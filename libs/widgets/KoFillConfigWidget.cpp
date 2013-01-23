@@ -239,7 +239,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     d->colorButton->setDefaultAction(d->colorAction);
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
-    
+
     // Gradient selector
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
     KoAbstractResourceServerAdapter *gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer(), this);
@@ -413,7 +413,6 @@ void KoFillConfigWidget::patternChanged(KoShapeBackground* background)
         fill->setPattern(patternBackground->pattern());
         canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
     }
-    delete patternBackground;
 }
 
 void KoFillConfigWidget::updateOpacity(qreal opacity)

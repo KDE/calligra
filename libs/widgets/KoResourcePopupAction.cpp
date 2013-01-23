@@ -66,7 +66,7 @@ KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *re
     KoResourceModel * resourceModel = qobject_cast<KoResourceModel*>(d->resourceList->model());
     if (resourceModel)
         resourceModel->setColumnCount(1);
-    
+
     KoResource *resource = resourceAdapter->resources().at(0);
     KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
     KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
@@ -76,8 +76,8 @@ KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *re
         d->background = new KoGradientBackground(qg);
     } else if (pattern) {
         KoImageCollection *collection = new KoImageCollection();
-        collection->createImageData(pattern->image());
         d->background = new KoPatternBackground(collection);
+        static_cast<KoPatternBackground*>(d->background)->setPattern(pattern->image());
     }
 
     QHBoxLayout *layout = new QHBoxLayout(widget);
@@ -122,15 +122,15 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
     d->menu->hide();
 
     KoResource *resource = static_cast<KoResource*>(modelIndex.internalPointer());
-    if(resource) {        
+    if(resource) {
         KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
         KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
         if (gradient) {
             d->background = new KoGradientBackground(gradient->toQGradient());
         } else if (pattern) {
             KoImageCollection *collection = new KoImageCollection();
-            collection->createImageData(pattern->image());
             d->background = new KoPatternBackground(collection);
+            static_cast<KoPatternBackground*>(d->background)->setPattern(pattern->image());
         }
 
         emit resourceSelected(d->background);
@@ -153,7 +153,7 @@ void KoResourcePopupAction::updateIcon()
     QPainter p(&pm);
     KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(d->background);
     KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(d->background);
-    
+
     QRect innerRect(0, 0, iconSize.width(), iconSize.height());
     if (gradientBackground) {
         QLinearGradient paintGradient;
