@@ -40,6 +40,7 @@ SharePage {
     }
     property string showUrl: "";
     property QtObject stash: null;
+    onStashChanged: stash.testCall();
     onSharingHandlerChanged: {
         if(sharingHandler !== null) {
             stash = sharingHandler.stash();
@@ -83,7 +84,7 @@ SharePage {
                     root.tags = txtTags.text;
                     root.description = txtDescription.text;
                 }
-                TextField { id: txtTitle; placeholder: "Title"; onTextChanged: content.updateCanShare(); }
+                TextField { id: txtTitle; placeholder: "Title"; text: sketchView.fileTitle.substring(0, sketchView.fileTitle.indexOf(".")); onTextChanged: content.updateCanShare(); }
                 TextField { id: txtTags; placeholder: "Tags"; onTextChanged: content.updateCanShare(); }
                 TextFieldMultiline { id: txtDescription; height: Constants.GridHeight * 4; placeholder: "Description"; onTextChanged: content.updateCanShare(); }
             }
