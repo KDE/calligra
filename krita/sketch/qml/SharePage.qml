@@ -56,6 +56,7 @@ Page {
             enabled: (switcher.currentPage !== undefined && switcher.currentPage.canShare)
             onClicked: {
                 switcher.currentPage.submitArt();
+                pageStack.pop();
             }
         }
     }
@@ -66,11 +67,6 @@ Page {
         anchors.right: parent.right;
         source: "images/shadow-smooth.png";
         z: 5;
-    }
-
-    SharingManager {
-        id: sharingManager;
-        view: sketchView.view;
     }
 
     CategorySwitcher {

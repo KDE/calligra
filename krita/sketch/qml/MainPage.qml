@@ -51,6 +51,11 @@ Page {
         view: sketchView.view;
     }
 
+    SharingManager {
+        id: sharingManager;
+        view: sketchView.view;
+    }
+
     PanelBar {
         id: panelBar;
         height: parent.height;
