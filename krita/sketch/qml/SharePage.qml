@@ -72,7 +72,7 @@ Page {
     CategorySwitcher {
         id: switcher;
         anchors.bottom: parent.bottom;
-        height: Constants.GridHeight * (Constants.GridRows - 2);
+        height: Constants.GridHeight * (Constants.GridRows - 2) - Constants.DefaultMargin;
         onCurrentPageChanged: currentPage.sharingHandler = sharingManager.sharingHandler(currentPage.pluginName);
 
         categories: [ { name: "DeviantArt Sta.sh", page: contentPage }/*, { name: "MediaGoblin", page: contentPage }*/ ];
