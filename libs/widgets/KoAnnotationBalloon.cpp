@@ -20,6 +20,7 @@
 
 #include "KoAnnotationBalloon.h"
 #include <QDateTime>
+#include <QTextDocumentFragment>
 
 KoAnnotationBalloon::KoAnnotationBalloon(int position, KoAnnotation *data, QWidget *parent):
 		KoBalloon(position, parent),
@@ -29,7 +30,13 @@ KoAnnotationBalloon::KoAnnotationBalloon(int position, KoAnnotation *data, QWidg
 
     m_authorLabel = new QLabel(d->creator());
     m_dateLabel = new QLabel(d->date());//d->date().toString("MM/dd/yyyy hh:mm"));
-    m_textContent = new QTextEdit("d->text()", this);
+    m_textContent = new QTextEdit(this);
+
+    // write annotation content into texteditor
+    QTextCursor cursor(d->textFrame()->firstCursorPosition());
+    cursor.setPosition(d->textFrame()->lastCursorPosition().position(), QTextCursor::KeepAnchor);
+    QTextDocumentFragment fragment(cursor);
+    m_textContent->textCursor().insertFragment(fragment);
 
 	QFont font = m_authorLabel->font();
 	font.setPointSize(8);

@@ -29,10 +29,13 @@ KoAnnotationSideBar::KoAnnotationSideBar(const KoAnnotationManager *manager, QWi
 	annotations = new QList<KoAnnotationBalloon*>();
 	QVBoxLayout *layout = new QVBoxLayout(this);
 	KUser user(KUser::UseRealUserID);
-    KoAnnotation *note = manager->annotation(manager->annotationNameList().first());
-	KoAnnotationBalloon *balloon = new KoAnnotationBalloon(0, note, this);
-	layout->addWidget(balloon, Qt::AlignTop);
-	setLayout(layout);
+    int pos = 0;
+    foreach (QString name, manager->annotationNameList()) {
+        KoAnnotation *note = manager->annotation(name);
+        KoAnnotationBalloon *balloon = new KoAnnotationBalloon(pos, note, this);
+        layout->addWidget(balloon, Qt::AlignTop);
+    }
+    setLayout(layout);
 	QPalette pal = palette();
 	pal.setColor(QPalette::Window, Qt::darkGray);
 	setPalette(pal);

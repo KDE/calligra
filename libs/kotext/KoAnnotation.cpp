@@ -221,21 +221,11 @@ QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
 
 QString KoAnnotation::creator() const
 {
-    // FIXME: I don't know but it was the result crash
-    //return d->creator;
-    return "creator";
+    return d->creator;
 }
-
-void KoAnnotation::setData(const QString &data)
-{
-    d->date = data;
-}
-
 
 QString KoAnnotation::date() const
 {
-    // FIXME: I don't know but it was the result crash
-    //return d->date;
-    return "data";
+    return d->date;
 }
 

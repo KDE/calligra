@@ -69,8 +69,6 @@ public:
      */
     void setName(const QString &name);
 
-    void setData(const QString &data);
-
     /// @return the name of this annotation
     QString name() const;
 
