@@ -62,7 +62,7 @@ private slots:
     void submitCallCompleted(Stash::Call, bool result);
     void uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
     void availableSpaceChanged();
-    void newSubmission(int stashId, QString folder, int folderId);
+    void newSubmission(qulonglong stashId, QString folder, int folderId);
 
 private:
 

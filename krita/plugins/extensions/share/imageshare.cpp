@@ -84,6 +84,7 @@ QObject* ImageShare::stash()
         QTimer::singleShot(0, m_deviantArt, SLOT(link()));
     }
     m_stash = new Stash(m_deviantArt, this);
+    connect(m_stash, SIGNAL(newSubmission(qulonglong,QString,int)), SLOT(newSubmission(qulonglong,QString,int)));
     return m_stash;
 }
 
@@ -128,7 +129,7 @@ void ImageShare::showSubmit()
     connect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), SLOT(testCallCompleted(Stash::Call,bool)));
     connect(m_stash, SIGNAL(submissionsChanged()), SLOT(submissionsChanged()));
     connect(m_stash, SIGNAL(uploadProgress(int,qint64,qint64)), SLOT(uploadProgress(int,qint64,qint64)));
-    connect(m_stash, SIGNAL(newSubmission(int,QString,int)), SLOT(newSubmission(int,QString,int)));
+    connect(m_stash, SIGNAL(newSubmission(qulonglong,QString,int)), SLOT(newSubmission(qulonglong,QString,int)));
     // This will need doing... once deviantArt fixes the call
     //connect(m_stash, SIGNAL(availableSpaceChanged()), SLOT(availableSpaceChanged()));
     m_stash->testCall();
@@ -194,7 +195,7 @@ void ImageShare::availableSpaceChanged()
     }
 }
 
-void ImageShare::newSubmission(int stashId, QString folder, int folderId)
+void ImageShare::newSubmission(qulonglong stashId, QString folder, int folderId)
 {
     emit sharingSuccessful(i18n("The image was successfully uploaded to DeviantArt Sta.sh"), QString("http://sta.sh/0%1").arg(stashId, 0, 36));
 }
