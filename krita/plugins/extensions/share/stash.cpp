@@ -212,7 +212,7 @@ void Stash::submitCallFinished(const QByteArray& data)
     QVariantMap result = parser.parse(data, &ok).toMap();
     if(ok && result.contains("status")) {
         if(result.value("status").toString() == QLatin1String("success")) {
-            emit newSubmission(result.value("stashid").toInt(), result.value("folder").toString(), result.value("folderid").toInt());
+            emit newSubmission(result.value("stashid").toULongLong(), result.value("folder").toString(), result.value("folderid").toInt());
         }
         emit callFinished(Submit, true);
     }

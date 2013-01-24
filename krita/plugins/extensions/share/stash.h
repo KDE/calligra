@@ -131,7 +131,7 @@ signals:
     void callFinished(Stash::Call call, bool result);
     void callError(QString error);
     void uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
-    void newSubmission(int stashId, QString folder, int folderId);
+    void newSubmission(qulonglong stashId, QString folder, int folderId);
 
 private:
     QMap<int, Call> m_callMap;
