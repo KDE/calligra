@@ -22,9 +22,10 @@ Item {
     id: base;
     height: messageStack.height;
     width: messageStack.width;
-    function showMessage(message, iconName) {
+    function showMessage(message, iconName, url) {
         var block = messageBlock.createObject(messageStack);
         block.text = message;
+        block.url = url;
     }
 
     Component {
@@ -32,8 +33,9 @@ Item {
         Item {
             id: message;
             property alias text: label.text;
+            property alias url: button.url;
             SequentialAnimation on opacity {
-                PauseAnimation { duration: 500; }
+                PauseAnimation { duration: (url === "") ? 500 : 5000; }
                 NumberAnimation { to: 0; duration: 2000; }
                 ScriptAction { script: message.destroy(); }
             }
@@ -57,6 +59,33 @@ Item {
                 color: "white";
                 font.bold: true;
                 font.pixelSize: Constants.LargeFontSize;
+            }
+            Rectangle {
+                id: button;
+                property string url: "";
+                visible: (url !== "");
+                anchors {
+                    left: parent.right;
+                    leftMargin: Constants.DefaultMargin;
+                    verticalCenter: parent.verticalCenter;
+                }
+                height: parent.height;
+                width: height;
+                color: "gray";
+                border {
+                    width: 2;
+                    color: "silver";
+                }
+                radius: height / 2;
+                opacity: 0.5;
+            }
+            Button {
+                anchors.fill: button;
+                visible: button.visible;
+                text: "";
+                color: "transparent";
+                image: "../images/svg/icon-visible_on.svg";
+                onClicked: Qt.openUrlExternally(button.url);
             }
         }
     }
