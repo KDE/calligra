@@ -41,6 +41,7 @@ public:
 
 Q_SIGNALS:
     void viewChanged();
+    void sharingSuccessful(const QString& message, const QString& url);
 
 private:
     class Private;

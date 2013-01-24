@@ -59,7 +59,25 @@ QObject* SharingManager::sharingHandler(QString name)
 
 void SharingManager::setView(QObject* newView)
 {
+    if(d->view) {
+        foreach(KXMLGUIClient* child, d->view->childClients()) {
+            KParts::Plugin* plugin = dynamic_cast<KParts::Plugin*>(child);
+            if(plugin) {
+                plugin->disconnect(this);
+            }
+        }
+    }
     d->view = qobject_cast<KisView2*>(newView);
+    if(d->view) {
+        foreach(KXMLGUIClient* child, d->view->childClients()) {
+            KParts::Plugin* plugin = dynamic_cast<KParts::Plugin*>(child);
+            if(plugin) {
+                if(plugin->metaObject()->indexOfSignal("sharingSuccessful(QString,QString)") > -1) {
+                    connect(plugin, SIGNAL(sharingSuccessful(QString,QString)), SIGNAL(sharingSuccessful(QString,QString)));
+                }
+            }
+        }
+    }
     emit viewChanged();
 }
 
