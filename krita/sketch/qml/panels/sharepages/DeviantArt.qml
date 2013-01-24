@@ -25,7 +25,6 @@ SharePage {
     id: root;
     pluginName: "ImageShare"
     function submitArt() {
-        console.debug("Submit using " + sharingHandler);
         if(stash !== null) {
             stash.submit(sketchView.view, sketchView.fileTitle, title, description, tags, "");
         }
