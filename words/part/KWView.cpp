@@ -20,7 +20,7 @@
  */
 
 // words includes
-#define  SHOW_ANNOTATIONS 1
+//#define  SHOW_ANNOTATIONS 1
 #include "KWView.h"
 #include "KWGui.h"
 #include "KWDocument.h"
