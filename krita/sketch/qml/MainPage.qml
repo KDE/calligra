@@ -54,6 +54,7 @@ Page {
     SharingManager {
         id: sharingManager;
         view: sketchView.view;
+        onSharingSuccessful: messageStack.showMessage(message, "", url);
     }
 
     PanelBar {
