@@ -68,16 +68,24 @@ SharePage {
                 width: parent.width;
                 spacing: Constants.DefaultMargin;
 
-                DropShadow {
+                Item {
+                    height: thumbImg.height;
+                    width: thumbImg.width;
                     anchors.horizontalCenter: parent.horizontalCenter;
-                    width: Constants.GridWidth * 4;
-                    height: Constants.GridHeight * 3;
-
-    //                         Image {
-    //                             anchors.fill: parent;
-    //                             source:
-    //                         }
+                    DropShadow {
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        anchors.fill: thumbImg;
+                    }
+                    Image {
+                        id: thumbImg;
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        height: Constants.GridHeight * 3;
+                        width: height * (sourceSize.width / sourceSize.height);
+                        fillMode: Image.PreserveAspectFit
+                        source: layerModel.fullImageThumbUrl;
+                    }
                 }
+
                 function updateCanShare() {
                     root.canShare = (txtTitle.text !== "" && txtTags.text !== "" && txtDescription.text !== "");
                     root.title = txtTitle.text;
