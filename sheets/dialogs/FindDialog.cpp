@@ -57,7 +57,7 @@ FindOption::FindOption(QWidget *parent)
     lst << i18n("Comments");
     m_searchIn->insertItems(0, lst);
 
-    comboLayout = new QHBoxLayout(m_findExtension);
+    comboLayout = new QHBoxLayout();
     label = new QLabel(i18n("Search direction:"), m_findExtension);
     comboLayout->addWidget(label);
 
