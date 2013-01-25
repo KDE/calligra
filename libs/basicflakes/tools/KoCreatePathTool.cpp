@@ -388,7 +388,7 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     list.append(angleWidget);
 
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
-    strokeWidget->setWindowTitle(i18n("Line / Border"));
+    strokeWidget->setWindowTitle(i18n("Stroke"));
     strokeWidget->setCanvas(canvas());
     list.append(strokeWidget);
 

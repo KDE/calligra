@@ -1112,7 +1112,7 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
-    strokeWidget->setWindowTitle(i18n("Line / Border"));
+    strokeWidget->setWindowTitle(i18n("Stroke"));
     strokeWidget->setCanvas(canvas());
     widgets.append(strokeWidget);
 
