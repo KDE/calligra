@@ -62,6 +62,8 @@ Q_DECLARE_METATYPE(QList<Submission>);
 class Stash : public QObject {
 
     Q_OBJECT
+    /// Whether or not the stash is ready to take submission calls (force an update on this status by using the test call)
+    Q_PROPERTY(bool ready READ ready NOTIFY readyChanged)
     /// The number of bytes available in the stash. Update by calling updateAvailableSpace
     Q_PROPERTY(int availableSpace READ availableSpace NOTIFY availableSpaceChanged)
     /// The current list of submissions. Update this list by calling delta, and update a single item by calling fetch on a submission's id
@@ -72,6 +74,7 @@ public:
     Stash(O2DeviantART *deviant, QObject *parent = 0);
     ~Stash();
 
+    bool ready() const;
     QList<Submission> submissions() const;
     int availableSpace();
 
@@ -125,6 +128,7 @@ private slots:
     void slotUploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
 
 signals:
+    void readyChanged();
     void availableSpaceChanged();
     void submissionsChanged();
 
@@ -136,6 +140,7 @@ signals:
 private:
     QMap<int, Call> m_callMap;
 
+    bool m_ready;
     QNetworkAccessManager m_networkAccessManager;
     O2Requestor *m_requestor;
     QList<Submission> m_submissions;

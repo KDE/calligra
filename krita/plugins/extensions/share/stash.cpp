@@ -32,10 +32,12 @@
 
 Stash::Stash(O2DeviantART *deviant, QObject *parent)
     : QObject(parent)
+    , m_ready(0)
     , m_bytesAvailable(-1)
     , m_progressUpdater(0)
     , m_progressSubtask(0)
 {
+    connect(deviant, SIGNAL(linkedChanged()), SLOT(testCall()));
     m_requestor = new O2Requestor(&m_networkAccessManager, deviant, this);
     connect(m_requestor, SIGNAL(finished(int,QNetworkReply::NetworkError,QByteArray)), SLOT(slotFinished(int,QNetworkReply::NetworkError,QByteArray)));
     connect(m_requestor, SIGNAL(uploadProgress(int,qint64,qint64)), SIGNAL(uploadProgress(int,qint64,qint64)));
@@ -45,6 +47,11 @@ Stash::Stash(O2DeviantART *deviant, QObject *parent)
 Stash::~Stash()
 {
 
+}
+
+bool Stash::ready() const
+{
+    return m_ready;
 }
 
 QList<Submission> Stash::submissions() const
@@ -201,8 +208,13 @@ void Stash::testCallFinished(const QByteArray& data)
     bool ok(false);
     QVariantMap result = parser.parse(data, &ok).toMap();
     if(ok && result.contains("status")) {
-        emit callFinished(Placebo, (result.value("status").toString() == QLatin1String("success")));
+        m_ready = (result.value("status").toString() == QLatin1String("success"));
     }
+    else {
+        m_ready = false;
+    }
+    emit readyChanged();
+    emit callFinished(Placebo, m_ready);
 }
 
 void Stash::submitCallFinished(const QByteArray& data)
