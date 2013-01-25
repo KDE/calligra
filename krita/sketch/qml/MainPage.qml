@@ -178,6 +178,12 @@ Page {
     }
 
     Dialog {
+        id: progressDialog;
+
+        title: Krita.ProgressProxy.taskName != "" ? Krita.ProgressProxy.taskName : "Applying...";
+    }
+
+    Dialog {
         id: modifiedDialog;
         title: "Image was modified";
         message: "The image was modified. Do you want to save your changes?";
@@ -220,12 +226,6 @@ Page {
             d.saveRequested = false;
             d.closeRequested = false;
         }
-    }
-
-    Dialog {
-        id: progressDialog;
-
-        title: Krita.ProgressProxy.taskName != "" ? Krita.ProgressProxy.taskName : "Applying...";
     }
 
     Connections {
