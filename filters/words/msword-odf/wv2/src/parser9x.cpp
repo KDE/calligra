@@ -968,6 +968,7 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 void Parser9x::processRun( const Chunk& chunk, SharedPtr<const Word97::CHP> chp,
                            U32 length, U32 index, U32 currentStart )
 {
+	qDebug() << "Parser9x::processRun";
     if ( chp->fSpec ) {
         U32 i = 0;
         while ( i < length ) {
@@ -977,6 +978,7 @@ void Parser9x::processRun( const Chunk& chunk, SharedPtr<const Word97::CHP> chp,
     }
     else {
         UConstString str( const_cast<UChar*>( chunk.m_text.data() ) + index, length );
+		qDebug() << "regular character string:";
         m_textHandler->runOfText( str.string(), chp );
     }
 }

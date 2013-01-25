@@ -755,6 +755,7 @@ void WordsTextHandler::msodrawObjectFound(const unsigned int globalCP, const wvW
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
 void WordsTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
+	qDebug("Start New Paragraph");
     kDebug(30513) << "**********************************************";
 
     //TODO: what has to be done in this situation
@@ -1689,6 +1690,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
  */
 void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
+	qDebug("Run of text");
     bool common_flag = false;
     QString newText(Conversion::string(text));
     kDebug(30513) << newText;
