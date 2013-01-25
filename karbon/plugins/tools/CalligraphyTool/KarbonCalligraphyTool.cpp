@@ -346,12 +346,12 @@ QList<QWidget *> KarbonCalligraphyTool::createOptionWidgets()
 {
     // if the widget don't exists yet create it
     QList<QWidget *> widgets;
-    
+
     KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
     fillWidget->setWindowTitle(i18n("Stroke"));
     fillWidget->setCanvas(canvas());
     widgets.append(fillWidget);
-    
+
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
     connect(widget, SIGNAL(usePathChanged(bool)),
             this, SLOT(setUsePath(bool)));
@@ -412,7 +412,7 @@ QList<QWidget *> KarbonCalligraphyTool::createOptionWidgets()
     widget->setObjectName(i18n("Calligraphy"));
     widget->setWindowTitle(i18n("Calligraphy"));
     widgets.append(widget);
-    
+
     return widgets;
 }
 

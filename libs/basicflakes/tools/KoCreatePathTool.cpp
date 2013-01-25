@@ -386,7 +386,7 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     layout->addWidget(specialSpacer, 1, 1);
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
-    
+
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
     strokeWidget->setWindowTitle(i18n("Line / Border"));
     strokeWidget->setCanvas(canvas());

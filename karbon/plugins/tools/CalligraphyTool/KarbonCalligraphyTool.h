@@ -44,7 +44,7 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event);
 
     QList<QWidget *> createOptionWidgets();
-    
+
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 

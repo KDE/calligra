@@ -37,6 +37,7 @@
 #include <QHeaderView>
 #include <QPainter>
 #include <QGradient>
+#include <QToolButton>
 #include <QRect>
 
 class KoResourcePopupAction::Private
@@ -64,8 +65,9 @@ KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *re
     d->resourceList->setModel(new KoResourceModel(resourceAdapter, widget));
     d->resourceList->setItemDelegate(new KoResourceItemDelegate(widget));
     KoResourceModel * resourceModel = qobject_cast<KoResourceModel*>(d->resourceList->model());
-    if (resourceModel)
+    if (resourceModel) {
         resourceModel->setColumnCount(1);
+    }
 
     KoResource *resource = resourceAdapter->resources().at(0);
     KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
@@ -116,8 +118,9 @@ void KoResourcePopupAction::setCurrentBackground(KoShapeBackground* background)
 
 void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
 {
-    if(! modelIndex.isValid())
+    if (! modelIndex.isValid()) {
         return;
+    }
 
     d->menu->hide();
 
@@ -143,12 +146,20 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
 
 void KoResourcePopupAction::updateIcon()
 {
-    QSize iconSize(16,16);
+    QSize iconSize(16, 16);
+//TODO discuss what is wanted exactly
+//     QToolButton *toolButton = dynamic_cast<QToolButton*>(parentWidget());
+//     if (toolButton) {
+//         iconSize = QSize(parentWidget()->width(), 16);
+//         toolButton->setIconSize(iconSize);
+//     } else {
+//         iconSize = QSize(16, 16);
+//     }
+
     // This must be a QImage, as drawing to a QPixmap outside the
     // UI thread will cause sporadic crashes.
     QImage pm = icon().pixmap(iconSize).toImage();
-    if(pm.isNull())
-    {
+    if (pm.isNull()) {
         pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
         pm.fill(Qt::transparent);
     }
@@ -156,8 +167,8 @@ void KoResourcePopupAction::updateIcon()
     KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(d->background);
     KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(d->background);
 
-    QRect innerRect(0, 0, iconSize.width(), iconSize.height());
     if (gradientBackground) {
+        QRect innerRect(0, 0, iconSize.width(), iconSize.height());
         QLinearGradient paintGradient;
         paintGradient.setStops(gradientBackground->gradient()->stops());
         paintGradient.setStart(innerRect.topLeft());

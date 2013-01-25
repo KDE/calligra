@@ -435,8 +435,13 @@ void KoFillConfigWidget::shapeChanged()
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape *shape = selection->firstSelectedShape();
-    if (! shape)
+    if (! shape) {
+        d->group->button(KoFillConfigWidget::None)->setChecked(false);
+        d->group->button(KoFillConfigWidget::Solid)->setChecked(false);
+        d->group->button(KoFillConfigWidget::Gradient)->setChecked(false);
+        d->group->button(KoFillConfigWidget::Pattern)->setChecked(false);
         return;
+    }
 
     updateWidget(shape);
 }
