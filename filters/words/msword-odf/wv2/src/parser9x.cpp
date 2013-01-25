@@ -148,6 +148,7 @@ Parser9x::~Parser9x()
 
 bool Parser9x::parse()
 {
+	qDebug() << "Parser9x::parse()";
     if ( !isOk() )
         return false;
 
@@ -458,6 +459,7 @@ void Parser9x::fakePieceTable()
 
 bool Parser9x::parseBody()
 {
+	qDebug() << "Parser9x::parseBody";
     saveState( m_fib.ccpText, Main );
     m_subDocumentHandler->bodyStart();
 
@@ -486,6 +488,7 @@ bool Parser9x::parseBody()
 
 void Parser9x::parseHelper( Position startPos )
 {
+	qDebug() << "Parser9x::parseHelper";
     PLCFIterator<Word97::PCD> it( m_plcfpcd->at( startPos.piece ) );
 
     while ( m_remainingChars > 0 && it.current() ) {
@@ -538,6 +541,7 @@ void Parser9x::parseHelper( Position startPos )
 template<typename String>
 void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& position )
 {
+	qDebug() << "Parser9x::processPiece";
     // Take a closer look at the piece we just read. "start" and "index" are
     // counted in character positions (take care!)
     unsigned int start = 0;
@@ -655,6 +659,7 @@ UString Parser9x::processPieceStringHelper( U8* string, unsigned int start, unsi
 
 void Parser9x::processParagraph( U32 fc )
 {
+	qDebug() << "Parser9x::processParagraph";
     // Get the PAP structure as it was at the last full-save
     ParagraphProperties* props( m_properties->fullSavedPap( fc, m_data ) );
     // ...and apply the latest changes, then the PAP is completely restored
