@@ -45,17 +45,17 @@ public:
 
     Private( const std::string& fromCode ) :
 #ifdef WORDS_BIGENDIAN
-        m_toCode( "UCS2BE" ),
+        m_toCode( "UCS-2BE" ),
 #else
-        m_toCode( "UCS2LE" ),
+        m_toCode( "UCS-2LE" ),
 #endif
         m_fromCode( fromCode ), m_iconv( reinterpret_cast<iconv_t>( -1 ) ) {}
 
     Private( U16 lid ) :
 #ifdef WORDS_BIGENDIAN
-        m_toCode( "UCS2BE" ),
+        m_toCode( "UCS-2BE" ),
 #else
-        m_toCode( "UCS2LE" ),
+        m_toCode( "UCS-2LE" ),
 #endif
         m_fromCode( TextConverter::LID2Codepage( lid ) ),
         m_iconv( reinterpret_cast<iconv_t>( -1 ) ) {}
@@ -316,11 +316,11 @@ void TextConverter::open()
         close();
     }
 #ifdef WORDS_BIGENDIAN
-    if ( d->m_toCode != "UCS2BE" )
-        wvlog << "Warning: Do you really want to do convert to something else than UCS2BE?" << endl;
+    if ( d->m_toCode != "UCS-2BE" )
+        wvlog << "Warning: Do you really want to do convert to something else than UCS-2BE?" << endl;
 #else
-    if ( d->m_toCode != "UCS2LE" )
-        wvlog << "Warning: Do you really want to do convert to something else than UCS2LE?" << endl;
+    if ( d->m_toCode != "UCS-2LE" )
+        wvlog << "Warning: Do you really want to do convert to something else than UCS-2LE?" << endl;
 #endif
     if ( d->m_fromCode == "not known" )
         wvlog << "Warning: We don't know the current charset you want to convert from!" << endl;
