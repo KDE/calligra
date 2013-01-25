@@ -51,6 +51,14 @@ Page {
         view: sketchView.view;
     }
 
+    LayerModel {
+        id: layerModel;
+        // Notice - the model needs to know about the engine before the view, hence it is set first
+        // This could be rectified, but for now know that the order here is important.
+        engine: QMLEngine;
+        view: sketchView.view;
+    }
+
     SharingManager {
         id: sharingManager;
         view: sketchView.view;
