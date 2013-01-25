@@ -316,6 +316,11 @@ void LayerModel::setEngine(QObject* newEngine)
     emit engineChanged();
 }
 
+QString LayerModel::fullImageThumbUrl() const
+{
+    return QString("image://layerthumb%1/fullimage/%2").arg(d->thumbProvider->layerID()).arg(QDateTime::currentMSecsSinceEpoch());
+}
+
 void LayerModel::currentNodeChanged(KisNodeSP newActiveNode)
 {
     if (!d->activeNode.isNull())

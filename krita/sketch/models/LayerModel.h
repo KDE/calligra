@@ -28,6 +28,8 @@ class LayerModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(QObject* engine READ engine WRITE setEngine NOTIFY engineChanged)
+    // This might seem a slightly odd position, but think of it as the thumbnail of all the currently visible layers merged down
+    Q_PROPERTY(QString fullImageThumbUrl READ fullImageThumbUrl NOTIFY viewChanged);
 
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged);
 
@@ -74,6 +76,7 @@ public:
     void setView(QObject* newView);
     QObject* engine() const;
     void setEngine(QObject* newEngine);
+    QString fullImageThumbUrl() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     Q_INVOKABLE virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
