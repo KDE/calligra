@@ -864,7 +864,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
     // O(1) nextFootnote() call to something like an O(n) containsFootnote( start, lim )
     // Up to now Word 97, 2000, and 2002 seem to be bug compatible and fullfill that precondition.
     //
-
+	qDebug() << "Parser9x::processChunk";
+	
     //only process the chunk if not marked hidden, TODO use text:display="none"
     if (chp->fVanish == 1) {
         return;
