@@ -97,6 +97,33 @@ SharePage {
                 TextFieldMultiline { id: txtDescription; height: Constants.GridHeight * 4; placeholder: "Description"; onTextChanged: content.updateCanShare(); }
             }
 
+            Item {
+                anchors.fill: parent;
+                opacity: (root.stash !== null && root.stash.ready) ?  0 : 1;
+                Behavior on opacity { PropertyAnimation { duration: 200; } }
+                Rectangle {
+                    anchors.fill: parent;
+                    color: "white";
+                    opacity: 0.9;
+                }
+                MouseArea {
+                    // This mouse area blocks any mouse click from passing through the panel. We need this to ensure we don't accidentally pass
+                    // any clicks to the collapsing area, or to the canvas, by accident.
+                    anchors.fill: parent;
+                    // This will always work, and never do anything - but we need some kind of processed thing in here to activate the mouse area
+                    onClicked: parent.focus = true;
+                }
+                SimpleTouchArea {
+                    // As above, but for touch events
+                    anchors.fill: parent;
+                    onTouched: parent.focus = true;
+                }
+                Label {
+                    anchors.centerIn: parent;
+                    text: "Sta.sh is not ready..."
+                }
+            }
+
             Button {
                 anchors {
                     top: parent.top;
