@@ -21,10 +21,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KPrPresentationDrawWidget.h"
+
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QMenu>
 #include <QList>
 #include <QMenu>
 #include <QIcon>
@@ -34,8 +35,6 @@
 
 #include <KoPACanvas.h>
 #include <KoPointerEvent.h>
-
-#include "KPrPresentationDrawWidget.h"
 
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvasBase * canvas)
 : KPrPresentationToolEventForwarder(canvas)
