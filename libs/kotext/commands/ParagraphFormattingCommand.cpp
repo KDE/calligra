@@ -107,19 +107,19 @@ void ParagraphFormattingCommand::redo()
     if (!m_first) {
         KUndo2Command::redo();
     } else {        
-        int caretAnchor = m_editor->cursor().anchor();
-        int caretPosition = m_editor->cursor().position();
+        int caretAnchor = m_editor->cursor()->anchor();
+        int caretPosition = m_editor->cursor()->position();
 
         MergeAutoParagraphStyleVisitor visitor(m_editor, m_charFormat, m_blockFormat);
 
         m_editor->recursivelyVisitSelection(m_editor->document()->rootFrame()->begin(), visitor);
 
-        if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
-            d->caret.mergeCharFormat(deltaCharFormat);
+        if (!m_editor->isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+            m_editor->cursor()->mergeCharFormat(m_charFormat);
         }
         else {
-            m_editor->cursor().setPosition(caretAnchor);
-            m_editor->cursor().setPosition(caretPosition, QTextCursor::KeepAnchor);
+            m_editor->cursor()->setPosition(caretAnchor);
+            m_editor->cursor()->setPosition(caretPosition, QTextCursor::KeepAnchor);
         }
 
         KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
