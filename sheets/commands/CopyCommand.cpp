@@ -162,7 +162,7 @@ QString CopyCommand::saveAsPlainText(const Region &region)
     QString result;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-      if (result.length()) result += "\n";
+      if (result.length()) result += QLatin1Char('\n');
       Region::Element *el = *it;
       QRect used = el->sheet()->usedArea (true);
       QRect rect = el->rect().intersected (used);
@@ -171,7 +171,7 @@ QString CopyCommand::saveAsPlainText(const Region &region)
           Cell cell (el->sheet(), col, row);
           result += cellAsText (cell, col != rect.right());
         }
-        result += "\n";
+        result += QLatin1Char('\n');
       }
     }
     return result;

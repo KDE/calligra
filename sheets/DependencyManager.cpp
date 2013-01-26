@@ -34,6 +34,7 @@
 #include "Sheet.h"
 #include "Value.h"
 #include "DocBase.h"
+#include "ElapsedTime_p.h"
 
 #include <QHash>
 #include <QList>

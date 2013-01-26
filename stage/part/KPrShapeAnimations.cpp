@@ -168,7 +168,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case Group:
             case StepCount: return QVariant();
-            case TriggerEvent:/// emited if an item time range has changed (return the index of the item changed)
+            case TriggerEvent:/// emitted if an item time range has changed (return the index of the item changed)
                 if (currentData.nodeType == KPrShapeAnimation::OnClick)
                     return i18n("start on mouse click");
                 if (currentData.nodeType == KPrShapeAnimation::AfterPrevious)
@@ -934,7 +934,7 @@ void KPrShapeAnimations::insertNewAnimation(KPrShapeAnimation *newAnimation, con
 QString KPrShapeAnimations::getAnimationName(KPrShapeAnimation *animation, bool omitSubType) const
 {
     if (animation) {
-        QStringList descriptionList = animation->id().split("-");
+        QStringList descriptionList = animation->id().split(QLatin1Char('-'));
         if (descriptionList.count() > 2) {
             descriptionList.removeFirst();
             descriptionList.removeFirst();
@@ -942,7 +942,7 @@ QString KPrShapeAnimations::getAnimationName(KPrShapeAnimation *animation, bool 
         if (!omitSubType && (!animation->presetSubType().isEmpty())) {
             descriptionList.append(animation->presetSubType());
         }
-        return descriptionList.join(QString(" "));
+        return descriptionList.join(QChar::fromLatin1(' '));
     }
     return QString();
 }
@@ -1019,7 +1019,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
     // Return animation icon
     else if (!name.isEmpty()) {
         name = name.append("_animation");
-        name.replace(" ", "_");
+        name.replace(QLatin1Char(' '), QLatin1Char('_'));
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
             return KIcon(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);

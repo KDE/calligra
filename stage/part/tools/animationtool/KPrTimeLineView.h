@@ -43,10 +43,10 @@ public:
     virtual bool eventFilter(QObject *target, QEvent *event);
 
 signals:
-    /// emited if an item is clicked (returns the index of the item clicked
+    /// emitted if an item is clicked (returns the index of the item clicked
     void clicked(const QModelIndex&);
 
-    /// emited if an item time range has changed (return the index of the item changed)
+    /// emitted if an item time range has changed (return the index of the item changed)
     void timeValuesChanged(const QModelIndex&);
 
 private:

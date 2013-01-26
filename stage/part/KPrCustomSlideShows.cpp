@@ -141,8 +141,12 @@ void KPrCustomSlideShows::removeSlidesFromAll( const QList<KoPAPageBase*> &slide
 
 void KPrCustomSlideShows::saveOdf( KoPASavingContext & context )
 {
-    foreach( const QString &name, m_customSlideShows.keys() ) {
-        QList<KoPAPageBase*> slideList = m_customSlideShows.value( name );
+    QMap<QString, QList<KoPAPageBase*> >::ConstIterator it = m_customSlideShows.constBegin();
+    const QMap<QString, QList<KoPAPageBase*> >::ConstIterator end = m_customSlideShows.constEnd();
+    for (; it != end; ++it) {
+        const QString &name = it.key();
+        const QList<KoPAPageBase*> &slideList = it.value();
+
         context.xmlWriter().startElement( "presentation:show" );
         context.xmlWriter().addAttribute( "presentation:name", name );
         QString pages;
@@ -153,7 +157,7 @@ void KPrCustomSlideShows::saveOdf( KoPASavingContext & context )
             }
         }
         if( !slideList.isEmpty() ) {
-            pages.truncate( pages.size() - 1 );//remove the last comma
+            pages.chop(1); //remove the last comma
         }
         context.xmlWriter().addAttribute( "presentation:pages", pages );
         context.xmlWriter().endElement();//presentation:show
@@ -173,7 +177,7 @@ void KPrCustomSlideShows::loadOdf( const KoXmlElement & presentationSettings, Ko
 
                 QStringList splitedPages = pages.split( ',' );
                 QList<KoPAPageBase*> slideShow;
-                foreach( QString pageName, splitedPages ) {
+                foreach (const QString &pageName, splitedPages) {
                     KoPAPage * page = context.pageByName( pageName );
                     if ( page ) {
                         slideShow.append( page );

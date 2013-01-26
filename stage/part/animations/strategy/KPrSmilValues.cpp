@@ -75,7 +75,7 @@ qreal KPrSmilValues::endValue() const
 bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode)
 {
     m_calcMode = calcMode;
-    QStringList valuesList = values.split(";");
+    QStringList valuesList = values.split(QLatin1Char(';'));
     if (valuesList.size() < 2) {
         return false;
     }
@@ -95,7 +95,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
         }
     }
     else {
-        QStringList keyTimesList = keyTimes.split(";");
+        QStringList keyTimesList = keyTimes.split(QLatin1Char(';'));
         if (valuesList.size() != keyTimesList.size()) {
             return false;
         }
@@ -112,7 +112,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     // keySplines
     if (m_calcMode ==  KPrAnimationValue::spline) {
         kWarning(33003) << "keySpline not yes supported";
-        QStringList keySplinesList = keySplines.split(";");
+//         QStringList keySplinesList = keySplines.split(QLatin1Char(';'));
     }
     return true;
 }
@@ -139,7 +139,7 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
     KoXmlWriter &writer = paContext.xmlWriter();
     // values
     QString values;
-    foreach (KPrFormulaParser valueParser, m_values) {
+    foreach (const KPrFormulaParser &valueParser, m_values) {
         if (values.isEmpty()) {
             values = QString("%1").arg(valueParser.formula());
         } else {

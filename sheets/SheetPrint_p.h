@@ -22,6 +22,7 @@
 #ifndef CALLIGRA_SHEETS_SHEET_PRINT_P
 #define CALLIGRA_SHEETS_SHEET_PRINT_P
 
+#include "SheetPrint.h"
 #include <QList>
 
 namespace Calligra

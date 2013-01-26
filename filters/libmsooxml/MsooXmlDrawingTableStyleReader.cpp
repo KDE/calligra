@@ -43,7 +43,6 @@ MsooXmlDrawingTableStyleReader::MsooXmlDrawingTableStyleReader(KoOdfWriters* wri
 : MsooXmlCommonReader(writers)
 , m_context(0)
 , m_currentStyle(0)
-, m_currentBorder()
 , m_currentTableStyleProperties()
 {
 }
@@ -860,80 +859,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideH()
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::InsideHBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
-//             ELSE_WRONG_FORMAT
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL ln
-KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
-{
-    READ_PROLOGUE2(Table_ln)
-
-    QXmlStreamAttributes attrs = attributes();
-
-    m_currentBorder = KoBorder::BorderData();
-
-    //compound line type
-    TRY_READ_ATTR_WITHOUT_NS(cmpd)
-    //double lines
-    if( cmpd.isEmpty() || cmpd == "sng" ) {
-        m_currentBorder.style = KoBorder::BorderSolid;
-    }
-    //single line
-    else if (cmpd == "dbl") {
-        m_currentBorder.style = KoBorder::BorderDouble;
-    }
-    //thick thin double lines
-    else if (cmpd == "thickThin") {
-        //FIXME it seem we don't support this properly. Use solid for now.
-        m_currentBorder.style = KoBorder::BorderDouble;
-    }
-    //thin thick double lines
-    else if (cmpd == "thinThick") {
-        //FIXME it doesn't seem we support this properly.
-        m_currentBorder.style = KoBorder::BorderDouble;
-    }
-    //thin thick thin triple lines
-    else if (cmpd == "tri") {
-        //NOTE: There is not triple in ODF
-        m_currentBorder.style = KoBorder::BorderSolid;
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(w) //width
-    m_currentBorder.outerPen.setWidthF(EMU_TO_POINT(w.toDouble()));
-
-    while(!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(solidFill)) {
-                TRY_READ(solidFill);
-                m_currentBorder.style = KoBorder::BorderSolid;
-                m_currentBorder.innerPen.setColor(m_currentColor);
-                m_currentBorder.outerPen.setColor(m_currentColor);
-            }
-            else if (QUALIFIED_NAME_IS(prstDash)) {
-                attrs = attributes();
-                //TODO find out how other colors are handled
-                m_currentBorder.innerPen.setColor(Qt::black);
-                m_currentBorder.outerPen.setColor(Qt::black);
-                TRY_READ_ATTR_WITHOUT_NS(val)
-                //TODO support other dash types. Make it its own function.
-                if (val == "dash") {
-                    m_currentBorder.style = KoBorder::BorderDashed;
-                }
-                else if(val == "dashDot") {
-                    m_currentBorder.style = KoBorder::BorderDashDot;
-                }
-                else if(val == "dot") {
-                    m_currentBorder.style = KoBorder::BorderDotted;
-                }
-            }
-            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }

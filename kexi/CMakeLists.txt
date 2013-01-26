@@ -137,7 +137,7 @@ IF(KEXI_MOBILE)
   add_subdirectory( mobile )
 ELSE(KEXI_MOBILE)
   set(kexi_SRCS main.cpp )
-  kde4_add_app_icon(kexi_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/*-app-kexi.png")
+  kde4_add_app_icon(kexi_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakexi.png")
   kde4_add_executable(kexi ${kexi_SRCS})
   target_link_libraries(kexi 
     ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}

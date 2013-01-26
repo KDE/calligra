@@ -27,7 +27,6 @@
 #include "animations/KPrShapeAnimation.h"
 #include "KPrAnimationGroupProxyModel.h"
 #include "KPrAnimationsTimeLineView.h"
-#include "animations/KPrShapeAnimation.h"
 #include "KPrAnimationSelectorWidget.h"
 #include "KPrShapeAnimations.h"
 

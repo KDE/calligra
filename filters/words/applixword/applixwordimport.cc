@@ -696,7 +696,7 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 
 
     // 3. Replace part for Applix Characters
-    int   foundSpecialCharakter;
+    bool  foundSpecialCharakter;
     QChar newchar;
 
     do {

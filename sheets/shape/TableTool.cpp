@@ -248,13 +248,13 @@ QList<QWidget*> TableTool::createOptionWidgets()
     l->setMargin(0);
     optionWidget->setLayout(l);
 
-    QGridLayout* layout = new QGridLayout(optionWidget);
+    QGridLayout* layout = new QGridLayout();
     l->addLayout(layout);
 
     QLabel* label = 0;
     QSpinBox* spinBox = 0;
 
-    QHBoxLayout* sheetlayout = new QHBoxLayout(optionWidget);
+    QHBoxLayout* sheetlayout = new QHBoxLayout();
     sheetlayout->setMargin(0);
     sheetlayout->setSpacing(3);
     layout->addLayout(sheetlayout, 0, 1);

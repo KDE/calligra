@@ -560,12 +560,12 @@ Value func_hex2oct(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_decimal(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString text = calc->conv()->asString(args[0]).asString();
-    text.remove(QChar(' '));
-    text.remove(QChar('\t'));
+    text.remove(QLatin1Char(' '));
+    text.remove(QLatin1Char('\t'));
     int radix = calc->conv()->asInteger(args[1]).asInteger();
     if (radix == 16) {
-        if (text.startsWith("0x", Qt::CaseInsensitive)) {
-            text = text.mid(2);
+        if (text.startsWith(QLatin1String("0x"), Qt::CaseInsensitive)) {
+            text.remove(0, 2);
         }
         if (text.endsWith(QLatin1Char('h'), Qt::CaseInsensitive)) {
             text.chop(1);  // all but the last char

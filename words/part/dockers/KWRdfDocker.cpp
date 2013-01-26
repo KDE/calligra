@@ -2,7 +2,7 @@
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2012 Ben Martin
+ * Copyright (C) 2012 Ben Martin <monkeyiq@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

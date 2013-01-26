@@ -95,7 +95,6 @@ protected:
     KoFilter::ConversionStatus read_tl2br();
     KoFilter::ConversionStatus read_tr2bl();
     KoFilter::ConversionStatus read_tcBdr();
-    KoFilter::ConversionStatus read_Table_ln();
     KoFilter::ConversionStatus read_fill();
 
 #include "MsooXmlDrawingMLShared.h"
@@ -104,7 +103,6 @@ private:
     MsooXmlDrawingTableStyleContext* m_context;
 
     DrawingTableStyle* m_currentStyle;
-    KoBorder::BorderData m_currentBorder;
     TableStyleProperties* m_currentTableStyleProperties;
 };
 
