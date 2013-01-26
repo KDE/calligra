@@ -249,6 +249,11 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     mainLayout->addLayout(firstLineLayout);
     mainLayout->addLayout(secondLineLayout);
 
+    // Spacer
+    d->spacer = new QWidget();
+    d->spacer->setObjectName("SpecialSpacer");
+    mainLayout->addWidget(d->spacer);
+
     // Make the signals visible on the outside of this widget.
     connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
     connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
