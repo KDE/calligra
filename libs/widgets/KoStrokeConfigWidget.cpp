@@ -41,6 +41,10 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QMenu>
+#include <QBuffer>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QSizePolicy>
 
 // KDE
 #include <klocale.h>
@@ -52,10 +56,8 @@
 #include <KoShapeStroke.h>
 #include <KoLineStyleSelector.h>
 #include <KoUnitDoubleSpinBox.h>
-#include "KoMarkerSelector.h"
+#include <KoMarkerSelector.h>
 #include <KoColorPopupAction.h>
-
-#include <QBuffer>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
@@ -183,7 +185,6 @@ public:
     KoColorPopupAction *colorAction;
 
     QWidget *spacer;
-    QGridLayout *layout;
 
     KoCanvasBase *canvas;
 };
@@ -193,56 +194,61 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     , d(new Private())
 {
     setObjectName("Stroke widget");
-    QGridLayout *mainLayout = new QGridLayout(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setMargin(0);
+
+    QHBoxLayout *firstLineLayout = new QHBoxLayout(this);
 
     // Start marker
     QList<KoMarker*> markers;
 
     d->startMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerStart, this);
     d->startMarkerSelector->updateMarkers(markers);
-    mainLayout->addWidget(d->startMarkerSelector, 0, 0);
+    d->startMarkerSelector->setMaximumWidth(50);
+    firstLineLayout->addWidget(d->startMarkerSelector);
 
     // Line style
     d->lineStyle = new KoLineStyleSelector(this);
-    mainLayout->addWidget(d->lineStyle, 0, 1, 1, 1);
+    d->lineStyle->setMinimumWidth(70);
+    firstLineLayout->addWidget(d->lineStyle);
 
     // End marker
     d->endMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerEnd, this);
     d->endMarkerSelector->updateMarkers(markers);
-    mainLayout->addWidget(d->endMarkerSelector, 0, 2, 1, 2);
+    d->endMarkerSelector->setMaximumWidth(50);
+    firstLineLayout->addWidget(d->endMarkerSelector);
+
+    QHBoxLayout *secondLineLayout = new QHBoxLayout(this);
 
     // Line width
     QLabel *l = new QLabel(this);
     l->setText(i18n("Thickness:"));
-    mainLayout->addWidget(l, 1, 0, 1, 1);
+    l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    secondLineLayout->addWidget(l);
+
     // set min/max/step and value in points, then set actual unit
     d->lineWidth = new KoUnitDoubleSpinBox(this);
     d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
     d->lineWidth->setDecimals(2);
     d->lineWidth->setUnit(KoUnit(KoUnit::Point));
     d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
-    mainLayout->addWidget(d->lineWidth, 1, 1, 1, 1);
+    secondLineLayout->addWidget(d->lineWidth);
 
     d->capNJoinButton = new CapNJoinButton(this);
-    mainLayout->addWidget(d->capNJoinButton, 1, 2);
+    d->capNJoinButton->setMinimumHeight(24);
+    secondLineLayout->addWidget(d->capNJoinButton);
 
     d->colorButton = new QToolButton(this);
-    mainLayout->addWidget(d->colorButton, 1, 3);
+    secondLineLayout->addWidget(d->colorButton);
     d->colorAction = new KoColorPopupAction(this);
     d->colorAction->setIcon(koIcon("format-stroke-color"));
     d->colorAction->setToolTip(i18n("Change the color of the line/border"));
     connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(applyChanges()));
     d->colorButton->setDefaultAction(d->colorAction);
 
-    // Spacer
-    d->spacer = new QWidget();
-    d->spacer->setObjectName("SpecialSpacer");
-    mainLayout->addWidget(d->spacer, 3, 0);
-
-    mainLayout->setColumnStretch(1,1);
-    mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    d->layout = mainLayout;
+    mainLayout->addLayout(firstLineLayout);
+    mainLayout->addLayout(secondLineLayout);
 
     // Make the signals visible on the outside of this widget.
     connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
