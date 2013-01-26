@@ -37,7 +37,7 @@ class ExportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ExportDialog(QWidget *parent = 0);
+    explicit ExportDialog(QWidget *parent = 0);
     ~ExportDialog();
 
     void setSheets(const QStringList &);
