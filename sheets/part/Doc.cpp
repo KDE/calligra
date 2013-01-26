@@ -541,13 +541,6 @@ void Doc::updateAllViews()
     emit updateView();
 }
 
-void Doc::updateBorderButton()
-{/*FIXME
-    foreach(KoView* view, views())
-    static_cast<View*>(view)->updateBorderButton();*/
-    emit updateBorderButton();
-}
-
 void Doc::addIgnoreWordAll(const QString & word)
 {
     if (d->spellListIgnoreAll.indexOf(word) == -1)
