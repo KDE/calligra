@@ -2,6 +2,8 @@
 
 import os, time, Kross, KSpread
 
+T = Kross.module("kdetranslation")
+
 class Logger:
     def __init__(self, scriptaction):
         self.scriptaction = scriptaction
@@ -13,27 +15,27 @@ class Logger:
         #file = os.path(self.getLogDir(),"KSpread.log")
 
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("Logger")
+        self.dialog = self.forms.createDialog(T.i18n("Logger"))
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
 
-        savepage = self.dialog.addPage("Save","Save to Log File","document-save")
+        savepage = self.dialog.addPage(T.i18nc("Options page name", "Save"),T.i18n("Save to Log File"),"document-save")
         self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadlogger")
         self.savewidget.setMode("Saving")
-        self.savewidget.setFilter("*.txt *.log|Log File\n*|All Files")
+        self.savewidget.setFilter("*.txt *.log|%(1)s\n*|%(2)s" % { '1' : T.i18n("Log File"), '2' : T.i18n("All Files") } )
 
         if self.dialog.exec_loop():
             filename = self.savewidget.selectedFile()
             if os.path.isfile(filename):
-                if self.forms.showMessageBox("WarningContinueCancel", "Overwrite file?", "The file \"%s\" does already exist. Overwrite the file?" % filename) != "Continue":
-                    raise "Aborted."
+                if self.forms.showMessageBox("WarningContinueCancel", T.i18n("Overwrite file?"), T.i18n("The file \"%1\" does already exist. Overwrite the file?", [filename])) != "Continue":
+                    raise Exception, T.i18n("Aborted.")
             sheetname = KSpread.currentSheet().sheetName()
             cellrange = "A1:F50" #FIXME
             try:
                 self.file = open(filename, "w")
                 self.startLogging(sheetname, cellrange)
             except IOError, (errno, strerror):
-                raise "Failed to write Log File \"%s\":\n%s" % (filename,strerror)
+                raise Exception, T.i18n("Failed to write Log File \"%1\":\n%2", [filename], [strerror])
 
     def addLog(self, message, flush = True):
         date = time.strftime("%Y-%M-%d %H:%M.%S")
@@ -45,7 +47,7 @@ class Logger:
         self.sheet = KSpread.sheetByName(sheetname)
         self.listener = KSpread.createListener(sheetname, cellrange)
         if not self.listener:
-            raise "Failed to create listener for sheetname '%s' and range '%s'" % (sheetname,cellrange)
+            raise Exception, T.i18n("Failed to create listener for sheetname '%1' and range '%2'", [sheetname], [cellrange])
         self.addLog( "Start logging sheet='%s' range='%s'" % (sheetname,cellrange) )
         self.listener.connect("regionChanged(QVariantList)", self.regionChanged)
         self.listener.connect("cellChanged(int,int)", self.cellChanged)

@@ -1,7 +1,17 @@
 [Desktop Entry]
 Name=Template Shape
+Name[ca]=Forma de plantilla
+Name[da]=Skabelon-form
+Name[de]=Vorlagen-Objekt
 Name[el]=Template Shape
+Name[es]=Forma plantilla
 Name[et]=Mallikujund
+Name[fi]=Pohjamuoto
+Name[fr]=Forme modèle
+Name[gl]=Obxecto de modelo
+Name[hu]=Sablon alakzat
+Name[it]=Forma di modello
+Name[kk]=Үлгі қалыпы
 Name[nl]=Vorm van sjabloon
 Name[pl]=Szablon kształtu
 Name[pt]=Forma de Modelo
@@ -13,5 +23,5 @@ Name[x-test]=xxTemplate Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=templateshape
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

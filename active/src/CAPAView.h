@@ -50,11 +50,13 @@ public:
     virtual KoPADocument* kopaDocument() const;
     virtual KoPACanvasBase* kopaCanvas() const;
 
+public slots:
+    void connectToZoomController();
+
 private:
     KoCanvasController* m_canvasController;
     KoPACanvasBase* m_paCanvas;
     KPrDocument* m_prDocument;
-    KoZoomController* m_zoomController;
     KoPAPageBase* m_page;
 
 private slots:

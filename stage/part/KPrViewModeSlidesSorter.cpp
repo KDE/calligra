@@ -584,7 +584,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     bool panelVisible = true;
     if (showNumber < 1) {
         panelVisible = false;
-        name = QString();
+        name.clear();
     }
 
     //Change document current custom slide show
@@ -692,9 +692,8 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
        updateCustomSlideShowsList();
     }
     else {
-        KMessageBox Message;
-        Message.sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
-                      KMessageBox::Notify);
+        KMessageBox::sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
+                           KMessageBox::Notify);
         updateCustomSlideShowsList();
     }
 }

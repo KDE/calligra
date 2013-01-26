@@ -59,8 +59,8 @@ ToolRegistry* ToolRegistry::instance()
 
 void ToolRegistry::loadTools()
 {
-    const QString serviceType = QLatin1String("KSpread/Plugin");
-    const QString query = QLatin1String("([X-KSpread-InterfaceVersion] == 0) and "
+    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
+    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
                                         "([X-KDE-PluginInfo-Category] == 'Tool')");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");

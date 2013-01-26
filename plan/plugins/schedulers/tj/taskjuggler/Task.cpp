@@ -32,6 +32,9 @@
 #include "Scenario.h"
 #include "CustomAttributeDefinition.h"
 #include "UsageLimits.h"
+#include "Shift.h"
+#include "ShiftSelection.h"
+
 #include <QExplicitlySharedDataPointer>
 
 namespace TJ
@@ -255,6 +258,20 @@ Task::warningMessage(const QString& msg) const
 }
 
 bool
+Task::isWorkingTime(const Interval& slot) const
+{
+    if (shifts.isEmpty()) {
+        return project->isWorkingTime(slot);
+    }
+    for (ShiftSelectionList::Iterator ssli(shifts); ssli.hasNext();) {
+        ShiftSelection *s = ssli.next();
+        if (s->getPeriod().contains(slot))
+            return s->getShift()->isOnShift(slot);
+    }
+    return false;
+}
+
+bool
 Task::schedule(int sc, time_t& date, time_t slotDuration)
 {
     // Has the task been scheduled already or is it a container?
@@ -290,6 +307,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
             if (DEBUGTS(20)) {
                 qDebug()<<"Scheduling of ASAP task"<<name<<"not continuous slots:"<<time2tjp(date)<<"last:"<<time2tjp(lastSlot);
             }
+            //warningMessage(i18nc("info/plain", "ASAP: Not continuous slots: %1 last: %2", time2ISO(date), time2ISO(lastSlot)));
             return false;
         }
 
@@ -333,8 +351,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
             bookResources(sc, date, slotDuration);
 
         doneDuration += ((double) slotDuration) / ONEDAY;
-        if (project->isWorkingTime(Interval(date, date + slotDuration - 1)))
+        if (isWorkingTime(Interval(date, date + slotDuration - 1))) {
             doneLength += project->convertToDailyLoad(slotDuration);
+        }
 
         if (DEBUGTS(10))
             qDebug("Length: %f/%f   Duration: %f/%f",
@@ -935,7 +954,7 @@ Task::bookResource(Allocation *allocation, Resource* r, time_t date, time_t slot
                 continue;
             }
             addBookedResource(*rti);
-//             TJMH.debugMessage(QString("Booked resource: '%1' at %2").arg((*rti)->getName()).arg(time2ISO(date)), this);
+            TJMH.debugMessage(QString("Booked resource: '%1' at %2").arg((*rti)->getName()).arg(time2ISO(date)), this);
             if (DEBUGTS(20)) {
                 qDebug()<<" Booked resource"<<(*rti)->getName()<<"at"<<time2ISO(date);
             }
@@ -1267,7 +1286,7 @@ Task::earliestStart(int sc) const
         for (dateAfterLengthGap = potentialDate;
              gapLength > 0 && dateAfterLengthGap < project->getEnd();
              dateAfterLengthGap += project->getScheduleGranularity())
-            if (project->isWorkingTime(dateAfterLengthGap))
+            if (isWorkingTime(dateAfterLengthGap))
                 gapLength -= project->getScheduleGranularity();
         if (dateAfterLengthGap > potentialDate + td->getGapDuration(sc))
             potentialDate = dateAfterLengthGap;
@@ -1324,7 +1343,7 @@ Task::latestEnd(int sc) const
         for (dateBeforeLengthGap = potentialDate;
              gapLength > 0 && dateBeforeLengthGap >= project->getStart();
              dateBeforeLengthGap -= project->getScheduleGranularity())
-            if (project->isWorkingTime(dateBeforeLengthGap))
+            if (isWorkingTime(dateBeforeLengthGap))
                 gapLength -= project->getScheduleGranularity();
         if (dateBeforeLengthGap < potentialDate - td->getGapDuration(sc))
             potentialDate = dateBeforeLengthGap;
@@ -2566,12 +2585,12 @@ Task::scheduleOk(int sc) const
     }
     if (start == 0)
     {
-        errorMessage(i18nc("@info/plain", "Start time is not calculated"));
+        warningMessage(i18nc("@info/plain", "Start time is not calculated"));
         return false;
     }
     if (start < project->getStart() || start > project->getEnd())
     {
-        errorMessage(i18nc("@info/plain", "Start time %1 is outside of the project target times (%2 - %3)",
+        warningMessage(i18nc("@info/plain", "Start time %1 is outside of the project target times (%2 - %3)",
                      formatTime(start),
                      formatTime(project->getStart()),
                      formatTime(project->getEnd())));
@@ -2601,12 +2620,12 @@ NOT USED ATM
 #endif
     if (end == 0)
     {
-        errorMessage(i18nc("info/plain", "End time is not calculated"));
+        warningMessage(i18nc("info/plain", "End time is not calculated"));
         return false;
     }
     if ((end + 1) < project->getStart() || (end > project->getEnd()))
     {
-        errorMessage(i18nc("info/plain", "End time %1 is outside of the project target times (%2 - %3)",
+        warningMessage(i18nc("info/plain", "End time %1 is outside of the project target times (%2 - %3)",
                      formatTime(end + 1),
                      formatTime(project->getStart()),
                      formatTime(project->getEnd() + 1)));
@@ -2672,26 +2691,34 @@ NOT USED ATM
     // Check if all previous tasks end before start of this task.
     for (TaskListIterator tli(predecessors); tli.hasNext();) {
         Task *t = static_cast<Task*>(tli.next());
-        if (t->end > start && !t->runAway)
-        {
-            errorMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
-                              "Task '%1' ends at %2 but must precede<nl/>"
-                              "task '%3' which starts at %4",
-                         t->getName(), formatTime(t->end + 1),
-                         name, formatTime(start)));
+        if (t->end > start && !t->runAway) {
+            if (t->end == 0) {
+                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                                   "Predeccessor task '%1': End time not calculated", t->getName()));
+            } else {
+                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                                   "Task '%1' ends at %2 but must precede<nl/>"
+                                   "task '%3' which starts at %4",
+                                   t->getName(), formatTime(t->end + 1),
+                                   name, formatTime(start)));
+            }
             return false;
         }
     }
     // Check if all following task start after this tasks end.
     for (TaskListIterator tli(successors); tli.hasNext();) {
         Task *t = static_cast<Task*>(tli.next());
-        if (end > t->start && !t->runAway)
-        {
-            errorMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
-                              "Task '%1' starts at %2 but must follow<nl/>"
-                              "task %3 which ends at %4",
-                         t->getName(), formatTime(t->start),
-                         name, formatTime(end + 1)));
+        if (end > t->start && !t->runAway) {
+            if (t->start == 0) {
+                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                                   "Successor task '%1': Start time not calculated", t->getName()));
+            } else {
+                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                                   "Task '%1' starts at %2 but must follow<nl/>"
+                                   "task %3 which ends at %4",
+                                   t->getName(), formatTime(t->start),
+                                   name, formatTime(end + 1)));
+            }
             return false;
         }
     }

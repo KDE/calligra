@@ -58,7 +58,7 @@ void KexiDBDatePicker::setEnabled(bool enabled)
 
 void KexiDBDatePicker::setValueInternal(const QVariant&, bool)
 {
-    KDatePicker::setDate(m_origValue.toDate());
+    KDatePicker::setDate(KexiDataItemInterface::originalValue().toDate());
 }
 
 QVariant KexiDBDatePicker::value()

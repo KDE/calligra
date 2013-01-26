@@ -22,6 +22,7 @@
 #include "CATextDocumentHandler.h"
 #include "CADocumentController.h"
 #include "CACanvasController.h"
+#include "CATextDocumentModel.h"
 
 #include <KWDocument.h>
 #include <KWCanvasItem.h>
@@ -50,11 +51,13 @@ public:
     Private() {
         document = 0;
         findText = 0;
+        taTextDocumentModel = 0;
     }
     KWDocument* document;
     KWPage currentTextDocPage;
     QString searchString;
     KoFindText* findText;
+    CATextDocumentModel *taTextDocumentModel;
 };
 
 CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentController)
@@ -78,6 +81,11 @@ QStringList CATextDocumentHandler::supportedMimetypes()
     QStringList supportedTypes;
     supportedTypes << "application/vnd.oasis.opendocument.text" << "application/msword";
     return supportedTypes;
+}
+
+KoZoomMode::Mode CATextDocumentHandler::preferredZoomMode() const
+{
+    return KoZoomMode::ZOOM_WIDTH;
 }
 
 bool CATextDocumentHandler::openDocument (const QString& uri)
@@ -119,23 +127,19 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (kwCanvasItem->viewConverter());
     documentController()->canvasController()->setZoomHandler (zoomHandler);
-    KoZoomController* zoomController =
-        new KoZoomController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()),
-                              zoomHandler, part->actionCollection());
-    documentController()->canvasController()->setZoomController (zoomController);
+    KoZoomController* zoomController = documentController()->canvasController()->zoomController();
     d->currentTextDocPage = d->document->pageManager()->begin();
     zoomController->setPageSize (d->currentTextDocPage.rect().size());
     zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, 1.0);
 
     if (kwCanvasItem) {
-        kwCanvasItem->updateSize();
-
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
         connect (kwCanvasItem, SIGNAL (documentSize (QSizeF)), zoomController, SLOT (setDocumentSize (QSizeF)));
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
         connect (documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL (moveDocumentOffset (const QPoint&)),
                  kwCanvasItem, SLOT (setDocumentOffset (QPoint)));
         kwCanvasItem->updateSize();
+        kDebug() << "HANDLEEEE " << kwCanvasItem->geometry();
     }
 
     connect (documentController()->canvasController(), SIGNAL (needsCanvasResize (QSizeF)), SLOT (resizeCanvas (QSizeF)));
@@ -149,6 +153,8 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 
     KAction *action = part->actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
     new KoCopyController(canvas(), action);
+
+    d->taTextDocumentModel = new CATextDocumentModel(this, d->document, canvas()->shapeManager());
 
     return true;
 }
@@ -219,8 +225,11 @@ int CATextDocumentHandler::totalPages() const {
 
 void CATextDocumentHandler::gotoPage(int pageNumber)
 {
-     d->currentTextDocPage = d->document->pageManager()->page(pageNumber);
-     documentController()->canvasController()->ensureVisible(d->currentTextDocPage.rect(), true);
+    if (pageNumber == d->currentTextDocPage.pageNumber())
+        return;
+    d->currentTextDocPage = d->document->pageManager()->page(pageNumber);
+    QRectF rect = documentController()->canvasController()->zoomHandler()->documentToView(d->currentTextDocPage.rect());
+    documentController()->canvasController()->alignTopWith(rect.top());
 }
 
 void CATextDocumentHandler::findNoMatchFound()
@@ -230,7 +239,7 @@ void CATextDocumentHandler::findNoMatchFound()
 
 QString CATextDocumentHandler::bottomToolbarSource() const
 {
-    return "TextDocumentFindToolbar.qml";
+    return "FindToolbar.qml";
 }
 
 QString CATextDocumentHandler::topToolbarSource() const
@@ -238,14 +247,23 @@ QString CATextDocumentHandler::topToolbarSource() const
     return "TextDocumentEditingToolbar.qml";
 }
 
-QString CATextDocumentHandler::leftToolbarSource() const
+QString CATextDocumentHandler::centerOverlaySource() const
 {
-    return "TextDocumentLeftToolbar.qml";
+    return "TextDocumentCenterOverlay.qml";
+}
+
+CATextDocumentModel* CATextDocumentHandler::paTextDocumentModel() const {
+    return d->taTextDocumentModel;
 }
 
 void CATextDocumentHandler::copy()
 {
     document()->documentPart()->actionCollection()->action("edit_copy")->activate(QAction::Trigger);
+}
+
+CAAbstractDocumentHandler::FlickModes CATextDocumentHandler::flickMode() const
+{
+    return FlickVertically;
 }
 
 #include "CATextDocumentHandler.moc"

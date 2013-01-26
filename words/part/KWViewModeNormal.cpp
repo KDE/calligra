@@ -140,6 +140,7 @@ void KWViewModeNormal::updatePageCache()
 
     m_pageSpreadMode = false;
     foreach (const KWPage &page, m_pageManager->pages()) {
+        Q_UNUSED(page);
     }
     m_pageTops.clear();
     qreal width = 0.0, bottom = 0.0;

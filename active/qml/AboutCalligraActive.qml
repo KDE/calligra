@@ -24,23 +24,9 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.graphicslayouts 4.7 as GraphicsLayouts
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Rectangle {
+Item {
     PlasmaCore.Theme {
         id: theme
-    }
-
-    color: "white"
-
-    PlasmaComponents.Button {
-        id: back
-        iconSource: "go-previous"
-        anchors.left: parent.left
-        anchors.top: parent.top
-        height: 64
-        width: 64
-        z: 2
-
-        onClicked: homeScreen.state = ""
     }
 
     Column {
@@ -54,21 +40,14 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
-//         Text {
-//             id: calligra_logo
-//             text: "Calligra"
-//             anchors.horizontalCenter: parent.horizontalCenter
-//             font.pointSize: 80
-//         }
-
         Text {
             id: description
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             wrapMode: Text.WordWrap
-            text: "<p>Calligra Active 1.0 Beta using Calligra Engine " + _calligra_version_string + "</p> \
-                   <p>Calligra Active is a office document viewer for touch based tablets especially tailored for the Plasma Active platform.</p> \
-                   <p><a href=\"http://www.calligra.org/\">http://www.calligra.org</a></p>"
+            text: i18n("<p>Calligra Active 1.0 Beta using Calligra Office Engine %1 </p> \
+                   <p>Calligra Active is an office document viewer for tablets especially tailored to the Plasma Active platform.</p> \
+                   <p><a href=\"http://www.calligra.org/\">http://www.calligra.org</a></p>", _calligra_version_string)
             color: theme.textColor
             styleColor: theme.backgroundColor
             font.pointSize: 20

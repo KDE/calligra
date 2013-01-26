@@ -60,7 +60,7 @@ Item
                     maximumValue: 30
                     value: 5
 
-                    onValueChanged: documentController.documentHandler().slideshowDelay = Math.floor(value)
+                    onValueChanged: documentController.documentHandler.slideshowDelay = Math.floor(value)
                     onPressedChanged: if (!pressed) slideshowDelayLabel.checked = false
                 }
             }
@@ -70,7 +70,7 @@ Item
                 height: parent.height
                 width: height
 
-                text: "Slide " + root.documentController.documentHandler().currentSlideNumber + " of " + root.documentController.documentHandler().totalNumberOfSlides
+                text: i18n("Slide %1 of %2", root.documentController.documentHandler.currentSlideNumber, root.documentController.documentHandler.totalNumberOfSlides)
             }
 
             PlasmaComponents.ToolButton {
@@ -82,9 +82,9 @@ Item
 
                 onCheckedChanged: {
                     if (checked) {
-                        root.documentController.documentHandler().startSlideshow()
+                        root.documentController.documentHandler.startSlideshow()
                     } else {
-                        root.documentController.documentHandler().stopSlideshow()
+                        root.documentController.documentHandler.stopSlideshow()
                     }
                 }
 
@@ -99,11 +99,20 @@ Item
                     root.parent.parent.state = "shown"
                 }
             }
+
+            PlasmaComponents.ToolButton {
+                id: showOverlayButton
+                iconSource: "stage"
+                height: parent.height
+                width: parent.height
+
+                onClicked: root.parent.parent.toggleOverlay()
+            }
         }
     }
 
     onDocumentControllerChanged: {
-        root.documentController.documentHandler().slideshowStopped.connect(startPresentationButton.slideshowStopped)
-        root.documentController.documentHandler().slideshowStarted.connect(startPresentationButton.slideshowStarted)
+        root.documentController.documentHandler.slideshowStopped.connect(startPresentationButton.slideshowStopped)
+        root.documentController.documentHandler.slideshowStarted.connect(startPresentationButton.slideshowStarted)
     }
 }

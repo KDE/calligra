@@ -22,8 +22,6 @@
 #include <klocale.h>
 
 #include "KPrDocument.h"
-#include "shapeanimations/KPrShapeAnimationOld.h"
-#include "KPrShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
 
 KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation )
@@ -49,6 +47,6 @@ void KPrAnimationCreateCommand::redo ()
 
 void KPrAnimationCreateCommand::undo ()
 {
-    m_doc->removeAnimation( m_animation );
+    m_doc->removeAnimation(m_animation);
     m_deleteAnimation = true;
 }

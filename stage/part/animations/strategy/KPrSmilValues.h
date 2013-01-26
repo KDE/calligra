@@ -31,7 +31,9 @@ class KPrShapeAnimation;
 class KPrSmilValues : public KPrAnimationValue
 {
 public:
-    KPrSmilValues(KPrShapeAnimation *shapeAnimation);
+    explicit KPrSmilValues(KPrShapeAnimation *shapeAnimation);
+    ~KPrSmilValues();
+
     virtual qreal value(qreal time) const;
     virtual qreal endValue() const;
     virtual qreal startValue() const;

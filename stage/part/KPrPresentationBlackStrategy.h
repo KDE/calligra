@@ -24,7 +24,7 @@
 class KPrPresentationBlackStrategy : public KPrPresentationStrategyBase
 {
 public:
-    KPrPresentationBlackStrategy( KPrPresentationTool * tool );
+    explicit KPrPresentationBlackStrategy(KPrPresentationTool *tool);
     virtual ~KPrPresentationBlackStrategy();
 
     virtual bool keyPressEvent( QKeyEvent * event );

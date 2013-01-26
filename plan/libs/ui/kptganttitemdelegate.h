@@ -79,10 +79,12 @@ public:
 protected:
     void paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx, int typ );
 
-private:
-    Q_DISABLE_COPY(GanttItemDelegate)
+protected:
     QBrush m_criticalBrush;
     QBrush m_schedulingErrorBrush;
+
+private:
+    Q_DISABLE_COPY(GanttItemDelegate)
 
 };
 

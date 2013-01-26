@@ -23,13 +23,18 @@
 #include "CACanvasController.h"
 #include "CADocumentInfo.h"
 #include "CADocumentController.h"
+#include "CACanvasItem.h"
+#include "CAPADocumentModel.h"
+#include "CATextDocumentModel.h"
+#include "CAImageProvider.h"
+#include "CAAbstractDocumentHandler.h"
 #include "calligra_active_global.h"
 
 #include <libs/main/calligraversion.h>
 
-#include <KDE/KGlobal>
-#include <KDE/KStandardDirs>
-#include <KDE/KDebug>
+#include <KGlobal>
+#include <KStandardDirs>
+#include <KDebug>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
@@ -44,7 +49,11 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterType<CACanvasController> ("CalligraActive", 1, 0, "CanvasController");
     qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
+    qmlRegisterType<CACanvasItem> ("CalligraActive", 1, 0, "CACanvasItem");
+    qmlRegisterUncreatableType<CAPADocumentModel> ("CalligraActive", 1, 0, "CAPADocumentModel", "Not allowed");
+    qmlRegisterUncreatableType<CATextDocumentModel> ("CalligraActive", 1, 0, "CATextDocumentModel", "Not allowed");
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
+    qmlRegisterUncreatableType<CAAbstractDocumentHandler>("CalligraActive", 1, 0, "CAAbstractDocumentHandler", "Not allowed");
 
     m_view = new QDeclarativeView (this);
 
@@ -57,8 +66,8 @@ MainWindow::MainWindow (QWidget* parent)
     QList<QObject*> recentSpreadsheets;
     QList<QObject*> recentPresentations;
     QSettings settings;
-    foreach (QString string, settings.value ("recentFiles").toStringList()) {
-        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (";"));
+    foreach (const QString &string, settings.value ("recentFiles").toStringList()) {
+        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (QLatin1Char(';')));
         recentFiles.append (docInfo);
         switch (docInfo->type()) {
         case CADocumentInfo::TextDocument:
@@ -77,26 +86,28 @@ MainWindow::MainWindow (QWidget* parent)
         m_view->engine()->addImportPath (importPath);
     }
 
-    m_view->rootContext()->setContextProperty ("mainwindow", this);
+    m_view->rootContext()->setContextProperty("mainwindow", this);
     m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
-    loadMetadataModel();
+    m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::instance());
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
-                                            + "/share/calligraactive/qml/HomeScreen.qml"));
+                                            + "/share/calligraactive/qml/Doc.qml"));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
 
-    setCentralWidget (m_view);
     connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
-    resize (800, 600);
+    resize (1024, 768);
+    setCentralWidget (m_view);
 
-    if (!documentPath.isEmpty()) {
-        QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
-    }
+    QTimer::singleShot(0, this, SLOT(checkForAndOpenDocument()));
 }
 
 void MainWindow::openFile (const QString& path)
 {
     documentPath = path;
+    QObject* object = m_view->rootObject();
+    if (object) {
+        QMetaObject::invokeMethod (object, "hideOpenButton");
+    }
 }
 
 void MainWindow::adjustWindowSize (QSize size)
@@ -106,7 +117,7 @@ void MainWindow::adjustWindowSize (QSize size)
 
 void MainWindow::openFileDialog()
 {
-    const QString path = QFileDialog::getOpenFileName (this, "Open File", QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
+    const QString path = QFileDialog::getOpenFileName (this, i18n("Open File"), QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
     if (!path.isEmpty()) {
         QObject* object = m_view->rootObject();
         Q_ASSERT (object);
@@ -115,30 +126,16 @@ void MainWindow::openFileDialog()
 
 }
 
-void MainWindow::loadMetadataModel()
-{
-    if (!m_view) {
-        return;
-    }
-    QDeclarativeComponent component(m_view->engine());
-    component.setData("import org.kde.metadatamodels 0.1\nMetadataModel { sortOrder: Qt.AscendingOrder }\n", QUrl());
-
-    if (!component.isError()) {
-        m_view->rootContext()->setContextProperty("metadataInternalModel", component.create());
-    } else {
-        kDebug() << "Plasma Active Metadata Models are not installed, using built in model";
-        m_view->rootContext()->setContextProperty("metadataInternalModel", false);
-    }
-}
-
 MainWindow::~MainWindow()
 {
 }
 
 void MainWindow::checkForAndOpenDocument()
 {
-    QObject* object = m_view->rootObject();
-    QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
+    if (!documentPath.isEmpty()) {
+        QObject* object = m_view->rootObject();
+        QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
+    }
 }
 
 #include "MainWindow.moc"

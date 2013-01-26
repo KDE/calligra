@@ -54,9 +54,14 @@ void FencedElement::layout( const AttributeManager* am )
     int count = 0;
     foreach( const BasicElement* tmp, childElements() ) {
         m_fence.moveTo( m_fence.currentPosition() + QPointF( tmp->width() , 0.0 ) );
-        if( tmp != childElements().last() )
+        if( tmp != childElements().last() ) {
             m_fence.addPath( op.renderForFence( separators.at( count ), Infix,m_fence.currentPosition()));
-        count++;
+        }
+
+        if(count < separators.size() - 1)
+        {
+            count++;
+        }
     }
 
     if(childElements().count()==0)

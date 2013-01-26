@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -156,7 +156,7 @@ public:
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
      \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
-    static int create(int argc, char *argv[], const KexiAboutData &aboutData);
+    static int create(int argc, char *argv[], const KAboutData &aboutData);
 
     //! \return KexiMainWindow singleton (if it is instantiated)
 //  static KexiMainWindow* self();
@@ -277,11 +277,18 @@ public slots:
 
     /*! Implemented for KexiMainWindow */
     virtual tristate saveObject(KexiWindow *window,
-                                const QString& messageWhenAskingForName = QString(), bool dontAsk = false);
+                                const QString& messageWhenAskingForName = QString(),
+                                SaveObjectOptions options = 0);
+
+    /*! Implemented for KexiMainWindowIface. */
+    virtual KexiWindow *openedWindowFor(const KexiPart::Item *item);
 
     /*! Implemented for KexiMainWindow */
-    virtual tristate getNewObjectInfo(KexiPart::Item *partItem, KexiPart::Part *part,
-                                      bool& allowOverwriting, const QString& messageWhenAskingForName = QString());
+    virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
+                                      const QString &originalName,
+                                      KexiPart::Part *part,
+                                      bool allowOverwriting, bool *overwriteNeeded,
+                                      const QString& messageWhenAskingForName = QString());
 
     /*! Implemented for KexiMainWindow */
     virtual void highlightObject(const QString& partClass, const QString& name);
@@ -511,7 +518,7 @@ protected:
 protected slots:
 
     tristate createNewProject(KexiProjectData* projectData);
-    
+
     /*! Called once after timeout (after ctors are executed). */
     void slotAutoOpenObjectsLater();
 
@@ -527,7 +534,7 @@ protected slots:
      or pressed Return key on the part item in the navigator.
      This differs from openObject() signal in that if the object is already opened
      in view mode other than \a viewMode, the mode is not changed.
-     \sa KexiBrowser::openOrActivateItem() */
+     \sa KexiProjectNavigator::openOrActivateItem() */
     KexiWindow* openObjectFromNavigator(KexiPart::Item* item,
                                         Kexi::ViewMode viewMode, bool &openingCancelled);
 
@@ -559,8 +566,13 @@ protected slots:
 
     /*! Renames object pointed by \a item to a new name \a _newName.
      Sets \a success to false on failure. Used as a slot connected
-     to KexiBrowser::renameItem() signal. */
+     to KexiProjectNavigator::renameItem() signal. */
     void renameObject(KexiPart::Item *item, const QString& _newName, bool &succes);
+
+    /*! Changes caption of object pointed by \a item to \a _newCaption.
+     Sets \a success to false on failure. Used as a slot connected
+     to KexiProjectNavigator::changeItemCaption() signal. */
+    void setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool &succes);
 
     /*! Reaction for object rename (signalled by KexiProject).
      If this item has opened window, it's caption is updated,

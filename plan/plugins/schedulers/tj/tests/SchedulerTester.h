@@ -41,12 +41,10 @@ private slots:
 private:
     void initTimezone();
     void cleanupTimezone();
+    void removeDir(const QString &dir);
     QStringList data();
     void testProject(const QString &fname, const KoXmlDocument &doc );
     void compare( const QString &fname, Node *n, long id1, long id2 );
-
-private:
-    KTempDir m_tmp;
 };
 
 } //namespace KPlato

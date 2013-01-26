@@ -139,8 +139,8 @@ void KPrHtmlExportDialog::loadTemplatesList()
         for (QStringList::ConstIterator entry=entries.constBegin(); entry!=entries.constEnd(); ++entry) {
             if (*entry != "." && *entry != "..") {
                 QString name = *entry;
-                if(name.endsWith(".zip", Qt::CaseInsensitive)){
-                        name.resize(name.size() - 4);
+                if(name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)){
+                    name.chop(4);
                 }
                 ui.kcombobox->addItem(name, QVariant(QString(*path + *entry)));
             }
@@ -184,8 +184,8 @@ void KPrHtmlExportDialog::browserAction()
     if (dialog.exec() == QDialog::Accepted) {
         if (verifyZipFile(dialog.selectedFile())) {
             QString name (dialog.selectedUrl().fileName());
-            if (name.endsWith(".zip", Qt::CaseInsensitive)) {
-                    name.resize(name.size()-4);
+            if (name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)) {
+                name.chop(4);
             }
             ui.kcombobox->addItem(name, dialog.selectedFile());
             ui.kcombobox->setCurrentIndex(ui.kcombobox->count() - 1);

@@ -434,6 +434,10 @@ void KexiComboBoxTableEdit::handleAction(const QString& actionName)
         KexiInputTableEdit::handleAction(actionName);
 }
 
+QVariant KexiComboBoxTableEdit::origValue() const
+{
+    return KexiDataItemInterface::originalValue();
+}
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiComboBoxEditorFactoryItem, KexiComboBoxTableEdit)
 

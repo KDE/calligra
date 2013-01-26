@@ -859,7 +859,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
         m_currentSchedule->logDebug( QString( "Make appointments from %1 to %2 load=%4, required: %3" ).arg( from.toString() ).arg( end.toString() ).arg( lst.join(",") ).arg( load ) );
     }
 #endif
-    AppointmentIntervalList lst = workIntervals( from, end );
+    AppointmentIntervalList lst = workIntervals( from, end, m_currentSchedule );
     foreach ( const AppointmentInterval &i, lst.map() ) {
         m_currentSchedule->addAppointment( node, i.startTime(), i.endTime(), load );
         foreach ( Resource *r, required ) {

@@ -159,7 +159,7 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         _T_* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["G"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) frameBufferData,
                                       sizeof(_T_) * 1,
                                       sizeof(_T_) * width));
@@ -197,20 +197,20 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["R"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->r,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["G"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->g,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["B"].toAscii().data(),
+        frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->b,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
         if (hasAlpha) {
-            frameBuffer.insert(info.channelMap["A"].toAscii().data(),
+            frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
                                Imf::Slice(ptype, (char *) &frameBufferData->a,
                                           sizeof(Rgba) * 1,
                                           sizeof(Rgba) * width));
@@ -530,7 +530,7 @@ KisImageBuilder_Result exrConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, false, QApplication::activeWindow())) {
+    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::DestinationSide, QApplication::activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 

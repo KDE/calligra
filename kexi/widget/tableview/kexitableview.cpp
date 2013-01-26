@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@
 #include <QPixmap>
 #include <QDesktopWidget>
 #include <QMatrix>
+#include <QScrollArea>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -2669,6 +2670,16 @@ void KexiTableView::valueChanged(KexiDataItemInterface* item)
 bool KexiTableView::cursorAtNewRow() const
 {
     return m_newRowEditing;
+}
+
+void KexiTableView::lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded)
+{
+    showLengthExceededMessage(item, lengthExceeded);
+}
+
+void KexiTableView::updateLengthExceededMessage(KexiDataItemInterface *item)
+{
+    showUpdateForLengthExceededMessage(item);
 }
 
 /* not needed after #2010-01-05 fix

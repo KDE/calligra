@@ -42,17 +42,15 @@ public:
     KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton = false);
     virtual ~KexiDBPasswordDialog();
 
-    bool showConnectionDetailsRequested() const {
-        return m_showConnectionDetailsRequested;
-    }
+    bool showConnectionDetailsRequested() const;
 
 protected slots:
     virtual void done(int r);
     void slotShowConnectionDetails();
 
 protected:
-    KexiDB::ConnectionData *m_cdata;
-    bool m_showConnectionDetailsRequested;
+    class Private;
+    Private* const d;
 };
 
 /*! Handles startup actions for Kexi application.
@@ -105,7 +103,7 @@ public:
      \a driverName is a preferred driver name.
      \a options should be a combination of DetectDriverForFileOptions enum values. */
     static tristate detectActionForFile(
-        KexiStartupData::Import& detectedImportAction, QString& detectedDriverName,
+        KexiStartupData::Import* detectedImportAction, QString* detectedDriverName,
         const QString& _suggestedDriverName,
         const QString &dbFileName, QWidget *parent = 0, int options = 0);
 

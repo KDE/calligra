@@ -97,7 +97,7 @@ namespace KPlatoWork
 {
 
 View::View( Part *part,  QWidget *parent, KActionCollection *collection )
-    : QWidget( parent ),
+    : QStackedWidget( parent ),
     m_part( part ),
     m_scheduleActionGroup( new QActionGroup( this ) ),
     m_manager( 0 )
@@ -105,25 +105,11 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     m_readWrite = part->isReadWrite();
     kDebug(planworkDbg())<<m_readWrite;
 
-//    m_dbus = new ViewAdaptor( this );
-//    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
-
-//     m_tab = new QTabWidget( this );
-     QVBoxLayout *layout = new QVBoxLayout( this );
-     layout->setMargin(0);
-//     layout->addWidget( m_tab );
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
     // Add sub views
     createViews();
 
     // The menu items
     // ------ Edit
-    actionCut = collection->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( slotEditCut() ));
-    actionCopy = collection->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
-    actionPaste = collection->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
-
     actionRemoveSelectedPackages  = new KAction(koIcon("edit-delete"), i18n("Remove Packages"), this);
     collection->addAction("package_remove_selected", actionRemoveSelectedPackages );
     connect( actionRemoveSelectedPackages, SIGNAL( triggered( bool ) ), SLOT( slotRemoveSelectedPackages() ) );
@@ -132,6 +118,15 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     collection->addAction("package_remove_current", actionRemoveCurrentPackage );
     connect( actionRemoveCurrentPackage, SIGNAL( triggered( bool ) ), SLOT( slotRemoveCurrentPackage() ) );
 
+    actionViewList  = new KAction(koIcon("view-list-tree"), i18n("List"), this);
+    actionViewList->setToolTip( i18nc( "@info:tooltip", "Select task list" ) );
+    collection->addAction("view_list", actionViewList );
+    connect( actionViewList, SIGNAL( triggered( bool ) ), SLOT( slotViewList() ) );
+
+    actionViewGantt  = new KAction(koIcon("view-time-schedule"), i18n("Gantt"), this);
+    actionViewGantt->setToolTip( i18nc( "@info:tooltip", "Select timeline" ) );
+    collection->addAction("view_gantt", actionViewGantt );
+    connect( actionViewGantt, SIGNAL( triggered( bool ) ), SLOT( slotViewGantt() ) );
 
 //     actionTaskProgress  = new KAction(koIcon("document-edit"), i18n("Progress..."), this);
 //     collection->addAction("task_progress", actionTaskProgress );
@@ -176,33 +171,66 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     updateReadWrite( m_readWrite );
     //kDebug(planworkDbg())<<" end";
 
-//    connect( m_tab, SIGNAL( currentChanged( int ) ), SLOT( slotCurrentChanged( int ) ) );
+    loadContext();
+    slotCurrentChanged( currentIndex() );
+    connect( this, SIGNAL( currentChanged( int ) ), SLOT( slotCurrentChanged( int ) ) );
 
     slotSelectionChanged();
 }
 
 View::~View()
 {
-//    removeStatusBarItem( m_estlabel );
-//    delete m_estlabel;
+    saveContext();
+}
+
+void View::slotCurrentChanged( int index )
+{
+    actionViewList->setEnabled( index != 0 );
+    actionViewGantt->setEnabled( index != 1 );
+    saveContext();
+}
+
+void View::slotViewList()
+{
+    kDebug(planworkDbg());
+    setCurrentIndex( 0 );
+}
+
+void View::slotViewGantt()
+{
+    kDebug(planworkDbg());
+    setCurrentIndex( 1 );
 }
 
 void View::createViews()
 {
-    TaskWorkPackageView * v = createTaskWorkPackageView();
-    Q_UNUSED(v); // XXX: shouldn't v be deleted?
+    QWidget *v = createTaskWorkPackageView();
+    addWidget( v );
+    v = createGanttView();
+    addWidget( v );
 }
 
 TaskWorkPackageView *View::createTaskWorkPackageView()
 {
     TaskWorkPackageView *v = new TaskWorkPackageView( part(), this );
-    kDebug(planworkDbg())<<PlanWorkSettings::self();
-    layout()->addWidget( v );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
     connect( v, SIGNAL( selectionChanged() ), SLOT( slotSelectionChanged() ) );
     v->updateReadWrite( m_readWrite );
+    v->loadContext();
+    return v;
+}
+
+TaskWPGanttView *View::createGanttView()
+{
+    TaskWPGanttView *v = new TaskWPGanttView( part(), this );
+
+    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    connect( v, SIGNAL( selectionChanged() ), SLOT( slotSelectionChanged() ) );
+    v->updateReadWrite( m_readWrite );
+    v->loadContext();
     return v;
 }
 
@@ -276,7 +304,7 @@ void View::slotPopupMenu( const QString& name, const QPoint & pos )
         return;
     }
     QList<QAction*> lst;
-    TaskWorkPackageView *v = currentView();
+    AbstractView *v = currentView();
     if ( v ) {
         lst = v->contextActionList();
         kDebug(planworkDbg())<<lst;
@@ -295,13 +323,16 @@ void View::slotPopupMenu( const QString& name, const QPoint & pos )
 
 bool View::loadContext()
 {
-    //kDebug(planworkDbg())<<endl;
+    kDebug(planworkDbg());
+    setCurrentIndex( PlanWorkSettings::self()->currentView() );
     return true;
 }
 
-void View::saveContext( QDomElement &/*me*/ ) const
+void View::saveContext() const
 {
-    //kDebug(planworkDbg())<<endl;
+    kDebug(planworkDbg());
+    PlanWorkSettings::self()->setCurrentView( currentIndex() );
+    PlanWorkSettings::self()->writeConfig();
 }
 
 void View::slotEditDocument()
@@ -406,31 +437,21 @@ void View::slotTaskDescription()
     delete dlg;
 }
 
-TaskWorkPackageView *View::currentView() const
+AbstractView *View::currentView() const
 {
-    QList<TaskWorkPackageView *> lst = findChildren<TaskWorkPackageView*>();
-    if ( lst.isEmpty() ) {
-        return 0;
-    }
-    return lst.first();
+    return qobject_cast<AbstractView*>( currentWidget() );
 }
 
 Node *View::currentNode() const
 {
-    QList<TaskWorkPackageView *> lst = findChildren<TaskWorkPackageView*>();
-    if ( lst.isEmpty() ) {
-        return 0;
-    }
-    return lst.first()->currentNode();
+    AbstractView *v = currentView();
+    return v ? v->currentNode() : 0;
 }
 
 Document *View::currentDocument() const
 {
-    QList<TaskWorkPackageView *> lst = findChildren<TaskWorkPackageView*>();
-    if ( lst.isEmpty() ) {
-        return 0;
-    }
-    return lst.first()->currentDocument();
+    AbstractView *v = currentView();
+    return v ? v->currentDocument() : 0;
 }
 
 void View::slotTaskProgress()

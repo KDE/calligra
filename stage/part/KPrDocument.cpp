@@ -101,6 +101,7 @@ KPrDocument::~KPrDocument()
 {
     saveKPrConfig();
     delete m_customSlideShows;
+    delete m_declarations;
 }
 
 const char * KPrDocument::odfTagName( bool withNamespace )
@@ -173,7 +174,7 @@ KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
 
 KoPAMasterPage * KPrDocument::newMasterPage()
 {
-    return new KPrMasterPage();
+    return new KPrMasterPage(this);
 }
 
 KoOdf::DocumentType KPrDocument::documentType() const
@@ -197,6 +198,7 @@ void KPrDocument::addAnimation( KPrShapeAnimation * animation )
         shape->setApplicationData( applicationData );
     }
     applicationData->animations().insert( animation );
+    applicationData->setDeleteAnimations(false);
 }
 
 void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData )
@@ -208,12 +210,23 @@ void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFro
     // remove animation from the list of animations
     animations.remove( animation );
 
-    if ( removeFromApplicationData ) {
+    KPrShapeApplicationData *applicationData = dynamic_cast<KPrShapeApplicationData*>(shape->applicationData());
+    Q_ASSERT(applicationData);
+    if (removeFromApplicationData) {
         // remove animation from the shape animation data
-        KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
-        Q_ASSERT( applicationData );
-        applicationData->animations().remove( animation );
+        applicationData->animations().remove(animation);
+    } else {
+        applicationData->setDeleteAnimations(true);
     }
+}
+
+void KPrDocument::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
+{
+    KoShape *shape = oldAnimation->shape();
+    KPrShapeAnimations &animations(animationsByPage(pageByShape(shape)));
+
+    // remove animation from the list of animations
+    animations.replaceAnimation(oldAnimation, newAnimation);
 }
 
 void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )

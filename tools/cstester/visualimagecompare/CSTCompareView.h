@@ -26,7 +26,7 @@
 #include <QDir>
 
 #ifdef HAS_POPPLER
-#include <poppler-qt4.h>
+#include <poppler/qt4/poppler-qt4.h>
 #endif
 
 class CompareView;
@@ -35,7 +35,7 @@ class QLabel;
 class CSTCompareView : public QWidget
 {
 public:
-    CSTCompareView(QWidget *parent = 0);
+    explicit CSTCompareView(QWidget *parent = 0);
     virtual ~CSTCompareView();
 
     bool open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile);

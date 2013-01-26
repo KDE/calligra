@@ -109,6 +109,21 @@ void TaskStatusItemModel::slotNodeRemoved( Node * /*node*/ )
     refresh();
 }
 
+void TaskStatusItemModel::slotNodeToBeMoved(Node *node, int pos, Node *newParent, int newPos)
+{
+    Q_UNUSED( node );
+    Q_UNUSED( pos );
+    Q_UNUSED( newParent );
+    Q_UNUSED( newPos );
+    clear();
+}
+
+void TaskStatusItemModel::slotNodeMoved( Node * /*node*/ )
+{
+    //kDebug(planDbg())<<node->name();
+    refresh();
+}
+
 void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
@@ -118,11 +133,11 @@ void TaskStatusItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        disconnect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
     
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
     }
     m_project = project;
     m_nodemodel.setProject( project );
@@ -132,12 +147,12 @@ void TaskStatusItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    
+        connect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
+
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
-        
+        connect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
+
     }
     reset();
 }
@@ -148,6 +163,7 @@ void TaskStatusItemModel::setScheduleManager( ScheduleManager *sm )
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );
+    ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
     reset();

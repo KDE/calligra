@@ -143,9 +143,12 @@ public slots:
     void nodeOpacityChanged(qreal opacity, bool finalChange);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode();
-    void removeNode(KisNodeSP node);
+    void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
+    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
+    void activateNextNode();
+    void activatePreviousNode();
 
     /**
      * move the active node up the nodestack.
@@ -191,7 +194,6 @@ private:
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
     void getNewNodeLocation(KisNodeSP node, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode);
 
-    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
 
     /**
      * Scales opacity from the range 0...1

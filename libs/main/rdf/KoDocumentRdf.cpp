@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
-   Copyright (C) 2011,2012 Ben Martin hacking for fun!
+   Copyright (C) 2011,2012 Ben Martin <monkeyiq@users.sourceforge.net> hacking for fun!
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@
 #include <KoInlineObject.h>
 #include <KoTextInlineRdf.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <KoBookmark.h>
 #include <KoTextMeta.h>
 #include "KoRdfFoaF.h"
@@ -913,7 +914,7 @@ QPair<int, int> KoDocumentRdf::findExtent(const QString &xmlid) const
         RDEBUG << "(Semantic) have inline obj, extent:" << ret;
         return ret;
     }
-    return QPair<int, int>(0, 0);
+    return QPair<int, int>(-1, 0);
 }
 
 QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
@@ -921,13 +922,22 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
     Q_ASSERT(d->model);
     RDEBUG << "model.sz:" << d->model->statementCount();
 
+    const QTextDocument *document = handler->document();
+
+    // first check for bookmarks
+    KoTextRangeManager *mgr = KoTextDocument(document).textRangeManager();
+    Q_ASSERT(mgr);
+    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(0, handler->selectionEnd(), handler->selectionStart(), -1);
+    foreach (const KoTextRange *range, textRanges) {
+        return QPair<int,int>(range->rangeStart(), range->rangeEnd());
+    }
+/*
+    // find the text:meta inline objects
     int startPosition = handler->position();
     KoInlineTextObjectManager *inlineObjectManager
                 = KoTextDocument(handler->document()).inlineTextObjectManager();
     Q_ASSERT(inlineObjectManager);
 
-    // find the bookmark-start or text:meta inline objects
-    const QTextDocument *document = handler->document();
     QTextCursor cursor = document->find(QString(QChar::ObjectReplacementCharacter),
                                         startPosition,
                                         QTextDocument::FindBackward);
@@ -936,19 +946,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
 
-        // first check for bookmarks
-        if (KoBookmark *bookmark = dynamic_cast<KoBookmark*>(obj)) {
-            KoBookmark::BookmarkType type = bookmark->type();
-            if (type == KoBookmark::StartBookmark) {
-                KoBookmark *endmark = bookmark->endBookmark();
-                Q_ASSERT(endmark);
-                if (endmark->position() > startPosition) {
-                    return QPair<int,int>(bookmark->position(), endmark->position());
-                }
-            }
-        }
-        // then check whether we've got a text:meta tag
-        else if (KoTextMeta *metamark = dynamic_cast<KoTextMeta*>(obj)) {
+        if (KoTextMeta *metamark = dynamic_cast<KoTextMeta*>(obj)) {
             if (metamark->type() == KoTextMeta::StartBookmark) {
                 KoTextMeta *endmark = metamark->endBookmark();
                 Q_ASSERT(endmark);
@@ -961,21 +959,35 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
                                 cursor.position(),
                                 QTextDocument::FindBackward);
     }
-    return QPair<int, int>(0, 0);
+    */
+    return QPair<int, int>(-1, 0);
 }
 
 QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
 {
-
     int startPosition = handler->position();
-    KoInlineTextObjectManager *inlineObjectManager
-                = KoTextDocument(handler->document()).inlineTextObjectManager();
-    Q_ASSERT(inlineObjectManager);
+    Q_UNUSED(startPosition);
 
     KoTextInlineRdf *inlineRdf = 0;
 
-    // find the bookmark-start or text:meta inline objects
     const QTextDocument *document = handler->document();
+
+    // first check for bookmarks
+    KoTextRangeManager *mgr = KoTextDocument(document).textRangeManager();
+    Q_ASSERT(mgr);
+    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(0, handler->selectionEnd(), handler->selectionStart(), -1);
+    foreach (const KoTextRange *range, textRanges) {
+        inlineRdf = range->inlineRdf();
+        if (inlineRdf) {
+            return inlineRdf->xmlId();
+        }
+    }
+
+/*
+    // find the text:meta inline objects
+    KoInlineTextObjectManager *inlineObjectManager
+                = KoTextDocument(document).inlineTextObjectManager();
+    Q_ASSERT(inlineObjectManager);
     QTextCursor cursor = document->find(QString(QChar::ObjectReplacementCharacter),
                                         startPosition,
                                         QTextDocument::FindBackward);
@@ -985,21 +997,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
         KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
         RDEBUG << "obj" << obj;
 
-        // first check for bookmarks
-        if (KoBookmark *bookmark = dynamic_cast<KoBookmark*>(obj)) {
-            KoBookmark::BookmarkType type = bookmark->type();
-            if (type == KoBookmark::StartBookmark) {
-                KoBookmark *endmark = bookmark->endBookmark();
-                // we used to assert on endmark, but we cannot keep people from
-                // inserting a startbookmark and only then creating and inserting
-                // the endmark
-                if (endmark && endmark->position() > startPosition) {
-                    inlineRdf = bookmark->inlineRdf();
-                }
-            }
-        }
-        // then check whether we've got a text:meta tag
-        else if (KoTextMeta *metamark = dynamic_cast<KoTextMeta*>(obj)) {
+        if (KoTextMeta *metamark = dynamic_cast<KoTextMeta*>(obj)) {
             if (metamark->type() == KoTextMeta::StartBookmark) {
                 KoTextMeta *endmark = metamark->endBookmark();
                 // we used to assert on endmark, but we cannot keep people from
@@ -1009,10 +1007,6 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
                     inlineRdf = metamark->inlineRdf();
                 }
             }
-        }
-        else if (obj){
-            // maybe we got another inline object that has rdf...
-            inlineRdf = obj->inlineRdf();
         }
 
         // if we've got inline rdf, we've found the nearest xmlid wrapping our current position
@@ -1028,7 +1022,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
                                 cursor.position()-1,
                                 QTextDocument::FindBackward);
     }
-
+*/
     // we couldn't find inline rdf object... So try to see whether there's
     // inlineRdf in the charformat for the current cursor position. It's
     // unlikely, of course. Maybe this should be the first check, though?
@@ -1040,7 +1034,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
         return inlineRdf->xmlId();
     }
 
-    return QString::null;
+    return QString();
 }
 
 
@@ -1127,8 +1121,9 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
 {
     RDEBUG << "top";
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(qdoc).inlineTextObjectManager();
+    KoTextRangeManager *textRangeManager = KoTextDocument(qdoc).textRangeManager();
     d->inlineRdfObjects.clear();
-    if(!textObjectManager) {
+    if(!textObjectManager || !textRangeManager) {
         return;
     }
     //
@@ -1137,6 +1132,15 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
     QList<KoInlineObject*> kiocol = textObjectManager->inlineTextObjects();
     foreach (KoInlineObject *kio, kiocol) {
         if (KoTextInlineRdf *inlineRdf = kio->inlineRdf()) {
+            rememberNewInlineRdfObject(inlineRdf);
+        }
+    }
+    //
+    // Rdf from textranges
+    //
+    QList<KoTextRange *> rangelist = textRangeManager->textRanges();
+    foreach (KoTextRange *range, rangelist) {
+        if (KoTextInlineRdf *inlineRdf = range->inlineRdf()) {
             rememberNewInlineRdfObject(inlineRdf);
         }
     }
@@ -1191,11 +1195,8 @@ void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfSemanticItem item)
         // reflow the formatting for each view of the semanticItem, in reverse document order
         //
         QMap<int, reflowItem> col;
-        QStringList xmlidlist = item->xmlIdList();
-        foreach (const QString &xmlid, xmlidlist) {
-            RDEBUG << "xmlid:" << xmlid << " reflow item:" << item->name();
-            insertReflow(col, item);
-        }
+        RDEBUG << "xmlids:" << item->xmlIdList() << " reflow item:" << item->name();
+        insertReflow(col, item);
         applyReflow(col);
     }
     emit semanticObjectUpdated(item);
@@ -1263,10 +1264,10 @@ void KoDocumentRdf::applyReflow(const QMap<int, reflowItem> &col)
     QMapIterator< int, reflowItem > i(col);
     i.toBack();
     while (i.hasPrevious()) {
-        reflowItem item = i.previous().value();
+        const reflowItem &item = i.previous().value();
         RDEBUG << "format(), extent:" << item.m_extent;
         RDEBUG << "xmlid:" << item.m_xmlid;
-        RDEBUG << "format(), semitem:" << item.m_si;
+        RDEBUG << "format(), semitem:" << item.m_si.constData();
         RDEBUG << "format(), semitem.name:" << item.m_si->name();
         if (item.m_ss) {
             KoRdfSemanticItemViewSite vs(item.m_si, item.m_xmlid);

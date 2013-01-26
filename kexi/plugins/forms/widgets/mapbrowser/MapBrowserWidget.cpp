@@ -52,16 +52,16 @@ QVariant MapBrowserWidget::value()
 
 void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld )
 {
-    
+    Q_UNUSED(removeOld);
     //if(isReadOnly())
     //    return;
     m_slotMapChanged_enabled = false;
     //disable change editing
     //if(removeOld);
     kDebug() << "add:" << add;
-    kDebug() << "m_origValue:" << m_origValue;
-    //deserializeData((removeOld ? QVariant() : m_origValue));
-    deserializeData(m_origValue);
+    kDebug() << "originalValue():" << originalValue();
+    //deserializeData((removeOld ? QVariant() : originalValue()));
+    deserializeData(originalValue());
     m_slotMapChanged_enabled = true;
     
 }

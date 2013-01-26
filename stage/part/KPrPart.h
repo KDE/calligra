@@ -31,7 +31,7 @@ class STAGE_EXPORT KPrPart : public KoPart
     Q_OBJECT
 
 public:
-    KPrPart(QObject *parent);
+    explicit KPrPart(QObject *parent);
 
     virtual ~KPrPart();
 

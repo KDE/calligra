@@ -57,8 +57,6 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
     setObjectName( "KPrClickActionDocker" );
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
-    m_cbPlaySound = new QComboBox();
-    //layout->addWidget(m_cbPlaySound);
 
     QList<KoEventActionFactoryBase *> factories = KoEventActionRegistry::instance()->presentationEventActions();
     foreach ( KoEventActionFactoryBase * factory, factories ) {

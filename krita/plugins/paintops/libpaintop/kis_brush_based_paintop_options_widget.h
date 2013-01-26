@@ -32,6 +32,8 @@ public:
     KisBrushBasedPaintopOptionWidget(QWidget* parent = 0);
     virtual ~KisBrushBasedPaintopOptionWidget();
 
+    void setPrecisionEnabled(bool value);
+
     KisBrushSP brush();
 
     void changePaintOpSize(qreal x, qreal y);

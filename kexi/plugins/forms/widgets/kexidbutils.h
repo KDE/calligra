@@ -60,13 +60,13 @@ public:
      Used in createTitle(QMenu *menu) and KexiDBImageBox.
      \return true is the title has been added. */
     static bool updateContextMenuTitleForDataItem(QMenu *menu, KexiDataItemInterface* iface,
-            const QString& icon = QString());
+    const QString& icon = QString());
 
 protected:
-    KexiDataItemInterface* m_iface;
-    QPointer<QMenu> m_contextMenu;
-    QPointer<QAction> m_titleAction;
-    bool m_contextMenuHasTitle; //!< true if KPopupTitle has been added to the context menu.
+
+    class Private;
+    Private * const d;
+
 };
 
 class KexiDBAutoField;

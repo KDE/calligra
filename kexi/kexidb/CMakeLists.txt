@@ -3,7 +3,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
 add_subdirectory(drivers)
 add_subdirectory(sqlitedump)
 
-include_directories(${CALLIGRADB_INCLUDES} ${KDE4_INCLUDES})
+include_directories(${KDE4_INCLUDES})
 
 set(kexidb_LIB_SRCS
    dbobjectnamevalidator.cpp

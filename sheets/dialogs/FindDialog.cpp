@@ -44,7 +44,7 @@ FindOption::FindOption(QWidget *parent)
     m_searchInAllSheet = new QCheckBox(i18n("Search entire sheet"), m_findExtension);
     layout1->addWidget(m_searchInAllSheet);
 
-    QHBoxLayout *comboLayout = new QHBoxLayout(m_findExtension);
+    QHBoxLayout *comboLayout = new QHBoxLayout();
     QLabel *label = new QLabel(i18n("Search in:"), m_findExtension);
     comboLayout->addWidget(label);
 
@@ -57,7 +57,7 @@ FindOption::FindOption(QWidget *parent)
     lst << i18n("Comments");
     m_searchIn->insertItems(0, lst);
 
-    comboLayout = new QHBoxLayout(m_findExtension);
+    comboLayout = new QHBoxLayout();
     label = new QLabel(i18n("Search direction:"), m_findExtension);
     comboLayout->addWidget(label);
 

@@ -30,7 +30,7 @@ class OffsetEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    OffsetEffectConfigWidget(QWidget *parent = 0);
+    explicit OffsetEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);

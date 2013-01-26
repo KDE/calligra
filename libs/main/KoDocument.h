@@ -85,8 +85,8 @@ public:
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    KoDocument(KoPart *parent,
-               KUndo2Stack *undoStack = new KUndo2Stack());
+    explicit KoDocument(KoPart *parent,
+                        KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
      *  Destructor.
@@ -607,12 +607,6 @@ public slots:
     virtual void setModified(bool _mod);
 
     /**
-     * Called by the undo stack when the document is saved or all changes has been undone
-     * @param clean if the document's undo stack is clean or not
-     */
-    virtual void setDocumentClean(bool clean);
-
-    /**
      * Set the output stream to report profile information to.
      */
     void setProfileStream(QTextStream *profilestream);
@@ -746,6 +740,9 @@ public:
 private slots:
 
     void slotAutoSave();
+
+    /// Called by the undo stack when undo or redo is called
+    void slotUndoStackIndexChanged(int idx);
 
 private:
 

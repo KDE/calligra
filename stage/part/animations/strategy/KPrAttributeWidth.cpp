@@ -21,7 +21,6 @@
 #include "../KPrAnimationCache.h"
 #include "KoShape.h"
 #include "KPrShapeAnimations.h"
-#include "KoTextBlockData.h"
 #include "KoTextShapeData.h"
 #include <QTextDocument>
 #include <QTextLayout>
@@ -34,7 +33,7 @@ void KPrAttributeWidth::updateCache(KPrAnimationCache *cache, KPrShapeAnimation 
 {
     qreal tx = 0.0, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
-    KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
+    QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
     QTransform transform;
 
     if (textBlockData) {
@@ -57,14 +56,14 @@ void KPrAttributeWidth::updateCache(KPrAnimationCache *cache, KPrShapeAnimation 
         ty = shape->size().height() * cache->zoom() / 2;
     }
                     transform.translate(tx, ty).scale(value, 1).translate(-tx, -ty);
-    cache->update(shape, shapeAnimation->textBlockData(), "transform", transform);
+    cache->update(shape, textBlockData, "transform", transform);
 }
 
 void KPrAttributeWidth::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
 {
     qreal v1 = 0.0, v2 = 0.0, tx = 0.0, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
-    KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
+    QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
 
     if (textBlockData) {
         if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
@@ -87,6 +86,6 @@ void KPrAttributeWidth::initCache(KPrAnimationCache *animationCache, int step, K
         tx = shape->size().width() * animationCache->zoom() / 2;
         ty = shape->size().height() * animationCache->zoom() / 2;
     }
-    animationCache->init(step, shape, shapeAnimation->textBlockData(), "transform", QTransform().translate(tx, ty).scale(v1, 1).translate(-tx, -ty));
-    animationCache->init(step + 1, shape, shapeAnimation->textBlockData(), "transform", QTransform().translate(tx, ty).scale(v2, 1).translate(-tx, -ty));
+    animationCache->init(step, shape, textBlockData, "transform", QTransform().translate(tx, ty).scale(v1, 1).translate(-tx, -ty));
+    animationCache->init(step + 1, shape, textBlockData, "transform", QTransform().translate(tx, ty).scale(v2, 1).translate(-tx, -ty));
 }

@@ -1606,10 +1606,10 @@ void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
     //m_bulletSize
     if (!m_textStyle.property("fo:font-size").isEmpty()) {
         QString bulletSize = m_textStyle.property("fo:font-size");
-        if (bulletSize.endsWith("%")) {
+        if (bulletSize.endsWith(QLatin1Char('%'))) {
             bulletSize.chop(1);
             m_bulletRelativeSize = bulletSize;
-        } else if (bulletSize.endsWith("pt")) {
+        } else if (bulletSize.endsWith(QLatin1String("pt"))) {
             bulletSize.chop(2);
             m_bulletSize = bulletSize;
         } else {

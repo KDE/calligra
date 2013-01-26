@@ -35,6 +35,16 @@ public:
     QSize minimumSizeHint() const;
 };
 
+class PerformanceTableView : public QTableView
+{
+    Q_OBJECT
+public:
+    PerformanceTableView( QWidget *parent );
+
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
+};
+
 } // namespace KPlato
 
 #endif

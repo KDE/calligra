@@ -252,8 +252,6 @@
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
-<layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>

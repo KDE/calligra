@@ -83,7 +83,9 @@ protected:
     void initStyleOption(QStyleOption *o) const;
 
 private:
-    Qt::Orientation m_orientation;
+    class Private;
+
+    Private* const d;
 };
 
 #endif

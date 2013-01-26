@@ -14,7 +14,7 @@ Name[fa]=ابزارهای پویانمایی
 Name[fi]=Animointityökalu
 Name[fr]=Outils d'animation
 Name[ga]=Uirlis Bheochana
-Name[gl]= Ferramentas de Animación
+Name[gl]=Ferramenta de animación
 Name[he]=כלי הנפשה
 Name[hne]=एनिमेसन औजार
 Name[hu]=Animáció eszköz
@@ -41,6 +41,6 @@ Name[zh_TW]=動畫工具
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-Library=calligrastagetoolanimation
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27
 

@@ -58,9 +58,7 @@ public:
     void setProjectSet(KexiProjectSet* prj_set);
 
     /*! \return currently assigned project set or NULL if no project set is assigned. */
-    inline KexiProjectSet *projectSet() {
-        return m_prj_set;
-    }
+    KexiProjectSet *projectSet();
 
     /*! Sets selectable state on or off. In this state one project item can be selected
     and executed by mouse double clicking or return key pressing.
@@ -86,8 +84,6 @@ protected slots:
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
     
-    KexiProjectSet *m_prj_set;
-
     class Private;
     Private * const d;
 
@@ -134,6 +130,8 @@ protected slots:
 protected:
     void init(KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns);
 
+    class Private;
+    Private * const d;
     KexiProjectSelectorWidget* m_sel;
 };
 

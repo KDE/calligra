@@ -211,7 +211,7 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
     m_options( 0 )
 {
     m_headerHeight = gantt->graphicsView()->headerHeight();
-    m_sceneRect = m_gantt->graphicsView()->printRect();
+    m_sceneRect = m_gantt->printRect();
     m_horPages = 1;
     qreal c = m_sceneRect.width() - printer().pageRect().width();
     while ( c > 0 ) {

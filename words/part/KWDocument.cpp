@@ -57,6 +57,7 @@
 #include <KoStyleManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
+#include <KoTextRangeManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
@@ -67,6 +68,7 @@
 #include <KoSelection.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoPart.h>
 
 #include <KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
@@ -90,6 +92,7 @@
 
 KWDocument::KWDocument(KoPart *part)
         : KoDocument(part),
+        m_isMasterDocument(false),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
 {
@@ -133,6 +136,18 @@ KWDocument::~KWDocument()
     qDeleteAll(m_frameSets);
 }
 
+bool KWDocument::isMasterDocument() const
+{
+    return m_isMasterDocument;
+}
+
+void KWDocument::setIsMasterDocument(bool isMasterDocument)
+{
+    m_isMasterDocument = isMasterDocument;
+}
+
+
+
 // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
 // will call addFrameSet.  Which will itself call addFrame()
 // any call coming in here is due to the undo/redo framework, pasting or for nested frames
@@ -161,7 +176,7 @@ void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
         addFrameSet(frame->frameSet());
     }
 
-    emit shapeAdded(shape);
+    emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
 
     shape->update();
 }
@@ -214,10 +229,9 @@ QPixmap KWDocument::generatePreview(const QSize &size)
     // use shape manager from canvasItem even for QWidget environments
     // if using the shape manager from one of the views there is no guarantee
     // that the view, its canvas and the shapemanager is not destroyed in between
-//FIXME    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(canvasItem())->shapeManager();
+    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(documentPart()->canvasItem())->shapeManager();
 
-//FIXME    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
-        return QPixmap();
+    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
 }
 
 void KWDocument::paintContent(QPainter &, const QRect &)
@@ -408,8 +422,8 @@ void KWDocument::addFrame(KWFrame *frame)
 {
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     //firePageSetupChanged();
-    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
     emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
+    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
@@ -457,6 +471,12 @@ KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
 {
     QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
     return var.value<KoInlineTextObjectManager*>();
+}
+
+KoTextRangeManager *KWDocument::textRangeManager() const
+{
+    QVariant var = resourceManager()->resource(KoText::TextRangeManager);
+    return var.value<KoTextRangeManager*>();
 }
 
 QString KWDocument::uniqueFrameSetName(const QString &suggestion)
@@ -515,6 +535,19 @@ void KWDocument::initEmpty()
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(styleManager);
     KoParagraphStyle *parag = new KoParagraphStyle();
+    parag->setName(i18n("Standard"));
+    parag->setFontPointSize(12);
+    parag->setFontWeight(QFont::Normal);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName(i18n("Document Title"));
+    parag->setFontPointSize(24);
+    parag->setFontWeight(QFont::Bold);
+    parag->setAlignment(Qt::AlignCenter);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
     parag->setName(i18n("Head 1"));
     parag->setFontPointSize(20);
     parag->setFontWeight(QFont::Bold);
@@ -541,6 +574,7 @@ void KWDocument::initEmpty()
     parag->setListStyle(list);
     styleManager->add(parag);
 
+    setMimeTypeAfterLoading("application/vnd.oasis.opendocument.text");
     KoDocument::initEmpty();
     clearUndoHistory();
 }
@@ -722,7 +756,7 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
             framesets.append(tfs);
     }
     int pageNumber = -1;
-    foreach (KWPage page, pageManager()->pages()) {
+    foreach (const KWPage &page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
             pageNumber = page.pageNumber();
             break;
@@ -776,7 +810,7 @@ KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape) const
     Q_ASSERT(mainFrameSet());
     Q_ASSERT(shape);
 
-    // try and find out if shape is already anchored    
+    // try and find out if shape is already anchored
     foreach (KoInlineObject *inlineObject, inlineTextObjectManager()->inlineTextObjects()) {
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
         if (anchor && anchor->shape() == shape) {
@@ -821,3 +855,12 @@ KWFrame *KWDocument::frameOfShape(KoShape* shape) const
     return answer;
 }
 
+void KWDocument::setCoverImage(QPair<QString, QByteArray> cover)
+{
+    m_coverImage = cover;
+}
+
+QPair<QString, QByteArray> KWDocument::coverImage()
+{
+    return m_coverImage;
+}

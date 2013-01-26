@@ -69,7 +69,7 @@ public:
 };
 
 
-KPlatoRCPSScheduler::KPlatoRCPSScheduler( Project *project, ScheduleManager *sm, QObject *parent )
+KPlatoRCPSScheduler::KPlatoRCPSScheduler( Project *project, ScheduleManager *sm, ulong granularity, QObject *parent )
     : SchedulerThread( project, sm, parent ),
     result( -1 ),
     m_schedule( 0 ),
@@ -77,7 +77,7 @@ KPlatoRCPSScheduler::KPlatoRCPSScheduler( Project *project, ScheduleManager *sm,
     m_usePert( false ),
     m_backward( false ),
     m_problem( 0 ),
-    m_timeunit( 60 ),
+    m_timeunit( granularity / 1000 ),
     m_offsetFromTime_t( 0 ),
     m_progressinfo( new ProgressInfo() )
 {
@@ -294,7 +294,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
     if ( info->isEndJob ) {
         if ( info->finish == 0 ) {
             info->finish = time;
-/*            const char *s = QString( "First  : %1 %2 %3 End job" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).toAscii();
+/*            const char *s = QString( "First  : %1 %2 %3 End job" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).toLatin1();
             std::cout<<s<<"\n";*/
         }
 /*        w = WEIGHT_FINISH * info->finish / ( time > 0 ? time : 1 );
@@ -306,7 +306,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
             f.weight = time - info->targettime;
         }
 
-/*        const char *s = QString( "End job: %1 %2 %3 End job target: %4" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->targettime ).toAscii();
+/*        const char *s = QString( "End job: %1 %2 %3 End job target: %4" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->targettime ).toLatin1();
         std::cout<<s<<"\n";*/
     } else {
         if ( m_backward ) {
@@ -339,7 +339,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
                 default:
                     break;
             }
-/*            const char *s = QString( "Backwrd: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toAscii();
+/*            const char *s = QString( "Backwrd: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toLatin1();
             std::cout<<s<<"\n";*/
         } else {
             switch ( info->task->constraint() ) {
@@ -375,7 +375,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
                 default:
                     break;
             }
-/*            const char *s = QString( "Forward: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toAscii();
+/*            const char *s = QString( "Forward: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toLatin1();
             std::cout<<s<<"\n";*/
         }
     }
@@ -415,8 +415,7 @@ void KPlatoRCPSScheduler::run()
         m_manager->setName( "Schedule: " + m_manager->name() ); //Debug
         m_schedule = m_manager->expected();
 
-        bool x = connect(m_manager, SIGNAL(sigLogAdded(Schedule::Log)), this, SLOT(slotAddLog(Schedule::Log)));
-        Q_ASSERT( x );
+        connect(m_manager, SIGNAL(sigLogAdded(Schedule::Log)), this, SLOT(slotAddLog(Schedule::Log)));
 
         m_project->initiateCalculation( *m_schedule );
         m_project->initiateCalculationLists( *m_schedule );
@@ -439,7 +438,7 @@ void KPlatoRCPSScheduler::run()
 
         m_schedule->setPhaseName( 0, i18n( "Init" ) );
         if ( ! m_backward && locale() ) {
-            m_schedule->logDebug( QString( "Schedule project using RCPS Scheduler, starting at %1" ).arg( QDateTime::currentDateTime().toString() ), 0 );
+            m_schedule->logDebug( QString( "Schedule project using RCPS Scheduler, starting at %1, granularity %2 sec" ).arg( QDateTime::currentDateTime().toString() ).arg( m_timeunit ), 0 );
             if ( m_recalculate ) {
                 m_schedule->logInfo( i18n( "Re-calculate project from start time: %1", locale()->formatDateTime( m_starttime ) ), 0 );
             } else {
@@ -447,7 +446,7 @@ void KPlatoRCPSScheduler::run()
             }
         }
         if ( m_backward && locale() ) {
-            m_schedule->logDebug( QString( "Schedule project backward using RCPS Scheduler, starting at %1" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
+            m_schedule->logDebug( QString( "Schedule project backward using RCPS Scheduler, starting at %1, granularity %2 sec" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ).arg( m_timeunit ), 0 );
             m_schedule->logInfo( i18n( "Schedule project from end time: %1", locale()->formatDateTime( m_starttime ) ), 0 );
         }
 
@@ -857,7 +856,7 @@ void KPlatoRCPSScheduler::calculatePertValues( const QMap<Node*, QList<ResourceR
         }
         if ( t->negativeFloat() != 0 ) {
             n->schedule()->setConstraintError( true );
-            n->schedule()->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", n->constraintToString( true ), t->negativeFloat().toString( Duration::Format_i18nHour ) ) );
+            n->schedule()->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", n->constraintToString( true ), locale()->formatDuration( t->negativeFloat().milliseconds() ) ) );
         }
 
     }

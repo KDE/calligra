@@ -41,7 +41,7 @@ class QTextBrowser;
 class QItemSelection;
 
 class KoDocument;
-class KoPageLayoutWidget;
+struct KoPageLayoutWidget;
 class PrintingHeaderFooter;
 
 class KAction;
@@ -183,6 +183,10 @@ struct PerformanceChartInfo
 {
     bool showBarChart;
     bool showLineChart;
+    bool showTableView;
+
+    bool showBaseValues;
+    bool showIndeces;
 
     bool showCost;
     bool showBCWSCost;
@@ -194,21 +198,40 @@ struct PerformanceChartInfo
     bool showBCWPEffort;
     bool showACWPEffort;
 
-    bool bcwsCost() const { return showCost && showBCWSCost; }
-    bool bcwpCost() const { return showCost && showBCWPCost; }
-    bool acwpCost() const { return showCost && showACWPCost; }
-    bool bcwsEffort() const { return showEffort && showBCWSEffort; }
-    bool bcwpEffort() const { return showEffort && showBCWPEffort; }
-    bool acwpEffort() const { return showEffort && showACWPEffort; }
+    bool showSpiCost;
+    bool showCpiCost;
+    bool showSpiEffort;
+    bool showCpiEffort;
+
+    bool effortShown() const {
+        return ( showBaseValues && showEffort ) || ( showIndeces && ( showSpiEffort || showCpiEffort ) );
+    }
+    bool costShown() const {
+        return ( showBaseValues && showCost ) || ( showIndeces && ( showSpiCost || showCpiCost ) );
+    }
+    bool bcwsCost() const { return showBaseValues && showCost && showBCWSCost; }
+    bool bcwpCost() const { return showBaseValues && showCost && showBCWPCost; }
+    bool acwpCost() const { return showBaseValues && showCost && showACWPCost; }
+    bool bcwsEffort() const { return showBaseValues && showEffort && showBCWSEffort; }
+    bool bcwpEffort() const { return showBaseValues && showEffort && showBCWPEffort; }
+    bool acwpEffort() const { return showBaseValues && showEffort && showACWPEffort; }
+
+    bool spiCost() const { return showIndeces && showSpiCost; }
+    bool cpiCost() const { return showIndeces && showCpiCost; }
+    bool spiEffort() const { return showIndeces && showSpiEffort; }
+    bool cpiEffort() const { return showIndeces && showCpiEffort; }
 
     PerformanceChartInfo() {
-        showBarChart = false; showLineChart = true;
+        showBarChart = false; showLineChart = true; showTableView = false;
+        showBaseValues = true; showIndeces = false;
         showCost = showBCWSCost = showBCWPCost = showACWPCost = true;
         showEffort = showBCWSEffort = showBCWPEffort = showACWPEffort = true;
+        showSpiCost = showCost = showSpiEffort = showCpiEffort = true;
     }
     bool operator!=( const PerformanceChartInfo &o ) const { return ! operator==( o ); }
     bool operator==( const PerformanceChartInfo &o ) const {
         return showBarChart == o.showBarChart && showLineChart == o.showLineChart &&
+                showBaseValues == o.showBaseValues && showIndeces == o.showIndeces &&
                 showCost == o.showCost && 
                 showBCWSCost == o.showBCWSCost &&
                 showBCWPCost == o.showBCWPCost &&
@@ -216,7 +239,11 @@ struct PerformanceChartInfo
                 showEffort == o.showEffort &&
                 showBCWSEffort == o.showBCWSEffort &&
                 showBCWPEffort == o.showBCWPEffort &&
-                showACWPEffort == o.showACWPEffort;
+                showACWPEffort == o.showACWPEffort &&
+                showSpiCost == o.showSpiCost &&
+                showCpiCost == o.showCpiCost &&
+                showSpiEffort == o.showSpiEffort &&
+                showCpiEffort == o.showCpiEffort;
     }
 };
 
@@ -262,6 +289,8 @@ public:
     /// Create a print job dialog
     KoPrintJob *createPrintJob( ViewBase *parent );
 
+    void setNodes( const QList<Node*> nodes );
+
 public slots:
     void refreshChart();
 
@@ -272,8 +301,6 @@ protected:
     void createLineChart();
     void setEffortValuesVisible( bool visible );
     void setCostValuesVisible( bool visible );
-
-    void drawValues();
 
 protected slots:
     void slotUpdate();
@@ -300,6 +327,11 @@ private:
         KDChart::CartesianAxis *effortaxis;
         KDChart::CartesianAxis *costaxis;
         KDChart::CartesianAxis *dateaxis;
+
+        ChartProxyModel piproxy;
+        KDChart::CartesianCoordinatePlane *piplane;
+        KDChart::AbstractDiagram *pidiagram;
+        KDChart::CartesianAxis *piaxis;
     };
     void setupChart( ChartContents &cc );
 
@@ -436,6 +468,9 @@ public slots:
 
 signals:
     void changed();
+
+protected slots:
+    void switchStackWidget();
 
 private:
     PerformanceStatusBase *m_view;

@@ -54,7 +54,7 @@ namespace
 const double IMAGE_DEFAULT_RESOLUTION = 100.0; // dpi
 const qint32 IMAGE_DEFAULT_WIDTH = 1600;
 const qint32 IMAGE_DEFAULT_HEIGHT = 1200;
-const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
+const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
 }
 
@@ -919,6 +919,24 @@ void KisConfig::setDefaultPalette(const QString& name)
 {
     m_cfg.writeEntry("defaultPalette", name);
 }
+
+QString KisConfig::toolbarSlider(int sliderNumber)
+{
+    QString def = "flow";
+    if (sliderNumber == 1) {
+        def = "opacity";
+    }
+    if (sliderNumber == 2) {
+        def = "size";
+    }
+    return m_cfg.readEntry(QString("toolbarslider_%1").arg(sliderNumber), def);
+}
+
+void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
+{
+    m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
+}
+
 
 bool KisConfig::useSystemMonitorProfile() const
 {

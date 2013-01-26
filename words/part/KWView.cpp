@@ -67,6 +67,8 @@
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
+#include <KoTextRangeManager.h>
+#include <KoAnnotationManager.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoTextAnchor.h>
@@ -77,10 +79,14 @@
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
+#include <KoDocumentInfo.h>
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+
+#include <KoAnnotationSideBar.h>
+
 #include <KoFindStyle.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
@@ -105,6 +111,8 @@
 KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         : KoView(part, document, parent)
         , m_canvas(0)
+        , m_minPageNum(1)
+        , m_maxPageNum(1)
 {
     setAcceptDrops(true);
 
@@ -114,9 +122,15 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
+#ifdef SHOW_ANNOTATIONS
+    QGridLayout *layout = new QGridLayout(this);
+    layout->setMargin(0);
+    layout->addWidget(m_gui,0,0);
+#else
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
+#endif
 
     setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
@@ -127,15 +141,15 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
-    QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-
     m_find = new KoFindText(this);
-    m_find->setDocuments(texts);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
     connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
+    // The text documents to search in will potentially change when we add/remove shapes and after load
+    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
+    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
+    refreshFindTexts();
 
     layout->addWidget(toolbar);
 
@@ -146,7 +160,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // the zoom controller needs to be initialized after the status bar gets initialized as
     // that resulted in bug 180759
     m_zoomController->setPageSize(m_currentPage.rect().size());
-    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
+    m_zoomController->setTextMinMax(m_currentPage.contentRect().left(), m_currentPage.contentRect().right());
+    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_TEXT;
     if (m_canvas->viewMode()->hasPages())
         modes |= KoZoomMode::ZOOM_PAGE;
     m_zoomController->zoomAction()->setZoomModes(modes);
@@ -157,14 +172,19 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
-        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)),
-                this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
+        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)),
+                this, SLOT(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)));
     }
 #endif
-    if (m_document->inlineTextObjectManager()) {
-        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
-           m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
+
+#ifdef SHOW_ANNOTATIONS
+    if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
+        if (textRangeManager->annotationManager()) {
+            KoAnnotationSideBar *annotationBar = new KoAnnotationSideBar(textRangeManager->annotationManager());
+            layout->addWidget(annotationBar, 0, 1);
+        }
     }
+#endif
 }
 
 KWView::~KWView()
@@ -280,6 +300,15 @@ void KWView::setupActions()
     action->setChecked(m_document->config().showFormattingChars()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
+
+    action = new KAction(i18n("Show Field Shadings"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_fieldshadings", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowInlineObjectVisualization(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowInlineObjectVisualization, QVariant(false));
+    action->setChecked(m_document->config().showInlineObjectVisualization()); // will change resource if true
+    action->setToolTip(i18n("Toggle the shaded background of fields"));
+    action->setWhatsThis(i18n("Toggle the visualizaion of fields (variables etc) by drawing their background in a contrasting color."));
 
     action = new KAction(i18n("Show Text Shape Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
@@ -451,7 +480,7 @@ void KWView::pasteRequested()
 
 void KWView::editFrameProperties()
 {
-    KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
+    QPointer<KWFrameDialog> frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
     frameDialog->exec();
     delete frameDialog;
 }
@@ -491,12 +520,12 @@ void KWView::addBookmark()
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     Q_ASSERT(editor);
 
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
     if (editor->hasSelection()) {
         suggestedName = editor->selectedText();
     }
 
-    KWCreateBookmarkDialog *dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
+    QPointer<KWCreateBookmarkDialog> dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
     if (dia->exec() == QDialog::Accepted) {
         name = dia->newBookmarkName();
     }
@@ -512,9 +541,9 @@ void KWView::addBookmark()
 void KWView::selectBookmark()
 {
     QString name;
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
 
-    KWSelectBookmarkDialog *dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
+    QPointer<KWSelectBookmarkDialog> dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
     connect(dia, SIGNAL(nameChanged(const QString &, const QString &)),
             manager, SLOT(rename(const QString &, const QString &)));
     connect(dia, SIGNAL(bookmarkDeleted(const QString &)),
@@ -526,8 +555,8 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
+    KoBookmark *bookmark = manager->bookmark(name);
 #if 0
-    KoBookmark *bookmark = manager->retrieveBookmark(name);
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
     selection->deselectAll();
@@ -535,20 +564,24 @@ void KWView::selectBookmark()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-
-    KoCanvasResourceManager *rm = m_canvas->resourceManager();
-    if (bookmark->hasSelection()) {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->position());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
-        rm->clearResource(KoText::SelectedTextPosition);
-        rm->clearResource(KoText::SelectedTextAnchor);
-    } else
-        rm->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
 #else
 #ifdef __GNUC__
     #warning FIXME: port to textlayout-rework
 #endif
 #endif
+
+    KoCanvasResourceManager *rm = m_canvas->resourceManager();
+    if ((bookmark->positionOnlyMode() == false) && bookmark->hasRange()) {
+        rm->clearResource(KoText::SelectedTextPosition);
+        rm->clearResource(KoText::SelectedTextAnchor);
+    }
+    if (bookmark->positionOnlyMode()) {
+        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeStart());
+    } else {
+        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeEnd());
+    }
 }
 
 void KWView::deleteBookmark(const QString &name)
@@ -556,7 +589,7 @@ void KWView::deleteBookmark(const QString &name)
     Q_UNUSED(name);
 #if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
-    KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
+    KoBookmark *bookmark = manager->bookmarkManager()->bookmark(name);
     if (!bookmark || !bookmark->shape())
         return;
 
@@ -609,6 +642,13 @@ void KWView::toggleViewFrameBorders(bool on)
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, on);
     m_canvas->update();
     m_document->config().setViewFrameBorders(on);
+}
+
+void KWView::setShowInlineObjectVisualization(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowInlineObjectVisualization, QVariant(on));
+    m_canvas->update();
+    m_document->config().setShowInlineObjectVisualization(on);
 }
 
 void KWView::setShowFormattingChars(bool on)
@@ -746,6 +786,7 @@ void KWView::zoomChanged(KoZoomMode::Mode mode, qreal zoom)
 void KWView::selectionChanged()
 {
     KoShape *shape = canvasBase()->shapeManager()->selection()-> firstSelectedShape();
+
     m_actionFormatFrameSet->setEnabled(shape != 0);
     m_actionAddBookmark->setEnabled(shape != 0);
     if (shape) {
@@ -781,14 +822,6 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
         m_canvas->resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, m_currentPage.pageNumber());
-
-        QSizeF newPageSize = m_currentPage.rect().size();
-        QSizeF newMaxPageSize = QSize(qMax(m_maxPageSize.width(), newPageSize.width()),
-                                     qMax(m_maxPageSize.height(), newPageSize.height()));
-        if (newMaxPageSize != m_maxPageSize) {
-            m_maxPageSize = newMaxPageSize;
-            m_zoomController->setPageSize(m_maxPageSize);
-        }
 
         m_actionViewHeader->setEnabled(m_currentPage.pageStyle().headerPolicy() == Words::HFTypeNone);
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
@@ -894,7 +927,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
 {
     const qreal offset = -m_zoomHandler.viewToDocumentY(yOffset);
     const qreal height = m_zoomHandler.viewToDocumentY(m_gui->viewportSize().height());
-    if (m_currentPage.isValid()) { // most of the time the current will not change.
+/*    if (m_currentPage.isValid()) { // most of the time the current will not change.
         const qreal pageTop = m_currentPage.offsetInDocument();
         const qreal pageBottom = pageTop + m_currentPage.height();
         const qreal visibleArea = qMin(offset + height, pageBottom) - qMax(pageTop, offset);
@@ -905,26 +938,56 @@ void KWView::offsetInDocumentMoved(int yOffset)
         if (pageTop > offset && pageTop < offset + height) { // check if the page above is a candidate.
             KWPage page = m_currentPage.previous();
             if (page.isValid() && pageTop - offset > visibleArea) {
-                setCurrentPage(page);
+                firstDrawnPage = page;
                 return;
             }
         }
         if (pageBottom > offset && pageBottom < offset + height) { // check if the page above is a candidate.
             KWPage page = m_currentPage.next();
             if (page.isValid() && m_currentPage.height() - height > visibleArea) {
-                setCurrentPage(page);
+                firstDrawnPage = page;
                 return;
             }
         }
     }
-    KWPage page = m_document->pageManager()->page(qreal(offset + height / 2.0));
-    if (page.isValid())
-        setCurrentPage(page);
+*/
+    KWPage page = m_document->pageManager()->page(qreal(offset));
+    qreal pageTop = page.offsetInDocument();
+    QSizeF maxPageSize;
+    qreal minTextX =1000000000;
+    qreal maxTextX = -10000000000;
+    int minPageNum = page.pageNumber();
+    int maxPageNum = page.pageNumber();
+    while (page.isValid() && pageTop < qreal(offset + height)) {
+        pageTop += page.height();
+        QSizeF pageSize = page.rect().size();
+        maxPageSize = QSize(qMax(maxPageSize.width(), pageSize.width()),
+                                     qMax(maxPageSize.height(), pageSize.height()));
+        minTextX = qMin(minTextX, page.contentRect().left());
+        maxTextX = qMax(maxTextX, page.contentRect().right());
+        maxPageNum = page.pageNumber();
+        page = page.next();
+    }
+
+    if (maxPageSize != m_pageSize) {
+        m_pageSize = maxPageSize;
+        m_zoomController->setPageSize(m_pageSize);
+    }
+    if (minTextX != m_textMinX || maxTextX != m_textMaxX) {
+        m_textMinX = minTextX;
+        m_textMaxX = maxTextX;
+        m_zoomController->setTextMinMax(minTextX, maxTextX);
+    }
+    if (minPageNum != m_minPageNum || maxPageNum != m_maxPageNum) {
+        m_minPageNum = minPageNum;
+        m_maxPageNum = maxPageNum;
+        emit shownPagesChanged();
+    }
 }
 
+#ifdef SHOULD_BUILD_RDF
 void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid)
 {
-#ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {
@@ -934,8 +997,8 @@ void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QStrin
     kDebug(30015) << "reflowing rdf semantic item.";
     KoRdfSemanticItemViewSite vs(item, xmlid);
     vs.reflowUsingCurrentStylesheet(editor);
-#endif
 }
+#endif
 
 void KWView::findMatchFound(KoFindMatch match)
 {
@@ -949,10 +1012,15 @@ void KWView::findMatchFound(KoFindMatch match)
     m_canvas->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
 }
 
-void KWView::loadingCompleted()
+void KWView::refreshFindTexts()
 {
     QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
+    foreach (KWFrameSet *fSet, m_document->frameSets()) {
+        KWTextFrameSet *tFSet = dynamic_cast<KWTextFrameSet *>(fSet);
+        if (tFSet) {
+           texts.append(tFSet->document());
+        }
+    }
     m_find->setDocuments(texts);
 }
 
@@ -975,7 +1043,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    foreach(const QImage image, imageList) {
+    foreach(const QImage &image, imageList) {
         KoProperties params;
         params.setProperty("qimage", image);
 

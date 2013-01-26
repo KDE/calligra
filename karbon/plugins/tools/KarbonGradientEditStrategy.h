@@ -54,7 +54,7 @@ public:
     /// selects handle at the given position
     bool hitHandle(const QPointF &mousePos, const KoViewConverter &converter, bool select);
 
-    /// selects the the gradient line at the given position
+    /// selects the gradient line at the given position
     bool hitLine(const QPointF &mousePos, const KoViewConverter &converter, bool select);
 
     /// selects the gradient stop at the given position

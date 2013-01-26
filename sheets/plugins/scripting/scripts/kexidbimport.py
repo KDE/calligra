@@ -2,11 +2,11 @@
 
 """
 Python script to import content from a Kexi Project stored
-within a KexiDB into KSpread.
+within a KexiDB into Sheets.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
@@ -15,6 +15,8 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 
 import sys, os, traceback
 import Kross, KSpread
+
+T = Kross.module("kdetranslation")
 
 class KexiImport:
 
@@ -46,9 +48,9 @@ class KexiImport:
 
             cursor = connection.executeQuerySchema(queryschema)
             if not cursor:
-                raise "Failed to create cursor."
+                raise Exception, T.i18n("Failed to create cursor.")
             if not cursor.moveFirst():
-                raise "The cursor has no records to read from."
+                raise Exception, T.i18n("The cursor has no records to read from.")
 
             while not cursor.eof():
                 record = []
@@ -65,60 +67,60 @@ class KexiImport:
     def createConnection(self, projectfile):
         kexidb = Kross.module("kexidb")
         if not kexidb:
-            raise "Failed to load the KexiDB Scripting module. This script needs Kexi to run."
+            raise Exception, T.i18n("Failed to load the KexiDB Scripting module. This script needs Kexi to run.")
         connectiondata = kexidb.createConnectionDataByFile(projectfile)
         if not connectiondata:
-            raise "Invalid Kexi Project File: %s" % projectfile
+            raise Exception, T.i18n("Invalid Kexi Project File: %1", [projectfile])
         connectiondata.setFileName(projectfile)
         connectiondata.setDatabaseName(projectfile)
         driver = kexidb.driver(connectiondata.driverName())
         if not driver:
-            raise "No KexiDB driver for: %s" % connectiondata.driverName()
+            raise Exception, T.i18n("No KexiDB driver for: %1", [connectiondata.driverName()])
         connection = driver.createConnection(connectiondata)
         if not connection.connect():
-            raise "Failed to connect: %s" % connection.lastError()
+            raise Exception, T.i18n("Failed to connect: %1", [connection.lastError()])
         if not connection.useDatabase(connectiondata.databaseName()):
-            raise "Failed to open database: %s" % connection.lastError()
+            raise Exception, T.i18n("Failed to open database: %1", [connection.lastError()])
         return connection
 
     def showImportDialog(self, writer):
-        dialog = self.forms.createDialog("Kexi Import")
+        dialog = self.forms.createDialog(T.i18n("Kexi Import"))
         dialog.setButtons("Ok|Cancel")
         dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        openpage = dialog.addPage("Open","Import from Kexi Project File","document-open")
+        openpage = dialog.addPage(T.i18n("Open"),T.i18n("Import from Kexi Project File"),"document-open")
         openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kspreadkexidbimportopen")
         openwidget.setMode("Opening")
-        openwidget.setFilter("*.kexi *.kexis *kexic|Kexi Project Files\n*|All Files")
+        openwidget.setFilter("*.kexi *.kexis *kexic|%(1)s\n*|%(2)s" % { '1' : T.i18n("Kexi Project Files"), '2' : T.i18n("All Files") } )
 
-        datapage = dialog.addPage("Import","Import to sheet beginning at cell","document-import")
+        datapage = dialog.addPage(T.i18n("Import"),T.i18n("Import to sheet beginning at cell"),"document-import")
         sheetslistview = KSpread.createSheetsListView(datapage)
         sheetslistview.setEditorType("Cell")
 
         if dialog.exec_loop():
             projectfile = openwidget.selectedFile()
             if not os.path.isfile(projectfile):
-                raise "File '%s' not found." % projectfile
+                raise Exception, T.i18n("File '%1' not found.", [projectfile])
 
             currentSheet = sheetslistview.sheet()
             if not currentSheet:
-                raise "No current sheet."
+                raise Exception, T.i18n("No current sheet.")
             if not writer.setSheet(currentSheet):
-                raise "Invalid sheet \"%s\" defined." % currentSheet
+                raise Exception, T.i18n("Invalid sheet \"%1\" defined." [currentSheet])
 
             cell = sheetslistview.editor()
             if not writer.setCell(cell):
-                raise "Invalid cell \"%s\" defined." % cell
+                raise Exception, T.i18n("Invalid cell \"%1\" defined.", [cell])
 
             connection = self.createConnection(projectfile)
             return connection
         return None
 
     def showTableDialog(self, connection):
-        tabledialog = self.forms.createDialog("Table or Query")
+        tabledialog = self.forms.createDialog(T.i18n("Table or Query"))
         tabledialog.setButtons("Ok|Cancel")
         tabledialog.setFaceType("List") #Auto Plain List Tree Tabbed
-        sourcepage = tabledialog.addPage("Data","Datasource","table")
+        sourcepage = tabledialog.addPage(T.i18n("Data"), T.i18n("Datasource"),"table")
         items = []
         for s in connection.tableNames(): items.append("table/%s" % s)
         for s in connection.queryNames(): items.append("query/%s" % s)
@@ -145,16 +147,16 @@ class KexiImport:
             if current.startswith("table/"):
                 schema = connection.tableSchema(current[6:])
                 if not schema:
-                    raise "No such tableschema \"%s\"" % current[6:]
+                    raise Exception, T.i18n("No such tableschema \"%1\"" [current[6:]])
                 return schema.query()
             elif current.startswith("query/"):
                 print "QUERY ==============> %s" % current[6:]
                 schema = connection.querySchema(current[6:])
                 if not schema:
-                    raise "No such queryschema \"%s\"" % current[6:]
+                    raise Exception, T.i18n("No such queryschema \"%1\"", [current[6:]])
                 return schema
             else:
-                raise "Unknown item %s" % current
+                raise Exception, T.i18n("Unknown item %1", [current])
         return None
 
         #csvfilename = self.openwidget.selectedFile()

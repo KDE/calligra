@@ -44,7 +44,7 @@ class KOWIDGETS_EXPORT KoViewItemContextBar : public QObject
     Q_OBJECT
 
 public:
-    KoViewItemContextBar(QAbstractItemView *parent);
+    explicit KoViewItemContextBar(QAbstractItemView *parent);
     virtual ~KoViewItemContextBar();
     virtual bool eventFilter(QObject *watched, QEvent *event);
 
@@ -59,6 +59,7 @@ public:
     QModelIndex currentIndex();
 
     int preferredWidth();
+    void setShowSelectionToggleButton(bool enabled);
 
 signals:
     /** Is emitted if the selection has been changed by the toggle button. */
@@ -95,6 +96,7 @@ private:
     QToolButton *m_ToggleSelectionButton;
     QHBoxLayout *m_Layout;
     QList <QToolButton*> m_contextBarButtons;
+    bool m_showToggleButton;
 };
 
 #endif // KOVIEWITEMCONTEXTBAR_H

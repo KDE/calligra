@@ -72,7 +72,10 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 {
     KisImageWSP image = m_view->image();
 
-    KisDoc2 d;
+    KisPart2 part;
+    KisDoc2 d(&part);
+    part.setDocument(&d);
+
     d.prepareForImport();
 
     KisImageWSP dst = new KisImage(d.createUndoStore(), imgSize.width(),imgSize.height(), image->colorSpace(), image->objectName());
@@ -98,7 +101,7 @@ void Imagesplit::slotImagesplit()
     // Getting all mime types and converting them into names which are displayed at combo box
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
     QStringList listFileType;
-    foreach(const QString tempStr, listMimeFilter) {
+    foreach(const QString &tempStr, listMimeFilter) {
         KMimeType::Ptr type = KMimeType::mimeType( tempStr );
         listFileType.append(type->comment());
     }

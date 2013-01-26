@@ -65,6 +65,7 @@
 #include <KoTextShapeDataBase.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 
 #include <kfileitem.h>
 #include <kio/job.h>
@@ -860,19 +861,20 @@ void TestRdf::testRoundtrip()
         editor->insertTable(5,10);
         const QTextTable *table = editor->currentTable();
 
-        KoBookmark *startmark = new KoBookmark(editor->document());
-        startmark->setType(KoBookmark::StartBookmark);
-
-        KoTextInlineRdf *inlineRdf(new KoTextInlineRdf(editor->document(), startmark));
+        QTextCursor cursor(editor->document());
+        cursor.setPosition(table->firstPosition());
+        QCOMPARE(cursor.position(), lorem.length() + 1);
+        KoBookmark *mark = new KoBookmark(cursor);
+        mark->setPositionOnlyMode(false);
+        
+        KoTextInlineRdf *inlineRdf(new KoTextInlineRdf(editor->document(), mark));
         QString newId = inlineRdf->createXmlId();
         inlineRdf->setXmlId(newId);
 
-        startmark->setName("blablabla -- in any case, not the rdf xmlid...");
-        startmark->setInlineRdf(inlineRdf);
-
-        editor->setPosition(table->firstPosition());
-        editor->movePosition(QTextCursor::PreviousCharacter);
-        editor->insertInlineObject(startmark);
+        mark->setName("blablabla -- in any case, not the rdf xmlid...");
+        mark->setInlineRdf(inlineRdf);
+        KoTextRangeManager *rangeManager = koTextDocument.textRangeManager();
+        rangeManager->insert(mark);
 
         hKoRdfLocation location(new KoRdfLocation(0, rdfDoc));
         location->setDlat(5.0);
@@ -888,22 +890,18 @@ void TestRdf::testRoundtrip()
         rdfDoc->rememberNewInlineRdfObject(inlineRdf);
 
         Q_ASSERT(rdfDoc->model()->statementCount() > 0);
-
-        KoBookmark *endmark = new KoBookmark(editor->document());
-        endmark->setName(newId);
-        endmark->setType(KoBookmark::EndBookmark);
-        startmark->setEndBookmark(endmark);
+        QCOMPARE(mark->rangeStart(), lorem.length() + 1);
 
         editor->setPosition(table->lastPosition());
         editor->movePosition(QTextCursor::NextCharacter);
-        editor->insertInlineObject(endmark);
+        mark->setRangeEnd(editor->position());
 
-        // Check the position of the object
+        // Check the position of the bookmark
         Q_ASSERT(location->xmlIdList().length() == 1);
         QString xmlid = location->xmlIdList()[0];
         QPair<int,int> position = rdfDoc->findExtent(location->xmlIdList()[0]);
-        QCOMPARE(position.first, 444);
-        QCOMPARE(position.second, 497);
+        QCOMPARE(position.first, lorem.length());
+        QCOMPARE(position.second, lorem.length() + 5*10 + 1);
 
         // search for locations and check the position
         // Find the location object
@@ -916,8 +914,8 @@ void TestRdf::testRoundtrip()
         // check the position for the location object we've just found,
         // and which should be the same as the other one...
         position = rdfDoc->findExtent(location2->xmlIdList()[0]);
-        QCOMPARE(position.first, 444);
-        QCOMPARE(position.second, 497);
+        QCOMPARE(position.first, lorem.length());
+        QCOMPARE(position.second, lorem.length() + 5*10 + 1);
 
         // Save the document -- this changes all xmlid's
         doc->documentPart()->saveAs(url);

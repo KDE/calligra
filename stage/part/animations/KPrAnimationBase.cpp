@@ -31,7 +31,6 @@
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
 
-
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)
 , m_begin(0)
@@ -46,7 +45,22 @@ KPrAnimationBase::~KPrAnimationBase()
 
 int KPrAnimationBase::duration() const
 {
-    return m_duration;
+    return m_duration + m_begin;
+}
+
+int KPrAnimationBase::begin() const
+{
+    return m_begin;
+}
+
+void KPrAnimationBase::setBegin(int value)
+{
+    m_begin = value;
+}
+
+void KPrAnimationBase::setDuration(int value)
+{
+    m_duration = value;
 }
 
 bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -89,7 +103,7 @@ bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
 
 void KPrAnimationBase::updateCache(const QString &id, const QVariant &value)
 {
-    m_animationCache->update(m_shapeAnimation->shape(), m_shapeAnimation->textBlockData(), id, value);
+    m_animationCache->update(m_shapeAnimation->shape(), m_shapeAnimation->textBlockUserData(), id, value);
 }
 
 void KPrAnimationBase::updateCurrentTime(int currentTime)
@@ -109,8 +123,8 @@ bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.addAttribute("smil:begin", KPrDurationParser::msToString(m_begin));
     writer.addAttribute("smil:dur", KPrDurationParser::msToString(m_duration));
-    if (m_shapeAnimation->textBlockData()) {
-        writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->textBlockData()).toString());
+    if (m_shapeAnimation->textBlockUserData()) {
+        writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->textBlockUserData()).toString());
         writer.addAttribute("anim:sub-item", "text");
     }
     else {

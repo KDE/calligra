@@ -29,12 +29,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    </rect>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item row="2" column="0" >
     <spacer>
      <property name="orientation" >
@@ -109,7 +103,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
  <pixmapfunction></pixmapfunction>
  <includes>
   <include location="global" >kdialog.h</include>

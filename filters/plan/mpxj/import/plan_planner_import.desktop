@@ -1,10 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=Planner Import Filter
+Name[ca]=Filtre d'importació del Planner
+Name[da]=Planner-importfilter
+Name[de]=Planner-Importfilter
 Name[el]=Φίλτρο εισαγωγής Planner
+Name[es]=Filtro de importación de Planner
 Name[et]=Planneri impordifilter
-Name[gl]=Filtro de importación Planner
+Name[fi]=Planner-tuontisuodin
+Name[fr]=Filtre d'importation Planner
+Name[gl]=Filtro de importación de Planner
+Name[hu]=Planner importszűrő
+Name[it]=Filtro di importazione di Planner
 Name[ja]=Planner インポートフィルタ
+Name[kk]=Planner -> Plan импорт сүзгісі
 Name[nl]=Importfilter voor Planner
 Name[pl]=Filtr importu Planner
 Name[pt]=Filtro de Importação do Planner

@@ -30,24 +30,24 @@ class KexiProject;
 
 class KexiMobileWidget : public QStackedWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	KexiMobileWidget(KexiProject *p);
-	virtual ~KexiMobileWidget();
-	void databaseOpened(KexiProject*);
-	
-        KexiMobileNavigator *navigator();
-        void setActiveObject(KexiWindow* win);
-        KexiWindow* activeObject();
-        
+    KexiMobileWidget(KexiProject *p);
+    virtual ~KexiMobileWidget();
+    void databaseOpened(KexiProject*);
+
+    KexiMobileNavigator *navigator();
+    void setActiveObject(KexiWindow* win);
+    KexiWindow* activeObject();
+
 public slots:
-        void showNavigator();
+    void showNavigator();
 
 private:
-	KexiProject *m_project;
-	
-	KexiMobileNavigator *m_navWidget;
-        KexiWindow* m_objectPage;
+    KexiProject *m_project;
+
+    KexiMobileNavigator *m_navWidget;
+    KexiWindow* m_objectPage;
 };
 
 #endif

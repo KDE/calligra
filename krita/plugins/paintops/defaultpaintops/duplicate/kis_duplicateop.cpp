@@ -64,7 +64,7 @@
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
-
+#include <kis_fixed_paint_device.h>
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(settings, painter)
@@ -130,7 +130,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qreal scale = m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(info.pressure());
 
-    QPointF hotSpot = brush->hotSpot(scale, scale);
+    QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
     QPointF pt = info.pos() - hotSpot;
 
     setCurrentScale(scale);
@@ -138,14 +138,10 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    qint32 x;
-    qreal xFraction;
-    qint32 y;
-    qreal yFraction;
-
+    qint32 x, y;
+    qreal xFraction, yFraction; // will not be used
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
-    xFraction = yFraction = 0.0;
 
     QPoint srcPoint;
 
@@ -158,8 +154,8 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
                           static_cast<qint32>(settings->position().y() - hotSpot.y()));
     }
 
-    qint32 sw = brush->maskWidth(scale, 0.0);
-    qint32 sh = brush->maskHeight(scale, 0.0);
+    qint32 sw = brush->maskWidth(scale, 0.0, info);
+    qint32 sh = brush->maskHeight(scale, 0.0, info);
 
     if (srcPoint.x() < 0)
         srcPoint.setX(0);
@@ -291,29 +287,23 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
         delete [] matrix;
     }
 
-    KisFixedPaintDeviceSP dab = 0;
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(m_srcdev->colorSpace(), scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-    } else {
-        dab = cachedDab();
-        KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-    }
+    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    static KoColor color(Qt::black, cs);
+
+    KisFixedPaintDeviceSP dab =
+        m_dabCache->fetchDab(cs, color, scale, scale,
+                             0.0, info, 0.0, 0.0, 0.0);
 
     QRect dstRect = QRect(x, y, dab->bounds().width(), dab->bounds().height());
+    if (dstRect.isEmpty()) return 1.0;
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
+    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
+                                        m_srcdev, dab,
+                                        dstRect.width(),
+                                        dstRect.height());
 
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
-    sw = dstRect.width();
-    sh = dstRect.height();
-
-    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, 0, 0, sw, sh);
-    painter()->renderMirrorMask(QRect(dstRect.topLeft(),dstRect.size()),m_srcdev,0,0,dab);
+    painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
+                                    !m_dabCache->needSeparateOriginal());
 
     return spacing(scale);
 }

@@ -532,7 +532,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
         deltaSequence = _seqList.createDeltaSequence(intervalLength);
 
         QString str("Deltas: [ ");
-        foreach(Value v, deltaSequence) {
+        foreach(const Value &v, deltaSequence) {
             if (v.isBoolean())
                 str += v.asBoolean() ? "change " : "nochange ";
             else if (v.isInteger())
@@ -572,7 +572,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
             deltaSequence.append(Value());
 
         QString str("Deltas: [ ");
-        foreach(Value v, deltaSequence) {
+        foreach(const Value &v, deltaSequence) {
             if (v.isBoolean())
                 str += v.asBoolean() ? "change " : "nochange ";
             else if (v.isInteger())
@@ -728,16 +728,16 @@ bool AutoFillCommand::mainProcessing()
 
     // Fill from left to right
     if (m_sourceRange.left() == m_targetRange.left() && m_sourceRange.right() < m_targetRange.right()) {
-        for (int y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++) {
+        for (int y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y) {
             int x;
             QList<Cell> destList;
-            for (x = m_sourceRange.right() + 1; x <= m_targetRange.right(); x++)
+            for (x = m_sourceRange.right() + 1; x <= m_targetRange.right(); ++x)
                 destList.append(Cell(m_sheet, x, y));
             QList<Cell> srcList;
-            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); x++)
+            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); ++x)
                 srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
-            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); x++)
+            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); ++x)
                 seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
             fillSequence(srcList, destList, seqList);
             qDeleteAll(seqList);
@@ -746,16 +746,16 @@ bool AutoFillCommand::mainProcessing()
 
     // Fill from top to bottom
     if (m_sourceRange.top() == m_targetRange.top() && m_sourceRange.bottom() < m_targetRange.bottom()) {
-        for (int x = m_sourceRange.left(); x <= m_targetRange.right(); x++) {
+        for (int x = m_sourceRange.left(); x <= m_targetRange.right(); ++x) {
             int y;
             QList<Cell> destList;
-            for (y = m_sourceRange.bottom() + 1; y <= m_targetRange.bottom(); y++)
+            for (y = m_sourceRange.bottom() + 1; y <= m_targetRange.bottom(); ++y)
                 destList.append(Cell(m_sheet, x, y));
             QList<Cell> srcList;
-            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++)
+            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y)
                 srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
-            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++)
+            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y)
                 seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
             fillSequence(srcList, destList, seqList);
             qDeleteAll(seqList);
@@ -764,16 +764,16 @@ bool AutoFillCommand::mainProcessing()
 
     // Fill from right to left
     if (m_sourceRange.left() == m_targetRange.right() && m_sourceRange.right() >= m_targetRange.right()) {
-        for (int y = m_targetRange.top(); y <= m_targetRange.bottom(); y++) {
+        for (int y = m_targetRange.top(); y <= m_targetRange.bottom(); ++y) {
             int x;
             QList<Cell> destList;
-            for (x = m_targetRange.left(); x < m_sourceRange.left(); x++)
+            for (x = m_targetRange.left(); x < m_sourceRange.left(); ++x)
                 destList.append(Cell(m_sheet, x, y));
             QList<Cell> srcList;
-            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); x++)
+            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); ++x)
                 srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
-            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); x++)
+            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); ++x)
                 seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
             fillSequence(srcList, destList, seqList, false);
             qDeleteAll(seqList);
@@ -784,16 +784,16 @@ bool AutoFillCommand::mainProcessing()
     if (m_sourceRange.top() == m_targetRange.bottom() && m_sourceRange.bottom() >= m_targetRange.bottom()) {
         const int startVal = qMin(m_targetRange.left(), m_sourceRange.left());
         const int endVal = qMax(m_sourceRange.right(), m_targetRange.right());
-        for (int x = startVal; x <= endVal; x++) {
+        for (int x = startVal; x <= endVal; ++x) {
             int y;
             QList<Cell> destList;
-            for (y = m_targetRange.top(); y < m_sourceRange.top(); y++)
+            for (y = m_targetRange.top(); y < m_sourceRange.top(); ++y)
                 destList.append(Cell(m_sheet, x, y));
             QList<Cell> srcList;
             for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y)
                 srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
-            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++)
+            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y)
                 seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
             fillSequence(srcList, destList, seqList, false);
             qDeleteAll(seqList);

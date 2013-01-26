@@ -54,7 +54,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     m_pageStylesView = new QListWidget(this);
     pageStyleLayout->addWidget(m_pageStylesView, 1);
     connect(m_pageStylesView, SIGNAL(currentRowChanged(int)), this, SLOT(pageStyleCurrentRowChanged(int)));
-    QVBoxLayout *pageStyleLayout2 = new QVBoxLayout(pageStyleWidget);
+    QVBoxLayout *pageStyleLayout2 = new QVBoxLayout();
     pageStyleLayout->addLayout(pageStyleLayout2);
     m_clonePageStyleButton = new QPushButton(i18n("Clone"), pageStyleWidget);
     connect(m_clonePageStyleButton, SIGNAL(clicked()), this, SLOT(pageStyleCloneClicked()));

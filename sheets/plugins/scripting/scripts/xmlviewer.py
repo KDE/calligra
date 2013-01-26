@@ -6,7 +6,9 @@ import os, sys, traceback, tempfile, zipfile
 # import the kross module.
 import Kross
 
-CalligraAppName="KSpread"
+T = Kross.module("kdetranslation")
+
+CalligraAppName="Sheets"
 CalligraAppExt="ods"
 
 try:
@@ -22,14 +24,14 @@ except ImportError:
     if not CalligraAppModule.document().url():
         # if the app does not have a loaded document now we show a fileopen-dialog to let the user choose the file.
         forms = Kross.module("forms")
-        dialog = forms.createDialog("XML Viewer")
+        dialog = forms.createDialog(T.i18n("XML Viewer"))
         dialog.setButtons("Ok|Cancel")
         dialog.setFaceType("Plain")
-        openwidget = forms.createFileWidget(dialog.addPage("Open","Open OpenDocument File"))
+        openwidget = forms.createFileWidget(dialog.addPage(T.i18n("Open"),T.i18n("Open OpenDocument File")))
         openwidget.setMode("Opening")
-        openwidget.setFilter("*.%s|OpenDocument Files\n*|All Files" % CalligraAppExt)
+        openwidget.setFilter("*.%s|%s\n*|%s" % (CalligraAppExt,T.i18n("OpenDocument Files"),T.i18n("All Files")))
         if not dialog.exec_loop():
-            raise Exception("Aborted.")
+            raise Exception(T.i18n("Aborted."))
         CalligraAppModule.document().openUrl(openwidget.selectedFile())
 
 # This class does provide us the viewer dialog we are using to display something to the user.
@@ -37,7 +39,7 @@ class Dialog:
     def __init__(self, action):
         # Create the viewer dialog.
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("XML Viewer")
+        self.dialog = self.forms.createDialog(T.i18n("XML Viewer"))
         self.dialog.setButtons("Ok")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
         self.dialog.minimumWidth = 720
@@ -52,7 +54,7 @@ class Dialog:
         # let's read the manifest file by using a KoScriptingOdfReader
         reader = self.store.open("META-INF/manifest.xml")
         if not reader:
-            raise Exception("Failed to read the mainfest")
+            raise Exception(T.i18n("Failed to read the manifest"))
         # walk over all file-entry items the manifest does know about.
         for i in range( reader.count() ):
             # the typename, e.g. "text/xml"
@@ -163,14 +165,14 @@ class Dialog:
 
         # Extract the XML content to a file.
         if not self.store.extractToFile(path,toFile):
-            raise Exception("Failed to extract \"%s\" to \"%s\"" % (path,toFile))
+            raise Exception(T.i18n("Failed to extract \"%1\" to \"%2\"", [path], [toFile]))
         if not '"' in program:
             program = "\"%s\"" % program
 
         # Execute the external program with the tempfile as argument.
         result = os.system( "%s \"%s\"" % (program,toFile) )
         if result != 0:
-            self.forms.showMessageBox("Error", "Error", "<qt>Failed to execute program:<br><br>%s \"%s\"</qt>" % (program,toFile))
+            self.forms.showMessageBox("Error", T.i18n("Error"), T.i18n("<qt>Failed to execute program:<br><br>%1 \"%2\"</qt>", [program], [toFile]))
 
         # Remove the tempfile again.
         try:
@@ -182,19 +184,19 @@ class Dialog:
     def openClicked(self, *args):
         # Show the "Open with..." dialog that allows the user to define the external program
         # that should be used executed.
-        dialog = self.forms.createDialog("Open with...")
+        dialog = self.forms.createDialog(T.i18n("Open with..."))
         dialog.setButtons("Ok|Cancel")
         dialog.setFaceType("Plain")
         dialog.minimumWidth = 360
         page = dialog.addPage("", "")
-        edit = self.forms.createWidget(page, "QLineEdit", "Filter")
+        edit = self.forms.createWidget(page, "QLineEdit", T.i18n("Filter"))
         edit.text = 'kate'
         edit.setFocus()
         if dialog.exec_loop():
             program = edit.text.strip()
             dialog.delayedDestruct()
             if not program:
-                raise Exception("No program defined.")
+                raise Exception(T.i18n("No program defined."))
             self.doOpen(program)
 
     def kwriteClicked(self, *args):
@@ -209,7 +211,7 @@ class Dialog:
         # the typename, e.g. "text/xml"
         typeName = self.pages[path][0]
 
-        dialog = self.forms.createDialog("Compare...")
+        dialog = self.forms.createDialog(T.i18n("Compare..."))
         dialog.setButtons("Ok|Cancel")
         dialog.setFaceType("Plain")
         dialog.minimumWidth = 540
@@ -220,7 +222,7 @@ class Dialog:
         cmdEdit.text = "\"kdiff3\" --L1 \"Current\" --L2 \"OpenDocument File\""
 
         self._url = CalligraAppModule.document().url()
-        self.forms.createWidget(page, "QLabel").text = "Compare with OpenDocument file:"
+        self.forms.createWidget(page, "QLabel").text = T.i18n("Compare with OpenDocument file:")
         urlEdit = self.forms.createWidget(page, "KUrlRequester")
         urlEdit.setPath(self._url)
         def editChanged(text):
@@ -233,11 +235,11 @@ class Dialog:
             if self._url.startswith("file://"):
                 self._url = self._url[7:]
             if not os.path.isfile(self._url):
-                raise Exception("No OpenDocument file to compare with selected.")
+                raise Exception(T.i18n("No OpenDocument file to compare with selected."))
 
             program = cmdEdit.text
             if not program:
-                raise Exception("No command selected.")
+                raise Exception(T.i18n("No command selected."))
             if not '"' in program:
                 program = "\"%s\"" % program
 
@@ -248,7 +250,7 @@ class Dialog:
                 raise Exception("Invalid OpenDocument file: %s" % self._url)
             # Check if the expected file is there.
             if not path in zf.namelist():
-                raise Exception("The OpenDocument file does not contain any file named \"%s\"" % path)
+                raise Exception(T.i18n("The OpenDocument file does not contain any file named \"%1\"", [path]))
 
             # Create the temp-files.
             currentFile = tempfile.mktemp()
@@ -260,7 +262,7 @@ class Dialog:
             try:
                 # Extract the XML content to a file.
                 if not self.store.extractToFile(path,currentFile):
-                    raise Exception("Failed to extract \"%s\" to \"%s\"" % (path,currentFile))
+                    raise Exception(T.i18n("Failed to extract \"%1\" to \"%2\"", [path], [currentFile]))
 
                 # Extract the file from the OpenDocument Zip file to the temp-file.
                 outfile = open(withFile, 'wb')
@@ -278,6 +280,6 @@ class Dialog:
                     except:
                         pass
         except:
-            self.forms.showMessageBox("Error", "Error", "<qt>%s</qt>" % str(sys.exc_value))
+            self.forms.showMessageBox("Error", T.i18n("Error"), T.i18n("<qt>%1</qt>", [str(sys.exc_value)]))
 
 Dialog(self)

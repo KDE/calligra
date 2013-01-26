@@ -1157,7 +1157,7 @@ QList <QWidget*> CellToolBase::createOptionWidgets()
     f.close();
 
     QDomNodeList widgetNodes = doc.elementsByTagName("optionWidget");
-    for (int i = 0; i < widgetNodes.size(); i++) {
+    for (int i = 0; i < widgetNodes.size(); ++i) {
         QDomElement e = widgetNodes.at(i).toElement();
         widgets.append(new ActionOptionWidget(this, e));
     }
@@ -1467,8 +1467,10 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     } else {
         selection()->update();
     }
-    d->externalEditor->applyAction()->setEnabled(false);
-    d->externalEditor->cancelAction()->setEnabled(false);
+    if (d->externalEditor) {
+        d->externalEditor->applyAction()->setEnabled(false);
+        d->externalEditor->cancelAction()->setEnabled(false);
+    }
     canvas()->canvasWidget()->setFocus();
 }
 
@@ -1534,7 +1536,7 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
         int closeParenthese = text.count(')');
         int diff = qAbs(openParenthese - closeParenthese);
         if (openParenthese > closeParenthese) {
-            for (int i = 0; i < diff; i++) {
+            for (int i = 0; i < diff; ++i) {
                 text += ')';
             }
         }
@@ -2649,7 +2651,7 @@ void CellToolBase::autoSum()
             if ((selection()->marker().y() > 1) && Cell(selection()->activeSheet(), selection()->marker().x(), selection()->marker().y() - 1).value().isNumber()) {
                 // check cells above the current one
                 start = end = selection()->marker().y() - 1;
-                for (start--; (start > 0) && Cell(selection()->activeSheet(), selection()->marker().x(), start).value().isNumber(); start--) ;
+                for (--start; (start > 0) && Cell(selection()->activeSheet(), selection()->marker().x(), start).value().isNumber(); --start) ;
 
                 const Region region(QRect(QPoint(selection()->marker().x(), start + 1),
                                           QPoint(selection()->marker().x(), end)), selection()->activeSheet());
@@ -2662,7 +2664,7 @@ void CellToolBase::autoSum()
             } else if ((selection()->marker().x() > 1) && Cell(selection()->activeSheet(), selection()->marker().x() - 1, selection()->marker().y()).value().isNumber()) {
                 // check cells to the left of the current one
                 start = end = selection()->marker().x() - 1;
-                for (start--; (start > 0) && Cell(selection()->activeSheet(), start, selection()->marker().y()).value().isNumber(); start--) ;
+                for (--start; (start > 0) && Cell(selection()->activeSheet(), start, selection()->marker().y()).value().isNumber(); --start) ;
 
                 const Region region(QRect(QPoint(start + 1, selection()->marker().y()),
                                           QPoint(end, selection()->marker().y())), selection()->activeSheet());

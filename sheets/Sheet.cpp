@@ -878,10 +878,10 @@ QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, 
         newPoint += QString::number(row);
 
     if (((ref == ColumnRemove
-            && col == pos.x() // Column is the deleted one : error
+            && (col >= pos.x() && col < pos.x() + nbCol) // Column is the deleted one : error
             && (fullRowOrColumn || row == pos.y())) ||
             (ref == RowRemove
-             && row == pos.y() // Row is the deleted one : error
+             && (row >= pos.y() && row < pos.y() + nbCol) // Row is the deleted one : error
              && (fullRowOrColumn || col == pos.x())) ||
             (ref == ColumnInsert
              && col + nbCol > KS_colMax
@@ -1571,8 +1571,8 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                             BackgroundImageProperties bgProperties;
                             if( element.hasAttribute("draw:opacity") ) {
                                 QString opacity = element.attribute("draw:opacity", "");
-                                if( opacity.endsWith('%') ) {
-                                    opacity = opacity.left(opacity.size() - 2);
+                                if( opacity.endsWith(QLatin1Char('%')) ) {
+                                    opacity.chop(1);
                                 }
                                 bool ok;
                                 float opacityFloat = opacity.toFloat( &ok );

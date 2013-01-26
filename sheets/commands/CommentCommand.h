@@ -35,7 +35,7 @@ namespace Sheets
 class CommentCommand : public AbstractRegionCommand
 {
 public:
-    CommentCommand(KUndo2Command* parent = 0);
+    explicit CommentCommand(KUndo2Command *parent = 0);
     void setComment(const QString& comment);
 
 protected:

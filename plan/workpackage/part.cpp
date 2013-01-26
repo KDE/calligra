@@ -413,7 +413,7 @@ bool Part::setWorkPackage( WorkPackage *wp, KoStore *store )
     if ( ! m_loadingFromProjectStore ) {
         wp->saveToProjects( this );
     }
-    connect( wp->project(), SIGNAL( changed() ), wp, SLOT( projectChanged() ) );
+    connect( wp->project(), SIGNAL( projectChanged() ), wp, SLOT( projectChanged() ) );
     connect ( wp, SIGNAL( modified( bool ) ), this, SLOT( setModified( bool ) ) );
     emit workPackageAdded( wp, indexOf( wp ) );
     connect(wp, SIGNAL(saveWorkPackage(WorkPackage*)), SLOT(saveWorkPackage(WorkPackage*)));

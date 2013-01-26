@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,49 +49,6 @@
 
 using namespace KexiTableDesignerCommands;
 
-//----------------------------------------------
-
-CommandHistory::CommandHistory(KActionCollection *actionCollection, bool withMenus)
-        : K3CommandHistory(actionCollection, withMenus)
-{
-    // We need ALL the commands because we'll collect reuse their
-    // data before performing alter table, so set that to the maximum,
-    // as K3CommandHistory has default = 50.
-    setUndoLimit(INT_MAX);
-    setRedoLimit(INT_MAX);
-}
-
-void CommandHistory::addCommand(K3Command *command, bool execute)
-{
-    K3CommandHistory::addCommand(command, execute);
-    m_commandsToUndo.append(command);
-}
-
-void CommandHistory::undo()
-{
-    if (!m_commandsToUndo.isEmpty()) {
-        K3Command * cmd = m_commandsToUndo.takeAt(m_commandsToUndo.count() - 1);
-        m_commandsToRedo.append(cmd);
-    }
-    K3CommandHistory::undo();
-}
-
-void CommandHistory::redo()
-{
-    if (!m_commandsToRedo.isEmpty()) {
-        K3Command * cmd = m_commandsToRedo.takeAt(m_commandsToRedo.count() - 1);
-        m_commandsToUndo.append(cmd);
-    }
-    K3CommandHistory::redo();
-}
-
-void CommandHistory::clear()
-{
-    K3CommandHistory::clear(); m_commandsToUndo.clear();
-}
-
-//----------------------------------------------
-
 KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
     KexiTableDesignerView* aDesignerView)
         : designerView(aDesignerView)
@@ -110,8 +67,10 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
         , tempStoreDataUsingRealAlterTable(false)
 {
     historyActionCollection = new KActionCollection((QWidget*)0);
-    history = new CommandHistory(historyActionCollection, true);
-
+    history = new KUndo2Stack();
+    historyActionCollection->addAction("edit_undo", history->createUndoAction(historyActionCollection, "edit_undo"));
+    historyActionCollection->addAction("edit_redo", history->createRedoAction(historyActionCollection, "edit_redo"));
+    
     internalPropertyNames
     << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
     << "boundColumn" << "visibleColumn";
@@ -131,7 +90,7 @@ int KexiTableDesignerViewPrivate::generateUniqueId()
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     const KoProperty::Set& set, const QByteArray& propertyName,
-    const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup,
+    const QVariant& newValue, const QVariant& oldValue, Command* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
 {
@@ -159,9 +118,8 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     if (property.value() != newValue)
         property.setValue(newValue, rememberOldValue);
     if (commandGroup) {
-        commandGroup->addCommand(
-            new ChangeFieldPropertyCommand(designerView, set, propertyName, oldValue, newValue,
-                                           oldListData, property.listData()));
+            new ChangeFieldPropertyCommand(commandGroup, designerView, set, propertyName, oldValue, newValue,
+                                           oldListData, property.listData());
     }
     delete oldListData;
     addHistoryCommand_in_slotPropertyChanged_enabled
@@ -170,7 +128,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     const KoProperty::Set& set, const QByteArray& propertyName,
-    const QVariant& newValue, CommandGroup* commandGroup,
+    const QVariant& newValue, Command* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
 {
@@ -181,12 +139,11 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 }
 
 void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
-        bool visible, bool &changed, CommandGroup *commandGroup)
+        bool visible, bool &changed, Command *commandGroup)
 {
     if (prop->isVisible() != visible) {
         if (commandGroup) {
-            commandGroup->addCommand(
-                new ChangePropertyVisibilityCommand(designerView, set, prop->name(), visible));
+                new ChangePropertyVisibilityCommand(commandGroup, designerView, set, prop->name(), visible);
         }
         prop->setVisible(visible);
         changed = true;
@@ -194,7 +151,7 @@ void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& 
 }
 
 bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
-        CommandGroup *commandGroup)
+        Command *commandGroup)
 {
     bool changed = false;
     KoProperty::Property *prop;
@@ -292,4 +249,3 @@ void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &recor
     view->data()->saveRowChanges(record, true);
 }
 
-#include "kexitabledesignerview_p.moc"

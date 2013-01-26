@@ -23,6 +23,7 @@
 #include <kexi_version.h>
 
 #include <calligraversion.h> //only for CALLIGRA_VERSION_STRING
+#include <KoIcon.h>
 #include <klocale.h>
 
 static const char *description =
@@ -43,6 +44,7 @@ KexiAboutData::KexiAboutData()
         "submit@bugs.kde.org"
     )
 {
+    setProgramIconName(koIconName("calligrakexi"));
     // authors sorted by last nontrivial contribution date * size
     addAuthor(
         ki18n("Jarosław Staniek"), ki18n("Project maintainer & developer, design, KexiDB, commercially supported version, MS Windows version"), "staniek@kde.org");

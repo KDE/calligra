@@ -1,10 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=Plan MS Project Import Filter
+Name[ca]=Filtre d'importació de MS Project per al Plan
+Name[da]=MS Project-importfilter til Plan
+Name[de]=MS-Projekt-Importfilter für Calligra Plan
 Name[el]=Φίλτρο εισαγωγής Plan MS Project
+Name[es]=Filtro de Plan de importación de MS Project
 Name[et]=Plani MS Projecti impordifilter
-Name[gl]=Filtro de importación de MS Project para Plan
+Name[fi]=Planin MS Project -tuontisuodin
+Name[fr]=Filtre d'importation MS Project de Karbon
+Name[gl]=Filtro para Plan de importación de MS Project
+Name[hu]=Plan MS Project importszűrő
+Name[it]=Filtro di importazione MS Project per Plan
 Name[ja]=Plan MS Project インポートフィルタ
+Name[kk]=MS Project -> Plan импорт сүзгісі
 Name[nl]=Plan importfilter voor MS Project
 Name[pl]=Filtr importu MS Project do Plan
 Name[pt]=Filtro de Importação do MS Project para o Plan

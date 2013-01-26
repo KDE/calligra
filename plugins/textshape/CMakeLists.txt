@@ -1,5 +1,13 @@
 project( textPlugin)
 
+# only build the textdocument inspector in debug builds
+set(BUILD_TEXTDOCUMENT_INSPECTOR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+
+
 add_subdirectory( pics )
 #add_subdirectory( tests )
 
@@ -8,7 +16,6 @@ include_directories(
     ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
     ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets/
     ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### Flake Plugin library ###############
@@ -33,10 +40,11 @@ SET ( textshape_SRCS
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
 
-    dialogs/StylesWidget.cpp
-    dialogs/SpecialButton.cpp
+#    dialogs/StylesWidget.cpp
+#    dialogs/SpecialButton.cpp
     dialogs/StylesCombo.cpp
     dialogs/StylesComboPreview.cpp
+    dialogs/DockerStylesComboModel.cpp
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
@@ -56,6 +64,9 @@ SET ( textshape_SRCS
     dialogs/ParagraphDropCaps.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StylesModel.cpp
+    dialogs/AbstractStylesModel.cpp
+    dialogs/StylesFilteredModelBase.cpp
+    dialogs/ValidParentStylesProxyModel.cpp
     dialogs/StylesDelegate.cpp
     dialogs/StyleManager.cpp
     dialogs/StyleManagerDialog.cpp
@@ -95,6 +106,16 @@ SET ( textshape_SRCS
     commands/AutoResizeCommand.cpp
 )
 
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    SET ( textshape_SRCS
+        ${textshape_SRCS}
+        TextDocumentStructureModel.cpp
+        TextDocumentInspectionDocker.cpp
+        TextDocumentInspectionDockerFactory.cpp
+    )
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+
+
 kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
@@ -112,7 +133,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ParagraphIndentSpacing.ui
     dialogs/ParagraphDecorations.ui
     dialogs/ParagraphBulletsNumbers.ui
-    dialogs/ParagraphDropCaps.ui   
+    dialogs/ParagraphDropCaps.ui
     dialogs/StyleManager.ui
     dialogs/CharacterGeneral.ui
     dialogs/CharacterHighlighting.ui

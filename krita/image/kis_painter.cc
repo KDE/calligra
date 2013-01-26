@@ -243,6 +243,18 @@ void KisPainter::endTransaction(KisPostExecutionUndoAdapter *undoAdapter)
     d->transaction = 0;
 }
 
+KUndo2Command* KisPainter::endAndTakeTransaction()
+{
+    Q_ASSERT_X(d->transaction, "KisPainter::endTransaction()",
+               "No transaction is in progress");
+
+    KUndo2Command *transactionData = d->transaction->endAndTake();
+    delete d->transaction;
+    d->transaction = 0;
+
+    return transactionData;
+}
+
 void KisPainter::deleteTransaction()
 {
     if (!d->transaction) return;
@@ -1105,6 +1117,11 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
 
 void KisPainter::fillPainterPath(const QPainterPath& path)
 {
+    fillPainterPath(path, QRect());
+}
+
+void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requestedRect)
+{
     FillStyle fillStyle = d->fillStyle;
 
     if (fillStyle == FillStyleNone) {
@@ -1124,15 +1141,14 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     Q_CHECK_PTR(d->polygon);
 
     QRectF boundingRect = path.boundingRect();
-    QRect fillRect;
-
-    fillRect.setLeft((qint32)floor(boundingRect.left()));
-    fillRect.setRight((qint32)ceil(boundingRect.right()));
-    fillRect.setTop((qint32)floor(boundingRect.top()));
-    fillRect.setBottom((qint32)ceil(boundingRect.bottom()));
+    QRect fillRect = boundingRect.toAlignedRect();
 
     // Expand the rectangle to allow for anti-aliasing.
     fillRect.adjust(-1, -1, 1, 1);
+
+    if (requestedRect.isValid()) {
+        fillRect &= requestedRect;
+    }
 
     // Clip to the image bounds.
     if (d->bounds.isValid()) {
@@ -1202,11 +1218,8 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         }
     }
 
-    QRect r = d->polygon->extent();
-
-    // The strokes for the outline may have already added updated the dirtyrect, but it can't hurt,
-    // and if we're painting without outlines, then there will be no dirty rect. Let's do it ourselves...
-    bitBlt(r.x(), r.y(), d->polygon, r.x(), r.y(), r.width(), r.height());
+    QRect bltRect = !requestedRect.isEmpty() ? requestedRect : fillRect;
+    bitBlt(bltRect.x(), bltRect.y(), d->polygon, bltRect.x(), bltRect.y(), bltRect.width(), bltRect.height());
 }
 
 void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
@@ -1823,9 +1836,9 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
         selectionAccessor = d->selection->projection()->createRandomConstAccessorNG(start.x(), start.y());
     }
 
-    int           pixelSize    = d->device->pixelSize();
-    quint8        pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
-    KoColorSpace* cs           = d->device->colorSpace();
+    int pixelSize = d->device->pixelSize();
+    quint8 pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
+    const KoColorSpace *cs = d->device->colorSpace();
 
     KoColor c1(d->paintColor);
     KoColor c2(d->paintColor);
@@ -2431,6 +2444,10 @@ void KisPainter::copyMirrorInformation(KisPainter* painter)
     painter->setMirrorInformation(d->axisCenter, d->mirrorHorizontaly, d->mirrorVerticaly);
 }
 
+bool KisPainter::hasMirroring() const
+{
+    return d->mirrorHorizontaly || d->mirrorVerticaly;
+}
 
 void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 {
@@ -2476,6 +2493,28 @@ void KisPainter::setColorConversionFlags(KoColorConversionTransformation::Conver
     d->conversionFlags = conversionFlags;
 }
 
+void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab)
+{
+    if (!d->mirrorHorizontaly && !d->mirrorVerticaly) return;
+
+    KisFixedPaintDeviceSP dabToProcess = dab;
+    if (preserveDab) {
+        dabToProcess = new KisFixedPaintDevice(*dab);
+    }
+    renderMirrorMask(rc, dabToProcess);
+}
+
+void KisPainter::renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask)
+{
+    if (!d->mirrorHorizontaly && !d->mirrorVerticaly) return;
+
+    KisFixedPaintDeviceSP maskToProcess = mask;
+    if (preserveMask) {
+        maskToProcess = new KisFixedPaintDevice(*mask);
+    }
+    renderMirrorMask(rc, dab, sx, sy, maskToProcess);
+}
+
 void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
 {
     int x = rc.topLeft().x();
@@ -2501,41 +2540,6 @@ void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
     }
 
 }
-
-QVector<QRect> KisPainter::regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
-{
-    QVector<QRect> region;
-    int x = rc.topLeft().x();
-    int y = rc.topLeft().y();
-
-    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
-
-    if (d->mirrorHorizontaly && d->mirrorVerticaly){
-        dab->mirror(true, false);
-        bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,y),rc.size()) );
-
-        dab->mirror(false,true);
-        bltFixed(mirrorX, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,mirrorY),rc.size()) );
-
-        dab->mirror(true, false);
-        bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(x,mirrorY),rc.size()) );
-
-    }else if (d->mirrorHorizontaly){
-        dab->mirror(true, false);
-        bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,y),rc.size()) );
-    }else if (d->mirrorVerticaly){
-        dab->mirror(false, true);
-        bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(x,mirrorY),rc.size()) );
-    }
-    return region;
-}
-
 
 void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask)
 {
@@ -2585,17 +2589,6 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
     }
 }
 
-void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask){
-    if (d->mirrorHorizontaly || d->mirrorVerticaly){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(device()->colorSpace());
-        QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
-        mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
-        dab->readBytes(mirrorDab->data(),rc);
-        renderMirrorMask(rc, mirrorDab, mask);
-    }
-}
-
 void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask)
 {
     if (d->mirrorHorizontaly || d->mirrorVerticaly){
@@ -2605,6 +2598,58 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy
         mirrorDab->initialize();
         dab->readBytes(mirrorDab->data(),QRect(QPoint(sx,sy),rc.size()));
         renderMirrorMask(rc, mirrorDab, mask);
+    }
+}
+
+void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP dab)
+{
+    QVector<QRect> rects;
+
+    int x = rc.topLeft().x();
+    int y = rc.topLeft().y();
+    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
+    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
+
+    rects << rc;
+
+    if (d->mirrorHorizontaly && d->mirrorVerticaly){
+        rects << QRect(mirrorX, y, rc.width(), rc.height());
+        rects << QRect(mirrorX, mirrorY, rc.width(), rc.height());
+        rects << QRect(x, mirrorY, rc.width(), rc.height());
+    } else if (d->mirrorHorizontaly) {
+        rects << QRect(mirrorX, y, rc.width(), rc.height());
+    } else if (d->mirrorVerticaly) {
+        rects << QRect(x, mirrorY, rc.width(), rc.height());
+    }
+
+    foreach(const QRect &rc, rects) {
+        d->device->clear(rc);
+    }
+
+    QRect resultRect = dab->extent() | rc;
+    bool intersects = false;
+
+    for (int i = 1; i < rects.size(); i++) {
+        if (rects[i].intersects(resultRect)) {
+            intersects = true;
+            break;
+        }
+    }
+
+    /**
+     * If there are no cross-intersections, we can use a fast path
+     * and do no cycling recompositioning
+     */
+    if (!intersects) {
+        rects.resize(1);
+    }
+
+    foreach(const QRect &rc, rects) {
+        bitBlt(rc.topLeft(), dab, rc);
+    }
+
+    foreach(const QRect &rc, rects) {
+        renderMirrorMask(rc, dab);
     }
 }
 

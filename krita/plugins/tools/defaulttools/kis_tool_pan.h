@@ -26,6 +26,7 @@
 
 class KoCanvasBase;
 class KisCanvas2;
+class KisCanvasController;
 
 class KisToolPan : public KisTool
 {
@@ -53,6 +54,7 @@ private:
     bool isInCheckerArea(QPointF pt);
     qreal calculateAngle(QPointF oldPoint, QPointF newPoint);
     KisCanvas2* kritaCanvas() const;
+    KisCanvasController* kritaCanvasController() const;
 
 private:
     static const qreal m_checkerRadius;

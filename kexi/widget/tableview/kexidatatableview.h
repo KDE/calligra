@@ -40,7 +40,7 @@ public:
     /**
      * creates a blank widget
      */
-    KexiDataTableView(QWidget *parent = 0);
+    explicit KexiDataTableView(QWidget *parent);
 
     /*! Creates a table widget and fills it using data from \a cursor.
      Cursor will be opened (with open()) if it is not yet opened.

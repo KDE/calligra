@@ -37,7 +37,7 @@
 #include <ksystemtimezone.h>
 #include <kdatetime.h>
 #include <kconfiggroup.h>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 
 #include <qtest_kde.h>
 #include <kdebug.h>
@@ -183,6 +183,7 @@ void ProjectTester::oneTask()
         KPlatoRCPSPlugin rcps( 0, QVariantList() );
         rcps.calculate( *m_project, sm, true/*nothread*/ );
     }
+    Debug::printSchedulingLog( *sm, s );
     Debug::print( m_project, s );
     Debug::print( t, s );
 

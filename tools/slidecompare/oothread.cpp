@@ -157,7 +157,7 @@ OoThread::toPng(const QString& path, int pngwidth) {
     c.from = path;
     c.width = pngwidth;
     do {
-        c.to = dir.absoluteFilePath(tmpname()+"/");
+        c.to = dir.absoluteFilePath(tmpname() + '/');
     } while(dir.exists(c.to));
     dir.mkdir(c.to);
     mutex.lock();

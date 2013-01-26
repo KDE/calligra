@@ -1,7 +1,16 @@
 [Desktop Entry]
-Name[fr]=Modèle de texture
 Name=Texture Templates
+Name[el]=Πρότυπα υφής
+Name[et]=Tekstuurimallid
+Name[fi]=Tekstuuripohjat
+Name[fr]=Modèles de textures
+Name[hu]=Textúrasablonok
+Name[it]=Modelli di trama
+Name[nl]=Textuur-sjablonen
+Name[pt]=Modelos de Texturas
+Name[pt_BR]=Modelos de textura
+Name[sk]=Šablóny textúr
+Name[sv]=Strukturmallar
+Name[uk]=Шаблони текстур
+Name[x-test]=xxTexture Templatesxx
 X-KDE-DefaultTab=true
-
-[Dolphin]
-Timestamp=2012,7,7,13,23,45

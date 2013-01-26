@@ -64,9 +64,11 @@ tristate KexiAutoFormDesignView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KexiDB::SchemaData* KexiAutoFormDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool& cancel)
+KexiDB::SchemaData* KexiAutoFormDesignView::storeNewData(const KexiDB::SchemaData& sdata,
+                                                         KexiView::StoreNewDataOptions options,
+                                                         bool& cancel)
 {
-    return KexiView::storeNewData(sdata, cancel);
+    return KexiView::storeNewData(sdata, options, cancel);
 }
 
 tristate KexiAutoFormDesignView::storeData(bool dontAsk)

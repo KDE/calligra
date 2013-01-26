@@ -3,13 +3,15 @@ project(calligradockers)
 include_directories(${KDE4_INCLUDE_DIR}
      ${FLAKE_INCLUDES}
      ${KOPAGEAPP_INCLUDES}
-     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
 )
 
 set(calligradockers_SRCS
 
     strokedocker/StrokeDocker.cpp
     strokedocker/StrokeDockerFactory.cpp
+
+    snapguidedocker/SnapGuideDocker.cpp
+    snapguidedocker/SnapGuideDockerFactory.cpp
 
     shapeproperties/ShapePropertiesDocker.cpp
     shapeproperties/ShapePropertiesDockerFactory.cpp
@@ -22,10 +24,11 @@ set(calligradockers_SRCS
     shadowdocker/ShadowDocker.cpp
     shadowdocker/ShadowDockerFactory.cpp
 
-    styledocker/StyleButtonBox.cpp
-    styledocker/StylePreview.cpp
-    styledocker/StyleDocker.cpp
     styledocker/StyleDockerFactory.cpp
+    styledocker/StyleDocker.cpp
+    styledocker/StrokeFillWidget.cpp
+    styledocker/StylePreview.cpp
+    styledocker/StyleButtonBox.cpp
 
     Plugin.cpp
 )

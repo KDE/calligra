@@ -1,0 +1,130 @@
+This file describes short and long term tasks that we want to do in
+Author
+
+
+Legend
+------
+
+* Main issue
++ Sub issue
+- Sub sub issue
+
+[DONE]    Main issue is done
+[Done]    Sub issue is done
+[done]    Sub sub issue is done
+
+[name]    <name> is assigned to this task
+
+
+================================================================
+
+
+Short term issues
+-----------------
+
+
+Fix known bugs / misfeatures
+ * ...
+
+
+
+Before release of 2.6
+---------------------
+
+EPUB2 export
+ * Add missing metadata to epub2 filter
+    + Book ID (ISBN)
+    + Language
+    + other ...
+ * Get book id + language from metadata in the filter
+ * Add to metadata dialog in words/author
+ * Some way to add a book cover image.
+
+MOBI export
+ * Investigate the mobi file format
+ * Create a MobiFile class like EpubFile
+ * Create a exportmobi plugin like exportepub2 (can use same directory)
+
+Word count in the status bar
+ * Add field to status bar
+ * Configuration dialog on what to show
+    + Add to current config dialog in the docker? Or special in the sb?
+
+Distraction free writing mode (DFM)
+ * Design the feature
+    + Write feature description                                         [Done]
+    + Start a discussion on the forum                                   [ingwa]
+ * GUI
+    + Decide if QML is ok (should only be affected by Qt version)
+    + Investigate full-screen mode and/or presentation mode
+        --> Only a property on the main window
+    + Special status bar that slides / fades in.
+       - word count
+       - Exit DFM
+    + Keyboard shortcuts (10?) to allow simple styling with keyboard
+      only interaction.
+       - GUI for configuration (is this needed?)
+ * Implementation
+    + Class KoTextDocument(?) with exact same API as QTextDocument
+       - Store several QTextDocuments in it to allow different styling
+       - Actions / commands are duplicated to all of them.
+
+Annotations
+ * Design the feature
+    + Write feature description                                         [Done]
+    + Start a discussion on the forum                                   [ingwa]
+ * Engine
+    + Load / Save notes
+    + Change text infrastructure to use QTextCursor instead of
+      inserted special characters. (Boemann knows more about this)
+ * GUI
+    + View notes
+    + Edit notes
+    + Add new comment to existing note not written by yourself.
+    + Create notes
+
+Important bugs for our usecases
+ * Does spellchecking work well?  No, it doesn't
+
+
+Long term issues
+----------------
+
+Future releases
+
+
+General features also useful in Words
+ * Web view
+ * Master documents
+ * Outline mode
+ * Change Tracking
+ * Advanced search (nepomuk)
+ * cross-references
+ * bookmarks
+ * Import of epub?
+ * export of other formats
+    - MOBI
+    - DAISY?
+    - Wiki
+
+Special Feauters for Authors
+ * Word count in the status bar?
+ * Visibility in styles
+ * Virtual clipboard [editing phase]
+ * Integration with braindump [research phase]
+ * Book Front page design
+ 
+Features for textbooks
+ * Multimedia 
+    - video
+    - soundclips
+ * Mathematical formulas
+ * Animations
+ * 3D obects
+
+Integration with other external programs
+ * Plume Creator (keep track of scenes
+ * Zanshin (todo app)
+ * ...
+
+ 

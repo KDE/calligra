@@ -96,9 +96,9 @@ struct KoPathTool::PathSegment {
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
         : KoToolBase(canvas)
+        , m_pointSelection(this)
         , m_activeHandle(0)
         , m_handleRadius(3)
-        , m_pointSelection(this)
         , m_activeSegment(0)
         , m_currentStrategy(0)
 {
@@ -185,6 +185,9 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
 KoPathTool::~KoPathTool()
 {
+    delete m_activeHandle;
+    delete m_activeSegment;
+    delete m_currentStrategy;
 }
 
 QList<QWidget *>  KoPathTool::createOptionWidgets()

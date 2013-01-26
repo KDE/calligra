@@ -37,6 +37,7 @@ class KoShape;
 class KoStyleManager;
 class KoChangeTracker;
 class QTextLayout;
+class KoTextRangeManager;
 class KoInlineTextObjectManager;
 class KoViewConverter;
 class KoImageCollection;
@@ -49,7 +50,7 @@ class KoTextLayoutObstruction;
 class TEXTLAYOUT_EXPORT KoInlineObjectExtent
 {
 public:
-    KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
+    explicit KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
     qreal m_ascent;
     qreal m_descent;
 };
@@ -99,6 +100,10 @@ public:
     KoInlineTextObjectManager *inlineTextObjectManager() const;
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
+    /// return the currently set manager, or 0 if none is set.
+    KoTextRangeManager *textRangeManager() const;
+    void setTextRangeManager(KoTextRangeManager *manager);
+
     /// return the currently set changeTracker, or 0 if none is set.
     KoChangeTracker *changeTracker() const;
     void setChangeTracker(KoChangeTracker *tracker);
@@ -132,6 +137,9 @@ public:
 
     /// are the tabs relative to indent or not
     bool relativeTabs(QTextBlock block) const;
+
+    /// visualize inline objects during paint
+    void showInlineObjectVisualization(bool show);
 
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;

@@ -35,7 +35,7 @@ namespace RtfReader
     class RTFREADER_EXPORT TextDocumentRtfOutput: public AbstractRtfOutput
     {
       public:
-	TextDocumentRtfOutput( QTextDocument *document );
+	explicit TextDocumentRtfOutput( QTextDocument *document );
 
 	virtual ~TextDocumentRtfOutput();
 

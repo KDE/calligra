@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,16 +22,13 @@
 
 #include "KWStatisticsDocker.h"
 
-#include "KWCanvas.h"
-#include "dockers/KWStatistics.h"
-
-
+#include <QDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
-
-#include <klocale.h>
-#include <kdebug.h>
+#include "KWCanvas.h"
 
 KWStatisticsDocker::KWStatisticsDocker()
 {
@@ -43,22 +42,23 @@ KWStatisticsDocker::~KWStatisticsDocker()
 
 void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
 {
-
     KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
 
     QWidget *wdg = widget();
     if (wdg) {
         delete wdg;
         m_canvasReset = true;
-    } else
+    } else {
         m_canvasReset = false;
-
-    KWStatistics *statistics = new KWStatistics(canvas->resourceManager(),
+    }
+ 
+    m_statisticsWidget = new KWStatisticsWidget(canvas->resourceManager(),
                                                 canvas->document(),
                                                 canvas->shapeManager()->selection(),
                                                 this);
-
-    setWidget(statistics);
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
+    setWidget(m_statisticsWidget);
 }
 
 void KWStatisticsDocker::unsetCanvas()
@@ -68,6 +68,16 @@ void KWStatisticsDocker::unsetCanvas()
         setWidget(0);
     }
 }
+
+void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
+{
+    if (newArea == Qt::TopDockWidgetArea || newArea == Qt::BottomDockWidgetArea) {
+        m_statisticsWidget->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
+    } else {
+        m_statisticsWidget->setLayoutDirection(KWStatisticsWidget::LayoutVertical);
+    }
+}
+
 
 KWStatisticsDockerFactory::KWStatisticsDockerFactory()
 {
@@ -82,7 +92,6 @@ QDockWidget *KWStatisticsDockerFactory::createDockWidget()
 {
     KWStatisticsDocker *widget = new KWStatisticsDocker();
     widget->setObjectName(id());
-
     return widget;
 }
 

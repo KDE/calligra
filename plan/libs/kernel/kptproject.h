@@ -520,7 +520,7 @@ public slots:
 
 signals:
     /// Emitted when anything in the project is changed (use with care)
-    void changed();
+    void projectChanged();
     /// Emitted when the WBS code definition has changed. This may change all nodes.
     void wbsDefinitionChanged();
     /// Emitted when a schedule has been calculated
@@ -546,7 +546,7 @@ signals:
     /// This signal is emitted when the node has been removed from the project.
     void nodeRemoved( Node* );
     /// This signal is emitted when the node is to be moved up, moved down, indented or unindented.
-    void nodeToBeMoved( Node* );
+    void nodeToBeMoved( Node* node, int pos, Node* newParent, int newPos );
     /// This signal is emitted when the node has been moved up, moved down, indented or unindented.
     void nodeMoved( Node* );
 
@@ -592,12 +592,12 @@ signals:
     void calendarRemoved( const Calendar *cal );
 
     /**
-     * Emitted when the the default calendar pointer has changed
+     * Emitted when the default calendar pointer has changed
      * @parem cal The new default calendar. May be 0.
      */
     void defaultCalendarChanged( Calendar *cal );
     /**
-     * Emitted when the the standard worktime has been changed.
+     * Emitted when the standard worktime has been changed.
      */
     void standardWorktimeChanged( StandardWorktime* );
     
@@ -638,8 +638,8 @@ protected:
 
 protected:
     friend class KPlatoXmlLoaderBase;
-
-    virtual void changed(Node *node);
+    using Node::changed;
+    virtual void changed(Node *node, int property = -1);
     
     Accounts m_accounts;
     QList<ResourceGroup*> m_resourceGroups;
@@ -659,6 +659,11 @@ protected:
     bool legalParents( const Node *par, const Node *child ) const;
     bool legalChildren( const Node *par, const Node *child ) const;
 
+#ifndef PLAN_NLOGDEBUG
+private:
+    static bool checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked );
+    static bool checkChildren( Node *n, QList<Node*> list, QList<Relation*> &checked );
+#endif
 private:
     void init();
 

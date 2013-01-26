@@ -45,7 +45,7 @@ xBaseMigrate::xBaseMigrate(QObject *parent, const QVariantList& args) :
   KexiMigrate(parent, args)
 {
   KexiDB::DriverManager manager;
-  m_kexiDBDriver = manager.driver("xbase");
+  setDriver(manager.driver("xbase"));
 }
 
 /* ************************************************************************** */

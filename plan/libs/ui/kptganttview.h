@@ -157,7 +157,7 @@ protected:
     GanttPrintingOptionsWidget *m_options;
 };
 
-class GanttTreeView : public TreeViewBase
+class KPLATOUI_EXPORT GanttTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
@@ -165,7 +165,7 @@ public:
 
 };
 
-class GanttViewBase : public KDGantt::View
+class KPLATOUI_EXPORT GanttViewBase : public KDGantt::View
 {
     Q_OBJECT
 public:
@@ -174,8 +174,8 @@ public:
     GanttTreeView *treeView() const;
     GanttPrintingOptions printingOptions() const { return m_printOptions; }
 
-    bool loadContext( const KoXmlElement &settings );
-    void saveContext( QDomElement &settings ) const;
+    virtual bool loadContext( const KoXmlElement &settings );
+    virtual void saveContext( QDomElement &settings ) const;
 
 public slots:
     void setPrintingOptions( const GanttPrintingOptions &opt ) { m_printOptions = opt; }

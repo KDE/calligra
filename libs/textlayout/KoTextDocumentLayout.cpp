@@ -67,6 +67,7 @@ public:
        : styleManager(0)
        , changeTracker(0)
        , inlineTextObjectManager(0)
+       , textRangeManager(0)
        , provider(0)
        , layoutPosition(0)
        , anchoringRootArea(0)
@@ -85,6 +86,7 @@ public:
        , changesBlocked(false)
        , restartLayout(false)
        , wordprocessingMode(false)
+       , showInlineObjectVisualization(false)
     {
     }
     KoStyleManager *styleManager;
@@ -92,6 +94,7 @@ public:
     KoChangeTracker *changeTracker;
 
     KoInlineTextObjectManager *inlineTextObjectManager;
+    KoTextRangeManager *textRangeManager;
     KoTextLayoutRootAreaProvider *provider;
     KoPostscriptPaintDevice *paintDevice;
     QList<KoTextLayoutRootArea *> rootAreaList;
@@ -125,6 +128,7 @@ public:
     bool changesBlocked;
     bool restartLayout;
     bool wordprocessingMode;
+    bool showInlineObjectVisualization;
 };
 
 
@@ -140,6 +144,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
     d->styleManager = KoTextDocument(document()).styleManager();
     d->changeTracker = KoTextDocument(document()).changeTracker();
     d->inlineTextObjectManager = KoTextDocument(document()).inlineTextObjectManager();
+    d->textRangeManager = KoTextDocument(document()).textRangeManager();
 
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 
@@ -187,6 +192,16 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const
 void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
 {
     d->inlineTextObjectManager = manager;
+}
+
+KoTextRangeManager *KoTextDocumentLayout::textRangeManager() const
+{
+    return d->textRangeManager;
+}
+
+void KoTextDocumentLayout::setTextRangeManager(KoTextRangeManager *manager)
+{
+    d->textRangeManager = manager;
 }
 
 KoChangeTracker *KoTextDocumentLayout::changeTracker() const
@@ -285,9 +300,8 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         if (! block.isValid())
             break;
         if (from == block.position() && block.textList()) {
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-            if (data)
-                data->setCounterWidth(-1); // invalidate whole list.
+            KoTextBlockData data(block);
+            data.setCounterWidth(-1);
         }
 
         from = block.position() + block.length();
@@ -376,12 +390,25 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &poin
     return 0;
 }
 
+void KoTextDocumentLayout::showInlineObjectVisualization(bool show)
+{
+    d->showInlineObjectVisualization = show;
+}
+
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
 {
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
+    if (d->showInlineObjectVisualization) {
+        QColor color = cf.foreground().color();
+        // initial idea was to use Qt::gray (#A0A0A4)
+        // for non-black text on non-white background it was derived to use
+        // the text color with a transparency of 0x5F, so white-gray (0xFF-0xA0)
+        color.setAlpha(0x5F);
+        cf.setBackground(QBrush(color));
+    }
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if (obj)
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);

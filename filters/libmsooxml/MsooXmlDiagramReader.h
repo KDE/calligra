@@ -56,7 +56,7 @@ public:
 class MSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    MsooXmlDiagramReader(KoOdfWriters *writers);
+    explicit MsooXmlDiagramReader(KoOdfWriters *writers);
     virtual ~MsooXmlDiagramReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 

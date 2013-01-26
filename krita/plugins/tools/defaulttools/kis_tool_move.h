@@ -41,7 +41,14 @@ class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
 public:
     MoveToolOptionsWidget(QWidget *parent) : QWidget(parent) {
         setupUi(this);
+        connectSignals();
     }
+
+signals:
+    void sigConfigurationChanged();
+
+private:
+    void connectSignals();
 };
 
 
@@ -54,6 +61,9 @@ public:
     KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
+    void deactivate();
+    void requestStrokeEnd();
+    void requestStrokeCancellation();
 
 public:
 
@@ -67,8 +77,11 @@ public:
 
 private:
     void drag(const QPoint& newPos);
-
+    void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
+
+private slots:
+    void endStroke();
 
 private:
 
@@ -92,7 +105,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
         setIconName(koIconNameCStr("krita_tool_move"));
-        //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
+        setShortcut( KShortcut(QKeySequence( Qt::Key_T )) );
     }
 
     virtual ~KisToolMoveFactory() {}

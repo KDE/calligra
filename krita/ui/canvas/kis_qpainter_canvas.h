@@ -83,16 +83,13 @@ protected: // KisCanvasWidgetBase
 
     virtual bool callFocusNextPrevChild(bool next);
 
-signals:
-    void needAdjustOrigin();
-
 private slots:
     void slotConfigChanged();
 
 private:
     QImage m_buffer;
 
-    struct Private;
+    class Private;
     Private * const m_d;
 };
 

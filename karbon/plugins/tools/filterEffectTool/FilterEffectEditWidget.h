@@ -33,7 +33,7 @@ class FilterEffectEditWidget : public QWidget, Ui::FilterEffectEditWidget
 {
     Q_OBJECT
 public:
-    FilterEffectEditWidget(QWidget *parent = 0);
+    explicit FilterEffectEditWidget(QWidget *parent = 0);
     ~FilterEffectEditWidget();
 
     /// Edits effects of given shape

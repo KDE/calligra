@@ -10,9 +10,10 @@ Name[es]=Complemento de objetos incorporados de texto
 Name[et]=Tekstiobjekti plugin
 Name[fi]=Liitännäinen rivinsisäisiä tekstiobjekteja varten
 Name[fr]=Module externe d'objet de texte interne
-Name[gl]=Engadido de obxectos de texto citado
+Name[gl]=Complemento de obxectos de texto inserido
 Name[hi]=इनलाइन पाठ वस्तु प्लगइन
 Name[hne]=इनलाइन पाठ चीज प्लगइन
+Name[hu]=Sorközi szövegobjektum bővítmény
 Name[it]=Estensione per oggetti di testo in linea
 Name[ja]=インラインテキストオブジェクトのためのプラグイン
 Name[kk]=Мәтіні ішіндегі нысан плагині
@@ -26,7 +27,7 @@ Name[pt_BR]=Plugin do Objeto Incorporado de Texto
 Name[ru]=Модуль встроенного текстового объекта
 Name[sk]=Definícia pluginu inline textu
 Name[sv]=Insticksprogram för flytande textobjekt
-Name[ta]=உள் வரியின் உரைப்பொருள் வரையறை 
+Name[ta]=உள் வரியின் உரைப்பொருள் வரையறை
 Name[tr]=Satır Metni Nesnesi Eklentisi
 Name[uk]=Додаток рядкового текстового об’єкта
 Name[wa]=Tchôke-divins di cayets tecse dins l' messaedje
@@ -50,6 +51,7 @@ Comment[fy]=Defenysje fan in tekstobjekt
 Comment[gl]=Definción dun obxecto de texto
 Comment[hi]=पाठ वस्तु की परिभाषा
 Comment[hne]=पाठ चीज के परिभासा
+Comment[hu]=Egy szövegobjektum meghatározása
 Comment[it]=Definizione di un oggetto di testo
 Comment[ja]=テキストオブジェクトの定義
 Comment[kk]=Мәтін нысанының анықтамасы
@@ -72,5 +74,5 @@ Comment[zh_CN]=文本对象的定义
 Comment[zh_TW]=定義文字物件
 [PropertyDef::X-KoText-MinVersion]
 Type=int
-[PropertyDef::X-Flake-PluginVersion]
+[PropertyDef::X-KoText-PluginVersion]
 Type=int

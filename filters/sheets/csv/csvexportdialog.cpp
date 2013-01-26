@@ -54,8 +54,6 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 
     m_dialog->comboBoxEncoding->addItems(encodings);
 
-    setButtonsOrientation(Qt::Vertical);
-
     setMainWidget(m_dialog);
 
     // Invalid 'Other' delimiters

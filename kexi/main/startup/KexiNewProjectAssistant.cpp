@@ -377,7 +377,9 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
             this, SLOT(next()));
     contents->le_title->setText(defaultDatabaseName());
     contents->le_title->selectAll();
-    contents->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this));
+    KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(this);
+    idValidator->setLowerCaseForced(true);
+    contents->le_dbname->setValidator(idValidator);
     m_projectSelector = new KexiProjectSelectorWidget(
         contents->frm_dblist, 0,
         true, // showProjectNameColumn
@@ -430,7 +432,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
-        QString captionAsId = KexiUtils::string2Identifier(capt);
+        QString captionAsId = KexiUtils::string2Identifier(capt).toLower();
         contents->le_dbname->setText(captionAsId);
         m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;

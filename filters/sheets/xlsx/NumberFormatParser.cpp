@@ -124,7 +124,7 @@ static KoGenStyle styleFromTypeAndBuffer(KoGenStyle::Type type, const QBuffer& b
     return result;
 }
 
-KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* styles, KoGenStyle::Type type)
+KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyles* styles, KoGenStyle::Type type)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
@@ -138,6 +138,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
     bool justHadHours = false;
     // to skip escaped plain-text
     bool hadPlainText = false;
+    QString numberFormat = origNumberFormat;
 
     for (int i = 0; i < numberFormat.length(); ++i) {
         const char c = numberFormat[ i ].toLatin1();
@@ -149,7 +150,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
         const bool isWayTooLong = isLongest && i < numberFormat.length() - 4 && numberFormat[ i + 4 ] == c;
 
         switch (c) {
-            // condition or color or locale...
+            // condition or color or locale or elapsed format
         case '[': {
             const char ch = (i < numberFormat.length() - 1) ? numberFormat[ ++i ].toLatin1() : ']';
             if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
@@ -160,10 +161,15 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
 
                 const QColor color = NumberFormatParser::color(colorName);
                 if (color.isValid()) {
-
                     xmlWriter.startElement("style:text-properties");
                     xmlWriter.addAttribute("fo:color", color.name());
                     xmlWriter.endElement();
+                }
+                else if ((colorName == "hh") || (colorName == "h") ||
+                         (colorName == "mm") || (colorName == "m") ||
+                         (colorName == "ss") || (colorName == "s")) {
+                    // was actually time in 'elapsed format'
+                    numberFormat.insert(i+1, colorName);
                 }
             } else if (ch == '$' && i < numberFormat.length() - 2 && numberFormat[ i + 1 ].toLatin1() != '-') {
                 SET_TYPE_OR_RETURN(KoGenStyle::NumericCurrencyStyle);

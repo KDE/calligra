@@ -12,9 +12,7 @@ IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
   INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 
-if(KEXI_DEBUG_GUI)
-    ADD_DEFINITIONS(-DKEXI_DEBUG_GUI)
-endif(KEXI_DEBUG_GUI)
+option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
 
 if(KEXI_AUTORISE_TABBED_TOOLBAR)
     ADD_DEFINITIONS(-DKEXI_AUTORISE_TABBED_TOOLBAR)
@@ -51,6 +49,7 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${KOMAIN_INCLUDES}
   ${KOPROPERTY_INCLUDES}
+  ${CALLIGRADB_INCLUDES}
   ${CMAKE_SOURCE_DIR}/libs
 )
 
@@ -138,7 +137,7 @@ IF(KEXI_MOBILE)
   add_subdirectory( mobile )
 ELSE(KEXI_MOBILE)
   set(kexi_SRCS main.cpp )
-  kde4_add_app_icon(kexi_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kexi.png")
+  kde4_add_app_icon(kexi_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakexi.png")
   kde4_add_executable(kexi ${kexi_SRCS})
   target_link_libraries(kexi 
     ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}

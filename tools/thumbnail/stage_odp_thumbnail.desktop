@@ -1,6 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Presentations
+Name[el]=OpenDocument παρουσιάσεις
+Name[et]=OpenDocument-esitlused
+Name[fi]=OpenDocument-esitykset
+Name[fr]=Présentations OpenDocument
+Name[hu]=OpenDocument bemutatók
+Name[it]=Presentazioni OpenDocument
+Name[nl]=OpenDocument presentaties
+Name[pt]=Apresentações em OpenDocument
+Name[pt_BR]=Apresentações OpenDocument
+Name[sk]=Prezentácie OpenDocument
+Name[sv]=OpenDocument-presentationer
+Name[uk]=Презентації OpenDocument (ODP)
+Name[x-test]=xxOpenDocument Presentationsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;

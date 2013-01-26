@@ -125,12 +125,6 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 {
     setObjectName("KexiLookupColumnPage");
 
-/*moved to KexiPropertyPaneViewBase
-    Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
-    d->objectInfoLabel = new KexiObjectInfoLabel(this);
-    d->objectInfoLabel->setObjectName("KexiObjectInfoLabel");
-    vlyr->addWidget(d->objectInfoLabel);*/
-
 //todo d->noDataSourceAvailableSingleText = i18n("No data source could be assigned for this widget.");
 //todo d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
 

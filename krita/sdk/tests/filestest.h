@@ -34,6 +34,7 @@
 #include <KoFilterManager.h>
 
 #include <kis_doc2.h>
+#include <kis_part2.h>
 #include <KoPart.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
@@ -64,7 +65,10 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 continue;
             }
 
-            KisDoc2 doc;
+            KisPart2 part;
+            KisDoc2 doc(&part);
+            part.setDocument(&doc);
+
             KoFilterManager manager(&doc);
             manager.setBatchMode(true);
             QByteArray nativeFormat = doc.nativeFormatMimeType();
@@ -78,11 +82,11 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             }
 
             QString id = doc.image()->colorSpace()->id();
-            if (id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16") {
+            if (id != "GRAYA" && id != "GRAYAU16" && id != "RGBA" && id != "RGBA16") {
                 dbgKrita << "Images need conversion";
                 doc.image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
-                                                    KoColorConversionTransformation::IntentPerceptual,
-                                                    KoColorConversionTransformation::Empty);
+                                                    KoColorConversionTransformation::IntentAbsoluteColorimetric,
+                                                    KoColorConversionTransformation::NoOptimization);
             }
 
             KTemporaryFile tmpFile;

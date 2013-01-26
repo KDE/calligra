@@ -25,7 +25,7 @@
 class QpRecFactory
 {
 public:
-    QpRecFactory(QpIStream& pIn);
+    explicit QpRecFactory(QpIStream& pIn);
     ~QpRecFactory();
 
     QpRec* nextRecord();

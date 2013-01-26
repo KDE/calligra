@@ -258,7 +258,7 @@ calculation. When it finishes and if it has found a solution press the
 </para>
 </sect1>
 
-<sect1 id="sheets">
+<sect1 id="worksheets">
 <title>Using more than one Worksheet</title>
 <para>When you start a new, empty, document with &sheets; it will create a 
 number of blank worksheets. The number of sheets it creates is determined 

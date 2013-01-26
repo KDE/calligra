@@ -360,8 +360,8 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     // Plugin Options Widget
     d->pluginSelector = new KPluginSelector(this);
-    const QString serviceType = QLatin1String("KSpread/Plugin");
-    const QString query = QLatin1String("([X-KSpread-InterfaceVersion] == 0)");
+    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
+    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0)");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
     d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,

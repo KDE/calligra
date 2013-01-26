@@ -1,17 +1,19 @@
 #!/usr/bin/env kross
 
 """
-KSpread python script to export an ISO OpenDocument spreadsheet file to
+Sheets python script to export an ISO OpenDocument spreadsheet file to
 a comma-separated-value file.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 import os, datetime, sys, traceback, csv
 import Kross, KSpread
+
+T = Kross.module("kdetranslation")
 
 class CsvExporter:
 
@@ -20,28 +22,28 @@ class CsvExporter:
         self.currentpath = self.scriptaction.currentPath()
 
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("CSV Export")
+        self.dialog = self.forms.createDialog(T.i18n("CSV Export"))
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        savepage = self.dialog.addPage("Save","Export to CSV File","document-save")
+        savepage = self.dialog.addPage(T.i18nc("Options page name", "Save"),T.i18n("Export to CSV File"),"document-save")
         self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadcsvexportsave")
         self.savewidget.setMode("Saving")
-        self.savewidget.setFilter("*.csv *.txt|Comma-Separated-Value Files\n*|All Files")
+        self.savewidget.setFilter("*.csv *.txt|%(1)s\n*|%(2)s" % { '1' : T.i18n("Comma-Separated-Value Files"), '2' : T.i18n("All Files") } )
 
-        datapage = self.dialog.addPage("Export","Export Sheets and ranges","document-export")
+        datapage = self.dialog.addPage(T.i18nc("Options page name", "Export"),T.i18n("Export Sheets and ranges"),"document-export")
         self.sheetslistview = KSpread.createSheetsListView(datapage)
         self.sheetslistview.setSelectionType("MultiSelect")
         self.sheetslistview.setEditorType("Range")
 
-        optionspage = self.dialog.addPage("Options","Comma Separated Value Options","configure")
+        optionspage = self.dialog.addPage(T.i18n("Options"),T.i18n("Comma Separated Value Options"),"configure")
         self.optionswidget = self.forms.createWidgetFromUIFile(optionspage, os.path.join(self.currentpath, "csvoptions.ui"))
 
         if self.dialog.exec_loop():
             try:
                 self.doExport()
             except:
-                self.forms.showMessageBox("Error", "Error", "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
+                self.forms.showMessageBox("Error", T.i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def getCustomDialect(self):
         class CustomDialect(csv.excel): pass
@@ -74,7 +76,7 @@ class CsvExporter:
 
         csvfilename = self.savewidget.selectedFile()
         if not csvfilename:
-            raise "No CSV file choosen"
+            raise Exception, T.i18n("No CSV file chosen")
         if os.path.splitext(csvfilename)[1] == '':
             csvfilename += '.csv'
 

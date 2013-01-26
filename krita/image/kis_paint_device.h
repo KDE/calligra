@@ -254,7 +254,7 @@ public:
     /**
      * Prepares the device for fastBitBlt opreration. It clears
      * the device, switches x,y shifts and colorspace if needed.
-     * After this call fastBitBlt will return true.
+     * After this call fastBitBltPossible will return true.
      * May be used for initialization of temporary devices.
      */
     void prepareClone(KisPaintDeviceSP src);
@@ -525,12 +525,7 @@ public:
     /**
      * @return the colorspace of the pixels in this paint device
      */
-    KoColorSpace * colorSpace();
-
-    /**
-     * @return the colorspace of the pixels in this paint device
-     */
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace *colorSpace() const;
 
     /**
      * @return the internal datamanager that keeps the pixels.

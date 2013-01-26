@@ -38,7 +38,7 @@ int parserTest(const QString &st, const QStringList &params)
     variantParams.append(param.toLocal8Bit());
     if (ok && q) {
         cout << q->debugString().toLatin1().constData() << '\n';
-        cout << "-STATEMENT:\n" << conn->selectStatement(*q, variantParams).toLatin1().data() << '\n';
+        cout << "-STATEMENT:\n" << conn->selectStatement(*q, variantParams).toLatin1().constData() << '\n';
     } else {
         KexiDB::ParserError err = parser.error();
         kDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.error())

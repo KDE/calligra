@@ -193,7 +193,7 @@ public:
     /**
       Creates a new generic record.
     */
-    Record(Workbook*);
+    explicit Record(Workbook*);
 
     /**
       Destroys the record.

@@ -29,17 +29,17 @@ class KPrShapeAnimation;
 class KPrAnimationCreateCommand : public KUndo2Command
 {
 public:
-    KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation );
+    KPrAnimationCreateCommand(KPrDocument *doc, KPrShapeAnimation *animation);
     virtual ~KPrAnimationCreateCommand();
 
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
 
 private:
-    KPrDocument * m_doc;
-    KPrShapeAnimation * m_animation;
+    KPrDocument *m_doc;
+    KPrShapeAnimation *m_animation;
     bool m_deleteAnimation;
 };
 

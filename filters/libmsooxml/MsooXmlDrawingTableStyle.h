@@ -123,7 +123,7 @@ private:
 class MSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
-    DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
+    explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
     virtual ~DrawingTableStyleConverter();
 
     KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans);

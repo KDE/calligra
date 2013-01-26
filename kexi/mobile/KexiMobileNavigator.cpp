@@ -27,15 +27,15 @@
 
 KexiMobileNavigator::KexiMobileNavigator(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f), m_project(0)
 {
-	m_formNavigator = new KexiProjectNavigator(this, KexiProjectNavigator::NoFeatures);
-	m_reportNavigator = new KexiProjectNavigator(this, KexiProjectNavigator::NoFeatures);
-	
-	m_layout = new QHBoxLayout(this);
-	m_layout->addWidget(m_formNavigator);
-	m_layout->addWidget(m_reportNavigator);
-	
-	setLayout(m_layout);
-	
+    m_formNavigator = new KexiProjectNavigator(this, KexiProjectNavigator::NoFeatures);
+    m_reportNavigator = new KexiProjectNavigator(this, KexiProjectNavigator::NoFeatures);
+
+    m_layout = new QHBoxLayout(this);
+    m_layout->addWidget(m_formNavigator);
+    m_layout->addWidget(m_reportNavigator);
+
+    setLayout(m_layout);
+
     connect(m_reportNavigator, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)), this, SLOT(slotOpenItem(KexiPart::Item*)));
     connect(m_formNavigator, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)), this, SLOT(slotOpenItem(KexiPart::Item*)));
     
@@ -48,11 +48,11 @@ KexiMobileNavigator::~KexiMobileNavigator()
 
 void KexiMobileNavigator::setProject(KexiProject* p)
 {
-	QString error;
-	
-	m_project = p;
-	m_formNavigator->setProject(m_project, "org.kexi-project.autoform", &error);
-	m_reportNavigator->setProject(m_project, "org.kexi-project.report", &error);
+    QString error;
+
+    m_project = p;
+    m_formNavigator->setProject(m_project, "org.kexi-project.autoform", &error);
+    m_reportNavigator->setProject(m_project, "org.kexi-project.report", &error);
 }
 
 void KexiMobileNavigator::slotOpenItem(KexiPart::Item* item)

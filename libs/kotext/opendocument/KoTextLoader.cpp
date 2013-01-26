@@ -5,13 +5,15 @@
  * Copyright (C) 2007,2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2007-2011 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2009-2012 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
  * Copyright (C) 2011 Pavol Korinek <pavol.korinek@ixonos.com>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2009-2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,8 +35,11 @@
 #include <KoTextMeta.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
+#include <KoAnnotation.h>
+#include <KoAnnotationManager.h>
 #include <KoInlineNote.h>
 #include <KoInlineCite.h>
+#include <KoTextRangeManager.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
@@ -517,6 +522,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
     cursor.beginEditBlock();
 
+
+
     if (! d->openingSections.isEmpty()) {
         QTextBlock block = cursor.block();
         QTextBlockFormat format = block.blockFormat();
@@ -790,7 +797,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             kWarning(32500) << "unhandled text:" << localName;
                         }
                     }
-                } else if (tag.namespaceURI() == KoXmlNS::draw) {
+                } else if (tag.namespaceURI() == KoXmlNS::draw
+                           || tag.namespaceURI() == KoXmlNS::dr3d) {
                     loadShape(tag, cursor);
                 } else if (tag.namespaceURI() == KoXmlNS::table) {
                     if (localName == "table") {
@@ -817,6 +825,14 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         d->processDeleteChange(cursor);
     }
     cursor.endEditBlock();
+
+    KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
+    Q_UNUSED(textRangeManager);
+    //kDebug(32500) << "text ranges::";
+    //foreach(KoTextRange *range, textRangeManager->textRanges()) {
+        //kDebug(32500) << range->id();
+    //}
+
 }
 
 KoXmlNode KoTextLoader::loadDeleteMerges(const KoXmlElement& elem, QString *generatedXmlString)
@@ -1091,12 +1107,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     if (id.isValid() && d->shape) {
         QTextBlock block = cursor.block();
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-        if (!data) {
-            data = new KoTextBlockData();
-            block.setUserData(data);
-        }
-        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(data), id.toString());
+        KoTextBlockData data(block); // this sets the user data, so don't remove
+        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(block.userData()), id.toString());
     }
 
     // attach Rdf to cursor.block()
@@ -1656,6 +1668,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     }
 }
 
+
 void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
@@ -1724,8 +1737,12 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const QString localName(ts.localName());
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
+        const bool isDr3dNS = ts.namespaceURI() == KoXmlNS::dr3d;
         const bool isDeltaNS = ts.namespaceURI() == KoXmlNS::delta;
-        //        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
+        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
+
+        //if (isOfficeNS)
+        kDebug(32500) << "office:"<<isOfficeNS << localName;
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug(32500) << "load" << localName << *stripLeadingSpace << node.toText().data();
@@ -1891,7 +1908,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                         delete inlineRdf;
                         inlineRdf = 0;
                     }
-
                 }
 
                 loadSpan(ts, cursor, stripLeadingSpace);   // recurse
@@ -1903,19 +1919,24 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         }
         // text:bookmark, text:bookmark-start and text:bookmark-end
         else if (isTextNS && (localName == "bookmark" || localName == "bookmark-start" || localName == "bookmark-end")) {
+            KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 
-            KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
-
-            KoBookmark *bookmark = new KoBookmark(cursor.block().document());
-            bookmark->setManager(textObjectManager);
-            if (textObjectManager && bookmark->loadOdf(ts, d->context)) {
-                textObjectManager->insertInlineObject(cursor, bookmark);
+            if (localName == "bookmark-end") {
+                KoBookmark *bookmark = textRangeManager->bookmarkManager()->bookmark(KoBookmark::createUniqueBookmarkName(textRangeManager->bookmarkManager(), ts.attribute("name"), true));
+                if (bookmark) {
+                    bookmark->setRangeEnd(cursor.position());
+                }
+            } else {
+                KoBookmark *bookmark = new KoBookmark(cursor);
+                bookmark->setManager(textRangeManager);
+                if (textRangeManager && bookmark->loadOdf(ts, d->context)) {
+                    textRangeManager->insert(bookmark);
+                }
+                else {
+                    kWarning(32500) << "Could not load bookmark";
+                    delete bookmark;
+                }
             }
-            else {
-                kWarning(32500) << "Could not load bookmark";
-                delete bookmark;
-            }
-
         } else if (isTextNS && localName == "bookmark-ref") {
             QString bookmarkName = ts.attribute("ref-name");
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
@@ -1931,7 +1952,35 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             // TODO add support for loading text:reference-format
             loadSpan(ts, cursor, stripLeadingSpace);   // recurse
             cursor.setCharFormat(cf);   // restore the cursor char format
-        } else if (isTextNS && localName == "number") { // text:number
+        }
+        // text:annotation and text:annotation-end
+        else if (isOfficeNS && (localName == "annotation" || localName == "annotation-end")) {
+            kDebug(32500) << "------> annotation found" << localName;
+
+            KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
+
+            if (localName == "annotation-end") {
+                KoAnnotation *annotation = textRangeManager->annotationManager()->annotation(KoAnnotation::createUniqueAnnotationName(textRangeManager->annotationManager(), ts.attribute("name"), true));
+                if (annotation) {
+                    annotation->setRangeEnd(cursor.position());
+                }
+            } else {
+                int position = cursor.position();
+                KoAnnotation *annotation = new KoAnnotation(cursor);
+                annotation->setManager(textRangeManager);
+                annotation->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
+                if (textRangeManager && annotation->loadOdf(ts, d->context)) {
+                    textRangeManager->insert(annotation);
+                    cursor.setPosition(position);
+                    annotation->setRangeEnd(cursor.position());
+                }
+                else {
+                    kWarning(32500) << "Could not load annotation";
+                    delete annotation;
+                }
+            }
+        }
+        else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering
             If a heading has a numbering applied, the text of the formatted number can be included in a
             <text:number> element. This text can be used by applications that do not support numbering of
@@ -1946,7 +1995,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
         } else if ((isDrawNS) && localName == "a") { // draw:a
             loadShapeWithHyperLink(ts, cursor);
-        } else if (isDrawNS) {
+        } else if (isDrawNS || isDr3dNS) {
             loadShape(ts, cursor);
         } else {
             KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(ts, d->context);
@@ -2570,6 +2619,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     // to store the contents we use an extrafor "meta-information" about the TOC we use this class
     QTextDocument *tocDocument = new QTextDocument();
     KoTextDocument(tocDocument).setStyleManager(d->styleManager);
+    KoTextDocument(tocDocument).setTextRangeManager(new KoTextRangeManager);
 
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");
@@ -2637,6 +2687,7 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
 
     QTextDocument *bibDocument = new QTextDocument();
     KoTextDocument(bibDocument).setStyleManager(d->styleManager);
+    KoTextDocument(bibDocument).setTextRangeManager(new KoTextRangeManager);
 
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");

@@ -43,7 +43,8 @@ public:
 
 SchedulerPlugin::SchedulerPlugin(QObject *parent)
     : QObject(parent),
-    d( new SchedulerPlugin::Private() )
+      d( new SchedulerPlugin::Private() ),
+      m_granularity( 0 )
 {
     // register Schedule::Log so it can be used in queued connections
     qRegisterMetaType<Schedule::Log>("Schedule::Log");
@@ -123,6 +124,21 @@ void SchedulerPlugin::haltCalculation( SchedulerThread *job )
     }
 }
 
+QList<long unsigned int> SchedulerPlugin::granularities() const
+{
+    return m_granularities;
+}
+
+int SchedulerPlugin::granularity() const
+{
+    return m_granularity;
+}
+
+void SchedulerPlugin::setGranularity( int index )
+{
+    m_granularity = qMin( index, m_granularities.count() - 1 );
+}
+
 void SchedulerPlugin::slotSyncData()
 {
     updateProgress();
@@ -161,7 +177,7 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
     }
 
     QList<Schedule::Log> logs;
-    foreach ( const Schedule::Log log, j->log() ) {
+    foreach ( const Schedule::Log &log, j->log() ) {
         // map log from temporary project to real project
         Schedule::Log l = log;
         if ( l.resource ) {

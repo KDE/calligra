@@ -47,7 +47,7 @@
 #include <QDateTime>
 #include <QPushButton>
 
-#include <kdebug.h>
+#include <kptdebug.h>
 
 namespace KPlato
 {
@@ -233,6 +233,10 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
 #if ! KDE_IS_VERSION( 4, 5, 0 )
     chooseLeader->hide();
 #endif
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
+    chooseLeader->hide();
 
     connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
@@ -506,22 +510,26 @@ QDateTime TaskGeneralPanelImpl::endDateTime()
 
 void TaskGeneralPanelImpl::setStartTime( const QTime &time )
 {
-    scheduleStartTime->setTime(time);
+    scheduleStartTime->setTime( QTime( time.hour(), time.minute(), 0 ) );
 }
 
 void TaskGeneralPanelImpl::setEndTime( const QTime &time )
 {
-    scheduleEndTime->setTime(time);
+    scheduleEndTime->setTime( QTime( time.hour(), time.minute(), 0 ) );
 }
 
 QTime TaskGeneralPanelImpl::startTime() const
 {
-    return scheduleStartTime->time();
+    QTime t = scheduleStartTime->time();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    return t;
 }
 
 QTime TaskGeneralPanelImpl::endTime()
 {
-    return scheduleEndTime->time();
+    QTime t = scheduleEndTime->time();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    return t;
 }
 
 QDate TaskGeneralPanelImpl::startDate()

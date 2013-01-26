@@ -27,13 +27,14 @@
 class KisDoc2;
 class QGraphicsItem;
 class KoView;
+class KisFlipbook;
 
 class KRITAUI_EXPORT KisPart2 : public KoPart
 {
     Q_OBJECT
 
 public:
-    KisPart2(QObject *parent);
+    KisPart2(QObject *parent = 0);
 
     virtual ~KisPart2();
 
@@ -55,12 +56,16 @@ public:
 
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
+    KisFlipbook *flipbook() const { return m_flipbook; }
+    void setFlipbook(KisFlipbook *flipbook);
+
 protected slots:
 
     /// Quits Krita with error message from m_errorMessage.
     void showErrorAndDie();
 
 protected:
+    KisFlipbook *m_flipbook;
     QString m_errorMessage;
     bool m_dieOnError;
     KisDoc2 *m_document;

@@ -127,6 +127,7 @@ void KWTextFrameSet::setupDocument()
 
     KoTextDocument doc(m_document);
     doc.setInlineTextObjectManager(m_wordsDocument->inlineTextObjectManager());
+    doc.setTextRangeManager(m_wordsDocument->textRangeManager());
     KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     doc.setStyleManager(styleManager);
     KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();

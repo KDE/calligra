@@ -59,7 +59,6 @@ private:
     KoPAViewBase *m_view;
     KPrSoundCollection *m_soundCollection;
     KoCanvasBase *m_canvas;
-    QComboBox *m_cbPlaySound; // TODO remove when the embedded widgets are ok
     QMap<QString, QWidget *> m_eventActionWidgets;
 };
 

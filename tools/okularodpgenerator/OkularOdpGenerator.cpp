@@ -18,19 +18,25 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kaboutdata.h>
-
-#include <KoPADocument.h>
-#include <KoPAPageBase.h>
-#include <KDE/KPluginFactory>
-#include <KDE/KStandardDirs>
-#include <KDE/KMimeType>
-#include <KDE/KParts/ComponentFactory>
-#include <QDebug>
 #include <OkularOdpGenerator.h>
-#include <okular/core/page.h>
+
+#include <QDebug>
 #include <QImage>
 #include <QPainter>
+
+
+#include <KoPart.h>
+#include <KoPADocument.h>
+#include <KoPAPageBase.h>
+
+#include <kaboutdata.h>
+#include <KPluginFactory>
+#include <KStandardDirs>
+#include <KMimeType>
+#include <KParts/ComponentFactory>
+
+#include <okular/core/page.h>
+
 
 static KAboutData createAboutData()
 {
@@ -64,12 +70,20 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
 {
     KComponentData cd("OkularOdpGenerator", QByteArray(),
                       KComponentData::SkipMainComponentRegistration);
-    KPluginFactory *factory = KPluginLoader("calligrastagepart", cd).factory();
-    if (!factory) {
-        qDebug() << "could not load calligrastagepart";
-        return false;
+
+    const QString mimetype = KMimeType::findByPath(fileName)->name();
+
+    QString error;
+    KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
+                               mimetype, QLatin1String("CalligraPart"), 0, QString(),
+                               QVariantList(), &error );
+
+    if (!error.isEmpty()) {
+        qWarning() << "Error creating document" << mimetype << error;
+        return 0;
     }
-    KoPADocument* doc = factory->create<KoPADocument>();
+
+    KoPADocument* doc = qobject_cast<KoPADocument*>(part->document());
     m_doc = doc;
     KUrl url;
     url.setPath(fileName);
@@ -89,7 +103,7 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
             continue;
         }
         QSize size = kprpage->size().toSize();
-    
+
         Okular::Page * page = new Okular::Page( i, size.width(), size.height(), Okular::Rotation0 );
         pages.append(page);
     }

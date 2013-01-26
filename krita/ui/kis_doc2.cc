@@ -24,6 +24,7 @@
 #include "kis_doc2.h"
 #include "kis_doc2_p.h"
 
+#include <QDesktopServices>
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>
@@ -141,6 +142,8 @@ public:
     QList<KisPaintingAssistant*> assistants;
 
     KisPart2 *part; // XXX: we shouldn't know about the part here!
+
+    QString flipbook;
 };
 
 
@@ -190,8 +193,6 @@ bool KisDoc2::init()
 {
     delete m_d->nserver;
     m_d->nserver = 0;
-
-    connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
 
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
@@ -318,7 +319,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     setModified(false);
     m_d->shapeController->setImage(m_d->image);
 
-    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
+    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
     emit sigLoadingFinished();
 
@@ -361,11 +362,14 @@ bool KisDoc2::newImage(const QString& name,
     image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
 
-    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
+    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     image->setResolution(imageResolution, imageResolution);
 
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
+    if (name != i18n("unnamed") && !name.isEmpty()) {
+        setUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + "/" + name + ".kra");
+    }
     documentInfo()->setAboutInfo("comments", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
@@ -477,16 +481,19 @@ KisImageWSP KisDoc2::image() const
 
 void KisDoc2::setCurrentImage(KisImageWSP image)
 {
+    //if (!image.isValid()) return;
+
     if (m_d->image) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);
+        m_d->shapeController->setImage(0);
     }
     m_d->image = image;
     m_d->shapeController->setImage(image);
 
     setModified(false);
 
-    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
+    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
     emit sigLoadingFinished();
 }
@@ -498,27 +505,16 @@ void KisDoc2::initEmpty()
     newImage("", cfg.defImageWidth(), cfg.defImageHeight(), rgb);
 }
 
+void KisDoc2::setImageModified()
+{
+    setModified(true);
+}
+
 
 KisUndoStore* KisDoc2::createUndoStore()
 {
     return new KisDocumentUndoStore(this);
 }
-
-void KisDoc2::undoIndexChanged(int idx)
-{
-    const KUndo2Command* command = undoStack()->command(idx);
-    if (!command) return;
-
-    KisImageWSP image = this->image();
-    if(!image) return;
-
-    KisDocumentUndoStore *undoStore =
-            dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
-    Q_ASSERT(undoStore);
-
-    undoStore->notifyCommandExecuted(command);
-}
-
 
 #include "kis_doc2.moc"
 

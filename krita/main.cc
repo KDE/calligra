@@ -23,6 +23,10 @@
 #include <QString>
 #include <QPixmap>
 #include <QDebug>
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QDesktopServices>
+#include <QDir>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
@@ -34,6 +38,10 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+
+#ifdef Q_OS_WIN
+#include "stdlib.h"
+#endif
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
@@ -59,6 +67,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     QPixmap pm(splash_screen_xpm);
     QSplashScreen *splash = new KSplashScreen(pm);
     app.setSplashScreen(splash);
+
 
     if (!app.start()) {
         return 1;

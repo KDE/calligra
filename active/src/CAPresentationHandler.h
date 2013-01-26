@@ -24,15 +24,18 @@
 
 #include "CAAbstractDocumentHandler.h"
 
+class CAPADocumentModel;
 class QSize;
 class QSizeF;
+class KoFindMatch;
 
 class CAPresentationHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
     Q_PROPERTY(int slideshowDelay READ slideshowDelay WRITE setSlideshowDelay NOTIFY slideshowDelayChanged)
-    Q_PROPERTY(int currentSlideNumber READ currentSlideNumber NOTIFY currentSlideNumChanged)
-    Q_PROPERTY(int totalNumberOfSlides READ totalNumberOfSlides)
+    Q_PROPERTY(int currentSlideNumber READ currentSlideNumber WRITE setCurrentSlideNumber NOTIFY currentSlideNumberChanged)
+    Q_PROPERTY(int totalNumberOfSlides READ totalNumberOfSlides NOTIFY totalNumberOfSlidesChanged)
+    Q_PROPERTY (QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
 
 public:
     explicit CAPresentationHandler (CADocumentController* documentController);
@@ -40,16 +43,35 @@ public:
     virtual bool openDocument (const QString& uri);
     virtual QStringList supportedMimetypes();
     virtual QString documentTypeName();
+    virtual KoZoomMode::Mode preferredZoomMode() const;
 
     virtual QString topToolbarSource() const;
     virtual QString rightToolbarSource() const;
     virtual QString leftToolbarSource() const;
+    virtual QString centerOverlaySource() const;
+    virtual QString bottomToolbarSource() const;
+    virtual QString previousPageImage() const;
+    virtual QString nextPageImage() const;
+    virtual FlickModes flickMode() const;
+
+    virtual void gotoNextPage();
+    virtual void gotoPreviousPage();
 
     int slideshowDelay() const;
     void setSlideshowDelay(int delay);
 
     int currentSlideNumber() const;
     int totalNumberOfSlides() const;
+    QString searchString() const;
+    void setSearchString (const QString& searchString);
+    void setTextData(int slideNumber);
+    enum SearchDirection {
+         SearchForward,
+         SearchBackwards
+    };
+    void searchOtherSlides(SearchDirection direction);
+
+    Q_INVOKABLE CAPADocumentModel *paDocumentModel() const;
 
 public slots:
     void tellZoomControllerToSetDocumentSize(const QSize &size);
@@ -61,18 +83,26 @@ public slots:
     void resizeCanvas(const QSizeF &canvasSize);
     void startSlideshow();
     void stopSlideshow();
+    void setCurrentSlideNumber(int number);
+    void findNext();
+    void findPrevious();
 
 signals:
     void slideshowDelayChanged();
     void slideshowStarted();
     void slideshowStopped();
-    void currentSlideNumChanged();
+    void currentSlideNumberChanged();
+    void totalNumberOfSlidesChanged();
+    void searchStringChanged();
 
 protected:
     virtual KoDocument* document();
 
 private slots:
     void advanceSlideshow();
+    void gotoCurrentSlide();
+    void findMatchFound(const KoFindMatch& match);
+    void findNoMatchFound();
 
 private:
     class Private;

@@ -174,7 +174,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     chooseAction->setCurrentIndex(0);
 
     tmpQLabel = new QLabel(page2);
-    tmpQLabel->setText(i18n("Title:"));
+    tmpQLabel->setText(i18nc("Title of message", "Title:"));
     tmpGridLayout->addWidget(tmpQLabel, 2, 0);
 
     title = new KLineEdit(page2);
@@ -197,7 +197,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     tmpGridLayout->addWidget(displayHelp, 0, 0, 1, 2);
 
     tmpQLabel = new QLabel(page3);
-    tmpQLabel->setText(i18n("Title:"));
+    tmpQLabel->setText(i18nc("Title of message", "Title:"));
     tmpGridLayout->addWidget(tmpQLabel, 1, 0);
 
     titleHelp = new KLineEdit(page3);

@@ -23,12 +23,14 @@
 #include "KPrShapeAnimations.h"
 #include "pagelayout/KPrPlaceholders.h"
 
+#include "stage_export.h"
+
 class KprAnimationStep;
 
-class KPrPageData
+class STAGE_EXPORT KPrPageData
 {
 public:
-    KPrPageData();
+    explicit KPrPageData(KPrDocument *document);
     ~KPrPageData();
 
     KPrShapeAnimations & animations();

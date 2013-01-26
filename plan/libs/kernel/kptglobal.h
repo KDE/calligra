@@ -82,7 +82,8 @@ namespace Role
         ColumnTag,
         Planned,
         Actual,
-        Foreground
+        Foreground,
+        Object
     };
 } //namespace Role
 

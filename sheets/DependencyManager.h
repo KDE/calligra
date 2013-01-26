@@ -46,7 +46,7 @@ class CALLIGRA_SHEETS_ODF_EXPORT DependencyManager : public QObject
 
 public:
     /** constructor */
-    DependencyManager(const Map* map);
+    explicit DependencyManager(const Map *map);
     /** destructor */
     ~DependencyManager();
 

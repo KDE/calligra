@@ -73,7 +73,7 @@ KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
     QString lang(KGlobal::locale()->language());
     QStringList dirs(KGlobal::dirs()->findDirs("data", subdir));
     while (true) {
-        foreach(QString dirname, dirs) {
+        foreach(const QString &dirname, dirs) {
             QDir dir(dirname + lang);
             if (!dir.exists())
                 continue;
@@ -83,7 +83,7 @@ KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
             }
             const QStringList templateDirs(dir.entryList(QDir::Dirs, QDir::Name));
             const QString absDirPath(dir.absolutePath() + '/');
-            foreach(QString templateDir, templateDirs) {
+            foreach(const QString &templateDir, templateDirs) {
                 if (templateDir == "." || templateDir == "..")
                     continue;
                 KexiTemplateInfo info = KexiTemplateLoader::loadInfo(absDirPath + templateDir);
@@ -134,7 +134,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     if (info.icon.isNull())
         info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName());
     QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
-    foreach(QString autoopenObjectString, autoopenObjectsString) {
+    foreach(const QString &autoopenObjectString, autoopenObjectsString) {
         KexiProjectData::ObjectInfo* autoopenObject = new KexiProjectData::ObjectInfo();
         QStringList autoopenObjectNameSplitted(autoopenObjectString.split(':'));
         if (autoopenObjectNameSplitted.count() > 1) {

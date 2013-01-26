@@ -24,6 +24,7 @@
  */
 
 #include "CAPAView.h"
+#include "CACanvasController.h"
 #include <KoZoomController.h>
 #include <libs/kopageapp/KoPADocument.h>
 #include <KoPACanvasBase.h>
@@ -41,14 +42,14 @@
 #include <KoZoomHandler.h>
 #include <KoPart.h>
 
+#include <KDebug>
+
+//TODO: Cleanup code that is not called
 CAPAView::CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)
     : m_canvasController (canvasController), m_paCanvas (canvas), m_prDocument (prDocument), m_page (0)
 {
     KoPAViewModeNormal* mode = new KoPAViewModeNormal (this, m_paCanvas);
     setViewMode (mode);
-    m_zoomController = new KoZoomController (canvasController, static_cast<KoZoomHandler*> (viewConverter()),
-            prDocument->documentPart()->actionCollection());
-    connect (m_zoomController, SIGNAL (zoomChanged (KoZoomMode::Mode, qreal)), SLOT (slotZoomChanged (KoZoomMode::Mode, qreal)));
 }
 
 CAPAView::~CAPAView()
@@ -143,9 +144,10 @@ void CAPAView::doUpdateActivePage (KoPAPageBase* page)
     //m_paCanvas->setDocumentOrigin(QPointF(layout.width, layout.height));
     m_paCanvas->setDocumentOrigin (QPointF (0, 0));
     // the page is in the center of the canvas
-    m_zoomController->setDocumentSize (pageSize * 3);
-    m_zoomController->setPageSize (pageSize);
     m_paCanvas->resourceManager()->setResource (KoCanvasResourceManager::PageSize, pageSize);
+    zoomController()->setPageSize(pageSize);
+    zoomController()->setDocumentSize(pageSize);
+    zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1);
     QGraphicsItem* item = dynamic_cast<QGraphicsItem*> (m_paCanvas);
     item->update();
 
@@ -154,7 +156,7 @@ void CAPAView::doUpdateActivePage (KoPAPageBase* page)
 
 KoZoomController* CAPAView::zoomController() const
 {
-    return m_zoomController;
+    return static_cast<CACanvasController*>(m_canvasController)->zoomController();
 }
 
 KoPADocument* CAPAView::kopaDocument() const
@@ -165,6 +167,11 @@ KoPADocument* CAPAView::kopaDocument() const
 KoPACanvasBase* CAPAView::kopaCanvas() const
 {
     return m_paCanvas;
+}
+
+void CAPAView::connectToZoomController()
+{
+    connect (zoomController(), SIGNAL (zoomChanged (KoZoomMode::Mode, qreal)), SLOT (slotZoomChanged (KoZoomMode::Mode, qreal)));
 }
 
 void CAPAView::slotZoomChanged (KoZoomMode::Mode mode, qreal zoom)

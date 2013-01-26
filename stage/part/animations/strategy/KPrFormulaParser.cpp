@@ -176,9 +176,9 @@ void TokenStack::ensureSpace()
 /**********************
     KPrFormulaParser
  **********************/
-KPrFormulaParser::KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData, ParseType type)
+KPrFormulaParser::KPrFormulaParser(QString formula, KoShape *shape, QTextBlockUserData *textBlockUserData, ParseType type)
     : m_shape(shape)
-    , m_textBlockData(textBlockData)
+    , m_textBlockData(textBlockUserData)
     , m_formula(formula)
     , m_fcompiled(false)
     , m_fvalid(false)

@@ -21,9 +21,10 @@
 #define PAMOCK_H
 
 #include "KPrDocument.h"
-#include <KoPart.h>
 
+#include <KoPart.h>
 #include <KoOdf.h>
+
 #include <QGraphicsItem>
 
 class KoView;

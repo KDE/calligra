@@ -214,7 +214,7 @@ public:
     UsedEffort *usedEffort( const Resource *r ) const { return m_usedEffort.value( const_cast<Resource*>( r ) ); }
     const ResourceUsedEffortMap &usedEffortMap() const { return m_usedEffort; }
     
-    void changed();
+    void changed( int propert = -1 );
     Node *node() const { return m_node; }
     void setNode( Node *node ) { m_node = node; }
     
@@ -459,21 +459,24 @@ public:
     /// Returns the cost planned to be used to reach the actual percent finished
     virtual double budgetedCostPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    using Node::bcwsPrDay;
     /// Return map of Budgeted Cost of Work Scheduled pr day
-    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
+    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     
     /// Budgeted Cost of Work Scheduled
     virtual double bcws( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    using Node::bcwpPrDay;
     /// Return map of Budgeted Cost of Work Performed pr day (also includes bcwsPrDay)
-    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
+    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    using Node::acwp;
     /// Map of Actual Cost of Work Performed
-    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
+    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     /// Actual Cost of Work Performed up to dat
     virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
@@ -740,6 +743,11 @@ private:
 
     WorkPackage m_workPackage;
     QList<WorkPackage*> m_packageLog;
+
+    bool m_calculateForwardRun;
+    bool m_calculateBackwardRun;
+    bool m_scheduleForwardRun;
+    bool m_scheduleBackwardRun;
 };
 
 }  //KPlato namespace

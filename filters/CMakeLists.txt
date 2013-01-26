@@ -1,8 +1,5 @@
 include(CheckIncludeFiles)
 
-macro_optional_add_subdirectory( libkowmf )
-set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
-
 macro_optional_find_package(WPD)
 macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
 
@@ -28,8 +25,7 @@ set(libdialogfilter_SRCS
 
 set(liboofilter_SRCS 
 	${CMAKE_SOURCE_DIR}/filters/liboofilter/ooutils.cc 
-	${CMAKE_SOURCE_DIR}/filters/liboofilter/liststylestack.cc
-	)
+)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
@@ -37,9 +33,13 @@ if (NOT CREATIVEONLY)
 
 set(WRITERPERFECT_INCLUDES ${CMAKE_SOURCE_DIR}/filters/writerperfect)
 
+set(SHOULD_BUILD_OOXML_FILTERS ${SHARED_MIME_INFO_FOUND})
+
 add_subdirectory(libmso)
 
-macro_optional_add_subdirectory( libmsooxml )
+if(SHOULD_BUILD_OOXML_FILTERS)
+    macro_optional_add_subdirectory( libmsooxml )
+endif(SHOULD_BUILD_OOXML_FILTERS)
 
 if(SHOULD_BUILD_KCHART)
     macro_optional_add_subdirectory(kchart)

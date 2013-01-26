@@ -1,0 +1,23 @@
+[Desktop Entry]
+Type=Service
+Name=ODT to HTML Export Filter
+Name[cs]=Exportní filtr ODT do HTML
+Name[el]=Φίλτρο εξαγωγής ODT σε HTML
+Name[et]=ODT->HTML ekspordifilter
+Name[fr]=Filtre d'exportation ODT vers HTML
+Name[hu]=ODT -> HTML exportszűrő
+Name[it]=Filtro di esportazione da ODT a HTML
+Name[nl]=ODT naar HTML exportfilter
+Name[pt]=Filtro de Exportação de ODT para HTML
+Name[pt_BR]=Filtro de exportação de ODT para HTML
+Name[sk]=Exportný filter ODT do HTML
+Name[sv]=ODT-till-HTML-exportfilter
+Name[uk]=Фільтр експорту ODT до HTML
+Name[x-test]=xxODT to HTML Export Filterxx
+
+X-KDE-Import=application/vnd.oasis.opendocument.text
+X-KDE-Export=text/html
+X-KDE-Weight=1
+X-KDE-Library=exporthtml
+X-KDE-ServiceTypes=CalligraFilter
+

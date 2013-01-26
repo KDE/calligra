@@ -58,7 +58,7 @@ class KOMAIN_EXPORT KoRdfSemanticItem : public QObject, public QSharedData
 
 public:
 
-    KoRdfSemanticItem(QObject *parent);
+    explicit KoRdfSemanticItem(QObject *parent);
     KoRdfSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
     KoRdfSemanticItem(const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, QObject *parent);
     virtual ~KoRdfSemanticItem();
@@ -341,6 +341,11 @@ public:
      */
     void saveUserStylesheets(QSharedPointer<Soprano::Model> model, const Soprano::Node &context) const;
 
+protected:
+    /**
+     * Create a new system stylesheet
+     */
+    hKoSemanticStylesheet createSystemStylesheet(const QString &uuid, const QString &name, const QString &templateString) const;
 
 protected slots:
     /**

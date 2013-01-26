@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     
     while(m->moveNext())
     {
-	kDebug() << m->value(0) << m->value(1) << m->value(2);
+        kDebug() << m->value(0) << m->value(1) << m->value(2);
     }
     
     m->movePrevious();
@@ -89,6 +89,6 @@ int main(int argc, char *argv[])
     
     while(k->moveNext())
     {
-	kDebug() << k->value(0) << k->value(1) << k->value(2);
+        kDebug() << k->value(0) << k->value(1) << k->value(2);
     }
 }

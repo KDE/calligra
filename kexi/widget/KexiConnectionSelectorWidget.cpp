@@ -216,6 +216,9 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(int id)
                 //   }
             }
             if (d->remote->list->topLevelItemCount() > 0) {
+                d->remote->list->sortByColumn(0, Qt::AscendingOrder);
+                d->remote->list->resizeColumnToContents(0); // name
+                d->remote->list->resizeColumnToContents(1); // type
                 d->remote->list->topLevelItem(0)->setSelected(true);
             }
             d->remote->descGroupBox->layout()->setMargin(2);
@@ -399,7 +402,7 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
 {
     KexiDB::ConnectionData data;
     KexiDBConnectionDialog dlg(this, data, QString(),
-                               KGuiItem(i18n("&Add"), "dialog-ok", i18n("Add database connection")));
+                               KGuiItem(i18n("&Add"), koIconName("dialog-ok"), i18n("Add database connection")));
     dlg.setWindowTitle(i18n("Add New Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
@@ -428,7 +431,7 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     if (!item)
         return;
     KexiDBConnectionDialog dlg(this, *item->data(), QString(),
-                               KGuiItem(i18n("&Save"), "document-save",
+                               KGuiItem(i18n("&Save"), koIconName("document-save"),
                                         i18n("Save changes made to this database connection")));
     dlg.setWindowTitle(i18n("Edit Database Connection"));
     if (QDialog::Accepted != dlg.exec())

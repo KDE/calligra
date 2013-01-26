@@ -106,6 +106,8 @@ protected slots:
     void slotNodeInserted( Node *node );
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
+    void slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos );
+    void slotNodeMoved( Node *node );
 
     void slotWbsDefinitionChanged();
     void slotLayoutChanged();

@@ -1,13 +1,19 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${CMAKE_SOURCE_DIR}/stage/part ${KOMAIN_INCLUDES} )
+
+include_directories(${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDES}
+        ${CMAKE_SOURCE_DIR}/libs/flake/tests
+        ${CMAKE_BINARY_DIR}/libs/main
+        ${CMAKE_SOURCE_DIR}/libs/kotext/tests
+        ${CMAKE_SOURCE_DIR}/stage/part
+)
 
 ########### next target ###############
 
-#set(TestShapeAnimations_test_SRCS TestShapeAnimations.cpp )
+set(TestShapeAnimations_test_SRCS TestShapeAnimations.cpp ModelTest.cpp)
 
-#kde4_add_unit_test(TestShapeAnimations TESTNAME stage-part-TestShapeAnimations  ${TestShapeAnimations_test_SRCS})
+kde4_add_unit_test(TestShapeAnimations TESTNAME stage-part-TestShapeAnimations  ${TestShapeAnimations_test_SRCS})
 
-#target_link_libraries(TestShapeAnimations calligrastageprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestShapeAnimations calligrastageprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

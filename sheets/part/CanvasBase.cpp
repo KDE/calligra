@@ -94,7 +94,7 @@
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 
-// KSpread
+// Sheets
 #include "CellStorage.h"
 #include "Doc.h"
 #include "Global.h"
@@ -106,6 +106,7 @@
 #include "Sheet.h"
 #include "Util.h"
 #include "Validity.h"
+#include "ElapsedTime_p.h"
 
 // commands
 #include "commands/CopyCommand.h"
