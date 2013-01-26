@@ -35,12 +35,11 @@
 #include <math.h>
 
 // Qt
+#include <QWidget>
+#include <QMenu>
 #include <QLabel>
 #include <QToolButton>
-#include <QWidget>
-#include <QGridLayout>
 #include <QButtonGroup>
-#include <QMenu>
 #include <QBuffer>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
