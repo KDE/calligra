@@ -84,7 +84,7 @@ Item {
                 visible: button.visible;
                 text: "";
                 color: "transparent";
-                image: "../images/svg/icon-visible_on.svg";
+                image: "../images/svg/icon-web.svg";
                 onClicked: Qt.openUrlExternally(button.url);
             }
         }
