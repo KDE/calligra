@@ -43,7 +43,6 @@ MsooXmlDrawingTableStyleReader::MsooXmlDrawingTableStyleReader(KoOdfWriters* wri
 : MsooXmlCommonReader(writers)
 , m_context(0)
 , m_currentStyle(0)
-, m_currentBorder()
 , m_currentTableStyleProperties()
 {
 }
