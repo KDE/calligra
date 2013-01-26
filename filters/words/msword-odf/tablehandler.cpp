@@ -124,7 +124,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
         }
         //style:vertical-rel - relative vertical position of the anchor
         pos = Conversion::getVerticalRel(tap->pcVert);
-    if (!pos.isEmpty()) {
+	if (!pos.isEmpty()) {
             style.addProperty("style:vertical-rel", pos, gt);
         }
         //style:horizontal-rel - relative horizontal position of the anchor
@@ -676,6 +676,11 @@ void WordsTableHandler::tableCellEnd()
         //add the current background-color to stack
 //         document()->pushBgColor(color);
     }
+}
+
+Words::Table::Table()
+: floating(false)
+{
 }
 
 void Words::Table::cacheCellEdge(int cellEdge)

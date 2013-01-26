@@ -67,11 +67,12 @@ namespace Words
      * during text parsing and the final generation of table cells.
      */
     struct Table {
+        Table();
 
-    /**
-     * Add cell edge position into the cache for a given table.  Keep them
-     * sorted.
-     */
+        /**
+         * Add cell edge position into the cache for a given table.  Keep them
+         * sorted.
+         */
         void cacheCellEdge(int cellEdge);
 
         /**
