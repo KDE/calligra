@@ -24,6 +24,7 @@
 #include "TextDocumentInspectionDockerFactory.h"
 #endif
 #include "TextShapeFactory.h"
+#include "AnnotationTextShapeFactory.h"
 
 #include <KoShapeRegistry.h>
 #include <KoDockRegistry.h>
@@ -44,6 +45,7 @@ TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
     KoDockRegistry::instance()->add(new TextDocumentInspectionDockerFactory());
 #endif
     KoShapeRegistry::instance()->add(new TextShapeFactory());
+    KoShapeRegistry::instance()->add(new AnnotationTextShapeFactory());
 }
 
 #include <TextPlugin.moc>

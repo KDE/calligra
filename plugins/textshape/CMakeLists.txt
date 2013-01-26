@@ -29,6 +29,8 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     ShrinkToFitShapeContainer.cpp
     SimpleRootAreaProvider.cpp
+    AnnotationTextShape.cpp
+    AnnotationTextShapeFactory.cpp
 
     ChangeTracker.cpp
     ReviewTool.cpp
