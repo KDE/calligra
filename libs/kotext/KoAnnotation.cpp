@@ -59,7 +59,7 @@ public:
     QString creator;
     QString date;
     QTextDocument contents;
-    KoShape *m_shape;
+    KoShape *shape;
 };
 
 KoAnnotation::KoAnnotation(const QTextCursor &cursor)
@@ -101,12 +101,12 @@ void KoAnnotation::setMotherFrame(QTextFrame *frame)
 
 void KoAnnotation::setAnnotationShape(KoShape *shape)
 {
-    d->m_shape = shape;
+    d->shape = shape;
 }
 
 KoShape *KoAnnotation::annotationShape()
 {
-    return d->m_shape;
+    return d->shape;
 }
 
 bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -181,15 +181,7 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
             inlineRdf()->saveOdf(context, writer);
         }
 
-        writer->startElement("dc:creator", false);
-        writer->addTextNode(d->creator);
-        writer->endElement(); // dc:creator
-        writer->startElement("dc:date", false);
-        writer->addTextNode(d->date);
-        writer->endElement(); // dc:date
-
-        KoTextWriter textWriter(context);
-        textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
+        d->shape->saveOdf(context);
 
         writer->endElement(); //office:annotation
     } else if ((tagType == EndTag) && (position == rangeEnd())) {

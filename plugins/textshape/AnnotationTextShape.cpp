@@ -21,7 +21,10 @@
 
 #include <KoTextLoader.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoTextRangeManager.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 
 #include <kdebug.h>
@@ -36,6 +39,11 @@ AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextOb
 
 AnnotationTextShape::~AnnotationTextShape()
 {
+}
+
+void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShape)
+{
+    m_textShapeData = textShape;
 }
 
 void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
@@ -73,8 +81,8 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
             }
         }
         textLoader.loadBody(element, cursor);
-        kDebug() << "****** End Load ******";
-        kDebug() << "loaded Annotation: " << m_creator<< m_date;
+        kDebug(31000) << "****** End Load ******";
+        kDebug(31000) << "loaded Annotation: " << m_creator<< m_date;
     }
     else {
         // something pretty weird going on...
@@ -85,5 +93,17 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
 
 void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
 {
+    kDebug(31000) << " ****** Start saveing annotation shape **********";
+    KoXmlWriter *writer = &context.xmlWriter();
 
+    writer->startElement("dc:creator", false);
+    writer->addTextNode(m_creator);
+    writer->endElement(); // dc:creator
+    writer->startElement("dc:date", false);
+    writer->addTextNode(m_date);
+    writer->endElement(); // dc:date
+
+    // I am not sure that this line is right or no?
+    kDebug(31000) << m_textShapeData->document()->toPlainText();
+    m_textShapeData->saveOdf(context, 0, 0, -1);
 }

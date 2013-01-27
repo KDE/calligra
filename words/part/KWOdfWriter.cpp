@@ -50,7 +50,7 @@
 
 #include <QBuffer>
 #include <QTextCursor>
-#include <KDebug>
+#include <kdebug.h>
 #include <ktemporaryfile.h>
 
 static const struct {
@@ -287,6 +287,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         QSet<QString> uniqueNames;
         foreach (KWFrame *frame, fs->frames()) { // make sure all shapes have names.
             KoShape *shape = frame->shape();
+            kDebug(31000) << "**** Shape Id:" << shape->shapeId() << "****";
             if (counter++ == 1)
                 shape->setName(fs->name());
             else if (shape->name().isEmpty() || uniqueNames.contains(shape->name()))
@@ -297,6 +298,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         for (int i = 0; i < frames.count(); ++i) {
             KWFrame *frame = frames.at(i);
             KWPage page = m_document->pageManager()->page(frame->shape());
+            KoShape *shape = frame->shape();
+            if (shape->shapeId() == "AnnotationTextShapeID") {
+                // Skip to save annotation shpaes.
+                continue;
+            }
             frame->saveOdf(context, page, m_zIndexOffsets.value(page));
         }
     }

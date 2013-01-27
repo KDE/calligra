@@ -36,7 +36,7 @@ class KoTextDocument;
 class TextShape;
 class KoTextDocumentLayout;
 
-#define AnnotationShape_SHAPEID "AnnotationTextShapeId"
+#define AnnotationShape_SHAPEID "AnnotationTextShapeID"
 
 class AnnotationTextShape : public TextShape
 {
@@ -44,6 +44,8 @@ public:
     // For now we should give these parameters for TextShape.
     AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager);
     virtual ~AnnotationTextShape();
+
+    void setAnnotaionTextData(KoTextShapeData *textShape);
 
     /// reimplemented
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
