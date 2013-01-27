@@ -72,8 +72,9 @@ qreal KPrSmilValues::endValue() const
     return m_values.at(m_values.size() - 1).eval(m_cache);
 }
 
-bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode)
+bool KPrSmilValues::loadValues(const QString &values, const QString &keyTimes, const QString &keySplines, SmilCalcMode calcMode)
 {
+    Q_UNUSED(keySplines);
     m_calcMode = calcMode;
     QStringList valuesList = values.split(QLatin1Char(';'));
     if (valuesList.size() < 2) {
@@ -117,7 +118,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     return true;
 }
 
-bool KPrSmilValues::loadFormula(QString values, QString keyTimes, QString keySplines, KPrAnimationValue::SmilCalcMode calcMode, QString formula)
+bool KPrSmilValues::loadFormula(const QString &values, const QString &keyTimes, const QString &keySplines, KPrAnimationValue::SmilCalcMode calcMode, const QString &formula)
 {
     bool retval = loadValues(values, keyTimes, keySplines, calcMode);
 
