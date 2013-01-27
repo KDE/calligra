@@ -125,14 +125,15 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     formulalist<<QString("<pre><strong>cos</strong>&alpha; + <strong>cos</strong>&beta; = 2 <strong>cos</strong>(&alpha; + &beta;)/2 <strong>cos</strong>(&alpha; - &beta;)/2</pre>");
     formulalist<<QString("<pre><strong>cos</strong>&alpha; - <strong>cos</strong>&beta; = 2 <strong>sin</strong>(&alpha; + &beta;)/2 <strong>sin</strong>(&beta; - &alpha;)/2</pre>");
 
-    m_printformula<<QString("A = ")+QString(0x03C0)+QString("r")+QString(0x00B2);
-    m_printformula<<QString("(x+a)")+QString(0x207F)+QString(" = 1 + nx/1! + n(n-1)x/2! + ...");
-    m_printformula<<QString("(1+x)")+QString(0x207F)+QString(" = 1 + nx/1! + n(n-1)x")+QString(0x00B2)+QString("/2! + n(n-1)(n-2)x")+QString(0x00B3)+QString("/3! + ...");
-    m_printformula<<QString("x = -b ")+QString(0x00B1)+QString(" ")+QString(0x221A)+QString("(b")+QString(0x00B2)+QString(" - 4ac) / 2a");
-    m_printformula<<QString("e")+QString(0x207F)+QString(" = 1 + n/1! + n")+QString(0x00B2)+QString("/2! + n")+QString(0x00B3)+QString("/3! + ...");
-    m_printformula<<QString("sin")+QString(0x03B1)+QString(" ")+QString(0x00B1)+QString(" sin")+QString(0x03B2)+QString(" = ")+QString("2sin(")+QString(0x03B1)+QString(0x00B1)+QString(0x03B2)+QString(")/2 ")+QString("cos(")+QString(0x03B1)+QString(0x00B1)+QString(0x03B2)+QString(")/2 ");
-    m_printformula<<QString("cos")+QString(0x03B1)+QString(" + cos")+QString(0x03B2)+QString(" = 2cos(")+QString(0x03B1)+QString("+")+QString(0x03B2)+QString(")/2 ")+QString("cos(")+QString(0x03B1)+QString("-")+QString(0x03B2)+QString(")/2 ");
-    m_printformula<<QString("cos")+QString(0x03B1)+QString(" - cos")+QString(0x03B2)+QString(" = 2sin(")+QString(0x03B1)+QString("+")+QString(0x03B2)+QString(")/2 ")+QString("sin(")+QString(0x03B2)+QString("-")+QString(0x03B1)+QString(")/2 ");
+    m_printFormula<<QString("A = ")+QString(0x03C0)+QString("r")+QString(0x00B2)
+                <<QString("(x+a)")+QString(0x207F)+QString(" = 1 + nx/1! + n(n-1)x/2! + ...")
+                <<QString("(1+x)")+QString(0x207F)+QString(" = 1 + nx/1! + n(n-1)x")+QString(0x00B2)+QString("/2! + n(n-1)(n-2)x")+QString(0x00B3)+QString("/3! + ...")
+                <<QString("x = -b ")+QString(0x00B1)+QString(" ")+QString(0x221A)+QString("(b")+QString(0x00B2)+QString(" - 4ac) / 2a")
+                <<QString("e")+QString(0x207F)+QString(" = 1 + n/1! + n")+QString(0x00B2)+QString("/2! + n")+QString(0x00B3)+QString("/3! + ...")
+                <<QString("sin")+QString(0x03B1)+QString(" ")+QString(0x00B1)+QString(" sin")+QString(0x03B2)+QString(" = ")+QString("2sin(")+QString(0x03B1)+QString(0x00B1)+QString(0x03B2)+QString(")/2 ")+QString("cos(")+QString(0x03B1)+QString(0x00B1)+QString(0x03B2)+QString(")/2 ")
+                <<QString("cos")+QString(0x03B1)+QString(" + cos")+QString(0x03B2)+QString(" = 2cos(")+QString(0x03B1)+QString("+")+QString(0x03B2)+QString(")/2 ")+QString("cos(")+QString(0x03B1)+QString("-")+QString(0x03B2)+QString(")/2 ")
+                <<QString("cos")+QString(0x03B1)+QString(" - cos")+QString(0x03B2)+QString(" = 2sin(")+QString(0x03B1)+QString("+")+QString(0x03B2)+QString(")/2 ")+QString("sin(")+QString(0x03B2)+QString("-")+QString(0x03B1)+QString(")/2 ");
+
     setupformulaButton(formulalist);
 
     connect( buttonLoad, SIGNAL( clicked() ), m_tool, SLOT( loadFormula() ) );
@@ -158,10 +159,9 @@ void FormulaToolWidget::insertSymbol ( QTableWidgetItem* item )
 
 void FormulaToolWidget::insertFormula (int a,int b)
 {
-
-        Q_UNUSED(b);
-        m_tool->insertSymbol(m_printformula.at(a));
-        m_formulaMenu.hide();
+    Q_UNUSED(b);
+    m_tool->insertSymbol(m_printFormula.at(a));
+    m_formulaMenu.hide();
 }
 
 void FormulaToolWidget::insertSymbol (QLabel* label )
@@ -220,19 +220,12 @@ void FormulaToolWidget::setupformulaButton(QList<QString>list)
 
     for(int i=0;i<list.length();i++)
      {
-
-         m_formulalabel[i] = new QLabel(list[i]);
-
-         QLabel* txtedit = new QLabel(list[i]);
-
        //  txtedit->setText(list[i]);
        //  txtedit->insertHtml(list[i]);
         //txtedit->setReadOnly(true);
        //  txtedit->setContextMenuPolicy(Qt::NoContextMenu);
 
-         table->setCellWidget(i,0,m_formulalabel[i]);
-
-         table->setCellWidget(i,0,txtedit);
+         table->setCellWidget(i,0,new QLabel(list[i]));
 
        //  txtedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 

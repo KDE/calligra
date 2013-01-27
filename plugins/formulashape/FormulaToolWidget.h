@@ -23,6 +23,7 @@
 #include <QTabWidget>
 #include <QMenu>
 #include <QLabel>
+#include <QStringList>
 #include "ui_FormulaToolWidget.h"
 
 class KoFormulaTool;
@@ -68,11 +69,8 @@ private:
     /// The KoFormulaTool this options widget belongs to
     KoFormulaTool* m_tool;
 
-    /// Holds the HTML tags of the 8 commonly used formula
-    QLabel* m_formulalabel[8];
-
     /// holds the formulae that are to be rendered
-    QList<QString> m_printformula;
+    QStringList m_printFormula;
 
     QMenu m_scriptsMenu;
     QMenu m_fractionMenu;
@@ -87,6 +85,8 @@ private:
     QMenu m_alterTableMenu;
     QMenu m_rowMenu;
     QMenu m_formulaMenu;
+
+
 };
 
 
