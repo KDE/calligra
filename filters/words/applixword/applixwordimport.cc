@@ -196,8 +196,9 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     int  pos;
     bool ok;
     QString           mystr, textstr;
-    bool inTable = false;
-    bool inTableRow = false;
+    // TODO: table implementation below is incomplete
+//     bool inTable = false;
+//     bool inTableRow = false;
 
     // We'll get the paragraph style only at the end of the paragraph,
     // so bufferize the paragraph contents
