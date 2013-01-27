@@ -74,6 +74,9 @@ private:
     KoParagraphStyle * m_paragraphStyle;
     bool m_clip;
     KoTextDocumentLayout *m_layout;
+
+    QString m_creator;
+    QString m_date;
 };
 
 #endif // ANNOTATIONTEXTSHAPE_H

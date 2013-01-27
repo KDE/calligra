@@ -30,6 +30,7 @@
 #include <KoTextLoader.h>
 #include <KoXmlNS.h>
 #include <KoTextWriter.h>
+#include <KoShape.h>
 
 #include "KoTextDocument.h"
 
@@ -58,6 +59,7 @@ public:
     QString creator;
     QString date;
     QTextDocument contents;
+    KoShape *m_shape;
 };
 
 KoAnnotation::KoAnnotation(const QTextCursor &cursor)
@@ -95,6 +97,16 @@ void KoAnnotation::setMotherFrame(QTextFrame *frame)
     format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
     d->textFrame = cursor.insertFrame(format);
     d->document = frame->document();
+}
+
+void KoAnnotation::setAnnotationShape(KoShape *shape)
+{
+    d->m_shape = shape;
+}
+
+KoShape *KoAnnotation::annotationShape()
+{
+    return d->m_shape;
 }
 
 bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

@@ -19,6 +19,16 @@
 
 #include "AnnotationTextShape.h"
 
+#include <KoTextLoader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
+
+
+#include <kdebug.h>
+
+#include <QTextCursor>
+#include <QTextDocument>
+
 AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager) :
     TextShape(inlineTextObjectManager, textRangeManager)
 {
@@ -35,7 +45,42 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
 
 bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    return false;
+    kDebug(31000) << "****** Start Load odf ******";
+
+    KoTextLoader textLoader(context);
+    QTextCursor cursor(textShapeData()->document());
+
+    // QString annotationName = element.attribute("name");
+
+    const QString localName(element.localName());
+
+
+    if (localName == "annotation") {
+
+        // FIXME: Load more attributes here
+
+        // Load the metadata (author, date) and contents here.
+        KoXmlElement el;
+        forEachElement(el, element) {
+            if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
+                m_creator = el.text();
+            }
+            else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
+                m_date = el.text();
+            }
+            else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
+                // FIXME: What to do here?
+            }
+        }
+        textLoader.loadBody(element, cursor);
+        kDebug() << "****** End Load ******";
+        kDebug() << "loaded Annotation: " << m_creator<< m_date;
+    }
+    else {
+        // something pretty weird going on...
+        return false;
+    }
+    return true;
 }
 
 void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const

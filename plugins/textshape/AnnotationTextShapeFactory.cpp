@@ -36,6 +36,7 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 #include <kundo2stack.h>
 #include <QTextCursor>
 
@@ -43,6 +44,9 @@ AnnotationTextShapeFactory::AnnotationTextShapeFactory() :
     KoShapeFactoryBase(AnnotationShape_SHAPEID, i18n("Annotation"))
 {
     setToolTip(i18n("Annotation shape to show annotaion content"));
+    QList<QPair<QString, QStringList> > odfElements;
+    odfElements.append(QPair<QString, QStringList>(KoXmlNS::office, QStringList("annotation")));
+    setXmlElements(odfElements);
 
     KoShapeTemplate t;
     t.name = i18n("Annotation");
@@ -56,6 +60,7 @@ AnnotationTextShapeFactory::AnnotationTextShapeFactory() :
 
 KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
+    kDebug(31000) << "******* annotation shape factory Default shape *********";
     KoInlineTextObjectManager *manager = 0;
     KoTextRangeManager *locationManager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
@@ -105,18 +110,21 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
         annotation->setImageCollection(documentResources->imageCollection());
     }
 
+    // Here we should handel the size and position of shape
+    annotation->setSize(QSizeF(150, 100));
+    annotation->setPosition(QPointF(200, 300));
     return annotation;
 }
 
 KoShape *AnnotationTextShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(params);
-
     AnnotationTextShape *shape = static_cast<AnnotationTextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
 
     // The size of shape
-    shape->setSize(QSizeF(300, 200));
+//    shape->setSize(QSizeF(300, 200));
+//    shape->setPosition(QPointF(200, 300));
 
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());
@@ -127,5 +135,6 @@ KoShape *AnnotationTextShapeFactory::createShape(const KoProperties *params, KoD
 
 bool AnnotationTextShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
-    return true;
+    Q_UNUSED(context);
+    return (e.localName() == "annotation" && e.namespaceURI() == KoXmlNS::office);
 }

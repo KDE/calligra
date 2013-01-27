@@ -1973,6 +1973,11 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     textRangeManager->insert(annotation);
                     cursor.setPosition(position);
                     annotation->setRangeEnd(cursor.position());
+                    // Load annotaion shape. For now let have KoAnnotation::loadodf
+                    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(ts, d->context);
+                    KoTextAnchor *anchor = new KoTextAnchor(shape);
+                    d->textSharedData->shapeInserted(shape, element, d->context, anchor);
+                    annotation->setAnnotationShape(shape);
                 }
                 else {
                     kWarning(32500) << "Could not load annotation";
