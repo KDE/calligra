@@ -816,7 +816,7 @@ QList<QWidget *> ConnectionTool::createOptionWidgets()
         }
     }
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
-    strokeWidget->setWindowTitle(i18n("Stroke"));
+    strokeWidget->setWindowTitle(i18n("Line"));
     strokeWidget->setCanvas(canvas());
     list.append(strokeWidget);
 
