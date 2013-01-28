@@ -152,7 +152,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     // the zoom controller needs to be initialized after the status bar gets initialized as
     // that resulted in bug 180759
-    m_zoomController->setPageSize(m_currentPage.rect().size());
+    m_zoomController->setPageSize(m_currentPage.rect().size() + QSize(AnnotationAreaWidth, 0.0));
     m_zoomController->setTextMinMax(m_currentPage.contentRect().left(), m_currentPage.contentRect().right());
     KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_TEXT;
     if (m_canvas->viewMode()->hasPages())
@@ -955,7 +955,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
 
     if (maxPageSize != m_pageSize) {
         m_pageSize = maxPageSize;
-        m_zoomController->setPageSize(m_pageSize);
+        m_zoomController->setPageSize(m_pageSize + QSize(AnnotationAreaWidth, 0.0));
     }
     if (minTextX != m_textMinX || maxTextX != m_textMaxX) {
         m_textMinX = minTextX;

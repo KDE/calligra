@@ -60,6 +60,8 @@ class WORDS_EXPORT KWView : public KoView
     Q_OBJECT
 
 public:
+    static const qreal AnnotationAreaWidth = 200.0;
+
     /**
      * Construct a new view on the words document.
      * The view will have a canvas as a member which does all the actual painting, the view will
