@@ -47,7 +47,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
             KoXmlNS::text, "anchor-page-number", "text:anchor-page-number"));
 }
 
-void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context, KoTextAnchor *anchor)
+void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context, KoShapeAnchor *anchor)
 {
     shape->removeAdditionalAttribute("text:anchor-type");
     const KoXmlElement *style = 0;

@@ -25,7 +25,7 @@
 #include "KWTextFrameSet.h"
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
-#include "KoTextAnchor.h"
+#include "KoShapeAnchor.h"
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
 #include <KoTextShapeData.h>
@@ -34,7 +34,7 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
-KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, KoTextAnchor *anchor)
+KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, KoShapeAnchor *anchor)
         : m_shape(shape),
         m_frameBehavior(Words::AutoExtendFrameBehavior),
         m_newFrameBehavior(Words::NoFollowupFrame),

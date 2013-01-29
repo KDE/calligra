@@ -26,7 +26,7 @@
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextEditor.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
@@ -126,11 +126,12 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
-
+/* FIXME
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (!anchor) {
             continue;
         }
+        */
 #if 0
         // TODO -- since March 2010...
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
@@ -171,6 +172,7 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
+        /* FIXME
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (!anchor)
             continue;
@@ -178,6 +180,7 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
         KUndo2Command *shapeCommand = m_canvas->shapeController()->removeShape(anchor->shape());
         shapeCommand->redo();
         m_shapeCommands.push_front(shapeCommand);
+        */
     }
 }
 

@@ -487,84 +487,86 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             // If we are in an inline object
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
-		  bool saveInlineObject = true;
+                if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject)) {
+                    bool saveInlineObject = true;
 
-		  if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {
-		      if (z->position() < from) {
-			  //
-			  // This <text:meta> starts before the selection, default
-			  // to not saving it with special cases to allow saving
-			  //
-			  saveInlineObject = false;
-			  if (z->type() == KoTextMeta::StartBookmark) {
-			      if (z->endBookmark()->position() > from) {
-				  //
-				  // They have selected something starting after the
-				  // <text:meta> opening but before the </text:meta>
-				  //
-				  saveInlineObject = true;
-			      }
-			  }
-		      }
-		  }
+                    if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {
+                        if (z->position() < from) {
+                            //
+                            // This <text:meta> starts before the selection, default
+                            // to not saving it with special cases to allow saving
+                            //
+                            saveInlineObject = false;
+                            if (z->type() == KoTextMeta::StartBookmark) {
+                                if (z->endBookmark()->position() > from) {
+                                    //
+                                    // They have selected something starting after the
+                                    // <text:meta> opening but before the </text:meta>
+                                    //
+                                    saveInlineObject = true;
+                                }
+                            }
+                        }
+                    }
 
-		  // get all text ranges which start before this inline object
-		  // or end directly after it (+1 to last position for that)
-		  const QHash<int, KoTextRange *> textRanges =
-		      mgr->textRangesChangingWithin(currentFragment.position(), currentFragment.position()+1,
-						    globalFrom, (globalTo==-1)?-1:globalTo+1);
-		  // get all text ranges which start before this
-		  const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
-		  // write tags for ranges which start before this content or at positioned at it
-		  foreach (const KoTextRange *range, textRangesBefore) {
-		      range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
-		  }
+                   // get all text ranges which start before this inline object
+                   // or end directly after it (+1 to last position for that)
+                   const QHash<int, KoTextRange *> textRanges =
+                       mgr->textRangesChangingWithin(currentFragment.position(), currentFragment.position()+1,
+                                                     globalFrom, (globalTo==-1)?-1:globalTo+1);
+                    // get all text ranges which start before this
+                    const QList<KoTextRange *> textRangesBefore = textRanges.values(currentFragment.position());
+                    // write tags for ranges which start before this content or at positioned at it
+                    foreach (const KoTextRange *range, textRangesBefore) {
+                        range->saveOdf(context, currentFragment.position(), KoTextRange::StartTag);
+                    }
 
-		  bool saveSpan = dynamic_cast<KoVariable*>(inlineObject) != 0;
+                    bool saveSpan = dynamic_cast<KoVariable*>(inlineObject) != 0;
 
-		  if (saveSpan) {
-		      QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
-		      if (!styleName.isEmpty()) {
-			  writer->startElement("text:span", false);
-			  writer->addAttribute("text:style-name", styleName);
-		      }
-		      else {
-			  saveSpan = false;
-		      }
-		  }
+                    if (saveSpan) {
+                        QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
+                        if (!styleName.isEmpty()) {
+                            writer->startElement("text:span", false);
+                            writer->addAttribute("text:style-name", styleName);
+                        }
+                        else {
+                            saveSpan = false;
+                        }
+                    }
 
-		  if (saveInlineObject) {
-		      inlineObject->saveOdf(context);
-		  }
+                    if (saveInlineObject) {
+                        inlineObject->saveOdf(context);
+                    }
 
-		  if (saveSpan) {
-		      writer->endElement();
-		  }
+                    if (saveSpan) {
+                        writer->endElement();
+                    }
 
-		  // write tags for ranges which end after this inline object
-		  const QList<KoTextRange *> textRangesAfter = textRanges.values(currentFragment.position()+1);
-		  foreach (const KoTextRange *range, textRangesAfter) {
-		      range->saveOdf(context, currentFragment.position()+1, KoTextRange::EndTag);
-		  }
+                    // write tags for ranges which end after this inline object
+                    const QList<KoTextRange *> textRangesAfter = textRanges.values(currentFragment.position()+1);
+                    foreach (const KoTextRange *range, textRangesAfter) {
+                        range->saveOdf(context, currentFragment.position()+1, KoTextRange::EndTag);
+                    }
 
-		  //
-		  // Track the end marker for matched pairs so we produce valid
-		  // ODF
-		  //
-		  if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {
-		      kDebug(30015) << "found kometa, type:" << z->type();
-		      if (z->type() == KoTextMeta::StartBookmark)
-			  currentPairedInlineObjectsStack->push(z->endBookmark());
-		      if (z->type() == KoTextMeta::EndBookmark
-			      && !currentPairedInlineObjectsStack->isEmpty())
-			  currentPairedInlineObjectsStack->pop();
-		  }/* else if (KoBookmark* z = dynamic_cast<KoBookmark*>(inlineObject)) {
-		      if (z->type() == KoBookmark::StartBookmark)
-			  currentPairedInlineObjectsStack->push(z->endBookmark());
-		      if (z->type() == KoBookmark::EndBookmark
-			      && !currentPairedInlineObjectsStack->isEmpty())
-			  currentPairedInlineObjectsStack->pop();
-		  }*/
+                    //
+                    // Track the end marker for matched pairs so we produce valid
+                    // ODF
+                    //
+                    if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {
+                        kDebug(30015) << "found kometa, type:" << z->type();
+                        if (z->type() == KoTextMeta::StartBookmark)
+                            currentPairedInlineObjectsStack->push(z->endBookmark());
+                        if (z->type() == KoTextMeta::EndBookmark
+                                && !currentPairedInlineObjectsStack->isEmpty())
+                            currentPairedInlineObjectsStack->pop();
+                    }/* else if (KoBookmark* z = dynamic_cast<KoBookmark*>(inlineObject)) {
+                        if (z->type() == KoBookmark::StartBookmark)
+                            currentPairedInlineObjectsStack->push(z->endBookmark());
+                        if (z->type() == KoBookmark::EndBookmark
+                                && !currentPairedInlineObjectsStack->isEmpty())
+                            currentPairedInlineObjectsStack->pop();
+                    }*/
+                }
             } else {
                 // Normal block, easier to handle
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);

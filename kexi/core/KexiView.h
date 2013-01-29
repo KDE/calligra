@@ -70,7 +70,9 @@ public:
  KexiView object can be also allocated without attaching it KexiWindow,
  especially within dock window. see KexiMainWindow::initNavigator() to see example
  how KexiBrowser does this.
-*/
+
+ @todo add some protected access methods
+ */
 class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 {
     Q_OBJECT
@@ -363,11 +365,6 @@ protected:
 
     void toggleViewModeButtonBack();
 
-#ifdef __GNUC__
-#warning todo: add some protected access methods
-#else
-#pragma WARNING( todo: add some protected access methods )
-#endif
     /*
 
         KexiMainWindow *m_mainWin;

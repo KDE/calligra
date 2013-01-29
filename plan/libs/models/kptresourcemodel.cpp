@@ -1526,6 +1526,7 @@ AllocatedResourceItemModel::AllocatedResourceItemModel( QObject *parent )
 
 int AllocatedResourceItemModel::columnCount( const QModelIndex &idx ) const
 {
+    Q_UNUSED(idx);
     return 2;
 }
 

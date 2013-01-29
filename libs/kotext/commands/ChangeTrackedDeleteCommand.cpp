@@ -29,7 +29,6 @@
 #include <KoChangeTrackerElement.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoTextAnchor.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoList.h>
@@ -246,9 +245,12 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
         QChar charAtPos = m_document.data()->characterAt(checker.position());
         checker.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
         if (inlineTextObjectManager->inlineTextObject(checker) && charAtPos == QChar::ObjectReplacementCharacter) {
-	    KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineTextObjectManager->inlineTextObject(checker));
-	    if (anchor)
-		shapesInSelection.push_back(anchor->shape());
+        /* This has changed but since this entire command is going away - let's not bother
+                KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineTextObjectManager->inlineTextObject(checker));
+                if (anchor)
+                    shapesInSelection.push_back(anchor->shape());
+        */
+           }
         }
         checker.setPosition(checker.position());
     }

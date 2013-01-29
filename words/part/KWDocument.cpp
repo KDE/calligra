@@ -47,7 +47,7 @@
 #include <changetracker/KoChangeTracker.h>
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
@@ -156,7 +156,7 @@ void KWDocument::addShape(KoShape *shape)
     addShape(shape, 0);
 }
 
-void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
+void KWDocument::addShape(KoShape* shape, KoShapeAnchor* anchor)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     kDebug(32001) << "shape=" << shape << "frame=" << frame;
@@ -199,19 +199,21 @@ void KWDocument::removeShape(KoShape *shape)
 
 void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command)
 {
-    QMap<KoTextEditor *, QList<KoTextAnchor *> > anchors;
+    QMap<KoTextEditor *, QList<KoShapeAnchor *> > anchors;
     foreach (KoShape *shape, shapes) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         if (frame && frame->shape()) {
-            KoTextAnchor *anchor = frame->anchor();
-            const QTextDocument *document = anchor ? anchor->document(): 0;
-            if (document) {
-                KoTextEditor *editor = KoTextDocument(document).textEditor();
-                anchors[editor].append(anchor);
+            KoShapeAnchor *anchor = frame->anchor();
+            if (anchor && anchor->textLocation()) {
+                const QTextDocument *document = anchor->textLocation()->document();
+                if (document) {
+                    KoTextEditor *editor = KoTextDocument(document).textEditor();
+                    anchors[editor].append(anchor);
+                }
             }
         }
     }
-    QMap<KoTextEditor *, QList<KoTextAnchor *> >::const_iterator it(anchors.constBegin());
+    QMap<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator it(anchors.constBegin());
     for (; it != anchors.constEnd(); ++it) {
         it.key()->removeAnchors(it.value(), command);
     }
@@ -805,27 +807,27 @@ KWFrame* KWDocument::findClosestFrame(KoShape* shape) const
     return result;
 }
 
-KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape) const
+KoShapeAnchor* KWDocument::anchorOfShape(KoShape *shape) const
 {
     Q_ASSERT(mainFrameSet());
     Q_ASSERT(shape);
 
     // try and find out if shape is already anchored
     foreach (KoInlineObject *inlineObject, inlineTextObjectManager()->inlineTextObjects()) {
-        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
+        KoShapeAnchor *anchor = dynamic_cast<KoShapeAnchor *>(inlineObject);
         if (anchor && anchor->shape() == shape) {
             return anchor;
         }
     }
 
     KWFrame *frame = frameOfShape(shape);
-    KoTextAnchor *anchor = frame->anchor();
+    KoShapeAnchor *anchor = frame->anchor();
 
     if (!anchor) {
-        anchor = new KoTextAnchor(shape);
-        anchor->setAnchorType(KoTextAnchor::AnchorPage);
-        anchor->setHorizontalPos(KoTextAnchor::HFromLeft);
-        anchor->setVerticalPos(KoTextAnchor::VFromTop);
+        anchor = new KoShapeAnchor(shape);
+        anchor->setAnchorType(KoShapeAnchor::AnchorPage);
+        anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
+        anchor->setVerticalPos(KoShapeAnchor::VFromTop);
         frame->setAnchor(anchor);
     }
 

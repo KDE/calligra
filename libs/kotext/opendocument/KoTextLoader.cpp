@@ -50,7 +50,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoTableColumnAndRowStyleManager.h>
-#include <KoTextAnchor.h>
+#include <KoAnchorInlineObject.h>
+#include <KoAnchorTextRange.h>
 #include <KoTextBlockData.h>
 #include "KoTextDebug.h"
 #include "KoTextDocument.h"
@@ -1461,22 +1462,27 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
         return 0;
     }
 
-    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    KoShapeAnchor *anchor = new KoShapeAnchor(shape);
     anchor->loadOdf(element, d->context);
     d->textSharedData->shapeInserted(shape, element, d->context, anchor);
 
     // page anchored shapes are handled differently
-    if (anchor->anchorType() == KoTextAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {
+    if (anchor->anchorType() == KoShapeAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {
         // nothing else to do
-    } else {
-        shape->setVisible(false); // make it invisible until layouting
+    } else if (anchor->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
+        KoAnchorInlineObject *anchorObject = new KoAnchorInlineObject(anchor);
 
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {
-
-	    QTextCharFormat format = cursor.charFormat();
-            textObjectManager->insertInlineObject(cursor, anchor);
+            textObjectManager->insertInlineObject(cursor, anchorObject);
         }
+    } else { // KoShapeAnchor::AnchorToCharacter or KoShapeAnchor::AnchorParagraph
+        KoAnchorTextRange *anchorRange = new KoAnchorTextRange(anchor, cursor);
+
+        KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
+
+        anchorRange->setManager(textRangeManager);
+        textRangeManager->insert(anchorRange);
     }
     return shape;
 }
