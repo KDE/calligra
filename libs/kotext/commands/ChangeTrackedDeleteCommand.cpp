@@ -250,7 +250,6 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
                 if (anchor)
                     shapesInSelection.push_back(anchor->shape());
         */
-           }
         }
         checker.setPosition(checker.position());
     }
