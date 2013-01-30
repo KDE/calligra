@@ -2,7 +2,7 @@
 Name=Image Docker
 Name[bs]=Slikovni Doker
 Name[ca]=Acoblador d'imatges
-Name[ca@valencia]=Amarradors d'imatges
+Name[ca@valencia]=Acoblador d'imatges
 Name[cs]=Dok obrázků
 Name[da]=Billed-dokker
 Name[de]=Bilddocker
@@ -31,7 +31,7 @@ Name[zh_TW]=影像嵌入器
 Comment=Docker for reference images
 Comment[bs]=Doker za obavještajne slike
 Comment[ca]=Acoblador per a imatges de referència
-Comment[ca@valencia]=Amarrador per a imatges de referència
+Comment[ca@valencia]=Acoblador per a imatges de referència
 Comment[cs]=Dok pro referenční obrázky
 Comment[da]=Dokker til referencebilleder
 Comment[el]=Προσάρτηση για εικόνες παραπομπής

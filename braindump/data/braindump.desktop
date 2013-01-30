@@ -5,6 +5,7 @@ Exec=braindump %u
 GenericName=Notes and idea gathering
 GenericName[bs]=Skupljanje bilješki i ideja
 GenericName[ca]=Notes i recull d'idees
+GenericName[ca@valencia]=Notes i recull d'idees
 GenericName[cs]=Poznámky a shromažďování nápadů
 GenericName[da]=Noter og idesamling
 GenericName[de]=Notizen und Ideen sammeln
