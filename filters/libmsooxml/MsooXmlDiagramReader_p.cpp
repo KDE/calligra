@@ -2703,8 +2703,7 @@ void LinearAlgorithm::virtualDoLayout() {
             kDebug() << "YVAL: " << y;
             y = childs[ i ]->finalValues()[ "t" ];
         }
-        if ( childs[ i ]->algorithm() != AlgorithmAtom::SpaceAlg )
-        {
+        if (childs[ i ]->algorithm()->m_type != AlgorithmAtom::SpaceAlg) {
             if ( !firstNSpaceNode )
                 firstNSpaceNode = childs[ i ];
             lastNSpaceNode = childs[ i ];

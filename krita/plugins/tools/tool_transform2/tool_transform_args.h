@@ -22,6 +22,7 @@
 #define TOOL_TRANSFORM_ARGS_H_
 
 #include <QPointF>
+#include <QVector3D>
 #include <kis_warptransform_worker.h>
 #include <kis_filter_strategy.h>
 
@@ -54,8 +55,15 @@ public:
      * Use setPoints method to set those vectors.
      */
     ToolTransformArgs(TransformMode mode,
-                      QPointF translate, QPointF rotationCenterOffset, double aX, double aY, double aZ, double scaleX, double scaleY, double shearX, double shearY,
-                      KisWarpTransformWorker::WarpType warpType, double alpha, QPointF previewPos, bool defaultPoints);
+                      QPointF transformedCenter,
+                      QPointF originalCenter,
+                      QPointF rotationCenterOffset,
+                      double aX, double aY, double aZ,
+                      double scaleX, double scaleY,
+                      double shearX, double shearY,
+                      KisWarpTransformWorker::WarpType warpType,
+                      double alpha,
+                      bool defaultPoints);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 
@@ -88,9 +96,6 @@ public:
     inline double alpha() const {
         return m_alpha;
     }
-    inline QPointF previewPos() const {
-        return m_previewPos;
-    }
     inline bool defaultPoints() const {
         return m_defaultPoints;
     }
@@ -108,16 +113,16 @@ public:
     inline void setAlpha(double alpha) {
         m_alpha = alpha;
     }
-    inline void setPreviewPos(QPointF previewPos) {
-        m_previewPos = previewPos;
-    }
     inline void setDefaultPoints(bool defaultPoints) {
         m_defaultPoints = defaultPoints;
     }
 
     //"free transform"-related
-    inline QPointF translate() const {
-        return m_translate;
+    inline QPointF transformedCenter() const {
+        return m_transformedCenter;
+    }
+    inline QPointF originalCenter() const {
+        return m_originalCenter;
     }
     inline QPointF rotationCenterOffset() const {
         return m_rotationCenterOffset;
@@ -130,6 +135,12 @@ public:
     }
     inline double aZ() const {
         return m_aZ;
+    }
+    inline QVector3D cameraPos() const {
+        return m_cameraPos;
+    }
+    inline QVector3D eyePos() const {
+        return m_eyePos;
     }
     inline double scaleX() const {
         return m_scaleX;
@@ -147,8 +158,11 @@ public:
         return m_shearY;
     }
 
-    inline void setTranslate(QPointF translate) {
-        m_translate = translate;
+    inline void setTransformedCenter(QPointF transformedCenter) {
+        m_transformedCenter = transformedCenter;
+    }
+    inline void setOriginalCenter(QPointF originalCenter) {
+        m_originalCenter = originalCenter;
     }
     inline void setRotationCenterOffset(QPointF rotationCenterOffset) {
         m_rotationCenterOffset = rotationCenterOffset;
@@ -161,6 +175,12 @@ public:
     }
     inline void setAZ(double aZ) {
         m_aZ = aZ;
+    }
+    inline void setCameraPos(const QVector3D &pos) {
+        m_cameraPos = pos;
+    }
+    inline void setEyePos(const QVector3D &pos) {
+        m_eyePos = pos;
     }
     inline void setScaleX(double scaleX) {
         m_scaleX = scaleX;
@@ -190,7 +210,7 @@ public:
         return m_filter;
     }
 
-    bool isIdentity(QPointF originalTranslate) const;
+    bool isIdentity() const;
 
 private:
     void clear();
@@ -206,17 +226,19 @@ private:
     QVector<QPointF> m_transfPoints;
     KisWarpTransformWorker::WarpType m_warpType;
     double m_alpha;
-    QPointF m_previewPos;
 
     //'free transform'-related
     // basically the arguments taken by the transform worker
-    QPointF m_translate;
+    QPointF m_transformedCenter;
+    QPointF m_originalCenter;
     QPointF m_rotationCenterOffset; // the position of the rotation center relative to
                                     // the original top left corner of the selection
                                     // before any transformation
     double m_aX;
     double m_aY;
     double m_aZ;
+    QVector3D m_cameraPos;
+    QVector3D m_eyePos;
     double m_scaleX;
     double m_scaleY;
     double m_shearX;

@@ -21,6 +21,7 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <KoIcon.h>
 #include <calligraversion.h>
 
 static const char* description = I18N_NOOP("A Vector Graphics Drawing Application.");
@@ -40,6 +41,7 @@ KAboutData * newKarbonAboutData()
         ki18n("You are invited to participate in any way."),
         "http://www.calligra.org/karbon/");
     aboutData->setProductName("karbon"); // for bugs.kde.org
+    aboutData->setProgramIconName(koIconName("calligrakarbon"));
     aboutData->addAuthor(
         ki18n("Rob Buis"),
         KLocalizedString(),

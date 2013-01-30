@@ -51,6 +51,8 @@ KoM2MMLFormulaTool::KoM2MMLFormulaTool(KoCanvasBase* canvas): KoToolBase(canvas)
 
 void KoM2MMLFormulaTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& shapes)
 {
+    Q_UNUSED(toolActivation);
+
     foreach (KoShape *shape, shapes) {
         m_formulaShape = dynamic_cast<KoFormulaShape*>( shape );
         if( m_formulaShape )
@@ -81,22 +83,23 @@ void KoM2MMLFormulaTool::activate(KoToolBase::ToolActivation toolActivation, con
 
 void KoM2MMLFormulaTool::mouseMoveEvent(KoPointerEvent* event)
 {
-
+    Q_UNUSED(event);
 }
 
 void KoM2MMLFormulaTool::mousePressEvent(KoPointerEvent* event)
 {
-
+    Q_UNUSED(event);
 }
 
 void KoM2MMLFormulaTool::mouseReleaseEvent(KoPointerEvent* event)
 {
-
+    Q_UNUSED(event);
 }
 
 void KoM2MMLFormulaTool::paint(QPainter& painter, const KoViewConverter& converter)
 {
-
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 QWidget* KoM2MMLFormulaTool::createOptionWidget()
@@ -170,7 +173,7 @@ void KoM2MMLFormulaTool::textEdited()
     } else {
 #endif
         std::string source = QStringtoStdString(m_lineEdit->text());
-        source = "$" + source + "$";
+        source = '$' + source + '$';
         char * mathml = itex2MML_parse (source.c_str(), source.size());
         
         if(mathml)

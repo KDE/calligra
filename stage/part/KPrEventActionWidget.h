@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOEVENTACTIONWIDGET_H
-#define KOEVENTACTIONWIDGET_H
+#ifndef KPREVENTACTIONWIDGET_H
+#define KPREVENTACTIONWIDGET_H
 
 #include <QWidget>
 
@@ -51,4 +51,4 @@ signals:
     void addCommand(KUndo2Command *command);
 };
 
-#endif /* KOEVENTACTIONWIDGET_H */
+#endif // KPREVENTACTIONWIDGET_H

@@ -1416,7 +1416,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
     if (res == true) {
         //todo
         KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-        res = conn->createTable(tempData()->table, options & KexiView::OverwriteExistingObject);
+        res = conn->createTable(tempData()->table, options & KexiView::OverwriteExistingData);
         if (res == true) {
             res = KexiMainWindowIface::global()->project()->removeUserDataBlock(tempData()->table->id());
         }
@@ -1435,6 +1435,29 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
         tempData()->table = 0;
     }
     return tempData()->table;
+}
+
+KexiDB::SchemaData* KexiTableDesignerView::copyData(const KexiDB::SchemaData& sdata,
+                                                     KexiView::StoreNewDataOptions options,
+                                                     bool &cancel)
+{
+    if (!tempData()->table) {
+        kWarning() << "Cannot copy data without source table (tempData()->table)";
+        return 0;
+    }
+    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KexiDB::TableSchema *copiedTable = conn->copyTable(*tempData()->table, sdata);
+    if (!copiedTable) {
+        return 0;
+    }
+    if (!KexiMainWindowIface::global()->project()->copyUserDataBlock(tempData()->table->id(),
+                                                                     copiedTable->id()))
+    {
+        conn->dropTable(copiedTable);
+        delete copiedTable;
+        return 0;
+    }
+    return copiedTable;
 }
 
 tristate KexiTableDesignerView::storeData(bool dontAsk)

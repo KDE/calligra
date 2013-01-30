@@ -1703,7 +1703,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
 
     if (imageBullet) {
         QString pictureSize = bulletSize;
-        if (pictureSize.endsWith("%")) {
+        if (pictureSize.endsWith(QLatin1Char('%'))) {
             pictureSize.chop(1);
             bool ok = false;
             qreal size = pictureSize.toDouble(&ok);

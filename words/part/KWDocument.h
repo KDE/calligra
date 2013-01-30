@@ -47,7 +47,7 @@ class KoInlineTextObjectManager;
 class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoShapeContainer;
 class KoShapeController;
 class KoPart;
@@ -76,7 +76,7 @@ public:
     // reimplemented from KoShapeBasedDocumentBase
     virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
 
-    void addShape(KoShape *shape, KoTextAnchor *anchor);
+    void addShape(KoShape *shape, KoShapeAnchor *anchor);
 
     // KoDocument interface
     /// reimplemented from KoDocument
@@ -187,7 +187,7 @@ public:
     /// find the frame closest to the given shape or return 0
     KWFrame *findClosestFrame(KoShape *shape) const;
 
-    KoTextAnchor *anchorOfShape(KoShape *shape) const;
+    KoShapeAnchor *anchorOfShape(KoShape *shape) const;
 
     KWFrame *frameOfShape(KoShape *shape) const;
 

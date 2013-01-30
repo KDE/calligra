@@ -357,9 +357,9 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
 
     // Remove thousands separators if necessary
     if (!thousandsSep) {
-        QString seperator = m_converter->settings()->locale()->thousandsSeparator();
-        if (!seperator.isNull()) {
-            localizedNumber.remove(seperator);
+        const QString separator = m_converter->settings()->locale()->thousandsSeparator();
+        if (!separator.isNull()) {
+            localizedNumber.remove(separator);
         }
     }
 

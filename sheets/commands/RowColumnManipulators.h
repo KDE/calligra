@@ -41,7 +41,7 @@ class RowFormat;
 class ResizeColumnManipulator : public AbstractRegionCommand
 {
 public:
-    ResizeColumnManipulator(KUndo2Command* parent = 0);
+    explicit ResizeColumnManipulator(KUndo2Command *parent = 0);
     ~ResizeColumnManipulator();
 
     void setSize(double size) {
@@ -65,7 +65,7 @@ private:
 class ResizeRowManipulator : public AbstractRegionCommand
 {
 public:
-    ResizeRowManipulator(KUndo2Command* parent = 0);
+    explicit ResizeRowManipulator(KUndo2Command *parent = 0);
     ~ResizeRowManipulator();
 
     void setSize(double size) {
@@ -89,7 +89,7 @@ private:
 class AdjustColumnRowManipulator : public AbstractRegionCommand
 {
 public:
-    AdjustColumnRowManipulator(KUndo2Command* parent = 0);
+    explicit AdjustColumnRowManipulator(KUndo2Command *parent = 0);
     virtual ~AdjustColumnRowManipulator();
 
     virtual bool process(Element*);
@@ -129,7 +129,7 @@ private:
 class HideShowManipulator : public AbstractRegionCommand
 {
 public:
-    HideShowManipulator(KUndo2Command* parent = 0);
+    explicit HideShowManipulator(KUndo2Command *parent = 0);
     virtual ~HideShowManipulator();
 
     virtual bool process(Element*);
@@ -161,7 +161,7 @@ private:
 class InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
 public:
-    InsertDeleteColumnManipulator(KUndo2Command *parent = 0);
+    explicit InsertDeleteColumnManipulator(KUndo2Command *parent = 0);
     virtual ~InsertDeleteColumnManipulator();
 
     void setTemplate(const ColumnFormat &columnFormat);
@@ -189,7 +189,7 @@ private:
 class InsertDeleteRowManipulator : public AbstractRegionCommand
 {
 public:
-    InsertDeleteRowManipulator(KUndo2Command *parent = 0);
+    explicit InsertDeleteRowManipulator(KUndo2Command *parent = 0);
     virtual ~InsertDeleteRowManipulator();
 
     void setTemplate(const RowFormat &rowFormat);

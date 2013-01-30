@@ -55,7 +55,7 @@ static double GammaHelp(double& x, bool& reflect)
     double res, anum;
     res = 1.0;
     anum = x;
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; ++i) {
         anum += 1.0;
         res += c[i] / anum;
     }
@@ -760,7 +760,7 @@ Value ValueCalc::fact(int which, int end)
     Value res = Value(1);
     while (which > end) {
         res = mul(res, which);
-        which--;
+        --which;
     }
     return res;
 }
@@ -851,7 +851,7 @@ Value ValueCalc::base(const Value &val, int base, int prec, int minLength)
         result += '.'; value = value - (int)numToDouble(value);
 
         int ix;
-        for (int i = 0; i < prec; i++) {
+        for (int i = 0; i < prec; ++i) {
             ix = (int) numToDouble(value * base);
             result += "0123456789abcdefghijklmnopqrstuvwxyz"[ix];
             value = base * (value - (double)ix / base);
@@ -1063,7 +1063,7 @@ Value ValueCalc::phi(Value x)
 static double taylor_helper(double* pPolynom, uint nMax, double x)
 {
     double nVal = pPolynom[nMax];
-    for (int i = nMax - 1; i >= 0; i--) {
+    for (int i = nMax - 1; i >= 0; --i) {
         nVal = pPolynom[i] + (nVal * x);
     }
     return nVal;
@@ -1369,7 +1369,7 @@ Value ValueCalc::GetLogGamma(Value _x)
 //   double cut1 = dx - dgamma;
 //   double cut2 = dx * 10000000000.0;
 //
-//   for ( int i=1; i<=maxit; i++ ) {
+//   for ( int i=1; i<=maxit; ++i ) {
 //     double ai = i;
 //     term = dx * term / ( dgamma + ai );
 //     sum += term;
@@ -1456,7 +1456,7 @@ Value ValueCalc::GetGammaDist(Value _x, Value _alpha, Value _beta)
         pn3 = x + 1.0;
         pn4 = x * b;
         sum = pn3 / pn4;
-        for (n = 1; ; n++) {
+        for (n = 1; ; ++n) {
 //       kDebug()<<"n="<<n<<" sum="<< sum;
             a += 1.0; // =   n+1 -alpha
             b += 2.0; // = 2(n+1)-alph+x
@@ -1539,7 +1539,7 @@ Value ValueCalc::GetBeta(Value _x, Value _alpha,
             cf = a2 * fnorm;
         }
         cfnew = 1.0;
-        for (uint j = 1; j <= 100; j++) {
+        for (uint j = 1; j <= 100; ++j) {
             rm = (double) j;
             apl2m = fA + 2.0 * rm;
             d2m = rm * (fB - rm) * x / ((apl2m - 1.0) * apl2m);
@@ -1880,8 +1880,8 @@ void ValueCalc::twoArrayWalk(const Value &a1, const Value &a2,
         res = Value::errorVALUE();
         return;
     }
-    for (int r = 0; r < rows; r++)
-        for (int c = 0; c < cols; c++) {
+    for (int r = 0; r < rows; ++r)
+        for (int c = 0; c < cols; ++c) {
             Value v1 = a1.element(c, r);
             Value v2 = a2.element(c, r);
             if (v1.isArray() && v2.isArray())
@@ -1961,8 +1961,8 @@ Value ValueCalc::sumIf(const Value &range, const Condition &cond)
 
     unsigned int rows = range.rows();
     unsigned int cols = range.columns();
-    for (unsigned int r = 0; r < rows; r++)
-        for (unsigned int c = 0; c < cols; c++) {
+    for (unsigned int r = 0; r < rows; ++r)
+        for (unsigned int c = 0; c < cols; ++c) {
             Value v = range.element(c, r);
 
             if (v.isArray())
@@ -1999,8 +1999,8 @@ Value ValueCalc::sumIf(const Cell &sumRangeStart, const Value &range, const Cond
 
     unsigned int rows = range.rows();
     unsigned int cols = range.columns();
-    for (unsigned int r = 0; r < rows; r++)
-        for (unsigned int c = 0; c < cols; c++) {
+    for (unsigned int r = 0; r < rows; ++r)
+        for (unsigned int c = 0; c < cols; ++c) {
             Value v = range.element(c, r);
             if (v.isArray())
                 return Value::errorVALUE();
@@ -2026,9 +2026,9 @@ Value ValueCalc::sumIfs(const Cell &sumRangeStart, QList<Value> range, QList<Con
 
     unsigned int rows = range[0].rows();
     unsigned int cols = range[0].columns();
-    for (unsigned int r = 0; r < rows; r++) {
-        for (unsigned int c = 0; c < cols; c++) {
-            for (unsigned int i = 1; i <= limit ; i++) {
+    for (unsigned int r = 0; r < rows; ++r) {
+        for (unsigned int c = 0; c < cols; ++c) {
+            for (unsigned int i = 1; i <= limit ; ++i) {
 
                 if(range[i].isError())
                     return range[0];
@@ -2077,8 +2077,8 @@ Value ValueCalc::averageIf(const Value &range, const Condition &cond)
     unsigned int rows = range.rows();
     unsigned int cols = range.columns();
     unsigned int cnt = 0;
-    for (unsigned int r = 0; r < rows; r++)
-        for (unsigned int c = 0; c < cols; c++) {
+    for (unsigned int r = 0; r < rows; ++r)
+        for (unsigned int c = 0; c < cols; ++c) {
             Value v = range.element(c, r);
 
             if (v.isArray())
@@ -2089,7 +2089,7 @@ Value ValueCalc::averageIf(const Value &range, const Condition &cond)
                 if (v.isNumber()) {// only add numbers, no conversion from string allowed
                     //kDebug()<<"add "<<v;
                     res = add(res, v);
-                    cnt++;
+                    ++cnt;
                 }
             }
         }
@@ -2115,8 +2115,8 @@ Value ValueCalc::averageIf(const Cell &avgRangeStart, const Value &range, const 
     unsigned int rows = range.rows();
     unsigned int cols = range.columns();
     unsigned int cnt = 0;
-    for (unsigned int r = 0; r < rows; r++)
-        for (unsigned int c = 0; c < cols; c++) {
+    for (unsigned int r = 0; r < rows; ++r)
+        for (unsigned int c = 0; c < cols; ++c) {
             Value v = range.element(c, r);
 
             if (v.isArray())
@@ -2127,7 +2127,7 @@ Value ValueCalc::averageIf(const Cell &avgRangeStart, const Value &range, const 
                 if (val.isNumber()) {// only add numbers, no conversion from string allowed
                     //kDebug()<<"add "<<val;
                     res = add(res, val);
-                    cnt++;
+                    ++cnt;
                 }
             }
         }
@@ -2147,10 +2147,10 @@ Value ValueCalc::averageIfs(const Cell &avgRangeStart, QList<Value> range, QList
     unsigned int rows = range[0].rows();
     unsigned int cols = range[0].columns();
     unsigned int cnt = 0;
-    for (unsigned int r = 0; r < rows; r++) {
-        for (unsigned int c = 0; c < cols; c++) {
+    for (unsigned int r = 0; r < rows; ++r) {
+        for (unsigned int c = 0; c < cols; ++c) {
             bool flag = true;
-            for (unsigned int i = 1; i <= limit ; i++) {
+            for (unsigned int i = 1; i <= limit ; ++i) {
 
                 if(range[i].isError())
                     return range[0];
@@ -2175,7 +2175,7 @@ Value ValueCalc::averageIfs(const Cell &avgRangeStart, QList<Value> range, QList
                 val = range[0].element(c, r);
             }
             if (flag) {
-                cnt++;
+                ++cnt;
                 flag = true;
             }
             if (val.isNumber()) {// only add numbers, no conversion from string allowed
@@ -2218,7 +2218,7 @@ int ValueCalc::countIf(const Value &range, const Condition &cond)
         if (v.isArray())
             res += countIf(v, cond);
         else if (matches(cond, v))
-            res++;
+            ++res;
     }
 
     return res;
@@ -2236,10 +2236,10 @@ Value ValueCalc::countIfs(const Cell &cntRangeStart, QList<Value> range, QList<C
 
     unsigned int rows = range[0].rows();
     unsigned int cols = range[0].columns();
-    for (unsigned int r = 0; r < rows; r++) {
-        for (unsigned int c = 0; c < cols; c++) {
+    for (unsigned int r = 0; r < rows; ++r) {
+        for (unsigned int c = 0; c < cols; ++c) {
             bool flag = true;
-            for (unsigned int i = 0; i <= limit ; i++) {
+            for (unsigned int i = 0; i <= limit ; ++i) {
 
                 if(range[i].isError())
                     return range[0];
@@ -2433,25 +2433,25 @@ void ValueCalc::getCond(Condition &cond, Value val)
     cond.comp = isEqual;
     text = text.trimmed();
 
-    if (text.startsWith("<=")) {
+    if (text.startsWith(QLatin1String("<="))) {
         cond.comp = lessEqual;
         text = text.remove(0, 2);
-    } else if (text.startsWith(">=")) {
+    } else if (text.startsWith(QLatin1String(">="))) {
         cond.comp = greaterEqual;
         text = text.remove(0, 2);
-    } else if (text.startsWith("!=") || text.startsWith("<>")) {
+    } else if (text.startsWith(QLatin1String("!=")) || text.startsWith(QLatin1String("<>"))) {
         cond.comp = notEqual;
         text = text.remove(0, 2);
-    } else if (text.startsWith("==")) {
+    } else if (text.startsWith(QLatin1String("=="))) {
         cond.comp = isEqual;
         text = text.remove(0, 2);
-    } else if (text.startsWith('<')) {
+    } else if (text.startsWith(QLatin1Char('<'))) {
         cond.comp = isLess;
         text = text.remove(0, 1);
-    } else if (text.startsWith('>')) {
+    } else if (text.startsWith(QLatin1Char('>'))) {
         cond.comp = isGreater;
         text = text.remove(0, 1);
-    } else if (text.startsWith('=')) {
+    } else if (text.startsWith(QLatin1Char('='))) {
         cond.comp = isEqual;
         text = text.remove(0, 1);
     }

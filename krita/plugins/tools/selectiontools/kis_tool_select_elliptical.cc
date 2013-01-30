@@ -58,7 +58,6 @@ void KisToolSelectElliptical::keyPressEvent(QKeyEvent *event)
 
 void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
 {
-    KisSystemLocker locker(currentNode());
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
 
@@ -68,6 +67,8 @@ void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
         QTimer::singleShot(0, kisCanvas->view()->selectionManager(), SLOT(deselect()));
         return;
     }
+
+    KisSystemLocker locker(currentNode());
 
     KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Elliptical Selection"));
 

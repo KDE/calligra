@@ -211,7 +211,7 @@ public:
         itm = new ActionSelectorDialogTreeItem(i18n("Application actions"), this );
         itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "kaction");
         itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, "kaction");
-        itm->setIcon(koIcon("kexi"));
+        itm->setIcon(koIcon("calligrakexi"));
 
         KexiPart::PartInfoList *pl = Kexi::partManager().infoList();
         if (pl) {

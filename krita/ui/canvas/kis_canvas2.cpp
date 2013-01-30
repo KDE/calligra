@@ -71,7 +71,7 @@
 #include "input/kis_input_manager.h"
 #include <opengl2/kis_gl2_canvas_widget_factory.h>
 
-struct KisCanvas2::KisCanvas2Private
+class KisCanvas2::KisCanvas2Private
 {
 
 public:
@@ -104,6 +104,9 @@ public:
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     bool currentCanvasIsOpenGL;
+#ifdef HAVE_OPENGL
+    bool useTrilinearFiltering;
+#endif
     KoToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 
@@ -155,7 +158,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
 
     KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
-            globalShapeManager()->selection(), SIGNAL(selectionChanged()));
+            this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 }
@@ -625,5 +628,18 @@ void KisCanvas2::setCursor(const QCursor &cursor)
 {
     canvasWidget()->setCursor(cursor);
 }
+
+void KisCanvas2::slotSelectionChanged()
+{
+    KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(view()->activeLayer().data());
+    if (!shapeLayer) {
+        return;
+    }
+    m_d->shapeManager->selection()->deselectAll();
+    foreach(KoShape* shape, shapeLayer->shapeManager()->selection()->selectedShapes()) {
+        m_d->shapeManager->selection()->select(shape);
+    }
+}
+
 
 #include "kis_canvas2.moc"

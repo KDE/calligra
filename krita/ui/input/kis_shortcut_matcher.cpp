@@ -26,8 +26,9 @@
 #include "kis_gesture_shortcut.h"
 #include "kis_touch_shortcut.h"
 
-struct KisShortcutMatcher::Private
+class KisShortcutMatcher::Private
 {
+public:
     Private() : runningShortcut(0), readyShortcut(0), gestureShortcut(0), touchShortcut(0), suppressAllActions(false), usingTouch(false) {}
 
     QList<KisSingleActionShortcut*> singleActionShortcuts;

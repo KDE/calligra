@@ -1404,6 +1404,11 @@ bool KisImage::cancelStroke(KisStrokeId id)
     return result;
 }
 
+void KisImage::requestUndoDuringStroke()
+{
+    emit sigUndoDuringStrokeRequested();
+}
+
 void KisImage::requestStrokeCancellation()
 {
     emit sigStrokeCancellationRequested();

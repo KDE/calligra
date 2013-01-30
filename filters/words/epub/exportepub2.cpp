@@ -421,7 +421,6 @@ KoFilter::ConversionStatus ExportEpub2::extractMediaFiles(EpubFile *epubFile)
         if (!file.open(QIODevice::ReadOnly)) {
             kDebug(31000) << "Unable to open" << mediaSrc;
             return KoFilter::FileNotFound;
-            Qt::ArrowCursor;
         }
         mediaContent = file.readAll();
 

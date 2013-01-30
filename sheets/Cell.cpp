@@ -297,9 +297,9 @@ QString Cell::columnName(uint column)
     unsigned  digits = 1;
     unsigned  offset = 0;
 
-    column--;
+    --column;
 
-    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
+    for (unsigned limit = 26; column >= limit + offset; limit *= 26, ++digits)
         offset += limit;
 
     for (unsigned col = column - offset; digits; --digits, col /= 26)
@@ -2155,7 +2155,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
         QString tag;
         QString qml_link;
 
-        for (int i = 1; i < t.length(); i++) {
+        for (int i = 1; i < t.length(); ++i) {
             QChar ch = t[i];
             if (ch == '<') {
                 if (!inside_tag) {
@@ -2165,9 +2165,10 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
             } else if (ch == '>') {
                 if (inside_tag) {
                     inside_tag = false;
-                    if (tag.startsWith("a href=\"", Qt::CaseSensitive))
-                        if (tag.endsWith('"'))
-                            qml_link = tag.mid(8, tag.length() - 9);
+                    if (tag.startsWith(QLatin1String("a href=\""), Qt::CaseSensitive) &&
+                        tag.endsWith(QLatin1Char('"'))) {
+                        qml_link.remove(0, 8).chop(1);
+                    }
                     tag.clear();
                 }
             } else {

@@ -45,7 +45,7 @@ class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoBookmark;
 
 class QTextBlock;
@@ -77,7 +77,7 @@ public:
     };
     Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
 
-    KoTextEditor(QTextDocument *document);
+    explicit KoTextEditor(QTextDocument *document);
 
     virtual ~KoTextEditor();
 
@@ -133,6 +133,7 @@ private:
     friend class DeleteCommand;
     friend class InsertInlineObjectCommand;
     friend class InsertNoteCommand;
+    friend class ParagraphFormattingCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -211,7 +212,7 @@ public slots:
 
     void mergeAutoStyle(const QTextCharFormat &deltaCharFormat);
 
-    void mergeAutoStyle(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat);
+    void applyDirectFormatting(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat, const KoListLevelProperties &llp);
 
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
@@ -229,11 +230,11 @@ public slots:
     void updateInlineObjectPosition(int start = 0, int end = -1);
 
     /**
-     * Remove the KoTextAnchor objects from the document.
+     * Remove the KoShapeAnchor objects from the document.
      *
      * NOTE: Call this method only when the shapes belonging to the anchors have been deleted.
      */
-    void removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent);
+    void removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.
@@ -283,7 +284,7 @@ public slots:
      * change the current block's list properties
      */
     void setListProperties(const KoListLevelProperties &llp,
-                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList));
+                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList), KUndo2Command *parent = 0);
 
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods

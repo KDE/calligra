@@ -37,16 +37,16 @@ class KPrTimeLineView: public QWidget
 {
      Q_OBJECT
 public:
-    KPrTimeLineView(QWidget *parent = 0);
+    explicit KPrTimeLineView(QWidget *parent = 0);
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
     virtual bool eventFilter(QObject *target, QEvent *event);
 
 signals:
-    /// emited if an item is clicked (returns the index of the item clicked
+    /// emitted if an item is clicked (returns the index of the item clicked
     void clicked(const QModelIndex&);
 
-    /// emited if an item time range has changed (return the index of the item changed)
+    /// emitted if an item time range has changed (return the index of the item changed)
     void timeValuesChanged(const QModelIndex&);
 
 private:

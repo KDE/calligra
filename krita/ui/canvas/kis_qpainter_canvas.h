@@ -60,8 +60,6 @@ public:
     void setSmoothingEnabled(bool smooth);
 
 public: // QWidget
-    /// reimplemented method from superclass
-    bool event(QEvent *);
 
     /// reimplemented method from superclass
     void paintEvent(QPaintEvent * ev);
@@ -107,7 +105,7 @@ private slots:
 private:
     QImage m_buffer;
 
-    struct Private;
+    class Private;
     Private * const m_d;
 };
 

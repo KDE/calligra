@@ -136,8 +136,6 @@ public:
     void initConfig();
     void saveConfig();
 
-    void updateBorderButton();
-
     void addIgnoreWordAll(const QString & word);
     void clearIgnoreWordAll();
     void addIgnoreWordAllList(const QStringList & _lst);

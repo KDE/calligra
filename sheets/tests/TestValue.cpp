@@ -137,9 +137,9 @@ void TestValue::testDate()
     QDate refDate(1899, 12, 31);
     v1 = new Value();
     bool date_error = 0;
-    for (unsigned y = 1900; !date_error && y < 2050; y++)
-        for (unsigned m = 1; !date_error && m <= 12; m++)
-            for (unsigned d = 1; !date_error && d <= 31; d++) {
+    for (unsigned y = 1900; !date_error && y < 2050; ++y)
+        for (unsigned m = 1; !date_error && m <= 12; ++m)
+            for (unsigned d = 1; !date_error && d <= 31; ++d) {
                 QDate dv1 = QDate(y, m, d);
                 if (!dv1.isValid()) continue;
                 long double serialNo = -dv1.daysTo(refDate) + 1.0;
@@ -159,9 +159,9 @@ void TestValue::testTime()
     v1 = new Value();
     *v1 = Value(Value(QTime(0, 0, 0), &calculationSettings));
     QCOMPARE(v1->type(), Value::Float);
-    for (unsigned h = 0; h < 24; h++)
-        for (unsigned m = 0; m < 60; m++)
-            for (unsigned s = 0; s < 60; s++) {
+    for (unsigned h = 0; h < 24; ++h)
+        for (unsigned m = 0; m < 60; ++m)
+            for (unsigned s = 0; s < 60; ++s) {
                 QTime t1 = QTime(h, m, s);
                 *v1 = Value(Value(t1, &calculationSettings));
                 QTime t2 = v1->asTime(&calculationSettings);
@@ -176,7 +176,7 @@ void TestValue::testTime()
     v1 = new Value();
     *v1 = Value(Value(QTime(0, 0, 0), &calculationSettings));
     QCOMPARE(v1->type(), Value::Float);
-    for (unsigned ms = 0; ms < 1000; ms++) {
+    for (unsigned ms = 0; ms < 1000; ++ms) {
         QTime t1 = QTime(1, 14, 2, ms);
         *v1 = Value(Value(t1, &calculationSettings));
         QTime t2 = v1->asTime(&calculationSettings);
@@ -244,18 +244,18 @@ void TestValue::testArray()
     // stress test, array of 1000x1000
     v1 = new Value(Value::Array);
     QCOMPARE(v1->type(), Value::Array);
-    for (unsigned r = 0; r < 1000; r++)
-        for (unsigned c = 0; c < 1000; c++) {
+    for (unsigned r = 0; r < 1000; ++r)
+        for (unsigned c = 0; c < 1000; ++c) {
             int index = 1000 * r + c;
             v1->setElement(c, r, Value(index));
         }
     int array_error = 0;
-    for (unsigned c = 0; !array_error && c < 1000; c++)
-        for (unsigned r = 0; !array_error && r < 1000; r++) {
+    for (unsigned c = 0; !array_error && c < 1000; ++c)
+        for (unsigned r = 0; !array_error && r < 1000; ++r) {
             int index = 1000 * r + c;
             v2 = new Value(v1->element(c, r));
-            if (v2->type() != Value::Integer) array_error++;
-            if (v2->asInteger() != index) array_error++;
+            if (v2->type() != Value::Integer) ++array_error;
+            if (v2->asInteger() != index) ++array_error;
             delete v2;
         }
     QCOMPARE(array_error, (int)0);
