@@ -2,6 +2,7 @@
 Name=Direct Data
 Name[bs]=Direktni podaci
 Name[ca]=Dades directes
+Name[ca@valencia]=Dades directes
 Name[da]=Direkte data
 Name[de]=Direkte Daten
 Name[el]=Άμεσα δεδομένα
@@ -20,5 +21,6 @@ Name[pt_BR]=Dados diretos
 Name[sk]=Priame dáta
 Name[sl]=Neposredni podatki
 Name[sv]=Direktdata
+Name[tr]=Doğrudan Veri
 Name[uk]=Дані з безпосереднім доступом
 Name[x-test]=xxDirect Dataxx

@@ -2,6 +2,7 @@
 Name=Off-page Reference
 Name[bs]=Referenca van stranice
 Name[ca]=Referència de fora de pàgina
+Name[ca@valencia]=Referència de fora de pàgina
 Name[da]=Henvisning væk fra siden
 Name[de]=Off-Page-Referenz
 Name[el]=Παραπομπή εκτός σελίδας
@@ -18,5 +19,6 @@ Name[pt]=Referência Fora da Página
 Name[pt_BR]=Referência fora da página
 Name[sk]=Vypnúť referencie strán
 Name[sv]=Referens till annan sida
+Name[tr]=Kapalı Sayfa Referansı
 Name[uk]=Посилання на іншу сторінку
 Name[x-test]=xxOff-page Referencexx

@@ -2,6 +2,7 @@
 Name=Sequential Data
 Name[bs]=Sekvencijalni podaci
 Name[ca]=Dades seqüencials
+Name[ca@valencia]=Dades seqüencials
 Name[da]=Sekventielle data
 Name[de]=Sequentielle Daten
 Name[el]=Ακολουθιακά δεδομένα
@@ -20,5 +21,6 @@ Name[pt_BR]=Dados sequenciais
 Name[sk]=Sekvenčné dáta
 Name[sl]=Zaporedni podatki
 Name[sv]=Sekvensiell data
+Name[tr]=Sıralı Veriler
 Name[uk]=Дані з послідовним доступом
 Name[x-test]=xxSequential Dataxx

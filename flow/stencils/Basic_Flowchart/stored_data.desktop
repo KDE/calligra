@@ -2,6 +2,7 @@
 Name=Stored Data
 Name[bs]=Spremljeni podaci
 Name[ca]=Dades emmagatzemades
+Name[ca@valencia]=Dades emmagatzemades
 Name[da]=Lagrede data
 Name[de]=Gespeicherte Daten
 Name[el]=Αποθηκευμένα δεδομένα
@@ -20,5 +21,6 @@ Name[pt_BR]=Dados armazenados
 Name[sk]=Uložené dáta
 Name[sl]=Shranjeni podatki
 Name[sv]=Lagrad data
+Name[tr]=Depolanan Veriler
 Name[uk]=Збережені дані
 Name[x-test]=xxStored Dataxx

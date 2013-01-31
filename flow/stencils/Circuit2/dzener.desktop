@@ -2,7 +2,7 @@
 Name=Diagonal Zener Diode
 Name[bs]=Dijagonalna Zener dioda
 Name[ca]=Diode Zener diagonal
-Name[ca@valencia]=Dione Zener diagonal
+Name[ca@valencia]=Diode Zener diagonal
 Name[da]=Diagonal zenerdiode
 Name[de]=Diagonale Zener-Diode
 Name[el]=Διαγώνια δίοδος Zener
@@ -22,6 +22,7 @@ Name[pt_BR]=Diodo de Zener diagonal
 Name[ru]=Диагональный зенеровский диод
 Name[sk]=Diagonálne Zenerova dióda
 Name[sv]=Diagonal Zener-diod
+Name[tr]=Diyagonal Zener Diyot
 Name[uk]=Стабілітрон (діагонально)
 Name[x-test]=xxDiagonal Zener Diodexx
 Name[zh_TW]=對角穩壓二極體

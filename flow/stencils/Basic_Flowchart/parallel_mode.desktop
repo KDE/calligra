@@ -2,7 +2,9 @@
 Name=Parallel Mode
 Name[bs]=Paralelni mod
 Name[ca]=Mode paral·lel
+Name[ca@valencia]=Mode paral·lel
 Name[da]=Paralleltilstand
+Name[de]=Parallelmodus
 Name[el]=Παράλληλη λειτουργία
 Name[es]=Modo paralelo
 Name[et]=Paralleelrežiim
@@ -18,5 +20,6 @@ Name[pt_BR]=Modo paralelo
 Name[sk]=Paralelný režim
 Name[sl]=Vzporedni način
 Name[sv]=Parallellt läge
+Name[tr]=Paralel Modu
 Name[uk]=Паралельний режим
 Name[x-test]=xxParallel Modexx

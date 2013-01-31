@@ -3,6 +3,7 @@ Type=Service
 Name=Flow Visio Import Filter
 Name[bs]=Flow Visio unosni Filter
 Name[ca]=Filtre d'exportació Visio del Flow
+Name[ca@valencia]=Filtre d'exportació Visio del Flow
 Name[cs]=Importní filtr formátu Flow Visio
 Name[da]=Visio-importfilter til Flow
 Name[de]=Flow-Visio-Importfilter

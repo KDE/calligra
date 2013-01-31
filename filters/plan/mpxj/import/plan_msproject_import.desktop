@@ -3,6 +3,7 @@ Type=Service
 Name=MS Project Import Filter
 Name[bs]=MS Project uvozni filter
 Name[ca]=Filtre d'importació de MS Project
+Name[ca@valencia]=Filtre d'importació de MS Project
 Name[da]=MS Project-importfilter
 Name[de]=MS-Projekt-Importfilter
 Name[el]=Φίλτρο εισαγωγής MS Project

@@ -2,6 +2,7 @@
 Name=Data
 Name[bs]=Podaci
 Name[ca]=Dades
+Name[ca@valencia]=Dades
 Name[cs]=Data
 Name[da]=Data
 Name[de]=Daten
@@ -21,6 +22,7 @@ Name[pt_BR]=Dados
 Name[sk]=Dáta
 Name[sl]=Podatki
 Name[sv]=Data
+Name[tr]=Veri
 Name[uk]=Дані
 Name[x-test]=xxDataxx
 Name[zh_CN]=数据

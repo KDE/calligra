@@ -2,6 +2,7 @@
 Name=Loop Limit
 Name[bs]=Ograničenje petlje
 Name[ca]=Límit de bucle
+Name[ca@valencia]=Límit de bucle
 Name[da]=Løkkebegrænsning
 Name[de]=Schleifenbegrenzung
 Name[el]=Όριο βρόχου
@@ -20,6 +21,7 @@ Name[pt_BR]=Limite de ciclo
 Name[sk]=Limit slučky
 Name[sl]=Omejitev zanke
 Name[sv]=Upprepningsgräns
+Name[tr]=Döngü Sınırı
 Name[uk]=Обмеження циклу
 Name[x-test]=xxLoop Limitxx
 Name[zh_CN]=循环限制
