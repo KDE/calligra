@@ -217,7 +217,7 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms koodf)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} ${QT_QTDECLARATIVE_LIBRARY} pigmentcms koodf)
 
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms koodf)
 target_link_libraries(flake kundo2)
@@ -225,7 +225,6 @@ target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake     
-            ${QT_QTDECLARATIVE_LIBRARY}
             ${OPENGL_LIBRARIES} 
             ${QT_QTOPENGL_LIBRARY})
 endif(HAVE_OPENGL)
