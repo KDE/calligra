@@ -69,10 +69,9 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoPart.h>
-
 #include <KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
+#include <KoDocumentRdf.h>
 #endif
 
 #include <KoProgressUpdater.h>
@@ -110,9 +109,19 @@ KWDocument::KWDocument(KoPart *part)
     }
 
     resourceManager()->setUndoStack(undoStack());
-    if (documentRdfBase()) {
-        documentRdfBase()->linkToResourceManager(resourceManager());
+    if (documentRdf()) {
+        documentRdf()->linkToResourceManager(resourceManager());
     }
+
+#ifdef SHOULD_BUILD_RDF
+    {
+        KoDocumentRdf *rdf = new KoDocumentRdf(this);
+        setDocumentRdf(rdf);
+    }
+
+#endif
+
+
 /* TODO reenable after release
     QVariant variant;
     variant.setValue(new KoChangeTracker(resourceManager()));

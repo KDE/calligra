@@ -89,7 +89,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWT
     Q_ASSERT(shapedata);
 
     writer.startElement(tag);
-    shapedata->saveOdf(context, m_document->documentRdfBase());
+    shapedata->saveOdf(context, m_document->documentRdf());
     writer.endElement();
 
     context.setOptions(options);
@@ -305,7 +305,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
             KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
-                shapeData->saveOdf(context, m_document->documentRdfBase());
+                shapeData->saveOdf(context, m_document->documentRdf());
             }
         }
     }
@@ -365,7 +365,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     // update references to xml:id to be to new xml:id
     // in the external Rdf
-    if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
+    if (KoDocumentRdfBase *rdf = m_document->documentRdf()) {
         QMap<QString, QString> m = sharedData->getRdfIdMapping();
         rdf->updateXmlIdReferences(m);
     }
