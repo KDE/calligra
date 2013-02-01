@@ -20,7 +20,10 @@
 
 #include "MainWindow.h"
 
+#ifdef HAVE_OPENGL
 #include <opengl2/kis_gl2_canvas.h>
+#include <QGLWidget>
+#endif
 
 #include <QApplication>
 #include <QResizeEvent>
@@ -28,7 +31,6 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 #include <QDir>
-#include <QGLWidget>
 #include <QFile>
 #include <QMessageBox>
 #include <QFileInfo>
