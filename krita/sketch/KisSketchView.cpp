@@ -18,8 +18,6 @@
  */
 #include "KisSketchView.h"
 
-#include <GL/glew.h>
-
 #include <QTimer>
 #include <QApplication>
 #include <QGraphicsScene>
@@ -29,9 +27,6 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QDebug>
-
-#include <QGLShaderProgram>
-#include <QGLBuffer>
 
 #include <kdebug.h>
 #include <kmimetype.h>
@@ -56,7 +51,6 @@
 #include <kundo2stack.h>
 
 #include "ProgressProxy.h"
-#include "KisSketchCanvasFactory.h"
 
 #include "kis_painter.h"
 #include "kis_layer.h"
@@ -70,7 +64,6 @@
 #include "kis_image.h"
 #include <kis_image_signal_router.h>
 #include "kis_clipboard.h"
-#include <opengl2/kis_gl2_canvas.h>
 #include <input/kis_input_manager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_zoom_manager.h>
@@ -81,11 +74,19 @@
 #include <kis_part2.h>
 #include <kis_canvas_decoration.h>
 
-#include "KisSketchCanvas.h"
 #include "KisSketchPart.h"
 #include "Settings.h"
 #include "cpuid.h"
 #include "DocumentManager.h"
+
+#ifdef HAVE_OPENGL
+#include <GL/glew.h>
+#include <opengl2/kis_gl2_canvas.h>
+#include "KisSketchCanvasFactory.h"
+#include "KisSketchCanvas.h"
+#include <QGLShaderProgram>
+#include <QGLBuffer>
+#endif
 
 class KisSketchView::Private
 {
@@ -122,9 +123,11 @@ public:
 
     QString file;
 
+#ifdef HAVE_OPENGL
     QGLShaderProgram *shader;
     QGLBuffer *vertexBuffer;
     QGLBuffer *indexBuffer;
+#endif
 
     int modelMatrixLocation;
     int viewMatrixLocation;
@@ -167,7 +170,9 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     KoZoomMode::setMaximumZoom(16.0);
 
     if (d->useOpenGL) {
+#ifdef HAVE_OPENGL
         KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
+#endif
     }
 
     d->configChanged();
@@ -199,7 +204,9 @@ KisSketchView::~KisSketchView()
 {
     if(d->doc) {
         if (d->useOpenGL) {
+#ifdef HAVE_OPENGL
             qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
+#endif
         }
 
         DocumentManager::instance()->closeDocument();
@@ -262,6 +269,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     }
 
     if (d->useOpenGL) {
+#ifdef HAVE_OPENGL
         qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
         d->shader->bind();
@@ -297,6 +305,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         d->indexBuffer->release();
         d->vertexBuffer->release();
         d->shader->release();
+#endif
     }
     else {
         if(d->zoomLevelChanged) {
@@ -362,6 +371,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 void KisSketchView::componentComplete()
 {
     if (d->useOpenGL) {
+#ifdef HAVE_OPENGL
         qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
         d->shader = new QGLShaderProgram(this);
@@ -408,6 +418,7 @@ void KisSketchView::componentComplete()
         indices << 0 << 1 << 2 << 0 << 2 << 3;
         d->indexBuffer->allocate(reinterpret_cast<void*>(indices.data()), indices.size() * sizeof(uint));
         d->indexBuffer->release();
+#endif
     }
 }
 
@@ -458,7 +469,9 @@ void KisSketchView::saveAs(const QString& fileName, const QString& mimeType)
 void KisSketchView::documentAboutToBeDeleted()
 {
     if (d->useOpenGL) {
+#ifdef HAVE_OPENGL
         qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
+#endif
     }
 
     if(d->undoAction)
@@ -503,9 +516,11 @@ void KisSketchView::documentChanged()
     KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
     if (d->useOpenGL) {
+#ifdef HAVE_OPENGL
         d->canvasWidget = d->canvas->canvasWidget();
         qobject_cast<KisSketchCanvas*>(d->canvasWidget)->initialize();
         connect(qobject_cast<KisSketchCanvas*>(d->canvasWidget), SIGNAL(renderFinished()), SLOT(update()));
+#endif
     }
     else {
         d->canvasWidget = d->canvas->canvasWidget();
