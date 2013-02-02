@@ -56,6 +56,7 @@
 #include <KoImageCollection.h>
 #include <KoResourcePopupAction.h>
 #include "KoZoomHandler.h"
+#include "KoColorPopupButton.h"
 
 static const char* const buttonnone[]={
     "16 16 3 1",
@@ -168,7 +169,7 @@ public:
     {
     }
 
-    QToolButton *colorButton;
+    KoColorPopupButton *colorButton;
     KoColorPopupAction *colorAction;
     KoResourcePopupAction *gradientAction;
     KoResourcePopupAction *patternAction;
@@ -229,7 +230,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(styleButtonPressed(int)));
 
-    d->colorButton = new QToolButton(this);
+    d->colorButton = new KoColorPopupButton(this);
     d->colorButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     layout->addWidget(d->colorButton);
 

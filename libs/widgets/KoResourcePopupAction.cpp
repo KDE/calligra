@@ -146,15 +146,13 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
 
 void KoResourcePopupAction::updateIcon()
 {
-    QSize iconSize(16, 16);
-//TODO discuss what is wanted exactly
-//     QToolButton *toolButton = dynamic_cast<QToolButton*>(parentWidget());
-//     if (toolButton) {
-//         iconSize = QSize(parentWidget()->width(), 16);
-//         toolButton->setIconSize(iconSize);
-//     } else {
-//         iconSize = QSize(16, 16);
-//     }
+    QSize iconSize;
+    QToolButton *toolButton = dynamic_cast<QToolButton*>(parentWidget());
+    if (toolButton) {
+        iconSize = QSize(toolButton->iconSize());
+    } else {
+        iconSize = QSize(16, 16);
+    }
 
     // This must be a QImage, as drawing to a QPixmap outside the
     // UI thread will cause sporadic crashes.

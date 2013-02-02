@@ -21,6 +21,7 @@ set(kowidgets_LIB_SRCS
     KoPagePreviewWidget.cpp
     KoPositionSelector.cpp
     KoSliderCombo.cpp
+    KoColorPopupButton.cpp
     KoUnitDoubleSpinBox.cpp
     KoZoomAction.cpp
     KoZoomController.cpp
