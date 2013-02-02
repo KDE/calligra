@@ -235,7 +235,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     secondLineLayout->addWidget(d->lineWidth);
 
     d->capNJoinButton = new CapNJoinButton(this);
-    d->capNJoinButton->setMinimumHeight(24);
+    d->capNJoinButton->setMinimumHeight(25);
     secondLineLayout->addWidget(d->capNJoinButton);
 
     d->colorButton = new QToolButton(this);
