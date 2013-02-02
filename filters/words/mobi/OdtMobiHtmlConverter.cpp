@@ -366,6 +366,8 @@ void OdtMobiHtmlConverter::endHtmlFile()
 
 void OdtMobiHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData)
 {
+    Q_UNUSED(metaData);
+
     writer->startElement("head", m_doIndent);
     writer->startElement("guide");
     writer->endElement();
@@ -444,7 +446,7 @@ void OdtMobiHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter
             KoXmlElement cellElement;
             forEachElement (cellElement, tableElement) {
                 QString styleName = cellElement.attribute("style-name");
-                StyleInfo *styleInfo = m_styles.value(styleName);
+//                 StyleInfo *styleInfo = m_styles.value(styleName);
                 htmlWriter->startElement("td", m_doIndent);
 //                if (styleInfo) {
 //                    styleInfo->inUse = true;
@@ -682,6 +684,7 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
 
 void OdtMobiHtmlConverter::handleTagTab (KoXmlWriter *htmlWriter)
 {
+    Q_UNUSED(htmlWriter);
 //    for (int i = 0; i <10; ++i)
 //        htmlWriter->addTextNode("\u00a0");
 }
@@ -742,6 +745,7 @@ void OdtMobiHtmlConverter::handleTagBookMarkStart(KoXmlElement &nodeElement, KoX
 
 void OdtMobiHtmlConverter::handleTagBookMarkEnd(KoXmlWriter *htmlWriter)
 {
+    Q_UNUSED(htmlWriter);
 //    htmlWriter->endElement();
 }
 
