@@ -47,20 +47,24 @@ private slots:
     void slotApplyClicked();
     void setDocumentUnit(const KoUnit &unit);
     void onDocumentUnitChange(const KoUnit &unit);
-    void pageStyleCloneClicked();
-    void pageStyleDeleteClicked();
-    void pageStyleCurrentRowChanged(int row);
+// Style tab temporarily disabled
+//     void pageStyleCloneClicked();
+//     void pageStyleDeleteClicked();
+//     void pageStyleCurrentRowChanged(int row);
 private:
     KWDocument *m_document;
     KWPage m_page;
     KWPageStyle m_pageStyle;
     KWDocumentColumns *m_columns;
-    QListWidget *m_pageStylesView;
-    QPushButton *m_clonePageStyleButton, *m_deletePageStyleButton;
+// Style tab temporarily disabled
+//     QListWidget *m_pageStylesView;
+//     QPushButton *m_clonePageStyleButton, *m_deletePageStyleButton;
     QMap<QString, KPageWidgetItem*> m_pages;
-    QString m_prevSelectedPageStyle;
+// Style tab temporarily disabled
+//     QString m_prevSelectedPageStyle;
 
-    void reloadPageStyles();
+// Style tab temporarily disabled
+//     void reloadPageStyles();
 };
 
 #endif

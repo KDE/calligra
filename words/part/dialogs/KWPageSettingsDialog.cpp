@@ -46,7 +46,8 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 
     m_columns = new KWDocumentColumns(this, m_page.pageStyle().columns());
     KPageWidgetItem *columnsPage = addPage(m_columns, i18n("Columns"));
-
+// Style tab temporarily disabled
+#if 0
     QWidget *pageStyleWidget = new QWidget(this);
     QHBoxLayout *pageStyleLayout = new QHBoxLayout(pageStyleWidget);
     pageStyleLayout->setMargin(0);
@@ -63,10 +64,12 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     connect(m_deletePageStyleButton, SIGNAL(clicked()), this, SLOT(pageStyleDeleteClicked()));
     pageStyleLayout2->addWidget(m_deletePageStyleButton);
     pageStyleLayout2->addStretch();
-    foreach(KPageWidgetItem *item, QList<KPageWidgetItem*>() << columnsPage << stylePage)
+#endif
+    foreach(KPageWidgetItem *item, QList<KPageWidgetItem*>() << columnsPage) // << stylePage)
         m_pages[item->name()] = item;
 
-    reloadPageStyles();
+// Style tab temporarily disabled
+//     reloadPageStyles();
 
     showPageSpread(false); //TODO better would be allow n pages to face rather then only 2
     showTextDirection(true); // TODO can we hide this in selected usecases? Use the resource manager bidi-check maybe?
@@ -186,6 +189,8 @@ void KWPageSettingsDialog::onDocumentUnitChange(const KoUnit &unit)
     m_columns->setUnit(unit);
 }
 
+// Style tab temporarily disabled
+#if 0
 void KWPageSettingsDialog::reloadPageStyles()
 {
     QStringList pagestyles = m_document->pageManager()->pageStyles().keys();
@@ -249,3 +254,4 @@ void KWPageSettingsDialog::pageStyleCurrentRowChanged(int row)
     enableButtonOk(pagestyle.isValid());
     enableButtonApply(pagestyle.isValid());
 }
+#endif
