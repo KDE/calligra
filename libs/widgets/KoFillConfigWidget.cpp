@@ -33,7 +33,6 @@
 #include <KoIcon.h>
 #include <KoColor.h>
 #include <KoColorPopupAction.h>
-#include <KoSliderCombo.h>
 #include "KoResourceServerProvider.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceSelector.h"
@@ -49,7 +48,6 @@
 #include <KoShapeController.h>
 #include <KoShapeBackground.h>
 #include <KoShapeBackgroundCommand.h>
-#include <KoShapeTransparencyCommand.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
@@ -175,8 +173,6 @@ public:
     KoResourcePopupAction *patternAction;
     QButtonGroup *group;
 
-    KoSliderCombo *opacity;
-
     QWidget *spacer;
     KoCanvasBase *canvas;
 };
@@ -256,19 +252,6 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->patternAction->setToolTip(i18n("Change the filling color"));
     connect(d->patternAction, SIGNAL(resourceSelected(KoShapeBackground*)), this, SLOT(patternChanged(KoShapeBackground*)));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
-
-    // Opacity setting
-    // FIXME: There is also an opacity setting in the color chooser. How do they interact?
-    d->opacity = new KoSliderCombo(this);
-    d->opacity->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    d->opacity->setMinimum(0);
-    d->opacity->setMaximum(100);
-    d->opacity->setValue(100);
-    d->opacity->setDecimals(0);
-    connect(d->opacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(updateOpacity(qreal)));
-
-    layout->addWidget(new QLabel(i18n("Opacity:")));
-    layout->addWidget(d->opacity);
 
     // Spacer
     d->spacer = new QWidget();
@@ -419,21 +402,6 @@ void KoFillConfigWidget::patternChanged(KoShapeBackground* background)
     }
 }
 
-void KoFillConfigWidget::updateOpacity(qreal opacity)
-{
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-
-    if (!selection || !selection->count())
-        return;
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    if (!selectedShapes.count())
-        return;
-
-    canvasController->canvas()->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0 - opacity / 100));
-}
-
 void KoFillConfigWidget::shapeChanged()
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
@@ -473,12 +441,6 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
         d->colorButton->setPopupMode(QToolButton::InstantPopup);
         return;
     }
-
-    // We don't want the opacity slider to send any signals when it's only initialized.
-    // Otherwise an undo record is created.
-    d->opacity->blockSignals(true);
-    d->opacity->setValue(100 - shape->transparency() * 100);
-    d->opacity->blockSignals(false);
 
     KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(background);
     KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(background);
@@ -535,7 +497,6 @@ void KoFillConfigWidget::blockChildSignals(bool block)
     d->gradientAction->blockSignals(block);
     d->patternAction->blockSignals(block);
     d->group->blockSignals(block);
-    d->opacity->blockSignals(block);
 }
 
 

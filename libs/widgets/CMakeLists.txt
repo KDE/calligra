@@ -43,6 +43,7 @@ set(kowidgets_LIB_SRCS
     KoResourcePopupAction.cpp
     KoStrokeConfigWidget.cpp
     KoFillConfigWidget.cpp
+    KoOpacityConfigWidget.cpp
     KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
@@ -112,6 +113,7 @@ install( FILES
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h
+    KoOpacityConfigWidget.h
     KoShadowConfigWidget.h
     KoColorPopupAction.h
     KoColorSetWidget.h

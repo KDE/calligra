@@ -56,6 +56,7 @@
 #include <KoStrokeConfigWidget.h>
 #include <KoFillConfigWidget.h>
 #include <KoShadowConfigWidget.h>
+#include <KoOpacityConfigWidget.h>
 
 #include <KoIcon.h>
 
@@ -1125,6 +1126,12 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     shadowWidget->setWindowTitle(i18n("Shadow"));
     shadowWidget->setCanvas(canvas());
     widgets.append(shadowWidget);
+
+    KoOpacityConfigWidget *opacityWidget = new KoOpacityConfigWidget(0);
+    opacityWidget->setWindowTitle(i18n("Shape Opacity"));
+    opacityWidget->setCanvas(canvas());
+    widgets.append(opacityWidget);
+
     return widgets;
 }
 

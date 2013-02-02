@@ -42,7 +42,7 @@ class KOWIDGETS_EXPORT KoFillConfigWidget : public QWidget
         Pattern
     };
 public:
-    KoFillConfigWidget(QWidget * parent);
+    KoFillConfigWidget(QWidget *parent);
     ~KoFillConfigWidget();
 
     void setCanvas( KoCanvasBase *canvas );
@@ -60,9 +60,6 @@ private slots:
 
     /// the pattern of the fill changed, apply the changes
     void patternChanged(KoShapeBackground *background);
-
-    /// update the opacity of the shape
-    void updateOpacity(qreal opacity);
 
     void shapeChanged();
 
