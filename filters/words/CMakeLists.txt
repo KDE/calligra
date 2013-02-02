@@ -69,7 +69,8 @@ add_subdirectory( ascii )
 add_subdirectory( rtf )
 
 add_subdirectory( epub )
-add_subdirectory( mobi )
+# mobi disabled for now, crashing, see https://bugs.kde.org/show_bug.cgi?id=314284
+# add_subdirectory( mobi )
 
 add_subdirectory(msword-odf)
 
