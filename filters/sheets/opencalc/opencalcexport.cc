@@ -782,8 +782,8 @@ void OpenCalcExport::exportPageAutoStyles(QDomDocument & doc, QDomElement & auto
 {
     const Sheet * sheet = ksdoc->map()->sheetList().first();
 
-    float width  = 20.999;
-    float height = 29.699;
+    float width  = 20.999f;
+    float height = 29.699f;
 
     if (sheet) {
         width  = sheet->printSettings()->pageLayout().width / 10;
