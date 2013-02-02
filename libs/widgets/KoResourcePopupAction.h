@@ -51,12 +51,13 @@ signals:
     /// Emitted when a resource was selected
     void resourceSelected(KoShapeBackground * background);
 
+public slots:
+    void updateIcon();
+
 private slots:
     void indexChanged(QModelIndex modelIndex);
 
 private:
-    void updateIcon();
-
     class Private;
     Private * const d;
 };

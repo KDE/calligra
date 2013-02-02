@@ -25,31 +25,40 @@
 
 #include "kdebug.h"
 
-KoColorPopupButton::KoColorPopupButton(QWidget* parent)
-:QToolButton(parent)
+KoColorPopupButton::KoColorPopupButton(QWidget *parent)
+    : QToolButton(parent)
 {
-    m_iconSize = QSize(16,16);
+    setToolButtonStyle(Qt::ToolButtonIconOnly);
 }
 
 KoColorPopupButton::~KoColorPopupButton()
 {
 }
 
-void KoColorPopupButton::resizeEvent(QResizeEvent* e)
+QSize KoColorPopupButton::sizeHint() const
 {
     QStyleOptionToolButton opt;
     initStyleOption(&opt);
 
-    kDebug(30006) << "Size" << e->size();
-    kDebug(30006) << "iconSize" << style()->sizeFromContents(QStyle::CT_ToolButton, &opt, iconSize(), this);
+    return style()->sizeFromContents(QStyle::CT_ToolButton, &opt, QSize(16,16), this);
+}
 
-    QSize rect = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, iconSize(), this);
-    int iconWidth = m_iconSize.width() + rect.width() - e->size().width();
+void KoColorPopupButton::resizeEvent(QResizeEvent *e)
+{
+    QStyleOptionToolButton opt;
+    initStyleOption(&opt);
+    QSize size = iconSize();
 
-    if (iconWidth != m_iconSize.width()) {
-        m_iconSize = QSize(iconWidth, 16);
-        setIconSize(m_iconSize);
+    QSize rect = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, size, this);
+    int iconWidth = size.width() - rect.width() + e->size().width();
+
+    if (iconWidth != size.width()) {
+        size.setWidth(iconWidth);
+        setIconSize(size);
     }
+    QToolButton::resizeEvent(e);
+
+    emit iconSizeChanged();
 }
 
 #include <KoColorPopupButton.moc>

@@ -234,9 +234,10 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->colorButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     layout->addWidget(d->colorButton);
 
-    d->colorAction = new KoColorPopupAction(this);
+    d->colorAction = new KoColorPopupAction(d->colorButton);
     d->colorAction->setToolTip(i18n("Change the filling color"));
     connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(colorChanged()));
+    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
 
     d->colorButton->setDefaultAction(d->colorAction);
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
@@ -247,12 +248,14 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
     d->gradientAction->setToolTip(i18n("Change the filling color"));
     connect(d->gradientAction, SIGNAL(resourceSelected(KoShapeBackground*)), this, SLOT(gradientChanged(KoShapeBackground*)));
+    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->gradientAction, SLOT(updateIcon()));
 
     // Pattern selector
     KoAbstractResourceServerAdapter *patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling color"));
     connect(d->patternAction, SIGNAL(resourceSelected(KoShapeBackground*)), this, SLOT(patternChanged(KoShapeBackground*)));
+    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
 
     // Opacity setting
     // FIXME: There is also an opacity setting in the color chooser. How do they interact?

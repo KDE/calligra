@@ -25,18 +25,8 @@
 #include "kowidgets_export.h"
 
 /**
- * @short A widget for qreal values with a popup slider
+ * @short A widget for 
  *
- * KoColorPopupButton combines a numerical input and a dropdown slider in a way that takes up as
- * little screen space as possible.
- *
- * It allows the user to either enter a floating point value or quickly set the value using a slider
- *
- * One signal is emitted when the value changes. The signal is even emitted when the slider
- * is moving. The second argument of the signal however tells you if the value is final or not. A
- * final value is produced by entering a value numerically or by releasing the slider.
- *
- * The input of the numerical line edit is constrained to numbers and decimal signs.
  */
 class KOWIDGETS_EXPORT KoColorPopupButton: public QToolButton
 {
@@ -55,11 +45,14 @@ public:
      */
     virtual ~KoColorPopupButton();
 
+    QSize sizeHint() const;
+
+signals:
+    /// Emitted when a resource was selected
+    void iconSizeChanged();
+
 protected:
     virtual void resizeEvent(QResizeEvent *); ///< reimplemented from QToolButton
-
-private:
-    QSize m_iconSize;
 };
 
 #endif

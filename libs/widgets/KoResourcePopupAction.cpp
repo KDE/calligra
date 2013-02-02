@@ -156,11 +156,10 @@ void KoResourcePopupAction::updateIcon()
 
     // This must be a QImage, as drawing to a QPixmap outside the
     // UI thread will cause sporadic crashes.
-    QImage pm = icon().pixmap(iconSize).toImage();
-    if (pm.isNull()) {
-        pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
-        pm.fill(Qt::transparent);
-    }
+    QImage pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
+
+    pm.fill(Qt::transparent);
+
     QPainter p(&pm);
     KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(d->background);
     KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(d->background);
