@@ -30,7 +30,7 @@ template<typename T> inline T sign(T x) {
 const int KisToolTransformConfigWidget::DEFAULT_POINTS_PER_LINE = 3;
 
 
-KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, QWidget *parent)
+KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, bool workRecursively, QWidget *parent)
     : QWidget(parent),
       m_transaction(transaction),
       m_notificationsBlocked(0),
@@ -39,6 +39,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 {
     setupUi(this);
     showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
+    chkWorkRecursively->setIcon(koIcon("krita_tool_transform_recursive.png"));
     label_shearX->setPixmap(koIcon("shear_horizontal").pixmap(16, 16));
     label_shearY->setPixmap(koIcon("shear_vertical").pixmap(16, 16));
 
@@ -56,6 +57,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     label_rotateX->setPixmap(rotateX_Pixmap);
     label_rotateY->setPixmap(rotateY_Pixmap);
     label_rotateZ->setPixmap(rotateZ_Pixmap);
+
+    chkWorkRecursively->setChecked(workRecursively);
+    connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));
 
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
@@ -199,8 +203,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         scaleYBox->setValue(config.scaleY() * 100.);
         shearXBox->setValue(config.shearX());
         shearYBox->setValue(config.shearY());
-        translateXBox->setValue(config.translate().x());
-        translateYBox->setValue(config.translate().y());
+        translateXBox->setValue(config.transformedCenter().x());
+        translateYBox->setValue(config.transformedCenter().y());
         aXBox->setValue(radianToDegree(config.aX()));
         aYBox->setValue(radianToDegree(config.aY()));
         aZBox->setValue(radianToDegree(config.aZ()));
@@ -270,6 +274,21 @@ void KisToolTransformConfigWidget::resetRotationCenterButtons()
         // uncheck the current checked button
         m_rotationCenterButtons->button(9)->setChecked(true);
     }
+}
+
+bool KisToolTransformConfigWidget::workRecursively() const
+{
+    return chkWorkRecursively->isChecked();;
+}
+
+void KisToolTransformConfigWidget::setTooBigLabelVisible(bool value)
+{
+    tooBigLabelWidget->setVisible(value);
+}
+
+bool KisToolTransformConfigWidget::showDecorations() const
+{
+    return showDecorationsBox->isChecked();
 }
 
 void KisToolTransformConfigWidget::blockNotifications()
@@ -418,7 +437,7 @@ void KisToolTransformConfigWidget::slotSetTranslateX(double value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setTranslate(QPointF(value, config->translate().y()));
+    config->setTransformedCenter(QPointF(value, config->transformedCenter().y()));
     notifyConfigChanged();
 }
 
@@ -427,7 +446,7 @@ void KisToolTransformConfigWidget::slotSetTranslateY(double value)
     if (m_uiSlotsBlocked) return;
 
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setTranslate(QPointF(config->translate().x(), value));
+    config->setTransformedCenter(QPointF(config->transformedCenter().x(), value));
     notifyConfigChanged();
 }
 

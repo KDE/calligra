@@ -24,22 +24,20 @@
 #include "KPrPageSelectStrategyActive.h"
 #include "animations/KPrAnimationCache.h"
 #include "KPrView.h"
-
-//Qt Headers
-#include <QPainter>
-
 //Calligra Headers
 #include <KoPACanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoPAViewBase.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KoZoomController.h>
 #include <KoPAUtil.h>
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
 #include <KoShapePaintingContext.h>
 #include <KPrViewModePresentation.h>
+//Qt Headers
+#include <QPainter>
+
 
 KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)

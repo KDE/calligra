@@ -34,7 +34,7 @@
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
-#include "KoTextAnchor.h"
+#include "KoShapeAnchor.h"
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -252,6 +252,11 @@ KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
 QTextCursor* KoTextEditor::cursor()
 {
     return &(d->caret);
+}
+
+const QTextCursor KoTextEditor::constCursor() const
+{
+    return QTextCursor(d->caret);
 }
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
@@ -560,7 +565,7 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 
 }
 
-void KoTextEditor::removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent)
+void KoTextEditor::removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent)
 {
     Q_ASSERT(parent);
     addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));

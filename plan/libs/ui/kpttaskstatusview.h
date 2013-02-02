@@ -41,7 +41,7 @@ class QTextBrowser;
 class QItemSelection;
 
 class KoDocument;
-struct KoPageLayoutWidget;
+class KoPageLayoutWidget;
 class PrintingHeaderFooter;
 
 class KAction;

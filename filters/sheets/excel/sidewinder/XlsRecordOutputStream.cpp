@@ -155,7 +155,7 @@ void XlsRecordOutputStream::writeFloat(unsigned bits, double value)
     ds.setByteOrder(QDataStream::LittleEndian);
     ds.setFloatingPointPrecision(bits == 32 ? QDataStream::SinglePrecision : QDataStream::DoublePrecision);
     ds << value;
-    Q_ASSERT(b.data().size() == (bits / 8));
+    Q_ASSERT(static_cast<unsigned int>(b.data().size()) == (bits / 8));
     writeBlob(b.data());
 }
 

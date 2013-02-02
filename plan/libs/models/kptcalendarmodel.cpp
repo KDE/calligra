@@ -1197,7 +1197,7 @@ bool CalendarExtendedItemModel::setData( const QModelIndex &index, const QVarian
     }
     switch ( col ) {
         case 0: { // weekday
-            if ( ! value.type() == QVariant::List ) {
+            if ( value.type() != QVariant::List ) {
                 return false;
             }
             QVariantList lst = value.toList();
@@ -1248,7 +1248,7 @@ bool CalendarExtendedItemModel::setData( const QModelIndex &index, const QVarian
             return true;
         }
         case 1: { // day
-            if ( ! value.type() == QVariant::List ) {
+            if ( value.type() != QVariant::List ) {
                 return false;
             }
             CalendarDay *day = new CalendarDay();

@@ -3,6 +3,7 @@
  *  Copyright (c) 2005-2007 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2005, 2010 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -98,8 +99,6 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
     QTransform tf;
     tf = tf.rotate(rotation);
 
-    KoColor c(Qt::red, dev->colorSpace());
-
     int ty = 0;
     int tx = 0;
 
@@ -114,7 +113,7 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
         progressHelper.step();
     }
 
-    dev->makeCloneFrom(tmp, tmp->extent());
+    dev->makeCloneFrom(tmp, tmp->region().boundingRect());
     return r;
 }
 

@@ -145,6 +145,7 @@ bool ODrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
 
 bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
 {
+    Q_UNUSED(o);
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
     return !m_shapeText.m_text.isEmpty();
 }
@@ -152,6 +153,8 @@ bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
 void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
                                     const MSO::OfficeArtClientData &o, Writer &out)
 {
+    Q_UNUSED(ct);
+    Q_UNUSED(o);
     if (m_shapeText.m_doc) { // rich-text
         KoTextDocument doc(m_shapeText.m_doc);
         Q_ASSERT(!doc.styleManager());
@@ -191,6 +194,9 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
 void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct,
                                        const MSO::OfficeArtClientData *cd, Writer &out)
 {
+    Q_UNUSED(ct);
+    Q_UNUSED(cd);
+    Q_UNUSED(out);
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
 }
 
@@ -199,6 +205,8 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
                                            const DrawStyle& ds,
                                            Writer &out)
 {
+    Q_UNUSED(ct);
+    Q_UNUSED(cd);
     Q_UNUSED(ds);
     KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     if (!m_shapeText.m_text.isEmpty()) {
@@ -234,6 +242,8 @@ void ODrawClient::addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox
                                 const MSO::OfficeArtClientData *clientData,
                                 KoGenStyle &style, Writer &out)
 {
+    Q_UNUSED(clientTextbox);
+    Q_UNUSED(clientData);
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
 
@@ -260,6 +270,7 @@ const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
 
 const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
 {
+    Q_UNUSED(spid);
     //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
     MSO::OfficeArtSpContainer* sp = NULL;
     return sp;
