@@ -318,12 +318,14 @@ void KoFillConfigWidget::noColorSelected()
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    if (!selection || !selection->count())
+    if (!selection || !selection->count()) {
         return;
+    }
 
     QList<KoShape*> selectedShapes = selection->selectedShapes();
-    if (selectedShapes.isEmpty())
+    if (selectedShapes.isEmpty()) {
         return;
+    }
 
     canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, 0));
 }
@@ -333,21 +335,24 @@ void KoFillConfigWidget::colorChanged()
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    if (!selection || !selection->count())
+    if (!selection || !selection->count()) {
         return;
+    }
 
     KoShapeBackground *fill = new KoColorBackground(d->colorAction->currentColor());
 
     QList<KoShape*> selectedShapes = selection->selectedShapes();
-    if (selectedShapes.isEmpty())
+    if (selectedShapes.isEmpty()) {
         return;
+    }
 
     KUndo2Command *firstCommand = 0;
     foreach (KoShape *shape, selectedShapes) {
-        if (! firstCommand)
+        if (! firstCommand) {
             firstCommand = new KoShapeBackgroundCommand(shape, fill);
-        else
+        } else {
             new KoShapeBackgroundCommand(shape, fill, firstCommand);
+        }
     }
     canvasController->canvas()->addCommand(firstCommand);
 }
@@ -357,16 +362,19 @@ void KoFillConfigWidget::gradientChanged(KoShapeBackground* background)
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    if (!selection || !selection->count())
+    if (!selection || !selection->count()) {
         return;
+    }
 
     QList<KoShape*> selectedShapes = selection->selectedShapes();
-    if (selectedShapes.isEmpty())
+    if (selectedShapes.isEmpty()) {
         return;
+    }
 
     KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(background);
-    if (! gradientBackground)
+    if (! gradientBackground) {
         return;
+    }
 
     QGradientStops newStops = gradientBackground->gradient()->stops();
     delete gradientBackground;
@@ -374,12 +382,14 @@ void KoFillConfigWidget::gradientChanged(KoShapeBackground* background)
     KUndo2Command *firstCommand = 0;
     foreach (KoShape *shape, selectedShapes) {
         KoShapeBackground *fill = applyFillGradientStops(shape, newStops);
-        if (! fill)
+        if (! fill) {
             continue;
-        if (! firstCommand)
+        }
+        if (! firstCommand) {
             firstCommand = new KoShapeBackgroundCommand(shape, fill);
-        else
+        } else {
             new KoShapeBackgroundCommand(shape, fill, firstCommand);
+        }
     }
     canvasController->canvas()->addCommand(firstCommand);
 }
@@ -389,16 +399,19 @@ void KoFillConfigWidget::patternChanged(KoShapeBackground* background)
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    if (!selection || !selection->count())
+    if (!selection || !selection->count()) {
         return;
+    }
 
     KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(background);
-    if(! patternBackground)
+    if (! patternBackground) {
         return;
+    }
 
     QList<KoShape*> selectedShapes = canvasController->canvas()->shapeManager()->selection()->selectedShapes();
-    if (selectedShapes.isEmpty())
+    if (selectedShapes.isEmpty()) {
         return;
+    }
 
     KoImageCollection *imageCollection = canvasController->canvas()->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
@@ -428,8 +441,9 @@ void KoFillConfigWidget::shapeChanged()
 
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
-    if(! shape)
+    if (! shape) {
         return;
+    }
 
     KoZoomHandler zoomHandler;
     const qreal realWidth = zoomHandler.resolutionX() * width();
@@ -478,8 +492,9 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
 
 KoShapeBackground *KoFillConfigWidget::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
 {
-    if (! shape || ! stops.count())
+    if (! shape || ! stops.count()) {
         return 0;
+    }
 
     KoGradientBackground *newGradient = 0;
     KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());

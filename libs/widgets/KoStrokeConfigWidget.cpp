@@ -374,8 +374,9 @@ void KoStrokeConfigWidget::applyChanges()
 
     //FIXME d->canvas->resourceManager()->setActiveStroke( d->stroke );
 
-    if (!selection || !selection->count())
+    if (!selection || !selection->count()) {
         return;
+    }
 
     KoShapeStroke *newStroke = new KoShapeStroke();
     KoShapeStroke *oldStroke = dynamic_cast<KoShapeStroke*>( selection->firstSelectedShape()->stroke() );
@@ -419,7 +420,7 @@ void KoStrokeConfigWidget::applyMarkerChanges(KoMarkerData::MarkerPosition posit
         }
     }
 
-    if(pathShapeList.size()){
+    if (pathShapeList.size()) {
         KoPathShapeMarkerCommand* cmdMarker = new KoPathShapeMarkerCommand(pathShapeList, marker, position);
         canvasController->canvas()->addCommand(cmdMarker);
     }
