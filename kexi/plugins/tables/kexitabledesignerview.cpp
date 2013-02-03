@@ -1441,6 +1441,9 @@ KexiDB::SchemaData* KexiTableDesignerView::copyData(const KexiDB::SchemaData& sd
                                                      KexiView::StoreNewDataOptions options,
                                                      bool &cancel)
 {
+    Q_UNUSED(options);
+    Q_UNUSED(cancel);
+
     if (!tempData()->table) {
         kWarning() << "Cannot copy data without source table (tempData()->table)";
         return 0;
