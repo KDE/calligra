@@ -106,12 +106,14 @@ void KoOpacityConfigWidget::updateOpacity(qreal opacity)
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    if (!selection || !selection->count())
+    if (!selection || !selection->count()) {
         return;
+    }
 
     QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    if (!selectedShapes.count())
+    if (!selectedShapes.count()){
         return;
+    }
 
     canvasController->canvas()->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0 - opacity / 100));
 }
@@ -122,8 +124,9 @@ void KoOpacityConfigWidget::shapeChanged()
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape *shape = selection->firstSelectedShape();
 
-    if(! shape)
+    if (! shape) {
         return;
+    }
 
     // We don't want the opacity slider to send any signals when it's only initialized.
     // Otherwise an undo record is created.
