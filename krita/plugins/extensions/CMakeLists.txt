@@ -14,7 +14,7 @@ add_subdirectory( shearimage )
 add_subdirectory( dockers )
 if (QT_QTWEBKIT_FOUND AND QT_QTDECLARATIVE_FOUND AND HAVE_QJSON)
     add_subdirectory( share )
-endif (QT_QTWEBKIT_FOUND AND QT_QTDECLARATIVE_FOUND)
+endif (QT_QTWEBKIT_FOUND AND QT_QTDECLARATIVE_FOUND AND HAVE_QJSON)
 
 find_package(OpenShiva)
 find_package(QtShiva )

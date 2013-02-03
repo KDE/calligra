@@ -1,7 +1,7 @@
 if(WIN32)
     option(ENABLE_SKETCH_STARTUP_MAGIC "Enable Sketch's windows startup magic" ON)
 
-    if(ENALE_SKETCH_STARTUP_MAGIC)
+    if(ENABLE_SKETCH_STARTUP_MAGIC)
         add_definitions(-DSKETCH_ENABLE_STARTUP_MAGIC)
     endif(ENABLE_SKETCH_STARTUP_MAGIC)
 endif(WIN32)
