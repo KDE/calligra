@@ -237,11 +237,10 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->colorAction = new KoColorPopupAction(d->colorButton);
     d->colorAction->setToolTip(i18n("Change the filling color"));
     d->colorAction->setCurrentColor(Qt::white);
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(colorChanged()));
-    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
-
     d->colorButton->setDefaultAction(d->colorAction);
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
+    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(colorChanged()));
+    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
 
     // Gradient selector
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
@@ -419,6 +418,7 @@ void KoFillConfigWidget::shapeChanged()
         d->group->button(KoFillConfigWidget::Solid)->setChecked(false);
         d->group->button(KoFillConfigWidget::Gradient)->setChecked(false);
         d->group->button(KoFillConfigWidget::Pattern)->setChecked(false);
+        d->colorButton->setDisabled(true);
         return;
     }
 
@@ -440,11 +440,13 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
 
     shape->waitUntilReady(zoomHandler, false);
 
+    d->colorButton->setEnabled(true);
     KoShapeBackground *background = shape->background();
     if (! background) {
         // No Fill
         d->group->button(KoFillConfigWidget::None)->setChecked(true);
-        d->colorButton->setDefaultAction(d->colorAction);
+        d->colorButton->setDefaultAction(d->noFillAction);
+        d->colorButton->setDisabled(true);
         d->colorButton->setPopupMode(QToolButton::InstantPopup);
         return;
     }
@@ -468,7 +470,8 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     } else {
         // No Fill
         d->group->button(KoFillConfigWidget::None)->setChecked(true);
-        d->colorButton->setDefaultAction(d->colorAction);
+        d->colorButton->setDefaultAction(d->noFillAction);
+        d->colorButton->setDisabled(true);
     }
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
 }
