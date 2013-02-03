@@ -648,7 +648,7 @@ void Project::tasksForward()
     foreach ( Node* n, m_terminalNodes ) {
         QList<Node*> lst;
         QList<Relation*> rel;
-        Q_ASSERT( checkParent( n, lst, rel ) );
+        Q_ASSERT( checkParent( n, lst, rel ) ); Q_UNUSED( n );
     }
 #endif
 }
@@ -681,7 +681,7 @@ void Project::tasksBackward()
     foreach ( Node* n, m_terminalNodes ) {
         QList<Node*> lst;
         QList<Relation*> rel;
-        Q_ASSERT( checkChildren( n, lst, rel ) );
+        Q_ASSERT( checkChildren( n, lst, rel ) ); Q_UNUSED( n );
     }
 #endif
 }
