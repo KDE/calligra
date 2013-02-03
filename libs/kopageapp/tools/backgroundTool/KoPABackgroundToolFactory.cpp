@@ -28,9 +28,9 @@
 KoPABackgroundToolFactory::KoPABackgroundToolFactory()
     : KoToolFactoryBase("KoPABackgroundTool")
 {
-    // TODO: use "Page" or "Slide" instead of "Document"
-    setToolTip(i18n("Document background"));
-    setToolType( mainToolType() );
+    // TODO: use "Page" in Flow
+    setToolTip(i18n("Slide design"));
+    setToolType("calligraflow, calligrastage");
     setActivationShapeId("flake/always");
     setIconName(koIconNameCStr("backgroundtool"));
     setPriority( 3 );

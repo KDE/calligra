@@ -47,6 +47,7 @@
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoStandardAction.h>
+#include <KoModeBoxFactory.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
@@ -160,11 +161,11 @@ public:
 
 
 
-KoPAView::KoPAView(KoPart *part, KoPADocument *document, QWidget *parent)
+KoPAView::KoPAView(KoPart *part, KoPADocument *document, bool withModeBox, QWidget *parent)
 : KoView(part, document, parent)
 , d( new Private(document))
 {
-    initGUI();
+    initGUI(withModeBox);
     initActions();
 
     if ( d->doc->pageCount() > 0 )
@@ -228,7 +229,7 @@ void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 }
 
 
-void KoPAView::initGUI()
+void KoPAView::initGUI(bool withModeBox)
 {
     d->tabBarLayout = new QGridLayout(this);
     d->tabBarLayout->setMargin(0);
@@ -315,12 +316,20 @@ void KoPAView::initGUI()
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
-    KoToolBoxFactory toolBoxFactory(d->canvasController);
-    if (shell())
-    {
-        shell()->createDockWidget( &toolBoxFactory );
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-             shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+    if (withModeBox) {
+        if (shell()) {
+            KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
+            QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
+            shell()->dockerManager()->removeToolOptionsDocker();
+            dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
+            }
+    } else {
+        if (shell()) {
+            KoToolBoxFactory toolBoxFactory(d->canvasController);
+            shell()->createDockWidget( &toolBoxFactory );
+            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+            shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+        }
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
