@@ -232,6 +232,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     d->colorAction = new KoColorPopupAction(d->colorButton);
     d->colorAction->setToolTip(i18n("Change the filling color"));
+    d->colorAction->setCurrentColor(Qt::white);
     connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(colorChanged()));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
 
