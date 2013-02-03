@@ -719,8 +719,9 @@ void View::initView()
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        shell()->createDockWidget(&modeBoxFactory);
+        QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
         shell()->dockerManager()->removeToolOptionsDocker();
+        dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
         //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),

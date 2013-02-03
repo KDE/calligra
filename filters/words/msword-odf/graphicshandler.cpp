@@ -1209,7 +1209,7 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
 
     QString hrAlign;
     QString xPos = QString::number(0.0f).append("in");
-    const float base_width = 6.1378;
+    const float base_width = 6.1378f;
 
     switch (ds.alignHR()) {
     case hAlignLeft:

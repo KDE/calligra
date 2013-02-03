@@ -21,7 +21,6 @@
 #include "TableShapeDeferredFactory.h"
 
 #include <QStringList>
-#include <QSharedPointer>
 
 #include <kpluginfactory.h>
 #include <klocale.h>

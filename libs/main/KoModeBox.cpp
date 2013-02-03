@@ -51,7 +51,6 @@ class KoModeBox::Private
 public:
     Private(KoCanvasController *c)
         : canvas(c->canvas())
-        , canvasReset(false)
         , activeId(-1)
         , iconTextFitted(true)
         , fittingIterations(0)
@@ -59,7 +58,6 @@ public:
     }
 
     KoCanvasBase *canvas;
-    bool canvasReset;
     QList<KoToolButton> buttons; // buttons maintained by toolmanager
     QList<KoToolButton> addedButtons; //buttons in the order added to QToolBox
     QMap<int, QWidget *> addedWidgets;
@@ -333,10 +331,6 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
     layout->setVerticalSpacing(2);
     int specialCount = 0;
     foreach(QWidget *widget, optionWidgetList) {
-        if (widget->objectName().isEmpty()) {
-            Q_ASSERT(!(widget->objectName().isEmpty()));
-            continue; // skip this docker in release build when assert don't crash
-        }
         if (!widget->windowTitle().isEmpty()) {
             QLabel *l;
             layout->addWidget(l = new QLabel(widget->windowTitle()), cnt++, 1, 1, 3, Qt::AlignHCenter);
@@ -383,8 +377,6 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
                     this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
     }
 
-    d->canvasReset = d->canvas != 0;
-
     d->canvas = canvas;
 
     ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
@@ -395,9 +387,7 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
 
 void KoModeBox::unsetCanvas()
 {
-    if (!d->canvasReset) {
-        d->canvas = 0;
-    }
+    d->canvas = 0;
 }
 
 void KoModeBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas)

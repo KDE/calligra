@@ -270,9 +270,11 @@ void FlipbookDockerDock::removeImage()
     QStandardItem *item = m_flipbook->itemFromIndex(idx);
     for (int i = 0; i < m_flipbook->rowCount(); ++i) {
         if (m_flipbook->item(i) == item) {
-            delete m_flipbook->takeItem(i);
+            // workaround as takeItem(i) doesn't change the rowCount
+            delete m_flipbook->takeRow(i).first();
         }
     }
+
     listFlipbook->reset();
 }
 
@@ -342,8 +344,8 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
         QList<KoCanvasObserverBase*> canvasObservers = m_canvas->view()->shell()->canvasObservers();
         foreach (KoCanvasObserverBase *canvasObserver, canvasObservers) {
             if (canvasObserver != this) {
-                canvasObserver->unsetCanvas();
-                canvasObserver->setCanvas(m_canvas);
+                canvasObserver->unsetObservedCanvas();
+                canvasObserver->setObservedCanvas(m_canvas);
             }
         }
 

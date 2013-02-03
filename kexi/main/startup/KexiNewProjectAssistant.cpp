@@ -205,7 +205,7 @@ static QString defaultDatabaseName()
 KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
  : KexiAssistantPage(i18n("Project Title & Filename"),
                   i18n("Enter title for the new project. "
-                       "Filename will created automatically based on the title. "
+                       "Filename will be created automatically based on the title. "
                        "You can change the filename too."),
                   parent)
 {
@@ -348,7 +348,7 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     KexiNewProjectAssistant* parent)
  : KexiAssistantPage(i18n("Project Title & Database Name"),
                   i18n("Enter title for the new project. "
-                       "Database name will created automatically based on the title. "
+                       "Database name will be created automatically based on the title. "
                        "You can change the database name too."),
                   parent)
  , m_assistant(parent)
