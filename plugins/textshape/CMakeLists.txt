@@ -107,6 +107,7 @@ SET ( textshape_SRCS
     dialogs/stylemanager/ParagraphLayoutTab.cpp
     dialogs/stylemanager/ParagraphStylesTab.cpp
     dialogs/stylemanager/StylesManager.cpp
+    dialogs/stylemanager/StylesManagerStylesModel.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp

@@ -55,13 +55,13 @@ CharacterHighlighting::CharacterHighlighting(bool uniqueFormat,QWidget* parent)
     widget.fontLayout->addWidget(m_fontChooser);
 
     widget.capitalizationList->addItems(capitalizationList());
-    widget.underlineStyle->addItems(KoText::underlineTypeList());
-    widget.underlineLineStyle->addItems(KoText::underlineStyleList());
+    widget.underlineStyle->addItems(KoText::lineTypeList());
+    widget.underlineLineStyle->addItems(KoText::lineStyleList());
 
     widget.positionList->addItems(fontLayoutPositionList());
 
-    widget.strikethroughStyle->addItems(KoText::underlineTypeList()); //TODO make KoText consistent: either add strikethroughTypeList, or change from underlineTypeList to lineTypeList
-    widget.strikethroughLineStyle->addItems(KoText::underlineStyleList()); //TODO idem
+    widget.strikethroughStyle->addItems(KoText::lineTypeList()); //TODO make KoText consistent: either add strikethroughTypeList, or change from underlineTypeList to lineTypeList
+    widget.strikethroughLineStyle->addItems(KoText::lineStyleList()); //TODO idem
 
     connect(widget.underlineStyle, SIGNAL(activated(int)), this, SLOT(underlineTypeChanged(int)));
     connect(widget.underlineLineStyle, SIGNAL(activated(int)), this, SLOT(underlineStyleChanged(int)));

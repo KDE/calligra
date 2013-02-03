@@ -54,7 +54,7 @@ Qt::ItemFlags DockerStylesComboModel::flags(const QModelIndex &index) const
     if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
         return (Qt::NoItemFlags);
     }
-    return (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+    return m_sourceModel->flags(m_sourceModel->index(m_proxyToSource.at(index.row()), 0, QModelIndex()));
 }
 
 QModelIndex DockerStylesComboModel::index(int row, int column, const QModelIndex &parent) const
@@ -66,6 +66,7 @@ QModelIndex DockerStylesComboModel::index(int row, int column, const QModelIndex
         if (row >= m_proxyToSource.count()) {
             return QModelIndex();
         }
+        //m_proxyToSource stores a mix of internalIds (negative, specific to this model) and row number in the source model
         return createIndex(row, column, (m_proxyToSource.at(row) >= 0)?int(m_sourceModel->index(m_proxyToSource.at(row), 0, QModelIndex()).internalId()):m_proxyToSource.at(row));
     }
     return QModelIndex();

@@ -20,7 +20,11 @@
 #ifndef STYLESMANAGER_H
 #define STYLESMANAGER_H
 
+#include <KoParagraphStyle.h>
+
 #include <QDialog>
+
+class KoStyleManager;
 
 namespace Ui {
 class StylesManager;
@@ -29,13 +33,18 @@ class StylesManager;
 class StylesManager : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     explicit StylesManager(QWidget *parent = 0);
     ~StylesManager();
-    
+
+    void setStyleManager(KoStyleManager *styleManager);
+    void setParagraphStyle(KoParagraphStyle *style);
+
 private:
     Ui::StylesManager *ui;
+
+    KoStyleManager *m_styleManager;
 };
 
 #endif // STYLESMANAGER_H

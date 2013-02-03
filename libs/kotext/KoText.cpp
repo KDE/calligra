@@ -24,7 +24,7 @@
 
 using namespace KoText;
 
-QStringList KoText::underlineTypeList()
+QStringList KoText::lineTypeList()
 {
     QStringList lst;
     lst << i18nc("Underline Style", "None");
@@ -33,7 +33,7 @@ QStringList KoText::underlineTypeList()
     return lst;
 }
 
-QStringList KoText::underlineStyleList()
+QStringList KoText::lineStyleList()
 {
     QStringList lst;
     lst << "_________";  // solid

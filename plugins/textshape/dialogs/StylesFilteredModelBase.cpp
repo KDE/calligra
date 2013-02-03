@@ -69,6 +69,8 @@ QVariant StylesFilteredModelBase::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
+    return m_sourceModel->data(m_sourceModel->index(m_proxyToSource.at(index.row()), 0, QModelIndex()), role);
+
     switch (role){
     case Qt::DisplayRole: {
         return QVariant();

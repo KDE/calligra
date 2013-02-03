@@ -39,8 +39,8 @@
  */
 namespace KoText
 {
-KOTEXT_EXPORT QStringList underlineTypeList();
-KOTEXT_EXPORT QStringList underlineStyleList();
+KOTEXT_EXPORT QStringList lineTypeList();
+KOTEXT_EXPORT QStringList lineStyleList();
 KOTEXT_EXPORT Qt::Alignment alignmentFromString(const QString &align);
 KOTEXT_EXPORT QString alignmentToString(Qt::Alignment align);
 KOTEXT_EXPORT Qt::Alignment valignmentFromString(const QString &align);

@@ -154,7 +154,7 @@ void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *man
     }
     if (!manager->hasResource(KoText::StyleManager)) {
         KoStyleManager *styleManager = new KoStyleManager(manager);
-        styleManager->createDefaultSet();
+//        styleManager->createDefaultSet();
         variant.setValue(styleManager);
         manager->setResource(KoText::StyleManager, variant);
     }

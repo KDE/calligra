@@ -39,41 +39,53 @@ public:
     explicit CharacterHighlightingTab(QWidget* parent = 0);
     ~CharacterHighlightingTab();
 
-    void init(bool uniqueFormat);
-
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style);
 
-    QStringList capitalizationList();
-    QStringList fontLayoutPositionList();
-
 signals:
+    void underlineEnabled(bool);
     void underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
+    void strikethroughEnabled(bool);
     void strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
+    void capitalizationEnabled(bool);
     void capitalizationChanged(QFont::Capitalization);
+    void fontFamilyChanged();
+    void fontEnabled(bool enabled);
     void fontChanged(const QFont &font);
+    void textColorEnabled(bool);
     void textColorChanged(QColor);
+    void backgroundColorEnabled(bool);
     void backgroundColorChanged(QColor);
+    void positionEnabled(bool);
+    void positionChanged(QTextCharFormat::VerticalAlignment);
     void charStyleChanged();
 
 
 private slots:
-    void underlineTypeChanged(int item);
-    void underlineStyleChanged(int item);
-    void underlineColorChanged(QColor color);
-    void strikethroughTypeChanged(int item);
-    void strikethroughStyleChanged(int item);
-    void strikethroughColorChanged(QColor color);
-    void capitalisationChanged(int item);
-    void positionChanged(int item);
-    void textToggled(bool state);
-    void backgroundToggled(bool state);
-    void clearTextColor();
-    void clearBackgroundColor();
-    void textColorChanged();
-    void backgroundColorChanged();
+    void slotUnderlineEnabled(bool enabled);
+    void slotUnderlineTypeChanged(int item);
+    void slotUnderlineStyleChanged(int item);
+    void slotUnderlineColorChanged(QColor color);
+    void slotStrikethroughEnabled(bool enabled);
+    void slotStrikethroughTypeChanged(int item);
+    void slotStrikethroughStyleChanged(int item);
+    void slotStrikethroughColorChanged(QColor color);
+    void slotCapitalisationEnabled(bool enabled);
+    void slotCapitalisationChanged(int item);
+    void slotPositionEnabled(bool enabled);
+    void slotPositionChanged(int item);
+    void slotTextColorEnabled(bool enabled);
+    void slotClearTextColor();
+    void slotTextColorChanged();
+    void slotBackgroundColorEnabled(bool enabled);
+    void slotClearBackgroundColor();
+    void slotBackgroundColorChanged();
+    void slotFontEnabled(bool enabled);
+    void slotFontChanged(const QFont &font);
 
 private:
+    QStringList capitalizationList();
+    QStringList fontLayoutPositionList();
     KoCharacterStyle::LineType indexToLineType(int index);
     KoCharacterStyle::LineStyle indexToLineStyle(int index);
     int lineTypeToIndex(KoCharacterStyle::LineType type);
@@ -81,7 +93,7 @@ private:
 
     Ui::CharacterHighlightingTab *ui;
 
-     KFontChooser *m_fontChooser;
+    KFontChooser *m_fontChooser;
 
     bool m_uniqueFormat;
     bool m_underlineStyleInherited;

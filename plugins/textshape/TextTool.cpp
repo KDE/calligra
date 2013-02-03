@@ -38,7 +38,9 @@
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
 
+#include "dialogs/StylesModel.h"
 #include "dialogs/stylemanager/StylesManager.h"
+#include <KoStyleThumbnailer.h>
 
 #include <KoOdf.h>
 #include <KoCanvasBase.h>
@@ -2492,6 +2494,11 @@ void TextTool::showStyleManager(int styleId)
         return;  //don't crash
 
     StylesManager *dia = new StylesManager();
+    dia->setStyleManager(styleManager);
+    KoParagraphStyle *paragraphStyle = styleManager->paragraphStyle(styleId);
+    if (paragraphStyle) {
+//        dia->setParagraphStyle(paragraphStyle);
+    }
     dia->show();
 /*    StyleManagerDialog *dia = new StyleManagerDialog(canvas()->canvasWidget());
     dia->setStyleManager(styleManager);

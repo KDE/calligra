@@ -48,57 +48,61 @@ CharacterHighlightingTab::CharacterHighlightingTab(QWidget* parent)
     , ui(new Ui::CharacterHighlightingTab)
 {
     ui->setupUi(this);
+
+    QStringList list;
+    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
+    m_fontChooser = new KFontChooser(this, KFontChooser::NoDisplayFlags, list, false);
+    m_fontChooser->setSampleBoxVisible(false);
+    ui->fontLayout->addWidget(m_fontChooser);
+    connect(ui->fontLabel, SIGNAL(toggled(bool)), this, SLOT(slotFontEnabled(bool)));
+    connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(fontChanged(const QFont &)));
+    connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(charStyleChanged()));
+
+    //capitalization
+    ui->capitalizationList->addItems(capitalizationList());
+    connect(ui->capitalizationList, SIGNAL(activated(int)), this, SLOT(slotCapitalisationChanged(int)));
+    connect(ui->capitalizationLabel, SIGNAL(toggled(bool)), this, SLOT(slotCapitalisationEnabled(bool)));
+
+    //underline
+    ui->underlineStyle->addItems(KoText::lineTypeList());
+    ui->underlineLineStyle->addItems(KoText::lineStyleList());
+    connect(ui->underlineLabel, SIGNAL(toggled(bool)), this, SLOT(slotUnderlineEnabled(bool)));
+    connect(ui->underlineStyle, SIGNAL(activated(int)), this, SLOT(slotUnderlineTypeChanged(int)));
+    connect(ui->underlineLineStyle, SIGNAL(activated(int)), this, SLOT(slotUnderlineStyleChanged(int)));
+    connect(ui->underlineColor, SIGNAL(changed(QColor)), this, SLOT(slotUnderlineColorChanged(QColor)));
+
+    //position
+    ui->positionList->addItems(fontLayoutPositionList());
+    connect(ui->positionLabel, SIGNAL(toggled(bool)), this, SLOT(slotPositionEnabled(bool)));
+    connect(ui->positionList, SIGNAL(activated(int)), this, SLOT(slotPositionChanged(int)));
+
+    //strikethrough
+    ui->strikethroughStyle->addItems(KoText::lineTypeList());
+    ui->strikethroughLineStyle->addItems(KoText::lineStyleList());
+    connect(ui->strikethroughLabel, SIGNAL(toggled(bool)), this, SLOT(slotStrikethroughEnabled(bool)));
+    connect(ui->strikethroughStyle, SIGNAL(activated(int)), this, SLOT(slotStrikethroughTypeChanged(int)));
+    connect(ui->strikethroughLineStyle, SIGNAL(activated(int)), this, SLOT(slotStrikethroughStyleChanged(int)));
+    connect(ui->strikethroughColor, SIGNAL(changed(QColor)), this, SLOT(slotStrikethroughColorChanged(QColor)));
+
+
+    const KIcon clearIcon(koIconName("edit-clear"));
+    //text color
+    ui->resetTextColor->setIcon(clearIcon);
+    connect(ui->textColorLabel, SIGNAL(toggled(bool)), this, SLOT(slotTextColorEnabled(bool)));
+    connect(ui->textColor, SIGNAL(changed(const QColor&)), this, SLOT(slotTextColorChanged()));
+    connect(ui->resetTextColor, SIGNAL(clicked()), this, SLOT(slotClearTextColor()));
+
+    //background color
+    ui->resetBackground->setIcon(clearIcon);
+    connect(ui->backgroundColorLabel, SIGNAL(toggled(bool)), this, SLOT(slotBackgroundColorEnabled(bool)));
+    connect(ui->backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(slotBackgroundColorChanged()));
+    connect(ui->resetBackground, SIGNAL(clicked()), this, SLOT(slotClearBackgroundColor()));
 }
 
 CharacterHighlightingTab::~CharacterHighlightingTab()
 {
     delete ui;
     ui = 0;
-}
-
-void CharacterHighlightingTab::init(bool uniqueFormat)
-{
-    m_uniqueFormat = uniqueFormat;
-
-    QStringList list;
-    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
-    m_fontChooser = new KFontChooser(this, (m_uniqueFormat) ? KFontChooser::NoDisplayFlags : KFontChooser::ShowDifferences, list, false);
-    m_fontChooser->setSampleBoxVisible(false);
-    ui->fontLayout->addWidget(m_fontChooser);
-
-    ui->capitalizationList->addItems(capitalizationList());
-    ui->underlineStyle->addItems(KoText::underlineTypeList());
-    ui->underlineLineStyle->addItems(KoText::underlineStyleList());
-
-    ui->positionList->addItems(fontLayoutPositionList());
-
-    ui->strikethroughStyle->addItems(KoText::underlineTypeList()); //TODO make KoText consistent: either add strikethroughTypeList, or change from underlineTypeList to lineTypeList
-    ui->strikethroughLineStyle->addItems(KoText::underlineStyleList()); //TODO idem
-
-    connect(ui->underlineStyle, SIGNAL(activated(int)), this, SLOT(underlineTypeChanged(int)));
-    connect(ui->underlineLineStyle, SIGNAL(activated(int)), this, SLOT(underlineStyleChanged(int)));
-    connect(ui->underlineColor, SIGNAL(changed(QColor)), this, SLOT(underlineColorChanged(QColor)));
-
-    connect(ui->strikethroughStyle, SIGNAL(activated(int)), this, SLOT(strikethroughTypeChanged(int)));
-    connect(ui->strikethroughLineStyle, SIGNAL(activated(int)), this, SLOT(strikethroughStyleChanged(int)));
-    connect(ui->strikethroughColor, SIGNAL(changed(QColor)), this, SLOT(strikethroughColorChanged(QColor)));
-
-    connect(ui->capitalizationList, SIGNAL(activated(int)), this, SLOT(capitalisationChanged(int)));
-
-    connect(ui->positionList, SIGNAL(activated(int)), this, SLOT(positionChanged(int)));
-
-    connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(fontChanged(const QFont &)));
-    connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(charStyleChanged()));
-
-    const KIcon clearIcon(koIconName("edit-clear"));
-    ui->resetTextColor->setIcon(clearIcon);
-    ui->resetBackground->setIcon(clearIcon);
-    connect(ui->textColor, SIGNAL(changed(const QColor&)), this, SLOT(textColorChanged()));
-    connect(ui->backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(backgroundColorChanged()));
-    connect(ui->resetTextColor, SIGNAL(clicked()), this, SLOT(clearTextColor()));
-    connect(ui->resetBackground, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
-    connect(ui->enableText, SIGNAL(toggled(bool)), this, SLOT(textToggled(bool)));
-    connect(ui->enableBackground, SIGNAL(toggled(bool)), this, SLOT(backgroundToggled(bool)));
 }
 
 KoCharacterStyle::LineType CharacterHighlightingTab::indexToLineType(int index)
@@ -157,9 +161,15 @@ int CharacterHighlightingTab::lineStyleToIndex(KoCharacterStyle::LineStyle type)
     return index;
 }
 
-void CharacterHighlightingTab::capitalisationChanged(int item)
+void CharacterHighlightingTab::slotCapitalisationEnabled(bool enabled)
 {
-    if (m_uniqueFormat || ui->capitalizationList->currentIndex() >= 0) {
+    ui->capitalizationList->setEnabled(enabled);
+    emit capitalizationEnabled(enabled);
+}
+
+void CharacterHighlightingTab::slotCapitalisationChanged(int item)
+{
+//    if (m_uniqueFormat || ui->capitalizationList->currentIndex() >= 0) {
         switch (item) {
         case 0:
             emit capitalizationChanged(QFont::MixedCase);
@@ -182,81 +192,161 @@ void CharacterHighlightingTab::capitalisationChanged(int item)
             m_capitalizInherited = false;
             break;
         }
-    }
-    emit charStyleChanged();
+//    }
+//    emit charStyleChanged();
 }
 
-void CharacterHighlightingTab::positionChanged(int item)
+void CharacterHighlightingTab::slotUnderlineEnabled(bool enabled)
 {
-    m_positionInherited = false;
-    emit charStyleChanged();
+    ui->underlineStyle->setEnabled(enabled);
+    ui->underlineColor->setEnabled(enabled && (ui->underlineStyle->currentIndex()>0));
+    ui->underlineLineStyle->setEnabled(enabled && (ui->underlineStyle->currentIndex()>0));
+    emit underlineEnabled(enabled);
 }
 
-void CharacterHighlightingTab::underlineTypeChanged(int item)
+void CharacterHighlightingTab::slotUnderlineTypeChanged(int item)
 {
-    ui->underlineLineStyle->setEnabled(item > 0);
-    ui->underlineColor->setEnabled(item > 0);
+    ui->underlineLineStyle->setEnabled(item > 0 && ui->underlineStyle->isEnabled());
+    ui->underlineColor->setEnabled(item > 0 && ui->underlineStyle->isEnabled());
     m_underlineTypeInherited = false;
     emit underlineChanged(indexToLineType(item), indexToLineStyle(ui->underlineLineStyle->currentIndex()), ui->underlineColor->color());
-    emit charStyleChanged();
+//    emit charStyleChanged();
 }
 
-void CharacterHighlightingTab::underlineStyleChanged(int item)
+void CharacterHighlightingTab::slotUnderlineStyleChanged(int item)
 {
-    if (ui->underlineStyle->currentIndex())
+    if (ui->underlineStyle->currentIndex()) {
         emit underlineChanged(indexToLineType(ui->underlineStyle->currentIndex()), indexToLineStyle(item), ui->underlineColor->color());
+    }
     m_underlineStyleInherited = false;
-    emit charStyleChanged();
+//    emit charStyleChanged();
 }
 
-void CharacterHighlightingTab::underlineColorChanged(QColor color)
+void CharacterHighlightingTab::slotUnderlineColorChanged(QColor color)
 {
-    if (ui->underlineStyle->currentIndex())
+    if (ui->underlineStyle->currentIndex()) {
         emit underlineChanged(indexToLineType(ui->underlineStyle->currentIndex()), indexToLineStyle(ui->underlineLineStyle->currentIndex()), color);
-    emit charStyleChanged();
+    }
+//    emit charStyleChanged();
 }
 
-void CharacterHighlightingTab::strikethroughTypeChanged(int item)
+void CharacterHighlightingTab::slotStrikethroughEnabled(bool enabled)
 {
-    ui->strikethroughLineStyle->setEnabled(item > 0);
-    ui->strikethroughColor->setEnabled(item > 0);
+    ui->strikethroughStyle->setEnabled(enabled);
+    ui->strikethroughColor->setEnabled(enabled && (ui->strikethroughStyle->currentIndex()>0));
+    ui->strikethroughLineStyle->setEnabled(enabled && (ui->strikethroughStyle->currentIndex()>0));
+    emit strikethroughEnabled(enabled);
+}
+
+void CharacterHighlightingTab::slotStrikethroughTypeChanged(int item)
+{
+    ui->strikethroughLineStyle->setEnabled(item > 0 && ui->strikethroughStyle->isEnabled());
+    ui->strikethroughColor->setEnabled(item > 0 && ui->strikethroughStyle->isEnabled());
     m_strikeoutTypeInherited = false;
     emit strikethroughChanged(indexToLineType(item), indexToLineStyle(ui->strikethroughLineStyle->currentIndex()), ui->strikethroughColor->color());
-    emit charStyleChanged();
+//    emit charStyleChanged();
 }
 
-void CharacterHighlightingTab::strikethroughStyleChanged(int item)
+void CharacterHighlightingTab::slotStrikethroughStyleChanged(int item)
 {
-    if (ui->strikethroughStyle->currentIndex())
+    if (ui->strikethroughStyle->currentIndex()) {
         emit strikethroughChanged(indexToLineType(ui->strikethroughStyle->currentIndex()), indexToLineStyle(item), ui->strikethroughColor->color());
+    }
     m_strikeoutStyleInherited = false;
-    emit charStyleChanged();
+//    emit charStyleChanged();
 }
 
-void CharacterHighlightingTab::strikethroughColorChanged(QColor color)
+void CharacterHighlightingTab::slotStrikethroughColorChanged(QColor color)
 {
-    if (ui->strikethroughStyle->currentIndex())
+    if (ui->strikethroughStyle->currentIndex()) {
         emit strikethroughChanged(indexToLineType(ui->strikethroughStyle->currentIndex()), indexToLineStyle(ui->strikethroughLineStyle->currentIndex()), color);
+    }
     m_strikeoutcolorInherited = false;
-    emit charStyleChanged();
+//    emit charStyleChanged();
 }
 
-void CharacterHighlightingTab::backgroundColorChanged()
+void CharacterHighlightingTab::slotPositionEnabled(bool enabled)
+{
+    ui->positionList->setEnabled(enabled);
+    emit positionEnabled(enabled);
+}
+
+void CharacterHighlightingTab::slotPositionChanged(int item)
+{
+    m_positionInherited = false;
+    switch(item) {
+    case 0:
+        emit positionChanged(QTextCharFormat::AlignNormal);
+        break;
+    case 1:
+        emit positionChanged(QTextCharFormat::AlignSuperScript);
+        break;
+    case 2:
+        emit positionChanged(QTextCharFormat::AlignSubScript);
+        break;
+    }
+//    emit charStyleChanged();
+}
+
+void CharacterHighlightingTab::slotBackgroundColorEnabled(bool enabled)
+{
+    ui->backgroundColor->setEnabled(enabled);
+    ui->resetBackground->setEnabled(enabled);
+    emit backgroundColorEnabled(enabled);
+}
+
+void CharacterHighlightingTab::slotClearBackgroundColor()
+{
+    ui->backgroundColor->setColor(ui->backgroundColor->defaultColor());
+    m_backgroundColorReset = true;
+    emit backgroundColorChanged(QColor(Qt::transparent));
+//    emit charStyleChanged();
+}
+
+void CharacterHighlightingTab::slotBackgroundColorChanged()
 {
     m_backgroundColorReset = false; m_backgroundColorChanged = true;
-    if (ui->enableBackground->isChecked() && ui->backgroundColor->color().isValid())
+//    if (/*ui->enableBackground->isChecked() && */ui->backgroundColor->color().isValid())
         emit backgroundColorChanged(ui->backgroundColor->color());
-    emit charStyleChanged();
+//    emit charStyleChanged();
 }
 
-void CharacterHighlightingTab::textColorChanged()
+void CharacterHighlightingTab::slotTextColorEnabled(bool enabled)
+{
+    ui->textColor->setEnabled(enabled);
+    ui->resetTextColor->setEnabled(enabled);
+    emit textColorEnabled(enabled);
+}
+
+void CharacterHighlightingTab::slotClearTextColor()
+{
+    ui->textColor->setColor(ui->textColor->defaultColor());
+    m_textColorReset = true;
+    emit textColorChanged(QColor(Qt::black));
+//    emit charStyleChanged();
+}
+
+void CharacterHighlightingTab::slotTextColorChanged()
 {
     m_textColorReset = false; m_textColorChanged = true;
-    if (ui->enableText->isChecked() && ui->textColor->color().isValid())
+//    if (/*ui->enableText->isChecked() && */ui->textColor->color().isValid())
         emit textColorChanged(ui->textColor->color());
-    emit charStyleChanged();
+//    emit charStyleChanged();
 }
 
+void CharacterHighlightingTab::slotFontEnabled(bool enabled)
+{
+//    ui->fontChooser->setEnabled(enabled);
+    m_fontChooser->setEnabled(enabled);
+    emit fontEnabled(enabled);
+}
+
+void CharacterHighlightingTab::slotFontChanged(const QFont &font)
+{
+    emit slotFontChanged(font);
+}
+
+/*
 void CharacterHighlightingTab::textToggled(bool state)
 {
     ui->textColor->setEnabled(state);
@@ -270,22 +360,7 @@ void CharacterHighlightingTab::backgroundToggled(bool state)
     ui->resetBackground->setEnabled(state);
     emit charStyleChanged();
 }
-
-void CharacterHighlightingTab::clearTextColor()
-{
-    ui->textColor->setColor(ui->textColor->defaultColor());
-    m_textColorReset = true;
-    emit textColorChanged(QColor(Qt::black));
-    emit charStyleChanged();
-}
-
-void CharacterHighlightingTab::clearBackgroundColor()
-{
-    ui->backgroundColor->setColor(ui->backgroundColor->defaultColor());
-    m_backgroundColorReset = true;
-    emit backgroundColorChanged(QColor(Qt::transparent));
-    emit charStyleChanged();
-}
+*/
 
 QStringList CharacterHighlightingTab::capitalizationList()
 {
@@ -308,17 +383,28 @@ QStringList CharacterHighlightingTab::fontLayoutPositionList()
 }
 void CharacterHighlightingTab::setDisplay(KoCharacterStyle *style)
 {
-    if (style == 0)
+    if (style == 0) {
         return;
+    }
 
+    blockSignals(true);
+
+    bool checked;
+    //font
     QFont font = style->font();
+    checked = style->hasProperty(QTextFormat::FontFamily) || style->hasProperty(QTextFormat::FontItalic) || style->hasProperty(QTextFormat::FontWeight) || style->hasProperty(QTextFormat::FontPointSize);
+    ui->fontLabel->setChecked(checked);
+    slotFontEnabled(checked);
     QFontDatabase dbase;
     QStringList availableStyles = dbase.styles(font.family());
-    if (font.italic() && !(availableStyles.contains(QString("Italic"))) && availableStyles.contains(QString("Oblique")))
+    if (font.italic() && !(availableStyles.contains(QString("Italic"))) && availableStyles.contains(QString("Oblique"))) {
         font.setStyle(QFont::StyleOblique);
+    }
     m_fontChooser->setFont(font);
 
+    //position
     m_positionInherited  = !style->hasProperty(QTextFormat::TextVerticalAlignment);
+    checked = style->hasProperty(QTextFormat::TextVerticalAlignment);
     switch (style->verticalAlignment()) {
     case QTextCharFormat::AlignSuperScript:
         ui->positionList->setCurrentIndex(1);
@@ -330,86 +416,92 @@ void CharacterHighlightingTab::setDisplay(KoCharacterStyle *style)
         // TODO check if its custom instead.
         ui->positionList->setCurrentIndex(0);
     }
-    if (!m_uniqueFormat){
-        ui->positionList->setEnabled(false);
-        ui->positionList->setCurrentIndex(-1);
-    }
+    ui->positionLabel->setChecked(checked);
+    slotPositionEnabled(checked);
 
+    //underline
     m_underlineStyleInherited = !style->hasProperty(KoCharacterStyle::UnderlineStyle);
     m_underlineTypeInherited = !style->hasProperty(KoCharacterStyle::UnderlineType);
+
+    checked = style->hasProperty(KoCharacterStyle::UnderlineType);
+    ui->underlineStyle->setCurrentIndex(lineTypeToIndex(style->underlineType()));
+    ui->underlineLineStyle->setCurrentIndex(lineStyleToIndex(style->underlineStyle()));
+    ui->underlineColor->setColor(style->underlineColor());
+    ui->underlineLabel->setChecked(checked);
+    slotUnderlineEnabled(checked);
+
+    //strikethrough
     m_strikeoutStyleInherited = !style->hasProperty(KoCharacterStyle::StrikeOutStyle);
     m_strikeoutTypeInherited = !style->hasProperty(KoCharacterStyle::StrikeOutType);
     m_strikeoutcolorInherited = !style->hasProperty(KoCharacterStyle::StrikeOutColor);
+
+    checked = style->hasProperty(KoCharacterStyle::StrikeOutType);
+    ui->strikethroughStyle->setCurrentIndex(lineTypeToIndex(style->strikeOutType()));
+    ui->strikethroughLineStyle->setCurrentIndex(lineStyleToIndex(style->strikeOutStyle()));
+    ui->strikethroughColor->setColor(style->strikeOutColor());
+    ui->strikethroughLabel->setChecked(checked);
+    slotStrikethroughEnabled(checked);
+
+    //capitalisation
     m_mixedCaseInherited = !style->hasProperty(QFont::MixedCase);
     m_smallCapsInherited = !style->hasProperty(QFont::SmallCaps);
     m_allUpperCaseInherited = !style->hasProperty(QFont::AllUppercase);
     m_allLowerCaseInherited = !style->hasProperty(QFont::AllLowercase);
     m_capitalizInherited = !style->hasProperty(QFont::Capitalize);
 
-    //set the underline up
-    ui->underlineStyle->setCurrentIndex(1);
-    ui->underlineLineStyle->setCurrentIndex(lineStyleToIndex(style->underlineStyle()));
-    if (m_uniqueFormat)
-        ui->underlineStyle->setCurrentIndex(lineTypeToIndex(style->underlineType()));
-    else
-        ui->underlineStyle->setCurrentIndex(-1);
-
-    underlineTypeChanged(ui->underlineStyle->currentIndex());
-    ui->underlineColor->setColor(style->underlineColor());
-
-    //set the strikethrough up
-    ui->strikethroughStyle->setCurrentIndex(1);
-    ui->strikethroughLineStyle->setCurrentIndex(lineStyleToIndex(style->strikeOutStyle()));
-    if (m_uniqueFormat)
-        ui->strikethroughStyle->setCurrentIndex(lineTypeToIndex(style->strikeOutType()));
-    else
-        ui->strikethroughStyle->setCurrentIndex(-1);
-    strikethroughTypeChanged(ui->strikethroughStyle->currentIndex());
-    ui->strikethroughColor->setColor(style->strikeOutColor());
-
-    //Now set the capitalisation
-    int index;
+    checked = style->hasProperty(QTextFormat::FontCapitalization);
     switch (style->fontCapitalization()) {
-    case QFont::MixedCase: ui->capitalizationList->setCurrentIndex(0);index=0; break;
-    case QFont::SmallCaps: ui->capitalizationList->setCurrentIndex(1);index=1; break;
-    case QFont::AllUppercase: ui->capitalizationList->setCurrentIndex(2);index=2; break;
-    case QFont::AllLowercase: ui->capitalizationList->setCurrentIndex(3);index=3; break;
-    case QFont::Capitalize: ui->capitalizationList->setCurrentIndex(4);index=4; break;
+    case QFont::MixedCase:
+        ui->capitalizationList->setCurrentIndex(0);
+        break;
+    case QFont::SmallCaps:
+        ui->capitalizationList->setCurrentIndex(1);
+        break;
+    case QFont::AllUppercase:
+        ui->capitalizationList->setCurrentIndex(2);
+        break;
+    case QFont::AllLowercase:
+        ui->capitalizationList->setCurrentIndex(3);
+        break;
+    case QFont::Capitalize:
+        ui->capitalizationList->setCurrentIndex(4);
+        break;
     default:
         ui->capitalizationList->setCurrentIndex(0);
-        index =0;
         break;
     }
-
-    if(m_uniqueFormat)
-        capitalisationChanged(index);
-    else{
-        ui->capitalizationList->setCurrentIndex(-1);
-        ui->capitalizationList->setEnabled(false);
-    }
+    ui->capitalizationLabel->setChecked(checked);
+    slotCapitalisationEnabled(checked);
 
     //Set font decoration display
-    ui->enableText->setVisible(!m_uniqueFormat);
-    ui->enableText->setChecked(m_uniqueFormat);
-    textToggled(m_uniqueFormat);
-    ui->enableBackground->setVisible(!m_uniqueFormat);
-    ui->enableBackground->setChecked(m_uniqueFormat);
-    backgroundToggled(m_uniqueFormat);
+//    ui->enableText->setVisible(!m_uniqueFormat);
+//    ui->enableText->setChecked(m_uniqueFormat);
+//    slotTextToggled(m_uniqueFormat);
+//    ui->enableBackground->setVisible(!m_uniqueFormat);
+//    ui->enableBackground->setChecked(m_uniqueFormat);
+//    backgroundToggled(m_uniqueFormat);
 
-    m_textColorChanged = false;
-    m_backgroundColorChanged = false;
-    m_textColorReset = ! style->hasProperty(QTextFormat::ForegroundBrush);
-    if (m_textColorReset || (style->foreground().style() == Qt::NoBrush)) {
-        clearTextColor();
+    //text color
+    checked = style->hasProperty(QTextFormat::ForegroundBrush);
+    if (!style->hasProperty(QTextFormat::ForegroundBrush) || (style->foreground().style() == Qt::NoBrush)) {
+        slotClearTextColor();
     } else {
         ui->textColor->setColor(style->foreground().color());
     }
-    m_backgroundColorReset = ! style->hasProperty(QTextFormat::BackgroundBrush);
-    if (m_backgroundColorReset || (style->background().style() == Qt::NoBrush)) {
-        clearBackgroundColor();
+    ui->textColorLabel->setChecked(checked);
+    slotTextColorEnabled(checked);
+
+    //background color
+    checked = style->hasProperty(QTextFormat::BackgroundBrush);
+    if (!style->hasProperty(QTextFormat::BackgroundBrush) || (style->background().style() == Qt::NoBrush)) {
+        slotClearBackgroundColor();
     } else {
         ui->backgroundColor->setColor(style->background().color());
     }
+    ui->backgroundColorLabel->setChecked(checked);
+    slotBackgroundColorEnabled(checked);
+
+    blockSignals(false);
 }
 
 void CharacterHighlightingTab::save(KoCharacterStyle *style)
@@ -486,13 +578,13 @@ void CharacterHighlightingTab::save(KoCharacterStyle *style)
         }
     }
 
-    if (ui->enableBackground->isChecked() && m_backgroundColorReset)
+    if (/*ui->enableBackground->isChecked() &&*/ m_backgroundColorReset)
         style->setBackground(QBrush(Qt::NoBrush));
-    else if (ui->enableBackground->isChecked() && m_backgroundColorChanged)
+    else if (/*ui->enableBackground->isChecked() &&*/ m_backgroundColorChanged)
         style->setBackground(QBrush(ui->backgroundColor->color()));
-    if (ui->enableText->isChecked() && m_textColorReset)
+    if (/*ui->enableText->isChecked() &&*/ m_textColorReset)
         style->setForeground(QBrush(Qt::NoBrush));
-    else if (ui->enableText->isChecked() && m_textColorChanged)
+    else if (/*ui->enableText->isChecked() && */m_textColorChanged)
         style->setForeground(QBrush(ui->textColor->color()));
 }
 

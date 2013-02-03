@@ -36,6 +36,11 @@
        <property name="documentMode">
         <bool>true</bool>
        </property>
+       <widget class="QWidget" name="paragraphGeneral">
+        <attribute name="title">
+         <string>Page</string>
+        </attribute>
+       </widget>
        <widget class="CharacterHighlightingTab" name="characterHighlighting">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">

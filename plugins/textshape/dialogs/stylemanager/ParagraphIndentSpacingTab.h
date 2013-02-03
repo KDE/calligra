@@ -20,19 +20,22 @@
 #ifndef PARAGRAPHINDENTSPACINGTAB_H
 #define PARAGRAPHINDENTSPACINGTAB_H
 
-#include <ui_ParagraphIndentSpacingTab.h>
-
 #include <KoUnit.h>
 
 #include <QWidget>
 
 class KoParagraphStyle;
 
+namespace Ui {
+    class ParagraphIndentSpacingTab;
+}
+
 class ParagraphIndentSpacingTab : public QWidget
 {
     Q_OBJECT
 public:
-    ParagraphIndentSpacingTab(QWidget *parent = 0);
+    explicit ParagraphIndentSpacingTab(QWidget *parent = 0);
+    ~ParagraphIndentSpacingTab();
     // open and display the style
     void setDisplay(KoParagraphStyle *style);
     void setUnit(const KoUnit &unit);
@@ -41,25 +44,49 @@ public:
     void save(KoParagraphStyle *style);
 
 signals:
-    void parStyleChanged();
+    //indentation signals
+    void leftIndentEnabled(bool enabled);
+    void leftIndentChanged(qreal value);
+    void rightIndentEnabled(bool enabled);
+    void rightIndentChanged(qreal value);
+    void firstLineIndentEnabled(bool enabled);
+    void firstLineIndentChanged(qreal value);
+    void autoTextIndentChecked(bool checked);
+    //line spacing signals
+    void lineSpacingEnabled(bool enabled);
+    void lineSpacingChanged(int item);
+    void lineSpacingValueChanged(qreal value);
+    void lineSpacingPercentChanged(int percent);
+    void useFontMetricsChecked(bool checked);
+    //paragraph spacing signals
+    void topParagraphSpacingEnabled(bool enabled);
+    void topParagraphSpacingChanged(qreal value);
+    void bottomParagraphSpacingEnabled(bool enabled);
+    void bottomParagraphSpacingChanged(qreal value);
 
 private slots:
-    void lineSpacingChanged(int);
-    void spacingValueChanged(qreal value);
-    void spacingPercentChanged(int percent);
-    void useFontMetrices(bool);
-    void autoTextIndentChanged(int state);
-    void firstIndentValueChanged();
-    void leftMarginValueChanged();
-    void rightMarginValueChanged();
-    void bottomMarginValueChanged();
-    void topMarginValueChanged();
-    void firstLineMarginChanged(qreal margin);
-    void leftMarginChanged(qreal margin);
-    void rightMarginChanged(qreal margin);
+    //indentation slots
+    void slotLeftIndentEnabled(bool enabled);
+    void slotLeftIndentChanged(qreal value);
+    void slotRightIndentEnabled(bool enabled);
+    void slotRightIndentChanged(qreal value);
+    void slotFirstLineIndentEnabled(bool enabled);
+    void slotFirstLineIndentChanged(qreal value);
+    void slotAutoTextIndentChecked(bool checked);
+    //line spacing slots
+    void slotLineSpacingEnabled(bool enabled);
+    void slotLineSpacingChanged(int item);
+    void slotLineSpacingValueChanged(qreal value);
+    void slotLineSpacingPercentChanged(int percent);
+    void slotUseFontMetricsChecked(bool checked);
+    //paragraph spacing slots
+    void slotTopParagraphSpacingEnabled(bool enabled);
+    void slotTopParagraphSpacingChanged(qreal value);
+    void slotBottomParagraphSpacingEnabled(bool enabled);
+    void slotBottomParagraphSpacingChanged(qreal value);
 
 private:
-    Ui::ParagraphIndentSpacingTab widget;
+    Ui::ParagraphIndentSpacingTab *ui;
 
     KoParagraphStyle *m_style;
     bool m_fontMetricsChecked;

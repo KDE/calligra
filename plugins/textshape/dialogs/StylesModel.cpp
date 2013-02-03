@@ -131,6 +131,33 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole: {
         return QVariant(QSize(250, 48));
     }
+    case AbstractStylesModel::ParagraphStylePointer: {
+        if (m_modelType != AbstractStylesModel::ParagraphStyle) {
+            return QVariant();
+        }
+        KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
+        if (paragStyle) {
+            QVariant variant;
+            variant.setValue<void*>(paragStyle);
+            return variant;
+        }
+        return QVariant();
+        break;
+    }
+    case AbstractStylesModel::CharacterStylePointer: {
+        if (m_modelType != AbstractStylesModel::CharacterStyle) {
+            return QVariant();
+        }
+        KoCharacterStyle *charStyle = m_styleManager->characterStyle(id);
+        if (charStyle) {
+            QVariant variant;
+            variant.setValue<void*>(charStyle);
+            return variant;
+        }
+        return QVariant();
+        break;
+
+    }
     default: break;
     };
     return QVariant();

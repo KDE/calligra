@@ -20,139 +20,120 @@
  */
 
 #include "ParagraphIndentSpacingTab.h"
+#include "ui_ParagraphIndentSpacingTab.h"
 
 #include <KoParagraphStyle.h>
 #include <KDebug>
 
 ParagraphIndentSpacingTab::ParagraphIndentSpacingTab(QWidget *parent)
-        : QWidget(parent),
-        m_fontMetricsChecked(false)
+    : QWidget(parent)
+    , ui(new Ui::ParagraphIndentSpacingTab)
+    , m_fontMetricsChecked(false)
 {
-    widget.setupUi(this);
+    ui->setupUi(this);
 
-    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SLOT(firstLineMarginChanged(qreal)));
-    connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SLOT(leftMarginChanged(qreal)));
-    connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SLOT(rightMarginChanged(qreal)));
+    //indentation
+    connect(ui->leftLabel, SIGNAL(toggled(bool)), this, SLOT(slotLeftIndentEnabled(bool)));
+    connect(ui->left, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotLeftIndentChanged(qreal)));
+    connect(ui->rightLabel, SIGNAL(toggled(bool)), this, SLOT(slotRightIndentEnabled(bool)));
+    connect(ui->right, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRightIndentChanged(qreal)));
+    connect(ui->firstLineLabel, SIGNAL(toggled(bool)), this, SLOT(slotFirstLineIndentEnabled(bool)));
+    connect(ui->first, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotFirstLineIndentChanged(qreal)));
+    connect(ui->autoTextIndent, SIGNAL(toggled(bool)), this, SLOT(slotAutoTextIndentChecked(bool)));
 
+    //line spacing
     // Keep order in sync with lineSpacingType() and display()
-    widget.lineSpacing->addItem(i18nc("Line spacing value", "Single"));
-    widget.lineSpacing->addItem(i18nc("Line spacing value", "1.5 Lines"));
-    widget.lineSpacing->addItem(i18nc("Line spacing value", "Double"));
-    widget.lineSpacing->addItem(i18nc("Line spacing type", "Proportional"));    // called Proportional like in OO
-    widget.lineSpacing->addItem(i18nc("Line spacing type", "Additional"));    // normal distance + absolute value
-    widget.lineSpacing->addItem(i18nc("Line spacing type", "Fixed"));
-    widget.lineSpacing->addItem(i18nc("Line spacing type", "At least"));
+    ui->lineSpacing->addItem(i18nc("Line spacing value", "Single"));
+    ui->lineSpacing->addItem(i18nc("Line spacing value", "1.5 Lines"));
+    ui->lineSpacing->addItem(i18nc("Line spacing value", "Double"));
+    ui->lineSpacing->addItem(i18nc("Line spacing type", "Proportional"));    // called Proportional like in OO
+    ui->lineSpacing->addItem(i18nc("Line spacing type", "Additional"));    // normal distance + absolute value
+    ui->lineSpacing->addItem(i18nc("Line spacing type", "Fixed"));
+    ui->lineSpacing->addItem(i18nc("Line spacing type", "At least"));
+    connect(ui->lineSpacingLabel, SIGNAL(toggled(bool)), this, SLOT(slotLineSpacingEnabled(bool)));
+    connect(ui->lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(slotLineSpacingChanged(int)));
+    connect(ui->proportional, SIGNAL(valueChanged(int)), this, SLOT(slotLineSpacingPercentChanged(int)));
+    connect(ui->custom, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotLineSpacingValueChanged(qreal)));
+    connect(ui->useFont, SIGNAL(toggled(bool)), this, SLOT(slotUseFontMetricsChecked(bool)));
+//    blockSignals(true);
+//    slotLineSpacingChanged(0);
+//    blockSignals(false);
 
-    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SLOT(firstIndentValueChanged()));
-    connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SLOT(leftMarginValueChanged()));
-    connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SLOT(rightMarginValueChanged()));
-    connect(widget.after, SIGNAL(valueChangedPt(qreal)), this, SLOT(bottomMarginValueChanged()));
-    connect(widget.before, SIGNAL(valueChangedPt(qreal)), this, SLOT(topMarginValueChanged()));
-    connect(widget.lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(lineSpacingChanged(int)));
-    connect(widget.useFont, SIGNAL(toggled(bool)), this, SLOT(useFontMetrices(bool)));
-    connect(widget.autoTextIndent, SIGNAL(stateChanged(int)), this, SLOT(autoTextIndentChanged(int)));
-    connect(widget.proportional, SIGNAL(valueChanged(int)), this, SLOT(spacingPercentChanged(int)));
-    connect(widget.custom, SIGNAL(valueChangedPt(qreal)), this, SLOT(spacingValueChanged(qreal)));
-    lineSpacingChanged(0);
+    //paragraph spacing
+    connect(ui->beforeLabel, SIGNAL(toggled(bool)), this, SLOT(slotTopParagraphSpacingEnabled(bool)));
+    connect(ui->before, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotTopParagraphSpacingChanged(qreal)));
+    connect(ui->afterLabel, SIGNAL(toggled(bool)), this, SLOT(slotBottomParagraphSpacingEnabled(bool)));
+    connect(ui->after, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotBottomParagraphSpacingChanged(qreal)));
 }
 
-void ParagraphIndentSpacingTab::autoTextIndentChanged(int state)
+ParagraphIndentSpacingTab::~ParagraphIndentSpacingTab()
 {
-    widget.first->setEnabled(state == Qt::Unchecked);
-    m_autoTextIndentInherited = false;
-    emit parStyleChanged();
-}
-void ParagraphIndentSpacingTab::firstIndentValueChanged()
-{
-    m_textIndentInherited = false;
-    emit parStyleChanged();
+    delete ui;
+    ui = 0;
 }
 
-void ParagraphIndentSpacingTab::rightMarginValueChanged()
+void ParagraphIndentSpacingTab::slotLeftIndentEnabled(bool enabled)
 {
-    m_rightMarginIngerited = false;
-    emit parStyleChanged();
+    ui->left->setEnabled(enabled);
+    emit leftIndentEnabled(enabled);
 }
 
-void ParagraphIndentSpacingTab::leftMarginValueChanged()
+void ParagraphIndentSpacingTab::slotLeftIndentChanged(qreal value)
 {
-    m_leftMarginInherited = false;
-    emit parStyleChanged();
+    emit leftIndentChanged(value);
 }
 
-void ParagraphIndentSpacingTab::topMarginValueChanged()
+void ParagraphIndentSpacingTab::slotRightIndentEnabled(bool enabled)
 {
-    m_topMarginInherited = false;
-    emit parStyleChanged();
+    ui->right->setEnabled(enabled);
+    emit rightIndentEnabled(enabled);
 }
 
-void ParagraphIndentSpacingTab::bottomMarginValueChanged()
+void ParagraphIndentSpacingTab::slotRightIndentChanged(qreal value)
 {
-    m_bottomMarginInherited = false;
-    emit parStyleChanged();
+    emit rightIndentChanged(value);
 }
 
-void ParagraphIndentSpacingTab::setDisplay(KoParagraphStyle *style)
+void ParagraphIndentSpacingTab::slotFirstLineIndentEnabled(bool enabled)
 {
-    m_style = style;
-    // TODO : handle relatives
-    widget.first->changeValue(style->textIndent());
-    widget.left->changeValue(style->leftMargin());
-    widget.right->changeValue(style->rightMargin());
-    widget.before->changeValue(style->topMargin());
-    widget.after->changeValue(style->bottomMargin());
-
-    m_rightMarginIngerited = !style->hasProperty(QTextFormat::BlockRightMargin);
-    m_leftMarginInherited = !style->hasProperty(QTextFormat::BlockLeftMargin);
-    m_topMarginInherited = !style->hasProperty(QTextFormat::BlockTopMargin);
-    m_bottomMarginInherited = !style->hasProperty(QTextFormat::BlockBottomMargin);
-    m_autoTextIndentInherited = !style->hasProperty(KoParagraphStyle::AutoTextIndent);
-    m_textIndentInherited = !style->hasProperty(QTextFormat::TextIndent);
-
-    widget.autoTextIndent->setChecked(style->autoTextIndent());
-
-    m_spacingInherited = !(style->hasProperty(KoParagraphStyle::FixedLineHeight) || style->hasProperty(KoParagraphStyle::LineSpacing) || style->hasProperty(KoParagraphStyle::PercentLineHeight) ||style->hasProperty(KoParagraphStyle::MinimumLineHeight));
-
-    int index;
-    if (style->hasProperty(KoParagraphStyle::FixedLineHeight) && style->lineHeightAbsolute() != 0) {
-        // this is the strongest; if this is set we don't care what other properties there are.
-        index = 5;
-    } else if (style->hasProperty(KoParagraphStyle::LineSpacing) && style->lineSpacing() != 0) {
-        // if LineSpacing is set then percent is ignored.
-        index = 4;
-    } else if (style->hasProperty(KoParagraphStyle::PercentLineHeight) && style->lineHeightPercent() != 0) {
-        int percent = style->lineHeightPercent();
-        if (percent == 120)
-            index = 0; // single
-        else if (percent == 180)
-            index = 1; // 1.5
-        else if (percent == 240)
-            index = 2; // double
-        else
-            index = 3; // proportional
-    } else if (style->hasProperty(KoParagraphStyle::MinimumLineHeight) && style->minimumLineHeight() != 0) {
-        index = 6;
-    } else {
-        index = 0; // nothing set, default is 'single' just like for geeks.
-    }
-    widget.lineSpacing->setCurrentIndex(index);
-    //widget.minimumLineSpacing->changeValue(style->minimumLineHeight());
-    widget.useFont->setChecked(style->lineSpacingFromFont());
-    m_fontMetricsChecked = style->lineSpacingFromFont();
+    ui->first->setEnabled(enabled && !ui->autoTextIndent->isChecked());
+    ui->autoTextIndent->setEnabled(enabled);
+    emit firstLineIndentEnabled(enabled);
 }
 
-void ParagraphIndentSpacingTab::lineSpacingChanged(int row)
+void ParagraphIndentSpacingTab::slotFirstLineIndentChanged(qreal value)
 {
-    bool percent = false, custom = false;
+    emit firstLineIndentChanged(value);
+}
+
+void ParagraphIndentSpacingTab::slotAutoTextIndentChecked(bool checked)
+{
+    ui->first->setEnabled(ui->firstLineLabel->isChecked() && !checked);
+    emit autoTextIndentChecked(checked);
+}
+
+void ParagraphIndentSpacingTab::slotLineSpacingEnabled(bool enabled)
+{
+    ui->lineSpacing->setEnabled(enabled);
+    ui->spacingStack->setEnabled(enabled);
+    ui->useFont->setEnabled(enabled);
+    emit lineSpacingEnabled(enabled);
+}
+
+void ParagraphIndentSpacingTab::slotLineSpacingChanged(int item)
+{
+    emit lineSpacingChanged(item);
+//this does not belong here
+/*    bool percent = false, custom = false;
     qreal customValue = 0.0;
-    switch (row) {
+    switch (item) {
         case 0:
         case 1:
         case 2:
             break;
         case 3: // proportional
             percent = true;
-            widget.proportional->setValue(m_style->lineHeightPercent());
+            ui->proportional->setValue(m_style->lineHeightPercent());
             break;
         case 4: // additional
             custom = true;
@@ -175,31 +156,140 @@ void ParagraphIndentSpacingTab::lineSpacingChanged(int row)
     m_spacingInherited = false;
 
     if (custom) {
-        widget.custom->setEnabled(true);
-        widget.spacingStack->setCurrentWidget(widget.unitsPage);
-        widget.custom->changeValue(customValue);
+        ui->custom->setEnabled(true);
+        ui->spacingStack->setCurrentWidget(ui->unitsPage);
+        ui->custom->changeValue(customValue);
     } else {
-        widget.spacingStack->setCurrentWidget(widget.percentPage);
-        widget.proportional->setEnabled(percent);
+        ui->spacingStack->setCurrentWidget(ui->percentPage);
+        ui->proportional->setEnabled(percent);
         if (! percent)
-            widget.proportional->setValue(100);
+            ui->proportional->setValue(100);
     }
 
-    widget.useFont->setEnabled(row != 5);
-    widget.useFont->setChecked(row == 5 ? false : m_fontMetricsChecked);
+    ui->useFont->setEnabled(item != 5);
+    ui->useFont->setChecked(item == 5 ? false : m_fontMetricsChecked);
     emit parStyleChanged();
+*/
 }
 
-void ParagraphIndentSpacingTab::spacingPercentChanged(int percent)
+void ParagraphIndentSpacingTab::slotLineSpacingPercentChanged(int percent)
 {
-    m_spacingInherited = false;
-    emit parStyleChanged();
+    emit lineSpacingPercentChanged(percent);
 }
 
-void ParagraphIndentSpacingTab::spacingValueChanged(qreal value)
+void ParagraphIndentSpacingTab::slotLineSpacingValueChanged(qreal value)
 {
-    m_spacingInherited = false;
-    emit parStyleChanged();
+    emit lineSpacingValueChanged(value);
+}
+
+void ParagraphIndentSpacingTab::slotUseFontMetricsChecked(bool checked)
+{
+    emit useFontMetricsChecked(checked);
+}
+
+void ParagraphIndentSpacingTab::slotTopParagraphSpacingEnabled(bool enabled)
+{
+    ui->before->setEnabled(enabled);
+    emit topParagraphSpacingEnabled(enabled);
+}
+
+void ParagraphIndentSpacingTab::slotTopParagraphSpacingChanged(qreal value)
+{
+    emit topParagraphSpacingChanged(value);
+}
+
+void ParagraphIndentSpacingTab::slotBottomParagraphSpacingEnabled(bool enabled)
+{
+    ui->after->setEnabled(enabled);
+    emit bottomParagraphSpacingEnabled(enabled);
+}
+
+void ParagraphIndentSpacingTab::slotBottomParagraphSpacingChanged(qreal value)
+{
+    emit bottomParagraphSpacingChanged(value);
+}
+
+void ParagraphIndentSpacingTab::setDisplay(KoParagraphStyle *style)
+{
+    if (!style) {
+        return;
+    }
+    blockSignals(true);
+    bool checked;
+    // indentation
+    checked = style->hasProperty(QTextFormat::BlockLeftMargin);
+    ui->leftLabel->setChecked(checked);
+    slotLeftIndentEnabled(checked);
+    ui->left->changeValue(style->leftMargin());
+    checked = style->hasProperty(QTextFormat::BlockRightMargin);
+    ui->rightLabel->setChecked(checked);
+    slotRightIndentEnabled(checked);
+    ui->right->changeValue(style->rightMargin());
+    checked = style->hasProperty(QTextFormat::TextIndent);
+    ui->firstLineLabel->setChecked(checked);
+    ui->autoTextIndent->setChecked(style->autoTextIndent()); //set this first as first line indent check for this to enable/disable the spinBox
+    slotFirstLineIndentEnabled(checked);
+    ui->first->changeValue(style->textIndent());
+
+    //line spacing
+    checked = (style->hasProperty(KoParagraphStyle::FixedLineHeight) || style->hasProperty(KoParagraphStyle::LineSpacing) || style->hasProperty(KoParagraphStyle::PercentLineHeight) ||style->hasProperty(KoParagraphStyle::MinimumLineHeight));
+    ui->lineSpacingLabel->setChecked(checked);
+    slotLineSpacingEnabled(checked);
+    ui->proportional->setValue(style->lineHeightPercent());
+
+    if (style->hasProperty(KoParagraphStyle::FixedLineHeight) && style->lineHeightAbsolute() != 0) {
+        // this is the strongest
+        ui->lineSpacing->setCurrentIndex(5);
+        ui->spacingStack->setCurrentWidget(ui->unitsPage);
+        ui->custom->changeValue(style->lineHeightAbsolute());
+        ui->useFont->setEnabled(false);
+    } else if (style->hasProperty(KoParagraphStyle::LineSpacing) && style->lineSpacing() != 0) {
+        // if LineSpacing is set then percent is ignored.
+        ui->lineSpacing->setCurrentIndex(4);
+        ui->spacingStack->setCurrentWidget(ui->unitsPage);
+        ui->custom->changeValue(qMax(qreal(0.1), style->lineSpacing()));
+    } else if (style->hasProperty(KoParagraphStyle::PercentLineHeight) && style->lineHeightPercent() != 0) {
+        int percent = style->lineHeightPercent();
+        if (percent == 120) {
+            ui->lineSpacing->setCurrentIndex(0); // single
+            ui->proportional->setEnabled(false);
+        }
+        else if (percent == 180) {
+            ui->lineSpacing->setCurrentIndex(1); // 1.5
+            ui->proportional->setEnabled(false);
+        }
+        else if (percent == 240) {
+            ui->lineSpacing->setCurrentIndex(2); // double
+            ui->proportional->setEnabled(false);
+        }
+        else {
+            ui->lineSpacing->setCurrentIndex(3); // proportional
+            ui->proportional->setEnabled(ui->lineSpacingLabel->isChecked());
+        }
+        ui->spacingStack->setCurrentWidget(ui->percentPage);
+    } else if (style->hasProperty(KoParagraphStyle::MinimumLineHeight) && style->minimumLineHeight() != 0) {
+        ui->lineSpacing->setCurrentIndex(6);
+        ui->spacingStack->setCurrentWidget(ui->unitsPage);
+        ui->custom->changeValue(style->minimumLineHeight());
+    } else {
+        ui->lineSpacing->setCurrentIndex(0); // nothing set, default is 'single' just like for geeks.
+        ui->proportional->setValue(120);
+        ui->proportional->setEnabled(false);
+    }
+    ui->useFont->setChecked(style->lineSpacingFromFont() && ui->lineSpacing->currentIndex() != 5);
+    m_fontMetricsChecked = style->lineSpacingFromFont();
+
+    //paragraph spacing
+    checked = style->hasProperty(QTextFormat::BlockTopMargin);
+    ui->beforeLabel->setChecked(checked);
+    slotTopParagraphSpacingEnabled(checked);
+    ui->before->changeValue(style->topMargin());
+    checked = style->hasProperty(QTextFormat::BlockBottomMargin);
+    ui->afterLabel->setChecked(checked);
+    slotBottomParagraphSpacingEnabled(checked);
+    ui->after->changeValue(style->bottomMargin());
+
+    blockSignals(false);
 }
 
 void ParagraphIndentSpacingTab::save(KoParagraphStyle *style)
@@ -208,83 +298,58 @@ void ParagraphIndentSpacingTab::save(KoParagraphStyle *style)
     // since this dialog may be used on a copy style, which will be applied later. And removing
     // items doesn't work for that.
     if (!m_textIndentInherited){
-        style->setTextIndent(QTextLength(QTextLength::FixedLength, widget.first->value()));
+        style->setTextIndent(QTextLength(QTextLength::FixedLength, ui->first->value()));
     }
     if (!m_leftMarginInherited){
-        style->setLeftMargin(QTextLength(QTextLength::FixedLength, widget.left->value()));
+        style->setLeftMargin(QTextLength(QTextLength::FixedLength, ui->left->value()));
     }
     if (!m_rightMarginIngerited){
-        style->setRightMargin(QTextLength(QTextLength::FixedLength, widget.right->value()));
+        style->setRightMargin(QTextLength(QTextLength::FixedLength, ui->right->value()));
     }
     if (!m_topMarginInherited){
-        style->setTopMargin(QTextLength(QTextLength::FixedLength, widget.before->value()));
+        style->setTopMargin(QTextLength(QTextLength::FixedLength, ui->before->value()));
     }
     if (!m_bottomMarginInherited){
-        style->setBottomMargin(QTextLength(QTextLength::FixedLength, widget.after->value()));
+        style->setBottomMargin(QTextLength(QTextLength::FixedLength, ui->after->value()));
     }
     if (!m_autoTextIndentInherited){
-        style->setAutoTextIndent(widget.autoTextIndent->isChecked());
+        style->setAutoTextIndent(ui->autoTextIndent->isChecked());
     }
     if (!m_spacingInherited) {
         style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
         style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
         style->setLineSpacing(0);
-        switch (widget.lineSpacing->currentIndex()) {
+        switch (ui->lineSpacing->currentIndex()) {
         case 0: style->setLineHeightPercent(120); break;
         case 1: style->setLineHeightPercent(180); break;
         case 2: style->setLineHeightPercent(240); break;
-        case 3: style->setLineHeightPercent(widget.proportional->value()); break;
+        case 3: style->setLineHeightPercent(ui->proportional->value()); break;
         case 4:
-            if (widget.custom->value() == 0.0) { // then we need to save it differently.
+            if (ui->custom->value() == 0.0) { // then we need to save it differently.
                 style->setLineHeightPercent(100);
             } else {
-                style->setLineSpacing(widget.custom->value());
+                style->setLineSpacing(ui->custom->value());
             }
             break;
         case 5:
-            style->setLineHeightAbsolute(widget.custom->value());
+            style->setLineHeightAbsolute(ui->custom->value());
             break;
         case 6:
-            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.custom->value()));
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, ui->custom->value()));
             break;
         }
-        style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
+        style->setLineSpacingFromFont(ui->lineSpacing->currentIndex() != 5 && ui->useFont->isChecked());
     }
 }
 
 void ParagraphIndentSpacingTab::setUnit(const KoUnit &unit)
 {
-    widget.first->setUnit(unit);
-    widget.left->setUnit(unit);
-    widget.right->setUnit(unit);
-    widget.before->setUnit(unit);
-    widget.after->setUnit(unit);
-    widget.custom->setUnit(unit);
-}
-
-void ParagraphIndentSpacingTab::useFontMetrices(bool on)
-{
-    if (widget.lineSpacing->currentIndex() != 5)
-        m_fontMetricsChecked = on;
-    emit parStyleChanged();
-}
-
-void ParagraphIndentSpacingTab::firstLineMarginChanged(qreal margin)
-{
-    Q_UNUSED(margin);
-    emit parStyleChanged();
-}
-
-void ParagraphIndentSpacingTab::leftMarginChanged(qreal margin)
-{
-    Q_UNUSED(margin);
-    emit parStyleChanged();
-}
-
-void ParagraphIndentSpacingTab::rightMarginChanged(qreal margin)
-{
-    Q_UNUSED(margin);
-    emit parStyleChanged();
+    ui->first->setUnit(unit);
+    ui->left->setUnit(unit);
+    ui->right->setUnit(unit);
+    ui->before->setUnit(unit);
+    ui->after->setUnit(unit);
+    ui->custom->setUnit(unit);
 }
 
 #include <ParagraphIndentSpacingTab.moc>

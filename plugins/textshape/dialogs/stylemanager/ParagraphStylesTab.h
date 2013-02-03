@@ -20,7 +20,14 @@
 #ifndef PARAGRAPHSTYLESTAB_H
 #define PARAGRAPHSTYLESTAB_H
 
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
+
+#include <QModelIndex>
 #include <QWidget>
+
+class AbstractStylesModel;
+class StylesDelegate;
 
 namespace Ui {
 class ParagraphStylesTab;
@@ -29,13 +36,57 @@ class ParagraphStylesTab;
 class ParagraphStylesTab : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit ParagraphStylesTab(QWidget *parent = 0);
     ~ParagraphStylesTab();
-    
+
+    void setStylesModel(AbstractStylesModel *model);
+    void setDisplay(KoParagraphStyle *style);
+
+private slots:
+    void slotStyleSelected(const QModelIndex &index);
+
+    void slotCapitalizationEnabled(bool enabled);
+    void slotCapitalizationChanged(QFont::Capitalization capitalization);
+    void slotUnderlineEnabled(bool enabled);
+    void slotUnderlineChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor);
+    void slotStrikethroughEnabled(bool enabled);
+    void slotStrikethroughChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor);
+    void slotPositionEnabled(bool enabled);
+    void slotPositionChanged(QTextCharFormat::VerticalAlignment alignment);
+    void slotBackgroundColorEnabled(bool enabled);
+    void slotBackgroundColorChanged(QColor color);
+    void slotTextColorEnabled(bool enabled);
+    void slotTextColorChanged(QColor color);
+    void slotFontEnabled(bool enabled);
+    void slotFontChanged(const QFont &font);
+
+    //indentation slots
+    void slotLeftIndentEnabled(bool enabled);
+    void slotLeftIndentChanged(qreal value);
+    void slotRightIndentEnabled(bool enabled);
+    void slotRightIndentChanged(qreal value);
+    void slotFirstLineIndentEnabled(bool enabled);
+    void slotFirstLineIndentChanged(qreal value);
+    void slotAutoTextIndentChecked(bool checked);
+    //line spacing slots
+    void slotLineSpacingEnabled(bool enabled);
+    void slotLineSpacingChanged(int item);
+    void slotLineSpacingValueChanged(qreal value);
+    void slotLineSpacingPercentChanged(int percent);
+    void slotUseFontMetricsChecked(bool checked);
+    //paragraph spacing slots
+    void slotTopParagraphSpacingEnabled(bool enabled);
+    void slotTopParagraphSpacingChanged(qreal value);
+    void slotBottomParagraphSpacingEnabled(bool enabled);
+    void slotBottomParagraphSpacingChanged(qreal value);
+
 private:
     Ui::ParagraphStylesTab *ui;
+
+    AbstractStylesModel *m_sourceModel;
+    StylesDelegate *m_stylesDelegate;
 };
 
 #endif // PARAGRAPHSTYLESTAB_H
