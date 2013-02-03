@@ -74,6 +74,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesManagerView.cpp
      KPrCustomSlideShowsModel.cpp
      KPrSlidesSorterItemDelegate.cpp
+     KPrPageLayoutWidget.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrAnimationRemoveCommand.cpp
@@ -90,8 +91,6 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrReplaceAnimationCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
-     dockers/KPrPageLayoutDockerFactory.cpp
-     dockers/KPrPageLayoutDocker.cpp
 
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
