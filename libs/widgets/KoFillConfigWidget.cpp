@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QSizePolicy>
 #include <QBitmap>
+#include <QAction>
 
 #include <klocale.h>
 
@@ -168,6 +169,7 @@ public:
     }
 
     KoColorPopupButton *colorButton;
+    QAction *noFillAction;
     KoColorPopupAction *colorAction;
     KoResourcePopupAction *gradientAction;
     KoResourcePopupAction *patternAction;
@@ -230,6 +232,8 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->colorButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     layout->addWidget(d->colorButton);
 
+    d->noFillAction = new QAction(0);
+
     d->colorAction = new KoColorPopupAction(d->colorButton);
     d->colorAction->setToolTip(i18n("Change the filling color"));
     d->colorAction->setCurrentColor(Qt::white);
@@ -284,10 +288,12 @@ void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
 
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
 {
+    d->colorButton->setEnabled(true);
     switch (buttonId) {
         case KoFillConfigWidget::None:
             // Direct manipulation
-            d->colorButton->setDefaultAction(d->colorAction);
+            d->colorButton->setDefaultAction(d->noFillAction);
+             d->colorButton->setDisabled(true);
             noColorSelected();
             break;
         case KoFillConfigWidget::Solid:
