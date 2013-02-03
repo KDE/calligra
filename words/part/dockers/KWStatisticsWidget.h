@@ -31,6 +31,7 @@
 // FIXME: Don't cross include
 //#include "KWStatisticsDocker.h"
 #include "StatisticsPreferencesPopup.h"
+#include <KWCanvas.h>
 
 class QTimer;
 class QTextDocument;
@@ -56,8 +57,7 @@ class KWStatisticsWidget : public QWidget
     Q_OBJECT
 
 public:
-    KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocument *m_document,
-                       KoSelection *selection = 0, QWidget *parent = 0);
+    KWStatisticsWidget(QWidget *parent = 0);
     virtual ~KWStatisticsWidget();
 
     enum LayoutDirection {
@@ -69,6 +69,10 @@ public:
 
     friend class KWStatisticsDocker;
     friend class StatisticsPreferencesPopup;
+
+    void setCanvas(KWCanvas* canvas);
+
+    void unsetCanvas();
     
 public slots:
     void wordsDisplayChanged(int);
