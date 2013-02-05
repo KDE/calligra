@@ -22,6 +22,7 @@ Name[sl]=Izvozni filter ODT v HTML
 Name[sv]=ODT-till-HTML-exportfilter
 Name[uk]=Фільтр експорту ODT до HTML
 Name[x-test]=xxODT to HTML Export Filterxx
+Name[zh_CN]=ODT 到 HTML 导出过滤器
 
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/html

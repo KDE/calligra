@@ -23,6 +23,7 @@ Name[sv]=Karbon 14-teckningar
 Name[tr]=Karbon 14 Çizimleri
 Name[uk]=Малюнки Karbon 14
 Name[x-test]=xxKarbon 14 Drawingsxx
+Name[zh_CN]=Karbon 14 绘图
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-karbon;

@@ -27,6 +27,7 @@ Name[sl]=Izvozni filter EPS za Karbon
 Name[sv]=Karbon EPS-exportfilter
 Name[uk]=Фільтр експорту EPS для Karbon
 Name[x-test]=xxKarbon EPS Export Filterxx
+Name[zh_CN]=Karbon EPS 导出过滤器
 X-KDE-Export=image/x-eps
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1

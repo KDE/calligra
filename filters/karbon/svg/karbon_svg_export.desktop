@@ -27,6 +27,7 @@ Name[sl]=Izvozni filter SVG za Karbon
 Name[sv]=Karbon SVG-exportfilter
 Name[uk]=Фільтр експорту SVG для Karbon
 Name[x-test]=xxKarbon SVG Export Filterxx
+Name[zh_CN]=Karbon SVG 导出过滤器
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/svg+xml

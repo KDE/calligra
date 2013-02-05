@@ -28,6 +28,7 @@ GenericName[sv]=Anteckningar och insamling av idéer
 GenericName[tr]=Notlar ve Fikir Toplama
 GenericName[uk]=Програма для впорядковування нотаток та ідей
 GenericName[x-test]=xxNotes and idea gatheringxx
+GenericName[zh_CN]=笔记和想法收集
 Icon=braindump
 MimeType=application/x-braindump;
 Name=Braindump

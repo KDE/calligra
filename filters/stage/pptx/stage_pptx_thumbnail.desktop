@@ -21,6 +21,7 @@ Name[sl]=Predstavitve Microsoft Powerpoint 2007
 Name[sv]=Microsoft PowerPoint 2007-presentationer
 Name[uk]=Презентації Microsoft Powerpoint 2007
 Name[x-test]=xxMicrosoft Powerpoint 2007 Presentationsxx
+Name[zh_CN]=Microsoft PowerPoint 演示文稿
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;

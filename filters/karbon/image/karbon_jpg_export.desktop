@@ -27,6 +27,7 @@ Name[sl]=Izvozni filter JPEG za Karbon
 Name[sv]=Karbon JPEG-exportfilter
 Name[uk]=Фільтр експорту JPEG для Karbon
 Name[x-test]=xxKarbon JPEG Export Filterxx
+Name[zh_CN]=Karbon JPEG 导出过滤器
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Export=image/jpeg
