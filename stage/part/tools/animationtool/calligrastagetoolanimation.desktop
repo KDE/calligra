@@ -38,9 +38,9 @@ Name[wa]=Usteye d' animåcion
 Name[x-test]=xxAnimation Toolxx
 Name[zh_CN]=动画工具
 Name[zh_TW]=動畫工具
+X-KDE-PluginInfo-Name=calligrastagetoolanimation
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-Library=calligrastagetoolanimation
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27
-

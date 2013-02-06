@@ -31,6 +31,7 @@ Name[zh_CN]=状态形状
 Name[zh_TW]=狀態元件
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
+X-KDE-PluginInfo-Name=stateshape
 X-KDE-Library=stateshape
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27
