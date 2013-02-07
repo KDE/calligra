@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,8 @@
 
 #include <core/kexidbconnectionset.h>
 #include <db/driver.h>
+#include <kexiutils/KexiContextMessage.h>
+#include <widget/KexiServerDriverNotFoundMessage.h>
 
 #include <KDialog>
 #include <kabstractfilewidget.h>
@@ -144,6 +147,7 @@ protected slots:
 private:
     ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
+    QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
     
     class Private;
     Private * const d;
