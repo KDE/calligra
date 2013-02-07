@@ -39,8 +39,8 @@ class Document;
 namespace wvWare
 {
     namespace Word97 {
-        class TC;
-        class SHD;
+        struct TC;
+        struct SHD;
     }
 }
 

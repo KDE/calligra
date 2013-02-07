@@ -54,7 +54,7 @@ namespace wvWare
 {
 class Parser;
 namespace Word97 {
-class BRC;
+struct BRC;
 }
 }
 class MSWordOdfImport;
