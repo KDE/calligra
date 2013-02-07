@@ -77,7 +77,7 @@ public:
              LEInputStream& wordDocument, POLE::Stream& table, LEInputStream *data, LEInputStream *si);
     virtual ~Document();
 
-    virtual void setProgress(int percent);
+    virtual void setProgress(const int percent);
 
     virtual void bodyStart();
     virtual void bodyEnd();
