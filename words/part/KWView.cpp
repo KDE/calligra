@@ -172,10 +172,6 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
                 this, SLOT(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)));
     }
 #endif
-    if (m_document->inlineTextObjectManager()) {
-        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
-           m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
-    }
 
 #ifdef SHOW_ANNOTATIONS
     if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
