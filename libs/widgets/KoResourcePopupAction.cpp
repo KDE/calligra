@@ -43,7 +43,7 @@
 class KoResourcePopupAction::Private
 {
 public:
-    Private() : checkerPainter(4)
+    Private() : checkerPainter(4), resourceList(0), background(0)
     {}
     QMenu *menu;
     KoResourceItemView *resourceList;
@@ -69,7 +69,11 @@ KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *re
         resourceModel->setColumnCount(1);
     }
 
-    KoResource *resource = resourceAdapter->resources().at(0);
+    KoResource *resource = 0;
+    if (resourceAdapter->resources().count() > 0) {
+        resource = resourceAdapter->resources().at(0);
+    }
+
     KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
     KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
     if (gradient) {

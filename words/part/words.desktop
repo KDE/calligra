@@ -117,4 +117,4 @@ X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.calligra.words
 Categories=Qt;KDE;Office;
-InitialPreference=3
+InitialPreference=4

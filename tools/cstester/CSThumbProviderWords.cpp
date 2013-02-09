@@ -91,9 +91,6 @@ QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
         thumbnails.append(thumbnail);
     }
 
-    // make sure to clean up
-    delete canvasItem;
-
     return thumbnails;
 }
 

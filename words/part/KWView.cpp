@@ -81,8 +81,8 @@
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentInfo.h>
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#include <rdf/KoSemanticStylesheetsEditor.h>
+#include <KoDocumentRdf.h>
+#include <KoSemanticStylesheetsEditor.h>
 #endif
 
 #include <KoFindStyle.h>

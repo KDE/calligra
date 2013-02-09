@@ -51,7 +51,7 @@ class KoShapeAnchor;
 class KoShapeContainer;
 class KoShapeController;
 class KoPart;
-
+class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
 
@@ -284,6 +284,7 @@ private:
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
     QPair<QString, QByteArray> m_coverImage;
+
 };
 
 #endif

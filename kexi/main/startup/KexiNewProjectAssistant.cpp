@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -321,21 +322,31 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
-
-    QVBoxLayout *lyr = new QVBoxLayout;
-    connSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
-        "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Saving);
-    lyr->addWidget(connSelector);
-    connSelector->showAdvancedConn();
-    connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
-            this, SLOT(next()));
-    connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    connSelector->hideHelpers();
-    connSelector->hideDescription();
-    setContents(lyr);
-    setFocusWidget(connSelector->connectionsList());
+    if (KexiDB::hasDatabaseServerDrivers()) {
+        QVBoxLayout *lyr = new QVBoxLayout;
+        connSelector = new KexiConnectionSelectorWidget(
+            Kexi::connset(),
+            "kfiledialog:///OpenExistingOrCreateNewProject",
+            KAbstractFileWidget::Saving);
+        lyr->addWidget(connSelector);
+        connSelector->showAdvancedConn();
+        connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+                this, SLOT(next()));
+        connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+        connSelector->hideHelpers();
+        connSelector->hideDescription();
+        setContents(lyr);
+        setFocusWidget(connSelector->connectionsList());
+    }
+    else {
+        setDescription(QString());
+        setNextButtonVisible(false);
+        m_errorMessagePopup = new KexiServerDriverNotFoundMessage(this);
+        setContents(m_errorMessagePopup);
+        layout()->setAlignment(m_errorMessagePopup, Qt::AlignTop);
+        m_errorMessagePopup->setAutoDelete(false);
+        m_errorMessagePopup->animatedShow();
+    }
 }
 
 KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
