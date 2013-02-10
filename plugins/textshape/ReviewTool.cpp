@@ -52,10 +52,7 @@ ReviewTool::ReviewTool(KoCanvasBase* canvas): TextTool(canvas),
     m_textEditor(0),
     m_textShapeData(0),
     m_canvas(canvas),
-    m_textShape(0),
-    m_model(0),
-    m_trackedChangeManager(0),
-    m_changesTreeView(0)
+    m_textShape(0)
 {
     createActions();
 }
@@ -66,21 +63,7 @@ ReviewTool::~ReviewTool()
 
 void ReviewTool::createActions()
 {
-    KAction *action;
-    action = new KAction(i18n("Tracked change manager"), this);
-    action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_T);
-    addAction("show_changeManager", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(showTrackedChangeManager()));
 
-    m_actionShowChanges = new KAction(i18n("Show Changes"), this);
-    m_actionShowChanges->setCheckable(true);
-    addAction("edit_show_changes", m_actionShowChanges);
-    connect(m_actionShowChanges, SIGNAL(triggered(bool)), this, SLOT(toggleShowChanges(bool)));
-
-    m_actionRecordChanges = new KAction(i18n("Record Changes"), this);
-    m_actionRecordChanges->setCheckable(true);
-    addAction("edit_record_changes", m_actionRecordChanges);
-    connect(m_actionRecordChanges, SIGNAL(triggered(bool)), this, SLOT(toggleRecordChanges(bool)));
 }
 
 void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
@@ -110,34 +93,4 @@ void ReviewTool::keyPressEvent(QKeyEvent* event)
 void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
 {
     TextTool::paint(painter,converter);
-}
-
-void ReviewTool::showTrackedChangeManager()
-{
-    Q_ASSERT(m_model);
-    m_trackedChangeManager = new TrackedChangeManager();
-    m_trackedChangeManager->setModel(m_model);
-    connect(m_trackedChangeManager, SIGNAL(currentChanged(QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex)));
-    m_trackedChangeManager->show();
-    //    view.setModel(&model);
-    //    view.setWindowTitle("testTracked");
-    //    view.show();
-    //    TrackedChangeManager *dia = new TrackedChangeManager(m_textShapeData->document());
-    //    dia->show();
-}
-
-
-void ReviewTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
-{
-    m_actionShowChanges->setChecked(on);
-    ShowChangesCommand *command = new ShowChangesCommand(on, m_textShapeData->document(), this->canvas());
-    connect(command, SIGNAL(toggledShowChange(bool)), m_actionShowChanges, SLOT(setChecked(bool)));
-    m_textEditor->addCommand(command);
-}
-
-void ReviewTool::toggleRecordChanges(bool on)
-{
-    m_actionRecordChanges->setChecked(on);
-    if (m_changeTracker)
-        m_changeTracker->setRecordChanges(on);
 }

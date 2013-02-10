@@ -26,9 +26,6 @@ class KoTextEditor;
 class KoTextShapeData;
 class KoViewConverter;
 class TextShape;
-class TrackedChangeManager;
-class TrackedChangeModel;
-class KoChangeTracker;
 
 class KAction;
 
@@ -59,26 +56,14 @@ public:
     virtual void createActions();
 
 private slots:
-    void showTrackedChangeManager();
-
-    /// When enabled, display changes
-    void toggleShowChanges(bool);
-    /// When enabled, make the change tracker record changes made while typing
-    void toggleRecordChanges(bool);
+    
 
 private:
-    KAction *m_actionShowChanges;
-    KAction *m_actionRecordChanges;
-    KAction *m_configureChangeTracking;
-
+    
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;
-    TextShape *m_textShape;
-    TrackedChangeModel *m_model;
-    TrackedChangeManager *m_trackedChangeManager;
-    QTreeView *m_changesTreeView;
-    KoChangeTracker *m_changeTracker;
+    TextShape *m_textShape;    
 };
 
 #endif // REVIEWTOOL_H
