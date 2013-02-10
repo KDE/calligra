@@ -20,8 +20,6 @@
 #ifndef REVIEWTOOL_H
 #define REVIEWTOOL_H
 
-#include <KoToolBase.h>
-
 class KoCanvasBase;
 class KoPointerEvent;
 class KoTextEditor;
@@ -43,12 +41,12 @@ class QTextCursor;
 template <class T> class QVector;
 /// This tool allows to manipulate the tracked changes of a document. You can accept or reject changes.
 
-class ReviewTool : public KoToolBase
+#include <TextTool.h>
+
+class ReviewTool : public TextTool
 {
-    Q_OBJECT
 public:
     explicit ReviewTool(KoCanvasBase *canvas);
-
     ~ReviewTool();
 
     virtual void mouseReleaseEvent(KoPointerEvent* event);
@@ -58,32 +56,17 @@ public:
     virtual void keyPressEvent(QKeyEvent* event);
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
-
-protected:
-    virtual QList<QWidget*> createOptionWidgets();
-
-    void readConfig();
-    void writeConfig();
+    virtual void createActions();
 
 private slots:
-    void acceptChange();
-    void rejectChange();
-    void selectedChangeChanged(QModelIndex newItem, QModelIndex previousItem);
-    void setShapeData(KoTextShapeData *data);
     void showTrackedChangeManager();
 
     /// When enabled, display changes
     void toggleShowChanges(bool);
     /// When enabled, make the change tracker record changes made while typing
     void toggleRecordChanges(bool);
-    /// Configure Change Tracking
-    void configureChangeTracking();
 
 private:
-    int pointToPosition(const QPointF & point) const;
-    QRectF textRect(QTextCursor &cursor) const;
-    void updateSelectedShape(const QPointF &point);
-
     KAction *m_actionShowChanges;
     KAction *m_actionRecordChanges;
     KAction *m_configureChangeTracking;
@@ -98,4 +81,4 @@ private:
     KoChangeTracker *m_changeTracker;
 };
 
-#endif // CHANGETRACKINGTOOL_H
+#endif // REVIEWTOOL_H
