@@ -402,52 +402,94 @@ void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QStrin
 
 void OdtHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("table", m_doIndent);
     if (styleInfo) {
         styleInfo->inUse = true;
         htmlWriter->addAttribute("class", styleName);
     }
-    htmlWriter->addAttribute("border", "1");
+    htmlWriter->addAttribute("style", "border-collapse: collapse");
 
-    //===== table-row ======
     KoXmlElement tableElement;
     forEachElement (tableElement, nodeElement) {
-        if (tableElement.localName() != "table-column" && tableElement.namespaceURI() == KoXmlNS::table) {
-            htmlWriter->startElement("tr", m_doIndent);
 
-            // ===== table-cell ======
-            KoXmlElement cellElement;
-            forEachElement (cellElement, tableElement) {
-                QString styleName = cellElement.attribute("style-name");
-                StyleInfo *styleInfo = m_styles.value(styleName);
-                htmlWriter->startElement("td", m_doIndent);
-                if (styleInfo) {
-                    styleInfo->inUse = true;
-                    htmlWriter->addAttribute("class", styleName);
-                }
+        //Table headers
+        if (tableElement.localName() == "table-header-rows" && tableElement.namespaceURI() == KoXmlNS::table) {
+            htmlWriter->startElement("thead", m_doIndent);
 
-                // ==== cell text ====
-                // FIXME: This is wrong. A cell element can contain
-                //        the same tags as the full contents, not just
-                //        what is inside a paragraph. (Beside, this
-                //        function has a strange name.)
-                handleInsideElementsTag(cellElement, htmlWriter);
-                // ===================
-                htmlWriter->endElement(); // td
-            } // end for write tag cell
+            KoXmlElement headerRow;
+            forEachElement (headerRow, tableElement) {
+                handleTagTableRow(headerRow, htmlWriter, TableHeaderType);
+            }
 
-            htmlWriter->endElement(); // tr
-        } // end while write tag row
+            htmlWriter->endElement(); //thead
+        }
+
+        //Table body
+        if (tableElement.localName() == "table-rows" && tableElement.namespaceURI() == KoXmlNS::table) {
+            htmlWriter->startElement("tbody", m_doIndent);
+
+            KoXmlElement rowElement;
+            forEachElement (rowElement, tableElement) {
+                handleTagTableRow(rowElement, htmlWriter);
+            }
+
+            htmlWriter->endElement(); //tbody
+        }
+
+        //Tables without headers have no table-rows element and instead embed rows directly in the table,
+        //so handle that properly.
+        if (tableElement.localName() == "table-row" && tableElement.namespaceURI() == KoXmlNS::table) {
+            handleTagTableRow(tableElement, htmlWriter);
+        }
     }
 
-    htmlWriter->endElement();
+    htmlWriter->endElement(); //table
+}
+
+void OdtHtmlConverter::handleTagTableRow(KoXmlElement& nodeElement, KoXmlWriter* htmlWriter, OdtHtmlConverter::TableCellType type)
+{
+    htmlWriter->startElement("tr", m_doIndent);
+
+    KoXmlElement cellElement;
+    forEachElement (cellElement, nodeElement) {
+
+        if (cellElement.localName() == "covered-table-cell") {
+            continue;
+        }
+
+        htmlWriter->startElement(type == TableHeaderType ? "th" : "td", m_doIndent);
+
+        if (cellElement.hasAttributeNS(KoXmlNS::table, "style-name")) {
+            QString styleName = cssClassName(cellElement.attribute("style-name"));
+            StyleInfo *styleInfo = m_styles.value(styleName);
+            if(styleInfo) {
+                styleInfo->inUse = true;
+                htmlWriter->addAttribute("class", styleName);
+            }
+        }
+
+        if (cellElement.hasAttributeNS(KoXmlNS::table, "number-rows-spanned")) {
+            htmlWriter->addAttribute("rowspan", cellElement.attribute("number-rows-spanned"));
+        }
+
+        // ==== cell text ====
+        // FIXME: This is wrong. A cell element can contain
+        //        the same tags as the full contents, not just
+        //        what is inside a paragraph. (Beside, this
+        //        function has a strange name.)
+        handleInsideElementsTag(cellElement, htmlWriter);
+
+        htmlWriter->endElement(); //td
+    }
+
+    htmlWriter->endElement(); //tr
 }
 
 void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
 
     // Find height and width
@@ -671,7 +713,7 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
 
 void OdtHtmlConverter::handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("p", m_doIndent);
     if (styleInfo) {
@@ -690,7 +732,7 @@ void OdtHtmlConverter::handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWri
 
 void OdtHtmlConverter::handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("span", m_doIndent);
     if (styleInfo) {
@@ -708,7 +750,7 @@ void OdtHtmlConverter::handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter
 
 void OdtHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("h1", m_doIndent);
     if (styleInfo) {
@@ -721,7 +763,7 @@ void OdtHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWr
 
 void OdtHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("ul", m_doIndent);
     if (styleInfo) {
@@ -1145,11 +1187,13 @@ void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, Sty
 
         StyleInfo *styleInfo = new StyleInfo;
 
-        // Get the style name. Default styles don't have a name so
-        // give them a constructed name by combining "default" and the
-        // style family in a way that should not collide with any real
-        // style name.
-        QString styleName = styleElement.attribute("name");
+        // Get the style name. "." is an illegal character in css style
+        // names and needs to be replaced.
+        QString styleName = cssClassName(styleElement.attribute("name"));
+
+        // Default styles don't have a name so give them a constructed
+        // name by combining "default" and the style family in a way
+        // that should not collide with any real style name.
         if (tagName == "default-style") {
             // This name should not collide with any real name.
             styleName = QString("default%") + styleElement.attribute("family");
@@ -1160,7 +1204,7 @@ void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, Sty
 
         // Every style should have a parent. If the style has no
         // parent, then use the appropriate default style.
-        QString parentName = styleElement.attribute("parent-style-name");
+        QString parentName = cssClassName(styleElement.attribute("parent-style-name"));
         if (!styleInfo->isDefaultStyle && parentName.isEmpty()) {
             parentName = QString("default%") + styleInfo->family;
         }
@@ -1460,4 +1504,11 @@ void OdtHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, Sty
     }
 
     doneStyles.insert(styleName);
+}
+
+QString OdtHtmlConverter::cssClassName(const QString& odfStyleName)
+{
+    QString retval = odfStyleName;
+    QRegExp exp("[^a-zA-Z0-9_]"); //CSS class names are only allowed to use alphanumeric and underscore.
+    return retval.replace(exp, "_sc_"); //Not pretty, but it should serve to create unique class names.
 }
