@@ -68,7 +68,7 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
 
     float* bufferPointer = buffer;
 
-    Vc::float_v currentIndices(Vc::int_v(Vc::IndexesFromZero));
+    Vc::float_v currentIndices(Vc::int_v::IndexesFromZero());
 
     Vc::float_v increment((float)Vc::float_v::Size);
     Vc::float_v vCenterX(centerX);
