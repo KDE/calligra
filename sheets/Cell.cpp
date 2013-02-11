@@ -87,7 +87,6 @@
 #include <KoTextSharedLoadingData.h>
 #include <KoTextDocument.h>
 #include <KoTextWriter.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include <KoParagraphStyle.h>
 
 #include <kdebug.h>
@@ -1100,10 +1099,12 @@ QString Cell::saveOdfCellStyle(KoGenStyle &currentCellStyle, KoGenStyles &mainSt
 }
 
 
-bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
-                   int row, int column, int &repeated,
+bool Cell::saveOdf(int row, int column, int &repeated,
                    OdfSavingContext& tableContext)
 {
+    KoXmlWriter & xmlwriter = tableContext.shapeContext.xmlWriter();
+    KoGenStyles & mainStyles = tableContext.shapeContext.mainStyles();
+
     // see: OpenDocument, 8.1.3 Table Cell
     if (!isPartOfMerged())
         xmlwriter.startElement("table:table-cell");
@@ -1235,9 +1236,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             QTextCharFormat format = style().asCharFormat();
             ((KoCharacterStyle *)sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
-            KoEmbeddedDocumentSaver embeddedSaver;
-            KoShapeSavingContext shapeContext(xmlwriter, mainStyles, embeddedSaver);
-            KoTextWriter writer(shapeContext);
+            KoTextWriter writer(tableContext.shapeContext);
 
             writer.write(doc.data(), 0);
         } else {
