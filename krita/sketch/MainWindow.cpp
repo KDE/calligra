@@ -130,6 +130,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     d->view = new QDeclarativeView();
     d->view->setAttribute(Qt::WA_AcceptTouchEvents);
+    d->view->setAttribute(Qt::WA_OpaquePaintEvent);
+    d->view->setAttribute(Qt::WA_NoSystemBackground);
+    d->view->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    d->view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
 
     d->view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     d->view->engine()->addImageProvider(QLatin1String("color"), new ColorImageProvider);

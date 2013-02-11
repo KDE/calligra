@@ -19,10 +19,11 @@
 import QtQuick 1.1
 import "components"
 
-Item {
+Rectangle {
     id: base;
     width: 1280;
     height: 768;
+    color: "white";
 
     Flickable {
         id: screenScroller;
