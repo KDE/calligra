@@ -1225,7 +1225,7 @@ bool KoDocument::openFile()
             d->profileStream);
 
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
-    d->progressUpdater->start();
+    d->progressUpdater->start(100, i18n("Opening document"));
 
     setupOpenFileSubProgress();
 

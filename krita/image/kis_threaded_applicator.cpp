@@ -29,6 +29,7 @@
 #include <kglobal.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <KLocalizedString>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -108,7 +109,7 @@ void KisThreadedApplicator::start()
         m_d->weaver->enqueue(job);
     } else {
         m_d->numTasks = 0;
-        m_d->progressUpdater->start(100);
+        m_d->progressUpdater->start(100, i18n("Applying"));
 
         int wleft = w;
         int col = 0;
