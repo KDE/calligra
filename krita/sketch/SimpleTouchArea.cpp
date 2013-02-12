@@ -38,6 +38,8 @@ bool SimpleTouchArea::sceneEvent(QEvent* event)
     case QEvent::TouchBegin:
     case QEvent::TouchUpdate:
     case QEvent::TouchEnd:
+    case QEvent::TabletPress:
+    case QEvent::GraphicsSceneMousePress:
         event->accept();
         return true;
     default:
