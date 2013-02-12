@@ -1015,6 +1015,7 @@ QObject* LayerModel::activeFilterConfig() const
     for(i = props.constBegin(); i != props.constEnd(); ++i)
     {
         config->setProperty(i.key().toAscii(), i.value());
+        qDebug() << "Getting active config..." << i.key() << i.value();
     }
     return config;
 }
@@ -1032,15 +1033,22 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
     for(i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i)
     {
         realConfig->setProperty(QString(i.key()), config->property(i.key().toAscii()));
+        qDebug() << "Creating config..." << i.key() << i.value();
     }
-    if(d->newConfig)
-        delete(d->newConfig);
+// The following code causes sporadic crashes, and disabling causes leaks. So, leaks it must be, for now.
+// The cause is the lack of a smart pointer interface for passing filter configs around
+// Must be remedied, but for now...
+//    if(d->newConfig)
+//        delete(d->newConfig);
     d->newConfig = realConfig;
     d->updateActiveLayerWithNewFilterConfigTimer->start();
 }
 
 void LayerModel::updateActiveLayerWithNewFilterConfig()
 {
+    if(!d->newConfig)
+        return;
+    qDebug() << "Setting new config..." << d->newConfig;
     KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
     if(filterMask)
     {
@@ -1061,7 +1069,7 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
     d->newConfig = 0;
     d->activeNode->setDirty(d->activeNode->extent());
     d->image->setModified();
-    emit activeFilterConfigChanged();
+    QTimer::singleShot(100, this, SIGNAL(activeFilterConfigChanged()));
 }
 
 #include "LayerModel.moc"
