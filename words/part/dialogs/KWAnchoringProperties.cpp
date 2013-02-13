@@ -178,7 +178,7 @@ bool KWAnchoringProperties::open(const QList<KWFrame*> &frames)
         }
         atLeastOne = true;
 
-        KoShapeAnchor *anchor = frame->anchor();
+        KoShapeAnchor *anchor = frame->shape()->anchor();
         KoShapeAnchor::AnchorType anchorTypeOfFrame = anchor ? anchor->anchorType() : KoShapeAnchor::AnchorPage;
 
         // FIXME these should fetch correct values if anchor == 0
@@ -518,13 +518,13 @@ void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
 
             KoShapeAnchor::AnchorType type = KoShapeAnchor::AnchorType(m_anchorTypeGroup->checkedId());
 
-            KoShapeAnchor *anchor = frame->anchor();
+            KoShapeAnchor *anchor = frame->shape()->anchor();
             if (!anchor) {
                 anchor = new KoShapeAnchor(frame->shape());
                 anchor->setAnchorType(KoShapeAnchor::AnchorPage);
                 anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
                 anchor->setVerticalPos(KoShapeAnchor::VFromTop);
-                frame->setAnchor(anchor);
+                frame->shape()->setAnchor(anchor);
             }
             KoShapeContainer *container = 0;
             // we change from page anchored to text shape anchored.

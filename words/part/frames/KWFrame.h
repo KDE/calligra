@@ -51,7 +51,7 @@ public:
      * @param shape the shape that displays the content, containing size/position
      * @param parent the parent frameset
      */
-    KWFrame(KoShape *shape, KWFrameSet *parent, KoShapeAnchor *anchor = 0);
+    KWFrame(KoShape *shape, KWFrameSet *parent);
     virtual ~KWFrame();
 
     /**
@@ -134,16 +134,6 @@ public:
     void setAnchoredFrameOffset(qreal offset) {
         m_anchoredFrameOffset = offset;
     }
-
-    KoShapeAnchor::AnchorType anchorType() {
-        return m_anchor ? m_anchor->anchorType() : KoShapeAnchor::AnchorPage;
-    }
-
-    void setAnchor(KoShapeAnchor *anchor) {
-        m_anchor = anchor;
-    }
-
-    KoShapeAnchor *anchor() const { return m_anchor; }
 
     /**
      * Returns the list of copy-shapes, see @a KWCopyShape , that

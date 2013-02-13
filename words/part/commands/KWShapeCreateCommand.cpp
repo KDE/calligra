@@ -48,11 +48,10 @@
 //     bool deleteShape;
 // };
 
-KWShapeCreateCommand::KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KoShapeAnchor *anchor, KUndo2Command *parent):
+KWShapeCreateCommand::KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KUndo2Command *parent):
     KUndo2Command(parent),
     m_document(doc),
     m_shape(shape),
-    m_anchor(anchor),
     m_deleteShape(true)
 {
     setText(i18nc("(qtundo-format)", "Create shape"));
@@ -72,7 +71,7 @@ void KWShapeCreateCommand::redo()
     if (m_shape->parent())
         m_shape->parent()->addShape(m_shape);
     // the parent has to be there when it is added to the KoShapeBasedDocumentBase
-    m_document->addShape(m_shape, m_anchor);
+    m_document->addShape(m_shape);
     m_shape->setParent(m_shape->parent()); // update parent if the 'addShape' changed it
     m_deleteShape = false;
 }

@@ -25,7 +25,6 @@
 #include "KWTextFrameSet.h"
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
-#include "KoShapeAnchor.h"
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
 #include <KoTextShapeData.h>
@@ -34,14 +33,13 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
-KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, KoShapeAnchor *anchor)
+KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         : m_shape(shape),
         m_frameBehavior(Words::AutoExtendFrameBehavior),
         m_newFrameBehavior(Words::NoFollowupFrame),
         m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
-        m_minimumFrameHeight(0.0), // no minimum height per default
-        m_anchor(anchor)
+        m_minimumFrameHeight(0.0) // no minimum height per default
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);

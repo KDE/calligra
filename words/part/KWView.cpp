@@ -1056,13 +1056,14 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         anchor->setVerticalPos(KoShapeAnchor::VFromTop);
         anchor->setHorizontalRel(KoShapeAnchor::HPage);
         anchor->setVerticalRel(KoShapeAnchor::VPage);
+        shape->setAnchor(anchor);
         shape->setPosition(pos);
 
         pos += QPointF(25,25); // increase the position for each shape we insert so the
                                // user can see them all.
 
         // create the undo step.
-        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape, anchor);
+        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape);
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
         selection->select(shape);
