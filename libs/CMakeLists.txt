@@ -1,4 +1,5 @@
 add_subdirectory( koplugin )
+add_subdirectory( kokasten )
 add_subdirectory( widgetutils )
 add_subdirectory( widgets )
 add_subdirectory( odf )
