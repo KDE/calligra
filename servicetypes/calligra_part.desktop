@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=ServiceType
-X-KDE-ServiceType=CalligraPart
+X-KDE-ServiceType=Calligra/Part
 Comment=Calligra Component
 Comment[bg]=Компонент на Calligra
 Comment[ca]=Component del Calligra
