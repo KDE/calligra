@@ -1,0 +1,22 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Calligra/Document
+
+[PropertyDef::X-Calligra-DefaultMimeTypes]
+Type=QStringList
+
+# Name of the native mimetype (mandatory)
+[PropertyDef::X-KDE-NativeMimeType]
+Type=QString
+
+# Name of the OASIS native mimetype (temporary, and optional)
+[PropertyDef::X-KDE-NativeOasisMimeType]
+Type=QString
+
+# Name of the additional mimetypes that the application can load/save natively
+[PropertyDef::X-KDE-ExtraNativeMimeTypes]
+Type=QStringList
+
+[PropertyDef::X-KDE-NOTKoDocumentEmbeddable]
+Type=bool
+
