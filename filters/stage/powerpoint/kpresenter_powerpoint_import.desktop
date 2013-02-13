@@ -54,4 +54,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/vnd.ms-powerpoint
 X-KDE-Weight=1
 X-KDE-Library=powerpointimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

@@ -35,7 +35,7 @@ MimeType=application/x-karbon;image/x-eps;application/postscript;application/vnd
 # kghostview has 6 for application/postscript, we need to be under that...
 InitialPreference=5
 Type=Service
-X-KDE-ServiceTypes=CalligraPart
+X-KDE-ServiceTypes=Calligra/Part
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template

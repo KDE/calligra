@@ -34,6 +34,6 @@ Name[uk]=Фільтр експорту до iCalendar Plan
 Name[x-test]=xxPlan iCalendar Export Filterxx
 Name[zh_CN]=Plan iCalendar 导出过滤器
 Name[zh_TW]=Plan iCalendar 匯出過濾程式
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter
 Type=Service
 X-KDE-Library=planicalexport

@@ -26,4 +26,4 @@ X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/x-planner
 X-KDE-Weight=1
 X-KDE-Library=planmpxjimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

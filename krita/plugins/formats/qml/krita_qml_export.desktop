@@ -1,7 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Krita QML Export Filter
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter
 Type=Service
 X-KDE-Export=text/x-qml
 X-KDE-Import=application/x-krita

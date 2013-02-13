@@ -35,4 +35,4 @@ X-KDE-Import=application/x-flow
 X-KDE-Export=image/png,image/jpeg,image/x-bmp,image/x-eps,image/x-portable-bitmap,image/x-pcx,image/x-portable-pixmap,image/x-rgb,image/x-xpm,image/jp2
 X-KDE-Weight=1
 X-KDE-Library=flowimageexport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

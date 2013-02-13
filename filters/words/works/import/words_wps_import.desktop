@@ -27,4 +27,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/vnd.ms-works
 X-KDE-Weight=1
 X-KDE-Library=wpsimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

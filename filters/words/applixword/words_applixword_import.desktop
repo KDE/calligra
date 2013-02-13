@@ -34,4 +34,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-applix-word
 X-KDE-Weight=1
 X-KDE-Library=applixwordimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

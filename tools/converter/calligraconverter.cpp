@@ -47,7 +47,7 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
 
     QString error;
     KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
-                    inputFormat, QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
+                    inputFormat, QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
     if (!part) {
         return false;
     }

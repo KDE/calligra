@@ -63,4 +63,4 @@ X-KDE-Export=text/csv,text/plain
 X-KDE-Import=application/x-kspread
 X-KDE-Weight=50
 X-KDE-Library=csvexport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

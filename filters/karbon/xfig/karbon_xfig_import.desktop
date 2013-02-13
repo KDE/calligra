@@ -60,4 +60,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/x-xfig
 X-KDE-Weight=1
 X-KDE-Library=karbonxfigimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

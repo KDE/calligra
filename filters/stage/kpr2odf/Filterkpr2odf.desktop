@@ -41,4 +41,4 @@ X-KDE-Weight=1
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/x-kpresenter
 X-KDE-Library=Filterkpr2odf
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

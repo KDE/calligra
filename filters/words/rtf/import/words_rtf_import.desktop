@@ -37,4 +37,4 @@ ImportDescription=RTF
 X-KDE-Export=application/vnd.oasis.opendocument.text
 ExportDescription=Words
 X-KDE-Library=rtfimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

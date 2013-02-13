@@ -33,4 +33,4 @@ X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/x-vnd.kde.kplato
 X-KDE-Weight=1
 X-KDE-Library=plankplatoimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

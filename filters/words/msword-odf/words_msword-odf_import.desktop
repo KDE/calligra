@@ -35,4 +35,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/msword
 X-KDE-Weight=1
 X-KDE-Library=mswordodf_import
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

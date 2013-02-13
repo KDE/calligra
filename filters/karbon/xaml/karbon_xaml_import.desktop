@@ -56,4 +56,4 @@ X-KDE-Export=application/x-karbon
 X-KDE-Import=image/wvg+xml
 X-KDE-Weight=1
 X-KDE-Library=karbonxamlimport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter
