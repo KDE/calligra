@@ -474,6 +474,10 @@ void OdtHtmlConverter::handleTagTableRow(KoXmlElement& nodeElement, KoXmlWriter*
             htmlWriter->addAttribute("rowspan", cellElement.attribute("number-rows-spanned"));
         }
 
+        if (cellElement.hasAttributeNS(KoXmlNS::table, "number-columns-spanned")) {
+            htmlWriter->addAttribute("colspan", cellElement.attribute("number-columns-spanned"));
+        }
+
         // ==== cell text ====
         // FIXME: This is wrong. A cell element can contain
         //        the same tags as the full contents, not just
