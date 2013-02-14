@@ -93,6 +93,11 @@ Answer DialogHandler::queryDiscard( const AbstractDocument* document, const QStr
     return (answer == KMessageBox::Cancel) ? Cancel : Discard;
 }
 
+Answer DialogHandler::queryRestore() const
+{
+    return Cancel;
+}
+
 DialogHandler::~DialogHandler() {}
 
 }

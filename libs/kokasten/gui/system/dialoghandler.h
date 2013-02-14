@@ -52,6 +52,9 @@ class KASTENGUI_EXPORT DialogHandler : public AbstractOverwriteDialog,
     virtual Answer queryDiscard( const AbstractDocument* document, const QString& title ) const;
 
   public:
+    virtual Answer queryRestore() const;
+
+  public:
     void setWidget( QWidget* widget );
 
   private:
