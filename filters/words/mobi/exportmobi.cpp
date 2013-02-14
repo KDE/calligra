@@ -165,8 +165,13 @@ KoFilter::ConversionStatus ExportMobi::extractImages(KoStore *odfStore, MobiFile
     QByteArray imgContent;
     int imgId = 1;
     foreach (const QString imgSrc, m_imagesSrcList.keys()) {
+        if (!odfStore->hasFile(imgSrc)) {
+            kWarning(30503) << "Can not to extract this image, image "<< imgSrc<< "is an external image";
+            // Ignore the external image.
+            continue;
+        }
         if (!odfStore->extractFile(imgSrc, imgContent)) {
-            kDebug(31000) << "Can not to extract file";
+            kDebug(30503) << "Can not to extract file";
             return KoFilter::FileNotFound;
         }
         m_imagesSize << imgContent.size();

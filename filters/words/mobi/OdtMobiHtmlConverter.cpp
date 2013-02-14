@@ -800,11 +800,9 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
     KoXmlNode node = nodeElement.firstChild();
     KoXmlElement element = node.toElement();
 
-    // We should end tag "a" after text for bookmark-start we can
-    // handle it with tag bookmark-end but for bookmark there is no
-    // bookmark-end so i use this flag to close the tag "a" that i
-    // have opened it in handleTagBookMark()
-    bool bookMarkFlag = false;
+    // handle it with tag bookmark-end but for bookmark we may have
+    // bookmark-end or we may not have it so we control it with "insideBookmarkTag".
+    bool insideBookmarkTag = false;
 
     // We have characterData or image or span or s  or soft-page break in a tag p
     // FIXME: we should add if there are more tags.
@@ -812,9 +810,10 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
 
         if (node.isText()) {
             handleCharacterData(node, htmlWriter);
-            if (bookMarkFlag) {
+            if (insideBookmarkTag) {
+                // End tag <a> started in bookmark or bookmark-start.
                 htmlWriter->endElement(); // end tag "a"
-                bookMarkFlag = false;
+                insideBookmarkTag = false;
             }
         }
         else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
@@ -852,13 +851,15 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
         }
         else if (element.localName() == "bookmark" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMark(element, htmlWriter);
-            bookMarkFlag = true;
+            insideBookmarkTag = true;
         }
         else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMarkStart(element, htmlWriter);
+             insideBookmarkTag = true;
         }
         else if (element.localName() == "bookmark-end" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagBookMarkEnd(htmlWriter);
+            // End tag <a> started in bookmark or bookmark-start.
+//            handleTagBookMarkEnd(htmlWriter);
         }
         else if (element.localName() == "note" && element.namespaceURI() == KoXmlNS::text) {
             handleTagNote(element, htmlWriter);
