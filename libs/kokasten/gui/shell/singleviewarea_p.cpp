@@ -74,8 +74,8 @@ void SingleViewAreaPrivate::setCurrentToolInlineView( AbstractToolInlineView* vi
 
 void SingleViewAreaPrivate::setView( AbstractView* view )
 {
-    mCurrentView = view;
-    mViewAreaBox->setCentralWidget( view ? view->widget() : 0 );
+    mCurrentView = qobject_cast<AbstractWidgetView*>(view);
+    mViewAreaBox->setCentralWidget( mCurrentView ? mCurrentView->widget() : 0 );
 }
 
 SingleViewAreaPrivate::~SingleViewAreaPrivate()

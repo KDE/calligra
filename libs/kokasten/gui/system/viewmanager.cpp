@@ -25,6 +25,7 @@
 // lib
 #include "abstractviewfactory.h"
 #include "dummyview.h"
+#include "abstractwidgetview.h"
 // Qt
 #include <QtCore/QListIterator>
 #include <QtCore/QMutableListIterator>
@@ -60,10 +61,12 @@ AbstractView* ViewManager::viewByWidget( QWidget* widget ) const
     while( it.hasNext() )
     {
         AbstractView* view = it.next();
-        if( view->widget() == widget)
-        {
-            result = view;
-            break;
+        if (qobject_cast<AbstractWidgetView*>(view)) {
+            if( qobject_cast<AbstractWidgetView*>(view)->widget() == widget)
+            {
+                result = view;
+                break;
+            }
         }
     }
     return result;

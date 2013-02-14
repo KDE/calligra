@@ -17,6 +17,8 @@ include_directories(
 
 set( kastengui_view_SRCS
   view/abstractview.cpp
+  view/abstractwidgetview.cpp
+  view/abstractgraphicsitemview.cpp
   view/abstractselectionview.cpp
   view/abstracttoolinlineview.cpp
   view/abstracttoolview.cpp
@@ -26,6 +28,8 @@ set( kastengui_view_HDRS
   view/selecteddatawriteable.h
   view/abstracttoolinlineview.h
   view/abstractview.h
+  view/abstractwidgetview.h
+  view/abstractgraphicsitemview.h
   view/abstractselectionview.h
   view/abstracttoolview.h
   view/abstracttoolviewfactory.h

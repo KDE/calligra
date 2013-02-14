@@ -69,7 +69,7 @@ QList<AbstractView*> TabbedViewsPrivate::viewList() const
     for( int i=0; i<count; ++i )
     {
         const ViewBox* viewBox = static_cast<const ViewBox*>( mTabWidget->widget(i) );
-        AbstractView* view = viewBox->view();
+        AbstractWidgetView* view = qobject_cast<AbstractWidgetView*>(viewBox->view());
         result.append( view );
     }
 
@@ -180,7 +180,7 @@ void TabbedViewsPrivate::onCurrentChanged( int index )
     Q_Q( TabbedViews );
 
     const ViewBox* viewBox = static_cast<const ViewBox*>( mTabWidget->widget(index) );
-    AbstractView* view = viewBox ? viewBox->view() : 0;
+    AbstractWidgetView* view = qobject_cast<AbstractWidgetView*>(viewBox ? viewBox->view() : 0);
 
     if( view == mCurrentView )
         return;

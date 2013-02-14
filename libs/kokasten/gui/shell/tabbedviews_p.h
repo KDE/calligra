@@ -28,7 +28,7 @@
 #include "tabbedviews.h"
 #include "viewareabox.h"
 #include "viewbox.h"
-#include <abstractview.h>
+#include <abstractwidgetview.h>
 // KDE
 #include <KTabWidget>
 
@@ -83,7 +83,7 @@ class TabbedViewsPrivate : public AbstractGroupedViewsPrivate
     ViewAreaBox* mViewAreaBox;
     KTabWidget* mTabWidget;
 
-    AbstractView* mCurrentView;
+    AbstractWidgetView* mCurrentView;
 };
 
 

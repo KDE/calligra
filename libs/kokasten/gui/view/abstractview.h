@@ -45,8 +45,6 @@ class KASTENGUI_EXPORT AbstractView : public AbstractModel
 
   public: // API to be implemented
     virtual void setFocus() = 0;
-
-    virtual QWidget* widget() const = 0;
     virtual bool hasFocus() const = 0;
 
   Q_SIGNALS:

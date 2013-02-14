@@ -1,7 +1,7 @@
 /*
     This file is part of the Kasten Framework, made within the KDE community.
 
-    Copyright 2009 Friedrich W. H. Kossebau <kossebau@kde.org>
+    Copyright 2007 Friedrich W. H. Kossebau <kossebau@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -20,41 +20,17 @@
     License along with this library. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIEWBOX_H
-#define VIEWBOX_H
-
-// Qt
-#include <QtGui/QWidget>
+#include "abstractwidgetview.h"
 
 
 namespace Kasten2
 {
 
-class AbstractView;
-class AbstractWidgetView;
-
-
-class ViewBox : public QWidget
+AbstractWidgetView::AbstractWidgetView( AbstractModel* baseModel)
+  : AbstractView( baseModel )
 {
-    Q_OBJECT
-
-  public:
-    enum Area { TopArea, BottomArea };
-
-  public:
-    explicit ViewBox( AbstractView* view, QWidget* parent = 0 );
-    virtual ~ViewBox();
-
-  public:
-    AbstractView* view() const;
-
-  public:
-    void add( ViewBox::Area area );
-
-  protected:
-    AbstractWidgetView* mView;
-};
-
 }
 
-#endif
+AbstractWidgetView::~AbstractWidgetView() {}
+
+}

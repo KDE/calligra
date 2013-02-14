@@ -25,7 +25,7 @@
 
 
 // lib
-#include <abstractview.h>
+#include <abstractwidgetview.h>
 
 class QLabel;
 
@@ -33,7 +33,7 @@ class QLabel;
 namespace Kasten2
 {
 
-class KASTENGUI_EXPORT DummyView : public AbstractView
+class KASTENGUI_EXPORT DummyView : public AbstractWidgetView
 {
     Q_OBJECT
 

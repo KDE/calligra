@@ -32,7 +32,7 @@ namespace Kasten2
 {
 
 DummyView::DummyView( AbstractDocument* document )
-  : AbstractView( document ),
+  : AbstractWidgetView( document ),
     mLabel( new QLabel() ),
     mDocument( document )
 {

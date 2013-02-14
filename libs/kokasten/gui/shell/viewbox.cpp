@@ -23,7 +23,7 @@
 #include "viewbox.h"
 
 // lib
-#include "abstractview.h"
+#include "abstractwidgetview.h"
 // Qt
 #include <QtGui/QVBoxLayout>
 
@@ -32,10 +32,10 @@ namespace Kasten2
 {
 
 ViewBox::ViewBox( AbstractView* view, QWidget* parent )
-  : QWidget( parent ),
-    mView( view )
+  : QWidget( parent )
 {
-    QWidget* widget = view->widget();
+    mView = qobject_cast<AbstractWidgetView*>(view);
+    QWidget* widget = mView->widget();
     setFocusProxy( widget );
 
     QVBoxLayout* layout = new QVBoxLayout( this );

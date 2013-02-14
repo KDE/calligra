@@ -27,7 +27,7 @@
 #include "abstractviewarea_p.h"
 #include "singleviewarea.h"
 #include "viewareabox.h"
-#include "abstractview.h"
+#include "abstractwidgetview.h"
 
 class QDragMoveEvent;
 class QDropEvent;
@@ -62,7 +62,7 @@ class SingleViewAreaPrivate : public AbstractViewAreaPrivate
 
   protected:
     ViewAreaBox* mViewAreaBox;
-    AbstractView* mCurrentView;
+    AbstractWidgetView* mCurrentView;
 };
 
 
