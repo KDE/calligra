@@ -36,6 +36,11 @@ KWFrameSet::KWFrameSet(Words::FrameSetType type)
 
 KWFrameSet::~KWFrameSet()
 {
+    cleanupFrames();
+}
+
+void KWFrameSet::cleanupFrames()
+{
     kDebug(32001) << "type=" << m_type << "frameCount=" << frames().count();
     while (!frames().isEmpty()) { // deleting a shape can result in multiple KWFrame's and shapes being deleted (e.g. copy-shapes)
         KWFrame *f = frames().last();

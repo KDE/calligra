@@ -129,17 +129,20 @@ void KWFrame::cleanupShape(KoShape* shape)
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_frameSet);
     if (tfs) {
         KWRootAreaProvider *rootAreaProvider = tfs->rootAreaProvider();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
-        Q_ASSERT(lay);
-        QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
-        for(int i = 0; i < layoutRootAreas.count(); ++i) {
-            KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
-            if (rootArea->associatedShape() == shape) {
-                KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
-                rootAreaProvider->releaseAllAfter(prevRootArea);
-                lay->removeRootArea(prevRootArea);
-                rootArea->setAssociatedShape(0);
-                break;
+        // it is no longer set when document is destroyed
+        if (rootAreaProvider) {
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            Q_ASSERT(lay);
+            QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
+            for(int i = 0; i < layoutRootAreas.count(); ++i) {
+                KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
+                if (rootArea->associatedShape() == shape) {
+                    KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
+                    rootAreaProvider->releaseAllAfter(prevRootArea);
+                    lay->removeRootArea(prevRootArea);
+                    rootArea->setAssociatedShape(0);
+                    break;
+                }
             }
         }
     }
