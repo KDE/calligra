@@ -15,16 +15,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_WIDGET_VIEW_H
+#define KIS_WIDGET_VIEW_H
 
-#ifndef KRITAABOUT_H
-#define KRITAABOUT_H
+#include <abstractwidgetview.h>
 
-#include <kaboutdata.h>
+class KisImageDocument;
 
-class KritaAboutData : public KAboutData
+class KisWidgetView : public Kasten2::AbstractWidgetView
 {
 public:
-    KritaAboutData();
+    KisWidgetView(KisImageDocument *document);
+    ~KisWidgetView();
+
+public: // AbstractModel API
+    virtual QString title() const;
+    virtual bool isModifiable() const;
+    virtual bool isReadOnly() const;
+    virtual void setReadOnly( bool isReadOnly );
+
+public: // AbstractView API
+    virtual void setFocus();
+    virtual QWidget* widget() const;
+    virtual bool hasFocus() const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
-#endif
+#endif // KIS_WIDGET_VIEW_H

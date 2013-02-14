@@ -1,56 +1,26 @@
 /*
-    This file is part of the Krita program, made within the KDE community.
-
-    Copyright 2006-2011 Friedrich W. H. Kossebau <kossebau@kde.org>
-    Copyright 2013 Boudewijn Rempt <boud@kde.org>
-    
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of
-    the License or (at your option) version 3 or any later version
-    accepted by the membership of KDE e.V. (or its successor approved
-    by the membership of KDE e.V.), which shall act as a proxy
-    defined in Section 14 of version 3 of the license.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ *  Copyright (c) 2013 Boudewijn Rempt <boud@valdyas.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "mainwindow.h"
 
 // program
-#include "program.h"
-// tmp
-#include <bytearrayviewprofilemanager.h>
-// tools
-#include <stringsextract/stringsextracttoolview.h>
-#include <stringsextract/stringsextracttool.h>
-#include <info/infotoolview.h>
-#include <info/infotool.h>
-#include <filter/filtertoolview.h>
-#include <filter/filtertool.h>
-#include <charsetconversion/charsetconversiontoolview.h>
-#include <charsetconversion/charsetconversiontool.h>
-#include <checksum/checksumtoolview.h>
-#include <checksum/checksumtool.h>
-#include <info/documentinfotoolview.h>
-#include <info/documentinfotool.h>
-#include <poddecoder/poddecodertoolview.h>
-#include <poddecoder/poddecodertool.h>
-#include <bytetable/bytetabletoolview.h>
-#include <bytetable/bytetabletool.h>
-#include <bookmarks/bookmarkstoolview.h>
-#include <bookmarks/bookmarkstool.h>
+#include "kis_program.h"
 
-#ifndef NO_STRUCTURES_TOOL
-#include <structures/structtoolview.h>
-#include <structures/structtool.h>
-#endif
 
 // Kasten tools
 #include <document/versionview/versionviewtoolview.h>
@@ -61,20 +31,8 @@
 #include <documentsystem/documentsbrowser/documentstool.h>
 #include <document/terminal/terminaltoolview.h>
 #include <document/terminal/terminaltool.h>
-// controllers
-#include <overwriteonly/overwriteonlycontroller.h>
-#include <overwritemode/overwritemodecontroller.h>
-#include <gotooffset/gotooffsetcontroller.h>
-#include <selectrange/selectrangecontroller.h>
-#include <search/searchcontroller.h>
-#include <replace/replacecontroller.h>
-#include <bookmarks/bookmarkscontroller.h>
-#include <print/printcontroller.h>
-#include <viewconfig/viewconfigcontroller.h>
-#include <viewmode/viewmodecontroller.h>
-#include <viewstatus/viewstatuscontroller.h>
-#include <viewprofiles/viewprofilecontroller.h>
-#include <viewprofiles/viewprofilesmanagecontroller.h>
+
+
 // Kasten controllers
 #include <document/modified/modifiedbarcontroller.h>
 #include <document/readonly/readonlycontroller.h>
@@ -97,19 +55,22 @@
 #include <shellwindow/viewareasplit/viewareasplitcontroller.h>
 #include <shellwindow/toollistmenu/toollistmenucontroller.h>
 #include <shellwindow/fullscreen/fullscreencontroller.h>
-/*#include <viewsystem/close/closecontroller.h>*/
+#include <viewsystem/close/closecontroller.h>
 #include <program/quit/quitcontroller.h>
+
 // Kasten gui
 #include <multidocumentstrategy.h>
 #include <modelcodecviewmanager.h>
 #include <viewmanager.h>
 #include <multiviewareas.h>
 #include <statusbar.h>
+
 // Kasten core
 #include <modelcodecmanager.h>
 #include <documentcreatemanager.h>
 #include <documentsyncmanager.h>
 #include <documentmanager.h>
+
 // KDE
 #include <KUrl>
 #include <KGlobal>

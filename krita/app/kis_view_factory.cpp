@@ -15,16 +15,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_view_factory.h"
+#include "kis_image_document.h"
+#include "kis_widget_view.h"
 
-#ifndef KRITAABOUT_H
-#define KRITAABOUT_H
-
-#include <kaboutdata.h>
-
-class KritaAboutData : public KAboutData
+KisViewFactory::KisViewFactory(QObject *parent)
+    : Kasten2::AbstractViewFactory(parent)
 {
-public:
-    KritaAboutData();
-};
+}
 
-#endif
+
+virtual Kasten2::AbstractView* createViewFor(Kasten2::AbstractDocument* document)
+{
+    KisWidgetView *view = 0;
+    KisImageDocument *document = qobject_cast<KisImageDocument*>(document);
+    if (document) {
+        KisWidgetView = new KisWidgetView();
+        view->set
+    }
+    return view;
+}

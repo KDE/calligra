@@ -15,16 +15,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_VIEW_FACTORY_H
+#define KIS_VIEW_FACTORY_H
 
-#ifndef KRITAABOUT_H
-#define KRITAABOUT_H
+#include <abstractviewfactory.h>
 
-#include <kaboutdata.h>
+class Kasten2::AbstractDocument;
 
-class KritaAboutData : public KAboutData
+// XXX: Move to a plugin
+class KisViewFactory : public Kasten2::AbstractViewFactory
 {
+    Q_OBJECT
 public:
-    KritaAboutData();
+    explicit KisViewFactory(QObject *parent = 0);
+    virtual ~KisViewFactory() {}
+    virtual Kasten2::AbstractView* createViewFor(Kasten2::AbstractDocument* document);
+    
 };
 
-#endif
+#endif // KIS_VIEW_FACTORY_H

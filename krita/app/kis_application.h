@@ -15,16 +15,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_APPLICATION_H
+#define KIS_APPLICATION_H
 
-#ifndef KRITAABOUT_H
-#define KRITAABOUT_H
+#include <kapplication.h>
 
-#include <kaboutdata.h>
+class QSplashScreen;
 
-class KritaAboutData : public KAboutData
+/**
+ * XXX: mostly ported stuff from KoApplication, should move back there when
+ * everything is de-parted
+ */
+class KisApplication : public KApplication
 {
+    Q_OBJECT
 public:
-    KritaAboutData();
+    KisApplication();
+
+    static void createCommandLineOptions();
+
+    /**
+     *  Destructor.
+     */
+    virtual ~KoApplication();
+
+    // Overridden to handle exceptions from event handlers.
+    bool notify(QObject *receiver, QEvent *event);
+
 };
 
-#endif
+#endif // KIS_APPLICATION_H
