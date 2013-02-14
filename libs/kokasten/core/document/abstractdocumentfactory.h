@@ -28,6 +28,10 @@
 // Qt
 #include <QtCore/QObject>
 
+#include <QMap>
+#include <QString>
+#include <QVariant>
+
 class QMimeData;
 
 
@@ -49,6 +53,10 @@ class KASTENCORE_EXPORT AbstractDocumentFactory : public QObject
     virtual bool canCreateFromData( const QMimeData* mimeData );
 
     virtual AbstractDocument* create() = 0;
+
+    /// default returns 0
+    virtual AbstractDocument* create(const QMap<QString, QVariant> & parameters);
+
     /// default returns 0
     virtual AbstractDocument* createFromData( const QMimeData* mimeData, bool setModified );
 };

@@ -33,6 +33,13 @@ bool AbstractDocumentFactory::canCreateFromData( const QMimeData* mimeData )
     return false;
 }
 
+AbstractDocument *AbstractDocumentFactory::create(const QMap<QString, QVariant> &parameters)
+{
+    Q_UNUSED(parameters);
+
+    return 0;
+}
+
 AbstractDocument* AbstractDocumentFactory::createFromData( const QMimeData* mimeData, bool setModified )
 {
     Q_UNUSED( mimeData );
