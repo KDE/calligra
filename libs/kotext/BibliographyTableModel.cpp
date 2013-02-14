@@ -80,7 +80,7 @@ QVariant BibliographyTableModel::headerData(int section, Qt::Orientation orienta
     }
 
     if (orientation == Qt::Horizontal) {
-        return capitalize(m_schema->fields()->at(section)->name().replace('_', ' '));
+        return capitalize(m_schema->fields()->at(section)->captionOrName().replace('_', ' '));
     } else {
         return QVariant(section + 1);
     }
