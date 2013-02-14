@@ -128,6 +128,7 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
             if ((index != m_maxBlockSize)  || index < input.size()) {
                 // input.at(index) is between [-127..127] so i am sure that
                 // it (^) is less that 0X7f
+                // litterals ascii is between 0X09 - 0X7f
                 if (QChar(input.at(index)).isLetter() && (input.at(index) >= 0X09)){
 
                     winIndex += 2;
@@ -151,6 +152,13 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
                     }
                     index++;
                     len++;
+                    /**
+                        0x01 to 0x08: "literals": the byte is interpreted as a count from 1 to 8,
+                        and that many literals are copied unmodified from the compressed stream to
+                        the decompressed stream.*/
+                    if (len == 8) {
+                        break;
+                    }
                 }
                 else {
                     break;
@@ -183,6 +191,10 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
                         break;
                     }
                     if (input.at(j) != input.at(lookahead)) {
+                        break;
+                    }
+                    // Match character should be char
+                    if (input.at(lookahead) < 0X09) {
                         break;
                     }
                     length++;
