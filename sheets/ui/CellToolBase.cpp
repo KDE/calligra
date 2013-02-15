@@ -2015,11 +2015,7 @@ void CellToolBase::currency(bool enable)
     command->setSheet(selection()->activeSheet());
     command->setText(i18nc("(qtundo-format)", "Format Money"));
     command->setFormatType(enable ? Format::Money : Format::Generic);
-#if KDE_IS_VERSION(4,4,0)
     command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces() : 0);
-#else
-    command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits() : 0);
-#endif
 
     command->add(*selection());
     command->execute(canvas());

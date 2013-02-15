@@ -54,11 +54,7 @@ void Localization::load(const KoXmlElement& element)
     if (element.hasAttribute("negativeSign"))
         setNegativeSign(element.attribute("negativeSign"));
     if (element.hasAttribute("fracDigits"))
-#if KDE_IS_VERSION(4,4,0)
         setMonetaryDecimalPlaces(element.attribute("fracDigits").toInt());
-#else
-        setFracDigits(element.attribute("fracDigits").toInt());
-#endif
     if (element.hasAttribute("positivePrefixCurrencySymbol")) {
         QString c = element.attribute("positivePrefixCurrencySymbol");
         setPositivePrefixCurrencySymbol(c == "True");
@@ -91,11 +87,7 @@ QDomElement Localization::save(QDomDocument& doc) const
     element.setAttribute("monetaryThousandsSeparator", monetaryThousandsSeparator());
     element.setAttribute("positiveSign", positiveSign());
     element.setAttribute("negativeSign", negativeSign());
-#if KDE_IS_VERSION(4,4,0)
     element.setAttribute("fracDigits", monetaryDecimalPlaces());
-#else
-    element.setAttribute("fracDigits", fracDigits());
-#endif
     element.setAttribute("positivePrefixCurrencySymbol", positivePrefixCurrencySymbol() ? "True" : "False");
     element.setAttribute("negativePrefixCurrencySymbol", negativePrefixCurrencySymbol() ? "True" : "False");
     element.setAttribute("positiveMonetarySignPosition", (int)positiveMonetarySignPosition());
@@ -118,12 +110,8 @@ void Localization::defaultSystemConfig()
     setMonetaryThousandsSeparator(locale.monetaryThousandsSeparator());
     setPositiveSign(locale.positiveSign());
     setNegativeSign(locale.negativeSign());
-#if KDE_IS_VERSION(4,4,0)
     setMonetaryDecimalPlaces(locale.monetaryDecimalPlaces());
     setDecimalPlaces(locale.decimalPlaces());
-#else
-    setFracDigits(locale.fracDigits());
-#endif
     setPositivePrefixCurrencySymbol(locale.positivePrefixCurrencySymbol());
     setNegativePrefixCurrencySymbol(locale.negativePrefixCurrencySymbol());
     setPositiveMonetarySignPosition(locale.positiveMonetarySignPosition());

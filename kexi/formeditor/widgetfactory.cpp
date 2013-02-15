@@ -30,11 +30,7 @@
 #include <klineedit.h>
 
 #include <kdialog.h>
-#if KDE_IS_VERSION(4,5,90)
 # include <keditlistwidget.h>
-#else
-# include <keditlistbox.h>
-#endif
 
 #include <kactioncollection.h>
 
@@ -163,11 +159,7 @@ bool WidgetFactory::editList(QWidget *w, QStringList &list) const
     dialog.setWindowTitle(i18n("Edit Contents of %1", w->objectName()));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
 
-#if KDE_IS_VERSION(4,5,90)
     KEditListWidget *edit = new KEditListWidget(&dialog);
-#else
-    KEditListBox *edit = new KEditListBox(&dialog);
-#endif
     edit->setObjectName("editlist");
     dialog.setMainWidget(edit);
     edit->insertStringList(list);
