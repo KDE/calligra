@@ -32,8 +32,9 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
-AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager) :
-    TextShape(inlineTextObjectManager, textRangeManager)
+AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
+                                         KoTextRangeManager *textRangeManager)
+    : TextShape(inlineTextObjectManager, textRangeManager)
 {
 }
 
@@ -46,7 +47,8 @@ void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShape)
     m_textShapeData = textShape;
 }
 
-void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
+                                         KoShapePaintingContext &paintcontext)
 {
     TextShape::paintComponent(painter, converter, paintcontext);
 }
@@ -58,10 +60,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
     KoTextLoader textLoader(context);
     QTextCursor cursor(textShapeData()->document());
 
-    // QString annotationName = element.attribute("name");
-
     const QString localName(element.localName());
-
 
     if (localName == "annotation") {
 

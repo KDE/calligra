@@ -155,7 +155,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                 else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
                     // FIXME: What to do here?
                 }
-          }
+            }
             textLoader.loadBody(element, cursor);
 
             kDebug(32500) << "****** End Load ******";

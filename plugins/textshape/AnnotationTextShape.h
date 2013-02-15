@@ -42,13 +42,15 @@ class AnnotationTextShape : public TextShape
 {
 public:
     // For now we should give these parameters for TextShape.
-    AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager);
+    AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
+                        KoTextRangeManager *textRangeManager);
     virtual ~AnnotationTextShape();
 
     void setAnnotaionTextData(KoTextShapeData *textShape);
 
     /// reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter,
+                        KoShapePaintingContext &paintcontext);
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -57,8 +59,8 @@ public:
      * in turn will call the KoTextLoader::loadBody() method that reads the element
      * into a QTextCursor.
      *
-     * @param context the KoShapeLoadingContext used for loading.
      * @param element element which represents the shape in odf.
+     * @param context the KoShapeLoadingContext used for loading.
      * @return false if loading failed.
      */
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);

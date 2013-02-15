@@ -1973,9 +1973,15 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     textRangeManager->insert(annotation);
                     cursor.setPosition(position);
                     annotation->setRangeEnd(cursor.position());
-                    // Load annotaion shape. For now let have KoAnnotation::loadodf
+
+                    // Load the annotation shape.
+                    //
+                    // FIXME: For now let keep KoAnnotation::loadodf
+                    //        above but in the long run we shouldn't
+                    //        load it twice.
+                    // FIXME: Why is this not called from inside KoAnnotation::loadOdf?
                     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(ts, d->context);
-                    KoTextAnchor *anchor = new KoTextAnchor(shape);
+                    KoTextAnchor *anchor = new KoTextAnchor(shape); // default type is to-char
                     d->textSharedData->shapeInserted(shape, element, d->context, anchor);
                     annotation->setAnnotationShape(shape);
                 }
