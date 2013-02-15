@@ -800,9 +800,6 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
     KoXmlNode node = nodeElement.firstChild();
     KoXmlElement element = node.toElement();
 
-    // handle it with tag bookmark-end but for bookmark we may have
-    // bookmark-end or we may not have it so we control it with "insideBookmarkTag".
-    bool insideBookmarkTag = false;
 
     // We have characterData or image or span or s  or soft-page break in a tag p
     // FIXME: we should add if there are more tags.
@@ -810,11 +807,6 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
 
         if (node.isText()) {
             handleCharacterData(node, htmlWriter);
-            if (insideBookmarkTag) {
-                // End tag <a> started in bookmark or bookmark-start.
-                htmlWriter->endElement(); // end tag "a"
-                insideBookmarkTag = false;
-            }
         }
         else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
             handleTagP(element, htmlWriter);
@@ -851,15 +843,12 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
         }
         else if (element.localName() == "bookmark" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMark(element, htmlWriter);
-            insideBookmarkTag = true;
         }
         else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMarkStart(element, htmlWriter);
-             insideBookmarkTag = true;
         }
         else if (element.localName() == "bookmark-end" && element.namespaceURI() == KoXmlNS::text) {
-            // End tag <a> started in bookmark or bookmark-start.
-//            handleTagBookMarkEnd(htmlWriter);
+            handleTagBookMarkEnd(htmlWriter);
         }
         else if (element.localName() == "note" && element.namespaceURI() == KoXmlNS::text) {
             handleTagNote(element, htmlWriter);
