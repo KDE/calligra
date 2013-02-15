@@ -1981,7 +1981,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     //        load it twice.
                     // FIXME: Why is this not called from inside KoAnnotation::loadOdf?
                     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(ts, d->context);
-                    KoTextAnchor *anchor = new KoTextAnchor(shape); // default type is to-char
                     d->textSharedData->shapeInserted(shape, element, d->context, anchor);
                     annotation->setAnnotationShape(shape);
                 }
