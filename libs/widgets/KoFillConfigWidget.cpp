@@ -285,6 +285,16 @@ void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
     d->canvas = canvas;
 }
 
+KoCanvasBase* KoFillConfigWidget::canvas()
+{
+    return d->canvas;
+}
+
+QColor KoFillConfigWidget::currentColor()
+{
+    return d->colorAction->currentColor();
+}
+
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
 {
     d->colorButton->setEnabled(true);

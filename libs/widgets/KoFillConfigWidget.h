@@ -26,7 +26,7 @@
 #include <QWidget>
 
 class KoCanvasBase;
-class KoColor;
+class QColor;
 class KoResource;
 class KoShapeBackground;
 class KoShape;
@@ -45,30 +45,36 @@ public:
     KoFillConfigWidget(QWidget *parent);
     ~KoFillConfigWidget();
 
-    void setCanvas( KoCanvasBase *canvas );
+    void setCanvas(KoCanvasBase *canvas);
+
+    KoCanvasBase *canvas();
+
+    /// Return the current color of the color action
+    QColor currentColor();
+
+    /// Apply the gradient stops using the shape background
+    KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
+
+    /// update the widget with the KoShape background
+    virtual void updateWidget(KoShape *shape);
 
 private slots:
     void styleButtonPressed(int buttonId);
 
-    void noColorSelected();
+    virtual void noColorSelected();
 
     /// apply color changes to the selected shape
-    void colorChanged();
+    virtual void colorChanged();
 
     /// the gradient of the fill changed, apply the changes
-    void gradientChanged(KoShapeBackground *background);
+    virtual void gradientChanged(KoShapeBackground *background);
 
     /// the pattern of the fill changed, apply the changes
-    void patternChanged(KoShapeBackground *background);
+    virtual void patternChanged(KoShapeBackground *background);
 
     void shapeChanged();
 
 private:
-    /// update the widget
-    void updateWidget(KoShape *shape);
-
-    static KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
-
     void blockChildSignals(bool block);
 
     class Private;

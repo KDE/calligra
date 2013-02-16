@@ -1,4 +1,4 @@
-include_directories( 
+include_directories(
     ${KOPAGEAPP_INCLUDES}
 )
 
@@ -50,6 +50,7 @@ set( kopageapp_LIB_SRCS
      dialogs/KoPAConfigureDialog.cpp
      widgets/KoPageNavigator.cpp
      widgets/KoPageNavigatorButton.cpp
+     widgets/KoPABackgroundFillWidget.cpp
      tools/backgroundTool/KoPABackgroundTool.cpp
      tools/backgroundTool/KoPABackgroundToolWidget.cpp
 )
