@@ -126,7 +126,7 @@ public:
     */
 
     int anchoredPageNumber() const {
-        return m_anchor ? m_anchor->pageNumber() : -1;
+        return m_shape->anchor() ? m_shape->anchor()->pageNumber() : -1;
     }
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
@@ -173,7 +173,6 @@ private:
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
     QList<KWFrame*> m_copyShapes;
-    KoShapeAnchor *m_anchor;
 };
 
 #endif
