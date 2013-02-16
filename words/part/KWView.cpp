@@ -72,7 +72,7 @@
 #include <KoAnnotationManager.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
 #include <KoInlineTextObjectManager.h>
@@ -82,8 +82,8 @@
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentInfo.h>
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#include <rdf/KoSemanticStylesheetsEditor.h>
+#include <KoDocumentRdf.h>
+#include <KoSemanticStylesheetsEditor.h>
 #endif
 
 #include <KoFindStyle.h>
@@ -1051,19 +1051,20 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 
         shape->setTextRunAroundSide(KoShape::BothRunAroundSide);
 
-        KoTextAnchor *anchor = new KoTextAnchor(shape);
-        anchor->setAnchorType(KoTextAnchor::AnchorPage);
-        anchor->setHorizontalPos(KoTextAnchor::HFromLeft);
-        anchor->setVerticalPos(KoTextAnchor::VFromTop);
-        anchor->setHorizontalRel(KoTextAnchor::HPage);
-        anchor->setVerticalRel(KoTextAnchor::VPage);
+        KoShapeAnchor *anchor = new KoShapeAnchor(shape);
+        anchor->setAnchorType(KoShapeAnchor::AnchorPage);
+        anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
+        anchor->setVerticalPos(KoShapeAnchor::VFromTop);
+        anchor->setHorizontalRel(KoShapeAnchor::HPage);
+        anchor->setVerticalRel(KoShapeAnchor::VPage);
+        shape->setAnchor(anchor);
         shape->setPosition(pos);
 
         pos += QPointF(25,25); // increase the position for each shape we insert so the
                                // user can see them all.
 
         // create the undo step.
-        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape, anchor);
+        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(kwdocument(), shape);
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
         selection->select(shape);

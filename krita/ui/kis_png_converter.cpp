@@ -861,7 +861,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     int color_type = getColorTypeforColorSpace(device->colorSpace(), options.alpha);
 
     if (color_type == -1) {
-        return KisImageBuilder_RESULT_UNSUPPORTED;
+        device->convertTo(KoColorSpaceRegistry::instance()->rgb8(0));
+        color_type = options.alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
     // Try to compute a table of color if the colorspace is RGB8f
@@ -970,9 +971,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     QByteArray colorProfileData = colorProfile->rawData();
     if (!sRGB || options.saveSRGBProfile) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.data(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.data(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
 #endif
     }
 

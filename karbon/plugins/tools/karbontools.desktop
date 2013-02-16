@@ -43,6 +43,7 @@ Name[zh_CN]=Karbon 工具
 Name[zh_TW]=Karbon 工具
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
+X-KDE-PluginInfo-Name=karbontools
 X-KDE-Library=karbontools
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27

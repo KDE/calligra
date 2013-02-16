@@ -145,6 +145,10 @@ void KoTextSharedLoadingData::addDefaultParagraphStyle(KoShapeLoadingContext &co
 
 void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext, KoStyleManager *styleManager)
 {
+    if (styleManager) {
+        styleManager->useLoadedStyles();
+    }
+
     KoOdfLoadingContext &context = shapeContext.odfLoadingContext();
 
     // only add styles of office:styles to the style manager
@@ -648,11 +652,10 @@ KoOdfBibliographyConfiguration KoTextSharedLoadingData::bibliographyConfiguratio
     return d->bibliographyConfiguration;
 }
 
-void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/, KoTextAnchor *anchor)
+void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
 {
     Q_UNUSED(shape);
     Q_UNUSED(element);
-    Q_UNUSED(anchor);
 }
 
 void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &context)

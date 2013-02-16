@@ -3,7 +3,7 @@ project(wordspart)
 #TODO port to textlayout-rework
 add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
+include_directories( ${KORDF_INCLUDES} ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### WordsPrivate library ###############
 
@@ -109,7 +109,7 @@ kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
 target_link_libraries(wordsprivate komain textlayout)
 if( Soprano_FOUND )
-    target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
+    target_link_libraries(wordsprivate kordf)
 endif( Soprano_FOUND )
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 

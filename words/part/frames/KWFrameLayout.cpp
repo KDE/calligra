@@ -542,11 +542,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
 void KWFrameLayout::proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page)
 {
-    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    if (!frame) {
-        return; // nothing we can do
-    }
-    KoTextAnchor *anchor = frame->anchor();
+    KoShapeAnchor *anchor = shape->anchor();
     if (!anchor) {
         return; // nothing we can do
     }
@@ -555,22 +551,22 @@ void KWFrameLayout::proposeShapeMove(const KoShape *shape, QPointF &delta, const
     const qreal textWidth = page.width() - page.leftMargin() - page.rightMargin()
                                 - page.leftPadding() - page.rightPadding();
     switch (anchor->horizontalRel()) {
-        case KoTextAnchor::HParagraph: // LO mistakenly saves it like this sometimes - stupid LO
-        anchor->setHorizontalRel(KoTextAnchor::HPage); // let's fix it
+        case KoShapeAnchor::HParagraph: // LO mistakenly saves it like this sometimes - stupid LO
+        anchor->setHorizontalRel(KoShapeAnchor::HPage); // let's fix it
         // fall through
-    case KoTextAnchor::HPage:
+    case KoShapeAnchor::HPage:
         refRect.setX(0);
         refRect.setWidth(page.width());
         break;
-    case KoTextAnchor::HPageContent:
+    case KoShapeAnchor::HPageContent:
         refRect.setX(page.leftMargin() + page.leftPadding());
         refRect.setWidth(textWidth);
         break;
-    case KoTextAnchor::HPageStartMargin:
+    case KoShapeAnchor::HPageStartMargin:
         refRect.setX(0);
         refRect.setRight(page.leftMargin() + page.leftPadding());
         break;
-    case KoTextAnchor::HPageEndMargin:
+    case KoShapeAnchor::HPageEndMargin:
         refRect.setX(page.width() - page.rightMargin() - page.rightPadding());
         refRect.setRight(page.width());
         break;
@@ -578,11 +574,11 @@ void KWFrameLayout::proposeShapeMove(const KoShape *shape, QPointF &delta, const
         break;
     }
     switch (anchor->verticalRel()) {
-    case KoTextAnchor::VPage:
+    case KoShapeAnchor::VPage:
         refRect.setY(page.offsetInDocument());
         refRect.setHeight(page.height());
         break;
-    case KoTextAnchor::VPageContent:
+    case KoShapeAnchor::VPageContent:
         refRect.setY(page.contentRect().x());
         refRect.setHeight(page.contentRect().height());
         break;
@@ -591,26 +587,26 @@ void KWFrameLayout::proposeShapeMove(const KoShape *shape, QPointF &delta, const
     }
     QPointF newPos = shape->position() + delta;
     switch (anchor->horizontalPos()) {
-    case KoTextAnchor::HLeft:
+    case KoShapeAnchor::HLeft:
         newPos.setX(refRect.x());
         break;
-    case KoTextAnchor::HCenter:
+    case KoShapeAnchor::HCenter:
         newPos.setX(refRect.x() + (refRect.width() - shape->size().width()) / 2);
         break;
-    case KoTextAnchor::HRight:
+    case KoShapeAnchor::HRight:
         newPos.setX(refRect.right() - shape->size().width());
         break;
     default:
         break;
     }
     switch (anchor->verticalPos()) {
-    case KoTextAnchor::VTop:
+    case KoShapeAnchor::VTop:
         newPos.setY(refRect.y());
         break;
-    case KoTextAnchor::VMiddle:
+    case KoShapeAnchor::VMiddle:
         newPos.setY(refRect.y() + (refRect.height() - shape->size().height()) / 2);
         break;
-    case KoTextAnchor::VBottom:
+    case KoShapeAnchor::VBottom:
         newPos.setY(refRect.bottom() - shape->size().height());
         break;
     default:

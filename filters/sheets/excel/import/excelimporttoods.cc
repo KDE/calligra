@@ -1237,6 +1237,7 @@ QString currencyValue(const QString &value)
 void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter)
 {
         Q_UNUSED(store);
+        Q_UNUSED(rowsRepeat);
 
     if (!cell) return;
     if (!xmlWriter) return;

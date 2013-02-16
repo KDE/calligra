@@ -18,7 +18,7 @@ include_directories(${QT_INCLUDES}
                     ${CMAKE_CURRENT_BINARY_DIR})
 
 include_directories(
-    ${KOMAIN_INCLUDES}
+    ${KORDF_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
     ${CMAKE_SOURCE_DIR}/sheets
     ${CMAKE_SOURCE_DIR}/libs/kopageapp
@@ -56,6 +56,7 @@ target_link_libraries(calligraactive
     ${QT_LIBRARIES}
     ${KDECLARATIVE_LIBRARIES}
     komain
+    kordf
     wordsprivate
     calligrasheetscommon
     kopageapp

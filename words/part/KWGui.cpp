@@ -74,8 +74,9 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     if (m_view->shell())
     {
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        m_view->shell()->createDockWidget(&modeBoxFactory);
+        QDockWidget* modeBox = m_view->shell()->createDockWidget(&modeBoxFactory);
         m_view->shell()->dockerManager()->removeToolOptionsDocker();
+        dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(m_canvas);
     }
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);

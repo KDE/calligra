@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 #include <kexiutils/KexiCategorizedView.h>
+#include <widget/KexiServerDriverNotFoundMessage.h>
 
 #include <QPointer>
 
@@ -108,6 +110,8 @@ public:
     virtual ~KexiProjectConnectionSelectionPage();
 
     KexiConnectionSelectorWidget* connSelector;
+private:
+	QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
 };
 
 class KexiServerDBNamePage;

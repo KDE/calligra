@@ -541,13 +541,6 @@ void Doc::updateAllViews()
     emit updateView();
 }
 
-void Doc::updateBorderButton()
-{/*FIXME
-    foreach(KoView* view, views())
-    static_cast<View*>(view)->updateBorderButton();*/
-    emit updateBorderButton();
-}
-
 void Doc::addIgnoreWordAll(const QString & word)
 {
     if (d->spellListIgnoreAll.indexOf(word) == -1)
@@ -583,6 +576,7 @@ void Doc::sheetAdded(Sheet* sheet)
 
 void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
 {
+    Q_UNUSED(settingsWriter);
     /*FIXME
     // Save visual info for the first view, such as active sheet and active cell
     // It looks like a hack, but reopening a document creates only one view anyway (David)
@@ -598,6 +592,8 @@ void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
 
 void Doc::saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter)
 {
+    Q_UNUSED(sheet);
+    Q_UNUSED(settingsWriter);
     /*FIXME
     View *const view = static_cast<View*>(views().first());
     QPoint marker = view->markerFromSheet(sheet);

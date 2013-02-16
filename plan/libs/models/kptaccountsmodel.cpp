@@ -171,7 +171,7 @@ void AccountItemModel::slotAccountToBeInserted( const Account *parent, int row )
 void AccountItemModel::slotAccountInserted( const Account *account )
 {
     //kDebug(planDbg())<<account->name();
-    Q_ASSERT( account->parent() == m_account );
+    Q_ASSERT( account->parent() == m_account ); Q_UNUSED( account );
     endInsertRows();
     m_account = 0;
 }
@@ -188,7 +188,7 @@ void AccountItemModel::slotAccountToBeRemoved( const Account *account )
 void AccountItemModel::slotAccountRemoved( const Account *account )
 {
     //kDebug(planDbg())<<account->name();
-    Q_ASSERT( account == m_account );
+    Q_ASSERT( account == m_account ); Q_UNUSED( account );
     endRemoveRows();
     m_account = 0;
 }

@@ -972,7 +972,7 @@ Project::schedule(int sc)
      * number so the first round of cleanup is done right after the first
      * scheduling pass. */
     breakFlag = false;
-    bool runAwayFound = false;
+//    bool runAwayFound = false;
     do
     {
         done = true;
@@ -1020,7 +1020,7 @@ Project::schedule(int sc)
                         }
                         static_cast<Task*>(t)->setRunaway();
                     }
-                    runAwayFound = true;
+          //          runAwayFound = true;
                     slot = 0;
                     continue;
                 }

@@ -33,11 +33,11 @@ namespace wvWare
 {
     namespace Word97
     {
-        class BRC;
-        class LSPD;
-        class SHD;
+        struct BRC;
+        struct LSPD;
+        struct SHD;
     }
-    class FLD;
+    struct FLD;
 }
 
 /**

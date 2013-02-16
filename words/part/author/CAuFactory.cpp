@@ -37,8 +37,8 @@
 #include <KoMainWindow.h>
 
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#include <rdf/KoSemanticStylesheetsEditor.h>
+#include <KoDocumentRdf.h>
+#include <KoSemanticStylesheetsEditor.h>
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
 #endif

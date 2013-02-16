@@ -174,7 +174,7 @@ void KPlatoScheduler::run()
     connect(m_project, SIGNAL(sigProgress(int)), this, SLOT(setProgress(int)));
 
     bool x = connect(m_manager, SIGNAL(sigLogAdded(Schedule::Log)), this, SLOT(slotAddLog(Schedule::Log)));
-    Q_ASSERT( x );
+    Q_ASSERT( x ); Q_UNUSED( x );
     m_project->calculate( *m_manager );
     if ( m_haltScheduling ) {
         deleteLater();

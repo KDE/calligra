@@ -168,6 +168,11 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
     int imgId = 1;
     foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
         kDebug(30503) << imgSrc;
+        if (!odfStore->hasFile(imgSrc)) {
+            kWarning(30503) << "Can not to extract this image, image "<< imgSrc<< "is an external image";
+            // Ignore the external image.
+            continue;
+        }
         if (!odfStore->extractFile(imgSrc, imgContent)) {
             kDebug(30503) << "Can not to extract file";
             return KoFilter::FileNotFound;
@@ -421,7 +426,6 @@ KoFilter::ConversionStatus ExportEpub2::extractMediaFiles(EpubFile *epubFile)
         if (!file.open(QIODevice::ReadOnly)) {
             kDebug(31000) << "Unable to open" << mediaSrc;
             return KoFilter::FileNotFound;
-            Qt::ArrowCursor;
         }
         mediaContent = file.readAll();
 

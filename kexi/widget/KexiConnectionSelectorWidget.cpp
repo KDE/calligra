@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -135,6 +136,7 @@ KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
     d->conn_set = &conn_set;
     d->startDirOrVariable = startDirOrVariable;
     d->fileAccessType = fileAccessType;
+    m_errorMessagePopup = 0;
     QString iconname(KexiDB::defaultFileBasedDriverIconName());
     setWindowIcon(KIcon(iconname));
 
@@ -204,28 +206,45 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(int id)
     if (id == 1) {//file-based prj type
         showSimpleConn();
     } else if (id == 2) {//server-based prj type
-        if (!d->conn_sel_shown) {
-            d->conn_sel_shown = true;
-
-            //show connections (on demand):
-            foreach(KexiDB::ConnectionData* connData, d->conn_set->list()) {
-                addConnectionData(connData);
-                //   else {
-                //this error should be more verbose:
-                //    kWarning() << "no driver found for '" << it.current()->driverName << "'!";
-                //   }
+        if (KexiDB::hasDatabaseServerDrivers()) {
+            if (!d->conn_sel_shown) {
+                d->conn_sel_shown = true;
+                //show connections (on demand):
+                foreach(KexiDB::ConnectionData* connData, d->conn_set->list()) {
+                    addConnectionData(connData);
+                    //   else {
+                    //this error should be more verbose:
+                    //    kWarning() << "no driver found for '" << it.current()->driverName << "'!";
+                    //   }
+                }
+                if (d->remote->list->topLevelItemCount() > 0) {
+                    d->remote->list->sortByColumn(0, Qt::AscendingOrder);
+                    d->remote->list->resizeColumnToContents(0); // name
+                    d->remote->list->resizeColumnToContents(1); // type
+                    d->remote->list->topLevelItem(0)->setSelected(true);
+                }
+                d->remote->descGroupBox->layout()->setMargin(2);
+                d->remote->list->setFocus();
+                slotConnectionSelectionChanged();
             }
-            if (d->remote->list->topLevelItemCount() > 0) {
-                d->remote->list->sortByColumn(0, Qt::AscendingOrder);
-                d->remote->list->resizeColumnToContents(0); // name
-                d->remote->list->resizeColumnToContents(1); // type
-                d->remote->list->topLevelItem(0)->setSelected(true);
-            }
-            d->remote->descGroupBox->layout()->setMargin(2);
-            d->remote->list->setFocus();
-            slotConnectionSelectionChanged();
+            d->stack->setCurrentWidget(d->remote);
         }
-        d->stack->setCurrentWidget(d->remote);
+        else {
+            if (!m_errorMessagePopup) {
+                QWidget *errorMessagePopupParent = new QWidget(this);
+                QVBoxLayout *vbox = new QVBoxLayout(errorMessagePopupParent);
+                m_errorMessagePopup = new KexiServerDriverNotFoundMessage(errorMessagePopupParent);
+                vbox->addWidget(m_errorMessagePopup);
+                vbox->addStretch(0);
+                d->stack->addWidget(errorMessagePopupParent);
+                m_errorMessagePopup->setAutoDelete(false);
+                d->stack->setCurrentWidget(m_errorMessagePopup->parentWidget());
+                m_errorMessagePopup->animatedShow();
+            }
+            else {
+                d->stack->setCurrentWidget(m_errorMessagePopup->parentWidget());
+            }
+        }
     }
 }
 
