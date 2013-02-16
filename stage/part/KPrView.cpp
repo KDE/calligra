@@ -59,7 +59,6 @@
 #include "KPrFactory.h"
 #include "commands/KPrAnimationCreateCommand.h"
 #include "KPrPageLayoutWidget.h"
-#include "KPrPageBackgroundWidget.h"
 #include "KPrHtmlExport.h"
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrConfigureSlideShowDialog.h"
@@ -197,8 +196,6 @@ void KPrView::initGUI()
     }*/
     KoPABackgroundTool *designTool = dynamic_cast<KoPABackgroundTool *>(KoToolManager::instance()->toolById(kopaCanvas(), "KoPABackgroundTool"));
     if (designTool) {
-	KPrPageBackgroundWidget *bgw = new KPrPageBackgroundWidget(this);
-	designTool->addOptionWidget(bgw);
         KPrPageLayoutWidget *plw = new KPrPageLayoutWidget();
         plw->setView(this);
         designTool->addOptionWidget(plw);

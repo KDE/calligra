@@ -23,13 +23,11 @@
 
 #include <KAction>
 
-#include "kowidgets_export.h"
-
 class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
 class QModelIndex;
 
-class KOWIDGETS_EXPORT KoResourcePopupAction : public KAction
+class KoResourcePopupAction : public KAction
 {
     Q_OBJECT
 
