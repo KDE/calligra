@@ -115,7 +115,6 @@ KisLayerBox::KisLayerBox()
         actions[i]->setCheckable(true);
         actions[i]->setActionGroup(group);
     }
-    actions[1]->trigger(); //TODO save/load previous state
 
     m_wdgLayerBox->bnAdd->setIcon(koIcon("list-add"));
 
