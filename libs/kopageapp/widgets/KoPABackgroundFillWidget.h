@@ -25,6 +25,8 @@
 
 #include "kopageapp_export.h"
 
+class KoShapeLayer;
+
 class KOPAGEAPP_EXPORT KoPABackgroundFillWidget : public KoFillConfigWidget
 {
 public:
@@ -41,6 +43,8 @@ private slots:
 
     /// the pattern of the fill changed, apply the changes
     void patternChanged(KoShapeBackground *background);
+
+    void shapeChanged();
 
 private:
     /// update the widget

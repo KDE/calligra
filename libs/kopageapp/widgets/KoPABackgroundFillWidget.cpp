@@ -32,11 +32,15 @@
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <KoColorBackground.h>
+#include <KoShapeLayer.h>
+#include <KoSelection.h>
 
 KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget* parent)
 : KoFillConfigWidget(parent)
 {
-
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    connect(canvasController->canvas()->shapeManager()->selection(),
+            SIGNAL(currentLayerChanged(const KoShapeLayer*)), this, SLOT(shapeChanged()));
 }
 
 void KoPABackgroundFillWidget::noColorSelected()
@@ -103,10 +107,20 @@ void KoPABackgroundFillWidget::patternChanged(KoShapeBackground* background)
     }
 }
 
+void KoPABackgroundFillWidget::shapeChanged()
+{
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    setCanvas(canvasController->canvas());
+    updateWidget(0);
+}
+
+
 void KoPABackgroundFillWidget::updateWidget(KoShape* shape)
 {
     Q_UNUSED(shape);
-    KoShape* slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
+
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    KoShape* slide = canvasController->canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
     if (! slide) {
         return;
     }

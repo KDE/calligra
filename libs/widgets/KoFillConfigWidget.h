@@ -72,8 +72,7 @@ private slots:
     /// the pattern of the fill changed, apply the changes
     virtual void patternChanged(KoShapeBackground *background);
 
-    void shapeChanged();
-
+    virtual void shapeChanged();
 private:
     void blockChildSignals(bool block);
 
