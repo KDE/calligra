@@ -1108,7 +1108,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     // FIXME: This is commented out to fix the build.
                     //        But something needs to be done here and
                     //        I'm not sure exactly what right now.
-                    //d->textSharedData->shapeInserted(shape, element, d->context, anchor);
+                    d->textSharedData->shapeInserted(shape, element, d->context);
                     annotation->setAnnotationShape(shape);
                 }
                 else {
