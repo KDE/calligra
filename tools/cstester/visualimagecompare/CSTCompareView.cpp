@@ -40,7 +40,7 @@ CSTCompareView::CSTCompareView(QWidget *parent)
     QGridLayout *layout = new QGridLayout(this);
     m_current = new QLabel(this);
     m_current->setWordWrap(true);
-    m_current->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+    m_current->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
     layout->addWidget(m_current, 0, 0, 1, 2);
     m_currentPage = new QLabel(this);
     layout->addWidget(m_currentPage, 1, 0);
@@ -258,12 +258,8 @@ void CSTCompareView::updateImage(int index)
         }
     }
 #endif
-    
-    QString totalChanges = QString::number(m_result.size());
 
-    m_changesAndDocument->setText(QString("Document: %1/%2").arg(
-                                      QString::number(m_currentIndex+1),
-                                      totalChanges));
+    m_changesAndDocument->setText(QString("Document: %1/%2").arg(m_currentIndex+1).arg(m_result.size()));
 
     m_currentPage->setText(currentPageText);
 
