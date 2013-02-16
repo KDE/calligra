@@ -95,14 +95,15 @@ def main():
 
     try :
         opts, params = getopt.getopt(sys.argv[1:], "a:dhrv" ,
-                                     ["actions", "dryrun", "help", "recursive", "verbose"])
+                                     ["actions=", "dryrun", "help", "recursive", "verbose"])
     except getopt.GetoptError:
         usage("unknown options")
-    #print "opts", opts
-    #print "params", params
+    #print "opts:", opts
+    #print "params:", params
 
     actions = []
     for opt, param in opts:
+        #print opt, param
         if opt in ("-a" , "--actions"):
             actions = string.split(param, ",")
             #print "actions: ", actions
@@ -120,6 +121,8 @@ def main():
 
     if actions == []:
         usage("no actions defined")
+
+    # Do the actual work
     traverseTree("", actions, params)
 
     return 0
