@@ -75,6 +75,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrCustomSlideShowsModel.cpp
      KPrSlidesSorterItemDelegate.cpp
      KPrPageLayoutWidget.cpp
+     KPrPageBackgroundWidget.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrAnimationRemoveCommand.cpp
