@@ -12,4 +12,4 @@ foreach (_currentcommondesktopfiles ${commondesktopfiles})
 endforeach(_currentcommondesktopfiles ${commondesktopfiles})
 
 
-add_subdirectory(Svg)
+#add_subdirectory(Svg)
