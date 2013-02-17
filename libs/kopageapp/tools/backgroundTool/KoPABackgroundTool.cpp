@@ -38,7 +38,6 @@
 #include <KoSelection.h>
 
 #include "KoPAMasterPageDocker.h"
-#include "KoPABackgroundToolWidget.h"
 #include <KoPADocument.h>
 
 KoPABackgroundTool::KoPABackgroundTool( KoCanvasBase *canvas )
@@ -101,12 +100,7 @@ KoPAViewBase * KoPABackgroundTool::view() const
 
 QList<QWidget *> KoPABackgroundTool::createOptionWidgets()
 {
-    KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
     QList<QWidget *> widgets;
-    const QString title =
-        (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Background");
-    widget->setWindowTitle(title);
-    widgets.append(widget);
     widgets.append(m_addOnWidgets);
 #if 0
     KoPAMasterPageDocker *masterPageDocker = new KoPAMasterPageDocker();
