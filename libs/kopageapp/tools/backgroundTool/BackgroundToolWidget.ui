@@ -35,6 +35,9 @@
       <widget class="QCheckBox" name="useMasterBackground"/>
      </item>
      <item>
+      <widget class="KoPABackgroundFillWidget" name="fillBackground" native="true"/>
+     </item>
+     <item>
       <widget class="QPushButton" name="backgroundImage">
        <property name="text">
         <string>Set image ...</string>
@@ -58,6 +61,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoPABackgroundFillWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/KoPABackgroundFillWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

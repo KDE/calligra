@@ -21,7 +21,7 @@
 #include "KoPABackgroundFillWidget.h"
 
 #include <KoPageApp.h>
-#include <KoPAView.h>
+#include <KoPAViewBase.h>
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -33,13 +33,15 @@
 #include <KoSelection.h>
 #include <KoPAViewBase.h>
 
+#include <KLocale>
+
 KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
 : KoFillConfigWidget(parent)
 {
     setWindowTitle(i18n("Background"));
 }
 
-void KoPABackgroundFillWidget::setView(KoPAView *view)
+void KoPABackgroundFillWidget::setView(KoPAViewBase *view)
 {
     Q_ASSERT(view);
     connect(view->proxyObject, SIGNAL(activePageChanged()),

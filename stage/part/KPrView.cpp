@@ -43,7 +43,6 @@
 #include <KoZoomController.h>
 #include <KoToolManager.h>
 #include <tools/backgroundTool/KoPABackgroundTool.h>
-#include <libs/kopageapp/widgets/KoPABackgroundFillWidget.h>
 
 #include "KPrDocument.h"
 #include "KPrPart.h"
@@ -197,9 +196,6 @@ void KPrView::initGUI()
     }*/
     KoPABackgroundTool *designTool = dynamic_cast<KoPABackgroundTool *>(KoToolManager::instance()->toolById(kopaCanvas(), "KoPABackgroundTool"));
     if (designTool) {
-        KoPABackgroundFillWidget *bgw = new KoPABackgroundFillWidget(0);
-        bgw->setView(this);
-        designTool->addOptionWidget(bgw);
         KPrPageLayoutWidget *plw = new KPrPageLayoutWidget();
         plw->setView(this);
         designTool->addOptionWidget(plw);

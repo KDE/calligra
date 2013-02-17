@@ -45,6 +45,8 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QW
     setObjectName( "KoPABackgroundToolWidget" );
     widget.setupUi( this );
 
+    widget.fillBackground->setView(m_tool->view());
+
     // adapt texts to type of pages
     const bool isSlideType = (m_tool->view()->kopaDocument()->pageType() == KoPageApp::Slide);
     const QString useMasterBackgroundText =

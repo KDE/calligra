@@ -26,14 +26,14 @@
 #include "kopageapp_export.h"
 
 class KoShape;
-class KoPAView;
+class KoPAViewBase;
 
 class KOPAGEAPP_EXPORT KoPABackgroundFillWidget : public KoFillConfigWidget
 {
 public:
     KoPABackgroundFillWidget(QWidget *parent);
 
-    void setView(KoPAView *view);
+    void setView(KoPAViewBase *view);
 
     QList<KoShape*> currentShapes();
 
