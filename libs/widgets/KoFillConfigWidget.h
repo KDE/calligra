@@ -49,8 +49,11 @@ public:
 
     KoCanvasBase *canvas();
 
+    /// Returns the list of the selected shape
+    /// If you need to use only one shape, call currentShape()
     virtual QList<KoShape*> currentShapes();
 
+    /// Returns the first selected shape of the ressource
     virtual KoShape *currentShape();
 
 private slots:
