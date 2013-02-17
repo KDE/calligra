@@ -58,6 +58,10 @@ public:
     /// update the widget with the KoShape background
     virtual void updateWidget(KoShape *shape);
 
+    virtual QList<KoShape*> currentShapes();
+
+    virtual KoShape *currentShape();
+
 private slots:
     void styleButtonPressed(int buttonId);
 
