@@ -52,6 +52,11 @@ set( kopageapp_LIB_SRCS
      widgets/KoPageNavigatorButton.cpp
      widgets/KoPABackgroundFillWidget.cpp
      tools/backgroundTool/KoPABackgroundTool.cpp
+     tools/backgroundTool/KoPABackgroundToolWidget.cpp
+)
+
+kde4_add_ui_files(kopageapp_LIB_SRCS
+    tools/backgroundTool/BackgroundToolWidget.ui
 )
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
