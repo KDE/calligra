@@ -26,11 +26,14 @@
 #include "kopageapp_export.h"
 
 class KoShapeLayer;
+class KoPAView;
 
 class KOPAGEAPP_EXPORT KoPABackgroundFillWidget : public KoFillConfigWidget
 {
 public:
     KoPABackgroundFillWidget(QWidget *parent);
+
+    void setView(KoPAView *view);
 
 private slots:
     void noColorSelected();

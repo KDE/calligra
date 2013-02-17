@@ -197,8 +197,9 @@ void KPrView::initGUI()
     }*/
     KoPABackgroundTool *designTool = dynamic_cast<KoPABackgroundTool *>(KoToolManager::instance()->toolById(kopaCanvas(), "KoPABackgroundTool"));
     if (designTool) {
-	KoPABackgroundFillWidget *bgw = new KoPABackgroundFillWidget(0);
-	designTool->addOptionWidget(bgw);
+        KoPABackgroundFillWidget *bgw = new KoPABackgroundFillWidget(0);
+        bgw->setView(this);
+        designTool->addOptionWidget(bgw);
         KPrPageLayoutWidget *plw = new KPrPageLayoutWidget();
         plw->setView(this);
         designTool->addOptionWidget(plw);

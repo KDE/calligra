@@ -21,6 +21,7 @@
 #include "KoPABackgroundFillWidget.h"
 
 #include <KoPageApp.h>
+#include <KoPAView.h>
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -34,13 +35,18 @@
 #include <KoColorBackground.h>
 #include <KoShapeLayer.h>
 #include <KoSelection.h>
+#include <KoPAViewBase.h>
 
-KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget* parent)
+KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
 : KoFillConfigWidget(parent)
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    connect(canvasController->canvas()->shapeManager()->selection(),
-            SIGNAL(currentLayerChanged(const KoShapeLayer*)), this, SLOT(shapeChanged()));
+}
+
+void KoPABackgroundFillWidget::setView(KoPAView *view)
+{
+    Q_ASSERT(view);
+    connect(view->proxyObject, SIGNAL(activePageChanged()),
+             this, SLOT(shapeChanged()));
 }
 
 void KoPABackgroundFillWidget::noColorSelected()
@@ -66,7 +72,7 @@ void KoPABackgroundFillWidget::colorChanged()
     canvasController->canvas()->addCommand(firstCommand);
 }
 
-void KoPABackgroundFillWidget::gradientChanged(KoShapeBackground* background)
+void KoPABackgroundFillWidget::gradientChanged(KoShapeBackground *background)
 {
     KoShape* slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
     if (! slide) {
@@ -86,7 +92,7 @@ void KoPABackgroundFillWidget::gradientChanged(KoShapeBackground* background)
     canvasController->canvas()->addCommand(firstCommand);
 }
 
-void KoPABackgroundFillWidget::patternChanged(KoShapeBackground* background)
+void KoPABackgroundFillWidget::patternChanged(KoShapeBackground *background)
 {
     KoShape* slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
     if (! slide) {
