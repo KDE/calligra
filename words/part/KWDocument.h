@@ -199,6 +199,11 @@ public:
     /// return cover data.
     QPair<QString, QByteArray> coverImage();
 
+    /// Add an annotation shape
+    void addAnnotationShape(KoShape *shape);
+
+    QList<KoShape*> annotationShapes();
+
 public slots:
     /**
      * Relayout the pages or frames within the framesets.
@@ -282,6 +287,7 @@ private:
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
     QPair<QString, QByteArray> m_coverImage;
+    QList<KoShape*> m_loadedAnnotationShapes;
 
 };
 

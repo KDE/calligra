@@ -185,6 +185,18 @@ void KWDocument::addShape(KoShape *shape)
     shape->update();
 }
 
+void KWDocument::addAnnotationShape(KoShape *shape)
+{
+    if (!m_loadedAnnotationShapes.contains(shape)) {
+        m_loadedAnnotationShapes.append(shape);
+    }
+}
+
+QList<KoShape*> KWDocument::annotationShapes()
+{
+    return m_loadedAnnotationShapes;
+}
+
 void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
