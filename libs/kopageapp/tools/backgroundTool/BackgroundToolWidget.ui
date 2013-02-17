@@ -49,9 +49,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="text">
-        <string>To change background color use Stroke and Fill docker.</string>
-       </property>
        <property name="wordWrap">
         <bool>true</bool>
        </property>
