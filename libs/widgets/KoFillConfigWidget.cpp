@@ -167,6 +167,31 @@ public:
     : canvas(0)
     {
     }
+    /// Apply the gradient stops using the shape background
+    KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
+    {
+        if (! shape || ! stops.count()) {
+            return 0;
+        }
+
+        KoGradientBackground *newGradient = 0;
+        KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
+        if (oldGradient) {
+            // just copy the gradient and set the new stops
+            QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
+            g->setStops(stops);
+            newGradient = new KoGradientBackground(g);
+            newGradient->setTransform(oldGradient->transform());
+        }
+        else {
+            // No gradient yet, so create a new one.
+            QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
+            g->setCoordinateMode(QGradient::ObjectBoundingMode);
+            g->setStops(stops);
+            newGradient = new KoGradientBackground(g);
+        }
+        return newGradient;
+    }
 
     KoColorPopupButton *colorButton;
     QAction *noFillAction;
@@ -381,7 +406,7 @@ void KoFillConfigWidget::gradientChanged(KoShapeBackground* background)
 
     KUndo2Command *firstCommand = 0;
     foreach (KoShape *shape, selectedShapes) {
-        KoShapeBackground *fill = applyFillGradientStops(shape, newStops);
+        KoShapeBackground *fill = d->applyFillGradientStops(shape, newStops);
         if (! fill) {
             continue;
         }
@@ -482,40 +507,5 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     }
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
 }
-
-KoShapeBackground *KoFillConfigWidget::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
-{
-    if (! shape || ! stops.count()) {
-        return 0;
-    }
-
-    KoGradientBackground *newGradient = 0;
-    KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
-    if (oldGradient) {
-        // just copy the gradient and set the new stops
-        QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
-        g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
-        newGradient->setTransform(oldGradient->transform());
-    }
-    else {
-        // No gradient yet, so create a new one.
-        QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
-        g->setCoordinateMode(QGradient::ObjectBoundingMode);
-        g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
-    }
-    return newGradient;
-}
-
-void KoFillConfigWidget::blockChildSignals(bool block)
-{
-    d->colorButton->blockSignals(block);
-    d->colorAction->blockSignals(block);
-    d->gradientAction->blockSignals(block);
-    d->patternAction->blockSignals(block);
-    d->group->blockSignals(block);
-}
-
 
 #include <KoFillConfigWidget.moc>

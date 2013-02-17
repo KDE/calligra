@@ -69,13 +69,8 @@ private slots:
 
     virtual void shapeChanged();
 private:
-    void blockChildSignals(bool block);
-
     /// update the widget with the KoShape background
     void updateWidget(KoShape *shape);
-
-    /// Apply the gradient stops using the shape background
-    KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
 
     class Private;
     Private * const d;
