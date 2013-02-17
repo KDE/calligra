@@ -81,14 +81,12 @@ void KoPABackgroundToolWidget::slotActivePageChanged()
 
         const bool enableBackgroundEditing = (! normalPage->displayMasterBackground());
         widget.backgroundImage->setEnabled(enableBackgroundEditing);
-        widget.useStrokeAndFillDockerLabel->setEnabled(enableBackgroundEditing);
     }
     else {
         widget.useMasterBackground->setChecked( false );
         widget.displayMasterShapes->setChecked( false );
 
         widget.backgroundImage->setEnabled(true);
-        widget.useStrokeAndFillDockerLabel->setEnabled(true);
     }
 }
 
@@ -152,7 +150,6 @@ void KoPABackgroundToolWidget::useMasterBackground(bool doUse)
 
     const bool enableBackgroundEditing = (! doUse);
     widget.backgroundImage->setEnabled(enableBackgroundEditing);
-    widget.useStrokeAndFillDockerLabel->setEnabled(enableBackgroundEditing);
 }
 
 void KoPABackgroundToolWidget::displayMasterShapes(bool doDisplay)
