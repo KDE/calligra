@@ -28,17 +28,15 @@
 #include <sheets/DocBase.h>
 #include <sheets/part/CanvasItem.h>
 #include <sheets/part/Doc.h>
+#include <sheets/part/Find.h>
+#include <sheets/ui/SheetView.h>
 
 #include <KoPart.h>
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 #include <KoFindText.h>
-#include <sheets/part/Find.h>
-#include <sheets/ui/SheetView.h>
-#include <sheets/Map.h>
 #include <KoCanvasBase.h>
-#include <KoFindText.h>
 
 #include <KMimeType>
 #include <KMimeTypeTrader>

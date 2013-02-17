@@ -1332,6 +1332,7 @@ void KarbonView::configurePageLayout()
     dlg->showPageSpread(false);
     dlg->showTextDirection(false);
     dlg->setPageSpread(false);
+    dlg->setUnit(d->part->unit());
 
     if (dlg->exec() == QDialog::Accepted) {
         if (dlg) {

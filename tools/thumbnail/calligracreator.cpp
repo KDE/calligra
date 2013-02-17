@@ -58,8 +58,12 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     KoStore *store = KoStore::createStore(path, KoStore::Read);
 
     if (store &&
+         // ODF thumbnail?
         (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
-         store->open(QLatin1String("preview.png")))) {
+         // old KOffice/Calligra thumbnail?
+         store->open(QLatin1String("preview.png")) ||
+         // OOXML?
+         store->open(QLatin1String("docProps/thumbnail.jpeg")))) {
         // Hooray! No long delay for the user...
         const QByteArray thumbnailData = store->read(store->size());
 

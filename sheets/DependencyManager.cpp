@@ -34,6 +34,7 @@
 #include "Sheet.h"
 #include "Value.h"
 #include "DocBase.h"
+#include "ElapsedTime_p.h"
 
 #include <QHash>
 #include <QList>
@@ -46,8 +47,8 @@ using namespace Calligra::Sheets;
 // gdb or from debug output to check that everything is set up ok.
 void DependencyManager::Private::dump() const
 {
-    QHash<Cell, Region>::ConstIterator mend(providers.end());
-    for (QHash<Cell, Region>::ConstIterator mit(providers.begin()); mit != mend; ++mit) {
+    QMap<Cell, Region>::ConstIterator mend(providers.end());
+    for (QMap<Cell, Region>::ConstIterator mit(providers.begin()); mit != mend; ++mit) {
         Cell cell = mit.key();
 
         QStringList debugStr;
@@ -60,20 +61,19 @@ void DependencyManager::Private::dump() const
     }
 
     foreach(Sheet* sheet, consumers.keys()) {
-        QList<QRectF> keys = consumers[sheet]->keys();
-        QList<Cell> values = consumers[sheet]->values();
+        const QList< QPair<QRectF, Cell> > pairs = consumers[sheet]->intersectingPairs(QRect(1, 1, KS_colMax, KS_rowMax)).values();
         QHash<QString, QString> table;
-        for (int i = 0; i < keys.count(); ++i) {
-            Region tmpRange(keys[i].toRect(), sheet);
-            table.insertMulti(tmpRange.name(), values[i].name());
+        for (int i = 0; i < pairs.count(); ++i) {
+            Region tmpRange(pairs[i].first.toRect(), sheet);
+            table.insertMulti(tmpRange.name(), pairs[i].second.name());
         }
-        foreach(QString uniqueKey, table.uniqueKeys()) {
+        foreach(const QString &uniqueKey, table.uniqueKeys()) {
             QStringList debugStr(table.values(uniqueKey));
             kDebug(36002) << uniqueKey << " provides values for:" << debugStr.join(",");
         }
     }
 
-    foreach(Cell cell, depths.keys()) {
+    foreach(const Cell &cell, depths.keys()) {
         QString cellName = cell.name();
         while (cellName.count() < 4) cellName.prepend(' ');
         kDebug(36002) << "depth(" << cellName << " ) =" << depths[cell];
@@ -190,7 +190,6 @@ void DependencyManager::updateAllDependencies(const Map* map, KoUpdater *updater
     d->depths.clear();
 
     int cellsCount = 9;
-    int cellCurrent = 0;
 
     if (updater) {
         updater->setProgress(0);
@@ -200,20 +199,31 @@ void DependencyManager::updateAllDependencies(const Map* map, KoUpdater *updater
     }
 
     Cell cell;
+    int cellCurrent = 0;
     foreach(const Sheet* sheet, map->sheetList()) {
         for (int c = 0; c < sheet->formulaStorage()->count(); ++c, ++cellCurrent) {
             cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
 
             d->generateDependencies(cell, sheet->formulaStorage()->data(c));
-            if (!d->depths.contains(cell)) {
-                int depth = d->computeDepth(cell);
-                d->depths.insert(cell , depth);
-            }
             if (!sheet->formulaStorage()->data(c).isValid())
                 cell.setValue(Value::errorPARSE());
 
             if (updater)
-                updater->setProgress(int(qreal(cellCurrent) / qreal(cellsCount) * 100.));
+                updater->setProgress(int(qreal(cellCurrent) / qreal(cellsCount) * 50.));
+        }
+    }
+    cellCurrent = 0;
+    foreach(const Sheet* sheet, map->sheetList()) {
+        for (int c = 0; c < sheet->formulaStorage()->count(); ++c, ++cellCurrent) {
+            cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
+
+            if (!d->depths.contains(cell)) {
+                int depth = d->computeDepth(cell);
+                d->depths.insert(cell , depth);
+            }
+
+            if (updater)
+                updater->setProgress(50 + int(qreal(cellCurrent) / qreal(cellsCount) * 50.));
         }
     }
 
@@ -429,33 +439,13 @@ void DependencyManager::Private::generateDepths(const Region& region)
 
         int bottom = range.bottom();
         if (bottom > cells->rows()) bottom = cells->rows();
+        int right = range.right();
+        if (right > cells->columns()) right = cells->columns();
 
         for (int row = range.top(); row <= bottom; ++row) {
-            int col = 0;
-            Formula formula = sheet->formulaStorage()->firstInRow(row, &col);
-            if (col > 0 && col < range.left())
-                formula = sheet->formulaStorage()->nextInRow(col, row, &col);
-            while (col != 0 && col <= range.right()) {
+            for (int col = range.left(); col <= right; ++col) {
                 Cell cell(sheet, col, row);
-
-                // compute the cell depth and automatically the depths of its providers
-                int depth = computeDepth(cell);
-                depths.insert(cell, depth);
-
-                // compute the consumers' depths
-                QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
-                if (cit == consumers.constEnd()) {
-                    formula = sheet->formulaStorage()->nextInRow(col, row, &col);
-                    continue;
-                }
-
-                const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
-                foreach (const Cell &c, consumers) {
-                    if (!region.contains(c.cellPosition(), c.sheet()))
-                        generateDepths(c, computedDepths);
-                }
-
-                formula = sheet->formulaStorage()->nextInRow(col, row, &col);
+                generateDepths(cell, computedDepths);
             }
         }
     }

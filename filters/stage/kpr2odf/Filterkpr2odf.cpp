@@ -125,7 +125,6 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     output->write(*preview);
     output->close();
     output->leaveDirectory();
-    manifest->addManifestEntry(QLatin1String("Thumbnails/"), QString());
     manifest->addManifestEntry(QLatin1String("Thumbnails/thumbnail.png"), QString());
     delete preview;
 
@@ -162,6 +161,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
 
     settings->endElement();//office:document-settings
     settings->endDocument();
+    delete settings;
     output->close();
     manifest->addManifestEntry("settings.xml", "text/xml");
 

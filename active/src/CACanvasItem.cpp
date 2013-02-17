@@ -23,11 +23,11 @@
 
 #include <KoCanvasBase.h>
 
-#include <KDE/KDebug>
+#include <KDebug>
 #include <KoCanvasController.h>
 
-#include <QtGui/QGraphicsWidget>
-#include <QtCore/QTimer>
+#include <QGraphicsWidget>
+#include <QTimer>
 
 CACanvasItem::CACanvasItem(QDeclarativeItem* parent)
     : QDeclarativeItem(parent)

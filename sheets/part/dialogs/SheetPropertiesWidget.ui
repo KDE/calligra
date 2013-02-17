@@ -207,7 +207,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <customwidgets>
   <customwidget>
    <class>KComboBox</class>

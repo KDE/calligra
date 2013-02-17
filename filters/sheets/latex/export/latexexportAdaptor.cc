@@ -20,9 +20,9 @@
 */
 
 #include <latexexportAdaptor.h>
-#include "kspreadlatexexportdiaImpl.h"
+#include "latexexportdialog.h"
 
-LatexExportAdaptor::LatexExportAdaptor(KSpreadLatexExportDiaImpl* dia)
+LatexExportAdaptor::LatexExportAdaptor(LatexExportDialog* dia)
         : QDBusAbstractAdaptor(dia)
 {
     // constructor

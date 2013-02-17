@@ -54,7 +54,6 @@
 #include <QToolButton>
 #include <QSqlDatabase>
 #include <QSizePolicy>
-#include <QList>
 #include <QScrollBar>
 
 // KDE includes
@@ -103,7 +102,7 @@
 #include <KoModeBoxFactory.h>
 #include <KoIcon.h>
 
-// KSpread includes
+// Sheets includes
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -136,6 +135,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "PrintJob.h"
+#include "ElapsedTime_p.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -158,8 +158,10 @@
 #include "ui/PixmapCachingSheetView.h"
 
 // D-Bus
+#ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
-#include <QtDBus/QtDBus>
+#include <QtDBus>
+#endif
 
 using namespace Calligra::Sheets;
 
@@ -603,7 +605,10 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     // process, is called from resizeEvent(). The loading flag will be unset
     // at the end of initialPosition().
 
+#ifndef QT_NO_DBUS
     new ViewAdaptor(this);
+#endif
+
     d->canvas->setFocus();
 }
 
@@ -714,8 +719,9 @@ void View::initView()
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        shell()->createDockWidget(&modeBoxFactory);
+        QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
         shell()->dockerManager()->removeToolOptionsDocker();
+        dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
         //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),

@@ -1,5 +1,4 @@
 include_directories(
-    ${CMAKE_BINARY_DIR}/libs/store
     ${CMAKE_BINARY_DIR}/filters/
     ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting.h

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +40,8 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
                   i18n("Select project to open. "
                        "You can choose project stored in file or on database server."),
                   parent)
+ , connSelector(0)
+ , m_errorMessagePopup(0)
 {
     setNextButtonVisible(true);
 
@@ -70,6 +73,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     setFocusWidget(tabWidget);
     setContents(tabWidget);
     
+    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     // delayed opening:
     QTimer::singleShot(500, this, SLOT(init()));
 }
@@ -81,28 +85,56 @@ void KexiMainOpenProjectPage::init()
     fileSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
     fileSelectorLayout->addWidget(fileSelector);
     fileSelector->show();
-                      
-    // server-based:
-    QVBoxLayout* connSelectorLayout = new QVBoxLayout(m_connSelectorWidget);
-    connSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
-    QLabel* connSelectorLabel = new QLabel(
-        i18n("Select database server's connection with project you wish to open. "
-            "<p>Here you may also add, edit or remove connections "
-            "from the list."));
-    connSelectorLayout->addWidget(connSelectorLabel);
-    connSelectorLayout->addSpacing(KDialog::marginHint());
-    connSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
-        "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Opening);
-    connSelectorLayout->addWidget(connSelector);
-    
-    connSelector->showAdvancedConn();
-    connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    connSelector->hideHelpers();
-    connSelector->hideDescription();
-    connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
-            this, SLOT(next()));
+}
+
+void KexiMainOpenProjectPage::tabChanged(int index)
+{
+    QVBoxLayout* connSelectorLayout;
+    if (!m_connSelectorWidget->layout()) {
+        connSelectorLayout = new QVBoxLayout(m_connSelectorWidget);
+    }
+    else {
+        connSelectorLayout = dynamic_cast<QVBoxLayout*>(m_connSelectorWidget->layout());
+    }
+
+    if (index == 1) {
+        if (KexiDB::hasDatabaseServerDrivers()) {
+            if (!connSelector) {
+                // server-based:
+                connSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
+                QLabel* connSelectorLabel = new QLabel(
+                    i18n("Select database server's connection with project you wish to open. "
+                        "<p>Here you may also add, edit or remove connections "
+                        "from the list."));
+                connSelectorLayout->addWidget(connSelectorLabel);
+                connSelectorLayout->addSpacing(KDialog::marginHint());
+                connSelector = new KexiConnectionSelectorWidget(
+                    Kexi::connset(),
+                    "kfiledialog:///OpenExistingOrCreateNewProject",
+                    KAbstractFileWidget::Opening);
+                connSelectorLayout->addWidget(connSelector);
+
+                connSelector->showAdvancedConn();
+                connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+                connSelector->hideHelpers();
+                connSelector->hideDescription();
+                connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+                        this, SLOT(next()));
+            }
+        }
+        else {
+            if (!m_errorMessagePopup) {
+                setNextButtonVisible(false);
+                setDescription(QString());
+                m_errorMessagePopup = new KexiServerDriverNotFoundMessage(m_connSelectorWidget);
+                connSelectorLayout->addSpacing(KDialog::marginHint());
+                connSelectorLayout->addWidget(m_errorMessagePopup);
+                connSelectorLayout->setAlignment(m_errorMessagePopup, Qt::AlignTop);
+                m_errorMessagePopup->setAutoDelete(false);
+                m_errorMessagePopup->animatedShow();
+            }
+        }
+    }
 }
 
 KexiMainOpenProjectPage::~KexiMainOpenProjectPage()

@@ -1,16 +1,4 @@
 
-########### next target ###############
-
-#set(karbonepsexport_PART_SRCS EpsExport.cpp EpsExportDlg.cpp )
-
-#kde4_add_plugin(karbonepsexport ${karbonepsexport_PART_SRCS})
-
-#target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS}  karboncommon )
-
-#install(TARGETS karbonepsexport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### next target ###############
-
 macro_optional_find_package(Pstoedit)
 macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit with svg plugin" "Translates PostScript and PDF graphics to SVG" "http://www.pstoedit.net/" FALSE "" "Required at runtime by the Karbon EPS import filter")
 
@@ -24,10 +12,7 @@ target_link_libraries(karbonepsimport komain)
 
 install(TARGETS karbonepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### install files ###############
-
 install(FILES
-    #karbon_eps_export.desktop
     karbon_eps_import.desktop
     #karbon_ps_import.desktop
     DESTINATION ${SERVICES_INSTALL_DIR}

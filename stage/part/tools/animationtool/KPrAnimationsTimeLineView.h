@@ -90,16 +90,16 @@ public:
     friend class KPrTimeLineHeader;
 
 signals:
-    /// emited if an item is clicked (return index of the item clicked)
+    /// emitted if an item is clicked (return index of the item clicked)
     void clicked(const QModelIndex&);
 
-    /// emited if an item time range has changed (return the index of the item changed)
+    /// emitted if an item time range has changed (return the index of the item changed)
     void timeValuesChanged(const QModelIndex&);
 
-    /// emited if the layout has changed
+    /// emitted if the layout has changed
     void layoutChanged();
 
-    /// emited if the context menu is called
+    /// emitted if the context menu is called
     void customContextMenuRequested(const QPoint &pos);
 
 public slots:
@@ -131,10 +131,10 @@ protected:
     /// Set selected column and update view
     void setSelectedColumn(int column);
 
-    /// Return row heigth
-    int rowsHeigth() const;
+    /// Return row height
+    int rowsHeight() const;
 
-    /// Calculate width necesary to display all columns
+    /// Calculate width necessary to display all columns
     int totalWidth() const;
 
     /// Returns selected row and column
@@ -171,7 +171,7 @@ private:
     int m_selectedRow;
     int m_selectedColumn;
     QScrollArea *m_scrollArea;
-    int m_rowsHeigth;
+    int m_rowsHeight;
     int m_stepsNumber;
     int m_scaleOversize;
     qreal m_maxLength;

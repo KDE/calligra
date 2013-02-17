@@ -53,6 +53,15 @@ KoFilter::ConversionStatus read_lumOff();
 KoFilter::ConversionStatus read_tailEnd();
 KoFilter::ConversionStatus read_headEnd();
 
+KoBorder::BorderData m_currentBorder;
+
+KoFilter::ConversionStatus read_Table_generic(const QString& endElement);
+KoFilter::ConversionStatus read_Table_lnL();
+KoFilter::ConversionStatus read_Table_lnR();
+KoFilter::ConversionStatus read_Table_lnT();
+KoFilter::ConversionStatus read_Table_lnB();
+KoFilter::ConversionStatus read_Table_ln();
+
 //! set by one of the color readers, read by read_solidFill. Read and
 //! set by one of the color transformations.
 QColor m_currentColor;

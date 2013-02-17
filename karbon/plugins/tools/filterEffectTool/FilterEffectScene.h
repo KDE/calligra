@@ -82,7 +82,7 @@ class FilterEffectScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    FilterEffectScene(QObject *parent = 0);
+    explicit FilterEffectScene(QObject *parent = 0);
     virtual ~FilterEffectScene();
 
     /// initializes the scene from the filter effect stack

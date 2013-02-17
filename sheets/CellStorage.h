@@ -90,7 +90,7 @@ public:
      * Constructor.
      * Creates an empty storage for \p sheet.
      */
-    CellStorage(Sheet* sheet);
+    explicit CellStorage(Sheet *sheet);
 
     /**
      * Copy constructor.

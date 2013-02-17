@@ -878,10 +878,10 @@ QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, 
         newPoint += QString::number(row);
 
     if (((ref == ColumnRemove
-            && col == pos.x() // Column is the deleted one : error
+            && (col >= pos.x() && col < pos.x() + nbCol) // Column is the deleted one : error
             && (fullRowOrColumn || row == pos.y())) ||
             (ref == RowRemove
-             && row == pos.y() // Row is the deleted one : error
+             && (row >= pos.y() && row < pos.y() + nbCol) // Row is the deleted one : error
              && (fullRowOrColumn || col == pos.x())) ||
             (ref == ColumnInsert
              && col + nbCol > KS_colMax
@@ -1571,8 +1571,8 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                             BackgroundImageProperties bgProperties;
                             if( element.hasAttribute("draw:opacity") ) {
                                 QString opacity = element.attribute("draw:opacity", "");
-                                if( opacity.endsWith('%') ) {
-                                    opacity = opacity.left(opacity.size() - 2);
+                                if( opacity.endsWith(QLatin1Char('%')) ) {
+                                    opacity.chop(1);
                                 }
                                 bool ok;
                                 float opacityFloat = opacity.toFloat( &ok );
@@ -2615,7 +2615,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     }
 
     const QRect usedArea = this->usedArea();
-    saveOdfColRowCell(xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
+    saveOdfColRowCell(usedArea.width(), usedArea.height(), tableContext);
 
     xmlWriter.endElement();
     return true;
@@ -2656,10 +2656,12 @@ QString Sheet::saveOdfSheetStyleName(KoGenStyles &mainStyles)
 }
 
 
-void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
-                              int maxCols, int maxRows, OdfSavingContext& tableContext)
+void Sheet::saveOdfColRowCell(int maxCols, int maxRows, OdfSavingContext& tableContext)
 {
     kDebug(36003) << "Sheet::saveOdfColRowCell:" << d->name;
+
+    KoXmlWriter & xmlWriter = tableContext.shapeContext.xmlWriter();
+    KoGenStyles & mainStyles = tableContext.shapeContext.mainStyles();
 
     // calculate the column/row default cell styles
     int maxMaxRows = maxRows; // includes the max row a column default style occupies
@@ -2880,7 +2882,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             }
 
-            saveOdfCells(xmlWriter, mainStyles, i, maxCols, tableContext);
+            saveOdfCells(i, maxCols, tableContext);
 
             // copy the index for the next row to process
             i = j - 1; /*it's already incremented in the for loop*/
@@ -2903,9 +2905,10 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     }
 }
 
-void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                         OdfSavingContext& tableContext)
+void Sheet::saveOdfCells(int row, int maxCols, OdfSavingContext& tableContext)
 {
+    KoXmlWriter & xmlWriter = tableContext.shapeContext.xmlWriter();
+
     int i = 1;
     Cell cell(this, i, row);
     Cell nextCell = d->cellStorage->nextInRow(i, row);
@@ -2926,7 +2929,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
 
         int repeated = 1;
         int column = i;
-        cell.saveOdf(xmlWriter, mainStyles, row, column, repeated, tableContext);
+        cell.saveOdf(row, column, repeated, tableContext);
         i += repeated;
         // stop if we reached the end column
         if (i > maxCols || nextCell.isNull())

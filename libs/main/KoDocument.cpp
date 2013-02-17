@@ -32,9 +32,7 @@
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
-#ifdef SHOULD_BUILD_RDF
-#include "rdf/KoDocumentRdf.h"
-#endif
+
 #include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
@@ -69,7 +67,9 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QTimer>
-#include <QtDBus/QDBusConnection>
+#ifndef QT_NO_DBUS
+#include <QDBusConnection>
+#endif
 #include <QApplication>
 
 // Define the protocol used here for embedded documents' URL
@@ -84,6 +84,8 @@
 #include "KoUndoStackAction.h"
 
 using namespace std;
+
+class KoPageWidgetItem;
 
 /**********************************************************
  *
@@ -103,26 +105,27 @@ class KoDocument::Private
 {
 public:
     Private() :
-            progressUpdater(0),
-            progressProxy(0),
-            profileStream(0),
-            filterManager(0),
-            specialOutputFlag(0),   // default is native format
-            isImporting(false),
-            isExporting(false),
-            password(QString()),
-            modifiedAfterAutosave(false),
-            autosaving(false),
-            shouldCheckAutoSaveFile(true),
-            autoErrorHandlingEnabled(true),
-            backupFile(true),
-            backupPath(QString()),
-            doNotSaveExtDoc(false),
-            storeInternal(false),
-            isLoading(false),
-            undoStack(0),
-            parentPart(0)
-
+        docInfo(0),
+        docRdf(0),
+        progressUpdater(0),
+        progressProxy(0),
+        profileStream(0),
+        filterManager(0),
+        specialOutputFlag(0),   // default is native format
+        isImporting(false),
+        isExporting(false),
+        password(QString()),
+        modifiedAfterAutosave(false),
+        autosaving(false),
+        shouldCheckAutoSaveFile(true),
+        autoErrorHandlingEnabled(true),
+        backupFile(true),
+        backupPath(QString()),
+        doNotSaveExtDoc(false),
+        storeInternal(false),
+        isLoading(false),
+        undoStack(0),
+        parentPart(0)
     {
         confirmNonNativeSave[0] = true;
         confirmNonNativeSave[1] = true;
@@ -135,11 +138,8 @@ public:
 
 
     KoDocumentInfo *docInfo;
-#ifdef SHOULD_BUILD_RDF
-    KoDocumentRdf *docRdf;
-#else
     KoDocumentRdfBase *docRdf;
-#endif
+
     KoProgressUpdater *progressUpdater;
     KoProgressProxy *progressProxy;
     QTextStream *profileStream;
@@ -192,6 +192,7 @@ public:
 KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
         : d(new Private)
 {
+    Q_ASSERT(parent);
     d->parentPart = parent;
 
     d->isEmpty = true;
@@ -200,16 +201,6 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
 
     setObjectName(newObjectName());
     d->docInfo = new KoDocumentInfo(this);
-    d->docRdf = 0;
-#ifdef SHOULD_BUILD_RDF
-    {
-        KConfigGroup cfgGrp(d->parentPart->componentData().config(), "RDF");
-        bool rdfEnabled = cfgGrp.readEntry("rdf_enabled", false);
-        if (rdfEnabled) {
-            setDocumentRdf(new KoDocumentRdf(this));
-        }
-    }
-#endif
 
     d->pageLayout.width = 0;
     d->pageLayout.height = 0;
@@ -519,30 +510,14 @@ KoDocumentInfo *KoDocument::documentInfo() const
 
 KoDocumentRdfBase *KoDocument::documentRdf() const
 {
-#ifdef SHOULD_BUILD_RDF
-    if (d->docRdf && d->docRdf->model()) {
-        return d->docRdf;
-    }
-#endif
-    return 0;
-}
-
-void KoDocument::setDocumentRdf(KoDocumentRdf *rdfDocument)
-{
-    delete d->docRdf;
-    d->docRdf = 0;
-#ifdef SHOULD_BUILD_RDF
-    if (rdfDocument->model()) {
-        d->docRdf = rdfDocument;
-    }
-#endif
-}
-
-KoDocumentRdfBase *KoDocument::documentRdfBase() const
-{
     return d->docRdf;
 }
 
+void KoDocument::setDocumentRdf(KoDocumentRdfBase *rdfDocument)
+{
+    delete d->docRdf;
+    d->docRdf = rdfDocument;
+}
 
 bool KoDocument::isModified() const
 {
@@ -773,6 +748,8 @@ bool KoDocument::saveToStream(QIODevice *dev)
 QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url) const
 {
     if (!url.isLocalFile()) return mimeType;
+
+    if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
 
     QStringList imageMimeTypes;
     imageMimeTypes << "image/jpeg"
@@ -1190,7 +1167,7 @@ bool KoDocument::openFile()
             if (!ext.isEmpty() && ext[0] == '*') {
                 ext.remove(0, 1);
                 if (path.endsWith(ext)) {
-                    path.truncate(path.length() - ext.length());
+                    path.chop(ext.length());
                     break;
                 }
             }
@@ -1796,6 +1773,7 @@ void KoDocument::setModified(bool mod)
 
     if (mod) {
         d->isEmpty = false;
+        documentInfo()->updateParameters();
     }
 
     // This influences the title

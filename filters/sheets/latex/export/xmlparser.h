@@ -47,9 +47,9 @@ protected:
     static Document   *_root;
 
 public:
-    XmlParser(QString);
-    XmlParser(QByteArray); /* deprecated */
-    XmlParser(const KoStore*);
+    explicit XmlParser(const QString&);
+    explicit XmlParser(QByteArray); /* deprecated */
+    explicit XmlParser(const KoStore*);
     XmlParser();
     virtual ~XmlParser();
 

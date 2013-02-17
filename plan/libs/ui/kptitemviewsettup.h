@@ -30,7 +30,7 @@
 #include <kdialog.h>
 #include <kpagedialog.h>
 
-struct KoPageLayoutWidget;
+class KoPageLayoutWidget;
 
 namespace KPlato
 {

@@ -51,7 +51,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
     captionsForServerBasedDrivers.sort();
     //insert file-based
     if (options & ShowFileDrivers) {
-        foreach(QString caption, captionsForFileBasedDrivers) {
+        foreach(const QString &caption, captionsForFileBasedDrivers) {
             const KexiDB::Driver::Info& info = driversInfo[ fileBasedDriversDict[ caption ] ];
             //! @todo change this if better icon is available
             addItem(koIcon("application-x-executable"), info.caption);
@@ -60,7 +60,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
     }
     //insert server-based
     if (options & ShowServerDrivers) {
-        foreach(QString caption, captionsForServerBasedDrivers) {
+        foreach(const QString &caption, captionsForServerBasedDrivers) {
             const KexiDB::Driver::Info& info = driversInfo[ serverBasedDriversDict[ caption ] ];
             //! @todo change this if better icon is available
             addItem(koIcon("application-x-executable"), info.caption);

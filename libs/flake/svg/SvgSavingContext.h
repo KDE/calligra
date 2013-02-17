@@ -36,6 +36,8 @@ class FLAKE_EXPORT SvgSavingContext
 public:
     /// Creates a new svg saving context on the specified output device
     SvgSavingContext();
+    
+    explicit SvgSavingContext(QIODevice &outputDevice, bool saveInlineImages = true);
 
     /// Virtual destructor
     virtual ~SvgSavingContext();

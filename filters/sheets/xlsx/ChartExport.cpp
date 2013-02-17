@@ -52,8 +52,9 @@ ChartExport::~ChartExport()
 // Takes a Excel cellrange and translates it into a ODF cellrange
 QString normalizeCellRange(QString range)
 {
-    if(range.startsWith('[') && range.endsWith(']'))
-        range = range.mid(1, range.length() - 2);
+    if(range.startsWith('[') && range.endsWith(']')) {
+        range.remove(0, 1).chop(1);
+    }
     range = range.remove('$');
 
     const bool isPoint = !range.contains( ':' );
@@ -61,8 +62,8 @@ QString normalizeCellRange(QString range)
     if(regEx.indexIn(range) >= 0) {
         range.clear();
         QString sheetName = regEx.cap(1);
-        if(sheetName.endsWith('.') || sheetName.endsWith('!'))
-            sheetName = sheetName.left(sheetName.length() - 1);
+        if(sheetName.endsWith(QLatin1Char('.')) || sheetName.endsWith(QLatin1Char('!')))
+            sheetName.chop(1);
         if(!sheetName.isEmpty())
             range = sheetName + '.';
         range += regEx.cap(2);

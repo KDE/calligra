@@ -28,7 +28,7 @@ class KPrAnimationAttribute;
 class KPrAnimate : public KPrAnimationBase
 {
 public:
-    KPrAnimate(KPrShapeAnimation *shapeAnimation);
+    explicit KPrAnimate(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimate();
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);

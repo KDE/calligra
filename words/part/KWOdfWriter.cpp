@@ -89,7 +89,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWT
     Q_ASSERT(shapedata);
 
     writer.startElement(tag);
-    shapedata->saveOdf(context, m_document->documentRdfBase());
+    shapedata->saveOdf(context, m_document->documentRdf());
     writer.endElement();
 
     context.setOptions(options);
@@ -120,7 +120,7 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
     }
 
     // save page styles that don't have a header or footer which will be handled later
-    foreach (KWPageStyle pageStyle, m_document->pageManager()->pageStyles()) {
+    foreach (const KWPageStyle &pageStyle, m_document->pageManager()->pageStyles()) {
         if (data.contains(pageStyle))
             continue;
 
@@ -140,7 +140,7 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
           << Words::OddPagesFooterTextFrameSet
           << Words::EvenPagesFooterTextFrameSet;
 
-    foreach (KWPageStyle pageStyle, data.keys()) {
+    foreach (const KWPageStyle &pageStyle, data.keys()) {
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         //masterStyle.setAutoStyleInStylesDotXml(true);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
@@ -268,7 +268,8 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
         if (fs->frameCount() == 1) {
             // may be a frame that is anchored to text, don't save those here.
-            if (fs->frames().first()->anchorType() != KoTextAnchor::AnchorPage)
+            KoShapeAnchor *anchor = fs->frames().first()->shape()->anchor();
+            if (anchor && anchor->anchorType() != KoShapeAnchor::AnchorPage)
                 continue;
         }
 
@@ -305,7 +306,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
             KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
-                shapeData->saveOdf(context, m_document->documentRdfBase());
+                shapeData->saveOdf(context, m_document->documentRdf());
             }
         }
     }
@@ -339,7 +340,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     // if there is e.g. text:p or text:h there
     if (!mainTextFrame) {
         bodyWriter->startElement("text:page-sequence");
-        foreach (KWPage page, m_document->pageManager()->pages()) {
+        foreach (const KWPage &page, m_document->pageManager()->pages()) {
             Q_ASSERT(m_masterPages.contains(page.pageStyle()));
             bodyWriter->startElement("text:page");
             bodyWriter->addAttribute("text:master-page-name",
@@ -365,7 +366,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     // update references to xml:id to be to new xml:id
     // in the external Rdf
-    if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
+    if (KoDocumentRdfBase *rdf = m_document->documentRdf()) {
         QMap<QString, QString> m = sharedData->getRdfIdMapping();
         rdf->updateXmlIdReferences(m);
     }

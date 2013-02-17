@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -185,10 +185,8 @@ QString KexiCSVTextQuoteComboBox::textQuote() const
 
 void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 {
-    if (textQuote == "\"" || textQuote == "'")
-        setEditText(textQuote);
-    else if (textQuote.isEmpty())
-        setEditText(i18n("None"));
+    QString q(textQuote.isEmpty() ? i18n("None") : textQuote);
+    setCurrentIndex(findText(q));
 }
 
 //----------------------------------------------------

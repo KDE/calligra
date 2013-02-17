@@ -178,7 +178,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
 
     // Icon chooser button
     m_button = new KIconButton(frame);
-    m_button->setIcon(koIconName("kexi"));
+    m_button->setIcon(koIconName("calligrakexi"));
     m_button->setIconSize(KIconLoader::SizeMedium);
     l->addWidget(m_button, 0, 2, 2, 1);
     connect(m_button, SIGNAL(iconChanged(QString)), this, SLOT(updateIconName(QString)));

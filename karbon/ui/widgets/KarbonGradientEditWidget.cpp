@@ -166,7 +166,7 @@ void KarbonGradientEditWidget::setupUI()
     int row = 0;
     editLayout->addWidget(new QLabel(i18n("Target:"), this), row, 0);
     m_gradientTarget = new KComboBox(false, this);
-    m_gradientTarget->insertItem(0, i18n("Stroke"));
+    m_gradientTarget->insertItem(0, i18n("Line"));
     m_gradientTarget->insertItem(1, i18n("Fill"));
     m_gradientTarget->setCurrentIndex(FillGradient);
     editLayout->addWidget(m_gradientTarget, row, 1, 1, 2);

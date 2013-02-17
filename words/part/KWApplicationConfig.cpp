@@ -37,6 +37,7 @@ KWApplicationConfig::KWApplicationConfig()
         m_statusBarShowModified(true),
         m_statusBarShowMouse(false),
         m_statusBarShowZoom(true),
+        m_showInlineObjectVisualization(true),
         m_zoom(100),
         m_zoomMode(KoZoomMode::ZOOM_WIDTH),
         m_autoSaveSeconds(KoDocument::defaultAutoSave()),
@@ -61,6 +62,7 @@ void KWApplicationConfig::load(KWDocument *document)
 //    m_maxRecentFiles = interface.readEntry("NbRecentFile", 10);
 
     m_showFormattingChars = interface.readEntry("ViewFormattingChars", m_showFormattingChars);
+    m_showInlineObjectVisualization = interface.readEntry("ViewFieldShadings", m_showInlineObjectVisualization);
     m_showTableBorders = interface.readEntry("ViewTableBorders", m_showTableBorders);
 
     m_viewFrameBorders = interface.readEntry("ViewFrameBorders", m_viewFrameBorders);
@@ -128,6 +130,7 @@ void KWApplicationConfig::save()
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");
     interface.writeEntry("ViewFormattingChars", m_showFormattingChars);
+    interface.writeEntry("ViewFieldShadings", m_showInlineObjectVisualization);
     interface.writeEntry("ViewTableBorders", m_showTableBorders);
     interface.writeEntry("ViewFrameBorders", m_viewFrameBorders);
     interface.writeEntry("Zoom", m_zoom);

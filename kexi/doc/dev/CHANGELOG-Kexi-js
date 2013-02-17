@@ -152,20 +152,57 @@ TODO: DriverManager::~DriverManager() should not delete internal driver manager 
 
 TODO: ask for closing table (and other depending objects) before table renaming
 
-TODO: Table View
-- fix support for storing/displaying rich text
 
 ===================== Kexi 2.7  =====================
 
+TODO: Table View
+*Fix support for displaying and storing rich text
+REVIEW:312134
 
+2012-12-30
+Tests
+*KexiTester introduced: Global object for setting up GUI tests
+*Global Search test added
+Script Designer
+*Move actions to the object main menu, improve names
+
+2012-12-26
+Main Window
+*Add "Save As" action for any database object. The operation works on server side if possible.
+REVIEW:107913
+DIGEST: Kexi now supports "Save As" action for any database object and on the server side if possible.
+TODO: Port to Predicate
+
+2012-12-22
+Main Window
+*View switching uses modern group button
+REVIEW:107856
+
+2012-12-10
+Core
+*Add main context menu for all object windows
+REVIEW:107661
+
+2012-12-05
+Core
+*Add configurable Window's Main Menu
+Script Designer
+*Redesign menu, move some actions to Main Menu, rename open to import, save to export
 
 ===================== Kexi 2.6  =====================
+
+2012-12-27
+Main Window
+*Fix regression in global search (introduced in commit 8bcbf0202, Oct 19)
+BUG:312258
+*Fix possible crash when pressing tab in the global search box
+*Make Clear button work in the global search box
 
 ~~~~~~~~~~~~~~~~ 2.6 RC (2.4.92) ~~~~~~~~~~~~~~~~
 
 2012-10-29
-KexiDB
-*Fix for Text Editor stripping out rich text formatting in Kexi Forms
+Forms
+*Fix for Text Editor stripping out rich text formatting
 BUG:309174
 REVIEW:107120
 
@@ -175,7 +212,7 @@ Tables
 BUG:309116
 REVIEW:107085
 
-2012-10-21..26
+2012-10-21..2012-11-07
 Tables
 *Show indication that edited or pasted text is trimmed
 BUG:301136
@@ -247,8 +284,8 @@ BUG:309274
 REVIEW:107159
 
 2012-10-29
-KexiDB
-*Fix for Text Editor stripping out rich text formatting in Kexi Forms
+Forms
+*Fix for Text Editor stripping out rich text formatting
 BUG:309174
 REVIEW:107120
 

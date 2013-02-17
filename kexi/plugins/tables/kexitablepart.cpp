@@ -163,6 +163,7 @@ tristate KexiTablePart::rename(KexiPart::Item & item, const QString& newName)
 KexiDB::SchemaData* KexiTablePart::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
                               Kexi::ViewMode viewMode, bool *ownedByWindow)
 {
+    Q_UNUSED(window);
     Q_UNUSED(viewMode);
     if (ownedByWindow)
         *ownedByWindow = false;

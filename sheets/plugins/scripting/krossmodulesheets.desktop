@@ -95,4 +95,4 @@ Comment[zh_CN]=允许执行脚本
 Comment[zh_TW]=允許執行命令稿
 Type=Service
 X-KDE-Library=krossmodulesheets
-X-KDE-Version=1
+X-KDE-Version=27

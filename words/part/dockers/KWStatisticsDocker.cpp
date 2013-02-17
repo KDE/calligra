@@ -34,6 +34,11 @@ KWStatisticsDocker::KWStatisticsDocker()
 {
     m_canvasReset = false;
     setWindowTitle(i18n("Statistics"));
+
+    m_statisticsWidget = new KWStatisticsWidget(this);
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
+    setWidget(m_statisticsWidget);
 }
 
 KWStatisticsDocker::~KWStatisticsDocker()
@@ -43,30 +48,12 @@ KWStatisticsDocker::~KWStatisticsDocker()
 void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
 {
     KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
-
-    QWidget *wdg = widget();
-    if (wdg) {
-        delete wdg;
-        m_canvasReset = true;
-    } else {
-        m_canvasReset = false;
-    }
- 
-    m_statisticsWidget = new KWStatisticsWidget(canvas->resourceManager(),
-                                                canvas->document(),
-                                                canvas->shapeManager()->selection(),
-                                                this);
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
-    setWidget(m_statisticsWidget);
+    m_statisticsWidget->setCanvas(canvas);
 }
 
 void KWStatisticsDocker::unsetCanvas()
 {
-    if (!m_canvasReset) {
-        delete widget();
-        setWidget(0);
-    }
+    m_statisticsWidget->unsetCanvas();
 }
 
 void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)

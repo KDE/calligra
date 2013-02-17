@@ -231,20 +231,23 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //-------------------------------------------------
 
 //static
-int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutData)
+int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
 {
     Kexi::initCmdLineArgs(argc, argv, aboutData);
 
     bool GUIenabled = true;
 //! @todo switch GUIenabled off when needed
-    KApplication* app = new KApplication(GUIenabled);
+    bool kappExisted = kapp;
+    KApplication* app = kapp ? kapp : new KApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return (~res) ? 0 : 1;
     }
 
@@ -252,7 +255,9 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
 
     /* Exit requested, e.g. after database removing. */
     if (Kexi::startupHandler().action() == KexiStartupData::Exit) {
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return 0;
     }
 
@@ -270,7 +275,9 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
 
     if (true != win->startup()) {
         delete win;
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return 1;
     }
 
@@ -296,6 +303,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         , d(new KexiMainWindow::Private(this))
 {
     setObjectName("KexiMainWindow");
+    kexiTester() << KexiTestObject(this);
 
 //kde4: removed  KImageIO::registerFormats();
 
@@ -483,7 +491,6 @@ void KexiMainWindow::setupActions()
     d->action_save->setToolTip(i18n("Save object changes"));
     d->action_save->setWhatsThis(i18n("Saves object changes from currently selected window."));
 
-#ifdef KEXI_SHOW_UNIMPLEMENTED
     d->action_save_as = addAction("project_saveas", koIcon("document-save-as"),
                                   i18n("Save &As..."));
     d->action_save_as->setToolTip(i18n("Save object as"));
@@ -492,13 +499,13 @@ void KexiMainWindow::setupActions()
              "(within the same project)."));
     connect(d->action_save_as, SIGNAL(triggered()), this, SLOT(slotProjectSaveAs()));
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
     ac->addAction("project_properties",
         action = d->action_project_properties = new KexiMenuWidgetAction(
             koIcon("document-properties"), i18n("Project Properties"), this));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectProperties()));
     setupMainMenuActionShortcut(action, SLOT(slotProjectProperties()));
 #else
-    d->action_save_as = d->dummy_action;
     d->action_project_properties = d->dummy_action;
 #endif
 
@@ -557,7 +564,7 @@ void KexiMainWindow::setupActions()
 
     d->action_tools_compact_database = addAction("tools_compact_database",
 //! @todo icon
-                                                 koIcon("kexi"), i18n("&Compact Database..."));
+                                                 koIcon("calligrakexi"), i18n("&Compact Database..."));
     d->action_tools_compact_database->setToolTip(i18n("Compact the current database project"));
     d->action_tools_compact_database->setWhatsThis(
         i18n("Compacts the current database project, so it will take less space and work faster."));
@@ -1292,14 +1299,13 @@ static QString internalReason(KexiDB::Object *obj)
 tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
-    KexiProjectData *newProjectData = new KexiProjectData(projectData);
-    createKexiProject(*newProjectData);
-    if (!newProjectData->connectionData()->savePassword
-            && newProjectData->connectionData()->password.isEmpty()
-            && newProjectData->connectionData()->fileName().isEmpty() //! @todo temp.: change this if there are file-based drivers requiring a password
+    createKexiProject(projectData);
+    if (!d->prj->data()->connectionData()->savePassword
+            && d->prj->data()->connectionData()->password.isEmpty()
+            && d->prj->data()->connectionData()->fileName().isEmpty() //! @todo temp.: change this if there are file-based drivers requiring a password
        ) {
         //ask for password
-        KexiDBPasswordDialog pwdDlg(this, *newProjectData->connectionData(),
+        KexiDBPasswordDialog pwdDlg(this, *d->prj->data()->connectionData(),
                                     false /*!showDetailsButton*/);
         if (QDialog::Accepted != pwdDlg.exec()) {
             delete d->prj;
@@ -1341,8 +1347,8 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
         return false;
     }
     setupProjectNavigator();
-    newProjectData->setLastOpened(QDateTime::currentDateTime());
-    Kexi::recentProjects()->addProjectData(newProjectData);
+    d->prj->data()->setLastOpened(QDateTime::currentDateTime());
+    Kexi::recentProjects()->addProjectData(new KexiProjectData(*d->prj->data()));
     updateReadOnlyState();
     invalidateActions();
     enableMessages(false);
@@ -1844,7 +1850,8 @@ void KexiMainWindow::setupProjectNavigator()
 
         KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
         d->navigator = new KexiProjectNavigator(navDockableWidget);
-        
+        kexiTester() << KexiTestObject(d->navigator, "KexiProjectNavigator");
+
         navDockableWidget->setWidget(d->navigator);
 
         d->navDockWidget->setWindowTitle(d->navigator->windowTitle());
@@ -2001,8 +2008,7 @@ void KexiMainWindow::updateAppCaption()
             d->appCaptionPrefix = d->prj->data()->databaseName();
     }
 
-    setWindowTitle((d->appCaptionPrefix.isEmpty() ? QString() : (d->appCaptionPrefix + QString::fromLatin1(" - ")))
-                   + KGlobal::mainComponent().aboutData()->programName());
+    setWindowTitle(KDialog::makeStandardCaption(d->appCaptionPrefix, this));
 }
 
 bool KexiMainWindow::queryClose()
@@ -2511,7 +2517,11 @@ KexiMainWindow::slotProjectSave()
 void
 KexiMainWindow::slotProjectSaveAs()
 {
-    KEXI_UNFINISHED(i18n("Save object as"));
+    if (!currentWindow())
+        return;
+    saveObject(currentWindow(), QString(), SaveObjectAs);
+    updateAppCaption();
+    invalidateActions();
 }
 
 void
@@ -2704,8 +2714,29 @@ void KexiMainWindow::slotViewTextMode()
         switchToViewMode(*currentWindow(), Kexi::TextViewMode);
 }
 
+//! Used to control if we're not Saving-As object under the original name
+class SaveAsObjectNameValidator : public KexiNameDialogValidator
+{
+public:
+    SaveAsObjectNameValidator(const QString &originalObjectName)
+     : m_originalObjectName(originalObjectName)
+    {
+    }
+    virtual bool validate(KexiNameDialog *dialog) const {
+        if (dialog->widget()->nameText() == m_originalObjectName) {
+            KMessageBox::information(dialog,
+                                     i18nc("Could not save object under the original name.",
+                                           "Could not save under the original name."));
+            return false;
+        }
+        return true;
+    }
+private:
+    QString m_originalObjectName;
+};
+
 tristate KexiMainWindow::getNewObjectInfo(
-    KexiPart::Item *partItem, KexiPart::Part *part,
+    KexiPart::Item *partItem, const QString &originalName, KexiPart::Part *part,
     bool allowOverwriting, bool *overwriteNeeded, const QString& messageWhenAskingForName)
 {
     //data was never saved in the past -we need to create a new object at the backend
@@ -2724,7 +2755,9 @@ tristate KexiMainWindow::getNewObjectInfo(
     d->nameDialog->setWindowTitle(i18n("Save Object As"));
     d->nameDialog->setDialogIcon(info->itemIconName());
     d->nameDialog->setAllowOverwriting(allowOverwriting);
-
+    if (!originalName.isEmpty()) {
+        d->nameDialog->setValidator(new SaveAsObjectNameValidator(originalName));
+    }
     if (d->nameDialog->execAndCheckIfObjectExists(*project(), *part, overwriteNeeded)
         != QDialog::Accepted)
     {
@@ -2737,46 +2770,90 @@ tristate KexiMainWindow::getNewObjectInfo(
     return true;
 }
 
+//! Used to delete part item on exit from block
+class PartItemDeleter : public QScopedPointer<KexiPart::Item>
+{
+    public:
+        explicit PartItemDeleter(KexiProject *prj) : m_prj(prj) {}
+        ~PartItemDeleter() {
+            if (!isNull()) {
+                m_prj->deleteUnstoredItem(take());
+            }
+        }
+    private:
+        KexiProject *m_prj;
+};
+
+static void showSavingObjectFailedErrorMessage(KexiMainWindow *wnd, KexiPart::Item *item)
+{
+    wnd->showErrorMessage(
+        i18nc("@info Saving object failed",
+              "Saving <resource>%1</resource> object failed.", item->name()),
+              wnd->currentWindow());
+}
+
 tristate KexiMainWindow::saveObject(KexiWindow *window, const QString& messageWhenAskingForName,
-                                    bool dontAsk)
+                                    SaveObjectOptions options)
 {
     tristate res;
-    if (!window->neverSaved()) {
+    bool saveAs = options & SaveObjectAs;
+    if (!saveAs && !window->neverSaved()) {
         //data was saved in the past -just save again
-        res = window->storeData(dontAsk);
-        if (!res)
-            showErrorMessage(i18n("Saving \"%1\" object failed.", window->partItem()->name()),
-                             currentWindow());
+        res = window->storeData(options & DoNotAsk);
+        if (!res) {
+            showSavingObjectFailedErrorMessage(this, window->partItem());
+        }
         return res;
+    }
+    if (saveAs && window->neverSaved()) {
+        //if never saved, saveAs == save
+        saveAs = false;
     }
 
     const int oldItemID = window->partItem()->identifier();
 
+    KexiPart::Item *partItem;
+    KexiView::StoreNewDataOptions storeNewDataOptions;
+    PartItemDeleter itemDeleter(d->prj);
+    if (saveAs) {
+        partItem = d->prj->createPartItem(window->part());
+        if (!partItem) {
+            //! @todo error
+            return false;
+        }
+        itemDeleter.reset(partItem);
+    }
+    else {
+        partItem = window->partItem();
+    }
+
     bool overwriteNeeded;
-    res = getNewObjectInfo(window->partItem(), window->part(), true /*allowOverwriting*/,
+    res = getNewObjectInfo(partItem, saveAs ? window->partItem()->name() : QString(),
+                           window->part(), true /*allowOverwriting*/,
                            &overwriteNeeded, messageWhenAskingForName);
     if (res != true)
         return res;
-
-    KexiView::StoreNewDataOptions storeNewDataOptions;
     if (overwriteNeeded) {
-        storeNewDataOptions |= KexiView::OverwriteExistingObject;
+        storeNewDataOptions |= KexiView::OverwriteExistingData;
     }
-    res = window->storeNewData(storeNewDataOptions);
+
+    if (saveAs) {
+        res = window->storeDataAs(partItem, storeNewDataOptions);
+    }
+    else {
+        res = window->storeNewData(storeNewDataOptions);
+    }
+
     if (~res)
         return cancelled;
     if (!res) {
-        showErrorMessage(i18n("Saving new \"%1\" object failed.", window->partItem()->name()),
-                         currentWindow());
+        showSavingObjectFailedErrorMessage(this, partItem);
         return false;
     }
 
-    //update navigator
-//this is alreday done in KexiProject::addStoredItem(): d->nav->addItem(window->partItem());
-    //item id changed to final one: update association in dialogs' dictionary
-// d->dialogs.take(oldItemID);
     d->updateWindowId(window, oldItemID);
     invalidateProjectWideActions();
+    itemDeleter.take();
     return true;
 }
 
@@ -2875,7 +2952,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         if (questionRes == KMessageBox::Yes) {
             //save it
 //   if (!window->storeData())
-            tristate res = saveObject(window, QString(), true /*dontAsk*/);
+            tristate res = saveObject(window, QString(), DoNotAsk);
             if (!res || ~res) {
 //js:TODO show error info; (retry/ignore/cancel)
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -3926,7 +4003,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
             if (KMessageBox::Cancel == questionRes)
                 return cancelled;
             if (KMessageBox::Yes == questionRes) {
-                tristate savingRes = saveObject(window, QString(), true /*dontAsk*/);
+                tristate savingRes = saveObject(window, QString(), DoNotAsk);
                 if (true != savingRes)
                     return savingRes;
             }

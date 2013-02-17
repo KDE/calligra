@@ -110,7 +110,7 @@ void ScriptingSheetsListView::initialize()
 
             if (m_editortype != Disabled) {
                 QString range;
-                foreach(QVariant v, m_prevlist) {
+                foreach(const QVariant &v, m_prevlist) {
                     QVariantList l = v.toList();
                     if (l.count() < 1 || l[0].toString() != sheet->sheetName())
                         continue;

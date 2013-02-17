@@ -648,7 +648,7 @@ void Project::tasksForward()
     foreach ( Node* n, m_terminalNodes ) {
         QList<Node*> lst;
         QList<Relation*> rel;
-        Q_ASSERT( checkParent( n, lst, rel ) );
+        Q_ASSERT( checkParent( n, lst, rel ) ); Q_UNUSED( n );
     }
 #endif
 }
@@ -681,7 +681,7 @@ void Project::tasksBackward()
     foreach ( Node* n, m_terminalNodes ) {
         QList<Node*> lst;
         QList<Relation*> rel;
-        Q_ASSERT( checkChildren( n, lst, rel ) );
+        Q_ASSERT( checkChildren( n, lst, rel ) ); Q_UNUSED( n );
     }
 #endif
 }
@@ -948,11 +948,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 
 //            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
             if ( e.hasAttribute( "currency-digits" ) ) {
-#if KDE_IS_VERSION(4,4,0)
                 l->setMonetaryDecimalPlaces(e.attribute("currency-digits").toInt());
-#else
-                l->setFracDigits( e.attribute( "currency-digits" ).toInt() );
-#endif
             }
             if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
                 l->setPositiveMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
@@ -1267,11 +1263,7 @@ void Project::save( QDomElement &element ) const
     loc.setAttribute( "currency-symbol", l->currencySymbol() );
 //    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
 //    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );
-#if KDE_IS_VERSION(4,4,0)
     loc.setAttribute("currency-digits", l->monetaryDecimalPlaces());
-#else
-    loc.setAttribute( "currency-digits", l->fracDigits() );
-#endif
     loc.setAttribute( "positive-monetary-sign-position", l->positiveMonetarySignPosition() );
     loc.setAttribute( "positive-prefix-currency-symbol", l->positivePrefixCurrencySymbol() );
     loc.setAttribute( "negative-monetary-sign-position", l->negativeMonetarySignPosition() );

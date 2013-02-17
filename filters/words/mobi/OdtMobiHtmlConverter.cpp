@@ -60,10 +60,10 @@ OdtMobiHtmlConverter::OdtMobiHtmlConverter()
     : m_currentChapter(1),
       m_optionsTag(false),
       m_boldTag(false),
-      m_italicTag(false),
       m_underlineTag(false),
-      m_fontColorTag(false),
-      m_spanTag(false)
+      m_italicTag(false),
+      m_spanTag(false),
+      m_fontColorTag(false)
 {
     qDeleteAll(m_styles);
 }
@@ -800,22 +800,12 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
     KoXmlNode node = nodeElement.firstChild();
     KoXmlElement element = node.toElement();
 
-    // We should end tag "a" after text for bookmark-start we can
-    // handle it with tag bookmark-end but for bookmark there is no
-    // bookmark-end so i use this flag to close the tag "a" that i
-    // have opened it in handleTagBookMark()
-    bool bookMarkFlag = false;
-
     // We have characterData or image or span or s  or soft-page break in a tag p
     // FIXME: we should add if there are more tags.
     while (!node.isNull()) {
 
         if (node.isText()) {
             handleCharacterData(node, htmlWriter);
-            if (bookMarkFlag) {
-                htmlWriter->endElement(); // end tag "a"
-                bookMarkFlag = false;
-            }
         }
         else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
             handleTagP(element, htmlWriter);
@@ -852,7 +842,6 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
         }
         else if (element.localName() == "bookmark" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMark(element, htmlWriter);
-            bookMarkFlag = true;
         }
         else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMarkStart(element, htmlWriter);
@@ -918,7 +907,7 @@ void OdtMobiHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(QString id, m_footNotes.keys()) {
+    foreach(const QString &id, m_footNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
 //        htmlWriter->addAttribute("id", id + "n");
 //        htmlWriter->startElement("a", m_doIndent);
@@ -946,7 +935,7 @@ void OdtMobiHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(QString id, m_endNotes.keys()) {
+    foreach(const QString &id, m_endNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
 //        htmlWriter->addAttribute("id", id.section("/", 1) + "n");
 
@@ -1298,7 +1287,7 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::createCSS(QHash<QString, StyleI
 
     QByteArray begin("{\n");
     QByteArray end("}\n");
-    foreach (QString styleName, styles.keys()) {
+    foreach (const QString &styleName, styles.keys()) {
         QByteArray head;
         QByteArray attributeList;
 
@@ -1443,7 +1432,7 @@ void OdtMobiHtmlConverter::generateMobiInternalLinks()
 
     // For each refrence that we add to file, should update bookmark position.
     foreach (qint64 refPosition, m_refrencesList.keys()) {
-        foreach (QString id, m_bookMarksList.keys()) {
+        foreach (const QString &id, m_bookMarksList.keys()) {
             if (m_bookMarksList.value(id) > refPosition) {
                 qint64 newPos = (qint64)11 + (qint64)QString::number(m_bookMarksList.value(id)).size()
                         + m_bookMarksList.value(id) + 1;

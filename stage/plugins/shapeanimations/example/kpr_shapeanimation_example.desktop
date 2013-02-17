@@ -66,4 +66,4 @@ Comment[zh_TW]=讓元件動起來！
 X-KDE-ServiceTypes=CalligraStage/ShapeAnimation
 Type=Service
 X-KDE-Library=kpr_shapeanimation_example
-X-KPresenter-Version=1
+X-KPresenter-Version=27

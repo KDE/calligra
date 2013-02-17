@@ -27,12 +27,18 @@
 #include "frames/KWTextFrameSet.h"
 #include "dialogs/KWStartupWidget.h"
 
+#ifdef SHOULD_BUILD_RDF
+#include <KoDocumentRdf.h>
+#include <KoDocumentRdfEditWidget.h>
+#endif
+
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
+#include <KoDocumentInfoDlg.h>
 
 #include <kglobal.h>
 #include <kmessagebox.h>
@@ -131,6 +137,17 @@ void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     else
         KoPart::showStartUpWidget(parent, alwaysShow);
+}
+
+KoDocumentInfoDlg *KWPart::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
+{
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+#ifdef SHOULD_BUILD_RDF
+    KoPageWidgetItem *rdfEditWidget = new KoDocumentRdfEditWidget(static_cast<KoDocumentRdf*>(document()->documentRdf()));
+    dlg->addPageItem(rdfEditWidget);
+#endif
+    return dlg;
+
 }
 
 void KWPart::showErrorAndDie()

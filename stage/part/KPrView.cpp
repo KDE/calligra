@@ -244,8 +244,8 @@ void KPrView::initActions()
 
     if ( QAction *action = actionCollection()->action("view_masterpages") )
         action->setShortcut(QKeySequence("CTRL+F8"));
-    
-    m_actionInsertPictures = new KAction(i18n("Insert Pictures..."), this);
+
+    m_actionInsertPictures = new KAction(i18n("Insert Pictures as Slides..."), this);
     actionCollection()->addAction("insert_pictures", m_actionInsertPictures);
     connect(m_actionInsertPictures, SIGNAL(activated()), this, SLOT(insertPictures()));
 
