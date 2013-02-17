@@ -49,86 +49,20 @@ void KoPABackgroundFillWidget::setView(KoPAView *view)
              this, SLOT(shapeChanged()));
 }
 
-void KoPABackgroundFillWidget::noColorSelected()
+KoShape* KoPABackgroundFillWidget::currentShape()
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoShape* slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-    if (! slide) {
-        return;
-    }
-    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(slide, 0));
+    KoShape *slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
+
+    return slide;
 }
 
-void KoPABackgroundFillWidget::colorChanged()
+QList<KoShape*> KoPABackgroundFillWidget::currentShapes()
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoShape* slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-    if (! slide) {
-        return;
-    }
+    KoShape *slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
 
-    KoShapeBackground *fill = new KoColorBackground(currentColor());
-    KUndo2Command *firstCommand = new KoShapeBackgroundCommand(slide, fill);
-    canvasController->canvas()->addCommand(firstCommand);
-}
-
-void KoPABackgroundFillWidget::gradientChanged(KoShapeBackground *background)
-{
-    KoShape* slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-    if (! slide) {
-        return;
-    }
-
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(background);
-    if (! gradientBackground) {
-        return;
-    }
-
-    QGradientStops newStops = gradientBackground->gradient()->stops();
-    delete gradientBackground;
-
-    KUndo2Command *firstCommand = new KoShapeBackgroundCommand(slide, applyFillGradientStops(slide, newStops));
-    canvasController->canvas()->addCommand(firstCommand);
-}
-
-void KoPABackgroundFillWidget::patternChanged(KoShapeBackground *background)
-{
-    KoShape* slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-    if (! slide) {
-        return;
-    }
-
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(background);
-    if (! patternBackground) {
-        return;
-    }
-
-    KoImageCollection *imageCollection = canvasController->canvas()->shapeController()->resourceManager()->imageCollection();
-    if (imageCollection) {
-        KoPatternBackground *fill = new KoPatternBackground(imageCollection);
-        fill->setPattern(patternBackground->pattern());
-        canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(slide, fill));
-    }
-}
-
-void KoPABackgroundFillWidget::shapeChanged()
-{
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    setCanvas(canvasController->canvas());
-    updateWidget(0);
-}
-
-
-void KoPABackgroundFillWidget::updateWidget(KoShape* shape)
-{
-    Q_UNUSED(shape);
-
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoShape* slide = canvasController->canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-    if (! slide) {
-        return;
-    }
-    KoFillConfigWidget::updateWidget(slide);
+    QList<KoShape*> list;
+    list.append(slide);
+    return list;
 }

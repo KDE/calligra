@@ -49,15 +49,6 @@ public:
 
     KoCanvasBase *canvas();
 
-    /// Return the current color of the color action
-    QColor currentColor();
-
-    /// Apply the gradient stops using the shape background
-    KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
-
-    /// update the widget with the KoShape background
-    virtual void updateWidget(KoShape *shape);
-
     virtual QList<KoShape*> currentShapes();
 
     virtual KoShape *currentShape();
@@ -65,20 +56,26 @@ public:
 private slots:
     void styleButtonPressed(int buttonId);
 
-    virtual void noColorSelected();
+    void noColorSelected();
 
     /// apply color changes to the selected shape
-    virtual void colorChanged();
+    void colorChanged();
 
     /// the gradient of the fill changed, apply the changes
-    virtual void gradientChanged(KoShapeBackground *background);
+    void gradientChanged(KoShapeBackground *background);
 
     /// the pattern of the fill changed, apply the changes
-    virtual void patternChanged(KoShapeBackground *background);
+    void patternChanged(KoShapeBackground *background);
 
     virtual void shapeChanged();
 private:
     void blockChildSignals(bool block);
+
+    /// update the widget with the KoShape background
+    void updateWidget(KoShape *shape);
+
+    /// Apply the gradient stops using the shape background
+    KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
 
     class Private;
     Private * const d;

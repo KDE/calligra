@@ -290,11 +290,6 @@ KoCanvasBase* KoFillConfigWidget::canvas()
     return d->canvas;
 }
 
-QColor KoFillConfigWidget::currentColor()
-{
-    return d->colorAction->currentColor();
-}
-
 QList<KoShape*> KoFillConfigWidget::currentShapes()
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();

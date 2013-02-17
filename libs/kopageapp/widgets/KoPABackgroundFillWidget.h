@@ -25,7 +25,7 @@
 
 #include "kopageapp_export.h"
 
-class KoShapeLayer;
+class KoShape;
 class KoPAView;
 
 class KOPAGEAPP_EXPORT KoPABackgroundFillWidget : public KoFillConfigWidget
@@ -35,23 +35,9 @@ public:
 
     void setView(KoPAView *view);
 
-private slots:
-    void noColorSelected();
+    QList<KoShape*> currentShapes();
 
-    /// apply color changes to the selected shape
-    void colorChanged();
-
-    /// the gradient of the fill changed, apply the changes
-    void gradientChanged(KoShapeBackground *background);
-
-    /// the pattern of the fill changed, apply the changes
-    void patternChanged(KoShapeBackground *background);
-
-    void shapeChanged();
-
-private:
-    /// update the widget
-    void updateWidget(KoShape *shape);
+    KoShape *currentShape();
 };
 
 #endif /* KOPABACKGROUNDFILLWIDGET_H */
