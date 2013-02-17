@@ -1259,6 +1259,9 @@ NodeItemModel *WorkPackageTreeView::baseModel() const
 
 void WorkPackageTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
 {
+    Q_UNUSED(index);
+    Q_UNUSED(dropIndicatorPosition);
+    Q_UNUSED(event);
 /*    QModelIndex idx = index;
     NodeSortFilterProxyModel *pr = proxyModel();
     if ( pr ) {

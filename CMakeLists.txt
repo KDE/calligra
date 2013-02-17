@@ -101,8 +101,8 @@ ENDIF()
 ## Look for KDE and Qt ##
 #########################
 ########################
-set(KDE_MIN_VERSION "4.3.0")
-find_package(KDE4 4.3.0 REQUIRED)
+set(KDE_MIN_VERSION "4.6.0")
+find_package(KDE4 4.6.0 REQUIRED)
 
 if (QT3SUPPORT)
     find_package(Qt4 4.7.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
@@ -197,7 +197,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
 		    "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
-## Check for OpenEXR
+## Check for OpenEXR 
 ##
 
 macro_optional_find_package(OpenEXR)
@@ -313,7 +313,7 @@ endif(LCMS2_FOUND)
 
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
-macro_optional_find_package(Vc)
+macro_optional_find_package(Vc 0.6.70)
 macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
 macro_bool_to_01(Vc_FOUND HAVE_VC)
 macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
@@ -328,7 +328,7 @@ if(HAVE_VC)
 
     macro(ko_compile_for_all_implementations_no_scalar _objs _src)
       if(PACKAGERS_BUILD)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC EXCLUDE Scalar)
+        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
       else(PACKAGERS_BUILD)
         set(${_objs} ${_src})
       endif(PACKAGERS_BUILD)
@@ -336,7 +336,7 @@ if(HAVE_VC)
 
     macro(ko_compile_for_all_implementations _objs _src)
       if(PACKAGERS_BUILD)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC)
+        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
       else(PACKAGERS_BUILD)
         set(${_objs} ${_src})
       endif(PACKAGERS_BUILD)
@@ -540,8 +540,11 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${MARBLE_INCLUDE_DIR}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
-                    ${CMAKE_SOURCE_DIR}/libs/main/rdf
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
+
+set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/rdf
+)
 
 if(SHOULD_BUILD_SCRIPTING)
   set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)

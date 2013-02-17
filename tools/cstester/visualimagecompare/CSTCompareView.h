@@ -60,6 +60,7 @@ private:
 
     QLabel *m_current;
     QLabel *m_currentPage;
+    QLabel *m_changesAndDocument;
     CompareView *m_compareView;
 
     QDir m_dir1;

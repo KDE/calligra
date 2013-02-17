@@ -29,7 +29,7 @@
 #include <QDragMoveEvent>
 #include <QMimeData>
 
-#include <rdf/KoDocumentRdf.h>
+#include <KoDocumentRdf.h>
 
 #include "KWCanvas.h"
 

@@ -62,7 +62,10 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetTyp
 KWTextFrameSet::~KWTextFrameSet()
 {
     kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
+    // delete the root area provider first and set to 0 as we don't want relayouting on deletion
     delete m_rootAreaProvider;
+    m_rootAreaProvider = 0;
+    cleanupFrames();
     delete m_document;
 }
 

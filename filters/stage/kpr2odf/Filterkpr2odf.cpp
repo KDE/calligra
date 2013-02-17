@@ -161,6 +161,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
 
     settings->endElement();//office:document-settings
     settings->endDocument();
+    delete settings;
     output->close();
     manifest->addManifestEntry("settings.xml", "text/xml");
 

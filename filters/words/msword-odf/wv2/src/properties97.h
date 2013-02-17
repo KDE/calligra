@@ -29,7 +29,7 @@ namespace wvWare
     class ParagraphProperties;
     namespace Word95
     {
-        class PHE;
+        struct PHE;
     }
 
     class Properties97

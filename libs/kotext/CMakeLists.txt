@@ -41,7 +41,6 @@ set(kotext_LIB_SRCS
     KoSection.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
-    KoShapeAnchor.cpp
     KoAnchorInlineObject.cpp
     KoAnchorTextRange.cpp
     KoTextShapeSavingContext.cpp
@@ -90,7 +89,6 @@ set(kotext_LIB_SRCS
 
     changetracker/KoChangeTracker.cpp
     changetracker/KoChangeTrackerElement.cpp
-    changetracker/KoDeleteChangeMarker.cpp
     changetracker/KoFormatChangeInformation.cpp
     changetracker/KoDeletedRowColumnDataStore.cpp
     changetracker/KoDeletedRowData.cpp
@@ -171,7 +169,6 @@ install(
     KoInlineTextObjectManager.h
     KoAnchorInlineObject.h
     KoAnchorTextRange.h
-    KoShapeAnchor.h
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h
@@ -216,7 +213,6 @@ install(
     FILES
     changetracker/KoChangeTracker.h
     changetracker/KoChangeTrackerElement.h
-    changetracker/KoDeleteChangeMarker.h
     changetracker/KoDeletedRowColumnDataStore.h
     changetracker/KoDeletedRowData.cpp
     changetracker/KoDeletedColumnData.cpp

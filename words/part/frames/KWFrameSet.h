@@ -125,6 +125,8 @@ protected:
         Q_UNUSED(frame);
     }
 
+    void cleanupFrames();
+
 private:
     /// The list of frames that this frameset owns.
     QList<KWFrame*> m_frames;

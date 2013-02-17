@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +28,8 @@
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
+#include <kexiutils/utils.h>
+#include <widget/KexiServerDriverNotFoundMessage.h>
 
 class KTabWidget;
 class KexiProjectData;
@@ -48,9 +51,11 @@ public:
     KexiConnectionSelectorWidget* connSelector;
 private slots:
     void init();
+    void tabChanged(int index);
 private:
     QWidget* m_fileSelectorWidget;
     QWidget* m_connSelectorWidget;
+    QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
 };
 
 //! A page for selecting existing server database project

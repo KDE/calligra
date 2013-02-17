@@ -44,7 +44,6 @@
 #include "KoInlineCite.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
-#include "changetracker/KoDeleteChangeMarker.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
@@ -90,11 +89,7 @@
 #include <kdebug.h>
 #include "KoTextDebug.h"
 
-#ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#else
-#include "KoTextSopranoRdfModel_p.h"
-#endif
+#include <KoDocumentRdfBase.h>
 
 Q_DECLARE_METATYPE(QTextFrame*)
 
@@ -1234,26 +1229,7 @@ void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
     QTextCharFormat fmt = cell.format();
     KoBorder border = fmt.property(KoTableCellStyle::Borders).value<KoBorder>();
 
-    switch (cellSide) {
-    case KoBorder::Top:
-        border.setTopBorderData(data);
-        break;
-    case KoBorder::Left:
-        border.setLeftBorderData(data);
-        break;
-    case KoBorder::Bottom:
-        border.setBottomBorderData(data);
-        break;
-    case KoBorder::Right:
-        border.setRightBorderData(data);
-        break;
-    case KoBorder::TopLeftToBottomRight:
-        border.setTlbrBorderData(data);
-        break;
-    case KoBorder::BottomLeftToTopRight:
-        border.setTrblBorderData(data);
-        break;
-    }
+    border.setBorderData(cellSide, data);
     fmt.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
     cell.setFormat(fmt);
     d->caret.endEditBlock();

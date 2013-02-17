@@ -22,19 +22,11 @@
 #include <kdeversion.h>
 
 int planDbg() {
-    #if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan" );
-    #else
-    static int s_area = 0;
-    #endif
     return s_area;
 }
 
 int planDependencyEditorDbg() {
-    #if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan (Dependency Editor)" );
-    #else
-    static int s_area = 0;
-    #endif
     return s_area;
 }

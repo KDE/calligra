@@ -21,10 +21,6 @@
 #include <kdeversion.h>
 
 int planworkDbg() {
-#if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "planwork" );
-#else
-    static int s_area = 0;
-#endif
     return s_area;
 }
