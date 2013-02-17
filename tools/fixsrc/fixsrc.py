@@ -67,12 +67,14 @@ def doNormalize(contents):
 def handleFile(name, actions):
     global dryrun, verbose
 
+    if verbose:
+        sys.stderr.write(name + ":\n")
+
+    # Read the contents of the file into a list, one item per line.
     infile = open(name)
     contents = infile.readlines()
     infile.close()
 
-    if verbose:
-        sys.stderr.write(name + ":\n")
     if "endswitheol" in actions:
         if contents != [] and contents[-1] != "" and contents[-1][-1] != "\n":
             if verbose:
@@ -98,6 +100,7 @@ def traverseTree(dir, actions, names):
             fullname = name
         else:
             fullname = dir + "/" + name
+
         if not os.path.exists(fullname):
             sys.stderr.write(fullname + ": unknown file or directory\n")
             continue
