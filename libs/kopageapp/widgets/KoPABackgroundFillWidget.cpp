@@ -27,12 +27,8 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
-#include <KoShapeBackgroundCommand.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
-#include <KoGradientBackground.h>
-#include <KoPatternBackground.h>
-#include <KoColorBackground.h>
 #include <KoShapeLayer.h>
 #include <KoSelection.h>
 #include <KoPAViewBase.h>
@@ -40,6 +36,7 @@
 KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
 : KoFillConfigWidget(parent)
 {
+    setWindowTitle(i18n("Background"));
 }
 
 void KoPABackgroundFillWidget::setView(KoPAView *view)
@@ -51,17 +48,13 @@ void KoPABackgroundFillWidget::setView(KoPAView *view)
 
 KoShape* KoPABackgroundFillWidget::currentShape()
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoShape *slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-
     return slide;
 }
 
 QList<KoShape*> KoPABackgroundFillWidget::currentShapes()
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoShape *slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-
     QList<KoShape*> list;
     list.append(slide);
     return list;
