@@ -171,7 +171,7 @@ KoPACanvasBase* CAPAView::kopaCanvas() const
 
 void CAPAView::connectToZoomController()
 {
-    connect (zoomController(), SIGNAL (zoomChanged (KoZoomMode::Mode, qreal)), SLOT (slotZoomChanged (KoZoomMode::Mode, qreal)));
+    connect (zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 }
 
 void CAPAView::slotZoomChanged (KoZoomMode::Mode mode, qreal zoom)

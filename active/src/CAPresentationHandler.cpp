@@ -83,9 +83,9 @@ CAPresentationHandler::CAPresentationHandler (CADocumentController* documentCont
     QList<QTextDocument*> texts;
     d->findText = new KoFindText(this);
     connect(&d->slideshowTimer, SIGNAL(timeout()), SLOT(advanceSlideshow()));
-    connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvas()));
-    connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
-    connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
+    connect (d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
+    connect (d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 CAPresentationHandler::~CAPresentationHandler()
@@ -135,9 +135,9 @@ bool CAPresentationHandler::openDocument (const QString& uri)
 
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
         connect (documentController()->canvasController()->canvasControllerProxyObject(),
-                 SIGNAL (moveDocumentOffset (const QPoint&)), paCanvasItem, SLOT (slotSetDocumentOffset (QPoint)));
+                 SIGNAL(moveDocumentOffset(QPoint)), paCanvasItem, SLOT(slotSetDocumentOffset(QPoint)));
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect (paCanvasItem, SIGNAL (documentSize (QSize)), this, SLOT (tellZoomControllerToSetDocumentSize (QSize)));
+        connect (paCanvasItem, SIGNAL(documentSize(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
 
         paCanvasItem->update();
     }
@@ -146,7 +146,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     KoToolManager::instance()->addController (documentController()->canvasController());
 
     connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
-    connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
+    connect (documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
 
     d->paDocumentModel = new CAPADocumentModel(this, d->document);
     emit totalNumberOfSlidesChanged();
