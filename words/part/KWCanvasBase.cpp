@@ -194,23 +194,23 @@ void KWCanvasBase::paintBorder(QPainter &painter, const KoBorder &border, const 
     qreal zoomY;
     viewConverter()->zoom(&zoomX, &zoomY);
 
-    KoBorder::BorderData borderSide = border.borderData(KoBorder::Left);
+    KoBorder::BorderData borderSide = border.borderData(KoBorder::LeftBorder);
     painter.save();
     paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.bottomLeft(),
                     zoomX, 1, 0);
-    borderSide = border.borderData(KoBorder::Top);
+    borderSide = border.borderData(KoBorder::TopBorder);
     painter.restore();
     painter.save();
     paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.topRight(),
                     zoomY, 0, 1);
 
-    borderSide = border.borderData(KoBorder::Right);
+    borderSide = border.borderData(KoBorder::RightBorder);
     painter.restore();
     painter.save();
     paintBorderSide(painter, borderSide, borderRect.topRight(), borderRect.bottomRight(),
                     zoomX, -1, 0);
 
-    borderSide = border.borderData(KoBorder::Bottom);
+    borderSide = border.borderData(KoBorder::BottomBorder);
     painter.restore();
     painter.save();
     paintBorderSide(painter, borderSide, borderRect.bottomLeft(), borderRect.bottomRight(),
