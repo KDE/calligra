@@ -47,14 +47,7 @@ void StylesManager::setStyleManager(KoStyleManager *styleManager)
         return; //don't crash but should never happen
     }
     m_styleManager = styleManager;
-
-    StylesModel *stylesModel = new StylesModel(m_styleManager, AbstractStylesModel::ParagraphStyle);
-    KoStyleThumbnailer *thumbnailer = new KoStyleThumbnailer();
-    stylesModel->setStyleThumbnailer(thumbnailer);
-
-    StylesManagerStylesModel *paragraphStylesModel = new StylesManagerStylesModel();
-    paragraphStylesModel->setStylesModel(stylesModel);
-    ui->paragraphTab->setStylesModel(paragraphStylesModel);
+    ui->paragraphTab->setStyleManager(styleManager);
 }
 
 void StylesManager::setParagraphStyle(KoParagraphStyle *style)

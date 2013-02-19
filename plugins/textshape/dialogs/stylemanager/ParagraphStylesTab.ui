@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>883</width>
-    <height>414</height>
+    <width>472</width>
+    <height>227</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,97 +19,117 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetNoConstraint</enum>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="3">
+    <widget class="QListView" name="paragraphListView"/>
+   </item>
+   <item row="0" column="3">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <item>
-      <widget class="QListView" name="paragraphListView"/>
-     </item>
-     <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <property name="documentMode">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="paragraphGeneral">
-        <attribute name="title">
-         <string>Page</string>
-        </attribute>
-       </widget>
-       <widget class="CharacterHighlightingTab" name="characterHighlighting">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <attribute name="title">
-         <string>Font</string>
-        </attribute>
-       </widget>
-       <widget class="ParagraphIndentSpacingTab" name="indentSpacing">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <attribute name="title">
-         <string>Indent/Spacing</string>
-        </attribute>
-       </widget>
-       <widget class="ParagraphLayoutTab" name="paragraphLayout">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <attribute name="title">
-         <string>GeneralLayout</string>
-        </attribute>
-       </widget>
-       <widget class="ParagraphBulletsNumbersTab" name="bulletNumbers">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <attribute name="title">
-         <string>Bullet/Numbers</string>
-        </attribute>
-       </widget>
-       <widget class="ParagraphDecorationsTab" name="decorations">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <attribute name="title">
-         <string>Decorations</string>
-        </attribute>
-       </widget>
-       <widget class="ParagraphDropCapsTab" name="dropCaps">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <attribute name="title">
-         <string>Drop Caps</string>
-        </attribute>
-       </widget>
-      </widget>
-     </item>
-    </layout>
+     <property name="documentMode">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="paragraphGeneral">
+      <attribute name="title">
+       <string>Page</string>
+      </attribute>
+     </widget>
+     <widget class="CharacterHighlightingTab" name="characterHighlighting">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>Font</string>
+      </attribute>
+     </widget>
+     <widget class="ParagraphIndentSpacingTab" name="indentSpacing">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>Indent/Spacing</string>
+      </attribute>
+     </widget>
+     <widget class="ParagraphLayoutTab" name="paragraphLayout">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>GeneralLayout</string>
+      </attribute>
+     </widget>
+     <widget class="ParagraphBulletsNumbersTab" name="bulletNumbers">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>Bullet/Numbers</string>
+      </attribute>
+     </widget>
+     <widget class="ParagraphDecorationsTab" name="decorations">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>Decorations</string>
+      </attribute>
+     </widget>
+     <widget class="ParagraphDropCapsTab" name="dropCaps">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title">
+       <string>Drop Caps</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="newStyleButton">
+     <property name="text">
+      <string>New Style</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>45</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="saveAllStylesButton">
+     <property name="text">
+      <string>Save all styles</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

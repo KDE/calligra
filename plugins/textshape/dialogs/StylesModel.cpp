@@ -144,10 +144,10 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
         return QVariant();
         break;
     }
-    case AbstractStylesModel::CharacterStylePointer: {
-        if (m_modelType != AbstractStylesModel::CharacterStyle) {
-            return QVariant();
-        }
+    case AbstractStylesModel::CharacterStylePointer: { //Paragraph stylesa re also character styles.
+//        if (m_modelType != AbstractStylesModel::CharacterStyle) {
+//            return QVariant();
+//        }
         KoCharacterStyle *charStyle = m_styleManager->characterStyle(id);
         if (charStyle) {
             QVariant variant;

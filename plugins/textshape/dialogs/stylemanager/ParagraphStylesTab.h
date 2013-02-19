@@ -26,8 +26,12 @@
 #include <QModelIndex>
 #include <QWidget>
 
-class AbstractStylesModel;
+class StylesModel;
 class StylesDelegate;
+class StylesManagerStylesModel;
+
+class KoStyleManager;
+class KoStyleThumbnailer;
 
 namespace Ui {
 class ParagraphStylesTab;
@@ -41,11 +45,13 @@ public:
     explicit ParagraphStylesTab(QWidget *parent = 0);
     ~ParagraphStylesTab();
 
-    void setStylesModel(AbstractStylesModel *model);
+    void setStyleManager(KoStyleManager *manager);
     void setDisplay(KoParagraphStyle *style);
 
 private slots:
     void slotStyleSelected(const QModelIndex &index);
+    void slotCreateNewStyle();
+    void slotSaveStyle();
 
     void slotCapitalizationEnabled(bool enabled);
     void slotCapitalizationChanged(QFont::Capitalization capitalization);
@@ -85,8 +91,12 @@ private slots:
 private:
     Ui::ParagraphStylesTab *ui;
 
-    AbstractStylesModel *m_sourceModel;
+    KoStyleManager *m_styleManager;
+    KoStyleThumbnailer *m_thumbnailer;
+
+    StylesModel *m_sourceModel;
     StylesDelegate *m_stylesDelegate;
+    StylesManagerStylesModel *m_paragraphStylesModel;
 };
 
 #endif // PARAGRAPHSTYLESTAB_H

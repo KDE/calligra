@@ -22,6 +22,11 @@
 
 #include "dialogs/StylesFilteredModelBase.h"
 
+#include <QMap>
+#include <QModelIndex>
+
+class KoStyleManager;
+
 class StylesManagerStylesModel : public StylesFilteredModelBase
 {
     Q_OBJECT
@@ -52,7 +57,7 @@ public:
 
     /** Specific methods of the StylesManagerStylesModel. */
 
-//    void setStyleManager(KoStyleManager *sm);
+    void setStyleManager(KoStyleManager *sm);
 
 //    void setInitialUsedStyles(QVector<int> usedStyles);
 
@@ -62,16 +67,20 @@ public:
 signals:
 
 public slots:
-//    void slotCreateNewStyle();
+    KoCharacterStyle* slotCreateNewStyle(const QModelIndex &index = QModelIndex());
+    KoCharacterStyle* unsavedStyle(const QModelIndex &index);
+    void saveStyle(const QModelIndex &index);
 
 protected:
     virtual void createMapping();
 
 private:
-//    KoStyleManager *m_styleManager;
+    KoStyleManager *m_styleManager;
 //    KoParagraphStyle *m_currentParagraphStyle;
 //    KoCharacterStyle *m_defaultCharacterStyle;
     QVector<int> m_newStylesId;
+    QMap<int, KoCharacterStyle*> m_stylesMap;
+    int m_styleIdCounter;
 //    QVector<int> m_usedStyles;
 //    QVector<int> m_unusedStyles;
 };

@@ -20,21 +20,31 @@
 #include "ParagraphStylesTab.h"
 #include "ui_ParagraphStylesTab.h"
 
-#include <dialogs/AbstractStylesModel.h>
+#include "StylesManagerStylesModel.h"
+
+#include <dialogs/StylesModel.h>
 #include <dialogs/StylesDelegate.h>
+
+#include <KoStyleManager.h>
+#include <KoStyleThumbnailer.h>
 
 #include <KDebug>
 
 ParagraphStylesTab::ParagraphStylesTab(QWidget *parent) :
     QWidget(parent)
-    , ui(new Ui::ParagraphStylesTab)
-    , m_sourceModel(0)
-    , m_stylesDelegate(new StylesDelegate())
+  , ui(new Ui::ParagraphStylesTab)
+  , m_styleManager(0)
+  , m_thumbnailer(new KoStyleThumbnailer())
+  , m_sourceModel(0)
+  , m_stylesDelegate(new StylesDelegate())
+  , m_paragraphStylesModel(0)
 {
     ui->setupUi(this);
 
-    ui->paragraphListView->setItemDelegate(m_stylesDelegate);
+//    ui->paragraphListView->setItemDelegate(m_stylesDelegate);
     connect(ui->paragraphListView, SIGNAL(activated(QModelIndex)), this, SLOT(slotStyleSelected(QModelIndex)));
+    connect(ui->newStyleButton, SIGNAL(clicked()), this, SLOT(slotCreateNewStyle()));
+    connect(ui->saveAllStylesButton, SIGNAL(clicked()), this, SLOT(slotSaveStyle()));
 
     connect(ui->characterHighlighting, SIGNAL(capitalizationEnabled(bool)), this, SLOT(slotCapitalizationEnabled(bool)));
     connect(ui->characterHighlighting, SIGNAL(capitalizationChanged(QFont::Capitalization)), this, SLOT(slotCapitalizationChanged(QFont::Capitalization)));
@@ -81,11 +91,24 @@ void ParagraphStylesTab::setDisplay(KoParagraphStyle *style)
     ui->indentSpacing->setDisplay(style);
 }
 
-void ParagraphStylesTab::setStylesModel(AbstractStylesModel *model)
+void ParagraphStylesTab::setStyleManager(KoStyleManager *manager)
 {
-    m_sourceModel = model;
-    ui->paragraphListView->setModel(m_sourceModel);
+    Q_ASSERT(manager);
+    if (!manager) {
+        return; //return gracefully but shouldn't happen
+    }
+    m_styleManager = manager;
+
+    m_sourceModel = new StylesModel(m_styleManager, AbstractStylesModel::ParagraphStyle);
+    m_sourceModel->setStyleThumbnailer(m_thumbnailer);
+
+    m_paragraphStylesModel = new StylesManagerStylesModel();
+    m_paragraphStylesModel->setStylesModel(m_sourceModel);
+    m_paragraphStylesModel->setStyleThumbnailer(m_thumbnailer);
+    m_paragraphStylesModel->setStyleManager(m_styleManager);
+    ui->paragraphListView->setModel(m_paragraphStylesModel);
 }
+
 void ParagraphStylesTab::slotStyleSelected(const QModelIndex &index)
 {
     KoParagraphStyle *style = static_cast<KoParagraphStyle*>(index.data(AbstractStylesModel::ParagraphStylePointer).value<void*>());
@@ -95,14 +118,50 @@ void ParagraphStylesTab::slotStyleSelected(const QModelIndex &index)
     }
 }
 
+void ParagraphStylesTab::slotCreateNewStyle()
+{
+    KoParagraphStyle *newStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->slotCreateNewStyle(ui->paragraphListView->currentIndex()));
+    if (newStyle) {
+        ui->characterHighlighting->setDisplay(newStyle);
+        ui->indentSpacing->setDisplay(newStyle);
+    }
+
+}
+
+void ParagraphStylesTab::slotSaveStyle() //TODO reselect the style
+{
+//    KoParagraphStyle *style = static_cast<KoParagraphStyle*>(ui->paragraphListView->currentIndex().data(AbstractStylesModel::ParagraphStylePointer).value<void*>());
+//    if (style) {
+        m_paragraphStylesModel->saveStyle(ui->paragraphListView->currentIndex());
+
+//    }
+}
+
 void ParagraphStylesTab::slotCapitalizationEnabled(bool enabled)
 {
-    kDebug() << "capitalization enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->hasProperty(QTextFormat::FontCapitalization)) {
+            style->setFontCapitalization(style->fontCapitalization()); //set the capitalisation of the parent/default paragraph style. If none exists, 0 is returned by the function, which correspond to the "normal" mixed case font rendering.
+        }
+        else if (!enable && style->hasProperty(QTextFormat::FontCapitalization)) {
+            style->remove(QTextFormat::FontCapitalization);
+        }
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotCapitalizationChanged(QFont::Capitalization capitalization)
 {
-    kDebug() << "capitalization changed: " << capitalization;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->KoCharacterStyle::setFontCapitalization(capitalization);
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotUnderlineEnabled(bool enabled)
