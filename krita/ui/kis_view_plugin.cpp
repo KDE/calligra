@@ -1,7 +1,5 @@
 /*
- * colorrange.h -- Part of Krita
- *
- *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef COLORRANGE_H
-#define COLORRANGE_H
 
-#include <QVariant>
+#include "kis_view_plugin.h"
+#include "kis_view2.h"
+#include "kis_action_manager.h"
 
-#include <kis_view_plugin.h>
+#include <kstandarddirs.h>
 
-class ColorRange : public KisViewPlugin
+KisViewPlugin::KisViewPlugin(QObject* parent, const QString& rcFile): KParts::Plugin(parent), m_view(0)
 {
-    Q_OBJECT
-public:
-    ColorRange(QObject *parent, const QVariantList &);
-    virtual ~ColorRange();
+    if (parent->inherits("KisView2")) {
+        setXMLFile(KStandardDirs::locate("data", rcFile), true);
 
-private slots:
-    void slotActivated();
-    void selectOpaque();
-};
+        m_view = static_cast<KisView2*>(parent);
+    }
+}
 
-#endif // COLORRANGE_H
+void KisViewPlugin::addAction(const QString& name, KisAction* action)
+{
+    if (m_view) {
+        m_view->actionManager()->addAction(name, action, actionCollection());
+    }
+}

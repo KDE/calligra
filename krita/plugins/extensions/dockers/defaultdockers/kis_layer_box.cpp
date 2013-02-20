@@ -118,7 +118,6 @@ KisLayerBox::KisLayerBox()
         actions[i]->setCheckable(true);
         actions[i]->setActionGroup(group);
     }
-    actions[1]->trigger(); //TODO save/load previous state
 
     m_wdgLayerBox->bnAdd->setIcon(koIcon("list-add"));
 
@@ -213,11 +212,9 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(m_newTransparencyMaskAction);
     m_newLayerMenu->addAction(m_newEffectMaskAction);
 #if 0 // XXX_2.0
-    m_newLayerMenu->addAction(koIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMa
-    sk()));
+    m_newLayerMenu->addAction(koIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
 #endif
     m_newLayerMenu->addAction(m_newSelectionMaskAction);
-
     
     m_nodeModel = new KisNodeModel(this);
 

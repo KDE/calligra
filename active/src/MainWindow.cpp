@@ -94,7 +94,7 @@ MainWindow::MainWindow (QWidget* parent)
                                             + "/share/calligraactive/qml/Doc.qml"));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
 
-    connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
+    connect (m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
     resize (1024, 768);
     setCentralWidget (m_view);
 

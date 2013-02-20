@@ -1,7 +1,5 @@
 /*
- * colorrange.h -- Part of Krita
- *
- *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef COLORRANGE_H
-#define COLORRANGE_H
 
-#include <QVariant>
+#ifndef KIS_VIEW_PLUGIN_H
+#define KIS_VIEW_PLUGIN_H
 
-#include <kis_view_plugin.h>
+#include <kparts/plugin.h>
+#include <krita_export.h>
 
-class ColorRange : public KisViewPlugin
+class KisAction;
+class KisView2;
+
+/**
+ *  KisViewPlugin is the base for plugins which add actions to the view
+ */
+class KRITAUI_EXPORT KisViewPlugin : public KParts::Plugin
 {
-    Q_OBJECT
 public:
-    ColorRange(QObject *parent, const QVariantList &);
-    virtual ~ColorRange();
+    KisViewPlugin(QObject* parent = 0, const QString& rcFile = QString());
 
-private slots:
-    void slotActivated();
-    void selectOpaque();
+protected:
+    /**
+    *  adds an action to UI and action manager
+    *  @param name name of the action in the rc file
+    *  @param action the action that should be added
+    */
+    void addAction(const QString& name, KisAction* action);
+
+    KisView2* m_view;
 };
 
-#endif // COLORRANGE_H
+#endif // KIS_VIEW_PLUGIN_H

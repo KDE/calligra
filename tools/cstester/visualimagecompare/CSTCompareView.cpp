@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2013 Mohammed Nafees   <nafees.technocool@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,11 +39,15 @@ CSTCompareView::CSTCompareView(QWidget *parent)
 {
     QGridLayout *layout = new QGridLayout(this);
     m_current = new QLabel(this);
-    layout->addWidget(m_current, 0, 0);
+    m_current->setWordWrap(true);
+    m_current->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+    layout->addWidget(m_current, 0, 0, 1, 2);
     m_currentPage = new QLabel(this);
     layout->addWidget(m_currentPage, 1, 0);
+    m_changesAndDocument = new QLabel(this);
+    layout->addWidget(m_changesAndDocument, 1, 1, Qt::AlignRight);
     m_compareView = new CompareView(this);
-    layout->addWidget(m_compareView, 2, 0);
+    layout->addWidget(m_compareView, 2, 0, 1, 2);
     setLayout(layout);
 }
 
@@ -253,8 +258,10 @@ void CSTCompareView::updateImage(int index)
         }
     }
 #endif
-    
+
+    m_changesAndDocument->setText(QString("Document: %1/%2").arg(m_currentIndex+1).arg(m_result.size()));
+
     m_currentPage->setText(currentPageText);
-    
+
     m_compareView->update(image1, image2, m_dir1.dirName(), m_dir2.dirName(), pdfView);
 }

@@ -72,8 +72,6 @@ public:
     {
         qDeleteAll(layers);
         layers.clear();
-        qDeleteAll(objects);
-        objects.clear();
         if (!hasExternalDataCenterMap)
             qDeleteAll(dataCenterMap);
     }
