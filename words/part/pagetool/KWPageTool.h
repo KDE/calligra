@@ -59,6 +59,7 @@ protected:
     QList<QWidget *> createOptionWidgets();
 
 private:
+    int selection;
     KWCanvas *m_canvas;
     KWDocument *m_document;
 };
