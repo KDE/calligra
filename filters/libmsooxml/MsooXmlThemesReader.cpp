@@ -79,7 +79,7 @@ void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphic
     graphicStyle->addProperty("draw:fill-gradient-name", gradName);
 }
 
-DrawingMLBlipFill::DrawingMLBlipFill(QString filePath) : m_filePath(filePath)
+DrawingMLBlipFill::DrawingMLBlipFill(const QString &filePath) : m_filePath(filePath)
 {
 }
 

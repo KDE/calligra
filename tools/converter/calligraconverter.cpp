@@ -128,6 +128,8 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
 
 bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, const QString &outputFormat, bool batch)
 {
+    Q_UNUSED(inputFormat);
+
     KoFilter::ConversionStatus status = KoFilter::OK;
     KoFilterManager *manager = new KoFilterManager(uIn.path());
     manager->setBatchMode(batch);

@@ -266,7 +266,6 @@ ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
     m_dlg->m_style_2->insertItems(0, list);
     m_dlg->m_style_3->insertItems(0, list);
 
-    setButtonsOrientation(Qt::Vertical);
     setMainWidget(m_dlg);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));

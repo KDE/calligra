@@ -137,7 +137,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_treeWidget->regenerateFilteredMap();
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
-    connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
+    connect(m_filterLineEdit, SIGNAL(textEdited(QString)), this, SLOT(reapplyFilter()));
 }
 
 void StencilBoxDocker::getHotNewStuff()

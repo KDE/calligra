@@ -202,6 +202,15 @@ public slots:
      \return true on success, false on failure and cancelled when storing has been cancelled. */
     tristate storeNewData(KexiView::StoreNewDataOptions options = 0);
 
+    /*! Internal. Called by KexiMainWindow::saveObject().
+     Tells this dialog to create and store a copy of data of existing object to the backend.
+     Object's schema data has been never stored,
+     so it is created automatically, using information obtained
+     form the part item. On success, part item's ID is updated to new value,
+     and schema data is set. \sa schemaData().
+     \return true on success, false on failure and cancelled when storing has been cancelled. */
+    tristate storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOptions options);
+
     /*! Reimplemented - we're informing the current view about performed
      detaching by calling KexiView::parentDialogDetached(), so the view
      can react on this event

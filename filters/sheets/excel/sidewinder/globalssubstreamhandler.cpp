@@ -227,7 +227,7 @@ static Pen convertBorderStyle(unsigned style)
         pen.style = Pen::NoLine;
         break;
     case XFRecord::Thin:
-        pen.width = 0.5;
+        pen.width = 0.5f;
         pen.style = Pen::SolidLine;
         break;
     case XFRecord::Medium:
@@ -235,11 +235,11 @@ static Pen convertBorderStyle(unsigned style)
         pen.style = Pen::SolidLine;
         break;
     case XFRecord::Dashed:
-        pen.width = 0.5;
+        pen.width = 0.5f;
         pen.style = Pen::DashLine;
         break;
     case XFRecord::Dotted:
-        pen.width = 0.5;
+        pen.width = 0.5f;
         pen.style = Pen::DotLine;
         break;
     case XFRecord::Thick:
@@ -247,12 +247,12 @@ static Pen convertBorderStyle(unsigned style)
         pen.style = Pen::SolidLine;
         break;
     case XFRecord::Double:
-        pen.width = 0.5;
+        pen.width = 0.5f;
         pen.style = Pen::DoubleLine;
         break;
     case XFRecord::Hair:
         // FIXME no equivalent ?
-        pen.width = 0.1;
+        pen.width = 0.1f;
         pen.style = Pen::DotLine;
         break;
     case XFRecord::MediumDashed:
@@ -260,7 +260,7 @@ static Pen convertBorderStyle(unsigned style)
         pen.style = Pen::DashLine;
         break;
     case XFRecord::ThinDashDotted:
-        pen.width = 0.5;
+        pen.width = 0.5f;
         pen.style = Pen::DashDotLine;
         break;
     case XFRecord::MediumDashDotted:
@@ -268,7 +268,7 @@ static Pen convertBorderStyle(unsigned style)
         pen.style = Pen::DashDotLine;
         break;
     case XFRecord::ThinDashDotDotted:
-        pen.width = 0.5;
+        pen.width = 0.5f;
         pen.style = Pen::DashDotDotLine;
         break;
     case XFRecord::MediumDashDotDotted:
@@ -282,7 +282,7 @@ static Pen convertBorderStyle(unsigned style)
         break;
     default:
         // fallback, simple solid line
-        pen.width = 0.5;
+        pen.width = 0.5f;
         pen.style = Pen::SolidLine;
         break;
     }

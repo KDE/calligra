@@ -47,11 +47,11 @@ class KoInlineTextObjectManager;
 class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoShapeContainer;
 class KoShapeController;
 class KoPart;
-
+class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
 
@@ -75,8 +75,6 @@ public:
     virtual void removeShape(KoShape *shape);
     // reimplemented from KoShapeBasedDocumentBase
     virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
-
-    void addShape(KoShape *shape, KoTextAnchor *anchor);
 
     // KoDocument interface
     /// reimplemented from KoDocument
@@ -187,7 +185,7 @@ public:
     /// find the frame closest to the given shape or return 0
     KWFrame *findClosestFrame(KoShape *shape) const;
 
-    KoTextAnchor *anchorOfShape(KoShape *shape) const;
+    KoShapeAnchor *anchorOfShape(KoShape *shape) const;
 
     KWFrame *frameOfShape(KoShape *shape) const;
 
@@ -284,6 +282,7 @@ private:
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
     QPair<QString, QByteArray> m_coverImage;
+
 };
 
 #endif

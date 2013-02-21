@@ -130,7 +130,7 @@ XlsxXmlWorksheetReaderContext::~XlsxXmlWorksheetReaderContext()
 static void splitToRowAndColumn(const QString source, QString& row, int& column)
 {
     // Checking whether the 2nd char is a number
-    char second = source.at(1).toAscii();
+    const char second = source.at(1).toLatin1();
     if (second < 65) {
         row = source.at(0);
         column = source.mid(1).toInt();
@@ -767,9 +767,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                             drawing->save(body);
                         }
 
-                        QPair<QString,QString> oleObject;
+                        typedef QPair<QString,QString> OleObject;
                         int listIndex = 0;
-                        foreach( oleObject, cell->embedded->oleObjects ) {
+                        foreach( const OleObject& oleObject, cell->embedded->oleObjects ) {
                             const QString olePath = oleObject.first;
                             const QString previewPath = oleObject.second;
                             body->addCompleteElement(cell->embedded->oleFrameBegins.at(listIndex).toUtf8());

@@ -37,8 +37,9 @@
 #include "StdOutHandler.hxx"
 #include <libwpd-stream/WPXStreamImplementation.h>
 
-struct OutputFileHelperImpl
+class OutputFileHelperImpl
 {
+public:
     OutputFileHelperImpl(const char *password) : mpPassword(password) {}
 #ifdef USE_GSF_OUTPUT
     GsfOutfile *mpOutfile;

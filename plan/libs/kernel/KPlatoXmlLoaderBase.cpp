@@ -43,11 +43,7 @@
 using namespace KPlato;
 
 KPLATOKERNEL_EXPORT int kplatoXmlDebugArea() {
-#if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan (kplato xml)" );
-#else
-    static int s_area = 0;
-#endif
     return s_area;
 }
 

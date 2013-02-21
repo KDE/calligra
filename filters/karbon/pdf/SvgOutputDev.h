@@ -37,7 +37,7 @@ class GooString;
 class SvgOutputDev : public OutputDev
 {
 public:
-    SvgOutputDev(const QString &fileName);
+    explicit SvgOutputDev(const QString &fileName);
     virtual ~SvgOutputDev();
 
     GBool isOk();

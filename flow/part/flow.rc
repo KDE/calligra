@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="flow" version="32">
+<kpartgui name="flow" version="33">
     <MenuBar>
         <Menu name="edit">
             <Text>&amp;Edit</Text>
@@ -40,6 +40,11 @@
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="insert_variable"/> <!-- menu -->
 	        <Action name="import_document" />
+        </Menu>
+        <Menu name="format"><text>F&amp;ormat</text>
+            <Action name="format_masterpage"/>
+            <Separator/>
+            <Action name="format_pagelayout"/>
         </Menu>
         <Menu name="page">
             <Text>&amp;Page</Text>

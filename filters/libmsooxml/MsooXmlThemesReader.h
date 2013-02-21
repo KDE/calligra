@@ -150,7 +150,7 @@ public:
 class MSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 {
 public:
-    DrawingMLBlipFill(QString filePath);
+    explicit DrawingMLBlipFill(const QString &filePath);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
 
     DrawingMLBlipFill* clone() const { return new DrawingMLBlipFill(*this); }
@@ -228,7 +228,7 @@ class MSOOXML_EXPORT MsooXmlThemesReader : public MSOOXML::MsooXmlCommonReader
 public:
     //! Creates MsooXmlThemesReader object.
     //! On successful reading, @a theme will be written with theme definition.
-    MsooXmlThemesReader(KoOdfWriters *writers);
+    explicit MsooXmlThemesReader(KoOdfWriters *writers);
 
     virtual ~MsooXmlThemesReader();
 

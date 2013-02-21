@@ -24,11 +24,9 @@
 #include "plansettings.h"
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
-#endif
 #endif
 
 #include <QDateTime>
@@ -57,9 +55,6 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p )
     kcfg_ExpectedEstimate->setMaximumUnit( (Duration::Unit)KPlatoSettings::self()->maximumDurationUnit() );
 
 #ifndef PLAN_KDEPIMLIBS_FOUND
-    chooseLeader->hide();
-#endif
-#if ! KDE_IS_VERSION( 4, 5, 0 )
     chooseLeader->hide();
 #endif
 
@@ -126,7 +121,6 @@ void ConfigTaskPanelImpl::initDescription()
 void ConfigTaskPanelImpl::changeLeader()
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -150,7 +144,6 @@ void ConfigTaskPanelImpl::changeLeader()
             kcfg_Leader->setText( names.join( ", " ) );
         }
     }
-#endif
 #endif
 }
 

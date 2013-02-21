@@ -45,3 +45,5 @@ protected:
 
     MSOOXML::TableStyleProperties* m_currentLocalStyleProperties;
     MSOOXML::LocalTableStyles m_localTableStyles;
+
+    #include "PresetDrawingMLTables.h"

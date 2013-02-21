@@ -221,7 +221,7 @@ namespace RtfReader
 
     void Reader::parseDocument()
     {
-	struct RtfGroupState state;
+	class RtfGroupState state;
 
 	// Push an end-of-file marker onto the stack
 	state.endOfFile = true;

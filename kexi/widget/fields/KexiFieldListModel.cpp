@@ -171,7 +171,7 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
 
     sourceName = d->schema->name();
 
-    foreach (QModelIndex idx, indexes) {
+    foreach (const QModelIndex &idx, indexes) {
         fields << data(idx, Qt::DisplayRole).toString();
     }
 

@@ -73,7 +73,7 @@ FunctionModuleRegistry::FunctionModuleRegistry()
 
 FunctionModuleRegistry::~FunctionModuleRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         get(id)->deleteLater();
     }
     qDeleteAll(doubleEntries());

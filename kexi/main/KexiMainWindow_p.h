@@ -44,6 +44,8 @@
 #include "KexiUserFeedbackAgent.h"
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/styleproxy.h>
+#include <kexiutils/KexiTester.h>
+#include <core/kexi.h>
 
 class KexiProjectNavigator;
 
@@ -962,6 +964,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
     d->searchLineEdit = new KexiSearchLineEdit;
+    kexiTester() << KexiTestObject(d->searchLineEdit, "globalSearch.lineEdit");
     d->searchLineEdit->installEventFilter(this);
     helpLyr->addWidget(d->searchLineEdit);
 
@@ -1180,7 +1183,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         if (watched == d->searchLineEdit) {
             activateSearchLineEdit(); // custom setFocus() for search box, so it's possible to focus
                                       // back on Escape key press
-            return true;
+            return false;
         }
         else if (watched == tabBar()) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);

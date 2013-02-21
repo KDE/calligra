@@ -43,7 +43,7 @@ public:
     /**
      * Constructor.
      */
-    AbstractRegionCommand(KUndo2Command* parent = 0);
+    explicit AbstractRegionCommand(KUndo2Command *parent = 0);
 
     /**
      * Destructor.

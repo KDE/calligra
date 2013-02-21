@@ -196,7 +196,7 @@ public:
     bool setNodeType(KPrShapeAnimation *animation, const KPrShapeAnimation::NodeType type);
 
     /**
-     * @brief Redefine start of the animation if is moved below the minimun limit
+     * @brief Redefine start of the animation if is moved below the minimum limit
      * of its animation trigger event scale.
      *
      * @param mIndex index of the animation

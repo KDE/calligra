@@ -454,7 +454,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
                 relativeColumnXOffset += columnDatum.relativeWidth;
             }
         }
-        // what is this doing? Friedrich
+
+        //make sure the order of shapes geometrically follows the textflow order
         for (int i = 0; i < columns.count; i++) {
             for (int f = 0; f < columns.count; f++) {
                 if (f == i) continue;
@@ -537,6 +538,81 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         }
     }
     delete [] main;
+}
+
+void KWFrameLayout::proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page)
+{
+    KoShapeAnchor *anchor = shape->anchor();
+    if (!anchor) {
+        return; // nothing we can do
+    }
+
+    QRectF refRect;
+    const qreal textWidth = page.width() - page.leftMargin() - page.rightMargin()
+                                - page.leftPadding() - page.rightPadding();
+    switch (anchor->horizontalRel()) {
+        case KoShapeAnchor::HParagraph: // LO mistakenly saves it like this sometimes - stupid LO
+        anchor->setHorizontalRel(KoShapeAnchor::HPage); // let's fix it
+        // fall through
+    case KoShapeAnchor::HPage:
+        refRect.setX(0);
+        refRect.setWidth(page.width());
+        break;
+    case KoShapeAnchor::HPageContent:
+        refRect.setX(page.leftMargin() + page.leftPadding());
+        refRect.setWidth(textWidth);
+        break;
+    case KoShapeAnchor::HPageStartMargin:
+        refRect.setX(0);
+        refRect.setRight(page.leftMargin() + page.leftPadding());
+        break;
+    case KoShapeAnchor::HPageEndMargin:
+        refRect.setX(page.width() - page.rightMargin() - page.rightPadding());
+        refRect.setRight(page.width());
+        break;
+    default:
+        break;
+    }
+    switch (anchor->verticalRel()) {
+    case KoShapeAnchor::VPage:
+        refRect.setY(page.offsetInDocument());
+        refRect.setHeight(page.height());
+        break;
+    case KoShapeAnchor::VPageContent:
+        refRect.setY(page.contentRect().x());
+        refRect.setHeight(page.contentRect().height());
+        break;
+    default:
+        break;
+    }
+    QPointF newPos = shape->position() + delta;
+    switch (anchor->horizontalPos()) {
+    case KoShapeAnchor::HLeft:
+        newPos.setX(refRect.x());
+        break;
+    case KoShapeAnchor::HCenter:
+        newPos.setX(refRect.x() + (refRect.width() - shape->size().width()) / 2);
+        break;
+    case KoShapeAnchor::HRight:
+        newPos.setX(refRect.right() - shape->size().width());
+        break;
+    default:
+        break;
+    }
+    switch (anchor->verticalPos()) {
+    case KoShapeAnchor::VTop:
+        newPos.setY(refRect.y());
+        break;
+    case KoShapeAnchor::VMiddle:
+        newPos.setY(refRect.y() + (refRect.height() - shape->size().height()) / 2);
+        break;
+    case KoShapeAnchor::VBottom:
+        newPos.setY(refRect.bottom() - shape->size().height());
+        break;
+    default:
+        break;
+    }
+    delta = newPos - shape->position();
 }
 
 bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, Words::TextFrameSetType *origin)

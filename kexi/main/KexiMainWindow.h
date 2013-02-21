@@ -156,7 +156,7 @@ public:
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
      \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
-    static int create(int argc, char *argv[], const KexiAboutData &aboutData);
+    static int create(int argc, char *argv[], const KAboutData &aboutData);
 
     //! \return KexiMainWindow singleton (if it is instantiated)
 //  static KexiMainWindow* self();
@@ -277,13 +277,16 @@ public slots:
 
     /*! Implemented for KexiMainWindow */
     virtual tristate saveObject(KexiWindow *window,
-                                const QString& messageWhenAskingForName = QString(), bool dontAsk = false);
+                                const QString& messageWhenAskingForName = QString(),
+                                SaveObjectOptions options = 0);
 
     /*! Implemented for KexiMainWindowIface. */
     virtual KexiWindow *openedWindowFor(const KexiPart::Item *item);
 
     /*! Implemented for KexiMainWindow */
-    virtual tristate getNewObjectInfo(KexiPart::Item *partItem, KexiPart::Part *part,
+    virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
+                                      const QString &originalName,
+                                      KexiPart::Part *part,
                                       bool allowOverwriting, bool *overwriteNeeded,
                                       const QString& messageWhenAskingForName = QString());
 

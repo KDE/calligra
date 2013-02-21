@@ -25,7 +25,7 @@
 class KPrAnimTransitionFilter : public KPrAnimationBase
 {
 public:
-    KPrAnimTransitionFilter(KPrShapeAnimation *shapeAnimation);
+    explicit KPrAnimTransitionFilter(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimTransitionFilter();
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);

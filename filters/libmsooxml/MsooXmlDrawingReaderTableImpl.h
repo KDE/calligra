@@ -22,6 +22,9 @@
  * the table starts at tbl §21.1.3.13
  */
 
+#include "MsooXmlTableStyle.h"
+using namespace MSOOXML;
+
 #undef CURRENT_EL
 #define CURRENT_EL tbl
 //! tbl (Table) §21.1.3.13
@@ -308,6 +311,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     READ_PROLOGUE
 
     readNext();
+    QString id = text().toString();
+
+    QString predefinedTable = getPresetTable(id);
+    if (!predefinedTable.isEmpty()) {
+        predefinedTable.prepend("<a:tblStyleLst xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">");
+        predefinedTable.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+        predefinedTable.append("</a:tblStyleLst>");
+        QString tableStylesFile;
+        QString tableStylesPath;
+        QBuffer tempDevice;
+        tempDevice.setData(predefinedTable.toAscii());
+        tempDevice.open(QIODevice::ReadOnly);
+        MSOOXML::Utils::splitPathAndFile(m_context->tableStylesFilePath, &tableStylesPath, &tableStylesFile);
+        MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
+        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
+                                                                         tableStylesFile, &m_context->slideMasterProperties->theme,
+                                                                         d->tableStyleList, m_context->colorMap);
+        m_context->import->loadAndParseFromDevice(&tableStyleReader, &tempDevice, &tableStyleReaderContext);
+    }
+
     m_tableStyle = d->tableStyleList->value(text().toString());
     readNext();
 
@@ -335,12 +358,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 //             ELSE_TRY_READ_IF(gradFill)
 //             ELSE_TRY_READ_IF(grpFill)
 //             ELSE_TRY_READ_IF(lnBlToTr)
-//             ELSE_TRY_READ_IF(lnB)
-//             ELSE_TRY_READ_IF(lnR)
-//             ELSE_TRY_READ_IF(lnT)
 //             ELSE_TRY_READ_IF(lnTlToBr)
 //             ELSE_TRY_READ_IF(pattFill)
-            /*else */if(QUALIFIED_NAME_IS(solidFill)) {
+            if (QUALIFIED_NAME_IS(lnL)) {
+                TRY_READ(Table_lnL)
+                m_currentLocalStyleProperties->left = m_currentBorder;
+                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::LeftBorder;
+            }
+            else if (QUALIFIED_NAME_IS(lnR)) {
+                TRY_READ(Table_lnR)
+                m_currentLocalStyleProperties->right = m_currentBorder;
+                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::RightBorder;
+            }
+            else if (QUALIFIED_NAME_IS(lnT)) {
+                TRY_READ(Table_lnT)
+                m_currentLocalStyleProperties->top = m_currentBorder;
+                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::TopBorder;
+            }
+            else if (QUALIFIED_NAME_IS(lnB)) {
+                TRY_READ(Table_lnB)
+                m_currentLocalStyleProperties->bottom = m_currentBorder;
+                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::BottomBorder;
+            }
+            else if (QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill)
                 m_currentLocalStyleProperties->backgroundColor = m_currentColor;
                 m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;

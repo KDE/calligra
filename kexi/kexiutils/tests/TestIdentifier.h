@@ -20,7 +20,7 @@
 #ifndef KEXIUTILS_TESTIDENTIFIER_H
 #define KEXIUTILS_TESTIDENTIFIER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestIdentifier : public QObject
 {

@@ -63,7 +63,7 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
                 metaObject = metaObject->superClass()) {
             QList<QMetaProperty> properties(
                 KexiUtils::propertiesForMetaObjectWithInherited(metaObject));
-            foreach(QMetaProperty property, properties) {
+            foreach(const QMetaProperty &property, properties) {
                 if (dynamic_cast<QObject*>(this)
                     && -1 != dynamic_cast<QObject*>(this)->metaObject()->indexOfProperty(property.name())
                     && !addedSubproperies.contains(property.name()))

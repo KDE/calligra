@@ -10,7 +10,6 @@ add_subdirectory( functions )
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
-                    ${CMAKE_SOURCE_DIR}/kchart
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
@@ -281,7 +280,6 @@ target_link_libraries(calligrasheetscommon
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
-#    ${KDE4_KDE3SUPPORT_LIBS}
 )
 if(KDE4_KCMUTILS_LIBS)
     target_link_libraries(calligrasheetscommon ${KDE4_KCMUTILS_LIBS} )

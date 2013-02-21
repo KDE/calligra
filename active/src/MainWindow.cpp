@@ -32,9 +32,9 @@
 
 #include <libs/main/calligraversion.h>
 
-#include <KDE/KGlobal>
-#include <KDE/KStandardDirs>
-#include <KDE/KDebug>
+#include <KGlobal>
+#include <KStandardDirs>
+#include <KDebug>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
@@ -66,8 +66,8 @@ MainWindow::MainWindow (QWidget* parent)
     QList<QObject*> recentSpreadsheets;
     QList<QObject*> recentPresentations;
     QSettings settings;
-    foreach (QString string, settings.value ("recentFiles").toStringList()) {
-        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (";"));
+    foreach (const QString &string, settings.value ("recentFiles").toStringList()) {
+        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (QLatin1Char(';')));
         recentFiles.append (docInfo);
         switch (docInfo->type()) {
         case CADocumentInfo::TextDocument:
@@ -94,7 +94,7 @@ MainWindow::MainWindow (QWidget* parent)
                                             + "/share/calligraactive/qml/Doc.qml"));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
 
-    connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
+    connect (m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
     resize (1024, 768);
     setCentralWidget (m_view);
 

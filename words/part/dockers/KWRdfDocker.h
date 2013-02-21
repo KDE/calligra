@@ -23,7 +23,7 @@
 
 #include <QDockWidget>
 #include <ui_KWRdfDocker.h>
-#include <rdf/KoDocumentRdf.h>
+#include <KoDocumentRdf.h>
 #include <KoCanvasObserverBase.h>
 
 class QTimer;

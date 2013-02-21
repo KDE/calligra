@@ -32,7 +32,7 @@ class Record;
 class XlsRecordOutputStream
 {
 public:
-    XlsRecordOutputStream(QIODevice* device);
+    explicit XlsRecordOutputStream(QIODevice *device);
 
     /**
      * Writes a record, updates the records position to the position it is saved to in the file.

@@ -65,13 +65,19 @@ class OdtHtmlConverter
     OdtHtmlConverter();
     ~OdtHtmlConverter();
 
-    KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
+    KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString,
+                                              QString> &metaData, QHash<QString, QString> *manifest,
                                               ConversionOptions *options,
                                               FileCollector *collector,
                                               // Out parameters:
-                                              QHash<QString, QSizeF> &images);
+                                              QHash<QString, QSizeF> &images,
+                                              QHash<QString, QString> &mediaFiles);
 
  private:
+    enum TableCellType {
+        TableDataType,
+        TableHeaderType,
+    };
 
     // Helper functions to create the html contents.
     void beginHtmlFile(QHash<QString, QString> &metaData);
@@ -87,6 +93,7 @@ class OdtHtmlConverter
     void handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWriter);
 
     void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleTagTableRow(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter, TableCellType type = TableDataType);
 
     void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
@@ -94,6 +101,10 @@ class OdtHtmlConverter
     void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
     void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter);
+    void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
+                        QHash<QString, QString> &unknownNamespaces);
+
 
     void handleTagTab(KoXmlWriter *htmlWriter);
     void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
@@ -124,6 +135,16 @@ class OdtHtmlConverter
     void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
                       QSet<QString> &doneStyles);
 
+    void writeMediaOverlayDocumentFile();
+
+    /**
+     * Convert an ODF style name to a CSS class name.
+     *
+     * This strips out special characters like . and > that cannot be used
+     * in CSS class names.
+     */
+    QString cssClassName(const QString& odfStyleName);
+
 
  private:
     FileCollector *m_collector;
@@ -135,9 +156,9 @@ class OdtHtmlConverter
     KoXmlWriter *m_htmlWriter;
 
     // Options for the conversion process
-    // FIXME: This should go into an Options struct together with some
-    //        others from FileConversion.h.
-    ConversionOptions  *m_options;
+    ConversionOptions       *m_options;
+    QHash<QString, QString> *m_manifest;
+    KoStore                 *m_odfStore;
 
     QHash<QString, StyleInfo*> m_styles;
 
@@ -199,7 +220,9 @@ class OdtHtmlConverter
     // Format: QHash<Qstring anchor, qint64 anchor position>
     QHash<QString, qint64> m_mobiInternalLinks;
 
-    //
+    // Format: QHash< QString id, QString video source>
+    QHash<QString, QString> m_mediaFilesList;
+    int m_mediaId;
 
 };
 

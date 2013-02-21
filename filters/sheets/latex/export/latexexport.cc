@@ -17,17 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <latexexport.h>
-#include <latexexport.moc>
+#include "latexexportdialog.h"
+#include "latexexport.h"
+// KDE
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <QTextCodec>
-//Added by qt3to4:
+// Qt
 #include <QByteArray>
-#include "kspreadlatexexportdiaImpl.h"
 
 K_PLUGIN_FACTORY(LATEXExportFactory, registerPlugin<LATEXExport>();)
 K_EXPORT_PLUGIN(LATEXExportFactory("calligrafilters"))
@@ -55,7 +52,7 @@ KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QB
     /* input file Reading */
     in->close();
 
-    KSpreadLatexExportDiaImpl* dialog = new KSpreadLatexExportDiaImpl(in);
+    LatexExportDialog* dialog = new LatexExportDialog(in);
     dialog->setOutputFile(m_chain->outputFile());
 
     dialog->exec();
@@ -64,3 +61,5 @@ KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QB
 
     return KoFilter::OK;
 }
+
+#include <latexexport.moc>

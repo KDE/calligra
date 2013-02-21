@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2005 Sebastian Sauer <mail@dipe.org>
 
@@ -122,50 +122,65 @@ KexiScriptDesignView::KexiScriptDesignView(
     // setup local actions
     QList<QAction*> viewActions;
 
-    KActionMenu *filemenu = new KActionMenu(koIcon("system-file-manager"), i18n("File"), this);
-    filemenu->setObjectName("script_file_menu");
-    filemenu->setToolTip(i18n("File actions"));
-    filemenu->setWhatsThis(i18n("File actions"));
-    QAction *a = new QAction(koIcon("document-new"), i18n("New"), this);
-    a->setShortcut(Qt::CTRL + Qt::Key_N);
-    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileNew()));
-    filemenu->addAction(a);
-    a = new QAction(koIcon("document-open"), i18n("Open..."), this);
-    a->setShortcut(Qt::CTRL + Qt::Key_O);
-    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileOpen()));
-    filemenu->addAction(a);
-    a = new QAction(koIcon("document-save-as"), i18n("Save As..."), this);
-    a->setShortcut(Qt::CTRL + Qt::Key_S);
-    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileSave()));
-    filemenu->addAction(a);
-    viewActions << filemenu;
-
-    KActionMenu *menu = new KActionMenu(koIcon("document-properties"), i18n("Edit"), this);
-    menu->setObjectName("script_edit_menu");
-    menu->setToolTip(i18n("Edit actions"));
-    menu->setWhatsThis(i18n("Edit actions"));
-    foreach(QAction *a, d->editor->defaultContextMenu()->actions()) {
-        menu->addAction(a);
-    }
-    if (KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode avaiable.
-        menu->addSeparator();
-        QAction *a = new KAction(koIcon("configure"), i18n("Configure Editor..."), this);
-        a->setObjectName("script_config_editor");
-        a->setToolTip(i18n("Configure the scripting editor"));
-        a->setWhatsThis(i18n("Configure the scripting editor"));
-        connect(a, SIGNAL(triggered()), d->editor, SLOT(slotConfigureEditor()));
-        menu->addAction(a);
-    }
-    viewActions << menu;
     {
         QAction *a = new KAction(koIcon("system-run"), i18n("Execute"), this);
         a->setObjectName("script_execute");
         a->setToolTip(i18n("Execute the scripting code"));
-        a->setWhatsThis(i18n("Execute the scripting code"));
+        a->setWhatsThis(i18n("Executes the scripting code."));
         connect(a, SIGNAL(triggered()), this, SLOT(execute()));
         viewActions << a;
     }
+
+    QAction *a = new QAction(this);
+    a->setSeparator(true);
+    viewActions << a;
+
+    KActionMenu *menu = new KActionMenu(koIcon("document-properties"), i18n("Edit"), this);
+    menu->setObjectName("script_edit_menu");
+    menu->setToolTip(i18n("Edit actions"));
+    menu->setWhatsThis(i18n("Provides Edit menu."));
+    menu->setDelayed(false);
+    foreach(QAction *a, d->editor->defaultContextMenu()->actions()) {
+        menu->addAction(a);
+    }
+    if (KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode available.
+        menu->addSeparator();
+        QAction *a = new KAction(koIcon("configure"), i18n("Configure Editor..."), this);
+        a->setObjectName("script_config_editor");
+        a->setToolTip(i18n("Configure the scripting editor"));
+        a->setWhatsThis(i18n("Configures the scripting editor."));
+        connect(a, SIGNAL(triggered()), d->editor, SLOT(slotConfigureEditor()));
+        menu->addAction(a);
+    }
+    viewActions << menu;
     setViewActions(viewActions);
+
+    // setup main menu actions
+    QList<QAction*> mainMenuActions;
+    a = new QAction(koIcon("document-import"), i18n("&Import..."), this);
+    a->setObjectName("script_import");
+    a->setToolTip(i18n("Import script"));
+    a->setWhatsThis(i18n("Imports script from a file."));
+    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotImport()));
+    mainMenuActions << a;
+
+    a = new QAction(this);
+    a->setSeparator(true);
+    mainMenuActions << a;
+
+    //a = new QAction(this);
+    //a->setObjectName("project_saveas"); // placeholder for real?
+    a = sharedAction("project_saveas");
+    mainMenuActions << a;
+
+    a = new QAction(koIcon("document-export"), i18n("&Export..."), this);
+    a->setObjectName("script_export");
+    a->setToolTip(i18n("Export script"));
+    a->setWhatsThis(i18n("Exports script to a file."));
+    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotExport()));
+    mainMenuActions << a;
+
+    setMainMenuActions(mainMenuActions);
 
     loadData();
 
@@ -197,39 +212,44 @@ void KexiScriptDesignView::initialize()
     d->splitter->setSizes( QList<int>() << height() * 2 / 3 << height() * 1 / 3 );
 }
 
-void KexiScriptDesignView::slotFileNew()
-{
-    d->editor->setText(QString());
-}
-
-void KexiScriptDesignView::slotFileOpen()
+void KexiScriptDesignView::slotImport()
 {
     QStringList filters;
-    foreach(QString interpreter, Kross::Manager::self().interpreters()) {
+    foreach(const QString &interpreter, Kross::Manager::self().interpreters()) {
         filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
     }
-    const QString file = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kexiscriptingdesigner"), filters.join(" "));
+    const QString file = KFileDialog::getOpenFileName(
+        KUrl("kfiledialog:///kexiscriptingdesigner"),
+        filters.join(" "), this, i18nc("@title:window", "Import Script"));
     if (file.isEmpty())
         return;
     QFile f(file);
-    if (! f.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (! f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        KMessageBox::sorry(this,
+            i18nc("@info", "Could not read <filename>%1</filename>.", file));
         return;
+    }
     d->editor->setText(f.readAll());
     f.close();
 }
 
-void KexiScriptDesignView::slotFileSave()
+void KexiScriptDesignView::slotExport()
 {
     QStringList filters;
-    foreach(QString interpreter, Kross::Manager::self().interpreters()) {
+    foreach(const QString &interpreter, Kross::Manager::self().interpreters()) {
         filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
     }
-    const QString file = KFileDialog::getSaveFileName(KUrl("kfiledialog:///kexiscriptingdesigner"), filters.join(" "));
+    const QString file = KFileDialog::getSaveFileName(
+        KUrl("kfiledialog:///kexiscriptingdesigner"),
+        filters.join(" "), this, i18nc("@title:window", "Export Script"));
     if (file.isEmpty())
         return;
     QFile f(file);
-    if (! f.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (! f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        KMessageBox::sorry(this,
+            i18nc("@info", "Could not write <filename>%1</filename>.", file));
         return;
+    }
     f.write(d->editor->text().toUtf8());
     f.close();
 }

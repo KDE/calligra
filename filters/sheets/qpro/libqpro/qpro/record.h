@@ -43,7 +43,7 @@ enum QpRecType {
 class QpRec
 {
 public:
-    QpRec(QpRecType pType);
+    explicit QpRec(QpRecType pType);
     ~QpRec();
 
     QP_INT16 type();
@@ -75,7 +75,7 @@ protected:
 class QpRecCell : public QpRec
 {
 public:
-    QpRecCell(QpRecType pType);
+    explicit QpRecCell(QpRecType pType);
     ~QpRecCell();
 
     void        attributes(QP_INT16 pAttributes);

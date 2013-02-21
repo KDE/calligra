@@ -30,7 +30,7 @@ class Layout : public QObject
 {
     Q_OBJECT
 public:
-    Layout(const QString& _id);
+    explicit Layout(const QString& _id);
     virtual ~Layout();
 public:
     const QString& id() const;

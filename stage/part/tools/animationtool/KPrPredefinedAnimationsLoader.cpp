@@ -267,13 +267,13 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
 
 QString KPrPredefinedAnimationsLoader::animationName(const QString id) const
 {
-    QStringList descriptionList = id.split("-");
+    QStringList descriptionList = id.split(QLatin1Char('-'));
     if (descriptionList.count() > 2) {
         // Remove the "stage-type" part (type: entrance, exit, motion-path, etc.)
         descriptionList.removeFirst();
         descriptionList.removeFirst();
         // Replace "-" on id with spaces
-        return descriptionList.join(QString(" "));
+        return descriptionList.join(QChar::fromLatin1(' '));
     }
     return QString();
 }
@@ -286,7 +286,7 @@ QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
     QString name = id;
     if (!name.isEmpty()) {
         name = name.append("_animation");
-        name.replace(" ", "_");
+        name.replace(QLatin1Char(' '), QLatin1Char('_'));
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
             return KIcon(name);
@@ -301,7 +301,7 @@ QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const
     QIcon icon;
     // icon name ex: entrance_zoom_in_animations
     QString subId = subTypeId;
-    subId.replace("-", "_");
+    subId.replace(QLatin1Char('-'), QLatin1Char('_'));
     // icon name ex: in_animations
     QString name = subId;
     name.append("_animations");

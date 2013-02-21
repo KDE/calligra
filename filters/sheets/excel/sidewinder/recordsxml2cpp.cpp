@@ -932,9 +932,9 @@ int main(int argc, char** argv)
     if (!doc.setContent(&f, &errorMsg, &errorLine, &errorCol)) {
         f.close();
         errorMsg = "Error parsing file: " + errorMsg + "\n";
-        errorMsg += QString::fromAscii("In line ")  + QString::number(errorLine)
-                    + QString::fromAscii(", column ") + QString::number(errorCol);
-        qFatal("%s", errorMsg.toAscii().constData());
+        errorMsg += QLatin1String("In line ")  + QString::number(errorLine)
+                    + QLatin1String(", column ") + QString::number(errorCol);
+        qFatal("%s", errorMsg.toLatin1().constData());
     }
     f.close();
 

@@ -22,8 +22,8 @@
 #ifndef CAABSTRACTDOCUMENTHANDLER_H
 #define CAABSTRACTDOCUMENTHANDLER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QStringList>
 #include <KoZoomMode.h>
 
 class KoDocument;

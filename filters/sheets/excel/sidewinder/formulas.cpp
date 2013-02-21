@@ -874,7 +874,7 @@ static const FunctionEntry* functionEntry(const QString& functionName)
     static QHash<QString, const FunctionEntry*> entries;
     if (entries.isEmpty()) {
         for (int i = 0; i <= 380; i++) {
-            entries[QString::fromAscii(FunctionEntries[i].name)] = &FunctionEntries[i];
+            entries[QString::fromLatin1(FunctionEntries[i].name)] = &FunctionEntries[i];
         }
     }
     return entries.value(functionName);
@@ -990,8 +990,9 @@ static QString escapeSheetName(const QString& sheetName)
     if (!hasSpecial) return sheetName;
 
     QString res = sheetName;
-    while(res.startsWith('\'') && res.endsWith('\''))
-        res = res.mid(1, res.length() - 2);
+    while(res.startsWith(QLatin1Char('\'')) && res.endsWith(QLatin1Char('\''))) {
+        res.remove(0, 1).chop(1);
+    }
     return "$'" + res.replace('\'', QLatin1String("\'\'")) + "'";
 }
 

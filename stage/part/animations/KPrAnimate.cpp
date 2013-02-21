@@ -20,16 +20,12 @@
 
 #include "KPrAnimate.h"
 
-#include "KPrAnimationCache.h"
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextBlockData.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlReader.h>
-#include "KoXmlWriter.h"
 
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"

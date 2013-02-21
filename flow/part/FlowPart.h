@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRPART_H
-#define KPRPART_H
+#ifndef FLOWPART_H
+#define FLOWPART_H
 
 #include <KoPart.h>
 
@@ -33,7 +33,7 @@ class FLOW_EXPORT FlowPart : public KoPart
     Q_OBJECT
 
 public:
-    FlowPart(QObject *parent);
+    explicit FlowPart(QObject *parent);
 
     virtual ~FlowPart();
 
@@ -61,4 +61,4 @@ protected:
     FlowDocument *m_document;
 };
 
-#endif
+#endif // FLOWPART_H
