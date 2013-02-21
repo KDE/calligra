@@ -29,9 +29,12 @@ set(liboofilter_SRCS
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
-if (NOT CREATIVEONLY)
-
-set(WRITERPERFECT_INCLUDES ${CMAKE_SOURCE_DIR}/filters/writerperfect)
+if(SHOULD_BUILD_FLOW OR SHOULD_BUILD_WORDS)
+    if(WPD_FOUND AND LIBWPG_FOUND)
+        set(WRITERPERFECT_INCLUDES ${CMAKE_SOURCE_DIR}/filters/writerperfect)
+        add_subdirectory( writerperfect )
+    endif(WPD_FOUND AND LIBWPG_FOUND)
+endif(SHOULD_BUILD_FLOW OR SHOULD_BUILD_WORDS)
 
 set(SHOULD_BUILD_OOXML_FILTERS ${SHARED_MIME_INFO_FOUND})
 
@@ -64,12 +67,6 @@ endif(SHOULD_BUILD_FLOW)
 if(SHOULD_BUILD_PLAN)
     macro_optional_add_subdirectory(plan)
 endif(SHOULD_BUILD_PLAN)
-
-if(NOT TINY AND WPD_FOUND AND LIBWPG_FOUND)
-    macro_optional_add_subdirectory( writerperfect )
-endif(NOT TINY AND WPD_FOUND AND LIBWPG_FOUND)
-
-endif (NOT CREATIVEONLY)
 
 if(SHOULD_BUILD_KARBON)
   macro_optional_add_subdirectory(karbon)

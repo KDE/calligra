@@ -305,8 +305,9 @@ target_link_libraries(calligrasheetspart calligrasheetscommon )
 
 install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-
 ########### next target ###############
+
+if (SHOULD_BUILD_SHEETS_APP)
 
 SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
@@ -327,12 +328,15 @@ install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_link_libraries( calligrasheets kdeinit_calligrasheets )
 install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+endif (SHOULD_BUILD_SHEETS_APP)
+
 ########### install files ###############
 
 install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})

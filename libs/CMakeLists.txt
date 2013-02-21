@@ -11,17 +11,17 @@ add_subdirectory( main )
 add_subdirectory( kundo2 )
 add_subdirectory( vectorimage )
 
-if (SHOULD_BUILD_SCRIPTING AND NOT CREATIVEONLY)
+if (SHOULD_BUILD_SCRIPTING)
     add_subdirectory( kokross )
-endif (SHOULD_BUILD_SCRIPTING AND NOT CREATIVEONLY)
+endif (SHOULD_BUILD_SCRIPTING)
 
-if (NOT CREATIVEONLY)
+if (SHOULD_BUILD_FLOW OR SHOULD_BUILD_STAGE)
     add_subdirectory( kopageapp )
-endif (NOT CREATIVEONLY)
+endif (SHOULD_BUILD_FLOW OR SHOULD_BUILD_STAGE)
 
-if(NOT TINY OR NOT CREATIVEONLY)
+if(SHOULD_BUILD_KOREPORT)
     add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
-endif(NOT TINY OR NOT CREATIVEONLY)
+endif(SHOULD_BUILD_KOREPORT)
 
 if (HAVE_ICU AND HAVE_SQLITE AND SHOULD_BUILD_CALLIGRADB)
     add_subdirectory( db ) # used by Kexi and Word's Biblio; TODO: remove when Predicate lib arrives
