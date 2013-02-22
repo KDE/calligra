@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Stage Svg Presentation Export filter
-X-KDE-Import=application/x-kpresenter
+X-KDE-Import=application/vnd.oasis.opendocument.presentation
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1
 X-KDE-Library=svgsinglecanvasexport
