@@ -39,6 +39,7 @@ public:
     void setView(QObject* newView);
     QObject* view() const;
 
+    Q_INVOKABLE void clearCookies(QObject* qmlEngine);
 Q_SIGNALS:
     void viewChanged();
     void sharingSuccessful(const QString& message, const QString& url);

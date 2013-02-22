@@ -24,6 +24,9 @@
 #include <kis_view2.h>
 #include <kis_part2.h>
 #include <kparts/plugin.h>
+#include <QDeclarativeEngine>
+#include <QNetworkAccessManager>
+#include <QNetworkCookieJar>
 
 class SharingManager::Private {
 public:
@@ -85,4 +88,11 @@ QObject* SharingManager::view() const
 {
     return d->view;
 }
+
+void SharingManager::clearCookies(QObject* qmlEngine)
+{
+    QDeclarativeEngine* engine = qobject_cast<QDeclarativeEngine*>(qmlEngine);
+    engine->networkAccessManager()->setCookieJar(new QNetworkCookieJar());
+}
+
 #include "SharingManager.moc"
