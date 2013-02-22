@@ -74,6 +74,15 @@ ImageShare::~ImageShare()
 
 QObject* ImageShare::stash()
 {
+    return m_stash;
+}
+
+void ImageShare::authenticate()
+{
+    if(m_deviantArt) {
+        m_deviantArt->deleteLater();
+        m_deviantArt = 0;
+    }
     m_deviantArt = new O2DeviantART(this);
     m_deviantArt->setClientId("272");
     m_deviantArt->setClientSecret("a8464938f858f68661c4246347f09b62");
@@ -85,7 +94,24 @@ QObject* ImageShare::stash()
     }
     m_stash = new Stash(m_deviantArt, this);
     connect(m_stash, SIGNAL(newSubmission(qulonglong,QString,int)), SLOT(newSubmission(qulonglong,QString,int)));
-    return m_stash;
+    emit stashChanged();
+}
+
+void ImageShare::deauthenticate()
+{
+    if(m_deviantArt) {
+        if(m_stash) {
+            m_stash->deleteLater();
+            m_stash = 0;
+        }
+        m_deviantArt->unlink();
+        emit stashChanged();
+    }
+}
+
+bool ImageShare::isAuthenticated() const
+{
+    return m_deviantArt->linked();
 }
 
 void ImageShare::slotImageShare()
@@ -130,6 +156,7 @@ void ImageShare::showSubmit()
     connect(m_stash, SIGNAL(submissionsChanged()), SLOT(submissionsChanged()));
     connect(m_stash, SIGNAL(uploadProgress(int,qint64,qint64)), SLOT(uploadProgress(int,qint64,qint64)));
     connect(m_stash, SIGNAL(newSubmission(qulonglong,QString,int)), SLOT(newSubmission(qulonglong,QString,int)));
+    emit stashChanged();
     // This will need doing... once deviantArt fixes the call
     //connect(m_stash, SIGNAL(availableSpaceChanged()), SLOT(availableSpaceChanged()));
     m_stash->testCall();

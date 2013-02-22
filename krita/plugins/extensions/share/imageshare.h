@@ -39,16 +39,21 @@ class SubmitDlg;
 class ImageShare : public KParts::Plugin
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* stash READ stash NOTIFY stashChanged)
 public:
     ImageShare(QObject *parent, const QVariantList &);
     virtual ~ImageShare();
 
-    Q_INVOKABLE QObject* stash();
+    QObject* stash();
+    Q_SLOT void authenticate();
+    Q_SLOT void deauthenticate();
+    Q_INVOKABLE bool isAuthenticated() const;
 Q_SIGNALS:
     void openBrowser(const QUrl &url);
     void closeBrowser();
     void linkingSucceeded();
     void sharingSuccessful(const QString& message, const QString& url);
+    void stashChanged();
 
 private slots:
 
