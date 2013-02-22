@@ -37,15 +37,16 @@ SharePage {
             showUrl = url;
         }
         onCloseBrowser: shareStack.pop();
-    }
-    property string showUrl: "";
-    property QtObject stash: null;
-    onStashChanged: stash.testCall();
-    onSharingHandlerChanged: {
-        if(sharingHandler !== null) {
-            stash = sharingHandler.stash();
+        onLinkingSucceeded: {
+            if(!sharingHandler.isAuthenticated()) {
+                sharingHandler.authenticate();
+            }
         }
     }
+    property string showUrl: "";
+    onSharingHandlerChanged: if(sharingHandler !== null) { sharingHandler.authenticate(); }
+    property QtObject stash: sharingHandler ? sharingHandler.stash : null;
+    onStashChanged: if(stash !== null) { stash.testCall(); }
     property string title: "";
     property string tags: "";
     property string description: "";
@@ -97,8 +98,34 @@ SharePage {
                 TextFieldMultiline { id: txtDescription; height: Constants.GridHeight * 4; placeholder: "Description"; onTextChanged: content.updateCanShare(); }
             }
 
+            Button {
+                anchors {
+                    top: parent.top;
+                    right: parent.right;
+                    margins: Constants.DefaultMargin;
+                }
+                width: Constants.GridWidth * 2;
+                height: textSize + Constants.DefaultMargin;
+                color: "transparent";
+                text: "Open Your Sta.sh...";
+                onClicked: Qt.openUrlExternally("http://sta.sh/");
+            }
+            Button {
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    margins: Constants.DefaultMargin;
+                }
+                width: Constants.GridWidth * 2;
+                height: textSize + Constants.DefaultMargin;
+                color: "transparent";
+                text: "Log Out of Sta.sh";
+                onClicked: { sharingManager.clearCookies(QMLEngine); sharingHandler.deauthenticate(); }
+            }
+
             Item {
                 anchors.fill: parent;
+                anchors.margins: -Constants.DefaultMargin;
                 opacity: (root.stash !== null && root.stash.ready) ?  0 : 1;
                 Behavior on opacity { PropertyAnimation { duration: 200; } }
                 Rectangle {
@@ -123,27 +150,62 @@ SharePage {
                     text: "Sta.sh is not ready..."
                 }
             }
-
-            Button {
-                anchors {
-                    top: parent.top;
-                    right: parent.right;
-                    margins: Constants.DefaultMargin;
-                }
-                width: Constants.GridWidth * 2;
-                height: textSize + Constants.DefaultMargin;
-                color: "transparent";
-                text: "Open Your Sta.sh...";
-                onClicked: Qt.openUrlExternally("http://sta.sh/");
-            }
         }
     }
     Component {
         id: webPage;
         Item {
+            id: webPageContainer
             anchors.fill: parent;
             anchors.margins: Constants.DefaultMargin;
+            Component {
+                id: webViewNewWindowComponent
+                Item {
+                    // This container item is a massive hack, caused by newWindowComponent being created from C++ and /not/ set to QML ownership.
+                    // That means we have to leave objects around, and Items are fairly cheap
+                    width: webPageContainer.width
+                    height: webPageContainer.height
+                    Rectangle {
+                        id: childViewContainer
+                        width: parent.width
+                        height: parent.height
+                        color: "silver";
+                        Flickable {
+                            clip: true;
+                            width: parent.width
+                            contentWidth: Math.max(parent.width, childWebView.width)
+                            contentHeight: Math.max(parent.height, childWebView.height)
+                            anchors.fill: parent;
+                            anchors.margins: Constants.DefaultMargin;
+                            anchors.topMargin: Constants.GridHeight + Constants.DefaultMargin;
+                            pressDelay: 200
+                            onWidthChanged : {
+                                // Expand (but not above 1:1) if otherwise would be smaller that available width.
+                                if (width > childWebView.width*childWebView.contentsScale && childWebView.contentsScale < 1.0)
+                                    childWebView.contentsScale = width / childWebView.width * childWebView.contentsScale;
+                            }
+                            WebView {
+                                id: childWebView
+                                preferredWidth: childViewContainer ? childViewContainer.width - Constants.DefaultMargin * 2 : parent.width;
+                                newWindowComponent: webViewNewWindowComponent
+                                newWindowParent: childViewContainer ? childViewContainer : null;
+                            }
+                        }
+                        Button {
+                            anchors {
+                                top: parent.top;
+                                left: parent.left;
+                                margins: Constants.DefaultMargin;
+                            }
+                            color: "gray";
+                            text: "Back";
+                            onClicked: parent.destroy();
+                        }
+                    }
+                }
+            }
             Flickable {
+                clip: true;
                 width: parent.width
                 contentWidth: Math.max(parent.width, webView.width)
                 contentHeight: Math.max(parent.height, webView.height)
@@ -158,6 +220,8 @@ SharePage {
                     id: webView;
                     preferredWidth: shareStack.width;
                     preferredHeight: shareStack.height;
+                    newWindowComponent: webViewNewWindowComponent
+                    newWindowParent: webPageContainer;
                     url: showUrl;
                 }
             }
