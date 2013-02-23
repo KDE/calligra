@@ -25,7 +25,7 @@
 #include <KoTextRangeManager.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-
+#include <KoColorBackground.h>
 
 #include <kdebug.h>
 
@@ -36,6 +36,8 @@ AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextOb
                                          KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
 {
+    KoShapeBackground *fill = new KoColorBackground(Qt::white);
+    setBackground(fill);
 }
 
 AnnotationTextShape::~AnnotationTextShape()
