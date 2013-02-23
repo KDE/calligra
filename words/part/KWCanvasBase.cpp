@@ -165,25 +165,31 @@ void KWCanvasBase::ensureVisible(const QRectF &rect)
     canvasController()->ensureVisible(viewRect);
 }
 
-void KWCanvasBase::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)
+void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
     // We have no page shadows yet, but the annotations area will go
     // here in the annotations branch.
     Q_UNUSED(viewMap);
 
-    // FIXME: We should go through the viewMap and only paint those
-    //        places that should be repainted. Also, there could be
-    //        more than one page on the canvas,depending on the
-    //        viewmode.
-    QColor color = Qt::cyan;
+    QColor color = Qt::white;
+#ifdef DEBUG_REPAINT
+    color = QColor(random() % 255, random() % 255, random() % 255);
+#endif
+    painter.fillRect(viewMap.clipRect, QBrush(color));
+
+    color = Qt::cyan;
     QRect annotationRect(m_viewMode->contentsSize().width(), 0,
                          KWView::AnnotationAreaWidth, m_viewMode->contentsSize().height());
-    qDebug() << "annotation rect " << annotationRect;
     QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
-    qDebug()<<"view rect "<< viewRect;
-    //painter.fillRect(m_viewMode->documentToView(annotationRect, m_viewConverter), QBrush(color));
+    qDebug() << "annotation rect " << annotationRect << "view rect " << viewRect;
     painter.fillRect(viewRect, QBrush(color));
-    //painter.fillRect(annotationRect, QBrush(color));
+}
+
+void KWCanvasBase::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)
+{
+    // We have no page shadows yet.
+    Q_UNUSED(painter);
+    Q_UNUSED(viewMap);
 }
 
 void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
@@ -330,18 +336,16 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 painter.save();
 
                 // Set up the painter to clip the part of the canvas that contains the rect.
+                // FIXME: The viewmap must also take into account the annotation area
                 painter.translate(vm.distance.x(), vm.distance.y());
                 vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
                 //painter.setClipRect(vm.clipRect);
 
-                // Paint the background of the page.
-                QColor color = Qt::white;
-#ifdef DEBUG_REPAINT
-                color = QColor(random() % 255, random() % 255, random() % 255);
-#endif
-                painter.fillRect(vm.clipRect, QBrush(color));
+                // Paint the background of the page.  This includes
+                // the annotation area if that should be shown.
+                paintBackgrounds(painter, vm);
 
-                // Paint the contents of the page.
+                // Paint the contents of the page (shapes border).
                 painter.setRenderHint(QPainter::Antialiasing);
                 m_shapeManager->paint(painter, *(viewConverter()), false); // Paint all shapes
                 paintBorder(painter, vm);
@@ -353,7 +357,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 // Paint the grid
                 paintGrid(painter, vm);
 
-                // paint whatever the tool wants to paint
+                // Paint whatever the tool wants to paint
                 m_toolProxy->paint(painter, *(viewConverter()));
                 painter.restore();
 

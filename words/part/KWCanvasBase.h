@@ -110,6 +110,7 @@ protected:
 
     void paint(QPainter &painter, const QRectF &paintRect);
 
+    void paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &viewMap);
     void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
     void paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap);
     void doPaintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
