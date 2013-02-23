@@ -25,7 +25,7 @@ def createCalligraIconFile(calligraIconsFile):
 
 # TODO: make path a variable
 def createDotDesktopIconFile():
-    r = subprocess.call("grep 'Icon=' * -R --include=*.desktop > dotDesktopIconFiles.list", shell=True)
+    r = subprocess.call("GREP_OPTIONS= grep 'Icon=' . -R --include=\*.desktop > dotDesktopIconFiles.list", shell=True)
     return r
 
 # TODO: make path a variable
@@ -39,13 +39,17 @@ def createPotFile():
              "-kkoIconNameCStr:1 " +
              "-kkoSmallIcon:1 " +
              "-kkoDesktopIcon:1 " +
+
              "-kkoIconNeeded:1c,2 " +
              "-kkoIconNeededWithSubs:1c,2 " +
              "-kkoIconNameNeeded:1c,2 " +
              "-kkoIconNameNeededWithSubs:1c,2 " +
              "-kkoIconNameCStrNeeded:1c,2 " +
              "-kkoIconNameCStrNeededWithSubs:1c,2 " +
+
              "-kkoIconWanted:1c,2 " +
+             "-kkoIconNameWanted:1c,2 " +
+
              "-D . --files-from=koIconFiles.list -o koIconNames.po -n", shell=True)
     return r
     #TODO: use Python pipes and/or clean-up helper files
@@ -95,7 +99,7 @@ def main():
         #print >> sys.stderr, "usage: %s directory" % sys.argv[0]
         #sys.exit(1)
 
-    oxygenIcons = readIcons('tools/iconcheck/oxygen-icons-4.3.5.list')
+    oxygenIcons = readIcons('tools/iconcheck/oxygen-icons-4.6.0.list')
 
     r = createCalligraIconFile('calligra-icons.list')
     if r:
