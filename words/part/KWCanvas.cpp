@@ -20,9 +20,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// words includes
-#define  SHOW_ANNOTATIONS 1
+// Own
 #include "KWCanvas.h"
+
+// words includes
 #include "KWGui.h"
 #include "KWView.h"
 #include "KWViewMode.h"
@@ -186,14 +187,7 @@ void KWCanvas::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
     painter.eraseRect(ev->rect());
-#ifdef SHOW_ANNOTATIONS
-    QColor color = Qt::red;
-    QRect annotationRect(m_viewMode->contentsSize().width(), 0,
-                         KWView::AnnotationAreaWidth, m_viewMode->contentsSize().height());
-    qDebug()<<"annotation rect "<< annotationRect;
-    painter.fillRect(m_viewMode->documentToView(annotationRect, m_viewConverter), QBrush(color));
-#endif
-    paint(painter, ev->rect());
+    paint(painter, ev->rect()); // In KWCanvasBase
 
     painter.end();
 }

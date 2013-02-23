@@ -24,6 +24,7 @@
 
 // words includes
 #include "KWCanvas.h"
+#include "KWView.h"  // Only for the annotationWidth.  Move it?
 #include "KWGui.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
@@ -50,7 +51,6 @@
 #include <sys/time.h>
 
 //#define DEBUG_REPAINT
-#define ANNOTATION_WIDTH 200
 
 
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
@@ -169,8 +169,21 @@ void KWCanvasBase::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &
 {
     // We have no page shadows yet, but the annotations area will go
     // here in the annotations branch.
-    Q_UNUSED(painter);
     Q_UNUSED(viewMap);
+
+    // FIXME: We should go through the viewMap and only paint those
+    //        places that should be repainted. Also, there could be
+    //        more than one page on the canvas,depending on the
+    //        viewmode.
+    QColor color = Qt::cyan;
+    QRect annotationRect(m_viewMode->contentsSize().width(), 0,
+                         KWView::AnnotationAreaWidth, m_viewMode->contentsSize().height());
+    qDebug() << "annotation rect " << annotationRect;
+    QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
+    qDebug()<<"view rect "<< viewRect;
+    //painter.fillRect(m_viewMode->documentToView(annotationRect, m_viewConverter), QBrush(color));
+    painter.fillRect(viewRect, QBrush(color));
+    //painter.fillRect(annotationRect, QBrush(color));
 }
 
 void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
@@ -319,7 +332,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 // Set up the painter to clip the part of the canvas that contains the rect.
                 painter.translate(vm.distance.x(), vm.distance.y());
                 vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
-                painter.setClipRect(vm.clipRect);
+                //painter.setClipRect(vm.clipRect);
 
                 // Paint the background of the page.
                 QColor color = Qt::white;
@@ -334,6 +347,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 paintBorder(painter, vm);
 
                 // Paint the page decorations: shadow, etc.
+                // FIXME: This will fail because the painter is clipped to the page.
                 paintPageDecorations(painter, vm);
 
                 // Paint the grid
