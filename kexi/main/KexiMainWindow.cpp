@@ -2287,7 +2287,7 @@ KexiMainWindow::createKexiProject(const KexiProjectData& new_data)
     connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const QString&)));
 
     if (d->navigator){
-        connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->navigator, SLOT(slotRemoveItem(const KexiPart::Item&)));
+        connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->navigator->model(), SLOT(slotRemoveItem(const KexiPart::Item&)));
     }
     
 }

@@ -1,3 +1,7 @@
+if(SHOULD_BUILD_CALLIGRA)
+  macro_optional_add_subdirectory( calligra )
+endif(SHOULD_BUILD_CALLIGRA)
+
 if (SHOULD_BUILD_CONVERTER)
     macro_optional_add_subdirectory( converter )
 endif(SHOULD_BUILD_CONVERTER)
@@ -14,14 +18,6 @@ if (SHOULD_BUILD_EXTRA_QUICKPRINT)
     macro_optional_add_subdirectory( quickprint )
 endif(SHOULD_BUILD_EXTRA_QUICKPRINT)
 
-if(SHOULD_BUILD_CSTESTER)
-    macro_optional_add_subdirectory( cstester )
-endif(SHOULD_BUILD_CSTESTER)
-
-if(SHOULD_BUILD_CALLIGRA)
-  macro_optional_add_subdirectory(calligra)
-endif(SHOULD_BUILD_CALLIGRA)
-
 if(SHOULD_BUILD_OKULARODPGENERATOR)
     macro_optional_find_package(Okular)
     macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
@@ -30,8 +26,3 @@ if(SHOULD_BUILD_OKULARODPGENERATOR)
         macro_optional_add_subdirectory( okularodpgenerator )
     endif(OKULAR_FOUND)
 endif(SHOULD_BUILD_OKULARODPGENERATOR)
-
-if (SHOULD_BUILD_DEVTOOLS)
-    macro_optional_add_subdirectory( slidecompare )
-    macro_optional_add_subdirectory(scripts)
-endif (SHOULD_BUILD_DEVTOOLS)
