@@ -31,7 +31,7 @@ CellToolFactory::CellToolFactory(const QString& id)
         : KoToolFactoryBase(id)
 {
     setToolTip(i18n("Cell formatting"));
-    setIconName(koIconNameCStr("sheets"));
+    setIconName(koIconNameCStr("tool_cellformatting"));
     setToolType(dynamicToolType()+",calligrasheets");
     setPriority(0);
     setActivationShapeId("flake/always");
