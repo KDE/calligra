@@ -1,26 +1,3 @@
 [Desktop Entry]
 Name=Location server
-Name[bs]=Mjesni server
-Name[ca]=Servidor de localització
 Name[ca@valencia]=Servidor de localització
-Name[el]=Εξυπηρετητής τοποθεσίας
-Name[es]=Servidor de comunicaciones
-Name[et]=Asukohaserver
-Name[fr]=emplacement du serveur
-Name[gl]=Servidor de localización
-Name[hu]=Hely-kiszolgáló
-Name[it]=Location server
-Name[kk]=Орналасу сервері
-Name[lt]=Adresavimo serveris
-Name[nb]=Lokasjonstjener
-Name[nl]=Locatieserver
-Name[pl]=Serwer położenia
-Name[pt]=Servidor de localização
-Name[pt_BR]=Servidor de localização
-Name[ru]=Сервер расположения
-Name[sk]=Server umiestnenia
-Name[sv]=Platsserver
-Name[uk]=Сервер розташування
-Name[x-test]=xxLocation serverxx
-Name[zh_CN]=位置服务器
-Name[zh_TW]=位置伺服器

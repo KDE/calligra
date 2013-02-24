@@ -2,38 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraPart
 Comment=Calligra Component
-Comment[bg]=Компонент на Calligra
-Comment[bs]=Calligra Komponenta
-Comment[ca]=Component del Calligra
 Comment[ca@valencia]=Component del Calligra
-Comment[cs]=Komponenta Calligra
-Comment[da]=Calligra-komponent
-Comment[de]=Calligra-Komponente
-Comment[el]=Συστατικό Calligra
-Comment[es]=Componente de Calligra
-Comment[et]=Calligra komponent
-Comment[fi]=Calligra-osa
-Comment[fr]=Composant gestion de projets de Calligra
-Comment[gl]=Compoñente para Calligra.
-Comment[hu]=Calligra komponens
-Comment[it]=Componente di Calligra
-Comment[ja]=Calligra コンポーネント
-Comment[kk]=Calligra-ның компоненті
-Comment[mr]=कॅलिग्रा घटक
-Comment[nb]=Calligra-komponent
-Comment[nds]=Calligra-Komponent
-Comment[nl]=Calligra-component
-Comment[pl]=Składnik Calligry
-Comment[pt]=Componente do Calligra
-Comment[pt_BR]=Componente do Calligra
-Comment[ru]=Компонент Calligra
-Comment[sk]=Calligra komponent
-Comment[sl]=Komponenta Calligre
-Comment[sv]=Calligra-komponent
-Comment[uk]=Компонент Calligra
-Comment[x-test]=xxCalligra Componentxx
-Comment[zh_CN]=Calligra 组件
-Comment[zh_TW]=Calligra 組件
 
 # Name of the native mimetype (mandatory)
 [PropertyDef::X-KDE-NativeMimeType]
