@@ -59,9 +59,13 @@ protected:
     QList<QWidget *> createOptionWidgets();
 
 private:
-    int selection;
+    enum Margin{NONE,TOP,BOTTOM,LEFT,RIGHT,HEADER,FOOTER};
+    Margin margin;
     KWCanvas *m_canvas;
     KWDocument *m_document;
+    //Return or set the position x or y of the margin
+    int marginInPx(Margin p_selection);
+    void setMarginInPx(Margin p_selection, int p_postionX, int p_positionY);
 };
 
 #endif
