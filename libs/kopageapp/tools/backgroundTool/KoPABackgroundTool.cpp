@@ -106,6 +106,9 @@ QList<QWidget *> KoPABackgroundTool::createOptionWidgets()
     const QString title =
         (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Background");
     widget->setWindowTitle(title);
+    const QString toolTip =
+        (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Design") : i18n("Slide Design");
+    widget->setToolTip(toolTip);
     widgets.append(widget);
     widgets.append(m_addOnWidgets);
 #if 0
