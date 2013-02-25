@@ -54,7 +54,7 @@ void CAuView::selectCoverImage()
 
     QString path = QFileDialog::getOpenFileName(0, i18n("Open File"),
                                                 QDir::currentPath(),
-                                                      i18n("Images (*.png *.xpm *.jpg)"));
+                                                      i18n("Images (*.png *.xpm *.jpg *.jpeg)"));
     if (!path.isEmpty()) {
         QPair<QString, QByteArray> coverData = cover.readCoverImage(path);
         kwdocument()->setCoverImage(coverData);

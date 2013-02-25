@@ -66,7 +66,9 @@ QPair<QString, QByteArray> CoverImage::readCoverImage(QString path)
     QByteArray data = file.readAll();
 
     QPair<QString, QByteArray> coverData;
-    coverData.first = path.right(3);
+    //more flexible, allow to catch all kind of extantions like .png AND .jpeg for example
+    int nbPartSplitted = path.split(".").length();
+    coverData.first = path.split(".")[nbPartSplitted-1]; //was : "right(3);"
     coverData.second = data;
 
     file.close();
