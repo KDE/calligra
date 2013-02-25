@@ -30,6 +30,7 @@
 #include <QDebug>
 #include <OkularOdpGenerator.h>
 #include <okular/core/page.h>
+#include <okular/core/version.h>
 #include <QImage>
 #include <QPainter>
 
@@ -129,7 +130,12 @@ void OkularOdpGenerator::generatePixmap( Okular::PixmapRequest *request )
         pix = new QPixmap(page->thumbnail(QSize(request->width(), request->height())));
     }
 
+// API change
+#if OKULAR_IS_VERSION(0, 16, 60)
+   request->page()->setPixmap( request->observer(), pix );
+#else
    request->page()->setPixmap( request->id(), pix );
+#endif
 
     signalPixmapRequestDone( request );
 }
