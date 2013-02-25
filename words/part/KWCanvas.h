@@ -30,8 +30,6 @@
 
 #include "KWViewMode.h"
 
-#include "KoAnnotationLayoutManager.h"
-
 #include <QWidget>
 
 class QRect;
@@ -142,7 +140,6 @@ private slots:
 private:
 
     KWView *m_view;
-    KoAnnotationLayoutManager *m_annotationManager;
 };
 
 #endif

@@ -55,12 +55,6 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
     m_viewConverter = m_view->viewConverter();
     m_viewMode = KWViewMode::create(viewMode, document);
-    m_annotationManager = new KoAnnotationLayoutManager(m_viewMode->contentsSize().width());
-    // Layout annotation shapes that loaded in loader.
-    foreach(KoShape *shape, m_document->annotationShapes()) {
-        m_annotationManager->addAnnotationShape(shape);
-    }
-    connect(document, SIGNAL(shapeAdded(KoShape*,KoShapeManager::Repaint)), m_annotationManager, SLOT(addAnnotationShape(KoShape*)));
 }
 
 KWCanvas::~KWCanvas()

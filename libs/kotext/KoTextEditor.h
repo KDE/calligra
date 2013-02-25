@@ -47,6 +47,7 @@ class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
 class KoShapeAnchor;
 class KoBookmark;
+class KoAnnotation;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -247,6 +248,9 @@ public slots:
 
     /// add a bookmark on current cursor location or current selection
     KoBookmark *addBookmark(const QString &name);
+
+    /// add an annotation on current cursor loactaion or current selection.
+    KoAnnotation *addAnnotation();
 
     /**
      * Insert a frame break at the cursor position, moving the rest of the text to the next frame.

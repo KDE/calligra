@@ -23,6 +23,7 @@
 
 #include "words_export.h"
 #include "KWPage.h"
+#include "KoAnnotationLayoutManager.h"
 
 #include <KoView.h>
 #include <KoViewConverter.h>
@@ -118,6 +119,9 @@ public:
     int minPageNumber() const { return m_minPageNum; }
     int maxPageNumber() const { return m_maxPageNum; }
 
+    /// Add loaded annotation shapes are loaded in textLoader to KoAnnotationLayoutManager.
+    void layoutLoadedAnnotationShapes();
+
 signals:
     void shownPagesChanged();
 
@@ -139,6 +143,9 @@ public slots:
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
     void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+
+    /// Add an annotation, add it to KoAnnotationLayoutManager and to KoAnnotationManager.
+    void annotationShapeAdded(KoShape *);
 
 protected:
     /// reimplemented method from superclass
@@ -238,6 +245,8 @@ private:
     qreal m_textMaxX; // The max x value where text can appear we currently show. Prevents endless loop
     int m_minPageNum;
     int m_maxPageNum;
+
+    KoAnnotationLayoutManager *m_annotationManager;
 };
 
 #endif

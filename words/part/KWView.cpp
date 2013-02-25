@@ -70,6 +70,7 @@
 #include <KoMainWindow.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
+#include <KoAnnotation.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoShapeAnchor.h>
@@ -119,8 +120,13 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(QString(), this);
     m_canvas = m_gui->canvas();
-    setFocusProxy(m_canvas);
+    // FIXME: This (400.0) i s just for now i know i know. :)
+    m_annotationManager = new KoAnnotationLayoutManager(400.0);
+    //layout loaded annotation shapes in textLoader.
+    layoutLoadedAnnotationShapes();
+    connect(m_document, SIGNAL(annotationShapeAdded(KoShape*)), this, SLOT(annotationShapeAdded(KoShape*)));
 
+    setFocusProxy(m_canvas);
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
@@ -142,6 +148,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // The text documents to search in will potentially change when we add/remove shapes and after load
     connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
     connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
+
+
     refreshFindTexts();
 
     layout->addWidget(toolbar);
@@ -1072,3 +1080,22 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
     }
 }
 
+void KWView::layoutLoadedAnnotationShapes()
+{
+    foreach(KoShape *shape, m_document->annotationShapes()) {
+        m_annotationManager->addAnnotationShape(shape);
+    }
+}
+
+void KWView::annotationShapeAdded(KoShape *shape)
+{
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    Q_ASSERT(editor);
+
+    const KoAnnotationManager *manager = m_document->textRangeManager()->annotationManager();
+
+    KoAnnotation *annotation = editor->addAnnotation();
+    annotation->setAnnotationShape(shape);
+
+    m_annotationManager->addAnnotationShape(shape);
+}
