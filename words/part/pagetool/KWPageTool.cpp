@@ -26,6 +26,7 @@
 //words includes
 #include "KWDocument.h"
 #include "KWCanvas.h"
+#include "KWView.h"
 
 //Qt includes
 #include <QList>
@@ -39,7 +40,7 @@
 KWPageTool::KWPageTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
 {
-    selection = 0;
+    margin = NONE;
     m_canvas = dynamic_cast<KWCanvas*>(canvas);
     if (m_canvas) {
         m_document = m_canvas->document();
@@ -66,77 +67,109 @@ void KWPageTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
 
 void KWPageTool::mousePressEvent(KoPointerEvent *event)
 {
+        int leftMargin = marginInPx(LEFT);
+        int rightMargin = marginInPx(RIGHT);
+        int topMargin = marginInPx(TOP);
+        int bottomMargin = marginInPx(BOTTOM);
+        int header = marginInPx(HEADER);
+        int bottom = marginInPx(FOOTER);
 
         KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
-        qreal mmToPxWidth = m_canvas->width() / layout.width;
         qreal mmToPxHeight = m_canvas->height() / layout.height;
+        qDebug() << "SOUROS Y : " << event->y()/mmToPxHeight;
+        qDebug() << "MARGE TOP: " << layout.topMargin;
+        qDebug() << "HEADER D : " << m_document->pageManager()->defaultPageStyle().headerDistance();
+        qDebug() << "TOP + HEA: " << layout.topMargin + m_document->pageManager()->defaultPageStyle().headerDistance();
 
-        qDebug() << "mmToPxWidth : " << mmToPxWidth;
-        qDebug() << "Souris X    : " << event->x();
-        qDebug() << "Width in MM : " << layout.width;
-        qDebug() << "Width in PX : " << m_canvas->width();
-        qDebug() << "Conversion  : " << m_canvas->width()/mmToPxWidth;
-        qDebug() << "Conversion X: " << event->x()/mmToPxWidth;
-        qDebug() << "Margin Left : " << layout.leftMargin;
-
-        if(event->x() > (layout.leftMargin*mmToPxWidth) -10
-        && event->x() < (layout.leftMargin*mmToPxWidth) +10 )
-            selection = 1;
+        if(event->x() > leftMargin - 10
+        && event->x() < leftMargin + 10 )
+            margin = LEFT;
         else
-        if(event->x() > ((layout.width - layout.rightMargin)*mmToPxWidth) -10
-        && event->x() < ((layout.width - layout.rightMargin)*mmToPxWidth) +10 )
-            selection = 3;
+        if(event->x() > rightMargin - 10
+        && event->x() < rightMargin + 10 )
+            margin = RIGHT;
         else
-        if(event->y() > (layout.topMargin*mmToPxHeight) -10
-        && event->y() < (layout.topMargin*mmToPxHeight) +10 )
-            selection = 2;
+        if(event->y() > topMargin - 10
+        && event->y() < topMargin + 10 )
+            margin = TOP;
         else
-        if(event->y() > ((layout.height - layout.bottomMargin)*mmToPxHeight) -10
-        && event->y() < ((layout.height - layout.bottomMargin)*mmToPxHeight) +10 )
-            selection = 4;
-
-        qDebug() << selection;
+        if(event->y() > bottomMargin - 10
+        && event->y() < bottomMargin + 10 )
+            margin = BOTTOM;
+        else
+        if(event->y() > header - 10
+        && event->y() < header + 10 )
+            margin = HEADER;
 }
 
 void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if(selection != 0){
-        KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
-        qreal mmToPxWidth = m_canvas->width() / layout.width;
-        qreal mmToPxHeight = m_canvas->height() / layout.height;
 
-        switch(selection){
-            case 1:
-            if(event->x() < ((layout.width - layout.rightMargin)*mmToPxWidth - 10)
-            && event->x() > 1)
-                    layout.leftMargin = event->x()/mmToPxWidth;
-                break;
-            case 2:
-            if(event->y() < ((layout.height - layout.bottomMargin)*mmToPxHeight - 10)
-            && event->y() > 1)
-                    layout.topMargin = event->y()/mmToPxHeight;
-                break;
-            case 3:
-            if(event->x() > (layout.leftMargin)*mmToPxWidth + 10
-            && event->x() < m_canvas->width() - 1)
-                    layout.rightMargin = layout.width - event->x()/mmToPxWidth;
-                break;
-            case 4:
-            if(event->y() > (layout.topMargin)*mmToPxHeight + 10
-            && event->y() < m_canvas->height() - 1)
-                    layout.bottomMargin = layout.height - event->y()/mmToPxHeight;
-                break;
-        }
-
-        m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
-        m_document->relayout();
+    if(margin != NONE){
+        setMarginInPx(margin,event->x(),event->y());
     }
 }
 
 void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    qDebug() << "RELACHE";
-    selection = 0;
+    if(margin != 0){
+        margin = NONE;
+    }
+}
+
+int KWPageTool::marginInPx(Margin p_selection){
+
+    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
+    qreal mmToPxWidth = m_canvas->width() / layout.width;
+    qreal mmToPxHeight = m_canvas->height() / layout.height;
+
+    switch(p_selection){
+        case LEFT:
+            return layout.leftMargin*mmToPxWidth;
+        case RIGHT:
+            return (layout.width - layout.rightMargin)*mmToPxWidth;
+        case TOP:
+            return layout.topMargin*mmToPxHeight;
+        case BOTTOM:
+            return (layout.height - layout.bottomMargin)*mmToPxHeight;
+        case HEADER:
+            return layout.topMargin + m_document->pageManager()->defaultPageStyle().headerDistance();
+    }
+    return -1;
+}
+
+void KWPageTool::setMarginInPx(Margin p_selection, int p_positionX, int p_positionY){
+
+    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
+    qreal mmToPxWidth = m_canvas->width() / layout.width;
+    qreal mmToPxHeight = m_canvas->height() / layout.height;
+    qreal xMouseInMM = p_positionX/mmToPxWidth;
+    qreal yMouseInMM = p_positionY/mmToPxHeight;
+
+    switch(p_selection){
+        case LEFT:
+            if(xMouseInMM > 1 && xMouseInMM < marginInPx(RIGHT)/mmToPxWidth - 10)
+                layout.leftMargin = xMouseInMM;
+            break;
+        case RIGHT:
+            if(xMouseInMM < layout.width - 1 && xMouseInMM > layout.leftMargin + 10)
+                layout.rightMargin = layout.width - xMouseInMM;
+            break;
+        case TOP:
+            if(yMouseInMM > 1 && yMouseInMM < marginInPx(BOTTOM)/mmToPxHeight - 10)
+                layout.topMargin = yMouseInMM;
+            break;
+        case BOTTOM:
+            if(yMouseInMM < layout.height - 1 && yMouseInMM > layout.topMargin + 10)
+                layout.bottomMargin = layout.height - yMouseInMM;
+            break;
+        case HEADER:
+            break;
+        case FOOTER:
+            break;
+    }
+    m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
+    m_document->relayout();
 }
 
 void KWPageTool::insertPageBreak()
@@ -149,6 +182,8 @@ void KWPageTool::insertPageBreak()
         }
     }
 }
+
+
 
 QList<QWidget *> KWPageTool::createOptionWidgets()
 {
