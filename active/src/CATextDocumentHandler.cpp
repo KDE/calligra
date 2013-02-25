@@ -78,8 +78,9 @@ CATextDocumentHandler::~CATextDocumentHandler()
 
 QStringList CATextDocumentHandler::supportedMimetypes()
 {
-    QStringList supportedTypes;
-    supportedTypes << "application/vnd.oasis.opendocument.text" << "application/msword";
+    // keep in sync with textdocument related mimetypes in calligraactive.desktop
+    const QStringList supportedTypes =
+        QString::fromLatin1("application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;").split(';', QString::SkipEmptyParts);
     return supportedTypes;
 }
 

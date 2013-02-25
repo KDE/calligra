@@ -157,8 +157,9 @@ bool CAPresentationHandler::openDocument (const QString& uri)
 
 QStringList CAPresentationHandler::supportedMimetypes()
 {
-    QStringList supportedTypes;
-    supportedTypes << "application/vnd.oasis.opendocument.presentation" << "application/vnd.ms-powerpoint";
+    // keep in sync with presentation related mimetypes in calligraactive.desktop
+    const QStringList supportedTypes =
+        QString::fromLatin1("application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;").split(';', QString::SkipEmptyParts);
     return supportedTypes;
 }
 
