@@ -69,7 +69,7 @@
 #include "KPrPdfPrintJob.h"
 
 KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
-  : KoPAView(part, document, true, parent)
+  : KoPAView(part, document, KoPAView::withModeBox, parent)
   , m_part(part)
   , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
   , m_normalMode( viewMode() )

@@ -70,6 +70,11 @@ public:
         AllActions       = 0xFF
     };
 
+    enum KoPAModeBox
+    {
+        withoutModeBox = false,
+        withModeBox = true
+    };
     /**
      * Constructor
      * @param document the document of this view
