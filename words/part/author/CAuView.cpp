@@ -21,6 +21,7 @@
 #include "CAuView.h"
 #include "CAuFactory.h"
 #include "CoverImage.h"
+#include "CoverPreviewTool.h"
 
 #include "KWDocument.h"
 
@@ -50,8 +51,11 @@ void CAuView::setupActions()
 
 void CAuView::selectCoverImage()
 {
-    CoverImage cover;
-
+    //CoverImage cover;
+    CoverPreviewTool* tool = new CoverPreviewTool(this);
+    tool->setCurrentImage(kwdocument()->coverImage());
+    tool->show();
+/*
     QString path = QFileDialog::getOpenFileName(0, i18n("Open File"),
                                                 QDir::currentPath(),
                                                       i18n("Images (*.png *.xpm *.jpg *.jpeg)"));
@@ -59,4 +63,5 @@ void CAuView::selectCoverImage()
         QPair<QString, QByteArray> coverData = cover.readCoverImage(path);
         kwdocument()->setCoverImage(coverData);
     }
+    */
 }
