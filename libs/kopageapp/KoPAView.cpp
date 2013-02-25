@@ -317,12 +317,13 @@ void KoPAView::initGUI(bool withModeBox)
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
     if (withModeBox) {
-        if (shell()) {
+        KoMainWindow *mainWindow = shell();
+        if (mainWindow) {
             KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
             QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
-            shell()->dockerManager()->removeToolOptionsDocker();
+            mainWindow->dockerManager()->removeToolOptionsDocker();
             dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
-            }
+        }
     } else {
         if (shell()) {
             KoToolBoxFactory toolBoxFactory(d->canvasController);
