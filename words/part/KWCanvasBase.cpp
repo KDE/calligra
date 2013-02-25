@@ -50,7 +50,6 @@
 #include <sys/time.h>
 
 //#define DEBUG_REPAINT
-#define ANNOTATION_WIDTH 200
 
 
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)

@@ -16,7 +16,7 @@
 <note><para>Like the rest of &kde;, &sheets; is highly configurable, which can
 cause problems for readers trying to compare the text in a document such as
 this with what they see on the version of &sheets; running on their desktop.
-To cut down on some of the possibilities for confusion, it it suggested that
+To cut down on some of the possibilities for confusion, it is suggested that
 when you first start to use &sheets; you set the default options in all pages
 of the &sheets; configuration dialog (obtained by selecting
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure

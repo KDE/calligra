@@ -291,7 +291,7 @@ void KWView::setupActions()
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowInlineObjectVisualization, QVariant(false));
     action->setChecked(m_document->config().showInlineObjectVisualization()); // will change resource if true
     action->setToolTip(i18n("Toggle the shaded background of fields"));
-    action->setWhatsThis(i18n("Toggle the visualizaion of fields (variables etc) by drawing their background in a contrasting color."));
+    action->setWhatsThis(i18n("Toggle the visualization of fields (variables etc.) by drawing their background in a contrasting color."));
 
     action = new KAction(i18n("Show Text Shape Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
