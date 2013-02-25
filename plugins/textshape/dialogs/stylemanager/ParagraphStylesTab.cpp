@@ -41,7 +41,9 @@ ParagraphStylesTab::ParagraphStylesTab(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //TODO create/extend delegate for saving individual styles, highlight modified styles,...
 //    ui->paragraphListView->setItemDelegate(m_stylesDelegate);
+
     connect(ui->paragraphListView, SIGNAL(activated(QModelIndex)), this, SLOT(slotStyleSelected(QModelIndex)));
     connect(ui->newStyleButton, SIGNAL(clicked()), this, SLOT(slotCreateNewStyle()));
     connect(ui->saveAllStylesButton, SIGNAL(clicked()), this, SLOT(slotSaveStyle()));
@@ -137,15 +139,22 @@ void ParagraphStylesTab::slotSaveStyle() //TODO reselect the style
 //    }
 }
 
+/*TODOs:
+- the new style section is not empty after save new style
+-- select newly created style after new style
+*/
+
+/// ///////////////////CharacterHighlightingTab slots
+
 void ParagraphStylesTab::slotCapitalizationEnabled(bool enabled)
 {
     KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
     if (style) {
-        if (enabled && !style->hasProperty(QTextFormat::FontCapitalization)) {
-            style->setFontCapitalization(style->fontCapitalization()); //set the capitalisation of the parent/default paragraph style. If none exists, 0 is returned by the function, which correspond to the "normal" mixed case font rendering.
+        if (enabled && !style->KoCharacterStyle::hasProperty(QTextFormat::FontCapitalization)) {
+            style->KoCharacterStyle::setFontCapitalization(style->KoCharacterStyle::fontCapitalization()); //set the capitalisation of the parent/default paragraph style. If none exists, 0 is returned by the function, which correspond to the "normal" mixed case font rendering.
         }
-        else if (!enable && style->hasProperty(QTextFormat::FontCapitalization)) {
-            style->remove(QTextFormat::FontCapitalization);
+        else if (!enabled && style->KoCharacterStyle::hasProperty(QTextFormat::FontCapitalization)) {
+            style->KoCharacterStyle::remove(QTextFormat::FontCapitalization);
         }
         ui->paragraphListView->update(ui->paragraphListView->currentIndex());
         ui->characterHighlighting->setDisplay(style);
@@ -158,6 +167,7 @@ void ParagraphStylesTab::slotCapitalizationChanged(QFont::Capitalization capital
     KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
     if (style) {
         style->KoCharacterStyle::setFontCapitalization(capitalization);
+
         ui->paragraphListView->update(ui->paragraphListView->currentIndex());
         ui->characterHighlighting->setDisplay(style);
         ui->indentSpacing->setDisplay(style);
@@ -166,63 +176,197 @@ void ParagraphStylesTab::slotCapitalizationChanged(QFont::Capitalization capital
 
 void ParagraphStylesTab::slotUnderlineEnabled(bool enabled)
 {
-    kDebug() << "underline enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->KoCharacterStyle::hasProperty(KoCharacterStyle::UnderlineType)) {
+            style->KoCharacterStyle::setUnderlineType(style->underlineType()); //set the uderline of the parent/default paragraph style. If none exists, 0 is returned by the function, which correspond to no underline.
+            style->KoCharacterStyle::setUnderlineStyle(style->underlineStyle());
+            style->KoCharacterStyle::setUnderlineColor(style->underlineColor());
+        }
+        else if (!enabled && style->KoCharacterStyle::hasProperty(KoCharacterStyle::UnderlineType)) {
+            style->KoCharacterStyle::remove(KoCharacterStyle::UnderlineType);
+            style->KoCharacterStyle::remove(KoCharacterStyle::UnderlineStyle);
+            style->KoCharacterStyle::remove(QTextFormat::TextUnderlineColor);
+        }
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotUnderlineChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)
 {
-    kDebug() << "underline changed type: " << lineType << " style: " << lineStyle << " color: " << lineColor;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->KoCharacterStyle::setUnderlineType(lineType); //set the uderline of the parent/default paragraph style. If none exists, 0 is returned by the function, which correspond to no underline.
+        style->KoCharacterStyle::setUnderlineStyle(lineStyle);
+        style->KoCharacterStyle::setUnderlineColor(lineColor);
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotStrikethroughEnabled(bool enabled)
 {
-    kDebug() << "strikethrough enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->KoCharacterStyle::hasProperty(KoCharacterStyle::StrikeOutType)) {
+            style->KoCharacterStyle::setStrikeOutType(style->strikeOutType()); //set the uderline of the parent/default paragraph style. If none exists, 0 is returned by the function, which correspond to no underline.
+            style->KoCharacterStyle::setStrikeOutStyle(style->strikeOutStyle());
+            style->KoCharacterStyle::setStrikeOutColor(style->strikeOutColor());
+        }
+        else if (!enabled && style->KoCharacterStyle::hasProperty(KoCharacterStyle::StrikeOutType)) {
+            style->KoCharacterStyle::remove(KoCharacterStyle::StrikeOutType);
+            style->KoCharacterStyle::remove(KoCharacterStyle::StrikeOutStyle);
+            style->KoCharacterStyle::remove(KoCharacterStyle::StrikeOutColor);
+        }
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotStrikethroughChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)
 {
-        kDebug() << "strikethrough changed type: " << lineType << " style: " << lineStyle << " color: " << lineColor;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->KoCharacterStyle::setStrikeOutType(lineType); //set the strikeout of the parent/default paragraph style. If none exists, 0 is returned by the function, which correspond to no strikeout.
+        style->KoCharacterStyle::setStrikeOutStyle(lineStyle);
+        style->KoCharacterStyle::setStrikeOutColor(lineColor);
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotPositionEnabled(bool enabled)
 {
-    kDebug() << "position enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->KoCharacterStyle::hasProperty(QTextFormat::TextVerticalAlignment)) {
+            style->KoCharacterStyle::setVerticalAlignment(style->KoCharacterStyle::verticalAlignment()); //set the vertical alignment of the parent/default paragraph style. If none exists, 0 is returned by the function, which correspond to the "normal" alignment.
+        }
+        else if (!enabled && style->KoCharacterStyle::hasProperty(QTextFormat::TextVerticalAlignment)) {
+            style->KoCharacterStyle::remove(QTextFormat::TextVerticalAlignment);
+        }
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotPositionChanged(QTextCharFormat::VerticalAlignment alignment)
 {
-    kDebug() << "position changed: " << alignment;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->KoCharacterStyle::setVerticalAlignment(alignment);
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotBackgroundColorEnabled(bool enabled)
 {
-    kDebug() << "backgroundColor enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->KoCharacterStyle::hasProperty(QTextFormat::BackgroundBrush)) {
+            style->KoCharacterStyle::setBackground(style->background()); //set the background of the parent/default paragraph style. If none exists, an invalid brush is returned.
+        }
+        else if (!enabled && style->KoCharacterStyle::hasProperty(QTextFormat::BackgroundBrush)) {
+            style->KoCharacterStyle::remove(QTextFormat::BackgroundBrush);
+        }
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
-void ParagraphStylesTab::slotBackgroundColorChanged(QColor color)
+void ParagraphStylesTab::slotBackgroundColorChanged(const QColor color)
 {
-    kDebug() << "backgroundColor changed: " << color;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->KoCharacterStyle::setBackground(QBrush(color));
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotTextColorEnabled(bool enabled)
 {
-    kDebug() << "textColor enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->KoCharacterStyle::hasProperty(QTextFormat::ForegroundBrush)) {
+            style->KoCharacterStyle::setForeground(style->foreground()); //set the foreground of the parent/default paragraph style. If none exists, an invalid brush is returned.
+        }
+        else if (!enabled && style->KoCharacterStyle::hasProperty(QTextFormat::ForegroundBrush)) {
+            style->KoCharacterStyle::remove(QTextFormat::ForegroundBrush);
+        }
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotTextColorChanged(QColor color)
 {
-    kDebug() << "textColor changed: " << color;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->KoCharacterStyle::setForeground(QBrush(color));
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotFontEnabled(bool enabled)
 {
-    kDebug() << "font enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && (!style->KoCharacterStyle::hasProperty(QTextFormat::FontFamily) || !style->KoCharacterStyle::hasProperty(QTextFormat::FontItalic) || !style->KoCharacterStyle::hasProperty(QTextFormat::FontWeight) || !style->KoCharacterStyle::hasProperty(QTextFormat::FontPointSize))) {
+            style->KoCharacterStyle::setFontFamily(style->fontFamily()); //set the font of the parent/default paragraph style.
+            style->KoCharacterStyle::setFontItalic(style->fontItalic());
+            style->KoCharacterStyle::setFontWeight(style->fontWeight());
+            style->KoCharacterStyle::setFontPointSize(style->fontPointSize());
+        }
+        else if (!enabled && (style->KoCharacterStyle::hasProperty(QTextFormat::FontFamily) || style->KoCharacterStyle::hasProperty(QTextFormat::FontItalic) || style->KoCharacterStyle::hasProperty(QTextFormat::FontWeight) || style->KoCharacterStyle::hasProperty(QTextFormat::FontPointSize))) {
+            style->KoCharacterStyle::remove(QTextFormat::FontFamily);
+            style->KoCharacterStyle::remove(QTextFormat::FontItalic);
+            style->KoCharacterStyle::remove(QTextFormat::FontWeight);
+            style->KoCharacterStyle::remove(QTextFormat::FontPointSize);
+        }
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotFontChanged(const QFont &font)
 {
-    kDebug() << "font changed: " << font;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->KoCharacterStyle::setFontFamily(font.family());
+        style->KoCharacterStyle::setFontItalic(font.italic());
+        style->KoCharacterStyle::setFontWeight(font.weight());
+        style->KoCharacterStyle::setFontPointSize(font.pointSize());
+
+        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
+        ui->characterHighlighting->setDisplay(style);
+        ui->indentSpacing->setDisplay(style);
+    }
 }
+
+/// ///////////////////////////ParagraphIndentSpacingTab slots
 
 //indentation slots
 void ParagraphStylesTab::slotLeftIndentEnabled(bool enabled)

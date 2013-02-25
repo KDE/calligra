@@ -509,7 +509,6 @@ void CharacterHighlightingTab::save(KoCharacterStyle *style)
     if (style == 0)
         return;
 
-    kDebug() << "QFont() weight: " << QFont().weight();
     KFontChooser::FontDiffFlags fontDiff = m_fontChooser->fontDiffFlags();
     if (m_uniqueFormat || (fontDiff & KFontChooser::FontDiffFamily)){
         style->setFontFamily(m_fontChooser->font().family());

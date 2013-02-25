@@ -62,7 +62,7 @@ private slots:
     void slotPositionEnabled(bool enabled);
     void slotPositionChanged(QTextCharFormat::VerticalAlignment alignment);
     void slotBackgroundColorEnabled(bool enabled);
-    void slotBackgroundColorChanged(QColor color);
+    void slotBackgroundColorChanged(const QColor color);
     void slotTextColorEnabled(bool enabled);
     void slotTextColorChanged(QColor color);
     void slotFontEnabled(bool enabled);
