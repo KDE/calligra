@@ -56,7 +56,10 @@ def doNormalize(contents):
             # Parameters to SIGNAL or SLOT
             signalSlotParam = macro[1] #macro[0] = "SIGNAL" or "SLOT"
 
-            params = paramRegex.findall(signalSlotParam)[0]  # There should only be one hit
+            params = paramRegex.findall(signalSlotParam)
+            if not params:
+                continue
+            params = params[0]  # There should only be one hit
             #print "params:", params, len(params)
 
             functionName  = params[1]
@@ -71,13 +74,17 @@ def doNormalize(contents):
             for functionParam in functionParams:
                 s = functionParam.strip()
                 if s[:5] == "const" and s[-1:] == "&":
-                    # remove const-&
+                    # Remove const-&
                     outParamList.append(s[5:-1].replace(" ", ""))
                 elif s[:5] == "const":
-                    # remove const without &
+                    # Remove const without &
                     outParamList.append(s[5:].replace(" ", ""))
                 elif s[-1:] == "&":
-                    # keep & without const but remove spaces
+                    # Keep & without const but remove spaces
+                    outParamList.append(s.replace(" ", ""))
+                else:
+                    # Keep parameter without any const and & but remove spaces
+                    # (This and the last line could be combined.)
                     outParamList.append(s.replace(" ", ""))
             outParams = string.join(outParamList, ",")
             signalSlotParam2 = "(" + functionName + "(" + outParams + "))"
