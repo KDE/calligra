@@ -25,6 +25,7 @@ Name[uk]=Calligra Author
 Name[x-test]=xxCalligra Authorxx
 Exec=calligraauthor %u
 GenericName=Author tool
+GenericName[cs]=Nástroj Author
 GenericName[da]=Forfatterværktøj
 GenericName[de]=Autoren-Anwendung
 GenericName[el]=Εργαλείο Author

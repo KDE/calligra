@@ -28,6 +28,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;
 X-KDE-ServiceTypes=CalligraPart
 GenericName=Author tool
+GenericName[cs]=Nástroj Author
 GenericName[da]=Forfatterværktøj
 GenericName[de]=Autoren-Anwendung
 GenericName[el]=Εργαλείο Author
