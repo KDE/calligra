@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Laptop
 Name[bg]=Лаптоп
+Name[bs]=Laptop
 Name[ca]=Ordinador portàtil
 Name[ca@valencia]=Ordinador portàtil
 Name[cs]=Notebook
+Name[da]=Bærbar
 Name[de]=Laptop
 Name[el]=Φορητός
 Name[es]=Portátil
@@ -12,6 +14,7 @@ Name[fr]=Ordinateur portable
 Name[ga]=Ríomhaire Glúine
 Name[gl]=Portátil
 Name[hu]=Laptop
+Name[ia]=Laptop
 Name[it]=Portatile
 Name[kk]=Ноутбук
 Name[nb]=Bærbar
@@ -22,6 +25,7 @@ Name[pt]=Portátil
 Name[pt_BR]=Laptop
 Name[ru]=Ноутбук
 Name[sk]=Laptop
+Name[sl]=Prenosnik
 Name[sv]=Bärbar dator
 Name[ug]=يان كومپيۇتېر
 Name[uk]=Ноутбук

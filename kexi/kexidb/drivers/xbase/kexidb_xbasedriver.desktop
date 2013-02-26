@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=xBase
 Name[bg]=xBase
+Name[bs]=xBase
 Name[ca]=xBase
 Name[ca@valencia]=xBase
 Name[cs]=xBase
@@ -41,6 +42,7 @@ Name[x-test]=xxxBasexx
 Name[zh_CN]=xBase
 Name[zh_TW]=xBase
 Comment=Kexi database driver for accessing xBase database files
+Comment[bs]=Kexi drajver baze podataka za pristup xBase serverima
 Comment[ca]=Controlador de bases de dades Kexi per a accedir a fitxers de bases de dades xBase
 Comment[ca@valencia]=Controlador de bases de dades Kexi per a accedir a fitxers de bases de dades xBase
 Comment[cs]=Databázový ovladač pro přístup k databázovým souborům xBase

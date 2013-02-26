@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Small hub
 Name[bg]=Малък хъб
+Name[bs]=Malo središte
 Name[ca]=Petit concentrador
 Name[ca@valencia]=Petit concentrador
+Name[da]=Lille hub
 Name[de]=Kleiner Hub
 Name[el]=Μικρός αναμεταδότης
 Name[es]=Concentrador pequeño
@@ -12,6 +14,7 @@ Name[gl]=Hub pequeno
 Name[hu]=Kis méretű hub
 Name[it]=Hub piccolo
 Name[kk]=Кіші хаб
+Name[lt]=Nedidelis šakotuvas
 Name[nb]=Lite nettnav
 Name[nds]=Lütt Nettknütt
 Name[nl]=Kleine hub
@@ -20,6 +23,7 @@ Name[pt]=Concentrador pequeno
 Name[pt_BR]=Concentrador pequeno
 Name[ru]=Маленький повторитель
 Name[sk]=Malý hub
+Name[sl]=Majhno vozlišče
 Name[sv]=Litet nätnav
 Name[uk]=Маленький концентратор
 Name[x-test]=xxSmall hubxx

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Pneumatic
+Name[bs]=Pneumatski
 Name[ca]=Pneumàtic
 Name[ca@valencia]=Pneumàtic
 Name[cs]=Pneumatický
+Name[da]=Pneumatic
 Name[de]=Pneumatik
 Name[el]=Pneumatic
 Name[es]=Neumático
@@ -12,6 +14,7 @@ Name[gl]=Pneumática
 Name[hu]=Pneumatikus
 Name[it]=Pneumatico
 Name[kk]=Пневматика
+Name[lt]=Pneumatinis
 Name[nb]=Trykkluft
 Name[nl]=Pneumatisch
 Name[pl]=Pneumatyka
@@ -19,6 +22,7 @@ Name[pt]=Pneumático
 Name[pt_BR]=Pneumático
 Name[ru]=Пневматический
 Name[sk]=Pneumatické
+Name[sl]=Pnevmatsko
 Name[sv]=Pneumatik
 Name[uk]=Пневматика
 Name[x-test]=xxPneumaticxx

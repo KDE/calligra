@@ -1,16 +1,24 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Presentations
+Name[da]=OpenDocument-præsentationer
+Name[de]=OpenDocument-Präsentationen
 Name[el]=OpenDocument παρουσιάσεις
+Name[es]=Presentaciones OpenDocument
 Name[et]=OpenDocument-esitlused
 Name[fi]=OpenDocument-esitykset
 Name[fr]=Présentations OpenDocument
+Name[gl]=Presentacións OpenDocuments
 Name[hu]=OpenDocument bemutatók
 Name[it]=Presentazioni OpenDocument
+Name[kk]=OpenDocument презентациялары
+Name[nb]=OpenDocument presentasjoner
 Name[nl]=OpenDocument presentaties
+Name[pl]=Prezentacje OpenDocument
 Name[pt]=Apresentações em OpenDocument
 Name[pt_BR]=Apresentações OpenDocument
 Name[sk]=Prezentácie OpenDocument
+Name[sl]=Predstavitve OpenDocument
 Name[sv]=OpenDocument-presentationer
 Name[uk]=Презентації OpenDocument (ODP)
 Name[x-test]=xxOpenDocument Presentationsxx

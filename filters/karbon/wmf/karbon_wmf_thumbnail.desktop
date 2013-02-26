@@ -1,18 +1,28 @@
 [Desktop Entry]
 Type=Service
 Name=WMF Images
+Name[da]=WMF-billeder
+Name[de]=WMF-Bilder
 Name[el]=Εικόνες WMF
+Name[es]=Imágenes WMF
 Name[et]=WMF-pildid
 Name[fr]=Images WMF
+Name[gl]=Imaxes WMF
 Name[hu]=WMF képek
 Name[it]=Immagini WMF
+Name[kk]=WMF кескіндері
+Name[nb]=WMF-bilder
 Name[nl]=WMF-afbeeldingen
+Name[pl]=Obrazy WMF
 Name[pt]=Imagens WMF
 Name[pt_BR]=Imagens WMF
 Name[sk]=WMF obrázky
+Name[sl]=Slike WMF
 Name[sv]=WMF-bilder
+Name[tr]=WMF Görüntüleri
 Name[uk]=Зображення WMF
 Name[x-test]=xxWMF Imagesxx
+Name[zh_CN]=WMF 图像
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/x-wmf;

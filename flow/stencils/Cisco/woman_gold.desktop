@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Woman gold
+Name[bs]=Zlatna žena
 Name[ca]=Dona daurada
 Name[ca@valencia]=Dona daurada
+Name[da]=Kvinde guld
+Name[de]=Frau, gold
 Name[el]=Γυναίκα χρυσή
 Name[es]=Mujer dorada
 Name[et]=Kuldne naine
@@ -11,6 +14,7 @@ Name[gl]=Muller dourada
 Name[hu]=Arany nő
 Name[it]=Donna dorata
 Name[kk]=Алтын әйел
+Name[lt]=Moteris (auksinė)
 Name[nb]=Kvinne gull
 Name[nl]=Vrouw goud
 Name[pl]=Kobieta złota
@@ -18,6 +22,7 @@ Name[pt]=Mulher dourada
 Name[pt_BR]=Mulher dourada
 Name[ru]=Женщина золотистая
 Name[sk]=Žena zlatá
+Name[sl]=Zlata ženska
 Name[sv]=Kvinna gyllene
 Name[uk]=Жінка (золотавим)
 Name[x-test]=xxWoman goldxx

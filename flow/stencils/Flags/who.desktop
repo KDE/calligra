@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=WHO
+Name[bs]=WHO
 Name[ca]=WHO
 Name[ca@valencia]=WHO
 Name[cs]=WHO
@@ -15,6 +16,7 @@ Name[hu]=WHO
 Name[it]=WHO
 Name[ja]=WHO
 Name[kk]=ДДСҰ
+Name[mr]=WHO
 Name[nb]=WHO
 Name[nds]=WHO
 Name[nl]=WHO
@@ -23,7 +25,9 @@ Name[pt]=WHO
 Name[pt_BR]=WHO
 Name[ru]=Всемирная организация здравоохранения
 Name[sk]=WHO
+Name[sl]=WHO
 Name[sv]=WHO
+Name[tr]=WHO
 Name[uk]=ВООЗ
 Name[x-test]=xxWHOxx
 Name[zh_CN]=世界卫生组织

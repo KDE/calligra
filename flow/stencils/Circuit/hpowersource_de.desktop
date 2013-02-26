@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Horizontal Powersource (European)
 Name[bg]=Хоризонтален източник на енергия (европейски)
+Name[bs]=Horizontalni izvor napajanja (europski)
 Name[ca]=Font d'alimentació horitzontal (europea)
-Name[ca@valencia]=Font d'alimentació horitzonal (europea)
+Name[ca@valencia]=Font d'alimentació horitzontal (europea)
+Name[da]=Vandret spændingskilde (europæisk)
 Name[de]=Waagerechte Stromquelle (europäisch)
 Name[el]=Οριζόντια πηγή ισχύος (Ευρώπη)
 Name[es]=Fuente de energía horizontal (europeo)
@@ -21,6 +23,7 @@ Name[pt_BR]=Fonte de alimentação horizontal (Europeia)
 Name[ru]=Горизонтальный источник питания (Европейский)
 Name[sk]=Vodorovný zdroj napäria (európsky)
 Name[sv]=Horisontell kraftkälla (europeisk)
+Name[tr]=Yatay Güç Ünitesi (Avrupa)
 Name[uk]=Джерело струму (горизонтально, Європа)
 Name[x-test]=xxHorizontal Powersource (European)xx
 Name[zh_TW]=水平電源（歐洲）

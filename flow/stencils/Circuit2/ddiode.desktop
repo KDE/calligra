@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Diagonal Diode
+Name[bs]=Dijagonalna dioda
 Name[ca]=Diode diagonal
 Name[ca@valencia]=Diode diagonal
+Name[da]=Diagonal diode
 Name[de]=Diagonale Diode
 Name[el]=Διαγώνια δίοδος
 Name[es]=Diodo diagonal
@@ -20,6 +22,7 @@ Name[pt_BR]=Diodo diagonal
 Name[ru]=Диагональный диод
 Name[sk]=Diagonálna dióda
 Name[sv]=Diagonal diod
+Name[tr]=Diyagonal Diyot
 Name[uk]=Діод (діагонально)
 Name[x-test]=xxDiagonal Diodexx
 Name[zh_TW]=對角二極體

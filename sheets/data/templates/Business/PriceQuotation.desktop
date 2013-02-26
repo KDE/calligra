@@ -3,6 +3,7 @@ Type=Link
 URL=.source/PriceQuotation.kst
 Name=Price Quotation
 Name[bg]=Ценова листа
+Name[bs]=Navođenje Cijene
 Name[ca]=Cita de preus
 Name[ca@valencia]=Cita de preus
 Name[cs]=Cenová nabídka

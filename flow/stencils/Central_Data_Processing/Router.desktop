@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Router
+Name[bs]=Ruter
 Name[ca]=Encaminador
 Name[ca@valencia]=Encaminador
 Name[cs]=Router
+Name[da]=Router
 Name[de]=Router
 Name[el]=Δρομολογητής
 Name[es]=Enrutador
@@ -13,6 +15,7 @@ Name[gl]=Encamiñador
 Name[hu]=Router
 Name[it]=Router
 Name[kk]=Маршруттауыш
+Name[lt]=Maršrutizatorius
 Name[nb]=Ruter
 Name[nds]=Nettweger
 Name[nl]=Router

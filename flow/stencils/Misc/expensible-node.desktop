@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=expansible node
+Name[bs]=rastegljiv čvor
 Name[ca]=node expansible
 Name[ca@valencia]=node expansible
+Name[da]=udfoldbart punkt
+Name[de]=Aufklappbarer Knoten
 Name[el]=επεκτάσιμος κόμβος
 Name[es]=Nodo expansible
 Name[et]=Avatav sõlm
@@ -17,6 +20,7 @@ Name[pt]=nó expansível
 Name[pt_BR]=nó expansível
 Name[ru]=узел большого расширения
 Name[sk]=rozpínavý uzol
+Name[sl]=razširljivo vozlišče
 Name[sv]=expanderbar nod
 Name[uk]=Придатний до розширення вузол
 Name[x-test]=xxexpansible nodexx
