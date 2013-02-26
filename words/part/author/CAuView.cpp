@@ -53,7 +53,7 @@ void CAuView::selectCoverImage()
 {
     //CoverImage cover;
     CoverPreviewTool* tool = new CoverPreviewTool(this);
-    tool->setCurrentImage(kwdocument()->coverImage());
+    tool->setCAuView(this);
     tool->show();
 /*
     QString path = QFileDialog::getOpenFileName(0, i18n("Open File"),
@@ -64,4 +64,15 @@ void CAuView::selectCoverImage()
         kwdocument()->setCoverImage(coverData);
     }
     */
+}
+
+QPair<QString, QByteArray> CAuView::getCurrentCoverImage()
+{
+    return (kwdocument()->coverImage());
+}
+
+void CAuView::setCurrentCoverImage(QPair<QString, QByteArray> img)
+{
+    kwdocument()->setCoverImage(img);
+    qDebug() << "AUTHOR : fichier saved";
 }

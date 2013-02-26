@@ -1,5 +1,6 @@
 
 #include "CoverPreviewTool.h"
+#include "CoverImage.h"
 #include <QFileDialog>
 #include <QDebug>
 #include <kmessagebox.h>
@@ -21,25 +22,45 @@ CoverPreviewTool::CoverPreviewTool(QWidget *parent) :
 
     setWindowTitle(tr("Cover Viewer"));
     resize(500, 400);
+    //refresh();
 }
-void CoverPreviewTool::setCurrentImage(QPair<QString, QByteArray> img) {
-    imageField->setPixmap(QPixmap::fromImage(QImage::fromData(img.second)));
+void CoverPreviewTool::setCAuView(CAuView *au){
+    view = au;
+    refresh();
+}
+
+void CoverPreviewTool::refresh(){
+    qDebug() << "Refreching";
+    img = view->getCurrentCoverImage();
+    if(img.second.isEmpty()) {
+        imageField->setPixmap(QPixmap::fromImage(QImage::fromData(img.second)));
+    }
+    else {
+        qDebug() << "Uninitialized view";
+    }
+
 }
 
 void CoverPreviewTool::open()
 {
+    CoverImage cover;
     QString fileName = QFileDialog::getOpenFileName(0, tr("Open File"),
-                                                    QDir::currentPath(),
+                                                    "~",
                                                     tr("Images (*.png *.xpm *.jpg *.jpeg)"));
     if (!fileName.isEmpty()) {
-        QImage image(fileName);
-        if (image.isNull()) {
+        //QImage image(fileName);
+        //image.
+        if (cover.readCoverImage(fileName).second.isEmpty()) {
             KMessageBox::error(0,
                                tr("Import problem"),
                                tr("Import problem"));
             return;
         }
-        imageField->setPixmap(QPixmap::fromImage(image));
+        img =cover.readCoverImage(fileName);
+        imageField->setPixmap(QPixmap::fromImage(QImage::fromData(img.second)));
+        view->setCurrentCoverImage(img);
+        qDebug() << "AUTHOR : fichier envoyé -> " << fileName;
+        refresh();
     }
 }
 

@@ -1,6 +1,7 @@
 #ifndef COVERPREVIEWTOOL_H
 #define COVERPREVIEWTOOL_H
 
+#include "CAuView.h"
 #include <QMainWindow>
 #include <QAction>
 #include <QMenu>
@@ -12,17 +13,20 @@ class CoverPreviewTool : public QMainWindow
     Q_OBJECT
 public:
     explicit CoverPreviewTool(QWidget *parent = 0);
-    void setCurrentImage(QPair<QString, QByteArray> img);
+    void setCAuView(CAuView* au);
 
 private slots:
     void open();
 
 private:
+    void refresh();
     void createActions();
     void createMenus();
     void updateActions();
 
     QLabel *imageField;
+    CAuView *view;
+    QPair<QString, QByteArray> img;
 
     QAction *openAct;
     QAction *exitAct;
