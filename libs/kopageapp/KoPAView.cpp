@@ -316,8 +316,8 @@ void KoPAView::initGUI(KoPAFlags flags)
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
+    KoMainWindow *mainWindow = shell();
     if (flags & KoPAView::ModeBox) {
-        KoMainWindow *mainWindow = shell();
         if (mainWindow) {
             KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
             QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
@@ -325,11 +325,11 @@ void KoPAView::initGUI(KoPAFlags flags)
             dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
         }
     } else {
-        if (shell()) {
+        if (mainWindow) {
             KoToolBoxFactory toolBoxFactory(d->canvasController);
-            shell()->createDockWidget( &toolBoxFactory );
+            mainWindow->createDockWidget( &toolBoxFactory );
             connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-            shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+            mainWindow->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
         }
     }
 
@@ -342,7 +342,7 @@ void KoPAView::initGUI(KoPAFlags flags)
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
 
-    if (shell()) {
+    if (mainWindow) {
         KoToolManager::instance()->requestToolActivation( d->canvasController );
     }
 }
