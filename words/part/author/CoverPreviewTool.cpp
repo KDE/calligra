@@ -14,14 +14,15 @@ CoverPreviewTool::CoverPreviewTool(QWidget *parent) :
     imageField = new QLabel;
     imageField->setBackgroundRole(QPalette::Base);
     imageField->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    imageField->setScaledContents(true);
+    imageField->setAlignment(Qt::AlignCenter);
+    //imageField->setScaledContents(true);
     setCentralWidget(imageField);
 
     createActions();
     createMenus();
 
     setWindowTitle(tr("Cover Viewer"));
-    resize(500, 400);
+    resize(600, 500);
     //refresh();
 }
 void CoverPreviewTool::setCAuView(CAuView *au){
@@ -32,11 +33,11 @@ void CoverPreviewTool::setCAuView(CAuView *au){
 void CoverPreviewTool::refresh(){
     qDebug() << "Refreching";
     img = view->getCurrentCoverImage();
-    if(img.second.isEmpty()) {
-        imageField->setPixmap(QPixmap::fromImage(QImage::fromData(img.second)));
+    if(!img.second.isNull()) {
+        imageField->setPixmap(QPixmap::fromImage(QImage::fromData(view->getCurrentCoverImage().second)));
     }
     else {
-        qDebug() << "Uninitialized view";
+        qDebug() << "Nothing to display";
     }
 
 }
@@ -56,7 +57,7 @@ void CoverPreviewTool::open()
                                tr("Import problem"));
             return;
         }
-        img =cover.readCoverImage(fileName);
+        img = cover.readCoverImage(fileName);
         imageField->setPixmap(QPixmap::fromImage(QImage::fromData(img.second)));
         view->setCurrentCoverImage(img);
         qDebug() << "AUTHOR : fichier envoyé -> " << fileName;
