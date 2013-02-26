@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=port out
+Name[bs]=port van
 Name[ca]=port out
 Name[ca@valencia]=port out
+Name[da]=port out
 Name[el]=θύρα εξόδου
 Name[es]=puerto de salida
 Name[et]=Port välja
@@ -19,4 +21,5 @@ Name[sk]=port out
 Name[sv]=port ut
 Name[uk]=Вихідний порт
 Name[x-test]=xxport outxx
+Name[zh_CN]=OUT 端口
 Name[zh_TW]=port out

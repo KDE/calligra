@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=settling
+Name[bs]=taloženje
 Name[ca]=assentant
 Name[ca@valencia]=assentant
+Name[da]=settling
+Name[de]=Absetzbecken
 Name[el]=settling
 Name[es]=asentamiento
 Name[et]=Settepaak
@@ -17,6 +20,7 @@ Name[pt_BR]=depósito
 Name[ru]=Осадок
 Name[sk]=settling
 Name[sv]=sedimentation
+Name[tr]=yerleşme
 Name[uk]=Очищувач або відстійник
 Name[x-test]=xxsettlingxx
 Name[zh_TW]=settling

@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Road Rotated Tee
+Name[bs]=Putno rotirana meta
 Name[ca]=Carretera T girada
 Name[ca@valencia]=Carretera T girada
+Name[da]=Drejet vej-t
+Name[de]=Gedrehter Straßenabzweig
 Name[el]=Περιστρεφόμενο υποστήριγμα δρόμου
 Name[es]=Unión en forma de T rotada de carreteras
 Name[et]=Pööratud T-kujuline ristmik
@@ -20,4 +23,5 @@ Name[sk]=Cestný otočený prierez
 Name[sv]=Roterad t-vägkorsning
 Name[uk]=Перехрестя у формі повернутої «Т»
 Name[x-test]=xxRoad Rotated Teexx
+Name[zh_CN]=旋转后的丁字路口
 Name[zh_TW]=旋轉 T 型路口

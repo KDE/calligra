@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Document
 Name[bg]=Документ
+Name[bs]=Dokument
 Name[ca]=Document
 Name[ca@valencia]=Document
 Name[cs]=Dokument
@@ -16,6 +17,8 @@ Name[hu]=Dokumentum
 Name[it]=Documento
 Name[ja]=文書
 Name[kk]=Құжат
+Name[lt]=Dokumentas
+Name[mr]=दस्तऐवज
 Name[nb]=Dokument
 Name[nds]=Dokment
 Name[nl]=Document
@@ -26,6 +29,7 @@ Name[ru]=Документ
 Name[sk]=Dokument
 Name[sl]=Dokument
 Name[sv]=Dokument
+Name[tr]=Belge
 Name[ug]=پۈتۈك
 Name[uk]=Документ
 Name[x-test]=xxDocumentxx

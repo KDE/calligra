@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=column-reflux-red-blue
+Name[bs]=kolona-refluks-crveno-plavo
 Name[ca]=columna reflux vermell-blau
 Name[ca@valencia]=columna reflux roig-blau
+Name[da]=destillationskolonne-rød-blå
 Name[el]=column-reflux-red-blue
 Name[es]=reflujo de columna rojo-azul
 Name[et]=Puna-sinine tagasijooksukolonn
@@ -18,6 +20,7 @@ Name[pt_BR]=refluxo da coluna azul-vermelho
 Name[ru]=Колонка рефлюкса (красно-синяя)
 Name[sk]=column-reflux-red-blue
 Name[sv]=återloppskolonn-rödblå
+Name[tr]=sütun-reflü-kırmızı-mavi
 Name[uk]=Дистиляційна колона з рефлюксом (червоним і синім)
 Name[x-test]=xxcolumn-reflux-red-bluexx
 Name[zh_TW]=column-reflux-red-blue

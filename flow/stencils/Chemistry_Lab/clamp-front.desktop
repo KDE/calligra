@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=clamp-front
+Name[bs]=prednja spona
 Name[ca]=pinça frontal
 Name[ca@valencia]=pinça frontal
+Name[da]=klemhane-forfra
+Name[de]=Klammer-Vorderseite
 Name[el]=clamp-front
 Name[es]=frente de abrazadera
 Name[et]=Näpits eest
@@ -17,6 +20,7 @@ Name[pt_BR]=grampo frontal
 Name[ru]=Зажим (спереди)
 Name[sk]=svorka-predná
 Name[sv]=klämmare-frontal
+Name[tr]=ön-kelepçe
 Name[uk]=Передній затискувач
 Name[x-test]=xxclamp-frontxx
 Name[zh_TW]=前夾

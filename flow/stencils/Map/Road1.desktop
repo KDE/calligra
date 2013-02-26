@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Road1
 Name[bg]=Път1
+Name[bs]=Cesta1
 Name[ca]=Camí1
 Name[ca@valencia]=Camí1
+Name[da]=Vej1
 Name[de]=Straße1
 Name[el]=Road1
 Name[es]=Carretera1
@@ -19,7 +21,9 @@ Name[pt]=Estrada1
 Name[pt_BR]=Estrada1
 Name[ru]=Дорога1
 Name[sk]=Cesta1
+Name[sl]=Cesta1
 Name[sv]=Väg 1
+Name[tr]=Yol1
 Name[uk]=Дорога 1
 Name[x-test]=xxRoad1xx
 Name[zh_TW]=路1

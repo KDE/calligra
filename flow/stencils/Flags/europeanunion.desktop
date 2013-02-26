@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=European Union
 Name[bg]=Европейски съюз
+Name[bs]=Europska Unija
 Name[ca]=Unió Europea
 Name[ca@valencia]=Unió Europea
 Name[cs]=Evropská unie
@@ -15,6 +16,8 @@ Name[gl]=Unión Europea
 Name[hu]=Európai Unió
 Name[it]=Unione Europea
 Name[kk]=Еуропалық Одақ
+Name[lt]=Europos Sąjunga
+Name[mr]=युरोपियन युनियन
 Name[nb]=Den europeiske union
 Name[nds]=Europääsch Unioon
 Name[nl]=Europese Unie
@@ -23,7 +26,9 @@ Name[pt]=União Europeia
 Name[pt_BR]=União Europeia
 Name[ru]=Европейский союз
 Name[sk]=Európska únia
+Name[sl]=Evropska unija
 Name[sv]=Europeiska unionen
+Name[tr]=Avrupa Birliği
 Name[uk]=ЄС
 Name[x-test]=xxEuropean Unionxx
 Name[zh_CN]=欧盟

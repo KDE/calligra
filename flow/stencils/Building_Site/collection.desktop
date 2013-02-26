@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Building Site
 Name[bg]=Строеж
+Name[bs]=gradilište
 Name[ca]=Construint el lloc
 Name[ca@valencia]=Construint el lloc
+Name[da]=Byggeplads
 Name[de]=Baustelle
 Name[el]=Κατασκευή ιστοχώρου
 Name[es]=Sitio en construcción
@@ -19,8 +21,10 @@ Name[pt]=Local de Construção
 Name[pt_BR]=Local de construção
 Name[ru]=Строительство
 Name[sk]=Vytváranie siete
+Name[sl]=Gradbišče
 Name[sv]=Byggplats
 Name[uk]=Планування будівництва
 Name[x-test]=xxBuilding Sitexx
+Name[zh_CN]=建筑场地
 Name[zh_TW]=建立站台
 X-KDE-DirType=odg-collection

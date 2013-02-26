@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Pentagon
 Name[bg]=Петоъгълник
+Name[bs]=Petougao
 Name[ca]=Pentàgon
 Name[ca@valencia]=Pentàgon
 Name[cs]=Pětiúhelník
@@ -15,6 +16,8 @@ Name[gl]=Pentágono
 Name[hu]=Ötszög
 Name[it]=Pentagono
 Name[kk]=Бесбұрыш
+Name[lt]=Penkiakampis
+Name[mr]=पंचकोन
 Name[nb]=Femkant
 Name[nds]=Fiefeck
 Name[nl]=Vijfhoek
@@ -25,6 +28,7 @@ Name[ru]=Пятиугольник
 Name[sk]=Päťuholník
 Name[sl]=Peterokotnik
 Name[sv]=Femhörning
+Name[tr]=Beşgen
 Name[ug]=بەش تەرەپلىك
 Name[uk]=П’ятикутник
 Name[x-test]=xxPentagonxx

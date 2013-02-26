@@ -1,18 +1,28 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Excel 2007 Spreadsheets
+Name[da]=Microsoft Excel 2007-regneark
+Name[de]=Microsoft Excel 2007 Tabellenkalkulation
 Name[el]=Φύλλα εργασίας Microsoft Excel 2007
+Name[es]=Hojas de cálculo Microsoft Excel 2007
 Name[et]=Microsoft Excel 2007 arvutustabelid
 Name[fr]=Tableurs Microsoft Excel 2007
+Name[gl]=Follas de cálculo Microsoft Excel 2007
 Name[hu]=Microsoft Excel 2007 táblázatok
 Name[it]=Fogli di calcolo Microsoft Excel 2007
+Name[kk]=Microsoft Excel 2007 эл.кестелері
+Name[nb]=Microsoft Excel 2007 regneark
 Name[nl]=Microsoft Excel 2007-spreadsheets
+Name[pl]=Arkusze kalkulacyjne Microsoft Excel 2007
 Name[pt]=Folhas de Cálculo do Microsoft Excel 2007
 Name[pt_BR]=Planilhas do Microsoft Excel 2007
 Name[sk]=Zošity Microsoft Excel 2007
+Name[sl]=Preglednice Microsoft Excel 2007
 Name[sv]=Microsoft Excel 2007-kalkylark
+Name[tr]=Microsoft Excel 2007 Tabloları
 Name[uk]=Електронні таблиці Microsoft Excel 2007
 Name[x-test]=xxMicrosoft Excel 2007 Spreadsheetsxx
+Name[zh_CN]=Microsoft Excel 2007 电子表格
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;

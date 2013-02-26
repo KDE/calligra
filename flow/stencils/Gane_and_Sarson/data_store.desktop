@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Data Store
 Name[bg]=Хранилище на данни
+Name[bs]=Skladište podataka
 Name[ca]=Magatzem de dades
 Name[ca@valencia]=Magatzem de dades
 Name[cs]=Datové úložiště
+Name[da]=Data Store
 Name[de]=Datenspeicher
 Name[el]=Data Store
 Name[es]=Almacén de datos
@@ -13,6 +15,7 @@ Name[gl]=Almacén de datos
 Name[hu]=Adattároló
 Name[it]=Data Store
 Name[kk]=Дерек қоймасы
+Name[lt]=Duomenų saugykla
 Name[nb]=Datalager
 Name[nds]=Datenspieker
 Name[nl]=Gegevensopslag
@@ -21,6 +24,7 @@ Name[pt]=Armazém de Dados
 Name[pt_BR]=Armazenamento de dados
 Name[ru]=Хранилище данных
 Name[sk]=Úložisko dát
+Name[sl]=Shramba podatkov
 Name[sv]=Datalagring
 Name[uk]=Сховище даних
 Name[x-test]=xxData Storexx

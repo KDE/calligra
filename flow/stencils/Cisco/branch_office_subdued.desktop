@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Branch office subdued
-Name[ca]=Branca d'oficina sotmesa
-Name[ca@valencia]=Branca d'oficina sotmesa
+Name[bs]=podčinjena produžnica
+Name[ca]=Sucursal de delegació
+Name[ca@valencia]=Sucursal de delegació
+Name[da]=Filial nedtonet
+Name[de]=Zweigbüro (inaktiv)
 Name[el]=Branch office subdued
 Name[es]=Sucursal poco activa
 Name[et]=Toonita harukontor
@@ -10,6 +13,7 @@ Name[fr]=Bureau de direction
 Name[gl]=Sucursal baixo control
 Name[it]=Succursale attenuata
 Name[kk]=Басыңқы филиал кеңсесі
+Name[lt]=Filialas (blankus)
 Name[nb]=Filialkontor blå dempet
 Name[nl]=Ondergeschikt bijkantoor
 Name[pl]=Biuro oddziału podległe

@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=gasholder
+Name[bs]=spremnik gasa
 Name[ca]=sortidor
 Name[ca@valencia]=eixidor
+Name[da]=gasholder
+Name[de]=Gasometer
 Name[el]=gasholder
 Name[es]=mantenedor de gas
 Name[et]=Gasomeeter
@@ -17,7 +20,9 @@ Name[pt]=cisterna
 Name[pt_BR]=cisterna
 Name[ru]=Ёмкость для газа
 Name[sk]=gasholder
+Name[sl]=plinski rezervoar
 Name[sv]=gasbehållare
+Name[tr]=GazTutucu
 Name[uk]=Газосховище
 Name[x-test]=xxgasholderxx
 Name[zh_TW]=gasholder

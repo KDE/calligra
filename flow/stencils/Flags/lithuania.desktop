@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Lithuania
 Name[bg]=Литва
+Name[bs]=Litvanija
 Name[ca]=Lituània
 Name[ca@valencia]=Lituània
 Name[cs]=Litva
@@ -14,8 +15,11 @@ Name[fr]=Lithuanie
 Name[ga]=An Liotuáin
 Name[gl]=Lituania
 Name[hu]=Litvánia
+Name[ia]=Lituania
 Name[it]=Lituania
 Name[kk]=Литва
+Name[lt]=Lietuva
+Name[mr]=लिथुआनिया
 Name[nb]=Litauen
 Name[nds]=Litauen
 Name[nl]=Litouwen
@@ -27,6 +31,7 @@ Name[se]=Lietuva
 Name[sk]=Litva
 Name[sl]=Litva
 Name[sv]=Litauen
+Name[tr]=Litvanya
 Name[ug]=لىتۋانىيە
 Name[uk]=Литва
 Name[x-test]=xxLithuaniaxx

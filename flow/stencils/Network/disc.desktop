@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Storage
 Name[bg]=Хранилище
+Name[bs]=Skladište
 Name[ca]=Emmagatzematge
-Name[ca@valencia]=Emmagatzement
+Name[ca@valencia]=Emmagatzematge
 Name[cs]=Úložiště
+Name[da]=Lager
 Name[de]=Speicher
 Name[el]=Αποθήκη
 Name[es]=Almacenamiento
@@ -11,8 +13,10 @@ Name[et]=Salvesti
 Name[fr]=Stockage
 Name[gl]=Almacenamento
 Name[hu]=Tároló
+Name[ia]=Immagazinage
 Name[it]=Storage
 Name[kk]=Жинатауыш
+Name[mr]=स्टोरेज
 Name[nb]=Lagring
 Name[nl]=Opslag
 Name[pl]=Magazyn

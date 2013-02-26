@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=SSL Terminator
+Name[bs]=SSL terminator
 Name[ca]=SSL Terminator
 Name[ca@valencia]=SSL Terminator
+Name[da]=SSL-terminator
 Name[de]=SSL-Terminator
 Name[el]=SSL Terminator
 Name[es]=Terminador SSL
@@ -10,6 +12,7 @@ Name[fr]=SSL Terminator
 Name[gl]=Delimitador SSL
 Name[it]=Terminatore SSL
 Name[kk]=SSL аятауыш
+Name[lt]=SSL terminatorius
 Name[nb]=SSL-terminator
 Name[nds]=SSL-Terminator
 Name[nl]=SSL Terminator

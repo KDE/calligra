@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=ATM Router
 Name[bg]=Маршрутизатор ATM
+Name[bs]=ATM ruter
 Name[ca]=Encaminador ATM
 Name[ca@valencia]=Encaminador ATM
+Name[da]=ATM Router
 Name[de]=ATM-Router
 Name[el]=Δρομολογητής ATM
 Name[es]=Enrutador ATM
@@ -21,6 +23,7 @@ Name[pt]=Encaminhador ATM
 Name[pt_BR]=Roteador ATM
 Name[ru]=Маршрутизатор ATM
 Name[sk]=ATM Router
+Name[sl]=Usmerjevalnik ATM
 Name[sv]=ATM-router
 Name[uk]=Маршрутизатор ATM
 Name[x-test]=xxATM Routerxx
