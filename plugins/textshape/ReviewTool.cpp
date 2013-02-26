@@ -20,33 +20,11 @@
 
 #include "ReviewTool.h"
 #include <KoToolBase.h>
-
 #include <KoCanvasBase.h>
-#include <KoTextLayoutRootArea.h>
-#include <KoChangeTracker.h>
 #include <KoPointerEvent.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoTextDocument.h>
-#include <KoTextDocumentLayout.h>
-#include <KoTextEditor.h>
-#include <KoTextShapeData.h>
-#include <KoViewConverter.h>
-#include <KoGlobal.h>
 
-#include "TextShape.h"
+//#include "TextShape.h"
 
-#include "commands/AcceptChangeCommand.h"
-#include "commands/RejectChangeCommand.h"
-#include "commands/ShowChangesCommand.h"
-#include "dialogs/TrackedChangeModel.h"
-#include "dialogs/TrackedChangeManager.h"
-#include "dialogs/AcceptRejectChangeDialog.h"
-#include "dialogs/ChangeConfigureDialog.h"
-
-#include <KLocale>
-#include <KAction>
-#include <KUser>
 
 ReviewTool::ReviewTool(KoCanvasBase* canvas): TextTool(canvas),
     m_textEditor(0),
