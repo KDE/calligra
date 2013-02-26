@@ -28,18 +28,7 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "12")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
-macro(macro_init_should_build)
-  foreach(product ${ARGV})
-    set(SHOULD_BUILD_${product} FALSE)
-  endforeach(product)
-endmacro(macro_init_should_build)
-
-macro(macro_set_to_should_build)
-  foreach(product ${ARGV})
-    # TODO: check if product was initialized before
-    set(SHOULD_BUILD_${product} TRUE)
-  endforeach(product)
-endmacro(macro_set_to_should_build)
+include(CalligraProductSetMacros)
 
 #
 # WARNING: don't change the SHOULD_BUILD_app if an application
@@ -70,7 +59,9 @@ if(NOT PRODUCTSET)
     set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Product set to build, currently supported: ACTIVE, CREATIVE, DESKTOP, ALL (default)" FORCE)
 endif(NOT PRODUCTSET)
 
-macro_init_should_build(
+# TODO: also add headers/sdk for all the libs ("_DEVEL"?)
+# TODO: filters
+set(AVAILABLE_PRODUCTS
     WORDS
     WORDS_APP
     STAGE
@@ -117,140 +108,9 @@ macro_init_should_build(
     PLUGIN_VECTORSHAPE
     PLUGIN_REPORTING
 )
+calligra_init_should_build(${AVAILABLE_PRODUCTS})
 
-IF (PRODUCTSET STREQUAL "ACTIVE")
-    macro_set_to_should_build(
-        WORDS
-        STAGE
-        SHEETS
-        KOABSTRACTION
-        ACTIVE
-        EXTRA_PROPERTIES
-        EXTRA_THUMBNAIL
-        EXTRA_QUICKPRINT
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
-        PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
-        PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
-        PLUGIN_REPORTING
-    )
-ELSEIF (PRODUCTSET STREQUAL "CREATIVE")
-    macro_set_to_should_build(
-        KARBON
-        KRITA
-        CONVERTER
-        EXTRA_PROPERTIES
-        EXTRA_THUMBNAIL
-        EXTRA_QUICKPRINT
-        PLUGIN_COLORENGINES
-        PLUGIN_SPACENAVIGATOR
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_TEXTEDITING
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_PATHSHAPES
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-    )
-ELSEIF (PRODUCTSET STREQUAL "DESKTOP")
-    macro_set_to_should_build(
-        WORDS
-        WORDS_APP
-        STAGE
-        STAGE_APP
-        SHEETS
-        SHEETS_APP
-        AUTHOR
-        KARBON
-        KRITA
-        KEXI
-        FLOW
-        PLAN
-        KDGANTT
-        KDCHART
-        SCRIPTING
-        KOREPORT
-        BRAINDUMP
-        CALLIGRA
-        CSTESTER
-        KOABSTRACTION
-        CONVERTER
-        EXTRA_PROPERTIES
-        EXTRA_THUMBNAIL
-        EXTRA_QUICKPRINT
-        OKULARODPGENERATOR
-        PLUGIN_COLORENGINES
-        PLUGIN_MUSICSHAPE
-        PLUGIN_SPACENAVIGATOR
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_TEXTEDITING
-        PLUGIN_STAGING
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
-        PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
-        PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
-        PLUGIN_REPORTING
-    )
-ELSE() # default: all
-    macro_set_to_should_build(
-        WORDS
-        WORDS_APP
-        STAGE
-        STAGE_APP
-        SHEETS
-        SHEETS_APP
-        AUTHOR
-        KARBON
-        KRITA
-        KEXI
-        FLOW
-        PLAN
-        KDGANTT
-        KDCHART
-        SCRIPTING
-        KOREPORT
-        BRAINDUMP
-        CALLIGRA
-        CSTESTER
-        KOABSTRACTION
-        ACTIVE
-        CONVERTER
-        EXTRA_PROPERTIES
-        EXTRA_THUMBNAIL
-        EXTRA_QUICKPRINT
-        DEVTOOLS
-        OKULARODPGENERATOR
-        PLUGIN_COLORENGINES
-        PLUGIN_MUSICSHAPE
-        PLUGIN_SPACENAVIGATOR
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_DOCKERS
-        PLUGIN_TEXTEDITING
-        PLUGIN_STAGING
-        PLUGIN_KEXI
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_PATHSHAPES
-        PLUGIN_VARIABLES
-        PLUGIN_CHARTSHAPE
-        PLUGIN_PICTURESHAPE
-        PLUGIN_TEXTSHAPE
-        PLUGIN_PLUGINSHAPE
-        PLUGIN_FORMULASHAPE
-        PLUGIN_VECTORSHAPE
-        PLUGIN_REPORTING
-    )
-ENDIF()
+calligra_set_productset(${PRODUCTSET})
 
  ########################
 #########################
@@ -884,30 +744,7 @@ add_subdirectory(data)
 
 macro_display_feature_log()
 
-macro(macro_display_application_enabled _appName _shouldBuild)
-if( BUILD_${_appName} AND ${_shouldBuild} MATCHES "[Tt][Rr][Uu][Ee]" )
-  message(STATUS ${_appName} )
-endif( BUILD_${_appName} AND ${_shouldBuild} MATCHES "[Tt][Rr][Uu][Ee]" )
-endmacro(macro_display_application_enabled)
-
-message(STATUS "---------------- The following applications will be built ----------------" )
-
-macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
-macro_display_application_enabled(sheets ${SHOULD_BUILD_SHEETS})
-macro_display_application_enabled(stage ${SHOULD_BUILD_STAGE})
-macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
-macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
-macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})
-macro_display_application_enabled(author ${SHOULD_BUILD_AUTHOR})
-macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
-macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
-macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
-macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
-macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
-macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})
-macro_display_application_enabled(converter ${SHOULD_BUILD_CONVERTER})
-
-message(STATUS "--------------------------------------------------------------------------" )
+calligra_log_should_build(${AVAILABLE_PRODUCTS})
 
 add_custom_target(apidox doc/api/gendocs.pl WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
