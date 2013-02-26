@@ -161,7 +161,7 @@ public:
 
 
 
-KoPAView::KoPAView(KoPart *part, KoPADocument *document, bool withModeBox, QWidget *parent)
+KoPAView::KoPAView(KoPart *part, KoPADocument *document, KoPAFlags withModeBox, QWidget *parent)
 : KoView(part, document, parent)
 , d( new Private(document))
 {
@@ -229,7 +229,7 @@ void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 }
 
 
-void KoPAView::initGUI(bool withModeBox)
+void KoPAView::initGUI(KoPAFlags flags)
 {
     d->tabBarLayout = new QGridLayout(this);
     d->tabBarLayout->setMargin(0);
@@ -316,7 +316,7 @@ void KoPAView::initGUI(bool withModeBox)
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
-    if (withModeBox == KoPAView::withModeBox) {
+    if (flags & KoPAView::ModeBox) {
         KoMainWindow *mainWindow = shell();
         if (mainWindow) {
             KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
@@ -324,7 +324,7 @@ void KoPAView::initGUI(bool withModeBox)
             mainWindow->dockerManager()->removeToolOptionsDocker();
             dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
         }
-    } else if (withModeBox == KoPAView::withoutModeBox) {
+    } else {
         if (shell()) {
             KoToolBoxFactory toolBoxFactory(d->canvasController);
             shell()->createDockWidget( &toolBoxFactory );
