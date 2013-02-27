@@ -18,14 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QCache>
-#include <QRectF>
-#include <QImage>
-#include <QQueue>
-#include <QSize>
-#include <QObject>
-
 #include "KWPageCacheManager.h"
+
+#include <QImage>
 
 static const int MAX_TILE_SIZE = 1024;
 

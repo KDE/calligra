@@ -21,14 +21,11 @@
 #define KWPAGECACHEMANAGER_H
 
 #include "KWPage.h"
-
+// Qt
 #include <QCache>
-#include <QRectF>
 #include <QImage>
-#include <QQueue>
-#include <QSize>
-#include <QObject>
 
+class QSize;
 
 class KWPageCacheManager;
 
