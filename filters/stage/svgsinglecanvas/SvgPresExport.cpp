@@ -1,12 +1,13 @@
 #include "SvgPresExport.h"
-#include <KoStore.h>
 #include <QDebug>
 #include <SvgWriter.h>
 #include <SvgCustomSavingContext.h>
 
-#include <KoDocument.h>
 #include <KoFilterChain.h>
+#include <KPrPage.h>
+#include <KPrDocument.h>
 #include <KPluginFactory>
+#include <KoShape.h>
 
 #include <QString>
 
@@ -20,31 +21,28 @@ SvgPresExport::SvgPresExport(QObject*parent, const QVariantList&)
 
 KoFilter::ConversionStatus SvgPresExport::convert(const QByteArray& from, const QByteArray& to)
 {
- // qDebug() << "svg filter";
+  qDebug() << "in svg filter";
   if (to != "image/svg+xml" || from != "application/vnd.oasis.opendocument.presentation")
         return KoFilter::NotImplemented;
   
     
-/*    KoDocument * document = m_chain->inputDocument();
+    KPrDocument * document = dynamic_cast<KPrDocument*>(m_chain->inputDocument());
     if (!document)
         return KoFilter::ParsingError;
 
-   KarbonKoDocument * karbonPart = dynamic_cast<KarbonKoDocument*>(document);
-    if (!karbonPart)
-        return KoFilter::WrongFormat;
+    QList<KoPAPageBase*> slideShow = document->slideShow();
+    //assume this slideshow has only one slide
+    KPrPage * slide = dynamic_cast<KPrPage*>(slideShow.front());
+    QList<KoShape*> shapes = slide->shapes();
 
-    const KarbonDocument &data = karbonPart->document();
-
-
-  SvgWriter writer(data.layers(), data.pageSize());
+    SvgWriter writer(shapes, slide->size());
     
-    //For stage, will be removed from here
     {
     qreal width;
     qreal height;
     
-    width = data.pageSize().width();
-    height = data.pageSize().height();
+    width = slide->size().width();
+    height = slide->size().height();
         
     QString header("<?xml version=\"1.0\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n<!-- Created using Stage, part of Calligra: http://www.calligra-suite.org/karbon -->\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sozi=\"http://sozi.baierouge.fr\" ");
     header.append(QString("width=\"%1pt\" height=\"%2pt\">").arg(width, 0, 'g', 3).arg(height, 0, 'g', 3));
@@ -57,7 +55,7 @@ KoFilter::ConversionStatus SvgPresExport::convert(const QByteArray& from, const 
     
     if (!writer.save(m_chain->outputFile(), true))
         return KoFilter::CreationError;
-*/        
+        
     return KoFilter::OK;
 }
 
