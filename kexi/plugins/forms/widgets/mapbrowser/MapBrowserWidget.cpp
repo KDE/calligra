@@ -34,7 +34,7 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
 #endif
   //Marble::GeoSceneDocument::head()->mapThemeId()
   setMapThemeId("earth/srtm/srtm.dgml");
-  connect( this, SIGNAL(visibleLatLonAltBoxChanged(const GeoDataLatLonAltBox &)), this , SLOT(slotMapChanged()));
+  connect( this, SIGNAL(visibleLatLonAltBoxChanged(GeoDataLatLonAltBox)), this , SLOT(slotMapChanged()));
 }
 
 MapBrowserWidget::~MapBrowserWidget()

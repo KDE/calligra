@@ -113,8 +113,8 @@ void KexiStatusBar::activePartChanged(KParts::Part *part)
 // @todo
     if (part && part->widget()) {
         if ((m_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget()))) {
-            connect(part->widget(), SIGNAL(viewStatusMsg(const QString &)),
-                    this, SLOT(setStatus(const QString &)));
+            connect(part->widget(), SIGNAL(viewStatusMsg(QString)),
+                    this, SLOT(setStatus(QString)));
         } else if ((m_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()))) {
             connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
             cursorPositionChanged();

@@ -652,7 +652,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = tab;
 #if defined(USE_KTabWidget)
         tab->setTabReorderingEnabled(true);
-        connect(tab, SIGNAL(movedTab(int, int)), this, SLOT(reorderTabs(int, int)));
+        connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
 #endif
         kDebug() << "Creating ObjectTreeItem:";
         container->form()->objectTree()->addItem(container->objectTree(),

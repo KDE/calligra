@@ -108,8 +108,8 @@ KexiFileWidget::KexiFileWidget(
     setFocusProxy(locationEdit());
 //#endif
 
-    connect(this, SIGNAL(fileHighlighted(const QString&)),
-            this, SLOT(slotExistingFileHighlighted(const QString&)));
+    connect(this, SIGNAL(fileHighlighted(QString)),
+            this, SLOT(slotExistingFileHighlighted(QString)));
 }
 
 KexiFileWidget::~KexiFileWidget()

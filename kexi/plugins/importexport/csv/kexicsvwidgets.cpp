@@ -99,8 +99,8 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
             this, SLOT(slotDelimiterChanged(int)));
     connect(d->delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(slotDelimiterLineEditReturnPressed()));
-    connect(d->delimiterEdit, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotDelimiterLineEditTextChanged(const QString &)));
+    connect(d->delimiterEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotDelimiterLineEditTextChanged(QString)));
 }
 
 KexiCSVDelimiterWidget::~KexiCSVDelimiterWidget()
