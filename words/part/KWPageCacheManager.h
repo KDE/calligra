@@ -61,11 +61,11 @@ public:
 
     ~KWPageCacheManager();
 
-    KWPageCache *take(const KWPage page);
+    KWPageCache *take(const KWPage &page);
 
-    void insert(const KWPage page, KWPageCache *cache);
+    void insert(const KWPage &page, KWPageCache *cache);
 
-    KWPageCache *cache(QSize size);
+    KWPageCache *cache(const QSize &size);
 
     void clear();
 

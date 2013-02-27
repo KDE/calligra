@@ -67,7 +67,7 @@ KWPageCacheManager::~KWPageCacheManager()
     clear();
 }
 
-KWPageCache *KWPageCacheManager::take(const KWPage page)
+KWPageCache *KWPageCacheManager::take(const KWPage &page)
 {
     KWPageCache *cache = 0;
     if (m_cache.contains(page)) {
@@ -76,14 +76,14 @@ KWPageCache *KWPageCacheManager::take(const KWPage page)
     return cache;
 }
 
-void KWPageCacheManager::insert(KWPage page, KWPageCache *cache)
+void KWPageCacheManager::insert(const KWPage &page, KWPageCache *cache)
 {
     QSize size = cache->m_size;
     // make sure always at least two pages can be cached
     m_cache.insert(page, cache, qMin(m_cache.maxCost() / 2, size.width() * size.height()));
 }
 
-KWPageCache *KWPageCacheManager::cache(QSize size)
+KWPageCache *KWPageCacheManager::cache(const QSize &size)
 {
     KWPageCache *cache = 0;
     if (!cache){
