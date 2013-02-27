@@ -59,6 +59,7 @@ Name[x-test]=xxEmpty Documentxx
 Name[zh_CN]=空文档
 Name[zh_TW]=空白文件
 Comment=Creates a document with no stencils loaded.
+Comment[bs]=Kreira dokument bez učitanih šablona.
 Comment[ca@valencia]=Crea un document sense carregar cap plantilla.
 Comment[cs]=Vytvoří prázdný dokument bez šablon
 Comment[es]=Crea un documento sin ningún patrón cargado.

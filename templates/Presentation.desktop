@@ -55,6 +55,7 @@ Name[x-test]=xxPresentation Document...xx
 Name[zh_CN]=演示文稿...
 Name[zh_TW]=簡報文件...
 Comment=New KPresenter presentation document:
+Comment[bs]=Novi KPresenter prezentacijski dokument:
 Comment[ca@valencia]=Nou document de presentació KPresenter:
 Comment[cs]=Nový dokument aplikace KPresenter:
 Comment[es]=Nuevo documento de presentación de KPresenter:
