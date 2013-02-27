@@ -48,6 +48,7 @@ ParagraphStylesTab::ParagraphStylesTab(QWidget *parent) :
     connect(ui->newStyleButton, SIGNAL(clicked()), this, SLOT(slotCreateNewStyle()));
     connect(ui->saveAllStylesButton, SIGNAL(clicked()), this, SLOT(slotSaveStyle()));
 
+    //Character highlighting
     connect(ui->characterHighlighting, SIGNAL(capitalizationEnabled(bool)), this, SLOT(slotCapitalizationEnabled(bool)));
     connect(ui->characterHighlighting, SIGNAL(capitalizationChanged(QFont::Capitalization)), this, SLOT(slotCapitalizationChanged(QFont::Capitalization)));
     connect(ui->characterHighlighting, SIGNAL(underlineEnabled(bool)), this, SLOT(slotUnderlineEnabled(bool)));
@@ -63,6 +64,7 @@ ParagraphStylesTab::ParagraphStylesTab(QWidget *parent) :
     connect(ui->characterHighlighting, SIGNAL(fontEnabled(bool)), this, SLOT(slotFontEnabled(bool)));
     connect(ui->characterHighlighting, SIGNAL(fontChanged(QFont)), this, SLOT(slotFontChanged(QFont)));
 
+    //Paragraph indent and spacing
     connect(ui->indentSpacing, SIGNAL(leftIndentEnabled(bool)), this, SLOT(slotLeftIndentEnabled(bool)));
     connect(ui->indentSpacing, SIGNAL(leftIndentChanged(qreal)), this, SLOT(slotLeftIndentChanged(qreal)));
     connect(ui->indentSpacing, SIGNAL(rightIndentEnabled(bool)), this, SLOT(slotRightIndentEnabled(bool)));
@@ -124,13 +126,14 @@ void ParagraphStylesTab::slotCreateNewStyle()
 {
     KoParagraphStyle *newStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->slotCreateNewStyle(ui->paragraphListView->currentIndex()));
     if (newStyle) {
+        ui->paragraphListView->setCurrentIndex(m_paragraphStylesModel->indexForCharacterStyle(*newStyle));
         ui->characterHighlighting->setDisplay(newStyle);
         ui->indentSpacing->setDisplay(newStyle);
     }
 
 }
 
-void ParagraphStylesTab::slotSaveStyle() //TODO reselect the style
+void ParagraphStylesTab::slotSaveStyle() //TODO reselect the style, create a save all style in lieu of this one and connect appropriatly
 {
 //    KoParagraphStyle *style = static_cast<KoParagraphStyle*>(ui->paragraphListView->currentIndex().data(AbstractStylesModel::ParagraphStylePointer).value<void*>());
 //    if (style) {
@@ -140,8 +143,6 @@ void ParagraphStylesTab::slotSaveStyle() //TODO reselect the style
 }
 
 /*TODOs:
-- the new style section is not empty after save new style
--- select newly created style after new style
 */
 
 /// ///////////////////CharacterHighlightingTab slots

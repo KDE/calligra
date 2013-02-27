@@ -78,7 +78,7 @@ private:
     KoStyleManager *m_styleManager;
 //    KoParagraphStyle *m_currentParagraphStyle;
 //    KoCharacterStyle *m_defaultCharacterStyle;
-    QVector<int> m_newStylesId;
+    QList<int> m_newStylesId;
     QMap<int, KoCharacterStyle*> m_stylesMap;
     int m_styleIdCounter;
 //    QVector<int> m_usedStyles;

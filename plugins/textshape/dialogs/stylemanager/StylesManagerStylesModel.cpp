@@ -329,12 +329,14 @@ void StylesManagerStylesModel::saveStyle(const QModelIndex &index)
         if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
             KoCharacterStyle *style = m_stylesMap.value(m_proxyToSource.at(index.row()));
             m_stylesMap.remove(m_proxyToSource.at(index.row()));
+            m_newStylesId.removeAll(m_proxyToSource.at(index.row()));
             m_styleManager->add(style);
         }
         else if (m_sourceModel->stylesType() == AbstractStylesModel::ParagraphStyle) {
             KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_stylesMap.value(m_proxyToSource.at(index.row())));
             if (style) {
                 m_stylesMap.remove(m_proxyToSource.at(index.row()));
+                m_newStylesId.removeAll(m_proxyToSource.at(index.row()));
                 m_styleManager->add(style);
             }
         }
@@ -375,7 +377,7 @@ void StylesManagerStylesModel::createMapping()
     m_sourceToProxy.clear();
 
     if (!m_newStylesId.isEmpty()) {
-        m_proxyToSource << NewStyleId << m_newStylesId;
+        m_proxyToSource << NewStyleId << m_newStylesId.toVector();
     }
 
     if (m_sourceModel->rowCount()) {
