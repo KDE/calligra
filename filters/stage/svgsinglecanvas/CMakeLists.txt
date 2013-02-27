@@ -1,6 +1,5 @@
-
 include_directories( ${CMAKE_SOURCE_DIR}/stage
-                     ${CMAKE_SOURCE_DIR}/stage/core
+                     ${CMAKE_SOURCE_DIR}/stage/part
                      ${KDE4_INCLUDES})
 
 ########### next target ###############
@@ -10,8 +9,8 @@ set(svgsinglecanvasexport_PART_SRCS
 )
 
 kde4_add_plugin(svgsinglecanvasexport ${svgsinglecanvasexport_PART_SRCS})
-
-target_link_libraries(svgsinglecanvasexport komain)
+# TODO Allthese libs needed?
+target_link_libraries(svgsinglecanvasexport komain kopageapp calligrastageprivate)
 
 install(TARGETS svgsinglecanvasexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
