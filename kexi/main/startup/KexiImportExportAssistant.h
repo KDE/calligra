@@ -52,7 +52,6 @@ public:
     const KAction *action_import_project;
 
 public slots:
-    virtual void previousPageRequested(KexiAssistantPage* page);
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
 
