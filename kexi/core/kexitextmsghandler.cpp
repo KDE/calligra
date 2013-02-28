@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,9 +56,14 @@ KexiTextMessageHandler::~KexiTextMessageHandler()
     delete d;
 }
 
-void KexiTextMessageHandler::showMessage(MessageType type,
-                                         const QString &title, const QString &details,
-                                         const QString& dontShowAgainName)
+void KexiTextMessageHandler::showErrorMessageInternal(const QString &title, const QString &details)
+{
+    showMessageInternal(KexiDB::MessageHandler::Error, title, details);
+}
+
+void KexiTextMessageHandler::showMessageInternal(MessageType type,
+                                                 const QString &title, const QString &details,
+                                                 const QString& dontShowAgainName)
 {
     Q_UNUSED(type);
     Q_UNUSED(dontShowAgainName);

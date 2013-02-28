@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,40 +17,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIASSISTANTWIDGET_H
-#define KEXIASSISTANTWIDGET_H
+#ifndef KEXIASSISTANTMESSAGEHANDLER_H
+#define KEXIASSISTANTMESSAGEHANDLER_H
 
-#include "kexiutils_export.h"
+#include <db/msghandler.h>
 
-#include <QWidget>
+class KexiContextMessageWidget;
 
-class KexiAssistantPage;
-
-//! A widget for building assistants.
-class KEXIUTILS_EXPORT KexiAssistantWidget : public QWidget
+class KexiAssistantMessageHandler : public KexiDB::MessageHandler
 {
-    Q_OBJECT
 public:
-    explicit KexiAssistantWidget(QWidget* parent = 0);
-    ~KexiAssistantWidget();
+    KexiAssistantMessageHandler();
 
-    void addPage(KexiAssistantPage* page);
+    ~KexiAssistantMessageHandler();
 
-    KexiAssistantPage* currentPage() const;
+protected:
+    //! Implementation for KexiDB::MessageHandler.
+    virtual void showErrorMessageInternal(const QString &msg,
+                                          const QString &details = QString());
 
-public slots:
-    void setCurrentPage(KexiAssistantPage* page);
+    //! Implementation for KexiDB::MessageHandler.
+    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString());
 
-    virtual void nextPageRequested(KexiAssistantPage* page);
+    virtual QWidget* calloutWidget() const = 0;
 
-    virtual void cancelRequested(KexiAssistantPage* page);
-
-private slots:
-    virtual void previousPageRequested(KexiAssistantPage* page);
+    KexiContextMessageWidget* messageWidget();
 
 private:
     class Private;
-    Private* const d;
+    Private * const d;
 };
 
-#endif
+#endif // KEXIASSISTANTMESSAGEHANDLER_H
