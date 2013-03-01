@@ -23,13 +23,16 @@
 
 #include <QObject>
 
+#define default_shapeHeight 100.0
+#define shapeWidth 150.0
+
 class KoShape;
 
 class FLAKE_EXPORT KoAnnotationLayoutManager: public QObject
 {
     Q_OBJECT
 public:
-    KoAnnotationLayoutManager(qreal annotationX, QObject *parent = 0);
+    KoAnnotationLayoutManager(qreal annotationX, qreal pageHeight, QObject *parent = 0);
     virtual ~KoAnnotationLayoutManager();
 
 public slots:

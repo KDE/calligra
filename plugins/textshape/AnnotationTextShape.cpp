@@ -36,7 +36,7 @@ AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextOb
                                          KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
 {
-    KoShapeBackground *fill = new KoColorBackground(Qt::white);
+    KoShapeBackground *fill = new KoColorBackground(Qt::yellow);
     setBackground(fill);
 }
 

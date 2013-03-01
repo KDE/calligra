@@ -109,9 +109,9 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
         annotation->setImageCollection(documentResources->imageCollection());
     }
 
-    // Here we should handel the size and position of shape
-    annotation->setSize(QSizeF(150, 100));
-    annotation->setPosition(QPointF(200, 300));
+//    // Here we should handel the size and position of shape
+//    annotation->setSize(QSizeF(150, 100));
+//    annotation->setPosition(QPointF(200, 300));
     // Should set if we don't set id it will set to TextShapeID.
     annotation->setShapeId(AnnotationShape_SHAPEID);
 

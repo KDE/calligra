@@ -120,11 +120,6 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(QString(), this);
     m_canvas = m_gui->canvas();
-    // FIXME: This (400.0) i s just for now i know i know. :)
-    m_annotationManager = new KoAnnotationLayoutManager(400.0);
-    //layout loaded annotation shapes in textLoader.
-    layoutLoadedAnnotationShapes();
-    connect(m_document, SIGNAL(annotationShapeAdded(KoShape*)), this, SLOT(annotationShapeAdded(KoShape*)));
 
     setFocusProxy(m_canvas);
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -135,6 +130,12 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
+
+    // FIXME: This (400.0) i s just for now i know i know. :)
+    m_annotationManager = new KoAnnotationLayoutManager(400.0, currentPage().height());
+    //layout loaded annotation shapes in textLoader.
+    layoutLoadedAnnotationShapes();
+    connect(m_document, SIGNAL(annotationShapeAdded(KoShape*)), this, SLOT(annotationShapeAdded(KoShape*)));
 
     setupActions();
 
