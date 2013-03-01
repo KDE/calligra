@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Converter
+Name[bs]=Konvertor
 Name[ca]=Convertidor
 Name[ca@valencia]=Convertidor
 Name[cs]=Převodník
+Name[da]=Converter
 Name[el]=Μετατροπέας
 Name[es]=Conversor
 Name[et]=Teisendaja
@@ -10,8 +12,10 @@ Name[fi]=Muunnin
 Name[fr]=convertisseur
 Name[gl]=Convertidor
 Name[hu]=Konverter
+Name[ia]=Convertitor
 Name[it]=Convertitore
 Name[kk]=Аударғыш
+Name[lt]=Keitiklis
 Name[nb]=Omformer
 Name[nl]=Converter
 Name[pl]=Konwerter
@@ -24,4 +28,5 @@ Name[sv]=Konverterare
 Name[ug]=ئايلاندۇرغۇچ
 Name[uk]=Підсистема перетворення
 Name[x-test]=xxConverterxx
+Name[zh_CN]=转换器
 Name[zh_TW]=轉換器

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=vessel
+Name[bs]=brod
 Name[ca]=nau
 Name[ca@valencia]=nau
+Name[da]=vessel
 Name[de]=Gefäß
 Name[el]=vessel
 Name[es]=contenedor
@@ -18,7 +20,9 @@ Name[pt]=vasilhame
 Name[pt_BR]=vasilhame
 Name[ru]=Резервуар
 Name[sk]=vessel
+Name[sl]=posoda
 Name[sv]=behållare
+Name[tr]=damar
 Name[uk]=Проста посудина
 Name[x-test]=xxvesselxx
 Name[zh_TW]=容器

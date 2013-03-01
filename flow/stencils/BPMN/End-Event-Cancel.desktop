@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=End-Event-Cancel
+Name[bs]=Otkazati krajnji događaj
 Name[ca]=Final-Esdeveniment-Cancel·la
 Name[ca@valencia]=Final-Esdeveniment-Cancel·la
+Name[de]=Endereignis - Abbruch
 Name[el]=Ακύρωση-γεγονότος-τέλους
 Name[es]=Cancelación del evento final
 Name[et]=Lõpusündmuse katkestamine
@@ -18,6 +20,8 @@ Name[pt_BR]=Cancelar evento final
 Name[ru]=Отмена завершения события
 Name[sk]=End-Event-Cancel
 Name[sv]=Sluthändelse-avbryt
+Name[tr]=Son-Etkinlik-İptal
 Name[uk]=Скасування кінцевої події
 Name[x-test]=xxEnd-Event-Cancelxx
+Name[zh_CN]=结束事件-取消
 Name[zh_TW]=結束─事件─取消

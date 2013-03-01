@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Litter
+Name[bs]=Smeće
 Name[ca]=Abocament
 Name[ca@valencia]=Abocament
+Name[da]=Litter
 Name[de]=Abfall
 Name[el]=Απορρίμματα
 Name[es]=Basura
@@ -18,6 +20,8 @@ Name[pt_BR]=Lixo
 Name[ru]=Подставка
 Name[sk]=Smeti
 Name[sv]=Avfall
+Name[tr]=Çöp
 Name[uk]=Підставка
 Name[x-test]=xxLitterxx
+Name[zh_CN]=垃圾
 Name[zh_TW]=Litter

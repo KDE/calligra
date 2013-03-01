@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Relational Database
 Name[bg]=Релационна база от данни
+Name[bs]=Relaciona baza podataka
 Name[ca]=Base de dades relacional
 Name[ca@valencia]=Base de dades relacional
+Name[da]=Relationsdatabase
 Name[de]=Relationale Datenbank
 Name[el]=Σχεσιακή βάση δεδομένων
 Name[es]=Base de datos relacional
@@ -12,6 +14,7 @@ Name[gl]=Base de datos relacional
 Name[hu]=Relációs adatbázis
 Name[it]=Database relazionale
 Name[kk]=Реляциялық деректер қоры
+Name[lt]=Sąryšinė duomenų bazė
 Name[nb]=Relasjonsdatabase
 Name[nds]=Relatschonaal Datenbank
 Name[nl]=Relationele database
@@ -20,6 +23,7 @@ Name[pt]=Base de Dados Relacional
 Name[pt_BR]=Banco de dados relacional
 Name[ru]=Реляционная база данных
 Name[sk]=Relačná databáza
+Name[sl]=Relacijska podatkovna zbirka
 Name[sv]=Relationsdatabas
 Name[uk]=Реляційна база даних
 Name[x-test]=xxRelational Databasexx

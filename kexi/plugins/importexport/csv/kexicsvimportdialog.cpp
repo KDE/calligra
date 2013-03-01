@@ -2019,7 +2019,7 @@ void KexiCSVImportDialog::import()
     if (true != res) {
         //importing cancelled or failed
         if (!res) { //do not display err msg when res == cancelled
-            m_importProgressLabel->setText(i18n("Import has been cancelled."));
+            m_importProgressLabel->setText(i18n("Import has been canceled."));
         } else if (~res) {
             m_importProgressLabel->setText(i18n("Error occurred during import."));
         }

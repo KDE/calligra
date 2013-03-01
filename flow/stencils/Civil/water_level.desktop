@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Water Level
 Name[bg]=Ниво на водата
+Name[bs]=Vodostaj
 Name[ca]=Nivell d'aigua
 Name[ca@valencia]=Nivell d'aigua
 Name[cs]=Vodní hladina:
+Name[da]=Vandstand
 Name[de]=Wasserspiegel
 Name[el]=Επίπεδο ύδατος
 Name[es]=Nivel del agua
@@ -22,6 +24,7 @@ Name[pt]=Nível Água
 Name[pt_BR]=Nível da água
 Name[ru]=Уровень воды
 Name[sk]=Hladina vody
+Name[sl]=Višina vode
 Name[sv]=Vattennivå
 Name[uk]=Рівень води
 Name[x-test]=xxWater Levelxx

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=File cabinet
 Name[bg]=Шкаф за файлове
+Name[bs]=Ormar za datoteke
 Name[ca]=Gabinet de fitxers
-Name[ca@valencia]=Gavinet de fitxers
+Name[ca@valencia]=Gabinet de fitxers
+Name[da]=Arkivskab
 Name[de]=Ordnerkabinett
 Name[el]=Αρχειοθήκη
 Name[es]=Archivador
@@ -14,6 +16,7 @@ Name[hu]=Fájlgyűjtő
 Name[it]=Schedario
 Name[ja]=ファイルキャビネット
 Name[kk]=Құжат шкафы
+Name[lt]=Failų saugykla
 Name[nb]=Arkivskap
 Name[nds]=Dateischapp
 Name[nl]=Archiefkast
