@@ -150,10 +150,10 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
             this, SLOT(connectionViewGotFocus()));
     connect(d->scrollArea, SIGNAL(emptyAreaGotFocus()),
             this, SLOT(emptyAreaGotFocus()));
-    connect(d->scrollArea, SIGNAL(tableContextMenuRequest(const QPoint&)),
-            this, SLOT(tableContextMenuRequest(const QPoint&)));
-    connect(d->scrollArea, SIGNAL(connectionContextMenuRequest(const QPoint&)),
-            this, SLOT(connectionContextMenuRequest(const QPoint&)));
+    connect(d->scrollArea, SIGNAL(tableContextMenuRequest(QPoint)),
+            this, SLOT(tableContextMenuRequest(QPoint)));
+    connect(d->scrollArea, SIGNAL(connectionContextMenuRequest(QPoint)),
+            this, SLOT(connectionContextMenuRequest(QPoint)));
     connect(d->scrollArea, SIGNAL(tableHidden(KexiDB::TableSchema&)),
             this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
     connect(d->scrollArea, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)),
@@ -218,8 +218,8 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
         kDebug() << "adding table" << t->name();
         if (!c)
             return;
-        connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&, const QStringList&)),
-                this, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&, const QStringList&)));
+        connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&,QStringList)),
+                this, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&,QStringList)));
     }
 
     const QString tname = t->name().toLower();

@@ -164,14 +164,14 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 
     d->view->setSpreadSheetMode();
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)),
-            this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
+            this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)));
     connect(d->data, SIGNAL(rowUpdated(KexiDB::RecordData*)),
             this, SLOT(slotRowUpdated(KexiDB::RecordData*)));
     //connect(d->data, SIGNAL(aboutToInsertRow(KexiDB::RecordData*,KexiDB::ResultInfo*,bool)),
     // this, SLOT(slotAboutToInsertRow(KexiDB::RecordData*,KexiDB::ResultInfo*,bool)));
-    connect(d->data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)),
-            this, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)));
+    connect(d->data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)),
+            this, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)));
 
     setMinimumSize(d->view->minimumSizeHint().width(), d->view->minimumSizeHint().height());
     d->view->setFocus();
@@ -479,8 +479,8 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
     //----
     d->updatePropertiesVisibility(field.type(), *set);
 
-    connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     d->sets->set(row, set, newOne);
     return set;

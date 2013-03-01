@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=IPTV broadcast server
 Name[bg]=Разпръскващ сървър IPTV
+Name[bs]=IPTV emitovajuci server
 Name[ca]=IPTV broadcast server
 Name[ca@valencia]=IPTV broadcast server
+Name[da]=IPTV broadcast server
 Name[de]=IPTV-Broadcast-Server
 Name[el]=Εξυπηρετητής μετάδοσης IPTV
 Name[es]=Servidor IPTV de difusión
@@ -11,6 +13,7 @@ Name[fr]=IPTV broadcast server
 Name[gl]=Servidor de emisión de IPTV
 Name[it]=Server di trasmissione IPTV
 Name[kk]=IPTV кеңтарту сервері
+Name[lt]=IPTV perdavimo serveris
 Name[nb]=IPTV kringkastingstjener
 Name[nds]=Överdregen-Server för IPTV
 Name[nl]=IPTV broadcast-server

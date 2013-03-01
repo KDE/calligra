@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=FC Storage
 Name[bg]=Хранилище FC
+Name[bs]=FC skladište
 Name[ca]=Emmagatzematge FC
-Name[ca@valencia]=Emmagatzement FC
+Name[ca@valencia]=Emmagatzematge FC
+Name[da]=FC Storage
 Name[de]=FC-Speicher
 Name[el]=FC Storage
 Name[es]=Almacenamiento FC
@@ -13,6 +15,7 @@ Name[hu]=FC-tároló
 Name[it]=Archiviazione FC
 Name[ja]=FC ストレージ
 Name[kk]=АС жинақтауышы
+Name[lt]=FC saugykla
 Name[nb]=FC-lagring
 Name[nds]=FC-Spieker
 Name[nl]=FC-storage

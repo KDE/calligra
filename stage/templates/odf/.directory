@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Templates
+Name[bs]=Predlošci
 Name[ca]=Plantilles
 Name[ca@valencia]=Plantilles
 Name[cs]=Šablony
@@ -18,6 +19,8 @@ Name[ia]=Patronos
 Name[it]=Modelli
 Name[ja]=テンプレート
 Name[kk]=Үлгілер
+Name[lt]=Šablonai
+Name[mr]=नमूने
 Name[nb]=Maler
 Name[nds]=Vörlagen
 Name[nl]=Sjablonen

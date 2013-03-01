@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "ImportDialog.h"
+
 #include <QTextCodec>
 #include <QRadioButton>
 #include <QApplication>
@@ -30,7 +32,6 @@
 #include <kmessagebox.h>
 
 #include <ui_ImportDialogUI.h>
-#include <ImportDialog.h>
 
 AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
 : KDialog(parent)

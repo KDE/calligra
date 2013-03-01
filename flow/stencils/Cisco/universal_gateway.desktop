@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Universal Gateway
 Name[bg]=Универсален шлюз
+Name[bs]=Univerzalni Gateway
 Name[ca]=Passarel·la universal
 Name[ca@valencia]=Passarel·la universal
+Name[da]=Universal Gateway
 Name[de]=Universelles Gateway
 Name[el]=Καθολική πύλη
 Name[es]=Pasarela universal
@@ -12,6 +14,7 @@ Name[gl]=Porta universal
 Name[hu]=Univerzális átjáró
 Name[it]=Gateway universale
 Name[kk]=Әмбебап шлюзі
+Name[lt]=Universalus šliuzas
 Name[nb]=Universell portner
 Name[nds]=Allgemeen Döörreekner
 Name[nl]=Universal Gateway
@@ -20,6 +23,7 @@ Name[pt]='Gateway' Universal
 Name[pt_BR]=Gateway universal
 Name[ru]=Универсальный шлюз
 Name[sk]=Univerzálna brána
+Name[sl]=Univerzalni prehod
 Name[sv]=Universell förmedlingsnod
 Name[uk]=Універсальний шлюз
 Name[x-test]=xxUniversal Gatewayxx

@@ -1,19 +1,29 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Visio Documents
+Name[da]=Microsoft Visio-dokumenter
+Name[de]=Microsoft Visio-Dokumente
 Name[el]=Έγγραφα Microsoft Visio
+Name[es]=Documentos Microsoft Visio
 Name[et]=Microsoft Visio dokumendid
 Name[fi]=Microsoft Visio -asiakirjat
 Name[fr]=Documents Microsoft Visio
+Name[gl]=Documentos Microsoft Visio
 Name[hu]=Microsoft Visio dokumentumok
 Name[it]=Documenti Microsoft Visio
+Name[kk]=Microsoft Visio құжаттары
+Name[nb]=Microsoft Visio-dokumenter
 Name[nl]=Documenten van Microsoft Visio
+Name[pl]=Dokumenty Microsoft Visio
 Name[pt]=Documentos do Microsoft Visio
 Name[pt_BR]=Documentos do Microsoft Visio
 Name[sk]=Dokumenty Microsoft Visio
+Name[sl]=Dokumenti Microsoft Visio
 Name[sv]=Microsoft Visio-dokument
+Name[tr]=Microsoft Visio Belgeleri
 Name[uk]=Документи Microsoft Visio
 Name[x-test]=xxMicrosoft Visio Documentsxx
+Name[zh_CN]=Microsoft Visio 文档
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.visio;

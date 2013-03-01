@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=WAN
 Name[bg]=WAN
+Name[bs]=WAN
 Name[ca]=WAN
 Name[ca@valencia]=WAN
+Name[da]=WAN
 Name[de]=WAN
 Name[el]=WAN
 Name[es]=WAN
@@ -13,6 +15,7 @@ Name[hu]=WAN
 Name[it]=WAN
 Name[ja]=WAN
 Name[kk]=WAN
+Name[lt]=WAN
 Name[nb]=WAN
 Name[nds]=WAN
 Name[nl]=WAN
@@ -21,6 +24,7 @@ Name[pt]=WAN
 Name[pt_BR]=WAN
 Name[ru]=WAN
 Name[sk]=WAN
+Name[sl]=WAN
 Name[sv]=Fjärrnätverk
 Name[uk]=WAN
 Name[x-test]=xxWANxx

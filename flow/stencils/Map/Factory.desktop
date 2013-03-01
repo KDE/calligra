@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Factory
 Name[bg]=Фабрика
+Name[bs]=Fabrika
 Name[ca]=Fàbrica
 Name[ca@valencia]=Fàbrica
+Name[da]=Fabrik
 Name[de]=Fabrik
 Name[el]=Factory
 Name[es]=Fábrica
@@ -12,6 +14,7 @@ Name[fr]=Usine
 Name[gl]=Fábrica
 Name[it]=Fabbrica
 Name[kk]=Фабрика
+Name[lt]=Gamykla
 Name[nb]=Fabrikk
 Name[nl]=Fabriek
 Name[pl]=Fabryka
@@ -21,6 +24,7 @@ Name[ru]=Фабрика
 Name[sk]=Továreň
 Name[sl]=Tovarna
 Name[sv]=Fabrik
+Name[tr]=Fabrika
 Name[ug]=Factory
 Name[uk]=Фабрика
 Name[x-test]=xxFactoryxx

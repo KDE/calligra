@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=reactor
+Name[bs]=reaktor
 Name[ca]=reactor
 Name[ca@valencia]=reactor
+Name[da]=reactor
+Name[de]=Reaktor, Auffanggefäß
 Name[el]=reactor
 Name[es]=reactor
 Name[et]=Reaktsioonianum
@@ -17,7 +20,9 @@ Name[pt]=reactor
 Name[pt_BR]=reator
 Name[ru]=Реактор
 Name[sk]=reaktor
+Name[sl]=reaktor
 Name[sv]=reaktor
+Name[tr]=reaktör
 Name[uk]=Спрощений реактор або абсорбційна посудина
 Name[x-test]=xxreactorxx
 Name[zh_TW]=reactor

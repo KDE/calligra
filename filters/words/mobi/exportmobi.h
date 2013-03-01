@@ -23,7 +23,6 @@
 
 #include <QObject>
 
-#include <KoFilter.h>
 #include <QVariantList>
 #include <KoFilter.h>
 #include <KoStore.h>

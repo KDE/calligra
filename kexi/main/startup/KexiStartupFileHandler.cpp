@@ -132,8 +132,8 @@ void KexiStartupFileHandler::init(const KUrl &startDirOrVariable, Mode mode)
 
     // setFocusProxy(locationEdit());
 
-//    connect(dialog, SIGNAL(fileHighlighted(const QString&)),
-//            this, SLOT(slotExistingFileHighlighted(const QString&)));
+//    connect(dialog, SIGNAL(fileHighlighted(QString)),
+//            this, SLOT(slotExistingFileHighlighted(QString)));
 }
 
 KexiStartupFileHandler::~KexiStartupFileHandler()

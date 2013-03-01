@@ -2668,7 +2668,6 @@ void ExcelReader::handleEOF(EOFRecord* record)
 
 #ifdef SWINDER_XLS2RAW
 
-#include <iostream>
 #include <QApplication>
 
 int main(int argc, char ** argv)

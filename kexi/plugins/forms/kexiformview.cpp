@@ -135,11 +135,11 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
     initForm();
 
     if (viewMode() == Kexi::DesignViewMode) {
-//        connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QByteArray&)),
-//                this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool, const QByteArray&)));
+//        connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*,bool,QByteArray)),
+//                this, SLOT(slotPropertySetSwitched(KoProperty::Set*,bool,QByteArray)));
         connect(form(), SIGNAL(propertySetSwitched()), this, SLOT(slotPropertySetSwitched()));
-//        connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
-//                this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
+//        connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form*,bool)),
+//                this, SLOT(slotDirty(KFormDesigner::Form*,bool)));
         connect(form(), SIGNAL(modified()), this, SLOT(slotModified()));
 
         connect(d->dbform, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
@@ -389,16 +389,16 @@ void KexiFormView::initForm()
 //2.0    if (d->treeview)
 //2.0       d->treeview->setForm(form);
 //2.0    d->active = form;
-//2.0    connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
-//2.0            d->propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*, bool, bool)));
+//2.0    connect(form, SIGNAL(selectionChanged(QWidget*,bool,bool)),
+//2.0            d->propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*,bool,bool)));
 /*2.0    if (d->treeview) {
-        connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
-                d->treeview, SLOT(setSelectedWidget(QWidget*, bool)));
+        connect(form, SIGNAL(selectionChanged(QWidget*,bool,bool)),
+                d->treeview, SLOT(setSelectedWidget(QWidget*,bool)));
         connect(form, SIGNAL(childAdded(ObjectTreeItem*)), d->treeview, SLOT(addItem(ObjectTreeItem*)));
         connect(form, SIGNAL(childRemoved(ObjectTreeItem*)), d->treeview, SLOT(removeItem(ObjectTreeItem*)));
     }*/
-        connect(form(), SIGNAL(widgetNameChanged(const QByteArray&,const QByteArray&)),
-                this, SLOT(slotWidgetNameChanged(const QByteArray&,const QByteArray&)));
+        connect(form(), SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
+                this, SLOT(slotWidgetNameChanged(QByteArray,QByteArray)));
         connect(form(), SIGNAL(selectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)),
                 this, SLOT(slotWidgetSelectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)));
 

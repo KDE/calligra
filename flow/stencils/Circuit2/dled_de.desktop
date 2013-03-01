@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Diagonal Led (European)
+Name[bs]=Diagonalni Led (europski)
 Name[ca]=Diagonal Led (Europeu)
 Name[ca@valencia]=Diagonal Led (Europeu)
+Name[da]=Diagonal LED (europæisk)
 Name[de]=Diagonale LED (europäisch)
 Name[el]=Διαγώνιο led (Ευρώπη)
 Name[es]=LED diagonal (Europeo)
@@ -20,6 +22,7 @@ Name[pt_BR]=Led diagonal (Europeu)
 Name[ru]=Диагональный светодиод (Европейский)
 Name[sk]=Diagonálna LED (európska)
 Name[sv]=Diagonal lysdiod (europeisk)
+Name[tr]=Diyagonal Led (Avrupa)
 Name[uk]=Світлодіод (діагонально, Європа)
 Name[x-test]=xxDiagonal Led (European)xx
 Name[zh_CN]=倾斜发光二极管(欧洲)

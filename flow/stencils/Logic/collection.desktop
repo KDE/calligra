@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Logic
 Name[bg]=Логика
+Name[bs]=Logika
 Name[ca]=Lògica
 Name[ca@valencia]=Lògica
+Name[da]=Logik
 Name[de]=Logik
 Name[el]=Λογική
 Name[es]=Lógica
@@ -12,6 +14,7 @@ Name[fr]=Logic
 Name[gl]=Lóxica
 Name[it]=Logica
 Name[kk]=Логика
+Name[lt]=Logika
 Name[nb]=Logikk
 Name[nl]=Logica
 Name[pl]=Logiczny
@@ -20,6 +23,7 @@ Name[pt_BR]=Lógica
 Name[ru]=Логика
 Name[sk]=Logika
 Name[sv]=Logik
+Name[tr]=Mantık
 Name[ug]=لوگىكا
 Name[uk]=Логіка
 Name[x-test]=xxLogicxx

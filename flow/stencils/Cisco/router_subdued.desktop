@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Router subdued
+Name[bs]=Podčinjeni ruter
 Name[ca]=Encaminador suavitzat
 Name[ca@valencia]=Encaminador suavitzat
+Name[da]=Router nedtonet
+Name[de]=Router (inaktiv)
 Name[el]=Δρομολογητής υποτονικός
 Name[es]=Enrutador poco activo
 Name[et]=Toonita marsruuter
@@ -9,6 +12,7 @@ Name[fr]=Router subdued
 Name[gl]=Encamiñador controlado
 Name[it]=Router attenuato
 Name[kk]=Басыңқы маршруттауыш
+Name[lt]=Maršrutizatorius (blankus)
 Name[nb]=Ruter dempet
 Name[nl]=Ondergeschikte router
 Name[pl]=Router podległy

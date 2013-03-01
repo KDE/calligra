@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=vdd v
+Name[bs]=vdd v
 Name[ca]=vdd v
 Name[ca@valencia]=vdd v
+Name[da]=vdd v
 Name[el]=vdd v
 Name[es]=vdd v
 Name[et]=Vertikaalne VDD
@@ -21,4 +23,5 @@ Name[sk]=vdd v
 Name[sv]=vdd v
 Name[uk]=vdd v
 Name[x-test]=xxvdd vxx
+Name[zh_CN]=垂直 VDD
 Name[zh_TW]=vdd v

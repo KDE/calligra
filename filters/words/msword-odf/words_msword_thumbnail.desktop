@@ -1,19 +1,30 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Word Documents
+Name[da]=Microsoft Word-dokumenter
+Name[de]=Microsoft Word Dokumente
 Name[el]=Έγγραφα Microsoft Word
+Name[es]=Documentos Microsoft Word
 Name[et]=Microsoft Wordi dokumendid
 Name[fi]=Microsoft Word -asiakirjat
 Name[fr]=Documents Microsoft Word
+Name[gl]=Documentos de Microsoft Word 
 Name[hu]=Microsoft Word dokumentumok
 Name[it]=Documenti Microsoft Word
+Name[kk]=Microsoft Word құжаттары
+Name[lt]=Microsoft Word dokumentai
+Name[nb]=Microsoft Word dokumenter
 Name[nl]=Microsoft Word-documenten
+Name[pl]=Dokumenty Microsoft Word 
 Name[pt]=Documentos do Microsoft Word
 Name[pt_BR]=Documentos do Microsoft Word
 Name[sk]=Dokumenty Microsoft Word
+Name[sl]=Dokumenti Microsoft Word
 Name[sv]=Microsoft Word-dokument
+Name[tr]=Microsoft Word Belgeleri
 Name[uk]=Документи Microsoft Word
 Name[x-test]=xxMicrosoft Word Documentsxx
+Name[zh_CN]=Microsoft Word 文本文档
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/msword;

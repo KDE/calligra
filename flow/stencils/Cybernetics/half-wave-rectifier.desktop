@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=half-wave-rectifier
+Name[bs]=poluvalni ispravljač
 Name[ca]=half-wave-rectifier
 Name[ca@valencia]=half-wave-rectifier
+Name[da]=half-wave-rectifier
 Name[de]=Einweggleichrichter
 Name[el]=half-wave-rectifier
 Name[es]=rectificador de onda media
@@ -20,4 +22,5 @@ Name[sk]=half-wave-rectifier
 Name[sv]=halvvågslikriktare
 Name[uk]=Напівміст
 Name[x-test]=xxhalf-wave-rectifierxx
+Name[zh_CN]=半波整流
 Name[zh_TW]=half-wave-rectifier
