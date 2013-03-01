@@ -27,7 +27,7 @@ SimpleSpellCheckingWidget::SimpleSpellCheckingWidget(ReviewTool *tool, QWidget *
     ui(new Ui::SimpleSpellCheckingWidget)
 {
     ui->setupUi(this);
-    ui->toolAutoSpellCheck->setDefaultAction(tool->action("tool_auto_spellcheck"));
+    ui->toolAutoSpellCheck->setDefaultAction((QAction*)tool->action("tool_auto_spellcheck"));
 
 }
 

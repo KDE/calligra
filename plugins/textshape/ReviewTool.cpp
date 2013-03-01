@@ -25,7 +25,6 @@
 
 //#include "TextShape.h"
 
-
 ReviewTool::ReviewTool(KoCanvasBase* canvas): TextTool(canvas),
     m_textEditor(0),
     m_textShapeData(0),
@@ -71,4 +70,14 @@ void ReviewTool::keyPressEvent(QKeyEvent* event)
 void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
 {
     TextTool::paint(painter,converter);
+}
+
+QList<QWidget *> ReviewTool::createOptionWidgets()
+{
+    QList<QWidget *> widgets;
+    SimpleSpellCheckingWidget* sscw = new SimpleSpellCheckingWidget(this, 0);
+    sscw->setWindowTitle("SpellCheck");
+    widgets.append(sscw);
+    return widgets;
+
 }

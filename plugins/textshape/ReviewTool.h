@@ -55,15 +55,17 @@ public:
     virtual void deactivate();
     virtual void createActions();
 
+    virtual QList<QWidget *> createOptionWidgets();
+
 private slots:
-    
+
 
 private:
-    
+
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;
-    TextShape *m_textShape;    
+    TextShape *m_textShape;
 };
 
 #endif // REVIEWTOOL_H
