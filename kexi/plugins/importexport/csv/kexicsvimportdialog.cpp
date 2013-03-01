@@ -439,14 +439,14 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
 
     connect(m_formatCombo, SIGNAL(activated(int)),
             this, SLOT(formatChanged(int)));
-    connect(m_delimiterWidget, SIGNAL(delimiterChanged(const QString&)),
-            this, SLOT(delimiterChanged(const QString&)));
+    connect(m_delimiterWidget, SIGNAL(delimiterChanged(QString)),
+            this, SLOT(delimiterChanged(QString)));
     connect(m_startAtLineSpinBox, SIGNAL(valueChanged(int)),
             this, SLOT(startlineSelected(int)));
     connect(m_comboQuote, SIGNAL(activated(int)),
             this, SLOT(textquoteSelected(int)));
-    connect(m_tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-            this, SLOT(currentCellChanged(QModelIndex, QModelIndex)));
+    connect(m_tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(currentCellChanged(QModelIndex,QModelIndex)));
     connect(m_ignoreDuplicates, SIGNAL(stateChanged(int)),
             this, SLOT(ignoreDuplicatesChanged(int)));
     connect(m_1stRowForFieldNames, SIGNAL(stateChanged(int)),
@@ -455,7 +455,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     connect(this, SIGNAL(helpClicked()), this, SLOT(optionsButtonClicked()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(import()));
 
-    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
+    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
             this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
     installRecursiveEventFilter(this, this);
@@ -655,7 +655,7 @@ void KexiCSVImportDialog::createFileOpenPage()
     m_openFileWidget->setObjectName("m_openFileWidget");
     m_openFileWidget->setAdditionalFilters(csvMimeTypes().toSet());
     m_openFileWidget->setDefaultExtension("csv");
-    connect(m_openFileWidget, SIGNAL(fileSelected(const KUrl &)), this, SLOT(next()));
+    connect(m_openFileWidget, SIGNAL(fileSelected(KUrl)), this, SLOT(next()));
     m_openFilePage = new KPageWidgetItem(m_openFileWidget, i18n("Select file name for import"));
     addPage(m_openFilePage);
 }
@@ -807,7 +807,7 @@ void KexiCSVImportDialog::createTableNamePage()
     m_tablesList = new KexiProjectNavigator(page2, KexiProjectNavigator::NoFeatures);
     QString errorString;
     m_tablesList->setProject(KexiMainWindowIface::global()->project(), "org.kexi-project.table", &errorString, false);
-    connect (m_tablesList, SIGNAL(openOrActivateItem(KexiPart::Item*, Kexi::ViewMode)),
+    connect (m_tablesList, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)),
             this, SLOT(next()));
     connect (m_tablesList, SIGNAL(selectionChanged(KexiPart::Item*)),
             this, SLOT(slotShowSchema(KexiPart::Item*)));

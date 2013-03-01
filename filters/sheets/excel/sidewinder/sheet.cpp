@@ -18,8 +18,9 @@
  * Boston, MA 02110-1301, USA
 */
 
-#include "cell.h"
 #include "sheet.h"
+
+#include "cell.h"
 #include "workbook.h"
 #include "utils.h"
 #include "objects.h"
