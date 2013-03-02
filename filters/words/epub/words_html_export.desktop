@@ -2,6 +2,7 @@
 Type=Service
 Name=ODT to HTML Export Filter
 Name[bs]=ODT u HTML izvozni filter
+Name[ca]=Filtre d'exportació ODT a HTML
 Name[cs]=Exportní filtr ODT do HTML
 Name[da]=ODT til HTML-eksportfilter
 Name[de]=Exportfilter ODT zu HTML
