@@ -1084,7 +1084,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 void KWView::layoutLoadedAnnotationShapes()
 {
     foreach(KoShape *shape, m_document->annotationShapes()) {
-        m_annotationManager->addAnnotationShape(shape);
+        m_annotationManager->addAnnotationShape(shape, currentPage().pageNumber());
     }
 }
 
@@ -1098,5 +1098,6 @@ void KWView::annotationShapeAdded(KoShape *shape)
     KoAnnotation *annotation = editor->addAnnotation();
     annotation->setAnnotationShape(shape);
 
-    m_annotationManager->addAnnotationShape(shape);
+    kDebug(31000) << "@@@@@@@@@@@" << currentPage().pageNumber();
+    m_annotationManager->addAnnotationShape(shape, currentPage().pageNumber());
 }

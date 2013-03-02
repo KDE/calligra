@@ -37,7 +37,7 @@ public:
 
 public slots:
     /// Add annotation shape.
-    void addAnnotationShape(KoShape *annotationShape);
+    void addAnnotationShape(KoShape *annotationShape, int pageNumber);
 
     /// Remove annotation shape.
     void removeAnnotationShape(KoShape *annotationShape);
