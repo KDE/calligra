@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef GNUMERICFILTER_H
-#define GNUMERICFILTER_H
+#ifndef GNUMERICIMPORT_H
+#define GNUMERICIMPORT_H
 
 #include <KoFilter.h>
 
-#include <QDateTime>
-#include <QDomDocument>
-//Added by qt3to4:
-#include <QByteArray>
+#include <QDate>
 #include <QVariantList>
+
+class QDomElement;
+class QDomNode;
 
 namespace Calligra
 {
@@ -70,4 +70,4 @@ private:
 
     void setText(Calligra::Sheets::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 };
-#endif // GNUMERICFILTER_H
+#endif // GNUMERICIMPORT_H

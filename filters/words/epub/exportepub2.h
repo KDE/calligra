@@ -25,12 +25,12 @@
 #include <QString>
 #include <QVariantList>
 #include <QFile>
-#include <QObject>
 #include <QTextStream>
-#include <KoFilter.h>
-#include <KoStore.h>
 #include <QHash>
 #include <QList>
+
+#include <KoFilter.h>
+#include <KoStore.h>
 
 
 class EpubFile;

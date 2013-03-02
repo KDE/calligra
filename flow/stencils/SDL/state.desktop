@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=State
 Name[bg]=Състояние
+Name[bs]=Stanje
 Name[ca]=Estat
 Name[ca@valencia]=Estat
 Name[cs]=Stav
+Name[da]=State
 Name[de]=Status
 Name[el]=Κατάσταση
 Name[es]=Estado
@@ -15,6 +17,7 @@ Name[hu]=Állapot
 Name[ia]=Stato
 Name[it]=Stato
 Name[kk]=Күй-жай
+Name[mr]=स्थिती
 Name[nb]=Tilstand
 Name[nds]=Status
 Name[nl]=Status
@@ -23,6 +26,7 @@ Name[pt]=Estado
 Name[pt_BR]=Estado
 Name[ru]=Состояние
 Name[sk]=Stav
+Name[sl]=Stanje
 Name[sv]=Tillstånd
 Name[ug]=ھالەت
 Name[uk]=Стан

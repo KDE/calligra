@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "applixwordimport.h"
+
 #include <QMessageBox>
 #include <QList>
 #include <QDateTime>
@@ -25,8 +27,6 @@
 #include <QByteArray>
 #include <QColor>
 #include <QBuffer>
-#include <applixwordimport.h>
-#include <applixwordimport.moc>
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
@@ -789,3 +789,4 @@ bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
     return true;
 }
 
+#include <applixwordimport.moc>

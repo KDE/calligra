@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Internal Transducer
+Name[bs]=Unutarnja sonda
 Name[ca]=Transductor intern
 Name[ca@valencia]=Transductor intern
+Name[da]=Internal Transducer
+Name[de]=Interner Signalgeber
 Name[el]=Εσωτερικός μετατροπέας
 Name[es]=Transductor interno
 Name[et]=Sisemine tõlgendaja
@@ -19,4 +22,5 @@ Name[sk]=Interný prevodník
 Name[sv]=Intern omvandlare
 Name[uk]=Внутрішній перетворювач
 Name[x-test]=xxInternal Transducerxx
+Name[zh_CN]=内部换能器
 Name[zh_TW]=網際網路轉換器

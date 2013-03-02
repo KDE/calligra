@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Dark-light vertical gradient box
-Name[ca]=caixa gradient vertical fosc-clar
-Name[ca@valencia]=caixa gradient vertical fosc-clar
+Name[bs]=tamnosvijetla vertikalna gradijent kutija
+Name[ca]=Quadre degradat vertical fosc-clar
+Name[ca@valencia]=Quadre degradat vertical fosc-clar
+Name[da]=Mørk-lys lodret gradient-boks
+Name[de]=Senkrechter Verlauf Dunkel-Hell
 Name[el]=Πλαίσιο κάθετης διαβάθμισης σκούρο-φωτεινό
 Name[es]=Caja de gradiente vertical oscuro-claro
 Name[et]=Tume-hele püstine üleminek raamis
@@ -20,4 +23,5 @@ Name[sk]=Zvislý prechod tmavý-svetlý
 Name[sv]=Mörk-ljus vertikalt tonad ruta
 Name[uk]=Панель з темно-світлим вертикальним градієнтом
 Name[x-test]=xxDark-light vertical gradient boxxx
+Name[zh_CN]=暗-亮竖直渐变框
 Name[zh_TW]=暗到亮垂直漸層盒

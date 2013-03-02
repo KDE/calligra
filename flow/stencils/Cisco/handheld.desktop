@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Handheld
 Name[bg]=Мобилно устройство
+Name[bs]=Ručni
 Name[ca]=Mans lliures
 Name[ca@valencia]=Mans lliures
 Name[cs]=Handheld
+Name[da]=Håndholdt
 Name[de]=PDA
 Name[el]=Χειρός
 Name[es]=Handheld
@@ -13,6 +15,7 @@ Name[gl]=Dispositivo móbil
 Name[it]=Palmare
 Name[ja]=ハンドヘルド
 Name[kk]=Қалта құрылғысы
+Name[lt]=Rankinis kompiuteris
 Name[nb]=Håndholdt
 Name[nds]=Handreekner
 Name[nl]=Handheld
@@ -21,6 +24,7 @@ Name[pt]=Dispositivo Móvel
 Name[pt_BR]=Handheld
 Name[ru]=Карманный ПК
 Name[sk]=Handheld
+Name[sl]=Ročni računalnik
 Name[sv]=Handdator
 Name[uk]=Кишеньковий пристрій
 Name[x-test]=xxHandheldxx

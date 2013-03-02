@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Firewall horizontal
+Name[bs]=horizontalni Firewall
 Name[ca]=Tallafocs horitzontal
 Name[ca@valencia]=Tallafocs horitzontal
+Name[da]=Firewall vandret
 Name[de]=Firewall waagerecht
 Name[el]=Τείχος προστασίας οριζόντιο
 Name[es]=Cortafuegos horizontal
@@ -10,6 +12,7 @@ Name[fr]=Pare-feu horizontal
 Name[gl]=Devasa horizontal
 Name[it]=Firewall (orizzontale)
 Name[kk]=Жатық желіаралық қалқаны
+Name[lt]=Ugniasienė (horizontali)
 Name[nb]=Brannmur vannrett
 Name[nds]=Kimmrecht Nettdiek
 Name[nl]=Horizontale firewall
@@ -18,6 +21,7 @@ Name[pt]='Firewall' horizontal
 Name[pt_BR]=Firewall horizontal
 Name[ru]=Сетевой экран в горизонтальном ракурсе
 Name[sk]=Firewall vodorovný
+Name[sl]=Vodoraven požarni zid
 Name[sv]=Brandvägg horisontell
 Name[uk]=Брандмауер (горизонтально)
 Name[x-test]=xxFirewall horizontalxx

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Horizontal Voltmeter
+Name[bs]=Horizontalni voltmetar
 Name[ca]=Voltímetre horitzontal
 Name[ca@valencia]=Voltímetre horitzontal
+Name[da]=Vandret voltmeter
 Name[de]=Waagerechtes Voltmeter
 Name[el]=Οριζόντιο βολτόμετρο
 Name[es]=Voltímetro horizontal
@@ -19,7 +21,9 @@ Name[pt]=Voltímetro Horizontal
 Name[pt_BR]=Voltímetro horizontal
 Name[ru]=Горизонтальный вольтметр
 Name[sk]=Vodorovný voltmeter
+Name[sl]=Vodoravni voltmeter
 Name[sv]=Horisontell voltmätare
+Name[tr]=Yatay Voltmetre
 Name[uk]=Вольтметр (горизонтально)
 Name[x-test]=xxHorizontal Voltmeterxx
 Name[zh_TW]=水平電壓計

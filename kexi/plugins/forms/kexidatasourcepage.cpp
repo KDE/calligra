@@ -243,14 +243,14 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     connect(m_fieldListView, SIGNAL(selectionChanged()),
             this, SLOT(slotFieldListViewSelectionChanged()));
     connect(m_fieldListView,
-            SIGNAL(fieldDoubleClicked(const QString&, const QString&, const QString&)),
-            this, SLOT(slotFieldDoubleClicked(const QString&, const QString&, const QString&)));
+            SIGNAL(fieldDoubleClicked(QString,QString,QString)),
+            this, SLOT(slotFieldDoubleClicked(QString,QString,QString)));
 #endif
 
     mainLayout()->addStretch(1);
 
-    connect(m_formDataSourceCombo, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotFormDataSourceTextChanged(const QString &)));
+    connect(m_formDataSourceCombo, SIGNAL(textChanged(QString)),
+            this, SLOT(slotFormDataSourceTextChanged(QString)));
     connect(m_formDataSourceCombo, SIGNAL(dataSourceChanged()),
             this, SLOT(slotFormDataSourceChanged()));
     connect(m_widgetDataSourceCombo, SIGNAL(selected()),

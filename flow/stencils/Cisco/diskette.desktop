@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Diskette
 Name[bg]=Дискета
+Name[bs]=Disketa
 Name[ca]=Disquet
 Name[ca@valencia]=Disquet
+Name[da]=Diskette
 Name[de]=Diskette
 Name[el]=Δισκέτα
 Name[es]=Disquete
@@ -13,6 +15,7 @@ Name[gl]=Disquete
 Name[it]=Disco floppy
 Name[ja]=ディスケット
 Name[kk]=Дискета
+Name[lt]=Diskelis
 Name[nb]=Diskett
 Name[nds]=Diskett
 Name[nl]=Diskette
@@ -21,6 +24,7 @@ Name[pt]=Disquete
 Name[pt_BR]=Disquete
 Name[ru]=Дискета
 Name[sk]=Disketa
+Name[sl]=Disketa
 Name[sv]=Diskett
 Name[uk]=Дискета
 Name[x-test]=xxDiskettexx

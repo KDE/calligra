@@ -905,7 +905,7 @@ void KexiMainWindow::setupActions()
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     /*! @todo 2.0 - toolbars configuration will be handled in a special way
-      action = KStandardAction::configureToolbars( this, SLOT( slotConfigureToolbars() ),
+      action = KStandardAction::configureToolbars( this, SLOT(slotConfigureToolbars()),
         actionCollection() );
       action->setWhatsThis(i18n("Lets you configure toolbars."));
 
@@ -1873,18 +1873,18 @@ void KexiMainWindow::setupProjectNavigator()
             this, SLOT(slotProjectNavigatorVisibilityChanged(bool)));
 
         //Nav2 Signals
-        connect(d->navigator, SIGNAL(openItem(KexiPart::Item*, Kexi::ViewMode)),
-                this, SLOT(openObject(KexiPart::Item*, Kexi::ViewMode)));
-        connect(d->navigator, SIGNAL(openOrActivateItem(KexiPart::Item*, Kexi::ViewMode)),
-                this, SLOT(openObjectFromNavigator(KexiPart::Item*, Kexi::ViewMode)));
+        connect(d->navigator, SIGNAL(openItem(KexiPart::Item*,Kexi::ViewMode)),
+                this, SLOT(openObject(KexiPart::Item*,Kexi::ViewMode)));
+        connect(d->navigator, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)),
+                this, SLOT(openObjectFromNavigator(KexiPart::Item*,Kexi::ViewMode)));
         connect(d->navigator, SIGNAL(newItem(KexiPart::Info*)),
                 this, SLOT(newObject(KexiPart::Info*)));
         connect(d->navigator, SIGNAL(removeItem(KexiPart::Item*)),
                 this, SLOT(removeObject(KexiPart::Item*)));
-        connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*, const QString&, bool&)),
-                this, SLOT(renameObject(KexiPart::Item*, const QString&, bool&)));
-        connect(d->navigator->model(), SIGNAL(changeItemCaption(KexiPart::Item*, const QString&, bool&)),
-                this, SLOT(setObjectCaption(KexiPart::Item*, const QString&, bool&)));
+        connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*,QString,bool&)),
+                this, SLOT(renameObject(KexiPart::Item*,QString,bool&)));
+        connect(d->navigator->model(), SIGNAL(changeItemCaption(KexiPart::Item*,QString,bool&)),
+                this, SLOT(setObjectCaption(KexiPart::Item*,QString,bool&)));
         connect(d->navigator, SIGNAL(executeItem(KexiPart::Item*)),
                 this, SLOT(executeItem(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
@@ -1900,8 +1900,8 @@ void KexiMainWindow::setupProjectNavigator()
         connect(d->navigator, SIGNAL(selectionChanged(KexiPart::Item*)),
                 this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
         if (d->prj) {//connect to the project
-            connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-                    d->navigator->model(), SLOT(slotRemoveItem(const KexiPart::Item&)));
+            connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)),
+                    d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
         }
 
         
@@ -2284,10 +2284,10 @@ void
 KexiMainWindow::createKexiProject(const KexiProjectData& new_data)
 {
     d->prj = new KexiProject(new_data, this);
-    connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const QString&)));
+    connect(d->prj, SIGNAL(itemRenamed(KexiPart::Item,QString)), this, SLOT(slotObjectRenamed(KexiPart::Item,QString)));
 
     if (d->navigator){
-        connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->navigator->model(), SLOT(slotRemoveItem(const KexiPart::Item&)));
+        connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
     }
     
 }

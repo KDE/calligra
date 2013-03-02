@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=IAD router
 Name[bg]=Маршрутизатор IAD
+Name[bs]=IAD ruter
 Name[ca]=Encaminador IAD
 Name[ca@valencia]=Encaminador IAD
+Name[da]=IAD-router
 Name[de]=IAD-Router
 Name[el]=Δρομολογητής IAD
 Name[es]=Encaminador IAD
@@ -11,6 +13,7 @@ Name[fr]=IAD router
 Name[gl]=Encamiñador IAD
 Name[it]=Router IAD
 Name[kk]=IAD маршруттауышы
+Name[lt]=IAD maršrutizatorius
 Name[nb]=IAD-ruter
 Name[nds]=IAD-Nettweger
 Name[nl]=IAD-router
@@ -19,6 +22,7 @@ Name[pt]=Encaminhador IAD
 Name[pt_BR]=Roteador IAD
 Name[ru]=Маршрутизатор IAD
 Name[sk]=IAD router
+Name[sl]=Usmerjevalnik IAD
 Name[sv]=IAD-router
 Name[uk]=Маршрутизатор IAD
 Name[x-test]=xxIAD routerxx

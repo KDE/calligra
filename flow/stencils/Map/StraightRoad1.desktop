@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=StraightRoad1
+Name[bs]=RavnaCesta1
 Name[ca]=CamíRecte1
-Name[ca@valencia]=Camírecte1
+Name[ca@valencia]=CamíRecte1
+Name[da]=Lige vej1
+Name[de]=Gerade Straße
 Name[el]=StraightRoad1
 Name[es]=Carretera recta 1
 Name[et]=Sirge tee 1
@@ -17,7 +20,9 @@ Name[pt]=EstradaRecta1
 Name[pt_BR]=EstradaReta1
 Name[ru]=Прямая дорога 1
 Name[sk]=StraightRoad1
+Name[sl]=RavnaCesta1
 Name[sv]=Rak väg 1
+Name[tr]=Düz Yol1
 Name[uk]=Пряма дорога 1
 Name[x-test]=xxStraightRoad1xx
 Name[zh_TW]=直路1

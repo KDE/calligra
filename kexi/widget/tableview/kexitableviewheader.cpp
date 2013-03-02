@@ -76,8 +76,8 @@ KexiTableViewHeader::KexiTableViewHeader(QWidget * parent)
 {
     styleChanged();
     installEventFilter(this);
-    connect(this, SIGNAL(sizeChange(int, int, int)),
-            this, SLOT(slotSizeChange(int, int, int)));
+    connect(this, SIGNAL(sizeChange(int,int,int)),
+            this, SLOT(slotSizeChange(int,int,int)));
 }
 
 KexiTableViewHeader::~KexiTableViewHeader()

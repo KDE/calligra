@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Collapsed-Sub-Process
+Name[bs]=Prošireni subproces
 Name[ca]=Sub-procés col·lapsat
 Name[ca@valencia]=Sub-procés col·lapsat
+Name[de]=Zugeklappter Teilprozess
 Name[el]=Κατάρρευση-υπο-διεργασίας
 Name[es]=Subproceso colapsado
 Name[et]=Suletud alamprotsess
@@ -17,6 +19,8 @@ Name[pt_BR]=Sub-processo-recolhido
 Name[ru]=Свёрнутый подпроцесс
 Name[sk]=Zbalený podproces
 Name[sv]=Sammanslagen-delprocess
+Name[tr]=Çöken-Alt-Süreç
 Name[uk]=Згорнутий підпроцес
 Name[x-test]=xxCollapsed-Sub-Processxx
+Name[zh_CN]=折叠子进程
 Name[zh_TW]=補償─子行程

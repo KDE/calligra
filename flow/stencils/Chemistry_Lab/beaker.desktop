@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=beaker
+Name[bs]=pehar
 Name[ca]=vasmesurat
 Name[ca@valencia]=vasmesurat
 Name[cs]=kádinka
+Name[da]=bægerglas
 Name[de]=Becherglas
 Name[el]=beaker
 Name[es]=vaso
@@ -19,7 +21,9 @@ Name[pt]=bico
 Name[pt_BR]=bico
 Name[ru]=Мензурка
 Name[sk]=beaker
+Name[sl]=čaša
 Name[sv]=bägare
+Name[tr]=deney şişesi
 Name[uk]=Мензурка
 Name[x-test]=xxbeakerxx
 Name[zh_TW]=燒杯

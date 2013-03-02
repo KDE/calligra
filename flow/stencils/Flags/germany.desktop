@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Germany
 Name[bg]=Германия
+Name[bs]=Njemačka
 Name[ca]=Alemanya
 Name[ca@valencia]=Alemanya
 Name[cs]=Německo
@@ -18,6 +19,8 @@ Name[ia]=Germania
 Name[it]=Germania
 Name[ja]=ドイツ
 Name[kk]=Германия
+Name[lt]=Vokietija
+Name[mr]=जर्मनी
 Name[nb]=Tyskland
 Name[nds]=Düütschland
 Name[nl]=Duitsland
@@ -29,6 +32,7 @@ Name[se]=Duiska
 Name[sk]=Nemecko
 Name[sl]=Nemčija
 Name[sv]=Tyskland
+Name[tr]=Almanya
 Name[ug]=گېرمانىيە
 Name[uk]=Німеччина
 Name[x-test]=xxGermanyxx
