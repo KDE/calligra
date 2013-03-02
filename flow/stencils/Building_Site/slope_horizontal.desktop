@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Horizontal Slope
+Name[bs]=Horizontalni nagib
 Name[ca]=Desnivell horitzontal
 Name[ca@valencia]=Desnivell horitzontal
+Name[da]=Vandret hældning
+Name[de]=Waagerechte Böschung
 Name[el]=Οριζόντια κλίση
 Name[es]=Rampa horizontal
 Name[et]=Horisontaalne kallak
@@ -19,6 +22,8 @@ Name[pt_BR]=Rampa horizontal
 Name[ru]=Горизонтальный склон
 Name[sk]=Vodorovný svah
 Name[sv]=Horisontell backe
+Name[tr]=Yatay Eğim
 Name[uk]=Горизонтальний ухил
 Name[x-test]=xxHorizontal Slopexx
+Name[zh_CN]=水平斜面
 Name[zh_TW]=水平坡

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Branch office
 Name[bg]=Клон на офис
-Name[ca]=Branca d'oficina
-Name[ca@valencia]=Branca d'oficina
+Name[bs]=Podružnica
+Name[ca]=Sucursal
+Name[ca@valencia]=Sucursal
+Name[da]=Filial
 Name[de]=Branch-Office
 Name[el]=Branch office
 Name[es]=Sucursal
@@ -14,6 +16,7 @@ Name[hu]=Fiókiroda
 Name[it]=Succursale
 Name[ja]=支店
 Name[kk]=Филиал кеңсесі
+Name[lt]=Filialas
 Name[nb]=Filialkontor
 Name[nds]=Branch-Kontoor
 Name[nl]=Bijkantoor

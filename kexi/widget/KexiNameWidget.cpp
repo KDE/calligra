@@ -130,10 +130,10 @@ void KexiNameWidget::init(
     d->nameWarning = i18n("Please enter the name.");
     d->captionWarning = i18n("Please enter the caption.");
 
-    connect(d->le_caption, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotCaptionTxtChanged(const QString&)));
-    connect(d->le_name, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotNameTxtChanged(const QString&)));
+    connect(d->le_caption, SIGNAL(textChanged(QString)),
+            this, SLOT(slotCaptionTxtChanged(QString)));
+    connect(d->le_name, SIGNAL(textChanged(QString)),
+            this, SLOT(slotNameTxtChanged(QString)));
     connect(d->le_caption, SIGNAL(returnPressed()),
             this, SIGNAL(returnPressed()));
     connect(d->le_name, SIGNAL(returnPressed()),

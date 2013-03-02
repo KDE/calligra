@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Central Data Processing
+Name[bs]=Centralna obrada podataka
 Name[ca]=Procés central de dades
 Name[ca@valencia]=Procés central de dades
+Name[da]=Central databehandling
 Name[de]=Zentrale Datenverarbeitung
 Name[el]=Κεντρική επεξεργασία δεδομένων
 Name[es]=Central de proceso de datos
@@ -19,7 +21,9 @@ Name[pt_BR]=Central de processamento de dados
 Name[ru]=Централизованная обработка данных
 Name[sk]=Centrálne spracovanie dát
 Name[sv]=Central databehandling
+Name[tr]=Merkezi Veri İşleme
 Name[uk]=Централізована обробка даних
 Name[x-test]=xxCentral Data Processingxx
+Name[zh_CN]=中央数据处理
 Name[zh_TW]=中央資料處理
 X-KDE-DirType=odg-collection

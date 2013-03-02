@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=LAN to LAN
 Name[bg]=LAN до LAN
+Name[bs]=LAN prema LAN-u
 Name[ca]=LAN to LAN
 Name[ca@valencia]=LAN to LAN
+Name[da]=LAN to LAN
 Name[de]=LAN zu LAN
 Name[el]=LAN to LAN
 Name[es]=LAN a LAN
@@ -11,6 +13,7 @@ Name[fr]=LAN to LAN
 Name[gl]=LAN a LAN
 Name[it]=LAN to LAN
 Name[kk]=LAN - LAN
+Name[lt]=LAN į LAN
 Name[nb]=LAN til LAN
 Name[nds]=LAN na LAN
 Name[nl]=LAN naar LAN
@@ -19,6 +22,7 @@ Name[pt]=LAN para LAN
 Name[pt_BR]=LAN para LAN
 Name[ru]=Сеть-Сеть
 Name[sk]=LAN to LAN
+Name[sl]=Mreža z mrežo (LAN to LAN)
 Name[sv]=Lokalt nätverk till lokalt nätverk
 Name[uk]=LAN у LAN
 Name[x-test]=xxLAN to LANxx

@@ -118,12 +118,12 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 
     m_paletteBackgroundColorChanged = false; //set this here, not before
 
-    connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)),
-            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
-    connect(m_contextMenu, SIGNAL(insertFromFileRequested(const KUrl&)),
-            this, SLOT(handleInsertFromFileAction(const KUrl&)));
-    connect(m_contextMenu, SIGNAL(saveAsRequested(const QString&)),
-            this, SLOT(handleSaveAsAction(const QString&)));
+    connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
+            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
+    connect(m_contextMenu, SIGNAL(insertFromFileRequested(KUrl)),
+            this, SLOT(handleInsertFromFileAction(KUrl)));
+    connect(m_contextMenu, SIGNAL(saveAsRequested(QString)),
+            this, SLOT(handleSaveAsAction(QString)));
     connect(m_contextMenu, SIGNAL(cutRequested()),
             this, SLOT(handleCutAction()));
     connect(m_contextMenu, SIGNAL(copyRequested()),

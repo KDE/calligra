@@ -85,8 +85,8 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions optio
 // header()->hide();
     setSorting(-1, true); // disable sorting
 */
-    connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-            this, SLOT(slotDoubleClicked(const QModelIndex&)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(slotDoubleClicked(QModelIndex)));
 }
 
 KexiFieldListView::~KexiFieldListView()

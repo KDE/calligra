@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Supercomputer
 Name[bg]=Суперкомпютър
+Name[bs]=Superračunar
 Name[ca]=Superordinador
 Name[ca@valencia]=Superordinador
+Name[da]=Supercomputer
 Name[de]=Supercomputer
 Name[el]=Υπερυπολογιστής
 Name[es]=Supercomputador
@@ -13,6 +15,7 @@ Name[hu]=Szuperszámítógép
 Name[it]=Supercomputer
 Name[ja]=スーパーコンピュータ
 Name[kk]=Суперкомпьютер
+Name[lt]=Superkompiuteris
 Name[nb]=Superdator
 Name[nl]=Supercomputer
 Name[pl]=Superkomputer
@@ -20,6 +23,7 @@ Name[pt]=Super-computador
 Name[pt_BR]=Super-computador
 Name[ru]=Суперкомпьютер
 Name[sk]=Superpočítač
+Name[sl]=Superračunalnik
 Name[sv]=Superdator
 Name[uk]=Суперкомп'ютер
 Name[x-test]=xxSupercomputerxx

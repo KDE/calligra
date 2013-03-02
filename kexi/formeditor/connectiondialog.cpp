@@ -112,10 +112,10 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
     d->table->adjustColumnWidthToContents(0);
     layout->addWidget(d->table);
 
-    connect(d->table, SIGNAL(cellSelected(int, int)),
-            this, SLOT(slotCellSelected(int, int)));
-    connect(d->table->data(), SIGNAL(rowInserted(KexiDB::RecordData*, bool)),
-            this, SLOT(slotRowInserted(KexiDB::RecordData*, bool)));
+    connect(d->table, SIGNAL(cellSelected(int,int)),
+            this, SLOT(slotCellSelected(int,int)));
+    connect(d->table->data(), SIGNAL(rowInserted(KexiDB::RecordData*,bool)),
+            this, SLOT(slotRowInserted(KexiDB::RecordData*,bool)));
 
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(layout);
@@ -173,8 +173,8 @@ ConnectionDialog::initTable()
     d->table->maximizeColumnsWidth(c);
     d->table->setColumnStretchEnabled(true, 4);
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)),
-            this, SLOT(slotCellChanged(KexiDB::RecordData*, int, QVariant, KexiDB::ResultInfo*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
+            this, SLOT(slotCellChanged(KexiDB::RecordData*,int,QVariant,KexiDB::ResultInfo*)));
     connect(d->data, SIGNAL(rowUpdated(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
     connect(d->table, SIGNAL(itemSelected(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
 }
@@ -394,8 +394,8 @@ ConnectionDialog::newItemByDragnDrop()
     d->form->enterConnectingState();
     connect(d->form, SIGNAL(connectionAborted(KFormDesigner::Form*)),
         this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
-    connect(d->form, SIGNAL(connectionCreated(KFormDesigner::Form*, Connection&)),
-        this, SLOT(slotConnectionCreated(KFormDesigner::Form*, Connection&)));
+    connect(d->form, SIGNAL(connectionCreated(KFormDesigner::Form*,Connection&)),
+        this, SLOT(slotConnectionCreated(KFormDesigner::Form*,Connection&)));
 
     hide();
 }

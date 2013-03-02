@@ -73,7 +73,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidge
     d->button->setFocusPolicy(Qt::NoFocus);
     connect(d->button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
 
-    connect(m_lineedit, SIGNAL(textChanged(const QString&)), this, SLOT(slotLineEditTextChanged(const QString&)));
+    connect(m_lineedit, SIGNAL(textChanged(QString)), this, SLOT(slotLineEditTextChanged(QString)));
 
 // m_lineedit = new KLineEdit(this, "lineedit");
 // m_lineedit->setFrame(false);

@@ -101,7 +101,7 @@ QWidget *KexiRelationDesignTool::createOptionWidget()
     fileButton->setToolTip(i18n("Open Database"));
 
     connect(fileButton, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
-    connect(m_relationCombo, SIGNAL(activated(const QString &)), this, SLOT(relationSelected(const QString &)));
+    connect(m_relationCombo, SIGNAL(activated(QString)), this, SLOT(relationSelected(QString)));
 
     layout->addWidget(fileButton);
     layout->addWidget(m_fileLabel);
@@ -122,7 +122,7 @@ void KexiRelationDesignTool::changeUrlPressed()
 
     if (!m_dbDialog) {
         m_dbDialog = new KexiStartupDialog(KexiStartupDialog::OpenExisting, 0, kcs, kps);
-        //connect( m_dbDialog, SIGNAL( okClicked() ), this, SLOT( openDatabase() ) );
+        //connect( m_dbDialog, SIGNAL(okClicked()), this, SLOT(openDatabase()) );
     }
 
     int res = m_dbDialog->exec();

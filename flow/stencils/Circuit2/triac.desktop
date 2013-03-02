@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=TRIAC
 Name[bg]=TRIAC
+Name[bs]=TRIAC
 Name[ca]=TRIAC
 Name[ca@valencia]=TRIAC
 Name[cs]=TRIAK
+Name[da]=Triac
 Name[de]=Doppeltransistor
 Name[el]=TRIAC
 Name[es]=Triodo C.A.
@@ -21,6 +23,7 @@ Name[pt]=TRIAC
 Name[pt_BR]=TRIAC
 Name[ru]=Симистор
 Name[sk]=TRIAC
+Name[sl]=TRIAC
 Name[sv]=TRIAC
 Name[uk]=Симістор
 Name[x-test]=xxTRIACxx

@@ -176,15 +176,15 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
         QObject* thisObject = dynamic_cast<QObject*>(this);
         if (thisObject) {
             QObject::connect(m_data, SIGNAL(destroying()), thisObject, SLOT(slotDataDestroying()));
-            QObject::connect(m_data, SIGNAL(rowsDeleted(const QList<int> &)),
-                             thisObject, SLOT(slotRowsDeleted(const QList<int> &)));
-            QObject::connect(m_data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)),
-                             thisObject, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)));
+            QObject::connect(m_data, SIGNAL(rowsDeleted(QList<int>)),
+                             thisObject, SLOT(slotRowsDeleted(QList<int>)));
+            QObject::connect(m_data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)),
+                             thisObject, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)));
             QObject::connect(m_data, SIGNAL(rowDeleted()), thisObject, SLOT(slotRowDeleted()));
-            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*, bool)),
-                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*, bool)));
-            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*, uint, bool)),
-                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*, uint, bool))); //not db-aware
+            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*,bool)),
+                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*,bool)));
+            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
+                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool))); //not db-aware
             QObject::connect(m_data, SIGNAL(rowRepaintRequested(KexiDB::RecordData&)),
                              thisObject, SLOT(slotRowRepaintRequested(KexiDB::RecordData&)));
             // setup scrollbar's tooltip

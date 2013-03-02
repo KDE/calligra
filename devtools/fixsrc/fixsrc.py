@@ -12,10 +12,12 @@ import os
 import string
 import getopt
 import re
+import fnmatch
 
 
 # Global variables
 dryrun = False    # Maybe the default should be True...
+pattern = "*"
 recursive = False
 verbose = False
 
@@ -134,7 +136,7 @@ def handleFile(name, actions):
 
 
 def traverseTree(dir, actions, names):
-    global recursive, verbose
+    global recursive, verbose, pattern
 
     # We could also use os.walk()
     for name in names:
@@ -152,7 +154,8 @@ def traverseTree(dir, actions, names):
                 traverseTree(fullname, actions, os.listdir(fullname))
             # Ignore all directories if not in recursive mode
         else:
-            handleFile(fullname, actions)
+            if fnmatch.fnmatch(name, pattern):
+                handleFile(fullname, actions)
 
 
 # ================================================================
@@ -173,25 +176,27 @@ def usage(errormsg=""):
         -d --dryrun     don't actually perform the actions (combine with --verbose)
                         This is recommended before doing the full run.
         -h --help       print this help and exit immediately
+        -p --pattern    apply to files whose name matches a certain glob pattern
         -r --recursive  recursive: all files that are directories are traversed recursively
         -v --verbose    print extra verbose output
 
     files:
         source files to be fixed and/or directories if --recursive is given
 
-    example:
-        fixsrc.py -rv --actions normalize libs
+    examples:
+        fixsrc.py -rv --actions endswitheol libs
+        fixsrc.py -rv --pattern '*.cpp' --actions normalize .
 """
     sys.exit(0)
 
 
 def main():
-    global dryrun, recursive, verbose
+    global dryrun, recursive, pattern, verbose
     allActions = ["endswitheol", "normalize", "all"]
 
     try :
-        opts, params = getopt.getopt(sys.argv[1:], "a:dhrv" ,
-                                     ["actions=", "dryrun", "help", "recursive", "verbose"])
+        opts, params = getopt.getopt(sys.argv[1:], "a:dhp:rv" ,
+                                     ["actions=", "dryrun", "help", "pattern=", "recursive", "verbose"])
     except getopt.GetoptError:
         usage("unknown options")
     #print "opts:", opts
@@ -213,6 +218,8 @@ def main():
             dryrun = True
         elif opt in ("-h" , "--help"):
             usage()
+        elif opt in ("-p" , "--pattern"):
+            pattern = param
         elif opt in ("-r" , "--recursive"):
             recursive = True
         elif opt in ("-v" , "--verbose"):

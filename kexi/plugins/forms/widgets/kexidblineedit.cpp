@@ -106,10 +106,10 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     m_originalPalette = palette();
-    connect(this, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextChanged(const QString&)));
-    connect(this, SIGNAL(textEdited(const QString&)),
-            this, SLOT(slotTextEdited(const QString&)));
+    connect(this, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTextChanged(QString)));
+    connect(this, SIGNAL(textEdited(QString)),
+            this, SLOT(slotTextEdited(QString)));
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 

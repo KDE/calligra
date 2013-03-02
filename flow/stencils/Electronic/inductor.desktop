@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=inductor
 Name[bg]=бобина
+Name[bs]=induktor
 Name[ca]=inductor
 Name[ca@valencia]=inductor
+Name[da]=induktor
 Name[de]=Drosselspule
 Name[el]=πηνίο
 Name[es]=inductor
@@ -23,4 +25,5 @@ Name[sk]=vodič
 Name[sv]=induktans
 Name[uk]=Індуктивна котушка
 Name[x-test]=xxinductorxx
+Name[zh_CN]=电感器
 Name[zh_TW]=電感

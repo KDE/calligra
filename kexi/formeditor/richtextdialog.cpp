@@ -82,14 +82,14 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 
     d->fontCombo = new KFontRequester(d->toolbar);
     d->fontComboAction = d->toolbar->addWidget(/*js: TBFont, 40,*/ d->fontCombo);
-    connect(d->fontCombo, SIGNAL(textChanged(const QString&)),
-            this, SLOT(changeFont(const QString &)));
+    connect(d->fontCombo, SIGNAL(textChanged(QString)),
+            this, SLOT(changeFont(QString)));
 
     d->toolbar->addSeparator();
 
     d->colorCombo = new KColorCombo(d->toolbar);
     d->colorComboAction = d->toolbar->addWidget(/*js: TBColor, 30,*/ d->colorCombo);
-    connect(d->colorCombo, SIGNAL(activated(const QColor&)), this, SLOT(changeColor(const QColor&)));
+    connect(d->colorCombo, SIGNAL(activated(QColor)), this, SLOT(changeColor(QColor)));
 
     d->boldTextAction = d->toolbar->addAction(koIcon("format-text-bold"), i18n("Bold"));
     d->boldTextAction->setCheckable(true);
@@ -127,8 +127,8 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     d->edit->setAcceptRichText(true);
 
 
-    connect(d->edit, SIGNAL(currentCharFormatChanged(const QTextCharFormat&)),
-            this, SLOT(slotCurrentCharFormatChanged(const QTextCharFormat&)));
+    connect(d->edit, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
+            this, SLOT(slotCurrentCharFormatChanged(QTextCharFormat)));
 
     d->edit->moveCursor(QTextCursor::End);
     slotCurrentCharFormatChanged(d->edit->currentCharFormat());

@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Data Switch Processor
+Name[bs]=Procesor Prekidača Podataka
 Name[ca]=Data Switch Processor
 Name[ca@valencia]=Data Switch Processor
+Name[da]=Dataswitch-processor
+Name[de]=Daten-Switch-Prozessor
 Name[el]=Επεξεργαστής μεταγωγής δεδομένων
 Name[es]=Procesador de conmutación de datos
 Name[et]=Andmekommutaatori protsessor
@@ -9,6 +12,7 @@ Name[fr]=Data Switch Processor
 Name[gl]=Procesador dun conmutador de datos
 Name[it]=Data Switch Processor
 Name[kk]=Дерек қосқыш процесоры
+Name[lt]=Duomenų perjungimo procesorius
 Name[nb]=Datasvitsj-prosessor
 Name[nl]=Data Switch Processor
 Name[pl]=Procesor przełącznika danych

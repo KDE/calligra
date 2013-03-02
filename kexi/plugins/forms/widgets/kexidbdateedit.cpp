@@ -41,8 +41,8 @@ KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent)
     m_edit = new Q3DateEdit(date, this);
     m_edit->setAutoAdvance(true);
     m_edit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-    connect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged(const QDate&)));
-    connect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SIGNAL(dateChanged(const QDate&)));
+    connect(m_edit, SIGNAL(valueChanged(QDate)), this, SLOT(slotValueChanged(QDate)));
+    connect(m_edit, SIGNAL(valueChanged(QDate)), this, SIGNAL(dateChanged(QDate)));
 
     QToolButton* btn = new QToolButton(this);
     btn->setText("...");

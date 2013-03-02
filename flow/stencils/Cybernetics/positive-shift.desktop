@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=positive-shift
+Name[bs]=pozitivna promjena
 Name[ca]=positive-shift
 Name[ca@valencia]=positive-shift
+Name[da]=positive-shift
 Name[el]=positive-shift
 Name[es]=desplazamiento positivo
 Name[et]=Positiivne siire
@@ -19,4 +21,5 @@ Name[sk]=kladný posun
 Name[sv]=positiv-skift
 Name[uk]=Стале додатне зміщення за Oy
 Name[x-test]=xxpositive-shiftxx
+Name[zh_CN]=正移
 Name[zh_TW]=positive-shift

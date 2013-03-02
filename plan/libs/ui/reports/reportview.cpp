@@ -1448,7 +1448,7 @@ void GroupSectionEditor::slotAddRow()
     }
     ReportSectionDetailGroup * g = new ReportSectionDetailGroup( reportdata->fieldKeys().value( 0 ), sd, sd );
 
-    sd->insertSection( sd->groupSectionCount(), g );
+    sd->insertGroupSection( sd->groupSectionCount(), g );
 
     ColumnItem *ci = new ColumnItem( g );
     ci->names = reportdata->fieldNames();
@@ -1476,7 +1476,7 @@ void GroupSectionEditor::slotRemoveRows()
     for (int i = rows.count() - 1; i >= 0; --i ) {
         int row = rows.at( i );
         QList<QStandardItem*> items = model.takeRow( row );
-        sd->removeSection( row, true );
+        sd->removeGroupSection( row, true );
         qDeleteAll( items );
     }
 }
@@ -1500,8 +1500,8 @@ void GroupSectionEditor::slotMoveRowUp()
         ReportSectionDetailGroup *g = sd->groupSection( row );
         bool showgh = g->groupHeaderVisible();
         bool showgf = g->groupFooterVisible();
-        sd->removeSection( row );
-        sd->insertSection( row - 1, g );
+        sd->removeGroupSection( row );
+        sd->insertGroupSection( row - 1, g );
         g->setGroupHeaderVisible( showgh );
         g->setGroupFooterVisible( showgf );
         model.insertRow( row - 1, items );
@@ -1533,8 +1533,8 @@ void GroupSectionEditor::slotMoveRowDown()
         ReportSectionDetailGroup *g = sd->groupSection( row );
         bool showgh = g->groupHeaderVisible();
         bool showgf = g->groupFooterVisible();
-        sd->removeSection( row );
-        sd->insertSection( row + 1, g );
+        sd->removeGroupSection( row );
+        sd->insertGroupSection( row + 1, g );
         g->setGroupHeaderVisible( showgh );
         g->setGroupFooterVisible( showgf );
         model.insertRow( row + 1, items );
