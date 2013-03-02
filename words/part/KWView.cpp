@@ -100,6 +100,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         , m_canvas(0)
         , m_minPageNum(1)
         , m_maxPageNum(1)
+        , m_textMinX(1)
+        , m_textMaxX(600)
 {
     setAcceptDrops(true);
 
