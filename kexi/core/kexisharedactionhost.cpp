@@ -40,7 +40,7 @@ KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h
         , host(h)
 {
     setObjectName("KexiSharedActionHostPrivate");
-    connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
+    connect(&actionMapper, SIGNAL(mapped(QString)), this, SLOT(slotAction(QString)));
 }
 
 KexiSharedActionHostPrivate::~KexiSharedActionHostPrivate()

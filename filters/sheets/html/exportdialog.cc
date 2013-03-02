@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "exportdialog.h"
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QListWidget>
@@ -28,8 +30,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kurlrequester.h>
-
-#include <exportdialog.h>
 
 ExportDialog::ExportDialog(QWidget *parent)
         : KDialog(parent), m_mainwidget(new ExportWidget(this))

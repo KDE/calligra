@@ -106,7 +106,7 @@ namespace wvWare
     class EscherHeader
     {
     public:
-        EscherHeader( OLEStreamReader* stream );
+        explicit EscherHeader( OLEStreamReader* stream );
         ~EscherHeader();
 
         bool isAtom();
@@ -132,7 +132,7 @@ namespace wvWare
     class FBSE
     {
     public:
-        FBSE( OLEStreamReader* stream );
+        explicit FBSE( OLEStreamReader* stream );
         ~FBSE();
 
         int recordSize();//size of the record without the Escher header

@@ -163,8 +163,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
             this, SLOT(slotTableAdded(KexiDB::TableSchema&)));
     connect(d->relations, SIGNAL(tableHidden(KexiDB::TableSchema&)),
             this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
-    connect(d->relations, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&, const QStringList&)),
-            this, SLOT(slotAppendFields(KexiDB::TableOrQuerySchema&, const QStringList&)));
+    connect(d->relations, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&,QStringList)),
+            this, SLOT(slotAppendFields(KexiDB::TableOrQuerySchema&,QStringList)));
 
     d->head = new KexiSectionHeader(i18n("Query Columns"), Qt::Vertical, d->spl);
     d->spl->addWidget(d->head);
@@ -185,17 +185,17 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
         d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_SORTING);
         d->dataTable->tableView()->maximizeColumnsWidth(c);
         d->dataTable->tableView()->setDropsAtRowEnabled(true);
-        connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiDB::RecordData*, int, QDragMoveEvent*)),
-                this, SLOT(slotDragOverTableRow(KexiDB::RecordData*, int, QDragMoveEvent*)));
-        connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KexiDB::RecordData*, int, QDropEvent*, KexiDB::RecordData*&)),
-                this, SLOT(slotDroppedAtRow(KexiDB::RecordData*, int, QDropEvent*, KexiDB::RecordData*&)));
+        connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiDB::RecordData*,int,QDragMoveEvent*)),
+                this, SLOT(slotDragOverTableRow(KexiDB::RecordData*,int,QDragMoveEvent*)));
+        connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KexiDB::RecordData*,int,QDropEvent*,KexiDB::RecordData*&)),
+                this, SLOT(slotDroppedAtRow(KexiDB::RecordData*,int,QDropEvent*,KexiDB::RecordData*&)));
         connect(d->dataTable->tableView(), SIGNAL(newItemAppendedForAfterDeletingInSpreadSheetMode()),
                 this, SLOT(slotNewItemAppendedForAfterDeletingInSpreadSheetMode()));
     }
-    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)),
-            this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)));
-    connect(d->data, SIGNAL(rowInserted(KexiDB::RecordData*, uint, bool)),
-            this, SLOT(slotRowInserted(KexiDB::RecordData*, uint, bool)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
+            this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)));
+    connect(d->data, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
+            this, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool)));
     connect(d->relations, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)),
             this, SLOT(slotTablePositionChanged(KexiRelationsTableContainer*)));
     connect(d->relations, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
@@ -1795,8 +1795,8 @@ KexiQueryDesignerGuiEditor::createPropertySet(int row,
     set->addProperty(prop = new KoProperty::Property("isExpression", QVariant(false)));
     prop->setVisible(false);
 
-    connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     d->sets->set(row, set, newOne);
 

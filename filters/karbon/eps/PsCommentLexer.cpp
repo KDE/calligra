@@ -17,10 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "PsCommentLexer.h"
+
 #include <stdlib.h>
 #include <ctype.h>
 #include <QStringList>
-#include "PsCommentLexer.h"
 
 #define CATEGORY_WHITESPACE -1
 #define CATEGORY_ALPHA -2

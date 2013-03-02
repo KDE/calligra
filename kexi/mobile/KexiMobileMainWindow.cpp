@@ -62,7 +62,7 @@ KexiMobileMainWindow::KexiMobileMainWindow()
     addToolBar(Qt::BottomToolBarArea, m_toolbar);
     
     connect(m_toolbar, SIGNAL(pageNavigator()), m_mobile, SLOT(showNavigator()));
-    connect(m_mobile->navigator(), SIGNAL(openItem(KexiPart::Item *)), this, SLOT(openObject(KexiPart::Item*)));
+    connect(m_mobile->navigator(), SIGNAL(openItem(KexiPart::Item*)), this, SLOT(openObject(KexiPart::Item*)));
 }
 
 void KexiMobileMainWindow::setupToolbar()
