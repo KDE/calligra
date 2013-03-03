@@ -66,6 +66,7 @@ set(koodf_LIB_SRCS
     KoElementReference.cpp
 
     styles/KoOdfStyle.cpp
+    styles/KoOdfStyleManager.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
