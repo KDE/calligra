@@ -23,6 +23,7 @@
 
 #include <KoToolBase.h>
 
+class QTextEdit;
 class FormulaShape;
 
 class FormulaTool : public KoToolBase
@@ -52,11 +53,12 @@ protected:
     virtual QWidget *createOptionWidget();
 
 private slots: 
-    void openPressed();         // Template: example code
+    void insertPressed();         // Template: example code
 
 private:
     // Pointer to the shape that we manipulate.
     FormulaShape *m_formulaShape;
+    QTextEdit *m_textEdit;
 };
 
 #endif

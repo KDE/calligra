@@ -665,7 +665,7 @@ static QString rectToStr(const QRect &rect);
 static QString entityDeclarations();
 
 
-#define MML_ATT_COMMON      " class style id xref actiontype "
+#define MML_ATT_COMMON      " class style id xref actiontype xmlns"
 #define MML_ATT_FONTSIZE    " fontsize fontweight fontstyle fontfamily color "
 #define MML_ATT_MATHVARIANT " mathvariant mathsize mathcolor mathbackground "
 #define MML_ATT_FONTINFO    MML_ATT_FONTSIZE MML_ATT_MATHVARIANT
@@ -3170,9 +3170,9 @@ bool MmlDocument::setContent(QString text, QString *errorMsg,
 {
     clear();
 
+    //QString prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     QString prefix = "<?xml version=\"2.0\"?>\n";
     prefix.append(entityDeclarations());
-
     uint prefix_lines = 0;
     for (int i = 0; i < prefix.length(); ++i) {
 	if (prefix.at(i) == '\n')

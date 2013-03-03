@@ -39,7 +39,7 @@ FormulaToolFactory::FormulaToolFactory()
     setToolTip(i18n("Formula editing tool"));
     setIconName(koIconNameCStr("eidttext"));
     setToolType(dynamicToolType());
-    setPriority(1);
+    setPriority(2);
     setActivationShapeId(FORMULASHAPEID);
 }
 

@@ -24,6 +24,7 @@
 // Qt
 #include <QToolButton>
 #include <QGridLayout>
+#include <QTextEdit>
 
 // KDE
 #include <KLocale>
@@ -46,6 +47,7 @@
 FormulaTool::FormulaTool( KoCanvasBase* canvas )
     : KoToolBase( canvas ),
       m_formulaShape(0)
+    , m_textEdit(0)
 {
 }
 
@@ -85,11 +87,15 @@ QWidget * FormulaTool::createOptionWidget()
 
     QToolButton *button = 0;
 
+    m_textEdit = new QTextEdit(optionWidget);
     button = new QToolButton(optionWidget);
-    button->setIcon(koIcon("document-open"));
-    button->setToolTip(i18n( "Open"));
-    layout->addWidget(button, 0, 0);
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(openPressed()));
+    //button->setIcon(koIcon("document-open"));
+    button->setText(i18n("Insert"));
+    button->setToolTip(i18n( "Insert"));
+    layout->addWidget(button, 1, 0);
+    layout->addWidget(m_textEdit, 0, 0);
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(insertPressed()));
+
 
     return optionWidget;
 }
@@ -99,17 +105,13 @@ QWidget * FormulaTool::createOptionWidget()
 //                         Private slots
 
 
-void FormulaTool::openPressed()
+void FormulaTool::insertPressed()
 {
     if (m_formulaShape == 0)
         return;
 
-    KUrl url = KFileDialog::getOpenUrl();
-    if (!url.isEmpty()) {
-        // Template: do something with the file here.
-    }
+    m_formulaShape->setMML(m_textEdit->toPlainText());
 }
-
 
 // ----------------------------------------------------------------
 //                         Event handling
@@ -124,15 +126,6 @@ void FormulaTool::mousePressEvent(KoPointerEvent *event)
 
 void FormulaTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    // Template: Example code: if the shape is double clicked, do the
-    //           same as if the button in the option widget is pressed.
-
-    if (canvas()->shapeManager()->shapeAt(event->point) != m_formulaShape) {
-        event->ignore(); // allow the event to be used by another
-        return;
-    }
-
-    openPressed();
 }
 
 #include <FormulaTool.moc>

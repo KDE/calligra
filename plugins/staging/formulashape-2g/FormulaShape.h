@@ -25,18 +25,23 @@
 #include <QObject>
 
 // Calligra
+#include <KoFrameShape.h>
 #include <KoShape.h>
 
 #define FORMULASHAPEID "FormulaShape2g"
 
-class QtMmlDocument;
+class KoStore;
+class KoOdfLoadingContext;
+class KoDocumentResourceManager;
 
-class FormulaShape : public QObject, public KoShape
+class FormulaDocument;
+
+class FormulaShape : public QObject, public KoShape, public KoFrameShape
 {
     Q_OBJECT
 
 public:
-    FormulaShape();
+    FormulaShape(KoDocumentResourceManager *documentResourceManager);
     virtual ~FormulaShape();
 
     // reimplemented from KoShape
@@ -45,14 +50,28 @@ public:
     // reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented from KoShape
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context );
+
+    virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
 
     // reimplemented from KoShape
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
+    KoDocumentResourceManager *resourceManager() const;
+
+    void setMML(const QString &mmlText);
 
 private:
-    QtMmlDocument *m_mmlDocument;
+    bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
+                              const KoOdfLoadingContext &odfLoadingContext);
+
+    FormulaDocument *m_document;
+    KoDocumentResourceManager *m_resourceManager;
+
+    /// True if this formula is inline, i.e. not embedded in a formula document.
+    bool m_isInline;
+
+    QString m_mmlString;
 };
 
 

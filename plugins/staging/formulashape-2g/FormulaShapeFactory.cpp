@@ -44,20 +44,33 @@ FormulaShapeFactory::FormulaShapeFactory()
 {
     setToolTip(i18n("Formula editing"));
     setIconName(koIconNameCStr("edittext"));
-    setLoadingPriority(1);
+    setLoadingPriority(2);
 
     // Tell the shape loader which tag we can store
-    // Template: You must change this.
     QList<QPair<QString, QStringList> > elementNamesList;
-    elementNamesList.append(qMakePair(QString(KoXmlNS::calligra), QStringList("template")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("object")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::math), QStringList("math")));
     setXmlElements(elementNamesList);
 }
 
 bool FormulaShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
-    // Template: Change this to your own supported element and namespace.
-    if (e.localName() == "template" && e.namespaceURI() == KoXmlNS::calligra) {
+    Q_UNUSED(context);
+    if ((e.localName() == "math" && e.namespaceURI() == KoXmlNS::math)) {
         return true;
+    }
+
+    if (e.localName() == "object" && e.namespaceURI() == KoXmlNS::draw) {
+        QString href = e.attribute("href");
+        if (!href.isEmpty()) {
+            // check the mimetype
+            if (href.startsWith(QLatin1String("./"))) {
+                href.remove(0, 2);
+            }
+
+            const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+            return mimetype.isEmpty() || mimetype == "application/vnd.oasis.opendocument.formula";
+        }
     }
 
     return false;
@@ -65,7 +78,7 @@ bool FormulaShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
 
 KoShape *FormulaShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    FormulaShape *formulaShape = new FormulaShape();
+    FormulaShape *formulaShape = new FormulaShape(documentResources);
     formulaShape->setShapeId(FORMULASHAPEID);
 
     return formulaShape;
