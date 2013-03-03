@@ -75,7 +75,7 @@ struct Mml
 	    MstyleNode, TextNode, MphantomNode, MfencedNode,
 	    MtableNode, MtrNode, MtdNode, MoverNode, MunderNode,
 	    MunderoverNode, MerrorNode, MtextNode, MpaddedNode,
-	    MspaceNode, MalignMarkNode, UnknownNode
+        MspaceNode, MalignMarkNode, MannotationNode, UnknownNode
     };
 
     enum MathVariant {
@@ -325,6 +325,15 @@ class MmlMalignMarkNode : public MmlNode
     public:
 	MmlMalignMarkNode(MmlDocument *document)
 	    : MmlNode(MalignMarkNode, document, MmlAttributeMap()) {}
+};
+
+class MmlannotationNode : public MmlNode
+{
+    public:
+    MmlannotationNode(MmlDocument *document, const MmlAttributeMap &attribute_map)
+        : MmlNode(MannotationNode, document, attribute_map) {}
+
+    virtual void paint(QPainter *) {}
 };
 
 class MmlMfracNode : public MmlNode
@@ -719,6 +728,7 @@ static const NodeSpec g_node_spec_data[] = {
     {	Mml::MpaddedNode,  	"mpadded",   	"MpaddedNode",	    NodeSpec::ImplicitMrow, 0,                       MML_ATT_COMMON " width height depth lspace " },
     {	Mml::MspaceNode,  	"mspace",   	"MspaceNode",	    NodeSpec::ImplicitMrow, 0,                       MML_ATT_COMMON " width height depth linebreak " },
     {	Mml::TextNode,    	0,  	    	"TextNode", 	    NodeSpec::ChildIgnore,  0,                       ""                                  },
+    {   Mml::MannotationNode, "annotation", "MannotationNode",    NodeSpec::ChildAny,     0,                       0         	    	    	         },
     {	Mml::UnknownNode,	0,	      	"UnknownNode",      NodeSpec::ChildAny,     0,                       0         	    	    	         },
     {	Mml::NoNode,	    	0,	      	0,  	    	    0,       	            0,                       0         	    	    	         }
 };
@@ -3336,6 +3346,9 @@ MmlNode *MmlDocument::createNode(NodeType type,
 	case MalignMarkNode:
 	    mml_node = new MmlMalignMarkNode(this);
 	    break;
+    case MannotationNode:
+        mml_node = new MmlannotationNode(this, mml_attr);
+        break;
 	case MerrorNode:
 	    mml_node = new MmlMerrorNode(this, mml_attr);
 	    break;
@@ -4447,6 +4460,7 @@ int MmlMoNode::lspace() const
     if (parent() == 0
 	    || (parent()->nodeType() != MrowNode
 	    	    && parent()->nodeType() != MfencedNode
+            && parent()->nodeType() != MannotationNode
 		    && parent()->nodeType() != UnknownNode)
 	    || (previousSibling() == 0 && nextSibling() == 0))
 	return 0;
@@ -4460,6 +4474,7 @@ int MmlMoNode::rspace() const
     if (parent() == 0
 	    || (parent()->nodeType() != MrowNode
 	    	    && parent()->nodeType() != MfencedNode
+            && parent()->nodeType() != MannotationNode
 		    && parent()->nodeType() != UnknownNode)
 	    || (previousSibling() == 0 && nextSibling() == 0))
 	return 0;
@@ -5689,7 +5704,7 @@ static const NodeSpec *mmlFindNodeSpec(const QString &tag)
 {
     const NodeSpec *spec = g_node_spec_data;
     for (; spec->type != Mml::NoNode; ++spec) {
-	if (tag == spec->tag) return spec;
+    if (tag == spec->tag) return spec;
     }
     return 0;
 }
@@ -5699,6 +5714,10 @@ static bool mmlCheckChildType(Mml::NodeType parent_type, Mml::NodeType child_typ
 {
     if (parent_type == Mml::UnknownNode || child_type == Mml::UnknownNode)
 	return true;
+
+    if (parent_type == Mml::MannotationNode || child_type == Mml::MannotationNode) {
+        return true;
+    }
 
     const NodeSpec *child_spec = mmlFindNodeSpec(child_type);
     const NodeSpec *parent_spec = mmlFindNodeSpec(parent_type);
