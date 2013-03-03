@@ -4,14 +4,16 @@
 #include <QString>
 #include <QMap>
 #include <KDebug>
+#include <locale.h>
 
 LinkGrammar::LinkGrammar()
 {
     //add the default language to list of supported languages
-	//addLanguageToSetOfSupportedLanguagesWithDictionaryPath("en");
-	m_Opts = parse_options_create();
-	m_Dict = dictionary_create_lang("en");
-	m_languagePreference = "en";
+    //addLanguageToSetOfSupportedLanguagesWithDictionaryPath("en");
+    setlocale(LC_ALL, "");
+    m_Opts = parse_options_create();
+    m_Dict = dictionary_create_lang("en");
+    m_languagePreference = "en";
 	// default max parsing time = 1
 	m_maxTimeToParseInNumberOfSeconds = 1;
 	// default disjunct count = 2
@@ -96,19 +98,31 @@ bool LinkGrammar::isLanguageAvailable(QString language)
 
 bool LinkGrammar::parseSentence(QString givenSentence)
 {
+    setlocale(LC_ALL, "");
+    m_Opts = parse_options_create();
+    m_Dict = dictionary_create_lang("en");
+
+    kDebug(31000) << "in parse sentence function";
+    kDebug(31000) << givenSentence;
+    
 	if(!m_Dict)
 	{
-		kDebug() << "No dictionary";
+		kDebug(31000) << "No dictionary";
 		return true; //no grammar checking
 	}
-	char *textChar = givenSentence.toUtf8().data();
-	Sentence sent = sentence_create(textChar, m_Dict);
+    
+    QByteArray utfByteArray = givenSentence.toUtf8();
+    char *textChar = utfByteArray.data();
+	
+    Sentence sent = sentence_create(textChar, m_Dict);
 	if (!sent)
 	{
-		kDebug() << "Failed to create sentence";
+		kDebug(31000) << "Failed to create sentence";
 		return true;
 	}
-	
+
+	kDebug(31000) << "sentence created";
+
 	parse_options_set_max_parse_time(m_Opts, m_maxTimeToParseInNumberOfSeconds);
 	parse_options_set_disjunct_cost(m_Opts, m_disjunctCount);
 	
@@ -118,7 +132,9 @@ bool LinkGrammar::parseSentence(QString givenSentence)
 	parse_options_set_panic_mode(m_Opts, true);
 	parse_options_reset_resources(m_Opts);
 	
+	sentence_split(sent, m_Opts);
 	quint32 num_linkages = sentence_parse(sent, m_Opts);
+	
 	bool res =  (num_linkages >= 1);
 	
 	if(parse_options_timer_expired(m_Opts))
@@ -126,11 +142,10 @@ bool LinkGrammar::parseSentence(QString givenSentence)
 		kDebug() << "Timer expired!";
 		res = true;
 	}
-	
+
 	/*****
 	 * TODO: find out what actually went wrong by allowing null linkages.
 	 *******/
-	
-	sentence_delete(sent);
+	//sentence_delete(sent);
 	return res;
 }

@@ -13,6 +13,6 @@ GrammarCheckFactory::GrammarCheckFactory()
 
 KoTextEditingPlugin *GrammarCheckFactory::create() const
 {
-    kDebug() << "grammarcheck plugin not created";
+    kDebug(31000) << "grammarcheck factory created";
     return new GrammarCheck();
 }

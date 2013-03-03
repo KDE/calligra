@@ -13,7 +13,7 @@ K_EXPORT_PLUGIN(GrammarCheckPluginFactory("GrammarCheckPlugin"))
 GrammarCheckPlugin::GrammarCheckPlugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
-    kDebug() << "No dictionary";
+    kDebug(31000) << "grammar check instance created";
     KoTextEditingRegistry::instance()->add(new GrammarCheckFactory());
 }
 

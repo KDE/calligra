@@ -21,11 +21,11 @@ public:
     void startRun(QTextDocument *document, int startPosition, int endPosition);
     LinkGrammar grammarChecker();
     void setGrammarChecker(const LinkGrammar &grammarChecker);
-    void checkCurrentSentence();
     void restore(KConfig *config);
     QString currentLanguage();
 
 public slots:
+    void checkCurrentSentence();
     void setDefaultLanguage(const QString &language);
     void changeLanguage(const QString &lang);
    // QString language();

@@ -748,21 +748,35 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
     }
 
 
-    // Finally let's paint our own spelling markings
+    // Finally let's paint our own spelling and grammar markings
     // TODO Should we make this optional at this point (right on/off handled by the plugin)
     // also we might want to provide alternative ways of drawing it
-    KoTextBlockData blockData(block);
     QPen penBackup = painter->pen();
     QPen pen;
     pen.setColor(QColor(Qt::red));
     pen.setWidthF(1.5);
-    QVector<qreal> pattern;
-    pattern << 1 << 2;
-    pen.setDashPattern(pattern);
-    painter->setPen(pen);
+	QVector<qreal> pattern;
+	pattern << 1 << 2;
+	pen.setDashPattern(pattern);
+    applyCustomMarkups(painter, block, KoTextBlockData::Misspell, pen);
 
-    QList<KoTextBlockData::MarkupRange>::Iterator markIt = blockData.markupsBegin(KoTextBlockData::Misspell);
-    QList<KoTextBlockData::MarkupRange>::Iterator markEnd = blockData.markupsEnd(KoTextBlockData::Misspell);
+    pen = QPen();
+    pen.setColor(QColor(Qt::green));
+    pen.setWidthF(1.2);
+	pen.setStyle(Qt::DashDotLine);
+    applyCustomMarkups(painter, block, KoTextBlockData::Grammar, pen);
+
+    painter->setPen(penBackup);
+    painter->setFont(oldFont);
+}
+
+void KoTextLayoutArea::applyCustomMarkups(QPainter *painter, QTextBlock &block, KoTextBlockData::MarkupType type, QPen &pen) 
+{
+    painter->setPen(pen);
+    KoTextBlockData blockData(block);
+    QTextLayout *layout = block.layout();
+    QList<KoTextBlockData::MarkupRange>::Iterator markEnd = blockData.markupsEnd(type);
+    QList<KoTextBlockData::MarkupRange>::Iterator markIt = blockData.markupsBegin(type);
     for (int i = 0 ; i <= layout->lineCount(); ++i) {
         if (markIt == markEnd) {
             break;
@@ -770,12 +784,16 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
         QTextLine line = layout->lineAt(i);
         // the y position is placed half way between baseline and descent of the line
         // this is fast and sufficient
-        qreal y = line.position().y() + line.ascent() + 0.5 * line.descent();
-
+       
+    qreal y = line.position().y() + line.ascent() + 0.5 * line.descent();
+	if(type == KoTextBlockData::Grammar)
+	{
+	    y = line.position().y() + line.ascent() + 0.8 * line.descent();
+	}
         // first handle all those marking ranges that end on this line
         while (markIt != markEnd && markIt->lastChar < line.textStart() + line.textLength()
             && line.textStart() + line.textLength() <= block.length()) {
-            if (!blockData.isMarkupsLayoutValid(KoTextBlockData::Misspell)) {
+            if (!blockData.isMarkupsLayoutValid(type)) {
                 if (markIt->firstChar > line.textStart()) {
                     markIt->startX = line.cursorToX(markIt->firstChar);
                 }
@@ -791,7 +809,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
         // there may be a markup range on this line that extends to the next line
         if (markIt != markEnd && markIt->firstChar < line.textStart() + line.textLength()
             && line.textStart() + line.textLength()<=block.length()) {
-            if (!blockData.isMarkupsLayoutValid(KoTextBlockData::Misspell)) {
+            if (!blockData.isMarkupsLayoutValid(type)) {
                 if (markIt->firstChar > line.textStart()) {
                     markIt->startX = line.cursorToX(markIt->firstChar);
                 }
@@ -803,10 +821,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
             // since it extends to next line we don't increment the iterator
         }
     }
-    blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, true);
-
-    painter->setPen(penBackup);
-    painter->setFont(oldFont);
+    blockData.setMarkupsLayoutValidity(type, true);
 }
 
 void KoTextLayoutArea::drawStrikeOuts(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const

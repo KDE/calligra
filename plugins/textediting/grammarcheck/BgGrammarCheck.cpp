@@ -79,7 +79,9 @@ void BgGrammarCheck::startRun(QTextDocument *document, int startPosition, int en
 
 void BgGrammarCheck::checkCurrentSentence()
 {
+    kDebug(31000) << "sentence sent to link-grammar" << m_currentSentence;
     bool isCorrect = m_grammarChecker.parseSentence(m_currentSentence);
+    kDebug(31000) << isCorrect;
     if(!isCorrect)
         emit grammaticallyIncorrectSegment(m_currentSentence, m_startPosition, m_endPosition, true);
     emit done();
