@@ -33,6 +33,7 @@ class KoOdfStyleProperties::Private
 public:
     Private() {};
 
+    // We could use a QHash instead but I like that the values are saved in order.
     QMap<QString, QString> attributes;  // name, value
 };
 
@@ -53,7 +54,7 @@ KoOdfStyleProperties::~KoOdfStyleProperties()
 
 QString KoOdfStyleProperties::value(QString &property) const
 {
-    return d->attributes.value(property);
+    return d->attributes.value(property, QString());
 }
 
 void KoOdfStyleProperties::setValue(QString &property, QString &value)
@@ -150,13 +151,13 @@ void KoOdfStyle::setIsDefaultStyle(bool isDefaultStyle)
 
 KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
 {
-    return d->properties.value(name);
+    return d->properties.value(name, 0);
 }
 
 
 QString KoOdfStyle::property(QString &propertySet, QString &property) const
 {
-    KoOdfStyleProperties *props = d->properties.value(propertySet);
+    KoOdfStyleProperties *props = d->properties.value(propertySet, 0);
     if (props)
         return props->value(property);
     else
