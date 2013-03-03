@@ -76,18 +76,13 @@ void FormulaTool::deactivate()
 
 QWidget * FormulaTool::createOptionWidget()
 {
-    // Template: This function should not be implemented if the tool
-    // does not have an option widget.
-
-    // Template: Example code: a single button that opens a file.
-    // Another alternative is to have the option widget in a separate class.
-
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout(optionWidget);
 
     QToolButton *button = 0;
 
     m_textEdit = new QTextEdit(optionWidget);
+    m_textEdit->setText(m_formulaShape->MML());
     button = new QToolButton(optionWidget);
     //button->setIcon(koIcon("document-open"));
     button->setText(i18n("Insert"));

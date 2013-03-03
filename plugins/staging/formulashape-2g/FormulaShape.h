@@ -60,6 +60,7 @@ public:
     KoDocumentResourceManager *resourceManager() const;
 
     void setMML(const QString &mmlText);
+    QString MML();
 
 private:
     bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,

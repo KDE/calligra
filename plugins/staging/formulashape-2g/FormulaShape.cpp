@@ -264,4 +264,9 @@ void FormulaShape::setMML(const QString &mmlText)
     }
 }
 
+QString FormulaShape::MML()
+{
+    return m_document->content();
+}
+
 #include <FormulaShape.moc>
