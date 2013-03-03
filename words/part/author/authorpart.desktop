@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Calligra Author Component
+Name[ca]=Component Author del Calligra
 Name[da]=Calligra Author-komponent
 Name[de]=Calligra-Komponente für Autoren
 Name[el]=Calligra Author Component
@@ -28,6 +29,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;
 X-KDE-ServiceTypes=CalligraPart
 GenericName=Author tool
+GenericName[ca]=Eina d'autor
 GenericName[cs]=Nástroj Author
 GenericName[da]=Forfatterværktøj
 GenericName[de]=Autoren-Anwendung
