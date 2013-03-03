@@ -10,9 +10,7 @@
 
 
 macro(calligra_set_shouldbuild_productdependencies _productset_id_dependencies _product_id)
-  message(STATUS "-> ${_productset_id_dependencies}")
   foreach(_dep_product_id ${_productset_id_dependencies})
-    message(STATUS "++++++++++++ ${_dep_product_id}")
     list(APPEND CALLIGRA_PRODUCT_${_dep_product_id}_dependents ${_product_id})
     # if not already enabled, enable
     if (NOT SHOULD_BUILD_${_dep_product_id})
@@ -29,10 +27,8 @@ endmacro()
 macro(calligra_drop_unbuildable_products)
   # can assume calligra_all_products has products in down-up order
   foreach(_product_id ${CALLIGRA_ALL_PRODUCTS})
-    message(STATUS "TTTTTT ${_product_id} ${SHOULD_BUILD_${_product_id}}")
     if(NOT SHOULD_BUILD_${_product_id})
       if(DEFINED CALLIGRA_PRODUCT_${_product_id}_dependents)
-        message(STATUS "-- -- -- -- ${_product_id} ${CALLIGRA_PRODUCT_${_product_id}_dependents}")
         foreach(_dependent_product_id ${CALLIGRA_PRODUCT_${_product_id}_dependents})
           set(SHOULD_BUILD_${_dependent_product_id} FALSE)
         endforeach(_dependent_product_id ${CALLIGRA_PRODUCT_${_dep_product_id}_dependents})
@@ -63,6 +59,25 @@ macro(calligra_set_productset _productset_id)
   message(STATUS "Configured with product set \"${_productset_id}\"")
   message(STATUS "--------------------------------------------------------------------------" )
 
+  # backward compatibility: BUILD_app as option or passed as cmake parameter can overwrite product set
+  foreach(_product_id ${CALLIGRA_ALL_PRODUCTS})
+    string(TOLOWER "${_product_id}" lowercase_product_id)
+    if (DEFINED BUILD_${lowercase_product_id})
+      list(FIND CALLIGRA_SHOULD_BUILD_PRODUCTS ${_product_id} _index)
+      if(BUILD_${lowercase_product_id})
+        # add to product set, if not already part
+        if(_index EQUAL -1)
+          list(APPEND CALLIGRA_SHOULD_BUILD_PRODUCTS ${_product_id})
+        endif(_index EQUAL -1)
+      else(BUILD_${lowercase_product_id})
+        # remove from product set, if part
+        if(NOT _index EQUAL -1)
+          list(REMOVE_AT CALLIGRA_SHOULD_BUILD_PRODUCTS ${_index})
+        endif(NOT _index EQUAL -1)
+      endif(BUILD_${lowercase_product_id})
+    endif (DEFINED BUILD_${lowercase_product_id})
+  endforeach(_product_id ${CALLIGRA_ALL_PRODUCTS})
+
   # mark all products of the set as SHOULD_BUILD
   foreach(_product_id ${CALLIGRA_SHOULD_BUILD_PRODUCTS})
     # check that this product is actually existing
@@ -72,7 +87,6 @@ macro(calligra_set_productset _productset_id)
 
     # mark product as should build, also all dependencies
     set(SHOULD_BUILD_${_product_id} TRUE)
-    message(STATUS "=========== ${_product_id} (CALLIGRA_PRODUCT_${_product_id}_dependencies:${CALLIGRA_PRODUCT_${_product_id}_dependencies})")
     if (DEFINED CALLIGRA_PRODUCT_${_product_id}_dependencies)
         calligra_set_shouldbuild_productdependencies("${CALLIGRA_PRODUCT_${_product_id}_dependencies}" ${_product_id})
     endif (DEFINED CALLIGRA_PRODUCT_${_product_id}_dependencies)
@@ -115,7 +129,6 @@ macro(calligra_define_product _product_id)
   set(CALLIGRA_PRODUCT_${_product_id}_name "${_product_name}")
   set(CALLIGRA_PRODUCT_${_product_id}_dependencies ${_dep_product_ids})
   list(APPEND CALLIGRA_ALL_PRODUCTS ${_product_id})
-  message(STATUS "**** ${_product_id}: ${CALLIGRA_PRODUCT_${_product_id}_dependencies} (CALLIGRA_PRODUCT_${_product_id}_dependencies)")
 endmacro(calligra_define_product)
 
 

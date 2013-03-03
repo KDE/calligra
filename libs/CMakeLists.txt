@@ -19,9 +19,9 @@ if (SHOULD_BUILD_LIB_KOPAGEAPP)
     add_subdirectory( kopageapp )
 endif (SHOULD_BUILD_LIB_KOPAGEAPP)
 
-if(SHOULD_BUILD_LIB_KOREPORT)
+if(SHOULD_BUILD_LIB_KOPROPERTY)
     add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
-endif(SHOULD_BUILD_LIB_KOREPORT)
+endif(SHOULD_BUILD_LIB_KOPROPERTY)
 
 if (SHOULD_BUILD_LIB_CALLIGRADB)
     add_subdirectory( db ) # used by Kexi and Word's Biblio; TODO: remove when Predicate lib arrives

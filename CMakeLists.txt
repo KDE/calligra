@@ -35,25 +35,17 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #####################
 ####################
 
+# There are currently 4 product sets predefined:
+# "ACTIVE", "CREATIVE", "DESKTOP", "ALL" (default).
+# One can define her/his own set, see cmake/productsts/README
+
 # Finding out the products to build is done in x steps:
 # 1. have the user define the products wanted
 # 2. estimate all additional required products
 # 3. estimate which of the products can be build by external deps
 # 4. estimate which of the products can be build by internal deps
 
-# TODO: note external deps for products, so they are only checked if needed
-# There can be required or optional external deps, required will also result
-# in automatic disabling of products
-
 include(CalligraProductSetMacros)
-
-#
-# WARNING: don't change the SHOULD_BUILD_app if an application
-# doesn't build, but rather add the following line:
-# option(BUILD_app "Build directory app" OFF)
-#
-#eg:
-#option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 
 option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
@@ -64,6 +56,14 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 
 # TODO: remove option and migration code below before 3.0 release
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
+
+#
+# WARNING: don't change the SHOULD_BUILD_app if an application
+# doesn't build, but rather add the following line:
+# option(BUILD_app "Build directory app" OFF)
+#
+#eg:
+#option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 
 # temporary migration support
 set(PRODUCTSET_DEFAULT "ALL")
@@ -78,36 +78,40 @@ endif(NOT PRODUCTSET)
 
 # TODO: also add headers/sdk for all the libs ("_DEVEL"?)
 # TODO: filters
+# TODO: note external deps for products, so they are only checked if needed
+# There can be required or optional external deps, required will also result
+# in automatic disabling of product building
+# TODO: some products have multiple optional requirements, but need at least one.
+# See CONVERTER, CSTESTER, EXTRA_*
 calligra_define_product(LIB_KDGANTT "")
 calligra_define_product(LIB_KDCHART "")
-calligra_define_product(LIB_KOREPORT "")
+calligra_define_product(LIB_KOPROPERTY "")
+calligra_define_product(LIB_KOREPORT "" NEEDS LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "")
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents")
+calligra_define_product(SCRIPTING "") # TODO
 calligra_define_product(WORDS_PART "Words engine")
 calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
-calligra_define_product(WORDS "Complete Words (for Desktop)"  NEEDS WORDS_APP)
+calligra_define_product(WORDS "Full Words (for Desktop)"  NEEDS WORDS_APP)
 calligra_define_product(STAGE_PART "Stage engine" NEEDS LIB_KOPAGEAPP)
 calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  NEEDS STAGE_PART)
-calligra_define_product(STAGE "Complete Stage (for Desktop)"  NEEDS STAGE_APP)
+calligra_define_product(STAGE "Full Stage (for Desktop)"  NEEDS STAGE_APP)
 calligra_define_product(SHEETS_PART "Sheets engine")
 calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)" NEEDS SHEETS_PART)
-calligra_define_product(SHEETS "Complete Sheets (for Desktop)" NEEDS SHEETS_APP)
-calligra_define_product(AUTHOR "Author")
-calligra_define_product(KARBON "Karbon")
-calligra_define_product(KRITA "Krita")
-calligra_define_product(KEXI "Kexi"  NEEDS LIB_KOREPORT LIB_CALLIGRADB)
-calligra_define_product(FLOW "Flow"  NEEDS LIB_KOPAGEAPP)
-calligra_define_product(PLAN "Plan"  NEEDS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
-calligra_define_product(SCRIPTING "")
-calligra_define_product(BRAINDUMP "")
-calligra_define_product(CALLIGRA "")
-calligra_define_product(CSTESTER "")
+calligra_define_product(SHEETS "Full Sheets (for Desktop)" NEEDS SHEETS_APP)
+calligra_define_product(AUTHOR "Full Author (for Desktop)")
+calligra_define_product(KARBON "Full Karbon (for Desktop)")
+calligra_define_product(KRITA "Full Krita (for Desktop)")
+calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS LIB_KOREPORT LIB_CALLIGRADB)
+calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS LIB_KOPAGEAPP)
+calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
+calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)")
 calligra_define_product(ACTIVE "Calligra Active" NEEDS  SHEETS_PART STAGE_PART WORDS_PART)
-calligra_define_product(CONVERTER "")
+calligra_define_product(CALLIGRA "")
+calligra_define_product(CONVERTER "Format converter for commandline")
 calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dialog")
 calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing")
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the KDE filemanager adding a \"Print\" action")
-calligra_define_product(DEVTOOLS "")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
 calligra_define_product(PLUGIN_COLORENGINES "")
 calligra_define_product(PLUGIN_MUSICSHAPE "")
@@ -127,6 +131,8 @@ calligra_define_product(PLUGIN_PLUGINSHAPE "")
 calligra_define_product(PLUGIN_FORMULASHAPE "")
 calligra_define_product(PLUGIN_VECTORSHAPE "")
 calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT)
+calligra_define_product(DEVTOOLS "Tools for developers")
+calligra_define_product(CSTESTER "")
 
 calligra_set_productset(${PRODUCTSET})
 
