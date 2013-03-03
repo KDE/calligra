@@ -82,7 +82,7 @@ void FormulaShape::saveOdf(KoShapeSavingContext &context) const
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement( "draw:object" );
     // TODO add some namespace magic to avoid adding "math:" namespace everywhere
-    //formulaData()->formulaElement()->writeMathML( &context.xmlWriter() );
+    writer.addCompleteElement(m_document->content().toUtf8());
     writer.endElement(); // draw:object
     writer.endElement(); // draw:frame
 }

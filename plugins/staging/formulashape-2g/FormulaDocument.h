@@ -52,6 +52,9 @@ public:
     KoView *createViewInstance( QWidget *parent );
     
     void paintContent( QPainter &painter, const QRect &rect ); 
+
+    bool setContent(QString text, QString *errorMsg, int *errorLine, int *errorColumn);
+    QString content();
     
 private:
     class Private;

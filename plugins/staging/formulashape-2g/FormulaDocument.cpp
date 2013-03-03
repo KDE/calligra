@@ -57,6 +57,7 @@ public:
     ~Private();
 
     FormulaShape *parent;
+    QString content;
 };
 
 FormulaDocument::Private::Private()
@@ -160,4 +161,17 @@ void FormulaDocument::paintContent( QPainter &painter, const QRect &rect )
     Q_UNUSED( rect );
 }
 
+bool FormulaDocument::setContent(QString text, QString *errorMsg, int *errorLine, int *errorColumn)
+{
+    if (QtMmlDocument::setContent(text, errorMsg, errorLine, errorColumn)) {
+        d->content = text;
+        return true;
+    }
 
+    return false;
+}
+
+QString FormulaDocument::content()
+{
+    return d->content;
+}
