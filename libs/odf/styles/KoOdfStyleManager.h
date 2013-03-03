@@ -25,6 +25,7 @@
 #include "koodf_export.h"
 
 
+class QString;
 class KoOdfStyle;
 
 

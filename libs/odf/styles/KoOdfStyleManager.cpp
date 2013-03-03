@@ -24,6 +24,7 @@
 
 // Qt
 #include <QMap>
+#include <QString>
 
 // odf lib
 #include "KoOdfStyle.h"

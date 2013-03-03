@@ -24,8 +24,8 @@
 
 #include "koodf_export.h"
 
-#include <QMap>
-#include <QString>
+
+class QString;
 
 
 class KOODF_EXPORT KoOdfStyleProperties

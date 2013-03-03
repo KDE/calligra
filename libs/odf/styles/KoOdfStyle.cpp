@@ -21,6 +21,7 @@
 
 #include "KoOdfStyle.h"
 
+#include <QString>
 #include <QMap>
 
 
