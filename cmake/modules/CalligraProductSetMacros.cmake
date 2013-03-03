@@ -60,21 +60,17 @@ macro(calligra_set_productset _productset_id)
   message(STATUS "--------------------------------------------------------------------------" )
 
   # backward compatibility: BUILD_app as option or passed as cmake parameter can overwrite product set
+  # and disable a product if set to FALSE (TRUE was ignored)
   foreach(_product_id ${CALLIGRA_ALL_PRODUCTS})
     string(TOLOWER "${_product_id}" lowercase_product_id)
     if (DEFINED BUILD_${lowercase_product_id})
-      list(FIND CALLIGRA_SHOULD_BUILD_PRODUCTS ${_product_id} _index)
-      if(BUILD_${lowercase_product_id})
-        # add to product set, if not already part
-        if(_index EQUAL -1)
-          list(APPEND CALLIGRA_SHOULD_BUILD_PRODUCTS ${_product_id})
-        endif(_index EQUAL -1)
-      else(BUILD_${lowercase_product_id})
+      if(NOT BUILD_${lowercase_product_id})
+        list(FIND CALLIGRA_SHOULD_BUILD_PRODUCTS ${_product_id} _index)
         # remove from product set, if part
         if(NOT _index EQUAL -1)
           list(REMOVE_AT CALLIGRA_SHOULD_BUILD_PRODUCTS ${_index})
         endif(NOT _index EQUAL -1)
-      endif(BUILD_${lowercase_product_id})
+      endif(NOT BUILD_${lowercase_product_id})
     endif (DEFINED BUILD_${lowercase_product_id})
   endforeach(_product_id ${CALLIGRA_ALL_PRODUCTS})
 
