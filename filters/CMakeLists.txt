@@ -48,17 +48,17 @@ if(SHOULD_BUILD_KCHART)
     add_subdirectory(kchart)
 endif(SHOULD_BUILD_KCHART)
 
-if (SHOULD_BUILD_WORDS)
+if (SHOULD_BUILD_WORDS_PART)
     add_subdirectory(words)
-endif (SHOULD_BUILD_WORDS)
+endif (SHOULD_BUILD_WORDS_PART)
 
-if(SHOULD_BUILD_STAGE)
+if(SHOULD_BUILD_STAGE_PART)
     add_subdirectory(stage)
-endif(SHOULD_BUILD_STAGE)
+endif(SHOULD_BUILD_STAGE_PART)
 
-if(SHOULD_BUILD_SHEETS)
+if(SHOULD_BUILD_SHEETS_PART)
     add_subdirectory(sheets)
-endif(SHOULD_BUILD_SHEETS)
+endif(SHOULD_BUILD_SHEETS_PART)
 
 if(SHOULD_BUILD_FLOW)
     add_subdirectory(flow)

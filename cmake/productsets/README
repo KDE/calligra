@@ -19,7 +19,6 @@ into this directory, with the content:
 --- 8< ---
 set( CALLIGRA_SHOULD_BUILD_PRODUCTS
     WORDS
-    WORDS_APP
 )
 --- 8< ---
 

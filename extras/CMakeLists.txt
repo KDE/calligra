@@ -19,10 +19,5 @@ if (SHOULD_BUILD_EXTRA_QUICKPRINT)
 endif(SHOULD_BUILD_EXTRA_QUICKPRINT)
 
 if(SHOULD_BUILD_OKULARODPGENERATOR)
-    macro_optional_find_package(Okular)
-    macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
-
-    if(OKULAR_FOUND)
-        add_subdirectory( okularodpgenerator )
-    endif(OKULAR_FOUND)
+    add_subdirectory( okularodpgenerator )
 endif(SHOULD_BUILD_OKULARODPGENERATOR)

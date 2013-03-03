@@ -41,6 +41,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 # 3. estimate which of the products can be build by external deps
 # 4. estimate which of the products can be build by internal deps
 
+# TODO: note external deps for products, so they are only checked if needed
+# There can be required or optional external deps, required will also result
+# in automatic disabling of products
 
 include(CalligraProductSetMacros)
 
@@ -79,33 +82,33 @@ calligra_define_product(LIB_KDGANTT "")
 calligra_define_product(LIB_KDCHART "")
 calligra_define_product(LIB_KOREPORT "")
 calligra_define_product(LIB_CALLIGRADB "")
-calligra_define_product(LIB_KOPAGEAPP "")
+calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents")
 calligra_define_product(WORDS_PART "Words engine")
-calligra_define_product(WORDS_APP "Words executable (for Desktop)"  DEPENDS WORDS_PART)
-calligra_define_product(WORDS "Complete Words (for Desktop)"  DEPENDS WORDS_APP)
-calligra_define_product(STAGE_PART "Stage engine" DEPENDS LIB_KOPAGEAPP)
-calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  DEPENDS STAGE_PART)
-calligra_define_product(STAGE "Complete Stage (for Desktop)"  DEPENDS STAGE_APP)
+calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
+calligra_define_product(WORDS "Complete Words (for Desktop)"  NEEDS WORDS_APP)
+calligra_define_product(STAGE_PART "Stage engine" NEEDS LIB_KOPAGEAPP)
+calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  NEEDS STAGE_PART)
+calligra_define_product(STAGE "Complete Stage (for Desktop)"  NEEDS STAGE_APP)
 calligra_define_product(SHEETS_PART "Sheets engine")
-calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)" DEPENDS SHEETS_PART)
-calligra_define_product(SHEETS "Complete Sheets (for Desktop)" DEPENDS SHEETS_APP)
+calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)" NEEDS SHEETS_PART)
+calligra_define_product(SHEETS "Complete Sheets (for Desktop)" NEEDS SHEETS_APP)
 calligra_define_product(AUTHOR "Author")
 calligra_define_product(KARBON "Karbon")
 calligra_define_product(KRITA "Krita")
-calligra_define_product(KEXI "Kexi"  DEPENDS LIB_KOREPORT LIB_CALLIGRADB)
-calligra_define_product(FLOW "Flow"  DEPENDS LIB_KOPAGEAPP)
-calligra_define_product(PLAN "Plan"  DEPENDS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
+calligra_define_product(KEXI "Kexi"  NEEDS LIB_KOREPORT LIB_CALLIGRADB)
+calligra_define_product(FLOW "Flow"  NEEDS LIB_KOPAGEAPP)
+calligra_define_product(PLAN "Plan"  NEEDS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
 calligra_define_product(SCRIPTING "")
 calligra_define_product(BRAINDUMP "")
 calligra_define_product(CALLIGRA "")
 calligra_define_product(CSTESTER "")
-calligra_define_product(ACTIVE "Calligra Active" DEPENDS  SHEETS_PART STAGE_PART WORDS_PART)
+calligra_define_product(ACTIVE "Calligra Active" NEEDS  SHEETS_PART STAGE_PART WORDS_PART)
 calligra_define_product(CONVERTER "")
 calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dialog")
 calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing")
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the KDE filemanager adding a \"Print\" action")
 calligra_define_product(DEVTOOLS "")
-calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" DEPENDS STAGE_PART)
+calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
 calligra_define_product(PLUGIN_COLORENGINES "")
 calligra_define_product(PLUGIN_MUSICSHAPE "")
 calligra_define_product(PLUGIN_SPACENAVIGATOR "")
@@ -113,7 +116,7 @@ calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "")
 calligra_define_product(PLUGIN_DOCKERS "")
 calligra_define_product(PLUGIN_TEXTEDITING "")
 calligra_define_product(PLUGIN_STAGING "")
-calligra_define_product(PLUGIN_KEXI ""  DEPENDS KEXI)
+calligra_define_product(PLUGIN_KEXI ""  NEEDS KEXI)
 calligra_define_product(PLUGIN_DEFAULTTOOLS "")
 calligra_define_product(PLUGIN_PATHSHAPES "")
 calligra_define_product(PLUGIN_VARIABLES "")
@@ -123,7 +126,7 @@ calligra_define_product(PLUGIN_TEXTSHAPE "")
 calligra_define_product(PLUGIN_PLUGINSHAPE "")
 calligra_define_product(PLUGIN_FORMULASHAPE "")
 calligra_define_product(PLUGIN_VECTORSHAPE "")
-calligra_define_product(PLUGIN_REPORTING ""  DEPENDS LIB_KOREPORT)
+calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT)
 
 calligra_set_productset(${PRODUCTSET})
 
@@ -149,8 +152,8 @@ include (MacroAddFileDependencies)
 set(SHOULD_BUILD_TEXTSHAPE TRUE)
 if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     if (NOT IHAVEPATCHEDQT)
-        set(SHOULD_BUILD_WORDS FALSE)
-        set(SHOULD_BUILD_STAGE FALSE)
+        set(SHOULD_BUILD_WORDS_PART FALSE)
+        set(SHOULD_BUILD_STAGE_PART FALSE)
         set(SHOULD_BUILD_TEXTSHAPE FALSE)
         MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
     endif (NOT IHAVEPATCHEDQT)
@@ -465,9 +468,6 @@ endif(QT_QTWEBKIT_FOUND)
 ## Test for KDeclarative
 ##
 macro_optional_find_package(KDeclarative)
-if(NOT KDECLARATIVE_FOUND)
-    set(SHOULD_BUILD_ACTIVE FALSE)
-endif(NOT KDECLARATIVE_FOUND)
 
 ##
 ## Test endianess
@@ -481,6 +481,11 @@ TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 macro_optional_find_package(SharedMimeInfo)
 macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
 
+##
+## Test for Okular
+##
+macro_optional_find_package(Okular)
+macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
 
 ##
 ## Generate a file for prefix information
@@ -614,11 +619,11 @@ set(KDCHART_INCLUDES
     ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include
 )
 
- #############################################
-##############################################
-## Detect which applications can be compile ##
-##############################################
-#############################################
+ #########################################
+##########################################
+## Detect which products can be compile ##
+##########################################
+#########################################
 
 #
 # WARNING: when adding a dependency if there is already a line
@@ -629,7 +634,7 @@ set(KDCHART_INCLUDES
 
 ### Calligra Sheets: eigen2, boost
 if(NOT EIGEN2_FOUND)
-    set(SHOULD_BUILD_SHEETS FALSE)
+    set(SHOULD_BUILD_SHEETS_PART FALSE)
 endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2, sharedmimeinfo
@@ -643,13 +648,9 @@ if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 
-if (NOT QT_QTDECLARATIVE_FOUND)
+if (NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
     set(SHOULD_BUILD_ACTIVE FALSE)
-endif (NOT QT_QTDECLARATIVE_FOUND)
-
-if(${KDE_VERSION} VERSION_LESS 4.8.0)
-    set(SHOULD_BUILD_ACTIVE FALSE)
-endif(${KDE_VERSION} VERSION_LESS 4.8.0)
+endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
 
 #if(NOT QIMAGEBLITZ_FOUND)
 #    set (SHOULD_BUILD_KEXI FALSE)
@@ -659,8 +660,12 @@ if (NOT QT3SUPPORT)
     set (SHOULD_BUILD_KEXI FALSE)
 endif (NOT QT3SUPPORT)
 
+if(NOT OKULAR_FOUND)
+    set(SHOULD_BUILD_OKULARODPGENERATOR FALSE)
+endif(NOT OKULAR_FOUND)
+
 # finally disable all those which are missing internal dependencies
-calligra_drop_incomplete_products()
+calligra_drop_unbuildable_products()
 
  ###################
 ####################
