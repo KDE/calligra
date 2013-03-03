@@ -41,34 +41,34 @@ set(SHOULD_BUILD_OOXML_FILTERS ${SHARED_MIME_INFO_FOUND})
 add_subdirectory(libmso)
 
 if(SHOULD_BUILD_OOXML_FILTERS)
-    macro_optional_add_subdirectory( libmsooxml )
+    add_subdirectory( libmsooxml )
 endif(SHOULD_BUILD_OOXML_FILTERS)
 
 if(SHOULD_BUILD_KCHART)
-    macro_optional_add_subdirectory(kchart)
+    add_subdirectory(kchart)
 endif(SHOULD_BUILD_KCHART)
 
 if (SHOULD_BUILD_WORDS)
-    macro_optional_add_subdirectory(words)
+    add_subdirectory(words)
 endif (SHOULD_BUILD_WORDS)
 
 if(SHOULD_BUILD_STAGE)
-    macro_optional_add_subdirectory(stage)
+    add_subdirectory(stage)
 endif(SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_SHEETS)
-    macro_optional_add_subdirectory(sheets)
+    add_subdirectory(sheets)
 endif(SHOULD_BUILD_SHEETS)
 
 if(SHOULD_BUILD_FLOW)
-    macro_optional_add_subdirectory(flow)
+    add_subdirectory(flow)
 endif(SHOULD_BUILD_FLOW)
 
 if(SHOULD_BUILD_PLAN)
-    macro_optional_add_subdirectory(plan)
+    add_subdirectory(plan)
 endif(SHOULD_BUILD_PLAN)
 
 if(SHOULD_BUILD_KARBON)
-  macro_optional_add_subdirectory(karbon)
+  add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 

@@ -1,5 +1,5 @@
 if(SHOULD_BUILD_CSTESTER)
-    macro_optional_add_subdirectory( cstester )
+    add_subdirectory( cstester )
 endif(SHOULD_BUILD_CSTESTER)
 
 if (SHOULD_BUILD_DEVTOOLS)

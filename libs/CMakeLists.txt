@@ -15,22 +15,22 @@ if (SHOULD_BUILD_SCRIPTING)
     add_subdirectory( kokross )
 endif (SHOULD_BUILD_SCRIPTING)
 
-if (SHOULD_BUILD_FLOW OR SHOULD_BUILD_STAGE)
+if (SHOULD_BUILD_LIB_KOPAGEAPP)
     add_subdirectory( kopageapp )
-endif (SHOULD_BUILD_FLOW OR SHOULD_BUILD_STAGE)
+endif (SHOULD_BUILD_LIB_KOPAGEAPP)
 
-if(SHOULD_BUILD_KOREPORT)
+if(SHOULD_BUILD_LIB_KOREPORT)
     add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
-endif(SHOULD_BUILD_KOREPORT)
+endif(SHOULD_BUILD_LIB_KOREPORT)
 
-if (HAVE_ICU AND HAVE_SQLITE AND SHOULD_BUILD_CALLIGRADB)
+if (SHOULD_BUILD_LIB_CALLIGRADB)
     add_subdirectory( db ) # used by Kexi and Word's Biblio; TODO: remove when Predicate lib arrives
-endif ()
+endif (SHOULD_BUILD_LIB_CALLIGRADB)
 
 # only build koreport if possible
-if (SHOULD_BUILD_KOREPORT)
+if (SHOULD_BUILD_LIB_KOREPORT)
     add_subdirectory( koreport )
-endif (SHOULD_BUILD_KOREPORT)
+endif (SHOULD_BUILD_LIB_KOREPORT)
 
 if (Soprano_FOUND)
     add_subdirectory( rdf )

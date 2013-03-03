@@ -1,7 +1,7 @@
-if (SHOULD_BUILD_KDGANTT)
-    macro_optional_add_subdirectory(kdgantt)
-endif (SHOULD_BUILD_KDGANTT)
+if (SHOULD_BUILD_LIB_KDGANTT)
+    add_subdirectory(kdgantt)
+endif (SHOULD_BUILD_LIB_KDGANTT)
 
-if (SHOULD_BUILD_KDCHART)
+if (SHOULD_BUILD_LIB_KDCHART)
     add_subdirectory(kdchart)
-endif (SHOULD_BUILD_KDCHART)
+endif (SHOULD_BUILD_LIB_KDCHART)
