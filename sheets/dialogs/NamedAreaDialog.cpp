@@ -115,8 +115,8 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     connect(m_editButton, SIGNAL(clicked(bool)), this, SLOT(slotEdit()));
     connect(m_removeButton, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
     connect(m_list, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotOk()));
-    connect(m_list, SIGNAL(currentTextChanged(const QString&)),
-            this, SLOT(displayAreaValues(const QString&)));
+    connect(m_list, SIGNAL(currentTextChanged(QString)),
+            this, SLOT(displayAreaValues(QString)));
 
     if (m_list->count() > 0)
         m_list->setCurrentItem(m_list->item(0));
@@ -270,8 +270,8 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     }
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(m_areaNameEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotAreaNameModified(const QString&)));
+    connect(m_areaNameEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotAreaNameModified(QString)));
 }
 
 EditNamedAreaDialog::~EditNamedAreaDialog()

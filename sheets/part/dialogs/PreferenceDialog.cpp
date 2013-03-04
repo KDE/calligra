@@ -473,7 +473,7 @@ listType += i18n("Semi-Automatic");
 typeCompletion->insertItems(0, listType);
 typeCompletion->setCurrentIndex(0);
 comboChanged = false;
-connect(typeCompletion, SIGNAL(activated(const QString &)), this, SLOT(slotTextComboChanged(const QString &)));
+connect(typeCompletion, SIGNAL(activated(QString)), this, SLOT(slotTextComboChanged(QString)));
 #endif
 
 #include "PreferenceDialog.moc"

@@ -199,10 +199,10 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
     else
         m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("Default")));
 
-    connect(m_parentBox, SIGNAL(activated(const QString&)),
-            this, SLOT(parentChanged(const QString&)));
-    connect(m_nameEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(styleNameChanged(const QString&)));
+    connect(m_parentBox, SIGNAL(activated(QString)),
+            this, SLOT(parentChanged(QString)));
+    connect(m_nameEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(styleNameChanged(QString)));
 
     groupBoxLayout->addWidget(m_parentBox, 2, 1);
 
@@ -1092,9 +1092,9 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
 
     connect(listFormat, SIGNAL(itemSelectionChanged()), this, SLOT(makeformat()));
     connect(precision, SIGNAL(valueChanged(int)), this, SLOT(slotChangeValue(int)));
-    connect(prefix, SIGNAL(textChanged(const QString &)), this, SLOT(makeformat()));
-    connect(postfix, SIGNAL(textChanged(const QString &)), this, SLOT(makeformat()));
-    connect(currency, SIGNAL(activated(const QString &)), this, SLOT(currencyChanged(const QString &)));
+    connect(prefix, SIGNAL(textChanged(QString)), this, SLOT(makeformat()));
+    connect(postfix, SIGNAL(textChanged(QString)), this, SLOT(makeformat()));
+    connect(currency, SIGNAL(activated(QString)), this, SLOT(currencyChanged(QString)));
     connect(format, SIGNAL(activated(int)), this, SLOT(formatChanged(int)));
     connect(format, SIGNAL(activated(int)), this, SLOT(makeformat()));
     slotChangeState();
@@ -1732,8 +1732,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     bTextColorUndefined = !dlg->bTextColor;
 
-    connect(textColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotSetTextColor(const QColor &)));
+    connect(textColorButton, SIGNAL(changed(QColor)),
+            this, SLOT(slotSetTextColor(QColor)));
 
 
     QStringList tmpListFont;
@@ -1758,8 +1758,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
         family_combo->setCurrentRow(0);
     }
 
-    connect(family_combo, SIGNAL(currentTextChanged(const QString &)),
-            SLOT(family_chosen_slot(const QString &)));
+    connect(family_combo, SIGNAL(currentTextChanged(QString)),
+            SLOT(family_chosen_slot(QString)));
 
     QStringList lst;
     lst.append("");
@@ -1771,16 +1771,16 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     size_combo->setInsertPolicy(KComboBox::NoInsert);
 
-    connect(size_combo, SIGNAL(activated(const QString &)),
-            SLOT(size_chosen_slot(const QString &)));
-    connect(size_combo , SIGNAL(textChanged(const QString &)),
-            this, SLOT(size_chosen_slot(const QString &)));
+    connect(size_combo, SIGNAL(activated(QString)),
+            SLOT(size_chosen_slot(QString)));
+    connect(size_combo , SIGNAL(textChanged(QString)),
+            this, SLOT(size_chosen_slot(QString)));
 
-    connect(weight_combo, SIGNAL(activated(const QString &)),
-            SLOT(weight_chosen_slot(const QString &)));
+    connect(weight_combo, SIGNAL(activated(QString)),
+            SLOT(weight_chosen_slot(QString)));
 
-    connect(style_combo, SIGNAL(activated(const QString &)),
-            SLOT(style_chosen_slot(const QString &)));
+    connect(style_combo, SIGNAL(activated(QString)),
+            SLOT(style_chosen_slot(QString)));
 
     strike->setChecked(dlg->strike);
     connect(strike, SIGNAL(clicked()),
@@ -1792,8 +1792,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     example_label->setText(i18n("Dolor Ipse"));
 
-    connect(this, SIGNAL(fontSelected(const QFont&)),
-            this, SLOT(display_example(const QFont&)));
+    connect(this, SIGNAL(fontSelected(QFont)),
+            this, SLOT(display_example(QFont)));
 
     setCombos();
     display_example(selFont);
@@ -2618,8 +2618,8 @@ void CellFormatPageBorder::InitializePatterns()
 
 void CellFormatPageBorder::SetConnections()
 {
-    connect(color, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotSetColorButton(const QColor &)));
+    connect(color, SIGNAL(changed(QColor)),
+            this, SLOT(slotSetColorButton(QColor)));
 
     for (int i = 0; i < NUM_BORDER_PATTERNS; i++) {
         connect(pattern[i], SIGNAL(clicked(PatternSelect*)),
@@ -2627,22 +2627,22 @@ void CellFormatPageBorder::SetConnections()
     }
 
     for (int i = BorderType_Top; i < BorderType_END; i++) {
-        connect(borderButtons[i], SIGNAL(clicked(BorderButton *)),
-                this, SLOT(changeState(BorderButton *)));
+        connect(borderButtons[i], SIGNAL(clicked(BorderButton*)),
+                this, SLOT(changeState(BorderButton*)));
     }
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
-        connect(shortcutButtons[i], SIGNAL(clicked(BorderButton *)),
-                this, SLOT(preselect(BorderButton *)));
+        connect(shortcutButtons[i], SIGNAL(clicked(BorderButton*)),
+                this, SLOT(preselect(BorderButton*)));
     }
 
     connect(area , SIGNAL(redraw()), this, SLOT(draw()));
-    connect(area , SIGNAL(choosearea(QMouseEvent *)),
-            this, SLOT(slotPressEvent(QMouseEvent *)));
+    connect(area , SIGNAL(choosearea(QMouseEvent*)),
+            this, SLOT(slotPressEvent(QMouseEvent*)));
 
     connect(style, SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
-    connect(size, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotChangeStyle(const QString &)));
+    connect(size, SIGNAL(textChanged(QString)),
+            this, SLOT(slotChangeStyle(QString)));
     connect(size , SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
 }
 
@@ -3322,8 +3322,8 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
         bgColor = palette().base().color();
 
     bgColorButton->setColor(bgColor);
-    connect(bgColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotSetBackgroundColor(const QColor &)));
+    connect(bgColorButton, SIGNAL(changed(QColor)),
+            this, SLOT(slotSetBackgroundColor(QColor)));
 
     notAnyColor = new QPushButton(i18n("No Color"), tmpQGroupBox);
     grid3->addWidget(notAnyColor, 0, 2);
@@ -3403,8 +3403,8 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     palette.setColor(current->backgroundRole(), bgColor);
     current->setPalette(palette);
 
-    connect(color, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotSetColorButton(const QColor &)));
+    connect(color, SIGNAL(changed(QColor)),
+            this, SLOT(slotSetColorButton(QColor)));
 
     slotSetColorButton(dlg->brushColor);
     init();
