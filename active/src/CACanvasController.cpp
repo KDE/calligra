@@ -52,11 +52,13 @@ CACanvasController::CACanvasController (QDeclarativeItem* parent)
 
 void CACanvasController::setVastScrolling (qreal factor)
 {
+    Q_UNUSED(factor);
     //kDebug() << factor;
 }
 
 void CACanvasController::setZoomWithWheel (bool zoom)
 {
+    Q_UNUSED(zoom);
     //kDebug() << zoom;
 }
 
@@ -68,6 +70,7 @@ void CACanvasController::updateDocumentSize (const QSize& sz, bool recalculateCe
 
 void CACanvasController::setScrollBarValue (const QPoint& value)
 {
+    Q_UNUSED(value);
     //kDebug() << value;
 }
 
@@ -90,6 +93,7 @@ QPointF CACanvasController::preferredCenter() const
 
 void CACanvasController::setPreferredCenter (const QPointF& viewPoint)
 {
+    Q_UNUSED(viewPoint);
     //kDebug() << viewPoint;
 }
 
@@ -99,6 +103,7 @@ void CACanvasController::recenterPreferred()
 
 void CACanvasController::zoomTo (const QRect& rect)
 {
+    Q_UNUSED(rect);
     //kDebug() << rect;
 }
 
@@ -110,11 +115,13 @@ void CACanvasController::zoomBy (const QPoint& center, qreal zoom)
 
 void CACanvasController::zoomOut (const QPoint& center)
 {
+    Q_UNUSED(center);
     //kDebug() << center;
 }
 
 void CACanvasController::zoomIn (const QPoint& center)
 {
+    Q_UNUSED(center);
     //kDebug() << center;
 }
 
@@ -229,6 +236,7 @@ void CACanvasController::setCanvas (KoCanvasBase* canvas)
 
 void CACanvasController::setDrawShadow (bool drawShadow)
 {
+    Q_UNUSED(drawShadow);
     //kDebug() << drawShadow;
 }
 
@@ -239,6 +247,8 @@ QSize CACanvasController::viewportSize() const
 
 void CACanvasController::scrollContentsBy (int dx, int dy)
 {
+    Q_UNUSED(dx);
+    Q_UNUSED(dy);
     //kDebug() << dx << dy;
 }
 
@@ -333,6 +343,7 @@ void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
 
 void CACanvasController::setZoom(qreal zoom)
 {
+    Q_UNUSED(zoom);
 }
 
 qreal CACanvasController::zoom() const
@@ -342,6 +353,7 @@ qreal CACanvasController::zoom() const
 
 void CACanvasController::updateZoomValue(KoZoomMode::Mode mode, qreal zoom)
 {
+    Q_UNUSED(mode);
     m_zoom = zoom;
 }
 
