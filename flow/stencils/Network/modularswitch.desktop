@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Modular Switch
 Name[bg]=Модулен комутатор
+Name[bs]=modularni prekidač
 Name[ca]=Commutador modular
 Name[ca@valencia]=Commutador modular
+Name[da]=Modulær switch
 Name[de]=Modularer Switch
 Name[el]=Αρθρωτός μεταγωγέας
 Name[es]=Conmutador modular
@@ -18,6 +20,7 @@ Name[pt]=Comutador Modular
 Name[pt_BR]=Comutador modular
 Name[ru]=Модульный переключатель
 Name[sk]=Modulárny prepínač
+Name[sl]=Modularno stikalo
 Name[sv]=Modulär växel
 Name[uk]=Модульний комутатор
 Name[x-test]=xxModular Switchxx

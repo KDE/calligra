@@ -75,9 +75,9 @@ CASpreadsheetHandler::CASpreadsheetHandler (CADocumentController* documentContro
     , d (new Private())
 {
     d->findText = new Calligra::Sheets::Find(this);
-    connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvas()));
-    connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
-    connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
+    connect (d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
+    connect (d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 KoZoomMode::Mode CASpreadsheetHandler::preferredZoomMode() const
@@ -129,14 +129,14 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
     if (d->canvasItem) {
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
         connect (documentController()->canvasController()->canvasControllerProxyObject(),
-                 SIGNAL (moveDocumentOffset (const QPoint&)), d->canvasItem, SLOT (setDocumentOffset (QPoint)));
+                 SIGNAL(moveDocumentOffset(QPoint)), d->canvasItem, SLOT(setDocumentOffset(QPoint)));
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect (d->canvasItem, SIGNAL (documentSizeChanged (QSize)), this, SLOT (tellZoomControllerToSetDocumentSize (QSize)));
+        connect (d->canvasItem, SIGNAL(documentSizeChanged(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
         d->canvasItem->update();
     }
 
-    connect (documentController()->canvasController(), SIGNAL (needsCanvasResize (QSizeF)), SLOT (resizeCanvas (QSizeF)));
-    connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
+    connect (documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
+    connect (documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
 
     updateCanvas();
     documentController()->canvasController()->zoomToFit();
@@ -147,8 +147,9 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
 
 QStringList CASpreadsheetHandler::supportedMimetypes()
 {
-    QStringList supportedTypes;
-    supportedTypes << "application/vnd.oasis.opendocument.spreadsheet" << "application/vnd.ms-excel";
+    // keep in sync with spreadsheet related mimetypes in calligraactive.desktop
+    const QStringList supportedTypes =
+        QString::fromLatin1("application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;").split(';', QString::SkipEmptyParts);
     return supportedTypes;
 }
 

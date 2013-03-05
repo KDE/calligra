@@ -1,19 +1,31 @@
 [Desktop Entry]
 Type=Service
 Name=ODT to HTML Export Filter
+Name[ca]=Filtre d'exportació ODT a HTML
 Name[cs]=Exportní filtr ODT do HTML
+Name[da]=ODT til HTML-eksportfilter
+Name[de]=Exportfilter ODT zu HTML
 Name[el]=Φίλτρο εξαγωγής ODT σε HTML
+Name[es]=Filtro de exportación de ODT a HTML
 Name[et]=ODT->HTML ekspordifilter
 Name[fr]=Filtre d'exportation ODT vers HTML
+Name[gl]=Filtro de exportacións de ODT a HTML
 Name[hu]=ODT -> HTML exportszűrő
 Name[it]=Filtro di esportazione da ODT a HTML
+Name[kk]=ODT -> HTML экспорт сүзгісі
+Name[lt]=ODT į HTML eksportavimo filtras
+Name[nb]=ODT til HTML-eksportfilter
 Name[nl]=ODT naar HTML exportfilter
+Name[pl]=Filtr eksportu ODT do HTML
 Name[pt]=Filtro de Exportação de ODT para HTML
 Name[pt_BR]=Filtro de exportação de ODT para HTML
 Name[sk]=Exportný filter ODT do HTML
+Name[sl]=Izvozni filter ODT v HTML
 Name[sv]=ODT-till-HTML-exportfilter
+Name[tr]=ODT'den HTML'e Dışa Aktarma Filtesi
 Name[uk]=Фільтр експорту ODT до HTML
 Name[x-test]=xxODT to HTML Export Filterxx
+Name[zh_CN]=ODT 到 HTML 导出过滤器
 
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/html

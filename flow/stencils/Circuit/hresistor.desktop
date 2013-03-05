@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Horizontal Resistor
 Name[bg]=Хоризонтално съпротивление
+Name[bs]=Horizontalni otpornik
 Name[ca]=Resistor horitzontal
 Name[ca@valencia]=Resistor horitzontal
+Name[da]=Vandret resistor
 Name[de]=Waagerechter Widerstand
 Name[el]=Οριζόντιος αντιστάτης
 Name[es]=Resistencia horizontal
@@ -21,6 +23,7 @@ Name[pt_BR]=Resistor horizontal
 Name[ru]=Горизонтальный резистор
 Name[sk]=Vodorovný rezistor
 Name[sv]=Horisontellt motstånd
+Name[tr]=Yatay Direnç
 Name[uk]=Резистор (горизонтально)
 Name[x-test]=xxHorizontal Resistorxx
 Name[zh_TW]=水平電阻

@@ -182,7 +182,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
     m_button->setIconSize(KIconLoader::SizeMedium);
     l->addWidget(m_button, 0, 2, 2, 1);
     connect(m_button, SIGNAL(iconChanged(QString)), this, SLOT(updateIconName(QString)));
-    connect(m_nameInput, SIGNAL(textChanged(const QString &)), this, SLOT(setIcon(const QString &)));
+    connect(m_nameInput, SIGNAL(textChanged(QString)), this, SLOT(setIcon(QString)));
 }
 
 void
@@ -266,8 +266,8 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
     m_iconView->setAutoArrange(true);
     m_iconView->setMode(K3IconView::Select);
     l->addWidget(m_iconView);
-    connect(m_iconView, SIGNAL(contextMenuRequested(Q3IconViewItem*, const QPoint&)), this, SLOT(displayMenu(Q3IconViewItem*, const QPoint&)));
-    connect(m_iconView, SIGNAL(itemRenamed(Q3IconViewItem*, const QString &)), this, SLOT(renameCollectionItem(Q3IconViewItem*, const QString&)));
+    connect(m_iconView, SIGNAL(contextMenuRequested(Q3IconViewItem*,QPoint)), this, SLOT(displayMenu(Q3IconViewItem*,QPoint)));
+    connect(m_iconView, SIGNAL(itemRenamed(Q3IconViewItem*,QString)), this, SLOT(renameCollectionItem(Q3IconViewItem*,QString)));
 
     PixmapMap::ConstIterator it;
     PixmapMap::ConstIterator endIt = collection->m_pixmaps.end();

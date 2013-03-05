@@ -1,14 +1,18 @@
 [Desktop Entry]
 Name=Connector
+Name[bs]=Povezivač
 Name[ca]=Connector
 Name[ca@valencia]=Connector
 Name[cs]=Konektor
+Name[da]=Connector
+Name[de]=Kreuzverbinder
 Name[el]=Υποδοχή
 Name[es]=Conector
 Name[et]=Ühendus
 Name[fr]=Connecteur
 Name[gl]=Conectador
 Name[hu]=Csatlakozó
+Name[ia]=Connector
 Name[it]=Connettore
 Name[kk]=Түйістіргіш
 Name[nb]=Tilkobling
@@ -18,6 +22,7 @@ Name[pt]=Ligação
 Name[pt_BR]=Conector
 Name[ru]=Коннектор
 Name[sk]=Konektor
+Name[sl]=Povezovalnik
 Name[sv]=Kontakt
 Name[ug]=ئۇلىغۇچ
 Name[uk]=З'єднувач

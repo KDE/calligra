@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=clamp-large
+Name[bs]=velika spona
 Name[ca]=pinça gran
 Name[ca@valencia]=pinça gran
+Name[da]=stor klemhane
+Name[de]=Große Klammer
 Name[el]=clamp-large
 Name[es]=abrazadera larga
 Name[et]=Suur näpits
@@ -17,6 +20,7 @@ Name[pt_BR]=grampo grande
 Name[ru]=Зажим (большой)
 Name[sk]=svorka-veľká
 Name[sv]=klämmare-stor
+Name[tr]=büyük-kelepçe
 Name[uk]=Великий затискувач
 Name[x-test]=xxclamp-largexx
 Name[zh_TW]=大夾

@@ -71,6 +71,7 @@
 #include <QDBusConnection>
 #endif
 #include <QApplication>
+#include <QMutex>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
@@ -100,6 +101,9 @@ QString KoDocument::newObjectName()
     QString name; name.setNum(s_docIFNumber++); name.prepend("document_");
     return name;
 }
+
+
+static QMutex s_autosaveMutex;
 
 class KoDocument::Private
 {
@@ -221,6 +225,7 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
 
 KoDocument::~KoDocument()
 {
+    d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
     delete d->filterManager;
     delete d;
@@ -463,6 +468,8 @@ bool KoDocument::isAutoErrorHandlingEnabled() const
 
 void KoDocument::slotAutoSave()
 {
+    s_autosaveMutex.lock();
+    if (!d->parentPart) return;
     if (isModified() && d->modifiedAfterAutosave && !d->isLoading) {
         // Give a warning when trying to autosave an encrypted file when no password is known (should not happen)
         if (d->specialOutputFlag == SaveEncrypted && d->password.isNull()) {
@@ -486,6 +493,7 @@ void KoDocument::slotAutoSave()
             }
         }
     }
+    s_autosaveMutex.unlock();
 }
 
 void KoDocument::setReadWrite(bool readwrite)

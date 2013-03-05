@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Crossroads
+Name[bs]=Raskrsnica
 Name[ca]=Encreuament
 Name[ca@valencia]=Encreuament
+Name[da]=Vejkryds
 Name[de]=Kreuzung
 Name[el]=Crossroads
 Name[es]=Cruce de caminos
@@ -11,6 +13,7 @@ Name[fr]=Carrefour de routes
 Name[gl]=Intersección
 Name[it]=Incroci
 Name[kk]=Қиылыс
+Name[lt]=Kryžkelė
 Name[nb]=Veikryss
 Name[nl]=Kruispunt
 Name[pl]=Skrzyżowanie
@@ -18,7 +21,9 @@ Name[pt]=Cruzamento
 Name[pt_BR]=Cruzamento
 Name[ru]=Перекрёсток
 Name[sk]=Križovatky
+Name[sl]=Križišče
 Name[sv]=Vägkorsning
+Name[tr]=Kavşak
 Name[uk]=Перехрестя
 Name[x-test]=xxCrossroadsxx
 Name[zh_CN]=交叉点

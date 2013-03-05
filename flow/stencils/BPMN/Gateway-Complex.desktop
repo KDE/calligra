@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Gateway-Complex
+Name[bs]=Kompleks Gateway-a
 Name[ca]=Passarel·la-Complex
 Name[ca@valencia]=Passarel·la-Complex
+Name[de]=Komplexes Gateway
 Name[el]=Σύμπλεγμα-πύλης
 Name[es]=Puerta de enlace compleja
 Name[et]=Keeruline värav
@@ -18,6 +20,8 @@ Name[pt_BR]=Gateway complexo
 Name[ru]=Сложный оператор
 Name[sk]=Brána-komplexná
 Name[sv]=Port-komplex
+Name[tr]=Ağ Geçidi Kompleksi
 Name[uk]=Шлюзовий комплекс
 Name[x-test]=xxGateway-Complexxx
+Name[zh_CN]=网关-复杂
 Name[zh_TW]=閘道─複雜

@@ -32,6 +32,7 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
+    KoShapeAnchor.cpp
     KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
@@ -217,9 +218,9 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms koodf)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
 
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms koodf)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
 target_link_libraries(flake kundo2)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 
@@ -275,6 +276,7 @@ install(
     KoRTree.h
     KoSelection.h
     KoShape.h
+    KoShapeAnchor.h
     KoShapeStrokeModel.h
     KoToolSelection.h
     KoShapeContainer.h

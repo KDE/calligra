@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Decision
 Name[bg]=Решение
+Name[bs]=Odluka
 Name[ca]=Decisió
 Name[ca@valencia]=Decisió
 Name[cs]=Rozhodnutí
+Name[da]=Beslutning
 Name[de]=Entscheidung
 Name[el]=Απόφαση
 Name[es]=Decisión
@@ -14,6 +16,7 @@ Name[gl]=Decisión
 Name[hu]=Döntés
 Name[it]=Decisione
 Name[kk]=Шешім
+Name[lt]=Sprendimas
 Name[nb]=Avgjørelse
 Name[nds]=Bestimmen
 Name[nl]=Beslissing
@@ -24,6 +27,7 @@ Name[ru]=Решение
 Name[sk]=Rozhodnutie
 Name[sl]=Odločitev
 Name[sv]=Beslut
+Name[tr]=Karar
 Name[uk]=Рішення
 Name[x-test]=xxDecisionxx
 Name[zh_CN]=决定

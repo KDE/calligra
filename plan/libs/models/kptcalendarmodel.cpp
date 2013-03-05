@@ -868,16 +868,12 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
             if ( d->state() == CalendarDay::NonWorking ) {
                 return i18nc( "@info:tooltip", "Non-working" );
             }
-#if KDE_IS_VERSION( 4, 3, 80 )
             KLocale *l = KGlobal::locale();
             QStringList tip;
             foreach ( TimeInterval *i, d->timeIntervals() ) {
                 tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", l->formatLocaleTime( i->startTime(), KLocale::TimeWithoutSeconds ), l->formatDuration( i->second ) );
             }
             return tip.join( "\n" );
-#else
-            return i18nc( "@info:tooltip", "Working" );
-#endif
         }
         case Qt::FontRole: {
             if ( d->state() != CalendarDay::Undefined ) {
@@ -1027,16 +1023,12 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         if ( day->state() == CalendarDay::NonWorking ) {
             return i18nc( "@info:tooltip", "Non-working" );
         }
-#if KDE_IS_VERSION( 4, 3, 80 )
         KLocale *l = KGlobal::locale();
         QStringList tip;
         foreach ( TimeInterval *i, day->timeIntervals() ) {
             tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", l->formatLocaleTime( i->startTime(), KLocale::TimeWithoutSeconds ), l->formatDuration( i->second ) );
         }
         return tip.join( "\n" );
-#else
-        return i18nc( "@info:tooltip", "Working" );
-#endif
     }
 
     switch ( dataType ) {

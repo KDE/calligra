@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Channelized Pipe
+Name[bs]=Kanalizovana cijev
 Name[ca]=Canonada canalitzada
 Name[ca@valencia]=Canonada canalitzada
+Name[da]=Channelized Pipe
+Name[de]=Kanalisierte Weiterleitung
 Name[el]=Κατευθυνόμενος αγωγός
 Name[es]=Conducto canalizado
 Name[et]=Mitme kanaliga toru
@@ -18,6 +21,7 @@ Name[pt_BR]=Tubo canalizado
 Name[ru]=Канальная труба
 Name[sk]=Združená rúra
 Name[sv]=Kanaliserad ledning
+Name[tr]=Kanallı Boru
 Name[uk]=Канальна труба
 Name[x-test]=xxChannelized Pipexx
 Name[zh_CN]=信道化管道

@@ -73,7 +73,7 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
 
     setLayout(m_layout);
 
-    connect(m_table, SIGNAL(clicked(const QModelIndex&)), this, SLOT(tableClicked(const QModelIndex&)));
+    connect(m_table, SIGNAL(clicked(QModelIndex)), this, SLOT(tableClicked(QModelIndex)));
     connect(m_columnType, SIGNAL(activated(int)), this, SLOT(typeActivated(int)));
     connect(m_columnPKey, SIGNAL(clicked(bool)), this, SLOT(pkeyClicked(bool)));
     connect(m_tableName, SIGNAL(textChanged(QString)), this, SLOT(nameChanged(QString)));

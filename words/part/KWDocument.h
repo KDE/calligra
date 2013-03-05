@@ -76,8 +76,6 @@ public:
     // reimplemented from KoShapeBasedDocumentBase
     virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
 
-    void addShape(KoShape *shape, KoShapeAnchor *anchor);
-
     // KoDocument interface
     /// reimplemented from KoDocument
     virtual QPixmap generatePreview(const QSize& size);

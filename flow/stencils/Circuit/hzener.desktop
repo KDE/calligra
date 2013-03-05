@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Horizontal Zener Diode
 Name[bg]=Хоризонтален ценеров диод
+Name[bs]=Horizontalna Zener dioda
 Name[ca]=Diode Zener horitzontal
 Name[ca@valencia]=Diode Zener horitzontal
+Name[da]=Vandret zenerdiode
 Name[de]=Waagerechte Zener-Diode
 Name[el]=Οριζόντια δίοδος Zener
 Name[es]=Diodo Zener horizontal
@@ -20,7 +22,9 @@ Name[pt]=Díodo de Zener Horizontal
 Name[pt_BR]=Diodo de Zener horizontal
 Name[ru]=Горизонтальный зенеровский диод
 Name[sk]=Vodorovná Zenerova dióda
+Name[sl]=Vodoravna zenerjeva dioda
 Name[sv]=Horisontell Zener-diod
+Name[tr]=Yatay Zener Diyot
 Name[uk]=Стабілітрон (горизонтально)
 Name[x-test]=xxHorizontal Zener Diodexx
 Name[zh_TW]=水平穩壓二極體

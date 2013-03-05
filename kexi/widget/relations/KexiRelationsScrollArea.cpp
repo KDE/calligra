@@ -118,7 +118,7 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
 {
 //Qt4 setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 //Qt4 setAttribute(Qt::WA_StaticContents, true);
-// connect(relation, SIGNAL(relationListUpdated(QObject *)), this, SLOT(slotListUpdate(QObject *)));
+// connect(relation, SIGNAL(relationListUpdated(QObject*)), this, SLOT(slotListUpdate(QObject*)));
 
     d->areaWidget = new KexiRelationsScrollAreaWidget(this);
     setWidget(d->areaWidget);
@@ -194,10 +194,10 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
                                        );
     connect(c, SIGNAL(endDrag()), this, SLOT(slotTableViewEndDrag()));
     connect(c, SIGNAL(gotFocus()), this, SLOT(slotTableViewGotFocus()));
-// connect(c, SIGNAL(headerContextMenuRequest(const QPoint&)),
-//  this, SLOT(tableHeaderContextMenuRequest(const QPoint&)));
-    connect(c, SIGNAL(contextMenuRequest(const QPoint&)),
-            this, SIGNAL(tableContextMenuRequest(const QPoint&)));
+// connect(c, SIGNAL(headerContextMenuRequest(QPoint)),
+//  this, SLOT(tableHeaderContextMenuRequest(QPoint)));
+    connect(c, SIGNAL(contextMenuRequest(QPoint)),
+            this, SIGNAL(tableContextMenuRequest(QPoint)));
 
     if (rect.isValid()) {//predefined size
         QSize finalSize = c->size().expandedTo(c->sizeHint());
@@ -245,8 +245,8 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
 
     d->tables.insert(t->name(), c);
 
-    connect(c, SIGNAL(moved(KexiRelationsTableContainer *)), this,
-            SLOT(containerMoved(KexiRelationsTableContainer *)));
+    connect(c, SIGNAL(moved(KexiRelationsTableContainer*)), this,
+            SLOT(containerMoved(KexiRelationsTableContainer*)));
 
     c->show();
     if (hasFocus()) //ok?

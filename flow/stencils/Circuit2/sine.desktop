@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Sine Wave
+Name[bs]=Sinusoida
 Name[ca]=Ona sinusoïdal
 Name[ca@valencia]=Ona sinusoïdal
+Name[da]=Sinusbølge
 Name[de]=Sinuswelle
 Name[el]=Ημιτονοειδές κύμα
 Name[es]=Onda sinusoidal
@@ -13,6 +15,7 @@ Name[hu]=Szinuszhullám
 Name[it]=Onda sinusoidale
 Name[ja]=サイン波
 Name[kk]=Синусоидалық толқын
+Name[lt]=Sinusoidė
 Name[nb]=Sinusbølge
 Name[nds]=Sinus
 Name[nl]=Sinusgolf
@@ -21,7 +24,9 @@ Name[pt]=Onda Sinusoidal
 Name[pt_BR]=Onda senoidal
 Name[ru]=Синусоидальная волна
 Name[sk]=Sínusoida
+Name[sl]=Sinusni val
 Name[sv]=Sinusvåg
+Name[tr]=Sinüs Dalga
 Name[ug]=سىنۇس ئەگرى سىزىقى
 Name[uk]=Синусоподібний сигнал
 Name[x-test]=xxSine Wavexx

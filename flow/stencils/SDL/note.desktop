@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Note
 Name[bg]=Бележка
+Name[bs]=Bilješka
 Name[ca]=Nota
 Name[ca@valencia]=Nota
 Name[cs]=Poznámka
+Name[da]=Note
 Name[el]=Σημείωση
 Name[es]=Nota
 Name[et]=Märkus
@@ -25,6 +27,7 @@ Name[ru]=Заметка
 Name[sk]=Poznámka
 Name[sl]=Opomba
 Name[sv]=Anteckning
+Name[tr]=Not
 Name[ug]=ئىزاھات
 Name[uk]=Примітка
 Name[x-test]=xxNotexx

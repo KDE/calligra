@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Manual Input
 Name[bg]=Ръчно въвеждане
+Name[bs]=Ručni unos
 Name[ca]=Introducció manual
 Name[ca@valencia]=Introducció manual
+Name[da]=Manuelt input
 Name[de]=Manuelle Eingabe
 Name[el]=Χειροκίνητη είσοδος
 Name[es]=Entrada manual
@@ -22,6 +24,7 @@ Name[ru]=Ручной ввод
 Name[sk]=Ručný vstup
 Name[sl]=Ročen vnos
 Name[sv]=Manuell inmatning
+Name[tr]=Manuel Girdi
 Name[uk]=Ручний ввід
 Name[x-test]=xxManual Inputxx
 Name[zh_CN]=手动输入

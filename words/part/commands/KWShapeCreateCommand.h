@@ -23,7 +23,6 @@
 #include <kundo2command.h>
 
 class KoShape;
-class KoShapeAnchor;
 class KWDocument;
 
 /// The undo / redo command for creating shapes
@@ -32,11 +31,11 @@ class KWShapeCreateCommand : public KUndo2Command
 public:
     /**
      * Command used on creation of new shapes
-     * @param controller the controller used to add/remove the shape from
+     * @param doc the document used to add/remove the shape from
      * @param shape the shape thats just been created.
      * @param parent the parent command used for macro commands
      */
-    KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KoShapeAnchor *anchor, KUndo2Command *parent=0);
+    KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KUndo2Command *parent=0);
     virtual ~KWShapeCreateCommand();
     /// redo the command
     virtual void redo();
@@ -46,7 +45,6 @@ public:
 private:
     KWDocument *m_document;
     KoShape *m_shape;
-    KoShapeAnchor *m_anchor;
     bool m_deleteShape;
 };
 

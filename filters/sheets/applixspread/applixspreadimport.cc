@@ -17,13 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "applixspreadimport.h"
+
 #include <QMessageBox>
 #include <QStringList>
 #include <QRegExp>
 #include <QList>
 #include <QTextStream>
 #include <QByteArray>
-#include <applixspreadimport.h>
 #include <kdebug.h>
 #include <math.h>
 #include <KoFilterChain.h>

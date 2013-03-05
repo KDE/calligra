@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Intermediate-Event-Link
+Name[bs]=Veza srednjeg događaja
 Name[ca]=Intermedi-Esdeveniment-Enllaç
 Name[ca@valencia]=Intermedi-Esdeveniment-Enllaç
+Name[de]=Zwischenereignis - Link
 Name[el]=Σύνδεσμος-ενδιάμεσου-γεγονότος
 Name[es]=Enlace al evento intermedio
 Name[et]=Vahesündmuse link
@@ -20,4 +22,5 @@ Name[sk]=Intermediate-Event-Link
 Name[sv]=Mellanliggande-händelse-länk
 Name[uk]=Посилання на проміжну подію
 Name[x-test]=xxIntermediate-Event-Linkxx
+Name[zh_CN]=中间事件-连接
 Name[zh_TW]=中介─事件─連結

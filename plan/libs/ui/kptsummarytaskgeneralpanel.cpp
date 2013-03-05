@@ -32,11 +32,9 @@
 
 #include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
-#endif
 #endif
 
 #include <QPushButton>
@@ -53,9 +51,6 @@ SummaryTaskGeneralPanel::SummaryTaskGeneralPanel(Task &task, QWidget *p, const c
     setupUi(this);
 
 #ifndef PLAN_KDEPIMLIBS_FOUND
-    chooseLeader->hide();
-#endif
-#if ! KDE_IS_VERSION( 4, 5, 0 )
     chooseLeader->hide();
 #endif
 
@@ -133,7 +128,6 @@ bool SummaryTaskGeneralPanel::ok() {
 void SummaryTaskGeneralPanel::slotChooseResponsible()
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -157,7 +151,6 @@ void SummaryTaskGeneralPanel::slotChooseResponsible()
             leaderfield->setText( names.join( ", " ) );
         }
     }
-#endif
 #endif
 }
 

@@ -271,7 +271,7 @@ void WidgetLibrary::createWidgetActions(ActionGroup *group)
 
     foreach (WidgetInfo *winfo, d->widgets) {
         LibActionWidget *a = new LibActionWidget(group, winfo);
-        connect(a, SIGNAL(toggled(const QByteArray &)), this, SIGNAL(widgetActionToggled(const QByteArray &)));
+        connect(a, SIGNAL(toggled(QByteArray)), this, SIGNAL(widgetActionToggled(QByteArray)));
     }
 }
 

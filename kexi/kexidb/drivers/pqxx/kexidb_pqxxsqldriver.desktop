@@ -2,6 +2,7 @@
 Name=PostgreSQL
 Name[bg]=PostgreSQL
 Name[br]=PostgreSQL
+Name[bs]=PostgreSQL
 Name[ca]=PostgreSQL
 Name[ca@valencia]=PostgreSQL
 Name[cs]=PostgreSQL
@@ -57,6 +58,7 @@ Name[x-test]=xxPostgreSQLxx
 Name[zh_CN]=PostgreSQL
 Name[zh_TW]=PostgreSQL
 Comment=Kexi database driver for accessing PostgreSQL servers
+Comment[bs]=Kexi drajver baze podataka za pristup PostgreSQL serverima
 Comment[ca]=Controlador de bases de dades Kexi per a accedir a servidors PostgreSQL
 Comment[ca@valencia]=Controlador de bases de dades Kexi per a accedir a servidors PostgreSQL
 Comment[cs]=Databázový ovladač pro přístup k serverům PostgreSQL

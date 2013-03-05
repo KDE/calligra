@@ -351,11 +351,11 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     connect(m_startingCell, SIGNAL(clicked()), this, SLOT(startingCell_clicked()));
     connect(m_startingRegion, SIGNAL(clicked()), this, SLOT(startingRegion_clicked()));
     connect(m_driver, SIGNAL(activated(int)), this, SLOT(databaseDriverChanged(int)));
-    connect(m_host, SIGNAL(textChanged(const QString &)), this, SLOT(databaseHostChanged(const QString &)));
-    connect(m_databaseName, SIGNAL(textChanged(const QString &)), this, SLOT(databaseNameChanged(const QString &)));
-    /*connect( m_tableView, SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint &, int ) ),
-             this, SLOT( popupTableViewMenu(Q3ListViewItem *, const QPoint &, int ) ) );*/
-    connect(m_tableView, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(tableViewClicked(QListWidgetItem *)));
+    connect(m_host, SIGNAL(textChanged(QString)), this, SLOT(databaseHostChanged(QString)));
+    connect(m_databaseName, SIGNAL(textChanged(QString)), this, SLOT(databaseNameChanged(QString)));
+    /*connect( m_tableView, SIGNAL(contextMenuRequested(Q3ListViewItem*,QPoint,int)),
+             this, SLOT(popupTableViewMenu(Q3ListViewItem*,QPoint,int)) );*/
+    connect(m_tableView, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(tableViewClicked(QListWidgetItem*)));
 
     QStringList str = QSqlDatabase::drivers();
     m_driver->insertItems(0, QSqlDatabase::drivers());
