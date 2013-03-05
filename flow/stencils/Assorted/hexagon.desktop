@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Hexagon
 Name[bg]=Шестоъгълник
+Name[bs]=Šestougao
 Name[ca]=Hexàgon
 Name[ca@valencia]=Hexàgon
 Name[cs]=Šestiúhelník
@@ -15,6 +16,8 @@ Name[gl]=Hexágono
 Name[hu]=Hatszög
 Name[it]=Esagono
 Name[kk]=Алтыбұрыш
+Name[lt]=Šešiakampis
+Name[mr]=षटकोन
 Name[nb]=Sekskant
 Name[nds]=Sösseck
 Name[nl]=Zeshoek
@@ -25,6 +28,7 @@ Name[ru]=Шестиугольник
 Name[sk]=Šesťuholník
 Name[sl]=Šesterokotnik
 Name[sv]=Sexhörning
+Name[tr]=Altıgen
 Name[ug]=ئالتە تەرەپلىك
 Name[uk]=Шестикутник
 Name[x-test]=xxHexagonxx

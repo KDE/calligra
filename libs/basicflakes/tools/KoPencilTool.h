@@ -48,7 +48,7 @@ public:
     void deactivate();
 
 protected:
-    virtual QWidget * createOptionWidget();
+    virtual QList<QWidget *> createOptionWidgets();
 
     /**
      * Add path shape to document.
@@ -58,6 +58,8 @@ protected:
     virtual void addPathShape(KoPathShape* path, bool closePath);
 
     KoShapeStroke * currentStroke();
+    void setFittingError(qreal fittingError);
+    qreal getFittingError();
 
 private slots:
     void selectMode(int mode);
@@ -90,6 +92,7 @@ private:
     KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
     KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
+
 };
 
 #endif // _KOPENCILTOOL_H_

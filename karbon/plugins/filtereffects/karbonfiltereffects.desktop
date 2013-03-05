@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Filter Effects
+Name[bs]=Efekti filtera
 Name[ca]=Efectes de filtre
 Name[ca@valencia]=Efectes de filtre
 Name[cs]=Filtrovat efekty
@@ -35,6 +36,7 @@ Name[zh_CN]=滤镜效果
 Name[zh_TW]=過濾器效果
 X-KDE-ServiceTypes=Calligra/FilterEffect
 Type=Service
+X-KDE-PluginInfo-Name=karbonfiltereffects
 X-KDE-Library=karbonfiltereffects
 X-Flake-MinVersion=27
 X-Flake-PluginVersion=27

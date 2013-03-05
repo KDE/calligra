@@ -542,11 +542,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
 void KWFrameLayout::proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page)
 {
-    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    if (!frame) {
-        return; // nothing we can do
-    }
-    KoShapeAnchor *anchor = frame->anchor();
+    KoShapeAnchor *anchor = shape->anchor();
     if (!anchor) {
         return; // nothing we can do
     }

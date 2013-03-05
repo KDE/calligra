@@ -37,12 +37,11 @@
 #include <QTextBlock>
 #include <QTimer>
 
-KWStatisticsWidget::KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocument *document,
-                                       KoSelection *selection, QWidget *parent)
+KWStatisticsWidget::KWStatisticsWidget(QWidget *parent)
         : QWidget(parent),
-          m_resourceManager(provider),
-          m_selection(selection),
-          m_document(document),
+          m_resourceManager(0),
+          m_selection(0),
+          m_document(0),
           m_textDocument(0),
           m_timer(0),
           m_words(0),
@@ -55,7 +54,6 @@ KWStatisticsWidget::KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocu
           m_paragraphs(0)
 {
     m_timer = new QTimer(this);
-    m_timer->start(2500);
     initUi();
     initLayout();
     m_menu = new StatisticsPreferencesPopup(m_preferencesButton);
@@ -346,6 +344,22 @@ void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection 
     } else {
         m_mainBox->setDirection(QBoxLayout::TopToBottom);
     }
+}
+
+void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
+{
+    m_resourceManager = canvas->resourceManager();
+    m_selection = canvas->shapeManager()->selection();
+    m_document = canvas->document();
+    m_timer->start(2500);
+}
+
+void KWStatisticsWidget::unsetCanvas()
+{
+    m_timer->stop();
+    m_resourceManager = 0;
+    m_selection = 0;
+    m_document = 0;
 }
 
 void KWStatisticsWidget::updateDataUi()

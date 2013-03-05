@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Diagonal Resistor
+Name[bs]=Dijagonalni otpornik
 Name[ca]=Resistor diagonal
 Name[ca@valencia]=Resistor diagonal
+Name[da]=Diagonal resistor
 Name[de]=Diagonaler Widerstand
 Name[el]=Διαγώνιος αντιστάτης
 Name[es]=Resistor diagonal
@@ -20,6 +22,7 @@ Name[pt_BR]=Resistor diagonal
 Name[ru]=Диагональный резистор
 Name[sk]=Diagonálny rezistor
 Name[sv]=Diagonalt motstånd
+Name[tr]=Çapraz Direnç
 Name[uk]=Резистор (діагонально)
 Name[x-test]=xxDiagonal Resistorxx
 Name[zh_TW]=對角電阻

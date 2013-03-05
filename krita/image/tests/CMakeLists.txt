@@ -75,14 +75,6 @@ target_link_libraries(KisPainterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_
 
 ########### next target ###############
 
-set(kis_threaded_applicator_test_SRCS kis_threaded_applicator_test.cpp )
-
-kde4_add_unit_test(KisThreadedApplicatorTest TESTNAME krita-image-KisThreadedApplicatorTest ${kis_threaded_applicator_test_SRCS})
-
-target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} ${KDE4_THREADWEAVER_LIBRARY} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_selection_test_SRCS kis_selection_test.cpp )
 
 kde4_add_unit_test(KisSelectionTest TESTNAME krita-image-SelectionTest ${kis_selection_test_SRCS})
@@ -253,12 +245,6 @@ target_link_libraries(KisFilterRegistryTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_
 set(kis_filter_strategy_test_SRCS kis_filter_strategy_test.cpp )
 kde4_add_unit_test(KisFilterStrategyTest TESTNAME krita-image-KisFilterStrategyTest ${kis_filter_strategy_test_SRCS})
 target_link_libraries(KisFilterStrategyTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_generic_colorspace_test_SRCS kis_generic_colorspace_test.cpp )
-kde4_add_unit_test(KisGenericColorspaceTest TESTNAME krita-image-KisGenericColorspaceTest ${kis_generic_colorspace_test_SRCS})
-target_link_libraries(KisGenericColorspaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -524,12 +510,6 @@ target_link_libraries(KisVecTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBR
 set(kis_filter_config_widget_test_SRCS kis_filter_config_widget_test.cpp )
 kde4_add_unit_test(KisFilterConfigWidgetTest TESTNAME krita-image-KisFilterConfigWidgetTest ${kis_filter_config_widget_test_SRCS})
 target_link_libraries(KisFilterConfigWidgetTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
-kde4_add_unit_test(KisFilterJobTest TESTNAME krita-image-KisFilterJobTest ${kis_filter_job_test_SRCS})
-target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

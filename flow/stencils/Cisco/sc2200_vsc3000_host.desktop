@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=SC2200/VSC3000 host
 Name[bg]=Хост SC2200/VSC3000
+Name[bs]=SC2200/VSC3000 host
 Name[ca]=SC2200/VSC3000 host
 Name[ca@valencia]=SC2200/VSC3000 host
+Name[da]=SC2200/VSC3000 host
 Name[de]=SC2200/VSC3000-Rechner
 Name[el]=SC2200/VSC3000 host
 Name[es]=Servidor SC2200/VSC3000
@@ -12,6 +14,7 @@ Name[gl]=Servidor SC2200/VSC3000
 Name[hu]=SC2200/VSC3000 gép
 Name[it]=SC2200/VSC3000 host
 Name[kk]=SC2200/VSC3000 хосты
+Name[lt]=SC2200/VSC3000 mazgas
 Name[nb]=SC2200/VSC3000-vert
 Name[nds]=SC2200/VSC3000-Reekner
 Name[nl]=SC2200/VSC3000 host
@@ -20,6 +23,7 @@ Name[pt]=Máquina SC2200/VSC3000
 Name[pt_BR]=máquina SC2200/VSC3000
 Name[ru]=Узел SC2200/VSC3000
 Name[sk]=SC2200/VSC3000 host
+Name[sl]=Gostitelj SC2200/VSC3000
 Name[sv]=SC2200/VSC3000-värddator
 Name[uk]=Вузол SC2200/VSC3000
 Name[x-test]=xxSC2200/VSC3000 hostxx

@@ -98,7 +98,6 @@ set(kritaimage_LIB_SRCS
    processing/kis_transform_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
-   filter/kis_filter_job.cpp
    filter/kis_filter_registry.cc
    filter/kis_color_transformation_filter.cc
    generator/kis_generator.cpp
@@ -187,7 +186,6 @@ set(kritaimage_LIB_SRCS
    kis_selection_transaction_data.cpp
    kis_serializable_configuration.cc
    kis_shared.cc
-   kis_threaded_applicator.cpp
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
@@ -240,7 +238,7 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES})
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} )
 
 if(OPENEXR_FOUND)
@@ -288,7 +286,6 @@ install( FILES
     filter/kis_filter.h
     filter/kis_filter_registry.h
     kis_filter_strategy.h
-    kis_generic_colorspace.h
     kis_global.h
     kis_image.h
     kis_mask.h

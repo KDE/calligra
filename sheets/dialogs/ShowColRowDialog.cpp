@@ -114,7 +114,7 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
     //selection multiple
     list->setSelectionMode(QAbstractItemView::MultiSelection);
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotDoubleClicked(QListWidgetItem *)));
+    connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotDoubleClicked(QListWidgetItem*)));
     resize(200, 150);
     setFocus();
 }

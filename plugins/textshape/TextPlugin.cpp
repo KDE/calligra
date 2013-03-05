@@ -21,7 +21,7 @@
 #include "ReferencesToolFactory.h"
 #include "ReviewToolFactory.h"
 #ifdef CREATE_TEXTDOCUMENT_INSPECTOR
-#include "TextDocumentInspectionDockerFactory.h"
+#include "TextDocumentInspectionPlugin.h"
 #endif
 #include "TextShapeFactory.h"
 
@@ -31,7 +31,16 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(TextPluginFactory, registerPlugin<TextPlugin>();)
+#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
+K_PLUGIN_FACTORY(TextPluginFactory,
+                 registerPlugin<TextPlugin>();
+                 registerPlugin<TextDocumentInspectionPlugin>(QLatin1String("TextDocumentInspection"));
+)
+#else
+K_PLUGIN_FACTORY(TextPluginFactory,
+                 registerPlugin<TextPlugin>();
+)
+#endif
 K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
 
 TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
@@ -40,9 +49,6 @@ TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
     KoToolRegistry::instance()->add(new TextToolFactory());
     KoToolRegistry::instance()->add(new ReviewToolFactory());
     KoToolRegistry::instance()->add(new ReferencesToolFactory());
-#ifdef CREATE_TEXTDOCUMENT_INSPECTOR
-    KoDockRegistry::instance()->add(new TextDocumentInspectionDockerFactory());
-#endif
     KoShapeRegistry::instance()->add(new TextShapeFactory());
 }
 

@@ -51,7 +51,7 @@ class KoShapeAnchor;
 class KoShapeContainer;
 class KoShapeController;
 class KoPart;
-
+class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
 
@@ -75,8 +75,6 @@ public:
     virtual void removeShape(KoShape *shape);
     // reimplemented from KoShapeBasedDocumentBase
     virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
-
-    void addShape(KoShape *shape, KoShapeAnchor *anchor);
 
     // KoDocument interface
     /// reimplemented from KoDocument
@@ -284,6 +282,7 @@ private:
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
     QPair<QString, QByteArray> m_coverImage;
+
 };
 
 #endif

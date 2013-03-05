@@ -57,7 +57,7 @@ KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
 {
     setObjectName(view->objectName() + "_KexiDataAwarePropertySet");
     d->dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiTableViewData*)));
-    d->dataObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int, int)));
+    d->dataObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
     slotDataSet(d->dataObject->data());
     const bool wasDirty = view->isDirty();
     clear();
@@ -79,10 +79,10 @@ void KexiDataAwarePropertySet::slotDataSet(KexiTableViewData *data)
     d->currentTVData = data;
     if (!d->currentTVData.isNull()) {
         connect(d->currentTVData, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
-        connect(d->currentTVData, SIGNAL(rowsDeleted(const QList<int> &)),
-                this, SLOT(slotRowsDeleted(const QList<int> &)));
-        connect(d->currentTVData, SIGNAL(rowInserted(KexiDB::RecordData*, uint, bool)),
-                this, SLOT(slotRowInserted(KexiDB::RecordData*, uint, bool)));
+        connect(d->currentTVData, SIGNAL(rowsDeleted(QList<int>)),
+                this, SLOT(slotRowsDeleted(QList<int>)));
+        connect(d->currentTVData, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
+                this, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool)));
         connect(d->currentTVData, SIGNAL(reloadRequested()),
                 this, SLOT(slotReloadRequested()));
     }
@@ -155,7 +155,7 @@ void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
 
     d->sets[row] = set;
 
-    connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)), d->view, SLOT(setDirty()));
+    connect(set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)), d->view, SLOT(setDirty()));
 
     if (newOne) {
         //add a special property indicating that this is brand new set,

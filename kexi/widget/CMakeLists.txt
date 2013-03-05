@@ -43,6 +43,7 @@ set(kexiextendedwidgets_LIB_SRCS
     KexiDBTitlePage.cpp
     KexiProjectSelectorWidget.cpp
     kexislider.cpp
+    KexiServerDriverNotFoundMessage.cpp
   )
 
 IF (KEXI_MOBILE)

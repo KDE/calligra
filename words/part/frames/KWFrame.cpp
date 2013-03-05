@@ -25,7 +25,6 @@
 #include "KWTextFrameSet.h"
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
-#include "KoShapeAnchor.h"
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
 #include <KoTextShapeData.h>
@@ -34,14 +33,13 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
-KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, KoShapeAnchor *anchor)
+KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         : m_shape(shape),
         m_frameBehavior(Words::AutoExtendFrameBehavior),
         m_newFrameBehavior(Words::NoFollowupFrame),
         m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
-        m_minimumFrameHeight(0.0), // no minimum height per default
-        m_anchor(anchor)
+        m_minimumFrameHeight(0.0) // no minimum height per default
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -129,17 +127,20 @@ void KWFrame::cleanupShape(KoShape* shape)
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_frameSet);
     if (tfs) {
         KWRootAreaProvider *rootAreaProvider = tfs->rootAreaProvider();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
-        Q_ASSERT(lay);
-        QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
-        for(int i = 0; i < layoutRootAreas.count(); ++i) {
-            KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
-            if (rootArea->associatedShape() == shape) {
-                KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
-                rootAreaProvider->releaseAllAfter(prevRootArea);
-                lay->removeRootArea(prevRootArea);
-                rootArea->setAssociatedShape(0);
-                break;
+        // it is no longer set when document is destroyed
+        if (rootAreaProvider) {
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            Q_ASSERT(lay);
+            QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
+            for(int i = 0; i < layoutRootAreas.count(); ++i) {
+                KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
+                if (rootArea->associatedShape() == shape) {
+                    KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
+                    rootAreaProvider->releaseAllAfter(prevRootArea);
+                    lay->removeRootArea(prevRootArea);
+                    rootArea->setAssociatedShape(0);
+                    break;
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Words" version="138">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Words" version="139">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -65,9 +65,7 @@
  -->
 
  <Menu name="format"><text>S&amp;tyles</text>
-  <Action name="format_stylemenu"/>
   <Action name="format_stylist"/>
-  <Action name="import_style"/>
  </Menu>
 
  <Menu name="settings"><text>&amp;Settings</text>

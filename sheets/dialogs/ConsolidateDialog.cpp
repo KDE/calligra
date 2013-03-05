@@ -119,7 +119,7 @@ ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
     connect(d->mainWidget.m_sourceRange, SIGNAL(returnPressed()),
             this, SLOT(slotReturnPressed()));
 
-    connect(d->selection, SIGNAL(changed(const Region&)),
+    connect(d->selection, SIGNAL(changed(Region)),
             this, SLOT(slotSelectionChanged()));
 }
 

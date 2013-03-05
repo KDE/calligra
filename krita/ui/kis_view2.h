@@ -28,6 +28,7 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
+class KisAction;
 class QDragEnterEvent;
 class QDropEvent;
 class QPoint;
@@ -56,6 +57,7 @@ class KoFavoriteResourceManager;
 class KisPaintopBox;
 class KisCanvasController;
 class KisFlipbook;
+class KisActionManager;
 
 /**
  * Krita view class
@@ -127,6 +129,8 @@ public:  // Krita specific interfaces
     /// The node manager handles everything about nodes
     KisNodeManager * nodeManager();
 
+    KisActionManager* actionManager();
+    
     /**
      * Convenience method to get at the active node, which may be
      * a layer or a mask or a selection

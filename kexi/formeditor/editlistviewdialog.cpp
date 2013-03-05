@@ -106,7 +106,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     layout->addWidget(m_listview);
     m_listview->setFocus();
     connect(m_listview, SIGNAL(currentChanged(Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
-    connect(m_listview, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
+    connect(m_listview, SIGNAL(moved(Q3ListViewItem*,Q3ListViewItem*,Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
 
     /////////////////// Setup the columns page ////////////////
     m_contentsPageItem = addPage(new QWidget(this), i18n("Contents"));
@@ -127,8 +127,8 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     m_propSet->addProperty(
         new KoProperty::Property("fullwidth", QVariant(false), i18n("Full Width"), i18n("Full Width")));
     m_editor->changeSet(m_propSet);
-    connect(m_propSet, SIGNAL(propertyChanged(KoProperty::Set & KoProperty::Property&)),
-            this, SLOT(changeProperty(KoProperty::Set & KoProperty::Property&)));
+    connect(m_propSet, SIGNAL(propertyChanged(KoProperty::Set&KoProperty::Property&)),
+            this, SLOT(changeProperty(KoProperty::Set&KoProperty::Property&)));
 
     // Setup the icon toolbar //////////
     Q3VBoxLayout *vbox = new Q3VBoxLayout(hbox, 3);

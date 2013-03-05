@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=SDL
 Name[bg]=SDL
+Name[bs]=SDL
 Name[ca]=SDL
 Name[ca@valencia]=SDL
 Name[cs]=SDL
+Name[da]=SDL
 Name[de]=SDL
 Name[el]=SDL
 Name[es]=SDL
@@ -14,6 +16,7 @@ Name[gl]=SDL
 Name[hu]=SDL
 Name[it]=SDL
 Name[kk]=SDL
+Name[lt]=SDL
 Name[nb]=SDL
 Name[nds]=SDL
 Name[nl]=SDL
@@ -22,6 +25,7 @@ Name[pt]=SDL
 Name[pt_BR]=SDL
 Name[ru]=SDL
 Name[sk]=SDL
+Name[sl]=SDL
 Name[sv]=SDL
 Name[ug]=SDL
 Name[uk]=SDL

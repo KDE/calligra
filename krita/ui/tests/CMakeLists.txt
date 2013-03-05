@@ -158,3 +158,24 @@ target_link_libraries(KisInputManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimag
 set(kis_flipbook_test_SRCS kis_flipbook_test.cpp )
 kde4_add_unit_test(KisFlipbookTest TESTNAME krita-ui-KisFlipbookTest  ${kis_flipbook_test_SRCS})
 target_link_libraries(KisFlipbookTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_action_manager_test_SRCS kis_action_manager_test.cpp )
+kde4_add_unit_test(KisActionManagerTest TESTNAME krita-ui-KisActionManagerTest  ${kis_action_manager_test_SRCS})
+target_link_libraries(KisActionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
+kde4_add_unit_test(KisFilterJobTest TESTNAME krita-ui-KisFilterJobTest ${kis_filter_job_test_SRCS})
+target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} kritaui ${QT_QTTEST_LIBRARY})
+
+
+########### next target ###############
+
+set(kis_threaded_applicator_test_SRCS kis_threaded_applicator_test.cpp )
+kde4_add_unit_test(KisThreadedApplicatorTest TESTNAME krita-ui-KisThreadedApplicatorTest ${kis_threaded_applicator_test_SRCS})
+target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} ${KDE4_THREADWEAVER_LIBRARY} kritaui ${QT_QTTEST_LIBRARY})
+
+

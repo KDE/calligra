@@ -51,6 +51,7 @@ SET ( textshape_SRCS
     dialogs/SimpleInsertWidget.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
     dialogs/SimpleCitationBibliographyWidget.cpp
+    dialogs/SimpleSpellCheckingWidget.cpp
     dialogs/CitationInsertionDialog.cpp
     dialogs/InsertBibliographyDialog.cpp
     dialogs/SimpleFootEndNotesWidget.cpp
@@ -112,6 +113,7 @@ if(BUILD_TEXTDOCUMENT_INSPECTOR)
         TextDocumentStructureModel.cpp
         TextDocumentInspectionDocker.cpp
         TextDocumentInspectionDockerFactory.cpp
+        TextDocumentInspectionPlugin.cpp
     )
 endif(BUILD_TEXTDOCUMENT_INSPECTOR)
 
@@ -123,6 +125,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleInsertWidget.ui
     dialogs/SimpleTableOfContentsWidget.ui
     dialogs/SimpleCitationBibliographyWidget.ui
+    dialogs/SimpleSpellCheckingWidget.ui
     dialogs/CitationInsertionDialog.ui
     dialogs/InsertBibliographyDialog.ui
     dialogs/SimpleFootEndNotesWidget.ui
@@ -141,7 +144,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableDialog.ui
     dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
-    dialogs/TableOfContentsStyleConfigure.ui 
+    dialogs/TableOfContentsStyleConfigure.ui
 
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui
@@ -164,3 +167,10 @@ install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES textshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 #kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+
+if(BUILD_TEXTDOCUMENT_INSPECTOR)
+    # workaround: to avoid translations the real desktop file is only generated
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/textdocumentinspection.desktop)
+
+    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(BUILD_TEXTDOCUMENT_INSPECTOR)

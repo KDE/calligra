@@ -127,6 +127,7 @@
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
+#include "kis_action_manager.h"
 #include "kis_paintop_box.h"
 
 
@@ -168,6 +169,7 @@ public:
         , gridManager(0)
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
+        , actionManager(0)
     {
     }
 
@@ -188,6 +190,7 @@ public:
         delete paintingAssistantManager;
         delete viewConverter;
         delete statusBar;
+        delete actionManager;
     }
 
 public:
@@ -215,6 +218,7 @@ public:
     KisPaintingAssistantsManager *paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisFlipbook *flipbook;
+    KisActionManager* actionManager;
 };
 
 
@@ -248,7 +252,16 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
 
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+
+
+    KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
+    if (grp.readEntry("CreatingCanvas", false)) {
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+    }
+    grp.writeEntry("CreatingCanvas", true);
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
+    grp.writeEntry("CreatingCanvas", false);
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
     m_d->canvasController->setCanvas(m_d->canvas);
@@ -793,14 +806,16 @@ void KisView2::createManagers()
     // XXX: When the currentlayer changes, call updateGUI on all
     // managers
 
+    m_d->actionManager = new KisActionManager(this);
+
     m_d->filterManager = new KisFilterManager(this, m_d->doc);
     m_d->filterManager->setup(actionCollection());
 
     m_d->selectionManager = new KisSelectionManager(this, m_d->doc);
-    m_d->selectionManager->setup(actionCollection());
+    m_d->selectionManager->setup(actionCollection(), actionManager());
 
     m_d->nodeManager = new KisNodeManager(this, m_d->doc);
-    m_d->nodeManager->setup(actionCollection());
+    m_d->nodeManager->setup(actionCollection(), actionManager());
 
     // the following cast is not really safe, but better here than in the zoomManager
     // best place would be outside kisview too
@@ -829,9 +844,9 @@ void KisView2::updateGUI()
     m_d->selectionManager->updateGUI();
     m_d->filterManager->updateGUI();
     m_d->zoomManager->updateGUI();
-    m_d->imageManager->updateGUI();
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
+    m_d->actionManager->updateGUI();
 }
 
 
@@ -981,6 +996,11 @@ KoPrintJob * KisView2::createPrintJob()
 KisNodeManager * KisView2::nodeManager()
 {
     return m_d->nodeManager;
+}
+
+KisActionManager* KisView2::actionManager()
+{
+    return m_d->actionManager;
 }
 
 KisPerspectiveGridManager* KisView2::perspectiveGridManager()

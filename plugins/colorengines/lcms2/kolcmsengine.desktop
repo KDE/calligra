@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=LCMS Color Management Engine for Pigment
+Name[bs]=LCMS pogon za upravljanje pigmentom boje
 Name[ca]=Motor de gestió de color LCMS per al Pigment
 Name[ca@valencia]=Motor de gestió de color LCMS per al Pigment
 Name[da]=LCMS farvehåndteringsmotor til Pigment
@@ -29,6 +30,7 @@ Name[x-test]=xxLCMS Color Management Engine for Pigmentxx
 Name[zh_TW]=Pigment 的 LCMS 色彩管理引擎
 X-KDE-ServiceTypes=Calligra/ColorSpace
 Type=Service
+X-KDE-PluginInfo-Name=kolcmsengine
 X-KDE-Library=kolcmsengine
 X-Pigment-MinVersion=27
 X-Pigment-PluginVersion=27

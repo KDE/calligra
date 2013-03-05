@@ -910,23 +910,23 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
                 if (pointedAt.tableColumnDivider < pointedAt.table->columns()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
-                        KoBorder::Left, m_tablePenBorderData);
+                        KoBorder::LeftBorder, m_tablePenBorderData);
                 }
                 if (pointedAt.tableColumnDivider > 0) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider - 1,
-                        KoBorder::Right, m_tablePenBorderData);
+                        KoBorder::RightBorder, m_tablePenBorderData);
                 }
             } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
                 if (pointedAt.tableRowDivider < pointedAt.table->rows()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
-                        KoBorder::Top, m_tablePenBorderData);
+                        KoBorder::TopBorder, m_tablePenBorderData);
                 }
                 if (pointedAt.tableRowDivider > 0) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider-1, pointedAt.tableColumnDivider,
-                        KoBorder::Bottom, m_tablePenBorderData);
+                        KoBorder::BottomBorder, m_tablePenBorderData);
                 }
             }
             m_textEditor.data()->endEditBlock();
@@ -1738,7 +1738,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         QTextLayout *layout = block.layout();
         Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
-        const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
+        const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), event->preeditString().length());
     }
     event->accept();
 }
@@ -1963,7 +1963,7 @@ void TextTool::repaintCaret()
         return;
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
+    Q_ASSERT(lay); Q_UNUSED(lay);
 
     // If we have changed root area we need to update m_textShape and m_textShapeData
     if (m_delayedEnsureVisible) {
@@ -2072,7 +2072,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
 
-/* We do not use these for now. Let's see if they become usefull at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
+/* We do not use these for now. Let's see if they become useful at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
     if (m_textShapeData && KoTextDocument(m_textShapeData->document()).styleManager()) {
         scw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
         spw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());

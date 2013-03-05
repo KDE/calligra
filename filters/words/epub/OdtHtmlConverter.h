@@ -74,6 +74,10 @@ class OdtHtmlConverter
                                               QHash<QString, QString> &mediaFiles);
 
  private:
+    enum TableCellType {
+        TableDataType,
+        TableHeaderType,
+    };
 
     // Helper functions to create the html contents.
     void beginHtmlFile(QHash<QString, QString> &metaData);
@@ -89,6 +93,7 @@ class OdtHtmlConverter
     void handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWriter);
 
     void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleTagTableRow(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter, TableCellType type = TableDataType);
 
     void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
@@ -131,6 +136,14 @@ class OdtHtmlConverter
                       QSet<QString> &doneStyles);
 
     void writeMediaOverlayDocumentFile();
+
+    /**
+     * Convert an ODF style name to a CSS class name.
+     *
+     * This strips out special characters like . and > that cannot be used
+     * in CSS class names.
+     */
+    QString cssClassName(const QString& odfStyleName);
 
 
  private:

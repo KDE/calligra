@@ -298,6 +298,11 @@ bool KisDoc2::completeSaving(KoStore *store)
     return true;
 }
 
+int KisDoc2::supportedSpecialFormats() const
+{
+    return 0; // we don't support encryption.
+}
+
 
 bool KisDoc2::completeLoading(KoStore *store)
 {
@@ -428,7 +433,7 @@ vKisNodeSP KisDoc2::activeNodes() const
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
-            if (!nodes.contains(activeNode)) {
+            if (activeNode && !nodes.contains(activeNode)) {
                 if (activeNode->inherits("KisMask")) {
                     activeNode = activeNode->parent();
                 }

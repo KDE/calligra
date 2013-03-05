@@ -44,7 +44,6 @@
 #include "KoInlineCite.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
-#include "changetracker/KoDeleteChangeMarker.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
@@ -90,11 +89,7 @@
 #include <kdebug.h>
 #include "KoTextDebug.h"
 
-#ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#else
-#include "KoTextSopranoRdfModel_p.h"
-#endif
+#include <KoDocumentRdfBase.h>
 
 Q_DECLARE_METATYPE(QTextFrame*)
 
@@ -725,27 +720,14 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
         }
     }
 
-    if (trackChanges) {
-        if (previous) {
-            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
-                                                      d->document,
-                                                      shapeController, parent));
-        } else {
-            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar,
-                                                      d->document,
-                                                      shapeController, parent));
-        }
-    }
-    else {
-        if (previous) {
-            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
-                                         d->document,
-                                         shapeController, parent));
-        } else {
-            addCommand(new DeleteCommand(DeleteCommand::NextChar,
-                                         d->document,
-                                         shapeController, parent));
-        }
+    if (previous) {
+        addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+                                        d->document,
+                                        shapeController, parent));
+    } else {
+        addCommand(new DeleteCommand(DeleteCommand::NextChar,
+                                        d->document,
+                                        shapeController, parent));
     }
 }
 
@@ -1029,10 +1011,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);
@@ -1226,7 +1208,7 @@ void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight
 }
 
 void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
-         KoBorder::Side cellSide, const KoBorder::BorderData &data)
+         KoBorder::BorderSide cellSide, const KoBorder::BorderData &data)
 {
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Change Border Formatting"));
     d->caret.beginEditBlock();
@@ -1234,26 +1216,7 @@ void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
     QTextCharFormat fmt = cell.format();
     KoBorder border = fmt.property(KoTableCellStyle::Borders).value<KoBorder>();
 
-    switch (cellSide) {
-    case KoBorder::Top:
-        border.setTopBorderData(data);
-        break;
-    case KoBorder::Left:
-        border.setLeftBorderData(data);
-        break;
-    case KoBorder::Bottom:
-        border.setBottomBorderData(data);
-        break;
-    case KoBorder::Right:
-        border.setRightBorderData(data);
-        break;
-    case KoBorder::TopLeftToBottomRight:
-        border.setTlbrBorderData(data);
-        break;
-    case KoBorder::BottomLeftToTopRight:
-        border.setTrblBorderData(data);
-        break;
-    }
+    border.setBorderData(cellSide, data);
     fmt.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
     cell.setFormat(fmt);
     d->caret.endEditBlock();

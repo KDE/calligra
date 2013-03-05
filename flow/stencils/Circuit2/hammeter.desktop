@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Horizontal Ammeter
+Name[bs]=Horizontalni Ampermetar
 Name[ca]=Amperímetre horitzontal
 Name[ca@valencia]=Amperímetre horitzontal
+Name[da]=Vandret amperemeter
 Name[de]=Waagerechtes Amperemeter
 Name[el]=Οριζόντιο αμπερόμετρο
 Name[es]=Amperímetro horizontal
@@ -20,6 +22,7 @@ Name[pt_BR]=Amperímetro horizontal
 Name[ru]=Горизонтальный амперметр
 Name[sk]=Vodorovný ampérmeter
 Name[sv]=Horisontell Amperemätare
+Name[tr]=Yatay Ampermetre
 Name[uk]=Амперметр (горизонтально)
 Name[x-test]=xxHorizontal Ammeterxx
 Name[zh_TW]=水平電流計

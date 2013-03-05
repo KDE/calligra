@@ -49,6 +49,9 @@ public:
 
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+
+
 private slots:
      void showErrorAndDie();
 

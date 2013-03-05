@@ -47,9 +47,7 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 
-#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
 
 #include <QFile>
 #include <QSplashScreen>
@@ -93,22 +91,7 @@ KoApplication::KoApplication()
 #endif
     m_starting = true;
 #ifdef Q_WS_WIN
-//    QSysInfo::WinVersion version = QSysInfo::windowsVersion();
-//    printf("setting windows style %i", version);
-//    switch (version) {
-//	case QSysInfo::WV_NT:
-//	case QSysInfo::WV_2000:
-            setStyle("windows");
-//	    break;
-//	case QSysInfo::WV_XP:
-//	case QSysInfo::WV_2003:
-//	    setStyle("windowsxp");
-//	    break;
-//	case QSysInfo::WV_VISTA:
-//	case QSysInfo::WV_WINDOWS7:
-//	default:
-//	    setStyle("windowsvista");
-//    }
+    setStyle("Plastique");
 #endif
 
 }
@@ -219,13 +202,12 @@ bool KoApplication::start()
     }
     // No argument -> create an empty document
     if (!argsCount) {
-#if KDE_IS_VERSION(4,6,0)
         // if there's no document, add the current working directory
         // to the recent dirs so the open dialog and open pane show
         // the directory from where the app was started, instead of
         // the last directory from where we opened a file
         KRecentDirs::add(":OpenDialog", QDir::currentPath());
-#endif
+
         QString errorMsg;
         KoPart *part = entry.createKoPart(&errorMsg);
 

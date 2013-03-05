@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Send
 Name[bg]=Изпращане
+Name[bs]=Pošalji
 Name[ca]=Envia
 Name[ca@valencia]=Envia
 Name[cs]=Odeslat
+Name[da]=Send
 Name[de]=Senden
 Name[el]=Αποστολή
 Name[es]=Envío
@@ -12,8 +14,11 @@ Name[fi]=Lähetä
 Name[fr]=Envoyer
 Name[gl]=Enviar
 Name[hu]=Küldés
+Name[ia]=Invia
 Name[it]=Invia
 Name[kk]=Жіберу
+Name[lt]=Siųsti
+Name[mr]=पाठवा
 Name[nb]=Send
 Name[nds]=Loosstüern
 Name[nl]=Verzenden

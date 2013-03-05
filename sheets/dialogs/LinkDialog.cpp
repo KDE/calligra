@@ -88,8 +88,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->internetLink = new KLineEdit(d->internetPage);
     iLayout->addWidget(d->internetLink);
     iLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    connect(d->internetText, SIGNAL(textChanged(const QString&)), this,
-            SLOT(setText(const QString&)));
+    connect(d->internetText, SIGNAL(textChanged(QString)), this,
+            SLOT(setText(QString)));
 
     // link for e-mail
     d->mailPage = new QWidget();
@@ -103,8 +103,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     mLayout->addWidget(new QLabel(i18n("Email address:"), d->mailPage));
     d->mailLink = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailLink);
-    connect(d->mailText, SIGNAL(textChanged(const QString&)), this,
-            SLOT(setText(const QString&)));
+    connect(d->mailText, SIGNAL(textChanged(QString)), this,
+            SLOT(setText(QString)));
     mLayout->addWidget(new QLabel(i18n("Subject:"), d->mailPage));
     d->mailSubject = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailSubject);
@@ -130,10 +130,10 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     recentFile->setMinimumContentsLength(40);
     fLayout->addWidget(recentFile);
     fLayout->addItem(new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
-    connect(d->fileText, SIGNAL(textChanged(const QString&)), this,
-            SLOT(setText(const QString&)));
-    QObject::connect(recentFile, SIGNAL(highlighted(const QString &)),
-                     d->fileLink->lineEdit(), SLOT(setText(const QString &)));
+    connect(d->fileText, SIGNAL(textChanged(QString)), this,
+            SLOT(setText(QString)));
+    QObject::connect(recentFile, SIGNAL(highlighted(QString)),
+                     d->fileLink->lineEdit(), SLOT(setText(QString)));
 
     // populate recent files
     int index = 0;
@@ -173,8 +173,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->cellLink->setItemText(d->cellLink->currentIndex(), "");
     cLayout->addWidget(d->cellLink);
     cLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    connect(d->cellText, SIGNAL(textChanged(const QString&)), this,
-            SLOT(setText(const QString&)));
+    connect(d->cellText, SIGNAL(textChanged(QString)), this,
+            SLOT(setText(QString)));
 
     showButtonSeparator(true);
     d->internetText->setFocus();

@@ -223,12 +223,12 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->print = new SheetPrint(this);
 
     // document size changes always trigger a visible size change
-    connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
+    connect(this, SIGNAL(documentSizeChanged(QSizeF)), SIGNAL(visibleSizeChanged()));
     // CellStorage connections
-    connect(d->cellStorage, SIGNAL(insertNamedArea(const Region&, const QString&)),
-            d->workbook->namedAreaManager(), SLOT(insert(const Region&, const QString&)));
-    connect(d->cellStorage, SIGNAL(namedAreaRemoved(const QString&)),
-            d->workbook->namedAreaManager(), SLOT(remove(const QString&)));
+    connect(d->cellStorage, SIGNAL(insertNamedArea(Region,QString)),
+            d->workbook->namedAreaManager(), SLOT(insert(Region,QString)));
+    connect(d->cellStorage, SIGNAL(namedAreaRemoved(QString)),
+            d->workbook->namedAreaManager(), SLOT(remove(QString)));
 }
 
 Sheet::Sheet(const Sheet &other)
@@ -2615,7 +2615,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     }
 
     const QRect usedArea = this->usedArea();
-    saveOdfColRowCell(xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
+    saveOdfColRowCell(usedArea.width(), usedArea.height(), tableContext);
 
     xmlWriter.endElement();
     return true;
@@ -2656,10 +2656,12 @@ QString Sheet::saveOdfSheetStyleName(KoGenStyles &mainStyles)
 }
 
 
-void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
-                              int maxCols, int maxRows, OdfSavingContext& tableContext)
+void Sheet::saveOdfColRowCell(int maxCols, int maxRows, OdfSavingContext& tableContext)
 {
     kDebug(36003) << "Sheet::saveOdfColRowCell:" << d->name;
+
+    KoXmlWriter & xmlWriter = tableContext.shapeContext.xmlWriter();
+    KoGenStyles & mainStyles = tableContext.shapeContext.mainStyles();
 
     // calculate the column/row default cell styles
     int maxMaxRows = maxRows; // includes the max row a column default style occupies
@@ -2880,7 +2882,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             }
 
-            saveOdfCells(xmlWriter, mainStyles, i, maxCols, tableContext);
+            saveOdfCells(i, maxCols, tableContext);
 
             // copy the index for the next row to process
             i = j - 1; /*it's already incremented in the for loop*/
@@ -2903,9 +2905,10 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     }
 }
 
-void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                         OdfSavingContext& tableContext)
+void Sheet::saveOdfCells(int row, int maxCols, OdfSavingContext& tableContext)
 {
+    KoXmlWriter & xmlWriter = tableContext.shapeContext.xmlWriter();
+
     int i = 1;
     Cell cell(this, i, row);
     Cell nextCell = d->cellStorage->nextInRow(i, row);
@@ -2926,7 +2929,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
 
         int repeated = 1;
         int column = i;
-        cell.saveOdf(xmlWriter, mainStyles, row, column, repeated, tableContext);
+        cell.saveOdf(row, column, repeated, tableContext);
         i += repeated;
         // stop if we reached the end column
         if (i > maxCols || nextCell.isNull())

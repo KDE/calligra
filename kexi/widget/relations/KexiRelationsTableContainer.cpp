@@ -100,10 +100,10 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
 // d->fieldList->resize( d->fieldList->sizeHint() );
     lyr->addWidget(d->fieldList);
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
-    connect(d->fieldList, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
-            this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
-    connect(d->fieldList, SIGNAL(doubleClicked(const QModelIndex &)),
-            this, SLOT(slotFieldsDoubleClicked(const QModelIndex &)));
+    connect(d->fieldList, SIGNAL(contextMenu(K3ListView*,Q3ListViewItem*,QPoint)),
+            this, SLOT(slotContextMenu(K3ListView*,Q3ListViewItem*,QPoint)));
+    connect(d->fieldList, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(slotFieldsDoubleClicked(QModelIndex)));
 }
 
 KexiRelationsTableContainer::~KexiRelationsTableContainer()

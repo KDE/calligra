@@ -181,6 +181,9 @@ protected:
     void requestStrokeCancellation();
 
 private:
+    void clearDevices(KisNodeSP node, bool recursive);
+    void transformDevices(KisNodeSP node, bool recursive);
+
     void startStroke(ToolTransformArgs::TransformMode mode);
     void endStroke();
     void cancelStroke();
@@ -355,13 +358,9 @@ private:
 
     void initTransformMode(ToolTransformArgs::TransformMode mode);
 
-    void initThumbnailImage();
+    void initThumbnailImage(KisPaintDeviceSP previewDevice);
     void updateSelectionPath();
     void updateApplyResetAvailability();
-    void transformDevice(KisPaintDeviceSP device,
-                         KoUpdaterPtr warpUpdater,
-                         KoUpdaterPtr affineUpdater,
-                         KoUpdaterPtr perspectiveUpdater);
 
 private:
     enum function {ROTATE = 0, MOVE, RIGHTSCALE, TOPRIGHTSCALE, TOPSCALE, TOPLEFTSCALE,
@@ -395,6 +394,7 @@ private:
     QImage m_currImg; // origImg transformed using m_transform
     KisPaintDeviceSP m_selectedPortionCache;
     KisStrokeId m_strokeId;
+    bool m_workRecursively;
 
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
 
@@ -486,6 +486,7 @@ private slots:
     void slotUiChangedConfig();
     void slotApplyTransform();
     void slotResetTransform();
+    void slotRestartTransform();
     void slotEditingFinished();
 };
 

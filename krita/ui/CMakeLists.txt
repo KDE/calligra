@@ -111,6 +111,9 @@ set(kritaui_LIB_SRCS
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kis_mirror_visitor.cpp
+    kis_action.cpp
+    kis_action_manager.cpp
+    kis_view_plugin.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -217,6 +220,8 @@ set(kritaui_LIB_SRCS
     actions/kis_selection_action_factories.cpp
     input/kis_gesture_shortcut.cpp
     input/kis_touch_shortcut.cpp
+    kis_filter_job.cpp
+    kis_threaded_applicator.cpp
 )
 
 if(HAVE_OPENGL)
@@ -289,9 +294,9 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)

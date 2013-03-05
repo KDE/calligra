@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=pump
+Name[bs]=pumpa
 Name[ca]=bomba
 Name[ca@valencia]=bomba
+Name[da]=pumpe
 Name[de]=Pumpe
 Name[el]=αντλία
 Name[es]=bomba centrífuga
@@ -19,7 +21,9 @@ Name[pt]=bomba
 Name[pt_BR]=bomba
 Name[ru]=Насос
 Name[sk]=pump
+Name[sl]=črpalka
 Name[sv]=pump
+Name[tr]=pompa
 Name[uk]=Центробіжний насос або вентилятор
 Name[x-test]=xxpumpxx
 Name[zh_TW]=pump

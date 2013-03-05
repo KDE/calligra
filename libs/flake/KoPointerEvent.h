@@ -245,6 +245,10 @@ public:
     const QPointF point;
 
     const QList<KoTouchPoint> touchPoints;
+    /**
+     * Returns if the event comes from a tablet
+     */
+    bool isTabletEvent();
 
 protected:
     friend class KoToolProxy;

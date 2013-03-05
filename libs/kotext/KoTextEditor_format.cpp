@@ -25,7 +25,6 @@
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
-#include "changetracker/KoDeleteChangeMarker.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
@@ -78,12 +77,8 @@ void KoTextEditor::bold(bool bold)
     d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Bold"));
     QTextCharFormat format;
     format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
-
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Bold"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 void KoTextEditor::italic(bool italic)
@@ -95,12 +90,8 @@ void KoTextEditor::italic(bool italic)
     d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Italic"));
     QTextCharFormat format;
     format.setFontItalic(italic);
-
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Italic"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 void KoTextEditor::underline(bool underline)
@@ -118,12 +109,8 @@ void KoTextEditor::underline(bool underline)
         format.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::NoLineType);
         format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::NoLineStyle);
     }
-
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Underline"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 void KoTextEditor::strikeOut(bool strikeout)
@@ -141,11 +128,8 @@ void KoTextEditor::strikeOut(bool strikeout)
         format.setProperty(KoCharacterStyle::StrikeOutType, KoCharacterStyle::NoLineType);
         format.setProperty(KoCharacterStyle::StrikeOutStyle, KoCharacterStyle::NoLineStyle);
     }
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Strike Out"), format, prevFormat, false);
+    mergeAutoStyle(format);
     d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
 }
 
 void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
@@ -565,9 +549,19 @@ void KoTextEditor::mergeAutoStyle(const QTextCharFormat &deltaCharFormat)
 {
     d->updateState(KoTextEditor::Private::Custom, "Formatting");
 
+    int caretAnchor = d->caret.anchor();
+    int caretPosition = d->caret.position();
     MergeAutoCharacterStyleVisitor visitor(this, deltaCharFormat);
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+
+    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+        d->caret.mergeCharFormat(deltaCharFormat);
+    }
+    else {
+        d->caret.setPosition(caretAnchor);
+        d->caret.setPosition(caretPosition, QTextCursor::KeepAnchor);
+    }
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();

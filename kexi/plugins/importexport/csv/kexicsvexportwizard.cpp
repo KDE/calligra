@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.org>
-   Copyright (C) 2005,2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -122,8 +122,8 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
             KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()));
         m_fileSavePage = new KPageWidgetItem(m_fileSaveWidget, i18n("Enter Name of File You Want to Save Data To"));
         addPage(m_fileSavePage);
-        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
-                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
+        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
+                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
     }
 
     /* 2. Export options
@@ -320,35 +320,36 @@ void KexiCSVExportWizard::done(int result)
         m_options.addColumnNames = m_addColumnNamesCheckBox->isChecked();
         if (!KexiCSVExport::exportData(*m_tableOrQuery, m_options))
             return;
-    } else if (QDialog::Rejected == result) {
+
+        //store options
+        if (m_options.mode != KexiCSVExport::Clipboard)
+            writeEntry("ShowOptionsInCSVExportDialog", m_exportOptionsSection->isVisible());
+        const bool store = m_alwaysUseCheckBox->isChecked();
+        writeEntry("StoreOptionsForCSVExportDialog", store);
+        // only save if an option differs from default
+
+        if (store && m_delimiterWidget->delimiter() != defaultDelimiter())
+            writeEntry("DefaultDelimiterForExportingCSVFiles", m_delimiterWidget->delimiter());
+        else
+            deleteEntry("DefaultDelimiterForExportingCSVFiles");
+        if (store && m_textQuote->textQuote() != defaultTextQuote())
+            writeEntry("DefaultTextQuoteForExportingCSVFiles", m_textQuote->textQuote());
+        else
+            deleteEntry("DefaultTextQuoteForExportingCSVFiles");
+        if (store && !m_characterEncodingCombo->defaultEncodingSelected())
+            writeEntry(
+                "DefaultEncodingForExportingCSVFiles", m_characterEncodingCombo->selectedEncoding());
+        else
+            deleteEntry("DefaultEncodingForExportingCSVFiles");
+        if (store && !m_addColumnNamesCheckBox->isChecked())
+            writeEntry(
+                "AddColumnNamesForExportingCSVFiles", m_addColumnNamesCheckBox->isChecked());
+        else
+            deleteEntry("AddColumnNamesForExportingCSVFiles");
+    }
+    else if (QDialog::Rejected == result) {
         //nothing to do
     }
-
-    //store options
-    if (m_options.mode != KexiCSVExport::Clipboard)
-        writeEntry("ShowOptionsInCSVExportDialog", m_exportOptionsSection->isVisible());
-    const bool store = m_alwaysUseCheckBox->isChecked();
-    writeEntry("StoreOptionsForCSVExportDialog", store);
-    // only save if an option differs from default
-
-    if (store && m_delimiterWidget->delimiter() != defaultDelimiter())
-        writeEntry("DefaultDelimiterForExportingCSVFiles", m_delimiterWidget->delimiter());
-    else
-        deleteEntry("DefaultDelimiterForExportingCSVFiles");
-    if (store && m_textQuote->textQuote() != defaultTextQuote())
-        writeEntry("DefaultTextQuoteForExportingCSVFiles", m_textQuote->textQuote());
-    else
-        deleteEntry("DefaultTextQuoteForExportingCSVFiles");
-    if (store && !m_characterEncodingCombo->defaultEncodingSelected())
-        writeEntry(
-            "DefaultEncodingForExportingCSVFiles", m_characterEncodingCombo->selectedEncoding());
-    else
-        deleteEntry("DefaultEncodingForExportingCSVFiles");
-    if (store && !m_addColumnNamesCheckBox->isChecked())
-        writeEntry(
-            "AddColumnNamesForExportingCSVFiles", m_addColumnNamesCheckBox->isChecked());
-    else
-        deleteEntry("AddColumnNamesForExportingCSVFiles");
 
     KAssistantDialog::done(result);
 }

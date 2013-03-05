@@ -50,7 +50,6 @@
 #include <sys/time.h>
 
 //#define DEBUG_REPAINT
-#define ANNOTATION_WIDTH 200
 
 
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
@@ -167,6 +166,14 @@ void KWCanvasBase::ensureVisible(const QRectF &rect)
 
 void KWCanvasBase::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
+    // We have no page shadows yet, but the annotations area will go
+    // here in the annotations branch.
+    Q_UNUSED(painter);
+    Q_UNUSED(viewMap);
+}
+
+void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
+{
     painter.save();
 
     const QRectF       pageRect = viewMap.page.rect();
@@ -182,35 +189,36 @@ void KWCanvasBase::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &
     QRectF borderRect = QRectF(topLeftCorner, bottomRightCorner);
 
     // Actually paint the border
-    paintBorder(painter, pageLayout.border, borderRect);
+    doPaintBorder(painter, pageLayout.border, borderRect);
 
     painter.restore();
 }
 
-void KWCanvasBase::paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const
+void KWCanvasBase::doPaintBorder(QPainter &painter, const KoBorder &border,
+                                 const QRectF &borderRect) const
 {
     // Get the zoom.
     qreal zoomX;
     qreal zoomY;
     viewConverter()->zoom(&zoomX, &zoomY);
 
-    KoBorder::BorderData borderSide = border.leftBorderData();
+    KoBorder::BorderData borderSide = border.borderData(KoBorder::LeftBorder);
     painter.save();
     paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.bottomLeft(),
                     zoomX, 1, 0);
-    borderSide = border.topBorderData();
+    borderSide = border.borderData(KoBorder::TopBorder);
     painter.restore();
     painter.save();
     paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.topRight(),
                     zoomY, 0, 1);
 
-    borderSide = border.rightBorderData();
+    borderSide = border.borderData(KoBorder::RightBorder);
     painter.restore();
     painter.save();
     paintBorderSide(painter, borderSide, borderRect.topRight(), borderRect.bottomRight(),
                     zoomX, -1, 0);
 
-    borderSide = border.bottomBorderData();
+    borderSide = border.borderData(KoBorder::BottomBorder);
     painter.restore();
     painter.save();
     paintBorderSide(painter, borderSide, borderRect.bottomLeft(), borderRect.bottomRight(),
@@ -321,10 +329,10 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 
                 // Paint the contents of the page.
                 painter.setRenderHint(QPainter::Antialiasing);
+                m_shapeManager->paint(painter, *(viewConverter()), false); // Paint all shapes
+                paintBorder(painter, vm);
 
-                m_shapeManager->paint(painter, *(viewConverter()), false);
-
-                // Paint the page decorations: border, shadow, etc.
+                // Paint the page decorations: shadow, etc.
                 paintPageDecorations(painter, vm);
 
                 // Paint the grid

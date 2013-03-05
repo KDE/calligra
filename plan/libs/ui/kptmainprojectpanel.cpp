@@ -31,11 +31,9 @@
 
 #include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
-#endif
 #endif
 
 
@@ -55,9 +53,6 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     setupUi(this);
 
 #ifndef PLAN_KDEPIMLIBS_FOUND
-    chooseLeader->hide();
-#endif
-#if ! KDE_IS_VERSION( 4, 5, 0 )
     chooseLeader->hide();
 #endif
 
@@ -144,7 +139,6 @@ void MainProjectPanel::slotCheckAllFieldsFilled()
 void MainProjectPanel::slotChooseLeader()
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -168,7 +162,6 @@ void MainProjectPanel::slotChooseLeader()
             leaderfield->setText( names.join( ", " ) );
         }
     }
-#endif
 #endif
 }
 
