@@ -1,6 +1,7 @@
 project(calligra-stage)
 
 add_subdirectory( part )
+add_subdirectory( app )
 
 include_directories(
 		${KOTEXT_INCLUDES}
