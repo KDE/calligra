@@ -164,6 +164,8 @@ DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 
 ###What follows is calligraauthor section###
 
+if (SHOULD_BUILD_AUTHOR)
+
 ########### AuthorPart Library ###############
 
 set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
@@ -202,3 +204,5 @@ install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_IN
 install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
+
+endif (SHOULD_BUILD_AUTHOR)

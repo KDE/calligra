@@ -8,37 +8,37 @@ kde4_add_plugin(calligrathumbnail ${calligrathumbnail_SRCS})
 target_link_libraries(calligrathumbnail komain)
 install(TARGETS calligrathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-if( BUILD_krita OR BUILD_flow OR BUILD_karbon )
+if( SHOULD_BUILD_KRITA OR SHOULD_BUILD_FLOW OR SHOULD_BUILD_KARBON )
     set(calligraimagethumbnail_SRCS calligracreator.cpp)
     kde4_add_plugin(calligraimagethumbnail ${calligraimagethumbnail_SRCS})
     macro_add_compile_flags(calligraimagethumbnail "-DNO_ICON_BLENDING")
     target_link_libraries(calligraimagethumbnail komain)
     install(TARGETS calligraimagethumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
-endif( BUILD_krita OR BUILD_flow OR BUILD_karbon )
+endif( SHOULD_BUILD_KRITA OR SHOULD_BUILD_FLOW OR SHOULD_BUILD_KARBON )
 
 # thumbnailing for the native opendocument formats
 set( THUMBNAIL_SERVICES
 )
 
 # both flow and karbon load odg natively, so if any is build add support for odg
-if( BUILD_flow OR BUILD_karbon )
+if( SHOULD_BUILD_FLOW OR SHOULD_BUILD_KARBON )
     set( THUMBNAIL_SERVICES ${THUMBNAIL_SERVICES} calligra_odg_thumbnail.desktop )
-endif( BUILD_flow OR BUILD_karbon )
+endif( SHOULD_BUILD_FLOW OR SHOULD_BUILD_KARBON )
 
-if( BUILD_krita )
+if( SHOULD_BUILD_KRITA )
     set( THUMBNAIL_SERVICES ${THUMBNAIL_SERVICES} krita_kra_thumbnail.desktop )
-endif( BUILD_krita )
+endif( SHOULD_BUILD_KRITA )
 
-if( BUILD_sheets )
+if( SHOULD_BUILD_SHEETS_PART )
     set( THUMBNAIL_SERVICES ${THUMBNAIL_SERVICES} sheets_ods_thumbnail.desktop )
-endif( BUILD_sheets )
+endif( SHOULD_BUILD_SHEETS_PART )
 
-if( BUILD_stage )
+if( SHOULD_BUILD_STAGE_PART )
     set( THUMBNAIL_SERVICES ${THUMBNAIL_SERVICES} stage_odp_thumbnail.desktop )
-endif( BUILD_stage )
+endif( SHOULD_BUILD_STAGE_PART )
 
-if( BUILD_words )
+if( SHOULD_BUILD_WORDS_PART )
     set( THUMBNAIL_SERVICES ${THUMBNAIL_SERVICES} words_odt_thumbnail.desktop )
-endif( BUILD_words )
+endif( SHOULD_BUILD_WORDS_PART )
 
 install( FILES ${THUMBNAIL_SERVICES} DESTINATION ${SERVICES_INSTALL_DIR})
