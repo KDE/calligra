@@ -44,7 +44,7 @@
 
 CACanvasController::CACanvasController (QDeclarativeItem* parent)
     : QDeclarativeItem (parent), KoCanvasController (0), m_zoomHandler (0), m_zoomController (0),
-      m_caDocumentHandler(0), m_currentPoint (QPoint (0, 0)), m_documentSize (QSizeF (0, 0))
+      m_currentPoint (QPoint (0, 0)), m_documentSize (QSizeF (0, 0)), m_caDocumentHandler(0)
 {
     setFlag (QGraphicsItem::ItemHasNoContents, false);
     setClip (true);
