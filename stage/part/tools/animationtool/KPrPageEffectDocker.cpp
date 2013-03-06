@@ -65,13 +65,13 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     }
     optionLayout->addWidget(m_effectCombo, 0, 0);
 
-    connect( m_effectCombo, SIGNAL( activated( int ) ),
-             this, SLOT( slotEffectChanged( int ) ) );
+    connect( m_effectCombo, SIGNAL(activated(int)),
+             this, SLOT(slotEffectChanged(int)) );
 
     m_subTypeCombo = new QComboBox( this );
 
-    connect( m_subTypeCombo, SIGNAL( activated( int ) ),
-             this, SLOT( slotSubTypeChanged( int ) ) );
+    connect( m_subTypeCombo, SIGNAL(activated(int)),
+             this, SLOT(slotSubTypeChanged(int)) );
 
     m_durationSpinBox = new QDoubleSpinBox( this );
     m_durationSpinBox->setRange( 0.1, 60);
@@ -83,8 +83,8 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     m_durationSpinBox->setValue( 2.0 );
     optionLayout->addWidget(m_durationSpinBox, 0, 1);
 
-    connect( m_durationSpinBox, SIGNAL( valueChanged( double ) ),
-             this, SLOT( slotDurationChanged( double ) ) );
+    connect( m_durationSpinBox, SIGNAL(valueChanged(double)),
+             this, SLOT(slotDurationChanged(double)) );
 
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
@@ -226,10 +226,10 @@ void KPrPageEffectDocker::setView( KoPAViewBase* view )
 {
     Q_ASSERT( view );
     m_view = view;
-    connect( view->proxyObject, SIGNAL( activePageChanged() ),
-             this, SLOT( slotActivePageChanged() ) );
-    connect( view->proxyObject, SIGNAL( destroyed( QObject* ) ),
-             this, SLOT( cleanup ( QObject* ) ) );
+    connect( view->proxyObject, SIGNAL(activePageChanged()),
+             this, SLOT(slotActivePageChanged()) );
+    connect( view->proxyObject, SIGNAL(destroyed(QObject*)),
+             this, SLOT(cleanup(QObject*)) );
 
 
     if( m_view->activePage() )
