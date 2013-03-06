@@ -1,6 +1,6 @@
 
 if(KdepimLibs_FOUND)
-    macro_optional_add_subdirectory( icalendar )
+    add_subdirectory( icalendar )
 endif(KdepimLibs_FOUND)
 
 if(WIN32)
