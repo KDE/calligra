@@ -78,6 +78,7 @@ private:
     KoParagraphStyle * m_paragraphStyle;
     bool m_clip;
     KoTextDocumentLayout *m_layout;
+    KoImageCollection *m_imageCollection;
 
     QString m_creator;
     QString m_date;
