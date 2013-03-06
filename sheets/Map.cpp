@@ -177,10 +177,10 @@ Map::Map(DocBase* doc, int syntaxVersion)
             d->dependencyManager, SLOT(addSheet(Sheet*)));
     connect(this, SIGNAL(sheetRevived(Sheet*)),
             d->recalcManager, SLOT(addSheet(Sheet*)));
-    connect(d->namedAreaManager, SIGNAL(namedAreaModified(const QString&)),
-            d->dependencyManager, SLOT(namedAreaModified(const QString&)));
-    connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            this, SLOT(handleDamages(const QList<Damage*>&)));
+    connect(d->namedAreaManager, SIGNAL(namedAreaModified(QString)),
+            d->dependencyManager, SLOT(namedAreaModified(QString)));
+    connect(this, SIGNAL(damagesFlushed(QList<Damage*>)),
+            this, SLOT(handleDamages(QList<Damage*>)));
 }
 
 Map::~Map()
@@ -349,8 +349,8 @@ Sheet* Map::createSheet(const QString& name)
     if ( !name.isEmpty() )
         sheetName = name;
     Sheet* sheet = new Sheet(this, sheetName);
-    connect(sheet, SIGNAL(statusMessage(const QString &, int)),
-            this, SIGNAL(statusMessage(const QString &, int)));
+    connect(sheet, SIGNAL(statusMessage(QString,int)),
+            this, SIGNAL(statusMessage(QString,int)));
     return sheet;
 }
 

@@ -59,7 +59,7 @@ CAPAView::~CAPAView()
 
 void CAPAView::setShowRulers (bool show)
 {
-
+    Q_UNUSED(show);
 }
 
 void CAPAView::editPaste()
@@ -84,12 +84,14 @@ void CAPAView::updatePageNavigationActions()
 
 void CAPAView::setActionEnabled (int actions, bool enable)
 {
+    Q_UNUSED(actions);
+    Q_UNUSED(enable);
 
 }
 
 void CAPAView::navigatePage (KoPageApp::PageNavigation pageNavigation)
 {
-
+    Q_UNUSED(pageNavigation);
 }
 
 KoPAPageBase* CAPAView::activePage() const
