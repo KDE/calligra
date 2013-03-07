@@ -71,8 +71,8 @@ SpellCheckCommand::SpellCheckCommand(const Region &region, KoCanvasBase* canvasB
 
     connect(this, SIGNAL(done()),
             this, SLOT(finishCommand()));
-    connect(d->dialog, SIGNAL(replace(const QString&, int, const QString&)),
-            this, SLOT(replace(const QString&, int, const QString&)));
+    connect(d->dialog, SIGNAL(replace(QString,int,QString)),
+            this, SLOT(replace(QString,int,QString)));
 }
 
 SpellCheckCommand::~SpellCheckCommand()

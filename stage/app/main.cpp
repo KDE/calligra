@@ -17,32 +17,33 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <KPrAboutData.h>
+
 #include <KoApplication.h>
+
 #include <kcmdlineargs.h>
-#include "KWAboutData.h"
+#include <klocale.h>
 
-extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+
+extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
-    KAboutData * aboutData = newWordsAboutData();
+    int state;
+    KAboutData * aboutData=newKPresenterAboutData();
 
-#ifdef Q_WS_X11
-    // the "raster" graphicssystem is way faster then the "native" graphicssystem on x11 with Calligra Words
-    qApp->setGraphicsSystem( QLatin1String("raster") );
-#endif
-
-    KCmdLineArgs::init(argc, argv, aboutData);
+    KCmdLineArgs::init( argc, argv, aboutData );
 
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions(options);
+    KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
 
     if (!app.start())
         return 1;
-    app.exec();
 
-    delete(aboutData);
+    state=app.exec();
 
-    return 0;
+    delete (aboutData);
+
+    return state;
 }

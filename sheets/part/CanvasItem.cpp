@@ -174,8 +174,8 @@ CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
     connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
     connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
-    connect(doc->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            SLOT(handleDamages(const QList<Damage*>&)));
+    connect(doc->map(), SIGNAL(damagesFlushed(QList<Damage*>)),
+            SLOT(handleDamages(QList<Damage*>)));
 }
 
 CanvasItem::~CanvasItem()
@@ -273,12 +273,12 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
         kDebug(36004) << "Creating SheetView for" << sheet->sheetName();
         d->sheetViews.insert(sheet, new PixmapCachingSheetView(sheet));
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
-        connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                this, SLOT(setDocumentSize(const QSizeF&)));
+        connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
+                this, SLOT(setDocumentSize(QSizeF)));
         connect(d->sheetViews[ sheet ], SIGNAL(obscuredRangeChanged(QSize)),
                 this, SLOT(setObscuredRange(QSize)));
-        //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
+                //d->zoomController, SLOT(setDocumentSize(QSizeF)));
         connect(sheet, SIGNAL(visibleSizeChanged()),
                 d->sheetViews[ sheet ], SLOT(updateAccessedCellRange()));
     }
@@ -289,12 +289,12 @@ void CanvasItem::refreshSheetViews()
 {
     const QList<SheetView*> sheetViews = d->sheetViews.values();
     for (int i = 0; i < sheetViews.count(); ++i) {
-        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   this, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(QSizeF)),
+                   this, SLOT(setDocumentSize(QSizeF)));
         disconnect(sheetViews[i], SIGNAL(obscuredRangeChanged(QSize)),
                 this, SLOT(setObscuredRange(QSize)));
-        //disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        //disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(QSizeF)),
+                   //d->zoomController, SLOT(setDocumentSize(QSizeF)));
         disconnect(sheetViews[i]->sheet(), SIGNAL(visibleSizeChanged()),
                    sheetViews[i], SLOT(updateAccessedCellRange()));
     }
