@@ -222,6 +222,7 @@ set(kritaui_LIB_SRCS
     input/kis_touch_shortcut.cpp
     kis_filter_job.cpp
     kis_threaded_applicator.cpp
+    kis_document_undo_store.cpp
 )
 
 if(HAVE_OPENGL)
