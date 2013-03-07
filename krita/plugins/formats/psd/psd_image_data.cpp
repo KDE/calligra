@@ -35,8 +35,6 @@
 #include "kis_iterator_ng.h"
 #include "kis_paint_device.h"
 
-#include <QDebug>
-
 PSDImageData::PSDImageData(PSDHeader *header)
 {
     m_header = header;
