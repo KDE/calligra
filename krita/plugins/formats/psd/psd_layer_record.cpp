@@ -250,12 +250,12 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-//        dbgFile << "\tchannel" << i << "id"
-//                << channelIdToChannelType(info->channelId, m_header.colormode)
-//                << "length" << info->channelDataLength
-//                << "start" << info->channelDataStart
-//                << "offset" << info->channelOffset
-//                << "channelInfoPosition" << info->channelInfoPosition;
+        //        dbgFile << "\tchannel" << i << "id"
+        //                << channelIdToChannelType(info->channelId, m_header.colormode)
+        //                << "length" << info->channelDataLength
+        //                << "start" << info->channelDataStart
+        //                << "offset" << info->channelOffset
+        //                << "channelInfoPosition" << info->channelInfoPosition;
 
         channelInfoRecords << info;
     }
@@ -632,9 +632,9 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
     dbgFile << "\tnode y" << m_node->y() << "paint device x" << dev->y() << "extent y" << rc.y();
     QVector<quint8* > tmp = dev->readPlanarBytes(rc.x() - m_node->x(), rc.y() -m_node->y(), rc.width(), rc.height());
 
-//    KisPaintDeviceSP dev2 = new KisPaintDevice(dev->colorSpace());
-//    dev2->writePlanarBytes(tmp, 0, 0, rc.width(), rc.height());
-//    dev2->convertToQImage(0).save(layerName + ".png");
+    //    KisPaintDeviceSP dev2 = new KisPaintDevice(dev->colorSpace());
+    //    dev2->writePlanarBytes(tmp, 0, 0, rc.width(), rc.height());
+    //    dev2->convertToQImage(0).save(layerName + ".png");
 
     // then reorder the planes to fit the psd model -- alpha first, then display order
     QVector<quint8* > planes;
@@ -668,7 +668,7 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
                 val = reinterpret_cast<quint16*>(planes[channelInfoIndex])[i];
                 val = ntohs(val);
                 if (channelInfoRecords[channelInfoIndex]->channelId >= 0 && (m_header.colormode == CMYK || m_header.colormode == CMYK64)) {
-                     val = quint16_MAX - val;
+                    val = quint16_MAX - val;
                 }
                 reinterpret_cast<quint16*>(planes[channelInfoIndex])[i] = val;
             }
@@ -723,10 +723,10 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
 
             // If the layer's size, and therefore the data, is odd, a pad byte will be inserted
             // at the end of the row. (weirdly enough, that's not true for the image data)
-//            if ((size & 0x01) != 0) {
-//                psdwrite(io, (quint8)0);
-//                size++;
-//            }
+            //            if ((size & 0x01) != 0) {
+            //                psdwrite(io, (quint8)0);
+            //                size++;
+            //            }
 
             channelStartPos += size;
         }
@@ -857,17 +857,18 @@ bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP dev, QIODevice *io)
                 KoGrayU16Traits::setGray(it->rawData(), Gray);
 
             }
+
+            /* XXX see implementation Openexr
+            else if (channelSize == 4) {
+
+            }
+            */
+
             else {
                 // Unsupported channel sizes for now
                 return false;
             }
-            /*
-            // XXX see implementation Openexr
-            else if (channelSize == 4) {
 
-
-            }
-*/
             it->nextPixel();
         }
         it->nextRow();
@@ -962,24 +963,20 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
                 KoBgrU16Traits::setBlue(it->rawData(), blue);
 
             }
+
+            /* XXX see implementation Openexr
+            else if (channelSize == 4) {
+
+            }
+            */
+
             else {
                 // Unsupported channel sizes for now
                 return false;
             }
-            /*
-            // XXX see implementation Openexr
-            else if (channelSize == 4) {
 
-                quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setRed(it->rawData(), red);
 
-                quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setGreen(it->rawData(), green);
 
-                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setBlue(it->rawData(), blue);
-            }
-*/
             it->nextPixel();
         }
         it->nextRow();
