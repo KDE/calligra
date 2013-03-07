@@ -104,11 +104,16 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
         painter.setPen(pen);
         painter.drawRect(rect);
 
+
         if (background()) {
             QPainterPath p;
             p.addRect(QRectF(QPointF(), size()));
             background()->paint(painter, converter, paintcontext, p);
         }
+
+        // Draw delete annotation button.
+        QRect removeButton (rect.width(), 0, -20, 20);
+        painter.fillRect(removeButton, QBrush(QColor(Qt::red)));
 
         // Set Author and date.
         QPen peninfo (Qt::darkYellow);
