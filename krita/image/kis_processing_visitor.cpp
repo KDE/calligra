@@ -31,7 +31,6 @@ KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
     if(progressProxy) {
         m_progressUpdater = new KoProgressUpdater(progressProxy);
         m_progressUpdater->start(100, i18n("Processing"));
-        m_updater = m_progressUpdater->startSubtask();
         m_progressUpdater->moveToThread(node->thread());
     }
     else {

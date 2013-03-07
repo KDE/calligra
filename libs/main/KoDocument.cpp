@@ -32,9 +32,6 @@
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
-#ifdef SHOULD_BUILD_RDF
-#   include "rdf/KoDocumentRdf.h"
-#endif
 #include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"

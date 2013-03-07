@@ -28,7 +28,7 @@ if (HAVE_ICU AND HAVE_SQLITE AND SHOULD_BUILD_CALLIGRADB)
 endif ()
 
 # only build koreport if possible
-if (SHOULD_BUILD_KOREPORT AND NOT CREATIVEONLY)
+if (SHOULD_BUILD_KOREPORT)
     add_subdirectory( koreport )
 endif (SHOULD_BUILD_KOREPORT)
 

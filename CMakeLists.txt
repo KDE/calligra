@@ -687,7 +687,7 @@ if(SHOULD_BUILD_KRITA)
 endif(SHOULD_BUILD_KRITA)
 
 if(SHOULD_BUILD_KARBON)
-	#  macro_optional_add_subdirectory(karbon)
+  macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
 if(SHOULD_BUILD_BRAINDUMP)

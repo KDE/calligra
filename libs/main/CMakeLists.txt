@@ -191,33 +191,6 @@ if( QT_QTDBUS_FOUND )
     DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 endif( QT_QTDBUS_FOUND )
 
-if( Soprano_FOUND )
-    install( FILES
-        rdf/KoRdfFoaF.h
-        rdf/KoRdfCalendarEvent.h
-        rdf/KoRdfLocation.h
-        rdf/KoRdfFoaFTreeWidgetItem.h
-        rdf/KoRdfCalendarEventTreeWidgetItem.h
-        rdf/KoRdfLocationTreeWidgetItem.h
-        rdf/KoChangeTrackerDisabledRAII.h
-        rdf/RdfForward.h
-        rdf/KoDocumentRdf.h
-        rdf/KoSopranoTableModelDelegate.h
-        rdf/KoSopranoTableModel.h
-        rdf/KoSemanticStylesheet.h
-        rdf/KoRdfSemanticItem.h
-        rdf/KoRdfSemanticItemViewSite.h
-        rdf/KoRdfSemanticTree.h
-        rdf/KoRdfSemanticTreeWidgetItem.h
-        rdf/RdfSemanticTreeWidgetAction.h
-        rdf/RdfSemanticTreeWidgetSelectAction.h
-        rdf/InsertSemanticObjectActionBase.h
-        rdf/InsertSemanticObjectCreateAction.h
-        rdf/InsertSemanticObjectReferenceAction.h
-        rdf/KoSemanticStylesheetsEditor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-endif( Soprano_FOUND )
-
 if (QT_QTDBUS_FOUND)
 install( FILES
     KoApplicationAdaptor.h
