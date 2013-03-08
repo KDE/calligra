@@ -64,6 +64,10 @@ class KOODF_EXPORT KoOdfStyle
     bool isDefaultStyle() const;
     void setIsDefaultStyle(bool isDefaultStyle);
 
+    /**
+     * @brief Return the list of properties in the selected property set.
+     * @param name name of the property set.  Example: "text-properties" or "paragraph-properties"
+     */
     KoOdfStyleProperties *properties(QString &name) const;
 
     QString property(QString &propertySet, QString &property) const;

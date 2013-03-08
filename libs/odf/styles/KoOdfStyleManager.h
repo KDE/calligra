@@ -36,12 +36,13 @@ class KOODF_EXPORT KoOdfStyleManager
     ~KoOdfStyleManager();
 
     KoOdfStyle *style(QString &name) const;
-    KoOdfStyle *defaultStyle(QString &family) const;
+    void setStyle(QString &name, KoOdfStyle *style);
 
-    void addStyle(QString &name, KoOdfStyle *style);
-    void addDefaultStyle(QString &name, KoOdfStyle *family);
+    KoOdfStyle *defaultStyle(QString &family) const;
+    void setDefaultStyle(QString &name, KoOdfStyle *family);
 
     void clear();
+
 
  private:
     class Private;

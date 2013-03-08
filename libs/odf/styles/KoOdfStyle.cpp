@@ -22,7 +22,7 @@
 #include "KoOdfStyle.h"
 
 #include <QString>
-#include <QMap>
+#include <QHash>
 
 
 // ================================================================
@@ -34,8 +34,7 @@ class KoOdfStyleProperties::Private
 public:
     Private() {};
 
-    // We could use a QHash instead but I like that the values are saved in order.
-    QMap<QString, QString> attributes;  // name, value
+    QHash<QString, QString> attributes;  // name, value
 };
 
 
@@ -87,7 +86,7 @@ public:
 
     bool    inUse;
 
-    QMap<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties", 
+    QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties", 
 };
 
 KoOdfStyle::Private::~Private()
@@ -152,11 +151,6 @@ void KoOdfStyle::setIsDefaultStyle(bool isDefaultStyle)
 }
 
 
-KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
-{
-    return d->properties.value(name, 0);
-}
-
 
 bool KoOdfStyle::inUse() const
 {
@@ -168,6 +162,11 @@ void KoOdfStyle::setInUse(bool inUse)
     d->inUse = inUse;
 }
 
+
+KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
+{
+    return d->properties.value(name, 0);
+}
 
 QString KoOdfStyle::property(QString &propertySet, QString &property) const
 {

@@ -23,7 +23,7 @@
 #include "KoOdfStyleManager.h"
 
 // Qt
-#include <QMap>
+#include <QHash>
 #include <QString>
 
 // odf lib
@@ -39,9 +39,8 @@ class KoOdfStyleManager::Private
 public:
     Private() {};
 
-    // We could use a QHash instead but I like that the styles are saved in order.
-    QMap<QString, KoOdfStyle*> styles;         // name, style
-    QMap<QString, KoOdfStyle*> defaultStyles;  // family, style
+    QHash<QString, KoOdfStyle*> styles;         // name, style
+    QHash<QString, KoOdfStyle*> defaultStyles;  // family, style
 };
 
 
@@ -64,18 +63,18 @@ KoOdfStyle *KoOdfStyleManager::style(QString &name) const
     return d->styles.value(name, 0);
 }
 
+void KoOdfStyleManager::setStyle(QString &name, KoOdfStyle *style)
+{
+    d->styles.insert(name, style);
+}
+
+
 KoOdfStyle *KoOdfStyleManager::defaultStyle(QString &family) const
 {
     return d->defaultStyles.value(family, 0);
 }
 
-
-void KoOdfStyleManager::addStyle(QString &name, KoOdfStyle *style)
-{
-    d->styles.insert(name, style);
-}
-
-void KoOdfStyleManager::addDefaultStyle(QString &name, KoOdfStyle *family)
+void KoOdfStyleManager::setDefaultStyle(QString &name, KoOdfStyle *family)
 {
     d->styles.insert(name, family);
 }
@@ -86,3 +85,5 @@ void KoOdfStyleManager::clear()
     qDeleteAll(d->styles);
     qDeleteAll(d->defaultStyles);
 }
+
+
