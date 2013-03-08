@@ -85,6 +85,8 @@ public:
     QString parent;
     bool    isDefaultStyle;
 
+    bool    inUse;
+
     QMap<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties", 
 };
 
@@ -153,6 +155,17 @@ void KoOdfStyle::setIsDefaultStyle(bool isDefaultStyle)
 KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
 {
     return d->properties.value(name, 0);
+}
+
+
+bool KoOdfStyle::inUse() const
+{
+    return d->inUse;
+}
+
+void KoOdfStyle::setInUse(bool inUse)
+{
+    d->inUse = inUse;
 }
 
 

@@ -58,6 +58,9 @@ class KOODF_EXPORT KoOdfStyle
     QString parent() const;
     void setParent(QString &parent);
 
+    bool inUse() const;
+    void setInUse(bool inUse);
+
     bool isDefaultStyle() const;
     void setIsDefaultStyle(bool isDefaultStyle);
 
