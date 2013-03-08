@@ -24,19 +24,7 @@
 #include <KGlobal>
 
 const char *CAImageProvider::identificationString = "caimage";
-
-class CAImageProvider::Singleton
-{
-public:
-    CAImageProvider q;
-};
-
-K_GLOBAL_STATIC( CAImageProvider::Singleton, singleton )
-
-CAImageProvider * CAImageProvider::instance()
-{
-    return &( singleton->q );
-}
+CAImageProvider *CAImageProvider::s_imageProvider = 0;
 
 CAImageProvider::CAImageProvider()
     : QDeclarativeImageProvider(Image)

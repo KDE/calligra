@@ -186,7 +186,6 @@ int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
         .arg(QString(propertyName));
     }
     return res;
-    return KexiDB_alteringTypeForProperty->types[propertyName.toLower()];
 }
 
 //---

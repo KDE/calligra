@@ -44,7 +44,6 @@ set(koodf_LIB_SRCS
     KoXmlWriter.cpp
     KoEncryptedStore.cpp
     KoEncryptionChecker.cpp
-    KoProperties.cpp
     KoUnit.cpp
     KoOdfNotesConfiguration.cpp
     KoOdfBibliographyConfiguration.cpp
@@ -120,7 +119,6 @@ install( FILES
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h
-    KoProperties.h
     KoUnit.h
     KoElementReference.h
     KoTableTemplate.h

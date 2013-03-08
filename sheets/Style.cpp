@@ -1644,7 +1644,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         HAlign a = (HAlign) format.attribute(type() == AUTO ? "align" : "alignX").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 4) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 4) {
             setHAlign(a);
         }
     }
@@ -1652,7 +1652,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         VAlign a = (VAlign) format.attribute("alignY").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a < 4) {
+        if ((unsigned int) a >= 1 && (unsigned int) a < 4) {
             setVAlign(a);
         }
     }
@@ -1692,7 +1692,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         FloatFormat a = (FloatFormat)format.attribute("float").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 3) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 3) {
             setFloatFormat(a);
         }
     }
@@ -1700,7 +1700,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
     if (format.hasAttribute("floatcolor")) {
         FloatColor a = (FloatColor) format.attribute("floatcolor").toInt(&ok);
         if (!ok) return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 2) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 2) {
             setFloatColor(a);
         }
     }

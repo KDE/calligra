@@ -50,7 +50,7 @@ ScriptingCellListener::ScriptingCellListener(Calligra::Sheets::Sheet *sheet, con
 {
     d->sheet = sheet;
     d->cellbinding = new Calligra::Sheets::Binding(Region(area, sheet));
-    connect(d->cellbinding->model(), SIGNAL(changed(const Region&)), this, SLOT(slotChanged(const Region&)));
+    connect(d->cellbinding->model(), SIGNAL(changed(Region)), this, SLOT(slotChanged(Region)));
     sheet->cellStorage()->setBinding(Region(area, sheet), *d->cellbinding);
 }
 

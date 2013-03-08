@@ -65,8 +65,8 @@ AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent, Selection* selection)
     enableButtonOk(!m_areaName->text().isEmpty());
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(m_areaName, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotAreaNameChanged(const QString&)));
+    connect(m_areaName, SIGNAL(textChanged(QString)),
+            this, SLOT(slotAreaNameChanged(QString)));
 }
 
 void AddNamedAreaDialog::slotAreaNameChanged(const QString& name)

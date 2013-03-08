@@ -72,8 +72,8 @@ GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
     m_nameCell->setFocus();
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(m_nameCell, SIGNAL(textChanged(const QString &)),
-            this, SLOT(textChanged(const QString &)));
+    connect(m_nameCell, SIGNAL(textChanged(QString)),
+            this, SLOT(textChanged(QString)));
 
     resize(QSize(320, 50).expandedTo(minimumSizeHint()));
 }

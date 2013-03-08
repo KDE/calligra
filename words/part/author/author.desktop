@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Author
+Name[ca]=Calligra Author
 Name[cs]=Calligra Author
 Name[da]=Calligra Author
 Name[de]=Calligra Author
@@ -25,6 +26,7 @@ Name[uk]=Calligra Author
 Name[x-test]=xxCalligra Authorxx
 Exec=calligraauthor %u
 GenericName=Author tool
+GenericName[ca]=Eina d'autor
 GenericName[cs]=Nástroj Author
 GenericName[da]=Forfatterværktøj
 GenericName[de]=Autoren-Anwendung
@@ -48,6 +50,7 @@ GenericName[tr]=Yazar aracı
 GenericName[uk]=Інструмент письменника
 GenericName[x-test]=xxAuthor toolxx
 Comment=Write ebooks and textbooks
+Comment[ca]=Escriu ebooks i textbooks
 Comment[da]=Skriv e-bøger og papirbøger
 Comment[de]=Zum Schreiben von Textbüchern und E-Books
 Comment[el]=Γράψιμο 

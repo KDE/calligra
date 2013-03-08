@@ -135,7 +135,7 @@ void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
     d->hintLabel->raise();
 
     // do not show it forever
-    //QTimer::singleShot( 5000, d->hintLabel, SLOT( hide()) );
+    //QTimer::singleShot( 5000, d->hintLabel, SLOT(hide()) );
 }
 
 bool FunctionCompletion::eventFilter(QObject *obj, QEvent *ev)
