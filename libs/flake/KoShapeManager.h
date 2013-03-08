@@ -205,6 +205,8 @@ signals:
     void selectionContentChanged();
     /// emitted when any object changed (moved/rotated etc)
     void contentChanged();
+    /// emitted when an annotation shape removed.
+    void shapeRemoved(KoShape *);
 
 private:
 

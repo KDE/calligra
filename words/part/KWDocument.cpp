@@ -213,7 +213,13 @@ void KWDocument::removeShape(KoShape *shape)
         else
             fs->removeFrame(frame);
     } else { // not a frame, but we still have to remove it from views.
-        emit shapeRemoved(shape);
+        // We don't use this for now, I don't know how to use KWDocument in TextTool
+        // For now we use KoShapeManager to remove annotation shape.
+        if (shape->shapeId() == "AnnotationTextShapeID") {
+            emit annotationShapeRemoved(shape);
+        } else {
+            emit shapeRemoved(shape);
+        }
     }
 }
 

@@ -147,6 +147,9 @@ public slots:
     /// Add an annotation, add it to KoAnnotationLayoutManager and to KoAnnotationManager.
     void annotationShapeAdded(KoShape *);
 
+    /// Remove an annotation shape.
+    void annotationShapeRemoved(KoShape *);
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);

@@ -870,6 +870,26 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     updateSelectedShape(event->point);
 
     KoSelection *selection = canvas()->shapeManager()->selection();
+
+    //Remove annotation when mouse is pressed the red button (annotation remove button)
+    KoShape *annotation = canvas()->shapeManager()->shapeAt(event->point);
+    if (annotation) {
+        if (annotation->shapeId() == "AnnotationTextShapeID") {
+            QPointF evePonit(event->point);
+            QPointF shapePoint(selection->position());
+            // Check if mouse is on red remove button area.
+            // Remove button size = Size(20, 20).
+            if ((shapePoint.x() + annotation->size().width() - 20.0) <= evePonit.x() && evePonit.x() <= (shapePoint.x() + annotation->size().width())
+                    && shapePoint.y() <= evePonit.y() && evePonit.y() <= (shapePoint.y() + 20.0)) {
+                if (event->button() == Qt::LeftButton) {
+                    // FIXME: Is there any other way?
+                    // I have added a signal in Shape Manager that emit when
+                    // an annotation shape removed.
+                    canvas()->shapeManager()->remove(annotation);
+                }
+            }
+        }
+    }
     if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
         selection->deselectAll();
         selection->select(m_textShape);
@@ -1332,6 +1352,16 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         }
 
         useCursor(Qt::IBeamCursor);
+
+        // Set Arrow Cursor when mouse is on top of annotation shape.
+        if (selectedShape) {
+            if (selectedShape->shapeId() == "AnnotationTextShapeID") {
+                QPointF point(event->point);
+                if (point.y() <= (selectedShape->position().y() + 25))
+                    useCursor(Qt::ArrowCursor);
+            }
+        }
+
         return;
     } else {
         if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {

@@ -127,6 +127,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     //layout loaded annotation shapes in textLoader.
     layoutLoadedAnnotationShapes();
     connect(m_document, SIGNAL(annotationShapeAdded(KoShape*)), this, SLOT(annotationShapeAdded(KoShape*)));
+    connect(m_canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(annotationShapeRemoved(KoShape*)));
 
     setupActions();
 
@@ -1089,6 +1090,23 @@ void KWView::annotationShapeAdded(KoShape *shape)
     KoAnnotation *annotation = editor->addAnnotation();
     annotation->setAnnotationShape(shape);
 
-    kDebug(31000) << "@@@@@@@@@@@" << currentPage().pageNumber();
     m_annotationManager->addAnnotationShape(shape, currentPage().pageNumber());
+}
+
+void KWView::annotationShapeRemoved(KoShape *shape)
+{
+    const KoAnnotationManager *manager = m_document->textRangeManager()->annotationManager();
+    foreach (QString name, manager->annotationNameList()) {
+        KoAnnotation *annotation = manager->annotation(name);
+        if (annotation->annotationShape() == shape) {
+            /// Remove annotation from annotation manager.
+            /// FIXME: It gets error :/ , I really don't know why.
+            /// Error: error: passing ‘const KoAnnotationManager’ as ‘this’ argument of
+            /// ‘void KoAnnotationManager::remove(const QString&)’ discards qualifiers [-fpermissive]
+//            manager->remove(name);
+            break;
+        }
+    }
+    // Remove From annotation layout manager.
+    m_annotationManager->removeAnnotationShape(shape);
 }

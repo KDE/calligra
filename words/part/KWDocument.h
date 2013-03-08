@@ -237,6 +237,9 @@ signals:
     /// emitted whenever an annotation shape is added.
     void annotationShapeAdded(KoShape *);
 
+    /// emitted whenever an annotation shape is removed
+    void annotationShapeRemoved(KoShape *);
+
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);
 

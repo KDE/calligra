@@ -275,6 +275,8 @@ void KoShapeManager::remove(KoShape *shape)
             remove(containerShape);
         }
     }
+    // FIXME: I have added this signal just for annoattion shapes.
+    shapeRemoved(shape);
 }
 
 void KoShapeManager::removeAdditional(KoShape *shape)
