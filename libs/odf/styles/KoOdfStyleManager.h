@@ -26,8 +26,10 @@
 
 
 class QString;
+class KoStore;
 class KoOdfStyle;
-
+class KoXmlNode;
+class KoXmlElement;
 
 class KOODF_EXPORT KoOdfStyleManager
 {
@@ -43,6 +45,11 @@ class KOODF_EXPORT KoOdfStyleManager
 
     void clear();
 
+    bool loadStyles(KoStore *odfStore);
+
+ private:
+    void collectStyleSet(KoXmlNode &stylesNode);
+    void collectStyleAttributes(KoXmlElement &propertiesElement, KoOdfStyle *style);
 
  private:
     class Private;
