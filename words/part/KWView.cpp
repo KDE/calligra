@@ -24,11 +24,9 @@
 #include "KWGui.h"
 #include "KWDocument.h"
 #include "KWCanvas.h"
-#include "KWViewMode.h"
 #include "KWFactory.h"
 #include "KWStatusBar.h"
 #include "KWPageManager.h"
-#include "KWPageStyle.h"
 #include "frames/KWFrame.h"
 #include "frames/KWCopyShape.h"
 #include "frames/KWTextFrameSet.h"
@@ -40,13 +38,11 @@
 #include "dialogs/KWConfigureDialog.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWShapeCreateCommand.h"
-#include <KoShapeReorderCommand.h>
 #include "ui_KWInsertImage.h"
 
 // calligra libs includes
 #include <KoShapeCreateCommand.h>
 #include <calligraversion.h>
-#include <KoCanvasController.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
@@ -64,9 +60,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoZoomAction.h>
 #include <KoToolManager.h>
-#include <KoMainWindow.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
 #include <KoTextEditor.h>
@@ -85,30 +79,27 @@
 #include <KoSemanticStylesheetsEditor.h>
 #endif
 
-#include <KoFindStyle.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoIcon.h>
 
 // KDE + Qt includes
-#include <QHBoxLayout>
-#include <KMenu>
 #include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kdialog.h>
 #include <KToggleAction>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
-#include <kfiledialog.h>
-#include <KParts/PartManager>
+#include <QMenu>
 
 KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         : KoView(part, document, parent)
         , m_canvas(0)
+        , m_textMinX(1)
+        , m_textMaxX(600)
         , m_minPageNum(1)
         , m_maxPageNum(1)
 {
@@ -291,7 +282,7 @@ void KWView::setupActions()
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowInlineObjectVisualization, QVariant(false));
     action->setChecked(m_document->config().showInlineObjectVisualization()); // will change resource if true
     action->setToolTip(i18n("Toggle the shaded background of fields"));
-    action->setWhatsThis(i18n("Toggle the visualizaion of fields (variables etc) by drawing their background in a contrasting color."));
+    action->setWhatsThis(i18n("Toggle the visualization of fields (variables etc.) by drawing their background in a contrasting color."));
 
     action = new KAction(i18n("Show Text Shape Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));

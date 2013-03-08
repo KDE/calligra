@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Wireless Transport
 Name[bg]=Безжичен пренос
+Name[bs]=Bežični transport
 Name[ca]=Transport sense fils
 Name[ca@valencia]=Transport sense fils
+Name[da]=Wireless Transport
 Name[de]=Drahtlose Übertragung
 Name[el]=Ασύρματη μεταφορά
 Name[es]=Transporte inalámbrico
@@ -12,6 +14,7 @@ Name[gl]=Transporte sen fíos
 Name[hu]=Vezeték nélküli adatátvitel
 Name[it]=Trasporto wireless
 Name[kk]=Сымсыз тасымал
+Name[lt]=Bevielė sąsaja
 Name[nb]=Trådløs transport
 Name[nds]=Funköverdregen
 Name[nl]=Draadloos transport

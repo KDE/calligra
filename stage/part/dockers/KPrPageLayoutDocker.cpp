@@ -68,8 +68,8 @@ void KPrPageLayoutDocker::setView( KPrView* view )
         disconnect(m_layoutsView, 0, this, 0);
     }
     m_view = view;
-    connect( m_view->proxyObject, SIGNAL( activePageChanged() ),
-             this, SLOT( slotActivePageChanged() ) );
+    connect( m_view->proxyObject, SIGNAL(activePageChanged()),
+             this, SLOT(slotActivePageChanged()) );
 
     // remove the layouts from the last view
     m_layoutsView->clear();
@@ -90,10 +90,10 @@ void KPrPageLayoutDocker::setView( KPrView* view )
 
     slotActivePageChanged();
 
-    connect( m_layoutsView, SIGNAL( itemPressed( QListWidgetItem * ) ),
-             this, SLOT( slotItemPressed( QListWidgetItem * ) ) );
-    connect( m_layoutsView, SIGNAL( currentItemChanged( QListWidgetItem *, QListWidgetItem * ) ),
-             this, SLOT( slotCurrentItemChanged( QListWidgetItem *, QListWidgetItem * ) ) );
+    connect( m_layoutsView, SIGNAL(itemPressed(QListWidgetItem*)),
+             this, SLOT(slotItemPressed(QListWidgetItem*)) );
+    connect( m_layoutsView, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+             this, SLOT(slotCurrentItemChanged(QListWidgetItem*,QListWidgetItem*)) );
 }
 
 void KPrPageLayoutDocker::slotActivePageChanged()

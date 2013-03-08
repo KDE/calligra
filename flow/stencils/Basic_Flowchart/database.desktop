@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Database
+Name[bs]=Baza podataka
 Name[ca]=Base de dades
+Name[ca@valencia]=Base de dades
 Name[cs]=Databáze
+Name[da]=Database
 Name[de]=Datenbank
 Name[el]=Βάση δεδομένων
 Name[es]=Base de datos
@@ -14,6 +17,8 @@ Name[ia]=Base de Datos
 Name[it]=Database
 Name[ja]=データベース
 Name[kk]=Деректер қоры
+Name[lt]=Duomenų bazė
+Name[nb]=Database
 Name[nl]=Database
 Name[pl]=Baza danych
 Name[pt]=Base de Dados
@@ -21,5 +26,7 @@ Name[pt_BR]=Banco de dados
 Name[sk]=Databáza
 Name[sl]=Podatkovna zbirka
 Name[sv]=Databas
+Name[tr]=Veritabanı
 Name[uk]=База даних
 Name[x-test]=xxDatabasexx
+Name[zh_CN]=数据库

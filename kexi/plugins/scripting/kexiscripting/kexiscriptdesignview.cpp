@@ -185,8 +185,8 @@ KexiScriptDesignView::KexiScriptDesignView(
     loadData();
 
     d->properties = new KoProperty::Set(this, "KexiScripting");
-    connect(d->properties, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(d->properties, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     // To schedule the initialize fixes a crasher in Kate.
     QTimer::singleShot(50, this, SLOT(initialize()));

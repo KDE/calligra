@@ -357,8 +357,8 @@ void KexiComboBoxBase::createPopup(bool show)
     if (!popup()) {
         setPopup(column() ? new KexiComboBoxPopup(thisWidget, *column())
                  : new KexiComboBoxPopup(thisWidget, *field()));
-        QObject::connect(popup(), SIGNAL(rowAccepted(KexiDB::RecordData*, int)),
-                         thisWidget, SLOT(slotRowAccepted(KexiDB::RecordData*, int)));
+        QObject::connect(popup(), SIGNAL(rowAccepted(KexiDB::RecordData*,int)),
+                         thisWidget, SLOT(slotRowAccepted(KexiDB::RecordData*,int)));
         QObject::connect(popup()->tableView(), SIGNAL(itemSelected(KexiDB::RecordData*)),
                          thisWidget, SLOT(slotItemSelected(KexiDB::RecordData*)));
 

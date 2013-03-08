@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Phone Ethernet
+Name[bs]=Telefonski Ethernet
 Name[ca]=Telèfon Ethernet
 Name[ca@valencia]=Telèfon Ethernet
+Name[da]=Phone Ethernet
+Name[de]=Telefon-Ethernet
 Name[el]=Phone Ethernet
 Name[es]=Teléfono ethernet
 Name[et]=Telefoni-Ethernet
@@ -9,6 +12,7 @@ Name[fr]=Téléphone Ethernet
 Name[gl]=Teléfono por ethernet
 Name[it]=Telefono Ethernet
 Name[kk]=Телефон Ethernet-ті
+Name[lt]=Telefoninis Ethernet
 Name[nb]=Ethernet-telefon
 Name[nl]=Telefoon ethernet
 Name[pl]=Telefon Ethernet

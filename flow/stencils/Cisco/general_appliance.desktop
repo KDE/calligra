@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=General appliance
 Name[bg]=Обикновено устройство
+Name[bs]=Općeniti aparat
 Name[ca]=Dispositiu general
 Name[ca@valencia]=Dispositiu general
+Name[da]=Generel maskine
 Name[de]=Generisches Gerät
 Name[el]=Γενική συσκευή
 Name[es]=Dispositivo general
@@ -19,6 +21,7 @@ Name[pt]=Aplicativo Geral
 Name[pt_BR]=Aplicativo geral
 Name[ru]=Произвольное устройство
 Name[sk]=Všeobecný spotrebič
+Name[sl]=Splošna naprava
 Name[sv]=Generell apparat
 Name[uk]=Узагальнений прилад
 Name[x-test]=xxGeneral appliancexx

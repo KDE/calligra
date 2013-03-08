@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=variable linear part
+Name[bs]=varijabilni linearni dio
 Name[ca]=part lineal variable
 Name[ca@valencia]=part lineal variable
+Name[da]=variable linear part
 Name[el]=μεταβλητό γραμμικό μέρος
 Name[es]=parte lineal variable
 Name[et]=Muutuja lineaarne komponent
@@ -19,4 +21,5 @@ Name[sk]=premenná lineárna časť
 Name[sv]=variabel linjär komponent
 Name[uk]=Лінійно змінна деталь
 Name[x-test]=xxvariable linear partxx
+Name[zh_CN]=可变线性部分
 Name[zh_TW]=variable linear part

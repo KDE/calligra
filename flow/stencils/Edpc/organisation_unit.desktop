@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Organisation Unit
+Name[bs]=Organizacijska jedinica
 Name[ca]=Unitat d'organització
 Name[ca@valencia]=Unitat d'organització
+Name[da]=Organisation Unit
 Name[el]=Μονάδα οργανισμού
 Name[es]=Unidad de organización
 Name[et]=Organisatsiooniüksus
@@ -18,7 +20,9 @@ Name[pt]=Unidade Organizacional
 Name[pt_BR]=Unidade organizacional
 Name[ru]=Организационный блок
 Name[sk]=Organizačná jednotka
+Name[sl]=Organizacijska enota
 Name[sv]=Organisationsenhet
 Name[uk]=Модуль впорядкування
 Name[x-test]=xxOrganisation Unitxx
+Name[zh_CN]=组织单元
 Name[zh_TW]=組織單位

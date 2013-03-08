@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Sun
 Name[bg]=Слънце
+Name[bs]=Sunce
 Name[ca]=Sol
 Name[ca@valencia]=Sol
 Name[cs]=Slunce
@@ -13,6 +14,7 @@ Name[fi]=Aurinko
 Name[fr]=Soleil
 Name[gl]=Sol
 Name[hu]=Nap
+Name[ia]=Dom
 Name[it]=Sole
 Name[kk]=Күннің көзі
 Name[nb]=Sol
@@ -28,4 +30,5 @@ Name[sv]=Sol
 Name[ug]=ي
 Name[uk]=Сонце
 Name[x-test]=xxSunxx
+Name[zh_CN]=太阳
 Name[zh_TW]=太陽

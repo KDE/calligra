@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=A Diskette
 Name[bg]=Дискета
+Name[bs]=neka Disketa
 Name[ca]=Un disquet
 Name[ca@valencia]=Un disquet
+Name[da]=En diskette
 Name[de]=Diskette
 Name[el]=Δισκέτα
 Name[es]=Un disquete
@@ -21,6 +23,7 @@ Name[ru]=Дискета
 Name[sk]=Disketa
 Name[sl]=Disketa
 Name[sv]=En diskett
+Name[tr]=Disket
 Name[uk]=Дискета
 Name[x-test]=xxA Diskettexx
 Name[zh_TW]=磁碟

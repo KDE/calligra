@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=xBase
 Name[bg]=xBase
+Name[bs]=xBase
 Name[ca]=xBase
 Name[ca@valencia]=xBase
 Name[cs]=xBase
@@ -41,6 +42,7 @@ Name[x-test]=xxxBasexx
 Name[zh_CN]=xBase
 Name[zh_TW]=xBase
 Comment=xBase Import Plugin for Kexi
+Comment[bs]=xBase uvozni plugin za Kexi
 Comment[ca]=Connector d'importació xBase per al Kexi
 Comment[ca@valencia]=Connector d'importació xBase per al Kexi
 Comment[da]=xBase-importplugin til Kexi
@@ -62,6 +64,7 @@ Comment[pt]='Plugin' de Importação de xBase para o Kexi
 Comment[pt_BR]=Plugin de Importação do xBase para o Kexi
 Comment[ru]=Драйвер миграции xBase для Kexi
 Comment[sk]=xBase importný plugin pre Kexi
+Comment[sl]=Gonilnik za uvoz xBase za Kexi
 Comment[sv]=xBase importinsticksprogram för Kexi
 Comment[uk]=Додаток імпортування даних з xBase для Kexi
 Comment[x-test]=xxxBase Import Plugin for Kexixx

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Flow Dockers plugin
+Name[bs]=Dodatak za plutajuće dokere
 Name[ca]=Connector de Dockers per al Flow
 Name[ca@valencia]=Connector de Dockers per al Flow
 Name[da]=Dokker-plugin til Flow
@@ -23,7 +24,9 @@ Name[pt]='Plugin' de Módulos Acopláveis do Flow
 Name[pt_BR]=Plugin de módulos acopláveis do Flow
 Name[ru]=Модуль панелей Flow
 Name[sk]=Plugin dockerov Flow
+Name[sl]=Vstavek za sidrišča Flowa
 Name[sv]=Flow dockningsinsticksprogram
+Name[tr]=Flow Dockers eklentisi
 Name[uk]=Додаток панелей Flow
 Name[x-test]=xxFlow Dockers pluginxx
 Name[zh_CN]=Flow 停靠插件

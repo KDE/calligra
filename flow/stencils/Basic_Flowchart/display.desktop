@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Display
+Name[bs]=Prikaz
 Name[ca]=Mostra
 Name[ca@valencia]=Mostra
 Name[cs]=Zobrazení
@@ -15,6 +16,7 @@ Name[hu]=Megjelenítés
 Name[ia]=Monstrator
 Name[it]=Schermo
 Name[kk]=Көрсету
+Name[mr]=दर्शवा
 Name[nb]=Bildeskjerm
 Name[nds]=Dorstellen
 Name[nl]=Beeldscherm
@@ -25,6 +27,7 @@ Name[ru]=Показывать
 Name[sk]=Obrazovka
 Name[sl]=Prikaz
 Name[sv]=Bildskärm
+Name[tr]=Görüntüle
 Name[ug]=كۆرسەت
 Name[uk]=Показати
 Name[x-test]=xxDisplayxx

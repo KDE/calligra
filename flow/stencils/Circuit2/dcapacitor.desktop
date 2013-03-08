@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Diagonal Capacitor
+Name[bs]=Dijagonalni kondenzator
 Name[ca]=Capacitador diagonal
 Name[ca@valencia]=Capacitador diagonal
+Name[da]=Diagonal kondensator
 Name[de]=Diagonaler Widerstand
 Name[el]=Διαγώνιος πυκνωτής
 Name[es]=Condensador diagonal
@@ -20,6 +22,7 @@ Name[pt_BR]=Capacitor diagonal
 Name[ru]=Диагональный конденсатор
 Name[sk]=Diagonálny kondenzátor
 Name[sv]=Diagonal kondensator
+Name[tr]=Diyagonal Kapasitör
 Name[uk]=Конденсатор (діагонально)
 Name[x-test]=xxDiagonal Capacitorxx
 Name[zh_TW]=對角電容器
