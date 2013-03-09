@@ -1,3 +1,6 @@
+/*
+ * shader for handling scaling
+ */
 uniform sampler2D texture0;
 uniform vec2 textureScale;
 
