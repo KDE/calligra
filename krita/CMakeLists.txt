@@ -131,7 +131,7 @@ if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_krita komain)
+target_link_libraries(kdeinit_krita kritaui)
 target_link_libraries(krita kdeinit_krita)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)

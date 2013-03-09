@@ -123,17 +123,22 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
-
-
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
 
     m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
-    if(!KisCanvas2Private::widgetFactory)
-        KisCanvas2Private::widgetFactory = new KisQPainterCanvasWidgetFactory();//new KisGL2CanvasWidgetFactory();
+    KisCanvas2Private::widgetFactory = 0;
+    if(cfg.useOpenGL()) {
+        if(!KisCanvas2Private::widgetFactory)
+            KisCanvas2Private::widgetFactory = new KisGL2CanvasWidgetFactory();
+    }
+    else {
+        if(!KisCanvas2Private::widgetFactory)
+            KisCanvas2Private::widgetFactory = new KisQPainterCanvasWidgetFactory();
 
+    }
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     createCanvas(cfg.useOpenGL());
 

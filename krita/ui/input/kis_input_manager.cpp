@@ -60,7 +60,7 @@ public:
         , forwardAllEventsToTool(false)
         , lastTabletEvent(0)
         , lastTouchEvent(0)
-        , enabled(false)
+        , enabled(true)
     { }
 
     bool tryHidePopupPalette();
@@ -413,8 +413,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
         d->resetSavedTabletEvent();
 
-        if(retval)
-                d->enabled = false;
+//        if(retval)
+//                d->enabled = false;
         break;
     }
     case QEvent::KeyPress: {
@@ -443,8 +443,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);
-            if(retval)
-                d->enabled = false;
+//            if(retval)
+//                d->enabled = false;
         }
         break;
     }
