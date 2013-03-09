@@ -1,16 +1,20 @@
 #include "CTTextDocumentCanvas.h"
+#include "CTCanvasController.h"
 
 #include <KoDocument.h>
 #include <KoPart.h>
 #include <KoCanvasBase.h>
+#include <KoToolManager.h>
 #include <KWDocument.h>
 #include <KMimeType>
 #include <KMimeTypeTrader>
 #include <KDE/KDebug>
+#include <KActionCollection>
 #include <QGraphicsWidget>
 
 CTTextDocumentCanvas::CTTextDocumentCanvas()
     : m_canvasBase(0)
+    , m_canvasController(0)
 {
 }
 
@@ -30,6 +34,7 @@ bool CTTextDocumentCanvas::openFile(const QString& uri)
     document->openUrl (KUrl (uri));
 
     m_canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
+    createAndSetCanvasControllerOn(m_canvasBase);
 
     QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
     graphicsWidget->setParentItem(this);
@@ -65,6 +70,14 @@ void CTTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRec
         }
     }
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+void CTTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
+{
+    //TODO: pass a proper action collection
+    CTCanvasController *controller = new CTCanvasController(new KActionCollection(this));
+    controller->setCanvas(canvas);
+    KoToolManager::instance()->addController (controller);
 }
 
 #include "CTTextDocumentCanvas.moc"
