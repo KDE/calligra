@@ -41,26 +41,19 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mousePressEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+    if (mouseEvent) {
+        QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+        inputManager()->toolProxy()->mousePressEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+    }
 }
 
 void KisChangePrimarySettingAction::end(QEvent *event)
 {
-    /*
-    if (event->type() == QEvent::MouseMove) {
-        QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
-        inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
-    }
-    else if (event->type() == QEvent::TouchUpdate ) {
-        QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
-        inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
-    }*/
-
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mouseReleaseEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+    if (mouseEvent) {
+        QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+        inputManager()->toolProxy()->mouseReleaseEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+    }
 
     KisAbstractInputAction::end(event);
 }
