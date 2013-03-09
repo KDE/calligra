@@ -16,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 
@@ -417,7 +417,7 @@ void OdtTraverser::handleTagFrame(KoXmlElement &element)
 
     // Remove characters "in" or "pt" from their end.
     //
-    // FIXME: This is WRONG!  
+    // FIXME: This is WRONG!
     //        First, there is no way to tell if the unit is 2 chars
     //        Second, it is not sure that there *is* a unit.
     //        Instead, use some function in KoUnit that converts the size.  /IW
@@ -846,7 +846,7 @@ void OdtTraverser::collectInternalLinksInfo(KoXmlElement &currentElement, int &c
 #if 0
     KoXmlElement element;
     forEachElement (element, currentElement) {
-        if ( (element.localName() == "p" || element.localName() == "h") 
+        if ( (element.localName() == "p" || element.localName() == "h")
              && element.namespaceURI() == KoXmlNS::text)
         {
             // A break-before in the style means create a new chapter here,
@@ -899,7 +899,7 @@ bool OdtTraverser::collectStyles(KoStore *odfStore,
     }
 
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing styles.xml "
+        kDebug() << "Error occurred while parsing content.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
