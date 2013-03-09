@@ -1329,8 +1329,7 @@ void KisView2::showJustTheCanvas(bool toggled)
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
 {
     // Yes, the @return is correct. But only for widget based KDE apps, not QML based ones
-    if(mainWindow())
-    {
+    if (mainWindow()) {
         KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
         floatingMessage->setShowOverParent(true);
         floatingMessage->setIcon(icon);
