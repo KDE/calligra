@@ -906,7 +906,7 @@ Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *)
     // check if basis is valid
     int basis = 0;
     if (args.count() > 2)
-        calc->conv()->asInteger(args[2]).asInteger();
+        basis = calc->conv()->asInteger(args[2]).asInteger();
     if (basis < 0 || basis > 4)
         return Value::errorVALUE();
 
