@@ -26,8 +26,9 @@
 #include <KoXmlReader.h>
 
 
-OdtTraverserBackend::OdtTraverserBackend()
+OdtTraverserBackend::OdtTraverserBackend(OdtTraverserContext *context)
 {
+    Q_UNUSED(context)
 }
 
 OdtTraverserBackend::~OdtTraverserBackend()
@@ -35,12 +36,14 @@ OdtTraverserBackend::~OdtTraverserBackend()
 }
 
 
-void OdtTraverserBackend::beginTraversal()
+void OdtTraverserBackend::beginTraversal(OdtTraverserContext *context)
 {
+    Q_UNUSED(context);
 }
 
-void OdtTraverserBackend::endTraversal()
+void OdtTraverserBackend::endTraversal(OdtTraverserContext *context)
 {
+    Q_UNUSED(context);
 }
 
 
@@ -95,6 +98,20 @@ void OdtTraverserBackend::beginTagSpan(KoXmlElement &element,
 
 void OdtTraverserBackend::endTagSpan(KoXmlElement &element,
                                      OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
+void OdtTraverserBackend::beginTagS(KoXmlElement &element,
+                                    OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
+void OdtTraverserBackend::endTagS(KoXmlElement &element,
+                                  OdtTraverserContext *context)
 {
     Q_UNUSED(element);
     Q_UNUSED(context);

@@ -3,12 +3,13 @@ include_directories( ${KOODF_INCLUDES} )
 ########### libodftraverse ###############
 
 set(odftraverse_LIB_SRCS
+    OdtTraverser.cpp
     OdtTraverserBackend.cpp
 )
 
 kde4_add_library(odftraverse SHARED ${odftraverse_LIB_SRCS})
 
-target_link_libraries(odftraverse ${QT_QTXML_LIBRARY})
+target_link_libraries(odftraverse koodf ${QT_QTXML_LIBRARY})
 
 set_target_properties(odftraverse PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION}

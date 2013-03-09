@@ -46,11 +46,11 @@ class OdtTraverserContext {
 class OdtTraverserBackend
 {
  public:
-    OdtTraverserBackend();
+    OdtTraverserBackend(OdtTraverserContext *context);
     virtual ~OdtTraverserBackend();
 
-    virtual void beginTraversal();
-    virtual void endTraversal();
+    virtual void beginTraversal(OdtTraverserContext *context);
+    virtual void endTraversal(OdtTraverserContext *context);
 
     virtual void beginInsideElementsTag(KoXmlElement &element,
                                         OdtTraverserContext *context);
@@ -68,6 +68,10 @@ class OdtTraverserBackend
                               OdtTraverserContext *context);
     virtual void endTagSpan(KoXmlElement &element,
                             OdtTraverserContext *context);
+    virtual void beginTagS(KoXmlElement &element,
+                           OdtTraverserContext *context);
+    virtual void endTagS(KoXmlElement &element,
+                         OdtTraverserContext *context);
     virtual void beginCharacterData(KoXmlNode &node,
                                     OdtTraverserContext *context);
     virtual void endCharacterData(KoXmlNode &node,
