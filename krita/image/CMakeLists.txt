@@ -36,6 +36,7 @@ set(libkritatile_SRCS
 add_subdirectory( tiles3 )
 endif(USE_TILESYSTEM EQUAL 3)
 
+option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" OFF)
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
@@ -163,6 +164,7 @@ set(kritaimage_LIB_SRCS
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp
+   kis_memory_leak_tracker.cpp
    kis_name_server.cpp
    kis_node.cpp
    kis_node_facade.cpp

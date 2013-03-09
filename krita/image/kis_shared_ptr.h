@@ -190,7 +190,11 @@ public:
 private:
     inline static void ref(const KisSharedPtr<T>* sp, T* t)
     {
+#ifdef NDEBUG
         Q_UNUSED(sp);
+#else
+        KisMemoryLeakTracker::instance()->reference(t, sp);
+#endif
         if (t)
             t->ref();
     }
@@ -200,7 +204,11 @@ private:
     }
     inline static bool deref(const KisSharedPtr<T>* sp, T* t)
     {
+#ifdef NDEBUG
         Q_UNUSED(sp);
+#else
+        KisMemoryLeakTracker::instance()->dereference(t, sp);
+#endif
         if (t && !t->deref())
         {
             delete t;
