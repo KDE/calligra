@@ -630,7 +630,6 @@ KisPaintopBox* KisView2::paintOpBox() const
 KoProgressUpdater* KisView2::createProgressUpdater(KoProgressUpdater::Mode mode)
 {
     return new KisProgressUpdater(m_d->statusBar->progress(), document()->progressProxy(), mode);
-    //return m_d->statusBar->progress()->createUpdater(mode);
 }
 
 KisSelectionManager * KisView2::selectionManager()
