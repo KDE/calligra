@@ -64,16 +64,6 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 
 void KisAlternateInvocationAction::end(QEvent *event)
 {
-//     if(event->type() == QEvent::MouseMove) {
-//         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-//         setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
-//         inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
-//     }
-//     else if (event->type() == QEvent::TouchUpdate) {
-//         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
-//         inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
-//     }
-
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
     QMouseEvent targetEvent(*mouseEvent);
