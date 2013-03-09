@@ -84,7 +84,6 @@ void O2DeviantART::onTokenReplyFinished() {
         QVariantMap reply = parser.parse(replyData, &ok).toMap();
 
         if(!ok) {
-            qDebug() << "Malformed JSON while parsing deviantart token reply! Response contents:\n" << replyData;
             return;
         }
         // Interpret reply

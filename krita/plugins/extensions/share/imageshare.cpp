@@ -126,8 +126,6 @@ void ImageShare::slotImageShare()
     connect(m_deviantArt, SIGNAL(closeBrowser()), SLOT(slotCloseBrowser()));
     connect(m_deviantArt, SIGNAL(linkingSucceeded()), SLOT(showSubmit()));
 
-    qDebug() << "slotImageShare" << m_deviantArt->token() << m_deviantArt->linked();
-
     if (!m_deviantArt->linked()) {
         m_deviantArt->link();
     }
@@ -138,7 +136,6 @@ void ImageShare::slotImageShare()
 
 void ImageShare::slotOpenBrowser(const QUrl &url)
 {
-    qDebug() << "openBrowser" << url << m_deviantArt->token();
     DlgLogin dlgLogin(m_deviantArt);
     dlgLogin.setLoginUrl(url);
     dlgLogin.exec();
@@ -146,7 +143,6 @@ void ImageShare::slotOpenBrowser(const QUrl &url)
 
 void ImageShare::slotCloseBrowser()
 {
-    qDebug() << "close browser" << m_deviantArt->token();
 }
 
 void ImageShare::showSubmit()
@@ -164,9 +160,6 @@ void ImageShare::showSubmit()
 
 void ImageShare::testCallCompleted(Stash::Call, bool result)
 {
-    if(!result) {
-        qDebug() << Q_FUNC_INFO << "if this happens, something failed and we'll need to start over...";
-    }
     disconnect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), this, SLOT(testCallCompleted(Stash::Call,bool)));
     QTimer::singleShot(100, m_stash, SLOT(delta()));
     m_submitDlg->open();
@@ -211,7 +204,6 @@ void ImageShare::uploadProgress(int, qint64 bytesSent, qint64 bytesTotal)
 
 void ImageShare::submitCallCompleted(Stash::Call, bool result)
 {
-    qDebug() << Q_FUNC_INFO;
     m_progressUpdater->deleteLater();
 }
 

@@ -1,7 +1,6 @@
 #include "dlg_login.h"
 #include "ui_dlg_login.h"
 
-#include <QDebug>
 #include <QStringList>
 
 #include "o2deviantart.h"
@@ -23,7 +22,6 @@ DlgLogin::~DlgLogin()
 
 void DlgLogin::urlChanged(const QUrl &url)
 {
-    qDebug() << "URL =" << url << m_deviant->token() << "," << m_accessToken;
     QString str = url.toString();
 
     if (!url.queryItemValue("code").isEmpty()) {
@@ -37,7 +35,6 @@ void DlgLogin::urlChanged(const QUrl &url)
         for (int i=0; i<lst.count(); i++ ) {
             QStringList pair = lst[i].split("=");
             if (pair[0] == "access_token") {
-                qDebug() << "Access token" << m_accessToken;
                 m_accessToken = pair[1];
                 emit accessTokenObtained();
                 QDialog::accept();
@@ -48,6 +45,5 @@ void DlgLogin::urlChanged(const QUrl &url)
 
 void DlgLogin::setLoginUrl(const QUrl &url)
 {
-    qDebug() << "setLoginUrl" << url;
     ui->webView->setUrl(url);
 }

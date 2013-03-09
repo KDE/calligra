@@ -195,7 +195,6 @@ void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteA
             fetchCallFinished(data);
             break;
         default:
-            qDebug() << "Unknown call or successful completion of call after expected ending (no call currently set)";
             break;
     }
     m_callMap.remove(id);
