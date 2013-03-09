@@ -82,10 +82,10 @@ using namespace Eigen;
 #include "strokes/transform_stroke_strategy.h"
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::rotateCursor())
-        , m_workRecursively(true)
-        , m_isActive(false)
-        , m_changesTracker(&m_transaction)
+    : KisTool(canvas, KisCursor::rotateCursor())
+    , m_workRecursively(true)
+    , m_isActive(false)
+    , m_changesTracker(&m_transaction)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
@@ -933,33 +933,33 @@ void KisToolTransform::touchEvent( QTouchEvent* event )
 
     //Use the touch point count to determine the gesture
     switch( touchCount ) {
-        case 1: { //Panning
-            QTouchEvent::TouchPoint tp = event->touchPoints().at( 0 );
-            QPointF diff = tp.screenPos() - tp.lastScreenPos();
+    case 1: { //Panning
+        QTouchEvent::TouchPoint tp = event->touchPoints().at( 0 );
+        QPointF diff = tp.screenPos() - tp.lastScreenPos();
 
-            m_currentArgs.setTransformedCenter( m_currentArgs.transformedCenter() + diff );
-            outlineChanged();
-            break;
-        }
-        case 2: { //Scaling
-            QTouchEvent::TouchPoint tp1 = event->touchPoints().at( 0 );
-            QTouchEvent::TouchPoint tp2 = event->touchPoints().at( 1 );
+        m_currentArgs.setTransformedCenter( m_currentArgs.transformedCenter() + diff );
+        outlineChanged();
+        break;
+    }
+    case 2: { //Scaling
+        QTouchEvent::TouchPoint tp1 = event->touchPoints().at( 0 );
+        QTouchEvent::TouchPoint tp2 = event->touchPoints().at( 1 );
 
-            float lastZoom = (tp1.lastScreenPos() - tp2.lastScreenPos()).manhattanLength();
-            float newZoom = (tp1.screenPos() - tp2.screenPos()).manhattanLength();
+        float lastZoom = (tp1.lastScreenPos() - tp2.lastScreenPos()).manhattanLength();
+        float newZoom = (tp1.screenPos() - tp2.screenPos()).manhattanLength();
 
-            float diff = (newZoom - lastZoom) / 100;
+        float diff = (newZoom - lastZoom) / 100;
 
-            m_currentArgs.setScaleX( m_currentArgs.scaleX() + diff );
-            m_currentArgs.setScaleY( m_currentArgs.scaleY() + diff );
+        m_currentArgs.setScaleX( m_currentArgs.scaleX() + diff );
+        m_currentArgs.setScaleY( m_currentArgs.scaleY() + diff );
 
-            outlineChanged();
-            break;
-        }
-        case 3: { //Rotation
+        outlineChanged();
+        break;
+    }
+    case 3: { //Rotation
 
-            /*
-              TODO: Fix this code so it works.
+/* TODO: implement touch-based rotation.
+
             Vector2f center;
             foreach( const QTouchEvent::TouchPoint &tp, event->touchPoints() ) {
                 if( tp.state() == Qt::TouchPointMoved ) {
@@ -980,9 +980,10 @@ void KisToolTransform::touchEvent( QTouchEvent* event )
 
             m_currentArgs.setAZ( m_currentArgs.aZ() + diff );
 
-            outlineChanged();*/
-            break;
-        }
+            outlineChanged();
+*/
+        break;
+    }
     }
 }
 
@@ -1073,14 +1074,14 @@ double KisToolTransform::shearY() const
 KisToolTransform::WarpType KisToolTransform::warpType() const
 {
     switch(m_currentArgs.warpType()) {
-        case KisWarpTransformWorker::AFFINE_TRANSFORM:
-            return AffineWarpType;
-        case KisWarpTransformWorker::RIGID_TRANSFORM:
-            return RigidWarpType;
-        case KisWarpTransformWorker::SIMILITUDE_TRANSFORM:
-            return SimilitudeWarpType;
-        default:
-            return RigidWarpType;
+    case KisWarpTransformWorker::AFFINE_TRANSFORM:
+        return AffineWarpType;
+    case KisWarpTransformWorker::RIGID_TRANSFORM:
+        return RigidWarpType;
+    case KisWarpTransformWorker::SIMILITUDE_TRANSFORM:
+        return SimilitudeWarpType;
+    default:
+        return RigidWarpType;
     }
 }
 
@@ -1125,17 +1126,17 @@ void KisToolTransform::setRotateZ( double rotation )
 void KisToolTransform::setWarpType( KisToolTransform::WarpType type )
 {
     switch( type ) {
-        case RigidWarpType:
-            m_currentArgs.setWarpType(KisWarpTransformWorker::RIGID_TRANSFORM);
-            break;
-        case AffineWarpType:
-            m_currentArgs.setWarpType(KisWarpTransformWorker::AFFINE_TRANSFORM);
-            break;
-        case SimilitudeWarpType:
-            m_currentArgs.setWarpType(KisWarpTransformWorker::SIMILITUDE_TRANSFORM);
-            break;
-        default:
-            break;
+    case RigidWarpType:
+        m_currentArgs.setWarpType(KisWarpTransformWorker::RIGID_TRANSFORM);
+        break;
+    case AffineWarpType:
+        m_currentArgs.setWarpType(KisWarpTransformWorker::AFFINE_TRANSFORM);
+        break;
+    case SimilitudeWarpType:
+        m_currentArgs.setWarpType(KisWarpTransformWorker::SIMILITUDE_TRANSFORM);
+        break;
+    default:
+        break;
     }
 }
 
@@ -1204,59 +1205,59 @@ double KisToolTransform::gradientDescent_partialDeriv2_f(QVector3D v1, QVector3D
    1 is returned if correct scale factors have been found, or else 0 (in that case x_min, y_min are unchanged
 */
 int KisToolTransform::gradientDescent(QVector3D v1, QVector3D v2, QVector3D desired, double x0, double y0, double epsilon, double gradStep, int nbIt1, int nbIt2, double epsilon_deriv, double *x_min, double *y_min) {
-   double val = gradientDescent_f(v1, v2, desired, x0, y0);
-   double derivX, derivY;
-   double x1, y1;
-   int exit;
-   double step;
-   for (int i = 0; i < nbIt1 && val > epsilon; ++i) {
-      step = gradStep;
-      derivX = gradientDescent_partialDeriv1_f(v1, v2, desired, x0, y0, epsilon_deriv);
-      derivY = gradientDescent_partialDeriv2_f(v1, v2, desired, x0, y0, epsilon_deriv);
-      if (derivX == 0 && derivY == 0) {
-          // might happen if f is not computable around x0, y0
-          x0 /= 2;
-          y0 /= 2;
-          continue;
-      }
+    double val = gradientDescent_f(v1, v2, desired, x0, y0);
+    double derivX, derivY;
+    double x1, y1;
+    int exit;
+    double step;
+    for (int i = 0; i < nbIt1 && val > epsilon; ++i) {
+        step = gradStep;
+        derivX = gradientDescent_partialDeriv1_f(v1, v2, desired, x0, y0, epsilon_deriv);
+        derivY = gradientDescent_partialDeriv2_f(v1, v2, desired, x0, y0, epsilon_deriv);
+        if (derivX == 0 && derivY == 0) {
+            // might happen if f is not computable around x0, y0
+            x0 /= 2;
+            y0 /= 2;
+            continue;
+        }
 
-      int j = 0;
-      exit = 0;
-      do {
-         if (j > nbIt2) {
-            exit = 1;
+        int j = 0;
+        exit = 0;
+        do {
+            if (j > nbIt2) {
+                exit = 1;
+                break;
+            }
+            x1 = x0 - step * derivX;
+            y1 = y0 - step * derivY;
+
+            if (gradientDescent_f(v1, v2, desired, x1, y1) >= val) {
+                step /= 2;
+            }
+            else {
+                break;
+            }
+            ++j;
+        } while(1);
+        if (exit) {
             break;
-         }
-         x1 = x0 - step * derivX;
-         y1 = y0 - step * derivY;
+        }
+        else {
+            x0 = x1;
+            y0 = y1;
+            val = gradientDescent_f(v1, v2, desired, x0, y0);
+        }
+    }
 
-         if (gradientDescent_f(v1, v2, desired, x1, y1) >= val) {
-            step /= 2;
-         }
-         else {
-            break;
-         }
-         ++j;
-      } while(1);
-      if (exit) {
-         break;
-      }
-      else {
-         x0 = x1;
-         y0 = y1;
-         val = gradientDescent_f(v1, v2, desired, x0, y0);
-      }
-   }
+    if (val <= epsilon) {
+        *x_min = x0;
+        *y_min = y0;
 
-   if (val <= epsilon) {
-      *x_min = x0;
-      *y_min = y0;
-
-      return 1;
-   }
-   else {
-      return 0;
-   }
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 // the interval for the dichotomy is [0, b]
@@ -1697,7 +1698,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
             updateOptionWidget();
         }
-        break;
+            break;
         case PERSPECTIVE:
         {
             t = QVector3D(mousePos.x() - m_clickPoint.x(), mousePos.y() - m_clickPoint.y(), 0);
@@ -1734,7 +1735,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
             updateOptionWidget();
         }
-        break;
+            break;
         case TOPSCALE:
         case BOTTOMSCALE:
             if (m_function == TOPSCALE) {
@@ -2169,10 +2170,10 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
         QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
 
         m_origImg = m_selectedPortionCache->
-            createThumbnail(thumbRect.width(),
-                            thumbRect.height(),
-                            srcRect,
-                            KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+                createThumbnail(thumbRect.width(),
+                                thumbRect.height(),
+                                srcRect,
+                                KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         m_thumbToImageTransform = scaleTransform.inverted();
 
     } else {
@@ -2248,7 +2249,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     if (m_optWidget) {
         m_workRecursively = m_optWidget->workRecursively() ||
-            !currentNode()->paintDevice();
+                !currentNode()->paintDevice();
     }
 
     TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode(), currentSelection(), image()->postExecutionUndoAdapter(), image()->undoAdapter());

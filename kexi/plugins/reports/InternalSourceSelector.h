@@ -1,5 +1,4 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
     Copyright (C) 2011  Adam Pigg <adam@piggz.co.uk>
 
     This library is free software; you can redistribute it and/or

@@ -1,5 +1,4 @@
 /*
- * <one line to give the library's name and an idea of what it does.>
  * Copyright 2013  Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  * This program is free software; you can redistribute it and/or
