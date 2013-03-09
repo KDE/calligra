@@ -27,12 +27,9 @@
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
-class QGestureEvent;
-class QGesture;
 class QTouchEvent;
 
 class KisStrokeShortcut;
-class KisGestureShortcut;
 class KisTouchShortcut;
 class KisAbstractInputAction;
 
@@ -90,7 +87,6 @@ public:
 
     void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
-    void addShortcut(KisGestureShortcut *shortcut);
     void addShortcut(KisTouchShortcut *shortcut);
     void addAction(KisAbstractInputAction *action);
 
@@ -161,8 +157,6 @@ public:
      */
     bool mouseMoved(QMouseEvent *event);
 
-    bool gestureEvent(QGestureEvent *event);
-
     bool touchBeginEvent(QTouchEvent *event);
     bool touchUpdateEvent(QTouchEvent *event);
     bool touchEndEvent(QTouchEvent *event);
@@ -196,9 +190,6 @@ private:
     bool tryRunReadyShortcut( Qt::MouseButton button, QMouseEvent* event );
     void tryActivateReadyShortcut();
     bool tryEndRunningShortcut( Qt::MouseButton button, QMouseEvent* event );
-
-    bool tryRunGestureShortcut(QGestureEvent* event);
-    bool tryEndGestureShortcut(QGestureEvent* event);
 
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);

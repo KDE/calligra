@@ -42,12 +42,10 @@
 #include "kis_zoom_action.h"
 #include "kis_show_palette_action.h"
 #include "kis_change_primary_setting_action.h"
-//#include "kis_gesture_action.h"
 
 #include "kis_shortcut_matcher.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_single_action_shortcut.h"
-#include "kis_gesture_shortcut.h"
 #include "kis_touch_shortcut.h"
 
 class KisInputManager::Private
@@ -76,8 +74,6 @@ public:
     void addWheelShortcut(KisAbstractInputAction* action, int index,
                           const QList<Qt::Key> &modifiers,
                           KisSingleActionShortcut::WheelAction wheelAction);
-    void addGestureShortcut(KisAbstractInputAction* action, int index, Qt::GestureType gesture);
-
     void addTouchShortcut( KisAbstractInputAction* action, int index, int minTouchCount, int maxTouchCount );
 
     bool processUnhandledEvent(QEvent *event);
@@ -151,13 +147,6 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     matcher.addShortcut(keyShortcut);
 }
 
-void KisInputManager::Private::addGestureShortcut(KisAbstractInputAction* action, int index, Qt::GestureType gesture)
-{
-    KisGestureShortcut *shortcut = new KisGestureShortcut(action, index);
-    shortcut->setGesture(gesture);
-    matcher.addShortcut(shortcut);
-}
-
 void KisInputManager::Private::addTouchShortcut( KisAbstractInputAction* action, int index, int minTouchCount, int maxTouchCount )
 {
     KisTouchShortcut *shortcut = new KisTouchShortcut(action, index);
@@ -206,7 +195,6 @@ void KisInputManager::Private::setupActions()
     addKeyShortcut(action, KisPanAction::PanUpShortcut, KEYS(), Qt::Key_Up);
     addKeyShortcut(action, KisPanAction::PanDownShortcut, KEYS(), Qt::Key_Down);
 
-    //addGestureShortcut(action, KisPanAction::PanToggleShortcut, Qt::PanGesture);
     addTouchShortcut(action, KisPanAction::PanToggleShortcut, 3, 10);
 
 
@@ -249,12 +237,6 @@ void KisInputManager::Private::setupActions()
         addStrokeShortcut(action, 0, KEYS(), BUTTONS(Qt::RightButton));
         addKeyShortcut(action, 0, KEYS(), Qt::Key_F);
     }
-
-    /*action = new KisGestureAction(q);
-    actions.append(action);
-
-    shortcut = createShortcut(action, 0);
-    shortcut->setGesture(true);*/
 }
 
 bool KisInputManager::Private::processUnhandledEvent(QEvent *event)
@@ -487,9 +469,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         event->ignore();
         break;
     }
-//     case QEvent::Gesture:
-//         retval = d->matcher.gestureEvent(static_cast<QGestureEvent*>(event));
-//         break;
     case QEvent::TouchBegin:
         retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));
         event->accept();

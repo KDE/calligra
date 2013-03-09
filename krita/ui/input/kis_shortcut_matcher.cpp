@@ -19,21 +19,24 @@
 #include "kis_shortcut_matcher.h"
 
 #include <QMouseEvent>
-#include <QGesture>
 
 #include "kis_abstract_input_action.h"
 #include "kis_stroke_shortcut.h"
-#include "kis_gesture_shortcut.h"
 #include "kis_touch_shortcut.h"
 
 class KisShortcutMatcher::Private
 {
 public:
-    Private() : runningShortcut(0), readyShortcut(0), gestureShortcut(0), touchShortcut(0), suppressAllActions(false), usingTouch(false) {}
+    Private()
+        : runningShortcut(0)
+        , readyShortcut(0)
+        , touchShortcut(0)
+        , suppressAllActions(false)
+        , usingTouch(false)
+    {}
 
     QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
-    QList<KisGestureShortcut*> gestureShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
     QList<KisAbstractInputAction*> actions;
 
@@ -42,7 +45,6 @@ public:
 
     KisStrokeShortcut *runningShortcut;
     KisStrokeShortcut *readyShortcut;
-    KisGestureShortcut *gestureShortcut;
     QList<KisStrokeShortcut*> readyShortcuts;
 
     KisTouchShortcut *touchShortcut;
@@ -62,7 +64,6 @@ KisShortcutMatcher::~KisShortcutMatcher()
 {
     qDeleteAll(m_d->singleActionShortcuts);
     qDeleteAll(m_d->strokeShortcuts);
-    qDeleteAll(m_d->gestureShortcuts);
     qDeleteAll(m_d->actions);
     delete m_d;
 }
@@ -75,11 +76,6 @@ void KisShortcutMatcher::addShortcut(KisSingleActionShortcut *shortcut)
 void KisShortcutMatcher::addShortcut(KisStrokeShortcut *shortcut)
 {
     m_d->strokeShortcuts.append(shortcut);
-}
-
-void KisShortcutMatcher::addShortcut(KisGestureShortcut* shortcut)
-{
-    m_d->gestureShortcuts.append(shortcut);
 }
 
 void KisShortcutMatcher::addShortcut( KisTouchShortcut* shortcut )
@@ -142,7 +138,7 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QMouseEvent *even
 {
     bool retval = false;
 
-    if(m_d->gestureShortcut || m_d->usingTouch)
+    if(m_d->usingTouch)
         return retval;
 
     if (m_d->buttons.contains(button)) reset();
@@ -197,27 +193,6 @@ bool KisShortcutMatcher::mouseMoved(QMouseEvent *event)
 
     m_d->runningShortcut->action()->inputEvent(event);
     return true;
-}
-
-bool KisShortcutMatcher::gestureEvent(QGestureEvent* event)
-{
-    bool retval = false;
-
-    if (!m_d->gestureShortcut) {
-        foreach(QGesture *gesture, event->activeGestures()) {
-            if(gesture->state() == Qt::GestureStarted) {
-                retval = tryRunGestureShortcut(event);
-            }
-        }
-    } else {
-        retval = tryEndGestureShortcut(event);
-
-        if(!retval) {
-            m_d->gestureShortcut->action()->inputEvent(event);
-        }
-    }
-
-    return retval;
 }
 
 bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
@@ -390,51 +365,6 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QMouseEv
     return !m_d->runningShortcut;
 }
 
-bool KisShortcutMatcher::tryRunGestureShortcut(QGestureEvent* event)
-{
-    KisGestureShortcut *goodCandidate = 0;
-
-    if (m_d->suppressAllActions)
-        return false;
-
-    if(m_d->runningShortcut) {
-        m_d->runningShortcut->action()->end(0);
-        m_d->runningShortcut->action()->deactivate();
-        m_d->runningShortcut = 0;
-    }
-
-    foreach(KisGestureShortcut *shortcut, m_d->gestureShortcuts) {
-        QGesture *matchedGesture = shortcut->match(event);
-        if( matchedGesture
-            && ( matchedGesture->state() == Qt::GestureStarted || matchedGesture->state() == Qt::GestureUpdated )
-            && ( !goodCandidate || shortcut->priority() > goodCandidate->priority()) ) {
-            goodCandidate = shortcut;
-        }
-    }
-
-    if (goodCandidate) {
-        goodCandidate->action()->activate();
-        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
-
-        m_d->gestureShortcut = goodCandidate;
-    }
-
-    return goodCandidate;
-}
-
-bool KisShortcutMatcher::tryEndGestureShortcut(QGestureEvent* event)
-{
-    Q_ASSERT(m_d->gestureShortcut);
-
-    QGesture *matchedGesture = m_d->gestureShortcut->match(event);
-    if( matchedGesture && ( matchedGesture->state() == Qt::GestureFinished || matchedGesture->state() == Qt::GestureCanceled ) ) {
-        m_d->gestureShortcut->action()->end(event);
-        m_d->gestureShortcut->action()->deactivate();
-        m_d->gestureShortcut = 0;
-    }
-
-    return !m_d->gestureShortcut;
-}
 
 bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
 {
