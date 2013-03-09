@@ -16,7 +16,7 @@ kde4_add_plugin(kritatooltransform ${kritatooltransform_PART_SRCS})
 
 
 
-target_link_libraries(kritatooltransform kritaui ${QT_QTDECLARATIVE_LIBRARY})
+target_link_libraries(kritatooltransform kritaui)
 
 install(TARGETS kritatooltransform  DESTINATION ${PLUGIN_INSTALL_DIR})
 

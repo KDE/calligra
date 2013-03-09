@@ -57,7 +57,7 @@ Column {
             onCheckedChanged: {
                 if(checked) {
                     warpModeButton.checked = false;
-                    toolManager.currentTool.transformMode = Krita.TransformTool.FreeTransformMode;
+                    toolManager.currentTool.transformMode = 0;
                 } else if( !warpModeButton.checked ) {
                     checked = true;
                 }
@@ -87,7 +87,7 @@ Column {
             onCheckedChanged: {
                 if(checked) {
                     freeModeButton.checked = false;
-                    toolManager.currentTool.transformMode = Krita.TransformTool.WarpTransformMode;
+                    toolManager.currentTool.transformMode = 1;
                 } else if( !freeModeButton.checked ) {
                     checked = true;
                 }

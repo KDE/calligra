@@ -45,8 +45,6 @@ ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
 {
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolTransformFactory(QStringList()));
-
-    qmlRegisterUncreatableType<KisToolTransform>("org.krita.sketch", 1, 0, "TransformTool", "This class is only used for enum values.");
 }
 
 ToolTransform::~ToolTransform()
