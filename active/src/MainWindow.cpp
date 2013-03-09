@@ -28,6 +28,7 @@
 #include "CATextDocumentModel.h"
 #include "CAImageProvider.h"
 #include "CAAbstractDocumentHandler.h"
+#include "CTTextDocumentCanvas.h"
 #include "calligra_active_global.h"
 
 #include <libs/main/calligraversion.h>
@@ -52,6 +53,9 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
     qmlRegisterType<CACanvasItem> ("CalligraActive", 1, 0, "CACanvasItem");
+
+    qmlRegisterType<CTTextDocumentCanvas> ("CalligraTouch", 0, 1, "TextDocumentCanvas");
+
     qmlRegisterUncreatableType<CAPADocumentModel> ("CalligraActive", 1, 0, "CAPADocumentModel", "Not allowed");
     qmlRegisterUncreatableType<CATextDocumentModel> ("CalligraActive", 1, 0, "CATextDocumentModel", "Not allowed");
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
@@ -93,7 +97,7 @@ MainWindow::MainWindow (QWidget* parent)
     m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::s_imageProvider);
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
-                                            + "/share/calligraactive/qml/Doc.qml"));
+                                            + "/share/calligraactive/qml/Test.qml"));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
 
     connect (m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
