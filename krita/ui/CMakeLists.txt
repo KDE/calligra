@@ -214,7 +214,6 @@ set(kritaui_LIB_SRCS
     input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
-    #input/kis_gesture_action.cpp
     kis_ui_action_factory.cpp
     kis_ui_action_factory_registry.cpp
     actions/kis_selection_action_factories.cpp
