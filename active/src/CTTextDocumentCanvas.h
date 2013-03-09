@@ -3,6 +3,7 @@
 
 #include <QtDeclarative/qdeclarativeitem.h>
 
+class KoCanvasController;
 class KoCanvasBase;
 class KUrl;
 
@@ -25,9 +26,11 @@ protected:
 
 private:
     bool openFile(const QString& uri);
+    void createAndSetCanvasControllerOn(KoCanvasBase *canvas);
 
     QString m_source;
     KoCanvasBase *m_canvasBase;
+    KoCanvasController *m_canvasController;
 };
 
 #endif // CTTEXTDOCUMENTCANVAS_H
