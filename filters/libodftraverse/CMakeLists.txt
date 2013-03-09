@@ -3,6 +3,7 @@ include_directories( ${KOODF_INCLUDES} )
 ########### libodftraverse ###############
 
 set(odftraverse_LIB_SRCS
+    OdfParser.cpp
     OdtTraverser.cpp
     OdtTraverserBackend.cpp
 )
