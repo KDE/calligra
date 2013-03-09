@@ -26,6 +26,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QDebug>
 #include <QTimer>
 
+#include <kdebug.h>
+
 #include "o2requestor.h"
 #include "o2.h"
 
@@ -81,7 +83,7 @@ int O2Requestor::put(const QNetworkRequest &req, const QByteArray &data) {
 
 void O2Requestor::onRefreshFinished(QNetworkReply::NetworkError error) {
     if (status_ != Requesting) {
-        qWarning() << "O2Requestor::onRefreshFinished: No pending request";
+        kWarning() << "O2Requestor::onRefreshFinished: No pending request";
         return;
     }
     if (QNetworkReply::NoError == error) {
@@ -107,7 +109,7 @@ void O2Requestor::onRequestFinished() {
 }
 
 void O2Requestor::onRequestError(QNetworkReply::NetworkError error) {
-    qWarning() << "O2Requestor::onRequestError: Error" << (int)error;
+    kWarning() << "O2Requestor::onRequestError: Error" << (int)error;
     if (status_ == Idle) {
         return;
     }
@@ -115,7 +117,7 @@ void O2Requestor::onRequestError(QNetworkReply::NetworkError error) {
         return;
     }
     int httpStatus = reply_->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    qWarning() << "O2Requestor::onRequestError: HTTP status" << httpStatus << reply_->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+    kWarning() << "O2Requestor::onRequestError: HTTP status" << httpStatus << reply_->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
     trace() << reply_->readAll();
     if ((status_ == Requesting) && (httpStatus == 401)) {
         // Call O2::refresh. Note the O2 instance might live in a different thread
@@ -130,7 +132,7 @@ void O2Requestor::onRequestError(QNetworkReply::NetworkError error) {
 
 void O2Requestor::onUploadProgress(qint64 uploaded, qint64 total) {
     if (status_ == Idle) {
-        qWarning() << "O2Requestor::onUploadProgress: No pending request";
+        kWarning() << "O2Requestor::onUploadProgress: No pending request";
         return;
     }
     if (reply_ != qobject_cast<QNetworkReply *>(sender())) {
@@ -144,7 +146,7 @@ int O2Requestor::setup(const QNetworkRequest &req, QNetworkAccessManager::Operat
     QUrl url;
 
     if (status_ != Idle) {
-        qWarning() << "O2Requestor::setup: Another request pending";
+        kWarning() << "O2Requestor::setup: Another request pending";
         return -1;
     }
 
@@ -162,7 +164,7 @@ int O2Requestor::setup(const QNetworkRequest &req, QNetworkAccessManager::Operat
 void O2Requestor::finish() {
     QByteArray data;
     if (status_ == Idle) {
-        qWarning() << "O2Requestor::finish: No pending request";
+        kWarning() << "O2Requestor::finish: No pending request";
         return;
     }
     data = reply_->readAll();
@@ -175,7 +177,7 @@ void O2Requestor::finish() {
 
 void O2Requestor::retry() {
     if (status_ != Requesting) {
-        qWarning() << "O2Requestor::retry: No pending request";
+        kWarning() << "O2Requestor::retry: No pending request";
         return;
     }
     timedReplies_.remove(reply_);

@@ -33,6 +33,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "o2deviantart.h"
 
+#include <kdebug.h>
+
 static const char *FbEndpoint = "https://www.deviantart.com/oauth2/draft15/authorize";
 static const char *FbTokenUrl = "https://www.deviantart.com/oauth2/draft15/token?grant_type=authorization_code";
 static const quint16 FbLocalPort = 1965;
@@ -47,9 +49,9 @@ O2DeviantART::O2DeviantART(QObject *parent): O2(parent) {
 void O2DeviantART::onVerificationReceived(const QMap<QString, QString> response) {
     emit closeBrowser();
     if (response.contains("error")) {
-        qWarning() << "O2DeviantART::onVerificationReceived: Verification failed";
+        kWarning() << "O2DeviantART::onVerificationReceived: Verification failed";
         foreach (QString key, response.keys()) {
-            qWarning() << "O2DeviantART::onVerificationReceived:" << key << response.value(key);
+            kWarning() << "O2DeviantART::onVerificationReceived:" << key << response.value(key);
         }
         emit linkingFailed();
         return;

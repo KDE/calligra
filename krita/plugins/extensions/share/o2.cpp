@@ -40,6 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 #include "o2.h"
 #include "o2replyserver.h"
@@ -321,12 +322,12 @@ void O2::refresh() {
     trace() << "O2::refresh: Token: ..." << refreshToken().right(7);
 
     if (refreshToken().isEmpty()) {
-        qWarning() << "O2::refresh: No refresh token";
+        kWarning() << "O2::refresh: No refresh token";
         onRefreshError(QNetworkReply::AuthenticationRequiredError);
         return;
     }
     if (refreshTokenUrl_.isEmpty()) {
-        qWarning() << "O2::refresh: Refresh token URL not set";
+        kWarning() << "O2::refresh: Refresh token URL not set";
         onRefreshError(QNetworkReply::AuthenticationRequiredError);
         return;
     }
@@ -368,7 +369,7 @@ void O2::onRefreshFinished() {
 
 void O2::onRefreshError(QNetworkReply::NetworkError error) {
     QNetworkReply *refreshReply = qobject_cast<QNetworkReply *>(sender());
-    qWarning() << "O2::onRefreshFailed: Error" << error << ", resetting tokens";
+    kWarning() << "O2::onRefreshFailed: Error" << error << ", resetting tokens";
     setToken(QString());
     setRefreshToken(QString());
     timedReplies_.remove(refreshReply);
