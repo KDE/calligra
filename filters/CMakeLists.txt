@@ -38,6 +38,7 @@ endif(SHOULD_BUILD_FLOW OR SHOULD_BUILD_WORDS_PART)
 
 set(SHOULD_BUILD_OOXML_FILTERS ${SHARED_MIME_INFO_FOUND})
 
+add_subdirectory(libodftraverse)
 add_subdirectory(libmso)
 
 if(SHOULD_BUILD_OOXML_FILTERS)
