@@ -37,13 +37,7 @@ if (SHOULD_BUILD_PLUGIN_TEXTEDITING AND SHOULD_BUILD_TEXTSHAPE)
     add_subdirectory( textediting )
 endif(SHOULD_BUILD_PLUGIN_TEXTEDITING AND SHOULD_BUILD_TEXTSHAPE)
 
-if (SHOULD_BUILD_PLUGIN_STAGING)
-        add_subdirectory( staging )
-endif (SHOULD_BUILD_PLUGIN_STAGING)
-
-if(SHOULD_BUILD_PLUGIN_KEXI)
-        add_subdirectory( kexi )
-endif(SHOULD_BUILD_PLUGIN_KEXI)
+add_subdirectory( kexi )
 
 if (SHOULD_BUILD_PLUGIN_DEFAULTTOOLS)
     add_subdirectory( defaultTools )
@@ -89,3 +83,5 @@ endif(SHOULD_BUILD_PLUGIN_REPORTING)
 
 #add_subdirectory( videoshape )
 #add_subdirectory( commentshape )
+
+add_subdirectory( staging )
