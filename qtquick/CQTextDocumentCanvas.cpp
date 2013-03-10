@@ -1,5 +1,5 @@
-#include "CTTextDocumentCanvas.h"
-#include "CTCanvasController.h"
+#include "CQTextDocumentCanvas.h"
+#include "CQCanvasController.h"
 
 #include <KoDocument.h>
 #include <KoPart.h>
@@ -15,7 +15,7 @@
 #include <KActionCollection>
 #include <QGraphicsWidget>
 
-CTTextDocumentCanvas::CTTextDocumentCanvas()
+CQTextDocumentCanvas::CQTextDocumentCanvas()
     : m_canvasBase(0)
     , m_canvasController(0)
     , m_zoomController(0)
@@ -23,7 +23,7 @@ CTTextDocumentCanvas::CTTextDocumentCanvas()
 {
 }
 
-bool CTTextDocumentCanvas::openFile(const QString& uri)
+bool CQTextDocumentCanvas::openFile(const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
@@ -53,23 +53,23 @@ bool CTTextDocumentCanvas::openFile(const QString& uri)
     return true;
 }
 
-void CTTextDocumentCanvas::setSource(const QString& source)
+void CQTextDocumentCanvas::setSource(const QString& source)
 {
     m_source = source;
     openFile(source);
     emit sourceChanged();
 }
 
-QString CTTextDocumentCanvas::source() const
+QString CQTextDocumentCanvas::source() const
 {
     return m_source;
 }
 
-CTTextDocumentCanvas::~CTTextDocumentCanvas()
+CQTextDocumentCanvas::~CQTextDocumentCanvas()
 {
 }
 
-void CTTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (m_canvasBase) {
         QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
@@ -81,16 +81,16 @@ void CTTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRec
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-void CTTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
+void CQTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 {
     //TODO: pass a proper action collection
-    CTCanvasController *controller = new CTCanvasController(new KActionCollection(this));
+    CQCanvasController *controller = new CQCanvasController(new KActionCollection(this));
     m_canvasController = controller;
     controller->setCanvas(canvas);
     KoToolManager::instance()->addController (controller);
 }
 
-void CTTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
+void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
     m_zoomController = new KoZoomController(m_canvasController,
@@ -98,25 +98,25 @@ void CTTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
                                                             new KActionCollection(this));
 }
 
-void CTTextDocumentCanvas::setZoomMode(CTTextDocumentCanvas::ZoomMode zoomMode)
+void CQTextDocumentCanvas::setZoomMode(ZoomMode zoomMode)
 {
     m_zoomMode = zoomMode;
     updateControllerWithZoomMode();
     emit zoomModeChanged();
 }
 
-CTTextDocumentCanvas::ZoomMode CTTextDocumentCanvas::zoomMode() const
+CQTextDocumentCanvas::ZoomMode CQTextDocumentCanvas::zoomMode() const
 {
     return m_zoomMode;
 }
 
-void CTTextDocumentCanvas::updateZoomControllerAccordingToDocument(const KoDocument* document)
+void CQTextDocumentCanvas::updateZoomControllerAccordingToDocument(const KoDocument* document)
 {
     const KWDocument *kwDoc = static_cast<const KWDocument*>(document);
     m_zoomController->setPageSize (kwDoc->pageManager()->begin().rect().size());
 }
 
-void CTTextDocumentCanvas::updateControllerWithZoomMode()
+void CQTextDocumentCanvas::updateControllerWithZoomMode()
 {
     KoZoomMode::Mode zoomMode;
     switch (m_zoomMode) {
@@ -127,4 +127,4 @@ void CTTextDocumentCanvas::updateControllerWithZoomMode()
     m_zoomController->setZoom(zoomMode, 1.0);
 }
 
-#include "CTTextDocumentCanvas.moc"
+#include "CQTextDocumentCanvas.moc"

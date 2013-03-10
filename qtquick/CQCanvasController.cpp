@@ -20,7 +20,7 @@
  * 
  */
 
-#include "CTCanvasController.h"
+#include "CQCanvasController.h"
 #include <KoCanvasBase.h>
 
 #include <QtCore/QPoint>
@@ -29,120 +29,120 @@
 
 #include <QDebug>
 
-CTCanvasController::CTCanvasController(KActionCollection* actionCollection)
+CQCanvasController::CQCanvasController(KActionCollection* actionCollection)
     : KoCanvasController(actionCollection)
     , m_canvas(0)
 {
 }
 
-CTCanvasController::~CTCanvasController()
+CQCanvasController::~CQCanvasController()
 {
 }
 
-void CTCanvasController::setVastScrolling(qreal factor)
+void CQCanvasController::setVastScrolling(qreal factor)
 {
 }
 
-void CTCanvasController::setZoomWithWheel(bool zoom)
+void CQCanvasController::setZoomWithWheel(bool zoom)
 {
 }
 
-void CTCanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
+void CQCanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
 }
 
-void CTCanvasController::setScrollBarValue(const QPoint& value)
+void CQCanvasController::setScrollBarValue(const QPoint& value)
 {
 }
 
-QPoint CTCanvasController::scrollBarValue() const
+QPoint CQCanvasController::scrollBarValue() const
 {
     return QPoint();
 }
 
-void CTCanvasController::pan(const QPoint& distance)
+void CQCanvasController::pan(const QPoint& distance)
 {
 }
 
-QPointF CTCanvasController::preferredCenter() const
+QPointF CQCanvasController::preferredCenter() const
 {
     return QPointF();
 }
 
-void CTCanvasController::setPreferredCenter(const QPointF& viewPoint)
+void CQCanvasController::setPreferredCenter(const QPointF& viewPoint)
 {
 }
 
-void CTCanvasController::recenterPreferred()
+void CQCanvasController::recenterPreferred()
 {
 }
 
-void CTCanvasController::zoomTo(const QRect& rect)
+void CQCanvasController::zoomTo(const QRect& rect)
 {
 }
 
-void CTCanvasController::zoomBy(const QPoint& center, qreal zoom)
+void CQCanvasController::zoomBy(const QPoint& center, qreal zoom)
 {
 }
 
-void CTCanvasController::zoomOut(const QPoint& center)
+void CQCanvasController::zoomOut(const QPoint& center)
 {
 }
 
-void CTCanvasController::zoomIn(const QPoint& center)
+void CQCanvasController::zoomIn(const QPoint& center)
 {
 }
 
-void CTCanvasController::ensureVisible(KoShape* shape)
+void CQCanvasController::ensureVisible(KoShape* shape)
 {
 }
 
-void CTCanvasController::ensureVisible(const QRectF& rect, bool smooth)
+void CQCanvasController::ensureVisible(const QRectF& rect, bool smooth)
 {
 }
 
-int CTCanvasController::canvasOffsetY() const
-{
-    return 0;
-}
-
-int CTCanvasController::canvasOffsetX() const
+int CQCanvasController::canvasOffsetY() const
 {
     return 0;
 }
 
-int CTCanvasController::visibleWidth() const
+int CQCanvasController::canvasOffsetX() const
 {
     return 0;
 }
 
-int CTCanvasController::visibleHeight() const
+int CQCanvasController::visibleWidth() const
 {
     return 0;
 }
 
-KoCanvasBase* CTCanvasController::canvas() const
+int CQCanvasController::visibleHeight() const
+{
+    return 0;
+}
+
+KoCanvasBase* CQCanvasController::canvas() const
 {
     return m_canvas;
 }
 
-void CTCanvasController::setCanvas(KoCanvasBase* canvas)
+void CQCanvasController::setCanvas(KoCanvasBase* canvas)
 {
     m_canvas = canvas;
     canvas->setCanvasController(this);
 }
 
-void CTCanvasController::setDrawShadow(bool drawShadow)
+void CQCanvasController::setDrawShadow(bool drawShadow)
 {
 }
 
-QSize CTCanvasController::viewportSize() const
+QSize CQCanvasController::viewportSize() const
 {
     QGraphicsWidget *canvasWidget = dynamic_cast<QGraphicsWidget*>(m_canvas);
     return canvasWidget->size().toSize();
 }
 
-void CTCanvasController::scrollContentsBy(int dx, int dy)
+void CQCanvasController::scrollContentsBy(int dx, int dy)
 {
 }
 

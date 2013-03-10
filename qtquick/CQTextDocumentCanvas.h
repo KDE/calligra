@@ -1,5 +1,5 @@
-#ifndef CTTEXTDOCUMENTCANVAS_H
-#define CTTEXTDOCUMENTCANVAS_H
+#ifndef CQTEXTDOCUMENTCANVAS_H
+#define CQTEXTDOCUMENTCANVAS_H
 
 #include <QtDeclarative/qdeclarativeitem.h>
 
@@ -11,7 +11,7 @@ class KoCanvasController;
 class KoCanvasBase;
 class KUrl;
 
-class CTTextDocumentCanvas : public QDeclarativeItem
+class CQTextDocumentCanvas : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
@@ -19,8 +19,8 @@ class CTTextDocumentCanvas : public QDeclarativeItem
     Q_ENUMS(ZoomMode)
 
 public:
-    CTTextDocumentCanvas();
-    ~CTTextDocumentCanvas();
+    CQTextDocumentCanvas();
+    ~CQTextDocumentCanvas();
 
     enum ZoomMode
     {
@@ -58,4 +58,4 @@ private:
     ZoomMode m_zoomMode;
 };
 
-#endif // CTTEXTDOCUMENTCANVAS_H
+#endif // CQTEXTDOCUMENTCANVAS_H

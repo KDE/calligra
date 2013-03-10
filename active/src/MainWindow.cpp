@@ -28,7 +28,6 @@
 #include "CATextDocumentModel.h"
 #include "CAImageProvider.h"
 #include "CAAbstractDocumentHandler.h"
-#include "CTTextDocumentCanvas.h"
 #include "calligra_active_global.h"
 
 #include <libs/main/calligraversion.h>
@@ -54,8 +53,6 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
     qmlRegisterType<CACanvasItem> ("CalligraActive", 1, 0, "CACanvasItem");
 
-    qmlRegisterType<CTTextDocumentCanvas> ("CalligraTouch", 0, 1, "TextDocumentCanvas");
-
     qmlRegisterUncreatableType<CAPADocumentModel> ("CalligraActive", 1, 0, "CAPADocumentModel", "Not allowed");
     qmlRegisterUncreatableType<CATextDocumentModel> ("CalligraActive", 1, 0, "CATextDocumentModel", "Not allowed");
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
@@ -66,6 +63,7 @@ MainWindow::MainWindow (QWidget* parent)
     kdeclarative.setDeclarativeEngine(m_view->engine());
     kdeclarative.initialize();
     kdeclarative.setupBindings();
+    m_view->engine()->addImportPath("/home/shaan/kde/share/apps/calligra/imports");
 
     QList<QObject*> recentFiles;
     QList<QObject*> recentTextDocs;

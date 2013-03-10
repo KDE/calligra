@@ -20,19 +20,19 @@
  *
  */
 
-#ifndef CTCANVASCONTROLLER_H
-#define CTCANVASCONTROLLER_H
+#ifndef CQCANVASCONTROLLER_H
+#define CQCANVASCONTROLLER_H
 
 #include <libs/flake/KoCanvasController.h>
 #include <QSize>
 #include <QPoint>
 
 class KoCanvasBase;
-class CTCanvasController : public KoCanvasController
+class CQCanvasController : public KoCanvasController
 {
 public:
-    explicit CTCanvasController(KActionCollection* actionCollection);
-    ~CTCanvasController();
+    explicit CQCanvasController(KActionCollection* actionCollection);
+    ~CQCanvasController();
     virtual void setVastScrolling(qreal factor);
     virtual void setZoomWithWheel(bool zoom);
     virtual void updateDocumentSize(const QSize& sz, bool recalculateCenter);
@@ -62,6 +62,6 @@ private:
     KoCanvasBase *m_canvas;
 };
 
-#endif // CTCANVASCONTROLLER_H
+#endif // CQCANVASCONTROLLER_H
 
 
