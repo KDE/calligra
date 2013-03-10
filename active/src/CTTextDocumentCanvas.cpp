@@ -16,7 +16,7 @@
 
 CTTextDocumentCanvas::CTTextDocumentCanvas()
     : m_canvasBase(0)
-    , m_canvasController(0)
+    , m_canvasController(0
     , m_zoomController(0)
 {
 }
