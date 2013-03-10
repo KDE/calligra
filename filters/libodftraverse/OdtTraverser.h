@@ -30,6 +30,9 @@
 // Calligra
 #include <KoXmlReader.h>
 
+// this library
+#include "odftraverse_export.h"
+
 class QByteArray;
 class QSizeF;
 class QStringList;
@@ -41,7 +44,7 @@ class OdtTraverserContext;
 class StyleInfo;
 
 
-class OdtTraverser
+class ODFTRAVERSE_EXPORT OdtTraverser
 {
  public:
     OdtTraverser();

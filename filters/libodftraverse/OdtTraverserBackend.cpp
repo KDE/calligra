@@ -66,6 +66,16 @@ OdtTraverserContext::Private::~Private()
 }
 
 
+OdtTraverserContext::OdtTraverserContext(KoStore *store)
+    : d(new OdtTraverserContext::Private(store))
+{
+}
+
+OdtTraverserContext::~OdtTraverserContext()
+{
+}
+
+
 KoFilter::ConversionStatus OdtTraverserContext::analyzeOdfFile()
 {
     if (!d->odfStore) {

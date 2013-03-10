@@ -25,6 +25,10 @@
 #include <KoXmlReader.h>
 #include <KoFilter.h>
 
+// this library
+#include "odftraverse_export.h"
+
+
 class QByteArray;
 class QSizeF;
 class QStringList;
@@ -61,10 +65,10 @@ struct StyleInfo {
 // your own context class that inherits the OdtTraverserContext and
 // adds more context to the base class.
 
-class OdtTraverserContext {
+class ODFTRAVERSE_EXPORT OdtTraverserContext {
  public: 
     OdtTraverserContext(KoStore *store);
-    ~OdtTraverserContext();
+    virtual ~OdtTraverserContext();
 
     KoFilter::ConversionStatus analyzeOdfFile();
 
@@ -97,7 +101,7 @@ class OdtTraverserContext {
 };
 
 
-class OdtTraverserBackend
+class ODFTRAVERSE_EXPORT OdtTraverserBackend
 {
  public:
     OdtTraverserBackend(OdtTraverserContext *context);
