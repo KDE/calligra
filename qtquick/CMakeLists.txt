@@ -7,11 +7,11 @@ set(calligraqtquickcomponents_SRCS
     )
 
 include_directories(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
-        ${KOMAIN_INCLUDES}
-        ${CMAKE_SOURCE_DIR}/words/part
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_BINARY_DIR}
+    ${KDE4_INCLUDES}
+    ${KOMAIN_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/words/part
 )
 
 qt4_automoc(${calligraqtquickcomponents_SRCS})
@@ -28,5 +28,6 @@ target_link_libraries(calligraqtquickcomponentsplugin
     kopageapp
     calligrastageprivate)
 
-install(TARGETS calligraqtquickcomponentsplugin DESTINATION ${DATA_INSTALL_DIR}/calligra/imports)
-install(FILES qmldir DESTINATION ${DATA_INSTALL_DIR}/calligra/imports)
+install(TARGETS calligraqtquickcomponentsplugin
+    DESTINATION ${DATA_INSTALL_DIR}/calligra/imports/org/calligra/CalligraComponents)
+install(FILES qmldir DESTINATION ${DATA_INSTALL_DIR}/calligra/imports/org/calligra/CalligraComponents)
