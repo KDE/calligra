@@ -19,7 +19,7 @@ CTTextDocumentCanvas::CTTextDocumentCanvas()
     : m_canvasBase(0)
     , m_canvasController(0)
     , m_zoomController(0)
-    , m_zoomMode(ZOOM_WIDTH)
+    , m_zoomMode(ZOOM_PAGE)
 {
 }
 
@@ -101,6 +101,7 @@ void CTTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 void CTTextDocumentCanvas::setZoomMode(CTTextDocumentCanvas::ZoomMode zoomMode)
 {
     m_zoomMode = zoomMode;
+    updateControllerWithZoomMode();
     emit zoomModeChanged();
 }
 
@@ -123,7 +124,6 @@ void CTTextDocumentCanvas::updateControllerWithZoomMode()
         case ZOOM_PAGE: zoomMode = KoZoomMode::ZOOM_PAGE; break;
         case ZOOM_WIDTH: zoomMode = KoZoomMode::ZOOM_WIDTH; break;
     }
-    kDebug() << "PAGE SIZE " << m_zoomController->pageSize();
     m_zoomController->setZoom(zoomMode, 1.0);
 }
 
