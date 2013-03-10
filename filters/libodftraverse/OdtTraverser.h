@@ -38,20 +38,7 @@ class KoStore;
 
 class OdtTraverserBackend;
 class OdtTraverserContext;
-
-struct StyleInfo {
-    StyleInfo();
-
-    QString family;
-    QString parent;
-    bool isDefaultStyle;
-
-    int  defaultOutlineLevel;
-    bool shouldBreakChapter;
-    bool inUse;
-
-    QHash<QString, QString> attributes;
-};
+class StyleInfo;
 
 
 class OdtTraverser

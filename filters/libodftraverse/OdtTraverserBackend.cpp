@@ -25,6 +25,72 @@
 // Calligra
 #include <KoXmlReader.h>
 
+// Odftraverse library
+#include "OdfParser.h"
+
+
+class OdtTraverserContext::Private
+{
+public:
+    Private(KoStore *store);
+    ~Private();
+
+    KoStore *store;
+
+    // This data is used for conversion while traversing the content tree.
+    // It's created from the store that is given to us at construction time.
+    QHash<QString, QString>    metadata;
+    QHash<QString, QString>    manifest;
+    QHash<QString, StyleInfo*> styles;
+
+    // This data is created during the traversal and can be used after
+    // it is finished.
+    QHash<QString, QSizeF>   images;
+    QHash<QString, QString>  mediaFiles;
+};
+
+
+OdtTraverserContext::Private::Private(KoStore *store)
+{
+    this->store = store;
+}
+
+OdtTraverserContext::Private::~Private()
+{
+    // FIXME: Maybe we should delete the store here...  or not?
+    //        The question is: who really owns it?
+}
+
+
+QHash<QString, QString> OdtTraverserContext::metadata() const
+{
+    return d->metadata;
+}
+
+    QHash<QString, QString> OdtTraverserContext::manifest() const
+{
+    return d->manifest;
+}
+
+    QHash<QString, StyleInfo*> OdtTraverserContext::styles() const
+{
+    return d->styles;
+}
+
+
+QHash<QString, QSizeF> OdtTraverserContext::images() const
+{
+    return d->images;
+}
+
+QHash<QString, QString> OdtTraverserContext::mediaFiles() const
+{
+    return d->mediaFiles;
+}
+
+
+// ----------------------------------------------------------------
+
 
 OdtTraverserBackend::OdtTraverserBackend(OdtTraverserContext *context)
 {
