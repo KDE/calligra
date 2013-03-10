@@ -30,6 +30,9 @@
 #include <QHash>
 #include <QList>
 
+// Calligra
+#include <KoFilter.h>           // If we ever move this out of filters/ we should move the
+                                // filterstatus return values to bools.
 
 class KoStore;
 
@@ -48,7 +51,9 @@ public:
     OdfParser();
     virtual ~OdfParser();
 
-    bool parseMetadata(KoStore *odfStore, QHash<QString, QString> &metadata);
+    KoFilter::ConversionStatus parseMetadata(KoStore *odfStore,
+                                             QHash<QString, QString> &metadata);
+
     // Parse manifest
     //
     // Format is QHash<path, type>
@@ -56,7 +61,8 @@ public:
     //   path  is the full path of the file stored in the manifest
     //   type  is the mimetype of the file.
     //
-    bool parseManifest(KoStore *odfStore, QHash<QString, QString> &manifest);
+    KoFilter::ConversionStatus parseManifest(KoStore *odfStore,
+                                             QHash<QString, QString> &manifest);
 
 private:
 };

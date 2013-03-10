@@ -23,6 +23,7 @@
 
 // Calligra
 #include <KoXmlReader.h>
+#include <KoFilter.h>
 
 class QByteArray;
 class QSizeF;
@@ -61,8 +62,13 @@ struct StyleInfo {
 // adds more context to the base class.
 
 class OdtTraverserContext {
+ public: 
     OdtTraverserContext(KoStore *store);
     ~OdtTraverserContext();
+
+    KoFilter::ConversionStatus analyzeOdfFile();
+
+    KoStore *odfStore() const;
 
     // This data is created before the traversal starts and can be
     // accessed during the traversal.
@@ -73,6 +79,16 @@ class OdtTraverserContext {
 
     // This data is created during the traversal and can be accessed
     // after the traversal is finished.
+
+    // A list of images and their sizes. This list is collected during
+    // the conversion and returned from traverseContent() using an
+    // outparameter.
+    //
+    // The format is QHash<name, size>
+    // where
+    //    name   is the name of the picture inside the ODT file
+    //    size   is the size in points.
+    //
     QHash<QString, QSizeF>   images() const;
     QHash<QString, QString>  mediaFiles() const;
  private:

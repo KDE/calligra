@@ -58,7 +58,6 @@ StyleInfo::StyleInfo()
 
 OdtTraverser::OdtTraverser()
 {
-    qDeleteAll(m_styles);
 }
 
 OdtTraverser::~OdtTraverser()
@@ -70,31 +69,20 @@ OdtTraverser::~OdtTraverser()
 //                             Traversal
 
 
-bool OdtTraverser::traverseContent(KoStore *odfStore,
-                                   QHash<QString, QString> *metadata,
-                                   QHash<QString, QString> *manifest,
-                                   QHash<QString, StyleInfo*> styles,
-                                   OdtTraverserBackend *backend,
-                                   OdtTraverserContext *context,
-                                   // Out parameters:
-                                   QHash<QString, QSizeF> &images,
-                                   QHash<QString, QString> &mediaFiles)
+bool OdtTraverser::traverseContent(OdtTraverserContext *context,
+                                   OdtTraverserBackend *backend)
+                                   
 {
-    m_odfStore = odfStore;
     m_backend = backend;
     m_context = context;
-    m_metadata = metadata;
-    m_manifest = manifest;
-    m_styles = styles;
 
-    bool status = collectStyles(odfStore, m_styles);
-    if (!status) {
-        return status;
+    if (context->analyzeOdfFile() != KoFilter::OK) {
+        return false;
     }
 
 #if 0 // Debug
     kDebug(30503) << "======== >> Styles";
-    foreach(const QString &name, m_styles.keys()) {
+    foreach(const QString &name, context->styles().keys()) {
         kDebug(30503) << "==" << name << ":\t"
                       << m_styles.value(name)->parent
                       << m_styles.value(name)->family
@@ -108,6 +96,8 @@ bool OdtTraverser::traverseContent(KoStore *odfStore,
 
     // ----------------------------------------------------------------
     // Parse body from content.xml
+
+    KoStore *odfStore = m_context->odfStore();
 
     if (!odfStore->open("content.xml")) {
         kDebug(30503) << "Can not open content.xml .";
@@ -179,11 +169,6 @@ bool OdtTraverser::traverseContent(KoStore *odfStore,
 
     m_backend->endTraversal(m_context);
     odfStore->close();
-
-    // Return the list of images.
-    images = m_images;
-    // Return the list of media files source.
-    mediaFiles = m_mediaFilesList;
 
     return true;
 }

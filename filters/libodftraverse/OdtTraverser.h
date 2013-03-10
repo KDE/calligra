@@ -47,15 +47,8 @@ class OdtTraverser
     OdtTraverser();
     ~OdtTraverser();
 
-    bool traverseContent(KoStore *odfStore,
-                         QHash<QString, QString> *metadata,
-                         QHash<QString, QString> *manifest,
-                         QHash<QString, StyleInfo*> styles,
-                         OdtTraverserBackend *backend,
-                         OdtTraverserContext *context,
-                         // Out parameters:
-                         QHash<QString, QSizeF> &images,
-                         QHash<QString, QString> &mediaFiles);
+    bool traverseContent(OdtTraverserContext *context,
+                         OdtTraverserBackend *backend);
 
  private:
     enum TableCellType {
@@ -109,13 +102,9 @@ class OdtTraverser
 
 
  private:
-    KoStore              *m_odfStore;
     OdtTraverserBackend  *m_backend;
     OdtTraverserContext  *m_context;
 
-    QHash<QString, QString>   *m_metadata;
-    QHash<QString, QString>   *m_manifest;
-    QHash<QString, StyleInfo*> m_styles;
 
     // A list of images and their sizes. This list is collected during
     // the conversion and returned from traverseContent() using an

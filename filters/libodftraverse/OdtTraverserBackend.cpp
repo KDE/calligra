@@ -29,13 +29,17 @@
 #include "OdfParser.h"
 
 
+// ----------------------------------------------------------------
+//                 class OdtTraverserContext
+
+
 class OdtTraverserContext::Private
 {
 public:
     Private(KoStore *store);
     ~Private();
 
-    KoStore *store;
+    KoStore *odfStore;
 
     // This data is used for conversion while traversing the content tree.
     // It's created from the store that is given to us at construction time.
@@ -51,8 +55,8 @@ public:
 
 
 OdtTraverserContext::Private::Private(KoStore *store)
+    : odfStore(store)
 {
-    this->store = store;
 }
 
 OdtTraverserContext::Private::~Private()
@@ -61,6 +65,39 @@ OdtTraverserContext::Private::~Private()
     //        The question is: who really owns it?
 }
 
+
+KoFilter::ConversionStatus OdtTraverserContext::analyzeOdfFile()
+{
+    if (!d->odfStore) {
+        return KoFilter::FileNotFound;
+    }
+
+    // ----------------------------------------------------------------
+    // Parse input files
+
+    OdfParser odfParser;
+    KoFilter::ConversionStatus  status;
+
+    // Parse meta.xml into m_metadata
+    status = odfParser.parseMetadata(d->odfStore, d->metadata);
+    if (status != KoFilter::OK) {
+        return status;
+    }
+
+    // Parse manifest
+    status = odfParser.parseManifest(d->odfStore, d->manifest);
+    if (status != KoFilter::OK) {
+        return status;
+    }
+
+    return KoFilter::OK;
+}
+
+
+KoStore *OdtTraverserContext::odfStore() const
+{
+    return d->odfStore;
+}
 
 QHash<QString, QString> OdtTraverserContext::metadata() const
 {
@@ -90,6 +127,7 @@ QHash<QString, QString> OdtTraverserContext::mediaFiles() const
 
 
 // ----------------------------------------------------------------
+//                 class OdtTraverserBackend
 
 
 OdtTraverserBackend::OdtTraverserBackend(OdtTraverserContext *context)

@@ -50,11 +50,12 @@ OdfParser::~OdfParser()
 
 
 
-bool OdfParser::parseMetadata(KoStore *odfStore, QHash<QString, QString> &metadata)
+KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore *odfStore,
+                                                    QHash<QString, QString> &metadata)
 {
     if (!odfStore->open("meta.xml")) {
         kDebug(30503) << "Cannot open meta.xml";
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     KoXmlDocument doc;
@@ -66,7 +67,7 @@ bool OdfParser::parseMetadata(KoStore *odfStore, QHash<QString, QString> &metada
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
-        return false;
+        return KoFilter::ParsingError;
     }
 
     KoXmlNode childNode = doc.documentElement();
@@ -77,15 +78,16 @@ bool OdfParser::parseMetadata(KoStore *odfStore, QHash<QString, QString> &metada
     }
 
     odfStore->close();
-    return true;
+    return KoFilter::OK;
 }
 
 
-bool OdfParser::parseManifest(KoStore *odfStore, QHash<QString, QString> &manifest)
+KoFilter::ConversionStatus OdfParser::parseManifest(KoStore *odfStore,
+                                                    QHash<QString, QString> &manifest)
 {
     if (!odfStore->open("META-INF/manifest.xml")) {
         kDebug(30503) << "Cannot to open manifest.xml.";
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     KoXmlDocument doc;
@@ -95,7 +97,7 @@ bool OdfParser::parseManifest(KoStore *odfStore, QHash<QString, QString> &manife
         kDebug() << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
-        return false;
+        return KoFilter::ParsingError;
     }
 
     KoXmlNode childNode = doc.documentElement();
@@ -111,5 +113,5 @@ bool OdfParser::parseManifest(KoStore *odfStore, QHash<QString, QString> &manife
     }
 
     odfStore->close();
-    return true;
+    return KoFilter::OK;
 }

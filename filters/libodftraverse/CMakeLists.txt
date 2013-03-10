@@ -1,4 +1,7 @@
-include_directories( ${KOODF_INCLUDES} )
+include_directories(
+    ${KOODF_INCLUDES}
+    ${KOMAIN_INCLUDES}  # For KoFilter
+ )
 
 ########### libodftraverse ###############
 
