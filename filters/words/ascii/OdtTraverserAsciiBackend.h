@@ -30,7 +30,7 @@ class QByteArray;
 class QSizeF;
 class QStringList;
 class QFile;
-class QDataStream;
+class QTextStream;
 
 class KoStore;
 
@@ -42,7 +42,7 @@ class OdtTraverserAsciiContext : public OdtTraverserContext
     ~OdtTraverserAsciiContext();
 
     //QFile &outfile;
-    QDataStream  outStream;
+    QTextStream  outStream;
 };
 
 
@@ -56,11 +56,9 @@ class OdtTraverserAsciiBackend : public OdtTraverserBackend
     virtual void endTraversal(OdtTraverserContext *context);
 
     // The only output function that we need.
-    virtual void beginCharacterData(KoXmlNode &node,
-                                    OdtTraverserContext *context);
-    virtual void endCharacterData(KoXmlNode &node,
-                                  OdtTraverserContext *context);
+    virtual void beginCharacterData(KoXmlNode &node, OdtTraverserContext *context);
 
+    virtual void endTagP(KoXmlElement &element, OdtTraverserContext *context);
 };
 
 #endif // ODTTRAVERSERASCIIBACKEND_H

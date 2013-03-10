@@ -79,9 +79,16 @@ void OdtTraverserAsciiBackend::beginCharacterData(KoXmlNode &node,
     newContext->outStream << node.toText().data();
 }
 
-void OdtTraverserAsciiBackend::endCharacterData(KoXmlNode &node,
-                                                OdtTraverserContext *context)
+
+void OdtTraverserAsciiBackend::endTagP(KoXmlElement &element, OdtTraverserContext *context)
 {
-    Q_UNUSED(node);
-    Q_UNUSED(context);
+    Q_UNUSED(element);
+
+    OdtTraverserAsciiContext *newContext = dynamic_cast<OdtTraverserAsciiContext*>(context);
+    if (!newContext) {
+        return;
+    }
+
+    newContext->outStream << "\n\n";
 }
+
