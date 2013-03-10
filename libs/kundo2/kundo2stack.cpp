@@ -40,7 +40,7 @@
 ****************************************************************************/
 
 #include <QDebug>
-#include <KDE/KLocale>
+#include <KLocale>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include "kundo2stack.h"
@@ -131,7 +131,8 @@ KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent):
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(KUndo2Command *parent)
+KUndo2Command::KUndo2Command(KUndo2Command *parent):
+    m_hasParent(parent != 0)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0)
@@ -877,7 +878,7 @@ QAction *KUndo2QStack::createRedoAction(QObject *parent) const
     connect(this, SIGNAL(canRedoChanged(bool)),
             result, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(redoTextChanged(QString)),
-            result, SLOT(setPrefixText(QString)));
+            result, SLOT(setPrefixedText(QString)));
     connect(result, SIGNAL(triggered()), this, SLOT(redo()));
     return result;
 }

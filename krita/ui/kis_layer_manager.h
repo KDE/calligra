@@ -37,7 +37,7 @@ class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
 class KisNodeCommandsAdapter;
-
+class KisAction;
 
 /**
  * KisLayerManager takes care of the gui around working with layers:
@@ -71,7 +71,6 @@ private:
     
     
     void setup(KActionCollection * collection);
-    void addAction(QAction * action);
 
     void updateGUI();
     
@@ -130,16 +129,14 @@ private:
     KisView2 * m_view;
     KisDoc2 * m_doc;
 
-    QList<QAction*> m_pluginActions;
-
     KAction *m_imageFlatten;
     KAction *m_imageMergeLayer;
-    KAction *m_layerSaveAs;
+    KisAction *m_layerSaveAs;
     KAction *m_groupLayersSave;
     bool m_actLayerVis;
-    KAction *m_imageResizeToLayer;
+    KisAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
-    KAction *m_rasterizeLayer;
+    KisAction *m_rasterizeLayer;
     KAction *m_addPaintLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;

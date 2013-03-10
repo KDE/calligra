@@ -49,5 +49,5 @@ set(TestFormulaParser_SRCS
     TestFormulaParser.cpp
 )
 
-kde4_add_unit_test(TestFormulaParser TESTNAME kspread-xlsx-FormulaParser ${TestFormulaParser_SRCS})
+kde4_add_unit_test(TestFormulaParser TESTNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
 target_link_libraries(TestFormulaParser msooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})

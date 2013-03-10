@@ -95,10 +95,10 @@ RowHeaderWidget::RowHeaderWidget(QWidget *_parent, Canvas *_canvas, View *_view)
     setAttribute(Qt::WA_StaticContents);
     setMouseTracking(true);
 
-    connect(_view, SIGNAL(autoScroll(const QPoint &)),
-            this, SLOT(slotAutoScroll(const QPoint &)));
-    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
-            this, SLOT(toolChanged(const QString&)));
+    connect(_view, SIGNAL(autoScroll(QPoint)),
+            this, SLOT(slotAutoScroll(QPoint)));
+    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(QString)),
+            this, SLOT(toolChanged(QString)));
 }
 
 
@@ -249,10 +249,10 @@ ColumnHeaderWidget::ColumnHeaderWidget(QWidget *_parent, Canvas *_canvas, View *
     setAttribute(Qt::WA_StaticContents);
     setMouseTracking(true);
 
-    connect(_view, SIGNAL(autoScroll(const QPoint &)),
-            this, SLOT(slotAutoScroll(const QPoint &)));
-    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
-            this, SLOT(toolChanged(const QString&)));
+    connect(_view, SIGNAL(autoScroll(QPoint)),
+            this, SLOT(slotAutoScroll(QPoint)));
+    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(QString)),
+            this, SLOT(toolChanged(QString)));
 }
 
 
@@ -418,8 +418,8 @@ SelectAllButtonWidget::SelectAllButtonWidget(CanvasBase* canvasBase)
         : QWidget(canvasBase->canvasWidget())
         , SelectAllButton(canvasBase)
 {
-    connect(canvasBase->toolProxy(), SIGNAL(toolChanged(const QString&)),
-            this, SLOT(toolChanged(const QString&)));
+    connect(canvasBase->toolProxy(), SIGNAL(toolChanged(QString)),
+            this, SLOT(toolChanged(QString)));
 }
 
 SelectAllButtonWidget::~SelectAllButtonWidget()

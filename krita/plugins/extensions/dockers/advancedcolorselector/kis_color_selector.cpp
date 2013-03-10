@@ -264,9 +264,9 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
             m_lastColorRole=Background;
         commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
 
-        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
-            hidePopup();
-        }
+//        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
+//            hidePopup();
+//        }
     }
     e->accept();
     m_grabbingComponent=0;
@@ -303,6 +303,7 @@ void KisColorSelector::init()
 {
     setAcceptDrops(true);
 
+    m_lastColorRole = Foreground;
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
     m_slider = new KisColorSelectorSimple(this);

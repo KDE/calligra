@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Flow
-Name[ca]=Flux del Calligra
+Name[bs]=Calligra tok
+Name[ca]=Calligra Flow
 Name[ca@valencia]=Flux del Calligra
 Name[cs]=Calligra Flow
 Name[da]=Calligra Flow
@@ -16,15 +17,18 @@ Name[hu]=Calligra Flow
 Name[it]=Calligra Flow
 Name[ja]=Calligra Flow
 Name[kk]=Calligra Flow
+Name[lt]=Calligra Flow
 Name[nb]=Calligra Flow
 Name[nds]=Calligra-Flow
 Name[nl]=Calligra Flow
-Name[pl]=Calligra Flow
+Name[pl]=Schematy Calligra
 Name[pt]=Calligra Flow
 Name[pt_BR]=Calligra Flow
 Name[ru]=Calligra Flow
 Name[sk]=Calligra Flow
+Name[sl]=Calligra Flow
 Name[sv]=Calligra Flow
+Name[tr]=Calligra Flow
 Name[uk]=Calligra Flow
 Name[x-test]=xxCalligra Flowxx
 Name[zh_CN]=Calligra Flow
@@ -32,6 +36,7 @@ Name[zh_TW]=Calligra Flow
 Exec=calligraflow %u
 GenericName=Flowchart & Diagram Editing
 GenericName[bg]=Редактиране на блоксхеми и диаграми
+GenericName[bs]=Flowchart i Dijagram editovanje
 GenericName[ca]=Editor de diagrames de fluxos
 GenericName[ca@valencia]=Editor de diagrames de fluxos
 GenericName[cs]=Editor nákresů a diagramů
@@ -85,7 +90,7 @@ GenericName[zh_CN]=流程图和图表编辑
 GenericName[zh_TW]=流程圖與圖表編輯
 MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.visio;
 X-KDE-ServiceTypes=Calligra/Application
-Icon=kivio
+Icon=calligraflow
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 # application/vnd.oasis.opendocument.graphics is not on this list because Karbon has the default;
 # Flow will be used only in absence of Karbon

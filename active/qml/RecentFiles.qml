@@ -73,7 +73,7 @@ ListView {
     }
 
     PlasmaComponents.Label {
-        text: "No files here"
+        text: i18n("No files here")
         anchors.centerIn: parent
         visible: recentFilesListView.count == 0 && typeFilter != ""
     }

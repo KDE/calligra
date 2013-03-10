@@ -251,15 +251,6 @@
        </spacer>
       </item>
      </layout>
-     <zorder>distanceLeft</zorder>
-     <zorder>label_6</zorder>
-     <zorder>distanceTop</zorder>
-     <zorder>label_8</zorder>
-     <zorder>distanceBottom</zorder>
-     <zorder>label_5</zorder>
-     <zorder>label_7</zorder>
-     <zorder>distanceRight</zorder>
-     <zorder></zorder>
     </widget>
    </item>
    <item>

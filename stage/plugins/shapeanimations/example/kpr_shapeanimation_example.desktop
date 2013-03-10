@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Jiggle and Wiggle
+Name[bs]=Tresi i mrdaj
 Name[ca]=Sacseja
 Name[ca@valencia]=Sacseja
 Name[da]=Rysten og blævren
@@ -32,6 +33,7 @@ Name[wa]=Harloxhî eyet hossî
 Name[x-test]=xxJiggle and Wigglexx
 Name[zh_TW]=搖搖擺擺
 Comment=Jiggle and Wiggle that Shape!
+Comment[bs]=Tresi i mrdaj taj oblik!
 Comment[ca]=Sacseja aquesta imatge!
 Comment[ca@valencia]=Sacseja esta imatge!
 Comment[da]=Ryst og blævr den form!
@@ -66,4 +68,4 @@ Comment[zh_TW]=讓元件動起來！
 X-KDE-ServiceTypes=CalligraStage/ShapeAnimation
 Type=Service
 X-KDE-Library=kpr_shapeanimation_example
-X-KPresenter-Version=1
+X-KPresenter-Version=27

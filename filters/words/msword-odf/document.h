@@ -54,7 +54,7 @@ namespace wvWare
 {
 class Parser;
 namespace Word97 {
-class BRC;
+struct BRC;
 }
 }
 class MSWordOdfImport;
@@ -77,7 +77,7 @@ public:
              LEInputStream& wordDocument, POLE::Stream& table, LEInputStream *data, LEInputStream *si);
     virtual ~Document();
 
-    virtual void setProgress(int percent);
+    virtual void setProgress(const int percent);
 
     virtual void bodyStart();
     virtual void bodyEnd();

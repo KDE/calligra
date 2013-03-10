@@ -288,10 +288,10 @@ Value func_cell(valVector args, ValueCalc *calc, FuncExtra *e)
         const Calligra::Sheets::Region &region = args.count() ? extra.regions[0] : Calligra::Sheets::Region(QPoint(e->mycol, e->myrow), e->sheet);
         QString s;
         if (region.firstSheet() && region.firstSheet() != e->sheet)
-            s += "'" + region.firstSheet()->sheetName() + "'!";
-        s += "$" + Cell::columnName(region.firstRange().x()) + "$" + QString::number(region.firstRange().y());
+            s += '\'' + region.firstSheet()->sheetName() + "'!";
+        s += '$' + Cell::columnName(region.firstRange().x()) + '$' + QString::number(region.firstRange().y());
         if (region.firstRange() != region.lastRange())
-            s += ":$" + Cell::columnName(region.lastRange().x()) + "$" + QString::number(region.lastRange().y());
+            s += ":$" + Cell::columnName(region.lastRange().x()) + '$' + QString::number(region.lastRange().y());
         return Value(s);
     }
     if (type == "filename") {

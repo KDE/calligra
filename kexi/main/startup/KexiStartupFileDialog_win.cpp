@@ -93,8 +93,8 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //(js)    d->okButton = new KPushButton( KStandardGuiItem::ok(), d->mainWidget );
 //(js)    d->okButton->setDefault( true );
 //(js)    d->cancelButton = new KPushButton(KStandardGuiItem::cancel(), d->mainWidget);
-//(js)    connect( d->okButton, SIGNAL( clicked() ), SLOT( slotOk() ));
-//(js)    connect( d->cancelButton, SIGNAL( clicked() ), SLOT( slotCancel() ));
+//(js)    connect( d->okButton, SIGNAL(clicked()), SLOT(slotOk()));
+//(js)    connect( d->cancelButton, SIGNAL(clicked()), SLOT(slotCancel()));
 //(js)    d->customWidget = widget;
 //(js)    d->autoSelectExtCheckBox = 0; // delayed loading
 //TODO    d->autoSelectExtChecked = false;
@@ -167,12 +167,12 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 
         ops = new KDirOperator(d->url, d->mainWidget, "KFileDialog::ops");
         ops->setOnlyDoubleClickSelectsFiles( true );
-        connect(ops, SIGNAL(urlEntered(const KUrl&)),
-                SLOT(urlEntered(const KUrl&)));
-        connect(ops, SIGNAL(fileHighlighted(const KFileItem *)),
-                SLOT(fileHighlighted(const KFileItem *)));
-        connect(ops, SIGNAL(fileSelected(const KFileItem *)),
-                SLOT(fileSelected(const KFileItem *)));
+        connect(ops, SIGNAL(urlEntered(KUrl)),
+                SLOT(urlEntered(KUrl)));
+        connect(ops, SIGNAL(fileHighlighted(KFileItem*)),
+                SLOT(fileHighlighted(KFileItem*)));
+        connect(ops, SIGNAL(fileSelected(KFileItem*)),
+                SLOT(fileSelected(KFileItem*)));
         connect(ops, SIGNAL(finishedLoading()),
                 SLOT(slotLoadingFinished()));
 
@@ -208,13 +208,13 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
                              "edit or select a bookmark.<p>"
                              "These bookmarks are specific to the file dialog, but otherwise operate "
                              "like bookmarks elsewhere in KDE.</qt>"));
-        connect( d->bookmarkHandler, SIGNAL( openURL( const QString& )),
-                 SLOT( enterURL( const QString& )));
+        connect( d->bookmarkHandler, SIGNAL(openURL(QString)),
+                 SLOT(enterURL(QString)));
 
         KToggleAction *showSidebarAction =
             new KToggleAction(i18n("Show Quick Access Navigation Panel"), Qt::Key_F9, coll,"toggleSpeedbar");
-        connect( showSidebarAction, SIGNAL( toggled( bool ) ),
-                 SLOT( toggleSpeedbar( bool )) );
+        connect( showSidebarAction, SIGNAL(toggled(bool)),
+                 SLOT(toggleSpeedbar(bool)) );
 
         KActionMenu *menu = new KActionMenu( i18n("Configure"), "configure", this, "extra menu" );
         menu->setWhatsThis(i18n("<qt>This is the configuration menu for the file dialog. "
@@ -241,8 +241,8 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
         menu->insert( coll->action( "separate dirs" ));
 
         menu->setDelayed( false );
-        connect( menu->popupMenu(), SIGNAL( aboutToShow() ),
-                 ops, SLOT( updateSelectionDependentActions() ));
+        connect( menu->popupMenu(), SIGNAL(aboutToShow()),
+                 ops, SLOT(updateSelectionDependentActions()));
         menu->plug( toolbar );
     */
     /*
@@ -264,16 +264,16 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 
         d->pathCombo->setCompletionObject( ops->dirCompletionObject(), false );
 
-        connect( d->pathCombo, SIGNAL( urlActivated( const KUrl&  )),
-                 this,  SLOT( enterURL( const KUrl& ) ));
-        connect( d->pathCombo, SIGNAL( returnPressed( const QString&  )),
-                 this,  SLOT( enterURL( const QString& ) ));
-        connect( d->pathCombo, SIGNAL(textChanged( const QString& )),
-                 SLOT( pathComboChanged( const QString& ) ));
-        connect( d->pathCombo, SIGNAL( completion( const QString& )),
-                 SLOT( dirCompletion( const QString& )));
-        connect( d->pathCombo, SIGNAL( textRotation(KCompletionBase::KeyBindingType) ),
-                 d->pathCombo, SLOT( rotateText(KCompletionBase::KeyBindingType) ));
+        connect( d->pathCombo, SIGNAL(urlActivated(KUrl)),
+                 this,  SLOT(enterURL(KUrl)));
+        connect( d->pathCombo, SIGNAL(returnPressed(QString)),
+                 this,  SLOT(enterURL(QString)));
+        connect( d->pathCombo, SIGNAL(textChanged(QString)),
+                 SLOT(pathComboChanged(QString)));
+        connect( d->pathCombo, SIGNAL(completion(QString)),
+                 SLOT(dirCompletion(QString)));
+        connect( d->pathCombo, SIGNAL(textRotation(KCompletionBase::KeyBindingType)),
+                 d->pathCombo, SLOT(rotateText(KCompletionBase::KeyBindingType)));
 
         QString whatsThisText;
 
@@ -293,14 +293,14 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
     //     locationEdit->setAutoDeleteCompletionObject( true );
         locationEdit->setCompletionObject( ops->completionObject(), false );
 
-        connect( locationEdit, SIGNAL( returnPressed() ),
-                 this, SLOT( slotOk()));
-        connect(locationEdit, SIGNAL( activated( const QString&  )),
-                this,  SLOT( locationActivated( const QString& ) ));
-        connect( locationEdit, SIGNAL( completion( const QString& )),
-                 SLOT( fileCompletion( const QString& )));
-        connect( locationEdit, SIGNAL( textRotation(KCompletionBase::KeyBindingType) ),
-                 locationEdit, SLOT( rotateText(KCompletionBase::KeyBindingType) ));
+        connect( locationEdit, SIGNAL(returnPressed()),
+                 this, SLOT(slotOk()));
+        connect(locationEdit, SIGNAL(activated(QString)),
+                this,  SLOT(locationActivated(QString)));
+        connect( locationEdit, SIGNAL(completion(QString)),
+                 SLOT(fileCompletion(QString)));
+        connect( locationEdit, SIGNAL(textRotation(KCompletionBase::KeyBindingType)),
+                 locationEdit, SLOT(rotateText(KCompletionBase::KeyBindingType)));
 
         // the Filter label/edit
         whatsThisText = i18n("<qt>This is the filter to apply to the file list. "

@@ -32,9 +32,9 @@
 
 #include <libs/main/calligraversion.h>
 
-#include <KDE/KGlobal>
-#include <KDE/KStandardDirs>
-#include <KDE/KDebug>
+#include <KGlobal>
+#include <KStandardDirs>
+#include <KDebug>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
@@ -46,6 +46,8 @@
 
 MainWindow::MainWindow (QWidget* parent)
 {
+    CAImageProvider::s_imageProvider = new CAImageProvider;
+
     qmlRegisterType<CACanvasController> ("CalligraActive", 1, 0, "CanvasController");
     qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
@@ -66,8 +68,8 @@ MainWindow::MainWindow (QWidget* parent)
     QList<QObject*> recentSpreadsheets;
     QList<QObject*> recentPresentations;
     QSettings settings;
-    foreach (QString string, settings.value ("recentFiles").toStringList()) {
-        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (";"));
+    foreach (const QString &string, settings.value ("recentFiles").toStringList()) {
+        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (QLatin1Char(';')));
         recentFiles.append (docInfo);
         switch (docInfo->type()) {
         case CADocumentInfo::TextDocument:
@@ -88,13 +90,13 @@ MainWindow::MainWindow (QWidget* parent)
 
     m_view->rootContext()->setContextProperty("mainwindow", this);
     m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
-    m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::instance());
+    m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::s_imageProvider);
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
                                             + "/share/calligraactive/qml/Doc.qml"));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
 
-    connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
+    connect (m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
     resize (1024, 768);
     setCentralWidget (m_view);
 
@@ -117,7 +119,7 @@ void MainWindow::adjustWindowSize (QSize size)
 
 void MainWindow::openFileDialog()
 {
-    const QString path = QFileDialog::getOpenFileName (this, "Open File", QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
+    const QString path = QFileDialog::getOpenFileName (this, i18n("Open File"), QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
     if (!path.isEmpty()) {
         QObject* object = m_view->rootObject();
         Q_ASSERT (object);
@@ -128,6 +130,7 @@ void MainWindow::openFileDialog()
 
 MainWindow::~MainWindow()
 {
+    CAImageProvider::s_imageProvider = 0;
 }
 
 void MainWindow::checkForAndOpenDocument()

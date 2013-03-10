@@ -20,7 +20,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "KoFilterManager.h"
 #include "KoFilterManager_p.h"
 
 #include <QVBoxLayout>
@@ -59,7 +58,7 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
     Q_ASSERT(!m_mimeTypes.isEmpty());
     for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
             it != m_mimeTypes.constEnd();
-            it++) {
+            ++it) {
 
         KMimeType::Ptr mime = KMimeType::mimeType(*it);
         const QString name = mime ? mime->comment() : *it;

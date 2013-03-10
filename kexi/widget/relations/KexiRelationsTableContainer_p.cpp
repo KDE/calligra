@@ -165,10 +165,10 @@ KexiRelationsTableFieldList::KexiRelationsTableFieldList(
     setSchema(tableOrQuerySchema);
     setAcceptDrops(true);
 
-//    connect(this, SIGNAL(dropped(QDropEvent *, Q3ListViewItem *)),
-//            this, SLOT(slotDropped(QDropEvent *)));
-    connect(this, SIGNAL(contentsMoving(int, int)),
-            this, SLOT(slotContentsMoving(int, int)));
+//    connect(this, SIGNAL(dropped(QDropEvent*,Q3ListViewItem*)),
+//            this, SLOT(slotDropped(QDropEvent*)));
+    connect(this, SIGNAL(contentsMoving(int,int)),
+            this, SLOT(slotContentsMoving(int,int)));
 
     horizontalScrollBar()->installEventFilter(this);
     verticalScrollBar()->installEventFilter(this);
@@ -358,6 +358,7 @@ KexiRelationsTableFieldList::slotContentsMoving(int, int)
 
 void KexiRelationsTableFieldList::contentsMousePressEvent(QMouseEvent *ev)
 {
+    Q_UNUSED(ev);
     // set focus before showing context menu because contents of the menu depend on focused table
     static_cast<KexiRelationsTableContainer*>(parentWidget())->setFocus();
 //    QListView::contentsMousePressEvent(ev);
@@ -368,6 +369,8 @@ void KexiRelationsTableFieldList::contentsMousePressEvent(QMouseEvent *ev)
 
 QRect KexiRelationsTableFieldList::drawItemHighlighter(QPainter *painter, Q3ListViewItem *item)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(item);
 #if 0
 #ifdef __GNUC__
 #warning TODO KexiRelationsTableFieldList::drawItemHighlighter() OK?

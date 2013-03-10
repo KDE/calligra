@@ -43,11 +43,7 @@
 using namespace KPlato;
 
 KPLATOKERNEL_EXPORT int kplatoXmlDebugArea() {
-#if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan (kplato xml)" );
-#else
-    static int s_area = 0;
-#endif
     return s_area;
 }
 
@@ -339,6 +335,11 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
             kWarning()<<"Unhandled tag:"<<e.tagName();
         }
     }
+    // set schedule parent
+    foreach ( Schedule *s, project->schedules() ) {
+        project->setParentSchedule( s );
+    }
+
     kDebug(kplatoXmlDebugArea())<<"Project loaded:"<<project<<project->name()<<project->allNodes();
     return true;
 }
@@ -637,17 +638,20 @@ bool KPlatoXmlLoaderBase::load( Relation *relation, const KoXmlElement &element,
     kDebug(kplatoXmlDebugArea())<<"relation";
     relation->setParent( status.project().findNode( element.attribute( "parent-id" ) ) );
     if (relation->parent() == 0) {
+        kWarning()<<"Parent node == 0, cannot find id:"<<element.attribute( "parent-id" );
         return false;
     }
     relation->setChild( status.project().findNode( element.attribute( "child-id" ) ) );
     if ( relation->child() == 0 ) {
+        kWarning()<<"Child node == 0, cannot find id:"<<element.attribute( "child-id" );
         return false;
     }
     if ( relation->child() == relation->parent() ) {
-        kDebug(kplatoXmlDebugArea())<<"child == parent";
+        kWarning()<<"Parent node == child node";
         return false;
     }
     if ( ! relation->parent()->legalToLink( relation->child() ) ) {
+        kWarning()<<"Realation is not legal:"<<relation->parent()->name()<<"->"<<relation->child()->name();
         return false;
     }
     relation->setType( element.attribute("type") );

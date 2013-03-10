@@ -30,7 +30,7 @@ class KPrShapeAnimation;
 class KPrAnimationValue
 {
 public:
-    KPrAnimationValue(KPrShapeAnimation * shapeAnimation);
+    explicit KPrAnimationValue(KPrShapeAnimation * shapeAnimation);
     virtual ~KPrAnimationValue();
     virtual qreal value(qreal time) const = 0;
     virtual qreal startValue() const = 0;

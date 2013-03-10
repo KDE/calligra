@@ -102,11 +102,11 @@ KexiFormPart::KexiFormPart(QObject *parent, const QVariantList &l)
 
 /* 2.0 slotPropertyChanged() code moved to Form so this connection can be removed
     connect(KFormDesigner::FormManager::self()->propertySet(),
-            SIGNAL(widgetPropertyChanged(QWidget *, const QByteArray &, const QVariant&)),
-            this, SLOT(slotPropertyChanged(QWidget *, const QByteArray &, const QVariant&)));*/
+            SIGNAL(widgetPropertyChanged(QWidget*,QByteArray,QVariant)),
+            this, SLOT(slotPropertyChanged(QWidget*,QByteArray,QVariant)));*/
 //2.0 not needed, the code from slot receiving this signal is moved to Form itself
-//    connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*, bool)),
-//            this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*, bool)));
+//    connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)),
+//            this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
 KexiFormPart::~KexiFormPart()
@@ -466,21 +466,21 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
         d->dataSourcePage = new KexiDataSourcePage(0);
         d->dataSourcePage->setObjectName("dataSourcePage");
         connect(d->dataSourcePage,
-                SIGNAL(jumpToObjectRequested(const QString&, const QString&)),
+                SIGNAL(jumpToObjectRequested(QString,QString)),
                 KexiMainWindowIface::global()->thisWidget(),
-                SLOT(highlightObject(const QString&, const QString&)));
+                SLOT(highlightObject(QString,QString)));
         connect(d->dataSourcePage,
-                SIGNAL(formDataSourceChanged(const QString&, const QString&)),
+                SIGNAL(formDataSourceChanged(QString,QString)),
                 KexiFormManager::self(),
-                SLOT(setFormDataSource(const QString&, const QString&)));
+                SLOT(setFormDataSource(QString,QString)));
         connect(d->dataSourcePage,
-                SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
+                SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
                 KexiFormManager::self(),
-                SLOT(setDataSourceFieldOrExpression(const QString&, const QString&, KexiDB::Field::Type)));
+                SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
         connect(d->dataSourcePage,
-                SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)),
+                SIGNAL(insertAutoFields(QString,QString,QStringList)),
                 KexiFormManager::self(),
-                SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));
+                SLOT(insertAutoFields(QString,QString,QStringList)));
     }
 
     KexiProject *prj = KexiMainWindowIface::global()->project();

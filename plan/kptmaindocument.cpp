@@ -195,6 +195,18 @@ bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
         if ( ok ) {
             setProject( newProject );
             setModified( false );
+            kDebug(planDbg())<<newProject->schedules();
+            // Cleanup after possible bug:
+            // There should *not* be any deleted schedules (or with parent == 0)
+            foreach ( Node *n, newProject->nodeDict()) {
+                foreach ( Schedule *s, n->schedules()) {
+                    if ( s->isDeleted() ) { // true also if parent == 0
+                        kError()<<n->name()<<s;
+                        n->takeSchedule( s );
+                        delete s;
+                    }
+                }
+            }
         } else {
             setErrorMessage( loader.errorMessage() );
             delete newProject;
@@ -256,6 +268,17 @@ This test does not work any longer. KoXml adds a couple of elements not present 
                 }
                 // The load went fine. Throw out the old project
                 setProject( newProject );
+                // Cleanup after possible bug:
+                // There should *not* be any deleted schedules (or with parent == 0)
+                foreach ( Node *n, newProject->nodeDict()) {
+                    foreach ( Schedule *s, n->schedules()) {
+                        if ( s->isDeleted() ) { // true also if parent == 0
+                            kError()<<n->name()<<s;
+                            n->takeSchedule( s );
+                            delete s;
+                        }
+                    }
+                }
             } else {
                 delete newProject;
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of project failed" );

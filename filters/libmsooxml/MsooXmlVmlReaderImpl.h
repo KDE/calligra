@@ -47,8 +47,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
         if (name.isEmpty()) {
             continue;
         }
-        if (value.startsWith("'") && value.endsWith("'")) {
-            value = value.mid(1, value.length() - 2); // strip ' '
+        if (value.startsWith(QLatin1Char('\'')) && value.endsWith(QLatin1Char('\''))) {
+            value.remove(0, 1).chop(1);
         }
 #ifdef VMLREADER_DEBUG
         kDebug() << "name:" << name << "value:" << value;
@@ -492,7 +492,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     // shadow offset
     // ------------------------------
     QString offset = m_currentVMLProperties.shadowXOffset;
-    if (offset.endsWith('%')) {
+    if (offset.endsWith(QLatin1Char('%'))) {
         offset.chop(1);
         bool ok;
         int p = offset.toInt(&ok);
@@ -505,7 +505,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     m_currentDrawStyle->addProperty("draw:shadow-offset-x", offset);
 
     offset = m_currentVMLProperties.shadowYOffset;
-    if (offset.endsWith("%")) {
+    if (offset.endsWith(QLatin1Char('%'))) {
         offset.chop(1);
         bool ok;
         int p = offset.toInt(&ok);
@@ -597,9 +597,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
 void MSOOXML_CURRENT_CLASS::takeDefaultValues()
 {
-    m_currentVMLProperties.modifiers = QString();
-    m_currentVMLProperties.viewBox = QString();
-    m_currentVMLProperties.shapePath = QString();
+    m_currentVMLProperties.modifiers.clear();
+    m_currentVMLProperties.viewBox.clear();
+    m_currentVMLProperties.shapePath.clear();
     m_currentVMLProperties.strokeColor = "#000000"; // default
     m_currentVMLProperties.strokeWidth = "1pt" ; // default
     m_currentVMLProperties.shapeColor = "#ffffff"; //default
@@ -607,7 +607,7 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.shapeSecondaryColor = "#ffffff"; //default
     m_currentVMLProperties.lineCapStyle = "square";
     m_currentVMLProperties.joinStyle = "middle";
-    m_currentVMLProperties.strokeStyleName = QString();
+    m_currentVMLProperties.strokeStyleName.clear();
     m_currentVMLProperties.filled = true; // default
     m_currentVMLProperties.stroked = true; // default
     m_currentVMLProperties.opacity = 0; // default
@@ -616,7 +616,7 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.shadowColor = "#101010"; // default
     m_currentVMLProperties.shadowXOffset = "2pt"; // default
     m_currentVMLProperties.shadowYOffset = "2pt"; //default
-    m_currentVMLProperties.imagedataPath = QString();
+    m_currentVMLProperties.imagedataPath.clear();
     // default internal margins
     m_currentVMLProperties.internalMarginLeft = "0.1in";
     m_currentVMLProperties.internalMarginRight = "0.1in";
@@ -2265,7 +2265,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_formulas()
     READ_PROLOGUE
 
     m_currentVMLProperties.formulaIndex = 0;
-    m_currentVMLProperties.normalFormulas = QString();
+    m_currentVMLProperties.normalFormulas.clear();
 
     while (!atEnd()) {
         readNext();
@@ -2802,7 +2802,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_path()
 
     TRY_READ_ATTR_WITHOUT_NS(v)
     if (!v.isEmpty()) {
-        m_currentVMLProperties.extraShapeFormulas = QString();
+        m_currentVMLProperties.extraShapeFormulas.clear();
         m_currentVMLProperties.shapePath = convertToEnhancedPath(v, m_currentVMLProperties.extraShapeFormulas);
     }
 
@@ -2831,7 +2831,7 @@ void MSOOXML_CURRENT_CLASS::handlePathValues(const QXmlStreamAttributes& attrs)
 
     TRY_READ_ATTR_WITHOUT_NS(path)
     if (!path.isEmpty()) {
-        m_currentVMLProperties.extraShapeFormulas = QString();
+        m_currentVMLProperties.extraShapeFormulas.clear();
         m_currentVMLProperties.shapePath = convertToEnhancedPath(path, m_currentVMLProperties.extraShapeFormulas);
     }
 }

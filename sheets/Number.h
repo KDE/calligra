@@ -100,8 +100,8 @@ public:
 
     // constructors
     Number();
-    Number(int num);
-    Number(long double num);
+    explicit Number(int num); //krazy:exclude=explicit
+    explicit Number(long double num); //krazy:exclude=explicit
 
     Number(const Number& n);
 

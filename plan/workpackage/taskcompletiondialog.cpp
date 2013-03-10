@@ -309,6 +309,8 @@ void TaskCompletionPanel::slotSelectionChanged( const QItemSelection &sel )
 
 void TaskCompletionPanel::slotEditmodeChanged( int index )
 {
+    Q_UNUSED( index );
+
 }
 
 //-------------------

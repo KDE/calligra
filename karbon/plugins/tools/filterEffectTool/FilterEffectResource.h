@@ -28,7 +28,7 @@ class KoFilterEffectStack;
 class FilterEffectResource : public KoResource
 {
 public:
-    FilterEffectResource(const QString &filename);
+    explicit FilterEffectResource(const QString &filename);
 
     /// reimplemented from KoResource
     virtual bool load();

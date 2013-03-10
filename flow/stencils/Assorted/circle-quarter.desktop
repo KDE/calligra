@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Quarter Circle
 Name[bg]=Четвърт окръжност
+Name[bs]=Krug četvrtine
 Name[ca]=Quart de cercle
 Name[ca@valencia]=Quart de cercle
 Name[cs]=Čtvrtinový kruh
@@ -15,6 +16,7 @@ Name[gl]=Cuarto de círculo
 Name[hu]=Negyedkör
 Name[it]=Quarto di cerchio
 Name[kk]=Ширек секторы
+Name[lt]=Ketvirtis apskritimo
 Name[nb]=Kvartsirkel
 Name[nds]=Veerdelkrink
 Name[nl]=Kwartcirkel
@@ -23,7 +25,9 @@ Name[pt]=Quarto de Círculo
 Name[pt_BR]=Quarto de círculo
 Name[ru]=Четверть окружности
 Name[sk]=Štvrťkruh
+Name[sl]=Četrt kroga
 Name[sv]=Kvartscirkel
+Name[tr]=Çeyrek Çember
 Name[uk]=Чвертьколо
 Name[x-test]=xxQuarter Circlexx
 Name[zh_CN]=四分之一圆

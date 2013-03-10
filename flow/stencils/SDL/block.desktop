@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Block
+Name[bs]=Blok
 Name[ca]=Bloc
 Name[ca@valencia]=Bloc
 Name[cs]=Blok
+Name[da]=Block
 Name[de]=Block
 Name[el]=Παρεμπόδιση
 Name[es]=Bloque
@@ -23,7 +25,9 @@ Name[pt]=Bloco
 Name[pt_BR]=Bloco
 Name[ru]=Блок
 Name[sk]=Blok
+Name[sl]=Blok
 Name[sv]=Block
+Name[tr]=Blok
 Name[ug]=بۆلەك
 Name[uk]=Блок
 Name[x-test]=xxBlockxx

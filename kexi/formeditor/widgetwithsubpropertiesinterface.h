@@ -64,9 +64,9 @@ public:
     //! is no such a subproperty in the subwidget or QObject::setProperty() failed.
     bool setSubproperty(const char * name, const QVariant & value);
 
-protected:
-    QPointer<QWidget> m_subwidget;
-    QSet<QByteArray> m_subproperies;
+private:
+    class Private;
+    Private* const d;
 };
 }
 

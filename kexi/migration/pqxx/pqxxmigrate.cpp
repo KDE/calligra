@@ -67,7 +67,7 @@ PqxxMigrate::PqxxMigrate(QObject *parent, const QVariantList& args)
     m_row = 0;
     
     KexiDB::DriverManager manager;
-    m_kexiDBDriver = manager.driver("pqxx");
+    setDriver(manager.driver("pqxx"));
 }
 //==================================================================================
 //Destructor
@@ -184,34 +184,34 @@ KexiDB::Field::Type PqxxMigrate::type(int t, const QString& fname)
 //Connect to the db backend
 bool PqxxMigrate::drv_connect()
 {
-    kDebug() << "drv_connect: " << m_migrateData->sourceName;
+    kDebug() << "drv_connect: " << data()->sourceName;
 
     QString conninfo;
     QString socket;
 
     //Setup local/remote connection
-    if (m_migrateData->source->hostName.isEmpty()) {
-        if (m_migrateData->source->fileName().isEmpty()) {
+    if (data()->source->hostName.isEmpty()) {
+        if (data()->source->fileName().isEmpty()) {
             socket = "/tmp/.s.PGSQL.5432";
         } else {
-            socket = m_migrateData->source->fileName();
+            socket = data()->source->fileName();
         }
     } else {
-        conninfo = "host='" + m_migrateData->source->hostName + '\'';
+        conninfo = "host='" + data()->source->hostName + '\'';
     }
 
     //Build up the connection string
-    if (m_migrateData->source->port == 0)
-        m_migrateData->source->port = 5432;
+    if (data()->source->port == 0)
+        data()->source->port = 5432;
 
-    conninfo += QString::fromLatin1(" port='%1'").arg(m_migrateData->source->port);
-    conninfo += QString::fromLatin1(" dbname='%1'").arg(m_migrateData->sourceName);
+    conninfo += QString::fromLatin1(" port='%1'").arg(data()->source->port);
+    conninfo += QString::fromLatin1(" dbname='%1'").arg(data()->sourceName);
 
-    if (!m_migrateData->source->userName.isEmpty())
-        conninfo += QString::fromLatin1(" user='%1'").arg(m_migrateData->source->userName);
+    if (!data()->source->userName.isEmpty())
+        conninfo += QString::fromLatin1(" user='%1'").arg(data()->source->userName);
 
-    if (!m_migrateData->source->password.isEmpty())
-        conninfo += QString::fromLatin1(" password='%1'").arg(m_migrateData->source->password);
+    if (!data()->source->password.isEmpty())
+        conninfo += QString::fromLatin1(" password='%1'").arg(data()->source->password);
 
     try {
         m_conn = new pqxx::connection(conninfo.toLatin1().constData());

@@ -41,7 +41,7 @@ namespace Sheets
 class OdfLoadingContext
 {
 public:
-    OdfLoadingContext(KoOdfLoadingContext& odfContext)
+    explicit OdfLoadingContext(KoOdfLoadingContext &odfContext)
             : odfContext(odfContext), shapeContext(0) {}
 
 public:

@@ -49,6 +49,7 @@
 #include <KoConnectionShapeConfigWidget.h>
 #include <KoPathConnectionPointStrategy.h>
 #include <KoParameterChangeStrategy.h>
+#include <KoStrokeConfigWidget.h>
 #include <KoToolManager.h>
 #include <KoIcon.h>
 
@@ -177,7 +178,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 
     QList<KoShape*> shapes = canvas()->shapeManager()->shapes();
-    for (QList<KoShape*>::const_iterator end = shapes.constBegin(); end !=  shapes.constEnd(); end++) {
+    for (QList<KoShape*>::const_iterator end = shapes.constBegin(); end !=  shapes.constEnd(); ++end) {
         KoShape* shape = *end;
         if (!dynamic_cast<KoConnectionShape*>(shape)) {
             // only paint connection points of textShapes not inside a tos container and other shapes
@@ -254,7 +255,7 @@ void ConnectionTool::repaintDecorations()
     }
     if (m_resetPaint) {
         QList<KoShape*> shapes = canvas()->shapeManager()->shapes();
-        for (QList<KoShape*>::const_iterator end = shapes.constBegin(); end !=  shapes.constEnd(); end++) {
+        for (QList<KoShape*>::const_iterator end = shapes.constBegin(); end !=  shapes.constEnd(); ++end) {
             KoShape* shape = *end;
             if (!dynamic_cast<KoConnectionShape*>(shape)) {
                 // only paint connection points of textShapes not inside a tos container and other shapes
@@ -551,7 +552,7 @@ KoShape * ConnectionTool::findShapeAtPosition(const QPointF &position) const
         if (connectionShape) {
             return connectionShape;
         } else {
-            for (QList<KoShape*>::const_iterator end = shapes.constEnd()-1; end >= shapes.constBegin(); end--) {
+            for (QList<KoShape*>::const_iterator end = shapes.constEnd()-1; end >= shapes.constBegin(); --end) {
                 KoShape* shape = *end;
                 if (!dynamic_cast<KoConnectionShape*>(shape) && shape->shapeId() != TextShape_SHAPEID) {
                     return shape;
@@ -568,7 +569,7 @@ KoShape * ConnectionTool::findNonConnectionShapeAtPosition(const QPointF &positi
     QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(position));
     if (!shapes.isEmpty()) {
         qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-        for (QList<KoShape*>::const_iterator end = shapes.constEnd()-1; end >= shapes.constBegin(); end--) {
+        for (QList<KoShape*>::const_iterator end = shapes.constEnd()-1; end >= shapes.constBegin(); --end) {
             KoShape* shape = *end;
             if (!dynamic_cast<KoConnectionShape*>(shape) && shape->shapeId() != TextShape_SHAPEID) {
                 return shape;
@@ -821,6 +822,11 @@ QList<QWidget *> ConnectionTool::createOptionWidgets()
             list.append(cw);
         }
     }
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    strokeWidget->setWindowTitle(i18n("Line"));
+    strokeWidget->setCanvas(canvas());
+    list.append(strokeWidget);
+
     ConnectionPointWidget *connectPoint = new ConnectionPointWidget(this);
     connectPoint->setWindowTitle(i18n("Connection Point"));
     list.append(connectPoint);

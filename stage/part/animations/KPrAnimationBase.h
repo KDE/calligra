@@ -42,7 +42,7 @@ public:
         FillAuto,
         FillDefault
     };
-    KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
+    explicit KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimationBase();
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual bool saveOdf(KoPASavingContext &paContext) const = 0;

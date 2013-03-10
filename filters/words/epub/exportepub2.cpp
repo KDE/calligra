@@ -31,6 +31,7 @@
 // KDE
 #include <kdebug.h>
 #include <kpluginfactory.h>
+#include <kmimetype.h>
 
 // Calligra
 #include <KoFilterChain.h>
@@ -84,7 +85,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     // have names like this.
     odfStore->disallowNameExpansion();
     if (!odfStore->open("mimetype")) {
-        kError(30517) << "Unable to open input file!" << endl;
+        kError(30503) << "Unable to open input file!" << endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -123,8 +124,8 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         true,                    // do break into chapters
         false                    // It is not mobi
     };
-    status = converter.convertContent(odfStore, m_metadata, &options, &epub,
-                                      m_imagesSrcList);
+    status = converter.convertContent(odfStore, m_metadata, &m_manifest, &options, &epub,
+                                      m_imagesSrcList, m_mediaFilesList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -132,6 +133,18 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Extract images
     status = extractImages(odfStore, &epub);
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+    // Extract media files
+    status = extractMediaFiles(&epub);
+    // Check for cover image
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+    status = extractCoverImage(odfStore, &epub);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -153,10 +166,15 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
     // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
-    foreach (const QString imgSrc, m_imagesSrcList.keys()) {
-        kDebug(30517) << imgSrc;
+    foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
+        kDebug(30503) << imgSrc;
+        if (!odfStore->hasFile(imgSrc)) {
+            kWarning(30503) << "Can not to extract this image, image "<< imgSrc<< "is an external image";
+            // Ignore the external image.
+            continue;
+        }
         if (!odfStore->extractFile(imgSrc, imgContent)) {
-            kDebug(30517) << "Can not to extract file";
+            kDebug(30503) << "Can not to extract file";
             return KoFilter::FileNotFound;
         }
 
@@ -166,11 +184,11 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
 
         case ExportEpub2::VectorTypeSvm:
             {
-                kDebug(30517) << "Svm file";
+                kDebug(30503) << "Svm file";
                 QSize size(qSize.width(), qSize.height());
                 QByteArray output;
                 if (!convertSvm(imgContent, output, size)) {
-                    kDebug(30517) << "Svm Parse error";
+                    kDebug(30503) << "Svm Parse error";
                     return KoFilter::ParsingError;
                 }
 
@@ -181,11 +199,11 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             }
         case ExportEpub2::VectorTypeEmf:
             {
-                kDebug(30517) << "EMF file";
+                kDebug(30503) << "EMF file";
                 QSize size(qSize.width(), qSize.height());
                 QByteArray output;
                 if (!convertEmf(imgContent, output, size)) {
-                    kDebug(30517) << "EMF Parse error";
+                    kDebug(30503) << "EMF Parse error";
                     return KoFilter::ParsingError;
                 }
 
@@ -196,10 +214,10 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             }
         case ExportEpub2::VectorTypeWmf:
             {
-                kDebug(30517) << "WMF file";
+                kDebug(30503) << "WMF file";
                  QByteArray output;
                 if (!convertWmf(imgContent, output, qSize)) {
-                    kDebug(30517) << "WMF Parse error";
+                    kDebug(30503) << "WMF Parse error";
                     return KoFilter::ParsingError;
                 }
 
@@ -215,7 +233,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             // the image.
         case ExportEpub2::VectorTypeOther:
             {
-                kDebug(30517) << "Other file";
+                kDebug(30503) << "Other file";
                 epubFile->addContentFile(("image" + QString::number(imgId)),
                                          (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          m_manifest.value(imgSrc).toUtf8(), imgContent);
@@ -223,7 +241,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             }
 
         default:
-            kDebug(30517) << "";
+            kDebug(30503) << "";
         }
     }
     return KoFilter::OK;
@@ -245,7 +263,7 @@ bool ExportEpub2::convertSvm(QByteArray &input, QByteArray &output, QSize size)
     QPainter painter;
 
     if (!painter.begin(&generator)) {
-        kDebug(30517) << "Can not open the painter";
+        kDebug(30503) << "Can not open the painter";
         return false;
     }
 
@@ -253,7 +271,7 @@ bool ExportEpub2::convertSvm(QByteArray &input, QByteArray &output, QSize size)
     Libsvm::SvmPainterBackend svmPainterBackend(&painter, size);
     svmParser.setBackend(&svmPainterBackend);
     if (!svmParser.parse(input)) {
-        kDebug(30517) << "Can not Parse the Svm file";
+        kDebug(30503) << "Can not Parse the Svm file";
         return false;
     }
     painter.end();
@@ -275,7 +293,7 @@ bool ExportEpub2::convertEmf(QByteArray &input, QByteArray &output, QSize size)
     QPainter painter;
 
     if (!painter.begin(&generator)) {
-        kDebug(30517) << "Can not open the painter";
+        kDebug(30503) << "Can not open the painter";
         return false;
     }
 
@@ -283,7 +301,7 @@ bool ExportEpub2::convertEmf(QByteArray &input, QByteArray &output, QSize size)
     Libemf::OutputPainterStrategy  emfPaintOutput(painter, size, true );
     emfParser.setOutput( &emfPaintOutput );
     if (!emfParser.load(input)) {
-        kDebug(30517) << "Can not Parse the EMF file";
+        kDebug(30503) << "Can not Parse the EMF file";
         return false;
     }
     painter.end();
@@ -303,14 +321,14 @@ bool ExportEpub2::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
     QPainter painter;
 
     if (!painter.begin(&generator)) {
-        kDebug(30517) << "Can not open the painter";
+        kDebug(30503) << "Can not open the painter";
         return false;
     }
 
     painter.scale(50,50);
     Libwmf::WmfPainterBackend  wmfPainter(&painter, size);
     if (!wmfPainter.load(input)) {
-        kDebug(30517) << "Can not Parse the WMF file";
+        kDebug(30503) << "Can not Parse the WMF file";
         return false;
     }
 
@@ -393,4 +411,105 @@ bool ExportEpub2::isWmf(QByteArray &content)
     }
 
     return false;
+}
+
+KoFilter::ConversionStatus ExportEpub2::extractMediaFiles(EpubFile *epubFile)
+{
+    QByteArray mediaContent;
+    foreach (QString mediaId, m_mediaFilesList.keys()) {
+        QString mediaSrc = m_mediaFilesList.value(mediaId);
+        // Remove scheme (file://) from the path
+        QUrl mediaPath(mediaSrc);
+        mediaSrc = mediaPath.path();
+
+        QFile file (mediaSrc);
+        if (!file.open(QIODevice::ReadOnly)) {
+            kDebug(31000) << "Unable to open" << mediaSrc;
+            return KoFilter::FileNotFound;
+        }
+        mediaContent = file.readAll();
+
+        const QString mimetype(KMimeType::findByPath(mediaSrc.section("/", -1), 0 , true)->name());
+        epubFile->addContentFile(mediaId.section("#", -1), epubFile->pathPrefix() + mediaSrc.section("/", -1),
+                                 mimetype.toUtf8(), mediaContent);
+    }
+    return KoFilter::OK;
+}
+
+KoFilter::ConversionStatus ExportEpub2::extractCoverImage(KoStore *odfStore, EpubFile *epubFile)
+{
+    // Find Cover from manifest
+    QString coverPath;
+    foreach (const QString &path, m_manifest.keys()) {
+        if (path.contains("coverImage.")) {
+            coverPath = path;
+            break;
+        }
+    }
+
+    // There is no cover image.
+    if (coverPath.isEmpty()) {
+        return KoFilter::OK;
+    }
+
+    // Extact cover data.
+    QByteArray coverData;
+    if (!odfStore->extractFile(coverPath, coverData)) {
+        kDebug(30503) << "Can not to extract file" + coverPath;
+        return KoFilter::FileNotFound;
+    }
+
+    // Add it to epub file content.
+    QByteArray mime = m_manifest.value(coverPath).toUtf8();
+    epubFile->addContentFile(QString("cover-image"),
+                             QString((epubFile->pathPrefix() + coverPath.section('/', -1))),
+                             mime, coverData);
+    // Write the html for cover.
+    writeCoverImage(epubFile, coverPath.section('/', -1));
+
+    return KoFilter::OK;
+}
+
+void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
+{
+    QByteArray coverHtmlContent;
+    QBuffer *buff = new QBuffer(&coverHtmlContent);
+    KoXmlWriter * writer = new KoXmlWriter(buff);
+
+    writer->startElement("html");
+    writer->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+
+    writer->startElement("head");
+
+    writer->startElement("title");
+    writer->addTextNode("Cover");
+    writer->endElement();
+
+    writer->startElement("style");
+    writer->addAttribute("type", "text/css");
+    writer->addTextNode("img { max-width: 100%; }");
+    writer->endElement();
+
+    writer->endElement(); // head
+
+    writer->startElement("body");
+
+    writer->startElement("div");
+    writer->addAttribute("id", "cover-image");
+
+    writer->startElement("img");
+    writer->addAttribute("src", coverPath);
+    writer->addAttribute("alt", "Cover Image");
+
+    writer->endElement();
+
+    writer->endElement(); // div
+
+    writer->endElement(); // body
+
+    writer->endElement(); // html
+
+    // Add cover html to content
+    epubFile->addContentFile(QString("cover"), QString(epubFile->pathPrefix() + "cover.xhtml")
+                             , "application/xhtml+xml", coverHtmlContent, QString("Cover"));
 }

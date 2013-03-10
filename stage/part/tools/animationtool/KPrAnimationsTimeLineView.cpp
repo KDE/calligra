@@ -54,7 +54,7 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     , m_shapeModel(0)
     , m_selectedRow(INVALID)
     , m_selectedColumn(INVALID)
-    , m_rowsHeigth(50)
+    , m_rowsHeight(50)
     , m_stepsNumber(10)
     , m_scaleOversize(0)
     , m_maxLength(0.0)
@@ -76,7 +76,7 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     setLayout(layout);
 
     //Connect Signals
-    connect(m_view, SIGNAL(clicked(const QModelIndex&)), this, SIGNAL(clicked(const QModelIndex&)));
+    connect(m_view, SIGNAL(clicked(QModelIndex)), this, SIGNAL(clicked(QModelIndex)));
     connect(m_view, SIGNAL(timeValuesChanged(QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
     connect(m_view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(requestContextMenu(QPoint)));
 }
@@ -90,7 +90,7 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
     connect(m_shapeModel, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
     connect(m_shapeModel, SIGNAL(layoutChanged()), this, SLOT(resetData()));
     connect(m_shapeModel, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
-    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(update()));
+    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
     //It works only if one item could be selected each time
     connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(notifyTimeValuesChanged(QModelIndex)));
     connect(m_shapeModel, SIGNAL(timeScaleModified()), this, SLOT(adjustScale()));
@@ -121,11 +121,11 @@ int KPrAnimationsTimeLineView::widthOfColumn(int column) const
 {
     switch (column) {
     case KPrShapeAnimations::ShapeThumbnail:
-        return rowsHeigth() * 3 / 2;
+        return rowsHeight() * 3 / 2;
     case KPrShapeAnimations::AnimationIcon:
-        return rowsHeigth() * 5 / 4;
+        return rowsHeight() * 5 / 4;
     case KPrShapeAnimations::StartTime:
-        return 2 * (rowsHeigth() * 2 / 3 + rowsHeigth() * 10 / 4 + 10);
+        return 2 * (rowsHeight() * 2 / 3 + rowsHeight() * 10 / 4 + 10);
     default:
         return 0;
     }
@@ -153,12 +153,12 @@ void KPrAnimationsTimeLineView::setCurrentIndex(const QModelIndex &index)
     setSelectedRow(index.row());
     setSelectedColumn(index.column());
     m_scrollArea->ensureVisible(widthOfColumn(index.row()),
-                                rowsHeigth() * index.row());
+                                rowsHeight() * index.row());
 }
 
-int KPrAnimationsTimeLineView::rowsHeigth() const
+int KPrAnimationsTimeLineView::rowsHeight() const
 {
-    return m_rowsHeigth;
+    return m_rowsHeight;
 }
 
 int KPrAnimationsTimeLineView::totalWidth() const

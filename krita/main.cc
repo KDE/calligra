@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QProcess>
 #include <QProcessEnvironment>
+#include <QDesktopServices>
 #include <QDir>
 
 #include <kglobal.h>
@@ -37,6 +38,10 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+
+#ifdef Q_OS_WIN
+#include "stdlib.h"
+#endif
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
@@ -59,9 +64,9 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    QPixmap pm(splash_screen_xpm);
-    QSplashScreen *splash = new KSplashScreen(pm);
+    QSplashScreen *splash = new KSplashScreen(QPixmap(splash_screen_xpm));
     app.setSplashScreen(splash);
+
 
     if (!app.start()) {
         return 1;
@@ -74,14 +79,6 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     state = app.exec();
 
     delete aboutData;
-
-#ifdef Q_OS_WIN
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QDir appdir(app.applicationDirPath());
-    //const QString path = KStandardDirs::findExe( QLatin1String("kdeinit4" ) );
-    Q_ASSERT(QFile(appdir.canonicalPath() + "kdeinit4.exe").exists());
-    QProcess::startDetached(appdir.canonicalPath() + "kdeinit4 --terminate");
-#endif
 
     return state;
 }

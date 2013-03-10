@@ -34,8 +34,12 @@
 class KexiInternalPartManager : public QObject
 {
 public:
-    KexiInternalPartManager()
-     : QObject()
+    KexiInternalPartManager() : QObject()
+    {
+
+    }
+
+    ~KexiInternalPartManager()
     {
     }
 
@@ -75,24 +79,52 @@ public:
         return part;
     }
 
-private:
 
-    QHash<QByteArray, KexiInternalPart*> m_parts;
+
+private:
+     QHash<QByteArray, KexiInternalPart*> m_parts;
 };
 
 KexiInternalPartManager internalPartManager;
 
 //----------------------------------------------
 
+class KexiInternalPart::Private
+{
+public:
+    Private();
+
+    ~Private();
+
+    //! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
+    QPointer<QWidget> uniqueWidget;
+
+    bool uniqueWindow; //!< true if createWidgetInstance() should return only one window
+
+    bool cancelled; //!< Used in cancelled()
+
+};
+
+KexiInternalPart::Private::Private() : uniqueWindow(true)
+                                       ,cancelled(false)
+{
+
+}
+
+KexiInternalPart::Private::~Private()
+{
+
+}
+
 KexiInternalPart::KexiInternalPart(QObject *parent, const QVariantList &)
         : QObject(parent)
-        , m_uniqueWindow(true)
-        , m_cancelled(false)
+        , d(new Private())
 {
 }
 
 KexiInternalPart::~KexiInternalPart()
 {
+    delete d;
 }
 
 //static
@@ -116,15 +148,15 @@ QWidget* KexiInternalPart::createWidgetInstance(const char* partName,
 KexiWindow* KexiInternalPart::findOrCreateKexiWindow(
     const char *objName)
 {
-    if (m_uniqueWindow && !m_uniqueWidget.isNull())
-        return dynamic_cast<KexiWindow*>((QWidget*)m_uniqueWidget);
+    if (d->uniqueWindow && !d->uniqueWidget.isNull())
+        return dynamic_cast<KexiWindow*>((QWidget*)d->uniqueWidget);
     KexiWindow * wnd = new KexiWindow();
     KexiView *view = createView(0, objName);
     if (!view)
         return 0;
 
-    if (m_uniqueWindow)
-        m_uniqueWidget = wnd; //recall unique!
+    if (d->uniqueWindow)
+        d->uniqueWidget = wnd; //recall unique!
     wnd->addView(view);
     wnd->setWindowTitle(view->windowTitle());
 #ifdef __GNUC__
@@ -163,18 +195,18 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
         return 0; //fatal!
     }
     QWidget *w;
-    if (part->uniqueWindow() && !part->m_uniqueWidget.isNull())
-        w = part->m_uniqueWidget;
+    if (part->uniqueWindow() && !part->d->uniqueWidget.isNull())
+        w = part->d->uniqueWidget;
     else
         w = part->createWidget(dialogClass, KexiMainWindowIface::global()->thisWidget(), objName ? objName : partName, args);
 
     if (dynamic_cast<QDialog*>(w)) {
         if (part->uniqueWindow())
-            part->m_uniqueWidget = w;
+            part->d->uniqueWidget = w;
         return dynamic_cast<QDialog*>(w);
     }
     //sanity
-    if (!(part->uniqueWindow() && !part->m_uniqueWidget.isNull()))
+    if (!(part->uniqueWindow() && !part->d->uniqueWidget.isNull()))
         delete w;
     return 0;
 }
@@ -215,6 +247,26 @@ bool KexiInternalPart::executeCommand(const char* commandName,
     Q_UNUSED(commandName);
     Q_UNUSED(args);
     return false;
+}
+
+bool KexiInternalPart::uniqueWindow() const
+{
+    return d->uniqueWindow;
+}
+
+void KexiInternalPart::setUniqueWindow(bool set)
+{
+    d->uniqueWindow = set;
+}
+
+bool KexiInternalPart::cancelled() const
+{
+    return d->cancelled;
+}
+
+void KexiInternalPart::setCancelled(bool set)
+{
+    d->cancelled = set;
 }
 
 #include "kexiinternalpart.moc"

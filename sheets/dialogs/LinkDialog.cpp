@@ -88,8 +88,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->internetLink = new KLineEdit(d->internetPage);
     iLayout->addWidget(d->internetLink);
     iLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    connect(d->internetText, SIGNAL(textChanged(const QString&)), this,
-            SLOT(setText(const QString&)));
+    connect(d->internetText, SIGNAL(textChanged(QString)), this,
+            SLOT(setText(QString)));
 
     // link for e-mail
     d->mailPage = new QWidget();
@@ -103,8 +103,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     mLayout->addWidget(new QLabel(i18n("Email address:"), d->mailPage));
     d->mailLink = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailLink);
-    connect(d->mailText, SIGNAL(textChanged(const QString&)), this,
-            SLOT(setText(const QString&)));
+    connect(d->mailText, SIGNAL(textChanged(QString)), this,
+            SLOT(setText(QString)));
     mLayout->addWidget(new QLabel(i18n("Subject:"), d->mailPage));
     d->mailSubject = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailSubject);
@@ -130,10 +130,10 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     recentFile->setMinimumContentsLength(40);
     fLayout->addWidget(recentFile);
     fLayout->addItem(new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
-    connect(d->fileText, SIGNAL(textChanged(const QString&)), this,
-            SLOT(setText(const QString&)));
-    QObject::connect(recentFile, SIGNAL(highlighted(const QString &)),
-                     d->fileLink->lineEdit(), SLOT(setText(const QString &)));
+    connect(d->fileText, SIGNAL(textChanged(QString)), this,
+            SLOT(setText(QString)));
+    QObject::connect(recentFile, SIGNAL(highlighted(QString)),
+                     d->fileLink->lineEdit(), SLOT(setText(QString)));
 
     // populate recent files
     int index = 0;
@@ -173,8 +173,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->cellLink->setItemText(d->cellLink->currentIndex(), "");
     cLayout->addWidget(d->cellLink);
     cLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    connect(d->cellText, SIGNAL(textChanged(const QString&)), this,
-            SLOT(setText(const QString&)));
+    connect(d->cellText, SIGNAL(textChanged(QString)), this,
+            SLOT(setText(QString)));
 
     showButtonSeparator(true);
     d->internetText->setFocus();
@@ -252,39 +252,39 @@ void LinkDialog::setText(const QString& text)
 // "www.calligra.org" only, since protocol is used to decide which page to show
 void LinkDialog::setLink(const QString& link)
 {
-    if (link.startsWith("https://")) {
-        d->internetLink->setText(link.mid(QString("https://").length()));
+    if (link.startsWith(QLatin1String("https://"))) {
+        d->internetLink->setText(link.mid(8));
         setCurrentPage(d->p1);
         return;
     }
 
-    if (link.startsWith("http://")) {
-        d->internetLink->setText(link.mid(QString("http://").length()));
+    if (link.startsWith(QLatin1String("http://"))) {
+        d->internetLink->setText(link.mid(7));
         setCurrentPage(d->p1);
         return;
     }
 
-    if (link.startsWith("ftp://")) {
-        d->internetLink->setText(link.mid(QString("ftp://").length()));
+    if (link.startsWith(QLatin1String("ftp://"))) {
+        d->internetLink->setText(link.mid(6));
         setCurrentPage(d->p1);
         return;
     }
 
-    if (link.startsWith("mailto:")) {
+    if (link.startsWith(QLatin1String("mailto:"))) {
         QUrl url(link);
         if (url.isValid()) {
             d->mailLink->setText(url.toString(QUrl::RemoveScheme | QUrl::RemoveQuery));
             d->mailSubject->setText(url.queryItemValue("subject"));
         } else {
-            d->mailLink->setText(link.mid(QString("mailto:").length()));
+            d->mailLink->setText(link.mid(7));
         }
         setCurrentPage(d->p2);
         return;
     }
 
-    if (link.startsWith("file:/")) {
-        QString s = link.mid(QString("file:/").length());
-        while (s.startsWith("//")) s.remove(0, 1);
+    if (link.startsWith(QLatin1String("file:/"))) {
+        QString s = link.mid(6);
+        while (s.startsWith(QLatin1String("//"))) s.remove(0, 1);
         d->fileLink->lineEdit()->setText(s);
         setCurrentPage(d->p3);
         return;

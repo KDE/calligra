@@ -36,27 +36,7 @@ target_link_libraries(DocumentStructureTest komain  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
-kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-komain-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
-target_link_libraries(KoProgressUpdaterTest komain ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
-
-########### next target ###############
-
 set(findmatch_test_SRCS testfindmatch.cpp )
 kde4_add_unit_test(testfindmatch TESTNAME libs-komain-testfindmatch ${findmatch_test_SRCS})
 target_link_libraries(testfindmatch komain ${QT_QTTEST_LIBRARY})
 
-########### next target ###############
-
-if( Soprano_FOUND )
-set(TestKoDocumentRdf_SRCS TestKoDocumentRdf.cpp )
-kde4_add_unit_test(TestKoDocumentRdf TESTNAME libs-komain-TestKoDocumentRdf ${TestKoDocumentRdf_SRCS})
-target_link_libraries(TestKoDocumentRdf komain ${QT_QTTEST_LIBRARY})
-
-
-########### next target ###############
-
-set(rdf_test_SRCS rdf_test.cpp )
-kde4_add_unit_test(rdf_test TESTNAME libs-komain-rdf_test ${rdf_test_SRCS})
-target_link_libraries(rdf_test komain ${QT_QTTEST_LIBRARY})
-endif( Soprano_FOUND )

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Microphone (European)
 Name[bg]=Микрофон (европейски)
+Name[bs]=Mikrofon (europski)
 Name[ca]=Micròfon (europeu)
 Name[ca@valencia]=Micròfon (europeu)
+Name[da]=Mikrofon (europæisk)
 Name[de]=Mikrofon (europäisch)
 Name[el]=Μικρόφωνο (Ευρώπη)
 Name[es]=Micrófono (Europeo)
@@ -21,7 +23,9 @@ Name[pt]=Microfone (Europeu)
 Name[pt_BR]=Microfone (Europeu)
 Name[ru]=Микрофон (Европейский)
 Name[sk]=Mikrofón (európsky)
+Name[sl]=Mikrofon (evropski)
 Name[sv]=Mikrofon (europeisk)
+Name[tr]=Mikrofon (Avrupa)
 Name[uk]=Мікрофон (Європа)
 Name[x-test]=xxMicrophone (European)xx
 Name[zh_TW]=麥克風（歐洲）

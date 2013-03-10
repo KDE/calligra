@@ -40,11 +40,11 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-if(!WIN32)
+if(NOT WIN32)
     macro_optional_find_package(FFTW3)
     macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
     macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
-endif(!WIN32)
+endif(NOT WIN32)
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
@@ -54,6 +54,9 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
+  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
+else(HAVE_VC)
+  set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
@@ -96,7 +99,6 @@ set(kritaimage_LIB_SRCS
    processing/kis_transform_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
-   filter/kis_filter_job.cpp
    filter/kis_filter_registry.cc
    filter/kis_color_transformation_filter.cc
    generator/kis_generator.cpp
@@ -157,6 +159,7 @@ set(kritaimage_LIB_SRCS
    kis_circle_mask_generator.cpp
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
+   ${__per_arch_circle_mask_generator_objs}
    kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
@@ -185,7 +188,6 @@ set(kritaimage_LIB_SRCS
    kis_selection_transaction_data.cpp
    kis_serializable_configuration.cc
    kis_shared.cc
-   kis_threaded_applicator.cpp
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
@@ -238,8 +240,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES})
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
@@ -286,7 +288,6 @@ install( FILES
     filter/kis_filter.h
     filter/kis_filter_registry.h
     kis_filter_strategy.h
-    kis_generic_colorspace.h
     kis_global.h
     kis_image.h
     kis_mask.h

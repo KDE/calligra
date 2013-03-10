@@ -34,7 +34,7 @@ int rangeStringToInt(const QString &string)
     int result = 0;
     const int size = string.size();
     for ( int i = 0; i < size; i++ )
-        result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );
+        result += rangeCharToInt( string[i].toLatin1() ) * pow( 10.0, ( size - i - 1 ) );
     return result;
 }
 
@@ -42,7 +42,10 @@ int rangeStringToInt(const QString &string)
 QPair<QString,QRect> splitCellRange(QString range)
 {
     range.remove( "$" ); // remove "fixed" character
-    if(range.startsWith('[') && range.endsWith(']')) range = range.mid(1, range.length() - 2); // remove []
+    // remove []
+    if(range.startsWith(QLatin1Char('[')) && range.endsWith(QLatin1Char(']'))) {
+        range.remove(0, 1).chop(1);
+    }
     QPair<QString,QRect> result;
     const bool isPoint = !range.contains( ':' );
     QRegExp regEx = isPoint ? QRegExp( "(.*)(\\.|\\!)([A-Z]+)([0-9]+)" ) : QRegExp ( "(.*)(\\.|\\!)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );

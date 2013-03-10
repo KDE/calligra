@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTPAPAGEDELETECOMMAND_H
-#define TESTPAPAGEDELETECOMMAND_H
+#ifndef TESTSHAPEANIMATIONS_H
+#define TESTSHAPEANIMATIONS_H
 
 #include <QtTest>
 
@@ -48,5 +48,5 @@ private:
     QList<MockShape *> shapes;
 };
 
-#endif // TESTPAPAGEDELETECOMMAND_H
+#endif // TESTSHAPEANIMATIONS_H
 

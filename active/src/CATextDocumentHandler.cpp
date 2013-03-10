@@ -66,9 +66,9 @@ CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentCont
 {
     QList<QTextDocument*> texts;
     d->findText = new KoFindText(this);
-    connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvas()));
-    connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
-    connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
+    connect (d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
+    connect (d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 CATextDocumentHandler::~CATextDocumentHandler()
@@ -78,8 +78,9 @@ CATextDocumentHandler::~CATextDocumentHandler()
 
 QStringList CATextDocumentHandler::supportedMimetypes()
 {
-    QStringList supportedTypes;
-    supportedTypes << "application/vnd.oasis.opendocument.text" << "application/msword";
+    // keep in sync with textdocument related mimetypes in calligraactive.desktop
+    const QStringList supportedTypes =
+        QString::fromLatin1("application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;").split(';', QString::SkipEmptyParts);
     return supportedTypes;
 }
 
@@ -134,16 +135,16 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 
     if (kwCanvasItem) {
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect (kwCanvasItem, SIGNAL (documentSize (QSizeF)), zoomController, SLOT (setDocumentSize (QSizeF)));
+        connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController, SLOT(setDocumentSize(QSizeF)));
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-        connect (documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL (moveDocumentOffset (const QPoint&)),
-                 kwCanvasItem, SLOT (setDocumentOffset (QPoint)));
+        connect (documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL(moveDocumentOffset(QPoint)),
+                 kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
         kwCanvasItem->updateSize();
         kDebug() << "HANDLEEEE " << kwCanvasItem->geometry();
     }
 
-    connect (documentController()->canvasController(), SIGNAL (needsCanvasResize (QSizeF)), SLOT (resizeCanvas (QSizeF)));
-    connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
+    connect (documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
+    connect (documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
 
     documentController()->canvasController()->zoomToFit();
 
@@ -239,7 +240,7 @@ void CATextDocumentHandler::findNoMatchFound()
 
 QString CATextDocumentHandler::bottomToolbarSource() const
 {
-    return "TextDocumentFindToolbar.qml";
+    return "FindToolbar.qml";
 }
 
 QString CATextDocumentHandler::topToolbarSource() const

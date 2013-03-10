@@ -28,6 +28,7 @@
 #include <QStringList>
 #include <QByteArray>
 #include <QPen>
+#include <QDomDocument>
 
 #include <kmessagebox.h>
 #include <kfilterdev.h>

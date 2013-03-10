@@ -72,15 +72,16 @@ qreal KPrSmilValues::endValue() const
     return m_values.at(m_values.size() - 1).eval(m_cache);
 }
 
-bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode)
+bool KPrSmilValues::loadValues(const QString &values, const QString &keyTimes, const QString &keySplines, SmilCalcMode calcMode)
 {
+    Q_UNUSED(keySplines);
     m_calcMode = calcMode;
-    QStringList valuesList = values.split(";");
+    QStringList valuesList = values.split(QLatin1Char(';'));
     if (valuesList.size() < 2) {
         return false;
     }
 
-    foreach (QString value, valuesList) {
+    foreach (const QString &value, valuesList) {
         KPrFormulaParser parser(value, m_shape, m_textBlockData, KPrFormulaParser::Values);
         if (!parser.valid()) {
             return false;
@@ -95,7 +96,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
         }
     }
     else {
-        QStringList keyTimesList = keyTimes.split(";");
+        QStringList keyTimesList = keyTimes.split(QLatin1Char(';'));
         if (valuesList.size() != keyTimesList.size()) {
             return false;
         }
@@ -112,12 +113,12 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     // keySplines
     if (m_calcMode ==  KPrAnimationValue::spline) {
         kWarning(33003) << "keySpline not yes supported";
-        QStringList keySplinesList = keySplines.split(";");
+//         QStringList keySplinesList = keySplines.split(QLatin1Char(';'));
     }
     return true;
 }
 
-bool KPrSmilValues::loadFormula(QString values, QString keyTimes, QString keySplines, KPrAnimationValue::SmilCalcMode calcMode, QString formula)
+bool KPrSmilValues::loadFormula(const QString &values, const QString &keyTimes, const QString &keySplines, KPrAnimationValue::SmilCalcMode calcMode, const QString &formula)
 {
     bool retval = loadValues(values, keyTimes, keySplines, calcMode);
 
@@ -139,7 +140,7 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
     KoXmlWriter &writer = paContext.xmlWriter();
     // values
     QString values;
-    foreach (KPrFormulaParser valueParser, m_values) {
+    foreach (const KPrFormulaParser &valueParser, m_values) {
         if (values.isEmpty()) {
             values = QString("%1").arg(valueParser.formula());
         } else {

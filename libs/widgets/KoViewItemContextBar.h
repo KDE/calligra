@@ -44,7 +44,7 @@ class KOWIDGETS_EXPORT KoViewItemContextBar : public QObject
     Q_OBJECT
 
 public:
-    KoViewItemContextBar(QAbstractItemView *parent);
+    explicit KoViewItemContextBar(QAbstractItemView *parent);
     virtual ~KoViewItemContextBar();
     virtual bool eventFilter(QObject *watched, QEvent *event);
 
@@ -86,11 +86,8 @@ private slots:
     void update();
 
 private:
-    void applyPointingHandCursor();
-    void restoreCursor();
     QAbstractItemView *m_view;
     bool m_enabled;
-    bool m_appliedPointingHandCursor;
     QModelIndex m_IndexUnderCursor;
     QWidget *m_ContextBar;
     QToolButton *m_ToggleSelectionButton;

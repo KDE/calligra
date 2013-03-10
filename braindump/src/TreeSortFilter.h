@@ -43,7 +43,7 @@ public:
       *
       * @param parent the parent. Must not be @c null.
       */
-    TreeSortFilter(QObject *parent);
+    explicit TreeSortFilter(QObject *parent);
 protected:
 
     /**

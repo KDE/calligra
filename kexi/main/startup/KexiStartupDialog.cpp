@@ -207,8 +207,8 @@ KexiStartupDialog::KexiStartupDialog(
 #endif
 
     if (!d->singlePage) {
-        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
-                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
+        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
+                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
         d->templatesWidget->setFocus();
     }
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
@@ -333,8 +333,8 @@ void KexiStartupDialog::setupPageTemplates()
             d->templatesWidget_IconListView->installEventFilter(this);
     }
     lyr->addWidget(d->templatesWidget);
-    connect(d->templatesWidget, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
-            this, SLOT(slotCurrentTemplatesubpageChanged(KPageWidgetItem*, KPageWidgetItem*)));
+    connect(d->templatesWidget, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
+            this, SLOT(slotCurrentTemplatesubpageChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
     if (d->dialogOptions & CheckBoxDoNotShowAgain) {
         d->chkDoNotShow = new QCheckBox(i18n("Do not show me this dialog again"), pageTemplatesFrame);
@@ -386,8 +386,8 @@ void KexiStartupDialog::setupPageTemplates()
 
     d->viewTemplates = new KexiStartupDialogTemplatesPage(templPageWidget);
     tmplyr->addWidget(d->viewTemplates);
-    connect(d->viewTemplates, SIGNAL(selected(const QString&)),
-            this, SLOT(templateSelected(const QString&)));
+    connect(d->viewTemplates, SIGNAL(selected(QString)),
+            this, SLOT(templateSelected(QString)));
     /* connect(d->viewTemplates->templates,SIGNAL(returnPressed(QIconViewItem*)),
         this,SLOT(templateItemExecuted(QIconViewItem*)));
       connect(d->viewTemplates->templates,SIGNAL(currentChanged(QIconViewItem*)),

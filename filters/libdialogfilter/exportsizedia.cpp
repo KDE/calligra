@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "exportsizedia.h"
+
 #include <QCheckBox>
 #include <QImage>
 #include <QLabel>
@@ -31,8 +33,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
-
-#include "exportsizedia.h"
 
 
 ExportSizeDia::ExportSizeDia(int width, int height,

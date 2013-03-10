@@ -358,11 +358,13 @@ TaskReportData::TaskReportData( const TaskReportData &other )
 
 bool TaskReportData::loadXml( const KoXmlElement &element )
 {
+    Q_UNUSED(element);
     return true;
 }
 
 void TaskReportData::saveXml( QDomElement &element ) const
 {
+    Q_UNUSED(element);
 }
 
 ReportData *TaskReportData::clone() const
@@ -406,11 +408,13 @@ TaskStatusReportData::TaskStatusReportData( const TaskStatusReportData &other )
 
 bool TaskStatusReportData::loadXml( const KoXmlElement &element )
 {
+    Q_UNUSED(element);
     return true;
 }
 
 void TaskStatusReportData::saveXml( QDomElement &element ) const
 {
+    Q_UNUSED(element);
 }
 
 ReportData *TaskStatusReportData::clone() const
@@ -453,11 +457,13 @@ ResourceReportData::ResourceReportData( const ResourceReportData &other )
 
 bool ResourceReportData::loadXml( const KoXmlElement &element )
 {
+    Q_UNUSED(element);
     return true;
 }
 
 void ResourceReportData::saveXml( QDomElement &element ) const
 {
+    Q_UNUSED(element);
 }
 
 ReportData *ResourceReportData::clone() const
@@ -502,11 +508,13 @@ ResourceAssignmentReportData::ResourceAssignmentReportData( const ResourceAssign
 
 bool ResourceAssignmentReportData::loadXml( const KoXmlElement &element )
 {
+    Q_UNUSED(element);
     return true;
 }
 
 void ResourceAssignmentReportData::saveXml( QDomElement &element ) const
 {
+    Q_UNUSED(element);
 }
 
 ReportData *ResourceAssignmentReportData::clone() const
@@ -724,11 +732,13 @@ void ChartReportData::addExpression( const QString &field, const QVariant &/*val
 
 bool ChartReportData::loadXml( const KoXmlElement &element )
 {
+    Q_UNUSED(element);
     return true;
 }
 
 void ChartReportData::saveXml( QDomElement &element ) const
 {
+    Q_UNUSED(element);
 }
 
 //-----------------

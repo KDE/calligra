@@ -164,14 +164,14 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 
     d->view->setSpreadSheetMode();
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)),
-            this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
+            this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)));
     connect(d->data, SIGNAL(rowUpdated(KexiDB::RecordData*)),
             this, SLOT(slotRowUpdated(KexiDB::RecordData*)));
     //connect(d->data, SIGNAL(aboutToInsertRow(KexiDB::RecordData*,KexiDB::ResultInfo*,bool)),
     // this, SLOT(slotAboutToInsertRow(KexiDB::RecordData*,KexiDB::ResultInfo*,bool)));
-    connect(d->data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)),
-            this, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)));
+    connect(d->data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)),
+            this, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)));
 
     setMinimumSize(d->view->minimumSizeHint().width(), d->view->minimumSizeHint().height());
     d->view->setFocus();
@@ -479,8 +479,8 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
     //----
     d->updatePropertiesVisibility(field.type(), *set);
 
-    connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     d->sets->set(row, set, newOne);
     return set;
@@ -1416,7 +1416,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
     if (res == true) {
         //todo
         KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-        res = conn->createTable(tempData()->table, options & KexiView::OverwriteExistingObject);
+        res = conn->createTable(tempData()->table, options & KexiView::OverwriteExistingData);
         if (res == true) {
             res = KexiMainWindowIface::global()->project()->removeUserDataBlock(tempData()->table->id());
         }
@@ -1435,6 +1435,32 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
         tempData()->table = 0;
     }
     return tempData()->table;
+}
+
+KexiDB::SchemaData* KexiTableDesignerView::copyData(const KexiDB::SchemaData& sdata,
+                                                     KexiView::StoreNewDataOptions options,
+                                                     bool &cancel)
+{
+    Q_UNUSED(options);
+    Q_UNUSED(cancel);
+
+    if (!tempData()->table) {
+        kWarning() << "Cannot copy data without source table (tempData()->table)";
+        return 0;
+    }
+    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KexiDB::TableSchema *copiedTable = conn->copyTable(*tempData()->table, sdata);
+    if (!copiedTable) {
+        return 0;
+    }
+    if (!KexiMainWindowIface::global()->project()->copyUserDataBlock(tempData()->table->id(),
+                                                                     copiedTable->id()))
+    {
+        conn->dropTable(copiedTable);
+        delete copiedTable;
+        return 0;
+    }
+    return copiedTable;
 }
 
 tristate KexiTableDesignerView::storeData(bool dontAsk)

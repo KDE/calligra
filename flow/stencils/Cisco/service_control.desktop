@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Service Control
+Name[bs]=Kontrola usluga
 Name[ca]=Control de servei
 Name[ca@valencia]=Control de servei
+Name[da]=Service Control
 Name[el]=Service Control
 Name[es]=Control de servicio
 Name[et]=Teenuste haldur
@@ -9,6 +11,7 @@ Name[fr]=Service Control
 Name[gl]=Control de servizos
 Name[it]=Controllo di servizio
 Name[kk]=Қызмет басқаруы
+Name[lt]=Tarnybos kontrolė
 Name[nb]=Tjenestestyring
 Name[nl]=Servicebesturing
 Name[pl]=Kontrola usługi

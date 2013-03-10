@@ -40,7 +40,7 @@ class ExternalEditor : public KTextEdit
 {
     Q_OBJECT
 public:
-    ExternalEditor(QWidget* parent = 0);
+    explicit ExternalEditor(QWidget *parent = 0);
     ~ExternalEditor();
 
     virtual QSize sizeHint() const;

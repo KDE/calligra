@@ -91,8 +91,12 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    KoZoomMode::setMinimumZoom(0.125);
-    KoZoomMode::setMaximumZoom(64.0);
+    QSize imageSize = m_view->image()->size();
+    qreal minDimension = qMin(imageSize.width(), imageSize.height());
+    qreal minZoom = qMin(100.0 / minDimension, 0.1);
+
+    KoZoomMode::setMinimumZoom(minZoom);
+    KoZoomMode::setMaximumZoom(90.0);
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
@@ -115,7 +119,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection->addAction("view_ruler", m_showRulersAction);
     m_showRulersAction->setWhatsThis(i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
-                                          "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers."));
+                                          "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
     m_100pct = new KAction(i18n("Reset zoom"), this);

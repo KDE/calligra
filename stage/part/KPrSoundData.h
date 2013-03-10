@@ -52,7 +52,7 @@ public:
      * @param collection the sound collection which will do the loading of the sound data for us.
      * @param href the url of the sound in the store.
      */
-    explicit KPrSoundData(KPrSoundCollection *collection, QString href="");
+    explicit KPrSoundData(KPrSoundCollection *collection, const QString &href = QString());
 
     /**
      * copy constructor using ref-counting.
@@ -100,9 +100,7 @@ public:
     bool isTaggedForSaving();
 
 
-    bool operator==(const KPrSoundData &other) {
-        return other.d == d;
-    }
+    bool operator==(const KPrSoundData &other) const;
 
     /**
      * Get the collection used

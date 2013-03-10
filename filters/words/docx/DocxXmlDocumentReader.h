@@ -45,7 +45,7 @@ class DocxXmlDocumentReaderContext;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
-class TableStyleProperties;
+struct TableStyleProperties;
 class LocalTableStyles;
 }
 
@@ -214,6 +214,7 @@ protected:
 
     bool m_createSectionStyle;
     QString m_currentSectionStyleName;
+    QByteArray m_currentSectionStyleFamily;
     bool m_createSectionToNext;
     KoGenStyle m_currentPageStyle;
     KoGenStyle m_masterPageStyle;

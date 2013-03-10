@@ -277,7 +277,6 @@ It is even possible to print a sheet more than once. Just insert the desired she
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
  <pixmapfunction>KIcon</pixmapfunction>
  <customwidgets>
   <customwidget>

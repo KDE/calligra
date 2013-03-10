@@ -34,6 +34,7 @@ KAboutData * newKPresenterAboutData()
                                            ki18n("(c) 1998-2011, The Stage Team"), KLocalizedString(),
                                            "http://www.calligra.org/stage/");
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
+    aboutData->setProgramIconName(QLatin1String("calligrastage"));
     aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("Maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Former maintainer"), "montel@kde.org");
     aboutData->addAuthor(ki18n("Reginald Stadlbauer"),ki18n("Original author"), "reggie@kde.org");

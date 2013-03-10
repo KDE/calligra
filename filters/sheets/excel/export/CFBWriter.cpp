@@ -423,7 +423,7 @@ unsigned CFBWriter::writeSector(const QByteArray &data, unsigned previousSector)
     Q_ASSERT(m_device->isOpen());
     Q_ASSERT(m_device->isWritable());
     Q_ASSERT(!m_device->isSequential());
-    Q_ASSERT(data.size() == m_sectorSize);
+    Q_ASSERT(static_cast<unsigned int>(data.size()) == m_sectorSize);
     Q_ASSERT(previousSector == unsigned(-1) || previousSector < unsigned(m_fat.size()));
 
     qDebug() << "writeSector: previousSector=" << previousSector << ", fat-size =" << m_fat.size();
@@ -464,7 +464,8 @@ unsigned CFBWriter::fatSectorCount() const
 
 void CFBWriter::writeHeader()
 {
-    static const char signature[] = {0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1};
+    static const int signatureLength = 8;
+    static const unsigned char signature[signatureLength] = {0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1};
     static const char zeroes[16] = {0};
     Q_ASSERT(m_device);
     Q_ASSERT(m_device->isOpen());
@@ -475,7 +476,7 @@ void CFBWriter::writeHeader()
     QDataStream ds(m_device);
     ds.setByteOrder(QDataStream::LittleEndian);
 
-    ds.writeRawData(signature, 8); // Header Signature
+    ds.writeRawData(reinterpret_cast<const char*>(signature), signatureLength); // Header Signature
     ds.writeRawData(zeroes, 16);   // Header CLSID
     ds << quint16(0x003E);         // Minor version
     ds << quint16(m_sectorSize == 4096 ? 0x0004 : 0x0003);         // Major version

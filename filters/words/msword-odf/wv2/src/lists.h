@@ -235,7 +235,7 @@ namespace wvWare
          * inside pap.anld. To make that work you have to set the ANLD structure
          * every time the PAP changes, using setWord6StylePAP()
          */
-        ListInfoProvider( const StyleSheet* styleSheet );
+        explicit ListInfoProvider( const StyleSheet* styleSheet );
         /**
          * This constructor reads the structures from the table stream of a
          * Word 97 document.

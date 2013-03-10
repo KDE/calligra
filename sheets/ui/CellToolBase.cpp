@@ -203,7 +203,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = new KSelectAction(i18n("Style"), this);
     addAction("setStyle", action);
     action->setToolTip(i18n("Apply a predefined style to the selected cells"));
-    connect(action, SIGNAL(triggered(const QString&)), this, SLOT(setStyle(const QString&)));
+    connect(action, SIGNAL(triggered(QString)), this, SLOT(setStyle(QString)));
 
     action = new KAction(i18n("Create Style From Cell..."), this);
     action->setIconText(i18n("Style From Cell"));
@@ -235,7 +235,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = new KFontAction(i18n("Select Font..."), this);
     action->setIconText(i18n("Font"));
     addAction("font", action);
-    connect(action, SIGNAL(triggered(const QString&)), this, SLOT(font(const QString&)));
+    connect(action, SIGNAL(triggered(QString)), this, SLOT(font(QString)));
 
     action = new KFontSizeAction(i18n("Select Font Size"), this);
     action->setIconText(i18n("Font Size"));
@@ -255,7 +255,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setText(i18n("Text Color"));
     action->setToolTip(i18n("Set the text color"));
     addAction("textColor", action);
-    connect(action, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changeTextColor(const KoColor &)));
+    connect(action, SIGNAL(colorChanged(KoColor)), this, SLOT(changeTextColor(KoColor)));
 
     // -- horizontal alignment actions --
 
@@ -355,7 +355,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setText(i18n("Border Color"));
     static_cast<KoColorPopupAction*>(action)->setCurrentColor(Qt::black);
     addAction("borderColor", action);
-    connect(action, SIGNAL(colorChanged(const KoColor &)), this, SLOT(borderColor(const KoColor &)));
+    connect(action, SIGNAL(colorChanged(KoColor)), this, SLOT(borderColor(KoColor)));
 
     // -- text layout actions --
 
@@ -436,7 +436,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Set the background color"));
     action->setText(i18n("Background Color"));
     addAction("backgroundColor", action);
-    connect(action, SIGNAL(colorChanged(const KoColor &)), this, SLOT(changeBackgroundColor(const KoColor &)));
+    connect(action, SIGNAL(colorChanged(KoColor)), this, SLOT(changeBackgroundColor(KoColor)));
 
     // -- cell merging actions --
 
@@ -721,7 +721,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("subtotals", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(subtotals()));
     action->setToolTip(i18n("Create different kind of subtotals to a list or database"));
-
+    
     action = new KAction(i18n("Area Name..."), this);
     addAction("setAreaName", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(setAreaName()));
@@ -749,7 +749,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     static_cast<KSelectAction*>(action)->setItems(functionList);
     static_cast<KSelectAction*>(action)->setComboWidth(80);
     static_cast<KSelectAction*>(action)->setCurrentItem(0);
-    connect(action, SIGNAL(triggered(const QString&)), this, SLOT(formulaSelection(const QString&)));
+    connect(action, SIGNAL(triggered(QString)), this, SLOT(formulaSelection(QString)));
 
     // -- general editing actions --
 
@@ -1099,11 +1099,11 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
     static_cast<KSelectAction*>(this->action("setStyle"))->setItems(styleManager->styleNames());
 
     // Establish connections.
-    connect(selection(), SIGNAL(changed(const Region&)),
-            this, SLOT(selectionChanged(const Region&)));
-    connect(selection(), SIGNAL(closeEditor(bool, bool)),
-            this, SLOT(deleteEditor(bool, bool)));
-    connect(selection(), SIGNAL(modified(const Region&)),
+    connect(selection(), SIGNAL(changed(Region)),
+            this, SLOT(selectionChanged(Region)));
+    connect(selection(), SIGNAL(closeEditor(bool,bool)),
+            this, SLOT(deleteEditor(bool,bool)));
+    connect(selection(), SIGNAL(modified(Region)),
             this, SLOT(updateEditor()));
     connect(selection(), SIGNAL(activeSheetChanged(Sheet*)),
             this, SLOT(activeSheetChanged(Sheet*)));
@@ -1157,7 +1157,7 @@ QList <QWidget*> CellToolBase::createOptionWidgets()
     f.close();
 
     QDomNodeList widgetNodes = doc.elementsByTagName("optionWidget");
-    for (int i = 0; i < widgetNodes.size(); i++) {
+    for (int i = 0; i < widgetNodes.size(); ++i) {
         QDomElement e = widgetNodes.at(i).toElement();
         widgets.append(new ActionOptionWidget(this, e));
     }
@@ -1371,10 +1371,10 @@ bool CellToolBase::createEditor(bool clear, bool focus)
                 d->cellEditor, SLOT(permuteFixation()));
 
         if(d->externalEditor) {
-            connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
-                    d->externalEditor, SLOT(setText(const QString &)));
-            connect(d->externalEditor, SIGNAL(textChanged(const QString &)),
-                    d->cellEditor, SLOT(setText(const QString &)));
+            connect(d->cellEditor, SIGNAL(textChanged(QString)),
+                    d->externalEditor, SLOT(setText(QString)));
+            connect(d->externalEditor, SIGNAL(textChanged(QString)),
+                    d->cellEditor, SLOT(setText(QString)));
             d->externalEditor->applyAction()->setEnabled(true);
             d->externalEditor->cancelAction()->setEnabled(true);
         }
@@ -1467,8 +1467,10 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     } else {
         selection()->update();
     }
-    d->externalEditor->applyAction()->setEnabled(false);
-    d->externalEditor->cancelAction()->setEnabled(false);
+    if (d->externalEditor) {
+        d->externalEditor->applyAction()->setEnabled(false);
+        d->externalEditor->cancelAction()->setEnabled(false);
+    }
     canvas()->canvasWidget()->setFocus();
 }
 
@@ -1534,7 +1536,7 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
         int closeParenthese = text.count(')');
         int diff = qAbs(openParenthese - closeParenthese);
         if (openParenthese > closeParenthese) {
-            for (int i = 0; i < diff; i++) {
+            for (int i = 0; i < diff; ++i) {
                 text += ')';
             }
         }
@@ -2013,11 +2015,7 @@ void CellToolBase::currency(bool enable)
     command->setSheet(selection()->activeSheet());
     command->setText(i18nc("(qtundo-format)", "Format Money"));
     command->setFormatType(enable ? Format::Money : Format::Generic);
-#if KDE_IS_VERSION(4,4,0)
     command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces() : 0);
-#else
-    command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits() : 0);
-#endif
 
     command->add(*selection());
     command->execute(canvas());
@@ -2649,7 +2647,7 @@ void CellToolBase::autoSum()
             if ((selection()->marker().y() > 1) && Cell(selection()->activeSheet(), selection()->marker().x(), selection()->marker().y() - 1).value().isNumber()) {
                 // check cells above the current one
                 start = end = selection()->marker().y() - 1;
-                for (start--; (start > 0) && Cell(selection()->activeSheet(), selection()->marker().x(), start).value().isNumber(); start--) ;
+                for (--start; (start > 0) && Cell(selection()->activeSheet(), selection()->marker().x(), start).value().isNumber(); --start) ;
 
                 const Region region(QRect(QPoint(selection()->marker().x(), start + 1),
                                           QPoint(selection()->marker().x(), end)), selection()->activeSheet());
@@ -2662,7 +2660,7 @@ void CellToolBase::autoSum()
             } else if ((selection()->marker().x() > 1) && Cell(selection()->activeSheet(), selection()->marker().x() - 1, selection()->marker().y()).value().isNumber()) {
                 // check cells to the left of the current one
                 start = end = selection()->marker().x() - 1;
-                for (start--; (start > 0) && Cell(selection()->activeSheet(), start, selection()->marker().y()).value().isNumber(); start--) ;
+                for (--start; (start > 0) && Cell(selection()->activeSheet(), start, selection()->marker().y()).value().isNumber(); --start) ;
 
                 const Region region(QRect(QPoint(start + 1, selection()->marker().y()),
                                           QPoint(end, selection()->marker().y())), selection()->activeSheet());
@@ -2707,8 +2705,8 @@ void CellToolBase::insertSpecialChar()
 
     if (d->specialCharDialog == 0) {
         d->specialCharDialog = new CharacterSelectDialog(canvas()->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
-        connect(d->specialCharDialog, SIGNAL(insertChar(QChar, const QString&)),
-                this, SLOT(specialChar(QChar, const QString&)));
+        connect(d->specialCharDialog, SIGNAL(insertChar(QChar,QString)),
+                this, SLOT(specialChar(QChar,QString)));
         connect(d->specialCharDialog, SIGNAL(finished()),
                 this, SLOT(specialCharDialogClosed()));
     }
@@ -2718,8 +2716,8 @@ void CellToolBase::insertSpecialChar()
 void CellToolBase::specialCharDialogClosed()
 {
     if (d->specialCharDialog) {
-        disconnect(d->specialCharDialog, SIGNAL(insertChar(QChar, const QString&)),
-                   this, SLOT(specialChar(QChar, const QString&)));
+        disconnect(d->specialCharDialog, SIGNAL(insertChar(QChar,QString)),
+                   this, SLOT(specialChar(QChar,QString)));
         disconnect(d->specialCharDialog, SIGNAL(finished()),
                    this, SLOT(specialCharDialogClosed()));
         d->specialCharDialog->deleteLater();
@@ -3113,8 +3111,8 @@ void CellToolBase::initFindReplace()
 {
     KFind* findObj = d->find ? d->find : d->replace;
     Q_ASSERT(findObj);
-    connect(findObj, SIGNAL(highlight(const QString &, int, int)),
-            this, SLOT(slotHighlight(const QString &, int, int)));
+    connect(findObj, SIGNAL(highlight(QString,int,int)),
+            this, SLOT(slotHighlight(QString,int,int)));
     connect(findObj, SIGNAL(findNext()),
             this, SLOT(findNext()));
 
@@ -3328,8 +3326,8 @@ void CellToolBase::replace()
     d->searchInSheets.currentSheet = selection()->activeSheet();
     d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
     initFindReplace();
-    connect(d->replace, SIGNAL(replace(const QString &, int, int, int)),
-            this, SLOT(slotReplace(const QString &, int, int, int)));
+    connect(d->replace, SIGNAL(replace(QString,int,int,int)),
+            this, SLOT(slotReplace(QString,int,int,int)));
 
     d->replaceCommand = new KUndo2Command(i18nc("(qtundo-format)", "Replace"));
 

@@ -107,7 +107,7 @@ bool SybaseConnection::drv_createDatabase(const QString &dbName)
     if (drv_executeSQL("CREATE DATABASE " + dbName)) {
         // set allow_nulls_by_default option to true
         QString allowNullsQuery = QString("sp_dboption %1, allow_nulls_by_default, true").arg(dbName);
-        if (drv_executeSQL(allowNullsQuery.toLatin1().data()))
+        if (drv_executeSQL(allowNullsQuery))
             return true;
     }
     d->storeResult();

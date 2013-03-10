@@ -61,7 +61,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : parentStyle(0), defaultStyle(0), list(0) {}
+    Private() : parentStyle(0), defaultStyle(0), list(0), m_inUse(false) {}
 
     ~Private()
     {
@@ -91,6 +91,7 @@ public:
     KoParagraphStyle *defaultStyle;
     KoList *list;
     StylePrivate stylesPrivate;
+    bool m_inUse;
 };
 
 KoParagraphStyle::KoParagraphStyle(QObject *parent)
@@ -127,6 +128,11 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *
 KoParagraphStyle::~KoParagraphStyle()
 {
     delete d;
+}
+
+KoCharacterStyle::Type KoParagraphStyle::styleType() const
+{
+    return KoCharacterStyle::ParagraphStyle;
 }
 
 void KoParagraphStyle::setDefaultStyle(KoParagraphStyle *defaultStyle)
@@ -229,23 +235,10 @@ QColor KoParagraphStyle::propertyColor(int key) const
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
-    bool hadBreakBefore = format.hasProperty(BreakBefore);
-    bool hadBreakAfter = format.hasProperty(BreakAfter);
-
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
 
-    if (!hadBreakBefore) {
-         // page preak should not be inherited according to odf, yet if it was there
-         // before we shouldn't remove
-         format.clearProperty(BreakBefore);
-    }
-    if (!hadBreakAfter) {
-         // page preak should not be inherited according to odf, yet if it was there
-         // before we shouldn't remove
-         format.clearProperty(BreakAfter);
-    }
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
     while (it != props.end()) {
@@ -263,6 +256,8 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
        format.setProperty(OutlineLevel, defaultOutlineLevel());
     }
+    emit styleApplied(this);
+    d->m_inUse = true;
 }
 
 void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
@@ -278,6 +273,11 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     if (applyListStyle) {
         applyParagraphListStyle(block, format);
     }
+}
+
+bool KoParagraphStyle::isApplied() const
+{
+    return d->m_inUse;
 }
 
 void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const
@@ -314,9 +314,8 @@ void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlo
         } else {
             if (block.textList())
                 block.textList()->remove(block);
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-            if (data)
-                data->setCounterWidth(-1);
+            KoTextBlockData data(block);
+            data.setCounterWidth(-1);
         }
     }
 }
@@ -357,7 +356,6 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
     if (d->list && block.textList()) { // TODO check its the same one?
         KoList::remove(block);
     }
-
 }
 
 void KoParagraphStyle::setLineHeightPercent(qreal lineHeight)

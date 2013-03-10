@@ -84,7 +84,7 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     // have names like this.
     odfStore->disallowNameExpansion();
     if (!odfStore->open("mimetype")) {
-        kError(30517) << "Unable to open input file!" << endl;
+        kError(30503) << "Unable to open input file!" << endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -119,15 +119,19 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     // m_imagesSrcList is an output parameter from the conversion.    
     HtmlFile html;
     html.setPathPrefix("./");
-    html.setFilePrefix(m_chain->outputFile().section('/', -1).section('.', 0, 0));
+    const QString outputFileName = m_chain->outputFile().section('/', -1);
+    const int dotPosition = outputFileName.indexOf('.');
+    html.setFilePrefix(outputFileName.left(dotPosition));
+    html.setFileSuffix(dotPosition != -1 ? outputFileName.mid(dotPosition) : QString());
     OdtHtmlConverter converter;
     OdtHtmlConverter::ConversionOptions options = {
         false,                   // don't put styles in css file
         false,                    // don't break into chapters
         false                     // It is not mobi.
     };
-    status = converter.convertContent(odfStore, m_metadata, &options, &html,
-                                      m_imagesSrcList);
+    QHash<QString, QString> mediaFilesList;
+    status = converter.convertContent(odfStore, m_metadata, &m_manifest, &options, &html,
+                                      m_imagesSrcList, mediaFilesList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -156,10 +160,10 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
     // Extract images and add them to htmlFile one by one
     QByteArray imgContent;
     int imgId = 1;
-    foreach (const QString imgSrc, m_imagesSrcList.keys()) {
-        kDebug(30517) << imgSrc;
+    foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
+        kDebug(30503) << imgSrc;
         if (!odfStore->extractFile(imgSrc, imgContent)) {
-            kDebug(30517) << "Can not to extract file";
+            kDebug(30503) << "Can not to extract file";
             return KoFilter::FileNotFound;
         }
 
@@ -175,11 +179,11 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
 
         case ExportHtml::VectorTypeSvm:
             {
-                kDebug(30517) << "Svm file";
+                kDebug(30503) << "Svm file";
                 QSize size(qSize.width(), qSize.height());
                 QByteArray output;
                 if (!convertSvm(imgContent, output, size)) {
-                    kDebug(30517) << "Svm Parse error";
+                    kDebug(30503) << "Svm Parse error";
                     return KoFilter::ParsingError;
                 }
 
@@ -190,11 +194,11 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
             }
         case ExportHtml::VectorTypeEmf:
             {
-                kDebug(30517) << "EMF file";
+                kDebug(30503) << "EMF file";
                 QSize size(qSize.width(), qSize.height());
                 QByteArray output;
                 if (!convertEmf(imgContent, output, size)) {
-                    kDebug(30517) << "EMF Parse error";
+                    kDebug(30503) << "EMF Parse error";
                     return KoFilter::ParsingError;
                 }
 
@@ -205,10 +209,10 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
             }
         case ExportHtml::VectorTypeWmf:
             {
-                kDebug(30517) << "WMF file";
+                kDebug(30503) << "WMF file";
                  QByteArray output;
                 if (!convertWmf(imgContent, output, qSize)) {
-                    kDebug(30517) << "WMF Parse error";
+                    kDebug(30503) << "WMF Parse error";
                     return KoFilter::ParsingError;
                 }
 
@@ -224,7 +228,7 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
             // the image.
         case ExportHtml::VectorTypeOther:
             {
-                kDebug(30517) << "Other file";
+                kDebug(30503) << "Other file";
                 epubFile->addContentFile(("image" + QString::number(imgId)),
                                          (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          m_manifest.value(imgSrc).toUtf8(), imgContent);
@@ -232,7 +236,7 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
             }
 
         default:
-            kDebug(30517) << "";
+            kDebug(30503) << "";
         }
 #endif
     }
@@ -256,7 +260,7 @@ bool ExportHtml::convertSvm(QByteArray &input, QByteArray &output, QSize size)
     QPainter painter;
 
     if (!painter.begin(&generator)) {
-        kDebug(30517) << "Can not open the painter";
+        kDebug(30503) << "Can not open the painter";
         return false;
     }
 
@@ -264,7 +268,7 @@ bool ExportHtml::convertSvm(QByteArray &input, QByteArray &output, QSize size)
     Libsvm::SvmPainterBackend svmPainterBackend(&painter, size);
     svmParser.setBackend(&svmPainterBackend);
     if (!svmParser.parse(input)) {
-        kDebug(30517) << "Can not Parse the Svm file";
+        kDebug(30503) << "Can not Parse the Svm file";
         return false;
     }
     painter.end();
@@ -286,7 +290,7 @@ bool ExportHtml::convertEmf(QByteArray &input, QByteArray &output, QSize size)
     QPainter painter;
 
     if (!painter.begin(&generator)) {
-        kDebug(30517) << "Can not open the painter";
+        kDebug(30503) << "Can not open the painter";
         return false;
     }
 
@@ -294,7 +298,7 @@ bool ExportHtml::convertEmf(QByteArray &input, QByteArray &output, QSize size)
     Libemf::OutputPainterStrategy  emfPaintOutput(painter, size, true );
     emfParser.setOutput( &emfPaintOutput );
     if (!emfParser.load(input)) {
-        kDebug(30517) << "Can not Parse the EMF file";
+        kDebug(30503) << "Can not Parse the EMF file";
         return false;
     }
     painter.end();
@@ -314,14 +318,14 @@ bool ExportHtml::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
     QPainter painter;
 
     if (!painter.begin(&generator)) {
-        kDebug(30517) << "Can not open the painter";
+        kDebug(30503) << "Can not open the painter";
         return false;
     }
 
     painter.scale(50,50);
     Libwmf::WmfPainterBackend  wmfPainter(&painter, size);
     if (!wmfPainter.load(input)) {
-        kDebug(30517) << "Can not Parse the WMF file";
+        kDebug(30503) << "Can not Parse the WMF file";
         return false;
     }
 

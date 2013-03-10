@@ -60,9 +60,8 @@ public:
     QString databaseName() const;
 
 private:
-    QString  m_driverName;
-    QString  m_databaseName;
-
+    class Private;
+    Private * const d;
 };
 
 #endif

@@ -133,7 +133,7 @@ void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manag
         endRemoveRows();
         return;
     }
-    Q_ASSERT( manager == m_manager );
+    Q_ASSERT( manager == m_manager ); Q_UNUSED( manager );
     endRemoveRows();
     m_manager = 0;
 }

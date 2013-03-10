@@ -48,7 +48,7 @@ class KWPageCacheManager;
 class WORDS_EXPORT KWCanvasBase : public KoCanvasBase
 {
 public:
-    KWCanvasBase(KWDocument *document, QObject *parent = 0);
+    explicit KWCanvasBase(KWDocument *document, QObject *parent = 0);
     ~KWCanvasBase();
 
 public: // KoCanvasBase interface methods.
@@ -111,8 +111,8 @@ protected:
     void paint(QPainter &painter, const QRectF &paintRect);
 
     void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
-
-    void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
+    void paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap);
+    void doPaintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
 
     void paintGrid(QPainter &painter, KWViewMode::ViewMap &viewMap);
 

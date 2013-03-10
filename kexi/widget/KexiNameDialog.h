@@ -25,6 +25,19 @@
 #include <core/kexipart.h>
 
 class KexiNameWidget;
+class KexiNameDialog;
+
+//! Validator that can be used to check validity of data entered into KexiNameDialog
+class KEXIEXTWIDGETS_EXPORT KexiNameDialogValidator
+{
+public:
+    KexiNameDialogValidator();
+    virtual ~KexiNameDialogValidator();
+
+    //! For implementation. Validates data entered into dialog @a dialog.
+    //! @return true if the data if valid.
+    virtual bool validate(KexiNameDialog *dialog) const = 0;
+};
 
 class KEXIEXTWIDGETS_EXPORT KexiNameDialog : public KDialog
 {
@@ -58,6 +71,12 @@ public:
     //! False by default.
     void setAllowOverwriting(bool set);
 
+    //! Sets validator that will be used to check validity of data entered into this KexiNameDialog.
+    //! Validation occurs before any other checks.
+    //! Passes ownership of @a validator to this name dialog.
+    //! Previous validator is removed. 0 an be passed.
+    void setValidator(KexiNameDialogValidator *validator);
+
 protected slots:
     void slotTextChanged();
     virtual void accept();
@@ -69,13 +88,9 @@ protected:
     //! Checks if specified name already exists.
     bool canOverwrite();
 
-    QLabel *m_icon;
-    KexiNameWidget* m_widget;
-    const KexiProject *m_project;
-    const KexiPart::Part *m_part;
-    bool m_checkIfObjectExists;
-    bool m_allowOverwriting;
-    bool *m_overwriteNeeded;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

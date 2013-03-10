@@ -124,7 +124,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
         }
         //style:vertical-rel - relative vertical position of the anchor
         pos = Conversion::getVerticalRel(tap->pcVert);
-    if (!pos.isEmpty()) {
+	if (!pos.isEmpty()) {
             style.addProperty("style:vertical-rel", pos, gt);
         }
         //style:horizontal-rel - relative horizontal position of the anchor
@@ -666,7 +666,7 @@ void WordsTableHandler::tableCellEnd()
                                               document()->textHandler()->paragraphBaseFontColorBkp());
 
     if (!color.isNull()) {
-        KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName);
+        KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName, "table-cell");
         Q_ASSERT(cellStyle);
         if (cellStyle) {
             cellStyle->addProperty("fo:background-color", color, KoGenStyle::TableCellType);
@@ -676,6 +676,11 @@ void WordsTableHandler::tableCellEnd()
         //add the current background-color to stack
 //         document()->pushBgColor(color);
     }
+}
+
+Words::Table::Table()
+: floating(false)
+{
 }
 
 void Words::Table::cacheCellEdge(int cellEdge)

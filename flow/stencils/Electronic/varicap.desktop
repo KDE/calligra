@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=varicap
+Name[bs]=varikap dioda
 Name[ca]=varicap
 Name[ca@valencia]=varicap
+Name[da]=varicap
 Name[de]=Abstimmdiode
 Name[el]=varicap
 Name[es]=condensador variable
@@ -20,4 +22,5 @@ Name[sk]=varikap
 Name[sv]=variabel kondensator
 Name[uk]=Варіконд
 Name[x-test]=xxvaricapxx
+Name[zh_CN]=变容
 Name[zh_TW]=varicap

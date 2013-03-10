@@ -21,18 +21,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoApplication.h"
 #include "KoPart.h"
+
+#include "KoApplication.h"
 #include "KoMainWindow.h"
 #include "KoDocument.h"
 #include "KoView.h"
-#include "KoCanvasController.h"
-#include "KoCanvasControllerWidget.h"
 #include "KoOpenPane.h"
-#include "KoMainWindow.h"
 #include "KoProgressProxy.h"
 #include "KoFilterManager.h"
 #include "KoServiceProvider.h"
+#include <KoDocumentInfoDlg.h>
+
+#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -40,7 +42,6 @@
 #include <kdeprintdialog.h>
 #include <knotification.h>
 #include <kdialog.h>
-#include <kmessagebox.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
@@ -101,6 +102,11 @@ public:
         , canvasItem(0)
         , startUpWidget(0)
     {
+    }
+
+    ~Private()
+    {
+        delete canvasItem;
     }
 
     QList<KoView*> views;
@@ -311,6 +317,11 @@ KoMainWindow *KoPart::currentShell() const
     }
     return shell;
 
+}
+
+KoDocumentInfoDlg *KoPart::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
+{
+    return new KoDocumentInfoDlg(parent, docInfo);
 }
 
 void KoPart::showSavingErrorDialog()

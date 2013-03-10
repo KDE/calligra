@@ -23,7 +23,6 @@
 #define CALLIGRA_SHEETS_FUNCTIONS
 
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <QVector>
 

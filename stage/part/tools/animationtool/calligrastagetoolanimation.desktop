@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Animation Tool
 Name[bg]=Инструмент за анимации
+Name[bs]=Alat za animaciju
 Name[ca]=Eina d'animació
 Name[ca@valencia]=Eina d'animació
 Name[cs]=Nástroj pro animaci
@@ -22,6 +23,7 @@ Name[it]=Strumento di animazione
 Name[ja]=アニメーションツール
 Name[kk]=Анимация құралы
 Name[lv]=Animēšanas rīks
+Name[mr]=ऍनीमेशन साधन
 Name[nb]=Animasjonsverktøy
 Name[nds]=Animatschoon-Warktüüch
 Name[nl]=Animatie-hulpmiddel
@@ -38,9 +40,9 @@ Name[wa]=Usteye d' animåcion
 Name[x-test]=xxAnimation Toolxx
 Name[zh_CN]=动画工具
 Name[zh_TW]=動畫工具
+X-KDE-PluginInfo-Name=calligrastagetoolanimation
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-Library=calligrastagetoolanimation
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
-
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

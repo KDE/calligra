@@ -158,7 +158,7 @@ void DocxXmlDocumentReader::init()
     m_createSectionToNext = false;
     m_currentVMLProperties.insideGroup = false;
     m_outputFrames = true;
-    m_currentNumId = "";
+    m_currentNumId.clear();
     m_prevListLevel = 0;
     qsrand(QTime::currentTime().msec());
 }
@@ -396,10 +396,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     // the numbering in addChildElement is needed to correctly sort the element when writing out the values.
     if (!m_headers.isEmpty()) {
         bool odd = false;
-        if (useEvenAndOddHeaders && m_headers["even"] != "") {
+        if (useEvenAndOddHeaders && !m_headers["even"].isEmpty()) {
             m_masterPageStyle.addChildElement("2 style:header-left", m_headers["even"]);
         }
-        if (m_headers["default"] != "") {
+        if (!m_headers["default"].isEmpty()) {
             odd = true;
             m_masterPageStyle.addChildElement("1 style:header", m_headers["default"]);
         }
@@ -410,10 +410,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 
     if (!m_footers.isEmpty()) {
         bool odd = false;
-        if (useEvenAndOddHeaders && m_footers["even"] != "") {
+        if (useEvenAndOddHeaders && !m_footers["even"].isEmpty()) {
             m_masterPageStyle.addChildElement("4 style:footer-left", m_footers["even"]);
         }
-        if (m_footers["default"] != "") {
+        if (!m_footers["default"].isEmpty()) {
             odd = true;
             m_masterPageStyle.addChildElement("3 style:footer", m_footers["default"]);
         }
@@ -435,7 +435,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     // Needs to have a style which is modified by next sectPr
     m_createSectionToNext = true;
 
-    KoGenStyle *sectionStyle = mainStyles->styleForModification(m_currentSectionStyleName);
+    KoGenStyle *sectionStyle = mainStyles->styleForModification(m_currentSectionStyleName, m_currentSectionStyleFamily);
     // There might not be a style to modify if the document is completely empty
     if (sectionStyle) {
         sectionStyle->addAttribute("style:master-page-name", currentMasterPageName);
@@ -701,7 +701,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
         reader.raiseError(errorMessage);
     }
 
-    QString footerContent = "";
+    QString footerContent;
 
     TRY_READ_ATTR(type)
     if (!type.isEmpty()) {
@@ -780,7 +780,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
         reader.raiseError(errorMessage);
     }
 
-    QString headerContent = "";
+    QString headerContent;
 
     TRY_READ_ATTR(type)
     if (!type.isEmpty()) {
@@ -2374,7 +2374,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                             fontSize = m_context->m_defaultFontSizePt;
                         }
                         qreal base = 10; //fair enough
-                        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+                        if (!fontSize.isEmpty() && fontSize.endsWith(QLatin1String("pt"))) {
                             fontSize.chop(2);
                             STRING_TO_QREAL(fontSize, base, QString("PictureType: processing font-size"));
                         }
@@ -2482,12 +2482,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 body->startElement("text:p", false);
                 if (m_currentStyleName.isEmpty()) {
                     QString currentParagraphStyleName;
+                    currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
                     if (sectionAdded) {
-                        currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
                         m_currentSectionStyleName = currentParagraphStyleName;
-                    }
-                    else {
-                        currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
+                        m_currentSectionStyleFamily = m_currentParagraphStyle.familyName();
                     }
                     body->addAttribute("text:style-name", currentParagraphStyleName);
                 }
@@ -4534,7 +4532,7 @@ bool DocxXmlDocumentReader::handleSpecialField()
         return false;
     }
     QString instr = m_specialCharacters.trimmed();
-    m_specialCharacters = QString();
+    m_specialCharacters.clear();
     QVector<QString> instructions;
     while (instr.indexOf(' ') > 0) {
         int place = instr.indexOf(' ');
@@ -5489,6 +5487,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     if (sectionAdded) {
         m_currentSectionStyleName = m_table->tableStyle()->name();
+        m_currentSectionStyleFamily = "table";
     }
 
     delete m_currentLocalTableStyles;
@@ -6430,7 +6429,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
     kDebug() << "oleName:" << oleName;
 
-    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);
+    QString destinationName = oleName.mid(oleName.lastIndexOf('/') + 1);
     KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
     if (stat == KoFilter::OK) {
         body->startElement("draw:object-ole");

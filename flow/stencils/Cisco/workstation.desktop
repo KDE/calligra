@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Workstation
 Name[bg]=Работна станция
+Name[bs]=Radna stanica
 Name[ca]=Estació de treball
 Name[ca@valencia]=Estació de treball
 Name[cs]=Prac. stanice
+Name[da]=Arbejdsstation
 Name[de]=Workstation
 Name[el]=Σταθμός εργασίας
 Name[es]=Estación de trabajo
@@ -15,6 +17,7 @@ Name[hu]=Munkaállomás
 Name[it]=Workstation
 Name[ja]=ワークステーション
 Name[kk]=Жұмыс станциясы
+Name[lt]=Darbo stotis
 Name[nb]=Arbeidsstasjon
 Name[nds]=Arbeitreekner
 Name[nl]=Werkstation
@@ -23,6 +26,7 @@ Name[pt]=Estação trabalho
 Name[pt_BR]=Estação de trabalho
 Name[ru]=Рабочая станция
 Name[sk]=Pracovná stanica
+Name[sl]=Delovna postaja
 Name[sv]=Arbetsstation
 Name[ug]=Workstation
 Name[uk]=Робоча станція

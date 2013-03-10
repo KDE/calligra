@@ -204,7 +204,6 @@ The default font is set for all cells in the Format -> Style Manager menu with t
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <customwidgets>
   <customwidget>
    <class>KColorButton</class>

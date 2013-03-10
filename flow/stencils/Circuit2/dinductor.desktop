@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Diagonal Inductor
+Name[bs]=Dijagonalna zavojnica
 Name[ca]=Diagonal Inductor
 Name[ca@valencia]=Diagonal Inductor
+Name[da]=Diagonal induktor
 Name[de]=Diagonale Drosselspule
 Name[el]=Διαγώνιο πηνίο
 Name[es]=Inductor diagonal
@@ -20,6 +22,7 @@ Name[pt_BR]=Indutor diagonal
 Name[ru]=Диагональная катушка индуктивности
 Name[sk]=Diagonálna cievka
 Name[sv]=Diagonal induktans
+Name[tr]=Diyagonal Endüktör
 Name[uk]=Індуктивна котушка (діагонально)
 Name[x-test]=xxDiagonal Inductorxx
 Name[zh_TW]=對角導體

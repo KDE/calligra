@@ -576,10 +576,10 @@ void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KForm
     d->features = 0;
     d->widgetActionGroup = &group;
 
-    connect(&d->propertySet, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
-    connect(&d->propertySet, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
+    connect(&d->propertySet, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+    connect(&d->propertySet, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyReset(KoProperty::Set&,KoProperty::Property&)));
 
     // Init actions
     d->collection = &col; //new KActionCollection(this);
@@ -1570,7 +1570,7 @@ void Form::setFormWidget(FormWidget* w)
     d->formWidget = w;
     if (!d->formWidget)
         return;
-    d->formWidget->m_form = this;
+    d->formWidget->setForm(this);
 }
 
 // moved from FormManager
@@ -3444,7 +3444,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         editor->show();
         editor->setFocus();
         editor->selectAll();
-        connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeInlineTextInternal(const QString&)));
+        connect(editor, SIGNAL(textChanged(QString)), this, SLOT(changeInlineTextInternal(QString)));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
         connect(editor, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     }

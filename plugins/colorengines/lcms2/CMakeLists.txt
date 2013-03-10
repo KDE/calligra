@@ -1,6 +1,10 @@
 project( lcmsengine )
 
-add_subdirectory(tests)
+if(!WIN32)
+## Only test if on non-Windows system
+	add_subdirectory(tests)
+endif(!WIN32)
+
 add_subdirectory(colorprofiles)
 
 include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
@@ -30,7 +34,7 @@ include_directories(
 if (HAVE_LCMS24 AND OPENEXR_FOUND)
 include_directories( 
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_f16
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/ycbcr_f16
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/xyz_f16
 )
 endif (HAVE_LCMS24 AND OPENEXR_FOUND)
 

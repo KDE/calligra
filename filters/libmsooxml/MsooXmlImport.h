@@ -32,6 +32,7 @@
 #include <QHash>
 #include <QVariant>
 
+#include <KoBorder.h>
 #include <KoOdfExporter.h>
 #include <KoXmlReader.h>
 
@@ -72,6 +73,10 @@ public:
     KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString& path,
             QString& errorMessage,
             MsooXmlReaderContext* context = 0);
+
+    //! Loads a file from a device
+    KoFilter::ConversionStatus loadAndParseFromDevice(MsooXmlReader* reader, QIODevice* device,
+            MsooXmlReaderContext* context);
 
     /*! Copies file @a sourceName from the input archive to the output document
     under @a destinationName name. @return KoFilter::OK on success.

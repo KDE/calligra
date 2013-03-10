@@ -41,7 +41,7 @@ class View;
 class CALLIGRA_SHEETS_COMMON_EXPORT ColumnHeader
 {
 public:
-    ColumnHeader(CanvasBase *_canvas);
+    explicit ColumnHeader(CanvasBase *_canvas);
     virtual ~ColumnHeader();
 
     int markerColumn() const {
@@ -134,7 +134,7 @@ protected:
 class CALLIGRA_SHEETS_COMMON_EXPORT RowHeader
 {
 public:
-    RowHeader(CanvasBase *_canvas);
+    explicit RowHeader(CanvasBase *_canvas);
     virtual ~RowHeader();
 
     int markerRow() const {

@@ -32,11 +32,9 @@
 
 #include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
-#endif
 #endif
 
 #include <QPushButton>
@@ -55,9 +53,10 @@ SummaryTaskGeneralPanel::SummaryTaskGeneralPanel(Task &task, QWidget *p, const c
 #ifndef PLAN_KDEPIMLIBS_FOUND
     chooseLeader->hide();
 #endif
-#if ! KDE_IS_VERSION( 4, 5, 0 )
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
     chooseLeader->hide();
-#endif
 
     m_description = new TaskDescriptionPanel( task, this );
     m_description->namefield->hide();
@@ -129,7 +128,6 @@ bool SummaryTaskGeneralPanel::ok() {
 void SummaryTaskGeneralPanel::slotChooseResponsible()
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -153,7 +151,6 @@ void SummaryTaskGeneralPanel::slotChooseResponsible()
             leaderfield->setText( names.join( ", " ) );
         }
     }
-#endif
 #endif
 }
 

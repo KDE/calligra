@@ -106,10 +106,10 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     m_originalPalette = palette();
-    connect(this, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextChanged(const QString&)));
-    connect(this, SIGNAL(textEdited(const QString&)),
-            this, SLOT(slotTextEdited(const QString&)));
+    connect(this, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTextChanged(QString)));
+    connect(this, SIGNAL(textEdited(QString)),
+            this, SLOT(slotTextEdited(QString)));
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
@@ -119,7 +119,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     m_inStyleChangeEvent = true; // do not allow KLineEdit::event() to touch the style
     setStyle(m_internalStyle);
     m_inStyleChangeEvent = false;
-    m_lengthExceededEmittedAtPreviousChange = false;
+    KexiDataItemInterface::setLengthExceededEmittedAtPreviousChange(false);
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
@@ -147,7 +147,7 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
     m_slotTextChanged_enabled = false;
     bool lengthExceeded;
     m_originalText = m_textFormatter.toString(
-                         removeOld ? QVariant() : m_origValue, add.toString(), &lengthExceeded);
+                removeOld ? QVariant() : KexiDataItemInterface::originalValue(), add.toString(), &lengthExceeded);
     setText(m_originalText);
     setCursorPosition(0); //ok?
     emitLengthExceededIfNeeded(lengthExceeded);

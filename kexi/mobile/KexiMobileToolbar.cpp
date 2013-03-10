@@ -30,7 +30,7 @@
 #include <core/KexiRecordNavigatorHandler.h>
 
 KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
-				m_recordHandler(0)
+                m_recordHandler(0)
 {
     setOrientation(Qt::Vertical);
 
@@ -78,32 +78,32 @@ void KexiMobileToolbar::openFileClicked()
 
 void KexiMobileToolbar::recordNext()
 {
-	if (m_recordHandler) {
-		m_recordHandler->moveToNextRecordRequested();
-		updatePage();
-	}
+    if (m_recordHandler) {
+        m_recordHandler->moveToNextRecordRequested();
+        updatePage();
+    }
 }
 
 void KexiMobileToolbar::recordPrevious()
 {
-	if (m_recordHandler) {
-		m_recordHandler->moveToPreviousRecordRequested();
-		updatePage();
-	}
+    if (m_recordHandler) {
+        m_recordHandler->moveToPreviousRecordRequested();
+        updatePage();
+    }
 }
 
 void KexiMobileToolbar::setRecordHandler(KexiRecordNavigatorHandler* handler)
 {
-	qDebug() << handler;
-	m_recordHandler = handler;
-	updatePage();
+    qDebug() << handler;
+    m_recordHandler = handler;
+    updatePage();
 }
 
 void KexiMobileToolbar::updatePage()
 {
-	if (m_recordHandler) {
-		m_recordNumber->setText(QString("%1 of %2").arg(m_recordHandler->currentRecord()).arg(m_recordHandler->recordCount()));
-	}
+    if (m_recordHandler) {
+        m_recordNumber->setText(QString("%1 of %2").arg(m_recordHandler->currentRecord()).arg(m_recordHandler->recordCount()));
+    }
 }
 
 #include "KexiMobileToolbar.moc"

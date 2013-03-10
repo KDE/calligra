@@ -79,24 +79,27 @@ void KWFrameDialog::okClicked()
     class MasterCommand : public KUndo2Command
     {
     public:
-        MasterCommand(KWAnchoringProperties *anchoringProperties)
+        MasterCommand(KWAnchoringProperties *anchoringProperties, KWCanvas *canvas)
             : KUndo2Command(i18nc("(qtundo-format)", "Change Shape Properties"))
             , m_anchoringProperties(anchoringProperties)
             , m_first(true)
+            , m_canvas(canvas)
         {}
 
         void redo() {
             if (m_first) {
                 m_first = false;
-                m_anchoringProperties->save(this);
+                m_anchoringProperties->save(this, m_canvas);
+            } else {
+                KUndo2Command::redo();
             }
-            KUndo2Command::redo();
         }
         KWAnchoringProperties *m_anchoringProperties;
         bool m_first;
+        KWCanvas *m_canvas;
     };
 
-    MasterCommand *macro = new MasterCommand(m_anchoringProperties);
+    MasterCommand *macro = new MasterCommand(m_anchoringProperties, m_canvas);
 
     //these we can just add as children as they don't deal with kotexteditor
     m_generalFrameProperties->save();

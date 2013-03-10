@@ -35,6 +35,7 @@
 #include "kdatetable.h"
 #include "kdatetable_p.h"
 
+#include <kdeversion.h>
 #include <kconfig.h>
 #include <kcolorscheme.h>
 #include <kglobal.h>
@@ -492,7 +493,7 @@ QDate KDateTable::dateFromPos( int pos )
 {
   QDate pCellDate;
   const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-  calendar->setYMD(pCellDate, calendar->year(d->mDate), calendar->month(d->mDate), 1);
+  calendar->setDate(pCellDate, calendar->year(d->mDate), calendar->month(d->mDate), 1);
 
   int firstWeekDay = KGlobal::locale()->weekStartDay();
   int offset = (d->firstday - firstWeekDay + 7) % 7;
@@ -532,7 +533,12 @@ bool KDateTable::event( QEvent *event )
             if ( d->m_weekNumberDelegate )
             {
                 const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-                text = d->m_weekNumberDelegate->data( calendar->weekNumber( pCellDate ), Qt::ToolTipRole, d->m_model ).toString();
+#if KDE_IS_VERSION(4,7,0)
+                const int weekNumber = calendar->week( pCellDate );
+#else
+                const int weekNumber = calendar->weekNumber( pCellDate );
+#endif
+                text = d->m_weekNumberDelegate->data( weekNumber, Qt::ToolTipRole, d->m_model ).toString();
             }
         }
         else
@@ -625,7 +631,12 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
     QDate pCellDate = dateFromPos( pos );
     if ( d->m_weekNumberDelegate )
     {
-      size = d->m_weekNumberDelegate->paint( painter, d->m_styleOptionWeekNumber, calendar->weekNumber( pCellDate ), d->m_model ).size();
+#if KDE_IS_VERSION(4,7,0)
+      const int weekNumber = calendar->week( pCellDate );
+#else
+      const int weekNumber = calendar->weekNumber( pCellDate );
+#endif
+      size = d->m_weekNumberDelegate->paint( painter, d->m_styleOptionWeekNumber, weekNumber, d->m_model ).size();
     }
   }
   else
@@ -1014,8 +1025,8 @@ KDateTable::setDate(const QDate& date_)
   }
   const KCalendarSystem * calendar = KGlobal::locale()->calendar();
 
-  calendar->setYMD(temp, calendar->year(d->mDate), calendar->month(d->mDate), 1);
-  //temp.setYMD(d->mDate.year(), d->mDate.month(), 1);
+  calendar->setDate(temp, calendar->year(d->mDate), calendar->month(d->mDate), 1);
+  //temp.setDate(d->mDate.year(), d->mDate.month(), 1);
   //kDebug(planDbg()) << "firstDayInWeek: " << temp.toString();
   d->firstday=temp.dayOfWeek();
   d->numdays=calendar->daysInMonth(d->mDate);
@@ -1129,8 +1140,8 @@ KDateInternalYearSelector::yearEnteredSlot()
       KNotification::beep();
       return;
     }
-  //date.setYMD(year, 1, 1);
-  KGlobal::locale()->calendar()->setYMD(date, year, 1, 1);
+  //date.setDate(year, 1, 1);
+  KGlobal::locale()->calendar()->setDate(date, year, 1, 1);
   if(!date.isValid())
     {
       KNotification::beep();
@@ -1316,7 +1327,7 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
     QColor textColor = palette.text().color();
     QBrush bg( palette.base() );
     Qt::Alignment align = option.displayAlignment;
-    QString text = calendar->dayString(date, KCalendarSystem::ShortFormat);
+    QString text = calendar->formatDate(date, KLocale::Day, KLocale::ShortNumber);
 
     if ( model )
     {
@@ -1455,7 +1466,7 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
         painter->drawRect(option.rectF);
       }
       painter->setPen(pen);
-      QString text = calendar->dayString(date, KCalendarSystem::ShortFormat);
+      QString text = calendar->formatDate(date, KLocale::Day, KLocale::ShortNumber);
       if ( model )
       {
         QVariant v = model->data( date );

@@ -90,11 +90,6 @@ public:
     //! Sets listener. No need to reimplement this.
     virtual void installListener(KexiDataItemChangesListener* listener);
 
-//  //! Sets value \a value for a widget.
-//  //! Just calls setValueInternal(), but also blocks valueChanged()
-//  //! as you we don't want to react on our own change
-//  void setValue(const QVariant& value);
-
     //! \return value currently represented by this item.
     virtual QVariant value() = 0;
 
@@ -118,29 +113,21 @@ public:
     //! \return value that should be displayed for this item.
     //! Only used for items like combo box, where real value is an integer while
     //! displayed value is usually a text. For other item types this method should be empty.
-    virtual QVariant visibleValue() {
-        return QVariant();
-    }
+    virtual QVariant visibleValue();
 
     /*! \return 'readOnly' flag for this item. The flag is usually taken from
      the item's widget, e.g. KLineEdit::isReadOnly().
      By default, always returns false. */
-    virtual bool isReadOnly() const {
-        return false;
-    }
+    virtual bool isReadOnly() const;
 
     /*! \return the view widget of this item, e.g. line edit widget. */
     virtual QWidget* widget() = 0;
 
     /*! Hides item's widget, if available. */
-    virtual void hideWidget() {
-        if (widget()) widget()->hide();
-    }
+    virtual void hideWidget();
 
     /*! Shows item's widget, if available. */
-    virtual void showWidget() {
-        if (widget()) widget()->show();
-    }
+    virtual void showWidget();
 
     //! \return true if editor's value is changed (compared to original value)
     virtual bool valueChanged();
@@ -173,10 +160,10 @@ public:
     /*! \return true if this editor offers a widget (e.g. line edit) that we can move focus to.
      Editor for boolean values has this set to false (see KexiBoolTableEdit).
      This is true by default. You can override this flag by changing
-     m_hasFocusableWidget in your subclass' constructor. */
-    inline bool hasFocusableWidget() const {
-        return m_hasFocusableWidget;
-    }
+     hasFocusableWidget in your subclass' constructor. */
+    bool hasFocusableWidget() const;
+
+    void setHasFocusableWidget(bool set) const;
 
     /*! Displays additional elements that are needed for indicating that the current cell
      is selected. For example, combobox editor (KexiComboBoxTableEdit) moves and shows
@@ -200,13 +187,11 @@ public:
     /*! \return true if editing should be accepted immediately after
      deleting contents for the cell (usually using Delete key).
      This flag is false by default, and is true e.g. for date, time and datetime types. */
-    bool acceptEditorAfterDeleteContents() const {
-        return m_acceptEditorAfterDeleteContents;
-    }
+    bool acceptEditorAfterDeleteContents() const;
 
-    inline virtual void setFocus() {
-        if (widget()) widget()->setFocus();
-    }
+    void setAcceptEditorAfterDeleteContents(bool set) const;
+
+    virtual void setFocus();
 
     bool cursorAtNewRow();
 
@@ -214,21 +199,17 @@ public:
      but can be set by parent widget if this interface is a building block of a larger data widget.
      It is the case for KexiDBFieldEdit widget (see KexiDBFieldEdit::createEditor()). Use with care.
      signalValueChanged() method will check this pointer, and if it's not 0,
-     m_parentDataItemInterface->signalValueChanged() is called, so a changes can be signalled at higher level. */
+     parentDataItemInterface()->signalValueChanged() is called, so a changes can be signalled at higher level. */
     void setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface);
 
     /*! \return a pointer to a Parent Data Item Interface.
      @see setParentDataItemInterface() */
-    inline KexiDataItemInterface* parentInterface() const {
-        return m_parentDataItemInterface;
-    }
+    KexiDataItemInterface* parentDataItemInterface() const;
 
     /*! Handles action having standard name \a actionName.
      Action could be: "edit_cut", "edit_paste", etc.
      For reimplementation. */
-    virtual void handleAction(const QString& actionName) {
-        Q_UNUSED(actionName);
-    }
+    virtual void handleAction(const QString& actionName);
 
     virtual bool isComboBox() const;
     
@@ -238,24 +219,26 @@ public:
     //! @return true on successful fixing
     //! Default implementation just returns true.
     virtual bool fixup();
-    
+
+    bool lengthExceededEmittedAtPreviousChange() const;
+
+    void setLengthExceededEmittedAtPreviousChange(bool set);
+
 protected:
     /*! Initializes this editor with \a add value, which should be somewhat added to the current
-     value (already storted in m_origValue).
+     value (see originalValue()).
      If \a removeOld is true, a value should be set to \a add, otherwise
-     -it should be set to current \a m_origValue + \a add, if possible.
+     -it should be set to current \a originalValue() + \a add, if possible.
      Implement this. */
     virtual void setValueInternal(const QVariant& add, bool removeOld) = 0;
+
+    QVariant originalValue() const;
 
     /*! Initializes this editor with \a value visible value.
      This is currently used only in case of the combo box form widget, where displayed content
      (usually a text of image) differs from the value of the widget (a numeric index).
      For implementation in the combo box widget, by default does nothing. */
     virtual void setVisibleValueInternal(const QVariant& value);
-
-//  //! Sets value \a value for a widget.
-//  //! Implement this method to allow setting value for this widget item.
-//  virtual void setValueInternal(const QVariant& value) = 0;
 
     /*! Call this in your implementation when value changes,
      so installed listener can react on this change. If there is a parent data item defined
@@ -278,18 +261,10 @@ protected:
 
     KexiDataItemChangesListener* listener();
 
-//moved to KexiFormDataItemInterface: QString m_dataSource;
-    QPointer<QObject> m_listenerObject;
-    KexiDataItemChangesListener* m_listener;
-    bool m_listenerIsQObject;
-    QVariant m_origValue;
+    void setFocusableWidget(bool set);
 
-    /*! @see parentDataItemInterface() */
-    KexiDataItemInterface* m_parentDataItemInterface;
-    bool m_hasFocusableWidget;
-    bool m_disable_signalValueChanged;
-    bool m_acceptEditorAfterDeleteContents;
-    bool m_lengthExceededEmittedAtPreviousChange;
+    class Private;
+    Private* const d;
 };
 
 #endif

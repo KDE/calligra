@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=General Computer (Tower)
 Name[bg]=Обикновен компютър (изправен)
+Name[bs]=Opći računar (toranj)
 Name[ca]=Ordinador general (torre)
 Name[ca@valencia]=Ordinador general (torre)
+Name[da]=Generel computer (tower)
 Name[de]=Rechner (Tower)
 Name[el]=Υπολογιστής γενικής χρήσης (πύργος)
 Name[es]=Equipo general (Torre)
@@ -18,7 +20,9 @@ Name[pt]=Computador Geral (Torre)
 Name[pt_BR]=Computador genérico (Torre)
 Name[ru]=Компьютер-башня
 Name[sk]=Všeobecný počítač (tower)
+Name[sl]=Splošen računalnik (stolp)
 Name[sv]=Allmän dator (torn)
+Name[tr]=Genel Bilgisayar (Dikey)
 Name[uk]=Типовий комп’ютер (корпус «башта»)
 Name[x-test]=xxGeneral Computer (Tower)xx
 Name[zh_TW]=一般電腦（塔）

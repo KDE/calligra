@@ -47,7 +47,7 @@ class KARBONUI_EXPORT KarbonPart : public KoPart
     Q_OBJECT
 
 public:
-    KarbonPart(QObject *parent);
+    explicit KarbonPart(QObject *parent);
 
     virtual ~KarbonPart();
 

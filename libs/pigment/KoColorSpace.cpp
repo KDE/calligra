@@ -18,10 +18,7 @@
 */
 
 #include "KoColorSpace.h"
-
-#include <QThreadStorage>
-#include <QByteArray>
-#include <QBitArray>
+#include "KoColorSpace_p.h"
 
 #include "KoChannelInfo.h"
 #include "DebugPigment.h"
@@ -37,7 +34,10 @@
 #include "KoFallBackColorTransformation.h"
 #include "KoUniqueNumberForIdServer.h"
 
-#include "KoColorSpace_p.h"
+#include <QThreadStorage>
+#include <QByteArray>
+#include <QBitArray>
+
 
 KoColorSpace::KoColorSpace()
         : d(new Private())
@@ -241,7 +241,9 @@ bool KoColorSpace::convertPixelsTo(const quint8 * src,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     if (*this == *dstColorSpace) {
-        memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
+        if (src != dst) {
+            memcpy(dst, src, numPixels * sizeof(quint8) * pixelSize());
+        }
     } else {
         KoCachedColorConversionTransformation cct = KoColorSpaceRegistry::instance()->colorConversionCache()->cachedConverter(this, dstColorSpace, renderingIntent, conversionFlags);
         cct.transformation()->transform(src, dst, numPixels);

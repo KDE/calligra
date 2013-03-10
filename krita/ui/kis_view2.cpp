@@ -90,6 +90,7 @@
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
 #include "dialogs/kis_dlg_preferences.h"
+#include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -126,6 +127,7 @@
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
+#include "kis_action_manager.h"
 #include "kis_paintop_box.h"
 
 
@@ -145,7 +147,7 @@ class BlockingUserInputEventFilter : public QObject
     }
 };
 
-struct KisView2::KisView2Private
+class KisView2::KisView2Private
 {
 
 public:
@@ -167,6 +169,7 @@ public:
         , gridManager(0)
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
+        , actionManager(0)
     {
     }
 
@@ -187,6 +190,7 @@ public:
         delete paintingAssistantManager;
         delete viewConverter;
         delete statusBar;
+        delete actionManager;
     }
 
 public:
@@ -194,26 +198,27 @@ public:
     KisCanvas2 *canvas;
     KisDoc2 *doc;
     KisPart2 *part;
-    KisCoordinatesConverter * viewConverter;
-    KisCanvasController * canvasController;
-    KisCanvasResourceProvider * resourceProvider;
-    KisFilterManager * filterManager;
-    KisStatusBar * statusBar;
-    KAction * totalRefresh;
-    KAction* mirrorCanvas;
-    KAction* createTemplate;
+    KisCoordinatesConverter *viewConverter;
+    KisCanvasController *canvasController;
+    KisCanvasResourceProvider *resourceProvider;
+    KisFilterManager *filterManager;
+    KisStatusBar *statusBar;
+    KAction *totalRefresh;
+    KAction *mirrorCanvas;
+    KAction *createTemplate;
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
     KisSelectionManager *selectionManager;
-    KisControlFrame * controlFrame;
-    KisNodeManager * nodeManager;
-    KisZoomManager * zoomManager;
-    KisImageManager * imageManager;
-    KisGridManager * gridManager;
+    KisControlFrame *controlFrame;
+    KisNodeManager *nodeManager;
+    KisZoomManager *zoomManager;
+    KisImageManager *imageManager;
+    KisGridManager *gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
-    KisPaintingAssistantsManager* paintingAssistantManager;
-    KoFavoriteResourceManager* favoriteResourceManager;
+    KisPaintingAssistantsManager *paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
+    KisFlipbook *flipbook;
+    KisActionManager* actionManager;
 };
 
 
@@ -221,12 +226,12 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     : KoView(part, doc, parent),
       m_d(new KisView2Private())
 {
-    setComponentData(KisFactory2::componentData());
     setXMLFile("krita.rc");
 
     setFocusPolicy(Qt::NoFocus);
 
     if (mainWindow()) {
+        mainWindow()->setDockNestingEnabled(true);
         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
     }
 
@@ -247,7 +252,16 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
 
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+
+
+    KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
+    if (grp.readEntry("CreatingCanvas", false)) {
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+    }
+    grp.writeEntry("CreatingCanvas", true);
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
+    grp.writeEntry("CreatingCanvas", false);
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
     m_d->canvasController->setCanvas(m_d->canvas);
@@ -266,7 +280,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     // krita/krita.rc must also be modified to add actions to the menu entries
 
     m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
-    m_d->saveIncremental->setShortcut(Qt::Key_F2);
+    m_d->saveIncremental->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
@@ -291,7 +305,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
+    m_d->mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
@@ -363,6 +377,9 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
 
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
+
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->doc->image(), SLOT(requestStrokeEnd()));
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
             m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
@@ -545,7 +562,7 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *action = popup.exec(QCursor::pos());
 
             if (action != 0 && action != cancel) {
-                foreach(QUrl url, urls) {
+                foreach(const QUrl &url, urls) {
 
                     if (action == insertAsNewLayer || action == insertAsNewLayers) {
                         m_d->imageManager->importImage(KUrl(url));
@@ -768,6 +785,10 @@ void KisView2::createActions()
     KAction* action = new KAction(i18n("Edit Palette..."), this);
     actionCollection()->addAction("edit_palette", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
+
+    action = new KAction(i18n("Cleanup removed files..."), this);
+    actionCollection()->addAction("edit_blacklist_cleanup", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }
 
 
@@ -778,14 +799,16 @@ void KisView2::createManagers()
     // XXX: When the currentlayer changes, call updateGUI on all
     // managers
 
+    m_d->actionManager = new KisActionManager(this);
+
     m_d->filterManager = new KisFilterManager(this, m_d->doc);
     m_d->filterManager->setup(actionCollection());
 
     m_d->selectionManager = new KisSelectionManager(this, m_d->doc);
-    m_d->selectionManager->setup(actionCollection());
+    m_d->selectionManager->setup(actionCollection(), actionManager());
 
     m_d->nodeManager = new KisNodeManager(this, m_d->doc);
-    m_d->nodeManager->setup(actionCollection());
+    m_d->nodeManager->setup(actionCollection(), actionManager());
 
     // the following cast is not really safe, but better here than in the zoomManager
     // best place would be outside kisview too
@@ -814,9 +837,9 @@ void KisView2::updateGUI()
     m_d->selectionManager->updateGUI();
     m_d->filterManager->updateGUI();
     m_d->zoomManager->updateGUI();
-    m_d->imageManager->updateGUI();
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
+    m_d->actionManager->updateGUI();
 }
 
 
@@ -903,6 +926,13 @@ void KisView2::slotEditPalette()
     base->show();
 }
 
+void KisView2::slotBlacklistCleanup()
+{
+    KisDlgBlacklistCleanup dialog;
+    dialog.exec();
+}
+
+
 void KisView2::slotImageSizeChanged()
 {
     QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
@@ -929,7 +959,7 @@ void KisView2::loadPlugins()
     // Load all plugins
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
                                                               QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 5)"));
+                                                                                  "([X-Krita-Version] == 27)"));
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;
@@ -959,6 +989,11 @@ KoPrintJob * KisView2::createPrintJob()
 KisNodeManager * KisView2::nodeManager()
 {
     return m_d->nodeManager;
+}
+
+KisActionManager* KisView2::actionManager()
+{
+    return m_d->actionManager;
 }
 
 KisPerspectiveGridManager* KisView2::perspectiveGridManager()

@@ -64,7 +64,7 @@ public:
     /**
      * Constructor.
      */
-    CellToolBase(KoCanvasBase* canvas);
+    explicit CellToolBase(KoCanvasBase *canvas);
 
     /**
      * Destructor.

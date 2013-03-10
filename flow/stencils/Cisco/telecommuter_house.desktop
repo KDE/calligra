@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Telecommuter house
 Name[bg]=Отдалечено работно място
+Name[bs]=Kuća telekomjutera
 Name[ca]=Casa telecommutador
 Name[ca@valencia]=Casa telecommutador
-Name[de]=Telecommuter-Haus
+Name[da]=Hjemmearbejder
+Name[de]=Telearbeiter-Haus
 Name[el]=Telecommuter house
 Name[es]=Casa de teleconmutación
 Name[et]=Telekommunikatsioonihoone
@@ -12,6 +14,7 @@ Name[gl]=Casa do traballador desde casa
 Name[hu]=Telecommuter-ház
 Name[it]=Telecommutatore casa
 Name[kk]=Үйдегі компьютер
+Name[lt]=Nutolusio darbuotojo namas
 Name[nb]=Telependler-hus
 Name[nds]=Telewerker-Huus
 Name[nl]=Telewerker thuis

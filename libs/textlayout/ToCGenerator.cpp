@@ -76,7 +76,7 @@ void ToCGenerator::setBlock(const QTextBlock &block)
 
 QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoTextRangeManager *textRangeManager)
 {
-    QHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
+    QHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.document(), block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
 
     foreach (KoTextRange *range, ranges) {
         KoBookmark *bookmark = dynamic_cast<KoBookmark *>(range);
@@ -229,7 +229,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
             QTextBlock tocEntryTextBlock = cursor.block();
             tocTemplateStyle->applyStyle( tocEntryTextBlock );
 
-            KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
+            KoTextBlockData bd(block);
 
             // save the current style due to hyperlinks
             QTextCharFormat savedCharFormat = cursor.charFormat();
@@ -271,9 +271,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                     }
                     case IndexEntry::CHAPTER: {
                         //IndexEntryChapter *chapter = static_cast<IndexEntryChapter*>(entry);
-                        if (bd) {
-                            cursor.insertText(bd->counterText());
-                        }
+                        cursor.insertText(bd.counterText());
                         break;
                     }
                     case IndexEntry::SPAN: {

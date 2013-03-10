@@ -125,6 +125,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     fillPredefined();
 }
 
+void KisCustomImageWidget::showEvent(QShowEvent *){
+    this->createButton->setFocus();
+}
+
 KisCustomImageWidget::~KisCustomImageWidget()
 {
     qDeleteAll(m_predefined);
@@ -294,7 +298,7 @@ void KisCustomImageWidget::fillPredefined()
 
     if (!definitions.empty()) {
 
-        foreach(QString definition, definitions) {
+        foreach(const QString &definition, definitions) {
             QFile f(definition);
             f.open(QIODevice::ReadOnly);
             if (f.exists()) {

@@ -56,12 +56,12 @@ public:
      *
      * @param document the text document where this annotation is located
      */
-    KoAnnotation(const QTextCursor &);
+    explicit KoAnnotation(const QTextCursor &);
 
     virtual ~KoAnnotation();
 
     /// reimplemented from super
-    void saveOdf(KoShapeSavingContext &context, int position) const;
+    virtual void saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const;
 
     /**
      * Set the new name for this annotation

@@ -47,9 +47,7 @@ public:
     void setSchema(KexiDB::TableOrQuerySchema* schema);
 
     /*! \return table or query schema schema set for this widget. */
-    KexiDB::TableOrQuerySchema* schema() const {
-        return m_schema;
-    }
+    KexiDB::TableOrQuerySchema* schema() const;
 
     /*! \return list of selected field names. */
     QStringList selectedFieldNames() const;
@@ -64,9 +62,9 @@ protected slots:
 
 protected:
 
-    KexiDB::TableOrQuerySchema* m_schema;
-    KexiFieldListModel *m_model;
-    KexiFieldListOptions m_options;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

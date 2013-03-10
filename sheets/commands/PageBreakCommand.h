@@ -34,7 +34,7 @@ namespace Sheets
 class PageBreakCommand : public AbstractRegionCommand
 {
 public:
-    PageBreakCommand(KUndo2Command *parent = 0);
+    explicit PageBreakCommand(KUndo2Command *parent = 0);
     virtual ~PageBreakCommand();
 
     enum Mode { BreakBeforeColumn, BreakBeforeRow };

@@ -74,7 +74,7 @@ MySQLMigrate::MySQLMigrate(QObject *parent, const QVariantList& args) :
         , m_dataRow(0)
 {
     KexiDB::DriverManager manager;
-    m_kexiDBDriver = manager.driver("mysql");
+    setDriver(manager.driver("mysql"));
 }
 
 /* ************************************************************************** */
@@ -90,9 +90,9 @@ MySQLMigrate::~MySQLMigrate()
 /*! Connect to the db backend */
 bool MySQLMigrate::drv_connect()
 {
-    if (!d->db_connect(*m_migrateData->source))
+    if (!d->db_connect(*data()->source))
         return false;
-    return d->useDatabase(m_migrateData->sourceName);
+    return d->useDatabase(data()->sourceName);
 }
 
 
@@ -187,7 +187,7 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
             if (mysql_errno(d->mysql))
                 r = false;
             else
-                r = (numRecords == -1) ? true : cancelled;
+                r = (numRecords == -1) ? tristate(true) : tristate(cancelled);
             mysql_free_result(res);
             return r;
         }

@@ -40,6 +40,9 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
+#include <KoTextDocument.h>
+#include <KoTextRangeManager.h>
+
 #include <pole.h>
 #include "swinder.h"
 #include "utils.h"
@@ -72,7 +75,6 @@ EString::EString()
     d = new EString::Private();
     d->unicode  = false;
     d->richText = false;
-    d->str      = QString::null;
     d->size     = 0;
 }
 
@@ -150,7 +152,7 @@ void EString::setSize(unsigned s)
 EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* maxsize */, const unsigned* continuePositions, unsigned continuePositionsOffset)
 {
     const unsigned char* data = (const unsigned char*) p;
-    QString str = QString::null;
+    QString str;
 
     unsigned offset = longString ? 2 : 1;
     unsigned len = longString ? readU16(data) : data[0];
@@ -178,7 +180,7 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
     if (richText) size += (formatRuns * 4);
     if (asianPhonetics) size += asianPhoneticsSize;
 
-    str = QString();
+    str.clear();
     for (unsigned k = 0; k < len; k++) {
         unsigned uchar;
         if (unicode) {
@@ -223,7 +225,7 @@ EString EString::fromByteString(const void* p, bool longString,
                                 unsigned /* maxsize */)
 {
     const unsigned char* data = (const unsigned char*) p;
-    QString str = QString::null;
+    QString str;
 
     unsigned offset = longString ? 2 : 1;
     unsigned len = longString ? readU16(data) : data[0];
@@ -251,7 +253,7 @@ EString EString::fromByteString(const void* p, bool longString,
 EString EString::fromSheetName(const void* p, unsigned datasize)
 {
     const unsigned char* data = (const unsigned char*) p;
-    QString str = QString::null;
+    QString str;
 
     bool richText = false;
     // unsigned formatRuns = 0;
@@ -975,7 +977,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
             const bool fHighByte = opts & 0x01;
 
             // XLUnicodeStringNoCch
-            QString str = QString();
+            QString str;
             if (fHighByte) {
                 for (unsigned k = 0; k < len*2; k++) {
                     unsigned zc = readU16(data + 15 + k * 2);
@@ -1138,7 +1140,6 @@ RStringRecord::RStringRecord(Workbook *book):
         Record(book), CellInfo()
 {
     d = new RStringRecord::Private();
-    d->label = QString::null;
 }
 
 RStringRecord::~RStringRecord()
@@ -1291,7 +1292,7 @@ void SSTRecord::setExtSSTRecord(ExtSSTRecord *esst)
 // why not just string() ? to avoid easy confusion with std::string
 QString SSTRecord::stringAt(unsigned index) const
 {
-    if (index >= count()) return QString::null;
+    if (index >= count()) return QString();
     return d->strings[ index ];
 }
 
@@ -1675,7 +1676,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     //Q_ASSERT((opts << 1) == 0x0);
 
     // XLUnicodeStringNoCch
-    m_text = QString();
+    m_text.clear();
     unsigned k = 1;
     if(fHighByte) {
         for (; startPict + k + 1 < endPict; k += 2) {
@@ -1716,6 +1717,8 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     } while(true);
     if (ToXRunsPositionIndex > 0) {
         m_doc = QSharedPointer<QTextDocument>(new QTextDocument());
+        // also add a textrangemanager, as KoTextWriter assumes one
+        KoTextDocument(m_doc).setTextRangeManager(new KoTextRangeManager);
         m_doc->setPlainText(m_text);
         QTextCursor cursor(m_doc.data());
         //cursor.setVisualNavigation(true);
@@ -2665,7 +2668,6 @@ void ExcelReader::handleEOF(EOFRecord* record)
 
 #ifdef SWINDER_XLS2RAW
 
-#include <iostream>
 #include <QApplication>
 
 int main(int argc, char ** argv)

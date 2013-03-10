@@ -27,7 +27,6 @@
 #include <QTreeWidgetItem>
 #include <QItemDelegate>
 #include <QApplication>
-#include <QTreeWidgetItem>
 #include <QContextMenuEvent>
 #include <QAction>
 #include <QActionGroup>

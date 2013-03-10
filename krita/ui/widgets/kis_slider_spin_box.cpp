@@ -49,8 +49,9 @@ public:
     QSpinBox* dummySpinBox;
 };
 
-KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate* _d) :
-        QWidget(parent), d_ptr(_d)
+KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate* _d)
+    : QWidget(parent)
+    , d_ptr(_d)
 {
     Q_D(KisAbstractSliderSpinBox);
     d->upButtonDown = false;
@@ -67,7 +68,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     pal.setColor(QPalette::Base, Qt::transparent);
     d->edit->setPalette(pal);
 
-    connect(d->edit, SIGNAL(lostFocus()), this, SLOT(editLostFocus()));
+    connect(d->edit, SIGNAL(editingFinished()), this, SLOT(editLostFocus()));
 
     d->validator = new QDoubleValidator(d->edit);
     d->edit->setValidator(d->validator);
@@ -204,7 +205,7 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
     //Respect emulated mouse grab.
     if (e->buttons() & Qt::LeftButton &&
-        !(d->downButtonDown || d->upButtonDown)) {
+            !(d->downButtonDown || d->upButtonDown)) {
         setInternalValue(valueForX(e->pos().x()));
         update();
     }
@@ -236,6 +237,18 @@ void KisAbstractSliderSpinBox::keyPressEvent(QKeyEvent* e)
         d->edit->event(e);
         break;
     }
+}
+
+void KisAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
+{
+
+    Q_D(KisAbstractSliderSpinBox);
+    if ( e->delta() > 0) {
+        setInternalValue(d->value + d->singleStep);
+    } else {
+        setInternalValue(d->value - d->singleStep);
+    }
+    e->accept();
 }
 
 bool KisAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
@@ -287,7 +300,7 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
 
     spinOpts.rect = rect();
     return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint, 0)
-           .expandedTo(QApplication::globalStrut());
+            .expandedTo(QApplication::globalStrut());
 
 }
 
@@ -410,7 +423,11 @@ void KisAbstractSliderSpinBox::contextMenuEvent(QContextMenuEvent* event)
 
 void KisAbstractSliderSpinBox::editLostFocus()
 {
-    hideEdit();
+    // only hide on focus lost, if editing is finished that will be handled in eventFilter
+    Q_D(KisAbstractSliderSpinBox);
+    if (!d->edit->hasFocus()) {
+        hideEdit();
+    }
 }
 
 class KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
@@ -418,7 +435,7 @@ class KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
 
 KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) : KisAbstractSliderSpinBox(parent, new KisSliderSpinBoxPrivate)
 {
-  setRange(0,99);
+    setRange(0,99);
 }
 
 KisSliderSpinBox::~KisSliderSpinBox()
