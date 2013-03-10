@@ -33,9 +33,9 @@ if (SHOULD_BUILD_PLUGIN_DOCKERS)
     add_subdirectory( dockers )
 endif (SHOULD_BUILD_PLUGIN_DOCKERS)
 
-if (SHOULD_BUILD_PLUGIN_TEXTEDITING AND SHOULD_BUILD_TEXTSHAPE)
+if (SHOULD_BUILD_PLUGIN_TEXTEDITING)
     add_subdirectory( textediting )
-endif(SHOULD_BUILD_PLUGIN_TEXTEDITING AND SHOULD_BUILD_TEXTSHAPE)
+endif(SHOULD_BUILD_PLUGIN_TEXTEDITING)
 
 add_subdirectory( kexi )
 
@@ -59,9 +59,9 @@ if (SHOULD_BUILD_PLUGIN_PICTURESHAPE)
     add_subdirectory( pictureshape )
 endif (SHOULD_BUILD_PLUGIN_PICTURESHAPE)
 
-if (SHOULD_BUILD_PLUGIN_TEXTSHAPE AND SHOULD_BUILD_TEXTSHAPE)
+if (SHOULD_BUILD_PLUGIN_TEXTSHAPE)
     add_subdirectory( textshape )
-endif(SHOULD_BUILD_PLUGIN_TEXTSHAPE AND SHOULD_BUILD_TEXTSHAPE)
+endif(SHOULD_BUILD_PLUGIN_TEXTSHAPE)
 
 if (SHOULD_BUILD_PLUGIN_PLUGINSHAPE)
     add_subdirectory( pluginshape )
@@ -75,6 +75,10 @@ if (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
     # ??? old comment: as the vector shape depends on filters subdir (not really intuitive) lets allow disabling
     add_subdirectory( vectorshape )
 endif (SHOULD_BUILD_PLUGIN_VECTORSHAPE)
+
+if (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
+    add_subdirectory( videoshape )
+endif (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
 
 # only build the reporting plugins if building koreport
 if(SHOULD_BUILD_PLUGIN_REPORTING)

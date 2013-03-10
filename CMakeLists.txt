@@ -73,7 +73,7 @@ if (CREATIVEONLY)
 endif (CREATIVEONLY)
 
 if(NOT PRODUCTSET)
-    set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Product set to build, currently supported: ACTIVE, CREATIVE, DESKTOP, ALL (default)" FORCE)
+    set(PRODUCTSET ${PRODUCTSET_DEFAULT} CACHE STRING "Set of products to build" FORCE)
 endif(NOT PRODUCTSET)
 
 # TODO: also add headers/sdk for all the libs ("_DEVEL"?)
@@ -82,7 +82,7 @@ endif(NOT PRODUCTSET)
 # There can be required or optional external deps, required will also result
 # in automatic disabling of product building
 # TODO: some products have multiple optional requirements, but need at least one.
-# See CONVERTER, CSTESTER, EXTRA_*
+# See CONVERTER, EXTRA_*
 calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
 calligra_define_product(LIB_VECTORIMAGE "libvectorimage")
@@ -109,6 +109,7 @@ calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS LIB_KOREPORT LIB_K
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)")
 calligra_define_product(ACTIVE "Calligra Active" NEEDS  SHEETS_PART STAGE_PART WORDS_PART)
 calligra_define_product(CALLIGRA "")
+calligra_define_product(DOC "Calligra Documentations")
 # extras
 calligra_define_product(CONVERTER "Format converter for commandline")
 calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dialog")
@@ -131,6 +132,7 @@ calligra_define_product(PLUGIN_PICTURESHAPE "")
 calligra_define_product(PLUGIN_TEXTSHAPE "")
 calligra_define_product(PLUGIN_PLUGINSHAPE "")
 calligra_define_product(PLUGIN_FORMULASHAPE "")
+calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra")
 calligra_define_product(PLUGIN_VECTORSHAPE "" NEEDS LIB_VECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT LIB_KDCHART)
 # staging plugins
@@ -140,7 +142,7 @@ calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES ""  NEEDS SHEETS_PART)
 calligra_define_product(PLUGIN_STAGING "All plugins in staging status"  NEEDS PLUGIN_GOOGLEDOCS PLUGIN_THREEDSHAPE PLUGIN_SHEETS_PIVOTTABLES)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
-calligra_define_product(CSTESTER "")
+calligra_define_product(CSTESTER "" NEEDS SHEETS_PART STAGE_PART WORDS_PART)
 
 calligra_set_productset(${PRODUCTSET})
 
@@ -163,12 +165,12 @@ include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
-set(SHOULD_BUILD_TEXTSHAPE TRUE)
 if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     if (NOT IHAVEPATCHEDQT)
         set(SHOULD_BUILD_WORDS_PART FALSE)
         set(SHOULD_BUILD_STAGE_PART FALSE)
-        set(SHOULD_BUILD_TEXTSHAPE FALSE)
+        set(SHOULD_BUILD_PLUGIN_TEXTSHAPE FALSE)
+        set(SHOULD_BUILD_PLUGIN_TEXTEDITING FALSE)
         MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
     endif (NOT IHAVEPATCHEDQT)
 endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
@@ -731,7 +733,9 @@ if(SHOULD_BUILD_ACTIVE)
   add_subdirectory(active)
 endif(SHOULD_BUILD_ACTIVE)
 
-add_subdirectory(doc)
+if(SHOULD_BUILD_DOC)
+	add_subdirectory(doc)
+endif(SHOULD_BUILD_DOC)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
