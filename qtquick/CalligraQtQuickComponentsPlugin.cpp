@@ -25,7 +25,7 @@
 
 void CalligraQtQuickComponentsPlugin::registerTypes(const char* uri)
 {
-    qDebug() << "URIII " << uri;
+    Q_ASSERT(uri == QLatin1String("org.calligra.CalligraComponents"));
     qmlRegisterType<CQTextDocumentCanvas> (uri, 0, 1, "TextDocumentCanvas");
 }
 

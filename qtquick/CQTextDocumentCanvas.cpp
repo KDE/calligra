@@ -19,7 +19,7 @@ CQTextDocumentCanvas::CQTextDocumentCanvas()
     : m_canvasBase(0)
     , m_canvasController(0)
     , m_zoomController(0)
-    , m_zoomMode(ZOOM_PAGE)
+    , m_zoomMode(ZOOM_CONSTANT)
 {
 }
 
