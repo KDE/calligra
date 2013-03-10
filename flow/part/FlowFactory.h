@@ -31,7 +31,7 @@ class FLOW_EXPORT FlowFactory : public KPluginFactory
   Q_OBJECT
 
   public:
-    FlowFactory(QObject* parent = 0);
+    explicit FlowFactory(QObject *parent = 0);
     ~FlowFactory();
 
 

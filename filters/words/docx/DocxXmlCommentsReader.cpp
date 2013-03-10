@@ -179,8 +179,8 @@ KoFilter::ConversionStatus DocxXmlCommentReader::read_comment()
 
     TRY_READ_ATTR(author)
     TRY_READ_ATTR(date)
-    if (date.endsWith("Z")) {
-        date.remove(date.length()-1, 1);
+    if (date.endsWith(QLatin1Char('Z'))) {
+        date.chop(1);
     }
 
     // The idea in this is to push all actual text we read into a map, where they can

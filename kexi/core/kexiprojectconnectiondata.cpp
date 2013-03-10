@@ -37,15 +37,42 @@
 #include <db/drivermanager.h>
 #include "kexiprojectconnectiondata.h"
 
-KexiProjectConnectionData::KexiProjectConnectionData(): KexiDB::ConnectionData()
+class KexiProjectConnectionData::Private
+{
+public:
+    Private(const QString& drvName, const QString& dbName);
+    Private();
+    ~Private();
+
+    QString driverName;
+    QString databaseName;
+};
+
+KexiProjectConnectionData::Private()
+{
+
+}
+
+KexiProjectConnectionData::Private::Private(const QString& drvName, const QString& dbName) : driverName(drvName)
+                                                                                             ,databaseName(dbName)
+{
+
+}
+
+KexiProjectConnectionData::Private::~Private()
+{
+
+}
+
+KexiProjectConnectionData::KexiProjectConnectionData(): KexiDB::ConnectionData(), d(new Private())
 {
 }
 
 KexiProjectConnectionData::KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &host,
-        unsigned short int rport, const QString& user, const QString &pass, const QString& file): KexiDB::ConnectionData()
+                                                     unsigned short int rport, const QString& user, const QString &pass, const QString& file)
+    : KexiDB::ConnectionData(), d(new Private(driverName, databaseName))
 {
-    m_driverName = driverName;
-    m_databaseName = databaseName;
+
     hostName = host;
     port = rport;
     userName = user;
@@ -54,10 +81,15 @@ KexiProjectConnectionData::KexiProjectConnectionData(const QString& driverName, 
 }
 
 KexiProjectConnectionData::KexiProjectConnectionData(const QString &driverName, const QString &fileName)
-        : KexiDB::ConnectionData()
+    : KexiDB::ConnectionData(), d(new Private(driverName, QString()))
 {
-    m_driverName = driverName;
     setFileName(fileName);
+}
+
+
+KexiProjectConnectionData::~KexiProjectConnectionData()
+{
+    delete d;
 }
 
 const QString &
@@ -87,22 +119,22 @@ KexiProjectConnectionData::loadInfo(QDomElement &rootElement)
 
 void    KexiProjectConnectionData::setDriverName(const QString &driverName)
 {
-    m_driverName = driverName;
+    d->driverName = driverName;
 }
 
 void KexiProjectConnectionData::setDatabaseName(const QString &databaseName)
 {
-    m_databaseName = databaseName;
+    d->databaseName = databaseName;
 }
 
 QString KexiProjectConnectionData::driverName() const
 {
-    return m_driverName;
+    return d->driverName;
 }
 
 QString KexiProjectConnectionData::databaseName() const
 {
-    return m_databaseName;
+    return d->databaseName;
 }
 
 
@@ -116,7 +148,7 @@ KexiProjectConnectionData::writeInfo(QDomDocument &domDoc)
     QDomElement engineElement = domDoc.createElement("engine");
     connectionElement.appendChild(engineElement);
 
-    QDomText tEngine = domDoc.createTextNode(m_driverName);
+    QDomText tEngine = domDoc.createTextNode(d->driverName);
     engineElement.appendChild(tEngine);
 
 //HOST
@@ -130,7 +162,7 @@ KexiProjectConnectionData::writeInfo(QDomDocument &domDoc)
     QDomElement nameElement = domDoc.createElement("name");
     connectionElement.appendChild(nameElement);
 
-    QDomText tName = domDoc.createTextNode(m_databaseName);
+    QDomText tName = domDoc.createTextNode(d->databaseName);
     nameElement.appendChild(tName);
 
 //USER
@@ -147,10 +179,4 @@ KexiProjectConnectionData::writeInfo(QDomDocument &domDoc)
     QDomText tPass = domDoc.createTextNode(password);
     passElement.appendChild(tPass);
 
-}
-
-
-
-KexiProjectConnectionData::~KexiProjectConnectionData()
-{
 }

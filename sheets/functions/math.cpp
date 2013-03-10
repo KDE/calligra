@@ -59,7 +59,7 @@ Value func_count(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_counta(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_countblank(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_countif(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e);
+Value func_countifs(valVector args, ValueCalc *calc, FuncExtra * e);
 Value func_cur(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_div(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_eps(valVector args, ValueCalc *calc, FuncExtra *);
@@ -598,8 +598,8 @@ Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *e)
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
     }
-    Cell sumRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
-    return calc->sumIfs(sumRangeStart, c_Range, cond, lim);
+    //Cell sumRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+    return calc->sumIfs(c_Range, cond, lim);
 }
 
 // Function: product
@@ -1073,8 +1073,8 @@ Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e)
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
     }
-    Cell cntRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
-    return calc->countIfs(cntRangeStart, c_Range, cond, lim);
+    //Cell cntRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+    return calc->countIfs(c_Range, cond, lim);
 }
 
 // Function: FIB

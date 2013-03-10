@@ -57,7 +57,6 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 #include <KoInlineNote.h>
-#include <KoInlineNote.h>
 #include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
@@ -112,11 +111,11 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 
     QTextFrame::iterator it = d->startOfArea->it;
     QTextFrame::iterator stop = d->endOfArea->it;
-    if(!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
-        // Last thing we contain is a frame (table) or first part of a paragraph split in two
-        // The stop point should be the object after that
-        // However if stop is already atEnd we shouldn't increment further
-        if (!stop.atEnd()) {
+    if (!stop.atEnd()) {
+        if(!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
+            // Last thing we contain is a frame (table) or first part of a paragraph split in two
+            // The stop point should be the object after that
+            // However if stop is already atEnd we shouldn't increment further
             ++stop;
         }
     }
@@ -245,11 +244,11 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 
     QTextFrame::iterator it = d->startOfArea->it;
     QTextFrame::iterator stop = d->endOfArea->it;
-    if(!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
-        // Last thing we show is a frame (table) or first part of a paragraph split in two
-        // The stop point should be the object after that
-        // However if stop is already atEnd we shouldn't increment further
-        if (!stop.atEnd()) {
+    if (!stop.atEnd()) {
+        if(!stop.currentBlock().isValid() || d->endOfArea->lineTextStart >= 0) {
+            // Last thing we show is a frame (table) or first part of a paragraph split in two
+            // The stop point should be the object after that
+            // However if stop is already atEnd we shouldn't increment further
             ++stop;
         }
     }
@@ -893,7 +892,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     QRectF rect = fm.tightBoundingRect(dropCapsText);
                     const qreal diff = dropCapsHeight - rect.height();
                     dropCapsPositionAdjust = rect.top() + fm.ascent();
-                    if (qAbs(diff < 0.5)) // good enough
+                    if (qAbs(diff) < 0.5) // good enough
                         break;
 
                     const qreal adjustment = diff * (f.pointSizeF() / rect.height());
@@ -982,7 +981,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QList<QTextOption::Tab> qTabs;
     // Note: Converting to Qt tabs is needed as long as we use Qt for layout, but we
     // loose the possibility to do leader chars.
-    foreach (KoText::Tab kTab, tabs) {
+    foreach (const KoText::Tab &kTab, tabs) {
         qreal value = kTab.position;
         if (value == MaximumTabPos) { // MaximumTabPos is used in index generators
             // note: we subtract right margin as this is where the tab should be
@@ -1213,6 +1212,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         documentLayout()->setAnchoringParagraphRect(anchoringRect);
         documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
         runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ d->isRtl, QPointF(x(), d->y));
+
+        documentLayout()->positionAnchorTextRanges(block.position()+line.textStart(), line.textLength());
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;

@@ -146,8 +146,8 @@ void View::initGUI()
     KoToolManager::instance()->registerTools(actionCollection(), m_canvasController);
 
     m_zoomController = new KoZoomController(m_canvasController, &m_zoomHandler, actionCollection());
-    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
-            this, SLOT(slotZoomChanged(KoZoomMode::Mode, qreal)));
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            this, SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 
     m_zoomAction = m_zoomController->zoomAction();
     m_mainWindow->addStatusBarItem(m_zoomAction->createWidget(m_mainWindow->statusBar()), 0, this);
@@ -156,13 +156,13 @@ void View::initGUI()
 
     gridLayout->addWidget(m_canvasController, 1, 1);
 
-    connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint&)),
-            this, SLOT(updateMousePosition(const QPoint&)));
+    connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)),
+            this, SLOT(updateMousePosition(QPoint)));
 
     KoToolBoxFactory toolBoxFactory(m_canvasController);
     m_mainWindow->createDockWidget(&toolBoxFactory);
 
-    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)), m_mainWindow->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget*> &)));
+    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)), m_mainWindow->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
     SectionsBoxDockFactory structureDockerFactory;
     m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>(m_mainWindow->createDockWidget(&structureDockerFactory));
@@ -214,7 +214,7 @@ void View::loadExtensions()
 {
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Braindump/Extensions"),
                             QString::fromLatin1("(Type == 'Service') && "
-                                    "([X-Braindump-Version] == 1)"));
+                                    "([X-Braindump-Version] == 27)"));
     KService::List::ConstIterator iter;
     for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
@@ -288,10 +288,10 @@ void View::createCanvas(Section* _currentSection)
     m_copyController = new KoCopyController(m_canvas, m_editCopy);
 
     connect(m_canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
-    connect(m_canvas, SIGNAL(documentRect(const QRectF&)), SLOT(documentRectChanged(const QRectF&)));
-    connect(m_canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
-            m_canvas, SLOT(setDocumentOffset(const QPoint&)));
-    connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
+    connect(m_canvas, SIGNAL(documentRect(QRectF)), SLOT(documentRectChanged(QRectF)));
+    connect(m_canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)),
+            m_canvas, SLOT(setDocumentOffset(QPoint)));
+    connect(m_canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(clipboardDataChanged()));
 
     m_canvas->updateOriginAndSize();
 

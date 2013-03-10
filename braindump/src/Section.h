@@ -32,7 +32,7 @@ class RootSection;
 class Section :  public SectionGroup
 {
 public:
-    Section(RootSection* _rootSection);
+    explicit Section(RootSection* _rootSection);
     Section(const Section& _rhs);
     virtual ~Section();
 public:

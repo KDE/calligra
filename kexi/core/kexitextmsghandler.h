@@ -35,7 +35,9 @@ public:
     virtual void showMessage(MessageType type, const QString &title, const QString &details,
                              const QString& dontShowAgainName = QString());
 
-    QString *m_messageTarget, *m_detailsTarget;
+    class Private;
+
+    Private* const d;
 };
 
 #endif

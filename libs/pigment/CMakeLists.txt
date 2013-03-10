@@ -11,10 +11,14 @@ if(OPENEXR_FOUND)
 endif(OPENEXR_FOUND)
 
 set(LINK_VC_LIB)
+
 if(HAVE_VC)
-  include_directories(${Vc_INCLUDE_DIR})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-  set(LINK_VC_LIB ${Vc_LIBRARIES})
+    include_directories(${Vc_INCLUDE_DIR})
+    set(LINK_VC_LIB ${Vc_LIBRARIES})
+    ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
+
+    message("Following objects are generated from the per-arch lib")
+    message(${__per_arch_factory_objs})
 endif(HAVE_VC)
 
 add_subdirectory(tests)
@@ -52,6 +56,8 @@ set(pigmentcms_SRCS
     colorspaces/KoRgbU8ColorSpace.cpp
     colorspaces/KoSimpleColorSpaceEngine.cpp
     compositeops/KoOptimizedCompositeOpFactory.cpp
+    compositeops/KoOptimizedCompositeOpFactoryPerArch_Scalar.cpp
+    ${__per_arch_factory_objs}
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp

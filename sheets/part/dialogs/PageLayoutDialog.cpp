@@ -138,6 +138,7 @@ PageLayoutDialog::PageLayoutDialog(QWidget* parent, Sheet* sheet)
         , d(new Private)
 {
     showPageSpread(false);
+    setUnit(sheet->doc()->unit());
 
     QWidget* page = new QWidget(this);
     d->sheetPage.setupUi(page);

@@ -66,9 +66,9 @@ CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentCont
 {
     QList<QTextDocument*> texts;
     d->findText = new KoFindText(this);
-    connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvas()));
-    connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
-    connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
+    connect (d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
+    connect (d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 CATextDocumentHandler::~CATextDocumentHandler()
@@ -134,16 +134,16 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 
     if (kwCanvasItem) {
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect (kwCanvasItem, SIGNAL (documentSize (QSizeF)), zoomController, SLOT (setDocumentSize (QSizeF)));
+        connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController, SLOT(setDocumentSize(QSizeF)));
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-        connect (documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL (moveDocumentOffset (const QPoint&)),
-                 kwCanvasItem, SLOT (setDocumentOffset (QPoint)));
+        connect (documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL(moveDocumentOffset(QPoint)),
+                 kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
         kwCanvasItem->updateSize();
         kDebug() << "HANDLEEEE " << kwCanvasItem->geometry();
     }
 
-    connect (documentController()->canvasController(), SIGNAL (needsCanvasResize (QSizeF)), SLOT (resizeCanvas (QSizeF)));
-    connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
+    connect (documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
+    connect (documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
 
     documentController()->canvasController()->zoomToFit();
 
@@ -239,7 +239,7 @@ void CATextDocumentHandler::findNoMatchFound()
 
 QString CATextDocumentHandler::bottomToolbarSource() const
 {
-    return "TextDocumentFindToolbar.qml";
+    return "FindToolbar.qml";
 }
 
 QString CATextDocumentHandler::topToolbarSource() const

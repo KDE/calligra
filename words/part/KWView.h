@@ -28,7 +28,6 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoFindMatch.h>
-#include <KoTextAnchor.h>
 
 #include <QWidget>
 
@@ -42,7 +41,6 @@ class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
 class KoFindStyle;
-class KoTextAnchor;
 
 #ifdef SHOULD_BUILD_RDF
 class KoRdfSemanticItem;
@@ -115,6 +113,12 @@ public:
 
     virtual KoZoomController *zoomController() const { return m_zoomController; }
 
+    int minPageNumber() const { return m_minPageNum; }
+    int maxPageNumber() const { return m_maxPageNum; }
+
+signals:
+    void shownPagesChanged();
+
 public slots:
     void offsetInDocumentMoved(int yOffset);
 
@@ -125,6 +129,8 @@ public slots:
     void toggleViewFrameBorders(bool on);
     /// toggle the display of non-printing characters
     void setShowFormattingChars(bool on);
+    /// toggle the display of field shadings
+    void setShowInlineObjectVisualization(bool on);
     /// toggle the display of table borders
     void setShowTableBorders(bool on);
     /// go to previous page
@@ -188,8 +194,8 @@ private slots:
 #endif
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);
-    /// The document has finished loading. This is used to update the text that can be searched.
-    void loadingCompleted();
+    /// This is used to update the text that can be searched.
+    void refreshFindTexts();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard
@@ -225,8 +231,11 @@ private:
     bool m_snapToGrid;
     QString m_lastPageSettingsTab;
 
-    QSizeF m_maxPageSize; // The maximum size of the pages we have encountered. This is used to
-                         // make sure that we always show all pages correctly in page/pagewidth mode.
+    QSizeF m_pageSize; // The max size of the pages we currently show. Prevents endless loop
+    qreal m_textMinX; // The min x value where text can appear we currently show. Prevents endless loop
+    qreal m_textMaxX; // The max x value where text can appear we currently show. Prevents endless loop
+    int m_minPageNum;
+    int m_maxPageNum;
 };
 
 #endif

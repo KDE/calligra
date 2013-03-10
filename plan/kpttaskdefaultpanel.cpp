@@ -24,11 +24,9 @@
 #include "plansettings.h"
 
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
-#endif
 #endif
 
 #include <QDateTime>
@@ -59,9 +57,10 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p )
 #ifndef PLAN_KDEPIMLIBS_FOUND
     chooseLeader->hide();
 #endif
-#if ! KDE_IS_VERSION( 4, 5, 0 )
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
     chooseLeader->hide();
-#endif
 
     initDescription();
 
@@ -122,7 +121,6 @@ void ConfigTaskPanelImpl::initDescription()
 void ConfigTaskPanelImpl::changeLeader()
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -146,7 +144,6 @@ void ConfigTaskPanelImpl::changeLeader()
             kcfg_Leader->setText( names.join( ", " ) );
         }
     }
-#endif
 #endif
 }
 

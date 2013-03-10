@@ -33,11 +33,9 @@
 
 #include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
-#endif
 #endif
 
 #include <kdatetimewidget.h>
@@ -59,9 +57,10 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
 #ifndef PLAN_KDEPIMLIBS_FOUND
     chooseBtn->hide();
 #endif
-#if ! KDE_IS_VERSION( 4, 5, 0 )
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
     chooseBtn->hide();
-#endif
 
     QSortFilterProxyModel *pr = new QSortFilterProxyModel( ui_teamView );
     QStandardItemModel *m = new QStandardItemModel( ui_teamView );
@@ -219,7 +218,6 @@ void ResourceDialogImpl::slotCalculationNeeded(const QString&) {
 void ResourceDialogImpl::slotChooseResource()
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList s;
@@ -237,7 +235,6 @@ void ResourceDialogImpl::slotChooseResource()
             initialsEdit->setText(in);
         }
     }
-#endif
 #endif
 }
 

@@ -1354,7 +1354,7 @@ void MainSchedule::saveXML( QDomElement &element ) const
     if ( ! m_pathlists.isEmpty() ) {
         QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );
         element.appendChild( lists );
-        foreach ( QList<Node*> l, m_pathlists ) {
+        foreach ( const QList<Node*> &l, m_pathlists ) {
             if ( l.isEmpty() ) {
                 continue;
             }

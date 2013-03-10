@@ -35,7 +35,7 @@ class WORDS_EXPORT KWPart : public KoPart
     Q_OBJECT
 
 public:
-    KWPart(QObject *parent);
+    explicit KWPart(QObject *parent);
 
     virtual ~KWPart();
 
@@ -48,6 +48,9 @@ public:
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
+
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+
 
 private slots:
      void showErrorAndDie();

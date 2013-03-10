@@ -3,7 +3,7 @@ project(wordspart)
 #TODO port to textlayout-rework
 add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
+include_directories( ${KORDF_INCLUDES} ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### WordsPrivate library ###############
 
@@ -74,6 +74,7 @@ set(wordsprivate_LIB_SRCS
     author/CAuFactory.cpp
     author/CAuView.cpp
     author/CAuPart.cpp
+    author/CoverImage.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -108,7 +109,7 @@ kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
 target_link_libraries(wordsprivate komain textlayout)
 if( Soprano_FOUND )
-    target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
+    target_link_libraries(wordsprivate kordf)
 endif( Soprano_FOUND )
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
@@ -135,7 +136,7 @@ install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(words_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-words.png")
+kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrawords.png")
 
 kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 
@@ -199,7 +200,7 @@ install(TARGETS authorpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(author_KDEINIT_SRCS author/main.cpp )
 
-#kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-words.png")
+#kde4_add_app_icon(author_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/author/hi*-app-calligraauthor.png")
 
 kde4_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
 

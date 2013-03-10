@@ -35,7 +35,7 @@ class QLabel;
 class CSTCompareView : public QWidget
 {
 public:
-    CSTCompareView(QWidget *parent = 0);
+    explicit CSTCompareView(QWidget *parent = 0);
     virtual ~CSTCompareView();
 
     bool open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile);
@@ -60,6 +60,7 @@ private:
 
     QLabel *m_current;
     QLabel *m_currentPage;
+    QLabel *m_changesAndDocument;
     CompareView *m_compareView;
 
     QDir m_dir1;

@@ -109,33 +109,33 @@ public:
 void convertColorSpaceNames(QString &colorspacename, QString &profileProductName) {
     if (colorspacename  == "Grayscale + Alpha") {
         colorspacename  = "GRAYA";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "RgbAF32") {
         colorspacename = "RGBAF32";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "RgbAF16") {
         colorspacename = "RGBAF32";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "CMYKA16") {
         colorspacename = "CMYKAU16";
     }
     else if (colorspacename == "GrayF32") {
         colorspacename =  "GRAYAF32";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "GRAYA16") {
         colorspacename  = "GRAYAU16";
     }
     else if (colorspacename == "XyzAF16") {
         colorspacename  = "XYZAF16";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "XyzAF32") {
         colorspacename  = "XYZAF32";
-        profileProductName = QString::null;
+        profileProductName.clear();
     }
     else if (colorspacename == "YCbCrA") {
         colorspacename  = "YCBCRA8";
@@ -257,7 +257,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 {
 
     // icc profile: if present, this overrides the profile product name loaded in loadXML.
-    QString location = external ? QString::null : uri;
+    QString location = external ? QString() : uri;
     location += m_d->imageName + ICC_PATH;
     if (store->hasFile(location)) {
         store->open(location);
@@ -285,7 +285,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
     // annotations
     // exif
-    location = external ? QString::null : uri;
+    location = external ? QString() : uri;
     location += m_d->imageName + EXIF_PATH;
     if (store->hasFile(location)) {
         QByteArray data;
@@ -324,7 +324,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
         const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(loadedAssistant.value());
         if (factory) {
             assistant = factory->createPaintingAssistant();
-            location = external ? QString::null : uri;
+            location = external ? QString() : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
             assistant->loadXml(store, handleMap, file_path);

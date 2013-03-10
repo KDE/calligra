@@ -44,7 +44,7 @@ namespace Sheets
 class OdfSavingContext
 {
 public:
-    OdfSavingContext(KoShapeSavingContext& shapeContext)
+    explicit OdfSavingContext(KoShapeSavingContext &shapeContext)
             : shapeContext(shapeContext) {}
 
     void insertCellAnchoredShape(const Sheet *sheet, int row, int column, KoShape* shape) {

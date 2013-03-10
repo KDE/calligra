@@ -29,8 +29,6 @@
 #include <KoCompositeOpOver.h>
 #include "KoOptimizedCompositeOpFactory.h"
 
-#include <KoOptimizedCompositeOpOver32.h>
-#include <KoOptimizedCompositeOpAlphaDarken32.h>
 
 
 // for calculation of the needed alignment
@@ -38,6 +36,9 @@
 #ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
+
+#include <KoOptimizedCompositeOpOver32.h>
+#include <KoOptimizedCompositeOpAlphaDarken32.h>
 #endif
 
 // for memalign()
@@ -363,10 +364,10 @@ void checkRounding()
     quint8 *msk2 = tiles[1].mask;
 
     for (int i = 0; i < numBlocks; i++) {
-        Compositor::template compositeVector<true,true>(src1, dst1, msk1, 0.5, 0.3);
+        Compositor::template compositeVector<true,true, VC_IMPL>(src1, dst1, msk1, 0.5, 0.3);
         for (int j = 0; j < vecSize; j++) {
 
-            Compositor::template compositeOnePixelScalar<true>(src2, dst2, msk2, 0.5, 0.3, QBitArray());
+            Compositor::template compositeOnePixelScalar<true, VC_IMPL>(src2, dst2, msk2, 0.5, 0.3, QBitArray());
 
             if(!comparePixels(dst1, dst2, 0)) {
                 qDebug() << "Wrong rounding in pixel:" << 8 * i + j;
@@ -514,6 +515,98 @@ void KisCompositionBenchmark::benchmarkMemcpy()
     }
 
     freeTiles(tiles, 0, 0);
+}
+
+void KisCompositionBenchmark::benchmarkUintFloat()
+{
+#ifdef HAVE_VC
+    const int vecSize = Vc::float_v::Size;
+
+    const int dataSize = 4096;
+    quint8 *iData = (quint8*) memalign(vecSize, dataSize);
+    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
+
+    QBENCHMARK {
+        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+            // convert uint -> float directly, this causes
+            // static_cast helper be called
+            Vc::float_v b(Vc::uint_v(iData + i));
+            b.store(fData + i);
+        }
+    }
+
+    free(iData);
+    free(fData);
+#endif
+}
+
+void KisCompositionBenchmark::benchmarkUintIntFloat()
+{
+#ifdef HAVE_VC
+    const int vecSize = Vc::float_v::Size;
+
+    const int dataSize = 4096;
+    quint8 *iData = (quint8*) memalign(vecSize, dataSize);
+    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
+
+    QBENCHMARK {
+        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+            // convert uint->int->float, that avoids special sign
+            // treating, and gives 2.6 times speedup
+            Vc::float_v b(Vc::int_v(Vc::uint_v(iData + i)));
+            b.store(fData + i);
+        }
+    }
+
+    free(iData);
+    free(fData);
+#endif
+}
+
+void KisCompositionBenchmark::benchmarkFloatUint()
+{
+#ifdef HAVE_VC
+    const int vecSize = Vc::float_v::Size;
+
+    const int dataSize = 4096;
+    quint32 *iData = (quint32*) memalign(vecSize * 4, dataSize * 4);
+    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
+
+    QBENCHMARK {
+        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+            // conversion float -> uint
+            Vc::uint_v b(Vc::float_v(fData + i));
+
+            b.store(iData + i);
+        }
+    }
+
+    free(iData);
+    free(fData);
+#endif
+}
+
+void KisCompositionBenchmark::benchmarkFloatIntUint()
+{
+#ifdef HAVE_VC
+    const int vecSize = Vc::float_v::Size;
+
+    const int dataSize = 4096;
+    quint32 *iData = (quint32*) memalign(vecSize * 4, dataSize * 4);
+    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
+
+    QBENCHMARK {
+        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+            // conversion float -> int -> uint
+            Vc::uint_v b(Vc::int_v(Vc::float_v(fData + i)));
+
+            b.store(iData + i);
+        }
+    }
+
+    free(iData);
+    free(fData);
+#endif
 }
 
 QTEST_KDEMAIN(KisCompositionBenchmark, GUI)

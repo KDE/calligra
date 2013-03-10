@@ -63,11 +63,13 @@ public:
     sender and receiver, and draws a link between them. */
     virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
 
-    Form *form() const { return m_form; }
+    Form *form() const;
+    void setForm(Form* f);
 
 protected:
-    Form *m_form;
+    class Private;
 
+    Private* const d;
     friend class Form;
 };
 

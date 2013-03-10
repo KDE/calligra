@@ -28,7 +28,7 @@ class QDate;
 class QString;
 class QWidget;
 
-struct KoPageLayoutWidget;
+class KoPageLayoutWidget;
 
 namespace KPlato
 {

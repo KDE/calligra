@@ -68,7 +68,7 @@ QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 
     QList<QImage> thumbnails;
 
-    foreach(KWPage page, pageManager->pages()) {
+    foreach(const KWPage &page, pageManager->pages()) {
 
         QRectF pRect(page.rect());
         KoPageLayout layout;
@@ -90,9 +90,6 @@ QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 
         thumbnails.append(thumbnail);
     }
-
-    // make sure to clean up
-    delete canvasItem;
 
     return thumbnails;
 }

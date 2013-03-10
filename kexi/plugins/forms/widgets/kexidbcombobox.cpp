@@ -113,8 +113,8 @@ void KexiDBComboBox::setEditable(bool set)
     if (set)
         createEditor();
     else {
-        delete m_subwidget;
-        m_subwidget = 0;
+        delete subwidget();
+        setSubwidget(0);
     }
     update();
 }
@@ -210,29 +210,29 @@ QRect KexiDBComboBox::editorGeometry() const
 void KexiDBComboBox::createEditor()
 {
     KexiDBAutoField::createEditor();
-    if (m_subwidget) {
-        m_subwidget->setGeometry(editorGeometry());
+    if (subwidget()) {
+        subwidget()->setGeometry(editorGeometry());
         if (!d->isEditable) {
             QStyleOptionComboBox option;
-            option.initFrom(m_subwidget);
-            const QRect comboRect = m_subwidget->style()->subControlRect(
-                QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, m_subwidget);
+            option.initFrom(subwidget());
+            const QRect comboRect = subwidget()->style()->subControlRect(
+                QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, subwidget());
             kDebug() << "comboRect:" << comboRect;
-            m_subwidget->setContentsMargins(comboRect.left(), comboRect.top(),
+            subwidget()->setContentsMargins(comboRect.left(), comboRect.top(),
                 width() - comboRect.right(), height() - comboRect.bottom());
             int l, t, r, b;
-            m_subwidget->getContentsMargins(&l, &t, &r, &b);
+            subwidget()->getContentsMargins(&l, &t, &r, &b);
             kDebug() << "altered margins:" << l << t << r << b;
 
-            m_subwidget->setFocusPolicy(Qt::NoFocus);
-            m_subwidget->setCursor(QCursor(Qt::ArrowCursor)); // widgets like listedit have IbeamCursor, we don't want that
-            QPalette subwidgetPalette(m_subwidget->palette());
+            subwidget()->setFocusPolicy(Qt::NoFocus);
+            subwidget()->setCursor(QCursor(Qt::ArrowCursor)); // widgets like listedit have IbeamCursor, we don't want that
+            QPalette subwidgetPalette(subwidget()->palette());
             subwidgetPalette.setColor(QColorGroup::Base, Qt::transparent);
-            m_subwidget->setPalette(subwidgetPalette);
+            subwidget()->setPalette(subwidgetPalette);
             d->subWidgetsWithDisabledEvents.clear();
-            d->subWidgetsWithDisabledEvents << m_subwidget;
-            m_subwidget->installEventFilter(this);
-            QList<QWidget*> widgets(m_subwidget->findChildren<QWidget*>());
+            d->subWidgetsWithDisabledEvents << subwidget();
+            subwidget()->installEventFilter(this);
+            QList<QWidget*> widgets(subwidget()->findChildren<QWidget*>());
             foreach(QWidget *widget, widgets) {
                 d->subWidgetsWithDisabledEvents << widget;
                 widget->installEventFilter(this);
@@ -244,11 +244,11 @@ void KexiDBComboBox::createEditor()
 
 void KexiDBComboBox::setLabelPosition(LabelPosition position)
 {
-    if (m_subwidget) {
-        if (-1 != m_subwidget->metaObject()->indexOfProperty("frameShape")) {
-            m_subwidget->setProperty("frameShape", QVariant((int)QFrame::NoFrame));
+    if (subwidget()) {
+        if (-1 != subwidget()->metaObject()->indexOfProperty("frameShape")) {
+            subwidget()->setProperty("frameShape", QVariant((int)QFrame::NoFrame));
         }
-        m_subwidget->setGeometry(editorGeometry());
+        subwidget()->setGeometry(editorGeometry());
     }
 //  KexiSubwidgetInterface *subwidgetInterface = dynamic_cast<KexiSubwidgetInterface*>((QWidget*)m_subwidget);
     // update size policy
@@ -377,8 +377,8 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
     if (o == this) {
         if (e->type() == QEvent::Resize) {
             d->paintedCombo->resize(size());
-            if (m_subwidget)
-                m_subwidget->setGeometry(editorGeometry());
+            if (subwidget())
+                subwidget()->setGeometry(editorGeometry());
         } else if (e->type() == QEvent::Enter) {
             if (!d->isEditable
                     || /*over button if editable combo*/buttonGeometry().contains(static_cast<QMouseEvent*>(e)->pos())) {
@@ -440,8 +440,8 @@ void KexiDBComboBox::setPaletteBackgroundColor(const QColor & color)
 
 bool KexiDBComboBox::valueChanged()
 {
-    kDebug() << m_origValue.toString() << " ? " << value().toString();
-    return m_origValue != value();
+    kDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << value().toString();
+    return KexiDataItemInterface::originalValue() != value();
 }
 
 void
@@ -485,7 +485,7 @@ void KexiDBComboBox::setValueInternal(const QVariant& add, bool removeOld)
 
 void KexiDBComboBox::setVisibleValueInternal(const QVariant& value)
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
     if (iface)
         iface->setValue(value, QVariant(), false /*!removeOld*/);
 }
@@ -499,7 +499,7 @@ void KexiDBComboBox::setValueInInternalEditor(const QVariant& value)
 {
     if (!m_setValueInInternalEditor_enabled)
         return;
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
     if (iface)
         iface->setValue(value, QVariant(), false/*!removeOld*/);
 }
@@ -533,8 +533,8 @@ void KexiDBComboBox::styleChange(QStyle& oldStyle)
 {
     KexiDBAutoField::styleChange(oldStyle);
     d->sizeHint = QSize(); //force rebuild the cache
-    if (m_subwidget)
-        m_subwidget->setGeometry(editorGeometry());
+    if (subwidget())
+        subwidget()->setGeometry(editorGeometry());
 }
 
 QSize KexiDBComboBox::sizeHint() const
@@ -571,7 +571,7 @@ void KexiDBComboBox::slotRowAccepted(KexiDB::RecordData *record, int row)
 void KexiDBComboBox::beforeSignalValueChanged()
 {
     if (d->dataEnteredByHand) {
-        KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
+        KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
         if (iface) {
             slotInternalEditorValueChanged(iface->value());
         }

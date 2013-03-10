@@ -87,7 +87,7 @@ static QString toStringForTextType(const QVariant& value, const QString& add,
     const QString str(value.toString());
     if (lengthExceeded) {
         if (field && field->maxLength() > 0) {
-            *lengthExceeded = (str.length() + add.length()) > field->maxLength();
+            *lengthExceeded = uint(str.length() + add.length()) > field->maxLength();
         }
         else {
             *lengthExceeded = false;

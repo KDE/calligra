@@ -52,6 +52,13 @@ public:
         return m_showFormattingChars;
     }
 
+    void setShowInlineObjectVisualization(bool on) {
+        m_showInlineObjectVisualization = on;
+    }
+    bool showInlineObjectVisualization() const {
+        return m_showInlineObjectVisualization;
+    }
+
     void setShowTableBorders(bool on) {
         m_showTableBorders = on;
     }
@@ -171,6 +178,7 @@ private:
     bool m_statusBarShowPage, m_statusBarShowPageStyle, m_statusBarShowPageSize;
     bool m_statusBarShowLineNumber, m_statusBarShowModified;
     bool m_statusBarShowMouse, m_statusBarShowZoom;
+    bool m_showInlineObjectVisualization;
 
     int m_zoom; /// < zoom level in percent
     KoZoomMode::Mode m_zoomMode;

@@ -246,7 +246,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     if (updater) updater->setProgress(90);
 
     // Grab weak references to all the Rdf stuff that was loaded
-    if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
+    if (KoDocumentRdfBase *rdf = m_document->documentRdf()) {
         rdf->updateInlineRdfStatements(textShapeData.document());
     }
 

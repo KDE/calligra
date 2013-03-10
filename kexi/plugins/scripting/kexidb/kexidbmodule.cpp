@@ -116,7 +116,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         KConfig _config(filename, KConfig::NoGlobals);
 
         QString groupkey;
-        foreach(QString s, _config.groupList()) {
+        foreach(const QString &s, _config.groupList()) {
             if (s.toLower() != "file information") {
                 groupkey = s;
                 break;

@@ -86,6 +86,12 @@ KoTextRangeManager *KoTextRange::manager()
     return d->manager;
 }
 
+QTextDocument *KoTextRange::document() const
+{
+    Q_D(const KoTextRange);
+    return d->cursor.document();
+}
+
 bool KoTextRange::positionOnlyMode() const
 {
     Q_D(const KoTextRange);
@@ -114,6 +120,13 @@ int KoTextRange::rangeEnd() const
 {
     Q_D(const KoTextRange);
     return d->positionOnlyMode ? d->cursor.position() : d->cursor.selectionEnd();
+}
+
+void KoTextRange::setRangeStart(int position)
+{
+    Q_D(KoTextRange);
+    d->positionOnlyMode = true;
+    d->cursor.setPosition(position);
 }
 
 void KoTextRange::setRangeEnd(int position)

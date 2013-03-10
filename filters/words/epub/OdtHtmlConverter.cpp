@@ -36,6 +36,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoOdfReadStore.h>
 
 // EPUB filter
 #include "FileCollector.h"
@@ -58,6 +59,7 @@ StyleInfo::StyleInfo()
 
 OdtHtmlConverter::OdtHtmlConverter()
     : m_currentChapter(1)
+    , m_mediaId(1)
 {
     qDeleteAll(m_styles);
 }
@@ -81,16 +83,19 @@ OdtHtmlConverter::ConversionOptions defaultOptions = {
 KoFilter::ConversionStatus
 OdtHtmlConverter::convertContent(KoStore *odfStore,
                                  QHash<QString, QString> &metaData,
+                                 QHash<QString, QString> *manifest,
                                  OdtHtmlConverter::ConversionOptions *options,
                                  FileCollector *collector,
                                  // Out parameters:
-                                 QHash<QString, QSizeF> &images)
+                                 QHash<QString, QSizeF> &images, QHash<QString, QString> &mediaFiles)
 {
     if (options)
         m_options = options;
     else
         m_options = &defaultOptions;
     m_collector = collector;
+    m_manifest = manifest;
+    m_odfStore = odfStore;
 
     m_doIndent = !m_options->useMobiConventions;
     m_imgIndex = 1;
@@ -209,7 +214,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
 
                 // Write the result to the file collector object.
                 QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
-                QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+                QString fileName = m_collector->pathPrefix() + fileId + m_collector->fileSuffix();
                 m_collector->addContentFile(fileId, fileName,
                                             "application/xhtml+xml", m_htmlContent, currentChapterTitle);
 
@@ -281,7 +286,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     QString fileId = m_collector->filePrefix();
     if (m_options->doBreakIntoChapters)
         fileId += QString::number(m_currentChapter);
-    QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+    QString fileName = m_collector->pathPrefix() + fileId + m_collector->fileSuffix();
     m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, currentChapterTitle);
 
     // 5. Write any data that we have collected on the way.
@@ -295,14 +300,20 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
         endHtmlFile();
 
         QString fileId = "chapter-endnotes";
-        QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+        QString fileName = m_collector->pathPrefix() + fileId + m_collector->fileSuffix();
         m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, i18n("End notes"));
     }
 
+    // Write media document file.
+    if (!m_mediaFilesList.isEmpty()) {
+        writeMediaOverlayDocumentFile();
+    }
     odfStore->close();
 
     // Return the list of images.
     images = m_images;
+    // Return the list of media files source.
+    mediaFiles = m_mediaFilesList;
 
     return KoFilter::OK;
 }
@@ -391,59 +402,99 @@ void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QStrin
 
 void OdtHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("table", m_doIndent);
     if (styleInfo) {
         styleInfo->inUse = true;
         htmlWriter->addAttribute("class", styleName);
     }
-    htmlWriter->addAttribute("border", "1");
+    htmlWriter->addAttribute("style", "border-collapse: collapse");
 
-    //===== table-row ======
     KoXmlElement tableElement;
     forEachElement (tableElement, nodeElement) {
-        if (tableElement.localName() != "table-column" && tableElement.namespaceURI() == KoXmlNS::table) {
-            htmlWriter->startElement("tr", m_doIndent);
 
-            // ===== table-cell ======
-            KoXmlElement cellElement;
-            forEachElement (cellElement, tableElement) {
-                QString styleName = cellElement.attribute("style-name");
-                StyleInfo *styleInfo = m_styles.value(styleName);
-                htmlWriter->startElement("td", m_doIndent);
-                if (styleInfo) {
-                    styleInfo->inUse = true;
-                    htmlWriter->addAttribute("class", styleName);
-                }
+        //Table headers
+        if (tableElement.localName() == "table-header-rows" && tableElement.namespaceURI() == KoXmlNS::table) {
+            htmlWriter->startElement("thead", m_doIndent);
 
-                // ==== cell text ====
-                // FIXME: This is wrong. A cell element can contain
-                //        the same tags as the full contents, not just
-                //        what is inside a paragraph. (Beside, this
-                //        function has a strange name.)
-                handleInsideElementsTag(cellElement, htmlWriter);
-                // ===================
-                htmlWriter->endElement(); // td
-            } // end for write tag cell
+            KoXmlElement headerRow;
+            forEachElement (headerRow, tableElement) {
+                handleTagTableRow(headerRow, htmlWriter, TableHeaderType);
+            }
 
-            htmlWriter->endElement(); // tr
-        } // end while write tag row
+            htmlWriter->endElement(); //thead
+        }
+
+        //Table body
+        if (tableElement.localName() == "table-rows" && tableElement.namespaceURI() == KoXmlNS::table) {
+            htmlWriter->startElement("tbody", m_doIndent);
+
+            KoXmlElement rowElement;
+            forEachElement (rowElement, tableElement) {
+                handleTagTableRow(rowElement, htmlWriter);
+            }
+
+            htmlWriter->endElement(); //tbody
+        }
+
+        //Tables without headers have no table-rows element and instead embed rows directly in the table,
+        //so handle that properly.
+        if (tableElement.localName() == "table-row" && tableElement.namespaceURI() == KoXmlNS::table) {
+            handleTagTableRow(tableElement, htmlWriter);
+        }
     }
 
-    htmlWriter->endElement();
+    htmlWriter->endElement(); //table
+}
+
+void OdtHtmlConverter::handleTagTableRow(KoXmlElement& nodeElement, KoXmlWriter* htmlWriter, OdtHtmlConverter::TableCellType type)
+{
+    htmlWriter->startElement("tr", m_doIndent);
+
+    KoXmlElement cellElement;
+    forEachElement (cellElement, nodeElement) {
+
+        if (cellElement.localName() == "covered-table-cell") {
+            continue;
+        }
+
+        htmlWriter->startElement(type == TableHeaderType ? "th" : "td", m_doIndent);
+
+        if (cellElement.hasAttributeNS(KoXmlNS::table, "style-name")) {
+            QString styleName = cssClassName(cellElement.attribute("style-name"));
+            StyleInfo *styleInfo = m_styles.value(styleName);
+            if(styleInfo) {
+                styleInfo->inUse = true;
+                htmlWriter->addAttribute("class", styleName);
+            }
+        }
+
+        if (cellElement.hasAttributeNS(KoXmlNS::table, "number-rows-spanned")) {
+            htmlWriter->addAttribute("rowspan", cellElement.attribute("number-rows-spanned"));
+        }
+
+        if (cellElement.hasAttributeNS(KoXmlNS::table, "number-columns-spanned")) {
+            htmlWriter->addAttribute("colspan", cellElement.attribute("number-columns-spanned"));
+        }
+
+        // ==== cell text ====
+        // FIXME: This is wrong. A cell element can contain
+        //        the same tags as the full contents, not just
+        //        what is inside a paragraph. (Beside, this
+        //        function has a strange name.)
+        handleInsideElementsTag(cellElement, htmlWriter);
+
+        htmlWriter->endElement(); //td
+    }
+
+    htmlWriter->endElement(); //tr
 }
 
 void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("img", m_doIndent);
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-    htmlWriter->addAttribute("alt", "(No Description)");
 
     // Find height and width
     QString height = nodeElement.attribute("height");
@@ -463,11 +514,70 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
     qreal qWidth = width.toFloat();
     QSizeF size(qWidth, qHeight);
 
-    // Check image tag to find image source
-    KoXmlElement imgElement;
-    forEachElement (imgElement, nodeElement) {
-        if (imgElement.localName() == "image" && imgElement.namespaceURI() == KoXmlNS::draw) {
-            QString imgSrc = imgElement.attribute("href").section('/', -1);
+    // Go through the frame's content and see what we can handle.
+    KoXmlElement framePartElement;
+    forEachElement (framePartElement, nodeElement) {
+
+        // Handle at least a few types of objects (hopefully more in the future).
+        if (framePartElement.localName() == "object"
+            && framePartElement.namespaceURI() == KoXmlNS::draw)
+        {
+            QString href = framePartElement.attribute("href");
+            if (href.isEmpty()) {
+                // Check for inline stuff.
+                // So far only math:math is supported.
+                if (!framePartElement.hasChildNodes())
+                    continue;
+
+                // Handle inline math:math
+                KoXmlElement childElement = framePartElement.firstChildElement();
+                if (childElement.localName() == "math"
+                    && childElement.namespaceURI() == KoXmlNS::math)
+                {
+                    QHash<QString, QString> unknownNamespaces;
+                    copyXmlElement(childElement, *htmlWriter, unknownNamespaces);
+
+                    // We are done with the whole frame.
+                    break;
+                }
+
+                // We couldn't handle this inline object. Check for
+                // object replacements (pictures).
+                continue;
+            }
+
+            // If we get here, this frame part was not an inline object.
+            // We already have an object reference.
+
+            // Normalize the object reference
+            if (href.startsWith("./"))
+                href.remove(0, 2);
+            QString type = m_manifest->value(href);
+
+            // So far we can only an handle embedded object (formula).
+            // In the future we will probably be able to handle more types.
+            if (type == "application/vnd.oasis.opendocument.formula") {
+
+                handleEmbeddedFormula(href, htmlWriter);
+                break; // Only one object per frame.
+            }
+            // ...more types here in the future, e.g. video.
+
+            // Ok, so we couldn't handle this one.
+            continue;
+        }
+        else if (framePartElement.localName() == "image"
+                 && framePartElement.namespaceURI() == KoXmlNS::draw)
+        {
+            // Handle image
+            htmlWriter->startElement("img", m_doIndent);
+            if (styleInfo) {
+                styleInfo->inUse = true;
+                htmlWriter->addAttribute("class", styleName);
+            }
+            htmlWriter->addAttribute("alt", "(No Description)");
+
+            QString imgSrc = framePartElement.attribute("href").section('/', -1);
 
             if (m_options->useMobiConventions) {
                 // Mobi
@@ -482,18 +592,132 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
                 }
             }
             else {
-                htmlWriter->addAttribute("src", m_collector->filePrefix() + imgSrc);
+                htmlWriter->addAttribute("src", imgSrc);
             }
 
-            m_images.insert(imgElement.attribute("href"), size);
+            m_images.insert(framePartElement.attribute("href"), size);
+
+            htmlWriter->endElement(); // end img
+            break; // Only one image per frame.
+        }
+        // Handle video
+        else if (framePartElement.localName() == "plugin"
+                 && framePartElement.namespaceURI() == KoXmlNS::draw) {
+            QString videoSource = framePartElement.attribute("href");
+            QString videoId = "media_id_" + QString::number(m_mediaId);
+            m_mediaId++;
+
+            htmlWriter->addAttribute("id", videoId);
+            QString id = "chapter" + QString::number(m_currentChapter) +
+                    m_collector->fileSuffix() + "#" + videoId;
+            m_mediaFilesList.insert(id, videoSource);
+        }
+    } // foreach
+}
+
+void OdtHtmlConverter::handleEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter)
+{
+    // FIXME: Track down why we need to close() the store here and
+    //        whip that code with a wet noodle.
+    m_odfStore->close();
+
+    // Open the formula content file if possible.
+    if (!m_odfStore->open(href + "/content.xml")) {
+        kDebug(30503) << "Can not open" << href << "/content.xml .";
+        return;
+    }
+
+    // Copy the math:math xml tree.
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if (!doc.setContent(m_odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug(30503) << "Error occurred while parsing content.xml "
+                      << errorMsg << " in Line: " << errorLine
+                      << " Column: " << errorColumn;
+        m_odfStore->close();
+        return;
+    }
+
+    KoXmlNode n = doc.documentElement();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (n.isElement()) {
+            KoXmlElement el = n.toElement();
+            if (el.tagName() == "math") {
+                QHash<QString, QString> unknownNamespaces;
+                copyXmlElement(el, *htmlWriter, unknownNamespaces);
+
+                // No need to continue once we have the math:math node.
+                break;
+            }
         }
     }
-    htmlWriter->endElement(); // end img
+
+    m_odfStore->close();
 }
+
+// Note: This code was copied from libs/flake/KoUnavailShape.  It
+// should probably be placed near /libs/odf/KoXml* instead.
+
+void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
+                                      QHash<QString, QString> &unknownNamespaces)
+{
+    // Start the element;
+    // keep the name in a QByteArray so that it stays valid until end element is called.
+    const QByteArray name(el.nodeName().toAscii());
+    kDebug(30503) << "Copying element;" << name;
+    writer.startElement(name.constData());
+
+    // Copy all the attributes, including namespaces.
+    const QList< QPair<QString, QString> >  &attributeNames = el.attributeFullNames();
+    for (int i = 0; i < attributeNames.size(); ++i) {
+        const QPair<QString, QString>  &attrPair(attributeNames.value(i));
+        if (attrPair.first.isEmpty()) {
+            kDebug(30503) << "Copying attribute;" << attrPair.second;
+            writer.addAttribute(attrPair.second.toAscii(), el.attribute(attrPair.second));
+        }
+        else {
+            // This somewhat convoluted code is because we need the
+            // namespace, not the namespace URI.
+            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toAscii());
+            // in case we don't find the namespace in our list create a own one and use that
+            // so the document created on saving is valid.
+            if (nsShort.isEmpty()) {
+                nsShort = unknownNamespaces.value(attrPair.first);
+                if (nsShort.isEmpty()) {
+                    nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
+                    unknownNamespaces.insert(attrPair.first, nsShort);
+                }
+                writer.addAttribute("xmlns:" + nsShort.toAscii(), attrPair.first);
+            }
+            QString attr(nsShort + ':' + attrPair.second);
+            writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
+                                                               attrPair.second));
+        }
+    }
+
+    // Child elements
+    // Loop through all the child elements of the draw:frame.
+    KoXmlNode n = el.firstChild();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (n.isElement()) {
+            copyXmlElement(n.toElement(), writer, unknownNamespaces);
+        }
+        else if (n.isText()) {
+            writer.addTextNode(n.toText().data()/*.toUtf8()*/);
+        }
+    }
+
+    // End the element
+    writer.endElement();
+}
+
+// ----------------------------------------------------------------
 
 void OdtHtmlConverter::handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("p", m_doIndent);
     if (styleInfo) {
@@ -512,7 +736,7 @@ void OdtHtmlConverter::handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWri
 
 void OdtHtmlConverter::handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("span", m_doIndent);
     if (styleInfo) {
@@ -530,7 +754,7 @@ void OdtHtmlConverter::handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter
 
 void OdtHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("h1", m_doIndent);
     if (styleInfo) {
@@ -543,7 +767,7 @@ void OdtHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWr
 
 void OdtHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    QString styleName = nodeElement.attribute("style-name");
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
     htmlWriter->startElement("ul", m_doIndent);
     if (styleInfo) {
@@ -662,7 +886,7 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
             if (noteClass == "footnote")
                 htmlWriter->addAttribute("href", "#" + id + "n"); // n rerence to note foot-note or end-note
             else { // endnote
-                QString endRef = "chapter-endnotes.xhtml#" + id + "n";
+                QString endRef = "chapter-endnotes" + m_collector->fileSuffix() + '#' + id + 'n';
                 htmlWriter->addAttribute("href", endRef);
             }
             htmlWriter->addAttribute("id", id + "t"); // t is for text
@@ -691,11 +915,9 @@ void OdtHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlW
     KoXmlNode node = nodeElement.firstChild();
     KoXmlElement element = node.toElement();
 
-    // We should end tag "a" after text for bookmark-start we can
-    // handle it with tag bookmark-end but for bookmark there is no
-    // bookmark-end so i use this flag to close the tag "a" that i
-    // have opened it in handleTagBookMark()
-    bool bookMarkFlag = false;
+    // handle it with tag bookmark-end but for bookmark we may have
+    // bookmark-end or we may not have it so we control it with "insideBookmarkTag".
+    bool insideBookmarkTag = false;
 
     // We have characterData or image or span or s  or soft-page break in a tag p
     // FIXME: we should add if there are more tags.
@@ -703,9 +925,10 @@ void OdtHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlW
 
         if (node.isText()) {
             handleCharacterData(node, htmlWriter);
-            if (bookMarkFlag) {
+            if (insideBookmarkTag) {
+                // End tag <a> started in bookmark or bookmark-start.
                 htmlWriter->endElement(); // end tag "a"
-                bookMarkFlag = false;
+                insideBookmarkTag = false;
             }
         }
         else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
@@ -743,13 +966,15 @@ void OdtHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlW
         }
         else if (element.localName() == "bookmark" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMark(element, htmlWriter);
-            bookMarkFlag = true;
+            insideBookmarkTag = true;
         }
         else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMarkStart(element, htmlWriter);
+            insideBookmarkTag = true;
         }
         else if (element.localName() == "bookmark-end" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagBookMarkEnd(htmlWriter);
+            // End tag <a> started in bookmark or bookmark-start.
+//            handleTagBookMarkEnd(htmlWriter);
         }
         else if (element.localName() == "note" && element.namespaceURI() == KoXmlNS::text) {
             handleTagNote(element, htmlWriter);
@@ -789,7 +1014,7 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, in
             QString value = m_collector->filePrefix();
             if (m_options->doBreakIntoChapters)
                 value += QString::number(chapter);
-            value += ".xhtml";
+            value += m_collector->fileSuffix();
             m_linksInfo.insert(key, value);
             continue;
         }
@@ -808,7 +1033,7 @@ void OdtHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(QString id, m_footNotes.keys()) {
+    foreach(const QString &id, m_footNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
         htmlWriter->addAttribute("id", id + "n");
 
@@ -836,7 +1061,7 @@ void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(QString id, m_endNotes.keys()) {
+    foreach(const QString &id, m_endNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
         htmlWriter->addAttribute("id", id.section("/", 1) + "n");
 
@@ -855,6 +1080,37 @@ void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
     htmlWriter->endElement();
 }
 
+void OdtHtmlConverter::writeMediaOverlayDocumentFile()
+{
+    QByteArray mediaContent;
+    QBuffer *buff = new QBuffer(&mediaContent);
+    KoXmlWriter * writer = new KoXmlWriter(buff);
+
+    writer->startElement("smil");
+    writer->addAttribute("xmlns", "http://www.w3.org/ns/SMIL");
+    writer->addAttribute("version", "3.0");
+
+    writer->startElement("body");
+
+    foreach (QString mediaReference, m_mediaFilesList.keys()) {
+        writer->startElement("par");
+
+        writer->startElement("text");
+        writer->addAttribute("src", mediaReference);
+        writer->endElement(); // text
+
+        writer->startElement("audio");
+        writer->addAttribute("src", m_mediaFilesList.value(mediaReference).section("/", -1));
+        writer->endElement();
+
+        writer->endElement(); // par
+    }
+    writer->endElement(); // body
+    writer->endElement(); // smil
+
+    m_collector->addContentFile(QString("smil"), QString(m_collector->pathPrefix() + "media.smil")
+                                ,"application/smil", mediaContent);
+}
 
 // ================================================================
 //                         Style handling
@@ -936,11 +1192,13 @@ void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, Sty
 
         StyleInfo *styleInfo = new StyleInfo;
 
-        // Get the style name. Default styles don't have a name so
-        // give them a constructed name by combining "default" and the
-        // style family in a way that should not collide with any real
-        // style name.
-        QString styleName = styleElement.attribute("name");
+        // Get the style name. "." is an illegal character in css style
+        // names and needs to be replaced.
+        QString styleName = cssClassName(styleElement.attribute("name"));
+
+        // Default styles don't have a name so give them a constructed
+        // name by combining "default" and the style family in a way
+        // that should not collide with any real style name.
         if (tagName == "default-style") {
             // This name should not collide with any real name.
             styleName = QString("default%") + styleElement.attribute("family");
@@ -951,7 +1209,7 @@ void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, Sty
 
         // Every style should have a parent. If the style has no
         // parent, then use the appropriate default style.
-        QString parentName = styleElement.attribute("parent-style-name");
+        QString parentName = cssClassName(styleElement.attribute("parent-style-name"));
         if (!styleInfo->isDefaultStyle && parentName.isEmpty()) {
             parentName = QString("default%") + styleInfo->family;
         }
@@ -1174,8 +1432,6 @@ void OdtHtmlConverter::fixStyleTree(QHash<QString, StyleInfo*> &styles)
     }
 }
 
-
-
 KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*> &styles,
                                                        QByteArray &cssContent)
 {
@@ -1188,7 +1444,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*
 
     QByteArray begin("{\n");
     QByteArray end("}\n");
-    foreach (QString styleName, styles.keys()) {
+    foreach (const QString &styleName, styles.keys()) {
         QByteArray head;
         QByteArray attributeList;
 
@@ -1253,4 +1509,11 @@ void OdtHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, Sty
     }
 
     doneStyles.insert(styleName);
+}
+
+QString OdtHtmlConverter::cssClassName(const QString& odfStyleName)
+{
+    QString retval = odfStyleName;
+    QRegExp exp("[^a-zA-Z0-9_]"); //CSS class names are only allowed to use alphanumeric and underscore.
+    return retval.replace(exp, "_sc_"); //Not pretty, but it should serve to create unique class names.
 }

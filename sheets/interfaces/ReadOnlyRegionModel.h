@@ -35,7 +35,7 @@ public:
     /**
      * Constructor.
      */
-    ReadOnlyRegionModel(const Region& region);
+    explicit ReadOnlyRegionModel(const Region &region);
 
     /**
      * Destructor.

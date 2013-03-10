@@ -45,7 +45,7 @@ class CALLIGRA_SHEETS_ODF_EXPORT FunctionParameter
 public:
     FunctionParameter();
     FunctionParameter(const FunctionParameter& param);
-    FunctionParameter(const QDomElement& element);
+    explicit FunctionParameter(const QDomElement& element);
 
     QString helpText() const {
         return m_help;
@@ -71,7 +71,7 @@ class CALLIGRA_SHEETS_ODF_EXPORT FunctionDescription
 {
 public:
     FunctionDescription();
-    FunctionDescription(const QDomElement& element);
+    explicit FunctionDescription(const QDomElement& element);
     FunctionDescription(const FunctionDescription& desc);
 
     const QStringList& examples() {

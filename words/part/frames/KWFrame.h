@@ -29,13 +29,12 @@
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeApplicationData.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 
 class KWFrameSet;
 class KoViewConverter;
 class KWOutlineShape;
 class KWPage;
-class KoTextAnchor;
 
 /**
  * This class represents a single frame.
@@ -52,7 +51,7 @@ public:
      * @param shape the shape that displays the content, containing size/position
      * @param parent the parent frameset
      */
-    KWFrame(KoShape *shape, KWFrameSet *parent, KoTextAnchor *anchor = 0);
+    KWFrame(KoShape *shape, KWFrameSet *parent);
     virtual ~KWFrame();
 
     /**
@@ -127,7 +126,7 @@ public:
     */
 
     int anchoredPageNumber() const {
-        return m_anchor ? m_anchor->pageNumber() : -1;
+        return m_shape->anchor() ? m_shape->anchor()->pageNumber() : -1;
     }
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
@@ -135,16 +134,6 @@ public:
     void setAnchoredFrameOffset(qreal offset) {
         m_anchoredFrameOffset = offset;
     }
-
-    KoTextAnchor::AnchorType anchorType() {
-        return m_anchor ? m_anchor->anchorType() : KoTextAnchor::AnchorPage;
-    }
-
-    void setAnchor(KoTextAnchor *anchor) {
-        m_anchor = anchor;
-    }
-
-    KoTextAnchor *anchor() const { return m_anchor; }
 
     /**
      * Returns the list of copy-shapes, see @a KWCopyShape , that
@@ -184,7 +173,6 @@ private:
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
     QList<KWFrame*> m_copyShapes;
-    KoTextAnchor *m_anchor;
 };
 
 #endif

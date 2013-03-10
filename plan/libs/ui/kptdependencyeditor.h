@@ -41,7 +41,7 @@
 
 #include <KPageDialog>
 
-struct KoPageLayoutWidget;
+class KoPageLayoutWidget;
 
 class QModelIndex;
 

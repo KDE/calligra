@@ -49,7 +49,6 @@
 #include "KPrPresentationBlackStrategy.h"
 #include "ui/KPrPresentationToolWidget.h"
 #include "KPrPresentationToolAdaptor.h"
-#include "KPrViewModePresentation.h"
 
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )

@@ -19,7 +19,7 @@
 #ifndef __KIS_COMPOSITION_BENCHMARK_H
 #define __KIS_COMPOSITION_BENCHMARK_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisCompositionBenchmark : public QObject
 {
@@ -43,6 +43,11 @@ private slots:
     void testRgb8CompositeOverReal_Aligned();
 
     void benchmarkMemcpy();
+
+    void benchmarkUintFloat();
+    void benchmarkUintIntFloat();
+    void benchmarkFloatUint();
+    void benchmarkFloatIntUint();
 };
 
 #endif /* __KIS_COMPOSITION_BENCHMARK_H */

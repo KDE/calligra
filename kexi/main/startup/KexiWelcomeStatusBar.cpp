@@ -46,7 +46,7 @@
 #include <QEvent>
 #include <QLayout>
 #include <QProgressBar>
-#include <QtCore/qmath.h>
+#include <qmath.h>
 #include <QFile>
 #include <QDesktopServices>
 #include <QUiLoader>

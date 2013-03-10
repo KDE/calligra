@@ -280,8 +280,6 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         }
     } break;
     default: { // As Is: Line-break at the end of line.
-        int lastPercent = -1;
-        bool firstLine = true;
         while (!stream.atEnd()) {
             QString s = stream.readLine();
 #ifdef OUTPUT_AS_ODT_FILE

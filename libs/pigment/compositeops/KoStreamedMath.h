@@ -19,13 +19,8 @@
 #ifndef __VECTOR_MATH_H
 #define __VECTOR_MATH_H
 
-
-#include "config-vc.h"
-
-#ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
-#endif
 
 #include <stdint.h>
 
@@ -39,13 +34,14 @@
 #endif
 #endif
 
-namespace KoStreamedMath {
+template<Vc::Implementation _impl>
+struct KoStreamedMath {
 
 /**
  * Composes src into dst without using vector instructions
  */
 template<bool useMask, bool useFlow, class Compositor>
-    void genericComposite32_novector(const KoCompositeOp::ParameterInfo& params)
+    static void genericComposite32_novector(const KoCompositeOp::ParameterInfo& params)
 {
     using namespace Arithmetic;
 
@@ -64,7 +60,7 @@ template<bool useMask, bool useFlow, class Compositor>
         int blockRest = params.cols;
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixelScalar<useMask>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -86,15 +82,13 @@ static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
     return quint8(qint16(b - a) * alpha + a);
 }
 
-#if defined HAVE_VC
-
 /**
  * Get a vector containing first Vc::float_v::Size values of mask.
  * Each source mask element is considered to be a 8-bit integer
  */
-inline Vc::float_v fetch_mask_8(const quint8 *data) {
+static inline Vc::float_v fetch_mask_8(const quint8 *data) {
     Vc::uint_v data_i(data);
-    return Vc::float_v(data_i);
+    return Vc::float_v(Vc::int_v(data_i));
 }
 
 /**
@@ -110,7 +104,7 @@ inline Vc::float_v fetch_mask_8(const quint8 *data) {
  *               causes #GP (General Protection Exception)
  */
 template <bool aligned>
-inline Vc::float_v fetch_alpha_32(const quint8 *data) {
+static inline Vc::float_v fetch_alpha_32(const quint8 *data) {
     Vc::uint_v data_i;
     if (aligned) {
         data_i.load((const quint32*)data, Vc::Aligned);
@@ -118,7 +112,7 @@ inline Vc::float_v fetch_alpha_32(const quint8 *data) {
         data_i.load((const quint32*)data, Vc::Unaligned);
     }
 
-    return Vc::float_v(data_i >> 24);
+    return Vc::float_v(Vc::int_v(data_i >> 24));
 }
 
 /**
@@ -134,7 +128,7 @@ inline Vc::float_v fetch_alpha_32(const quint8 *data) {
  *               causes #GP (General Protection Exception)
  */
 template <bool aligned>
-inline void fetch_colors_32(const quint8 *data,
+static inline void fetch_colors_32(const quint8 *data,
                             Vc::float_v &c1,
                             Vc::float_v &c2,
                             Vc::float_v &c3) {
@@ -148,9 +142,9 @@ inline void fetch_colors_32(const quint8 *data,
     const quint32 lowByteMask = 0xFF;
     Vc::uint_v mask(lowByteMask);
 
-    c1 = Vc::float_v((data_i >> 16) & mask);
-    c2 = Vc::float_v((data_i >> 8)  & mask);
-    c3 = Vc::float_v( data_i        & mask);
+    c1 = Vc::float_v(Vc::int_v((data_i >> 16) & mask));
+    c2 = Vc::float_v(Vc::int_v((data_i >> 8)  & mask));
+    c3 = Vc::float_v(Vc::int_v( data_i        & mask));
 }
 
 /**
@@ -161,12 +155,11 @@ inline void fetch_colors_32(const quint8 *data,
  *
  * NOTE: \p data must be aligned pointer!
  */
-inline void write_channels_32(quint8 *data,
-                              Vc::float_v alpha,
-                              Vc::float_v c1,
-                              Vc::float_v c2,
-                              Vc::float_v c3) {
-
+static inline void write_channels_32(quint8 *data,
+                                     Vc::float_v::AsArg alpha,
+                                     Vc::float_v::AsArg c1,
+                                     Vc::float_v::AsArg c2,
+                                     Vc::float_v::AsArg c3) {
     /**
      * FIXME: make conversion float->int
      * use methematical rounding
@@ -175,11 +168,11 @@ inline void write_channels_32(quint8 *data,
     const quint32 lowByteMask = 0xFF;
     Vc::uint_v mask(lowByteMask);
 
-    Vc::uint_v v1 = Vc::uint_v(alpha) << 24;
-    Vc::uint_v v2 = (Vc::uint_v(c1) & mask) << 16;
-    Vc::uint_v v3 = (Vc::uint_v(c2) & mask) <<  8;
+    Vc::uint_v v1 = Vc::uint_v(Vc::int_v(alpha)) << 24;
+    Vc::uint_v v2 = (Vc::uint_v(Vc::int_v(c1)) & mask) << 16;
+    Vc::uint_v v3 = (Vc::uint_v(Vc::int_v(c2)) & mask) <<  8;
     v1 = v1 | v2;
-    Vc::uint_v v4 = Vc::uint_v(c3) & mask;
+    Vc::uint_v v4 = Vc::uint_v(Vc::int_v(c3)) & mask;
     v3 = v3 | v4;
 
     *((Vc::uint_v*)data) = v1 | v3;
@@ -191,7 +184,7 @@ inline void write_channels_32(quint8 *data,
  * math of the composition
  */
 template<bool useMask, bool useFlow, class Compositor>
-    void genericComposite32(const KoCompositeOp::ParameterInfo& params)
+    static void genericComposite32(const KoCompositeOp::ParameterInfo& params)
 {
     using namespace Arithmetic;
 
@@ -251,7 +244,7 @@ template<bool useMask, bool useFlow, class Compositor>
         }
 
         for(int i = 0; i < blockAlign; i++) {
-            Compositor::template compositeOnePixelScalar<useMask>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -261,7 +254,7 @@ template<bool useMask, bool useFlow, class Compositor>
         }
 
         for (int i = 0; i < blockAlignedVector; i++) {
-            Compositor::template compositeVector<useMask, true>(src, dst, mask, params.opacity, params.flow);
+            Compositor::template compositeVector<useMask, true, _impl>(src, dst, mask, params.opacity, params.flow);
             src += srcVectorInc;
             dst += vectorInc;
 
@@ -271,7 +264,7 @@ template<bool useMask, bool useFlow, class Compositor>
         }
 
         for (int i = 0; i < blockUnalignedVector; i++) {
-            Compositor::template compositeVector<useMask, false>(src, dst, mask, params.opacity, params.flow);
+            Compositor::template compositeVector<useMask, false, _impl>(src, dst, mask, params.opacity, params.flow);
             src += srcVectorInc;
             dst += vectorInc;
 
@@ -282,7 +275,7 @@ template<bool useMask, bool useFlow, class Compositor>
 
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixelScalar<useMask>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -303,25 +296,6 @@ template<bool useMask, bool useFlow, class Compositor>
         Vc::free<float>(reinterpret_cast<float*>(const_cast<quint8*>(srcRowStart)));
     }
 }
-
-#else /* if ! defined HAVE_VC */
-
-/**
- * Fall back to the scalar version of the composition.
- *
- * Don't use this method! The scalar floating point version of the
- * algorithm is up to 2 times slower then the basic integer
- * implementation! Use another composite op instead!
- */
-
-template<bool useMask, bool useFlow, class Compositor>
-    void genericComposite32(const KoCompositeOp::ParameterInfo& params)
-{
-    genericComposite32_novector<useMask, useFlow, Compositor>(params);
-}
-
-#endif /* HAVE_VC */
-
-}
+};
 
 #endif /* __VECTOR_MATH_H */

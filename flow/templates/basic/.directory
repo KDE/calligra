@@ -2,8 +2,8 @@
 Name=Basic
 Name[bg]=Основни
 Name[br]=Diazez
-Name[ca]=Bàsic
 Name[ca@valencia]=Bàsic
+Name[ca]=Bàsic
 Name[cs]=Základní
 Name[cy]=Sylfaenol
 Name[da]=Basal
@@ -49,10 +49,15 @@ Name[tg]=Асосӣ
 Name[tr]=Temel
 Name[ug]=ئاساس
 Name[uk]=Основний
-Name[uz]=Oddiy
 Name[uz@cyrillic]=Оддий
+Name[uz]=Oddiy
 Name[wa]=Di båze
 Name[x-test]=xxBasicxx
 Name[zh_CN]=基本
 Name[zh_TW]=基本
 X-KDE-DefaultTab=true
+
+[Dolphin]
+PreviewsShown=true
+Timestamp=2013,1,19,16,2,5
+Version=3

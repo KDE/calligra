@@ -7,6 +7,10 @@ if (KdepimLibs_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
 endif (KdepimLibs_FOUND)
 
+if (APPLE)
+    find_library(FOUNDATION_LIBRARY Foundation)
+endif (APPLE)
+
 include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
@@ -17,10 +21,8 @@ endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
-    KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
-    KoPartAdaptor.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
@@ -43,7 +45,6 @@ set(komain_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     KoVersionDialog.cpp
-    KoViewAdaptor.cpp
     KoView.cpp
     calligraversion.cpp
     KoFilterManager.cpp
@@ -84,8 +85,6 @@ set(komain_LIB_SRCS
     KoTemplatesPane.cpp
     KoTemplateTree.cpp
 
-    rdf/KoDocumentRdfEditWidgetBase.cpp
-
     KoFindBase.cpp
     KoFindMatch.cpp
     KoFindText.cpp
@@ -98,34 +97,20 @@ set(komain_LIB_SRCS
 
     thememanager.cpp
 )
-if( Soprano_FOUND )
+
+if( QT_QTDBUS_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
-        rdf/KoDocumentRdf.cpp
-        rdf/KoDocumentRdfEditWidget.cpp
-        rdf/KoSopranoTableModelDelegate.cpp
-        rdf/KoSopranoTableModel.cpp
-        rdf/KoRdfPrefixMapping.cpp
-        rdf/KoSemanticStylesheet.cpp
-        rdf/KoRdfSemanticItem.cpp
-        rdf/KoRdfFoaF.cpp
-        rdf/KoRdfCalendarEvent.cpp
-        rdf/KoRdfLocationEditWidget.cpp
-        rdf/KoRdfLocation.cpp
-        rdf/KoRdfSemanticItemViewSite.cpp
-        rdf/KoRdfSemanticTree.cpp
-        rdf/KoRdfSemanticTreeWidgetItem.cpp
-        rdf/KoRdfFoaFTreeWidgetItem.cpp
-        rdf/KoRdfCalendarEventTreeWidgetItem.cpp
-        rdf/KoRdfLocationTreeWidgetItem.cpp
-        rdf/KoSemanticStylesheetsEditor.cpp
-        rdf/KoChangeTrackerDisabledRAII.cpp
-        rdf/RdfSemanticTreeWidgetAction.cpp
-        rdf/RdfSemanticTreeWidgetSelectAction.cpp
-        rdf/InsertSemanticObjectActionBase.cpp
-        rdf/InsertSemanticObjectCreateAction.cpp
-        rdf/InsertSemanticObjectReferenceAction.cpp
+        KoApplicationAdaptor.cpp
+        KoViewAdaptor.cpp
+        KoPartAdaptor.cpp
     )
-endif( Soprano_FOUND )
+endif( QT_QTDBUS_FOUND )
+
+if (APPLE)
+    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+        MacSupport.mm
+    )
+endif (APPLE)
 
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
@@ -134,30 +119,6 @@ kde4_add_ui_files( komain_LIB_SRCS
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
-if(Soprano_FOUND)
-
-    kde4_add_ui_files( komain_LIB_SRCS
-       rdf/KoDocumentRdfEditWidget.ui
-       rdf/KoRdfFoaFEditWidget.ui
-       rdf/KoRdfCalendarEventEditWidget.ui
-       rdf/KoSemanticStylesheetsEditor.ui
-    )
-
-#    if(MARBLE_FOUND)
-#        kde4_add_ui_files( komain_LIB_SRCS
-#           rdf/KoRdfLocationEditWidgetMarble.ui
-#           rdf/KoRdfLocationViewWidgetMarble.ui
-#        )
-#    else(MARBLE_FOUND)
-        kde4_add_ui_files( komain_LIB_SRCS
-           rdf/KoRdfLocationEditWidget.ui
-           rdf/KoRdfLocationViewWidget.ui
-        )
-#    endif(MARBLE_FOUND)
-
-endif(Soprano_FOUND)
-
-
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
 target_link_libraries(komain ${extra_libs}
@@ -167,21 +128,18 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KCAL_LIBS}
     kowidgets
     textlayout
+    
 )
-if( Soprano_FOUND )
-    target_link_libraries(komain ${SOPRANO_LIBRARIES})
-    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
-endif( Soprano_FOUND )
-if( MARBLE_FOUND )
-    include_directories(${MARBLE_INCLUDE_DIR})
-    target_link_libraries(komain ${MARBLE_LIBRARIES})
-    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
-endif( MARBLE_FOUND )
+
 if( KActivities_FOUND )
     include_directories(${KACTIVITIES_INCLUDES})
     target_link_libraries(komain ${KACTIVITIES_LIBRARY})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
 endif( KActivities_FOUND )
+
+if (APPLE)
+    target_link_libraries(komain ${FOUNDATION_LIBRARY})
+endif (APPLE)
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
@@ -196,7 +154,6 @@ install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 install( FILES
     KoApplication.h
-    KoApplicationAdaptor.h
     KoDocument.h
     KoDocumentEntry.h
     KoDocumentInfo.h
@@ -218,6 +175,7 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    MacSupport.h
     KoModeBoxFactory.h
     KoServiceProvider.h
     KoPart.h
@@ -226,7 +184,6 @@ install( FILES
     KoProgressProxy.h
     KoVersionDialog.h
     KoView.h
-    KoViewAdaptor.h
     calligraversion.h
     KoProgressUpdater.h
     KoProgressBar.h
@@ -235,30 +192,10 @@ install( FILES
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
-if( Soprano_FOUND )
+if( QT_QTDBUS_FOUND )
     install( FILES
-        rdf/KoRdfFoaF.h
-        rdf/KoRdfCalendarEvent.h
-        rdf/KoRdfLocation.h
-        rdf/KoRdfFoaFTreeWidgetItem.h
-        rdf/KoRdfCalendarEventTreeWidgetItem.h
-        rdf/KoRdfLocationTreeWidgetItem.h
-        rdf/KoChangeTrackerDisabledRAII.h
-        rdf/RdfForward.h
-        rdf/KoDocumentRdf.h
-        rdf/KoSopranoTableModelDelegate.h
-        rdf/KoSopranoTableModel.h
-        rdf/KoSemanticStylesheet.h
-        rdf/KoRdfSemanticItem.h
-        rdf/KoRdfSemanticItemViewSite.h
-        rdf/KoRdfSemanticTree.h
-        rdf/KoRdfSemanticTreeWidgetItem.h
-        rdf/RdfSemanticTreeWidgetAction.h
-        rdf/RdfSemanticTreeWidgetSelectAction.h
-        rdf/InsertSemanticObjectActionBase.h
-        rdf/InsertSemanticObjectCreateAction.h
-        rdf/InsertSemanticObjectReferenceAction.h
-        rdf/KoSemanticStylesheetsEditor.h
+        KoApplicationAdaptor.h
+        KoViewAdaptor.h
     DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-endif( Soprano_FOUND )
+endif( QT_QTDBUS_FOUND )
 

@@ -119,15 +119,19 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     // m_imagesSrcList is an output parameter from the conversion.    
     HtmlFile html;
     html.setPathPrefix("./");
-    html.setFilePrefix(m_chain->outputFile().section('/', -1).section('.', 0, 0));
+    const QString outputFileName = m_chain->outputFile().section('/', -1);
+    const int dotPosition = outputFileName.indexOf('.');
+    html.setFilePrefix(outputFileName.left(dotPosition));
+    html.setFileSuffix(dotPosition != -1 ? outputFileName.mid(dotPosition) : QString());
     OdtHtmlConverter converter;
     OdtHtmlConverter::ConversionOptions options = {
         false,                   // don't put styles in css file
         false,                    // don't break into chapters
         false                     // It is not mobi.
     };
-    status = converter.convertContent(odfStore, m_metadata, &options, &html,
-                                      m_imagesSrcList);
+    QHash<QString, QString> mediaFilesList;
+    status = converter.convertContent(odfStore, m_metadata, &m_manifest, &options, &html,
+                                      m_imagesSrcList, mediaFilesList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -156,7 +160,7 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
     // Extract images and add them to htmlFile one by one
     QByteArray imgContent;
     int imgId = 1;
-    foreach (const QString imgSrc, m_imagesSrcList.keys()) {
+    foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
         kDebug(30503) << imgSrc;
         if (!odfStore->extractFile(imgSrc, imgContent)) {
             kDebug(30503) << "Can not to extract file";

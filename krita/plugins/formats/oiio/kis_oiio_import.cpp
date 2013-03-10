@@ -60,15 +60,6 @@ KisOiioImport::~KisOiioImport()
 {
 }
 
-bool hasVisibleWidgets()
-{
-    QWidgetList wl = QApplication::allWidgets();
-    foreach(QWidget* w, wl) {
-        if (w->isVisible()) return true;
-    }
-    return false;
-}
-
 KoFilter::ConversionStatus KisOiioImport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "Oiio import! From:" << from << ", To:" << to << 0;
@@ -82,7 +73,7 @@ KoFilter::ConversionStatus KisOiioImport::convert(const QByteArray& from, const 
         KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -103,8 +94,6 @@ KoFilter::ConversionStatus KisOiioImport::convert(const QByteArray& from, const 
 
         ImageBuf buf(localFile::toStdString());
         int nSubImages = buf.nsubimages();
-
-
 
 
 //        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),

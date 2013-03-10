@@ -32,6 +32,7 @@
 #include "Value.h"
 #include "ValueFormatter.h"
 #include "DocBase.h"
+#include "ElapsedTime_p.h"
 
 #include <KoUpdater.h>
 

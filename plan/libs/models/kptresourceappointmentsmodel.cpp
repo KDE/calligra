@@ -117,7 +117,7 @@ void ResourceAppointmentsItemModel::slotResourceGroupToBeInserted( const Resourc
 void ResourceAppointmentsItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 {
     //kDebug(planDbg())<<group->name()<<endl;
-    Q_ASSERT( group == m_group );
+    Q_ASSERT( group == m_group ); Q_UNUSED( group );
     endInsertRows();
     m_group = 0;
 }
@@ -134,7 +134,7 @@ void ResourceAppointmentsItemModel::slotResourceGroupToBeRemoved( const Resource
 void ResourceAppointmentsItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
 {
     //kDebug(planDbg())<<group->name()<<endl;
-    Q_ASSERT( group == m_group );
+    Q_ASSERT( group == m_group ); Q_UNUSED( group );
     endRemoveRows();
     m_group = 0;
 }

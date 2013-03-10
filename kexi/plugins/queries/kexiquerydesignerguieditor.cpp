@@ -706,6 +706,7 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata,
                                          KexiView::StoreNewDataOptions options,
                                          bool &cancel)
 {
+    Q_UNUSED(options);
     if (!d->dataTable->dataAwareObject()->acceptRowEdit()) {
         cancel = true;
         return 0;
@@ -1559,7 +1560,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeTableCellChanged(KexiDB::RecordData *
     if (set) {
         if ((*set)["isExpression"].value().toBool() == false) {
             (*set)["table"] = newValue;
-            (*set)["caption"] = QString();
+            (*set)["caption"] = QVariant(QString());
         }
         else {
             //do not set table for expr. columns

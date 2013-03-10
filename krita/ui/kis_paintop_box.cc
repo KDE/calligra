@@ -152,7 +152,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         
         slSize->setRange(0.0, 1000.0, 2);
         slSize->setValue(100.0);
-        slSize->setSingleStep(0.05);
+        slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
         slSize->setMinimumWidth(120);
 
@@ -205,6 +205,21 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     view->actionCollection()->addAction("brushslider2", action);
     action->setDefaultWidget(m_sliderChooser[1]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
+
+    action = new KAction(i18n("Next Favourite Preset"), this);
+    view->actionCollection()->addAction("next_favorite_preset", action);
+    action->setShortcut(KShortcut(Qt::Key_Right));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
+
+    action = new KAction(i18n("Previous Favourite Preset"), this);
+    view->actionCollection()->addAction("previous_favorite_preset", action);
+    action->setShortcut(KShortcut(Qt::Key_Left));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
+
+    action = new KAction(i18n("Switch to Previous Preset"), this);
+    view->actionCollection()->addAction("previous_preset", action);
+    action->setShortcut(KShortcut(Qt::Key_Slash));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
@@ -324,8 +339,11 @@ KoID KisPaintopBox::currentPaintop()
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
 {
-    if(m_activePreset) {
-        if(m_optionWidget) {
+    if (m_activePreset) {
+
+        m_previousPreset = m_activePreset->clone();
+
+        if (m_optionWidget) {
             m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
             m_optionWidget->disconnect(this);
             m_optionWidget->hide();
@@ -370,7 +388,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     }
 
     m_activePreset = preset;
-    emit signalPaintopChanged(preset);
 }
 
 KoID KisPaintopBox::defaultPaintOp()
@@ -650,7 +667,7 @@ void KisPaintopBox::sliderChanged(int n)
     qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value();
     qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value();
     qreal size    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
-    
+
     setSliderValue("opacity", opacity);
     setSliderValue("flow"   , flow   );
     setSliderValue("size"   , size   );
@@ -728,4 +745,54 @@ void KisPaintopBox::slotOpacityChanged(qreal opacity)
         m_optionWidget->setConfiguration(m_activePreset->settings().data());
     }
     m_blockUpdate = false;
+}
+
+void KisPaintopBox::slotPreviousFavoritePreset()
+{
+    if (!m_view->canvasBase()->favoriteResourceManager()) {
+        m_view->canvasBase()->createFavoriteResourceManager(this);
+    }
+    KoFavoriteResourceManager *mgr = m_view->canvasBase()->favoriteResourceManager();
+    int i = 0;
+    foreach (const QString &preset, mgr->favoritePresetList()) {
+        if (m_activePreset->name() == preset) {
+            if (i > 0) {
+                mgr->slotChangeActivePaintop(i - 1);
+            }
+            else {
+                mgr->slotChangeActivePaintop(mgr->numFavoritePresets() - 1);
+            }
+            return;
+        }
+        i++;
+    }
+
+}
+
+void KisPaintopBox::slotNextFavoritePreset()
+{
+    if (!m_view->canvasBase()->favoriteResourceManager()) {
+        m_view->canvasBase()->createFavoriteResourceManager(this);
+    }
+    KoFavoriteResourceManager *mgr = m_view->canvasBase()->favoriteResourceManager();
+    int i = 0;
+    foreach (const QString &preset, mgr->favoritePresetList()) {
+        if (m_activePreset->name() == preset) {
+            if (i < mgr->numFavoritePresets() - 1) {
+                mgr->slotChangeActivePaintop(i + 1);
+            }
+            else {
+                mgr->slotChangeActivePaintop(0);
+            }
+            return;
+        }
+        i++;
+    }
+}
+
+void KisPaintopBox::slotSwitchToPreviousPreset()
+{
+    if (m_previousPreset) {
+        setCurrentPaintop(m_previousPreset->paintOp(), m_previousPreset);
+    }
 }

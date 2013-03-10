@@ -57,13 +57,14 @@ struct FileInfo
 };
 
 
-struct FileCollectorPrivate
+class FileCollectorPrivate
 {
 public:
     FileCollectorPrivate();
     ~FileCollectorPrivate();
 
     QString  filePrefix;        // default: "chapter"
+    QString  fileSuffix;        // default: ".xhtml"
     QString  pathPrefix;        // default: "OEBPS/"
 
     QList<FileCollector::FileInfo*>  m_files;  // Embedded files
@@ -71,6 +72,7 @@ public:
 
 FileCollectorPrivate::FileCollectorPrivate()
     : filePrefix("chapter")
+    , fileSuffix(".xhtml")
     , pathPrefix("OEBPS/")
 {
 }
@@ -104,6 +106,16 @@ void FileCollector::setFilePrefix(QString prefix)
 QString FileCollector::filePrefix() const
 {
     return d->filePrefix;
+}
+
+void FileCollector::setFileSuffix(const QString &suffix)
+{
+    d->fileSuffix = suffix;
+}
+
+QString FileCollector::fileSuffix() const
+{
+    return d->fileSuffix;
 }
 
 void FileCollector::setPathPrefix(QString prefix)

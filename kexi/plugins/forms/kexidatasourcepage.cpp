@@ -50,6 +50,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         , m_noDataSourceAvailableMultiText(
             i18n("No data source could be assigned for multiple widgets.") )
         , m_insideClearFormDataSourceSelection(false)
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+        , m_tableOrQuerySchema(0)
+#endif
 {
 /*moved
     Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);

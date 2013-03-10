@@ -31,7 +31,7 @@ class SimpleHeaderFooterWidget : public QWidget
     Q_OBJECT
 public:
 
-    SimpleHeaderFooterWidget(KWView *view, QWidget *parent = 0);
+    explicit SimpleHeaderFooterWidget(KWView *view, QWidget *parent = 0);
     ~SimpleHeaderFooterWidget();
 
 private:

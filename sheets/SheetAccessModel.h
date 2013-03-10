@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef SHEETACCESSMODEL_H
+#define SHEETACCESSMODEL_H
+
 #include <QStandardItemModel>
 
 #include "Sheet.h"
@@ -54,7 +57,7 @@ class SheetAccessModel : public QStandardItemModel
     Q_OBJECT
 
 public:
-    SheetAccessModel(Map *map);
+    explicit SheetAccessModel(Map *map);
     virtual ~SheetAccessModel();
 
 public Q_SLOTS:
@@ -69,3 +72,5 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
+
+#endif

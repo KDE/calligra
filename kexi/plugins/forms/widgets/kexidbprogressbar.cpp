@@ -52,7 +52,7 @@ KexiDBProgressBar::setEnabled(bool enabled)
 
 void KexiDBProgressBar::setValueInternal(const QVariant&, bool)
 {
-    QProgressBar::setValue(m_origValue.toInt());
+    QProgressBar::setValue(KexiDataItemInterface::originalValue().toInt());
 }
 
 QVariant

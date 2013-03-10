@@ -202,7 +202,7 @@ void KexiActionProxy::plugSharedActionToExternalGUI(const QString& action_name, 
 
 void KexiActionProxy::plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client)
 {
-    foreach(QString n, action_names) {
+    foreach(const QString &n, action_names) {
         plugSharedActionToExternalGUI(n, client);
     }
 }

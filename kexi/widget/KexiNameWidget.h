@@ -47,23 +47,12 @@ public:
 
     virtual ~KexiNameWidget();
 
-    QLabel* captionLabel() const {
-        return lbl_caption;
-    }
-    QLabel* nameLabel() const {
-        return lbl_name;
-    }
-    KLineEdit* captionLineEdit() const {
-        return le_caption;
-    }
-    KLineEdit* nameLineEdit() const {
-        return le_name;
-    }
+    QLabel* captionLabel() const;
+    QLabel* nameLabel() const;
+    KLineEdit* captionLineEdit() const;
+    KLineEdit* nameLineEdit() const;
 
-    QString messageText() const {
-        return lbl_message->text();
-    }
-
+    QString messageText() const;
     void setMessageText(const QString& msg);
 
     //! \return entered caption text
@@ -81,23 +70,19 @@ public:
     /*! Sets i18n'ed warning message displayed when user leaves 'name' field
      without filling it (if acceptsEmptyValue() is false).
      By default the message is equal "Please enter the name.". */
-    void setWarningForName(const QString& txt) {
-        m_nameWarning = txt;
-    }
+    void setWarningForName(const QString& txt);
 
     /*! Sets i18n'ed warning message displayed when user leaves 'name' field
      without filling it (if acceptsEmptyValue() is false).
      By default the message is equal "Please enter the caption." */
-    void setWarningForCaption(const QString& txt) {
-        m_captionWarning = txt;
-    }
+    void setWarningForCaption(const QString& txt);
 
     /*! \return true if name or caption is empty. */
     bool empty() const;
 
     KexiUtils::Validator *nameValidator() const;
 
-    /*! Adds subvalidator for name field. In fact it's is added to internal
+    /*! Adds subvalidator for name field. In fact it is added to internal
      multivalidator. If \a owned is true, \a validator will be owned by the object.
      \sa MultiValidator::addSubvalidator(). */
     void addNameSubvalidator(KexiUtils::Validator* validator, bool owned = true);
@@ -108,13 +93,9 @@ public:
     void setNameRequired(bool set);
 
     /*! \return true if caption text cannot be empty (false by default). */
-    bool isCaptionRequired() const {
-        return m_caption_required;
-    }
+    bool isCaptionRequired() const;
 
-    void setCaptionRequired(bool set) {
-        m_caption_required = set;
-    }
+    void setCaptionRequired(bool set);
 
 public slots:
     /*! Clears both name and caption. */
@@ -146,19 +127,11 @@ protected:
         const QString& nameLabel, const QString& nameText,
         const QString& captionLabel, const QString& captionText);
 
-    QLabel* lbl_message;
-    QLabel* lbl_caption;
-    QLabel* lbl_name;
-    KLineEdit* le_caption;
-    KLineEdit* le_name;
-    QGridLayout* lyr;
-    KexiUtils::MultiValidator *m_validator;
-    QString m_nameWarning, m_captionWarning;
-    QString m_originalNameText;
+    QLabel *messageLabel() const;
 
-    bool m_le_name_txtchanged_disable;
-    bool m_le_name_autofill;
-    bool m_caption_required;
+private:
+    class Private;
+    Private * const d;
 
     friend class KexiNameDialog;
 };

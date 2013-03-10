@@ -113,7 +113,7 @@ void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
             t = add.toString();
         }
         else {
-            t = m_origValue.toString() + add.toString();
+            t = KexiDataItemInterface::originalValue().toString() + add.toString();
         }
 
         if (acceptRichText()) {

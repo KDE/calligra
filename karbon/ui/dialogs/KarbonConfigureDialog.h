@@ -36,7 +36,7 @@ class KarbonConfigureDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    KarbonConfigureDialog(KarbonView* parent);
+    explicit KarbonConfigureDialog(KarbonView *parent);
 
 public slots:
     void slotApply();

@@ -83,7 +83,7 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *paren
 {
 // m_proc = 0;
 // m_content = 0;
-    m_hasFocusableWidget = false;
+    KexiDataItemInterface::setHasFocusableWidget(false);
     d->button = new KexiDropDownButton(parentWidget() /*usually a viewport*/);
     d->button->hide();
     d->button->setToolTip(i18n("Click to show available actions for this cell"));
@@ -141,7 +141,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
     if (removeOld)
         d->value = add.toByteArray();
     else //do not add "m_origValue" to "add" as this is QByteArray
-        d->value = m_origValue.toByteArray();
+        d->value = KexiDataItemInterface::originalValue().toByteArray();
 
 #if 0 //todo?
     QByteArray val = m_origValue.toByteArray();
@@ -519,12 +519,12 @@ KexiKIconTableEdit::~KexiKIconTableEdit()
 
 void KexiKIconTableEdit::init()
 {
-    m_hasFocusableWidget = false;
+    KexiDataItemInterface::setHasFocusableWidget(false);
 }
 
 void KexiKIconTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
-    d->currentValue = m_origValue;
+    d->currentValue = KexiDataItemInterface::originalValue();
 }
 
 bool KexiKIconTableEdit::valueIsNull()

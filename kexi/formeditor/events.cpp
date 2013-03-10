@@ -24,20 +24,93 @@
 
 using namespace KFormDesigner;
 
-Connection::Connection(const QString &sender, const QString &signal,
-                       const QString &receiver, const QString &slot)
+class Connection::Private
 {
-    m_sender = sender;
-    m_signal = signal;
-    m_receiver = receiver;
-    m_slot = slot;
+public:
+    Private(const QString &sender_, const QString &signal_, const QString &receiver_, const QString &slot_);
+    Private()
+    {
+
+    }
+
+    ~Private()
+    {
+
+    }
+
+    QString sender;
+    QString signal;
+    QString receiver;
+    QString slot;
+};
+
+Connection::Private::Private(const QString &sender_, const QString &signal_, const QString &receiver_, const QString &slot_)
+    :sender(sender_), signal(signal_), receiver(receiver_), slot(slot_)
+
+{
+
 }
 
+Connection::Connection(const QString &sender, const QString &signal,
+                       const QString &receiver, const QString &slot) : d(new Private(sender, signal, receiver, slot))
+{
+
+}
+
+Connection::Connection() : d(new Private())
+{
+
+}
+
+Connection::~Connection()
+{
+    delete d;
+}
+
+QString Connection::sender() const
+{
+    return d->sender;
+}
+
+QString Connection::receiver() const
+{
+    return d->receiver;
+}
+
+QString Connection::signal() const
+{
+    return d->signal;
+}
+
+QString Connection::slot() const
+{
+    return d->slot;
+}
+
+void Connection::setSender(const QString &v)
+{
+    d->sender = v;
+}
+
+void Connection::setReceiver(const QString &v)
+{
+    d->receiver = v;
+}
+
+void Connection::setSignal(const QString &v)
+{
+    d->signal = v;
+}
+
+void Connection::setSlot(const QString &v)
+{
+    d->slot = v;
+}
 ///////////////////////////////////////
 
 ConnectionBuffer::ConnectionBuffer()
 {
-//Qt4    setAutoDelete(true);
+
 }
 
 void

@@ -53,6 +53,7 @@ public:
 
 private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);
+    KoFilter::ConversionStatus extractMediaFiles(EpubFile *epubFile);
 
     ExportEpub2::VectorType vectorType(QByteArray &content);
     bool convertSvm(QByteArray &input, QByteArray &output, QSize size);
@@ -63,6 +64,9 @@ private:
     bool isEmf(QByteArray &content);
     bool isWmf(QByteArray &content);
 
+    KoFilter::ConversionStatus extractCoverImage(KoStore *odfStore, EpubFile *epubFile);
+    void writeCoverImage(EpubFile *epubFile, const QString coverPath);
+
 public slots:
 
 
@@ -70,6 +74,7 @@ private:
     QHash<QString, QString> m_metadata;
     QHash<QString, QString> m_manifest;
     QHash<QString, QSizeF>  m_imagesSrcList;
+    QHash<QString, QString> m_mediaFilesList;
 };
 
 #endif // EXPORTEPUB2_H

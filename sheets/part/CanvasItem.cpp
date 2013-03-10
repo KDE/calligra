@@ -142,8 +142,8 @@ public:
     KoPart *part;
 };
 
-CanvasItem::CanvasItem(Doc *doc)
-        : QGraphicsWidget(0)
+CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
+        : QGraphicsWidget(parent)
         , CanvasBase(doc)
         , d(new Private)
 {
