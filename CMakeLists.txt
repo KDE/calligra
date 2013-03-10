@@ -1103,6 +1103,7 @@ endif(SHOULD_BUILD_BRAINDUMP_APP)
 
 if(SHOULD_BUILD_ACTIVE)
   add_subdirectory(active)
+  add_subdirectory(qtquick)
 endif(SHOULD_BUILD_ACTIVE)
 
 if(SHOULD_BUILD_DOC)
