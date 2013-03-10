@@ -5,6 +5,8 @@
 #include <KoPart.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
+#include <KoZoomHandler.h>
+#include <KoZoomController.h>
 #include <KWDocument.h>
 #include <KMimeType>
 #include <KMimeTypeTrader>
@@ -15,6 +17,7 @@
 CTTextDocumentCanvas::CTTextDocumentCanvas()
     : m_canvasBase(0)
     , m_canvasController(0)
+    , m_zoomController(0)
 {
 }
 
@@ -35,6 +38,7 @@ bool CTTextDocumentCanvas::openFile(const QString& uri)
 
     m_canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
     createAndSetCanvasControllerOn(m_canvasBase);
+    createAndSetZoomController(m_canvasBase);
 
     QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
     graphicsWidget->setParentItem(this);
@@ -76,8 +80,18 @@ void CTTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 {
     //TODO: pass a proper action collection
     CTCanvasController *controller = new CTCanvasController(new KActionCollection(this));
+    m_canvasController = controller;
     controller->setCanvas(canvas);
     KoToolManager::instance()->addController (controller);
+}
+
+void CTTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
+{
+    KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
+    KoZoomController* zoomController = new KoZoomController(m_canvasController,
+                                                            zoomHandler,
+                                                            new KActionCollection(this));
+    zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, 1.0);
 }
 
 #include "CTTextDocumentCanvas.moc"
