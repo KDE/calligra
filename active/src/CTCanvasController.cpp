@@ -25,6 +25,9 @@
 
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
+#include <QGraphicsWidget>
+
+#include <QDebug>
 
 CTCanvasController::CTCanvasController(KActionCollection* actionCollection)
     : KoCanvasController(actionCollection)
@@ -135,7 +138,8 @@ void CTCanvasController::setDrawShadow(bool drawShadow)
 
 QSize CTCanvasController::viewportSize() const
 {
-    return QSize();
+    QGraphicsWidget *canvasWidget = dynamic_cast<QGraphicsWidget*>(m_canvas);
+    return canvasWidget->size().toSize();
 }
 
 void CTCanvasController::scrollContentsBy(int dx, int dy)

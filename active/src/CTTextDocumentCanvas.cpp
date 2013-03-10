@@ -8,6 +8,7 @@
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 #include <KWDocument.h>
+#include <KWPage.h>
 #include <KMimeType>
 #include <KMimeTypeTrader>
 #include <KDE/KDebug>
@@ -16,8 +17,9 @@
 
 CTTextDocumentCanvas::CTTextDocumentCanvas()
     : m_canvasBase(0)
-    , m_canvasController(0
+    , m_canvasController(0)
     , m_zoomController(0)
+    , m_zoomMode(ZOOM_WIDTH)
 {
 }
 
@@ -39,6 +41,8 @@ bool CTTextDocumentCanvas::openFile(const QString& uri)
     m_canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
     createAndSetCanvasControllerOn(m_canvasBase);
     createAndSetZoomController(m_canvasBase);
+    updateZoomControllerAccordingToDocument(document);
+    updateControllerWithZoomMode();
 
     QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
     graphicsWidget->setParentItem(this);
@@ -71,6 +75,7 @@ void CTTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRec
         QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
         if (widget) {
             widget->setGeometry(newGeometry);
+            updateControllerWithZoomMode();
         }
     }
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
@@ -88,10 +93,38 @@ void CTTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 void CTTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
-    KoZoomController* zoomController = new KoZoomController(m_canvasController,
+    m_zoomController = new KoZoomController(m_canvasController,
                                                             zoomHandler,
                                                             new KActionCollection(this));
-    zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, 1.0);
+}
+
+void CTTextDocumentCanvas::setZoomMode(CTTextDocumentCanvas::ZoomMode zoomMode)
+{
+    m_zoomMode = zoomMode;
+    emit zoomModeChanged();
+}
+
+CTTextDocumentCanvas::ZoomMode CTTextDocumentCanvas::zoomMode() const
+{
+    return m_zoomMode;
+}
+
+void CTTextDocumentCanvas::updateZoomControllerAccordingToDocument(const KoDocument* document)
+{
+    const KWDocument *kwDoc = static_cast<const KWDocument*>(document);
+    m_zoomController->setPageSize (kwDoc->pageManager()->begin().rect().size());
+}
+
+void CTTextDocumentCanvas::updateControllerWithZoomMode()
+{
+    KoZoomMode::Mode zoomMode;
+    switch (m_zoomMode) {
+        case ZOOM_CONSTANT: zoomMode = KoZoomMode::ZOOM_CONSTANT; break;
+        case ZOOM_PAGE: zoomMode = KoZoomMode::ZOOM_PAGE; break;
+        case ZOOM_WIDTH: zoomMode = KoZoomMode::ZOOM_WIDTH; break;
+    }
+    kDebug() << "PAGE SIZE " << m_zoomController->pageSize();
+    m_zoomController->setZoom(zoomMode, 1.0);
 }
 
 #include "CTTextDocumentCanvas.moc"
