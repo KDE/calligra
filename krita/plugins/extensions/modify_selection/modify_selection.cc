@@ -22,11 +22,11 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-#include <kpluginfactory.h>
 
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
 #include "kis_action.h"
+#include <operations/kis_operation_ui_widget_factory.h>
 
 #include "dlg_grow_selection.h"
 #include "dlg_shrink_selection.h"
@@ -42,8 +42,10 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
     KisAction* action  = new KisAction(i18n("Grow Selection..."), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("growselection");
     addAction("growselection", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
+
+    addUIFactory(new KisOperationUIWidgetFactory<WdgGrowSelection>("growselection"));
 
     action = new KisAction(i18n("Shrink Selection..."), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
@@ -72,27 +74,6 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
 
 ModifySelection::~ModifySelection()
 {
-}
-
-void ModifySelection::slotGrowSelection()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image) return;
-
-    DlgGrowSelection * dlgGrowSelection = new DlgGrowSelection(m_view, "GrowSelection");
-    Q_CHECK_PTR(dlgGrowSelection);
-
-    dlgGrowSelection->setCaption(i18n("Grow Selection"));
-
-    if (dlgGrowSelection->exec() == QDialog::Accepted) {
-        qint32 xradius = dlgGrowSelection->xradius();
-        qint32 yradius = dlgGrowSelection->yradius();
-
-        m_view->selectionManager()->grow(xradius, yradius);
-    }
-
-    delete dlgGrowSelection;
 }
 
 void ModifySelection::slotShrinkSelection()

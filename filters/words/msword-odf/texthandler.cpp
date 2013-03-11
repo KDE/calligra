@@ -276,7 +276,7 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
             m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                              lineNumberingConfig.arg(lineNumbersStyleName).toLatin1());
 
-            KoGenStyle *normalStyle = m_mainStyles->styleForModification(QString("Normal"));
+            KoGenStyle *normalStyle = m_mainStyles->styleForModification(QString("Normal"), "paragraph");
 
             // if got Normal style, insert line numbering configuration in it
             if (normalStyle) {
@@ -1435,7 +1435,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         // Hyperlink style info is not provided by the TOC field, reusing the
         // text style of text:index-body content.
         if (m_fld->m_styleName.contains('T')) {
-            hlinkStyleName = m_mainStyles->style(m_fld->m_styleName)->parentName();
+            hlinkStyleName = m_mainStyles->style(m_fld->m_styleName, "text")->parentName();
         } else {
             kDebug(30513) << "TOC: Missing text style to format the hyperlink!";
         }

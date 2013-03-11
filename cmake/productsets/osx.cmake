@@ -1,23 +1,17 @@
-#defines the set of products commonly wanted if everything should be build
+#defines the set of products commonly wanted for classic Desktop environment
 
 set( CALLIGRA_SHOULD_BUILD_PRODUCTS
-# desktop apps
+# apps
     AUTHOR
-    BRAINDUMP
     FLOW
-    KARBON
     KEXI
     KRITA
-    PLAN
     SHEETS
     STAGE
     WORDS
-# PA apps
-    ACTIVE
 # plugins
     PLUGIN_COLORENGINES
     PLUGIN_MUSICSHAPE
-    PLUGIN_SPACENAVIGATOR
     PLUGIN_ARTISTICTEXTSHAPE
     PLUGIN_DOCKERS
     PLUGIN_TEXTEDITING
@@ -32,19 +26,12 @@ set( CALLIGRA_SHOULD_BUILD_PRODUCTS
     PLUGIN_FORMULASHAPE
     PLUGIN_VECTORSHAPE
     PLUGIN_REPORTING
-    PLUGIN_STAGING
-    PLUGIN_VIDEOSHAPE
 # feature
     SCRIPTING
 # extras
     CALLIGRA
     CONVERTER
-    DOC
     EXTRA_PROPERTIES
     EXTRA_THUMBNAIL
     EXTRA_QUICKPRINT
-    OKULARODPGENERATOR
-# developer utils
-    CSTESTER
-    DEVTOOLS
 )

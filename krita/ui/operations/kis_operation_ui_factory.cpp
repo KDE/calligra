@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_DOCUMENT_UNDO_STORE_H
-#define __KIS_DOCUMENT_UNDO_STORE_H
+#include "kis_operation_ui_factory.h"
 
-#include "kis_undo_store.h"
+class KisOperationUIFactory::Private {
 
-class KoDocument;
-class KUndo2Stack;
-
-class KRITAUI_EXPORT KisDocumentUndoStore : public KisUndoStore
-{
 public:
-    KisDocumentUndoStore(KoDocument *doc);
-
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2Command *cmd);
-    void beginMacro(const QString& macroName);
-    void endMacro();
-
-private:
-    KoDocument* m_doc;
+    Private() {}
+    QString id;
 };
 
-#endif /* __KIS_DOCUMENT_UNDO_STORES_H */
+KisOperationUIFactory::KisOperationUIFactory(const QString& id): d(new KisOperationUIFactory::Private)
+{
+    d->id = id;
+}
+
+KisOperationUIFactory::~KisOperationUIFactory()
+{
+    delete d;
+}
+
+QString KisOperationUIFactory::id() const
+{
+    return d->id;
+}
+
+
