@@ -345,7 +345,7 @@ void OdtTraverserBackend::endTagTableRow(KoXmlElement &element,
 
 
 // ----------------------------------------------------------------
-//                         Embedded stuff
+//                             Frames
 
 
 void OdtTraverserBackend::beginTagFrame(KoXmlElement &element,
@@ -375,6 +375,9 @@ void OdtTraverserBackend::endEmbeddedFormula(const QString &href,
     Q_UNUSED(href);
     Q_UNUSED(context);
 }
+
+
+// ----------------------------------------------------------------
 
 
 void OdtTraverserBackend::beginTagTableOfContent(KoXmlElement &element,

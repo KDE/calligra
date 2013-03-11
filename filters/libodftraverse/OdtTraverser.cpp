@@ -35,6 +35,7 @@
 #include <KoStore.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>  // For copyXmlElement
 #include <KoOdfReadStore.h>
 
 // Traverser
@@ -398,36 +399,14 @@ void OdtTraverser::handleTagTableRow(KoXmlElement& element, OdtTraverser::TableC
 }
 
 // ----------------------------------------------------------------
-//                         Embedded stuff
+//                         Frames
 
-
-//qwe
 
 void OdtTraverser::handleTagFrame(KoXmlElement &element)
 {
-    // FIXME: NYI
-    return;
-#if 0
-    QString styleName = cssClassName(element.attribute("style-name"));
-    StyleInfo *styleInfo = m_styles.value(styleName);
+    m_backend->beginTagFrame(element, m_context);
 
-    // Find height and width
-    QString height = element.attribute("height");
-    QString width  = element.attribute("width");
-
-    // Remove characters "in" or "pt" from their end.
-    //
-    // FIXME: This is WRONG!
-    //        First, there is no way to tell if the unit is 2 chars
-    //        Second, it is not sure that there *is* a unit.
-    //        Instead, use some function in KoUnit that converts the size.  /IW
-    height = height.left(height.length()-2);
-    width  = width.left(width.length()-2);
-
-    // Convert them to real.
-    qreal qHeight = height.toFloat();
-    qreal qWidth = width.toFloat();
-    QSizeF size(qWidth, qHeight);
+#if 0    // FIXME: Frames are not yet fully supported
 
     // Go through the frame's content and see what we can handle.
     KoXmlElement framePartElement;
@@ -440,10 +419,11 @@ void OdtTraverser::handleTagFrame(KoXmlElement &element)
             QString href = framePartElement.attribute("href");
             if (href.isEmpty()) {
                 // Check for inline stuff.
-                // So far only math:math is supported.
+                // [So far only math:math is supported.]
+
                 if (!framePartElement.hasChildNodes())
                     continue;
-
+#if 0 // FIXME: Think more about how to handle inline stuff generically
                 // Handle inline math:math
                 KoXmlElement childElement = framePartElement.firstChildElement();
                 if (childElement.localName() == "math"
@@ -455,24 +435,23 @@ void OdtTraverser::handleTagFrame(KoXmlElement &element)
                     // We are done with the whole frame.
                     break;
                 }
-
+#endif
                 // We couldn't handle this inline object. Check for
                 // object replacements (pictures).
                 continue;
             }
 
             // If we get here, this frame part was not an inline object.
-            // We already have an object reference.
+            // So check the object reference.
 
             // Normalize the object reference
             if (href.startsWith("./"))
                 href.remove(0, 2);
-            QString type = m_manifest->value(href);
+            QString type = m_context->manifest()->value(href);
 
-            // So far we can only an handle embedded object (formula).
+            // So far we can only handle one type of embedded objects (formula).
             // In the future we will probably be able to handle more types.
             if (type == "application/vnd.oasis.opendocument.formula") {
-
                 handleEmbeddedFormula(href);
                 break; // Only one object per frame.
             }
@@ -484,6 +463,7 @@ void OdtTraverser::handleTagFrame(KoXmlElement &element)
         else if (framePartElement.localName() == "image"
                  && framePartElement.namespaceURI() == KoXmlNS::draw)
         {
+#if 0
             // Handle image
             htmlWriter->startElement("img", m_doIndent);
             if (styleInfo) {
@@ -509,15 +489,17 @@ void OdtTraverser::handleTagFrame(KoXmlElement &element)
             else {
                 htmlWriter->addAttribute("src", imgSrc);
             }
-
             m_images.insert(framePartElement.attribute("href"), size);
 
             htmlWriter->endElement(); // end img
             break; // Only one image per frame.
+#endif
         }
         // Handle video
         else if (framePartElement.localName() == "plugin"
-                 && framePartElement.namespaceURI() == KoXmlNS::draw) {
+                 && framePartElement.namespaceURI() == KoXmlNS::draw)
+        {
+#if 0
             QString videoSource = framePartElement.attribute("href");
             QString videoId = "media_id_" + QString::number(m_mediaId);
             m_mediaId++;
@@ -526,14 +508,17 @@ void OdtTraverser::handleTagFrame(KoXmlElement &element)
             QString id = "chapter" + QString::number(m_currentChapter) +
                     m_collector->fileSuffix() + "#" + videoId;
             m_mediaFilesList.insert(id, videoSource);
+#endif
         }
     } // foreach
 #endif
+    m_backend->endTagFrame(element, m_context);
 }
 
 void OdtTraverser::handleEmbeddedFormula(const QString &href)
 {
     // FIXME: NYI
+    Q_UNUSED(href);
     return;
 #if 0
     // FIXME: Track down why we need to close() the store here and
@@ -583,9 +568,6 @@ void OdtTraverser::handleEmbeddedFormula(const QString &href)
 void OdtTraverser::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
                                       QHash<QString, QString> &unknownNamespaces)
 {
-    // FIXME: NYI
-    return;
-#if 0
     // Start the element;
     // keep the name in a QByteArray so that it stays valid until end element is called.
     const QByteArray name(el.nodeName().toAscii());
@@ -621,7 +603,7 @@ void OdtTraverser::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
     }
 
     // Child elements
-    // Loop through all the child elements of the draw:frame.
+    // Loop through all the child elements of the element.
     KoXmlNode n = el.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (n.isElement()) {
@@ -634,38 +616,38 @@ void OdtTraverser::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
 
     // End the element
     writer.endElement();
-#endif
 }
 
 
 // ----------------------------------------------------------------
 
+
 void OdtTraverser::handleTagTableOfContent(KoXmlElement &element)
 {
-    // FIXME: NYI
-    return;
-#if 0
+    m_backend->beginTagTableOfContent(element, m_context);
+
     KoXmlNode indexBody = KoXml::namedItemNS(element, KoXmlNS::text, "index-body");
-    KoXmlElement  element;
-    forEachElement (element, indexBody) {
-        if (element.localName() == "index-title" && element.namespaceURI() == KoXmlNS::text) {
-            handleInsideElementsTag(element);
+    KoXmlElement  el;
+    forEachElement (el, indexBody) {
+        if (el.localName() == "index-title" && el.namespaceURI() == KoXmlNS::text) {
+            handleInsideElementsTag(el);
         }
         else
-            handleTagTableOfContentBody(element);
+            handleTagTableOfContentBody(el);
     }
-#endif
+
+    m_backend->endTagTableOfContent(element, m_context);
 }
 
 void OdtTraverser::handleTagTableOfContentBody(KoXmlElement &element)
 {
-    // FIXME: NYI
-    return;
-#if 0
+    m_backend->beginTagTableOfContentBody(element, m_context);
+
     if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
         handleTagP(element);
     }
-#endif
+
+    m_backend->endTagTableOfContentBody(element, m_context);
 }
 
 void OdtTraverser::handleTagBookMark(KoXmlElement &element)

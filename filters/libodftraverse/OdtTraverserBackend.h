@@ -156,8 +156,6 @@ class ODFTRAVERSE_EXPORT OdtTraverserBackend
                                 OdtTraverserContext *context,
                                 OdtTraverser::TableCellType type = OdtTraverser::TableDataType);
 
-//--
-
     virtual void beginTagFrame(KoXmlElement &element,
                                OdtTraverserContext *context);
     virtual void endTagFrame(KoXmlElement &element,
@@ -175,6 +173,7 @@ class ODFTRAVERSE_EXPORT OdtTraverserBackend
                                             OdtTraverserContext *context);
     virtual void endTagTableOfContentBody(KoXmlElement &element,
                                           OdtTraverserContext *context);
+//--
 
     virtual void beginTagBookMark(KoXmlElement &element,
                                   OdtTraverserContext *context);

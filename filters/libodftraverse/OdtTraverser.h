@@ -58,11 +58,15 @@ class ODFTRAVERSE_EXPORT OdtTraverser
         TableHeaderType,
     };
 
- private:
+ protected:
     // All handleTag*() are named after the tag in the ODF that they handle.
 
     // Basic text stuff.
+    //
     // FIXME: Should be called handleGeneralTextContent()
+    //
+    // FIXME: There should be one general handler for document level
+    //        and one for paragraph level.
     void handleInsideElementsTag(KoXmlElement &element);
 
     void handleTagP(KoXmlElement &element);
@@ -79,17 +83,17 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     void handleTagList(KoXmlElement &element);
     void handleTagTable(KoXmlElement &element);
     void handleTagTableRow(KoXmlElement &element, TableCellType type = TableDataType);
-//--
 
-    // Embedded stuff
+    // Frames
     void handleTagFrame(KoXmlElement &element);
     void handleEmbeddedFormula(const QString &href);
     void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
                         QHash<QString, QString> &unknownNamespaces);
 
+    // Other document level text tags
     void handleTagTableOfContent(KoXmlElement &element);
     void handleTagTableOfContentBody(KoXmlElement &element);
-
+//--
     void handleTagBookMark(KoXmlElement &element);
     void handleTagBookMarkStart(KoXmlElement &element);
     void handleTagBookMarkEnd(KoXmlElement &element);
