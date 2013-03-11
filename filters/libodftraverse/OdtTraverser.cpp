@@ -652,37 +652,20 @@ void OdtTraverser::handleTagTableOfContentBody(KoXmlElement &element)
 
 void OdtTraverser::handleTagBookMark(KoXmlElement &element)
 {
-    // FIXME: NYI
-    return;
-#if 0
-    QString anchor = element.attribute("name");
-    // This is haed codevalidator gets error for characters "|" and spaces
-    // FIXME : we should handle ids better after move file to class
-    anchor = anchor.remove("|");
-    anchor = anchor.remove(" ");//remove spaces
-    htmlWriter->startElement("a", m_doIndent);
-    htmlWriter->addAttribute("id", anchor);
-#endif
+    m_backend->beginTagBookMark(element, m_context);
+    m_backend->endTagBookMark(element, m_context);
 }
 
 void OdtTraverser::handleTagBookMarkStart(KoXmlElement &element)
 {
-    // FIXME: NYI
-    return;
-#if 0
-    QString anchor = element.attribute("name");
-    htmlWriter->startElement("a", m_doIndent);
-    htmlWriter->addAttribute("id", anchor);
-#endif
+    m_backend->beginTagBookMarkStart(element, m_context);
+    m_backend->endTagBookMarkStart(element, m_context);
 }
 
 void OdtTraverser::handleTagBookMarkEnd(KoXmlElement &element)
 {
-    // FIXME: NYI
-    return;
-#if 0
-    htmlWriter->endElement();
-#endif
+    m_backend->beginTagBookMarkEnd(element, m_context);
+    m_backend->endTagBookMarkEnd(element, m_context);
 }
 
 
@@ -690,9 +673,10 @@ void OdtTraverser::handleTagBookMarkEnd(KoXmlElement &element)
 
 void OdtTraverser::handleTagNote(KoXmlElement &element)
 {
-    // FIXME: NYI
-    return;
-#if 0
+    m_backend->beginTagNote(element, m_context);
+
+#if 0  // FIXME: Analyze how to handle this.
+
     QString noteClass = element.attribute("note-class");
     if (noteClass != "footnote" && noteClass != "endnote") {
         return;
@@ -731,11 +715,17 @@ void OdtTraverser::handleTagNote(KoXmlElement &element)
         }
     }
 #endif
+
+    m_backend->endTagNote(element, m_context);
 }
 
 
 void OdtTraverser::handleUnknownTags(KoXmlElement &element)
 {
+    m_backend->beginTagNote(element, m_context);
+
     // Just go deeper to find known tags.
     handleInsideElementsTag(element);
+
+    m_backend->endTagNote(element, m_context);
 }
