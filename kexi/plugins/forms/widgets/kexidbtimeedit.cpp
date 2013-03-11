@@ -42,7 +42,7 @@ KexiDBTimeEdit::KexiDBTimeEdit(const QTime &time, QWidget *parent)
     m_dte_time = 0;
 #endif
 
-    connect(this, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged(const QTime&)));
+    connect(this, SIGNAL(valueChanged(QTime)), this, SLOT(slotValueChanged(QTime)));
 }
 
 KexiDBTimeEdit::~KexiDBTimeEdit()

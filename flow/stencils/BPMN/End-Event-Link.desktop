@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=End-Event-Link
+Name[bs]=Veza krajnjeg događaja
 Name[ca]=Final-Esdeveniment-Enllaç
 Name[ca@valencia]=Final-Esdeveniment-Enllaç
+Name[de]=Endereignis - Link
 Name[el]=Σύνδεσμος-γεγονότος-τέλους
 Name[es]=Enlace al evento final
 Name[et]=Lõpusündmuse link
@@ -18,7 +20,8 @@ Name[pt_BR]=Link do evento final
 Name[ru]=Ссылка на завершение события
 Name[sk]=End-Event-Link
 Name[sv]=Sluthändelse-länk
+Name[tr]=Son-Etkinlik-Bağlantı
 Name[uk]=Посилання на кінцеву подію
 Name[x-test]=xxEnd-Event-Linkxx
-Name[zh_CN]=结束-事件-连接
+Name[zh_CN]=结束事件-连接
 Name[zh_TW]=結束─事件─連結

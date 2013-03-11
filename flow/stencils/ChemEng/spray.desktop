@@ -1,10 +1,12 @@
 [Desktop Entry]
 Name=spray
 Name[bg]=спрей
+Name[bs]=sprej
 Name[ca]=esprai
 Name[ca@valencia]=esprai
 Name[cs]=sprej
-Name[de]=Sprühen
+Name[da]=spray
+Name[de]=Sprühgerät
 Name[el]=spray
 Name[es]=dispositivo difusor
 Name[et]=Segisti
@@ -20,7 +22,9 @@ Name[pt]=spray
 Name[pt_BR]=spray
 Name[ru]=Распылитель
 Name[sk]=sprej
+Name[sl]=razpršilo
 Name[sv]=sprej
+Name[tr]=sprey
 Name[uk]=Розпилювач
 Name[x-test]=xxsprayxx
 Name[zh_TW]=spray

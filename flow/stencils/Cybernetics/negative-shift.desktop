@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=negative-shift
+Name[bs]=negativna promjena
 Name[ca]=negative-shift
 Name[ca@valencia]=negative-shift
+Name[da]=negative-shift
 Name[el]=negative-shift
 Name[es]=desplazamiento negativo
 Name[et]=Negatiivne siire
@@ -19,4 +21,5 @@ Name[sk]=záporný posun
 Name[sv]=negativ-skift
 Name[uk]=Стале від’ємне зміщення за Oy
 Name[x-test]=xxnegative-shiftxx
+Name[zh_CN]=负移
 Name[zh_TW]=negative-shift

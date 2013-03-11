@@ -36,9 +36,8 @@
 
 #include <KoCanvasBase.h>
 
-#include "calligra_sheets_export.h"
-
-#include "Global.h"
+#include "../calligra_sheets_export.h"
+#include "../Global.h"
 
 class QFocusEvent;
 class QKeyEvent;

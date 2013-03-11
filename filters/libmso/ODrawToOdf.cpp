@@ -506,7 +506,7 @@ QString ODrawToOdf::defineMarkerStyle(KoGenStyles& styles, const quint32 arrowTy
 
     const QString name(markerStyles[arrowType]);
 
-    if (styles.style(name)) {
+    if (styles.style(name, "")) {
         return name;
     }
 

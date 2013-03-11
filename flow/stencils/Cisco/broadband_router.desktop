@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Broadband router
 Name[bg]=Широколентов маршрутизатор
+Name[bs]=Širokopojasni ruter
 Name[ca]=Encaminador de banda ampla
 Name[ca@valencia]=Encaminador de banda ampla
+Name[da]=Bredbåndsrouter
 Name[de]=Breitband-Router
 Name[el]=Ευρυζωνικός δρομολογητής
 Name[es]=Enrutador de banda ancha
@@ -13,6 +15,7 @@ Name[gl]=Encamiñador de largo de banda
 Name[hu]=Széles sávú router
 Name[it]=Router a banda larga
 Name[kk]=Кеңжолақты маршруттауышы
+Name[lt]=Plačiajuostis maršrutizatorius
 Name[nb]=Bredbåndsruter
 Name[nds]=Breedband-Nettweger
 Name[nl]=Breedbandrouter
@@ -21,6 +24,7 @@ Name[pt]=Encaminhador banda larga
 Name[pt_BR]=Roteador de banda larga
 Name[ru]=Широковещательный маршрутизатор
 Name[sk]=Širokopásmový router
+Name[sl]=Širokopasovni usmerjevalnik
 Name[sv]=Bredbandsrouter
 Name[uk]=Широкочастотний маршрутизатор
 Name[x-test]=xxBroadband routerxx

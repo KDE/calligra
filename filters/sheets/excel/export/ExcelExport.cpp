@@ -315,10 +315,15 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet* sheet, const QHash<QStri
 
     QRect area = sheet->usedArea();
 
+    // limit to allowed range
+    if (area.right() > 0x100) {
+      area.setRight(0x100);
+    }
+
     IndexRecord ir(0);
     ir.setRowMin(area.top()-1);
     ir.setRowMaxPlus1(area.bottom());
-    int dbCellCount = ((area.height()+1)+31) / 32;
+    int dbCellCount = (area.height()+31) / 32;
     ir.setRowBlockCount(dbCellCount);
     o.writeRecord(ir);
 

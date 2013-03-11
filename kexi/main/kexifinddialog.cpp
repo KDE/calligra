@@ -108,8 +108,8 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     connect(m_btnReplace, SIGNAL(clicked()), this, SIGNAL(replaceNext()));
     connect(m_btnReplaceAll, SIGNAL(clicked()), this, SIGNAL(replaceAll()));
     // clear message after the text is changed
-    connect(m_textToFind, SIGNAL(editTextChanged(const QString&)), this, SLOT(updateMessage(const QString&)));
-    connect(m_textToReplace, SIGNAL(editTextChanged(const QString&)), this, SLOT(updateMessage(const QString&)));
+    connect(m_textToFind, SIGNAL(editTextChanged(QString)), this, SLOT(updateMessage(QString)));
+    connect(m_textToReplace, SIGNAL(editTextChanged(QString)), this, SLOT(updateMessage(QString)));
 
     d->replaceMode = true; //to force updating by setReplaceMode()
     setReplaceMode(false);

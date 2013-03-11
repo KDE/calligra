@@ -1,6 +1,9 @@
 [Desktop Entry]
 Name=Terminator
+Name[bs]=Zaključnik
 Name[ca]=Terminador
+Name[ca@valencia]=Terminador
+Name[da]=Terminalpunkt
 Name[de]=Terminator
 Name[el]=Εξολοθρευτής
 Name[es]=Terminal
@@ -10,11 +13,15 @@ Name[gl]=Delimitador
 Name[hu]=Lezáró
 Name[it]=Terminatore
 Name[kk]=Аятауыш
+Name[lt]=Terminator
+Name[nb]=Terminator
 Name[nl]=Terminator
 Name[pl]=Zakończenie
 Name[pt]=Terminação
 Name[pt_BR]=Terminador
 Name[sk]=Terminátor
 Name[sv]=Avslutning
+Name[tr]=Sonlandırıcı
 Name[uk]=Завершення
 Name[x-test]=xxTerminatorxx
+Name[zh_CN]=终止

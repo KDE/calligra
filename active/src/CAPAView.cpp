@@ -59,7 +59,7 @@ CAPAView::~CAPAView()
 
 void CAPAView::setShowRulers (bool show)
 {
-
+    Q_UNUSED(show);
 }
 
 void CAPAView::editPaste()
@@ -84,12 +84,14 @@ void CAPAView::updatePageNavigationActions()
 
 void CAPAView::setActionEnabled (int actions, bool enable)
 {
+    Q_UNUSED(actions);
+    Q_UNUSED(enable);
 
 }
 
 void CAPAView::navigatePage (KoPageApp::PageNavigation pageNavigation)
 {
-
+    Q_UNUSED(pageNavigation);
 }
 
 KoPAPageBase* CAPAView::activePage() const
@@ -171,7 +173,7 @@ KoPACanvasBase* CAPAView::kopaCanvas() const
 
 void CAPAView::connectToZoomController()
 {
-    connect (zoomController(), SIGNAL (zoomChanged (KoZoomMode::Mode, qreal)), SLOT (slotZoomChanged (KoZoomMode::Mode, qreal)));
+    connect (zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 }
 
 void CAPAView::slotZoomChanged (KoZoomMode::Mode mode, qreal zoom)

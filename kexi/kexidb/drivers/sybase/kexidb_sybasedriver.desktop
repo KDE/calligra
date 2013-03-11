@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Sybase
 Name[bg]=Sybase
+Name[bs]=Sybase
 Name[ca]=Sybase
 Name[ca@valencia]=Sybase
 Name[cs]=Sybase
@@ -23,6 +24,7 @@ Name[hu]=Sybase
 Name[it]=Sybase
 Name[ja]=Sybase
 Name[kk]=Sybase
+Name[lt]=Sybase
 Name[lv]=Sybase
 Name[nb]=Sybase
 Name[nds]=Sybase
@@ -44,6 +46,7 @@ Name[x-test]=xxSybasexx
 Name[zh_CN]=Sybase
 Name[zh_TW]=Sybase
 Comment=Kexi database driver for accessing Sybase servers
+Comment[bs]=Kexi drajver baze podataka za pristup Sybase serverima
 Comment[ca]=Controlador de bases de dades Kexi per a accedir a servidors Sybase
 Comment[ca@valencia]=Controlador de bases de dades Kexi per a accedir a servidors Sybase
 Comment[cs]=Databázový ovladač pro přístup k serverům Sybase

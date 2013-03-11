@@ -162,7 +162,7 @@ void KisSelectAllActionFactory::run(KisView2 *view)
                      KisStrokeJobData::SEQUENTIAL,
                      KisStrokeJobData::EXCLUSIVE);
 
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisDeselectActionFactory::run(KisView2 *view)
@@ -171,7 +171,7 @@ void KisDeselectActionFactory::run(KisView2 *view)
 
     KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisReselectActionFactory::run(KisView2 *view)
@@ -180,7 +180,7 @@ void KisReselectActionFactory::run(KisView2 *view)
 
     KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
@@ -203,10 +203,14 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
         painter.end();
         actionName = i18n("Fill with Pattern");
     } else if (fillSource == "bg") {
-        filled->setDefaultPixel(view->resourceProvider()->bgColor().data());
+        KoColor color(node->paintDevice()->colorSpace());
+        color.fromKoColor(view->resourceProvider()->bgColor());
+        filled->setDefaultPixel(color.data());
         actionName = i18n("Fill with Background Color");
     } else if (fillSource == "fg") {
-        filled->setDefaultPixel(view->resourceProvider()->fgColor().data());
+        KoColor color(node->paintDevice()->colorSpace());
+        color.fromKoColor(view->resourceProvider()->fgColor());
+        filled->setDefaultPixel(color.data());
         actionName = i18n("Fill with Foreground Color");
     }
 
@@ -235,7 +239,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     ap->applyCommand(new BitBlt(filled, view->activeDevice()/*node->paintDevice()*/, selection, selectedRect),
                      KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
 
-    KisUiActionConfiguration config(id());
+    KisOperationConfiguration config(id());
     config.setProperty("fill-source", fillSource);
 
     ActionHelper::endAction(ap, config.toXML());
@@ -253,7 +257,7 @@ void KisClearActionFactory::run(KisView2 *view)
     view->canvasBase()->toolProxy()->deleteSelection();
 }
 
-void KisApplySelectionFilterActionFactory::runFromXML(KisView2 *view, const KisUiActionConfiguration &config)
+void KisApplySelectionFilterActionFactory::runFromXML(KisView2 *view, const KisOperationConfiguration &config)
 {
     QString filterName = config.getString("filter-name", "no-filter");
 
@@ -377,7 +381,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
                              KisStrokeJobData::NORMAL);
         }
 
-        KisUiActionConfiguration config(id());
+        KisOperationConfiguration config(id());
         config.setProperty("will-cut", willCut);
         ActionHelper::endAction(ap, config.toXML());
     }
@@ -393,7 +397,7 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
     image->unlock();
 
     KisProcessingApplicator *ap = ActionHelper::beginAction(view, i18n("Copy Merged"));
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisPasteActionFactory::run(KisView2 *view)
@@ -433,7 +437,7 @@ void KisPasteActionFactory::run(KisView2 *view)
         KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
         KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-        ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+        ActionHelper::endAction(ap, KisOperationConfiguration(id()).toXML());
     } else {
 #ifdef __GNUC__
 #warning "Add saving of XML data for Paste of shapes"
@@ -483,4 +487,36 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     KoMainWindow *win = new KoMainWindow(part->componentData());
     win->show();
     win->setRootDocument(doc);
+}
+
+void KisGrowSelectionOperation::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+{
+    int radius = config.getInt("radius", 1);
+    KisSelectionFilter* filter = new KisGrowSelectionFilter(radius, radius);
+
+    KisSelectionSP selection = view->selection();
+    if (!selection) return;
+
+    struct FilterSelection : public ActionHelper::KisTransactionBasedCommand {
+        FilterSelection(KisImageSP image, KisSelectionSP sel, KisSelectionFilter *filter)
+            : m_image(image), m_sel(sel), m_filter(filter) {}
+        ~FilterSelection() { delete m_filter;}
+        KisImageSP m_image;
+        KisSelectionSP m_sel;
+        KisSelectionFilter *m_filter;
+
+        KUndo2Command* paint() {
+            KisSelectionTransaction transaction("", m_image->undoAdapter(), m_sel);
+            KisPixelSelectionSP mergedSelection = m_sel->getOrCreatePixelSelection();
+            QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect());
+            m_filter->process(mergedSelection, processingRect);
+            m_sel->setDirty(processingRect); // check if really needed
+            return transaction.endAndTake();
+        }
+    };
+
+    KisProcessingApplicator *ap = ActionHelper::beginAction(view, filter->name());
+    ap->applyCommand(new FilterSelection(view->image(), selection, filter),
+                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+    ActionHelper::endAction(ap, config.toXML());
 }

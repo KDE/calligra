@@ -144,13 +144,13 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     d->list->setAlternatingRowColors(true);
 //    d->list->renameLineEdit()->setValidator(new KexiUtils::IdentifierValidator(this));
     
-    connect(d->list, SIGNAL(pressed(const QModelIndex&)), this,SLOT(slotSelectionChanged(const QModelIndex&)));
+    connect(d->list, SIGNAL(pressed(QModelIndex)), this,SLOT(slotSelectionChanged(QModelIndex)));
 
     KConfigGroup mainWindowGroup = KGlobal::config()->group("MainWindow");
     if ((d->features & SingleClickOpensItemOptionEnabled) && mainWindowGroup.readEntry("SingleClickOpensItem", false)) {
-        connect(d->list, SIGNAL(activate(const QModelIndex&)), this, SLOT(slotExecuteItem(const QModelIndex&)));
+        connect(d->list, SIGNAL(activate(QModelIndex)), this, SLOT(slotExecuteItem(QModelIndex)));
     } else {
-        connect(d->list, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(slotExecuteItem(const QModelIndex&)));
+        connect(d->list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotExecuteItem(QModelIndex)));
 //        d->list->enableExecuteArea = false;
     }
 

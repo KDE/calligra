@@ -69,10 +69,10 @@ MapModel::MapModel(Map* map)
         , d(new Private)
 {
     d->map = map;
-    connect(d->map, SIGNAL(sheetAdded(Sheet *)),
-            this, SLOT(addSheet(Sheet *)));
-    connect(d->map, SIGNAL(sheetRemoved(Sheet *)),
-            this, SLOT(removeSheet(Sheet *)));
+    connect(d->map, SIGNAL(sheetAdded(Sheet*)),
+            this, SLOT(addSheet(Sheet*)));
+    connect(d->map, SIGNAL(sheetRemoved(Sheet*)),
+            this, SLOT(removeSheet(Sheet*)));
 }
 
 MapModel::~MapModel()

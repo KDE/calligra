@@ -41,8 +41,8 @@ KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *paren
     m_dateEdit->setAutoAdvance(true);
     m_dateEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
 // m_dateEdit->setFixedWidth( QFontMetrics(m_dateEdit->font()).width("8888-88-88___") );
-    connect(m_dateEdit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged()));
-    connect(m_dateEdit, SIGNAL(valueChanged(const QDate&)), this, SIGNAL(dateTimeChanged()));
+    connect(m_dateEdit, SIGNAL(valueChanged(QDate)), this, SLOT(slotValueChanged()));
+    connect(m_dateEdit, SIGNAL(valueChanged(QDate)), this, SIGNAL(dateTimeChanged()));
 
     QToolButton* btn = new QToolButton(this);
     btn->setText("...");
@@ -52,8 +52,8 @@ KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *paren
     m_timeEdit = new Q3TimeEdit(datetime.time(), this);
     m_timeEdit->setAutoAdvance(true);
     m_timeEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-    connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged()));
-    connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SIGNAL(dateTimeChanged()));
+    connect(m_timeEdit, SIGNAL(valueChanged(QTime)), this, SLOT(slotValueChanged()));
+    connect(m_timeEdit, SIGNAL(valueChanged(QTime)), this, SIGNAL(dateTimeChanged()));
 
 #ifdef QDateTimeEditor_HACK
     m_dte_date = KexiUtils::findFirstChild<QDateTimeEditor>(m_dateEdit, "QDateTimeEditor");

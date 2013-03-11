@@ -40,21 +40,25 @@ int CATextDocumentModel::rowCount(const QModelIndex& parent) const
 
 QVariant CATextDocumentModel::data(const QModelIndex& index, int role) const
 {
+
     if(!kw_document || !index.isValid()) {
        return QVariant();
     }
-    if(role == Qt::DecorationRole) {
-       const QString id = kw_document->caption() + "textData" + QString::number(index.row());
-       if (!CAImageProvider::instance()->containsId(id)) {
-	    KWPage pagePreview = kw_document->pageManager()->page(index.row()+1);
-	    QSize size = QSize(512,512);
-            QImage image = pagePreview.thumbnail(size, kw_shapemanager);
-	    if(image.isNull() == true) {
-	       return QVariant();
-	    }
-            CAImageProvider::instance()->addImage(id, image);
-       }
-       return QString("image://") + QString(CAImageProvider::identificationString) + "/" + id;
+
+    if (CAImageProvider::s_imageProvider) {
+        if(role == Qt::DecorationRole) {
+            const QString id = kw_document->caption() + "textData" + QString::number(index.row());
+            if (!CAImageProvider::s_imageProvider->containsId(id)) {
+                KWPage pagePreview = kw_document->pageManager()->page(index.row()+1);
+                QSize size = QSize(512,512);
+                QImage image = pagePreview.thumbnail(size, kw_shapemanager);
+                if(image.isNull() == true) {
+                    return QVariant();
+                }
+                CAImageProvider::s_imageProvider->addImage(id, image);
+            }
+            return QString("image://") + QString(CAImageProvider::identificationString) + "/" + id;
+        }
     }
     return QVariant();
 }

@@ -3,6 +3,7 @@ Type=Service
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Widgets Plugin for Kexi Forms
+Name[bs]=plugin dodataka za Kexi Forme
 Name[ca]=Connector d'estris per a formularis del Kexi
 Name[ca@valencia]=Connector d'estris per a formularis del Kexi
 Name[da]=Kontrolplugin til Kexi-formularer

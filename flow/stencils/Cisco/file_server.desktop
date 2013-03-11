@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=File Server
 Name[bg]=Файлов сървър
+Name[bs]=Server za datoteke
 Name[ca]=Servidor de fitxers
 Name[ca@valencia]=Servidor de fitxers
+Name[da]=Filserver
 Name[de]=Datei-Server
 Name[el]=Εξυπηρετητής αρχείων
 Name[es]=Servidor de archivos
@@ -22,6 +24,7 @@ Name[pt]=Servidor de Ficheiros
 Name[pt_BR]=Servidor de arquivos
 Name[ru]=Файловый сервер
 Name[sk]=Súborový server
+Name[sl]=Datotečni strežnik
 Name[sv]=Filserver
 Name[uk]=Файловий сервер
 Name[x-test]=xxFile Serverxx
