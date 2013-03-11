@@ -20,7 +20,7 @@ class GrammarCheck : public KoTextEditingPlugin
 {
     Q_OBJECT
 public:
-	GrammarCheck();
+    GrammarCheck();
 	/// reimplemented from superclass
 	void finishedWord(QTextDocument *document, int cursorPosition);
 	/// reimplemented from superclass
@@ -34,7 +34,6 @@ public:
 	void checkSentence(QTextDocument *document, int startPosition, int endPosition);
 	void findSentencesInBlock(const QTextBlock &block, QVector<QPair<int,int> > &sentencesInCurrentBlock);
 	bool isSentenceComplete(QTextDocument *document, int startPosition, int endPosition);
-	void checkSentencesNearPosition(QTextDocument *document, int cursorPosition);
 	int numberOfWords(QTextDocument *document, int startPosition, int endPosition);
 	QStringList availableBackends() const;
 	QStringList availableLanguages() const;
