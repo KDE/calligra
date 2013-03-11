@@ -19,6 +19,7 @@
 
 #include "EditFiltersDialog.h"
 
+#include <BibDbFilter.h>
 #include <BibliographyDb.h>
 
 #include <KComboBox>
@@ -32,110 +33,6 @@
 #include <QPair>
 #include <QList>
 #include <QDebug>
-
-const QList<ConditionPair> EditFiltersDialog::filterConditions = QList<ConditionPair>() << ConditionPair("=", "equals to")
-                                                                                        << ConditionPair("<>", "not equals to")
-                                                                                        << ConditionPair("<", "less than")
-                                                                                        << ConditionPair("<=", "less than or equal to")
-                                                                                        << ConditionPair(">", "greater than")
-                                                                                        << ConditionPair(">=", "greater than or equal to")
-                                                                                        << ConditionPair("LIKE", "is like")
-                                                                                        << ConditionPair("NOT LIKE", "isn't like")
-                                                                                        << ConditionPair("NULL", "is blank")
-                                                                                        << ConditionPair("NOT NULL", "isn't blank");
-
-BibDbFilter::BibDbFilter(bool hasPreCond) :
-    m_leftOp("identifier"),
-    m_comparison("<>"),
-    m_field(new KComboBox),
-    m_cond(new KComboBox),
-    m_value(new KLineEdit),
-    m_layout(new QHBoxLayout)
-{
-    setLayout(m_layout);
-
-    if (hasPreCond) {
-        m_preOp = QString("AND");
-        m_preCond = new KComboBox;
-        m_layout->addWidget(m_preCond);
-        m_preCond->addItems(QStringList() << "AND" << "OR");
-
-        m_preCond->setCurrentIndex(0);
-        connect(m_preCond, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPreCondition(QString)));
-    } else {
-        m_layout->addSpacing(62);               //Free space instead of pre-operator combobox of size 62
-    }
-
-    m_layout->addWidget(m_field);
-    m_layout->addWidget(m_cond);
-    m_layout->addWidget(m_value);
-
-    m_field->addItems(BibliographyDb::dbFields);
-
-    foreach(ConditionPair cond, EditFiltersDialog::filterConditions) {
-        m_cond->addItem(cond.second);
-    }
-
-    m_field->setCurrentIndex(m_field->findText(m_leftOp, Qt::MatchFixedString));
-    m_cond->setCurrentIndex(1);
-
-    connect(m_field, SIGNAL(currentIndexChanged(QString)), this, SLOT(setLeftOperand(QString)));
-    connect(m_value, SIGNAL(textEdited(QString)), this, SLOT(setRightOperand(QString)));
-    connect(m_cond, SIGNAL(currentIndexChanged(int)), this, SLOT(setCondition(int)));
-    show();
-}
-
-void BibDbFilter::setLeftOperand(const QString &op)
-{
-    m_leftOp = op;
-}
-
-void BibDbFilter::setRightOperand(const QString &op)
-{
-    m_rightOp = op;
-}
-
-void BibDbFilter::setCondition(int index)
-{
-    if (EditFiltersDialog::filterConditions.at(index).first == "NULL" ||
-            EditFiltersDialog::filterConditions.at(index).first == "NOT NULL") {
-        m_value->clear();
-        m_value->setDisabled(true);
-        m_rightOp = "";
-    } else m_value->setEnabled(true);
-
-    m_comparison = EditFiltersDialog::filterConditions.at(index).first;
-}
-
-void BibDbFilter::setPreCondition(const QString &preCond)
-{
-    m_preOp = preCond;
-}
-
-QString BibDbFilter::filterString() const
-{
-    QString filter;
-    if (!m_preOp.isEmpty()) {
-        filter.append(" ").append(m_preOp);
-    }
-
-    if (!m_leftOp.isEmpty()) {
-        filter.append(" ").append(m_leftOp);
-    } else filter.append(" ").append("identifier");
-
-    if (!m_comparison.isEmpty()) {
-        filter.append(" ").append(m_comparison).append(" ");
-    } else filter.append(" <>");
-
-    if (!m_rightOp.isEmpty()) {
-        filter.append(QString(" '%1' ").arg(m_rightOp));
-    } else if (m_comparison != "NULL" && m_comparison != "NOT NULL") {
-        filter.append("''");
-    }
-
-    qDebug() << "Filter string is " << filter;
-    return filter;
-}
 
 EditFiltersDialog::EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *parent) :
     QDialog(parent),
@@ -183,13 +80,7 @@ void EditFiltersDialog::addFilter()
 
 void EditFiltersDialog::applyFilters()
 {
-    QString filterString;
-    foreach (BibDbFilter *filter, *m_filters) {
-        filterString.append(filter->filterString());
+    if (m_filters->size() != 0) {
+        emit accept();
     }
-
-    if (!filterString.isEmpty()) {
-        emit changedFilterString(filterString);
-    }
-    emit accept();
 }

@@ -19,8 +19,12 @@
 
 #include "BibliographyTableModel.h"
 
+#include <BibDbFilter.h>
 #include <db/cursor.h>
 #include <db/queryschema.h>
+#include <db/tableschema.h>
+#include <db/parser/sqlparser.h>
+#include <db/roweditbuffer.h>
 
 #include <QAbstractTableModel>
 #include <QString>
@@ -29,12 +33,12 @@
 BibliographyTableModel::BibliographyTableModel(KexiDB::Connection *conn, QObject * parent) :
     QAbstractTableModel(parent),
     m_conn(conn),
-    m_schema(m_conn->tableSchema("bibref"))
+    m_schema(m_conn->tableSchema("bibref")),
+    m_cursor(m_conn->executeQuery(*m_schema))
 {
     Q_ASSERT(m_conn);
-    m_cursor = m_conn->prepareQuery(*m_schema);//, KexiDB::Cursor::Buffered);
-    m_cursor->open();
-    qDebug() << "model created\n\n";
+    Q_ASSERT(m_cursor);
+    Q_ASSERT(m_schema);
 }
 
 QModelIndex BibliographyTableModel::index(int row, int column, const QModelIndex &parent) const
@@ -109,8 +113,6 @@ bool BibliographyTableModel::setData(const QModelIndex &index, const QVariant &v
 {
     if (index.isValid() && role == Qt::EditRole) {
         //TODO: set value to (row, col) index using cursor and conn
-//        QuerySchema query;
-        //m_conn->executeQuery();
         emit dataChanged(index, index);
         return true;
     }
@@ -126,6 +128,42 @@ Qt::ItemFlags BibliographyTableModel::flags(const QModelIndex &index) const
     } else {
         return defaultFlags;
     }
+}
+
+int BibliographyTableModel::getRelationInt(QString comparison)
+{
+    if (comparison == "=") {
+        return '=';
+    } else if (comparison == "<>") {
+        return NOT_EQUAL;
+    } else if (comparison == "<=") {
+        return LESS_OR_EQUAL;
+    } else if (comparison == ">=") {
+        return GREATER_OR_EQUAL;
+    } else if (comparison == "LIKE") {
+        return LIKE;
+    } else if (comparison == "NULL") {
+        return SQL_IS_NULL;
+    } else if (comparison == "NOT NULL") {
+        return SQL_IS_NOT_NULL;
+    } else {        // comparison left "less than", "greater than", "isn't like"
+        return NOT_EQUAL;
+    }
+}
+
+void BibliographyTableModel::setFilter(QList<BibDbFilter *> *filters)
+{
+    KexiDB::QuerySchema *query = new KexiDB::QuerySchema(*m_schema);
+    if (filters) {
+        foreach(BibDbFilter *filter, *filters) {
+            query->addToWhereExpression(query->field(filter->m_leftOp),
+                                        QVariant(filter->m_rightOp),
+                                        getRelationInt(filter->m_comparison));
+        }
+    }
+
+    qDebug() << query->debugString();
+    m_cursor = m_conn->executeQuery(*query);
 }
 
 QString BibliographyTableModel::capitalize(QString s) const

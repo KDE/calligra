@@ -17,10 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef EDITFILTERSDIALOG_H
-#define EDITFILTERSDIALOG_H
+#ifndef BIBDBFILTER_H
+#define BIBDBFILTER_H
 
-#include <QDialog>
+#include <QWidget>
+
+#include "kotext_export.h"
+
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -29,27 +32,33 @@ class KPushButton;
 class KComboBox;
 class KLineEdit;
 class KDialogButtonBox;
-class BibDbFilter;
 
-class EditFiltersDialog : public QDialog
+typedef QPair<QString, QString> ConditionPair;
+
+class KOTEXT_EXPORT BibDbFilter : public QWidget
 {
     Q_OBJECT
 public:
-    explicit EditFiltersDialog(QList<BibDbFilter*> *filters, QWidget *parent);
+    explicit BibDbFilter(bool hasPreCond = true);
 
-signals:
-    void changedFilterString(QString);
+    static const QList<ConditionPair> filterConditions;
+
+    QString m_leftOp;
+    QString m_rightOp;
+    QString m_comparison;
+    QString m_preOp;
+    KComboBox *m_field;
+    KComboBox *m_cond;
+    KLineEdit *m_value;
+    KComboBox *m_preCond;
+    QString filterString() const;
 public slots:
-    void addFilter();
-    void applyFilters();
+    void setLeftOperand(const QString &op);
+    void setRightOperand(const QString &op);
+    void setCondition(int index);
+    void setPreCondition(const QString &preCond);
 private:
-    QVBoxLayout *m_layout;
-    QVBoxLayout *m_filterLayout;
-    QHBoxLayout *m_buttonLayout;
-    KDialogButtonBox *m_buttonBox;
-    QGroupBox *m_group;
-    KPushButton *m_addFilter;
-    QList<BibDbFilter*> *m_filters;
+    QHBoxLayout *m_layout;
 };
 
-#endif // EDITFILTERSDIALOG_H
+#endif // BIBDBFILTER_H

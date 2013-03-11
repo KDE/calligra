@@ -163,7 +163,7 @@ bool BibliographyDb::createTable()
     m_schema->addField(field);
 
     field = new KexiDB::Field("identifier", KexiDB::Field::Text, KexiDB::Field::NotNull | KexiDB::Field::Unique);
-    field->setCaption("Identifier");
+    field->setCaption("identifier");
     m_schema->addField(field);
 
     foreach(QString fieldName, BibliographyDb::dbFields) {
@@ -199,10 +199,9 @@ void BibliographyDb::setSearchFilter(QRegExp expr)
     }
 }
 
-void BibliographyDb::setFilter(QString filter)
+void BibliographyDb::setFilter(QList<BibDbFilter*> *filters)
 {
-    qDebug() << "Filter: " << filter;
-//    m_model->setFilter(filter);       TODO:
+    m_model->setFilter(filters);       //TODO:
 }
 
 bool BibliographyDb::insertCitation(KoInlineCite *cite)

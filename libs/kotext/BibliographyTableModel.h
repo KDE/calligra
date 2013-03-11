@@ -27,6 +27,7 @@
 #include <db/connection.h>
 
 class QString;
+class BibDbFilter;
 
 class KOTEXT_EXPORT BibliographyTableModel : public QAbstractTableModel
 {
@@ -42,6 +43,10 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    void setFilter(QList<BibDbFilter*> *filters);
+    void clearFilter();
+
+    static int getRelationInt(QString comparison);
 
 private:
     KexiDB::Connection *m_conn;

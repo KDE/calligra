@@ -69,6 +69,7 @@ set(kotext_LIB_SRCS
     KoBridgeServer.cpp
     KoBridgeActions.cpp
     BibliographyTableModel.cpp
+    BibDbFilter.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp

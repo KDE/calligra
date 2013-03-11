@@ -24,6 +24,7 @@
 #include "BibliographyTableModel.h"
 
 #include <BibliographyDb.h>
+#include <BibDbFilter.h>
 
 #include <QTableView>
 #include <QHeaderView>
@@ -206,21 +207,22 @@ void BibliographyDatabaseWindow::showFilters()
         m_filters->append(new BibDbFilter(false));
     }
     EditFiltersDialog *dialog = new EditFiltersDialog(m_filters, this);
-    connect(dialog, SIGNAL(changedFilterString(QString)), this, SLOT(applyFilters(QString)));
+    connect(dialog, SIGNAL(accepted()), this, SLOT(applyFilters()));
 }
 
 void BibliographyDatabaseWindow::clearFilters()
 {
-    m_table->setFilter("");
+    m_table->setFilter(0);
     if (!m_filters->isEmpty()) {
         qDeleteAll(m_filters->begin(), m_filters->end());
         m_filters->clear();
+        m_table->tableModel()->setFilter(0);
     }
 }
 
-void BibliographyDatabaseWindow::applyFilters(QString filter)
+void BibliographyDatabaseWindow::applyFilters()
 {
-    m_table->setFilter(filter);
+    m_table->setFilter(m_filters);
 }
 
 void BibliographyDatabaseWindow::newRecord()

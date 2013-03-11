@@ -34,6 +34,7 @@ class QSqlError;
 class QDir;
 class QSortFilterProxyModel;
 class BibliographyTableModel;
+class BibDbFilter;
 
 class KoInlineCite;
 
@@ -58,7 +59,7 @@ public:
     BibliographyTableModel *tableModel();
     QSortFilterProxyModel* proxyModel();
     void setSearchFilter(QRegExp);
-    void setFilter(QString filter);
+    void setFilter(QList<BibDbFilter *> *filters);
     bool insertCitation(KoInlineCite *);
     QMap<QString, KoInlineCite *> citationRecords();
 
