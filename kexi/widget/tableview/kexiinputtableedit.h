@@ -23,7 +23,6 @@
 
 #include <klineedit.h>
 #include <QVariant>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 #include "kexitableedit.h"
