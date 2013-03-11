@@ -212,7 +212,17 @@ bool PSDLayerSection::read(QIODevice* io)
     }
 
     quint32 globalMaskBlockLength;
+
+    /* Not Sure for now why globalMaskBlockLength is greater than bytesAvailable removing size check for now
+       This still needs to be fixed.
+     */
+    /*
     if (!psdread(io, &globalMaskBlockLength) || globalMaskBlockLength > (quint64)io->bytesAvailable()) {
+        error = "Could not read global mask info block";
+        return false;
+    }*/
+
+    if(!psdread(io, &globalMaskBlockLength)){
         error = "Could not read global mask info block";
         return false;
     }

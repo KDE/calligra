@@ -45,12 +45,12 @@ PSDImageData::~PSDImageData() {
 }
 
 bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
-
+    qDebug()<<"PSD DATA IMAGE CALLED";
     psdread(io, &m_compression);
     quint64 start = io->pos();
     m_channelSize = m_header->channelDepth/8;
     m_channelDataLength = m_header->height * m_header->width * m_channelSize;
-
+    qDebug()<<m_compression;
     switch (m_compression) {
 
     case 0: // Uncompressed
@@ -66,8 +66,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
             m_channelInfoRecords.append(channelInfo);
 
         }
-
-    switch (m_header->colormode) {
+        switch (m_header->colormode) {
         case Bitmap:
             break;
         case Grayscale:
@@ -135,6 +134,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
         case Bitmap:
             break;
         case Grayscale:
+            readGrayscale(io,dev);
             break;
         case Indexed:
             break;
@@ -438,7 +438,7 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
                 KoCmykTraits<quint16>::setY(it->rawData(),Y);
 
                 quint16 K = ntohs(reinterpret_cast<const quint16 *>(channelBytes[3].constData())[col]);
-               KoCmykTraits<quint16>::setK(it->rawData(),K);
+                KoCmykTraits<quint16>::setK(it->rawData(),K);
 
             }
             else if (m_channelSize == 4) {
@@ -616,7 +616,6 @@ bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev){
 
                 quint8 Gray = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
                 KoGrayU8Traits::setGray(it->rawData(), Gray);
-
 
             }
 
