@@ -1742,9 +1742,9 @@ void QuerySchema::addToWhereExpression(KexiDB::Field *field, const QVariant& val
 
     BinaryExpr * newExpr = new BinaryExpr(
         KexiDBExpr_Relational,
-        new ConstExpr(token, value),
+        new VariableExpr((field->table() ? (field->table()->name() + ".") : QString()) + field->name()),
         relation,
-        new VariableExpr((field->table() ? (field->table()->name() + ".") : QString()) + field->name())
+        new ConstExpr(token, value)
     );
     if (d->whereExpr) {
         d->whereExpr = new BinaryExpr(
