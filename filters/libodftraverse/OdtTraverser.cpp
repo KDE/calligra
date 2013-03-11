@@ -277,6 +277,15 @@ void OdtTraverser::handleTagPageBreak(KoXmlElement &element)
     m_backend->endTagPageBreak(element, m_context);
 }
 
+void OdtTraverser::handleTagA(KoXmlElement &element)
+{
+    m_backend->beginTagA(element, m_context);
+
+    handleInsideElementsTag(element);
+
+    m_backend->endTagA(element, m_context);
+}
+
 void OdtTraverser::handleCharacterData(KoXmlNode &node)
 {
     // FIXME: Do we really need two calls here?  Doubtful...
@@ -631,31 +640,6 @@ void OdtTraverser::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
 
 // ----------------------------------------------------------------
 
-void OdtTraverser::handleTagA(KoXmlElement &element)
-{
-    // FIXME: NYI
-    return;
-#if 0
-    htmlWriter->startElement("a", m_doIndent);
-    QString reference = element.attribute("href");
-    QString chapter = m_linksInfo.value(reference);
-    if (!chapter.isEmpty() && !m_options->stylesInCssFile) {
-        // This is internal link.
-        reference = reference.remove("|");
-        reference = reference.remove(" ");// remove spaces
-        reference = chapter+reference;
-        htmlWriter->addAttribute("href", reference);
-    }
-    else {
-        // This is external link.
-        htmlWriter->addAttribute("href", reference);
-    }
-
-    handleInsideElementsTag(element);
-    htmlWriter->endElement();
-#endif
-}
-
 void OdtTraverser::handleTagTableOfContent(KoXmlElement &element)
 {
     // FIXME: NYI
@@ -719,15 +703,7 @@ void OdtTraverser::handleTagBookMarkEnd(KoXmlElement &element)
 #endif
 }
 
-void OdtTraverser::handleUnknownTags(KoXmlElement &element)
-{
-    // FIXME: NYI
-    return;
-#if 0
-    // Just go deeper to find known tags.
-    handleInsideElementsTag(element);
-#endif
-}
+
 
 
 void OdtTraverser::handleTagNote(KoXmlElement &element)
@@ -773,4 +749,11 @@ void OdtTraverser::handleTagNote(KoXmlElement &element)
         }
     }
 #endif
+}
+
+
+void OdtTraverser::handleUnknownTags(KoXmlElement &element)
+{
+    // Just go deeper to find known tags.
+    handleInsideElementsTag(element);
 }

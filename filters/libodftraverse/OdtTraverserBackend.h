@@ -131,6 +131,10 @@ class ODFTRAVERSE_EXPORT OdtTraverserBackend
                                    OdtTraverserContext *context);
     virtual void endTagPageBreak(KoXmlElement &element,
                                  OdtTraverserContext *context);
+    virtual void beginTagA(KoXmlElement &element,
+                           OdtTraverserContext *context);
+    virtual void endTagA(KoXmlElement &element,
+                         OdtTraverserContext *context);
     virtual void beginCharacterData(KoXmlNode &node,
                                     OdtTraverserContext *context);
     virtual void endCharacterData(KoXmlNode &node,
@@ -153,10 +157,6 @@ class ODFTRAVERSE_EXPORT OdtTraverserBackend
                                 OdtTraverser::TableCellType type = OdtTraverser::TableDataType);
 
 //--
-    virtual void beginTagA(KoXmlElement &element,
-                           OdtTraverserContext *context);
-    virtual void endTagA(KoXmlElement &element,
-                         OdtTraverserContext *context);
 
     virtual void beginTagFrame(KoXmlElement &element,
                                OdtTraverserContext *context);

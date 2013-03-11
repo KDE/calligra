@@ -62,7 +62,9 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     // All handleTag*() are named after the tag in the ODF that they handle.
 
     // Basic text stuff.
+    // FIXME: Should be called handleGeneralTextContent()
     void handleInsideElementsTag(KoXmlElement &element);
+
     void handleTagP(KoXmlElement &element);
     void handleTagH(KoXmlElement &element);
     void handleTagSpan(KoXmlElement &element);
@@ -70,6 +72,7 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     void handleTagTab(KoXmlElement &element);
     void handleTagLineBreak(KoXmlElement &element);
     void handleTagPageBreak(KoXmlElement &element);
+    void handleTagA(KoXmlElement &element);
     void handleCharacterData(KoXmlNode &node);
 
     // Slightly more advanced text stuff.
@@ -78,14 +81,11 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     void handleTagTableRow(KoXmlElement &element, TableCellType type = TableDataType);
 //--
 
-    void handleTagA(KoXmlElement &element);
-
     // Embedded stuff
     void handleTagFrame(KoXmlElement &element);
     void handleEmbeddedFormula(const QString &href);
     void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
                         QHash<QString, QString> &unknownNamespaces);
-
 
     void handleTagTableOfContent(KoXmlElement &element);
     void handleTagTableOfContentBody(KoXmlElement &element);
@@ -94,13 +94,16 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     void handleTagBookMarkStart(KoXmlElement &element);
     void handleTagBookMarkEnd(KoXmlElement &element);
 
+    void handleTagNote(KoXmlElement &element);// footnotes and endnotes
+
+    // FIXME: text:annotation
+
+    // Called for all tags that are not explicitly recognized. 
     void handleUnknownTags(KoXmlElement &element);
-    void handleTagNote(KoXmlElement &element);
 
  private:
     OdtTraverserBackend  *m_backend;
     OdtTraverserContext  *m_context;
-
 
     // A list of images and their sizes. This list is collected during
     // the conversion and returned from traverseContent() using an
