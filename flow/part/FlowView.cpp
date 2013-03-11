@@ -30,7 +30,7 @@
 #include <kactionmenu.h>
 
 FlowView::FlowView(FlowPart *part, FlowDocument* document, QWidget* parent)
-  : KoPAView(part, document, false, parent), m_document(document)
+  : KoPAView(part, document, KoPAView::NormalMode, parent), m_document(document)
 {
     Q_ASSERT(m_document);
 
