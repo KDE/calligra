@@ -28,9 +28,6 @@
 class QByteArray;
 class QTextStream;
 
-class KoGenStyles;
-class KoOdfWriteStore;
-class KoXmlWriter;
 
 class AsciiExport : public KoFilter
 {
@@ -42,8 +39,6 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-    QHash<QString, QString> m_metadata;
-    QHash<QString, QString> m_manifest;
 };
 
 #endif /* ASCIIEXPORT_H */

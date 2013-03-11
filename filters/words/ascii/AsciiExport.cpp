@@ -24,60 +24,26 @@
 
 #include "AsciiExport.h"
 
-#include <QTextCodec>
 #include <QFile>
-#include <QTextDocument>
-#include <QTextCursor>
 
+// KDE
 #include <kdebug.h>
 #include <kpluginfactory.h>
-#include <kencodingprober.h>
 
-#include <calligraversion.h>
-#include <KoFilterChain.h>
-#include <KoFilterManager.h>
+// Calligra
 #include <KoStore.h>
-#include <KoOdfWriteStore.h>
-#include <KoGenStyles.h>
-#include <KoXmlWriter.h>
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
-#include <KoCharacterStyle.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoEmbeddedDocumentSaver.h>
-#include <KoShapeSavingContext.h>
-#include <KoTextWriter.h>
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
-#include <KoTextDocumentLayout.h>
+#include <KoFilterChain.h>
 
+// Filter libraries
 #include "OdtTraverser.h"
 
+// This filter
 #include "OdtTraverserAsciiBackend.h"
-
-//#include <KWDocument.h>
-//#include <KWPage.h>
-//#include <frames/KWTextFrameSet.h>
 
 
 K_PLUGIN_FACTORY(AsciiExportFactory, registerPlugin<AsciiExport>();)
 K_EXPORT_PLUGIN(AsciiExportFactory("wordsasciiexportng", "calligrafilters"))
 
-#if 0
-bool checkEncoding(QTextCodec *codec, QByteArray &data)
-{
-    QTextCodec::ConverterState state(QTextCodec::ConvertInvalidToNull);
-    QString unicode = codec->toUnicode(data.constData(), data.size(), &state);
-    for (int i = 0; i < unicode.size(); ++i) {
-        if (unicode[i] == 0) {
-            return false;
-        }
-    }
-    return true;
-}
-#endif
 
 AsciiExport::AsciiExport(QObject *parent, const QVariantList &)
 : KoFilter(parent)
@@ -121,9 +87,10 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
 
     OdtTraverserAsciiContext  asciiBackendContext(odfStore, outfile);
     OdtTraverserAsciiBackend  asciiBackend(&asciiBackendContext);
-    OdtTraverser              odtTraverser;
 
+    OdtTraverser              odtTraverser;
     odtTraverser.traverseContent(&asciiBackendContext, &asciiBackend);
+
     outfile.close();
 
     return KoFilter::OK;

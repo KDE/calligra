@@ -52,12 +52,8 @@ class OdtTraverserAsciiBackend : public OdtTraverserBackend
     OdtTraverserAsciiBackend(OdtTraverserContext *context);
     virtual ~OdtTraverserAsciiBackend();
 
-    virtual void beginTraversal(OdtTraverserContext *context);
-    virtual void endTraversal(OdtTraverserContext *context);
-
-    // The only output function that we need.
+    // The only output functions that we need in this filter.
     virtual void beginCharacterData(KoXmlNode &node, OdtTraverserContext *context);
-
     virtual void endTagP(KoXmlElement &element, OdtTraverserContext *context);
 };
 

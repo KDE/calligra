@@ -49,22 +49,10 @@ OdtTraverserAsciiContext::~OdtTraverserAsciiContext()
 OdtTraverserAsciiBackend::OdtTraverserAsciiBackend(OdtTraverserContext *context)
     : OdtTraverserBackend(context)
 {
-    Q_UNUSED(context)
 }
 
 OdtTraverserAsciiBackend::~OdtTraverserAsciiBackend()
 {
-}
-
-
-void OdtTraverserAsciiBackend::beginTraversal(OdtTraverserContext *context)
-{
-    Q_UNUSED(context);
-}
-
-void OdtTraverserAsciiBackend::endTraversal(OdtTraverserContext *context)
-{
-    Q_UNUSED(context);
 }
 
 
@@ -91,4 +79,3 @@ void OdtTraverserAsciiBackend::endTagP(KoXmlElement &element, OdtTraverserContex
 
     newContext->outStream << "\n\n";
 }
-
