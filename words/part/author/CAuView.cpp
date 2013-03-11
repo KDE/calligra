@@ -22,6 +22,7 @@
 #include "CAuFactory.h"
 #include "CoverImage.h"
 #include "CoverPreviewTool.h"
+#include "CoverSelectionDialog.h"
 
 #include "KWDocument.h"
 
@@ -52,7 +53,8 @@ void CAuView::setupActions()
 void CAuView::selectCoverImage()
 {
     //CoverImage cover;
-    CoverPreviewTool* tool = new CoverPreviewTool(this);
+    CoverSelectionDialog* tool = new CoverSelectionDialog(this);
+    //CoverPreviewTool* tool = new CoverPreviewTool(this);
     tool->setCAuView(this);
     tool->show();
 /*
