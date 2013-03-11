@@ -27,6 +27,7 @@
 
 // this library
 #include "odftraverse_export.h"
+#include "OdtTraverser.h"
 
 
 class QByteArray;
@@ -37,12 +38,13 @@ class KoStore;
 class OdtTraverserBackend;
 
 
+#if 0
 // FIXME: Should be moved to the traverser .h file?  Or a common one?
 enum TableCellType {
     TableDataType,
     TableHeaderType,
 };
-
+#endif
 
 // This class makes some data from the KoStore easily accessible
 // during the traversal. When you create a filter you should create
@@ -138,17 +140,19 @@ class ODFTRAVERSE_EXPORT OdtTraverserBackend
                               OdtTraverserContext *context);
     virtual void endTagList(KoXmlElement &element,
                             OdtTraverserContext *context);
-//--
+
     virtual void beginTagTable(KoXmlElement &element,
                                OdtTraverserContext *context);
     virtual void endTagTable(KoXmlElement &element,
                              OdtTraverserContext *context);
     virtual void beginTagTableRow(KoXmlElement &element,
                                    OdtTraverserContext *context,
-                                   TableCellType type = TableDataType);
+                                   OdtTraverser::TableCellType type = OdtTraverser::TableDataType);
     virtual void endTagTableRow(KoXmlElement &element,
-                                OdtTraverserContext *context);
+                                OdtTraverserContext *context,
+                                OdtTraverser::TableCellType type = OdtTraverser::TableDataType);
 
+//--
     virtual void beginTagA(KoXmlElement &element,
                            OdtTraverserContext *context);
     virtual void endTagA(KoXmlElement &element,

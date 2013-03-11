@@ -304,65 +304,47 @@ void OdtTraverser::handleTagList(KoXmlElement &element)
 
 // ----------------------------------------------------------------
 
-//qwe
 
 void OdtTraverser::handleTagTable(KoXmlElement &element)
 {
-    // FIXME: NYI
-    return;
-#if 0
-    QString styleName = cssClassName(element.attribute("style-name"));
-    StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("table", m_doIndent);
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-    htmlWriter->addAttribute("style", "border-collapse: collapse");
+    m_backend->beginTagTable(element, m_context);
 
     KoXmlElement tableElement;
     forEachElement (tableElement, element) {
 
         //Table headers
         if (tableElement.localName() == "table-header-rows" && tableElement.namespaceURI() == KoXmlNS::table) {
-            htmlWriter->startElement("thead", m_doIndent);
-
             KoXmlElement headerRow;
             forEachElement (headerRow, tableElement) {
                 handleTagTableRow(headerRow, TableHeaderType);
             }
-
-            htmlWriter->endElement(); //thead
         }
 
         //Table body
-        if (tableElement.localName() == "table-rows" && tableElement.namespaceURI() == KoXmlNS::table) {
-            htmlWriter->startElement("tbody", m_doIndent);
-
+        else if (tableElement.localName() == "table-rows" && tableElement.namespaceURI() == KoXmlNS::table) {
             KoXmlElement rowElement;
             forEachElement (rowElement, tableElement) {
                 handleTagTableRow(rowElement);
             }
-
-            htmlWriter->endElement(); //tbody
         }
 
-        //Tables without headers have no table-rows element and instead embed rows directly in the table,
-        //so handle that properly.
-        if (tableElement.localName() == "table-row" && tableElement.namespaceURI() == KoXmlNS::table) {
+        // Tables without headers have no table-rows element and
+        // instead embed rows directly in the table, so handle that
+        // properly.
+        else if (tableElement.localName() == "table-row" && tableElement.namespaceURI() == KoXmlNS::table) {
             handleTagTableRow(tableElement);
         }
     }
 
-    htmlWriter->endElement(); //table
-#endif
+    m_backend->beginTagTable(element, m_context);
 }
 
 void OdtTraverser::handleTagTableRow(KoXmlElement& element, OdtTraverser::TableCellType type)
 {
-    // FIXME: NYI
-    return;
-#if 0
+    m_backend->beginTagTableRow(element, m_context, type);
+
+#if 0    // FIXME: We need more advanced handling of tables and more handle...Tag functions
+
     htmlWriter->startElement("tr", m_doIndent);
 
     KoXmlElement cellElement;
@@ -403,7 +385,14 @@ void OdtTraverser::handleTagTableRow(KoXmlElement& element, OdtTraverser::TableC
 
     htmlWriter->endElement(); //tr
 #endif
+    m_backend->endTagTableRow(element, m_context, type);
 }
+
+// ----------------------------------------------------------------
+//                         Embedded stuff
+
+
+//qwe
 
 void OdtTraverser::handleTagFrame(KoXmlElement &element)
 {

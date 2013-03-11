@@ -52,14 +52,16 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     bool traverseContent(OdtTraverserContext *context,
                          OdtTraverserBackend *backend);
 
- private:
+    // Used when traversing table cells in headers and normal tables respectively.
     enum TableCellType {
         TableDataType,
         TableHeaderType,
     };
 
-
+ private:
     // All handleTag*() are named after the tag in the ODF that they handle.
+
+    // Basic text stuff.
     void handleInsideElementsTag(KoXmlElement &element);
     void handleTagP(KoXmlElement &element);
     void handleTagH(KoXmlElement &element);
@@ -70,10 +72,11 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     void handleTagPageBreak(KoXmlElement &element);
     void handleCharacterData(KoXmlNode &node);
 
+    // Slightly more advanced text stuff.
     void handleTagList(KoXmlElement &element);
-    //--
     void handleTagTable(KoXmlElement &element);
     void handleTagTableRow(KoXmlElement &element, TableCellType type = TableDataType);
+//--
 
     void handleTagA(KoXmlElement &element);
 

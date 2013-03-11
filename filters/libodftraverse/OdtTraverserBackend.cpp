@@ -313,7 +313,7 @@ void OdtTraverserBackend::endTagTable(KoXmlElement &element,
 
 void OdtTraverserBackend::beginTagTableRow(KoXmlElement &element,
                                            OdtTraverserContext *context,
-                                           TableCellType type)
+                                           OdtTraverser::TableCellType type)
 {
     Q_UNUSED(element);
     Q_UNUSED(context);
@@ -321,10 +321,12 @@ void OdtTraverserBackend::beginTagTableRow(KoXmlElement &element,
 }
 
 void OdtTraverserBackend::endTagTableRow(KoXmlElement &element,
-                                           OdtTraverserContext *context)
+                                         OdtTraverserContext *context,
+                                         OdtTraverser::TableCellType type)
 {
     Q_UNUSED(element);
     Q_UNUSED(context);
+    Q_UNUSED(type);
 }
 
 
@@ -341,6 +343,10 @@ void OdtTraverserBackend::endTagA(KoXmlElement &element,
     Q_UNUSED(element);
     Q_UNUSED(context);
 }
+
+
+// ----------------------------------------------------------------
+//                         Embedded stuff
 
 
 void OdtTraverserBackend::beginTagFrame(KoXmlElement &element,
