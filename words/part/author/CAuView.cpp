@@ -44,7 +44,7 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
 void CAuView::setupActions()
 {
     // -------- Book
-    KAction *action = new KAction(i18n("Insert Cover Image"), this);
+    KAction *action = new KAction(i18n("Select Cover Image"), this);
     actionCollection()->addAction("insert_coverimage", action);
     action->setToolTip(i18n("Set cover for your ebook"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectCoverImage()));
@@ -52,22 +52,9 @@ void CAuView::setupActions()
 
 void CAuView::selectCoverImage()
 {
-    //CoverImage cover;
-    CoverSelectionDialog* tool = new CoverSelectionDialog(this);
-    //CoverPreviewTool* tool = new CoverPreviewTool(this);
-    tool->setCAuView(this);
-    tool->show();
-/*
-    QString path = QFileDialog::getOpenFileName(0, i18n("Open File"),
-                                                QDir::currentPath(),
-                                                      i18n("Images (*.png *.xpm *.jpg *.jpeg)"));
-
-    if (!path.isEmpty()) {
-        QPair<QString, QByteArray> coverData = cover.readCoverImage(path);
-        kwdocument()->setCoverImage(coverData);
-    }
-    */
-
+    //first "this" for CAuView context and second one for window parent
+    CoverSelectionDialog* coverDialog = new CoverSelectionDialog(this,this);
+    coverDialog->show();
 }
 
 QPair<QString, QByteArray> CAuView::getCurrentCoverImage()

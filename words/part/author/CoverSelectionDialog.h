@@ -14,8 +14,7 @@ class CoverSelectionDialog : public QDialog
     Q_OBJECT
     
 public:
-    explicit CoverSelectionDialog(QWidget *parent = 0);
-    void setCAuView(CAuView* au);
+    explicit CoverSelectionDialog(CAuView *au, QWidget *parent = 0);
     ~CoverSelectionDialog();
 
 private slots:
@@ -28,10 +27,7 @@ private:
 
     void refresh();
     void createActions();
-    void createMenus();
-    void updateActions();
 
-    QLabel *imageField;
     CAuView *view;
     QPair<QString, QByteArray> img;
 
