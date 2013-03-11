@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
-   Copyright (C) 2012 Inge Wallin            <inge@lysator.liu.se>
+   Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,22 +22,14 @@
 // Own
 #include "OdfParser.h"
 
-// Qt
-#include <QSvgGenerator>
-#include <QBuffer>
-#include <QPainter>
-
 // KDE
 #include <kdebug.h>
-#include <kpluginfactory.h>
 
 // Calligra
-#include <KoOdfWriteStore.h>
-#include <KoGenStyles.h>
-#include <KoXmlWriter.h>
-#include <KoStoreDevice.h>
+#include <KoStore.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+
 
 OdfParser::OdfParser()
 {
@@ -47,7 +38,6 @@ OdfParser::OdfParser()
 OdfParser::~OdfParser()
 {
 }
-
 
 
 KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore *odfStore,

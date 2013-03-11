@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
-   Copyright (C) 2012 Inge Wallin            <inge@lysator.liu.se>
+
+   Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,35 +23,35 @@
 
 // Qt
 #include <QString>
-#include <QVariantList>
-#include <QFile>
-#include <QObject>
-#include <QTextStream>
 #include <QHash>
-#include <QList>
 
 // Calligra
-#include <KoFilter.h>           // If we ever move this out of filters/ we should move the
+#include <KoFilter.h>           // For the return values.
+                                // If we ever move this out of filters/ we should move the
                                 // filterstatus return values to bools.
 
 class KoStore;
 
 
+// The purpose of this class is to provide a parser for the
+// information in an ODF file outside of the actual content and
+// provide easy access to it.  This includes the manifest, the
+// metadata, settings and styles although not all of the above is
+// implemented yet.
 class OdfParser
 {
 public:
-    enum VectorType {
-        VectorTypeOther,        // Uninitialized
-        VectorTypeWmf,          // Windows MetaFile
-        VectorTypeEmf,          // Extended MetaFile
-        VectorTypeSvm           // StarView Metafile
-        // ... more here later
-    };
-
     OdfParser();
     virtual ~OdfParser();
 
+    // Parse the metadata.
+    //
+    // Format is QHash<name, value>
+    // where
+    //   name  is the name of the metadata tag
+    //   value is its value
     KoFilter::ConversionStatus parseMetadata(KoStore *odfStore,
+                                             // Out parameter:
                                              QHash<QString, QString> &metadata);
 
     // Parse manifest
@@ -62,6 +62,7 @@ public:
     //   type  is the mimetype of the file.
     //
     KoFilter::ConversionStatus parseManifest(KoStore *odfStore,
+                                             // Out parameter:
                                              QHash<QString, QString> &manifest);
 
 private:

@@ -41,7 +41,6 @@ class KoStore;
 
 class OdtTraverserBackend;
 class OdtTraverserContext;
-class StyleInfo;
 
 
 class ODFTRAVERSE_EXPORT OdtTraverser
@@ -94,15 +93,7 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     void handleUnknownTags(KoXmlElement &element);
     void handleTagNote(KoXmlElement &element);
 
-
-
     void collectInternalLinksInfo(KoXmlElement &currentElement, int &chapter);
-
-    // FIXME: these should be moved to libs/odf
-    bool collectStyles(KoStore *odfStore, QHash<QString, StyleInfo*> &styles);
-    void collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
-    void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
-
 
  private:
     OdtTraverserBackend  *m_backend;

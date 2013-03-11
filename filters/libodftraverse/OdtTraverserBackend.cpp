@@ -45,7 +45,6 @@ public:
     // It's created from the store that is given to us at construction time.
     QHash<QString, QString>    metadata;
     QHash<QString, QString>    manifest;
-    QHash<QString, StyleInfo*> styles;
 
     // This data is created during the traversal and can be used after
     // it is finished.
@@ -114,14 +113,9 @@ QHash<QString, QString> OdtTraverserContext::metadata() const
     return d->metadata;
 }
 
-    QHash<QString, QString> OdtTraverserContext::manifest() const
+QHash<QString, QString> OdtTraverserContext::manifest() const
 {
     return d->manifest;
-}
-
-    QHash<QString, StyleInfo*> OdtTraverserContext::styles() const
-{
-    return d->styles;
 }
 
 

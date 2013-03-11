@@ -44,22 +44,6 @@ enum TableCellType {
 };
 
 
-// FIXME: This should use style handling from libs/odf.
-struct StyleInfo {
-    StyleInfo();
-
-    QString family;
-    QString parent;
-    bool isDefaultStyle;
-
-    int  defaultOutlineLevel;
-    bool shouldBreakChapter;
-    bool inUse;
-
-    QHash<QString, QString> attributes;
-};
-
-
 // This class makes some data from the KoStore easily accessible
 // during the traversal. When you create a filter you should create
 // your own context class that inherits the OdtTraverserContext and
@@ -79,7 +63,6 @@ class ODFTRAVERSE_EXPORT OdtTraverserContext {
     // NOTE: QHash is implicitly shared and making a copy is cheap.
     QHash<QString, QString>    metadata() const;
     QHash<QString, QString>    manifest() const;
-    QHash<QString, StyleInfo*> styles() const;
 
     // This data is created during the traversal and can be accessed
     // after the traversal is finished.
