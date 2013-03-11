@@ -41,8 +41,6 @@
 #include "OdtTraverserBackend.h"
 
 
-
-
 OdtTraverser::OdtTraverser()
 {
 }
@@ -257,8 +255,26 @@ void OdtTraverser::handleTagSpan(KoXmlElement &element)
 void OdtTraverser::handleTagS(KoXmlElement &element)
 {
     m_backend->beginTagS(element, m_context);
-    handleInsideElementsTag(element);
+    handleInsideElementsTag(element);  // BUG?
     m_backend->endTagS(element, m_context);
+}
+
+void OdtTraverser::handleTagTab (KoXmlElement &element)
+{
+    m_backend->beginTagTab(element, m_context);
+    m_backend->endTagTab(element, m_context);
+}
+
+void OdtTraverser::handleTagLineBreak(KoXmlElement &element)
+{
+    m_backend->beginTagLineBreak(element, m_context);
+    m_backend->endTagLineBreak(element, m_context);
+}
+
+void OdtTraverser::handleTagPageBreak(KoXmlElement &element)
+{
+    m_backend->beginTagPageBreak(element, m_context);
+    m_backend->endTagPageBreak(element, m_context);
 }
 
 void OdtTraverser::handleCharacterData(KoXmlNode &node)
@@ -266,6 +282,23 @@ void OdtTraverser::handleCharacterData(KoXmlNode &node)
     // FIXME: Do we really need two calls here?  Doubtful...
     m_backend->beginCharacterData(node, m_context);
     m_backend->endCharacterData(node, m_context);
+}
+
+
+void OdtTraverser::handleTagList(KoXmlElement &element)
+{
+    m_backend->beginTagList(element, m_context);
+
+#if 0  // FIXME: Find out how to handle list items in ODT
+    KoXmlElement listItem;
+    forEachElement (listItem, element) {
+        htmlWriter->startElement("li", m_doIndent);
+        handleInsideElementsTag(listItem);
+        htmlWriter->endElement();
+    }
+#endif
+
+    m_backend->endTagList(element, m_context);
 }
 
 
@@ -609,38 +642,6 @@ void OdtTraverser::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
 
 // ----------------------------------------------------------------
 
-void OdtTraverser::handleTagPageBreak(KoXmlElement &element)
-{
-    // FIXME: NYI
-    return;
-#if 0
-    htmlWriter->addTextNode(element.text().toUtf8());
-#endif
-}
-
-void OdtTraverser::handleTagList(KoXmlElement &element)
-{
-    // FIXME: NYI
-    return;
-#if 0
-    QString styleName = cssClassName(element.attribute("style-name"));
-    StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("ul", m_doIndent);
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-
-    KoXmlElement listItem;
-    forEachElement (listItem, element) {
-        htmlWriter->startElement("li", m_doIndent);
-        handleInsideElementsTag(listItem);
-        htmlWriter->endElement();
-    }
-    htmlWriter->endElement();
-#endif
-}
-
 void OdtTraverser::handleTagA(KoXmlElement &element)
 {
     // FIXME: NYI
@@ -663,16 +664,6 @@ void OdtTraverser::handleTagA(KoXmlElement &element)
 
     handleInsideElementsTag(element);
     htmlWriter->endElement();
-#endif
-}
-
-void OdtTraverser::handleTagTab (KoXmlElement &element)
-{
-    // FIXME: NYI
-    return;
-#if 0
-    for (int i = 0; i <10; ++i)
-        htmlWriter->addTextNode("\u00a0");
 #endif
 }
 
@@ -701,16 +692,6 @@ void OdtTraverser::handleTagTableOfContentBody(KoXmlElement &element)
     if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
         handleTagP(element);
     }
-#endif
-}
-
-void OdtTraverser::handleTagLineBreak(KoXmlElement &element)
-{
-    // FIXME: NYI
-    return;
-#if 0
-    htmlWriter->startElement("br", m_doIndent);
-    htmlWriter->endElement();
 #endif
 }
 
@@ -801,43 +782,6 @@ void OdtTraverser::handleTagNote(KoXmlElement &element)
                 // to can add reference for text in end note
             }
         }
-    }
-#endif
-}
-
-// ----------------------------------------------------------------
-
-
-void OdtTraverser::collectInternalLinksInfo(KoXmlElement &currentElement, int &chapter)
-{
-    // FIXME: NYI
-    return;
-#if 0
-    KoXmlElement element;
-    forEachElement (element, currentElement) {
-        if ( (element.localName() == "p" || element.localName() == "h")
-             && element.namespaceURI() == KoXmlNS::text)
-        {
-            // A break-before in the style means create a new chapter here,
-            // but only if it is a top-level paragraph and not at the very first node.
-            StyleInfo *style = m_styles.value(element.attribute("style-name"));
-            if (m_options->doBreakIntoChapters && style && style->shouldBreakChapter) {
-                chapter++;
-            }
-        }
-        else if ((element.localName() == "bookmark-start" || element.localName() == "bookmark")
-                  && element.namespaceURI() == KoXmlNS::text) {
-            QString key = "#" + element.attribute("name");
-            QString value = m_collector->filePrefix();
-            if (m_options->doBreakIntoChapters)
-                value += QString::number(chapter);
-            value += m_collector->fileSuffix();
-            m_linksInfo.insert(key, value);
-            continue;
-        }
-
-        // Check for links recursively also inside this element.
-        collectInternalLinksInfo(element, chapter);
     }
 #endif
 }

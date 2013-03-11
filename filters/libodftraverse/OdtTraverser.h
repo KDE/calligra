@@ -65,35 +65,34 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     void handleTagH(KoXmlElement &element);
     void handleTagSpan(KoXmlElement &element);
     void handleTagS(KoXmlElement &element);
+    void handleTagTab(KoXmlElement &element);
+    void handleTagLineBreak(KoXmlElement &element);
+    void handleTagPageBreak(KoXmlElement &element);
     void handleCharacterData(KoXmlNode &node);
 
+    void handleTagList(KoXmlElement &element);
+    //--
     void handleTagTable(KoXmlElement &element);
     void handleTagTableRow(KoXmlElement &element, TableCellType type = TableDataType);
 
     void handleTagA(KoXmlElement &element);
 
-    void handleTagPageBreak(KoXmlElement &element);
-    void handleTagList(KoXmlElement &element);
-
+    // Embedded stuff
     void handleTagFrame(KoXmlElement &element);
     void handleEmbeddedFormula(const QString &href);
     void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
                         QHash<QString, QString> &unknownNamespaces);
 
 
-    void handleTagTab(KoXmlElement &element);
     void handleTagTableOfContent(KoXmlElement &element);
     void handleTagTableOfContentBody(KoXmlElement &element);
 
-    void handleTagLineBreak(KoXmlElement &element);
     void handleTagBookMark(KoXmlElement &element);
     void handleTagBookMarkStart(KoXmlElement &element);
     void handleTagBookMarkEnd(KoXmlElement &element);
 
     void handleUnknownTags(KoXmlElement &element);
     void handleTagNote(KoXmlElement &element);
-
-    void collectInternalLinksInfo(KoXmlElement &currentElement, int &chapter);
 
  private:
     OdtTraverserBackend  *m_backend;

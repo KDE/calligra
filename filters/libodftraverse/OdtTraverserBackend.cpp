@@ -225,6 +225,48 @@ void OdtTraverserBackend::endTagS(KoXmlElement &element,
     Q_UNUSED(context);
 }
 
+void OdtTraverserBackend::beginTagTab(KoXmlElement &element,
+                                      OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
+void OdtTraverserBackend::endTagTab(KoXmlElement &element,
+                                    OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
+void OdtTraverserBackend::beginTagLineBreak(KoXmlElement &element,
+                                            OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
+void OdtTraverserBackend::endTagLineBreak(KoXmlElement &element,
+                                          OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
+void OdtTraverserBackend::beginTagPageBreak(KoXmlElement &element,
+                                            OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
+void OdtTraverserBackend::endTagPageBreak(KoXmlElement &element,
+                                          OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
 void OdtTraverserBackend::beginCharacterData(KoXmlNode &node,
                                              OdtTraverserContext *context)
 {
@@ -236,6 +278,21 @@ void OdtTraverserBackend::endCharacterData(KoXmlNode &node,
                                            OdtTraverserContext *context)
 {
     Q_UNUSED(node);
+    Q_UNUSED(context);
+}
+
+
+void OdtTraverserBackend::beginTagList(KoXmlElement &element,
+                                       OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+}
+
+void OdtTraverserBackend::endTagList(KoXmlElement &element,
+                                     OdtTraverserContext *context)
+{
+    Q_UNUSED(element);
     Q_UNUSED(context);
 }
 
@@ -286,35 +343,6 @@ void OdtTraverserBackend::endTagA(KoXmlElement &element,
 }
 
 
-void OdtTraverserBackend::beginTagPageBreak(KoXmlElement &element,
-                                            OdtTraverserContext *context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-}
-
-void OdtTraverserBackend::endTagPageBreak(KoXmlElement &element,
-                                          OdtTraverserContext *context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-}
-
-void OdtTraverserBackend::beginTagList(KoXmlElement &element,
-                                       OdtTraverserContext *context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-}
-
-void OdtTraverserBackend::endTagList(KoXmlElement &element,
-                                     OdtTraverserContext *context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-}
-
-
 void OdtTraverserBackend::beginTagFrame(KoXmlElement &element,
                                         OdtTraverserContext *context)
 {
@@ -344,20 +372,6 @@ void OdtTraverserBackend::endEmbeddedFormula(const QString &href,
 }
 
 
-void OdtTraverserBackend::beginTagTab(KoXmlElement &element,
-                                      OdtTraverserContext *context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-}
-
-void OdtTraverserBackend::endTagTab(KoXmlElement &element,
-                                    OdtTraverserContext *context)
-{
-    Q_UNUSED(element);
-    Q_UNUSED(context);
-}
-
 void OdtTraverserBackend::beginTagTableOfContent(KoXmlElement &element,
                                                  OdtTraverserContext *context)
 {
@@ -386,16 +400,6 @@ void OdtTraverserBackend::endTagTableOfContentBody(KoXmlElement &element,
     Q_UNUSED(context);
 }
 
-
-void OdtTraverserBackend::beginTagLineBreak(OdtTraverserContext *context)
-{
-    Q_UNUSED(context);
-}
-
-void OdtTraverserBackend::endTagLineBreak(OdtTraverserContext *context)
-{
-    Q_UNUSED(context);
-}
 
 void OdtTraverserBackend::beginTagBookMark(KoXmlElement &element,
                                            OdtTraverserContext *context)
