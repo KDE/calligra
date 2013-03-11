@@ -14,74 +14,19 @@ class KConfigGroup : public KConfigBase
 {
 public:
     KConfigGroup(const QString &path = QByteArray()) : KConfigBase(path) {}
-    KConfigGroup(KConfigBase *master, const QString &group) : KConfigBase(master->m_path + "/" + group.toUtf8()) {}
-    KConfigGroup(KConfigBase *master, const char *group) : KConfigBase(master->m_path + "/" + group) {}
-    KConfigGroup(const KSharedConfigPtr &master, const QString &group) : KConfigBase(master->m_path + "/" + group.toUtf8()) {}
-    KConfigGroup(const KSharedConfigPtr &master, const char *group) : KConfigBase(master->m_path + "/" + group) {}
+    KConfigGroup(KConfigBase *master, const QString &group) : KConfigBase((master ? master->m_path + "/" : QString()) + group) {}
+    KConfigGroup(KConfigBase *master, const char *group) : KConfigBase((master ? master->m_path + "/" : QString()) + QString::fromUtf8(group)) {}
+    KConfigGroup(const KSharedConfigPtr &master, const QString &group) : KConfigBase((master ? master->m_path + "/" : QString()) + group.toUtf8()) {}
+    KConfigGroup(const KSharedConfigPtr &master, const char *group) : KConfigBase((master ? master->m_path : QString()) + "/" + QString::fromUtf8(group)) {}
 
-#if 0
-/**
-     * Constructs an invalid group.
-     *
-     * \see isValid
-     */
-    KConfigGroup();
+    bool isValid() const { return true; }
 
-    /**
-     * Construct a config group corresponding to @p group in @p master.
-     *
-     * This allows the creation of subgroups by passing another
-     * group as @p master.
-     *
-     * @p group is the group name encoded in UTF-8.
-     */
-    KConfigGroup(KConfigBase *master, const QString &group);
-    /** Overload for KConfigGroup(KConfigBase*,const QString&) */
-    KConfigGroup(KConfigBase *master, const char *group);
+    QString name() const
+    {
+        QStringList l = m_path.split('/', QString::SkipEmptyParts);
+        return l.isEmpty() ? QString() : l.last();
+    }
 
-    /**
-     * Construct a read-only config group.
-     *
-     * A read-only group will silently ignore any attempts to write to it.
-     *
-     * This allows the creation of subgroups by passing an existing group
-     * as @p master.
-     */
-    KConfigGroup(const KConfigBase *master, const QString &group);
-    /** Overload for KConfigGroup(const KConfigBase*,const QString&) */
-    KConfigGroup(const KConfigBase *master, const char *group);
-
-    /**
-     * Creates a read-only copy of a read-only group.
-     */
-    KConfigGroup(const KConfigGroup &);
-    KConfigGroup &operator=(const KConfigGroup &);
-
-    ~KConfigGroup();
-
-    /**
-     * Whether the group is valid.
-     *
-     * A group is invalid if it was constructed without arguments.
-     *
-     * You should not call any functions on an invalid group.
-     *
-     * @return @c true if the group is valid, @c false if it is invalid.
-     */
-    bool isValid() const;
-
-    /**
-     * The name of this group.
-     *
-     * The root group is named "<default>".
-     */
-    QString name() const;
-
-#endif
-    /**
-     * Check whether the containing KConfig object acutally contains a
-     * group with this name.
-     */
     bool exists() const
     {
         QStringList parts = m_path.split('/', QString::SkipEmptyParts);
@@ -95,144 +40,36 @@ public:
         return true;
     }
 
+    void sync() {}
+    void markAsClean() {}
+
 #if 0
-    /**
-     * @reimp
-     *
-     * Syncs the parent config.
-     */
-    void sync();
-
-    /// @reimp
-    void markAsClean();
-
-    /// @reimp
     AccessMode accessMode() const;
-
-    /**
-     * Return the config object that this group belongs to
-     */
     KConfig* config();
-    /**
-     * Return the config object that this group belongs to
-     */
     const KConfig* config() const;
-
-    /**
-     * Changes the group of the object
-     *
-     * @deprecated
-     * Create another KConfigGroup from the parent of this group instead.
-     */
-#ifndef KDE_NO_DEPRECATED
-    KDE_DEPRECATED void changeGroup(const QString &group);
-#endif
-    /**
-     * Overload for changeGroup(const QString&)
-     *
-     * @deprecated
-     * Create another KConfigGroup from the parent of this group instead.
-     */
-#ifndef KDE_NO_DEPRECATED
-    KDE_DEPRECATED void changeGroup(const char *group);
-#endif
-
-    /**
-     * Copies the entries in this group to another configuration object
-     *
-     * @note @p other can be either another group or a different file.
-     *
-     * @param other  the configuration object to copy this group's entries to
-     * @param pFlags the flags to use when writing the entries to the
-     *               other configuration object
-     *
-     * @since 4.1
-     */
     void copyTo(KConfigBase *other, WriteConfigFlags pFlags = Normal) const;
-
-    /**
-     * Changes the configuration object that this group belongs to
-     *
-     * @note @p other can be another group, the top-level KConfig object or
-     * a different KConfig object entirely.
-     *
-     * If @p parent is already the parent of this group, this method will have
-     * no effect.
-     *
-     * @param parent the config object to place this group under
-     * @param pFlags the flags to use in determining which storage source to
-     *               write the data to
-     *
-     * @since 4.1
-     */
     void reparent(KConfigBase *parent, WriteConfigFlags pFlags = Normal);
-
-    /**
-     * Returns the group that this group belongs to
-     *
-     * @return the parent group, or an invalid group if this is a top-level
-     *          group
-     *
-     * @since 4.1
-     */
     KConfigGroup parent() const;
-
-    /**
-     * @reimp
-     */
     QStringList groupList() const;
-
-    /**
-     * Returns a list of keys this group contains
-     */
     QStringList keyList() const;
-
-    /**
-     * Delete all entries in the entire group
-     *
-     * @param pFlags flags passed to KConfig::deleteGroup
-     *
-     * @see deleteEntry()
-     */
     void deleteGroup(WriteConfigFlags pFlags = Normal);
     using KConfigBase::deleteGroup;
-
-    /**
-     * Reads the value of an entry specified by @p pKey in the current group
-     *
-     * This template method makes it possible to write
-     *    QString foo = readEntry("...", QString("default"));
-     * and the same with all other types supported by QVariant.
-     *
-     * The return type of the method is simply the same as the type of the default value.
-     *
-     * @note readEntry("...", Qt::white) will not compile because Qt::white is an enum.
-     * You must turn it into readEntry("...", QColor(Qt::white)).
-     *
-     * @note Only the following QVariant types are allowed : String,
-     * StringList, List, Font, Point, Rect, Size, Color, Int, UInt, Bool,
-     * Double, LongLong, ULongLong, DateTime and Date.
-     *
-     * @param key The key to search for
-     * @param aDefault A default value returned if the key was not found
-     * @return The value for this key, or @p aDefault.
-     *
-     * @see writeEntry(), deleteEntry(), hasKey()
-     */
     template <typename T>
         inline T readEntry(const QString &key, const T &aDefault) const
             { return readCheck(key.toUtf8().constData(), aDefault); }
-    /** Overload for readEntry(const QString&, const T&) const */
     template <typename T>
         inline T readEntry(const char *key, const T &aDefault) const
             { return readCheck(key, aDefault); }
-
 #endif
 
     QVariant readEntry(const QString &key, const QVariant &aDefault) const
     {
         qWarning() << Q_FUNC_INFO << "TODO" << key;
         return aDefault;
+    }
+    QVariant readEntry(const char *key, const QVariant &aDefault) const
+    {
+        return readEntry(QString::fromUtf8(key), aDefault);
     }
 
     qreal readEntry(const QString &key, const double &aDefault) const
@@ -280,11 +117,6 @@ public:
         return readEntry(QString::fromUtf8(key), aDefault);
     }
 
-#if 0
-    /** Overload for readEntry(const QString&, const QVariant&) */
-    QVariant readEntry(const char *key, const QVariant &aDefault) const;
-#endif
-
     QString readEntry(const QString &key, const QString &aDefault = QString()) const
     {
         return readEntry(key, QVariant::fromValue<QString>(aDefault)).toString();
@@ -302,33 +134,22 @@ public:
         return readEntry(QString::fromUtf8(key), aDefault);
     }
 
-#if 0
-    /**
-     * @copydoc readEntry(const char*, const QStringList&) const
-     *
-     * @warning This function doesn't convert the items returned
-     *          to any type. It's actually a list of QVariant::String's. If you
-     *          want the items converted to a specific type use
-     *          readEntry(const char*, const QList<T>&) const
-     */
-    QVariantList readEntry(const QString &key, const QVariantList &aDefault) const;
-    /** Overload for readEntry(const QString&, const QVariantList&) */
-    QVariantList readEntry(const char *key, const QVariantList &aDefault) const;
-
-    /**
-     * Reads a list of strings from the config object
-     *
-     * @param key The key to search for
-     * @param aDefault The default value to use if the key does not exist
-     * @return The list, or @p aDefault if @p key does not exist
-     *
-     * @see readXdgListEntry(), writeEntry(), deleteEntry(), hasKey()
-     */
-#endif
+    QVariantList readEntry(const QString &key, const QVariantList &aDefault) const
+    {
+        return readEntry(key, QVariant(aDefault)).toList();
+    }
+    QVariantList readEntry(const char *key, const QVariantList &aDefault) const
+    {
+        return readEntry(QString::fromUtf8(key), aDefault);
+    }
 
     QStringList readEntry(const QString &key, const QStringList &aDefault) const
     {
         return readEntry(key, QVariant::fromValue<QStringList>(aDefault)).toStringList();
+    }
+    QStringList readEntry(const char *key, const QStringList &aDefault) const
+    {
+        return readEntry(QString::fromUtf8(key), aDefault);
     }
 
     QList<int> readEntry(const QString &key, const QList<int> &aDefault) const
@@ -344,38 +165,13 @@ public:
     }
 
 #if 0
-    /** Overload for readEntry(const QString&, const QStringList&) */
-    QStringList readEntry(const char *key, const QStringList &aDefault) const;
-
-    /**
-     * Reads a list of values from the config object
-     *
-     * @param key the key to search for
-     * @param aDefault the default value to use if the key does not exist
-     * @return the list, or @p aDefault if @p key does not exist
-     *
-     * @see readXdgListEntry(), writeEntry(), deleteEntry(), hasKey()
-     */
     template<typename T>
         inline QList<T> readEntry(const QString &key, const QList<T> &aDefault) const
             { return readListCheck(key.toUtf8().constData(), aDefault); }
-    /** Overload for readEntry(const QString&, const QList<T>&) */
     template<typename T>
         inline QList<T> readEntry(const char *key, const QList<T> &aDefault) const
             { return readListCheck(key, aDefault); }
-
-    /**
-     * Reads a list of strings from the config object, following XDG
-     * desktop entry spec separator semantics
-     *
-     * @param pKey the key to search for
-     * @param aDefault the default value to use if the key does not exist
-     * @return the list, or @p aDefault if @p pKey does not exist
-     *
-     * @see readEntry(const QString&, const QStringList&) const
-     */
     QStringList readXdgListEntry(const QString &pKey, const QStringList &aDefault = QStringList()) const;
-    /** Overload for readXdgListEntry(const QString&, const QStringList&) */
     QStringList readXdgListEntry(const char *pKey, const QStringList &aDefault = QStringList()) const;
 #endif
 
@@ -522,7 +318,6 @@ public:
     {
         writeEntry(pKey, path, pFlags);
     }
-
     void writePathEntry(const char *pKey, const QString &path, WriteConfigFlags pFlags = Normal)
     {
         writeEntry(pKey, path, pFlags);

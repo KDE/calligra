@@ -39,7 +39,7 @@ private:
         KGlobalStaticWrapperPtr() : m_data(0) {} \
         ~KGlobalStaticWrapperPtr() { delete m_data; } \
         clazz* operator ->() { if (!m_data) m_data = new clazz(); return m_data; } \
-        operator clazz*() { return m_data; } \
+        operator clazz*() { if (!m_data) m_data = new clazz(); return m_data; } \
         bool exists() const { return m_data; } \
     }; \
     static KGlobalStaticWrapperPtr inst;

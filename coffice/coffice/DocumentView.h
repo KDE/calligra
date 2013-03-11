@@ -3,6 +3,8 @@
 
 #include <QDeclarativeItem>
 
+class KoDocument;
+
 class DocumentView : public QDeclarativeItem
 {
     Q_OBJECT
@@ -17,6 +19,9 @@ public slots:
 
 protected:
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+
+private:
+    KoDocument *m_document;
 };
 
 #endif // DOCUMENTVIEW_H

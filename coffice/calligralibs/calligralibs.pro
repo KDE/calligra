@@ -31,7 +31,7 @@ SOURCES += $$files($$CALLIGRALIBS_KOTEXT_DIR/commands/*.cpp)
 #SOURCES += $$files($$CALLIGRALIBS_KOTEXT_DIR/kohyphen/*.cpp)
 SOURCES += $$files($$CALLIGRALIBS_KOTEXT_DIR/opendocument/*.cpp)
 SOURCES += $$files($$CALLIGRALIBS_KOTEXT_DIR/styles/*.cpp)
-#SOURCES -= $$files($$CALLIGRALIBS_KOTEXT_DIR/KoTextRdfCore.cpp)
+SOURCES -= $$files($$CALLIGRALIBS_KOTEXT_DIR/KoTextRdfCore.cpp)
 
 SOURCES += $$files($$CALLIGRALIBS_TEXTLAYOUT_DIR/*.cpp)
 SOURCES -= $$files($$CALLIGRALIBS_TEXTLAYOUT_DIR/KoPageProvider.cpp)
@@ -55,29 +55,8 @@ SOURCES -= $$files($$CALLIGRALIBS_MAIN_DIR/*Adaptor*.cpp)
 
 SOURCES += $$files($$CALLIGRALIBS_WIDGETSUTILS_DIR/*.cpp)
 SOURCES += $$files($$CALLIGRALIBS_WIDGETS_DIR/*.cpp)
-#SOURCES -= $$files($$CALLIGRALIBS_WIDGETS_DIR/KoResource*.cpp)
-#SOURCES -= $$files($$CALLIGRALIBS_WIDGETS_DIR/KoColor*.cpp)
-#SOURCES -= $$files($$CALLIGRALIBS_WIDGETS_DIR/KoEditColor*.cpp)
-#SOURCES -= $$files($$CALLIGRALIBS_WIDGETS_DIR/Ko*Color*.cpp)
-#SOURCES += $$files($$CALLIGRALIBS_WIDGETS_DIR/KoColorPopup*.cpp)
 
 HEADERS += calligralibs_global.h
-
-#HEADERS += \
-#    #$$CALLIGRALIBS_KDEFAKE/klimitediodevice.h \
-#    $$CALLIGRALIBS_KDEFAKE/kfilterbase.h \
-#    $$CALLIGRALIBS_KDEFAKE/kfilterdev.h \
-#    $$CALLIGRALIBS_KDEFAKE/kgzipfilter.h \
-#    $$CALLIGRALIBS_KDEFAKE/karchive.h \
-#    $$CALLIGRALIBS_KDEFAKE/ktar.h \
-#    $$CALLIGRALIBS_KDEFAKE/kzip.h \
-#    $$CALLIGRALIBS_KDEFAKE/kconfigbase.h \
-#    $$CALLIGRALIBS_KDEFAKE/kaction.h \
-#    $$CALLIGRALIBS_KDEFAKE/kactioncollection.h \
-#    $$CALLIGRALIBS_KDEFAKE/kstandardaction.h \
-#    $$CALLIGRALIBS_KDEFAKE/krecentfilesaction.h \
-#    $$CALLIGRALIBS_KDEFAKE/kcomponentdata.h \
-#    $$CALLIGRALIBS_KDEFAKE/kfilewidget.h
 
 HEADERS += $$files($$CALLIGRALIBS_KDEFAKE/*.h)
 HEADERS += $$files($$CALLIGRALIBS_KDEFAKE/kio/*.h)
@@ -90,7 +69,7 @@ HEADERS += $$files($$CALLIGRALIBS_KOTEXT_DIR/commands/*.h)
 #HEADERS += $$files($$CALLIGRALIBS_KOTEXT_DIR/kohyphen/*.h)
 HEADERS += $$files($$CALLIGRALIBS_KOTEXT_DIR/opendocument/*.h)
 HEADERS += $$files($$CALLIGRALIBS_KOTEXT_DIR/styles/*.h)
-#HEADERS -= $$files($$CALLIGRALIBS_KOTEXT_DIR/KoTextRdfCore.h)
+HEADERS -= $$files($$CALLIGRALIBS_KOTEXT_DIR/KoTextRdfCore.h)
 
 HEADERS += $$files($$CALLIGRALIBS_TEXTLAYOUT_DIR/*.h)
 HEADERS -= $$files($$CALLIGRALIBS_TEXTLAYOUT_DIR/KoPageProvider.h)
@@ -113,11 +92,6 @@ HEADERS += $$files($$CALLIGRALIBS_MAIN_DIR/config/*.h)
 
 HEADERS += $$files($$CALLIGRALIBS_WIDGETSUTILS_DIR/*.h)
 HEADERS += $$files($$CALLIGRALIBS_WIDGETS_DIR/*.h)
-#HEADERS -= $$files($$CALLIGRALIBS_WIDGETS_DIR/KoResource*.h)
-#HEADERS -= $$files($$CALLIGRALIBS_WIDGETS_DIR/KoColor*.h)
-#HEADERS -= $$files($$CALLIGRALIBS_WIDGETS_DIR/KoEditColor*.h)
-#HEADERS -= $$files($$CALLIGRALIBS_WIDGETS_DIR/Ko*Color*.h)
-#HEADERS += $$files($$CALLIGRALIBS_WIDGETS_DIR/KoColorPopup*.h)
 
 FORMS += $$files($$CALLIGRALIBS_FLAKE_DIR/*.ui)
 FORMS += $$files($$CALLIGRALIBS_FLAKE_DIR/tools/*.ui)

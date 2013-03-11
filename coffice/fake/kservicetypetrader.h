@@ -6,6 +6,7 @@
 
 #include <kurl.h>
 #include <kservice.h>
+#include <kpluginloader.h>
 
 // const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
 // KService::List plugins;

@@ -17,7 +17,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //ctxt->setContextProperty("Manager", &donkeyManager);
 
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.setMainQmlFile(QLatin1String("qml/coffice/main.qml"));
+    //viewer.setMainQmlFile(QLatin1String("qml/coffice/main.qml"));
+    viewer.setMainQmlFile(QLatin1String("/home/snoopy/src/calligra/coffice/coffice/qml/coffice/main.qml"));
     viewer.showExpanded();
 
     return app->exec();

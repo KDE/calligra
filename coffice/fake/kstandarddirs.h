@@ -230,7 +230,7 @@ public:
     QStringList findAllResources( const char *type, const QString& filter = QString(), SearchOptions options = NoSearchOptions ) const
     {
         qDebug() << Q_FUNC_INFO << type << filter << options;
-        Q_ASSERT(false);
+        //Q_ASSERT(false);
         return QStringList();
     }
 
@@ -241,7 +241,7 @@ public:
     QStringList findAllResources( const char *type, const QString& filter, SearchOptions options, QStringList &relPaths) const
     {
         qDebug() << Q_FUNC_INFO << type << filter << options;
-        Q_ASSERT(false);
+        //Q_ASSERT(false);
         return QStringList();
     }
 
@@ -504,7 +504,8 @@ public:
      **/
     static QString locate( const char *type, const QString& filename, const KComponentData &cData = KGlobal::mainComponent() )
     {
-        Q_ASSERT(false);
+        qDebug() << Q_FUNC_INFO << type << filename;
+        //Q_ASSERT(false);
         return QString();
     }
 

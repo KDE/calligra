@@ -1,7 +1,7 @@
-include($${TOP_SOURCE_DIR}/common.pri)
-
 TEMPLATE = app
 TARGET = coffice
+
+include($${TOP_SOURCE_DIR}/common.pri)
 
 #QT += core gui xml sql network widgets
 QT += core gui xml svg declarative
@@ -30,9 +30,9 @@ win32 {
 }
 
 # Add more folders to ship with the application, here
-#folder_01.source = qml/calligradocuments
-#folder_01.target = qml
-#DEPLOYMENTFOLDERS = folder_01
+folder_01.source = qml/coffice
+folder_01.target = qml
+DEPLOYMENTFOLDERS = folder_01
 
 # Additional import path used to resolve QML modules in Creator's code model
 #QML_IMPORT_PATH =
@@ -52,10 +52,6 @@ SOURCES += main.cpp \
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../calligralibs-build-b32659-Release/release -lcalligralibs
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../calligralibs-build-b32659-Release/debug -lcalligralibs
-#else:unix: LIBS += -L$$PWD/../calligralibs-build-b32659-Release/ -lcalligralibs
 
 #INCLUDEPATH += $$PWD/../calligralibs
 #DEPENDPATH += $$PWD/../calligralibs

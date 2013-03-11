@@ -34,7 +34,7 @@ class GUIActivateEvent : public Event
 public:
     GUIActivateEvent(bool activated) : Event(KPARTS_EVENT_TYPE), m_activated(activated) {}
     GUIActivateEvent(QEvent::Type t, bool activated) : Event(t), m_activated(activated) {}
-    bool activated() const {}
+    bool activated() const { return m_activated; }
     static bool test( const QEvent *event ) { return dynamic_cast<const GUIActivateEvent*>(event); }
 private:
     bool m_activated;
