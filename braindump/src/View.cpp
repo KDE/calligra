@@ -43,6 +43,7 @@
 #include <KoCopyController.h>
 #include "KoZoomController.h"
 #include <KoZoomAction.h>
+#include <KoPluginLoader.h>
 
 #include "Canvas.h"
 #include "RootSection.h"
@@ -62,7 +63,6 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
-#include <KServiceTypeTrader>
 
 #include "KoOdf.h"
 #include "KoShapeGroup.h"
@@ -212,22 +212,15 @@ void View::initActions()
 
 void View::loadExtensions()
 {
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Braindump/Extensions"),
-                            QString::fromLatin1("(Type == 'Service') && "
-                                    "([X-Braindump-Version] == 27)"));
-    KService::List::ConstIterator iter;
-    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-
-        KService::Ptr service = *iter;
-        QString error;
-        KParts::Plugin* plugin =
-            service->createInstance<KParts::Plugin> (this, QVariantList(), &error);
-        if(plugin) {
-            insertChildClient(plugin);
-        } else {
-            if(!error.isEmpty()) {
-                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
-            }
+    QList<QObject*> plugins =
+            KoPluginLoader::instance()->retrievePlugins(this,
+                                                        QString::fromLatin1("Braindump/Extensions"),
+                                                        QString::fromLatin1("[X-Braindump-Version] == 27"));
+    foreach(QObject *plugin, plugins) {
+        KParts::Plugin* part = qobject_cast<KParts::Plugin*>(plugin);
+        qDebug() << "loaded" << part;
+        if (part) {
+            insertChildClient(part);
         }
     }
 }
