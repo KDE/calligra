@@ -75,7 +75,6 @@ set(wordsprivate_LIB_SRCS
     author/CAuView.cpp
     author/CAuPart.cpp
     author/CoverImage.cpp
-    author/CoverPreviewTool.cpp
     author/CoverSelectionDialog.cpp
 )
 if( Soprano_FOUND )
