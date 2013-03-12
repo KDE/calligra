@@ -27,16 +27,12 @@
 #include "KoShape.h"
 #include "KoShapeLoadingContext.h"
 
+#include <KoPluginLoader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
 
-#include <kservice.h>
-#include <kservicetypetrader.h>
-
 #include <QMutexLocker>
 #include <QMutex>
-
-
 
 #include <kdebug.h>
 
@@ -246,17 +242,13 @@ void KoShapeFactoryBase::getDeferredPlugin()
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
-    const QString serviceType = "Calligra/Deferred";
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, QString());
-    Q_ASSERT(offers.size() > 0);
-
-    foreach(KSharedPtr<KService> service, offers) {
-        KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
+    QList<QObject *> deferredPlugins = KoPluginLoader::instance()->retrievePlugins(this, "Calligra/Deferred");
+    foreach(QObject *deferredPlugin, deferredPlugins) {
+        KoDeferredShapeFactoryBase *plugin = qobject_cast<KoDeferredShapeFactoryBase*>(deferredPlugin);
         if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;
         }
     }
-
 }
 
 void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *obj)
