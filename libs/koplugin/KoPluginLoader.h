@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QSharedPointer>
 
 #include "koplugin_export.h"
 
@@ -109,9 +110,10 @@ public:
      * @param serviceType The string used to identify the plugins.
      * @param versionString A string match that allows you to check for a specific version
      * @param config when passing a valid config only the wanted plugins are actually loaded
-     * @return a list of services (by library name) that were not know in the config
+     * @return the loaded plugins. This can be disregared (the plugin will be deleted) or
+     * used and cast to something specific.
      */
-    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig());
+    QList<QSharedPointer<QObject> > load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig());
 
 private:
     KoPluginLoader();

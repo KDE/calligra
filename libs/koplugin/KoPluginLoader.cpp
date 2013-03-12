@@ -52,11 +52,13 @@ KoPluginLoader* KoPluginLoader::instance()
     return s_instance;
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config)
+QList<QSharedPointer<QObject> > KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config)
 {
+    QList<QSharedPointer<QObject> > loadedPlugins;
+
     // Don't load the same plugins again
     if (d->loadedServiceTypes.contains(serviceType)) {
-        return;
+        return loadedPlugins;
     }
     // kDebug( 30003 ) <<"KoPluginLoader::load" << serviceType << kBacktrace();
     d->loadedServiceTypes << serviceType;
@@ -123,7 +125,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         if (plugin) {
             whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name")).toString();
             kDebug(30003) << "Loaded plugin" << service->name();
-            delete plugin;
+            loadedPlugins.append(QSharedPointer<QObject>(plugin));
         } else {
             kWarning(30003) << "Loading plugin" << service->name() << "failed, " << error;
         }
@@ -134,6 +136,8 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }
+
+    return loadedPlugins;
 }
 
 #include <KoPluginLoader.moc>
