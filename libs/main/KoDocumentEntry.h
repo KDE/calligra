@@ -87,19 +87,6 @@ public:
      */
     KoPart *createKoPart(QString* errorMsg = 0) const;
 
-    enum QueryFlag {
-        AllEntries = 0,
-        /**
-         * OnlyEmbeddableDocuments specifies if only Calligra Parts should be
-         * listed which are embeddable into other koDocuments, or all (if false)
-         * (eg.: it makes no sense to embed Kexi into Words,
-         *  but it makes sense to embed it into KoShell)
-         */
-        OnlyEmbeddableDocuments = 1
-        // bitfield
-    };
-    Q_DECLARE_FLAGS(QueryFlags, QueryFlag)
-
     /**
      *  This function will query ksycoca to find all available components.
      *  The result will only contain parts, which are embeddable into a document
@@ -108,7 +95,7 @@ public:
      *                 You can use it to set additional restrictions on the available
      *                 components.
      */
-    static QList<KoDocumentEntry> query(QueryFlags flags, const QString &  _constr = QString());
+    static QList<KoDocumentEntry> query(const QString &  _constr = QString());
 
     /**
      *  This is a convenience function.
@@ -122,6 +109,5 @@ private:
     KService::Ptr m_service;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoDocumentEntry::QueryFlags)
 
 #endif
