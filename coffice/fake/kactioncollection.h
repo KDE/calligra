@@ -14,6 +14,7 @@ class KActionCollection : public QObject
 {
     Q_OBJECT
 public:
+    KActionCollection(QObject *parent = 0) : QObject(parent) {}
     QAction* action(const QString &name) const {
         int index = m_actionNames.lastIndexOf(name);
         return index < 0 ? 0 : m_actions[index];

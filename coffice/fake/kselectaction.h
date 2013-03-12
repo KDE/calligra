@@ -12,6 +12,7 @@ public:
     KSelectAction(QObject *parent = 0) : KAction(parent) { init(); }
     KSelectAction(const QString &text, QObject *parent) : KAction(text, parent) { init(); }
     KSelectAction(const KIcon &icon, const QString &text, QObject *parent) : KAction(icon, text, parent) { init(); }
+    virtual ~KSelectAction() { delete m_menu; }
 
     void clear() {
         while(!m_group->actions().isEmpty())
@@ -50,8 +51,13 @@ public:
     QAction* currentAction() const { return m_group->checkedAction(); }
     QString currentText() const { return currentAction() ? currentAction()->text() : QString(); }
 
-    void setCurrentAction(QAction *a) { if (a) a->setChecked(true); }
-    void setCurrentItem(int i) { setCurrentAction(actions().at(i)); }
+    void setCurrentAction(QAction *a) {
+        if (a)
+            a->setChecked(true);
+        else if (currentAction())
+            currentAction()->setChecked(false);
+    }
+    void setCurrentItem(int i) { setCurrentAction(i > -1 && i < actions().count() ? actions().at(i) : 0); }
     void setCurrentAction(const QString &text) { setCurrentItem(items().indexOf(text)); }
 
     QStringList items() const {
@@ -88,14 +94,18 @@ protected Q_SLOTS:
         if (!checked && currentAction())
             currentAction()->setChecked(false);
     }
+
 private:
     QActionGroup *m_group;
     bool m_isEditable;
+    QMenu *m_menu;
 
     void init() {
         m_group = new QActionGroup(this);
         m_group->setExclusive(true);
         m_isEditable = false;
+        m_menu = new QMenu();
+        setMenu(m_menu);
         QObject::connect(m_group, SIGNAL(triggered(QAction*)), this, SLOT(actionTriggered(QAction*)));
         QObject::connect(this, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
     }

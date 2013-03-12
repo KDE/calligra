@@ -30,13 +30,13 @@ public:
     static Ptr findByContent( const QByteArray &data, int *accuracy=0 )
     {
         qWarning() << Q_FUNC_INFO << "TODO";
-        return Ptr();
+        return defaultMimeTypePtr();
     }
     
     static Ptr mimeType( const QString& name, FindByNameOption options = ResolveAliases )
     {
         qWarning() << Q_FUNC_INFO << "TODO" << name;
-        return Ptr();
+        return defaultMimeTypePtr();
     }
 
     bool is( const QString& mimeTypeName ) const
@@ -90,13 +90,13 @@ public:
     static Ptr findByUrl( const KUrl& url, mode_t mode = 0, bool is_local_file = false, bool fast_mode = false, int *accuracy = 0 )
     {
         qWarning() << Q_FUNC_INFO << "TODO" << url;
-        return Ptr();
+        return defaultMimeTypePtr();
     }
 
     static Ptr findByPath( const QString& path, mode_t mode = 0, bool fast_mode = false, int* accuracy = 0 )
     {
         qWarning() << Q_FUNC_INFO << "TODO" << path;
-        return Ptr();
+        return defaultMimeTypePtr();
     }
 
 #if 0
@@ -216,6 +216,8 @@ public:
     {
         //static KMimeType::Ptr defaultmimetype = KMimeType::Ptr(new KMimeType(defaultMimeType()));
         static KMimeType::Ptr defaultmimetype;
+        if (!defaultmimetype)
+            defaultmimetype = Ptr(new KMimeType());
         return defaultmimetype;
     }
 

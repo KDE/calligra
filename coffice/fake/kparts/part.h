@@ -133,7 +133,7 @@ namespace KParts {
             }
             m_url = url;
             m_args = OpenUrlArguments();
-            return true;
+            return openFile();
         }
     public:
         KUrl url() const { return m_url; }
@@ -159,10 +159,7 @@ namespace KParts {
         virtual bool doWriteStream( const QByteArray& /*data*/ ) { return false; }
         virtual bool doCloseStream() { return false; }
     protected:
-        virtual bool openFile() {
-            qDebug() << Q_FUNC_INFO;
-            return true;
-        }
+        virtual bool openFile() { qWarning() << Q_FUNC_INFO; return false; }
         void abortLoad() {}
         virtual void guiActivateEvent( GUIActivateEvent *event ) {}
         // #ifndef KDE_NO_DEPRECATED

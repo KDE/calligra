@@ -16,6 +16,7 @@ public:
     typedef KSharedPtr<KServiceType> Ptr;
     typedef QList<Ptr> List;
 
+    KServiceType() {}
     KServiceType( KDesktopFile *config ) {}
     KServiceType( QDataStream& _str, int offset ) {}
 

@@ -3,7 +3,10 @@
 
 #include <QDeclarativeItem>
 
-class KoDocument;
+class QGraphicsProxyWidget;
+
+class KoPart;
+class KoView;
 
 class DocumentView : public QDeclarativeItem
 {
@@ -15,13 +18,17 @@ public:
 signals:
     
 public slots:
-    bool loadFile(const QString &file);
+    bool openFile(const QString &file);
 
 protected:
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 
 private:
-    KoDocument *m_document;
+    KoPart *m_part;
+    KoView* m_view;
+    QGraphicsProxyWidget *m_proxyWidget;
+
+    bool init();
 };
 
 #endif // DOCUMENTVIEW_H

@@ -18,13 +18,14 @@ class KXMLGUIBuilder
 class KXMLGUIClient
 {
 public:
-    KXMLGUIClient(KXMLGUIClient *parent = 0) : m_factory(0) {}
+    KXMLGUIClient(KXMLGUIClient *parent = 0) : m_factory(0), m_builder(0), m_actionCollection(new KActionCollection()) {}
+    virtual ~KXMLGUIClient() { delete m_actionCollection; }
 
     static KAction* action(const QByteArray &name) { return 0; }
 
-    QAction* action( const char* name ) const { return 0; }
+    QAction* action( const char* name ) const { return m_actionCollection->action(name); }
     virtual QAction *action( const QDomElement &element ) const { return 0; }
-    virtual KActionCollection* actionCollection() const { return 0; }
+    virtual KActionCollection* actionCollection() const { return m_actionCollection; }
     virtual KComponentData componentData() const { return KGlobal::mainComponent(); }
     virtual QDomDocument domDocument() const { return QDomDocument(); }
     virtual QString xmlFile() const { return QString(); }
@@ -37,8 +38,8 @@ public:
     void insertChildClient( KXMLGUIClient *child ) {}
     void removeChildClient( KXMLGUIClient *child ) {}
     QList<KXMLGUIClient*> childClients() { return QList<KXMLGUIClient*>(); }
-    void setClientBuilder( KXMLGUIBuilder *builder ) {}
-    KXMLGUIBuilder *clientBuilder() const { return 0; }
+    void setClientBuilder( KXMLGUIBuilder *builder ) { m_builder = builder; }
+    KXMLGUIBuilder *clientBuilder() const { return m_builder; }
     void reloadXML() {}
     void plugActionList( const QString &name, const QList<QAction*> &actionList ) {}
     void unplugActionList( const QString &name ) {}
@@ -64,6 +65,8 @@ protected:
 
 private:
     KXMLGUIFactory *m_factory;
+    KXMLGUIBuilder *m_builder;
+    KActionCollection *m_actionCollection;
 };
 
 #endif
