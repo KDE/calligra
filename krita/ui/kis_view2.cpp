@@ -54,8 +54,6 @@
 #include <kparts/componentfactory.h>
 #include <kparts/event.h>
 #include <kparts/plugin.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kstandardaction.h>
 #include <kurl.h>
 #include <kxmlguiwindow.h>
@@ -63,6 +61,7 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
+#include <KoPluginLoader.h>
 #include <KoStore.h>
 #include <KoMainWindow.h>
 #include <KoSelection.h>
@@ -391,7 +390,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     qApp->setStartDragDistance(25);
     show();
 
-
+    qDebug() << ">>>>>>>>>>> Node manager" << m_d->nodeManager;
     loadPlugins();
 
     // Wait for the async image to have loaded
@@ -956,22 +955,14 @@ void KisView2::slotNodeChanged()
 
 void KisView2::loadPlugins()
 {
-    // Load all plugins
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 27)"));
-    KService::List::ConstIterator iter;
-    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-        KService::Ptr service = *iter;
-        dbgUI << "Load plugin " << service->name();
-        QString error;
-
-        KParts::Plugin* plugin =
-                dynamic_cast<KParts::Plugin*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if (plugin) {
-            insertChildClient(plugin);
-        } else {
-            errKrita << "Fail to create an instance for " << service->name() << " " << error;
+    QList<QObject*> plugins =
+            KoPluginLoader::instance()->retrievePlugins(this,
+                                                        QString::fromLatin1("Krita/ViewPlugin"),
+                                                        QString::fromLatin1("[X-Krita-Version] == 27"));
+    foreach(QObject *plugin, plugins) {
+        KParts::Plugin* part = qobject_cast<KParts::Plugin*>(plugin);
+        if (part) {
+            insertChildClient(part);
         }
     }
 }
