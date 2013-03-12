@@ -218,7 +218,6 @@ void View::loadExtensions()
                                                         QString::fromLatin1("[X-Braindump-Version] == 27"));
     foreach(QObject *plugin, plugins) {
         KParts::Plugin* part = qobject_cast<KParts::Plugin*>(plugin);
-        qDebug() << "loaded" << part;
         if (part) {
             insertChildClient(part);
         }
