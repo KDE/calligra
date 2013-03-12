@@ -26,9 +26,9 @@
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <KGlobal>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class KoPluginLoader::Private
 {
@@ -52,25 +52,40 @@ KoPluginLoader* KoPluginLoader::instance()
     return s_instance;
 }
 
-QList<QSharedPointer<QObject> > KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config)
+void KoPluginLoader::KoPluginLoader::load(const QString &serviceType, const QString &versionString, const PluginsConfig &config)
 {
-    QList<QSharedPointer<QObject> > loadedPlugins;
+    qDeleteAll(retrievePlugins(0, serviceType, versionString, config));
+}
+
+QList<QObject*> KoPluginLoader::retrievePlugins(QObject *parent, const QString &serviceType, const QString &versionString, const PluginsConfig &config)
+{
+    QList<QObject*> loadedPlugins;
 
     // Don't load the same plugins again
     if (d->loadedServiceTypes.contains(serviceType)) {
+        kDebug(30003) << "We already loaded" << serviceType << "before, not loading it again.";
         return loadedPlugins;
     }
-    // kDebug( 30003 ) <<"KoPluginLoader::load" << serviceType << kBacktrace();
+    kDebug(30003) <<"Going to load" << serviceType;
+
     d->loadedServiceTypes << serviceType;
+
     QString query = QString::fromLatin1("(Type == 'Service')");
     if (!versionString.isEmpty()) {
         query += QString::fromLatin1(" and (%1)").arg(versionString);
     }
+    kDebug(30003) << "Query:" << query;
+
 
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+
+    kDebug() << "returns" << offers << "offers";
+
     KService::List plugins;
+
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
+
     if (config.whiteList && config.blacklist && config.group) {
         kDebug(30003) << "Loading" << serviceType << "with checking the config";
         KConfigGroup configGroup = KGlobal::config()->group(config.group);
@@ -91,14 +106,17 @@ QList<QSharedPointer<QObject> > KoPluginLoader::load(const QString & serviceType
             }
             if (whiteList.contains(pluginName)) {
                 plugins.append(service);
-            } else if (!firstStart && !knownList.contains(pluginName)) { // also load newly installed plugins.
+            }
+            else if (!firstStart && !knownList.contains(pluginName)) { // also load newly installed plugins.
                 plugins.append(service);
                 configChanged = true;
-            } else {
+            }
+            else {
                 blacklist << pluginName;
             }
         }
-    } else {
+    }
+    else {
         plugins = offers;
     }
 
@@ -121,11 +139,11 @@ QList<QSharedPointer<QObject> > KoPluginLoader::load(const QString & serviceType
     QList<QString> whiteList;
     foreach(KSharedPtr<KService> service, serviceNames) {
         QString error = 0;
-        QObject * plugin = service->createInstance<QObject>(this, QVariantList(), &error);
+        QObject * plugin = service->createInstance<QObject>(parent, QVariantList(), &error);
         if (plugin) {
             whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name")).toString();
             kDebug(30003) << "Loaded plugin" << service->name();
-            loadedPlugins.append(QSharedPointer<QObject>(plugin));
+            loadedPlugins.append(plugin);
         } else {
             kWarning(30003) << "Loading plugin" << service->name() << "failed, " << error;
         }

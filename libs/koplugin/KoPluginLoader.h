@@ -22,7 +22,6 @@
 
 #include <QObject>
 #include <QStringList>
-#include <QSharedPointer>
 
 #include "koplugin_export.h"
 
@@ -105,6 +104,25 @@ public:
      * KoPluginLoader::instance()->load("Calligra/Flake", "([X-Flake-PluginVersion] == 27)");
      * This method allows you to optionally limit the plugins that are loaded by version, but also
      * using a user configurable set of config options.
+     *
+     * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the
+     * application config file.  New plugins found since last start will be automatically loaded.
+     *
+     * The objects loaded are discarded. This is useful for plugins that on loading add something
+     * to a registry.
+     *
+     * @param serviceType The string used to identify the plugins.
+     * @param versionString A string match that allows you to check for a specific version
+     * @param config when passing a valid config only the wanted plugins are actually loaded
+     */
+    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig());
+
+    /**
+     * Load all plugins that conform to the versiontype and versionstring,
+     * for instance:
+     * KoPluginLoader::instance()->load("Calligra/Flake", "([X-Flake-PluginVersion] == 27)");
+     * This method allows you to optionally limit the plugins that are loaded by version, but also
+     * using a user configurable set of config options.
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the
      * application config file.  New plugins found since last start will be automatically loaded.
      * @param serviceType The string used to identify the plugins.
@@ -113,7 +131,7 @@ public:
      * @return the loaded plugins. This can be disregared (the plugin will be deleted) or
      * used and cast to something specific.
      */
-    QList<QSharedPointer<QObject> > load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig());
+    QList<QObject*> retrievePlugins(QObject *parent, const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig());
 
 private:
     KoPluginLoader();
