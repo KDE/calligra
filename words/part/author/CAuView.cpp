@@ -21,7 +21,6 @@
 #include "CAuView.h"
 #include "CAuFactory.h"
 #include "CoverImage.h"
-#include "CoverPreviewTool.h"
 #include "CoverSelectionDialog.h"
 
 #include "KWDocument.h"
