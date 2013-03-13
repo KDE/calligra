@@ -7,6 +7,7 @@ Rectangle {
     height: 200
 
     Calligra.TextDocumentCanvas {
+        id: canvas
         source: "/home/shaan/Documents/all/Resume.odt"
         anchors.fill: parent
         zoomMode: Calligra.TextDocumentCanvas.ZOOM_WIDTH
@@ -14,6 +15,12 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: parent.searchTerm = 'Shantanu'
+        }
+
+        ListView {
+            anchors.fill: parent
+            model: canvas.documentModel
+            delegate: Image { source: decoration }
         }
     }
 }

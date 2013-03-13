@@ -4,6 +4,8 @@ set(calligraqtquickcomponents_SRCS
     CalligraQtQuickComponentsPlugin.cpp
     CQCanvasController.cpp
     CQTextDocumentCanvas.cpp
+    CQTextDocumentModel.cpp
+    CQImageProvider.cpp
     )
 
 include_directories(

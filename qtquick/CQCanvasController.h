@@ -24,8 +24,9 @@
 #define CQCANVASCONTROLLER_H
 
 #include <libs/flake/KoCanvasController.h>
-#include <QSize>
-#include <QPoint>
+
+#include <QtCore/QSize>
+#include <QtCore/QPoint>
 
 class KoCanvasBase;
 class CQCanvasController : public KoCanvasController

@@ -21,12 +21,22 @@
 #include "CalligraQtQuickComponentsPlugin.h"
 
 #include "CQTextDocumentCanvas.h"
+#include "CQImageProvider.h"
 #include <QDebug>
+#include <QDeclarativeEngine>
 
 void CalligraQtQuickComponentsPlugin::registerTypes(const char* uri)
 {
     Q_ASSERT(uri == QLatin1String("org.calligra.CalligraComponents"));
     qmlRegisterType<CQTextDocumentCanvas> (uri, 0, 1, "TextDocumentCanvas");
+}
+
+void CalligraQtQuickComponentsPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
+{
+    CQImageProvider::s_imageProvider = new CQImageProvider;
+    engine->addImageProvider(CQImageProvider::identificationString, CQImageProvider::s_imageProvider);
+
+    QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
 }
 
 #include "CalligraQtQuickComponentsPlugin.moc"

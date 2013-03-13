@@ -1,5 +1,6 @@
 #include "CQTextDocumentCanvas.h"
 #include "CQCanvasController.h"
+#include "CQTextDocumentModel.h"
 
 #include <KoDocument.h>
 #include <KoPart.h>
@@ -24,6 +25,7 @@ CQTextDocumentCanvas::CQTextDocumentCanvas()
     , m_zoomController(0)
     , m_zoomMode(ZOOM_CONSTANT)
     , m_findText(new KoFindText(this))
+    , m_documentModel(0)
 {
     connect (m_findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
     connect (m_findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
@@ -61,6 +63,10 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(kwCanvasItem ->shapeManager()->shapes(), texts);
     m_findText->setDocuments(texts);
+
+    KWDocument *kwDocument = static_cast<KWDocument*>(document);
+    m_documentModel = new CQTextDocumentModel(this, kwDocument, kwCanvasItem->shapeManager());
+    emit documentModelChanged();
 
     return true;
 }
@@ -181,6 +187,11 @@ void CQTextDocumentCanvas::findNext()
 void CQTextDocumentCanvas::findPrevious()
 {
     m_findText->findPrevious();
+}
+
+QObject* CQTextDocumentCanvas::documentModel() const
+{
+    return m_documentModel;
 }
 
 #include "CQTextDocumentCanvas.moc"
