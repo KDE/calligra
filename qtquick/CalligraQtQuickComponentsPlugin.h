@@ -30,6 +30,7 @@ class CalligraQtQuickComponentsPlugin : public QDeclarativeExtensionPlugin
 
 public:
     void registerTypes(const char *uri);
+    virtual void initializeEngine(QDeclarativeEngine* engine, const char* uri); 
 
 private:
 
