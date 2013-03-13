@@ -43,4 +43,4 @@ X-KDE-Library=pptximport
 X-KDE-LibraryMajor=0
 X-KDE-LibraryMinor=1
 X-KDE-LibraryDependencies=
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

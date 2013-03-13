@@ -21,7 +21,7 @@
 #define __GENERICIMAGEEXPORT_H__
 
 #include <KoFilter.h>
-//Added by qt3to4:
+
 #include <QPixmap>
 #include <QByteArray>
 #include <QVariantList>
