@@ -3,24 +3,31 @@
 
 #include <KoDocument.h>
 #include <KoPart.h>
+#include <KoFindText.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 #include <KWDocument.h>
 #include <KWPage.h>
+#include <KWCanvasItem.h>
 #include <KMimeType>
 #include <KMimeTypeTrader>
 #include <KDE/KDebug>
 #include <KActionCollection>
 #include <QGraphicsWidget>
+#include <QTextDocument>
 
 CQTextDocumentCanvas::CQTextDocumentCanvas()
     : m_canvasBase(0)
     , m_canvasController(0)
     , m_zoomController(0)
     , m_zoomMode(ZOOM_CONSTANT)
+    , m_findText(new KoFindText(this))
 {
+    connect (m_findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
+    connect (m_findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect (m_findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 bool CQTextDocumentCanvas::openFile(const QString& uri)
@@ -28,10 +35,10 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
     KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
+                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
 
     if (!part) {
-        kDebug() << "Doc can't be openend" << error;
+        kDebug() << "Doc can't be openend because" << error;
         return false;
     }
 
@@ -49,6 +56,11 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
     graphicsWidget->installEventFilter(this);
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
+
+    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(m_canvasBase);
+    QList<QTextDocument*> texts;
+    KoFindText::findTextInShapes(kwCanvasItem ->shapeManager()->shapes(), texts);
+    m_findText->setDocuments(texts);
 
     return true;
 }
@@ -125,6 +137,50 @@ void CQTextDocumentCanvas::updateControllerWithZoomMode()
         case ZOOM_WIDTH: zoomMode = KoZoomMode::ZOOM_WIDTH; break;
     }
     m_zoomController->setZoom(zoomMode, 1.0);
+}
+
+QString CQTextDocumentCanvas::searchTerm() const
+{
+    return m_searchTerm;
+}
+
+void CQTextDocumentCanvas::setSearchTerm(const QString& term)
+{
+    m_searchTerm = term;
+    if (!term.isEmpty()) {
+        m_findText->find(term);
+    }
+    emit searchTermChanged();
+}
+
+void CQTextDocumentCanvas::findMatchFound(const KoFindMatch &match)
+{
+    QTextCursor cursor = match.location().value<QTextCursor>();
+    m_canvasBase->canvasItem()->update();
+
+    m_canvasBase->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
+    m_canvasBase->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
+}
+
+void CQTextDocumentCanvas::findNoMatchFound()
+{
+    kDebug() << "Match for " << m_searchTerm << " not found";
+}
+
+void CQTextDocumentCanvas::updateCanvas()
+{
+    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (m_canvasBase);
+    kwCanvasItem->update();
+}
+
+void CQTextDocumentCanvas::findNext()
+{
+    m_findText->findNext();
+}
+
+void CQTextDocumentCanvas::findPrevious()
+{
+    m_findText->findPrevious();
 }
 
 #include "CQTextDocumentCanvas.moc"

@@ -10,5 +10,10 @@ Rectangle {
         source: "/home/shaan/Documents/all/Resume.odt"
         anchors.fill: parent
         zoomMode: Calligra.TextDocumentCanvas.ZOOM_WIDTH
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: parent.searchTerm = 'Shantanu'
+        }
     }
 }
