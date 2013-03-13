@@ -183,6 +183,7 @@ void KWPageTool::setMarginInPx(Margin p_selection, int p_positionX, int p_positi
 
     m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
     m_document->relayout();
+    m_canvas->repaint();
 }
 
 int KWPageTool::xMouseInPage(int p_positionX)
@@ -196,7 +197,7 @@ int KWPageTool::yMouseInPage(int p_positionY)
 {
     KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
     return int(m_canvas->viewConverter()->viewToDocumentY(p_positionY
-              + m_canvas->documentOffset().y())) % (int(layout.height)+17);
+              + m_canvas->documentOffset().y())) % (int(layout.height)+21);
 }
 
 void KWPageTool::insertPageBreak()
