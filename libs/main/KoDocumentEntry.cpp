@@ -47,6 +47,18 @@ KoDocumentEntry::~KoDocumentEntry()
 {
 }
 
+QStringList KoDocumentEntry::nativeMimeTypes() const
+{
+    QStringList mimeTypes;
+
+    if (m_service) {
+        mimeTypes = m_service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+        mimeTypes += m_service->property("X-KDE-NativeMimeType").toString();
+    }
+
+    return mimeTypes;
+}
+
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
     QString error;

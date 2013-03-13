@@ -49,9 +49,7 @@ public:
     explicit KoDocumentEntry(const KService::Ptr& service);
     ~KoDocumentEntry();
 
-    KService::Ptr service() const {
-        return m_service;
-    }
+    QStringList nativeMimeTypes() const;
 
     /**
      * @return TRUE if the service pointer is null
