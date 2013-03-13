@@ -30,7 +30,7 @@
 #include <kcomponentdata.h>
 #include <kcombobox.h>
 #include <knuminput.h>
-
+#include <klocale.h>
 #include <kdialog.h>
 #include <kconfig.h>
 
