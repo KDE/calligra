@@ -39,7 +39,6 @@ set(komain_LIB_SRCS
     KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp
     KoToolDocker_p.cpp
-    KoVersionDialog.cpp
     KoView.cpp
     calligraversion.cpp
     KoFilterManager.cpp
@@ -167,7 +166,6 @@ install( FILES
     KoServiceProvider.h
     KoPart.h
     KoPrintJob.h
-    KoVersionDialog.h
     KoView.h
     calligraversion.h
     KoStandardAction.h

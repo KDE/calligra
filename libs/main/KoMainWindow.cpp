@@ -32,7 +32,6 @@
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoFileDialog.h"
-#include "KoVersionDialog.h"
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoPrintJob.h"
@@ -294,10 +293,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->reloadFile  = new KAction(i18n("Reload"), this);
     actionCollection()->addAction("file_reload_file", d->reloadFile);
     connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
-
-    d->showFileVersions  = new KAction(i18n("Versions..."), this);
-    actionCollection()->addAction("file_versions_file", d->showFileVersions);
-    connect(d->showFileVersions, SIGNAL(triggered(bool)), this, SLOT(slotVersionsFile()));
 
     d->importFile  = new KAction(koIcon("document-import"), i18n("Open ex&isting Document as Untitled Document..."), this);
     actionCollection()->addAction("file_import_file", d->importFile);
@@ -1829,14 +1824,6 @@ void KoMainWindow::slotEmailFile()
     }
 }
 
-void KoMainWindow::slotVersionsFile()
-{
-    if (!rootDocument())
-        return;
-    KoVersionDialog *dlg = new KoVersionDialog(this, rootDocument());
-    dlg->exec();
-    delete dlg;
-}
 
 void KoMainWindow::slotReloadFile()
 {

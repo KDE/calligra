@@ -281,11 +281,6 @@ public slots:
     void slotReloadFile();
 
     /**
-     * This will call a dialogbox to add version to list of files
-     */
-    void slotVersionsFile();
-
-    /**
      * File --> Import
      *
      * This will call slotFileOpen().  To differentiate this from an ordinary
