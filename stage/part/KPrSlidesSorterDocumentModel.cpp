@@ -22,6 +22,8 @@
 #include "KPrViewModeSlidesSorter.h"
 #include "KPrDocument.h"
 
+#include <klocale.h>
+
 //Calligra headers
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>

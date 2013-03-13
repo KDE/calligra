@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QString>
 
+#include <klocale.h>
+
 namespace MusicCore {
 
 class Part;

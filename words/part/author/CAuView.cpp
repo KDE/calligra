@@ -28,8 +28,10 @@
 
 #include <QWidget>
 #include <QFileDialog>
+
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <klocale.h>
 
 CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
     :KWView(part, document, parent)

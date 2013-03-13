@@ -54,6 +54,7 @@
 
 #include <ktemporaryfile.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <QDomDocument>
 #include <QRectF>

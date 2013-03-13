@@ -28,6 +28,8 @@
 
 #include <KoIcon.h>
 
+#include <klocale.h>
+
 using namespace Calligra::Sheets;
 
 class MapModel::Private

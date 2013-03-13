@@ -31,7 +31,8 @@
 #include <KoShapeManager.h>
 
 #include <kglobal.h>
-#include <KMessageBox>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 FlowPart::FlowPart(QObject *parent)
     : KoPart(parent)

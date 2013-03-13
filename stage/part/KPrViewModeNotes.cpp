@@ -25,6 +25,7 @@
 #include <QGraphicsWidget>
 
 #include <KDebug>
+#include <klocale.h>
 
 #include <KoDocumentResourceManager.h>
 #include <KoRuler.h>

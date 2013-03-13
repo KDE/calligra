@@ -74,6 +74,7 @@
 #include <KFontChooser>
 #include <KFontSizeAction>
 #include <kdeversion.h>
+#include <klocale.h>
 
 // Qt
 #include <QApplication>

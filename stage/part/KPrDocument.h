@@ -24,7 +24,7 @@
 
 #include <KoPADocument.h>
 #include "KPrCustomSlideShows.h"
-
+#include <klocale.h>
 class KPrDeclarations;
 class KPrShapeAnimation;
 class KPrShapeAnimations;

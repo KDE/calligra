@@ -32,6 +32,8 @@
 #include "DocBase_p.h"
 #include "DocBase.moc"
 
+#include <klocale.h>
+
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>

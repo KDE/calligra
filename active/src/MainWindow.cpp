@@ -35,6 +35,7 @@
 #include <KGlobal>
 #include <KStandardDirs>
 #include <KDebug>
+#include <klocale.h>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>

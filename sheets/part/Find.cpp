@@ -29,6 +29,8 @@
 #include "ValueStorage.h"
 #include "ui/SheetView.h"
 
+#include <klocale.h>
+
 using namespace Calligra::Sheets;
 
 class Find::Private

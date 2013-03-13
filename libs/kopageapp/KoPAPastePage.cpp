@@ -33,6 +33,7 @@
 #include "commands/KoPAPageInsertCommand.h"
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <kglobal.h>
 
 KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )

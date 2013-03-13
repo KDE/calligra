@@ -31,7 +31,7 @@
 #include <KMessageBox>
 #include <KMimeType>
 #include <KRun>
-
+#include <klocale.h>
 #include <QTimer>
 
 using namespace Calligra::Sheets;

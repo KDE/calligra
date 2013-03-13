@@ -18,7 +18,7 @@
  */
 
 #include "KPrAnimationRemoveCommand.h"
-
+#include <klocale.h>
 #include "KPrDocument.h"
 #include "animations/KPrShapeAnimation.h"
 

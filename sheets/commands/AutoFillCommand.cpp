@@ -45,6 +45,9 @@
 
 #include <math.h>
 
+#include <klocale.h>
+#include <kglobal.h>
+
 using namespace Calligra::Sheets;
 
 QStringList *AutoFillCommand::month = 0;

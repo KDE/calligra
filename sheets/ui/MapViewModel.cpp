@@ -33,6 +33,7 @@
 
 #include <KAction>
 #include <kparts/event.h>
+#include <klocale.h>
 #include <KXMLGUIClient>
 
 using namespace Calligra::Sheets;

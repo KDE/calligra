@@ -32,6 +32,7 @@
 // KDE
 #include <KAction>
 #include <kdebug.h>
+#include <klocale.h>
 
 // Qt
 #include <QApplication>

@@ -29,7 +29,7 @@
 #include "commands/DataManipulators.h"
 
 #include <KoCanvasBase.h>
-
+#include <klocale.h>
 #include <KMessageBox>
 #include <sonnet/dialog.h>
 #include <sonnet/speller.h>

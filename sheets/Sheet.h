@@ -34,6 +34,8 @@
 #include <KoShapeUserData.h>
 #include <KoXmlReader.h>
 
+#include <klocale.h>
+
 #include "Cell.h"
 #include "Style.h"
 #include "Global.h"

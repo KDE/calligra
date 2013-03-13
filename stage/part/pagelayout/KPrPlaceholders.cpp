@@ -18,7 +18,7 @@
  */
 
 #include "KPrPlaceholders.h"
-
+#include <klocale.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>

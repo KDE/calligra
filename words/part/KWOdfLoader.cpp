@@ -21,6 +21,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <klocale.h>
+
 #include "KWOdfLoader.h"
 #include "KWOdfSharedLoadingData.h"
 #include "KWDocument.h"

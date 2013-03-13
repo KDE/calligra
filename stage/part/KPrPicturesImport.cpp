@@ -18,7 +18,7 @@
 */
 
 #include "KPrPicturesImport.h"
-
+#include <klocale.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLayer.h>
