@@ -27,6 +27,7 @@
 #include <KoShapeManager.h>
 
 #include <kmessagebox.h>
+#include <klocale.h>
 
 CAuPart::CAuPart(QObject *parent)
     : KWPart(parent)
