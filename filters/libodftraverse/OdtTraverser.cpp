@@ -47,7 +47,6 @@ OdtTraverser::OdtTraverser()
 }
 
 OdtTraverser::~OdtTraverser()
-
 {
 }
 
@@ -62,20 +61,6 @@ bool OdtTraverser::traverseContent(OdtTraverserContext *context,
     if (context->analyzeOdfFile() != KoFilter::OK) {
         return false;
     }
-
-#if 0 // Debug
-    kDebug(30503) << "======== >> Styles";
-    foreach(const QString &name, context->styles().keys()) {
-        kDebug(30503) << "==" << name << ":\t"
-                      << m_styles.value(name)->parent
-                      << m_styles.value(name)->family
-                      << m_styles.value(name)->isDefaultStyle
-                      << m_styles.value(name)->shouldBreakChapter
-                      << m_styles.value(name)->attributes
-            ;
-    }
-    kDebug(30503) << "======== << Styles";
-#endif
 
     // ----------------------------------------------------------------
     // Parse body from content.xml
@@ -566,7 +551,7 @@ void OdtTraverser::handleEmbeddedFormula(const QString &href)
 // should probably be placed near /libs/odf/KoXml* instead.
 
 void OdtTraverser::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
-                                      QHash<QString, QString> &unknownNamespaces)
+                                  QHash<QString, QString> &unknownNamespaces)
 {
     // Start the element;
     // keep the name in a QByteArray so that it stays valid until end element is called.
@@ -667,8 +652,6 @@ void OdtTraverser::handleTagBookMarkEnd(KoXmlElement &element)
     m_backend->beginTagBookMarkEnd(element, m_context);
     m_backend->endTagBookMarkEnd(element, m_context);
 }
-
-
 
 
 void OdtTraverser::handleTagNote(KoXmlElement &element)
