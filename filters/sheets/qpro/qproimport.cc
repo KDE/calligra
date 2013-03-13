@@ -37,7 +37,6 @@
 #include <qpro/stream.h>
 #include <qpro/record_factory.h>
 #include <QFile>
-//Added by qt3to4:
 #include <QByteArray>
 
 using namespace Calligra::Sheets;

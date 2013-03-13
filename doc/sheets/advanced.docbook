@@ -258,6 +258,81 @@ calculation. When it finishes and if it has found a solution press the
 </para>
 </sect1>
 
+ <sect1 id="pivottable">
+   <title>Pivot Tables</title>
+   <para>
+     &sheets; can be used to construct <ulink url="http://en.wikipedia.org/wiki/Pivot_table">pivot tables</ulink> using the data of the current table.
+   </para>
+   <para>This feature can be invoked by selecting <guimenuitem>Pivot...</guimenuitem> from 
+     the <guimenu>Data</guimenu> menu. Below is an example of pivot table generation.
+   </para>
+   <para>
+     Supposing we have the following data.
+   </para>
+   <para>
+     <mediaobject>
+       <imageobject>
+	 <imagedata fileref="pivot1.png" format="PNG"/>
+       </imageobject>
+       <textobject>
+	 <phrase>Initial table</phrase>
+       </textobject>
+     </mediaobject>
+   </para>
+   <para>
+     We want to create a pivot table of our choice and requirement. So we choose
+       <menuchoice>
+	 <guimenu>Data</guimenu>
+	 <guimenuitem>Pivot...</guimenuitem>
+       </menuchoice>.
+     </para>
+     <para>
+       The dialog box that will appear allows user to select the source of data. The data can be taken from the current worksheet or from an external source like a database or <abbrev>ODS</abbrev> file.
+     </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot2.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase>Choosing the data source</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para>
+       Here is the dialog box which allows the user to customize the pivot table. The column labels in the source data are converted to labels which serve as the working fields. The labels can be dragged and dropped into one of three areas (<guilabel>Rows</guilabel>, <guilabel>Columns</guilabel> or <guilabel>Values</guilabel>) to generate the pivot table. You can reset your choices using <guibutton>Reset DnD</guibutton> button.
+     </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot3.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase>Pivot table customization dialog</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para>
+       In our example, <replaceable>Name</replaceable> is dragged to <guilabel>Rows</guilabel>, <replaceable>Category</replaceable> to <guilabel>Columns</guilabel>, <replaceable>Score</replaceable> to <guilabel>Values</guilabel>. User defined functions like sum, average, max, min, count, &etc; can be selected from the <guilabel>Select Option</guilabel> list.
+     </para>
+     <para>
+       The <guibutton>Add Filter</guibutton> button can be used to open filter dialog box to filter the desired data. Using this box you can define multiple filters based on the column label and the relationship between them (<guimenuitem>And</guimenuitem> or <guimenuitem>Or</guimenuitem>). This would allow extreme freedom to customize the output.
+     </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot4.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase>Pivot table filtering dialog</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para>
+       <guilabel>Total Rows</guilabel> and <guilabel>Total Columns</guilabel>: checking these allow automatic totalling of corresponding rows and columns in the pivot table.
+     </para>
+   </sect1>
+
 <sect1 id="worksheets">
 <title>Using more than one Worksheet</title>
 <para>When you start a new, empty, document with &sheets; it will create a 

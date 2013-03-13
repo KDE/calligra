@@ -121,7 +121,7 @@ $ cstmd5diff.sh <documents dir> <previous result dir> <current result dir>
 e.g.
 
 $ cstmd5diff.sh . ../results/sha1 ../results/sha2 > md5-sha1-sha2.log
-$ visualimagecompare ../results/sha1 ../results/sha2 md5-sha1-sha2.log
+$ visualimagecompare ../results/sha1 ../results/sha2 md5-sha1-sha2.log --pdf directory_of_pdfs
 
 
 visualimagecompare
@@ -129,8 +129,9 @@ visualimagecompare
 
 PageUp, n	Move to the next page of the current document
 PageDown, b	Move to the previous page of the current document
-Up	  	Move to the previous document
+Up	        Move to the previous document
 Down		Move to the next document
 Left		Switch to the left tab
 Right		Switch to the right tab
 Space		Switch between tabs
+p           Show pdf (only works when --pdf is given)

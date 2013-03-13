@@ -30,7 +30,6 @@
 #include <KMenu>
 #include <KDebug>
 #include <KLocale>
-#include <kparts/part.h>
 
 #if KexiStatusBar_KTEXTEDITOR_USED
 #include <ktexteditor/viewcursorinterface.h>
@@ -59,7 +58,6 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
 #if KexiStatusBar_KTEXTEDITOR_USED
         , m_cursorIface(0)
 #endif
-        , m_activePart(0)
 {
     setObjectName("KexiStatusBar");
     setContentsMargins(2, 0, 2, 0);
@@ -100,32 +98,6 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
 KexiStatusBar::~KexiStatusBar()
 {
 }
-
-void KexiStatusBar::activePartChanged(KParts::Part *part)
-{
-    if (m_activePart && m_activePart->widget())
-        disconnect(m_activePart->widget(), 0, this, 0);
-
-    m_activePart = part;
-#if KexiStatusBar_KTEXTEDITOR_USED
-    m_cursorIface = 0;
-    m_viewmsgIface = 0;
-// @todo
-    if (part && part->widget()) {
-        if ((m_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget()))) {
-            connect(part->widget(), SIGNAL(viewStatusMsg(QString)),
-                    this, SLOT(setStatus(QString)));
-        } else if ((m_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()))) {
-            connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
-            cursorPositionChanged();
-        } else {
-            // we can't produce any status data, hide the status box
-            changeItem("", m_msgID);
-        }
-    }
-#endif
-}
-
 
 void KexiStatusBar::cursorPositionChanged()
 {

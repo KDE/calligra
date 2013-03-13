@@ -22,7 +22,7 @@
 #include <kdebug.h>  /* for kDebug stream */
 
 #include "row.h"
-//Added by qt3to4:
+
 #include <QTextStream>
 
 /*******************************************/

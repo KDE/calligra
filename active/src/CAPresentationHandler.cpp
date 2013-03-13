@@ -108,7 +108,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
     KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
+                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
 
     if (!part) {
         kDebug() << "Doc can't be openend" << error;

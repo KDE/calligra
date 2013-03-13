@@ -21,7 +21,6 @@
 
 #include <kdebug.h>  /* for kDebug() stream */
 #include "config.h"
-//Added by qt3to4:
 #include <QTextStream>
 
 /* Static variable */
