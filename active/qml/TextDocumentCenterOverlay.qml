@@ -49,13 +49,18 @@ Item {
                   Image {
                       anchors { fill: parent; margins: 10 }
                       source: decoration
-                      Text {
-                          text: i18n("Page %1",(index + 1))
-                          font.pointSize: 10
-                          anchors.bottom: parent.bottom
-                          anchors.horizontalCenter: parent.horizontalCenter
+                      Rectangle {
+                         height: pageNumber.height
+                         width: pageNumber.width
+                         anchors.bottom: parent.bottom
+                         anchors.horizontalCenter: parent.horizontalCenter
+                         Text {
+                           id: pageNumber
+                           text: i18n("Page %1",(index + 1))
+                           font.pointSize: 10
+                           anchors.centerIn: parent
+                        }
                       }
-
                       MouseArea {
                           anchors.fill: parent
                           onClicked: {

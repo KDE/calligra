@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2013 Marijn Kruisselbrink <mkruisselbrink@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,37 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UI_ACTION_FACTORY_H
-#define __KIS_UI_ACTION_FACTORY_H
+#ifndef PIVOTPLUGIN_H
+#define PIVOTPLUGIN_H
 
-#include <QString>
-#include <krita_export.h>
-#include "kis_properties_configuration.h"
+#include <kparts/plugin.h>
 
-class KisView2;
-
-class KisUiActionConfiguration : public KisPropertiesConfiguration
+class PivotPlugin : public KParts::Plugin
 {
+    Q_OBJECT
 public:
-    KisUiActionConfiguration();
-    KisUiActionConfiguration(const QString &id);
+    PivotPlugin(QObject *parent, const QVariantList &);
+    virtual ~PivotPlugin();
 
-    QString id() const;
+private slots:
+    void pivot();
 };
 
-
-class KRITAUI_EXPORT KisUiActionFactory
-{
-public:
-    KisUiActionFactory(const QString &id);
-    virtual ~KisUiActionFactory();
-
-    QString id() const;
-
-    virtual void runFromXML(KisView2 *view, const KisUiActionConfiguration &config);
-
-private:
-    const QString m_id;
-};
-
-#endif /* __KIS_UI_ACTION_FACTORY_H */
+#endif

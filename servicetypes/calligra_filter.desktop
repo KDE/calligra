@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=ServiceType
-X-KDE-ServiceType=CalligraFilter
+X-KDE-ServiceType=Calligra/Filter
 Comment=Calligra Filter
 Comment[bg]=Филтър за Calligra
 Comment[bs]=Calligra Filter

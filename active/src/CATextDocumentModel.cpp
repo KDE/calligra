@@ -40,10 +40,12 @@ int CATextDocumentModel::rowCount(const QModelIndex& parent) const
 
 QVariant CATextDocumentModel::data(const QModelIndex& index, int role) const
 {
+
     if(!kw_document || !index.isValid()) {
        return QVariant();
     }
-    if (!CAImageProvider::s_imageProvider) {
+
+    if (CAImageProvider::s_imageProvider) {
         if(role == Qt::DecorationRole) {
             const QString id = kw_document->caption() + "textData" + QString::number(index.row());
             if (!CAImageProvider::s_imageProvider->containsId(id)) {

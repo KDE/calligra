@@ -17,10 +17,10 @@ function checkname()
     mimetypes=`grep ^MimeType $f|sed -e 's/.*=//;s/;/,/g;'`
     servicetypes=`grep ^ServiceTypes $f|sed -e 's/.*=//;s/$/,/g'`
     fulllist="$mimetypes,$servicetypes"
-    if echo $fulllist | grep "CalligraPart," >/dev/null 2>/dev/null; then
-      echo "ok, this is a CalligraPart"
+    if echo $fulllist | grep "Calligra/Part," >/dev/null 2>/dev/null; then
+      echo "ok, this is a Calligra/Part"
     else
-      echo '**** CalligraPart not in list of types !'
+      echo '**** Calligra/Part not in list of types !'
       echo Service Types: $fulllist
       cat $f
       exit 1
@@ -78,7 +78,7 @@ echo
 stfound=0
 for dir in `kde4-config --path servicetypes`; do
   echo Service Types dir $dir
-  f=`echo $dir/calligrapart.desktop | sed -e 's,//,/,g'`
+  f=`echo $dir/calligra_part.desktop | sed -e 's,//,/,g'`
   if [ -f $f ]; then
     echo Found $f
     grep Native $f
@@ -87,7 +87,7 @@ for dir in `kde4-config --path servicetypes`; do
 done
 
 if [ $stfound = 0 ]; then
-  echo '****** calligrapart.desktop not found!'
+  echo '****** calligra_part.desktop not found!'
   kde4-config --path servicetypes
 else
   echo

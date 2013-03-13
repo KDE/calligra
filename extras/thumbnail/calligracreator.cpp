@@ -84,7 +84,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
     // load document and render the thumbnail ourselves
     const QString mimetype = KMimeType::findByPath(path)->name();
-    m_part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(mimetype, QLatin1String("CalligraPart"));
+    m_part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(mimetype, QLatin1String("Calligra/Part"));
 
     if (!m_part) return false;
 

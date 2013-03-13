@@ -16,42 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_ui_action_factory.h"
+#ifndef __KIS_OPERATION_CONFIGURATION_H
+#define __KIS_OPERATION_CONFIGURATION_H
 
-KisUiActionConfiguration::KisUiActionConfiguration()
+#include <QString>
+#include <krita_export.h>
+#include "kis_properties_configuration.h"
+
+class KisView2;
+
+class KRITAUI_EXPORT KisOperationConfiguration : public KisPropertiesConfiguration
 {
-}
+public:
+    KisOperationConfiguration();
+    KisOperationConfiguration(const QString &id);
 
-KisUiActionConfiguration::KisUiActionConfiguration(const QString &id)
-{
-    setProperty("id", id);
-}
+    QString id() const;
+};
 
-QString KisUiActionConfiguration::id() const
-{
-    return getString("id", "wrong-id");
-}
-
-
-KisUiActionFactory::KisUiActionFactory(const QString &id)
-    : m_id(id)
-{
-}
-
-KisUiActionFactory::~KisUiActionFactory()
-{
-}
-
-QString KisUiActionFactory::id() const
-{
-    return m_id;
-}
-
-void KisUiActionFactory::runFromXML(KisView2 *view, const KisUiActionConfiguration &config)
-{
-    Q_UNUSED(view);
-    Q_UNUSED(config);
-
-    qFatal("Not implemented yet");
-}
-
+#endif /* __KIS_OPERATION_CONFIGURATION_H */

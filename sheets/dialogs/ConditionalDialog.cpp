@@ -45,7 +45,6 @@
 
 #include <QGroupBox>
 #include <QLabel>
-//Added by qt3to4:
 #include <QGridLayout>
 
 using namespace Calligra::Sheets;
