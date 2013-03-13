@@ -26,7 +26,6 @@
 #include <QList>
 
 #include <kparts/part.h>
-#include <kservice.h>
 #include <kcomponentdata.h>
 
 #include "komain_export.h"
