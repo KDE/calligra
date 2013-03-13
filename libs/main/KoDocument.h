@@ -27,10 +27,6 @@
 #include <QTransform>
 #include <QList>
 
-#include <kparts/part.h>
-#include <kservice.h>
-#include <kcomponentdata.h>
-
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 #include "komain_export.h"
@@ -743,8 +739,6 @@ private:
     bool saveToStream(QIODevice *dev);
 
     QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
-
-    KService::Ptr nativeService();
     bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
     bool loadNativeFormatFromStore(const QString& file);
     bool loadNativeFormatFromStoreInternal(KoStore *store);

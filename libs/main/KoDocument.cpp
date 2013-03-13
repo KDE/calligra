@@ -61,6 +61,8 @@
 #include <kio/jobuidelegate.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
+#include <kcomponentdata.h>
+#include <kservice.h>
 
 #include <QBuffer>
 #include <QDir>
@@ -183,13 +185,26 @@ public:
     KoGridData gridData;
     KoGuidesData guidesData;
 
-    KService::Ptr nativeService;
-
     bool isEmpty;
 
     KoPageLayout pageLayout;
 
     KoPart *parentPart;
+
+    KService::Ptr nativeService()
+    {
+        if (!nativeServicePtr) {
+            nativeServicePtr = KoServiceProvider::readNativeService(parentPart->componentData());
+        }
+        return nativeServicePtr;
+    }
+
+private:
+
+    KService::Ptr nativeServicePtr;
+
+
+
 
 };
 
@@ -1891,17 +1906,9 @@ QDomDocument KoDocument::saveXML()
     return QDomDocument();
 }
 
-KService::Ptr KoDocument::nativeService()
-{
-    if (!d->nativeService)
-        d->nativeService = KoServiceProvider::readNativeService(d->parentPart->componentData());
-
-    return d->nativeService;
-}
-
 QByteArray KoDocument::nativeFormatMimeType() const
 {
-    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
+    KService::Ptr service = const_cast<KoDocument *>(this)->d->nativeService();
     if (!service) {
         kWarning(30003) << "No native service defined to read NativeMimeType from desktop file!";
         return QByteArray();
@@ -1923,7 +1930,7 @@ QByteArray KoDocument::nativeFormatMimeType() const
 
 QByteArray KoDocument::nativeOasisMimeType() const
 {
-    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
+    KService::Ptr service = const_cast<KoDocument *>(this)->d->nativeService();
     if (!service) {
         return KoDocument::nativeFormatMimeType();
     }
@@ -1946,7 +1953,7 @@ QStringList KoDocument::extraNativeMimeTypes(KoDocument::ImportExportType import
     // This implementation is temporary while we treat both calligra-1.3 and OASIS formats as native.
     // But it's good to have this virtual method, in case some app want to
     // support more than one native format.
-    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
+    KService::Ptr service = const_cast<KoDocument *>(this)->d->nativeService();
     if (!service)   // can't happen
         return lst;
     return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
