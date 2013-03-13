@@ -1,3 +1,114 @@
+diff --git a/coffice/Calligra-01.patchfile b/coffice/Calligra-01.patchfile
+index a3b8a62..e69de29 100644
+--- a/coffice/Calligra-01.patchfile
++++ b/coffice/Calligra-01.patchfile
+@@ -1,106 +0,0 @@
+-diff --git a/libs/main/KoDocumentSectionView.cpp b/libs/main/KoDocumentSectionView.cpp
+-index 154e4a8..0dd1334 100644
+---- a/libs/main/KoDocumentSectionView.cpp
+-+++ b/libs/main/KoDocumentSectionView.cpp
+-@@ -395,5 +395,5 @@ void KoDocumentSectionView::setDraggingFlag(bool flag)
+-     m_draggingFlag = flag;
+- }
+- 
+--#include <KoDocumentSectionPropertyAction_p.moc>
+-+//#include <KoDocumentSectionPropertyAction_p.moc>
+- #include <KoDocumentSectionView.moc>
+-diff --git a/libs/main/KoRecentDocumentsPane.cpp b/libs/main/KoRecentDocumentsPane.cpp
+-index 126078e..3f71c6c 100644
+---- a/libs/main/KoRecentDocumentsPane.cpp
+-+++ b/libs/main/KoRecentDocumentsPane.cpp
+-@@ -152,7 +152,8 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
+-         QPixmap preview = item->data(PreviewRole).value<QPixmap>();
+-         if (preview.isNull()) {
+-             // need to fetch preview
+--            const KFileItemList fileList = KFileItemList() << fileItem;
+-+            KFileItemList fileList;
+-+            fileList << fileItem;
+- #if KDE_IS_VERSION(4,6,80)
+-             QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
+-             KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
+-diff --git a/libs/main/KoView.cpp b/libs/main/KoView.cpp
+-index efd39ec..e5cc661 100644
+---- a/libs/main/KoView.cpp
+-+++ b/libs/main/KoView.cpp
+-@@ -631,5 +631,5 @@ QList<QAction*> KoView::createChangeUnitActions()
+-     return unitActions->actions();
+- }
+- 
+--#include <KoView_p.moc>
+-+//#include <KoView_p.moc>
+- #include <KoView.moc>
+-diff --git a/libs/widgets/KoPageLayoutWidget.cpp b/libs/widgets/KoPageLayoutWidget.cpp
+-index fd3667b..72ee571 100644
+---- a/libs/widgets/KoPageLayoutWidget.cpp
+-+++ b/libs/widgets/KoPageLayoutWidget.cpp
+-@@ -21,6 +21,8 @@
+- 
+- #include <ui_KoPageLayoutWidget.h>
+- 
+-+#include <klocale.h>
+-+
+- class KoPageLayoutWidget::Private
+- {
+- public:
+-diff --git a/libs/widgets/KoResourcePopupAction.cpp b/libs/widgets/KoResourcePopupAction.cpp
+-index aa1f2a0..1983b87 100644
+---- a/libs/widgets/KoResourcePopupAction.cpp
+-+++ b/libs/widgets/KoResourcePopupAction.cpp
+-@@ -39,6 +39,7 @@
+- #include <QGradient>
+- #include <QToolButton>
+- #include <QRect>
+-+#include <QWidgetAction>
+- 
+- class KoResourcePopupAction::Private
+- {
+-diff --git a/words/part/dialogs/KWCreateBookmarkDialog.cpp b/words/part/dialogs/KWCreateBookmarkDialog.cpp
+-index 36df111..989f0f5 100644
+---- a/words/part/dialogs/KWCreateBookmarkDialog.cpp
+-+++ b/words/part/dialogs/KWCreateBookmarkDialog.cpp
+-@@ -19,6 +19,8 @@
+- 
+- #include "KWCreateBookmarkDialog.h"
+- 
+-+#include <klocale.h>
+-+
+- KWCreateBookmark::KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
+-         : QWidget(parent)
+- {
+-diff --git a/words/part/dialogs/KWPageSettingsDialog.h b/words/part/dialogs/KWPageSettingsDialog.h
+-index 1ce0d93..4a2bfc5 100644
+---- a/words/part/dialogs/KWPageSettingsDialog.h
+-+++ b/words/part/dialogs/KWPageSettingsDialog.h
+-@@ -38,6 +38,7 @@ class KWPageSettingsDialog : public KoPageLayoutDialog
+- public:
+-     explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, const KWPage &page);
+-     KPageWidgetItem* pageItem(const QString &name) const;
+-+    void setCurrentPage(KPageWidgetItem *item) {}
+- 
+- protected:
+-     void accept();
+-diff --git a/words/part/frames/KWFrameLayout.h b/words/part/frames/KWFrameLayout.h
+-index 72bd252..cba5517 100644
+---- a/words/part/frames/KWFrameLayout.h
+-+++ b/words/part/frames/KWFrameLayout.h
+-@@ -24,6 +24,7 @@
+- #define KWFRAMELAYOUT_H
+- 
+- #include "../Words.h"
+-+#include "../KWPageStyle.h"
+- 
+- #include "../words_export.h"
+- 
+-@@ -34,7 +35,6 @@
+- class KWPageManager;
+- class KWFrameSet;
+- class KWTextFrameSet;
+--class KWPageStyle;
+- class KWPage;
+- class KWFrame;
+- class KWDocument;
 diff --git a/libs/main/KoDocumentSectionView.cpp b/libs/main/KoDocumentSectionView.cpp
 index 154e4a8..0dd1334 100644
 --- a/libs/main/KoDocumentSectionView.cpp
@@ -34,31 +145,36 @@ index efd39ec..e5cc661 100644
 -#include <KoView_p.moc>
 +//#include <KoView_p.moc>
  #include <KoView.moc>
-diff --git a/libs/widgets/KoPageLayoutWidget.cpp b/libs/widgets/KoPageLayoutWidget.cpp
-index fd3667b..72ee571 100644
---- a/libs/widgets/KoPageLayoutWidget.cpp
-+++ b/libs/widgets/KoPageLayoutWidget.cpp
-@@ -21,6 +21,8 @@
- 
- #include <ui_KoPageLayoutWidget.h>
- 
-+#include <klocale.h>
-+
- class KoPageLayoutWidget::Private
+diff --git a/plugins/textshape/TextPlugin.cpp b/plugins/textshape/TextPlugin.cpp
+index b99243f..bafee04 100644
+--- a/plugins/textshape/TextPlugin.cpp
++++ b/plugins/textshape/TextPlugin.cpp
+@@ -17,9 +17,9 @@
+  * Boston, MA 02110-1301, USA.
+  */
+ #include "TextPlugin.h"
+-#include "TextToolFactory.h"
+-#include "ReferencesToolFactory.h"
+-#include "ReviewToolFactory.h"
++// #include "TextToolFactory.h"
++// #include "ReferencesToolFactory.h"
++// #include "ReviewToolFactory.h"
+ #ifdef CREATE_TEXTDOCUMENT_INSPECTOR
+ #include "TextDocumentInspectionPlugin.h"
+ #endif
+@@ -46,9 +46,9 @@ K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
+ TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
+         : QObject(parent)
  {
- public:
-diff --git a/libs/widgets/KoResourcePopupAction.cpp b/libs/widgets/KoResourcePopupAction.cpp
-index aa1f2a0..1983b87 100644
---- a/libs/widgets/KoResourcePopupAction.cpp
-+++ b/libs/widgets/KoResourcePopupAction.cpp
-@@ -39,6 +39,7 @@
- #include <QGradient>
- #include <QToolButton>
- #include <QRect>
-+#include <QWidgetAction>
+-    KoToolRegistry::instance()->add(new TextToolFactory());
+-    KoToolRegistry::instance()->add(new ReviewToolFactory());
+-    KoToolRegistry::instance()->add(new ReferencesToolFactory());
++//     KoToolRegistry::instance()->add(new TextToolFactory());
++//     KoToolRegistry::instance()->add(new ReviewToolFactory());
++//     KoToolRegistry::instance()->add(new ReferencesToolFactory());
+     KoShapeRegistry::instance()->add(new TextShapeFactory());
+ }
  
- class KoResourcePopupAction::Private
- {
 diff --git a/words/part/dialogs/KWCreateBookmarkDialog.cpp b/words/part/dialogs/KWCreateBookmarkDialog.cpp
 index 36df111..989f0f5 100644
 --- a/words/part/dialogs/KWCreateBookmarkDialog.cpp
