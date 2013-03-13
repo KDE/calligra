@@ -135,7 +135,6 @@ public:
         exportPdf = 0;
         closeFile = 0;
         reloadFile = 0;
-        showFileVersions = 0;
         importFile = 0;
         exportFile = 0;
         isImporting = false;
@@ -209,7 +208,6 @@ public:
     KAction *exportPdf;
     KAction *closeFile;
     KAction *reloadFile;
-    KAction *showFileVersions;
     KAction *importFile;
     KAction *exportFile;
     KToggleAction *toggleDockers;
@@ -314,7 +312,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->showDocumentInfo->setEnabled(false);
     d->saveActionAs->setEnabled(false);
     d->reloadFile->setEnabled(false);
-    d->showFileVersions->setEnabled(false);
     d->importFile->setEnabled(true);    // always enabled like File --> Open
     d->exportFile->setEnabled(false);
     d->saveAction->setEnabled(false);
@@ -548,12 +545,6 @@ void KoMainWindow::updateReloadFileAction(KoDocument *doc)
     d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
 }
 
-void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
-{
-    //TODO activate it just when we save it in oasis file format
-    d->showFileVersions->setEnabled(doc && !doc->url().isEmpty() && (doc->outputMimeType() == doc->nativeOasisMimeType() || doc->outputMimeType() == doc->nativeOasisMimeType() + "-template"));
-}
-
 void KoMainWindow::setReadWrite(bool readwrite)
 {
     d->saveAction->setEnabled(readwrite);
@@ -734,7 +725,6 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
         return false;
     }
     updateReloadFileAction(newdoc);
-    updateVersionsFileAction(newdoc);
 
     KFileItem file(url, newdoc->mimeType(), KFileItem::Unknown);
     if (!file.isWritable())

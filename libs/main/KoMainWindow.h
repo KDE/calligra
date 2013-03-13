@@ -145,7 +145,6 @@ public:
      */
     void updateCaption(const QString & caption, bool mod);
     void updateReloadFileAction(KoDocument *doc);
-    void updateVersionsFileAction(KoDocument *doc);
 
     void setReadWrite(bool readwrite);
 

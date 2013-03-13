@@ -387,7 +387,6 @@ void KoPart::setTitleModified(const QString &caption, bool mod)
     foreach(KoMainWindow *mainWindow, d->shells) {
         mainWindow->updateCaption(caption, mod);
         mainWindow->updateReloadFileAction(d->document);
-        mainWindow->updateVersionsFileAction(d->document);
     }
 }
 
