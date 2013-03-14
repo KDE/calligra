@@ -1,3 +1,25 @@
+diff --git a/libs/flake/KoUnavailShape.cpp b/libs/flake/KoUnavailShape.cpp
+index ecc771f..ce83900 100644
+--- a/libs/flake/KoUnavailShape.cpp
++++ b/libs/flake/KoUnavailShape.cpp
+@@ -607,7 +607,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
+ void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingContext &context)
+ {
+     kDebug(30006) << "Saving file: " << fileName;
+-
++return;
+     // Directories need to be saved too, but they don't have any file contents.
+     if (fileName.endsWith('/')) {
+         FileEntry *entry = new FileEntry;
+@@ -652,6 +652,7 @@ QByteArray KoUnavailShape::Private::loadFile(const QString &fileName, KoShapeLoa
+     fileContent = store->read(fileSize);
+     store->close();
+ 
+-    //kDebug(30006) << "File content: " << fileContent;
++    kDebug(30006) << "File size: " << fileSize;
++    kDebug(30006) << "File content: " << fileContent;
+     return fileContent;
+ }
 diff --git a/libs/main/KoDocumentSectionView.cpp b/libs/main/KoDocumentSectionView.cpp
 index 154e4a8..0dd1334 100644
 --- a/libs/main/KoDocumentSectionView.cpp
@@ -9,20 +31,6 @@ index 154e4a8..0dd1334 100644
 -#include <KoDocumentSectionPropertyAction_p.moc>
 +//#include <KoDocumentSectionPropertyAction_p.moc>
  #include <KoDocumentSectionView.moc>
-diff --git a/libs/main/KoRecentDocumentsPane.cpp b/libs/main/KoRecentDocumentsPane.cpp
-index 126078e..3f71c6c 100644
---- a/libs/main/KoRecentDocumentsPane.cpp
-+++ b/libs/main/KoRecentDocumentsPane.cpp
-@@ -152,7 +152,8 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
-         QPixmap preview = item->data(PreviewRole).value<QPixmap>();
-         if (preview.isNull()) {
-             // need to fetch preview
--            const KFileItemList fileList = KFileItemList() << fileItem;
-+            KFileItemList fileList;
-+            fileList << fileItem;
- #if KDE_IS_VERSION(4,6,80)
-             QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
-             KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
 diff --git a/libs/main/KoView.cpp b/libs/main/KoView.cpp
 index efd39ec..e5cc661 100644
 --- a/libs/main/KoView.cpp
@@ -34,6 +42,50 @@ index efd39ec..e5cc661 100644
 -#include <KoView_p.moc>
 +//#include <KoView_p.moc>
  #include <KoView.moc>
+diff --git a/plugins/pictureshape/PictureShapeFactory.cpp b/plugins/pictureshape/PictureShapeFactory.cpp
+index c7786cb..9cd8b20 100644
+--- a/plugins/pictureshape/PictureShapeFactory.cpp
++++ b/plugins/pictureshape/PictureShapeFactory.cpp
+@@ -22,7 +22,7 @@
+ #include "PictureShapeFactory.h"
+ 
+ #include "PictureShape.h"
+-#include "PictureShapeConfigWidget.h"
++//#include "PictureShapeConfigWidget.h"
+ 
+ #include <QByteArray>
+ #include <QBuffer>
+@@ -114,7 +114,7 @@ bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext
+ QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
+ {
+     QList<KoShapeConfigWidgetBase*> panels;
+-    panels.append( new PictureShapeConfigWidget() );
++    //panels.append( new PictureShapeConfigWidget() );
+     return panels;
+ }
+ 
+diff --git a/plugins/pictureshape/Plugin.cpp b/plugins/pictureshape/Plugin.cpp
+index b167d2e..43ba7ad 100644
+--- a/plugins/pictureshape/Plugin.cpp
++++ b/plugins/pictureshape/Plugin.cpp
+@@ -18,7 +18,7 @@
+  */
+ #include "Plugin.h"
+ #include "PictureShapeFactory.h"
+-#include "PictureToolFactory.h"
++//#include "PictureToolFactory.h"
+ 
+ #include <QPixmapCache>
+ 
+@@ -40,7 +40,7 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
+     }
+ 
+     KoShapeRegistry::instance()->add( new PictureShapeFactory() );
+-    KoToolRegistry::instance()->add( new PictureToolFactory() );
++    //KoToolRegistry::instance()->add( new PictureToolFactory() );
+ }
+ 
+ #include <Plugin.moc>
 diff --git a/plugins/textshape/TextPlugin.cpp b/plugins/textshape/TextPlugin.cpp
 index b99243f..bafee04 100644
 --- a/plugins/textshape/TextPlugin.cpp
@@ -64,31 +116,79 @@ index b99243f..bafee04 100644
      KoShapeRegistry::instance()->add(new TextShapeFactory());
  }
  
-diff --git a/words/part/dialogs/KWCreateBookmarkDialog.cpp b/words/part/dialogs/KWCreateBookmarkDialog.cpp
-index 36df111..989f0f5 100644
---- a/words/part/dialogs/KWCreateBookmarkDialog.cpp
-+++ b/words/part/dialogs/KWCreateBookmarkDialog.cpp
-@@ -19,6 +19,8 @@
+diff --git a/words/part/KWDocument.cpp b/words/part/KWDocument.cpp
+index 54cccdc..c62c60c 100644
+--- a/words/part/KWDocument.cpp
++++ b/words/part/KWDocument.cpp
+@@ -353,9 +353,9 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
+         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+         Q_ASSERT(lay);
  
- #include "KWCreateBookmarkDialog.h"
+-        if (tfs->textFrameSetType() == Words::MainTextFrameSet && m_layoutProgressUpdater) {
+-            connect(lay, SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
+-            connect(lay, SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
++        if (tfs->textFrameSetType() == Words::MainTextFrameSet) {
++            connect(lay, SIGNAL(layoutProgressChanged(int)), this, SLOT(slotLayoutProgressChanged(int)));
++            connect(lay, SIGNAL(finishedLayout()), this, SLOT(slotLayoutFinished()));
+         }
  
-+#include <klocale.h>
-+
- KWCreateBookmark::KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
-         : QWidget(parent)
+         // schedule all calls so multiple layout calls are compressed
+@@ -365,19 +365,21 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
+     firePageSetupChanged();
+ }
+ 
+-void KWDocument::layoutProgressChanged(int percent)
++void KWDocument::slotLayoutProgressChanged(int percent)
  {
-diff --git a/words/part/dialogs/KWPageSettingsDialog.h b/words/part/dialogs/KWPageSettingsDialog.h
-index 1ce0d93..4a2bfc5 100644
---- a/words/part/dialogs/KWPageSettingsDialog.h
-+++ b/words/part/dialogs/KWPageSettingsDialog.h
-@@ -38,6 +38,7 @@ class KWPageSettingsDialog : public KoPageLayoutDialog
- public:
-     explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, const KWPage &page);
-     KPageWidgetItem* pageItem(const QString &name) const;
-+    void setCurrentPage(KPageWidgetItem *item) {}
+-    Q_ASSERT(m_layoutProgressUpdater);
+-    m_layoutProgressUpdater->setProgress(percent);
++    if (m_layoutProgressUpdater)
++        m_layoutProgressUpdater->setProgress(percent);
+ }
+ 
+-void KWDocument::layoutFinished()
++void KWDocument::slotLayoutFinished()
+ {
+-    Q_ASSERT(m_layoutProgressUpdater);
+-    disconnect(QObject::sender(), SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
+-    disconnect(QObject::sender(), SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
+-    m_layoutProgressUpdater->setProgress(100);
+-    m_layoutProgressUpdater = 0; // free the instance
++    if (m_layoutProgressUpdater) {
++        disconnect(QObject::sender(), SIGNAL(layoutProgressChanged(int)), this, SLOT(slotLayoutProgressChanged(int)));
++        disconnect(QObject::sender(), SIGNAL(finishedLayout()), this, SLOT(slotLayoutFinished()));
++        m_layoutProgressUpdater->setProgress(100);
++        m_layoutProgressUpdater = 0; // free the instance
++    }
++    emit layoutFinished();
+ }
+ 
+ void KWDocument::addFrameSet(KWFrameSet *fs)
+diff --git a/words/part/KWDocument.h b/words/part/KWDocument.h
+index 7654aa3..14e50ec 100644
+--- a/words/part/KWDocument.h
++++ b/words/part/KWDocument.h
+@@ -226,6 +226,9 @@ signals:
+     /// signal emitted when a page has been added
+     void pageSetupChanged();
+ 
++    /// signal emitted when layouting finished
++    void layoutFinished();
++
+     /// emitted whenever a shape is added.
+     void shapeAdded(KoShape *, KoShapeManager::Repaint);
+ 
+@@ -242,8 +245,8 @@ private slots:
+     /// Called after the constructor figures out there is an install problem.
+     void mainTextFrameSetLayoutDone();
+ 
+-    void layoutProgressChanged(int percent);
+-    void layoutFinished();
++    void slotLayoutProgressChanged(int percent);
++    void slotLayoutFinished();
  
  protected:
-     void accept();
+     /// reimplemented from KoDocument
 diff --git a/words/part/frames/KWFrameLayout.h b/words/part/frames/KWFrameLayout.h
 index 72bd252..cba5517 100644
 --- a/words/part/frames/KWFrameLayout.h
