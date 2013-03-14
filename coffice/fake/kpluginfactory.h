@@ -40,44 +40,18 @@ namespace KParts { class Part; }
     }
 
 #if 0
-/**
- * \relates KPluginFactory
- * K_PLUGIN_FACTORY_DECLARATION declares the KPluginFactory subclass. This macro can be used in a
- * header file.
- *
- * \param name The name of the KPluginFactory derived class. This is the name you'll need for
- * K_EXPORT_PLUGIN
- *
- * \see K_PLUGIN_FACTORY
- * \see K_PLUGIN_FACTORY_DEFINITION
- */
 #define K_PLUGIN_FACTORY_DECLARATION(name) K_PLUGIN_FACTORY_DECLARATION_WITH_BASEFACTORY(name, KPluginFactory)
-
-/**
- * \relates KPluginFactory
- * K_PLUGIN_FACTORY_DEFINITION defines the KPluginFactory subclass. This macro can <b>not</b> be used in a
- * header file.
- *
- * \param name The name of the KPluginFactory derived class. This is the name you'll need for
- * K_EXPORT_PLUGIN
- *
- * \param pluginRegistrations This is code inserted into the constructors the class. You'll want to
- * call registerPlugin from there.
- *
- * \see K_PLUGIN_FACTORY
- * \see K_PLUGIN_FACTORY_DECLARATION
- */
 #define K_PLUGIN_FACTORY_DEFINITION(name, pluginRegistrations) K_PLUGIN_FACTORY_DEFINITION_WITH_BASEFACTORY(name, KPluginFactory, pluginRegistrations)
 #endif
 
 class KPluginFactory : public QObject
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
-    KPluginFactory(const char *componentName = 0, const char *catalogName = 0, QObject *parent = 0) : QObject(parent) {}
-    KPluginFactory(const KAboutData &aboutData, QObject *parent = 0) : QObject(parent) {}
+    KPluginFactory(const char *componentName = 0, const char *catalogName = 0, QObject *parent = 0);
+    KPluginFactory(const KAboutData &aboutData, QObject *parent = 0);
 
-    KComponentData componentData() const { return m_componentData; }
+    KComponentData componentData() const;
 
     template<typename T>
     T *create(QObject *parent = 0, const QVariantList &args = QVariantList());
@@ -88,10 +62,8 @@ public:
     template<typename T>
     T *create(QWidget *parentWidget, QObject *parent, const QString &keyword = QString(), const QVariantList &args = QVariantList());
 
-#if 0
 Q_SIGNALS:
     void objectCreated(QObject *object);
-#endif
 
 protected:
     typedef QObject *(*CreateInstanceFunction)(QWidget *, QObject *, const QVariantList &);
@@ -127,26 +99,11 @@ protected:
         m_registeredPlugins.insert(name, p);
     }
 
-    void setComponentData(const KComponentData &componentData) { m_componentData = componentData; }
+    void setComponentData(const KComponentData &componentData);
 
-    virtual void setupTranslations() {}
+    virtual void setupTranslations();
 
-    virtual QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword) {
-        qDebug() << Q_FUNC_INFO << "iface=" << iface << "parentWidget=" << parentWidget << "parent=" << parent << "args=" << args << "keyword=" << keyword;
-//         QHash<QString, RegisteredPlugin>::ConstIterator it = m_registeredPlugins.constFind(keyword);
-//         if (it != m_registeredPlugins.constEnd()) {
-//             if (it->instanceFunction)
-//                 return it->instanceFunction(parentWidget, parent, args);
-//             Q_ASSERT(it->metaObject);
-//             it->metaObject->
-//         }
-
-        QHash<QString, PluginIface*>::ConstIterator it =  m_registeredPlugins.constFind(keyword);
-        if (it != m_registeredPlugins.constEnd()) {
-            return it.value()->create(iface, parentWidget, parent, args, keyword);
-        }
-        return 0;
-    }
+    virtual QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword);
 
 #if 0
     template<class impl, class ParentType>
@@ -166,14 +123,6 @@ protected:
     {
         return new impl(parentWidget, parent, args);
     }
-
-    template<class impl>
-    struct InheritanceChecker
-    {
-        CreateInstanceFunction createInstanceFunction(KParts::Part *) { return &createPartInstance<impl>; }
-        CreateInstanceFunction createInstanceFunction(QWidget *) { return &createInstance<impl, QWidget>; }
-        CreateInstanceFunction createInstanceFunction(...) { return &createInstance<impl, QObject>; }
-    };
 #endif
 
 private:
@@ -186,33 +135,24 @@ template<typename T>
 inline T *KPluginFactory::create(QObject *parent, const QVariantList &args)
 {
     QObject *o = create(T::staticMetaObject.className(), parent && parent->isWidgetType() ? reinterpret_cast<QWidget *>(parent): 0, parent, args, QString());
-    T *t = qobject_cast<T *>(o);
-    if (!t) {
-        delete o;
-    }
-    return t;
+    T *t = qobject_cast<T*>(o);
+    return t ? t : o;
 }
 
 template<typename T>
 inline T *KPluginFactory::create(const QString &keyword, QObject *parent, const QVariantList &args)
 {
     QObject *o = create(T::staticMetaObject.className(), parent && parent->isWidgetType() ? reinterpret_cast<QWidget *>(parent): 0, parent, args, keyword);
-    T *t = qobject_cast<T *>(o);
-    if (!t) {
-        delete o;
-    }
-    return t;
+    T *t = qobject_cast<T*>(o);
+    return t ? t : o;
 }
 
 template<typename T>
 inline T *KPluginFactory::create(QWidget *parentWidget, QObject *parent, const QString &keyword, const QVariantList &args)
 {
     QObject *o = create(T::staticMetaObject.className(), parentWidget, parent, args, keyword);
-    T *t = qobject_cast<T *>(o);
-    if (!t) {
-        delete o;
-    }
-    return t;
+    T *t = qobject_cast<T*>(o);
+    return t ? t : o;
 }
 
 #endif

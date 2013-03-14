@@ -1,7 +1,7 @@
-include($${TOP_SOURCE_DIR}/common.pri)
-
 TEMPLATE = lib
 TARGET = calligraplugins
+
+include($${TOP_SOURCE_DIR}/common.pri)
 
 #QT += core gui xml sql network widgets
 QT += core gui xml svg
@@ -18,13 +18,7 @@ INCLUDEPATH = \
      $${CALLIGRAPLUGINS_VARIABLES_DIR} \
      $$INCLUDEPATH
 
-unix {
-    !macx: LIBEXT = so
-    macx: LIBEXT = dylib
-    CONFIG( static ): LIBEXT = a
-    LIBS += $${TOP_BUILD_DIR}/calligralibs/libcalligralibs.$${LIBEXT}
-}
-win32: LIBS += -L$${TOP_BUILD_DIR} -lcalligralibs
+LIBS += -lcalligralibs
 
 SOURCES += $$files($$CALLIGRAPLUGINS_TEXTSHAPE_DIR/TextPlugin.cpp)
 SOURCES += $$files($$CALLIGRAPLUGINS_TEXTSHAPE_DIR/TextShapeFactory.cpp)

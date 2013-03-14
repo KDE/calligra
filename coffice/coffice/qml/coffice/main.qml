@@ -4,9 +4,11 @@ import DocumentView 1.0
 Rectangle {
     width: 800
     height: 600
-    color: "#c0c0c0"
+    //color: "#c0c0c0"
+    color: "#ffffff"
 
     Flickable {
+        id: documentViewFlickable
         anchors {
             top: parent.top
             bottom: parent.bottom
@@ -14,33 +16,46 @@ Rectangle {
             right: parent.right
         }
         contentHeight: buttonBar.height + documentViewItem.implicitHeight
+        contentWidth: Math.max(documentViewItem.implicitWidth, parent.width)
+
+//        onFlickStarted: documentViewItem.beginUpdate()
+//        onFlickEnded: documentViewItem.endUpdate()
+//        onMovementStarted: documentViewItem.beginUpdate()
+//        onMovementEnded: documentViewItem.endUpdate()
+
         clip: true
 
-        Row {
+        Rectangle {
             id: buttonBar
-            Button {
-                text: "Open"
-                onClicked: {
-                    documentViewItem.openFileWithDialog()
-                }
-            }
-            /*
-            Button {
-                text: "Save As"
-                onClicked: {
-                }
-            }
-            */
-        }
+            x: 10
+            y: 10
+            width: buttonRow.implicitWidth
+            height: buttonRow.implicitHeight
 
-        /*
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                Qt.quit();
+            Row {
+                id: buttonRow
+                Button {
+                    text: "Open"
+                    onClicked: {
+                        documentViewItem.openFileWithDialog()
+                    }
+                }
+                /*
+                Button {
+                    text: "Save As"
+                    onClicked: {
+                        documentViewItem.saveFileWithDialog()
+                    }
+                }
+                Button {
+                    text: "Quit"
+                    onClicked: {
+                        Qt.quit()
+                    }
+                }
+                */
             }
         }
-        */
 
         DocumentViewItem {
             id: documentViewItem
@@ -50,5 +65,6 @@ Rectangle {
 
     Component.onCompleted: {
         //documentViewItem.openFile("/home/snoopy/test.odt")
+        //documentViewItem.openFile("/storage/sdcard0/Download/test2.odt")
     }
 }

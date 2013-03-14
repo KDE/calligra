@@ -17,6 +17,7 @@ Rectangle {
     height: contentColumn.height + 10
     width: contentColumn.width + 10
     border.width: 1
+    border.color: "#909090"
     radius: 4
     smooth: true
     clip: true
@@ -24,17 +25,13 @@ Rectangle {
     gradient: Gradient {
         GradientStop {
             position: 0.0
-            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#c0c0c0" : "#f0f0f0"
+            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#c9c9c9" : "#f9f9f9"
         }
         GradientStop {
             position: 1.0
-            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#f0f0f0" : "#c0c0c0"
+            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#f9f9f9" : "#c9c9c9"
         }
     }
-
-//    SystemPalette { id: activePalette }
-//    activePalette.buttonText
-//    activePalette.button
 
     MouseArea {
         id: mouseArea
@@ -43,7 +40,6 @@ Rectangle {
             if (!root.enabled)
                 return
             if (root.checkable) {
-//                root.checked = !root.checked
                 root.toggled()
             } else {
                 root.clicked()

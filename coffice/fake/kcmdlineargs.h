@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QCoreApplication>
 #include <kurl.h>
 #include <klocale.h>
 
@@ -74,9 +75,11 @@ public:
     static int &qtArgc() { static int m_qtArgc = 0; return m_qtArgc; }
     static char **qtArgv() {
         static char ** m_qtArgv = 0;
+        static QByteArray m_appFilePath;
         if (!m_qtArgv) {
             m_qtArgv = new char*[2];
-            m_qtArgv[0] = "";
+            m_appFilePath = QCoreApplication::applicationFilePath().toLocal8Bit();
+            m_qtArgv[0] = m_appFilePath.data();
             m_qtArgv[1] = 0;
         }
         return m_qtArgv;

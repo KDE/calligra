@@ -1,7 +1,7 @@
-include($${TOP_SOURCE_DIR}/common.pri)
-
 TEMPLATE = lib
 TARGET = calligrawords
+
+include($${TOP_SOURCE_DIR}/common.pri)
 
 #QT += core gui xml sql network widgets
 QT += core gui xml svg
@@ -14,14 +14,7 @@ INCLUDEPATH += \
      $${CALLIGRAWORDS_DIR} \
      $${CALLIGRAWORDS_DIR}/part
 
-unix {
-  !macx: LIBEXT = so
-  macx: LIBEXT = dylib
-  CONFIG( static ): LIBEXT = a
-  LIBS += $${TOP_BUILD_DIR}/calligralibs/libcalligralibs.$${LIBEXT}
-  LIBS += $${TOP_BUILD_DIR}/calligraplugins/libcalligraplugins.$${LIBEXT}
-}
-win32: LIBS += -L$${TOP_BUILD_DIR} -lcalligralibs -lcalligraplugins
+LIBS += -lcalligralibs -lcalligraplugins
 
 SOURCES += $$files($$CALLIGRAWORDS_DIR/*.cpp)
 SOURCES += $$files($$CALLIGRAWORDS_DIR/part/*.cpp)

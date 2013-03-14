@@ -1,4 +1,5 @@
 CONFIG += depend_includepath
+CONFIG += qt warn_on
 
 DEFINES += QT_FATAL_ASSERT
 #DEFINES += USE_EXCEPTIONS
@@ -11,9 +12,26 @@ DEFINES += QT_NO_DBUS
 }
 
 # Increase the debugging level from Qt's default
-CONFIG(debug, debug|release) {
-    NORMAL_CXXFLAGS += -g3
+#CONFIG(debug, debug|release) {
+#    NORMAL_CXXFLAGS += -g3
+#}
+
+contains(TEMPLATE, lib) {
+  DESTDIR = $${TOP_BUILD_DIR}/lib
 }
+contains(TEMPLATE, app) {
+  DESTDIR = $${TOP_BUILD_DIR}/bin
+}
+
+#unix {
+#    isEmpty(QMAKE_EXTENSION_SHLIB) {
+#      static:QMAKE_EXTENSION_SHLIB=a
+#      else {
+#        macx:QMAKE_EXTENSION_SHLIB=dylib
+#        else:QMAKE_EXTENSION_SHLIB=so
+#      }
+#    }
+#}
 
 # The calligra-libs code-paths are the common base for all other sub-projects
 CALLIGRALIBS_KDEFAKE = $${TOP_SOURCE_DIR}/fake
@@ -53,6 +71,9 @@ INCLUDEPATH = \
     $$CALLIGRALIBS_WIDGETS_DIR \
     $${TOP_BUILD_DIR} \
     $$INCLUDEPATH
+
+# Set the directories where our own libraries are located
+LIBS += -L$${TOP_BUILD_DIR}/lib
 
 #new_moc.output = ${QMAKE_FILE_BASE}.moc
 #new_moc.commands = moc ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}

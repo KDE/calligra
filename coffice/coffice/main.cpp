@@ -1,6 +1,7 @@
 #include <QtGui/QApplication>
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
+#include <QFile>
 
 #include "qmlapplicationviewer.h"
 
@@ -14,11 +15,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QDeclarativeContext *ctxt = viewer.rootContext();
 
     qmlRegisterType<DocumentView>("DocumentView", 1, 0, "DocumentViewItem");
-    //ctxt->setContextProperty("Manager", &donkeyManager);
+    //ctxt->setContextProperty("Settings", &settings);
+
+    QString url("qml/coffice/main.qml");
+
+    // temporary hack for my dev-system :)
+    QString hack = "/home/snoopy/src/calligra/coffice/coffice/qml/coffice/main.qml";
+    if (QFile(hack).exists()) url = hack;
+
+    viewer.setMainQmlFile(url);
 
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    //viewer.setMainQmlFile(QLatin1String("qml/coffice/main.qml"));
-    viewer.setMainQmlFile(QLatin1String("/home/snoopy/src/calligra/coffice/coffice/qml/coffice/main.qml"));
     viewer.showExpanded();
 
     return app->exec();
