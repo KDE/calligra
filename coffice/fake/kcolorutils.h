@@ -1,0 +1,4 @@
+#ifndef FAKE_KCOLORUTILS_H
+#define FAKE_KCOLORUTILS_H
+
+#endif

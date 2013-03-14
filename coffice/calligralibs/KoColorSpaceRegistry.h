@@ -34,7 +34,7 @@ public:
     //QList<const KoColorProfile *>  profilesFor(const KoID& id) const { return QList<const KoColorProfile *>(); }
     QList<const KoColorSpaceFactory*> colorSpacesFor(const KoColorProfile* _profile) const { return QList<const KoColorSpaceFactory*>(); }
     QList<const KoColorProfile *>  profilesFor(const QString& id) const { return QList<const KoColorProfile *>(); }
-    const KoColorSpaceFactory* colorSpaceFactory(const QString &colorSpaceId) const {}
+    const KoColorSpaceFactory* colorSpaceFactory(const QString &colorSpaceId) const { return 0; }
     const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId, const KoColorProfile *profile) { return 0; }
     const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId, const QString &profileName) { return 0; }
     QString colorSpaceId(const QString & colorModelId, const QString & colorDepthId) const { return QString(); }

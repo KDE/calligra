@@ -384,6 +384,9 @@ public:
 
 private:
     KUrl m_url;
+
+//     friend QDataStream& operator<< ( QDataStream &s, const KFileItem &a );
+//     friend QDataStream& operator>> ( QDataStream &s, KFileItem &a );
 };
 
 Q_DECLARE_METATYPE(KFileItem)
@@ -391,11 +394,25 @@ Q_DECLARE_METATYPE(KFileItem)
 class KFileItemList : public QList<KFileItem>
 {
 public:
-  //KFileItem findByName( const QString& fileName ) const;
-  //KFileItem findByUrl( const KUrl& url ) const;
-  //KUrl::List urlList() const;
-  //KUrl::List targetUrlList() const;
+    KFileItemList() : QList<KFileItem>() {}
+    KFileItemList( const QList<KFileItem> &items ) : QList<KFileItem>(items) {}
+    //KFileItem findByName( const QString& fileName ) const;
+    //KFileItem findByUrl( const KUrl& url ) const;
+    //KUrl::List urlList() const;
+    //KUrl::List targetUrlList() const;
 };
+
+// QDataStream& operator<< ( QDataStream &s, const KFileItem &a )
+// {
+//     s << a.m_url;
+//     return s;
+// }
+// 
+// QDataStream& operator>> ( QDataStream &s, KFileItem &a )
+// {
+//     s >> a.m_url;
+//     return s;
+// }
 
 #endif
  

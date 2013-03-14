@@ -115,7 +115,7 @@ public:
  public Q_SLOTS:
 #endif
 
-  int configureShortcuts(bool bAllowLetterShortcuts = true, bool bSaveSettings = true) {}
+  int configureShortcuts(bool bAllowLetterShortcuts = true, bool bSaveSettings = true) { return 0; }
   void changeShortcutScheme(const QString &scheme) {}
 
 #if 0
