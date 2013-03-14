@@ -203,15 +203,17 @@ void GrammarCheck::startingSimpleEdit(QTextDocument *document, int cursorPositio
 
 void GrammarCheck::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
+	//***note: this function clears markups of the blocks involved
 	if(startPosition >= endPosition || startPosition < 0 || endPosition > document -> characterCount())
 	{
 		return;
-    }
+	}
 	QTextBlock block = document->findBlock(startPosition);
 	bool sectionFinished = false;
 	while(block.isValid() && !sectionFinished)
 	{
 		QVector<QPair<int, int> > sentenceVector;
+		bool isMarkUpClearedForCurrentBlock = false;
 		findSentencesInBlock(block, sentenceVector);
 		for(int i = 0; i < sentenceVector.size(); i++)
 		{
@@ -223,6 +225,12 @@ void GrammarCheck::checkSection(QTextDocument *document, int startPosition, int 
 			if(sentenceVector[i].second + block.position() < startPosition)
 			{
 				continue;
+			}
+			if(!isMarkUpClearedForCurrentBlock)
+			{
+				isMarkUpClearedForCurrentBlock = true;
+				KoTextBlockData blockData(block);
+				blockData.clearMarkups(KoTextBlockData::Grammar);
 			}
 			checkSentence(document, sentenceVector[i].first + block.position(), sentenceVector[i].second + block.position());
 		}
@@ -342,22 +350,18 @@ void GrammarCheck::documentChanged(int from, int minus, int plus)
 
 void GrammarCheck::runQueue()
 {
+	//***this function assumes that markups are already cleared for the involved blocks
 	Q_ASSERT(QThread::currentThread() == QApplication::instance()->thread());
 	if (m_isChecking)
 		return;
 	while (!m_documentsQueue.isEmpty()) {
 		m_activeSection = m_documentsQueue.dequeue();
-		if (m_activeSection.document.isNull())
 			continue;
+		if (m_activeSection.document.isNull())
 		QTextBlock block = m_activeSection.document->findBlock(m_activeSection.from);
 		if (!block.isValid())
 			continue;
 		m_isChecking = true;
-		do {
-			KoTextBlockData blockData(block);
-			blockData.clearMarkups(KoTextBlockData::Grammar);
-			block = block.next();
-		} while(block.isValid() && block.position() < m_activeSection.to);
 		m_bgGrammarCheck->startRun(m_activeSection.document, m_activeSection.from, m_activeSection.to);
 		break;
 	}

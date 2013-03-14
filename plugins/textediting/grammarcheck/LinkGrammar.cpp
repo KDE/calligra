@@ -56,7 +56,7 @@ void LinkGrammar::cleanUp()
 	cleanUpDictionary();
 }
 
-int LinkGrammar::getMaxTimeToParseInNumberOfSeconds()
+int LinkGrammar::getMaxTimeToParseInNumberOfSeconds() const
 {
 	return m_maxTimeToParseInNumberOfSeconds;
 }
@@ -66,7 +66,7 @@ void LinkGrammar::setMaxTimeToParseInNumberOfSeconds(int numberOfSeconds)
 	m_maxTimeToParseInNumberOfSeconds = numberOfSeconds;
 }
 
-int LinkGrammar::getDisjunctCount()
+int LinkGrammar::getDisjunctCount() const
 {
 	return m_disjunctCount;
 }

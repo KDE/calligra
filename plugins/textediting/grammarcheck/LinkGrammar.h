@@ -19,9 +19,9 @@ extern "C"
 		bool parseSentence(const QString text);
 		void cleanUp();
 		bool isLanguageAvailable(QString language);
-		int getMaxTimeToParseInNumberOfSeconds();
+		int getMaxTimeToParseInNumberOfSeconds() const;
 		void setMaxTimeToParseInNumberOfSeconds(int numberOfSeconds);
-		int getDisjunctCount();
+		int getDisjunctCount() const;
 		void setDisjunctCount(int count);
 		QString getLanguage() const;
 		void setLanguage(const QString &language);
