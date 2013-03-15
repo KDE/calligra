@@ -169,7 +169,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     if (canvas->canvas() == d->canvas) {
         d->activeId = id;
-        blockSignals(true);
+        d->tabBar->blockSignals(true);
+        d->stack->blockSignals(true);
         int i = 0;
         foreach (const KoToolButton &button, d->addedButtons) {
             if (button.buttonGroupId == d->activeId) {
@@ -179,7 +180,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
             }
             ++i;
         }
-        blockSignals(false);
+        d->stack->blockSignals(false);
+        d->tabBar->blockSignals(false);
         return;
     }
 }
@@ -270,14 +272,12 @@ void KoModeBox::addItem(const KoToolButton button)
     d->addedWidgets[button.buttonGroupId] = widget;
 
     // Create a rotated icon with text
-    d->tabBar->blockSignals(true);
     if (d->iconMode == IconAndText) {
         d->tabBar->addTab(createRotatedIcon(button), QString());
     } else {
         int index = d->tabBar->addTab(createSimpleIcon(button), QString());
         d->tabBar->setTabToolTip(index, button.button->toolTip());
     }
-    d->tabBar->blockSignals(false);
     d->stack->addWidget(widget);
     d->addedButtons.append(button);
 }
@@ -293,7 +293,8 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     }
     d->iconTextFitted = true;
 
-    blockSignals(true);
+    d->tabBar->blockSignals(true);
+    d->stack->blockSignals(true);
 
     while (d->tabBar->count()) {
         d->tabBar->removeTab(0);
@@ -334,8 +335,10 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     }
     if (newIndex != -1) {
         d->tabBar->setCurrentIndex(newIndex);
+        d->stack->setCurrentIndex(newIndex);
     }
-    blockSignals(false);
+    d->tabBar->blockSignals(false);
+    d->stack->blockSignals(false);
 
     if (!d->iconTextFitted &&  d->fittingIterations++ < 8) {
         updateShownTools(canvas, codes);
