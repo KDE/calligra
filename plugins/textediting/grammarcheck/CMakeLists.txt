@@ -18,6 +18,3 @@ target_link_libraries(grammarcheck kotext textlayout ${LINK_GRAMMAR_LIBRARIES})
 install(TARGETS grammarcheck DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES grammarcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-add subdirectory( tests )
-
-include directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )

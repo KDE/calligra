@@ -33,7 +33,7 @@ public:
 	void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
 	void checkSentence(QTextDocument *document, int startPosition, int endPosition);
 	void findSentencesInBlock(const QTextBlock &block, QVector<QPair<int,int> > &sentencesInCurrentBlock);
-	bool isSentenceComplete(QTextDocument *document, int startPosition, int endPosition);
+	bool isSentenceComplete(QString textSegment);
 	int numberOfWords(QTextDocument *document, int startPosition, int endPosition);
 	QStringList availableBackends() const;
 	QStringList availableLanguages() const;
