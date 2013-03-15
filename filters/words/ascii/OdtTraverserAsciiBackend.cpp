@@ -55,10 +55,12 @@ OdtTraverserAsciiBackend::~OdtTraverserAsciiBackend()
 {
 }
 
-
-void OdtTraverserAsciiBackend::beginCharacterData(KoXmlNode &node,
-                                                  OdfTraverserContext *context)
+void OdtTraverserAsciiBackend::characterData(KoXmlNode &node, OdfTraverserContext *context,
+                                             BeginEndTag beginEnd)
 {
+    if (beginEnd != EndTag)
+        return;
+
     OdtTraverserAsciiContext *asciiContext = dynamic_cast<OdtTraverserAsciiContext*>(context);
     if (!asciiContext) {
         return;
@@ -68,14 +70,19 @@ void OdtTraverserAsciiBackend::beginCharacterData(KoXmlNode &node,
 }
 
 
-void OdtTraverserAsciiBackend::endTagP(KoXmlElement &element, OdfTraverserContext *context)
+void OdtTraverserAsciiBackend::tagP(KoXmlElement &element, OdfTraverserContext *context,
+                                    BeginEndTag beginEnd)
 {
     Q_UNUSED(element);
+
+    if (beginEnd != EndTag)
+        return;
 
     OdtTraverserAsciiContext *asciiContext = dynamic_cast<OdtTraverserAsciiContext*>(context);
     if (!asciiContext) {
         return;
     }
 
+    // At the end of a paragraph, output two newlines.
     asciiContext->outStream << "\n\n";
 }

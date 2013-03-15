@@ -90,7 +90,7 @@ bool OdtTraverser::traverseContent(OdtTraverserBackend *backend,
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "text");
 
     // Start the actual conversion.
-    m_backend->beginTraversal(m_context);
+    m_backend->beginEndTraversal(m_context, OdtTraverserBackend::BeginTag);
 
     // KoXmlElement element = currentNode.toElement();
     KoXmlElement nodeElement;    // currentNode as Element
@@ -136,7 +136,7 @@ bool OdtTraverser::traverseContent(OdtTraverserBackend *backend,
         }
     }
 
-    m_backend->endTraversal(m_context);
+    m_backend->beginEndTraversal(m_context, OdtTraverserBackend::EndTag);
     odfStore->close();
 
     return true;
@@ -152,7 +152,7 @@ void OdtTraverser::handleInsideElementsTag(KoXmlElement &nodeElement)
     KoXmlNode node = nodeElement.firstChild();
     KoXmlElement element = node.toElement();
 
-    m_backend->beginInsideElementsTag(element, m_context);
+    m_backend->insideElementsTag(element, m_context, OdtTraverserBackend::BeginTag);
 
     // We have characterData or image or span or s or soft-page break in a tag p
     // FIXME: we should add if there are more tags.
@@ -215,75 +215,75 @@ void OdtTraverser::handleInsideElementsTag(KoXmlElement &nodeElement)
         element = node.toElement();
     }
 
-    m_backend->endInsideElementsTag(element, m_context);
+    m_backend->insideElementsTag(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagP(KoXmlElement &element)
 {
-    m_backend->beginTagP(element, m_context);
+    m_backend->tagP(element, m_context, OdtTraverserBackend::BeginTag);
     handleInsideElementsTag(element);
-    m_backend->endTagP(element, m_context);
+    m_backend->tagP(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagH(KoXmlElement &element)
 {
-    m_backend->beginTagH(element, m_context);
+    m_backend->tagH(element, m_context, OdtTraverserBackend::BeginTag);
     handleInsideElementsTag(element);
-    m_backend->endTagH(element, m_context);
+    m_backend->tagH(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagSpan(KoXmlElement &element)
 {
-    m_backend->beginTagSpan(element, m_context);
+    m_backend->tagSpan(element, m_context, OdtTraverserBackend::BeginTag);
     handleInsideElementsTag(element);
-    m_backend->endTagSpan(element, m_context);
+    m_backend->tagSpan(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagS(KoXmlElement &element)
 {
-    m_backend->beginTagS(element, m_context);
+    m_backend->tagS(element, m_context, OdtTraverserBackend::BeginTag);
     handleInsideElementsTag(element);  // BUG?
-    m_backend->endTagS(element, m_context);
+    m_backend->tagS(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagTab (KoXmlElement &element)
 {
-    m_backend->beginTagTab(element, m_context);
-    m_backend->endTagTab(element, m_context);
+    m_backend->tagTab(element, m_context, OdtTraverserBackend::BeginTag);
+    m_backend->tagTab(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagLineBreak(KoXmlElement &element)
 {
-    m_backend->beginTagLineBreak(element, m_context);
-    m_backend->endTagLineBreak(element, m_context);
+    m_backend->tagLineBreak(element, m_context, OdtTraverserBackend::BeginTag);
+    m_backend->tagLineBreak(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagPageBreak(KoXmlElement &element)
 {
-    m_backend->beginTagPageBreak(element, m_context);
-    m_backend->endTagPageBreak(element, m_context);
+    m_backend->tagPageBreak(element, m_context, OdtTraverserBackend::BeginTag);
+    m_backend->tagPageBreak(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagA(KoXmlElement &element)
 {
-    m_backend->beginTagA(element, m_context);
+    m_backend->tagA(element, m_context, OdtTraverserBackend::BeginTag);
 
     handleInsideElementsTag(element);
 
-    m_backend->endTagA(element, m_context);
+    m_backend->tagA(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleCharacterData(KoXmlNode &node)
 {
     // FIXME: Do we really need two calls here?  Doubtful...
-    m_backend->beginCharacterData(node, m_context);
-    m_backend->endCharacterData(node, m_context);
+    m_backend->characterData(node, m_context, OdtTraverserBackend::BeginTag);
+    m_backend->characterData(node, m_context, OdtTraverserBackend::EndTag);
 }
 
 
 void OdtTraverser::handleTagList(KoXmlElement &element)
 {
-    m_backend->beginTagList(element, m_context);
+    m_backend->tagList(element, m_context, OdtTraverserBackend::BeginTag);
 
 #if 0  // FIXME: Find out how to handle list items in ODT
     KoXmlElement listItem;
@@ -294,7 +294,7 @@ void OdtTraverser::handleTagList(KoXmlElement &element)
     }
 #endif
 
-    m_backend->endTagList(element, m_context);
+    m_backend->tagList(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 
@@ -303,7 +303,7 @@ void OdtTraverser::handleTagList(KoXmlElement &element)
 
 void OdtTraverser::handleTagTable(KoXmlElement &element)
 {
-    m_backend->beginTagTable(element, m_context);
+    m_backend->tagTable(element, m_context, OdtTraverserBackend::BeginTag);
 
     KoXmlElement tableElement;
     forEachElement (tableElement, element) {
@@ -332,12 +332,12 @@ void OdtTraverser::handleTagTable(KoXmlElement &element)
         }
     }
 
-    m_backend->beginTagTable(element, m_context);
+    m_backend->tagTable(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagTableRow(KoXmlElement& element, OdtTraverser::TableCellType type)
 {
-    m_backend->beginTagTableRow(element, m_context, type);
+    m_backend->tagTableRow(element, m_context, type, OdtTraverserBackend::BeginTag);
 
 #if 0    // FIXME: We need more advanced handling of tables and more handle...Tag functions
 
@@ -381,7 +381,7 @@ void OdtTraverser::handleTagTableRow(KoXmlElement& element, OdtTraverser::TableC
 
     htmlWriter->endElement(); //tr
 #endif
-    m_backend->endTagTableRow(element, m_context, type);
+    m_backend->tagTableRow(element, m_context, type, OdtTraverserBackend::EndTag);
 }
 
 // ----------------------------------------------------------------
@@ -390,7 +390,7 @@ void OdtTraverser::handleTagTableRow(KoXmlElement& element, OdtTraverser::TableC
 
 void OdtTraverser::handleTagFrame(KoXmlElement &element)
 {
-    m_backend->beginTagFrame(element, m_context);
+    m_backend->tagFrame(element, m_context, OdtTraverserBackend::BeginTag);
 
 #if 0    // FIXME: Frames are not yet fully supported
 
@@ -498,7 +498,7 @@ void OdtTraverser::handleTagFrame(KoXmlElement &element)
         }
     } // foreach
 #endif
-    m_backend->endTagFrame(element, m_context);
+    m_backend->tagFrame(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleEmbeddedFormula(const QString &href)
@@ -610,7 +610,7 @@ void OdtTraverser::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
 
 void OdtTraverser::handleTagTableOfContent(KoXmlElement &element)
 {
-    m_backend->beginTagTableOfContent(element, m_context);
+    m_backend->tagTableOfContent(element, m_context, OdtTraverserBackend::BeginTag);
 
     KoXmlNode indexBody = KoXml::namedItemNS(element, KoXmlNS::text, "index-body");
     KoXmlElement  el;
@@ -622,42 +622,42 @@ void OdtTraverser::handleTagTableOfContent(KoXmlElement &element)
             handleTagTableOfContentBody(el);
     }
 
-    m_backend->endTagTableOfContent(element, m_context);
+    m_backend->tagTableOfContent(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagTableOfContentBody(KoXmlElement &element)
 {
-    m_backend->beginTagTableOfContentBody(element, m_context);
+    m_backend->tagTableOfContentBody(element, m_context, OdtTraverserBackend::BeginTag);
 
     if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
         handleTagP(element);
     }
 
-    m_backend->endTagTableOfContentBody(element, m_context);
+    m_backend->tagTableOfContentBody(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagBookMark(KoXmlElement &element)
 {
-    m_backend->beginTagBookMark(element, m_context);
-    m_backend->endTagBookMark(element, m_context);
+    m_backend->tagBookMark(element, m_context, OdtTraverserBackend::BeginTag);
+    m_backend->tagBookMark(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagBookMarkStart(KoXmlElement &element)
 {
-    m_backend->beginTagBookMarkStart(element, m_context);
-    m_backend->endTagBookMarkStart(element, m_context);
+    m_backend->tagBookMarkStart(element, m_context, OdtTraverserBackend::BeginTag);
+    m_backend->tagBookMarkStart(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 void OdtTraverser::handleTagBookMarkEnd(KoXmlElement &element)
 {
-    m_backend->beginTagBookMarkEnd(element, m_context);
-    m_backend->endTagBookMarkEnd(element, m_context);
+    m_backend->tagBookMarkEnd(element, m_context, OdtTraverserBackend::BeginTag);
+    m_backend->tagBookMarkEnd(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 
 void OdtTraverser::handleTagNote(KoXmlElement &element)
 {
-    m_backend->beginTagNote(element, m_context);
+    m_backend->tagNote(element, m_context, OdtTraverserBackend::BeginTag);
 
 #if 0  // FIXME: Analyze how to handle this.
 
@@ -700,16 +700,16 @@ void OdtTraverser::handleTagNote(KoXmlElement &element)
     }
 #endif
 
-    m_backend->endTagNote(element, m_context);
+    m_backend->tagNote(element, m_context, OdtTraverserBackend::EndTag);
 }
 
 
 void OdtTraverser::handleUnknownTags(KoXmlElement &element)
 {
-    m_backend->beginTagNote(element, m_context);
+    m_backend->tagNote(element, m_context, OdtTraverserBackend::BeginTag);
 
     // Just go deeper to find known tags.
     handleInsideElementsTag(element);
 
-    m_backend->endTagNote(element, m_context);
+    m_backend->tagNote(element, m_context, OdtTraverserBackend::EndTag);
 }

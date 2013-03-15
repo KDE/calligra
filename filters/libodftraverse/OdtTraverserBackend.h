@@ -40,113 +40,65 @@ class OdfTraverserContext;
 class ODFTRAVERSE_EXPORT OdtTraverserBackend
 {
  public:
+    enum BeginEndTag {
+        BeginTag,
+        EndTag
+    };
+
     OdtTraverserBackend(OdfTraverserContext *context);
     virtual ~OdtTraverserBackend();
 
     // Called before and after the actual traversal.
-    virtual void beginTraversal(OdfTraverserContext *context);
-    virtual void endTraversal(OdfTraverserContext *context);
+    virtual void beginEndTraversal(OdfTraverserContext *context, BeginEndTag beginEnd);
 
     // Called when there is a document level element with children.
-    virtual void beginInsideElementsTag(KoXmlElement &element,
-                                        OdfTraverserContext *context);
-    virtual void endInsideElementsTag(KoXmlElement &element,
-                                      OdfTraverserContext *context);
+    virtual void insideElementsTag(KoXmlElement &element,
+                                   OdfTraverserContext *context, BeginEndTag beginEnd);
 
     // Text tags
-    virtual void beginTagP(KoXmlElement &element,
-                           OdfTraverserContext *context);
-    virtual void endTagP(KoXmlElement &element,
-                         OdfTraverserContext *context);
-    virtual void beginTagH(KoXmlElement &element,
-                           OdfTraverserContext *context);
-    virtual void endTagH(KoXmlElement &element,
-                         OdfTraverserContext *context);
-    virtual void beginTagSpan(KoXmlElement &element,
-                              OdfTraverserContext *context);
-    virtual void endTagSpan(KoXmlElement &element,
-                            OdfTraverserContext *context);
-    virtual void beginTagS(KoXmlElement &element,
-                           OdfTraverserContext *context);
-    virtual void endTagS(KoXmlElement &element,
-                         OdfTraverserContext *context);
-    virtual void beginTagTab(KoXmlElement &element,
-                             OdfTraverserContext *context);
-    virtual void endTagTab(KoXmlElement &element,
-                           OdfTraverserContext *context);
-    virtual void beginTagLineBreak(KoXmlElement &element,
-                                   OdfTraverserContext *context);
-    virtual void endTagLineBreak(KoXmlElement &element,
-                                 OdfTraverserContext *context);
-    virtual void beginTagPageBreak(KoXmlElement &element,
-                                   OdfTraverserContext *context);
-    virtual void endTagPageBreak(KoXmlElement &element,
-                                 OdfTraverserContext *context);
-    virtual void beginTagA(KoXmlElement &element,
-                           OdfTraverserContext *context);
-    virtual void endTagA(KoXmlElement &element,
-                         OdfTraverserContext *context);
-    virtual void beginCharacterData(KoXmlNode &node,
-                                    OdfTraverserContext *context);
-    virtual void endCharacterData(KoXmlNode &node,
-                                  OdfTraverserContext *context);
+    virtual void tagP(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+    virtual void tagH(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+    virtual void tagSpan(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+    virtual void tagS(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+    virtual void tagTab(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+    virtual void tagLineBreak(KoXmlElement &element, OdfTraverserContext *context,
+                              BeginEndTag beginEnd);
+    virtual void tagPageBreak(KoXmlElement &element, OdfTraverserContext *context,
+                              BeginEndTag beginEnd);
+    virtual void tagA(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+    virtual void characterData(KoXmlNode &node, OdfTraverserContext *context,
+                               BeginEndTag beginEnd);
 
-    virtual void beginTagList(KoXmlElement &element,
-                              OdfTraverserContext *context);
-    virtual void endTagList(KoXmlElement &element,
-                            OdfTraverserContext *context);
+    virtual void tagList(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
 
-    virtual void beginTagTable(KoXmlElement &element,
-                               OdfTraverserContext *context);
-    virtual void endTagTable(KoXmlElement &element,
-                             OdfTraverserContext *context);
-    virtual void beginTagTableRow(KoXmlElement &element,
-                                   OdfTraverserContext *context,
-                                   OdtTraverser::TableCellType type = OdtTraverser::TableDataType);
-    virtual void endTagTableRow(KoXmlElement &element,
-                                OdfTraverserContext *context,
-                                OdtTraverser::TableCellType type = OdtTraverser::TableDataType);
+    virtual void tagTable(KoXmlElement &element, OdfTraverserContext *context,
+                          BeginEndTag beginEnd);
+    virtual void tagTableRow(KoXmlElement &element, OdfTraverserContext *context,
+                             OdtTraverser::TableCellType type,
+                             BeginEndTag beginEnd);
 
-    virtual void beginTagFrame(KoXmlElement &element,
-                               OdfTraverserContext *context);
-    virtual void endTagFrame(KoXmlElement &element,
-                             OdfTraverserContext *context);
-    virtual void beginEmbeddedFormula(const QString &href,
-                                      OdfTraverserContext *context);
-    virtual void endEmbeddedFormula(const QString &href,
-                                    OdfTraverserContext *context);
+    virtual void tagFrame(KoXmlElement &element, OdfTraverserContext *context,
+                          BeginEndTag beginEnd);
+    virtual void beginEmbeddedFormula(const QString &href, OdfTraverserContext *context,
+                                      BeginEndTag beginEnd);
 
-    virtual void beginTagTableOfContent(KoXmlElement &element,
-                                        OdfTraverserContext *context);
-    virtual void endTagTableOfContent(KoXmlElement &element,
-                                      OdfTraverserContext *context);
-    virtual void beginTagTableOfContentBody(KoXmlElement &element,
-                                            OdfTraverserContext *context);
-    virtual void endTagTableOfContentBody(KoXmlElement &element,
-                                          OdfTraverserContext *context);
-//--
+    virtual void tagTableOfContent(KoXmlElement &element, OdfTraverserContext *context,
+                                   BeginEndTag beginEnd);
+    virtual void tagTableOfContentBody(KoXmlElement &element, OdfTraverserContext *context,
+                                       BeginEndTag beginEnd);
 
-    virtual void beginTagBookMark(KoXmlElement &element,
-                                  OdfTraverserContext *context);
-    virtual void endTagBookMark(KoXmlElement &element,
-                                OdfTraverserContext *context);
-    virtual void beginTagBookMarkStart(KoXmlElement &element,
-                                       OdfTraverserContext *context);
-    virtual void endTagBookMarkStart(KoXmlElement &element,
-                                     OdfTraverserContext *context);
-    virtual void beginTagBookMarkEnd(KoXmlElement &element,
-                                     OdfTraverserContext *context);
-    virtual void endTagBookMarkEnd(KoXmlElement &element,
-                                   OdfTraverserContext *context);
+    virtual void tagBookMark(KoXmlElement &element, OdfTraverserContext *context,
+                             BeginEndTag beginEnd);
+    virtual void tagBookMarkStart(KoXmlElement &element, OdfTraverserContext *context,
+                                  BeginEndTag beginEnd);
+    virtual void tagBookMarkEnd(KoXmlElement &element, OdfTraverserContext *context,
+                                BeginEndTag beginEnd);
 
-    virtual void beginUnknownTags(KoXmlElement &element,
-                                  OdfTraverserContext *context);
-    virtual void endUnknownTags(KoXmlElement &element,
-                                OdfTraverserContext *context);
-    virtual void beginTagNote(KoXmlElement &element,
-                              OdfTraverserContext *context);
-    virtual void endTagNote(KoXmlElement &element,
-                            OdfTraverserContext *context);
+    virtual void tagNote(KoXmlElement &element, OdfTraverserContext *context,
+                         BeginEndTag beginEnd);
+
+    virtual void unknownTags(KoXmlElement &element, OdfTraverserContext *context,
+                             BeginEndTag beginEnd);
 
  private:
     class Private;
