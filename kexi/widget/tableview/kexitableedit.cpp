@@ -25,7 +25,6 @@
 
 #include <QPalette>
 #include <QPainter>
-//Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 

@@ -755,7 +755,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     action = new KAction(koIcon("cell_edit"), i18n("Modify Cell"), this);
     addAction("editCell", action);
-    action->setShortcuts(QList<QKeySequence>() << Qt::Key_F2 << QKeySequence(Qt::CTRL + Qt::Key_M));
+    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
     action->setToolTip(i18n("Edit the highlighted cell"));
 
@@ -1064,6 +1064,14 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
             return;
         break;
 
+    case Qt::Key_Delete:
+	clearContents();
+	break;
+
+    case Qt::Key_F2:
+	edit();
+	break;
+	
     default:
         d->processOtherKey(event);
         return;
