@@ -42,7 +42,6 @@
 #include <QApplication>
 #include <QFont>
 #include <QTimer>
-//Added by qt3to4:
 #include <QList>
 #include <QPainter>
 #include <QGraphicsItem>

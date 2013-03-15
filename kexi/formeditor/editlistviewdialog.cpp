@@ -18,7 +18,6 @@
 */
 #include <q3header.h>
 #include <QLayout>
-//Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 

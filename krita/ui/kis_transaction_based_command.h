@@ -16,42 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_ui_action_factory.h"
+#ifndef KIS_TRANSACTION_BASED_COMMAND_H
+#define KIS_TRANSACTION_BASED_COMMAND_H
 
-KisUiActionConfiguration::KisUiActionConfiguration()
+#include <krita_export.h>
+#include <kundo2command.h>
+
+class KRITAUI_EXPORT KisTransactionBasedCommand : public KUndo2Command
 {
-}
+public:
+    KisTransactionBasedCommand(const QString &text = "", KUndo2Command *parent = 0);
 
-KisUiActionConfiguration::KisUiActionConfiguration(const QString &id)
-{
-    setProperty("id", id);
-}
+    ~KisTransactionBasedCommand();
 
-QString KisUiActionConfiguration::id() const
-{
-    return getString("id", "wrong-id");
-}
+    void redo();
+    void undo();
 
-
-KisUiActionFactory::KisUiActionFactory(const QString &id)
-    : m_id(id)
-{
-}
-
-KisUiActionFactory::~KisUiActionFactory()
-{
-}
-
-QString KisUiActionFactory::id() const
-{
-    return m_id;
-}
-
-void KisUiActionFactory::runFromXML(KisView2 *view, const KisUiActionConfiguration &config)
-{
-    Q_UNUSED(view);
-    Q_UNUSED(config);
-
-    qFatal("Not implemented yet");
-}
-
+protected:
+    virtual KUndo2Command* paint() = 0;
+private:
+    bool m_firstRedo;
+    KUndo2Command *m_transactionData;
+};
+#endif // KIS_TRANSACTION_BASED_COMMAND_H

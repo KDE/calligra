@@ -99,6 +99,16 @@ void TestDatetimeFunctions::testYEARFRAC()
     CHECK_EVAL("YEARFRAC( \"2001-12-05\" ; \"2001-12-30\" ; 0)", Value(0.0694444444));
     CHECK_EVAL("YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 0)", Value(6.5138888889));
 
+    // basis 0 is default
+    CHECK_EVAL("YEARFRAC( \"1999-01-01\" ; \"1999-06-30\")", Value(0.4972222222));
+    CHECK_EVAL("YEARFRAC( \"1999-01-01\" ; \"1999-07-01\")", Value(0.5000000000));
+    CHECK_EVAL("YEARFRAC( \"2000-01-01\" ; \"2000-06-30\")", Value(0.4972222222));
+    CHECK_EVAL("YEARFRAC( \"2000-01-15\" ; \"2000-09-17\")", Value(0.6722222222));
+    CHECK_EVAL("YEARFRAC( \"2000-01-01\" ; \"2001-01-01\")", Value(1.0000000000));
+    CHECK_EVAL("YEARFRAC( \"2001-01-01\" ; \"2002-01-01\")", Value(1.0000000000));
+    CHECK_EVAL("YEARFRAC( \"2001-12-05\" ; \"2001-12-30\")", Value(0.0694444444));
+    CHECK_EVAL("YEARFRAC( \"2000-02-05\" ; \"2006-08-10\")", Value(6.5138888889));
+
     // basis 1 Actual/actual
     // other values are taken from OOo-2.2.1
     CHECK_EVAL("YEARFRAC( \"1999-01-01\" ; \"1999-06-30\" ; 1)", Value(0.4931506849));

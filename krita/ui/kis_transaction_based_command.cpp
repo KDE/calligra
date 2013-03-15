@@ -16,20 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UI_ACTION_FACTORY_REGISTRY_H
-#define __KIS_UI_ACTION_FACTORY_REGISTRY_H
+#include "kis_transaction_based_command.h"
 
-#include <krita_export.h>
-#include <KoGenericRegistry.h>
-#include "kis_ui_action_factory.h"
-
-
-class KRITAUI_EXPORT KisUiActionFactoryRegistry : public KoGenericRegistry<KisUiActionFactory*>
+KisTransactionBasedCommand::KisTransactionBasedCommand(const QString& text, KUndo2Command* parent)
+    : KUndo2Command(text, parent), m_firstRedo(true), m_transactionData(0)
 {
-public:
-    KisUiActionFactoryRegistry();
-    ~KisUiActionFactoryRegistry();
-    static KisUiActionFactoryRegistry* instance();
-};
+}
 
-#endif /* __KIS_UI_ACTION_FACTORY_REGISTRY_H */
+KisTransactionBasedCommand::~KisTransactionBasedCommand()
+{
+    delete m_transactionData;
+}
+
+void KisTransactionBasedCommand::redo()
+{
+    if (m_firstRedo) {
+        m_transactionData = paint();
+    }
+    m_transactionData->redo();
+}
+
+void KisTransactionBasedCommand::undo()
+{
+    m_transactionData->undo();
+}
+
