@@ -89,7 +89,7 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
     OdtTraverserAsciiBackend  asciiBackend(&asciiBackendContext);
 
     OdtTraverser              odtTraverser;
-    odtTraverser.traverseContent(&asciiBackendContext, &asciiBackend);
+    odtTraverser.traverseContent(&asciiBackend, &asciiBackendContext);
 
     outfile.close();
 

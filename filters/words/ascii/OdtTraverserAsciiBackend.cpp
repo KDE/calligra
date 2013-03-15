@@ -31,7 +31,7 @@
 
 
 OdtTraverserAsciiContext::OdtTraverserAsciiContext(KoStore *store, QFile &file)
-    : OdtTraverserContext(store)
+    : OdfTraverserContext(store)
     , outStream(&file)
 {
 }
@@ -46,7 +46,7 @@ OdtTraverserAsciiContext::~OdtTraverserAsciiContext()
 
 
 
-OdtTraverserAsciiBackend::OdtTraverserAsciiBackend(OdtTraverserContext *context)
+OdtTraverserAsciiBackend::OdtTraverserAsciiBackend(OdfTraverserContext *context)
     : OdtTraverserBackend(context)
 {
 }
@@ -57,7 +57,7 @@ OdtTraverserAsciiBackend::~OdtTraverserAsciiBackend()
 
 
 void OdtTraverserAsciiBackend::beginCharacterData(KoXmlNode &node,
-                                                  OdtTraverserContext *context)
+                                                  OdfTraverserContext *context)
 {
     OdtTraverserAsciiContext *asciiContext = dynamic_cast<OdtTraverserAsciiContext*>(context);
     if (!asciiContext) {
@@ -68,7 +68,7 @@ void OdtTraverserAsciiBackend::beginCharacterData(KoXmlNode &node,
 }
 
 
-void OdtTraverserAsciiBackend::endTagP(KoXmlElement &element, OdtTraverserContext *context)
+void OdtTraverserAsciiBackend::endTagP(KoXmlElement &element, OdfTraverserContext *context)
 {
     Q_UNUSED(element);
 

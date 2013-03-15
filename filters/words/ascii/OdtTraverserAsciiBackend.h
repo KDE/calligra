@@ -25,6 +25,7 @@
 #include <KoXmlReader.h>
 #include <OdtTraverser.h>
 #include <OdtTraverserBackend.h>
+#include <OdfTraverserContext.h>
 
 class QByteArray;
 class QSizeF;
@@ -35,7 +36,7 @@ class QTextStream;
 class KoStore;
 
 
-class OdtTraverserAsciiContext : public OdtTraverserContext
+class OdtTraverserAsciiContext : public OdfTraverserContext
 {
  public:
     OdtTraverserAsciiContext(KoStore *store, QFile &outfile);
@@ -49,12 +50,12 @@ class OdtTraverserAsciiContext : public OdtTraverserContext
 class OdtTraverserAsciiBackend : public OdtTraverserBackend
 {
  public:
-    OdtTraverserAsciiBackend(OdtTraverserContext *context);
+    OdtTraverserAsciiBackend(OdfTraverserContext *context);
     virtual ~OdtTraverserAsciiBackend();
 
     // The only output functions that we need in this filter.
-    virtual void beginCharacterData(KoXmlNode &node, OdtTraverserContext *context);
-    virtual void endTagP(KoXmlElement &element, OdtTraverserContext *context);
+    virtual void beginCharacterData(KoXmlNode &node, OdfTraverserContext *context);
+    virtual void endTagP(KoXmlElement &element, OdfTraverserContext *context);
 };
 
 #endif // ODTTRAVERSERASCIIBACKEND_H

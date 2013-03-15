@@ -6,9 +6,10 @@ include_directories(
 ########### libodftraverse ###############
 
 set(odftraverse_LIB_SRCS
-    OdfParser.cpp
     OdtTraverser.cpp
     OdtTraverserBackend.cpp
+    OdfTraverserContext.cpp
+    OdfParser.cpp
 )
 
 kde4_add_library(odftraverse SHARED ${odftraverse_LIB_SRCS})

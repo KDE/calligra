@@ -40,6 +40,7 @@
 
 // Traverser
 #include "OdtTraverserBackend.h"
+#include "OdfTraverserContext.h"
 
 
 OdtTraverser::OdtTraverser()
@@ -51,8 +52,8 @@ OdtTraverser::~OdtTraverser()
 }
 
 
-bool OdtTraverser::traverseContent(OdtTraverserContext *context,
-                                   OdtTraverserBackend *backend)
+bool OdtTraverser::traverseContent(OdtTraverserBackend *backend,
+                                   OdfTraverserContext *context)
                                    
 {
     m_backend = backend;

@@ -40,7 +40,7 @@ class KoXmlWriter;
 class KoStore;
 
 class OdtTraverserBackend;
-class OdtTraverserContext;
+class OdfTraverserContext;
 
 
 class ODFTRAVERSE_EXPORT OdtTraverser
@@ -49,8 +49,8 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     OdtTraverser();
     ~OdtTraverser();
 
-    bool traverseContent(OdtTraverserContext *context,
-                         OdtTraverserBackend *backend);
+    bool traverseContent(OdtTraverserBackend *backend,
+                         OdfTraverserContext *context);
 
     // Used when traversing table cells in headers and normal tables respectively.
     enum TableCellType {
@@ -107,7 +107,7 @@ class ODFTRAVERSE_EXPORT OdtTraverser
 
  private:
     OdtTraverserBackend  *m_backend;
-    OdtTraverserContext  *m_context;
+    OdfTraverserContext  *m_context;
 
     // A list of images and their sizes. This list is collected during
     // the conversion and returned from traverseContent() using an
