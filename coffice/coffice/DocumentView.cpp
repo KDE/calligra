@@ -60,17 +60,19 @@ public:
     }
 
 private:
+    QList<QObject*> m_plugins;
+
     void initPlugins() {
         qDebug() << "REGISTERED PLUGINS START";
         Q_FOREACH(QObject* o, QPluginLoader::staticInstances()) {
             qDebug() << ">>>>>>>>>> PLUGIN FACTORY" << o << o->metaObject()->className() << o->objectName();
             if (KPluginFactory *f = qobject_cast<KPluginFactory*>(o)) {
-                QObject *plugin = f->create<QObject>("TextPlugin");
-//TODO find a better way in KPluginFactory to handle >1 plugins in one factory + allow return instances for all those plugins
-if(!plugin) { qDebug()<<"TODO!!!!!!!!!!!!!!!"; continue; }
+                QObject *plugin = f->create<QObject>(this);
                 Q_ASSERT(plugin);
-
-                qDebug() << ">>>>>>>>>> PLUGIN INSTANCE" << plugin << plugin->metaObject()->className();
+                if (plugin) {
+                    m_plugins.append(plugin);
+                    qDebug() << ">>>>>>>>>> PLUGIN INSTANCE" << plugin << plugin->metaObject()->className();
+                }
             }
 
             /*
@@ -82,8 +84,6 @@ if(!plugin) { qDebug()<<"TODO!!!!!!!!!!!!!!!"; continue; }
         }
         qDebug() << "REGISTERED PLUGINS END";
         Q_ASSERT_X(KoShapeRegistry::instance()->value(TextShape_SHAPEID), __FUNCTION__, "No TextShape-plugin loaded");
-
-
     }
 };
 
@@ -456,7 +456,7 @@ bool DocumentView::openFileWithDialog()
     dlg->setOption(QFileDialog::ReadOnly);
     dlg->setDirectory(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     QStringList filters;
-    filters << "OpenDocument Text files (*.odt)"
+    filters << "OpenDocument Text Files (*.odt)"
             << "Any files (*)";
     dlg->setNameFilters(filters);
     bool ok = false;

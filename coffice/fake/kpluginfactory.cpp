@@ -20,12 +20,27 @@ void KPluginFactory::setupTranslations() {}
 QObject *KPluginFactory::create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword)
 {
     qDebug() << Q_FUNC_INFO << "iface=" << iface << "parentWidget=" << parentWidget << "parent=" << parent << "args=" << args << "keyword=" << keyword;
-    QHash<QString, PluginIface*>::ConstIterator it =  m_registeredPlugins.constFind(keyword);
-    if (it != m_registeredPlugins.constEnd()) {
-        QObject *obj = it.value()->create(iface, parentWidget, parent, args, keyword);
-        if (obj)
+    if (keyword.isEmpty()) {
+        const bool hasOne = m_registeredPlugins.count() == 1;
+        QObject *p = m_registeredPlugins.count() > 1 ? new QObject(parent) : 0;
+        for(QHash<QString, PluginIface*>::ConstIterator it = m_registeredPlugins.constBegin(); it != m_registeredPlugins.constEnd(); ++it) {
+            QObject *obj = it.value()->create(iface, parentWidget, p ? p : parent, args, keyword);
+            Q_ASSERT(obj);
+            if (!obj)
+                continue;
             emit objectCreated(obj);
-        return obj;
+            if (hasOne)
+                p = obj;
+        }
+        return p;
+    } else {
+        QHash<QString, PluginIface*>::ConstIterator it =  m_registeredPlugins.constFind(keyword);
+        if (it != m_registeredPlugins.constEnd()) {
+            QObject *obj = it.value()->create(iface, parentWidget, parent, args, keyword);
+            if (obj)
+                emit objectCreated(obj);
+            return obj;
+        }
+        return 0;
     }
-    return 0;
 }
