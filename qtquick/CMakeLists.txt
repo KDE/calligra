@@ -1,6 +1,7 @@
 project(calligraqtquickcomponents)
 
 set(calligraqtquickcomponents_SRCS
+    CQSpreadsheetCanvas.cpp
     CalligraQtQuickComponentsPlugin.cpp
     CQCanvasController.cpp
     CQTextDocumentCanvas.cpp
@@ -14,6 +15,8 @@ include_directories(
     ${KDE4_INCLUDES}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
+    ${CMAKE_SOURCE_DIR}/sheets
+    ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
 
 qt4_automoc(${calligraqtquickcomponents_SRCS})

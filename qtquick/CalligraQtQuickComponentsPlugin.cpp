@@ -22,6 +22,7 @@
 
 #include "CQTextDocumentCanvas.h"
 #include "CQImageProvider.h"
+#include "CQSpreadsheetCanvas.h"
 #include <QDebug>
 #include <QDeclarativeEngine>
 
@@ -29,6 +30,7 @@ void CalligraQtQuickComponentsPlugin::registerTypes(const char* uri)
 {
     Q_ASSERT(uri == QLatin1String("org.calligra.CalligraComponents"));
     qmlRegisterType<CQTextDocumentCanvas> (uri, 0, 1, "TextDocumentCanvas");
+    qmlRegisterType<CQSpreadsheetCanvas> (uri, 0, 1, "SpreadsheetCanvas");
 }
 
 void CalligraQtQuickComponentsPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
