@@ -16,8 +16,13 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#ifndef PRESENTATIONVIEWPORTCONFIGWIDGET_H
+#define PRESENTATIONVIEWPORTCONFIGWIDGET_H
+
 #include "PresentationViewPortTool.h"
 #include "ui_PresentationViewPortConfigWidget.h"
+#include "KoShapeConfigWidgetBase.h"
 
 class PresentationViewPortConfigWidget : public QWidget
 {
@@ -25,7 +30,7 @@ class PresentationViewPortConfigWidget : public QWidget
 public:
     PresentationViewPortConfigWidget(PresentationViewPortTool* tool, QWidget* parent = 0);
     ~PresentationViewPortConfigWidget();
-      
+     
 public slots:
     void updateWidget();
   
@@ -34,3 +39,5 @@ private:
     PresentationViewPortShape* m_shape;
     PresentationViewPortTool* m_tool;
 };
+
+#endif //PRESENTATIONVIEWPORTCONFIGWIDGET_H

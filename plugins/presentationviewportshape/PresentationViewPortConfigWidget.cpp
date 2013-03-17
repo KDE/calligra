@@ -78,4 +78,3 @@ void PresentationViewPortConfigWidget::updateWidget()
     
     m_widget.title->setText(currShape->attribute("title"));
 }
-
