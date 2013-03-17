@@ -66,6 +66,7 @@ public:
     }
 
     KoCanvasBase *canvas;
+    QGridLayout *layout;
     QList<KoToolButton> buttons; // buttons maintained by toolmanager
     QList<KoToolButton> addedButtons; //buttons in the order added to QToolBox
     QMap<int, QWidget *> addedWidgets;
@@ -115,9 +116,10 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->verticalTabsSide = (VerticalTabsSide)cfg.readEntry("ModeBoxVerticalTabsSide", (int)TopSide);
     d->horizontalTabsSide = (HorizontalTabsSide)cfg.readEntry("ModeBoxHorizontalTabsSide", (int)LeftSide);
 
-    QGridLayout *layout = new QGridLayout();
+    d->layout = new QGridLayout();
+    d->stack = new QStackedWidget();
+
     d->tabBar = new QTabBar();
-    d->tabBar->setShape(QTabBar::RoundedWest);
     d->tabBar->setExpanding(false);
     if (d->iconMode == IconAndText) {
         d->tabBar->setIconSize(QSize(32,64));
@@ -125,14 +127,16 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
         d->tabBar->setIconSize(QSize(22,22));
     }
     d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    layout->addWidget(d->tabBar, 0, 0);
+    if (d->verticalMode) {
+        switchTabsSide(d->verticalTabsSide);
+    } else {
+        switchTabsSide(d->horizontalTabsSide);
+    }
+    d->layout->addWidget(d->stack, 0, 1);
 
-    d->stack = new QStackedWidget();
-    layout->addWidget(d->stack, 0, 1);
-
-    layout->setContentsMargins(0,0,0,0);
-    layout->setColumnStretch(1, 100);
-    setLayout(layout);
+    d->layout->setContentsMargins(0,0,0,0);
+    d->layout->setColumnStretch(1, 100);
+    setLayout(d->layout);
 
     foreach(const KoToolButton &button, KoToolManager::instance()->createToolList(canvas->canvas())) {
         addButton(button);
@@ -280,11 +284,22 @@ void KoModeBox::addItem(const KoToolButton button)
     d->addedWidgets[button.buttonGroupId] = widget;
 
     // Create a rotated icon with text
-    if (d->iconMode == IconAndText) {
-        d->tabBar->addTab(createRotatedIcon(button), QString());
-    } else {
-        int index = d->tabBar->addTab(createSimpleIcon(button), QString());
-        d->tabBar->setTabToolTip(index, button.button->toolTip());
+    if (!d->verticalMode) {
+        if (d->horizontalTabsSide == LeftSide) {
+            if (d->iconMode == IconAndText) {
+                d->tabBar->addTab(createRotatedIcon(button), QString());
+            } else {
+                int index = d->tabBar->addTab(createSimpleIcon(button), QString());
+                d->tabBar->setTabToolTip(index, button.button->toolTip());
+            }
+        } else {
+            if (d->iconMode == IconAndText) {
+                d->tabBar->addTab(createSimpleIcon(button), QString());
+            } else {
+                int index = d->tabBar->addTab(createRotatedIcon(button), QString());
+                d->tabBar->setTabToolTip(index, button.button->toolTip());
+            }
+        }
     }
     d->stack->addWidget(widget);
     d->addedButtons.append(button);
@@ -512,12 +527,17 @@ void KoModeBox::switchTabsSide(int side)
     } else {
         d->horizontalTabsSide = static_cast<HorizontalTabsSide>(side);
         if (d->horizontalTabsSide == LeftSide) {
-            //TODO
+            d->layout->removeWidget(d->tabBar);
+            d->tabBar->setShape(QTabBar::RoundedWest);
+            d->layout->addWidget(d->tabBar, 0, 0);
         } else {
-            //TODO
+            d->layout->removeWidget(d->tabBar);
+            d->tabBar->setShape(QTabBar::RoundedEast);
+            d->layout->addWidget(d->tabBar, 0, 2);
         }
 
         KConfigGroup cfg = KGlobal::config()->group("calligra");
         cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
     }
+    updateShownTools(d->canvas->canvasController(), QList<QString>());
 }
