@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Diagonal Resistor (European)
+Name[bs]=dijagonalni otpornik (europski)
 Name[ca]=Resistor diagonal (europeu)
 Name[ca@valencia]=Resistor diagonal (europeu)
+Name[da]=Diagonal resistor (europæisk)
 Name[de]=Diagonaler Widerstand (europäisch)
 Name[el]=Διαγώνιος αντιστάτης (Ευρώπη)
 Name[es]=Resistor diagonal (Europeo)
@@ -20,6 +22,7 @@ Name[pt_BR]=Resistor diagonal (Europeu)
 Name[ru]=Диагональный резистор (Европейский)
 Name[sk]=Diagonálny rezistor (európsky)
 Name[sv]=Diagonalt motstånd (europeiskt)
+Name[tr]=Çapraz Direnç (Avrupa)
 Name[uk]=Резистор (діагонально, Європа)
 Name[x-test]=xxDiagonal Resistor (European)xx
 Name[zh_TW]=對角電阻（歐洲）

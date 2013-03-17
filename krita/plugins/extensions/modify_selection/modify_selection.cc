@@ -21,168 +21,71 @@
 #include "modify_selection.h"
 
 #include <klocale.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kpluginfactory.h>
-#include <kactioncollection.h>
 
-#include "kis_view2.h"
-#include "kis_selection_manager.h"
 #include "kis_action.h"
-#include "kis_action_manager.h"
+#include <kpluginfactory.h>
+#include <operations/kis_operation_ui_widget_factory.h>
 
 #include "dlg_grow_selection.h"
 #include "dlg_shrink_selection.h"
 #include "dlg_border_selection.h"
 #include "dlg_feather_selection.h"
+#include "modify_selection_operations.h"
 
 K_PLUGIN_FACTORY(ModifySelectionFactory, registerPlugin<ModifySelection>();)
 K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
 
 ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/modify_selection.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/modify_selection.rc"),
-                   true);
+    KisAction* action  = new KisAction(i18n("Grow Selection..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("growselection");
+    addAction("growselection", action);
 
-        m_view = (KisView2*) parent;
+    addUIFactory(new KisOperationUIWidgetFactory<WdgGrowSelection>("growselection"));
+    addOperation(new GrowSelectionOperation);
 
-        // Selection manager takes ownership
-        m_growSelection  = new KisAction(i18n("Grow Selection..."), this);
-        m_growSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_growSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("growselection", m_growSelection, actionCollection());
+    action = new KisAction(i18n("Shrink Selection..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("shrinkselection");
+    addAction("shrinkselection", action);
 
-        m_shrinkSelection = new KisAction(i18n("Shrink Selection..."), this);
-        m_shrinkSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_shrinkSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("shrinkselection", m_shrinkSelection, actionCollection());
+    addUIFactory(new KisOperationUIWidgetFactory<WdgShrinkSelection>("shrinkselection"));
+    addOperation(new ShrinkSelectionOperation);
 
-        m_borderSelection  = new KisAction(i18n("Border Selection..."), this);
-        m_borderSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_borderSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("borderselection", m_borderSelection, actionCollection());
+    action  = new KisAction(i18n("Border Selection..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("borderselection");
+    addAction("borderselection", action);
 
-        m_featherSelection  = new KisAction(i18n("Feather Selection..."), this);
-        m_featherSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_featherSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("featherselection", m_featherSelection, actionCollection());
+    addUIFactory(new KisOperationUIWidgetFactory<WdgBorderSelection>("borderselection"));
+    addOperation(new BorderSelectionOperation);
 
-        m_smoothSelection = new KisAction(i18n("Smooth..."), this);
-        m_smoothSelection->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
-        m_smoothSelection->setActivationConditions(KisAction::SELECTION_EDITABLE);
-        m_view->actionManager()->addAction("smoothselection", m_smoothSelection, actionCollection());
+    action  = new KisAction(i18n("Feather Selection..."), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("featherselection");
+    addAction("featherselection", action);
 
-        Q_CHECK_PTR(m_growSelection);
-        Q_CHECK_PTR(m_shrinkSelection);
-        Q_CHECK_PTR(m_borderSelection);
-        Q_CHECK_PTR(m_featherSelection);
-        Q_CHECK_PTR(m_smoothSelection);
+    addUIFactory(new KisOperationUIWidgetFactory<WdgFeatherSelection>("featherselection"));
+    addOperation(new FeatherSelectionOperation);
 
-        connect(m_growSelection, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
-        connect(m_shrinkSelection, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
-        connect(m_borderSelection, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
-        connect(m_featherSelection, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
-        connect(m_smoothSelection, SIGNAL(triggered()), this, SLOT(slotSmoothSelection()));
-    }
+    action = new KisAction(i18n("Smooth"), this);
+    action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
+    action->setActivationConditions(KisAction::SELECTION_EDITABLE);
+    action->setOperationID("smoothselection");
+    addAction("smoothselection", action);
+
+    addOperation(new SmoothSelectionOperation);
 }
 
 ModifySelection::~ModifySelection()
 {
-    m_view = 0;
 }
-
-void ModifySelection::slotGrowSelection()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image) return;
-
-    DlgGrowSelection * dlgGrowSelection = new DlgGrowSelection(m_view, "GrowSelection");
-    Q_CHECK_PTR(dlgGrowSelection);
-
-    dlgGrowSelection->setCaption(i18n("Grow Selection"));
-
-    if (dlgGrowSelection->exec() == QDialog::Accepted) {
-        qint32 xradius = dlgGrowSelection->xradius();
-        qint32 yradius = dlgGrowSelection->yradius();
-
-        m_view->selectionManager()->grow(xradius, yradius);
-    }
-
-    delete dlgGrowSelection;
-}
-
-void ModifySelection::slotShrinkSelection()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image) return;
-
-    DlgShrinkSelection * dlgShrinkSelection = new DlgShrinkSelection(m_view, "ShrinkSelection");
-    Q_CHECK_PTR(dlgShrinkSelection);
-
-    dlgShrinkSelection->setCaption(i18n("Shrink Selection"));
-
-    if (dlgShrinkSelection->exec() == QDialog::Accepted) {
-        qint32 xradius = dlgShrinkSelection->xradius();
-        qint32 yradius = dlgShrinkSelection->yradius();
-        bool shrinkFromImageBorder = dlgShrinkSelection->shrinkFromImageBorder();
-
-        //third parameter is edge_lock so shrinkFromImageBorder needs to be inverted
-        m_view->selectionManager()->shrink(xradius, yradius, !shrinkFromImageBorder);
-    }
-
-    delete dlgShrinkSelection;
-}
-
-void ModifySelection::slotBorderSelection()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image) return;
-
-    DlgBorderSelection * dlgBorderSelection = new DlgBorderSelection(m_view, "BorderSelection");
-    Q_CHECK_PTR(dlgBorderSelection);
-
-    dlgBorderSelection->setCaption(i18n("Border Selection"));
-
-    if (dlgBorderSelection->exec() == QDialog::Accepted) {
-        qint32 xradius = dlgBorderSelection->xradius();
-        qint32 yradius = dlgBorderSelection->yradius();
-
-        m_view->selectionManager()->border(xradius, yradius);
-    }
-
-    delete dlgBorderSelection;
-}
-
-void ModifySelection::slotFeatherSelection()
-{
-    KisImageWSP image = m_view->image();
-
-    if (!image) return;
-
-    DlgFeatherSelection * dlgFeatherSelection = new DlgFeatherSelection(m_view, "FeatherSelection");
-    Q_CHECK_PTR(dlgFeatherSelection);
-
-    dlgFeatherSelection->setCaption(i18n("Feather Selection"));
-
-    if (dlgFeatherSelection->exec() == QDialog::Accepted) {
-        qint32 radius = dlgFeatherSelection->radius();
-
-        m_view->selectionManager()->feather(radius);
-    }
-
-    delete dlgFeatherSelection;
-}
-
-void ModifySelection::slotSmoothSelection()
-{
-    m_view->selectionManager()->smooth();
-}
-
 
 #include "modify_selection.moc"

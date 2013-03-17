@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=Jigsaw
 Name[bg]=Пъзел
+Name[bs]=Puzle
 Name[ca]=Trencaclosques
 Name[ca@valencia]=Trencaclosques
 Name[cs]=Puzzle
+Name[da]=Puslespil
+Name[de]=Puzzle
 Name[el]=Jigsaw
 Name[es]=Rompecabezas
 Name[et]=Pusle
@@ -20,6 +23,7 @@ Name[pt]='Puzzle'
 Name[pt_BR]=Quebra-cabeça
 Name[ru]=Пазл
 Name[sk]=Jigsaw
+Name[sl]=Koščki
 Name[sv]=Pussel
 Name[uk]=Складанка
 Name[x-test]=xxJigsawxx

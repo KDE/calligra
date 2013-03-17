@@ -231,19 +231,19 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     if (!d->lookupColumnPage) {
         d->lookupColumnPage = new KexiLookupColumnPage(0);
         connect(d->lookupColumnPage,
-                SIGNAL(jumpToObjectRequested(const QString&, const QString&)),
+                SIGNAL(jumpToObjectRequested(QString,QString)),
                 KexiMainWindowIface::global()->thisWidget(),
-                SLOT(highlightObject(const QString&, const QString&)));
+                SLOT(highlightObject(QString,QString)));
 
 //! @todo add "Table" tab
 
         /*
-          connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const QCString&, const QCString&)),
-            KFormDesigner::FormManager::self(), SLOT(setFormDataSource(const QCString&, const QCString&)));
-          connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
-            KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(const QString&, const QString&, KexiDB::Field::Type)));
-          connect(d->dataSourcePage, SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)),
-            KFormDesigner::FormManager::self(), SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));*/
+          connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(QCString,QCString)),
+            KFormDesigner::FormManager::self(), SLOT(setFormDataSource(QCString,QCString)));
+          connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
+            KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
+          connect(d->dataSourcePage, SIGNAL(insertAutoFields(QString,QString,QStringList)),
+            KFormDesigner::FormManager::self(), SLOT(insertAutoFields(QString,QString,QStringList)));*/
     }
 
     KexiProject *prj = KexiMainWindowIface::global()->project();

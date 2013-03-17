@@ -1,8 +1,9 @@
 [Desktop Entry]
 Name=Internal Storage
 Name[bg]=Вътрешно хранилище
+Name[bs]=Unutrašnje skladište
 Name[ca]=Emmagatzematge intern
-Name[ca@valencia]=Emmagatzement intern
+Name[ca@valencia]=Emmagatzematge intern
 Name[cs]=Interní úložiště
 Name[da]=Intern opbevaring
 Name[de]=Interner Speicher
@@ -16,6 +17,7 @@ Name[hu]=Belső tároló
 Name[it]=Memorizzazione interna
 Name[ja]=内部ストレージ
 Name[kk]=Ішкі жинақтауыш
+Name[lt]=Vidinė saugykla
 Name[nb]=Indre lager
 Name[nds]=Intern Spieker
 Name[nl]=Interne opslag
@@ -26,6 +28,7 @@ Name[ru]=Внутреннее хранилище
 Name[sk]=Interné úložisko
 Name[sl]=Notranja shramba
 Name[sv]=Intern lagring
+Name[tr]=Dahili Saklama
 Name[uk]=Внутрішня пам'ять
 Name[x-test]=xxInternal Storagexx
 Name[zh_CN]=内部存储

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=spraydrier
+Name[bs]=sprej za kosu
 Name[ca]=assecadoresprai
 Name[ca@valencia]=assecadoresprai
+Name[da]=spraydrier
 Name[de]=Sprühtrockner
 Name[el]=spraydrier
 Name[es]=secadora difusora
@@ -18,6 +20,7 @@ Name[pt_BR]=secador de spray
 Name[ru]=Распылительная сушилка
 Name[sk]=spraydrier
 Name[sv]=sprejtorkare
+Name[tr]=spraykurutucu
 Name[uk]=Розпилювальна сушарка
 Name[x-test]=xxspraydrierxx
 Name[zh_TW]=spraydrier

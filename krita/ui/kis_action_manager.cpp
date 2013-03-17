@@ -18,12 +18,16 @@
 
 #include "kis_action_manager.h"
 
-#include <QVector>
+#include <QList>
 #include <kactioncollection.h>
 
 #include "kis_action.h"
 #include "kis_view2.h"
 #include "kis_selection_manager.h"
+#include "operations/kis_operation_ui_factory.h"
+#include "operations/kis_operation_registry.h"
+#include "operations/kis_operation.h"
+#include "kis_layer.h"
 
 class KisActionManager::Private {
 
@@ -31,7 +35,9 @@ public:
     Private() {}
 
     KisView2* view;
-    QVector<KisAction*> actions;
+    QList<KisAction*> actions;
+    KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
+    KisOperationRegistry operationRegistry;
 };
 
 KisActionManager::KisActionManager(KisView2* view) : d(new Private)
@@ -48,7 +54,18 @@ void KisActionManager::addAction(const QString& name, KisAction* action, KAction
 {
     actionCollection->addAction(name, action);
     action->setObjectName(name);
+    addAction(action);
+}
+
+void KisActionManager::addAction(KisAction* action)
+{
     d->actions.append(action);
+    action->setActionManager(this);
+}
+
+void KisActionManager::takeAction(KisAction* action)
+{
+    d->actions.removeOne(action);
 }
 
 KisAction *KisActionManager::actionByName(const QString &name) const
@@ -106,10 +123,49 @@ void KisActionManager::updateGUI()
     }
 
     foreach(KisAction* action, d->actions) {
-        bool enable = action->activationFlags() & flags;
+        bool enable;
+        if (action->activationFlags() == KisAction::NONE) {
+            enable = true;
+        } else {
+            enable = action->activationFlags() & flags;
+        }
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
-        action->setEnabled(enable);
+        action->setActionEnabled(enable);
     }
+}
+
+void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory)
+{
+    d->uiRegistry.add(factory);
+}
+
+void KisActionManager::registerOperation(KisOperation* operation)
+{
+    d->operationRegistry.add(operation);
+}
+
+void KisActionManager::runOperation(const QString& id)
+{
+    KisOperationConfiguration* config = new KisOperationConfiguration(id);
+
+    KisOperationUIFactory* uiFactory = d->uiRegistry.get(id);
+    if (uiFactory) {
+        bool gotConfig = uiFactory->fetchConfiguration(d->view, config);
+        if (!gotConfig) {
+            return;
+        }
+    }
+    runOperationFromConfiguration(config);
+}
+
+void KisActionManager::runOperationFromConfiguration(KisOperationConfiguration* config)
+{
+    KisOperation* operation = d->operationRegistry.get(config->id());
+    Q_ASSERT(operation);
+    if (operation) {
+        operation->runFromXML(d->view, *config);
+    }
+    delete config;
 }
 
 void KisActionManager::dumpActionFlags()

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=contact pair
+Name[bs]=kontakt par
 Name[ca]=parell de contactes
 Name[ca@valencia]=parell de contactes
+Name[da]=kontaktpar
 Name[el]=ζεύγος επαφής
 Name[es]=par de contactos
 Name[et]=Kontaktipaar
@@ -19,4 +21,5 @@ Name[sk]=kontaktný pár
 Name[sv]=kontaktpar
 Name[uk]=Пара контактів
 Name[x-test]=xxcontact pairxx
+Name[zh_CN]=接触对
 Name[zh_TW]=contact pair

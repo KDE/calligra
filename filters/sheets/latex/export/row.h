@@ -22,7 +22,6 @@
 #define __CALLIGRA_SHEETS_LATEX_ROW_H__
 
 #include <QString>
-//Added by qt3to4:
 #include <QTextStream>
 
 #include "config.h"

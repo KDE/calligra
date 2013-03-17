@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=SUN workstation
 Name[bg]=Работна станция SUN
+Name[bs]=radna stanica SUN
 Name[ca]=Estació de treball Sun
 Name[ca@valencia]=Estació de treball Sun
+Name[da]=SUN-workstation
 Name[de]=SUN-Workstation
 Name[el]=Σταθμός εργασίας SUN
 Name[es]=Estación de trabajo SUN
@@ -14,6 +16,7 @@ Name[hu]=SUN munkaállomás
 Name[it]=SUN workstation
 Name[ja]=Sun ワークステーション
 Name[kk]=SUN жұмыс станциясы
+Name[lt]=SUN darbo stotis
 Name[nb]=SUN arbeidsstasjon
 Name[nds]=SUN-Arbeitreekner
 Name[nl]=SUN werkstation
@@ -22,6 +25,7 @@ Name[pt]=Estação SUN
 Name[pt_BR]=Estação de Trabalho SUN
 Name[ru]=Рабочая станция SUN
 Name[sk]=Pracovná stanica SUN
+Name[sl]=Delovna postaja SUN
 Name[sv]=Sun arbetsstation
 Name[uk]=Робоча станція SUN
 Name[x-test]=xxSUN workstationxx

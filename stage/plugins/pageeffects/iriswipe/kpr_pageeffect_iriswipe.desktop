@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Iris Wipe
+Name[bs]=Brisanje Šarenila
 Name[ca]=Esborrat d'iris
 Name[ca@valencia]=Esborrat d'iris
 Name[da]=Irisvisker
@@ -31,6 +32,7 @@ Name[wa]=Schover l' iris evoye
 Name[x-test]=xxIris Wipexx
 Name[zh_TW]=彩虹掃描
 Comment=Iris Wipe Page Effects
+Comment[bs]=Efekti Brisanja Šarenih Stranica
 Comment[ca]=Efectes d'esborrat d'iris de la pàgina
 Comment[ca@valencia]=Efectes d'esborrat d'iris de la pàgina
 Comment[da]=Irisvisker-sideeffekter

@@ -435,7 +435,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     // Needs to have a style which is modified by next sectPr
     m_createSectionToNext = true;
 
-    KoGenStyle *sectionStyle = mainStyles->styleForModification(m_currentSectionStyleName);
+    KoGenStyle *sectionStyle = mainStyles->styleForModification(m_currentSectionStyleName, m_currentSectionStyleFamily);
     // There might not be a style to modify if the document is completely empty
     if (sectionStyle) {
         sectionStyle->addAttribute("style:master-page-name", currentMasterPageName);
@@ -2482,12 +2482,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 body->startElement("text:p", false);
                 if (m_currentStyleName.isEmpty()) {
                     QString currentParagraphStyleName;
+                    currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
                     if (sectionAdded) {
-                        currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
                         m_currentSectionStyleName = currentParagraphStyleName;
-                    }
-                    else {
-                        currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
+                        m_currentSectionStyleFamily = m_currentParagraphStyle.familyName();
                     }
                     body->addAttribute("text:style-name", currentParagraphStyleName);
                 }
@@ -5489,6 +5487,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     if (sectionAdded) {
         m_currentSectionStyleName = m_table->tableStyle()->name();
+        m_currentSectionStyleFamily = "table";
     }
 
     delete m_currentLocalTableStyles;

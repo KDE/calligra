@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Access server
+Name[bs]=Pristupni server
 Name[ca]=Servidor d'accés
 Name[ca@valencia]=Servidor d'accés
+Name[da]=Access-server
+Name[de]=Access-Server
 Name[el]=Εξυπηρετητής πρόσβασης
 Name[es]=Servidor de acceso
 Name[et]=Pöördusserver
@@ -17,7 +20,9 @@ Name[pt]=Servidor de acesso
 Name[pt_BR]=Servidor de acesso
 Name[ru]=Сервер Доступа
 Name[sk]=Prístupový server
+Name[sl]=Dostopni strežnik
 Name[sv]=Åtkomstserver
 Name[uk]=Сервер доступу
 Name[x-test]=xxAccess serverxx
+Name[zh_CN]=Access server
 Name[zh_TW]=存取伺服器

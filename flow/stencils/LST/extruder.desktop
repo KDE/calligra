@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Extruder
+Name[bs]=Ekstruder
 Name[ca]=Extrusor
 Name[ca@valencia]=Extrusor
+Name[da]=Extruder
 Name[el]=Εξωθητής
 Name[es]=Extrusor
 Name[et]=Väljastaja
@@ -19,4 +21,5 @@ Name[sk]=Extrudér
 Name[sv]=Extruder
 Name[uk]=Підсистема видобування
 Name[x-test]=xxExtruderxx
+Name[zh_CN]=挤压机
 Name[zh_TW]=壓出機

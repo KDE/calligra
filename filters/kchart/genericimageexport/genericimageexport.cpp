@@ -17,9 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "genericimageexport.h"
+
 #include <QPixmap>
 #include <QPainter>
-//Added by qt3to4:
 #include <QByteArray>
 
 #include <kmessagebox.h>
@@ -30,7 +31,6 @@
 #include <KoDocument.h>
 #include <KoXmlReader.h>
 #include <exportsizedia.h>
-#include "genericimageexport.h"
 #include "KChartPart.h"
 
 

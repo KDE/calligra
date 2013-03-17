@@ -74,9 +74,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
 
     // updatePageAnimation was called from updateZoom() [updateActivePage()]
 
-    connect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
+    connect( &m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()) );
     // this is needed as after a call to m_canvas->showFullScreen the canvas is not made fullscreen right away
-    connect( m_canvas, SIGNAL( sizeChanged( const QSize & ) ), this, SLOT( updateZoom( const QSize & ) ) );
+    connect( m_canvas, SIGNAL(sizeChanged(QSize)), this, SLOT(updateZoom(QSize)) );
     m_timeLine.setCurveShape( QTimeLine::LinearCurve );
     m_timeLine.setUpdateInterval( 20 );
     // set the animation strategy in the KoShapeManagers

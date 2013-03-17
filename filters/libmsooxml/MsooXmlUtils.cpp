@@ -1197,7 +1197,7 @@ QString Utils::defineMarkerStyle(KoGenStyles& mainStyles, const QString& type)
 
     const QString name(markerStyles[id]);
 
-    if (mainStyles.style(name)) {
+    if (mainStyles.style(name, "")) {
         return name;
     }
 

@@ -255,8 +255,8 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
 
     d->functionCompletion = new FunctionCompletion(this);
     d->functionCompletionTimer = new QTimer(this);
-    connect(d->functionCompletion, SIGNAL(selectedCompletion(const QString&)),
-            SLOT(functionAutoComplete(const QString&)));
+    connect(d->functionCompletion, SIGNAL(selectedCompletion(QString)),
+            SLOT(functionAutoComplete(QString)));
     connect(this, SIGNAL(textChanged()), SLOT(checkFunctionAutoComplete()));
     connect(d->functionCompletionTimer, SIGNAL(timeout()),
             SLOT(triggerFunctionAutoComplete()));
@@ -272,7 +272,7 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
 
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-// connect( this, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
+// connect( this, SIGNAL(completionModeChanged(KGlobalSettings::Completion)),this,SLOT(slotCompletionModeChanged(KGlobalSettings::Completion)));
 }
 
 CellEditor::~CellEditor()

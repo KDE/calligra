@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Spectrum
 Name[bg]=Спектър
+Name[bs]=Spektar
 Name[ca]=Espectre
 Name[ca@valencia]=Espectre
 Name[cs]=Spektrum
+Name[da]=Spektrum
 Name[de]=Spektrum
 Name[el]=Φάσμα
 Name[es]=Espectro
@@ -13,6 +15,7 @@ Name[gl]=Espectro
 Name[hu]=Spektrum
 Name[it]=Spettro
 Name[kk]=Спектр талдағышы
+Name[lt]=Spektras
 Name[nb]=Spektrum
 Name[nds]=Spektrum
 Name[nl]=Spectrum
@@ -21,6 +24,7 @@ Name[pt]=Espectro
 Name[pt_BR]=Espectro
 Name[ru]=Спектр
 Name[sk]=Spektrum
+Name[sl]=Spekter
 Name[sv]=Spektrum
 Name[uk]=Аналізатор спектра
 Name[x-test]=xxSpectrumxx
