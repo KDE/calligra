@@ -112,6 +112,9 @@ private slots:
     /// switch icon mode
     void switchIconMode(int);
 
+    /// switch tabs side
+    void switchTabsSide(int);
+
 public:
     static QString applicationName;
 
@@ -119,6 +122,16 @@ private:
     enum IconMode {
         IconAndText,
         IconOnly
+    };
+
+    enum VerticalTabsSide {
+        TopSide,
+        BottomSide
+    };
+
+    enum HorizontalTabsSide {
+        LeftSide,
+        RightSide
     };
 
     QIcon createRotatedIcon(const KoToolButton button);

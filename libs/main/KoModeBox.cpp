@@ -59,6 +59,9 @@ public:
         , iconTextFitted(true)
         , fittingIterations(0)
         , iconMode(IconAndText)
+        , verticalTabsSide(TopSide)
+        , horizontalTabsSide(LeftSide)
+        , verticalMode(false)
     {
     }
 
@@ -73,6 +76,9 @@ public:
     bool iconTextFitted;
     int fittingIterations;
     IconMode iconMode;
+    VerticalTabsSide verticalTabsSide;
+    HorizontalTabsSide horizontalTabsSide;
+    bool verticalMode;
 };
 
 QString KoModeBox::applicationName;
@@ -106,6 +112,8 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     d->iconMode = (IconMode)cfg.readEntry("ModeBoxIconMode", (int)IconAndText);
+    d->verticalTabsSide = (VerticalTabsSide)cfg.readEntry("ModeBoxVerticalTabsSide", (int)TopSide);
+    d->horizontalTabsSide = (HorizontalTabsSide)cfg.readEntry("ModeBoxHorizontalTabsSide", (int)LeftSide);
 
     QGridLayout *layout = new QGridLayout();
     d->tabBar = new QTabBar();
@@ -451,12 +459,25 @@ void KoModeBox::toolSelected(int index)
 void KoModeBox::slotContextMenuRequested(const QPoint &pos)
 {
     QMenu menu;
-    KSelectAction* selectionAction = new KSelectAction(i18n("Text"), &menu);
-    connect(selectionAction, SIGNAL(triggered(int)), SLOT(switchIconMode(int)));
-    menu.addAction(selectionAction);
-    selectionAction->addAction(i18n("Icon and Text"));
-    selectionAction->addAction(i18n("Icon only"));
-    selectionAction->setCurrentItem(d->iconMode);
+    KSelectAction* textAction = new KSelectAction(i18n("Text"), &menu);
+    connect(textAction, SIGNAL(triggered(int)), SLOT(switchIconMode(int)));
+    menu.addAction(textAction);
+    textAction->addAction(i18n("Icon and Text"));
+    textAction->addAction(i18n("Icon only"));
+    textAction->setCurrentItem(d->iconMode);
+
+    KSelectAction* buttonPositionAction = new KSelectAction(i18n("Tabs side"), &menu);
+    connect(buttonPositionAction, SIGNAL(triggered(int)), SLOT(switchTabsSide(int)));
+    menu.addAction(buttonPositionAction);
+    if (d->verticalMode) {
+        buttonPositionAction->addAction(i18n("Top side"));
+        buttonPositionAction->addAction(i18n("Bottom side"));
+        buttonPositionAction->setCurrentItem(d->verticalTabsSide);
+    } else {
+        buttonPositionAction->addAction(i18n("Left side"));
+        buttonPositionAction->addAction(i18n("Right side"));
+        buttonPositionAction->setCurrentItem(d->horizontalTabsSide);
+    }
 
     menu.exec(d->tabBar->mapToGlobal(pos));
 }
@@ -474,4 +495,29 @@ void KoModeBox::switchIconMode(int mode)
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
 
+}
+
+void KoModeBox::switchTabsSide(int side)
+{
+    if (d->verticalMode) {
+        d->verticalTabsSide = static_cast<VerticalTabsSide>(side);
+        if (d->verticalTabsSide == TopSide) {
+            //TODO
+        } else {
+            //TODO
+        }
+
+        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        cfg.writeEntry("ModeBoxVerticalTabsSide", (int)d->verticalTabsSide);
+    } else {
+        d->horizontalTabsSide = static_cast<HorizontalTabsSide>(side);
+        if (d->horizontalTabsSide == LeftSide) {
+            //TODO
+        } else {
+            //TODO
+        }
+
+        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
+    }
 }
