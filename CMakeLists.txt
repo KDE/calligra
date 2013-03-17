@@ -135,6 +135,7 @@ calligra_define_product(PLUGIN_FORMULASHAPE "")
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra")
 calligra_define_product(PLUGIN_VECTORSHAPE "" NEEDS LIB_VECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT LIB_KDCHART)
+calligra_define_product(PLUGIN_PRESENTATIONVIEWPORTSHAPE "")
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "")
 calligra_define_product(PLUGIN_THREEDSHAPE "")
