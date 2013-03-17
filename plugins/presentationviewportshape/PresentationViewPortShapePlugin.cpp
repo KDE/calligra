@@ -32,8 +32,8 @@ K_EXPORT_PLUGIN(PresentationViewPortShapePluginFactory("PresentationViewPortShap
 PresentationViewPortShapePlugin::PresentationViewPortShapePlugin( QObject * parent, const QVariantList & )
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new PresentationViewPortShapeFactory(parent) );
-    KoToolRegistry::instance()->add( new PresentationViewPortToolFactory() );
+	KoToolRegistry::instance()->add( new PresentationViewPortToolFactory() );
+    KoShapeRegistry::instance()->add( new PresentationViewPortShapeFactory() );
 }
 
 PresentationViewPortShapePlugin::~PresentationViewPortShapePlugin()
