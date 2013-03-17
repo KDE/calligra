@@ -2,7 +2,6 @@
  * This file is part of the KDE project
  *
  * Copyright (C) 2013 Shantanu Tushar <shantanu@kde.org>
- * Copyright (C) 2013 Sujith Haridasan <sujith.h@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,28 +20,46 @@
  *
  */
 
-#ifndef CQTEXTDOCUMENTMODEL_H
-#define CQTEXTDOCUMENTMODEL_H
+#ifndef CQSPREADSHEETCANVAS_H
+#define CQSPREADSHEETCANVAS_H
 
-#include <KWDocument.h>
+#include <QtDeclarative/QDeclarativeItem>
 
-class KWPageManager;
-class CQDocumentController;
+class KoZoomController;
+class CQCanvasController;
+namespace Calligra
+{
+namespace Sheets
+{
+class Doc;
+}
+}
 
-class CQTextDocumentModel : public QAbstractListModel
+class KoCanvasBase;
+
+class CQSpreadsheetCanvas : public QDeclarativeItem
 {
     Q_OBJECT
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
 public:
-    CQTextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager);
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    QString source() const;
+    void setSource(const QString &source);
 
 signals:
-    void documentControllerChanged();
+    void sourceChanged();
+
+protected:
+    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
 
 private:
-    KWDocument *kw_document;
-    KoShapeManager *kw_shapemanager;
+    bool openFile(const QString& uri);
+    void createAndSetCanvasControllerOn(KoCanvasBase* canvas);
+    void createAndSetZoomController(KoCanvasBase* canvas);
+
+    QString m_source;
+    KoCanvasBase* m_canvasBase;
+    CQCanvasController* m_canvasController;
+    KoZoomController* m_zoomController;
 };
 
-#endif // CQTEXTDOCUMENTMODEL_H
+#endif // CQSPREADSHEETCANVAS_H

@@ -1,3 +1,26 @@
+/*
+ * This file is part of the KDE project
+ *
+ * Copyright (C) 2013 Shantanu Tushar <shantanu@kde.org>
+ * Copyright (C) 2013 Sujith Haridasan <sujith.h@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ *
+ */
+
 #ifndef CQTEXTDOCUMENTCANVAS_H
 #define CQTEXTDOCUMENTCANVAS_H
 
@@ -21,6 +44,7 @@ class CQTextDocumentCanvas : public QDeclarativeItem
     Q_PROPERTY(ZoomMode zoomMode READ zoomMode WRITE setZoomMode NOTIFY zoomModeChanged)
     Q_PROPERTY(QString searchTerm READ searchTerm WRITE setSearchTerm NOTIFY searchTermChanged)
     Q_PROPERTY(QObject* documentModel READ documentModel NOTIFY documentModelChanged)
+    Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_ENUMS(ZoomMode)
 
 public:
@@ -44,12 +68,14 @@ public:
     void setSearchTerm(const QString &term);
 
     QObject *documentModel() const;
+    QSize documentSize() const;
 
 signals:
     void sourceChanged();
     void zoomModeChanged();
     void searchTermChanged();
     void documentModelChanged();
+    void documentSizeChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
@@ -61,6 +87,7 @@ private slots:
     void updateCanvas();
     void findPrevious();
     void findNext();
+    void updateDocumentSize(const QSize &size);
 
 private:
     bool openFile(const QString& uri);
@@ -76,5 +103,6 @@ private:
     QString m_searchTerm;
     KoFindText *m_findText;
     CQTextDocumentModel *m_documentModel;
+    QSize m_documentSize;
 };
 #endif // CQTEXTDOCUMENTCANVAS_H

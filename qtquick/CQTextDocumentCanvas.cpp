@@ -1,3 +1,26 @@
+/*
+ * This file is part of the KDE project
+ *
+ * Copyright (C) 2013 Shantanu Tushar <shantanu@kde.org>
+ * Copyright (C) 2013 Sujith Haridasan <sujith.h@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ *
+ */
+
 #include "CQTextDocumentCanvas.h"
 #include "CQCanvasController.h"
 #include "CQTextDocumentModel.h"
@@ -104,6 +127,7 @@ void CQTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
     //TODO: pass a proper action collection
     CQCanvasController *controller = new CQCanvasController(new KActionCollection(this));
     m_canvasController = controller;
+    connect (controller, SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
     controller->setCanvas(canvas);
     KoToolManager::instance()->addController (controller);
 }
@@ -114,6 +138,8 @@ void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
     m_zoomController = new KoZoomController(m_canvasController,
                                                             zoomHandler,
                                                             new KActionCollection(this));
+    KWCanvasItem *kwCanvasItem = static_cast<KWCanvasItem*>(canvas);
+    connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
 }
 
 void CQTextDocumentCanvas::setZoomMode(ZoomMode zoomMode)
@@ -192,6 +218,17 @@ void CQTextDocumentCanvas::findPrevious()
 QObject* CQTextDocumentCanvas::documentModel() const
 {
     return m_documentModel;
+}
+
+QSize CQTextDocumentCanvas::documentSize() const
+{
+    return m_documentSize;
+}
+
+void CQTextDocumentCanvas::updateDocumentSize(const QSize& size)
+{
+    m_documentSize = size;
+    emit documentSizeChanged();
 }
 
 #include "CQTextDocumentCanvas.moc"

@@ -2,6 +2,7 @@
  * This file is part of the KDE project
  *
  * Copyright (C) 2013 Shantanu Tushar <shantanu@kde.org>
+ * Copyright (C) 2013 Sujith Haridasan <sujith.h@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,11 +30,13 @@
 #include <QtCore/QPoint>
 
 class KoCanvasBase;
-class CQCanvasController : public KoCanvasController
+class CQCanvasController : public QObject, public KoCanvasController
 {
+    Q_OBJECT
 public:
     explicit CQCanvasController(KActionCollection* actionCollection);
-    ~CQCanvasController();
+    virtual ~CQCanvasController();
+ 
     virtual void setVastScrolling(qreal factor);
     virtual void setZoomWithWheel(bool zoom);
     virtual void updateDocumentSize(const QSize& sz, bool recalculateCenter);
@@ -58,6 +61,9 @@ public:
     virtual void setDrawShadow(bool drawShadow);
     virtual QSize viewportSize() const;
     virtual void scrollContentsBy(int dx, int dy);
+
+signals:
+    void documentSizeChanged(const QSize &sz);
 
 private:
     KoCanvasBase *m_canvas;

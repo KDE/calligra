@@ -2,6 +2,7 @@
  * This file is part of the KDE project
  * 
  * Copyright (C) 2013 Shantanu Tushar <shantanu@kde.org>
+ * Copyright (C) 2013 Sujith Haridasan <sujith.h@gmail.com>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,6 +50,7 @@ void CQCanvasController::setZoomWithWheel(bool zoom)
 
 void CQCanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
+    emit documentSizeChanged(sz);
 }
 
 void CQCanvasController::setScrollBarValue(const QPoint& value)
@@ -146,3 +148,4 @@ void CQCanvasController::scrollContentsBy(int dx, int dy)
 {
 }
 
+#include "CQCanvasController.moc"
