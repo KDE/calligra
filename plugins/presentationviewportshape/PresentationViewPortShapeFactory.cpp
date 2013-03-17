@@ -31,7 +31,7 @@
 #include <KoIcon.h>
 #include <klocale.h>
 
-PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * parent)
+PresentationViewPortShapeFactory::PresentationViewPortShapeFactory()
     : KoShapeFactoryBase("PresentationViewPortShape", i18n("PresentationViewPort"))
 {	
     setToolTip(i18n("A Presentation View Port"));

@@ -24,7 +24,7 @@
 class PresentationViewPortShapeFactory : public KoShapeFactoryBase 
 {
 public:
-  PresentationViewPortShapeFactory(QObject* parent);
+  PresentationViewPortShapeFactory();
   ~PresentationViewPortShapeFactory() {}
   
   virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
