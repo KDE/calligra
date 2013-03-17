@@ -25,6 +25,7 @@ PresentationViewPortToolFactory::PresentationViewPortToolFactory()
     : KoToolFactoryBase("PresentationViewPortShape")
 {
     setToolTip( i18n("Presentation View Port Tool") );
+    setIconName("rectangle-shape");
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId("PresentationViewPortShape");
