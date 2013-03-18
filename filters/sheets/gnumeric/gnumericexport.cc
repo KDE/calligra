@@ -61,7 +61,7 @@ K_PLUGIN_FACTORY(GNUMERICExportFactory, registerPlugin<GNUMERICExport>();)
 K_EXPORT_PLUGIN(GNUMERICExportFactory("calligrafilters"))
 
 GNUMERICExport::GNUMERICExport(QObject* parent, const QVariantList&)
-        : KoFilter(parent)
+    : KoFilter(parent)
 {
     isLink = false;
     isLinkBold = false;
@@ -77,7 +77,7 @@ bool GNUMERICExport::hasBorder(const Cell& cell, int currentcolumn, int currentr
     Q_UNUSED(currentrow);
     const Style style = cell.style();
     if (((style.leftBorderPen().width() != 0) &&
-            (style.leftBorderPen().style() != Qt::NoPen)) ||
+         (style.leftBorderPen().style() != Qt::NoPen)) ||
             ((style.rightBorderPen().width() != 0) &&
              (style.rightBorderPen().style() != Qt::NoPen)) ||
             ((style.topBorderPen().width() != 0) &&
@@ -248,7 +248,10 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         case Validity::Information:
             val.setAttribute("Style", "3");
             break;
+        default:
+            ;
         }
+
     }
 
     switch (kspread_validity.condition()) {
@@ -279,6 +282,8 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
     case Conditional::DifferentTo:
         val.setAttribute("Operator", "1");
         break;
+    default:
+        ;
     }
     switch (kspread_validity.restriction()) {
     case Validity::None:
@@ -300,7 +305,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
@@ -310,7 +315,9 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
+        default:
+            ;
         }
 
         break;
@@ -335,7 +342,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
@@ -345,7 +352,10 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
+
+        default:
+            ;
         }
 
         break;
@@ -365,7 +375,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
@@ -375,7 +385,10 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
+
+        default:
+            ;
         }
 
         break;
@@ -395,7 +408,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
@@ -405,7 +418,10 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
+
+        default:
+            ;
         }
         break;
     case Validity::TextLength:
@@ -424,7 +440,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
@@ -434,7 +450,10 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
-        break;
+            break;
+
+        default:
+            ;
         }
         break;
     case Validity::List:
@@ -453,6 +472,9 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         case Conditional::Between:
         case Conditional::DifferentTo:
             break;
+
+        default:
+            ;
         }
         break;
     }
