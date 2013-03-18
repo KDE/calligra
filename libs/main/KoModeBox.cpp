@@ -209,9 +209,15 @@ QIcon KoModeBox::createRotatedIcon(const KoToolButton button)
     QImage pm(iconSize, QImage::Format_ARGB32_Premultiplied);
     pm.fill(Qt::transparent);
     QPainter p(&pm);
-    p.rotate(90);
-    p.translate(0,-iconSize.width());
-
+    if (!d->verticalMode) {
+        if (d->horizontalTabsSide == LeftSide ) {
+            p.rotate(90);
+            p.translate(0,-iconSize.width());
+        } else {
+            p.rotate(-90);
+            p.translate(-iconSize.height(),0);
+        }
+    }
     button.button->icon().paint(&p, 0, 0, iconSize.height(), 22);
 
     QTextLayout textLayout(button.button->toolTip(), smallFont, p.device());
@@ -257,8 +263,15 @@ QIcon KoModeBox::createSimpleIcon(const KoToolButton button)
     QImage pm(iconSize, QImage::Format_ARGB32_Premultiplied);
     pm.fill(Qt::transparent);
     QPainter p(&pm);
-    p.rotate(90);
-    p.translate(0,-iconSize.width());
+    if (!d->verticalMode) {
+        if (d->horizontalTabsSide == LeftSide ) {
+            p.rotate(90);
+            p.translate(0,-iconSize.width());
+        } else {
+            p.rotate(-90);
+            p.translate(-iconSize.height(),0);
+        }
+    }
 
     button.button->icon().paint(&p, 0, 0, iconSize.height(), iconSize.width());
 
@@ -284,22 +297,11 @@ void KoModeBox::addItem(const KoToolButton button)
     d->addedWidgets[button.buttonGroupId] = widget;
 
     // Create a rotated icon with text
-    if (!d->verticalMode) {
-        if (d->horizontalTabsSide == LeftSide) {
-            if (d->iconMode == IconAndText) {
-                d->tabBar->addTab(createRotatedIcon(button), QString());
-            } else {
-                int index = d->tabBar->addTab(createSimpleIcon(button), QString());
-                d->tabBar->setTabToolTip(index, button.button->toolTip());
-            }
-        } else {
-            if (d->iconMode == IconAndText) {
-                d->tabBar->addTab(createSimpleIcon(button), QString());
-            } else {
-                int index = d->tabBar->addTab(createRotatedIcon(button), QString());
-                d->tabBar->setTabToolTip(index, button.button->toolTip());
-            }
-        }
+    if (d->iconMode == IconAndText) {
+        d->tabBar->addTab(createRotatedIcon(button), QString());
+    } else {
+        int index = d->tabBar->addTab(createSimpleIcon(button), QString());
+        d->tabBar->setTabToolTip(index, button.button->toolTip());
     }
     d->stack->addWidget(widget);
     d->addedButtons.append(button);
