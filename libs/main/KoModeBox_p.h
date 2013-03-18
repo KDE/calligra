@@ -72,6 +72,13 @@ public:
      */
     void addButton(const KoToolButton &button);
 
+    /**
+     * Should been called when the docker position has changed.
+     * Organise widgets and icons and orientation of the tabs.
+     *
+     * @param area the new location area
+     */
+    void locationChanged(Qt::DockWidgetArea area);
 public slots:
     /**
      * Using the buttongroup id passed in addButton() you can set the new active tool.
