@@ -3,7 +3,6 @@ qtcreator-build
 *~
 .kateconfig
 CMakeLists.txt.user*
-.directory
 *.rej
 *.orig
 *.patch
