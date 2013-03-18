@@ -1,5 +1,3 @@
-project( presentationviewportshape )
-
 include_directories(${FLAKE_INCLUDES})
 
 SET ( PresentationViewPortShape_SRCS
