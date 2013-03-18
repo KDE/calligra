@@ -97,6 +97,8 @@
 #include <kstatusbar.h>
 #include <QMenu>
 
+#include <limits>
+
 KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         : KoView(part, document, parent)
         , m_canvas(0)
@@ -939,8 +941,8 @@ void KWView::offsetInDocumentMoved(int yOffset)
     KWPage page = m_document->pageManager()->page(qreal(offset));
     qreal pageTop = page.offsetInDocument();
     QSizeF maxPageSize;
-    qreal minTextX =1000000000;
-    qreal maxTextX = -10000000000;
+    qreal minTextX = std::numeric_limits<qreal>::max();
+    qreal maxTextX = std::numeric_limits<qreal>::min();
     int minPageNum = page.pageNumber();
     int maxPageNum = page.pageNumber();
     while (page.isValid() && pageTop < qreal(offset + height)) {
