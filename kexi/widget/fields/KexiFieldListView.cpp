@@ -27,7 +27,6 @@
 #include <QApplication>
 #include <QBitmap>
 #include <QStyle>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <kdebug.h>

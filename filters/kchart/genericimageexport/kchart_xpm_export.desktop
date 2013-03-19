@@ -55,4 +55,4 @@ X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-xpm
 X-KDE-Weight=1
 X-KDE-Library=kchartgenericimageexport
-X-KDE-ServiceTypes=CalligraFilter
+X-KDE-ServiceTypes=Calligra/Filter

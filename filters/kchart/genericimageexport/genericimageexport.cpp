@@ -21,7 +21,6 @@
 
 #include <QPixmap>
 #include <QPainter>
-//Added by qt3to4:
 #include <QByteArray>
 
 #include <kmessagebox.h>
