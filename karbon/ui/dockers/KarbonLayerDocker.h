@@ -31,7 +31,7 @@ class KoShapeLayer;
 class KoShapeGroup;
 class KarbonLayerModel;
 class KarbonLayerSortingModel;
-class KarbonDocument;
+class KarbonKoDocument;
 class QModelIndex;
 
 namespace KParts
@@ -81,7 +81,7 @@ private:
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
     void selectLayers(QList<KoShapeLayer*> layers);
 
-    KarbonDocument * m_doc;
+    KarbonKoDocument * m_doc;
     KarbonLayerModel * m_model;
     KarbonLayerSortingModel * m_sortModel;
     KoDocumentSectionView * m_layerView;

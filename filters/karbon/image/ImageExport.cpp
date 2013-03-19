@@ -31,8 +31,8 @@
 #include "ImageExportOptionsWidget.h"
 
 #include <KarbonDocument.h>
-#include <FlowDocument.h>
-#include <KoDocument.h>
+#include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 
 #include <KoShapePainter.h>
 #include <KoFilter.h>
@@ -69,57 +69,52 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
         return KoFilter::NotImplemented;
     }
 
-    KoDocument* document = m_chain->inputDocument();
+    KoDocument * document = m_chain->inputDocument();
     if (! document)
         return KoFilter::ParsingError;
 
-    KarbonDocument* doc = dynamic_cast<KarbonDocument*>(document);
-    if (doc) {
-        KoShapePainter painter;
-        painter.setShapes(doc->shapes());
+    KarbonKoDocument * karbonPart = dynamic_cast<KarbonKoDocument*>(document);
+    if (! karbonPart)
+        return KoFilter::WrongFormat;
 
-        // get the bounding rect of the content
-        QRectF shapesRect = painter.contentRect();
-        // get the size in point
-        QSizeF pointSize = shapesRect.size();
-        // get the size in pixel (100% zoom)
-        KoZoomHandler zoomHandler;
-        QSize pixelSize = zoomHandler.documentToView(pointSize).toSize();
-        //transparent white by default
-        QColor backgroundColor(QColor(255, 255, 255, 0));
+    KoShapePainter painter;
+    painter.setShapes(karbonPart->document().shapes());
 
-        if (! m_chain->manager()->getBatchMode()) {
-            ImageExportOptionsWidget * widget = new ImageExportOptionsWidget(pointSize);
-            widget->setUnit(document->unit());
-            widget->setBackgroundColor(backgroundColor);
-            widget->enableBackgroundOpacity(format == "PNG");
+    // get the bounding rect of the content
+    QRectF shapesRect = painter.contentRect();
+    // get the size in point
+    QSizeF pointSize = shapesRect.size();
+    // get the size in pixel (100% zoom)
+    KoZoomHandler zoomHandler;
+    QSize pixelSize = zoomHandler.documentToView(pointSize).toSize();
+    QColor backgroundColor(Qt::white);
 
-            KDialog dlg;
-            dlg.setCaption(i18n("PNG Export Options"));
-            dlg.setButtons(KDialog::Ok | KDialog::Cancel);
-            dlg.setMainWidget(widget);
-            if (dlg.exec() != QDialog::Accepted)
-                return KoFilter::UserCancelled;
+    if (! m_chain->manager()->getBatchMode()) {
+        ImageExportOptionsWidget * widget = new ImageExportOptionsWidget(pointSize);
+        widget->setUnit(karbonPart->unit());
+        widget->setBackgroundColor(backgroundColor);
+        widget->enableBackgroundOpacity(format == "PNG");
 
-            pixelSize = widget->pixelSize();
-            backgroundColor = widget->backgroundColor();
-        }
-        QImage image(pixelSize, QImage::Format_ARGB32);
+        KDialog dlg;
+        dlg.setCaption(i18n("PNG Export Options"));
+        dlg.setButtons(KDialog::Ok | KDialog::Cancel);
+        dlg.setMainWidget(widget);
+        if (dlg.exec() != QDialog::Accepted)
+            return KoFilter::UserCancelled;
 
-        // draw the background of the image
-        image.fill(backgroundColor.rgba());
+        pixelSize = widget->pixelSize();
+        backgroundColor = widget->backgroundColor();
+    }
+    QImage image(pixelSize, QImage::Format_ARGB32);
 
-        // paint the shapes
-        painter.paint(image);
+    // draw the background of the image
+    image.fill(backgroundColor.rgba());
 
-        if(!image.save(m_chain->outputFile(), format.toLatin1())) {
-            return KoFilter::CreationError;
-        }
+    // paint the shapes
+    painter.paint(image);
 
-    } else {
-        FlowDocument* doc = dynamic_cast<FlowDocument*>(document);
-        if (! doc)
-            return KoFilter::WrongFormat;
+    if(!image.save(m_chain->outputFile(), format.toLatin1())) {
+        return KoFilter::CreationError;
     }
 
     return KoFilter::OK;

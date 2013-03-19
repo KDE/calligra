@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
-#include "KarbonDocument.h"
+#include "KarbonKoDocument.h"
 #include "KarbonConfigInterfacePage.h"
 
 #include <KoIcon.h>

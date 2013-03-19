@@ -48,7 +48,7 @@ ImageExportOptionsWidget::ImageExportOptionsWidget(QSizeF pointSize, QWidget * p
     widget.backColor->setColor(Qt::white);
     widget.opacity->setMinimum(0.0);
     widget.opacity->setMaximum(100.0);
-    widget.opacity->setValue(0.0);
+    widget.opacity->setValue(100.0);
     widget.unitWidth->changeValue(pointSize.width());
     widget.unitHeight->changeValue(pointSize.height());
     updateFromPointSize(pointSize);

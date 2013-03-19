@@ -7,19 +7,16 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/karbon/ui/dialogs
         ${CMAKE_SOURCE_DIR}/karbon/ui/dockers
         ${CMAKE_SOURCE_DIR}/karbon/ui/widgets
-        ${CMAKE_SOURCE_DIR}/karbon/ui/commands
 )
 
 set(karbonui_SRCS
     KarbonFactory.cpp
-    KarbonDocument.cpp
+    KarbonKoDocument.cpp 
     KarbonPart.cpp
     KarbonView.cpp 
     KarbonPrintJob.cpp
     KarbonZoomController.cpp
     KarbonDocumentMergeCommand.cpp
-    
-    commands/KarbonLayerReorderCommand.cpp
     
     dialogs/KarbonConfigureDialog.cpp
 

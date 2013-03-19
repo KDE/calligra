@@ -51,7 +51,7 @@ class QRectF;
 class QPrinter;
 
 class KAction;
-class KarbonDocument;
+class KarbonKoDocument;
 class KSelectAction;
 class KToggleAction;
 
@@ -71,11 +71,11 @@ class KARBONUI_EXPORT KarbonView : public KoView
     Q_OBJECT
 
 public:
-    KarbonView(KarbonPart *part, KarbonDocument* doc, QWidget* parent = 0);
+    KarbonView(KarbonPart *part, KarbonKoDocument* doc, QWidget* parent = 0);
     virtual ~KarbonView();
 
     /// Returns the view is attached to
-    KarbonDocument * part() const;
+    KarbonKoDocument * part() const;
 
     /// Returns the canvas widget of this view
     KarbonCanvas * canvasWidget() const;

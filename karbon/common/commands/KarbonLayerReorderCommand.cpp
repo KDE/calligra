@@ -24,7 +24,7 @@
 */
 
 #include "KarbonLayerReorderCommand.h"
-#include <KarbonDocument.h>
+#include "KarbonDocument.h"
 #include <KoShapeLayer.h>
 #include <klocale.h>
 

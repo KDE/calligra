@@ -38,6 +38,7 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 
 #include <KoDocument.h>
 #include <KoFilterChain.h>
@@ -63,11 +64,12 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
     if (!document)
         return KoFilter::ParsingError;
 
-    KarbonDocument * karbonPart = dynamic_cast<KarbonDocument*>(document);
+    KarbonKoDocument * karbonPart = dynamic_cast<KarbonKoDocument*>(document);
     if (!karbonPart)
         return KoFilter::WrongFormat;
 
-    SvgWriter writer(karbonPart->layers(), karbonPart->pageSize());
+    const KarbonDocument &data = karbonPart->document();
+    SvgWriter writer(data.layers(), data.pageSize());
     if (!writer.save(m_chain->outputFile(), true))
         return KoFilter::CreationError;
 

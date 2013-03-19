@@ -40,7 +40,7 @@
 #include <QList>
 #include <QBrush>
 
-class KarbonDocument;
+class KarbonKoDocument;
 class KoViewConverter;
 class KoShapeManager;
 class KoToolProxy;
@@ -56,7 +56,7 @@ class KarbonCanvas: public QWidget, public KoCanvasBase
     Q_OBJECT
 
 public:
-    explicit KarbonCanvas(KarbonDocument *p);
+    explicit KarbonCanvas(KarbonKoDocument *p);
     virtual ~KarbonCanvas();
 
     /// reimplemented from KoCanvasBase
@@ -112,7 +112,7 @@ public:
     const QPoint &documentOffset() const;
 
     /// @return the document used by the canvas.
-    KarbonDocument *document() const;
+    KarbonKoDocument *document() const;
 
 public slots:
 

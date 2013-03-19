@@ -22,6 +22,7 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 
 #include <kdebug.h>
 #include <kpluginfactory.h>
@@ -59,7 +60,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
     if (! doc)
         return KoFilter::ParsingError;
 
-    KarbonDocument * karbonPart = dynamic_cast<KarbonDocument*>(doc);
+    KarbonKoDocument * karbonPart = dynamic_cast<KarbonKoDocument*>(doc);
     if (! karbonPart)
         return KoFilter::WrongFormat;
 
@@ -70,7 +71,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
         return KoFilter::WrongFormat;
     }
 
-    paintDocument(karbonPart);
+    paintDocument(karbonPart->document());
 
     mWmf->end();
 
@@ -79,13 +80,13 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
-void WmfExport::paintDocument(KarbonDocument* document)
+void WmfExport::paintDocument(KarbonDocument& document)
 {
 
     // resolution
     mDpi = 1000;
 
-    QSizeF pageSize = document->pageSize();
+    QSizeF pageSize = document.pageSize();
     int width = static_cast<int>(POINT_TO_INCH(pageSize.width()) * mDpi);
     int height = static_cast<int>(POINT_TO_INCH(pageSize.height()) * mDpi);
 
@@ -97,7 +98,7 @@ void WmfExport::paintDocument(KarbonDocument* document)
         mScaleY = static_cast<double>(height) / pageSize.height();
     }
 
-    QList<KoShape*> shapes = document->shapes();
+    QList<KoShape*> shapes = document.shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     // Export layers.

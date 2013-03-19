@@ -23,11 +23,10 @@
 #define FLOWDOCUMENT_H
 
 #include <KoPADocument.h>
-#include "flow_export.h"
 
 class KoPart;
 
-class FLOW_EXPORT FlowDocument : public KoPADocument
+class FlowDocument : public KoPADocument
 {
     Q_OBJECT
 
