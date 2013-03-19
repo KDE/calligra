@@ -58,6 +58,8 @@ bool CQSpreadsheetCanvas::openFile(const QString& uri)
 
     KoPart* part = service->createInstance<KoPart>();
     Calligra::Sheets::Doc * document = static_cast<Calligra::Sheets::Doc*> (part->document());
+    document->setAutoSave(0);
+    document->setCheckAutoSaveFile(false);
     document->openUrl (KUrl (uri));
 
     m_canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());

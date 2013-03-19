@@ -64,6 +64,8 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
 
     KoPart* part = service->createInstance<KoPart>();
     KoDocument* document = part->document();
+    document->setAutoSave(0);
+    document->setCheckAutoSaveFile(false);
     document->openUrl(KUrl(uri));
 
     m_canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
