@@ -72,6 +72,8 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
     int topMargin    = marginInPx(TOP);
     int bottomMargin = marginInPx(BOTTOM);
 
+    m_canvas->view()->disableAutoScroll();
+
     int xMouse = xMouseInPage(event->x());
     int yMouse = yMouseInPage(event->y());
 
@@ -91,10 +93,10 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
 
 void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (margin != NONE){
+    if (margin != NONE) {
         setMarginInPx(margin, event->x(), event->y());
     }
-    else{
+    else {
         int leftMargin   = marginInPx(LEFT);
         int rightMargin  = marginInPx(RIGHT);
         int topMargin    = marginInPx(TOP);
@@ -121,6 +123,7 @@ void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
     if (margin != 0){
         margin = NONE;
     }
+    m_canvas->view()->enableAutoScroll();
 }
 
 int KWPageTool::marginInPx(Margin p_selection)
