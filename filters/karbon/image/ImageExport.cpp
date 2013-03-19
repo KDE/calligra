@@ -31,7 +31,6 @@
 #include "ImageExportOptionsWidget.h"
 
 #include <KarbonDocument.h>
-#include <FlowDocument.h>
 #include <KoDocument.h>
 
 #include <KoShapePainter.h>
@@ -117,9 +116,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
         }
 
     } else {
-        FlowDocument* doc = dynamic_cast<FlowDocument*>(document);
-        if (! doc)
-            return KoFilter::WrongFormat;
+        return KoFilter::WrongFormat;
     }
 
     return KoFilter::OK;
