@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,9 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QFile>
 #include <QApplication>
 #include <QDomDocument>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
 
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -305,6 +307,18 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
     kDebug() << d->data->databaseName() << d->data->connectionData()->driverName;
     KexiDB::MessageTitle et(this,
                             i18n("Could not open project \"%1\".", d->data->databaseName()));
+
+    if (!d->data->connectionData()->fileName().isEmpty()) {
+        QFileInfo finfo(d->data->connectionData()->fileName());
+        if (!d->data->isReadOnly() && !finfo.isWritable()) {
+            if (KexiProject::askForOpeningNonWritableFileAsReadOnly(0, finfo)) {
+                d->data->setReadOnly(true);
+            }
+            else {
+                return cancelled;
+            }
+        }
+    }
 
     if (!createConnection()) {
         kDebug() << "!createConnection()";
@@ -1376,6 +1390,20 @@ bool KexiProject::removeUserDataBlock(int objectID, const QString& dataID)
                                  "o_id", KexiDB::Field::Integer, objectID,
                                  "d_user", KexiDB::Field::Text, d->userName(),
                                  "d_sub_id", KexiDB::Field::Text, dataID);
+}
+
+// static
+bool KexiProject::askForOpeningNonWritableFileAsReadOnly(QWidget *parent, const QFileInfo &finfo)
+{
+    KGuiItem openItem(KStandardGuiItem::open());
+    openItem.setText(i18n("Open As Read Only"));
+    return KMessageBox::Yes == KMessageBox::questionYesNo(
+            parent, i18nc("@info",
+                          "<para>Could not open file <filename>%1</filename> for reading and writing.</para>"
+                          "<para>Do you want to open the file as read only?</para>",
+                          QDir::convertSeparators(finfo.filePath())),
+                    i18nc("@title:window", "Could Not Open File" ),
+                    openItem, KStandardGuiItem::cancel(), QString());
 }
 
 #include "kexiproject.moc"
