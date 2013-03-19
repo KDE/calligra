@@ -63,7 +63,7 @@ MainWindow::MainWindow (QWidget* parent)
     kdeclarative.setDeclarativeEngine(m_view->engine());
     kdeclarative.initialize();
     kdeclarative.setupBindings();
-    m_view->engine()->addImportPath("/home/shaan/kde/share/apps/calligra/imports");
+    m_view->engine()->addImportPath("/home/ahiemstra/kde/inst/share/apps/calligra/imports");
 
     QList<QObject*> recentFiles;
     QList<QObject*> recentTextDocs;
