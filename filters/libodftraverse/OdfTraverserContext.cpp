@@ -90,13 +90,13 @@ KoFilter::ConversionStatus OdfTraverserContext::analyzeOdfFile()
     KoFilter::ConversionStatus  status;
 
     // Parse meta.xml into m_metadata
-    status = odfParser.parseMetadata(d->odfStore, d->metadata);
+    status = odfParser.parseMetadata(*d->odfStore, &d->metadata);
     if (status != KoFilter::OK) {
         return status;
     }
 
     // Parse manifest
-    status = odfParser.parseManifest(d->odfStore, d->manifest);
+    status = odfParser.parseManifest(*d->odfStore, &d->manifest);
     if (status != KoFilter::OK) {
         return status;
     }

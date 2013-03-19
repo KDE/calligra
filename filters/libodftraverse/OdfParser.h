@@ -33,37 +33,51 @@
 class KoStore;
 
 
-// The purpose of this class is to provide a parser for the
-// information in an ODF file outside of the actual content and
-// provide easy access to it.  This includes the manifest, the
-// metadata, settings and styles although not all of the above is
-// implemented yet.
+/** @brief Provide a parser for some parts of an ODF file.
+ *
+ * The purpose of this class is to provide a parser for the
+ * information in an ODF file outside of the actual content and
+ * provide easy access to it.  This includes the manifest, the
+ * metadata, settings and styles although not all of the above is
+ * implemented yet.
+ */
 class OdfParser
 {
 public:
     OdfParser();
     virtual ~OdfParser();
 
-    // Parse the metadata.
-    //
-    // Format is QHash<name, value>
-    // where
-    //   name  is the name of the metadata tag
-    //   value is its value
-    KoFilter::ConversionStatus parseMetadata(KoStore *odfStore,
+    /** Parse the metadata.
+     *
+     * Format is QHash<name, value>
+     * where
+     *   name  is the name of the metadata tag
+     *   value is its value
+     *
+     * @param odfStore The store where the information is fetched
+     * @param metadata The result
+     * @return returns KoFilter::OK if everything went well.
+     * @return returns an error status otherwise.
+     */
+    KoFilter::ConversionStatus parseMetadata(KoStore &odfStore,
                                              // Out parameter:
-                                             QHash<QString, QString> &metadata);
+                                             QHash<QString, QString> *metadata);
 
-    // Parse manifest
-    //
-    // Format is QHash<path, type>
-    // where
-    //   path  is the full path of the file stored in the manifest
-    //   type  is the mimetype of the file.
-    //
-    KoFilter::ConversionStatus parseManifest(KoStore *odfStore,
+    /*** Parse manifest
+     *
+     * Format is QHash<path, type>
+     * where
+     *   path  is the full path of the file stored in the manifest
+     *   type  is the mimetype of the file.
+     *
+     * @param odfStore The store where the information is fetched
+     * @param metadata The result
+     * @return returns KoFilter::OK if everything went well.
+     * @return returns an error status otherwise.
+     */
+    KoFilter::ConversionStatus parseManifest(KoStore &odfStore,
                                              // Out parameter:
-                                             QHash<QString, QString> &manifest);
+                                             QHash<QString, QString> *manifest);
 
 private:
 };

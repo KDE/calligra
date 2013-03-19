@@ -40,10 +40,11 @@ OdfParser::~OdfParser()
 }
 
 
-KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore *odfStore,
-                                                    QHash<QString, QString> &metadata)
+KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore &odfStore,
+                                                    // out parameters:
+                                                    QHash<QString, QString> *metadata)
 {
-    if (!odfStore->open("meta.xml")) {
+    if (!odfStore.open("meta.xml")) {
         kDebug(30503) << "Cannot open meta.xml";
         return KoFilter::FileNotFound;
     }
@@ -52,11 +53,11 @@ KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore *odfStore,
     QString errorMsg;
     int errorLine;
     int errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+    if (!doc.setContent(odfStore.device(), true, &errorMsg, &errorLine, &errorColumn)) {
         kDebug() << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
-        odfStore->close();
+        odfStore.close();
         return KoFilter::ParsingError;
     }
 
@@ -64,18 +65,19 @@ KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore *odfStore,
     childNode = KoXml::namedItemNS(childNode, KoXmlNS::office, "meta");
     KoXmlElement element;
     forEachElement (element, childNode) {
-        metadata.insert(element.tagName(), element.text());
+        metadata->insert(element.tagName(), element.text());
     }
 
-    odfStore->close();
+    odfStore.close();
     return KoFilter::OK;
 }
 
 
-KoFilter::ConversionStatus OdfParser::parseManifest(KoStore *odfStore,
-                                                    QHash<QString, QString> &manifest)
+KoFilter::ConversionStatus OdfParser::parseManifest(KoStore &odfStore,
+                                                    // out parameters:
+                                                    QHash<QString, QString> *manifest)
 {
-    if (!odfStore->open("META-INF/manifest.xml")) {
+    if (!odfStore.open("META-INF/manifest.xml")) {
         kDebug(30503) << "Cannot to open manifest.xml.";
         return KoFilter::FileNotFound;
     }
@@ -83,7 +85,7 @@ KoFilter::ConversionStatus OdfParser::parseManifest(KoStore *odfStore,
     KoXmlDocument doc;
     QString errorMsg;
     int errorLine, errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+    if (!doc.setContent(odfStore.device(), true, &errorMsg, &errorLine, &errorColumn)) {
         kDebug() << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
@@ -99,9 +101,9 @@ KoFilter::ConversionStatus OdfParser::parseManifest(KoStore *odfStore,
             path.chop(1);
         QString type = nodeElement.attribute("media-type");
 
-        manifest.insert(path, type);
+        manifest->insert(path, type);
     }
 
-    odfStore->close();
+    odfStore.close();
     return KoFilter::OK;
 }
