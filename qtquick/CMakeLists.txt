@@ -7,6 +7,8 @@ set(calligraqtquickcomponents_SRCS
     CQTextDocumentCanvas.cpp
     CQTextDocumentModel.cpp
     CQImageProvider.cpp
+    CQPresentationView.cpp
+    CQPresentationCanvas.cpp
     )
 
 include_directories(
