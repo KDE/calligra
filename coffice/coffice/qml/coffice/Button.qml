@@ -25,11 +25,11 @@ Rectangle {
     gradient: Gradient {
         GradientStop {
             position: 0.0
-            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#c9c9c9" : "#f9f9f9"
+            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#c9c9c9" : "#fafafa"
         }
         GradientStop {
             position: 1.0
-            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#f9f9f9" : "#c9c9c9"
+            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#f9f9f9" : "#f0f0f0"
         }
     }
 

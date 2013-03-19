@@ -22,7 +22,7 @@ QObject *KPluginFactory::create(const char *iface, QWidget *parentWidget, QObjec
     qDebug() << Q_FUNC_INFO << "iface=" << iface << "parentWidget=" << parentWidget << "parent=" << parent << "args=" << args << "keyword=" << keyword;
     if (keyword.isEmpty()) {
         const bool hasOne = m_registeredPlugins.count() == 1;
-        QObject *p = m_registeredPlugins.count() > 1 ? new QObject(parent) : 0;
+        QObject *p = m_registeredPlugins.count() > 1 ? new KPluginFactoryContainer(parent) : 0;
         for(QHash<QString, PluginIface*>::ConstIterator it = m_registeredPlugins.constBegin(); it != m_registeredPlugins.constEnd(); ++it) {
             QObject *obj = it.value()->create(iface, parentWidget, p ? p : parent, args, keyword);
             Q_ASSERT(obj);

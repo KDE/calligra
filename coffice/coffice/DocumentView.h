@@ -106,15 +106,22 @@ class DocumentView : public QDeclarativeItem
 public:
     explicit DocumentView(QDeclarativeItem *parent = 0);
     virtual ~DocumentView();
+    virtual QRectF boundingRect() const;
+Q_SIGNALS:
+    void multiTouchBegin();
+    void multiTouchEnd();
 public Q_SLOTS:
     bool openFileWithDialog();
     bool openFile(const QString &file);
 private Q_SLOTS:
     void slotSizeChanged();
 protected:
+    virtual bool sceneEvent(QEvent *event);
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
     DocumentItem *m_doc;
+    qreal m_totalScaleFactor;
 };
 
 #endif // DOCUMENTVIEW_H

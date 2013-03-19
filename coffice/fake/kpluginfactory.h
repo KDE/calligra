@@ -44,6 +44,13 @@ namespace KParts { class Part; }
 #define K_PLUGIN_FACTORY_DEFINITION(name, pluginRegistrations) K_PLUGIN_FACTORY_DEFINITION_WITH_BASEFACTORY(name, KPluginFactory, pluginRegistrations)
 #endif
 
+class KPluginFactoryContainer : public QObject
+{
+    Q_OBJECT
+public:
+    KPluginFactoryContainer(QObject *parent = 0) : QObject(parent) { setObjectName("KPluginFactoryContainer"); }
+};
+
 class KPluginFactory : public QObject
 {
     Q_OBJECT

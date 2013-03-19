@@ -427,12 +427,15 @@ bool DocumentItem::openFile(const QString &file)
 DocumentView::DocumentView(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , m_doc(new DocumentItem(this, this))
+    , m_totalScaleFactor(1.0)
 {
-    //setFlag(QGraphicsItem::ItemClipsToShape, true);
-    //setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+    setAcceptTouchEvents(true);
+    setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MiddleButton);
+    setSmooth(true);
+    setFlag(QGraphicsItem::ItemClipsToShape, true);
+    setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
     setFlag(QGraphicsItem::ItemIgnoresParentOpacity, true);
     setFlag(QGraphicsItem::ItemDoesntPropagateOpacityToChildren, true);
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
     connect(m_doc, SIGNAL(sizeChanged()), this, SLOT(slotSizeChanged()));
@@ -440,6 +443,13 @@ DocumentView::DocumentView(QDeclarativeItem *parent)
 
 DocumentView::~DocumentView()
 {
+}
+
+QRectF DocumentView::boundingRect() const
+{
+    //QRectF r = m_doc->boundingRect();
+    //return QRectF(0.0, 0.0, r.width(), r.height());
+    return QDeclarativeItem::boundingRect();
 }
 
 bool DocumentView::openFile(const QString &file)
@@ -478,9 +488,53 @@ void DocumentView::geometryChanged(const QRectF &newGeometry, const QRectF &oldG
     //m_proxyWidget->setGeometry(r);
 }
 
+bool DocumentView::sceneEvent(QEvent *event)
+{
+    switch (event->type()) {
+        case QEvent::TouchBegin:
+        case QEvent::TouchUpdate:
+        case QEvent::TouchEnd: {
+            QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+            QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+
+            if (touchPoints.count() == 2) {
+                if (event->type() == QEvent::TouchBegin)
+                    Q_EMIT multiTouchBegin();
+
+                const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+                const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+                qreal scaleFactor = QLineF(touchPoint0.pos(), touchPoint1.pos()).length() / QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+                if (touchEvent->touchPointStates() & Qt::TouchPointReleased) {
+                    m_totalScaleFactor *= scaleFactor;
+                    scaleFactor = 1;
+                }
+                m_doc->setScale(m_totalScaleFactor * scaleFactor);
+
+                if (event->type() == QEvent::TouchEnd) {
+                    slotSizeChanged();
+                    Q_EMIT multiTouchEnd();
+                }
+            }
+            return true;
+        }
+        default: {
+            break;
+        }
+    }
+    return QDeclarativeItem::sceneEvent(event);
+}
+
+QVariant DocumentView::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    QVariant result = QDeclarativeItem::itemChange(change, value);
+    qDebug() << Q_FUNC_INFO << "change=" << change << "value=" << value << "result=" << result;
+    return result;
+}
+
 void DocumentView::slotSizeChanged()
 {
     QRectF r = m_doc->boundingRect();
+    r = mapRectFromItem(m_doc, r);
     setImplicitWidth(r.width());
     setImplicitHeight(r.height());
 }

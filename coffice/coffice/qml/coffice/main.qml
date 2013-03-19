@@ -32,6 +32,7 @@ Rectangle {
             width: buttonRow.implicitWidth
             height: buttonRow.implicitHeight
 
+
             Row {
                 id: buttonRow
                 Button {
@@ -60,11 +61,15 @@ Rectangle {
         DocumentViewItem {
             id: documentViewItem
             anchors.top: buttonBar.bottom
+            Component.onCompleted: {
+                documentViewItem.multiTouchBegin.connect( function() { documentViewFlickable.interactive = false } )
+                documentViewItem.multiTouchEnd.connect( function() { documentViewFlickable.interactive = true } )
+            }
         }
     }
 
     Component.onCompleted: {
         //documentViewItem.openFile("/home/snoopy/test.odt")
-        //documentViewItem.openFile("/storage/sdcard0/Download/test2.odt")
+        documentViewItem.openFile("/storage/sdcard0/Download/test2.odt")
     }
 }
