@@ -60,10 +60,14 @@ public:
         , iconTextFitted(true)
         , fittingIterations(0)
         , iconMode(IconAndText)
+        , verticalTabsSide(TopSide)
+        , horizontalTabsSide(LeftSide)
+        , verticalMode(false)
     {
     }
 
     KoCanvasBase *canvas;
+    QGridLayout *layout;
     QList<KoToolButton> buttons; // buttons maintained by toolmanager
     QList<KoToolButton> addedButtons; //buttons in the order added to QToolBox
     QMap<int, QWidget *> addedWidgets;
@@ -74,6 +78,9 @@ public:
     bool iconTextFitted;
     int fittingIterations;
     IconMode iconMode;
+    VerticalTabsSide verticalTabsSide;
+    HorizontalTabsSide horizontalTabsSide;
+    bool verticalMode;
 };
 
 QString KoModeBox::applicationName;
@@ -107,25 +114,34 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     d->iconMode = (IconMode)cfg.readEntry("ModeBoxIconMode", (int)IconAndText);
+    d->verticalTabsSide = (VerticalTabsSide)cfg.readEntry("ModeBoxVerticalTabsSide", (int)TopSide);
+    d->horizontalTabsSide = (HorizontalTabsSide)cfg.readEntry("ModeBoxHorizontalTabsSide", (int)LeftSide);
 
-    QGridLayout *layout = new QGridLayout();
+    d->layout = new QGridLayout();
+    d->stack = new QStackedWidget();
+
     d->tabBar = new QTabBar();
-    d->tabBar->setShape(QTabBar::RoundedWest);
     d->tabBar->setExpanding(false);
     if (d->iconMode == IconAndText) {
-        d->tabBar->setIconSize(QSize(32,64));
+        if (d->verticalMode) {
+            d->tabBar->setIconSize(QSize(38,32));
+        } else {
+            d->tabBar->setIconSize(QSize(32,64));
+        }
     } else {
         d->tabBar->setIconSize(QSize(22,22));
     }
     d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    layout->addWidget(d->tabBar, 0, 0);
+    if (d->verticalMode) {
+        switchTabsSide(d->verticalTabsSide);
+    } else {
+        switchTabsSide(d->horizontalTabsSide);
+    }
+    d->layout->addWidget(d->stack, 0, 1);
 
-    d->stack = new QStackedWidget();
-    layout->addWidget(d->stack, 0, 1);
-
-    layout->setContentsMargins(0,0,0,0);
-    layout->setColumnStretch(1, 100);
-    setLayout(layout);
+    d->layout->setContentsMargins(0,0,0,0);
+    d->layout->setColumnStretch(1, 100);
+    setLayout(d->layout);
 
     foreach(const KoToolButton &button, KoToolManager::instance()->createToolList(canvas->canvas())) {
         addButton(button);
@@ -166,6 +182,45 @@ void KoModeBox::addButton(const KoToolButton &button)
     button.button->setVisible(false);
 }
 
+void KoModeBox::locationChanged(Qt::DockWidgetArea area)
+{
+    resize(0,0);
+    switch(area) {
+        case Qt::TopDockWidgetArea:
+        case Qt::BottomDockWidgetArea:
+            d->verticalMode = true;
+            d->layout->removeWidget(d->stack);
+            d->layout->addWidget(d->stack, 1, 0);
+            break;
+        case Qt::LeftDockWidgetArea:
+        case Qt::RightDockWidgetArea:
+            d->verticalMode = false;
+            d->layout->removeWidget(d->stack);
+            d->layout->addWidget(d->stack, 0, 1);
+            break;
+        default:
+            break;
+    }
+    d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    d->layout->invalidate();
+
+    if (d->iconMode == IconAndText) {
+        if (d->verticalMode) {
+            d->tabBar->setIconSize(QSize(42,32));
+        } else {
+            d->tabBar->setIconSize(QSize(32,64));
+        }
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
+
+    if (d->verticalMode) {
+        switchTabsSide(d->verticalTabsSide);
+    } else {
+        switchTabsSide(d->horizontalTabsSide);
+    }
+}
+
 void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     if (canvas->canvas() == d->canvas) {
@@ -198,13 +253,25 @@ QIcon KoModeBox::createRotatedIcon(const KoToolButton button)
     QImage pm(iconSize, QImage::Format_ARGB32_Premultiplied);
     pm.fill(Qt::transparent);
     QPainter p(&pm);
-    p.rotate(90);
-    p.translate(0,-iconSize.width());
+    if (!d->verticalMode) {
+        if (d->horizontalTabsSide == LeftSide ) {
+            p.rotate(90);
+            p.translate(0,-iconSize.width());
+        } else {
+            p.rotate(-90);
+            p.translate(-iconSize.height(),0);
+        }
+    }
 
     button.button->icon().paint(&p, 0, 0, iconSize.height(), 22);
 
     QTextLayout textLayout(button.button->toolTip(), smallFont, p.device());
-    QTextOption option(Qt::AlignTop | Qt::AlignHCenter);
+    QTextOption option;
+    if (d->verticalMode) {
+        option = QTextOption(Qt::AlignVCenter | Qt::AlignHCenter);
+    } else {
+        option = QTextOption(Qt::AlignTop | Qt::AlignHCenter);
+    }
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     textLayout.setTextOption(option);
     textLayout.beginLayout();
@@ -246,8 +313,15 @@ QIcon KoModeBox::createSimpleIcon(const KoToolButton button)
     QImage pm(iconSize, QImage::Format_ARGB32_Premultiplied);
     pm.fill(Qt::transparent);
     QPainter p(&pm);
-    p.rotate(90);
-    p.translate(0,-iconSize.width());
+    if (!d->verticalMode) {
+        if (d->horizontalTabsSide == LeftSide ) {
+            p.rotate(90);
+            p.translate(0,-iconSize.width());
+        } else {
+            p.rotate(-90);
+            p.translate(-iconSize.height(),0);
+        }
+    }
 
     button.button->icon().paint(&p, 0, 0, iconSize.height(), iconSize.width());
 
@@ -461,12 +535,25 @@ void KoModeBox::toolSelected(int index)
 void KoModeBox::slotContextMenuRequested(const QPoint &pos)
 {
     QMenu menu;
-    KSelectAction* selectionAction = new KSelectAction(i18n("Text"), &menu);
-    connect(selectionAction, SIGNAL(triggered(int)), SLOT(switchIconMode(int)));
-    menu.addAction(selectionAction);
-    selectionAction->addAction(i18n("Icon and Text"));
-    selectionAction->addAction(i18n("Icon only"));
-    selectionAction->setCurrentItem(d->iconMode);
+    KSelectAction* textAction = new KSelectAction(i18n("Text"), &menu);
+    connect(textAction, SIGNAL(triggered(int)), SLOT(switchIconMode(int)));
+    menu.addAction(textAction);
+    textAction->addAction(i18n("Icon and Text"));
+    textAction->addAction(i18n("Icon only"));
+    textAction->setCurrentItem(d->iconMode);
+
+    KSelectAction* buttonPositionAction = new KSelectAction(i18n("Tabs side"), &menu);
+    connect(buttonPositionAction, SIGNAL(triggered(int)), SLOT(switchTabsSide(int)));
+    menu.addAction(buttonPositionAction);
+    if (d->verticalMode) {
+        buttonPositionAction->addAction(i18n("Top side"));
+        buttonPositionAction->addAction(i18n("Bottom side"));
+        buttonPositionAction->setCurrentItem(d->verticalTabsSide);
+    } else {
+        buttonPositionAction->addAction(i18n("Left side"));
+        buttonPositionAction->addAction(i18n("Right side"));
+        buttonPositionAction->setCurrentItem(d->horizontalTabsSide);
+    }
 
     menu.exec(d->tabBar->mapToGlobal(pos));
 }
@@ -475,7 +562,11 @@ void KoModeBox::switchIconMode(int mode)
 {
     d->iconMode = static_cast<IconMode>(mode);
     if (d->iconMode == IconAndText) {
-        d->tabBar->setIconSize(QSize(32,64));
+        if (d->verticalMode) {
+            d->tabBar->setIconSize(QSize(38,32));
+        } else {
+            d->tabBar->setIconSize(QSize(32,64));
+        }
     } else {
         d->tabBar->setIconSize(QSize(22,22));
     }
@@ -484,4 +575,38 @@ void KoModeBox::switchIconMode(int mode)
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
 
+}
+
+void KoModeBox::switchTabsSide(int side)
+{
+    if (d->verticalMode) {
+        d->verticalTabsSide = static_cast<VerticalTabsSide>(side);
+        if (d->verticalTabsSide == TopSide) {
+            d->layout->removeWidget(d->tabBar);
+            d->tabBar->setShape(QTabBar::RoundedNorth);
+            d->layout->addWidget(d->tabBar, 0, 0);
+        } else {
+            d->layout->removeWidget(d->tabBar);
+            d->tabBar->setShape(QTabBar::RoundedSouth);
+            d->layout->addWidget(d->tabBar, 2, 0);
+        }
+
+        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        cfg.writeEntry("ModeBoxVerticalTabsSide", (int)d->verticalTabsSide);
+    } else {
+        d->horizontalTabsSide = static_cast<HorizontalTabsSide>(side);
+        if (d->horizontalTabsSide == LeftSide) {
+            d->layout->removeWidget(d->tabBar);
+            d->tabBar->setShape(QTabBar::RoundedWest);
+            d->layout->addWidget(d->tabBar, 0, 0);
+        } else {
+            d->layout->removeWidget(d->tabBar);
+            d->tabBar->setShape(QTabBar::RoundedEast);
+            d->layout->addWidget(d->tabBar, 0, 2);
+        }
+
+        KConfigGroup cfg = KGlobal::config()->group("calligra");
+        cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
+    }
+    updateShownTools(d->canvas->canvasController(), QList<QString>());
 }
