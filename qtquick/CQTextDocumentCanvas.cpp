@@ -35,12 +35,11 @@
 #include <KWDocument.h>
 #include <KWPage.h>
 #include <KWCanvasItem.h>
-#include <KMimeType>
-#include <KMimeTypeTrader>
-#include <KDE/KDebug>
+#include <KService>
 #include <KActionCollection>
 #include <QGraphicsWidget>
 #include <QTextDocument>
+#include <KDebug>
 
 CQTextDocumentCanvas::CQTextDocumentCanvas()
     : m_canvasBase(0)
@@ -57,18 +56,15 @@ CQTextDocumentCanvas::CQTextDocumentCanvas()
 
 bool CQTextDocumentCanvas::openFile(const QString& uri)
 {
-    QString error;
-    QString mimetype = KMimeType::findByPath (uri)->name();
-    KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
-
-    if (!part) {
-        kDebug() << "Doc can't be openend because" << error;
+    KService::Ptr service = KService::serviceByDesktopName("wordspart");
+    if(service.isNull()) {
+        qWarning("Unable to load Words plugin, aborting!");
         return false;
     }
 
-    KoDocument * document = static_cast<KWDocument*> (part->document());
-    document->openUrl (KUrl (uri));
+    KoPart* part = service->createInstance<KoPart>();
+    KoDocument* document = part->document();
+    document->openUrl(KUrl(uri));
 
     m_canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
     createAndSetCanvasControllerOn(m_canvasBase);
