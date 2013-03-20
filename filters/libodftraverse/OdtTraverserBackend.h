@@ -37,9 +37,40 @@ class KoStore;
 class OdfTraverserContext;
 
 
+/** @brief A default backend for the OdtTraverser class.
+ *
+ * This class defines an interface and the default behaviour for the
+ * backend to the ODT traverser (@see OdtTraverser). When the
+ * traverser is called upon to traverse a certain XML tree, there will
+ * be two parameters to the root traverse function: a pointer to a
+ * backend object and a pointer to a context object.
+ *
+ * The traverser will traverse the XML tree and for every tag it comes
+ * across it will call a specific function in the backend and every
+ * call will use the pointer to the context object. 
+ *
+ * Each supported XML tag has a corresponding callback function. This
+ * callback function will be called twice: once when the tag is first
+ * encountered anc once when the tag is closed.  This means that an
+ * element with no child elements will be called twice in succession.
+ *
+ * The callback function will also receive as parameter a reference to
+ * the XML element in question so that the callback can examine the
+ * attributes. The third parameter is an enum indicating whether the
+ * element is an open tag or a close tag.
+ *
+ * This class defines a virtual function for every supported
+ * element. It also implements a default behaviour for every element
+ * which is to ignore the parameters and do nothing.
+ *
+ * When this class is used e.g. in a filter it is recommended to
+ * inherit this class and only reimplement those functions that are
+ * actually needed.
+ */
 class ODFTRAVERSE_EXPORT OdtTraverserBackend
 {
  public:
+    /// Tells whether a callback function is called on an open tag or a close tag.
     enum BeginEndTag {
         BeginTag,
         EndTag

@@ -29,13 +29,19 @@
 #include "OdfParser.h"
 
 
+// ----------------------------------------------------------------
+//             class OdtTraverserBackend::Private
+
+
 class OdtTraverserBackend::Private
 {
  public:
     Private();
     ~Private();
 
-    bool dummy;                 // We don't have any actual content in this class yet.
+    bool dummy;                 // We don't have any actual content in
+                                // this class yet but it's still
+                                // needed for forward binary compatibility.
 };
 
 OdtTraverserBackend::Private::Private()
@@ -59,6 +65,7 @@ OdtTraverserBackend::OdtTraverserBackend(OdfTraverserContext *context)
 
 OdtTraverserBackend::~OdtTraverserBackend()
 {
+    delete d;
 }
 
 
