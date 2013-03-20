@@ -35,6 +35,7 @@ namespace Sheets
  */
 class CALLIGRA_SHEETS_COMMON_EXPORT ToolRegistry : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Creates the registry.
