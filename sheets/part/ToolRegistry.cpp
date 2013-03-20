@@ -25,7 +25,6 @@
 #include <KGlobal>
 
 #include <KoPluginLoader.h>
-
 #include <KoToolRegistry.h>
 
 using namespace Calligra::Sheets;
@@ -38,7 +37,7 @@ public:
 
 
 ToolRegistry::ToolRegistry()
-        : d(new Private)
+    : d(new Private)
 {
     // Add the built-in cell tool.
     KoToolRegistry::instance()->add(new CellToolFactory("KSpreadCellToolId"));
@@ -54,39 +53,27 @@ ToolRegistry::~ToolRegistry()
 ToolRegistry* ToolRegistry::instance()
 {
     K_GLOBAL_STATIC(ToolRegistry, s_instance)
-    return s_instance;
+            return s_instance;
 }
 
 void ToolRegistry::loadTools()
 {
-    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
-    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
-                                        "([X-KDE-PluginInfo-Category] == 'Tool')");
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
-    const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
-    const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
-    foreach(KPluginInfo pluginInfo, pluginInfos) {
-        KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();
-        if (!factory) {
-            kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
-            continue;
-        }
-        CellToolFactory* toolFactory = new CellToolFactory("KSpreadCellToolId");
-        if (!toolFactory) {
-            kDebug(36002) << "Unable to create tool factory for" << pluginInfo.name();
-            continue;
-        }
-        pluginInfo.load(); // load activation state
-        if (pluginInfo.isPluginEnabled()) {
-            // Tool already registered?
+    QList<QObject*> toolPlugins = KoPluginLoader::instance()->retrievePlugins(this,
+                                                                              QLatin1String("CalligraSheets/Plugin"),
+                                                                              QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
+                                                                                            "([X-KDE-PluginInfo-Category] == 'Tool')"));
+    foreach(QObject *plugin, toolPlugins) {
+        CellToolFactory* toolFactory = qobject_cast<CellToolFactory*>(plugin);
+        if (plugin->property("plugin-info:enabled").toBool()) {
             if (KoToolRegistry::instance()->contains(toolFactory->id())) {
                 continue;
             }
-            toolFactory->setIconName(pluginInfo.service()->icon());
+            toolFactory->setIconName(plugin->property("plugin:icon").toString());
             toolFactory->setPriority(10);
-            toolFactory->setToolTip(pluginInfo.service()->comment());
+            toolFactory->setToolTip(plugin->property("plugin:comment").toString());
             KoToolRegistry::instance()->add(toolFactory);
-        } else {
+        }
+        else {
             // Tool not registered?
             if (!KoToolRegistry::instance()->contains(toolFactory->id())) {
                 continue;
