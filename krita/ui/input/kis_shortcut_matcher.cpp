@@ -19,6 +19,7 @@
 #include "kis_shortcut_matcher.h"
 
 #include <QMouseEvent>
+#include <QTabletEvent>
 
 #include "kis_abstract_input_action.h"
 #include "kis_stroke_shortcut.h"
@@ -228,6 +229,25 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
     }
 
     return false;
+}
+
+bool KisShortcutMatcher::tabletMoved(QTabletEvent *event)
+{
+    if (!m_d->runningShortcut) return false;
+    bool retval = false;
+
+    KisAbstractInputAction *action = m_d->runningShortcut->action();
+    if (action->supportsHiResInputEvents()) {
+        QMouseEvent mouseEvent(QEvent::MouseMove,
+                               event->pos(),
+                               Qt::NoButton,
+                               listToFlags(m_d->buttons),
+                               event->modifiers());
+        action->inputEvent(&mouseEvent);
+        retval = true;
+    }
+
+    return retval;
 }
 
 void KisShortcutMatcher::reset()

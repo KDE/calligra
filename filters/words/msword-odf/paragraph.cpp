@@ -125,7 +125,7 @@ void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::Paragraph
     }
     //Check the background-color of the named paragraph style.
     else {
-        const KoGenStyle *pStyle = m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()));
+        const KoGenStyle *pStyle = m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()), m_paragraphStyle->type() == sgcPara ? "paragraph" : "text");
         if (pStyle) {
             color = pStyle->property("fo:background-color", KoGenStyle::ParagraphType);
             if (color.isEmpty() || color == "transparent") {

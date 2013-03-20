@@ -30,9 +30,8 @@
 */
 
 #include "KarbonCanvas.h"
-#include "KarbonDocument.h"
-#include <KarbonKoDocument.h>
-#include "KarbonPart.h"
+#include <KarbonDocument.h>
+#include <KarbonPart.h>
 #include <KarbonOutlinePaintingStrategy.h>
 
 #include <KoZoomHandler.h>
@@ -58,7 +57,6 @@ class KarbonCanvas::KarbonCanvasPrivate {
 public:
     KarbonCanvasPrivate()
             : zoomHandler()
-            , document(0)
             , part(0)
             , showMargins(false)
             , documentOffset(0, 0)
@@ -79,8 +77,7 @@ public:
 
     KoToolProxy *toolProxy;
 
-    KarbonDocument *document;
-    KarbonKoDocument *part;
+    KarbonDocument *part;
     QPoint origin;         ///< the origin of the document page rect
     bool showMargins;      ///< should page margins be shown
     QPoint documentOffset; ///< the offset of the virtual canvas from the viewport
@@ -89,13 +86,12 @@ public:
     KoGridData pixelGrid;  ///< pixel grid data
 };
 
-KarbonCanvas::KarbonCanvas(KarbonKoDocument *p)
+KarbonCanvas::KarbonCanvas(KarbonDocument *p)
         : QWidget() , KoCanvasBase(p), d(new KarbonCanvasPrivate())
 {
     d->part = p;
-    d->document = &p->document();
     d->toolProxy = new KoToolProxy(this);
-    d->shapeManager = new KoShapeManager(this, d->document->shapes());
+    d->shapeManager = new KoShapeManager(this, d->part->shapes());
     connect(d->shapeManager, SIGNAL(selectionChanged()), this, SLOT(updateSizeAndOffset()));
 
     setBackgroundRole(QPalette::Base);
@@ -166,7 +162,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     painter.setPen(Qt::black);
 
     // paint the page rect
-    painter.drawRect(d->zoomHandler.documentToView(QRectF(QPointF(0.0, 0.0), d->document->pageSize())));
+    painter.drawRect(d->zoomHandler.documentToView(QRectF(QPointF(0.0, 0.0), d->part->pageSize())));
 
     // paint the page margins
     paintMargins(painter, d->zoomHandler);
@@ -204,7 +200,7 @@ void KarbonCanvas::paintMargins(QPainter &painter, const KoViewConverter &conver
 
     KoPageLayout pl = d->part->pageLayout();
 
-    QSizeF pageSize = d->document->pageSize();
+    QSizeF pageSize = d->part->pageSize();
     QRectF marginRect(pl.leftMargin, pl.topMargin,
                       pageSize.width() - pl.leftMargin - pl.rightMargin,
                       pageSize.height() - pl.topMargin - pl.bottomMargin);
@@ -382,7 +378,7 @@ const QPoint &KarbonCanvas::documentOffset() const
     return d->documentOffset;
 }
 
-KarbonKoDocument *KarbonCanvas::document() const
+KarbonDocument *KarbonCanvas::document() const
 {
     return d->part;
 }
@@ -443,7 +439,7 @@ int KarbonCanvas::documentViewMargin() const
 
 QRectF KarbonCanvas::documentViewRect()
 {
-    QRectF bbox = d->document->boundingRect();
+    QRectF bbox = d->part->boundingRect();
     d->documentViewRect = bbox.adjusted(-d->viewMargin, -d->viewMargin, d->viewMargin, d->viewMargin);
     return d->documentViewRect;
 }

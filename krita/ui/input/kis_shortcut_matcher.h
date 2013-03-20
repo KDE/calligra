@@ -28,6 +28,7 @@ class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QTouchEvent;
+class QTabletEvent;
 
 class KisStrokeShortcut;
 class KisTouchShortcut;
@@ -160,6 +161,17 @@ public:
     bool touchBeginEvent(QTouchEvent *event);
     bool touchUpdateEvent(QTouchEvent *event);
     bool touchEndEvent(QTouchEvent *event);
+
+    /**
+     * Handles the High Resolution tablet events
+     * (used on Windows only)
+     *
+     * \param event the event that caused this call
+     *
+     * \return whether the event has been handled successfully and
+     * should be eaten by the events filter
+     */
+    bool tabletMoved(QTabletEvent *event);
 
     /**
      * Resets the internal state of the matcher

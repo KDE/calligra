@@ -84,8 +84,7 @@ public slots:
     void fillBackgroundColor();
     void fillPattern();
     void reselect();
-    void invert();
-    void smooth();
+
     void copySelectionToNewLayer();
     void toggleDisplaySelection();
 

@@ -23,7 +23,6 @@
 #define HTMLEXPORT_TEST_H
 
 #include <KoFilter.h>
-//Added by qt3to4:
 #include <QByteArray>
 #include <QVariantList>
 

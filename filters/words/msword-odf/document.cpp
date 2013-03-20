@@ -228,6 +228,9 @@ void Document::processAssociatedStrings()
         }
     }
 
+    static const quint16 CP_WINUNICODE = 0x04B0;
+    bool isUnicode16 = false;
+
     QString title;
     QString subject;
     QString keywords;
@@ -241,6 +244,13 @@ void Document::processAssociatedStrings()
 
         for (uint i = 0; i < ps.numProperties; i++) {
             switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
+            case PIDSI_CODEPAGE:
+                if (ps.property.at(i)._has_vt_I2) {
+                    if (ps.property.at(i).vt_I2 == CP_WINUNICODE) {
+                        isUnicode16 = true;
+                    }
+                }
+                break;
             case PIDSI_TITLE:
                 p_str = &title;
                 break;
@@ -264,7 +274,11 @@ void Document::processAssociatedStrings()
             }
             if (p_str) {
                 if (ps.property.at(i).vt_lpstr) {
-                    *p_str = ps.property.at(i).vt_lpstr->characters;
+                    if (isUnicode16) {
+                        *p_str = QString::fromUtf16((ushort*)ps.property.at(i).vt_lpstr->characters.data());
+                    } else {
+                        *p_str = QString::fromUtf8(ps.property.at(i).vt_lpstr->characters.data());
+                    }
                 }
                 p_str = 0;
             }
