@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2013 Inge Wallin            <inge@lysator.liu.se>
+   Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,12 +57,12 @@ class KoStore;
  *
  * When you create a file format filter using a traverser
  * (e.g. OdtTraverser or OdsTraverser), you should inherit this class
- * in your own context class and extend it with storage of all data
- * that is relevant during the conversion. Such data could be data
- * about internal links, current list level, etc.
+ * to create your own context class and extend it with storage of all
+ * data that is relevant for you during the conversion. Such data
+ * could be data about internal links, current list level, etc.
  *
- * Note: at the time of writing, styles are not parsed and stored, and
- *       there is only an OdtTraverser, no other traversers.
+ * @Note: at the time of writing, styles are not parsed and stored, and
+ *        there is only an OdtTraverser, no other traversers.
  *
  * @see OdtTraverser
  * @see OdtTraverserBackend
@@ -74,30 +74,54 @@ class ODFTRAVERSE_EXPORT OdfTraverserContext
     OdfTraverserContext(KoStore *store);
     virtual ~OdfTraverserContext();
 
+    /** Analyze (parse) the data in an ODF file other than the content
+     *  and store it internally.  This data can later be accessed by
+     *  the getters such as metadata() and manifest().
+     */
     KoFilter::ConversionStatus analyzeOdfFile();
 
+    /** Return the store that is used during the parsing.
+     */
     KoStore *odfStore() const;
 
-    // This data is created before the traversal starts and can be
-    // accessed during the traversal.
-    // NOTE: QHash is implicitly shared and making a copy is cheap.
-    QHash<QString, QString>    metadata() const;
-    QHash<QString, QString>    manifest() const;
+    /** Return the metadata of an ODF file.
+     *
+     * Format is QHash<name, value>
+     * where
+     *   name  is the name of the metadata tag
+     *   value is its value
+     *
+     * This data is created before the traversal starts and can be
+     * accessed during the traversal.
+     */
+    QHash<QString, QString> metadata() const;
 
-    // This data is created during the traversal and can be accessed
-    // after the traversal is finished.
+    /*** Return the manifest of an ODF file.
+     *
+     * Format is QHash<path, type>
+     * where
+     *   path  is the full path of the file stored in the manifest
+     *   type  is the mimetype of the file.
+     *
+     * This data is created before the traversal starts and can be
+     * accessed during the traversal.
+     */
+    QHash<QString, QString> manifest() const;
 
-    // A list of images and their sizes. This list is collected during
-    // the conversion and returned from traverseContent() using an
-    // outparameter.
-    //
-    // The format is QHash<name, size>
-    // where
-    //    name   is the name of the picture inside the ODT file
-    //    size   is the size in points.
-    //
+    // This data below is created during the traversal and can be
+    // accessed after the traversal is finished.
+
+    /** Return a list of images and their sizes. This list is
+     * collected during the traversal of an ODF file.
+     *
+     * The format is QHash<name, size>
+     * where
+     *    name   is the name of the picture inside the ODT file
+     *    size   is the size in points.
+     */
     QHash<QString, QSizeF>   images() const;
-    QHash<QString, QString>  mediaFiles() const;
+
+    //QHash<QString, QString>  mediaFiles() const;
 
  private:
     class Private;

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2013 Inge Wallin            <inge@lysator.liu.se>
+   Copyright (C) 2013 Inge Wallin  <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,6 +74,7 @@ OdfTraverserContext::OdfTraverserContext(KoStore *store)
 
 OdfTraverserContext::~OdfTraverserContext()
 {
+    delete d;
 }
 
 
@@ -126,7 +127,9 @@ QHash<QString, QSizeF> OdfTraverserContext::images() const
     return d->images;
 }
 
+#if 0  // NYI
 QHash<QString, QString> OdfTraverserContext::mediaFiles() const
 {
     return d->mediaFiles;
 }
+#endif
