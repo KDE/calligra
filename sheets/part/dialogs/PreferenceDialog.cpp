@@ -47,7 +47,11 @@
 #include <kcolorbutton.h>
 #include <KPluginInfo>
 #include <KPluginSelector>
+
+#ifdef USE_SYCOCA
 #include <KServiceTypeTrader>
+#endif
+
 #include <ksharedconfig.h>
 #include <KStandardDirs>
 #include <sonnet/configwidget.h>

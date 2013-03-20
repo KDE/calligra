@@ -47,6 +47,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 include(CalligraProductSetMacros)
 
+option(USE_SYCOCA "Use the KDE plugin trader system. Used for runtime plugin configuration." OFF)
 option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
@@ -689,6 +690,14 @@ endif (NOT QT3SUPPORT)
 if(NOT OKULAR_FOUND)
     set(SHOULD_BUILD_OKULARODPGENERATOR FALSE)
 endif(NOT OKULAR_FOUND)
+
+if (NOT USE_SYCOCA)
+    set(SHOULD_BUILD_KEXI FALSE)
+    set(SHOULD_BUILD_PLAN FALSE)
+    set(SHOULD_BUILD_LIB_CALLIGRADB FALSE)
+    set(SHOULD_BUILD_LIB_KOPROPERTY FALSE)
+    set(SHOULD_BUILD_LIB_KOREPORT FALSE)
+endif (NOT USE_SYCOCA)
 
 # finally disable all those which are missing internal dependencies
 calligra_drop_unbuildable_products()

@@ -23,8 +23,8 @@
 #include "CellToolFactory.h"
 
 #include <KGlobal>
-#include <KPluginInfo>
-#include <KServiceTypeTrader>
+
+#include <KoPluginLoader.h>
 
 #include <KoToolRegistry.h>
 

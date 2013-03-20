@@ -30,6 +30,8 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
+#include <kplugininfo.h>
+
 class KoPluginLoader::Private
 {
 public:
@@ -82,6 +84,7 @@ QList<QObject*> KoPluginLoader::retrievePlugins(QObject *parent, const QString &
     kDebug() << "returns" << offers << "offers";
 
     KService::List plugins;
+    const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
 
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
@@ -138,6 +141,13 @@ QList<QObject*> KoPluginLoader::retrievePlugins(QObject *parent, const QString &
 
     QList<QString> whiteList;
     foreach(KSharedPtr<KService> service, serviceNames) {
+
+        KPluginInfo info(service);
+        info.load(moduleGroup);
+        if (!info.isPluginEnabled()) {
+            continue;
+        }
+
         QString error = 0;
         QObject * plugin = service->createInstance<QObject>(parent, QVariantList(), &error);
         if (plugin) {
