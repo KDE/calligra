@@ -20,6 +20,8 @@
 #ifndef CALLIGRA_SHEETS_CELL_TOOL_FACTORY
 #define CALLIGRA_SHEETS_CELL_TOOL_FACTORY
 
+#include <QObject>
+
 #include <KoToolFactoryBase.h>
 
 #include "calligra_sheets_export.h"
@@ -32,8 +34,10 @@ namespace Sheets
 /**
  * The Factory, that creates a CellTool.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT CellToolFactory : public KoToolFactoryBase
+class CALLIGRA_SHEETS_COMMON_EXPORT CellToolFactory : public QObject, public KoToolFactoryBase
 {
+    Q_OBJECT
+
 public:
     explicit CellToolFactory(const QString& id);
     ~CellToolFactory();

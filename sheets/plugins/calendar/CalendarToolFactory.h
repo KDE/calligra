@@ -30,7 +30,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class CalendarToolFactory : public QObject, public CellToolFactory
+class CalendarToolFactory : public CellToolFactory
 {
     Q_OBJECT
 public:
