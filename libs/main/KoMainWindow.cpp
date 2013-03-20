@@ -242,7 +242,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         , d(new KoMainWindowPrivate(this))
 {
 #ifdef __APPLE__
-    setUnifiedTitleAndToolBarOnMac(true);
+    //setUnifiedTitleAndToolBarOnMac(true);
     MacSupport::addFullscreen(this);
 #endif
     setStandardToolBarMenuEnabled(true);

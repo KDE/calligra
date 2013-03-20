@@ -26,13 +26,13 @@
 #define KARBONLAYERREORDERCOMMAND_H
 
 #include <kundo2command.h>
-#include <karboncommon_export.h>
+#include <karbonui_export.h>
 
 class KarbonDocument;
 class KoShapeLayer;
 
 /// Command for raising or lowering layers
-class KARBONCOMMON_EXPORT KarbonLayerReorderCommand : public KUndo2Command
+class KARBONUI_EXPORT KarbonLayerReorderCommand : public KUndo2Command
 {
 public:
     /// The different types of layer commands.

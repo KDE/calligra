@@ -2004,8 +2004,12 @@ void KexiMainWindow::updateAppCaption()
     d->appCaptionPrefix.clear();
     if (d->prj && d->prj->data()) {//add project name
         d->appCaptionPrefix = d->prj->data()->caption();
-        if (d->appCaptionPrefix.isEmpty())
+        if (d->appCaptionPrefix.isEmpty()) {
             d->appCaptionPrefix = d->prj->data()->databaseName();
+        }
+        if (d->prj->dbConnection()->isReadOnly()) {
+            d->appCaptionPrefix = i18nc("<project-name> (read only)", "%1 (read only)", d->appCaptionPrefix);
+        }
     }
 
     setWindowTitle(KDialog::makeStandardCaption(d->appCaptionPrefix, this));
@@ -2388,6 +2392,11 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
     }
 
     KexiProjectData* projectData = 0;
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
+    bool readOnly = false;
+    if (args) {
+        readOnly = args->isSet("readonly");
+    }
     bool deleteAfterOpen = false;
     if (cdata) {
         //server-based project
@@ -2402,37 +2411,45 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
             deleteAfterOpen = true;
         }
     } else {
-//  QString selFile = dlg.selectedExistingFile();
         if (aFileName.isEmpty()) {
             kWarning() << "KexiMainWindow::openProject(): aFileName.isEmpty()";
             return false;
         }
         //file-based project
         kDebug() << "Project File: " << aFileName;
-        KexiDB::ConnectionData cdata;
-        cdata.setFileName(aFileName);
-//   cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName, fileName, this );
+        KexiDB::ConnectionData fileConnData;
+        fileConnData.setFileName(aFileName);
         QString detectedDriverName;
+        int detectOptions = 0;
+        if (readOnly) {
+            detectOptions |= KexiStartupHandler::OpenReadOnly;
+        }
         KexiStartupData::Import importActionData;
+        bool forceReadOnly;
         const tristate res = KexiStartupHandler::detectActionForFile(
-                                 &importActionData, &detectedDriverName, cdata.driverName, aFileName, this);
+                                 &importActionData, &detectedDriverName, fileConnData.driverName,
+                                 aFileName, this, detectOptions, &forceReadOnly);
+        if (forceReadOnly) {
+            readOnly = true;
+        }
         if (true != res)
             return res;
 
         if (importActionData) { //importing requested
             return showProjectMigrationWizard(importActionData.mimeType, importActionData.fileName);
         }
-        cdata.driverName = detectedDriverName;
+        fileConnData.driverName = detectedDriverName;
 
-        if (cdata.driverName.isEmpty())
+        if (fileConnData.driverName.isEmpty())
             return false;
 
         //opening requested
-        projectData = new KexiProjectData(cdata);
+        projectData = new KexiProjectData(fileConnData);
         deleteAfterOpen = true;
     }
     if (!projectData)
         return false;
+    projectData->setReadOnly(readOnly);
     projectData->autoopenObjects = autoopenObjects;
     const tristate res = openProject(*projectData);
     if (deleteAfterOpen) //projectData object has been copied

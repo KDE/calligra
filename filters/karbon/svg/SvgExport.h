@@ -32,8 +32,6 @@
 #include <KoFilter.h>
 #include <QVariantList>
 
-class KarbonDocument;
-
 class SvgExport : public KoFilter
 {
     Q_OBJECT
@@ -43,9 +41,6 @@ public:
     virtual ~SvgExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-
-private:
-    void saveDocument(KarbonDocument& document);
 };
 
 #endif
