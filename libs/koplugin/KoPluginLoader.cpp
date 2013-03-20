@@ -148,9 +148,17 @@ QList<QObject*> KoPluginLoader::retrievePlugins(QObject *parent, const QString &
             continue;
         }
 
+        KPluginLoader loader(*info.service());
+
         QString error = 0;
         QObject * plugin = service->createInstance<QObject>(parent, QVariantList(), &error);
         if (plugin) {
+            plugin->setProperty("plugin-info:enabled", info.isPluginEnabled());
+            plugin->setProperty("plugin-info:name", info.pluginName());
+            plugin->setProperty("plugin-loader:version", loader.pluginVersion());
+            plugin->setProperty("plugin:icon", service->icon());
+            plugin->setProperty("plugin:comment", service->comment());
+
             whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name")).toString();
             kDebug(30003) << "Loaded plugin" << service->name();
             loadedPlugins.append(plugin);

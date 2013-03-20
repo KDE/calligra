@@ -130,6 +130,16 @@ public:
      * @param config when passing a valid config only the wanted plugins are actually loaded
      * @return the loaded plugins. This can be disregared (the plugin will be deleted) or
      * used and cast to something specific.
+     *
+     * The QObject contains the following metadata fields:
+     *
+     * <ul>
+     * <li> plugin-info:enabled
+     * <li> plugin-info:name
+     * <li> plugin-loader:version
+     * <li> plugin:icon
+     * <li> plugin:comment
+     * </ul>
      */
     QList<QObject*> retrievePlugins(QObject *parent, const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig());
 
