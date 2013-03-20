@@ -25,7 +25,6 @@
 // Qt
 #include <QHash>
 #include <QString>
-#include <QList>
 
 // Calligra
 #include <KoXmlReader.h>
@@ -33,9 +32,9 @@
 // this library
 #include "odftraverse_export.h"
 
-class QByteArray;
+
 class QSizeF;
-class QStringList;
+
 class KoXmlWriter;
 class KoStore;
 
@@ -43,6 +42,26 @@ class OdtTraverserBackend;
 class OdfTraverserContext;
 
 
+/** @brief Traverse the XML tree of the content of an ODT file.
+ *
+ * The OdtTraverser is used to traverse the contents of an ODT file.
+ * For every XML element that it comes across it will call a specific
+ * function in a backend class: @see OdtTraverserBackend. 
+ *
+ * Before the traversing process is started the ODT file will be
+ * analyzed to collect some data that may be needed during the
+ * traversal: metadata, manifest and styles (note: styles is not yet
+ * implemented). This data is stored in the so called context, which
+ * is kept in an instance of the OdfTraverserContext class.
+ *
+ * The context will be passed around to the backend in every call to a
+ * backend callback function.
+ *
+ * In addition to the pre-analyzed data from the ODT file, the context
+ * can be used to keep track of data that is used in the backend
+ * processing such as internal links, lists of embedded data such as
+ * pictures.
+ */
 class ODFTRAVERSE_EXPORT OdtTraverser
 {
  public:
@@ -61,14 +80,15 @@ class ODFTRAVERSE_EXPORT OdtTraverser
  protected:
     // All handleTag*() are named after the tag in the ODF that they handle.
 
-    // Basic text stuff.
+    // Generic stuff
     //
     // FIXME: Should be called handleGeneralTextContent()
     //
-    // FIXME: There should be one general handler for document level
-    //        and one for paragraph level.
+    // FIXME: There should be one general handler for block level and
+    //        one for paragraph level.
     void handleInsideElementsTag(KoXmlElement &element);
 
+    // Basic text stuff.
     void handleTagP(KoXmlElement &element);
     void handleTagH(KoXmlElement &element);
     void handleTagSpan(KoXmlElement &element);
@@ -90,7 +110,7 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
                         QHash<QString, QString> &unknownNamespaces);
 
-    // Other document level text tags
+    // Other block level text tags
     void handleTagTableOfContent(KoXmlElement &element);
     void handleTagTableOfContentBody(KoXmlElement &element);
 //--
@@ -108,6 +128,9 @@ class ODFTRAVERSE_EXPORT OdtTraverser
  private:
     OdtTraverserBackend  *m_backend;
     OdfTraverserContext  *m_context;
+
+#if 0  // This data is now store in the context.
+       // FIXME: Remove when we have fixed all the handleTag*() functions.
 
     // A list of images and their sizes. This list is collected during
     // the conversion and returned from traverseContent() using an
@@ -139,6 +162,7 @@ class ODFTRAVERSE_EXPORT OdtTraverser
     // Format: QHash< QString id, QString video source>
     QHash<QString, QString> m_mediaFilesList;
     int m_mediaId;
+#endif
 };
 
 #endif // ODTTRAVERSER_H

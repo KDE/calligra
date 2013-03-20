@@ -54,7 +54,6 @@ OdtTraverser::~OdtTraverser()
 
 bool OdtTraverser::traverseContent(OdtTraverserBackend *backend,
                                    OdfTraverserContext *context)
-                                   
 {
     m_backend = backend;
     m_context = context;
