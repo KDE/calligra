@@ -26,7 +26,6 @@
 
 #include <KDebug>
 #include <KGlobal>
-#include <KServiceTypeTrader>
 #include <KStandardDirs>
 
 using namespace Calligra::Sheets;
