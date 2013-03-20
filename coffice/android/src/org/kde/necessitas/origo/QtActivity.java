@@ -1122,32 +1122,32 @@ public class QtActivity extends Activity
 
 //////////////// Activity API 8 /////////////
 //@ANDROID-8
-@Override
-    protected Dialog onCreateDialog(int id, Bundle args)
-    {
-        QtApplication.InvokeResult res = QtApplication.invokeDelegate(id, args);
-        if (res.invoked)
-            return (Dialog)res.methodReturns;
-        else
-            return super.onCreateDialog(id, args);
-    }
-    public Dialog super_onCreateDialog(int id, Bundle args)
-    {
-        return super.onCreateDialog(id, args);
-    }
-    //---------------------------------------------------------------------------
-
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog, Bundle args)
-    {
-        if (!QtApplication.invokeDelegate(id, dialog, args).invoked)
-            super.onPrepareDialog(id, dialog, args);
-    }
-    public void super_onPrepareDialog(int id, Dialog dialog, Bundle args)
-    {
-        super.onPrepareDialog(id, dialog, args);
-    }
-    //---------------------------------------------------------------------------
+//QtCreator @Override
+//QtCreator     protected Dialog onCreateDialog(int id, Bundle args)
+//QtCreator     {
+//QtCreator         QtApplication.InvokeResult res = QtApplication.invokeDelegate(id, args);
+//QtCreator         if (res.invoked)
+//QtCreator             return (Dialog)res.methodReturns;
+//QtCreator         else
+//QtCreator             return super.onCreateDialog(id, args);
+//QtCreator     }
+//QtCreator     public Dialog super_onCreateDialog(int id, Bundle args)
+//QtCreator     {
+//QtCreator         return super.onCreateDialog(id, args);
+//QtCreator     }
+//QtCreator     //---------------------------------------------------------------------------
+//QtCreator 
+//QtCreator     @Override
+//QtCreator     protected void onPrepareDialog(int id, Dialog dialog, Bundle args)
+//QtCreator     {
+//QtCreator         if (!QtApplication.invokeDelegate(id, dialog, args).invoked)
+//QtCreator             super.onPrepareDialog(id, dialog, args);
+//QtCreator     }
+//QtCreator     public void super_onPrepareDialog(int id, Dialog dialog, Bundle args)
+//QtCreator     {
+//QtCreator         super.onPrepareDialog(id, dialog, args);
+//QtCreator     }
+//QtCreator     //---------------------------------------------------------------------------
 //@ANDROID-8
     //////////////// Activity API 11 /////////////
 

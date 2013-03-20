@@ -14,8 +14,8 @@ Rectangle {
     signal clicked
     signal toggled
 
-    height: contentColumn.height + 10
-    width: contentColumn.width + 10
+    height: contentColumn.height + 14
+    width: contentColumn.width + 14
     border.width: 1
     border.color: "#909090"
     radius: 4

@@ -1,75 +1,42 @@
 import QtQuick 1.1
-import DocumentView 1.0
 
 Rectangle {
+    id: appWindow
     width: 800
     height: 600
-    //color: "#c0c0c0"
     color: "#ffffff"
 
-    Flickable {
-        id: documentViewFlickable
+    PageStack {
+        id: pageStack
         anchors {
             top: parent.top
+            //top: buttonBar.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
         }
-        contentHeight: buttonBar.height + documentViewItem.implicitHeight
-        contentWidth: Math.max(documentViewItem.implicitWidth, parent.width)
-
-//        onFlickStarted: documentViewItem.beginUpdate()
-//        onFlickEnded: documentViewItem.endUpdate()
-//        onMovementStarted: documentViewItem.beginUpdate()
-//        onMovementEnded: documentViewItem.endUpdate()
-
-        clip: true
-
-        Rectangle {
-            id: buttonBar
-            x: 10
-            y: 10
-            width: buttonRow.implicitWidth
-            height: buttonRow.implicitHeight
-
-
-            Row {
-                id: buttonRow
-                Button {
-                    text: "Open"
-                    onClicked: {
-                        documentViewItem.openFileWithDialog()
-                    }
-                }
-                /*
-                Button {
-                    text: "Save As"
-                    onClicked: {
-                        documentViewItem.saveFileWithDialog()
-                    }
-                }
-                Button {
-                    text: "Quit"
-                    onClicked: {
-                        Qt.quit()
-                    }
-                }
-                */
+        FilePage {
+            id: fileTab
+            onCloseClicked: {
+                pageStack.pop(documentTab, false)
+            }
+            onFileClicked: {
+                pageStack.pop(documentTab, false)
+                documentTab.openFile(file)
             }
         }
-
-        DocumentViewItem {
-            id: documentViewItem
-            anchors.top: buttonBar.bottom
-            Component.onCompleted: {
-                documentViewItem.multiTouchBegin.connect( function() { documentViewFlickable.interactive = false } )
-                documentViewItem.multiTouchEnd.connect( function() { documentViewFlickable.interactive = true } )
+        DocumentPage {
+            id: documentTab
+            onOpenClicked: {
+                pageStack.push(fileTab, false)
             }
         }
     }
 
     Component.onCompleted: {
-        //documentViewItem.openFile("/home/snoopy/test.odt")
-        documentViewItem.openFile("/storage/sdcard0/Download/test2.odt")
+        pageStack.push(documentTab, true)
+
+        //documentTab.openFile("/home/snoopy/test.odt")
+        //documentTab.openFile("/storage/sdcard0/Download/test2.odt")
     }
 }

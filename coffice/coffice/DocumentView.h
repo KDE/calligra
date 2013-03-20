@@ -24,8 +24,10 @@ public:
     const KWPage &page() const;
     QRectF rect() const;
     int pageNumber() const;
+    void markDirty();
 public Q_SLOTS:
-    void updateThumbnail();
+    void maybeUpdateThumbnail();
+    void forceUpdateThumbnail();
 Q_SIGNALS:
     void thumbnailFinished(const QImage &image);
 private:
@@ -69,9 +71,12 @@ public:
     virtual ~Document();
     KoPart* part() const;
     bool openFile(const QString &file);
+    void emitProgressUpdated(int percent) { Q_EMIT progressUpdated(percent); }
 Q_SIGNALS:
+    void progressUpdated(int percent);
     void pagesAdded(QList<Page*> page);
     void pagesRemoved();
+    void layoutFinished();
 private Q_SLOTS:
     void slotPageSetupChanged();
     void slotLayoutFinished();
@@ -86,6 +91,7 @@ class DocumentItem : public QObject, public QGraphicsRectItem
 public:
     explicit DocumentItem(QObject *parentObject = 0, QGraphicsItem *parentItem = 0);
     virtual ~DocumentItem();
+    Document* document() const { return m_doc; }
     virtual QRectF boundingRect() const;
     bool openFile(const QString &file);
 signals:
@@ -93,25 +99,31 @@ signals:
 private Q_SLOTS:
     void slotPagesAdded(QList<Page*> pages);
     void slotPagesRemoved();
+    void slotLayoutFinished();
 private:
     Document *m_doc;
-    qreal m_width;
-    qreal m_height;
-    qreal m_margin;
+    qreal m_width, m_height;
+    qreal m_margin, m_spacing;
 };
 
 class DocumentView : public QDeclarativeItem
 {
     Q_OBJECT
+    //Q_PROPERTY(bool pinchEnabled READ pinchEnabled NOTIFY pinchEnabledChanged)
 public:
     explicit DocumentView(QDeclarativeItem *parent = 0);
     virtual ~DocumentView();
     virtual QRectF boundingRect() const;
 Q_SIGNALS:
-    void multiTouchBegin();
-    void multiTouchEnd();
+    void progressUpdated(int percent);
 public Q_SLOTS:
-    bool openFileWithDialog();
+    QPointF pos() const;
+    void setPos(const QPointF &position);
+    qreal zoom() const;
+    //bool isZoomToFit() const;
+    void setZoom(qreal factor);
+    //void zoomToCenter(qreal factor = 1.0);
+    //void zoomToFit();
     bool openFile(const QString &file);
 private Q_SLOTS:
     void slotSizeChanged();
@@ -121,7 +133,8 @@ protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
     DocumentItem *m_doc;
-    qreal m_totalScaleFactor;
+    //qreal m_totalScaleFactor;
+    //bool m_pinchEnabled;
 };
 
 #endif // DOCUMENTVIEW_H

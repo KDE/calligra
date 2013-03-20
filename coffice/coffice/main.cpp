@@ -5,7 +5,9 @@
 
 #include "qmlapplicationviewer.h"
 
+#include "FileSystemModel.h"
 #include "DocumentView.h"
+#include "Settings.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -14,8 +16,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QmlApplicationViewer viewer;
     QDeclarativeContext *ctxt = viewer.rootContext();
 
+    qmlRegisterType<FileSystemModel>("FileSystemModel", 1, 0, "FileSystemModelItem");
     qmlRegisterType<DocumentView>("DocumentView", 1, 0, "DocumentViewItem");
-    //ctxt->setContextProperty("Settings", &settings);
+
+    ctxt->setContextProperty("Settings", Settings::instance());
 
     QString url("qml/coffice/main.qml");
 
@@ -28,5 +32,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.showExpanded();
 
-    return app->exec();
+    int result = app->exec();
+
+    // Call that explicit since the dtor of Settings may not be called...
+    Settings::instance()->saveChanges();
+
+    return result;
 }

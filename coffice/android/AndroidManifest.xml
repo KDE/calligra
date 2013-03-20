@@ -15,11 +15,15 @@
             <meta-data android:name="android.app.fatal_error_msg" android:value="@string/fatal_error_msg"/>
             <!--  Messages maps -->
             <!-- Splash screen -->
+            <!--
             <meta-data android:name="android.app.splash_screen" android:resource="@layout/splash"/>
+            -->
             <!-- Splash screen -->
         </activity>
     </application>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
+    <!--
     <uses-permission android:name="android.permission.INTERNET"/>
+    -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>

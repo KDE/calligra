@@ -3,7 +3,6 @@
 #include <QGraphicsProxyWidget>
 #include <QPluginLoader>
 #include <QGraphicsDropShadowEffect>
-#include <QFileDialog>
 #include <QDesktopServices>
 #include <QStyleOptionGraphicsItem>
 #include <QThreadPool>
@@ -20,6 +19,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoCanvasBase.h>
+#include <KoProgressProxy.h>
 
 #include <KWPart.h>
 #include <KWView.h>
@@ -98,7 +98,8 @@ class Page::Private
 public:
     Document *m_doc;
     KWPage m_page;
-    Private(Document *doc, const KWPage &page) : m_doc(doc), m_page(page) {}
+    bool m_isDirty;
+    Private(Document *doc, const KWPage &page) : m_doc(doc), m_page(page), m_isDirty(false) {}
 };
 
 Page::Page(Document *doc, const KWPage &page)
@@ -132,7 +133,20 @@ int Page::pageNumber() const
     return d->m_page.pageNumber();
 }
 
-void Page::updateThumbnail()
+void Page::markDirty()
+{
+    d->m_isDirty = true;
+}
+
+void Page::maybeUpdateThumbnail()
+{
+    if (d->m_isDirty) {
+        d->m_isDirty = false;
+        forceUpdateThumbnail();
+    }
+}
+
+void Page::forceUpdateThumbnail()
 {
 #if 0
     PageThread *thread = new PageThread(this);
@@ -200,10 +214,10 @@ void PageThread::run()
     thumbnail.fill(QColor(Qt::white).rgb());
 
     QImage img = page.thumbnail(pageSize, shapeManager);
-    QPainter imgPainter(&img);
-    imgPainter.setPen(QPen(Qt::black));
-    imgPainter.drawRect(QRect(0, 0, pageSize.width() - 1, pageSize.height() - 1));
-    imgPainter.end();
+    //QPainter imgPainter(&img);
+    //imgPainter.setPen(QPen(Qt::black));
+    //imgPainter.drawRect(QRect(0, 0, pageSize.width() - 1, pageSize.height() - 1));
+    //imgPainter.end();
 
     QPainter painter(&thumbnail);
     painter.drawImage(QRectF(QPointF(0.0, 0.0), pageRect.size()), img);
@@ -216,23 +230,37 @@ void PageThread::run()
  * Document
  */
 
+class DocumentProgressProxy : public KoProgressProxy {
+public:
+    DocumentProgressProxy(Document *doc) : m_doc(doc) {}
+    ~DocumentProgressProxy() {}
+    int maximum() const { return 100; }
+    void setValue(int value) { m_doc->emitProgressUpdated(value); }
+    void setRange(int /*minimum*/, int /*maximum*/) {}
+    void setFormat(const QString &/*format*/) {}
+private:
+    Document *m_doc;
+};
+
 class Document::Private
 {
 public:
     KoPart *m_part;
     QList<Page*> m_pages;
-    Private() : m_part(0) {}
+    DocumentProgressProxy *m_progressProxy;
+    Private(Document *q) : m_part(0), m_progressProxy(new DocumentProgressProxy(q)) {}
 };
 
 Document::Document(QObject *parent)
     : QObject(parent)
-    , d(new Private())
+    , d(new Private(this))
 {
 }
 
 Document::~Document()
 {
     delete d->m_part;
+    delete d->m_progressProxy;
     delete d;
 }
 
@@ -247,26 +275,28 @@ bool Document::openFile(const QString &file)
     d->m_pages.clear();
     Q_EMIT pagesRemoved();
 
-    if (!d->m_part) {
-        d->m_part = s_manager()->createPart();
-        if (!d->m_part)
-            return false;
+    delete d->m_part;
+    d->m_part = s_manager()->createPart();
+    if (!d->m_part)
+        return false;
 
-        connect(d->m_part->document(), SIGNAL(pageSetupChanged()), this, SLOT(slotPageSetupChanged()));
-        connect(d->m_part->document(), SIGNAL(layoutFinished()), this, SLOT(slotLayoutFinished()));
-    }
+    d->m_progressProxy->setValue(0);
+    d->m_part->document()->setProgressProxy(d->m_progressProxy);
+
+    connect(d->m_part->document(), SIGNAL(pageSetupChanged()), this, SLOT(slotPageSetupChanged()));
+    connect(d->m_part->document(), SIGNAL(layoutFinished()), this, SLOT(slotLayoutFinished()));
 
     KUrl url(file);
     bool ok = d->m_part->document()->openUrl(url);
-    if (!ok)
-        return false;
 
-    return true;
+    d->m_progressProxy->setValue(-1);
+
+    return ok;
 }
 
 void Document::slotPageSetupChanged()
 {
-    qDebug() << "!!!!!!!!!!!!" << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO;
 
     KWDocument *kwdoc = dynamic_cast<KWDocument*>(d->m_part->document());
     Q_ASSERT(kwdoc);
@@ -312,7 +342,8 @@ void Document::slotLayoutFinished()
 #endif
 
     foreach(Page *page, d->m_pages)
-        page-> updateThumbnail();
+        page-> markDirty();
+    Q_EMIT layoutFinished();
 }
 
 /**************************************************************************
@@ -326,7 +357,7 @@ PageItem::PageItem(DocumentItem *view, Page *page)
     , m_page(page)
 {
     setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
-    setTransformationMode(Qt::SmoothTransformation);
+    //setTransformationMode(Qt::SmoothTransformation);
 
     //QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
     //effect->setBlurRadius(6);
@@ -348,13 +379,12 @@ QRectF PageItem::boundingRect() const
 
 void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    //if (pixmap().isNull()) {
-    //}
-    //qDebug() << Q_FUNC_INFO << m_page->pageNumber();
+    m_page->maybeUpdateThumbnail();
+
     QGraphicsPixmapItem::paint(painter, option, widget);
 
-    //painter->setPen(QPen(Qt::black));
-    //painter->drawRect(option->rect);
+    painter->setPen(QPen(Qt::black));
+    painter->drawRect(option->rect);
 }
 
 void PageItem::slotThumbnailFinished(const QImage &image)
@@ -373,10 +403,12 @@ DocumentItem::DocumentItem(QObject *parentObject, QGraphicsItem *parentItem)
     , m_doc(new Document(this))
     , m_width(0.0)
     , m_height(0.0)
-    , m_margin(10.0)
+    , m_margin(5.0)
+    , m_spacing(10.0)
 {
     connect(m_doc, SIGNAL(pagesAdded(QList<Page*>)), this, SLOT(slotPagesAdded(QList<Page*>)));
     connect(m_doc, SIGNAL(pagesRemoved()), this, SLOT(slotPagesRemoved()));
+    connect(m_doc, SIGNAL(layoutFinished()), this, SLOT(slotLayoutFinished()));
 }
 
 DocumentItem::~DocumentItem()
@@ -388,8 +420,9 @@ void DocumentItem::slotPagesAdded(QList<Page*> pages)
     qDebug() << Q_FUNC_INFO << pages;
     Q_FOREACH(Page *page, pages) {
         PageItem *pageItem = new PageItem(this, page);
-        m_height += m_margin;
-        pageItem->setPos(m_margin, m_height);
+        if (m_height > 0.0)
+            m_height += m_spacing;
+        pageItem->setPos(m_margin, m_margin + m_height);
         m_height += page->rect().height();
         m_width = qMax(m_width, page->rect().width());
     }
@@ -398,25 +431,28 @@ void DocumentItem::slotPagesAdded(QList<Page*> pages)
 
 void DocumentItem::slotPagesRemoved()
 {
-    qDeleteAll(childItems());
     m_width = m_height = 0.0;
+    qDeleteAll(childItems());
+}
+
+void DocumentItem::slotLayoutFinished()
+{
+    update();
 }
 
 QRectF DocumentItem::boundingRect() const
 {
-    return QRectF(0.0, 0.0, m_width + m_margin*2, m_height + m_margin*2);
+    qreal width = m_width + m_margin*2;
+    qreal height = m_height + m_margin*2;
+    qreal x = (width * scale() - width);
+    qreal y = (height * scale() - height);
+    return QRectF(QPointF(x, y), QSizeF(width, height));
 }
 
 bool DocumentItem::openFile(const QString &file)
 {
     qDebug() << Q_FUNC_INFO << file;
     bool ok = m_doc->openFile(file);
-
-    /*
-    setImplicitWidth(maxWidth + margin * 2);
-    setImplicitHeight(y);
-    */
-
     return ok;
 }
 
@@ -427,17 +463,17 @@ bool DocumentItem::openFile(const QString &file)
 DocumentView::DocumentView(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , m_doc(new DocumentItem(this, this))
-    , m_totalScaleFactor(1.0)
 {
     setAcceptTouchEvents(true);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MiddleButton);
-    setSmooth(true);
+    //setSmooth(true);
     setFlag(QGraphicsItem::ItemClipsToShape, true);
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
     setFlag(QGraphicsItem::ItemIgnoresParentOpacity, true);
     setFlag(QGraphicsItem::ItemDoesntPropagateOpacityToChildren, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
+    connect(m_doc->document(), SIGNAL(progressUpdated(int)), this, SIGNAL(progressUpdated(int)));
     connect(m_doc, SIGNAL(sizeChanged()), this, SLOT(slotSizeChanged()));
 }
 
@@ -447,35 +483,65 @@ DocumentView::~DocumentView()
 
 QRectF DocumentView::boundingRect() const
 {
-    //QRectF r = m_doc->boundingRect();
-    //return QRectF(0.0, 0.0, r.width(), r.height());
+//    QRectF r = QDeclarativeItem::boundingRect();
+//    //QRectF r = m_doc->boundingRect();
+//    return QRectF(0.0, 0.0, r.width(), r.height());
+
     return QDeclarativeItem::boundingRect();
+
+//    QRectF r = m_doc->boundingRect();
+//    r = mapRectFromItem(m_doc, r);
+//    return r;
 }
+
+QPointF DocumentView::pos() const
+{
+    return m_doc->pos();
+}
+
+void DocumentView::setPos(const QPointF &position)
+{
+    m_doc->setPos(position.x(), position.y());
+}
+
+qreal DocumentView::zoom() const
+{
+    return m_doc->scale();
+}
+
+//bool DocumentView::isZoomToFit() const
+//{
+//    QSizeF size = m_doc->boundingRect().size();
+//    return qFuzzyCompare(qMin(width() / size.width(), height() / size.height()), m_totalScaleFactor);
+//}
+
+void DocumentView::setZoom(qreal factor)
+{
+    m_doc->setScale(factor);
+}
+
+//void DocumentView::zoomToFit()
+//{
+//    QSizeF size = m_doc->boundingRect().size();
+//    //qreal factor = qMin(width() / size.width(), height() / size.height());
+//    qreal factor = width() / size.width();
+//    zoomToCenter(factor);
+//}
+
+//void DocumentView::zoomToCenter(qreal factor)
+//{
+//    zoom(factor);
+//    QRectF r = m_doc->mapRectToParent(m_doc->boundingRect());
+//    QSizeF s = boundingRect().size();
+//    qreal x = (s.width() - r.width()) / 2;
+//    qreal y = (s.height() - r.height()) / 2;
+//    m_doc->setPos(x, y);
+//}
 
 bool DocumentView::openFile(const QString &file)
 {
     qDebug() << Q_FUNC_INFO << file;
-    return m_doc->openFile(file);
-}
-
-bool DocumentView::openFileWithDialog()
-{
-    QFileDialog *dlg = new QFileDialog();
-    dlg->setAcceptMode(QFileDialog::AcceptOpen);
-    dlg->setFileMode(QFileDialog::ExistingFile);
-    dlg->setOption(QFileDialog::ReadOnly);
-    dlg->setDirectory(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-    QStringList filters;
-    filters << "OpenDocument Text Files (*.odt)"
-            << "Any files (*)";
-    dlg->setNameFilters(filters);
-    bool ok = false;
-    if (dlg->exec() && dlg && !dlg->selectedFiles().isEmpty()) {
-        QString file = dlg->selectedFiles().first();
-        if (!file.isEmpty())
-            ok = openFile(file);
-    }
-    delete dlg;
+    bool ok = m_doc->openFile(file);
     return ok;
 }
 
@@ -490,6 +556,7 @@ void DocumentView::geometryChanged(const QRectF &newGeometry, const QRectF &oldG
 
 bool DocumentView::sceneEvent(QEvent *event)
 {
+#if 0
     switch (event->type()) {
         case QEvent::TouchBegin:
         case QEvent::TouchUpdate:
@@ -497,10 +564,28 @@ bool DocumentView::sceneEvent(QEvent *event)
             QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
             QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
 
-            if (touchPoints.count() == 2) {
-                if (event->type() == QEvent::TouchBegin)
-                    Q_EMIT multiTouchBegin();
-
+            if (touchPoints.count() == 1 /* && m_borderMousePress == NoBorder */ ) {
+                const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+                qreal x = touchPoint0.pos().x() - touchPoint0.lastPos().x();
+                qreal y = touchPoint0.pos().y() - touchPoint0.lastPos().y();
+                QRectF r1 = boundingRect();
+                QRectF r2 = m_doc->mapRectToParent(m_doc->boundingRect());
+                if (r2.width() <= r1.width()) {
+                    x = 0;
+                } else if (x > 0) {
+                    x = r2.left() >= r1.left() ? 0 : qMin(x, r1.left() - r2.left());
+                } else {
+                    x = r2.right() >= r1.right() ? qMin(x, r2.right() - r1.right()) : 0;
+                }
+                if (r2.height() <= r1.height()) {
+                    y = 0;
+                } else if (y > 0) {
+                    y = r2.top() >= r1.top() ? 0 : qMin(y, r1.top() - r2.top());
+                } else {
+                    y = r2.bottom() >= r1.bottom() ? qMin(y, r2.bottom() - r1.bottom()) : 0;
+                }
+                m_doc->moveBy(x, y);
+            } else if (touchPoints.count() == 2) {
                 const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
                 const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
                 qreal scaleFactor = QLineF(touchPoint0.pos(), touchPoint1.pos()).length() / QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
@@ -508,19 +593,43 @@ bool DocumentView::sceneEvent(QEvent *event)
                     m_totalScaleFactor *= scaleFactor;
                     scaleFactor = 1;
                 }
-                m_doc->setScale(m_totalScaleFactor * scaleFactor);
 
-                if (event->type() == QEvent::TouchEnd) {
-                    slotSizeChanged();
-                    Q_EMIT multiTouchEnd();
+                QRectF r1 = boundingRect();
+                QRectF r2 = m_doc->mapRectToParent(m_doc->boundingRect());
+                m_doc->setScale(m_totalScaleFactor * scaleFactor);
+                QRectF r3 = m_doc->mapRectToParent(m_doc->boundingRect());
+                qreal x = (r2.width() - r3.width()) / 2;
+                qreal y = (r2.height() - r3.height()) / 2;
+                if (x > 0 && r1.width() < r3.width()) {
+                    if (r3.left() + x > r1.left()) {
+                        x = qMax<qreal>(0, r3.left() - r1.left());
+                    } else if (r3.right() + x < r1.right()) {
+                        x = qMax<qreal>(0, r1.right() - r3.right());
+                    }
                 }
+                if (y > 0 && r1.height() < r3.height()) {
+                    if (r3.top() + y > r1.top()) {
+                        y = qMax<qreal>(0, r3.top() - r1.top());
+                    } else if (r3.bottom() + y < r1.bottom()) {
+                        y = qMax<qreal>(0, r1.bottom() - r3.bottom());
+                    }
+                }
+                m_doc->moveBy(x, y);
             }
+            return true;
+        }
+        case QEvent::GraphicsSceneMouseDoubleClick: {
+            if (isZoomToFit())
+                zoomToCenter(m_totalScaleFactor * 2.0);
+            else
+                zoomToFit();
             return true;
         }
         default: {
             break;
         }
     }
+#endif
     return QDeclarativeItem::sceneEvent(event);
 }
 
@@ -533,8 +642,8 @@ QVariant DocumentView::itemChange(GraphicsItemChange change, const QVariant &val
 
 void DocumentView::slotSizeChanged()
 {
-    QRectF r = m_doc->boundingRect();
-    r = mapRectFromItem(m_doc, r);
-    setImplicitWidth(r.width());
-    setImplicitHeight(r.height());
+   QRectF r = m_doc->boundingRect();
+   r = mapRectFromItem(m_doc, r);
+   setImplicitWidth(r.width());
+   setImplicitHeight(r.height());
 }

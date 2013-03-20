@@ -236,6 +236,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( KJob::Capabilities )
 
 namespace KIO {
 
+enum LoadType { Reload, NoReload };
+
 class UDSEntry
 {
 public:
@@ -254,6 +256,7 @@ public:
 
 class FileCopyJob : public Job
 {
+    Q_OBJECT
 public:
     virtual void exec();
 };
@@ -266,7 +269,23 @@ public:
 
 class ListJob : public Job
 {
+    Q_OBJECT
 public:
+    virtual void exec();
+};
+
+class TransferJob : public SimpleJob
+{
+public:
+    virtual void exec();
+};
+
+class StoredTransferJob : public TransferJob
+{
+    Q_OBJECT
+public:
+    void setData( const QByteArray& arr ) {}
+    QByteArray data() const { return QByteArray(); }
     virtual void exec();
 };
 
@@ -285,6 +304,10 @@ KDECORE_EXPORT FileCopyJob *file_move( const KUrl& src, const KUrl& dest, int pe
 KDECORE_EXPORT SimpleJob *file_delete( const KUrl& src, JobFlags flags = DefaultFlags );
 KDECORE_EXPORT ListJob *listDir( const KUrl& url, JobFlags flags = DefaultFlags, bool includeHidden = true );
 KDECORE_EXPORT ListJob *listRecursive( const KUrl& url, JobFlags flags = DefaultFlags, bool includeHidden = true );
+KDECORE_EXPORT StoredTransferJob *storedGet( const KUrl& url, LoadType reload = NoReload, JobFlags flags = DefaultFlags );
+KDECORE_EXPORT StoredTransferJob *storedPut( const QByteArray& arr, const KUrl& url, int permissions, JobFlags flags = DefaultFlags );
+KDECORE_EXPORT StoredTransferJob *storedHttpPost( const QByteArray& arr, const KUrl& url, JobFlags flags = DefaultFlags );
+KDECORE_EXPORT StoredTransferJob *storedHttpPost( QIODevice* device, const KUrl& url, qint64 size = -1, JobFlags flags = DefaultFlags );
 
 }
 

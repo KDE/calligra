@@ -9,7 +9,7 @@
 class KXmlGuiWindow : public KMainWindow, public KXMLGUIBuilder, virtual public KXMLGUIClient
 {
 public:
-    KXmlGuiWindow( QWidget* parent = 0 ) : KMainWindow(parent), KXMLGUIBuilder(), KXMLGUIClient() {}
+    KXmlGuiWindow( QWidget* parent = 0 ) : KMainWindow(parent) {}
     void setHelpMenuEnabled(bool showHelpMenu = true) {}
     bool isHelpMenuEnabled() const { return false; }
     virtual KXMLGUIFactory *guiFactory() { return 0; }

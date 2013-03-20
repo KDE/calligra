@@ -33,10 +33,14 @@ LIBS += -lcalligralibs -lcalligraplugins -lcalligrawords
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    DocumentView.cpp
+    DocumentView.cpp \
+    FileSystemModel.cpp \
+    Settings.cpp
 
 HEADERS += \
-    DocumentView.h
+    DocumentView.h \
+    FileSystemModel.h \
+    Settings.h
 
 ## Install extraLibraries
 #x86 {
