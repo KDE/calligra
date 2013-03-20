@@ -22,9 +22,10 @@
 #include "Function.h"
 #include "FunctionRepository.h"
 
+#include <KoPluginLoader.h>
+
 #include <KDebug>
 #include <KGlobal>
-#include <KPluginInfo>
 #include <KServiceTypeTrader>
 #include <KStandardDirs>
 
@@ -89,56 +90,63 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 void FunctionModuleRegistry::loadFunctionModules()
 {
     const quint32 minKSpreadVersion = CALLIGRA_MAKE_VERSION(2, 1, 0);
-    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
-    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
-                                        "([X-KDE-PluginInfo-Category] == 'FunctionModule')");
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
-    const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
-    const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
-    kDebug(36002) << pluginInfos.count() << "function modules found.";
-    foreach(KPluginInfo pluginInfo, pluginInfos) {
-        pluginInfo.load(); // load activation state
-        KPluginLoader loader(*pluginInfo.service());
-        // Let's be paranoid: do not believe the service type.
-        if (loader.pluginVersion() < minKSpreadVersion) {
-            kDebug(36002) << pluginInfo.name()
-            << "was built against Caligra Sheets" << loader.pluginVersion()
-            << "; required version >=" << minKSpreadVersion;
-            continue;
-        }
-        if (pluginInfo.isPluginEnabled() && !contains(pluginInfo.pluginName())) {
-            // Plugin enabled, but not registered. Add it.
-            KPluginFactory* const factory = loader.factory();
-            if (!factory) {
-                kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
-                continue;
-            }
-            FunctionModule* const module = factory->create<FunctionModule>();
-            if (!module) {
-                kDebug(36002) << "Unable to create function module for" << pluginInfo.name();
-                continue;
-            }
-            add(pluginInfo.pluginName(), module);
 
+    QList<QObject*> functionPlugins = KoPluginLoader::instance()->retrievePlugins(0,
+                                                                                  QLatin1String("CalligraSheets/Plugin"),
+                                                                                  QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
+                                                                                                "([X-KDE-PluginInfo-Category] == 'FunctionModule')"));
+
+    foreach(QObject *plugin, functionPlugins) {
+
+        if ((quint32)plugin->property("plugin-loader:version").toInt() < minKSpreadVersion) {
+            kDebug(36002) << plugin->property("plugin-info:name")
+                          << "was built against Caligra Sheets" << plugin->property("plugin-loader:version")
+                          << "; required version >=" << minKSpreadVersion;
+            continue;
+
+        }
+
+        QString pluginName = plugin->property("plugin-info:name").toString();
+
+        if (plugin->property("plugin-info:enabled").toBool()) {
+
+            if (contains(pluginName)) {
+                continue;
+            }
+
+            FunctionModule* const module = qobject_cast<FunctionModule*>(plugin);
+            if (!module) {
+                kDebug(36002) << "Unable to create function module for" << pluginName;
+                continue;
+            }
+
+            add(pluginName, module);
             // Delays the function registration until the user needs one.
             if (d->repositoryInitialized) {
                 d->registerFunctionModule(module);
             }
-        } else if (!pluginInfo.isPluginEnabled() && contains(pluginInfo.pluginName())) {
+        }
+        else {
+            if (!contains(pluginName)) {
+                continue;
+            }
             // Plugin disabled, but registered. Remove it.
-            FunctionModule* const module = get(pluginInfo.pluginName());
+            FunctionModule* const module = get(pluginName);
+
             // Delay the function registration until the user needs one.
             if (d->repositoryInitialized) {
                 d->removeFunctionModule(module);
             }
-            remove(pluginInfo.pluginName());
+
+            remove(pluginName);
+
             if (module->isRemovable()) {
                 delete module;
-                delete loader.factory();
-                loader.unload();
-            } else {
+                delete plugin;
+            }
+            else {
                 // Put it back in.
-                add(pluginInfo.pluginName(), module);
+                add(pluginName, module);
                 // Delay the function registration until the user needs one.
                 if (d->repositoryInitialized) {
                     d->registerFunctionModule(module);
