@@ -95,10 +95,10 @@ public:
     int oldRecentFilesEntries;
     int oldAutoSaveDelay;
     bool oldCreateBackupFile;
-
+#ifdef USE_SYCOCA
     // Plugin Options
     KPluginSelector* pluginSelector;
-
+#endif
     // Spellchecker Options
     Sonnet::ConfigWidget* spellCheckPage;
 
@@ -361,7 +361,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->page3 = page;
 
     d->resetOpenSaveOptions(); // initialize values
-
+#ifdef USE_SYCOCA
     // Plugin Options Widget
     d->pluginSelector = new KPluginSelector(this);
     const QString serviceType = QLatin1String("CalligraSheets/Plugin");
@@ -377,7 +377,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     page->setIcon(koIcon("preferences-plugin"));
     addPage(page);
     d->pluginPage = page;
-
+#endif
     // Spell Checker Options
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
     d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
@@ -415,11 +415,11 @@ void PreferenceDialog::slotApply()
 {
     d->applyInterfaceOptions();
     d->applyOpenSaveOptions();
-
+#ifdef USE_SYCOCA
     // Plugin Options
     d->pluginSelector->save();
     FunctionModuleRegistry::instance()->loadFunctionModules();
-
+#endif
     d->spellCheckPage->save();
 
     d->authorPage->apply();
@@ -437,8 +437,10 @@ void PreferenceDialog::slotDefault()
         d->defaultOpenSaveOptions();
     } else if (currentPage() == d->page4) {
         d->spellCheckPage->slotDefault();
+#ifdef USE_SYCOCA
     } else if (currentPage() == d->pluginPage) {
         d->pluginSelector->load();
+#endif
     }
 }
 
@@ -450,8 +452,10 @@ void PreferenceDialog::slotReset()
         d->resetOpenSaveOptions();
     } else if (currentPage() == d->page4) {
         // TODO
+#ifdef USE_SYCOCA
     } else if (currentPage() == d->pluginPage) {
         d->pluginSelector->load(); // FIXME
+#endif
     }
 }
 
