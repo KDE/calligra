@@ -76,7 +76,7 @@ class ODFTRAVERSE_EXPORT OdtTraverserBackend
         EndTag
     };
 
-    OdtTraverserBackend(OdfTraverserContext *context);
+    explicit OdtTraverserBackend(OdfTraverserContext *context);
     virtual ~OdtTraverserBackend();
 
     // Called before and after the actual traversal.
