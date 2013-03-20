@@ -8,6 +8,7 @@ add_subdirectory( flake )
 add_subdirectory( basicflakes )
 add_subdirectory( pigment )
 add_subdirectory( main )
+add_subdirectory( komvc )
 add_subdirectory( kundo2 )
 
 if (SHOULD_BUILD_SCRIPTING)

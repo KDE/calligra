@@ -539,6 +539,10 @@ set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
 
 set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 
+set(KOMVC_INCLUDES ${CMAKE_SOURCE_DIR/libs/komvc
+                   ${QT_INCLUDES}
+                   ${KOPLUGIN_INCLUDES})
+
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
