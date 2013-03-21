@@ -96,13 +96,13 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
     createAndSetCanvasControllerOn(d->canvasBase);
     createAndSetZoomController(d->canvasBase);
     updateZoomControllerAccordingToDocument(document);
-    updateControllerWithZoomMode();
 
     QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
     graphicsWidget->setParentItem(this);
     graphicsWidget->installEventFilter(this);
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
+    updateControllerWithZoomMode();
 
     KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(d->canvasBase);
     QList<QTextDocument*> texts;
@@ -188,7 +188,9 @@ void CQTextDocumentCanvas::updateControllerWithZoomMode()
         case ZOOM_PAGE: zoomMode = KoZoomMode::ZOOM_PAGE; break;
         case ZOOM_WIDTH: zoomMode = KoZoomMode::ZOOM_WIDTH; break;
     }
-    d->zoomController->setZoom(zoomMode, 1.0);
+    if(d->zoomController) {
+        d->zoomController->setZoom(zoomMode, 1.0);
+    }
 }
 
 QString CQTextDocumentCanvas::searchTerm() const
