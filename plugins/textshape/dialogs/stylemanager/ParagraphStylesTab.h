@@ -20,6 +20,8 @@
 #ifndef PARAGRAPHSTYLESTAB_H
 #define PARAGRAPHSTYLESTAB_H
 
+#include "ParagraphIndentSpacingTab.h"
+
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 
@@ -53,6 +55,7 @@ private slots:
     void slotCreateNewStyle();
     void slotSaveStyle();
 
+    //character highlighting slots
     void slotCapitalizationEnabled(bool enabled);
     void slotCapitalizationChanged(QFont::Capitalization capitalization);
     void slotUnderlineEnabled(bool enabled);
@@ -78,10 +81,7 @@ private slots:
     void slotAutoTextIndentChecked(bool checked);
     //line spacing slots
     void slotLineSpacingEnabled(bool enabled);
-    void slotLineSpacingChanged(int item);
-    void slotLineSpacingValueChanged(qreal value);
-    void slotLineSpacingPercentChanged(int percent);
-    void slotUseFontMetricsChecked(bool checked);
+    void slotLineSpacingChanged(ParagraphIndentSpacingTab::LineSpacingType spacingType, qreal value, bool useFontMetrics);
     //paragraph spacing slots
     void slotTopParagraphSpacingEnabled(bool enabled);
     void slotTopParagraphSpacingChanged(qreal value);

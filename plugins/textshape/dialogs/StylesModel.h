@@ -108,19 +108,6 @@ public:
     /** Return style id list. */
     QList<int> StyleList();
 
-    /** Return new styles and their ids. */
-    QHash<int, KoParagraphStyle *> draftParStyleList();
-    QHash<int, KoCharacterStyle *> draftCharStyleList();
-
-    /** Add a paragraph style to pargraph style list but this style is not applied. */
-    void addDraftParagraphStyle(KoParagraphStyle *style);
-
-    /** Add a character style to character style list but this style is not applied. */
-    void addDraftCharacterStyle(KoCharacterStyle *style);
-
-    /** we call this when we apply our unapplied styles and we clear our list. */
-    void clearDraftStyles();
-
     /** We call this when we want a clear style model. */
     void clearStyleModel();
 
@@ -143,8 +130,6 @@ private:
 
 protected:
     QList<int> m_styleList; // list of style IDs
-    QHash<int, KoParagraphStyle *> m_draftParStyleList; // list of new styles that are not applied
-    QHash<int, KoCharacterStyle *> m_draftCharStyleList;
 
 private:
     KoStyleManager *m_styleManager;
@@ -153,8 +138,6 @@ private:
     KoCharacterStyle *m_defaultCharacterStyle;
 
     QSignalMapper *m_styleMapper;
-
-    bool m_provideStyleNone;
 };
 
 #endif

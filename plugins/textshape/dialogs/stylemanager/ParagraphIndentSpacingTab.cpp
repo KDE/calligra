@@ -116,75 +116,66 @@ void ParagraphIndentSpacingTab::slotLineSpacingEnabled(bool enabled)
 {
     ui->lineSpacing->setEnabled(enabled);
     ui->spacingStack->setEnabled(enabled);
-    ui->useFont->setEnabled(enabled);
+    ui->useFont->setEnabled(enabled && ui->lineSpacing->currentIndex() != 5);
     emit lineSpacingEnabled(enabled);
 }
 
 void ParagraphIndentSpacingTab::slotLineSpacingChanged(int item)
 {
-    emit lineSpacingChanged(item);
-//this does not belong here
-/*    bool percent = false, custom = false;
-    qreal customValue = 0.0;
+    kDebug() << "slot line spacing changed.";
+    kDebug() << "item: " << item;
+    kDebug() << "useFont: " << ui->useFont->isChecked();
+    kDebug() << "proportional value: " << ui->proportional->value();
+    kDebug() << "custom value: " << ui->custom->value();
     switch (item) {
-        case 0:
-        case 1:
-        case 2:
-            break;
-        case 3: // proportional
-            percent = true;
-            ui->proportional->setValue(m_style->lineHeightPercent());
-            break;
-        case 4: // additional
-            custom = true;
-            customValue = qMax(qreal(0.1), m_style->lineSpacing());
-            break;
-        case 5: // fixed
-            custom = true;
-            if (m_style->lineHeightAbsolute() == 0) // unset
-                customValue = 12.0; // nice default value...
-            else
-                customValue = m_style->lineHeightAbsolute();
-            break;
-        case 6: // minimum
-            custom = true;
-            customValue = m_style->minimumLineHeight();
-            break;
-        default:; // other cases don't need the spinboxes
+    case 0:
+        emit lineSpacingChanged(LineHeightProportional, 120, ui->useFont->isChecked());
+        break;
+    case 1:
+        emit lineSpacingChanged(LineHeightProportional, 180, ui->useFont->isChecked());
+        break;
+    case 2:
+        emit lineSpacingChanged(LineHeightProportional, 240, ui->useFont->isChecked());
+        break;
+    case 3:
+        emit lineSpacingChanged(LineHeightProportional, ui->proportional->value(), ui->useFont->isChecked());
+        break;
+    case 4:
+        if (ui->custom->value() == 0.0) {
+            emit lineSpacingChanged(LineHeightProportional, 100, ui->useFont->isChecked()); //we need to save it as percentage
+        }
+        else {
+            emit lineSpacingChanged(LineSpacingAdditional, ui->custom->value(), ui->useFont->isChecked());
+        }
+        break;
+    case 5:
+        emit lineSpacingChanged(LineHeightFixed, ui->custom->value(), false);
+        break;
+    case 6:
+        emit lineSpacingChanged(LineHeightMinimum, ui->custom->value(), ui->useFont->isChecked());
+        break;
     }
-
-    m_spacingInherited = false;
-
-    if (custom) {
-        ui->custom->setEnabled(true);
-        ui->spacingStack->setCurrentWidget(ui->unitsPage);
-        ui->custom->changeValue(customValue);
-    } else {
-        ui->spacingStack->setCurrentWidget(ui->percentPage);
-        ui->proportional->setEnabled(percent);
-        if (! percent)
-            ui->proportional->setValue(100);
-    }
-
-    ui->useFont->setEnabled(item != 5);
-    ui->useFont->setChecked(item == 5 ? false : m_fontMetricsChecked);
-    emit parStyleChanged();
-*/
 }
 
 void ParagraphIndentSpacingTab::slotLineSpacingPercentChanged(int percent)
 {
-    emit lineSpacingPercentChanged(percent);
+    Q_UNUSED(percent);
+    slotLineSpacingChanged(ui->lineSpacing->currentIndex());
+//    emit lineSpacingPercentChanged(percent);
 }
 
 void ParagraphIndentSpacingTab::slotLineSpacingValueChanged(qreal value)
 {
-    emit lineSpacingValueChanged(value);
+    Q_UNUSED(value);
+    slotLineSpacingChanged(ui->lineSpacing->currentIndex());
+//    emit lineSpacingValueChanged(value);
 }
 
 void ParagraphIndentSpacingTab::slotUseFontMetricsChecked(bool checked)
 {
-    emit useFontMetricsChecked(checked);
+    Q_UNUSED(checked);
+    slotLineSpacingChanged(ui->lineSpacing->currentIndex());
+//    emit useFontMetricsChecked(checked);
 }
 
 void ParagraphIndentSpacingTab::slotTopParagraphSpacingEnabled(bool enabled)
@@ -232,9 +223,6 @@ void ParagraphIndentSpacingTab::setDisplay(KoParagraphStyle *style)
     ui->first->changeValue(style->textIndent());
 
     //line spacing
-    checked = (style->hasProperty(KoParagraphStyle::FixedLineHeight) || style->hasProperty(KoParagraphStyle::LineSpacing) || style->hasProperty(KoParagraphStyle::PercentLineHeight) ||style->hasProperty(KoParagraphStyle::MinimumLineHeight));
-    ui->lineSpacingLabel->setChecked(checked);
-    slotLineSpacingEnabled(checked);
     ui->proportional->setValue(style->lineHeightPercent());
 
     if (style->hasProperty(KoParagraphStyle::FixedLineHeight) && style->lineHeightAbsolute() != 0) {
@@ -278,6 +266,11 @@ void ParagraphIndentSpacingTab::setDisplay(KoParagraphStyle *style)
     }
     ui->useFont->setChecked(style->lineSpacingFromFont() && ui->lineSpacing->currentIndex() != 5);
     m_fontMetricsChecked = style->lineSpacingFromFont();
+
+    checked = (style->hasProperty(KoParagraphStyle::FixedLineHeight) || style->hasProperty(KoParagraphStyle::LineSpacing) || style->hasProperty(KoParagraphStyle::PercentLineHeight) ||style->hasProperty(KoParagraphStyle::MinimumLineHeight));
+    ui->lineSpacingLabel->setChecked(checked);
+    slotLineSpacingEnabled(checked); //we do this after setting the line spacing widgets because the useFontMetrics check box enabling depends on the line spacing type
+
 
     //paragraph spacing
     checked = style->hasProperty(QTextFormat::BlockTopMargin);

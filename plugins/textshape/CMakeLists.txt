@@ -68,8 +68,8 @@ SET ( textshape_SRCS
     dialogs/StylesFilteredModelBase.cpp
     dialogs/ValidParentStylesProxyModel.cpp
     dialogs/StylesDelegate.cpp
-    dialogs/StyleManager.cpp
-    dialogs/StyleManagerDialog.cpp
+#    dialogs/StyleManager.cpp
+#    dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
     dialogs/CharacterGeneral.cpp
     dialogs/CharacterHighlighting.cpp

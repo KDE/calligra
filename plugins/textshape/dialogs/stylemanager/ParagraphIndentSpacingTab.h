@@ -34,6 +34,13 @@ class ParagraphIndentSpacingTab : public QWidget
 {
     Q_OBJECT
 public:
+    enum LineSpacingType {
+        LineHeightProportional,
+        LineHeightFixed,
+        LineHeightMinimum,
+        LineSpacingAdditional
+    };
+
     explicit ParagraphIndentSpacingTab(QWidget *parent = 0);
     ~ParagraphIndentSpacingTab();
     // open and display the style
@@ -53,11 +60,12 @@ signals:
     void firstLineIndentChanged(qreal value);
     void autoTextIndentChecked(bool checked);
     //line spacing signals
+    void lineSpacingChanged(ParagraphIndentSpacingTab::LineSpacingType spacingType, qreal value, bool useFontMetrics);
     void lineSpacingEnabled(bool enabled);
-    void lineSpacingChanged(int item);
-    void lineSpacingValueChanged(qreal value);
-    void lineSpacingPercentChanged(int percent);
-    void useFontMetricsChecked(bool checked);
+//    void lineSpacingChanged(int item);
+//    void lineSpacingValueChanged(qreal value);
+//    void lineSpacingPercentChanged(int percent);
+//    void useFontMetricsChecked(bool checked);
     //paragraph spacing signals
     void topParagraphSpacingEnabled(bool enabled);
     void topParagraphSpacingChanged(qreal value);

@@ -73,10 +73,7 @@ ParagraphStylesTab::ParagraphStylesTab(QWidget *parent) :
     connect(ui->indentSpacing, SIGNAL(firstLineIndentChanged(qreal)), this, SLOT(slotFirstLineIndentChanged(qreal)));
     connect(ui->indentSpacing, SIGNAL(autoTextIndentChecked(bool)), this, SLOT(slotAutoTextIndentChecked(bool)));
     connect(ui->indentSpacing, SIGNAL(lineSpacingEnabled(bool)), this, SLOT(slotLineSpacingEnabled(bool)));
-    connect(ui->indentSpacing, SIGNAL(lineSpacingChanged(int)), this, SLOT(slotLineSpacingChanged(int)));
-    connect(ui->indentSpacing, SIGNAL(lineSpacingValueChanged(qreal)), this, SLOT(slotLineSpacingValueChanged(qreal)));
-    connect(ui->indentSpacing, SIGNAL(lineSpacingPercentChanged(int)), this, SLOT(slotLineSpacingPercentChanged(int)));
-    connect(ui->indentSpacing, SIGNAL(useFontMetricsChecked(bool)), this, SLOT(slotUseFontMetricsChecked(bool)));
+    connect(ui->indentSpacing, SIGNAL(lineSpacingChanged(ParagraphIndentSpacingTab::LineSpacingType,qreal,bool)), this, SLOT(slotLineSpacingChanged(ParagraphIndentSpacingTab::LineSpacingType,qreal,bool)));
     connect(ui->indentSpacing, SIGNAL(topParagraphSpacingEnabled(bool)), this, SLOT(slotTopParagraphSpacingEnabled(bool)));
     connect(ui->indentSpacing, SIGNAL(topParagraphSpacingChanged(qreal)), this, SLOT(slotTopParagraphSpacingChanged(qreal)));
     connect(ui->indentSpacing, SIGNAL(bottomParagraphSpacingEnabled(bool)), this, SLOT(slotBottomParagraphSpacingEnabled(bool)));
@@ -91,6 +88,7 @@ ParagraphStylesTab::~ParagraphStylesTab()
 
 void ParagraphStylesTab::setDisplay(KoParagraphStyle *style)
 {
+    ui->paragraphListView->update(ui->paragraphListView->currentIndex());
     ui->characterHighlighting->setDisplay(style);
     ui->indentSpacing->setDisplay(style);
 }
@@ -117,8 +115,7 @@ void ParagraphStylesTab::slotStyleSelected(const QModelIndex &index)
 {
     KoParagraphStyle *style = static_cast<KoParagraphStyle*>(index.data(AbstractStylesModel::ParagraphStylePointer).value<void*>());
     if (style) {
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -127,8 +124,7 @@ void ParagraphStylesTab::slotCreateNewStyle()
     KoParagraphStyle *newStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->slotCreateNewStyle(ui->paragraphListView->currentIndex()));
     if (newStyle) {
         ui->paragraphListView->setCurrentIndex(m_paragraphStylesModel->indexForCharacterStyle(*newStyle));
-        ui->characterHighlighting->setDisplay(newStyle);
-        ui->indentSpacing->setDisplay(newStyle);
+        setDisplay(newStyle);
     }
 
 }
@@ -143,6 +139,8 @@ void ParagraphStylesTab::slotSaveStyle() //TODO reselect the style, create a sav
 }
 
 /*TODOs:
+- inherit style on new style instead of cloning
+- create our own KFontChooser. the stock kde one does not allow to disable individual font properties
 */
 
 /// ///////////////////CharacterHighlightingTab slots
@@ -157,9 +155,8 @@ void ParagraphStylesTab::slotCapitalizationEnabled(bool enabled)
         else if (!enabled && style->KoCharacterStyle::hasProperty(QTextFormat::FontCapitalization)) {
             style->KoCharacterStyle::remove(QTextFormat::FontCapitalization);
         }
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+
+        setDisplay(style);
     }
 }
 
@@ -169,9 +166,7 @@ void ParagraphStylesTab::slotCapitalizationChanged(QFont::Capitalization capital
     if (style) {
         style->KoCharacterStyle::setFontCapitalization(capitalization);
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -190,9 +185,7 @@ void ParagraphStylesTab::slotUnderlineEnabled(bool enabled)
             style->KoCharacterStyle::remove(QTextFormat::TextUnderlineColor);
         }
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -204,9 +197,7 @@ void ParagraphStylesTab::slotUnderlineChanged(KoCharacterStyle::LineType lineTyp
         style->KoCharacterStyle::setUnderlineStyle(lineStyle);
         style->KoCharacterStyle::setUnderlineColor(lineColor);
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -225,9 +216,7 @@ void ParagraphStylesTab::slotStrikethroughEnabled(bool enabled)
             style->KoCharacterStyle::remove(KoCharacterStyle::StrikeOutColor);
         }
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -239,9 +228,7 @@ void ParagraphStylesTab::slotStrikethroughChanged(KoCharacterStyle::LineType lin
         style->KoCharacterStyle::setStrikeOutStyle(lineStyle);
         style->KoCharacterStyle::setStrikeOutColor(lineColor);
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -255,9 +242,8 @@ void ParagraphStylesTab::slotPositionEnabled(bool enabled)
         else if (!enabled && style->KoCharacterStyle::hasProperty(QTextFormat::TextVerticalAlignment)) {
             style->KoCharacterStyle::remove(QTextFormat::TextVerticalAlignment);
         }
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+
+        setDisplay(style);
     }
 }
 
@@ -267,9 +253,7 @@ void ParagraphStylesTab::slotPositionChanged(QTextCharFormat::VerticalAlignment 
     if (style) {
         style->KoCharacterStyle::setVerticalAlignment(alignment);
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -283,9 +267,8 @@ void ParagraphStylesTab::slotBackgroundColorEnabled(bool enabled)
         else if (!enabled && style->KoCharacterStyle::hasProperty(QTextFormat::BackgroundBrush)) {
             style->KoCharacterStyle::remove(QTextFormat::BackgroundBrush);
         }
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+
+        setDisplay(style);
     }
 }
 
@@ -295,9 +278,7 @@ void ParagraphStylesTab::slotBackgroundColorChanged(const QColor color)
     if (style) {
         style->KoCharacterStyle::setBackground(QBrush(color));
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -311,9 +292,8 @@ void ParagraphStylesTab::slotTextColorEnabled(bool enabled)
         else if (!enabled && style->KoCharacterStyle::hasProperty(QTextFormat::ForegroundBrush)) {
             style->KoCharacterStyle::remove(QTextFormat::ForegroundBrush);
         }
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+
+        setDisplay(style);
     }
 }
 
@@ -323,9 +303,7 @@ void ParagraphStylesTab::slotTextColorChanged(QColor color)
     if (style) {
         style->KoCharacterStyle::setForeground(QBrush(color));
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -346,9 +324,7 @@ void ParagraphStylesTab::slotFontEnabled(bool enabled)
             style->KoCharacterStyle::remove(QTextFormat::FontPointSize);
         }
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -361,9 +337,7 @@ void ParagraphStylesTab::slotFontChanged(const QFont &font)
         style->KoCharacterStyle::setFontWeight(font.weight());
         style->KoCharacterStyle::setFontPointSize(font.pointSize());
 
-        ui->paragraphListView->update(ui->paragraphListView->currentIndex());
-        ui->characterHighlighting->setDisplay(style);
-        ui->indentSpacing->setDisplay(style);
+        setDisplay(style);
     }
 }
 
@@ -372,82 +346,202 @@ void ParagraphStylesTab::slotFontChanged(const QFont &font)
 //indentation slots
 void ParagraphStylesTab::slotLeftIndentEnabled(bool enabled)
 {
-    kDebug() << "leftIndent enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->hasProperty(QTextFormat::BlockLeftMargin)) {
+            style->setLeftMargin(QTextLength(QTextLength::FixedLength, style->leftMargin())); //set the left margin of the parent/default paragraph style. If none exists, 0 is returned.
+        }
+        else if (!enabled && style->hasProperty(QTextFormat::BlockLeftMargin)) {
+            style->remove(QTextFormat::BlockLeftMargin);
+        }
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotLeftIndentChanged(qreal value)
 {
-    kDebug() << "new value: " << value;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->setLeftMargin(QTextLength(QTextLength::FixedLength, value));
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotRightIndentEnabled(bool enabled)
 {
-    kDebug() << "rightIndent enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->hasProperty(QTextFormat::BlockRightMargin)) {
+            style->setRightMargin(QTextLength(QTextLength::FixedLength, style->rightMargin())); //set the right margin of the parent/default paragraph style. If none exists, 0 is returned.
+        }
+        else if (!enabled && style->hasProperty(QTextFormat::BlockRightMargin)) {
+            style->remove(QTextFormat::BlockRightMargin);
+        }
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotRightIndentChanged(qreal value)
 {
-    kDebug() << "new value: " << value;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->setRightMargin(QTextLength(QTextLength::FixedLength, value));
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotFirstLineIndentEnabled(bool enabled)
 {
-    kDebug() << "firstLineIndent enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->hasProperty(QTextFormat::TextIndent)) {
+            style->setTextIndent(QTextLength(QTextLength::FixedLength, style->textIndent())); //set the first line indent of the parent/default paragraph style. If none exists, 0 is returned.
+        }
+        else if (!enabled && style->hasProperty(QTextFormat::TextIndent)) {
+            style->remove(QTextFormat::TextIndent);
+        }
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotFirstLineIndentChanged(qreal value)
 {
-    kDebug() << "new value: " << value;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->setTextIndent(QTextLength(QTextLength::FixedLength, value));
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotAutoTextIndentChecked(bool checked)
 {
-    kDebug() << "checked: " << checked;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->setAutoTextIndent(checked);
+
+        setDisplay(style);
+    }
 }
 
 //line spacing slots
 void ParagraphStylesTab::slotLineSpacingEnabled(bool enabled)
 {
-    kDebug() << "leftSpacing enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && (!style->hasProperty(KoParagraphStyle::FixedLineHeight) || !style->hasProperty(KoParagraphStyle::LineSpacing) || !style->hasProperty(KoParagraphStyle::PercentLineHeight) || !style->hasProperty(KoParagraphStyle::MinimumLineHeight))) {
+            style->setLineHeightAbsolute(style->lineHeightAbsolute());
+            style->setLineHeightPercent(style->lineHeightPercent());
+            style->setLineSpacing(style->lineSpacing());
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, style->minimumLineHeight()));
+            style->setLineSpacingFromFont(style->lineSpacingFromFont());
+        }
+        else if (!enabled && (style->hasProperty(KoParagraphStyle::FixedLineHeight) || style->hasProperty(KoParagraphStyle::LineSpacing) || style->hasProperty(KoParagraphStyle::PercentLineHeight) || style->hasProperty(KoParagraphStyle::MinimumLineHeight))) {
+            style->remove(KoParagraphStyle::FixedLineHeight);
+            style->remove(KoParagraphStyle::LineSpacing);
+            style->remove(KoParagraphStyle::PercentLineHeight);
+            style->remove(KoParagraphStyle::MinimumLineHeight);
+        }
+
+        setDisplay(style);
+    }
 }
 
-void ParagraphStylesTab::slotLineSpacingChanged(int item)
+void ParagraphStylesTab::slotLineSpacingChanged(ParagraphIndentSpacingTab::LineSpacingType spacingType, qreal value, bool useFontMetrics)
 {
-    kDebug() << "selected item: " << item;
-}
+    kDebug() << "slot lineSpacing changed";
+    kDebug() << "spacing type: " << spacingType;
+    kDebug() << "value: " << value;
+    kDebug() << "useFont: " << useFontMetrics;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        switch (spacingType) {
+        case ParagraphIndentSpacingTab::LineHeightProportional:
+            style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
+            style->setLineSpacing(0);
+            style->setLineHeightPercent(int(value));
+            style->setLineSpacingFromFont(useFontMetrics);
+            break;
+        case ParagraphIndentSpacingTab::LineSpacingAdditional:
+            style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
+            style->setLineSpacing(value);
+            style->setLineHeightPercent(100);
+            style->setLineSpacingFromFont(useFontMetrics);
+            break;
+        case ParagraphIndentSpacingTab::LineHeightFixed:
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
+            style->setLineSpacing(0);
+            style->setLineHeightPercent(100);
+            style->setLineHeightAbsolute(style->lineHeightAbsolute());
+            style->setLineSpacingFromFont(false);
+            break;
+        case ParagraphIndentSpacingTab::LineHeightMinimum:
+            style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
+            style->setLineHeightPercent(100);
+            style->setLineSpacing(0);
+            style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, style->minimumLineHeight()));
+            style->setLineSpacingFromFont(false);
+            break;
+        }
 
-void ParagraphStylesTab::slotLineSpacingValueChanged(qreal value)
-{
-    kDebug() << "new value: " << value;
-}
-
-void ParagraphStylesTab::slotLineSpacingPercentChanged(int percent)
-{
-    kDebug() << "percent: " << percent;
-}
-
-void ParagraphStylesTab::slotUseFontMetricsChecked(bool checked)
-{
-    kDebug() << "checked: " << checked;
+        setDisplay(style);
+    }
 }
 
 //paragraph spacing slots
 void ParagraphStylesTab::slotTopParagraphSpacingEnabled(bool enabled)
 {
-    kDebug() << "topSpacing enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->hasProperty(QTextFormat::BlockTopMargin)) {
+            style->setTopMargin(QTextLength(QTextLength::FixedLength, style->topMargin()));
+        }
+        else if (!enabled && style->hasProperty(QTextFormat::BlockTopMargin)) {
+            style->remove(QTextFormat::BlockTopMargin);
+        }
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotTopParagraphSpacingChanged(qreal value)
 {
-    kDebug() << "new value: " << value;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->setTopMargin(QTextLength(QTextLength::FixedLength, value));
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotBottomParagraphSpacingEnabled(bool enabled)
 {
-    kDebug() << "bottomSpacing enabled: " << enabled;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        if (enabled && !style->hasProperty(QTextFormat::BlockBottomMargin)) {
+            style->setBottomMargin(QTextLength(QTextLength::FixedLength, style->bottomMargin()));
+        }
+        else if (!enabled && style->hasProperty(QTextFormat::BlockBottomMargin)) {
+            style->remove(QTextFormat::BlockBottomMargin);
+        }
+
+        setDisplay(style);
+    }
 }
 
 void ParagraphStylesTab::slotBottomParagraphSpacingChanged(qreal value)
 {
-    kDebug() << "new value: " << value;
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphStylesModel->unsavedStyle(ui->paragraphListView->currentIndex()));
+    if (style) {
+        style->setBottomMargin(QTextLength(QTextLength::FixedLength, value));
+
+        setDisplay(style);
+    }
 }
