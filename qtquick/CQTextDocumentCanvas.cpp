@@ -118,9 +118,11 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
 
 void CQTextDocumentCanvas::setSource(const QString& source)
 {
-    d->source = source;
-    openFile(source);
-    emit sourceChanged();
+    if(source != d->source) {
+        d->source = source;
+        openFile(source);
+        emit sourceChanged();
+    }
 }
 
 QString CQTextDocumentCanvas::source() const
