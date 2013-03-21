@@ -29,6 +29,7 @@ class KoZoomController;
 class CQCanvasController;
 class KoCanvasBase;
 
+class CQPresentationView;
 class CQPresentationCanvas : public QDeclarativeItem
 {
     Q_OBJECT
@@ -50,11 +51,13 @@ private:
     bool openFile(const QString& uri);
     void createAndSetCanvasControllerOn(KoCanvasBase* canvas);
     void createAndSetZoomController(KoCanvasBase* canvas);
+    void resizeCanvas(const QSizeF& canvasSize);
 
     QString m_source;
     KoCanvasBase* m_canvasBase;
     CQCanvasController* m_canvasController;
     KoZoomController* m_zoomController;
+    CQPresentationView* m_view;
 };
 
 #endif // CQPRESENTATIONCANVAS_H
