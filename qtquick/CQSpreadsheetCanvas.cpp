@@ -30,8 +30,6 @@
 #include <KoZoomHandler.h>
 #include <sheets/part/Doc.h>
 #include <sheets/part/CanvasItem.h>
-#include <KMimeType>
-#include <KMimeTypeTrader>
 #include <KDebug>
 #include <KActionCollection>
 #include <QGraphicsWidget>
