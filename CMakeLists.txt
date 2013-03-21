@@ -195,6 +195,7 @@ calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligr
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin" NEEDS CALLIGRA_LIBS LIB_KOVECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  NEEDS LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  NEEDS RDF CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_QTQUICK "QtQuick Plugin that provides Calligra components" NEEDS WORDS_PART SHEETS_PART STAGE_PART)
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  NEEDS CALLIGRA_LIBS)
@@ -1103,12 +1104,15 @@ endif(SHOULD_BUILD_BRAINDUMP_APP)
 
 if(SHOULD_BUILD_ACTIVE)
   add_subdirectory(active)
-  add_subdirectory(qtquick)
 endif(SHOULD_BUILD_ACTIVE)
 
 if(SHOULD_BUILD_DOC)
     add_subdirectory(doc)
 endif(SHOULD_BUILD_DOC)
+
+if(SHOULD_BUILD_PLUGIN_QTQUICK)
+    add_subdirectory(qtquick)
+endif(SHOULD_BUILD_PLUGIN_QTQUICK)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
