@@ -41,17 +41,36 @@
 #include <QTextDocument>
 #include <KDebug>
 
-CQTextDocumentCanvas::CQTextDocumentCanvas()
-    : m_canvasBase(0)
-    , m_canvasController(0)
-    , m_zoomController(0)
-    , m_zoomMode(ZOOM_CONSTANT)
-    , m_findText(new KoFindText(this))
-    , m_documentModel(0)
+class CQTextDocumentCanvas::Private
 {
-    connect (m_findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
-    connect (m_findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
-    connect (m_findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
+public:
+    Private()
+        : canvasBase(0),
+          canvasController(0),
+          zoomController(0),
+          zoomMode(ZOOM_CONSTANT),
+          findText(0),
+          documentModel(0)
+    {}
+    QString source;
+    KoCanvasBase *canvasBase;
+    KoCanvasController *canvasController;
+    KoZoomController *zoomController;
+    ZoomMode zoomMode;
+    QString searchTerm;
+    KoFindText *findText;
+    CQTextDocumentModel *documentModel;
+    QSize documentSize;
+};
+
+CQTextDocumentCanvas::CQTextDocumentCanvas(QDeclarativeItem* parent)
+    : QDeclarativeItem(parent), d(new Private)
+{
+    d->findText = new KoFindText(this);
+
+    connect (d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
+    connect (d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 bool CQTextDocumentCanvas::openFile(const QString& uri)
@@ -68,25 +87,25 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
     document->setCheckAutoSaveFile(false);
     document->openUrl(KUrl(uri));
 
-    m_canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
-    createAndSetCanvasControllerOn(m_canvasBase);
-    createAndSetZoomController(m_canvasBase);
+    d->canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
+    createAndSetCanvasControllerOn(d->canvasBase);
+    createAndSetZoomController(d->canvasBase);
     updateZoomControllerAccordingToDocument(document);
     updateControllerWithZoomMode();
 
-    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
+    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
     graphicsWidget->setParentItem(this);
     graphicsWidget->installEventFilter(this);
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
-    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(m_canvasBase);
+    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(d->canvasBase);
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(kwCanvasItem ->shapeManager()->shapes(), texts);
-    m_findText->setDocuments(texts);
+    d->findText->setDocuments(texts);
 
     KWDocument *kwDocument = static_cast<KWDocument*>(document);
-    m_documentModel = new CQTextDocumentModel(this, kwDocument, kwCanvasItem->shapeManager());
+    d->documentModel = new CQTextDocumentModel(this, kwDocument, kwCanvasItem->shapeManager());
     emit documentModelChanged();
 
     return true;
@@ -94,14 +113,14 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
 
 void CQTextDocumentCanvas::setSource(const QString& source)
 {
-    m_source = source;
+    d->source = source;
     openFile(source);
     emit sourceChanged();
 }
 
 QString CQTextDocumentCanvas::source() const
 {
-    return m_source;
+    return d->source;
 }
 
 CQTextDocumentCanvas::~CQTextDocumentCanvas()
@@ -110,8 +129,8 @@ CQTextDocumentCanvas::~CQTextDocumentCanvas()
 
 void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    if (m_canvasBase) {
-        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
+    if (d->canvasBase) {
+        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
         if (widget) {
             widget->setGeometry(newGeometry);
             updateControllerWithZoomMode();
@@ -124,7 +143,7 @@ void CQTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 {
     //TODO: pass a proper action collection
     CQCanvasController *controller = new CQCanvasController(new KActionCollection(this));
-    m_canvasController = controller;
+    d->canvasController = controller;
     connect (controller, SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
     controller->setCanvas(canvas);
     KoToolManager::instance()->addController (controller);
@@ -133,52 +152,52 @@ void CQTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
-    m_zoomController = new KoZoomController(m_canvasController,
+    d->zoomController = new KoZoomController(d->canvasController,
                                                             zoomHandler,
                                                             new KActionCollection(this));
     KWCanvasItem *kwCanvasItem = static_cast<KWCanvasItem*>(canvas);
-    connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
+    connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), d->zoomController, SLOT(setDocumentSize(QSizeF)));
 }
 
 void CQTextDocumentCanvas::setZoomMode(ZoomMode zoomMode)
 {
-    m_zoomMode = zoomMode;
+    d->zoomMode = zoomMode;
     updateControllerWithZoomMode();
     emit zoomModeChanged();
 }
 
 CQTextDocumentCanvas::ZoomMode CQTextDocumentCanvas::zoomMode() const
 {
-    return m_zoomMode;
+    return d->zoomMode;
 }
 
 void CQTextDocumentCanvas::updateZoomControllerAccordingToDocument(const KoDocument* document)
 {
     const KWDocument *kwDoc = static_cast<const KWDocument*>(document);
-    m_zoomController->setPageSize (kwDoc->pageManager()->begin().rect().size());
+    d->zoomController->setPageSize (kwDoc->pageManager()->begin().rect().size());
 }
 
 void CQTextDocumentCanvas::updateControllerWithZoomMode()
 {
     KoZoomMode::Mode zoomMode;
-    switch (m_zoomMode) {
+    switch (d->zoomMode) {
         case ZOOM_CONSTANT: zoomMode = KoZoomMode::ZOOM_CONSTANT; break;
         case ZOOM_PAGE: zoomMode = KoZoomMode::ZOOM_PAGE; break;
         case ZOOM_WIDTH: zoomMode = KoZoomMode::ZOOM_WIDTH; break;
     }
-    m_zoomController->setZoom(zoomMode, 1.0);
+    d->zoomController->setZoom(zoomMode, 1.0);
 }
 
 QString CQTextDocumentCanvas::searchTerm() const
 {
-    return m_searchTerm;
+    return d->searchTerm;
 }
 
 void CQTextDocumentCanvas::setSearchTerm(const QString& term)
 {
-    m_searchTerm = term;
+    d->searchTerm = term;
     if (!term.isEmpty()) {
-        m_findText->find(term);
+        d->findText->find(term);
     }
     emit searchTermChanged();
 }
@@ -186,46 +205,46 @@ void CQTextDocumentCanvas::setSearchTerm(const QString& term)
 void CQTextDocumentCanvas::findMatchFound(const KoFindMatch &match)
 {
     QTextCursor cursor = match.location().value<QTextCursor>();
-    m_canvasBase->canvasItem()->update();
+    d->canvasBase->canvasItem()->update();
 
-    m_canvasBase->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
-    m_canvasBase->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
+    d->canvasBase->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
+    d->canvasBase->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
 }
 
 void CQTextDocumentCanvas::findNoMatchFound()
 {
-    kDebug() << "Match for " << m_searchTerm << " not found";
+    kDebug() << "Match for " << d->searchTerm << " not found";
 }
 
 void CQTextDocumentCanvas::updateCanvas()
 {
-    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (m_canvasBase);
+    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (d->canvasBase);
     kwCanvasItem->update();
 }
 
 void CQTextDocumentCanvas::findNext()
 {
-    m_findText->findNext();
+    d->findText->findNext();
 }
 
 void CQTextDocumentCanvas::findPrevious()
 {
-    m_findText->findPrevious();
+    d->findText->findPrevious();
 }
 
 QObject* CQTextDocumentCanvas::documentModel() const
 {
-    return m_documentModel;
+    return d->documentModel;
 }
 
 QSize CQTextDocumentCanvas::documentSize() const
 {
-    return m_documentSize;
+    return d->documentSize;
 }
 
 void CQTextDocumentCanvas::updateDocumentSize(const QSize& size)
 {
-    m_documentSize = size;
+    d->documentSize = size;
     emit documentSizeChanged();
 }
 
