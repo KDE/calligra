@@ -38,6 +38,8 @@
 #include <KActionCollection>
 #include <QGraphicsWidget>
 
+#include <KoPAPageBase.h>
+
 #include <stage/part/KPrDocument.h>
 
 #include "CQPresentationView.h"
@@ -75,11 +77,11 @@ bool CQPresentationCanvas::openFile(const QString& uri)
 
     KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem*>(part->canvasItem());
 
-    CQPresentationView *view = new CQPresentationView(m_canvasController, static_cast<KoPACanvasBase*>(m_canvasBase), dynamic_cast<KPrDocument*>(document));
-    paCanvasItem->setView(view);
+    m_view = new CQPresentationView(m_canvasController, static_cast<KoPACanvasBase*>(m_canvasBase), dynamic_cast<KPrDocument*>(document));
+    paCanvasItem->setView(m_view);
 
     createAndSetZoomController(m_canvasBase);
-    view->setZoomController(m_zoomController);
+    m_view->setZoomController(m_zoomController);
     //view->connectToZoomController();
 
     QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
@@ -88,7 +90,9 @@ bool CQPresentationCanvas::openFile(const QString& uri)
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
-    view->doUpdateActivePage(document->pageByIndex(0, false));
+    m_view->doUpdateActivePage(document->pageByIndex(0, false));
+
+    resizeCanvas(QSizeF(width(), height()));
 
     return true;
 }
@@ -122,18 +126,34 @@ void CQPresentationCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 
 void CQPresentationCanvas::updateDocumentSize(const QSize& size)
 {
+    Q_UNUSED(size);
     //m_zoomController->setDocumentSize(size);
 }
 
 void CQPresentationCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (m_canvasBase) {
-        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
-        if (widget) {
-            widget->setGeometry(newGeometry);
-        }
+        resizeCanvas(newGeometry.size());
     }
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+void CQPresentationCanvas::resizeCanvas (const QSizeF& canvasSize)
+{
+    QSizeF pageSize = m_view->activePage()->boundingRect().size();
+    QGraphicsWidget* canvasItem = m_canvasBase->canvasItem();
+    QSizeF newSize (pageSize);
+    newSize.scale (canvasSize, Qt::KeepAspectRatio);
+
+    if (canvasSize.width() < canvasSize.height()) {
+        canvasItem->setGeometry (0, (canvasSize.height() - newSize.height()) / 2,
+                                 newSize.width(), newSize.height());
+        m_zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, canvasSize.width() / pageSize.width() * 0.75);
+    } else {
+        canvasItem->setGeometry ( (canvasSize.width() - newSize.width()) / 2, 0,
+                                  newSize.width(), newSize.height());
+        m_zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, canvasSize.height() / pageSize.height() * 0.75);
+    }
 }
 
 #include "CQPresentationCanvas.moc"
