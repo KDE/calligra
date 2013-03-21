@@ -48,7 +48,7 @@ class CQTextDocumentCanvas : public QDeclarativeItem
     Q_ENUMS(ZoomMode)
 
 public:
-    CQTextDocumentCanvas();
+    CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
     ~CQTextDocumentCanvas();
 
     enum ZoomMode
@@ -79,6 +79,7 @@ signals:
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+    virtual void componentComplete();
 
 private slots:
     void updateControllerWithZoomMode();
@@ -95,14 +96,7 @@ private:
     void createAndSetZoomController(KoCanvasBase *canvas);
     void updateZoomControllerAccordingToDocument(const KoDocument *document);
 
-    QString m_source;
-    KoCanvasBase *m_canvasBase;
-    KoCanvasController *m_canvasController;
-    KoZoomController *m_zoomController;
-    ZoomMode m_zoomMode;
-    QString m_searchTerm;
-    KoFindText *m_findText;
-    CQTextDocumentModel *m_documentModel;
-    QSize m_documentSize;
+    class Private;
+    Private * const d;
 };
 #endif // CQTEXTDOCUMENTCANVAS_H
