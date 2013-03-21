@@ -214,6 +214,7 @@ protected:
 
     bool m_createSectionStyle;
     QString m_currentSectionStyleName;
+    QByteArray m_currentSectionStyleFamily;
     bool m_createSectionToNext;
     KoGenStyle m_currentPageStyle;
     KoGenStyle m_masterPageStyle;

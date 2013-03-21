@@ -71,9 +71,9 @@ class OdfExporter:
                 if len(r) < 4:
                     r = (r[:2] + (lastColumn, lastRow))
                 if r[0] > r[2]:
-                    raise Exception, T.i18n("Invalid range for sheet \"%1\" cause left column value \"%2\" is bigger then right column value \"%3\".", [sheet.sheetName()], [r[0]], [r[2]])
+                    raise Exception, T.i18n("Invalid range for sheet \"%1\" cause left column value \"%2\" is bigger than right column value \"%3\".", [sheet.sheetName()], [r[0]], [r[2]])
                 if r[1] > r[3]:
-                    raise Exception, T.i18n("Invalid range for sheet \"%1\" cause top row value \"%2\" is bigger then bottom row value \"%3\".", [sheet.sheetName()], [r[1]], [r[3]])
+                    raise Exception, T.i18n("Invalid range for sheet \"%1\" cause top row value \"%2\" is bigger than bottom row value \"%3\".", [sheet.sheetName()], [r[1]], [r[3]])
                 rangeList.append(r)
             if len(rangeList) < 1:
                 rangeList.append( (1, 1, lastColumn, lastRow) )
