@@ -79,7 +79,6 @@ signals:
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
-    virtual void componentComplete();
 
 private slots:
     void updateControllerWithZoomMode();
