@@ -9,12 +9,11 @@ set(calligraqtquickcomponents_SRCS
     CQImageProvider.cpp
     CQPresentationView.cpp
     CQPresentationCanvas.cpp
-    )
+)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
-    ${KDE4_INCLUDES}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
     ${CMAKE_SOURCE_DIR}/sheets
@@ -27,9 +26,7 @@ add_library(calligraqtquickcomponentsplugin SHARED ${calligraqtquickcomponents_S
 target_link_libraries(calligraqtquickcomponentsplugin
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
-    ${KDECLARATIVE_LIBRARIES}
     komain
-    kordf
     wordsprivate
     calligrasheetscommon
     kopageapp
