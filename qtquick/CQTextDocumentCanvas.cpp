@@ -73,6 +73,11 @@ CQTextDocumentCanvas::CQTextDocumentCanvas(QDeclarativeItem* parent)
     connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
+CQTextDocumentCanvas::~CQTextDocumentCanvas()
+{
+    delete d;
+}
+
 bool CQTextDocumentCanvas::openFile(const QString& uri)
 {
     KService::Ptr service = KService::serviceByDesktopName("wordspart");
@@ -121,10 +126,6 @@ void CQTextDocumentCanvas::setSource(const QString& source)
 QString CQTextDocumentCanvas::source() const
 {
     return d->source;
-}
-
-CQTextDocumentCanvas::~CQTextDocumentCanvas()
-{
 }
 
 void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
