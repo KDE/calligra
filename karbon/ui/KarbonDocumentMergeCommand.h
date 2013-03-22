@@ -22,12 +22,12 @@
 
 #include <kundo2command.h>
 
-class KarbonKoDocument;
+class KarbonDocument;
 
 class KarbonDocumentMergeCommand : public KUndo2Command
 {
 public:
-    KarbonDocumentMergeCommand(KarbonKoDocument * targetPart, KarbonKoDocument * sourcePart);
+    KarbonDocumentMergeCommand(KarbonDocument * targetPart, KarbonDocument * sourcePart);
     virtual ~KarbonDocumentMergeCommand();
     virtual void redo();
     virtual void undo();

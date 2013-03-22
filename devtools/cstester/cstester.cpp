@@ -46,7 +46,7 @@
 
 #ifdef BUILD_KARBON
 #include <KarbonPart.h>
-#include <KarbonKoDocument.h>
+#include <KarbonDocument.h>
 #include "CSThumbProviderKarbon.h"
 #endif
 
@@ -126,7 +126,7 @@ QList<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
         tp = new CSThumbProviderWords(doc);
     }
 #ifdef BUILD_KARBON
-    else if (KarbonKoDocument *doc = qobject_cast<KarbonKoDocument *>(document)) {
+    else if (KarbonDocument *doc = qobject_cast<KarbonDocument *>(document)) {
         tp = new CSThumbProviderKarbon(doc);
     }
 #endif
