@@ -39,16 +39,13 @@
 
 StyleManager::StyleManager(QWidget *parent)
         : QWidget(parent)
-         ,m_styleManager(0)
+        , m_styleManager(0)
         , m_paragraphStylesModel(new StylesManagerModel(this))
         , m_characterStylesModel(new StylesManagerModel(this))
         , m_paragraphProxyModel(new StylesSortFilterProxyModel(this))
         , m_characterProxyModel(new StylesSortFilterProxyModel(this))
         , m_thumbnailer(new KoStyleThumbnailer())
-//        , m_blockSignals(false)
-//        , m_blockStyleChangeSignals(false)
         , m_unappliedStyleChanges(false)
-//        , m_currentStyleChanged(false)
 {
     widget.setupUi(this);
     layout()->setMargin(0);
