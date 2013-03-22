@@ -20,7 +20,7 @@
 
 #include "StyleManagerNew.h"
 
-#include "StylesModelNew.h"
+#include "StylesManagerModel.h"
 #include "StylesSortFilterProxyModel.h"
 
 #include <KoStyleManager.h>
@@ -40,8 +40,8 @@
 StyleManagerNew::StyleManagerNew(QWidget *parent)
         : QWidget(parent)
          ,m_styleManager(0)
-        , m_paragraphStylesModel(new StylesModelNew(this))
-        , m_characterStylesModel(new StylesModelNew(this))
+        , m_paragraphStylesModel(new StylesManagerModel(this))
+        , m_characterStylesModel(new StylesManagerModel(this))
         , m_paragraphProxyModel(new StylesSortFilterProxyModel(this))
         , m_characterProxyModel(new StylesSortFilterProxyModel(this))
         , m_thumbnailer(new KoStyleThumbnailer())
@@ -235,13 +235,13 @@ void StyleManagerNew::save()
 
     // set the paragraph and character style new so it has a cloned style to work on and we don't change the actual style.
     KoParagraphStyle *paragraphStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(),
-                                                                       StylesModelNew::StylePointer).value<KoCharacterStyle*>());
+                                                                       StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
     if (paragraphStyle) {
         setParagraphStyle(paragraphStyle);
     }
 
     KoCharacterStyle *characterStyle = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(),
-                                                                   StylesModelNew::StylePointer).value<KoCharacterStyle*>();
+                                                                   StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
     if (characterStyle) {
         setCharacterStyle(characterStyle);
     }
@@ -251,7 +251,7 @@ void StyleManagerNew::save()
 
 void StyleManagerNew::currentParagraphStyleChanged()
 {
-    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(), StylesModelNew::StylePointer).value<KoCharacterStyle*>());
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
     if (style) {
         widget.paragraphStylePage->save();
         m_paragraphStylesModel->updateStyle(style);
@@ -261,7 +261,7 @@ void StyleManagerNew::currentParagraphStyleChanged()
 
 void StyleManagerNew::currentParagraphNameChanged(const QString &name)
 {
-    KoCharacterStyle *style = m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(), StylesModelNew::StylePointer).value<KoCharacterStyle*>();
+    KoCharacterStyle *style = m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
     if (style) {
         style->setName(name);
         currentParagraphStyleChanged();
@@ -270,7 +270,7 @@ void StyleManagerNew::currentParagraphNameChanged(const QString &name)
 
 void StyleManagerNew::currentCharacterStyleChanged()
 {
-    KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesModelNew::StylePointer).value<KoCharacterStyle*>();
+    KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
     if (style) {
         widget.characterStylePage->save();
         m_characterStylesModel->updateStyle(style);
@@ -280,7 +280,7 @@ void StyleManagerNew::currentCharacterStyleChanged()
 
 void StyleManagerNew::currentCharacterNameChanged(const QString &name)
 {
-    KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesModelNew::StylePointer).value<KoCharacterStyle*>();
+    KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
     if (style) {
         style->setName(name);
         currentCharacterStyleChanged();
@@ -325,7 +325,7 @@ void StyleManagerNew::removeCharacterStyle(KoCharacterStyle* style)
 void StyleManagerNew::slotParagraphStyleSelected(QModelIndex index)
 {
     if (checkUniqueStyleName()) {
-        KoParagraphStyle *paragraphStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(index, StylesModelNew::StylePointer).value<KoCharacterStyle*>());
+        KoParagraphStyle *paragraphStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(index, StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
         if (paragraphStyle) {
             setParagraphStyle(paragraphStyle);
             return;
@@ -336,7 +336,7 @@ void StyleManagerNew::slotParagraphStyleSelected(QModelIndex index)
 void StyleManagerNew::slotCharacterStyleSelected(QModelIndex index)
 {
     if (checkUniqueStyleName()) {
-        KoCharacterStyle *characterStyle = m_characterProxyModel->data(index, StylesModelNew::StylePointer).value<KoCharacterStyle*>();
+        KoCharacterStyle *characterStyle = m_characterProxyModel->data(index, StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
         if (characterStyle) {
             setCharacterStyle(characterStyle, false);
             return;
@@ -350,7 +350,7 @@ void StyleManagerNew::buttonNewPressed()
         if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
             KoParagraphStyle *newStyle = 0;
             KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(),
-                                                                      StylesModelNew::StylePointer).value<KoCharacterStyle*>());
+                                                                      StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
             if (style) {
                 newStyle = style->clone();
             }
@@ -364,7 +364,7 @@ void StyleManagerNew::buttonNewPressed()
         }
         else {
             KoCharacterStyle *newStyle = 0;
-            KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesModelNew::StylePointer).value<KoCharacterStyle*>();
+            KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
             if (style) {
                 newStyle = style->clone();
             }
@@ -392,12 +392,12 @@ void StyleManagerNew::tabChanged(int index)
     else {
         if (paragraphIndex == index) {
             KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(),
-                        StylesModelNew::StylePointer).value<KoCharacterStyle*>());
+                        StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
             setParagraphStyle(style);
             widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
         }
         else {
-            KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesModelNew::StylePointer).value<KoCharacterStyle*>();
+            KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
             setCharacterStyle(style);
             widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
         }

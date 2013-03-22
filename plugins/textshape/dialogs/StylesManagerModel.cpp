@@ -17,20 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "StylesModelNew.h"
+#include "StylesManagerModel.h"
 
 #include <KoCharacterStyle.h>
 #include <KoStyleThumbnailer.h>
 
 #include <QDebug>
 
-StylesModelNew::StylesModelNew(QObject *parent)
+StylesManagerModel::StylesManagerModel(QObject *parent)
 : QAbstractListModel(parent)
 , m_styleThumbnailer(0)
 {
 }
 
-QVariant StylesModelNew::data(const QModelIndex &index, int role) const
+QVariant StylesManagerModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -65,25 +65,25 @@ QVariant StylesModelNew::data(const QModelIndex &index, int role) const
     return retval;
 }
 
-int StylesModelNew::rowCount(const QModelIndex &parent) const
+int StylesManagerModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_styles.size();
 }
 
-void StylesModelNew::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
+void StylesManagerModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
 {
     m_styleThumbnailer = thumbnailer;
 }
 
-void StylesModelNew::setStyles(const QList<KoCharacterStyle *> styles)
+void StylesManagerModel::setStyles(const QList<KoCharacterStyle *> styles)
 {
     beginResetModel();
     m_styles = styles;
     endResetModel();
 }
 
-void StylesModelNew::addStyle(KoCharacterStyle *style)
+void StylesManagerModel::addStyle(KoCharacterStyle *style)
 {
     int row = m_styles.indexOf(style);
     //Q_ASSERT(row == -1);
@@ -94,7 +94,7 @@ void StylesModelNew::addStyle(KoCharacterStyle *style)
     }
 }
 
-void StylesModelNew::removeStyle(KoCharacterStyle *style)
+void StylesManagerModel::removeStyle(KoCharacterStyle *style)
 {
     int row = m_styles.indexOf(style);
     Q_ASSERT(row != -1);
@@ -105,7 +105,7 @@ void StylesModelNew::removeStyle(KoCharacterStyle *style)
     }
 }
 
-void StylesModelNew::replaceStyle(KoCharacterStyle *oldStyle, KoCharacterStyle *newStyle)
+void StylesManagerModel::replaceStyle(KoCharacterStyle *oldStyle, KoCharacterStyle *newStyle)
 {
     qDebug() << Q_FUNC_INFO << oldStyle << "->" << newStyle;
     int row = m_styles.indexOf(oldStyle);
@@ -117,7 +117,7 @@ void StylesModelNew::replaceStyle(KoCharacterStyle *oldStyle, KoCharacterStyle *
     }
 }
 
-void StylesModelNew::updateStyle(KoCharacterStyle *style)
+void StylesManagerModel::updateStyle(KoCharacterStyle *style)
 {
     int row = m_styles.indexOf(style);
     Q_ASSERT(row != -1);
@@ -129,7 +129,7 @@ void StylesModelNew::updateStyle(KoCharacterStyle *style)
     }
 }
 
-QModelIndex StylesModelNew::styleIndex(KoCharacterStyle *style)
+QModelIndex StylesManagerModel::styleIndex(KoCharacterStyle *style)
 {
     QModelIndex index;
     int row = m_styles.indexOf(style);

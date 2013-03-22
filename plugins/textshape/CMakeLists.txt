@@ -65,7 +65,7 @@ SET ( textshape_SRCS
     dialogs/ParagraphDropCaps.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StylesModel.cpp
-    dialogs/StylesModelNew.cpp
+    dialogs/StylesManagerModel.cpp
     dialogs/StylesSortFilterProxyModel.cpp
     dialogs/AbstractStylesModel.cpp
     dialogs/StylesFilteredModelBase.cpp

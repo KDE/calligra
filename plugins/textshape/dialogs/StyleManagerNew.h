@@ -25,7 +25,7 @@
 
 #include <QWidget>
 
-class StylesModelNew;
+class StylesManagerModel;
 class StylesSortFilterProxyModel;
 class KoStyleManager;
 class KoStyleThumbnailer;
@@ -77,8 +77,8 @@ private:
     QMap<KoParagraphStyle *, KoParagraphStyle *> m_modifiedParagraphStyles;
     QMap<KoCharacterStyle *, KoCharacterStyle *> m_modifiedCharacterStyles;
 
-    StylesModelNew *m_paragraphStylesModel;
-    StylesModelNew *m_characterStylesModel;
+    StylesManagerModel *m_paragraphStylesModel;
+    StylesManagerModel *m_characterStylesModel;
     StylesSortFilterProxyModel *m_paragraphProxyModel;
     StylesSortFilterProxyModel *m_characterProxyModel;
     KoStyleThumbnailer *m_thumbnailer;

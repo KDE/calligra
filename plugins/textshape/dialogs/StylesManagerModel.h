@@ -26,14 +26,14 @@
 class KoCharacterStyle;
 class KoStyleThumbnailer;
 
-class StylesModelNew : public QAbstractListModel
+class StylesManagerModel : public QAbstractListModel
 {
 public:
     enum Roles {
         StylePointer = Qt::UserRole + 1,
     };
 
-    StylesModelNew(QObject *parent = 0);
+    StylesManagerModel(QObject *parent = 0);
 
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
