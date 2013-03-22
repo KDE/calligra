@@ -138,7 +138,6 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
 void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 {
     widget.characterStylePage->save();
-    //widget.characterStylePage->setStyle(0); // TODO check if that is needed
     widget.paragraphStylePage->save();
     KoParagraphStyle *localStyle = 0;
 
@@ -165,7 +164,6 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
 {
     Q_UNUSED(canDelete);
     widget.paragraphStylePage->save();
-    //widget.paragraphStylePage->setStyle(0); // TODO check if that is needed
     widget.characterStylePage->save();
     KoCharacterStyle *localStyle = 0;
 
