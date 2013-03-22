@@ -92,6 +92,12 @@ KoApplication::KoApplication()
     setStyle("Plastique");
 #endif
 
+    if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
+        // There are two themes that work for Krita, oxygen and plastique. Try plastique first, then oxygen
+        setStyle("Plastique");
+        setStyle("Oxygen");
+    }
+
 }
 
 // This gets called before entering KApplication::KApplication
