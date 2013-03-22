@@ -18,11 +18,7 @@
  */
 
 #include "StyleManagerDialog.h"
-#if NEW_STYLE_MANAGER
-#include "StyleManagerNew.h"
-#else
 #include "StyleManager.h"
-#endif
 
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
@@ -32,12 +28,7 @@ StyleManagerDialog::StyleManagerDialog(QWidget *parent)
         : KDialog(parent)
 {
     setButtons(Ok | Cancel | Apply);
-#if NEW_STYLE_MANAGER
-    //m_styleManagerWidget = new StyleManagerNG(this);
-    m_styleManagerWidget = new StyleManagerNew(this);
-#else
     m_styleManagerWidget = new StyleManager(this);
-#endif
     setMainWidget(m_styleManagerWidget);
     setWindowTitle(i18n("Style Manager"));
 

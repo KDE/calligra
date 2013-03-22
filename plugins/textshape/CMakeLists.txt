@@ -72,7 +72,6 @@ SET ( textshape_SRCS
     dialogs/ValidParentStylesProxyModel.cpp
     dialogs/StylesDelegate.cpp
     dialogs/StyleManager.cpp
-    dialogs/StyleManagerNew.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
     dialogs/CharacterGeneral.cpp

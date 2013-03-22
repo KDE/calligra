@@ -22,13 +22,7 @@
 #include <KDialog>
 #include <QCloseEvent>
 
-#define NEW_STYLE_MANAGER 1
-
-#if NEW_STYLE_MANAGER
-class StyleManagerNew;
-#else
 class StyleManager;
-#endif
 
 class KoCharacterStyle;
 class KoParagraphStyle;
@@ -60,11 +54,7 @@ private:
     void accept();
     void reject();
 
-#if NEW_STYLE_MANAGER
-    StyleManagerNew *m_styleManagerWidget;
-#else
     StyleManager *m_styleManagerWidget;
-#endif
 };
 
 #endif
