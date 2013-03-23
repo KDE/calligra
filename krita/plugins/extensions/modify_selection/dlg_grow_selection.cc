@@ -31,7 +31,8 @@ WdgGrowSelection::WdgGrowSelection(QWidget* parent) : KisOperationUIWidget(i18n(
 
 void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
 {
-    config->setProperty("radius", radiusSpinBox->value());
+    config->setProperty("x-radius", radiusSpinBox->value());
+    config->setProperty("y-radius", radiusSpinBox->value());
 }
 
 #include "dlg_grow_selection.moc"

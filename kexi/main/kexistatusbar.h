@@ -38,10 +38,6 @@ namespace KTextEditor
     class ViewCursorInterface;
 }
 #endif
-namespace KParts
-{
-    class Part;
-}
 
 class KexiStatusBar : public KStatusBar
 {
@@ -63,7 +59,6 @@ signals:
 
 protected slots:
     void cursorPositionChanged();
-    void activePartChanged(KParts::Part *part);
     void setCursorPosition(int line, int col);
 
 protected:
@@ -74,7 +69,6 @@ protected:
     KTextEditor::ViewCursorInterface * m_cursorIface;
     KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
 #endif
-    KParts::Part *m_activePart;
     KMenu *m_viewMenu;
 };
 
