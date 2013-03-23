@@ -45,6 +45,8 @@ class CQTextDocumentCanvas : public QDeclarativeItem
     Q_PROPERTY(QString searchTerm READ searchTerm WRITE setSearchTerm NOTIFY searchTermChanged)
     Q_PROPERTY(QObject* documentModel READ documentModel NOTIFY documentModelChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
+    Q_PROPERTY(int currentPageNumber READ currentPageNumber WRITE setCurrentPageNumber NOTIFY currentPageNumberChanged)
+    Q_PROPERTY (int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
     Q_ENUMS(ZoomMode)
 
 public:
@@ -59,7 +61,12 @@ public:
     };
 
     QString source() const;
+    int currentPageNumber() const;
     void setSource(const QString &source);
+    void setCurrentPageNumber(const int &currentPageNumber);
+    int cameraY() const;
+    void setCameraY (int cameraY);
+
 
     ZoomMode zoomMode() const;
     void setZoomMode(ZoomMode zoomMode);
@@ -76,6 +83,8 @@ signals:
     void searchTermChanged();
     void documentModelChanged();
     void documentSizeChanged();
+    void currentPageNumberChanged();
+    void cameraYChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);

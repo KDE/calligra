@@ -50,7 +50,8 @@ public:
           zoomController(0),
           zoomMode(ZOOM_CONSTANT),
           findText(0),
-          documentModel(0)
+          documentModel(0),
+          m_currentPoint(QPoint (0, 0))
     {}
     QString source;
     KoCanvasBase *canvasBase;
@@ -61,6 +62,8 @@ public:
     KoFindText *findText;
     CQTextDocumentModel *documentModel;
     QSize documentSize;
+    int m_pageNumber;
+    QPoint m_currentPoint;
 };
 
 CQTextDocumentCanvas::CQTextDocumentCanvas(QDeclarativeItem* parent)
@@ -104,6 +107,10 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
     graphicsWidget->setGeometry(x(), y(), width(), height());
     updateControllerWithZoomMode();
 
+    if(d->m_pageNumber >= 1) {
+      gotoPage(d->m_pageNumber, document);
+    }
+
     KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(d->canvasBase);
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(kwCanvasItem ->shapeManager()->shapes(), texts);
@@ -114,6 +121,44 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
     emit documentModelChanged();
 
     return true;
+}
+
+void CQTextDocumentCanvas::gotoPage(int pageNumber, KoDocument *document)
+{
+    const KWDocument *kwDoc = static_cast<const KWDocument*>(document);
+    KWPage currentTextDocPage = kwDoc->pageManager()->page(pageNumber);
+
+    QRectF rect = m_canvasBase->viewConverter()->documentToView(currentTextDocPage.rect());
+    alignTopWith(rect.top());
+    updateCanvas();
+}
+
+int CQTextDocumentCanvas::cameraY() const
+{
+    return d->m_currentPoint.y();
+}
+
+void CQTextDocumentCanvas::setCameraY(int cameraY)
+{
+    d->m_currentPoint.setY (cameraY);
+    emit cameraYChanged();
+}
+
+void CQTextDocumentCanvas::alignTopWith(int y)
+{
+    d->m_currentPoint.setY(y);
+    emit cameraYChanged();
+}
+
+int CQTextDocumentCanvas::currentPageNumber() const
+{
+    return d->m_pageNumber;
+}
+
+void CQTextDocumentCanvas::setCurrentPageNumber(const int& currentPageNumber)
+{
+    d->m_pageNumber = currentPageNumber;
+    emit currentPageNumberChanged();
 }
 
 void CQTextDocumentCanvas::setSource(const QString& source)
