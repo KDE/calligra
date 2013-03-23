@@ -160,6 +160,7 @@ void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
                                                             new KActionCollection(this));
     KWCanvasItem *kwCanvasItem = static_cast<KWCanvasItem*>(canvas);
     connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), d->zoomController, SLOT(setDocumentSize(QSizeF)));
+    kwCanvasItem->updateSize();
 }
 
 void CQTextDocumentCanvas::setZoomMode(ZoomMode zoomMode)
