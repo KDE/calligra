@@ -43,7 +43,7 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
 void CAuView::setupActions()
 {
     // -------- Book
-    KAction *action = new KAction(i18n("Select Cover Image"), this);
+    KAction *action = new KAction(i18n("Select Cover Image..."), this);
     actionCollection()->addAction("insert_coverimage", action);
     action->setToolTip(i18n("Set cover for your ebook"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectCoverImage()));

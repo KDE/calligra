@@ -50,8 +50,8 @@ CoverSelectionDialog::~CoverSelectionDialog()
 
 void CoverSelectionDialog::createActions()
 {
-    //need to add that 'open' button manualy, the standard one close the dialog
-    QPushButton *b = ui->coverSelectionButtonBox->addButton(i18n("Open"),QDialogButtonBox::ActionRole);
+    //need to add that 'open..' button manualy, behaviour is not standard
+    QPushButton *b = ui->coverSelectionButtonBox->addButton(i18n("Open..."),QDialogButtonBox::ActionRole);
     b->setIcon(QIcon::fromTheme("document-open"));
     connect(b, SIGNAL(clicked()), this, SLOT(open()));
 
@@ -60,11 +60,12 @@ void CoverSelectionDialog::createActions()
 
     connect(ui->coverSelectionButtonBox->button(QDialogButtonBox::Ok),
             SIGNAL(clicked()), this, SLOT(ok()));
+
 }
 
 void CoverSelectionDialog::open()
 {
-    //qDebug() << "Opening file selector";
+    //Here filter could be change if new extention(s) have to be added
     QString fileName = QFileDialog::getOpenFileName(0, i18n("Open File"),
                                                     "~",
                                                     i18n("Images (*.png *.xpm *.jpg *.jpeg)"));
@@ -80,26 +81,29 @@ void CoverSelectionDialog::open()
     }
 }
 
+void CoverSelectionDialog::resizeEvent(QResizeEvent*) {
+    refresh();
+}
+
 void CoverSelectionDialog::refresh(){
-    //qDebug() << "Refreching cover preview";
     if(!img.second.isNull()) {
-        ui->coverSelectLabel->setPixmap(QPixmap::fromImage(QImage::fromData(img.second)));
+        QPixmap p = QPixmap::fromImage(QImage::fromData(img.second));
+        ui->coverSelectLabel->setPixmap(p.scaled(ui->coverSelectLabel->size(),Qt::KeepAspectRatio));
     }
+    /*
     else {
         qDebug() << "AUTHOR : nothing to display in cover preview";
-    }
+    }*/
 }
 
 void CoverSelectionDialog::reset()
 {
-    //qDebug() << "reset image";
     ui->coverSelectLabel->setText("No cover selected yet");
     img = QPair<QString, QByteArray>();
 }
 
 void CoverSelectionDialog::ok()
 {
-    //qDebug() << "Valid image";
     view->setCurrentCoverImage(img);
     //qDebug() << "AUTHOR : cover image saved";
 }

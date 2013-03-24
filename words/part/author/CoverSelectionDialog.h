@@ -43,10 +43,13 @@ private slots:
     void ok();
 
 private:
-    Ui::CoverSelectionDialog *ui;
-
-    void refresh();
+    void resizeEvent(QResizeEvent*);
     void createActions();
+    //Fonction call manualy, responsible of QLabel's image display
+    void refresh();
+
+    //GUI from CoverSelectionDialog.ui
+    Ui::CoverSelectionDialog *ui;
 
     //needed to ask for oparations on the kdocument use
     //by the given view
