@@ -87,6 +87,7 @@ View::View(RootSection *document, MainWindow* parent)
     , m_cutController(0)
     , m_copyController(0)
 {
+    setXMLFile("braindumpview.rc");
 
     m_doc->viewManager()->addView(this);
 
@@ -102,8 +103,6 @@ View::View(RootSection *document, MainWindow* parent)
     } else {
         setActiveSection(0);
     }
-
-    setXMLFile("braindumpview.rc");
 
     m_doc->viewManager()->viewHasFocus(this);
 }

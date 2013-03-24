@@ -1,15 +1,18 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="braindump" version="0">
+<kpartgui name="braindump" version="1">
     <MenuBar>
         <Menu name="edit" >
-            <Text>&amp;Edit</Text>
         </Menu>
         <Menu name="Shapes" >
             <Text>Shapes</Text>
         </Menu>
         <Menu name="view" >
-            <Text>&amp;View</Text>
+            <!-- XMLGUI will drop standard menus which are not filled when
+            calling setupGUI/createGUI, so as workaround adding some dummy entry
+            See https://bugs.kde.org/show_bug.cgi?id=317211
+            -->
+            <DefineGroup name="dummyToKeepViewMenu"/>
         </Menu>
     </MenuBar>
 </kpartgui>
