@@ -22,6 +22,7 @@
         </activity>
     </application>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
+    <uses-sdk android:targetSdkVersion="7" android:minSdkVersion="7"/>
     <!--
     <uses-permission android:name="android.permission.INTERNET"/>
     -->
