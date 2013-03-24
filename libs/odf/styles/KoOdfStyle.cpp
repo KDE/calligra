@@ -24,49 +24,7 @@
 #include <QString>
 #include <QHash>
 
-
-// ================================================================
-//                 class KoOdfStylePrpoerties
-
-
-class KoOdfStyleProperties::Private
-{
-public:
-    Private() {};
-
-    QHash<QString, QString> attributes;  // name, value
-};
-
-
-// ----------------------------------------------------------------
-
-
-KoOdfStyleProperties::KoOdfStyleProperties()
-    : d(new KoOdfStyleProperties::Private())
-{
-}
-
-KoOdfStyleProperties::~KoOdfStyleProperties()
-{
-    delete d;
-}
-
-
-QString KoOdfStyleProperties::value(QString &property) const
-{
-    return d->attributes.value(property, QString());
-}
-
-void KoOdfStyleProperties::setValue(QString &property, QString &value)
-{
-    d->attributes[property] = value;
-}
-
-
-void KoOdfStyleProperties::clear()
-{
-    d->attributes.clear();
-}
+#include "KoOdfStyleProperties.h"
 
 
 // ================================================================

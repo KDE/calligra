@@ -19,43 +19,25 @@
  */
 
 
-#ifndef KOODF_STYLE_H
-#define KOODF_STYLE_H
+#ifndef KOODF_STYLE_PROPERTIES_H
+#define KOODF_STYLE_PROPERTIES_H
 
 #include "koodf_export.h"
 
 
 class QString;
-class KoOdfStyleProperties;
 
 
-class KOODF_EXPORT KoOdfStyle
+class KOODF_EXPORT KoOdfStyleProperties
 {
  public:
-    KoOdfStyle();
-    ~KoOdfStyle();
+    KoOdfStyleProperties();
+    ~KoOdfStyleProperties();
 
-    QString name() const;
-    void setName(QString &name);
-    QString family() const;
-    void setFamily(QString &family);
-    QString parent() const;
-    void setParent(QString &parent);
+    QString value(QString &property) const;
+    void    setValue(QString &property, QString &value);
 
-    bool inUse() const;
-    void setInUse(bool inUse);
-
-    bool isDefaultStyle() const;
-    void setIsDefaultStyle(bool isDefaultStyle);
-
-    /**
-     * @brief Return the list of properties in the selected property set.
-     * @param name name of the property set.  Example: "text-properties" or "paragraph-properties"
-     */
-    KoOdfStyleProperties *properties(QString &name) const;
-
-    QString property(QString &propertySet, QString &property) const;
-    void    setProperty(QString &propertySet, QString &property, QString &value);
+    void clear();
 
  private:
     class Private;
