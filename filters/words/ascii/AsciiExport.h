@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Laurent Montel <montel@kde.org>
+
+   Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,33 +15,30 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
-*/
+   Boston, MA 02110-1301, USA.
+ */
 
-#ifndef __GENERICIMAGEEXPORT_H__
-#define __GENERICIMAGEEXPORT_H__
+#ifndef ASCIIEXPORT_H
+#define ASCIIEXPORT_H
 
 #include <KoFilter.h>
 
-#include <QPixmap>
-#include <QByteArray>
 #include <QVariantList>
 
-class GenericImageExport : public KoFilter
+class QByteArray;
+class QTextStream;
+
+
+class AsciiExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    GenericImageExport(QObject* parent, const QVariantList&);
-    virtual ~GenericImageExport();
-
+    AsciiExport(QObject *parent, const QVariantList &);
+    virtual ~AsciiExport();
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-    bool saveImage(const QString& fileName, const QByteArray& to);
-protected:
-    int width;
-    int height;
-    QPixmap pixmap;
+
+private:
 };
 
-#endif // __GENERCICIMAGEEXPORT_H__
-
+#endif /* ASCIIEXPORT_H */

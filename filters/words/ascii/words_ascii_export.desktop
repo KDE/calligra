@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=Words ASCII Export Filter
+X-KDE-Import=application/vnd.oasis.opendocument.text
+X-KDE-Export=text/plain
+X-KDE-Weight=1
+X-KDE-Library=asciiexport
+X-KDE-ServiceTypes=Calligra/Filter

@@ -19,10 +19,6 @@ check_include_files(strings.h HAVE_STRINGS_H)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-filters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-filters.h )
 
-set(libdialogfilter_SRCS 
-	${CMAKE_SOURCE_DIR}/filters/libdialogfilter/exportsizedia.cpp
-)
-
 set(liboofilter_SRCS 
 	${CMAKE_SOURCE_DIR}/filters/liboofilter/ooutils.cc 
 )
@@ -38,15 +34,12 @@ endif(SHOULD_BUILD_FLOW OR SHOULD_BUILD_WORDS_PART)
 
 set(SHOULD_BUILD_OOXML_FILTERS ${SHARED_MIME_INFO_FOUND})
 
+add_subdirectory(libodftraverse)
 add_subdirectory(libmso)
 
 if(SHOULD_BUILD_OOXML_FILTERS)
     add_subdirectory( libmsooxml )
 endif(SHOULD_BUILD_OOXML_FILTERS)
-
-if(SHOULD_BUILD_KCHART)
-    add_subdirectory(kchart)
-endif(SHOULD_BUILD_KCHART)
 
 if (SHOULD_BUILD_WORDS_PART)
     add_subdirectory(words)
