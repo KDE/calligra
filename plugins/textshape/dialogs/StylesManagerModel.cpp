@@ -60,7 +60,9 @@ QVariant StylesManagerModel::data(const QModelIndex &index, int role) const
         break;
     case Qt::SizeHintRole:
         retval = QVariant(QSize(250, 48));
-    default: break;
+        break;
+    default:
+        break;
     };
     return retval;
 }
@@ -85,9 +87,7 @@ void StylesManagerModel::setStyles(const QList<KoCharacterStyle *> styles)
 
 void StylesManagerModel::addStyle(KoCharacterStyle *style)
 {
-    int row = m_styles.indexOf(style);
-    //Q_ASSERT(row == -1);
-    if (row == -1) {
+    if (m_styles.indexOf(style) == -1) {
         beginInsertRows(QModelIndex(), m_styles.size(), m_styles.size());
         m_styles.append(style);
         endInsertRows();

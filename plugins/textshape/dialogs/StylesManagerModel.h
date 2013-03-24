@@ -33,7 +33,7 @@ public:
         StylePointer = Qt::UserRole + 1,
     };
 
-    StylesManagerModel(QObject *parent = 0);
+    explicit StylesManagerModel(QObject *parent = 0);
 
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
