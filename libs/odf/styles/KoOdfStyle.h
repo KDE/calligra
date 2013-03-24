@@ -43,6 +43,8 @@ class KOODF_EXPORT KoOdfStyle
     void setFamily(QString &family);
     QString parent() const;
     void setParent(QString &parent);
+    QString displayName() const;
+    void setDisplayName(QString &name);
 
     bool inUse() const;
     void setInUse(bool inUse);
@@ -60,7 +62,7 @@ class KOODF_EXPORT KoOdfStyle
     QString property(QString &propertySet, QString &property) const;
     void    setProperty(QString &propertySet, QString &property, QString &value);
 
-    bool readOdf(KoXmlElement &element);
+    bool loadOdf(KoXmlElement &element);
 
  private:
     class Private;

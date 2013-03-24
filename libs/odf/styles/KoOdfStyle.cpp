@@ -41,6 +41,7 @@ public:
     QString name;
     QString family;
     QString parent;
+    QString displayName;
     bool    isDefaultStyle;
 
     bool    inUse;
@@ -98,6 +99,16 @@ void KoOdfStyle::setParent(QString &parent)
     d->parent = parent;
 }
 
+QString KoOdfStyle::displayName() const
+{
+    return d->displayName;
+}
+
+void KoOdfStyle::setDisplayName(QString &name)
+{
+    d->displayName = name;
+}
+
 
 bool KoOdfStyle::isDefaultStyle() const
 {
@@ -150,18 +161,27 @@ void KoOdfStyle::setProperty(QString &propertySet, QString &property, QString &v
 }
 
 
-bool KoOdfStyle::readOdf(KoXmlElement &element)
+bool KoOdfStyle::loadOdf(KoXmlElement &element)
 {
-    // FIXME: Read style attributes
+    // Load style attributes.
+    QString dummy;              // Because the set*() methods take a QString &,
+    dummy = element.attribute("family");
+    setFamily(dummy);
+    dummy = element.attribute("name", QString());
+    setName(dummy);
+    dummy = element.attribute("parent-style-name", QString());
+    setParent(dummy);
+    dummy = element.attribute("display-name", QString());
+    setDisplayName(dummy);
 
-    // Read child elements: propertysets and other children.
+    // Load child elements: property sets and other children.
     KoXmlElement elem;
     forEachElement(elem, element) {
         if (!(elem.namespaceURI() == KoXmlNS::style)) {
             continue;
         }
 
-        // So far we only have support for text-, paragaph-and graphic-properties
+        // So far we only have support for text-, paragaph- and graphic-properties
         QString propertiesType = elem.localName();
         if (propertiesType == "text-properties"
             || propertiesType == "paragraph-properties"

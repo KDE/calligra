@@ -82,9 +82,9 @@ KoOdfStyle *KoOdfStyleManager::defaultStyle(QString &family) const
     return d->defaultStyles.value(family, 0);
 }
 
-void KoOdfStyleManager::setDefaultStyle(QString &name, KoOdfStyle *family)
+void KoOdfStyleManager::setDefaultStyle(QString &family, KoOdfStyle *style)
 {
-    d->styles.insert(name, family);
+    d->styles.insert(family, style);
 }
 
 
@@ -104,7 +104,6 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     QString errorMsg;
     int errorLine;
     int errorColumn;
-
 
 
     // ----------------------------------------------------------------
@@ -166,175 +165,30 @@ void KoOdfStyleManager::collectStyleSet(KoXmlNode &stylesNode)
     KoXmlElement styleElement;
     forEachElement (styleElement, stylesNode) {
 
-        // FIXME: Handle text:outline-style also.
+        // For now: handle style:style and style:default-style
+        // and only the text, paragraph and graphic families.
         QString tagName = styleElement.tagName();
         if (tagName != "style" && tagName != "default-style")
             continue;
 
-        KoOdfStyle *style = new KoOdfStyle;
+        QString family = styleElement.attribute("family");
+        if (family == "text"
+            || family == "paragraph"
+            || family == "graphic")
+        {
+            // FIXME: In the future, create style per type (family).
+            KoOdfStyle *style = new KoOdfStyle;
 
-        // Get the style name and other general information.
-        // FIXME: display-name
-        QString styleName = styleElement.attribute("name", QString());
-        style->setName(styleName);
-        QString dummy = styleElement.attribute("family");
-        style->setFamily(dummy);
-        dummy = styleElement.attribute("parent-style-name", QString());
-        style->setParent(dummy);
-
-        // Go through all property lists (like paragraph--properties,
-        // text-properties, etc) and collect the attributes from them.
-        KoXmlElement propertiesElement;
-        forEachElement (propertiesElement, styleElement) {
-            kDebug() << propertiesElement.tagName() << propertiesElement.attributeNames();
-            kDebug() << propertiesElement.tagName() << propertiesElement.attributeFullNames();
-            //collectStyleAttributes(propertiesElement, style);
-        }
-
+            style->setIsDefaultStyle(tagName == "default-style");
+            style->loadOdf(styleElement);
 #if 0 // debug
-        kDebug(30503) << "==" << styleName << ":\t"
-                      << styleInfo->parent
-                      << style->family
-                      << style->isDefaultStyle;
+            kDebug(30503) << "==" << styleName << ":\t"
+                          << style->family()
+                          << style->parent()
+                          << style->isDefaultStyle;
 #endif
-        setStyle(styleName, style);
+            QString styleName = styleElement.attribute("name", QString());
+            setStyle(styleName, style);
+        }
     }
 }
-
-#if 0
-void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, KoOdfInfoe *style)
-{
-    // font properties
-    QString attribute = propertiesElement.attribute("font-family");
-    if (!attribute.isEmpty()) {
-        attribute = '"' + attribute + '"';
-        styleInfo->attributes.insert("font-family", attribute);
-    }
-
-    QStringList attributes;
-    attributes
-        // font
-        << "font-style" << "font-variant" << "font-weight" << "font-size"
-        // text
-        << "text-indent" << "text-align" << "text-decoration" << "white-space"
-        // color
-        << "color" << "background-color"
-        // visual formatting
-        << "width" << "min-width" << "max-width"
-        << "height" << "min-height" << "max-height" << "line-height" << "vertical-align"
-        // border
-        << "border-top-width" << "border-bottom-width"
-        << "border-left-width" << "border-right-width" << "border-width"
-        // border
-        << "border-top-color" << "border-bottom-color"
-        << "border-left-color" << "border-right-color" << "border-color"
-        // border
-        << "border-top-style" << "border-bottom-style"
-        << "border-left-style" << "border-right-style" << "border-style"
-        << "border-top" << "border-bottom" << "border-left" << "border-right" << "border"
-        // padding
-        << "padding-top" << "padding-bottom" << "padding-left" << "padding-right" << "padding"
-        << "margin-top" << "margin-bottom" << "margin-left" << "margin-right" //<< "margin"
-        << "auto";
-
-    // Handle all general text formatting attributes
-    foreach(const QString &attrName, attributes) {
-        QString attrVal = propertiesElement.attribute(attrName);
-
-        if (!attrVal.isEmpty()) {
-            styleInfo->attributes.insert(attrName, attrVal);
-        }
-    }
-
-    // Text Decorations
-    attribute = propertiesElement.attribute("text-underline-style");
-    if (!attribute.isEmpty() && attribute != "none") {
-        styleInfo->attributes.insert("text-decoration", "underline");
-    }
-    attribute = propertiesElement.attribute("text-overline-style");
-    if (!attribute.isEmpty() && attribute != "none") {
-        styleInfo->attributes.insert("text-decoration", "overline");
-    }
-    attribute = propertiesElement.attribute("text-line-through-style");
-    if (!attribute.isEmpty() && attribute != "none") {
-        styleInfo->attributes.insert("text-decoration", "line-through");
-    }
-
-    // Visual Display Model
-    attribute = propertiesElement.attribute("writing-mode");
-    if (!attribute.isEmpty()) {
-        if (attribute == "rl")
-            attribute = "rtl";
-        else if (attribute == "lr")
-            attribute = "ltr";
-        else
-            attribute = "inherited";
-        styleInfo->attributes.insert("direction", attribute);
-    }
-
-    // Image align
-    attribute = propertiesElement.attribute("horizontal-pos");
-    if (!attribute.isEmpty()) {
-        //kDebug(30503) << "horisontal pos attribute" << attribute;
-        if (attribute == "right" || attribute == "from-left") {
-            styleInfo->attributes.insert("float", "right");
-            styleInfo->attributes.insert("margin", "5px 0 5px 15px");
-        }
-        // Center doesn't show very well.
-//        else if (attribute == "center") {
-//            styleInfo->attributes.insert("display", "block");
-//            styleInfo->attributes.insert("margin", "10px auto");
-//        }
-        else if (attribute == "left") {
-            styleInfo->attributes.insert("display", "inline");
-            styleInfo->attributes.insert("float", "left");
-            styleInfo->attributes.insert("margin","5px 15px 5px 0");
-        }
-    }
-
-    // Lists and numbering
-    if (propertiesElement.hasAttribute("num-format")) {
-        attribute = propertiesElement.attribute("num-format");
-        if (!attribute.isEmpty()) {
-            if (attribute == "1")
-                attribute = "decimal";
-            else if (attribute == "i")
-                attribute = "lower-roman";
-            else if (attribute == "I")
-                attribute = "upper-roman";
-            else if (attribute == "a")
-                attribute = "lower-alpha";
-            else if (attribute == "A")
-                attribute = "upper-alpha";
-            else
-                attribute = "decimal";
-        }
-        styleInfo->attributes.insert("list-style-type:", attribute);
-        styleInfo->attributes.insert("list-style-position:", "outside");
-    }
-    else if (propertiesElement.hasAttribute("bullet-char")) {
-        attribute = propertiesElement.attribute("bullet-char");
-        if (!attribute.isEmpty()) {
-            switch (attribute[0].unicode()) {
-            case 0x2022:
-                attribute = "disc";
-                break;
-            case 0x25CF:
-                attribute = "disc";
-                break;
-            case 0x25CB:
-                attribute = "circle";
-                break;
-            case 0x25A0:
-                attribute = "square";
-                break;
-            default:
-                attribute = "disc";
-                break;
-            }
-        }
-        styleInfo->attributes.insert("list-style-type:", attribute);
-        styleInfo->attributes.insert("list-style-position:", "outside");
-    }
-}
-#endif

@@ -41,7 +41,7 @@ class KOODF_EXPORT KoOdfStyleManager
     void setStyle(QString &name, KoOdfStyle *style);
 
     KoOdfStyle *defaultStyle(QString &family) const;
-    void setDefaultStyle(QString &name, KoOdfStyle *family);
+    void setDefaultStyle(QString &family, KoOdfStyle *style);
 
     void clear();
 
@@ -49,7 +49,6 @@ class KOODF_EXPORT KoOdfStyleManager
 
  private:
     void collectStyleSet(KoXmlNode &stylesNode);
-    void collectStyleAttributes(KoXmlElement &propertiesElement, KoOdfStyle *style);
 
  private:
     class Private;
