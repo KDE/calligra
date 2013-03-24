@@ -24,6 +24,10 @@
 #include <QString>
 #include <QHash>
 
+#include <kdebug.h>
+
+#include <KoXmlReader.h>
+
 
 // ================================================================
 //                 class KoOdfStyleProperties
@@ -67,4 +71,21 @@ void KoOdfStyleProperties::setValue(QString &property, QString &value)
 void KoOdfStyleProperties::clear()
 {
     d->attributes.clear();
+}
+
+
+bool KoOdfStyleProperties::readAttributes(KoXmlElement &element)
+{
+    foreach (const QString &attribute, element.attributeNames()) {
+        d->attributes[attribute] = element.attribute(attribute);
+    }
+
+    kDebug() << "read attributes: " << d->attributes;
+
+    return true;
+}
+
+bool KoOdfStyleProperties::readOdf(KoXmlElement &element)
+{
+    return readAttributes(element);
 }

@@ -24,8 +24,10 @@
 
 #include "koodf_export.h"
 
+#include <QHash>
 
 class QString;
+class KoXmlElement;
 class KoOdfStyleProperties;
 
 
@@ -48,6 +50,7 @@ class KOODF_EXPORT KoOdfStyle
     bool isDefaultStyle() const;
     void setIsDefaultStyle(bool isDefaultStyle);
 
+    QHash<QString, KoOdfStyleProperties*> properties();
     /**
      * @brief Return the list of properties in the selected property set.
      * @param name name of the property set.  Example: "text-properties" or "paragraph-properties"
@@ -56,6 +59,8 @@ class KOODF_EXPORT KoOdfStyle
 
     QString property(QString &propertySet, QString &property) const;
     void    setProperty(QString &propertySet, QString &property, QString &value);
+
+    bool readOdf(KoXmlElement &element);
 
  private:
     class Private;

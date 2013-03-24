@@ -22,8 +22,9 @@
 #include "KoOdfStyle.h"
 
 #include <QString>
-#include <QHash>
 
+#include "KoXmlReader.h"
+#include "KoXmlNS.h"
 #include "KoOdfStyleProperties.h"
 
 
@@ -121,6 +122,11 @@ void KoOdfStyle::setInUse(bool inUse)
 }
 
 
+QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties()
+{
+    return d->properties;
+}
+
 KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
 {
     return d->properties.value(name, 0);
@@ -141,5 +147,35 @@ void KoOdfStyle::setProperty(QString &propertySet, QString &property, QString &v
     if (!props)
         props = new KoOdfStyleProperties();
     props->setValue(property, value);
+}
+
+
+bool KoOdfStyle::readOdf(KoXmlElement &element)
+{
+    // FIXME: Read style attributes
+
+    // Read child elements: propertysets and other children.
+    KoXmlElement elem;
+    forEachElement(elem, element) {
+        if (!(elem.namespaceURI() == KoXmlNS::style)) {
+            continue;
+        }
+
+        // So far we only have support for text-, paragaph-and graphic-properties
+        QString propertiesType = elem.localName();
+        if (propertiesType == "text-properties"
+            || propertiesType == "paragraph-properties"
+            || propertiesType == "graphic-properties")
+        {
+            // FIXME: In the future, create per type.
+            KoOdfStyleProperties *properties = new KoOdfStyleProperties();
+            if (!properties->readOdf(elem)) {
+                return false;
+            }
+            d->properties[propertiesType] = properties;
+        }
+    }
+
+    return true;
 }
 

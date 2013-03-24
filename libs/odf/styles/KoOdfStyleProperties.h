@@ -24,6 +24,7 @@
 
 #include "koodf_export.h"
 
+class KoXmlElement;
 
 class QString;
 
@@ -32,12 +33,15 @@ class KOODF_EXPORT KoOdfStyleProperties
 {
  public:
     KoOdfStyleProperties();
-    ~KoOdfStyleProperties();
+    virtual ~KoOdfStyleProperties();
 
     QString value(QString &property) const;
     void    setValue(QString &property, QString &value);
 
     void clear();
+
+    bool readAttributes(KoXmlElement &element);
+    virtual bool readOdf(KoXmlElement &element);
 
  private:
     class Private;
