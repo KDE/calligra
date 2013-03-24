@@ -22,6 +22,7 @@
 
 #include <KoToolBase.h>
 
+class QTimer;
 class KWCanvas;
 class KWDocument;
 
@@ -31,7 +32,7 @@ class KWPageTool : public KoToolBase
 public:
     explicit KWPageTool(KoCanvasBase *canvas);
     virtual ~KWPageTool();
-
+    bool wantsAutoScroll() const;
 public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
@@ -43,6 +44,7 @@ public: // Events
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
+
 //  virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
 //  virtual void keyPressEvent(QKeyEvent *event);
@@ -50,7 +52,7 @@ public: // Events
 private slots:
     ///Force the remaining content on the page to next page.
     void insertPageBreak();
-
+    void resizePage();
 private:
     KWCanvas *getCanvas() const;
     KWDocument *getDocument() const;
@@ -59,16 +61,15 @@ protected:
     QList<QWidget *> createOptionWidgets();
 
 private:
-
-    enum Margin{NONE,TOP,BOTTOM,LEFT,RIGHT,HEADER,FOOTER};
-
-    Margin margin;
+    enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
+    Selection selection;
     KWCanvas *m_canvas;
     KWDocument *m_document;
-
+    //Need to control the page resizing when cursor is out of canvas
+    QTimer *resizingTimer;
     //Return or set the position x or y of the margin
-    int marginInPx(Margin p_selection);
-    void setMarginInPx(Margin p_selection,int p_postionX,int p_positionY);
+    int marginInPx(Selection p_selection);
+    void setMarginInPx(Selection p_selection,int p_postionX,int p_positionY);
     int xMouseInPage(int p_positionX);
     int yMouseInPage(int p_positionY);
 };
