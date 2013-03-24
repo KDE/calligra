@@ -35,7 +35,7 @@
 class KoOdfStyle::Private
 {
 public:
-    Private() {};
+    Private();
     ~Private();
 
     QString name;
@@ -48,6 +48,12 @@ public:
 
     QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties", 
 };
+
+KoOdfStyle::Private::Private()
+    : isDefaultStyle(false)
+    , inUse(false)
+{
+}
 
 KoOdfStyle::Private::~Private()
 {
