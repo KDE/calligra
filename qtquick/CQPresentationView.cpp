@@ -205,5 +205,3 @@ void CQPresentationView::setZoomController(KoZoomController* controller)
 {
     m_zoomController = controller;
 }
-
-#include "CQPresentationView.moc"
