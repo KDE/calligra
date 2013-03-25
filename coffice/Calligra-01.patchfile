@@ -176,34 +176,6 @@ index 6caf3d1..5c47eb3 100644
 +        : d(new Private(this))
  {
  }
-diff --git a/libs/main/KoDocument.cpp b/libs/main/KoDocument.cpp
-index 9b5b2bd..a8e8716 100644
---- a/libs/main/KoDocument.cpp
-+++ b/libs/main/KoDocument.cpp
-@@ -1376,6 +1376,11 @@ void KoDocument::setProgressProxy(KoProgressProxy *progressProxy)
-     d->progressProxy = progressProxy;
- }
- 
-+KoProgressProxy* KoDocument::progressProxy() const
-+{
-+    return d->progressProxy;
-+}
-+
- // shared between openFile and koMainWindow's "create new empty document" code
- void KoDocument::setMimeTypeAfterLoading(const QString& mimeType)
- {
-diff --git a/libs/main/KoDocument.h b/libs/main/KoDocument.h
-index 287a56d..4841d58 100644
---- a/libs/main/KoDocument.h
-+++ b/libs/main/KoDocument.h
-@@ -443,6 +443,7 @@ public:
-      * progress to.
-      */
-     void setProgressProxy(KoProgressProxy *progressProxy);
-+    KoProgressProxy* progressProxy() const;
- 
-     /**
-      * Return true if url() is a real filename, false if url() is
 diff --git a/libs/main/KoDocumentSectionView.cpp b/libs/main/KoDocumentSectionView.cpp
 index 154e4a8..0dd1334 100644
 --- a/libs/main/KoDocumentSectionView.cpp
@@ -215,73 +187,6 @@ index 154e4a8..0dd1334 100644
 -#include <KoDocumentSectionPropertyAction_p.moc>
 +//#include <KoDocumentSectionPropertyAction_p.moc>
  #include <KoDocumentSectionView.moc>
-diff --git a/libs/main/KoPart.cpp b/libs/main/KoPart.cpp
-index d1e86e5..56e27b5 100644
---- a/libs/main/KoPart.cpp
-+++ b/libs/main/KoPart.cpp
-@@ -183,32 +183,50 @@ void KoPart::setReadWrite(bool readwrite)
- 
- bool KoPart::openFile()
- {
--    KoMainWindow *shell = 0;
--    if (shellCount() > 0) {
--        shell = shells()[0];
-+    DocumentProgressProxy *progressProxy = 0;
-+    if (!d->document->progressProxy()) {
-+        KoMainWindow *shell = 0;
-+        if (shellCount() > 0) {
-+            shell = shells()[0];
-+        }
-+        progressProxy = new DocumentProgressProxy(shell);
-+        d->document->setProgressProxy(progressProxy);
-     }
--    DocumentProgressProxy progressProxy(shell);
--    d->document->setProgressProxy(&progressProxy);
-     d->document->setUrl(url());
- 
-     // THIS IS WRONG! KoDocument::openFile should move here, and whoever subclassed KoDocument to
-     // reimplement openFile shold now subclass KoPart.
--    return d->document->openFile();
-+    bool ok = d->document->openFile();
-+
-+    if (progressProxy) {
-+        d->document->setProgressProxy(0);
-+        delete progressProxy;
-+    }
-+    return ok;
- }
- 
- bool KoPart::saveFile()
- {
--    KoMainWindow *shell = 0;
--    if (shellCount() > 0) {
--        shell = shells()[0];
-+    DocumentProgressProxy *progressProxy = 0;
-+    if (!d->document->progressProxy()) {
-+        KoMainWindow *shell = 0;
-+        if (shellCount() > 0) {
-+            shell = shells()[0];
-+        }
-+        progressProxy = new DocumentProgressProxy(shell);
-+        d->document->setProgressProxy(progressProxy);
-     }
--    DocumentProgressProxy progressProxy(shell);
--    d->document->setProgressProxy(&progressProxy);
-     d->document->setUrl(url());
- 
-     // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
-     // reimplement saveFile shold now subclass KoPart.
--    return d->document->saveFile();
-+    bool ok = d->document->saveFile();
-+
-+    if (progressProxy) {
-+        d->document->setProgressProxy(0);
-+        delete progressProxy;
-+    }
-+    return ok;
- }
- 
- KoView *KoPart::createView(QWidget *parent)
 diff --git a/libs/main/KoView.cpp b/libs/main/KoView.cpp
 index efd39ec..e5cc661 100644
 --- a/libs/main/KoView.cpp
@@ -440,23 +345,3 @@ index 7654aa3..14e50ec 100644
  
  protected:
      /// reimplemented from KoDocument
-diff --git a/words/part/frames/KWFrameLayout.h b/words/part/frames/KWFrameLayout.h
-index 72bd252..cba5517 100644
---- a/words/part/frames/KWFrameLayout.h
-+++ b/words/part/frames/KWFrameLayout.h
-@@ -24,6 +24,7 @@
- #define KWFRAMELAYOUT_H
- 
- #include "../Words.h"
-+#include "../KWPageStyle.h"
- 
- #include "../words_export.h"
- 
-@@ -34,7 +35,6 @@
- class KWPageManager;
- class KWFrameSet;
- class KWTextFrameSet;
--class KWPageStyle;
- class KWPage;
- class KWFrame;
- class KWDocument;
