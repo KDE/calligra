@@ -62,11 +62,14 @@ public:
     virtual QSize viewportSize() const;
     virtual void scrollContentsBy(int dx, int dy);
 
+    QSize documentSize();
+
 signals:
     void documentSizeChanged(const QSize &sz);
 
 private:
-    KoCanvasBase *m_canvas;
+    class Private;
+    Private * const d;
 };
 
 #endif // CQCANVASCONTROLLER_H

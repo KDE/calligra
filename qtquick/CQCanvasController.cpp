@@ -22,7 +22,6 @@
  */
 
 #include "CQCanvasController.h"
-#include <KoCanvasBase.h>
 
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
@@ -30,14 +29,23 @@
 
 #include <QDebug>
 
+#include <KoCanvasBase.h>
+
+class CQCanvasController::Private
+{
+public:
+    Private() : canvas(0) { }
+    KoCanvasBase *canvas;
+};
+
 CQCanvasController::CQCanvasController(KActionCollection* actionCollection)
-    : KoCanvasController(actionCollection)
-    , m_canvas(0)
+    : KoCanvasController(actionCollection), d(new Private)
 {
 }
 
 CQCanvasController::~CQCanvasController()
 {
+    delete d;
 }
 
 void CQCanvasController::setVastScrolling(qreal factor)
@@ -50,6 +58,7 @@ void CQCanvasController::setZoomWithWheel(bool zoom)
 
 void CQCanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
+    setDocumentSize(sz);
     emit documentSizeChanged(sz);
 }
 
@@ -64,6 +73,9 @@ QPoint CQCanvasController::scrollBarValue() const
 
 void CQCanvasController::pan(const QPoint& distance)
 {
+    QPoint offset = documentOffset() + distance;
+    setDocumentOffset(offset);
+    proxyObject->emitMoveDocumentOffset(offset);
 }
 
 QPointF CQCanvasController::preferredCenter() const
@@ -125,13 +137,14 @@ int CQCanvasController::visibleHeight() const
 
 KoCanvasBase* CQCanvasController::canvas() const
 {
-    return m_canvas;
+    return d->canvas;
 }
 
 void CQCanvasController::setCanvas(KoCanvasBase* canvas)
 {
-    m_canvas = canvas;
+    d->canvas = canvas;
     canvas->setCanvasController(this);
+    proxyObject->emitCanvasSet(this);
 }
 
 void CQCanvasController::setDrawShadow(bool drawShadow)
@@ -140,7 +153,7 @@ void CQCanvasController::setDrawShadow(bool drawShadow)
 
 QSize CQCanvasController::viewportSize() const
 {
-    QGraphicsWidget *canvasWidget = dynamic_cast<QGraphicsWidget*>(m_canvas);
+    QGraphicsWidget *canvasWidget = dynamic_cast<QGraphicsWidget*>(d->canvas);
     return canvasWidget->size().toSize();
 }
 
@@ -148,4 +161,8 @@ void CQCanvasController::scrollContentsBy(int dx, int dy)
 {
 }
 
-#include "CQCanvasController.moc"
+QSize CQCanvasController::documentSize()
+{
+    return KoCanvasController::documentSize();
+}
+
