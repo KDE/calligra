@@ -23,43 +23,31 @@
 #ifndef CQSPREADSHEETCANVAS_H
 #define CQSPREADSHEETCANVAS_H
 
-#include <QtDeclarative/QDeclarativeItem>
-
-class KoZoomController;
-class CQCanvasController;
-namespace Calligra
-{
-namespace Sheets
-{
-class Doc;
-}
-}
+#include "CQCanvasBase.h"
 
 class KoCanvasBase;
 
-class CQSpreadsheetCanvas : public QDeclarativeItem
+class CQSpreadsheetCanvas : public CQCanvasBase
 {
     Q_OBJECT
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-public:
-    QString source() const;
-    void setSource(const QString &source);
 
-signals:
-    void sourceChanged();
+public:
+    explicit CQSpreadsheetCanvas(QDeclarativeItem* parent = 0);
+    virtual ~CQSpreadsheetCanvas();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+    virtual void openFile(const QString& file);
+
+private Q_SLOTS:
+    void updateDocumentSize(const QSize& size);
 
 private:
-    bool openFile(const QString& uri);
     void createAndSetCanvasControllerOn(KoCanvasBase* canvas);
     void createAndSetZoomController(KoCanvasBase* canvas);
 
-    QString m_source;
-    KoCanvasBase* m_canvasBase;
-    CQCanvasController* m_canvasController;
-    KoZoomController* m_zoomController;
+    class Private;
+    Private * const d;
 };
 
 #endif // CQSPREADSHEETCANVAS_H
