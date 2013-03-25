@@ -24,9 +24,7 @@
 #ifndef CQTEXTDOCUMENTCANVAS_H
 #define CQTEXTDOCUMENTCANVAS_H
 
-#include <QtDeclarative/qdeclarativeitem.h>
-
-#include <KoZoomMode.h>
+#include "CQCanvasBase.h"
 
 class CQTextDocumentModel;
 class KoFindText;
@@ -37,17 +35,15 @@ class KoCanvasBase;
 class KUrl;
 class KoFindMatch;
 
-class CQTextDocumentCanvas : public QDeclarativeItem
+class CQTextDocumentCanvas : public CQCanvasBase
 {
     Q_OBJECT
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(ZoomMode zoomMode READ zoomMode WRITE setZoomMode NOTIFY zoomModeChanged)
     Q_PROPERTY(QString searchTerm READ searchTerm WRITE setSearchTerm NOTIFY searchTermChanged)
     Q_PROPERTY(QObject* documentModel READ documentModel NOTIFY documentModelChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(int currentPageNumber READ currentPageNumber WRITE setCurrentPageNumber NOTIFY currentPageNumberChanged)
     Q_PROPERTY (int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
-    Q_ENUMS(ZoomMode)
 
 public:
     CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
@@ -59,10 +55,9 @@ public:
         ZOOM_WIDTH    = 1,  ///< zoom pagewidth
         ZOOM_PAGE     = 2,  ///< zoom to pagesize
     };
+    Q_ENUMS(ZoomMode)
 
-    QString source() const;
     int currentPageNumber() const;
-    void setSource(const QString &source);
     void setCurrentPageNumber(const int &currentPageNumber);
     int cameraY() const;
     void setCameraY (int cameraY);
@@ -78,7 +73,6 @@ public:
     QSize documentSize() const;
 
 signals:
-    void sourceChanged();
     void zoomModeChanged();
     void searchTermChanged();
     void documentModelChanged();
@@ -88,6 +82,7 @@ signals:
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+    virtual void openFile(const QString& uri);
 
 private slots:
     void updateControllerWithZoomMode();
@@ -99,7 +94,6 @@ private slots:
     void updateDocumentSize(const QSize &size);
 
 private:
-    bool openFile(const QString& uri);
     void createAndSetCanvasControllerOn(KoCanvasBase *canvas);
     void createAndSetZoomController(KoCanvasBase *canvas);
     void updateZoomControllerAccordingToDocument(const KoDocument *document);

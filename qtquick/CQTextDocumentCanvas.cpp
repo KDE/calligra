@@ -46,16 +46,13 @@ class CQTextDocumentCanvas::Private
 public:
     Private()
         : canvasBase(0),
-          canvasController(0),
           zoomController(0),
           zoomMode(ZOOM_CONSTANT),
           findText(0),
           documentModel(0)
     {}
 
-    QString source;
     KoCanvasBase *canvasBase;
-    KoCanvasController *canvasController;
     KoZoomController *zoomController;
     ZoomMode zoomMode;
     QString searchTerm;
@@ -67,7 +64,7 @@ public:
 };
 
 CQTextDocumentCanvas::CQTextDocumentCanvas(QDeclarativeItem* parent)
-    : QDeclarativeItem(parent), d(new Private)
+    : CQCanvasBase(parent), d(new Private)
 {
     d->findText = new KoFindText(this);
 
@@ -81,12 +78,12 @@ CQTextDocumentCanvas::~CQTextDocumentCanvas()
     delete d;
 }
 
-bool CQTextDocumentCanvas::openFile(const QString& uri)
+void CQTextDocumentCanvas::openFile(const QString& uri)
 {
     KService::Ptr service = KService::serviceByDesktopName("wordspart");
     if(service.isNull()) {
         qWarning("Unable to load Words plugin, aborting!");
-        return false;
+        return;
     }
 
     KoPart* part = service->createInstance<KoPart>();
@@ -119,8 +116,6 @@ bool CQTextDocumentCanvas::openFile(const QString& uri)
     KWDocument *kwDocument = static_cast<KWDocument*>(document);
     d->documentModel = new CQTextDocumentModel(this, kwDocument, kwCanvasItem->shapeManager());
     emit documentModelChanged();
-
-    return true;
 }
 
 void CQTextDocumentCanvas::gotoPage(int pageNumber, KoDocument *document)
@@ -161,20 +156,6 @@ void CQTextDocumentCanvas::setCurrentPageNumber(const int& currentPageNumber)
     emit currentPageNumberChanged();
 }
 
-void CQTextDocumentCanvas::setSource(const QString& source)
-{
-    if(source != d->source) {
-        d->source = source;
-        openFile(source);
-        emit sourceChanged();
-    }
-}
-
-QString CQTextDocumentCanvas::source() const
-{
-    return d->source;
-}
-
 void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (d->canvasBase) {
@@ -191,7 +172,7 @@ void CQTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 {
     //TODO: pass a proper action collection
     CQCanvasController *controller = new CQCanvasController(new KActionCollection(this));
-    d->canvasController = controller;
+    setCanvasController(controller);
     connect (controller, SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
     controller->setCanvas(canvas);
     KoToolManager::instance()->addController (controller);
@@ -200,11 +181,11 @@ void CQTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
-    d->zoomController = new KoZoomController(d->canvasController,
-                                                            zoomHandler,
-                                                            new KActionCollection(this));
+    d->zoomController = new KoZoomController(canvasController(), zoomHandler, new KActionCollection(this));
+
     KWCanvasItem *kwCanvasItem = static_cast<KWCanvasItem*>(canvas);
     connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), d->zoomController, SLOT(setDocumentSize(QSizeF)));
+    connect (canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
     kwCanvasItem->updateSize();
 }
 
