@@ -1,5 +1,3 @@
-macro_optional_find_package(Poppler)
-
 if (POPPLER_FOUND)
     add_definitions(-DHAS_POPPLER)
 

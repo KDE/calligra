@@ -1,4 +1,9 @@
-include_directories(${ZLIB_INCLUDE_DIR} ../../libmso)
+include_directories(
+    ${ZLIB_INCLUDE_DIR}
+    ../../libmso
+    ${KOMAIN_INCLUDES}
+    ${KOTEXT_INCLUDES}
+)
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -KPIC")
@@ -18,4 +23,6 @@ target_link_libraries(powerpointimport ppttoodplib komain)
 install(TARGETS powerpointimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kpresenter_powerpoint_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
