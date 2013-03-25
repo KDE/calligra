@@ -23,41 +23,30 @@
 #ifndef CQPRESENTATIONCANVAS_H
 #define CQPRESENTATIONCANVAS_H
 
-#include <QtDeclarative/QDeclarativeItem>
+#include "CQCanvasBase.h"
 
-class KoZoomController;
-class CQCanvasController;
 class KoCanvasBase;
-
-class CQPresentationView;
-class CQPresentationCanvas : public QDeclarativeItem
+class CQPresentationCanvas : public CQCanvasBase
 {
     Q_OBJECT
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-public:
-    QString source() const;
-    void setSource(const QString &source);
 
-signals:
-    void sourceChanged();
+public:
+    explicit CQPresentationCanvas(QDeclarativeItem* parent = 0);
+    virtual ~CQPresentationCanvas();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+    void openFile(const QString& uri);
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize& size);
 
 private:
-    bool openFile(const QString& uri);
     void createAndSetCanvasControllerOn(KoCanvasBase* canvas);
     void createAndSetZoomController(KoCanvasBase* canvas);
-    void resizeCanvas(const QSizeF& canvasSize);
 
-    QString m_source;
-    KoCanvasBase* m_canvasBase;
-    CQCanvasController* m_canvasController;
-    KoZoomController* m_zoomController;
-    CQPresentationView* m_view;
+    class Private;
+    Private * const d;
 };
 
 #endif // CQPRESENTATIONCANVAS_H

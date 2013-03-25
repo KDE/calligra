@@ -149,7 +149,9 @@ void CQPresentationView::doUpdateActivePage (KoPAPageBase* page)
     m_paCanvas->resourceManager()->setResource (KoCanvasResourceManager::PageSize, pageSize);
     zoomController()->setPageSize(pageSize);
     zoomController()->setDocumentSize(pageSize);
-    zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1);
+    //zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1);
+
+    m_paCanvas->updateSize();
     QGraphicsItem* item = dynamic_cast<QGraphicsItem*> (m_paCanvas);
     item->update();
 
