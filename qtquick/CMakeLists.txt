@@ -31,5 +31,5 @@ target_link_libraries(calligraqtquickcomponentsplugin
     calligrastageprivate)
 
 install(TARGETS calligraqtquickcomponentsplugin
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/imports/org/calligra/CalligraComponents)
-install(FILES qmldir DESTINATION ${DATA_INSTALL_DIR}/calligra/imports/org/calligra/CalligraComponents)
+    DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/calligra/CalligraComponents)
+install(FILES qmldir DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/calligra/CalligraComponents)
