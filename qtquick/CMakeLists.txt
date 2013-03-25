@@ -1,6 +1,8 @@
 project(calligraqtquickcomponents)
 
 set(calligraqtquickcomponents_SRCS
+    CQCanvasBase.cpp
+    CQCanvasControllerItem.cpp
     CQSpreadsheetCanvas.cpp
     CalligraQtQuickComponentsPlugin.cpp
     CQCanvasController.cpp
@@ -20,7 +22,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
 
-kde4_add_library(calligraqtquickcomponentsplugin SHARED ${calligraqtquickcomponents_SRCS})
+kde4_add_plugin(calligraqtquickcomponentsplugin WITH_PREFIX ${calligraqtquickcomponents_SRCS})
 target_link_libraries(calligraqtquickcomponentsplugin
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
