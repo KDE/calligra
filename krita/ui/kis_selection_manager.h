@@ -106,10 +106,10 @@ public:
     /// Checks if the current selection is editabl and has some pixels selected in the pixel selection
     bool havePixelSelectionWithPixels();
 
-    Q_INVOKABLE void grow(qint32 xradius, qint32 yradius);
-    Q_INVOKABLE void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
-    Q_INVOKABLE void border(qint32 xradius, qint32 yradius);
-    Q_INVOKABLE void feather(qint32 radius);
+//    Q_INVOKABLE void grow(qint32 xradius, qint32 yradius);
+//    Q_INVOKABLE void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
+//    Q_INVOKABLE void border(qint32 xradius, qint32 yradius);
+//    Q_INVOKABLE void feather(qint32 radius);
     // the following functions are needed for the siox tool
     // they might be also useful on its own
     void erode();
