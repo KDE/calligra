@@ -39,6 +39,8 @@
 class CQSpreadsheetCanvas::Private
 {
 public:
+    Private() : canvasBase(0), zoomController(0) { }
+
     KoCanvasBase* canvasBase;
     KoZoomController* zoomController;
 };

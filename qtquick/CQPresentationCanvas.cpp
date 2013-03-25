@@ -43,6 +43,8 @@
 class CQPresentationCanvas::Private
 {
 public:
+    Private() : canvasBase(0), zoomController(0), view(0) { }
+
     KoCanvasBase* canvasBase;
     KoZoomController* zoomController;
     CQPresentationView* view;
