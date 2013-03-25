@@ -103,6 +103,8 @@ private:
     void createAndSetCanvasControllerOn(KoCanvasBase *canvas);
     void createAndSetZoomController(KoCanvasBase *canvas);
     void updateZoomControllerAccordingToDocument(const KoDocument *document);
+    void alignTopWith(int y);
+    void gotoPage(int pageNumber, KoDocument *document);
 
     class Private;
     Private * const d;
