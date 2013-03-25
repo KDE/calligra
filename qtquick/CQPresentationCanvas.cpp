@@ -40,26 +40,31 @@
 
 #include "CQPresentationView.h"
 
-void CQPresentationCanvas::setSource(const QString& source)
+class CQPresentationCanvas::Private
 {
-    if(m_source != source) {
-        m_source = source;
-        openFile(source);
-        emit sourceChanged();
-    }
+public:
+    KoCanvasBase* canvasBase;
+    KoZoomController* zoomController;
+    CQPresentationView* view;
+};
+
+CQPresentationCanvas::CQPresentationCanvas(QDeclarativeItem* parent)
+    : CQCanvasBase(parent), d(new Private)
+{
+
 }
 
-QString CQPresentationCanvas::source() const
+CQPresentationCanvas::~CQPresentationCanvas()
 {
-    return m_source;
+    delete d;
 }
 
-bool CQPresentationCanvas::openFile(const QString& uri)
+void CQPresentationCanvas::openFile(const QString& uri)
 {
     KService::Ptr service = KService::serviceByDesktopName("stagepart");
     if(service.isNull()) {
         qWarning("Unable to load Stage plugin, aborting!");
-        return false;
+        return;
     }
 
     KoPart *part = service->createInstance<KoPart>();
@@ -68,37 +73,33 @@ bool CQPresentationCanvas::openFile(const QString& uri)
     document->setCheckAutoSaveFile(false);
     document->openUrl (KUrl (uri));
 
-    m_canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
-    createAndSetCanvasControllerOn(m_canvasBase);
-
     KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem*>(part->canvasItem());
+    d->canvasBase = paCanvasItem;
+    createAndSetCanvasControllerOn(d->canvasBase);
 
-    m_view = new CQPresentationView(m_canvasController, static_cast<KoPACanvasBase*>(m_canvasBase), dynamic_cast<KPrDocument*>(document));
-    paCanvasItem->setView(m_view);
+    d->view = new CQPresentationView(canvasController(), static_cast<KoPACanvasBase*>(d->canvasBase), dynamic_cast<KPrDocument*>(document));
+    paCanvasItem->setView(d->view);
 
-    createAndSetZoomController(m_canvasBase);
-    m_view->setZoomController(m_zoomController);
-    //view->connectToZoomController();
+    createAndSetZoomController(d->canvasBase);
+    d->view->setZoomController(d->zoomController);
+    d->view->connectToZoomController();
 
-    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(m_canvasBase);
+    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
     graphicsWidget->setParentItem(this);
     graphicsWidget->installEventFilter(this);
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
-    m_view->doUpdateActivePage(document->pageByIndex(0, false));
+    d->view->doUpdateActivePage(document->pageByIndex(0, false));
 
-    resizeCanvas(QSizeF(width(), height()));
-
-    return true;
+    //resizeCanvas(QSizeF(width(), height()));
 }
 
 void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 {
     //TODO: pass a proper action collection
     CQCanvasController *controller = new CQCanvasController(new KActionCollection(this));
-    m_canvasController = controller;
-    connect (controller, SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
+    setCanvasController(controller);
     controller->setCanvas(canvas);
     KoToolManager::instance()->addController (controller);
 }
@@ -106,48 +107,33 @@ void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 void CQPresentationCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
-    m_zoomController = new KoZoomController(m_canvasController,
-                                            zoomHandler,
-                                            new KActionCollection(this));
+    d->zoomController = new KoZoomController(canvasController(),
+                                             zoomHandler,
+                                             new KActionCollection(this));
 
     KoPACanvasItem* canvasItem = static_cast<KoPACanvasItem*>(canvas);
 
     // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-    connect (m_canvasController->proxyObject,
+    connect (canvasController()->proxyObject,
                 SIGNAL(moveDocumentOffset(QPoint)), canvasItem, SLOT(slotSetDocumentOffset(QPoint)));
     // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-    //connect (canvasItem, SIGNAL(documentSize(QSize)), this, SLOT(updateDocumentSize(QSize)));
+    connect (canvasItem, SIGNAL(documentSize(QSize)), this, SLOT(updateDocumentSize(QSize)));
+    canvasItem->updateSize();
     canvasItem->update();
 }
 
 void CQPresentationCanvas::updateDocumentSize(const QSize& size)
 {
-    Q_UNUSED(size);
-    //m_zoomController->setDocumentSize(size);
+    d->zoomController->setDocumentSize(d->canvasBase->viewConverter()->viewToDocument(size), false);
 }
 
 void CQPresentationCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    if (m_canvasBase) {
-        resizeCanvas(newGeometry.size());
+    if (d->canvasBase) {
+        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
+        if (widget) {
+            widget->setGeometry(newGeometry);
+        }
     }
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
-}
-
-void CQPresentationCanvas::resizeCanvas (const QSizeF& canvasSize)
-{
-    QSizeF pageSize = m_view->activePage()->boundingRect().size();
-    QGraphicsWidget* canvasItem = m_canvasBase->canvasItem();
-    QSizeF newSize (pageSize);
-    newSize.scale (canvasSize, Qt::KeepAspectRatio);
-
-    if (canvasSize.width() < canvasSize.height()) {
-        canvasItem->setGeometry (0, (canvasSize.height() - newSize.height()) / 2,
-                                 newSize.width(), newSize.height());
-        m_zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, canvasSize.width() / pageSize.width() * 0.75);
-    } else {
-        canvasItem->setGeometry ( (canvasSize.width() - newSize.width()) / 2, 0,
-                                  newSize.width(), newSize.height());
-        m_zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, canvasSize.height() / pageSize.height() * 0.75);
-    }
 }
