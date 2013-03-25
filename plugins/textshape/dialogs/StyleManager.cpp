@@ -378,11 +378,14 @@ void StyleManager::tabChanged(int index)
 {
     int paragraphIndex = widget.tabs->indexOf(widget.paragraphStylesListView);
     if (!checkUniqueStyleName(paragraphIndex == index ? widget.tabs->indexOf(widget.characterStylesListView) : paragraphIndex)) {
+        // this is needed to not call tab changed during the resetting of the tab as this leads to en endless recursion.
+        disconnect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
         if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
             widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
         } else {
             widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
         }
+        connect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     }
     else {
         if (paragraphIndex == index) {
