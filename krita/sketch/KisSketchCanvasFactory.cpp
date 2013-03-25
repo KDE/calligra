@@ -21,8 +21,11 @@
 #include "KisSketchCanvasFactory.h"
 
 #include "KisSketchCanvas.h"
+#include <kis_canvas2.h>
+#include <input/kis_input_manager.h>
 
 KisCanvasWidgetBase* KisSketchCanvasFactory::create(KisCanvas2* canvas, KisCoordinatesConverter* converter, QWidget* parent)
 {
+    canvas->inputManager()->setInputHack(true);
     return new KisSketchCanvas(canvas, converter, parent);
 }
