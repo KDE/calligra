@@ -22,6 +22,8 @@
 class CQCanvasBase::Private
 {
 public:
+    Private() : canvasController(0) { }
+    
     CQCanvasController *canvasController;
     QString source;
 };
