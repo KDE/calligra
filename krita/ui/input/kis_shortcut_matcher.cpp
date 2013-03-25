@@ -231,6 +231,14 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
     return false;
 }
 
+Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
+    Qt::MouseButtons flags;
+    foreach (Qt::MouseButton b, list) {
+        flags |= b;
+    }
+    return flags;
+}
+
 bool KisShortcutMatcher::tabletMoved(QTabletEvent *event)
 {
     if (!m_d->runningShortcut) return false;
