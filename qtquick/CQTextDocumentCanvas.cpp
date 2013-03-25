@@ -298,5 +298,3 @@ void CQTextDocumentCanvas::updateDocumentSize(const QSize& size)
     d->documentSize = size;
     emit documentSizeChanged();
 }
-
-#include "CQTextDocumentCanvas.moc"

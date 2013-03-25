@@ -151,5 +151,3 @@ void CQPresentationCanvas::resizeCanvas (const QSizeF& canvasSize)
         m_zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, canvasSize.height() / pageSize.height() * 0.75);
     }
 }
-
-#include "CQPresentationCanvas.moc"

@@ -109,5 +109,3 @@ void CQSpreadsheetCanvas::geometryChanged(const QRectF& newGeometry, const QRect
     }
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
-
-#include "CQSpreadsheetCanvas.moc"
