@@ -65,8 +65,9 @@ private:
     Selection selection;
     KWCanvas *m_canvas;
     KWDocument *m_document;
+    QPoint *m_mousePosTmp;
     //Need to control the page resizing when cursor is out of canvas
-    QTimer *resizingTimer;
+    QTimer *m_resizeTimer;
     //Return or set the position x or y of the margin
     int marginInPx(Selection p_selection);
     void setMarginInPx(Selection p_selection,int p_postionX,int p_positionY);
