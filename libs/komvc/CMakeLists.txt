@@ -1,6 +1,12 @@
 include_directories(${KOMVC_INCLUDES})
 
 set(komvc_LIB_SRCS
+    KoApplicationBase.cpp
+    KoControllerBase.cpp
+    KodocumentBase.cpp
+    KoDocumentManager.cpp
+    KoMainwindowBase.cpp
+    KoViewBase.cpp
 )
 
 kde4_add_library(komvc SHARED ${komvc_LIB_SRCS})
@@ -14,8 +20,13 @@ set_target_properties(komvc PROPERTIES
 install(TARGETS komvc  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
+    KoApplicationBase.h
+    KoControllerBase.h
+    KodocumentBase.h
+    KoDocumentManager.h
+    KoMainwindowBase.h
     komvc_export.h
-
+    KoViewBase.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 COMPONENT Devel)
