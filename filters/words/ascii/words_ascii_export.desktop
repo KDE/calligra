@@ -1,8 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Words ASCII Export Filter
+Name[cs]=Exportní filtr formátu ASCII pro Words
 Name[de]=Words ASCII-Exportfilter
 Name[el]=Φίλτρο εξαγωγής ASCII του Words
+Name[mr]=वर्डस् ASCII निर्यात गाळणी
+Name[nl]=ASCII-exportfilter voor Words
 Name[pt]=Filtro de Exportação de ASCII para o Words
 Name[pt_BR]=Filtro de exportação de ASCII para Words
 Name[sk]=ASCII filter pre export z Words
