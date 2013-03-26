@@ -31,6 +31,7 @@
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
 #include "KoStrokeConfigWidget.h"
+#include "KoShapeStroke.h"
 
 #include <KNumInput>
 #include <KLocale>
@@ -333,6 +334,17 @@ void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
     }
 }
 
+void KoCreatePathTool::strokeChanged(KoShapeStroke *newStroke)
+{
+    Q_D(KoCreatePathTool);
+    if (newStroke) {
+        d->stroke = newStroke;
+        if (d->shape) {
+            d->shape->setStroke(d->stroke);
+        }
+    }
+}
+
 void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
 {
     Q_D(KoCreatePathTool);
@@ -345,6 +357,7 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     d->existingStartPoint.validate(canvas());
     d->existingEndPoint.validate(canvas());
 
+    pathShape->setStroke(d->stroke);
     if (d->connectPaths(pathShape, d->existingStartPoint, d->existingEndPoint)) {
         if (d->existingStartPoint.isValid())
             startShape = d->existingStartPoint.path;
@@ -401,6 +414,7 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
+    connect(strokeWidget, SIGNAL(strokeChanged(KoShapeStroke*)), this, SLOT(strokeChanged(KoShapeStroke*)));
 
     return list;
 }

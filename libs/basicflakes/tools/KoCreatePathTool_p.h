@@ -23,6 +23,8 @@
 #define KOCREATEPATHTOOL_P_H
 
 #include "KoCreatePathTool.h"
+#include "KoStrokeConfigWidget.h"
+#include "KoShapeStroke.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "KoPathPointMergeCommand.h"
@@ -188,6 +190,7 @@ public:
         : KoToolBasePrivate(qq, canvas),
         q(qq),
         shape(0),
+        stroke(0),
         activePoint(0),
         firstPoint(0),
         handleRadius(3),
@@ -201,6 +204,8 @@ public:
     {}
 
     KoPathShape *shape;
+    KoShapeStroke *stroke;
+
     KoPathPoint *activePoint;
     KoPathPoint *firstPoint;
     int handleRadius;

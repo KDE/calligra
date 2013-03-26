@@ -29,6 +29,7 @@
 
 class KoPathShape;
 class KoPathPoint;
+class KoShapeStroke;
 
 class KoCreatePathToolPrivate;
 
@@ -69,6 +70,8 @@ public slots:
     virtual void deactivate();
     /// reimplemented
     virtual void documentResourceChanged(int key, const QVariant & res);
+
+    void strokeChanged(KoShapeStroke *newStroke);
 
 protected:
     /**
