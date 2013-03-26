@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Calligra/ViewManager
+
+[PropertyDef::X-Calligra-DefaultMimeTypes]
+Type=QStringList
