@@ -80,7 +80,10 @@ void CQSpreadsheetCanvas::openFile(const QString& uri)
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
-    updateDocumentSize(document->map()->sheet(0)->documentSize().toSize());
+    Calligra::Sheets::Sheet *sheet = document->map()->sheet(0);
+    if(sheet) {
+        updateDocumentSize(sheet->documentSize().toSize());
+    }
 }
 
 void CQSpreadsheetCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
