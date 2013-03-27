@@ -27,7 +27,9 @@ class CQCanvasControllerItem : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QDeclarativeItem* canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
+    Q_PROPERTY(QDeclarativeItem* flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
+    Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
     //Q_PROPERTY()
 
 public:
@@ -39,15 +41,23 @@ public:
     QDeclarativeItem* canvas() const;
     void setCanvas(QDeclarativeItem* canvas);
 
+    QDeclarativeItem* flickable() const;
+    void setFlickable(QDeclarativeItem* item);
+
     QSize documentSize() const;
+
+    qreal zoom() const;
+    void setZoom(qreal newZoom);
+
+Q_SIGNALS:
+    void canvasChanged();
+    void flickableChanged();
+    void documentSizeChanged();
+    void zoomChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
-
-Q_SIGNALS:
-    void canvasChanged();
-    void documentSizeChanged();
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize& size);
