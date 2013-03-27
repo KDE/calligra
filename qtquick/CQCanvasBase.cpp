@@ -24,8 +24,9 @@ class CQCanvasBase::Private
 public:
     Private() : canvasController(0) { }
     
-    CQCanvasController *canvasController;
     QString source;
+    CQCanvasController *canvasController;
+    KoZoomController* zoomController;
 };
 
 CQCanvasBase::CQCanvasBase(QDeclarativeItem* parent)
@@ -42,6 +43,11 @@ CQCanvasBase::~CQCanvasBase()
 CQCanvasController* CQCanvasBase::canvasController() const
 {
     return d->canvasController;
+}
+
+KoZoomController* CQCanvasBase::zoomController() const
+{
+    return d->zoomController;
 }
 
 QString CQCanvasBase::source() const
@@ -65,4 +71,9 @@ void CQCanvasBase::setCanvasController(CQCanvasController* controller)
         d->canvasController = controller;
         emit canvasControllerChanged();
     }
+}
+
+void CQCanvasBase::setZoomController(KoZoomController* controller)
+{
+    d->zoomController = controller;
 }

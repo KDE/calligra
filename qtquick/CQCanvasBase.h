@@ -22,6 +22,7 @@
 
 #include <QDeclarativeItem>
 
+class KoZoomController;
 class CQCanvasController;
 class CQCanvasBase : public QDeclarativeItem
 {
@@ -33,6 +34,7 @@ public:
     virtual ~CQCanvasBase();
 
     CQCanvasController *canvasController() const;
+    KoZoomController *zoomController() const;
     QString source() const;
 
 public Q_SLOTS:
@@ -44,6 +46,7 @@ Q_SIGNALS:
 
 protected:
     virtual void setCanvasController(CQCanvasController *controller);
+    virtual void setZoomController(KoZoomController *controller);
 
     virtual void openFile(const QString &file) = 0;
 
