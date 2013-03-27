@@ -24,8 +24,12 @@
 #include "CoverSelectionDialog.h"
 
 #include "KWDocument.h"
+#include "../dockers/KWStatisticsWidget.h"
+#include "../dockers/KWStatisticsDocker.h"
 
 #include <KoPart.h>
+#include <KoDockRegistry.h>
+#include <KStatusBar>
 
 #include <QWidget>
 #include <QFileDialog>
@@ -38,6 +42,12 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
         setComponentData(CAuFactory::componentData());
         setXMLFile("author.rc");
         setupActions();
+
+        KWStatisticsWidget *stats = new KWStatisticsWidget(this,true);
+        stats->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
+        stats->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
+        statusBar()->addWidget(stats);
+
 }
 
 void CAuView::setupActions()
