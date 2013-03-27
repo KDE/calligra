@@ -16,6 +16,9 @@
 #include <klocale.h>
 #include <kdecore_export.h>
 
+#define FAKE_KAPPLICATION_CTOR Q_ASSERT(false);
+#define FAKE_KMAINWINDOW_CTOR Q_ASSERT(false);
+
 class KStandardDirs;
 
 class KDECORE_EXPORT KComponentData

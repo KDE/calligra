@@ -4,12 +4,17 @@
 #include <QApplication>
 #include <QDebug>
 #include <kcmdlineargs.h>
+#include <kglobal.h>
 
 class KApplication : public QApplication
 {
 public:
-    KApplication(bool isGui = true) : QApplication(KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv()) {}
-    KApplication(int &argc, char **argv) : QApplication(argc, argv) {}
+    KApplication(bool isGui = true) : QApplication(KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv()) {
+        FAKE_KAPPLICATION_CTOR
+    }
+    KApplication(int &argc, char **argv) : QApplication(argc, argv) {
+        FAKE_KAPPLICATION_CTOR
+    }
 
     static QApplication* kApplication() { return qApp; }
 //     TODO if needed turn into a decorator for QApplication...

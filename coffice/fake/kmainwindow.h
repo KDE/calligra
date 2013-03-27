@@ -10,12 +10,14 @@
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
+#include <kglobal.h>
 
 class KMainWindow : public QMainWindow
 {
 public:
-    KMainWindow(QWidget* parent = 0) : QMainWindow(parent) {}
-    //KMainWindow(QWidget* parent = 0, Qt::WindowFlags f = 0) {}
+    KMainWindow(QWidget* parent = 0, Qt::WindowFlags f = 0) : QMainWindow(parent) {
+        FAKE_KMAINWINDOW_CTOR
+    }
     KMenu* helpMenu( const QString &aboutAppText = QString(), bool showWhatsThis = true ) { return 0; }
     KMenu* customHelpMenu( bool showWhatsThis = true ) { return 0; }
     static bool canBeRestored( int number ) { return false; }

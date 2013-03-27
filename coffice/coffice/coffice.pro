@@ -20,6 +20,11 @@ INCLUDEPATH += \
 
 LIBS += -lcalligralibs -lcalligraplugins -lcalligrawords
 
+unix:!macx {
+    # needed for XInitThreads hack
+    LIBS += $$QMAKE_LIBS_X11
+}
+
 # Additional import path used to resolve QML modules in Creator's code model
 #QML_IMPORT_PATH =
 
@@ -35,12 +40,18 @@ LIBS += -lcalligralibs -lcalligraplugins -lcalligrawords
 SOURCES += main.cpp \
     DocumentView.cpp \
     FileSystemModel.cpp \
-    Settings.cpp
+    Settings.cpp \
+    AppManager.cpp \
+    Document.cpp \
+    Document_p.cpp
 
 HEADERS += \
     DocumentView.h \
     FileSystemModel.h \
-    Settings.h
+    Settings.h \
+    AppManager.h \
+    Document.h \
+    Document_p.h
 
 ## Install extraLibraries
 #x86 {

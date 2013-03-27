@@ -9,8 +9,23 @@
 #include "DocumentView.h"
 #include "Settings.h"
 
+#if defined(Q_WS_X11)
+#include <X11/Xlib.h>
+void preInitHacks() {
+    // Nah, even if we are not using QtGui we still receive input
+    // events which are processed what can lead to asserts/crashes
+    // cause the main-app runs in another thread. Hack around by
+    // allowing X11-stuff to run also outside of the Gui-thread.
+    XInitThreads();
+}
+#else
+void preInitHacks() {}
+#endif
+
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
+    preInitHacks();
+
     QScopedPointer<QApplication> app(createApplication(argc, argv));
 
     QmlApplicationViewer viewer;
