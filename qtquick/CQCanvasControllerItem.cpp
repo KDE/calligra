@@ -134,7 +134,7 @@ void CQCanvasControllerItem::geometryChanged(const QRectF& newGeometry, const QR
 QVariant CQCanvasControllerItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     if(change == QGraphicsItem::ItemScenePositionHasChanged) {
-        QPointF pos = value.toPointF();
+        QPointF pos = value.toPointF() - d->flickable->scenePos();
         float xDiff = -(pos.x() - d->lastX);
         float yDiff = -(pos.y() - d->lastY);
         d->canvasController->pan(QPoint(xDiff, yDiff));
