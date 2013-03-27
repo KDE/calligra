@@ -46,14 +46,12 @@ class CQTextDocumentCanvas::Private
 public:
     Private()
         : canvasBase(0),
-          zoomController(0),
           zoomMode(ZOOM_CONSTANT),
           findText(0),
           documentModel(0)
     {}
 
     KoCanvasBase *canvasBase;
-    KoZoomController *zoomController;
     ZoomMode zoomMode;
     QString searchTerm;
     KoFindText *findText;
@@ -181,10 +179,10 @@ void CQTextDocumentCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
-    d->zoomController = new KoZoomController(canvasController(), zoomHandler, new KActionCollection(this));
+    setZoomController(new KoZoomController(canvasController(), zoomHandler, new KActionCollection(this)));
 
     KWCanvasItem *kwCanvasItem = static_cast<KWCanvasItem*>(canvas);
-    connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), d->zoomController, SLOT(setDocumentSize(QSizeF)));
+    connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
     connect (canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
     kwCanvasItem->updateSize();
 }
@@ -204,7 +202,7 @@ CQTextDocumentCanvas::ZoomMode CQTextDocumentCanvas::zoomMode() const
 void CQTextDocumentCanvas::updateZoomControllerAccordingToDocument(const KoDocument* document)
 {
     const KWDocument *kwDoc = static_cast<const KWDocument*>(document);
-    d->zoomController->setPageSize (kwDoc->pageManager()->begin().rect().size());
+    zoomController()->setPageSize (kwDoc->pageManager()->begin().rect().size());
 }
 
 void CQTextDocumentCanvas::updateControllerWithZoomMode()
@@ -215,8 +213,8 @@ void CQTextDocumentCanvas::updateControllerWithZoomMode()
         case ZOOM_PAGE: zoomMode = KoZoomMode::ZOOM_PAGE; break;
         case ZOOM_WIDTH: zoomMode = KoZoomMode::ZOOM_WIDTH; break;
     }
-    if(d->zoomController) {
-        d->zoomController->setZoom(zoomMode, 1.0);
+    if(zoomController()) {
+        zoomController()->setZoom(zoomMode, 1.0);
     }
 }
 
