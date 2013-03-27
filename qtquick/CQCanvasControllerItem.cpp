@@ -24,6 +24,8 @@
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
+#include <KoZoomMode.h>
+#include <KoZoomController.h>
 
 #include "CQCanvasController.h"
 #include "CQCanvasBase.h"
@@ -31,15 +33,18 @@
 class CQCanvasControllerItem::Private
 {
 public:
-    Private() : canvas(0), canvasController(0), lastX(0), lastY(0) { }
+    Private() : canvas(0), flickable(0), canvasController(0), lastX(0), lastY(0), zoom(1.0f) { }
 
     CQCanvasBase *canvas;
+    QDeclarativeItem* flickable;
     CQCanvasController *canvasController;
 
     QSize documentSize;
 
     float lastX;
     float lastY;
+
+    qreal zoom;
 };
 
 CQCanvasControllerItem::CQCanvasControllerItem(QDeclarativeItem* parent)
@@ -80,9 +85,44 @@ void CQCanvasControllerItem::setCanvas(QDeclarativeItem* canvas)
     }
 }
 
+QDeclarativeItem* CQCanvasControllerItem::flickable() const
+{
+    return d->flickable;
+}
+
+void CQCanvasControllerItem::setFlickable(QDeclarativeItem* item)
+{
+    if(item != d->flickable) {
+        if(item->metaObject()->indexOfProperty("contentWidth") == -1) {
+            qWarning() << Q_FUNC_INFO << "item does not look like a flickable, ignoring.";
+            return;
+        }
+
+        d->flickable = item;
+        d->flickable->setProperty("contentWidth", d->documentSize.width());
+        d->flickable->setProperty("contentHeight", d->documentSize.height());
+        emit flickableChanged();
+    }
+}
+
 QSize CQCanvasControllerItem::documentSize() const
 {
     return d->documentSize;
+}
+
+qreal CQCanvasControllerItem::zoom() const
+{
+    return d->zoom;
+}
+
+void CQCanvasControllerItem::setZoom(qreal newZoom)
+{
+    qreal tempZoom = qBound(KoZoomMode::minimumZoom(), newZoom, KoZoomMode::maximumZoom());
+    if(!qFuzzyCompare(d->zoom, tempZoom)) {
+        d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, tempZoom);
+        d->zoom = tempZoom;
+        emit zoomChanged();
+    }
 }
 
 void CQCanvasControllerItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -109,6 +149,12 @@ void CQCanvasControllerItem::updateDocumentSize(const QSize &size)
 {
     setSize(size);
     d->documentSize = size;
+
+    if(d->flickable) {
+        d->flickable->setProperty("contentWidth", d->documentSize.width());
+        d->flickable->setProperty("contentHeight", d->documentSize.height());
+    }
+
     emit documentSizeChanged();
 }
 
