@@ -43,10 +43,9 @@
 class CQPresentationCanvas::Private
 {
 public:
-    Private() : canvasBase(0), zoomController(0), view(0) { }
+    Private() : canvasBase(0), view(0) { }
 
     KoCanvasBase* canvasBase;
-    KoZoomController* zoomController;
     CQPresentationView* view;
 };
 
@@ -83,7 +82,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     paCanvasItem->setView(d->view);
 
     createAndSetZoomController(d->canvasBase);
-    d->view->setZoomController(d->zoomController);
+    d->view->setZoomController(zoomController());
     d->view->connectToZoomController();
 
     QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
@@ -109,9 +108,9 @@ void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 void CQPresentationCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
-    d->zoomController = new KoZoomController(canvasController(),
-                                             zoomHandler,
-                                             new KActionCollection(this));
+    setZoomController(new KoZoomController(canvasController(),
+                                           zoomHandler,
+                                           new KActionCollection(this)));
 
     KoPACanvasItem* canvasItem = static_cast<KoPACanvasItem*>(canvas);
 
@@ -126,7 +125,7 @@ void CQPresentationCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 
 void CQPresentationCanvas::updateDocumentSize(const QSize& size)
 {
-    d->zoomController->setDocumentSize(d->canvasBase->viewConverter()->viewToDocument(size), false);
+    zoomController()->setDocumentSize(d->canvasBase->viewConverter()->viewToDocument(size), false);
 }
 
 void CQPresentationCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)

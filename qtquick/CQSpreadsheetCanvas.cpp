@@ -39,10 +39,9 @@
 class CQSpreadsheetCanvas::Private
 {
 public:
-    Private() : canvasBase(0), zoomController(0) { }
+    Private() : canvasBase(0) { }
 
     KoCanvasBase* canvasBase;
-    KoZoomController* zoomController;
 };
 
 CQSpreadsheetCanvas::CQSpreadsheetCanvas(QDeclarativeItem* parent)
@@ -96,9 +95,9 @@ void CQSpreadsheetCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
 void CQSpreadsheetCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
-    d->zoomController = new KoZoomController(canvasController(),
-                                             zoomHandler,
-                                             new KActionCollection(this));
+    setZoomController(new KoZoomController(canvasController(),
+                                           zoomHandler,
+                                           new KActionCollection(this)));
 
     Calligra::Sheets::CanvasItem *canvasItem = dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas);
     // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
@@ -121,5 +120,5 @@ void CQSpreadsheetCanvas::geometryChanged(const QRectF& newGeometry, const QRect
 
 void CQSpreadsheetCanvas::updateDocumentSize(const QSize& size)
 {
-    d->zoomController->setDocumentSize(size, false);
+    zoomController()->setDocumentSize(size, false);
 }
