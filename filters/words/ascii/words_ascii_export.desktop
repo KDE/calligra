@@ -1,6 +1,17 @@
 [Desktop Entry]
 Type=Service
 Name=Words ASCII Export Filter
+Name[cs]=Exportní filtr formátu ASCII pro Words
+Name[de]=Words ASCII-Exportfilter
+Name[el]=Φίλτρο εξαγωγής ASCII του Words
+Name[mr]=वर्डस् ASCII निर्यात गाळणी
+Name[nl]=ASCII-exportfilter voor Words
+Name[pt]=Filtro de Exportação de ASCII para o Words
+Name[pt_BR]=Filtro de exportação de ASCII para Words
+Name[sk]=ASCII filter pre export z Words
+Name[sv]=Words ASCII-exportfilter
+Name[uk]=Фільтр імпорту ASCII для Words
+Name[x-test]=xxWords ASCII Export Filterxx
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/plain
 X-KDE-Weight=1
