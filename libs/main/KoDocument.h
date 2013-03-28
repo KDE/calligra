@@ -444,6 +444,7 @@ public:
      * progress to.
      */
     void setProgressProxy(KoProgressProxy *progressProxy);
+    KoProgressProxy* progressProxy() const;
 
     KoProgressProxy *progressProxy() const;
 
