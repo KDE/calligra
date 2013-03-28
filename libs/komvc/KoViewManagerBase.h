@@ -15,19 +15,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOAPPLICATIONBASE_H
-#define KOAPPLICATIONBASE_H
+#ifndef KOVIEWMANAGERBASE_H
+#define KOVIEWMANAGERBASE_H
 
 #include "komvc_export.h"
 
 /**
- * @brief The KoApplicationBase class provides the basic functionality for a Calligra
- * application object, such as handling style setup, splash screen and standard directories
+ * KoViewManagerBase is the base class for classes that manage documents inside a 
+ * single window. Examples are tabbed window managers, MDI window managers or
+ * SDI window managers.
  */
-class KOMVC_EXPORT KoApplicationBase
+class KOMVC_EXPORT KoViewManagerBase
 {
 public:
-    KoApplicationBase();
+    KoViewManagerBase();
 };
 
-#endif // KOAPPLICATIONBASE_H
+#endif // KOVIEWMANAGERBASE_H

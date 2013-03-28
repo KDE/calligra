@@ -15,19 +15,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOAPPLICATIONBASE_H
-#define KOAPPLICATIONBASE_H
+#ifndef KOVIEWFACTORY_H
+#define KOVIEWFACTORY_H
 
 #include "komvc_export.h"
+#include <QObject>
 
 /**
- * @brief The KoApplicationBase class provides the basic functionality for a Calligra
- * application object, such as handling style setup, splash screen and standard directories
+ * KoViewFactory is the base class for plugins that can create a view on
+ * a particular type of document.
  */
-class KOMVC_EXPORT KoApplicationBase
+class KOMVC_EXPORT KoViewFactory : public QObject
 {
+    Q_OBJECT
 public:
-    KoApplicationBase();
+    explicit KoViewFactory(QObject *parent = 0);
+    
+signals:
+    
+public slots:
+    
 };
 
-#endif // KOAPPLICATIONBASE_H
+#endif // KOVIEWFACTORY_H

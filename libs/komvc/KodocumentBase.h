@@ -18,9 +18,14 @@
 #ifndef KODOCUMENTBASE_H
 #define KODOCUMENTBASE_H
 
+#include "komvc_export.h"
 #include <QObject>
 
-class KodocumentBase : public QObject
+/**
+ * @brief The KodocumentBase class is the base class for classes that can load, save and export
+ * documents in one or more mime types. The KoDocumentBase class does not provide any gui.
+ */
+class KOMVC_EXPORT KodocumentBase : public QObject
 {
     Q_OBJECT
 public:

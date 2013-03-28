@@ -7,6 +7,10 @@ set(komvc_LIB_SRCS
     KoDocumentManager.cpp
     KoMainwindowBase.cpp
     KoViewBase.cpp
+    KoDocumentFactory.cpp
+    KoViewManagerFactory.cpp
+    KoViewManagerBase.cpp
+    KoViewFactory.cpp
 )
 
 kde4_add_library(komvc SHARED ${komvc_LIB_SRCS})
@@ -27,6 +31,10 @@ install( FILES
     KoMainwindowBase.h
     komvc_export.h
     KoViewBase.h
+    KoDocumentFactory.h
+    KoViewManagerFactory.h
+    KoViewManagerBase.h
+    KoViewFactory.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 COMPONENT Devel)

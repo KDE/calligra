@@ -18,7 +18,13 @@
 #ifndef KOVIEWBASE_H
 #define KOVIEWBASE_H
 
-class KoViewBase
+#include "komvc_export.h"
+
+/**
+ * KoViewBase is the base class for classes that can provide a certain
+ * view on a particular document type.
+ */
+class KOMVC_EXPORT KoViewBase
 {
 public:
     KoViewBase();

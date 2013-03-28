@@ -18,9 +18,15 @@
 #ifndef KODOCUMENTMANAGER_H
 #define KODOCUMENTMANAGER_H
 
+#include "komvc_export.h"
 #include <QObject>
 
-class KoDocumentManager : public QObject
+/**
+ * @brief The KoDocumentManager class handles documents, views and windows for the application.
+ * A single application instance can have multiple open multiple windows, multiple views per window and
+ * documents that are visible in more than one view and window.
+ */
+class KOMVC_EXPORT KoDocumentManager : public QObject
 {
     Q_OBJECT
 public:

@@ -18,7 +18,13 @@
 #ifndef KOMAINWINDOWBASE_H
 #define KOMAINWINDOWBASE_H
 
-class KoMainwindowBase
+#include "komvc_export.h"
+
+/**
+ * @brief The KoMainwindowBase class is the base class for main windows. Main windows can show
+ * one or more views on one or more documents.
+ */
+class KOMVC_EXPORT KoMainwindowBase
 {
 public:
     KoMainwindowBase();

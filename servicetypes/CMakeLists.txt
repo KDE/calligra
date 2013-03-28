@@ -7,6 +7,9 @@ install(
         calligra_deferred_plugin.desktop
         calligra_filter.desktop
         calligra_part.desktop
+        calligra_document.desktop
+        calligra_view.desktop
+        calligra_view_manager.desktop
     DESTINATION
         ${SERVICETYPES_INSTALL_DIR}
 )

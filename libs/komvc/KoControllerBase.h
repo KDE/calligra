@@ -18,9 +18,14 @@
 #ifndef KOCONTROLLERBASE_H
 #define KOCONTROLLERBASE_H
 
+#include "komvc_export.h"
 #include <QObject>
 
-class KoControllerBase : public QObject
+/**
+ * @brief The KoControllerBase class is a base class for classes that handle input that
+ * modifies a document. It provides the action list and input manager.
+ */
+class KOMVC_EXPORT KoControllerBase : public QObject
 {
     Q_OBJECT
 public:

@@ -15,19 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOAPPLICATIONBASE_H
-#define KOAPPLICATIONBASE_H
+#include "KoViewManagerBase.h"
 
-#include "komvc_export.h"
-
-/**
- * @brief The KoApplicationBase class provides the basic functionality for a Calligra
- * application object, such as handling style setup, splash screen and standard directories
- */
-class KOMVC_EXPORT KoApplicationBase
+KoViewManagerBase::KoViewManagerBase()
 {
-public:
-    KoApplicationBase();
-};
-
-#endif // KOAPPLICATIONBASE_H
+}
