@@ -39,9 +39,12 @@
 class CQSpreadsheetCanvas::Private
 {
 public:
-    Private() : canvasBase(0) { }
+    Private() : canvas(0), document(0), currentSheet(0) { }
 
-    KoCanvasBase* canvasBase;
+    Calligra::Sheets::CanvasItem* canvas;
+    Calligra::Sheets::Doc * document;
+
+    int currentSheet;
 };
 
 CQSpreadsheetCanvas::CQSpreadsheetCanvas(QDeclarativeItem* parent)
@@ -55,6 +58,20 @@ CQSpreadsheetCanvas::~CQSpreadsheetCanvas()
     delete d;
 }
 
+int CQSpreadsheetCanvas::currentSheet() const
+{
+    return d->currentSheet;
+}
+
+void CQSpreadsheetCanvas::setCurrentSheet(int sheet)
+{
+    sheet = qBound(0, sheet, d->document->map()->count() - 1);
+    if(sheet != d->currentSheet) {
+        d->currentSheet = sheet;
+        d->canvas->setActiveSheet(d->document->map()->sheet(d->currentSheet));
+        emit currentSheetChanged();
+    }
+}
 
 void CQSpreadsheetCanvas::openFile(const QString& uri)
 {
@@ -65,22 +82,21 @@ void CQSpreadsheetCanvas::openFile(const QString& uri)
     }
 
     KoPart* part = service->createInstance<KoPart>();
-    Calligra::Sheets::Doc * document = static_cast<Calligra::Sheets::Doc*> (part->document());
-    document->setAutoSave(0);
-    document->setCheckAutoSaveFile(false);
-    document->openUrl (KUrl (uri));
+    d->document = static_cast<Calligra::Sheets::Doc*> (part->document());
+    d->document->setAutoSave(0);
+    d->document->setCheckAutoSaveFile(false);
+    d->document->openUrl (KUrl (uri));
 
-    d->canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
-    createAndSetCanvasControllerOn(d->canvasBase);
-    createAndSetZoomController(d->canvasBase);
+    d->canvas = dynamic_cast<Calligra::Sheets::CanvasItem*> (part->canvasItem());
+    createAndSetCanvasControllerOn(d->canvas);
+    createAndSetZoomController(d->canvas);
 
-    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
-    graphicsWidget->setParentItem(this);
-    graphicsWidget->installEventFilter(this);
-    graphicsWidget->setVisible(true);
-    graphicsWidget->setGeometry(x(), y(), width(), height());
+    d->canvas->setParentItem(this);
+    d->canvas->installEventFilter(this);
+    d->canvas->setVisible(true);
+    d->canvas->setGeometry(x(), y(), width(), height());
 
-    Calligra::Sheets::Sheet *sheet = document->map()->sheet(0);
+    Calligra::Sheets::Sheet *sheet = d->document->map()->sheet(0);
     if(sheet) {
         updateDocumentSize(sheet->documentSize().toSize());
     }
@@ -112,11 +128,8 @@ void CQSpreadsheetCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 
 void CQSpreadsheetCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    if (d->canvasBase) {
-        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
-        if (widget) {
-            widget->setGeometry(newGeometry);
-        }
+    if (d->canvas) {
+        d->canvas->setGeometry(newGeometry);
     }
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }

@@ -30,10 +30,17 @@ class KoCanvasBase;
 class CQSpreadsheetCanvas : public CQCanvasBase
 {
     Q_OBJECT
+    Q_PROPERTY(int currentSheet READ currentSheet WRITE setCurrentSheet NOTIFY currentSheetChanged)
 
 public:
     explicit CQSpreadsheetCanvas(QDeclarativeItem* parent = 0);
     virtual ~CQSpreadsheetCanvas();
+
+    int currentSheet() const;
+    void setCurrentSheet(int sheet);
+
+Q_SIGNALS:
+    void currentSheetChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
