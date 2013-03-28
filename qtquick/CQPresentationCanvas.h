@@ -29,10 +29,17 @@ class KoCanvasBase;
 class CQPresentationCanvas : public CQCanvasBase
 {
     Q_OBJECT
+    Q_PROPERTY(int currentSlide READ currentSlide WRITE setCurrentSlide NOTIFY currentSlideChanged)
 
 public:
     explicit CQPresentationCanvas(QDeclarativeItem* parent = 0);
     virtual ~CQPresentationCanvas();
+
+    int currentSlide() const;
+    void setCurrentSlide(int slide);
+
+Q_SIGNALS:
+    void currentSlideChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);

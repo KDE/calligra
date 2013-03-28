@@ -43,10 +43,13 @@
 class CQPresentationCanvas::Private
 {
 public:
-    Private() : canvasBase(0), view(0) { }
+    Private() : canvasBase(0), view(0), currentSlide(0) { }
 
     KoCanvasBase* canvasBase;
     CQPresentationView* view;
+    KPrDocument* document;
+
+    int currentSlide;
 };
 
 CQPresentationCanvas::CQPresentationCanvas(QDeclarativeItem* parent)
@@ -60,6 +63,21 @@ CQPresentationCanvas::~CQPresentationCanvas()
     delete d;
 }
 
+int CQPresentationCanvas::currentSlide() const
+{
+    return d->currentSlide;
+}
+
+void CQPresentationCanvas::setCurrentSlide(int slide)
+{
+    slide = qBound(0, slide, d->document->pageCount() - 1);
+    if(slide != d->currentSlide) {
+        d->currentSlide = slide;
+        d->view->doUpdateActivePage(d->document->pageByIndex(slide, false));
+        emit currentSlideChanged();
+    }
+}
+
 void CQPresentationCanvas::openFile(const QString& uri)
 {
     KService::Ptr service = KService::serviceByDesktopName("stagepart");
@@ -69,16 +87,16 @@ void CQPresentationCanvas::openFile(const QString& uri)
     }
 
     KoPart *part = service->createInstance<KoPart>();
-    KPrDocument* document = dynamic_cast<KPrDocument*>(part->document());
-    document->setAutoSave(0);
-    document->setCheckAutoSaveFile(false);
-    document->openUrl (KUrl (uri));
+    d->document = dynamic_cast<KPrDocument*>(part->document());
+    d->document->setAutoSave(0);
+    d->document->setCheckAutoSaveFile(false);
+    d->document->openUrl (KUrl (uri));
 
     KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem*>(part->canvasItem());
     d->canvasBase = paCanvasItem;
     createAndSetCanvasControllerOn(d->canvasBase);
 
-    d->view = new CQPresentationView(canvasController(), static_cast<KoPACanvasBase*>(d->canvasBase), dynamic_cast<KPrDocument*>(document));
+    d->view = new CQPresentationView(canvasController(), static_cast<KoPACanvasBase*>(d->canvasBase), dynamic_cast<KPrDocument*>(d->document));
     paCanvasItem->setView(d->view);
 
     createAndSetZoomController(d->canvasBase);
@@ -91,9 +109,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
-    d->view->doUpdateActivePage(document->pageByIndex(0, false));
-
-    //resizeCanvas(QSizeF(width(), height()));
+    d->view->doUpdateActivePage(d->document->pageByIndex(0, false));
 }
 
 void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
