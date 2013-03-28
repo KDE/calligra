@@ -536,6 +536,7 @@ private:
     Private * const d;
 };
 
+Q_DECLARE_METATYPE(KoCharacterStyle *)
 Q_DECLARE_METATYPE(QSharedPointer<KoCharacterStyle>)
 
 #endif
