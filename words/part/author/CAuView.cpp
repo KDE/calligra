@@ -21,10 +21,15 @@
 #include "CAuView.h"
 #include "CAuFactory.h"
 #include "CoverImage.h"
+#include "CoverSelectionDialog.h"
 
 #include "KWDocument.h"
+#include "../dockers/KWStatisticsWidget.h"
+#include "../dockers/KWStatisticsDocker.h"
 
 #include <KoPart.h>
+#include <KoDockRegistry.h>
+#include <KStatusBar>
 
 #include <QWidget>
 #include <QFileDialog>
@@ -37,12 +42,18 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
         setComponentData(CAuFactory::componentData());
         setXMLFile("author.rc");
         setupActions();
+
+        KWStatisticsWidget *stats = new KWStatisticsWidget(this,true);
+        stats->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
+        stats->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
+        statusBar()->addWidget(stats);
+
 }
 
 void CAuView::setupActions()
 {
     // -------- Book
-    KAction *action = new KAction(i18n("Insert Cover Image"), this);
+    KAction *action = new KAction(i18n("Select Cover Image..."), this);
     actionCollection()->addAction("insert_coverimage", action);
     action->setToolTip(i18n("Set cover for your ebook"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectCoverImage()));
@@ -50,13 +61,21 @@ void CAuView::setupActions()
 
 void CAuView::selectCoverImage()
 {
-    CoverImage cover;
+    //first "this" for CAuView context and second one for window parent
+    CoverSelectionDialog* coverDialog = new CoverSelectionDialog(this,this);
+    coverDialog->show();
+}
 
-    QString path = QFileDialog::getOpenFileName(0, i18n("Open File"),
-                                                QDir::currentPath(),
-                                                      i18n("Images (*.png *.xpm *.jpg)"));
-    if (!path.isEmpty()) {
-        QPair<QString, QByteArray> coverData = cover.readCoverImage(path);
-        kwdocument()->setCoverImage(coverData);
-    }
+QPair<QString, QByteArray> CAuView::getCurrentCoverImage()
+{
+    /*if(kwdocument()->coverImage().second.isNull())
+        qDebug() << "AUTHOR : get problem";
+    else
+        qDebug() << "AUTHOR : get ok";*/
+    return (kwdocument()->coverImage());
+}
+
+void CAuView::setCurrentCoverImage(QPair<QString, QByteArray> img)
+{
+    kwdocument()->setCoverImage(img);
 }
