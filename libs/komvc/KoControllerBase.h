@@ -21,6 +21,8 @@
 #include "komvc_export.h"
 #include <QObject>
 
+class KoMainWindowBase;
+
 /**
  * @brief The KoControllerBase class is a base class for classes that handle input that
  * modifies a document. It provides the action list and input manager.
@@ -30,6 +32,11 @@ class KOMVC_EXPORT KoControllerBase : public QObject
     Q_OBJECT
 public:
     explicit KoControllerBase(QObject *parent = 0);
+
+    virtual void createToolbars(KoMainWindowBase *mainWindow) = 0;
+    virtual void createMenus(KoMainWindowBase *mainWindow) = 0;
+    virtual void createDockers(KoMainWindowBase *mainWindow) = 0;
+    virtual void createStatusbar(KoMainWindowBase *mainWindow) = 0;
 
 };
 
