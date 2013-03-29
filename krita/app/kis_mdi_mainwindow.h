@@ -31,10 +31,11 @@ class KisMdiMainWindow : public QMainWindow, public KoMainWindowBase
     Q_OBJECT
 public:
     explicit KisMdiMainWindow(KoDocumentManager *documentManager, QWidget *parent = 0);
+    virtual ~KisMdiMainWindow();
 
-signals:
-    
-public slots:
+protected:
+
+    void closeEvent(QCloseEvent *event);
 
 private:
     QMdiArea *m_mdiArea;

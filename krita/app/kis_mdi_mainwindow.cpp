@@ -47,6 +47,12 @@ KisMdiMainWindow::KisMdiMainWindow(KoDocumentManager *documentManager, QWidget *
 
 KisMdiMainWindow::~KisMdiMainWindow()
 {
-    saveState(0);
-    saveGeometry();
+}
+
+void KisMdiMainWindow::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.setValue("qrita/mainwindow/geometry", saveState(0));
+    settings.setValue("qrita/mainwindow/windowState", saveGeometry());
+    QMainWindow::closeEvent(event);
 }
