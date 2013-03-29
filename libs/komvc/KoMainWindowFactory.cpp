@@ -15,22 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOCONTROLLERBASE_H
-#define KOCONTROLLERBASE_H
+#include "KoMainWindowFactory.h"
 
-#include "komvc_export.h"
-#include <QObject>
-
-/**
- * @brief The KoControllerBase class is a base class for classes that handle input that
- * modifies a document. It provides the action list and input manager.
- */
-class KOMVC_EXPORT KoControllerBase : public QObject
+KoMainWindowFactory::KoMainWindowFactory(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit KoControllerBase(QObject *parent = 0);
-
-};
-
-#endif // KOCONTROLLERBASE_H
+}

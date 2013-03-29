@@ -22,16 +22,19 @@
 
 #include <KoDocumentFactory.h>
 #include <KoViewFactory.h>
+#include <KoMainWindowFactory.h>
 
 class KoDocumentManager::Private {
 public:
     Private()
         : viewFactory(0)
         , documentFactory(0)
+        , mainwindowFactory(0)
     {}
 
     KoViewFactory *viewFactory;
     KoDocumentFactory *documentFactory;
+    KoMainWindowFactory *mainwindowFactory;
 };
 
 KoDocumentManager::KoDocumentManager(QObject *parent)
@@ -42,16 +45,28 @@ KoDocumentManager::KoDocumentManager(QObject *parent)
 
 void KoDocumentManager::setDocumentFactory(KoDocumentFactory *documentFactory)
 {
+    d->documentFactory = documentFactory;
 }
 
 void KoDocumentManager::setViewFactory(KoViewFactory *viewFactory)
 {
+    d->viewFactory = viewFactory;
+}
+
+void KoDocumentManager::setMainWindowFactory(KoMainWindowFactory *mainWindowFactory)
+{
+    d->mainwindowFactory = mainWindowFactory;
 }
 
 bool KoDocumentManager::initialize(const QStringList &urls)
 {
+    KoMainWindowBase *mainWindow = d->mainwindowFactory->create(this);
+    Q_UNUSED(mainWindow);
     foreach(const QString &url, urls) {
         qDebug() << url;
     }
+
+
+
     return true;
 }

@@ -23,6 +23,7 @@
 
 class KoDocumentFactory;
 class KoViewFactory;
+class KoMainWindowFactory;
 
 class QStringList;
 
@@ -39,6 +40,7 @@ public:
     
     void setDocumentFactory(KoDocumentFactory *documentFactory);
     void setViewFactory(KoViewFactory *viewFactory);
+    void setMainWindowFactory(KoMainWindowFactory *mainWindowFactory);
 
     /**
      * Loads all the documents that were given on the command line
