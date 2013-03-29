@@ -5,7 +5,7 @@ set(komvc_LIB_SRCS
     KoControllerBase.cpp
     KodocumentBase.cpp
     KoDocumentManager.cpp
-    KoMainwindowBase.cpp
+    KoMainWindowBase.cpp
     KoViewBase.cpp
     KoDocumentFactory.cpp
     KoViewManagerFactory.cpp
@@ -28,7 +28,7 @@ install( FILES
     KoControllerBase.h
     KodocumentBase.h
     KoDocumentManager.h
-    KoMainwindowBase.h
+    KoMainWindowBase.h
     komvc_export.h
     KoViewBase.h
     KoDocumentFactory.h

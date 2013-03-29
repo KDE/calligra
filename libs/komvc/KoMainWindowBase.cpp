@@ -17,6 +17,6 @@
  */
 #include "KoMainwindowBase.h"
 
-KoMainwindowBase::KoMainwindowBase()
+KoMainWindowBase::KoMainWindowBase()
 {
 }

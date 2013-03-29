@@ -24,10 +24,10 @@
  * @brief The KoMainwindowBase class is the base class for main windows. Main windows can show
  * one or more views on one or more documents.
  */
-class KOMVC_EXPORT KoMainwindowBase
+class KOMVC_EXPORT KoMainWindowBase
 {
 public:
-    KoMainwindowBase();
+    KoMainWindowBase();
 };
 
 #endif // KOMAINWINDOWBASE_H
