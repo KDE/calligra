@@ -15,7 +15,7 @@ set(komvc_LIB_SRCS
 
 kde4_add_library(komvc SHARED ${komvc_LIB_SRCS})
 
-target_link_libraries(komvc koplugin)
+target_link_libraries(komvc koplugin ${QT_QTGUI_LIBRARY})
 
 set_target_properties(komvc PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -35,6 +35,7 @@ install( FILES
     KoViewManagerFactory.h
     KoViewManagerBase.h
     KoViewFactory.h
+    KoDocumentFactory.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}
 COMPONENT Devel)

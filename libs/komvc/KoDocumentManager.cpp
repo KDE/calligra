@@ -17,7 +17,41 @@
  */
 #include "KoDocumentManager.h"
 
-KoDocumentManager::KoDocumentManager(QObject *parent) :
-    QObject(parent)
+#include <QStringList>
+#include <QDebug>
+
+#include <KoDocumentFactory.h>
+#include <KoViewFactory.h>
+
+class KoDocumentManager::Private {
+public:
+    Private()
+        : viewFactory(0)
+        , documentFactory(0)
+    {}
+
+    KoViewFactory *viewFactory;
+    KoDocumentFactory *documentFactory;
+};
+
+KoDocumentManager::KoDocumentManager(QObject *parent)
+    : QObject(parent)
+    , d(new Private())
 {
+}
+
+void KoDocumentManager::setDocumentFactory(KoDocumentFactory *documentFactory)
+{
+}
+
+void KoDocumentManager::setViewFactory(KoViewFactory *viewFactory)
+{
+}
+
+bool KoDocumentManager::initialize(const QStringList &urls)
+{
+    foreach(const QString &url, urls) {
+        qDebug() << url;
+    }
+    return true;
 }

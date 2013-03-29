@@ -21,6 +21,11 @@
 #include "komvc_export.h"
 #include <QObject>
 
+class KoDocumentFactory;
+class KoViewFactory;
+
+class QStringList;
+
 /**
  * @brief The KoDocumentManager class handles documents, views and windows for the application.
  * A single application instance can have multiple open multiple windows, multiple views per window and
@@ -32,10 +37,22 @@ class KOMVC_EXPORT KoDocumentManager : public QObject
 public:
     explicit KoDocumentManager(QObject *parent = 0);
     
+    void setDocumentFactory(KoDocumentFactory *documentFactory);
+    void setViewFactory(KoViewFactory *viewFactory);
+
+    /**
+     * Loads all the documents that were given on the command line
+     * and handles autosave documents
+     */
+    virtual bool initialize(const QStringList &urls);
+
 signals:
     
 public slots:
-    
+private:
+
+    class Private;
+    Private * const d;
 };
 
 #endif // KODOCUMENTMANAGER_H

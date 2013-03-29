@@ -20,6 +20,13 @@
 
 #include "komvc_export.h"
 
+class QPixmap;
+class QString;
+class QCoreApplication;
+
+class KoDocumentManager;
+
+
 /**
  * @brief The KoApplicationBase class provides the basic functionality for a Calligra
  * application object, such as handling style setup, splash screen and standard directories
@@ -27,7 +34,19 @@
 class KOMVC_EXPORT KoApplicationBase
 {
 public:
+
     KoApplicationBase();
+    virtual ~KoApplicationBase();
+
+    void setApplication(QCoreApplication *app);
+    bool start(KoDocumentManager *documentManager);
+    void setSplashScreen(const QPixmap &splash);
+    void showSplashMessage(const QString &message);
+
+private:
+    class Private;
+    Private * const d;
+
 };
 
 #endif // KOAPPLICATIONBASE_H
