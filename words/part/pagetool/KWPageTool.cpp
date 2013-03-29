@@ -54,7 +54,6 @@ KWPageTool::KWPageTool(KoCanvasBase *canvas)
     m_resizeTimer = new QTimer(this);
     connect( m_resizeTimer, SIGNAL(timeout()), this, SLOT(resizePage()));
     m_resizeTimer->stop();
-    m_canvas->view()->disableAutoScroll();
 }
 
 bool KWPageTool::wantsAutoScroll() const
@@ -65,30 +64,35 @@ bool KWPageTool::wantsAutoScroll() const
 void KWPageTool::resizePage()
 {
     KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
-    QPoint posSelectedTmp = m_canvas->mapFromGlobal(QCursor::pos());
 
     int widthResize = m_canvas->viewConverter()->viewToDocumentX(m_mousePosTmp->x() - QCursor::pos().x());
     int heightResize = m_canvas->viewConverter()->viewToDocumentY(m_mousePosTmp->y() - QCursor::pos().y());
-    if( heightResize != 0 ) qDebug() << heightResize;
+
+    float heightTmp = (m_canvas->viewConverter()->viewToDocumentY(layout.height) + 21) * m_document->pageCount();
+
     switch(selection) {
     case BLEFT:
-        layout.width += widthResize;
+        layout.width += widthResize*2;
         break;
     case BRIGHT:
-        layout.width -= widthResize;
+        layout.width -= widthResize*2;
         break;
     case BTOP:
-        layout.height += heightResize;
+        layout.height += heightResize*2;
         break;
     case BBOTTOM:
-        layout.height -= heightResize;
+        layout.height -= heightResize*2;
         break;
     default:
         qDebug() << "Error!";
     }
+    qDebug() << m_canvas->canvasController()->scrollBarValue().y()*(layout.height*m_document->pageCount())/heightTmp;
+    qDebug() << (layout.height*m_document->pageCount())/heightTmp;
 
+    float heightNew = (m_canvas->viewConverter()->viewToDocumentY(layout.height) + 21) * m_document->pageCount();
+    QPoint scrollNewPos(0,m_canvas->canvasController()->scrollBarValue().y()*(heightNew/heightTmp));
+    m_canvas->canvasController()->setScrollBarValue(scrollNewPos);
     m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
-
     layout.width = std::max(layout.width,qreal(200));
     layout.height = std::max(layout.height,qreal(200));
     m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
@@ -152,7 +156,7 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
         m_resizeTimer->start(10);
     }
-    else if (yMouse > layout.height - 10 ) {
+    else if (yMouse > layout.height - 10 && yMouse < layout.height) {
         selection = BBOTTOM;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
         m_resizeTimer->start(10);
@@ -191,7 +195,7 @@ void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
         }
         else if ((yMouse > topMargin - 10 && yMouse < topMargin + 10)
               || (yMouse > bottomMargin - 10 && yMouse < bottomMargin + 10)
-              || (yMouse < 10 || yMouse > layout.height - 10)) {
+              || (yMouse < 10 || (yMouse > layout.height - 10 && yMouse < layout.height))) {
             useCursor(Qt::SplitVCursor);
         }
         else{
