@@ -18,9 +18,13 @@
  */
 #include "kis_application.h"
 
+#include <QPixmap>
+
+#include "KoDocumentManager.h"
+
 #include "kis_view_factory.h"
 #include "kis_document_factory.h"
-#include "KoDocumentManager.h"
+#include "../data/splash/splash_screen.xpm"
 
 KisApplication::KisApplication(int &argc, char **argv, QObject *parent)
     : QApplication(argc, argv)
@@ -29,6 +33,9 @@ KisApplication::KisApplication(int &argc, char **argv, QObject *parent)
     , m_documentFactory(new KisDocumentFactory(this))
     , m_viewFactory(new KisViewFactory(this))
 {
+    Q_UNUSED(parent)
+
+    setSplashScreen(QPixmap(splash_screen_xpm));
     // Fix the style, outside KDE only Plastique and Oxygen are good enough
     if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
         setStyle("Plastique");
