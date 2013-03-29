@@ -24,6 +24,8 @@
 
 #include "kis_view_factory.h"
 #include "kis_document_factory.h"
+#include "kis_mdi_mainwindow.h"
+
 #include "../data/splash/splash_screen.xpm"
 
 KisApplication::KisApplication(int &argc, char **argv, QObject *parent)
@@ -43,10 +45,13 @@ KisApplication::KisApplication(int &argc, char **argv, QObject *parent)
     }
 
     KoApplicationBase::setApplication(this);
-    setApplicationName("qrita");
+    QCoreApplication::setApplicationName("qrita");
+    QCoreApplication::setOrganizationName("Krita Foundation");
+    QCoreApplication::setOrganizationDomain("krita.org");
 
     m_documentManager->setViewFactory(m_viewFactory);
     m_documentManager->setDocumentFactory(m_documentFactory);
+    m_documentManager->setMainWindowFactory(new KisMdiMainWindowFactory);
 }
 
 

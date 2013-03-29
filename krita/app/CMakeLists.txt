@@ -6,6 +6,7 @@ set( qrita_SRCS
     kis_document_factory.cpp
     kis_main.cpp
     kis_view_factory.cpp
+    kis_mdi_mainwindow.cpp
 )
 
 kde4_add_app_icon(qrita "${CMAKE_CURRENT_SOURCE_DIR}/../pics/app/*.png")

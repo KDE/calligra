@@ -30,4 +30,3 @@ extern "C" int main(int argc, char **argv)
     int state = app.exec();
     return state;
 }
-
