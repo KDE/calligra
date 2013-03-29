@@ -73,6 +73,12 @@ private:
     void setMarginInPx(Selection p_selection,int p_postionX,int p_positionY);
     int xMouseInPage(int p_positionX);
     int yMouseInPage(int p_positionY);
+
+    void createHeader();
+    void createFooter();
+    //To check if header/footer is already created
+    bool header, footer;
+
 };
 
 #endif

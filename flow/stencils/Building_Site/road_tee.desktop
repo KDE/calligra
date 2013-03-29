@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Road Tee
+Name[bs]=Putna meta
 Name[ca]=Carretera T
 Name[ca@valencia]=Carretera T
+Name[da]=Vej-t
+Name[de]=Straßenabzweig
 Name[el]=Υποστήριγμα δρόμου
 Name[es]=Unión en forma de T de carreteras
 Name[et]=T-kujuline ristmik
@@ -20,4 +23,5 @@ Name[sk]=Cestný prierez
 Name[sv]=T-vägkorsning
 Name[uk]=Перехрестя у формі «Т»
 Name[x-test]=xxRoad Teexx
+Name[zh_CN]=丁字路口
 Name[zh_TW]=T 型路口

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Gateway-Parallel-AND
+Name[bs]=Gateway paralelno i
 Name[ca]=Passarel·la-Paral·lel-AND
 Name[ca@valencia]=Passarel·la-Paral·lel-AND
+Name[de]=Paralleles Gateway
 Name[el]=Πύλη-Parallel-AND
 Name[es]=Puerta de enlace Y paralela
 Name[et]=Paralleelne (AND) värav
@@ -20,4 +22,5 @@ Name[sk]=Gateway-Parallel-AND
 Name[sv]=Port-parallell-och
 Name[uk]=Шлюз паралельного ТА
 Name[x-test]=xxGateway-Parallel-ANDxx
+Name[zh_CN]=网关-并行 AND
 Name[zh_TW]=閘道─Parallel-AND

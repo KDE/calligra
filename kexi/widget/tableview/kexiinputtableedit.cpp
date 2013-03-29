@@ -119,10 +119,10 @@ void KexiInputTableEdit::init()
     m_calculatedCell = false;
 
 #if 0 //js TODO
-    connect(m_cview->completionBox(), SIGNAL(activated(const QString &)),
-            this, SLOT(completed(const QString &)));
-    connect(m_cview->completionBox(), SIGNAL(highlighted(const QString &)),
-            this, SLOT(completed(const QString &)));
+    connect(m_cview->completionBox(), SIGNAL(activated(QString)),
+            this, SLOT(completed(QString)));
+    connect(m_cview->completionBox(), SIGNAL(highlighted(QString)),
+            this, SLOT(completed(QString)));
     m_cview->completionBox()->setTabHandling(true);
 #endif
 }

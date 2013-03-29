@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=Small Business
 Name[bg]=Малък бизнес
+Name[bs]=Malo preduzeće
 Name[ca]=Petit negoci
 Name[ca@valencia]=Petit negoci
+Name[da]=Lille virksomhed
+Name[de]=Mittelstandsunternehmen
 Name[el]=Μικρή επιχείρηση
 Name[es]=Empresa pequeña
 Name[et]=Väikeettevõte
@@ -12,6 +15,7 @@ Name[gl]=Empresa pequena
 Name[hu]=Kisvállalkozás
 Name[it]=Piccola azienda
 Name[kk]=Шағын іскерлік
+Name[lt]=Nedidelis verslas
 Name[nb]=Småbedrift
 Name[nds]=Lüttbedrief
 Name[nl]=Midden en klein bedrijf
@@ -20,6 +24,7 @@ Name[pt]=Micro-Negócios
 Name[pt_BR]=Pequenos Negócios
 Name[ru]=Малый бизнес
 Name[sk]=Small Business
+Name[sl]=Majhna podjetja
 Name[sv]=Småföretag
 Name[uk]=Невеликий бізнес
 Name[x-test]=xxSmall Businessxx

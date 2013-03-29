@@ -26,6 +26,7 @@
 const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
 {
     KoGenStyle style(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
+    style.setAutoStyleInStylesDotXml(m_sticky);
 
     bool useMasterBackground = false;
     if (page.nodeName() == "PAGE") {
@@ -41,8 +42,6 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             style.addProperty("draw:fill", "none");
         }
     }
-
-    style.setAutoStyleInStylesDotXml(m_sticky);
 
     if (!page.hasChildNodes()) { //we check if this is an empty page
         return m_styles.insert(style, "dp");
@@ -408,7 +407,7 @@ const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode & objects, co
     // set that we work on master
     m_sticky = true;
 
-    KoGenStyle style(KoGenStyle::MasterPageStyle, "");
+    KoGenStyle style(KoGenStyle::MasterPageStyle);
     style.addAttribute("style:page-layout-name", createPageLayout());
 
     style.addAttribute("draw:style-name", createPageStyle(masterBackground));
@@ -431,6 +430,8 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
 {
     //A graphic style is wiely used by a broad type of objects, hence can have many different properties
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(m_sticky);
+
     KoXmlElement textObject(element.namedItem("TEXTOBJ").toElement());
     if (!textObject.isNull()) {
         if (textObject.hasAttribute("verticalAlign")) {
@@ -649,7 +650,6 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
     }
 
 //     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standard Graphic style
-    style.setAutoStyleInStylesDotXml(m_sticky);
 
     return m_styles.insert(style, "gr");
 }
@@ -850,6 +850,7 @@ const QString Filterkpr2odf::createHatchStyle(int brushStyle, QString fillColor)
 const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement& element)
 {
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
+    style.setAutoStyleInStylesDotXml(m_sticky);
 
     QString textAlign;
     if (element.hasAttribute("align")) {
@@ -970,6 +971,7 @@ QString Filterkpr2odf::convertBorder(const KoXmlElement& border)
 const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
 {
     KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
+    style.setAutoStyleInStylesDotXml(m_sticky);
 
     if (element.hasAttribute("family")) {
         style.addProperty("style:font-name", element.attribute("family"));
@@ -1065,6 +1067,7 @@ const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
 const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
 {
     KoGenStyle style(KoGenStyle::ListAutoStyle);
+    style.setAutoStyleInStylesDotXml(m_sticky);
 
     static const int s_oasisCounterTypes[] = { '\0', '1', 'a', 'A', 'i', 'I',
             '\0', '\0', // custombullet, custom

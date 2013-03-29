@@ -2,6 +2,7 @@
 Type=Service
 Name=Calligra Document Info Properties Page
 Name[bg]=Страница с данни за документ на Calligra
+Name[bs]=Informativna Stranica Osobina Calligra dokumenata
 Name[ca]=Pàgina d'informació de propietats de documents Calligra
 Name[ca@valencia]=Pàgina d'informació de propietats de documents Calligra
 Name[cs]=Stránka s informacemi o dokumentu Calligra
@@ -25,6 +26,7 @@ Name[pt]=Página de Propriedades do Documento do Calligra
 Name[pt_BR]=Página de propriedades do documento do Calligra
 Name[ru]=Страница сведений о документе Calligra
 Name[sk]=Informačná strana dokumentu Calligra
+Name[sl]=Stran z lastnostmi dokumenta za Calligro
 Name[sv]=Calligra-sida med dokumentinformation
 Name[uk]=Сторінка властивостей документу Calligra
 Name[x-test]=xxCalligra Document Info Properties Pagexx

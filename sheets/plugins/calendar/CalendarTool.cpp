@@ -197,8 +197,8 @@ QWidget* CalendarTool::createOptionWidget()
     CellTool::createOptionWidget();
 
     CalendarToolWidget* widget =  new CalendarToolWidget(canvas()->canvasWidget());
-    connect(widget, SIGNAL(insertCalendar(const QDate&, const QDate&)),
-            this, SLOT(insertCalendar(const QDate&, const QDate&)));
+    connect(widget, SIGNAL(insertCalendar(QDate,QDate)),
+            this, SLOT(insertCalendar(QDate,QDate)));
     return widget;
 }
 

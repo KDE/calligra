@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Workgroup switch
 Name[bg]=Комутатор за работна група
+Name[bs]=Svič za radne grupe
 Name[ca]=Commutador de treball de grup
 Name[ca@valencia]=Commutador de treball de grup
+Name[da]=Workgroup switch
 Name[de]=Arbeitsgruppen-Switch
 Name[el]=Workgroup switch
 Name[es]=Conmutador Workgroup
@@ -12,6 +14,7 @@ Name[gl]=Conmutador de grupos de traballo
 Name[hu]=Munkacsoport switch
 Name[it]=Workgroup switch
 Name[kk]=Жұмыс тобы қосқышы
+Name[lt]=Darbo grupės perjungiklis
 Name[nb]=Arbeidsgruppe-svitsj
 Name[nds]=Arbeitkoppel-Ümschalter
 Name[nl]=Workgroepswitch

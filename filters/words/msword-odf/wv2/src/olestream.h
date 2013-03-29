@@ -39,7 +39,7 @@ public:
     /**
      * Create an OLE stream
      */
-    OLEStream( OLEStorage* storage );
+    explicit OLEStream( OLEStorage* storage );
     virtual ~OLEStream();
 
     /**

@@ -477,8 +477,10 @@ void DependencyManager::Private::generateDepths(Cell cell, QSet<Cell>& computedD
     // Recursion. We need the whole dependency tree of the changed region.
     // An infinite loop is prevented by the check above.
     QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
-    if (cit == consumers.constEnd())
+    if (cit == consumers.constEnd()) {
+        processedCells.remove(cell);
         return;
+    }
     const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
     foreach (const Cell &c, consumers) {
         generateDepths(c, computedDepths);

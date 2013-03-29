@@ -666,7 +666,7 @@ void WordsTableHandler::tableCellEnd()
                                               document()->textHandler()->paragraphBaseFontColorBkp());
 
     if (!color.isNull()) {
-        KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName);
+        KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName, "table-cell");
         Q_ASSERT(cellStyle);
         if (cellStyle) {
             cellStyle->addProperty("fo:background-color", color, KoGenStyle::TableCellType);

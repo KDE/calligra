@@ -107,7 +107,7 @@ void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
     color->addAction( buildActionColor(Qt::red, i18n("Red")));
     color->addAction( buildActionColor(Qt::blue, i18n("Blue")));
     color->addAction( buildActionColor(Qt::yellow, i18n("Yellow")));
-    connect( color, SIGNAL( triggered( QAction* ) ), this, SLOT( updateColor( QAction* ) ) );
+    connect( color, SIGNAL(triggered(QAction*)), this, SLOT(updateColor(QAction*)) );
 
     size->addAction( buildActionSize ( 9 ) );
     size->addAction( buildActionSize ( 10 ) );
@@ -118,7 +118,7 @@ void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
     size->addAction( buildActionSize ( 20 ) );
     size->addAction( buildActionSize ( 22 ) );
 
-    connect( size, SIGNAL( triggered( QAction* ) ), this, SLOT( updateSize( QAction* ) ) );
+    connect( size, SIGNAL(triggered(QAction*)), this, SLOT(updateSize(QAction*)) );
 
     menu.addMenu( color );
     menu.addMenu( size );

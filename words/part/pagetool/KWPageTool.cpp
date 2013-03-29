@@ -50,6 +50,7 @@ KWPageTool::KWPageTool(KoCanvasBase *canvas)
     if (m_canvas) {
         m_document = m_canvas->document();
     }
+    header = footer = false;
     m_resizeTimer = new QTimer(this);
     connect( m_resizeTimer, SIGNAL(timeout()), this, SLOT(resizePage()));
     m_resizeTimer->stop();
@@ -156,6 +157,16 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
         m_resizeTimer->start(10);
     }
+    else if (yMouse < layout.height /2 && !header){
+        selection = HEADER;
+        createHeader();
+        header = true;
+    }
+    else if(yMouse > layout.height / 2 && !footer){
+        selection = FOOTER;
+        createFooter();
+        footer = true;
+    }
 }
 
 void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
@@ -194,6 +205,8 @@ void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
     if (selection != 0){
         selection = NONE;
     }
+    m_document->relayout();
+    m_canvas->repaint();
     m_resizeTimer->stop();
 }
 
@@ -294,6 +307,17 @@ void KWPageTool::insertPageBreak()
 }
 
 
+void KWPageTool::createHeader(){
+    m_canvas->view()->enableHeader();
+    m_document->relayout();
+    m_canvas->repaint();
+}
+
+void KWPageTool::createFooter(){
+    m_canvas->view()->enableFooter();
+    m_document->relayout();
+    m_canvas->repaint();
+}
 
 QList<QWidget *> KWPageTool::createOptionWidgets()
 {

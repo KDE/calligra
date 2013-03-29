@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Right Angle Triangle
 Name[bg]=Правоъгълен триъгълник
+Name[bs]=Pravougli trougao
 Name[ca]=Triangle rectangle
 Name[ca@valencia]=Triangle rectangle
 Name[da]=Højrevinklet trekant
@@ -13,7 +14,7 @@ Name[fr]=Triangle à angle droit
 Name[gl]=Triángulo recto pola esquerda
 Name[hu]=Derékszögű háromszög
 Name[it]=Triangolo rettangolo
-Name[kk]=Тең жақты үшбұрыш
+Name[kk]=Тік бұрышты үшбұрыш
 Name[nb]=Rettvinklet trekant
 Name[nds]=Rechtwinklig Dre'eck
 Name[nl]=Rechthoekige driehoek
@@ -24,6 +25,7 @@ Name[ru]=Прямоугольный треугольник
 Name[sk]=Pravouhlý trojuholník
 Name[sl]=Pravokoten trikotnik
 Name[sv]=Triangel med högervinkel
+Name[tr]=Sağ Açılı Üçgen
 Name[uk]=Прямокутний трикутник
 Name[x-test]=xxRight Angle Trianglexx
 Name[zh_CN]=直角三角形

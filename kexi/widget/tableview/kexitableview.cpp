@@ -274,8 +274,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     m_horizontalHeader->setOrientation(Qt::Horizontal);
     m_horizontalHeader->setTracking(false);
     m_horizontalHeader->setMovingEnabled(false);
-    connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)),
-        this, SLOT(slotTopHeaderSizeChange(int, int, int)));
+    connect(m_horizontalHeader, SIGNAL(sizeChange(int,int,int)),
+        this, SLOT(slotTopHeaderSizeChange(int,int,int)));
 
     m_verticalHeader = new KexiRecordMarker(this);
     m_verticalHeader->setObjectName("m_verticalHeader");
@@ -315,7 +315,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     // Connect header, table and scrollbars
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), m_horizontalHeader, SLOT(setOffset(int)));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), m_verticalHeader, SLOT(setOffset(int)));
-    connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnWidthChanged(int, int, int)));
+    connect(m_horizontalHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotColumnWidthChanged(int,int,int)));
     connect(m_horizontalHeader, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotSectionHandleDoubleClicked(int)));
     connect(m_horizontalHeader, SIGNAL(clicked(int)), this, SLOT(sortColumnInternal(int)));
 
@@ -1091,7 +1091,7 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
     }
 // d->contentsMousePressEvent_ev = *e;
 // d->contentsMousePressEvent_enabled = true;
-// QTimer::singleShot(2000, this, SLOT( contentsMousePressEvent_Internal() ));
+// QTimer::singleShot(2000, this, SLOT(contentsMousePressEvent_Internal()));
 // d->contentsMousePressEvent_timer.start(100,true);
 
 // if (!d->contentsMousePressEvent_enabled)

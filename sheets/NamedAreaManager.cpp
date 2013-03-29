@@ -65,10 +65,10 @@ NamedAreaManager::NamedAreaManager(const Map* map)
         : d(new Private)
 {
     d->map = map;
-    connect(this, SIGNAL(namedAreaAdded(const QString&)),
-            this, SIGNAL(namedAreaModified(const QString&)));
-    connect(this, SIGNAL(namedAreaRemoved(const QString&)),
-            this, SIGNAL(namedAreaModified(const QString&)));
+    connect(this, SIGNAL(namedAreaAdded(QString)),
+            this, SIGNAL(namedAreaModified(QString)));
+    connect(this, SIGNAL(namedAreaRemoved(QString)),
+            this, SIGNAL(namedAreaModified(QString)));
 }
 
 NamedAreaManager::~NamedAreaManager()

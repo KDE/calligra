@@ -1,7 +1,11 @@
-include_directories(${KOMAIN_INCLUDES}  ${KOTEXT_INCLUDES})
+if(SHOULD_BUILD_FILTER_PPT_TO_ODP)
+    add_subdirectory( powerpoint )
+endif(SHOULD_BUILD_FILTER_PPT_TO_ODP)
 
-add_subdirectory( powerpoint )
-add_subdirectory( kpr2odf )
-if(SHOULD_BUILD_OOXML_FILTERS)
+if(SHOULD_BUILD_FILTER_KPR_TO_ODP)
+    add_subdirectory( kpr2odf )
+endif(SHOULD_BUILD_FILTER_KPR_TO_ODP)
+
+if(SHOULD_BUILD_FILTER_PPTX_TO_ODP)
     add_subdirectory( pptx )
-endif(SHOULD_BUILD_OOXML_FILTERS)
+endif(SHOULD_BUILD_FILTER_PPTX_TO_ODP)

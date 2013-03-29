@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Storage array
 Name[bg]=Масив хранилища
+Name[bs]=Red skladišta
 Name[ca]=Matriu d'emmagatzematge
-Name[ca@valencia]=MAtriu d'emmagatzement
+Name[ca@valencia]=Matriu d'emmagatzematge
+Name[da]=Storage array
 Name[de]=Speicherarray
 Name[el]=Αποθηκευτική διάταξη
 Name[es]=Array de almacenamiento
@@ -11,6 +13,7 @@ Name[fr]=Baie de stockage
 Name[gl]=Matriz de almacenamento
 Name[it]=Storage array
 Name[kk]=Жинатауыш жиымы
+Name[lt]=Talpyklų masyvas
 Name[nb]=Lagringsmatrise
 Name[nds]=Spiekerfeld
 Name[nl]=Storage-array

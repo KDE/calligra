@@ -108,7 +108,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
     KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
+                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
 
     if (!part) {
         kDebug() << "Doc can't be openend" << error;
@@ -157,8 +157,9 @@ bool CAPresentationHandler::openDocument (const QString& uri)
 
 QStringList CAPresentationHandler::supportedMimetypes()
 {
-    QStringList supportedTypes;
-    supportedTypes << "application/vnd.oasis.opendocument.presentation" << "application/vnd.ms-powerpoint";
+    // keep in sync with presentation related mimetypes in calligraactive.desktop
+    const QStringList supportedTypes =
+        QString::fromLatin1("application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;").split(';', QString::SkipEmptyParts);
     return supportedTypes;
 }
 

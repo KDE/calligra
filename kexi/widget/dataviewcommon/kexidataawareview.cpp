@@ -66,7 +66,7 @@ void KexiDataAwareView::init(QWidget* viewWidget, KexiSharedActionClient* action
     setViewWidget(d->internalView, true);
 
     if (!noDataAware) {
-        d->dataAwareObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int, int)));
+        d->dataAwareObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
 
         //! before closing - we'are accepting editing
         connect(this, SIGNAL(closing(bool&)), this, SLOT(slotClosing(bool&)));

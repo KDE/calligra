@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Man
 Name[bg]=Мъж
+Name[bs]=Čovjek
 Name[ca]=Home
 Name[ca@valencia]=Home
 Name[cs]=Muž
+Name[da]=Mand
 Name[de]=Mann
 Name[el]=Άνδρας
 Name[es]=Hombre
@@ -13,6 +15,7 @@ Name[fr]=Man
 Name[gl]=Home
 Name[it]=Uomo
 Name[kk]=Адам
+Name[lt]=Vyras
 Name[nb]=Mann
 Name[nds]=Mann
 Name[nl]=Man
@@ -21,6 +24,7 @@ Name[pt]=Homem
 Name[pt_BR]=Homem
 Name[ru]=Человек
 Name[sk]=Muž
+Name[sl]=Moški
 Name[sv]=Man
 Name[uk]=Чоловік
 Name[x-test]=xxManxx

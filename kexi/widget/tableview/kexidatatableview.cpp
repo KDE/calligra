@@ -60,7 +60,7 @@ KexiDataTableView::init()
 // m_records = 0;
 // m_first = false;
 
-// connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotMoving(int)));
+// connect(this, SIGNAL(contentsMoving(int,int)), this, SLOT(slotMoving(int)));
 // connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
 
