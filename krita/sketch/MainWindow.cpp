@@ -48,7 +48,6 @@
 #include "kis_config.h"
 
 #include "ColorSelectorItem.h"
-#include "IconImageProvider.h"
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "ColorImageProvider.h"
@@ -138,7 +137,6 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     d->view->engine()->addImageProvider(QLatin1String("color"), new ColorImageProvider);
     d->view->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
-    d->view->engine()->addImageProvider("icon", new IconImageProvider);
 
     KritaNamespace *nameSpace = new KritaNamespace(this);
     d->view->rootContext()->setContextProperty("Krita", nameSpace);

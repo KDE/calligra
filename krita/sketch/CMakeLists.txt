@@ -21,7 +21,6 @@ set(kritasketch_SRCS
     ColorSelectorItem.cpp
     Constants.cpp
     DocumentListModel.cpp
-    IconImageProvider.cpp
     KisSketchView.cpp
     KisSketchPart.cpp
     ToolManager.cpp
