@@ -1592,7 +1592,11 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
         if ((m_prevColumnForSetText + 1) < col) { //skipped one or more columns
                                                   //before this: save NULLs first
             for (int i = m_prevColumnForSetText + 1; i < col; i++) {
-                m_tmpValues << QVariant();
+                if (d->detectedType(i-1) == KexiDB::Field::Text) {
+                    m_tmpValues << QString("");
+                } else {
+                    m_tmpValues << QVariant();
+                }
             }
         }
         m_prevColumnForSetText = col;
@@ -1652,8 +1656,15 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
                     m_tmpValues << QVariant();
             } else
                 m_tmpValues << QVariant();
-        } else // Text type and the rest
-            m_tmpValues << (m_options.trimmedInTextValuesChecked ? text.trimmed() : text);
+        } else {   // Text type and the rest
+            if (text.isNull()) {
+                //default value is empty string not null - instead querying data without knowing SQL is very confusing
+                m_tmpValues << QString("");
+            } else {
+                m_tmpValues <<QVariant((m_options.trimmedInTextValuesChecked ? text.trimmed() : text));
+            }
+        };
+        qDebug()<<"m_tmpValues:"<<m_tmpValues;
         return;
     }
     //save text to GUI (table view)
