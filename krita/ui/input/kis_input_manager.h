@@ -65,10 +65,6 @@ public:
      */
     ~KisInputManager();
 
-
-    /// Set to true when using a qgraphcsview-based canvas
-    void setInputHack(bool enabled);
-
     /**
      * Event filter method. Overridden from QObject.
      */

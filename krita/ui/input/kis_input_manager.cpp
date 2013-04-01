@@ -59,7 +59,6 @@ public:
         , lastTabletEvent(0)
         , lastTouchEvent(0)
         , enabled(false)
-        , inputHackEnabled(false)
     { }
 
     bool tryHidePopupPalette();
@@ -97,7 +96,6 @@ public:
     KisAbstractInputAction *defaultInputAction;
 
     bool enabled;
-    bool inputHackEnabled;
 };
 
 static inline QList<Qt::Key> KEYS() {
@@ -370,11 +368,6 @@ KisInputManager::~KisInputManager()
     delete d;
 }
 
-void KisInputManager::setInputHack(bool enabled)
-{
-    d->inputHackEnabled = enabled;
-}
-
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object)
@@ -387,7 +380,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         tevent->ignore();
     }
 
-    if(!d->enabled && d->inputHackEnabled)
+    if(!d->enabled)
         return false;
 
     bool retval = false;
@@ -417,7 +410,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::MouseButtonRelease: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
-        if (retval && d->inputHackEnabled)
+        if (retval)
             d->enabled = false;
         d->resetSavedTabletEvent(event->type());
         break;
@@ -448,7 +441,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);
-            if(retval && d->inputHackEnabled)
+            if(retval)
                 d->enabled = false;
         }
         break;
