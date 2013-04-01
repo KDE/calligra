@@ -412,6 +412,7 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
     strokeWidget->setWindowTitle(i18n("Line"));
     strokeWidget->setCanvas(canvas());
+    strokeWidget->unactivate();
     list.append(strokeWidget);
 
 

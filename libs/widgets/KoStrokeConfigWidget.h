@@ -59,6 +59,8 @@ public:
     KoMarker *endMarker() const;
 
     void setCanvas(KoCanvasBase *canvas);
+    void activate();
+    void unactivate();
 
 signals:
     void strokeChanged(KoShapeStroke*);

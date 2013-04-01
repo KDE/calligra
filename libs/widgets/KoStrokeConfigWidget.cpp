@@ -170,7 +170,8 @@ class KoStrokeConfigWidget::Private
 {
 public:
     Private()
-        : canvas(0)
+        : canvas(0),
+        active(true)
     {
     }
 
@@ -186,6 +187,8 @@ public:
     QWidget *spacer;
 
     KoCanvasBase *canvas;
+
+    bool active;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
@@ -372,6 +375,16 @@ void KoStrokeConfigWidget::blockChildSignals(bool block)
     d->endMarkerSelector->blockSignals(block);
 }
 
+void KoStrokeConfigWidget::activate()
+{
+    d->active = true;
+}
+
+void KoStrokeConfigWidget::unactivate()
+{
+    d->active = false;
+}
+
 //------------------------
 void KoStrokeConfigWidget::applyChanges()
 {
@@ -403,8 +416,10 @@ void KoStrokeConfigWidget::applyChanges()
     newStroke->setMiterLimit(miterLimit());
     newStroke->setLineStyle(lineStyle(), lineDashes());
 
-    KoShapeStrokeCommand *cmd = new KoShapeStrokeCommand(selection->selectedShapes(), newStroke);
-    canvasController->canvas()->addCommand(cmd);
+    if (d->active) {
+        KoShapeStrokeCommand *cmd = new KoShapeStrokeCommand(selection->selectedShapes(), newStroke);
+        canvasController->canvas()->addCommand(cmd);
+    }
 
     emit(strokeChanged(newStroke));
 }
