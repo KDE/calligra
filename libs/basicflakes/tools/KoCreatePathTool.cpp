@@ -57,6 +57,9 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 {
     Q_D(KoCreatePathTool);
     if (d->shape) {
+        if (d->stroke) {
+            d->shape->setStroke(d->stroke);
+        }
         painter.save();
         paintPath(*(d->shape), painter, converter);
         painter.restore();
