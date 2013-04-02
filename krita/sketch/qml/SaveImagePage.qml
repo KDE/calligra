@@ -40,7 +40,7 @@ Page {
         }
 
         text: "Save Image";
-        background: "images/header_red.png";
+        background: "images/header_krita_sketch.png";
 
         leftArea: Button {
             width: Constants.GridWidth;
@@ -111,7 +111,7 @@ Page {
         }
 
         height: Constants.GridHeight;
-        color: "#622727"
+        color: "#000000"
 
         Row {
             anchors {
@@ -140,7 +140,7 @@ Page {
 
                 radius: Constants.GridHeight * 0.25;
 
-                color: "#622727"
+                color: "#000000"
 
                 ExpandingListView {
                     id: fileType;
@@ -198,7 +198,7 @@ Page {
             width: GridView.view.cellWidth;
             z: 10;
 
-            image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-red.svg";
+            image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-black.svg";
             imageShadow: model.fileType != "inode/directory" ? true : false;
             imageFillMode: model.fileType != "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
             imageSmooth: model.fileType != "inode/directory" ? false : true;

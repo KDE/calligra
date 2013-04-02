@@ -65,7 +65,7 @@ Item {
         anchors.top: view.bottom;
 
         title: "Open Image";
-        image: "../images/svg/icon-fileopen-red.svg";
+        image: "../images/svg/icon-fileopen-black.svg";
 
         onClicked: base.openClicked();
     }

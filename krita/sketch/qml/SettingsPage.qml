@@ -63,7 +63,7 @@ Page {
                 width: parent.width;
 
                 Label { width: Constants.GridWidth * 6 - Constants.DefaultMargin * 2; text: "Background Color"; }
-                Button { width: Constants.GridWidth * 2; color: "grey"; }
+                Button { width: Constants.GridWidth * 2; color: "#505050"; }
                 Label { width: parent.width; text: "Transparency Checkers"; }
                 Item { width: Constants.GridWidth; height: Constants.GridHeight }
                 Label { width: Constants.GridWidth * 5 - Constants.DefaultMargin * 2; text: "Size"; }

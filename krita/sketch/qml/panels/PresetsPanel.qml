@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Presets";
-    panelColor: "#1e0058";
+    panelColor: "#000000";
 
     /*actions: [
         Button {
@@ -115,7 +115,7 @@ Panel {
 
             checked: GridView.isCurrentItem;
 
-            color: (model.index === peekViewGrid.currentIndex) ? "#D2C8E5" : "transparent";
+            color: (model.index === peekViewGrid.currentIndex) ? "#D7D7D7" : "transparent";
             shadow: false
             textSize: 10;
             image: model.image;
@@ -149,7 +149,7 @@ Panel {
                 width: contentArea.width;
                 Rectangle {
                     anchors.fill: parent;
-                    color: (model.index === fullViewGrid.currentIndex) ? "#D2C8E5" : "transparent";
+                    color: (model.index === fullViewGrid.currentIndex) ? "#D7D7D7" : "transparent";
                 }
                 Rectangle {
                     id: presetThumbContainer;

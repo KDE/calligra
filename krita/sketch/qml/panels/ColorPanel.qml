@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Color";
-    panelColor: "#d37300"
+    panelColor: "#000000"
 
     actions: [
         ColorSwatch {

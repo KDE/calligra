@@ -46,7 +46,7 @@ Item {
 
             border.width: 2;
             border.color: "silver";
-            color: "#63ffffff";
+            color: "#bdffffff";
 
             radius: Constants.GridHeight / 2;
 

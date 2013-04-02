@@ -49,7 +49,7 @@ Item {
 
             border.width: 2;
             border.color: input.acceptableInput ? "silver" : "red";
-            color: "#63ffffff";
+            color: "#bdffffff";
 
             radius: height / 2;
 

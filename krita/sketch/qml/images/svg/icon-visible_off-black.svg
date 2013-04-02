@@ -14,8 +14,8 @@
    height="48px"
    id="svg4244"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="icon-visible_off.svg">
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="icon-visible_off-red.svg">
   <defs
      id="defs4246">
     <linearGradient
@@ -85,7 +85,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -95,21 +95,21 @@
      inkscape:groupmode="layer">
     <g
        transform="translate(-48,-288)"
-       style="display:inline"
+       style="display:inline;fill:#000000"
        id="g3368">
       <path
          inkscape:connector-curvature="0"
          d="m 71.999999,287.99995 c -13.254833,0 -23.999999,10.74517 -23.999999,24 0,13.25483 10.745166,24 23.999999,24 13.254831,0 24.000001,-10.74517 24.000001,-24 0,-13.25483 -10.74517,-24 -24.000001,-24 z m 0,4 c 11.045691,0 19.999993,8.9543 19.999993,20 0,11.04569 -8.954302,19.99999 -19.999993,19.99999 -11.0457,0 -20.000002,-8.9543 -20.000002,-19.99999 0,-11.0457 8.954302,-20 20.000002,-20 z"
          id="path3850-7-3"
-         style="color:#000000;fill:#78001e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          sodipodi:nodetypes="ccsccsc"
          inkscape:connector-curvature="0"
          id="path9402"
          d="m 56,312 -1,0 c 0,0 4.666667,13 17,13 12.333333,0 17,-13 17,-13 l -1,0 c 0,0 -4.333333,11 -16,11 -11.666667,0 -16,-11 -16,-11 z"
-         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#78001e;fill-opacity:1;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
       <path
-         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#78001e;fill-opacity:1;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
          d="m 72,301 c -4.041667,0 -6.21438,0.97965 -8,2 -1.78562,1.02035 -4,3 -4,3 l 1,0 c 0,0 1.28562,-1.02035 3,-2 1.71438,-0.97965 4.041667,-2 8,-2 3.958333,0 6.28562,1.02035 8,2 1.71438,0.97965 3,2 3,2 l 1,0 c 0,0 -2.21438,-1.97965 -4,-3 -1.78562,-1.02035 -3.958333,-2 -8,-2 z"
          id="path9402-1-6"
          inkscape:connector-curvature="0"

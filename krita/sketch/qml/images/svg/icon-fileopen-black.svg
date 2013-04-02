@@ -13,8 +13,8 @@
    height="48"
    id="svg4351"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="New document 9">
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="icon-fileopen-red.svg">
   <defs
      id="defs4353" />
   <sodipodi:namedview
@@ -43,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,7 +53,7 @@
      id="layer1"
      transform="translate(0,-1004.3622)">
     <g
-       style="fill:#622727;fill-opacity:1;display:inline"
+       style="fill:#000000;fill-opacity:1;display:inline"
        id="g4471"
        transform="translate(-168,300.3622)"
        inkscape:export-filename="/home/timo/Dessins/inkscape/kritasketch/renders/icon-48px-fileopen.png"
@@ -62,25 +62,25 @@
       <path
          id="path3850-7-4"
          d="m 192,704 c -13.25483,0 -24,10.74517 -24,24 0,13.25483 10.74517,24 24,24 13.25483,0 24,-10.74517 24,-24 0,-13.25483 -10.74517,-24 -24,-24 z m 0,4 c 11.04569,0 19.99999,8.9543 19.99999,20 0,11.04569 -8.9543,19.99999 -19.99999,19.99999 -11.0457,0 -20,-8.9543 -20,-19.99999 0,-11.0457 8.9543,-20 20,-20 z"
-         style="color:#000000;fill:#622727;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          inkscape:connector-curvature="0" />
       <path
          inkscape:connector-curvature="0"
          id="path4360"
          d="m 179,721 0,5 2,0 0,-5 -2,0 z m 24,0 0,3 2,0 0,-3 -2,0 z"
-         style="fill:#622727;fill-opacity:1;stroke:none" />
+         style="fill:#000000;fill-opacity:1;stroke:none" />
       <path
          sodipodi:nodetypes="ccccccc"
          inkscape:connector-curvature="0"
          id="rect4354"
          d="m 182,717 0,9 12,0 0,-2 12,0 0,-7 z"
-         style="color:#000000;fill:#622727;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          sodipodi:nodetypes="ccccccc"
          inkscape:connector-curvature="0"
          id="path4356-7"
          d="m 176,727 c 1.06451,0 19,0 19,0 l 0,-2 13,0 -3,14 -26,0 z"
-         style="fill:#622727;fill-opacity:1;stroke:none;display:inline" />
+         style="fill:#000000;fill-opacity:1;stroke:none;display:inline" />
     </g>
   </g>
 </svg>

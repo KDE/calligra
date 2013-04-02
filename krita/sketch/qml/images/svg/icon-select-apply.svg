@@ -14,8 +14,8 @@
    height="48"
    id="svg3531"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="icon-select-sub.svg">
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="icon-select-apply.svg">
   <defs
      id="defs3533">
     <linearGradient
@@ -113,7 +113,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -125,18 +125,18 @@
     <g
        id="g4240-4"
        transform="translate(-79.999999,8.0000704)"
-       style="fill:#00821e;fill-opacity:1;display:inline">
+       style="fill:#000000;fill-opacity:1;display:inline">
       <path
          inkscape:connector-curvature="0"
          d="m 816,704 c -13.25483,0 -24,10.74517 -24,24 0,13.25483 10.74517,24 24,24 13.25483,0 24,-10.74517 24,-24 0,-13.25483 -10.74517,-24 -24,-24 z m 0,4 c 11.04569,0 19.99999,8.9543 19.99999,20 0,11.04569 -8.9543,19.99999 -19.99999,19.99999 -11.0457,0 -20,-8.9543 -20,-19.99999 0,-11.0457 8.9543,-20 20,-20 z"
          id="path3850-7-4-7-3-6-5-9-2"
-         style="color:#000000;fill:#00821e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          transform="translate(-712,-696.00007)" />
       <path
          inkscape:connector-curvature="0"
          id="path6459-6"
          d="m 113.75,18.875 -10.4375,20.875 -9.53125,-9.53125 -3.5625,3.5625 12,12 2.46875,2.4375 1.5625,-3.09375 12,-24 -4.5,-2.25 z"
-         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#00821e;fill-opacity:1;stroke:none;stroke-width:5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
     </g>
   </g>
 </svg>

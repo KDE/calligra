@@ -161,7 +161,7 @@ Item {
             width: height;
             height: Constants.GridHeight
             color: "transparent";
-            image: (layersModel && layersModel.activeVisible) ? "../images/svg/icon-visible_on-red.svg" : "../images/svg/icon-visible_off-red.svg";
+            image: (layersModel && layersModel.activeVisible) ? "../images/svg/icon-visible_on-black.svg" : "../images/svg/icon-visible_off-black.svg";
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -172,7 +172,7 @@ Item {
             width: height;
             height: Constants.GridHeight
             color: "transparent";
-            image: (layersModel && layersModel.activeLocked) ? "../images/svg/icon-locked_on-red.svg" : "../images/svg/icon-locked_off-red.svg";
+            image: (layersModel && layersModel.activeLocked) ? "../images/svg/icon-locked_on-black.svg" : "../images/svg/icon-locked_off-black.svg";
             textColor: "white";
             shadow: false;
             highlight: false;

@@ -193,7 +193,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter;
             Button {
                 id: mirrorVertical;
-                image: "../../images/svg/icon-mirror_v-blue.svg"
+                image: "../../images/svg/icon-mirror_v-black.svg"
                 width: Constants.GridWidth * 2 / 5;
                 height: width;
                 color: "transparent";
@@ -205,7 +205,7 @@ Item {
             Button {
                 id: mirrorHorizontal;
                 anchors.left: mirrorVertical.right;
-                image: "../../images/svg/icon-mirror_h-blue.svg"
+                image: "../../images/svg/icon-mirror_h-black.svg"
                 width: Constants.GridWidth * 2 / 5;
                 height: width;
                 color: "transparent";
@@ -217,7 +217,7 @@ Item {
             Button {
                 id: mirrorCenter;
                 anchors.left: mirrorHorizontal.right;
-                image: "../../images/svg/icon-mirror_c-blue.svg"
+                image: "../../images/svg/icon-mirror_c-black.svg"
                 width: Constants.GridWidth * 2 / 5;
                 height: width;
                 color: "transparent";

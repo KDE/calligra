@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Filter";
-    panelColor: Constants.Theme.TertiaryColor;
+    panelColor: "#000000";
 
     actions: [
         Button {

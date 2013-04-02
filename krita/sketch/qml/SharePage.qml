@@ -38,7 +38,7 @@ Page {
 
         text: "Share";
 
-        background: "images/header_red.png";
+        background: "images/header_krita_sketch.png";
         leftArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
