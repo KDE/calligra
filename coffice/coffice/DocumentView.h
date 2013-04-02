@@ -21,9 +21,9 @@ class PageItem : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    PageItem(DocumentItem *view, Page *page);
+    PageItem(DocumentItem *view, const QSharedPointer<Page> &page);
     virtual ~PageItem();
-    Page* page() const;
+    QSharedPointer<Page> page() const;
     virtual QRectF boundingRect() const;
 protected:
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -31,7 +31,7 @@ private Q_SLOTS:
     void slotThumbnailFinished(const QImage &image);
 private:
     DocumentItem *m_view;
-    Page *m_page;
+    QSharedPointer<Page> m_page;
 };
 
 class DocumentItem : public QObject, public QGraphicsRectItem

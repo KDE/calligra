@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QRectF>
 #include <QImage>
+#include <QSharedPointer>
 
 class KoPart;
 
@@ -35,7 +36,7 @@ class Document : public QObject
 public:
     explicit Document(QObject *parent = 0);
     virtual ~Document();
-    QList<Page*> pages() const;
+    QList< QSharedPointer<Page> > pages() const;
     bool openFile(const QString &file);
     void emitProgressUpdated(int percent);
 Q_SIGNALS:

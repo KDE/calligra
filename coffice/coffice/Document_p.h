@@ -3,6 +3,7 @@
 
 #include "Document.h"
 
+#include <QSharedPointer>
 #include <QMutex>
 
 #include <KoProgressProxy.h>
@@ -32,9 +33,9 @@ public:
     // the KoPart lifes in the AppManager thread
     KoPart *m_kopart;
 
-    QMutex m_mutex;
+    //QMutex m_mutex;
 
-    QList<Page*> m_pages;
+    QList< QSharedPointer<Page> > m_pages;
     DocumentProgressProxy *m_progressProxy;
 
     Private(Document *qq);

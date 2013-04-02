@@ -57,11 +57,10 @@ void Document::Private::slotLayoutFinished2(PageDefList pages)
 {
     qDebug() << Q_FUNC_INFO << pages.count();
 
-    qDeleteAll(m_pages);
     m_pages.clear();
     for(PageDefList::ConstIterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
         const PageDef &p = *it;
-        Page *page = new Page(q, p.first, p.second);
+        QSharedPointer<Page> page(new Page(q, p.first, p.second));
         m_pages.append(page);
     }
 
@@ -71,9 +70,6 @@ void Document::Private::slotLayoutFinished2(PageDefList pages)
 void Document::Private::slotThumbnailFinished(int pageNumber, const QImage &image)
 {
     qDebug() << Q_FUNC_INFO << pageNumber;
-    Page *page = m_pages.value(pageNumber - 1);
-    Q_ASSERT_X(page, __FUNCTION__, qPrintable(QString("No such page %1").arg(pageNumber)));
-    if (!page)
-        return;
-    QMetaObject::invokeMethod(page, "thumbnailFinished", Qt::QueuedConnection, Q_ARG(QImage, image));
+    QSharedPointer<Page> page = m_pages.value(pageNumber - 1);
+    QMetaObject::invokeMethod(page.data(), "thumbnailFinished", Qt::QueuedConnection, Q_ARG(QImage, image));
 }

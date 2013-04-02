@@ -20,7 +20,7 @@
  * PageItem
  */
 
-PageItem::PageItem(DocumentItem *view, Page *page)
+PageItem::PageItem(DocumentItem *view, const QSharedPointer<Page> &page)
     : QObject(view)
     , QGraphicsPixmapItem(view)
     , m_view(view)
@@ -33,14 +33,14 @@ PageItem::PageItem(DocumentItem *view, Page *page)
     //effect->setBlurRadius(6);
     //pageItem->setGraphicsEffect(effect);
 
-    connect(m_page, SIGNAL(thumbnailFinished(QImage)), this, SLOT(slotThumbnailFinished(QImage)));
+    connect(m_page.data(), SIGNAL(thumbnailFinished(QImage)), this, SLOT(slotThumbnailFinished(QImage)));
 }
 
 PageItem::~PageItem()
 {
 }
 
-Page* PageItem::page() const
+QSharedPointer<Page> PageItem::page() const
 {
     return m_page;
 }
@@ -92,28 +92,41 @@ DocumentItem::~DocumentItem()
 void DocumentItem::slotLayoutFinished()
 {
     qDebug() << Q_FUNC_INFO;
-
-    QList<Page*> pages = m_doc->pages();
+\
+    QList< QSharedPointer<Page> > pages = m_doc->pages();
     QList<QGraphicsItem *> pageItems = childItems();
 
+    // Remove all PageItem's that are to much
     if (pageItems.count() > pages.count()) {
         for(int i = pageItems.count() - 1; i >= pages.count(); --i) {
             delete pageItems.takeLast();
         }
     }
 
+    // Remove all PageItem's that are invalid meanwhile
+    for(int i = 0; i < pageItems.count(); ++i) {
+        PageItem *pageItem = static_cast<PageItem*>(pageItems[i]);
+        const QSharedPointer<Page> &page = pages[i];
+        if (!pageItem->page() || pageItem->page().data() != pages[i].data() || pageItem->page()->rect() != page->rect()) {
+            for(int k = pageItems.count() - 1; k >= i; --k) {
+                delete pageItems.takeLast();
+            }
+            break;
+        }
+    }
+
+    // Determinate the properly new height/width values
     m_width = m_height = 0.0;
     for(int i = 0; i < pageItems.count(); ++i) {
         PageItem *pageItem = static_cast<PageItem*>(pageItems[i]);
-        Page *page = pages[i];
-        Q_ASSERT_X(pageItem->page() == page, __FUNCTION__, qPrintable(QString("hmmmm, pages out of sync :/ %1").arg(i)));
-        Q_ASSERT_X(pageItem->page()->rect() != page->rect(), __FUNCTION__, qPrintable(QString("hmmmm, page boundaries out of sync :/ %1").arg(i)));
+        QSharedPointer<Page> page = pageItem->page();
         m_height += page->rect().height();
         m_width = qMax(m_width, page->rect().width());
     }
 
+    // Create new PageItem's
     for(int i = pageItems.count(); i < pages.count(); ++i) {
-        Page *page = pages[i];
+        const QSharedPointer<Page> &page = pages[i];
         PageItem *pageItem = new PageItem(this, page);
         if (m_height > 0.0)
             m_height += m_spacing;
@@ -123,8 +136,6 @@ void DocumentItem::slotLayoutFinished()
     }
 
     Q_EMIT sizeChanged();
-
-    //update();
 }
 
 QRectF DocumentItem::boundingRect() const

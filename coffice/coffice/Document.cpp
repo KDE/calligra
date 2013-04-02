@@ -81,16 +81,13 @@ Document::~Document()
     delete d;
 }
 
-QList<Page*> Document::pages() const
+QList< QSharedPointer<Page> > Document::pages() const
 {
     return d->m_pages;
 }
 
 bool Document::openFile(const QString &file)
 {
-    qDeleteAll(d->m_pages);
-    d->m_pages.clear();
-
     bool ok = s_appManager()->openFile(this, file);
     return ok;
 }
