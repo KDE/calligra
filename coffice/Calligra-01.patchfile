@@ -1,3 +1,120 @@
+diff --git a/libs/flake/KoImageData.cpp b/libs/flake/KoImageData.cpp
+index 7930e5f..7f3ec93 100644
+--- a/libs/flake/KoImageData.cpp
++++ b/libs/flake/KoImageData.cpp
+@@ -65,9 +65,9 @@ KoImageData::~KoImageData()
+         delete d;
+ }
+ 
+-QPixmap KoImageData::pixmap(const QSize &size)
++QImage KoImageData::pixmap(const QSize &size)
+ {
+-    if (!d) return QPixmap();
++    if (!d) return QImage();
+     QSize wantedSize = size;
+     if (! wantedSize.isValid()) {
+         if (d->pixmap.isNull()) // we have a problem, Houston..
+@@ -80,14 +80,14 @@ QPixmap KoImageData::pixmap(const QSize &size)
+         case KoImageDataPrivate::StateEmpty: {
+ #if 0       // this is not possible as it gets called during the paint method
+             // and will crash. Therefore create a tmp pixmap and return it.
+-            d->pixmap = QPixmap(1, 1);
++            d->pixmap = QImage(1, 1, QImage::Format_ARGB32);
+             QPainter p(&d->pixmap);
+             p.setPen(QPen(Qt::gray));
+             p.drawPoint(0, 0);
+             p.end();
+             break;
+ #endif
+-            QPixmap tmp(1, 1);
++            QImage tmp(1, 1, QImage::Format_ARGB32);
+             tmp.fill(Qt::gray);
+             return tmp;
+         }
+@@ -99,7 +99,7 @@ QPixmap KoImageData::pixmap(const QSize &size)
+             if (!d->image.isNull()) {
+                 // create pixmap from image.
+                 // this is the highest quality and lowest memory usage way of doing the conversion.
+-                d->pixmap = QPixmap::fromImage(d->image.scaled(wantedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
++                d->pixmap = d->image.scaled(wantedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+             }
+         }
+ 
+diff --git a/libs/flake/KoImageData.h b/libs/flake/KoImageData.h
+index 3556100..888422c 100644
+--- a/libs/flake/KoImageData.h
++++ b/libs/flake/KoImageData.h
+@@ -29,7 +29,6 @@
+ #include <KoShapeUserData.h>
+ 
+ class QIODevice;
+-class QPixmap;
+ class QImage;
+ class QSizeF;
+ class QUrl;
+@@ -78,7 +77,7 @@ public:
+      * @returns the cached pixmap
+      * @see isValid(), hasCachedPixmap()
+      */
+-    QPixmap pixmap(const QSize &targetSize = QSize());
++    QImage pixmap(const QSize &targetSize = QSize());
+ 
+     /// returns true only if pixmap() would return immediately with a cached pixmap
+     bool hasCachedPixmap() const;
+diff --git a/libs/flake/KoImageData_p.cpp b/libs/flake/KoImageData_p.cpp
+index 540c0e2..3009cfa 100644
+--- a/libs/flake/KoImageData_p.cpp
++++ b/libs/flake/KoImageData_p.cpp
+@@ -154,7 +154,7 @@ void KoImageDataPrivate::clear()
+     imageSize = QSizeF();
+     key = 0;
+     image = QImage();
+-    pixmap = QPixmap();
++    //pixmap = QPixmap();
+ }
+ 
+ qint64 KoImageDataPrivate::generateKey(const QByteArray &bytes)
+diff --git a/libs/flake/KoImageData_p.h b/libs/flake/KoImageData_p.h
+index 46480d0..419ac21 100644
+--- a/libs/flake/KoImageData_p.h
++++ b/libs/flake/KoImageData_p.h
+@@ -82,7 +82,7 @@ public:
+     QUrl imageLocation;
+     QImage image;
+     /// screen optimized cached version.
+-    QPixmap pixmap;
++    QImage pixmap;
+ 
+     KTemporaryFile *temporaryFile;
+ };
+diff --git a/libs/flake/KoPatternBackground.cpp b/libs/flake/KoPatternBackground.cpp
+index 17fef9c..b0339b4 100644
+--- a/libs/flake/KoPatternBackground.cpp
++++ b/libs/flake/KoPatternBackground.cpp
+@@ -310,13 +310,12 @@ void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &conver
+ 
+         painter.setClipPath(fillPath);
+         painter.setWorldTransform(matrix, true);
+-        painter.drawTiledPixmap(targetRect, d->imageData->pixmap(imageSize.toSize()), -offset);
++        painter.fillRect(targetRect, QBrush(d->imageData->pixmap(imageSize.toSize())) /* , -offset */ );
+     } else if (d->repeat == Original) {
+         QRectF sourceRect(QPointF(0, 0), d->imageData->imageSize());
+         QRectF targetRect(QPoint(0, 0), d->targetSize());
+         targetRect.moveCenter(fillPath.boundingRect().center());
+         painter.setClipPath(fillPath);
+-        painter.drawPixmap(targetRect, d->imageData->pixmap(sourceRect.size().toSize()), sourceRect);
+     } else if (d->repeat == Stretched) {
+         painter.setClipPath(fillPath);
+         // undo conversion of the scaling so that we can use a nicely scaled image of the correct size
+@@ -327,7 +326,7 @@ void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &conver
+         painter.scale(zoomX, zoomY);
+ 
+         QRectF targetRect = converter.documentToView(fillPath.boundingRect());
+-        painter.drawPixmap(targetRect.topLeft(), d->imageData->pixmap(targetRect.size().toSize()));
++        painter.drawImage(targetRect.topLeft(), d->imageData->pixmap(targetRect.size().toSize()));
+     }
+ 
+     painter.restore();
 diff --git a/libs/flake/KoShapeRegistry.cpp b/libs/flake/KoShapeRegistry.cpp
 index c628704..b021820 100644
 --- a/libs/flake/KoShapeRegistry.cpp
@@ -198,6 +315,90 @@ index efd39ec..e5cc661 100644
 -#include <KoView_p.moc>
 +//#include <KoView_p.moc>
  #include <KoView.moc>
+diff --git a/libs/textlayout/KoTextLayoutArea_paint.cpp b/libs/textlayout/KoTextLayoutArea_paint.cpp
+index d0386d9..59c14e9 100644
+--- a/libs/textlayout/KoTextLayoutArea_paint.cpp
++++ b/libs/textlayout/KoTextLayoutArea_paint.cpp
+@@ -477,7 +477,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
+             qreal y = blockData.counterPosition().y() + fm.ascent() - fm.xHeight()/2 - height/2; // centered
+             KoImageData *idata = listFormat.property(KoListStyle::BulletImage).value<KoImageData *>();
+             if (idata) {
+-                painter->drawPixmap(x, y, width, height, idata->pixmap());
++                painter->drawImage(QRectF(x, y, width, height), idata->pixmap());
+             }
+         }
+     }
+diff --git a/plugins/pictureshape/PictureShape.cpp b/plugins/pictureshape/PictureShape.cpp
+index 7b1036a..ff2f6dc 100644
+--- a/plugins/pictureshape/PictureShape.cpp
++++ b/plugins/pictureshape/PictureShape.cpp
+@@ -52,10 +52,13 @@
+ 
+ #include <QPainter>
+ #include <QTimer>
+-#include <QPixmapCache>
+ #include <QThreadPool>
+ #include <QImage>
+ #include <QColor>
++#include <QCache>
++
++typedef QMap<QString,QImage> ImageCache;
++Q_GLOBAL_STATIC(ImageCache, s_imageCache)
+ 
+ QString generate_key(qint64 key, const QSize & size)
+ {
+@@ -90,7 +93,7 @@ void _Private::PixmapScaler::run()
+ 
+ void _Private::PictureShapeProxy::setImage(const QString &key, const QImage &image)
+ {
+-    QPixmapCache::insert(key, QPixmap::fromImage(image));
++    s_imageCache()->insert(key, image);
+     m_pictureShape->update();
+ }
+ 
+@@ -330,17 +333,18 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
+         m_printQualityImage = QImage(); // free memory
+     }
+     else {
+-        QPixmap pixmap;
+         QString key(generate_key(imageData()->key(), pixmapSize));
+ 
+         // If the required pixmap is not in the cache
+         // launch a task in a background thread that scales
+         // the source image to the required size
+-        if (!QPixmapCache::find(key, &pixmap)) {
++        ImageCache::ConstIterator it = s_imageCache()->constFind(key);
++        if (it == s_imageCache()->constEnd()) {
+             QThreadPool::globalInstance()->start(new _Private::PixmapScaler(this, pixmapSize));
+             painter.fillRect(viewRect, QColor(Qt::gray)); // just paint a gray rect as long as we don't have the required pixmap
+         }
+         else {
++            QImage pixmap = it.value();
+             QRectF cropRect(
+                 pixmapSize.width()  * m_clippingRect.left,
+                 pixmapSize.height() * m_clippingRect.top,
+@@ -348,7 +352,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
+                 pixmapSize.height() * m_clippingRect.height()
+             );
+ 
+-            painter.drawPixmap(viewRect, pixmap, cropRect);
++            painter.drawImage(viewRect, pixmap, cropRect);
+         }
+     }
+ }
+@@ -376,9 +380,9 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
+     else {
+         QSize pixmapSize = calcOptimalPixmapSize(converter.documentToView(QRectF(QPointF(0,0), size())).size(), imageData->image().size());
+         QString key(generate_key(imageData->key(), pixmapSize));
+-        if (QPixmapCache::find(key) == 0) {
+-            QPixmap pixmap = imageData->pixmap(pixmapSize);
+-            QPixmapCache::insert(key, pixmap);
++        if (!s_imageCache()->contains(key)) {
++            QImage pixmap = imageData->pixmap(pixmapSize);
++            s_imageCache()->insert(key, pixmap);
+         }
+     }
+ }
 diff --git a/plugins/pictureshape/PictureShapeFactory.cpp b/plugins/pictureshape/PictureShapeFactory.cpp
 index c7786cb..9cd8b20 100644
 --- a/plugins/pictureshape/PictureShapeFactory.cpp
@@ -221,20 +422,31 @@ index c7786cb..9cd8b20 100644
  }
  
 diff --git a/plugins/pictureshape/Plugin.cpp b/plugins/pictureshape/Plugin.cpp
-index b167d2e..43ba7ad 100644
+index b167d2e..3f992ba 100644
 --- a/plugins/pictureshape/Plugin.cpp
 +++ b/plugins/pictureshape/Plugin.cpp
-@@ -18,7 +18,7 @@
+@@ -18,9 +18,9 @@
   */
  #include "Plugin.h"
  #include "PictureShapeFactory.h"
 -#include "PictureToolFactory.h"
 +//#include "PictureToolFactory.h"
  
- #include <QPixmapCache>
+-#include <QPixmapCache>
++//#include <QPixmapCache>
  
-@@ -40,7 +40,7 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
-     }
+ #include <KoToolRegistry.h>
+ #include <KoShapeRegistry.h>
+@@ -35,12 +35,12 @@ K_EXPORT_PLUGIN(PluginFactory("PictureShape"))
+ Plugin::Plugin(QObject *parent, const QVariantList &)
+     : QObject(parent)
+ {
+-    if(QPixmapCache::cacheLimit() < CACHE_SIZE) {
+-        QPixmapCache::setCacheLimit(CACHE_SIZE);
+-    }
++    //if(QPixmapCache::cacheLimit() < CACHE_SIZE) {
++    //    QPixmapCache::setCacheLimit(CACHE_SIZE);
++    //}
  
      KoShapeRegistry::instance()->add( new PictureShapeFactory() );
 -    KoToolRegistry::instance()->add( new PictureToolFactory() );
