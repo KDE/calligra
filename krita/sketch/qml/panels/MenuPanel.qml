@@ -34,7 +34,7 @@ Item {
 
     Rectangle {
         id: background;
-        color: "#1d3458"
+        color: "#000000"
         anchors.fill: parent;
 
         MouseArea {
@@ -55,7 +55,7 @@ Item {
                 id: newButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-filenew.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -65,7 +65,7 @@ Item {
                 id: openButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-fileopen.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -75,7 +75,7 @@ Item {
                 id: saveButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-filesave.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -85,7 +85,7 @@ Item {
                 id: saveAsButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-filesaveas.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -95,7 +95,7 @@ Item {
                 id: shareButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-fileshare.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -110,7 +110,7 @@ Item {
                 id: undoButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-undo.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -121,7 +121,7 @@ Item {
                 id: redoButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-redo.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -132,7 +132,7 @@ Item {
                 id: zoomOutButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-delete.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -142,7 +142,7 @@ Item {
                 id: zoomInButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-add.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -156,7 +156,7 @@ Item {
                 id: minimizeButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-minimize.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -166,7 +166,7 @@ Item {
                 id: closeButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-close.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -180,7 +180,7 @@ Item {
                 id: helpButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-help.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -190,7 +190,7 @@ Item {
                 id: settingsButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                color: "#1d3458"
+                color: "#000000"
                 shadow: false
                 image: "../images/svg/icon-settings.svg"
                 highlightColor: Constants.Theme.HighlightColor;
@@ -207,7 +207,7 @@ Item {
         width: Constants.GridWidth * 1.5;
         height: Constants.GridHeight / 2 + 8;
 
-        color: "#1d3458"
+        color: "#000000"
         radius: 8;
 
         Label {

@@ -33,7 +33,7 @@ Item {
         anchors.fill: parent;
         border.width: 1;
         border.color: "silver";
-        color: "#63ffffff";
+        color: "#bdffffff";
         radius: height / 2;
     }
     MouseArea {

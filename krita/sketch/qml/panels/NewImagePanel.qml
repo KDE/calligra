@@ -41,13 +41,13 @@ Item {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#3B9BA5"
+                    color: "#707070"
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#148793"
+                    color: "#565656"
                 }
             }
 
@@ -58,7 +58,7 @@ Item {
                     right: parent.right;
                 }
                 height: Constants.DefaultMargin;
-                color: "#148793";
+                color: "#000000";
             }
 
 

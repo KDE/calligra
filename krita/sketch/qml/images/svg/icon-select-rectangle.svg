@@ -14,8 +14,8 @@
    height="48"
    id="svg3531"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="icon-select-show.svg">
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="icon-select-rectangle.svg">
   <defs
      id="defs3533">
     <linearGradient
@@ -74,7 +74,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -86,14 +86,14 @@
     <g
        id="g6302"
        transform="translate(-7.9999995,-56)"
-       style="opacity:1;display:inline">
+       style="opacity:1;display:inline;fill:#000000">
       <g
-         style="fill:#00821e;fill-opacity:1;display:inline"
+         style="fill:#000000;fill-opacity:1;display:inline"
          id="g4182-7-9"
          transform="matrix(0.75000001,0,0,0.75,-106.00003,-66)">
         <path
            inkscape:connector-curvature="0"
-           style="color:#000000;fill:#00821e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
            d="m 184,184 c -17.67311,0 -32,14.32689 -32,32 0,17.67311 14.32689,32 32,32 17.67311,0 32,-14.32689 32,-32 0,-17.67311 -14.32689,-32 -32,-32 z m 0,5.33333 c 14.72759,0 26.66666,11.93907 26.66666,26.66667 0,14.72759 -11.93907,26.66666 -26.66666,26.66666 -14.7276,0 -26.66667,-11.93907 -26.66667,-26.66666 0,-14.7276 11.93907,-26.66667 26.66667,-26.66667 z"
            id="path3850-7-6" />
       </g>
@@ -102,7 +102,7 @@
          inkscape:connector-curvature="0"
          id="rect6027-7-2"
          d="m 21.5,86 0,1 1,0 0,-0.5 0.5,0 0,-1 -1,0 -0.5,0 z m 3.5,0.5 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 0.5,0 0,0.5 1,0 0,-1 0,-0.5 -0.5,0 -1,0 z m -19.5,4.5 1,0 0,-2 -1,0 z m 20,0 1,0 0,-2 -1,0 z m -20,4 1,0 0,-2 -1,0 z m 20,0 1,0 0,-2 -1,0 z m -20,4 1,0 0,-2 -1,0 z m 20,0 1,0 0,-2 -1,0 z m -20,4 1,0 0,-2 -1,0 z m 20,0 1,0 0,-2 -1,0 z m -20,3 0,0.5 0.5,0 1,0 0,-1 -0.5,0 0,-0.5 -1,0 z m 20,-0.5 -0.5,0 0,1 1,0 0.513864,0.0139 L 42.5,106 l 0,-1 -1,0 z m -16.5,1 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z m 4,0 2,0 0,-1 -2,0 z"
-         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#00821e;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
     </g>
   </g>
 </svg>

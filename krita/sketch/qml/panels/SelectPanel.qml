@@ -22,7 +22,7 @@ import "../components"
 Panel {
     id: base;
     name: "Select";
-    panelColor: Constants.Theme.QuaternaryColor;
+    panelColor: "#000000";
 
     actions: [
         Button {

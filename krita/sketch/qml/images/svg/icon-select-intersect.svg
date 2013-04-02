@@ -14,8 +14,8 @@
    height="48"
    id="svg3531"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="icon-select-replace.svg">
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="icon-select-intersect.svg">
   <defs
      id="defs3533">
     <linearGradient
@@ -113,7 +113,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -124,20 +124,20 @@
      transform="translate(0,-16)">
     <g
        transform="translate(-72,-144)"
-       style="display:inline"
+       style="display:inline;fill:#000000"
        id="g4866">
       <g
          transform="translate(64,88)"
          id="g6302-4-7"
-         style="display:inline">
+         style="display:inline;fill:#000000">
         <g
            transform="matrix(0.75000001,0,0,0.75,-106.00003,-66)"
            id="g4182-7-9-9-4"
-           style="fill:#00821e;fill-opacity:1;display:inline">
+           style="fill:#000000;fill-opacity:1;display:inline">
           <path
              id="path3850-7-6-5-2"
              d="m 184,184 c -17.67311,0 -32,14.32689 -32,32 0,17.67311 14.32689,32 32,32 17.67311,0 32,-14.32689 32,-32 0,-17.67311 -14.32689,-32 -32,-32 z m 0,5.33333 c 14.72759,0 26.66666,11.93907 26.66666,26.66667 0,14.72759 -11.93907,26.66666 -26.66666,26.66666 -14.7276,0 -26.66667,-11.93907 -26.66667,-26.66666 0,-14.7276 11.93907,-26.66667 26.66667,-26.66667 z"
-             style="color:#000000;fill:#00821e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
              inkscape:connector-curvature="0" />
         </g>
       </g>
@@ -145,19 +145,19 @@
          inkscape:connector-curvature="0"
          id="rect6651-7"
          d="m 84,172 0,16 16,0 0,-16 -16,0 z m 1,1 14,0 0,14 -14,0 0,-14 z"
-         style="color:#000000;fill:#00821e;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          inkscape:connector-curvature="0"
          id="rect6651-7-5"
          d="m 92,180 0,16 16,0 0,-16 -16,0 z m 1,1 14,0 0,14 -14,0 0,-14 z"
-         style="color:#000000;fill:#00821e;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <rect
          y="180"
          x="92"
          height="8"
          width="8"
          id="rect6727"
-         style="color:#000000;fill:#00821e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     </g>
   </g>
 </svg>

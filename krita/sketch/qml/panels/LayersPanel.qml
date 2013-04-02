@@ -23,7 +23,7 @@ import org.krita.sketch 1.0
 Panel {
     id: base;
     name: "Layers";
-    panelColor: Constants.Theme.SecondaryColor;
+    panelColor: "#000000";
 
     actions: [
         Button {
@@ -205,7 +205,7 @@ Panel {
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
                     color: "transparent"; textColor: "white"; shadow: false; highlight: false;
-                    image: "../images/svg/icon-layer_paint-red.svg"
+                    image: "../images/svg/icon-layer_paint-black.svg"
                     onClicked: {
                         layerModel.addLayer(0);
                         addLayerButtons.state = "";
@@ -214,7 +214,7 @@ Panel {
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
                     color: "transparent"; textColor: "white"; shadow: false; highlight: false;
-                    image: "../images/svg/icon-layer_group-red.svg"
+                    image: "../images/svg/icon-layer_group-black.svg"
                     onClicked: {
                         layerModel.addLayer(1);
                         addLayerButtons.state = "";
@@ -223,7 +223,7 @@ Panel {
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
                     color: "transparent"; textColor: "white"; shadow: false; highlight: false;
-                    image: "../images/svg/icon-layer_filter-red.svg"
+                    image: "../images/svg/icon-layer_filter-black.svg"
                     onClicked: {
                         layerModel.addLayer(2);
                         addLayerButtons.state = "";

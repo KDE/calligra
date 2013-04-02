@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Tool";
-    panelColor: "#0078B4";
+    panelColor: "#000000";
 
     CompositeOpModel {
         id: compositeOpModel;
@@ -214,7 +214,7 @@ Panel {
                             width: height;
                             height: Constants.ToolbarButtonSize
                             color: "transparent";
-                            image: "../images/svg/icon-" + model.name + "-blue.svg"
+                            image: "../images/svg/icon-" + model.name + "-black.svg"
                             textColor: "white";
                             shadow: false;
                             highlight: false;
@@ -246,7 +246,7 @@ Panel {
                             width: height;
                             height: Constants.ToolbarButtonSize
                             color: "transparent";
-                            image: "../images/svg/icon-" + model.name + "-blue.svg"
+                            image: "../images/svg/icon-" + model.name + "-black.svg"
                             textColor: "white";
                             shadow: false;
                             highlight: false;

@@ -60,7 +60,7 @@ QColor Theme::textColor() const
 
 QColor Theme::secondaryTextColor() const
 {
-    return QColor( 175, 175, 175 );
+    return QColor( 90, 90, 90 );
 }
 
 QColor Theme::positiveColor() const

@@ -14,8 +14,8 @@
    height="48"
    id="svg3531"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="icon-select-add.svg">
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="icon-select-sub.svg">
   <defs
      id="defs3533">
     <linearGradient
@@ -113,7 +113,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -123,29 +123,29 @@
      inkscape:groupmode="layer"
      transform="translate(0,-16)">
     <g
-       style="display:inline"
+       style="display:inline;fill:#000000"
        id="g6302-4-7-9-5"
        transform="translate(-7.9999718,-56)">
       <g
-         style="fill:#00821e;fill-opacity:1;display:inline"
+         style="fill:#000000;fill-opacity:1;display:inline"
          id="g4182-7-9-9-4-8-0"
          transform="matrix(0.75000001,0,0,0.75,-106.00003,-66)">
         <path
            inkscape:connector-curvature="0"
-           style="color:#000000;fill:#00821e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
            d="m 184,184 c -17.67311,0 -32,14.32689 -32,32 0,17.67311 14.32689,32 32,32 17.67311,0 32,-14.32689 32,-32 0,-17.67311 -14.32689,-32 -32,-32 z m 0,5.33333 c 14.72759,0 26.66666,11.93907 26.66666,26.66667 0,14.72759 -11.93907,26.66666 -26.66666,26.66666 -14.7276,0 -26.66667,-11.93907 -26.66667,-26.66666 0,-14.7276 11.93907,-26.66667 26.66667,-26.66667 z"
            id="path3850-7-6-5-2-2-9" />
       </g>
     </g>
     <path
-       style="color:#000000;fill:#00821e;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        d="m 12.000028,28 0,16 8,0 0,-8 8,0 0,-8 z"
        id="rect6651-7-66"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc" />
     <path
        inkscape:connector-curvature="0"
-       style="color:#000000;fill:#00821e;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        d="m 20.000028,36 0,16 16,0 0,-16 -16,0 z m 1,1 14,0 0,14 -14,0 0,-14 z"
        id="rect6651-7-5-0" />
   </g>

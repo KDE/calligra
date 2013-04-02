@@ -35,7 +35,7 @@ Item {
         }
         width: height;
         smooth: true;
-        source: "../images/svg/icon-cancel-blue.svg";
+        source: "../images/svg/icon-cancel-black.svg";
     }
     Image {
         id: checkedImg;
@@ -48,7 +48,7 @@ Item {
         width: height;
         smooth: true;
         opacity: 0;
-        source: "../images/svg/icon-apply-blue.svg";
+        source: "../images/svg/icon-apply-black.svg";
     }
     Label {
         id: txt;

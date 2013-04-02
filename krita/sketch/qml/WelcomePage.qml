@@ -84,13 +84,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#994747"
+                    color: "#707070"
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#862525"
+                    color: "#565656"
                 }
             }
 
@@ -117,13 +117,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#3B9BA5"
+                    color: "#565656"
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#148793"
+                    color: "#707070"
                 }
             }
 
@@ -149,13 +149,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#D49A57"
+                    color: "#707070"
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#CB8636"
+                    color: "#565656"
                 }
             }
 

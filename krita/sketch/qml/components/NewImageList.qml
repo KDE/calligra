@@ -37,8 +37,8 @@ PageStack {
                 imageShadow: false;
 
                 gradient: Gradient {
-                    GradientStop { position: 0; color: "#FAFCFD"; }
-                    GradientStop { position: 0.4; color: "#F0F5FA"; }
+                    GradientStop { position: 0; color: "#FBFBFB"; }
+                    GradientStop { position: 0.4; color: "#F0F0F0"; }
                 }
 
                 onClicked: {
@@ -86,14 +86,14 @@ PageStack {
             }
 
             model: ListModel {
-                ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-A4portrait-green.svg" }
-                ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-A4landscape-green.svg" }
-//                 ListElement { bnrole: "a5p";    name: "Blank Image (A5 Portrait)"; image: "../images/svg/icon-A4portrait-green.svg" }
-//                 ListElement { bnrole: "a5l";    name: "Blank Image (A5 Landscape)"; image: "../images/svg/icon-A4landscape-green.svg" }
-                ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "../images/svg/icon-filenew-green.svg" }
-                ListElement { bnrole: "custom"; name: "Custom Size"; image: "../images/svg/icon-filenew-green.svg" }
-                ListElement { bnrole: "clip";   name: "From Clipboard"; image: "../images/svg/icon-fileclip-green.svg" }
-//                 ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-green.svg" }
+                ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
+                ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
+//                 ListElement { bnrole: "a5p";    name: "Blank Image (A5 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
+//                 ListElement { bnrole: "a5l";    name: "Blank Image (A5 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
+                ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "../images/svg/icon-filenew-black.svg" }
+                ListElement { bnrole: "custom"; name: "Custom Size"; image: "../images/svg/icon-filenew-black.svg" }
+                ListElement { bnrole: "clip";   name: "From Clipboard"; image: "../images/svg/icon-fileclip-black.svg" }
+//                 ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-black.svg" }
             }
 
             ScrollDecorator { }
@@ -116,7 +116,7 @@ PageStack {
                     id: titleImage;
                     anchors.left: parent.left;
                     anchors.verticalCenter: parent.verticalCenter;
-                    source: "../images/svg/icon-filenew-green.svg"
+                    source: "../images/svg/icon-filenew-black.svg"
                 }
                 Label {
                     anchors.left: titleImage.right;
@@ -160,13 +160,13 @@ PageStack {
                 Button {
                     width: parent.width / 2;
                     color: "transparent";
-                    image: "../images/svg/icon-cancel-green.svg";
+                    image: "../images/svg/icon-cancel-black.svg";
                     onClicked: pageStack.pop();
                 }
                 Button {
                     width: parent.width / 2;
                     color: "transparent";
-                    image: "../images/svg/icon-apply-green.svg";
+                    image: "../images/svg/icon-apply-black.svg";
                     onClicked: {
                         if(width.acceptableInput && height.acceptableInput && resolution.acceptableInput) {
                             base.clicked();

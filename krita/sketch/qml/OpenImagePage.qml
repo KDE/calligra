@@ -39,7 +39,7 @@ Page {
 
         text: "Open Image";
 
-        background: "images/header_red.png";
+        background: "images/header_krita_sketch.png";
 
         leftArea: Button {
             width: Constants.GridWidth;
@@ -114,7 +114,7 @@ Page {
 
             width: GridView.view.cellWidth;
 
-            image: model.fileType !== "inode/directory" ? model.icon : "images/svg/icon-fileopen-red.svg";
+            image: model.fileType !== "inode/directory" ? model.icon : "images/svg/icon-fileopen-black.svg";
             imageShadow: model.fileType !== "inode/directory" ? true : false;
             imageFillMode: model.fileType !== "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
             imageSmooth: model.fileType !== "inode/directory" ? false : true;

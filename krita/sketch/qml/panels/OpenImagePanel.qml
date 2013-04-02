@@ -43,13 +43,13 @@ Item {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#994747"
+                    color: "#707070"
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#862525"
+                    color: "#565656"
                 }
             }
 
@@ -58,7 +58,7 @@ Item {
                 anchors.left: parent.left;
                 anchors.right: parent.right;
                 height: Constants.DefaultMargin;
-                color: "#862525";
+                color: "#000000";
             }
 
             Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
