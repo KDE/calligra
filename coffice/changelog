@@ -1,0 +1,13 @@
+coffice (1.1) unstable; urgency=low
+
+  * Optimize by making all of app run in own rather then in UI thread.
+  * Fix unneeded READ_PHONE_STATE permission. See https://bugs.kde.org/show_bug.cgi?id=309678
+  * Fix unneeded WRITE_EXTERNAL_STORAGE permission.
+
+ -- Sebastian Sauer <mail@dipe.org>  Wed, 03 Apr 2013 22:22:22 +0100
+
+coffice (1.0) unstable; urgency=low
+
+  * Initial release of Coffice. Only viewing ODT document supported yet.
+
+ -- Sebastian Sauer <mail@dipe.org>  Sat, 23 Mar 2013 21:21:21 +0100
