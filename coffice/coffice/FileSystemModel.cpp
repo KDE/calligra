@@ -108,10 +108,10 @@ QString FileSystemModel::homePath() const
 {
 #ifdef Q_OS_ANDROID
     // On Android return /sdcard as home-directory and not whereever
-    // the application's hom-directory is located at.
-    QDir androidDir("/sdcard");
-    if (androidDir.exists())
-        return androidDir.absolutePath() + QDir::separator();
+    // the application's home-directory is located at.
+    QDir homeDir("/sdcard");
+    if (homeDir.exists())
+        return homeDir.absolutePath() + QDir::separator();
 #endif
     return QDir::homePath() + QDir::separator();
 }
@@ -119,9 +119,15 @@ QString FileSystemModel::homePath() const
 QString FileSystemModel::documentsPath() const
 {
 #ifdef Q_OS_ANDROID
-    QDir androidDir("/sdcard/documents");
-    if (androidDir.exists())
-        return androidDir.absolutePath() + QDir::separator();
+    // On Android the QDesktopServices returns all wrong paths for
+    // things like documents- and home-location. So, work around
+    // and hardcode better defaults.
+    QDir documentsDir("/sdcard/documents");
+    if (documentsDir.exists())
+        return documentsDir.absolutePath() + QDir::separator();
+    QDir homeDir("/sdcard");
+    if (homeDir.exists())
+        return homeDir.absolutePath() + QDir::separator();
 #endif
     QDir docsDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     if (docsDir.exists())
