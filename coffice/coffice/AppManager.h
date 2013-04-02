@@ -2,6 +2,7 @@
 #define APPMANAGER_H
 
 #include <QThread>
+#include <QSharedPointer>
 
 class Document;
 class Page;
@@ -12,7 +13,7 @@ public:
     AppManager();
     virtual ~AppManager();
     bool openFile(Document *doc, const QString &file);
-    void update(Page *page);
+    void update(const QSharedPointer<Page> &page);
 
 protected:
     virtual void run();

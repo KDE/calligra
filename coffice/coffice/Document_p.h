@@ -36,12 +36,14 @@ public:
     //QMutex m_mutex;
 
     QList< QSharedPointer<Page> > m_pages;
+    QString m_file;
     DocumentProgressProxy *m_progressProxy;
 
     Private(Document *qq);
     virtual ~Private();
 
 public Q_SLOTS:
+    void slotOpenFileFailed();
     void slotPageSetupChanged();
     void slotLayoutFinished();
     void slotLayoutFinished2(PageDefList pages);

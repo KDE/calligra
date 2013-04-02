@@ -42,27 +42,14 @@ QRectF Page::rect() const
     return d->m_rect;
 }
 
-void Page::markDirty()
+bool Page::isDirty() const
 {
-    d->m_isDirty = true;
+    return d->m_isDirty;
 }
 
-void Page::maybeUpdateThumbnail()
+void Page::setDirty(bool dirty)
 {
-    if (d->m_isDirty) {
-        d->m_isDirty = false;
-        forceUpdateThumbnail();
-    }
-}
-
-void Page::forceUpdateThumbnail()
-{
-    struct DebugHelper {
-        DebugHelper() { qDebug() << Q_FUNC_INFO << "START"; }
-        ~DebugHelper() { qDebug() << Q_FUNC_INFO << "DONE"; }
-    };
-    DebugHelper debugHelper;
-    s_appManager()->update(this);
+    d->m_isDirty = dirty;
 }
 
 /**************************************************************************
@@ -86,13 +73,27 @@ QList< QSharedPointer<Page> > Document::pages() const
     return d->m_pages;
 }
 
+QString Document::file() const
+{
+    return d->m_file;
+}
+
 bool Document::openFile(const QString &file)
 {
+    d->m_file = file;
     bool ok = s_appManager()->openFile(this, file);
+    if (!ok)
+        d->m_file.clear();
     return ok;
 }
 
 void Document::emitProgressUpdated(int percent)
 {
     Q_EMIT progressUpdated(percent);
+}
+
+void Document::updatePage(const QSharedPointer<Page> &page)
+{
+    qDebug() << Q_FUNC_INFO << page->pageNumber();
+    s_appManager()->update(page);
 }

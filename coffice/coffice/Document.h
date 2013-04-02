@@ -19,10 +19,8 @@ public:
     Document* doc() const;
     int pageNumber() const;
     QRectF rect() const;
-    void markDirty();
-public Q_SLOTS:
-    void maybeUpdateThumbnail();
-    void forceUpdateThumbnail();
+    bool isDirty() const;
+    void setDirty(bool dirty);
 Q_SIGNALS:
     void thumbnailFinished(const QImage &image);
 private:
@@ -37,13 +35,16 @@ public:
     explicit Document(QObject *parent = 0);
     virtual ~Document();
     QList< QSharedPointer<Page> > pages() const;
+    QString file() const;
     bool openFile(const QString &file);
     void emitProgressUpdated(int percent);
 Q_SIGNALS:
     //void openFileSucceeded();
-    void openFileFailed();
+    void openFileFailed(const QString &file);
     void progressUpdated(int percent);
     void layoutFinished();
+public Q_SLOTS:
+    void updatePage(const QSharedPointer<Page> &page);
 private:
     friend class OpenFileCommand;
     friend class UpdatePageCommand;

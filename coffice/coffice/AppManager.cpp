@@ -101,13 +101,15 @@ public:
     OpenFileCommand(Document *doc, const QString &file) : Command(doc), m_file(file) {}
     virtual void run()
     {
+        qDebug() << Q_FUNC_INFO << m_file;
+
         delete m_doc->d->m_kopart;
         m_doc->d->m_kopart = 0;
 
         KoPart *kopart = s_partFactory()->createPart();
         if (!kopart) {
             qWarning() << Q_FUNC_INFO << "Failed to create KoPart";
-            QMetaObject::invokeMethod(m_doc, "openFileFailed", Qt::QueuedConnection);
+            QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection);
             return;
         }
 
@@ -122,7 +124,7 @@ public:
         if (!ok) {
             qWarning() << Q_FUNC_INFO << "Failed to openFile" << m_file;
             m_doc->d->m_kopart = 0;
-            QMetaObject::invokeMethod(m_doc, "openFileFailed", Qt::QueuedConnection);
+            QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection);
             delete kopart;
             return;
         }
@@ -137,11 +139,11 @@ public:
 class UpdatePageCommand : public Command
 {
 public:
-    Page *m_page;
-    UpdatePageCommand(Page *page) : Command(page->doc()), m_page(page) {}
+    QSharedPointer<Page> m_page;
+    UpdatePageCommand(const QSharedPointer<Page> &page) : Command(page->doc()), m_page(page) {}
     virtual void run()
     {
-        qDebug() << Q_FUNC_INFO << "Starting updating page" << m_page;
+        qDebug() << Q_FUNC_INFO << "Starting updating page" << m_page->pageNumber() << "document=" << m_doc->file();
 
         KoPart *kopart = m_doc->d->m_kopart;
         KWDocument *kwdoc = dynamic_cast<KWDocument*>(kopart->document());
@@ -151,7 +153,7 @@ public:
         Q_ASSERT(kwPageManager);
 
         KWPage kwpage = kwPageManager->page(m_page->pageNumber());
-        Q_ASSERT(kwpage.isValid());
+        Q_ASSERT_X(kwpage.isValid(), __FUNCTION__, qPrintable(QString("No such page number %1 (valid are 1-%2) in document %3").arg(m_page->pageNumber()).arg(kwPageManager->pageCount()).arg(kopart->url().toString())));
 
         KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(kwdoc->documentPart()->canvasItem());
         Q_ASSERT(canvasItem);
@@ -180,7 +182,7 @@ public:
         painter.drawImage(QRectF(QPointF(0.0, 0.0), pageRect.size()), img);
         painter.end();
 
-        qDebug() << Q_FUNC_INFO << "Finished updating page" << m_page;
+        qDebug() << Q_FUNC_INFO << "Finished updating page" << m_page.data();
         QMetaObject::invokeMethod(m_doc->d, "slotThumbnailFinished", Qt::QueuedConnection, Q_ARG(int, m_page->pageNumber()), Q_ARG(QImage, thumbnail));
     }
 };
@@ -231,7 +233,7 @@ bool AppManager::openFile(Document *doc, const QString &file)
     return true;
 }
 
-void AppManager::update(Page *page)
+void AppManager::update(const QSharedPointer<Page> &page)
 {
     UpdatePageCommand *command = new UpdatePageCommand(page);
     QMutexLocker locker(&d->m_workMutex);
@@ -246,7 +248,7 @@ void AppManager::run()
             qDebug()<<Q_FUNC_INFO<<"MutexLocker Waiting";
             QMutexLocker locker(&d->m_workMutex);
             qDebug()<<Q_FUNC_INFO<<"MutexLocker Active";
-            if (!d->m_prendingCommands.isEmpty()) {
+            while (!d->m_kill && !d->m_prendingCommands.isEmpty()) {
                 QScopedPointer<Command> command(d->m_prendingCommands.dequeue());
                 if (OpenFileCommand *openFileCommand = dynamic_cast<OpenFileCommand*>(command.data())) {
                     openFileCommand->run();

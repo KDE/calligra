@@ -25,6 +25,13 @@ Document::Private::~Private()
     }
 }
 
+// runs in the UI-thread
+void Document::Private::slotOpenFileFailed()
+{
+    Q_EMIT q->openFileFailed(m_file);
+    m_file.clear();
+}
+
 // runs in the AppManager thread
 void Document::Private::slotPageSetupChanged()
 {

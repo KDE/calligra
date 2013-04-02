@@ -38,7 +38,8 @@ Item {
             left: parent.left
             top: parent.top
             bottom: parent.bottom
-            margins: 2
+            //margins: 2
+            margins: 0
         }
 
         gradient: Gradient {

@@ -54,7 +54,10 @@ QRectF PageItem::boundingRect() const
 
 void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    m_page->maybeUpdateThumbnail();
+    if (m_page->isDirty()) {
+        m_page->setDirty(false);
+        m_page->doc()->updatePage(m_page);
+    }
 
     QGraphicsPixmapItem::paint(painter, option, widget);
 
@@ -150,6 +153,7 @@ QRectF DocumentItem::boundingRect() const
 bool DocumentItem::openFile(const QString &file)
 {
     qDebug() << Q_FUNC_INFO << file;
+    qDeleteAll(childItems());
     bool ok = m_doc->openFile(file);
     return ok;
 }
