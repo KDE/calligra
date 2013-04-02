@@ -214,7 +214,7 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeRChannelActive) ? "#F0E4E7" : "transparent";
+            color: (layersModel && layersModel.activeRChannelActive) ? "#EAEAEA" : "transparent";
             onClicked: if(layersModel) layersModel.activeRChannelActive = !layersModel.activeRChannelActive;
         }
         Button {
@@ -226,7 +226,7 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeGChannelActive) ? "#F0E4E7" : "transparent";
+            color: (layersModel && layersModel.activeGChannelActive) ? "#EAEAEA" : "transparent";
             onClicked: if(layersModel) layersModel.activeGChannelActive = !layersModel.activeGChannelActive;
         }
         Button {
@@ -238,7 +238,7 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeBChannelActive) ? "#F0E4E7" : "transparent";
+            color: (layersModel && layersModel.activeBChannelActive) ? "#EAEAEA" : "transparent";
             onClicked: if(layersModel) layersModel.activeBChannelActive = !layersModel.activeBChannelActive;
         }
         Button {
@@ -250,7 +250,7 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeAChannelActive) ? "#F0E4E7" : "transparent";
+            color: (layersModel && layersModel.activeAChannelActive) ? "#EAEAEA" : "transparent";
             onClicked: if(layersModel) layersModel.activeAChannelActive = !layersModel.activeAChannelActive;
         }
     }
@@ -289,7 +289,7 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeRChannelLocked) ? "#F0E4E7" : "transparent";
+            color: (layersModel && layersModel.activeRChannelLocked) ? "#EAEAEA" : "transparent";
             onClicked: if(layersModel) layersModel.activeRChannelLocked = !layersModel.activeRChannelLocked;
         }
         Button {
@@ -301,7 +301,7 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeGChannelLocked) ? "#F0E4E7" : "transparent";
+            color: (layersModel && layersModel.activeGChannelLocked) ? "#EAEAEA" : "transparent";
             onClicked: if(layersModel) layersModel.activeGChannelLocked = !layersModel.activeGChannelLocked;
         }
         Button {
@@ -313,7 +313,7 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeBChannelLocked) ? "#F0E4E7" : "transparent";
+            color: (layersModel && layersModel.activeBChannelLocked) ? "#EAEAEA" : "transparent";
             onClicked: if(layersModel) layersModel.activeBChannelLocked = !layersModel.activeBChannelLocked;
         }
         Button {
@@ -325,7 +325,7 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeAChannelLocked) ? "#F0E4E7" : "transparent";
+            color: (layersModel && layersModel.activeAChannelLocked) ? "#EAEAEA" : "transparent";
             onClicked: if(layersModel) layersModel.activeAChannelLocked = !layersModel.activeAChannelLocked;
         }
     }
