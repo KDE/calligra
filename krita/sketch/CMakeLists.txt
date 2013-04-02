@@ -23,6 +23,7 @@ set(kritasketch_SRCS
     DocumentListModel.cpp
     KisSketchView.cpp
     KisSketchPart.cpp
+    KisSelectionExtras.cpp
     ToolManager.cpp
     main.cpp
     MainWindow.cpp

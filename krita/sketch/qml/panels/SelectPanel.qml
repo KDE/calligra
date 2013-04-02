@@ -482,7 +482,7 @@ Panel {
                     smooth: true;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: sketchView.selectionManager.feather(featherTxt.value);
+                        onClicked: sketchView.selectionManager().feather(featherTxt.value);
                     }
                 }
             }
@@ -512,7 +512,7 @@ Panel {
                     smooth: true;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: sketchView.selectionManager.grow(growTxt.value, growTxt.value);
+                        onClicked: sketchView.selectionExtras().grow(growTxt.value, growTxt.value);
                     }
                 }
             }
@@ -542,7 +542,7 @@ Panel {
                     smooth: true;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: sketchView.selectionManager.border(borderTxt.value, borderTxt.value);
+                        onClicked: sketchView.selectionManager().border(borderTxt.value, borderTxt.value);
                     }
                 }
             }
@@ -572,7 +572,7 @@ Panel {
                     smooth: true;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: sketchView.selectionManager.shrink(shrinkTxt.value, shrinkTxt.value, false);
+                        onClicked: sketchView.selectionManager().shrink(shrinkTxt.value, shrinkTxt.value, false);
                     }
                 }
             }

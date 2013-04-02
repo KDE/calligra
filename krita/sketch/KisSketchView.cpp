@@ -75,6 +75,7 @@
 #include <kis_canvas_decoration.h>
 
 #include "KisSketchPart.h"
+#include "KisSelectionExtras.h"
 #include "Settings.h"
 #include "cpuid.h"
 #include "DocumentManager.h"
@@ -97,13 +98,16 @@ public:
         , view(0)
         , canvas(0)
         , canvasWidget(0)
+        , selectionExtras(0)
         , undoAction(0)
         , redoAction(0)
         , useOpenGL(false)
         , viewportMoved(false)
         , zoomLevelChanged(false)
     { }
-    ~Private() { }
+    ~Private() {
+        delete selectionExtras;
+    }
 
     void imageUpdated(const QRect &updated);
     void documentOffsetMoved();
@@ -128,6 +132,8 @@ public:
     QGLBuffer *vertexBuffer;
     QGLBuffer *indexBuffer;
 #endif
+
+    KisSelectionExtras *selectionExtras;
 
     int modelMatrixLocation;
     int viewMatrixLocation;
@@ -219,6 +225,14 @@ QObject* KisSketchView::selectionManager() const
     if(!d->view)
         return 0;
     return d->view->selectionManager();
+}
+
+QObject* KisSketchView::selectionExtras() const
+{
+    if (!d->selectionExtras) {
+        d->selectionExtras = new KisSelectionExtras(d->view);
+    }
+    return d->selectionExtras;
 }
 
 QObject* KisSketchView::doc() const

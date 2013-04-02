@@ -38,6 +38,7 @@ public:
     virtual ~KisSketchView();
 
     QObject* selectionManager() const;
+    Q_INVOKABLE QObject* selectionExtras() const;
     QObject* doc() const;
     QObject* view() const;
     QString file() const;
