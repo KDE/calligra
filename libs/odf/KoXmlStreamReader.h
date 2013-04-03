@@ -88,4 +88,8 @@ private:
     Private * const d;
 };
 
+
+void prepareForOdf(KoXmlStreamReader &reader);
+
+
 #endif /* KOGENCHANGES_H */
