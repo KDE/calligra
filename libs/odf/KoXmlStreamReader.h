@@ -98,6 +98,10 @@ public:
     void setDevice(QIODevice *device);
 
 private:
+    // No copying
+    KoXmlStreamReader(KoXmlStreamReader&other);
+    KoXmlStreamReader &operator=(KoXmlStreamReader&other);
+
     class Private;
     Private * const d;
 };
