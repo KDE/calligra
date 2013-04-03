@@ -64,6 +64,11 @@ int CQSpreadsheetCanvas::currentSheet() const
     return d->currentSheet;
 }
 
+Calligra::Sheets::Map* CQSpreadsheetCanvas::documentMap() const
+{
+    return d->document->map();
+}
+
 void CQSpreadsheetCanvas::setCurrentSheet(int sheet)
 {
     sheet = qBound(0, sheet, d->document->map()->count() - 1);

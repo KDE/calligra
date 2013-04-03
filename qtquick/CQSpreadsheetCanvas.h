@@ -26,6 +26,12 @@
 
 #include "CQCanvasBase.h"
 
+namespace Calligra {
+namespace Sheets {
+class Map;
+}
+}
+
 class KoCanvasBase;
 
 class CQSpreadsheetCanvas : public CQCanvasBase
@@ -38,6 +44,8 @@ public:
     virtual ~CQSpreadsheetCanvas();
 
     int currentSheet() const;
+    Calligra::Sheets::Map* documentMap() const;
+
     void setCurrentSheet(int sheet);
 
 Q_SIGNALS:
