@@ -1,6 +1,8 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
+macro_add_unittest_definitions()
+
 SET(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
 kde4_add_ui_files(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
 kde4_add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})
@@ -32,15 +34,12 @@ target_link_libraries(KisNodeFacadeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 
 ########### next target ###############
 
-add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
-add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
 kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
 target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage koodf ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 set(kis_fixed_paint_device_test_SRCS kis_fixed_paint_device_test.cpp )
 kde4_add_unit_test(KisFixedPaintDeviceTest TESTNAME krita-image-KisFixedPaintDeviceTest ${kis_fixed_paint_device_test_SRCS})
 target_link_libraries(KisFixedPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -423,12 +422,6 @@ target_link_libraries(KisPerspectiveGridTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 
 ########### next target ###############
 
-set(kis_perspective_math_test_SRCS kis_perspective_math_test.cpp )
-kde4_add_unit_test(KisPerspectiveMathTest TESTNAME krita-image-KisPerspectiveMathTest ${kis_perspective_math_test_SRCS})
-target_link_libraries(KisPerspectiveMathTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_recorded_action_factory_registry_test_SRCS kis_recorded_action_factory_registry_test.cpp )
 kde4_add_unit_test(KisRecordedActionFactoryRegistryTest TESTNAME krita-image-KisRecordedActionFactoryRegistryTest ${kis_recorded_action_factory_registry_test_SRCS})
 target_link_libraries(KisRecordedActionFactoryRegistryTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -444,12 +437,6 @@ target_link_libraries(KisRecordedActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_
 set(kis_recorded_filter_action_test_SRCS kis_recorded_filter_action_test.cpp )
 kde4_add_unit_test(KisRecordedFilterActionTest TESTNAME krita-image-KisRecordedFilterActionTest ${kis_recorded_filter_action_test_SRCS})
 target_link_libraries(KisRecordedFilterActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_selected_transaction_test_SRCS kis_selected_transaction_test.cpp )
-kde4_add_unit_test(KisSelectedTransactionTest TESTNAME krita-image-KisSelectedTransactionTest ${kis_selected_transaction_test_SRCS})
-target_link_libraries(KisSelectedTransactionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

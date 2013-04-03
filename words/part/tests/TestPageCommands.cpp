@@ -779,7 +779,7 @@ void TestPageCommands::testMakePageSpread()
     QCOMPARE(page2.pageSide(), KWPage::Left);
     QCOMPARE(manager->pageCount(), 2);
 
-    // avoid reusing cmd1 as that assumes the constructor doens't do anything. Which is
+    // avoid reusing cmd1 as that assumes the constructor doesn't do anything. Which is
     // not a restriction we put on the command. (i.e. that doesn't *have* to work)
     KWPageStylePropertiesCommand cmd2(&document, style, pageSpread);
     cmd2.redo();

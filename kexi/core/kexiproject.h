@@ -58,6 +58,7 @@ struct MissingPart {
 typedef QList<MissingPart> MissingPartsList;
 }
 
+class QFileInfo;
 class KexiMainWindow;
 class KexiWindow;
 
@@ -282,6 +283,10 @@ public:
      Use with care: Any KexiProject objects allocated for this project will become invalid! */
     static tristate dropProject(const KexiProjectData& data,
                                 KexiDB::MessageHandler* handler, bool dontAsk = false);
+
+    //! Helper method to ask user "Could not  open file for reading and writing. Do you want to
+    //! open the file as read only?". @return true if user agrees, false if user cancels opening.
+    static bool askForOpeningNonWritableFileAsReadOnly(QWidget *parent, const QFileInfo &finfo);
 
     /*! @see KexiDB::Connection::setQuerySchemaObsolete( const QString& queryName ) */
 //  void setQuerySchemaObsolete( const QString& queryName );

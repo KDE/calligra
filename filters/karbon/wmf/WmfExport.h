@@ -42,8 +42,8 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-    void paintDocument(KarbonDocument& document);
-    void paintShape(KoShape * shape);
+    void paintDocument(KarbonDocument* document);
+    void paintShape(KoShape* shape);
 
     QPen getPen(const KoShapeStrokeModel *stroke);
 

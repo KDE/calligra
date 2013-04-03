@@ -368,7 +368,7 @@ public:
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
 
     /**
-     * Convinience method for renderMirrorMask(), allows to choose whether
+     * Convenience method for renderMirrorMask(), allows to choose whether
      * we need to preserve out dab or do the transformations in-place.
      *
      * @param rc rectangle area covered by dab
@@ -379,7 +379,7 @@ public:
     void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab);
 
     /**
-     * Convinience method for renderMirrorMask(), allows to choose whether
+     * Convenience method for renderMirrorMask(), allows to choose whether
      * we need to preserve our fixed mask or do the transformations in-place.
      *
      * @param rc rectangle area covered by dab
@@ -631,12 +631,6 @@ public:
     /// Returns the current background color
     const KoColor &backgroundColor() const;
 
-    /// Set the current fill color
-    void setFillColor(const KoColor& color);
-
-    /// Returns the current fill color
-    const KoColor &fillColor() const;
-
     /// Set the current generator (a generator can be used to fill an area
     void setGenerator(const KisFilterConfiguration * generator);
 
@@ -778,6 +772,8 @@ private:
                         const KisPaintDeviceSP srcDev,
                         qint32 srcX, qint32 srcY,
                         qint32 srcWidth, qint32 srcHeight);
+
+    inline void compositeOnePixel(quint8 *dst, const KoColor &color);
 
 private:
 

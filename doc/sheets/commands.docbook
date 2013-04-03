@@ -853,6 +853,16 @@ Validity Checking</link> for more details.
 </para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Pivot...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open the Pivot Table configuration dialog</action>. See
+<link linkend="pivottable">Pivot Table</link> for details.
+</para></listitem>
+</varlistentry>
+
 </variablelist></para>
 </sect1>
 

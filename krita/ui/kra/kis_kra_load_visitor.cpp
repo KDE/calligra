@@ -154,9 +154,9 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         KisSelectionSP selection = new KisSelection();
         KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
         loadPaintDevice(pixelSelection, getLocation(layer, ".selection"));
-        layer->setSelection(selection);
+        layer->setInternalSelection(selection);
     } else if (m_syntaxVersion == 2) {
-        loadSelection(getLocation(layer), layer->selection());
+        loadSelection(getLocation(layer), layer->internalSelection());
 
     } else {
         // We use the default, empty selection
@@ -186,7 +186,7 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
 
-    loadSelection(getLocation(layer), layer->selection());
+    loadSelection(getLocation(layer), layer->internalSelection());
 
     loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
 
@@ -276,8 +276,10 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         const KoColorSpace *cs =
             KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), profile);
         // replace the old colorspace
-        device->setDataManager(device->dataManager(), cs);
-        return true;
+        if (cs) {
+            device->setDataManager(device->dataManager(), cs);
+            return true;
+        }
     }
     return false;
 }

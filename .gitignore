@@ -1,3 +1,4 @@
+build
 qtcreator-build
 *.kdev4
 *~
@@ -11,5 +12,10 @@ CMakeLists.txt.user*
 *.swp
 .gdb_history
 .kdev_include_paths
+*.config
+*.creator
+*.creator.user
+*.files
+*.includes
 .DS_Store
 *.kate-swap

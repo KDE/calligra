@@ -25,7 +25,6 @@
 
 #include <Q3ScrollView>
 #include <QTimer>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QEvent>

@@ -44,7 +44,7 @@
 
 #include "KarbonView.h"
 #include "KarbonDocument.h"
-#include "KarbonKoDocument.h"
+#include "KarbonDocument.h"
 #include "KarbonFactory.h"
 #include "KarbonCanvas.h"
 
@@ -73,18 +73,18 @@ KarbonPart::~KarbonPart()
 void KarbonPart::setDocument(KoDocument *document)
 {
     KoPart::setDocument(document);
-    KarbonKoDocument *doc = qobject_cast<KarbonKoDocument*>(document);
+    KarbonDocument *doc = qobject_cast<KarbonDocument*>(document);
     connect(doc, SIGNAL(applyCanvasConfiguration(KarbonCanvas*)), SLOT(applyCanvasConfiguration(KarbonCanvas*)));
 }
 
 KoView * KarbonPart::createViewInstance(QWidget *parent)
 {
-    KarbonKoDocument *doc = qobject_cast<KarbonKoDocument*>(document());
+    KarbonDocument *doc = qobject_cast<KarbonDocument*>(document());
 
     KarbonView *result = new KarbonView(this, doc, parent);
 
     KoCanvasResourceManager * provider = result->canvasWidget()->resourceManager();
-    provider->setResource(KoCanvasResourceManager::PageSize, doc->document().pageSize());
+    provider->setResource(KoCanvasResourceManager::PageSize, doc->pageSize());
 
     applyCanvasConfiguration(result->canvasWidget());
 
