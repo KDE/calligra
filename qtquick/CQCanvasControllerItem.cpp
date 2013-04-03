@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE project
- * Copyright (C) 2013 Arjen-Wander Hiemstra <aw.hiemstra@gmail.com>
+ * Copyright (C) 2013 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,9 +61,11 @@ CQCanvasControllerItem::~CQCanvasControllerItem()
 
 void CQCanvasControllerItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
-//     painter->setBrush(QBrush(Qt::cyan));
-//     painter->setOpacity(0.5);
-//     painter->drawRect(x(), y(), width(), height());
+#if 0
+    painter->setBrush(QBrush(Qt::cyan));
+    painter->setOpacity(0.5);
+    painter->drawRect(x(), y(), width(), height());
+#endif
 }
 
 QDeclarativeItem* CQCanvasControllerItem::canvas() const
@@ -73,8 +75,11 @@ QDeclarativeItem* CQCanvasControllerItem::canvas() const
 
 void CQCanvasControllerItem::setCanvas(QDeclarativeItem* canvas)
 {
-    Q_ASSERT(canvas);
     if(canvas != d->canvas) {
+        if(d->canvas) {
+            disconnect(d->canvas, SIGNAL(canvasControllerChanged()), this, SLOT(canvasControllerChanged()));
+        }
+
         d->canvas = qobject_cast<CQCanvasBase*>(canvas);
         Q_ASSERT(d->canvas);
 
@@ -166,7 +171,7 @@ void CQCanvasControllerItem::canvasControllerChanged()
 
     d->canvasController = d->canvas->canvasController();
     if(d->canvasController) {
-        connect(d->canvas->canvasController(), SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
+        connect(d->canvasController, SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
         updateDocumentSize(d->canvasController->documentSize());
     }
 }

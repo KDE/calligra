@@ -2,6 +2,7 @@
  * This file is part of the KDE project
  * Copyright (C) 2013 Shantanu Tushar <shantanu@kde.org>
  * Copyright (C) 2013 Sujith Haridasan <sujith.h@gmail.com>
+ * Copyright (C) 2013 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
