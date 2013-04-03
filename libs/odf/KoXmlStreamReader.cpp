@@ -46,12 +46,13 @@ public:
     void        checkSoundness();
     QStringRef  buildQName();
 
-    KoXmlStreamReader *q;
+    KoXmlStreamReader *q;       // The owner object;
+
     bool  isSound;              // True if the document is sound (see the class doc for details)
     bool  isChecked;            // True if the soundness is checked
 
-    QList<NamespaceDeclaration>  expectedNamespaces;
-    QList<NamespaceDeclaration>  extraNamespaces;
+    QHash<QString, QString>  expectedNamespaces;  // nsUri, prefix
+    QHash<QString, QString>  extraNamespaces;     // nsUri, prefix
 
     // This is only used when a document is unsound, but is always created.
     QHash<QString, QString>  prefixes; // nsUri, prefix
@@ -89,6 +90,7 @@ void KoXmlStreamReader::Private::clear()
     extraNamespaces.clear();
 
     prefixes.clear();
+    qualifiedNamesCache.clear();
 }
 
 
@@ -102,16 +104,14 @@ void KoXmlStreamReader::Private::checkSoundness()
 
     // Initialize by setting all expected prefixes and all extra ones.
     prefixes.clear();
-    foreach(const NamespaceDeclaration &expectedDecl, expectedNamespaces) {
-        QString nsUri(expectedDecl.namespaceUri);
-        QString prefix(expectedDecl.prefix);
+    foreach(const QString &nsUri, expectedNamespaces.keys()) {
+        QString prefix = expectedNamespaces.value(nsUri);
 
         prefixes.insert(nsUri, prefix);
         usedPrefixes.insert(prefix);
     }
-    foreach(const NamespaceDeclaration &extraDecl, extraNamespaces) {
-        QString nsUri(extraDecl.namespaceUri);
-        QString prefix(extraDecl.prefix);
+    foreach(const QString &nsUri, extraNamespaces.keys()) {
+        QString prefix = extraNamespaces.value(nsUri);
 
         prefixes.insert(nsUri, prefix);
         usedPrefixes.insert(prefix);
@@ -210,7 +210,8 @@ QStringRef KoXmlStreamReader::Private::buildQName()
 
     // FIXME: Handle undeclared prefixes.  (Is that even legal?)
     //QString nsUri = q->QXmlStreamReader::namespaceUri().toString();
-    QString qualifiedName = prefixes.value(q->QXmlStreamReader::namespaceUri().toString()) + ':' + q->QXmlStreamReader::name().toString();
+    QString qualifiedName = prefixes.value(q->QXmlStreamReader::namespaceUri().toString())
+        + ':' + q->QXmlStreamReader::name().toString();
 
     // The following code is because qualifiedName() returns a
     // QStringRef, not a QString.  So we need to make sure that the
@@ -221,7 +222,7 @@ QStringRef KoXmlStreamReader::Private::buildQName()
 #if 1
     if (!qualifiedNamesCache.contains(qualifiedName)) {
         // FIXME: Is there a way to do this at the same time as the
-        // check without creating a double copy if it was already inserted?p?
+        // check without creating a double copy if it was already inserted?
         qualifiedNamesCache.insert(qualifiedName);
     }
 
@@ -252,38 +253,25 @@ KoXmlStreamReader::~KoXmlStreamReader()
 }
 
 
-void KoXmlStreamReader::SetExpectedNamespaces(NamespaceDeclaration *namespaces, int numNamespaces)
+void KoXmlStreamReader::clear()
 {
-    d->expectedNamespaces.clear();
-    for (int i = 0; i < numNamespaces; ++i) {
-        d->expectedNamespaces.append(namespaces[i]);
-    }
+    d->clear();
+
+    QXmlStreamReader::clear();
+}
+
+
+void KoXmlStreamReader::addExpectedNamespace(QString prefix, QString namespaceUri)
+{
+    d->expectedNamespaces.insert(namespaceUri, prefix);
 
     d->isChecked = false;
     d->isSound = false;
 }
 
-void KoXmlStreamReader::SetExtraNamespaces(NamespaceDeclaration *namespaces, int numNamespaces)
+void KoXmlStreamReader::addExtraNamespace(QString prefix, QString namespaceUri)
 {
-    d->extraNamespaces.clear();
-    for (int i = 0; i < numNamespaces; ++i) {
-        d->extraNamespaces.append(namespaces[i]);
-    }
-
-    d->isSound = false;
-}
-
-void KoXmlStreamReader::AddExpectedNamespace(NamespaceDeclaration *nameSpace)
-{
-    d->expectedNamespaces.append(*nameSpace);
-
-    d->isChecked = false;
-    d->isSound = false;
-}
-
-void KoXmlStreamReader::AddExtraNamespace(NamespaceDeclaration *nameSpace)
-{
-    d->extraNamespaces.append(*nameSpace);
+    d->extraNamespaces.insert(namespaceUri, prefix);
 
     d->isChecked = false;
     d->isSound = false;
@@ -293,6 +281,9 @@ void KoXmlStreamReader::AddExtraNamespace(NamespaceDeclaration *nameSpace)
 // ----------------------------------------------------------------
 //                 Reimplemented from QXmlStreamReader
 
+
+// Should this be made inline?  that would make it very fast at the
+// cost of a possibly unstable API.
 
 QStringRef KoXmlStreamReader::qualifiedName() const
 {

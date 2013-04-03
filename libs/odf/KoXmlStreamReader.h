@@ -72,18 +72,13 @@ class KOODF_EXPORT KoXmlStreamReader : public QXmlStreamReader
 {
 public:
 
-    struct NamespaceDeclaration {
-        char *prefix;
-        char *namespaceUri;
-    };     
-
     KoXmlStreamReader();
     ~KoXmlStreamReader();
 
-    void SetExpectedNamespaces(NamespaceDeclaration *namespaces, int numNamespaces);
-    void SetExtraNamespaces(NamespaceDeclaration *namespaces, int numNamespaces);
-    void AddExpectedNamespace(NamespaceDeclaration *nameSpace);
-    void AddExtraNamespace(NamespaceDeclaration *nameSpace);
+    void clear();
+
+    void addExpectedNamespace(QString prefix, QString namespaceUri);
+    void addExtraNamespace(QString prefix, QString namespaceUri);
 
     // Reimplemented from QXmlStreamReader
     QStringRef qualifiedName() const;
