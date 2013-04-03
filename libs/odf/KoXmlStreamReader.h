@@ -29,6 +29,11 @@
 
 #include "koodf_export.h"
 
+class QByteArray;
+class QString;
+class QIODevice;
+
+
 /**
  * @brief An XML stream reader based on QXmlStreamReader and with namespace handling better suited to use for ODF in Calligra.
  *
@@ -73,6 +78,11 @@ class KOODF_EXPORT KoXmlStreamReader : public QXmlStreamReader
 public:
 
     KoXmlStreamReader();
+    KoXmlStreamReader(QIODevice *device);
+    KoXmlStreamReader(const QByteArray &data);
+    KoXmlStreamReader(const QString &data);
+    KoXmlStreamReader(const char *data);
+
     ~KoXmlStreamReader();
 
     void clear();
@@ -80,8 +90,12 @@ public:
     void addExpectedNamespace(QString prefix, QString namespaceUri);
     void addExtraNamespace(QString prefix, QString namespaceUri);
 
+    // --------------------------------
     // Reimplemented from QXmlStreamReader
+
     QStringRef qualifiedName() const;
+
+    void setDevice(QIODevice *device);
 
 private:
     class Private;

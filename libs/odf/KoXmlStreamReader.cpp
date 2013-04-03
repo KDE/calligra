@@ -247,6 +247,30 @@ KoXmlStreamReader::KoXmlStreamReader()
 {
 }
 
+KoXmlStreamReader::KoXmlStreamReader(QIODevice *device)
+    : QXmlStreamReader(device)
+    , d(new KoXmlStreamReader::Private(this))
+{
+}
+
+KoXmlStreamReader::KoXmlStreamReader(const QByteArray &data)
+    : QXmlStreamReader(data)
+    , d(new KoXmlStreamReader::Private(this))
+{
+}
+
+KoXmlStreamReader::KoXmlStreamReader(const QString &data)
+    : QXmlStreamReader(data)
+    , d(new KoXmlStreamReader::Private(this))
+{
+}
+
+KoXmlStreamReader::KoXmlStreamReader(const char *data)
+    : QXmlStreamReader(data)
+    , d(new KoXmlStreamReader::Private(this))
+{
+}
+
 KoXmlStreamReader::~KoXmlStreamReader()
 {
     delete d;
@@ -288,6 +312,17 @@ void KoXmlStreamReader::addExtraNamespace(QString prefix, QString namespaceUri)
 QStringRef KoXmlStreamReader::qualifiedName() const
 {
     return d->isSound ? QXmlStreamReader::qualifiedName() : d->buildQName();
+}
+
+
+void KoXmlStreamReader::setDevice(QIODevice *device)
+{
+    // Setting the device clears the checked status since we don't know
+    // which namespace declarations that will be in the new document.
+    d->isChecked = false;
+    d->isSound = false;
+
+    QXmlStreamReader::setDevice(device);
 }
 
 
