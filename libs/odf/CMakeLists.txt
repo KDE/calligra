@@ -118,6 +118,7 @@ install( FILES
     KoColumns.h
     KoStore.h
     KoStoreDevice.h
+    KoXmlStreamReader.h
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h
