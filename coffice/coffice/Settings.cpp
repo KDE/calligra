@@ -24,6 +24,19 @@ Settings* Settings::instance()
     return settings();
 }
 
+QString Settings::openFileRequested() const
+{
+    return m_openFileRequested;
+}
+
+void Settings::setOpenFileRequested(const QString &file)
+{
+    if (m_openFileRequested == file)
+        return;
+    m_openFileRequested = file;
+    Q_EMIT openFileRequestedChanged(m_openFileRequested);
+}
+
 QVariantMap Settings::values() const
 {
     return m_settings;

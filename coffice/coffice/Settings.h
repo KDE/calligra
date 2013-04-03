@@ -15,9 +15,13 @@ public:
     static Settings* instance();
 
 signals:
+    void openFileRequestedChanged(const QString &file);
     void valueChanged(const QString &name);
 
 public slots:
+    QString openFileRequested() const;
+    void setOpenFileRequested(const QString &file);
+
     QVariantMap values() const;
     void setValues(const QVariantMap& values);
 
@@ -36,6 +40,7 @@ public slots:
 private:
     QVariantMap m_settings;
     bool m_modified;
+    QString m_openFileRequested;
 
     void readGroup(QSettings &settings, QVariantMap &map);
     void writeGroup(QSettings &settings, QVariantMap &map);

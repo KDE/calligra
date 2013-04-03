@@ -912,11 +912,31 @@ public class QtActivity extends Activity
     }
     //---------------------------------------------------------------------------
 
+    public static native void openFileIntent(String uri);
+
     @Override
     protected void onResume()
     {
         super.onResume();
         QtApplication.invokeDelegate();
+
+        final Intent intent = getIntent();
+        if (intent != null && intent.getAction() != null && intent.getData() != null && intent.getAction().equals(android.content.Intent.ACTION_VIEW)) {
+            new Thread( new Runnable() {
+                public void run() {
+                    while(true) {
+                        try {
+                            openFileIntent(intent.getData().toString());
+                            break; // all fine, our job is done
+                        } catch(java.lang.UnsatisfiedLinkError e) {
+                            // happens if the main library wasn't loaded yet in
+                            // which case we need to wait till it was loaded...
+                            try { Thread.sleep(300); } catch(Exception ex) {}
+                        }
+                    }
+                }
+            } ).start();
+        }
     }
     //---------------------------------------------------------------------------
 

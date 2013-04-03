@@ -35,8 +35,5 @@ Rectangle {
 
     Component.onCompleted: {
         pageStack.push(documentTab, true)
-
-        //documentTab.openFile("/home/snoopy/test.odt")
-        //documentTab.openFile("/storage/sdcard0/Download/test2.odt")
     }
 }

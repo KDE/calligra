@@ -2,6 +2,7 @@
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 #include <QFile>
+#include <QDebug>
 
 #include "qmlapplicationviewer.h"
 
@@ -20,6 +21,24 @@ void preInitHacks() {
 }
 #else
 void preInitHacks() {}
+#endif
+
+#ifdef Q_OS_ANDROID
+#include <jni.h>
+#define JNOTOKRETURN(WHAT) \
+    if (!WHAT || jenv->ExceptionCheck()) { \
+        SetHist::log("WHAT went wrong"); \
+        jenv->ExceptionClear(); \
+        return JNI_VERSION_1_4; \
+    }
+extern "C" {
+    JNIEXPORT void JNICALL Java_org_kde_necessitas_origo_QtActivity_openFileIntent(JNIEnv *jenv, jobject, jstring uri)
+    {
+        const char* file = jenv->GetStringUTFChars(uri, 0);
+        Settings::instance()->setOpenFileRequested(QString::fromUtf8(file));
+        jenv->ReleaseStringUTFChars(uri, file);
+    }
+}
 #endif
 
 Q_DECL_EXPORT int main(int argc, char *argv[])

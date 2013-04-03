@@ -123,6 +123,7 @@ public:
         bool ok = kopart->document()->openUrl(KUrl(m_file));
         if (!ok) {
             qWarning() << Q_FUNC_INFO << "Failed to openFile" << m_file;
+            m_doc->d->m_progressProxy->setValue(-1);
             m_doc->d->m_kopart = 0;
             QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection);
             delete kopart;

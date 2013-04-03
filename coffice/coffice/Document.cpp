@@ -80,8 +80,9 @@ QString Document::file() const
 
 bool Document::openFile(const QString &file)
 {
-    d->m_file = file;
-    bool ok = s_appManager()->openFile(this, file);
+    QUrl url(file);
+    d->m_file = url.toLocalFile();
+    bool ok = s_appManager()->openFile(this, d->m_file);
     if (!ok)
         d->m_file.clear();
     return ok;

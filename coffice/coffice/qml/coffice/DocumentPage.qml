@@ -136,4 +136,15 @@ Page {
             }
         }
     }
+
+    Component.onCompleted: {
+        var file = Settings.openFileRequested()
+        //var file = "file:///storage/sdcard0/Download/test2.odt"
+        if (file.length > 0)
+            openFile(file)
+        Settings.openFileRequestedChanged.connect( function(file) {
+            if (file.length > 0)
+                openFile(file)
+        } )
+    }
 }

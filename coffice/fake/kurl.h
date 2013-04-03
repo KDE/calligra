@@ -226,7 +226,7 @@ public:
 
     QString toLocalFile( AdjustPathOption trailing = LeaveTrailingSlash ) const
     {
-        if (!scheme().isEmpty() && isLocalFile()) {
+        if (!host().isEmpty() && isLocalFile()) {
             KUrl urlWithoutHost(*this);
             urlWithoutHost.setHost(QString());
             return trailingSlash(trailing, urlWithoutHost.toLocalFile());
