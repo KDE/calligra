@@ -22,7 +22,7 @@
 #include "ui_pivotoptions.h"
 
 
-#include<QtGui>
+#include<QtWidgets>
 #include<QListWidgetItem>
 #include<QListWidget>
 #include<QObject>

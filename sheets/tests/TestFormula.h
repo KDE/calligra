@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_FORMULA
 #define CALLIGRA_SHEETS_TEST_FORMULA
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtTest>
 #include <Value.h>
 

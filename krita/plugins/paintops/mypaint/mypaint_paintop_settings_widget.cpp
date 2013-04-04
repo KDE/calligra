@@ -18,7 +18,7 @@
 #include "mypaint_paintop_settings_widget.h"
 
 #include <math.h>
-#include <QtGui>
+#include <QtWidgets>
 #include <QStyledItemDelegate>
 #include <QVariant>
 #include <QAbstractListModel>

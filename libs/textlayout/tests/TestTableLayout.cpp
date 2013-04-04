@@ -35,7 +35,7 @@
 #include <KoTableStyle.h>
 #include <KoTextDebug.h>
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QTextCursor>
 
 #include <kdebug.h>

@@ -19,7 +19,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_SORT
 #define CALLIGRA_SHEETS_TEST_SORT
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtTest>
 
 namespace Calligra

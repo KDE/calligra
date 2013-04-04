@@ -34,7 +34,7 @@
 #include "TestRdf.h"
 
 #include <QDebug>
-#include <QtGui>
+#include <QtWidgets>
 #include <QTemporaryFile>
 
 #include <KWDocument.h>

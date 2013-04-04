@@ -29,7 +29,7 @@
 */
 
 #include "kis_palette_manager.h"
-#include <QtGui>
+#include <QtWidgets>
 #include "klocale.h"
 #include <kmenu.h>
 #include <KoIcon.h>

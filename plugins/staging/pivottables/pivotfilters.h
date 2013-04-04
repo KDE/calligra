@@ -24,7 +24,7 @@
 
 #include <kdialog.h>
 
-#include<QtGui>
+#include<QtWidgets>
 #include<QString>
 #include<QVector>
 

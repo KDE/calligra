@@ -17,7 +17,7 @@
  */
 #include "mybrush_resources_listmodel.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 #include <kis_paintop_registry.h>
 #include "mypaint_paintop_factory.h"

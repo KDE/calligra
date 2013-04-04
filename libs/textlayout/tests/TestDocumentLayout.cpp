@@ -20,7 +20,7 @@
  */
 #include "TestDocumentLayout.h"
 #include "MockRootAreaProvider.h"
-#include <QtGui>
+#include <QtWidgets>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>

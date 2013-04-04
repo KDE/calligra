@@ -24,10 +24,10 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoResource.h"
 #include <kis_types.h>
-#include <QtGui>
+#include <QtWidgets>
 #include <QDebug>
 #include <QQueue>
-#include <QtGui>
+#include <QtWidgets>
 #include <math.h>
 
 #define maxPresetCount 10

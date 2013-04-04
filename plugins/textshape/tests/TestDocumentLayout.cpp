@@ -27,7 +27,7 @@
 #include <KoTextBlockBorderData.h>
 #include <KoTextDocument.h>
 
-#include <QtGui>
+#include <QtWidgets>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>

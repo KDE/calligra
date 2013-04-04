@@ -31,7 +31,7 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QSharedPointer>
 #include <QVariant>
 

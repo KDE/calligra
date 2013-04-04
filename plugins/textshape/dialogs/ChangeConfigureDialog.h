@@ -20,7 +20,7 @@
 #ifndef __CHANGE_CONFIGURE_DIALOG_H__
 #define __CHANGE_CONFIGURE_DIALOG_H__
 
-#include <QtGui>
+#include <QtWidgets>
 #include <KoChangeTracker.h>
 
 class ColorDisplayLabel:public QLabel

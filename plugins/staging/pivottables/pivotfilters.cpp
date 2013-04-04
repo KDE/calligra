@@ -22,7 +22,7 @@
 #include "ui_pivotfilters.h"
 #include "pivotmain.h"
 
-#include<QtGui>
+#include<QtWidgets>
 #include<QString>
 
 #include <sheets/Sheet.h>

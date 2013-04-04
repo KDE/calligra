@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_REGION
 #define CALLIGRA_SHEETS_TEST_REGION
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtTest>
 
 namespace Calligra

@@ -19,7 +19,7 @@
 #include "rtreetestapp.h"
 
 #include <QApplication>
-#include <QtGui>
+#include <QtWidgets>
 #include <QPainterPath>
 #include <QLayout>
 #include <QPoint>

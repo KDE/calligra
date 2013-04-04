@@ -20,7 +20,7 @@
 
 #include "TestShapePainting.h"
 
-#include <QtGui>
+#include <QtWidgets>
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
 #include "KoShapePaintingContext.h"

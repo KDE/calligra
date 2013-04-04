@@ -21,7 +21,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_ENGINEERING_FUNCTIONS
 #define CALLIGRA_SHEETS_TEST_ENGINEERING_FUNCTIONS
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtTest>
 
 #include <Value.h>

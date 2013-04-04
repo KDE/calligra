@@ -21,7 +21,7 @@
 
 #include <QDebug>
 #include <QtTest>
-#include <QtGui>
+#include <QtWidgets>
 
 
 

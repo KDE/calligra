@@ -21,7 +21,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_FINANCIAL_FUNCTIONS
 #define CALLIGRA_SHEETS_TEST_FINANCIAL_FUNCTIONS
 
-#include <QtGui>
+#include <QtWidgets>
 #include <qtest_kde.h>
 
 #include <Value.h>

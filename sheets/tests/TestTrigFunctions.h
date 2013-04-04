@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_TRIG_FUNCTIONS
 #define CALLIGRA_SHEETS_TEST_TRIG_FUNCTIONS
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtTest>
 
 #include <Value.h>

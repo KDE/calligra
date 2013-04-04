@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QtGui>
+#include <QtWidgets>
 #include <QVector3D>
 #include <cmath>
 #include <krita_export.h>

@@ -6,7 +6,7 @@
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
 
-#include <QtGui>
+#include <QtWidgets>
 
 void TestDocumentLayout::testBasicList()
 {
