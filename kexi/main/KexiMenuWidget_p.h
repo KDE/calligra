@@ -31,8 +31,8 @@
 #ifndef KEXIMENUWIDGET_P_H
 #define KEXIMENUWIDGET_P_H
 
-#include <KComponentData>
-#include <KSharedConfig>
+#include <kcomponentdata.h>
+#include <ksharedconfig.h>
 #include <QStyleOption>
 #include <QDateTime>
 #include <QCache>

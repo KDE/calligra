@@ -62,7 +62,7 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
-#include <KServiceTypeTrader>
+#include <kservicetypetrader.h>
 
 #include "KoOdf.h"
 #include "KoShapeGroup.h"

@@ -24,7 +24,7 @@
 
 #include "kpttask.h"
 
-#include <KUrl>
+#include <kurl.h>
 
 #include <QString>
 

@@ -28,7 +28,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 // used by the CONVERT function
 #include <QMap>

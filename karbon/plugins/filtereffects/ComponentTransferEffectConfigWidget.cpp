@@ -20,10 +20,10 @@
 #include "ComponentTransferEffectConfigWidget.h"
 #include "KoFilterEffect.h"
 
-#include <KNumInput>
-#include <KComboBox>
-#include <KLineEdit>
-#include <KLocale>
+#include <knuminput.h>
+#include <kcombobox.h>
+#include <klineedit.h>
+#include <klocale.h>
 
 #include <QGridLayout>
 #include <QLabel>

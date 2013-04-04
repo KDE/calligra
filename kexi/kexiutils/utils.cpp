@@ -32,14 +32,14 @@
 #include <QStyle>
 #include <QLayout>
 
-#include <KDebug>
-#include <KCursor>
-#include <KApplication>
-#include <KIconEffect>
-#include <KGlobalSettings>
-#include <KAction>
-#include <KDialog>
-#include <KColorScheme>
+#include <kdebug.h>
+#include <kcursor.h>
+#include <kapplication.h>
+#include <kiconeffect.h>
+#include <kglobalsettings.h>
+#include <kaction.h>
+#include <kdialog.h>
+#include <kcolorscheme.h>
 
 using namespace KexiUtils;
 

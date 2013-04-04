@@ -37,7 +37,7 @@
 #include "krscriptfunctions.h"
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
-#include <KRun>
+#include <krun.h>
 
 #include <KoIcon.h>
 #include <renderobjects.h>

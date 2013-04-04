@@ -37,10 +37,10 @@
 #include <KoShapeManager.h>
 #include <KoPart.h>
 
-#include <KMimeType>
-#include <KMimeTypeTrader>
-#include <KDebug>
-#include <KActionCollection>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
+#include <kdebug.h>
+#include <kactioncollection.h>
 #include <KoSelection.h>
 
 #include <QTextDocument>

@@ -37,7 +37,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QPainter>
 #include <QWidget>

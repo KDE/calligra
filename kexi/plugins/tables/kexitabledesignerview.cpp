@@ -30,13 +30,13 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <KAction>
-#include <KToggleAction>
-#include <KMenu>
+#include <kaction.h>
+#include <ktoggleaction.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kiconeffect.h>
 #include <kundo2command.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 #include <KoIcon.h>
 
 #include <koproperty/Set.h>

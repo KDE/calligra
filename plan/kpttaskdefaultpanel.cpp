@@ -33,8 +33,8 @@
 #include <QDateTimeEdit>
 #include <QComboBox>
 
-#include <KActionCollection>
-#include <KTextEdit>
+#include <kactioncollection.h>
+#include <ktextedit.h>
 #include <kdebug.h>
 
 namespace KPlato

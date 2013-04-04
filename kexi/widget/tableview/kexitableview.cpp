@@ -36,7 +36,7 @@
 #include <QLabel>
 #include <QToolTip>
 #include <Q3WhatsThis>
-#include <KColorScheme>
+#include <kcolorscheme.h>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QFocusEvent>
@@ -56,7 +56,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <KAction>
+#include <kaction.h>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>

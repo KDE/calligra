@@ -20,9 +20,9 @@
 #include "ImageEffectConfigWidget.h"
 #include "ImageEffect.h"
 #include "KoFilterEffect.h"
-#include <KNumInput>
-#include <KFileDialog>
-#include <KLocale>
+#include <knuminput.h>
+#include <kfiledialog.h>
+#include <klocale.h>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>

@@ -39,10 +39,10 @@
 #include <QIntValidator>
 #include <QToolButton>
 #include <QTimer>
-#include <KSqueezedTextLabel>
-#include <KStatusBar>
-#include <KLocale>
-#include <KActionCollection>
+#include <ksqueezedtextlabel.h>
+#include <kstatusbar.h>
+#include <klocale.h>
+#include <kactioncollection.h>
 #include <kdebug.h>
 
 const KLocalizedString i18nModified = ki18n("Modified");

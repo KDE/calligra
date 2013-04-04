@@ -30,7 +30,7 @@
 #include <qmath.h>
 
 #include <kdebug.h>
-#include <KLocale>
+#include <klocale.h>
 
 #include "FunctionModuleRegistry.h"
 #include "Function.h"

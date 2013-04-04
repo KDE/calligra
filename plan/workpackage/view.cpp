@@ -58,14 +58,14 @@
 #include <kxmlguiclient.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
-#include <KToolInvocation>
+#include <ktoolinvocation.h>
 #include <ktoggleaction.h>
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/componentfactory.h>
-#include <KActionCollection>
-#include <KTemporaryFile>
+#include <kactioncollection.h>
+#include <ktemporaryfile.h>
 
 #include <kmessagebox.h>
 #include <kvbox.h>

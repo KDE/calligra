@@ -23,7 +23,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
-#include <KLineEdit>
+#include <klineedit.h>
 
 #include <kexi_export.h>
 

@@ -43,10 +43,10 @@
 #include <QFileInfo>
 
 #include <kdeversion.h>
-#include <KDebug>
-#include <KZip>
-#include <KMessageBox>
-#include <KTemporaryFile>
+#include <kdebug.h>
+#include <kzip.h>
+#include <kmessagebox.h>
+#include <ktemporaryfile.h>
 
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>

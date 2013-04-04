@@ -31,7 +31,7 @@
 
 
 #include <QApplication>
-#include <KMessageBox>
+#include <kmessagebox.h>
 #include <kptschedulerplugin.h>
 
 

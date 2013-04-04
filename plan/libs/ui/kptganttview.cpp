@@ -60,7 +60,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kaction.h>
-#include <KToggleAction>
+#include <ktoggleaction.h>
 
 #include "kdganttglobal.h"
 #include "kdganttstyleoptionganttitem.h"

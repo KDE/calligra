@@ -24,9 +24,9 @@
 #include <QHeaderView>
 #include <QContextMenuEvent>
 
-#include <KDebug>
-#include <KIconEffect>
-#include <KLocale>
+#include <kdebug.h>
+#include <kiconeffect.h>
+#include <klocale.h>
 
 #include <KoIcon.h>
 

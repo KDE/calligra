@@ -21,7 +21,7 @@
 #ifndef LIBACTIONWIDGET_H
 #define LIBACTIONWIDGET_H
 
-#include <KToggleAction>
+#include <ktoggleaction.h>
 
 #include <kexi_export.h>
 

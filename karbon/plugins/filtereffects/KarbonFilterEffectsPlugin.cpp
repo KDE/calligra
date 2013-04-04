@@ -32,7 +32,7 @@
 
 #include "KoFilterEffectRegistry.h"
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(KarbonFilterEffectsPluginFacory, registerPlugin<KarbonFilterEffectsPlugin>();)
 K_EXPORT_PLUGIN(KarbonFilterEffectsPluginFacory("FilterEffects"))

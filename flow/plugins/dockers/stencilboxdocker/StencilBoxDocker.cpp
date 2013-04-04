@@ -46,10 +46,10 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <knewstuff3/downloaddialog.h>
-#include <KFileDialog>
+#include <kfiledialog.h>
 #include <KIO/NetAccess>
-#include <KStandardDirs>
-#include <KTar>
+#include <kstandarddirs.h>
+#include <ktar.h>
 
 #include <QVBoxLayout>
 #include <QListView>

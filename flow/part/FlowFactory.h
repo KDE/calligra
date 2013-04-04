@@ -20,7 +20,7 @@
 #ifndef FLOWFACTORY_H
 #define FLOWFACTORY_H
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 #include "flow_export.h"
 
 class KComponentData;

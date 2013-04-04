@@ -25,7 +25,7 @@
 #include <QtAlgorithms>
 #include <QTextDocument>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <db/utils.h>
 #include <db/field.h>

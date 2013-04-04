@@ -26,7 +26,7 @@
 
 #include <QWidget>
 
-#include <KDialog>
+#include <kdialog.h>
 
 namespace KPlato
 {

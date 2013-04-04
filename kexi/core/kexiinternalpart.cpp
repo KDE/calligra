@@ -24,9 +24,9 @@
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
 
-#include <KDebug>
-//#include <KLibLoader>
-#include <KLocale>
+#include <kdebug.h>
+//#include <klibloader.h>
+#include <klocale.h>
 #include <db/msghandler.h>
 #include <kexi_global.h>
 

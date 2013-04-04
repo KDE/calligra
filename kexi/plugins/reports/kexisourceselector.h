@@ -22,8 +22,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QComboBox>
-#include <KLineEdit>
-#include <KPushButton>
+#include <klineedit.h>
+#include <kpushbutton.h>
 
 #include <db/connection.h>
 #include <KoReportData.h>

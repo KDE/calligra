@@ -26,15 +26,15 @@
 
 #include <KoIcon.h>
 
-#include <KAcceleratorManager>
-#include <KStandardGuiItem>
-#include <KLocale>
+#include <kacceleratormanager.h>
+#include <kstandardguiitem.h>
+#include <klocale.h>
 
 #include <QGridLayout>
 #include <QPointer>
 #include <QEvent>
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KexiAssistantPage::Private {
 public:    

@@ -24,8 +24,8 @@
 
 #include "ui_kptworkpackagemergepanel.h"
 
-#include <KDialog>
-#include <KDateTime>
+#include <kdialog.h>
+#include <kdatetime.h>
 
 #include <QMap>
 #include <QFrame>

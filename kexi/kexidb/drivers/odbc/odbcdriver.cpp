@@ -34,7 +34,7 @@
 #include <sql.h>
 #include <sqltypes.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 using namespace KexiDB;
 
