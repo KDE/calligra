@@ -20,7 +20,7 @@
 
 #include <limits.h>
 
-#ifdef Q_WS_X11
+#if HAVE_X11
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <fixx11h.h>
@@ -195,7 +195,7 @@ void KisConfig::setMonitorProfile(const QString & monitorProfile, bool override)
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
-#ifdef Q_WS_X11
+#if HAVE_X11
 
     Atom type;
     int format;

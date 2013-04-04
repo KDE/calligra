@@ -55,7 +55,7 @@ public:
         , toolProxy(0)
         , setMirrorMode(false)
         , forwardAllEventsToTool(false)
-#ifdef Q_WS_X11
+#if HAVE_X11
         , hiResEventsWorkaroundCoeff(1.0, 1.0)
 #endif
         , lastTabletEvent(0)
@@ -87,7 +87,7 @@ public:
     bool forwardAllEventsToTool;
 
     KisShortcutMatcher matcher;
-#ifdef Q_WS_X11
+#if HAVE_X11
     QPointF hiResEventsWorkaroundCoeff;
 #endif
     QTabletEvent *lastTabletEvent;
@@ -269,7 +269,7 @@ bool KisInputManager::Private::trySetMirrorMode(const QPointF &mousePosition)
     return false;
 }
 
-#ifdef Q_WS_X11
+#if HAVE_X11
 inline QPointF dividePoints(const QPointF &pt1, const QPointF &pt2) {
     return QPointF(pt1.x() / pt2.x(), pt1.y() / pt2.y());
 }
@@ -283,7 +283,7 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
 {
     delete lastTabletEvent;
 
-#ifdef Q_WS_X11
+#if HAVE_X11
     /**
      * There is a bug in Qt-x11 when working in 2 tablets + 2 monitors
      * setup. The hiResGlobalPos() value gets scaled wrongly somehow.
@@ -304,7 +304,7 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
         new QTabletEvent(event->type(),
                          event->pos(),
                          event->globalPos(),
-#ifdef Q_WS_X11
+#if HAVE_X11
                          multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
 #else
                          event->hiResGlobalPos(),

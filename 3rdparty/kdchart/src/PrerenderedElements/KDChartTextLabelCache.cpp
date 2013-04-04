@@ -186,7 +186,7 @@ void PrerenderedLabel::paint() const
 
     QRectF boundingRect;
     const QColor FullTransparent( 255, 255, 255, 0 );
-#ifdef Q_WS_X11
+#if HAVE_X11
     QImage pixmap( Width, Height, QImage::Format_ARGB32_Premultiplied );
     qWarning() << "PrerenderedLabel::paint: using QImage for prerendered labels "
                << "to work around XRender/Qt4 bug.";
@@ -245,7 +245,7 @@ void PrerenderedLabel::paint() const
     {
         temp.fill( FullTransparent );
         QPainter painter( &temp );
-#ifdef Q_WS_X11
+#if HAVE_X11
         painter.drawImage( QPointF( 0.0, 0.0 ), pixmap, boundingRect );
 #else
         painter.drawPixmap( QPointF( 0.0, 0.0 ), pixmap, boundingRect );

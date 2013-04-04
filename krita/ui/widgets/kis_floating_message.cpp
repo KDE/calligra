@@ -135,7 +135,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 
     setFont(QFont("sans-serif"));
 
-    #ifdef Q_WS_X11
+    #if HAVE_X11
     KWindowSystem::setType( winId(), NET::Notification );
     #endif
 

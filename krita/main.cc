@@ -45,7 +45,7 @@
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-#ifdef Q_WS_X11
+#if HAVE_X11
     setenv("QT_NO_GLIB", "1", true);
 #endif
 
