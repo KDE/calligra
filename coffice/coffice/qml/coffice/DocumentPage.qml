@@ -55,9 +55,6 @@ Page {
                     value: 0
                 }
             }
-            Component.onCompleted: {
-                barPageStack.push(buttonPage, true)
-            }
         }
     }
 
@@ -71,10 +68,10 @@ Page {
             margins: 5
         }
         height: infoLabel.height
-        //color: buttonBar.color
+        color: "transparent"
         Label {
             id: infoLabel
-            color: "#aa0000"
+            color: "#ff3333"
             font.bold: true
             wrapMode: Text.Wrap
             anchors {
@@ -147,6 +144,7 @@ Page {
 
         DocumentViewItem {
             id: documentViewItem
+            pageColor: "#ffffff"
             onOpenFileFailed: {
                 infoLabel.text = qsTr("Error: %1").arg(error)
             }
@@ -154,7 +152,7 @@ Page {
                 if (percent < 0) {
                     fileLabel.text = file()
                     if (barPageStack.currentPage == progressPage)
-                        barPageStack.pop(buttonPage, true)
+                        barPageStack.push(buttonPage, true)
                     progressBar.value = 0
                 } else {
                     if (barPageStack.currentPage != progressPage)
@@ -167,9 +165,10 @@ Page {
 
     Component.onCompleted: {
         var file = Settings.openFileRequested()
-        //var file = "file:///storage/sdcard0/Download/test2.odt"
         if (file.length > 0)
             documentPage.openFile(file)
+        else
+            barPageStack.push(buttonPage, true)
 
         Settings.openFileRequestedChanged.connect( function(file) {
             if (file.length > 0)

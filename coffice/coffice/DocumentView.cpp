@@ -59,10 +59,14 @@ void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
         m_page->doc()->updatePage(m_page);
     }
 
+    if (m_view->pageColor().isValid()) {
+        painter->fillRect(option->rect, QBrush(m_view->pageColor()));
+    }
+
     QGraphicsPixmapItem::paint(painter, option, widget);
 
-    painter->setPen(QPen(Qt::black));
-    painter->drawRect(option->rect);
+    //painter->setPen(QPen(QColor("#ffffff")));
+    //painter->drawRect(option->rect);
 }
 
 void PageItem::slotThumbnailFinished(const QImage &image)
@@ -82,7 +86,7 @@ DocumentItem::DocumentItem(QObject *parentObject, QGraphicsItem *parentItem)
     , m_width(0.0)
     , m_height(0.0)
     , m_margin(5.0)
-    , m_spacing(10.0)
+    , m_spacing(5.0)
 {
     connect(m_doc, SIGNAL(layoutFinished()), this, SLOT(slotLayoutFinished()));
 }
@@ -195,6 +199,39 @@ QRectF DocumentView::boundingRect() const
 //    QRectF r = m_doc->boundingRect();
 //    r = mapRectFromItem(m_doc, r);
 //    return r;
+}
+
+qreal DocumentView::pageMargin() const
+{
+    return m_doc->pageMargin();
+}
+
+void DocumentView::setPageMargin(qreal margin)
+{
+    m_doc->setPageMargin(margin);
+    Q_EMIT pageMarginChanged();
+}
+
+qreal DocumentView::pageSpacing() const
+{
+    return m_doc->pageSpacing();
+}
+
+void DocumentView::setPageSpacing(qreal spacing)
+{
+    m_doc->setPageSpacing(spacing);
+    Q_EMIT pageSpacingChanged();
+}
+
+QColor DocumentView::pageColor() const
+{
+    return m_doc->brush().color();
+}
+
+void DocumentView::setPageColor(const QColor &color)
+{
+    m_doc->setPageColor(color);
+    Q_EMIT pageColorChanged();
 }
 
 QPointF DocumentView::pos() const

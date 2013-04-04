@@ -4,7 +4,7 @@ Rectangle {
     id: appWindow
     width: 800
     height: 600
-    color: "#ffffff"
+    color: "#000000"
 
     PageStack {
         id: pageStack

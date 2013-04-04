@@ -16,11 +16,11 @@ Item {
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: "#d0d0d0"
+                color: "#000030"
             }
             GradientStop {
                 position: 1.0
-                color: "#f0f0f0"
+                color: "#000060"
             }
         }
     }
@@ -31,7 +31,6 @@ Item {
         Label {
             id: titleLabel
             font.weight: Font.Bold
-            //font.pointSize: 16
         }
         Row {
             id: columnRow
@@ -39,7 +38,7 @@ Item {
             Label {
                 id: detailLabel
                 font.weight: Font.Light
-                //font.pointSize: 16
+                color: "#cacaca"
             }
         }
     }

@@ -17,7 +17,7 @@ Rectangle {
     height: contentColumn.height + 14
     width: contentColumn.width + 14
     border.width: 1
-    border.color: "#909090"
+    border.color: "#a0a0a0"
     radius: 4
     smooth: true
     clip: true
@@ -25,11 +25,11 @@ Rectangle {
     gradient: Gradient {
         GradientStop {
             position: 0.0
-            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#c9c9c9" : "#fafafa"
+            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#000030" : "#909090"
         }
         GradientStop {
             position: 1.0
-            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#f9f9f9" : "#f0f0f0"
+            color: root.enabled && ((root.checkable && root.checked) || (/*!root.checkable &&*/ mouseArea.pressed)) ? "#000060" : "#404040"
         }
     }
 
@@ -65,7 +65,7 @@ Rectangle {
             id: label
             anchors.horizontalCenter: parent.horizontalCenter
             font.pointSize: 11
-            color: root.enabled ? "#000000" : "#939393"
+            color: root.enabled ? "#ffffff" : "#c0c0c0"
             clip: true
         }
     }
