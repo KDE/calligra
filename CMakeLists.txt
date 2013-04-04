@@ -66,6 +66,8 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 option(BUILD_kexi "Build directory kexi" OFF)
 option(BUILD_plan "Build directory plan" OFF)
+set(SHOULD_BUILD_LIB_KOPROPERTY FALSE)
+set(SHOULD_BUILD_LIB_KOREPORT FALSE)
 
 
 # temporary migration support
