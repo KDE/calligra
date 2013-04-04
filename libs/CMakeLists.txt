@@ -13,7 +13,7 @@ if (SHOULD_BUILD_CALLIGRA_LIBS)
 endif (SHOULD_BUILD_CALLIGRA_LIBS)
 
 if (SHOULD_BUILD_SCRIPTING)
-    add_subdirectory( kokross )
+#    add_subdirectory( kokross )
 endif (SHOULD_BUILD_SCRIPTING)
 
 if (SHOULD_BUILD_LIB_VECTORIMAGE)
@@ -25,16 +25,16 @@ if (SHOULD_BUILD_LIB_KOPAGEAPP)
 endif (SHOULD_BUILD_LIB_KOPAGEAPP)
 
 if(SHOULD_BUILD_LIB_KOPROPERTY)
-    add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
+#    add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
 endif(SHOULD_BUILD_LIB_KOPROPERTY)
 
 if (SHOULD_BUILD_LIB_CALLIGRADB)
-    add_subdirectory( db ) # used by Kexi and Word's Biblio; TODO: remove when Predicate lib arrives
+#    add_subdirectory( db ) # used by Kexi and Word's Biblio; TODO: remove when Predicate lib arrives
 endif (SHOULD_BUILD_LIB_CALLIGRADB)
 
 # only build koreport if possible
 if (SHOULD_BUILD_LIB_KOREPORT)
-    add_subdirectory( koreport )
+#    add_subdirectory( koreport )
 endif (SHOULD_BUILD_LIB_KOREPORT)
 
 if (Soprano_FOUND)
