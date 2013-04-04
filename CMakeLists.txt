@@ -68,8 +68,8 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
-option(BUILD_kexi "Build directory kexi" OFF)
-option(BUILD_plan "Build directory plan" OFF)
+option(SHOULD_BUILD_KEXI_APP "Build directory kexi" OFF)
+option(SHOUD_BUILD_PLAN_APP "Build directory plan" OFF)
 set(SHOULD_BUILD_LIB_KOPROPERTY FALSE)
 set(SHOULD_BUILD_LIB_KOREPORT FALSE)
 
@@ -888,11 +888,11 @@ endif (SHOULD_BUILD_FLOW_APP)
 add_subdirectory(stage)
 
 if(SHOULD_BUILD_KEXI_APP)
-    add_subdirectory(kexi)
+#    add_subdirectory(kexi)
 endif(SHOULD_BUILD_KEXI_APP)
 
 if(SHOULD_BUILD_PLAN_APP)
-    add_subdirectory(plan)
+#    add_subdirectory(plan)
 endif(SHOULD_BUILD_PLAN_APP)
 
 add_subdirectory(sheets)
