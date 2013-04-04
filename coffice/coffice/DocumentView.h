@@ -61,17 +61,24 @@ public:
     explicit DocumentView(QDeclarativeItem *parent = 0);
     virtual ~DocumentView();
     virtual QRectF boundingRect() const;
+
 Q_SIGNALS:
+    void openFileFailed(const QString &file, const QString &error);
     void progressUpdated(int percent);
+
 public Q_SLOTS:
     QPointF pos() const;
     void setPos(const QPointF &position);
+
     qreal zoom() const;
     //bool isZoomToFit() const;
     void setZoom(qreal factor);
     //void zoomToCenter(qreal factor = 1.0);
     //void zoomToFit();
+
+    QString file() const;
     bool openFile(const QString &file);
+
 private Q_SLOTS:
     void slotSizeChanged();
 protected:

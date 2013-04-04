@@ -5,7 +5,7 @@ Page {
     id: documentPage
 
     function openFile(file) {
-        fileLabel.text = file
+        infoLabel.text = ""
 
         documentViewItem.openFile(file)
 
@@ -61,10 +61,34 @@ Page {
         }
     }
 
+    Rectangle {
+        id: infoBox
+        visible: infoLabel.text.length > 0
+        anchors {
+            top: buttonBar.bottom
+            left: parent.left
+            right: parent.right
+            margins: 5
+        }
+        height: infoLabel.height
+        //color: buttonBar.color
+        Label {
+            id: infoLabel
+            color: "#aa0000"
+            font.bold: true
+            wrapMode: Text.Wrap
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+            }
+        }
+    }
+
     Flickable {
         id: flickable
         anchors {
-            top: buttonBar.bottom
+            top: infoBox.visible ? infoBox.bottom : buttonBar.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -123,8 +147,12 @@ Page {
 
         DocumentViewItem {
             id: documentViewItem
+            onOpenFileFailed: {
+                infoLabel.text = qsTr("Error: %1").arg(error)
+            }
             onProgressUpdated: {
                 if (percent < 0) {
+                    fileLabel.text = file()
                     if (barPageStack.currentPage == progressPage)
                         barPageStack.pop(buttonPage, true)
                     progressBar.value = 0
@@ -141,10 +169,11 @@ Page {
         var file = Settings.openFileRequested()
         //var file = "file:///storage/sdcard0/Download/test2.odt"
         if (file.length > 0)
-            openFile(file)
+            documentPage.openFile(file)
+
         Settings.openFileRequestedChanged.connect( function(file) {
             if (file.length > 0)
-                openFile(file)
+                documentPage.openFile(file)
         } )
     }
 }

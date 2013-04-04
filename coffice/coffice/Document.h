@@ -40,7 +40,7 @@ public:
     void emitProgressUpdated(int percent);
 Q_SIGNALS:
     //void openFileSucceeded();
-    void openFileFailed(const QString &file);
+    void openFileFailed(const QString &file, const QString &error);
     void progressUpdated(int percent);
     void layoutFinished();
 public Q_SLOTS:

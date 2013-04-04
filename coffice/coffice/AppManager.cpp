@@ -109,7 +109,7 @@ public:
         KoPart *kopart = s_partFactory()->createPart();
         if (!kopart) {
             qWarning() << Q_FUNC_INFO << "Failed to create KoPart";
-            QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection);
+            QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, QObject::tr("Unsupported Mimetype")));
             return;
         }
 
@@ -122,10 +122,13 @@ public:
 
         bool ok = kopart->document()->openUrl(KUrl(m_file));
         if (!ok) {
-            qWarning() << Q_FUNC_INFO << "Failed to openFile" << m_file;
+            QString error = kopart->document()->errorMessage();
+            if (error.isEmpty())
+                error = QObject::tr("Cannot load file");
+            qWarning() << Q_FUNC_INFO << "Failed to openFile" << m_file << error;
             m_doc->d->m_progressProxy->setValue(-1);
             m_doc->d->m_kopart = 0;
-            QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection);
+            QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, error));
             delete kopart;
             return;
         }

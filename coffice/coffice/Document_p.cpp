@@ -26,9 +26,9 @@ Document::Private::~Private()
 }
 
 // runs in the UI-thread
-void Document::Private::slotOpenFileFailed()
+void Document::Private::slotOpenFileFailed(const QString &error)
 {
-    Q_EMIT q->openFileFailed(m_file);
+    Q_EMIT q->openFileFailed(m_file, error);
     m_file.clear();
 }
 

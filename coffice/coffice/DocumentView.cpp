@@ -175,6 +175,7 @@ DocumentView::DocumentView(QDeclarativeItem *parent)
     setFlag(QGraphicsItem::ItemDoesntPropagateOpacityToChildren, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
+    connect(m_doc->document(), SIGNAL(openFileFailed(QString,QString)), this, SIGNAL(openFileFailed(QString,QString)));
     connect(m_doc->document(), SIGNAL(progressUpdated(int)), this, SIGNAL(progressUpdated(int)));
     connect(m_doc, SIGNAL(sizeChanged()), this, SLOT(slotSizeChanged()));
 }
@@ -239,6 +240,11 @@ void DocumentView::setZoom(qreal factor)
 //    qreal y = (s.height() - r.height()) / 2;
 //    m_doc->setPos(x, y);
 //}
+
+QString DocumentView::file() const
+{
+    return m_doc->document()->file();
+}
 
 bool DocumentView::openFile(const QString &file)
 {

@@ -43,7 +43,7 @@ public:
     virtual ~Private();
 
 public Q_SLOTS:
-    void slotOpenFileFailed();
+    void slotOpenFileFailed(const QString &error);
     void slotPageSetupChanged();
     void slotLayoutFinished();
     void slotLayoutFinished2(PageDefList pages);
