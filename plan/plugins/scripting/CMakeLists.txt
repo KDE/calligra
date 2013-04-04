@@ -27,7 +27,7 @@ kde4_add_ui_files(krossmoduleplan_PART_SRCS
 )
 
 
-qt4_wrap_cpp(krossmoduleplan_PART_SRCS
+qt5_wrap_cpp(krossmoduleplan_PART_SRCS
 )
 
 kde4_add_plugin(krossmoduleplan ${krossmoduleplan_PART_SRCS})

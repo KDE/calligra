@@ -12,7 +12,7 @@ set(krossmodulewords_PART_SRCS
 	KWScriptingPart.cpp
 )
 
-qt4_wrap_cpp(krossmodulewords_PART_SRCS
+qt5_wrap_cpp(krossmodulewords_PART_SRCS
 	Page.h PageLayout.h
 	Style.h
 	TextDocument.h TextFrame.h TextList.h TextTable.h

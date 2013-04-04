@@ -14,7 +14,7 @@ add_subdirectory( scripts )
 # the Sheets Scripting KParts::Plugin + Kross module
 set(krossmodulesheets_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp ScriptingWidgets.cpp ScriptingPart.cpp ScriptingListener.cpp)
 
-qt4_wrap_cpp(krossmodulesheets_PART_SRCS ScriptingReader.h ScriptingWriter.h)
+qt5_wrap_cpp(krossmodulesheets_PART_SRCS ScriptingReader.h ScriptingWriter.h)
 kde4_add_plugin(krossmodulesheets ${krossmodulesheets_PART_SRCS})
 
 target_link_libraries(krossmodulesheets ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} calligrasheetscommon kokross)

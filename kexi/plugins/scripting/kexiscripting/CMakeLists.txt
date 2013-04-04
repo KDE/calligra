@@ -10,7 +10,7 @@ include_directories(
 ########### next target ###############
 
 set(kexihandler_script_PART_SRCS kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp )
-qt4_wrap_cpp(kexihandler_script_PART_SRCS kexiscriptadaptor.h)
+qt5_wrap_cpp(kexihandler_script_PART_SRCS kexiscriptadaptor.h)
 kde4_add_plugin(kexihandler_script ${kexihandler_script_PART_SRCS})
 target_link_libraries(
     kexihandler_script

@@ -34,7 +34,7 @@ else (KEXI_MOBILE)
 endif (KEXI_MOBILE)
 
 
-qt4_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
+qt5_wrap_cpp(kexihandler_report_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
 
 kde4_add_plugin(kexihandler_report ${kexihandler_report_SRCS})
 
