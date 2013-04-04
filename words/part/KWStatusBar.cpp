@@ -60,7 +60,7 @@ public:
     QWidget *m_widget;
     KWStatusBarBaseItem(QWidget *parent = 0) : QStackedWidget(parent), m_widget(0)
     {
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         setAttribute(Qt::WA_MacMiniSize, true);
 #endif
         m_label = new QLabel(this);

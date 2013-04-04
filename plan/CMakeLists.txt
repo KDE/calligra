@@ -122,11 +122,11 @@ kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi
 
 kde4_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
 
-if (Q_WS_MAC)
+if (Q_OS_MAC)
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.plan")
    set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Plan")
-endif (Q_WS_MAC)
+endif (Q_OS_MAC)
 
 target_link_libraries(kdeinit_calligraplan komain)
 

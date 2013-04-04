@@ -123,11 +123,11 @@ set(krita_KDEINIT_SRCS main.cc)
 kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
-if (Q_WS_MAC)
+if (Q_OS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.krita")
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
-endif (Q_WS_MAC)
+endif (Q_OS_MAC)
 
 target_link_libraries(kdeinit_krita kritaui)
 target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)

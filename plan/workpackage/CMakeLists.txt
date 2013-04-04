@@ -90,11 +90,11 @@ set(calligraplanwork_KDEINIT_SRCS main.cpp)
 
 kde4_add_kdeinit_executable(calligraplanwork ${calligraplanwork_KDEINIT_SRCS})
 
-if (Q_WS_MAC)
+if (Q_OS_MAC)
    set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.plan.work")
    set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Plan Work")
-endif (Q_WS_MAC)
+endif (Q_OS_MAC)
 
 target_link_libraries(
     kdeinit_calligraplanwork

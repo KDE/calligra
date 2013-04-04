@@ -48,12 +48,12 @@ MACRO (CALLIGRA_ADD_BENCHMARK _test_NAME)
       # .bat because of rpath handling
       set(_executable "${loc}.bat")
     else(WIN32)
-      if (Q_WS_MAC AND NOT _nogui)
+      if (Q_OS_MAC AND NOT _nogui)
         set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
-      else (Q_WS_MAC AND NOT _nogui)
+      else (Q_OS_MAC AND NOT _nogui)
         # .shell because of rpath handling
         set(_executable "${loc}.shell")
-      endif (Q_WS_MAC AND NOT _nogui)
+      endif (Q_OS_MAC AND NOT _nogui)
     endif(WIN32)
     
     if (using_qtest AND KDE4_TEST_OUTPUT STREQUAL "xml")

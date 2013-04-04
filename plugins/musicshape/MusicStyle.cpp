@@ -20,7 +20,7 @@
 using namespace MusicCore;
 
 MusicStyle::MusicStyle()
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     : m_font("Emmentaler 14")
 #else
     : m_font("Emmentaler")

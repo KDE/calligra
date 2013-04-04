@@ -79,7 +79,7 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
 {
     const bool isSlideType = (d->view->kopaDocument()->pageType() == KoPageApp::Slide);
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     setAttribute(Qt::WA_MacMiniSize, true);
 #endif
     // normal display

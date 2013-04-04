@@ -114,7 +114,7 @@ void KexiUserFeedbackAgent::Private::updateData()
         }
         p.close();
     }
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     ADD("os", "mac", SystemInfoArea);
 #elif defined(Q_OS_WIN)
     ADD("os", "windows", SystemInfoArea);

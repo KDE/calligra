@@ -184,11 +184,11 @@ set(author_KDEINIT_SRCS author/main.cpp )
 
 kde4_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
 
-if (Q_WS_MAC)
+if (Q_OS_MAC)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.author")
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
-endif (Q_WS_MAC)
+endif (Q_OS_MAC)
 
 target_link_libraries(kdeinit_calligraauthor  ${KDE4_KDEUI_LIBS} komain )
 
