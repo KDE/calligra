@@ -21,7 +21,7 @@
 #define MYSQLDRIVER_GLOBAL_H
 
 #include <QtGlobal>
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define KDEWIN_FCNTL_H
 # define KDEWIN_SYS_STAT_H
 # define KDEWIN_STDIO_H

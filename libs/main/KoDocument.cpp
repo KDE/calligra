@@ -1829,7 +1829,7 @@ int KoDocument::queryCloseDia()
 QString KoDocument::prettyPathOrUrl() const
 {
     QString url( d->parentPart->url().pathOrUrl() );
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     if (d->parentPart->url().isLocalFile()) {
         url = QDir::convertSeparators(url);
     }

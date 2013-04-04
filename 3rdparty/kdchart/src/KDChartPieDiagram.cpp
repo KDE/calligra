@@ -428,7 +428,7 @@ void PieDiagram::paintInternal(PaintContext* ctx, QRectF& textBoundingRect)
     d->paintDataValueTextsAndMarkers(  this,  ctx,  list,  false, false, &textBoundingRect );
 }
 
-#if defined ( Q_WS_WIN)
+#if defined ( Q_OS_WIN)
 #define trunc(x) ((int)(x))
 #endif
 

@@ -100,7 +100,7 @@ KexiFileWidget::KexiFileWidget(
       } */
 
     /* Qt4
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       if (startDirOrVariable.startsWith(":"))
         m_lastVisitedPathsVariable = startDirOrVariable; //store for later use
     #else*/
@@ -132,7 +132,7 @@ KexiFileWidget::~KexiFileWidget()
             KRecentDirs::add(d->recentDirClass, dir.url());
     }
     delete d;
-//Qt4 #ifdef Q_WS_WIN
+//Qt4 #ifdef Q_OS_WIN
 // saveLastVisitedPath(currentFileName());
 //#endif
 }
@@ -285,7 +285,7 @@ QString KexiFileWidget::selectedFile() const
 {
 //Qt4 setResult( QDialog::Accepted ); // selectedURL tests for it
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 // QString path = selectedFile();
   //js @todo
 // kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text();
@@ -455,7 +455,7 @@ void KexiFileWidget::accept()
     //  m_lastUrl=KUrl();
         d->lastFileName.clear();
         kDebug() << "d->lastFileName==selectedFile()";
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
         return;
     #endif
       }
@@ -465,7 +465,7 @@ void KexiFileWidget::accept()
       }
       d->lastFileName = selectedFile();
 
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       saveLastVisitedPath(d->lastFileName);
     #endif*/
 }
@@ -476,7 +476,7 @@ void KexiFileWidget::reject()
     emit rejected();
 }
 
-/*#ifndef Q_WS_WIN
+/*#ifndef Q_OS_WIN
 KUrlComboBox *KexiFileWidget::locationWidget() const
 {
   return locationEdit;
@@ -488,7 +488,7 @@ void KexiFileWidget::setLocationText(const QString& fn)
 {
     locationEdit()->setUrl(KUrl(fn));
     /*
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       //js @todo
       setSelection(fn);
     #else

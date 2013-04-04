@@ -138,7 +138,7 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
         if (data.useLocalSocketFile) {
             if (data.localSocketFileName.isEmpty()) {
                 QStringList sockets;
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
                 sockets.append("/tmp/s.sybase.2638");
 
                 foreach(const QString& socket, sockets) {

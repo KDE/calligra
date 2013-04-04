@@ -563,7 +563,7 @@ void KexiKIconTableEdit::setupContents(QPainter *p, bool /*focused*/, const QVar
     Q_UNUSED(y_offset);
 
 #if 0
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     y_offset = -1;
 #else
     y_offset = 0;

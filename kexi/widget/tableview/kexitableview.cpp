@@ -253,7 +253,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     // are related to a single cell (Cut, Copy..) and others to entire row (Delete Row):
     setContextMenuEnabled(false);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     d->rowHeight = fontMetrics().lineSpacing() + 4;
 #else
     d->rowHeight = fontMetrics().lineSpacing() + 1;
@@ -428,7 +428,7 @@ void KexiTableView::setFont(const QFont &font)
 
 void KexiTableView::updateFonts(bool repaint)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     d->rowHeight = fontMetrics().lineSpacing() + 4;
 #else
     d->rowHeight = fontMetrics().lineSpacing() + 1;

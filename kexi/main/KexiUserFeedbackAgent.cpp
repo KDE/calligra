@@ -33,7 +33,7 @@
 #include <QProcess>
 #include <QUuid>
 
-#if defined HAVE_UNAME || defined Q_WS_WIN
+#if defined HAVE_UNAME || defined Q_OS_WIN
 # include <sys/utsname.h>
 #endif
 
@@ -116,14 +116,14 @@ void KexiUserFeedbackAgent::Private::updateData()
     }
 #elif defined(Q_WS_MAC)
     ADD("os", "mac", SystemInfoArea);
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     ADD("os", "windows", SystemInfoArea);
 #else
 //! @todo BSD?
     ADD("os", "other", SystemInfoArea);
 #endif
 
-#if defined HAVE_UNAME || defined Q_WS_WIN
+#if defined HAVE_UNAME || defined Q_OS_WIN
     struct utsname buf;
     if (uname(&buf) == 0) {
         ADD("os_release", buf.release, SystemInfoArea);

@@ -103,7 +103,7 @@ DataDimensionsList LeveyJenningsGrid::calculateGrid( const DataDimensionsList& r
     return l;
 }
 
-#if defined ( Q_WS_WIN)
+#if defined ( Q_OS_WIN)
 #define trunc(x) ((int)(x))
 #endif
 

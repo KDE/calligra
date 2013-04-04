@@ -206,7 +206,7 @@ LoadIconDialog::changeIconSize(int index)
         //case 1: size = KIconLoader::SizeSmallMedium; break;
     case 1: size = KIconLoader::SizeMedium; break;
     case 2: size = KIconLoader::SizeLarge; break;
-#if !defined(Q_WS_WIN)
+#if !defined(Q_OS_WIN)
     case 3: size = KIconLoader::SizeHuge; break;
 #endif
     default:;

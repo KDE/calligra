@@ -855,7 +855,7 @@ void KexiMainWindow::setupActions()
     //additional 'Window' menu items
     d->action_window_next = addAction("window_next",
                                       i18n("&Next Window"), 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         "Ctrl+Tab"
 #else
         "Alt+Right"
@@ -868,7 +868,7 @@ void KexiMainWindow::setupActions()
 
     d->action_window_previous = addAction("window_previous",
                                           i18n("&Previous Window"),
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         "Ctrl+Shift+Tab"
 #else
         "Alt+Left"

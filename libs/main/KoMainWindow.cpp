@@ -1272,7 +1272,7 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
 	// TODO provide support for "last visited" directory
     KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), this);

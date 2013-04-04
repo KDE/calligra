@@ -19,7 +19,7 @@
 */
 
 #include <QtGlobal>
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # define KDEWIN_FCNTL_H // avoid redef.
 # define KDEWIN_SYS_STAT_H // avoid redef.
 # define KDEWIN_MATH_H // avoid redef.
@@ -38,7 +38,7 @@
 #include <QList>
 #include <kdebug.h>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # undef _WIN32_WINNT // avoid redef.
 #endif
 #include <mysql_version.h>

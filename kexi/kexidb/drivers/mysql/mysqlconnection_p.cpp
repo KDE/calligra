@@ -83,7 +83,7 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
             if (data.localSocketFileName.isEmpty()) {
                 //! @todo move the list of default sockets to a generic method
                 QStringList sockets;
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
                 sockets.append("/var/lib/mysql/mysql.sock");
                 sockets.append("/var/run/mysqld/mysqld.sock");
                 sockets.append("/var/run/mysql/mysql.sock");

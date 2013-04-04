@@ -90,7 +90,7 @@ void KexiDateTimeTableEdit::setupContents(QPainter *p, bool focused, const QVari
     Q_UNUSED(x);
     Q_UNUSED(w);
     Q_UNUSED(h);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     y_offset = -1;
 #else
     y_offset = 0;

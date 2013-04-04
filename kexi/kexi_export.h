@@ -125,7 +125,7 @@
 # define KDE_CXXFLAGS
 
 /* -- compile-time settings -- */
-#if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
+#if defined(Q_OS_WIN) || defined(KEXI_OPTIONS)
 /* defined in a .pro file or 'KEXI_OPTIONS' env. variable */
 #else
 

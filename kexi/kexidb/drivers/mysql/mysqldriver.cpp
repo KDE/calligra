@@ -29,7 +29,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QVariant>
 #include <QFile>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # undef _WIN32_WINNT // avoid redef.
 # include <config-win.h>
 #endif

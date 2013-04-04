@@ -48,7 +48,7 @@
 #include <klocale.h>
 
 /* KDE4:
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <win32_utils.h>
 #include <krecentdirs.h>
 #endif*/
@@ -159,7 +159,7 @@ QString PixmapEdit::selectPixmapFileName()
     #endif*/
     const QString caption(i18n("Insert Image From File (for \"%1\" property)", m_property->caption()));
     /*KDE4:
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       QString recentDir;
       QString fileName = Q3FileDialog::getOpenFileName(
         KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(),
@@ -189,7 +189,7 @@ void PixmapEdit::selectPixmap()
     setValue(pm);
 
     /* KDE4:
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       //save last visited path
       KUrl url(fileName);
       if (url.isLocalFile())

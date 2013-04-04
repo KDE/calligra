@@ -32,7 +32,7 @@
 #include <QFileDialog>
 #include <QApplication>
 
-/*#ifdef Q_WS_WIN
+/*#ifdef Q_OS_WIN
 #include <win32_utils.h>
 #include <krecentdirs.h>
 #endif*/
@@ -117,7 +117,7 @@ void KexiImageContextMenu::insertFromFile()
 #pragma WARNING( Q3FileDialog::getOpenFileName for win32 )
 #endif
     /* TODO
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       QString recentDir;
       QString fileName = Q3FileDialog::getOpenFileName(
         KFileDialog::getStartURL(
@@ -152,7 +152,7 @@ void KexiImageContextMenu::insertFromFile()
 #else
 #pragma WARNING( Q3FileDialog::getOpenFileName for win32 )
 #endif
-    /*#ifdef Q_WS_WIN
+    /*#ifdef Q_OS_WIN
       //save last visited path
     // KUrl url(fileName);
       if (url.isLocalFile())
@@ -193,7 +193,7 @@ void KexiImageContextMenu::saveAs()
 #pragma WARNING( Q3FileDialog::getOpenFileName for win32 )
 #endif
     /*TODO
-    #ifdef Q_WS_WIN
+    #ifdef Q_OS_WIN
       QString recentDir;
       QString fileName = Q3FileDialog::getSaveFileName(
         KFileDialog::getStartURL(KUrl("kfiledialog:///LastVisitedImagePath"), recentDir).path()
@@ -220,7 +220,7 @@ void KexiImageContextMenu::saveAs()
 #else
 #pragma WARNING( Q3FileDialog::getOpenFileName for win32 )
 #endif
-    /*#ifdef Q_WS_WIN
+    /*#ifdef Q_OS_WIN
       //save last visited path
       if (url.isLocalFile())
         KRecentDirs::add("kfiledialog:///LastVisitedImagePath", url.directory());

@@ -882,7 +882,7 @@ date2time(const QString& date)
         return 0;
     }
 
-#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_OS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1 };
 #else
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1, 0, 0 };
@@ -922,7 +922,7 @@ time2qdate(time_t t)
 time_t
 qdate2time(const QDate& d)
 {
-#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_OS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { 0, 0, 0, d.day(), d.month() - 1, d.year() - 1900,
                     0, 0, -1 };
 #else

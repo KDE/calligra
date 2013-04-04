@@ -2375,7 +2375,7 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
 qDebug() << "action:" << action << "d->currentAction:" << d->currentAction; // << action->menu();
     if (action && action == d->currentAction) {
         if (!action->menu()){
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN)
             //On Windows only context menus can be activated with the right button
             if (e->button() == Qt::LeftButton || d->topCausedWidget() == 0)
 #endif
@@ -3029,7 +3029,7 @@ void KexiMenuWidget::internalDelayedPopup()
 */
 void KexiMenuWidget::setNoReplayFor(QWidget *noReplayFor)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     d->noReplayFor = noReplayFor;
 #else
     Q_UNUSED(noReplayFor);

@@ -78,7 +78,7 @@
 #include <assert.h>
 #include <limits.h>
 //TODO OK?
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 //workaround for bug on msvc
 # undef LLONG_MIN
 #endif

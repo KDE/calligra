@@ -54,7 +54,7 @@
 #include <formeditor/utils.h>
 #include <kexi_global.h>
 
-//#ifdef Q_WS_WIN
+//#ifdef Q_OS_WIN
 //#include <win32_utils.h>
 //#include <krecentdirs.h>
 //#endif

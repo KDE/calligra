@@ -433,7 +433,7 @@ KexiRelationsScrollArea::setReadOnly(bool b)
       for ( it=d->tables.begin(); it != end; ++it)
       {
     //  (*it)->setReadOnly(b);
-    #ifndef Q_WS_WIN
+    #ifndef Q_OS_WIN
     #ifdef __GNUC__
         #warning readonly needed
     #endif

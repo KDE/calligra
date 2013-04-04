@@ -229,7 +229,7 @@ IntEdit::updateSpinWidgets()
 {
     // An empty string matches all object names.
     QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 #ifdef __GNUC__
 #warning TODO: fix for Qt4
 #endif
@@ -455,7 +455,7 @@ DoubleEdit::updateSpinWidgets()
 {
     // An empty string matches all object names.
     QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 #ifdef __GNUC__
 #warning TODO: fix for Qt4
 #endif

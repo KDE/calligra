@@ -452,7 +452,7 @@ qreal fastPow10( int x )
     return res;
 }
 
-#if defined ( Q_WS_WIN)
+#if defined ( Q_OS_WIN)
 #define trunc(x) ((int)(x))
 #endif
 

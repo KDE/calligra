@@ -87,7 +87,7 @@ public:
     // KUrl currentURL();
     //virtual QString highlightedFile() const;
 
-    //#ifndef Q_WS_WIN
+    //#ifndef Q_OS_WIN
     // KUrlComboBox *locationWidget() const;
     //#endif
 //    //! just sets locationWidget()->setCurrentText(fn)

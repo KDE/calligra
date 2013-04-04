@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <db/connection_p.h>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 # ifdef _MSC_VER
 #  undef _WIN32_WINNT // avoid redef.
 # elif defined __MINGW32__

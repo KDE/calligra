@@ -143,7 +143,7 @@ int KexiRelationsTableContainer::globalY(const QString &field)
 #if 0//js
 QSize KexiRelationsTableContainer::sizeHint()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     QSize s = d->fieldList->sizeHint()
               + QSize(2 * 5 , d->tableHeader->height() + 2 * 5);
 #else

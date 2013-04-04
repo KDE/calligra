@@ -92,7 +92,7 @@ void KexiDateTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
     Q_UNUSED(x);
     Q_UNUSED(w);
     Q_UNUSED(h);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     y_offset = -1;
 #else
     y_offset = 0;
@@ -191,7 +191,7 @@ void KexiDateTableEdit::moveToFirstSection()
   if (m_dte_date)
     m_dte_date->setFocusSection(0);
 #else
-#ifdef Q_WS_WIN //tmp
+#ifdef Q_OS_WIN //tmp
   QKeyEvent ke_left(QEvent::KeyPress, Qt::Key_Left, 0, 0);
   for (int i=0; i<8; i++)
     QApplication::sendEvent( m_dte_date_obj, &ke_left );
@@ -229,7 +229,7 @@ bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
       break;
     }
   }
-#ifdef Q_WS_WIN //tmp
+#ifdef Q_OS_WIN //tmp
   else if (e->type()==QEvent::FocusIn && o->parent() && o->parent()->parent()==m_edit
     && m_setNumberOnFocus >= 0 && m_dte_date_obj)
   {

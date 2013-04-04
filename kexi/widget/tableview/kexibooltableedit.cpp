@@ -92,7 +92,7 @@ void KexiBoolTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
     Q_UNUSED(txt);
     Q_UNUSED(align);
     Q_UNUSED(x);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 // x = 1;
     y_offset = -1;
 #else
