@@ -47,7 +47,7 @@ set(calligra-active_SRCS
     ${calligra-active_RCC_SRCS}
 )
 
-qt4_automoc(${calligra-active_SRCS})
+qt5_automoc(${calligra-active_SRCS})
 
 add_executable(calligraactive ${calligra-active_SRCS})
 

@@ -24,7 +24,7 @@ set(KexiMobile_SRCS main.cpp
         KexiMobileToolbar.cpp
 )
 
-qt4_automoc(${KexiMobile_SRCS})
+qt5_automoc(${KexiMobile_SRCS})
 
 add_executable(keximobile ${KexiMobile_SRCS})
 
