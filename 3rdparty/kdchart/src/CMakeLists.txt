@@ -108,7 +108,7 @@ set(kdchart_LIB_SRCS
     Ternary/TernaryPoint.cpp
 )
 
-qt4_wrap_ui(kdchart_LIB_SRCS
+qt5_wrap_ui(kdchart_LIB_SRCS
     KDChartDatasetSelector.ui
 )
 
