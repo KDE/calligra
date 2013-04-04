@@ -26,8 +26,12 @@ endif()
 set(GENERIC_CALLIGRA_LIB_VERSION "14.0.0")
 set(GENERIC_CALLIGRA_LIB_SOVERSION "14")
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+find_package(ECM 0.0.8 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro" "${CMAKE_SOURCE_DIR}/cmake/modules" ${ECM_MODULE_PATH})
 
+# this gives us the KDE install dir variables (instead of defining them in FindKDE4Internal.cmake),
+# RPATH handling and test settings. It does not need the actual KF5 modules
+find_package(KF5 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs)
 
  ####################
 #####################
@@ -232,35 +236,22 @@ calligra_set_productset(${PRODUCTSET})
 
  ########################
 #########################
-## Look for KDE and Qt ##
+## Look for Qt         ##
 #########################
 ########################
-set(KDE_MIN_VERSION "4.3.0")
-find_package(KDE4 4.3.0 REQUIRED)
 
-if (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
-else (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
-endif (QT3SUPPORT)
-
-include (KDE4Defaults)
-include (MacroLibrary)
-include (MacroAdditionalCleanFiles)
-include (MacroAddFileDependencies)
-
-if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
-    if (NOT IHAVEPATCHEDQT)
-        set(SHOULD_BUILD_WORDS_PART FALSE)
-        set(SHOULD_BUILD_STAGE_PART FALSE)
-        set(SHOULD_BUILD_PLUGIN_TEXTSHAPE FALSE)
-        set(SHOULD_BUILD_PLUGIN_TEXTEDITING FALSE)
-        MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
-    endif (NOT IHAVEPATCHEDQT)
-endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+# Use the KDE4 macros, they are very convenient. There's a copy in cmake/kde4_macros
+include(KDE4Macros)
+include(KDE4Defaults)
+include(MacroLibrary)
+include(MacroAdditionalCleanFiles)
+include(MacroAddFileDependencies)
 
 
-#optional features
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+find_package(Qt5Widgets REQUIRED)
+
 find_package(X11)
 if(X11_FOUND)
     macro_bool_to_01(X11_FOUND HAVE_X11)
