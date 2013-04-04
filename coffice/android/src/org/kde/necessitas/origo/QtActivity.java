@@ -924,13 +924,15 @@ public class QtActivity extends Activity
         if (intent != null && intent.getAction() != null && intent.getData() != null && intent.getAction().equals(android.content.Intent.ACTION_VIEW)) {
             new Thread( new Runnable() {
                 public void run() {
-                    while(true) {
+                    // try 10 times and then abort if still not succeed
+                    for(int i = 0; i < 10; i++) {
                         try {
+                            // call the native function defined in that main library.
                             openFileIntent(intent.getData().toString());
                             break; // all fine, our job is done
                         } catch(java.lang.UnsatisfiedLinkError e) {
-                            // happens if the main library wasn't loaded yet in
-                            // which case we need to wait till it was loaded...
+                            // happens if the main library wasn't loaded yet
+                            // in which case we need to wait and re-try.
                             try { Thread.sleep(300); } catch(Exception ex) {}
                         }
                     }
