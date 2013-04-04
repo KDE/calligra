@@ -43,8 +43,6 @@ set(RtfReader_LIB_SOURCES
 	UserPropsDestination.cpp
 )
 
-qt5_automoc(${RtfReader_LIB_SOURCES})
-
 kde4_add_library(RtfReader SHARED ${RtfReader_LIB_SOURCES})
 target_link_libraries(RtfReader ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY}) 
 

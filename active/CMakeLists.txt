@@ -5,12 +5,6 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
     cmake_policy(SET CMP0017 NEW)
 endif()
 
-project(calligra-active)
-
-find_package(Qt4 4.7.0 REQUIRED)
-find_package(KDE4 REQUIRED)
-
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories(${QT_INCLUDES}
                     ${KDE4_INCLUDES}
                     ${KDECLARATIVE_INCLUDE_DIRS}
@@ -25,7 +19,7 @@ include_directories(
 )
 
 set (calligra-active_RCCS CalligraActive.qrc)
-qt4_add_resources(calligra-active_RCC_SRCS ${calligra-active_RCCS})
+qt5_add_resources(calligra-active_RCC_SRCS ${calligra-active_RCCS})
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_active_global.h.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_active_global.h)
 
@@ -46,8 +40,6 @@ set(calligra-active_SRCS
     main.cpp
     ${calligra-active_RCC_SRCS}
 )
-
-qt5_automoc(${calligra-active_SRCS})
 
 add_executable(calligraactive ${calligra-active_SRCS})
 

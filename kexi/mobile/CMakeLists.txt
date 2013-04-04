@@ -23,9 +23,6 @@ set(KexiMobile_SRCS main.cpp
 	KexiMobileNavigator.cpp 
         KexiMobileToolbar.cpp
 )
-
-qt5_automoc(${KexiMobile_SRCS})
-
 add_executable(keximobile ${KexiMobile_SRCS})
 
 target_link_libraries(keximobile ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
