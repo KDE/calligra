@@ -238,7 +238,7 @@ void ImportWizard::setupIntro()
         msg = i18n(
                   "<qt>Database Importing wizard is about to import <nobr>\"%1\"</nobr> file "
                   "of type \"%2\" into a Kexi database.</qt>",
-                  QDir::convertSeparators(d->predefinedDatabaseName), mimeTypePtr ? mimeTypePtr->comment() : "???");
+                  QDir::toNativeSeparators(d->predefinedDatabaseName), mimeTypePtr ? mimeTypePtr->comment() : "???");
     } else {
         msg = i18n("Database Importing wizard allows you to import an existing database "
                    "into a Kexi database.");

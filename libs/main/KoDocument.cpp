@@ -1831,7 +1831,7 @@ QString KoDocument::prettyPathOrUrl() const
     QString url( d->parentPart->url().pathOrUrl() );
 #ifdef Q_OS_WIN
     if (d->parentPart->url().isLocalFile()) {
-        url = QDir::convertSeparators(url);
+        url = QDir::toNativeSeparators(url);
     }
 #endif
     return url;

@@ -448,7 +448,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
         if (!fi.exists()) {
             KMessageBox::error(d->dialog->parentWidget(),
                                "<qt>" + i18n("The file \"%1\" does not exist.",
-                               QDir::convertSeparators(url.toLocalFile())));
+                               QDir::toNativeSeparators(url.toLocalFile())));
             return false;
         } else if (mode() & KFile::File) {
             if (!fi.isFile()) {
@@ -458,7 +458,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
             } else if (!fi.isReadable()) {
                 KMessageBox::error(d->dialog->parentWidget(),
                                    "<qt>" + i18n("The file \"%1\" is not readable.",
-                                   QDir::convertSeparators(url.toLocalFile())));
+                                   QDir::toNativeSeparators(url.toLocalFile())));
                 return false;
             }
         }

@@ -3727,7 +3727,7 @@ void KexiMainWindow::slotToolsCompactDatabase()
         if (!drv || !(drv->features() & KexiDB::Driver::CompactingDatabaseSupported)) {
             KMessageBox::information(this, "<qt>" +
                                      i18n("Compacting database file <nobr>\"%1\"</nobr> is not supported.",
-                                          QDir::convertSeparators(cdata.fileName())));
+                                          QDir::toNativeSeparators(cdata.fileName())));
             return;
         }
         data = new KexiProjectData(cdata);

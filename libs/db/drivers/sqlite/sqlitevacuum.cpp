@@ -128,7 +128,7 @@ tristate SQLiteVacuum::run()
     
     m_dlg = new KProgressDialog(0, i18n("Compacting database"),
                                 "<qt>" + i18n("Compacting database \"%1\"...",
-                                              "<nobr>" + QDir::convertSeparators(fi.fileName()) + "</nobr>")
+                                              "<nobr>" + QDir::toNativeSeparators(fi.fileName()) + "</nobr>")
                                );
     m_dlg->adjustSize();
     m_dlg->resize(300, m_dlg->height());

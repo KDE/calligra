@@ -355,7 +355,7 @@ bool Connection::connect()
     d->serverVersion.clear();
     if (!(d->isConnected = drv_connect(d->serverVersion))) {
         setError(m_driver->isFileDriver() ?
-                 i18n("Could not open \"%1\" project file.", QDir::convertSeparators(d->conn_data->fileName()))
+                 i18n("Could not open \"%1\" project file.", QDir::toNativeSeparators(d->conn_data->fileName()))
                  : i18n("Could not connect to \"%1\" database server.", d->conn_data->serverInfoString()));
     }
     return d->isConnected;
@@ -485,19 +485,19 @@ bool Connection::databaseExists(const QString &dbName, bool ignoreErrors)
         if (!file.exists() || (!file.isFile() && !file.isSymLink())) {
             if (!ignoreErrors)
                 setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.",
-                                                    QDir::convertSeparators(d->conn_data->fileName())));
+                                                    QDir::toNativeSeparators(d->conn_data->fileName())));
             return false;
         }
         if (!file.isReadable()) {
             if (!ignoreErrors)
                 setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.",
-                                                 QDir::convertSeparators(d->conn_data->fileName())));
+                                                 QDir::toNativeSeparators(d->conn_data->fileName())));
             return false;
         }
         if (!d->readOnly && !file.isWritable()) {
             if (!ignoreErrors)
                 setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.",
-                                                 QDir::convertSeparators(d->conn_data->fileName())));
+                                                 QDir::toNativeSeparators(d->conn_data->fileName())));
             return false;
         }
         return true;

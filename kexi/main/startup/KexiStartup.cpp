@@ -315,7 +315,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             KMessageBox::sorry(0, "<qt>"
                                + i18n("Could not read connection information from connection shortcut "
                                       "file <nobr>\"%1\"</nobr>.<br><br>Check whether the file has valid contents.",
-                                      QDir::convertSeparators(connectionShortcut.fileName())));
+                                      QDir::toNativeSeparators(connectionShortcut.fileName())));
             return false;
         }
     }
@@ -447,7 +447,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             if (dropDB && !projectFileExists) {
                 KMessageBox::sorry(0,
                                    i18n("Could not remove project.\nThe file \"%1\" does not exist.",
-                                        QDir::convertSeparators(cdata.dbFileName())));
+                                        QDir::toNativeSeparators(cdata.dbFileName())));
                 return 0;
             }
         }
@@ -496,7 +496,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                     d->shortcutFileName = cdata.fileName();
                     if (!KexiStartupData::projectData()->load(d->shortcutFileName, &d->shortcutFileGroupKey)) {
                         KMessageBox::sorry(0, i18n("Could not open shortcut file\n\"%1\".",
-                                                   QDir::convertSeparators(cdata.fileName())));
+                                                   QDir::toNativeSeparators(cdata.fileName())));
                         delete KexiStartupData::projectData();
                         KexiStartupData::setProjectData(0);
                         return false;
@@ -527,7 +527,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                     d->connShortcutFile = new KexiDBConnShortcutFile(cdata.fileName());
                     if (!d->connShortcutFile->loadConnectionData(cdata, &d->shortcutFileGroupKey)) {
                         KMessageBox::sorry(0, i18n("Could not open connection data file\n\"%1\".",
-                                                   QDir::convertSeparators(cdata.fileName())));
+                                                   QDir::toNativeSeparators(cdata.fileName())));
                         delete d->connShortcutFile;
                         d->connShortcutFile = 0;
                         return false;
@@ -628,7 +628,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         if (!alsoOpenDB) {
             if (ok) {
                 KMessageBox::information(0, i18n("Project \"%1\" created successfully.",
-                                                 QDir::convertSeparators(projectData()->databaseName())));
+                                                 QDir::toNativeSeparators(projectData()->databaseName())));
             }
             return ok;
         }
@@ -637,7 +637,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         tristate res = KexiProject::dropProject(*projectData(), &gui, false/*ask*/);
         if (res == true)
             KMessageBox::information(0, i18n("Project \"%1\" dropped successfully.",
-                                             QDir::convertSeparators(projectData()->databaseName())));
+                                             QDir::toNativeSeparators(projectData()->databaseName())));
         return res != false;
     }
 
@@ -772,7 +772,7 @@ tristate KexiStartupHandler::detectActionForFile(
         if (!(options & SkipMessages)) {
             KMessageBox::sorry(parent, i18nc("@info", "Could not open file. "
                                              "The file <filename>%1</filename> does not exist.",
-                                             QDir::convertSeparators(dbFileName)),
+                                             QDir::toNativeSeparators(dbFileName)),
                                        i18nc("@title:window", "Could Not Open File" ));
         }
         return false;
@@ -783,7 +783,7 @@ tristate KexiStartupHandler::detectActionForFile(
                                              "Could not open file <filename>%1</filename> for reading. "
                                              "<note>Check the file's permissions and whether it is "
                                              "already opened and locked by another application.</note>",
-                                             QDir::convertSeparators(dbFileName)),
+                                             QDir::toNativeSeparators(dbFileName)),
                                        i18nc("@title:window", "Could Not Open File" ));
         }
         return false;
@@ -823,7 +823,7 @@ tristate KexiStartupHandler::detectActionForFile(
             if (!(options & SkipMessages))
                 KMessageBox::sorry(parent, i18n("<p>Could not open project.</p>")
                                    + i18n("<p>The file <nobr>\"%1\"</nobr> is not readable.</p>",
-                                          QDir::convertSeparators(dbFileName))
+                                          QDir::toNativeSeparators(dbFileName))
                                    + i18n("Check the file's permissions and whether it is already opened "
                                           "and locked by another application."));
             return false;
@@ -846,7 +846,7 @@ tristate KexiStartupHandler::detectActionForFile(
             if ((options & SkipMessages) || KMessageBox::Yes != KMessageBox::questionYesNo(
                         parent, i18n("\"%1\" is an external file of type:\n\"%2\".\n"
                                      "Do you want to import the file as a Kexi project?",
-                                     QDir::convertSeparators(dbFileName), ptr.data()->comment()),
+                                     QDir::toNativeSeparators(dbFileName), ptr.data()->comment()),
                         i18n("Open External File"), KGuiItem(i18n("Import...")), KStandardGuiItem::cancel())) {
                 return cancelled;
             }
@@ -871,7 +871,7 @@ tristate KexiStartupHandler::detectActionForFile(
                                                       "The project file \"%1\" is recognized as compatible with \"%2\" database driver, "
                                                       "while you have asked for \"%3\" database driver to be used.\n"
                                                       "Do you want to use \"%4\" database driver?",
-                                                      QDir::convertSeparators(dbFileName),
+                                                      QDir::toNativeSeparators(dbFileName),
                                                       tmpDriverName, suggestedDriverName, tmpDriverName));
         if (KMessageBox::Yes == res)
             useDetectedDriver = true;
@@ -893,7 +893,7 @@ tristate KexiStartupHandler::detectActionForFile(
             && KMessageBox::Yes == KMessageBox::questionYesNo(parent, i18n(
                         "Previous version of database file format (\"%1\") is detected in the \"%2\" "
                         "project file.\nDo you want to convert the project to a new \"%3\" format (recommended)?",
-                        detectedDriverName, QDir::convertSeparators(dbFileName), newFileFormat))) {
+                        detectedDriverName, QDir::toNativeSeparators(dbFileName), newFileFormat))) {
         SQLite2ToSQLite3Migration migr(finfo.absoluteFilePath());
         tristate res = migr.run();
 //  kDebug() << "--- migr.run() END ---";
@@ -902,7 +902,7 @@ tristate KexiStartupHandler::detectActionForFile(
             KMessageBox::sorry(parent, i18n(
                                    "Failed to convert project file \"%1\" to a new \"%2\" format.\n"
                                    "The file format remains unchanged.",
-                                   QDir::convertSeparators(dbFileName), newFileFormat));
+                                   QDir::toNativeSeparators(dbFileName), newFileFormat));
             //continue...
         }
         if (res == true)
@@ -919,7 +919,7 @@ tristate KexiStartupHandler::detectActionForFile(
         if (!(options & SkipMessages))
             KMessageBox::detailedSorry(parent,
                                        i18n("The file \"%1\" is not recognized as being supported by Kexi.",
-                                            QDir::convertSeparators(dbFileName)),
+                                            QDir::toNativeSeparators(dbFileName)),
                                        QString::fromLatin1("<p>")
                                        + i18n("Database driver for this file type not found.\nDetected MIME type: %1",
                                               mimename)
@@ -999,7 +999,7 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
 
     if (!ok) {
         KMessageBox::sorry(0, i18n("Failed saving connection data to\n\"%1\" file.",
-                           QDir::convertSeparators(fileName)));
+                           QDir::toNativeSeparators(fileName)));
     }
 }
 

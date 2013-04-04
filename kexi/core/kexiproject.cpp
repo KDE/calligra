@@ -1401,7 +1401,7 @@ bool KexiProject::askForOpeningNonWritableFileAsReadOnly(QWidget *parent, const 
             parent, i18nc("@info",
                           "<para>Could not open file <filename>%1</filename> for reading and writing.</para>"
                           "<para>Do you want to open the file as read only?</para>",
-                          QDir::convertSeparators(finfo.filePath())),
+                          QDir::toNativeSeparators(finfo.filePath())),
                     i18nc("@title:window", "Could Not Open File" ),
                     openItem, KStandardGuiItem::cancel(), QString());
 }

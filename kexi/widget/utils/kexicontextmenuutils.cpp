@@ -230,7 +230,7 @@ void KexiImageContextMenu::saveAs()
     if (f.exists() && KMessageBox::Yes != KMessageBox::warningYesNo(this,
             "<qt>" +
             i18n("File \"%1\" already exists.<p>Do you want to replace it with a new one?",
-                 QDir::convertSeparators(fileName)) + "</qt>", 0,
+                 QDir::toNativeSeparators(fileName)) + "</qt>", 0,
             KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Don't Replace")))) {
         return;
     }
