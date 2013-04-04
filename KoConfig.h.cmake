@@ -10,6 +10,10 @@
 #cmakedefine WORDS_BIGENDIAN ${CMAKE_WORDS_BIGENDIAN}
 #endif
 
+/* Defines if we are building for X11 */
+#cmakedefine HAVE_X11 1
+
+
 /* Defines if you Get Hot New Stuff support */
 #cmakedefine GHNS 1
 

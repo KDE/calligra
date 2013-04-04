@@ -259,6 +259,14 @@ if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     endif (NOT IHAVEPATCHEDQT)
 endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
 
+
+#optional features
+find_package(X11)
+if(X11_FOUND)
+    macro_bool_to_01(X11_FOUND HAVE_X11)
+endif(X11_FOUND)
+
+
 if (GHNS)
     if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
         set(GHNS FALSE)
