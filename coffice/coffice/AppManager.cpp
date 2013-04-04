@@ -231,6 +231,10 @@ bool AppManager::openFile(Document *doc, const QString &file)
     OpenFileCommand *command = new OpenFileCommand(doc, file);
     {
         QMutexLocker locker(&d->m_workMutex);
+        // abort all pending commands
+        qDeleteAll(d->m_prendingCommands);
+        d->m_prendingCommands.clear();
+        // add the new command
         d->m_prendingCommands.enqueue(command);
     }
     d->m_waitCondition.wakeAll();
@@ -248,25 +252,29 @@ void AppManager::update(const QSharedPointer<Page> &page)
 void AppManager::run()
 {
     Q_FOREVER {
+        QSharedPointer<Command> command;
         {
-            qDebug()<<Q_FUNC_INFO<<"MutexLocker Waiting";
             QMutexLocker locker(&d->m_workMutex);
-            qDebug()<<Q_FUNC_INFO<<"MutexLocker Active";
-            while (!d->m_kill && !d->m_prendingCommands.isEmpty()) {
-                QScopedPointer<Command> command(d->m_prendingCommands.dequeue());
-                if (OpenFileCommand *openFileCommand = dynamic_cast<OpenFileCommand*>(command.data())) {
-                    openFileCommand->run();
-                } else if (UpdatePageCommand *updatePageCommand = dynamic_cast<UpdatePageCommand*>(command.data())) {
-                    updatePageCommand->run();
-                } else {
-                    Q_ASSERT_X(false, __FUNCTION__, "Unknown Command");
-                }
-            }
             if (d->m_kill) {
-                qDebug()<<Q_FUNC_INFO<<"Got killed";
+                qDebug() << Q_FUNC_INFO << "Got killed";
                 return;
             }
+            if (!d->m_prendingCommands.isEmpty()) {
+                command = QSharedPointer<Command>(d->m_prendingCommands.dequeue());
+            }
         }
-        d->m_waitCondition.wait(&d->m_waitMutex);
+
+        if (command) {
+            if (OpenFileCommand *openFileCommand = dynamic_cast<OpenFileCommand*>(command.data())) {
+                openFileCommand->run();
+            } else if (UpdatePageCommand *updatePageCommand = dynamic_cast<UpdatePageCommand*>(command.data())) {
+                updatePageCommand->run();
+            } else {
+                Q_ASSERT_X(false, __FUNCTION__, "Unknown Command");
+            }
+        } else {
+            // No command in the queue. Wait till a new one arrives.
+            d->m_waitCondition.wait(&d->m_waitMutex);
+        }
     }
 }
