@@ -29,7 +29,7 @@
 #include <QKeyEvent>
 
 #include <kdebug.h>
-#include <KDoubleValidator>
+#include <knumvalidator.h>
 
 #include <math.h>
 #include <limits.h>

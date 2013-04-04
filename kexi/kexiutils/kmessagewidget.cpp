@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kstandardaction.h>
-#include <KStandardGuiItem>
+#include <kstandardguiitem.h>
 
 #include <QEvent>
 #include <QGridLayout>

@@ -46,9 +46,9 @@
 #include <QMutexLocker>
 #include <QMap>
 
-#include <KGlobal>
-#include <KLocale>
-#include <KDebug>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <iostream>
 

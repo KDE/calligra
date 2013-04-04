@@ -22,7 +22,7 @@
 
 #include "kplato_export.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 
 namespace KPlato
 {

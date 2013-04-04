@@ -29,8 +29,8 @@
 
 #include <QPushButton>
 #include <QListWidget>
-#include <KInputDialog>
-#include <KDebug>
+#include <kinputdialog.h>
+#include <kdebug.h>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
         : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),

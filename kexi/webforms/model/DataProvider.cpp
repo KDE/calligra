@@ -23,7 +23,7 @@
 
 #include <QPointer>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <main/startup/KexiStartup.h>
 

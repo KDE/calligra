@@ -21,8 +21,8 @@
 
 #include <QDesktopWidget>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "KPrDocument.h"
 #include "KPrView.h"

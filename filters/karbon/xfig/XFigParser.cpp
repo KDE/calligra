@@ -30,7 +30,7 @@
 #include <QFont>
 #include <QScopedPointer>
 
-#include <KDebug>
+#include <kdebug.h>
 
 
 enum XFig3_2TextFlag {

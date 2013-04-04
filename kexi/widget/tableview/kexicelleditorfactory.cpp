@@ -21,7 +21,7 @@
 
 #include <QSet>
 #include <QHash>
-#include <KGlobal>
+#include <kglobal.h>
 
 #include <db/indexschema.h>
 #include <db/tableschema.h>

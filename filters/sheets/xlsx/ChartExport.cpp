@@ -27,7 +27,7 @@
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 //#include <KoOdfNumberStyles.h>
-#include <KDebug>
+#include <kdebug.h>
 #include "XlsxXmlDrawingReader.h"
 #include "Charting.h"
 

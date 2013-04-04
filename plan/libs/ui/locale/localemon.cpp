@@ -34,9 +34,9 @@
 
 
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KStandardDirs>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kstandarddirs.h>
 
 
 namespace KPlato {

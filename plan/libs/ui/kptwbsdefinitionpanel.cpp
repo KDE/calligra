@@ -23,7 +23,7 @@
 #include "kptproject.h"
 #include "kptdebug.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <klocale.h>
 
 #include <QComboBox>

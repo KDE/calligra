@@ -28,7 +28,7 @@
 #include <QList>
 #include <QHash>
 
-#include <KDebug>
+#include <kdebug.h>
 
 namespace KexiDB
 {

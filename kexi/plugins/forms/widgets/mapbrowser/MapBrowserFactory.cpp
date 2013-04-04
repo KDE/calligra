@@ -24,10 +24,10 @@
 #include <formeditor/WidgetInfo.h>
 #include <formeditor/formIO.h>
 #include <KoIcon.h>
-#include <KLocalizedString>
-#include <KDebug>
-#include <KLocale>
-#include <KPluginFactory>
+#include <klocalizedstring.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kpluginfactory.h>
 #include <QVariant>
 #include <QVariantList>
 

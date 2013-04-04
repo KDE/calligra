@@ -20,8 +20,8 @@
 #include <string>
 #include <stdlib.h>
 
-#include <KGlobal>
-#include <KLocale>
+#include <kglobal.h>
+#include <klocale.h>
 
 #include <QMap>
 

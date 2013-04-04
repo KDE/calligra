@@ -42,7 +42,7 @@
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <QString>
 

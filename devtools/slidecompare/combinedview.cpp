@@ -25,8 +25,8 @@
 #include <QGridLayout>
 #include <QDragEnterEvent>
 #include <QCoreApplication>
-#include <KMessageBox>
-#include <KMimeType>
+#include <kmessagebox.h>
+#include <kmimetype.h>
 
 CombinedView::CombinedView(QWidget* parent) :QWidget(parent),
         ooodploader(new DirSlideLoader(this)),

@@ -23,10 +23,10 @@
 
 #include <KoIcon.h>
 
-#include <KDebug>
-#include <KMessageBox>
-#include <KTabWidget>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <ktabwidget.h>
+#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"

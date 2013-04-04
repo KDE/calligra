@@ -30,7 +30,7 @@
 #include "KexiAssistantPage.h"
 #include "KexiLinkWidget.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KexiContextMessage::Private
 {

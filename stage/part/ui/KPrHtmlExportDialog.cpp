@@ -25,11 +25,11 @@
 #include <QDir>
 #include <QWebFrame>
 
-#include <KLocale>
-#include <KStandardDirs>
-#include <KFileDialog>
-#include <KArchiveDirectory>
-#include <KZip>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
+#include <karchive.h>
+#include <kzip.h>
 
 #include "KPrHtmlExport.h"
 

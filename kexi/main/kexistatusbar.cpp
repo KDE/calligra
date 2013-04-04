@@ -27,9 +27,9 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 
-#include <KMenu>
-#include <KDebug>
-#include <KLocale>
+#include <kmenu.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 #if KexiStatusBar_KTEXTEDITOR_USED
 #include <ktexteditor/viewcursorinterface.h>

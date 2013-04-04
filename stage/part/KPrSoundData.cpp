@@ -25,8 +25,8 @@
 #include <KoUnit.h>
 #include <KoStore.h>
 
-#include <KTemporaryFile>
-#include <KDebug>
+#include <ktemporaryfile.h>
+#include <kdebug.h>
 #include <QIODevice>
 
 // make it a QSharedData

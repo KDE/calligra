@@ -40,7 +40,7 @@
 #include <KoZoomHandler.h>
 
 #include <kpluginfactory.h>
-#include <KDialog>
+#include <kdialog.h>
 #include <QImage>
 
 K_PLUGIN_FACTORY(PngExportFactory, registerPlugin<ImageExport>();)

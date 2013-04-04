@@ -26,7 +26,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <KPushButton>
+#include <kpushbutton.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>

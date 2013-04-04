@@ -25,9 +25,9 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <KLocale>
-#include <KDebug>
-#include <KFadeWidgetEffect>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kfadewidgeteffect.h>
 
 #include <KoIcon.h>
 #include <widget/properties/KexiPropertyEditorView.h>

@@ -27,7 +27,7 @@
 #include <QDir>
 
 //KDE Includes
-#include <KDebug>
+#include <kdebug.h>
 
 //Kexi Includes
 #include <db/driver.h>
