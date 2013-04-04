@@ -69,7 +69,8 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 option(SHOULD_BUILD_KEXI_APP "Build directory kexi" OFF)
-option(SHOUD_BUILD_PLAN_APP "Build directory plan" OFF)
+option(SHOULD_BUILD_PLAN_APP "Build directory plan" OFF)
+option(SHOULD_BUILD_DOC "Build documetation" OFF)
 set(SHOULD_BUILD_LIB_KOPROPERTY FALSE)
 set(SHOULD_BUILD_LIB_KOREPORT FALSE)
 
@@ -914,7 +915,7 @@ if(SHOULD_BUILD_ACTIVE)
 endif(SHOULD_BUILD_ACTIVE)
 
 if(SHOULD_BUILD_DOC)
-    add_subdirectory(doc)
+#    add_subdirectory(doc)
 endif(SHOULD_BUILD_DOC)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
