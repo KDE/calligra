@@ -2804,4 +2804,24 @@ private:
     QLocale m_locale;
 };
 
+/**
+ * Qt's uic generated translation calls go through numerous indirections
+ * unnecessary in our case. So we use <tt>uic -tr tr2i18n</tt> to redirect them
+ * to ki18n API.
+**/
+inline QString tr2i18n (const char *message, const char *comment = 0) {
+    if (comment && comment[0] && message && message[0]) {
+        return ki18nc(comment, message).toString();
+    }
+    else if (message && message[0]) {
+        return ki18n(message).toString();
+    }
+    else {
+        return QString();
+    }
+}
+
+
+
+
 #endif
