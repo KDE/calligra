@@ -39,8 +39,8 @@ void preInitHacks() {}
 #ifdef Q_OS_ANDROID
 #include <jni.h>
 extern "C" {
-    JNIEXPORT void JNICALL Java_org_kde_necessitas_origo_QtActivity_openFileIntent(JNIEnv *jenv, jobject, jstring uri)
-    {
+    // Used by QtActivity.java to pass in the file-uri that should be loaded on startup.
+    JNIEXPORT void JNICALL Java_org_kde_necessitas_origo_QtActivity_openFileIntent(JNIEnv *jenv, jobject, jstring uri) {
         const char* file = jenv->GetStringUTFChars(uri, 0);
         Settings::instance()->setOpenFileRequested(QString::fromUtf8(file));
         jenv->ReleaseStringUTFChars(uri, file);
@@ -53,6 +53,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     preInitHacks();
 
     QScopedPointer<QApplication> app(createApplication(argc, argv));
+
+    for(int i = 1; i < QCoreApplication::arguments().count(); ++i) {
+        QString arg = QCoreApplication::arguments().at(i);
+        if (QFile(arg).exists()) {
+            Settings::instance()->setOpenFileRequested(arg);
+            break;
+        }
+    }
 
     QmlApplicationViewer viewer;
     QDeclarativeContext *ctxt = viewer.rootContext();
