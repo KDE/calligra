@@ -290,6 +290,7 @@ set(QT_INCLUDES
     ${Qt5PrintSupport_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
     ${Qt5Xml_INCLUDE_DIRS}
+    ${Qt5OpenGL_INCLUDE_DIRS}
 )
 
 # The Qt5Widgets_INCLUDES also includes the include directories for
