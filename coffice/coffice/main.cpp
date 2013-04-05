@@ -2,6 +2,7 @@
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 #include <QFile>
+#include <QWindowsStyle>
 #include <QDebug>
 
 #include "qmlapplicationviewer.h"
@@ -18,6 +19,18 @@ void preInitHacks() {
     // cause the main-app runs in another thread. Hack around by
     // allowing X11-stuff to run also outside of the Gui-thread.
     XInitThreads();
+
+    // Disable desktop-aware settings like for system's standard
+    // colors, fonts, etc. to not clash with whatever QWidgets
+    // dsktop related things are configured. We are not using
+    // QWidgets and trust in our and Qt's configurations.
+    QApplication::setDesktopSettingsAware(false);
+
+    // We are not using QWidget's but Qt may still load and initialize
+    // a style. Let's hard-code to a buildin style to be sure Oxygen or
+    // another style using kdelibs isn't picked up and potentially
+    // clashes with symbols defined by our fake library.
+    QApplication::setStyle(new QWindowsStyle);
 }
 #else
 void preInitHacks() {}
@@ -25,12 +38,6 @@ void preInitHacks() {}
 
 #ifdef Q_OS_ANDROID
 #include <jni.h>
-#define JNOTOKRETURN(WHAT) \
-    if (!WHAT || jenv->ExceptionCheck()) { \
-        SetHist::log("WHAT went wrong"); \
-        jenv->ExceptionClear(); \
-        return JNI_VERSION_1_4; \
-    }
 extern "C" {
     JNIEXPORT void JNICALL Java_org_kde_necessitas_origo_QtActivity_openFileIntent(JNIEnv *jenv, jobject, jstring uri)
     {
