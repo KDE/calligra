@@ -1,4 +1,4 @@
-include_directories(${QT_INCLUDES} ${KDE4_INCLUDES})
+include_directories(${QT_INCLUDES} ${Qt5Xml_INCLUDE_DIRS} ${KDE4_INCLUDES})
 
 add_subdirectory(tests)
 
