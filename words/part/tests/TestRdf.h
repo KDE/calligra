@@ -21,7 +21,7 @@
 #define RDFTEST_H
 
 #include <QObject>
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <qtest_kde.h>
 
 class TestRdf : public QObject

@@ -21,7 +21,7 @@
 #define TESTVIEWMODE_H
 
 #include <QObject>
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <qtest_kde.h>
 
 #include <KWViewModeNormal.h>

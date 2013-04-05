@@ -19,7 +19,7 @@
 #ifndef __KIS_CLIPBOARD_TEST_H
 #define __KIS_CLIPBOARD_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisClipboardTest : public QObject
 {

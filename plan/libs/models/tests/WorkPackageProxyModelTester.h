@@ -20,7 +20,7 @@
 #ifndef KPlato_WorkPackageProxyModelTester_h
 #define KPlato_WorkPackageProxyModelTester_h
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include "kptworkpackagemodel.h"
 #include "kptproject.h"

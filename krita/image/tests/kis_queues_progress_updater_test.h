@@ -19,7 +19,7 @@
 #ifndef __KIS_QUEUES_PROGRESS_UPDATER_TEST_H
 #define __KIS_QUEUES_PROGRESS_UPDATER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisQueuesProgressUpdaterTest : public QObject
 {

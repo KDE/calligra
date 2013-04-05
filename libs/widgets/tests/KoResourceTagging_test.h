@@ -19,7 +19,7 @@
 #ifndef KORESOURCETAGGING_TEST_H
 #define KORESOURCETAGGING_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <KoConfig.h>
 #include "KoResourceTagging.h"
 

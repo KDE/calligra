@@ -2,7 +2,7 @@
 #define TESTCHANGESDATABASE_H
 
 #include <QObject>
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestChangesDatabase : public QObject
 {

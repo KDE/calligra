@@ -19,7 +19,7 @@
 #ifndef KIS_SELECTION_MASK_TEST_H
 #define KIS_SELECTION_MASK_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisSelectionMaskTest : public QObject
 {

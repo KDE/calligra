@@ -19,7 +19,7 @@
 #ifndef KIS_ITERATOR_TEST_H
 #define KIS_ITERATOR_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KoColorSpace;
 

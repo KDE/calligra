@@ -18,7 +18,7 @@
 #ifndef KOREPORTTEST_H
 #define KOREPORTTEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 
 class KoReportTest : public QObject

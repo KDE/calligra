@@ -20,7 +20,7 @@
 #ifndef TESTPAPAGEMOVECOMMAND_H
 #define TESTPAPAGEMOVECOMMAND_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include "PAMock.h"
 

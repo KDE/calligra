@@ -21,7 +21,7 @@
 #define CALLIGRA_SHEETS_TEST_VALUEFORMATTER
 
 #include <QtWidgets>
-#include <QtTest>
+#include <QtTest/QtTest>
 
 namespace Calligra
 {

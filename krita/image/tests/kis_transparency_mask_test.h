@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSPARENCY_MASK_TEST_H
 #define KIS_TRANSPARENCY_MASK_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisTransparencyMaskTest : public QObject
 {

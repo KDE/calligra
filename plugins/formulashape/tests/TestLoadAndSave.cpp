@@ -21,7 +21,7 @@
 
 #include "TestLoadAndSave.h"
 
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <QBuffer>
 #include <QDebug>
 

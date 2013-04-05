@@ -21,7 +21,7 @@
 #ifndef TESTSHAPEANIMATIONS_H
 #define TESTSHAPEANIMATIONS_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class MockShapeAnimation;
 class KPrShapeAnimations;

@@ -19,7 +19,7 @@
 #ifndef KIS_GRADIENT_PAINTER_TEST_H
 #define KIS_GRADIENT_PAINTER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisGradientPainterTest : public QObject
 {

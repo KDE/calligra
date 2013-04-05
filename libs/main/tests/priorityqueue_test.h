@@ -2,7 +2,7 @@
 #define PRIORITYQUEUETEST_H
 
 #include <QObject>
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class PriorityQueue_test : public QObject
 {

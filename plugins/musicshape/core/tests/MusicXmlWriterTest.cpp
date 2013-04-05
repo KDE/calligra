@@ -27,7 +27,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <QBuffer>
 
 using namespace MusicCore;

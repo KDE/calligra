@@ -19,7 +19,7 @@
 #ifndef __KIS_ZOOM_AND_PAN_TEST_H
 #define __KIS_ZOOM_AND_PAN_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class ZoomAndPanTester;
 

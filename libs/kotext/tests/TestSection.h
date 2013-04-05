@@ -21,7 +21,7 @@
 #define TESTSECTION_H
 
 #include <QObject>
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestSection : public QObject
 {

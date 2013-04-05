@@ -19,7 +19,7 @@
 #ifndef KIS_FLIPBOOK_TEST_H
 #define KIS_FLIPBOOK_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisFlipbookTest : public QObject
 {

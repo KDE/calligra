@@ -19,7 +19,7 @@
 #ifndef KISNODEMODEL_TEST_H
 #define KISNODEMODEL_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include "empty_nodes_test.h"
 

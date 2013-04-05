@@ -20,7 +20,7 @@
 #ifndef KPlato_WorkInfoCache_h
 #define KPlato_WorkInfoCache_h
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include <ktempdir.h>
 

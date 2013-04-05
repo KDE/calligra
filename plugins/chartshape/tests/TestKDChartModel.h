@@ -21,7 +21,7 @@
 #ifndef KCHART_TESTKDCHARTMODEL_H
 #define KCHART_TESTKDCHARTMODEL_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <QStandardItemModel>
 
 #include "KDChartModel.h"

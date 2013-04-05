@@ -2,7 +2,7 @@
 #define TESTCHANGETRACKEDDELETE_H
 
 #include <QObject>
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class QTextDocument;
 class KoTextEditor;

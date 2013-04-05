@@ -18,7 +18,7 @@
 #ifndef PYEMF_TESTS_H
 #define PYEMF_TESTS_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class PyEmfTests: public QObject
 {

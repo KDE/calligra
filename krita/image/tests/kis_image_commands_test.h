@@ -19,7 +19,7 @@
 #ifndef KIS_IMAGE_COMMANDS_TEST_H
 #define KIS_IMAGE_COMMANDS_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisImageCommandsTest : public QObject
 {

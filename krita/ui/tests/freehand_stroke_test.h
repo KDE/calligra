@@ -19,7 +19,7 @@
 #ifndef __FREEHAND_STROKE_TEST_H
 #define __FREEHAND_STROKE_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 
 class FreehandStrokeTest : public QObject

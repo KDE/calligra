@@ -22,7 +22,7 @@
 #define KCHART_TESTPROXYMODEL_H
 
 // Qt
-#include <QtTest>
+#include <QtTest/QtTest>
 
 // KChart
 #include "ChartProxyModel.h"

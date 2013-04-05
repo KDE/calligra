@@ -22,7 +22,7 @@
 #define CALLIGRA_SHEETS_TEST_MATH_FUNCTIONS
 
 #include <QtWidgets>
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include <Value.h>
 

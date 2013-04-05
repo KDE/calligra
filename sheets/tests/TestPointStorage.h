@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_POINT_STORAGE_TEST
 #define CALLIGRA_SHEETS_POINT_STORAGE_TEST
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 namespace Calligra
 {

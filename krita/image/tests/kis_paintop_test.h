@@ -19,7 +19,7 @@
 #ifndef KIS_PAINTOP_TEST_H
 #define KIS_PAINTOP_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisPaintopTest : public QObject
 {

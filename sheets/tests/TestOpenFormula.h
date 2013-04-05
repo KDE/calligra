@@ -23,7 +23,7 @@
 #define CALLIGRA_SHEETS_TEST_OPENFORMULA
 
 #include <QtWidgets>
-#include <QtTest>
+#include <QtTest/QtTest>
 
 namespace Calligra
 {

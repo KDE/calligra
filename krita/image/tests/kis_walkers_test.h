@@ -19,7 +19,7 @@
 #ifndef KIS_WALKERS_TEST_H
 #define KIS_WALKERS_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include "kis_layer.h"
 #include "kis_types.h"

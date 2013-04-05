@@ -19,7 +19,7 @@
 #ifndef TESTPOINTTYPECOMMAND_H
 #define TESTPOINTTYPECOMMAND_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestPointTypeCommand : public QObject
 {

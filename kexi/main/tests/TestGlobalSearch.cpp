@@ -31,7 +31,7 @@
 #include <kapplication.h>
 #include <klineedit.h>
 
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <QtTest/qtestkeyboard.h>
 #include <QtTest/qtestmouse.h>
 #include <QFile>

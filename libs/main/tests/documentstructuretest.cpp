@@ -20,7 +20,7 @@
 #include "documentstructuretest.h"
 
 #include <QDebug>
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <QtWidgets>
 
 

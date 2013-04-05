@@ -19,7 +19,7 @@
 #ifndef CALLIGRA_SHEETS_SHEET_TEST
 #define CALLIGRA_SHEETS_SHEET_TEST
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 namespace Calligra
 {

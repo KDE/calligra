@@ -19,7 +19,7 @@
 #ifndef KIS_KRA_LOADER_TEST_H
 #define KIS_KRA_LOADER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisKraLoaderTest : public QObject
 {

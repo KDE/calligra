@@ -19,7 +19,7 @@
 #ifndef KIS_PAINTER_BENCHMARK_H
 #define KIS_PAINTER_BENCHMARK_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include <KoColor.h>
 

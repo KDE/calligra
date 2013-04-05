@@ -18,7 +18,7 @@
 */
 #include "BenchmarkRTree.h"
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include <kdebug.h>
 

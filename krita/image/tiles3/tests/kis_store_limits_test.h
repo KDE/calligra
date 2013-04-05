@@ -18,7 +18,7 @@
 #ifndef KIS_STORE_LIMITS_TEST_H
 #define KIS_STORE_LIMITS_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisStoreLimitsTest : public QObject
 {

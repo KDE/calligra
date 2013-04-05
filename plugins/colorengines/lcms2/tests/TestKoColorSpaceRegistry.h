@@ -1,7 +1,7 @@
 #ifndef TESTKOCOLORSPACEREGISTRY_H
 #define TESTKOCOLORSPACEREGISTRY_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestKoColorSpaceRegistry : public QObject
 {

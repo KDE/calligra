@@ -19,7 +19,7 @@
 #ifndef KIS_FILL_PAINTER_TEST_H
 #define KIS_FILL_PAINTER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisFillPainterTest : public QObject
 {

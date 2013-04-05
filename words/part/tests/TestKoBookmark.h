@@ -20,7 +20,7 @@
 #define TEST_KO_BOOKMARK_H
 
 #include <QObject>
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <qtest_kde.h>
 
 class TestKoBookmark: public QObject

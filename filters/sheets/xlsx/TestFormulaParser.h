@@ -25,7 +25,7 @@
 #ifndef TEST_FORMULAPARSER_H
 #define TEST_FORMULAPARSER_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestFormulaParser : public QObject
 {

@@ -19,7 +19,7 @@
 #ifndef KIS_DATAMANAGER_BENCHMARK_H
 #define KIS_DATAMANAGER_BENCHMARK_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisDatamanagerBenchmark : public QObject
 {

@@ -19,7 +19,7 @@
 #ifndef KIS_ANNOTATION_TEST_H
 #define KIS_ANNOTATION_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisAnnotationTest : public QObject
 {

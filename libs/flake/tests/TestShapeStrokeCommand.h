@@ -19,7 +19,7 @@
 #ifndef TESTSHAPESTROKECOMMAND_H
 #define TESTSHAPESTROKECOMMAND_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestShapeStrokeCommand : public QObject
 {

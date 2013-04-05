@@ -1,7 +1,7 @@
 #ifndef TESTKOCOLORSPACEMATHS_H
 #define TESTKOCOLORSPACEMATHS_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestKoColorSpaceMaths : public QObject
 {

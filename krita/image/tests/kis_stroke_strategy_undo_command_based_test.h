@@ -19,7 +19,7 @@
 #ifndef __KIS_STROKE_STRATEGY_UNDO_COMMAND_BASED_TEST_H
 #define __KIS_STROKE_STRATEGY_UNDO_COMMAND_BASED_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisStrokeStrategyUndoCommandBasedTest : public QObject
 {

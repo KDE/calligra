@@ -20,7 +20,7 @@
 #ifndef KPlato_AppointmentIntervalTester_h
 #define KPlato_AppointmentIntervalTester_h
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 namespace KPlato
 {

@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_DATABASE_FILTER_TEST
 #define CALLIGRA_SHEETS_DATABASE_FILTER_TEST
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 namespace Calligra
 {

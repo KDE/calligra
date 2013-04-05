@@ -20,7 +20,7 @@
 #ifndef TESTDELCUSTOMSLIDESHOWCOMMAND_H
 #define TESTDELCUSTOMSLIDESHOWCOMMAND_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestDelCustomSlideShowCommand: public QObject
 {

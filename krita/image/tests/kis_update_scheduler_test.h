@@ -19,7 +19,7 @@
 #ifndef KIS_UPDATE_SCHEDULER_TEST_H
 #define KIS_UPDATE_SCHEDULER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include "kis_types.h"
 

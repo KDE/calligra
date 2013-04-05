@@ -19,7 +19,7 @@
 #ifndef KIS_BOUNDARY_TEST_H
 #define KIS_BOUNDARY_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisBoundaryTest : public QObject
 {

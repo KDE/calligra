@@ -19,7 +19,7 @@
 #ifndef KIS_UPDATER_CONTEXT_TEST_H
 #define KIS_UPDATER_CONTEXT_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisUpdaterContextTest : public QObject
 {

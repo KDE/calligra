@@ -19,7 +19,7 @@
 #ifndef KIS_BOOKMARKED_CONFIGURATION_MANAGER_TEST_H
 #define KIS_BOOKMARKED_CONFIGURATION_MANAGER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisBookmarkedConfigurationManagerTest : public QObject
 {

@@ -19,7 +19,7 @@
 #ifndef KIS_FILTER_STRATEGY_TEST_H
 #define KIS_FILTER_STRATEGY_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisFilterStrategyTest : public QObject
 {

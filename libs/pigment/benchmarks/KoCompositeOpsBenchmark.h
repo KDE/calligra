@@ -19,7 +19,7 @@
 #ifndef KO_COMPOSITEOPS_BENCHMARK_H_
 #define KO_COMPOSITEOPS_BENCHMARK_H_
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KoCompositeOpsBenchmark : public QObject
 {

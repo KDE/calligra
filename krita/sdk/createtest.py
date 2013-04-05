@@ -27,7 +27,7 @@ HEADER=Template("""${GPL}
 #ifndef ${HEADER_GUARD}_TEST_H
 #define ${HEADER_GUARD}_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class ${CLASSNAME}Test : public QObject
 {

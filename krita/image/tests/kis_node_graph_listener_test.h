@@ -19,7 +19,7 @@
 #ifndef KIS_NODE_GRAPH_LISTENER_TEST_H
 #define KIS_NODE_GRAPH_LISTENER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 #include "kis_node.h"
 

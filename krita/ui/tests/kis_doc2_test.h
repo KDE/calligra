@@ -19,7 +19,7 @@
 #ifndef KIS_DOC2_TEST_H
 #define KIS_DOC2_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisDoc2Test : public QObject
 {

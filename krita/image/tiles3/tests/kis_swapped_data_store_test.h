@@ -18,7 +18,7 @@
 #ifndef KIS_SWAPPED_DATA_STORE_TEST_H
 #define KIS_SWAPPED_DATA_STORE_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisTileData;
 class KisSwappedDataStore;

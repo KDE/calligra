@@ -1,7 +1,7 @@
 #ifndef CALLIGRA_SHEETS_TEST_RTREE
 #define CALLIGRA_SHEETS_TEST_RTREE
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 namespace Calligra
 {

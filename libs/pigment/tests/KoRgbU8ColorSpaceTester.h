@@ -20,7 +20,7 @@
 #ifndef KO_STRATEGY_COLORSPACE_RGB_TESTER_H
 #define KO_STRATEGY_COLORSPACE_RGB_TESTER_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KoRgbColorSpaceTester : public QObject
 {

@@ -20,7 +20,7 @@
 #ifndef KPlato_InsertProjectTester_h
 #define KPlato_InsertProjectTester_h
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 namespace KPlato
 {

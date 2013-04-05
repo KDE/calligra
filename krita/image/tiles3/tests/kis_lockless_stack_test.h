@@ -18,7 +18,7 @@
 #ifndef KIS_LOCKLESS_STACK_TEST_H
 #define KIS_LOCKLESS_STACK_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisAbstractIntStack;
 

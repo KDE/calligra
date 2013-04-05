@@ -19,7 +19,7 @@
 #ifndef KIS_COORDINATES_CONVERTER_TEST_H
 #define KIS_COORDINATES_CONVERTER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisCoordinatesConverterTest : public QObject
 {

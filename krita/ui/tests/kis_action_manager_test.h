@@ -20,7 +20,7 @@
 #ifndef KIS_ACTION_MANAGER_TEST_H
 #define KIS_ACTION_MANAGER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisActionManagerTest : public QObject
 {

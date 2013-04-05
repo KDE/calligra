@@ -18,7 +18,7 @@
 #ifndef SNP_TESTS_H
 #define SNP_TESTS_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class SnpTests: public QObject
 {

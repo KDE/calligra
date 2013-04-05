@@ -21,7 +21,7 @@
 #define CALLIGRA_SHEETS_TEST_FORMULA
 
 #include <QtWidgets>
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <Value.h>
 
 namespace Calligra

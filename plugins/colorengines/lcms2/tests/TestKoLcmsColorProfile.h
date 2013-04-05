@@ -1,7 +1,7 @@
 #ifndef TESTKOLCMSCOLORPROFILE_H
 #define TESTKOLCMSCOLORPROFILE_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestKoLcmsColorProfile : public QObject
 {

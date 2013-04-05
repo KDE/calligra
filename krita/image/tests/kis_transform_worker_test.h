@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSFORM_WORKER_TEST_H
 #define KIS_TRANSFORM_WORKER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisTransformWorkerTest : public QObject
 {

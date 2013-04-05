@@ -19,7 +19,7 @@
 #ifndef KIS_GROUP_LAYER_TEST_H
 #define KIS_GROUP_LAYER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisGroupLayerTest : public QObject
 {

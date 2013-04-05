@@ -19,7 +19,7 @@
 #ifndef __KIS_SIMPLE_STROKE_STRATEGY_TEST_H
 #define __KIS_SIMPLE_STROKE_STRATEGY_TEST_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class KisSimpleStrokeStrategyTest : public QObject
 {

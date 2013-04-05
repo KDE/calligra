@@ -19,7 +19,7 @@
 #ifndef KO_INTEGER_MATHS_TESTER_H
 #define KO_INTEGER_MATHS_TESTER_H
 
-#include <QtTest>
+#include <QtTest/QtTest>
 
 class TestKoIntegerMaths : public QObject
 {
