@@ -925,6 +925,7 @@ calligra_drop_unbuildable_products()
 ####################
 ###################
 
+add_subdirectory(fake)
 add_subdirectory(words)
 
 if (SHOULD_BUILD_FLOW_APP)
