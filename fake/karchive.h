@@ -56,7 +56,7 @@ protected:
      * @param dev the I/O device where the archive reads its data
      * Note that this can be a file, but also a data buffer, a compression filter, etc.
      * For a file in writing mode it is better to use the other constructor
-     * though, to benefit from the use of QSaveFile when saving.
+     * though, to benefit from the use of KSaveFile when saving.
      */
     KArchive( QIODevice * dev );
 
@@ -335,7 +335,7 @@ protected:
     /**
      * Can be reimplemented in order to change the creation of the device
      * (when using the fileName constructor). By default this method uses
-     * QSaveFile when saving, and a simple QFile on reading.
+     * KSaveFile when saving, and a simple QFile on reading.
      * This method is called by open().
      */
     virtual bool createDevice( QIODevice::OpenMode mode );

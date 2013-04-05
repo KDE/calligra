@@ -38,7 +38,7 @@
 #include <kpushbutton.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <QSaveFile>
+#include <ksavefile.h>
 
 
 using namespace KexiCSVExport;
@@ -103,9 +103,9 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     KexiDB::QueryColumnInfo::Vector fields(query->fieldsExpanded(KexiDB::QuerySchema::WithInternalFields));
     QString buffer;
 
-    QSaveFile *kSaveFile = 0;
+    KSaveFile *kSaveFile = 0;
     QTextStream *stream = 0;
-    QTextStream *kSaveFileTextStream = 0; // we'll delete it as QSaveFile's stream
+    QTextStream *kSaveFileTextStream = 0; // we'll delete it as KSaveFile's stream
 
     const bool copyToClipboard = options.mode == Clipboard;
     if (copyToClipboard) {
@@ -125,11 +125,11 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
                 kWarning() << "Fname is empty";
                 return false;
             }
-            kSaveFile = new QSaveFile(options.fileName);
+            kSaveFile = new KSaveFile(options.fileName);
 
-            kDebug() << "QSaveFile Filename:" << kSaveFile->fileName();
+            kDebug() << "KSaveFile Filename:" << kSaveFile->fileName();
 
-            if (kSaveFile->open(QIODevice::WriteOnly)) {
+            if (kSaveFile->open()) {
                 kSaveFileTextStream = new QTextStream(kSaveFile);
                 stream = kSaveFileTextStream;
                 kDebug() << "have a stream";

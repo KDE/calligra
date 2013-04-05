@@ -29,6 +29,7 @@
 #include <kdebug.h>
 
 #include <kcomponentdata.h>
+#include <ksavefile.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
