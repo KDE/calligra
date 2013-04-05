@@ -31,7 +31,6 @@ public:
     QString componentName() const { return  qApp->applicationName(); }
     const KAboutData* aboutData() const { return &m_about; }
 private:
-    KSharedConfigPtr m_sharedConfig;
     KAboutData m_about;
 };
 
