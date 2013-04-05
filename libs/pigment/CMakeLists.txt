@@ -117,13 +117,15 @@ kde4_add_library(pigmentcms SHARED ${pigmentcms_SRCS})
 target_link_libraries(
     pigmentcms
     koplugin
+    kofake
     ${EXTRA_LIBRARIES}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
-    )
+    ${Qt5Gui_LIBRARIES} 
+    ${Qt5Widgets_LIBRARIES} 
+    ${Qt5Xml_LIBRARIES}
+)
 
 target_link_libraries(
-    pigmentcms LINK_INTERFACE_LIBRARIES koplugin ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${EXTRA_LIBRARIES}
+    pigmentcms LINK_INTERFACE_LIBRARIES koplugin ${EXTRA_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${Qt5Xml_LIBRARIES} kofake
 )
 
 set_target_properties(pigmentcms PROPERTIES
