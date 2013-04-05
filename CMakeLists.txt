@@ -3,11 +3,7 @@ project(calligra)
 cmake_minimum_required(VERSION 2.8.10 FATAL_ERROR)
 
 cmake_policy(SET CMP0002 OLD)
-
-#cmake_policy CMP0017 was introduced in version 2.8.4
-if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
-    cmake_policy(SET CMP0017 NEW)
-endif()
+cmake_policy(SET CMP0017 NEW)
 
  ############
 #############
@@ -28,10 +24,6 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "14")
 
 find_package(ECM 0.0.8 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro" "${CMAKE_SOURCE_DIR}/cmake/modules" ${ECM_MODULE_PATH})
-
-# this gives us the KDE install dir variables (instead of defining them in FindKDE4Internal.cmake),
-# RPATH handling and test settings. It does not need the actual KF5 modules
-find_package(KF5 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs)
 
  ####################
 #####################
@@ -241,6 +233,10 @@ calligra_set_productset(${PRODUCTSET})
 #########################
 ########################
 
+# this gives us the KDE install dir variables (instead of defining them in FindKDE4Internal.cmake),
+# RPATH handling and test settings. It does not need the actual KF5 modules
+find_package(KF5 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs)
+
 # Use the KDE4 macros, they are very convenient. There's a copy in cmake/kde4_macros
 include(KDE4Macros)
 include(KDE4Defaults)
@@ -248,18 +244,64 @@ include(MacroLibrary)
 include(MacroAdditionalCleanFiles)
 include(MacroAddFileDependencies)
 
-
+set (QT_MIN_VERSION "5.0.0")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5OpenGL REQUIRED)
+find_package(Qt5Core REQUIRED NO_MODULE)
+find_package(Qt5Widgets REQUIRED NO_MODULE)
+find_package(Qt5Network REQUIRED NO_MODULE)
+find_package(Qt5Declarative REQUIRED NO_MODULE)
+find_package(Qt5Xml REQUIRED NO_MODULE)
+#find_package(Qt5UiTools REQUIRED NO_MODULE)
+find_package(Qt5OpenGL REQUIRED NO_MODULE)
+find_package(Qt5Qml REQUIRED NO_MODULE)
+#find_package(Qt5Quick1 REQUIRED NO_MODULE)
+find_package(Qt5Svg REQUIRED NO_MODULE)
+find_package(Qt5PrintSupport REQUIRED NO_MODULE)
+#find_package(Qt5Webkit REQUIRED NO_MODULE)
 
-find_package(X11)
+if (Qt5_POSITION_INDEPENDENT_CODE)
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
+set(QT_QTGUI_LIBRARIES
+  ${Qt5Gui_LIBRARIES}
+  ${Qt5Widgets_LIBRARIES}
+  ${Qt5PrintSupport_LIBRARIES}
+  ${Qt5Svg_LIBRARIES}
+)
+
+set(QT_INCLUDES
+    ${Qt5Gui_INCLUDE_DIRS}
+    ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt5PrintSupport_INCLUDE_DIRS}
+    ${Qt5Svg_INCLUDE_DIRS}
+)
+
+# The Qt5Widgets_INCLUDES also includes the include directories for
+# dependencies QtCore and QtGui
+include_directories(${Qt5Widgets_INCLUDE_DIRS} ${QT_INCLUDES} )
+
+# We need add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5.
+add_definitions(${Qt5Widgets_DEFINITIONS} ${QT_DEFINITIONS} )
+
+add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
+remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FROM_BYTEARRAY -DQT_NO_KEYWORDS)
+
+
+ ########################
+#########################
+## Look for other deps ##
+#########################
+########################
+
+find_package(X11 MODULE)
 if(X11_FOUND)
     macro_bool_to_01(X11_FOUND HAVE_X11)
 endif(X11_FOUND)
-
 
 if (GHNS)
     if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
@@ -354,12 +396,12 @@ else (WIN32)
 
     if(OPENGL_FOUND)
         message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
-        if(QT_QTOPENGL_FOUND)
+        #if(QT_QTOPENGL_FOUND)
             message(STATUS "Found Qt OpenGL support")
             set(HAVE_OPENGL 1)
-        else(QT_QTOPENGL_FOUND)
-            message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-        endif(QT_QTOPENGL_FOUND)
+        #else(QT_QTOPENGL_FOUND)
+        #    message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
+        #endif(QT_QTOPENGL_FOUND)
     else(OPENGL_FOUND)
         message(STATUS "Did NOT find OpenGL libraries")
     endif(OPENGL_FOUND)
@@ -664,6 +706,9 @@ include(MacroCalligraBuildTest)
 
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
+
+# for the fake kde headers during transition
+include_directories(${CMAKE_SOURCE_DIR}/fake)
 
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
