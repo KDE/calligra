@@ -23,11 +23,11 @@
 #include "KoSharedLoadingData.h"
 
 #include <QHash>
+#include <QString>
 
 #define MARKER_SHARED_LOADING_ID "KoMarkerShareadLoadingId"
 
 class KoMarker;
-class QString;
 
 class KoMarkerSharedLoadingData : public KoSharedLoadingData
 {
