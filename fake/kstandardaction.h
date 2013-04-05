@@ -58,11 +58,12 @@ public:
 
     static QString name(StandardAction a)
     {
-        KStandardAction sa;
-        int idx = sa.metaObject()->indexOfEnumerator("StandardAction");
-        Q_ASSERT(idx >= 0);
-        QMetaEnum e = sa.metaObject()->enumerator(idx);
-        return QString::fromLatin1(e.valueToKey(int(a)));
+        return QString();
+//        KStandardAction sa;
+//        int idx = sa.metaObject()->indexOfEnumerator("StandardAction");
+//        Q_ASSERT(idx >= 0);
+//        QMetaEnum e = sa.metaObject()->enumerator(idx);
+//        return QString::fromLatin1(e.valueToKey(int(a)));
     }
 
 #if 0
