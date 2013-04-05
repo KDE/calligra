@@ -253,6 +253,7 @@ find_package(Qt5Widgets REQUIRED NO_MODULE)
 find_package(Qt5Network REQUIRED NO_MODULE)
 find_package(Qt5Declarative REQUIRED NO_MODULE)
 find_package(Qt5Xml REQUIRED NO_MODULE)
+find_package(Qt5Test REQUIRED NO_MODULE)
 #find_package(Qt5UiTools REQUIRED NO_MODULE)
 find_package(Qt5OpenGL REQUIRED NO_MODULE)
 find_package(Qt5Qml REQUIRED NO_MODULE)
@@ -272,6 +273,16 @@ set(QT_QTGUI_LIBRARIES
   ${Qt5Svg_LIBRARIES}
   ${Qt5Xml_LIBRARIES}
 )
+
+set(QT_QTXML_LIBRARY ${Qt5Xml_LIBRARIES})
+set(QT_QTGUI_LIBRARY ${Qt5Gui_LIBRARIES}
+                     ${Qt5Widgets_LIBRARIES}
+                     ${Qt5PrintSupport_LIBRARIES})
+set(QT_QTCORE_LIBRARY ${Qt5Gui_LIBRARIES})
+set(QT_QNETWORK_LIBRARY ${Qt5Network_LIBRARIES})
+
+set(QT_QTDECLARATIVE_LIBRARY ${Qt5Declarative_LIBRARIES})
+set(QT_QTEST_LIBRARY ${Qt5QTest_LIBRARIES})
 
 set(QT_INCLUDES
     ${Qt5Gui_INCLUDE_DIRS}
