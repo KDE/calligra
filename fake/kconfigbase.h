@@ -5,10 +5,11 @@
 #include <QStringList>
 #include <QSharedPointer>
 #include <QDebug>
+#include "kdecore_export.h"
 
 class KConfigGroup;
 
-class KConfigBase
+class KDECORE_EXPORT KConfigBase
 {
 protected:
     KConfigBase(const QString &path = QByteArray());
