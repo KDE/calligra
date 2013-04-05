@@ -1,13 +1,11 @@
-include_directories( ${KDE4_INCLUDES} )
-
 set(koplugin_LIB_SRCS
 	KoPluginLoader.cpp
 )
 
 kde4_add_library(koplugin SHARED ${koplugin_LIB_SRCS})
 
-target_link_libraries(koplugin ${KDE4_KDECORE_LIBS})
-target_link_libraries(koplugin LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS})
+target_link_libraries(koplugin Qt5::Core)
+target_link_libraries(koplugin LINK_INTERFACE_LIBRARIES Qt5::Core)
 
 set_target_properties(koplugin PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
