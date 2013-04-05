@@ -64,5 +64,5 @@ bool KoShapeBackground::deref()
 int KoShapeBackground::useCount() const
 {
     Q_D(const KoShapeBackground);
-    return d->refCount;
+    return d->refCount.load();
 }
