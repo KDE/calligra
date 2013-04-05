@@ -35,11 +35,9 @@ public:
     KAboutData( const QByteArray &, const QByteArray &, const KLocalizedString &, const QByteArray &, const KLocalizedString &shortDescription = KLocalizedString(), enum LicenseKey licenseType = License_Unknown, const KLocalizedString &copyrightStatement = KLocalizedString(), const KLocalizedString &otherText = KLocalizedString(), const QByteArray &homePageAddress = QByteArray(), const QByteArray &bugsEmailAddress = QByteArray())
     {
         Q_UNUSED(shortDescription);
-        Q_UNUSED(LicenseKey);
         Q_UNUSED(licenseType);
         Q_UNUSED(copyrightStatement);
         Q_UNUSED(otherText);
-        Q_UNUSED(homepage);
         Q_UNUSED(bugAddress());
         Q_UNUSED(homePageAddress);
         Q_UNUSED(bugsEmailAddress);

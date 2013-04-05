@@ -267,16 +267,16 @@ public:
             { writeCheck( key.toUtf8().constData(), value, pFlags ); }
 #endif
 
-    void writeEntry(const QString &key, const QStringList &value, WriteConfigFlags pFlags = Normal)
+    void writeEntry(const QString &/*key*/, const QStringList &/*value*/, WriteConfigFlags pFlags = Normal)
     {
         Q_UNUSED(pFlags);
-        qWarning() << Q_FUNC_INFO << "TODO" << key << value;
+        //qWarning() << Q_FUNC_INFO << "TODO" << key << value;
     }
     
-    void writeEntry(const QString &key, const QList<int> &value, WriteConfigFlags pFlags = Normal)
+    void writeEntry(const QString &/*key*/, const QList<int> &/*value*/, WriteConfigFlags pFlags = Normal)
     {
         Q_UNUSED(pFlags);
-        qWarning() << Q_FUNC_INFO << "TODO" << key << value;
+        //qWarning() << Q_FUNC_INFO << "TODO" << key << value;
     }
 
 #if 0
