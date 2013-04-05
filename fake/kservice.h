@@ -20,11 +20,11 @@ public:
     QString library() const { return QString(); }
     QString entryPath() const { return QString(); }
 
-    static Ptr serviceByName( const QString& _name ) { return Ptr(); }
-    static Ptr serviceByDesktopPath( const QString& _path ) { return Ptr(); }
-    static Ptr serviceByDesktopName( const QString& _name ) { return Ptr(); }
-    static Ptr serviceByMenuId( const QString& _menuId ) { return Ptr(); }
-    static Ptr serviceByStorageId( const QString& _storageId ) { return Ptr(); }
+    static Ptr serviceByName( const QString&) { return Ptr(); }
+    static Ptr serviceByDesktopPath( const QString& ) { return Ptr(); }
+    static Ptr serviceByDesktopName( const QString& ) { return Ptr(); }
+    static Ptr serviceByMenuId( const QString&) { return Ptr(); }
+    static Ptr serviceByStorageId( const QString&) { return Ptr(); }
     static List allServices() { return List(); }
     QStringList serviceTypes() const { return QStringList(); }
 
@@ -33,6 +33,8 @@ public:
     template<class T>
     T* createInstance(QObject*, const QVariantList &args = QVariantList(), QString *error = 0) const
     {
+        Q_UNUSED(args);
+        Q_UNUSED(error);
         qWarning() << Q_FUNC_INFO << "TODO";
         return 0;
     }

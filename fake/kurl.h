@@ -325,6 +325,7 @@ public:
 
     QString fileName(DirectoryOptions trailing = IgnoreTrailingSlash) const
     {
+        Q_UNUSED(trailing);
         return QFileInfo(toLocalFile()).fileName();
     }
 
@@ -335,6 +336,7 @@ public:
 
     QString directory(const DirectoryOptions& options = IgnoreTrailingSlash) const
     {
+        Q_UNUSED(options);
         return QFileInfo(toLocalFile()).absolutePath();
     }
 
@@ -356,7 +358,7 @@ public:
         return u;
     }
 
-    void adjustPath(AdjustPathOption trailing) {}
+    void adjustPath(AdjustPathOption trailing) {Q_UNUSED(trailing);}
 
 private:
 

@@ -18,8 +18,8 @@ public:
 
     void reparseConfiguration() {}
 
-    static KSharedConfig::Ptr openConfig(const QString& fileName = QString(), OpenFlags mode = FullConfig, const char *resourceType = "config") { return Ptr(); }
-    static KSharedConfig::Ptr openConfig(const KComponentData &componentData, const QString &fileName = QString(), OpenFlags mode = FullConfig, const char *resourceType = "config") { return Ptr(); }
+    static KSharedConfig::Ptr openConfig(const QString& fileName = QString(), OpenFlags mode = FullConfig, const char *resourceType = "config") { Q_UNUSED(fileName); Q_UNUSED(mode); Q_UNUSED(resourceType); return Ptr(); }
+    static KSharedConfig::Ptr openConfig(const KComponentData &componentData, const QString &fileName = QString(), OpenFlags mode = FullConfig, const char *resourceType = "config") { Q_UNUSED(componentData); Q_UNUSED(fileName); Q_UNUSED(mode); Q_UNUSED(resourceType);return Ptr(); }
 
 };
 

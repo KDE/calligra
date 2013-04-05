@@ -32,7 +32,20 @@ public:
     enum NameFormat { ShortName, FullName };
 
     KAboutData() { init(); }
-    KAboutData( const QByteArray &appName, const QByteArray &catalogName, const KLocalizedString &programName, const QByteArray &version, const KLocalizedString &shortDescription = KLocalizedString(), enum LicenseKey licenseType = License_Unknown, const KLocalizedString &copyrightStatement = KLocalizedString(), const KLocalizedString &otherText = KLocalizedString(), const QByteArray &homePageAddress = QByteArray(), const QByteArray &bugsEmailAddress = QByteArray()) { init(); }
+    KAboutData( const QByteArray &, const QByteArray &, const KLocalizedString &, const QByteArray &, const KLocalizedString &shortDescription = KLocalizedString(), enum LicenseKey licenseType = License_Unknown, const KLocalizedString &copyrightStatement = KLocalizedString(), const KLocalizedString &otherText = KLocalizedString(), const QByteArray &homePageAddress = QByteArray(), const QByteArray &bugsEmailAddress = QByteArray())
+    {
+        Q_UNUSED(shortDescription);
+        Q_UNUSED(LicenseKey);
+        Q_UNUSED(licenseType);
+        Q_UNUSED(copyrightStatement);
+        Q_UNUSED(otherText);
+        Q_UNUSED(homepage);
+        Q_UNUSED(bugAddress());
+        Q_UNUSED(homePageAddress);
+        Q_UNUSED(bugsEmailAddress);
+
+        init();
+    }
 
     QString appName() const { return qApp->applicationName(); }
     QString productName() const { return appName(); }
@@ -55,7 +68,7 @@ public:
     static QString aboutTranslationTeam() { return QString(); }
     QString otherText() const { return QString(); }
     QString license() const { return QString(); }
-    QString licenseName(NameFormat formatName) const { return QString(); }
+    QString licenseName(NameFormat ) const { return QString(); }
     QList<KAboutLicense> licenses() const { return QList<KAboutLicense>(); }
     QString copyrightStatement() const { return QString(); }
     QString customAuthorPlainText() const { return QString(); }
@@ -70,27 +83,27 @@ public:
         m_credits.append(KAboutPerson(name, task, emailAddress, webAddress, ocsUsername));
         return *this;
     }
-    KAboutData &setTranslator( const KLocalizedString& name, const KLocalizedString& emailAddress ) { return *this; }
-    KAboutData &setLicenseText( const KLocalizedString &license ) { return *this; }
-    KAboutData &addLicenseText( const KLocalizedString &license ) { return *this; }
-    KAboutData &setLicenseTextFile( const QString &file ) { return *this; }
-    KAboutData &addLicenseTextFile( const QString &file ) { return *this; }
-    KAboutData &setAppName( const QByteArray &appName ) { return *this; }
-    KAboutData &setProgramName( const KLocalizedString &programName ) { return *this; }
-    KAboutData &setProgramIconName( const QString &iconName ) { return *this; }
-    KAboutData &setProgramLogo(const QVariant& image) { return *this; }
-    KAboutData &setOcsProvider( const QByteArray &providerUrl ) { return *this; }
-    KAboutData &setVersion( const QByteArray &version ) { return *this; }
-    KAboutData &setShortDescription( const KLocalizedString &shortDescription ) { return *this; }
-    KAboutData &setCatalogName( const QByteArray &catalogName ) { return *this; }
-    KAboutData &setLicense( LicenseKey licenseKey ) { return *this; }
-    KAboutData &addLicense( LicenseKey licenseKey ) { return *this; }
-    KAboutData &setCopyrightStatement( const KLocalizedString &copyrightStatement ) { return *this; }
-    KAboutData &setOtherText( const KLocalizedString &otherText ) { return *this; }
-    KAboutData &setHomepage( const QByteArray &homepage ) { return *this; }
-    KAboutData &setBugAddress( const QByteArray &bugAddress ) { return *this; }
-    KAboutData &setOrganizationDomain( const QByteArray &domain ) { return *this; }
-    KAboutData &setProductName( const QByteArray &name ) { return *this; }
+    KAboutData &setTranslator( const KLocalizedString& , const KLocalizedString& ) { return *this; }
+    KAboutData &setLicenseText( const KLocalizedString &) { return *this; }
+    KAboutData &addLicenseText( const KLocalizedString &) { return *this; }
+    KAboutData &setLicenseTextFile( const QString &) { return *this; }
+    KAboutData &addLicenseTextFile( const QString &) { return *this; }
+    KAboutData &setAppName( const QByteArray & ) { return *this; }
+    KAboutData &setProgramName( const KLocalizedString & ) { return *this; }
+    KAboutData &setProgramIconName( const QString &) { return *this; }
+    KAboutData &setProgramLogo(const QVariant& ) { return *this; }
+    KAboutData &setOcsProvider( const QByteArray &) { return *this; }
+    KAboutData &setVersion( const QByteArray & ) { return *this; }
+    KAboutData &setShortDescription( const KLocalizedString &) { return *this; }
+    KAboutData &setCatalogName( const QByteArray & ) { return *this; }
+    KAboutData &setLicense( LicenseKey  ) { return *this; }
+    KAboutData &addLicense( LicenseKey ) { return *this; }
+    KAboutData &setCopyrightStatement( const KLocalizedString &) { return *this; }
+    KAboutData &setOtherText( const KLocalizedString & ) { return *this; }
+    KAboutData &setHomepage( const QByteArray & ) { return *this; }
+    KAboutData &setBugAddress( const QByteArray &) { return *this; }
+    KAboutData &setOrganizationDomain( const QByteArray &) { return *this; }
+    KAboutData &setProductName( const QByteArray &) { return *this; }
 
 private:
     QByteArray m_name, m_version;

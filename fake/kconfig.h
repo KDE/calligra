@@ -24,7 +24,7 @@ public:
     };
     Q_DECLARE_FLAGS(OpenFlags, OpenFlag)
 
-    KConfig(const QString& file, OpenFlag = FullConfig, const char* resourceType = "config") : KConfigBase() {}
+    KConfig(const QString& file, OpenFlag = FullConfig, const char* resourceType = "config") : KConfigBase() { Q_UNUSED(file); Q_UNUSED(resourceType);}
     virtual ~KConfig() {}
 
 #if 0

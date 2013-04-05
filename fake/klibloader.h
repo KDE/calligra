@@ -11,8 +11,8 @@ class KLibrary : public QLibrary
 public:
     typedef void (*void_function_ptr) ();
     KLibrary(QObject *parent = 0) : QLibrary(parent) {}
-    KLibrary(const QString &name, const KComponentData &cData = KGlobal::mainComponent(), QObject *parent = 0) : QLibrary(name, parent) {}
-    KLibrary(const QString &name, int verNum, const KComponentData &cData = KGlobal::mainComponent(), QObject *parent = 0) : QLibrary(name, verNum, parent) {}
+    KLibrary(const QString &name, const KComponentData &cData = KGlobal::mainComponent(), QObject *parent = 0) : QLibrary(name, parent) {Q_UNUSED(cData);}
+    KLibrary(const QString &name, int verNum, const KComponentData &cData = KGlobal::mainComponent(), QObject *parent = 0) : QLibrary(name, verNum, parent) {Q_UNUSED(cData);}
 #if 0
     /**
      * Returns the factory of the library.

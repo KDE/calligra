@@ -14,9 +14,15 @@ class KPluginLoader : public QPluginLoader
 {
 public:
     KPluginLoader(const QString &plugin, const KComponentData &componentdata = KGlobal::mainComponent(), QObject *parent = 0) : QPluginLoader() {
+        Q_UNUSED(plugin);
+        Q_UNUSED(componentdata);
+        Q_UNUSED(parent);
         qDebug() << Q_FUNC_INFO;
     }
     KPluginLoader(const KService &service, const KComponentData &componentdata = KGlobal::mainComponent(), QObject *parent = 0) : QPluginLoader() {
+        Q_UNUSED(service);
+        Q_UNUSED(componentdata);
+        Q_UNUSED(parent);
         qDebug() << Q_FUNC_INFO;
     }
     ~KPluginLoader() {

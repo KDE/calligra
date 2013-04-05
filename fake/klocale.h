@@ -1654,7 +1654,6 @@ public:
     QString formatDateTime(const QDateTime &dateTime, DateFormat format = ShortDate, bool includeSecs = false) const
     {
         Q_UNUSED(includeSecs);
-        Q_UNUSED(catalog);
         switch (format) {
         case FancyShortDate:
         case ShortDate: return dateTime.toString(Qt::SystemLocaleShortDate);
@@ -2478,7 +2477,7 @@ public:
     * @param catalog The catalog to add.
     */
 #endif
-    void insertCatalog(const QString& catalog) {}
+    void insertCatalog(const QString& ) {}
 #if 0
     /**
     * Removes a catalog for translation lookup.

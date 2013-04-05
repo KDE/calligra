@@ -53,6 +53,9 @@ public:
 
     KService::List query( const QString& servicetype, const QString& constraint = QString() ) const
     {
+        Q_UNUSED(servicetype);
+        Q_UNUSED(constraint);
+
         qWarning() << Q_FUNC_INFO << "TOFO";
         return KService::List();
     }

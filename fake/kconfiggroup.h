@@ -229,6 +229,7 @@ public:
 
     void writeEntry(const QString &key, const QVariant &value, WriteConfigFlags pFlags = Normal)
     {
+        Q_UNUSED(pFlags);
         qWarning() << Q_FUNC_INFO << "TODO" << key << value;
     }
 
@@ -268,11 +269,13 @@ public:
 
     void writeEntry(const QString &key, const QStringList &value, WriteConfigFlags pFlags = Normal)
     {
+        Q_UNUSED(pFlags);
         qWarning() << Q_FUNC_INFO << "TODO" << key << value;
     }
     
     void writeEntry(const QString &key, const QList<int> &value, WriteConfigFlags pFlags = Normal)
     {
+        Q_UNUSED(pFlags);
         qWarning() << Q_FUNC_INFO << "TODO" << key << value;
     }
 
