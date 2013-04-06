@@ -522,7 +522,7 @@ bool KoXmlStreamAttributes::hasAttribute(const QLatin1String &qualifiedName) con
 {
 #if 1
     const QString qName(qualifiedName);
-    return hasAttribute(QString(qName));
+    return hasAttribute(qName);
 #else
     for (int i = 0; i < size(); ++i) {
         if (qualifiedName == this->at(i).qualifiedName()) {
@@ -551,7 +551,7 @@ QStringRef KoXmlStreamAttributes::value(const QLatin1String &qualifiedName) cons
 {
     // FIXME: Find faster way.
     const QString qName(qualifiedName);
-    return value(QString(qName));
+    return value(qName);
 }
 
 
