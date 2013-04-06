@@ -31,9 +31,9 @@
 #include <KoShapeManager.h>
 #include <KoIcon.h>
 
-#include <KAction>
+#include <kaction.h>
 #include <kparts/event.h>
-#include <KXMLGUIClient>
+#include <kxmlguiclient.h>
 
 using namespace Calligra::Sheets;
 

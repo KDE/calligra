@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
-#include "KarbonKoDocument.h"
+#include "KarbonDocument.h"
 #include "KarbonConfigInterfacePage.h"
 
 #include <KoIcon.h>
@@ -32,7 +32,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoConfigMiscPage.h>
 #include <KoConfigAuthorPage.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     : KPageDialog(parent)

@@ -50,10 +50,10 @@
 #include <klocale.h>
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
-#include <KTabWidget>
+#include <ktabwidget.h>
 
-#include <KMenu>
-#include <KToggleAction>
+#include <kmenu.h>
+#include <ktoggleaction.h>
 
 
 namespace KPlato

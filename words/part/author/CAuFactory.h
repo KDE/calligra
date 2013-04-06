@@ -21,7 +21,7 @@
 #ifndef CAUFACTORY_H
 #define CAUFACTORY_H
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 #include "words_export.h"
 
 class KAboutData;

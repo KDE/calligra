@@ -22,8 +22,8 @@
 
 #include "kexiutils_export.h"
 
-#include <KCategoryDrawer>
-#include <KCategorizedView>
+#include <kcategorydrawer.h>
+#include <kcategorizedview.h>
 #include <kdeversion.h>
 
 class QModelIndex;

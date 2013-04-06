@@ -57,7 +57,6 @@
 #include "KarbonPart.h"
 #include "KarbonCanvas.h"
 #include "KarbonDocument.h"
-#include "KarbonKoDocument.h"
 #include "KarbonPrintJob.h"
 #include "KarbonZoomController.h"
 #include "KarbonSmallStylePreview.h"
@@ -129,8 +128,8 @@
 #include <kfiledialog.h>
 #include <kstandardaction.h>
 #include <kparts/partmanager.h>
-#include <KToggleAction>
-#include <KDebug>
+#include <ktoggleaction.h>
+#include <kdebug.h>
 
 // qt header
 #include <QIcon>
@@ -152,7 +151,7 @@
 class KarbonView::Private
 {
 public:
-    Private(KarbonPart *part, KarbonKoDocument * doc)
+    Private(KarbonPart *part, KarbonDocument * doc)
             : karbonPart(part), part(doc), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
             , colorBar(0), closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
@@ -165,7 +164,7 @@ public:
     {}
 
     KarbonPart * karbonPart;
-    KarbonKoDocument * part;
+    KarbonDocument * part;
     KarbonCanvas * canvas;
     KoCanvasController * canvasController;
     KoRuler * horizRuler;
@@ -203,7 +202,7 @@ public:
     QWidget * zoomActionWidget; ///< zoom action widget
 };
 
-KarbonView::KarbonView(KarbonPart *karbonPart, KarbonKoDocument* doc, QWidget* parent)
+KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* parent)
         : KoView(karbonPart, doc, parent), d(new Private(karbonPart, doc))
 {
     setComponentData(KarbonFactory::componentData(), true);
@@ -244,7 +243,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonKoDocument* doc, QWidget* p
     // TODO maybe the zoomHandler should be a member of the view and not the canvas.
     // set up the zoom controller
     KarbonZoomController * zoomController = new KarbonZoomController(d->canvasController, actionCollection(), this);
-    zoomController->setPageSize(d->part->document().pageSize());
+    zoomController->setPageSize(d->part->pageSize());
     d->zoomActionWidget = zoomController->zoomAction()->createWidget(statusBar());
     addStatusBarItem(d->zoomActionWidget, 0);
     zoomController->setZoomMode(KoZoomMode::ZOOM_PAGE);
@@ -296,7 +295,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonKoDocument* doc, QWidget* p
 
     if (shell()) {
         // set the first layer active
-        d->canvasController->canvas()->shapeManager()->selection()->setActiveLayer(part()->document().layers().first());
+        d->canvasController->canvas()->shapeManager()->selection()->setActiveLayer(part()->layers().first());
 
         //Create Dockers
         createLayersTabDock();
@@ -350,7 +349,7 @@ KarbonView::~KarbonView()
     delete d;
 }
 
-KarbonKoDocument * KarbonView::part() const
+KarbonDocument * KarbonView::part() const
 {
     return d->part;
 }
@@ -442,7 +441,7 @@ void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertA
         v.setValue<QImage>(image);
         params.setProperty("qimage", v);
 
-        KoShape *shape = factory->createShape(&params, part()->document().resourceManager());
+        KoShape *shape = factory->createShape(&params, part()->resourceManager());
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
@@ -487,14 +486,14 @@ void KarbonView::fileImportGraphic()
     QString currentMimeFilter = dialog ? dialog->currentMimeFilter() : QString();
     delete dialog;
 
-    QMap<QString, KoDataCenterBase*> dataCenters = part()->document().dataCenterMap();
+    QMap<QString, KoDataCenterBase*> dataCenters = part()->dataCenterMap();
 
     KarbonPart importPart(0);
-    KarbonKoDocument importDocument(&importPart);
+    KarbonDocument importDocument(&importPart);
     importPart.setDocument(&importDocument);
 
     // use data centers of this document for importing
-    importDocument.document().useExternalDataCenterMap(dataCenters);
+    importDocument.useExternalDataCenterMap(dataCenters);
 
     bool success = true;
 
@@ -530,8 +529,8 @@ void KarbonView::fileImportGraphic()
             return;
         }
 
-        KoShape *picture = factory->createDefaultShape(part()->document().resourceManager());
-        KoImageCollection *imageCollection = part()->document().resourceManager()->imageCollection();
+        KoShape *picture = factory->createDefaultShape(part()->resourceManager());
+        KoImageCollection *imageCollection = part()->resourceManager()->imageCollection();
         if (!picture || !imageCollection) {
             KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
             return;
@@ -582,7 +581,7 @@ void KarbonView::fileImportGraphic()
     }
 
     if (success) {
-        QList<KoShape*> importedShapes = importDocument.document().shapes();
+        QList<KoShape*> importedShapes = importDocument.shapes();
 
         KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importDocument);
         d->canvas->addCommand(cmd);
@@ -605,7 +604,7 @@ void KarbonView::editSelectAll()
     if (! selection)
         return;
 
-    QList<KoShape*> shapes = part()->document().shapes();
+    QList<KoShape*> shapes = part()->shapes();
     kDebug(38000) << "shapes.size() =" << shapes.size();
 
     foreach(KoShape* shape, shapes) {
@@ -1001,7 +1000,7 @@ void KarbonView::zoomDrawing()
     if (! zoomHandler)
         return;
 
-    QRectF bbox = d->part->document().contentRect();
+    QRectF bbox = d->part->contentRect();
     if (bbox.isNull())
         return;
 
@@ -1280,8 +1279,8 @@ void KarbonView::pageOffsetChanged()
 
 void KarbonView::updateRuler()
 {
-    d->horizRuler->setRulerLength(part()->document().pageSize().width());
-    d->vertRuler->setRulerLength(part()->document().pageSize().height());
+    d->horizRuler->setRulerLength(part()->pageSize().width());
+    d->vertRuler->setRulerLength(part()->pageSize().height());
 }
 
 void KarbonView::showGuides()

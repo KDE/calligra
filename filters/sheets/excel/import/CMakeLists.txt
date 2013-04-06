@@ -61,6 +61,7 @@ install(TARGETS excelimporttodoc DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kspread_excel_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-install( FILES sheets_excel_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES sheets_excel_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
 

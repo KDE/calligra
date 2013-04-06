@@ -29,7 +29,7 @@
 #include "kptdebug.h"
 
 #include <QApplication>
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(PlanTJPlugin)
 

@@ -22,7 +22,7 @@
 #define KARBONCONFIGUREDIALOG_H
 
 #include <KoUnit.h>
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 class KarbonView;
 class KarbonConfigInterfacePage;

@@ -377,7 +377,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         createDB = true;
     const bool dropDB = args->isSet("dropdb");
     const bool openExisting = !createDB && !dropDB;
-    const bool readOnly = args->isSet("readonly");
+    bool readOnly = args->isSet("readonly");
     const QString couldnotMsg = QString::fromLatin1("\n")
                                 + i18n("Could not start Kexi application this way.");
 
@@ -468,13 +468,20 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
                 if (dropDB)
                     detectOptions |= DontConvert;
+                if (readOnly)
+                    detectOptions |= OpenReadOnly;
 
                 QString detectedDriverName;
                 KexiStartupData::Import importData = KexiStartupData::importActionData();
+                bool forceReadOnly;
                 const tristate res = detectActionForFile(&importData, &detectedDriverName,
-                                     cdata.driverName, cdata.fileName(), 0, detectOptions);
+                                     cdata.driverName, cdata.fileName(), 0, detectOptions,
+                                     &forceReadOnly);
                 if (true != res)
                     return res;
+                if (forceReadOnly) {
+                    readOnly = true;
+                }
                 KexiStartupData::setImportActionData(importData);
                 if (KexiStartupData::importActionData()) { //importing action
                     KexiStartupData::setAction(ImportProject);
@@ -742,21 +749,52 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     return true;
 }
 
-tristate KexiStartupHandler::detectActionForFile(KexiStartupData::Import* detectedImportAction, QString *detectedDriverName,
-    const QString& _suggestedDriverName, const QString &dbFileName, QWidget *parent, int options)
+tristate KexiStartupHandler::detectActionForFile(
+        KexiStartupData::Import* detectedImportAction, QString *detectedDriverName,
+        const QString& _suggestedDriverName, const QString &dbFileName, QWidget *parent,
+        int options, bool *forceReadOnly)
 {
     *detectedImportAction = KexiStartupData::Import(); //clear
+    if (forceReadOnly) {
+        *forceReadOnly = false;
+    }
     QString suggestedDriverName(_suggestedDriverName); //safe
     detectedDriverName->clear();
     QFileInfo finfo(dbFileName);
-    if (dbFileName.isEmpty() || !finfo.isReadable()) {
-        if (!(options & SkipMessages))
-            KMessageBox::sorry(parent, i18n("<p>Could not open project.</p>")
-                               + i18n("<p>The file <nobr>\"%1\"</nobr> does not exist or is not readable.</p>",
-                                      QDir::convertSeparators(dbFileName))
-                               + i18n("Check the file's permissions and whether it is already opened "
-                                      "and locked by another application."));
+    if (dbFileName.isEmpty()) {
+        if (!(options & SkipMessages)) {
+            KMessageBox::sorry(parent, i18nc("@info", "Could not open file. Missing filename."),
+                               i18nc("@title:window", "Could Not Open File"));
+        }
         return false;
+    }
+    if (!finfo.exists()) {
+        if (!(options & SkipMessages)) {
+            KMessageBox::sorry(parent, i18nc("@info", "Could not open file. "
+                                             "The file <filename>%1</filename> does not exist.",
+                                             QDir::convertSeparators(dbFileName)),
+                                       i18nc("@title:window", "Could Not Open File" ));
+        }
+        return false;
+    }
+    if (!finfo.isReadable()) {
+        if (!(options & SkipMessages)) {
+            KMessageBox::sorry(parent, i18nc("@info",
+                                             "Could not open file <filename>%1</filename> for reading. "
+                                             "<note>Check the file's permissions and whether it is "
+                                             "already opened and locked by another application.</note>",
+                                             QDir::convertSeparators(dbFileName)),
+                                       i18nc("@title:window", "Could Not Open File" ));
+        }
+        return false;
+    }
+    if (!(options & OpenReadOnly) && !finfo.isWritable()) {
+        if (!KexiProject::askForOpeningNonWritableFileAsReadOnly(parent, finfo)) {
+            return false;
+        }
+        if (forceReadOnly) {
+            *forceReadOnly = true;
+        }
     }
 
     KMimeType::Ptr ptr;

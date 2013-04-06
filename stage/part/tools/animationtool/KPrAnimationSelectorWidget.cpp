@@ -36,12 +36,12 @@
 #include <QToolButton>
 
 //KDE Headers
-#include <KLocale>
-#include <KIconLoader>
-#include <KIcon>
-#include <KConfigGroup>
-#include <KGlobalSettings>
-#include <KDebug>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kicon.h>
+#include <kconfiggroup.h>
+#include <kglobalsettings.h>
+#include <kdebug.h>
 
 //Calligra Headers
 #include <KoXmlReader.h>

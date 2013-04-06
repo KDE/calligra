@@ -28,7 +28,7 @@
 // Local
 #include "FormulaDialog.h"
 
-#include <KTabWidget>
+#include <ktabwidget.h>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QGridLayout>

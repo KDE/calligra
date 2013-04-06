@@ -24,7 +24,7 @@
 #include <KoFilterEffectLoadingContext.h>
 #include <KoXmlWriter.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QFile>
 #include <QBuffer>

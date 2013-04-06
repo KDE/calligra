@@ -19,7 +19,7 @@
 
 #include "KexiImportExportAssistant.h"
 
-#include <KAction>
+#include <kaction.h>
 #include <QPointer>
 
 static QString stripText(const QString &text)

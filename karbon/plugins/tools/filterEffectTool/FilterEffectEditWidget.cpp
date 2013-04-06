@@ -36,8 +36,8 @@
 
 #include <KoIcon.h>
 
-#include <KInputDialog>
-#include <KDebug>
+#include <kinputdialog.h>
+#include <kdebug.h>
 
 #include <QGraphicsItem>
 #include <QSet>

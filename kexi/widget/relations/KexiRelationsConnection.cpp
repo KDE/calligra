@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QPolygon>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <math.h>
 

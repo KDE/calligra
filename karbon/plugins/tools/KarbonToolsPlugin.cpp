@@ -27,8 +27,8 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 K_PLUGIN_FACTORY(KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>();)
 K_EXPORT_PLUGIN(KarbonToolsPluginFactory("KarbonTools"))

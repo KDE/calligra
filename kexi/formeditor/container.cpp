@@ -32,8 +32,8 @@
 #include <QMouseEvent>
 
 #include <kdebug.h>
-#include <KLocale>
-#include <KGlobalSettings>
+#include <klocale.h>
+#include <kglobalsettings.h>
 
 #include <cstdlib> // for abs()
 

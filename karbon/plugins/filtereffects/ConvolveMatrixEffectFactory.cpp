@@ -21,7 +21,7 @@
 #include "ConvolveMatrixEffect.h"
 #include "ConvolveMatrixEffectConfigWidget.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 ConvolveMatrixEffectFactory::ConvolveMatrixEffectFactory()
         : KoFilterEffectFactoryBase(ConvolveMatrixEffectId, i18n("Convolve Matrix"))

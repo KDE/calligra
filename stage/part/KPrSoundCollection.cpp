@@ -23,7 +23,7 @@
 #include <KoXmlWriter.h>
 
 #include <QList>
-#include <KDebug>
+#include <kdebug.h>
 #include <kmimetype.h>
 
 class KPrSoundCollection::Private {

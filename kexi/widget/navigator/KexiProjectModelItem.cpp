@@ -23,7 +23,7 @@
 
 
 #include <core/kexipartinfo.h>
-#include <KIcon>
+#include <kicon.h>
 #include <QtAlgorithms>
 #include <kdebug.h>
 

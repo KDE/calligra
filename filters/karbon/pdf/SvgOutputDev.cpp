@@ -23,7 +23,7 @@
 #include <poppler/Stream.h>
 #include <poppler/GfxFont.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QFile>
 #include <QTextStream>
 #include <QSizeF>

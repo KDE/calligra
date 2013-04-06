@@ -26,21 +26,21 @@
 #include <kexiutils/KexiContextMessage.h>
 #include "KexiUserFeedbackAgent.h"
 
-#include <KGlobalSettings>
-#include <KColorUtils>
-#include <KColorScheme>
-#include <KStandardDirs>
-#include <KLocale>
-#include <KDebug>
-#include <KAction>
-#include <KStandardGuiItem>
-#include <KFadeWidgetEffect>
-#include <KConfigGroup>
+#include <kglobalsettings.h>
+#include <kcolorutils.h>
+#include <kcolorscheme.h>
+#include <kstandarddirs.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kaction.h>
+#include <kstandardguiitem.h>
+#include <kfadewidgeteffect.h>
+#include <kconfiggroup.h>
 #include <KIO/Job>
 #include <KIO/CopyJob>
-#include <KCodecs>
-#include <KTemporaryFile>
-#include <KTempDir>
+#include <kcodecs.h>
+#include <ktemporaryfile.h>
+#include <ktempdir.h>
 #include <kde_file.h>
 
 #include <QEvent>

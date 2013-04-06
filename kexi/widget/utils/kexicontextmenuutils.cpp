@@ -26,8 +26,8 @@
 #include <kimageio.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <KActionCollection>
-#include <KAction>
+#include <kactioncollection.h>
+#include <kaction.h>
 
 #include <QFileDialog>
 #include <QApplication>

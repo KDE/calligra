@@ -20,9 +20,9 @@
 
 #include "kexiquerypart.h"
 
-#include <KDebug>
-#include <KToggleAction>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <ktoggleaction.h>
+#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>

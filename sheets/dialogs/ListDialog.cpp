@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <KTextEdit>
+#include <ktextedit.h>
 
 #include "commands/AutoFillCommand.h"
 #include "Localization.h"

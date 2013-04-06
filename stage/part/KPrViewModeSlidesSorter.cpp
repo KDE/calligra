@@ -58,11 +58,11 @@
 
 //KDE Headers
 #include <klocale.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <kconfiggroup.h>
-#include <KGlobalSettings>
-#include <KMessageBox>
-#include <KActionCollection>
+#include <kglobalsettings.h>
+#include <kmessagebox.h>
+#include <kactioncollection.h>
 
 const int DEFAULT_ICON_SIZE = 200;
 

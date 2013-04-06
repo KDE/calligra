@@ -26,10 +26,10 @@
 
 #include "KoXmlReader.h"
 
-#include <KMessageBox>
-#include <KTimeZone>
-#include <KSystemTimeZones>
-#include <KDebug>
+#include <kmessagebox.h>
+#include <ktimezone.h>
+#include <ksystemtimezone.h>
+#include <kdebug.h>
 #include <kdeversion.h>
 
 #include <QDateTime>
