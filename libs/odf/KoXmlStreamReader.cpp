@@ -31,8 +31,8 @@
 #include <kdebug.h>
 
 
-// ----------------------------------------------------------------
-//                 class KoXmlStreamReader::Private
+// ================================================================
+//             class KoXmlStreamReader and Private class
 
 
 class KoXmlStreamReader::Private
@@ -43,7 +43,12 @@ public:
 
     void clear();
 
+    // Checks the soundness of the whole document.  Must be called
+    // after the namespace declarations are read.
     void        checkSoundness();
+
+    // Builds a qualified name for the current element. Only called if
+    // the document is unsound.
     QStringRef  buildQName();
 
     KoXmlStreamReader *q;       // The owner object;
@@ -51,6 +56,7 @@ public:
     bool  isSound;              // True if the document is sound (see the class doc for details)
     bool  isChecked;            // True if the soundness is checked
 
+    // These are filled using the addEx{pected,tra}Namespace() functions.
     QHash<QString, QString>  expectedNamespaces;  // nsUri, prefix
     QHash<QString, QString>  extraNamespaces;     // nsUri, prefix
 
@@ -62,7 +68,7 @@ public:
     // name.  But we return a QStringRef and not QString so we need to
     // make sure that the stringref is valid until this
     // KoXmlStreamReader is destructed.  So we use this QSet as a
-    // cache of all constructed qualifiednames that we ever generate.
+    // cache of all constructed qualified names that we ever generate.
     QSet<QString>  qualifiedNamesCache;
 };
 
@@ -122,7 +128,7 @@ void KoXmlStreamReader::Private::checkSoundness()
     // namespaces for the same namespace URI.
     //
     // If it is not Sound, then we need to rewrite the prefixes for
-    // the qualified names when the caller wantes to access them.
+    // the qualified names when the caller wants to access them.
     // Hopefully this only happens once in a million documents (and it
     // would be interesting to know which application created such a
     // strange beast).
@@ -325,8 +331,228 @@ void KoXmlStreamReader::setDevice(QIODevice *device)
     QXmlStreamReader::setDevice(device);
 }
 
+KoXmlStreamAttributes KoXmlStreamReader::attributes() const
+{
+    QXmlStreamAttributes   qAttrs = QXmlStreamReader::attributes();
+    KoXmlStreamAttributes  retval = KoXmlStreamAttributes(qAttrs);
+
+    for (int i = 0; i < qAttrs.size(); ++i) {
+        retval[i] = KoXmlStreamAttribute(&qAttrs[i], this);
+    }
+
+    return retval;
+}
+
 
 // ----------------------------------------------------------------
+//                         private functions
+
+
+bool KoXmlStreamReader::isSound() const
+{
+    return d->isSound;
+}
+
+
+// ================================================================
+//             class KoXmlStreamAttribute and Private class
+
+
+class KoXmlStreamAttribute::Private
+{
+public:
+    Private(const QXmlStreamAttribute *attr, const KoXmlStreamReader *r);
+    ~Private();
+
+    void generateQName();
+
+    const QXmlStreamAttribute *qAttr;
+    const KoXmlStreamReader   *reader;
+
+    // These two are only used when the document is unsound
+    QString  qName;             // qualifiedName if it was ever asked for.
+    int      prefixLen;         // the length of the prefix alone. -1 means uninitialized.
+};
+
+KoXmlStreamAttribute::Private::Private(const QXmlStreamAttribute *attr, const KoXmlStreamReader *r)
+    : qAttr(attr)
+    , reader(r)
+    , qName()
+    , prefixLen(-1)
+{
+}
+
+KoXmlStreamAttribute::Private::~Private()
+{
+}
+
+
+void KoXmlStreamAttribute::Private::generateQName()
+{
+    // FIXME: NYI
+}
+
+
+// ----------------------------------------------------------------
+
+
+
+KoXmlStreamAttribute::KoXmlStreamAttribute()
+    : d(new KoXmlStreamAttribute::Private(0, 0))
+{
+}
+
+KoXmlStreamAttribute::KoXmlStreamAttribute(const QXmlStreamAttribute *attr,
+                                           const KoXmlStreamReader *reader)
+    : d(new KoXmlStreamAttribute::Private(attr, reader))
+{
+}
+
+KoXmlStreamAttribute::~KoXmlStreamAttribute()
+{
+    delete d;
+}
+
+
+bool KoXmlStreamAttribute::isDefault() const
+{
+    return d->qAttr->isDefault();
+}
+
+QStringRef KoXmlStreamAttribute::name() const
+{
+    return d->qAttr->name();
+}
+
+QStringRef KoXmlStreamAttribute::namespaceUri() const
+{
+    return d->qAttr->namespaceUri();
+}
+
+
+QStringRef KoXmlStreamAttribute::prefix() const
+{
+    if (d->reader->isSound()) {
+        return d->qAttr->prefix();
+    }
+
+    if (d->prefixLen == -1) {
+        d->generateQName();
+    }
+
+    return d->qName.leftRef(d->prefixLen);
+}
+
+
+QStringRef KoXmlStreamAttribute::qualifiedName() const
+{
+    if (d->reader->isSound()) {
+        return d->qAttr->prefix();
+    }
+
+    if (d->prefixLen == -1) {
+        d->generateQName();
+    }
+
+    return d->qName.leftRef(-1);
+}
+
+
+QStringRef KoXmlStreamAttribute::value() const
+{
+    return d->qAttr->value();
+}
+
+
+bool KoXmlStreamAttribute::operator!=(const KoXmlStreamAttribute &other) const
+{
+    return d->qAttr != other.d->qAttr;
+}
+
+
+KoXmlStreamAttribute &KoXmlStreamAttribute::operator=(const KoXmlStreamAttribute &other)
+{
+    d->qAttr = other.d->qAttr;
+    d->reader = other.d->reader;
+    d->qName = other.d->qName;
+    d->prefixLen = other.d->prefixLen;
+
+    return *this;
+}
+
+bool KoXmlStreamAttribute::operator==(const KoXmlStreamAttribute &other) const
+{
+    return d->qAttr == other.d->qAttr;
+}
+
+
+// ================================================================
+//             class KoXmlStreamAttributes (no Private class)
+
+
+
+KoXmlStreamAttributes::KoXmlStreamAttributes(const QXmlStreamAttributes &qAttrs)
+    : QVector(qAttrs.size())
+{
+}
+
+KoXmlStreamAttributes::~KoXmlStreamAttributes()
+{
+}
+
+
+// reimplemented from QXmlStreamAttributes
+bool KoXmlStreamAttributes::hasAttribute(const QString &qualifiedName) const
+{
+    for (int i = 0; i < size(); ++i) {
+        // This compares with the expected name always.
+        if (qualifiedName == this->at(i).qualifiedName()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool KoXmlStreamAttributes::hasAttribute(const QLatin1String &qualifiedName) const
+{
+#if 1
+    const QString qName(qualifiedName);
+    return hasAttribute(QString(qName));
+#else
+    for (int i = 0; i < size(); ++i) {
+        if (qualifiedName == this->at(i).qualifiedName()) {
+            return true;
+        }
+    }
+
+    return false;
+#endif
+}
+
+
+QStringRef KoXmlStreamAttributes::value(const QString &qualifiedName) const
+{
+    for (int i = 0; i < size(); ++i) {
+        if (qualifiedName == this->at(i).qualifiedName()) {
+            return this->at(i).value();
+        }
+    }
+
+    return QStringRef();
+}
+
+
+QStringRef KoXmlStreamAttributes::value(const QLatin1String &qualifiedName) const
+{
+    // FIXME: Find faster way.
+    const QString qName(qualifiedName);
+    return value(QString(qName));
+}
+
+
+// ================================================================
 //                         non-class functions
 
 
@@ -369,6 +595,7 @@ void prepareForOdf(KoXmlStreamReader &reader)
     reader.addExpectedNamespace("ac", "http://www.deltaxml.com/ns/track-changes/attribute-change-namespace");
 
     // This list of namespaces is taken from KoXmlReader::fixNamespace()
+    // They were generated by old versions of OpenOffice.org.
     reader.addExtraNamespace("office",    "http://openoffice.org/2000/office");
     reader.addExtraNamespace("text",      "http://openoffice.org/2000/text");
     reader.addExtraNamespace("style",     "http://openoffice.org/2000/style");

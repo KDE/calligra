@@ -26,12 +26,16 @@
 
 #include <QXmlStreamReader>
 #include <QStringRef>
+#include <QVector>
 
 #include "koodf_export.h"
+
 
 class QByteArray;
 class QString;
 class QIODevice;
+
+class KoXmlStreamAttributes;
 
 
 /**
@@ -75,8 +79,10 @@ class QIODevice;
  */
 class KOODF_EXPORT KoXmlStreamReader : public QXmlStreamReader
 {
-public:
+    friend class KoXmlStreamAttribute;
+    friend class KoXmlStreamAttributes;
 
+public:
     KoXmlStreamReader();
     KoXmlStreamReader(QIODevice *device);
     KoXmlStreamReader(const QByteArray &data);
@@ -93,17 +99,98 @@ public:
     // --------------------------------
     // Reimplemented from QXmlStreamReader
 
+    QStringRef prefix() const;
     QStringRef qualifiedName() const;
-
     void setDevice(QIODevice *device);
+    KoXmlStreamAttributes attributes() const;
 
 private:
     // No copying
-    KoXmlStreamReader(KoXmlStreamReader&other);
-    KoXmlStreamReader &operator=(KoXmlStreamReader&other);
+    KoXmlStreamReader(KoXmlStreamReader &other);
+    KoXmlStreamReader &operator=(KoXmlStreamReader &other);
+
+    // Only for friend classes KoXmlStreamAttributes and KoXmlStreamAttribute.
+    bool isSound() const;
 
     class Private;
     Private * const d;
+};
+
+
+/**
+ * @brief KoXmlStreamAttribute is a source-compatible replacement for QXmlStreamAttribute.
+ *
+ * In addition to the API from QXmlStreamAttribute, it offers the same
+ * advantages that KoXmlStreamReader does over QXmlStreamReader: when
+ * asked for the qualified name of an attribute it will return the
+ * expected one even if the prefix declared in the namespace
+ * declaration of the document is different.
+ *
+ * @see KoXmlStreamReader
+ */
+class KoXmlStreamAttribute
+{
+    friend class QVector<KoXmlStreamAttribute>;       // For the default constructor
+    friend class KoXmlStreamReader;
+ public:
+    ~KoXmlStreamAttribute();
+
+    // API taken from QXmlStreamAttribute
+    bool       isDefault() const;
+    QStringRef name() const;
+    QStringRef namespaceUri() const;
+    QStringRef prefix() const;
+    QStringRef qualifiedName() const;
+    QStringRef value() const;
+
+    bool operator!=(const KoXmlStreamAttribute &other) const;
+    KoXmlStreamAttribute &operator=(const KoXmlStreamAttribute &other);
+    bool operator==(const KoXmlStreamAttribute &other) const;
+
+ private:
+    // Only for friend classes.
+    KoXmlStreamAttribute();
+    KoXmlStreamAttribute(const QXmlStreamAttribute *attr, const KoXmlStreamReader *reader);
+
+    class Private;
+    Private * const d;
+};
+
+
+/**
+ * @brief KoXmlStreamAttributes is a source-compatible replacement for QXmlStreamAttributes.
+ *
+ * All the convenience functions of KoXmlStreamAttributes work exactly
+ * like the counterparts of QXmlStreamAttributes but they give the
+ * expected prefix for the registered expected namespaces.
+ *
+ * This class can only be used in connection with KoXmlStreamReader.
+ *
+ * @see KoXmlStreamReader
+ */
+class KoXmlStreamAttributes : public QVector<KoXmlStreamAttribute>
+{
+    friend class KoXmlStreamReader;
+
+ public:
+    ~KoXmlStreamAttributes();
+
+    // Convenience functions taken from QXmlStreamAttributes API
+    void        append(const QString &namespaceUri, const QString &name, const QString &value);
+    void        append(const QXmlStreamAttribute &attribute);
+    void        append(const QString &qualifiedName, const QString &value);
+    bool        hasAttribute(const QString &qualifiedName) const;
+    bool        hasAttribute(const QLatin1String &qualifiedName) const;
+    bool        hasAttribute ( const QString & namespaceUri, const QString & name ) const;
+    QStringRef  value ( const QString & namespaceUri, const QString & name ) const;
+    QStringRef  value ( const QString & namespaceUri, const QLatin1String & name ) const;
+    QStringRef  value ( const QLatin1String & namespaceUri, const QLatin1String & name ) const;
+    QStringRef  value(const QString &qualifiedName) const;
+    QStringRef  value(const QLatin1String &qualifiedName) const;
+
+ private:
+    // Only available from friend class KoXmlStreamReader.
+    KoXmlStreamAttributes(const QXmlStreamAttributes &qAttrs);
 };
 
 
