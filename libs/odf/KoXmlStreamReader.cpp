@@ -389,7 +389,10 @@ KoXmlStreamAttribute::Private::~Private()
 
 void KoXmlStreamAttribute::Private::generateQName()
 {
-    // FIXME: NYI
+    qName = reader->d->prefixes.value(qAttr->namespaceUri().toString());
+    prefixLen = qName.size();
+    qName += ':';
+    qName += qAttr->name();
 }
 
 
