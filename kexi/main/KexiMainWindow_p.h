@@ -30,15 +30,15 @@
 #define PROJECT_NAVIGATOR_TABBAR_ID 0
 #define PROPERTY_EDITOR_TABBAR_ID 1
 
-#include <KToolBar>
-#include <KColorUtils>
-#include <KHelpMenu>
+#include <ktoolbar.h>
+#include <kcolorutils.h>
+#include <khelpmenu.h>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QDesktopWidget>
 #include <QKeyEvent>
-#include <KTabWidget>
+#include <ktabwidget.h>
 #include <KoIcon.h>
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
@@ -154,7 +154,7 @@ private:
 };
 
 //#include <qimageblitz/qimageblitz.h>
-#include <KFadeWidgetEffect>
+#include <kfadewidgeteffect.h>
 #include <QStyleOptionMenuItem>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
@@ -560,7 +560,7 @@ public:
     int lowestIndex;
 };
 
-#include <KTabBar>
+#include <ktabbar.h>
 #include <QTabBar>
 #include <QPainter>
 

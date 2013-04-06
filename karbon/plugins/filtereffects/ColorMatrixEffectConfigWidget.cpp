@@ -22,9 +22,9 @@
 #include "KoFilterEffect.h"
 #include "MatrixDataModel.h"
 
-#include <KNumInput>
-#include <KComboBox>
-#include <KLocale>
+#include <knuminput.h>
+#include <kcombobox.h>
+#include <klocale.h>
 
 #include <QGridLayout>
 #include <QLabel>

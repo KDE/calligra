@@ -63,9 +63,9 @@
 #include <QRegExp>
 #include <QtXml>
 
-#include <KGlobal>
-#include <KDebug>
-#include <KZip>
+#include <kglobal.h>
+#include <kdebug.h>
+#include <kzip.h>
 
 #include <memory>
 

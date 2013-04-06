@@ -32,8 +32,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <KUrl>
-#include <KHTMLPart>
+#include <kurl.h>
+#include <khtml_part.h>
 
 KPlatoAboutPage::KPlatoAboutPage()
     : m_project( 0 )

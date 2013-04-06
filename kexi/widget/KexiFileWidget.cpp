@@ -40,9 +40,9 @@
 #include <kmimetype.h>
 #include <kfile.h>
 #include <kurlcombobox.h>
-#include <KToolBar>
-#include <KActionCollection>
-#include <KFileDialog>
+#include <ktoolbar.h>
+#include <kactioncollection.h>
+#include <kfiledialog.h>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs

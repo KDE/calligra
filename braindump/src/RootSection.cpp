@@ -26,7 +26,7 @@
 
 #include "ViewManager.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 RootSection::RootSection() : SectionGroup(0), m_undoStack(new KUndo2Stack(this)), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this)), m_currentSection(0)
 {

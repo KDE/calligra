@@ -23,8 +23,8 @@
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <QRect>
 #include <QPainter>
 

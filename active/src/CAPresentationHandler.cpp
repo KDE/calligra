@@ -41,9 +41,9 @@
 #include <KoShapeManager.h>
 #include <KoFindBase.h>
 
-#include <KDebug>
-#include <KMimeType>
-#include <KMimeTypeTrader>
+#include <kdebug.h>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
 
 #include <QSize>
 #include <QTimer>

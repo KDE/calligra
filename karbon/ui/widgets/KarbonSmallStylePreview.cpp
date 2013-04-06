@@ -33,8 +33,8 @@
 #include <KoShapeStroke.h>
 #include <KoViewConverter.h>
 
-#include <KLocale>
-#include <KGlobalSettings>
+#include <klocale.h>
+#include <kglobalsettings.h>
 
 #include <QColor>
 #include <QPushButton>

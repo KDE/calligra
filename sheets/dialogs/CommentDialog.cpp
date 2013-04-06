@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 
 #include <klocale.h>
-#include <KTextEdit>
+#include <ktextedit.h>
 
 //KSpread includes
 #include "Cell.h"

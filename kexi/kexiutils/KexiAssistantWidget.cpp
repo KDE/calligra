@@ -21,8 +21,8 @@
 #include "KexiAssistantPage.h"
 #include "KexiAnimatedLayout.h"
 
-#include <KDialog>
-#include <KDebug>
+#include <kdialog.h>
+#include <kdebug.h>
 
 #include <QStyle>
 

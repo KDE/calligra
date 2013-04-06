@@ -29,13 +29,13 @@
 */
 
 #include "KexiMenuWidget.h"
-#include <KColorScheme>
-#include <KColorUtils>
-#include <KGlobalSettings>
-#include <KIconLoader>
-#include <KStandardDirs>
-#include <KLocale>
-#include <KDebug>
+#include <kcolorscheme.h>
+#include <kcolorutils.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <kstandarddirs.h>
+#include <klocale.h>
+#include <kdebug.h>
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
 

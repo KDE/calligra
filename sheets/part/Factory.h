@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_FACTORY_H
 #define CALLIGRA_SHEETS_FACTORY_H
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include "calligra_sheets_export.h"
 

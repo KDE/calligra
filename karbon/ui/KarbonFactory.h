@@ -28,7 +28,7 @@
 #ifndef __KARBON_FACTORY_H__
 #define __KARBON_FACTORY_H__
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 #include <karbonui_export.h>
 
 class KAboutData;

@@ -21,7 +21,7 @@
 #define KPLATO_DEBUG
 
 #include "kplatokernel_export.h"
-#include <KDebug>
+#include <kdebug.h>
 
 KPLATOKERNEL_EXPORT int planDbg();
 

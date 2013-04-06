@@ -30,7 +30,7 @@
 #include <kservicetypetrader.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-//2.0 #include <KXMLGUIClient>
+//2.0 #include <kxmlguiclient.h>
 
 #include <KoIcon.h>
 #include "WidgetInfo.h"

@@ -31,8 +31,8 @@
 #include <QTimer>
 
 #include <kmenu.h>
-#include <KMessageBox>
-#include <KComboBox>
+#include <kmessagebox.h>
+#include <kcombobox.h>
 
 #include <KoIcon.h>
 #include "KoDocument.h"

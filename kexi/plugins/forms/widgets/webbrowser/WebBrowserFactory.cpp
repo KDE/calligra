@@ -28,9 +28,9 @@
 
 #include <QVariant>
 #include <QVariantList>
-#include <KDebug>
-#include <KLocale>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kpluginfactory.h>
 
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
   : KexiDBFactoryBase(parent, "webbrowser")

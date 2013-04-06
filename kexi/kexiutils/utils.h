@@ -30,8 +30,8 @@
 #include <QFont>
 #include <QFrame>
 
-#include <KMimeType>
-#include <KIconLoader>
+#include <kmimetype.h>
+#include <kiconloader.h>
 
 class QColor;
 class QMetaProperty;

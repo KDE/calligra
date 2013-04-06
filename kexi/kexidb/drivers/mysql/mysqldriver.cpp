@@ -37,7 +37,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <mysql.h>
 #define BOOL bool
 
-#include <KDebug>
+#include <kdebug.h>
 
 using namespace KexiDB;
 

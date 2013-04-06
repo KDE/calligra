@@ -24,8 +24,8 @@
 #include <db/msghandler.h>
 #include <core/kexidbshortcutfile.h>
 
-#include <KStandardDirs>
-#include <KDebug>
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
 #include <QDir>
 

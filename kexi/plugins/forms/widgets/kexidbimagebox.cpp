@@ -42,7 +42,7 @@
 #include <kstdaccel.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <KIconEffect>
+#include <kiconeffect.h>
 
 #include <KoIcon.h>
 #include <widget/utils/kexidropdownbutton.h>

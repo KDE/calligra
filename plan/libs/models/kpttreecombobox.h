@@ -22,7 +22,7 @@
 
 #include "kplatomodels_export.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 
 #include <QAbstractItemView>
 #include <QEvent>

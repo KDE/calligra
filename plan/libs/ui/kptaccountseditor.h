@@ -25,7 +25,7 @@
 #include <kptviewbase.h>
 #include "kptaccountsmodel.h"
 
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 class KoDocument;
 

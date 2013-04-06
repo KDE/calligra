@@ -20,7 +20,7 @@
 #ifndef KEXIRECENTPROJECTSMODEL_H
 #define KEXIRECENTPROJECTSMODEL_H
 
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorizedsortfilterproxymodel.h>
 #include <QAbstractListModel>
 
 class KexiRecentProjects;

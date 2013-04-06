@@ -28,9 +28,9 @@
 #include <KoShapeManager.h>
 #include <KoToolBase.h>
 
-#include <KMessageBox>
-#include <KMimeType>
-#include <KRun>
+#include <kmessagebox.h>
+#include <kmimetype.h>
+#include <krun.h>
 
 #include <QTimer>
 

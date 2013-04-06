@@ -46,7 +46,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaction.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
 #include <klocale.h>
@@ -68,9 +68,9 @@
 #include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
-#include <KMenu>
-#include <KXMLGUIFactory>
-#include <KMultiTabBar>
+#include <kmenu.h>
+#include <kxmlguifactory.h>
+#include <kmultitabbar.h>
 
 #include <db/connection.h>
 #include <db/utils.h>
