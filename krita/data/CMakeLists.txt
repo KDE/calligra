@@ -1,5 +1,4 @@
 add_subdirectory( brushes )
-add_subdirectory( paintoppresets )
 add_subdirectory( patterns )
 add_subdirectory( gradients )
 add_subdirectory( profiles )
