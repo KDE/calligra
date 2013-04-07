@@ -31,7 +31,7 @@
 #include <KoScriptingModule.h>
 
 
-class KPLATOSCRIPTING_TEST_EXPORT TestResult : public QObject
+class TestResult : public QObject
 {
     Q_OBJECT
 public:
