@@ -50,8 +50,6 @@
 #include <kdebug.h>
 #include <kdesktopfile.h>
 
-#include <kfiledialog.h>
-#include <kfileitem.h>
 #include <kiconloader.h>
 #include <klibloader.h>
 #include <klocale.h>

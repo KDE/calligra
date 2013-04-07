@@ -23,17 +23,18 @@
 // Local
 #include "CSVDialog.h"
 
+#include <KoModalFileDialog>
+
 #include <QApplication>
 #include <QByteArray>
 #include <QMimeData>
 #include <QString>
 #include <QTimer>
 
+
 #include <KoCanvasBase.h>
 
 #include <kdebug.h>
-#include <kdialog.h>
-#include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
@@ -74,10 +75,9 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
             m_canceled = true;
         }
     } else if (m_mode == File) {
-        setWindowTitle(i18n("Inserting Text File"));
-        m_filename = KFileDialog::getOpenFileName(KUrl("kfiledialog:///"),
-                     "text/plain",
-                     this);
+        //setWindowTitle(i18n("Inserting Text File"));
+        m_filename = KoModalFileDialog::getOpenFileName(parent, i18n("Import CSV Data File"),
+                                                        "", i18n("CSV data files (*.csv)"));
         //cancel action !
         if (m_filename.isEmpty()) {
             enableButton(Ok, false);
