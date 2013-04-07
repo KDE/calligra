@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef KPLATOSCRIPTING_EXPORT
-# if defined(MAKE_KPLATOKERNEL_LIB)
+# if defined(MAKE_KPLATOSCRIPTING_LIB)
    /* We are building this library */ 
 #  define KPLATOSCRIPTING_EXPORT KDE_EXPORT
 # else
@@ -36,21 +36,5 @@
 # ifndef KPLATOSCRIPTING_EXPORT_DEPRECATED
 #  define KPLATOSCRIPTING_EXPORT_DEPRECATED KDE_DEPRECATED KPLATOSCRIPTING_EXPORT
 # endif
-
-/* Now the same for KPLATO_TEST_EXPORT, if compiling with unit tests enabled */
-
-#ifdef COMPILING_TESTS
-#if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KPLATOKERNEL_LIB)
-#       define KPLATOSCRIPTING_TEST_EXPORT KDE_EXPORT
-#   else
-#       define KPLATOSCRIPTING_TEST_EXPORT KDE_IMPORT
-#   endif
-# else /* not windows */
-#   define KPLATOSCRIPTING_TEST_EXPORT KDE_EXPORT
-# endif
-#else /* not compiling tests */
-#   define KPLATOSCRIPTING_TEST_EXPORT
-#endif
 
 #endif

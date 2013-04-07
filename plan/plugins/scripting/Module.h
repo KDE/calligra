@@ -57,7 +57,7 @@ namespace Scripting {
     * print Plan.project().name()
     * \endcode
     */
-    class Module : public KoScriptingModule
+    class KPLATOSCRIPTING_EXPORT Module : public KoScriptingModule
     {
             Q_OBJECT
         public:
