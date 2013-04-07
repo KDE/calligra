@@ -683,7 +683,7 @@ bool KexiUtils::isLightColorScheme()
 QPalette KexiUtils::paletteForReadOnly(const QPalette &palette)
 {
     QPalette p(palette);
-    p.setBrush(QPalette::QPalette::Base, palette.brush(QPalette::Disabled, QPalette::Base));
+    p.setBrush(QPalette::Base, palette.brush(QPalette::Disabled, QPalette::Base));
     p.setBrush(QPalette::Text, palette.brush(QPalette::Disabled, QPalette::Text));
     p.setBrush(QPalette::Highlight, palette.brush(QPalette::Disabled, QPalette::Highlight));
     p.setBrush(QPalette::HighlightedText, palette.brush(QPalette::Disabled, QPalette::HighlightedText));
