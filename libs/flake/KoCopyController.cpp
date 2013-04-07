@@ -103,4 +103,4 @@ void KoCopyController::hasSelection(bool selection)
                           d->canvas->toolProxy()->hasSelection());
 }
 
-#include <KoCopyController.moc>
+#include <moc_KoCopyController.cpp>

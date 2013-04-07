@@ -36,4 +36,4 @@ ShapeDeleter::~ShapeDeleter()
     delete m_shape;
 }
 
-#include <ShapeDeleter_p.moc>
+#include <moc_ShapeDeleter_p.cpp>

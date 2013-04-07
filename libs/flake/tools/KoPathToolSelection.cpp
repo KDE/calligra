@@ -245,5 +245,4 @@ bool KoPathToolSelection::hasSelection()
 {
     return !m_selectedPoints.isEmpty();
 }
-
-#include <KoPathToolSelection.moc>
+#include <moc_KoPathToolSelection.cpp>

@@ -167,4 +167,4 @@ void KoCanvasResourceManager::clearResource(int key)
     emit resourceChanged(key, empty);
 }
 
-#include <KoCanvasResourceManager.moc>
+#include <moc_KoCanvasResourceManager.cpp>

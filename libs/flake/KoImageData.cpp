@@ -393,4 +393,4 @@ bool KoImageData::saveData(QIODevice &device)
     return d->saveData(device);
 }
 
-#include <KoImageData.moc>
+#include <moc_KoImageData.cpp>

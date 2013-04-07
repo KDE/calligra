@@ -1036,4 +1036,4 @@ KoToolManager::Private *KoToolManager::priv()
     return d;
 }
 
-#include <KoToolManager.moc>
+#include <moc_KoToolManager.cpp>

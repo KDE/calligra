@@ -615,5 +615,4 @@ KoCanvasControllerWidget::Private *KoCanvasControllerWidget::priv()
 {
     return d;
 }
-
-#include <KoCanvasControllerWidget.moc>
+#include <moc_KoCanvasControllerWidget.cpp>

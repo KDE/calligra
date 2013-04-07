@@ -964,4 +964,4 @@ KoToolSelection * KoPathTool::selection()
     return &m_pointSelection;
 }
 
-#include <KoPathTool.moc>
+#include <moc_KoPathTool.cpp>

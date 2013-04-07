@@ -207,4 +207,4 @@ void KoDocumentResourceManager::setOdfDocument(KoOdfDocument *currentDocument)
     setResource(OdfDocument, variant);
 }
 
-#include <KoDocumentResourceManager.moc>
+#include <moc_KoDocumentResourceManager.cpp>

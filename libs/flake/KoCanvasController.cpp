@@ -151,5 +151,4 @@ KActionCollection* KoCanvasController::actionCollection() const
     return d->actionCollection;
 }
 
-
-#include <KoCanvasController.moc>
+#include <moc_KoCanvasController.cpp>

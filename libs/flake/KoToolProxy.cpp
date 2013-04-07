@@ -516,4 +516,4 @@ KoToolProxyPrivate *KoToolProxy::priv()
     return d;
 }
 
-#include <KoToolProxy.moc>
+#include "moc_KoToolProxy.cpp"

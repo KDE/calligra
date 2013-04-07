@@ -88,4 +88,4 @@ void KoZoomToolWidget::changeZoomMode()
     m_tool->setZoomInMode(zoomInButton->isChecked());
 }
 
-#include <KoZoomToolWidget.moc>
+#include <moc_KoZoomToolWidget.cpp>

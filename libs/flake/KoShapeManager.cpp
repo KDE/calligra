@@ -581,5 +581,4 @@ KoCanvasBase *KoShapeManager::canvas()
 {
     return d->canvas;
 }
-
-#include <KoShapeManager.moc>
+#include <moc_KoShapeManager.cpp>

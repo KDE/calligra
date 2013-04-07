@@ -72,4 +72,4 @@ KUndo2Command * KoConnectionShapeConfigWidget::createCommand()
     }
 }
 
-#include <KoConnectionShapeConfigWidget.moc>
+#include <moc_KoConnectionShapeConfigWidget.cpp>

@@ -43,4 +43,4 @@ QString KoInputDeviceHandler::id() const
     return d->id;
 }
 
-#include <KoInputDeviceHandler.moc>
+#include <moc_KoInputDeviceHandler.cpp>

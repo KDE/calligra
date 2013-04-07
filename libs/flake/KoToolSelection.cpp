@@ -28,4 +28,4 @@ KoToolSelection::~KoToolSelection()
 {
 }
 
-#include <KoToolSelection.moc>
+#include <moc_KoToolSelection.cpp>

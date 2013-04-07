@@ -34,4 +34,4 @@ KoShape *KoDeferredShapeFactoryBase::createShape(const KoProperties *, KoDocumen
     return createDefaultShape(documentResources);
 }
 
-#include "KoDeferredShapeFactoryBase.moc"
+#include <moc_KoDeferredShapeFactoryBase.cpp>

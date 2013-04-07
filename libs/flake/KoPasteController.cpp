@@ -39,4 +39,4 @@ KoPasteController::~KoPasteController()
     delete d;
 }
 
-#include <KoPasteController.moc>
+#include <moc_KoPasteController.cpp>

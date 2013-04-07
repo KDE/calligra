@@ -53,5 +53,4 @@ KUndo2Command * KoShapeConfigWidgetBase::createCommand()
     return 0;
 }
 
-#include <KoShapeConfigWidgetBase.moc>
-
+#include <moc_KoShapeConfigWidgetBase.cpp>
