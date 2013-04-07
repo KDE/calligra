@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
    
    Based on qmenu.cpp from Qt 4.7
 
@@ -440,7 +440,10 @@ int KexiMenuWidgetPrivate::sloppyDelayTimer = 0;
 void KexiMenuWidgetPrivate::init()
 {
     oxygenHelper = q->style()->objectName() == "oxygen" ? new OxygenHelper : 0;
-    
+    if (!oxygenHelper) {
+        bespin = q->style()->objectName() == "bespin";
+    }
+
 #ifndef QT_NO_WHATSTHIS
     //q->setAttribute(Qt::WA_CustomWhatsThis);
 #endif
@@ -2094,8 +2097,15 @@ void ClickableLogoArea::paintEvent(QPaintEvent*)
 
 void KexiMenuWidgetPrivate::updateLogoPixmap()
 {
+    bool isLight;
+    if (bespin) {
+        isLight = q->palette().color(QPalette::Shadow).lightness() >= 128;
+    }
+    else {
+        isLight = KexiUtils::isLightColorScheme();
+    }
     const QString calligraLogo = KStandardDirs::locate("data",
-        KexiUtils::isLightColorScheme()
+        isLight
          ? "kexi/pics/calligra-logo-white-glow.png"
          : "kexi/pics/calligra-logo-black-glow.png");
     calligraLogoPixmap = QPixmap(calligraLogo);
@@ -2168,8 +2178,13 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     menuOpt.checkType = QStyleOptionMenuItem::NotCheckable;
     menuOpt.maxIconWidth = 0;
     menuOpt.tabWidth = 0;
-    style()->drawPrimitive(QStyle::PE_PanelMenu, &menuOpt, &p, this);
-    
+    if (d->bespin) {
+        p.fillRect(rect(), palette().shadow());
+    }
+    else {
+        style()->drawPrimitive(QStyle::PE_PanelMenu, &menuOpt, &p, this);
+    }
+
     {
         QStyleOptionFrameV3 opt;
         opt.initFrom(this);
@@ -2211,19 +2226,23 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         opt.rect = adjustedActionRect;
         if (d->actionPersistentlySelected(action)) {
             opt.state |= QStyle::State_Selected;
-            opt.palette.setBrush(QPalette::Window, opt.palette.brush(QPalette::Highlight));
-            opt.palette.setBrush(QPalette::WindowText, opt.palette.brush(QPalette::HighlightedText));
+            if (!d->bespin) {
+                opt.palette.setBrush(QPalette::Window, opt.palette.brush(QPalette::Highlight));
+                opt.palette.setBrush(QPalette::WindowText, opt.palette.brush(QPalette::HighlightedText));
+            }
         }
-        else if (!action->isSeparator() && (opt.state & QStyle::State_Selected)) {
-            // lighten the highlight to make it different from
-            // the persistently selected item
-            opt.palette.setColor(QPalette::Highlight,
-                                 KColorUtils::mix(
-                                    opt.palette.color(QPalette::Highlight),
-                                    opt.palette.color(QPalette::Window)));
-            opt.palette.setColor(QPalette::HighlightedText, opt.palette.color(QPalette::Text));
+        else if (!action->isSeparator()) {
+            if (!d->bespin && opt.state & QStyle::State_Selected) {
+                // lighten the highlight to make it different from
+                // the persistently selected item
+                opt.palette.setColor(QPalette::Highlight,
+                                     KColorUtils::mix(
+                                        opt.palette.color(QPalette::Highlight),
+                                        opt.palette.color(QPalette::Window)));
+                opt.palette.setColor(QPalette::HighlightedText, opt.palette.color(QPalette::Text));
+            }
         }
-        
+
         // Depending on style Button or Background brush may be used
         // to fill background of deselected items. Make it transparent.
         bool transparentBackground = !(opt.state & QStyle::State_Selected);
@@ -2232,7 +2251,9 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         }
         if (transparentBackground) {
             opt.palette.setBrush(QPalette::Button, QBrush(Qt::transparent));
-            opt.palette.setBrush(QPalette::Background, QBrush(Qt::transparent));
+            if (!d->bespin) {
+                opt.palette.setBrush(QPalette::Background, QBrush(Qt::transparent));
+            }
         }
 
         style()->drawControl(QStyle::CE_MenuItem, &opt, &p, this);
