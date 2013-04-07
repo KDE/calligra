@@ -27,7 +27,7 @@
 #include <QHash>
 
 class QString;
-class KoXmlElement;
+class KoXmlStreamReader;
 class KoOdfStyleProperties;
 
 
@@ -62,7 +62,7 @@ class KOODF_EXPORT KoOdfStyle
     QString property(QString &propertySet, QString &property) const;
     void    setProperty(QString &propertySet, QString &property, QString &value);
 
-    bool loadOdf(KoXmlElement &element);
+    bool loadOdf(KoXmlStreamReader &reader);
 
  private:
     class Private;

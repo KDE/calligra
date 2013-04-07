@@ -24,7 +24,7 @@
 
 #include "koodf_export.h"
 
-class KoXmlElement;
+class KoXmlStreamReader;
 
 class QString;
 
@@ -40,8 +40,8 @@ class KOODF_EXPORT KoOdfStyleProperties
 
     void clear();
 
-    bool readAttributes(KoXmlElement &element);
-    virtual bool readOdf(KoXmlElement &element);
+    virtual bool readOdf(KoXmlStreamReader &reader);
+    bool readAttributes(KoXmlStreamReader &reader);
 
  private:
     class Private;

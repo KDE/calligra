@@ -31,8 +31,7 @@
 // odf lib
 #include "KoStore.h"
 #include <KoOdfReadStore.h>
-#include <KoXmlReader.h>
-#include <KoXmlReader.h>
+#include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
 
 #include "KoOdfStyle.h"
@@ -100,14 +99,14 @@ void KoOdfStyleManager::clear()
 
 bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
 {
-    KoXmlDocument doc;
+    //KoXmlDocument doc;
     QString errorMsg;
-    int errorLine;
-    int errorColumn;
+    //int errorLine;
+    //int errorColumn;
 
 
     // ----------------------------------------------------------------
-    // Get style info from content.xml.
+    // Get styles from content.xml.
 
     // Try to open content.xml. Return if it failed.
     //kDebug(30503) << "parse content.xml styles";
@@ -116,62 +115,72 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
         return false;
     }
 
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing content.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        odfStore->close();
-        return false;
+    kDebug() << "================================================================\n"
+             << "Loading styles from content.xml";
+
+    KoXmlStreamReader reader;
+    prepareForOdf(reader);
+    reader.setDevice(odfStore->device());
+    while (!reader.atEnd()) {
+        reader.readNext();
+
+        if (reader.isStartElement() && reader.qualifiedName() == "office:automatic-styles") {
+            break;
+        }
     }
+    // FIXME: Error handling
 
-    // Get the xml node that contains the styles.
-    KoXmlNode stylesNode = doc.documentElement();
-    stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "automatic-styles");
-
-    // Collect info about the styles.
-    collectStyleSet(stylesNode);
+    // Collect the styles.
+    collectStyleSet(reader);
 
     odfStore->close(); // end of parsing styles in content.xml
 
     // ----------------------------------------------------------------
-    // Get style info from styles.xml.
+    // Get styles from styles.xml.
+
+    kDebug() << "================================================================\n"
+             << "Loading styles from styles.xml";
 
     // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
     if (!odfStore->open("styles.xml")) {
         kError(30503) << "Unable to open input file styles.xml" << endl;
         return false;
     }
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing styles.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        odfStore->close();
-        return false;
+
+    reader.setDevice(odfStore->device());
+    while (!reader.atEnd()) {
+        reader.readNext();
+
+        if (reader.isStartElement() && reader.qualifiedName() == "office:styles") {
+            break;
+        }
     }
+    // FIXME: Error handling
 
-    // Parse properties of the named styles referred by the automatic styles.
-    stylesNode = doc.documentElement();
-    stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "styles");
-
-    // Collect info about the styles.
-    collectStyleSet(stylesNode);
+    // Collect the styles.
+    collectStyleSet(reader);
 
     odfStore->close();
     return true;
 }
 
-void KoOdfStyleManager::collectStyleSet(KoXmlNode &stylesNode)
+void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
 {
-    KoXmlElement styleElement;
-    forEachElement (styleElement, stylesNode) {
+    kDebug() << "current element:" << reader.qualifiedName().toString();
+
+    while (reader.readNextStartElement()) {
 
         // For now: handle style:style and style:default-style
         // and only the text, paragraph and graphic families.
-        QString tagName = styleElement.tagName();
-        if (tagName != "style" && tagName != "default-style")
+        QString tagName = reader.qualifiedName().toString();
+        kDebug() << "tagname: " << tagName;
+        if (tagName != "style:style" && tagName != "style:default-style")
             continue;
 
-        QString family = styleElement.attribute("family");
+        KoXmlStreamAttributes  attrs = reader.attributes();
+        for (int i = 0; i < attrs.size(); ++i) kDebug() << attrs[i].qualifiedName().toString();
+        QString family = attrs.value("style:family").toString();
+        kDebug() << "family: " << family;
         if (family == "text"
             || family == "paragraph"
             || family == "graphic")
@@ -179,16 +188,24 @@ void KoOdfStyleManager::collectStyleSet(KoXmlNode &stylesNode)
             // FIXME: In the future, create style per type (family).
             KoOdfStyle *style = new KoOdfStyle;
 
-            style->setIsDefaultStyle(tagName == "default-style");
-            style->loadOdf(styleElement);
+            kDebug() << "Loading style type:" << family;
+
+            style->setIsDefaultStyle(tagName == "style:default-style");
+            style->loadOdf(reader);
 #if 0 // debug
             kDebug(30503) << "==" << styleName << ":\t"
                           << style->family()
                           << style->parent()
                           << style->isDefaultStyle;
 #endif
-            QString styleName = styleElement.attribute("name", QString());
-            setStyle(styleName, style);
+            if (style->isDefaultStyle()) {
+                QString family = style->family();
+                setDefaultStyle(family, style);
+            }
+            else {
+                QString styleName = style->name();
+                setStyle(styleName, style);
+            }
         }
     }
 }

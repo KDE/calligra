@@ -19,14 +19,18 @@
  */
 
 
+// Own
 #include "KoOdfStyleProperties.h"
 
+// Qt
 #include <QString>
 #include <QHash>
 
+// KDE
 #include <kdebug.h>
 
-#include <KoXmlReader.h>
+// odflib
+#include <KoXmlStreamReader.h>
 
 
 // ================================================================
@@ -74,18 +78,22 @@ void KoOdfStyleProperties::clear()
 }
 
 
-bool KoOdfStyleProperties::readAttributes(KoXmlElement &element)
+bool KoOdfStyleProperties::readOdf(KoXmlStreamReader &reader)
 {
-    foreach (const QString &attribute, element.attributeNames()) {
-        d->attributes[attribute] = element.attribute(attribute);
+    // The default implementation just read the attributes.  The
+    // inheriting classes will also read various types of children.
+    return readAttributes(reader);
+}
+
+
+bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
+{
+    KoXmlStreamAttributes attrs = reader.attributes();
+    foreach (const KoXmlStreamAttribute &attr, attrs) {
+        d->attributes.insert(attr.qualifiedName().toString(), attr.value().toString());
     }
 
     kDebug() << "read attributes: " << d->attributes;
 
     return true;
-}
-
-bool KoOdfStyleProperties::readOdf(KoXmlElement &element)
-{
-    return readAttributes(element);
 }

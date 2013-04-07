@@ -19,12 +19,17 @@
  */
 
 
+// Own
 #include "KoOdfStyle.h"
 
+// Qt
 #include <QString>
 
-#include "KoXmlReader.h"
-#include "KoXmlNS.h"
+// KDE
+#include <kdebug.h>
+
+// Odflib
+#include "KoXmlStreamReader.h"
 #include "KoOdfStyleProperties.h"
 
 
@@ -46,6 +51,7 @@ public:
 
     bool    inUse;
 
+    // 
     QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties", 
 };
 
@@ -167,35 +173,37 @@ void KoOdfStyle::setProperty(QString &propertySet, QString &property, QString &v
 }
 
 
-bool KoOdfStyle::loadOdf(KoXmlElement &element)
+bool KoOdfStyle::loadOdf(KoXmlStreamReader &reader)
 {
     // Load style attributes.
+    KoXmlStreamAttributes  attrs = reader.attributes();
     QString dummy;              // Because the set*() methods take a QString &,
-    dummy = element.attribute("family");
+
+    dummy = attrs.value("style:family").toString();
     setFamily(dummy);
-    dummy = element.attribute("name", QString());
+    dummy = attrs.value("style:name").toString();
     setName(dummy);
-    dummy = element.attribute("parent-style-name", QString());
+    dummy = attrs.value("style:parent-style-name").toString();
     setParent(dummy);
-    dummy = element.attribute("display-name", QString());
+    dummy = attrs.value("style:display-name").toString();
     setDisplayName(dummy);
 
+    kDebug() << "Style:" << name() << family() << parent() << displayName();
+
     // Load child elements: property sets and other children.
-    KoXmlElement elem;
-    forEachElement(elem, element) {
-        if (!(elem.namespaceURI() == KoXmlNS::style)) {
-            continue;
-        }
+    while (reader.readNextStartElement()) {
 
         // So far we only have support for text-, paragaph- and graphic-properties
-        QString propertiesType = elem.localName();
-        if (propertiesType == "text-properties"
-            || propertiesType == "paragraph-properties"
-            || propertiesType == "graphic-properties")
+        QString propertiesType = reader.qualifiedName().toString();
+        if (propertiesType == "style:text-properties"
+            || propertiesType == "style:paragraph-properties"
+            || propertiesType == "style:graphic-properties")
         {
+            kDebug() << "properties type: " << propertiesType;
+
             // FIXME: In the future, create per type.
             KoOdfStyleProperties *properties = new KoOdfStyleProperties();
-            if (!properties->readOdf(elem)) {
+            if (!properties->readOdf(reader)) {
                 return false;
             }
             d->properties[propertiesType] = properties;
