@@ -164,16 +164,8 @@ void KoXmlStreamReader::Private::checkSoundness()
             // Let's check if the prefix is unique or if it already
             // exists among the expected ones.  If it is unique the
             // soundness is not affected, otherwise it is unsound.
-            prefixes.insert(nsUri, prefix);
-            usedPrefixes.insert(prefix);
-            bool found = false;
-            foreach (const QString &value, prefixes) {
-                if (value == prefix) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
+            if (usedPrefixes.contains(prefix)) {
+
                 // Yes, the prefix is used for another namespace among
                 // the expected ones.  Let's store this namespace for
                 // now and create a unique, non-"expected" prefix
@@ -181,8 +173,14 @@ void KoXmlStreamReader::Private::checkSoundness()
                 isSound = false;
                 namespacesToFix.append(nsUri);
             }
+            else {
+                prefixes.insert(nsUri, prefix);
+                usedPrefixes.insert(prefix);
+            }
         }
     }
+
+    kDebug() << "namespaces to fix:" << namespacesToFix;
 
     // Finally, if necessary, create unique prefixes for namespaces
     // that are found to use one of the expected prefixes.  It doesn't
@@ -193,13 +191,16 @@ void KoXmlStreamReader::Private::checkSoundness()
         bool ok = false;
         QString pfx;
         while (!ok) {
-            pfx = QString("pfx%d").arg(number++);
+            pfx = QString("pfx%1").arg(number++);
             if (!usedPrefixes.contains(pfx)) {
                 ok = true;
             }
         }
         prefixes.insert(ns, pfx);
     }
+
+    kDebug() << "Document soundness:" << isSound;
+    //kDebug() << "prefixes:" << prefixes;
 
     isChecked = true;
 }
@@ -334,6 +335,7 @@ void KoXmlStreamReader::setDevice(QIODevice *device)
 KoXmlStreamAttributes KoXmlStreamReader::attributes() const
 {
     QXmlStreamAttributes   qAttrs = QXmlStreamReader::attributes();
+    for (int i = 0; i < qAttrs.size(); ++i) kDebug() << qAttrs[i].qualifiedName().toString();
     KoXmlStreamAttributes  retval = KoXmlStreamAttributes(qAttrs);
 
     for (int i = 0; i < qAttrs.size(); ++i) {
