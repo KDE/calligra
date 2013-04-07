@@ -18,8 +18,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef DockerManager_p_h
+#define DockerManager_p_h
+
 #include "DockerManager.h"
-#include "DockerManager_p.h"
 #include "KoDockFactoryBase.h"
 
 #include <kglobal.h>
@@ -119,44 +121,4 @@ public:
     }
 };
 
-DockerManager::DockerManager(MainWindow *mainWindow)
-    : QObject(mainWindow), d(new Private(mainWindow))
-{
-    ToolDockerFactory toolDockerFactory;
-    ToolBarsDockerFactory toolBarsDockerFactory;
-    d->toolOptionsDocker =
-        qobject_cast<ToolDocker*>(mainWindow->createDockWidget(&toolDockerFactory));
-    Q_ASSERT(d->toolOptionsDocker);
-    d->toolOptionsDocker->setVisible(false);
-
-    d->toolBarsDocker = mainWindow->createDockWidget(&toolBarsDockerFactory);
-    Q_ASSERT(d->toolBarsDocker);
-
-    QWidget *dockedToolBarsWidget = new QWidget();
-    d->dockedToolBarsLayout = new QGridLayout();
-    d->dockedToolBarsLayout->setHorizontalSpacing(2);
-    d->dockedToolBarsLayout->setVerticalSpacing(0);
-    dockedToolBarsWidget->setLayout(d->dockedToolBarsLayout);
-    d->toolBarsDocker->setAllowedAreas(Qt::TopDockWidgetArea);
-    d->toolBarsDocker->setFeatures(QDockWidget::DockWidgetClosable);
-    d->toolBarsDocker->setWidget(dockedToolBarsWidget);
-    d->toolBarsDocker->setTitleBarWidget(new QWidget());
-    d->toolBarsDocker->setVisible(false);
-
-    connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(restoringDone()));
-    connect(d->toolBarsDocker, SIGNAL(visibilityChanged(bool)), this, SLOT(moveToolBars()));
-    connect(mainWindow, SIGNAL(beforeHandlingToolBars()), this, SLOT(moveToolBarsBack()));
-    connect(mainWindow, SIGNAL(afterHandlingToolBars()), this, SLOT(moveToolBars()));
-}
-
-DockerManager::~DockerManager()
-{
-    delete d;
-}
-
-void DockerManager::newOptionWidgets(const QList<QWidget*> &optionWidgetMap)
-{
-    d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
-}
-
-#include <DockerManager.moc>
+#endif
