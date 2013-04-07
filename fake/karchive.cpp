@@ -25,7 +25,7 @@
 #include <config.h>
 
 #include <kdebug.h>
-#include <ksavefile.h>
+#include <QSaveFile>
 #include <kde_file.h>
 
 #include <QStack>
@@ -66,7 +66,7 @@ public:
     void abortWriting();
 
     KArchiveDirectory* rootDir;
-    KSaveFile* saveFile;
+    QSaveFile* saveFile;
     QIODevice * dev;
     QString fileName;
     QIODevice::OpenMode mode;
@@ -84,7 +84,7 @@ KArchive::KArchive( const QString& fileName )
     Q_ASSERT( !fileName.isEmpty() );
     d->fileName = fileName;
     // This constructor leaves the device set to 0.
-    // This is for the use of KSaveFile, see open().
+    // This is for the use of QSaveFile, see open().
 }
 
 KArchive::KArchive( QIODevice * dev )
@@ -133,11 +133,11 @@ bool KArchive::createDevice( QIODevice::OpenMode mode )
     switch( mode ) {
     case QIODevice::WriteOnly:
         if ( !d->fileName.isEmpty() ) {
-            // The use of KSaveFile can't be done in the ctor (no mode known yet)
-            //kDebug() << "Writing to a file using KSaveFile";
-            d->saveFile = new KSaveFile( d->fileName );
-            if ( !d->saveFile->open() ) {
-                kWarning() << "KSaveFile creation for " << d->fileName << " failed, " << d->saveFile->errorString();
+            // The use of QSaveFile can't be done in the ctor (no mode known yet)
+            //kDebug() << "Writing to a file using QSaveFile";
+            d->saveFile = new QSaveFile( d->fileName );
+            if ( !d->saveFile->open(QIODevice::WrtiteOnly) ) {
+                kWarning() << "QSaveFile creation for " << d->fileName << " failed, " << d->saveFile->errorString();
                 delete d->saveFile;
                 d->saveFile = 0;
                 return false;
@@ -181,7 +181,7 @@ bool KArchive::close()
 
     // if d->saveFile is not null then it is equal to d->dev.
     if ( d->saveFile ) {
-        closeSucceeded = d->saveFile->finalize();
+        closeSucceeded = d->saveFile->commit();
         delete d->saveFile;
         d->saveFile = 0;
     } if ( d->deviceOwned ) {
@@ -490,7 +490,7 @@ QString KArchive::fileName() const
 void KArchivePrivate::abortWriting()
 {
     if ( saveFile ) {
-        saveFile->abort();
+        saveFile->cancelWriting();
         delete saveFile;
         saveFile = 0;
         dev = 0;

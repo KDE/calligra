@@ -51,7 +51,7 @@
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kparts/partmanager.h>
-#include <ksavefile.h>
+#include <QSaveFile>
 #include <kxmlguifactory.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -301,7 +301,7 @@ bool KoDocument::saveFile()
 
     if (backupFile()) {
         if (d->parentPart->url().isLocalFile())
-            KSaveFile::backupFile(d->parentPart->url().toLocalFile(), d->backupPath);
+            QSaveFile::backupFile(d->parentPart->url().toLocalFile(), d->backupPath);
         else {
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(d->parentPart->url(),

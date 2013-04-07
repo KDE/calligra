@@ -45,7 +45,6 @@
 #include <kpushbutton.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <ksavefile.h>
 #include <kglobal.h>
 #include <kdialog.h>
 
