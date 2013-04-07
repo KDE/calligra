@@ -36,9 +36,9 @@
 #include <KoShapePaintingContext.h>
 #include <KoFillConfigWidget.h>
 
-#include <KAction>
-#include <KDebug>
-#include <KLocale>
+#include <kaction.h>
+#include <kdebug.h>
+#include <klocale.h>
 #include <QPainter>
 
 #include <cmath>

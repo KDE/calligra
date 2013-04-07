@@ -33,11 +33,11 @@
 
 #include <widgetutils/KoGroupButton.h>
 
-#include <KDebug>
-#include <KDialog>
-#include <KActionCollection>
-#include <KMenu>
-#include <KGlobalSettings>
+#include <kdebug.h>
+#include <kdialog.h>
+#include <kactioncollection.h>
+#include <kmenu.h>
+#include <kglobalsettings.h>
 #include <QEvent>
 #include <QCloseEvent>
 #include <QApplication>

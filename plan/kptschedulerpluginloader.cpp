@@ -23,8 +23,8 @@
 #include "kptschedulerplugin.h"
 #include "kptdebug.h"
 
-#include <KServiceTypeTrader>
-#include <KDebug>
+#include <kservicetypetrader.h>
+#include <kdebug.h>
 
 
 namespace KPlato

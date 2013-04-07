@@ -20,7 +20,7 @@
 #include "ImageEffectFactory.h"
 #include "ImageEffect.h"
 #include "ImageEffectConfigWidget.h"
-#include <KLocale>
+#include <klocale.h>
 
 ImageEffectFactory::ImageEffectFactory()
         : KoFilterEffectFactoryBase(ImageEffectId, i18n("Image"))

@@ -21,7 +21,7 @@
 #include "KexiAutoFormDesignView.h"
 #include <QScrollArea>
 #include <QLayout>
-#include <KDebug>
+#include <kdebug.h>
 
 KexiAutoFormDesignView::KexiAutoFormDesignView(QWidget* parent): KexiView(parent), m_autoformDesigner(0)
 {

@@ -25,7 +25,7 @@
 #include <core/kexipart.h>
 #include <kexiutils/utils.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)

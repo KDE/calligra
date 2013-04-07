@@ -41,10 +41,10 @@
 
 #include <kde_file.h> // for WARNING
 #include <kdeversion.h>
-#include <KDebug>
-#include <KZip>
-#include <KPluginFactory>
-#include <KMessageBox>
+#include <kdebug.h>
+#include <kzip.h>
+#include <kpluginfactory.h>
+#include <kmessagebox.h>
 
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>

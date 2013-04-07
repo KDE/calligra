@@ -48,8 +48,8 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
-#include <KRichTextWidget>
-#include <KMimeType>
+#include <krichtextwidget.h>
+#include <kmimetype.h>
 
 #include <kdganttglobal.h>
 #include <math.h>

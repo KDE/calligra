@@ -18,16 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-//#include <KLibLoader>
-#include <KServiceTypeTrader>
-#include <KServiceType>
-#include <KDebug>
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocale>
-#include <KAboutData>
-#include <KGlobal>
-#include <KApplication>
+//#include <klibloader.h>
+#include <kservicetypetrader.h>
+#include <kservicetype.h>
+#include <kdebug.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <klocale.h>
+#include <kaboutdata.h>
+#include <kglobal.h>
+#include <kapplication.h>
 
 #include "kexipartmanager.h"
 #include "kexipart.h"

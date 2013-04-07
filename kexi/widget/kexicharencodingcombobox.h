@@ -21,7 +21,7 @@
 #define KEXICHARENCODINGCOMBO_H
 
 #include <QHash>
-#include <KComboBox>
+#include <kcombobox.h>
 #include <kexi_export.h>
 
 /*! @short Combobox widget providing a list of possible character encodings.

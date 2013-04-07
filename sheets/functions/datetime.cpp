@@ -30,7 +30,7 @@
 #include "ValueConverter.h"
 
 #include <kcalendarsystem.h>
-#include <KLocale>
+#include <klocale.h>
 
 using namespace Calligra::Sheets;
 

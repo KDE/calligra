@@ -29,7 +29,7 @@
 #include <KoStore.h>
 #include <KoFilterChain.h>
 // KDE
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 // Qt
 #include <QFile>
 

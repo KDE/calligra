@@ -25,7 +25,7 @@
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 using namespace Calligra::Sheets;
 

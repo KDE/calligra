@@ -20,7 +20,7 @@
 #ifndef KEXIDATASOURCECOMBOBOX_H
 #define KEXIDATASOURCECOMBOBOX_H
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <kexi_export.h>
 
 class KexiProject;

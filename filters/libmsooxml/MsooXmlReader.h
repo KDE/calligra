@@ -30,8 +30,8 @@
 #include <QStack>
 #include <QUrl>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <KoXmlReader.h>
 #include <KoFilter.h>
 #include <KoOdfExporter.h>

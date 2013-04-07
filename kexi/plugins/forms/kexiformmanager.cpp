@@ -27,12 +27,12 @@
 #include <KoIcon.h>
 
 #include <QToolButton>
-#include <KAction>
-#include <KToggleAction>
-#include <KActionCollection>
-#include <KPageDialog>
-#include <KTextEdit>
-#include <KToolBar>
+#include <kaction.h>
+#include <ktoggleaction.h>
+#include <kactioncollection.h>
+#include <kpagedialog.h>
+#include <ktextedit.h>
+#include <ktoolbar.h>
 
 //2.0 #include <formeditor/formmanager.h>
 //2.0 #include <formeditor/widgetpropertyset.h>

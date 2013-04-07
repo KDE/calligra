@@ -20,7 +20,7 @@
 #ifndef KEXINAMEDIALOG_H
 #define KEXINAMEDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
 

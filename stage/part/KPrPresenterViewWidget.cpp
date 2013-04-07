@@ -23,8 +23,8 @@
 #include <QKeyEvent>
 #include <QStackedLayout>
 
-#include <KDebug>
-#include <KLocale>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>

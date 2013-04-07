@@ -27,7 +27,7 @@
 #include "reportentityselector.h"
 #include "kexisourceselector.h"
 #include <KoIcon.h>
-#include <KPushButton>
+#include <kpushbutton.h>
 
 namespace KPlato
 {

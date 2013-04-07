@@ -25,7 +25,7 @@
 #include <QObject>
 #include <KoFilter.h>
 #include <QDir>
-#include <KUrl>
+#include <kurl.h>
 #include <QByteArray>
 #include <QStack>
 #include <QVariantList>

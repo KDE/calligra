@@ -24,8 +24,8 @@
 #include <core/KexiWindow.h>
 #include <core/KexiMainWindowIface.h>
 
-#include <KPluginFactory>
-#include <KDebug>
+#include <kpluginfactory.h>
+#include <kdebug.h>
 
 KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)

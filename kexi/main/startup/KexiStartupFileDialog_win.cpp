@@ -169,10 +169,10 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
         ops->setOnlyDoubleClickSelectsFiles( true );
         connect(ops, SIGNAL(urlEntered(KUrl)),
                 SLOT(urlEntered(KUrl)));
-        connect(ops, SIGNAL(fileHighlighted(KFileItem*)),
-                SLOT(fileHighlighted(KFileItem*)));
-        connect(ops, SIGNAL(fileSelected(KFileItem*)),
-                SLOT(fileSelected(KFileItem*)));
+        connect(ops, SIGNAL(fileHighlighted(const KFileItem*)),
+                SLOT(fileHighlighted(const KFileItem*)));
+        connect(ops, SIGNAL(fileSelected(const KFileItem*)),
+                SLOT(fileSelected(const KFileItem*)));
         connect(ops, SIGNAL(finishedLoading()),
                 SLOT(slotLoadingFinished()));
 

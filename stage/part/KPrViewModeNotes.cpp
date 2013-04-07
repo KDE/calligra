@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <QGraphicsWidget>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoDocumentResourceManager.h>
 #include <KoRuler.h>

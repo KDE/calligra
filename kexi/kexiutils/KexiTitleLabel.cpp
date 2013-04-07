@@ -20,7 +20,7 @@
 #include "KexiTitleLabel.h"
 #include "utils.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QApplication>
 #include <QDesktopWidget>

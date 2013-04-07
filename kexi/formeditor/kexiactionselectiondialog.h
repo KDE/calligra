@@ -21,7 +21,7 @@
 #ifndef KEXIACTIONSELECTIONDIALOG_H
 #define KEXIACTIONSELECTIONDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 #include "kexiformeventhandler.h"
 
 class QTreeWidgetItem;

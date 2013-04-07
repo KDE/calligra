@@ -39,7 +39,7 @@
 
 #include "KoView.h"
 
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 class KoPageLayoutWidget;
 

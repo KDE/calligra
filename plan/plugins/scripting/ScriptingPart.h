@@ -22,7 +22,7 @@
 #ifndef KPlatoSCRIPTINGPART_H
 #define KPlatoSCRIPTINGPART_H
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <KoScriptingPart.h>
 

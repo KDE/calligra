@@ -34,14 +34,14 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <KMimeType>
+#include <kmimetype.h>
 #include <QFileDialog>
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <KexiWindow.h>
 #include <KexiView.h>
 #include <core/KexiRecordNavigatorHandler.h>
-#include <KToolBar>
+#include <ktoolbar.h>
 
 KexiMobileMainWindow::KexiMobileMainWindow()
 {

@@ -23,7 +23,7 @@
 
 #include <QPair>
 #include <QModelIndex>
-#include <KLineEdit>
+#include <klineedit.h>
 #include <KexiSearchableModel.h>
 
 class KexiSearchableModel;

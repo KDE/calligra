@@ -23,8 +23,8 @@
 #include <KoPart.h>
 #include <KoStore.h>
 #include <KoDocument.h>
-#include <KMimeTypeTrader>
-#include <KMimeType>
+#include <kmimetypetrader.h>
+#include <kmimetype.h>
 // Qt
 #include <QPainter>
 #include <QTimer>

@@ -27,7 +27,7 @@
 
 #include "kptusedefforteditor.h"
 
-#include <KDialog>
+#include <kdialog.h>
 #include <klocale.h>
 #include <kdebug.h>
 

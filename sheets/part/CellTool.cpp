@@ -45,13 +45,13 @@
 
 #include <QPainter>
 
-#include <KAction>
+#include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
-#include <KSelectAction>
+#include <kselectaction.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
