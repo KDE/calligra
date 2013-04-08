@@ -10,13 +10,17 @@ Rectangle {
         id: pageStack
         anchors {
             top: parent.top
-            //top: buttonBar.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
         }
-        FilePage {
-            id: fileTab
+        Loader {
+            id: fileTabLoader
+            anchors.fill: parent
+            focus: true
+        }
+        Connections {
+            target: fileTabLoader.item
             onCloseClicked: {
                 pageStack.pop(documentTab, false)
             }
@@ -28,7 +32,8 @@ Rectangle {
         DocumentPage {
             id: documentTab
             onOpenClicked: {
-                pageStack.push(fileTab, false)
+                fileTabLoader.source = "FilePage.qml"
+                pageStack.push(fileTabLoader.item, false)
             }
         }
     }
