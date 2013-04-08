@@ -50,13 +50,8 @@ public:
      */
     static KoShapeRegistry *instance();
 
-    /**
-     * Add shape factory for a shape that is not a plugin
-     * This can be used also if you want to have a shape only in one application
-     *
-     * @param factory The factory of the shape
-     */
-    void addFactory(KoShapeFactoryBase *factory);
+    //TODO replace with direct add() call...
+    KDE_DEPRECATED void addFactory(KoShapeFactoryBase *factory) { add(factory); }
 
     /**
      * Use the element to find out which flake plugin can load it, and
@@ -76,6 +71,10 @@ public:
      * @return the list of shape factories supporting the specified xml element
      */
     QList<KoShapeFactoryBase*> factoriesForElement(const QString &nameSpace, const QString &elementName);
+
+protected:
+    virtual void virtual_add(const QString &id, KoShapeFactoryBase *factory);
+    virtual void virtual_remove(const QString &id, KoShapeFactoryBase *factory);
 
 private:
     KoShapeRegistry();

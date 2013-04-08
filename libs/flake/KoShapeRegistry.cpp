@@ -50,12 +50,13 @@
 class KoShapeRegistry::Private
 {
 public:
-    void insertFactory(KoShapeFactoryBase *factory);
     void init(KoShapeRegistry *q);
 
     KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
 
-    // Map namespace,tagname to priority:factory
+    // Map namespace,tagname to priority:factory.
+    // Used to speed up loading ODF by making shape-factories direct
+    // accessible by the ODF elements passed in.
     QHash<QPair<QString, QString>, QMultiMap<int, KoShapeFactoryBase*> > factoryMap;
 };
 
@@ -92,15 +93,6 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     // As long as there is no shape dealing with embedded svg images
     // we add the svg shape factory here by default
     q->add(new SvgShapeFactory);
-
-    // Now all shape factories are registered with us, determine their
-    // assocated odf tagname & priority and prepare ourselves for
-    // loading ODF.
-
-    QList<KoShapeFactoryBase*> factories = q->values();
-    for (int i = 0; i < factories.size(); ++i) {
-        insertFactory(factories[i]);
-    }
 }
 
 KoShapeRegistry* KoShapeRegistry::instance()
@@ -112,16 +104,10 @@ KoShapeRegistry* KoShapeRegistry::instance()
     return s_instance;
 }
 
-void KoShapeRegistry::addFactory(KoShapeFactoryBase * factory)
+void KoShapeRegistry::virtual_add(const QString &id, KoShapeFactoryBase *factory)
 {
-    add(factory);
-    d->insertFactory(factory);
-}
-
-void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
-{
+    Q_UNUSED(id);
     const QList<QPair<QString, QStringList> > odfElements(factory->odfElements());
-
     if (odfElements.isEmpty()) {
         kDebug(30006) << "Shape factory" << factory->id() << " does not have OdfNamespace defined, ignoring";
     }
@@ -131,7 +117,7 @@ void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
             foreach (const QString &elementName, (*it).second) {
                 QPair<QString, QString> p((*it).first, elementName);
 
-                QMultiMap<int, KoShapeFactoryBase*> & priorityMap = factoryMap[p];
+                QMultiMap<int, KoShapeFactoryBase*> & priorityMap = d->factoryMap[p];
 
                 priorityMap.insert(priority, factory);
 
@@ -140,6 +126,21 @@ void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
                     << priority << " into factoryMap making "
                     << priorityMap.size() << " entries. ";
             }
+        }
+    }
+}
+
+void KoShapeRegistry::virtual_remove(const QString &id, KoShapeFactoryBase *factory)
+{
+    Q_UNUSED(id);
+    const QList<QPair<QString, QStringList> > odfElements(factory->odfElements());
+    int priority = factory->loadingPriority();
+    for (QList<QPair<QString, QStringList> >::const_iterator it(odfElements.begin()); it != odfElements.end(); ++it) {
+        foreach (const QString &elementName, (*it).second) {
+            QPair<QString, QString> p((*it).first, elementName);
+            QHash<QPair<QString, QString>, QMultiMap<int, KoShapeFactoryBase*> >::Iterator it = d->factoryMap.find(p);
+            if (it != d->factoryMap.end())
+                (*it).remove(priority, factory);
         }
     }
 }

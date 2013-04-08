@@ -78,6 +78,7 @@ public:
             remove(id);
         }
         m_hash.insert(id, item);
+        virtual_add(id, item);
     }
 
     /**
@@ -92,13 +93,16 @@ public:
             remove(id);
         }
         m_hash.insert(id, item);
+        virtual_add(id, item);
     }
 
     /**
      * This function removes an item from the registry
      */
     void remove(const QString &id) {
-        m_hash.remove(id);
+        T item = m_hash.take(id);
+        Q_ASSERT( item );
+        virtual_remove(id, item);
     }
 
     /**
@@ -145,6 +149,24 @@ public:
 
     QList<T> doubleEntries() const {
         return m_doubleEntries;
+    }
+
+protected:
+
+    /**
+     * Called when an object was added to the registry.
+     */
+    virtual void virtual_add(const QString &id, T item) {
+        Q_UNUSED(id);
+        Q_UNUSED(item);
+    }
+
+    /**
+     * Called when an object was remove from the registry.
+     */
+    virtual void virtual_remove(const QString &id, T item) {
+        Q_UNUSED(id);
+        Q_UNUSED(item);
     }
 
 private:

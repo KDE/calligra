@@ -34,12 +34,6 @@ void KoInputDeviceHandlerRegistry::init()
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 27"), config);
-
-    foreach(const QString & id, keys()) {
-        KoInputDeviceHandler * d = value(id);
-        if (d)
-            d->start();
-    }
 }
 
 KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
@@ -65,4 +59,16 @@ KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()
         s_instance->init();
     }
     return s_instance;
+}
+
+void KoInputDeviceHandlerRegistry::virtual_add(const QString &id, KoInputDeviceHandler *factory)
+{
+    Q_UNUSED(id);
+    factory->start();
+}
+
+void KoInputDeviceHandlerRegistry::virtual_remove(const QString &id, KoInputDeviceHandler *factory)
+{
+    Q_UNUSED(id);
+    factory->stop();
 }

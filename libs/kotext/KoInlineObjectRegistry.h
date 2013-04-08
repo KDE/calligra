@@ -71,6 +71,10 @@ public:
      */
     KoInlineObject *createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
+protected:
+    virtual void virtual_add(const QString &id, KoInlineObjectFactoryBase *factory);
+    virtual void virtual_remove(const QString &id, KoInlineObjectFactoryBase *factory);
+
 private:
     KoInlineObjectRegistry();
     KoInlineObjectRegistry(const KoInlineObjectRegistry&);

@@ -43,6 +43,10 @@ public:
      */
     static KoInputDeviceHandlerRegistry *instance();
 
+protected:
+    virtual void virtual_add(const QString &id, KoInputDeviceHandler *factory);
+    virtual void virtual_remove(const QString &id, KoInputDeviceHandler *factory);
+
 private:
     KoInputDeviceHandlerRegistry();
     KoInputDeviceHandlerRegistry(const KoInputDeviceHandlerRegistry&);

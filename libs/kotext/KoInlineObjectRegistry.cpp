@@ -32,9 +32,11 @@
 class KoInlineObjectRegistry::Private
 {
 public:
-    void insertFactory(KoInlineObjectFactoryBase *factory);
     void init(KoInlineObjectRegistry *q);
 
+    // Map namespace,tagname to factory.
+    // Used to speed up loading ODF by making inlineObject-factories
+    // direct accessible by the ODF elements passed in.
     QHash<QPair<QString, QString>, KoInlineObjectFactoryBase *> factories;
 };
 
@@ -46,20 +48,6 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-InlineObject"),
                                      QString::fromLatin1("[X-KoText-PluginVersion] == 27"), config);
-
-    foreach (KoInlineObjectFactoryBase *factory, q->values()) {
-        QString nameSpace = factory->odfNameSpace();
-        if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
-            kDebug(32500) << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
-        } else {
-            foreach (const QString &elementName, factory->odfElementNames()) {
-                factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
-
-                kDebug(32500) << "Inserting variable factory" << factory->id() << " for"
-                    << nameSpace << ":" << elementName;
-            }
-        }
-    }
 }
 
 KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
@@ -69,6 +57,31 @@ KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
         s_instance->d->init(s_instance);
     }
     return s_instance;
+}
+
+void KoInlineObjectRegistry::virtual_add(const QString &id, KoInlineObjectFactoryBase *factory)
+{
+    Q_UNUSED(id);
+    QString nameSpace = factory->odfNameSpace();
+    if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
+        kDebug(32500) << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
+    } else {
+        foreach (const QString &elementName, factory->odfElementNames()) {
+            d->factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
+
+            kDebug(32500) << "Inserting variable factory" << factory->id() << " for"
+                << nameSpace << ":" << elementName;
+        }
+    }
+}
+
+void KoInlineObjectRegistry::virtual_remove(const QString &id, KoInlineObjectFactoryBase *factory)
+{
+    Q_UNUSED(id);
+    QString nameSpace = factory->odfNameSpace();
+    foreach (const QString &elementName, factory->odfElementNames()) {
+        d->factories.remove(QPair<QString, QString>(nameSpace, elementName));
+    }
 }
 
 QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const
