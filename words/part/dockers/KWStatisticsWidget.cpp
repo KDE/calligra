@@ -57,6 +57,7 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool short_version)
     m_timer = new QTimer(this);
     initUi();
     initLayout();
+    //All kind of stuff related to the option menu, unnecessary stuff in short version
     if(!shortVersion) {
         m_menu = new StatisticsPreferencesPopup(m_preferencesButton);
         m_preferencesButton->setMenu(m_menu);
@@ -75,103 +76,77 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool short_version)
         connect(m_preferencesButton, SIGNAL(clicked()), m_preferencesButton, SLOT(showMenu()));
     }
 
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
-
+    //use to refresh statistics
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData())); // FIXME: better idea ?
 
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     bool visible = false;
 
-    if(!shortVersion) {
-        visible = cfgGroup.readEntry("WordsVisible", true);
-        m_wordsLabel->setVisible(visible);
-        m_countWords->setVisible(visible);
-        if (visible) {
-            m_menu->w->check_words->setCheckState(Qt::Checked);
-        }
-
-        visible = cfgGroup.readEntry("SentencesVisible", true);
-        m_sentencesLabel->setVisible(visible);
-        m_countSentences->setVisible(visible);
-        if (visible) {
-            m_menu->w->check_sentences->setCheckState(Qt::Checked);
-        }
-
-        visible = cfgGroup.readEntry("SyllablesVisible", true);
-        m_syllablesLabel->setVisible(visible);
-        m_countSyllables->setVisible(visible);
-        if (visible) {
-            m_menu->w->check_syllables->setCheckState(Qt::Checked);
-        }
-
-        visible = cfgGroup.readEntry("LinesVisible", true);
-        m_linesLabel->setVisible(visible);
-        m_countLines->setVisible(visible);
-        if (visible) {
-            m_menu->w->check_lines->setCheckState(Qt::Checked);
-        }
-
-        visible = cfgGroup.readEntry("EastAsianCharactersVisible", true);
-        m_cjkcharsLabel->setVisible(visible);
-        m_countCjkchars->setVisible(visible);
-        if (visible) {
-            m_menu->w->check_east->setCheckState(Qt::Checked);
-        }
-
-        visible = cfgGroup.readEntry("FleschVisible", true);
-        m_fleschLabel->setVisible(visible);
-        m_countFlesch->setVisible(visible);
-        if (visible) {
-            m_menu->w->check_flesch->setCheckState(Qt::Checked);
-        }
-
-        visible = cfgGroup.readEntry("CharspacesVisible", true);
-        m_spacesLabel->setVisible(visible);
-        m_countSpaces->setVisible(visible);
-        if (visible) {
-            m_menu->w->check_charspace->setCheckState(Qt::Checked);
-        }
-
-        visible = cfgGroup.readEntry("CharnospacesVisible", true);
-        m_nospacesLabel->setVisible(visible);
-        m_countNospaces->setVisible(visible);
-        if (visible) {
-            m_menu->w->check_charnospace->setCheckState(Qt::Checked);
-        }
-    }
-    else {
-        visible = cfgGroup.readEntry("WordsVisible", true);
-        m_wordsLabel->setVisible(true);
-        m_countWords->setVisible(true);
-
-        visible = cfgGroup.readEntry("SentencesVisible", true);
-        m_sentencesLabel->setVisible(true);
-        m_countSentences->setVisible(true);
-
-        visible = cfgGroup.readEntry("SyllablesVisible", false);
-        m_syllablesLabel->setVisible(false);
-        m_countSyllables->setVisible(false);
-
-        visible = cfgGroup.readEntry("LinesVisible", false);
-        m_linesLabel->setVisible(false);
-        m_countLines->setVisible(false);
-
-        visible = cfgGroup.readEntry("EastAsianCharactersVisible", false);
-        m_cjkcharsLabel->setVisible(false);
-        m_countCjkchars->setVisible(false);
-
-        visible = cfgGroup.readEntry("FleschVisible", false);
-        m_fleschLabel->setVisible(false);
-        m_countFlesch->setVisible(false);
-
-        visible = cfgGroup.readEntry("CharspacesVisible", false);
-        m_spacesLabel->setVisible(false);
-        m_countSpaces->setVisible(false);
-
-        visible = cfgGroup.readEntry("CharnospacesVisible", false);
-        m_nospacesLabel->setVisible(false);
-        m_countNospaces->setVisible(false);
+    // --- Elements present in short AND full version ---
+    visible = cfgGroup.readEntry("WordsVisible", true);
+    visible |= shortVersion;
+    m_wordsLabel->setVisible(visible);
+    m_countWords->setVisible(visible);
+    if (visible && !shortVersion) {
+        m_menu->w->check_words->setCheckState(Qt::Checked);
     }
 
+    visible = cfgGroup.readEntry("SentencesVisible", true);
+    visible |= shortVersion;
+    m_sentencesLabel->setVisible(visible);
+    m_countSentences->setVisible(visible);
+    if (visible && !shortVersion) {
+        m_menu->w->check_sentences->setCheckState(Qt::Checked);
+    }
+
+    visible = cfgGroup.readEntry("FleschVisible", true);
+    visible |= !shortVersion;
+    m_fleschLabel->setVisible(visible);
+    m_countFlesch->setVisible(visible);
+    if (visible && !shortVersion) {
+        m_menu->w->check_flesch->setCheckState(Qt::Checked);
+    }
+
+    // --- Elements present ONLY in full version --
+    visible = cfgGroup.readEntry("SyllablesVisible", true);
+    visible &= !shortVersion;
+    m_syllablesLabel->setVisible(visible);
+    m_countSyllables->setVisible(visible);
+    if (visible) {
+        m_menu->w->check_syllables->setCheckState(Qt::Checked);
+    }
+
+    visible = cfgGroup.readEntry("LinesVisible", true);
+    visible &= !shortVersion;
+    m_linesLabel->setVisible(visible);
+    m_countLines->setVisible(visible);
+    if (visible) {
+        m_menu->w->check_lines->setCheckState(Qt::Checked);
+    }
+
+    visible = cfgGroup.readEntry("EastAsianCharactersVisible", true);
+    visible &= !shortVersion;
+    m_cjkcharsLabel->setVisible(visible);
+    m_countCjkchars->setVisible(visible);
+    if (visible) {
+        m_menu->w->check_east->setCheckState(Qt::Checked);
+    }
+
+    visible = cfgGroup.readEntry("CharspacesVisible", true);
+    visible &= !shortVersion;
+    m_spacesLabel->setVisible(visible);
+    m_countSpaces->setVisible(visible);
+    if (visible) {
+        m_menu->w->check_charspace->setCheckState(Qt::Checked);
+    }
+
+    visible = cfgGroup.readEntry("CharnospacesVisible", true);
+    visible &= !shortVersion;
+    m_nospacesLabel->setVisible(visible);
+    m_countNospaces->setVisible(visible);
+    if (visible) {
+        m_menu->w->check_charnospace->setCheckState(Qt::Checked);
+    }
 }
 
 KWStatisticsWidget::~KWStatisticsWidget()
@@ -259,31 +234,6 @@ void KWStatisticsWidget::initLayout()
     if (!shortVersion) {
         // The button that opens the preferences dialog.
         m_mainBox->addWidget(m_preferencesButton);
-    }
-    else {
-        m_wordsLabel->show();
-        m_countWords->show();
-
-        m_sentencesLabel->show();
-        m_countSentences->show();
-
-        m_syllablesLabel->hide();
-        m_countSyllables->hide();
-
-        m_cjkcharsLabel->hide();
-        m_countCjkchars->hide();
-
-        m_spacesLabel->hide();
-        m_countSpaces->hide();
-
-        m_nospacesLabel->hide();
-        m_countNospaces->hide();
-
-        m_fleschLabel->hide();
-        m_countFlesch->hide();
-
-        m_linesLabel->hide();
-        m_countLines->hide();
     }
 
     setLayout(m_mainBox); // FIXME: Is this necessary?
