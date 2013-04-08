@@ -93,10 +93,16 @@ void KWPageTool::resizePage()
         layout.width = std::max(layout.width,qreal(200));
         layout.height = std::max(layout.height,qreal(200));
         layout.format = KoPageFormat::CustomSize;
-        m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
         m_canvas->canvasController()->setPreferredCenter(
                     QPointF(m_canvas->canvasController()->preferredCenter().x()
                            ,m_canvas->canvasController()->preferredCenter().y()*ratio));
+        if (layout.width > layout.height) {
+            layout.orientation = KoPageFormat::Landscape;
+        }
+        else {
+            layout.orientation = KoPageFormat::Portrait;
+        }
+        m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
         m_document->relayout();
         m_canvas->repaint();
 }
@@ -129,6 +135,8 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
 
     int xMouse = xMouseInPage(event->x());
     int yMouse = yMouseInPage(event->y());
+
+    m_mousePosTmp = new QPoint(xMouse,yMouse);
 
     if (xMouse > leftMargin - 10 && xMouse < leftMargin + 10) {
         selection = MLEFT;
@@ -203,12 +211,31 @@ void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
             useCursor(Qt::ArrowCursor);
         }
     }
+    qDebug() << m_canvas->canvasController()->scrollBarValue().x();
 }
 
 void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (selection != 0){
+    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
+    int xMouse = xMouseInPage(event->x());
+    int yMouse = yMouseInPage(event->y());
+    if (selection != NONE){
         selection = NONE;
+    }
+    else {
+        if (m_mousePosTmp->y() > layout.height / 2 && yMouse < layout.height / 2
+        ||  m_mousePosTmp->y() < layout.height / 2 && yMouse > layout.height / 2) {
+            qreal widthTmp = layout.width;
+            layout.width = layout.height;
+            layout.height = widthTmp;
+            if (layout.width > layout.height) {
+                layout.orientation = KoPageFormat::Landscape;
+            }
+            else {
+                layout.orientation = KoPageFormat::Portrait;
+            }
+        }
+        m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
     }
     m_document->relayout();
     m_canvas->repaint();
@@ -272,7 +299,6 @@ void KWPageTool::setMarginInPx(Selection p_selection, int p_positionX, int p_pos
         }
         break;
     }
-
     m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
     m_document->relayout();
     m_canvas->repaint();
