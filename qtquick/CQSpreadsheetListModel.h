@@ -26,10 +26,12 @@ class CQSpreadsheetListModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
+    Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 
 public:
     enum RoleNames {
         SheetNameRole = Qt::UserRole,
+        ThumbnailRole
     };
 
     CQSpreadsheetListModel(QObject* parent = 0);
@@ -40,11 +42,15 @@ public:
 
     QObject* canvas() const;
 
+    QSize thumbnailSize();
+
 public Q_SLOTS:
     void setCanvas(QObject* canvas);
+    void setThumbnailSize(const QSize& size);
 
 Q_SIGNALS:
     void canvasChanged();
+    void thumbnailSizeChanged();
 
 private:
     class Private;
