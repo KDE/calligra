@@ -2,6 +2,7 @@ project(calligraqtquickcomponents)
 
 set(calligraqtquickcomponents_SRCS
     CQThumbnailItem.cpp
+    CQPresentationModel.cpp
     CQSpreadsheetListModel.cpp
     CQCanvasBase.cpp
     CQCanvasControllerItem.cpp

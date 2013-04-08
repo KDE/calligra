@@ -26,6 +26,7 @@
 
 #include "CQCanvasBase.h"
 
+class KPrDocument;
 class KoCanvasBase;
 class CQPresentationCanvas : public CQCanvasBase
 {
@@ -38,6 +39,8 @@ public:
 
     int currentSlide() const;
     void setCurrentSlide(int slide);
+
+    KPrDocument* document() const;
 
 Q_SIGNALS:
     void currentSlideChanged();

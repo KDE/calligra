@@ -79,6 +79,11 @@ void CQPresentationCanvas::setCurrentSlide(int slide)
     }
 }
 
+KPrDocument* CQPresentationCanvas::document() const
+{
+    return d->document;
+}
+
 void CQPresentationCanvas::openFile(const QString& uri)
 {
     KService::Ptr service = KService::serviceByDesktopName("stagepart");
