@@ -208,4 +208,3 @@ void CSVDialog::accept()
     KoCsvImportDialog::accept();
 }
 
-#include "CSVDialog.moc"
