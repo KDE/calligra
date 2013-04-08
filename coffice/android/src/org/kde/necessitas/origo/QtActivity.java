@@ -549,7 +549,6 @@ public class QtActivity extends Activity
             QtApplication.invokeDelegateMethod(QtApplication.onCreate, savedInstanceState);
             return;
         }
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         try {
             m_activityInfo = getPackageManager().getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
@@ -865,11 +864,12 @@ public class QtActivity extends Activity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
-        QtApplication.InvokeResult res = QtApplication.invokeDelegate(menu);
-        if (res.invoked)
-            return (Boolean)res.methodReturns;
-        else
-            return super.onPrepareOptionsMenu(menu);
+//         QtApplication.InvokeResult res = QtApplication.invokeDelegate(menu);
+//         if (res.invoked)
+//             return (Boolean)res.methodReturns;
+//         else
+//             return super.onPrepareOptionsMenu(menu);
+        return false;
     }
     public boolean super_onPrepareOptionsMenu(Menu menu)
     {

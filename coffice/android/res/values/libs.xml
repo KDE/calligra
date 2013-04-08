@@ -8,12 +8,9 @@
     <array name="qt_libs">
         <item>QtCore</item>
         <item>QtGui</item>
-        <item>QtNetwork</item>
         <item>QtScript</item>
-        <item>QtSql</item>
         <item>QtXml</item>
         <item>QtSvg</item>
-        <item>QtXmlPatterns</item>
         <item>QtDeclarative</item>
     </array>
     <array name="bundled_libs"/>
