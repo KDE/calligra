@@ -124,7 +124,10 @@ public slots:
 
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
-
+    /// enable document headers
+    void enableHeader();
+    /// enable document footers
+    void enableFooter();
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
     /// toggle the display of non-printing characters
@@ -162,10 +165,6 @@ private slots:
     void selectBookmark();
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
-    /// enable document headers
-    void enableHeader();
-    /// enable document footers
-    void enableFooter();
     /// snap to grid
     void toggleSnapToGrid();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets

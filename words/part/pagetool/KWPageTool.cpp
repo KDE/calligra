@@ -63,41 +63,42 @@ bool KWPageTool::wantsAutoScroll() const
 
 void KWPageTool::resizePage()
 {
-    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
+        KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
 
-    int widthResize = m_canvas->viewConverter()->viewToDocumentX(m_mousePosTmp->x() - QCursor::pos().x());
-    int heightResize = m_canvas->viewConverter()->viewToDocumentY(m_mousePosTmp->y() - QCursor::pos().y());
+        int widthResize = m_canvas->viewConverter()->viewToDocumentX(m_mousePosTmp->x() - QCursor::pos().x());
+        int heightResize = m_canvas->viewConverter()->viewToDocumentY(m_mousePosTmp->y() - QCursor::pos().y());
 
-    float heightTmp = (m_canvas->viewConverter()->viewToDocumentY(layout.height) + 21) * m_document->pageCount();
+        float heightOld = layout.height;
 
-    switch(selection) {
-    case BLEFT:
-        layout.width += widthResize*2;
-        break;
-    case BRIGHT:
-        layout.width -= widthResize*2;
-        break;
-    case BTOP:
-        layout.height += heightResize*2;
-        break;
-    case BBOTTOM:
-        layout.height -= heightResize*2;
-        break;
-    default:
-        qDebug() << "Error!";
-    }
-    qDebug() << m_canvas->canvasController()->scrollBarValue().y()*(layout.height*m_document->pageCount())/heightTmp;
-    qDebug() << (layout.height*m_document->pageCount())/heightTmp;
+        switch(selection) {
+        case BLEFT:
+            layout.width += widthResize*2;
+            break;
+        case BRIGHT:
+            layout.width -= widthResize*2;
+            break;
+        case BTOP:
+            layout.height += heightResize*2;
+            break;
+        case BBOTTOM:
+            layout.height -= heightResize*2;
+            break;
+        default:
+            qDebug() << "Error!";
+        }
 
-    float heightNew = (m_canvas->viewConverter()->viewToDocumentY(layout.height) + 21) * m_document->pageCount();
-    QPoint scrollNewPos(0,m_canvas->canvasController()->scrollBarValue().y()*(heightNew/heightTmp));
-    m_canvas->canvasController()->setScrollBarValue(scrollNewPos);
-    m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
-    layout.width = std::max(layout.width,qreal(200));
-    layout.height = std::max(layout.height,qreal(200));
-    m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
-    m_document->relayout();
-    m_canvas->repaint();
+        float heightNew = layout.height;
+        float ratio = heightNew / heightOld;
+        m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
+        layout.width = std::max(layout.width,qreal(200));
+        layout.height = std::max(layout.height,qreal(200));
+        layout.format = KoPageFormat::CustomSize;
+        m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
+        m_canvas->canvasController()->setPreferredCenter(
+                    QPointF(m_canvas->canvasController()->preferredCenter().x()
+                           ,m_canvas->canvasController()->preferredCenter().y()*ratio));
+        m_document->relayout();
+        m_canvas->repaint();
 }
 
 KWPageTool::~KWPageTool()
@@ -144,22 +145,22 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
     else if (xMouse < 10 ) {
         selection = BLEFT;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
-        m_resizeTimer->start(10);
+        m_resizeTimer->start(3);
     }
     else if (xMouse > layout.width - 10 ) {
         selection = BRIGHT;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
-        m_resizeTimer->start(10);
+        m_resizeTimer->start(3);
     }
     else if (yMouse < 10 ) {
         selection = BTOP;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
-        m_resizeTimer->start(10);
+        m_resizeTimer->start(3);
     }
     else if (yMouse > layout.height - 10 && yMouse < layout.height) {
         selection = BBOTTOM;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
-        m_resizeTimer->start(10);
+        m_resizeTimer->start(3);
     }
     else if (yMouse < layout.height /2 && !header){
         selection = HEADER;
