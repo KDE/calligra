@@ -19,17 +19,25 @@
 
 #include "CQSpreadsheetListModel.h"
 
-#include "CQSpreadsheetCanvas.h"
+#include <QPainter>
+
+#include <KoZoomHandler.h>
 #include <Map.h>
 #include <Sheet.h>
+#include <ui/SheetView.h>
+
+#include "CQSpreadsheetCanvas.h"
 
 class CQSpreadsheetListModel::Private
 {
 public:
-    Private() : canvas(0), map(0) { }
+    Private() : canvas(0), map(0), thumbnailSize(64, 64) { }
 
     CQSpreadsheetCanvas* canvas;
     Calligra::Sheets::Map* map;
+
+    QHash<int, QPixmap> thumbnails;
+    QSize thumbnailSize;
 };
 
 CQSpreadsheetListModel::CQSpreadsheetListModel(QObject* parent)
@@ -37,6 +45,7 @@ CQSpreadsheetListModel::CQSpreadsheetListModel(QObject* parent)
 {
     QHash<int, QByteArray> roleNames;
     roleNames.insert(SheetNameRole, "sheetName");
+    roleNames.insert(ThumbnailRole, "thumbnail");
     setRoleNames(roleNames);
 }
 
@@ -53,6 +62,35 @@ QVariant CQSpreadsheetListModel::data(const QModelIndex& index, int role) const
     switch(role) {
         case SheetNameRole:
             return d->map->sheet(index.row())->sheetName();
+        case ThumbnailRole: {
+            if(d->thumbnails.contains(index.row())) {
+                return d->thumbnails.value(index.row());
+            }
+
+            QPixmap thumbnail(d->thumbnailSize);
+            QRect rect(QPoint(0,0), d->thumbnailSize);
+
+            QPainter p(&thumbnail);
+
+            p.fillRect(rect, Qt::white);
+
+            Calligra::Sheets::SheetView sheetView(d->map->sheet(index.row()));
+
+            qreal zoom = 0.5;
+            KoZoomHandler zoomHandler;
+            zoomHandler.setZoom(zoom);
+            p.setClipRect(rect);
+            p.scale(zoom, zoom);
+            sheetView.setViewConverter(&zoomHandler);
+
+            QRectF area = zoomHandler.viewToDocument(rect);
+            QRect range = sheetView.sheet()->documentToCellCoordinates(area).adjusted(0, 0, 2, 2);
+            sheetView.setPaintCellRange(range);
+            sheetView.paintCells(p, area, QPointF(0,0));
+
+            d->thumbnails.insert(index.row(), thumbnail);
+            return thumbnail;
+        }
         default:
             break;
     }
@@ -74,6 +112,12 @@ QObject* CQSpreadsheetListModel::canvas() const
 {
     return d->canvas;
 }
+
+QSize CQSpreadsheetListModel::thumbnailSize()
+{
+    return d->thumbnailSize;
+}
+
 void CQSpreadsheetListModel::setCanvas(QObject* canvas)
 {
     if (d->canvas != canvas) {
@@ -87,5 +131,14 @@ void CQSpreadsheetListModel::setCanvas(QObject* canvas)
         beginInsertRows(QModelIndex(), 0, d->map->count());
         endInsertRows();
         emit canvasChanged();
+    }
+}
+
+void CQSpreadsheetListModel::setThumbnailSize(const QSize& size)
+{
+    if(size != d->thumbnailSize) {
+        d->thumbnailSize = size;
+        d->thumbnails.clear();
+        emit thumbnailSizeChanged();
     }
 }
