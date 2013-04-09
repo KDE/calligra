@@ -22,10 +22,20 @@
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
+#include <KoShapeRegistry.h>
+#include <KoAnnotation.h>
+#include <KoShapeController.h>
+#include "KoShapeBasedDocumentBase.h"
 
 #include <dialogs/SimpleSpellCheckingWidget.h>
+#include <dialogs/SimpleAnnotationWidget.h>
+
+#include <kdebug.h>
+#include <klocale.h>
+#include <kaction.h>
 
 //#include "TextShape.h"
+#define AnnotationShape_SHAPEID "AnnotationTextShapeID"
 
 ReviewTool::ReviewTool(KoCanvasBase* canvas): TextTool(canvas),
     m_textEditor(0),
@@ -78,8 +88,25 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
 {
     QList<QWidget *> widgets;
     SimpleSpellCheckingWidget* sscw = new SimpleSpellCheckingWidget(this, 0);
+    m_saw = new SimpleAnnotationWidget(this, 0);
+
+    connect(m_saw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
     sscw->setWindowTitle("SpellCheck");
     widgets.append(sscw);
+
+
+    m_saw->setWindowTitle("Annotation");
+    widgets.append(m_saw);
+
     return widgets;
 
+}
+
+void ReviewTool::insertAnnotation()
+{
+    KoShape *shape = KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(m_canvas->shapeController()->resourceManager());
+    m_canvas->shapeController()->documentBase()->addShape(shape);
+    KoAnnotation *annotation = textEditor()->addAnnotation();
+    annotation->setAnnotationShape(shape);
 }

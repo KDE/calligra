@@ -26,6 +26,7 @@ class KoTextEditor;
 class KoTextShapeData;
 class KoViewConverter;
 class TextShape;
+class SimpleAnnotationWidget;
 
 class KAction;
 
@@ -57,7 +58,8 @@ public:
 
     virtual QList<QWidget *> createOptionWidgets();
 
-private slots:
+public slots:
+    void insertAnnotation();
 
 
 private:
@@ -66,6 +68,8 @@ private:
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;
     TextShape *m_textShape;
+    SimpleAnnotationWidget *m_saw;
+    KAction *m_insertAnnotationAction;
 };
 
 #endif // REVIEWTOOL_H

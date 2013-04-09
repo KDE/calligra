@@ -103,6 +103,7 @@ SET ( textshape_SRCS
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
     dialogs/ListLevelChooser.cpp
+    dialogs/SimpleAnnotationWidget.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp
@@ -149,6 +150,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
     dialogs/TableOfContentsStyleConfigure.ui
+    dialogs/SimpleAnnotationWidget.ui
 
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui

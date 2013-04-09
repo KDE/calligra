@@ -129,7 +129,6 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     //layout loaded annotation shapes in textLoader.
     layoutLoadedAnnotationShapes();
     connect(m_document, SIGNAL(annotationShapeAdded(KoShape*)), this, SLOT(annotationShapeAdded(KoShape*)));
-    connect(m_canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(annotationShapeRemoved(KoShape*)));
 
     setupActions();
 
@@ -1084,14 +1083,6 @@ void KWView::layoutLoadedAnnotationShapes()
 
 void KWView::annotationShapeAdded(KoShape *shape)
 {
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    Q_ASSERT(editor);
-
-    const KoAnnotationManager *manager = m_document->textRangeManager()->annotationManager();
-
-    KoAnnotation *annotation = editor->addAnnotation();
-    annotation->setAnnotationShape(shape);
-
     m_annotationManager->addAnnotationShape(shape, currentPage().pageNumber());
 }
 

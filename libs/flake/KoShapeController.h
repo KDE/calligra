@@ -117,6 +117,7 @@ public:
      * collection and others.
      */
     KoDocumentResourceManager *resourceManager() const;
+    KoShapeBasedDocumentBase *documentBase() const;
 
 private:
     class Private;
