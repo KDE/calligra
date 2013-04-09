@@ -372,8 +372,8 @@ void View::Private::initActions()
     actions->shapeAnchor->setEnabled(false);
     actions->shapeAnchor->setToolTip(i18n("Switch shape anchoring"));
     ac->addAction("shapeAnchor", actions->shapeAnchor);
-    connect(actions->shapeAnchor, SIGNAL(triggered(const QString&)),
-            view, SLOT(setShapeAnchoring(const QString&)));
+    connect(actions->shapeAnchor, SIGNAL(triggered(QString)),
+            view, SLOT(setShapeAnchoring(QString)));
 
     // -- navigation actions --
 
@@ -589,11 +589,11 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
             this, SLOT(removeSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(sheetRevived(Sheet*)),
             this, SLOT(addSheet(Sheet*)));
-    connect(doc()->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            this, SLOT(handleDamages(const QList<Damage*>&)));
+    connect(doc()->map(), SIGNAL(damagesFlushed(QList<Damage*>)),
+            this, SLOT(handleDamages(QList<Damage*>)));
     if (statusBar()) {
-        connect(doc()->map(), SIGNAL(statusMessage(const QString&, int)),
-                statusBar(), SLOT(showMessage(const QString&, int)));
+        connect(doc()->map(), SIGNAL(statusMessage(QString,int)),
+                statusBar(), SLOT(showMessage(QString,int)));
     }
 
     connect(&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
@@ -616,7 +616,7 @@ View::~View()
 {
     selection()->emitCloseEditor(true); // save changes
 
-    // if (d->calcLabel) disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
+    // if (d->calcLabel) disconnect(d->calcLabel,SIGNAL(pressed(int)),this,SLOT(statusBarClicked(int)));
 
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);
@@ -693,10 +693,10 @@ void View::initView()
 
     // Setup the selection.
     d->selection = new Selection(d->canvas);
-    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
-    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotScrollChoice(const Region&)));
-    connect(d->selection, SIGNAL(aboutToModify(const Region&)), this, SLOT(aboutToModify(const Region&)));
-    connect(d->selection, SIGNAL(modified(const Region&)), this, SLOT(refreshSelection(const Region&)));
+    connect(d->selection, SIGNAL(changed(Region)), this, SLOT(slotChangeSelection(Region)));
+    connect(d->selection, SIGNAL(changed(Region)), this, SLOT(slotScrollChoice(Region)));
+    connect(d->selection, SIGNAL(aboutToModify(Region)), this, SLOT(aboutToModify(Region)));
+    connect(d->selection, SIGNAL(modified(Region)), this, SLOT(refreshSelection(Region)));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
     connect(d->selection, SIGNAL(refreshSheetViews()), this, SLOT(refreshSheetViews()));
     connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
@@ -724,16 +724,16 @@ void View::initView()
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
-        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-        //        shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
+        //        shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
     d->zoomController = new KoZoomController(d->canvasController, d->zoomHandler, actionCollection(), 0, this);
     d->zoomController->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
     addStatusBarItem(d->zoomController->zoomAction()->createWidget(statusBar()), 0, true);
-    connect(d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
-            this, SLOT(viewZoom(KoZoomMode::Mode, qreal)));
+    connect(d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            this, SLOT(viewZoom(KoZoomMode::Mode,qreal)));
 
     d->columnHeader = new ColumnHeaderWidget(this, d->canvas, this);
     d->rowHeader = new RowHeaderWidget(this, d->canvas , this);
@@ -772,11 +772,11 @@ void View::initView()
     d->horzScrollBar->setSingleStep(60); //just random guess based on what feels okay
     d->horzScrollBar->setPageStep(60);
 
-    connect(d->tabBar, SIGNAL(tabChanged(const QString&)), this, SLOT(changeSheet(const QString&)));
-    connect(d->tabBar, SIGNAL(tabMoved(unsigned, unsigned)),
-            this, SLOT(moveSheet(unsigned, unsigned)));
-    connect(d->tabBar, SIGNAL(contextMenu(const QPoint&)),
-            this, SLOT(popupTabBarMenu(const QPoint&)));
+    connect(d->tabBar, SIGNAL(tabChanged(QString)), this, SLOT(changeSheet(QString)));
+    connect(d->tabBar, SIGNAL(tabMoved(unsigned,unsigned)),
+            this, SLOT(moveSheet(unsigned,unsigned)));
+    connect(d->tabBar, SIGNAL(contextMenu(QPoint)),
+            this, SLOT(popupTabBarMenu(QPoint)));
     connect(d->tabBar, SIGNAL(doubleClicked()),
             this, SLOT(slotRename()));
 
@@ -805,10 +805,10 @@ void View::initView()
     }
 
     // signal slot
-    connect(d->canvas, SIGNAL(documentSizeChanged(const QSize&)),
-            d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
-    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
-            d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(d->canvas, SIGNAL(documentSizeChanged(QSize)),
+            d->canvasController->proxyObject, SLOT(updateDocumentSize(QSize)));
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)),
+            d->canvas, SLOT(setDocumentOffset(QPoint)));
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
             this, SLOT(shapeSelectionChanged()));
 }
@@ -890,10 +890,10 @@ SheetView* View::sheetView(const Sheet* sheet) const
         sheetView = new SheetView(sheet);
         d->sheetViews.insert(sheet, sheetView);
         sheetView->setViewConverter(zoomHandler());
-        connect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
-                d->canvas, SLOT(setDocumentSize(const QSizeF&)));
-        connect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
-                d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        connect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
+                d->canvas, SLOT(setDocumentSize(QSizeF)));
+        connect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
+                d->zoomController, SLOT(setDocumentSize(QSizeF)));
         connect(sheet, SIGNAL(visibleSizeChanged()),
                 sheetView, SLOT(updateAccessedCellRange()));
         connect(sheet, SIGNAL(destroyed(QObject*)),
@@ -912,10 +912,10 @@ void View::refreshSheetViews()
     }
 
     foreach (SheetView *sheetView, sheetViews) {
-        disconnect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   d->canvas, SLOT(setDocumentSize(const QSizeF&)));
-        disconnect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
+                   d->canvas, SLOT(setDocumentSize(QSizeF)));
+        disconnect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
+                   d->zoomController, SLOT(setDocumentSize(QSizeF)));
         disconnect(sheetView->sheet(), SIGNAL(visibleSizeChanged()),
                    sheetView, SLOT(updateAccessedCellRange()));
     }
@@ -1995,10 +1995,10 @@ void View::addSheet(Sheet *sheet)
     d->actions->hideSheet->setEnabled(state);
 
     // Connect some signals
-    connect(sheet, SIGNAL(shapeAdded(Sheet *, KoShape *)),
-            d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
-    connect(sheet, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
-            d->mapViewModel, SLOT(removeShape(Sheet *, KoShape *)));
+    connect(sheet, SIGNAL(shapeAdded(Sheet*,KoShape*)),
+            d->mapViewModel, SLOT(addShape(Sheet*,KoShape*)));
+    connect(sheet, SIGNAL(shapeRemoved(Sheet*,KoShape*)),
+            d->mapViewModel, SLOT(removeShape(Sheet*,KoShape*)));
 }
 
 void View::removeSheet(Sheet *sheet)

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Route Switch Processor with Si
+Name[bs]=Procesor prekidača rute sa silicijumom
 Name[ca]=Processador de commutació de rutes amb Si
 Name[ca@valencia]=Processador de commutació de rutes amb Si
+Name[da]=Route Switch Processor with Si
 Name[el]=Επεξεργαστής δρομολόγησης με Si
 Name[es]=Procesador de conmutación de rutas con Silicio
 Name[et]=Marsruuter-kommutaatori protsessor räniga
@@ -9,6 +11,7 @@ Name[fr]=processeur de bascule avec Si
 Name[gl]=Procesador dun conmutador encamiñador con silicio
 Name[it]=Route Switch Processor con Si
 Name[kk]=Si-ді қолдайтын маршруттауыш қосқыш процесоры
+Name[lt]=Kelio perjungimo procesorius su Si
 Name[nb]=Rute-svitsj-prosessor med SI
 Name[nl]=Route-switch-processor met Si
 Name[pl]=Procesor przełączania trasy wraz z Si

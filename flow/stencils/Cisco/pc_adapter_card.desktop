@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=PC Adapter Card
 Name[bg]=Адаптерна карта за PC
+Name[bs]=PC adapter kartica
 Name[ca]=Targeta adaptadora de PC
 Name[ca@valencia]=Targeta adaptadora de PC
+Name[da]=PC-udvidelseskort
 Name[de]=PC-Adapterkarte
 Name[el]=PC Adapter Card
 Name[es]=Tarjeta adaptadora PC
@@ -11,6 +13,7 @@ Name[fr]=PC Adapter Card
 Name[gl]=Tarxeta adaptadora de PC
 Name[it]=PC Adattarore 
 Name[kk]=ДК адаптер тақшасы
+Name[lt]=PK adapterio korta
 Name[nb]=PC-adapterkort
 Name[nds]=Reekner-Topasskoort
 Name[nl]=PC-adapterkaart

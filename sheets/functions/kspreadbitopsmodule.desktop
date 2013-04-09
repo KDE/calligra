@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Bit Operation Functions
+Name[bs]=Funkcije za operacije sa bitovima
 Name[ca]=Funcions d'operació de bit
 Name[ca@valencia]=Funcions d'operació de bit
 Name[da]=Funktioner til bitoperationer
@@ -24,6 +25,7 @@ Name[pt]=Funções de Operação com 'Bits'
 Name[pt_BR]=Funções de operação com 'Bits'
 Name[ru]=Функции битовых операций
 Name[sk]=Funkcie bitových operácií
+Name[sl]=Funkcije za operacije nad biti
 Name[sv]=Bithanteringsfunktioner
 Name[tr]=Bit İşlemleri Fonksiyonları
 Name[uk]=Бітові дії
@@ -32,6 +34,7 @@ Name[x-test]=xxBit Operation Functionsxx
 Name[zh_CN]=位操作函数
 Name[zh_TW]=位元操作函數
 Comment=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
+Comment[bs]=BITI, BITILI, BITXILI, BITLSHIFT, BITRSHIFT
 Comment[ca]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
 Comment[ca@valencia]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
 Comment[cs]=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT

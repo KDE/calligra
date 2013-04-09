@@ -1,7 +1,13 @@
 
-add_subdirectory( sidewinder )
-add_subdirectory( import )
-add_subdirectory( export )
+if(SHOULD_BUILD_FILTER_XLS_TO_SHEETS OR SHOULD_BUILD_FILTER_SHEETS_TO_XLS)
+    add_subdirectory( sidewinder )
+endif(SHOULD_BUILD_FILTER_XLS_TO_SHEETS OR SHOULD_BUILD_FILTER_SHEETS_TO_XLS)
 
-include_directories( ${CMAKE_SOURCE_DIR}/sheets ${KDE4_INCLUDES}  )
+if(SHOULD_BUILD_FILTER_XLS_TO_SHEETS)
+    add_subdirectory( import )
+endif(SHOULD_BUILD_FILTER_XLS_TO_SHEETS)
+
+if(SHOULD_BUILD_FILTER_SHEETS_TO_XLS)
+    add_subdirectory( export )
+endif(SHOULD_BUILD_FILTER_SHEETS_TO_XLS)
 

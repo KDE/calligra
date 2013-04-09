@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Compensation
+Name[bs]=Kompenzacija
 Name[ca]=Compensació
 Name[ca@valencia]=Compensació
+Name[de]=Kompensation
 Name[el]=Αντιστάθμιση
 Name[es]=Compensación
 Name[et]=Kompenseerimine
@@ -21,4 +23,5 @@ Name[sk]=Kompenzácia
 Name[sv]=Kompensation
 Name[uk]=Компенсація
 Name[x-test]=xxCompensationxx
+Name[zh_CN]=补偿
 Name[zh_TW]=補償

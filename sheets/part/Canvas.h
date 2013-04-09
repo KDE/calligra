@@ -38,9 +38,8 @@
 
 #include <KoCanvasBase.h>
 
-#include "calligra_sheets_export.h"
-
-#include "Global.h"
+#include "../calligra_sheets_export.h"
+#include "../Global.h"
 #include "CanvasBase.h"
 
 class QDragLeaveEvent;

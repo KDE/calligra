@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Intermediate-Event-Timer
+Name[bs]=Tajmer srednjeg događaja
 Name[ca]=Intermedi-Esdeveniment-Temporitzador
 Name[ca@valencia]=Intermedi-Esdeveniment-Temporitzador
+Name[de]=Zwischenereignis - Timer
 Name[el]=Χρονόμετρο-ενδιάμεσου-γεγονότος
 Name[es]=Temporizador del evento intermedio
 Name[et]=Vahesündmuse taimer
@@ -20,4 +22,5 @@ Name[sk]=Intermediate-Event-Timer
 Name[sv]=Mellanliggande-händelse-tidtagning
 Name[uk]=Таймер проміжної події
 Name[x-test]=xxIntermediate-Event-Timerxx
+Name[zh_CN]=中间事件-计时
 Name[zh_TW]=中介─事件─計時器

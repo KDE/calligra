@@ -36,7 +36,7 @@
 #include <KParts/ComponentFactory>
 
 #include <okular/core/page.h>
-
+#include <okular/core/version.h>
 
 static KAboutData createAboutData()
 {
@@ -75,7 +75,7 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
 
     QString error;
     KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
-                               mimetype, QLatin1String("CalligraPart"), 0, QString(),
+                               mimetype, QLatin1String("Calligra/Part"), 0, QString(),
                                QVariantList(), &error );
 
     if (!error.isEmpty()) {
@@ -134,7 +134,13 @@ void OkularOdpGenerator::generatePixmap( Okular::PixmapRequest *request )
         pix = new QPixmap(page->thumbnail(QSize(request->width(), request->height())));
     }
 
+// API change
+#if OKULAR_IS_VERSION(0, 16, 60)
+   request->page()->setPixmap( request->observer(), pix );
+#else
    request->page()->setPixmap( request->id(), pix );
+#endif
+
 
     signalPixmapRequestDone( request );
 }

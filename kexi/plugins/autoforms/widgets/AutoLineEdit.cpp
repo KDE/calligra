@@ -27,7 +27,7 @@ AutoLineEdit::AutoLineEdit(AutoForm* parent): AutoWidget(parent)
 {
     m_lineEdit = new QLineEdit(this);
     setWidget(m_lineEdit);
-    connect(m_lineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(slotTextEdited(const QString&)));
+    connect(m_lineEdit, SIGNAL(textEdited(QString)), this, SLOT(slotTextEdited(QString)));
 }
 
 AutoLineEdit::~AutoLineEdit()

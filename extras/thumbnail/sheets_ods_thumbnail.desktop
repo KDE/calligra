@@ -1,16 +1,25 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Spreadsheets
+Name[ca]=Fulls de càlcul OpenDocument
+Name[da]=OpenDocument-regneark
+Name[de]=OpenDocument-Tabellenkalkulationen
 Name[el]=OpenDocument φύλλα εργασίας
+Name[es]=Hojas de cálculo OpenDocument
 Name[et]=OpenDocument-arvutustabelid
 Name[fi]=OpenDocument-laskentataulukot
 Name[fr]=Tableurs OpenDocument
+Name[gl]=Follas de cálculo Spreadsheet
 Name[hu]=OpenDocument munkafüzetek
 Name[it]=Fogli di calcolo OpenDocument
+Name[kk]=OpenDocument эл.кестелері
+Name[nb]=OpenDocument regneark
 Name[nl]=OpenDocument spreadsheets
+Name[pl]=Arkusze kalkulacyjne OpenDocument
 Name[pt]=Folhas de Cálculo em OpenDocument
 Name[pt_BR]=Planilhas OpenDocument
 Name[sk]=Zošity OpenDocument
+Name[sl]=Preglednice OpenDocument
 Name[sv]=OpenDocument-kalkylark
 Name[uk]=Електронні таблиці OpenDocument (ODS)
 Name[x-test]=xxOpenDocument Spreadsheetsxx

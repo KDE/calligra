@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Left-Up Arrow
 Name[bg]=Стрелка наляво-нагоре
+Name[bs]=Strelica lijevo-gore
 Name[ca]=Fletxa esquerra-dalt
 Name[ca@valencia]=Fletxa esquerra-dalt
 Name[da]=Pil til venstre-op
@@ -23,6 +24,7 @@ Name[pt_BR]=Seta Esquerda-Cima
 Name[ru]=Стрелка влево и вверх
 Name[sk]=Šípka vľavo-hore
 Name[sv]=Vänster-uppåtpil
+Name[tr]=Sol-Yukarı Ok
 Name[uk]=Стрілки ліворуч і вгору
 Name[x-test]=xxLeft-Up Arrowxx
 Name[zh_CN]=左上箭头

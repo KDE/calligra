@@ -46,6 +46,8 @@
 
 MainWindow::MainWindow (QWidget* parent)
 {
+    CAImageProvider::s_imageProvider = new CAImageProvider;
+
     qmlRegisterType<CACanvasController> ("CalligraActive", 1, 0, "CanvasController");
     qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
@@ -88,7 +90,7 @@ MainWindow::MainWindow (QWidget* parent)
 
     m_view->rootContext()->setContextProperty("mainwindow", this);
     m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
-    m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::instance());
+    m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::s_imageProvider);
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
                                             + "/share/calligraactive/qml/Doc.qml"));
@@ -128,6 +130,7 @@ void MainWindow::openFileDialog()
 
 MainWindow::~MainWindow()
 {
+    CAImageProvider::s_imageProvider = 0;
 }
 
 void MainWindow::checkForAndOpenDocument()

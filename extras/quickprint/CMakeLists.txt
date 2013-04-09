@@ -2,28 +2,28 @@
 set( QUICK_PRINT_SERVICES
 )
 
-if( BUILD_flow )
+if( SHOULD_BUILD_FLOW )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} flow_print.desktop )
-endif( BUILD_flow )
+endif( SHOULD_BUILD_FLOW )
 
-if( BUILD_karbon )
+if( SHOULD_BUILD_KARBON )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} karbon_print.desktop )
-endif( BUILD_karbon )
+endif( SHOULD_BUILD_KARBON )
 
-if( BUILD_krita )
+if( SHOULD_BUILD_KRITA )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} krita_print.desktop )
-endif( BUILD_krita )
+endif( SHOULD_BUILD_KRITA )
 
-if( BUILD_sheets )
+if( SHOULD_BUILD_SHEETS_APP )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} sheets_print.desktop )
-endif( BUILD_sheets )
+endif( SHOULD_BUILD_SHEETS_APP )
 
-if( BUILD_stage )
+if( SHOULD_BUILD_STAGE_APP )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} stage_print.desktop )
-endif( BUILD_stage )
+endif( SHOULD_BUILD_STAGE_APP )
 
-if( BUILD_words )
+if( SHOULD_BUILD_WORDS_APP )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} words_print.desktop )
-endif( BUILD_words )
+endif( SHOULD_BUILD_WORDS_APP )
 
 install( FILES ${QUICK_PRINT_SERVICES} DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)

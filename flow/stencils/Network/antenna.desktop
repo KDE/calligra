@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Antenna
 Name[bg]=Антена
+Name[bs]=antena
 Name[ca]=Antenna
 Name[ca@valencia]=Antenna
+Name[da]=Antenne
 Name[de]=Antenne
 Name[el]=Κεραία
 Name[es]=Antena
@@ -14,6 +16,7 @@ Name[hu]=Antenna
 Name[it]=Antenna
 Name[ja]=アンテナ
 Name[kk]=Антенна
+Name[lt]=Antena
 Name[nb]=Antenne
 Name[nds]=Antenn
 Name[nl]=Antenne
@@ -22,6 +25,7 @@ Name[pt]=Antena
 Name[pt_BR]=Antena
 Name[ru]=Антенна
 Name[sk]=Anténa
+Name[sl]=Antena
 Name[sv]=Antenn
 Name[uk]=Антенна
 Name[x-test]=xxAntennaxx

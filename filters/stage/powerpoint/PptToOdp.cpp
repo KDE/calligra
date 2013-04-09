@@ -21,8 +21,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "PowerPointImport.h"
 #include "PptToOdp.h"
+
+#include "PowerPointImport.h"
 #include "globalobjectcollectors.h"
 #include "pictures.h"
 #include "ODrawToOdf.h"

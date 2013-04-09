@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=VPN Gateway
 Name[bg]=Шлюз VPN
+Name[bs]=VPN Gateway
 Name[ca]=Passarel·la VPN
 Name[ca@valencia]=Passarel·la VPN
 Name[cs]=Brána VPN
+Name[da]=VPN-gateway
 Name[de]=VPN-Gateway
 Name[el]=Πύλη VPN
 Name[es]=Pasarela VPN
@@ -14,6 +16,7 @@ Name[hu]=VPN átjáró
 Name[it]=Gateway VPN
 Name[ja]=VPN ゲートウェイ
 Name[kk]=VPN шлюзі
+Name[lt]=VPN šliuzas
 Name[nb]=VPN-portner
 Name[nds]=VPN-Döörreekner
 Name[nl]=VPN-gateway
@@ -22,6 +25,7 @@ Name[pt]='Gateway' VPN
 Name[pt_BR]=Gateway de VPN
 Name[ru]=Шлюз VPN
 Name[sk]=VPN brána
+Name[sl]=Prehod VPN
 Name[sv]=Förmedlingsnod för virtuellt privat nätverk
 Name[uk]=Шлюз VPN
 Name[x-test]=xxVPN Gatewayxx

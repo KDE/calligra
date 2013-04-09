@@ -1,10 +1,9 @@
-if (NOT CREATIVEONLY)
-
-macro_optional_add_subdirectory( slidecompare )
 if(SHOULD_BUILD_CSTESTER)
-    macro_optional_add_subdirectory( cstester )
+    add_subdirectory( cstester )
 endif(SHOULD_BUILD_CSTESTER)
 
-add_subdirectory(scripts)
+if (SHOULD_BUILD_DEVTOOLS)
+    add_subdirectory(slidecompare)
+    add_subdirectory(scripts)
+endif (SHOULD_BUILD_DEVTOOLS)
 
-endif (NOT CREATIVEONLY)

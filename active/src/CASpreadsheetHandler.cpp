@@ -100,7 +100,7 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
     KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
+                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
 
     if (!part) {
         kDebug() << "Doc can't be openend" << error;
@@ -147,8 +147,9 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
 
 QStringList CASpreadsheetHandler::supportedMimetypes()
 {
-    QStringList supportedTypes;
-    supportedTypes << "application/vnd.oasis.opendocument.spreadsheet" << "application/vnd.ms-excel";
+    // keep in sync with spreadsheet related mimetypes in calligraactive.desktop
+    const QStringList supportedTypes =
+        QString::fromLatin1("application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;").split(';', QString::SkipEmptyParts);
     return supportedTypes;
 }
 

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=A ZIP Disk
 Name[bg]=ZIP-диск
+Name[bs]=neki ZIP Disk
 Name[ca]=Un disc ZIP
 Name[ca@valencia]=Un disc ZIP
+Name[da]=En ZIP-disk
 Name[de]=ZIP-Diskette
 Name[el]=Δίσκος ZIP
 Name[es]=Un disco ZIP
@@ -21,7 +23,9 @@ Name[pt]=Disco ZIP
 Name[pt_BR]=Disco ZIP
 Name[ru]=ZIP-диск
 Name[sk]=ZIP disk
+Name[sl]=Disk vrste ZIP
 Name[sv]=En ZIP-diskett
+Name[tr]=Zip Disk
 Name[uk]=ZIP-диск
 Name[x-test]=xxA ZIP Diskxx
 Name[zh_TW]=ZIP 磁碟

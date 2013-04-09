@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Radio Tower
 Name[bg]=Радиокула
+Name[bs]=Radio toranj
 Name[ca]=Torre de ràdio
 Name[ca@valencia]=Torre de ràdio
+Name[da]=Radiomast
 Name[de]=Funkturm
 Name[el]=Ραδιοφωνικός πύργος
 Name[es]=Torre de radio
@@ -12,6 +14,7 @@ Name[gl]=Torre de radio
 Name[hu]=Rádiótorony
 Name[it]=Ponte radio
 Name[kk]=Радиомұнара
+Name[lt]=Radijo bokštas
 Name[nb]=Radiotårn
 Name[nds]=Funktoorn
 Name[nl]=Radio Tower
@@ -20,6 +23,7 @@ Name[pt]=Torre Rádio
 Name[pt_BR]=Torre de rádio
 Name[ru]=Радиовышка
 Name[sk]=Rádiová veža
+Name[sl]=Radijski oddajnik
 Name[sv]=Radiotorn
 Name[uk]=Радіовежа
 Name[x-test]=xxRadio Towerxx

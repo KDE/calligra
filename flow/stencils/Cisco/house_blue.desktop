@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=House blue
+Name[bs]=Plava kuća
 Name[ca]=Casa blava
 Name[ca@valencia]=Casa blava
+Name[da]=Hus blåt
+Name[de]=Haus, blau
 Name[el]=House blue
 Name[es]=Casa azul
 Name[et]=Sinine hoone
@@ -9,6 +12,7 @@ Name[fr]=House blue
 Name[gl]=Casa azul
 Name[it]=Casa blu
 Name[kk]=Көк ұү
+Name[lt]=Namas (mėlynas)
 Name[nb]=Hus blått
 Name[nds]=Blaag Huus
 Name[nl]=Blauw huis
@@ -17,6 +21,7 @@ Name[pt]=Casa azul
 Name[pt_BR]=Casa azul
 Name[ru]=Синий дом
 Name[sk]=Dom modrý
+Name[sl]=Modra hiša
 Name[sv]=Hus blått
 Name[uk]=Будинок (синім)
 Name[x-test]=xxHouse bluexx

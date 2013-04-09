@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Wireless Bridge
 Name[bg]=Безжичен мост
+Name[bs]=Bežični most
 Name[ca]=Pont sense fils
 Name[ca@valencia]=Pont sense fils
+Name[da]=Trådløs bro
 Name[el]=Γέφυρα ασύρματης επικοινωνίας
 Name[es]=Puente inalámbrico
 Name[et]=Juhtmeta side sild
@@ -11,6 +13,7 @@ Name[gl]=Ponte sen fíos
 Name[hu]=Vezeték nélküli híd
 Name[it]=Bridge wireless
 Name[kk]=Сымсыз көпір
+Name[lt]=Belaidis tiltas
 Name[nb]=Trådløs bru
 Name[nds]=Funknettwark-Brüch
 Name[nl]=Wireless Bridge

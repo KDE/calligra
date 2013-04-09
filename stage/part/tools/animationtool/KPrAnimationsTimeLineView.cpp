@@ -76,7 +76,7 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     setLayout(layout);
 
     //Connect Signals
-    connect(m_view, SIGNAL(clicked(const QModelIndex&)), this, SIGNAL(clicked(const QModelIndex&)));
+    connect(m_view, SIGNAL(clicked(QModelIndex)), this, SIGNAL(clicked(QModelIndex)));
     connect(m_view, SIGNAL(timeValuesChanged(QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
     connect(m_view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(requestContextMenu(QPoint)));
 }
@@ -90,7 +90,7 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
     connect(m_shapeModel, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
     connect(m_shapeModel, SIGNAL(layoutChanged()), this, SLOT(resetData()));
     connect(m_shapeModel, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
-    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(update()));
+    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
     //It works only if one item could be selected each time
     connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(notifyTimeValuesChanged(QModelIndex)));
     connect(m_shapeModel, SIGNAL(timeScaleModified()), this, SLOT(adjustScale()));

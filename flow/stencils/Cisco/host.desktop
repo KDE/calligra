@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Host
 Name[bg]=Хост
+Name[bs]=Host
 Name[ca]=Màquina
 Name[ca@valencia]=Màquina
 Name[cs]=Hostitel
+Name[da]=Vært
 Name[de]=Rechner
 Name[el]=Υπολογιστής
 Name[es]=Host
@@ -15,6 +17,7 @@ Name[ia]=Hospite
 Name[it]=Host
 Name[ja]=ホスト
 Name[kk]=Хост
+Name[mr]=यजमान
 Name[nb]=Vert
 Name[nds]=Reekner
 Name[nl]=Host
@@ -23,6 +26,7 @@ Name[pt]=Máquina
 Name[pt_BR]=Máquina
 Name[ru]=Узел
 Name[sk]=Hostiteľ
+Name[sl]=Gostitelj
 Name[sv]=Värddator
 Name[ug]=ماشىنا
 Name[uk]=Вузол

@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=ChemEng
+Name[bs]=ChemEng
 Name[ca]=Enginyeria Química
 Name[ca@valencia]=Enginyeria Química
+Name[da]=Proceskemi
+Name[de]=Chemietechnik
 Name[el]=ChemEng
 Name[es]=Ingeniería química
 Name[et]=Keemia
@@ -9,6 +12,7 @@ Name[fr]=ChemEng
 Name[gl]=Electrotecnia
 Name[it]=ChemEng
 Name[kk]=Химия өндірісі
+Name[lt]=Cheminė inžinerija
 Name[nb]=Kjemitekn
 Name[nl]=Scheikunde
 Name[pl]=ChemEng

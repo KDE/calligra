@@ -27,7 +27,7 @@
 #ifndef KEXI_MOBILE
 #include <q3scrollview.h>
 #endif
-//Added by qt3to4:
+
 #include <QKeyEvent>
 #include <QEvent>
 

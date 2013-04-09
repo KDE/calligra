@@ -1,19 +1,31 @@
 [Desktop Entry]
 Type=Service
 Name=WordPerfect Documents
+Name[ca]=Documents del WordPerfect
+Name[da]=WordPerfect-dokumenter
+Name[de]=WordPerfect-Dokumente
 Name[el]=Έγγραφα WordPerfect
+Name[es]=Documentos WordPerfect
 Name[et]=WordPerfecti dokumendid
 Name[fi]=WordPerfect-asiakirjat
 Name[fr]=Documents WordPerfect
+Name[gl]=Documentos de WordPerfect
 Name[hu]=WordPerfect dokumentumok
 Name[it]=Documenti WordPerfect
+Name[kk]=WordPerfect құжаттары
+Name[lt]=WordPerfect dokumentai
+Name[nb]=WordPerfect-dokumenter
 Name[nl]=WordPerfect-documenten
+Name[pl]=Dokumenty WordPerfect
 Name[pt]=Documentos do WordPerfect
 Name[pt_BR]=Documentos do WordPerfect
 Name[sk]=Dokumenty WordPerfect
+Name[sl]=Dokumenti WordPerfect
 Name[sv]=WordPerfect-dokument
+Name[tr]=WordPerfect Belgeleri
 Name[uk]=Документи WordPerfect
 Name[x-test]=xxWordPerfect Documentsxx
+Name[zh_CN]=WordPerfect 文本文档
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.wordperfect;

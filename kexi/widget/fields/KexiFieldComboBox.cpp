@@ -75,8 +75,8 @@ KexiFieldComboBox::KexiFieldComboBox(QWidget *parent)
     setMaxVisibleItems(16);
     connect(this, SIGNAL(activated(int)),
             this, SLOT(slotActivated(int)));
-    connect(this, SIGNAL(returnPressed(const QString &)),
-            this, SLOT(slotReturnPressed(const QString &)));
+    connect(this, SIGNAL(returnPressed(QString)),
+            this, SLOT(slotReturnPressed(QString)));
 
 }
 

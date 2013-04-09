@@ -905,7 +905,7 @@ void KexiMainWindow::setupActions()
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     /*! @todo 2.0 - toolbars configuration will be handled in a special way
-      action = KStandardAction::configureToolbars( this, SLOT( slotConfigureToolbars() ),
+      action = KStandardAction::configureToolbars( this, SLOT(slotConfigureToolbars()),
         actionCollection() );
       action->setWhatsThis(i18n("Lets you configure toolbars."));
 
@@ -1873,18 +1873,18 @@ void KexiMainWindow::setupProjectNavigator()
             this, SLOT(slotProjectNavigatorVisibilityChanged(bool)));
 
         //Nav2 Signals
-        connect(d->navigator, SIGNAL(openItem(KexiPart::Item*, Kexi::ViewMode)),
-                this, SLOT(openObject(KexiPart::Item*, Kexi::ViewMode)));
-        connect(d->navigator, SIGNAL(openOrActivateItem(KexiPart::Item*, Kexi::ViewMode)),
-                this, SLOT(openObjectFromNavigator(KexiPart::Item*, Kexi::ViewMode)));
+        connect(d->navigator, SIGNAL(openItem(KexiPart::Item*,Kexi::ViewMode)),
+                this, SLOT(openObject(KexiPart::Item*,Kexi::ViewMode)));
+        connect(d->navigator, SIGNAL(openOrActivateItem(KexiPart::Item*,Kexi::ViewMode)),
+                this, SLOT(openObjectFromNavigator(KexiPart::Item*,Kexi::ViewMode)));
         connect(d->navigator, SIGNAL(newItem(KexiPart::Info*)),
                 this, SLOT(newObject(KexiPart::Info*)));
         connect(d->navigator, SIGNAL(removeItem(KexiPart::Item*)),
                 this, SLOT(removeObject(KexiPart::Item*)));
-        connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*, const QString&, bool&)),
-                this, SLOT(renameObject(KexiPart::Item*, const QString&, bool&)));
-        connect(d->navigator->model(), SIGNAL(changeItemCaption(KexiPart::Item*, const QString&, bool&)),
-                this, SLOT(setObjectCaption(KexiPart::Item*, const QString&, bool&)));
+        connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*,QString,bool&)),
+                this, SLOT(renameObject(KexiPart::Item*,QString,bool&)));
+        connect(d->navigator->model(), SIGNAL(changeItemCaption(KexiPart::Item*,QString,bool&)),
+                this, SLOT(setObjectCaption(KexiPart::Item*,QString,bool&)));
         connect(d->navigator, SIGNAL(executeItem(KexiPart::Item*)),
                 this, SLOT(executeItem(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
@@ -1900,8 +1900,8 @@ void KexiMainWindow::setupProjectNavigator()
         connect(d->navigator, SIGNAL(selectionChanged(KexiPart::Item*)),
                 this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
         if (d->prj) {//connect to the project
-            connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-                    d->navigator->model(), SLOT(slotRemoveItem(const KexiPart::Item&)));
+            connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)),
+                    d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
         }
 
         
@@ -2004,8 +2004,12 @@ void KexiMainWindow::updateAppCaption()
     d->appCaptionPrefix.clear();
     if (d->prj && d->prj->data()) {//add project name
         d->appCaptionPrefix = d->prj->data()->caption();
-        if (d->appCaptionPrefix.isEmpty())
+        if (d->appCaptionPrefix.isEmpty()) {
             d->appCaptionPrefix = d->prj->data()->databaseName();
+        }
+        if (d->prj->dbConnection()->isReadOnly()) {
+            d->appCaptionPrefix = i18nc("<project-name> (read only)", "%1 (read only)", d->appCaptionPrefix);
+        }
     }
 
     setWindowTitle(KDialog::makeStandardCaption(d->appCaptionPrefix, this));
@@ -2284,10 +2288,10 @@ void
 KexiMainWindow::createKexiProject(const KexiProjectData& new_data)
 {
     d->prj = new KexiProject(new_data, this);
-    connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const QString&)));
+    connect(d->prj, SIGNAL(itemRenamed(KexiPart::Item,QString)), this, SLOT(slotObjectRenamed(KexiPart::Item,QString)));
 
     if (d->navigator){
-        connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->navigator->model(), SLOT(slotRemoveItem(const KexiPart::Item&)));
+        connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)), d->navigator->model(), SLOT(slotRemoveItem(KexiPart::Item)));
     }
     
 }
@@ -2388,6 +2392,11 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
     }
 
     KexiProjectData* projectData = 0;
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
+    bool readOnly = false;
+    if (args) {
+        readOnly = args->isSet("readonly");
+    }
     bool deleteAfterOpen = false;
     if (cdata) {
         //server-based project
@@ -2402,37 +2411,45 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
             deleteAfterOpen = true;
         }
     } else {
-//  QString selFile = dlg.selectedExistingFile();
         if (aFileName.isEmpty()) {
             kWarning() << "KexiMainWindow::openProject(): aFileName.isEmpty()";
             return false;
         }
         //file-based project
         kDebug() << "Project File: " << aFileName;
-        KexiDB::ConnectionData cdata;
-        cdata.setFileName(aFileName);
-//   cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName, fileName, this );
+        KexiDB::ConnectionData fileConnData;
+        fileConnData.setFileName(aFileName);
         QString detectedDriverName;
+        int detectOptions = 0;
+        if (readOnly) {
+            detectOptions |= KexiStartupHandler::OpenReadOnly;
+        }
         KexiStartupData::Import importActionData;
+        bool forceReadOnly;
         const tristate res = KexiStartupHandler::detectActionForFile(
-                                 &importActionData, &detectedDriverName, cdata.driverName, aFileName, this);
+                                 &importActionData, &detectedDriverName, fileConnData.driverName,
+                                 aFileName, this, detectOptions, &forceReadOnly);
+        if (forceReadOnly) {
+            readOnly = true;
+        }
         if (true != res)
             return res;
 
         if (importActionData) { //importing requested
             return showProjectMigrationWizard(importActionData.mimeType, importActionData.fileName);
         }
-        cdata.driverName = detectedDriverName;
+        fileConnData.driverName = detectedDriverName;
 
-        if (cdata.driverName.isEmpty())
+        if (fileConnData.driverName.isEmpty())
             return false;
 
         //opening requested
-        projectData = new KexiProjectData(cdata);
+        projectData = new KexiProjectData(fileConnData);
         deleteAfterOpen = true;
     }
     if (!projectData)
         return false;
+    projectData->setReadOnly(readOnly);
     projectData->autoopenObjects = autoopenObjects;
     const tristate res = openProject(*projectData);
     if (deleteAfterOpen) //projectData object has been copied

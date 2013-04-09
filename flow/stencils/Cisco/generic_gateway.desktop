@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Generic gateway
 Name[bg]=Обикновен шлюз
+Name[bs]=Opći gateway
 Name[ca]=Passarel·la genèrica
 Name[ca@valencia]=Passarel·la genèrica
+Name[da]=Almindelig gateway
 Name[de]=Generisches Gateway
 Name[el]=Πύλη γενικής χρήσης
 Name[es]=Puerta de enlace genérica
@@ -20,6 +22,7 @@ Name[pt]='Gateway' genérica
 Name[pt_BR]=Gateway genérico
 Name[ru]=Обычный шлюз
 Name[sk]=Všeobecná brána
+Name[sl]=Generičen prehod
 Name[sv]=Generell förmedlingsnod
 Name[uk]=Узагальнений шлюз
 Name[x-test]=xxGeneric gatewayxx

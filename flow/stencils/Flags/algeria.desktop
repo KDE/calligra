@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Algeria
 Name[bg]=Алжир
+Name[bs]=Alžir
 Name[ca]=Algèria
 Name[ca@valencia]=Algèria
 Name[cs]=Alžírsko
@@ -14,9 +15,11 @@ Name[fr]=Algérie
 Name[ga]=An Ailgéir
 Name[gl]=Alxeria
 Name[hu]=Algéria
+Name[ia]=Algeria
 Name[it]=Algeria
 Name[ja]=アルジェリア
 Name[kk]=Алжир
+Name[mr]=अल्जेरिया
 Name[nb]=Algerie
 Name[nds]=Algerien
 Name[nl]=Algerije
@@ -28,6 +31,7 @@ Name[se]=Algeria
 Name[sk]=Alžírsko
 Name[sl]=Alžirija
 Name[sv]=Algeriet
+Name[tr]=Cezayir
 Name[ug]=ئالجىرىيە
 Name[uk]=Алжир
 Name[x-test]=xxAlgeriaxx

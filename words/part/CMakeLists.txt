@@ -134,32 +134,10 @@ target_link_libraries(wordspart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} wordspr
 install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
-########### Words exe ###############
-
-set(words_KDEINIT_SRCS main.cpp )
-
-kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrawords.png")
-
-kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
-
-if (Q_WS_MAC)
-   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
-   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
-endif (Q_WS_MAC)
-
-target_link_libraries(kdeinit_calligrawords  ${KDE4_KDEUI_LIBS} komain )
-
-install(TARGETS kdeinit_calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-target_link_libraries( calligrawords kdeinit_calligrawords )
-install(TARGETS calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 ########### install files ###############
 
 install( FILES words.rc words_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/words)
 install( FILES wordspart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS words.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
@@ -188,6 +166,8 @@ DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 
 ###What follows is calligraauthor section###
 
+if (SHOULD_BUILD_AUTHOR)
+
 ########### AuthorPart Library ###############
 
 set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
@@ -207,7 +187,7 @@ set(author_KDEINIT_SRCS author/main.cpp )
 kde4_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.author")
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
 endif (Q_WS_MAC)
@@ -226,3 +206,5 @@ install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_IN
 install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
+
+endif (SHOULD_BUILD_AUTHOR)

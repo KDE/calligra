@@ -1,16 +1,25 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Drawings
+Name[ca]=Dibuixos OpenDocument
+Name[da]=OpenDocument-tegninger
+Name[de]=OpenDocument-Zeichnungen
 Name[el]=OpenDocument Σχέδια
+Name[es]=Dibujos OpenDocument
 Name[et]=OpenDocument-joonised
 Name[fi]=OpenDocument-piirrokset
 Name[fr]=Graphiques OpenDocument
+Name[gl]=Debuxos OpenDocuments
 Name[hu]=OpenDocument rajzok
 Name[it]=Grafica OpenDocument
+Name[kk]=OpenDocument суреттері
+Name[nb]=OpenDocument-tegninger
 Name[nl]=OpenDocument tekeningen
+Name[pl]=Rysunki OpenDocument
 Name[pt]=Desenhos em OpenDocument
 Name[pt_BR]=Desenhos OpenDocument
 Name[sk]=Kresby OpenDocument
+Name[sl]=Risbe OpenDocument
 Name[sv]=OpenDocument-teckningar
 Name[uk]=Малюнки OpenDocument (ODD)
 Name[x-test]=xxOpenDocument Drawingsxx
