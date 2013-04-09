@@ -22,6 +22,9 @@
 
 #include <KoToolBase.h>
 
+//Size of the zone where we can select margin or page border in document px
+#define SELECT_SPACE 10
+
 class QTimer;
 class KWCanvas;
 class KWDocument;
@@ -62,17 +65,17 @@ protected:
 
 private:
     enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
-    Selection selection;
+    Selection m_selection;
     KWCanvas *m_canvas;
     KWDocument *m_document;
     QPoint *m_mousePosTmp;
     //Need to control the page resizing when cursor is out of canvas
     QTimer *m_resizeTimer;
     //Return or set the position x or y of the margin
-    int marginInPx(Selection p_selection);
-    void setMarginInPx(Selection p_selection,int p_postionX,int p_positionY);
-    int xMouseInPage(int p_positionX);
-    int yMouseInPage(int p_positionY);
+    int marginInPx(Selection selection);
+    void setMarginInPx(Selection selection,int postionX,int positionY);
+    int xMouseInPage(int positionX);
+    int yMouseInPage(int positionY);
 
     void createHeader();
     void createFooter();
