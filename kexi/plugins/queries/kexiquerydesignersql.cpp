@@ -382,7 +382,7 @@ KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaD
         (KexiDB::SchemaData&)*query = sdata; //copy main attributes
         ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(*query, true /*newObject*/);
         if (ok) {
-            ok = KexiMainWindowIface::global()->project()->removeUserDataBlock(sdata.id()); // for sanity
+            ok = KexiMainWindowIface::global()->project()->removeUserDataBlock(query->id()); // for sanity
         }
         if (ok) {
             window()->setId(query->id());
