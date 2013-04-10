@@ -22,13 +22,23 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <spacer name="horizontalSpacer">
+    <widget class="QToolButton" name="removeAnnotation">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Remove Annotation</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>259</width>
+       <width>138</width>
        <height>20</height>
       </size>
      </property>

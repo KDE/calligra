@@ -9,13 +9,26 @@ SimpleAnnotationWidget::SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent
     m_tool(tool)
 {
     widget.setupUi(this);
-    widget.insertAnnotation->setDefaultAction(tool->action("insert_annotations"));
+    widget.insertAnnotation->setDefaultAction(tool->action("insert_annotation"));
+    widget.removeAnnotation->setDefaultAction(tool->action("remove_annotation"));
+
+    //FIXME:: why doesn't work :( ?
+    widget.removeAnnotation->setDisabled(true);
+
     connect(widget.insertAnnotation, SIGNAL(clicked(bool)), this, SLOT(addAnnotation()));
+    connect(widget.removeAnnotation, SIGNAL(clicked()), this, SLOT(removeAnnotation()));
 }
 
 void SimpleAnnotationWidget::addAnnotation()
 {
     if (m_tool) {
         m_tool->insertAnnotation();
+    }
+}
+
+void SimpleAnnotationWidget::removeAnnotation()
+{
+    if (m_tool) {
+        m_tool->removeAnnotation();
     }
 }

@@ -60,6 +60,7 @@ public:
 
 public slots:
     void insertAnnotation();
+    void removeAnnotation();
 
 
 private:
@@ -68,8 +69,9 @@ private:
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;
     TextShape *m_textShape;
-    SimpleAnnotationWidget *m_saw;
     KAction *m_insertAnnotationAction;
+    KAction *m_removeAnnotationAction;
+    KoShape *m_currentShape;
 };
 
 #endif // REVIEWTOOL_H

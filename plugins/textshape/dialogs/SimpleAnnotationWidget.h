@@ -23,6 +23,7 @@ signals:
 
 private slots:
     void addAnnotation();
+    void removeAnnotation();
     
 private:
     Ui::SimpleAnnotationWidget widget;

@@ -52,7 +52,13 @@ ReviewTool::~ReviewTool()
 
 void ReviewTool::createActions()
 {
+    m_insertAnnotationAction = new KAction(i18n("Insert Annotation"), this);
+    m_insertAnnotationAction->setToolTip(i18n("Insert Annotation"));
+    addAction("insert_annotation", m_insertAnnotationAction);
 
+    m_removeAnnotationAction = new KAction(i18n("Remove Annotation"), this);
+    m_removeAnnotationAction->setToolTip(i18n("Remove Annotation"));
+    addAction("remove_annotation", m_removeAnnotationAction);
 }
 
 void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
@@ -73,6 +79,14 @@ void ReviewTool::mouseMoveEvent(KoPointerEvent* event)
 }
 void ReviewTool::mousePressEvent(KoPointerEvent* event)
 {
+    KoShape *annotation = canvas()->shapeManager()->shapeAt(event->point);
+    if (annotation) {
+        if (annotation->shapeId() == AnnotationShape_SHAPEID) {
+            m_currentShape = annotation;
+            return;
+        }
+    }
+
     TextTool::mousePressEvent(event);
 }
 void ReviewTool::keyPressEvent(QKeyEvent* event)
@@ -88,16 +102,16 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
 {
     QList<QWidget *> widgets;
     SimpleSpellCheckingWidget* sscw = new SimpleSpellCheckingWidget(this, 0);
-    m_saw = new SimpleAnnotationWidget(this, 0);
+    SimpleAnnotationWidget *saw = new SimpleAnnotationWidget(this, 0);
 
-    connect(m_saw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(saw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     sscw->setWindowTitle("SpellCheck");
     widgets.append(sscw);
 
 
-    m_saw->setWindowTitle("Annotation");
-    widgets.append(m_saw);
+    saw->setWindowTitle("Annotation");
+    widgets.append(saw);
 
     return widgets;
 
@@ -109,4 +123,12 @@ void ReviewTool::insertAnnotation()
     m_canvas->shapeController()->documentBase()->addShape(shape);
     KoAnnotation *annotation = textEditor()->addAnnotation();
     annotation->setAnnotationShape(shape);
+}
+
+void ReviewTool::removeAnnotation()
+{
+    if (m_currentShape) {
+        m_canvas->shapeManager()->remove(m_currentShape);
+        m_currentShape = 0;
+    }
 }
