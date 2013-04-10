@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -364,51 +364,42 @@ KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaD
                                                            bool &cancel)
 {
     Q_UNUSED(options);
-    Q_UNUSED(cancel);
 
     //here: we won't store query layout: it will be recreated 'by hand' in GUI Query Editor
-    bool queryOK = slotCheckQuery();
+    const bool queryOK = slotCheckQuery();
     bool ok = true;
     KexiDB::SchemaData* query = 0;
     if (queryOK) {
-        //query is ok
         if (d->parsedQuery) {
             query = d->parsedQuery; //will be returned, so: don't keep it
             d->parsedQuery = 0;
-        } else {//empty query
+        }
+        else { //empty query
             query = new KexiDB::SchemaData(); //just empty
         }
-
-        (KexiDB::SchemaData&)*query = sdata; //copy main attributes
-        ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(*query, true /*newObject*/);
-        if (ok) {
-            ok = KexiMainWindowIface::global()->project()->removeUserDataBlock(query->id()); // for sanity
+    }
+    else { //the query is not ok
+        if (KMessageBox::Yes != KMessageBox::questionYesNo(this, i18n("Do you want to save invalid query?"),
+                                         0, KStandardGuiItem::yes(), KStandardGuiItem::no(),
+                                         "askBeforeSavingInvalidQueries"/*config entry*/))
+        {
+            cancel = true;
+            return 0;
         }
-        if (ok) {
-            window()->setId(query->id());
-            ok = storeDataBlock(d->editor->text(), "sql");
-        }
-    } else {
-        //query is not ok
-//#if 0
-        //TODO: allow saving invalid queries
-        //TODO: just ask this question:
         query = new KexiDB::SchemaData(); //just empty
+    }
 
-        ok = (KMessageBox::questionYesNo(this, i18n("Do you want to save invalid query?"),
-                                         0, KStandardGuiItem::yes(), KStandardGuiItem::no(), "askBeforeSavingInvalidQueries"/*config entry*/) == KMessageBox::Yes);
-        if (ok) {
-            (KexiDB::SchemaData&)*query = sdata; //copy main attributes
-            ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(
-                     *query, true /*newObject*/);
-        }
-        if (ok) {
-            window()->setId(query->id());
-            ok = storeDataBlock(d->editor->text(), "sql");
-        }
-//#else
-        //ok = false;
-//#endif
+    (KexiDB::SchemaData&)*query = sdata; //copy main attributes
+
+    ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(
+             *query, true /*newObject*/);
+
+    if (ok) {
+        ok = KexiMainWindowIface::global()->project()->removeUserDataBlock(query->id()); // for sanity
+    }
+    if (ok) {
+        window()->setId(query->id());
+        ok = storeDataBlock(d->editor->text(), "sql");
     }
     if (!ok) {
         delete query;
