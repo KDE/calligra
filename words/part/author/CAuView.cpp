@@ -46,7 +46,7 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
         KWStatisticsWidget *stats = new KWStatisticsWidget(this,true);
         stats->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
         stats->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
-        statusBar()->addWidget(stats);
+        statusBar()->insertWidget(0,stats);
 
 }
 
