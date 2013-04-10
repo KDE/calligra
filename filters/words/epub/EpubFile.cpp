@@ -176,7 +176,15 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.addTextNode("123456789X");  // FIXME: Where to get this?
     writer.endElement(); // dc:identifier
 
-    // FIXME: dc:creator and many more (optional)
+    writer.startElement("dc:creator");
+    writer.addTextNode("");  // FIXME: Here should come the author name
+    writer.endElement(); // dc:creator
+
+    writer.startElement("dc:subject");
+    writer.addTextNode("");  // FIXME: Here should come suject info (Fiction &amp; Fantasy &amp; ...)
+    writer.endElement(); // dc:subject
+
+    // FIXME: many more (optional)
 
     writer.endElement(); // metadata
 
