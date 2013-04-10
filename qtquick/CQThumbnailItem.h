@@ -31,7 +31,7 @@ public:
     explicit CQThumbnailItem(QDeclarativeItem* parent = 0);
     ~CQThumbnailItem();
 
-    virtual void paint(QPainter* , const QStyleOptionGraphicsItem* , QWidget* );
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* );
 
     QPixmap content() const;
 
