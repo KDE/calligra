@@ -47,6 +47,7 @@ public:
 public Q_SLOTS:
     void setCanvas(QDeclarativeItem* canvas);
     void setThumbnailSize(const QSize& size);
+    void canvasSourceChanged();
 
 Q_SIGNALS:
     void canvasChanged();
