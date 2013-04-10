@@ -44,13 +44,14 @@
 class CQPresentationCanvas::Private
 {
 public:
-    Private() : canvasBase(0), view(0), currentSlide(0) { }
+    Private() : canvasBase(0), view(0), document(0), currentSlide(0) { }
 
     KoCanvasBase* canvasBase;
     CQPresentationView* view;
     KPrDocument* document;
 
     int currentSlide;
+    QSizeF pageSize;
 };
 
 CQPresentationCanvas::CQPresentationCanvas(QDeclarativeItem* parent)
@@ -69,19 +70,25 @@ int CQPresentationCanvas::currentSlide() const
     return d->currentSlide;
 }
 
+KPrDocument* CQPresentationCanvas::document() const
+{
+    return d->document;
+}
+
+QSizeF CQPresentationCanvas::pageSize() const
+{
+    return d->pageSize;
+}
+
 void CQPresentationCanvas::setCurrentSlide(int slide)
 {
     slide = qBound(0, slide, d->document->pageCount() - 1);
     if(slide != d->currentSlide) {
         d->currentSlide = slide;
         d->view->doUpdateActivePage(d->document->pageByIndex(slide, false));
+        d->pageSize = d->view->activePage()->size();
         emit currentSlideChanged();
     }
-}
-
-KPrDocument* CQPresentationCanvas::document() const
-{
-    return d->document;
 }
 
 void CQPresentationCanvas::openFile(const QString& uri)
@@ -116,6 +123,8 @@ void CQPresentationCanvas::openFile(const QString& uri)
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
     d->view->doUpdateActivePage(d->document->pageByIndex(0, false));
+    d->pageSize = d->view->activePage()->size();
+    emit currentSlideChanged();
 }
 
 void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
