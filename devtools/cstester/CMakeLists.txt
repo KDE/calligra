@@ -1,7 +1,6 @@
-macro_optional_add_subdirectory(visualimagecompare)
-macro_optional_add_subdirectory(cstrunner)
+add_subdirectory(visualimagecompare)
+add_subdirectory(cstrunner)
 
-macro_bool_to_01(BUILD_karbon BUILD_KARBON)
 configure_file(config_cstester.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_cstester.h)
 
 include_directories(
@@ -18,18 +17,18 @@ set(cstester_SRCS
     CSThumbProviderWords.cpp
     cstester.cpp )
 
-if(BUILD_KARBON)
+if(SHOULD_BUILD_KARBON)
     set(cstester_SRCS ${cstester_SRCS}
         CSThumbProviderKarbon.cpp)
-endif(BUILD_KARBON)
+endif(SHOULD_BUILD_KARBON)
 
 kde4_add_executable(cstester ${cstester_SRCS})
 
-if(BUILD_KARBON)
+if(SHOULD_BUILD_KARBON)
     target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate karbonui)
-else(BUILD_KARBON)
+else(SHOULD_BUILD_KARBON)
     target_link_libraries(cstester komain kopageapp calligrasheetscommon wordsprivate)
-endif(BUILD_KARBON)
+endif(SHOULD_BUILD_KARBON)
 
 install(TARGETS cstester  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

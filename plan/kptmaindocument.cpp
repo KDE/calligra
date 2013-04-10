@@ -61,7 +61,7 @@
 #include <kstandarddirs.h>
 #include <kparts/partmanager.h>
 #include <kmimetype.h>
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 #include <KoGlobal.h>
 #include <kio/global.h>
 #include <kio/jobclasses.h>
@@ -1033,7 +1033,7 @@ void MainDocument::removeViewListItem( View */*view*/, const ViewListItem *item 
 void MainDocument::setModified( bool mod )
 {
     kDebug(planDbg())<<mod<<m_viewlistModified;
-    KoDocument::setModified( mod || m_viewlistModified ); // Must allways call to activate autosave
+    KoDocument::setModified( mod || m_viewlistModified ); // Must always call to activate autosave
 }
 
 void MainDocument::viewlistModified()
@@ -1041,7 +1041,7 @@ void MainDocument::viewlistModified()
     if ( ! m_viewlistModified ) {
         m_viewlistModified = true;
     }
-    setModified( true );  // Must allways call to activate autosave
+    setModified( true );  // Must always call to activate autosave
 }
 
 void MainDocument::createNewProject()

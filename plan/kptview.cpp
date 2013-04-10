@@ -56,7 +56,7 @@
 #include <ktoolbar.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
-#include <KConfigDialogManager>
+#include <kconfigdialogmanager.h>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
@@ -65,10 +65,10 @@
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
-#include <KConfigDialog>
-#include <KToolInvocation>
-#include <KRun>
-#include <KStandardDirs>
+#include <kconfigdialog.h>
+#include <ktoolinvocation.h>
+#include <krun.h>
+#include <kstandarddirs.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>

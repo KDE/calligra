@@ -23,9 +23,9 @@
 #include <db/connection.h>
 #include <kexi_global.h>
 
-#include <KIconLoader>
-#include <KMessageBox>
-#include <KDebug>
+#include <kiconloader.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <QGridLayout>
 #include <QLabel>

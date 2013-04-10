@@ -23,7 +23,7 @@
 #include <KoToolRegistry.h>
 
 #include <KoIcon.h>
-#include <KLocale>
+#include <klocale.h>
 
 KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
         : KoToolFactoryBase("KarbonFilterEffectsTool")

@@ -43,9 +43,9 @@
 
 //KDE Headers
 #include <KoIcon.h>
-#include <KLocale>
-#include <KAction>
-#include <KIconLoader>
+#include <klocale.h>
+#include <kaction.h>
+#include <kiconloader.h>
 
 //Calligra Headers
 #include <KoToolManager.h>
@@ -306,8 +306,8 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(syncWithCanvasSelectedShape()));
     connect(m_animationsModel, SIGNAL(onClickEventChanged()), this, SLOT(testEditPanelRoot()));
     connect(m_animationsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(verifyMotionPathChanged(QModelIndex,QModelIndex)));
-    connect(m_animationsModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SIGNAL(motionPathAddedRemoved()));
-    connect(m_animationsModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SIGNAL(motionPathAddedRemoved()));
+    connect(m_animationsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SIGNAL(motionPathAddedRemoved()));
+    connect(m_animationsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SIGNAL(motionPathAddedRemoved()));
     getSelectedShape();
     checkAnimationSelected();
 }

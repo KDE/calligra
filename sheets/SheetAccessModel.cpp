@@ -67,8 +67,8 @@ SheetAccessModel::SheetAccessModel(Map *map)
             this, SLOT(slotSheetAdded(Sheet*)));
     connect(map, SIGNAL(sheetRemoved(Sheet*)),
             this, SLOT(slotSheetRemoved(Sheet*)));
-    connect(map, SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            this, SLOT(handleDamages(const QList<Damage*>&)));
+    connect(map, SIGNAL(damagesFlushed(QList<Damage*>)),
+            this, SLOT(handleDamages(QList<Damage*>)));
 
     setRowCount(1);
     setColumnCount(0);

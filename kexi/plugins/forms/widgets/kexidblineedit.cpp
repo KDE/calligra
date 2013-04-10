@@ -21,9 +21,9 @@
 #include "kexidblineedit.h"
 #include "kexidbautofield.h"
 
-#include <KDebug>
-#include <KNumInput>
-#include <KDateTable>
+#include <kdebug.h>
+#include <knuminput.h>
+#include <kdatetable.h>
 
 #include <QMenu>
 #include <QPainter>

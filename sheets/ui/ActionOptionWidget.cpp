@@ -27,8 +27,8 @@
 #include <QStyle>
 
 // KDE
-#include <KAction>
-#include <KLocale>
+#include <kaction.h>
+#include <klocale.h>
 
 // Calligra
 

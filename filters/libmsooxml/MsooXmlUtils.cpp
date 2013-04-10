@@ -63,9 +63,9 @@
 #include <QRegExp>
 #include <QtXml>
 
-#include <KGlobal>
-#include <KDebug>
-#include <KZip>
+#include <kglobal.h>
+#include <kdebug.h>
+#include <kzip.h>
 
 #include <memory>
 
@@ -1197,7 +1197,7 @@ QString Utils::defineMarkerStyle(KoGenStyles& mainStyles, const QString& type)
 
     const QString name(markerStyles[id]);
 
-    if (mainStyles.style(name)) {
+    if (mainStyles.style(name, "")) {
         return name;
     }
 

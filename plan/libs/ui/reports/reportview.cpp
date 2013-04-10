@@ -56,19 +56,19 @@
 #include "KoDocument.h"
 #include "KoIcon.h"
 
-#include <KTabWidget>
-#include <KAction>
-#include <KActionCollection>
-#include <KStandardAction>
-#include <KStandardGuiItem>
-#include <KGuiItem>
-#include <KMessageBox>
+#include <ktabwidget.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <kstandardaction.h>
+#include <kstandardguiitem.h>
+#include <kguiitem.h>
+#include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
 #include <kdebug.h>
-#include <KToolBar>
-#include <KFileDialog>
-#include <KPushButton>
+#include <ktoolbar.h>
+#include <kfiledialog.h>
+#include <kpushbutton.h>
 
 #include <QPainter>
 #include <QPrintDialog>

@@ -29,14 +29,14 @@
 #include <kundo2stack.h>
 
 #include <kdebug.h>
-#include <KLocale>
-#include <KAction>
-#include <KMessageBox>
-#include <KActionCollection>
-#include <KMenu>
-#include <KFontDialog>
-#include <KTextEdit>
-#include <KLineEdit>
+#include <klocale.h>
+#include <kaction.h>
+#include <kmessagebox.h>
+#include <kactioncollection.h>
+#include <kmenu.h>
+#include <kfontdialog.h>
+#include <ktextedit.h>
+#include <klineedit.h>
 
 #include <KoIcon.h>
 

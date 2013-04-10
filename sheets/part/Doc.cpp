@@ -42,7 +42,6 @@
 #include <QApplication>
 #include <QFont>
 #include <QTimer>
-//Added by qt3to4:
 #include <QList>
 #include <QPainter>
 #include <QGraphicsItem>
@@ -165,8 +164,8 @@ Doc::Doc(KoPart *part)
         chartShape->setOptionPanels(panels);
     }
 
-    connect(d->map, SIGNAL(commandAdded(KUndo2Command *)),
-            this, SLOT(addCommand(KUndo2Command *)));
+    connect(d->map, SIGNAL(commandAdded(KUndo2Command*)),
+            this, SLOT(addCommand(KUndo2Command*)));
 
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();

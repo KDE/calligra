@@ -27,7 +27,7 @@
 #include <QEvent>
 #include <klocale.h>
 
-#include <KFileDialog>
+#include <kfiledialog.h>
 
 #include <KoPACanvas.h>
 #include <KPrDocument.h>
@@ -63,8 +63,8 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
         QWidget * optionWidget = factory->createOptionWidget();
         layout->addWidget( optionWidget );
         m_eventActionWidgets.insert( factory->id(), optionWidget );
-        connect( optionWidget, SIGNAL( addCommand( KUndo2Command * ) ),
-                 this, SLOT( addCommand( KUndo2Command * ) ) );
+        connect( optionWidget, SIGNAL(addCommand(KUndo2Command*)),
+                 this, SLOT(addCommand(KUndo2Command*)) );
     }
     // The following widget activates a special feature in the
     // ToolOptionsDocker that makes the components of the widget align

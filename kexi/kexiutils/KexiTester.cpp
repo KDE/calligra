@@ -19,8 +19,8 @@
 
 #include "KexiTester.h"
 
-#include <KDebug>
-#include <KGlobal>
+#include <kdebug.h>
+#include <kglobal.h>
 
 #include <QMap>
 #include <QWidget>

@@ -21,7 +21,7 @@
 
 #include "kptglobal.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QModelIndex>
 #include <QPersistentModelIndex>

@@ -20,7 +20,7 @@
 
 #include <QDebug>
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include <KoToolProxy.h>
 #include <kis_canvas2.h>
@@ -130,8 +130,14 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
     }
 }
 
+bool KisToolInvocationAction::supportsHiResInputEvents() const
+{
+    return true;
+}
+
 QPointF KisToolInvocationAction::Private::tabletToPixel(const QPointF &globalPos)
 {
     const QPointF pos = globalPos - q->inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
     return q->inputManager()->widgetToPixel(pos);
 }
+

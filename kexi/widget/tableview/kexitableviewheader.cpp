@@ -26,7 +26,7 @@
 #include <QMouseEvent>
 #include <QHelpEvent>
 
-#include <KIconLoader>
+#include <kiconloader.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/styleproxy.h>
 

@@ -27,8 +27,8 @@
 
 #include <KoIcon.h>
 
-#include <KDateTime>
-#include <KDebug>
+#include <kdatetime.h>
+#include <kdebug.h>
 
 KexiRecentProjectsModel::KexiRecentProjectsModel(
     const KexiRecentProjects& projects, QObject *parent)

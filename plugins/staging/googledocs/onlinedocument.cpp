@@ -22,11 +22,11 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <KMimeType>
-#include <KMimeTypeTrader>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
 #include <kpluginfactory.h>
-#include <KCmdLineArgs>
-#include <KAboutData>
+#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 
 #include <KoView.h>
 #include <KoDocument.h>
@@ -82,7 +82,14 @@ void OnlineDocument::slotOnlineDocument()
             m_login = 0;
         }
     } else {
-        m_login->googleService()->showDocumentListWindow(true);
+        GoogleDocumentService *service = m_login->googleService();
+        if (service) {
+            service->showDocumentListWindow(true);
+        } else {
+            m_login->show();
+            m_login->activateWindow();
+            m_login->raise();
+        }
     }
 }
 

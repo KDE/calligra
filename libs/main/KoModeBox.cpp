@@ -28,11 +28,11 @@
 #include <KoShapeLayer.h>
 #include <KoInteractionTool.h>
 
-#include <KDebug>
-#include <KGlobalSettings>
-#include <KConfigGroup>
-#include <KLocale>
-#include <KSelectAction>
+#include <kdebug.h>
+#include <kglobalsettings.h>
+#include <kconfiggroup.h>
+#include <klocale.h>
+#include <kselectaction.h>
 
 #include <QMap>
 #include <QList>
@@ -49,6 +49,7 @@
 #include <QPainter>
 #include <QTextLayout>
 #include <QMenu>
+#include <QScrollArea>
 
 class KoModeBox::Private
 {
@@ -79,21 +80,28 @@ QString KoModeBox::applicationName;
 
 static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 {
-    if (b1.section == b2.section) {
+    int b1Level;
+    int b2Level;
+    if (b1.section.contains(KoModeBox::applicationName)) {
+        b1Level = 0;
+    } else if (b1.section.contains("main")) {
+        b1Level = 1;
+    } else {
+        b1Level = 2;
+    }
+
+    if (b2.section.contains(KoModeBox::applicationName)) {
+        b2Level = 0;
+    } else if (b2.section.contains("main")) {
+        b2Level = 1;
+    } else {
+        b2Level = 2;
+    }
+
+    if (b1Level == b2Level) {
         return b1.priority < b2.priority;
     } else {
-        if (b1.section.contains(KoModeBox::applicationName)) {
-            return true;
-        } else if (b2.section.contains(KoModeBox::applicationName)) {
-            return false;
-        }
-
-        if (b1.section == "main") {
-            return true;
-        } else if (b2.section == "main") {
-            return false;
-        }
-        return b1.section < b2.section;
+        return b1Level < b2Level;
     }
 }
 
@@ -267,6 +275,7 @@ void KoModeBox::addItem(const KoToolButton button)
     widget = new QWidget();
     widget->setLayout(layout);
     layout->setContentsMargins(0,0,0,0);
+    layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->addedWidgets[button.buttonGroupId] = widget;
 
     // Create a rotated icon with text
@@ -278,7 +287,13 @@ void KoModeBox::addItem(const KoToolButton button)
         d->tabBar->setTabToolTip(index, button.button->toolTip());
     }
     d->tabBar->blockSignals(false);
-    d->stack->addWidget(widget);
+    QScrollArea *sa = new QScrollArea();
+    sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    sa->setWidgetResizable(true);
+    sa->setContentsMargins(0,0,0,0);
+    sa->setWidget(widget);
+    sa->setFrameShape(QFrame::NoFrame);
+    d->stack->addWidget(sa);
     d->addedButtons.append(button);
 }
 
@@ -358,6 +373,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 
     int cnt = 0;
     QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
+
     // need to unstretch row that have previously been stretched
     layout->setRowStretch(layout->rowCount()-1, 0);
     layout->setColumnMinimumWidth(0, 0); // used to be indent

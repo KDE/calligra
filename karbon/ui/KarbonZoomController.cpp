@@ -29,8 +29,8 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
-#include <KActionCollection>
-#include <KLocale>
+#include <kactioncollection.h>
+#include <klocale.h>
 
 class KarbonZoomController::Private
 {

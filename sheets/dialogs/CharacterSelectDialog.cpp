@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kcharselect.h>
 #include <kdebug.h>
-#include <KStandardGuiItem>
+#include <kstandardguiitem.h>
 
 using namespace Calligra::Sheets;
 

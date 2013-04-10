@@ -18,8 +18,8 @@
 */
 
 #include <kdemacros.h>
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
  
 #define KPLATO_SCHEDULERPLUGIN_EXPORT( c ) \
   K_PLUGIN_FACTORY( SchedulerFactory, registerPlugin< c >(); ) \

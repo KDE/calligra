@@ -23,7 +23,7 @@
 #include <ui_KWSelectBookmark.h>
 
 #include <QWidget>
-#include <KDialog>
+#include <kdialog.h>
 
 class KWSelectBookmark : public QWidget
 {

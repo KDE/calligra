@@ -1,7 +1,7 @@
 #include <kdebug.h>
-#include <KAboutData>
-#include <KApplication>
-#include <KCmdLineArgs>
+#include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
 
 #include <db/connection.h>
 #include <db/drivermanager.h>

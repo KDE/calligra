@@ -40,7 +40,9 @@ install( FILES
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
 
-install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
 
 ########## unit tests ###################
 

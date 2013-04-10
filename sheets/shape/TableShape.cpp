@@ -238,8 +238,8 @@ void TableShape::setMap(Map *map)
     d->isMaster = true;
     setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
 
-    connect(map, SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            this, SLOT(handleDamages(const QList<Damage*>&)));
+    connect(map, SIGNAL(damagesFlushed(QList<Damage*>)),
+            this, SLOT(handleDamages(QList<Damage*>)));
 
     // Initialize the size using the default column/row dimensions.
     QSize size;

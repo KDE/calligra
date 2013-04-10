@@ -376,6 +376,7 @@
     <Action name="namedAreaDialog"/><!--FIXME also jumps to named area-->
     <Action name="consolidate"/>
     <Action name="subtotals"/>
+    <Action name="pivot"/>
     <Action name="validity"/>
     <Action name="goalSeek"/>
     <!-- Tools Menu Actions -->

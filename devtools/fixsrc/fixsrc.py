@@ -4,6 +4,7 @@
 # This script fixes trivial errors in the sources:
 #  - Add a newline to files that don't end in one. (only apply to source files!)
 #  - Normalize SIGNAL and SLOT signatures
+#  - Improve #include status: remove duplicates
 #  - ...more later
 #
 
@@ -24,6 +25,52 @@ verbose = False
 
 # ----------------------------------------------------------------
 #                         Individual actions
+
+
+def doIncludes(contents):
+    global verbose
+    global dryrun
+
+    # Compile a regex that matches an include statement.
+    # We do no syntax check so    #include "foo> is found by this.
+    includePattern = '^(\\#include\\s*)(["<])([^">]+)([">])(.*)'
+    includeRegex = re.compile(includePattern)
+
+    lineNo = 1
+    newContents = []
+    foundIncludes = []
+    for line in contents:
+        #print "input: ", line
+
+        # See if this line is an include line.  If not, just append it
+        # to the output and continue.
+        includes = includeRegex.findall(line)
+        #print "includes: ", includes
+        if len(includes) == 0:
+            newContents.append(line)
+            lineNo = lineNo + 1
+            continue
+
+        include = includes[0]
+        # Here we know it's an include statement.  We should only have found one hit.
+        #  include[0] = "#include "
+        #  include[1] = "\"" or "<"
+        #  include[2] = the filename in the include statement
+        #  include[3] = "\"" or ">"
+        #  include[4] = the rest of the line
+        includeName = include[2]
+        #print "include name: ", includeName
+        
+        if includeName in foundIncludes:
+            if verbose:
+                sys.stderr.write("  Duplicate include on line " + str(lineNo) + " (removing)\n")
+        else:
+            foundIncludes.append(includeName)
+            newContents.append(line)
+
+        lineNo = lineNo + 1
+
+    return newContents
 
 
 def doNormalize(contents):
@@ -126,6 +173,8 @@ def handleFile(name, actions):
             contents[-1] = contents[-1] + "\n"
     if "normalize" in actions:
         contents = doNormalize(contents)
+    if "includes" in actions:
+        contents = doIncludes(contents)
 
     if not dryrun:
         outname = name + "--temp"  #FIXME: Generate real tempname
@@ -172,6 +221,7 @@ def usage(errormsg=""):
         -a --actions    a comma separated list of the following possible actions:
                           endswitheol:  adds newline at the end to files that don't end in newline
                           normalize:    normalizes SIGNAL and SLOT signatures
+                          includes:     improves #include status (currently: removes duplicates)
                           all:          all of the above
         -d --dryrun     don't actually perform the actions (combine with --verbose)
                         This is recommended before doing the full run.
@@ -192,7 +242,7 @@ def usage(errormsg=""):
 
 def main():
     global dryrun, recursive, pattern, verbose
-    allActions = ["endswitheol", "normalize", "all"]
+    allActions = ["endswitheol", "normalize", "includes", "all"]
 
     try :
         opts, params = getopt.getopt(sys.argv[1:], "a:dhp:rv" ,

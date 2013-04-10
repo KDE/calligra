@@ -27,8 +27,8 @@
 #include <KoUnit.h>
 #include <SvgUtil.h>
 
-#include <KDebug>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <kpluginfactory.h>
 
 #include <QBuffer>
 #include <QImage>

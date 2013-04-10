@@ -29,16 +29,16 @@ class CAImageProvider : public QDeclarativeImageProvider
 {
 public:
     static const char *identificationString;
-    class Singleton;
+    static CAImageProvider *s_imageProvider;
 
+    CAImageProvider();
     virtual ~CAImageProvider();
-    static CAImageProvider *instance();
-    virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
+        virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
 
     void addImage(const QString& id, const QImage &image);
     bool containsId(const QString &id);
 private:
-    CAImageProvider();
+
     QHash<QString, QImage> m_images;
 };
 

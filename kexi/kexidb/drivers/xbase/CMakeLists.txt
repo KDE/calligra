@@ -26,7 +26,6 @@ target_link_libraries(
     ${CALLIGRADB_LIBS}
     ${XBase_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
-    ${KDE4_KPARTS_LIBS}
     )
 
 install(TARGETS kexidb_xbasedriver  DESTINATION ${PLUGIN_INSTALL_DIR})

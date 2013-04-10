@@ -26,9 +26,9 @@
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
-#include <KPluginFactory>
-#include <KShell>
-#include <KDebug>
+#include <kpluginfactory.h>
+#include <kshell.h>
+#include <kdebug.h>
 
 K_PLUGIN_FACTORY(EpsImportFactory, registerPlugin<EpsImport>();)
 K_EXPORT_PLUGIN(EpsImportFactory("calligrafilters"))

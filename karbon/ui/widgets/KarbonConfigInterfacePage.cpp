@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
-#include "KarbonKoDocument.h"
+#include "KarbonDocument.h"
 #include "KarbonFactory.h"
 
 #include <KoUnitDoubleSpinBox.h>
@@ -30,12 +30,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoConfigDocumentPage.h>
 #include <KoConfigMiscPage.h>
 
-#include <KLocale>
-#include <KComponentData>
-#include <KConfig>
-#include <KConfigGroup>
-#include <KNumInput>
-#include <KColorButton>
+#include <klocale.h>
+#include <kcomponentdata.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <knuminput.h>
+#include <kcolorbutton.h>
 
 #include <QLabel>
 #include <QCheckBox>
@@ -91,7 +91,7 @@ void KarbonConfigInterfacePage::apply()
 {
     bool showStatusBar = m_showStatusBar->isChecked();
 
-    KarbonKoDocument* part = m_view->part();
+    KarbonDocument* part = m_view->part();
 
     KConfigGroup interfaceGroup = m_config->group("Interface");
 

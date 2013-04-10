@@ -26,10 +26,10 @@
 #include <kexiutils/KexiTester.h>
 #include <widget/navigator/KexiProjectNavigator.h>
 
-#include <KDebug>
-#include <KGlobal>
-#include <KApplication>
-#include <KLineEdit>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kapplication.h>
+#include <klineedit.h>
 
 #include <QtTest>
 #include <QtTest/qtestkeyboard.h>
