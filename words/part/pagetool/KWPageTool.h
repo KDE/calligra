@@ -56,6 +56,10 @@ private slots:
     ///Force the remaining content on the page to next page.
     void insertPageBreak();
     void resizePage();
+
+    void enableHeader();
+    void enableFooter();
+
 private:
     KWCanvas *getCanvas() const;
     KWDocument *getDocument() const;
@@ -67,7 +71,7 @@ private:
     enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
     Selection m_selection;
 
-    Margin margin;
+    //Margin margin;
     KWCanvas *m_canvas;
     KWDocument *m_document;
     QPoint *m_mousePosTmp;
@@ -79,11 +83,10 @@ private:
     int xMouseInPage(int positionX);
     int yMouseInPage(int positionY);
 
-    void createHeader();
-    void createFooter();
     //To check if header/footer is already created
     bool header, footer;
-
+    KAction *m_actionViewHeader;
+    KAction *m_actionViewFooter;
 };
 
 #endif

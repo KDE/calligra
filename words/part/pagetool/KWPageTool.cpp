@@ -28,6 +28,24 @@
 #include "KWCanvas.h"
 #include "KWView.h"
 
+// words includes
+#include "KWGui.h"
+#include "KWFactory.h"
+#include "KWStatusBar.h"
+#include "KWPageManager.h"
+#include "frames/KWFrame.h"
+#include "frames/KWCopyShape.h"
+#include "frames/KWTextFrameSet.h"
+#include "dialogs/KWFrameDialog.h"
+#include "dialogs/KWPageSettingsDialog.h"
+#include "dialogs/KWPrintingDialog.h"
+#include "dialogs/KWCreateBookmarkDialog.h"
+#include "dialogs/KWSelectBookmarkDialog.h"
+#include "dialogs/KWConfigureDialog.h"
+#include "commands/KWFrameCreateCommand.h"
+#include "commands/KWShapeCreateCommand.h"
+#include "ui_KWInsertImage.h"
+
 //Qt includes
 #include <QList>
 #include <QPainter>
@@ -35,18 +53,66 @@
 
 //calligra includes
 #include <KoTextEditor.h>
-#include <KoTextEditor.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
 #include <KoTextDocument.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
+#include <KoShapeCreateCommand.h>
+#include <calligraversion.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
+#include <KoCopyController.h>
+#include <KoTextShapeData.h>
+#include <KoCanvasResourceManager.h>
+#include <KoCutController.h>
+#include <KoStandardAction.h>
+#include <KoTemplateCreateDia.h>
+#include <KoPasteController.h>
+#include <KoShape.h>
+#include <KoText.h>
+#include <KoFind.h>
+#include <KoShapeContainer.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoToolManager.h>
+#include <KoTextRangeManager.h>
+#include <KoAnnotationManager.h>
+#include <KoToolProxy.h>
+#include <KoShapeAnchor.h>
+#include <KoShapeGroupCommand.h>
+#include <KoZoomController.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoBookmark.h>
+#include <KoPathShape.h> // for KoPathShapeId
+#include <KoDocumentRdfBase.h>
+#include <KoDocumentInfo.h>
+#ifdef SHOULD_BUILD_RDF
+#include <KoDocumentRdf.h>
+#include <KoSemanticStylesheetsEditor.h>
+#endif
+// KDE + Qt includes
+#include <QTimer>
+#include <klocale.h>
+#include <kdebug.h>
+#include <ktoggleaction.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <kxmlguifactory.h>
+#include <kstatusbar.h>
+#include <QMenu>
+
+#include <KoIcon.h>
+#include <limits>
+
 KWPageTool::KWPageTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
 {
     m_selection = NONE;
     m_canvas = dynamic_cast<KWCanvas*>(canvas);
+
     if (m_canvas) {
         m_document = m_canvas->document();
     }
@@ -130,12 +196,12 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
     //For the creation of header
     else if (yMouse < layout.height /2 && !header){
         m_selection = HEADER;
-        createHeader();
+        enableHeader();
         header = true;
     }
     else if(yMouse > layout.height / 2 && !footer){
         m_selection = FOOTER;
-        createFooter();
+        enableFooter();
         footer = true;
     }
 }
@@ -365,19 +431,29 @@ void KWPageTool::insertPageBreak()
     }
 }
 
-void KWPageTool::createHeader(){
-    m_canvas->view()->enableHeader();
+
+void KWPageTool::enableHeader()
+{
+    KWPage m_currentPage = m_canvas->view()->currentPage();
+    if (!m_currentPage.isValid())
+        return;
+    Q_ASSERT(m_currentPage.pageStyle().isValid());
+    m_currentPage.pageStyle().setHeaderPolicy(Words::HFTypeUniform);
+    m_canvas->view()->actionCollection()->action("insert_header")->setEnabled(false);
     m_document->relayout();
-    m_canvas->repaint();
 }
 
-void KWPageTool::createFooter(){
-    m_canvas->view()->enableFooter();
+
+void KWPageTool::enableFooter()
+{
+    KWPage m_currentPage = m_canvas->view()->currentPage();
+    if (!m_currentPage.isValid())
+        return;
+    Q_ASSERT(m_currentPage.pageStyle().isValid());
+    m_currentPage.pageStyle().setFooterPolicy(Words::HFTypeUniform);
+    m_canvas->view()->actionCollection()->action("insert_footer")->setEnabled(false);
     m_document->relayout();
-    m_canvas->repaint();
 }
-
-
 
 QList<QWidget *> KWPageTool::createOptionWidgets()
 {

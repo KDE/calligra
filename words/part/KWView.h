@@ -124,10 +124,7 @@ public slots:
 
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
-    /// enable document headers
-    void enableHeader();
-    /// enable document footers
-    void enableFooter();
+
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
     /// toggle the display of non-printing characters
