@@ -26,7 +26,7 @@
 
 #include <KoPADocument.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 CAPADocumentModel::CAPADocumentModel(QObject* parent, KoPADocument* document)
     : KoPADocumentModel(parent, document)

@@ -45,11 +45,11 @@
 #include <KoConfigAuthorPage.h>
 
 #include <kcolorbutton.h>
-#include <KPluginInfo>
-#include <KPluginSelector>
-#include <KServiceTypeTrader>
+#include <kplugininfo.h>
+#include <kpluginselector.h>
+#include <kservicetypetrader.h>
 #include <ksharedconfig.h>
-#include <KStandardDirs>
+#include <kstandarddirs.h>
 #include <sonnet/configwidget.h>
 
 #include "ApplicationSettings.h"

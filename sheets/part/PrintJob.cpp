@@ -41,7 +41,7 @@
 #include <KoShapeManager.h>
 #include <KoZoomHandler.h>
 
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 #include <QHash>
 #include <QPainter>

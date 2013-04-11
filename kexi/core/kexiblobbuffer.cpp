@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kimageio.h>
 #include <kglobal.h>
-#include <KMimeType>
+#include <kmimetype.h>
 
 #include <db/connection.h>
 

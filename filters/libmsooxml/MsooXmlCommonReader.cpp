@@ -25,7 +25,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
-#include <KGlobal>
+#include <kglobal.h>
 
 #include <QMap>
 

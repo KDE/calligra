@@ -25,7 +25,7 @@
 #include <QHash>
 #include <QEvent>
 #include <QPointer>
-#include <KMenu>
+#include <kmenu.h>
 #include <kexi_export.h>
 #include <kexi.h>
 

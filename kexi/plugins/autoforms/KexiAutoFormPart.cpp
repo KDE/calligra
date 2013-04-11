@@ -21,7 +21,7 @@
 #include "KexiAutoFormPart.h"
 #include "KexiAutoFormView.h"
 #include "KexiAutoFormDesignView.h"
-#include <KDebug>
+#include <kdebug.h>
 #include <core/KexiWindow.h>
 
 KexiAutoFormPart::KexiAutoFormPart(QObject* parent, const QVariantList& args)

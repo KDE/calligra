@@ -3,7 +3,7 @@
 
 //#define MSOOXMLDRAWING_DEBUG_TABLES
 #ifdef MSOOXMLDRAWING_DEBUG_TABLES
-#include <KDebug>
+#include <kdebug.h>
 #endif
 
 using namespace MSOOXML;

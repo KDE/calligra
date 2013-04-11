@@ -23,7 +23,7 @@
 
 //#define KEXI_IMPL_WARNINGS
 
-#include <KMainWindow>
+#include <kmainwindow.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiguimsghandler.h>
 
@@ -50,7 +50,7 @@ class KXMLGUIFactory;
 class KexiMainWidget;
 class KexiUserFeedbackAgent;
 
-#include <KTabWidget>
+#include <ktabwidget.h>
 
 //! @internal tab widget acting as central widget for KexiMainWindow
 class KexiMainWindowTabWidget : public KTabWidget

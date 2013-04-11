@@ -19,7 +19,7 @@
 
 #include "KarbonPaletteWidget.h"
 #include <KoColorSet.h>
-#include <KLocale>
+#include <klocale.h>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QWheelEvent>

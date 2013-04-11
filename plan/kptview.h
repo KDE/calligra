@@ -35,7 +35,7 @@
 #include <QPointer>
 #include <QPrintDialog>
 
-#include <KConfigDialog>
+#include <kconfigdialog.h>
 
 class QStackedWidget;
 class QSplitter;

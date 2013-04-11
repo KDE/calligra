@@ -14,7 +14,7 @@
 
 #include "Task.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <stdlib.h>
 #include <math.h>

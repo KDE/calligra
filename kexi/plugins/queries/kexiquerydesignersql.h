@@ -24,7 +24,7 @@
 #include "kexiquerypart.h"
 
 #include <KexiView.h>
-#include <KTitleWidget>
+#include <ktitlewidget.h>
 #include <QEvent>
 
 class KexiQueryDesignerSQLEditor;

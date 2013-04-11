@@ -25,7 +25,7 @@
 #include <QListWidget>
 #include <QPushButton>
 
-#include <KInputDialog>
+#include <kinputdialog.h>
 
 #include "TableShape.h"
 #include "Sheet.h"

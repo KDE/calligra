@@ -35,7 +35,7 @@
 
 #include <QFileInfo>
 
-#include <KDialog>
+#include <kdialog.h>
 
 class KoView;
 

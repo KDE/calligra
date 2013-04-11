@@ -22,7 +22,7 @@
 #ifndef CALLIGRA_SHEETS_EXTERNAL_EDITOR
 #define CALLIGRA_SHEETS_EXTERNAL_EDITOR
 
-#include <KTextEdit>
+#include <ktextedit.h>
 
 #include "calligra_sheets_export.h"
 

@@ -57,7 +57,7 @@
 
 #include <kglobal.h>
 #include <kconfiggroup.h>
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 KarbonPart::KarbonPart(QObject *parent)
     : KoPart(parent)

@@ -23,7 +23,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-#include <KTabWidget>
+#include <ktabwidget.h>
 
 #include <KoIcon.h>
 #include <widget/KexiProjectSelectorWidget.h>

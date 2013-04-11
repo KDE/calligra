@@ -32,7 +32,7 @@
 #include <QStyle>
 #include <QStyleOptionHeader>
 
-#include <KLocale>
+#include <klocale.h>
 
 //Default height of the header
 const int HEADER_HEIGHT = 20;

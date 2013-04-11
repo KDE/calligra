@@ -23,7 +23,7 @@
 #include <QString>
 #include <QVariant>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <google/template.h>
 

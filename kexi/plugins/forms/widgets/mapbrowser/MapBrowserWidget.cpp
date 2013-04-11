@@ -20,7 +20,7 @@
 
 #include "MapBrowserWidget.h"
 #include <QPointF>
-#include <KDebug>
+#include <kdebug.h>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),

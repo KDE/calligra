@@ -43,9 +43,9 @@
 
 //KDE Headers
 #include <KoIcon.h>
-#include <KLocale>
-#include <KAction>
-#include <KIconLoader>
+#include <klocale.h>
+#include <kaction.h>
+#include <kiconloader.h>
 
 //Calligra Headers
 #include <KoToolManager.h>

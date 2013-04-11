@@ -19,7 +19,7 @@
 
 #include <kcmdlineargs.h>
 
-#include <KUniqueApplication>
+#include <kuniqueapplication.h>
 #include <kiconloader.h>
 #include <memory>
 

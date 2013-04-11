@@ -55,8 +55,8 @@
 #include <kmimetype.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>
-#include <KIconLoader>
-#include <KUrl>
+#include <kiconloader.h>
+#include <kurl.h>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define KEXI_STARTUP_SHOW_RECENT

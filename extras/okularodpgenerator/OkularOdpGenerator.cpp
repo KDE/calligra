@@ -30,9 +30,9 @@
 #include <KoPAPageBase.h>
 
 #include <kaboutdata.h>
-#include <KPluginFactory>
-#include <KStandardDirs>
-#include <KMimeType>
+#include <kpluginfactory.h>
+#include <kstandarddirs.h>
+#include <kmimetype.h>
 #include <KParts/ComponentFactory>
 
 #include <okular/core/page.h>

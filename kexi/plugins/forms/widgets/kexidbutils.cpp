@@ -22,9 +22,9 @@
 #include <QApplication>
 #include <QFontMetrics>
 
-#include <KMenu>
-#include <KIconLoader>
-#include <KIconEffect>
+#include <kmenu.h>
+#include <kiconloader.h>
+#include <kiconeffect.h>
 
 #include <db/queryschema.h>
 #include <db/utils.h>
