@@ -180,7 +180,7 @@ void KoXmlStreamReader::Private::checkSoundness()
         }
     }
 
-    kDebug() << "namespaces to fix:" << namespacesToFix;
+    //kDebug() << "namespaces to fix:" << namespacesToFix;
 
     // Finally, if necessary, create unique prefixes for namespaces
     // that are found to use one of the expected prefixes.  It doesn't
@@ -199,7 +199,7 @@ void KoXmlStreamReader::Private::checkSoundness()
         prefixes.insert(ns, pfx);
     }
 
-    kDebug() << "Document soundness:" << isSound;
+    //kDebug() << "Document soundness:" << isSound;
     //kDebug() << "prefixes:" << prefixes;
 
     isChecked = true;
@@ -335,12 +335,7 @@ void KoXmlStreamReader::setDevice(QIODevice *device)
 KoXmlStreamAttributes KoXmlStreamReader::attributes() const
 {
     QXmlStreamAttributes   qAttrs = QXmlStreamReader::attributes();
-    for (int i = 0; i < qAttrs.size(); ++i) kDebug() << qAttrs[i].qualifiedName().toString();
-    KoXmlStreamAttributes  retval = KoXmlStreamAttributes(qAttrs);
-
-    for (int i = 0; i < qAttrs.size(); ++i) {
-        retval[i] = KoXmlStreamAttribute(&qAttrs[i], this);
-    }
+    KoXmlStreamAttributes  retval = KoXmlStreamAttributes(this, qAttrs);
 
     return retval;
 }
@@ -364,6 +359,7 @@ class KoXmlStreamAttribute::Private
 {
 public:
     Private(const QXmlStreamAttribute *attr, const KoXmlStreamReader *r);
+    Private(const KoXmlStreamAttribute::Private &other);
     ~Private();
 
     void generateQName();
@@ -381,6 +377,14 @@ KoXmlStreamAttribute::Private::Private(const QXmlStreamAttribute *attr, const Ko
     , reader(r)
     , qName()
     , prefixLen(-1)
+{
+}
+
+KoXmlStreamAttribute::Private::Private(const KoXmlStreamAttribute::Private &other)
+    : qAttr(other.qAttr)
+    , reader(other.reader)
+    , qName(other.qName)
+    , prefixLen(other.prefixLen)
 {
 }
 
@@ -405,12 +409,20 @@ void KoXmlStreamAttribute::Private::generateQName()
 KoXmlStreamAttribute::KoXmlStreamAttribute()
     : d(new KoXmlStreamAttribute::Private(0, 0))
 {
+    //kDebug() << "default constructor called";
 }
 
 KoXmlStreamAttribute::KoXmlStreamAttribute(const QXmlStreamAttribute *attr,
                                            const KoXmlStreamReader *reader)
     : d(new KoXmlStreamAttribute::Private(attr, reader))
 {
+    //kDebug() << "normal constructor called";
+}
+
+KoXmlStreamAttribute::KoXmlStreamAttribute(const KoXmlStreamAttribute &other)
+    : d(new KoXmlStreamAttribute::Private(*other.d))
+{
+    //kDebug() << "copy constructor called";
 }
 
 KoXmlStreamAttribute::~KoXmlStreamAttribute()
@@ -452,7 +464,7 @@ QStringRef KoXmlStreamAttribute::prefix() const
 QStringRef KoXmlStreamAttribute::qualifiedName() const
 {
     if (d->reader->isSound()) {
-        return d->qAttr->prefix();
+        return d->qAttr->qualifiedName();
     }
 
     if (d->prefixLen == -1) {
@@ -468,6 +480,11 @@ QStringRef KoXmlStreamAttribute::value() const
     return d->qAttr->value();
 }
 
+
+bool KoXmlStreamAttribute::operator==(const KoXmlStreamAttribute &other) const
+{
+    return d->qAttr == other.d->qAttr;
+}
 
 bool KoXmlStreamAttribute::operator!=(const KoXmlStreamAttribute &other) const
 {
@@ -485,24 +502,92 @@ KoXmlStreamAttribute &KoXmlStreamAttribute::operator=(const KoXmlStreamAttribute
     return *this;
 }
 
-bool KoXmlStreamAttribute::operator==(const KoXmlStreamAttribute &other) const
+
+// ================================================================
+//             class KoXmlStreamAttributes and Private class
+
+
+class KoXmlStreamAttributes::Private : public QSharedData
 {
-    return d->qAttr == other.d->qAttr;
+public:
+    Private(const KoXmlStreamReader *r, const QXmlStreamAttributes &qa);
+    ~Private();
+
+    const KoXmlStreamReader      *reader;
+    QVector<KoXmlStreamAttribute> koAttrs;
+    const QXmlStreamAttributes    qAttrs; // We need the Q attributes to live while this class lives.
+};
+
+KoXmlStreamAttributes::Private::Private(const KoXmlStreamReader *r, const QXmlStreamAttributes &qa)
+    : reader(r)
+    , koAttrs(qa.size())
+    , qAttrs(qa)
+{
+}
+
+KoXmlStreamAttributes::Private::~Private()
+{
 }
 
 
-// ================================================================
-//             class KoXmlStreamAttributes (no Private class)
+// ----------------------------------------------------------------
 
 
+KoXmlStreamAttributes::KoXmlStreamAttributes(const KoXmlStreamReader *r,
+                                             const QXmlStreamAttributes &qAttrs)
+    : d(new KoXmlStreamAttributes::Private(r, qAttrs))
+{
+    for (int i = 0; i < qAttrs.size(); ++i) {
+        d->koAttrs[i] = KoXmlStreamAttribute(&qAttrs[i], d->reader);
+    }
+}
 
-KoXmlStreamAttributes::KoXmlStreamAttributes(const QXmlStreamAttributes &qAttrs)
-    : QVector(qAttrs.size())
+KoXmlStreamAttributes::KoXmlStreamAttributes(const KoXmlStreamAttributes &other)
+    : d(other.d)
 {
 }
 
 KoXmlStreamAttributes::~KoXmlStreamAttributes()
 {
+    // No delete because d is a QSharedDataPointer;
+}
+
+KoXmlStreamAttributes &KoXmlStreamAttributes::operator=(const KoXmlStreamAttributes &other)
+{
+    d = other.d;
+    return *this;
+}
+
+
+// Relevant parts of the QVector API
+const KoXmlStreamAttribute& KoXmlStreamAttributes::at(int i) const
+{
+    return d->koAttrs[i];
+}
+
+int KoXmlStreamAttributes::size() const
+{
+    return d->koAttrs.size();
+}
+
+KoXmlStreamAttribute KoXmlStreamAttributes::value(int i) const
+{
+    return d->koAttrs.value(i);
+}
+
+const KoXmlStreamAttribute& KoXmlStreamAttributes::operator[](int i) const
+{
+    return d->koAttrs[i];//.operator[](i);
+}
+
+KoXmlStreamAttributes::const_iterator KoXmlStreamAttributes::begin() const
+{
+    return const_iterator(d->koAttrs.begin());
+}
+
+KoXmlStreamAttributes::const_iterator KoXmlStreamAttributes::end() const
+{
+    return const_iterator(d->koAttrs.end());
 }
 
 

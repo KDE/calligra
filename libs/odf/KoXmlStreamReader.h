@@ -27,6 +27,7 @@
 #include <QXmlStreamReader>
 #include <QStringRef>
 #include <QVector>
+#include <QSharedData>
 
 #include "koodf_export.h"
 
@@ -131,6 +132,7 @@ private:
 class KoXmlStreamAttribute
 {
     friend class QVector<KoXmlStreamAttribute>;       // For the default constructor
+    friend class KoXmlStreamAttributes;               // For the normal constructor
     friend class KoXmlStreamReader;
  public:
     ~KoXmlStreamAttribute();
@@ -143,13 +145,14 @@ class KoXmlStreamAttribute
     QStringRef qualifiedName() const;
     QStringRef value() const;
 
+    bool operator==(const KoXmlStreamAttribute &other) const;
     bool operator!=(const KoXmlStreamAttribute &other) const;
     KoXmlStreamAttribute &operator=(const KoXmlStreamAttribute &other);
-    bool operator==(const KoXmlStreamAttribute &other) const;
 
  private:
     // Only for friend classes.
     KoXmlStreamAttribute();
+    KoXmlStreamAttribute(const KoXmlStreamAttribute &other);
     KoXmlStreamAttribute(const QXmlStreamAttribute *attr, const KoXmlStreamReader *reader);
 
     class Private;
@@ -158,22 +161,37 @@ class KoXmlStreamAttribute
 
 
 /**
- * @brief KoXmlStreamAttributes is a source-compatible replacement for QXmlStreamAttributes.
+ * @brief KoXmlStreamAttributes is a mostly source-compatible replacement for QXmlStreamAttributes.
  *
  * All the convenience functions of KoXmlStreamAttributes work exactly
  * like the counterparts of QXmlStreamAttributes but they give the
  * expected prefix for the registered expected namespaces.
  *
- * This class can only be used in connection with KoXmlStreamReader.
+ * Not all functions from QVector are implemented but the ones that
+ * make sense for this read-only class are. This class can only be
+ * used in connection with KoXmlStreamReader.
  *
  * @see KoXmlStreamReader
  */
-class KoXmlStreamAttributes : public QVector<KoXmlStreamAttribute>
+class KoXmlStreamAttributes
 {
     friend class KoXmlStreamReader;
 
  public:
+    typedef const KoXmlStreamAttribute *const_iterator;
+
+    KoXmlStreamAttributes(const KoXmlStreamAttributes &other);
     ~KoXmlStreamAttributes();
+
+    KoXmlStreamAttributes &operator=(const KoXmlStreamAttributes &other);
+
+    // Relevant parts of the QVector API
+    const KoXmlStreamAttribute &at(int i) const;
+    int size() const;
+    KoXmlStreamAttribute value(int i) const;
+    const KoXmlStreamAttribute &operator[](int i) const;
+    const_iterator begin() const;
+    const_iterator end() const;
 
     // Convenience functions taken from QXmlStreamAttributes API
     void        append(const QString &namespaceUri, const QString &name, const QString &value);
@@ -190,7 +208,11 @@ class KoXmlStreamAttributes : public QVector<KoXmlStreamAttribute>
 
  private:
     // Only available from friend class KoXmlStreamReader.
-    KoXmlStreamAttributes(const QXmlStreamAttributes &qAttrs);
+    KoXmlStreamAttributes(const KoXmlStreamReader *r, const QXmlStreamAttributes &qAttrs);
+
+    // This class is implicitly shared.
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 

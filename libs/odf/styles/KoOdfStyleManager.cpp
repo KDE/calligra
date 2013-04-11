@@ -166,25 +166,28 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
 
 void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
 {
-    kDebug() << "current element:" << reader.qualifiedName().toString();
+    kDebug() << "incoming element:" << reader.qualifiedName().toString();
 
     while (reader.readNextStartElement()) {
+        kDebug() << "style element:" << reader.qualifiedName().toString();
 
         // For now: handle style:style and style:default-style
         // and only the text, paragraph and graphic families.
         QString tagName = reader.qualifiedName().toString();
-        kDebug() << "tagname: " << tagName;
-        if (tagName != "style:style" && tagName != "style:default-style")
+        if (tagName != "style:style" && tagName != "style:default-style") {
+            reader.skipCurrentElement();
             continue;
+        }
 
         KoXmlStreamAttributes  attrs = reader.attributes();
-        for (int i = 0; i < attrs.size(); ++i) kDebug() << attrs[i].qualifiedName().toString();
+        kDebug() << "---------------- Attributes:";
+        for (int i = 0; i < attrs.size(); ++i) {
+            kDebug() << attrs[i].qualifiedName().toString()
+                     << attrs[i].value().toString();
+        }
+
         QString family = attrs.value("style:family").toString();
-        kDebug() << "family: " << family;
-        if (family == "text"
-            || family == "paragraph"
-            || family == "graphic")
-        {
+        if (family == "text" || family == "paragraph" || family == "graphic") {
             // FIXME: In the future, create style per type (family).
             KoOdfStyle *style = new KoOdfStyle;
 
@@ -206,6 +209,10 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
                 QString styleName = style->name();
                 setStyle(styleName, style);
             }
+        }
+        else {
+            reader.skipCurrentElement();
+            continue;
         }
     }
 }
