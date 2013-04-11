@@ -47,7 +47,6 @@ CQThumbnailItem::~CQThumbnailItem()
 void CQThumbnailItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
 {
     if(!d->content.isNull()) {
-        painter->setClipRect(option->rect);
         painter->drawPixmap(0, 0, width(), height(), d->content);
     }
 }
