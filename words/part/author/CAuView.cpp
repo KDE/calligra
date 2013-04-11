@@ -24,8 +24,6 @@
 #include "CoverSelectionDialog.h"
 
 #include "KWDocument.h"
-#include "../dockers/KWStatisticsWidget.h"
-#include "../dockers/KWStatisticsDocker.h"
 
 #include <KoPart.h>
 #include <KoDockRegistry.h>
@@ -33,6 +31,7 @@
 
 #include <QWidget>
 #include <QFileDialog>
+#include <ktoggleaction.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 
@@ -41,13 +40,9 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
 {
         setComponentData(CAuFactory::componentData());
         setXMLFile("author.rc");
+
+        buildAssociatedWidget();
         setupActions();
-
-        KWStatisticsWidget *stats = new KWStatisticsWidget(this,true);
-        stats->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
-        stats->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
-        statusBar()->insertWidget(0,stats);
-
 }
 
 void CAuView::setupActions()
@@ -57,6 +52,26 @@ void CAuView::setupActions()
     actionCollection()->addAction("insert_coverimage", action);
     action->setToolTip(i18n("Set cover for your ebook"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectCoverImage()));
+
+    // -------- Statistics in the status bar
+    KToggleAction *tAction = new KToggleAction(i18n("Show stats in bar"), this);
+    tAction->setToolTip(i18n("Shows or hides the stats in status bar"));
+    //always display at start so -> "true"
+    tAction->setChecked(true);
+    actionCollection()->addAction("showStatsInStatusBar", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatsInStatusBar(bool)));
+}
+
+void CAuView::buildAssociatedWidget() {
+    stats = new KWStatisticsWidget(this,true);
+    stats->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
+    stats->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
+    statusBar()->insertWidget(0,stats);
+}
+
+void CAuView::showStatsInStatusBar(bool toggled)
+{
+    stats->setVisible(toggled);
 }
 
 void CAuView::selectCoverImage()

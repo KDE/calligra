@@ -79,6 +79,7 @@
   <Action name="enable_autocorrection"/>
   <Action name="configure_autocorrection"/>
   <Action name="showStatusBar" group="settings_show"/>
+  <Action name="showStatsInStatusBar" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
   <Action name="settings_active_author" group="settings_configure"/>
   <Action name="configure" group="settings_configure"/>

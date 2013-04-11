@@ -22,6 +22,8 @@
 #define CAUVIEW_H
 
 #include "words_export.h"
+#include "../dockers/KWStatisticsWidget.h"
+#include "../dockers/KWStatisticsDocker.h"
 
 #include "KWView.h"
 
@@ -41,9 +43,12 @@ public:
 
 private slots:
     void selectCoverImage();
+    void showStatsInStatusBar(bool toggled);
 
 private:
     void setupActions();
+    void buildAssociatedWidget();
+    KWStatisticsWidget *stats;
 };
 
 #endif
