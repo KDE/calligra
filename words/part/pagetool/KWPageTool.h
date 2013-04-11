@@ -22,6 +22,10 @@
 
 #include <KoToolBase.h>
 
+//Size of the zone where we can select margin or page border in document px
+#define SELECT_SPACE 10
+
+class QTimer;
 class KWCanvas;
 class KWDocument;
 
@@ -31,7 +35,7 @@ class KWPageTool : public KoToolBase
 public:
     explicit KWPageTool(KoCanvasBase *canvas);
     virtual ~KWPageTool();
-
+    bool wantsAutoScroll() const;
 public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
@@ -43,6 +47,7 @@ public: // Events
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
+
 //  virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
 //  virtual void keyPressEvent(QKeyEvent *event);
@@ -50,7 +55,7 @@ public: // Events
 private slots:
     ///Force the remaining content on the page to next page.
     void insertPageBreak();
-
+    void resizePage();
 private:
     KWCanvas *getCanvas() const;
     KWDocument *getDocument() const;
@@ -59,18 +64,26 @@ protected:
     QList<QWidget *> createOptionWidgets();
 
 private:
-
-    enum Margin{NONE,TOP,BOTTOM,LEFT,RIGHT,HEADER,FOOTER};
+    enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
+    Selection m_selection;
 
     Margin margin;
     KWCanvas *m_canvas;
     KWDocument *m_document;
-
+    QPoint *m_mousePosTmp;
+    //Need to control the page resizing when cursor is out of canvas
+    QTimer *m_resizeTimer;
     //Return or set the position x or y of the margin
-    int marginInPx(Margin p_selection);
-    void setMarginInPx(Margin p_selection,int p_postionX,int p_positionY);
-    int xMouseInPage(int p_positionX);
-    int yMouseInPage(int p_positionY);
+    int marginInPx(Selection selection);
+    void setMarginInPx(Selection selection,int postionX,int positionY);
+    int xMouseInPage(int positionX);
+    int yMouseInPage(int positionY);
+
+    void createHeader();
+    void createFooter();
+    //To check if header/footer is already created
+    bool header, footer;
+
 };
 
 #endif
