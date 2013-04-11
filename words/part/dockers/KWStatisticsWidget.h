@@ -57,7 +57,7 @@ class KWStatisticsWidget : public QWidget
     Q_OBJECT
 
 public:
-    KWStatisticsWidget(QWidget *parent = 0, bool short_version = false);
+    KWStatisticsWidget(QWidget *parent = 0);
     virtual ~KWStatisticsWidget();
 
     enum LayoutDirection {
@@ -95,9 +95,6 @@ private:
     int countCJKChars(const QString &text);
 
 private:
-    //to know if this instance is a short version or a full one
-    bool shortVersion;
-
     // Labels, e.g. "Words:"
     QLabel *m_wordsLabel;
     QLabel *m_sentencesLabel;
