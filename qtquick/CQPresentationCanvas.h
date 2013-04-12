@@ -44,6 +44,8 @@ public:
 
     void setCurrentSlide(int slide);
 
+    virtual void render(QPainter* painter, const QRectF& target);
+
 Q_SIGNALS:
     void currentSlideChanged();
 

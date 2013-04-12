@@ -48,6 +48,8 @@ public:
 
     void setCurrentSheet(int sheet);
 
+    virtual void render(QPainter* painter, const QRectF& target);
+
 Q_SIGNALS:
     void currentSheetChanged();
 

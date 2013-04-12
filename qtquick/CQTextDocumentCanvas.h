@@ -59,6 +59,8 @@ public:
     QObject *documentModel() const;
     QSize documentSize() const;
 
+    virtual void render(QPainter* painter, const QRectF& target);
+
 signals:
     void searchTermChanged();
     void documentModelChanged();

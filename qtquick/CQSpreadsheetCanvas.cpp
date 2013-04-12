@@ -22,6 +22,9 @@
  */
 
 #include "CQSpreadsheetCanvas.h"
+
+#include <QStyleOptionGraphicsItem>
+
 #include "CQCanvasController.h"
 #include <KoPart.h>
 #include <KoFindText.h>
@@ -77,6 +80,14 @@ void CQSpreadsheetCanvas::setCurrentSheet(int sheet)
         d->canvas->setActiveSheet(d->document->map()->sheet(d->currentSheet));
         emit currentSheetChanged();
     }
+}
+
+void CQSpreadsheetCanvas::render(QPainter* painter, const QRectF& target)
+{
+    QStyleOptionGraphicsItem option;
+    option.exposedRect = target;
+    option.rect = target.toAlignedRect();
+    d->canvas->canvasItem()->paint(painter, &option);
 }
 
 void CQSpreadsheetCanvas::openFile(const QString& uri)

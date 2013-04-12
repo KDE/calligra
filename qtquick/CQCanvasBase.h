@@ -39,6 +39,7 @@ public:
 
 public Q_SLOTS:
     virtual void setSource(const QString &source);
+    virtual void render(QPainter* painter, const QRectF& target) = 0;
 
 Q_SIGNALS:
     void sourceChanged();
