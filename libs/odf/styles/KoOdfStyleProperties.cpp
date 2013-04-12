@@ -31,6 +31,7 @@
 
 // odflib
 #include <KoXmlStreamReader.h>
+#include <KoXmlWriter.h>
 
 
 // ================================================================
@@ -97,6 +98,17 @@ bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
     }
 
     kDebug() << "read attributes: " << d->attributes;
+
+    return true;
+}
+
+bool KoOdfStyleProperties::saveOdf(const QString &propertySet, KoXmlWriter *writer)
+{
+    writer->startElement(propertySet.toLatin1()); // e.g. text-properties
+    foreach(const QString &property, d->attributes.keys()) {
+        writer->addAttribute(property.toLatin1(), d->attributes[property]);
+    }
+    writer->endElement(); // propertySet
 
     return true;
 }

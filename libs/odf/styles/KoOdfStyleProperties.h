@@ -27,6 +27,7 @@
 class KoXmlStreamReader;
 
 class QString;
+class KoXmlWriter;
 
 
 class KOODF_EXPORT KoOdfStyleProperties
@@ -42,6 +43,7 @@ class KOODF_EXPORT KoOdfStyleProperties
 
     virtual bool readOdf(KoXmlStreamReader &reader);
     bool readAttributes(KoXmlStreamReader &reader);
+    virtual bool saveOdf(const QString &propertySet, KoXmlWriter *writer);
 
  private:
     class Private;

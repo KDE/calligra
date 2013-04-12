@@ -30,6 +30,7 @@
 
 // Odflib
 #include "KoXmlStreamReader.h"
+#include "KoXmlWriter.h"
 #include "KoOdfStyleProperties.h"
 
 
@@ -173,7 +174,7 @@ void KoOdfStyle::setProperty(QString &propertySet, QString &property, QString &v
 }
 
 
-bool KoOdfStyle::loadOdf(KoXmlStreamReader &reader)
+bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
 {
     // Load style attributes.
     KoXmlStreamAttributes  attrs = reader.attributes();
@@ -212,4 +213,34 @@ bool KoOdfStyle::loadOdf(KoXmlStreamReader &reader)
 
     return true;
 }
+
+bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
+{
+    if (d->isDefaultStyle) {
+        writer->startElement("style:default-style");
+        writer->addAttribute("style:name", d->name);
+    }
+    else {
+        writer->startElement("style:style");
+    }
+
+    // Write style attributes
+    writer->addAttribute("style:family", d->family);
+    if (!d->parent.isEmpty()) {
+        writer->addAttribute("style:parent-name", d->parent);
+    }
+    if (!d->displayName.isEmpty()) {
+        writer->addAttribute("style:display-name", d->displayName);
+    }
+
+    // Write properties
+    foreach(const QString &propertySet, d->properties.keys()) {
+        d->properties.value(propertySet)->saveOdf(propertySet, writer);
+    }
+
+    writer->endElement();  // style:{default-,}style
+    return true;
+}
+
+
 

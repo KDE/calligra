@@ -33,6 +33,7 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include "KoOdfStyle.h"
 
@@ -99,41 +100,12 @@ void KoOdfStyleManager::clear()
 
 bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
 {
-    //KoXmlDocument doc;
     QString errorMsg;
     //int errorLine;
     //int errorColumn;
 
-
-    // ----------------------------------------------------------------
-    // Get styles from content.xml.
-
-    // Try to open content.xml. Return if it failed.
-    //kDebug(30503) << "parse content.xml styles";
-    if (!odfStore->open("content.xml")) {
-        kError(30503) << "Unable to open input file content.xml" << endl;
-        return false;
-    }
-
-    kDebug() << "================================================================\n"
-             << "Loading styles from content.xml";
-
     KoXmlStreamReader reader;
     prepareForOdf(reader);
-    reader.setDevice(odfStore->device());
-    while (!reader.atEnd()) {
-        reader.readNext();
-
-        if (reader.isStartElement() && reader.qualifiedName() == "office:automatic-styles") {
-            break;
-        }
-    }
-    // FIXME: Error handling
-
-    // Collect the styles.
-    collectStyleSet(reader);
-
-    odfStore->close(); // end of parsing styles in content.xml
 
     // ----------------------------------------------------------------
     // Get styles from styles.xml.
@@ -159,8 +131,36 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
 
     // Collect the styles.
     collectStyleSet(reader);
-
     odfStore->close();
+
+    // ----------------------------------------------------------------
+    // Get styles from content.xml.
+
+    // Try to open content.xml. Return if it failed.
+    //kDebug(30503) << "parse content.xml styles";
+    if (!odfStore->open("content.xml")) {
+        kError(30503) << "Unable to open input file content.xml" << endl;
+        return false;
+    }
+
+    kDebug() << "================================================================\n"
+             << "Loading styles from content.xml";
+
+    reader.setDevice(odfStore->device());
+    while (!reader.atEnd()) {
+        reader.readNext();
+
+        if (reader.isStartElement() && reader.qualifiedName() == "office:automatic-styles") {
+            break;
+        }
+    }
+    // FIXME: Error handling
+
+    // Collect the styles.
+    collectStyleSet(reader);
+
+    odfStore->close(); // end of parsing styles in content.xml
+
     return true;
 }
 
@@ -169,7 +169,7 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
     kDebug() << "incoming element:" << reader.qualifiedName().toString();
 
     while (reader.readNextStartElement()) {
-        kDebug() << "style element:" << reader.qualifiedName().toString();
+        kDebug() << "---------------- style element:" << reader.qualifiedName().toString();
 
         // For now: handle style:style and style:default-style
         // and only the text, paragraph and graphic families.
@@ -180,21 +180,23 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
         }
 
         KoXmlStreamAttributes  attrs = reader.attributes();
-        kDebug() << "---------------- Attributes:";
+#if 1  // debug
+        kDebug() << "Attributes:";
         for (int i = 0; i < attrs.size(); ++i) {
-            kDebug() << attrs[i].qualifiedName().toString()
+            kDebug() << "  " << attrs[i].qualifiedName().toString()
                      << attrs[i].value().toString();
         }
+#endif
 
         QString family = attrs.value("style:family").toString();
         if (family == "text" || family == "paragraph" || family == "graphic") {
             // FIXME: In the future, create style per type (family).
             KoOdfStyle *style = new KoOdfStyle;
 
-            kDebug() << "Loading style type:" << family;
+            kDebug() << "This style should be loaded:" << family;
 
             style->setIsDefaultStyle(tagName == "style:default-style");
-            style->loadOdf(reader);
+            style->readOdf(reader);
 #if 0 // debug
             kDebug(30503) << "==" << styleName << ":\t"
                           << style->family()
@@ -215,4 +217,17 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
             continue;
         }
     }
+}
+
+
+bool KoOdfStyleManager::saveNamedStyles(KoXmlWriter *writer)
+{
+    foreach(KoOdfStyle *style, d->defaultStyles) {
+        style->saveOdf(writer);
+    }
+    foreach(KoOdfStyle *style, d->styles) {
+        style->saveOdf(writer);
+    }
+
+    return true;
 }

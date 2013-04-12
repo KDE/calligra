@@ -29,6 +29,7 @@ class QString;
 class KoStore;
 class KoOdfStyle;
 class KoXmlStreamReader;
+class KoXmlWriter;
 
 
 class KOODF_EXPORT KoOdfStyleManager
@@ -46,8 +47,10 @@ class KOODF_EXPORT KoOdfStyleManager
     void clear();
 
     bool loadStyles(KoStore *odfStore);
+    bool saveNamedStyles(KoXmlWriter *writer);
 
  private:
+    // FIXME: Move to private class.
     void collectStyleSet(KoXmlStreamReader &reader);
 
  private:
