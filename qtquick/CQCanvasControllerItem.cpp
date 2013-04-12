@@ -33,7 +33,7 @@
 class CQCanvasControllerItem::Private
 {
 public:
-    Private() : canvas(0), flickable(0), canvasController(0), lastX(0), lastY(0), zoom(1.0f) { }
+    Private() : canvas(0), flickable(0), canvasController(0), lastX(0), lastY(0), zoom(1.0f), zoomChange(0.f), zooming(false), placeholder(0) { }
 
     CQCanvasBase *canvas;
     QDeclarativeItem* flickable;
@@ -45,6 +45,10 @@ public:
     float lastY;
 
     qreal zoom;
+    qreal zoomChange;
+    bool zooming;
+
+    QPixmap *placeholder;
 };
 
 CQCanvasControllerItem::CQCanvasControllerItem(QDeclarativeItem* parent)
@@ -61,11 +65,11 @@ CQCanvasControllerItem::~CQCanvasControllerItem()
 
 void CQCanvasControllerItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
-#if 0
-    painter->setBrush(QBrush(Qt::cyan));
-    painter->setOpacity(0.5);
-    painter->drawRect(x(), y(), width(), height());
-#endif
+    if(!d->zooming || !d->placeholder || d->placeholder->isNull()) {
+        return;
+    }
+
+    painter->drawPixmap(-scenePos().x(), -scenePos().y(), d->flickable->width() * (1.0 + d->zoomChange), d->flickable->height() * (1.0 + d->zoomChange), *d->placeholder);
 }
 
 QDeclarativeItem* CQCanvasControllerItem::canvas() const
@@ -127,6 +131,36 @@ void CQCanvasControllerItem::setZoom(qreal newZoom)
         d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, tempZoom);
         d->zoom = tempZoom;
         emit zoomChanged();
+    }
+}
+
+void CQCanvasControllerItem::beginZoomGesture()
+{
+    d->placeholder = new QPixmap(d->flickable->width(), d->flickable->height());
+    d->placeholder->fill(Qt::white);
+
+    QPainter painter;
+    painter.begin(d->placeholder);
+    d->canvas->render(&painter, QRectF(QPoint(0, 0), d->placeholder->size()));
+    painter.end();
+
+    d->zooming = true;
+}
+
+void CQCanvasControllerItem::endZoomGesture()
+{
+    setZoom(d->zoom + d->zoomChange);
+
+    delete d->placeholder;
+    d->placeholder = 0;
+    d->zoomChange = 0.0;
+    d->zooming = false;
+}
+
+void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
+{
+    if(d->zooming) {
+        d->zoomChange += amount;
     }
 }
 
