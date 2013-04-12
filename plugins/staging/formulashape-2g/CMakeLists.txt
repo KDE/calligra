@@ -14,6 +14,7 @@ SET (formulashape2g_LIB_SRCS
     FormulaTool.cpp
     FormulaDocument.cpp
     FormulaPart.cpp
+    FormulaCursor.cpp
 
     ChangeFormulaCommand.cpp
 )

@@ -23,8 +23,11 @@
 
 #include <KoToolBase.h>
 
+#include <QTimer>
+
 class QTextEdit;
 class FormulaShape;
+class FormulaCursor;
 
 class FormulaTool : public KoToolBase
 {
@@ -33,7 +36,7 @@ public:
     explicit FormulaTool(KoCanvasBase* canvas);
 
     /// reimplemented from KoToolBase
-    virtual void paint(QPainter&, const KoViewConverter&) {}
+    virtual void paint(QPainter&, const KoViewConverter&);
     /// reimplemented from KoToolBase
     virtual void mousePressEvent(KoPointerEvent*);
     /// reimplemented from superclass
@@ -42,6 +45,9 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent*) {}
     /// reimplemented from KoToolBase
     virtual void mouseReleaseEvent(KoPointerEvent*) {}
+    
+    /// reimplemented from superclass
+    virtual void keyPressEvent(QKeyEvent *event);
 
     /// reimplemented from KoToolBase
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
@@ -53,12 +59,13 @@ protected:
     virtual QWidget *createOptionWidget();
 
 private slots: 
-    void insertPressed();         // Template: example code
+    void insertPressed(); 
 
 private:
     // Pointer to the shape that we manipulate.
     FormulaShape *m_formulaShape;
     QTextEdit *m_textEdit;
+    FormulaCursor *m_cursor;
 };
 
 #endif

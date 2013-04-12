@@ -41,6 +41,7 @@
 
 // This shape
 #include "FormulaShape.h"
+#include "FormulaCursor.h"
 //#include "ChangeFormulaCommand.h"
 
 
@@ -48,7 +49,9 @@ FormulaTool::FormulaTool( KoCanvasBase* canvas )
     : KoToolBase( canvas ),
       m_formulaShape(0)
     , m_textEdit(0)
+    , m_cursor(0)
 {
+
 }
 
 void FormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -66,12 +69,16 @@ void FormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &
         return;
     }
 
-    useCursor(Qt::ArrowCursor);
+    delete m_cursor;
+    m_cursor = new FormulaCursor(m_formulaShape->document());
+    m_formulaShape->update();
 }
 
 void FormulaTool::deactivate()
 {
     m_formulaShape = 0;
+    delete m_cursor;
+    m_cursor = 0;
 }
 
 QWidget * FormulaTool::createOptionWidget()
@@ -122,5 +129,37 @@ void FormulaTool::mousePressEvent(KoPointerEvent *event)
 void FormulaTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
 }
+
+void FormulaTool::paint(QPainter &painter, const KoViewConverter &converter)
+{
+    if (m_formulaShape == 0) {
+        return;
+    }
+    
+    m_formulaShape->update();
+}
+
+void FormulaTool::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Backspace) {
+        
+    } else if (event->key() == Qt::Key_Delete) {
+
+    } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
+        if(m_cursor) {
+            m_cursor->previousNode();
+        }
+    } else if ((event->key() == Qt::Key_Right) && (event->modifiers() & Qt::ControlModifier) == 0) {
+        if(m_cursor) {
+            m_cursor->nextNode();
+	    }
+    } else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::ControlModifier) == 0) {
+        
+    } else if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ControlModifier) == 0) {
+        
+    } else {
+      
+    }
+ }
 
 #include <FormulaTool.moc>

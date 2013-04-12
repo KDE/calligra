@@ -269,4 +269,9 @@ QString FormulaShape::MML()
     return m_document->content();
 }
 
+FormulaDocument *FormulaShape::document()
+{
+    return m_document;
+}
+
 #include <FormulaShape.moc>

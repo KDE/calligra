@@ -59,231 +59,6 @@
 
 #define ROUND(a) (int)((a)+.5)
 
-static bool           g_draw_frames			= false;
-static const double   g_mfrac_spacing			= 0.1;
-static const double   g_mroot_base_margin		= 0.1;
-static const double   g_script_size_multiplier	    	= 0.7071; // sqrt(1/2)
-static const int      g_min_font_point_size		= 8;
-static const QChar    g_radical_char  	    	    	= QChar(0x1A, 0x22);
-static const unsigned g_oper_spec_rows     	        = 9;
-
-struct Mml
-{
-    enum NodeType {
-	    NoNode = 0, MiNode, MnNode, MfracNode, MrowNode, MsqrtNode,
-	    MrootNode, MsupNode, MsubNode, MsubsupNode, MoNode,
-	    MstyleNode, TextNode, MphantomNode, MfencedNode,
-	    MtableNode, MtrNode, MtdNode, MoverNode, MunderNode,
-	    MunderoverNode, MerrorNode, MtextNode, MpaddedNode,
-        MspaceNode, MalignMarkNode, MannotationNode, UnknownNode
-    };
-
-    enum MathVariant {
-	    NormalMV	    = 0x0000,
-	    BoldMV  	    = 0x0001,
-	    ItalicMV	    = 0x0002,
-	    DoubleStruckMV  = 0x0004,
-	    ScriptMV        = 0x0008,
-	    FrakturMV       = 0x0010,
-	    SansSerifMV     = 0x0020,
-	    MonospaceMV     = 0x0040
-    };
-
-    enum FormType { PrefixForm, InfixForm, PostfixForm };
-    enum ColAlign { ColAlignLeft, ColAlignCenter, ColAlignRight };
-    enum RowAlign { RowAlignTop, RowAlignCenter, RowAlignBottom,
-		    RowAlignAxis, RowAlignBaseline };
-    enum FrameType { FrameNone, FrameSolid, FrameDashed };
-
-    struct FrameSpacing {
-	FrameSpacing(int hor = 0, int ver = 0)
-	    : m_hor(hor), m_ver(ver) {}
-	int m_hor, m_ver;
-    };
-};
-
-struct OperSpec {
-    enum StretchDir { NoStretch, HStretch, VStretch, HVStretch };
-
-    const char *name;
-    Mml::FormType form;
-    const char *attributes[g_oper_spec_rows];
-    StretchDir stretch_dir;
-};
-
-struct NodeSpec
-{
-    Mml::NodeType type;
-    const char *tag;
-    const char *type_str;
-    int child_spec;
-    const char *child_types;
-    const char *attributes;
-
-    enum ChildSpec {
-	    ChildAny     = -1, // any number of children allowed
-	    ChildIgnore  = -2, // do not build subexpression of children
-	    ImplicitMrow = -3  // if more than one child, build mrow
-    };
-};
-
-struct EntitySpec
-{
-    const char *name;
-    const char *value;
-};
-
-typedef QMap<QString, QString> MmlAttributeMap;
-class MmlNode;
-
-class MmlDocument : public Mml
-{
-    public:
-	MmlDocument();
-	~MmlDocument();
-	void clear();
-
-	bool setContent(QString text, QString *errorMsg = 0,
-			    int *errorLine = 0, int *errorColumn = 0);
-	void paint(QPainter *p, const QPoint &pos) const;
-	void dump() const;
-	QSize size() const;
-	void layout();
-
-	QString fontName(QtMmlWidget::MmlFont type) const;
-	void setFontName(QtMmlWidget::MmlFont type, const QString &name);
-
-	int baseFontPointSize() const
-	    { return m_base_font_point_size; }
-	void setBaseFontPointSize(int size)
-	    { m_base_font_point_size = size; }
-	QColor foregroundColor() const
-	    { return m_foreground_color; }
-	void setForegroundColor(const QColor &color)
-	    { m_foreground_color = color; }
-	QColor backgroundColor() const
-	    { return m_background_color; }
-	void setBackgroundColor(const QColor &color)
-	    { m_background_color = color; }
-
-    private:
-	void _dump(const MmlNode *node, QString &indent) const;
-	bool insertChild(MmlNode *parent, MmlNode *new_node, QString *errorMsg);
-
-	MmlNode *domToMml(const QDomNode &dom_node, bool *ok, QString *errorMsg);
-	MmlNode *createNode(NodeType type, const MmlAttributeMap &mml_attr,
-				const QString &mml_value, QString *errorMsg);
-	MmlNode *createImplicitMrowNode(const QDomNode &dom_node, bool *ok,
-				    QString *errorMsg);
-
-	void insertOperator(MmlNode *node, const QString &text);
-
-	MmlNode *m_root_node;
-
-	QString m_normal_font_name;
-	QString m_fraktur_font_name;
-	QString m_sans_serif_font_name;
-	QString m_script_font_name;
-	QString m_monospace_font_name;
-	QString m_doublestruck_font_name;
-	int m_base_font_point_size;
-	QColor m_foreground_color;
-	QColor m_background_color;
-};
-
-class MmlNode : public Mml
-{
-    friend class MmlDocument;
-
-    public:
-	MmlNode(NodeType type, MmlDocument *document, const MmlAttributeMap &attribute_map);
-	virtual ~MmlNode();
-
-	// Mml stuff
-	NodeType nodeType() const
-	    { return m_node_type; }
-
-	virtual QString toStr() const;
-
-	void setRelOrigin(const QPoint &rel_origin);
-	QPoint relOrigin() const
-	    { return m_rel_origin; }
-	void stretchTo(const QRect &rect);
-	bool isStretched() const
-	    { return m_stretched; }
-	QPoint devicePoint(const QPoint &p) const;
-
-	QRect myRect() const
-	    { return m_my_rect; }
-	QRect parentRect() const;
-	virtual QRect deviceRect() const;
-	void updateMyRect();
-	virtual void setMyRect(const QRect &rect)
-	    { m_my_rect = rect; }
-
-	virtual void stretch();
-	virtual void layout();
-	virtual void paint(QPainter *p);
-
-	int basePos() const;
-	int overlinePos() const;
-	int underlinePos() const;
-	int em() const;
-	int ex() const;
-
-	QString explicitAttribute(const QString &name, const QString &def = QString::null) const;
-	QString inheritAttributeFromMrow(const QString &name, const QString &def = QString::null) const;
-
-	virtual QFont font() const;
-	virtual QColor color() const;
-	virtual QColor background() const;
-	virtual int scriptlevel(const MmlNode *child = 0) const;
-
-
-	// Node stuff
-	MmlDocument *document() const
-	    { return m_document; }
-	MmlNode *parent() const
-	    { return m_parent; }
-	MmlNode *firstChild() const
-	    { return m_first_child; }
-	MmlNode *nextSibling() const
-	    { return m_next_sibling; }
-	MmlNode *previousSibling() const
-	    { return m_previous_sibling; }
-	MmlNode *lastSibling() const;
-	MmlNode *firstSibling() const;
-	bool isLastSibling() const
-	    { return m_next_sibling == 0; }
-	bool isFirstSibling() const
-	    { return m_previous_sibling == 0; }
-	bool hasChildNodes() const
-	    { return m_first_child != 0; }
-
-    protected:
-	virtual void layoutSymbol();
-	virtual void paintSymbol(QPainter *p) const;
-	virtual QRect symbolRect() const
-	    { return QRect(0, 0, 0, 0); }
-
-	MmlNode *parentWithExplicitAttribute(const QString &name, NodeType type = NoNode);
-	int interpretSpacing(const QString &value, bool *ok) const;
-
-    private:
-	MmlAttributeMap m_attribute_map;
-	bool m_stretched;
-	QRect m_my_rect, m_parent_rect;
-	QPoint m_rel_origin;
-
-	NodeType m_node_type;
-	MmlDocument *m_document;
-
-	MmlNode *m_parent,
-		*m_first_child,
-		*m_next_sibling,
-		*m_previous_sibling;
-};
-
 class MmlTokenNode : public MmlNode
 {
     public:
@@ -3610,6 +3385,7 @@ MmlNode::MmlNode(NodeType type, MmlDocument *document, const MmlAttributeMap &at
     m_my_rect = m_parent_rect = QRect(0, 0, 0, 0);
     m_rel_origin = QPoint(0, 0);
     m_stretched = false;
+    m_showCursor = false;
 }
 
 MmlNode::~MmlNode()
@@ -4025,6 +3801,13 @@ void MmlNode::paint(QPainter *p)
 	child->paint(p);
 
     paintSymbol(p);
+
+    if (m_showCursor) {
+      QBrush brush = p->brush();
+      brush.setColor(Qt::red);
+      p->setBrush(brush);
+      p->drawRect(myRect());
+    }
 
     p->restore();
 }
@@ -6386,4 +6169,9 @@ int QtMmlDocument::baseFontPointSize() const
 void QtMmlDocument::setBaseFontPointSize(int size)
 {
     m_doc->setBaseFontPointSize(size);
+}
+
+MmlNode *QtMmlDocument::rootNode() 
+{ 
+    return m_doc->rootNode();
 }

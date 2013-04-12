@@ -61,7 +61,8 @@ public:
 
     void setMML(const QString &mmlText);
     QString MML();
-
+    
+    FormulaDocument *document();
 private:
     bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
                               const KoOdfLoadingContext &odfLoadingContext);
