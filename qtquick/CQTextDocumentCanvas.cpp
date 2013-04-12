@@ -26,6 +26,8 @@
 #include "CQCanvasController.h"
 #include "CQTextDocumentModel.h"
 
+#include <QStyleOptionGraphicsItem>
+
 #include <KoDocument.h>
 #include <KoPart.h>
 #include <KoFindText.h>
@@ -149,6 +151,14 @@ void CQTextDocumentCanvas::setCurrentPageNumber(const int& currentPageNumber)
 {
     d->pageNumber = currentPageNumber;
     emit currentPageNumberChanged();
+}
+
+void CQTextDocumentCanvas::render(QPainter* painter, const QRectF& target)
+{
+    QStyleOptionGraphicsItem option;
+    option.exposedRect = target;
+    option.rect = target.toAlignedRect();
+    d->canvasBase->canvasItem()->paint(painter, &option);
 }
 
 void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)

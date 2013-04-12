@@ -22,6 +22,9 @@
  */
 
 #include "CQPresentationCanvas.h"
+
+#include <QStyleOptionGraphicsItem>
+
 #include "CQCanvasController.h"
 #include <KoPart.h>
 #include <KoFindText.h>
@@ -89,6 +92,14 @@ void CQPresentationCanvas::setCurrentSlide(int slide)
         d->pageSize = d->view->activePage()->size();
         emit currentSlideChanged();
     }
+}
+
+void CQPresentationCanvas::render(QPainter* painter, const QRectF& target)
+{
+    QStyleOptionGraphicsItem option;
+    option.exposedRect = target;
+    option.rect = target.toAlignedRect();
+    d->canvasBase->canvasItem()->paint(painter, &option);
 }
 
 void CQPresentationCanvas::openFile(const QString& uri)
