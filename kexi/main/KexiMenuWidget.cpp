@@ -440,9 +440,7 @@ int KexiMenuWidgetPrivate::sloppyDelayTimer = 0;
 void KexiMenuWidgetPrivate::init()
 {
     oxygenHelper = q->style()->objectName() == "oxygen" ? new OxygenHelper : 0;
-    if (!oxygenHelper) {
-        bespin = q->style()->objectName() == "bespin";
-    }
+    bespin = oxygenHelper ? false : q->style()->objectName() == "bespin";
 
 #ifndef QT_NO_WHATSTHIS
     //q->setAttribute(Qt::WA_CustomWhatsThis);

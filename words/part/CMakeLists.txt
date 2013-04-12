@@ -75,6 +75,7 @@ set(wordsprivate_LIB_SRCS
     author/CAuView.cpp
     author/CAuPart.cpp
     author/CoverImage.cpp
+    author/CoverSelectionDialog.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -97,6 +98,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dockers/StatisticsPreferencesPopup.ui
     pagetool/SimpleSetupWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui
+    author/CoverSelectionDialog.ui
 )
 if( Soprano_FOUND )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
