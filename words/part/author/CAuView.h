@@ -36,6 +36,8 @@ class WORDS_EXPORT CAuView : public KWView
 
 public:
     CAuView(KoPart *part, KWDocument *document, QWidget *parent);
+    QPair<QString, QByteArray> getCurrentCoverImage();
+    void setCurrentCoverImage(QPair<QString, QByteArray> img);
 
 private slots:
     void selectCoverImage();

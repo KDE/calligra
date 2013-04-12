@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
    
    Based on qmenu_p.h from Qt 4.7
 
@@ -268,6 +268,7 @@ public:
     //bool persistentSelectionsEnabled;
 
     OxygenHelper *oxygenHelper;
+    bool bespin;
 
     void updateLogo();
     void updateLogoPixmap();
