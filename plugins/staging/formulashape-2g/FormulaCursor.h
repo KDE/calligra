@@ -33,13 +33,13 @@ class FormulaCursor : public QObject
   
 public:
     explicit FormulaCursor(FormulaDocument *document);
-    FormulaCursor(MmlNode *node);
     ~FormulaCursor();
     
     void setNode(MmlNode *node);
     
     void nextNode();
     void previousNode();
+    void deleteNode();
     
 public slots:
     void blinkCaret();
@@ -47,7 +47,7 @@ public slots:
 private:
     MmlNode *m_node;
     QTimer m_caretTimer;
-    
+    FormulaDocument *m_document;
     void init();
     MmlNode *nextNode(MmlNode *node);
     MmlNode *previousNode(MmlNode *node);

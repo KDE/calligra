@@ -3007,6 +3007,31 @@ void MmlDocument::layout()
     m_root_node->stretch();
 //    dump();
 }
+void MmlDocument::deleteNode(MmlNode *node)
+{
+    if(node == m_root_node) {
+        m_root_node = 0;
+        delete node;
+        return;
+    }
+    
+    if (node->m_parent) {
+        MmlNode *parentNode = node->m_parent;
+        if (parentNode->m_first_child == node) {
+            parentNode->m_first_child = node->m_next_sibling;
+        }
+    }
+    
+    if (node->m_previous_sibling) {
+        node->m_previous_sibling->m_next_sibling = node->m_next_sibling;
+    }
+    
+    if (node->m_next_sibling) {
+        node->m_next_sibling->m_previous_sibling = node->m_previous_sibling;
+    }
+    
+    delete node;
+}
 
 bool MmlDocument::insertChild(MmlNode *parent, MmlNode *new_node,
 				QString *errorMsg)
@@ -6174,4 +6199,9 @@ void QtMmlDocument::setBaseFontPointSize(int size)
 MmlNode *QtMmlDocument::rootNode() 
 { 
     return m_doc->rootNode();
+}
+
+void QtMmlDocument::deleteNode(MmlNode *node)
+{
+    m_doc->deleteNode(node);
 }

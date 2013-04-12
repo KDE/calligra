@@ -25,16 +25,10 @@
 FormulaCursor::FormulaCursor(FormulaDocument *document)
     : QObject()
     , m_caretTimer(this)
+    , m_document(document)
 {
     init();
     setNode(document->rootNode()->firstChild());
-}
-
-FormulaCursor::FormulaCursor(MmlNode *node)
-    : m_caretTimer(this)
-{
-    init();
-    setNode(node);
 }
 
 FormulaCursor::~FormulaCursor()
@@ -82,7 +76,9 @@ void FormulaCursor::nextNode()
         return;
     }
 
-    if (MmlNode *nextMmlNode = nextNode(m_node)) {
+    if (m_node->hasChildNodes()) {
+        setNode(m_node->firstChild());
+    } else if (MmlNode *nextMmlNode = nextNode(m_node)) {
         setNode(nextMmlNode);
     }
 }
@@ -95,14 +91,14 @@ void FormulaCursor::previousNode()
 
     if (MmlNode *previousMmlNode = previousNode(m_node)) {
         setNode(previousMmlNode);
+    } else if (m_node->hasChildNodes()) {
+        setNode(m_node->firstChild()->lastSibling()); 
     }
 }
 
 MmlNode *FormulaCursor::nextNode(MmlNode *node)
 {
-    if (m_node->hasChildNodes()) {
-        return node->firstChild();
-    } else if (!node->isLastSibling()) {
+    if (!node->isLastSibling()) {
         return node->nextSibling();
     } else if(node->parent()) {
         return nextNode(node->parent());
@@ -117,9 +113,16 @@ MmlNode *FormulaCursor::previousNode(MmlNode *node)
         return node->parent();
     } else if (!node->isFirstSibling()) {
         return node->previousSibling();
-    } else if (node->hasChildNodes()) {
-        return node->firstChild()->lastSibling();    
     }
 
     return 0;
+}
+
+void FormulaCursor::deleteNode()
+{
+    MmlNode *deletedNode = m_node;
+    //set the cursor to the parent of the node being deleted
+    setNode(m_node->parent());
+    m_document->deleteNode(deletedNode);
+    m_document->rootNode()->layout();
 }

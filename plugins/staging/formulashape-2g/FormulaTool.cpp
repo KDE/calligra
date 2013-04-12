@@ -144,7 +144,9 @@ void FormulaTool::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Backspace) {
         
     } else if (event->key() == Qt::Key_Delete) {
-
+        if(m_cursor) {
+            m_cursor->deleteNode();
+        }
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
         if(m_cursor) {
             m_cursor->previousNode();

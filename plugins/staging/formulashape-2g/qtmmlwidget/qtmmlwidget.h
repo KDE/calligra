@@ -130,6 +130,7 @@ public:
     void setBaseFontPointSize(int size);
     
     MmlNode *rootNode();
+    void deleteNode(MmlNode *node);
 private:
     MmlDocument *m_doc;
 };
@@ -234,6 +235,8 @@ class MmlDocument : public Mml
 	    { m_background_color = color; }
 	MmlNode *rootNode() 
 	    { return m_root_node; }
+	
+	void deleteNode(MmlNode *node);
 
     private:
 	void _dump(const MmlNode *node, QString &indent) const;
