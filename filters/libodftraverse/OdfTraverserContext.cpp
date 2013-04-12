@@ -24,6 +24,7 @@
 
 // Calligra
 #include <KoXmlReader.h>
+#include <KoOdfStyleManager.h>
 
 // Odftraverse library
 #include "OdfParser.h"
@@ -45,6 +46,7 @@ public:
     // It's created from the store that is given to us at construction time.
     QHash<QString, QString>    metadata;
     QHash<QString, QString>    manifest;
+    KoOdfStyleManager         *styleManager;
 
     // This data is created during the traversal and can be used after
     // it is finished.
@@ -55,11 +57,13 @@ public:
 
 OdfTraverserContext::Private::Private(KoStore *store)
     : odfStore(store)
+    , styleManager(new KoOdfStyleManager())
 {
 }
 
 OdfTraverserContext::Private::~Private()
 {
+    delete styleManager;
 }
 
 
@@ -101,6 +105,9 @@ KoFilter::ConversionStatus OdfTraverserContext::analyzeOdfFile()
     if (status != KoFilter::OK) {
         return status;
     }
+
+    // Load the styles
+    d->styleManager->loadStyles(d->odfStore);
 
     return KoFilter::OK;
 }
