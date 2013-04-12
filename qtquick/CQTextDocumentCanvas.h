@@ -39,33 +39,19 @@ class KoFindMatch;
 class CQTextDocumentCanvas : public CQCanvasBase
 {
     Q_OBJECT
-    Q_PROPERTY(ZoomMode zoomMode READ zoomMode WRITE setZoomMode NOTIFY zoomModeChanged)
     Q_PROPERTY(QString searchTerm READ searchTerm WRITE setSearchTerm NOTIFY searchTermChanged)
     Q_PROPERTY(QObject* documentModel READ documentModel NOTIFY documentModelChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(int currentPageNumber READ currentPageNumber WRITE setCurrentPageNumber NOTIFY currentPageNumberChanged)
-    Q_PROPERTY (int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
 
 public:
     CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
     ~CQTextDocumentCanvas();
 
-    enum ZoomMode
-    {
-        ZOOM_CONSTANT = 0,  ///< zoom x %
-        ZOOM_WIDTH    = 1,  ///< zoom pagewidth
-        ZOOM_PAGE     = 2,  ///< zoom to pagesize
-    };
-    Q_ENUMS(ZoomMode)
-
     int currentPageNumber() const;
     void setCurrentPageNumber(const int &currentPageNumber);
     int cameraY() const;
     void setCameraY (int cameraY);
-
-
-    ZoomMode zoomMode() const;
-    void setZoomMode(ZoomMode zoomMode);
 
     QString searchTerm() const;
     void setSearchTerm(const QString &term);
@@ -74,7 +60,6 @@ public:
     QSize documentSize() const;
 
 signals:
-    void zoomModeChanged();
     void searchTermChanged();
     void documentModelChanged();
     void documentSizeChanged();
@@ -86,7 +71,6 @@ protected:
     virtual void openFile(const QString& uri);
 
 private slots:
-    void updateControllerWithZoomMode();
     void findNoMatchFound();
     void findMatchFound(const KoFindMatch& match);
     void updateCanvas();

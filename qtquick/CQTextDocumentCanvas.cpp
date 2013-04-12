@@ -36,7 +36,6 @@
 #include <KWDocument.h>
 #include <KWPage.h>
 #include <KWCanvasItem.h>
-#include <KService>
 #include <KActionCollection>
 #include <QGraphicsWidget>
 #include <QTextDocument>
@@ -47,13 +46,11 @@ class CQTextDocumentCanvas::Private
 public:
     Private()
         : canvasBase(0),
-          zoomMode(ZOOM_CONSTANT),
           findText(0),
           documentModel(0)
     {}
 
     KoCanvasBase *canvasBase;
-    ZoomMode zoomMode;
     QString searchTerm;
     KoFindText *findText;
     CQTextDocumentModel *documentModel;
@@ -101,7 +98,6 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     graphicsWidget->installEventFilter(this);
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
-    updateControllerWithZoomMode();
 
     if(d->pageNumber >= 1) {
       gotoPage(d->pageNumber, document);
@@ -161,7 +157,6 @@ void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRec
         QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
         if (widget) {
             widget->setGeometry(newGeometry);
-            updateControllerWithZoomMode();
         }
     }
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
@@ -188,35 +183,10 @@ void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
     kwCanvasItem->updateSize();
 }
 
-void CQTextDocumentCanvas::setZoomMode(ZoomMode zoomMode)
-{
-    d->zoomMode = zoomMode;
-    updateControllerWithZoomMode();
-    emit zoomModeChanged();
-}
-
-CQTextDocumentCanvas::ZoomMode CQTextDocumentCanvas::zoomMode() const
-{
-    return d->zoomMode;
-}
-
 void CQTextDocumentCanvas::updateZoomControllerAccordingToDocument(const KoDocument* document)
 {
     const KWDocument *kwDoc = static_cast<const KWDocument*>(document);
     zoomController()->setPageSize (kwDoc->pageManager()->begin().rect().size());
-}
-
-void CQTextDocumentCanvas::updateControllerWithZoomMode()
-{
-    KoZoomMode::Mode zoomMode;
-    switch (d->zoomMode) {
-        case ZOOM_CONSTANT: zoomMode = KoZoomMode::ZOOM_CONSTANT; break;
-        case ZOOM_PAGE: zoomMode = KoZoomMode::ZOOM_PAGE; break;
-        case ZOOM_WIDTH: zoomMode = KoZoomMode::ZOOM_WIDTH; break;
-    }
-    if(zoomController()) {
-        zoomController()->setZoom(zoomMode, 1.0);
-    }
 }
 
 QString CQTextDocumentCanvas::searchTerm() const
