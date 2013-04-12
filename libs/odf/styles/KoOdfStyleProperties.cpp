@@ -82,7 +82,10 @@ bool KoOdfStyleProperties::readOdf(KoXmlStreamReader &reader)
 {
     // The default implementation just read the attributes.  The
     // inheriting classes will also read various types of children.
-    return readAttributes(reader);
+    bool retval = readAttributes(reader);
+    reader.skipCurrentElement();
+
+    return retval;
 }
 
 
