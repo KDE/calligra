@@ -170,8 +170,3 @@ bool FormulaDocument::setContent(QString text, QString *errorMsg, int *errorLine
 
     return false;
 }
-
-QString FormulaDocument::content()
-{
-    return d->content;
-}

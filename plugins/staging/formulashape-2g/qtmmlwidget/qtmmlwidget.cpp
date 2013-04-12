@@ -2928,6 +2928,43 @@ void MmlDocument::clear()
     m_root_node = 0;
 }
 
+QString MmlDocument::content()
+{
+    QString content = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics>";
+    
+    QString rootContent = "";
+    if (m_root_node != 0) {
+        rootContent = mmlContent(m_root_node);
+    }
+    
+    return QString("%1%2%3").arg(content).arg(rootContent).arg("</semantics></math>");
+}
+
+
+QString MmlDocument::mmlContent(MmlNode *node)
+{
+    const NodeSpec *spec = mmlFindNodeSpec(node->nodeType());
+    Q_ASSERT(spec != 0);
+    QString returnString = "";
+    if (spec->tag) {
+        returnString += QString("<%1>").arg(spec->tag);
+    }
+    
+    MmlNode *child = node->firstChild();
+    for (; child != 0; child = child->nextSibling()) {
+        if (child->m_node_type == TextNode) {
+            returnString += dynamic_cast<MmlTextNode *>(child)->text();
+        } else {
+            returnString += mmlContent(child);
+        }
+    }
+    
+    if (spec->tag) {
+        returnString += QString("</%1>").arg(spec->tag);
+    }
+    return returnString;    
+}
+
 void MmlDocument::dump() const
 {
     if (m_root_node == 0)
@@ -3005,7 +3042,8 @@ void MmlDocument::layout()
 
     m_root_node->layout();
     m_root_node->stretch();
-//    dump();
+    //dump();
+    //qDebug()<<content();
 }
 void MmlDocument::deleteNode(MmlNode *node)
 {
@@ -5288,6 +5326,11 @@ void QtMmlWidget::dump() const
     m_doc->dump();
 }
 
+QString QtMmlWidget::content()
+{
+    return m_doc->content();
+}
+
 // *******************************************************************
 // Static helper functions
 // *******************************************************************
@@ -6204,4 +6247,14 @@ MmlNode *QtMmlDocument::rootNode()
 void QtMmlDocument::deleteNode(MmlNode *node)
 {
     m_doc->deleteNode(node);
+}
+
+void QtMmlDocument::layout()
+{
+    m_doc->layout();
+}
+
+QString QtMmlDocument::content()
+{
+    return m_doc->content();
 }

@@ -95,6 +95,8 @@ class QT_QTMMLWIDGET_EXPORT QtMmlWidget : public QFrame
 
 	bool setContent(const QString &text, QString *errorMsg = 0,
 			    int *errorLine = 0, int *errorColumn = 0);
+    QString content();
+    
 	void dump() const;
 	virtual QSize sizeHint() const;
 
@@ -120,7 +122,11 @@ public:
 
     bool setContent(QString text, QString *errorMsg = 0,
                     int *errorLine = 0, int *errorColumn = 0);
+    QString content();
+    
     void paint(QPainter *p, const QPoint &pos) const;
+    void layout();
+    
     QSize size() const;
 
     QString fontName(QtMmlWidget::MmlFont type) const;
@@ -213,6 +219,9 @@ class MmlDocument : public Mml
 
 	bool setContent(QString text, QString *errorMsg = 0,
 			    int *errorLine = 0, int *errorColumn = 0);
+    QString content();
+    QString mmlContent(MmlNode *node);
+    
 	void paint(QPainter *p, const QPoint &pos) const;
 	void dump() const;
 	QSize size() const;
@@ -334,8 +343,8 @@ class MmlNode : public Mml
 	    { return m_previous_sibling == 0; }
 	bool hasChildNodes() const
 	    { return m_first_child != 0; }
-
-    protected:
+	    
+protected:
 	virtual void layoutSymbol();
 	virtual void paintSymbol(QPainter *p) const;
 	virtual QRect symbolRect() const

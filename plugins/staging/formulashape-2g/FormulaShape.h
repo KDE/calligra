@@ -72,8 +72,6 @@ private:
 
     /// True if this formula is inline, i.e. not embedded in a formula document.
     bool m_isInline;
-
-    QString m_mmlString;
 };
 
 

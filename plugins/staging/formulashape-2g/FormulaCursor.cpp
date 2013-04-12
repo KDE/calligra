@@ -124,5 +124,5 @@ void FormulaCursor::deleteNode()
     //set the cursor to the parent of the node being deleted
     setNode(m_node->parent());
     m_document->deleteNode(deletedNode);
-    m_document->rootNode()->layout();
+    m_document->layout();
 }
