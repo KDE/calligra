@@ -49,6 +49,12 @@ public:
     qreal zoom() const;
     void setZoom(qreal newZoom);
 
+public Q_SLOTS:
+    void beginZoomGesture();
+    void endZoomGesture();
+
+    void zoomBy(qreal amount, const QPointF& center = QPointF());
+
 Q_SIGNALS:
     void canvasChanged();
     void flickableChanged();
