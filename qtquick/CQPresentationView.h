@@ -23,7 +23,7 @@
 #ifndef CQPRESENTATIONVIEW_H
 #define CQPRESENTATIONVIEW_H
 
-#include <libs/kopageapp/KoPAViewBase.h>
+#include <KoPAViewBase.h>
 #include <KoZoomMode.h>
 
 class KoCanvasController;

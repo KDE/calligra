@@ -27,10 +27,10 @@
 #include "CQPresentationView.h"
 #include "CQCanvasController.h"
 #include <KoZoomController.h>
-#include <libs/kopageapp/KoPADocument.h>
+#include <KoPADocument.h>
 #include <KoPACanvasBase.h>
-#include <libs/kopageapp/KoPAPageBase.h>
-#include <libs/kopageapp/KoPAViewModeNormal.h>
+#include <KoPAPageBase.h>
+#include <KoPAViewModeNormal.h>
 #include <stage/part/KPrDocument.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>

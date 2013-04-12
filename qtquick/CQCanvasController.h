@@ -25,7 +25,7 @@
 #ifndef CQCANVASCONTROLLER_H
 #define CQCANVASCONTROLLER_H
 
-#include <libs/flake/KoCanvasController.h>
+#include <KoCanvasController.h>
 
 #include <QtCore/QSize>
 #include <QtCore/QPoint>

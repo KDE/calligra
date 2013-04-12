@@ -20,7 +20,6 @@
 #include "CQThumbnailItem.h"
 
 #include <QPainter>
-#include <QStyleOptionGraphicsItem>
 
 class CQThumbnailItem::Private
 {
@@ -44,7 +43,7 @@ CQThumbnailItem::~CQThumbnailItem()
     delete d;
 }
 
-void CQThumbnailItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
+void CQThumbnailItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* )
 {
     if(!d->content.isNull()) {
         painter->drawPixmap(0, 0, width(), height(), d->content);

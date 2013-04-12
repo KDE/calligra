@@ -27,9 +27,9 @@
 #include "CQCanvasBase.h"
 
 namespace Calligra {
-namespace Sheets {
-class Map;
-}
+    namespace Sheets {
+        class Map;
+    }
 }
 
 class KoCanvasBase;
