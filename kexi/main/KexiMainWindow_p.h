@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,15 +30,15 @@
 #define PROJECT_NAVIGATOR_TABBAR_ID 0
 #define PROPERTY_EDITOR_TABBAR_ID 1
 
-#include <KToolBar>
-#include <KColorUtils>
-#include <KHelpMenu>
+#include <ktoolbar.h>
+#include <kcolorutils.h>
+#include <khelpmenu.h>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QDesktopWidget>
 #include <QKeyEvent>
-#include <KTabWidget>
+#include <ktabwidget.h>
 #include <KoIcon.h>
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
@@ -154,7 +154,7 @@ private:
 };
 
 //#include <qimageblitz/qimageblitz.h>
-#include <KFadeWidgetEffect>
+#include <kfadewidgeteffect.h>
 #include <QStyleOptionMenuItem>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
@@ -560,7 +560,7 @@ public:
     int lowestIndex;
 };
 
-#include <KTabBar>
+#include <ktabbar.h>
 #include <QTabBar>
 #include <QPainter>
 
@@ -614,8 +614,16 @@ public:
                 if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX)
                     return;
                 bool mouseOver = opt->state & QStyle::State_MouseOver;
+                bool unselectedOrMenuVisible
+                    = !(opt->state & State_Selected) || tbar->mainMenuVisible();
+                if (unselectedOrMenuVisible) {
+                    if (parentStyle()->objectName() == "bespin") {
+                        unselectedOrMenuVisible = false;
+                    }
+                }
+
                 if (!mouseOver
-                    && (!(opt->state & State_Selected) || tbar->mainMenuVisible())
+                    && unselectedOrMenuVisible
                     && index > 0)
                 {
                     QStyleOptionTabV2 newOpt(*opt);
@@ -815,7 +823,8 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
 
     QStyleOptionTab ot;
     ot.initFrom(tabBar);
-    int overlap = tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &ot, tabBar) - 2;
+    int overlap = tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &ot, tabBar)
+                  - tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseHeight, &ot, tabBar);
 //     kDebug() << "4. overlap=" << overlap;
 
     mainMenu->setGeometry(0, pos.y() - overlap /*- q->y()*/,

@@ -22,13 +22,13 @@
 #include <KoIcon.h>
 
 #include <QHash>
-#include <KGlobal>
-#include <KShortcut>
-#include <KStandardAction>
-#include <KStandardShortcut>
-#include <KAction>
-#include <KActionCollection>
-#include <KLocale>
+#include <kglobal.h>
+#include <kshortcut.h>
+#include <kstandardaction.h>
+#include <kstandardshortcut.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <klocale.h>
 
 namespace KexiStandardAction
 {

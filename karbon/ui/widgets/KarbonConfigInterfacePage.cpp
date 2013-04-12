@@ -30,12 +30,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoConfigDocumentPage.h>
 #include <KoConfigMiscPage.h>
 
-#include <KLocale>
-#include <KComponentData>
-#include <KConfig>
-#include <KConfigGroup>
-#include <KNumInput>
-#include <KColorButton>
+#include <klocale.h>
+#include <kcomponentdata.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <knuminput.h>
+#include <kcolorbutton.h>
 
 #include <QLabel>
 #include <QCheckBox>

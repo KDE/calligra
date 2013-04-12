@@ -20,7 +20,7 @@
 #ifndef KDBWIDGETS_UTILS_H
 #define KDBWIDGETS_UTILS_H
 
-#include <KMenu>
+#include <kmenu.h>
 #include <core/kexidataiteminterface.h>
 
 //! Form-related utilities

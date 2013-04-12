@@ -53,7 +53,7 @@
 #endif
 // KDE + Qt includes
 #include <QTextCursor>
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoDocumentRdfBase.h>
 

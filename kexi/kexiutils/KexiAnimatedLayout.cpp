@@ -20,7 +20,7 @@
 #include "KexiAnimatedLayout.h"
 #include "KexiAnimatedLayout_p.h"
  
-#include <KGlobalSettings>
+#include <kglobalsettings.h>
 
 #include <QPainter>
 #include <QPaintEvent>

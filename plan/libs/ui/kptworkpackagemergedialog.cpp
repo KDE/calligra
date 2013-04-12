@@ -22,8 +22,8 @@
 #include "kptproject.h"
 #include "kpttask.h"
 
-#include <KMessageBox>
-#include <KExtendableItemDelegate>
+#include <kmessagebox.h>
+#include <kextendableitemdelegate.h>
 
 #include <QTreeView>
 #include <QSortFilterProxyModel>

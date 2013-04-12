@@ -27,7 +27,7 @@
 #include "kpttask.h"
 #include "kptnode.h"
 
-#include <KUrl>
+#include <kurl.h>
 
 #include <QFileInfo>
 

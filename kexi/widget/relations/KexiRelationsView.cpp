@@ -28,10 +28,10 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <kpushbutton.h>
-#include <KMenu>
-#include <KDialog>
+#include <kmenu.h>
+#include <kdialog.h>
 
 #include <db/connection.h>
 #include <db/utils.h>

@@ -21,13 +21,13 @@
 
 #include <KoIcon.h>
 
-#include <KLocale>
-#include <KComboBox>
-#include <KGlobal>
-#include <KConfigGroup>
-#include <KDebug>
-#include <KMessageBox>
-#include <KInputDialog>
+#include <klocale.h>
+#include <kcombobox.h>
+#include <kglobal.h>
+#include <kconfiggroup.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <kinputdialog.h>
 
 #include <QSpinBox>
 #include <QCheckBox>

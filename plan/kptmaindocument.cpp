@@ -61,7 +61,7 @@
 #include <kstandarddirs.h>
 #include <kparts/partmanager.h>
 #include <kmimetype.h>
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 #include <KoGlobal.h>
 #include <kio/global.h>
 #include <kio/jobclasses.h>

@@ -43,12 +43,12 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kurlcombobox.h>
-#include <KCategorizedView>
-#include <KTitleWidget>
-#include <KPushButton>
-#include <KAcceleratorManager>
-#include <KFileDialog>
-#include <KFileItemDelegate>
+#include <kcategorizedview.h>
+#include <ktitlewidget.h>
+#include <kpushbutton.h>
+#include <kacceleratormanager.h>
+#include <kfiledialog.h>
+#include <kfileitemdelegate.h>
 
 #include <QLayout>
 #include <QCheckBox>

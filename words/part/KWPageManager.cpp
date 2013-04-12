@@ -27,7 +27,7 @@
 #include <KoShape.h>
 #include <KoUnit.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #define DEBUG_PAGES
 

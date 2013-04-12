@@ -26,6 +26,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "ui/splash/hi256-app-calligrakarbon.xpm"
+#include <ksplashscreen.h>
+#include <QHideEvent>
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -33,6 +36,18 @@
 #include <KoApplication.h>
 
 #include <KarbonFactory.h>
+
+class KoSplashScreen : public KSplashScreen
+{
+public:
+    explicit KoSplashScreen(const QPixmap& pixmap) : KSplashScreen(pixmap) {}
+
+    void hideEvent(QHideEvent *event)
+    {
+        event->accept();
+        deleteLater();
+    }
+};
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
@@ -44,6 +59,16 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
+    // After creating the KApplication then create the pixmap from an xpm: we cannot get the
+    // location of our datadir before we've started our components,
+    // so use an xpm.
+    QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
+    splashScreen->show();
+    splashScreen->showMessage("<p style=\"color:black\">"
+    "<b>Calligra Karbon is unmaintained!</b><br><br>"
+    "The Calligra community welcomes someone to take over.<br><br>"
+    "See community.kde.org/Calligra</p>");
+
     if( !app.start() )  // parses command line args, create initial docs and shells
         return 1;
 

@@ -37,7 +37,7 @@
 #include "ValueConverter.h"
 
 #include <kcalendarsystem.h>
-#include <KLocale>
+#include <klocale.h>
 
 #include <math.h>
 

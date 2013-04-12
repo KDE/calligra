@@ -47,7 +47,7 @@
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kmimetype.h>
-#include <KDateTime>
+#include <kdatetime.h>
 
 #include <QDomDocument>
 

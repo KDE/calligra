@@ -33,7 +33,7 @@
 #include "KPrPageSelectStrategyActive.h"
 
 #include <kglobal.h>
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 KPrPart::KPrPart(QObject *parent)
     : KoPart(parent)

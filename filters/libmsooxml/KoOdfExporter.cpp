@@ -24,7 +24,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoOdfWriteStore.h>
 #include <KoStoreDevice.h>

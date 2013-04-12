@@ -33,8 +33,8 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 
-#include <KActionCollection>
-#include <KDebug>
+#include <kactioncollection.h>
+#include <kdebug.h>
 
 #include <QPoint>
 #include <QSize>

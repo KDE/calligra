@@ -28,10 +28,10 @@
 #include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <KRun>
-#include <KToolInvocation>
-#include <KMessageBox>
-#include <KGuiItem>
+#include <krun.h>
+#include <ktoolinvocation.h>
+#include <kmessagebox.h>
+#include <kguiitem.h>
 
 #include <calligraversion.h>
 

@@ -3,6 +3,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30526)
 include_directories(
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
+    ${KOMAIN_INCLUDES}
 )
 
 ########### next target ###############
@@ -63,7 +64,9 @@ ENDIF(FALSE)
 
 install( FILES
   words_docx_import.desktop
-#todo  words_docx_export.desktop
-  words_docx_thumbnail.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
+
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES words_docx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)

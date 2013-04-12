@@ -128,8 +128,8 @@
 #include <kfiledialog.h>
 #include <kstandardaction.h>
 #include <kparts/partmanager.h>
-#include <KToggleAction>
-#include <KDebug>
+#include <ktoggleaction.h>
+#include <kdebug.h>
 
 // qt header
 #include <QIcon>

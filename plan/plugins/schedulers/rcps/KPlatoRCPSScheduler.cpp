@@ -32,8 +32,8 @@
 #include <QTimer>
 #include <QMutexLocker>
 
-#include <KGlobal>
-#include <KLocale>
+#include <kglobal.h>
+#include <klocale.h>
 
 #include <iostream>
 

@@ -21,7 +21,7 @@
 #include <QFile>
 #include <QRegExp>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "xbasedriver.h"
 #include "xbasecursor.h"

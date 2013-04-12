@@ -24,7 +24,7 @@
 
 #include "kptproject.h"
 #include "kptdatetime.h"
-#include <KTempDir>
+#include <ktempdir.h>
 
 namespace QTest
 {
