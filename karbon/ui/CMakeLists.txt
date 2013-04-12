@@ -1,7 +1,8 @@
 include_directories( 
         ${KDE4_INCLUDE_DIR} 
         ${QT_INCLUDES} 
-        ${KOMAIN_INCLUDES}         
+        ${KOODF_INCLUDES}
+        ${KOMAIN_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon/
         ${CMAKE_SOURCE_DIR}/karbon/ui
         ${CMAKE_SOURCE_DIR}/karbon/ui/dialogs
@@ -44,7 +45,7 @@ kde4_add_ui_files(karbonui_SRCS
 
 kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
 
-target_link_libraries(karbonui karboncommon kowidgets)
+target_link_libraries(karbonui karboncommon kowidgets koodf)
 target_link_libraries(karbonui LINK_INTERFACE_LIBRARIES karboncommon)
 
 set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
