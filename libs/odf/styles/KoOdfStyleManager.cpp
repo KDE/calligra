@@ -226,7 +226,13 @@ bool KoOdfStyleManager::saveNamedStyles(KoXmlWriter *writer)
         style->saveOdf(writer);
     }
     foreach(KoOdfStyle *style, d->styles) {
-        style->saveOdf(writer);
+        // FIXME: When we support named styles of types that may use
+        //        automatic styles, e.g. page layouts (with
+        //        headers/footers), then this logic needs to be more
+        //        advanced.
+        if (!style->displayName().isEmpty()) {
+            style->saveOdf(writer);
+        }
     }
 
     return true;
