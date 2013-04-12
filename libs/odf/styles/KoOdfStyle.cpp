@@ -227,7 +227,7 @@ bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
     // Write style attributes
     writer->addAttribute("style:family", d->family);
     if (!d->parent.isEmpty()) {
-        writer->addAttribute("style:parent-name", d->parent);
+        writer->addAttribute("style:parent-style-name", d->parent);
     }
     if (!d->displayName.isEmpty()) {
         writer->addAttribute("style:display-name", d->displayName);
