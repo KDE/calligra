@@ -30,22 +30,7 @@
 #include "DocxFile.h"
 
 
-// ----------------------------------------------------------------
-//                 class OdtTraverserDocxContext
-
-
-OdtTraverserDocxContext::OdtTraverserDocxContext(KoStore *store, DocxFile *dxf)
-    : OdfTraverserContext(store) // Collect metadata, manifest and styles
-    , docxFile(dxf)
-{
-}
-
-OdtTraverserDocxContext::~OdtTraverserDocxContext()
-{
-}
-
-
-// ----------------------------------------------------------------
+// ================================================================
 //                 class OdtTraverserDocxBackend
 
 

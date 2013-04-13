@@ -27,9 +27,6 @@
 #include <OdtTraverserBackend.h>
 #include <OdfTraverserContext.h>
 
-// This filter
-#include <OdtTraverserDocxContext.h>
-
 class QByteArray;
 class QSizeF;
 class QStringList;
@@ -40,15 +37,24 @@ class KoStore;
 class DocxFile;
 
 
+/** @brief Hold the context (metadata, styles and manifest) and keep track of the parts of the output while it's generated.
+ *
+ */
+class OdtTraverserDocxContext : public OdfTraverserContext
+{
+ public:
+    OdtTraverserDocxContext(KoStore *store, DocxFile *dxf);
+    ~OdtTraverserDocxContext();
+
+    DocxFile  *docxFile;
+};
+
 
 class OdtTraverserDocxBackend : public OdtTraverserBackend
 {
  public:
     OdtTraverserDocxBackend(OdfTraverserContext *context);
     virtual ~OdtTraverserDocxBackend();
-
-    // MANY backend functions here:
-    // ...
 };
 
 #endif // ODTTRAVERSERDOCXBACKEND_H

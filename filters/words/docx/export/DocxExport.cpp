@@ -39,6 +39,7 @@
 
 // This filter
 #include "DocxFile.h"
+#include "OdtTraverserDocxContext.h"
 #include "OdtTraverserDocxBackend.h"
 
 

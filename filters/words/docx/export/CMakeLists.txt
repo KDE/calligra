@@ -6,6 +6,7 @@ include_directories(
 
 set(DocxExport_PART_SRCS
     DocxExport.cpp
+    OdtTraverserDocxContext.cpp
     OdtTraverserDocxBackend.cpp
     DocxFile.cpp
     FileCollector.cpp

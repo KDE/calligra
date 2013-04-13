@@ -18,37 +18,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef ODTTRAVERSERDOCXBACKEND_H
-#define ODTTRAVERSERDOCXBACKEND_H
+
+// Own
+#include "OdtTraverserDocxContext.h"
 
 // Calligra
 #include <KoXmlReader.h>
-#include <OdtTraverser.h>
-#include <OdtTraverserBackend.h>
-#include <OdfTraverserContext.h>
+#include <KoXmlNS.h>
 
 // This filter
-#include <OdtTraverserDocxContext.h>
-
-class QByteArray;
-class QSizeF;
-class QStringList;
-class QFile;
-class QTextStream;
-
-class KoStore;
-class DocxFile;
+#include "DocxFile.h"
 
 
+// ================================================================
+//                 class OdtTraverserDocxContext
 
-class OdtTraverserDocxBackend : public OdtTraverserBackend
+
+OdtTraverserDocxContext::OdtTraverserDocxContext(KoStore *store, DocxFile *dxf)
+    : OdfTraverserContext(store) // Collect metadata, manifest and styles
+    , docxFile(dxf)
 {
- public:
-    OdtTraverserDocxBackend(OdfTraverserContext *context);
-    virtual ~OdtTraverserDocxBackend();
+}
 
-    // MANY backend functions here:
-    // ...
-};
-
-#endif // ODTTRAVERSERDOCXBACKEND_H
+OdtTraverserDocxContext::~OdtTraverserDocxContext()
+{
+}
