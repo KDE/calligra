@@ -264,8 +264,7 @@ void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
         }
         m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
     }
-    m_document->relayout();
-    m_canvas->repaint();
+    refreshCanvas();
     m_resizeTimer->stop();
 }
 
@@ -337,65 +336,63 @@ void KWPageTool::setMarginInPx(Selection selection, int positionX, int positionY
         break;
     }
     m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
-    m_document->relayout();
-    m_canvas->repaint();
+    refreshCanvas();
 }
 
 
 void KWPageTool::resizePage()
 {
-        KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
+    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
 
-        //Get the size of the resizing
-        int widthResize =
-                m_canvas->viewConverter()->viewToDocumentX(m_mousePosTmp->x() - QCursor::pos().x());
-        int heightResize =
-                m_canvas->viewConverter()->viewToDocumentY(m_mousePosTmp->y() - QCursor::pos().y());
-        m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
-        //In order to refresh the scroll position in order to follow the page that we resize
-        float heightOld = layout.height;
+    //Get the size of the resizing
+    int widthResize =
+            m_canvas->viewConverter()->viewToDocumentX(m_mousePosTmp->x() - QCursor::pos().x());
+    int heightResize =
+            m_canvas->viewConverter()->viewToDocumentY(m_mousePosTmp->y() - QCursor::pos().y());
+    m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
+    //In order to refresh the scroll position in order to follow the page that we resize
+    float heightOld = layout.height;
 
-        //Apply the resize
-        switch(m_selection) {
-        case BLEFT:
-            layout.width += widthResize*2;
-            break;
-        case BRIGHT:
-            layout.width -= widthResize*2;
-            break;
-        case BTOP:
-            layout.height += heightResize*2;
-            break;
-        case BBOTTOM:
-            layout.height -= heightResize*2;
-            break;
-        default:
-            qDebug() << "Unexcepted case PageTool::ResizePage";
-        }
-        layout.width =
-               std::max(layout.width
-               , qreal(marginInPx(MLEFT) + (layout.width - marginInPx(MRIGHT)) + SELECT_SPACE));
-        layout.height =
-               std::max(layout.height
-               , qreal(marginInPx(MTOP) + (layout.height - marginInPx(MBOTTOM)) + SELECT_SPACE));
-        //We follow the page
-        float heightNew = layout.height;
-        float ratio = heightNew / heightOld;
-        m_canvas->canvasController()->setPreferredCenter(
-                    QPointF(m_canvas->canvasController()->preferredCenter().x()
-                           ,m_canvas->canvasController()->preferredCenter().y()*ratio));
-        //Changethe orientation of the page if needed + change size format to custom
-        layout.format = KoPageFormat::CustomSize;
-        if (layout.width > layout.height) {
-            layout.orientation = KoPageFormat::Landscape;
-        }
-        else {
-            layout.orientation = KoPageFormat::Portrait;
-        }
+    //Apply the resize
+    switch(m_selection) {
+    case BLEFT:
+        layout.width += widthResize*2;
+        break;
+    case BRIGHT:
+        layout.width -= widthResize*2;
+        break;
+    case BTOP:
+        layout.height += heightResize*2;
+        break;
+    case BBOTTOM:
+        layout.height -= heightResize*2;
+        break;
+    default:
+        qDebug() << "Unexcepted case PageTool::ResizePage";
+    }
+    layout.width =
+           std::max(layout.width
+           , qreal(marginInPx(MLEFT) + (layout.width - marginInPx(MRIGHT)) + SELECT_SPACE));
+    layout.height =
+           std::max(layout.height
+           , qreal(marginInPx(MTOP) + (layout.height - marginInPx(MBOTTOM)) + SELECT_SPACE));
+    //We follow the page
+    float heightNew = layout.height;
+    float ratio = heightNew / heightOld;
+    m_canvas->canvasController()->setPreferredCenter(
+                QPointF(m_canvas->canvasController()->preferredCenter().x()
+                       ,m_canvas->canvasController()->preferredCenter().y()*ratio));
+    //Changethe orientation of the page if needed + change size format to custom
+    layout.format = KoPageFormat::CustomSize;
+    if (layout.width > layout.height) {
+        layout.orientation = KoPageFormat::Landscape;
+    }
+    else {
+        layout.orientation = KoPageFormat::Portrait;
+    }
 
-        m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
-        m_document->relayout();
-        m_canvas->repaint();
+    m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
+    refreshCanvas();
 }
 
 int KWPageTool::xMouseInPage(int positionX)
@@ -440,7 +437,7 @@ void KWPageTool::enableHeader()
     Q_ASSERT(m_currentPage.pageStyle().isValid());
     m_currentPage.pageStyle().setHeaderPolicy(Words::HFTypeUniform);
     m_canvas->view()->actionCollection()->action("insert_header")->setEnabled(false);
-    m_document->relayout();
+    refreshCanvas();
 }
 
 
@@ -452,7 +449,7 @@ void KWPageTool::enableFooter()
     Q_ASSERT(m_currentPage.pageStyle().isValid());
     m_currentPage.pageStyle().setFooterPolicy(Words::HFTypeUniform);
     m_canvas->view()->actionCollection()->action("insert_footer")->setEnabled(false);
-    m_document->relayout();
+    refreshCanvas();
 }
 
 QList<QWidget *> KWPageTool::createOptionWidgets()
@@ -468,6 +465,14 @@ QList<QWidget *> KWPageTool::createOptionWidgets()
     widgets.append(shfw);
 
     return widgets;
+}
+
+void KWPageTool::refreshCanvas()
+{
+    QPoint scrollTmp = m_canvas->canvasController()->scrollBarValue();
+    m_document->relayout();
+    m_canvas->canvasController()->setScrollBarValue(scrollTmp);
+    m_canvas->repaint();
 }
 
 #include "KWPageTool.moc"

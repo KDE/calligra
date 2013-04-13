@@ -66,6 +66,7 @@ private:
 
 protected:
     QList<QWidget *> createOptionWidgets();
+    void refreshCanvas();
 
 private:
     enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
