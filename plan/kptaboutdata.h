@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_ABOUTDATA
-#define KPLATO_ABOUTDATA
+#ifndef KPTABOUTDATA_H
+#define KPTABOUTDATA_H
 
 #include <kaboutdata.h>
 #include <klocale.h>

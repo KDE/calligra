@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TASKUSEDEFFORTEDITOR_H
-#define TASKUSEDEFFORTEDITOR_H
+#ifndef KPTUSEDEFFORTEDITOR_H
+#define KPTUSEDEFFORTEDITOR_H
 
 #include "kplatoui_export.h"
 
@@ -204,4 +204,4 @@ private:
 
 }  //KPlato namespace
 
-#endif // TASKUSEDEFFORTEDITOR_H
+#endif // KPTUSEDEFFORTEDITOR_H

@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_FLATPROXYMODEL_H
-#define KPLATO_FLATPROXYMODEL_H
+#ifndef KPTFLATPROXYMODEL_H
+#define KPTFLATPROXYMODEL_H
 
 #include "kplatomodels_export.h"
 

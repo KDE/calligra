@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TASKEDTIOR_H
-#define TASKEDTIOR_H
+#ifndef KPTTASKEDTIOR_H
+#define KPTTASKEDTIOR_H
 
 #include "kplatoui_export.h"
 

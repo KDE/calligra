@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_VIEWBASE
-#define KPLATO_VIEWBASE
+#ifndef KPTVIEWBASE_H
+#define KPTVIEWBASE_H
 
 #include "kplatoui_export.h"
 #include "kptitemmodelbase.h"
