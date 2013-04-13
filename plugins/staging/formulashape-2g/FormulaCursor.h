@@ -41,6 +41,10 @@ public:
     void previousNode();
     void deleteNode();
     
+    //inserts text at the current cursor position
+    void insertText(const QString &text);
+    void deleteText();
+    
 public slots:
     void blinkCaret();
     
@@ -48,6 +52,7 @@ private:
     MmlNode *m_node;
     QTimer m_caretTimer;
     FormulaDocument *m_document;
+    
     void init();
     MmlNode *nextNode(MmlNode *node);
     MmlNode *previousNode(MmlNode *node);

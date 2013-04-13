@@ -366,8 +366,37 @@ protected:
 		*m_first_child,
 		*m_next_sibling,
 		*m_previous_sibling;
-		
+protected:	
 	bool m_showCursor;
+};
+
+class MmlTextNode : public MmlNode
+{
+    public:
+    MmlTextNode(const QString &text, MmlDocument *document);
+
+    virtual QString toStr() const;
+    void setText(const QString &text);
+    QString text() const
+        { return m_text; }
+
+    // TextNodes are not xml elements, so they can't have attributes of
+    // their own. Everything is taken from the parent.
+    virtual QFont font() const
+        { return parent()->font(); }
+    virtual int scriptlevel(const MmlNode* = 0) const
+        { return parent()->scriptlevel(this); }
+    virtual QColor color() const
+        { return parent()->color(); }
+    virtual QColor background() const
+        { return parent()->background(); }
+
+    int m_cursorIndex;
+protected:
+    virtual void paintSymbol(QPainter *p) const;
+    virtual QRect symbolRect() const;
+
+    QString m_text;
 };
 
 #endif

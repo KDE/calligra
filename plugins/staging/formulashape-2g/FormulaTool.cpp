@@ -142,7 +142,9 @@ void FormulaTool::paint(QPainter &painter, const KoViewConverter &converter)
 void FormulaTool::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Backspace) {
-        
+      if(m_cursor) {
+            m_cursor->deleteText();
+      }
     } else if (event->key() == Qt::Key_Delete) {
         if(m_cursor) {
             m_cursor->deleteNode();
@@ -160,7 +162,9 @@ void FormulaTool::keyPressEvent(QKeyEvent *event)
     } else if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ControlModifier) == 0) {
         
     } else {
-      
+      if(m_cursor) {
+            m_cursor->insertText(event->text());
+      }
     }
  }
 

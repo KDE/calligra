@@ -74,12 +74,27 @@ void FormulaCursor::nextNode()
 {
     if (!m_node) {
         return;
+    }    
+
+    if (m_node->m_node_type == MmlNode::TextNode &&
+        dynamic_cast<MmlTextNode *>(m_node)->m_cursorIndex < ((dynamic_cast<MmlTextNode *>(m_node)->text()).length())) {
+        dynamic_cast<MmlTextNode *>(m_node)->m_cursorIndex++;
+        return;
+    }
+    
+    MmlNode *newNode = 0;
+    if (m_node->hasChildNodes()) {
+        newNode = m_node->firstChild();
+    } else if (MmlNode *nextMmlNode = nextNode(m_node)) {
+        newNode = nextMmlNode;
     }
 
-    if (m_node->hasChildNodes()) {
-        setNode(m_node->firstChild());
-    } else if (MmlNode *nextMmlNode = nextNode(m_node)) {
-        setNode(nextMmlNode);
+    if (newNode->m_node_type == MmlNode::TextNode) {
+        dynamic_cast<MmlTextNode *>(newNode)->m_cursorIndex = 0;
+    }
+    
+    if (newNode) {
+        setNode(newNode);
     }
 }
 
@@ -89,10 +104,25 @@ void FormulaCursor::previousNode()
         return;
     }
 
+    if (m_node->m_node_type == MmlNode::TextNode &&
+        dynamic_cast<MmlTextNode *>(m_node)->m_cursorIndex > 0) {
+        dynamic_cast<MmlTextNode *>(m_node)->m_cursorIndex--;
+        return;
+    }
+    
+    MmlNode *newNode = 0;
     if (MmlNode *previousMmlNode = previousNode(m_node)) {
-        setNode(previousMmlNode);
+        newNode = previousMmlNode;
     } else if (m_node->hasChildNodes()) {
-        setNode(m_node->firstChild()->lastSibling()); 
+        newNode = m_node->firstChild()->lastSibling(); 
+    }
+    
+    if (newNode->m_node_type == MmlNode::TextNode) {
+        dynamic_cast<MmlTextNode *>(newNode)->m_cursorIndex = ((dynamic_cast<MmlTextNode *>(newNode)->text()).length()) - 1;
+    }
+    
+    if (newNode) {
+        setNode(newNode);
     }
 }
 
@@ -120,9 +150,40 @@ MmlNode *FormulaCursor::previousNode(MmlNode *node)
 
 void FormulaCursor::deleteNode()
 {
-    MmlNode *deletedNode = m_node;
-    //set the cursor to the parent of the node being deleted
-    setNode(m_node->parent());
-    m_document->deleteNode(deletedNode);
+    if (m_node->m_node_type == MmlNode::TextNode) {
+        MmlTextNode *currentCursorNode = dynamic_cast<MmlTextNode *>(m_node);
+        QString currentText = currentCursorNode->text();
+        currentText.remove(currentCursorNode->m_cursorIndex, 1);
+        currentCursorNode->setText(currentText);
+    } else { 
+        MmlNode *deletedNode = m_node;
+        //set the cursor to the parent of the node being deleted
+        setNode(m_node->parent());
+        m_document->deleteNode(deletedNode);
+    }
     m_document->layout();
+}
+
+void FormulaCursor::insertText(const QString &text)
+{
+    if (m_node->m_node_type == MmlNode::TextNode) {
+        MmlTextNode *currentCursorNode = dynamic_cast<MmlTextNode *>(m_node);
+        QString currentText = currentCursorNode->text();
+        currentText.insert(currentCursorNode->m_cursorIndex, text);
+        currentCursorNode->setText(currentText);
+        currentCursorNode->m_cursorIndex++;
+        m_document->layout();
+    }
+}
+
+void FormulaCursor::deleteText()
+{
+    if (m_node->m_node_type == MmlNode::TextNode) {
+        MmlTextNode *currentCursorNode = dynamic_cast<MmlTextNode *>(m_node);
+        QString currentText = currentCursorNode->text();
+        currentText.remove(currentCursorNode->m_cursorIndex - 1, 1);
+        currentCursorNode->setText(currentText);
+        currentCursorNode->m_cursorIndex--;
+        m_document->layout();
+    }  
 }

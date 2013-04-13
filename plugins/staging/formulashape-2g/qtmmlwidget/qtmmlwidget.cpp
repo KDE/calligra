@@ -166,34 +166,6 @@ class MmlMsqrtNode : public MmlRootBaseNode
 
 };
 
-
-class MmlTextNode : public MmlNode
-{
-    public:
-	MmlTextNode(const QString &text, MmlDocument *document);
-
-	virtual QString toStr() const;
-	QString text() const
-	    { return m_text; }
-
-	// TextNodes are not xml elements, so they can't have attributes of
-	// their own. Everything is taken from the parent.
-	virtual QFont font() const
-	    { return parent()->font(); }
-	virtual int scriptlevel(const MmlNode* = 0) const
-	    { return parent()->scriptlevel(this); }
-	virtual QColor color() const
-	    { return parent()->color(); }
-	virtual QColor background() const
-	    { return parent()->background(); }
-
-     protected:
-	virtual void paintSymbol(QPainter *p) const;
-	virtual QRect symbolRect() const;
-
-	QString m_text;
-};
-
 class MmlMiNode : public MmlTokenNode
 {
     public:
@@ -3865,7 +3837,7 @@ void MmlNode::paint(QPainter *p)
 
     paintSymbol(p);
 
-    if (m_showCursor) {
+    if (m_showCursor && m_node_type != TextNode) {
       QBrush brush = p->brush();
       brush.setColor(Qt::red);
       p->setBrush(brush);
@@ -4076,6 +4048,7 @@ void MmlRootBaseNode::paintSymbol(QPainter *p) const
 
 MmlTextNode::MmlTextNode(const QString &text, MmlDocument *document)
     : MmlNode(TextNode, document, MmlAttributeMap())
+    , m_cursorIndex(0)
 {
     m_text = text;
     // Trim whitespace from ends, but keep nbsp and thinsp
@@ -4107,8 +4080,18 @@ void MmlTextNode::paintSymbol(QPainter *p) const
 
     p->save();
     p->setFont(fn);
-
+    
     p->drawText(0, fm.strikeOutPos(), m_text);
+    
+    if (MmlNode::m_showCursor) {
+        p->save();
+        p->setRenderHint(QPainter::Antialiasing, false);
+        const QSize textSize = fm.size(Qt::TextSingleLine, m_text.left(m_cursorIndex));
+        QRectF drawRect(textSize.width() - 1, myRect().y() - 2, 2.0, myRect().height() + 2);
+        p->fillRect(drawRect, QColor(0, 0, 0));
+        p->restore();
+    }
+    
     p->restore();
 }
 
@@ -4120,6 +4103,11 @@ QRect MmlTextNode::symbolRect() const
     br.translate(0, fm.strikeOutPos());
 
     return br;
+}
+
+void MmlTextNode::setText(const QString &text)
+{
+    m_text = text;
 }
 
 MmlNode *MmlSubsupBaseNode::base() const
