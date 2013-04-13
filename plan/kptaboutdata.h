@@ -36,7 +36,7 @@ KAboutData * newAboutData()
 {
     KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18nc("application name", "Plan"),
                                            KPLATO_VERSION, ki18n(KPLATO_DESCRIPTION), KAboutData::License_GPL,
-                                           ki18n("(c) 1998-2012, The Plan Team"),
+                                           ki18n("Copyright (C) 1998-2013, The Plan Team"),
                                            KLocalizedString(),
                                            "http://www.calligra.org/plan/" );
     aboutData->addAuthor(ki18n("Thomas Zander")); // please don't re-add, I don't like getting personal emails :)
