@@ -29,13 +29,13 @@
 namespace KPlato
 {
 
-static const char* KPLATO_DESCRIPTION=I18N_NOOP("Project Planning and Management Tool");
-static const char* KPLATO_VERSION=CALLIGRA_VERSION_STRING;
+static const char PLAN_DESCRIPTION[] = I18N_NOOP("Project Planning and Management Tool");
+static const char PLAN_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
     KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18nc("application name", "Plan"),
-                                           KPLATO_VERSION, ki18n(KPLATO_DESCRIPTION), KAboutData::License_GPL,
+                                           PLAN_VERSION, ki18n(PLAN_DESCRIPTION), KAboutData::License_GPL,
                                            ki18n("Copyright (C) 1998-2013, The Plan Team"),
                                            KLocalizedString(),
                                            "http://www.calligra.org/plan/" );
