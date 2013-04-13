@@ -19,7 +19,6 @@
 
 #include "FormulaPart.h"
 
-
 FormulaPart::FormulaPart(QObject *parent)
     : KoPart(parent)
 {

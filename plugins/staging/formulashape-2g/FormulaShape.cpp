@@ -62,9 +62,9 @@ FormulaShape::~FormulaShape()
 void FormulaShape::paint(QPainter &painter, const KoViewConverter &converter,
                           KoShapePaintingContext &context)
 {
+    Q_UNUSED(context);
+    
     painter.setPen(QPen(QColor(0, 0, 0)));
-
-    // Example painting code: Draw a rectangle around the shape
     painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
 
     m_document->paint(&painter, QPoint(0, 0));
@@ -88,7 +88,6 @@ void FormulaShape::saveOdf(KoShapeSavingContext &context) const
 
 bool FormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
-    qDebug() <<"Loading ODF in Formula 2G";
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
@@ -242,6 +241,8 @@ bool FormulaShape::loadEmbeddedDocument( KoStore *store,
 
 void FormulaShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
+    Q_UNUSED(converter);
+    Q_UNUSED(asynchronous);
 }
 
 KoDocumentResourceManager *FormulaShape::resourceManager() const

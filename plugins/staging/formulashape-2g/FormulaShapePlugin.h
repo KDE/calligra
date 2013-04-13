@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QVariantList>
 
-
 class FormulaShapePlugin : public QObject
 {
     Q_OBJECT

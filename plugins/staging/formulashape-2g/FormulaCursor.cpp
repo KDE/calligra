@@ -158,7 +158,6 @@ KUndo2Command *FormulaCursor::deleteNode()
         currentText.remove(currentCursorNode->m_cursorIndex, 1);
         return new AlterFormulaCommand(this, currentText, currentCursorNode->m_cursorIndex);
     } else { 
-        MmlNode *deletedNode = m_node;
         return new ChangeFormulaCommand(this);
     }
 }

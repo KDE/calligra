@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// Own
 #include "AlterFormulaCommand.h"
 
 #include "FormulaShape.h"
@@ -33,8 +32,6 @@ AlterFormulaCommand::AlterFormulaCommand(FormulaCursor *cursor, const QString &n
   , m_document(cursor->m_document)
   , m_newText(newText)
   , m_newIndex(newIndex)
-  , m_currentIndex(0)
-  , m_currentText("")
 {
     Q_ASSERT(cursor);
     Q_ASSERT(dynamic_cast<MmlTextNode *>(cursor->m_node));

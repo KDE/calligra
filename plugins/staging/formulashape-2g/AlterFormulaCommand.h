@@ -24,7 +24,6 @@
 
 #include <QSizeF>
 
-
 class FormulaCursor;
 class FormulaDocument;
 class MmlTextNode;
@@ -46,11 +45,10 @@ public:
 private:
     MmlTextNode *m_textNode;
     FormulaDocument *m_document;
-    FormulaCursor *m_cursor;
-    int m_currentIndex;
+    QString m_newText;
     int m_newIndex;
     QString m_currentText;
-    QString m_newText;
+    int m_currentIndex;
 };
 
 #endif /* ALTERFORMULACOMMAND_H */

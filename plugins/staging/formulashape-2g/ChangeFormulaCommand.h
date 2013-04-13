@@ -24,7 +24,6 @@
 
 #include <QSizeF>
 
-
 class FormulaCursor;
 class FormulaDocument;
 class MmlNode;

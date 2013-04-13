@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// Own
 #include "ChangeFormulaCommand.h"
 
 #include "FormulaShape.h"
@@ -34,7 +33,7 @@ ChangeFormulaCommand::ChangeFormulaCommand(FormulaCursor *cursor, KUndo2Command 
   , m_isLastCommandRedo(false)
 {
     Q_ASSERT(cursor);
-    setText(i18nc("(qtundo-format)", "Delete formula"));
+    setText(i18nc("(qtundo-format)", "Delete formula element"));
 }
 
 ChangeFormulaCommand::~ChangeFormulaCommand()

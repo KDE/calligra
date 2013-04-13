@@ -45,7 +45,7 @@
 #include "FormulaCursor.h"
 
 FormulaTool::FormulaTool( KoCanvasBase* canvas )
-    : KoToolBase( canvas )
+    : KoToolBase(canvas)
     , m_formulaShape(0)
     , m_textEdit(0)
 {
@@ -57,8 +57,9 @@ void FormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
     foreach (KoShape *shape, shapes) {
         m_formulaShape = dynamic_cast<FormulaShape*>( shape );
-        if (m_formulaShape)
+        if (m_formulaShape) {
             break;
+        }
     }
 
     if (!m_formulaShape) {
@@ -92,27 +93,18 @@ QWidget * FormulaTool::createOptionWidget()
     layout->addWidget(button, 1, 0);
     layout->addWidget(m_textEdit, 0, 0);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(insertPressed()));
-
-
+    connect(this, SIGNAL(formulaContentChanged(const QString &)), m_textEdit, SLOT(setPlainText(const QString &)));
     return optionWidget;
 }
 
-
-// ----------------------------------------------------------------
-//                         Private slots
-
-
 void FormulaTool::insertPressed()
 {
-    if (!m_formulaShape)
+    if (!m_formulaShape) {
         return;
+    }
 
     m_formulaShape->setMML(m_textEdit->toPlainText());
 }
-
-// ----------------------------------------------------------------
-//                         Event handling
-
 
 void FormulaTool::mousePressEvent(KoPointerEvent *event)
 {
@@ -123,10 +115,12 @@ void FormulaTool::mousePressEvent(KoPointerEvent *event)
 
 void FormulaTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
 }
 
 void FormulaTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
     if (!m_formulaShape) {
         return;
     }
@@ -141,6 +135,7 @@ void FormulaTool::keyPressEvent(QKeyEvent *event)
             KUndo2Command *command = cursor()->deleteText();
             if (command!=0) {
                 canvas()->addCommand(command);
+                emit formulaContentChanged(m_formulaShape->MML());
             }
       }
     } else if (event->key() == Qt::Key_Delete) {
@@ -148,6 +143,7 @@ void FormulaTool::keyPressEvent(QKeyEvent *event)
             KUndo2Command *command = cursor()->deleteNode();
             if (command!=0) {
                 canvas()->addCommand(command);
+                emit formulaContentChanged(m_formulaShape->MML());
             }
         }
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
@@ -163,22 +159,23 @@ void FormulaTool::keyPressEvent(QKeyEvent *event)
     } else if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ControlModifier) == 0) {
         
     } else {
-      if(cursor()) {
+        if(cursor()) {
             KUndo2Command *command = cursor()->insertText(event->text());
             if (command!=0) {
                 canvas()->addCommand(command);
+                emit formulaContentChanged(m_formulaShape->MML());
             }
-      }
+        }
     }
- }
+}
  
- FormulaCursor *FormulaTool::cursor() 
- {
-     if (!m_formulaShape) {
-         return 0;
-     }
+FormulaCursor *FormulaTool::cursor() 
+{
+    if (!m_formulaShape) {
+        return 0;
+    }
      
-     return m_formulaShape->cursor();
- }
+    return m_formulaShape->cursor();
+}
 
 #include <FormulaTool.moc>

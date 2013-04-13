@@ -57,7 +57,10 @@ public:
 protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
-
+    
+signals:
+    void formulaContentChanged(const QString &content);
+    
 private slots: 
     void insertPressed(); 
 
