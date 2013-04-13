@@ -39,8 +39,13 @@ void preInitHacks() {}
 #ifdef Q_OS_ANDROID
 #include <jni.h>
 extern "C" {
+    // Used by QtActivity.java to set/overwrite the default application font-size.
+    JNIEXPORT void JNICALL Java_org_kde_necessitas_origo_QtActivity_nativeSetFontSize(JNIEnv *jenv, jobject, jfloat textsize) {
+        qDebug() << "Java_org_kde_necessitas_origo_QtActivity_nativeSetFontSize textsize="<<textsize;
+        Settings::instance()->setPixelSize( (int) textsize + 0.5 );
+    }
     // Used by QtActivity.java to pass in the file-uri that should be loaded on startup.
-    JNIEXPORT void JNICALL Java_org_kde_necessitas_origo_QtActivity_openFileIntent(JNIEnv *jenv, jobject, jstring uri) {
+    JNIEXPORT void JNICALL Java_org_kde_necessitas_origo_QtActivity_nativeOpenFile(JNIEnv *jenv, jobject, jstring uri) {
         const char* file = jenv->GetStringUTFChars(uri, 0);
         Settings::instance()->setOpenFileRequested(QString::fromUtf8(file));
         jenv->ReleaseStringUTFChars(uri, file);

@@ -16,7 +16,6 @@ Page {
                 id: cancelButton
                 //iconSource: "qrc:///images/cancel.png"
                 text: "Cancel"
-                //font.pointSize: 9
                 onClicked: {
                     filePage.closeClicked()
                 }

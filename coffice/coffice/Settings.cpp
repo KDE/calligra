@@ -8,6 +8,8 @@ Settings::Settings(QObject *parent)
     : QObject(parent)
     , m_modified(false)
 {
+    setValue("pixelSize", -1);
+
     QSettings settings("org.kde.calligra.coffice");
     readGroup(settings, m_settings);
 }
@@ -22,6 +24,17 @@ Q_GLOBAL_STATIC(Settings, settings)
 Settings* Settings::instance()
 {
     return settings();
+}
+
+int Settings::pixelSize() const
+{
+    return value("pixelSize", -1).toInt();
+}
+
+void Settings::setPixelSize(int size)
+{
+    setValue("pixelSize", size);
+    Q_EMIT pixelSizeChanged();
 }
 
 QString Settings::openFileRequested() const

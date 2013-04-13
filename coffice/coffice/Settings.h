@@ -8,13 +8,18 @@
 class Settings : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int pixelSize READ pixelSize WRITE setPixelSize NOTIFY pixelSizeChanged)
 public:
     explicit Settings(QObject *parent = 0);
     virtual ~Settings();
 
     static Settings* instance();
 
+    int pixelSize() const;
+    void setPixelSize(int size);
+
 signals:
+    void pixelSizeChanged();
     void openFileRequestedChanged(const QString &file);
     void valueChanged(const QString &name);
 

@@ -61,10 +61,9 @@ Rectangle {
             clip: true
         }
 
-        Text {
+        Label {
             id: label
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: 11
             color: root.enabled ? "#ffffff" : "#c0c0c0"
             clip: true
         }

@@ -56,6 +56,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -66,6 +67,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.TextView;
 import dalvik.system.DexClassLoader;
 
 //@ANDROID-11
@@ -111,7 +113,7 @@ public class QtActivity extends Activity
                                                              // and must be separated with "\t"
                                                              // e.g "-param1\t-param2=value2\t-param3\tvalue3"
 
-    private static final String ENVIRONMENT_VARIABLES="QT_USE_ANDROID_NATIVE_STYLE=1\t";
+    private static final String ENVIRONMENT_VARIABLES="QT_USE_ANDROID_NATIVE_STYLE=0\t";
                                                              // use this variable to add any environment variables to your application.
                                                              // the env vars must be separated with "\t"
                                                              // e.g. "ENV_VAR1=1\tENV_VAR2=2\t"
@@ -563,6 +565,7 @@ public class QtActivity extends Activity
                 setContentView(m_activityInfo.metaData.getInt("android.app.splash_screen"));
             startApp(true);
         }
+
     }
     //---------------------------------------------------------------------------
 
@@ -912,7 +915,10 @@ public class QtActivity extends Activity
     }
     //---------------------------------------------------------------------------
 
-    public static native void openFileIntent(String uri);
+    public static native void nativeSetFontSize(float textsize);
+    public static native void nativeOpenFile(String uri);
+
+    private static boolean firstCreate = true;
 
     @Override
     protected void onResume()
@@ -920,25 +926,55 @@ public class QtActivity extends Activity
         super.onResume();
         QtApplication.invokeDelegate();
 
-        final Intent intent = getIntent();
-        if (intent != null && intent.getAction() != null && intent.getData() != null && intent.getAction().equals(android.content.Intent.ACTION_VIEW)) {
-            new Thread( new Runnable() {
-                public void run() {
-                    // try 10 times and then abort if still not succeed
-                    for(int i = 0; i < 10; i++) {
-                        try {
-                            // call the native function defined in that main library.
-                            openFileIntent(intent.getData().toString());
-                            break; // all fine, our job is done
-                        } catch(java.lang.UnsatisfiedLinkError e) {
-                            // happens if the main library wasn't loaded yet
-                            // in which case we need to wait and re-try.
-                            try { Thread.sleep(300); } catch(Exception ex) {}
+        class Runner implements Runnable {
+        private float m_textsize;
+            private String m_openFile;
+            public Runner(float textsize, String openFile) {
+                m_textsize = textsize;
+                m_openFile = openFile;
+            }
+            public void run() {
+                // try 10 times and then abort if still not succeed
+                for(int i = 0; i < 10; i++) {
+                    try {
+                        // call the native functions defined in that main library.
+
+                        if (m_textsize > 0) {
+                            nativeSetFontSize(m_textsize);
                         }
+
+                        if (m_openFile != null && m_openFile.length() > 0) {
+                            nativeOpenFile(m_openFile);
+                        }
+
+                        break;
+                    } catch(java.lang.UnsatisfiedLinkError e) {
+                        // happens if the main library wasn't loaded yet
+                        // in which case we need to wait and re-try.
+                        try { Thread.sleep(200); } catch(Exception ex) {}
                     }
                 }
-            } ).start();
+            }
         }
+
+        float textsize = -1;
+        if (firstCreate) {
+            firstCreate = false;
+
+            TextView textarea = new TextView(QtActivity.this);
+            textsize = textarea.getTextSize();
+            //int pixelsize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, getResources().getDisplayMetrics());
+            //textsize = (float) pixelsize;
+        }
+
+        String openFile = null;
+        Intent intent = getIntent();
+        if (intent != null && intent.getAction() != null && intent.getData() != null && intent.getAction().equals(android.content.Intent.ACTION_VIEW)) {
+            openFile = intent.getData().toString();
+        }
+
+        //runOnUiThread( new Runner(textsize, openFile) );
+        new Thread( new Runner(textsize, openFile) ).start();
     }
     //---------------------------------------------------------------------------
 

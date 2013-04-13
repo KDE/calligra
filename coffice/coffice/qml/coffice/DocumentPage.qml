@@ -33,7 +33,6 @@ Page {
                         id: fileButton
                         //iconSource: "qrc:///images/file.png"
                         text: "Open"
-                        //font.pointSize: 9
                         onClicked: {
                             documentPage.openClicked()
                         }
