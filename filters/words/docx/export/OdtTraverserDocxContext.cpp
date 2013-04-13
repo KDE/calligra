@@ -22,9 +22,12 @@
 // Own
 #include "OdtTraverserDocxContext.h"
 
+// Qt
+#include <QByteArray>
+#include <QBuffer>
+
 // Calligra
-#include <KoXmlReader.h>
-#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 // This filter
 #include "DocxFile.h"
@@ -36,10 +39,14 @@
 
 OdtTraverserDocxContext::OdtTraverserDocxContext(KoStore *store, DocxFile *dxf)
     : OdfTraverserContext(store) // Collect metadata, manifest and styles
-    , docxFile(dxf)
+    , m_docxFile(dxf)
+    , m_documentContent()
+    , m_documentIO(&m_documentContent)
 {
+    m_documentWriter = new KoXmlWriter(&m_documentIO);
 }
 
 OdtTraverserDocxContext::~OdtTraverserDocxContext()
 {
+    delete m_documentWriter;
 }

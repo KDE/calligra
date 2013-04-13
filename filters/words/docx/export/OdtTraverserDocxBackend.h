@@ -40,7 +40,6 @@ class KoStore;
 class DocxFile;
 
 
-
 class OdtTraverserDocxBackend : public OdtTraverserBackend
 {
  public:
