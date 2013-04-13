@@ -659,7 +659,7 @@ void PerformanceStatusBase::createBarChart()
     m_barchart.costdiagram = costdiagram;
 
     m_barchart.piplane = new CartesianCoordinatePlane( ui_chart );
-    m_barchart.piplane->setObjectName( "Performance Indeces" );
+    m_barchart.piplane->setObjectName( "Performance Indices" );
     BarDiagram *pidiagram = new BarDiagram( ui_chart, m_barchart.piplane );
     pidiagram->setObjectName( "PI diagram" );
     m_barchart.piaxis = new CartesianAxis( pidiagram );
@@ -720,7 +720,7 @@ void PerformanceStatusBase::createLineChart()
     m_linechart.costdiagram = costdiagram;
 
     m_linechart.piplane = new CartesianCoordinatePlane( ui_chart );
-    m_linechart.piplane->setObjectName( "Performance Indeces" );
+    m_linechart.piplane->setObjectName( "Performance Indices" );
     m_linechart.piplane->setRubberBandZoomingEnabled( true );
     LineDiagram *pidiagram = new LineDiagram( ui_chart, m_linechart.piplane );
     pidiagram->setObjectName( "PI diagram" );
