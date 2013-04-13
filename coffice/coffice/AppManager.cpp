@@ -53,8 +53,20 @@ public:
 private:
     QList<QObject*> m_plugins;
 
+    bool loadLibrary(const QString &lib)
+    {
+        QLibrary loader(lib);
+        bool ok = loader.load();
+        return ok;
+    }
+
     void initPlugins()
     {
+#ifndef Q_OS_ANDROID
+        bool calligraPluginsLibraryLoaded = loadLibrary("calligraplugins");
+        Q_ASSERT_X(calligraPluginsLibraryLoaded, __FUNCTION__, "Failed to load calligraplugins library");
+#endif
+
         qDebug() << "REGISTERED PLUGINS START";
         Q_FOREACH(QObject* o, QPluginLoader::staticInstances()) {
             qDebug() << ">>>>>>>>>> PLUGIN FACTORY" << o << o->metaObject()->className() << o->objectName();

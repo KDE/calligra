@@ -18,7 +18,8 @@ INCLUDEPATH += \
      $${CALLIGRAWORDS_DIR} \
      $${CALLIGRAWORDS_DIR}/part
 
-LIBS += -lcalligralibs -lcalligraplugins -lcalligrawords
+#LIBS += -lcalligralibs -lcalligraplugins -lcalligrawords
+LIBS += -lcalligralibs -lcalligrawords
 
 unix:!macx {
     # needed for XInitThreads hack

@@ -14,7 +14,8 @@ INCLUDEPATH += \
      $${CALLIGRAWORDS_DIR} \
      $${CALLIGRAWORDS_DIR}/part
 
-LIBS += -lcalligralibs -lcalligraplugins
+#LIBS += -lcalligralibs -lcalligraplugins
+LIBS += -lcalligralibs
 
 SOURCES += $$files($$CALLIGRAWORDS_DIR/*.cpp)
 SOURCES += $$files($$CALLIGRAWORDS_DIR/part/*.cpp)
