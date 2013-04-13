@@ -26,9 +26,14 @@
 
 class FormulaDocument;
 class MmlNode;
+class ChangeFormulaCommand;
+class KUndo2Command;
  
 class FormulaCursor : public QObject
 {
+  friend class ChangeFormulaCommand;
+  friend class AlterFormulaCommand;
+  
   Q_OBJECT
   
 public:
@@ -39,11 +44,14 @@ public:
     
     void nextNode();
     void previousNode();
-    void deleteNode();
+    KUndo2Command  *deleteNode();
     
     //inserts text at the current cursor position
-    void insertText(const QString &text);
-    void deleteText();
+    KUndo2Command * insertText(const QString &text);
+    KUndo2Command * deleteText();
+    
+    void activate();
+    void deactivate();
     
 public slots:
     void blinkCaret();

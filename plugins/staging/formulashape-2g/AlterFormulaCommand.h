@@ -17,8 +17,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef CHANGEFORMULACOMMAND_H
-#define CHANGEFORMULACOMMAND_H
+#ifndef ALTERFORMULACOMMAND_H
+#define ALTERFORMULACOMMAND_H
 
 #include <kundo2command.h>
 
@@ -27,14 +27,16 @@
 
 class FormulaCursor;
 class FormulaDocument;
-class MmlNode;
+class MmlTextNode;
 
-class ChangeFormulaCommand : public KUndo2Command
+class AlterFormulaCommand : public KUndo2Command
 {
 public:
-    ChangeFormulaCommand(FormulaCursor *cursor, 
+    AlterFormulaCommand(FormulaCursor *cursor, 
+                        const QString &newText,
+                        int newIndex, 
                          KUndo2Command *parent = 0);
-    virtual ~ChangeFormulaCommand();
+    virtual ~AlterFormulaCommand();
 
     /// redo the command
     virtual void redo();
@@ -42,10 +44,14 @@ public:
     virtual void undo();
 
 private:
-    MmlNode *m_node;
+    MmlTextNode *m_textNode;
     FormulaDocument *m_document;
     FormulaCursor *m_cursor;
-    bool m_isLastCommandRedo;
+    int m_currentIndex;
+    int m_newIndex;
+    QString m_currentText;
+    QString m_newText;
 };
 
-#endif /* CHANGEFORMULACOMMAND_H */
+#endif /* ALTERFORMULACOMMAND_H */
+ 

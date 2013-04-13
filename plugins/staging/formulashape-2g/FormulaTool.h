@@ -65,7 +65,8 @@ private:
     // Pointer to the shape that we manipulate.
     FormulaShape *m_formulaShape;
     QTextEdit *m_textEdit;
-    FormulaCursor *m_cursor;
+    
+    FormulaCursor *cursor();
 };
 
 #endif

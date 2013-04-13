@@ -19,49 +19,48 @@
  */
 
 // Own
-#include "ChangeFormulaCommand.h"
+#include "AlterFormulaCommand.h"
 
 #include "FormulaShape.h"
 #include "FormulaCursor.h"
 #include "FormulaDocument.h"
+#include <qtmmlwidget/qtmmlwidget.h>
 
 
-ChangeFormulaCommand::ChangeFormulaCommand(FormulaCursor *cursor, KUndo2Command *parent)
+AlterFormulaCommand::AlterFormulaCommand(FormulaCursor *cursor, const QString &newText,
+                                         int newIndex, KUndo2Command *parent)
   : KUndo2Command(parent)
-  , m_node(cursor->m_node)
   , m_document(cursor->m_document)
-  , m_cursor(cursor)
-  , m_isLastCommandRedo(false)
+  , m_newText(newText)
+  , m_newIndex(newIndex)
+  , m_currentIndex(0)
+  , m_currentText("")
 {
     Q_ASSERT(cursor);
-    setText(i18nc("(qtundo-format)", "Delete formula"));
+    Q_ASSERT(dynamic_cast<MmlTextNode *>(cursor->m_node));
+    m_textNode = static_cast<MmlTextNode *>(cursor->m_node);
+    setText(i18nc("(qtundo-format)", "Modify formula"));
+    m_currentIndex = m_textNode->m_cursorIndex;
+    m_currentText = m_textNode->text();
 }
 
-ChangeFormulaCommand::~ChangeFormulaCommand()
+AlterFormulaCommand::~AlterFormulaCommand()
 {
-    if (m_isLastCommandRedo) {
-        delete m_node;
-    }
 }
 
-void ChangeFormulaCommand::redo()
+void AlterFormulaCommand::redo()
 {
-    m_isLastCommandRedo = true;
-    
-    //set the cursor to the parent of the node being deleted
-    m_cursor->setNode(m_node->parent());
-    m_document->deleteNode(m_node);
+    m_textNode->m_cursorIndex = m_newIndex;
+    m_textNode->setText(m_newText);
     
     m_document->layout();
 }
 
-void ChangeFormulaCommand::undo()
+void AlterFormulaCommand::undo()
 {
-    m_isLastCommandRedo = true;
-
-    m_document->insertSibling(m_node, m_node->parent(), m_node->previousSibling(), m_node->nextSibling());
-    //set the cursor to the deleted node
-    m_cursor->setNode(m_node);
+    m_textNode->m_cursorIndex = m_currentIndex;
+    m_textNode->setText(m_currentText);
     
     m_document->layout();
 }
+ 

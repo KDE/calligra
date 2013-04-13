@@ -17,6 +17,7 @@ SET (formulashape2g_LIB_SRCS
     FormulaCursor.cpp
 
     ChangeFormulaCommand.cpp
+    AlterFormulaCommand.cpp
 )
 
 kde4_add_plugin(formulashape2g ${formulashape2g_LIB_SRCS})

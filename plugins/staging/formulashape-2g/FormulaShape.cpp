@@ -40,10 +40,8 @@
 #include <KoDocumentEntry.h>
 #include <KoDocumentResourceManager.h>
 
-// This shape
-//#include "Foo.h"
-
 #include "FormulaDocument.h"
+#include "FormulaCursor.h"
 
 #include <QDebug>
 
@@ -52,6 +50,7 @@ FormulaShape::FormulaShape(KoDocumentResourceManager *documentResourceManager)
     , KoFrameShape( KoXmlNS::draw, "object" )
     , m_document(new FormulaDocument(this))
     , m_isInline(false)
+    , m_cursor(new FormulaCursor(m_document))
 {
     m_resourceManager = documentResourceManager;
 }
@@ -272,6 +271,11 @@ QString FormulaShape::MML()
 FormulaDocument *FormulaShape::document()
 {
     return m_document;
+}
+
+FormulaCursor *FormulaShape::cursor()
+{
+    return m_cursor;
 }
 
 #include <FormulaShape.moc>

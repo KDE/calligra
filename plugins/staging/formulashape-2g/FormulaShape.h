@@ -35,6 +35,7 @@ class KoOdfLoadingContext;
 class KoDocumentResourceManager;
 
 class FormulaDocument;
+class FormulaCursor;
 
 class FormulaShape : public QObject, public KoShape, public KoFrameShape
 {
@@ -63,6 +64,7 @@ public:
     QString MML();
     
     FormulaDocument *document();
+    FormulaCursor *cursor();
 private:
     bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
                               const KoOdfLoadingContext &odfLoadingContext);
@@ -72,6 +74,7 @@ private:
 
     /// True if this formula is inline, i.e. not embedded in a formula document.
     bool m_isInline;
+    FormulaCursor *m_cursor;
 };
 
 

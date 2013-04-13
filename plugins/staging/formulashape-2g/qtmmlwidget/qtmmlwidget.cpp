@@ -3021,7 +3021,6 @@ void MmlDocument::deleteNode(MmlNode *node)
 {
     if(node == m_root_node) {
         m_root_node = 0;
-        delete node;
         return;
     }
     
@@ -3039,8 +3038,42 @@ void MmlDocument::deleteNode(MmlNode *node)
     if (node->m_next_sibling) {
         node->m_next_sibling->m_previous_sibling = node->m_previous_sibling;
     }
+}
+
+void MmlDocument::insertSibling(MmlNode *node, MmlNode *parent, MmlNode *previousSibling, MmlNode *nextSibling)
+{
+    if (m_root_node == 0) {
+        m_root_node = node;
+    }
+    //if previousSibling is 0 then the node is inserted before nextsibling
+    //if nextSibling is 0 then the node is inserted after previousSibling
+     if (previousSibling) {
+        node->m_previous_sibling = previousSibling;
+        node->m_next_sibling = previousSibling->m_next_sibling;
+        
+        previousSibling->m_next_sibling = node;
+
+        if (node->m_next_sibling) {
+            node->m_next_sibling->m_previous_sibling = node;
+        }
+    } else if (nextSibling) {
+        node->m_next_sibling = nextSibling;
+        node->m_previous_sibling = nextSibling->m_previous_sibling;
+        
+        nextSibling->m_previous_sibling = node;
+        if (node->m_previous_sibling) {
+            node->m_previous_sibling->m_next_sibling = node;
+        }
+    } else {
+        node->m_previous_sibling = 0;
+        node->m_next_sibling = 0;
+    }
+  
+    node->m_parent = parent;
     
-    delete node;
+    if (parent && !previousSibling && !nextSibling) {
+        parent->m_first_child = node;
+    }
 }
 
 bool MmlDocument::insertChild(MmlNode *parent, MmlNode *new_node,
@@ -6235,6 +6268,11 @@ MmlNode *QtMmlDocument::rootNode()
 void QtMmlDocument::deleteNode(MmlNode *node)
 {
     m_doc->deleteNode(node);
+}
+
+void QtMmlDocument::insertSibling(MmlNode *node, MmlNode *parent, MmlNode *previousSibling, MmlNode *nextSibling)
+{
+    m_doc->insertSibling(node, parent, previousSibling, nextSibling);
 }
 
 void QtMmlDocument::layout()

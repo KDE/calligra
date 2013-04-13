@@ -137,6 +137,7 @@ public:
     
     MmlNode *rootNode();
     void deleteNode(MmlNode *node);
+    void insertSibling(MmlNode *node, MmlNode *parent, MmlNode *previousSibling, MmlNode *nextSibling);
 private:
     MmlDocument *m_doc;
 };
@@ -246,6 +247,7 @@ class MmlDocument : public Mml
 	    { return m_root_node; }
 	
 	void deleteNode(MmlNode *node);
+    void insertSibling(MmlNode *node, MmlNode *parent, MmlNode *previousSibling, MmlNode *nextSibling);
 
     private:
 	void _dump(const MmlNode *node, QString &indent) const;

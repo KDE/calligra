@@ -21,14 +21,16 @@
 #include <FormulaCursor.h>
 #include <FormulaDocument.h>
 #include <qtmmlwidget/qtmmlwidget.h>
+#include <ChangeFormulaCommand.h>
+#include <AlterFormulaCommand.h>
 
 FormulaCursor::FormulaCursor(FormulaDocument *document)
     : QObject()
     , m_caretTimer(this)
     , m_document(document)
 {
+    Q_ASSERT(document);
     init();
-    setNode(document->rootNode()->firstChild());
 }
 
 FormulaCursor::~FormulaCursor()
@@ -77,8 +79,8 @@ void FormulaCursor::nextNode()
     }    
 
     if (m_node->m_node_type == MmlNode::TextNode &&
-        dynamic_cast<MmlTextNode *>(m_node)->m_cursorIndex < ((dynamic_cast<MmlTextNode *>(m_node)->text()).length())) {
-        dynamic_cast<MmlTextNode *>(m_node)->m_cursorIndex++;
+        static_cast<MmlTextNode *>(m_node)->m_cursorIndex < ((static_cast<MmlTextNode *>(m_node)->text()).length())) {
+        static_cast<MmlTextNode *>(m_node)->m_cursorIndex++;
         return;
     }
     
@@ -90,7 +92,7 @@ void FormulaCursor::nextNode()
     }
 
     if (newNode->m_node_type == MmlNode::TextNode) {
-        dynamic_cast<MmlTextNode *>(newNode)->m_cursorIndex = 0;
+        static_cast<MmlTextNode *>(newNode)->m_cursorIndex = 0;
     }
     
     if (newNode) {
@@ -105,8 +107,8 @@ void FormulaCursor::previousNode()
     }
 
     if (m_node->m_node_type == MmlNode::TextNode &&
-        dynamic_cast<MmlTextNode *>(m_node)->m_cursorIndex > 0) {
-        dynamic_cast<MmlTextNode *>(m_node)->m_cursorIndex--;
+        static_cast<MmlTextNode *>(m_node)->m_cursorIndex > 0) {
+        static_cast<MmlTextNode *>(m_node)->m_cursorIndex--;
         return;
     }
     
@@ -118,7 +120,7 @@ void FormulaCursor::previousNode()
     }
     
     if (newNode->m_node_type == MmlNode::TextNode) {
-        dynamic_cast<MmlTextNode *>(newNode)->m_cursorIndex = ((dynamic_cast<MmlTextNode *>(newNode)->text()).length()) - 1;
+        static_cast<MmlTextNode *>(newNode)->m_cursorIndex = ((static_cast<MmlTextNode *>(newNode)->text()).length()) - 1;
     }
     
     if (newNode) {
@@ -148,42 +150,46 @@ MmlNode *FormulaCursor::previousNode(MmlNode *node)
     return 0;
 }
 
-void FormulaCursor::deleteNode()
+KUndo2Command *FormulaCursor::deleteNode()
 {
     if (m_node->m_node_type == MmlNode::TextNode) {
-        MmlTextNode *currentCursorNode = dynamic_cast<MmlTextNode *>(m_node);
+        MmlTextNode *currentCursorNode = static_cast<MmlTextNode *>(m_node);
         QString currentText = currentCursorNode->text();
         currentText.remove(currentCursorNode->m_cursorIndex, 1);
-        currentCursorNode->setText(currentText);
+        return new AlterFormulaCommand(this, currentText, currentCursorNode->m_cursorIndex);
     } else { 
         MmlNode *deletedNode = m_node;
-        //set the cursor to the parent of the node being deleted
-        setNode(m_node->parent());
-        m_document->deleteNode(deletedNode);
+        return new ChangeFormulaCommand(this);
     }
-    m_document->layout();
 }
 
-void FormulaCursor::insertText(const QString &text)
+KUndo2Command *FormulaCursor::insertText(const QString &text)
 {
     if (m_node->m_node_type == MmlNode::TextNode) {
-        MmlTextNode *currentCursorNode = dynamic_cast<MmlTextNode *>(m_node);
+        MmlTextNode *currentCursorNode = static_cast<MmlTextNode *>(m_node);
         QString currentText = currentCursorNode->text();
         currentText.insert(currentCursorNode->m_cursorIndex, text);
-        currentCursorNode->setText(currentText);
-        currentCursorNode->m_cursorIndex++;
-        m_document->layout();
+        return new AlterFormulaCommand(this, currentText, currentCursorNode->m_cursorIndex + 1);
     }
+    return 0;
 }
 
-void FormulaCursor::deleteText()
+KUndo2Command *FormulaCursor::deleteText()
 {
     if (m_node->m_node_type == MmlNode::TextNode) {
-        MmlTextNode *currentCursorNode = dynamic_cast<MmlTextNode *>(m_node);
+        MmlTextNode *currentCursorNode = static_cast<MmlTextNode *>(m_node);
         QString currentText = currentCursorNode->text();
         currentText.remove(currentCursorNode->m_cursorIndex - 1, 1);
-        currentCursorNode->setText(currentText);
-        currentCursorNode->m_cursorIndex--;
-        m_document->layout();
+        return new AlterFormulaCommand(this, currentText, currentCursorNode->m_cursorIndex - 1);
     }  
+    return 0;
+}
+void FormulaCursor::activate()
+{
+    setNode(m_document->rootNode()->firstChild());
+}
+
+void FormulaCursor::deactivate()
+{
+    setNode(0);
 }
