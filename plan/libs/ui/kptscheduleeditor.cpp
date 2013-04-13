@@ -550,7 +550,7 @@ void ScheduleLogTreeView::slotEditCopy()
                 continue;
             }
             if ( ! s.isEmpty() ) {
-                s += " ";
+                s += ' ';
             }
             s = QString( "%1%2" ).arg( s ).arg( idx.data().toString(), -10 );
         }
