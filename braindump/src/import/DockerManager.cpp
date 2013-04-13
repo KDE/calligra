@@ -61,10 +61,7 @@ DockerManager::DockerManager(MainWindow *mainWindow)
     d->toolBarsDocker->setTitleBarWidget(new QWidget());
     d->toolBarsDocker->setVisible(false);
 
-    connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(restoringDone()));
     connect(d->toolBarsDocker, SIGNAL(visibilityChanged(bool)), this, SLOT(moveToolBars()));
-    connect(mainWindow, SIGNAL(beforeHandlingToolBars()), this, SLOT(moveToolBarsBack()));
-    connect(mainWindow, SIGNAL(afterHandlingToolBars()), this, SLOT(moveToolBars()));
 }
 
 DockerManager::~DockerManager()
