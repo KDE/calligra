@@ -23,6 +23,7 @@
 #include "OdtTraverserDocxBackend.h"
 
 // Calligra
+#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
@@ -42,5 +43,127 @@ OdtTraverserDocxBackend::OdtTraverserDocxBackend(OdfTraverserContext *context)
 
 OdtTraverserDocxBackend::~OdtTraverserDocxBackend()
 {
+}
+
+
+void OdtTraverserDocxBackend::beginEndTraversal(OdfTraverserContext *context, BeginEndTag beginEnd)
+{
+     OdtTraverserDocxContext *docxContext = dynamic_cast<OdtTraverserDocxContext*>(context);
+    if (!docxContext) {
+        return;
+    }
+
+    KoXmlWriter  *writer = docxContext->m_documentWriter;
+    if (beginEnd == BeginTag) {
+        writer->startDocument(0);
+        
+        // Start the document and add all necessary namespaces to it.
+        writer->startElement("w:document");
+        writer->addAttribute("xmlns:wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
+        writer->addAttribute("xmlns:mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+        writer->addAttribute("xmlns:o", "urn:schemas-microsoft-com:office:office");
+        writer->addAttribute("xmlns:r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+        writer->addAttribute("xmlns:m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+        writer->addAttribute("xmlns:v", "urn:schemas-microsoft-com:vml");
+        writer->addAttribute("xmlns:wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+        writer->addAttribute("xmlns:wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+        writer->addAttribute("xmlns:w10", "urn:schemas-microsoft-com:office:word");
+        writer->addAttribute("xmlns:w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+        writer->addAttribute("xmlns:w14", "http://schemas.microsoft.com/office/word/2010/wordml");
+        writer->addAttribute("xmlns:w15", "http://schemas.microsoft.com/office/word/2012/wordml");
+        writer->addAttribute("xmlns:wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
+        writer->addAttribute("xmlns:wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
+        writer->addAttribute("xmlns:wne", "http://schemas.microsoft.com/office/word/2006/wordml");
+        writer->addAttribute("xmlns:wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+        writer->addAttribute("mc:Ignorable", "w14 w15 wp14");
+
+        writer->startElement("w:body");
+    }
+    else {
+        // FIXME: Do we have to add w:sectPr here always or only sometimes?
+
+        writer->endElement(); // w:body
+        writer->endElement(); // w:document
+        writer->endDocument();
+    }
+}
+
+
+void OdtTraverserDocxBackend::tagP(KoXmlElement &element, OdfTraverserContext *context,
+                                   BeginEndTag beginEnd)
+{
+    Q_UNUSED(element);
+
+    OdtTraverserDocxContext *docxContext = dynamic_cast<OdtTraverserDocxContext*>(context);
+    if (!docxContext) {
+        return;
+    }
+
+    KoXmlWriter  *writer = docxContext->m_documentWriter;
+    if (beginEnd == BeginTag) {
+        writer->startElement("w:p");
+        // FIXME: Add paragraph attributes here
+        writer->startElement("w:pPr");
+        // FIXME: Add paragraph properties (styling) here
+        writer->endElement(); // w:pPr
+    }
+    else {
+        writer->endElement(); // w:r
+    }
+}
+
+void OdtTraverserDocxBackend::tagH(KoXmlElement &element, OdfTraverserContext *context,
+                                   BeginEndTag beginEnd)
+{
+    Q_UNUSED(element);
+
+    OdtTraverserDocxContext *docxContext = dynamic_cast<OdtTraverserDocxContext*>(context);
+    if (!docxContext) {
+        return;
+    }
+
+    KoXmlWriter  *writer = docxContext->m_documentWriter;
+    if (beginEnd == BeginTag) {
+        // FIXME: Handle header here
+    }
+}
+
+void OdtTraverserDocxBackend::tagSpan(KoXmlElement &element, OdfTraverserContext *context,
+                                      BeginEndTag beginEnd)
+{
+    Q_UNUSED(element);
+
+    OdtTraverserDocxContext *docxContext = dynamic_cast<OdtTraverserDocxContext*>(context);
+    if (!docxContext) {
+        return;
+    }
+
+    KoXmlWriter  *writer = docxContext->m_documentWriter;
+    if (beginEnd == BeginTag) {
+        writer->startElement("w:r");
+        writer->startElement("w:rPr");
+        // FIXME: Add run properties here
+        writer->endElement(); // w:rPr
+    }
+    else {
+        writer->endElement(); // w:r
+    }
+}
+
+
+void OdtTraverserDocxBackend::characterData(KoXmlNode &node, OdfTraverserContext *context,
+                                            BeginEndTag beginEnd)
+{
+    OdtTraverserDocxContext *docxContext = dynamic_cast<OdtTraverserDocxContext*>(context);
+    if (!docxContext) {
+        return;
+    }
+
+    KoXmlWriter  *writer = docxContext->m_documentWriter;
+    if (beginEnd == BeginTag) {
+        writer->startElement("w:t");
+        writer->addTextNode(node.toText().data());
+        writer->endElement(); // w:t
+    }
 }
 

@@ -46,8 +46,14 @@ class OdtTraverserDocxBackend : public OdtTraverserBackend
     OdtTraverserDocxBackend(OdfTraverserContext *context);
     virtual ~OdtTraverserDocxBackend();
 
-    // MANY backend functions here:
-    // ...
+    // Backend functions
+    void beginEndTraversal(OdfTraverserContext *context, BeginEndTag beginEnd);
+
+    void tagP(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+    void tagH(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+    void tagSpan(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
+
+    void characterData(KoXmlNode &node, OdfTraverserContext *context, BeginEndTag beginEnd);
 };
 
 #endif // ODTTRAVERSERDOCXBACKEND_H
