@@ -43,7 +43,6 @@ KAboutData * newAboutData()
     aboutData->addAuthor(ki18n("Bo Thorsen"), KLocalizedString(), "bo@sonofthor.dk");
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
     aboutData->addAuthor(ki18n("Raphael Langerhorst"),KLocalizedString(),"raphael.langerhorst@kdemail.net");
-    aboutData->addCredit(ki18n("Nuno Pinheiro and Danny Allen"), ki18n("Application icon for plan"), "danny@dannyallen.co.uk");
 
     aboutData->setProgramIconName( "calligraplan" );
 
