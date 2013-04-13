@@ -24,13 +24,8 @@
 
 #include "kptviewbase.h"
 
-#include <QTreeWidget>
-
 #include <QList>
 #include <QTreeWidget>
-#include <QVBoxLayout>
-#include <QTreeWidget>
-
 #include <QVariant>
 #include <QAction>
 #include <QApplication>
@@ -43,11 +38,9 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QVBoxLayout>
-#include <QWidget>
 #include <QSpinBox>
 #include <QLineEdit>
 
-#include <QWidget>
 #include <kptitemmodelbase.h>
 
 #include <kactionselector.h>

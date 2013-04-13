@@ -29,7 +29,6 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QPushButton>
-#include <QComboBox>
 #include <QTableWidget>
 #include <QStringList>
 #include <kundo2command.h>

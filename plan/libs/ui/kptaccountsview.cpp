@@ -38,7 +38,6 @@
 #include <QVBoxLayout>
 #include <QPrinter>
 #include <QPrintDialog>
-#include <QVBoxLayout>
 #include <QHeaderView>
 #include <QMenu>
 
