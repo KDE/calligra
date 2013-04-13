@@ -131,7 +131,6 @@ Let us say Hours per day is 8. If you estimate that a task needs 3 days effort t
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

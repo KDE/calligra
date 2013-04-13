@@ -39,9 +39,6 @@
      </item>
      <item row="1" column="1">
       <layout class="QHBoxLayout">
-       <property name="spacing">
-        <number>6</number>
-       </property>
        <property name="margin">
         <number>0</number>
        </property>
@@ -82,9 +79,6 @@
      </item>
      <item row="2" column="1">
       <layout class="QHBoxLayout">
-       <property name="spacing">
-        <number>6</number>
-       </property>
        <property name="margin">
         <number>0</number>
        </property>
@@ -408,12 +402,6 @@
           <string>Cost</string>
          </property>
          <layout class="QGridLayout">
-          <property name="margin">
-           <number>9</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="textLabel3_2">
             <property name="text">
@@ -532,7 +520,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KComboBox</class>

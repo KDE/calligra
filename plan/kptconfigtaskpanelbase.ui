@@ -27,9 +27,6 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0" colspan="2">
         <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>6</number>
-         </property>
          <property name="margin">
           <number>0</number>
          </property>
@@ -476,7 +473,6 @@ This is not limited to persons available in a resource group but can be anyone. 
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KRichTextEdit</class>
