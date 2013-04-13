@@ -67,8 +67,8 @@ class KPLATOUI_EXPORT TaskEditorTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    TaskEditorTreeView( QWidget *parent );
-    
+    explicit TaskEditorTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
@@ -88,8 +88,8 @@ class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    NodeTreeView( QWidget *parent );
-    
+    explicit NodeTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
@@ -270,7 +270,7 @@ class WorkPackageTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    WorkPackageTreeView( QWidget *parent );
+    explicit WorkPackageTreeView(QWidget *parent);
 
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 

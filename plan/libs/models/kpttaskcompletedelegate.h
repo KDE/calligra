@@ -31,7 +31,7 @@ class KPLATOMODELS_EXPORT TaskCompleteDelegate : public ProgressBarDelegate
 {
   Q_OBJECT
 public:
-    TaskCompleteDelegate( QObject *parent = 0 );
+    explicit TaskCompleteDelegate(QObject *parent = 0);
 
     ~TaskCompleteDelegate();
 

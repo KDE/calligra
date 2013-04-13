@@ -43,7 +43,7 @@ class KPLATOUI_EXPORT ResourceTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    ResourceTreeView( QWidget *parent );
+    explicit ResourceTreeView(QWidget *parent);
 
     ResourceItemModel *model() const { return static_cast<ResourceItemModel*>( DoubleTreeViewBase::model() ); }
 

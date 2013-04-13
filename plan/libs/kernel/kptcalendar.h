@@ -174,9 +174,9 @@ public:
                  NonWorking=1, Working=2 };
     
     CalendarDay();
-    CalendarDay(int state);
+    explicit CalendarDay(int state);
     explicit CalendarDay(const QDate& date, int state=Undefined);
-    CalendarDay(CalendarDay *day);
+    explicit CalendarDay(CalendarDay *day);
     ~CalendarDay();
 
     bool load( KoXmlElement &element, XMLLoaderObject &status );
@@ -288,7 +288,7 @@ class KPLATOKERNEL_EXPORT CalendarWeekdays {
 
 public:
     CalendarWeekdays();
-    CalendarWeekdays( const CalendarWeekdays *weekdays );
+    explicit CalendarWeekdays( const CalendarWeekdays *weekdays );
     ~CalendarWeekdays();
 
     bool load( KoXmlElement &element, XMLLoaderObject &status );
@@ -618,7 +618,7 @@ class KPLATOKERNEL_EXPORT StandardWorktime
 {
 public:
     explicit StandardWorktime( Project *project = 0 );
-    StandardWorktime(StandardWorktime* worktime);
+    explicit StandardWorktime(StandardWorktime* worktime);
     ~StandardWorktime();
 
     /// Set Project

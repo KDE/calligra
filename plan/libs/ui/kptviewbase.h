@@ -157,7 +157,7 @@ class KPLATOUI_EXPORT PrintingDialog : public KoPrintingDialog
 {
     Q_OBJECT
 public:
-    PrintingDialog(ViewBase *view);
+    explicit PrintingDialog(ViewBase *view);
     ~PrintingDialog();
 
     virtual QList<QWidget*> createOptionWidgets() const;

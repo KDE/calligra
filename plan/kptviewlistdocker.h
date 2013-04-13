@@ -52,7 +52,7 @@ private:
 class ViewListDockerFactory : public KoDockFactoryBase
 {
 public:
-    ViewListDockerFactory(View *view);
+    explicit ViewListDockerFactory(View *view);
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();

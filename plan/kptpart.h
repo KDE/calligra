@@ -37,7 +37,7 @@ class KPLATO_EXPORT Part : public KoPart
     Q_OBJECT
 
 public:
-    Part(QObject *parent);
+    explicit Part(QObject *parent);
 
     virtual ~Part();
 

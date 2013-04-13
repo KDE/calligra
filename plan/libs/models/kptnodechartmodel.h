@@ -44,7 +44,7 @@ class KPLATOMODELS_EXPORT ChartProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    ChartProxyModel( QObject *parent = 0 ) : QSortFilterProxyModel( parent ) {}
+    explicit ChartProxyModel(QObject *parent = 0) : QSortFilterProxyModel( parent ) {}
 
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const {
         //if ( role == Qt::DisplayRole && orientation == Qt::Vertical ) kDebug()<<"fetch:"<<orientation<<section<<mapToSource( index(0, section) ).column()<<m_rejects;
@@ -101,7 +101,7 @@ public:
     };
     const QMetaEnum columnMap() const;
 
-    ChartItemModel( QObject *parent = 0 );
+    explicit ChartItemModel(QObject *parent = 0);
 
 
 //    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
@@ -161,7 +161,7 @@ class KPLATOMODELS_EXPORT PerformanceDataCurrentDateModel : public ChartItemMode
 {
     Q_OBJECT
 public:
-    PerformanceDataCurrentDateModel( QObject *parent );
+    explicit PerformanceDataCurrentDateModel(QObject *parent);
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const;
     int columnCount( const QModelIndex &parent = QModelIndex() ) const;

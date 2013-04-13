@@ -72,21 +72,19 @@ class KPLATOUI_EXPORT TaskStatusTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    TaskStatusTreeView( QWidget *parent );
-    
-    
+    explicit TaskStatusTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     TaskStatusItemModel *model() const;
-    
+
     Project *project() const;
     void setProject( Project *project );
-    
-    
+
     int defaultWeekday() const { return Qt::Friday; }
     int weekday() const;
     void setWeekday( int day );
-    
+
     int defaultPeriod() const { return 7; }
     int period() const;
     void setPeriod( int days );

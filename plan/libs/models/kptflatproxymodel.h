@@ -51,7 +51,7 @@ class KPLATOMODELS_EXPORT FlatProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 public:
-    FlatProxyModel ( QObject * parent = 0 );
+    explicit FlatProxyModel(QObject *parent = 0);
 
     virtual QModelIndex mapFromSource ( const QModelIndex & sourceIndex ) const;
     virtual QItemSelection mapSelectionFromSource ( const QItemSelection & sourceSelection ) const;

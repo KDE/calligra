@@ -77,7 +77,6 @@ class QSplitter;
 class QTreeWidgetItem;
 
 
- 
 namespace KPlato
 {
 
@@ -89,7 +88,7 @@ class KPLATOUI_EXPORT ResourcesList : public QTreeWidget
     Q_OBJECT
 
 public:
-    ResourcesList( QWidget * parent = 0 );
+    explicit ResourcesList(QWidget *parent = 0);
 
 };
 
