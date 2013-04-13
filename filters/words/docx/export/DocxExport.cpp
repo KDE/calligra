@@ -38,6 +38,7 @@
 #include "OdtTraverser.h"
 
 // This filter
+#include "DocxFile.h"
 #include "OdtTraverserDocxBackend.h"
 
 
@@ -57,7 +58,8 @@ DocxExport::~DocxExport()
 KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QByteArray& to)
 {
     // Check for types
-    if (from != "application/vnd.oasis.opendocument.text" || to != "text/plain") {
+    if (from != "application/vnd.oasis.opendocument.text"
+        || to != "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
         return KoFilter::NotImplemented;
     }
 
@@ -75,24 +77,32 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     }
     odfStore->close();
 
-    // Start the conversion
-
+#if 0
     // Create output file.
     // FIXME: This was taken from the Ascii filter and needs to use OPC instead.
+    KoStore *docxStore = KoStore::createStore(m_chain->outputFile(), KoStore::Write,
+                                             "", KoStore::Auto);
+
     QFile outfile(m_chain->outputFile());
     if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
         kError(30501) << "Unable to open output file!" << endl;
         outfile.close();
         return KoFilter::FileNotFound;
     }
+#endif
+    // Start the conversion
 
-    OdtTraverserDocxContext  docxBackendContext(odfStore, outfile);
+    // Collects all the embedded files and writes the result at the end.
+    DocxFile docxFile;
+
+    OdtTraverserDocxContext  docxBackendContext(odfStore, &docxFile);
     OdtTraverserDocxBackend  docxBackend(&docxBackendContext);
 
-    OdtTraverser              odtTraverser;
+    // Traverse the ODT and create the output in the meantime. The
+    // output is collected into the DocxFile instance inside the docx
+    // backend context.
+    OdtTraverser  odtTraverser;
     odtTraverser.traverseContent(&docxBackend, &docxBackendContext);
 
-    outfile.close();
-
-    return KoFilter::OK;
+    return docxFile.writeDocx(m_chain->outputFile(), to, docxBackendContext);
 }

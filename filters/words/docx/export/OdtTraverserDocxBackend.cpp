@@ -26,14 +26,17 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+// This filter
+#include "DocxFile.h"
+
 
 // ----------------------------------------------------------------
 //                 class OdtTraverserDocxContext
 
 
-OdtTraverserDocxContext::OdtTraverserDocxContext(KoStore *store, QFile &file)
-    : OdfTraverserContext(store)
-    , outStream(&file)
+OdtTraverserDocxContext::OdtTraverserDocxContext(KoStore *store, DocxFile *dxf)
+    : OdfTraverserContext(store) // Collect metadata, manifest and styles
+    , docxFile(dxf)
 {
 }
 

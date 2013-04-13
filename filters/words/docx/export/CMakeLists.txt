@@ -7,6 +7,8 @@ include_directories(
 set(DocxExport_PART_SRCS
     DocxExport.cpp
     OdtTraverserDocxBackend.cpp
+    DocxFile.cpp
+    FileCollector.cpp
 )
 kde4_add_plugin(docxexport ${DocxExport_PART_SRCS})
 target_link_libraries(docxexport odftraverse komain koodf)

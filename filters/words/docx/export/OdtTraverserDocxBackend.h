@@ -34,16 +34,19 @@ class QFile;
 class QTextStream;
 
 class KoStore;
+class DocxFile;
 
 
+/** @brief Hold the context (metadata, styles and manifest) and keep track of the parts of the output while it's generated.
+ *
+ */
 class OdtTraverserDocxContext : public OdfTraverserContext
 {
  public:
-    OdtTraverserDocxContext(KoStore *store, QFile &outfile);
+    OdtTraverserDocxContext(KoStore *store, DocxFile *dxf);
     ~OdtTraverserDocxContext();
 
-    //QFile &outfile;
-    QTextStream  outStream;
+    DocxFile  *docxFile;
 };
 
 
