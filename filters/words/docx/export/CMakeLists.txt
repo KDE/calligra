@@ -9,6 +9,8 @@ set(DocxExport_PART_SRCS
     OdtTraverserDocxContext.cpp
     OdtTraverserDocxBackend.cpp
     DocxFile.cpp
+    OpcRelSet.cpp
+    OpcRelSetManager.cpp
     FileCollector.cpp
 )
 kde4_add_plugin(docxexport ${DocxExport_PART_SRCS})
