@@ -29,7 +29,7 @@
 namespace KPlato
 {
 
-static const char* KPLATO_DESCRIPTION=I18N_NOOP("Calligra Plan - KDE Project Planning and Management Tool");
+static const char* KPLATO_DESCRIPTION=I18N_NOOP("Project Planning and Management Tool");
 static const char* KPLATO_VERSION=CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
