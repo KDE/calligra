@@ -28,6 +28,9 @@
 class QTimer;
 class KWCanvas;
 class KWDocument;
+class KWPage;
+class KoPageLayout;
+class KWPageStyle;
 
 class KWPageTool : public KoToolBase
 {
@@ -80,9 +83,12 @@ private:
     QTimer *m_resizeTimer;
     //Return or set the position x or y of the margin
     int marginInPx(Selection selection);
-    void setMarginInPx(Selection selection,int postionX,int positionY);
-    int xMouseInPage(int positionX);
-    int yMouseInPage(int positionY);
+    void setMarginInPx(Selection selection, int postionX, int positionY);
+    int xMouseInPage();
+    int yMouseInPage();
+    qreal yMouseInDocument();
+    KWPage pageUnderMouse();
+    void changeLayoutInStyle(KoPageLayout layout, KWPageStyle style);
 
     //To check if header/footer is already created
     bool header, footer;

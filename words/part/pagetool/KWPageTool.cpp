@@ -27,6 +27,7 @@
 #include "KWDocument.h"
 #include "KWCanvas.h"
 #include "KWView.h"
+#include "KWPage.h"
 
 // words includes
 #include "KWGui.h"
@@ -151,10 +152,14 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
     int rightMargin  = marginInPx(MRIGHT);
     int topMargin    = marginInPx(MTOP);
     int bottomMargin = marginInPx(MBOTTOM);
-    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
 
-    int xMouse = xMouseInPage(event->x());
-    int yMouse = yMouseInPage(event->y());
+    KWPageStyle style = pageUnderMouse().pageStyle();
+    KoPageLayout layout = style.pageLayout();
+
+    qDebug() << pageUnderMouse().pageNumber() << " " << style.name();
+
+    int xMouse = xMouseInPage();
+    int yMouse = yMouseInPage();
 
     //For the orientation modification
     m_mousePosTmp = new QPoint(xMouse,yMouse);
@@ -219,10 +224,11 @@ void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
         int rightMargin  = marginInPx(MRIGHT);
         int topMargin    = marginInPx(MTOP);
         int bottomMargin = marginInPx(MBOTTOM);
-        KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
+        KWPageStyle style = pageUnderMouse().pageStyle();
+        KoPageLayout layout = style.pageLayout();
 
-        int xMouse = xMouseInPage(event->x());
-        int yMouse = yMouseInPage(event->y());
+        int xMouse = xMouseInPage();
+        int yMouse = yMouseInPage();
 
         //Refresh the cursor icon
         if ((xMouse > leftMargin - SELECT_SPACE && xMouse < leftMargin + SELECT_SPACE)
@@ -244,8 +250,9 @@ void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
-    int yMouse = yMouseInPage(event->y());
+    KWPageStyle style = pageUnderMouse().pageStyle();;
+    KoPageLayout layout = style.pageLayout();
+    int yMouse = yMouseInPage();
     if (m_selection != NONE){
         m_selection = NONE;
     }
@@ -262,7 +269,7 @@ void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
                 layout.orientation = KoPageFormat::Portrait;
             }
         }
-        m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
+        changeLayoutInStyle(layout, style);
     }
     refreshCanvas();
     m_resizeTimer->stop();
@@ -270,8 +277,8 @@ void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
 
 int KWPageTool::marginInPx(Selection selection)
 {
-
-    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
+    KWPageStyle style = pageUnderMouse().pageStyle();
+    KoPageLayout layout = style.pageLayout();
 
     int leftMargin   = layout.leftMargin;
     int rightMargin  = layout.width - layout.rightMargin;
@@ -300,15 +307,16 @@ int KWPageTool::marginInPx(Selection selection)
 
 void KWPageTool::setMarginInPx(Selection selection, int positionX, int positionY)
 {
-    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
+    KWPageStyle style = pageUnderMouse().pageStyle();
+    KoPageLayout layout = style.pageLayout();
 
     int leftMargin   = marginInPx(MLEFT);
     int rightMargin  = marginInPx(MRIGHT);
     int topMargin    = marginInPx(MTOP);
     int bottomMargin = marginInPx(MBOTTOM);
 
-    int xMouse = xMouseInPage(positionX);
-    int yMouse = yMouseInPage(positionY);
+    int xMouse = xMouseInPage();
+    int yMouse = yMouseInPage();
 
     switch (selection) {
     case MLEFT:
@@ -335,15 +343,15 @@ void KWPageTool::setMarginInPx(Selection selection, int positionX, int positionY
         qDebug() << "Unexcepted case PageTool::setMarginPx";
         break;
     }
-    m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
-    refreshCanvas();
+
+    changeLayoutInStyle(layout, style);
 }
 
 
 void KWPageTool::resizePage()
 {
-    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
-
+    KWPageStyle style = pageUnderMouse().pageStyle();
+    KoPageLayout layout = style.pageLayout();
     //Get the size of the resizing
     int widthResize =
             m_canvas->viewConverter()->viewToDocumentX(m_mousePosTmp->x() - QCursor::pos().x());
@@ -391,30 +399,35 @@ void KWPageTool::resizePage()
         layout.orientation = KoPageFormat::Portrait;
     }
 
-    m_document->pageManager()->defaultPageStyle().setPageLayout(layout);
-    refreshCanvas();
+    changeLayoutInStyle(layout, style);
 }
 
-int KWPageTool::xMouseInPage(int positionX)
+int KWPageTool::xMouseInPage()
 {
-    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
-    int xMouseInPage = int(m_canvas->viewConverter()->viewToDocumentX(positionX
-              + m_canvas->documentOffset().x()));
-    if(xMouseInPage > 0) {
-        xMouseInPage %= int(layout.width);
-    }
-    return xMouseInPage;
+    int xMouseInPage = m_canvas->mapFromGlobal(QCursor::pos()).x() + m_canvas->documentOffset().x();
+    return int(m_canvas->viewConverter()->viewToDocumentX(qreal(xMouseInPage)));
 }
 
-int KWPageTool::yMouseInPage(int positionY)
+int KWPageTool::yMouseInPage()
 {
-    KoPageLayout layout = m_document->pageManager()->defaultPageStyle().pageLayout();
-    int yMouseInPage = int(m_canvas->viewConverter()->viewToDocumentY(positionY
-              + m_canvas->documentOffset().y()));
+    int yMouseInPage = int(yMouseInDocument());
     if (yMouseInPage > 0) {
-         yMouseInPage %= (int(layout.height) + 21);
+        KoPageLayout layout =
+                pageUnderMouse().pageStyle().pageLayout();
+        yMouseInPage %= (int(layout.height) + 21);
     }
     return yMouseInPage;
+}
+
+qreal KWPageTool::yMouseInDocument()
+{
+    qreal posYInCanvas = m_canvas->mapFromGlobal(QCursor::pos()).y();
+    return m_canvas->viewConverter()->viewToDocumentY(posYInCanvas + m_canvas->documentOffset().y());
+}
+
+KWPage KWPageTool::pageUnderMouse()
+{
+    return m_document->pageManager()->page(yMouseInDocument());
 }
 
 void KWPageTool::insertPageBreak()
@@ -451,6 +464,13 @@ void KWPageTool::enableFooter()
     m_canvas->view()->actionCollection()->action("insert_footer")->setEnabled(false);
     refreshCanvas();
 }
+
+void KWPageTool::changeLayoutInStyle(KoPageLayout layout, KWPageStyle style)
+{
+    m_document->pageManager()->pageStyle(style.name()).setPageLayout(layout);
+    refreshCanvas();
+}
+
 
 QList<QWidget *> KWPageTool::createOptionWidgets()
 {
