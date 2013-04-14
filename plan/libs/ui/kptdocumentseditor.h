@@ -39,7 +39,7 @@ class KPLATOUI_EXPORT DocumentTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    DocumentTreeView( QWidget *parent );
+    explicit DocumentTreeView(QWidget *parent);
 
     DocumentItemModel *model() const { return static_cast<DocumentItemModel*>( TreeViewBase::model() ); }
 

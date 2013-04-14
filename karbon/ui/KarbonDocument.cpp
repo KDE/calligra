@@ -15,7 +15,7 @@
  * Copyright (C) 2005 Sven Langkamp <sven.langkamp@gmail.com>
  * Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2005-2013 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2005 Johannes Schaub <johannes.schaub@kdemail.net>
  * Copyright (C) 2006 Gabor Lehel <illissius@gmail.com>
  * Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
@@ -55,6 +55,7 @@
 #include <KoStyleManager.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoOdfStylesReader.h>
+#include <KoOdfStyleManager.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
@@ -144,6 +145,9 @@ public:
     bool showStatusBar;       ///< enable/disable status bar in attached view(s)
     bool merge;
     uint maxRecentFiles;      ///< max. number of files shown in open recent menu item
+
+    // For common styles (a.k.a. named styles)
+    KoOdfStyleManager styleManager;
 };
 
 
@@ -750,6 +754,11 @@ void KarbonDocument::useExternalDataCenterMap(QMap<QString, KoDataCenterBase*> d
 
 void KarbonDocument::loadOdfStyles(KoShapeLoadingContext & context)
 {
+    // Common styles (named styles) in general
+    KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    d->styleManager.loadStyles(odfLoadingContext.store());
+
+    // Only text styles (old style system).
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
 
     if (! styleManager)

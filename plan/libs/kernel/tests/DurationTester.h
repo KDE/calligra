@@ -31,7 +31,7 @@ class DurationTester : public QObject
 private slots:
     void add();
     void subtract();
-    void devide();
+    void divide();
     void equal();
     void lessThanOrEqual();
     void greaterThanOrEqual();
