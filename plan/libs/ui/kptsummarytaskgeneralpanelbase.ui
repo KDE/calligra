@@ -34,6 +34,9 @@
        <property name="wordWrap">
         <bool>false</bool>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="1" column="0">
@@ -46,6 +49,9 @@
        </property>
        <property name="wordWrap">
         <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>namefield</cstring>
@@ -80,6 +86,9 @@ This is not limited to persons available in a resource group but can be anyone. 
        </property>
        <property name="wordWrap">
         <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>leaderfield</cstring>
