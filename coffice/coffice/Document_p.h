@@ -11,14 +11,32 @@
 
 class DocumentProgressProxy : public KoProgressProxy {
 public:
-    DocumentProgressProxy(Document *doc) : m_doc(doc) {}
+    DocumentProgressProxy(Document *doc) : m_doc(doc), m_subTaskDone(0), m_subTaskCount(1) {}
     ~DocumentProgressProxy() {}
     int maximum() const { return 100; }
-    void setValue(int value) { m_doc->emitProgressUpdated(value); }
-    void setRange(int /*minimum*/, int /*maximum*/) {}
+    void setValue(int value) {
+        if (value < 0) {
+            if (m_subTaskDone+1 < m_subTaskCount)
+                value = 100;
+        }
+        if (value >= 0) {
+            qreal diff = qreal(100.0) / qreal(m_subTaskCount);
+            value /= m_subTaskCount;
+            value += m_subTaskDone * diff;
+        }
+        m_doc->emitProgressUpdated(value);
+    }
+    void setRange(int minimum, int maximum) {
+        qDebug() << minimum << maximum;
+        //Q_ASSERT(false);
+    }
     void setFormat(const QString &/*format*/) {}
+    void beginSubTask() { ++m_subTaskCount; }
+    void endSubTask() { m_subTaskDone = qMax(m_subTaskCount, ++m_subTaskDone); }
 private:
     Document *m_doc;
+    int m_subTaskDone;
+    int m_subTaskCount;
 };
 
 typedef QPair<int,QRectF> PageDef;

@@ -5,6 +5,7 @@
 #include <kservicetype.h>
 
 #include <QStringList>
+#include <QRegExp>
 #include <QDebug>
 
 class KMimeType : public KServiceType
@@ -13,18 +14,55 @@ public:
     typedef KSharedPtr<KMimeType> Ptr;
     typedef QList<Ptr> List;
 
+    static List allMimeTypes()
+    {
+        static List m_allMimeTypes;
+        if (m_allMimeTypes.isEmpty()) {
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.oasis.opendocument.text"), QStringList() << "*.odt"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.oasis.opendocument.spreadsheet"), QStringList() << "*.ods"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.oasis.opendocument.presentation"), QStringList() << "*.odp"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.oasis.opendocument.graphics"), QStringList() << "*.odg"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.oasis.opendocument.chart"), QStringList() << "*.odc"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.oasis.opendocument.formula"), QStringList() << "*.odf"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.oasis.opendocument.image"), QStringList() << "*.odi"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.oasis.opendocument.text-master"), QStringList() << "*.odm"));
+
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/msword"), QStringList() << "*.doc" << "*.dot"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), QStringList() << "*.docx"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.openxmlformats-officedocument.wordprocessingml.template"), QStringList() << "*.dotx"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-word.document.macroEnabled.12"), QStringList() << "*.docm"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-word.template.macroEnabled.12"), QStringList() << "*.dotm"));
+
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-excel"), QStringList() << "*.xls" << "*.xlt" << "*.xla"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), QStringList() << "*.xlsx"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.openxmlformats-officedocument.spreadsheetml.template"), QStringList() << "*.xltx"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-excel.sheet.macroEnabled.12"), QStringList() << "*.xlsm"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-excel.template.macroEnabled.12"), QStringList() << "*.xltm"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-excel.addin.macroEnabled.12"), QStringList() << "*.xlam"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-excel.sheet.binary.macroEnabled.12"), QStringList() << "*.xlsb"));
+
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-powerpoint"), QStringList() << "*.ppt" << "*.pot" << "*.pps" << "*.ppa"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.openxmlformats-officedocument.presentationml.presentation"), QStringList() << "*.pptx"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.openxmlformats-officedocument.presentationml.template"), QStringList() << "*.potx"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.openxmlformats-officedocument.presentationml.slideshow"), QStringList() << "*.ppsx"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-powerpoint.addin.macroEnabled.12"), QStringList() << "*.ppam"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-powerpoint.presentation.macroEnabled.12"), QStringList() << "*.pptm"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-powerpoint.template.macroEnabled.12"), QStringList() << "*.potm"));
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-powerpoint.slideshow.macroEnabled.12"), QStringList() << "*.ppsm"));
+        }
+        return m_allMimeTypes;
+    }
+
     enum FindByNameOption { DontResolveAlias, ResolveAliases = 1 };
 
     QString name() const
     {
-        qWarning() << Q_FUNC_INFO << "TODO";
-        return QString();
+        return m_name;
     }
 
     bool isEmpty() const
     {
-        qWarning() << Q_FUNC_INFO << "TODO";
-        return true;
+        return m_name.isEmpty();
     }
 
     static Ptr findByContent( const QByteArray &data, int *accuracy=0 )
@@ -35,47 +73,33 @@ public:
     
     static Ptr mimeType( const QString& name, FindByNameOption options = ResolveAliases )
     {
-        qWarning() << Q_FUNC_INFO << "TODO" << name;
+        Q_FOREACH(const Ptr &m, allMimeTypes())
+            if (m->name() == name)
+                return m;
+        qWarning()<<Q_FUNC_INFO<<"No mimetype for name="<<name;
         return defaultMimeTypePtr();
     }
 
     bool is( const QString& mimeTypeName ) const
     {
-        qWarning() << Q_FUNC_INFO << "TODO" << mimeTypeName;
-        return false;
+        qDebug()<<Q_FUNC_INFO<<mimeTypeName<<m_name;
+        return mimeTypeName == m_name;
     }
 
-    QString iconName( const KUrl &url = KUrl()) const
+    QString iconName( const KUrl &url = KUrl() ) const
     {
-        qWarning() << Q_FUNC_INFO << "TODO" << url;
         return QString();
     }
 
-#if 0
-    /**
-     * Return the filename of the icon associated with the mimetype, for a given url.
-     * Use KIconLoader::loadMimeTypeIcon to load the icon.
-     * @param url URL for the file
-     * @param mode the mode of the file. The mode may modify the icon
-     *              with overlays that show special properties of the
-     *              icon. Use 0 for default
-     * @return the name of the icon. The name of a default icon if there is no icon
-     *         for the mime type
-     */
-    static QString iconNameForUrl( const KUrl & url, mode_t mode = 0 );
+    static QString iconNameForUrl( const KUrl & url, mode_t mode = 0 )
+    {
+        return QString();
+    }
 
-    /**
-     * Return the "favicon" (see http://www.favicon.com) for the given @p url,
-     * if available. Does NOT attempt to download the favicon, it only returns
-     * one that is already available.
-     *
-     * If unavailable, returns QString().
-     * @param url the URL of the favicon
-     * @return the name of the favicon, or QString()
-     */
-    static QString favIconForUrl( const KUrl& url );
-
-#endif
+    static QString favIconForUrl( const KUrl& url )
+    {
+        return QString();
+    }
 
     QString comment( const KUrl& url = KUrl() ) const
     {
@@ -84,19 +108,27 @@ public:
 
     QStringList patterns() const
     {
-        return QStringList();
+        qDebug()<<Q_FUNC_INFO<<m_patterns;
+        return m_patterns;
     }
 
     static Ptr findByUrl( const KUrl& url, mode_t mode = 0, bool is_local_file = false, bool fast_mode = false, int *accuracy = 0 )
     {
-        qWarning() << Q_FUNC_INFO << "TODO" << url;
+        QString file = url.toLocalFile();
+        Q_FOREACH(const Ptr &m, allMimeTypes()) {
+            Q_FOREACH(const QString &p, m->patterns()) {
+                QRegExp rx(p, Qt::CaseInsensitive, QRegExp::Wildcard);
+                if (rx.exactMatch(file))
+                    return m;
+            }
+        }
+        qWarning() << Q_FUNC_INFO << "No mimetype for url=" << url << "file=" << file;
         return defaultMimeTypePtr();
     }
 
     static Ptr findByPath( const QString& path, mode_t mode = 0, bool fast_mode = false, int* accuracy = 0 )
     {
-        qWarning() << Q_FUNC_INFO << "TODO" << path;
-        return defaultMimeTypePtr();
+        return findByUrl(KUrl(path), mode, true, fast_mode, accuracy);
     }
 
 #if 0
@@ -187,17 +219,6 @@ public:
      * but text that the user should rarely ever see.
      */
     static bool isBufferBinaryData( const QByteArray &data );
-
-    /**
-     * Get all the mimetypes.
-     *
-     * Useful for showing the list of
-     * available mimetypes.
-     * More memory consuming than the ones above, don't use unless
-     * really necessary.
-     * @return the list of all existing KMimeTypes
-     */
-    static List allMimeTypes();
 #endif
 
     static QString defaultMimeType()
@@ -206,12 +227,6 @@ public:
         return defaultmimetype;
     }
 
-    /**
-     * Returns the default mimetype.
-     * Always application/octet-stream.
-     * This can be used to check the result of mimeType(name).
-     * @return the "application/octet-stream" mimetype pointer.
-     */
     static KMimeType::Ptr defaultMimeTypePtr()
     {
         //static KMimeType::Ptr defaultmimetype = KMimeType::Ptr(new KMimeType(defaultMimeType()));
@@ -221,9 +236,9 @@ public:
         return defaultmimetype;
     }
 
+    bool isDefault() const { return m_name.isEmpty(); }
+
 #if 0
-    /// Return true if this mimetype is the default mimetype
-    bool isDefault() const;
 
     /**
      * If this mimetype is a subclass of another mimetype,
@@ -279,15 +294,20 @@ public:
     QString userSpecifiedIconName() const;
 #endif
 
-    /**
-     * Return the primary extension associated with this mimetype, if any.
-     * If patterns() returns (*.jpg, *.jpeg) then mainExtension will return ".jpg".
-     * Note that the dot is included.
-     * If none of the patterns is in *.foo format (for instance
-     *   <code>*.jp? or *.* or callgrind.out* </code>)
-     * then mainExtension() returns an empty string.
-     */
-    QString mainExtension() const { return QString(); }
+    QString mainExtension() const
+    {
+        QString result;
+        if (!m_patterns.isEmpty()) {
+            result = m_patterns.first();
+            int delimiter = result.lastIndexOf(".");
+            int wildcard = result.lastIndexOf("*");
+            if (delimiter > 0 && wildcard < delimiter) {
+                result = result.mid(delimiter, result.length() - delimiter);
+            }
+        }
+        qDebug() << Q_FUNC_INFO << "mainExtension=" << result;
+        return result;
+    }
 
 #if 0
     /**
@@ -354,9 +374,12 @@ protected:
      */
     KMimeType( KMimeTypePrivate &dd, const QString& name, const QString& comment );
 #else
-    //KMimeType() {}
+    KMimeType(const QString& name = QString(), const QStringList &patterns = QStringList()) : KServiceType(), m_name(name), m_patterns(patterns) {}
 #endif
 
+private:
+    QString m_name;
+    QStringList m_patterns;
 };
 
 #endif

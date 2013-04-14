@@ -12,6 +12,7 @@ system('echo TOP_BUILD_DIR=$${TOP_BUILD_DIR} >> $${QMAKE_CACHE}')
 include(common.pri)
 
 SUBDIRS += calligralibs
+SUBDIRS += calligrafilters
 SUBDIRS += calligraplugins
 SUBDIRS += calligrawords
 SUBDIRS += coffice

@@ -40,7 +40,10 @@ FileSystemModel::FileSystemModel(QObject *parent)
     setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
     //setFilter(QDir::AllDirs | QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot);
 
-    setNameFilters(QStringList() << "*.odt");
+    setNameFilters(QStringList()
+       << "*.odt" // OpenDocument ODF
+       << "*.docx" << "*.dotx" // Microsoft OOXML
+    );
     setNameFilterDisables(false);
 
     QHash<int, QByteArray> roles;

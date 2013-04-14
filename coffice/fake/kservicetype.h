@@ -112,6 +112,7 @@ public:
 
     static Ptr serviceType( const QString& _name )
     {
+        qDebug()<<Q_FUNC_INFO<<_name;
         return Ptr();
     }
 
@@ -176,6 +177,7 @@ public:
 
    QVariant property(const QString &name) const
    {
+       qDebug()<<Q_FUNC_INFO<<name;
        return QVariant();
    }
 

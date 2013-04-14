@@ -1,3 +1,23 @@
+diff --git a/filters/libmsooxml/MsooXmlImport.cpp b/filters/libmsooxml/MsooXmlImport.cpp
+index acb0bc6..1624b69 100644
+--- a/filters/libmsooxml/MsooXmlImport.cpp
++++ b/filters/libmsooxml/MsooXmlImport.cpp
+@@ -759,6 +759,15 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
+         kDebug() << Content_Types_xml << "could not be parsed correctly! Aborting!";
+         return status;
+     }
++
++    //m_outputStore = 0;
++    //m_zip = 0;
++    //m_contentTypesXML = KoXmlDocument();
++    m_contentTypes.clear();
++    m_documentProperties.clear();
++    //m_documentXML = KoXmlDocument();
++    m_imageSizes.clear();
++
+     RETURN_IF_ERROR( Utils::loadContentTypes(m_contentTypesXML, m_contentTypes) )
+ 
+     static const char *docPropy_core_xml = "docProps/core.xml";
 diff --git a/libs/flake/KoImageData.cpp b/libs/flake/KoImageData.cpp
 index 7930e5f..7f3ec93 100644
 --- a/libs/flake/KoImageData.cpp
@@ -128,6 +148,152 @@ index ecc771f..0ead6cf 100644
      // Directories need to be saved too, but they don't have any file contents.
      if (fileName.endsWith('/')) {
          FileEntry *entry = new FileEntry;
+diff --git a/libs/main/KoDocument.cpp b/libs/main/KoDocument.cpp
+index 37f64b6..113f9e8 100644
+--- a/libs/main/KoDocument.cpp
++++ b/libs/main/KoDocument.cpp
+@@ -1096,10 +1096,12 @@ bool KoDocument::openFile()
+ 
+     if (typeName.isEmpty()) {
+         typeName = KMimeType::findByUrl(u, 0, true)->name();
++        qDebug()<<Q_FUNC_INFO<<"findByUrl"<<"url="<<u<<"mimeType="<<typeName;
+     }
+ 
+     // for images, always check content.
+     typeName = checkImageMimeTypes(typeName, u);
++    qDebug()<<Q_FUNC_INFO<<"mimeType="<<typeName;
+ 
+     // Sometimes it seems that arguments().mimeType() contains a much
+     // too generic mime type.  In that case, let's try some educated
+@@ -1216,71 +1218,7 @@ bool KoDocument::openFile()
+         importedFile = d->filterManager->importDocument(d->parentPart->localFilePath(), typeName, status);
+         if (status != KoFilter::OK) {
+             QApplication::restoreOverrideCursor();
+-
+-            QString msg;
+-            switch (status) {
+-            case KoFilter::OK: break;
+-
+-            case KoFilter::FilterCreationError:
+-                msg = i18n("Could not create the filter plugin"); break;
+-
+-            case KoFilter::CreationError:
+-                msg = i18n("Could not create the output document"); break;
+-
+-            case KoFilter::FileNotFound:
+-                msg = i18n("File not found"); break;
+-
+-            case KoFilter::StorageCreationError:
+-                msg = i18n("Cannot create storage"); break;
+-
+-            case KoFilter::BadMimeType:
+-                msg = i18n("Bad MIME type"); break;
+-
+-            case KoFilter::EmbeddedDocError:
+-                msg = i18n("Error in embedded document"); break;
+-
+-            case KoFilter::WrongFormat:
+-                msg = i18n("Format not recognized"); break;
+-
+-            case KoFilter::NotImplemented:
+-                msg = i18n("Not implemented"); break;
+-
+-            case KoFilter::ParsingError:
+-                msg = i18n("Parsing error"); break;
+-
+-            case KoFilter::PasswordProtected:
+-                msg = i18n("Document is password protected"); break;
+-
+-            case KoFilter::InvalidFormat:
+-                msg = i18n("Invalid file format"); break;
+-
+-            case KoFilter::InternalError:
+-            case KoFilter::UnexpectedEOF:
+-            case KoFilter::UnexpectedOpcode:
+-            case KoFilter::StupidError: // ?? what is this ??
+-            case KoFilter::UsageError:
+-                msg = i18n("Internal error"); break;
+-
+-            case KoFilter::OutOfMemory:
+-                msg = i18n("Out of memory"); break;
+-
+-            case KoFilter::FilterEntryNull:
+-                msg = i18n("Empty Filter Plugin"); break;
+-
+-            case KoFilter::NoDocumentCreated:
+-                msg = i18n("Trying to load into the wrong kind of document"); break;
+-
+-            case KoFilter::DownloadFailed:
+-                msg = i18n("Failed to download remote file"); break;
+-
+-            case KoFilter::UserCancelled:
+-            case KoFilter::BadConversionGraph:
+-                // intentionally we do not prompt the error message here
+-                break;
+-
+-            default: msg = i18n("Unknown error"); break;
+-            }
+-
++            QString msg = KoFilterManager::statusText(status);
+             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
+ #ifndef Q_OS_WIN
+                 QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
+@@ -1289,7 +1227,6 @@ bool KoDocument::openFile()
+                 QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
+                 KMessageBox::error(0, errorMsg);
+ #endif
+-
+             }
+ 
+             d->isLoading = false;
+@@ -1906,6 +1843,7 @@ KService::Ptr KoDocument::nativeService()
+ 
+ QByteArray KoDocument::nativeFormatMimeType() const
+ {
++#if 0
+     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
+     if (!service) {
+         kWarning(30003) << "No native service defined to read NativeMimeType from desktop file!";
+@@ -1924,6 +1862,9 @@ QByteArray KoDocument::nativeFormatMimeType() const
+     }
+ #endif
+     return nativeMimeType;
++#else
++    return "application/vnd.oasis.opendocument.text";
++#endif
+ }
+ 
+ QByteArray KoDocument::nativeOasisMimeType() const
+@@ -1939,6 +1880,7 @@ QByteArray KoDocument::nativeOasisMimeType() const
+ 
+ bool KoDocument::isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const
+ {
++qDebug()<<"=====================================================================================================>"<<mimetype;
+     if (mimetype == nativeFormatMimeType())
+         return true;
+     return extraNativeMimeTypes(importExportType).contains(mimetype);
+diff --git a/libs/main/KoDocument.h b/libs/main/KoDocument.h
+index 4841d58..ed4ce8d 100644
+--- a/libs/main/KoDocument.h
++++ b/libs/main/KoDocument.h
+@@ -145,7 +145,7 @@ public:
+      * delivers.
+      * This comes from the X-KDE-NativeMimeType key in the .desktop file.
+      */
+-    QByteArray nativeFormatMimeType() const;
++    virtual QByteArray nativeFormatMimeType() const;
+ 
+     /**
+      * Returns the OASIS OpenDocument mimetype of the document, if supported
+@@ -154,7 +154,7 @@ public:
+      *
+      * @return the oasis mimetype or, if it hasn't one, the nativeformatmimetype.
+      */
+-    QByteArray nativeOasisMimeType() const;
++    virtual QByteArray nativeOasisMimeType() const;
+ 
+     enum ImportExportType {
+         ForExport,
 diff --git a/libs/main/KoDocumentSectionView.cpp b/libs/main/KoDocumentSectionView.cpp
 index 154e4a8..0dd1334 100644
 --- a/libs/main/KoDocumentSectionView.cpp
@@ -139,6 +305,455 @@ index 154e4a8..0dd1334 100644
 -#include <KoDocumentSectionPropertyAction_p.moc>
 +//#include <KoDocumentSectionPropertyAction_p.moc>
  #include <KoDocumentSectionView.moc>
+diff --git a/libs/main/KoFilter.h b/libs/main/KoFilter.h
+index 8ed43ae..ce089f5 100644
+--- a/libs/main/KoFilter.h
++++ b/libs/main/KoFilter.h
+@@ -97,6 +97,8 @@ public:
+      */
+     void setUpdater(const QPointer<KoUpdater>& updater);
+ 
++    void setFilterChain(KoFilterChain *chain) { m_chain = chain; }
++
+ signals:
+     /**
+      * Emit this signal with a value in the range of 1...100 to have some
+diff --git a/libs/main/KoFilterChain.cpp b/libs/main/KoFilterChain.cpp
+index 3456ee1..0d9a257 100644
+--- a/libs/main/KoFilterChain.cpp
++++ b/libs/main/KoFilterChain.cpp
+@@ -49,11 +49,13 @@ KoFilterChain::KoFilterChain(const KoFilterManager* manager) :
+         m_inputDocument(0), m_outputDocument(0), m_inputTempFile(0),
+         m_outputTempFile(0), m_inputQueried(Nil), m_outputQueried(Nil), d(0)
+ {
++qDebug()<<Q_FUNC_INFO<<manager;
+ }
+ 
+ 
+ KoFilterChain::~KoFilterChain()
+ {
++qDebug()<<Q_FUNC_INFO;
+     m_chainLinks.deleteAll();
+ 
+     if (filterManagerParentChain() && filterManagerParentChain()->m_outputStorage)
+@@ -63,6 +65,7 @@ KoFilterChain::~KoFilterChain()
+ 
+ KoFilter::ConversionStatus KoFilterChain::invokeChain()
+ {
++qDebug()<<Q_FUNC_INFO;
+     KoFilter::ConversionStatus status = KoFilter::OK;
+ 
+     m_state = Beginning;
+@@ -161,6 +164,7 @@ QString KoFilterChain::outputFile()
+ 
+ KoStoreDevice* KoFilterChain::storageFile(const QString& name, KoStore::Mode mode)
+ {
++qDebug()<<Q_FUNC_INFO<<name;
+     // Plain normal use case
+     if (m_inputQueried == Storage && mode == KoStore::Read &&
+             m_inputStorage && m_inputStorage->mode() == KoStore::Read)
+@@ -276,6 +280,7 @@ KoFilterChain* KoFilterChain::filterManagerParentChain() const
+ 
+ void KoFilterChain::manageIO()
+ {
++qDebug()<<Q_FUNC_INFO;
+     m_inputQueried = Nil;
+     m_outputQueried = Nil;
+ 
+@@ -292,6 +297,7 @@ void KoFilterChain::manageIO()
+ 
+     if (!m_outputFile.isEmpty()) {
+         if (m_outputTempFile == 0) {
++qDebug()<<Q_FUNC_INFO<<"NEW TEMPFILE";
+             m_inputTempFile = new KTemporaryFile;
+             m_inputTempFile->setAutoRemove(true);
+             m_inputTempFile->setFileName(m_outputFile);
+@@ -308,6 +314,7 @@ void KoFilterChain::manageIO()
+         delete m_outputStorageDevice;
+         m_outputStorageDevice = 0;
+         if (m_outputStorage) {
++qDebug()<<Q_FUNC_INFO<<"CLOSE OUTPUT STORAGE";
+             m_outputStorage->close();
+             // Don't delete the storage if we're just pointing to the
+             // storage of the parent filter chain
+@@ -321,10 +328,12 @@ void KoFilterChain::manageIO()
+         delete m_inputDocument;
+     m_inputDocument = m_outputDocument;
+     m_outputDocument = 0;
++qDebug()<<Q_FUNC_INFO<<"DONE";
+ }
+ 
+ void KoFilterChain::finalizeIO()
+ {
++qDebug()<<Q_FUNC_INFO;
+     // In case we export (to a file, of course) and the last
+     // filter chose to output a KoDocument we have to save it.
+     // Should be very rare, but well...
+@@ -340,6 +349,8 @@ void KoFilterChain::finalizeIO()
+ 
+ bool KoFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
+ {
++qDebug()<<Q_FUNC_INFO;
++Q_ASSERT(false);
+     if (*tempFile) {
+         kError(30500) << "Ooops, why is there already a temp file???" << endl;
+         return false;
+@@ -371,6 +382,7 @@ bool KoFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
+ 
+ void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alternativeFile)
+ {
++qDebug()<<Q_FUNC_INFO<<document<<alternativeFile;
+     if (document) {
+         if (!createTempFile(&m_inputTempFile)) {
+             delete m_inputTempFile;
+@@ -399,6 +411,8 @@ void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alterna
+ 
+ void KoFilterChain::outputFileHelper(bool autoDelete)
+ {
++qDebug()<<Q_FUNC_INFO<<autoDelete;
++if (!m_outputFile.isEmpty()) return;
+     if (!createTempFile(&m_outputTempFile, autoDelete)) {
+         delete m_outputTempFile;
+         m_outputTempFile = 0;
+@@ -419,6 +433,7 @@ void KoFilterChain::outputFileHelper(bool autoDelete)
+ KoStoreDevice* KoFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreDevice** device,
+         const QString& name)
+ {
++qDebug()<<Q_FUNC_INFO;
+     delete *device;
+     *device = 0;
+     if ((*storage)->isOpen())
+@@ -436,6 +451,7 @@ KoStoreDevice* KoFilterChain::storageHelper(const QString& file, const QString&
+         KoStore::Mode mode, KoStore** storage,
+         KoStoreDevice** device)
+ {
++qDebug()<<Q_FUNC_INFO<<file<<streamName;
+     if (file.isEmpty())
+         return 0;
+     if (*storage) {
+@@ -461,6 +477,7 @@ KoStoreDevice* KoFilterChain::storageHelper(const QString& file, const QString&
+ 
+ void KoFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore** storage)
+ {
++qDebug()<<Q_FUNC_INFO<<file;
+     QByteArray appIdentification("");
+     if (mode == KoStore::Write) {
+         // To create valid storages we also have to add the mimetype
+@@ -477,6 +494,7 @@ void KoFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore
+ KoStoreDevice* KoFilterChain::storageCreateFirstStream(const QString& streamName, KoStore** storage,
+         KoStoreDevice** device)
+ {
++qDebug()<<Q_FUNC_INFO<<streamName;
+     if (!(*storage)->open(streamName))
+         return 0;
+ 
+@@ -491,6 +509,7 @@ KoStoreDevice* KoFilterChain::storageCreateFirstStream(const QString& streamName
+ 
+ KoStoreDevice* KoFilterChain::storageCleanupHelper(KoStore** storage)
+ {
++qDebug()<<Q_FUNC_INFO;
+     // Take care not to delete the storage of the parent chain
+     if (*storage != m_outputStorage || !filterManagerParentChain() ||
+             (*storage)->mode() != KoStore::Write)
+@@ -501,6 +520,7 @@ KoStoreDevice* KoFilterChain::storageCleanupHelper(KoStore** storage)
+ 
+ KoDocument* KoFilterChain::createDocument(const QString& file)
+ {
++qDebug()<<Q_FUNC_INFO<<file;
+     KUrl url;
+     url.setPath(file);
+     KMimeType::Ptr t = KMimeType::findByUrl(url, 0, true);
+@@ -521,6 +541,7 @@ KoDocument* KoFilterChain::createDocument(const QString& file)
+ 
+ KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
+ {
++qDebug()<<Q_FUNC_INFO<<mimeType;
+     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimeType);
+ 
+     if (entry.isEmpty()) {
+diff --git a/libs/main/KoFilterChain.h b/libs/main/KoFilterChain.h
+index a37c8b1..b4c0a8c 100644
+--- a/libs/main/KoFilterChain.h
++++ b/libs/main/KoFilterChain.h
+@@ -62,6 +62,7 @@ class KOMAIN_EXPORT KoFilterChain : public KShared
+ public:
+     typedef KSharedPtr<KoFilterChain> Ptr;
+ 
++    explicit KoFilterChain(const KoFilterManager* manager);
+     virtual ~KoFilterChain();
+ 
+     /**
+@@ -130,6 +131,9 @@ public:
+     // debugging
+     void dump();
+ 
++    void setInputFile(const QString &inputFile) { m_inputFile = inputFile; m_inputQueried = File; }
++    void setOutputFile(const QString &outputFile) { m_outputFile = outputFile; m_outputQueried = File; }
++
+ private:
+     // ### API for Calligra::Graph:
+     // Construct a filter chain belonging to some KoFilterManager.
+@@ -137,8 +141,6 @@ private:
+ 
+     friend class CalligraFilter::Graph;
+ 
+-    explicit KoFilterChain(const KoFilterManager* manager);
+-
+     void appendChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
+     void prependChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
+ 
+diff --git a/libs/main/KoFilterChainLink.cpp b/libs/main/KoFilterChainLink.cpp
+index 0ba0c54..0e33381 100644
+--- a/libs/main/KoFilterChainLink.cpp
++++ b/libs/main/KoFilterChainLink.cpp
+@@ -66,6 +66,7 @@ namespace CalligraFilter {
+ 
+     KoFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parentChainLink)
+     {
++qDebug()<<Q_FUNC_INFO;
+         if (!m_filterEntry) {
+             kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
+             return KoFilter::FilterEntryNull;
+diff --git a/libs/main/KoFilterManager.cpp b/libs/main/KoFilterManager.cpp
+index d3304ee..9da441f 100644
+--- a/libs/main/KoFilterManager.cpp
++++ b/libs/main/KoFilterManager.cpp
+@@ -52,6 +52,7 @@ KoFilterManager::KoFilterManager(KoDocument* document,
+         m_document(document), m_parentChain(0), m_graph(""),
+         d(new Private(progressUpdater))
+ {
++qDebug()<<Q_FUNC_INFO<<document;
+     d->batch = false;
+ }
+ 
+@@ -61,18 +62,21 @@ KoFilterManager::KoFilterManager(const QString& url, const QByteArray& mimetypeH
+         m_document(0), m_parentChain(parentChain), m_importUrl(url), m_importUrlMimetypeHint(mimetypeHint),
+         m_graph(""), d(new Private)
+ {
++qDebug()<<Q_FUNC_INFO<<url<<mimetypeHint;
+     d->batch = false;
+ }
+ 
+ KoFilterManager::KoFilterManager(const QByteArray& mimeType) :
+         m_document(0), m_parentChain(0), m_graph(""), d(new Private)
+ {
++qDebug()<<Q_FUNC_INFO<<mimeType;
+     d->batch = false;
+     d->importMimeType = mimeType;
+ }
+ 
+ KoFilterManager::~KoFilterManager()
+ {
++qDebug()<<Q_FUNC_INFO;
+     delete d;
+ }
+ 
+@@ -80,6 +84,7 @@ QString KoFilterManager::importDocument(const QString& url,
+                                         const QString& documentMimeType,
+                                         KoFilter::ConversionStatus& status)
+ {
++qDebug()<<Q_FUNC_INFO<<url<<documentMimeType;
+     // Find the mime type for the file to be imported.
+     QString  typeName(documentMimeType);
+     KUrl u(url);
+@@ -89,6 +94,7 @@ QString KoFilterManager::importDocument(const QString& url,
+         if (t)
+             typeName = t->name();
+     }
++qDebug()<<Q_FUNC_INFO<<"setSourceMimeType="<<typeName.toLatin1();
+     m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
+ 
+     if (!m_graph.isValid()) {
+@@ -130,11 +136,13 @@ QString KoFilterManager::importDocument(const QString& url,
+         }
+     }
+ 
++qDebug()<<Q_FUNC_INFO<<"CREATE_TOP_LEVEL_FILTERCHAIN";
+     KoFilterChain::Ptr chain(0);
+     // Are we owned by a KoDocument?
+     if (m_document) {
+         QByteArray mimeType = m_document->nativeFormatMimeType();
+         QStringList extraMimes = m_document->extraNativeMimeTypes(KoDocument::ForImport);
++qDebug()<<Q_FUNC_INFO<<"DOCUMENT"<<m_document<<mimeType<<extraMimes;
+         int i = 0;
+         int n = extraMimes.count();
+         chain = m_graph.chain(this, mimeType);
+@@ -149,6 +157,7 @@ QString KoFilterManager::importDocument(const QString& url,
+         }
+     } else if (!d->importMimeType.isEmpty()) {
+         chain = m_graph.chain(this, d->importMimeType);
++qDebug()<<Q_FUNC_INFO<<"CHAIN"<<d->importMimeType<<chain;
+     } else {
+         kError(30500) << "You aren't supposed to use import() from a filter!" << endl;
+         status = KoFilter::UsageError;
+@@ -166,11 +175,12 @@ QString KoFilterManager::importDocument(const QString& url,
+     m_direction = Import; // vital information!
+     m_importUrl = url;  // We want to load that file
+     m_exportUrl.clear();  // This is null for sure, as embedded stuff isn't
++qDebug()<<Q_FUNC_INFO<<"CHAIN_INVOKE";
+     // allowed to use that method
+     status = chain->invokeChain();
+ 
+     m_importUrl.clear();  // Reset the import URL
+-
++qDebug()<<Q_FUNC_INFO<<"CHAIN_INVOKE_DONE status="<<status<<"OKAY="<<(status == KoFilter::OK);
+     if (status == KoFilter::OK)
+         return chain->chainOutput();
+     return QString();
+@@ -178,6 +188,7 @@ QString KoFilterManager::importDocument(const QString& url,
+ 
+ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, QByteArray& mimeType)
+ {
++qDebug()<<Q_FUNC_INFO<<url<<mimeType;
+     bool userCancelled = false;
+ 
+     // The import url should already be set correctly (null if we have a KoDocument
+@@ -239,7 +250,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
+         if (!d->batch) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+         return KoFilter::BadConversionGraph;
+     }
+-
++qDebug()<<Q_FUNC_INFO<<"INVOKE_CHAIN";
+     return chain->invokeChain();
+ }
+ 
+@@ -280,6 +291,7 @@ private:
+ // This method builds up the graph in the passed ascii dict
+ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction direction)
+ {
++qDebug()<<Q_FUNC_INFO;
+     QStringList stopList; // Lists of mimetypes that are considered end of chains
+     stopList << "text/plain";
+     stopList << "text/csv";
+@@ -383,6 +395,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
+ // nodes are all white)
+ QStringList connected(const QHash<QByteArray, Vertex*>& vertices, const QByteArray& mimetype)
+ {
++qDebug()<<Q_FUNC_INFO;
+     if (mimetype.isEmpty())
+         return QStringList();
+     Vertex *v = vertices[ mimetype ];
+@@ -415,6 +428,7 @@ QStringList connected(const QHash<QByteArray, Vertex*>& vertices, const QByteArr
+ // graph this mimetype has a connection to.
+ QStringList KoFilterManager::mimeFilter(const QByteArray &mimetype, Direction direction, const QStringList &extraNativeMimeTypes)
+ {
++qDebug()<<Q_FUNC_INFO<<"INTRO"<<mimetype;
+     //kDebug(30500) <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
+     QHash<QByteArray, Vertex*> vertices;
+     buildGraph(vertices, direction);
+@@ -441,11 +455,13 @@ QStringList KoFilterManager::mimeFilter(const QByteArray &mimetype, Direction di
+         delete vertex;
+     }
+     vertices.clear();
++qDebug()<<Q_FUNC_INFO<<"RESULT"<<lst;
+     return lst;
+ }
+ 
+ QStringList KoFilterManager::mimeFilter()
+ {
++qDebug()<<Q_FUNC_INFO<<"INTRO";
+     QHash<QByteArray, Vertex*> vertices;
+     buildGraph(vertices, KoFilterManager::Import);
+ 
+@@ -477,6 +493,7 @@ QStringList KoFilterManager::mimeFilter()
+ 
+     // Finally we have to get rid of our fake mimetype again
+     result.removeAll("supercalifragilistic/x-pialadocious");
++qDebug()<<Q_FUNC_INFO<<"RESULT"<<result;
+     return result;
+ }
+ 
+@@ -484,6 +501,7 @@ QStringList KoFilterManager::mimeFilter()
+ // but I don't see any other convenient (for the user) way out :}
+ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
+ {
++qDebug()<<Q_FUNC_INFO;
+     if (!entry)
+         return false;
+     if (entry->available != "check")
+@@ -523,6 +541,56 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
+     return m_filterAvailable[key];
+ }
+ 
++QString KoFilterManager::statusText(KoFilter::ConversionStatus status)
++{
++    switch (status) {
++    case KoFilter::OK: break;
++    case KoFilter::FilterCreationError:
++        return i18n("Could not create the filter plugin");
++    case KoFilter::CreationError:
++        return i18n("Could not create the output document");
++    case KoFilter::FileNotFound:
++        return i18n("File not found");
++    case KoFilter::StorageCreationError:
++        return i18n("Cannot create storage");
++    case KoFilter::BadMimeType:
++        return i18n("Bad MIME type");
++    case KoFilter::EmbeddedDocError:
++        return i18n("Error in embedded document");
++    case KoFilter::WrongFormat:
++        return i18n("Format not recognized");
++    case KoFilter::NotImplemented:
++        return i18n("Not implemented");
++    case KoFilter::ParsingError:
++        return i18n("Parsing error");
++    case KoFilter::PasswordProtected:
++        return i18n("Document is password protected");
++    case KoFilter::InvalidFormat:
++        return i18n("Invalid file format");
++    case KoFilter::InternalError:
++    case KoFilter::UnexpectedEOF:
++    case KoFilter::UnexpectedOpcode:
++    case KoFilter::StupidError: // ?? what is this ??
++    case KoFilter::UsageError:
++        return i18n("Internal error");
++    case KoFilter::OutOfMemory:
++        return i18n("Out of memory");
++    case KoFilter::FilterEntryNull:
++        return i18n("Empty Filter Plugin");
++    case KoFilter::NoDocumentCreated:
++        return i18n("Trying to load into the wrong kind of document");
++    case KoFilter::DownloadFailed:
++        return i18n("Failed to download remote file");
++    case KoFilter::UserCancelled:
++    case KoFilter::BadConversionGraph:
++        // intentionally we do not prompt the error message here
++        break;
++    default:
++        return i18n("Unknown error");
++    }
++    return QString();
++}
++
+ void KoFilterManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)
+ {
+     QString tmp = i18n("Could not import file of type\n%1", mimeType);
+diff --git a/libs/main/KoFilterManager.h b/libs/main/KoFilterManager.h
+index 3fbef5c..774df84 100644
+--- a/libs/main/KoFilterManager.h
++++ b/libs/main/KoFilterManager.h
+@@ -134,6 +134,11 @@ public:
+      */
+     static bool filterAvailable(KoFilterEntry::Ptr entry);
+ 
++    /**
++     * Returns the translated description for the \p status .
++     */
++    static QString statusText(KoFilter::ConversionStatus status);
++
+     //@}
+ 
+     /**
+@@ -153,6 +158,9 @@ public:
+      **/
+     KoProgressUpdater *progressUpdater() const;
+ 
++    void setImportFile(const QString &file) { m_importUrl = file; }
++    void setExportFile(const QString &file) { m_exportUrl = file; }
++
+ private:
+     // === API for KoFilterChains === (internal)
+     // The friend methods are private in KoFilterChain and
 diff --git a/libs/main/KoView.cpp b/libs/main/KoView.cpp
 index efd39ec..e5cc661 100644
 --- a/libs/main/KoView.cpp
@@ -151,7 +766,7 @@ index efd39ec..e5cc661 100644
 +//#include <KoView_p.moc>
  #include <KoView.moc>
 diff --git a/libs/textlayout/KoTextLayoutArea_paint.cpp b/libs/textlayout/KoTextLayoutArea_paint.cpp
-index d0386d9..59c14e9 100644
+index 50fd17d..0b8c185 100644
 --- a/libs/textlayout/KoTextLayoutArea_paint.cpp
 +++ b/libs/textlayout/KoTextLayoutArea_paint.cpp
 @@ -477,7 +477,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
@@ -320,7 +935,7 @@ index b99243f..bafee04 100644
  }
  
 diff --git a/words/part/KWDocument.cpp b/words/part/KWDocument.cpp
-index 54cccdc..c62c60c 100644
+index 54cccdc..e062600 100644
 --- a/words/part/KWDocument.cpp
 +++ b/words/part/KWDocument.cpp
 @@ -353,9 +353,9 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
@@ -367,11 +982,37 @@ index 54cccdc..c62c60c 100644
  }
  
  void KWDocument::addFrameSet(KWFrameSet *fs)
+@@ -526,6 +528,16 @@ QString KWDocument::renameFrameSet(const QString &prefix, const QString &base)
+     }
+ }
+ 
++QByteArray KWDocument::nativeFormatMimeType() const
++{
++    return QByteArray("application/vnd.oasis.opendocument.text");
++}
++
++QByteArray KWDocument::nativeOasisMimeType() const
++{
++    return QByteArray();
++}
++
+ // *** LOADING
+ 
+ void KWDocument::initEmpty()
 diff --git a/words/part/KWDocument.h b/words/part/KWDocument.h
-index 7654aa3..14e50ec 100644
+index 7654aa3..72f0c60 100644
 --- a/words/part/KWDocument.h
 +++ b/words/part/KWDocument.h
-@@ -226,6 +226,9 @@ signals:
+@@ -175,6 +175,8 @@ public:
+     void firePageSetupChanged();
+ 
+     // reimplemented slot from KoDocument
++    virtual QByteArray nativeFormatMimeType() const;
++    virtual QByteArray nativeOasisMimeType() const;
+     virtual void initEmpty();
+ 
+     bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
+@@ -226,6 +228,9 @@ signals:
      /// signal emitted when a page has been added
      void pageSetupChanged();
  
@@ -381,7 +1022,7 @@ index 7654aa3..14e50ec 100644
      /// emitted whenever a shape is added.
      void shapeAdded(KoShape *, KoShapeManager::Repaint);
  
-@@ -242,8 +245,8 @@ private slots:
+@@ -242,8 +247,8 @@ private slots:
      /// Called after the constructor figures out there is an install problem.
      void mainTextFrameSetLayoutDone();
  
