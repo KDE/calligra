@@ -180,6 +180,7 @@ void AccountsView::setZoom( double zoom )
 void AccountsView::init()
 {
     QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
     m_view = new AccountsTreeView( this );
     l->addWidget( m_view );
     setProject( m_project );

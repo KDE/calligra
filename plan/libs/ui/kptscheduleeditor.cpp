@@ -571,7 +571,6 @@ ScheduleLogView::ScheduleLogView(KoPart *part, KoDocument *doc, QWidget *parent)
     slotEnableActions( 0 );
 
     QVBoxLayout * l = new QVBoxLayout( this );
-    l->setMargin( 0 );
     m_view = new ScheduleLogTreeView( this );
     l->addWidget( m_view );
 //    m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
