@@ -603,7 +603,7 @@ void PerformanceStatusBase::setChartInfo( const PerformanceChartInfo &info )
 
 void PerformanceStatusBase::refreshChart()
 {
-    valuesFrame->resize( QSize() );
+    ui_performancetable->resize( QSize() );
 
     // NOTE: Force grid/axis recalculation, couldn't find a better way :(
     QResizeEvent event( ui_chart->size(), QSize() );
