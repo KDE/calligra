@@ -66,7 +66,7 @@ class WPSortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    WPSortFilterProxyModel( QObject *parent = 0 ) : QSortFilterProxyModel( parent ) {}
+    explicit WPSortFilterProxyModel(QObject *parent = 0) : QSortFilterProxyModel( parent ) {}
 protected:
     /// Only accept scheduled tasks
     bool filterAcceptsRow(int source_row, const QModelIndex &sourceParent) const;
@@ -85,7 +85,7 @@ class KPLATOMODELS_EXPORT WorkPackageProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 public:
-    WorkPackageProxyModel( QObject *parent = 0 );
+    explicit WorkPackageProxyModel(QObject *parent = 0);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void setSourceModel( QAbstractItemModel *sourceModel );

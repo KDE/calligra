@@ -23,9 +23,9 @@
 #include "sheets/Map.h"
 #include "sheets/Sheet.h"
 
-#include <KApplication>
-#include <KCharsets>
-#include <KMessageBox>
+#include <kapplication.h>
+#include <kcharsets.h>
+#include <kmessagebox.h>
 
 #include <QTextCodec>
 #include <QValidator>

@@ -43,9 +43,9 @@
 #include <klineedit.h>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <KActionCollection>
-#include <KActionMenu>
-#include <KDialog>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <kdialog.h>
 
 #include <KoIcon.h>
 #include <kexi.h>

@@ -56,19 +56,18 @@
 #include "KoDocument.h"
 #include "KoIcon.h"
 
-#include <KTabWidget>
-#include <KAction>
-#include <KActionCollection>
-#include <KStandardAction>
-#include <KStandardGuiItem>
-#include <KGuiItem>
-#include <KMessageBox>
-#include <kfiledialog.h>
+#include <ktabwidget.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <kstandardaction.h>
+#include <kstandardguiitem.h>
+#include <kguiitem.h>
+#include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kdebug.h>
-#include <KToolBar>
-#include <KFileDialog>
-#include <KPushButton>
+#include <ktoolbar.h>
+#include <kfiledialog.h>
+#include <kpushbutton.h>
 
 #include <QPainter>
 #include <QPrintDialog>
@@ -167,6 +166,7 @@ ReportView::ReportView(KoPart *part, KoDocument *doc, QWidget *parent )
     setObjectName("ReportView");
 
     QLayout *l = new QHBoxLayout( this );
+    l->setMargin(0);
     m_stack = new QStackedWidget( this );
     l->addWidget( m_stack );
 
@@ -293,6 +293,7 @@ ReportWidget::ReportWidget(KoPart *part, KoDocument *doc, QWidget *parent )
     m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
 
     QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
     l->addWidget( m_reportView );
     m_pageSelector = new ReportNavigator( this );
     l->addWidget( m_pageSelector );
@@ -1027,6 +1028,7 @@ ReportDesigner::ReportDesigner(KoPart *part, KoDocument *doc, QWidget *parent)
     m_groupsectioneditor( new GroupSectionEditor( this ) )
 {
     QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
     m_scrollarea = new QScrollArea( this );
     l->addWidget( m_scrollarea );
 

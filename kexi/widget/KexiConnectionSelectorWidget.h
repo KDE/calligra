@@ -26,7 +26,7 @@
 #include <kexiutils/KexiContextMessage.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
 
-#include <KDialog>
+#include <kdialog.h>
 #include <kabstractfilewidget.h>
 
 #include <QPointer>

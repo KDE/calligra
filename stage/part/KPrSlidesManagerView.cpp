@@ -30,7 +30,7 @@
 
 //Kde headers
 #include <klocale.h>
-#include <KIconLoader>
+#include <kiconloader.h>
 
 KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     : QListView(parent)

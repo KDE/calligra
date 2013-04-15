@@ -25,8 +25,8 @@
 #include <QToolButton>
 
 // KDE
-#include <KAction>
-#include <KLocale>
+#include <kaction.h>
+#include <klocale.h>
 
 #include <kdebug.h>
 

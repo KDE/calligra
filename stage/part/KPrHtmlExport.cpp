@@ -22,11 +22,11 @@
 
 #include <QDir>
 #include <kio/copyjob.h>
-#include <KTempDir>
-#include <KStandardDirs>
-#include <KMessageBox>
-#include <KRun>
-#include <KZip>
+#include <ktempdir.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
+#include <krun.h>
+#include <kzip.h>
 
 #include <KoPADocument.h>
 #include "KPrHtmlExportUiDelegate.h"

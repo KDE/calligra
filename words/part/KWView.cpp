@@ -88,7 +88,7 @@
 #include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
-#include <KToggleAction>
+#include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>

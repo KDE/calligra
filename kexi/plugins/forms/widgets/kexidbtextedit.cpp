@@ -146,7 +146,11 @@ void KexiDBTextEdit::slotTextChanged()
         if (t.length() > (int)m_length) {
             m_slotTextChanged_enabled = false;
             if (acceptRichText()) {
+#ifdef __GNUC__
 #warning todo setHtml(t.left(m_length));
+#else
+#pragma WARNING(todo setHtml(t.left(m_length));
+#endif
             }
             else {
                 setPlainText(t.left(m_length));

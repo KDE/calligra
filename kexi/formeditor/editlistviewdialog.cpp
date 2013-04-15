@@ -126,8 +126,8 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     m_propSet->addProperty(
         new KoProperty::Property("fullwidth", QVariant(false), i18n("Full Width"), i18n("Full Width")));
     m_editor->changeSet(m_propSet);
-    connect(m_propSet, SIGNAL(propertyChanged(KoProperty::Set&KoProperty::Property&)),
-            this, SLOT(changeProperty(KoProperty::Set&KoProperty::Property&)));
+    connect(m_propSet, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(changeProperty(KoProperty::Set&,KoProperty::Property&)));
 
     // Setup the icon toolbar //////////
     Q3VBoxLayout *vbox = new Q3VBoxLayout(hbox, 3);

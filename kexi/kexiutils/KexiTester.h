@@ -45,7 +45,7 @@ private:
     static KexiTester* self();
 
     Q_DISABLE_COPY(KexiTester)
-    friend KexiTester& operator<<(KexiTester&, const KexiTestObject &);
+    friend KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester&, const KexiTestObject &);
     friend KexiTester& kexiTester();
 
     class Private;

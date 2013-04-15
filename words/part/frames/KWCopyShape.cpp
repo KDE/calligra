@@ -35,7 +35,7 @@
 
 #include <QPainter>
 #include <QPainterPath>
-#include <KDebug>
+#include <kdebug.h>
 
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
         : KoShape()

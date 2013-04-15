@@ -41,10 +41,10 @@
 
 #include <KoIcon.h>
 
-#include <KComboBox>
-#include <KLocale>
-#include <KDialog>
-#include <KNumInput>
+#include <kcombobox.h>
+#include <klocale.h>
+#include <kdialog.h>
+#include <knuminput.h>
 
 #include <QWidget>
 #include <QGridLayout>

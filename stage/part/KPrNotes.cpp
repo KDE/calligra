@@ -20,7 +20,7 @@
 
 #include "KPrNotes.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoImageCollection.h>
 #include <KoImageData.h>

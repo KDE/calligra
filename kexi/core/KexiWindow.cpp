@@ -40,11 +40,11 @@
 #include <QEvent>
 #include <QCloseEvent>
 
-#include <KDebug>
-#include <KApplication>
-#include <KToolBar>
-#include <KActionCollection>
-#include <KDialog>
+#include <kdebug.h>
+#include <kapplication.h>
+#include <ktoolbar.h>
+#include <kactioncollection.h>
+#include <kdialog.h>
 
 //----------------------------------------------------------
 

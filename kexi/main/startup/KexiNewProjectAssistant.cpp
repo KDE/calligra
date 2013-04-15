@@ -52,11 +52,11 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kurlcombobox.h>
-#include <KTitleWidget>
-#include <KCategoryDrawer>
-#include <KPushButton>
-#include <KAcceleratorManager>
-#include <KFileDialog>
+#include <ktitlewidget.h>
+#include <kcategorydrawer.h>
+#include <kpushbutton.h>
+#include <kacceleratormanager.h>
+#include <kfiledialog.h>
 
 #include <QPushButton>
 #include <QLayout>

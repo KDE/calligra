@@ -37,7 +37,7 @@
 #include <KoXmlReader.h>
 
 #include <kpluginfactory.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <kfilterdev.h>
 
 #include <QFileInfo>

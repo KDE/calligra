@@ -19,8 +19,8 @@
 
 #include "kexicomboboxdropdownbutton.h"
 
-#include <KDebug>
-#include <KComboBox>
+#include <kdebug.h>
+#include <kcombobox.h>
 
 #include <QStyle>
 #include <QPainter>

@@ -30,7 +30,7 @@
 
 #include <KoCanvasBase.h>
 
-#include <KMessageBox>
+#include <kmessagebox.h>
 #include <sonnet/dialog.h>
 #include <sonnet/speller.h>
 

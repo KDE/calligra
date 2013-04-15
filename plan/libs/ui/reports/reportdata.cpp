@@ -25,7 +25,6 @@
 #include "kptnodeitemmodel.h"
 #include "kptflatproxymodel.h"
 #include "kpttaskstatusmodel.h"
-#include "kptresourcemodel.h"
 #include "kptnodechartmodel.h"
 #include "kptaccountsmodel.h"
 #include "kptresourcemodel.h"

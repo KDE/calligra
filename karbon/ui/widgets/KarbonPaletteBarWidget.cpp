@@ -31,8 +31,8 @@
 #include <KoGradientBackground.h>
 #include <KoShapeStroke.h>
 
-#include <KLocale>
-#include <KGlobal>
+#include <klocale.h>
+#include <kglobal.h>
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

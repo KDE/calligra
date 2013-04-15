@@ -33,7 +33,7 @@
 #include <kpagedialog.h>
 #include <kpushbutton.h>
 #include <kguiitem.h>
-#include <KDebug>
+#include <kdebug.h>
 
 static DebugWindowDialog* debugWindow = 0;
 static KTabWidget* debugWindowTab = 0;

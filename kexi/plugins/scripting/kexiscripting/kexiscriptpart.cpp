@@ -40,7 +40,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <QMetaObject>
 #include <QMenu>

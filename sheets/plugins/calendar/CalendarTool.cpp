@@ -28,8 +28,8 @@
 
 #include <KoCanvasBase.h>
 
-#include <KCalendarSystem>
-#include <KMessageBox>
+#include <kcalendarsystem.h>
+#include <kmessagebox.h>
 
 using namespace Calligra::Sheets;
 

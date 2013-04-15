@@ -23,7 +23,7 @@
 
 #include "kplatowork_export.h"
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 class KAboutData;
 

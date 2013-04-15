@@ -22,7 +22,7 @@
 
 #include <QHash>
 #include <QToolButton>
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 #include <kexi_export.h>
 

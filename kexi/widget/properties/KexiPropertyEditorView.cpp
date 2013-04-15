@@ -27,7 +27,7 @@
 
 #include <QLayout>
 
-#include <KLocale>
+#include <klocale.h>
 
 //! @internal
 class KexiPropertyEditorView::Private
