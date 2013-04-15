@@ -216,7 +216,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
 
     writer.endElement(); // manifest
 
-    // ==== spine ==== 
+    // ==== spine ====
     writer.startElement("spine");
     writer.addAttribute("toc", "ncx");
 
@@ -249,6 +249,15 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     }
 
     writer.endElement(); // spine
+
+    // ==== Guide ====
+    writer.startElement("guide");
+        writer.startElement("reference");
+        writer.addAttribute("href", "cover.xhtml");
+        writer.addAttribute("type", "cover");
+        writer.addAttribute("type", "Cover");
+        writer.endElement(); // reference
+    writer.endElement(); // guide
 
     writer.endElement(); // package
 
