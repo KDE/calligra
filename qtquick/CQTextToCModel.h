@@ -1,8 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2013 Shantanu Tushar <shantanu@kde.org>
- * Copyright (C) 2013 Sujith Haridasan <sujith.h@gmail.com>
+ * Copyright (C) 2013 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,29 +20,41 @@
  *
  */
 
-#ifndef CQTEXTDOCUMENTMODEL_H
-#define CQTEXTDOCUMENTMODEL_H
+#ifndef CQTEXTTOCMODEL_H
+#define CQTEXTTOCMODEL_H
 
 #include <QAbstractListModel>
-#include <KWDocument.h>
 
-class KWPageManager;
-class CQDocumentController;
-
-class CQTextDocumentModel : public QAbstractListModel
+class CQTextToCModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* canvas READ canvas WRITE setCanvas NOTIFY canvasChanged);
 public:
-    CQTextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager);
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    enum TextToCModelRoleNames {
+        Title = Qt::UserRole + 1,
+        Level,
+        PageNumber
+    };
+    CQTextToCModel(QObject* parent = 0);
+    virtual ~CQTextToCModel();
+    virtual QVariant data(const QModelIndex& index, int role) const;
+    virtual int rowCount(const QModelIndex& parent) const;
 
-signals:
-    void documentControllerChanged();
+
+    QObject* canvas() const;
+    void setCanvas(QObject* newCanvas);
+Q_SIGNALS:
+    void canvasChanged();
+
+private Q_SLOTS:
+    void requestGeneration();
+    void startDoneTimer();
+    void timeout();
+    void updateToC();
 
 private:
-    KWDocument *kw_document;
-    KoShapeManager *kw_shapemanager;
+    class Private;
+    Private* d;
 };
 
-#endif // CQTEXTDOCUMENTMODEL_H
+#endif // CQTEXTTOCMODEL_H

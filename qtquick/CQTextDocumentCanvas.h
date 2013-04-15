@@ -27,6 +27,7 @@
 
 #include "CQCanvasBase.h"
 
+class KWDocument;
 class CQTextDocumentModel;
 class KoFindText;
 class KoDocument;
@@ -60,6 +61,8 @@ public:
     QSize documentSize() const;
 
     virtual void render(QPainter* painter, const QRectF& target);
+
+    KWDocument* document() const;
 
 signals:
     void searchTermChanged();

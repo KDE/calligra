@@ -49,13 +49,15 @@ public:
     Private()
         : canvasBase(0),
           findText(0),
-          documentModel(0)
+          documentModel(0),
+          document(0)
     {}
 
     KoCanvasBase *canvasBase;
     QString searchTerm;
     KoFindText *findText;
     CQTextDocumentModel *documentModel;
+    KWDocument* document;
     QSize documentSize;
     int pageNumber;
     QPoint currentPoint;
@@ -110,8 +112,8 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     KoFindText::findTextInShapes(kwCanvasItem ->shapeManager()->shapes(), texts);
     d->findText->setDocuments(texts);
 
-    KWDocument *kwDocument = static_cast<KWDocument*>(document);
-    d->documentModel = new CQTextDocumentModel(this, kwDocument, kwCanvasItem->shapeManager());
+    d->document = static_cast<KWDocument*>(document);
+    d->documentModel = new CQTextDocumentModel(this, d->document, kwCanvasItem->shapeManager());
     emit documentModelChanged();
 }
 
@@ -149,7 +151,11 @@ int CQTextDocumentCanvas::currentPageNumber() const
 
 void CQTextDocumentCanvas::setCurrentPageNumber(const int& currentPageNumber)
 {
-    d->pageNumber = currentPageNumber;
+    if(d->pageNumber != currentPageNumber)
+    {
+        d->pageNumber = currentPageNumber;
+        gotoPage(d->pageNumber, d->document);
+    }
     emit currentPageNumberChanged();
 }
 
@@ -246,6 +252,11 @@ void CQTextDocumentCanvas::findPrevious()
 QObject* CQTextDocumentCanvas::documentModel() const
 {
     return d->documentModel;
+}
+
+KWDocument* CQTextDocumentCanvas::document() const
+{
+    return d->document;
 }
 
 QSize CQTextDocumentCanvas::documentSize() const

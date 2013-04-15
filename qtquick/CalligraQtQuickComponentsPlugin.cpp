@@ -26,6 +26,7 @@
 #include "CQSpreadsheetCanvas.h"
 #include "CQPresentationCanvas.h"
 #include "CQCanvasControllerItem.h"
+#include "CQTextToCModel.h"
 #include "CQSpreadsheetListModel.h"
 #include "CQPresentationModel.h"
 #include "CQThumbnailItem.h"
@@ -39,6 +40,7 @@ void CalligraQtQuickComponentsPlugin::registerTypes(const char* uri)
     qmlRegisterType<CQSpreadsheetCanvas> (uri, 0, 1, "SpreadsheetCanvas");
     qmlRegisterType<CQPresentationCanvas> (uri, 0, 1, "PresentationCanvas");
     qmlRegisterType<CQCanvasControllerItem> (uri, 0, 1, "CanvasControllerItem");
+    qmlRegisterType<CQTextToCModel> (uri, 0, 1, "TextToCModel");
     qmlRegisterType<CQSpreadsheetListModel> (uri, 0, 1, "SpreadsheetListModel");
     qmlRegisterType<CQPresentationModel>(uri, 0, 1, "PresentationModel");
     qmlRegisterType<CQThumbnailItem>(uri, 0, 1, "Thumbnail");
