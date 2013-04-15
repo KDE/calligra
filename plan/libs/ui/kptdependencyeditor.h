@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTDEPENDENCYEDTIOR_H
-#define KPTDEPENDENCYEDTIOR_H
+#ifndef KPTDEPENDENCYEDITOR_H
+#define KPTDEPENDENCYEDITOR_H
 
 #include "kplatoui_export.h"
 
