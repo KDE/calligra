@@ -132,7 +132,11 @@ KexiTableView* KexiDataTable::tableView() const
 
 bool KexiDataTable::saveSettings()
 {
+#ifdef __GNUC__
 #warning TODO save only if changed
+#else
+#pragma WARNING(TODO save only if changed)
+#endif
     bool ok = true;
     KexiDB::TransactionGuard tg;
     if (dynamic_cast<KexiDataTableView*>(mainWidget())) { // db-aware

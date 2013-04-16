@@ -64,6 +64,9 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+if(WIN32)
+    option(BUILD_braindump "Build directory braindump" OFF) # braindump is unmaintained on Windows.
+endif()
 
 # temporary migration support
 set(PRODUCTSET_DEFAULT "ALL")
@@ -663,6 +666,7 @@ set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
+                   ${CMAKE_SOURCE_DIR}/libs/odf/styles
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${KDE4_INCLUDES})
 

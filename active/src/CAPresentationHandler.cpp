@@ -287,7 +287,7 @@ void CAPresentationHandler::searchOtherSlides(SearchDirection direction) {
 void CAPresentationHandler::findNext() {
     d->countMatchesPerSlide++;
     d->findText->findNext();
-    if((d->countMatchesPerSlide >= d->findText->matches().count()) or (d->findText->matches().count() == 0)) {
+    if((d->countMatchesPerSlide >= d->findText->matches().count()) || (d->findText->matches().count() == 0)) {
       searchOtherSlides(SearchForward);
     }
 }

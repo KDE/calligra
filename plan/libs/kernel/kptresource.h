@@ -82,7 +82,7 @@ class KPLATOKERNEL_EXPORT ResourceGroup : public QObject
 public:
     /// Default constructor
     explicit ResourceGroup();
-    ResourceGroup( const ResourceGroup *group );
+    explicit ResourceGroup( const ResourceGroup *group );
     ~ResourceGroup();
 
     enum Type { Type_Work, Type_Material };
@@ -231,7 +231,7 @@ class KPLATOKERNEL_EXPORT Resource : public QObject
 public:
 
     Resource();
-    Resource( Resource *resource );
+    explicit Resource(Resource *resource);
     virtual ~Resource();
 
     QString id() const { return m_id; }

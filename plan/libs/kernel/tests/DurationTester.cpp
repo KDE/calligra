@@ -36,7 +36,7 @@ void DurationTester::subtract() {
     QVERIFY((d2-d1) == Duration(0, 22, 0));
     QVERIFY((d1-d2) == Duration::zeroDuration); // underflow, return 0
 }
-void DurationTester::devide() {
+void DurationTester::divide() {
     Duration d1(0, 2, 0);
     
     QVERIFY((d1/2) == Duration(0, 1, 0));

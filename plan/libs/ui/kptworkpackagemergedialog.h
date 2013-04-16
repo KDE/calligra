@@ -58,7 +58,7 @@ class WorkPackageMergePanel : public QWidget, public Ui::WorkPackageMergePanel
 {
     Q_OBJECT
 public:
-    WorkPackageMergePanel( QWidget *parent = 0 );
+    explicit WorkPackageMergePanel(QWidget *parent = 0);
 };
 
 class KPLATOUI_EXPORT WorkPackageMergeDialog : public KDialog

@@ -55,13 +55,13 @@ void print( Calendar *c, const QString &str, bool full = true ) {
     qDebug()<<"Debug info: Calendar"<<c->name()<<s<<str;
     for ( int wd = 1; wd <= 7; ++wd ) {
         CalendarDay *d = c->weekday( wd );
-        qDebug()<<"   "<<wd<<":"<<d->stateToString( d->state() );
+        qDebug()<<"   "<<wd<<':'<<d->stateToString( d->state() );
         foreach ( TimeInterval *t,  d->timeIntervals() ) {
-            qDebug()<<"      interval:"<<t->first<<t->second<<"("<<Duration( qint64(t->second) ).toString()<<")";
+            qDebug()<<"      interval:"<<t->first<<t->second<<'('<<Duration( qint64(t->second) ).toString()<<')';
         }
     }
     foreach ( const CalendarDay *d, c->days() ) {
-        qDebug()<<"   "<<d->date()<<":";
+        qDebug()<<"   "<<d->date()<<':';
         foreach ( TimeInterval *t,  d->timeIntervals() ) {
             qDebug()<<"      interval:"<<t->first<<t->second;
         }
@@ -73,10 +73,10 @@ QString printAvailable( Resource *r, const QString &lead = QString() ) {
     sl<<lead<<"Available:"
         <<( r->availableFrom().isValid()
                 ? r->availableFrom().toString()
-                : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+                : ( r->project() ? ('('+r->project()->constraintStartTime().toString()+')' ) : QString() ) )
         <<( r->availableUntil().isValid()
                 ? r->availableUntil().toString()
-                : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
+                : ( r->project() ? ('('+r->project()->constraintEndTime().toString()+')' ) : QString() ) )
         <<QString::number( r->units() )<<"%"
         <<"cost: normal"<<QString::number(r->normalRate() )<<" overtime"<<QString::number(r->overtimeRate() );
     return sl.join( " " );
@@ -90,11 +90,11 @@ void print( Resource *r, const QString &str, bool full = true ) {
     qDebug()<<"Available:"
         <<( r->availableFrom().isValid()
                 ? r->availableFrom().toString()
-                : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+                : ( r->project() ? ('('+r->project()->constraintStartTime().toString()+')' ) : QString() ) )
         <<( r->availableUntil().isValid()
                 ? r->availableUntil().toString()
-                : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
-        <<r->units()<<"%";
+                : ( r->project() ? ('('+r->project()->constraintEndTime().toString()+')' ) : QString() ) )
+        <<r->units()<<'%';
     qDebug()<<"Type:"<<r->typeToString();
     if ( r->type() == Resource::Type_Team ) {
         qDebug()<<"Team members:"<<r->teamMembers().count();
@@ -102,11 +102,11 @@ void print( Resource *r, const QString &str, bool full = true ) {
             qDebug()<<"   "<<tm->name()<<"Available:"
                     <<( r->availableFrom().isValid()
                             ? r->availableFrom().toString()
-                            : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+                            : ( r->project() ? ('('+r->project()->constraintStartTime().toString()+')' ) : QString() ) )
                     <<( r->availableUntil().isValid()
                             ? r->availableUntil().toString()
-                            : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
-                    <<r->units()<<"%";
+                            : ( r->project() ? ('('+r->project()->constraintEndTime().toString()+')' ) : QString() ) )
+                    <<r->units()<<'%';
         }
     } else {
         Calendar *cal = r->calendar( true );
@@ -246,10 +246,10 @@ void print( Task *t, bool full = true ) {
     if ( s ) {
         qDebug()<<pad<<"Appointments:"<<s->appointments().count();
         foreach ( Appointment *a, s->appointments() ) {
-            qDebug()<<pad<<"  Resource:"<<a->resource()->resource()->name()<<"booked:"<<QTest::toString( QDateTime(a->startTime()) )<<QTest::toString( QDateTime(a->endTime()) )<<"effort:"<<a->effort( a->startTime(), a->endTime() ).toDouble( Duration::Unit_h )<<"h";
+            qDebug()<<pad<<"  Resource:"<<a->resource()->resource()->name()<<"booked:"<<QTest::toString( QDateTime(a->startTime()) )<<QTest::toString( QDateTime(a->endTime()) )<<"effort:"<<a->effort( a->startTime(), a->endTime() ).toDouble( Duration::Unit_h )<<'h';
             if ( ! full ) { continue; }
             foreach( const AppointmentInterval &i, a->intervals().map() ) {
-                qDebug()<<pad<<"    "<<QTest::toString( QDateTime(i.startTime()) )<<QTest::toString( QDateTime(i.endTime()) )<<i.load()<<"effort:"<<i.effort( i.startTime(), i.endTime() ).toDouble( Duration::Unit_h )<<"h";
+                qDebug()<<pad<<"    "<<QTest::toString( QDateTime(i.startTime()) )<<QTest::toString( QDateTime(i.endTime()) )<<i.load()<<"effort:"<<i.effort( i.startTime(), i.endTime() ).toDouble( Duration::Unit_h )<<'h';
             }
         }
     }
@@ -275,15 +275,15 @@ void print( const Completion &c, const QString &name, const QString &s = QString
     qDebug()<<"  Entry mode:"<<c.entryModeToString();
     qDebug()<<"     Started:"<<c.isStarted()<<c.startTime();
     qDebug()<<"    Finished:"<<c.isFinished()<<c.finishTime();
-    qDebug()<<"  Completion:"<<c.percentFinished()<<"%";
+    qDebug()<<"  Completion:"<<c.percentFinished()<<'%';
     
     if ( ! c.usedEffortMap().isEmpty() ) {
         qDebug()<<"     Used effort:";
         foreach ( const Resource *r, c.usedEffortMap().keys() ) {
             Completion::UsedEffort *ue = c.usedEffort( r );
             foreach ( const QDate &d, ue->actualEffortMap().keys() ) {
-                qDebug()<<"         "<<r->name()<<":";
-                qDebug()<<"             "<<d.toString( Qt::ISODate )<<":"<<c.actualEffort( d ).toString()<<c.actualCost( d );
+                qDebug()<<"         "<<r->name()<<':';
+                qDebug()<<"             "<<d.toString( Qt::ISODate )<<':'<<c.actualEffort( d ).toString()<<c.actualCost( d );
             }
         }
     }
@@ -299,15 +299,15 @@ void print( const EffortCostMap &m, const QString &s = QString() ) {
             <<" total="
             <<m.totalEffort().toString()
             <<m.totalCost()
-            <<"("
+            <<'('
             <<m.bcwpTotalEffort()
             <<m.bcwpTotalCost()
-            <<")";
+            <<')';
 
     if ( ! m.days().isEmpty() ) {
         foreach ( const QDate &d, m.days().keys() ) {
-            qDebug()<<"   "<<d.toString(Qt::ISODate)<<":"<<m.hoursOnDate( d )<<"h"<<m.costOnDate( d )
-                                                    <<"("<<m.bcwpEffortOnDate( d )<<"h"<<m.bcwpCostOnDate( d )<<")";
+            qDebug()<<"   "<<d.toString(Qt::ISODate)<<':'<<m.hoursOnDate( d )<<'h'<<m.costOnDate( d )
+                                                    <<'('<<m.bcwpEffortOnDate( d )<<'h'<<m.bcwpCostOnDate( d )<<')';
         }
     }
 }
@@ -349,7 +349,7 @@ void print( const AppointmentInterval &i, const QString &indent = QString() )
     if ( ! i.isValid() ) {
         qDebug()<<s<<"Not valid";
     } else {
-        qDebug()<<s<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<"%";
+        qDebug()<<s<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<'%';
     }
 }
 

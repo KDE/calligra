@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_GLOBAL_H
-#define KPLATO_GLOBAL_H
+#ifndef KPTGLOBAL_H
+#define KPTGLOBAL_H
 
 #include "kplatokernel_export.h"
 
