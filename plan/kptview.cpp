@@ -1866,7 +1866,7 @@ void View::slotConfigure()
     ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), koIconName("view-task") );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), koIconName("fill-color") );
-    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("planwork") );
+    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("calligraplanwork") );
     dialog->show();
 
 }

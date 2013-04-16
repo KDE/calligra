@@ -20,8 +20,9 @@
 */
 
 #include "reportview.h"
-#include "report.h"
 #include "reportview_p.h"
+
+#include "report.h"
 #include "reportdata.h"
 #include "reportsourceeditor.h"
 #include "reportscripts.h"
