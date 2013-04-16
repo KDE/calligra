@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest android:versionCode="4" package="org.kde.calligra.coffice" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.3">
+<manifest android:versionCode="5" package="org.kde.calligra.coffice" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.4">
     <application android:name="org.kde.necessitas.origo.QtApplication" android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name="org.kde.necessitas.origo.QtActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="orientation|locale|fontScale|keyboard|keyboardHidden" android:label="@string/app_name">
             <intent-filter>
@@ -11,8 +11,11 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="application/vnd.oasis.opendocument.text"/>
+                <data android:mimeType="application/msword"/>
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.template"/>
+                <data android:mimeType="application/vnd.ms-word.document.macroEnabled.12"/>
+                <data android:mimeType="application/vnd.ms-word.template.macroEnabled.12"/>
             </intent-filter>
             <meta-data android:name="android.app.qt_libs_resource_id" android:resource="@array/qt_libs"/>
             <meta-data android:name="android.app.bundled_libs_resource_id" android:resource="@array/bundled_libs_fixed"/>

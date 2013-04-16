@@ -32,7 +32,7 @@ public:
     }
     void setFormat(const QString &/*format*/) {}
     void beginSubTask() { ++m_subTaskCount; }
-    void endSubTask() { m_subTaskDone = qMax(m_subTaskCount, ++m_subTaskDone); }
+    void endSubTask() { ++m_subTaskDone; }
 private:
     Document *m_doc;
     int m_subTaskDone;

@@ -3,21 +3,22 @@ TARGET = calligrafilters
 
 include($${TOP_SOURCE_DIR}/common.pri)
 
-#QT += core gui xml sql network widgets
-#QT += core gui xml svg
+#QT += core gui xml svg sql network widgets
 QT += core gui xml
 
-#CALLIGRAFILTERS_LIBMSO_DIR = $${TOP_SOURCE_DIR}/../filters/libmso/
-#CALLIGRAFILTERS_MSWORD_DIR = $${TOP_SOURCE_DIR}/../filters/words/msword-odf/
-
-CALLIGRAFILTERS_LIBMSOOXML_DIR = $${TOP_SOURCE_DIR}/../filters/libmsooxml/
-CALLIGRAFILTERS_DOCX_DIR = $${TOP_SOURCE_DIR}/../filters/words/docx/
-
-CALLIGRAFILTERS_XLSX_DIR = $${TOP_SOURCE_DIR}/../filters/sheets/xlsx/
+CALLIGRAFILTERS_DIR = $${TOP_SOURCE_DIR}/calligrafilters
+CALLIGRAFILTERS_LIBMSO_DIR = $${TOP_SOURCE_DIR}/../filters/libmso
+CALLIGRAFILTERS_MSWORD_DIR = $${TOP_SOURCE_DIR}/../filters/words/msword-odf
+CALLIGRAFILTERS_LIBMSOOXML_DIR = $${TOP_SOURCE_DIR}/../filters/libmsooxml
+CALLIGRAFILTERS_DOCX_DIR = $${TOP_SOURCE_DIR}/../filters/words/docx
+CALLIGRAFILTERS_XLSX_DIR = $${TOP_SOURCE_DIR}/../filters/sheets/xlsx
 
 INCLUDEPATH = \
-     #$${CALLIGRAFILTERS_LIBMSO_DIR} \
-     #$${CALLIGRAFILTERS_MSWORD_DIR} \
+     $${CALLIGRAFILTERS_DIR} \
+     $${CALLIGRAFILTERS_LIBMSO_DIR} \
+     $${CALLIGRAFILTERS_LIBMSO_DIR}/generated/ \
+     $${CALLIGRAFILTERS_MSWORD_DIR} \
+     $${CALLIGRAFILTERS_MSWORD_DIR}/wv2/src/ \
      $${CALLIGRAFILTERS_LIBMSOOXML_DIR} \
      $${CALLIGRAFILTERS_DOCX_DIR} \
      $${CALLIGRAFILTERS_XLSX_DIR} \
@@ -25,19 +26,48 @@ INCLUDEPATH = \
 
 LIBS += -lcalligralibs
 
+# defines needed for msword doc
+DEFINES += "HAVE_DLFCN_H=1"
+DEFINES += HAVE_ERRNO_H
+DEFINES += "HAVE_FLOAT_H=1"
+DEFINES += HAVE_FUNC_FINITE
+DEFINES += HAVE_FUNC_ISINF
+DEFINES += HAVE_FUNC_ISNAN
+DEFINES += "HAVE_ICONV_H=1"
+DEFINES += "HAVE_INTTYPES_H=1"
+DEFINES += "HAVE_MATH_H=1"
+DEFINES += "HAVE_MEMORY_H=1"
+DEFINES += "HAVE_STDINT_H=1"
+DEFINES += "HAVE_STDLIB_H=1"
+DEFINES += "HAVE_STRINGS_H=1"
+DEFINES += "HAVE_STRING_H=1"
+DEFINES += "HAVE_SYS_STAT_H=1"
+DEFINES += "HAVE_SYS_TYPES_H=1"
+DEFINES += "HAVE_UNISTD_H=1"
+DEFINES += "SIZEOF_CHAR=sizeof\\(char\\)"
+DEFINES += "SIZEOF_INT=sizeof\\(int\\)"
+DEFINES += "SIZEOF_LONG=sizeof\\(long\\)"
+DEFINES += "SIZEOF_SHORT=sizeof\\(short\\)"
+DEFINES += "SIZEOF_VOID_P=sizeof\\(void*\\)"
+DEFINES += "ICONV_CONST="
+
+# for pre-generated files and stuff
+#SOURCES += $$files($$CALLIGRAFILTERS_DIR/*.cpp)
+#HEADERS += $$files($$CALLIGRAFILTERS_DIR/*.h)
+#HEADERS -= $$files($$CALLIGRAFILTERS_DIR/config.h)
+
 # libmso
-#SOURCES += $$files($$CALLIGRAFILTERS_LIBMSO_DIR/*.cpp)
-#HEADERS += $$files($$CALLIGRAFILTERS_LIBMSO_DIR/*.h)
-#SOURCES += $$files($$CALLIGRAFILTERS_LIBMSO_DIR/generated/*.cpp)
-#HEADERS += $$files($$CALLIGRAFILTERS_LIBMSO_DIR/generated/*.h)
+SOURCES += $$files($$CALLIGRAFILTERS_LIBMSO_DIR/*.cpp)
+HEADERS += $$files($$CALLIGRAFILTERS_LIBMSO_DIR/*.h)
+SOURCES += $$files($$CALLIGRAFILTERS_LIBMSO_DIR/generated/*.cpp)
+HEADERS += $$files($$CALLIGRAFILTERS_LIBMSO_DIR/generated/*.h)
 
 # doc
-##SOURCES += $$files($$CALLIGRAFILTERS_MSWORD_DIR/*.cpp)
-##HEADERS += $$files($$CALLIGRAFILTERS_MSWORD_DIR/*.h)
-##SOURCES += $$files($$CALLIGRAFILTERS_MSWORD_DIR/wv2/src/*.cpp)
-##HEADERS += $$files($$CALLIGRAFILTERS_MSWORD_DIR/wv2/src/*.h)
-###SOURCES += $$files($$CALLIGRAFILTERS_MSWORD_DIR/wv2/src/generator/*.cpp)
-###HEADERS += $$files($$CALLIGRAFILTERS_MSWORD_DIR/wv2/src/generator/*.h)
+SOURCES += $$files($$CALLIGRAFILTERS_MSWORD_DIR/*.cpp)
+HEADERS += $$files($$CALLIGRAFILTERS_MSWORD_DIR/*.h)
+SOURCES += $$files($$CALLIGRAFILTERS_MSWORD_DIR/wv2/src/*.cpp)
+SOURCES += $$files($$CALLIGRAFILTERS_MSWORD_DIR/wv2/src/crc32.c)
+HEADERS += $$files($$CALLIGRAFILTERS_MSWORD_DIR/wv2/src/*.h)
 
 # libmsooxml
 SOURCES += $$files($$CALLIGRAFILTERS_LIBMSOOXML_DIR/*.cpp)

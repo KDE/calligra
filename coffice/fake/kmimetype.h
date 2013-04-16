@@ -199,8 +199,8 @@ public:
 
     static Ptr findByFileContent( const QString &fileName, int *accuracy=0 )
     {
-        qWarning() << Q_FUNC_INFO << "TODO" << fileName;
-        return Ptr();
+        qDebug() << Q_FUNC_INFO << fileName;
+        return findByUrl(KUrl(fileName), 0, false, false, accuracy);
     }
 
 #if 0

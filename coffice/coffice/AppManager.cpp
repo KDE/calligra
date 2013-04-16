@@ -21,6 +21,7 @@
 #include <KoUpdater.h>
 
 #include <kpluginfactory.h>
+#include <kmimetype.h>
 
 #include <KWPart.h>
 #include <KWView.h>
@@ -60,18 +61,29 @@ public:
         return part;
     }
 
-    QPair<QByteArray, KoFilter*> filterForFile(const QString &file)
+    QPair<QString, KoFilter*> filterForFile(const QString &file)
     {
+        KMimeType::Ptr mime = KMimeType::findByUrl(KUrl(file));
+        if (!mime || mime->name().isEmpty())
+            return QPair<QString, KoFilter*>(); // unknown/unsupported file format
+        if (mime->name().startsWith("application/vnd.oasis.opendocument."))
+            return QPair<QString, KoFilter*>(); // ODF, native buildin file format
         Q_FOREACH(KoFilter *f, m_filterPlugins) {
+            //TODO not hardcode the filter mimetypes but use e.g. decorator/lookup-table
             if (f->metaObject()->className() == QLatin1String("DocxImport")) {
-                if (file.endsWith(".docx", Qt::CaseInsensitive)) {
-                    //return QPair<QByteArray, KoFilter*>("application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml", f);
-                    return QPair<QByteArray, KoFilter*>("application/vnd.openxmlformats-officedocument.wordprocessingml.document", f);
-                    //return QPair<QByteArray, KoFilter*>("application/msword", f);
+                if (mime->name().startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+                    mime->name().startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.template") ||
+                    mime->name().startsWith("application/vnd.ms-word.document.macroEnabled.12") ||
+                    mime->name().startsWith("application/vnd.ms-word.template.macroEnabled.12") ) {
+                    return QPair<QString, KoFilter*>(mime->name(), f); // Microsoft Office OOXML file format
+                }
+            } else if (f->metaObject()->className() == QLatin1String("MSWordOdfImport")) {
+                if (mime->name().startsWith("application/msword")) {
+                    return QPair<QString, KoFilter*>(mime->name(), f); // Microsoft Office binary file format
                 }
             }
         }
-        return QPair<QByteArray, KoFilter*>(QByteArray(), 0);
+        return QPair<QString, KoFilter*>();
     }
 
 private:
@@ -143,6 +155,7 @@ class OpenFileCommand : public Command
 public:
     QString m_file;
     OpenFileCommand(Document *doc, const QString &file) : Command(doc), m_file(file) {}
+
     virtual void run()
     {
         qDebug() << Q_FUNC_INFO << m_file;
@@ -164,99 +177,102 @@ public:
         QObject::connect(kopart->document(), SIGNAL(layoutFinished()), m_doc->d, SLOT(slotLayoutFinished()), Qt::DirectConnection);
         m_doc->d->m_kopart = kopart;
 
+        QString inputFile = m_file;
         QSharedPointer<QTemporaryFile> outputTempFile;
-        QString outputFile;
-        QPair<QByteArray, KoFilter*> filter = s_partFactory()->filterForFile(m_file);
+        QPair<QString, KoFilter*> filter = s_partFactory()->filterForFile(inputFile);
         if (filter.second) {
-            const QByteArray from = filter.first;
-            const QByteArray to = "application/vnd.oasis.opendocument.text";
-
-            const QString tempFileName = QFileInfo(m_file).baseName() + ".XXXXXX.odt";
-            outputTempFile = QSharedPointer<QTemporaryFile>(new QTemporaryFile(tempFileName));
-            outputTempFile->setAutoRemove(false);
-            if (!outputTempFile->open()) {
+            QString error;
+            if (!importFile(filter, inputFile, outputTempFile, error)) {
                 m_doc->d->m_progressProxy->setValue(-1);
+                delete m_doc->d->m_kopart;
                 m_doc->d->m_kopart = 0;
-                QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, QObject::tr("Failed to create temporary file")));
-                delete kopart;
-                return;
-            }
-            outputTempFile->close();
-            outputFile = outputTempFile->fileName();
-
-            KoFilterManager filterManager(to);
-            //KoFilterManager filterManager(kopart->document());
-            //KoFilterManager filterManager(m_file, to);
-
-            filterManager.setImportFile(m_file);
-            filterManager.setImportFile(outputFile);
-
-            KoFilterChain filterchain(&filterManager);
-            filterchain.setInputFile(m_file);
-            filterchain.setOutputFile(outputFile);
-            filter.second->setFilterChain(&filterchain);
-
-            qDebug()<<"FilterPlugin from="<<filterchain.inputFile()<<"to="<<outputFile;
-
-            QSharedPointer<KoProgressUpdater> progressUpdater(new KoProgressUpdater(m_doc->d->m_progressProxy, KoProgressUpdater::Unthreaded));
-            QPointer<KoUpdater> updater = progressUpdater->startSubtask(1, "Filter");
-            updater->setProgress(0);
-            m_doc->d->m_progressProxy->beginSubTask();
-
-            filter.second->setUpdater(updater);
-            KoFilter::ConversionStatus status = filter.second->convert(from, to);
-
-            updater->setProgress(100);
-            m_doc->d->m_progressProxy->endSubTask();
-
-            //Q_ASSERT_X(status == KoFilter::OK, __FUNCTION__, qPrintable(QString("FiFilter::convert failed with status=%1").arg(status)));
-            if (status != KoFilter::OK) {
-                QString error = QObject::tr("Cannot import %1: %2").arg(m_file).arg(KoFilterManager::statusText(status));
-                qWarning() << Q_FUNC_INFO << "Failed to KoFilter.convert" << error;
-                m_doc->d->m_progressProxy->setValue(-1);
-                m_doc->d->m_kopart = 0;
-                QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, error));
-                if (outputTempFile) {
+                if (outputTempFile)
                     outputTempFile->remove();
-                    QFile(outputFile).remove();
-                }
-                delete kopart;
+                if (error.isEmpty())
+                    error = QObject::tr("Cannot import file");
+                qWarning() << Q_FUNC_INFO << inputFile << error;
+                QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, error));
                 return;
             }
-
-            filter.second->setFilterChain(0);
-            m_file = outputFile;
         }
 
-        bool ok = kopart->document()->openUrl(KUrl(m_file));
+        bool ok = kopart->document()->openUrl(KUrl(inputFile));
 
-        outputTempFile.clear();
+        if (outputTempFile)
+            outputTempFile->remove();
 
         if (!ok) {
+            m_doc->d->m_progressProxy->setValue(-1);
+            delete m_doc->d->m_kopart;
+            m_doc->d->m_kopart = 0;
             QString error = kopart->document()->errorMessage();
             if (error.isEmpty())
                 error = QObject::tr("Cannot load file");
-            qWarning() << Q_FUNC_INFO << "Failed to openFile" << m_file << error;
-            m_doc->d->m_progressProxy->setValue(-1);
-            m_doc->d->m_kopart = 0;
+            qWarning() << Q_FUNC_INFO << inputFile << error;
             QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, error));
-            if (outputTempFile) {
-                outputTempFile->remove();
-                QFile(outputFile).remove();
-            }
-            delete kopart;
             return;
         }
 
-        qDebug() << Q_FUNC_INFO << "Successfully openFile=" << m_file;
+        qDebug() << Q_FUNC_INFO << "Successfully openFile=" << inputFile;
         m_doc->d->m_progressProxy->setValue(-1);
 
         //QMetaObject::invokeMethod(m_part, "openFileSucceeded", Qt::QueuedConnection);
+    }
 
-        if (outputTempFile) {
-            outputTempFile->remove();
-            QFile(outputFile).remove();
+private:
+
+    bool importFile(const QPair<QString, KoFilter*> &filter, QString &inputFile, QSharedPointer<QTemporaryFile> &outputTempFile, QString &error)
+    {
+        QString outputFile;
+
+        const QByteArray from = filter.first.toUtf8();
+        const QByteArray to = "application/vnd.oasis.opendocument.text";
+
+        const QString tempFileName = QFileInfo(inputFile).baseName() + ".XXXXXX.odt";
+        outputTempFile = QSharedPointer<QTemporaryFile>(new QTemporaryFile(tempFileName));
+        outputTempFile->setAutoRemove(false);
+        if (!outputTempFile->open()) { // needed to open to get the full fileName
+            error = QObject::tr("Cannot create temporary file %1").arg(tempFileName);
+            return false;
         }
+        outputTempFile->close();
+        outputFile = outputTempFile->fileName();
+
+        KoFilterManager filterManager(to);
+        //KoFilterManager filterManager(kopart->document());
+        //KoFilterManager filterManager(inputFile, to);
+
+        filterManager.setImportFile(inputFile);
+        filterManager.setImportFile(outputFile);
+
+        KoFilterChain filterchain(&filterManager);
+        filterchain.setInputFile(inputFile);
+        filterchain.setOutputFile(outputFile);
+        filter.second->setFilterChain(&filterchain);
+
+        qDebug()<<"FilterPlugin from="<<filterchain.inputFile()<<"to="<<outputFile;
+
+        QSharedPointer<KoProgressUpdater> progressUpdater(new KoProgressUpdater(m_doc->d->m_progressProxy, KoProgressUpdater::Unthreaded));
+        QPointer<KoUpdater> updater = progressUpdater->startSubtask(1, "Filter");
+        updater->setProgress(0);
+        m_doc->d->m_progressProxy->beginSubTask();
+
+        filter.second->setUpdater(updater);
+        KoFilter::ConversionStatus status = filter.second->convert(from, to);
+
+        updater->setProgress(100);
+        m_doc->d->m_progressProxy->endSubTask();
+
+        filter.second->setFilterChain(0);
+
+        //Q_ASSERT_X(status == KoFilter::OK, __FUNCTION__, qPrintable(QString("FiFilter::convert failed with status=%1").arg(status)));
+        if (status != KoFilter::OK) {
+            error = QObject::tr("Cannot import %1: %2").arg(inputFile).arg(KoFilterManager::statusText(status));
+            return false;
+        }
+
+        inputFile = outputFile;
+        return true;
     }
 };
 
@@ -364,8 +380,10 @@ bool AppManager::openFile(Document *doc, const QString &file)
 void AppManager::update(const QSharedPointer<Page> &page)
 {
     UpdatePageCommand *command = new UpdatePageCommand(page);
-    QMutexLocker locker(&d->m_workMutex);
-    d->m_prendingCommands.enqueue(command);
+    {
+        QMutexLocker locker(&d->m_workMutex);
+        d->m_prendingCommands.enqueue(command);
+    }
     d->m_waitCondition.wakeAll();
 }
 
@@ -385,13 +403,8 @@ void AppManager::run()
         }
 
         if (command) {
-            if (OpenFileCommand *openFileCommand = dynamic_cast<OpenFileCommand*>(command.data())) {
-                openFileCommand->run();
-            } else if (UpdatePageCommand *updatePageCommand = dynamic_cast<UpdatePageCommand*>(command.data())) {
-                updatePageCommand->run();
-            } else {
-                Q_ASSERT_X(false, __FUNCTION__, "Unknown Command");
-            }
+            // Run the command. The call will block (this thread only) till the command is done.
+            command->run();
         } else {
             // No command in the queue. Wait till a new one arrives.
             d->m_waitCondition.wait(&d->m_waitMutex);

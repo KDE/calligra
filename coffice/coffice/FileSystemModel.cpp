@@ -42,7 +42,9 @@ FileSystemModel::FileSystemModel(QObject *parent)
 
     setNameFilters(QStringList()
        << "*.odt" // OpenDocument ODF
-       << "*.docx" << "*.dotx" // Microsoft OOXML
+       << "*.doc" << "*.dot" // Microsoft Word binary
+       << "*.docx" << "*.dotx" // Microsoft Word OOXML
+       << "*.docm" << "*.dotm" // Microsoft Word macroEnabled
     );
     setNameFilterDisables(false);
 
