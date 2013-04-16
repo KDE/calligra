@@ -65,7 +65,7 @@ class WorkPackage : public QObject
 {
     Q_OBJECT
 public:
-    WorkPackage( bool fromProjectStore );
+    explicit WorkPackage(bool fromProjectStore);
     WorkPackage( Project *project, bool fromProjectStore );
     ~WorkPackage();
 

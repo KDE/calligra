@@ -25,7 +25,6 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
-#include "kptdatetime.h"
 #include "kptrelation.h"
 #include "kptschedule.h"
 #include "kptviewbase.h"

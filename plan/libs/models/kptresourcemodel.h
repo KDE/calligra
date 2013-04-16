@@ -197,7 +197,7 @@ class KPLATOMODELS_EXPORT ResourceItemSFModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    ResourceItemSFModel( QObject *parent = 0 );
+    explicit ResourceItemSFModel(QObject *parent = 0);
 
     void setProject( Project *project );
     Resource *resource( const QModelIndex &index ) const;
@@ -217,7 +217,7 @@ class KPLATOMODELS_EXPORT AllocatedResourceItemModel : public QSortFilterProxyMo
 {
     Q_OBJECT
 public:
-    AllocatedResourceItemModel( QObject *parent = 0 );
+    explicit AllocatedResourceItemModel(QObject *parent = 0);
 
     int columnCount( const QModelIndex &idx ) const;
 

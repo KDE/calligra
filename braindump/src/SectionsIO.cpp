@@ -102,6 +102,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
 
     const char* mimeType = KoOdf::mimeType(KoOdf::Text);
 
+    QDir().mkdir(fullFileNameTmpNew);
     KoStore* store = KoStore::createStore(fullFileNameTmpNew, KoStore::Write, mimeType, KoStore::Directory);
     Finally finaly(store);
 
