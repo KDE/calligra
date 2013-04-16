@@ -105,6 +105,11 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     OdtTraverser  odtTraverser;
     odtTraverser.traverseContent(&docxBackend, &docxBackendContext);
 
+    // Add the newly converted document contents to the docx file.
+    docxFile.addContentFile("", "word/document.xml",
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
+                            docxBackendContext.m_documentContent);
+
     // Write the output file.
     return docxFile.writeDocx(m_chain->outputFile(), to, docxBackendContext);
 }

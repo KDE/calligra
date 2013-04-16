@@ -49,10 +49,10 @@ class OdtTraverserDocxContext : public OdfTraverserContext
     ~OdtTraverserDocxContext();
 
     DocxFile    *m_docxFile;        // Collect embedded files here
+    QByteArray   m_documentContent; // m_documentWriter writes here;
     KoXmlWriter *m_documentWriter;  // XML writer for the document contents
 
 private:
-    QByteArray   m_documentContent; // m_documentWriter writes here;
     QBuffer      m_documentIO;      // IODevice for the XMl writer
 };
 
