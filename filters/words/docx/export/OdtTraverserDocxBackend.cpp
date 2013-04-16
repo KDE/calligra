@@ -108,7 +108,7 @@ void OdtTraverserDocxBackend::tagP(KoXmlElement &element, OdfTraverserContext *c
         writer->endElement(); // w:pPr
     }
     else {
-        writer->endElement(); // w:r
+        writer->endElement(); // w:p
     }
 }
 
@@ -166,4 +166,3 @@ void OdtTraverserDocxBackend::characterData(KoXmlNode &node, OdfTraverserContext
         writer->endElement(); // w:t
     }
 }
-

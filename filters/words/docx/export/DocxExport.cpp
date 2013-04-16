@@ -105,5 +105,6 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     OdtTraverser  odtTraverser;
     odtTraverser.traverseContent(&docxBackend, &docxBackendContext);
 
+    // Write the output file.
     return docxFile.writeDocx(m_chain->outputFile(), to, docxBackendContext);
 }

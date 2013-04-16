@@ -64,6 +64,14 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
     docxStore->disallowNameExpansion();
 
     KoFilter::ConversionStatus  status;
+
+    // Write top-level rels
+    status = writeTopLevelRels(docxStore);
+    if (status != KoFilter::OK) {
+        delete docxStore;
+        return status;
+    }
+
 #if 0
     // Write META-INF/container.xml
     status = writeMetaInf(docxStore);
@@ -97,6 +105,49 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
 // ----------------------------------------------------------------
 //                         Private functions
 
+
+KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
+{
+    // We can hardcode this one.
+    if (!docxStore->open("_rels/.rels")) {
+        kDebug(30503) << "Can not to open META-INF/container.xml.";
+        return KoFilter::CreationError;
+    }
+
+    KoStoreDevice metaDevice(docxStore);
+    KoXmlWriter writer(&metaDevice);
+
+    writer.startDocument(0, 0, 0);
+    writer.startElement("Relationships");
+    writer.addAttribute("xmlns", "http://schemas.openxmlformats.org/package/2006/relationships");
+
+    // The document itself
+    writer.startElement("Relationship");
+    writer.addAttribute("Id", "rId1");
+    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument");
+    writer.addAttribute("Target", "word/document.xml");
+    writer.endElement();        // Relationship
+
+    // Doc props core
+    writer.startElement("Relationship");
+    writer.addAttribute("Id", "rId2");
+    writer.addAttribute("Type", "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties");
+    writer.addAttribute("Target", "docProps/core.xml");
+    writer.endElement();        // Relationship
+
+    // Doc props app
+    writer.startElement("Relationship");
+    writer.addAttribute("Id", "rId3");
+    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
+    writer.addAttribute("Target", "docProps/app.xml");
+    writer.endElement();        // Relationship
+
+    writer.endElement();        // Relationships
+    writer.endDocument();
+
+    docxStore->close();
+    return KoFilter::OK;
+}
 
 #if 0
 KoFilter::ConversionStatus DocxFile::writeMetaInf(KoStore *docxStore)
