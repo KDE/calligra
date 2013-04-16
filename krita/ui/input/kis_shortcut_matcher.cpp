@@ -139,8 +139,9 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QMouseEvent *even
 {
     bool retval = false;
 
-    if(m_d->usingTouch)
+    if (m_d->usingTouch) {
         return retval;
+    }
 
     if (m_d->buttons.contains(button)) reset();
 
@@ -163,8 +164,9 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QMouseEvent *eve
 {
     bool retval = false;
 
-    if (m_d->usingTouch)
+    if (m_d->usingTouch) {
         return retval;
+    }
 
     if (m_d->runningShortcut) {
         retval = tryEndRunningShortcut(button, event);
@@ -190,7 +192,9 @@ bool KisShortcutMatcher::wheelEvent(KisSingleActionShortcut::WheelAction wheelAc
 
 bool KisShortcutMatcher::mouseMoved(QMouseEvent *event)
 {
-    if (!m_d->runningShortcut) return false;
+    if (m_d->usingTouch || !m_d->runningShortcut) {
+        return false;
+    }
 
     m_d->runningShortcut->action()->inputEvent(event);
     return true;
@@ -223,8 +227,10 @@ bool KisShortcutMatcher::touchUpdateEvent( QTouchEvent* event )
 
 bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
 {
+    m_d->usingTouch = false; // we need to say we are done because qt will not send further event
+
+    // we should try and end the shortcut too (it might be that there is none? (sketch))
     if( tryEndTouchShortcut( event ) ) {
-        m_d->usingTouch = false;
         return true;
     }
 
