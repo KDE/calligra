@@ -22,7 +22,7 @@
 #ifndef __KoViewAdaptor_h__
 #define __KoViewAdaptor_h__
 
-#ifndef QT_NO_DBUS
+#ifndef CALLIGRA_DISABLE_DBUS
 
 #include <QMap>
 #include <QObject>
@@ -52,6 +52,6 @@ protected:
 
 };
 
-#endif // QT_NO_DBUS
+#endif // CALLIGRA_DISABLE_DBUS
 
 #endif

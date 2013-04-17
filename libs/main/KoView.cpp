@@ -29,7 +29,7 @@
 #include "KoDocument.h"
 #include "KoMainWindow.h"
 
-#ifndef QT_NO_DBUS
+#ifndef CALLIGRA_DISABLE_DBUS
 #include "KoViewAdaptor.h"
 #endif
 
@@ -173,7 +173,7 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setObjectName(newObjectName());
 
-#ifndef QT_NO_DBUS
+#ifndef CALLIGRA_DISABLE_DBUS
     new KoViewAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif
@@ -631,5 +631,4 @@ QList<QAction*> KoView::createChangeUnitActions()
     return unitActions->actions();
 }
 
-#include <KoView_p.moc>
 #include <KoView.moc>

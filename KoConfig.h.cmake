@@ -46,3 +46,5 @@
 /* This file contains all the paths that change when changing the installation prefix */
 #define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"
 
+/* Defines whether we will build the dbus integration */
+#cmakedefine CALLIGRA_DISABLE_DBUS 1

@@ -21,7 +21,7 @@
 #ifndef KOPARTADAPTOR_H
 #define KOPARTADAPTOR_H
 
-#ifndef QT_NO_DBUS
+#ifndef CALLIGRA_DISABLE_DBUS
 
 #include <QMap>
 
@@ -136,7 +136,7 @@ protected:
     KoPart* m_pDoc;
 };
 
-#endif // QT_NO_DBUS
+#endif // CALLIGRA_DISABLE_DBUS
 
 #endif
 

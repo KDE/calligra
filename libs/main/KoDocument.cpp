@@ -67,7 +67,7 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QTimer>
-#ifndef QT_NO_DBUS
+#ifndef CALLIGRA_DISABLE_DBUS
 #include <QDBusConnection>
 #endif
 #include <QApplication>

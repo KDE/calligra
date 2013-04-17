@@ -52,6 +52,8 @@ option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binar
 
 # TODO: remove option and migration code below before 3.0 release
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
+# TODO: make this depend on whether Qt has DBus by default
+option(CALLIGRA_DISABLE_DBUS "Disable DBus integration" ON)
 
 #
 # WARNING: don't change the SHOULD_BUILD_app if an application

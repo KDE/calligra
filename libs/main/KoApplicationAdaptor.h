@@ -21,7 +21,9 @@
 #ifndef __KoApplicationAdaptor_h__
 #define __KoApplicationAdaptor_h__
 
-#ifndef QT_NO_DBUS
+#include "KoConfig.h"
+
+#ifndef CALLIGRA_DISABLE_DBUS
 
 #include <QObject>
 #include <QtDBus>
@@ -85,7 +87,7 @@ private:
     KoApplication *m_application;
 };
 
-#endif // QT_NO_DBUS
+#endif // CALLIGRA_DISABLE_DBUS
 
 #endif
 

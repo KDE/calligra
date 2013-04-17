@@ -22,8 +22,8 @@
 #include "KoApplication.h"
 
 #include "KoGlobal.h"
-
-#ifndef QT_NO_DBUS
+#include "KoConfig.h"
+#ifndef CALLIGRA_DISABLE_DBUS
 #include "KoApplicationAdaptor.h"
 #include <QtDBus>
 #endif
@@ -88,7 +88,7 @@ KoApplication::KoApplication()
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
-#ifndef QT_NO_DBUS
+#ifndef CALLIGRA_DISABLE_DBUS
     new KoApplicationAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/application", this);
 #endif
@@ -274,7 +274,7 @@ bool KoApplication::start()
         QString ourPid;
         ourPid.setNum(kapp->applicationPid());
 
-#ifndef QT_NO_DBUS
+#ifndef CALLIGRA_DISABLE_DBUS
         // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
         QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
 

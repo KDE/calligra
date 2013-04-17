@@ -405,4 +405,4 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     return list;
 }
 
-#include <KoCreatePathTool.moc>
+#include <moc_KoCreatePathTool.cpp>
