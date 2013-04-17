@@ -1231,9 +1231,9 @@ void OutputPainterStrategy::setClipPath( const quint32 regionMode )
     case RGN_AND:
         m_painter->setClipPath( *m_path, Qt::IntersectClip );
         break;
-    case RGN_OR:
-        m_painter->setClipPath( *m_path, Qt::UniteClip );
-        break;
+//    case RGN_OR:
+//        m_painter->setClipPath( *m_path, Qt::UniteClip );
+//        break;
     case RGN_COPY:
         m_painter->setClipPath( *m_path, Qt::ReplaceClip );
         break;
