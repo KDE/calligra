@@ -50,6 +50,7 @@ public:
         static int autoSelectDelay();
         static KDE_DEPRECATED int contextMenuKey ();
 \       static bool showContextMenusOnPress ();
+#endif
         enum Completion {
             CompletionNone=1,
             CompletionAuto,
@@ -58,6 +59,7 @@ public:
             CompletionPopup,
             CompletionPopupAuto
         };
+#if 0
         static Completion completionMode();
         struct KMouseSettings
         {

@@ -81,6 +81,7 @@ private:
         QString m_keyword;
         CreateInstanceFunction m_instanceFunction;
         PluginIface(const QString &keyword = QString(), CreateInstanceFunction instanceFunction = 0) : m_instanceFunction(instanceFunction) {}
+        virtual ~PluginIface() {}
         virtual QObject* create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword) = 0;
     };
 
