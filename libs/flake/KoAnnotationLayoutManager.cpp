@@ -23,83 +23,51 @@
 #include <QHash>
 #include <kdebug.h>
 
+#define default_shapeHeight 100.0
+#define shapeWidth 150.0
+
+
 class KoAnnotationLayoutManager::Private
 {
 public:
-    Private(qreal annotationX, qreal pageHeight) :
-        x(annotationX),
-        pageHeight(pageHeight)
+    Private(qreal annotationX)
+        : x(annotationX)
     {}
 
     qreal x;
-    qreal pageHeight;
-    qreal shapeHeight;
-    QHash<int, QList<KoShape*> > annotationShapeCollectio;
+    QHash<KoShape *, qreal> annotationShapePositions;
 };
 
-KoAnnotationLayoutManager::KoAnnotationLayoutManager(qreal annotationX, qreal pageHeight, QObject *parent)
-    :d(new Private(annotationX, pageHeight))
+KoAnnotationLayoutManager::KoAnnotationLayoutManager(qreal annotationX, QObject *parent)
+    :d(new Private(annotationX))
 {
     Q_UNUSED(parent);
-    d->shapeHeight = default_shapeHeight;
 }
 
 KoAnnotationLayoutManager::~KoAnnotationLayoutManager()
 {
 }
 
-void KoAnnotationLayoutManager::addAnnotationShape(KoShape *annotationShape, int pageNumber) {
-    if (d->annotationShapeCollectio.keys().contains(pageNumber)) {
-        // Check for repeated shape.
-        if (d->annotationShapeCollectio.value(pageNumber).contains(annotationShape)) {
-            return;
-        }
-        else {
-            QList<KoShape*> list = d->annotationShapeCollectio.value(pageNumber);
-            list.append(annotationShape);
-            d->annotationShapeCollectio.insert(pageNumber, list);
-            layoutAnnotationShapes();
-        }
-    }
-    else {
-        QList<KoShape*> list;
-        list.append(annotationShape);
-        d->annotationShapeCollectio.insert(pageNumber, list);
-        layoutAnnotationShapes();
-    }
+void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotationShape, QPointF pos) {
+    d->annotationShapePositions.insert(annotationShape, pos.y());
+    layoutAnnotationShapes();
 }
 
 void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape) {
-    foreach (int key, d->annotationShapeCollectio.keys()) {
-        if (d->annotationShapeCollectio.value(key).contains(annotationShape)) {
-            QList<KoShape*> list = d->annotationShapeCollectio.value(key);
-            list.removeOne(annotationShape);
-            d->annotationShapeCollectio.insert(key, list);
-            break;
-        }
-    }
+    d->annotationShapePositions.remove(annotationShape);
     layoutAnnotationShapes();
 }
 
 void KoAnnotationLayoutManager::layoutAnnotationShapes()
 {
-    foreach(int key, d->annotationShapeCollectio.keys()) {
-        // Set Default shape height for new page.
-        d->shapeHeight = default_shapeHeight;
-        QList<KoShape*> shapesList = d->annotationShapeCollectio.value(key);
-
-        // Calculate the shape height.
-        qreal height = d->pageHeight / shapesList.count();
-        if ( height <= d->shapeHeight) {
-            d->shapeHeight = height;
+    qreal currentY = 0.0;
+    foreach(KoShape *shape, d->annotationShapePositions.keys()) {
+        qreal refPosition = d->annotationShapePositions[shape];
+        if (refPosition > currentY) {
+            currentY = refPosition;
         }
-
-        // Add each shape height and 20 (space area betwwen pages) to this sumY to finde next shape Y position.
-        qreal sumY = ((key - 1) * (d->pageHeight + 20.0));
-        foreach (KoShape *shape, shapesList) {
-            shape->setSize(QSize(shapeWidth, d->shapeHeight));
-            shape->setPosition(QPointF(d->x, sumY));
-            sumY += shape->size().height();
-        }
+        shape->setSize(QSize(shapeWidth, shape->size().height()));
+        shape->setPosition(QPointF(d->x, currentY));
+        currentY += shape->size().height() + 20.0;
     }
 }

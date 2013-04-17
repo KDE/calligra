@@ -124,12 +124,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     m_currentPage = m_document->pageManager()->begin();
 
-    // FIXME: This (400.0) i s just for now i know i know. :)
-    m_annotationManager = new KoAnnotationLayoutManager(400.0, currentPage().height());
-    //layout loaded annotation shapes in textLoader.
-    layoutLoadedAnnotationShapes();
-    connect(m_document, SIGNAL(annotationShapeAdded(KoShape*)), this, SLOT(annotationShapeAdded(KoShape*)));
-    //connect(m_document, SIGNAL(annotationShapeRemoved(KoShape*)), this, SLOT(annotationShapeRemoved(KoShape*)));
+    // FIXME: This (400.0) is just for now i know i know. :)
+    m_annotationManager = new KoAnnotationLayoutManager(400.0);
     connect (m_canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(annotationShapeRemoved(KoShape*)));
 
     setupActions();
@@ -1076,16 +1072,15 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
     }
 }
 
-void KWView::layoutLoadedAnnotationShapes()
-{
-    foreach(KoShape *shape, m_document->annotationShapes()) {
-        m_annotationManager->addAnnotationShape(shape, currentPage().pageNumber());
-    }
-}
-
 void KWView::annotationShapeAdded(KoShape *shape)
 {
-    m_annotationManager->addAnnotationShape(shape, currentPage().pageNumber());
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    Q_ASSERT(editor);
+
+    const KoAnnotationManager *manager = m_document->textRangeManager()->annotationManager();
+
+    KoAnnotation *annotation = editor->addAnnotation();
+    annotation->setAnnotationShape(shape);
 }
 
 void KWView::annotationShapeRemoved(KoShape *shape)

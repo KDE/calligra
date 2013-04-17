@@ -22,9 +22,7 @@
 #include "flake_export.h"
 
 #include <QObject>
-
-#define default_shapeHeight 100.0
-#define shapeWidth 150.0
+#include <QPointF>
 
 class KoShape;
 
@@ -32,12 +30,12 @@ class FLAKE_EXPORT KoAnnotationLayoutManager: public QObject
 {
     Q_OBJECT
 public:
-    KoAnnotationLayoutManager(qreal annotationX, qreal pageHeight, QObject *parent = 0);
+    KoAnnotationLayoutManager(qreal annotationX, QObject *parent = 0);
     virtual ~KoAnnotationLayoutManager();
 
 public slots:
-    /// Add annotation shape.
-    void addAnnotationShape(KoShape *annotationShape, int pageNumber);
+    /// register the position of an annotation shape.
+    void registerAnnotationRefPosition(KoShape *annotationShape, QPointF refPosition);
 
     /// Remove annotation shape.
     void removeAnnotationShape(KoShape *annotationShape);

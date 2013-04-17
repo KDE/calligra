@@ -46,6 +46,8 @@
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
+#include <KoAnnotationLayoutManager.h>
+#include <KoAnnotation.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
@@ -81,6 +83,7 @@ public:
        , allowPositionInlineObject(true)
        , continuationObstruction(0)
        , referencedLayout(0)
+       , annotationLayoutManager(0)
        , defaultTabSizing(0)
        , y(0)
        , isLayouting(false)
@@ -122,6 +125,8 @@ public:
     KoTextLayoutObstruction *continuationObstruction;
 
     KoTextDocumentLayout *referencedLayout;
+
+    KoAnnotationLayoutManager *annotationLayoutManager;
 
     qreal defaultTabSizing;
     qreal y;
@@ -606,6 +611,11 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length)
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphRect(d->anchoringParagraphRect);
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
+        }
+        KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(range);
+        if (annotation) {
+            //FIXME we need a more precise position than anchorParagraph Rect
+            emit foundAnnotation(annotation->annotationShape(), d->anchoringParagraphContentRect.topLeft());
         }
     }
 }

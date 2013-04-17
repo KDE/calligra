@@ -119,9 +119,6 @@ public:
     int minPageNumber() const { return m_minPageNum; }
     int maxPageNumber() const { return m_maxPageNum; }
 
-    /// Add loaded annotation shapes are loaded in textLoader to KoAnnotationLayoutManager.
-    void layoutLoadedAnnotationShapes();
-
 signals:
     void shownPagesChanged();
 
