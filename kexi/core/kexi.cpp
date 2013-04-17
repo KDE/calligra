@@ -34,7 +34,7 @@
 #include <QLabel>
 
 #include <kdebug.h>
-#include <kcursor.h>
+#include <QCursor>
 #include <kapplication.h>
 #include <ksharedptr.h>
 #include <kglobalsettings.h>

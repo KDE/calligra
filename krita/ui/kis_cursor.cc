@@ -29,7 +29,7 @@
 #include <QtGlobal>
 #include <qmath.h>
 
-#include <kcursor.h>
+#include <QCursor>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 

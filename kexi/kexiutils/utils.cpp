@@ -33,7 +33,7 @@
 #include <QLayout>
 
 #include <kdebug.h>
-#include <kcursor.h>
+#include <QCursor>
 #include <kapplication.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
