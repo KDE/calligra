@@ -25,6 +25,8 @@
 #include <kmessagebox.h> // XXX: remove
 #include <knotification.h> // XXX: remove
 
+#include "KoConfig.h"
+
 #include "KoDocument.h"
 #include "KoPart.h"
 #include "KoServiceProvider.h"
@@ -285,6 +287,24 @@ bool KoDocument::exportDocument(const KUrl & _url)
     return ret;
 }
 
+void simpleBackupFile( const QString& qFilename,
+                       const QString& backupDir,
+                       const QString& backupExtension )
+{
+    QString backupFileName = qFilename + backupExtension;
+
+    if ( !backupDir.isEmpty() ) {
+        QFileInfo fileInfo ( qFilename );
+        backupFileName = backupDir + QLatin1Char('/') + fileInfo.fileName() + backupExtension;
+    }
+
+    //    kDebug(180) << "KBackup copying " << qFilename << " to " << backupFileName;
+    QFile::remove(backupFileName);
+    bool b = QFile::copy(qFilename, backupFileName);
+    Q_ASSERT(b);
+}
+
+
 bool KoDocument::saveFile()
 {
     kDebug(30003) << "doc=" << d->parentPart->url().url();
@@ -300,8 +320,9 @@ bool KoDocument::saveFile()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     if (backupFile()) {
-        if (d->parentPart->url().isLocalFile())
-            QSaveFile::backupFile(d->parentPart->url().toLocalFile(), d->backupPath);
+        if (d->parentPart->url().isLocalFile()) {
+            simpleBackupFile(d->parentPart->url().toLocalFile(), d->backupPath, QLatin1String("~"));
+        }
         else {
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(d->parentPart->url(),
@@ -309,10 +330,12 @@ bool KoDocument::saveFile()
                                      d->parentPart->currentShell())) {     // this file exists => backup
                 emit statusBarMessage(i18n("Making backup..."));
                 KUrl backup;
+
                 if (d->backupPath.isEmpty())
                     backup = d->parentPart->url();
                 else
-                    backup = d->backupPath + '/' + d->parentPart->url().fileName();
+                    backup = KUrl(d->backupPath + '/' + d->parentPart->url().fileName());
+
                 backup.setPath(backup.path() + QString::fromLatin1("~"));
                 KFileItem item(entry, d->parentPart->url());
                 Q_ASSERT(item.name() == d->parentPart->url().fileName());
@@ -2200,5 +2223,5 @@ void KoDocument::setUrl(const KUrl& url) {
     d->parentPart->setUrl(url);
 }
 
-#include <KoDocument.moc>
+#include <moc_KoDocument.cpp>
 
