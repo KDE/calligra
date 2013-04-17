@@ -40,7 +40,6 @@
 extern QVariant val;
 struct Property;
 class KoCharacterStyle;
-class KoListStyle;
 class QTextBlock;
 class KoStyleStack;
 class KoGenStyle;
@@ -48,6 +47,8 @@ class KoGenStyles;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoList;
+
+#include <KoListStyle.h>
 
 /**
  * A container for all properties for the paragraph wide style.
