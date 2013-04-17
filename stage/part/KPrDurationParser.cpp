@@ -21,22 +21,23 @@
 
 #include <QRegExp>
 #include <QStringList>
-#include <kglobal.h>
+#include <QGlobalStatic>
+
+// define the regex used as statics
+Q_GLOBAL_STATIC_WITH_ARGS(QRegExp, s_clockRegEx, ("^(?:(\\d+):)?(\\d{2}):(\\d{2}(?:\\.\\d+)?)$"))
+Q_GLOBAL_STATIC_WITH_ARGS(QRegExp, s_timecountRegEx, ("^(\\d+(?:\\.\\d+)?)(h|min|s|ms)?$"))
 
 int KPrDurationParser::durationMs(const QString & duration)
 {
-    // define the regex used as statics
-    K_GLOBAL_STATIC_WITH_ARGS(QRegExp, clockRegEx, ("^(?:(\\d+):)?(\\d{2}):(\\d{2}(?:\\.\\d+)?)$"))
-    K_GLOBAL_STATIC_WITH_ARGS(QRegExp, timecountRegEx, ("^(\\d+(?:\\.\\d+)?)(h|min|s|ms)?$"))
 
     int ms = -1;
-    if (clockRegEx->indexIn(duration) != -1) {
-        QStringList result(clockRegEx->capturedTexts());
+    if (s_clockRegEx->indexIn(duration) != -1) {
+        QStringList result(s_clockRegEx->capturedTexts());
         bool ok = true;
         ms = qreal(result[1].toInt(&ok, 10) * 3600 + result[2].toInt(&ok, 10) * 60 + result[3].toDouble(&ok)) * 1000;
     }
-    else if (timecountRegEx->indexIn(duration) != -1) {
-        QStringList result(timecountRegEx->capturedTexts());
+    else if (s_timecountRegEx->indexIn(duration) != -1) {
+        QStringList result(s_timecountRegEx->capturedTexts());
         QString metric(result[2]);
         // the default (no metric) is s
         qreal factor = 1000;
