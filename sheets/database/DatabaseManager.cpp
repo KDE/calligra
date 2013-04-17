@@ -102,5 +102,4 @@ void DatabaseManager::saveOdf(KoXmlWriter& xmlWriter) const
     xmlWriter.endElement();
 }
 
-#include "DatabaseStorage.moc"
-#include "DatabaseManager.moc"
+#include "moc_DatabaseStorage.cpp"
