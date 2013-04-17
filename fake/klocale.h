@@ -1698,7 +1698,7 @@ public:
     * @return If possessive form should be used
     */
     bool dateMonthNamePossessive() const;
-
+#endif
     /**
     * @deprecated replaced by formatLocaleTime()
     *
@@ -1713,8 +1713,11 @@ public:
     *
     * @return The time as a string
     */
-    QString formatTime(const QTime &pTime, bool includeSecs = false, bool isDuration = false) const;
-
+    QString formatTime(const QTime &pTime, bool includeSecs = false, bool isDuration = false) const
+    {
+        return m_locale.toString(time);
+    }
+#if 0
     //KDE5 move to KDateTime namespace
     /**
     * @since 4.4
