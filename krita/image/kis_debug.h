@@ -78,9 +78,3 @@
  */
 #define ppVar( var ) #var << "=" << var
 
-
-#  ifndef QT_NO_DEBUG
-#    undef Q_ASSERT
-#    define Q_ASSERT(cond) if(!(cond)) { kError() << kBacktrace(); qt_assert(#cond,__FILE__,__LINE__); } qt_noop()
-#  endif
-

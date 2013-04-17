@@ -36,7 +36,6 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
-        //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
     }
     virtual void saveOdf(KoShapeSavingContext &) const {}
@@ -53,7 +52,6 @@ public:
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
-        //qDebug() << "Container:" << kBacktrace( 10 );
         paintedCount++;
     }
 

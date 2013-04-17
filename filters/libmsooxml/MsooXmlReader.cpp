@@ -255,7 +255,6 @@ bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
 bool MsooXmlReader::expectElEnd(const QString& qualifiedElementName)
 {
     //kDebug() << qualifiedElementName << "found:" << qualifiedName();
-//    kDebug() << kBacktrace();
     if (!isEndElement() || qualifiedName() != qualifiedElementName) {
         raiseError(i18n("Expected closing of element \"%1\"", qualifiedElementName));
         return false;
