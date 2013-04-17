@@ -2603,5 +2603,3 @@ Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *)
     // face / pow(1 + rate, years)
     return calc->div(face, calc->pow(calc->add(rate, 1), years));
 }
-
-#include "FinancialModule.moc"

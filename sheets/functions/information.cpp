@@ -387,5 +387,3 @@ Value func_na(valVector, ValueCalc *, FuncExtra *)
 {
     return Value::errorNA();
 }
-
-#include "InformationModule.moc"

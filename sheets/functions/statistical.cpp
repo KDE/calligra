@@ -3061,4 +3061,3 @@ Value func_ztest(valVector args, ValueCalc* calc, FuncExtra*)
     return calc->mul(Value(2.0), calc->gauss(calc->abs(z)));
 }
 
-#include "StatisticalModule.moc"

@@ -1132,5 +1132,3 @@ Value func_date2unix(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(static_cast<int>(datetime.toTime_t()));
 }
-
-#include "DateTimeModule.moc"

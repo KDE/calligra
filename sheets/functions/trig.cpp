@@ -274,4 +274,3 @@ Value func_atan2(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->atan2(args[1], args[0]);
 }
 
-#include "TrigonometryModule.moc"

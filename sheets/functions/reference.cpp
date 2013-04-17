@@ -678,5 +678,3 @@ Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *)
     }
     return v;
 }
-
-#include "ReferenceModule.moc"

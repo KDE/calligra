@@ -301,5 +301,3 @@ Value func_xor(valVector args, ValueCalc *calc, FuncExtra *)
         calc->arrayWalk(args[i], count, awXor, Value(0));
     return Value((count.asInteger() & 1) == 1);
 }
-
-#include "LogicModule.moc"

@@ -281,5 +281,3 @@ Value func_ToString(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return calc->conv()->asString(args[0]);
 }
-
-#include "ConversionModule.moc"

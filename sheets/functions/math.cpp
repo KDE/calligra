@@ -1458,5 +1458,3 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 */
-
-#include "MathModule.moc"

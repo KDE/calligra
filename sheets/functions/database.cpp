@@ -557,5 +557,3 @@ Value func_getpivotdata(valVector args, ValueCalc *calc, FuncExtra *)
 
     return database.element(fieldIndex, row);
 }
-
-#include "DatabaseModule.moc"

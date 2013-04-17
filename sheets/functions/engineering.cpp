@@ -1521,5 +1521,3 @@ Value func_gestep(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(result);
 }
-
-#include "EngineeringModule.moc"

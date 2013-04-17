@@ -919,5 +919,3 @@ Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(aText);
 }
-
-#include "TextModule.moc"

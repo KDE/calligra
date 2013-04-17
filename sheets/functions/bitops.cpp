@@ -119,5 +119,3 @@ Value func_bitrshift(valVector args, ValueCalc *, FuncExtra *)
     else // negative right shift, becomes left shift
         return Value(static_cast<qint64>(x << (-1 * numshift)));
 }
-
-#include "BitOpsModule.moc"
