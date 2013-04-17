@@ -30,6 +30,7 @@
 #include <KoToolSelection.h>
 #include <KoBorder.h>
 
+#include <QTextDocumentFragment>
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>

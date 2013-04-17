@@ -55,4 +55,4 @@ void InsertInlineObjectActionBase::activated()
     }
 }
 
-#include <InsertInlineObjectActionBase_p.moc>
+#include <moc_InsertInlineObjectActionBase_p.cpp>

@@ -45,4 +45,4 @@ KoFind::~KoFind()
     delete d;
 }
 
-#include <KoFind.moc>
+#include <moc_KoFind.cpp>

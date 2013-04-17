@@ -249,4 +249,4 @@ void KoList::setListContinuedFrom(KoList *list)
     d->listToBeContinuedFrom = list;
 }
 
-#include <KoList.moc>
+#include <moc_KoList.cpp>

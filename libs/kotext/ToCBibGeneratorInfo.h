@@ -23,6 +23,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoText.h>
+#include <QTextDocument>
 
 const int INVALID_OUTLINE_LEVEL = 0;
 

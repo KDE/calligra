@@ -1697,4 +1697,4 @@ const QTextTable *KoTextEditor::currentTable () const
     return d->caret.currentTable();
 }
 
-#include <KoTextEditor.moc>
+#include <moc_KoTextEditor.cpp>
