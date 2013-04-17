@@ -21,7 +21,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="KFontComboBox" name="fontFamily">
+    <widget class="QFontComboBox" name="fontFamily">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -142,9 +142,9 @@
    <header>knuminput.h</header>
   </customwidget>
   <customwidget>
-   <class>KFontComboBox</class>
+   <class>QFontComboBox</class>
    <extends>KComboBox</extends>
-   <header>kfontcombobox.h</header>
+   <header>QFontComboBox</header>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>

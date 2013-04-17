@@ -302,7 +302,7 @@
       <property name="flat">
        <bool>true</bool>
       </property>
-      <widget class="KFontComboBox" name="fontComboBox">
+      <widget class="QFontComboBox" name="fontComboBox">
        <property name="geometry">
         <rect>
          <x>80</x>
@@ -417,9 +417,9 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KFontComboBox</class>
+   <class>QFontComboBox</class>
    <extends>KComboBox</extends>
-   <header>kfontcombobox.h</header>
+   <header>QFontComboBox</header>
   </customwidget>
  </customwidgets>
  <resources/>
