@@ -788,41 +788,41 @@ void KoPADocument::saveConfig()
     KoGridData defGrid;
 
     bool showGrid = gridData().showGrid();
-    if ((showGrid == defGrid.showGrid()) && !configGroup.hasDefault("ShowGrid"))
-        configGroup.revertToDefault("ShowGrid");
-    else
+//    if ((showGrid == defGrid.showGrid()) && !configGroup.hasDefault("ShowGrid"))
+//        configGroup.revertToDefault("ShowGrid");
+//    else
         configGroup.writeEntry("ShowGrid", showGrid);
 
     bool snapToGrid = gridData().snapToGrid();
-    if ((snapToGrid == defGrid.snapToGrid()) && !configGroup.hasDefault("SnapToGrid"))
-        configGroup.revertToDefault("SnapToGrid");
-    else
+//    if ((snapToGrid == defGrid.snapToGrid()) && !configGroup.hasDefault("SnapToGrid"))
+//        configGroup.revertToDefault("SnapToGrid");
+//    else
         configGroup.writeEntry("SnapToGrid", snapToGrid);
 
     qreal spacingX = gridData().gridX();
-    if ((spacingX == defGrid.gridX()) && !configGroup.hasDefault("SpacingX"))
-        configGroup.revertToDefault("SpacingX");
-    else
+//    if ((spacingX == defGrid.gridX()) && !configGroup.hasDefault("SpacingX"))
+//        configGroup.revertToDefault("SpacingX");
+//    else
         configGroup.writeEntry("SpacingX", spacingX);
 
     qreal spacingY = gridData().gridY();
-    if ((spacingY == defGrid.gridY()) && !configGroup.hasDefault("SpacingY"))
-        configGroup.revertToDefault("SpacingY");
-    else
+//    if ((spacingY == defGrid.gridY()) && !configGroup.hasDefault("SpacingY"))
+//        configGroup.revertToDefault("SpacingY");
+//    else
         configGroup.writeEntry("SpacingY", spacingY);
 
     QColor color = gridData().gridColor();
-    if ((color == defGrid.gridColor()) && !configGroup.hasDefault("Color"))
-        configGroup.revertToDefault("Color");
-    else
+//    if ((color == defGrid.gridColor()) && !configGroup.hasDefault("Color"))
+//        configGroup.revertToDefault("Color");
+//    else
         configGroup.writeEntry("Color", color);
 
     configGroup = config->group( "Interface" );
 
     bool showRulers = rulersVisible();
-    if ((showRulers == true) && !configGroup.hasDefault("ShowRulers"))
-        configGroup.revertToDefault("ShowRulers");
-    else
+//    if ((showRulers == true) && !configGroup.hasDefault("ShowRulers"))
+//        configGroup.revertToDefault("ShowRulers");
+//    else
         configGroup.writeEntry("ShowRulers", showRulers);
 }
 
