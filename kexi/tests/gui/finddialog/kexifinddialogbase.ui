@@ -312,9 +312,9 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
+    <includehint>QLineEdit</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
+    <includehint>QLineEdit</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>

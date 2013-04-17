@@ -28,7 +28,7 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <knuminput.h>
 #include <kpassworddialog.h>
 #include <kurlrequester.h>

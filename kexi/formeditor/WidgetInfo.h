@@ -88,7 +88,7 @@ public:
      If this name is found when loading a .ui file, the className() will be used instead.
      It allows to support both KDE and Qt versions of widget, without duplicating code.
      As a rule, className() should always return a class name which is inherited from
-     alternate class. For example KLineEdit class has alternate QLineEdit class.
+     alternate class. For example QLineEdit class has alternate QLineEdit class.
 
      \a override parameter overrides class name of a widget,
      even if it was implemented in other factory.
@@ -97,7 +97,7 @@ public:
      (no matter in which factory).
      By forced overriding existing class with other - custom, user
      will be able to see more or less properties and experience different behaviour.
-     For example, in Kexi application, KLineEdit class contains additional
+     For example, in Kexi application, QLineEdit class contains additional
      "datasource" property for binding to database sources.
     */
     void addAlternateClassName(const QByteArray& alternateName, bool override = false);

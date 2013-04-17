@@ -27,7 +27,7 @@
  It is a replacement QTimeEdit due to usability problems:
  people are accustomed to use single-character cursor.
  Time format is retrieved from the KDE global settings
- and input/output is performed using KLineEdit (from KexiInputTableEdit).
+ and input/output is performed using QLineEdit (from KexiInputTableEdit).
 */
 class KexiTimeTableEdit : public KexiInputTableEdit
 {

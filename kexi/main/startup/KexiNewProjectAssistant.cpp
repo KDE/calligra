@@ -50,7 +50,7 @@
 #include <kconfig.h>
 #include <kurlcombobox.h>
 #include <kmessagebox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kurlcombobox.h>
 #include <ktitlewidget.h>
 #include <kcategorydrawer.h>

@@ -31,7 +31,7 @@
 #include <QLabel>
 
 #include <kconfig.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kpagedialog.h>
 #include <ksharedconfig.h>
 #include <kvbox.h>

@@ -24,7 +24,7 @@
 #include "kpttaskdescriptiondialog.h"
 
 #include <kmessagebox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <ktextedit.h>
 #include <kcombobox.h>
 #include <kdatetimewidget.h>

@@ -35,7 +35,7 @@
 class QPixmap;
 class K3IconView;
 class KIconButton;
-class KLineEdit;
+class QLineEdit;
 class QDomNode;
 
 typedef QMap<QString, QPair<QString, int> > PixmapMap;
@@ -151,7 +151,7 @@ protected slots:
     void setIcon(const QString &);
 
 private:
-    KLineEdit *m_nameInput;
+    QLineEdit *m_nameInput;
     KIconButton *m_button;
 };
 

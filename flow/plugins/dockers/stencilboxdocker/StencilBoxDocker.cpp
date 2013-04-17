@@ -43,7 +43,7 @@
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 
@@ -115,7 +115,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_button->setMenu(m_menu);
     m_button->setPopupMode(QToolButton::InstantPopup);
 
-    m_filterLineEdit = new KLineEdit;
+    m_filterLineEdit = new QLineEdit;
 #if QT_VERSION >= 0x040700
     m_filterLineEdit->setPlaceholderText(i18n("Filter"));
 #endif
@@ -209,7 +209,7 @@ void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 
 void StencilBoxDocker::reapplyFilter()
 {
-    QRegExp regExp(m_filterLineEdit->originalText(), Qt::CaseInsensitive, QRegExp::RegExp2);
+    QRegExp regExp(m_filterLineEdit->text(), Qt::CaseInsensitive, QRegExp::RegExp2);
     m_treeWidget->setFilter(regExp);
 }
 

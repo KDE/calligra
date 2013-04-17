@@ -139,7 +139,7 @@
   </tabstops>
   <includes>
     <include location="local" >kurlrequester.h</include>
-    <include location="local" >klineedit.h</include>
+    <include location="local" >QLineEdit</include>
     <include location="local" >kpushbutton.h</include>
   </includes>
   <connections>

@@ -29,7 +29,7 @@
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 
 #include "Cell.h"
 #include "Localization.h"

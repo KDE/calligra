@@ -30,7 +30,7 @@
 #include <kcomponentdata.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kmessagebox.h>
 #include <ktextedit.h>
 

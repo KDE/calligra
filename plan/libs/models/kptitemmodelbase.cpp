@@ -40,7 +40,7 @@
 #include <QStylePainter>
 
 #include <kcombobox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 
 
 namespace KPlato
@@ -597,7 +597,7 @@ MoneyDelegate::MoneyDelegate( QObject *parent )
 
 QWidget *MoneyDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
 {
-    KLineEdit *editor = new KLineEdit(parent);
+    QLineEdit *editor = new QLineEdit(parent);
     //TODO: validator
     editor->installEventFilter(const_cast<MoneyDelegate*>(this));
     return editor;
@@ -606,14 +606,14 @@ QWidget *MoneyDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem
 void MoneyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     QString value = index.model()->data(index, Qt::EditRole).toString();
-    KLineEdit *e = static_cast<KLineEdit*>(editor);
+    QLineEdit *e = static_cast<QLineEdit*>(editor);
     e->setText( value );
 }
 
 void MoneyDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                 const QModelIndex &index) const
 {
-    KLineEdit *e = static_cast<KLineEdit*>(editor);
+    QLineEdit *e = static_cast<QLineEdit*>(editor);
     model->setData( index, e->text(), Qt::EditRole );
 }
 

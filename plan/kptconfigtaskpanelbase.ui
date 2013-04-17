@@ -52,7 +52,7 @@ This is not limited to persons available in a resource group but can be anyone. 
           </widget>
          </item>
          <item>
-          <widget class="KLineEdit" name="kcfg_Leader">
+          <widget class="QLineEdit" name="kcfg_Leader">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -484,9 +484,9 @@ This is not limited to persons available in a resource group but can be anyone. 
    <header>krichtextedit.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -537,7 +537,7 @@ This is not limited to persons available in a resource group but can be anyone. 
   <tabstop>kcfg_Description</tabstop>
  </tabstops>
  <includes>
-  <include location="local">klineedit.h</include>
+  <include location="local">QLineEdit</include>
   <include location="local">kcombobox.h</include>
   <include location="local">kdatewidget.h</include>
   <include location="local">ktextedit.h</include>

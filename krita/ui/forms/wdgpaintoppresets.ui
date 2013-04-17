@@ -23,7 +23,7 @@
    <item>
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1,0" columnminimumwidth="0,0,0">
      <item row="0" column="0">
-      <widget class="KLineEdit" name="searchBar">
+      <widget class="QLineEdit" name="searchBar">
        <property name="clickMessage">
         <string>Search Preset</string>
        </property>
@@ -71,9 +71,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
   </customwidget>
   <customwidget>
    <class>KisPresetChooser</class>

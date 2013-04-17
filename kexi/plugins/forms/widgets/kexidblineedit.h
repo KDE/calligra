@@ -24,7 +24,7 @@
 #include <QValidator>
 #include <QEvent>
 #include <QPaintEvent>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <QValidator>
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
@@ -41,7 +41,7 @@ class KexiDBLineEditStyle;
 /*! Handles many data types. User input is validated by using validators
  and/or input masks.
 */
-class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public KLineEdit,
+class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public QLineEdit,
                                             protected KexiDBTextWidgetInterface,
                                             public KexiFormDataItemInterface,
                                             public KexiSubwidgetInterface,
@@ -108,7 +108,7 @@ public:
     virtual bool keyPressed(QKeyEvent *ke);
 
     //! Used when read only flag is true
-    QString originalText() const { return m_originalText; }
+    QString text() const { return m_text; }
 
     //! Used when read only flag is true
     int originalCursorPosition() const;
@@ -172,14 +172,14 @@ protected:
     //! Used for extending context menu
     KexiDBWidgetContextMenuExtender m_menuExtender;
 
-    //! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly
+    //! Used in isReadOnly, as sometimes we want to have the flag set tot true when QLineEdit::isReadOnly
     //! is still false.
     bool m_internalReadOnly;
 
     //! Used in slotTextChanged()
     bool m_slotTextChanged_enabled;
 
-    QString m_originalText;
+    QString m_text;
     int m_cursorPosition;
     QPalette m_originalPalette; //!< Used for read-only case
     bool m_paletteChangeEvent_enabled;

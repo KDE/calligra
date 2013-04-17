@@ -38,7 +38,7 @@ class QHBoxLayout;
 class QVBoxLayout;
 class QGroupBox;
 class KComboBox;
-class KLineEdit;
+class QLineEdit;
 class KPushButton;
 class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;

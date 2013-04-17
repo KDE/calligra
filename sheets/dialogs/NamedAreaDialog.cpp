@@ -37,7 +37,7 @@
 // KDE
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <QListWidget>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
@@ -244,7 +244,7 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     textLabel4->setText(i18n("Cells:"));
     gridLayout->addWidget(textLabel4, 2, 0);
 
-    m_cellRange = new KLineEdit(page);
+    m_cellRange = new QLineEdit(page);
     gridLayout->addWidget(m_cellRange, 2, 1);
 
     QLabel * textLabel1 = new QLabel(page);
@@ -258,7 +258,7 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     textLabel2->setText(i18n("Area name:"));
     gridLayout->addWidget(textLabel2, 0, 0);
 
-    m_areaNameEdit = new KLineEdit(page);
+    m_areaNameEdit = new QLineEdit(page);
     gridLayout->addWidget(m_areaNameEdit, 0, 1);
 
     const QList<Sheet*> sheetList = m_selection->activeSheet()->map()->sheetList();

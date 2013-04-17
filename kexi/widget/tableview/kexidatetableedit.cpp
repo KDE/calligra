@@ -40,7 +40,7 @@
 #include <kglobal.h>
 #include <kdatepicker.h>
 #include <kdatetable.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <QMenu>
 #include <kdatewidget.h>
 

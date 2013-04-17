@@ -38,7 +38,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 
 
 #ifdef GHNS
@@ -68,7 +68,7 @@ public:
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
-    KLineEdit *tagSearchLineEdit, *tagOpLineEdit;
+    QLineEdit *tagSearchLineEdit, *tagOpLineEdit;
     QString knsrcFile;
     QCompleter *tagCompleter;
     QScrollArea *previewScroller;
@@ -108,7 +108,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
 
-    d->tagSearchLineEdit = new KLineEdit(this);
+    d->tagSearchLineEdit = new QLineEdit(this);
     d->tagSearchLineEdit->setClearButtonShown(true);
     d->tagSearchLineEdit->setClickMessage("Enter search tag here");
     d->tagSearchLineEdit->setEnabled( true );
@@ -161,7 +161,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->setSpacing( 0 );
     buttonLayout->setMargin( 0 );
 
-    d->tagOpLineEdit = new KLineEdit( this );
+    d->tagOpLineEdit = new QLineEdit( this );
     d->tagOpLineEdit->setClickMessage("Add / Remove Tag");
     d->tagOpLineEdit->setEnabled( false );
     d->tagOpLineEdit->hide();

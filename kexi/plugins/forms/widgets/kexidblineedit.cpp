@@ -47,7 +47,7 @@ public:
     }
     ~KexiDBLineEdit_ReadOnlyValidator() {}
     virtual State validate(QString &input, int &pos) const {
-        input = qobject_cast<KexiDBLineEdit*>(parent())->originalText();
+        input = qobject_cast<KexiDBLineEdit*>(parent())->text();
         pos = qobject_cast<KexiDBLineEdit*>(parent())->originalCursorPosition();
         return Intermediate;
     }
@@ -92,7 +92,7 @@ public:
 //-----
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
-        : KLineEdit(parent)
+        : QLineEdit(parent)
         , KexiDBTextWidgetInterface()
         , KexiFormDataItemInterface()
         , m_readWriteValidator(0)
@@ -116,7 +116,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     m_internalStyle = new KexiDBLineEditStyle(style());
     m_internalStyle->setParent(this);
     m_internalStyle->setIndent(KexiFormUtils::dataSourceTagIcon().width());
-    m_inStyleChangeEvent = true; // do not allow KLineEdit::event() to touch the style
+    m_inStyleChangeEvent = true; // do not allow QLineEdit::event() to touch the style
     setStyle(m_internalStyle);
     m_inStyleChangeEvent = false;
     KexiDataItemInterface::setLengthExceededEmittedAtPreviousChange(false);
@@ -135,7 +135,7 @@ void FormWidgetInterface::setDesignMode(bool design)
 
 void KexiDBLineEdit::setInvalidState(const QString& displayText)
 {
-    KLineEdit::setReadOnly(true);
+    QLineEdit::setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
     if (focusPolicy() & Qt::TabFocus)
         setFocusPolicy(Qt::ClickFocus);
@@ -146,9 +146,9 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
     m_slotTextChanged_enabled = false;
     bool lengthExceeded;
-    m_originalText = m_textFormatter.toString(
+    m_text = m_textFormatter.toString(
                 removeOld ? QVariant() : KexiDataItemInterface::originalValue(), add.toString(), &lengthExceeded);
-    setText(m_originalText);
+    setText(m_text);
     setCursorPosition(0); //ok?
     emitLengthExceededIfNeeded(lengthExceeded);
     m_slotTextChanged_enabled = true;
@@ -187,7 +187,7 @@ bool KexiDBLineEdit::fixup()
 void KexiDBLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
 {
     Q_UNUSED(oldPos);
-    if (m_originalText == text()) {
+    if (m_text == text()) {
         // when cursor was moved without altering the text, remember its position,
         // otherwise the change will be reverted by the validator
         m_cursorPosition = newPos;
@@ -234,7 +234,7 @@ void KexiDBLineEdit::changeEvent(QEvent *e)
         m_originalPalette = palette();
         updatePalette();
     }
-    KLineEdit::changeEvent(e);
+    QLineEdit::changeEvent(e);
 }
 
 void KexiDBLineEdit::setReadOnly(bool readOnly)
@@ -290,7 +290,7 @@ bool KexiDBLineEdit::cursorAtEnd()
 void KexiDBLineEdit::clear()
 {
     if (!m_internalReadOnly)
-        KLineEdit::clear();
+        QLineEdit::clear();
 }
 
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
@@ -326,7 +326,7 @@ void KexiDBLineEdit::paint( QPainter *p )
 
 void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 {
-    KLineEdit::paintEvent(pe);
+    QLineEdit::paintEvent(pe);
     KFormDesigner::FormWidgetInterface *formWidget = dynamic_cast<KFormDesigner::FormWidgetInterface*>(this);
     if (formWidget->designMode()) {
         KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(this);
@@ -367,11 +367,11 @@ bool KexiDBLineEdit::event(QEvent * e)
         if (m_inStyleChangeEvent) {
             return true;
         }
-        // let the KLineEdit set its KLineEditStyle
-        if (!KLineEdit::event(e)) {
+        // let the QLineEdit set its QLineEditStyle
+        if (!QLineEdit::event(e)) {
             return false;
         }
-        // move the KLineEditStyle inside our internal style as parent
+        // move the QLineEditStyle inside our internal style as parent
         m_internalStyle->setParent(style());
         m_inStyleChangeEvent = true; // avoid recursion
         setStyle(m_internalStyle);
@@ -379,7 +379,7 @@ bool KexiDBLineEdit::event(QEvent * e)
         return true;
     }
 
-    const bool ret = KLineEdit::event(e);
+    const bool ret = QLineEdit::event(e);
     KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
 
     if (e->type() == QEvent::FocusOut) {
@@ -429,17 +429,17 @@ void KexiDBLineEdit::undo()
 
 void KexiDBLineEdit::moveCursorToEnd()
 {
-    KLineEdit::end(false/*!mark*/);
+    QLineEdit::end(false/*!mark*/);
 }
 
 void KexiDBLineEdit::moveCursorToStart()
 {
-    KLineEdit::home(false/*!mark*/);
+    QLineEdit::home(false/*!mark*/);
 }
 
 void KexiDBLineEdit::selectAll()
 {
-    KLineEdit::selectAll();
+    QLineEdit::selectAll();
 }
 
 bool KexiDBLineEdit::keyPressed(QKeyEvent *ke)

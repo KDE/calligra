@@ -330,7 +330,7 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 
         QDomElement vclass = domDoc.createElement("widget");
         baseWidget.appendChild(vclass);
-        vclass.setAttribute("class", "KLineEdit");
+        vclass.setAttribute("class", "QLineEdit");
         QDomElement vNameProperty = domDoc.createElement("property");
         vNameProperty.setAttribute("name", "name");
         QDomElement vType = domDoc.createElement("cstring");

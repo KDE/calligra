@@ -34,7 +34,7 @@
 #include "kexitableview.h"
 #include "kexi.h"
 
-#include <klineedit.h>
+#include <QLineEdit>
 
 //! @internal
 class KexiComboBoxTableEdit::Private
@@ -74,7 +74,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidge
 
     connect(m_lineedit, SIGNAL(textChanged(QString)), this, SLOT(slotLineEditTextChanged(QString)));
 
-// m_lineedit = new KLineEdit(this, "lineedit");
+// m_lineedit = new QLineEdit(this, "lineedit");
 // m_lineedit->setFrame(false);
 // m_lineedit->setFrameStyle( QFrame::Plain | QFrame::Box );
 // m_lineedit->setLineWidth( 1 );

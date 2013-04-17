@@ -22,7 +22,7 @@
 #include <QCheckBox>
 #include <QPushButton>
 
-#include <klineedit.h>
+#include <QLineEdit>
 #include <ktextedit.h>
 #include <kdatewidget.h>
 #include <klocale.h>

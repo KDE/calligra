@@ -41,10 +41,10 @@
 #include <kexidb/fieldvalidator.h>
 
 //! @internal
-class MyLineEdit : public KLineEdit
+class MyLineEdit : public QLineEdit
 {
 public:
-    MyLineEdit(QWidget *parent) : KLineEdit(parent) {}
+    MyLineEdit(QWidget *parent) : QLineEdit(parent) {}
 protected:
     virtual void drawFrame(QPainter * p) {
         p->setPen(QPen(palette().text(), 1.0));
@@ -169,7 +169,7 @@ KexiInputTableEdit::setRestrictedCompletion()
 {
 #if 0 //js TODO
     kDebug();
-// KLineEdit *content = static_cast<KLineEdit*>(m_view);
+// QLineEdit *content = static_cast<QLineEdit*>(m_view);
     if (m_cview->text().isEmpty())
         return;
 

@@ -30,7 +30,7 @@
 #include <QDebug>
 
 #include <klocalizedstring.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
 #include <kaction.h>

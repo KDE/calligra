@@ -42,7 +42,7 @@
 #include <QRubberBand>
 
 #include <kpushbutton.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <QMenu>
 
 class KexiTableEdit;

@@ -51,7 +51,7 @@
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
@@ -171,7 +171,7 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
     label1->setText(i18nc("Name of the style", "Name:"));
     groupBoxLayout->addWidget(label1, 0, 0);
 
-    m_nameEdit = new KLineEdit(groupBox);
+    m_nameEdit = new QLineEdit(groupBox);
     m_nameEdit->setText(m_dlg->styleName);
     groupBoxLayout->addWidget(m_nameEdit, 0, 1);
 
@@ -937,7 +937,7 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
 
     grid->addWidget(box2, 9, 1, 3, 1);
 
-    customFormatEdit = new KLineEdit(grp);
+    customFormatEdit = new QLineEdit(grp);
     grid->addWidget(customFormatEdit, 0, 1);
     customFormatEdit->setHidden(true);
 
@@ -952,7 +952,7 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
 
     grid = new QGridLayout(box);
 
-    postfix = new KLineEdit(box);
+    postfix = new QLineEdit(box);
     postfix->setWhatsThis(i18n("You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format."));
     grid->addWidget(postfix, 2, 1);
     precision = new KIntNumInput(dlg->precision, box, 10);
@@ -962,7 +962,7 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     precision->setWhatsThis(i18n("You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. "));
     grid->addWidget(precision, 1, 1);
 
-    prefix = new KLineEdit(box);
+    prefix = new QLineEdit(box);
     prefix->setWhatsThis(i18n("You can add here a Prefix such as a $ symbol at the start of each cell content in the checked format."));
     grid->addWidget(prefix, 0, 1);
 

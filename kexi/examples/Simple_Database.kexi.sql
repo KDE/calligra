@@ -218,7 +218,7 @@ INSERT INTO "kexi__objectdata" VALUES(4,'<!DOCTYPE UI>
 </widget>
 </widget>
 <includehints>
-<includehint>klineedit.h</includehint>
+<includehint>QLineEdit</includehint>
 </includehints>
 <layoutDefaults spacing="6" margin="11"/>
 <tabstops>
@@ -436,7 +436,7 @@ INSERT INTO "kexi__objectdata" VALUES(65,'<!DOCTYPE UI>
 </widget>
 <includehints>
 <includehint>kpushbutton.h</includehint>
-<includehint>klineedit.h</includehint>
+<includehint>QLineEdit</includehint>
 </includehints>
 <layoutDefaults spacing="6" margin="11"/>
 <tabstops>
@@ -722,7 +722,7 @@ INSERT INTO "kexi__objectdata" VALUES(105,'<!DOCTYPE UI>
 </widget>
 <includehints>
 <includehint>kcombobox.h</includehint>
-<includehint>klineedit.h</includehint>
+<includehint>QLineEdit</includehint>
 </includehints>
 <layoutDefaults spacing="6" margin="11"/>
 <tabstops>

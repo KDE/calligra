@@ -25,7 +25,7 @@
 #include <QPixmap>
 
 #include <kfontdialog.h>
-#include <klineedit.h>
+#include <QLineEdit>
 
 #define showSlider(input) input->setRange(input->minimum(), input->maximum())
 

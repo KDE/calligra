@@ -40,7 +40,7 @@
 #include <klocale.h>
 #include <QMenu>
 #include <kmessagebox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kactioncollection.h>

@@ -25,7 +25,7 @@
 #include "kptproject.h"
 
 #include <kmessagebox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kcombobox.h>
 #include <klocale.h>
 

@@ -29,7 +29,7 @@
 #include "Condition.h"
 
 class KComboBox;
-class KLineEdit;
+class QLineEdit;
 
 namespace Calligra
 {
@@ -52,18 +52,18 @@ public:
 
     KComboBox * m_condition_1;
     KComboBox * m_style_1;
-    KLineEdit * m_firstValue_1;
-    KLineEdit * m_secondValue_1;
+    QLineEdit * m_firstValue_1;
+    QLineEdit * m_secondValue_1;
 
     KComboBox * m_condition_2;
     KComboBox * m_style_2;
-    KLineEdit * m_firstValue_2;
-    KLineEdit * m_secondValue_2;
+    QLineEdit * m_firstValue_2;
+    QLineEdit * m_secondValue_2;
 
     KComboBox * m_condition_3;
     KComboBox * m_style_3;
-    KLineEdit * m_firstValue_3;
-    KLineEdit * m_secondValue_3;
+    QLineEdit * m_firstValue_3;
+    QLineEdit * m_secondValue_3;
 
 public slots:
     void slotTextChanged1(const QString &);
@@ -96,11 +96,11 @@ private:
     void init(Conditional const & tmp, int numCondition);
     Conditional::Type typeOfCondition(KComboBox const * const cb) const;
 
-    bool checkInputData(KLineEdit const * const edit1,
-                        KLineEdit const * const edit2);
+    bool checkInputData(QLineEdit const * const edit1,
+                        QLineEdit const * const edit2);
     bool checkInputData();
     bool getCondition(Conditional & newCondition, const KComboBox * cb,
-                      const KLineEdit * edit1, const KLineEdit * edit2,
+                      const QLineEdit * edit1, const QLineEdit * edit2,
                       const KComboBox * sb);
 
 };

@@ -39,7 +39,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 #include <knotification.h>
 #include <kdeversion.h>
@@ -208,7 +208,7 @@ void KDatePicker::init( const QDate &dt )
 
   d->navigationLayout->addStretch();
 
-  d->line = new KLineEdit(this);
+  d->line = new QLineEdit(this);
   d->val = new KDateValidator(this);
 
   Frame *f = new Frame( this );

@@ -34,7 +34,7 @@
 
 #include <kpluginfactory.h>
 #include <ktextedit.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 #include <kdebug.h>
 

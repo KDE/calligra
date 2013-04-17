@@ -20,7 +20,7 @@
 */
 
 #include "kexidbdatepicker.h"
-#include "klineedit.h"
+#include "QLineEdit"
 #include <QInputMethodEvent>
 
 KexiDBDatePicker::KexiDBDatePicker(QWidget *parent)
@@ -98,13 +98,13 @@ QWidget* KexiDBDatePicker::widget()
 
 bool KexiDBDatePicker::cursorAtStart()
 {
-    const KLineEdit *lineEdit=findChild<KLineEdit*>();
+    const QLineEdit *lineEdit=findChild<QLineEdit*>();
     return lineEdit && lineEdit->hasFocus() && lineEdit->cursorPosition() == 0;
 }
 
 bool KexiDBDatePicker::cursorAtEnd()
 {
-    const KLineEdit *lineEdit=findChild<KLineEdit*>();
+    const QLineEdit *lineEdit=findChild<QLineEdit*>();
     return lineEdit && lineEdit->hasFocus() && lineEdit->cursorPosition() == lineEdit->text().length();
 }
 

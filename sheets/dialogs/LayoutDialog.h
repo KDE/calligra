@@ -56,7 +56,7 @@ class QRadioButton;
 class QPushButton;
 class QLabel;
 class QWidget;
-class KLineEdit;
+class QLineEdit;
 class QFrame;
 class QListWidget;
 class QCheckBox;
@@ -175,7 +175,7 @@ protected slots:
 private:
     CellFormatDialog * m_dlg;
     KComboBox     * m_parentBox;
-    KLineEdit     * m_nameEdit;
+    QLineEdit     * m_nameEdit;
     QLabel        * m_nameStatus;
     QLabel        * m_parentStatus;
 
@@ -249,9 +249,9 @@ public slots:
     void formatChanged(int);
     void currencyChanged(const QString &);
 protected:
-    KLineEdit* postfix;
+    QLineEdit* postfix;
     KIntNumInput* precision;
-    KLineEdit* prefix;
+    QLineEdit* prefix;
     KComboBox *format;
     KComboBox *currency;
     QLabel    *currencyLabel;
@@ -267,7 +267,7 @@ protected:
     QRadioButton *textFormat;
     QRadioButton *customFormat;
     QListWidget  *listFormat;
-    KLineEdit* customFormatEdit;
+    QLineEdit* customFormatEdit;
     QLabel *exampleLabel;
     CellFormatDialog *dlg;
     Format::Type cellFormatType, newFormatType;

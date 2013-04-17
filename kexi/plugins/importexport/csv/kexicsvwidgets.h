@@ -22,7 +22,7 @@
 
 #include <kcombobox.h>
 
-class KLineEdit;
+class QLineEdit;
 class QLabel;
 class QFrame;
 

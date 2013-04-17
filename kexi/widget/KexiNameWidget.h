@@ -23,7 +23,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
-#include <klineedit.h>
+#include <QLineEdit>
 
 #include <kexi_export.h>
 
@@ -49,8 +49,8 @@ public:
 
     QLabel* captionLabel() const;
     QLabel* nameLabel() const;
-    KLineEdit* captionLineEdit() const;
-    KLineEdit* nameLineEdit() const;
+    QLineEdit* captionLineEdit() const;
+    QLineEdit* nameLineEdit() const;
 
     QString messageText() const;
     void setMessageText(const QString& msg);

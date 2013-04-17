@@ -53,7 +53,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="KLineEdit" name="m_sourceRange"/>
+    <widget class="QLineEdit" name="m_sourceRange"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_3">
@@ -100,9 +100,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>

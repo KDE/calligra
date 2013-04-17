@@ -55,7 +55,7 @@ public:
     QVBoxLayout *layout;
     QComboBox *sourceType;
     QComboBox *internalSource;
-    KLineEdit *externalSource;
+    QLineEdit *externalSource;
     KPushButton *setData;
 
     KexiDBReportData *kexiDBData;
@@ -81,7 +81,7 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
     d->layout = new QVBoxLayout(this);
     d->sourceType = new QComboBox(this);
     d->internalSource = new InternalSourceSelector(this, conn);
-    d->externalSource = new KLineEdit(this);
+    d->externalSource = new QLineEdit(this);
     d->setData = new KPushButton(i18n("Set Data"));
 
     connect(d->setData, SIGNAL(clicked()), this, SLOT(setDataClicked()));

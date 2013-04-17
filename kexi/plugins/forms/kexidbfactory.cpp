@@ -113,10 +113,10 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setIconName(koIconName("lineedit"));
         wi->setClassName("KexiDBLineEdit");
         wi->setParentFactoryName("stdwidgets");
-        wi->setInheritedClassName("KLineEdit");
+        wi->setInheritedClassName("QLineEdit");
         wi->addAlternateClassName("QLineEdit", true/*override*/);
-        wi->addAlternateClassName("KLineEdit", true/*override*/);
-        wi->setIncludeFileName("klineedit.h");
+        wi->addAlternateClassName("QLineEdit", true/*override*/);
+        wi->setIncludeFileName("QLineEdit");
         wi->setName(i18n("Text Box"));
         wi->setNamePrefix(
             i18nc("Widget name. This string will be used to name widgets of this class. "
@@ -506,7 +506,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::startInlineEditing() should be called
 
-        KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
+        QLineEdit *lineedit = static_cast<QLineEdit*>(args.widget);
         args.text = lineedit->text();
         args.alignment = lineedit->alignment();
         args.useFrame = true;

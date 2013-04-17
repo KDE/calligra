@@ -184,7 +184,7 @@ The default font is set for all cells in the Format -> Style Manager menu with t
      </property>
      <layout class="QHBoxLayout" >
       <item>
-       <widget class="KLineEdit" name="example_label" >
+       <widget class="QLineEdit" name="example_label" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="MinimumExpanding" hsizetype="Expanding" >
           <horstretch>0</horstretch>
@@ -216,9 +216,9 @@ The default font is set for all cells in the Format -> Style Manager menu with t
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
   </customwidget>
  </customwidgets>
  <tabstops>

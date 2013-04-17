@@ -26,7 +26,7 @@
 class KoFilterEffect;
 class KDoubleNumInput;
 class KComboBox;
-class KLineEdit;
+class QLineEdit;
 class QStackedWidget;
 
 class ComponentTransferEffectConfigWidget : public KoFilterEffectConfigWidgetBase
@@ -54,8 +54,8 @@ private:
     ComponentTransferEffect * m_effect;
     KComboBox * m_function;
     QStackedWidget * m_stack;
-    KLineEdit * m_tableValues;
-    KLineEdit * m_discreteValues;
+    QLineEdit * m_tableValues;
+    QLineEdit * m_discreteValues;
     KDoubleNumInput * m_slope;
     KDoubleNumInput * m_intercept;
     KDoubleNumInput * m_amplitude;

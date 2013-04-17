@@ -123,7 +123,7 @@
        </widget>
       </item>
       <item row="2" column="2" colspan="5" >
-       <widget class="KLineEdit" name="hostEdit" />
+       <widget class="QLineEdit" name="hostEdit" />
       </item>
       <item row="1" column="0" colspan="3" >
        <widget class="QRadioButton" name="localhostRBtn" >
@@ -245,7 +245,7 @@
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="KLineEdit" name="userEdit" />
+       <widget class="QLineEdit" name="userEdit" />
       </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="passwordLbl" >
@@ -261,7 +261,7 @@
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="KLineEdit" name="passwordEdit" >
+       <widget class="QLineEdit" name="passwordEdit" >
         <property name="echoMode" >
          <enum>QLineEdit::Password</enum>
         </property>
@@ -303,7 +303,7 @@
        </widget>
       </item>
       <item row="1" column="1" colspan="2" >
-       <widget class="KLineEdit" name="titleEdit" />
+       <widget class="QLineEdit" name="titleEdit" />
       </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="titleLabel" >
@@ -428,9 +428,9 @@
    <header>knuminput.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>
@@ -454,10 +454,10 @@
  </tabstops>
  <includes>
   <include location="local" >knuminput.h</include>
-  <include location="local" >klineedit.h</include>
+  <include location="local" >QLineEdit</include>
   <include location="local" >kpushbutton.h</include>
   <include location="local" >kcombobox.h</include>
-  <include location="local" >klineedit.h</include>
+  <include location="local" >QLineEdit</include>
  </includes>
  <resources/>
  <connections/>

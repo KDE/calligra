@@ -69,7 +69,7 @@
       </widget>
      </item>
      <item row="1" column="1" colspan="2">
-      <widget class="KLineEdit" name="namefield">
+      <widget class="QLineEdit" name="namefield">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -101,7 +101,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KLineEdit" name="leaderfield">
+      <widget class="QLineEdit" name="leaderfield">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -199,9 +199,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -215,9 +215,9 @@
   <tabstop>endTime</tabstop>
  </tabstops>
  <includes>
-  <include location="local">klineedit.h</include>
-  <include location="local">klineedit.h</include>
-  <include location="local">klineedit.h</include>
+  <include location="local">QLineEdit</include>
+  <include location="local">QLineEdit</include>
+  <include location="local">QLineEdit</include>
   <include location="local">kdatewidget.h</include>
   <include location="local">kdatewidget.h</include>
   <include location="local">ktextedit.h</include>

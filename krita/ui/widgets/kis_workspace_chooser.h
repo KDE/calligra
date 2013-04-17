@@ -23,7 +23,7 @@
 
 #include <QWidget>
 
-class KLineEdit;
+class QLineEdit;
 class KoResourceItemChooser;
 class KisView2;
 class KoResource;
@@ -42,7 +42,7 @@ private slots:
 private:
     KoResourceItemChooser * m_itemChooser;
     KisView2* m_view;
-    KLineEdit* m_nameEdit;
+    QLineEdit* m_nameEdit;
 };
 
 #endif // KIS_WORKSPACE_CHOOSER_H

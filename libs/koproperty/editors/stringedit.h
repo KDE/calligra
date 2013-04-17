@@ -25,12 +25,12 @@
 #include "koproperty/Factory.h"
 
 #include <QVariant>
-#include <klineedit.h>
+#include <QLineEdit>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT StringEdit : public KLineEdit
+class KOPROPERTY_EXPORT StringEdit : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)

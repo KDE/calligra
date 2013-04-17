@@ -31,7 +31,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <klineedit.h>
+#include <QLineEdit>
 
 #include <KoIcon.h>
 #include <KoResourceItemChooser.h>

@@ -27,7 +27,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 
 #include <KoIcon.h>
 

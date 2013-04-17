@@ -20,7 +20,7 @@
 
 #include <kdialog.h>
 
-class KLineEdit;
+class QLineEdit;
 
 class KisFilter;
 class KisFilterConfiguration;
@@ -73,7 +73,7 @@ private:
     KisFilter *m_currentFilter;
     KisFilterConfiguration *m_currentConfiguration;
     KisAdjustmentLayer *m_layer;
-    KLineEdit *m_layerName;
+    QLineEdit *m_layerName;
     KisNodeFilterInterface *m_nodeFilterInterface;
 };
 

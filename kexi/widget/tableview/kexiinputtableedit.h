@@ -21,7 +21,7 @@
 #ifndef KEXIINPUTTABLEEDIT_H
 #define KEXIINPUTTABLEEDIT_H
 
-#include <klineedit.h>
+#include <QLineEdit>
 #include <QVariant>
 #include <QPaintEvent>
 
@@ -111,7 +111,7 @@ protected:
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
     QString m_decsym; //! decimal symbol
-    KLineEdit *m_lineedit;
+    QLineEdit *m_lineedit;
 
 signals:
     void hintClicked();

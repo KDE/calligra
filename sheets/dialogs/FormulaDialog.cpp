@@ -56,7 +56,7 @@
 #include <QEvent>
 #include <QLabel>
 #include <QPushButton>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <QLayout>
 #include <QStringListModel>
 #include <QSortFilterProxyModel>
@@ -91,7 +91,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     QGridLayout *grid1 = new QGridLayout(page);
 
-    searchFunct = new KLineEdit(page);
+    searchFunct = new QLineEdit(page);
     searchFunct->setClearButtonShown(true);
     searchFunct->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
@@ -134,7 +134,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     selectFunction->setIcon(koIcon("go-down"));
     grid1->addWidget(selectFunction, 3, 0);
 
-    result = new KLineEdit(page);
+    result = new QLineEdit(page);
     grid1->addWidget(result, 4, 0, 1, -1);
 
     m_tabwidget = new KTabWidget(page);
@@ -156,31 +156,31 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     label1 = new QLabel(m_input);
     grid2->addWidget(label1);
 
-    firstElement = new KLineEdit(m_input);
+    firstElement = new QLineEdit(m_input);
     grid2->addWidget(firstElement);
 
     label2 = new QLabel(m_input);
     grid2->addWidget(label2);
 
-    secondElement = new KLineEdit(m_input);
+    secondElement = new QLineEdit(m_input);
     grid2->addWidget(secondElement);
 
     label3 = new QLabel(m_input);
     grid2->addWidget(label3);
 
-    thirdElement = new KLineEdit(m_input);
+    thirdElement = new QLineEdit(m_input);
     grid2->addWidget(thirdElement);
 
     label4 = new QLabel(m_input);
     grid2->addWidget(label4);
 
-    fourElement = new KLineEdit(m_input);
+    fourElement = new QLineEdit(m_input);
     grid2->addWidget(fourElement);
 
     label5 = new QLabel(m_input);
     grid2->addWidget(label5);
 
-    fiveElement = new KLineEdit(m_input);
+    fiveElement = new QLineEdit(m_input);
     grid2->addWidget(fiveElement);
 
     grid2->addStretch(10);
@@ -529,7 +529,7 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
     return text;
 }
 
-static void showEntry(KLineEdit* edit, QLabel* label,
+static void showEntry(QLineEdit* edit, QLabel* label,
                       FunctionDescription* desc, int param)
 {
     edit->show();
@@ -579,7 +579,7 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     m_tabwidget->setCurrentIndex(1);
 
     //
-    // Show as many KLineEdits as needed.
+    // Show as many QLineEdits as needed.
     //
     if (m_desc->params() > 0) {
         m_focus = firstElement;
@@ -644,7 +644,7 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     }
 
     //
-    // Put focus somewhere is there are no KLineEdits visible
+    // Put focus somewhere is there are no QLineEdits visible
     //
     if (m_desc->params() == 0) {
         label1->show();

@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QGridLayout>
 
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kmessagebox.h>
 #include <klocale.h>
 
@@ -41,8 +41,8 @@ public:
     QLabel* lbl_message;
     QLabel* lbl_caption;
     QLabel* lbl_name;
-    KLineEdit* le_caption;
-    KLineEdit* le_name;
+    QLineEdit* le_caption;
+    QLineEdit* le_name;
     QGridLayout* lyr;
     KexiUtils::MultiValidator *validator;
     QString nameWarning, captionWarning;
@@ -105,7 +105,7 @@ void KexiNameWidget::init(
     d->lbl_name->setObjectName("lbl_name");
     d->lyr->addWidget(d->lbl_name, 2, 0);
 
-    d->le_caption = new KLineEdit(this);
+    d->le_caption = new QLineEdit(this);
     d->le_caption->setObjectName("le_caption");
     setCaptionText(nameText);
     QSizePolicy le_captionSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -113,7 +113,7 @@ void KexiNameWidget::init(
     d->le_caption->setSizePolicy(le_captionSizePolicy);
     d->lyr->addWidget(d->le_caption, 1, 1);
 
-    d->le_name = new KLineEdit(this);
+    d->le_name = new QLineEdit(this);
     d->le_name->setObjectName("le_name");
     setNameText(nameText);
     QSizePolicy le_nameSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -155,12 +155,12 @@ QLabel* KexiNameWidget::nameLabel() const
     return d->lbl_name;
 }
 
-KLineEdit* KexiNameWidget::captionLineEdit() const
+QLineEdit* KexiNameWidget::captionLineEdit() const
 {
     return d->le_caption;
 }
 
-KLineEdit* KexiNameWidget::nameLineEdit() const
+QLineEdit* KexiNameWidget::nameLineEdit() const
 {
     return d->le_name;
 }

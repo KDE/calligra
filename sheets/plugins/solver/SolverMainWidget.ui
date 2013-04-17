@@ -62,7 +62,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
        </widget>
       </item>
       <item>
-       <widget class="KLineEdit" name="value" />
+       <widget class="QLineEdit" name="value" />
       </item>
      </layout>
     </widget>
@@ -106,9 +106,9 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    <header>RegionSelector.h</header>
   </customwidget>
     <customwidget>
-      <class>KLineEdit</class>
+      <class>QLineEdit</class>
       <extends>QLineEdit</extends>
-      <header>klineedit.h</header>
+      <header>QLineEdit</header>
       <container>0</container>
       <pixmap></pixmap>
     </customwidget>

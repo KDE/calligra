@@ -810,7 +810,7 @@ protected:
     void handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value);
 
 //moved from WidgetFactory
-    /*! This function creates a KLineEdit to input some text and edit a widget's contents. */
+    /*! This function creates a QLineEdit to input some text and edit a widget's contents. */
     void createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args);
 
 // moved from WidgetFactory::editorText()

@@ -37,7 +37,7 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -64,11 +64,11 @@ ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::
     m_condition_3 = new KComboBox(groupBox1_3);
     groupBox1_3Layout->addWidget(m_condition_3, 0, 1);
 
-    m_firstValue_3 = new KLineEdit(groupBox1_3);
+    m_firstValue_3 = new QLineEdit(groupBox1_3);
     m_firstValue_3->setEnabled(false);
     groupBox1_3Layout->addWidget(m_firstValue_3, 0, 2);
 
-    m_secondValue_3 = new KLineEdit(groupBox1_3);
+    m_secondValue_3 = new QLineEdit(groupBox1_3);
     m_secondValue_3->setEnabled(false);
     groupBox1_3Layout->addWidget(m_secondValue_3, 0, 3);
 
@@ -104,12 +104,12 @@ ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::
     m_style_2->setEnabled(false);
     groupBox1_2Layout->addWidget(m_style_2, 1, 1);
 
-    m_firstValue_2 = new KLineEdit(groupBox1_2);
+    m_firstValue_2 = new QLineEdit(groupBox1_2);
 
     m_firstValue_2->setEnabled(false);
     groupBox1_2Layout->addWidget(m_firstValue_2, 0, 2);
 
-    m_secondValue_2 = new KLineEdit(groupBox1_2);
+    m_secondValue_2 = new QLineEdit(groupBox1_2);
     m_secondValue_2->setEnabled(false);
 
     groupBox1_2Layout->addWidget(m_secondValue_2, 0, 3);
@@ -138,11 +138,11 @@ ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::
     m_style_1->setEnabled(false);
     groupBox1_1Layout->addWidget(m_style_1, 1, 1);
 
-    m_firstValue_1 = new KLineEdit(groupBox1_1);
+    m_firstValue_1 = new QLineEdit(groupBox1_1);
     m_firstValue_1->setEnabled(false);
     groupBox1_1Layout->addWidget(m_firstValue_1, 0, 2);
 
-    m_secondValue_1 = new KLineEdit(groupBox1_1);
+    m_secondValue_1 = new QLineEdit(groupBox1_1);
     m_secondValue_1->setEnabled(false);
     groupBox1_1Layout->addWidget(m_secondValue_1, 0, 3);
 
@@ -340,8 +340,8 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
     kDebug() << "Adding" << numCondition;
     KComboBox * cb  = 0;
     KComboBox * sb  = 0;
-    KLineEdit * kl1 = 0;
-    KLineEdit * kl2 = 0;
+    QLineEdit * kl1 = 0;
+    QLineEdit * kl2 = 0;
     QString value;
     Map *const map = m_selection->activeSheet()->map();
     ValueConverter *const converter = map->converter();
@@ -458,8 +458,8 @@ Conditional::Type ConditionalDialog::typeOfCondition(KComboBox const * const cb)
     return result;
 }
 
-bool ConditionalDialog::checkInputData(KLineEdit const * const edit1,
-                                       KLineEdit const * const edit2)
+bool ConditionalDialog::checkInputData(QLineEdit const * const edit1,
+                                       QLineEdit const * const edit2)
 {
     bool b1 = false;
     bool b2 = false;
@@ -494,7 +494,7 @@ bool ConditionalDialog::checkInputData()
 }
 
 bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox * cb,
-                                     const KLineEdit * edit1, const KLineEdit * edit2,
+                                     const QLineEdit * edit1, const QLineEdit * edit2,
                                      const KComboBox * sb)
 {
     if (!cb->isEnabled())

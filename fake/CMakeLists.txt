@@ -76,7 +76,6 @@ kimageio.h
 kinputdialog.h
 klibloader.h
 klimitediodevice_p.h
-klineedit.h
 klocale.h
 klocalizedstring.h
 kmainwindow.h

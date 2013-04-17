@@ -98,7 +98,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="startupCost"/>
+       <widget class="QLineEdit" name="startupCost"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="textLabel3">
@@ -168,7 +168,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="shutdownCost"/>
+       <widget class="QLineEdit" name="shutdownCost"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="textLabel3_3">
@@ -233,15 +233,15 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local">klineedit.h</include>
-  <include location="local">klineedit.h</include>
+  <include location="local">QLineEdit</include>
+  <include location="local">QLineEdit</include>
  </includes>
  <resources/>
  <connections/>

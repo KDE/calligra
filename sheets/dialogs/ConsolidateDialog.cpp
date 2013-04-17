@@ -41,7 +41,7 @@
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 

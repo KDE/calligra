@@ -42,7 +42,7 @@ class KTextBrowser;
 class QStringListModel;
 class QSortFilterProxyModel;
 class KComboBox;
-class KLineEdit;
+class QLineEdit;
 
 namespace Calligra
 {
@@ -152,9 +152,9 @@ private:
     QListView *functions;
     QStringListModel *functionsModel;
     QSortFilterProxyModel *proxyModel;
-    KLineEdit *result;
+    QLineEdit *result;
 
-    KLineEdit *searchFunct;
+    QLineEdit *searchFunct;
     KCompletion listFunct;
 
     QLabel* label1;
@@ -162,17 +162,17 @@ private:
     QLabel* label3;
     QLabel* label4;
     QLabel* label5;
-    KLineEdit *firstElement;
-    KLineEdit *secondElement;
-    KLineEdit *thirdElement;
-    KLineEdit *fourElement;
-    KLineEdit *fiveElement;
+    QLineEdit *firstElement;
+    QLineEdit *secondElement;
+    QLineEdit *thirdElement;
+    QLineEdit *fourElement;
+    QLineEdit *fiveElement;
     /**
      * Tells which of the lineedits has the logical focus currently.
      * It may happen that a lineedit does not have qt focus but
      * logical focus but not the other way round.
      */
-    KLineEdit* m_focus;
+    QLineEdit* m_focus;
 
     int m_column;
     int m_row;

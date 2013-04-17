@@ -32,7 +32,7 @@
 #include <QStyleOptionFrameV2>
 
 #include <klocale.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kguiitem.h>
 #include <kdebug.h>
 
@@ -63,9 +63,9 @@ public:
     QToolButton *navBtnNext;
     QToolButton *navBtnLast;
     QToolButton *navBtnNew;
-    KLineEdit *navRecordNumber;
+    QLineEdit *navRecordNumber;
     QIntValidator *navRecordNumberValidator;
-    KLineEdit *navRecordCount; //!< readonly counter
+    QLineEdit *navRecordCount; //!< readonly counter
 //    QLabel *navRecordCount; //!< readonly counter
     uint nav1DigitWidth;
     Q3ScrollView *view;
@@ -105,7 +105,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
 
     d->lyr->addSpacing(2);
 
-    d->navRecordNumber = new KLineEdit(this);
+    d->navRecordNumber = new QLineEdit(this);
     d->lyr->addWidget(d->navRecordNumber, 0, Qt::AlignVCenter);
     KexiUtils::WidgetMargins margins;
 //    margins.top = winStyle ? 1 : 0;
@@ -129,7 +129,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
     lbl_of->setAlignment(Qt::AlignCenter);
     d->lyr->addWidget(lbl_of, 0, Qt::AlignVCenter);
 
-    d->navRecordCount = new KLineEdit(this);
+    d->navRecordCount = new QLineEdit(this);
     d->lyr->addWidget(d->navRecordCount, 0, Qt::AlignVCenter);
 //    d->navRecordCount->setTextInteractionFlags(Qt::TextSelectableByMouse);
     d->navRecordCount->setFrame(false);

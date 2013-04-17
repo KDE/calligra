@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 
 #include <KoIcon.h>
 
@@ -98,7 +98,7 @@ public:
     KexiPrjTypeSelector *dstPrjTypeSelector;
 
     KexiConnectionSelectorWidget *srcConn, *dstConn;
-    KLineEdit *dstNewDBNameLineEdit;
+    QLineEdit *dstNewDBNameLineEdit;
     KexiProjectSelectorWidget *srcDBName;
 
     QLabel *lblImportingTxt, *lblImportingErrTxt, *finishLbl;
@@ -373,7 +373,7 @@ void ImportWizard::setupDst()
     //d->dstConn->d->file->spacer7->hide();
 
 
-    //js dstNewDBName = new KLineEdit(dstControls);
+    //js dstNewDBName = new QLineEdit(dstControls);
     //   dstNewDBName->setText(i18n("Enter new database name here"));
 
     d->dstPageItem = new KPageWidgetItem(d->dstPageWidget, i18n("Select Location for Destination Database"));

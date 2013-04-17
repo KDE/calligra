@@ -22,7 +22,7 @@
 
 #include <knuminput.h>
 #include <kcombobox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 
 #include <QGridLayout>
@@ -75,7 +75,7 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     QWidget * tableWidget = new QWidget(m_stack);
     QGridLayout * tableLayout = new QGridLayout(tableWidget);
     tableLayout->addWidget(new QLabel(i18n("Values"), tableWidget), 0, 0);
-    m_tableValues = new KLineEdit(tableWidget);
+    m_tableValues = new QLineEdit(tableWidget);
     tableLayout->addWidget(m_tableValues, 0, 1);
     tableLayout->setContentsMargins(0, 0, 0, 0);
     tableLayout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 0);
@@ -85,7 +85,7 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     QWidget * discreteWidget = new QWidget(m_stack);
     QGridLayout * discreteLayout = new QGridLayout(discreteWidget);
     discreteLayout->addWidget(new QLabel(i18n("Values"), discreteWidget), 0, 0);
-    m_discreteValues = new KLineEdit(discreteWidget);
+    m_discreteValues = new QLineEdit(discreteWidget);
     discreteLayout->addWidget(m_discreteValues, 0, 1);
     discreteLayout->setContentsMargins(0, 0, 0, 0);
     discreteLayout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 0);

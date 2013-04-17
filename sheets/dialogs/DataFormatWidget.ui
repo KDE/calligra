@@ -175,7 +175,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KLineEdit" name="lineEdit_2">
+       <widget class="QLineEdit" name="lineEdit_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -185,7 +185,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="lineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -225,9 +225,9 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>

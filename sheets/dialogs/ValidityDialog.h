@@ -29,7 +29,7 @@
 #include "Validity.h"
 
 class QLabel;
-class KLineEdit;
+class QLineEdit;
 class KTextEdit;
 class KComboBox;
 class QCheckBox;
@@ -63,21 +63,21 @@ protected:
 
     Selection* m_selection;
 
-    KLineEdit *val_max;
-    KLineEdit *val_min;
+    QLineEdit *val_max;
+    QLineEdit *val_min;
     QLabel *edit1;
     QLabel *edit2;
     QLabel *chooseLabel;
     KComboBox *choose;
     KComboBox *chooseAction;
     KComboBox *chooseType;
-    KLineEdit * title;
+    QLineEdit * title;
     KTextEdit *message;
     QCheckBox *displayMessage;
     QCheckBox *allowEmptyCell;
     QCheckBox *displayHelp;
     KTextEdit *messageHelp;
-    KLineEdit *titleHelp;
+    QLineEdit *titleHelp;
     KTextEdit *validityList;
     QLabel *validityLabelList;
 };

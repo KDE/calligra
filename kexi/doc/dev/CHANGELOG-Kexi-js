@@ -1907,7 +1907,7 @@ Forms
 Forms
 * removed possible crashes in the auto-tab-order routine
 Table Designer
-* replace three extra "clear" buttons with the clear icon available within the KLineEdit objects
+* replace three extra "clear" buttons with the clear icon available within the QLineEdit objects
 
 2009-08-29
 Main Window
@@ -1968,7 +1968,7 @@ Forms
 * Set invisible properties in the property editor, but still add them to the set (needed e.g. for "dataSource" property)
 * "Data Source" tab
 ** set object class/name in the header also on form loading
-** use the clear buttons of KLineEdit instead of additional buttons in the form data source and field data source combo boxes
+** use the clear buttons of QLineEdit instead of additional buttons in the form data source and field data source combo boxes
 ** fixed assigning data source for forms and widgets
 Widgets
 * KexiDataSourceComboBox: use object classes like "org.kexi-project.table", not mime types
@@ -2601,7 +2601,7 @@ KoProperty2
 2008-09-23
 KoProperty2
 - 'revert to defaults' works
-- line edit now uses KLineEdit and has clear button enabled
+- line edit now uses QLineEdit and has clear button enabled
 - added tooltip for 'revert to defaults' button
 
 2008-09-11..21
@@ -8640,8 +8640,8 @@ TODO: IMPORTANT: Kaxi must automatically add primary key it is not added by user
 - Control+Delete shortcut added for current record removing
 - fixed removing vertical header item after current record removing
 - KexiTableEdit now uses layout for proper displaying its Editor
-TODO: KexiTableEdit shouldnt have subwidget like KLineEdit but its subclasses should
-	inherit also from given editor widget (eg. from KLineEdit)
+TODO: KexiTableEdit shouldnt have subwidget like QLineEdit but its subclasses should
+	inherit also from given editor widget (eg. from QLineEdit)
 TODO: KexiTableView's vertical header isn't updated after several actions
 - windows now have icons == KexiProjectHandler::itemPixmap()
 - normal size for relations dialog's combobox 

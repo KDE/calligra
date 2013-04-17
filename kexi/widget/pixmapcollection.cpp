@@ -31,7 +31,7 @@
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kcombobox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kicontheme.h>
 #include <QMenu>
 #include <kdebug.h>
@@ -157,7 +157,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
     QLabel *name = new QLabel(i18n("&Name:"), frame);
     l->addWidget(name, 0, 0);
     name->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_nameInput = new KLineEdit("kexi", frame);
+    m_nameInput = new QLineEdit("kexi", frame);
     l->addWidget(m_nameInput, 0, 1);
     name->setBuddy(m_nameInput);
 

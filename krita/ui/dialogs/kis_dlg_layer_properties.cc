@@ -29,7 +29,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <knuminput.h>

@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kmessagebox.h>
 
 #include "Localization.h"
@@ -57,7 +57,7 @@ AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent, Selection* selection)
     QLabel* label = new QLabel(i18n("Enter the area name:"), widget);
     layout->addWidget(label);
 
-    m_areaName = new KLineEdit(widget);
+    m_areaName = new QLineEdit(widget);
     m_areaName->setFocus();
     m_areaName->setMinimumWidth(m_areaName->sizeHint().width()* 3);
     layout->addWidget(m_areaName);

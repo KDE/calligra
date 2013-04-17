@@ -32,7 +32,7 @@ class CollectionItemModel;
 class CollectionTreeWidget;
 class KoShape;
 
-class KLineEdit;
+class QLineEdit;
 
 class QToolButton;
 class QMenu;
@@ -81,7 +81,7 @@ class StencilBoxDocker : public QDockWidget
         CollectionTreeWidget *m_treeWidget;
         QMenu* m_menu;
         QToolButton* m_button;
-        KLineEdit* m_filterLineEdit;
+        QLineEdit* m_filterLineEdit;
         QVBoxLayout* m_layout;
         QHBoxLayout* m_panelLayout;
 

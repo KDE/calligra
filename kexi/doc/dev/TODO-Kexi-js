@@ -923,7 +923,7 @@ Forms:
 - after setting "auto" tab order, we need to close and open the form to get tab stops to work properly
 
 TODO: 
-- use KLineEdit::displayText() to get partially filled date or time values like 20__-__-__;
+- use QLineEdit::displayText() to get partially filled date or time values like 20__-__-__;
   then use this for checking data validity (?)
 
 TODOs from Jeff Denman:
@@ -1072,7 +1072,7 @@ Form/TV Shortcuts:
 
 TODO:
 - fix crashes when table schema referenced by a combo box changes
-- replace QDate{Time}Edit in koproperty with KLineEdit, similar to the one in KexiTableView
+- replace QDate{Time}Edit in koproperty with QLineEdit, similar to the one in KexiTableView
 
 TODO: "Database "z3" created but could not be closed after creation." err. on win32 after creating a pgsql db
 TODO: PqxxMigrate::drv_copyTable():  we've switched from BLOBs to LongText

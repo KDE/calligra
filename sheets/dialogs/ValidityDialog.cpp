@@ -33,7 +33,7 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 #include <ktextedit.h>
@@ -110,7 +110,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     edit1->setText(i18n("Minimum:"));
     tmpGridLayout->addWidget(edit1, 3, 0);
 
-    val_min = new KLineEdit(page1);
+    val_min = new QLineEdit(page1);
     tmpGridLayout->addWidget(val_min, 3, 1);
     val_min->setValidator(new KDoubleValidator(val_min));
 
@@ -118,7 +118,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     edit2->setText(i18n("Maximum:"));
     tmpGridLayout->addWidget(edit2, 4, 0);
 
-    val_max = new KLineEdit(page1);
+    val_max = new QLineEdit(page1);
     tmpGridLayout->addWidget(val_max, 4, 1);
     val_max->setValidator(new KDoubleValidator(val_max));
 
@@ -177,7 +177,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     tmpQLabel->setText(i18nc("Title of message", "Title:"));
     tmpGridLayout->addWidget(tmpQLabel, 2, 0);
 
-    title = new KLineEdit(page2);
+    title = new QLineEdit(page2);
     tmpGridLayout->addWidget(title, 2, 1);
 
     tmpQLabel = new QLabel(page2);
@@ -200,7 +200,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     tmpQLabel->setText(i18nc("Title of message", "Title:"));
     tmpGridLayout->addWidget(tmpQLabel, 1, 0);
 
-    titleHelp = new KLineEdit(page3);
+    titleHelp = new QLineEdit(page3);
     tmpGridLayout->addWidget(titleHelp, 1, 1);
 
     tmpQLabel = new QLabel(page3);

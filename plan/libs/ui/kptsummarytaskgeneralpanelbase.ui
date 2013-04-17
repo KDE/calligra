@@ -53,7 +53,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KLineEdit" name="namefield">
+      <widget class="QLineEdit" name="namefield">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -95,7 +95,7 @@ This is not limited to persons available in a resource group but can be anyone. 
         <number>0</number>
        </property>
        <item>
-        <widget class="KLineEdit" name="leaderfield">
+        <widget class="QLineEdit" name="leaderfield">
          <property name="focusPolicy">
           <enum>Qt::WheelFocus</enum>
          </property>
@@ -151,9 +151,9 @@ This is not limited to persons available in a resource group but can be anyone. 
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -164,7 +164,7 @@ This is not limited to persons available in a resource group but can be anyone. 
   <tabstop>wbsfield</tabstop>
  </tabstops>
  <includes>
-  <include location="local">klineedit.h</include>
+  <include location="local">QLineEdit</include>
   <include location="local">ktextedit.h</include>
  </includes>
  <resources/>

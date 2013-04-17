@@ -232,7 +232,7 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="6">
-    <widget class="KLineEdit" name="klineedit_title"/>
+    <widget class="QLineEdit" name="klineedit_title"/>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_author">
@@ -245,7 +245,7 @@
     </widget>
    </item>
    <item row="4" column="0" colspan="6">
-    <widget class="KLineEdit" name="klineedit_author"/>
+    <widget class="QLineEdit" name="klineedit_author"/>
    </item>
    <item row="8" column="5">
     <layout class="QGridLayout" name="gridLayout_3">
@@ -304,9 +304,9 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>QLineEdit</header>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>

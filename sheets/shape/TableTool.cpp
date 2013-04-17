@@ -33,7 +33,7 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 #include <kaction.h>
 #include <kfiledialog.h>

@@ -26,7 +26,7 @@
 
 #include <kdialog.h>
 
-class KLineEdit;
+class QLineEdit;
 
 namespace Calligra
 {
@@ -51,7 +51,7 @@ public slots:
 
 protected:
     Selection*  m_selection;
-    KLineEdit*  m_areaName;
+    QLineEdit*  m_areaName;
 };
 
 } // namespace Sheets

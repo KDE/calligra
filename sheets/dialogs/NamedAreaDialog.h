@@ -31,7 +31,7 @@
 
 class KComboBox;
 class QLabel;
-class KLineEdit;
+class QLineEdit;
 class KPushButton;
 
 class QListWidget;
@@ -94,9 +94,9 @@ public Q_SLOTS:
 
 private:
     Selection*  m_selection;
-    KLineEdit*  m_areaNameEdit;
+    QLineEdit*  m_areaNameEdit;
     KComboBox*  m_sheets;
-    KLineEdit*  m_cellRange;
+    QLineEdit*  m_cellRange;
     QString     m_initialAreaName;
 };
 

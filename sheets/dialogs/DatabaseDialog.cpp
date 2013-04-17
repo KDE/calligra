@@ -34,7 +34,7 @@
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
@@ -97,10 +97,10 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_driver = new KComboBox(databaseFrame);
     databaseFrameLayout->addWidget(m_driver, 0, 1);
 
-    m_username = new KLineEdit(databaseFrame);
+    m_username = new QLineEdit(databaseFrame);
     databaseFrameLayout->addWidget(m_username, 4, 1);
 
-    m_host = new KLineEdit(databaseFrame);
+    m_host = new QLineEdit(databaseFrame);
     m_host->setText("localhost");
     databaseFrameLayout->addWidget(m_host, 2, 1);
 
@@ -108,11 +108,11 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     TextLabel3->setText(i18n("Port:\n(if necessary)"));
     databaseFrameLayout->addWidget(TextLabel3, 3, 0);
 
-    m_password = new KLineEdit(databaseFrame);
-    m_password->setEchoMode(KLineEdit::Password);
+    m_password = new QLineEdit(databaseFrame);
+    m_password->setEchoMode(QLineEdit::Password);
     databaseFrameLayout->addWidget(m_password, 5, 1);
 
-    m_port = new KLineEdit(databaseFrame);
+    m_port = new QLineEdit(databaseFrame);
     m_port->setValidator(new KIntValidator(m_port));
     databaseFrameLayout->addWidget(m_port, 3, 1);
 
@@ -120,7 +120,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     dbName->setText(i18n("Database name: "));
     databaseFrameLayout->addWidget(dbName, 1, 0);
 
-    m_databaseName = new KLineEdit(databaseFrame);
+    m_databaseName = new QLineEdit(databaseFrame);
     databaseFrameLayout->addWidget(m_databaseName, 1, 1);
 
     QLabel * TextLabel5 = new QLabel(databaseFrame);
@@ -230,7 +230,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_operator_1->insertItem(8, i18n("less or equal"));
     optionsFrameLayout->addWidget(m_operator_1, 2, 1);
 
-    m_operatorValue_1 = new KLineEdit(optionsFrame);
+    m_operatorValue_1 = new QLineEdit(optionsFrame);
     optionsFrameLayout->addWidget(m_operatorValue_1, 2, 2);
 
     m_columns_2 = new KComboBox(optionsFrame);
@@ -247,7 +247,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_operator_2->insertItem(6, i18n("lesser"));
     optionsFrameLayout->addWidget(m_operator_2, 3, 1);
 
-    m_operatorValue_2 = new KLineEdit(optionsFrame);
+    m_operatorValue_2 = new QLineEdit(optionsFrame);
     optionsFrameLayout->addWidget(m_operatorValue_2, 3, 2);
 
     m_columns_3 = new KComboBox(optionsFrame);
@@ -263,7 +263,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_operator_3->insertItem(6, i18n("lesser"));
     optionsFrameLayout->addWidget(m_operator_3, 4, 1);
 
-    m_operatorValue_3 = new KLineEdit(optionsFrame);
+    m_operatorValue_3 = new QLineEdit(optionsFrame);
     optionsFrameLayout->addWidget(m_operatorValue_3, 4, 2);
 
     QLabel * TextLabel19 = new QLabel(optionsFrame);
@@ -325,10 +325,10 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_startingRegion->setText(i18n("Insert in region"));
     Frame12Layout->addWidget(m_startingRegion, 0, 0);
 
-    m_cell = new KLineEdit(Frame12);
+    m_cell = new QLineEdit(Frame12);
     Frame12Layout->addWidget(m_cell, 1, 1);
 
-    m_region = new KLineEdit(Frame12);
+    m_region = new QLineEdit(Frame12);
     Frame12Layout->addWidget(m_region, 0, 1);
 
     m_startingCell = new QRadioButton(Frame12);

@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QComboBox>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kpushbutton.h>
 
 #include <db/connection.h>

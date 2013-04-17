@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <klineedit.h>
+#include <QLineEdit>
 
 
 #include "kis_config_widget.h"
@@ -83,7 +83,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     lblName->setObjectName("lblName");
     hl->addWidget(lblName, 0, 0);
 
-    m_layerName = new KLineEdit(page);
+    m_layerName = new QLineEdit(page);
     m_layerName->setObjectName("m_layerName");
     m_layerName->setText(layerName);
     m_layerName->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);

@@ -30,7 +30,7 @@
 #include "kexitableview.h"
 #include "kexi.h"
 
-#include <klineedit.h>
+#include <QLineEdit>
 
 KexiComboBoxBase::KexiComboBoxBase()
 {

@@ -52,7 +52,7 @@
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kpagewidgetmodel.h>

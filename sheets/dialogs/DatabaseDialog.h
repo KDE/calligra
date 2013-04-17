@@ -33,7 +33,7 @@ class QCheckBox;
 class KComboBox;
 class QFrame;
 class QLabel;
-class KLineEdit;
+class QLineEdit;
 class QTreeWidget;
 class QListWidget;
 class QListWidgetItem;
@@ -88,12 +88,12 @@ private:
 
     KPageWidgetItem * m_database;
     QLabel       * m_databaseStatus;
-    KLineEdit    * m_username;
-    KLineEdit    * m_port;
-    KLineEdit    * m_databaseName;
+    QLineEdit    * m_username;
+    QLineEdit    * m_port;
+    QLineEdit    * m_databaseName;
     KComboBox    * m_driver;
-    KLineEdit    * m_password;
-    KLineEdit    * m_host;
+    QLineEdit    * m_password;
+    QLineEdit    * m_host;
     QLabel       * m_Type;
     KPageWidgetItem * m_table;
     KComboBox    * m_databaseList;
@@ -111,9 +111,9 @@ private:
     KComboBox    * m_operator_1;
     KComboBox    * m_operator_2;
     KComboBox    * m_operator_3;
-    KLineEdit    * m_operatorValue_1;
-    KLineEdit    * m_operatorValue_2;
-    KLineEdit    * m_operatorValue_3;
+    QLineEdit    * m_operatorValue_1;
+    QLineEdit    * m_operatorValue_2;
+    QLineEdit    * m_operatorValue_3;
     QRadioButton * m_andBox;
     QRadioButton * m_orBox;
     KComboBox    * m_columnsSort_1;
@@ -124,8 +124,8 @@ private:
     KPageWidgetItem * m_result;
     KTextEdit    * m_sqlQuery;
     QRadioButton * m_startingRegion;
-    KLineEdit    * m_cell;
-    KLineEdit    * m_region;
+    QLineEdit    * m_cell;
+    QLineEdit    * m_region;
     QRadioButton * m_startingCell;
 
     void switchPage(int id);

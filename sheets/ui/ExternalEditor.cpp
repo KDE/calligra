@@ -60,7 +60,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
 
     setCurrentFont(KGlobalSettings::generalFont());
 
-    // Try to immitate KLineEdit regarding the margins and size.
+    // Try to immitate QLineEdit regarding the margins and size.
     document()->setDocumentMargin(1);
     setMinimumHeight(fontMetrics().height() + 2 * frameWidth() + 1);
 

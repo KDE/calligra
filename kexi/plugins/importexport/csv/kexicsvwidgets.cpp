@@ -27,7 +27,7 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
@@ -63,7 +63,7 @@ public:
     QString delimiter;
     QVector<QString> availableDelimiters;
     KComboBox* combo;
-    KLineEdit* delimiterEdit;
+    QLineEdit* delimiterEdit;
 };
 
 KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent)
@@ -85,7 +85,7 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
     lyr->addWidget(d->combo);
     setFocusProxy(d->combo);
 
-    d->delimiterEdit = new KLineEdit(this);
+    d->delimiterEdit = new QLineEdit(this);
     d->delimiterEdit->setObjectName("d->delimiterEdit");
 //  d->delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, d->delimiterEdit->sizePolicy().hasHeightForWidth() ) );
     d->delimiterEdit->setMaximumSize(QSize(30, 32767));

@@ -38,7 +38,7 @@
 #include <kcombobox.h>
 #include <kdesktopfile.h>
 #include <kpagedialog.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <krecentdocument.h>
@@ -52,17 +52,17 @@ class LinkDialog::Private
 public:
     QString text;
     QWidget* internetPage;
-    KLineEdit* internetText;
-    KLineEdit* internetLink;
+    QLineEdit* internetText;
+    QLineEdit* internetLink;
     QWidget* mailPage;
-    KLineEdit* mailText;
-    KLineEdit* mailLink;
-    KLineEdit* mailSubject;
+    QLineEdit* mailText;
+    QLineEdit* mailLink;
+    QLineEdit* mailSubject;
     QWidget* filePage;
-    KLineEdit* fileText;
+    QLineEdit* fileText;
     KUrlRequester* fileLink;
     QWidget* cellPage;
-    KLineEdit* cellText;
+    QLineEdit* cellText;
     KComboBox* cellLink;
     KPageWidgetItem* p1, *p2, *p3, *p4;
 };
@@ -82,10 +82,10 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->p1->setIcon(koIcon("internet-web-browser"));
     QVBoxLayout* iLayout = new QVBoxLayout(d->internetPage);
     iLayout->addWidget(new QLabel(i18n("Text to display:"), d->internetPage));
-    d->internetText = new KLineEdit(d->internetPage);
+    d->internetText = new QLineEdit(d->internetPage);
     iLayout->addWidget(d->internetText);
     iLayout->addWidget(new QLabel(i18n("Internet address:"), d->internetPage));
-    d->internetLink = new KLineEdit(d->internetPage);
+    d->internetLink = new QLineEdit(d->internetPage);
     iLayout->addWidget(d->internetLink);
     iLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     connect(d->internetText, SIGNAL(textChanged(QString)), this,
@@ -98,15 +98,15 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->p2->setIcon(koIcon("internet-mail"));
     QVBoxLayout* mLayout = new QVBoxLayout(d->mailPage);
     mLayout->addWidget(new QLabel(i18n("Text to display:"), d->mailPage));
-    d->mailText = new KLineEdit(d->mailPage);
+    d->mailText = new QLineEdit(d->mailPage);
     mLayout->addWidget(d->mailText);
     mLayout->addWidget(new QLabel(i18n("Email address:"), d->mailPage));
-    d->mailLink = new KLineEdit(d->mailPage);
+    d->mailLink = new QLineEdit(d->mailPage);
     mLayout->addWidget(d->mailLink);
     connect(d->mailText, SIGNAL(textChanged(QString)), this,
             SLOT(setText(QString)));
     mLayout->addWidget(new QLabel(i18n("Subject:"), d->mailPage));
-    d->mailSubject = new KLineEdit(d->mailPage);
+    d->mailSubject = new QLineEdit(d->mailPage);
     mLayout->addWidget(d->mailSubject);
     mLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
@@ -117,7 +117,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->p3->setIcon(koIcon("system-file-manager"));
     QVBoxLayout* fLayout = new QVBoxLayout(d->filePage);
     fLayout->addWidget(new QLabel(i18n("Text to display:"), d->filePage));
-    d->fileText = new KLineEdit(d->filePage);
+    d->fileText = new QLineEdit(d->filePage);
     fLayout->addWidget(d->fileText);
     fLayout->addWidget(new QLabel(i18n("File location:"), d->filePage));
     d->fileLink = new KUrlRequester(d->filePage);
@@ -155,7 +155,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->p4->setIcon(koIcon("table"));
     QVBoxLayout* cLayout = new QVBoxLayout(d->cellPage);
     cLayout->addWidget(new QLabel(i18n("Text to display:"), d->cellPage));
-    d->cellText = new KLineEdit(d->cellPage);
+    d->cellText = new QLineEdit(d->cellPage);
     cLayout->addWidget(d->cellText);
     cLayout->addWidget(new QLabel(i18n("Cell or Named Area:"), d->cellPage));
     d->cellLink = new KComboBox(d->cellPage);
