@@ -23,7 +23,7 @@
 
 #include <KoCanvasResourceManager.h>
 
-#include <KWindowSystem>
+#include <kwindowsystem.h>
 #include <kfinddialog.h>
 #include <kreplacedialog.h>
 #include <kfind.h>
