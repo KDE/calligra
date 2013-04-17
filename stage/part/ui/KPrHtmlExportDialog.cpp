@@ -19,7 +19,7 @@
  */
 
 #include "KPrHtmlExportDialog.h"
-
+#ifdef QT_QTWEBKIT_FOUND
 #include <QMessageBox>
 #include <QPainter>
 #include <QDir>
@@ -329,5 +329,4 @@ void KPrHtmlExportDialog::favoriteAction()
         this->addSelectedTemplateToFavorite();
     }
 }
-
-#include "KPrHtmlExportDialog.moc"
+#endif

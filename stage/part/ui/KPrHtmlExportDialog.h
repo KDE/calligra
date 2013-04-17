@@ -21,6 +21,8 @@
 #ifndef KPRHTMLEXPORTDIALOG_H
 #define KPRHTMLEXPORTDIALOG_H
 
+#ifdef QT_QTWEBKIT_FOUND
+
 #include "ui_KPrHtmlExport.h"
 
 #include <QWebPage>
@@ -67,7 +69,7 @@ private:
     QWebPage preview;
     int frameToRender;
 
-
+#endif
 };
 
 

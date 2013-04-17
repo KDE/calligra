@@ -218,10 +218,12 @@ void KPrView::initActions()
     else
        setXMLFile( "stage.rc" );
 
+#ifdef CAN_USE_QTWEBKIT
     // do special stage stuff here
     m_actionExportHtml = new KAction(i18n("Export as HTML..."), this);
     actionCollection()->addAction("file_export_html", m_actionExportHtml);
     connect(m_actionExportHtml, SIGNAL(triggered()), this, SLOT(exportToHtml()));
+#endif
 
     m_actionViewModeNormal = new KAction(m_normalMode->name(), this);
     m_actionViewModeNormal->setCheckable(true);
@@ -445,6 +447,7 @@ void KPrView::configurePresenterView()
 
 void KPrView::exportToHtml()
 {
+#ifdef CAN_USE_QTWEBKIT
     KPrHtmlExportDialog *dialog = new KPrHtmlExportDialog(kopaDocument()->pages(),koDocument()->documentInfo()->aboutInfo("title"),
                                                           koDocument()->documentInfo()->authorInfo("creator"), this);
     if (dialog->exec() == QDialog::Accepted && !dialog->checkedSlides().isEmpty()) {
@@ -458,6 +461,7 @@ void KPrView::exportToHtml()
                                                            dialog->title(), dialog->slidesNames(), dialog->openBrowser()));
         }
    }
+#endif
 }
 
 KoPrintJob *KPrView::createPdfPrintJob()
