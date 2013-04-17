@@ -25,7 +25,7 @@
 #define KPRPRESENTATIONTOOL_H
 
 #include <KoToolBase.h>
-
+#include <KoConfig.h>
 #include <QSet>
 
 class QFrame;
@@ -91,7 +91,9 @@ private:
     KPrPresentationToolWidget * m_presentationToolWidget;
     QFrame * m_frame;
     KPrPresentationStrategyBase * m_strategy;
+#ifndef CALLIGRA_DISABLE_DBUS
     KPrPresentationToolAdaptor *m_bus;
+#endif
     friend class KPrPresentationStrategyBase;
 };
 

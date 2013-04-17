@@ -18,7 +18,7 @@
  */
 
 #include "KPrPresentationToolAdaptor.h"
-
+#ifndef CALLIGRA_DISABLE_DBUS
 #include "KPrPresentationStrategyBase.h"
 #include "KPrPresentationTool.h"
 #include "KPrPresentationDrawWidget.h"
@@ -106,5 +106,4 @@ void KPrPresentationToolAdaptor::normalPresentation()
     m_tool->normalPresentation();
 }
 
-
-#include "KPrPresentationToolAdaptor.moc"
+#endif
