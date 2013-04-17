@@ -27,7 +27,9 @@
 
 class KPrDocument;
 class KPrPart;
+#ifndef CALLIGRA_DISABLE_DBUS
 class KPrViewAdaptor;
+#endif
 class KPrViewModeNotes;
 class KPrViewModeSlidesSorter;
 class KPrViewModePresentation;
@@ -50,12 +52,12 @@ public:
      * Get the document object the view was initialised with
      */
     KPrDocument * kprDocument() const;
-
+#ifndef CALLIGRA_DISABLE_DBUS
     /**
      * Get the view's dbus adaptor
      */
     virtual KPrViewAdaptor * dbusObject() const;
-
+#endif
     /**
      * Get the presentation view mode
      */
@@ -169,8 +171,9 @@ private:
     KoPAViewMode *m_normalMode;
     KPrViewModeNotes *m_notesMode;
     KPrViewModeSlidesSorter *m_slidesSorterMode;
-
+#ifndef CALLIGRA_DISABLE_DBUS
     KPrViewAdaptor *m_dbus;
+#endif
     int m_zoom;
     KoZoomMode::Mode m_zoomMode;
 

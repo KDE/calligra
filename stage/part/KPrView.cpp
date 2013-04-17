@@ -47,7 +47,9 @@
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
-#include "KPrViewAdaptor.h"
+#ifndef CALLIGRA_DISABLE_DBUS
+#   include "KPrViewAdaptor.h"
+#endif
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "KPrViewModeSlidesSorter.h"
@@ -62,7 +64,9 @@
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrConfigureSlideShowDialog.h"
 #include "ui/KPrConfigurePresenterViewDialog.h"
-#include "ui/KPrHtmlExportDialog.h"
+#ifdef CAN_USE_QTWEBKIT
+#   include "ui/KPrHtmlExportDialog.h"
+#endif
 #include <QDesktopWidget>
 
 #include "KPrPdfPrintJob.h"
@@ -74,7 +78,9 @@ KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
   , m_slidesSorterMode(new KPrViewModeSlidesSorter(this, kopaCanvas()))
+#ifndef CALLIGRA_DISABLE_DBUS
   , m_dbus( new KPrViewAdaptor( this ) )
+#endif
 {
     m_normalMode->setName(i18n("Normal"));
     initGUI();
@@ -134,11 +140,12 @@ KPrDocument * KPrView::kprDocument() const
     return static_cast<KPrDocument *>( kopaDocument() );
 }
 
+#ifndef CALLIGRA_DISABLE_DBUS
 KPrViewAdaptor * KPrView::dbusObject() const
 {
     return m_dbus;
 }
-
+#endif
 KPrViewModePresentation * KPrView::presentationMode() const
 {
     return m_presentationMode;

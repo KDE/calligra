@@ -23,7 +23,7 @@
 #include <KoViewAdaptor.h>
 
 class KPrView;
-
+#ifndef CALLIGRA_DISABLE_DBUS
 class KPrViewAdaptor : public KoViewAdaptor
 {
     Q_OBJECT
@@ -178,5 +178,5 @@ private slots:
 private:
     KPrView* m_view;
 };
-
+#endif
 #endif

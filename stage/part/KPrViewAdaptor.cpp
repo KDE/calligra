@@ -18,6 +18,9 @@
 */
 
 #include "KPrViewAdaptor.h"
+
+#ifndef CALLIGRA_DISABLE_DBUS
+
 #include "KPrView.h"
 #include "KPrViewModePresentation.h"
 #include "KPrAnimationDirector.h"
@@ -261,3 +264,4 @@ void KPrViewAdaptor::presentationActivated()
     emit presentationStarted( numPresentationPages() );
 }
 
+#endif
