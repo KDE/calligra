@@ -17,6 +17,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KoFindToolbar.h"
 #include "KoFindToolbar_p.h"
 
@@ -276,4 +277,4 @@ void KoFindToolbar::Private::inputTimeout()
     find(searchLine->currentText());
 }
 
-#include "KoFindToolbar.moc"
+#include "moc_KoFindToolbar.cpp"

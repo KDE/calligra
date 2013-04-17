@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "thememanager.moc"
+#include "thememanager.h"
 
 // Qt includes
 
@@ -56,6 +56,7 @@
 #include <ktoolinvocation.h>
 
 // Calligra
+#include <KoConfig.h>
 #include <KoIcon.h>
 
 #ifdef __APPLE__

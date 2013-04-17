@@ -264,4 +264,4 @@ void KoToolDocker::resetWidgets()
     d->resetWidgets();
 }
 
-#include <KoToolDocker_p.moc>
+#include <moc_KoToolDocker_p.cpp>

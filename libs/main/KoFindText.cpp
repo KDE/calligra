@@ -322,4 +322,4 @@ void KoFindText::setFormat(FormatType formatType, const QTextCharFormat &format)
     }
 }
 
-#include "KoFindText.moc"
+#include "moc_KoFindText.cpp"

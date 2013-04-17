@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef KOFINDTOOLBAR_H
 #define KOFINDTOOLBAR_H
 

@@ -2057,4 +2057,4 @@ KoView* KoMainWindow::currentView() const
     return 0;
 }
 
-#include <KoMainWindow.moc>
+#include <moc_KoMainWindow.cpp>

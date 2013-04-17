@@ -91,4 +91,4 @@ void KoDockerManager::resetToolDockerWidgets()
     d->toolOptionsDocker->resetWidgets();
 }
 
-#include <KoDockerManager.moc>
+#include <moc_KoDockerManager.cpp>

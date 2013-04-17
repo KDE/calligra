@@ -198,4 +198,4 @@ QRectF KoPrintingDialog::preparePage(int)
     return QRectF();
 }
 
-#include <KoPrintingDialog.moc>
+#include <moc_KoPrintingDialog.cpp>

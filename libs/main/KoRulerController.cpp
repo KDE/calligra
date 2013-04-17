@@ -53,5 +53,5 @@ KoRulerController::~KoRulerController()
     delete d;
 }
 
-#include <KoRulerController.moc>
+#include <moc_KoRulerController.cpp>
 
