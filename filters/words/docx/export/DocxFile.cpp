@@ -72,6 +72,13 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
         return status;
     }
 
+    // Write rels for word/document.xml
+    status = writeDocumentRels(docxStore);
+    if (status != KoFilter::OK) {
+        delete docxStore;
+        return status;
+    }
+
 #if 0
     // Write META-INF/container.xml
     status = writeMetaInf(docxStore);
@@ -110,7 +117,7 @@ KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
 {
     // We can hardcode this one.
     if (!docxStore->open("_rels/.rels")) {
-        kDebug(30503) << "Can not to open META-INF/container.xml.";
+        kDebug(30503) << "Can not to open _rels/.rels.";
         return KoFilter::CreationError;
     }
 
@@ -141,6 +148,65 @@ KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
     writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
     writer.addAttribute("Target", "docProps/app.xml");
     writer.endElement();        // Relationship
+
+    writer.endElement();        // Relationships
+    writer.endDocument();
+
+    docxStore->close();
+    return KoFilter::OK;
+}
+
+KoFilter::ConversionStatus DocxFile::writeDocumentRels(KoStore *docxStore)
+{
+    // We can hardcode this for now but should not be int he future.
+    if (!docxStore->open("word/_rels/document.xml.rels")) {
+        kDebug(30503) << "Can not to open word/_rels/document.xml.rels.";
+        return KoFilter::CreationError;
+    }
+
+    KoStoreDevice metaDevice(docxStore);
+    KoXmlWriter writer(&metaDevice);
+
+    writer.startDocument(0, 0, 0);
+    writer.startElement("Relationships");
+    writer.addAttribute("xmlns", "http://schemas.openxmlformats.org/package/2006/relationships");
+
+    writer.startElement("Relationship");
+    writer.addAttribute("Id", "rId1");
+    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
+    writer.addAttribute("Target", "styles.xml");
+    writer.endElement();
+
+    // FIXME: Enable these when we find that we need them
+#if 0
+    // Settings.xml
+    writer.startElement("Relationship");
+    writer.addAttribute("Id", "rId2");
+    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
+    writer.addAttribute("Target", "settings.xml");
+    writer.endElement();
+#endif
+#if 0
+    writer.startElement("Relationship");
+    writer.addAttribute("Id", "rId3");
+    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings");
+    writer.addAttribute("Target", "webSettings.xml");
+    writer.endElement();
+#endif
+#if 0
+    writer.startElement("Relationship");
+    writer.addAttribute("Id", "rId4");
+    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
+    writer.addAttribute("Target", "fontTable.xml");
+    writer.endElement();
+#endif
+#if 0
+    writer.startElement("Relationship");
+    writer.addAttribute("Id", "rId5");
+    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
+    writer.addAttribute("Target", "theme/theme1.xml");
+    writer.endElement();
+#endif
 
     writer.endElement();        // Relationships
     writer.endDocument();

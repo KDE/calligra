@@ -50,6 +50,7 @@ public:
 private:
     // Privat functions
     KoFilter::ConversionStatus  writeTopLevelRels(KoStore *docxStore);
+    KoFilter::ConversionStatus  writeDocumentRels(KoStore *docxStore);
 
 private:
     // data
