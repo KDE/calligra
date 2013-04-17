@@ -109,27 +109,32 @@ QString BibliographyDb::getDbPath() const
 bool BibliographyDb::connect()
 {
     m_conn = m_driver->createConnection(m_cdata);
-    return m_conn->connect();
+    return m_conn && m_conn->connect();
 }
 
 bool BibliographyDb::deleteDb()
 {
+    if (!m_conn) {
+        return true;
+    }
     return m_conn->dropDatabase(m_fullPath);
 }
 
 void BibliographyDb::closeDb()
 {
-    m_conn->closeDatabase();
+    if (m_conn) {
+        m_conn->closeDatabase();
+    }
 }
 
 QString BibliographyDb::lastError() const
 {
-    return m_conn->errorMsg();
+    return m_conn ? m_conn->errorMsg() : QString();
 }
 
 bool BibliographyDb::isLastErrorValid() const
 {
-    return m_conn->error();
+    return m_conn ? m_conn->error() : false;
 }
 
 bool BibliographyDb::isValid() const
@@ -154,6 +159,9 @@ void BibliographyDb::submitAll()
 
 bool BibliographyDb::createTable()
 {
+    if (!m_conn) {
+        return false;
+    }
     m_schema = new KexiDB::TableSchema("bibref");
 
     KexiDB::Field *field = new KexiDB::Field("id", KexiDB::Field::Integer,
@@ -206,6 +214,9 @@ void BibliographyDb::setFilter(QList<BibDbFilter*> *filters)
 
 bool BibliographyDb::insertCitation(KoInlineCite *cite)
 {
+    if (!m_conn) {
+        return false;
+    }
     KexiDB::PreparedStatement::Ptr statement = m_conn->prepareStatement(KexiDB::PreparedStatement::InsertStatement
                                                                         , *m_schema);
 
@@ -218,6 +229,9 @@ bool BibliographyDb::insertCitation(KoInlineCite *cite)
 QMap<QString, KoInlineCite *> BibliographyDb::citationRecords()
 {
     QMap<QString, KoInlineCite *> answers;
+    if (!m_conn) {
+        return answers;
+    }
     int citeCount = m_model->rowCount();
 
     KexiDB::Cursor *c = m_conn->executeQuery(*m_schema);

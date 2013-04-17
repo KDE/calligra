@@ -103,25 +103,33 @@ int BibliographyDatabaseWindow::loadBibliographyDbs()
 
 void BibliographyDatabaseWindow::tableChanged(int index)
 {
+    if (index < 0 || index >= m_tables.count()) {
+        return;
+    }
     if (m_table) {
         m_table->submitAll();
         delete m_table;
     }
 
     m_table = new BibliographyDb(this, m_tables.at(index).absoluteDir().absolutePath(), m_tables.at(index).fileName());
-    m_bibTableView->setItemDelegateForColumn(2, new BibliographyTypeEntryDelegate);
-
     if (!m_table->isValid()) {
         int ret = QMessageBox::critical(this, i18n("Error opening bibliography database")
                                         , i18n("Do you want to remove %1 from database directory?", QDir::convertSeparators(m_table->getDbPath()))
                                         , QMessageBox::Yes, QMessageBox::No);
-        if (ret == QMessageBox::Yes && QFile(m_table->getDbPath()).exists() && !QDir().remove(m_table->getDbPath())) {
-            QMessageBox::critical(this, i18n("Could not remove file \"%1\".",QDir::convertSeparators(m_table->getDbPath()))
-                                  , i18n("Check the file's permissions and whether it is already opened and locked by another application."));
-        } else {
+        if (ret == QMessageBox::Yes && !m_table->deleteDb()) {
+            QMessageBox::critical(this,
+                i18n("Could not remove file \"%1\".",QDir::convertSeparators(m_table->getDbPath())),
+                i18n("Check the file's permissions and whether it is already opened and locked by another application."));
+        }
+        else {
             removeTableEntry(index);
+            delete m_table;
+            m_table = 0;
+            tableChanged(index); // try again
+            return;
         }
     }
+    m_bibTableView->setItemDelegateForColumn(2, new BibliographyTypeEntryDelegate);
 
     m_bibTableView->setModel(m_table->tableModel());
     m_bibTableView->hideColumn(0);      // hide ID column
