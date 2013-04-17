@@ -24,7 +24,6 @@
 
 #include "KoConfig.h"
 
-
 #ifndef CALLIGRA_DISABLE_DBUS
 
 #include <QMap>

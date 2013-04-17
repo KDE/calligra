@@ -22,6 +22,8 @@
 
 #include "KoViewAdaptor.h"
 
+#ifndef CALLIGRA_DISABLE_DBUS
+
 #include "KoView.h"
 
 #include <kactioncollection.h>
@@ -51,4 +53,4 @@ QStringList KoViewAdaptor::actions()
     return tmp_actions;
 }
 
-#include <KoViewAdaptor.moc>
+#endif
