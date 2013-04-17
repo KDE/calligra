@@ -1715,7 +1715,7 @@ public:
     */
     QString formatTime(const QTime &pTime, bool includeSecs = false, bool isDuration = false) const
     {
-        return m_locale.toString(time);
+        return m_locale.toString(pTime);
     }
 #if 0
     //KDE5 move to KDateTime namespace
