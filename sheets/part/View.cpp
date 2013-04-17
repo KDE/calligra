@@ -27,6 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "KoConfig.h"
+
 // Local
 #include "View.h"
 #include "TabBar.h"

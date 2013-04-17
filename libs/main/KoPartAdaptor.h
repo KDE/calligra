@@ -21,6 +21,9 @@
 #ifndef KOPARTADAPTOR_H
 #define KOPARTADAPTOR_H
 
+#include "KoConfig.h"
+
+
 #ifndef CALLIGRA_DISABLE_DBUS
 
 #include <QMap>

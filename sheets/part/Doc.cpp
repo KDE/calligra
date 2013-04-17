@@ -28,6 +28,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "KoConfig.h"
+
+
 // Local
 #include "Doc.h"
 #include "../DocBase_p.h"

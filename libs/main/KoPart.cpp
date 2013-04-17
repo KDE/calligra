@@ -23,6 +23,9 @@
 
 #include "KoPart.h"
 
+#include "KoConfig.h"
+
+
 #include "KoApplication.h"
 #include "KoMainWindow.h"
 #include "KoDocument.h"

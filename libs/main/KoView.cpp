@@ -21,6 +21,9 @@
 
 #include "KoView.h"
 
+#include "KoConfig.h"
+
+
 // local directory
 #include "KoView_p.h"
 
