@@ -109,8 +109,8 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->buttonGroup->setExclusive( false );
 
     d->tagSearchLineEdit = new QLineEdit(this);
-    d->tagSearchLineEdit->setClearButtonShown(true);
-    d->tagSearchLineEdit->setClickMessage("Enter search tag here");
+    //d->tagSearchLineEdit->setClearButtonShown(true);
+    //d->tagSearchLineEdit->setClickMessage("Enter search tag here");
     d->tagSearchLineEdit->setEnabled( true );
     d->tagSearchLineEdit->hide();
 
@@ -162,7 +162,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->setMargin( 0 );
 
     d->tagOpLineEdit = new QLineEdit( this );
-    d->tagOpLineEdit->setClickMessage("Add / Remove Tag");
+    //d->tagOpLineEdit->setClickMessage("Add / Remove Tag");
     d->tagOpLineEdit->setEnabled( false );
     d->tagOpLineEdit->hide();
 

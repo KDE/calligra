@@ -119,7 +119,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
 #if QT_VERSION >= 0x040700
     m_filterLineEdit->setPlaceholderText(i18n("Filter"));
 #endif
-    m_filterLineEdit->setClearButtonShown(true);
+    //m_filterLineEdit->setClearButtonShown(true);
 
     m_treeWidget = new CollectionTreeWidget(mainWidget);
     m_treeWidget->setSelectionMode(QListView::SingleSelection);
