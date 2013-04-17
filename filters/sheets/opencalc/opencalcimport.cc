@@ -35,7 +35,6 @@
 #include <KoDocumentInfo.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
-#include <kcodecs.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
@@ -1313,7 +1312,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
                 QString p = t.attributeNS(ooNS::table, "protection-key", QString());
                 QByteArray str(p.toLatin1());
                 kDebug(30518) << "Decoding password:" << str;
-                passwd = KCodecs::base64Decode(str);
+                passwd = QByteArray::fromBase64(str);
             }
             kDebug(30518) << "Password hash: '" << passwd << "'";
             table->setProtected(passwd);
@@ -1331,7 +1330,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
             QString p = b.attributeNS(ooNS::table, "protection-key", QString());
             QByteArray str(p.toLatin1());
             kDebug(30518) << "Decoding password:" << str;
-            passwd = KCodecs::base64Decode(str);
+            passwd = str.fromBase64();
         }
         kDebug(30518) << "Password hash: '" << passwd << "'";
 

@@ -23,7 +23,6 @@
 
 #include <KoXmlNS.h>
 
-#include <kcodecs.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -99,7 +98,7 @@ void ProtectableObject::loadXmlProtection(const KoXmlElement& element)
     if (element.hasAttribute("protected")) {
         const QString passwd = element.attribute("protected");
         QByteArray str(passwd.toUtf8());
-        m_password = KCodecs::base64Decode(str);
+        m_password = QByteArray::fromBase64(str);
     }
 }
 
@@ -110,7 +109,7 @@ void ProtectableObject::loadOdfProtection(const KoXmlElement& element)
         if (!p.isNull()) {
             QByteArray str(p.toUtf8());
             kDebug(30518) <<"Decoding password:" << str;
-            m_password = KCodecs::base64Decode(str);
+            m_password = QByteArray::fromBase64(str);
         }
     }
 }

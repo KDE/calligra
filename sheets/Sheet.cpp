@@ -34,7 +34,6 @@
 #include <QImage>
 
 #include <kdebug.h>
-#include <kcodecs.h>
 #include <kfind.h>
 #include <kfinddialog.h>
 #include <kreplace.h>
@@ -1134,7 +1133,7 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
     password(pwd);
     if (!pwd.isNull()) {
         if (pwd.size() > 0) {
-            QByteArray str = KCodecs::base64Encode(pwd);
+            QByteArray str = pwd.toBase64();
             sheet.setAttribute("protected", QString(str.data()));
         } else
             sheet.setAttribute("protected", "");
@@ -2574,7 +2573,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     password(pwd);
     if (!pwd.isNull()) {
         xmlWriter.addAttribute("table:protected", "true");
-        QByteArray str = KCodecs::base64Encode(pwd);
+        QByteArray str = pwd.toBase64();
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString(str));
     }

@@ -33,7 +33,6 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kcodecs.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
 
@@ -420,7 +419,7 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
         QByteArray passwd;
         ksdoc->map()->password(passwd);
         if (passwd.length() > 0) {
-            QByteArray str(KCodecs::base64Encode(passwd));
+            QByteArray str(passwd.toBase64());
             body.setAttribute("table:protection-key", QString(str.data()));
         }
     }
@@ -441,7 +440,7 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
             QByteArray passwd;
             sheet->password(passwd);
             if (passwd.length() > 0) {
-                QByteArray str(KCodecs::base64Encode(passwd));
+                QByteArray str(passwd.toBase64());
                 tabElem.setAttribute("table:protection-key", QString(str.data()));
             }
         }

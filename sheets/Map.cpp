@@ -26,7 +26,6 @@
 
 #include <QTimer>
 
-#include <kcodecs.h>
 #include <kcompletion.h>
 #include <ktemporaryfile.h>
 
@@ -433,7 +432,7 @@ bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
     this->password(password);
     if (!password.isNull()) {
         xmlWriter.addAttribute("table:structure-protected", "true");
-        QByteArray str = KCodecs::base64Encode(password);
+        QByteArray str = password.toBase64();
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString(str.data()));
     }
@@ -475,7 +474,7 @@ QDomElement Map::save(QDomDocument& doc)
     this->password(password);
     if (!password.isNull()) {
         if (password.size() > 0) {
-            QByteArray str = KCodecs::base64Encode(password);
+            QByteArray str = password.toBase64();
             mymap.setAttribute("protected", QString(str.data()));
         } else {
             mymap.setAttribute("protected", "");
