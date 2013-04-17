@@ -63,7 +63,7 @@ KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(const QStr
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
 
     QDomDocument doc;
-    doc.setContent(cfg.readEntry<QString>(configname, ""));
+    doc.setContent(cfg.readEntry(configname, QString()));
     QDomElement e = doc.documentElement();
     KisSerializableConfiguration* config = d->configFactory->create(e);
     dbgImage << config << endl;

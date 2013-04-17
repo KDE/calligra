@@ -760,14 +760,14 @@ void KoPADocument::loadConfig()
     {
         KoGridData defGrid;
         KConfigGroup configGroup = config->group( "Grid" );
-        bool showGrid = configGroup.readEntry<bool>( "ShowGrid", defGrid.showGrid() );
+        bool showGrid = configGroup.readEntry( "ShowGrid", defGrid.showGrid() );
         gridData().setShowGrid(showGrid);
         bool paintGridInBackground = configGroup.readEntry("PaintGridInBackground", defGrid.paintGridInBackground());
         gridData().setPaintGridInBackground(paintGridInBackground);
-        bool snapToGrid = configGroup.readEntry<bool>( "SnapToGrid", defGrid.snapToGrid() );
+        bool snapToGrid = configGroup.readEntry( "SnapToGrid", defGrid.snapToGrid() );
         gridData().setSnapToGrid(snapToGrid);
-        qreal spacingX = configGroup.readEntry<qreal>( "SpacingX", defGrid.gridX() );
-        qreal spacingY = configGroup.readEntry<qreal>( "SpacingY", defGrid.gridY() );
+        qreal spacingX = configGroup.readEntry( "SpacingX", defGrid.gridX() );
+        qreal spacingY = configGroup.readEntry( "SpacingY", defGrid.gridY() );
         gridData().setGrid( spacingX, spacingY );
         QColor color = configGroup.readEntry( "Color", defGrid.gridColor() );
         gridData().setGridColor( color );
@@ -776,7 +776,7 @@ void KoPADocument::loadConfig()
     if( config->hasGroup( "Interface" ) )
     {
         KConfigGroup configGroup = config->group( "Interface" );
-        bool showRulers = configGroup.readEntry<bool>( "ShowRulers", true);
+        bool showRulers = configGroup.readEntry( "ShowRulers", true);
         setRulersVisible(showRulers);
     }
 }

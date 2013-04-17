@@ -431,8 +431,8 @@ void KarbonDocument::initConfig()
     if (config->hasGroup("Grid")) {
         KoGridData defGrid;
         KConfigGroup gridGroup = config->group("Grid");
-        qreal spacingX = gridGroup.readEntry<qreal>("SpacingX", defGrid.gridX());
-        qreal spacingY = gridGroup.readEntry<qreal>("SpacingY", defGrid.gridY());
+        qreal spacingX = gridGroup.readEntry("SpacingX", defGrid.gridX());
+        qreal spacingY = gridGroup.readEntry("SpacingY", defGrid.gridY());
         gridData().setGrid(spacingX, spacingY);
         QColor color = gridGroup.readEntry("Color", defGrid.gridColor());
         gridData().setGridColor(color);

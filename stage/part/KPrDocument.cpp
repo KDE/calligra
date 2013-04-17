@@ -267,8 +267,8 @@ void KPrDocument::loadKPrConfig()
 
     if ( config->hasGroup( "SlideShow" ) ) {
         KConfigGroup configGroup = config->group( "SlideShow" );
-        m_presentationMonitor = configGroup.readEntry<int>( "PresentationMonitor", 0 );
-        m_presenterViewEnabled = configGroup.readEntry<bool>( "PresenterViewEnabled", false );
+        m_presentationMonitor = configGroup.readEntry( "PresentationMonitor", 0 );
+        m_presenterViewEnabled = configGroup.readEntry( "PresenterViewEnabled", false );
     }
 }
 

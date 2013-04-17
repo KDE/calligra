@@ -310,12 +310,12 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
         KConfigGroup interfaceGroup = componentData().config()->group("Interface");
-        if(interfaceGroup.readEntry<bool>("ShowRulers", false)) {
+        if(interfaceGroup.readEntry("ShowRulers", false)) {
             d->horizRuler->setVisible(true);
             d->vertRuler->setVisible(true);
             d->showRulerAction->setChecked(true);
         }
-        if (!interfaceGroup.readEntry<bool>("ShowPalette", true)) {
+        if (!interfaceGroup.readEntry("ShowPalette", true)) {
             d->colorBar->setVisible(false);
             d->showPaletteAction->setChecked(false);
         }

@@ -1,4 +1,4 @@
-/*
+// /*
     Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
 
     This program is free software; you can redistribute it and/or modify
@@ -714,17 +714,17 @@ void KisColorSelector::saveSettings()
 void KisColorSelector::loadSettings()
 {
     KisConfig cfg;
-    setColorSpace(KisColor::Type(cfg.readEntry<qint32>("ArtColorSel.ColorSpace" , KisColor::HSY)));
+    setColorSpace(KisColor::Type(cfg.readEntry("ArtColorSel.ColorSpace" , KisColor::HSY)));
     
     setNumLightPieces(cfg.readEntry("ArtColorSel.LightPieces", 19));
     
-    m_selectedColor.setH(cfg.readEntry<float>("ArtColorSel.SelColorH", 0.0f));
-    m_selectedColor.setS(cfg.readEntry<float>("ArtColorSel.SelColorS", 0.0f));
-    m_selectedColor.setX(cfg.readEntry<float>("ArtColorSel.SelColorX", 0.0f));
+    m_selectedColor.setH(cfg.readEntry("ArtColorSel.SelColorH", 0.0f));
+    m_selectedColor.setS(cfg.readEntry("ArtColorSel.SelColorS", 0.0f));
+    m_selectedColor.setX(cfg.readEntry("ArtColorSel.SelColorX", 0.0f));
     m_selectedColor.setA(1.0f);
     
-    setInverseSaturation(cfg.readEntry<bool>("ArtColorSel.InversedSaturation", false));
-    setLight(cfg.readEntry<float>("ArtColorSel.Light", 0.5f), cfg.readEntry<bool>("ArtColorSel.RelativeLight", false));
+    setInverseSaturation(cfg.readEntry("ArtColorSel.InversedSaturation", false));
+    setLight(cfg.readEntry("ArtColorSel.Light", 0.5f), cfg.readEntry("ArtColorSel.RelativeLight", false));
     
     recalculateRings(
                 cfg.readEntry("ArtColorSel.NumRings"  , 11),

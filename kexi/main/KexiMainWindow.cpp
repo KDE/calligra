@@ -1857,7 +1857,7 @@ void KexiMainWindow::setupProjectNavigator()
         d->navDockWidget->setWindowTitle(d->navigator->windowTitle());
         d->navDockWidget->setWidget(navDockableWidget);
 
-        const QSize projectNavigatorSize = mainWindowGroup.readEntry<QSize>("ProjectNavigatorSize", QSize());
+        const QSize projectNavigatorSize = mainWindowGroup.readEntry("ProjectNavigatorSize", QSize());
         if (!projectNavigatorSize.isNull()) {
             navDockableWidget->setSizeHint(projectNavigatorSize);
         }
@@ -1959,7 +1959,7 @@ void KexiMainWindow::setupPropertyEditor()
 
         d->propEditorDockableWidget = new KexiDockableWidget(d->propEditorDockWidget);
         d->propEditorDockWidget->setWidget(d->propEditorDockableWidget);
-        const QSize propertyEditorSize = mainWindowGroup.readEntry<QSize>("PropertyEditorSize", QSize());
+        const QSize propertyEditorSize = mainWindowGroup.readEntry("PropertyEditorSize", QSize());
         if (!propertyEditorSize.isNull()) {
             d->propEditorDockableWidget->setSizeHint(propertyEditorSize);
         }
