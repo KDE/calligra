@@ -33,6 +33,7 @@
 #include <KoZoomHandler.h>
 #include <KoProperties.h>
 #include <KoIcon.h>
+#include <KoConfig.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -45,7 +46,11 @@
 #include <klineedit.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+
+#ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
+#endif
+
 #include <kfiledialog.h>
 #include <KIO/NetAccess>
 #include <kstandarddirs.h>
@@ -97,10 +102,11 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     setWidget(mainWidget);
 
     m_menu = new QMenu();
+#ifdef GHNS
     QAction *ghnsAction = m_menu->addAction(koIcon("get-hot-new-stuff"), i18n("Get more stencils"));
-    QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Install stencil"));
-
     connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
+#endif
+    QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Install stencil"));
     connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
 
     m_button = new QToolButton;
@@ -142,6 +148,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
 
 void StencilBoxDocker::getHotNewStuff()
 {
+#ifdef GHNS
     KNS3::DownloadDialog dialog("flow_stencils.knsrc", this);
     dialog.exec();
     if(!dialog.installedEntries().isEmpty()) {
@@ -150,6 +157,7 @@ void StencilBoxDocker::getHotNewStuff()
     else if(!dialog.changedEntries().isEmpty()) {
         KMessageBox::information(0, i18n("Stencils successfully uninstalled."));
     }
+#endif
 }
 
 void StencilBoxDocker::installStencil()
