@@ -201,5 +201,5 @@ bool KoTextBlockBorderData::deref()
 
 int KoTextBlockBorderData::useCount() const
 {
-    return d->refCount;
+    return d->refCount.load();
 }
