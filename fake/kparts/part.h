@@ -15,14 +15,14 @@
 //#include <kparts/partmanager.h>
 #include <kparts/browserextension.h>
 
-#include "kofake_export.h"
+#include "../kofake_export.h"
 
 
-namespace KParts {
+namespace  KParts {
 
     class PartManager;
 
-    class OpenUrlArguments
+    class KOFAKE_EXPORT OpenUrlArguments
     {
     public:
 #if 0
@@ -82,7 +82,7 @@ namespace KParts {
 
     class KOFAKE_EXPORT PartBase : virtual public KXMLGUIClient
     {
-	Q_OBJECT
+
     public:
         PartBase() : m_object(0) {}
         virtual ~PartBase() {}
@@ -99,7 +99,7 @@ namespace KParts {
         QObject *m_object;
     };
 
-    class Part : public QObject, public PartBase
+    class KOFAKE_EXPORT Part : public QObject, public PartBase
     {
         Q_OBJECT
     public:

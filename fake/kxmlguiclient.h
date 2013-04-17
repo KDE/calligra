@@ -17,6 +17,7 @@ class KXMLGUIBuilder
 
 class KXMLGUIClient
 {
+
 public:
     KXMLGUIClient(KXMLGUIClient *parent = 0) : m_factory(0), m_builder(0), m_actionCollection(new KActionCollection()) {}
     virtual ~KXMLGUIClient() { delete m_actionCollection; }
