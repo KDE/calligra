@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <ktoggleaction.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <kiconeffect.h>
 #include <kundo2command.h>

@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QFontMetrics>
 
-#include <kmenu.h>
+#include <QMenu>
 #include <kiconloader.h>
 #include <kiconeffect.h>
 
@@ -120,7 +120,7 @@ KexiDBWidgetContextMenuExtender::~KexiDBWidgetContextMenuExtender()
 
 void KexiDBWidgetContextMenuExtender::exec(QMenu *menu, const QPoint &globalPos)
 {
-    KMenu kmenu;
+    QMenu kmenu;
     foreach(QAction* action, menu->actions()) {
         kmenu.addAction(action);
     }
@@ -128,7 +128,7 @@ void KexiDBWidgetContextMenuExtender::exec(QMenu *menu, const QPoint &globalPos)
     kmenu.exec(globalPos);
 }
 
-void KexiDBWidgetContextMenuExtender::createTitle(KMenu *menu)
+void KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu)
 {
     if (!menu)
         return;

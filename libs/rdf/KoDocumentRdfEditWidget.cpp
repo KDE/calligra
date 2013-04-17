@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <QComboBox>
 #include <QSortFilterProxyModel>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 
 
@@ -343,7 +343,7 @@ void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfSemanticItem item)
 
 void KoDocumentRdfEditWidget::showSemanticViewContextMenu(const QPoint &position)
 {
-    QPointer<KMenu> menu = new KMenu(0);
+    QPointer<QMenu> menu = new QMenu(0);
     QList<KAction*> actions;
     if (QTreeWidgetItem *baseitem = d->m_ui->m_semanticView->itemAt(position)) {
         if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {

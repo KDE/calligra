@@ -40,7 +40,7 @@
 #include <kdebug.h>
 
 #include <QTextDocument>
-#include <kmenu.h>
+#include <QMenu>
 
 #include "KoRdfSemanticTreeWidgetItem.h"
 
@@ -128,7 +128,7 @@ void KWRdfDocker::semanticObjectUpdated(hKoRdfSemanticItem item)
  */
 void KWRdfDocker::showSemanticViewContextMenu(const QPoint &position)
 {
-    KMenu* menu = new KMenu(0);
+    QMenu* menu = new QMenu(0);
     QList<KAction *> actions;
     if (QTreeWidgetItem *baseitem = widgetDocker.semanticView->itemAt(position)) {
         if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {

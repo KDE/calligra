@@ -237,7 +237,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     verticalScrollBar()->raise();
 
     //context menu
-    m_contextMenu = new KMenu(this);
+    m_contextMenu = new QMenu(this);
     m_contextMenu->setObjectName("m_contextMenu");
 #if 0 //moved to mainwindow's actions
     d->menu_id_addRecord = m_contextMenu->insertItem(

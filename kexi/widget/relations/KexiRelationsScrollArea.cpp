@@ -34,7 +34,7 @@
 
 #include <klocale.h>
 #include <kaction.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 
 #include <db/tableschema.h>
@@ -139,7 +139,7 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
 // invalidateActions();
 
 #if 0
-    d->popup = new KMenu(this, "popup");
+    d->popup = new QMenu(this, "popup");
     d->openSelectedTableQueryAction->plug(d->popup);
     d->removeSelectedTableQueryAction->plug(d->popup);
     d->removeSelectedConnectionAction->plug(d->popup);

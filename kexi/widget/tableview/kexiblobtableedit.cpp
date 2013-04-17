@@ -44,7 +44,7 @@
 #include <kio/job.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kstdaccel.h>
 
 #include <kexiutils/utils.h>

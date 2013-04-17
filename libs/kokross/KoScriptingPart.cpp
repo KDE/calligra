@@ -35,7 +35,7 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kstandarddirs.h>

@@ -43,14 +43,14 @@
 #include <QScrollBar>
 
 #include <kio/netaccess.h>
-#include <kmenubar.h>
+#include <QMenuBar>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <klocale.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kparts/componentfactory.h>
 #include <kparts/event.h>
 #include <kparts/plugin.h>
@@ -529,7 +529,7 @@ void KisView2::dropEvent(QDropEvent *event)
         QList<QUrl> urls = event->mimeData()->urls();
         if (urls.length() > 0) {
 
-            KMenu popup;
+            QMenu popup;
             popup.setObjectName("drop_popup");
 
             QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);

@@ -33,7 +33,7 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kicontheme.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -357,7 +357,7 @@ void
 PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 {
     if (!it) return;
-    KMenu *menu = new KMenu();
+    QMenu *menu = new QMenu();
     menu->insertItem(koIcon("edit-rename"), i18n("Rename Item"), this, SLOT(renameItem()));
     menu->insertItem(koIcon("list-remove"), i18n("Remove Item"), this, SLOT(removeItem()));
     menu->exec(p);

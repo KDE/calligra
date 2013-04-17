@@ -73,7 +73,7 @@
 #include <kfilewidget.h>
 #include <kurlcombobox.h>
 #include <kdiroperator.h>
-#include <kmenubar.h>
+#include <QMenuBar>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>

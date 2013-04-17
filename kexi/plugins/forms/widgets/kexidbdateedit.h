@@ -25,7 +25,7 @@
 #include <formeditor/FormWidgetInterface.h>
 #include <q3datetimeedit.h>
 
-class KMenu;
+class QMenu;
 class KDatePicker;
 class QDateTimeEditor;
 
@@ -139,7 +139,7 @@ protected:
 private:
     KDatePicker *m_datePicker;
     Q3DateEdit *m_edit;
-    KMenu *m_datePickerPopupMenu;
+    QMenu *m_datePickerPopupMenu;
     QDateTimeEditor *m_dte_date;
     bool m_invalidState : 1;
     bool m_cleared : 1;

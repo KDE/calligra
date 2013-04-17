@@ -79,8 +79,6 @@ klineedit.h
 klocale.h
 klocalizedstring.h
 kmainwindow.h
-kmenubar.h
-kmenu.h
 kmessagebox.h
 kmimetype.h
 knotification.h

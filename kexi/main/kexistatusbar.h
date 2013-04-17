@@ -28,7 +28,7 @@
 
 #include <kstatusbar.h>
 
-class KMenu;
+class QMenu;
 class QCheckBox;
 
 #if KexiStatusBar_KTEXTEDITOR_USED
@@ -69,7 +69,7 @@ protected:
     KTextEditor::ViewCursorInterface * m_cursorIface;
     KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
 #endif
-    KMenu *m_viewMenu;
+    QMenu *m_viewMenu;
 };
 
 #endif

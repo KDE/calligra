@@ -43,7 +43,7 @@
 
 #include <kpushbutton.h>
 #include <klineedit.h>
-#include <kmenu.h>
+#include <QMenu>
 
 class KexiTableEdit;
 class QLabel;

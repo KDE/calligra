@@ -49,7 +49,7 @@
 
 #include <KoIcon.h>
 
-#include <kmenu.h>
+#include <QMenu>
 #include <klocale.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
@@ -108,7 +108,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     }
     layout->addWidget(button, 1, 0);
 
-    KMenu *menu = new KMenu(button);
+    QMenu *menu = new QMenu(button);
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
     menu->addAction(koIcon("document-new"),
@@ -138,7 +138,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     layout->addWidget(button, 1, 4);
 
     button = new QToolButton(mainWidget);
-    menu = new KMenu(this);
+    menu = new QMenu(button);
     QActionGroup *group = new QActionGroup(this);
 
     m_viewModeActions.insert(KoDocumentSectionView::MinimalMode,

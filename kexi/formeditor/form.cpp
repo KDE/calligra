@@ -33,7 +33,7 @@
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kfontdialog.h>
 #include <ktextedit.h>
 #include <klineedit.h>
@@ -327,7 +327,7 @@ public:
     //! true is slot connection is curently being painted
 // removed, use state instead    bool creatingConnection;
     Connection *connection;
-// not needed to store this one:    KMenu *m_sigSlotMenu;
+// not needed to store this one:    QMenu *m_sigSlotMenu;
 #endif
 
 // moved from WidgetPropertySet
@@ -2436,7 +2436,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         titleText = i18n("Multiple Widgets (%1)", widgetsCount);
     }
 
-    KMenu menu;
+    QMenu menu;
     menu.addTitle(icon, titleText);
 
     QAction *a;
@@ -2482,7 +2482,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         if (separatorNeeded)
             menu.addSeparator();
 
-        KMenu *sub = new KMenu(w);
+        QMenu *sub = new QMenu(w);
         QWidget *buddy = buddyLabelWidget->buddy();
 
         noBuddyAction = sub->addAction(i18n("No Buddy"));
@@ -2521,7 +2521,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
             menu.addSeparator();
 
         // We create the signals menu
-        KMenu *sigMenu = new KMenu();
+        QMenu *sigMenu = new QMenu();
         const QList<QMetaMethod> list(
             KexiUtils::methodsForMetaObjectWithParents(w->metaObject(), QMetaMethod::Signal,
                     QMetaMethod::Public));

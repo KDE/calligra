@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 
 #include <kactioncollection.h>
-#include <kmenu.h>
+#include <QMenu>
 
 class KexiDataAwareView::Private
 {

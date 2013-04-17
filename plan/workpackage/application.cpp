@@ -55,7 +55,7 @@
 #include <kiconloader.h>
 #include <klibloader.h>
 #include <klocale.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <kmimetypetrader.h>
 #include <kparts/partmanager.h>

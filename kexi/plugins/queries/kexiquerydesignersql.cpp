@@ -28,7 +28,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kaction.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kdialog.h>
 
 #include <KoIcon.h>

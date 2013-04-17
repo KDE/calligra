@@ -40,7 +40,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <klocale.h>

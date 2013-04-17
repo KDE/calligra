@@ -25,7 +25,7 @@
 
 #include <klocale.h>
 #include <kaction.h>
-#include <kmenu.h>
+#include <QMenu>
 
 #include <db/cursor.h>
 #include <db/utils.h>

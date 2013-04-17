@@ -38,7 +38,7 @@
 #include <q3stylesheet.h>
 #include <ktextbrowser.h>
 #include <kfiledialog.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kactionmenu.h>
 #include <kdebug.h>
 

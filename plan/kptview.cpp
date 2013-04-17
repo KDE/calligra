@@ -49,7 +49,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>

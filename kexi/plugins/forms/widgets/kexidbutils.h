@@ -20,7 +20,7 @@
 #ifndef KDBWIDGETS_UTILS_H
 #define KDBWIDGETS_UTILS_H
 
-#include <kmenu.h>
+#include <QMenu>
 #include <core/kexidataiteminterface.h>
 
 //! Form-related utilities
@@ -47,11 +47,11 @@ public:
     KexiDBWidgetContextMenuExtender(QObject* parent, KexiDataItemInterface* iface);
     ~KexiDBWidgetContextMenuExtender();
 
-    //! Perform context menu exec() for @a globalPos. KMenu is used
+    //! Perform context menu exec() for @a globalPos. QMenu is used
     void exec(QMenu *menu, const QPoint &globalPos);
 
     //! Creates title for context menu \a menu
-    void createTitle(KMenu *menu);
+    void createTitle(QMenu *menu);
 
     //! Enables or disables context menu actions for @a menu that can modify the value.
     void updatePopupMenuActions(QMenu *menu);

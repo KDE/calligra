@@ -21,7 +21,7 @@
 
 #include <KoIcon.h>
 
-#include <kmenu.h>
+#include <QMenu>
 
 #include "DocumentModel.h"
 #include "Section.h"
@@ -46,7 +46,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     m_wdgSectionsBox.listSections->setModel(m_proxy);
 
     // Setup the view mode button
-    KMenu* m_viewModeMenu = new KMenu(this);
+    QMenu* m_viewModeMenu = new QMenu(this);
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;
 
@@ -74,7 +74,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     // Setup the add button
     m_wdgSectionsBox.bnAdd->setIcon(koIcon("list-add"));
 
-    KMenu* newSectionMenu = new KMenu(this);
+    QMenu* newSectionMenu = new QMenu(this);
     m_wdgSectionsBox.bnAdd->setMenu(newSectionMenu);
     m_wdgSectionsBox.bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
     connect(m_wdgSectionsBox.bnAdd, SIGNAL(clicked()), SLOT(slotNewSectionBellowCurrent()));

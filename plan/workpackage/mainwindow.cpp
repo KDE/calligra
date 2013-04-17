@@ -54,7 +54,7 @@
 #include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kservice.h>
 #include <kmessagebox.h>
 #include <krecentdocument.h>

@@ -46,7 +46,7 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kparts/part.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kconfiggroup.h>
 
 #include <QGridLayout>
@@ -115,7 +115,7 @@ KarbonLayerDocker::KarbonLayerDocker()
     layout->addWidget(button, 1, 3);
 
     QToolButton * toolButton = new QToolButton(mainWidget);
-    KMenu * menu = new KMenu(this);
+    QMenu * menu = new QMenu(this);
     QActionGroup *group = new QActionGroup(this);
 
     m_viewModeActions.insert(KoDocumentSectionView::MinimalMode,

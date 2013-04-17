@@ -25,7 +25,7 @@
 #include <QHash>
 #include <QEvent>
 #include <QPointer>
-#include <kmenu.h>
+#include <QMenu>
 #include <kexi_export.h>
 #include <kexi.h>
 
@@ -50,7 +50,7 @@ namespace KexiPart
 class KexiProject;
 
 /*! @internal */
-class KexiMenuBase : public KMenu
+class KexiMenuBase : public QMenu
 {
 public:
     KexiMenuBase(QWidget *parent, KActionCollection *collection);

@@ -28,7 +28,7 @@
 //#include <klibloader.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kactioncollection.h>
 //2.0 #include <kxmlguiclient.h>
 
@@ -686,7 +686,7 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
     if (textVertical.isEmpty()) //default
         textVertical = i18nc("Insert Vertical Widget", "Insert Vertical");
 
-    KMenu popup(parent);
+    QMenu popup(parent);
     popup.setObjectName("orientationSelectionPopup");
     popup.addTitle(KIcon(wclass->iconName()), i18n("Insert Widget: %1", wclass->name()));
     QAction* horizAction = popup.addAction(iconHorizontal, textHorizontal);

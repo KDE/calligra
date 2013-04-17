@@ -68,7 +68,7 @@
 #include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kxmlguifactory.h>
 #include <kmultitabbar.h>
 

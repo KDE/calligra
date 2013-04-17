@@ -43,7 +43,7 @@
 
 #include <kis_debug.h>
 #include <kglobal.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <klocale.h>
@@ -123,7 +123,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->listLayers, SIGNAL(collapsed(const QModelIndex&)), SLOT(slotCollapsed(const QModelIndex &)));
     connect(m_wdgLayerBox->listLayers, SIGNAL(expanded(const QModelIndex&)), SLOT(slotExpanded(const QModelIndex &)));
 
-    m_viewModeMenu = new KMenu(this);
+    m_viewModeMenu = new QMenu(this);
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;
 
@@ -255,7 +255,7 @@ KisLayerBox::KisLayerBox()
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
     m_actions.append(m_selectOpaque);
 
-    m_newLayerMenu = new KMenu(this);
+    m_newLayerMenu = new QMenu(this);
     m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
     m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
 

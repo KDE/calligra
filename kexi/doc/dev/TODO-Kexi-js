@@ -1111,7 +1111,7 @@ TODO: fix displaying default values in comboboxes (form and tableview)
 TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
 KDE4: TODO:
-- fix KMenu::addTitle():
+- fix QMenu::addTitle():
   http://api.kde.org/4.0-api/kdelibs-apidocs/kdeui/html/kmenu_8cpp-source.html#l00144
 
 TODO: check reports at scan.coverity.com

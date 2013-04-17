@@ -28,7 +28,7 @@
 
 class KActionMenu;
 class KAction;
-class KMenu;
+class QMenu;
 class QSignalMapper;
 class SpellCheck;
 
@@ -60,7 +60,7 @@ private:
     KActionMenu *m_suggestionsMenuAction;
     KAction *m_ignoreWordAction;
     KAction *m_addToDictionaryAction;
-    KMenu *m_suggestionsMenu;
+    QMenu *m_suggestionsMenu;
     int m_lengthMisspelled;
     QSignalMapper *m_suggestionsSignalMapper;
     int m_currentMisspelledPosition;

@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <klocale.h>
 
 #include <QSignalMapper>

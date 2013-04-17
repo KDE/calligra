@@ -45,7 +45,7 @@
 #include <QPointer>
 
 #include <kactionmenu.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>

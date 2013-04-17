@@ -23,7 +23,7 @@
 #include <KoResource.h>
 
 #include <ui_wdgpaintoppresets.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kis_config.h>
 #include <KoIcon.h>
 #include <QCompleter>
@@ -40,7 +40,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     , m_d(new Private())
 {
     m_d->uiWdgPaintOpPresets.setupUi(this);
-    KMenu* menu = new KMenu(this);
+    QMenu* menu = new QMenu(this);
 
     QActionGroup *actionGroup = new QActionGroup(this);
 

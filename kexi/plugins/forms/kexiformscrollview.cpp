@@ -28,7 +28,7 @@
 #include <widget/utils/kexirecordmarker.h>
 #include <kexi_global.h>
 
-#include <kmenu.h>
+#include <QMenu>
 #include <kdebug.h>
 
 class KexiFormScrollView::Private
@@ -65,7 +65,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 
     connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 
-    m_contextMenu = new KMenu(this);
+    m_contextMenu = new QMenu(this);
     m_contextMenu->setObjectName("m_contextMenu");
 
 // setFocusPolicy(NoFocus);

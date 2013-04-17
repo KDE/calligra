@@ -75,7 +75,7 @@
 #include <kfontaction.h>
 #include <kaction.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <klocale.h>
 #include <kstandardaction.h>
 #include <kmimetype.h>

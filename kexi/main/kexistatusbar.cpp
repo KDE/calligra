@@ -27,7 +27,7 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 
-#include <kmenu.h>
+#include <QMenu>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -37,10 +37,10 @@
 #endif
 
 // Smart menu
-class Menu : public KMenu
+class Menu : public QMenu
 {
 public:
-    Menu(QWidget *parent) : KMenu(parent) {}
+    Menu(QWidget *parent) : QMenu(parent) {}
 protected:
     void mouseReleaseEvent(QMouseEvent* e);
 };

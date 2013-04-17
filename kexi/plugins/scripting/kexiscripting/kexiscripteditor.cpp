@@ -25,7 +25,7 @@
 #include <kross/core/action.h>
 
 #include <kdebug.h>
-#include <kmenu.h>
+#include <QMenu>
 
 /// \internal d-pointer class
 class KexiScriptEditor::Private

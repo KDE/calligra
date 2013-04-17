@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kmenu.h"
+#include "QMenu"
 #include "FontSizeAction.h"
 
 QString format(qreal v) {

@@ -38,7 +38,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kconfig.h>
@@ -310,7 +310,7 @@ void KexiProjectNavigator::contextMenuEvent(QContextMenuEvent* event)
         return;
     
     KexiProjectModelItem *bit = static_cast<KexiProjectModelItem*>(d->list->currentIndex().internalPointer());
-    KMenu *pm = 0;
+    QMenu *pm = 0;
     if (bit->partItem()) {
         pm = d->itemMenu;
         KexiProjectModelItem *par_it = static_cast<KexiProjectModelItem*>(bit->parent());
@@ -696,7 +696,7 @@ KexiProjectModel* KexiProjectNavigator::model() const
 //--------------------------------------------
 
 KexiMenuBase::KexiMenuBase(QWidget* parent, KActionCollection *col)
-        : KMenu(parent)
+        : QMenu(parent)
         , m_actionCollection(col)
 {
 }
@@ -709,7 +709,7 @@ QAction* KexiMenuBase::addAction(const QString& actionName)
 {
     QAction* action = m_actionCollection->action(actionName);
     if (action)
-        KMenu::addAction(action);
+        QMenu::addAction(action);
     return action;
 }
 

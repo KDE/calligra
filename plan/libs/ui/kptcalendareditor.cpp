@@ -50,7 +50,7 @@
 #include <kxmlguifactory.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
-#include <kmenu.h>
+#include <QMenu>
 
 #include <KoDocument.h>
 
@@ -336,7 +336,7 @@ void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
     if ( ! isReadWrite() ) {
         return;
     }
-    KMenu menu;
+    QMenu menu;
     menu.addAction( actionSetWork );
     menu.addAction( actionSetVacation );
     menu.addAction( actionSetUndefined );
@@ -439,8 +439,8 @@ CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
     m_calendarview->setAcceptDrops( true );
     m_calendarview->setAcceptDropsOnView( true );
 
-    connect( m_datePicker->dateTable(), SIGNAL( aboutToShowContextMenu( KMenu*, const QDate& ) ), SLOT( slotContextMenuDate( KMenu*, const QDate& ) ) );
-    connect( m_datePicker->dateTable(), SIGNAL( aboutToShowContextMenu( KMenu*, const QList<QDate>& ) ), SLOT( slotContextMenuDate( KMenu*, const QList<QDate>& ) ) );
+    connect( m_datePicker->dateTable(), SIGNAL( aboutToShowContextMenu( QMenu*, const QDate& ) ), SLOT( slotContextMenuDate( QMenu*, const QDate& ) ) );
+    connect( m_datePicker->dateTable(), SIGNAL( aboutToShowContextMenu( QMenu*, const QList<QDate>& ) ), SLOT( slotContextMenuDate( QMenu*, const QList<QDate>& ) ) );
 
 /*    const QDate date(2007,7,19);
     const QColor fgColor(Qt::darkGray);
@@ -500,7 +500,7 @@ void CalendarEditor::setGuiActive( bool activate )
     }
 }
 
-void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates )
+void CalendarEditor::slotContextMenuDate( QMenu *menu, const QList<QDate> &dates )
 {
     if ( ! isReadWrite() ) {
         return;
@@ -515,7 +515,7 @@ void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates
     menu->addAction( actionSetUndefined );
 }
 
-void CalendarEditor::slotContextMenuDate( KMenu *menu, const QDate &date )
+void CalendarEditor::slotContextMenuDate( QMenu *menu, const QDate &date )
 {
     kDebug(planDbg())<<menu<<date;
     if ( ! isReadWrite() || ! date.isValid() ) {

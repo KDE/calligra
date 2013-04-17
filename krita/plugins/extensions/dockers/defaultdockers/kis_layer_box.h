@@ -43,7 +43,7 @@ class QModelIndex;
 
 typedef QList<QModelIndex> QModelIndexList;
 
-class KMenu;
+class QMenu;
 class KoCompositeOp;
 class KisCanvas2;
 class KisNodeModel;
@@ -115,8 +115,8 @@ private slots:
 private:
 
     KisCanvas2* m_canvas;
-    KMenu *m_viewModeMenu;
-    KMenu *m_newLayerMenu;
+    QMenu *m_viewModeMenu;
+    QMenu *m_newLayerMenu;
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;

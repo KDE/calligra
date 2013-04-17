@@ -31,7 +31,7 @@
 #include "kis_palette_manager.h"
 #include <QtWidgets>
 #include "klocale.h"
-#include <kmenu.h>
+#include <QMenu>
 #include <KoIcon.h>
 #include <kis_paintop_settings_widget.h>
 
@@ -115,7 +115,7 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     rightBottomLayout->addWidget(viewButton);
     rightLayout->addLayout(rightBottomLayout);
 
-    KMenu* menu = new KMenu(this);
+    QMenu* menu = new QMenu(this);
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
