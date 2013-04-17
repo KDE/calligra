@@ -61,6 +61,7 @@ namespace KGlobal {
     }
 
     static void setActiveComponent(KComponentData) {}
+    static KComponentData activeComponent() { return mainComponent(); }
 
     KOFAKE_EXPORT KSharedConfigPtr config();
     KOFAKE_EXPORT KStandardDirs* dirs();
