@@ -34,7 +34,7 @@ class QLabel;
 class KLineEdit;
 class KPushButton;
 
-class KListWidget;
+class QListWidget;
 
 namespace Calligra
 {
@@ -64,7 +64,7 @@ public Q_SLOTS:
 
 private:
     Selection*      m_selection;
-    KListWidget*    m_list;
+    QListWidget*    m_list;
     QLabel*         m_rangeName;
     KPushButton*    m_newButton;
     KPushButton*    m_editButton;

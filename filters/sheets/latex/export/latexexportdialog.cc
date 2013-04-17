@@ -111,7 +111,7 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
     encodingComboBox->addItem("decmulti");
     encodingComboBox->addItem("next");
 
-    KListWidget* languagesList = m_ui.languagesList;
+    QListWidget* languagesList = m_ui.languagesList;
     languagesList->addItem("american");
     languagesList->addItem("austrian");
     languagesList->addItem("bahasa");
@@ -206,7 +206,7 @@ void LatexExportDialog::accept()
 
     /* Language tab */
     config->setEncoding(m_ui.encodingComboBox->currentText());
-    KListWidget* langUsedList = m_ui.langUsedList;
+    QListWidget* langUsedList = m_ui.langUsedList;
     for (int index = 0; index < langUsedList->count(); ++index) {
         kDebug(30522) << "lang. :" << langUsedList->item(index)->text();
         config->addLanguage(langUsedList->item(index)->text());

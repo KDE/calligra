@@ -21,7 +21,7 @@
     <widget class="QComboBox" name="orientation" />
    </item>
    <item row="1" column="0" colspan="2" >
-    <widget class="KListWidget" name="positionList" />
+    <widget class="QListWidget" name="positionList" />
    </item>
    <item row="2" column="0" >
     <widget class="QLabel" name="label_2" >
@@ -51,9 +51,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KListWidget</class>
+   <class>QListWidget</class>
    <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
+   <header>QListWidget</header>
   </customwidget>
   <customwidget>
    <class>KoUnitDoubleSpinBox</class>

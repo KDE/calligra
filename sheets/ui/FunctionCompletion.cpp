@@ -29,7 +29,7 @@
 
 // KDE
 #include <kdebug.h>
-#include <klistwidget.h>
+#include <QListWidget>
 
 // Qt
 #include <QApplication>
@@ -47,7 +47,7 @@ class FunctionCompletion::Private
 public:
     CellEditor* editor;
     QFrame *completionPopup;
-    KListWidget *completionListBox;
+    QListWidget *completionListBox;
     QLabel* hintLabel;
 };
 
@@ -67,7 +67,7 @@ FunctionCompletion::FunctionCompletion(CellEditor* editor)
     layout->setMargin(0);
     layout->setSpacing(0);
 
-    d->completionListBox = new KListWidget(d->completionPopup);
+    d->completionListBox = new QListWidget(d->completionPopup);
     d->completionPopup->setFocusProxy(d->completionListBox);
     d->completionListBox->setFrameStyle(QFrame::NoFrame);
 //   d->completionListBox->setVariableWidth( true );

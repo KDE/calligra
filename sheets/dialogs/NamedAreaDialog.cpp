@@ -38,7 +38,7 @@
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klineedit.h>
-#include <klistwidget.h>
+#include <QListWidget>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 #include <kpushbutton.h>
@@ -75,7 +75,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
 
     QVBoxLayout *vboxLayout = new QVBoxLayout();
 
-    m_list = new KListWidget(this);
+    m_list = new QListWidget(this);
     m_list->setSortingEnabled(true);
     vboxLayout->addWidget(m_list);
 

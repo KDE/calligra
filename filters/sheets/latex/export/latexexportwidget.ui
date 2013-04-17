@@ -247,7 +247,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1">
             <item>
-             <widget class="KListWidget" name="languagesList">
+             <widget class="QListWidget" name="languagesList">
               <property name="sortingEnabled">
                <bool>true</bool>
               </property>
@@ -272,7 +272,7 @@
              </layout>
             </item>
             <item>
-             <widget class="KListWidget" name="langUsedList">
+             <widget class="QListWidget" name="langUsedList">
               <property name="sortingEnabled">
                <bool>true</bool>
               </property>
@@ -390,9 +390,9 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KListWidget</class>
+   <class>QListWidget</class>
    <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
+   <header>QListWidget</header>
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>

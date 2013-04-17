@@ -20,26 +20,26 @@
       </widget>
      </item>
      <item>
-      <widget class="KListWidgetSearchLine" name="languageListSearchLine" />
+      <widget class="QListWidgetSearchLine" name="languageListSearchLine" />
      </item>
     </layout>
    </item>
    <item>
-    <widget class="KListWidget" name="languageList" />
+    <widget class="QListWidget" name="languageList" />
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
   <customwidgets>
   <customwidget>
-   <class>KListWidgetSearchLine</class>
+   <class>QListWidgetSearchLine</class>
    <extends>QLineEdit</extends>
    <header>klistwidgetsearchline.h</header>
   </customwidget>
   <customwidget>
-   <class>KListWidget</class>
+   <class>QListWidget</class>
    <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
+   <header>QListWidget</header>
   </customwidget>
  </customwidgets>
  <includes>
