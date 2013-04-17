@@ -41,6 +41,7 @@
 #include <QLabel>
 #include <QPropertyAnimation>
 #include <QLineEdit>
+#include <QToolButton>
 
 //Calligra Headers
 #include <KoDocumentResourceManager.h>
