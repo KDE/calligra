@@ -1,4 +1,4 @@
-/* This file is part of the KDE libraries
+This file is part of the KDE libraries
 
    Copyright (c) 2000 Carsten Pfeiffer <pfeiffer@kde.org>
 
@@ -96,4 +96,4 @@ private:
 
 
 
-#endif // KCURSOR_PRIVATE_H
+#endif // KOCURSOR_PRIVATE_H

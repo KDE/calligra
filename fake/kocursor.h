@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KCURSOR_H
-#define KCURSOR_H
+#ifndef KOCURSOR_H
+#define KOCURSOR_H
 
 #include <kofake_export.h>
 
@@ -109,4 +109,4 @@ private:
 };
 
 
-#endif // _KCURSOR_H
+#endif // _KOCURSOR_H
