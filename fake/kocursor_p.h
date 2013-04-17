@@ -1,4 +1,4 @@
-This file is part of the KDE libraries
+/*This file is part of the KDE libraries
 
    Copyright (c) 2000 Carsten Pfeiffer <pfeiffer@kde.org>
 
