@@ -35,4 +35,16 @@ public:
     KIntNumInput(int value, QWidget *parent) : KNumInput(parent) { setValue(value); }
 };
 
+class KDoubleNumInput : public KNumInput
+{
+public:
+    KDoubleNumInput(QWidget *parent = 0) : KNumInput(parent) {}
+    KDoubleNumInput(double lower, double upper, double value, QWidget *parent=0,double singleStep=0.01,
+                    int precision=2) : KNumInput(parent) {setValue(value);}
+    virtual void setLabel(const QString & label, Qt::Alignment a = Qt::AlignLeft | Qt::AlignTop) {}
+
+
+};
+
+
 #endif
