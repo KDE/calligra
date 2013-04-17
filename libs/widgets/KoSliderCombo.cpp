@@ -287,4 +287,4 @@ void KoSliderCombo::setValue(qreal value)
     emit valueChanged(value, true);
 }
 
-#include <KoSliderCombo.moc>
+#include <moc_KoSliderCombo.cpp>

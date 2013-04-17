@@ -231,4 +231,4 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
     thePublic->resizeEvent(0);
 }
 
-#include <KoDockWidgetTitleBar.moc>
+#include <moc_KoDockWidgetTitleBar.cpp>
