@@ -4,8 +4,8 @@
 #include <kaction.h>
 #include <QActionGroup>
 #include <QMenu>
-
-class KSelectAction : public KAction
+#include "kofake_export.h"
+class KOFAKE_EXPORT KSelectAction : public KAction
 {
     Q_OBJECT
 public:

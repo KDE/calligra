@@ -3,6 +3,9 @@
 
 #include <QTextCodec>
 
+#include "kofake_export.h"
+
+
 class KCharsets
 {
 public:

@@ -2,8 +2,8 @@
 #define FAKE_KICON_H
 
 #include <QIcon>
-
-class KIcon : public QIcon
+#include "kofake_export.h"
+class KOFAKE_EXPORT KIcon : public QIcon
 {
 public:
     KIcon(const QString &name = QString()) : QIcon() {}

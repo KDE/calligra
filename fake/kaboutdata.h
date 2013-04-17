@@ -6,6 +6,9 @@
 #include <QVariant>
 #include <klocale.h>
 
+#include "kofake_export.h"
+
+
 class KAboutLicense
 {
 public:

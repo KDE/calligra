@@ -12,6 +12,11 @@
 #include <kurl.h>
 #include <kio/kjob.h>
 
+
+#include "kofake_export.h"
+
+
+
 #if 0
 #include <kio/global.h>
 #include <kio/udsentry.h>
@@ -27,7 +32,7 @@ class QWidget;
 class KJob;
 namespace KIO {
 
-class KDECORE_EXPORT NetAccess : public QObject
+class KOFAKE_EXPORT NetAccess : public QObject
 {
 public:
     enum StatSide { SourceSide, DestinationSide };

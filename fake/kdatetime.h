@@ -6,6 +6,9 @@
 #include <QTime>
 #include <QDateTime>
 
+#include "kofake_export.h"
+
+
 class KDateTime : public QDateTime
 {
 public:

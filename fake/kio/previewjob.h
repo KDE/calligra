@@ -5,11 +5,14 @@
 #include <kfileitem.h>
 #include <kio/job.h>
 
+#include "kofake_export.h"
+
+
 class QPixmap;
 
 namespace KIO {
 
-    class PreviewJob : public KIO::Job
+    class KOFAKE_EXPORT PreviewJob : public KIO::Job
     {
         //Q_OBJECT
     public:

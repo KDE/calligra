@@ -5,6 +5,9 @@
 #include <QPushButton>
 #include <klocale.h>
 
+#include "kofake_export.h"
+
+
 class KColorButton : public QPushButton
 {
 public:

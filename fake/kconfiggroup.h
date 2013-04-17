@@ -10,6 +10,9 @@
 #include <kconfigbase.h>
 #include <ksharedconfig.h>
 
+#include "kofake_export.h"
+
+
 class KConfigGroup : public KConfigBase
 {
 public:

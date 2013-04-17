@@ -6,6 +6,9 @@
 #include <QDrag>
 #include <QWidget>
 
+#include "kofake_export.h"
+
+
 namespace KColorMimeData
 {
     void populateMimeData(QMimeData *mimeData, const QColor& color) {}

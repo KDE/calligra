@@ -29,7 +29,7 @@
  *
  * @internal
  */
-class KARCHIVE_EXPORT KGzipFilter : public KFilterBase
+class KOFAKE_EXPORT KGzipFilter : public KFilterBase
 {
 public:
     KGzipFilter();

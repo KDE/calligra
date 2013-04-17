@@ -3,12 +3,10 @@
 
 #include <QObject>
 #include <QWidget>
-
-class KFind : public QObject
+#include "kofake_export.h"
+class KOFAKE_EXPORT KFind : public QObject
 {
-#if 0
     Q_OBJECT
-#endif
 
 public:
 

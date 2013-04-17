@@ -15,6 +15,9 @@
 //#include <kparts/partmanager.h>
 #include <kparts/browserextension.h>
 
+#include "kofake_export.h"
+
+
 namespace KParts {
 
     class PartManager;
@@ -77,8 +80,9 @@ namespace KParts {
         QString m_mime;
     };
 
-    class PartBase : virtual public KXMLGUIClient
+    class KOFAKE_EXPORT PartBase : virtual public KXMLGUIClient
     {
+	Q_OBJECT
     public:
         PartBase() : m_object(0) {}
         virtual ~PartBase() {}
@@ -116,7 +120,7 @@ namespace KParts {
         PartManager *m_manager;
     };
 
-    class ReadOnlyPart : public Part
+    class KOFAKE_EXPORT ReadOnlyPart : public Part
     {
         Q_OBJECT
     public:
@@ -174,7 +178,7 @@ namespace KParts {
         OpenUrlArguments m_args;
     };
 
-    class ReadWritePart : public ReadOnlyPart
+    class KOFAKE_EXPORT ReadWritePart : public ReadOnlyPart
     {
         Q_OBJECT
     public:
@@ -214,8 +218,9 @@ namespace KParts {
         bool m_modified;
     };
 
-    class PartManager : public QObject
+    class KOFAKE_EXPORT PartManager : public QObject
     {
+      Q_OBJECT
     public:
         enum SelectionPolicy { Direct, TriState };
         enum Reason { ReasonLeftClick = 100, ReasonMidClick, ReasonRightClick, NoReason };

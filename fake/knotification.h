@@ -2,8 +2,8 @@
 #define FAKE_KNOTIFICATION_H
 
 #include <QObject>
-
-class KNotification : public QObject
+#include "kofake_export.h"
+class KOFAKE_EXPORT KNotification : public QObject
 {
     Q_OBJECT
 public:

@@ -5,6 +5,9 @@
 #include <QPalette>
 #include <QDebug>
 
+#include "kofake_export.h"
+
+
 class KColorScheme
 {
 public:

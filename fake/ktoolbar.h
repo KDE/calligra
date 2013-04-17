@@ -2,8 +2,8 @@
 #define FAKE_KTOOLBAR_H
 
 #include <QToolBar>
-
-class KToolBar : public QToolBar
+#include "kofake_export.h"
+class KOFAKE_EXPORT KToolBar : public QToolBar
 {
     Q_OBJECT
 public:

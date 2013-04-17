@@ -3,6 +3,9 @@
 
 #include <QColorDialog>
 
+#include "kofake_export.h"
+
+
 class KColorDialog : public QColorDialog
 {
 public:

@@ -42,7 +42,7 @@ class KZipFileEntry;
  *   http://www.pkware.com/products/enterprise/white_papers/appnote.html
  * @author Holger Schroeder <holger-kde@holgis.net>
  */
-class KDECORE_EXPORT KZip : public KArchive
+class KOFAKE_EXPORT KZip : public KArchive
 {
 public:
     /**
@@ -167,7 +167,7 @@ private:
 /**
  * A KZipFileEntry represents an file in a zip archive.
  */
-class KDECORE_EXPORT KZipFileEntry : public KArchiveFile
+class KOFAKE_EXPORT KZipFileEntry : public KArchiveFile
 {
 public:
     /**

@@ -9,6 +9,7 @@
 #include <kpluginfactory.h>
 //#include <kexportplugin.h>
 #include <kglobal.h>
+#include "kofake_export.h"
 
 namespace KParts { class Part; }
 
@@ -44,14 +45,14 @@ namespace KParts { class Part; }
 #define K_PLUGIN_FACTORY_DEFINITION(name, pluginRegistrations) K_PLUGIN_FACTORY_DEFINITION_WITH_BASEFACTORY(name, KPluginFactory, pluginRegistrations)
 #endif
 
-class KPluginFactoryContainer : public QObject
+class KOFAKE_EXPORT KPluginFactoryContainer : public QObject
 {
     Q_OBJECT
 public:
     KPluginFactoryContainer(QObject *parent = 0) : QObject(parent) { setObjectName("KPluginFactoryContainer"); }
 };
 
-class KPluginFactory : public QObject
+class KOFAKE_EXPORT KPluginFactory : public QObject
 {
     Q_OBJECT
 public:

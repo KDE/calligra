@@ -3,6 +3,9 @@
 
 #include <kaction.h>
 
+#include "kofake_export.h"
+
+
 class KActionMenu : public KAction
 {
 public:

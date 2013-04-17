@@ -1,0 +1,13 @@
+#ifndef FAKE_KOFAKE_EXPORT_H
+#define FAKE_KOFAKE_EXPORT_H
+
+#include <kdemacros.h>
+
+#define KOFAKE_EXPORT Q_DECL_EXPORT
+//#define KARCHIVE_EXPORT
+
+#ifndef KOFAKE_EXPORT_DEPRECATED
+    #define KOFAKE_EXPORT_DEPRECATED KDE_DEPRECATED KOFAKE_EXPORT
+#endif
+
+#endif

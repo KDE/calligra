@@ -3,6 +3,9 @@
 
 #include <QComboBox>
 
+#include "kofake_export.h"
+
+
 class KComboBox : public QComboBox
 {
 public:

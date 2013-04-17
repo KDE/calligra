@@ -4,9 +4,12 @@
 #include <kxmlguiwindow.h>
 #include <kparts/part.h>
 
+#include "kofake_export.h"
+
+
 namespace KParts {
 
-    class MainWindow : public KXmlGuiWindow, virtual public PartBase
+    class KOFAKE_EXPORT MainWindow : public KXmlGuiWindow, virtual public PartBase
     {
         Q_OBJECT
     public:

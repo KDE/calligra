@@ -10,7 +10,10 @@
 #include <kaction.h>
 #include <kstandardaction.h>
 
-class KActionCollection : public QObject
+#include "kofake_export.h"
+
+
+class KOFAKE_EXPORT KActionCollection : public QObject
 {
     Q_OBJECT
 public:

@@ -12,6 +12,9 @@
 
 #define KPARTS_EVENT_TYPE QEvent::User+50
 
+#include "kofake_export.h"
+
+
 namespace KParts
 {
 class Part;

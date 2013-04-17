@@ -4,6 +4,9 @@
 #include <kparts/part.h>
 #include <QObject>
 
+#include "kofake_export.h"
+
+
 namespace KParts {
 
     class Factory : public QObject

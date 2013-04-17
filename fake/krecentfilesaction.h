@@ -5,8 +5,8 @@
 #include <kurl.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
-
-class KRecentFilesAction : public KSelectAction
+#include "kofake_export.h"
+class KOFAKE_EXPORT KRecentFilesAction : public KSelectAction
 {
   Q_OBJECT
   Q_PROPERTY( int maxItems READ maxItems WRITE setMaxItems )

@@ -20,7 +20,7 @@
 #ifndef __kfilterbase__h
 #define __kfilterbase__h
 
-#include <karchive_export.h>
+#include <kofake_export.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -33,7 +33,7 @@ class QIODevice;
  * Don't use directly, use KFilterDev instead.
  * @internal
  */
-class KARCHIVE_EXPORT KFilterBase
+class KOFAKE_EXPORT KFilterBase
 {
 public:
     KFilterBase();

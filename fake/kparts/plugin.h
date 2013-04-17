@@ -6,6 +6,9 @@
 #include <kparts/part.h>
 #include <kxmlguiclient.h>
 
+#include "kofake_export.h"
+
+
 namespace KParts {
 
     class Plugin : public QObject, virtual public KXMLGUIClient

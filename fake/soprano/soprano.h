@@ -3,6 +3,9 @@
 
 #include <QTextStream>
 
+#include "kofake_export.h"
+
+
 namespace Soprano {
 
     class Node

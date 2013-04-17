@@ -10,6 +10,9 @@
 #include <kconfigbase.h>
 #include <ksharedptr.h>
 
+#include "kofake_export.h"
+
+
 class KConfig : public KConfigBase
 {
 public:

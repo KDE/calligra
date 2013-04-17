@@ -11,9 +11,11 @@
 #include <kpushbutton.h>
 #include <kurlcombobox.h>
 
+#include "kofake_export.h"
+
 class KFileFilterCombo;
 
-class KFileWidget : public QWidget
+class KOFAKE_EXPORT KFileWidget : public QWidget
 {
     Q_OBJECT
 public:

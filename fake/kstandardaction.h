@@ -8,8 +8,8 @@
 #include <QObject>
 #include <QMetaObject>
 #include <QMetaEnum>
-
-class KStandardAction : public QObject
+#include "kofake_export.h"
+class KOFAKE_EXPORT KStandardAction : public QObject
 {
     Q_OBJECT
     Q_ENUMS(StandardAction)

@@ -8,7 +8,9 @@
 #include <kguiitem.h>
 #include <kpushbutton.h>
 
-class KDialog : public QDialog
+#include "kofake_export.h"
+
+class KOFAKE_EXPORT KDialog : public QDialog
 {
     Q_OBJECT
     Q_ENUMS(ButtonCode)

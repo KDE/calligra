@@ -14,14 +14,14 @@
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kdecore_export.h>
+#include <kofake_export.h>
 
 #define FAKE_KAPPLICATION_CTOR Q_ASSERT(false);
 #define FAKE_KMAINWINDOW_CTOR Q_ASSERT(false);
 
 class KStandardDirs;
 
-class KDECORE_EXPORT KComponentData
+class KOFAKE_EXPORT KComponentData
 {
 public:
     KComponentData(KAboutData *about = 0) { if(about) m_about = *about; }
@@ -62,11 +62,11 @@ namespace KGlobal {
 
     static void setActiveComponent(KComponentData) {}
 
-    KDECORE_EXPORT KSharedConfigPtr config();
-    KDECORE_EXPORT KStandardDirs* dirs();
-    KDECORE_EXPORT KLocale* locale();
+    KOFAKE_EXPORT KSharedConfigPtr config();
+    KOFAKE_EXPORT KStandardDirs* dirs();
+    KOFAKE_EXPORT KLocale* locale();
 
-    KDECORE_EXPORT QString staticQString(const QByteArray &b);
+    KOFAKE_EXPORT QString staticQString(const QByteArray &b);
 }
 
 #endif

@@ -6,6 +6,9 @@
 #include <kcmdlineargs.h>
 #include <kglobal.h>
 
+#include "kofake_export.h"
+
+
 class KApplication : public QApplication
 {
 public:

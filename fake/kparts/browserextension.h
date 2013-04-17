@@ -2,7 +2,7 @@
 #define FAKE_BROWSERARGUMENTS_H
 
 #include <QObject>
-
+#include "kofake_export.h"
 namespace KParts {
 
 struct BrowserArguments
@@ -254,7 +254,7 @@ private:
   */
 #endif
 
-class BrowserExtension : public QObject
+class KOFAKE_EXPORT  BrowserExtension : public QObject
 {
   //Q_OBJECT
   //Q_PROPERTY( bool urlDropHandling READ isURLDropHandlingEnabled WRITE setURLDropHandlingEnabled )

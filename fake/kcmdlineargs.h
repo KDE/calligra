@@ -7,6 +7,9 @@
 #include <kurl.h>
 #include <klocale.h>
 
+#include "kofake_export.h"
+
+
 class KCmdLineOptions
 {
 public:

@@ -7,14 +7,21 @@
 #include <kurl.h>
 #include <kicon.h>
 #include <klocale.h>
+#include "kofake_export.h"
 
-class KAction : public QWidgetAction
+class KOFAKE_EXPORT KAction : public QWidgetAction
 {
     Q_OBJECT
 public:
-    KAction(QObject *parent = 0) : QWidgetAction(parent) {}
-    KAction(const QString &text, QObject *parent) : QWidgetAction(parent) { setText(text); }
-    KAction(const KIcon &icon, const QString &text, QObject *parent) : QWidgetAction(parent) { setIcon(icon); setText(text); }
+    KAction(QObject *parent = 0)
+        : QWidgetAction(parent) {}
+    virtual ~KAction() {}
+    KAction(const QString &text, QObject *parent)
+        : QWidgetAction(parent)
+
+    { setText(text); }
+    KAction(const KIcon &icon, const QString &text, QObject *parent)
+        : QWidgetAction(parent) { setIcon(icon); setText(text); }
 
     void setHelpText(const QString &help) {
         if (whatsThis().isEmpty())

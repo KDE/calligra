@@ -7,9 +7,9 @@
 
 #include <kurl.h>
 #include <kio/jobuidelegate.h>
-#include <kdecore_export.h>
+#include "kofake_export.h"
 
-class KJob : public QObject
+class KOFAKE_EXPORT KJob : public QObject
 {
     Q_OBJECT
     Q_ENUMS( KillVerbosity Capability Unit )
@@ -243,7 +243,7 @@ class UDSEntry
 public:
 };
 
-class Job : public KJob
+class KOFAKE_EXPORT Job : public KJob
 {
     Q_OBJECT
 public:
@@ -298,16 +298,16 @@ enum JobFlag {
 Q_DECLARE_FLAGS(JobFlags, JobFlag)
 Q_DECLARE_OPERATORS_FOR_FLAGS(JobFlags)
 
-KDECORE_EXPORT FileCopyJob *file_copy(const KUrl& src, const KUrl& dest, int permissions=-1, JobFlags flags = DefaultFlags);
-KDECORE_EXPORT FileCopyJob *file_move( const KUrl& src, const KUrl& dest, int permissions=-1, JobFlags flags = DefaultFlags );
+KOFAKE_EXPORT FileCopyJob *file_copy(const KUrl& src, const KUrl& dest, int permissions=-1, JobFlags flags = DefaultFlags);
+KOFAKE_EXPORT FileCopyJob *file_move( const KUrl& src, const KUrl& dest, int permissions=-1, JobFlags flags = DefaultFlags );
 //FileCopyJob *file_move( const KUrl& src, const KUrl& dest, JobFlags flags ); // not implemented - on purpose.
-KDECORE_EXPORT SimpleJob *file_delete( const KUrl& src, JobFlags flags = DefaultFlags );
-KDECORE_EXPORT ListJob *listDir( const KUrl& url, JobFlags flags = DefaultFlags, bool includeHidden = true );
-KDECORE_EXPORT ListJob *listRecursive( const KUrl& url, JobFlags flags = DefaultFlags, bool includeHidden = true );
-KDECORE_EXPORT StoredTransferJob *storedGet( const KUrl& url, LoadType reload = NoReload, JobFlags flags = DefaultFlags );
-KDECORE_EXPORT StoredTransferJob *storedPut( const QByteArray& arr, const KUrl& url, int permissions, JobFlags flags = DefaultFlags );
-KDECORE_EXPORT StoredTransferJob *storedHttpPost( const QByteArray& arr, const KUrl& url, JobFlags flags = DefaultFlags );
-KDECORE_EXPORT StoredTransferJob *storedHttpPost( QIODevice* device, const KUrl& url, qint64 size = -1, JobFlags flags = DefaultFlags );
+KOFAKE_EXPORT SimpleJob *file_delete( const KUrl& src, JobFlags flags = DefaultFlags );
+KOFAKE_EXPORT ListJob *listDir( const KUrl& url, JobFlags flags = DefaultFlags, bool includeHidden = true );
+KOFAKE_EXPORT ListJob *listRecursive( const KUrl& url, JobFlags flags = DefaultFlags, bool includeHidden = true );
+KOFAKE_EXPORT StoredTransferJob *storedGet( const KUrl& url, LoadType reload = NoReload, JobFlags flags = DefaultFlags );
+KOFAKE_EXPORT StoredTransferJob *storedPut( const QByteArray& arr, const KUrl& url, int permissions, JobFlags flags = DefaultFlags );
+KOFAKE_EXPORT StoredTransferJob *storedHttpPost( const QByteArray& arr, const KUrl& url, JobFlags flags = DefaultFlags );
+KOFAKE_EXPORT StoredTransferJob *storedHttpPost( QIODevice* device, const KUrl& url, qint64 size = -1, JobFlags flags = DefaultFlags );
 
 }
 

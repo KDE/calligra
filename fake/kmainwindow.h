@@ -11,9 +11,13 @@
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kglobal.h>
+#include <kconfiggroup.h>
 
-class KMainWindow : public QMainWindow
+#include "kofake_export.h"
+
+class KOFAKE_EXPORT KMainWindow : public QMainWindow
 {
+    Q_OBJECT
 public:
     KMainWindow(QWidget* parent = 0, Qt::WindowFlags f = 0) : QMainWindow(parent) {
         FAKE_KMAINWINDOW_CTOR
