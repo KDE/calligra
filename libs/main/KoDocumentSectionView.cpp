@@ -397,4 +397,4 @@ void KoDocumentSectionView::setDraggingFlag(bool flag)
     m_draggingFlag = flag;
 }
 
-#include <KoDocumentSectionView.moc>
+#include <moc_KoDocumentSectionView.cpp>
