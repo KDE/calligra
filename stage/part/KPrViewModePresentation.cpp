@@ -26,7 +26,8 @@
 #include <QDesktopWidget>
 
 #include <kdebug.h>
-#include <kcursor.h>
+
+#include <kocursor.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasController.h>
@@ -183,7 +184,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_baseCanvas->show();
     m_baseCanvas->setFocus();
 
-    KCursor::setAutoHideCursor( m_baseCanvas, true );
+    KoCursor::setAutoHideCursor( m_baseCanvas, true );
 
     if ( presenterViewEnabled ) {
 
@@ -240,7 +241,7 @@ void KPrViewModePresentation::deactivate()
     m_baseCanvas->setFocus();
     m_baseCanvas->setWindowState( m_baseCanvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_baseCanvas->show();
-    KCursor::setAutoHideCursor( m_baseCanvas, false );
+    KoCursor::setAutoHideCursor( m_baseCanvas, false );
     m_baseCanvas->setMouseTracking( true );
     m_view->setActivePage( page );
 

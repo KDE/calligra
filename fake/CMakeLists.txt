@@ -20,6 +20,7 @@ set(kofake_LIB_SRCS
     kio/job.cpp
     kaction.cpp
     kdialog.cpp
+    kocursor.cpp
 )
 
 set(kofake_HEADERS 
