@@ -1290,7 +1290,7 @@ public:
     * @return The number as a localized string
     */
     QString formatNumber(const QString &numStr, bool round = true, int precision = -1) const;
-
+#endif
     /**
     * Given an integer, converts that to a numeric string containing
     * the localized numeric equivalent.
@@ -1301,8 +1301,8 @@ public:
     *
     * @return The number as a localized string
     */
-    QString formatLong(long num) const;
-
+    QString formatLong(long num) const { return m_locale.toString((qlonglong)num); }
+#if 0
     /**
     * These binary units are used in KDE by the formatByteSize()
     * functions.
