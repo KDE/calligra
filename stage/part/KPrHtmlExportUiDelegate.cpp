@@ -35,4 +35,5 @@ KIO::RenameDialog_Result KPrHtmlExportUiDelegate::askFileRename ( KJob* job, con
     return KIO::JobUiDelegate::askFileRename(job, caption, src, dest, mode, newDest, sizeSrc,
                                              sizeDest, ctimeSrc, ctimeDest, mtimeSrc, mtimeDest);
 #endif
+    return KIO::R_CANCEL;
 }
