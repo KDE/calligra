@@ -23,6 +23,9 @@ class KLocalizedString {
 public:
     KLocalizedString(const char *msg = "") : m_msg(msg) {
     }
+
+    QString toString(const QString&) { return toString(); }
+
     QString toString() const {
         QString s = QObject::tr(m_msg);
         for(int i = 0; i < m_args.count(); ++i)
