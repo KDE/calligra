@@ -29,7 +29,7 @@
 #include "commands/KPrRenameCustomSlideShowCommand.h"
 
 //KDE headers
-#include "KLocalizedString"
+#include "klocale.h"
 
 //Qt headers
 #include <QIcon>
