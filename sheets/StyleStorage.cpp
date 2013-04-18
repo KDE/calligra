@@ -42,7 +42,7 @@ static const int g_maximumCachedStyles = 10000;
 
 using namespace Calligra::Sheets;
 
-class KDE_NO_EXPORT StyleStorage::Private
+class StyleStorage::Private
 {
 public:
     Private()
@@ -684,9 +684,11 @@ void StyleStorage::garbageCollection()
     // check whether the named style still exists
     if (currentPair.second->type() == Style::NamedStyleKey &&
             !styleManager()->style(static_cast<const NamedStyle*>(currentPair.second.data())->name)) {
+#if 0
         kDebug(36006) << "removing" << currentPair.second->debugData()
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
+#endif
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
         d->subStyles[currentPair.second->type()].removeAll(currentPair.second);
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
@@ -705,9 +707,11 @@ void StyleStorage::garbageCollection()
             currentPair.second->type() == Style::DefaultStyleKey &&
             pair.second->type() == Style::DefaultStyleKey &&
             pair.first == currentPair.first) {
+#if 0
         kDebug(36006) << "removing default style"
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
+#endif
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
         return; // already done
@@ -719,9 +723,11 @@ void StyleStorage::garbageCollection()
             currentPair.second->type() == Style::Indentation &&
             static_cast<const SubStyleOne<Style::Indentation, int>*>(currentPair.second.data())->value1 == 0 &&
             pair.first == currentPair.first) {
+#if 0
         kDebug(36006) << "removing default indentation"
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
+#endif
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
         return; // already done
@@ -733,9 +739,11 @@ void StyleStorage::garbageCollection()
             currentPair.second->type() == Style::Precision &&
             static_cast<const SubStyleOne<Style::Precision, int>*>(currentPair.second.data())->value1 == 0 &&
             pair.first == currentPair.first) {
+#if 0
         kDebug(36006) << "removing default precision"
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
+#endif
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
         return; // already done
@@ -779,10 +787,11 @@ void StyleStorage::garbageCollection()
                     static_cast<const SubStyleOne<Style::Precision, int>*>(pair.second.data())->value1 != 0) {
                 continue;
             }
-
+#if 0
             kDebug(36006) << "removing" << currentPair.second->debugData()
             << "at" << Region(currentPair.first.toRect()).name()
             << "used" << currentPair.second->ref << "times" << endl;
+#endif
             d->tree.remove(currentPair.first.toRect(), currentPair.second, currentZIndex);
 #if 0
             kDebug(36006) << "StyleStorage: usage of" << currentPair.second->debugData() << " is" << currentPair.second->ref;
@@ -922,5 +931,3 @@ StyleManager* StyleStorage::styleManager() const
 {
     return d->map->styleManager();
 }
-
-#include "StyleStorage.moc"
