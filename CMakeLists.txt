@@ -263,6 +263,7 @@ find_package(Qt5Qml REQUIRED NO_MODULE)
 find_package(Qt5Svg REQUIRED NO_MODULE)
 find_package(Qt5PrintSupport REQUIRED NO_MODULE)
 #find_package(Qt5Webkit REQUIRED NO_MODULE)
+find_package(Qt5Concurrent REQUIRED NO_MODULE)
 
 if (Qt5_POSITION_INDEPENDENT_CODE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -274,6 +275,7 @@ set(QT_QTGUI_LIBRARIES
   ${Qt5PrintSupport_LIBRARIES}
   ${Qt5Svg_LIBRARIES}
   ${Qt5Xml_LIBRARIES}
+  ${Qt5Concurrent_LIBRARIES}
 )
 
 set(QT_QTXML_LIBRARY ${Qt5Xml_LIBRARIES})
@@ -293,6 +295,7 @@ set(QT_INCLUDES
     ${Qt5Svg_INCLUDE_DIRS}
     ${Qt5Xml_INCLUDE_DIRS}
     ${Qt5OpenGL_INCLUDE_DIRS}
+    ${Qt5Concurrent_INCLUDE_DIRS}
 )
 
 # The Qt5Widgets_INCLUDES also includes the include directories for

@@ -218,7 +218,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
         return;
     }
 
-    KoID id(paintopid, "");
+    KoID id(paintopid);
 
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
     if (!settings)
