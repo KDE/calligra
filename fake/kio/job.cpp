@@ -97,3 +97,5 @@ StoredTransferJob *KIO::storedHttpPost( QIODevice* device, const KUrl& url, qint
     job->m_args << /* QVariant::fromValue<QIODevice*>(device) << */ QVariant::fromValue<KUrl>(url) << size;
     return job;
 }
+
+#include <moc_job.cpp>

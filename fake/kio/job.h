@@ -254,33 +254,33 @@ public:
     }
 };
 
-class FileCopyJob : public Job
+class KOFAKE_EXPORT FileCopyJob : public Job
 {
     Q_OBJECT
 public:
     virtual void exec();
 };
 
-class SimpleJob : public Job
+class KOFAKE_EXPORT SimpleJob : public Job
 {
 public:
     virtual void exec();
 };
 
-class ListJob : public Job
+class KOFAKE_EXPORT ListJob : public Job
 {
     Q_OBJECT
 public:
     virtual void exec();
 };
 
-class TransferJob : public SimpleJob
+class KOFAKE_EXPORT TransferJob : public SimpleJob
 {
 public:
     virtual void exec();
 };
 
-class StoredTransferJob : public TransferJob
+class KOFAKE_EXPORT StoredTransferJob : public TransferJob
 {
     Q_OBJECT
 public:
