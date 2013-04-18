@@ -69,9 +69,7 @@ private:
     QWebPage preview;
     int frameToRender;
 
-#endif
 };
-
-
+#endif
 
 #endif // KPRHTMLEXPORTDIALOG_H
