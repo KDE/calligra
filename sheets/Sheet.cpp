@@ -36,8 +36,6 @@
 #include <kdebug.h>
 #include <kfind.h>
 #include <kfinddialog.h>
-#include <kreplace.h>
-#include <kreplacedialog.h>
 #include <kurl.h>
 
 #include <KoDocumentInfo.h>
