@@ -550,6 +550,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         d->resetSavedTabletEvent(event->type());
         break;
     case QEvent::TouchEnd:
+        d->saveTouchEvent(static_cast<QTouchEvent*>(event));
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
         event->accept();
         d->resetSavedTabletEvent(event->type());
