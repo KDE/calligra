@@ -10,6 +10,8 @@
 #include <QDateTime>
 #include <QLocale>
 
+class KLocale;
+
 #define I18N_NOOP(x) x
 #define I18N_NOOP2(comment,x) x
 
@@ -23,6 +25,8 @@ class KLocalizedString {
 public:
     KLocalizedString(const char *msg = "") : m_msg(msg) {
     }
+
+    QString toString(const KLocale *) { return toString(); }
 
     QString toString(const QString&) { return toString(); }
 
