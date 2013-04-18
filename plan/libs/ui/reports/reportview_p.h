@@ -95,7 +95,7 @@ class GroupSectionEditor : public QObject
 {
     Q_OBJECT
 public:
-    GroupSectionEditor( QObject *parent );
+    explicit GroupSectionEditor(QObject *parent);
 
     void setupUi( QWidget *widget );
     void clear();
@@ -117,7 +117,7 @@ private:
     class Item : public QStandardItem
     {
     public:
-        Item( ReportSectionDetailGroup *g ) : QStandardItem(), group( g ) {}
+        explicit Item(ReportSectionDetailGroup *g) : QStandardItem(), group( g ) {}
         ReportSectionDetailGroup *group;
 
         QStringList names;
@@ -127,35 +127,35 @@ private:
     class ColumnItem : public Item
     {
     public:
-        ColumnItem( ReportSectionDetailGroup *g );
+        explicit ColumnItem(ReportSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };
     class SortItem : public Item
     {
     public:
-        SortItem( ReportSectionDetailGroup *g );
+        explicit SortItem(ReportSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };
     class HeaderItem : public Item
     {
     public:
-        HeaderItem( ReportSectionDetailGroup *g );
+        explicit HeaderItem(ReportSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };
     class FooterItem : public Item
     {
     public:
-        FooterItem( ReportSectionDetailGroup *g );
+        explicit FooterItem(ReportSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };
     class PageBreakItem : public Item
     {
     public:
-        PageBreakItem( ReportSectionDetailGroup *g );
+        explicit PageBreakItem(ReportSectionDetailGroup *g);
         QVariant data( int role = Qt::DisplayRole ) const;
         void setData( const QVariant &value, int role = Qt::EditRole );
     };

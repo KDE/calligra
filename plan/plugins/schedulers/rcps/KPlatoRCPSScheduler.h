@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPLATORCPSPSCHEDULER_H
-#define KPLATORCPSPSCHEDULER_H
+#ifndef KPLATORCPSSCHEDULER_H
+#define KPLATORCPSSCHEDULER_H
 
 #include "kplatorcps_export.h"
 

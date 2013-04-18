@@ -218,7 +218,7 @@ class KPLATOUI_EXPORT ReportNavigator : public QWidget, public Ui::ReportNavigat
 {
     Q_OBJECT
 public:
-    ReportNavigator( QWidget *parent = 0 );
+    explicit ReportNavigator(QWidget *parent = 0);
     void setCurrentPage( int page );
     
 public slots:

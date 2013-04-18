@@ -33,10 +33,10 @@ namespace KPlato
 
 WBSDefinition::WBSDefinition() {
     m_levelsEnabled = false;
-    
+
     m_defaultDef.code = "Number";
-    m_defaultDef.separator = ".";
-    
+    m_defaultDef.separator = '.';
+
     m_codeLists.append(qMakePair(QString("Number"), i18n("Number")));
     m_codeLists.append(qMakePair(QString("Roman, upper case"), i18n("Roman, upper case")));
     m_codeLists.append(qMakePair(QString("Roman, lower case"), i18n("Roman, lower case")));

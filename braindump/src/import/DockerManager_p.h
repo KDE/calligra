@@ -91,12 +91,6 @@ public:
     MainWindow *mainWindow;
     bool ignore;
 
-    void restoringDone() {
-        ignore = false;
-        moveToolBars();
-        toolOptionsDocker->setVisible(true); // should always be visible
-    }
-
     void moveToolBarsBack() {
         foreach(KToolBar * toolBar, toolBarList) {
             mainWindow->addToolBar(toolBar);
