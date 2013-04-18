@@ -1,0 +1,15 @@
+Qt Porting todo
+
+* stage: phonon in kprsoundeffect
+* sheets: 
+  commented out klocale usage in Localization.cpp
+  commented out kstringcomplete in 
+
+    Map.cpp:KCompletion& Map::stringCompletion()
+    Map.cpp:void Map::addStringCompletion(const QString &stringCompletion)
+    Map.cpp:    if (d->listCompletion.items().contains(stringCompletion) == 0) {
+    Map.cpp:        d->listCompletion.addItem(stringCompletion);
+    Map.h:    KCompletion &stringCompletion();
+    Map.h:    void addStringCompletion(const QString &string);
+    ui/CellEditor.cpp:    setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
+    ui/CellToolBase.cpp:        selection()->activeSheet()->map()->addStringCompletion(text);
