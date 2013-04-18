@@ -21,4 +21,4 @@ Qt Porting todo
 	setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
       #endif
       
-   in CellEditor.cpp
+   in CellEditor.cpp	
