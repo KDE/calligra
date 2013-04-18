@@ -641,7 +641,7 @@ Value ValueCalc::round(const Value &a, int digits)
         for (int i = 0; i > digits; --i)
             val = div(val, 10);
 
-    val = Value((lower(val, 0) ? -1 : 1) * qRound(qAbs(converter->toFloat(val))));
+    val = Value((lower(val, 0) ? -1 : 1) * qRound((qreal)qAbs(converter->toFloat(val))));
 
     if (digits > 0)
         for (int i = 0; i < digits; ++i)
