@@ -21,11 +21,12 @@
 #include "KPrHtmlExport.h"
 
 #include <QDir>
-#include <kio/copyjob.h>
+#include <QDesktopServices>
 #include <QTemporaryDir>
+
+#include <kio/copyjob.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <krun.h>
 #include <kzip.h>
 
 #include <KoPADocument.h>
@@ -161,7 +162,7 @@ void KPrHtmlExport::moveResult(KJob *job)
     else {
         if(m_parameters.openBrowser){
             KUrl url(m_parameters.destination, "index.html");
-            KRun::runUrl(url, "text/html", m_parameters.kprView);
+            QDesktopServices::openUrl(url)
         }
     }
 }

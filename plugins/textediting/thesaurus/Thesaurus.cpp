@@ -53,6 +53,7 @@ NOT TODO:
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QGroupBox>
+#include <QDesktopServices>
 
 #include <ktabwidget.h>
 #include <kglobal.h>
@@ -66,7 +67,6 @@ NOT TODO:
 #include <kpushbutton.h>
 #include <QLineEdit>
 #include <kdebug.h>
-#include <krun.h>
 #include <kcombobox.h>
 #include <ktextbrowser.h>
 #include <kurl.h>
@@ -399,7 +399,7 @@ void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 {
     // slotSetReplaceTerm(term);
     if (term.startsWith("http://")) {
-        (void) new KRun(KUrl(term),0L);
+        QDesktopServices::openUrl(term);
     }
     else {
         if (addToHistory && m_edit->itemText(0) != term) {

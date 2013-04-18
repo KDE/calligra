@@ -28,7 +28,6 @@
 #include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <krun.h>
 #include <ktoolinvocation.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
@@ -102,13 +101,10 @@ static int handleUrls(const KCmdLineArgs *args)
         if (!services.isEmpty()) {
             service = services.first();
             kDebug() << "-" << service->name() << service->property("X-Calligra-DefaultMimeTypes");
-#if 0
-            ok = KRun::run(*service.data(), KUrl::List() << url, 0);
-            kDebug() << "KRun::run:" << ok;
-#else
+
             startService(service, url);
             return 0;
-#endif
+
         }
         //if (!ok) {
         // if above not found or app cannot be executed:
@@ -159,7 +155,6 @@ static int handleUrls(const KCmdLineArgs *args)
         //}
     }
     if (!notHandledUrls.isEmpty()) {
-        KRun::displayOpenWithDialog(notHandledUrls, 0);
         return 0;
     }
     return 0;

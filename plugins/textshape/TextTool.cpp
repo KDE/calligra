@@ -80,6 +80,7 @@
 #include <kstandardaction.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
+
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>
@@ -91,6 +92,7 @@
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
+#include <QDesktopServices>
 
 #include <KoDocumentRdfBase.h>
 
@@ -2723,7 +2725,8 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
     }
 
     event->accept();
-    new KRun(url, 0);
+
+    QDesktopServices::openUrl(url);
 }
 
 void TextTool::debugTextDocument()

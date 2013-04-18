@@ -32,6 +32,7 @@
 #include <kmimetype.h>
 #include <krun.h>
 
+#include <QDesktopServices>
 #include <QTimer>
 
 using namespace Calligra::Sheets;
@@ -107,7 +108,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                     return;
                 }
             }
-            new KRun(url, tool()->canvas()->canvasWidget(), 0, url.isLocalFile());
+            QDesktopServices::openUrl(url);
         }
     }
 
