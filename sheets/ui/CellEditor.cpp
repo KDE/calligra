@@ -265,10 +265,10 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
     const bool wrapText = cell.style().wrapText();
     d->textEdit->setWordWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::NoWrap);
 
-#if 0 // FIXME Implement a completion aware KTextEdit.
-    setCompletionMode(selection()->view()->doc()->completionMode());
-    setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
-#endif
+//#if 0 // FIXME Implement a completion aware KTextEdit.
+//    setCompletionMode(selection()->view()->doc()->completionMode());
+//    setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
+//#endif
 
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
@@ -852,5 +852,3 @@ void CellEditor::setActiveSubRegion(int index)
         }
     }
 }
-
-#include "CellEditor.moc"

@@ -13,3 +13,12 @@ Qt Porting todo
     Map.h:    void addStringCompletion(const QString &string);
     ui/CellEditor.cpp:    setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
     ui/CellToolBase.cpp:        selection()->activeSheet()->map()->addStringCompletion(text);
+    
+    Note: this was not used in any case, see
+    
+      #if 0 // FIXME Implement a completion aware KTextEdit.
+	setCompletionMode(selection()->view()->doc()->completionMode());
+	setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
+      #endif
+      
+   in CellEditor.cpp

@@ -26,7 +26,7 @@
 
 #include <QTimer>
 
-#include <kcompletion.h>
+//#include <kcompletion.h>
 #include <ktemporaryfile.h>
 
 #include <KoGenStyles.h>
@@ -118,7 +118,7 @@ public:
 
     int syntaxVersion;
 
-    KCompletion listCompletion;
+//    KCompletion listCompletion;
 };
 
 
@@ -846,17 +846,17 @@ void Map::deleteLoadingInfo()
     d->loadingInfo = 0;
 }
 
-KCompletion& Map::stringCompletion()
-{
-    return d->listCompletion;
-}
+//KCompletion& Map::stringCompletion()
+//{
+//    return d->listCompletion;
+//}
 
-void Map::addStringCompletion(const QString &stringCompletion)
-{
-    if (d->listCompletion.items().contains(stringCompletion) == 0) {
-        d->listCompletion.addItem(stringCompletion);
-    }
-}
+//void Map::addStringCompletion(const QString &stringCompletion)
+//{
+//    if (d->listCompletion.items().contains(stringCompletion) == 0) {
+//        d->listCompletion.addItem(stringCompletion);
+//    }
+//}
 
 void Map::addDamage(Damage* damage)
 {
@@ -999,5 +999,3 @@ KoDocumentResourceManager* Map::resourceManager() const
     if (!doc()) return 0;
     return doc()->resourceManager();
 }
-
-#include "Map.moc"

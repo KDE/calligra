@@ -334,13 +334,13 @@ public:
     /**
      * \return the KCompletion object, that allows user input completions.
      */
-    KCompletion &stringCompletion();
+//    KCompletion &stringCompletion();
 
     /**
      * Adds \p string to the list of string values in order to be able to
      * complete user inputs.
      */
-    void addStringCompletion(const QString &string);
+//    void addStringCompletion(const QString &string);
 
     /**
      * \ingroup Damages

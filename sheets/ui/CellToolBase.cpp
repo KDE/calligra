@@ -1561,9 +1561,9 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
         selection()->initialize(*command);
 
     Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-    if (cell.value().isString() && !text.isEmpty() && !text.at(0).isDigit() && !cell.isFormula()) {
-        selection()->activeSheet()->map()->addStringCompletion(text);
-    }
+//    if (cell.value().isString() && !text.isEmpty() && !text.at(0).isDigit() && !cell.isFormula()) {
+//        selection()->activeSheet()->map()->addStringCompletion(text);
+//    }
 }
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
