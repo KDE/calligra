@@ -38,7 +38,6 @@
 #include <QTimer>
 
 // KDE
-#include <krun.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kglobal.h>

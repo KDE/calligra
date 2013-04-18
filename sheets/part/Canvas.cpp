@@ -77,11 +77,6 @@
 // KDE
 #include <QCursor>
 #include <kdebug.h>
-#include <kmessagebox.h>
-#include <krun.h>
-#include <kmimetype.h>
-#include <ksharedptr.h>
-#include <kwordwrap.h>
 #include <kxmlguifactory.h>
 
 // Calligra
