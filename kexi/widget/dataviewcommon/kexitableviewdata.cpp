@@ -219,8 +219,6 @@ public:
     //! real sorted column number, set by setSorting(), used by cmp*() methods
     int realSortedColumn;
 
-//  int (KexiTableViewData::*cmpFunc)(void *, void *);
-//  bool (KexiTableViewData::*lessThanFunction)(KexiDB::RecordData*, KexiDB::RecordData*);
     LessThanFunctor lessThanFunctor;
 
     short type;
@@ -360,8 +358,6 @@ void KexiTableViewData::init(
 void KexiTableViewData::init()
 {
     m_itemSize = 0;
-//Qt 4 setAutoDelete(true);
-//Qt 4 m_columns.setAutoDelete(true);
 }
 
 void KexiTableViewData::deleteLater()
@@ -372,11 +368,6 @@ void KexiTableViewData::deleteLater()
 
 void KexiTableViewData::addColumn(KexiTableViewColumn* col)
 {
-// if (!col->isDBAware()) {
-//  if (!d->simpleColumnsByName)
-//   d->simpleColumnsByName = new QDict<KexiTableViewColumn>(101);
-//  d->simpleColumnsByName->insert(col->caption,col);//for faster lookup
-// }
     m_columns.append(col);
     col->setData(this);
     if (d->globalColumnsIDs.size() < (int)m_columns.count()) {//sanity
@@ -401,6 +392,7 @@ int KexiTableViewData::globalColumnID(int visibleID) const
 {
     return d->globalColumnsIDs.value(visibleID, -1);
 }
+
 int KexiTableViewData::visibleColumnID(int globalID) const
 {
     return d->visibleColumnsIDs.value(globalID, -1);
@@ -484,13 +476,6 @@ void KexiTableViewData::sort()
     if (0 != sortingOrder())
         qSort(begin(), end(), d->lessThanFunctor);
 }
-
-/*
-Qt 4
-int KexiTableViewData::compareItems(Item record1, Item record2)
-{
-  return ((this->*cmpFunc) (record1, record2));
-}*/
 
 void KexiTableViewData::setReadOnly(bool set)
 {
