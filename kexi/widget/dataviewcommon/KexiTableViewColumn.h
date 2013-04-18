@@ -82,8 +82,8 @@ public:
      is in parent table of this query. \sa setReadOnly() */
     bool isReadOnly() const;
 
-//TODO: synchronize this with table view:
     //! forces readOnly flag to be set to \a ro
+    //! @todo synchronize this with table view:
     inline void setReadOnly(bool ro) {
         m_readOnly = ro;
     }
@@ -196,16 +196,6 @@ public:
         return m_isDBAware;
     }
 
-
-    /*  QString caption;
-        int type; //!< one of KexiDB::Field::Type
-        uint width;
-    */
-//  bool isNull() const;
-
-    /*  virtual QString caption() const;
-        virtual void setCaption(const QString& c);
-      */
 protected:
     //! special ctor that does not allocate d member;
     KexiTableViewColumn(bool);
