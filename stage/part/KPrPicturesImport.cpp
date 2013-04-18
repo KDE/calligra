@@ -127,5 +127,3 @@ void KPrPicturesImport::pictureImported(KJob *job)
     }
     import();
 }
-
-#include "KPrPicturesImport.moc"
