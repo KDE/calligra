@@ -21,6 +21,7 @@ set(kofake_LIB_SRCS
     kaction.cpp
     kdialog.cpp
     kocursor.cpp
+    krun.cpp
 )
 
 set(kofake_HEADERS 
