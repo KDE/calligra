@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kurl.h>
 #include <kfiledialog.h>
-#include <KIO/Job>
+#include <kio/job.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>

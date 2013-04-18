@@ -36,8 +36,8 @@
 #include <kstandardguiitem.h>
 #include <kfadewidgeteffect.h>
 #include <kconfiggroup.h>
-#include <KIO/Job>
-#include <KIO/CopyJob>
+#include <kio/job.h>
+#include <kio/copyjob.h>
 #include <ktemporaryfile.h>
 #include <QTemporaryDir>
 #include <kde_file.h>

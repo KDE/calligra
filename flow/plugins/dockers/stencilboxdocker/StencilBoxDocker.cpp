@@ -52,7 +52,7 @@
 #endif
 
 #include <kfiledialog.h>
-#include <KIO/NetAccess>
+#include <kio/netaccess.h>
 #include <kstandarddirs.h>
 #include <ktar.h>
 

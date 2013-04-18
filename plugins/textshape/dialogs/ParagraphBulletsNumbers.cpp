@@ -31,7 +31,7 @@
 #include <kdialog.h>
 #include <kurl.h>
 #include <kfiledialog.h>
-#include <KIO/Job>
+#include <kio/job.h>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
         : QWidget(parent),

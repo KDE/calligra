@@ -137,8 +137,7 @@ void KPrHtmlExport::generateToc()
 
 void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString &htmlBody)
 {
-    KUrl fileUrl(m_tmpDirPath, fileName);
-    QFile file(fileUrl.toLocalFile());
+    QFile file(m_tmpDirPath + "/" + fileName);
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file);
     stream << htmlBody;
@@ -146,15 +145,22 @@ void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString
 
 void KPrHtmlExport::copyFromTmpToDest()
 {
+#ifdef __GNUC__
+#warning KPrHtmlExport::copyFromTmpToDest() broke on Qt5 port
+#endif
+#if 0 // XXX_QT5
     KIO::CopyJob *job = KIO::moveAs(m_tmpDirPath, m_parameters.destination);
     job->setWriteIntoExistingDirectories(true);
     job->setUiDelegate(new KPrHtmlExportUiDelegate);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(moveResult(KJob*)));
     job->exec();
+#endif
 }
 
 void KPrHtmlExport::moveResult(KJob *job)
 {
+#if 0 // XXX_QT5
+
     QTemporaryDir::removeDir(m_tmpDirPath);
     if (job->error()) {
         KMessageBox::error(m_parameters.kprView, job->errorText());
@@ -165,6 +171,5 @@ void KPrHtmlExport::moveResult(KJob *job)
             QDesktopServices::openUrl(url)
         }
     }
+#endif
 }
-
-#include "KPrHtmlExport.moc"

@@ -22,7 +22,7 @@
 
 #include <kio/jobuidelegate.h>
 #include <kio/renamedialog.h>
-
+#include <kio/kjob.h>
 class KPrHtmlExportUiDelegate : public KIO::JobUiDelegate
 {
     Q_OBJECT

@@ -37,7 +37,7 @@
 #include <QPainter>
 #include <kurl.h>
 #include <kfiledialog.h>
-#include <KIO/Job>
+#include <kio/job.h>
 #include <kdebug.h>
 #include <kcombobox.h>
 

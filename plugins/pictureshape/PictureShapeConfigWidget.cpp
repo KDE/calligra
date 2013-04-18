@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <kfilewidget.h>
 #include <kjob.h>
-#include <KIO/Job>
+#include <kio/job.h>
 
 #include <QGridLayout>
 

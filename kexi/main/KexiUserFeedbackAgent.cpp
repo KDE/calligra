@@ -22,7 +22,7 @@
 #include <kexi_version.h>
 #include <KexiMainWindowIface.h>
 
-#include <KIO/Job>
+#include <kio/job.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>

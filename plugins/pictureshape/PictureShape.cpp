@@ -48,7 +48,7 @@
 
 #include <kdebug.h>
 #include <kjob.h>
-#include <KIO/Job>
+#include <kio/job.h>
 
 #include <QPainter>
 #include <QTimer>

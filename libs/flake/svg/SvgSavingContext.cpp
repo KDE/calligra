@@ -28,8 +28,8 @@
 
 #include <kmimetype.h>
 #include <ktemporaryfile.h>
-#include <KIO/NetAccess>
-#include <KIO/CopyJob>
+#include <kio/netaccess.h>
+#include <kio/copyjob.h>
 
 #include <QBuffer>
 #include <QHash>
