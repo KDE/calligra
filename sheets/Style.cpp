@@ -2862,5 +2862,5 @@ bool CustomStyle::loadXML(KoXmlElement const & style, QString const & name)
 
 int CustomStyle::usage() const
 {
-    return d->ref;
+    return d->ref.load();
 }
