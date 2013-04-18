@@ -44,6 +44,8 @@ public:
     float lastX;
     float lastY;
 
+    QRectF placeholderTarget;
+
     qreal zoom;
     qreal zoomChange;
     bool zooming;
@@ -69,7 +71,10 @@ void CQCanvasControllerItem::paint(QPainter* painter, const QStyleOptionGraphics
         return;
     }
 
-    painter->drawPixmap(-scenePos().x(), -scenePos().y(), d->flickable->width() * (1.0 + d->zoomChange), d->flickable->height() * (1.0 + d->zoomChange), *d->placeholder);
+    QPointF offset(d->flickable->property("contentX").toReal(), d->flickable->property("contentY").toReal());
+
+
+    painter->drawPixmap(QRectF(offset - d->placeholderTarget.topLeft(), d->placeholderTarget.size()) , *d->placeholder, QRectF(QPointF(0, 0), d->placeholder->size()));
 }
 
 QDeclarativeItem* CQCanvasControllerItem::canvas() const
@@ -136,31 +141,58 @@ void CQCanvasControllerItem::setZoom(qreal newZoom)
 
 void CQCanvasControllerItem::beginZoomGesture()
 {
+    if(d->zooming) {
+        return;
+    }
+
     d->placeholder = new QPixmap(d->flickable->width(), d->flickable->height());
-    d->placeholder->fill(Qt::white);
+
+    d->placeholderTarget.setLeft(0);
+    d->placeholderTarget.setTop(0);
+    d->placeholderTarget.setWidth(d->flickable->width());
+    d->placeholderTarget.setHeight(d->flickable->height());
 
     QPainter painter;
     painter.begin(d->placeholder);
     d->canvas->render(&painter, QRectF(QPoint(0, 0), d->placeholder->size()));
     painter.end();
 
+    d->canvas->setVisible(false);
     d->zooming = true;
 }
 
 void CQCanvasControllerItem::endZoomGesture()
 {
+    if(!d->zooming)
+        return;
+
+    qreal change = 1.0 + d->zoomChange / d->zoom;
     setZoom(d->zoom + d->zoomChange);
+
+    d->flickable->setProperty("contentX", d->flickable->property("contentX").toReal() * change + d->placeholderTarget.x());
+    d->flickable->setProperty("contentY", d->flickable->property("contentY").toReal() * change + d->placeholderTarget.y());
 
     delete d->placeholder;
     d->placeholder = 0;
     d->zoomChange = 0.0;
     d->zooming = false;
+
+    d->canvas->setVisible(true);
 }
 
 void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
 {
-    if(d->zooming) {
+    if(d->zooming && (1.0 + d->zoomChange + amount) * d->documentSize.width() >= d->flickable->width()) {
+        qreal oldWidth = d->placeholderTarget.width();
+        qreal oldHeight = d->placeholderTarget.height();
+
         d->zoomChange += amount;
+
+        d->placeholderTarget.setWidth(d->flickable->width() * (1.0 + d->zoomChange));
+        d->placeholderTarget.setHeight(d->flickable->height() * (1.0 + d->zoomChange));
+
+        d->placeholderTarget.moveLeft(d->placeholderTarget.x() + (center.x() * d->placeholderTarget.width() / oldWidth) - center.x());
+        d->placeholderTarget.moveTop(d->placeholderTarget.y() + (center.y() * d->placeholderTarget.height() / oldHeight) - center.y());
     }
 }
 
