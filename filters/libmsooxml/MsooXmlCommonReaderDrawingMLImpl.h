@@ -264,6 +264,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
                         m_ignoreLinkHref = true;
                     }
                 }
+#ifdef DOCXXMLDOCREADER_H
+                ELSE_TRY_READ_IF_NS_IN_CONTEXT(pic, blipFill)
+#endif
                 ELSE_TRY_READ_IF(nvPicPr)
                 ELSE_TRY_READ_IF(style)
                 SKIP_UNKNOWN
