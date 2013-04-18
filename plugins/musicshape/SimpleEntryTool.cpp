@@ -22,6 +22,7 @@
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QInputDialog>
+#include <QDesktopServices>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -41,7 +42,6 @@
 #include "MusicCursor.h"
 
 #include "SimpleEntryTool.h"
-#include <SimpleEntryTool.moc>
 
 #include "dialogs/SimpleEntryWidget.h"
 
@@ -769,7 +769,9 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
+    QString file = KFileDialog::getSaveFileName(0, i18n("Export Sheet"),
+                                                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                                                "xml|MusicXML files (*.xml)");
     if (file.isEmpty() || file.isNull()) return;
 
     QBuffer b;
