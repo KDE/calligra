@@ -20,7 +20,7 @@
 #ifndef KWFACTORY_H
 #define KWFACTORY_H
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 #include "words_export.h"
 
 class KAboutData;

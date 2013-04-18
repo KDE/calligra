@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
@@ -215,7 +215,7 @@ void BibliographyGenerator::generate(const QList<KoInlineCite *> &cites)
 QMap<QString, BibliographyEntryTemplate> BibliographyGenerator::defaultBibliographyEntryTemplates()
 {
     QMap<QString, BibliographyEntryTemplate> entryTemplates;
-    foreach (QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
+    foreach (const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
         BibliographyEntryTemplate bibEntryTemplate;
 
         //Now creating default IndexEntries for all BibliographyEntryTemplates

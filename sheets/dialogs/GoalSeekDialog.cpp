@@ -25,7 +25,7 @@
 
 #include "GoalSeekDialog.h"
 
-#include <KTextEdit>
+#include <ktextedit.h>
 
 #include "CalculationSettings.h"
 #include "Cell.h"
@@ -41,7 +41,7 @@
 
 #include "ui_GoalSeekWidget.h"
 
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 #include <QCloseEvent>
 

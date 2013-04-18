@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Diagonal Polarized Capacitor
+Name[bs]=Dijagonalni polarizirani kondenzator
 Name[ca]=Capacitador polaritzat diagonal
 Name[ca@valencia]=Capacitador polaritzat diagonal
+Name[da]=Diagonal elektrolytkapacitor
 Name[de]=Diagonaler gepolter Kondensator
 Name[el]=Διαγώνιος πολωμένος πυκνωτής
 Name[es]=Condensador diagonal polarizado
 Name[et]=Diagonaalne polariseeritud kondensaator
+Name[fr]=Diagonal Polarized Capacitor
+Name[gl]=Condensador diagonal polarizado
+Name[hu]=Átlós polarizált kondenzátor
 Name[it]=Condensatore diagonale polarizzato
 Name[kk]=Диагональдық үйектелген конденсатор
 Name[nb]=Diagonal polarisert kondensator
@@ -17,6 +22,7 @@ Name[pt_BR]=Capacitor diagonal polarizado
 Name[ru]=Диагональный полярный конденсатор
 Name[sk]=Diagonálny polarizovaný kondenzátor
 Name[sv]=Diagonal polär kondensator
+Name[tr]=Diyagonal Polarize Kapasitör
 Name[uk]=Поляризований конденсатор (діагонально)
 Name[x-test]=xxDiagonal Polarized Capacitorxx
 Name[zh_TW]=對角極性電容器

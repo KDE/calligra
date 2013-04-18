@@ -22,11 +22,11 @@
 #include "Function.h"
 #include "FunctionRepository.h"
 
-#include <KDebug>
-#include <KGlobal>
-#include <KPluginInfo>
-#include <KServiceTypeTrader>
-#include <KStandardDirs>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kplugininfo.h>
+#include <kservicetypetrader.h>
+#include <kstandarddirs.h>
 
 using namespace Calligra::Sheets;
 
@@ -73,7 +73,7 @@ FunctionModuleRegistry::FunctionModuleRegistry()
 
 FunctionModuleRegistry::~FunctionModuleRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         get(id)->deleteLater();
     }
     qDeleteAll(doubleEntries());

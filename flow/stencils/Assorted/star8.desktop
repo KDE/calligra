@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Eight Point Star
 Name[bg]=Осемлъчна звезда
+Name[bs]=Osmokraka zvijezda
 Name[ca]=Estrella de vuit puntes
 Name[ca@valencia]=Estrella de vuit puntes
 Name[cs]=Osmicípá hvězda
@@ -11,6 +12,7 @@ Name[es]=Estrella de ocho puntas
 Name[et]=Kaheksaharuline täht
 Name[fi]=Kahdeksansakarainen tähti
 Name[fr]=Étoile à huit branches
+Name[gl]=Estrela de oito puntas
 Name[hu]=Nyolcpontos csillag
 Name[it]=Stella a otto punte
 Name[kk]=Сегізұшты жұлдыз
@@ -22,7 +24,9 @@ Name[pt]=Estrela de Oito Pontas
 Name[pt_BR]=Estrela de Oito Pontas
 Name[ru]=Звезда с восемью лучами
 Name[sk]=Osemcípa hviezda
+Name[sl]=Osemkraka zvezda
 Name[sv]=Åttauddig stjärna
+Name[tr]=Sekiz Noktalı Yıldız
 Name[uk]=Восьмикутна зірка
 Name[x-test]=xxEight Point Starxx
 Name[zh_CN]=八角星

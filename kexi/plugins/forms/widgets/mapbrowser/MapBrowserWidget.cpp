@@ -20,7 +20,7 @@
 
 #include "MapBrowserWidget.h"
 #include <QPointF>
-#include <KDebug>
+#include <kdebug.h>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),
@@ -34,7 +34,7 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
 #endif
   //Marble::GeoSceneDocument::head()->mapThemeId()
   setMapThemeId("earth/srtm/srtm.dgml");
-  connect( this, SIGNAL(visibleLatLonAltBoxChanged(const GeoDataLatLonAltBox &)), this , SLOT(slotMapChanged()));
+  connect( this, SIGNAL(visibleLatLonAltBoxChanged(GeoDataLatLonAltBox)), this , SLOT(slotMapChanged()));
 }
 
 MapBrowserWidget::~MapBrowserWidget()
@@ -52,16 +52,16 @@ QVariant MapBrowserWidget::value()
 
 void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld )
 {
-    
+    Q_UNUSED(removeOld);
     //if(isReadOnly())
     //    return;
     m_slotMapChanged_enabled = false;
     //disable change editing
     //if(removeOld);
     kDebug() << "add:" << add;
-    kDebug() << "m_origValue:" << m_origValue;
-    //deserializeData((removeOld ? QVariant() : m_origValue));
-    deserializeData(m_origValue);
+    kDebug() << "originalValue():" << originalValue();
+    //deserializeData((removeOld ? QVariant() : originalValue()));
+    deserializeData(originalValue());
     m_slotMapChanged_enabled = true;
     
 }

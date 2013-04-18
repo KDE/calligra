@@ -22,7 +22,6 @@
 #include <QStyle>
 #include <QWindowsStyle>
 #include <QPainter>
-//Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 #include <QMouseEvent>
@@ -73,7 +72,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidge
     d->button->setFocusPolicy(Qt::NoFocus);
     connect(d->button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
 
-    connect(m_lineedit, SIGNAL(textChanged(const QString&)), this, SLOT(slotLineEditTextChanged(const QString&)));
+    connect(m_lineedit, SIGNAL(textChanged(QString)), this, SLOT(slotLineEditTextChanged(QString)));
 
 // m_lineedit = new KLineEdit(this, "lineedit");
 // m_lineedit->setFrame(false);
@@ -434,6 +433,10 @@ void KexiComboBoxTableEdit::handleAction(const QString& actionName)
         KexiInputTableEdit::handleAction(actionName);
 }
 
+QVariant KexiComboBoxTableEdit::origValue() const
+{
+    return KexiDataItemInterface::originalValue();
+}
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiComboBoxEditorFactoryItem, KexiComboBoxTableEdit)
 

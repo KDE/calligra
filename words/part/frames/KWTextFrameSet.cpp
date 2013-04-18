@@ -62,7 +62,10 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetTyp
 KWTextFrameSet::~KWTextFrameSet()
 {
     kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType());
+    // delete the root area provider first and set to 0 as we don't want relayouting on deletion
     delete m_rootAreaProvider;
+    m_rootAreaProvider = 0;
+    cleanupFrames();
     delete m_document;
 }
 
@@ -96,11 +99,12 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     kDebug(32001) << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
 
     // Handle the special case that the KoTextShapeData already defines a QTextDocument that we need
-    // to take over. This is the case for example with OtherTextFrameSet's where the KWTextFrameSet
-    // and the KWFrame are created after the TextShape was created and it's loadOdf was called what
+    // to take over. This is the case with OtherTextFrameSet's where the KWTextFrameSet
+    // and the KWFrame are created after the TextShape was created and it's loadOdf was called which
     // means that the QTextDocument of the KoTextShapeData already has content we like to take over.
-    // The mainTextFrame's are created on demand and need to be ignored.
-    if (textFrameSetType() != Words::MainTextFrameSet && frameCount() == 1 && data->document() && m_document->isEmpty()) {
+    if (textFrameSetType() == Words::OtherTextFrameSet && frameCount() == 1 && data->document() && m_document->isEmpty() && !data->document()->isEmpty()) {
+        // FIXME probably better to test if rangemanager has anything rather than tesing if frame
+        // is not empty
         Q_ASSERT(m_document != data->document());
         delete m_document;
         m_document = data->document();
@@ -127,6 +131,7 @@ void KWTextFrameSet::setupDocument()
 
     KoTextDocument doc(m_document);
     doc.setInlineTextObjectManager(m_wordsDocument->inlineTextObjectManager());
+    doc.setTextRangeManager(m_wordsDocument->textRangeManager());
     KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     doc.setStyleManager(styleManager);
     KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();

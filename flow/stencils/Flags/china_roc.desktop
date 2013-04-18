@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=China (ROC)
+Name[bs]=Kina (ROC)
 Name[ca]=Xina (ROC)
 Name[ca@valencia]=Xina (ROC)
 Name[da]=Kina (ROC)
@@ -9,8 +10,10 @@ Name[es]=China (República de China)
 Name[et]=Hiina (HV)
 Name[fi]=Kiinan tasavalta
 Name[fr]=Chine (ROC)
+Name[gl]=China (ROC)
 Name[it]=Cina (ROC)
 Name[kk]=Тайвань (Қытай)
+Name[mr]=चीन (ROC)
 Name[nb]=Kina (ROC)
 Name[nl]=China (ROC)
 Name[pl]=Chiny (RCh)
@@ -18,6 +21,7 @@ Name[pt]=China (ROC)
 Name[pt_BR]=China (ROC)
 Name[ru]=Китай (Тайвань)
 Name[sk]=Čína (ROC)
+Name[sl]=Kitajska (Tajvan)
 Name[sv]=Republiken Kina
 Name[uk]=Китай (Тайвань)
 Name[x-test]=xxChina (ROC)xx

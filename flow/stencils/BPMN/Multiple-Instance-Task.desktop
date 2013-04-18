@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Multiple-Instance-Task
+Name[bs]=Zadatak višestruke instance
 Name[ca]=Tasca-Múltiples-Instàncies
 Name[ca@valencia]=Tasca-Múltiples-Instàncies
+Name[de]=Aufgabe - Parallele Mehrfachausführung
 Name[el]=Πολλαπλές-περιπτώσεις-εργασίας
 Name[es]=Instancia múltiple de la tarea
 Name[et]=Mitmikülesanne
+Name[fr]=Tâche d'instances multiples
+Name[gl]=Tarefa de varias instancias
+Name[hu]=Többszörös-Példány-Feladat
 Name[it]=Compito-Istanza-Multipla
 Name[kk]=Бірнеше даналық тапсырма
 Name[nb]=Flerinstans-oppgave
@@ -17,4 +22,5 @@ Name[sk]=Multiple-Instance-Task
 Name[sv]=Flerinstans-uppgift
 Name[uk]=Декілька екземплярів задачі
 Name[x-test]=xxMultiple-Instance-Taskxx
+Name[zh_CN]=多重实例-任务
 Name[zh_TW]=多重實體─工作

@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "applixwordimport.h"
+
 #include <QMessageBox>
 #include <QList>
 #include <QDateTime>
@@ -25,8 +27,6 @@
 #include <QByteArray>
 #include <QColor>
 #include <QBuffer>
-#include <applixwordimport.h>
-#include <applixwordimport.moc>
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
@@ -196,8 +196,9 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     int  pos;
     bool ok;
     QString           mystr, textstr;
-    bool inTable = false;
-    bool inTableRow = false;
+    // TODO: table implementation below is incomplete
+//     bool inTable = false;
+//     bool inTableRow = false;
 
     // We'll get the paragraph style only at the end of the paragraph,
     // so bufferize the paragraph contents
@@ -672,8 +673,6 @@ APPLIXWORDImport::readTagLine(QTextStream &stream)
 void
 APPLIXWORDImport::replaceSpecial(QString &textstr)
 {
-    int ok, pos;
-
     // 1. Replace Part for this characters: <, >, &
     textstr.replace('&', "&amp;");
     textstr.replace('<', "&lt;");
@@ -681,8 +680,8 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 
 
     // 2. Replace part for this characters: applixwear qoutes
-    ok = true;
-    pos = 0;
+    bool ok = true;
+    int pos = 0;
     do {
         // Searching for an quote
         pos = textstr.indexOf('\"', pos);
@@ -698,7 +697,7 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 
 
     // 3. Replace part for Applix Characters
-    int   foundSpecialCharakter;
+    bool  foundSpecialCharakter;
     QChar newchar;
 
     do {
@@ -790,3 +789,4 @@ bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
     return true;
 }
 
+#include <applixwordimport.moc>

@@ -26,6 +26,7 @@
 
 class KoMainWindow;
 class KWDocument;
+class KWView;
 class KComponentData;
 class QGraphicsItem;
 
@@ -34,18 +35,22 @@ class WORDS_EXPORT KWPart : public KoPart
     Q_OBJECT
 
 public:
-    KWPart(QObject *parent);
+    explicit KWPart(QObject *parent);
 
     virtual ~KWPart();
 
     QGraphicsItem *createCanvasItem(); ///reimplemented
 
     void setDocument(KWDocument *document);
+    KWDocument *document() const;
 
     /// reimplemented from super
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
+
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+
 
 private slots:
      void showErrorAndDie();
@@ -53,6 +58,7 @@ private slots:
 protected:
 
     virtual KoView *createViewInstance(QWidget *parent); ///reimplemented
+    virtual void setupViewInstance(KWView *view);
 
     KWDocument *m_document;
 };

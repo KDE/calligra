@@ -3,7 +3,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
 add_subdirectory(drivers)
 add_subdirectory(sqlitedump)
 
-include_directories(${CALLIGRADB_INCLUDES} ${KDE4_INCLUDES})
+include_directories(${KDE4_INCLUDES})
 
 set(kexidb_LIB_SRCS
    dbobjectnamevalidator.cpp
@@ -13,7 +13,7 @@ set(kexidb_LIB_SRCS
 
 kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
 target_link_libraries(kexidb kexiutils ${CALLIGRADB_LIBS}
-   ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS})
+   ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS})
 
 set_target_properties(kexidb PROPERTIES
                       VERSION ${GENERIC_CALLIGRA_LIB_VERSION}

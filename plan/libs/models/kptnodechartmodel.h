@@ -28,7 +28,7 @@
 
 #include <QSortFilterProxyModel>
 
-#include <KDebug>
+#include "kptdebug.h"
 
 #include "KDChartGlobal"
 
@@ -44,22 +44,25 @@ class KPLATOMODELS_EXPORT ChartProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    ChartProxyModel( QObject *parent = 0 ) : QSortFilterProxyModel( parent ) {}
+    explicit ChartProxyModel(QObject *parent = 0) : QSortFilterProxyModel( parent ) {}
 
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const {
-        //if ( role == Qt::DisplayRole || role == KDChart::DatasetBrushRole ) kDebug()<<"fetch:"<<orientation<<section<<mapToSource( index(0, section) ).column()<<m_rejects;
+        //if ( role == Qt::DisplayRole && orientation == Qt::Vertical ) kDebug()<<"fetch:"<<orientation<<section<<mapToSource( index(0, section) ).column()<<m_rejects;
         return QSortFilterProxyModel::headerData( section, orientation, role );
     }
 
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const {
         if ( role == Qt::DisplayRole && ! m_zerocolumns.isEmpty() ) {
-            if ( m_zerocolumns.contains( mapToSource( index ).column() ) ) {
+            int column = mapToSource( index ).column();
+            if ( m_zerocolumns.contains( column ) ) {
                 //kDebug()<<"zero:"<<index.column()<<mapToSource( index ).column();
                 return QVariant();
             }
         }
         //if ( role == Qt::DisplayRole ) kDebug()<<"fetch:"<<index.column()<<mapToSource( index ).column()<<m_rejects;
-        return QSortFilterProxyModel::data( index, role );
+        QVariant v = QSortFilterProxyModel::data( index, role );
+        //if ( role == Qt::DisplayRole ) kDebug(planDbg())<<index.row()<<","<<index.column()<<"("<<columnCount()<<")"<<v;
+        return v;
     }
     void setRejectColumns( const QList<int> &columns ) { m_rejects = columns; invalidateFilter(); }
     QList<int> rejectColumns() const { return m_rejects; }
@@ -82,8 +85,24 @@ private:
 class KPLATOMODELS_EXPORT ChartItemModel : public ItemModelBase
 {
     Q_OBJECT
+    Q_ENUMS( Properties )
 public:
-    ChartItemModel( QObject *parent = 0 );
+    enum Properties {
+        BCWSCost,
+        BCWPCost,
+        ACWPCost,
+        BCWSEffort,
+        BCWPEffort,
+        ACWPEffort,
+        SPICost,
+        CPICost,
+        SPIEffort,
+        CPIEffort
+    };
+    const QMetaEnum columnMap() const;
+
+    explicit ChartItemModel(QObject *parent = 0);
+
 
 //    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
@@ -110,6 +129,8 @@ public:
     QDate endDate() const;
     void calculate();
 
+    void setLocalizeValues( bool on );
+
 public slots:
     void setScheduleManager( ScheduleManager *sm );
     void slotNodeRemoved( Node *node );
@@ -119,18 +140,37 @@ public slots:
 
 protected:
     double bcwsEffort( int day ) const;
-    QVariant bcwpEffort( int day ) const;
+    double bcwpEffort( int day ) const;
     double acwpEffort( int day ) const;
     double bcwsCost( int day ) const;
-    QVariant bcwpCost( int day ) const;
+    double bcwpCost( int day ) const;
     double acwpCost( int day ) const;
+    double spiEffort( int day ) const;
+    double cpiEffort( int day ) const;
+    double spiCost( int day ) const;
+    double cpiCost( int day ) const;
 
-private:
+protected:
     QList<Node*> m_nodes;
     EffortCostMap m_bcws;
     EffortCostMap m_acwp;
+    bool m_localizeValues;
 };
 
+class KPLATOMODELS_EXPORT PerformanceDataCurrentDateModel : public ChartItemModel
+{
+    Q_OBJECT
+public:
+    explicit PerformanceDataCurrentDateModel(QObject *parent);
+
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+    int columnCount( const QModelIndex &parent = QModelIndex() ) const;
+    QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
+    QVariant data( const QModelIndex &proxyIndex, int role = Qt::DisplayRole ) const;
+    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    QModelIndex mapIndex( const QModelIndex &idx ) const;
+};
 
 } //namespace KPlato
 

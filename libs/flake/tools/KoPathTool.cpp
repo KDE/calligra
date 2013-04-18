@@ -52,9 +52,9 @@
 
 #include <KoIcon.h>
 
-#include <KAction>
-#include <KDebug>
-#include <KLocale>
+#include <kaction.h>
+#include <kdebug.h>
+#include <klocale.h>
 #include <QPainter>
 #include <QBitmap>
 #include <QTabWidget>
@@ -96,9 +96,9 @@ struct KoPathTool::PathSegment {
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
         : KoToolBase(canvas)
+        , m_pointSelection(this)
         , m_activeHandle(0)
         , m_handleRadius(3)
-        , m_pointSelection(this)
         , m_activeSegment(0)
         , m_currentStrategy(0)
 {
@@ -185,22 +185,20 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
 KoPathTool::~KoPathTool()
 {
+    delete m_activeHandle;
+    delete m_activeSegment;
+    delete m_currentStrategy;
 }
 
 QList<QWidget *>  KoPathTool::createOptionWidgets()
 {
-    Q_D(KoToolBase);
     QList<QWidget *> list;
 
     PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), toolOptions, SLOT(setSelectionType(int)));
-    //connect(this, SIGNAL(pathChanged(KoPathShape*)), widget, SLOT(setSelectedPath(KoPathShape*)));
     updateOptionsWidget();
     toolOptions->setWindowTitle(i18n("Line/Curve"));
     list.append(toolOptions);
-    QWidget* widget = d->canvas->createSnapGuideConfigWidget();
-    widget->setWindowTitle(i18n("Snapping"));
-    list.append(widget);
 
     return list;
 }

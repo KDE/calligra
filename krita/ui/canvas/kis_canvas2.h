@@ -143,16 +143,11 @@ public: // KisCanvas2 methods
     KisImageWSP image();
     KisView2* view();
 
-    bool usingHDRExposureProgram();
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 
 signals:
-
-    void documentOriginChanged();
-    void scrollAreaSizeChanged();
-
     void imageChanged(KisImageWSP image);
 
     void canvasDestroyed(QWidget *);
@@ -167,6 +162,17 @@ public slots:
     /// Update the entire canvas area
     void updateCanvas();
 
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
+
+    void startResizingImage(qint32 w, qint32 h);
+    void finishResizingImage(qint32 w, qint32 h);
+
+    /// canvas rotation in degrees
+    qreal rotationAngle() const;
+    void setSmoothingEnabled(bool smooth);
+
+private slots:
+
     /// The image projection has changed, now start an update
     /// of the canvas representation.
     void startUpdateCanvasProjection(const QRect & rc);
@@ -177,29 +183,6 @@ public slots:
     void setMonitorProfile(KoColorProfile* monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
-
-
-
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
-
-    void startResizingImage(qint32 w, qint32 h);
-    void finishResizingImage(qint32 w, qint32 h);
-
-    /// adjust the origin of the document
-    void adjustOrigin();
-
-    /// slot for setting the mirroring
-    void mirrorCanvas(bool mirror);
-    /// canvas rotation in degrees
-    qreal rotationAngle() const;
-    void rotateCanvas(qreal angle, bool updateOffset=true);
-    void rotateCanvasRight15();
-    void rotateCanvasLeft15();
-    void resetCanvasTransformations();
-
-    void setSmoothingEnabled(bool smooth);
-
-private slots:
 
     /**
      * Called whenever the view widget needs to show a different part of
@@ -223,8 +206,9 @@ private slots:
 
     void setCursor(const QCursor &cursor);
 
+    void slotSelectionChanged();
+
 public:
-//    friend class KisView2;
 
     // interface for KisView2 only
     void connectCurrentImage();

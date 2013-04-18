@@ -22,7 +22,7 @@
 
 #include "KPrPresentationTool.h"
 
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 
 class KPrViewModePresentation;
 class KPrPresentationTool;

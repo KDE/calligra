@@ -32,8 +32,8 @@ Item
         anchors.centerIn: parent
         height: width
         width: parent.width
-        visible: root.documentController.documentHandler().currentSlideNumber < root.documentController.documentHandler().totalNumberOfSlides
+        visible: root.documentController.documentHandler.currentSlideNumber < root.documentController.documentHandler.totalNumberOfSlides
 
-        onClicked: root.documentController.documentHandler().nextSlide()
+        onClicked: root.documentController.documentHandler.nextSlide()
     }
 }

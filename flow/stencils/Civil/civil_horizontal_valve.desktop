@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Horizontal Valve
 Name[bg]=Хоризонтална клапа
+Name[bs]=Horizontalni ventil
 Name[ca]=Vàlvula horitzontal
 Name[ca@valencia]=Vàlvula horitzontal
+Name[da]=Vandret ventil
 Name[de]=Waagerechtes Ventil
 Name[el]=Οριζόντια βαλβίδα
 Name[es]=Válvula horizontal
 Name[et]=Horisontaalne siiber
+Name[fr]=Valve horizontale
+Name[gl]=Válvula horizontal
+Name[hu]=Vízszintes szelep
 Name[it]=Valvola orizzontale
 Name[kk]=Жатық шұра
 Name[nb]=Vannrett ventil
@@ -17,6 +22,7 @@ Name[pt]=Válvula Horizontal
 Name[pt_BR]=Válvula horizontal
 Name[ru]=Горизонтальный клапан
 Name[sk]=Vodorovný valec
+Name[sl]=Vodoravni ventil
 Name[sv]=Horisontell ventil
 Name[uk]=Горизонтальний клапан
 Name[x-test]=xxHorizontal Valvexx

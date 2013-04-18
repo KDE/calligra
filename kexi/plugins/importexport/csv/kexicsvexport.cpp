@@ -126,13 +126,13 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
                 return false;
             }
             kSaveFile = new KSaveFile(options.fileName);
-	    
-	    kDebug() << "KSaveFile Filename:" << kSaveFile->fileName();
-	    
+
+            kDebug() << "KSaveFile Filename:" << kSaveFile->fileName();
+
             if (kSaveFile->open()) {
                 kSaveFileTextStream = new QTextStream(kSaveFile);
                 stream = kSaveFileTextStream;
-		kDebug() << "have a stream";
+                kDebug() << "have a stream";
             }
             if (QFile::NoError != kSaveFile->error() || !stream) {//sanity
                 kWarning() << "Status != 0 or stream == 0";
@@ -197,7 +197,7 @@ kDebug() << 1;
     // 1. Output column names
     if (options.addColumnNames) {
         for (uint i = 0; i < fieldsCount; i++) {
-	    kDebug() << "Adding column names";
+            kDebug() << "Adding column names";
             if (i > 0) {
                 APPEND(delimiter);
             }
@@ -218,7 +218,7 @@ kDebug() << 1;
         _ERR;
     }
     for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
-	kDebug() << "Adding records";
+        kDebug() << "Adding records";
         const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
         for (uint i = 0; i < realFieldCount; i++) {
             const uint real_i = visibleFieldIndex[i];
@@ -273,10 +273,10 @@ kDebug() << 1;
     kDebug() << "Done";
     
     if (kSaveFile) {
-	stream->flush();
+        stream->flush();
         if (!kSaveFile->finalize()) {
-		kDebug() << "Error finalizing stream!";
-	}
+                kDebug() << "Error finalizing stream!";
+        }
         delete kSaveFileTextStream;
         delete kSaveFile;
     }

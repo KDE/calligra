@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2013 Aman Madaan <madaan.amanmadaan@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,12 +24,14 @@
 #include "dialogs/SimpleCitationBibliographyWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
+#include "dialogs/SimpleLinksWidget.h"
 #include "dialogs/TableOfContentsConfigure.h"
 #include "dialogs/NotesConfigurationDialog.h"
 #include "dialogs/InsertCitationDialog.h"
 #include "dialogs/InsertBibliographyDialog.h"
 #include "dialogs/BibliographyConfigureDialog.h"
 #include "dialogs/BibliographyDatabaseWindow.h"
+#include "dialogs/LinkInsertionDialog.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
@@ -40,9 +43,9 @@
 #include <KoInlineNote.h>
 #include <KoTextDocumentLayout.h>
 #include <KoIcon.h>
+#include <QMessageBox>
 
-#include <kdebug.h>
-
+#include <KDebug>
 #include <KLocale>
 #include <KAction>
 #include <QTextDocument>
@@ -50,40 +53,67 @@
 #include <QBoxLayout>
 #include <QMenu>
 
-LabeledNoteWidget::LabeledNoteWidget(KAction *action)
+LabeledWidget::LabeledWidget(KAction *action, const QString label, LabelPosition lb, bool warningLabelRequired)
     : QWidget()
     , m_action(action)
 {
     setMouseTracking(true);
-    QHBoxLayout *layout = new QHBoxLayout();
-    QLabel *l = new QLabel(i18n("Insert with label:"));
-    l->setIndent(l->style()->pixelMetric(QStyle::PM_SmallIconSize)
-        + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth)
-        + 4);
-    layout->addWidget(l);
+    QBoxLayout *layout;
+    QLabel *l = new QLabel(label);
+    l->setWordWrap(true);
     m_lineEdit = new QLineEdit();
+    if (lb == LabeledWidget::INLINE) { // label followed by line edit
+        layout = new QHBoxLayout();
+        l->setIndent(l->style()->pixelMetric(QStyle::PM_SmallIconSize)
+                    + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth) + 4);
+    } else { //Label goes above the text edit
+        layout = new QVBoxLayout();
+        m_lineEdit->setFixedWidth(300); //TODO : assuming a reasonable width, is there a better way?
+    }
+    layout->addWidget(l);
     layout->addWidget(m_lineEdit);
+    if (warningLabelRequired) {
+        m_warningLabel[0] = new QLabel("");
+        m_warningLabel[1] = new QLabel("");
+        m_warningLabel[0]->setWordWrap(true);
+        m_warningLabel[1]->setWordWrap(true);
+        layout->addWidget(m_warningLabel[0]);
+        layout->addWidget(m_warningLabel[1]);
+    }
     layout->setMargin(0);
     setLayout(layout);
-
     connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+    connect(m_lineEdit, SIGNAL(textChanged(QString)), this, SIGNAL(lineEditChanged(QString)));
 }
 
-void LabeledNoteWidget::returnPressed()
+void LabeledWidget::returnPressed()
 {
     emit triggered(m_lineEdit->text());
 }
 
-
-void LabeledNoteWidget::enterEvent(QEvent *event)
+void LabeledWidget::enterEvent(QEvent *event)
 {
     m_action->activate(QAction::Hover);
     QWidget::enterEvent(event);
 }
 
+void LabeledWidget::setWarningText(int pos, const QString& warning)
+{
+    if ((m_warningLabel[pos] == NULL)) {
+        return;
+    }
+    m_warningLabel[pos]->setText(warning);
+}
+
+void LabeledWidget::clearLineEdit()
+{
+    m_lineEdit->setText("");
+}
+
 ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
     m_configure(0),
-    m_stocw(0)
+    m_stocw(0),
+    m_canvas(canvas)
 {
     createActions();
 }
@@ -98,7 +128,7 @@ void ReferencesTool::createActions()
     addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
 
-    action = new KAction(i18n("Insert Custom ..."), this);
+    action = new KAction(i18n("Insert Custom..."), this);
     addAction("insert_configure_tableofcontents", action);
     action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
@@ -107,22 +137,22 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
-    action = new KAction(i18n("Insert with auto number"),this);
+    action = new KAction(i18n("Insert footnote with auto number"),this);
     addAction("insert_autofootnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
     action = new KAction(i18n("Insert Labeled Footnote"), this);
-    QWidget *w = new LabeledNoteWidget(action);
+    QWidget *w = new LabeledWidget(action, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     action->setDefaultWidget(w);
     addAction("insert_labeledfootnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
 
-    action = new KAction(i18n("Insert with auto number"),this);
+    action = new KAction(i18n("Insert endnote with auto number"),this);
     addAction("insert_autoendnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
 
     action = new KAction(i18n("Insert Labeled Endnote"), this);
-    w = new LabeledNoteWidget(action);
+    w = new LabeledWidget(action, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     action->setDefaultWidget(w);
     addAction("insert_labeledendnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
@@ -135,12 +165,12 @@ void ReferencesTool::createActions()
     addAction("format_endnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
 
-    action = new KAction(i18n("Insert Citation"),this);
+    action = new KAction(i18n("Insert Citation"), this);
     addAction("insert_citation",action);
     action->setToolTip(i18n("Insert a citation into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
 
-    action = new KAction(i18n("Insert"),this);
+    action = new KAction(i18n("Insert Bibliography"), this);
     addAction("insert_bibliography",action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
 
@@ -157,7 +187,29 @@ void ReferencesTool::createActions()
     addAction("bibliography_database", action);
     action->setToolTip(i18n("Bibliography Database"));
     connect(action, SIGNAL(triggered()), this, SLOT(showBibliographyDatabase()));
+
+    action = new KAction(i18n("Insert Link"), this);
+    addAction("insert_link", action);
+    action->setToolTip(i18n("Insert a weblink or link to a bookmark."));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertLink()));
+
+    action = new KAction(i18n("Add Bookmark"), this);
+    m_bmark = new LabeledWidget(action, i18n("Add Bookmark :"), LabeledWidget::ABOVE, true);
+    connect(m_bmark, SIGNAL(lineEditChanged(QString)), this, SLOT(validateBookmark(QString)));
+    action->setDefaultWidget(m_bmark);
+    addAction("insert_bookmark", action);
+    connect(m_bmark, SIGNAL(triggered(QString)), this, SLOT(insertBookmark(QString)));
+    action->setToolTip(i18n("Insert a Bookmark. This is useful to create links that point to areas within the document"));
+
+    action = new KAction(i18n("Bookmarks"), this);
+    addAction("invoke_bookmark_handler", action);
+    action->setToolTip(i18n("Display a pop up that hosts the options to add new Bookmark or handle existing Bookmarks"));
+
+    action = new KAction(i18n("Manage Bookmarks"), this);
+    addAction("manage_bookmarks", action);
+    action->setToolTip(i18n("Manage your Bookmarks. Check where are they pointing to, Delete or Rename."));
 }
+
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
@@ -175,9 +227,11 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     QList<QWidget *> widgets;
     m_stocw = new SimpleTableOfContentsWidget(this, 0);
 
-    m_sfenw = new SimpleFootEndNotesWidget(this,0);
+    m_sfenw = new SimpleFootEndNotesWidget(this, 0);
 
-    m_scbw = new SimpleCitationBibliographyWidget(this,0);
+    m_scbw = new SimpleCitationBibliographyWidget(this, 0);
+
+    m_slw = new SimpleLinksWidget(this, 0);
     // Connect to/with simple table of contents option widget
     connect(m_stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
@@ -187,6 +241,8 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     // Connect to/with simple citation index option widget
     connect(m_sfenw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
+    connect(m_slw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
     m_stocw->setWindowTitle(i18n("Table of Contents"));
     widgets.append(m_stocw);
 
@@ -195,6 +251,9 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 
     m_scbw->setWindowTitle(i18n("Citations and Bibliography"));
     widgets.append(m_scbw);
+
+    m_slw->setWindowTitle(i18n("Links and Bookmarks"));
+    widgets.append(m_slw);
     //widgets.insert(i18n("Captions"), scapw);
     connect(textEditor(), SIGNAL(cursorPositionChanged()), this, SLOT(updateButtons()));
     KoBridgeServer *server = new KoBridgeServer(editor(), this);
@@ -248,7 +307,7 @@ void ReferencesTool::formatTableOfContents()
         return;
     } else if (i == 1 && firstToCTextBlock.isValid()) {
         m_configure = new TableOfContentsConfigure(textEditor(), firstToCTextBlock, m_stocw);
-        connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+        connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
     } else {
         m_stocw->setToCConfigureMenu(tocList);
         connect(m_stocw->ToCConfigureMenu(), SIGNAL(triggered(QAction *)), SLOT(showConfigureDialog(QAction*)));
@@ -259,12 +318,12 @@ void ReferencesTool::formatTableOfContents()
 void ReferencesTool::showConfigureDialog(QAction *action)
 {
     m_configure = new TableOfContentsConfigure(textEditor(), action->data().value<QTextBlock>(), m_stocw);
-    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
 }
 
-void ReferencesTool::hideCofigureDialog(int result)
+void ReferencesTool::hideCofigureDialog()
 {
-    disconnect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    disconnect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
     m_configure->deleteLater();
 }
 
@@ -326,13 +385,50 @@ void ReferencesTool::insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemp
 {
     m_configure = new TableOfContentsConfigure(textEditor(), defaultTemplate, m_stocw);
     connect(m_configure, SIGNAL(accepted()), this, SLOT(customToCGenerated()));
-    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
 }
 
 void ReferencesTool::customToCGenerated()
 {
     if (m_configure) {
         textEditor()->insertTableOfContents(m_configure->currentToCData());
+    }
+}
+
+void ReferencesTool::insertLink()
+{
+    new LinkInsertionDialog(textEditor(), m_slw);
+}
+
+bool ReferencesTool::validateBookmark(QString bookmarkName)
+{
+    bookmarkName = bookmarkName.trimmed();
+    if (bookmarkName.isEmpty()) {
+        m_bmark->setWarningText(0, i18n("Bookmark cannot be empty"));
+        return false;
+    }
+    const KoBookmarkManager *manager = KoTextDocument(editor()->document()).textRangeManager()->bookmarkManager();
+    QStringList existingBookmarks = manager->bookmarkNameList();
+    int position = existingBookmarks.indexOf(bookmarkName);
+    if (position != -1) {
+        m_bmark->setWarningText(0, i18n("Duplicate Name. Click \"Manage Bookmarks\""));
+        m_bmark->setWarningText(1, i18n("to Rename or Delete Bookmarks"));
+        return false;
+    } else {
+        m_bmark->setWarningText(0, "");
+        m_bmark->setWarningText(1, "");
+        return true;
+    }
+}
+
+void ReferencesTool::insertBookmark(QString bookMarkName)
+{
+    bookMarkName = bookMarkName.trimmed();
+    m_bmark->setWarningText(0, "");
+    m_bmark->setWarningText(1, "");
+    if (validateBookmark(bookMarkName)) {
+        editor()->addBookmark(bookMarkName);
+        m_bmark->clearLineEdit();
     }
 }
 

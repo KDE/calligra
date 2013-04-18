@@ -49,7 +49,6 @@
 #include "KPrPresentationBlackStrategy.h"
 #include "ui/KPrPresentationToolWidget.h"
 #include "KPrPresentationToolAdaptor.h"
-#include "KPrViewModePresentation.h"
 
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )
@@ -75,9 +74,9 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )
     m_presentationToolWidget->installEventFilter(this);
 
     // Connections of button clicked to slots
-    connect( m_presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
-    connect( m_presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highlightPresentation() ) );
-    connect( m_presentationToolWidget->presentationToolUi().blackButton, SIGNAL( clicked() ), this, SLOT( blackPresentation() ) );
+    connect( m_presentationToolWidget->presentationToolUi().penButton, SIGNAL(clicked()), this, SLOT(drawOnPresentation()) );
+    connect( m_presentationToolWidget->presentationToolUi().highLightButton, SIGNAL(clicked()), this, SLOT(highlightPresentation()) );
+    connect( m_presentationToolWidget->presentationToolUi().blackButton, SIGNAL(clicked()), this, SLOT(blackPresentation()) );
 
 }
 

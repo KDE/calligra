@@ -1,13 +1,18 @@
 [Desktop Entry]
 Name=A Workstation Monitor
 Name[bg]=Монитор на работна станция
+Name[bs]=neki Monitor radne stanice
 Name[ca]=Un monitor d'estació de treball
 Name[ca@valencia]=Un monitor d'estació de treball
+Name[da]=En arbejdsstaionsmonitor
 Name[de]=Workstation-Monitor
 Name[el]=Οθόνη σταθμού εργασίας
 Name[es]=Un monitor de estación de trabajo
 Name[et]=Tööjaama monitor
 Name[fi]=Työaseman näyttö
+Name[fr]=moniteur de poste de travail
+Name[gl]=Monitor dunha estación de traballo
+Name[hu]=Egy munkaállomás monitor
 Name[it]=Un monitor di workstation
 Name[kk]=Жұмыс станциясының мониторы
 Name[nb]=En arbeidsstasjons-skjerm
@@ -17,6 +22,7 @@ Name[pt]=Monitor Computador
 Name[pt_BR]=Monitor de computador
 Name[ru]=Монитор рабочей станции
 Name[sk]=Monitor pracovnej stanice
+Name[sl]=Zaslon delovne postaje
 Name[sv]=En arbetsstationsskärm
 Name[uk]=Монітор робочої станції
 Name[x-test]=xxA Workstation Monitorxx

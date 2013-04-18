@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=Horizontal Road
+Name[bs]=Horizontalni put
 Name[ca]=Carretera horitzontal
 Name[ca@valencia]=Carretera horitzontal
+Name[da]=Vandret vej
 Name[de]=Waagerechte Straße
 Name[el]=Οριζόντιος δρόμος
 Name[es]=Carretera horizontal
 Name[et]=Horisontaalne tee
 Name[fi]=Vaakasuora tie
+Name[fr]=Route horizontale
+Name[gl]=Camiño horizontal
 Name[hu]=Vízszintes út
 Name[it]=Strada orizzontale
 Name[kk]=Қөлдеңен жол
@@ -20,6 +24,8 @@ Name[ru]=Горизонтальная дорога
 Name[sk]=Vodorovná cesta
 Name[sl]=Vodoravna cesta
 Name[sv]=Horisontell väg
+Name[tr]=Yatay Yol
 Name[uk]=Горизонтальний шлях
 Name[x-test]=xxHorizontal Roadxx
+Name[zh_CN]=水平公路
 Name[zh_TW]=水平路

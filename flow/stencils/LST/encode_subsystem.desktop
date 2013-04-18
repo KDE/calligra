@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Encode Subsystem
+Name[bs]=Enkodni podsistem
 Name[ca]=Sistema codificador
 Name[ca@valencia]=Sistema codificador
+Name[da]=Encode Subsystem
 Name[el]=Κωδικοποίηση υποσυστήματος
 Name[es]=Subsistema de codificación
 Name[et]=Allsüsteemi kodeerimine
+Name[fr]=Encode Subsystem
+Name[gl]=Subsistema de codificación
 Name[it]=Sottosistema di codifica
 Name[kk]=Ішкі кодер жүйесі
 Name[nb]=Kodings-delsystem
@@ -17,4 +21,5 @@ Name[sk]=Zakódovať subsystém
 Name[sv]=Kodningsdelsystem
 Name[uk]=Підсистема кодування
 Name[x-test]=xxEncode Subsystemxx
+Name[zh_CN]=编码子系统
 Name[zh_TW]=編碼子系統

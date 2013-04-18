@@ -125,6 +125,11 @@ public:
     void endTransaction(KisPostExecutionUndoAdapter *undoAdapter);
 
     /**
+     * Finishes a transaction and returns a pointer to its undo command
+     */
+    KUndo2Command* endAndTakeTransaction();
+
+    /**
      * Finish the transaction and delete it's undo information.
      * NOTE: Be careful, because all the previous transactions
      * will become non-undoable after execution of this method.
@@ -360,19 +365,41 @@ public:
     void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
     void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab);
-    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
 
     /**
-     * Special method for some paintop that needs to know which areas where covered by the dab
-     * E.g. experimental (shape) paintop needs to know it to be able to copy appriate regions from
-     * internal device to the layer device
+     * Convenience method for renderMirrorMask(), allows to choose whether
+     * we need to preserve out dab or do the transformations in-place.
      *
      * @param rc rectangle area covered by dab
-     * @param dab this device will be mirrored in-place, it means that it will be changed
-     * @return vector of rectangular dirty regions of the painter's device
+     * @param dab the device to render
+     * @param preserveDab states whether a temporary device should be
+     *                    created to do the transformations
      */
-    QVector<QRect> regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
+    void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab);
+
+    /**
+     * Convenience method for renderMirrorMask(), allows to choose whether
+     * we need to preserve our fixed mask or do the transformations in-place.
+     *
+     * @param rc rectangle area covered by dab
+     * @param dab the device to render
+     * @param mask mask to use for rendering
+     * @param preserveMask states whether a temporary device should be
+     *                    created to do the transformations
+     */
+    void renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask);
+
+    /**
+     * A complex method that re-renders a dab on an \p rc area.
+     * The \p rc  area and all the dedicated mirroring areas are cleared
+     * before the painting, so this method should be used by paintops
+     * which do not update the canvas incrementally, but instead
+     * regenerate some internal cache \p dab with the COMPOSITE_COPY op.
+     *
+     * \see KisExperimentPaintOp
+     */
+    void renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP dab);
 
     /**
       * The methods in this class do not tell the paintdevice to update, but they calculate the
@@ -474,8 +501,16 @@ public:
 
     /**
      * Fills the area enclosed by the given QPainterPath
+     * Convenience method for fillPainterPath(path, rect)
      */
     void fillPainterPath(const QPainterPath& path);
+
+    /**
+     * Fills the portion of an area enclosed by the given QPainterPath
+     *
+     * \param rect the portion of the path to fill
+     */
+    void fillPainterPath(const QPainterPath& path, const QRect &requestedRect);
 
     /**
      * Draw the path using the Pen
@@ -566,6 +601,12 @@ public:
      */
     void copyMirrorInformation(KisPainter * painter);
 
+    /**
+     * Returns whether the mirroring methods will do any
+     * work when called
+     */
+    bool hasMirroring() const;
+
     /// Set the current pattern
     void setPattern(const KisPattern * pattern);
 
@@ -589,12 +630,6 @@ public:
 
     /// Returns the current background color
     const KoColor &backgroundColor() const;
-
-    /// Set the current fill color
-    void setFillColor(const KoColor& color);
-
-    /// Returns the current fill color
-    const KoColor &fillColor() const;
 
     /// Set the current generator (a generator can be used to fill an area
     void setGenerator(const KisFilterConfiguration * generator);
@@ -737,6 +772,8 @@ private:
                         const KisPaintDeviceSP srcDev,
                         qint32 srcX, qint32 srcY,
                         qint32 srcWidth, qint32 srcHeight);
+
+    inline void compositeOnePixel(quint8 *dst, const KoColor &color);
 
 private:
 

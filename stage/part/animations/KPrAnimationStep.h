@@ -23,8 +23,9 @@
 
 #include <QSequentialAnimationGroup>
 #include "KPrAnimationData.h"
+#include "stage_export.h"
 
-class KPrAnimationStep : public QSequentialAnimationGroup, KPrAnimationData
+class STAGE_EXPORT KPrAnimationStep : public QSequentialAnimationGroup, KPrAnimationData
 {
 public:
     KPrAnimationStep();

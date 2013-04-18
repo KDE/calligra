@@ -26,11 +26,11 @@
 #include <QTimer>
 #include <QPushButton>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KDebug>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kdebug.h>
 
 #include <KoCanvasResourceManager.h>
 #include <KoIcon.h>
@@ -221,7 +221,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
             }
         }
     }
-    if(m_canvas) {
+    if(m_canvas && m_canvas->resourceManager()) {
         if (m_lastColorRole==Foreground) {
             setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
         } else {
@@ -264,9 +264,9 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
             m_lastColorRole=Background;
         commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
 
-        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
-            hidePopup();
-        }
+//        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
+//            hidePopup();
+//        }
     }
     e->accept();
     m_grabbingComponent=0;
@@ -303,6 +303,7 @@ void KisColorSelector::init()
 {
     setAcceptDrops(true);
 
+    m_lastColorRole = Foreground;
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
     m_slider = new KisColorSelectorSimple(this);

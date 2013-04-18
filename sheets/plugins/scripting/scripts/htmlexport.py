@@ -6,17 +6,17 @@ a HTML File.
 
 The script could be used in two ways;
 
-    1. Embedded in KSpread by execution via the "Tools=>Scripts"
+    1. Embedded in Sheets by execution via the "Tools=>Scripts"
        menu or from the "Tools=>Script Manager". In that case
-       the document currently loaded and displayed by KSpread
+       the document currently loaded and displayed by Sheets
        will be exported to a HTML file.
 
     2. As standalone script by running;
 
             # make the script executable
-            chmod 755 `kde4-config --install data`/kspread/scripts/extensions/htmlexport.py
+            chmod 755 `kde4-config --install data`/sheets/scripts/extensions/htmlexport.py
             # run the script
-            `kde4-config --install data`/kspread/scripts/extensions/htmlexport.py
+            `kde4-config --install data`/sheets/scripts/extensions/htmlexport.py
 
        In that case the htmlexport.py-script will use the with
        Kross distributed krossrunner commandline-application
@@ -25,12 +25,14 @@ The script could be used in two ways;
 
 (C)2006 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 import os, datetime, sys, traceback, urlparse
 import Kross
+
+T = Kross.module("kdetranslation")
 
 class Config:
     """ Some configurations for the htmlexport.py script. """
@@ -162,7 +164,7 @@ class Reader:
                 try:
                     self.kspread = Kross.module("kspread")
                 except ImportError:
-                    raise "Failed to import the Kross module. Please run this script with \"kross thisscriptfile.py\""
+                    raise Exception, "Failed to import the Kross module. Please run this script with \"kross thisscriptfile.py\""
 
             application = self.kspread.application()
             self.document = self.kspread.document()
@@ -212,7 +214,7 @@ class Reader:
         def setFile(self, filename):
             path = self.extractFileFromUrl(filename)
             if not os.path.isfile(path):
-                raise "No such file \"%s\" to read from." % filename
+                raise Exception, T.i18n("No such file \"%1\" to read from.", [filename])
             self.filename = path
 
         def openFile(self, progress = None):
@@ -221,13 +223,13 @@ class Reader:
                 docfile = self.extractFileFromUrl( self.document.url() )
                 if file != docfile:
                     if not self.kspread.openUrl( self.filename ):
-                        raise "Failed to open the file \"%s\"." % self.filename
+                        raise Exception, T.i18n("Failed to open the file \"%1\".", [self.filename])
 
             self.sheet = self.kspread.currentSheet()
             if self.sheet == None:
                 sheetnames = self.kspread.sheetNames()
                 if len(sheetnames) < 1:
-                    raise "No sheets which could be exported to HTML."
+                    raise Exception, T.i18n("No sheets which could be exported to HTML.")
                 self.sheet = self.kspread.sheetByName( sheetnames[0] )
 
             self.rowidx = 1
@@ -300,7 +302,7 @@ class Writer:
             try:
                 self.file = open(self.filename, "w")
             except IOError, (errno, strerror):
-                raise "Failed to create HTML file \"%s\":\n%s" % (self.filename,strerror)
+                raise Exception, T.i18n("Failed to create HTML file \"%1\":\n%2", [self.filename], [strerror])
             if self.infos.has_key('Title'):
                 title = self.infos['Title']
             else:
@@ -357,29 +359,29 @@ class Dialog:
         self.exporter = exporter
 
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("HTML Export")
+        self.dialog = self.forms.createDialog(T.i18n("HTML Export"))
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         if not self.exporter.reader.hasFile():
-            openpage = self.dialog.addPage("Open","Read from OpenDocument Spreadsheet File","document-open")
+            openpage = self.dialog.addPage(T.i18n("Open"),T.i18n("Read from OpenDocument Spreadsheet File"),"document-open")
             self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kspreadhtmlexportopen")
             self.openwidget.setMode("Opening")
-            self.openwidget.setFilter("*.ods|OpenDocument Spreadsheet Files\n*|All Files")
+            self.openwidget.setFilter("*.ods|%(1)s\n*|%(2)s"  % { '1' : T.i18n("OpenDocument Spreadsheet Files"), '2' : T.i18n("All Files") } )
 
         if not self.exporter.writer.hasFile():
-            savepage = self.dialog.addPage("Save","Save to HTML File","document-save")
+            savepage = self.dialog.addPage(T.i18nc("Options page name", "Save"),T.i18n("Save to HTML File"),"document-save")
             self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadhtmlexportsave")
             self.savewidget.setMode("Saving")
-            self.savewidget.setFilter("*.html *.htm *.xhtml|HTML Documents\n*|All Files")
+            self.savewidget.setFilter("*.html *.htm *.xhtml|%(1)s\n*|%(2)s"  % { '1' : T.i18n("HTML Documents"), '2' : T.i18n("All Files") } )
 
-        infospage = self.dialog.addPage("Infos","HTML Document Informations","document-properties")
+        infospage = self.dialog.addPage(T.i18n("Info"),T.i18n("HTML Document Information"),"document-properties")
         self.infoswidget = self.forms.createWidgetFromUIFile(infospage, os.path.join(self.exporter.currentpath, "htmlexportinfos.ui"))
         for i in self.exporter.reader.infos.keys():
             w = self.infoswidget[i]
             w.setText( self.exporter.reader.infos[i] )
 
-        layoutpage = self.dialog.addPage("Styles","Style of the HTML Document","fill-color")
+        layoutpage = self.dialog.addPage(T.i18n("Styles"),T.i18n("Style of the HTML Document"),"fill-color")
         layoutwidget = self.forms.createWidgetFromUI(layoutpage,
             '<ui version="4.0" >'
             ' <class>Form</class>'
@@ -417,9 +419,9 @@ class Dialog:
             if hasattr(self,"savewidget"):
                 savefilename = str( self.savewidget.selectedFile() )
                 if os.path.isfile(savefilename):
-                    r = self.forms.showMessageBox("WarningContinueCancel", "Overwrite file?", "The file \"%s\" does already exist. Overwrite the file?" % savefilename)
+                    r = self.forms.showMessageBox("WarningContinueCancel", T.i18n("Overwrite file?"), T.i18n("The file \"%1\" does already exist. Overwrite the file?", [savefilename]))
                     if r != "Continue":
-                        raise "Export aborted."
+                        raise Exception, T.i18n("Export aborted.")
                 self.exporter.writer.setFile(savefilename)
 
             # set informations
@@ -435,10 +437,10 @@ class Dialog:
         return result
 
     def showError(self, message):
-        self.forms.showMessageBox("Error", "Error", "%s" % message)
+        self.forms.showMessageBox("Error", T.i18n("Error"), "%s" % message)
 
     def showProgress(self):
-        progress = self.forms.showProgressDialog("Exporting...", "Initialize...")
+        progress = self.forms.showProgressDialog(T.i18n("Exporting..."), T.i18n("Initialize..."))
         progress.value = 0
         #progress.labelText = "blaaaaaaaaaaa"
         return progress

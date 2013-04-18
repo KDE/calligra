@@ -48,9 +48,6 @@ endif(QCA2_FOUND)
 set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS msooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-find_package(SharedMimeInfo)
-macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" TRUE "" "Required to determine MSOOXML file types.")
-
 install(FILES msooxml-all.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
 update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
 

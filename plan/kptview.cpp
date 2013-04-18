@@ -56,7 +56,7 @@
 #include <ktoolbar.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
-#include <KConfigDialogManager>
+#include <kconfigdialogmanager.h>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
@@ -65,10 +65,10 @@
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
-#include <KConfigDialog>
-#include <KToolInvocation>
-#include <KRun>
-#include <KStandardDirs>
+#include <kconfigdialog.h>
+#include <ktoolinvocation.h>
+#include <krun.h>
+#include <kstandarddirs.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -83,7 +83,7 @@
 #include "kptmilestoneprogressdialog.h"
 #include "kpttaskdescriptiondialog.h"
 #include "kptnode.h"
-#include "kptpart.h"
+#include "kptmaindocument.h"
 #include "kptproject.h"
 #include "kptmainprojectdialog.h"
 #include "kpttask.h"
@@ -208,7 +208,7 @@ bool ConfigDialog::isDefault()
 }
 
 //------------------------------------
-View::View(KoPart *part, Part *doc, QWidget *parent)
+View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         : KoView(part, doc, parent),
         m_currentEstimateType( Estimate::Use_Expected ),
         m_scheduleActionGroup( new QActionGroup( this ) ),
@@ -238,12 +238,17 @@ View::View(KoPart *part, Part *doc, QWidget *parent)
     if ( shell() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget(doc, m_sp);
+        m_viewlist->setProject( &( getProject() ) );
+        connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
+        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+        connect( m_viewlist, SIGNAL( updateViewInfo( ViewListItem* ) ), SLOT( slotUpdateViewInfo( ViewListItem* ) ) );
     } else {
         ViewListDockerFactory vl(this);
         docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
-        if (docker->view() != this) docker->setView(this);
+        if (docker->view() != this) {
+            docker->setView(this);
+        }
         m_viewlist = docker->viewList();
-
 #if 0        //SchedulesDocker
         SchedulesDockerFactory sdf;
         SchedulesDocker *sd = dynamic_cast<SchedulesDocker*>( createDockWidget( &sdf ) );
@@ -254,11 +259,6 @@ View::View(KoPart *part, Part *doc, QWidget *parent)
         connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), sd, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
 #endif
     }
-
-    m_viewlist->setProject( &( getProject() ) );
-    connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
-    connect( m_viewlist, SIGNAL( updateViewInfo( ViewListItem* ) ), SLOT( slotUpdateViewInfo( ViewListItem* ) ) );
 
     m_tab = new QStackedWidget( m_sp );
 
@@ -272,6 +272,10 @@ View::View(KoPart *part, Part *doc, QWidget *parent)
     actionCreateTemplate = new KAction( i18n( "&Create Template From Document..." ), this );
     actionCollection()->addAction("file_createtemplate", actionCreateTemplate );
     connect( actionCreateTemplate, SIGNAL( triggered( bool ) ), SLOT( slotCreateTemplate() ) );
+
+    actionCreateNewProject = new KAction( i18n( "&Create New Project..." ), this );
+    actionCollection()->addAction("file_createnewproject", actionCreateNewProject );
+    connect( actionCreateNewProject, SIGNAL( triggered( bool ) ), SLOT( slotCreateNewProject() ) );
 
     // ------ Edit
     actionCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( slotEditCut() ));
@@ -454,6 +458,23 @@ void View::slotCreateTemplate()
 {
     KoTemplateCreateDia::createTemplate("plan_template", ".plant",
                                         Factory::global(), getPart(), this);
+}
+
+void View::slotCreateNewProject()
+{
+    kDebug(planDbg());
+    if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( this,
+                      i18nc( "@info",
+                             "<note>This action cannot be undone.</note><nl/><nl/>"
+                             "Create a new Project from the current project "
+                             "with new project- and task identities.<nl/>"
+                             "Resource- and calendar identities are not changed.<nl/>"
+                             "All scheduling information is removed.<nl/>"
+                             "<nl/>Do you want to continue?" ) ) )
+    {
+        getPart()->createNewProject();
+        slotOpenNode( &getProject() );
+    }
 }
 
 void View::createViews()
@@ -669,16 +690,16 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.tip = i18nc( "@info:tooltip", "View task work package information" );
     } else if ( type == "GanttView" ) {
         vi.name = i18n( "Gantt" );
-        vi.tip = i18nc( "@info:tooltip", "View gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View Gantt chart" );
     } else if ( type == "MilestoneGanttView" ) {
         vi.name = i18n( "Milestone Gantt" );
-        vi.tip = i18nc( "@info:tooltip", "View milestone gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View milestone Gantt chart" );
     } else if ( type == "ResourceAppointmentsView" ) {
         vi.name = i18n( "Resource Assignments" );
         vi.tip = i18nc( "@info:tooltip", "View resource assignments in a table" );
     } else if ( type == "ResourceAppointmentsGanttView" ) {
         vi.name = i18n( "Resource Assignments (Gantt)" );
-        vi.tip = i18nc( "@info:tooltip", "View resource assignments in gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View resource assignments in Gantt chart" );
     } else if ( type == "AccountsView" ) {
         vi.name = i18n( "Cost Breakdown" );
         vi.tip = i18nc( "@info:tooltip", "View planned and actual cost" );
@@ -1578,12 +1599,13 @@ void View::slotViewSchedule( QAction *act )
         Schedule *sch = m_scheduleActions.value( act, 0 );
         sm = sch->manager();
     }
+    emit currentScheduleManagerChanged( 0 );
+    setLabel( 0 );
     m_nextScheduleManager = sm;
     // Performance is very dependent on schedule manager change since a lot is recalculated
     // In case of multiple changes, only issue the last change
     if ( ! m_trigged ) {
         m_trigged = true;
-        setLabel( 0 );
         emit currentScheduleManagerChanged( 0 );
         QTimer::singleShot( 0, this, SLOT(slotViewScheduleManager()) );
     }
@@ -1844,7 +1866,7 @@ void View::slotConfigure()
     ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), koIconName("view-task") );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), koIconName("fill-color") );
-    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("planwork") );
+    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("calligraplanwork") );
     dialog->show();
 
 }
@@ -2516,9 +2538,9 @@ void View::updateReadWrite( bool readwrite )
     m_viewlist->setReadWrite( readwrite );
 }
 
-Part *View::getPart() const
+MainDocument *View::getPart() const
 {
-    return ( Part * ) koDocument();
+    return ( MainDocument * ) koDocument();
 }
 
 KoPart *View::getKoPart() const
@@ -3009,7 +3031,7 @@ void View::saveTaskModule( const KUrl &url, Project *project )
     QString dir = Factory::global().dirs()->saveLocation( "plan_taskmodules" );
     kDebug(planDbg())<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
-        Part part;
+        MainDocument part;
         part.insertProject( *project, 0, 0 );
         part.getProject().setName( project->name() );
         part.getProject().setLeader( project->leader() );

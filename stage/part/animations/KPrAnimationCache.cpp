@@ -24,7 +24,6 @@
 #include <QVariant>
 
 #include <KoShape.h>
-#include <KoTextBlockData.h>
 
 #include "kdebug.h"
 
@@ -45,7 +44,7 @@ bool KPrAnimationCache::hasValue(KoShape *shape, const QString &id)
     return false;
 }
 
-bool KPrAnimationCache::hasValue(int step, KoTextBlockData *textBlockData, const QString &id)
+bool KPrAnimationCache::hasValue(int step, QTextBlockUserData *textBlockData, const QString &id)
 {
     if (m_textBlockDataValuesStack[step].contains(textBlockData))
         return m_textBlockDataValuesStack[step].value(textBlockData).contains(id);
@@ -64,7 +63,7 @@ void KPrAnimationCache::setValue(int step, KoShape *shape, const QString &id, co
     m_shapeValuesStack[step][shape][id] = value;
 }
 
-void KPrAnimationCache::setValue(int step, KoTextBlockData *textBlockData, const QString &id, const QVariant &value)
+void KPrAnimationCache::setValue(int step, QTextBlockUserData *textBlockData, const QString &id, const QVariant &value)
 {
     m_textBlockDataValuesStack[step][textBlockData][id] = value;
 }
@@ -84,39 +83,39 @@ QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id)
 }
 
 
-QVariant KPrAnimationCache::value(KoTextBlockData *textBlockData, const QString &id, const QVariant &defaultValue)
+QVariant KPrAnimationCache::value(QTextBlockUserData *textBlockData, const QString &id, const QVariant &defaultValue)
 {
     if (m_currentTextBlockDataValues.contains(textBlockData))
         return m_currentTextBlockDataValues.value(textBlockData).value(id, defaultValue);
     return defaultValue;
 }
 
-void KPrAnimationCache::init(int step, KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value)
+void KPrAnimationCache::init(int step, KoShape *shape, QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &value)
 {
-    if (textBlockData) {
+    if (textBlockUserData) {
         for (int i = m_textBlockDataValuesStack.size(); i <= step; ++i) {
             // copy previous values
             if (i > 0) {
                 m_textBlockDataValuesStack.append(m_textBlockDataValuesStack[i-1]);
             }
             else {
-                m_textBlockDataValuesStack.append(QMap<KoTextBlockData *, QMap<QString, QVariant> >());
+                m_textBlockDataValuesStack.append(QMap<QTextBlockUserData *, QMap<QString, QVariant> >());
             }
         }
         // check if value is valid
         if (value.isValid()) {
-            m_textBlockDataValuesStack[step][textBlockData][id] = value;
+            m_textBlockDataValuesStack[step][textBlockUserData][id] = value;
         }
         else {
-            m_textBlockDataValuesStack[step][textBlockData].remove(id);
+            m_textBlockDataValuesStack[step][textBlockUserData].remove(id);
         }
 
         // Check visibility
         if (id == "visibility") {
             for(int i = step - 1; i >= 0; i--)
             {
-                if(!this->hasValue(i, textBlockData, id)){
-                    this->setValue(i, textBlockData, id, value.toBool());
+                if(!this->hasValue(i, textBlockUserData, id)){
+                    this->setValue(i, textBlockUserData, id, value.toBool());
                 }
             }
         }
@@ -151,15 +150,15 @@ void KPrAnimationCache::init(int step, KoShape *shape, KoTextBlockData * textBlo
     }
 }
 
-void KPrAnimationCache::update(KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value)
+void KPrAnimationCache::update(KoShape *shape, QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &value)
 {
-    if (textBlockData) {
+    if (textBlockUserData) {
         if (id == "transform" && !m_next) {
-            QTransform transform = m_currentTextBlockDataValues[textBlockData][id].value<QTransform>();
-            m_currentTextBlockDataValues[textBlockData][id] = transform * value.value<QTransform>();
+            QTransform transform = m_currentTextBlockDataValues[textBlockUserData][id].value<QTransform>();
+            m_currentTextBlockDataValues[textBlockUserData][id] = transform * value.value<QTransform>();
         }
         else {
-            m_currentTextBlockDataValues[textBlockData][id] = value;
+            m_currentTextBlockDataValues[textBlockUserData][id] = value;
         }
     }
     else {

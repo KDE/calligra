@@ -25,8 +25,8 @@
 #include <KoUnit.h>
 #include <KoStore.h>
 
-#include <KTemporaryFile>
-#include <KDebug>
+#include <ktemporaryfile.h>
+#include <kdebug.h>
 #include <QIODevice>
 
 // make it a QSharedData
@@ -52,7 +52,7 @@ public:
     bool taggedForSaving;
 };
 
-KPrSoundData::KPrSoundData(KPrSoundCollection *collection, QString href)
+KPrSoundData::KPrSoundData(KPrSoundCollection *collection, const QString &href)
     : d(new Private(collection))
 {
     Q_ASSERT(collection);
@@ -76,6 +76,9 @@ KPrSoundData::~KPrSoundData() {
     }
 }
 
+bool KPrSoundData::operator==(const KPrSoundData &other) const {
+    return other.d == d;
+}
 
 QString KPrSoundData::tagForSaving() {
     d->taggedForSaving=true;

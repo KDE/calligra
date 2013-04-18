@@ -1,12 +1,19 @@
 [Desktop Entry]
 Name=File Engine
+Name[bs]=Motor za datoteke
 Name[ca]=Motor de fitxers
 Name[ca@valencia]=Motor de fitxers
+Name[da]=File Engine
+Name[de]=Datei-Engine
 Name[el]=Μηχανή αρχείων
 Name[es]=Motor de archivos
 Name[et]=File Engine
+Name[fr]=moteur de fichier
+Name[gl]=Motor de ficheiros
+Name[hu]=Fájlmotor
 Name[it]=Motore file
 Name[kk]=Файлдар басқару тетігі
+Name[lt]=Failų įrengimas
 Name[nb]=Filmotor
 Name[nl]=Opberg-engine
 Name[pl]=Silnik plikowy
@@ -14,6 +21,7 @@ Name[pt]=Motor de Ficheiros
 Name[pt_BR]=Motor de arquivos
 Name[ru]=Система управления файлами
 Name[sk]=Súborový engine
+Name[sl]=Datotečni pogon
 Name[sv]=Filutrustning
 Name[uk]=Система керування файлами
 Name[x-test]=xxFile Enginexx

@@ -31,6 +31,9 @@
 
 #include <QDeclarativeItem>
 
+class CAAbstractDocumentHandler;
+class CADocumentController;
+class CACanvasItem;
 class KoCanvasBase;
 class KoZoomController;
 class KoZoomHandler;
@@ -39,11 +42,10 @@ class CACanvasController : public QDeclarativeItem, public KoCanvasController
 {
     Q_OBJECT
 
-    Q_PROPERTY (qreal docHeight READ docHeight NOTIFY docHeightChanged)
-    Q_PROPERTY (qreal docWidth READ docWidth NOTIFY docWidthChanged)
     Q_PROPERTY (int cameraX READ cameraX WRITE setCameraX NOTIFY cameraXChanged)
     Q_PROPERTY (int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
     Q_PROPERTY (qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
+    Q_PROPERTY (QObject* caCanvasItem READ caCanvasItem WRITE setCACanvasItem NOTIFY caCanvasItemChanged)
 
 public:
     explicit CACanvasController (QDeclarativeItem* parent = 0);
@@ -54,8 +56,8 @@ public:
     virtual void setScrollBarValue (const QPoint& value);
     virtual QPoint scrollBarValue() const;
     virtual void pan (const QPoint& distance);
-    virtual QPoint preferredCenter() const;
-    virtual void setPreferredCenter (const QPoint& viewPoint);
+    virtual QPointF preferredCenter() const;
+    virtual void setPreferredCenter (const QPointF& viewPoint);
     virtual void recenterPreferred();
     virtual void zoomTo (const QRect& rect);
     virtual void zoomBy (const QPoint& center, qreal zoom);
@@ -72,24 +74,25 @@ public:
     virtual void setDrawShadow (bool drawShadow);
     virtual QSize viewportSize() const;
     virtual void scrollContentsBy (int dx, int dy);
+    QObject *caCanvasItem();
+    void setCACanvasItem(QObject *caCanvas);
 
-    qreal docWidth() const;
-    qreal docHeight() const;
     int cameraX() const;
     int cameraY() const;
     void setCameraX (int cameraX);
     void setCameraY (int cameraY);
     qreal zoom() const;
     void setZoom(qreal zoom);
+    void alignTopWith(int y);
+    void alignLeftWith(int x);
 
     KoCanvasControllerProxyObject* canvasControllerProxyObject();
     KoZoomHandler* zoomHandler();
     KoZoomController* zoomController();
     void setZoomHandler (KoZoomHandler* zoomHandler);
-    void setZoomController (KoZoomController* zoomController);
+    void setDocumentHandler (CAAbstractDocumentHandler *documentHandler);
 
 public slots:
-    void centerToCamera();
     void zoomToFit();
     void updateCanvas();
     void updateZoomValue(KoZoomMode::Mode mode, qreal zoom);
@@ -97,23 +100,22 @@ public slots:
 private:
     KoZoomHandler* m_zoomHandler;
     KoZoomController* m_zoomController;
-    KoCanvasBase* m_canvas;
     QPoint m_currentPoint;
     QSizeF m_documentSize;
     QList<CADocumentInfo*> m_recentFiles;
     qreal m_zoom;
+    CACanvasItem *m_caCanvasItem;
+    CAAbstractDocumentHandler *m_caDocumentHandler;
 
 protected:
     virtual void geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry);
 
 signals:
-    void docHeightChanged();
-    void docWidthChanged();
     void cameraXChanged();
     void cameraYChanged();
     void needCanvasUpdate();
-    void needsCanvasResize(const QSizeF canvasSize);
     void zoomChanged();
+    void caCanvasItemChanged();
 };
 
 #endif // CACANVASCONTROLLER_H

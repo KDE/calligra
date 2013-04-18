@@ -44,7 +44,7 @@ public:
      * Only the default TextPFException is required.
      * @param d DocumentContainer address
      */
-    PptTextPFRun(const MSO::DocumentContainer* d);
+    explicit PptTextPFRun(const MSO::DocumentContainer* d);
 
     /**
      * Special purpose constructor for default list styles of masters.
@@ -157,7 +157,7 @@ public:
      * Only the default TextCFException is required.
      * @param d DocumentContainer address
      */
-    PptTextCFRun(const MSO::DocumentContainer* d);
+    explicit PptTextCFRun(const MSO::DocumentContainer* d);
 
     /**
      * Special purpose constructor for default list styles of masters.

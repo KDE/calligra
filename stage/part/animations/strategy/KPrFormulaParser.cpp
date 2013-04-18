@@ -176,9 +176,9 @@ void TokenStack::ensureSpace()
 /**********************
     KPrFormulaParser
  **********************/
-KPrFormulaParser::KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData, ParseType type)
+KPrFormulaParser::KPrFormulaParser(const QString &formula, KoShape *shape, QTextBlockUserData *textBlockUserData, ParseType type)
     : m_shape(shape)
-    , m_textBlockData(textBlockData)
+    , m_textBlockData(textBlockUserData)
     , m_formula(formula)
     , m_fcompiled(false)
     , m_fvalid(false)
@@ -192,7 +192,7 @@ QString KPrFormulaParser::formula() const
     return m_formula;
 }
 
-Tokens KPrFormulaParser::scan(QString formula) const
+Tokens KPrFormulaParser::scan(const QString &formula) const
 {
     Tokens tokens;
     // parsing state
@@ -628,7 +628,7 @@ bool KPrFormulaParser::valid() const
     return m_fvalid;
 }
 
-qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache *cache, const qreal time) const
+qreal KPrFormulaParser::identifierToValue(const QString &identifier, KPrAnimationCache *cache, const qreal time) const
 {
     if (identifier == "width") {
         if (m_textBlockData) {
@@ -682,7 +682,7 @@ qreal KPrFormulaParser::identifierToValue(QString identifier, KPrAnimationCache 
     return 0.0;
 }
 
-qreal KPrFormulaParser::formulaToValue(QString identifier, qreal arg1) const
+qreal KPrFormulaParser::formulaToValue(const QString &identifier, qreal arg1) const
 {
     if (identifier == "sin") {
         return sin(arg1);
@@ -717,7 +717,7 @@ qreal KPrFormulaParser::formulaToValue(QString identifier, qreal arg1) const
     return 0.0;
 }
 
-qreal KPrFormulaParser::formulaToValue(QString identifier, qreal arg1, qreal arg2) const
+qreal KPrFormulaParser::formulaToValue(const QString &identifier, qreal arg1, qreal arg2) const
 {
     if (identifier == "min") {
         return qMin(arg1, arg2);

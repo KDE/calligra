@@ -21,7 +21,7 @@
 #define PLANWORK_DEBUGAREA
 
 #include "kplatowork_export.h"
-#include <KDebug>
+#include <kdebug.h>
 
 KPLATOWORK_EXPORT int planworkDbg();
 

@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Phase Modulator
+Name[bs]=Fazni modulator
 Name[ca]=Modulador de fase
 Name[ca@valencia]=Modulador de fase
+Name[da]=Fasemodulator
 Name[de]=Phasen-Modulator
 Name[el]=Διαμορφωτής φάσης
 Name[es]=Modulador Fase
 Name[et]=Faasimuundur
+Name[fr]=Modulateur de phase
+Name[gl]=Modulador de fases
 Name[it]=Modulatore di fase
 Name[kk]=Фаза модуляторы
 Name[nb]=Fasemodulator
@@ -15,6 +19,7 @@ Name[pt]=Modulador Fase
 Name[pt_BR]=Modulador de fase
 Name[ru]=Фазовый модулятор
 Name[sk]=Fázový modulátor
+Name[sl]=Fazni modulator
 Name[sv]=Fasmodulator
 Name[uk]=Фазовий модулятор
 Name[x-test]=xxPhase Modulatorxx

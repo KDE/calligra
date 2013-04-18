@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Octogon
 Name[bg]=Осмоъгълник
+Name[bs]=Osmougao
 Name[ca]=Octògon
 Name[ca@valencia]=Octògon
 Name[cs]=Osmiúhelník
@@ -9,8 +10,9 @@ Name[de]=Achteck
 Name[el]=Οκτάγωνο
 Name[es]=Octógono
 Name[et]=Kaheksanurk
-Name[fi]=öKahdeksankulmio
+Name[fi]=Kahdeksankulmio
 Name[fr]=Octogon
+Name[gl]=Octógono
 Name[hu]=Nyolcszög
 Name[it]=Ottagono
 Name[kk]=Сегізбұрыш
@@ -24,6 +26,7 @@ Name[ru]=Восьмиугольник
 Name[sk]=Osemhran
 Name[sl]=Osmerokotnik
 Name[sv]=Oktagon
+Name[tr]=Sekizgen
 Name[uk]=Восьмикутник
 Name[x-test]=xxOctogonxx
 Name[zh_CN]=八角形

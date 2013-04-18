@@ -1,3 +1,4 @@
+add_subdirectory( animations )
 install( FILES
          webslideshow-sidebar.png
          layout-elements.svg

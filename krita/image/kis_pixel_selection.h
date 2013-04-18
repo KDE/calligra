@@ -52,7 +52,7 @@ public:
 
     KisSelectionComponent* clone(KisSelection*);
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect) const;
+    const KoColorSpace* compositionSourceColorSpace() const;
 
     /**
      * Fill the specified rect with the specified selectedness.
@@ -82,7 +82,7 @@ public:
      */
     void applySelection(KisPixelSelectionSP selection, SelectionAction action);
 
-    /// Tests if the the rect is totally outside the selection
+    /// Tests if the rect is totally outside the selection
     bool isTotallyUnselected(const QRect & r) const;
 
     /**

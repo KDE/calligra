@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,6 +58,7 @@ struct MissingPart {
 typedef QList<MissingPart> MissingPartsList;
 }
 
+class QFileInfo;
 class KexiMainWindow;
 class KexiWindow;
 
@@ -215,6 +216,10 @@ public:
      \return true on success. */
     bool renameObject(KexiPart::Item& item, const QString& newName);
 
+    /*! Renames a part instance pointed by \a item to a new name \a newName.
+     \return true on success. */
+    bool setObjectCaption(KexiPart::Item& item, const QString& newCaption);
+
     /*! Creates part item for given part \a info.
      Newly item will not be saved to the backend but stored in memory only
      (owned by project), and marked as "neverSaved" (see KexiPart::Item::neverSaved()).
@@ -244,7 +249,7 @@ public:
 
     /*! removes \a item from internal dictionaries. The item is destroyed
      after successful removal.
-     Used to delete an unstored part item previusly created with createPartItem(). */
+     Used to delete an unstored part item previously created with createPartItem(). */
     void deleteUnstoredItem(KexiPart::Item *item);
 
     /**
@@ -279,6 +284,10 @@ public:
     static tristate dropProject(const KexiProjectData& data,
                                 KexiDB::MessageHandler* handler, bool dontAsk = false);
 
+    //! Helper method to ask user "Could not  open file for reading and writing. Do you want to
+    //! open the file as read only?". @return true if user agrees, false if user cancels opening.
+    static bool askForOpeningNonWritableFileAsReadOnly(QWidget *parent, const QFileInfo &finfo);
+
     /*! @see KexiDB::Connection::setQuerySchemaObsolete( const QString& queryName ) */
 //  void setQuerySchemaObsolete( const QString& queryName );
 
@@ -295,6 +304,35 @@ public:
 
     //! Closes connection. @return true on success.
     bool closeConnection();
+
+    /*! Loads current user's data block, referenced by \a objectID and \a dataID
+     and puts it to \a dataString.
+     \return true on success, false on failure and cancelled when there is no such data block
+     \sa storeUserDataBlock() removeUserDataBlock() copyUserDataBlock() KexiDB::Connection::loadDataBlock(). */
+    tristate loadUserDataBlock(int objectID, const QString& dataID, QString *dataString);
+
+    /*! Stores current user's data block \a dataString, referenced by \a objectID and \a dataID.
+     The block will be stored in "kexi__userdata" table
+     If there is already such record in the table, it's simply overwritten.
+     \return true on success
+     \sa loadUserDataBlock() removeUserDataBlock() copyUserDataBlock() KexiDB::Connection::storeDataBlock(). */
+    bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString);
+
+    /*! Copies urrent user's data blocks referenced by \a sourceObjectID and pointed
+     by optional \a dataID.
+     \return true on success. Does not fail if blocks do not exist.
+     Prior to copying, existing user data blocks are removed even if there is nothing to copy.
+     Copied data blocks will have \a destObjectID object identifier assigned.
+     Note that if \a dataID is not specified, all user data blocks found for the \a sourceObjectID
+     will be copied.
+     \sa loadUserDataBlock() storeUserDataBlock() removeUserDataBlock() KexiDB::Connection::copyDataBlock(). */
+    bool copyUserDataBlock(int sourceObjectID, int destObjectID, const QString &dataID = QString());
+
+    /*! Removes current user's data block referenced by \a objectID and \a dataID.
+     \return true on success. Does not fail if the block does not exist.
+     Note that if \a dataID is not specified, all data blocks for this user and object will be removed.
+     \sa loadUserDataBlock() storeUserDataBlock() copyUserDataBlock() KexiDB::Connection::removeDataBlock(). */
+    bool removeUserDataBlock(int objectID, const QString& dataID = QString());
 
 protected:
     /*! Creates connection using project data.
@@ -346,6 +384,9 @@ signals:
 
     /** instance pointed by \a item is renamed */
     void itemRenamed(const KexiPart::Item &item, const QString& oldName);
+
+    /** caption for instance pointed by \a item is changed */
+    void itemCaptionChanged(const KexiPart::Item &item, const QString& oldCaption);
 
 //  /** new table \a schema created */
 //  void tableCreated(KexiDB::TableSchema& schema);

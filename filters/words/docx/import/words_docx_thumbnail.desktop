@@ -1,0 +1,32 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Word 2007 Documents
+Name[ca]=Documents del Microsoft Word 2007
+Name[da]=Microsoft Word 2007-dokumenter
+Name[de]=Microsoft Word 2007 Dokumente
+Name[el]=Έγγραφα Microsoft Word 2007
+Name[es]=Documentos Microsoft Word 2007
+Name[et]=Microsoft Word 2007 dokumendid
+Name[fr]=Documents Microsoft Word 2007
+Name[gl]=Documentos de Microsoft Word 2007
+Name[hu]=Microsoft Word 2007 dokumentumok
+Name[it]=Documenti Microsoft Word 2007
+Name[kk]=Microsoft Word 2007 құжаттары
+Name[nb]=Microsoft Word 2007 dokumenter
+Name[nl]=Microsoft Word 2007-documenten
+Name[pl]=Dokumenty Microsoft Word 2007
+Name[pt]=Documentos do Microsoft Word 2007
+Name[pt_BR]=Documentos do Microsoft Word 2007
+Name[sk]=Dokumenty Microsoft Word 2007
+Name[sl]=Dokumenti Microsoft Word 2007
+Name[sv]=Microsoft Word 2007-dokument
+Name[tr]=Microsoft Word 2007 Belgeleri
+Name[uk]=Документи Microsoft Word 2007
+Name[x-test]=xxMicrosoft Word 2007 Documentsxx
+Name[zh_CN]=Microsoft Word 2007 文本文档
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

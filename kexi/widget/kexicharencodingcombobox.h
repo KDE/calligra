@@ -21,7 +21,7 @@
 #define KEXICHARENCODINGCOMBO_H
 
 #include <QHash>
-#include <KComboBox>
+#include <kcombobox.h>
 #include <kexi_export.h>
 
 /*! @short Combobox widget providing a list of possible character encodings.
@@ -41,9 +41,9 @@ public:
     void selectDefaultEncoding();
     bool defaultEncodingSelected() const;
 
-protected:
-    QHash<QString, QString> m_encodingDescriptionForName;
-    bool m_defaultEncodingAdded;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

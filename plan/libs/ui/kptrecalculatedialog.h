@@ -45,8 +45,8 @@ class KPLATOUI_EXPORT RecalculateDialog : public KDialog
 {
     Q_OBJECT
 public:
-    RecalculateDialog( QWidget *parent=0 );
-    
+    explicit RecalculateDialog(QWidget *parent = 0);
+
     QDateTime dateTime() const;
 
 private:

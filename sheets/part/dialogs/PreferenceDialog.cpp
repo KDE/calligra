@@ -45,11 +45,11 @@
 #include <KoConfigAuthorPage.h>
 
 #include <kcolorbutton.h>
-#include <KPluginInfo>
-#include <KPluginSelector>
-#include <KServiceTypeTrader>
+#include <kplugininfo.h>
+#include <kpluginselector.h>
+#include <kservicetypetrader.h>
 #include <ksharedconfig.h>
-#include <KStandardDirs>
+#include <kstandarddirs.h>
 #include <sonnet/configwidget.h>
 
 #include "ApplicationSettings.h"
@@ -360,8 +360,8 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     // Plugin Options Widget
     d->pluginSelector = new KPluginSelector(this);
-    const QString serviceType = QLatin1String("KSpread/Plugin");
-    const QString query = QLatin1String("([X-KSpread-InterfaceVersion] == 0)");
+    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
+    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0)");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
     d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
@@ -473,7 +473,7 @@ listType += i18n("Semi-Automatic");
 typeCompletion->insertItems(0, listType);
 typeCompletion->setCurrentIndex(0);
 comboChanged = false;
-connect(typeCompletion, SIGNAL(activated(const QString &)), this, SLOT(slotTextComboChanged(const QString &)));
+connect(typeCompletion, SIGNAL(activated(QString)), this, SLOT(slotTextComboChanged(QString)));
 #endif
 
 #include "PreferenceDialog.moc"

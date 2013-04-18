@@ -261,14 +261,10 @@ public:
 
     /*! \return The i18n'ed name of the property whose name is \a name,
      that will be displayed in PropertyEditor. */
-    inline QString propertyDescForName(const QByteArray &name) {
-        return m_propDesc[name];
-    }
+    QString propertyDescription(const char* name) const;
 
     /*! \return The i18n'ed name of the property's value whose name is \a name. */
-    inline QString propertyDescForValue(const QByteArray &name) {
-        return m_propValDesc[name];
-    }
+    QString valueDescription(const char* name) const;
 
     /*! This method is called after form's property set was filled with properties
      of a widget \a w, of class defined by \a info.
@@ -279,9 +275,7 @@ public:
     /*! \return internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be just provided
      to describe class' details. */
-    inline QVariant internalProperty(const QByteArray& classname, const QByteArray& property) const {
-        return m_internalProp.value(classname + ":" + property);
-    }
+    QVariant internalProperty(const QByteArray& classname, const QByteArray& property) const;
 
     /*! This function is called when the widget is resized,
      and the @a editor size needs to be updated. */
@@ -294,6 +288,14 @@ public:
      widget should to be selected. Defaults can be overridden by reimplementing this method. */
     virtual ObjectTreeItem* selectableItem(ObjectTreeItem* item);
 
+    /*! Sets the i18n'ed description of a property, which will be shown in PropertyEditor. */
+    void setPropertyDescription(const char *property, const QString &description);
+
+    /*! Sets the i18n'ed description of a property value, which will be shown in PropertyEditor. */
+    void setValueDescription(const char *valueName, const QString &description);
+
+
+    void setAdvancedPropertiesVisible(bool set);
 protected:
     /*! This function is called when we want to know whether the property should be visible.
      Implement it in the factory; don't forget to call implementation in the superclass.
@@ -332,32 +334,34 @@ protected:
     void editListWidget(QListWidget *listwidget) const;
 #endif
 
-    /*! This function destroys the editor when it loses focus or Enter is pressed. */
-// moved to Form
-//    virtual bool  eventFilter(QObject *obj, QEvent *ev);
-
     /*! This function is used to modify a property of a widget (eg after editing it).
     Please use it instead of w->setProperty() to allow sync inside PropertyEditor.
     */
     void changeProperty(Form *form, QWidget *widget, const char *name, const QVariant &value);
-
-//  /*! Adds the i18n'ed description of a property, which will be shown in PropertyEditor. */
-//  void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
-
-//  /*! Adds the i18n'ed description of a property value, which will be shown in PropertyEditor. */
-//  void  addValueDescription(Container *container, const char *value, const QString &desc);
 
     /*! \return true if at least one class defined by this factory inherits
      a class from other factory. Used in WidgetLibrary::loadFactories()
      to load factories in proper order. */
     bool inheritsFactories();
 
+    /*! Assigns \a value for internal property \a property for a class \a classname.
+     Internal properties are not stored within objects, but can be provided
+     to describe class' details. */
+    void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QVariant& value);
+
+    WidgetInfo* widgetInfoForClassName(const char* classname);
+
+    const QSet<QByteArray>* hiddenClasses() const;
+
+    WidgetLibrary* library();
+
+    bool advancedPropertiesVisible() const;
+
+    void setLibrary(WidgetLibrary* library);
 public slots:
 
-// moved to Form::resetInlineEditor()
     /*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
     It destroys the editor or installs again the event filter on the widget. */
-//    void resetEditor();
 
     //! Changes inline text for widget @a widget to @a text
     /*! Default implementation changes "text" property of the widget.
@@ -367,73 +371,9 @@ public slots:
     it really change property of the widget using changeProperty() (text, title, etc.). */
     virtual bool changeInlineText(Form *form, QWidget *widget,
                                   const QString& text, QString &oldText);
-
-protected slots:
-
-// Moved to Form::changeInlineTextInternal()
-//    void changeTextInternal(const QString& text);
-
-// Moved to Form::slotInlineTextChanged()
-//    void slotTextChanged();
-
-// Moved to Form()
-    /*! This slot is called when the editor is destroyed.*/
-//    void editorDeleted();
-// Moved to Form()
-//    void widgetDestroyed();
-
-protected:
-// Moved to Form::inlineEditorText()
-//    QString editorText() const;
-// Moved to Form::setInlineEditorText()
-//    void setEditorText(const QString& text);
-#if 0 //2.0
-    void setEditor(QWidget *widget, QWidget *editor);
-    QWidget *editor(QWidget *widget) const;
-    void setWidget(QWidget *widget, Container *container);
-    QWidget *widget() const;
-#endif
-    /*! Assigns \a value for internal property \a property for a class \a classname.
-     Internal properties are not stored within objects, but can be provided
-     to describe class' details. */
-    inline void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QVariant& value) {
-        m_internalProp.insert(classname + ":" + property, value);
-    }
-
-    WidgetLibrary *m_library;
-// moved to Form
-//    QByteArray m_editedWidgetClass;
-// moved to Form as originalInlineText
-//    QString m_firstText;
-//2.0: removed
-//    QPointer<ResizeHandleSet> m_handles;
-//2.0: moved to Form::Private::inlineEditorContainer
-//    QPointer<Container> m_container;
-//  WidgetInfoList m_classes;
-    WidgetInfoHash m_classesByName;
-    QSet<QByteArray>* m_hiddenClasses;
-
-    //! i18n stuff
-    QHash<QByteArray, QString> m_propDesc;
-    QHash<QByteArray, QString> m_propValDesc;
-    //! internal properties
-    QHash<QByteArray, QVariant> m_internalProp;
-
-    /*! flag useful to decide whether to hide some properties.
-     It's value is inherited from WidgetLibrary. */
-    bool m_showAdvancedProperties;
-
-//2.0    /*! Contains name of an XMLGUI file providing toolbar buttons
-//2.0     (and menu items in the future?) for the factory.
-//2.0     Can be empty, e.g. for the main factory which has XMLGUI defined in the shell window itself
-//2.0     (e.g. kexiformpartinstui.rc for Kexi Forms). This name is set in WidgetLibrary::loadFactories() */
-//2.0    QString m_xmlGUIFileName;
-
-//2.0    KXMLGUIClient *m_guiClient;
-
-//2.0    QPointer<QWidget> m_widget;
-// moved to Form as Private::inlineEditor
-//    QPointer<QWidget> m_editor;
+private:
+    class Private;
+    Private* const d;
 
     friend class WidgetLibrary;
 };

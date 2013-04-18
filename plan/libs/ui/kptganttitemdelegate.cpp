@@ -22,7 +22,7 @@
 #include "kptnodeitemmodel.h"
 #include "kptnode.h"
 #include "kptresourceappointmentsmodel.h"
-#include <kdebug.h>
+#include "kptdebug.h"
 
 #include <QModelIndex>
 #include <QApplication>
@@ -102,17 +102,60 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
     KDGantt::StyleOptionGanttItem opt;
     int typ = data( idx, NodeModel::NodeType, Qt::EditRole ).toInt();
     switch ( typ ) {
-        case Node::Type_Task:
-            return i18nc( "@info:tooltip",
-                    "Name: %1<nl/>"
-                    "Planned: %2 - %3<nl/>"
-                    "Status: %4",
-                        model->data( idx, Qt::DisplayRole ).toString(),
-                        data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
-                        data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
-                        data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString()
-                        );
+        case Node::Type_Task: {
+            int ctyp = data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
+            switch ( ctyp ) {
+                case Node::MustStartOn:
+                case Node::StartNotEarlier:
+                case Node::FixedInterval:
+                        return i18nc( "@info:tooltip",
+                            "Name: %1<nl/>"
+                            "Planned: %2 - %3<nl/>"
+                            "Status: %4<nl/>"
+                            "Constraint type: %5<nl/>"
+                            "Constraint time: %6<nl/>"
+                            "Negative float: %7 h",
+                                model->data( idx, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeConstraint, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeConstraintStart, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeNegativeFloat, Qt::DisplayRole ).toString()
+                                );
 
+                case Node::MustFinishOn:
+                case Node::FinishNotLater:
+                        return i18nc( "@info:tooltip",
+                            "Name: %1<nl/>"
+                            "Planned: %2 - %3<nl/>"
+                            "Status: %4<nl/>"
+                            "Constraint type: %5<nl/>"
+                            "Constraint time: %6<nl/>"
+                            "Negative float: %7 h",
+                                model->data( idx, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeConstraint, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeConstraintEnd, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeNegativeFloat, Qt::DisplayRole ).toString()
+                                );
+
+                default:
+                    return i18nc( "@info:tooltip",
+                            "Name: %1<nl/>"
+                            "Planned: %2 - %3<nl/>"
+                            "Status: %4<nl/>"
+                            "Scheduling: %5",
+                                model->data( idx, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeConstraint, Qt::DisplayRole ).toString()
+                                );
+            }
+        }
         case Node::Type_Milestone: {
             int ctyp = data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
             switch ( ctyp ) {
@@ -155,10 +198,12 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
                     return i18nc( "@info:tooltip",
                             "Name: %1<nl/>"
                             "Planned: %2<nl/>"
-                            "Status: %3<nl/>",
+                            "Status: %3<nl/>"
+                            "Scheduling: %4",
                                 model->data( idx, Qt::DisplayRole ).toString(),
                                 data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
-                                data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString()
+                                data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString(),
+                                data( idx, NodeModel::NodeConstraint, Qt::DisplayRole ).toString()
                                 );
             }
         }

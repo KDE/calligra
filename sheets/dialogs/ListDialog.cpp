@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <KTextEdit>
+#include <ktextedit.h>
 
 #include "commands/AutoFillCommand.h"
 #include "Localization.h"
@@ -69,8 +69,6 @@ ListDialog::ListDialog(QWidget* parent)
     setMainWidget(page);
 
     QGridLayout *grid1 = new QGridLayout(page);
-    grid1->setMargin(KDialog::marginHint());
-    grid1->setSpacing(KDialog::spacingHint());
 
     QLabel *lab = new QLabel(page);
     lab->setText(i18n("List:"));

@@ -20,6 +20,8 @@
 #include "utils.h"
 #include "utils_p.h"
 
+#include <db/utils.h>
+
 #include <KoIcon.h>
 
 #include <q3header.h>
@@ -31,32 +33,14 @@
 #include <kpagedialog.h>
 #include <kpushbutton.h>
 #include <kguiitem.h>
-#include <KDebug>
-
-#ifdef KEXI_DEBUG_GUI
+#include <kdebug.h>
 
 static DebugWindowDialog* debugWindow = 0;
 static KTabWidget* debugWindowTab = 0;
 static K3ListView* kexiDBDebugPage = 0;
 static K3ListView* kexiAlterTableActionDebugPage = 0;
 
-QWidget *KexiUtils::createDebugWindow(QWidget *parent)
-{
-    // (this is internal code - do not use i18n() here)
-    debugWindow = new DebugWindowDialog(parent);
-    debugWindow->setSizeGripEnabled(true);
-    QBoxLayout *lyr = new QVBoxLayout(debugWindow);
-    debugWindowTab = new KTabWidget(debugWindow);
-    debugWindowTab->setObjectName("debugWindowTab");
-    lyr->addWidget(debugWindowTab);
-    debugWindow->resize(900, 600);
-    debugWindow->setWindowIcon(koIcon("document-properties"));
-    debugWindow->setWindowTitle("Kexi Internal Debugger");
-    debugWindow->show();
-    return debugWindow;
-}
-
-void KexiUtils::addKexiDBDebug(const QString& text)
+static void addKexiDBDebug(const QString& text)
 {
     // (this is internal code - do not use i18n() here)
     if (!debugWindowTab)
@@ -72,7 +56,7 @@ void KexiUtils::addKexiDBDebug(const QString& text)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
-        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "edit-clear-locationbar-rtl"), page);
+        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
 
         kexiDBDebugPage = new K3ListView(page);
@@ -97,7 +81,7 @@ void KexiUtils::addKexiDBDebug(const QString& text)
     li->setMultiLinesEnabled(true);
 }
 
-void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
+static void addAlterTableActionDebug(const QString& text, int nestingLevel)
 {
     // (this is internal code - do not use i18n() here)
     if (!debugWindowTab)
@@ -108,12 +92,12 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
-        KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "document-save"), page);
+        KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", koIconName("document-save")), page);
         btn_exec->setObjectName("executeRealAlterTable");
         hbox->addWidget(btn_exec);
-        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "edit-clear-locationbar-rtl"), page);
+        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
-        KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "system-run"), page);
+        KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", koIconName("system-run")), page);
         btn_sim->setObjectName("simulateAlterTableExecution");
         hbox->addWidget(btn_sim);
 
@@ -171,6 +155,25 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
     li->setMultiLinesEnabled(true);
 }
 
+QWidget *KexiUtils::createDebugWindow(QWidget *parent)
+{
+    KexiDB::setDebugGUIHandler(addKexiDBDebug);
+    KexiDB::setAlterTableActionDebugHandler(addAlterTableActionDebug);
+
+    // (this is internal code - do not use i18n() here)
+    debugWindow = new DebugWindowDialog(parent);
+    debugWindow->setSizeGripEnabled(true);
+    QBoxLayout *lyr = new QVBoxLayout(debugWindow);
+    debugWindowTab = new KTabWidget(debugWindow);
+    debugWindowTab->setObjectName("debugWindowTab");
+    lyr->addWidget(debugWindowTab);
+    debugWindow->resize(900, 600);
+    debugWindow->setWindowIcon(koIcon("document-properties"));
+    debugWindow->setWindowTitle("Kexi Internal Debugger");
+    debugWindow->show();
+    return debugWindow;
+}
+
 void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName,
         const QObject *receiver, const char* slot)
 {
@@ -181,5 +184,3 @@ void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName,
             QObject::connect(btn, SIGNAL(clicked()), receiver, slot);
     }
 }
-
-#endif //KEXI_DEBUG_GUI

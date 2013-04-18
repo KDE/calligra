@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=flowfan
+Name[bs]=protok ventilatora
 Name[ca]=ventilador de flux
 Name[ca@valencia]=ventilador de flux
+Name[da]=flowfan
+Name[de]=Axiallüfter
 Name[el]=flowfan
 Name[es]=ventilador de flujo
 Name[et]=Puhur
+Name[fr]=flux
+Name[gl]=Ventilador de eixo flotante
 Name[it]=flowfan
 Name[kk]=Үрлегіш
 Name[nb]=flytvifte
@@ -15,6 +20,7 @@ Name[pt_BR]=ventoinha de fluxo
 Name[ru]=Вентилятор
 Name[sk]=flowfan
 Name[sv]=flödesfläkt
+Name[tr]=akışlı fan
 Name[uk]=Вентилятор, що створює осесиметричний потік
 Name[x-test]=xxflowfanxx
 Name[zh_TW]=flowfan

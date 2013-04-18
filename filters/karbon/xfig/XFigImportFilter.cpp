@@ -29,9 +29,9 @@
 #include <KoStore.h>
 #include <KoFilterChain.h>
 // KDE
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 // Qt
-#include <QtCore/QFile>
+#include <QFile>
 
 
 K_PLUGIN_FACTORY(CdrImportFactory, registerPlugin<XFigImportFilter>();)

@@ -32,9 +32,9 @@
 #include <QMenu>
 
 // KDE
-#include <KLocale>
-#include <KDebug>
-#include <KMessageBox>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
 
 // Calligra
 #include <interfaces/KoChartModel.h>
@@ -494,10 +494,10 @@ ChartConfigWidget::ChartConfigWidget()
             this,             SIGNAL(showLegendChanged(bool)));
 
     // "Datasets" tab
-    connect(d->ui.datasetBrush, SIGNAL(changed(const QColor&)),
-            this, SLOT(datasetBrushSelected(const QColor&)));
-    connect(d->ui.datasetPen, SIGNAL(changed(const QColor&)),
-            this, SLOT(datasetPenSelected(const QColor&)));
+    connect(d->ui.datasetBrush, SIGNAL(changed(QColor)),
+            this, SLOT(datasetBrushSelected(QColor)));
+    connect(d->ui.datasetPen, SIGNAL(changed(QColor)),
+            this, SLOT(datasetPenSelected(QColor)));
     connect(d->ui.datasetShowCategory, SIGNAL(toggled(bool)),
             this, SLOT(ui_datasetShowCategoryChanged(bool)));
     connect(d->ui.datasetShowErrorBar, SIGNAL(toggled(bool)),
@@ -516,8 +516,8 @@ ChartConfigWidget::ChartConfigWidget()
             this, SLOT(ui_dataSetPieExplodeFactorChanged(int)));
 
     // "Legend" tab
-    connect(d->ui.legendTitle, SIGNAL(textChanged(const QString&)),
-            this, SIGNAL(legendTitleChanged(const QString&)));
+    connect(d->ui.legendTitle, SIGNAL(textChanged(QString)),
+            this, SIGNAL(legendTitleChanged(QString)));
     connect(d->ui.legendShowFrame, SIGNAL(toggled(bool)),
             this, SIGNAL(legendShowFrameChanged(bool)));
     connect(d->ui.legendOrientationIsVertical, SIGNAL(toggled(bool)),
@@ -528,8 +528,8 @@ ChartConfigWidget::ChartConfigWidget()
     d->ui.addAxis->setIcon(koIcon("list-add"));
     d->ui.removeAxis->setIcon(koIcon("list-remove"));
 
-    connect(d->ui.axisTitle, SIGNAL(textChanged(const QString&)),
-            this, SLOT(ui_axisTitleChanged(const QString&)));
+    connect(d->ui.axisTitle, SIGNAL(textChanged(QString)),
+            this, SLOT(ui_axisTitleChanged(QString)));
     connect(d->ui.axisShowTitle, SIGNAL(toggled(bool)),
             this, SLOT(ui_axisShowTitleChanged(bool)));
     connect(d->ui.axisShowGridLines, SIGNAL(toggled(bool)),
@@ -637,8 +637,8 @@ void ChartConfigWidget::open(KoShape* shape)
                 this, SLOT(ui_dataSetYDataRegionChanged()));
         connect(d->cellRegionDialog.labelDataRegion, SIGNAL(editingFinished()),
                 this, SLOT(ui_dataSetLabelDataRegionChanged()));
-        //connect(d->cellRegionDialog.customDataRegion, SIGNAL(textEdited(const QString&)),
-        //        this, SLOT(ui_dataSetCustomDataRegionChanged(const QString&)));
+        //connect(d->cellRegionDialog.customDataRegion, SIGNAL(textEdited(QString)),
+        //        this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
         connect(d->cellRegionDialog.categoryDataRegion, SIGNAL(editingFinished()),
                 this, SLOT(ui_dataSetCategoryDataRegionChanged()));
         connect(d->cellRegionDialog.dataSets, SIGNAL(currentIndexChanged(int)),
@@ -1145,6 +1145,9 @@ void ChartConfigWidget::update()
     d->ui.showSubTitle->setChecked(d->shape->subTitle()->isVisible());
     d->ui.showFooter->setChecked(d->shape->footer()->isVisible());
 
+    // Update properties in "Data Sets" tab
+    ui_dataSetSelectionChanged(d->selectedDataSet);
+
     // Update "Bar Properties" in "Data Sets" tab
     d->ui.gapBetweenBars->setValue(d->shape->plotArea()->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(d->shape->plotArea()->gapBetweenSets());
@@ -1240,8 +1243,22 @@ void ChartConfigWidget::update()
 
     if (d->shape->legend()) {
         d->ui.legendTitle->blockSignals(true);
+        d->ui.showLegend->setChecked(d->shape->legend()->isVisible());
+        d->ui.legendTitle->blockSignals(false);
+
+        d->ui.legendTitle->blockSignals(true);
         d->ui.legendTitle->setText(d->shape->legend()->title());
         d->ui.legendTitle->blockSignals(false);
+
+        d->ui.legendTitle->blockSignals(true);
+        d->ui.legendShowFrame->setChecked(d->shape->legend()->showFrame());
+        d->ui.legendTitle->blockSignals(false);
+
+        if (d->shape->legend()->expansion() == HighLegendExpansion) {
+            d->ui.legendOrientationIsVertical->setChecked(true);
+        } else {
+            d->ui.legendOrientationIsHorizontal->setChecked(true);
+        }
     }
 
     bool enableMarkers = !(d->type == BarChartType || d->type == StockChartType || d->type == CircleChartType
@@ -1763,15 +1780,15 @@ void ChartConfigWidget::ui_axisLabelsFontChanged()
 {
     QFont font = d->axisFontEditorDialog.fontChooser->font();
     Axis *axis = d->axes[d->ui.axes->currentIndex()];
-    axis->setFont(font);
-    axis->setFontSize(font.pointSizeF());
+
+    emit axisLabelsFontChanged(axis, font);
 }
 
 void ChartConfigWidget::ui_legendFontChanged()
 {
     QFont font = d->legendFontEditorDialog.fontChooser->font();
-    d->shape->legend()->setFont(font);
-    d->shape->legend()->setFontSize(font.pointSizeF());
+
+    emit legendFontChanged(font);
 }
 
 void ChartConfigWidget::ui_axisAdded()

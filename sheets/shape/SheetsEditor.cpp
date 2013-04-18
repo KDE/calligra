@@ -25,7 +25,7 @@
 #include <QListWidget>
 #include <QPushButton>
 
-#include <KInputDialog>
+#include <kinputdialog.h>
 
 #include "TableShape.h"
 #include "Sheet.h"
@@ -63,7 +63,7 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     }
     connect(map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
 
-    QVBoxLayout* btnlayout = new QVBoxLayout(this);
+    QVBoxLayout* btnlayout = new QVBoxLayout();
     layout->addLayout(btnlayout);
 
     d->renamebtn = new QPushButton(/*koIcon("edit-rename"),*/ i18n("Rename"), this);
@@ -93,7 +93,7 @@ void SheetsEditor::sheetAdded(Sheet* sheet)
     QListWidgetItem* item = new QListWidgetItem(sheet->sheetName());
     item->setCheckState(sheet->isHidden() ? Qt::Unchecked : Qt::Checked);
     d->list->addItem(item);
-    connect(sheet, SIGNAL(sig_nameChanged(Sheet*, QString)), this, SLOT(sheetNameChanged(Sheet*, QString)));
+    connect(sheet, SIGNAL(sig_nameChanged(Sheet*,QString)), this, SLOT(sheetNameChanged(Sheet*,QString)));
 }
 
 void SheetsEditor::sheetNameChanged(Sheet* sheet, const QString& old_name)

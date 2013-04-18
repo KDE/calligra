@@ -59,9 +59,9 @@ protected slots:
     void slotSelectionChanged();
 
 protected:
-    WidgetTreeWidget *m_widgetTree;
-    KPushButton *m_btnUp, *m_btnDown;
-    QCheckBox *m_check;
+
+    class Private;
+    Private* const d;
 };
 
 }

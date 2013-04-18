@@ -95,10 +95,6 @@ public:
         return m_profile;
     }
 
-    virtual KoColorProfile* profile() {
-        return m_profile;
-    }
-
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile,
                                    KoColorConversionTransformation::Intent renderingIntent,
@@ -164,19 +160,9 @@ public:
         warnPigment << i18n("Undefined operation in the alpha color space");
     }
 
-public:
+protected:
+    virtual bool preferCompositionInSourceColorSpace() const;
 
-    /**
-     * Convert a byte array of srcLen pixels *src to the specified color space
-     * and put the converted bytes into the prepared byte array *dst.
-     *
-     * Returns false if the conversion failed, true if it succeeded
-     */
-    virtual bool convertPixelsTo(const quint8 *src,
-                                 quint8 *dst, const KoColorSpace * dstColorSpace,
-                                 quint32 numPixels,
-                                 KoColorConversionTransformation::Intent  renderingIntent,
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 private:
     KoColorProfile* m_profile;
     QList<KoCompositeOp*> m_compositeOps;

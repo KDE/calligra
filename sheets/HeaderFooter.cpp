@@ -26,9 +26,9 @@
 #include "Sheet.h"
 #include "SheetPrint.h"
 
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 #include <KoDocumentInfo.h>
 

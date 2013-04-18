@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kcharselect.h>
 #include <kdebug.h>
-#include <KStandardGuiItem>
+#include <kstandardguiitem.h>
 
 using namespace Calligra::Sheets;
 
@@ -84,7 +84,6 @@ void CharacterSelectDialog::initDialog(const QChar &_chr, const QString &_font)
 
     QGridLayout *grid = new QGridLayout(page);
     grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
 
     d->charSelect = new KCharSelect(page, 0);
     d->charSelect->setCurrentChar(_chr);

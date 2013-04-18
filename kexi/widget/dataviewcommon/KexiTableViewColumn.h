@@ -62,8 +62,7 @@ public:
                         uint length = 0, uint precision = 0,
                         QVariant defaultValue = QVariant(),
                         const QString& caption = QString(),
-                        const QString& description = QString(),
-                        uint width = 0);
+                        const QString& description = QString());
 
     /*! Not db-aware, convenience ctor, simplified version of the above. */
     KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
@@ -84,51 +83,33 @@ public:
 
     //! forces readOnly flag to be set to \a ro
     //! @todo synchronize this with table view:
-    inline void setReadOnly(bool ro) {
-        m_readOnly = ro;
-    }
+    void setReadOnly(bool ro);
 
     //! Column visibility. By default column is visible.
-    inline bool isVisible() const {
-        return m_columnInfo ? m_columnInfo->visible : m_visible;
-    }
+    bool isVisible() const;
 
     //! Changes column visibility.
-    inline void setVisible(bool v) {
-        if (m_columnInfo)
-            m_columnInfo->visible = v;
-        m_visible = v;
-    }
+    void setVisible(bool v);
 
     /*! Sets icon for displaying in the caption area (header). */
-    inline void setIcon(const QIcon& icon) {
-        m_icon = icon;
-    }
+    void setIcon(const QIcon& icon);
 
     /*! \return bame of icon displayed in the caption area (header). */
-    inline QIcon icon() const {
-        return m_icon;
-    }
+    QIcon icon() const;
 
     /*! If \a visible is true, caption has to be displayed in the column's header,
      (or field's name if caption is empty. True by default. */
-    inline void setHeaderTextVisible(bool visible) {
-        m_headerTextVisible = visible;
-    }
+    void setHeaderTextVisible(bool visible);
 
     /*! \return true if caption has to be displayed in the column's header,
      (or field's name if caption is empty. */
-    inline bool isHeaderTextVisible() const {
-        return m_headerTextVisible;
-    }
+    bool isHeaderTextVisible() const;
 
     /*! \return whatever is available:
      - field's caption
      - or field's alias (from query)
      - or finally - field's name */
-    inline QString captionAliasOrName() const {
-        return m_captionAliasOrName;
-    }
+    QString captionAliasOrName() const;
 
     /*! Assigns validator \a v for this column.
      If the validator has no parent object, it will be owned by the column,
@@ -136,9 +117,7 @@ public:
     void setValidator(KexiUtils::Validator* v);
 
     //! \return validator assigned for this column of 0 if there is no validator assigned.
-    inline KexiUtils::Validator* validator() const {
-        return m_validator;
-    }
+    KexiUtils::Validator* validator() const;
 
     /*! For not-db-aware data only:
      Sets related data \a data for this column, what defines simple one-field,
@@ -152,49 +131,43 @@ public:
     /*! For not-db-aware data only:
      Related data \a data for this column, what defines simple one-field.
      NULL by default. \sa setRelatedData() */
-    inline KexiTableViewData *relatedData() const {
-        return m_relatedData;
-    }
+    KexiTableViewData *relatedData() const;
 
     /*! \return field for this column.
      For db-aware information is taken from columnInfo(). */
-    inline KexiDB::Field* field() const {
-        return m_field;
-    }
+    KexiDB::Field* field() const;
 
     /*! Only usable if related data is set (ie. this is for combo boxes).
      Sets 'editable' flag for this column, what means a new value can be entered
      by hand. This is similar to QComboBox::setEditable(). */
-    inline void setRelatedDataEditable(bool set) {
-        m_relatedDataEditable = set;
-    }
+    void setRelatedDataEditable(bool set);
 
     /*! Only usable if related data is set (ie. this is for combo boxes).
      \return 'editable' flag for this column.
      False by default. @see setRelatedDataEditable(bool). */
-    inline bool isRelatedDataEditable() const {
-        return m_relatedDataEditable;
-    }
+    bool isRelatedDataEditable() const;
 
     /*! A rich field information for db-aware data.
      For not-db-aware data it is always 0 (use field() instead). */
-    inline KexiDB::QueryColumnInfo* columnInfo() const {
-        return m_columnInfo;
-    }
+    KexiDB::QueryColumnInfo* columnInfo() const;
 
     /*! A rich field information for db-aware data. Specifies information for a column
      that should be visible instead of columnInfo. For example case see
      @ref KexiDB::QueryColumnInfo::Vector KexiDB::QuerySchema::fieldsExpanded(KexiDB::QuerySchema::FieldsExpandedOptions options = Default)
 
      For not-db-aware data it is always 0. */
-    inline KexiDB::QueryColumnInfo* visibleLookupColumnInfo() const {
-        return m_visibleLookupColumnInfo;
-    }
+    KexiDB::QueryColumnInfo* visibleLookupColumnInfo() const;
 
-    //! \retrun true if data is stored in DB, not only in memeory.
-    inline bool isDBAware() const {
-        return m_isDBAware;
-    }
+    //! \return true if data is stored in DB, not only in memeory.
+    bool isDBAware() const;
+
+    /*! Sets visible width for this column to \a w (usually in pixels or points).
+        0 means there is no hint for the width. */
+    void setWidth(uint w);
+
+    /*! \return width of this field (usually in pixels or points).
+         0 (the default) means there is no hint for the width. */
+    uint width() const;
 
 protected:
     //! special ctor that does not allocate d member;
@@ -205,30 +178,7 @@ protected:
     //! used by KexiTableViewData::addColumn()
     void setData(KexiTableViewData* data);
 
-    QString m_captionAliasOrName;
-
-    QIcon m_icon;
-
-    KexiUtils::Validator* m_validator;
-
-    KexiTableViewData* m_relatedData;
-    uint m_relatedDataPKeyID;
-
-    KexiDB::Field* m_field;
-
-    //! @see columnInfo()
-    KexiDB::QueryColumnInfo* m_columnInfo;
-
-    //! @see visibleLookupColumnInfo()
-    KexiDB::QueryColumnInfo* m_visibleLookupColumnInfo;
-
-    bool m_isDBAware; //!< true if data is stored in DB, not only in memeory
-    bool m_readOnly;
-    bool m_fieldOwned;
-    bool m_visible;
-    bool m_relatedDataEditable;
-    bool m_headerTextVisible;
-
+private:
     class Private;
     Private * const d;
 

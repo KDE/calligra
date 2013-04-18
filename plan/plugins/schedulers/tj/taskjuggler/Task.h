@@ -41,6 +41,7 @@ class Project;
 class Resource;
 // class Account;
 class Shift;
+class ShiftSelection;
 class TaskList;
 class Allocation;
 class Interval;
@@ -131,7 +132,12 @@ public:
     {
         return QListIterator<TaskDependency*>(precedes);
     }
+
+    /// Add working time defined in @p shift for interval @p i
     bool addShift(const Interval& i, Shift* s);
+    /// Return true if @p slot is defined as working time
+    /// Falls back to project definitions if no shifts has been defined for this task
+    bool isWorkingTime(const Interval &slot) const;
 
     void addAllocation(Allocation* a) { allocations.append(a); }
     void purgeAllocations() { allocations.clear(); }
@@ -501,6 +507,7 @@ private:
     Resource* responsible;
 
     /// Tasks may only be worked on during the specified shifts.
+    /// Also defines the working time of length tasks
     ShiftSelectionList shifts;
 
     /// List of resource allocations requested by the task
@@ -566,7 +573,7 @@ private:
      * from one end the other in a continuous way. No timeslot may be
      * scheduled twice. This variable stores information about the last
      * allocation, so we can make sure the next slot is exactly adjacent
-     * the the previous one. */
+     * the previous one. */
     time_t lastSlot;
 
     /// This variable is set to true when the task has been scheduled.

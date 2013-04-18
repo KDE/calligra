@@ -57,9 +57,7 @@ public:
     QString name() const;
 
     //! \return the ObjectTreeItem information associated to this item.
-    ObjectTreeItem* data() const {
-        return m_data;
-    }
+    ObjectTreeItem* data() const;
 
     //2.0 virtual void setOpen(bool o);
 
@@ -70,7 +68,7 @@ public:
     virtual bool operator<( const QTreeWidgetItem & other ) const;
 
     //! Used to alter sorting for certain widget types, e.g. tab pages.
-    QString customSortingKey() const { return m_customSortingKey; }
+    QString customSortingKey() const;
 
 protected:
     //! Reimplemented to draw custom contents (copied from Property Editor)
@@ -88,9 +86,8 @@ protected:
 
 
 private:
-    ObjectTreeItem *m_data;
-    QString m_customSortingKey;
-    LoadTreeFlags m_loadTreeFlags;
+    class Private;
+    Private* const d;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
@@ -188,14 +185,9 @@ protected:
     void activateTabPageIfNeeded(QTreeWidgetItem* item);
 
 private:
-    Form *m_form;
-    //2.0 WidgetTreeWidgetItem *m_topItem;
-    Options m_options;
 
-    //! Used to temporarily disable slotSelectionChanged() when reloading contents in setForm().
-    bool m_slotSelectionChanged_enabled;
-    //! Used to temporarily disable selectWidget().
-    bool m_selectWidget_enabled;
+    class Private;
+    Private* const d;
 
     friend class TabStopDialog;
 };

@@ -27,7 +27,7 @@
 #include <KoDocument.h>
 
 #include "kis_types.h"
-
+#include "kis_part2.h"
 #include <krita_export.h>
 #include <kis_painting_assistant.h>
 
@@ -64,12 +64,13 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(KoPart* parent = 0);
+    KisDoc2(KoPart* parent);
     virtual ~KisDoc2();
 
 public:
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
+    virtual int supportedSpecialFormats() const;
 
     /// Unused
     virtual bool loadOdf(KoOdfReadStore & odfStore);
@@ -96,6 +97,8 @@ public slots:
      * @since 1.5
      */
     virtual void initEmpty();
+
+    void setImageModified();
 
 public:
 
@@ -166,10 +169,6 @@ signals:
 protected slots:
 
     void slotLoadingFinished();
-
-private slots:
-
-    void undoIndexChanged(int idx);
 
 private:
 

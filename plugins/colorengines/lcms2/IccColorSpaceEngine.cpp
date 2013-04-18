@@ -48,21 +48,21 @@ public:
         if (srcCs->colorDepthId() == Integer8BitsColorDepthID
                 || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
 
-            if (srcProfile->name().toLower().contains("linear") ||
-                    dstProfile->name().toLower().contains("linear") &&
+            if ((srcProfile->name().toLower().contains("linear") ||
+                    dstProfile->name().toLower().contains("linear")) &&
                     !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization) ) {
                 conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }
         }
 
 
+        m_transform = cmsCreateTransform(srcProfile->lcmsProfile(),
+                                              srcColorSpaceType,
+                                              dstProfile->lcmsProfile(),
+                                              dstColorSpaceType,
+                                              renderingIntent,
+                                              conversionFlags);
 
-        m_transform = this->createTransform(srcColorSpaceType,
-                                            srcProfile,
-                                            dstColorSpaceType,
-                                            dstProfile,
-                                            renderingIntent,
-                                            conversionFlags);
         Q_ASSERT(m_transform);
     }
 
@@ -83,7 +83,7 @@ public:
 
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
         while (numPixels > 0) {
-            quint8 alpha = srcColorSpace()->opacityU8(src);
+            qreal alpha = srcColorSpace()->opacityF(src);
             dstColorSpace()->setOpacity(dst, alpha, 1);
 
             src += srcPixelSize;
@@ -91,25 +91,6 @@ public:
             numPixels--;
         }
 
-    }
-private:
-
-    cmsHTRANSFORM createTransform(quint32 srcColorSpaceType,
-                                  LcmsColorProfileContainer *srcProfile,
-                                  quint32 dstColorSpaceType,
-                                  LcmsColorProfileContainer *dstProfile,
-                                  qint32 renderingIntent,
-                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const
-    {
-
-        cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
-                                              srcColorSpaceType,
-                                              dstProfile->lcmsProfile(),
-                                              dstColorSpaceType,
-                                              renderingIntent,
-                                              conversionFlags);
-
-        return tf;
     }
 private:
     mutable cmsHTRANSFORM m_transform;
@@ -140,7 +121,7 @@ void IccColorSpaceEngine::addProfile(const QString &filename)
     // and then lcms can read the profile from file itself without problems,
     // quite often, and we can initialize it
     if (!profile->valid()) {
-        cmsHPROFILE cmsp = cmsOpenProfileFromFile(filename.toAscii(), "r");
+        cmsHPROFILE cmsp = cmsOpenProfileFromFile(filename.toLatin1(), "r");
         profile = LcmsColorProfileContainer::createFromLcmsProfile(cmsp);
     }
 
@@ -217,10 +198,10 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace* cs) const
         quint32 modelType = 0;
 
         if (modelId == RGBAColorModelID.id()) {
-            if (depthId.startsWith("U")) {
+            if (depthId.startsWith(QLatin1Char('U'))) {
                 modelType = (COLORSPACE_SH(PT_RGB) | EXTRA_SH(1) | CHANNELS_SH(3) | DOSWAP_SH(1) | SWAPFIRST_SH(1));
             }
-            else if (depthId.startsWith("F")) {
+            else if (depthId.startsWith(QLatin1Char('F'))) {
                 modelType = (COLORSPACE_SH(PT_RGB) | EXTRA_SH(1) | CHANNELS_SH(3) );
             }
         } else if (modelId == XYZAColorModelID.id()) {

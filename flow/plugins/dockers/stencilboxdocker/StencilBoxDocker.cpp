@@ -46,10 +46,10 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <knewstuff3/downloaddialog.h>
-#include <KFileDialog>
+#include <kfiledialog.h>
 #include <KIO/NetAccess>
-#include <KStandardDirs>
-#include <KTar>
+#include <kstandarddirs.h>
+#include <ktar.h>
 
 #include <QVBoxLayout>
 #include <QListView>
@@ -137,7 +137,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_treeWidget->regenerateFilteredMap();
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
-    connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
+    connect(m_filterLineEdit, SIGNAL(textEdited(QString)), this, SLOT(reapplyFilter()));
 }
 
 void StencilBoxDocker::getHotNewStuff()

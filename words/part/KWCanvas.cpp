@@ -36,7 +36,7 @@
 #include <KoGridData.h>
 
 // KDE + Qt includes
-#include <KDebug>
+#include <kdebug.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
@@ -85,6 +85,11 @@ QPointF KWCanvas::viewToDocument(const QPointF &viewPoint) const
     return m_viewMode->viewToDocument(viewPoint, m_viewConverter);
 }
 
+void KWCanvas::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
+    e->setAccepted(true);
+}
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {

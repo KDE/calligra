@@ -146,14 +146,14 @@ void KexiComboBoxPopup::init()
     d->tv->setLineWidth(0);
     installEventFilter(this);
 
-    connect(d->tv, SIGNAL(itemReturnPressed(KexiDB::RecordData*, int, int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*, int, int)));
+    connect(d->tv, SIGNAL(itemReturnPressed(KexiDB::RecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 
-    connect(d->tv, SIGNAL(itemMouseReleased(KexiDB::RecordData*, int, int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*, int, int)));
+    connect(d->tv, SIGNAL(itemMouseReleased(KexiDB::RecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 
-    connect(d->tv, SIGNAL(itemDblClicked(KexiDB::RecordData*, int, int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*, int, int)));
+    connect(d->tv, SIGNAL(itemDblClicked(KexiDB::RecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 }
 
 void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *field)

@@ -1,12 +1,19 @@
 [Desktop Entry]
 Name=t-integrator
+Name[bs]=t-integrator
 Name[ca]=integrador-t
 Name[ca@valencia]=integrador-t
+Name[da]=t-integrator
+Name[de]=Integrierer - Eingang oben
 Name[el]=t-integrator
 Name[es]=integrador superior
 Name[et]=Ülemine integreerimislüli
+Name[fr]=t-intégrateur
+Name[gl]=Integrador T
+Name[hu]=t-integrátor
 Name[it]=t-integrator
 Name[kk]=жоғ-интегратор
+Name[lt]=t-integratorius
 Name[nb]=t-integrator
 Name[nl]=t-integrator
 Name[pl]=t-całkowanie
@@ -17,4 +24,5 @@ Name[sk]=t-integrator
 Name[sv]=t-integrator
 Name[uk]=Інтегратор (вхід згори)
 Name[x-test]=xxt-integratorxx
+Name[zh_CN]=T-积分
 Name[zh_TW]=t-integrator

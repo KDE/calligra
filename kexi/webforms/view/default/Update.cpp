@@ -25,7 +25,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <db/tableschema.h>
 

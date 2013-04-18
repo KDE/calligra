@@ -23,8 +23,8 @@
 #include <QStringList>
 #include <QByteArray>
 
-#include <KMimeType>
-#include <KDebug>
+#include <kmimetype.h>
+#include <kdebug.h>
 
 #include <pion/net/HTTPResponseWriter.hpp>
 #include <pion/net/PionUser.hpp>

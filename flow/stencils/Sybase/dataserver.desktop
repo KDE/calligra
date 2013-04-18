@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=Dataserver
 Name[bg]=Сървър за данни
+Name[bs]=Serverpodataka
 Name[ca]=Servidor de dades
 Name[ca@valencia]=Servidor de dades
+Name[da]=Dataserver
 Name[de]=Datenserver
 Name[el]=Εξυπηρετητής δεδομένων
 Name[es]=Servidor de datos
 Name[et]=Andmeserver
+Name[fr]=serveur de base de données
+Name[gl]=Servidor de datos
 Name[hu]=Adatkiszolgáló
 Name[it]=Server dati
 Name[kk]=Деректер сервері

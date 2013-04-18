@@ -30,8 +30,8 @@
 #include <QStringList>
 #include <QProgressBar>
 
-#include <KPushButton>
-#include <KDebug>
+#include <kpushbutton.h>
+#include <kdebug.h>
 
 #include <db/drivermanager.h>
 #include <db/driver.h>

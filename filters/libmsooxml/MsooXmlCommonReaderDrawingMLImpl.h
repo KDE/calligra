@@ -214,6 +214,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
     // Reset picture properties
     m_xlinkHref.clear();
+    m_ignoreLinkHref = false;
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
@@ -256,13 +257,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(spPr)
-                ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
+                else if (qualifiedName() == QLatin1String("p:blipFill")) {
+                    TRY_READ_IN_CONTEXT(blipFill)
+                    if (!m_xlinkHref.isEmpty()) {
+                        //spPr may also set m_xlinkHref
+                        m_ignoreLinkHref = true;
+                    }
+                }
+#ifdef DOCXXMLDOCREADER_H
+                ELSE_TRY_READ_IF_NS_IN_CONTEXT(pic, blipFill)
+#endif
                 ELSE_TRY_READ_IF(nvPicPr)
                 ELSE_TRY_READ_IF(style)
                 SKIP_UNKNOWN
             }
         }
     }
+
+    m_ignoreLinkHref = false;
 
 #ifndef DOCXXMLDOCREADER_H
     body->startElement("draw:frame"); // CASE #P421
@@ -1630,7 +1642,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
             ELSE_TRY_READ_IF_NS(a, lnRef)
             else if (qualifiedName() == "a:fontRef") {
                 m_currentColor = QColor();
-                m_referredFontName = QString();
+                m_referredFontName.clear();
                 TRY_READ(fontRef)
                 if (m_currentColor.isValid()) {
                     m_referredFont.addProperty("fo:color", m_currentColor.name());
@@ -1705,9 +1717,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     }
 
     m_contentAvLstExists = false;
-    m_customPath = QString();
-    m_customEquations = QString();
-    m_textareas = QString();
+    m_customPath.clear();
+    m_customEquations.clear();
+    m_textareas.clear();
 
     while (!atEnd()) {
         readNext();
@@ -1751,7 +1763,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
             }
-            else if (qualifiedName() == QLatin1String("a:blipFill")) {
+            else if (!m_ignoreLinkHref && qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IN_CONTEXT(blipFill)
                 if (!m_xlinkHref.isEmpty()) {
                     KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
@@ -2269,9 +2281,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     currentFilter = MSOOXML::Utils::DocxFilter;
 #endif
 
-    QString fontSize = QString();
-    QString bulletColor = QString();
-    QString listStyleName = QString();
+    QString fontSize;
+    QString bulletColor;
+    QString listStyleName;
 
     // Creating a list out of what we have, pPr MAY overwrite the list style
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
@@ -2386,7 +2398,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // used if another run is inserted after the last run specified.
     if (!rRead) {
         QString fontSize = endParaRPrFontSize;
-        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+        if (!fontSize.isEmpty() && fontSize.endsWith(QLatin1String("pt"))) {
             fontSize.chop(2);
             qreal realSize = fontSize.toDouble();
             if (realSize > m_maxParaFontPt) {
@@ -2412,7 +2424,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     //required to set size of the picture bullet properly
     if (m_listStylePropertiesAltered && m_currentBulletProperties.bulletSizePt() == "UNUSED") {
-        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+        if (!fontSize.isEmpty() && fontSize.endsWith(QLatin1String("pt"))) {
             fontSize.chop(2);
             qreal bulletSize = fontSize.toDouble();
 
@@ -3607,7 +3619,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
 
         RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
-
         addManifestEntryForFile(destinationName);
         m_recentDestName = sourceName;
         addManifestEntryForPicturesDir();

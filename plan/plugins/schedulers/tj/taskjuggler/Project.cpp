@@ -21,8 +21,8 @@
 #include <QString>
 #include <QStringList>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "TjMessageHandler.h"
 #include "Scenario.h"
@@ -972,7 +972,7 @@ Project::schedule(int sc)
      * number so the first round of cleanup is done right after the first
      * scheduling pass. */
     breakFlag = false;
-    bool runAwayFound = false;
+//    bool runAwayFound = false;
     do
     {
         done = true;
@@ -987,7 +987,7 @@ Project::schedule(int sc)
          * will be scheduled during this run for all subsequent tasks as well.
          */
         foreach (CoreAttributes *t, workItems) {
-//             TJMH.debugMessage(QString("'%1' schedule for slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
+//            TJMH.debugMessage(QString("'%1' schedule for slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
             if (slot == 0)
             {
                 /* No time slot has been set yet. Check if this task can be
@@ -1012,8 +1012,15 @@ Project::schedule(int sc)
                 if (slot < start ||
                     slot > (end - (time_t) scheduleGranularity + 1))
                 {
-                    static_cast<Task*>(t)->setRunaway();
-                    runAwayFound = true;
+                    if (!static_cast<Task*>(t)->isRunaway()) {
+                        if (slot < start) {
+                            static_cast<Task*>(t)->warningMessage(i18n("Attempt to schedule task to start before project target time"));
+                        } else {
+                            static_cast<Task*>(t)->warningMessage(i18n("Attempt to schedule task to end after project target time"));
+                        }
+                        static_cast<Task*>(t)->setRunaway();
+                    }
+          //          runAwayFound = true;
                     slot = 0;
                     continue;
                 }
@@ -1073,17 +1080,17 @@ Project::schedule(int sc)
         TJMH.infoMessage(i18nc("@info/plain", "Scheduling aborted on user request"));
         return false;
     }
-    if (runAwayFound) {
-        foreach (CoreAttributes *t, taskList) {
-            if (static_cast<Task*>(t)->isRunaway()) {
-                if (static_cast<Task*>(t)->getScheduling() == Task::ASAP) {
-                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projects target finish time. Try using a later project end date.", t->getName()));
-                } else {
-                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()));
-                }
-            }
-        }
-    }
+//    if (runAwayFound) {
+//        foreach (CoreAttributes *t, taskList) {
+//            if (static_cast<Task*>(t)->isRunaway()) {
+//                if (static_cast<Task*>(t)->getScheduling() == Task::ASAP) {
+//                    TJMH.errorMessage(i18nc("@info/plain", "Cannot meet the projects target finish time. Try using a later project end date.", t->getName()), t);
+//                } else {
+//                    TJMH.errorMessage(i18nc("@info/plain", "Cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()), t);
+//                }
+//            }
+//        }
+//    }
     if (TJMH.getErrors() == oldErrors)
         setProgressBar(100, 100);
 

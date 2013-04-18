@@ -70,6 +70,7 @@ public:
 
 KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
 : KoPAPage( masterPage )
+, KPrPageData(document)
 , d( new Private( this, document ) )
 {
     setApplicationData( new KPrPageApplicationData() );
@@ -137,7 +138,7 @@ bool KPrPage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &contex
             if (animationElement.namespaceURI() == KoXmlNS::anim) {
                 if (animationElement.tagName() == "par") {
                     QString begin(animationElement.attributeNS(KoXmlNS::smil, "begin"));
-                    if (begin.endsWith("begin")) {
+                    if (begin.endsWith(QLatin1String("begin"))) {
                         KoXmlElement transitionElement(KoXml::namedItemNS(animationElement, KoXmlNS::anim, "transitionFilter" ));
                         data->setPageEffect( KPrPageEffectRegistry::instance()->createPageEffect( transitionElement ) );
                         kDebug() << "XXXXXXX found page transition";

@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=isolator
 Name[bg]=изолатор
+Name[bs]=izolator
 Name[ca]=isolador
 Name[ca@valencia]=isolador
+Name[da]=isolator
 Name[de]=Isolator
 Name[el]=απομονωτής
 Name[es]=aislante
 Name[et]=Isolaator
+Name[fr]=isolateur
+Name[gl]=Illador
 Name[it]=isolatore
 Name[kk]=оқшаулағыш
 Name[nb]=isolator
@@ -16,7 +20,9 @@ Name[pt]=isolador
 Name[pt_BR]=isolador
 Name[ru]=изолятор
 Name[sk]=izolant
+Name[sl]=izolator
 Name[sv]=isolator
 Name[uk]=Ізолятор
 Name[x-test]=xxisolatorxx
+Name[zh_CN]=隔离器
 Name[zh_TW]=隔離器

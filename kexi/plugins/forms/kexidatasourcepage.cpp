@@ -25,9 +25,9 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <KLocale>
-#include <KDebug>
-#include <KFadeWidgetEffect>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kfadewidgeteffect.h>
 
 #include <KoIcon.h>
 #include <widget/properties/KexiPropertyEditorView.h>
@@ -50,6 +50,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         , m_noDataSourceAvailableMultiText(
             i18n("No data source could be assigned for multiple widgets.") )
         , m_insideClearFormDataSourceSelection(false)
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+        , m_tableOrQuerySchema(0)
+#endif
 {
 /*moved
     Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
@@ -240,14 +243,14 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     connect(m_fieldListView, SIGNAL(selectionChanged()),
             this, SLOT(slotFieldListViewSelectionChanged()));
     connect(m_fieldListView,
-            SIGNAL(fieldDoubleClicked(const QString&, const QString&, const QString&)),
-            this, SLOT(slotFieldDoubleClicked(const QString&, const QString&, const QString&)));
+            SIGNAL(fieldDoubleClicked(QString,QString,QString)),
+            this, SLOT(slotFieldDoubleClicked(QString,QString,QString)));
 #endif
 
     mainLayout()->addStretch(1);
 
-    connect(m_formDataSourceCombo, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotFormDataSourceTextChanged(const QString &)));
+    connect(m_formDataSourceCombo, SIGNAL(textChanged(QString)),
+            this, SLOT(slotFormDataSourceTextChanged(QString)));
     connect(m_formDataSourceCombo, SIGNAL(dataSourceChanged()),
             this, SLOT(slotFormDataSourceChanged()));
     connect(m_widgetDataSourceCombo, SIGNAL(selected()),

@@ -125,12 +125,6 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 {
     setObjectName("KexiLookupColumnPage");
 
-/*moved to KexiPropertyPaneViewBase
-    Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
-    d->objectInfoLabel = new KexiObjectInfoLabel(this);
-    d->objectInfoLabel->setObjectName("KexiObjectInfoLabel");
-    vlyr->addWidget(d->objectInfoLabel);*/
-
 //todo d->noDataSourceAvailableSingleText = i18n("No data source could be assigned for this widget.");
 //todo d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
 
@@ -227,8 +221,8 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 
     mainLayout()->addStretch(1);
 
-    connect(d->rowSourceCombo, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotRowSourceTextChanged(const QString &)));
+    connect(d->rowSourceCombo, SIGNAL(textChanged(QString)),
+            this, SLOT(slotRowSourceTextChanged(QString)));
     connect(d->rowSourceCombo, SIGNAL(dataSourceChanged()), this, SLOT(slotRowSourceChanged()));
     connect(d->boundColumnCombo, SIGNAL(selected()), this, SLOT(slotBoundColumnSelected()));
     connect(d->visibleColumnCombo, SIGNAL(selected()), this, SLOT(slotVisibleColumnSelected()));

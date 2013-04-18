@@ -51,24 +51,24 @@
 
 <varlistentry>
 <term><guilabel>Handle radius</guilabel></term>
-<listitem><para>If you select a shape with the default tool (arrow) you see the yellow and 
-red rectangles. These are called handles (used for resizing, rotation, ...). 
-The handle radius changes the size of the handles. If you make them bigger it 
+<listitem><para>If you select a shape with the default tool (arrow) you see the yellow and
+red rectangles. These are called handles (used for resizing, rotation, ...).
+The handle radius changes the size of the handles. If you make them bigger it
 is easier to hit them.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Grab sensitivity</guilabel></term>
-<listitem><para>This option defines how exactly you need to hit 
+<listitem><para>This option defines how exactly you need to hit
 a handle to select it.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Paste offset</guilabel></term>
-<listitem><para>This is only active if <guilabel>Paste at Cursor</guilabel> is disabled. 
-If you copy a shape with the shortcut <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo> 
-and paste it with <keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>, 
-and do that at a place where already a shape is this offset is used to paste the 
+<listitem><para>This is only active if <guilabel>Paste at Cursor</guilabel> is disabled.
+If you copy a shape with the shortcut <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
+and paste it with <keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>,
+and do that at a place where already a shape is this offset is used to paste the
 new shape to the bottom/right.</para></listitem>
 </varlistentry>
 
@@ -157,17 +157,38 @@ of both worlds.</para></listitem>
 <variablelist>
 <title><guilabel>Document Settings</guilabel></title>
 <varlistentry>
-<term><guilabel>Autosave (min):</guilabel></term>
-<listitem><para>You can use this to adjust how often &stage; saves a temporary file. If you set this value to  <guilabel>No auto save</guilabel>, &stage; will not autosave. You can adjust the autosave from 1 minute to 60 minutes.</para></listitem>
+<term><guilabel>Autosave interval:</guilabel></term>
+<listitem><para>You can use this to adjust how often &stage; saves a temporary file. If you set this value to  <guilabel>No autosave</guilabel>, &stage; will not autosave. You can adjust the autosave from 1 minute to 60 minutes.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Create backup file</guilabel></term>
+<term><guilabel>Create backup file:</guilabel></term>
 <listitem><para>If checked, this will create a <filename>.&lt;name&gt;.odp.autosave.odp</filename> in the folder where your file is. This backup file can then be used in case of a problem. The backup file is updated everytime you save your document or everytime there is an autosave.</para></listitem>
 </varlistentry>
 
 </variablelist>
 
+</sect2>
+
+<sect2 id="configure-author">
+<title>Author</title>
+
+<screenshot>
+<screeninfo>Author</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Document</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+  Choose an author profile for your document.
+</para>
+<para>
+  You can add a new profile or delete the current profile using the buttons to the right of the profiles drop-down list.
+</para>
 </sect2>
 
 </sect1>

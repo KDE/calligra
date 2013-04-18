@@ -47,7 +47,7 @@ private:
 class ConnectorMimeData : public QMimeData
 {
 public:
-    ConnectorMimeData(ConnectorItem *connector);
+    explicit ConnectorMimeData(ConnectorItem *connector);
     ConnectorItem * connector() const;
 private:
     ConnectorItem * m_connector;
@@ -57,7 +57,7 @@ private:
 class EffectItemBase : public QGraphicsRectItem
 {
 public:
-    EffectItemBase(KoFilterEffect *effect);
+    explicit EffectItemBase(KoFilterEffect *effect);
 
     /// Returns the position of the output connector
     QPointF outputPosition() const;
@@ -105,7 +105,7 @@ private:
 class EffectItem : public EffectItemBase
 {
 public:
-    EffectItem(KoFilterEffect *effect);
+    explicit EffectItem(KoFilterEffect *effect);
 
 private:
     KoFilterEffect * m_effect;

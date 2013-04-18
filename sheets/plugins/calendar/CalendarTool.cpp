@@ -28,8 +28,8 @@
 
 #include <KoCanvasBase.h>
 
-#include <KCalendarSystem>
-#include <KMessageBox>
+#include <kcalendarsystem.h>
+#include <kmessagebox.h>
 
 using namespace Calligra::Sheets;
 
@@ -107,7 +107,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
         }
     }
 
-    KCalendarSystem* cs = KCalendarSystem::create();
+    KCalendarSystem *cs = KCalendarSystem::create(KLocale::GregorianCalendar);
 
     Q_ASSERT(cs);
 
@@ -146,7 +146,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
 
         if (yearheader) {
             kDebug() << "inserting year" + QString::number(current.year());
-            setText(sheet, row, colstart + 6, cs->yearString(current, KCalendarSystem::LongFormat));
+            setText(sheet, row, colstart + 6, cs->formatDate(current, KLocale::Year, KLocale::LongNumber));
 
             row += 2;
             yearheader = false;
@@ -164,7 +164,12 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
             monthheader = false;
         }
         if (weekheader) {
-            setText(sheet, row, colstart, QString::number(cs->weekNumber(current)));
+            setText(sheet, row, colstart,
+#if KDE_IS_VERSION(4,7,0)
+                    QString::number(cs->week(current)));
+#else
+                    QString::number(cs->weekNumber(current)));
+#endif
             col++;
             weekheader = false;
 
@@ -192,8 +197,8 @@ QWidget* CalendarTool::createOptionWidget()
     CellTool::createOptionWidget();
 
     CalendarToolWidget* widget =  new CalendarToolWidget(canvas()->canvasWidget());
-    connect(widget, SIGNAL(insertCalendar(const QDate&, const QDate&)),
-            this, SLOT(insertCalendar(const QDate&, const QDate&)));
+    connect(widget, SIGNAL(insertCalendar(QDate,QDate)),
+            this, SLOT(insertCalendar(QDate,QDate)));
     return widget;
 }
 

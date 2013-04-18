@@ -2,6 +2,44 @@
 Calligra Plan current:
 ----------------------
 
+* TJ scheduler improvements
+    Fix bug and improve performance in positive float calculation.
+    Honor calendar timezone other than local timezone.
+    Improve handling of StartNotEarlier/FinishNotLater.
+    Fix bug in scheduling tasks with estimate in work time duration.
+
+* Add a command to generate a new project from the current project
+
+* Add export to csv and ods
+
+Release 2.6
+-----------
+* Fix regression in scheduling, backward calculation
+
+* Fix bug in kplato xml loader
+
+* Fix crash after File->Open on empty document
+
+* Fix bug 308855 -  Gantt chart: No tree structure in printed version
+
+* Fix bug 307450 - Calligra Plan crash when adding subtask
+
+* Always check appointments to avoid overbooking resources
+
+* Fix bug 307450 - Crash when calculating schedule (in rcps_solver_solve)
+
+* Add scheduling granularity
+
+* PlanWork:
+  Add gantt chart
+  Update scheduling info when task has been rescheduled
+
+* Fix bug: Send work package schedule info also when schedule is not top level schedule
+
+* Performance charts:
+  Show both effort- and cost based performance index values.
+  Add charting of perfomance indices
+
 * Enable dropping Plan project files into the Task Editor.
 
 * Task Editor: Add a Task Module docker to ease project creation.
@@ -26,6 +64,9 @@ Calligra Plan current:
 
 Release 2.5:
 ------------
+* Disable calculate action when calculating to avoid potential crash
+
+* Fix bug 306734 - Crash when calculating schedule (in rcps_solver_solve)
 
 * Fix crash when two dependent tasks are deleted in one go
 

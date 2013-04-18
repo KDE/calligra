@@ -21,7 +21,7 @@
 #ifndef _KEXIBLOBTABLEEDIT_H_
 #define _KEXIBLOBTABLEEDIT_H_
 
-#include <KUrl>
+#include <kurl.h>
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"

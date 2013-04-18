@@ -26,7 +26,7 @@ DESCRIPTION
 #include <KoFilterChain.h>
 #include <KoXmlWriter.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <QFile>
 

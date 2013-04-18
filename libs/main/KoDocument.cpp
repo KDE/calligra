@@ -22,20 +22,17 @@
  */
 
 #include "KoMainWindow.h" // XXX: remove
-#include <KMessageBox> // XXX: remove
+#include <kmessagebox.h> // XXX: remove
 #include <KNotification> // XXX: remove
 
 #include "KoDocument.h"
 #include "KoPart.h"
 #include "KoServiceProvider.h"
-#include "KoPartAdaptor.h"
 #include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
-#ifdef SHOULD_BUILD_RDF
-#include "rdf/KoDocumentRdf.h"
-#endif
+
 #include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
@@ -70,8 +67,11 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QTimer>
-#include <QtDBus/QDBusConnection>
+#ifndef QT_NO_DBUS
+#include <QDBusConnection>
+#endif
 #include <QApplication>
+#include <QMutex>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
@@ -85,6 +85,8 @@
 #include "KoUndoStackAction.h"
 
 using namespace std;
+
+class KoPageWidgetItem;
 
 /**********************************************************
  *
@@ -100,30 +102,34 @@ QString KoDocument::newObjectName()
     return name;
 }
 
+
+static QMutex s_autosaveMutex;
+
 class KoDocument::Private
 {
 public:
     Private() :
-            progressUpdater(0),
-            progressProxy(0),
-            profileStream(0),
-            filterManager(0),
-            specialOutputFlag(0),   // default is native format
-            isImporting(false),
-            isExporting(false),
-            password(QString()),
-            modifiedAfterAutosave(false),
-            autosaving(false),
-            shouldCheckAutoSaveFile(true),
-            autoErrorHandlingEnabled(true),
-            backupFile(true),
-            backupPath(QString()),
-            doNotSaveExtDoc(false),
-            storeInternal(false),
-            isLoading(false),
-            undoStack(0),
-            parentPart(0)
-
+        docInfo(0),
+        docRdf(0),
+        progressUpdater(0),
+        progressProxy(0),
+        profileStream(0),
+        filterManager(0),
+        specialOutputFlag(0),   // default is native format
+        isImporting(false),
+        isExporting(false),
+        password(QString()),
+        modifiedAfterAutosave(false),
+        autosaving(false),
+        shouldCheckAutoSaveFile(true),
+        autoErrorHandlingEnabled(true),
+        backupFile(true),
+        backupPath(QString()),
+        doNotSaveExtDoc(false),
+        storeInternal(false),
+        isLoading(false),
+        undoStack(0),
+        parentPart(0)
     {
         confirmNonNativeSave[0] = true;
         confirmNonNativeSave[1] = true;
@@ -136,11 +142,8 @@ public:
 
 
     KoDocumentInfo *docInfo;
-#ifdef SHOULD_BUILD_RDF
-    KoDocumentRdf *docRdf;
-#else
     KoDocumentRdfBase *docRdf;
-#endif
+
     KoProgressUpdater *progressUpdater;
     KoProgressProxy *progressProxy;
     QTextStream *profileStream;
@@ -193,6 +196,7 @@ public:
 KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
         : d(new Private)
 {
+    Q_ASSERT(parent);
     d->parentPart = parent;
 
     d->isEmpty = true;
@@ -201,16 +205,6 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
 
     setObjectName(newObjectName());
     d->docInfo = new KoDocumentInfo(this);
-    d->docRdf = 0;
-#ifdef SHOULD_BUILD_RDF
-    {
-        KConfigGroup cfgGrp(d->parentPart->componentData().config(), "RDF");
-        bool rdfEnabled = cfgGrp.readEntry("rdf_enabled", false);
-        if (rdfEnabled) {
-            setDocumentRdf(new KoDocumentRdf(this));
-        }
-    }
-#endif
 
     d->pageLayout.width = 0;
     d->pageLayout.height = 0;
@@ -225,12 +219,13 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
     KConfigGroup cfgGrp(d->parentPart->componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
-    connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(setDocumentClean(bool)));
+    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
 
 }
 
 KoDocument::~KoDocument()
 {
+    d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
     delete d->filterManager;
     delete d;
@@ -346,6 +341,7 @@ bool KoDocument::saveFile()
     }
 
     if (ret) {
+        d->undoStack->setClean();
         removeAutoSaveFiles();
         // Restart the autosave timer
         // (we don't want to autosave again 2 seconds after a real save)
@@ -472,6 +468,8 @@ bool KoDocument::isAutoErrorHandlingEnabled() const
 
 void KoDocument::slotAutoSave()
 {
+    s_autosaveMutex.lock();
+    if (!d->parentPart) return;
     if (isModified() && d->modifiedAfterAutosave && !d->isLoading) {
         // Give a warning when trying to autosave an encrypted file when no password is known (should not happen)
         if (d->specialOutputFlag == SaveEncrypted && d->password.isNull()) {
@@ -495,6 +493,7 @@ void KoDocument::slotAutoSave()
             }
         }
     }
+    s_autosaveMutex.unlock();
 }
 
 void KoDocument::setReadWrite(bool readwrite)
@@ -519,30 +518,14 @@ KoDocumentInfo *KoDocument::documentInfo() const
 
 KoDocumentRdfBase *KoDocument::documentRdf() const
 {
-#ifdef SHOULD_BUILD_RDF
-    if (d->docRdf && d->docRdf->model()) {
-        return d->docRdf;
-    }
-#endif
-    return 0;
-}
-
-void KoDocument::setDocumentRdf(KoDocumentRdf *rdfDocument)
-{
-    delete d->docRdf;
-    d->docRdf = 0;
-#ifdef SHOULD_BUILD_RDF
-    if (rdfDocument->model()) {
-        d->docRdf = rdfDocument;
-    }
-#endif
-}
-
-KoDocumentRdfBase *KoDocument::documentRdfBase() const
-{
     return d->docRdf;
 }
 
+void KoDocument::setDocumentRdf(KoDocumentRdfBase *rdfDocument)
+{
+    delete d->docRdf;
+    d->docRdf = rdfDocument;
+}
 
 bool KoDocument::isModified() const
 {
@@ -774,6 +757,8 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
 {
     if (!url.isLocalFile()) return mimeType;
 
+    if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
+
     QStringList imageMimeTypes;
     imageMimeTypes << "image/jpeg"
                    << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"
@@ -785,7 +770,6 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
                    << "image/png"
                    << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
                    << "image/tiff"
-                   << "image/openraster"
                    << "image/jp2";
 
     if (!imageMimeTypes.contains(mimeType)) return mimeType;
@@ -837,7 +821,13 @@ bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
 bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
 {
     const QPixmap pix = generatePreview(QSize(128, 128));
+    if (pix.isNull())
+        return true; //no thumbnail to save, but the process succeeded
+
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
+
+    if (preview.isNull())
+        return false; //thumbnail to save, but the process failed
 
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io(store);
@@ -846,8 +836,7 @@ bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
     if (! preview.save(&io, "PNG", 0))
         return false;
     io.close();
-    manifestWriter->addManifestEntry("Thumbnails/", "");
-    manifestWriter->addManifestEntry("Thumbnails/thumbnail.png", "");
+    manifestWriter->addManifestEntry("Thumbnails/thumbnail.png", "image/png");
     return true;
 }
 
@@ -910,7 +899,7 @@ QString KoDocument::autoSaveFile(const QString & path) const
     // Using the extension allows to avoid relying on the mime magic when opening
     KMimeType::Ptr mime = KMimeType::mimeType(nativeFormatMimeType());
     if (! mime) {
-        qFatal("It seems your installation is broken/incomplete cause we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
+        qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
     if (extension.isEmpty()) extension = mime->mainExtension();
@@ -999,9 +988,8 @@ bool KoDocument::openUrl(const KUrl & _url)
         QFile::remove(url.toLocalFile()); // and remove the autosave file
     }
     else {
-        if (d->parentPart) {
-            d->parentPart->addRecentURLToAllShells(_url);
-        }
+        d->parentPart->addRecentURLToAllShells(_url);
+
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
             KFileItem file(url, mimeType(), KFileItem::Unknown);
@@ -1187,7 +1175,7 @@ bool KoDocument::openFile()
             if (!ext.isEmpty() && ext[0] == '*') {
                 ext.remove(0, 1);
                 if (path.endsWith(ext)) {
-                    path.truncate(path.length() - ext.length());
+                    path.chop(ext.length());
                     break;
                 }
             }
@@ -1233,8 +1221,11 @@ bool KoDocument::openFile()
             switch (status) {
             case KoFilter::OK: break;
 
+            case KoFilter::FilterCreationError:
+                msg = i18n("Could not create the filter plugin"); break;
+
             case KoFilter::CreationError:
-                msg = i18n("Creation error"); break;
+                msg = i18n("Could not create the output document"); break;
 
             case KoFilter::FileNotFound:
                 msg = i18n("File not found"); break;
@@ -1273,6 +1264,15 @@ bool KoDocument::openFile()
             case KoFilter::OutOfMemory:
                 msg = i18n("Out of memory"); break;
 
+            case KoFilter::FilterEntryNull:
+                msg = i18n("Empty Filter Plugin"); break;
+
+            case KoFilter::NoDocumentCreated:
+                msg = i18n("Trying to load into the wrong kind of document"); break;
+
+            case KoFilter::DownloadFailed:
+                msg = i18n("Failed to download remote file"); break;
+
             case KoFilter::UserCancelled:
             case KoFilter::BadConversionGraph:
                 // intentionally we do not prompt the error message here
@@ -1282,8 +1282,14 @@ bool KoDocument::openFile()
             }
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
+#ifndef Q_OS_WIN
                 QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
                 KMessageBox::error(0, errorMsg);
+#else
+                QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
+                KMessageBox::error(0, errorMsg);
+#endif
+
             }
 
             d->isLoading = false;
@@ -1368,6 +1374,11 @@ KoProgressUpdater *KoDocument::progressUpdater() const
 void KoDocument::setProgressProxy(KoProgressProxy *progressProxy)
 {
     d->progressProxy = progressProxy;
+}
+
+KoProgressProxy* KoDocument::progressProxy() const
+{
+    return d->progressProxy;
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code
@@ -1775,6 +1786,7 @@ void KoDocument::setModified(bool mod)
 
     if (mod) {
         d->isEmpty = false;
+        documentInfo()->updateParameters();
     }
 
     // This influences the title
@@ -1903,10 +1915,10 @@ QByteArray KoDocument::nativeFormatMimeType() const
 #ifndef NDEBUG
     if (nativeMimeType.isEmpty()) {
         // shouldn't happen, let's find out why it happened
-        if (!service->serviceTypes().contains("CalligraPart"))
-            kWarning(30003) << "Wrong desktop file, CalligraPart isn't mentioned";
-        else if (!KServiceType::serviceType("CalligraPart"))
-            kWarning(30003) << "The CalligraPart service type isn't installed!";
+        if (!service->serviceTypes().contains("Calligra/Part"))
+            kWarning(30003) << "Wrong desktop file, Calligra/Part isn't mentioned";
+        else if (!KServiceType::serviceType("Calligra/Part"))
+            kWarning(30003) << "The Calligra/Part service type isn't installed!";
         else
             kWarning(30003) << "Failed to read NativeMimeType from desktop file!";
     }
@@ -2111,10 +2123,10 @@ void KoDocument::endMacro()
     d->undoStack->endMacro();
 }
 
-
-void KoDocument::setDocumentClean(bool clean)
+void KoDocument::slotUndoStackIndexChanged(int idx)
 {
-    setModified(!clean);
+    // even if the document was already modified, call setModified to re-start autosave timer
+    setModified(idx != d->undoStack->cleanIndex());
 }
 
 void KoDocument::setProfileStream(QTextStream *profilestream)

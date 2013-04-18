@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Detector (vertical)
+Name[bs]=Detektor (vertikalni)
 Name[ca]=Detector (vertical)
 Name[ca@valencia]=Detector (vertical)
+Name[da]=Detektor (lodret)
 Name[de]=Detektor (senkrecht)
 Name[el]=Ανιχνευτής (κάθετα)
 Name[es]=Detector (vertical)
 Name[et]=Vertikaalne detektor
+Name[fr]=Detector (vertical)
+Name[gl]=Detector (vertical)
 Name[it]=Detector (verticale)
 Name[kk]=Сезгіш (тік)
 Name[nb]=Detektor (loddrett)
@@ -15,6 +19,7 @@ Name[pt]=Detector (vertical)
 Name[pt_BR]=Detector (vertical)
 Name[ru]=Датчик (вертикальный)
 Name[sk]=Detektor (zvislý)
+Name[sl]=Detektor (navpičen)
 Name[sv]=Detektor (vertikal)
 Name[uk]=Детектор (вертикально)
 Name[x-test]=xxDetector (vertical)xx

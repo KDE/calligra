@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Horizontal Diode
 Name[bg]=Хоризонтален диод
+Name[bs]=Horizontalna dioda
 Name[ca]=Diode horitzontal
 Name[ca@valencia]=Diode horitzontal
+Name[da]=Vandret diode
 Name[de]=Waagerechte Diode
 Name[el]=Οριζόντια δίοδος
 Name[es]=Diodo horizontal
 Name[et]=Horisontaalne diood
+Name[fr]=diode horizontale
+Name[gl]=Díodo horizontal
+Name[hu]=Vízszintes dióda
 Name[it]=Diodo orizzontale
 Name[kk]=Жатық диод
 Name[nb]=Vannrett diode
@@ -17,7 +22,9 @@ Name[pt]=Díodo Horizontal
 Name[pt_BR]=Diodo Horizontal
 Name[ru]=Горизонтальный диод
 Name[sk]=Vodorovná dióda
+Name[sl]=Vodoravna dioda
 Name[sv]=Horisontell diod
+Name[tr]=Yatay Diyot
 Name[uk]=Діод (горизонтально)
 Name[x-test]=xxHorizontal Diodexx
 Name[zh_CN]=水平二极管

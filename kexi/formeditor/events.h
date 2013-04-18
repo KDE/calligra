@@ -35,44 +35,23 @@ class KFORMEDITOR_EXPORT Connection
 public:
     Connection(const QString &sender, const QString &signal,
                const QString &receiver, const QString &slot);
-    Connection() {
-        ;
-    }
-    ~Connection() {
-        ;
-    }
+    Connection();
 
-    QString sender() const {
-        return m_sender;
-    }
-    QString receiver() const {
-        return m_receiver;
-    }
-    QString signal() const {
-        return m_signal;
-    }
-    QString slot() const {
-        return m_slot;
-    }
+    ~Connection();
 
-    void setSender(const QString &v) {
-        m_sender = v;
-    }
-    void setReceiver(const QString &v) {
-        m_receiver = v;
-    }
-    void setSignal(const QString &v) {
-        m_signal = v;
-    }
-    void setSlot(const QString &v) {
-        m_slot = v;
-    }
+    QString sender() const;
+    QString receiver() const;
+    QString signal() const;
+    QString slot() const;
 
-protected:
-    QString m_sender;
-    QString m_signal;
-    QString m_receiver;
-    QString m_slot;
+    void setSender(const QString &v);
+    void setReceiver(const QString &v);
+    void setSignal(const QString &v);
+    void setSlot(const QString &v);
+
+private:
+    class Private;
+    Private* const d;
 };
 
 typedef QList<Connection*> ConnectionList;

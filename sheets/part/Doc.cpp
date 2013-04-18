@@ -42,7 +42,6 @@
 #include <QApplication>
 #include <QFont>
 #include <QTimer>
-//Added by qt3to4:
 #include <QList>
 #include <QPainter>
 #include <QGraphicsItem>
@@ -103,9 +102,11 @@
 #include "BindingModel.h"
 
 // D-Bus
+#ifndef QT_NO_DBUS
 #include "interfaces/MapAdaptor.h"
 #include "interfaces/SheetAdaptor.h"
-#include <QtDBus/QtDBus>
+#include <QtDBus>
+#endif
 
 // chart shape
 #include "plugins/chartshape/ChartShape.h"
@@ -150,9 +151,11 @@ Doc::Doc(KoPart *part)
         , dd(new Private)
 {
     connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
+
+#ifndef QT_NO_DBUS
     new MapAdaptor(d->map);
     QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
-
+#endif
 
     // Init chart shape factory with KSpread's specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
@@ -161,8 +164,8 @@ Doc::Doc(KoPart *part)
         chartShape->setOptionPanels(panels);
     }
 
-    connect(d->map, SIGNAL(commandAdded(KUndo2Command *)),
-            this, SLOT(addCommand(KUndo2Command *)));
+    connect(d->map, SIGNAL(commandAdded(KUndo2Command*)),
+            this, SLOT(addCommand(KUndo2Command*)));
 
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -537,13 +540,6 @@ void Doc::updateAllViews()
     emit updateView();
 }
 
-void Doc::updateBorderButton()
-{/*FIXME
-    foreach(KoView* view, views())
-    static_cast<View*>(view)->updateBorderButton();*/
-    emit updateBorderButton();
-}
-
 void Doc::addIgnoreWordAll(const QString & word)
 {
     if (d->spellListIgnoreAll.indexOf(word) == -1)
@@ -567,16 +563,19 @@ bool Doc::configLoadFromFile() const
 
 void Doc::sheetAdded(Sheet* sheet)
 {
+#ifndef QT_NO_DBUS
     new SheetAdaptor(sheet);
     QString dbusPath('/' + sheet->map()->objectName() + '/' + sheet->objectName());
     if (sheet->parent() && !sheet->parent()->objectName().isEmpty()) {
         dbusPath.prepend('/' + sheet->parent()->objectName());
     }
     QDBusConnection::sessionBus().registerObject(dbusPath, sheet);
+#endif
 }
 
 void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
 {
+    Q_UNUSED(settingsWriter);
     /*FIXME
     // Save visual info for the first view, such as active sheet and active cell
     // It looks like a hack, but reopening a document creates only one view anyway (David)
@@ -592,6 +591,8 @@ void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
 
 void Doc::saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter)
 {
+    Q_UNUSED(sheet);
+    Q_UNUSED(settingsWriter);
     /*FIXME
     View *const view = static_cast<View*>(views().first());
     QPoint marker = view->markerFromSheet(sheet);

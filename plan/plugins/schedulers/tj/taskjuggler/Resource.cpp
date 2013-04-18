@@ -13,7 +13,7 @@
 
 #include "Resource.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <assert.h>
 
@@ -490,14 +490,14 @@ Resource::book(Booking* nb)
 {
     uint idx = sbIndex(nb->getStart());
 
-    return bookSlot(idx, nb, 0);
+    return bookSlot(idx, nb);
 }
 
 bool
-Resource::bookSlot(uint idx, SbBooking* nb, int overtime)
+Resource::bookSlot(uint idx, SbBooking* nb)
 {
     // Make sure that the time slot is still available.
-    if (scoreboard[idx] > (SbBooking*) overtime)
+    if (scoreboard[idx] > (SbBooking*) 0)
     {
         delete nb;
         return false;
@@ -524,82 +524,82 @@ Resource::bookSlot(uint idx, SbBooking* nb, int overtime)
     return true;
 }
 
-bool
-Resource::bookInterval(Booking* nb, int sc, int sloppy, int overtime)
-{
-    uint sIdx = sbIndex(nb->getStart());
-    uint eIdx = sbIndex(nb->getEnd());
+//bool
+//Resource::bookInterval(Booking* nb, int sc, int sloppy, int overtime)
+//{
+//    uint sIdx = sbIndex(nb->getStart());
+//    uint eIdx = sbIndex(nb->getEnd());
 
-    bool conflict = false;
+//    bool conflict = false;
 
-    for (uint i = sIdx; i <= eIdx; i++)
-        if (scoreboard[i] > (SbBooking*) overtime)
-        {
-            uint j;
-            for (j = i + 1 ; j <= eIdx &&
-                 scoreboard[i] == scoreboard[j]; j++)
-                ;
-            if (scoreboard[i] == (SbBooking*) 1)
-            {
-                if (sloppy > 0)
-                {
-                    i = j;
-                    continue;
-                }
-                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is unavailable at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
-            }
-            else if (scoreboard[i] == (SbBooking*) 2)
-            {
-                if (sloppy > 1)
-                {
-                    i = j;
-                    continue;
-                }
-                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is on vacation at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
-            }
-            else
-            {
-                if (sloppy > 2)
-                {
-                    i = j;
-                    continue;
-                }
-                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name 3=task name", "Allocation conflict at %1. Conflicting tasks are %2 and %3.", formatTime(index2start(i)), scoreboard[i]->getTask()->getName(), nb->getTask()->getName()), this);
-            }
+//    for (uint i = sIdx; i <= eIdx; i++)
+//        if (scoreboard[i] > (SbBooking*) overtime)
+//        {
+//            uint j;
+//            for (j = i + 1 ; j <= eIdx &&
+//                 scoreboard[i] == scoreboard[j]; j++)
+//                ;
+//            if (scoreboard[i] == (SbBooking*) 1)
+//            {
+//                if (sloppy > 0)
+//                {
+//                    i = j;
+//                    continue;
+//                }
+//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is unavailable at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
+//            }
+//            else if (scoreboard[i] == (SbBooking*) 2)
+//            {
+//                if (sloppy > 1)
+//                {
+//                    i = j;
+//                    continue;
+//                }
+//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is on vacation at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
+//            }
+//            else
+//            {
+//                if (sloppy > 2)
+//                {
+//                    i = j;
+//                    continue;
+//                }
+//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name 3=task name", "Allocation conflict at %1. Conflicting tasks are %2 and %3.", formatTime(index2start(i)), scoreboard[i]->getTask()->getName(), nb->getTask()->getName()), this);
+//            }
 
-            conflict = true;
-            i = j;
-        }
+//            conflict = true;
+//            i = j;
+//        }
 
-    if (conflict)
-        return false;
+//    if (conflict)
+//        return false;
 
-    for (uint i = sIdx; i <= eIdx; i++)
-        if (scoreboard[i] <= (SbBooking*) overtime)
-            bookSlot(i, new SbBooking(*nb), overtime);
+//    for (uint i = sIdx; i <= eIdx; i++)
+//        if (scoreboard[i] <= static_cast<SbBooking*>(1))
+//            bookSlot(i, new SbBooking(*nb), overtime);
 
-    return true;
-}
+//    return true;
+//}
 
-bool
-Resource::addBooking(int sc, Booking* nb, int sloppy, int overtime)
-{
-    SbBooking** tmp = scoreboard;
+//bool
+//Resource::addBooking(int sc, Booking* nb, int sloppy, int overtime)
+//{
+//    SbBooking** tmp = scoreboard;
 
-    if (scoreboards[sc])
-        scoreboard = scoreboards[sc];
-    else
-        initScoreboard();
-    bool retVal = bookInterval(nb, sc, sloppy, overtime);
-    // Cross register booking with task.
-    if (retVal && nb->getTask())
-        nb->getTask()->addBookedResource(sc, this);
-    delete nb;
-    scoreboards[sc] = scoreboard;
-    scoreboard = tmp;
+//    if (scoreboards[sc])
+//        scoreboard = scoreboards[sc];
+//    else
+//        initScoreboard();
+//    bool retVal = bookInterval(nb, sc, sloppy, overtime);
+//    // Cross register booking with task.
+//    if (retVal && nb->getTask())
+//        nb->getTask()->addBookedResource(sc, this);
+//    delete nb;
+//    scoreboards[sc] = scoreboard;
+//    scoreboard = tmp;
 
-    return retVal;
-}
+//    return retVal;
+//}
 
 bool
 Resource::addShift(const Interval& i, Shift* s)

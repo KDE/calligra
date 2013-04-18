@@ -24,7 +24,7 @@
 #include <QScrollArea>
 #include <core/KexiWindow.h>
 #include "kexisourceselector.h"
-#include <KPushButton>
+#include <kpushbutton.h>
 #include <KoIcon.h>
 
 KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *s)
@@ -82,9 +82,11 @@ void KexiReportDesignView::slotDesignerPropertySetChanged()
     propertySetSwitched();
 }
 
-KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData& sdata,
+                                                       KexiView::StoreNewDataOptions options,
+                                                       bool &cancel)
 {
-    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
+    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
     kDebug() << "new id:" << s->id();
 
     if (!s || cancel) {

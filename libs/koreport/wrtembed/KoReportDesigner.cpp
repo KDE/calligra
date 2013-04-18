@@ -40,9 +40,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QMessageBox>
-#include <KStandardGuiItem>
-#include <KGuiItem>
-#include <KStandardAction>
+#include <kstandardguiitem.h>
+#include <kguiitem.h>
+#include <kstandardaction.h>
 
 #include <KoIcon.h>
 #include <koproperty/EditorView.h>
@@ -51,9 +51,9 @@
 #include <KoDpi.h>
 #include <KoPageFormat.h>
 #include <kaction.h>
-#include <KLocale>
-#include <KDebug>
-#include <KToggleAction>
+#include <klocale.h>
+#include <kdebug.h>
+#include <ktoggleaction.h>
 #include <kross/core/manager.h>
 
 //! Also add public method for runtime?
@@ -76,7 +76,6 @@ public:
     ReportWriterSectionData() {
         selected_items_rw = 0;
         mouseAction = ReportWriterSectionData::MA_None;
-        insertItem = QString();
     }
     virtual ~ReportWriterSectionData() {
         selected_items_rw = 0;
@@ -819,6 +818,8 @@ void KoReportDesigner::setGridOptions(bool vis, int div)
 //
 void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneContextMenuEvent * e)
 {
+    Q_UNUSED(s);
+
     QMenu pop;
 
     bool itemsSelected = selectionCount() > 0;
@@ -882,7 +883,7 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
             }
                 
             m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
-            m_sectionData->insertItem = QString();
+            m_sectionData->insertItem.clear();
             unsetSectionCursor();
         }
     }

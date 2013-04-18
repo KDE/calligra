@@ -58,8 +58,6 @@ InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
     QWidget *page = new QWidget();
     setMainWidget(page);
     QVBoxLayout *lay1 = new QVBoxLayout(page);
-    lay1->setMargin(KDialog::marginHint());
-    lay1->setSpacing(KDialog::spacingHint());
 
     QGroupBox *grp = new QGroupBox(i18n("Insert"), page);
     QVBoxLayout *vbox = new QVBoxLayout;

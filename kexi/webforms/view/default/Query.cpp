@@ -22,7 +22,7 @@
 #include <QVector>
 #include <QTextDocument>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <db/queryschema.h>
 

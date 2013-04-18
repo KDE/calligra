@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=Cloud Gold
+Name[bs]=Zlatni oblak
 Name[ca]=Núvol daurat
 Name[ca@valencia]=Núvol daurat
+Name[da]=Cloud guld
+Name[de]=Wolke, gold
 Name[el]=Νέφος χρυσό
 Name[es]=Nube dorada
 Name[et]=Kuldne pilv
+Name[fr]=Cloud Gold
+Name[gl]=Nube dourada
 Name[it]=Nuvola dorata
 Name[kk]=Алтын бұлт
+Name[lt]=Debesis (auksinis)
 Name[nb]=Sky gullen
 Name[nl]=Gouden wolk
 Name[pl]=Chmura złota
@@ -14,6 +20,7 @@ Name[pt]=Nuvem Dourada
 Name[pt_BR]=Nuvem dourada
 Name[ru]=Облако золотое
 Name[sk]=Oblak zlatý
+Name[sl]=Zlat oblak
 Name[sv]=Moln gyllene
 Name[uk]=Золота хмара
 Name[x-test]=xxCloud Goldxx

@@ -30,13 +30,12 @@
 
 #include "renderobjects.h"
 
-#include <KMimeType>
+#include <kmimetype.h>
 #include <kdebug.h>
 
 #include <QPainter>
 #include <QPicture>
 
-#include <kdebug.h>
 
 KoOdtFrameReportPicture::KoOdtFrameReportPicture(OROPrimitive *primitive)
     : KoOdtFrameReportPrimitive(primitive)

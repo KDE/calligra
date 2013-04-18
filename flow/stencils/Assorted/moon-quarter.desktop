@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Quarter Moon
 Name[bg]=Четвърт Луна
+Name[bs]=četvrtina mjeseca
 Name[ca]=Quart de Lluna
 Name[ca@valencia]=Quart de Lluna
 Name[da]=Kvartmåne
@@ -10,6 +11,7 @@ Name[es]=Cuarto de luna
 Name[et]=Veerandkuu
 Name[fi]=Kuunsirppi
 Name[fr]=Quart de lune
+Name[gl]=Cuarto crecente
 Name[hu]=Negyedhold
 Name[it]=Quarto di Luna
 Name[kk]=Айдың ширегі
@@ -22,6 +24,7 @@ Name[ru]=Четверть Луны
 Name[sk]=Štvrťmesiac
 Name[sl]=Lunin krajec
 Name[sv]=Kvartsmåne
+Name[tr]=Çeyrek Ay
 Name[uk]=Чверть місяця
 Name[x-test]=xxQuarter Moonxx
 Name[zh_CN]=弦月

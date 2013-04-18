@@ -47,7 +47,7 @@
 #include <changetracker/KoChangeTracker.h>
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
@@ -57,6 +57,7 @@
 #include <KoStyleManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
+#include <KoTextRangeManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
@@ -67,10 +68,10 @@
 #include <KoSelection.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
-
+#include <KoPart.h>
 #include <KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
+#include <KoDocumentRdf.h>
 #endif
 
 #include <KoProgressUpdater.h>
@@ -90,6 +91,7 @@
 
 KWDocument::KWDocument(KoPart *part)
         : KoDocument(part),
+        m_isMasterDocument(false),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
 {
@@ -107,9 +109,19 @@ KWDocument::KWDocument(KoPart *part)
     }
 
     resourceManager()->setUndoStack(undoStack());
-    if (documentRdfBase()) {
-        documentRdfBase()->linkToResourceManager(resourceManager());
+    if (documentRdf()) {
+        documentRdf()->linkToResourceManager(resourceManager());
     }
+
+#ifdef SHOULD_BUILD_RDF
+    {
+        KoDocumentRdf *rdf = new KoDocumentRdf(this);
+        setDocumentRdf(rdf);
+    }
+
+#endif
+
+
 /* TODO reenable after release
     QVariant variant;
     variant.setValue(new KoChangeTracker(resourceManager()));
@@ -133,15 +145,22 @@ KWDocument::~KWDocument()
     qDeleteAll(m_frameSets);
 }
 
+bool KWDocument::isMasterDocument() const
+{
+    return m_isMasterDocument;
+}
+
+void KWDocument::setIsMasterDocument(bool isMasterDocument)
+{
+    m_isMasterDocument = isMasterDocument;
+}
+
+
+
 // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
 // will call addFrameSet.  Which will itself call addFrame()
 // any call coming in here is due to the undo/redo framework, pasting or for nested frames
 void KWDocument::addShape(KoShape *shape)
-{
-    addShape(shape, 0);
-}
-
-void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     kDebug(32001) << "shape=" << shape << "frame=" << frame;
@@ -149,11 +168,11 @@ void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
         if (shape->shapeId() == TextShape_SHAPEID) {
             KWTextFrameSet *tfs = new KWTextFrameSet(this);
             tfs->setName("Text");
-            frame = new KWFrame(shape, tfs, anchor);
+            frame = new KWFrame(shape, tfs);
         } else {
             KWFrameSet *fs = new KWFrameSet();
             fs->setName(shape->shapeId());
-            frame = new KWFrame(shape, fs, anchor);
+            frame = new KWFrame(shape, fs);
         }
     }
     Q_ASSERT(frame->frameSet());
@@ -161,7 +180,7 @@ void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
         addFrameSet(frame->frameSet());
     }
 
-    emit shapeAdded(shape);
+    emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
 
     shape->update();
 }
@@ -184,19 +203,18 @@ void KWDocument::removeShape(KoShape *shape)
 
 void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command)
 {
-    QMap<KoTextEditor *, QList<KoTextAnchor *> > anchors;
+    QMap<KoTextEditor *, QList<KoShapeAnchor *> > anchors;
     foreach (KoShape *shape, shapes) {
-        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-        if (frame && frame->shape()) {
-            KoTextAnchor *anchor = frame->anchor();
-            const QTextDocument *document = anchor ? anchor->document(): 0;
+        KoShapeAnchor *anchor = shape->anchor();
+        if (anchor && anchor->textLocation()) {
+            const QTextDocument *document = anchor->textLocation()->document();
             if (document) {
                 KoTextEditor *editor = KoTextDocument(document).textEditor();
                 anchors[editor].append(anchor);
             }
         }
     }
-    QMap<KoTextEditor *, QList<KoTextAnchor *> >::const_iterator it(anchors.constBegin());
+    QMap<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator it(anchors.constBegin());
     for (; it != anchors.constEnd(); ++it) {
         it.key()->removeAnchors(it.value(), command);
     }
@@ -214,10 +232,9 @@ QPixmap KWDocument::generatePreview(const QSize &size)
     // use shape manager from canvasItem even for QWidget environments
     // if using the shape manager from one of the views there is no guarantee
     // that the view, its canvas and the shapemanager is not destroyed in between
-//FIXME    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(canvasItem())->shapeManager();
+    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(documentPart()->canvasItem())->shapeManager();
 
-//FIXME    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
-        return QPixmap();
+    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
 }
 
 void KWDocument::paintContent(QPainter &, const QRect &)
@@ -408,8 +425,8 @@ void KWDocument::addFrame(KWFrame *frame)
 {
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     //firePageSetupChanged();
-    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
     emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
+    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
@@ -457,6 +474,12 @@ KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
 {
     QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
     return var.value<KoInlineTextObjectManager*>();
+}
+
+KoTextRangeManager *KWDocument::textRangeManager() const
+{
+    QVariant var = resourceManager()->resource(KoText::TextRangeManager);
+    return var.value<KoTextRangeManager*>();
 }
 
 QString KWDocument::uniqueFrameSetName(const QString &suggestion)
@@ -515,6 +538,19 @@ void KWDocument::initEmpty()
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(styleManager);
     KoParagraphStyle *parag = new KoParagraphStyle();
+    parag->setName(i18n("Standard"));
+    parag->setFontPointSize(12);
+    parag->setFontWeight(QFont::Normal);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName(i18n("Document Title"));
+    parag->setFontPointSize(24);
+    parag->setFontWeight(QFont::Bold);
+    parag->setAlignment(Qt::AlignCenter);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
     parag->setName(i18n("Head 1"));
     parag->setFontPointSize(20);
     parag->setFontWeight(QFont::Bold);
@@ -541,6 +577,7 @@ void KWDocument::initEmpty()
     parag->setListStyle(list);
     styleManager->add(parag);
 
+    setMimeTypeAfterLoading("application/vnd.oasis.opendocument.text");
     KoDocument::initEmpty();
     clearUndoHistory();
 }
@@ -722,7 +759,7 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
             framesets.append(tfs);
     }
     int pageNumber = -1;
-    foreach (KWPage page, pageManager()->pages()) {
+    foreach (const KWPage &page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
             pageNumber = page.pageNumber();
             break;
@@ -771,28 +808,19 @@ KWFrame* KWDocument::findClosestFrame(KoShape* shape) const
     return result;
 }
 
-KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape) const
+KoShapeAnchor* KWDocument::anchorOfShape(KoShape *shape) const
 {
     Q_ASSERT(mainFrameSet());
     Q_ASSERT(shape);
 
-    // try and find out if shape is already anchored    
-    foreach (KoInlineObject *inlineObject, inlineTextObjectManager()->inlineTextObjects()) {
-        KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
-        if (anchor && anchor->shape() == shape) {
-            return anchor;
-        }
-    }
-
-    KWFrame *frame = frameOfShape(shape);
-    KoTextAnchor *anchor = frame->anchor();
+    KoShapeAnchor *anchor = shape->anchor();
 
     if (!anchor) {
-        anchor = new KoTextAnchor(shape);
-        anchor->setAnchorType(KoTextAnchor::AnchorPage);
-        anchor->setHorizontalPos(KoTextAnchor::HFromLeft);
-        anchor->setVerticalPos(KoTextAnchor::VFromTop);
-        frame->setAnchor(anchor);
+        anchor = new KoShapeAnchor(shape);
+        anchor->setAnchorType(KoShapeAnchor::AnchorPage);
+        anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
+        anchor->setVerticalPos(KoShapeAnchor::VFromTop);
+        shape->setAnchor(anchor);
     }
 
     return anchor;
@@ -821,3 +849,12 @@ KWFrame *KWDocument::frameOfShape(KoShape* shape) const
     return answer;
 }
 
+void KWDocument::setCoverImage(QPair<QString, QByteArray> cover)
+{
+    m_coverImage = cover;
+}
+
+QPair<QString, QByteArray> KWDocument::coverImage()
+{
+    return m_coverImage;
+}

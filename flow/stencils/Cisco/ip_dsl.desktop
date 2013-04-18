@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=IP DSL
 Name[bg]=IP DSL
+Name[bs]=IP DSL
 Name[ca]=IP DSL
 Name[ca@valencia]=IP DSL
+Name[da]=IP DSL
 Name[de]=IP-DSL
 Name[el]=IP DSL
 Name[es]=IP DSL
 Name[et]=IP DSL
+Name[fr]=IP DSL
+Name[gl]=IP DSL
 Name[hu]=IP DSL
 Name[it]=IP DSL
 Name[kk]=IP DSL
@@ -18,6 +22,7 @@ Name[pt]=IP DSL
 Name[pt_BR]=IP DSL
 Name[ru]=IP DSL коммутатор
 Name[sk]=IP DSL
+Name[sl]=IP DSL
 Name[sv]=Internet digital abonnentlinje
 Name[uk]=IP DSL
 Name[x-test]=xxIP DSLxx

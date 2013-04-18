@@ -48,8 +48,8 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
-#include <KRichTextWidget>
-#include <KMimeType>
+#include <krichtextwidget.h>
+#include <kmimetype.h>
 
 #include <kdganttglobal.h>
 #include <math.h>
@@ -1315,6 +1315,9 @@ QVariant NodeModel::status( const Node *node, int role ) const
                 return i18n( "Finished" );
             }
             if ( st & Node::State_Running ) {
+                if ( st & Node::State_Late ) {
+                    return i18n( "Running late" );
+                }
                 return i18n( "Running" );
             }
             if ( st & Node::State_Started ) {
@@ -1324,12 +1327,21 @@ QVariant NodeModel::status( const Node *node, int role ) const
                 if ( st & Node::State_StartedEarly ) {
                     return i18n( "Started early" );
                 }
+                if ( st & Node::State_Late ) {
+                    return i18n( "Running late" );
+                }
                 return i18n( "Started" );
             }
             if ( st & Node::State_ReadyToStart ) {
+                if ( st & Node::State_Late ) {
+                    return i18n( "Not started" );
+                }
                 return i18n( "Can start" );
             }
             if ( st & Node::State_NotReadyToStart ) {
+                if ( st & Node::State_Late ) {
+                    return i18n( "Delayed" );
+                }
                 return i18n( "Cannot start" );
             }
             return i18n( "Not started" );
@@ -3069,18 +3081,17 @@ void NodeItemModel::slotNodeRemoved( Node *node )
     m_node = 0;
 }
 
-void NodeItemModel::slotNodeToBeMoved( Node *node )
+void NodeItemModel::slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos )
 {
-    kDebug(planDbg());
-    slotNodeToBeRemoved( node );
+    //kDebug(planDbg())<<node->parentNode()->name()<<pos<<":"<<newParent->name()<<newPos;
+    beginMoveRows( index( node->parentNode() ), pos, pos, index( newParent ), newPos );
 }
 
 void NodeItemModel::slotNodeMoved( Node *node )
 {
-    kDebug(planDbg());
-    slotNodeRemoved( node );
-    slotNodeToBeInserted( node->parentNode(), node->parentNode()->indexOf( node ) );
-    slotNodeInserted( node );
+    Q_UNUSED( node );
+    //kDebug(planDbg())<<node->parentNode()->name()<<node->parentNode()->indexOf( node );
+    endMoveRows();
 }
 
 void NodeItemModel::slotLayoutChanged()
@@ -3088,6 +3099,14 @@ void NodeItemModel::slotLayoutChanged()
     //kDebug(planDbg())<<node->name();
     emit layoutAboutToBeChanged();
     emit layoutChanged();
+}
+
+void NodeItemModel::slotProjectCalulated(ScheduleManager *sm)
+{
+    kDebug(planDbg())<<m_manager<<sm;
+    if ( sm && sm == m_manager ) {
+        slotLayoutChanged();
+    }
 }
 
 void NodeItemModel::slotWbsDefinitionChanged()
@@ -3117,12 +3136,12 @@ void NodeItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotNodeToBeMoved( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeMoved( Node*, int, Node*, int ) ), this, SLOT( slotNodeToBeMoved( Node*, int, Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        //disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL( projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalulated(ScheduleManager*)));
     }
     m_project = project;
     kDebug(planDbg())<<this<<m_project<<"->"<<project;
@@ -3134,12 +3153,12 @@ void NodeItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotNodeToBeMoved( Node* ) ) );
+        connect( m_project, SIGNAL( nodeToBeMoved( Node*, int, Node*, int ) ), this, SLOT( slotNodeToBeMoved( Node*, int, Node*, int ) ) );
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        //connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalulated(ScheduleManager*)));
     }
     reset();
 }
@@ -3149,6 +3168,7 @@ void NodeItemModel::setScheduleManager( ScheduleManager *sm )
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );
+    ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
     kDebug(planDbg())<<this<<sm;
@@ -3537,11 +3557,14 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
 
 QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
 {
-    QVariant result;
     if ( role == Qt::TextAlignmentRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     }
     Node *n = node( index );
+    if ( role == Role::Object ) {
+        return n ? QVariant::fromValue( static_cast<QObject*>( n ) ) : QVariant();
+    }
+    QVariant result;
     if ( n != 0 ) {
         result = m_nodemodel.data( n, index.column(), role );
         //kDebug(planDbg())<<n->name()<<": "<<index.column()<<", "<<role<<result;
@@ -4016,6 +4039,9 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
                 if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
                 // append nodes if dropped *on* another node, insert if dropped *after*
                 int pos = row == -1 ? -1 : row + offset;
+                if ( pos >= 0 && n->parentNode() == par && par->indexOf( n ) < pos ) {
+                    --pos;
+                }
                 cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
                 offset++;
             }
@@ -4124,400 +4150,6 @@ int NodeItemModel::sortRole( int column ) const
             break;
     }
     return Qt::DisplayRole;
-}
-
-//----------------------------
-class GeneralNodeItemModel::Object
-{
-public:
-    enum Type { Type_Node, Type_WorkPackage };
-    Object( Node *n, Type typ = Type_Node, int r = -1 )
-    : node( n ), type( typ ), row( r )
-    {}
-
-    bool isNode() const { return type == Type_Node; }
-    bool isWorkPackage() const { return type == Type_WorkPackage; }
-
-    Node *node;
-    int type;
-    int row; // if isWorkPackage()
-};
-
-//----------------------------
-GeneralNodeItemModel::GeneralNodeItemModel( QObject *parent )
-    : NodeItemModel( parent ),
-    m_modus( 0 )
-{
-}
-
-GeneralNodeItemModel::~GeneralNodeItemModel()
-{
-    qDeleteAll( m_objects );
-}
-
-void GeneralNodeItemModel::setModus( int modus )
-{
-    if ( m_modus & WorkPackage ) {
-        foreach ( Object *o, nodeObjects() ) {
-            disconnect( o->node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-            disconnect( o->node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
-            disconnect( o->node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-        }
-    }
-    qDeleteAll( m_objects );
-    m_objects.clear();
-    m_modus = modus;
-    if ( m_project == 0 ) {
-        return;
-    }
-    foreach ( Node *n, m_project->allNodes() ) {
-        m_objects << new Object( n );
-        if ( m_modus & WorkPackage ) {
-/*            connect( n, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-            connect( n, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
-            connect( n, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );*/
-            for ( int i = 0; i < static_cast<Task*>( n )->workPackageLogCount(); ++i ) {
-                m_objects << new Object( n, Object::Type_WorkPackage, i );
-            }
-        }
-    }
-}
-
-void GeneralNodeItemModel::setProject( Project *project )
-{
-    NodeItemModel::setProject( project );
-    setModus( m_modus );
-    reset();
-}
-
-void GeneralNodeItemModel::slotNodeToBeInserted( Node *parent, int row )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeToBeInserted( parent, row );
-    }
-    if ( m_modus & Flat ) {
-        int pos = nodeObjects().count();
-        kDebug(planDbg())<<pos;
-        beginInsertRows( QModelIndex(), pos, pos );
-        return;
-    }
-    beginInsertRows( index( parent ), row, row );
-}
-
-void GeneralNodeItemModel::slotNodeInserted( Node *node )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeInserted( node );
-    }
-    m_objects << new Object( node );
-//     connect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-//     connect( node, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
-//     connect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-
-    kDebug(planDbg())<<node<<"at row"<<m_objects.count()-1;
-    endInsertRows();
-}
-
-void GeneralNodeItemModel::slotNodeToBeRemoved( Node *node )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeToBeRemoved( node );
-    }
-    Object *obj = findNodeObject( node );
-    int row = m_objects.indexOf( obj );
-    if ( row >= 0 ) {
-        if ( m_modus & WorkPackage ) {
-/*            disconnect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-            disconnect( node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
-            disconnect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );*/
-        }
-        QModelIndex idx = index( node );
-        beginRemoveRows( parent( idx ), idx.row(), idx.row() );
-        m_objects.removeAt( row );
-        QList<int> rows = workPackagePositions( obj );
-        while ( ! rows.isEmpty() ) {
-            delete m_objects.takeAt( rows.takeLast() );
-        }
-        delete obj;
-        endRemoveRows();
-    }
-}
-
-void GeneralNodeItemModel::slotWorkPackageToBeAdded( Node *node, int row )
-{
-    beginInsertRows( index( node ), row, row );
-    m_objects << new Object( node, Object::Type_WorkPackage, row );
-}
-
-void GeneralNodeItemModel::slotWorkPackageAdded( Node *node )
-{
-    Q_UNUSED(node);
-    endInsertRows();
-}
-
-void GeneralNodeItemModel::slotWorkPackageToBeRemoved( Node *node, int row )
-{
-    Object *parent = findNodeObject( node );
-    if ( parent == 0 ) {
-        kError()<<"No node object for node:"<<parent;
-    } else {
-        Object *o = findWPObject( row, parent );
-        if ( o ) {
-            beginRemoveRows( index( node ), row, row );
-            kDebug(planDbg())<<node->name()<<row<<m_objects.at( row )->isWorkPackage();
-            m_objects.removeAt( m_objects.indexOf( o ) );
-            delete o;
-            endRemoveRows();
-        }
-    }
-}
-
-void GeneralNodeItemModel::slotNodeRemoved( Node *node )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeRemoved( node );
-    }
-    // Do nothing!!
-}
-
-void GeneralNodeItemModel::slotNodeToBeMoved( Node *node )
-{
-    if ( m_modus == 0 ) {
-        NodeItemModel::slotNodeToBeMoved( node );
-    } else {
-        slotNodeToBeRemoved( node );
-    }
-}
-
-void GeneralNodeItemModel::slotNodeMoved( Node *node )
-{
-    kDebug(planDbg())<<node<<m_modus;
-    if ( m_modus == 0 ) {
-        NodeItemModel::slotNodeMoved( node );
-    } else {
-        slotNodeRemoved( node );
-        slotNodeToBeInserted( node, node->parentNode()->indexOf( node )  );
-        slotNodeInserted( node );
-    }
-}
-
-void GeneralNodeItemModel::slotWbsDefinitionChanged()
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotWbsDefinitionChanged();
-    }
-    //TODO
-}
-
-Qt::ItemFlags GeneralNodeItemModel::flags( const QModelIndex &index ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::flags( index );
-    }
-    return QAbstractItemModel::flags( index ); //TODO
-}
-
-
-QModelIndex GeneralNodeItemModel::parent( const QModelIndex &index ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::parent( index );
-    }
-    Object *obj = static_cast<Object*>( index.internalPointer() );
-    if ( obj == 0 ) {
-        return QModelIndex();
-    }
-    if ( obj->isWorkPackage() ) {
-        return this->index( obj->node );
-    }
-    if ( m_modus & WBS ) {
-        if ( obj->isNode() ) {
-            return this->index( obj->node->parentNode() );
-        }
-    }
-    return QModelIndex();
-}
-
-QModelIndex GeneralNodeItemModel::index( int row, int column, const QModelIndex &parent ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::index( row, column, parent );
-    }
-    Object *par = static_cast<Object*>( parent.internalPointer() );
-    if ( m_modus & WBS ) {
-        if ( ! parent.isValid() ) {
-            return createIndex( row, column, findNodeObject( m_project->childNode( row ) ) );
-        }
-        if ( par && par->isNode() ) {
-            if ( par->node->type() == Node::Type_Summarytask ) {
-                return createIndex( row, column, findNodeObject( par->node->childNode( row ) ) );
-            }
-            return createIndex( row, column, findWPObject( row, par ) );
-        }
-        return QModelIndex();
-    }
-    if ( m_modus & Flat  ) {
-        if ( ! parent.isValid() ) {
-            return createIndex( row, column, nodeObjects().value( row ) );
-        }
-        if ( par && par->isNode() ) {
-            return createIndex( row, column, findWPObject( row, par ) );
-        }
-        return QModelIndex();
-    }
-    return QModelIndex();
-}
-
-QModelIndex GeneralNodeItemModel::index( const Node *node, int column ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::index( node, column );
-    }
-    Object *obj = findNodeObject( node );
-    if ( obj ) {
-        return createIndex( nodeObjects().indexOf( obj ), column, obj );
-    }
-    return QModelIndex();
-}
-
-QVariant GeneralNodeItemModel::data( const QModelIndex &index, int role ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::data( index, role );
-    }
-    QVariant result;
-    Object *obj = static_cast<Object*>( index.internalPointer() );
-    if ( obj && obj->isNode() ) {
-        return m_nodemodel.data( obj->node, index.column(), role );
-    }
-    if ( obj && obj->isWorkPackage() ) {
-        int col = -1;
-        // map NodeModel columns to WorkPackageModel columns
-        switch ( index.column() ) {
-            case NodeModel::NodeName:
-            case NodeModel::WPOwnerName:
-                col = WorkPackageModel::WPOwnerName; break;
-            case NodeModel::NodeStatus:
-            case NodeModel::WPTransmitionStatus:
-                col = WorkPackageModel::WPTransmitionStatus; break;
-                col = WorkPackageModel::WPTransmitionStatus; break;
-            case NodeModel::WPTransmitionTime:
-                col = WorkPackageModel:: WPTransmitionTime; break;
-            default: break;
-        }
-        if ( col >= 0 ) {
-            return m_wpmodel.data( static_cast<const Task*>( obj->node )->workPackageAt( index.row() ), col, role );
-        }
-    }
-    return result;
-}
-
-bool GeneralNodeItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::setData( index, value, role );
-    }
-    return false;
-}
-
-QAbstractItemDelegate *GeneralNodeItemModel::createDelegate( int column, QWidget *parent ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::createDelegate( column, parent );
-    }
-    return 0; //TODO
-}
-
-int GeneralNodeItemModel::rowCount( const QModelIndex &parent ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::rowCount( parent );
-    }
-    Object *par = static_cast<Object*>( parent.internalPointer() );
-    if ( m_modus & WBS ) {
-        if ( ! parent.isValid() ) {
-            return m_project->numChildren();
-        }
-        if ( par && par->isNode() && par->node->type() == Node::Type_Summarytask ) {
-            return par->node->numChildren();
-        }
-    }
-    if ( m_modus & Flat ) {
-        if ( ! parent.isValid() ) {
-            return nodeObjects().count();
-        }
-    }
-    if ( ( m_modus & WorkPackage ) && par && par->isNode() ) {
-        return static_cast<const Task*>( par->node )->workPackageLogCount();
-    }
-    return 0;
-}
-
-Node *GeneralNodeItemModel::node( const QModelIndex &index ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::node( index );
-    }
-    Object *obj = static_cast<Object*>( index.internalPointer() );
-    if ( obj && obj->isNode() ) {
-        return obj->node;
-    }
-    return 0;
-}
-
-void GeneralNodeItemModel::slotNodeChanged( Node *node )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeChanged( node );
-    }
-    Object *obj = findNodeObject( node );
-    if ( obj && obj->isNode() ) {
-        QModelIndex i = index( node );
-        emit dataChanged( i, createIndex( i.row(), columnCount()-1, obj ) );
-    }
-}
-
-GeneralNodeItemModel::Object *GeneralNodeItemModel::findNodeObject( const Node *node ) const
-{
-    foreach ( Object *o, m_objects ) {
-        if ( o->node == node && o->isNode() ) {
-            return o;
-        }
-    }
-    return 0;
-}
-
-GeneralNodeItemModel::Object *GeneralNodeItemModel::findWPObject( int row, GeneralNodeItemModel::Object *parent ) const
-{
-    foreach ( Object *o, m_objects ) {
-        if ( o->isWorkPackage() && o->node == parent->node && o->row == row ) {
-            return o;
-        }
-    }
-    return 0;
-}
-
-QList<GeneralNodeItemModel::Object*> GeneralNodeItemModel::nodeObjects() const
-{
-    QList<Object*> lst;
-    foreach ( Object *o, m_objects ) {
-        if ( o->isNode() ) {
-            lst << o;
-        }
-    }
-    return lst;
-}
-
-QList<int> GeneralNodeItemModel::workPackagePositions( GeneralNodeItemModel::Object *parent ) const
-{
-    QList<int> rows;
-    for ( int i = 0; i < m_objects.count(); ++i ) {
-        Object *o = m_objects.at( i );
-        if ( o->node == parent->node && o->isWorkPackage() ) {
-            rows << i;
-        }
-    }
-    return rows;
 }
 
 //------------------------------------------------
@@ -4740,6 +4372,20 @@ void MilestoneItemModel::slotLayoutChanged()
     emit layoutChanged();
 }
 
+void MilestoneItemModel::slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos )
+{
+    Q_UNUSED( node );
+    Q_UNUSED( pos );
+    Q_UNUSED( newParent );
+    Q_UNUSED( newPos );
+}
+
+void MilestoneItemModel::slotNodeMoved( Node *node )
+{
+    Q_UNUSED( node );
+    resetModel();
+}
+
 void MilestoneItemModel::setProject( Project *project )
 {
     if ( m_project ) {
@@ -4749,8 +4395,8 @@ void MilestoneItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT(  slotNodeToBeInserted( Node *, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
+        disconnect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
@@ -4765,8 +4411,8 @@ void MilestoneItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted( Node *, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
+        connect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
@@ -4779,6 +4425,7 @@ void MilestoneItemModel::setScheduleManager( ScheduleManager *sm )
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );
+    ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
     //kDebug(planDbg())<<sm;

@@ -44,13 +44,14 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoShapeContainer;
 class KoShapeController;
 class KoPart;
-
+class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
 
@@ -64,7 +65,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(KoPart *part = 0);
+    explicit KWDocument(KoPart *part);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface
@@ -74,8 +75,6 @@ public:
     virtual void removeShape(KoShape *shape);
     // reimplemented from KoShapeBasedDocumentBase
     virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
-
-    void addShape(KoShape *shape, KoTextAnchor *anchor);
 
     // KoDocument interface
     /// reimplemented from KoDocument
@@ -92,6 +91,9 @@ public:
     virtual int pageCount() const {
         return pageManager()->pageCount();
     }
+
+    bool isMasterDocument() const;
+    void setIsMasterDocument(bool isMasterDocument);
 
     // others
     /**
@@ -159,6 +161,9 @@ public:
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
+    /// return the textRangeManager for this document.
+    KoTextRangeManager *textRangeManager() const;
+
     KWApplicationConfig &config() {
         return m_config;
     }
@@ -180,13 +185,19 @@ public:
     /// find the frame closest to the given shape or return 0
     KWFrame *findClosestFrame(KoShape *shape) const;
 
-    KoTextAnchor *anchorOfShape(KoShape *shape) const;
+    KoShapeAnchor *anchorOfShape(KoShape *shape) const;
 
     KWFrame *frameOfShape(KoShape *shape) const;
 
     /// returns the document's shapeController. This controller should only be used for deleting shapes.
     //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
     KoShapeController *shapeController() const { return m_shapeController; }
+
+    /// Set cover image data at a QPair<cover mime type, cover data>.
+    void setCoverImage(QPair<QString, QByteArray> cover);
+
+    /// return cover data.
+    QPair<QString, QByteArray> coverImage();
 
 public slots:
     /**
@@ -216,7 +227,7 @@ signals:
     void pageSetupChanged();
 
     /// emitted whenever a shape is added.
-    void shapeAdded(KoShape *, KoShapeManager::Repaint repaint = KoShapeManager::PaintShapeOnAdd);
+    void shapeAdded(KoShape *, KoShapeManager::Repaint);
 
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);
@@ -261,6 +272,7 @@ private:
     void saveConfig();
 
 private:
+    bool m_isMasterDocument;
     QList<KWFrameSet*> m_frameSets;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
@@ -269,6 +281,8 @@ private:
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
+    QPair<QString, QByteArray> m_coverImage;
+
 };
 
 #endif

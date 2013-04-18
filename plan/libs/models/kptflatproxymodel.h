@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_FLATPROXYMODEL_H
-#define KPLATO_FLATPROXYMODEL_H
+#ifndef KPTFLATPROXYMODEL_H
+#define KPTFLATPROXYMODEL_H
 
 #include "kplatomodels_export.h"
 
@@ -51,7 +51,7 @@ class KPLATOMODELS_EXPORT FlatProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 public:
-    FlatProxyModel ( QObject * parent = 0 );
+    explicit FlatProxyModel(QObject *parent = 0);
 
     virtual QModelIndex mapFromSource ( const QModelIndex & sourceIndex ) const;
     virtual QItemSelection mapSelectionFromSource ( const QItemSelection & sourceSelection ) const;
@@ -98,6 +98,11 @@ public slots:
     void sourceRowsRemoved(const QModelIndex &source_parent,
                               int start, int end);
 
+    void sourceRowsAboutToBeMoved( const QModelIndex &source_parent,
+                                  int start, int end, const QModelIndex &destParent, int destStart );
+    void sourceRowsMoved( const QModelIndex &source_parent,
+                                  int start, int end, const QModelIndex &destParent, int destStart );
+
 protected:
     int mapFromSourceRow( const QModelIndex & sourceIndex ) const;
     int mapToSourceRow( const  QModelIndex & sourceIndex ) const;
@@ -111,8 +116,6 @@ private:
     QList<QPersistentModelIndex> m_sourceIndexList;
     /// Map of sourceIndexes (parent, index)
     QMultiMap<QPersistentModelIndex, QPersistentModelIndex> m_sourceIndexMap;
-
-    QStandardItemModel m_privatemodel;
 };
 
 } //namespace KPlato

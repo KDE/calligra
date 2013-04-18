@@ -18,13 +18,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KODOCUMENTADAPTOR_H
-#define KODOCUMENTADAPTOR_H
+#ifndef KOPARTADAPTOR_H
+#define KOPARTADAPTOR_H
+
+#ifndef QT_NO_DBUS
 
 #include <QMap>
 
 #include <QObject>
-#include <QtDBus/qdbusabstractadaptor.h>
+#include <QDBusAbstractAdaptor>
 #include <QList>
 #include "komain_export.h"
 class KoPart;
@@ -133,6 +135,8 @@ public:
 protected:
     KoPart* m_pDoc;
 };
+
+#endif // QT_NO_DBUS
 
 #endif
 

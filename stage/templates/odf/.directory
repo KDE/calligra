@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Templates
+Name[bs]=Predlošci
 Name[ca]=Plantilles
 Name[ca@valencia]=Plantilles
 Name[cs]=Šablony
@@ -9,12 +10,17 @@ Name[el]=Πρότυπα
 Name[en_GB]=Templates
 Name[es]=Plantillas
 Name[et]=Mallid
+Name[fi]=Pohjat
 Name[fr]=Modèles
 Name[ga]=Teimpléid
+Name[gl]=Modelos
 Name[hu]=Sablonok
+Name[ia]=Patronos
 Name[it]=Modelli
 Name[ja]=テンプレート
 Name[kk]=Үлгілер
+Name[lt]=Šablonai
+Name[mr]=नमूने
 Name[nb]=Maler
 Name[nds]=Vörlagen
 Name[nl]=Sjablonen

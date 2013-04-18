@@ -19,4 +19,6 @@ install(TARGETS karbon1ximport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES karbon_1x_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-install( FILES karbon_karbon1x_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES karbon_karbon1x_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)

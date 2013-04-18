@@ -1,12 +1,19 @@
 [Desktop Entry]
 Name=ME Storage
+Name[bs]=ME skladište
 Name[ca]=Emmagatzematge ME
-Name[ca@valencia]=Emmagatzement ME
+Name[ca@valencia]=Emmagatzematge ME
+Name[da]=ME Storage
+Name[de]=ME-Speicher
 Name[el]=Αποθήκη ME
 Name[es]=Almacenamiento ME
 Name[et]=Aine-energiasalvesti
+Name[fr]=Stockage ME
+Name[gl]=Armacenamento ME
+Name[hu]=ME tároló
 Name[it]=ME Storage
 Name[kk]=МE жинақтауышы
+Name[lt]=ME saugykla
 Name[nb]=ME-lagring
 Name[nl]=ME-opslag
 Name[pl]=Magazyn ME
@@ -17,4 +24,5 @@ Name[sk]=ME úložisko
 Name[sv]=ME-lagring
 Name[uk]=Підсистема зберігання пам’яті
 Name[x-test]=xxME Storagexx
+Name[zh_CN]=ME存储
 Name[zh_TW]=ME 儲存裝置

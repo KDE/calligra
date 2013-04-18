@@ -53,7 +53,7 @@
 #endif
 // KDE + Qt includes
 #include <QTextCursor>
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoDocumentRdfBase.h>
 
@@ -108,6 +108,14 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
             m_document->setErrorMessage(i18n("This is not a word processing document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
         return false;
     }
+
+    // Load attributes from the office:text.  These are text:global and text:use-soft-page-breaks.
+    QString textGlobal = body.attributeNS(KoXmlNS::text, "global");
+    bool isTextGlobal = (textGlobal == "true");
+    if (isTextGlobal) {
+        m_document->setIsMasterDocument(true);
+    }
+    // FIXME: text:use-soft-page-breaks
 
     if (updater) updater->setProgress(20);
 
@@ -238,7 +246,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     if (updater) updater->setProgress(90);
 
     // Grab weak references to all the Rdf stuff that was loaded
-    if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
+    if (KoDocumentRdfBase *rdf = m_document->documentRdf()) {
         rdf->updateInlineRdfStatements(textShapeData.document());
     }
 

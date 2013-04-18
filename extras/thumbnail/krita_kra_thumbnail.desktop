@@ -1,0 +1,34 @@
+[Desktop Entry]
+Type=Service
+Name=Krita Documents
+Name[ca]=Documents del Krita
+Name[cs]=Dokumenty Krita
+Name[da]=Krita-dokumenter
+Name[de]=Krita-Dokumente
+Name[el]=Έγγραφα Krita
+Name[es]=Documentos de Krita
+Name[et]=Krita dokumendid
+Name[fi]=Krita-asiakirjat
+Name[fr]=Documents Krita
+Name[gl]=Documentos Krita
+Name[hu]=Krita dokumentumok
+Name[it]=Documenti Krita
+Name[kk]=Krita құжаттары
+Name[lt]=Krita dokumentai
+Name[mr]=क्रिटा दस्तऐवज
+Name[nb]=Krita-dokumenter
+Name[nl]=Krita-documenten
+Name[pl]=Dokumenty Krita
+Name[pt]=Documentos do Krita
+Name[pt_BR]=Documentos do Krita
+Name[sk]=Dokumenty Krita
+Name[sl]=Dokumenti Krite
+Name[sv]=Krita-dokument
+Name[uk]=Документи Krita
+Name[x-test]=xxKrita Documentsxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-krita;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

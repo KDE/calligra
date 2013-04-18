@@ -46,6 +46,7 @@ DocumentsPanel::DocumentsPanel( Node &node, QWidget *parent )
     widget.setupUi( this );
     QVBoxLayout *l = new QVBoxLayout( widget.itemViewHolder );
     m_view = new DocumentTreeView( widget.itemViewHolder );
+    l->setMargin(0);
     l->addWidget( m_view );
     m_view->setDocuments( &m_docs );
     m_view->setReadWrite( true );

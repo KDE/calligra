@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=l-sens
+Name[bs]=l-sens
 Name[ca]=l-sens
 Name[ca@valencia]=l-sens
+Name[da]=l-sens
 Name[el]=l-sens
 Name[es]=sensor izquierdo
 Name[et]=Vasak sensor
+Name[fr]=l-sens
+Name[gl]=Sensor L
 Name[it]=l-sens
 Name[kk]=сол-ж-сезгіш
 Name[nb]=l-sens
@@ -16,4 +20,5 @@ Name[sk]=l-sens
 Name[sv]=v-sensor
 Name[uk]=Датчик (ліворуч)
 Name[x-test]=xxl-sensxx
+Name[zh_CN]=L-SENS
 Name[zh_TW]=l-sens

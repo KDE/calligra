@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Horizontal Jumper
 Name[bg]=Хоризонтален джъмпер
+Name[bs]=Horizontalni skakač
 Name[ca]=Jumper horitzontal
 Name[ca@valencia]=Jumper horitzontal
+Name[da]=Vandret Lus
 Name[de]=Waagerechter Jumper
 Name[el]=Οριζόντια επαφή κυκλώματος
 Name[es]=Jumper horizontal
 Name[et]=Horisontaalne šunt
+Name[fr]=Horizontal Jumper
+Name[gl]=Ponte horizontal
+Name[hu]=Vízszintes jumper
 Name[it]=Jumper orizzontale
 Name[kk]=Жатық жалғастырғыш
 Name[nb]=Vannrett flyttekobling
@@ -18,6 +23,7 @@ Name[pt_BR]=Jumper horizontal
 Name[ru]=Горизонтальный переключатель
 Name[sk]=Vodorovný jumper
 Name[sv]=Horisontell bygel
+Name[tr]=Yatay Jumper
 Name[uk]=Горизонтальна перемичка
 Name[x-test]=xxHorizontal Jumperxx
 Name[zh_TW]=水平跳線

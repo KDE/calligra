@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Alternative External Entity
+Name[bs]=Alternativni vanjski entitet
 Name[ca]=Entitat externa alternativa
 Name[ca@valencia]=Entitat externa alternativa
+Name[da]=Alternative External Entity
+Name[de]=Externe Entität wechseln
 Name[el]=Εναλλακτική εξωτερική οντότητα
 Name[es]=Entidad externa alternativa
 Name[et]=Alternatiivne väline olem
+Name[fr]=Unité externe alternative
+Name[gl]=Entidade externa alternativa
 Name[it]=Entità esterna alternativa
 Name[kk]=Басқа сыртқы нәрсе
 Name[nb]=Alternativ ekstern enhet
@@ -17,4 +22,5 @@ Name[sk]=Alternatívna externá entita
 Name[sv]=Alternativ extern enhet
 Name[uk]=Інший зовнішній об’єкт
 Name[x-test]=xxAlternative External Entityxx
+Name[zh_CN]=备选外部实体
 Name[zh_TW]=替代外部實體

@@ -53,10 +53,14 @@
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
+#include <KoStrokeConfigWidget.h>
+#include <KoFillConfigWidget.h>
+#include <KoShadowConfigWidget.h>
+#include <KoOpacityConfigWidget.h>
 
 #include <KoIcon.h>
 
-#include <KAction>
+#include <kaction.h>
 #include <QKeyEvent>
 #include <QClipboard>
 #include <kstandarddirs.h>
@@ -64,6 +68,20 @@
 #include <math.h>
 
 #define HANDLE_DISTANCE 10
+
+class NopInteractionStrategy : public KoInteractionStrategy
+{
+public:
+    explicit NopInteractionStrategy(KoToolBase* parent) : KoInteractionStrategy(parent) {}
+
+    virtual KUndo2Command* createCommand()
+    {
+        return 0;
+    }
+
+    virtual void handleMouseMove(const QPointF& /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) {}
+    virtual void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) {}
+};
 
 class SelectionHandler : public KoToolSelection
 {
@@ -136,8 +154,10 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     setupActions();
 
     QPixmap rotatePixmap, shearPixmap;
-    rotatePixmap.load(KStandardDirs::locate("data", "calligra/icons/rotate.png"));
-    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/shear.png"));
+    rotatePixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
+    Q_ASSERT(!rotatePixmap.isNull());
+    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_shear.png"));
+    Q_ASSERT(!shearPixmap.isNull());
 
     m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QTransform().rotate(45)));
     m_rotateCursors[1] = QCursor(rotatePixmap.transformed(QTransform().rotate(90)));
@@ -1106,9 +1126,26 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
-    QWidget* snapWidget = canvas()->createSnapGuideConfigWidget();
-    snapWidget->setWindowTitle(i18n("Snapping"));
-    widgets.append(snapWidget);
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    strokeWidget->setWindowTitle(i18n("Line"));
+    strokeWidget->setCanvas(canvas());
+    widgets.append(strokeWidget);
+
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    fillWidget->setWindowTitle(i18n("Fill"));
+    fillWidget->setCanvas(canvas());
+    widgets.append(fillWidget);
+
+    KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
+    shadowWidget->setWindowTitle(i18n("Shadow"));
+    shadowWidget->setCanvas(canvas());
+    widgets.append(shadowWidget);
+
+    KoOpacityConfigWidget *opacityWidget = new KoOpacityConfigWidget(0);
+    opacityWidget->setWindowTitle(i18n("Shape Opacity"));
+    opacityWidget->setCanvas(canvas());
+    widgets.append(opacityWidget);
+
     return widgets;
 }
 
@@ -1220,6 +1257,10 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             shapeManager->selection()->deselectAll();
         select->select(shape, selectNextInStack ? false : true);
         repaintDecorations();
+        // tablet selection isn't precise and may lead to a move, preventing that
+        if (event->isTabletEvent()) {
+            return new NopInteractionStrategy(this);
+        }
         return new ShapeMoveStrategy(this, event->point);
     }
     return 0;

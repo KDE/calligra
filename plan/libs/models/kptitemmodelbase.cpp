@@ -39,7 +39,7 @@
 #include <QHeaderView>
 #include <QStylePainter>
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <klineedit.h>
 
 
@@ -254,7 +254,7 @@ void ProgressBarDelegate::initStyleOptionProgressBar( QStyleOptionProgressBar *o
     int max = index.data( Role::Maximum ).toInt();
     option->maximum = max > option->minimum ? max : option->minimum + 100;
     option->progress = index.data().toInt();
-    option->text = QString::number( ( option->progress * 100 ) / ( option->maximum - option->minimum ) ) + QChar::fromAscii( '%' );
+    option->text = QString::number( ( option->progress * 100 ) / ( option->maximum - option->minimum ) ) + QLatin1Char( '%' );
     option->textAlignment = Qt::AlignCenter;
     option->textVisible = true;
 }
@@ -298,7 +298,7 @@ void Slider::updateTip( int value )
     p.setY( height() / 2 );
     p.setX( style()->sliderPositionFromValue ( minimum(), maximum(), value, width() ) );
 
-    QString text = QString::fromAscii( "%1%" ).arg( value );
+    QString text = QString::number( value ) + QLatin1Char( '%' );
     QToolTip::showText( mapToGlobal( p ), text, this );
 }
 

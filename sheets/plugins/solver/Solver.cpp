@@ -38,11 +38,11 @@ using namespace Calligra::Sheets::Plugins;
 
 // make the plugin available
 K_PLUGIN_FACTORY(SolverFactory, registerPlugin<Calligra::Sheets::Plugins::Solver>();)
-K_EXPORT_PLUGIN(SolverFactory("kspreadsolver"))
+K_EXPORT_PLUGIN(SolverFactory("sheetssolver"))
 
 Calligra::Sheets::View* s_view = 0;
 Calligra::Sheets::Formula* s_formula = 0;
-double function(const gsl_vector* vector, void *params);
+double _function(const gsl_vector* vector, void *params);
 
 
 class Solver::Private
@@ -65,7 +65,7 @@ Solver::Solver(QObject* parent, const QVariantList& args)
         return;
     }
 
-    QAction* solver = actionCollection()->addAction("kspreadsolver");
+    QAction* solver = actionCollection()->addAction("sheetssolver");
     solver->setText(i18n("Function Optimizer..."));
     connect(solver, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
@@ -138,13 +138,13 @@ void Solver::optimize()
     /* Initialize starting point */
     int index = 0;
     gsl_vector* x = gsl_vector_alloc(dimension);
-    foreach(Cell cell, parameters->cells) {
+    foreach(const Cell &cell, parameters->cells) {
         gsl_vector_set(x, index++, numToDouble(cell.value().asFloat()));
     }
 
     /* Initialize method and iterate */
     gsl_multimin_function functionInfo;
-    functionInfo.f = &function;
+    functionInfo.f = &_function;
     functionInfo.n = dimension;
     functionInfo.params = static_cast<void*>(parameters);
 
@@ -194,7 +194,7 @@ double Solver::evaluate(const gsl_vector* vector, void *parameters)
     return 0.0;
 }
 
-double function(const gsl_vector* vector, void *params)
+double _function(const gsl_vector* vector, void *params)
 {
     Solver::Parameters* parameters = static_cast<Solver::Parameters*>(params);
 

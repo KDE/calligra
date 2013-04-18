@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=floatingroof
+Name[bs]=plutajući krov
 Name[ca]=fals sostre
 Name[ca@valencia]=fals sostre
+Name[da]=floatingroof
+Name[de]=Tank mit Schwimmdach
 Name[el]=floatingroof
 Name[es]=cubierta flotante
 Name[et]=Ujuv kaas
+Name[fr]=floatingroof
+Name[gl]=Tanque de teito flotante
 Name[it]=floatingroof
 Name[kk]=Бекітілмеген қақпақты
 Name[nb]=flytetak
@@ -15,6 +20,7 @@ Name[pt_BR]=teto flutuante
 Name[ru]=Съёмная крышка
 Name[sk]=floatingroof
 Name[sv]=rörligt tak
+Name[tr]=yüzer tavan
 Name[uk]=Резервуар з рухомою кришкою
 Name[x-test]=xxfloatingroofxx
 Name[zh_TW]=floatingroof

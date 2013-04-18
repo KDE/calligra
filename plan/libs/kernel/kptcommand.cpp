@@ -38,11 +38,7 @@
 
 
 static int insertProjectCmdDba() {
-#if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan (InsertProjectCmd)" );
-#else
-    static int s_area = 0;
-#endif
     return s_area;
 }
 
@@ -2793,6 +2789,24 @@ void ModifyScheduleManagerSchedulerCmd::unexecute()
     m_sm.setSchedulerPlugin( oldvalue );
 }
 
+ModifyScheduleManagerSchedulingGranularityCmd::ModifyScheduleManagerSchedulingGranularityCmd( ScheduleManager &sm, int value, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm ),
+    oldvalue( sm.granularity() ),
+    newvalue( value )
+{
+}
+
+void ModifyScheduleManagerSchedulingGranularityCmd::execute()
+{
+    m_sm.setGranularity( newvalue );
+}
+
+void ModifyScheduleManagerSchedulingGranularityCmd::unexecute()
+{
+    m_sm.setGranularity( oldvalue );
+}
+
 CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager *sm, const QString& name )
     : NamedCommand( name ),
     m_node( node ),
@@ -3526,28 +3540,16 @@ ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd(  KLocale *
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
-#if KDE_IS_VERSION(4,4,0)
     m_oldvalue(locale->monetaryDecimalPlaces())
-#else
-    m_oldvalue( locale->fracDigits() )
-#endif
 {
 };
 void ModifyCurrencyFractionalDigitsCmd::execute()
 {
-#if KDE_IS_VERSION(4,4,0)
     m_locale->setMonetaryDecimalPlaces(m_newvalue);
-#else
-    m_locale->setFracDigits( m_newvalue );
-#endif
 }
 void ModifyCurrencyFractionalDigitsCmd::unexecute()
 {
-#if KDE_IS_VERSION(4,4,0)
     m_locale->setMonetaryDecimalPlaces(m_oldvalue);
-#else
-    m_locale->setFracDigits( m_oldvalue );
-#endif
 }
 
 ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name )

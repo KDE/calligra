@@ -65,8 +65,8 @@ void KoColorConversionSystem::connectToEngine(Node* _node, Node* _engine)
     Vertex* v2 = createVertex(_engine, _node);
     v1->conserveColorInformation = !_node->isGray;
     v2->conserveColorInformation = !_node->isGray;
-    v1->conserveDynamicRange = !_node->isHdr;
-    v2->conserveDynamicRange = !_node->isHdr;
+    v1->conserveDynamicRange = _engine->isHdr;
+    v2->conserveDynamicRange = _engine->isHdr;
 }
 
 KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoColorSpaceEngine* engine)
@@ -95,7 +95,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
             n->init(csf);
         }
         else {
-            warnPigment << "Cannot add node for " << csf->name() << ", since there are no profiles available";
+            dbgPigment << "Cannot add node for " << csf->name() << ", since there are no profiles available";
         }
     } else {
         // Initialise the nodes

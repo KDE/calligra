@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=ring-front
+Name[bs]=prednji prsten
 Name[ca]=anell frontal
 Name[ca@valencia]=anell frontal
+Name[da]=ring-forfra
 Name[el]=ring-front
 Name[es]=frente de anillo
 Name[et]=Hoidik eestvaates
+Name[fr]=ring-front
+Name[gl]=Anel frontal
+Name[hu]=gyűrű-elől
 Name[it]=anello-fronte
 Name[kk]=Сақина (алды)
 Name[nb]=ring-foran
@@ -15,6 +20,7 @@ Name[pt_BR]=anel (frente)
 Name[ru]=Ободок (спереди)
 Name[sk]=ring-front
 Name[sv]=ring-framsida
+Name[tr]=Ön Halka
 Name[uk]=Злучник (спереду)
 Name[x-test]=xxring-frontxx
 Name[zh_TW]=環狀-前

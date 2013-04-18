@@ -902,14 +902,12 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
-                           int maxCols, int maxRows, OdfSavingContext& tableContext);
+    void saveOdfColRowCell(int maxCols, int maxRows, OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                      OdfSavingContext& tableContext);
+    void saveOdfCells(int row, int maxCols, OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument

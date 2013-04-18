@@ -1,13 +1,20 @@
 [Desktop Entry]
 Name=Distributor
+Name[bs]=Distributer
 Name[ca]=Distribuïdor
 Name[ca@valencia]=Distribuïdor
 Name[cs]=Distributor
+Name[da]=Distributor
 Name[el]=Κατανεμητής
 Name[es]=Distribuidor
 Name[et]=Levitaja
+Name[fr]=Distributeur
+Name[gl]=Distribuidor
+Name[ia]=Distributor
 Name[it]=Distributore
 Name[kk]=Үлестіргіш
+Name[lt]=Platintojas
+Name[mr]=वितरक
 Name[nb]=Fordeler
 Name[nl]=Verdeler
 Name[pl]=Dystrybutor
@@ -19,4 +26,5 @@ Name[sv]=Fördelare
 Name[ug]=تەمىنلىگۈچى
 Name[uk]=Розповсюджувач
 Name[x-test]=xxDistributorxx
+Name[zh_CN]=分配器
 Name[zh_TW]=發布器

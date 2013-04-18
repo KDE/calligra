@@ -5,7 +5,8 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="planworkrc"/>
   <group name="Views">
-    <entry name="TaskWorkPackageView" type="String">
-    </entry>
+    <entry name="CurrentView" type="Int"></entry>
+    <entry name="TaskWorkPackageView" type="String"></entry>
+    <entry name="TaskWPGanttView" type="String"></entry>
   </group>
 </kcfg>

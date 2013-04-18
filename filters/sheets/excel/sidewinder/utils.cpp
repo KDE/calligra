@@ -71,7 +71,7 @@ QString readByteString(const void* p, unsigned length, unsigned maxSize, bool* e
     if (size) *size = length;
     if (length > maxSize) {
         if (*error) *error = true;
-        return QString::null;
+        return QString();
     }
 
     char* buffer = new char[length+1];
@@ -93,7 +93,7 @@ QString readTerminatedUnicodeChars(const void* p, unsigned* pSize, unsigned maxS
     while (true) {
         if (size+2 > maxSize) {
             if (*error) *error = true;
-            return QString::null;
+            return QString();
         }
         unsigned uchar = readU16(data + offset);
         size += 2;
@@ -112,7 +112,7 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
 
     if (maxSize < 1) {
         if (*error) *error = true;
-        return QString::null;
+        return QString();
     }
 
     unsigned formatRuns = 0;
@@ -121,7 +121,7 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
     if (richText) {
         if (offset + 2 > maxSize) {
             if (*error) *error = true;
-            return QString::null;
+            return QString();
         }
         formatRuns = readU16(data + offset);
         offset += 2;
@@ -130,7 +130,7 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
     if (asianPhonetics) {
         if (offset + 4 > maxSize) {
             if (*error) *error = true;
-            return QString::null;
+            return QString();
         }
         asianPhoneticsSize = readU32(data + offset);
         offset += 4;
@@ -142,7 +142,7 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
     if (asianPhonetics) size += asianPhoneticsSize;
     if (size > maxSize) {
         if (*error) *error = true;
-        return QString::null;
+        return QString();
     }
     QString str;
     for (unsigned k = 0; k < length; k++) {
@@ -150,7 +150,7 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
         if (unicode) {
             if (size + 2 > maxSize) {
                 if (*error) *error = true;
-                return QString::null;
+                return QString();
             }
             uchar = readU16(data + offset);
             offset += 2;
@@ -158,7 +158,7 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
         } else {
             if (size + 1 > maxSize) {
                 if (*error) *error = true;
-                return QString::null;
+                return QString();
             }
             uchar = data[offset++];
             size++;
@@ -167,7 +167,7 @@ QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
         if (offset == continuePosition && k < length - 1) {
             if (size + 1 > maxSize) {
                 if (*error) *error = true;
-                return QString::null;
+                return QString();
             }
             unicode = data[offset] & 1;
             size++;
@@ -185,7 +185,7 @@ QString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool
 
     if (maxSize < 1) {
         if (*error) *error = true;
-        return QString::null;
+        return QString();
     }
 
     unsigned char flags = data[0];
@@ -221,7 +221,7 @@ std::ostream& operator<<(std::ostream& s, const QByteArray& d)
 
 std::ostream& operator<<(std::ostream& s, const QUuid& uuid)
 {
-    return s << uuid.toString().toAscii().data();
+    return s << uuid.toString().toLatin1().constData();
 }
 
 Value errorAsValue(int errorCode)

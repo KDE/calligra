@@ -1,11 +1,11 @@
 #!/usr/bin/env kross
 
 """
-Python script to import content from a vCard file to KSpread.
+Python script to import content from a vCard file to Sheets.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
@@ -15,6 +15,8 @@ except ImportError:
     raise "Failed to import required python module: VObject - iCalendar and vCard Library"
 
 import os, Kross, KSpread
+
+T = Kross.module("kdetranslation")
 
 class MyConfig:
     def __init__(self):
@@ -29,20 +31,20 @@ class MyDialog:
         self.config = config
 
         forms = Kross.module("forms")
-        dialog = forms.createDialog("Import vCard")
+        dialog = forms.createDialog(T.i18n("Import vCard"))
         #dialog.minimumWidth = 400
         #dialog.minimumHeight = 300
         dialog.setButtons("Ok|Cancel")
         dialog.setFaceType("List") #Auto Plain List Tree Tabbed
         
-        filepage = dialog.addPage("Open", "vCard File", "document-open")
+        filepage = dialog.addPage(T.i18n("Open"), T.i18n("vCard File"), "document-open")
         #deffile = "/home/kde4/vcardtest/addressbook.vcf" #"kfiledialog:///kspreadvcardimport"
         deffile = "kfiledialog:///kspreadvcardimport"
         self.openwidget = forms.createFileWidget(filepage, deffile)
         self.openwidget.setMode("Opening")
-        self.openwidget.setFilter("*.vcf|vCard Files\n*|All Files")
+        self.openwidget.setFilter("*.vcf|%(1)s\n*|%(2)s" % { '1' : T.i18n("vCard Files"), '2' : T.i18n("All Files") } )
         
-        datapage = dialog.addPage("Import","Import to sheet beginning at cell","document-import")
+        datapage = dialog.addPage(T.i18n("Import"),T.i18n("Import to sheet beginning at cell"),"document-import")
         self.sheetslistview = KSpread.createSheetsListView(datapage)
         self.sheetslistview.setEditorType("Cell")
 
@@ -51,11 +53,11 @@ class MyDialog:
 
         vcardfilename = self.openwidget.selectedFile()
         if not os.path.isfile(vcardfilename):
-            raise "File '%s' not found." % vcardfilename
+            raise Exception, T.i18n("File '%1' not found.", [vcardfilename])
 
         currentSheet = self.sheetslistview.sheet()
         if not currentSheet:
-            raise "No current sheet."
+            raise Exception, T.i18n("No current sheet.")
 
         self.importVCardFile(vcardfilename, currentSheet)
 
@@ -65,7 +67,7 @@ class MyDialog:
         
         writer = KSpread.writer()
         if not writer.setSheet(currentSheet):
-            raise "Invalid sheet \"%s\" defined." % currentSheet
+            raise Exception, T.i18n("Invalid sheet \"%1\" defined.", [currentSheet])
 
         writer.next() #hack
         writer.next() #hack

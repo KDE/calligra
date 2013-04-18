@@ -24,7 +24,6 @@
 #include <QFile>
 #include <QString>
 #include <QList>
-//Added by qt3to4:
 #include <QTextStream>
 
 #include <kpluginfactory.h>

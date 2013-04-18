@@ -50,7 +50,7 @@
 
 
 
-KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds, Qt::WFlags f)
+KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
         : KisConfigWidget(parent, f), m_histogram(0)
 {
     Q_ASSERT(dev);
@@ -92,7 +92,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     if(keys.size() > 0) {
         KoHistogramProducerFactory *hpf;
         hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
-	m_histogram = new KisHistogram(m_dev, bounds, hpf->generate(), LINEAR);
+	m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
     }
 
     connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
@@ -176,7 +176,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
     m_page->curveWidget->setPixmap(getHistogram());
     m_page->cmbChannel->setCurrentIndex(ch);
 
-    // Getting range accepted by chahhel
+    // Getting range accepted by channel
     KoChannelInfo *channel = m_dev->colorSpace()->channels()[m_activeCh];
     int order = BITS_PER_BYTE * channel->size();
     int maxValue = pwr2(order);
@@ -223,8 +223,9 @@ KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
     // updating current state
-    m_curves[m_activeCh] = m_page->curveWidget->curve();
-
+    if (m_activeCh < m_curves.size()) {
+        m_curves[m_activeCh] = m_page->curveWidget->curve();
+    }
     cfg->setCurves(m_curves);
 
     return cfg;
@@ -359,7 +360,7 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
     QString paramName;
 
     for (int i = 0; i < m_curves.size(); ++i) {
-        paramName = QString::fromAscii("curve") + QString::number(i);
+        paramName = QLatin1String("curve") + QString::number(i);
         t = doc.createElement("param");
         t.setAttribute("name", paramName);
 
@@ -384,9 +385,9 @@ KisPerChannelFilter::KisPerChannelFilter() : KisColorTransformationFilter(id(), 
     setColorSpaceIndependence(TO_LAB16);
 }
 
-KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
-    return new KisPerChannelConfigWidget(parent, dev, image->bounds());
+    return new KisPerChannelConfigWidget(parent, dev);
 }
 
 KisFilterConfiguration * KisPerChannelFilter::factoryConfiguration(const KisPaintDeviceSP) const

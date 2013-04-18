@@ -1,12 +1,19 @@
 [Desktop Entry]
 Name=Androgynous Person
+Name[bs]=Dvospolna Osoba
 Name[ca]=Persona andrògina
 Name[ca@valencia]=Persona andrògina
+Name[da]=Kønsløs person
+Name[de]=Androgyne Person
 Name[el]=Ανδρόγυνο
 Name[es]=Persona andrógina
 Name[et]=Androgüün
+Name[fr]=Personne androgyne
+Name[gl]=Andróxeno
+Name[hu]=Kétnemű személy
 Name[it]=Persona androgina
 Name[kk]=Жыныссыз тұлға
+Name[lt]=Belytis asmuo
 Name[nb]=Androgyn person
 Name[nl]=Androgyn persoon
 Name[pl]=Obojnacza osoba
@@ -14,6 +21,7 @@ Name[pt]=Pessoa Andrógina
 Name[pt_BR]=Pessoa andrógena
 Name[ru]=Личность неизвестного пола
 Name[sk]=Obojpohlavná osoba
+Name[sl]=Androginska oseba
 Name[sv]=Androgyn person
 Name[uk]=Особа невідомої статі
 Name[x-test]=xxAndrogynous Personxx

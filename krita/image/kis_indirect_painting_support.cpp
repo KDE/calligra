@@ -22,8 +22,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QReadWriteLock>
-#include <QList>
-#include <QRect>
 
 #include <KoCompositeOp.h>
 #include "kis_layer.h"
@@ -39,9 +37,6 @@ struct KisIndirectPaintingSupport::Private {
     quint8 compositeOpacity;
     QBitArray channelFlags;
     QReadWriteLock lock;
-
-    QMutex dirtyRegionMutex;
-    QList<QRect> dirtyRegion;
 };
 
 
@@ -58,7 +53,6 @@ KisIndirectPaintingSupport::~KisIndirectPaintingSupport()
 
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t)
 {
-    d->dirtyRegion.clear();
     d->temporaryTarget = t;
 }
 
@@ -117,26 +111,6 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
     return d->temporaryTarget;
 }
 
-void KisIndirectPaintingSupport::setDirty(const QRect &rect)
-{
-    lockTemporaryTarget();
-    if(hasTemporaryTarget()) {
-        addIndirectlyDirtyRect(rect);
-    }
-    unlockTemporaryTarget();
-}
-
-void KisIndirectPaintingSupport::addIndirectlyDirtyRect(const QRect &rect)
-{
-    d->dirtyRegion << rect;
-}
-
-QList<QRect> KisIndirectPaintingSupport::indirectlyDirtyRegion()
-{
-    QMutexLocker locker(&d->dirtyRegionMutex);
-    return d->dirtyRegion;
-}
-
 void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
 {
     mergeToLayerImpl(layer, undoAdapter, transactionText);
@@ -169,9 +143,7 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
     if(undoAdapter) {
         gc.beginTransaction(transactionText);
     }
-
-    QList<QRect> dirtyRegion = indirectlyDirtyRegion();
-    foreach(const QRect& rc, dirtyRegion) {
+    foreach (const QRect &rc, d->temporaryTarget->region().rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     d->temporaryTarget = 0;

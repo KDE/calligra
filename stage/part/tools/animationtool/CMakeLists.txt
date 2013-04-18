@@ -7,6 +7,15 @@ set(calligrastagetoolanimation_PART_SRCS
     KPrAnimationToolFactory.cpp
     KPrPageEffectDocker.cpp
     KPrClickActionDocker.cpp
+    KPrShapeAnimationDocker.cpp
+    KPrEditAnimationsWidget.cpp
+    KPrCollectionItemModel.cpp
+    KPrAnimationGroupProxyModel.cpp
+    KPrAnimationSelectorWidget.cpp
+    KPrPredefinedAnimationsLoader.cpp
+    KPrAnimationsTimeLineView.cpp
+    KPrTimeLineHeader.cpp
+    KPrTimeLineView.cpp
     )
 
 

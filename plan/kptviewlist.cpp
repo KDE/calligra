@@ -31,14 +31,14 @@
 #include <QTimer>
 
 #include <kmenu.h>
-#include <KMessageBox>
-#include <KComboBox>
+#include <kmessagebox.h>
+#include <kcombobox.h>
 
 #include <KoIcon.h>
 #include "KoDocument.h"
 
 #include "kptviewbase.h"
-#include "kptpart.h"
+#include "kptmaindocument.h"
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
 #include "kptschedulemodel.h"
@@ -348,7 +348,7 @@ ViewListItem *ViewListTreeWidget::category( const KoView *view ) const
 }
 
 //-----------------------
-ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXmlGuiWindow *parent )
+ViewListWidget::ViewListWidget( MainDocument *part, QWidget *parent )//QString name, KXmlGuiWindow *parent )
     : QWidget( parent ),
     m_part( part ),
     m_prev( 0 ),

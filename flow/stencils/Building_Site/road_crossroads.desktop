@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Road Crossroads
+Name[bs]=Raskršće
 Name[ca]=Encreuament de carreteres
 Name[ca@valencia]=Encreuament de carreteres
+Name[da]=Vejkryds
+Name[de]=Straßenkreuzung
 Name[el]=Διασταυρώσεις
 Name[es]=Cruce de carreteras
 Name[et]=Risttee
 Name[fi]=Tienristeys
+Name[fr]=Croisements de routes
+Name[gl]=Intersección
 Name[it]=Incroci stradali
 Name[kk]=Жол қиылысы
 Name[nb]=Veikryss
@@ -15,7 +20,10 @@ Name[pt]=Cruzamento de Estrada
 Name[pt_BR]=Cruzamento da estrada
 Name[ru]=Перекрёсток
 Name[sk]=Cestné križovatky
+Name[sl]=Križišče
 Name[sv]=Vägkorsning
+Name[tr]=Yol Kesişimi
 Name[uk]=Перехрестя
 Name[x-test]=xxRoad Crossroadsxx
+Name[zh_CN]=十字路口
 Name[zh_TW]=十字路

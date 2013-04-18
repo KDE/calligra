@@ -40,9 +40,7 @@ class Cursor;
 
 typedef KexiDB::AutodeletedList<KexiDB::RecordData*> KexiTableViewDataBase;
 
-/*! Reimplements QPtrList to allow configurable sorting and more.
-  Original author: Till Busch.
-  Reimplemented by Jarosław Staniek.
+/*! Reimplements list of records to allow configurable sorting and more.
 */
 class KEXIDATAVIEWCOMMON_EXPORT KexiTableViewData : public QObject, protected KexiTableViewDataBase
 {
@@ -125,8 +123,8 @@ public:
     }
 
     /*! \return columns information */
-    inline KexiTableViewColumn::List& columns() {
-        return m_columns;
+    inline KexiTableViewColumn::List* columns() {
+        return &m_columns;
     }
 
     /*! \return true if data is not editable. Can be set using setReadOnly()
@@ -250,8 +248,8 @@ public:
     inline KexiDB::RecordData* last() {
         return KexiTableViewDataBase::last();
     }
-    inline int indexOf(KexiDB::RecordData* record, int from = 0) const {
-        return KexiTableViewDataBase::indexOf(record, from);
+    inline int indexOf(const KexiDB::RecordData* record, int from = 0) const {
+        return KexiTableViewDataBase::indexOf(const_cast<KexiDB::RecordData*>(record), from);
     }
     inline void removeFirst() {
         KexiTableViewDataBase::removeFirst();

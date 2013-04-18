@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>633</width>
-    <height>569</height>
+    <width>600</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,188 +23,78 @@
    <enum>Qt::CustomContextMenu</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="frame_2">
-     <property name="focusPolicy">
-      <enum>Qt::StrongFocus</enum>
+    <widget class="QStackedWidget" name="ui_stack">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <property name="contextMenuPolicy">
-      <enum>Qt::NoContextMenu</enum>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QFrame" name="valuesFrame">
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <property name="margin">
-          <number>0</number>
+     <widget class="QWidget" name="page_7">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+           <widget class="PerformanceTableView" name="ui_performancetable">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAsNeeded</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::NoSelection</enum>
+            </property>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>20</number>
+            </attribute>
+           </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="ui_chartframe">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
          </property>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QDateEdit" name="dateEdit">
-             <property name="calendarPopup">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="PerformanceTableWidget" name="ui_performancetable">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <attribute name="horizontalHeaderCascadingSectionResizes">
-            <bool>true</bool>
-           </attribute>
-           <attribute name="verticalHeaderCascadingSectionResizes">
-            <bool>true</bool>
-           </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>25</number>
-           </attribute>
-           <attribute name="verticalHeaderStretchLastSection">
-            <bool>false</bool>
-           </attribute>
-           <row>
-            <property name="text">
-             <string>Cost:</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>Effort:</string>
-            </property>
-           </row>
-           <column>
-            <property name="text">
-             <string>BCWS</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>BCWP</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>ACWP</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>CPI</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>SPI</string>
-            </property>
-           </column>
-           <item row="0" column="0">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="0" column="1">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="0" column="2">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="0" column="3">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="0" column="4">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="1" column="0">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="1" column="1">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="1" column="2">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="1" column="3">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-           <item row="1" column="4">
-            <property name="textAlignment">
-             <set>AlignRight|AlignVCenter</set>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QFrame" name="frame">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Sunken</enum>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="margin">
-          <number>0</number>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
          </property>
-         <item>
-          <widget class="KDChart::Chart" name="ui_chart" native="true"/>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="KDChart::Chart" name="ui_chart" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_8">
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTableView" name="ui_tableView"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -217,8 +107,8 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>PerformanceTableWidget</class>
-   <extends>QTableWidget</extends>
+   <class>PerformanceTableView</class>
+   <extends>QTableView</extends>
    <header>kptperformancetablewidget.h</header>
   </customwidget>
  </customwidgets>

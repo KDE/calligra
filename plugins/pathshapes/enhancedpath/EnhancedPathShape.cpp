@@ -99,7 +99,7 @@ void EnhancedPathShape::updatePath(const QSizeF & size)
         m_mirrorMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
         QTransform matrix(1.0, 0.0, 0.0, 1.0, m_viewBoxOffset.x(), m_viewBoxOffset.y());
 
-        // if stretch points are set than stretch the the path manually
+        // if stretch points are set than stretch the path manually
         if (isStretched) {
             //if the path was stretched manually the stretch matrix is not more valid
             //and it has to be recalculated so that stretching in x and y direction is the same
@@ -173,11 +173,11 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
     if (reference.isEmpty())
         return 0.0;
 
-    QChar c = reference[0];
+    const char c = reference[0].toLatin1();
 
     qreal res = 0.0;
 
-    switch(c.toAscii()) {
+    switch(c) {
     // referenced modifier
     case '$': {
         bool success = false;
@@ -226,9 +226,9 @@ void EnhancedPathShape::modifyReference(const QString &reference, qreal value)
     if (reference.isEmpty())
         return;
 
-    QChar c = reference[0];
+    const char c = reference[0].toLatin1();
 
-    if (c.toAscii() == '$') {
+    if (c == '$') {
         bool success = false;
         int modifierIndex = reference.mid(1).toInt(&success);
         if (modifierIndex >= 0 && modifierIndex < m_modifiers.count())
@@ -245,8 +245,8 @@ EnhancedPathParameter * EnhancedPathShape::parameter(const QString & text)
         return parameterIt.value();
     } else {
         EnhancedPathParameter *parameter = 0;
-        QChar c = text[0];
-        if (c.toAscii() == '$' || c.toAscii() == '?') {
+        const char c = text[0].toLatin1();
+        if (c == '$' || c == '?') {
             parameter = new EnhancedPathReferenceParameter(text, this);
         } else {
             bool success = false;

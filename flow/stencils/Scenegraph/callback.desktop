@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=callback
+Name[bs]=povratni poziv
 Name[ca]=crida de retorn
 Name[ca@valencia]=crida de retorn
 Name[cs]=zpětné volání
+Name[da]=callback
 Name[el]=επανάκληση
 Name[es]=devolución de llamada
 Name[et]=Tagasiside
+Name[fr]=callback
+Name[gl]=Volta
 Name[it]=callback
 Name[kk]=қарсы шақыру
 Name[nb]=tilbakekall
@@ -16,6 +20,7 @@ Name[pt]=retorno
 Name[pt_BR]=retorno
 Name[ru]=Возврат
 Name[sk]=spätné volanie
+Name[sl]=povratni klic
 Name[sv]=återanrop
 Name[uk]=Повернення
 Name[x-test]=xxcallbackxx

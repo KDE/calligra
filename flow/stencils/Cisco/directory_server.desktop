@@ -1,14 +1,19 @@
 [Desktop Entry]
 Name=Directory Server
 Name[bg]=Директориен сървър
+Name[bs]=Server direktorijuma
 Name[ca]=Servidor de directoris
 Name[ca@valencia]=Servidor de directoris
+Name[da]=Directory Server
 Name[de]=Verzeichnis-Server
 Name[el]=Εξυπηρετητής καταλόγου
 Name[es]=Servidor de directorio
 Name[et]=Kataloogiserver
+Name[fr]=Directory Server
+Name[gl]=Servidor de directorios
 Name[it]=Server di directory
 Name[kk]=Каталог сервері
+Name[lt]=Katalogo serveris
 Name[nb]=Katalogtjener
 Name[nds]=Verteken-Server
 Name[nl]=Directory-server
@@ -17,6 +22,7 @@ Name[pt]=Servidor de Directório
 Name[pt_BR]=Servidor de diretório
 Name[ru]=Сервер каталогов
 Name[sk]=Adresárový server
+Name[sl]=Imeniški strežnik
 Name[sv]=Katalogserver
 Name[uk]=Сервер тек
 Name[x-test]=xxDirectory Serverxx

@@ -1,13 +1,18 @@
 [Desktop Entry]
 Name=Detector
+Name[bs]=Detektor
 Name[ca]=Detector
 Name[ca@valencia]=Detector
+Name[da]=Detektor
 Name[de]=Detektor
 Name[el]=Ανιχνευτής
 Name[es]=Detector
 Name[et]=Detektor
+Name[fr]=Detector
+Name[gl]=Detector
 Name[it]=Detector
 Name[kk]=Сезгіш
+Name[lt]=Detektorius
 Name[nb]=Detektor
 Name[nl]=Detector
 Name[pl]=Detektor
@@ -15,6 +20,7 @@ Name[pt]=Detector
 Name[pt_BR]=Detector
 Name[ru]=Датчик
 Name[sk]=Detektor
+Name[sl]=Detektor
 Name[sv]=Detektor
 Name[uk]=Індикатор
 Name[x-test]=xxDetectorxx

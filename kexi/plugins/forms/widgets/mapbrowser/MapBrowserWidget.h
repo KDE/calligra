@@ -29,8 +29,8 @@
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
 class MapBrowserWidget : public Marble::MarbleWidget, 
-			 public KFormDesigner::FormWidgetInterface,
-			 public KexiFormDataItemInterface    
+                         public KFormDesigner::FormWidgetInterface,
+                         public KexiFormDataItemInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)

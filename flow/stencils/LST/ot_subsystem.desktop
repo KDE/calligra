@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Output Transducer
+Name[bs]=Izlazna sonda
 Name[ca]=Sortida del transductor
 Name[ca@valencia]=Eixida del transductor
+Name[da]=Output Transducer
+Name[de]=Ausgabe-Signalgeber
 Name[el]=Μετατροπέας εξόδου
 Name[es]=Transductor de salida
 Name[et]=Väljundi tõlgendaja
+Name[fr]=Output Transducer
+Name[gl]=Transdutor de saída
 Name[it]=Trasduttore di uscita
 Name[kk]=Шығыс түрлендіргіш
 Name[nb]=Utgangsomvandler
@@ -17,4 +22,5 @@ Name[sk]=Výstupný prevodník
 Name[sv]=Utgångsomvandlare
 Name[uk]=Перетворювач виходу
 Name[x-test]=xxOutput Transducerxx
+Name[zh_CN]=输出换能器
 Name[zh_TW]=輸出轉換器

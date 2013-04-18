@@ -27,8 +27,8 @@
 #include <KoUnit.h>
 #include <SvgUtil.h>
 
-#include <KDebug>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <kpluginfactory.h>
 
 #include <QBuffer>
 #include <QImage>
@@ -849,7 +849,8 @@ void KarbonImport::loadSpiral(const KoXmlElement &element)
     enum SpiralType { round, rectangular };
 
     qreal radius  = qAbs(KoUnit::parseValue(element.attribute("radius")));
-    qreal angle = element.attribute("angle").toDouble();
+    // TODO: proper way to use "angle" value in transformation code below
+//     qreal angle = element.attribute("angle").toDouble();
     qreal fade = element.attribute("fade").toDouble();
 
     qreal cx = KoUnit::parseValue(element.attribute("cx"));
@@ -1173,7 +1174,8 @@ void KarbonImport::loadText(const KoXmlElement &element)
     enum Position { Above, On, Under };
 
     //int position = element.attribute( "position", "0" ).toInt();
-    int alignment = element.attribute("alignment", "0").toInt();
+    // TODO: apply alignment value
+//     int alignment = element.attribute("alignment", "0").toInt();
     /* TODO reactivate when we have a shadow implementation
     bool shadow = ( element.attribute( "shadow" ).toInt() == 1 );
     bool translucentShadow = ( element.attribute( "translucentshadow" ).toInt() == 1 );

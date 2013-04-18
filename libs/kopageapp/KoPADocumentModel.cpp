@@ -55,6 +55,7 @@
 
 KoPADocumentModel::KoPADocumentModel( QObject* parent, KoPADocument *document )
 : KoDocumentSectionModel( parent )
+, m_document(0)
 , m_master(false)
 , m_lastContainer( 0 )
 {
@@ -333,8 +334,6 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
     QSize size(thumbSize.width(), thumbSize.height());
     KoShapePainter shapePainter;
 
-    QList<KoShape*> shapes;
-
     KoPAPageBase *page = dynamic_cast<KoPAPageBase*>(shape);
     if (page) { // We create a thumbnail with actual width / height ratio for page
         KoZoomHandler zoomHandler;
@@ -350,10 +349,11 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
         return pixmap.toImage();
     }
 
-    shapes.append( shape );
-    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
-    if( container )
+    QList<KoShape*> shapes;
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+    if (container)
         shapes = container->shapes();
+    shapes.append(shape);
 
     shapePainter.setShapes( shapes );
 
@@ -624,12 +624,23 @@ QModelIndex KoPADocumentModel::parentIndexFromShape( const KoShape * child )
 
 void KoPADocumentModel::setDocument( KoPADocument* document )
 {
+    if (m_document == document) {
+        return;
+    }
+    if (m_document) {
+        disconnect( m_document, SIGNAL(pageAdded( KoPAPageBase* ) ), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(pageRemoved( KoPAPageBase* ) ), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(shapeAdded( KoShape* ) ), this, SLOT( update() ) );
+        disconnect( m_document, SIGNAL(shapeRemoved( KoShape* ) ), this, SLOT( update() ) );
+    }
     m_document = document;
 
     if ( m_document )
     {
         connect( m_document, SIGNAL(pageAdded( KoPAPageBase* ) ), this, SLOT( update() ) );
         connect( m_document, SIGNAL(pageRemoved( KoPAPageBase* ) ), this, SLOT( update() ) );
+        connect( m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT( update() ) );
         connect( m_document, SIGNAL(shapeAdded( KoShape* ) ), this, SLOT( update() ) );
         connect( m_document, SIGNAL(shapeRemoved( KoShape* ) ), this, SLOT( update() ) );
     }

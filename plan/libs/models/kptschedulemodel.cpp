@@ -133,7 +133,7 @@ void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manag
         endRemoveRows();
         return;
     }
-    Q_ASSERT( manager == m_manager );
+    Q_ASSERT( manager == m_manager ); Q_UNUSED( manager );
     endRemoveRows();
     m_manager = 0;
 }
@@ -275,6 +275,11 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
                 break;
             case ScheduleModel::SchedulePlannedStart: break;
             case ScheduleModel::SchedulePlannedFinish: break;
+            case ScheduleModel::ScheduleGranularity:
+                if ( ! sm->supportedGranularities().isEmpty() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
             default: flags |= Qt::ItemIsEditable; break;
         }
         return flags;
@@ -762,6 +767,64 @@ QVariant ScheduleItemModel::isScheduled( const QModelIndex &index, int role ) co
     return QVariant();
 }
 
+QVariant ScheduleItemModel::granularity(const QModelIndex &index, int role) const
+{
+    ScheduleManager *sm = manager( index );
+    if ( sm == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::EditRole:
+        case Role::EnumListValue:
+            return qMin( sm->granularity(), sm->supportedGranularities().count() - 1 );
+        case Qt::DisplayRole: {
+            QList<long unsigned int> lst = sm->supportedGranularities();
+            if ( lst.isEmpty() ) {
+                return i18nc( "Scheduling granularity not supported", "None" );
+            }
+            int idx = sm->granularity();
+            qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
+            return KGlobal::locale()->formatDuration( g );
+        }
+        case Qt::ToolTipRole: {
+            QList<long unsigned int> lst = sm->supportedGranularities();
+            if ( lst.isEmpty() ) {
+                return i18nc( "@info:tooltip", "Scheduling granularity not supported" );
+            }
+            int idx = sm->granularity();
+            qulonglong g = idx < lst.count() ? lst[ idx ] : lst.last();
+            return i18nc( "@info:tooltip", "Selected scheduling granularity: %1", KGlobal::locale()->formatDuration( g ) );
+        }
+        case Qt::TextAlignmentRole:
+            return Qt::AlignRight;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+        case Role::EnumList: {
+            QStringList sl;
+            foreach ( long unsigned int v, sm->supportedGranularities() ) {
+                sl << KGlobal::locale()->formatDuration( v );
+            }
+            return sl;
+        }
+    }
+    return QVariant();
+}
+
+bool ScheduleItemModel::setGranularity( const QModelIndex &index, const QVariant &value, int role )
+{
+    ScheduleManager *sm = manager( index );
+    if ( sm != 0 ) {
+        switch ( role ) {
+            case Qt::EditRole: {
+                emit executeCommand( new ModifyScheduleManagerSchedulingGranularityCmd( *sm, value.toInt(), i18nc( "(qtundo-format)", "Modify scheduling granularity" ) ) );
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column();
@@ -778,6 +841,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::SchedulePlannedStart: result = projectStart(  index, role ); break;
         case ScheduleModel::SchedulePlannedFinish: result = projectEnd( index, role ); break;
         case ScheduleModel::ScheduleScheduler: result = scheduler( index, role ); break;
+        case ScheduleModel::ScheduleGranularity: result = granularity( index, role ); break;
         case ScheduleModel::ScheduleScheduled: result = isScheduled( index, role ); break;
         default:
             kDebug(planDbg())<<"data: invalid display value column"<<index.column();
@@ -786,7 +850,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
-            result = " ";
+            result = ' ';
         }
         return result;
     }
@@ -811,6 +875,7 @@ bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value
         case ScheduleModel::SchedulePlannedStart: return false;
         case ScheduleModel::SchedulePlannedFinish: return false;
         case ScheduleModel::ScheduleScheduler: return setScheduler( index, value, role ); break;
+        case ScheduleModel::ScheduleGranularity: return setGranularity( index, value, role );
         case ScheduleModel::ScheduleScheduled: break;
         default:
             qWarning("data: invalid display value column %d", index.column());
@@ -833,6 +898,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 case ScheduleModel::SchedulePlannedStart: return i18n( "Planned Start" );
                 case ScheduleModel::SchedulePlannedFinish: return i18n( "Planned Finish" );
                 case ScheduleModel::ScheduleScheduler: return i18n( "Scheduler" );
+                case ScheduleModel::ScheduleGranularity: return i18nc( "title:column", "Granularity" );
                 case ScheduleModel::ScheduleScheduled: return i18n( "Scheduled" );
                 default: return QVariant();
             }
@@ -851,6 +917,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
             case ScheduleModel::SchedulePlannedStart: return ToolTip::scheduleStart();
             case ScheduleModel::SchedulePlannedFinish: return ToolTip::scheduleFinish();
             case ScheduleModel::ScheduleScheduler: return ToolTip::scheduleScheduler();
+            case ScheduleModel::ScheduleGranularity: return ToolTip::scheduleGranularity();
             case ScheduleModel::ScheduleScheduled: return QVariant();
             default: return QVariant();
         }
@@ -874,7 +941,7 @@ QAbstractItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *p
         case ScheduleModel::ScheduleDirection: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleOverbooking: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleDistribution: return new EnumDelegate( parent );
-//        case ScheduleModel::ScheduleCalculate: return new EnumDelegate( parent );
+        case ScheduleModel::ScheduleGranularity: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleScheduler: return new EnumDelegate( parent );
     }
     return 0;

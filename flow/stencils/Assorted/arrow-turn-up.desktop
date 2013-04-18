@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Turn-Up Arrow
+Name[bs]=Strelica za pojačavanje
 Name[ca]=Fletxa cap amunt
 Name[ca@valencia]=Fletxa cap amunt
 Name[da]=Pil der drejer op
+Name[de]=Pfeil nach oben drehend
 Name[el]=Στραμμένο άνω βέλος
 Name[es]=Flecha doblada hacia arriba
 Name[et]=Üles pöörav nool
+Name[fr]=Flèche de rotation vers le haut
+Name[gl]=Frecha cara arriba
 Name[hu]=Felfelé kanyarodó nyíl
 Name[it]=Freccia piegata in su
 Name[kk]=Жоғары бұрылыс жебесі
@@ -20,4 +24,5 @@ Name[sk]=Šípka otočiť hore
 Name[sv]=Uppåtsvängd pil
 Name[uk]=Стрілка «поворот вгору»
 Name[x-test]=xxTurn-Up Arrowxx
+Name[zh_CN]=翻折箭头
 Name[zh_TW]=轉向─上箭頭

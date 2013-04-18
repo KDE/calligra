@@ -643,7 +643,8 @@ void add_individual(struct rcps_individual *ind, struct rcps_population *pop) {
 
 	n = slist_node_new(ind);
 	slist_add(pop->individuals, n);
-
+	++pop->size;
+	// what is this? (da)
 	while (slist_count(pop->individuals) > pop->size) {
 		n = slist_last(pop->individuals);
 		if (!n) {
@@ -672,7 +673,7 @@ struct rcps_population *new_population(struct rcps_solver *s,
 
 	pop = (struct rcps_population*)malloc(sizeof(struct rcps_population));
 	pop->individuals = slist_new(individual_cmp);
-	pop->size = s->pop_size;
+	pop->size = 0;
 	for (i = 0; i < s->pop_size; i++) {
 		ind = (struct rcps_individual*)malloc(sizeof(struct rcps_individual));
 		initial(problem, &ind->genome);
@@ -754,9 +755,9 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 		daughter->genome.alternatives = (int*)malloc(p->genome_alternatives * sizeof(int));
 		// select father and mother
 		// XXX we want a configurable bias towards better individuals here
-		i = irand(s->pop_size);
-		j = 1 + irand(s->pop_size - 1);
-		j = (i + j) % s->pop_size;
+		i = irand(s->population->size - 1);
+		j = 1 + irand(s->population->size - 1);
+		j = (i + j) % s->population->size;
 		father = (struct rcps_individual*)slist_node_getdata(
 			slist_at(s->population->individuals, i));
 		mother = (struct rcps_individual*)slist_node_getdata(
@@ -803,8 +804,6 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 		add_individual(daughter, s->population);
 		// check if we have a better individual, if yes reset count
 		f1 = ((struct rcps_individual*)slist_node_getdata(slist_first(
-			s->population->individuals)))->fitness;
-		f2 = ((struct rcps_individual*)slist_node_getdata(slist_last(
 			s->population->individuals)))->fitness;
 		// get the best overuse count
 		best_overuse = son_overuse < daughter_overuse ?
@@ -952,7 +951,7 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 	s->population = new_population(s, p);
 
 	/* here we run the algorithm */
-#ifdef HAVE_PTHREAD	
+#ifdef HAVE_PTHREAD
 	if (s->jobs <= 1) {
 		s->reproductions = run_alg(s, p);
 	}

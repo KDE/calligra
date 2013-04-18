@@ -20,7 +20,7 @@
 
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <db/tableschema.h>
 #include <db/queryschema.h>
 #include <db/utils.h>
@@ -127,15 +127,19 @@ int KexiFieldListModel::rowCount(const QModelIndex& /*parent*/) const
     return d->items.count();
 }
 
-QVariant KexiFieldListModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
+QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
 
-    if (orientation == Qt::Horizontal)
-        return i18n("Field Name");
-    else
-        return QVariant();
+    if (orientation == Qt::Horizontal) {
+        if (section == 0) {
+            return i18n("Field Name");
+        } else if (section == 1) {
+            return i18n("Data Type");
+        }
+    }
+    return QVariant();
 }
 
 QStringList KexiFieldListModel::mimeTypes() const
@@ -167,7 +171,7 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
 
     sourceName = d->schema->name();
 
-    foreach (QModelIndex idx, indexes) {
+    foreach (const QModelIndex &idx, indexes) {
         fields << data(idx, Qt::DisplayRole).toString();
     }
 

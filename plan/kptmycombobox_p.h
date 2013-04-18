@@ -22,7 +22,7 @@
 
 #include "kplato_export.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 
 namespace KPlato
 {
@@ -30,7 +30,7 @@ namespace KPlato
 class MyComboBox : public KComboBox
 {
 public:
-    MyComboBox( QWidget *parent = 0 ) : KComboBox( parent ) {}
+    explicit MyComboBox(QWidget *parent = 0) : KComboBox(parent) {}
 
     void emitActivated( int i ) { emit activated( i ); }
 

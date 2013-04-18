@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Intermediate-Event-Message
+Name[bs]=Poruka srednjeg događaja
 Name[ca]=Intermedi-Esdeveniment-Missatge
 Name[ca@valencia]=Intermedi-Esdeveniment-Missatge
+Name[de]=Zwischenereignis - Nachricht
 Name[el]=Μήνυμα-ενδιάμεσου-γεγονότος
 Name[es]=Mensaje del evento intermedio
 Name[et]=Vahesündmuse sõnum
+Name[fr]=Message d'évènement intermédiaire
+Name[gl]=Evento intermedio de mensaxe
+Name[hu]=Közbülső-Esemény-Üzenet
 Name[it]=Evento-intermedio-Messaggio
 Name[kk]=Аралық-оқиға-хабарлама
 Name[nb]=Mellomliggende-hendelse-melding
@@ -17,4 +22,5 @@ Name[sk]=Intermediate-Event-Message
 Name[sv]=Mellanliggande-händelse-brev
 Name[uk]=Повідомлення проміжної події
 Name[x-test]=xxIntermediate-Event-Messagexx
+Name[zh_CN]=中间事件-消息
 Name[zh_TW]=中介─事件─訊息

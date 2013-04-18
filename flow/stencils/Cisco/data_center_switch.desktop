@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=Data Center Switch
+Name[bs]=Prekidač centra podataka
 Name[ca]=Data Center Switch
 Name[ca@valencia]=Data Center Switch
+Name[da]=Datacenterswitch
+Name[de]=Daten-Center Switch
 Name[el]=Data Center Switch
 Name[es]=Conmutador de centro de datos
 Name[et]=Andmekeskuse kommutaator
+Name[fr]=Data Center Switch
+Name[gl]=Conmutador do centro de datos
 Name[it]=Data Center Switch
 Name[kk]=Орталық дерек қосқышы
+Name[lt]=Duomenų centro perjungiklis
 Name[nb]=Datasentersvitsj
 Name[nl]=Data Center Switch
 Name[pl]=Przełącznik centrum danych

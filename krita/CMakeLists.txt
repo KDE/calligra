@@ -1,20 +1,27 @@
 project(krita)
 
+set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/tests/data/)
 
-# 
+macro(macro_add_unittest_definitions)
+  add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+  add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+  add_definitions(-DFILES_DEFAULT_DATA_DIR="${KRITA_DEFAULT_TEST_DATA_DIR}")
+endmacro()
+
+#
 # The reason for this mode is that the Debug mode disable inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_KRITADEVS "-O2 -g" CACHE STRING "" FORCE)
+    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif(MSVC)
 
+
 include(CheckFunctionExists)
 
-if (NOT WIN32)
 macro_optional_find_package(GLEW)
 macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
 configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
@@ -30,18 +37,11 @@ if(HAVE_OPENGL)
 else(HAVE_OPENGL)
     message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for hardware accelerated rendering.")
 endif(HAVE_OPENGL)
-endif (NOT WIN32)
 
 macro_optional_find_package(OCIO)
 macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
-
-macro_optional_find_package(OIIO)
-macro_log_feature(OIIO_FOUND "OIIO" "The OpenImageIO Lbirary" "https://sites.google.com/site/openimageio/" FALSE "" "Required by the OIIO file import/export filter")
-macro_bool_to_01(OIIO_FOUND HAVE_OIIO)
-configure_file(config-oiio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-oiio.h )
-
 
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
@@ -84,11 +84,13 @@ set(KRITA_INCLUDES
     ${PIGMENT_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
+    ${BASICFLAKES_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
-    
+    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+
     ${EIGEN2_INCLUDE_DIR}
-    
+
     # 'Export' this for use by filters
     CACHE INTERNAL ""
 )
@@ -108,7 +110,9 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
-add_subdirectory( benchmarks )
+if (NOT WIN32)
+    add_subdirectory( benchmarks )
+endif (NOT WIN32)
 
 set(kritapart_PART_SRCS krita_part_init.cc)
 kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
@@ -116,7 +120,7 @@ target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(krita_KDEINIT_SRCS main.cc)
-kde4_add_app_icon(krita_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/krita.png")
+kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
 if (Q_WS_MAC)

@@ -85,7 +85,7 @@ class CALLIGRA_SHEETS_COMMON_EXPORT CanvasItem : public QGraphicsWidget, public 
     Q_OBJECT
 
 public:
-    explicit CanvasItem(Doc* doc);
+    explicit CanvasItem(Doc* doc, QGraphicsItem *parent = 0);
     ~CanvasItem();
 
     virtual QWidget* canvasWidget() {

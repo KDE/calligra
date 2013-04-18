@@ -31,7 +31,7 @@
 #include <KoShapeManager.h>
 
 #include <kglobal.h>
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 FlowPart::FlowPart(QObject *parent)
     : KoPart(parent)
@@ -53,9 +53,9 @@ void FlowPart::setDocument(FlowDocument *document)
 KoView * FlowPart::createViewInstance(QWidget *parent)
 {
     FlowView *view = new FlowView(this, m_document, parent);
-    connect(m_document, SIGNAL(shapeAdded(KoShape *)), view->viewMode(), SLOT(addShape(KoShape *)));
-    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), view->viewMode(), SLOT(removeShape(KoShape *)));
-    connect(m_document, SIGNAL(replaceActivePage(KoPAPageBase *, KoPAPageBase *)), view, SLOT(replaceActivePage(KoPAPageBase *, KoPAPageBase *)));
+    connect(m_document, SIGNAL(shapeAdded(KoShape*)), view->viewMode(), SLOT(addShape(KoShape*)));
+    connect(m_document, SIGNAL(shapeRemoved(KoShape*)), view->viewMode(), SLOT(removeShape(KoShape*)));
+    connect(m_document, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), view, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
     return view;
 }
 

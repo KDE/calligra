@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -115,27 +115,25 @@ void KexiInputTableEdit::init()
         m_lineedit->setAlignment(Qt::AlignRight);
     }
 
-    if (field()->type() == KexiDB::Field::Text && field()->maxLength() > 0) {
-        m_lineedit->setMaxLength(field()->maxLength());
-    }
     setViewWidget(m_lineedit);
     m_calculatedCell = false;
 
 #if 0 //js TODO
-    connect(m_cview->completionBox(), SIGNAL(activated(const QString &)),
-            this, SLOT(completed(const QString &)));
-    connect(m_cview->completionBox(), SIGNAL(highlighted(const QString &)),
-            this, SLOT(completed(const QString &)));
+    connect(m_cview->completionBox(), SIGNAL(activated(QString)),
+            this, SLOT(completed(QString)));
+    connect(m_cview->completionBox(), SIGNAL(highlighted(QString)),
+            this, SLOT(completed(QString)));
     m_cview->completionBox()->setTabHandling(true);
 #endif
-
 }
 
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-    QString text(m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString()));
+    bool lengthExceeded;
+    QString text(m_textFormatter.toString(removeOld ? QVariant() : KexiDataItemInterface::originalValue(), add.toString(),
+                                          &lengthExceeded));
     if (text.isEmpty()) {
-        if (m_origValue.toString().isEmpty()) {
+        if (KexiDataItemInterface::originalValue().toString().isEmpty()) {
             //we have to set NULL initial value:
             m_lineedit->setText(QString());
         }
@@ -156,6 +154,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
         validator->setObjectName("KexiInputTableEdit-validator");
         m_lineedit->setValidator(validator);
     }
+    emitLengthExceededIfNeeded(lengthExceeded);
 }
 
 void KexiInputTableEdit::paintEvent(QPaintEvent * /*e*/)
@@ -275,7 +274,8 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
     Q_UNUSED(visibleValue);
 //! @todo handle rich text?
-    qApp->clipboard()->setText(m_textFormatter.toString(value, QString()));
+    bool lengthExceeded;
+    qApp->clipboard()->setText(m_textFormatter.toString(value, QString(), &lengthExceeded));
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -301,8 +301,9 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
 bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect,
         const QFontMetrics& fm, bool focused)
 {
-    QString text(value.type() == QVariant::String 
-        ? value.toString() : m_textFormatter.toString(value, QString()));
+    bool lengthExceeded;
+    QString text(value.type() == QVariant::String
+        ? value.toString() : m_textFormatter.toString(value, QString(), &lengthExceeded));
 
     QRect internalRect(rect);
     internalRect.setLeft(rect.x() + leftMargin());
@@ -328,8 +329,19 @@ void KexiInputTableEdit::selectAll()
 
 void KexiInputTableEdit::slotTextEdited(const QString& text)
 {
-    Q_UNUSED(text);
     signalValueChanged();
+    bool lengthExceeded = m_textFormatter.lengthExceeded(text);
+    emitLengthExceededIfNeeded(lengthExceeded);
+}
+
+bool KexiInputTableEdit::fixup()
+{
+    const QString t(m_lineedit->text());
+    bool lengthExceeded = m_textFormatter.lengthExceeded(t);
+    if (lengthExceeded) {
+        m_lineedit->setText(t.left(field()->maxLength()));
+    }
+    return true;
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

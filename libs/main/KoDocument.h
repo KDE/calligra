@@ -49,6 +49,7 @@ class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
 class KoProgressUpdater;
+class KoPageWidgetItem;
 class KoProgressProxy;
 
 class KoVersionInfo
@@ -85,8 +86,8 @@ public:
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    KoDocument(KoPart *parent,
-               KUndo2Stack *undoStack = new KUndo2Stack());
+    explicit KoDocument(KoPart *parent,
+                        KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
      *  Destructor.
@@ -428,13 +429,7 @@ public:
      * will be deleted, and if RDF support is compiled out, KoDocument does not take ownership.
      * Otherwise, KoDocument will own the rdf document.
      */
-    void setDocumentRdf(KoDocumentRdf *rdfDocument);
-
-    /**
-     * @return the Rdf metadata for this document.
-     * @see KoDocumentRdf
-     */
-    KoDocumentRdfBase *documentRdfBase() const;
+    void setDocumentRdf(KoDocumentRdfBase *rdfDocument);
 
     /**
      * @return the object to report progress to.
@@ -448,6 +443,7 @@ public:
      * progress to.
      */
     void setProgressProxy(KoProgressProxy *progressProxy);
+    KoProgressProxy* progressProxy() const;
 
     /**
      * Return true if url() is a real filename, false if url() is
@@ -484,7 +480,6 @@ public:
     bool isLoading() const;
 
     int queryCloseDia();
-
 
     /**
      * Sets the backup path of the document
@@ -605,12 +600,6 @@ public slots:
      *  to be saved or not before deleting it.
      */
     virtual void setModified(bool _mod);
-
-    /**
-     * Called by the undo stack when the document is saved or all changes has been undone
-     * @param clean if the document's undo stack is clean or not
-     */
-    virtual void setDocumentClean(bool clean);
 
     /**
      * Set the output stream to report profile information to.
@@ -746,6 +735,9 @@ public:
 private slots:
 
     void slotAutoSave();
+
+    /// Called by the undo stack when undo or redo is called
+    void slotUndoStackIndexChanged(int idx);
 
 private:
 

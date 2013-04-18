@@ -1,13 +1,17 @@
 [Desktop Entry]
 Name=Horizontal Fence
 Name[bg]=Хоризонтална ограда
+Name[bs]=Horizontalna ograda
 Name[ca]=Tanca horitzontal
 Name[ca@valencia]=Tanca horitzontal
+Name[da]=Vandret hegn
 Name[de]=Waagerechter Zaun
 Name[el]=Οριζόντιος φράκτης
 Name[es]=Valla horizontal
 Name[et]=Horisontaalne piire
 Name[fi]=Vaakasuora aita
+Name[fr]=Barrière horizontale
+Name[gl]=Valado horizontal
 Name[hu]=Vízszintes kerítés
 Name[it]=Recinzione orizzontale
 Name[kk]=Жатық қоршау
@@ -20,6 +24,8 @@ Name[ru]=Горизонтальное ограждение
 Name[sk]=Vodorovný plot
 Name[sl]=Vodoravna ograja
 Name[sv]=Horisontellt staket
+Name[tr]=Yatay Çit
 Name[uk]=Горизонтальна огорожа
 Name[x-test]=xxHorizontal Fencexx
+Name[zh_CN]=水平护栏
 Name[zh_TW]=水平籬笆

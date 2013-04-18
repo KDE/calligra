@@ -18,16 +18,16 @@
 
 #include "kis_ppm_export.h"
 
-#include <KPluginFactory>
-#include <KApplication>
+#include <kpluginfactory.h>
+#include <kapplication.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
-#include <KDialog>
-#include <KMessageBox>
+#include <kdialog.h>
+#include <kmessagebox.h>
 
 #include <kis_debug.h>
 #include <kis_doc2.h>
@@ -147,7 +147,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     QString filename = m_chain->outputFile();
 
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 

@@ -29,6 +29,8 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
+#include <kis_fixed_paint_device.h>
+#include <kis_paint_information.h>
 
 void KisAutoBrushTest::testCreation()
 {
@@ -57,7 +59,7 @@ void KisAutoBrushTest::testMaskGeneration()
 
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_1.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
     // Check creating a mask dab with a single color
@@ -68,7 +70,7 @@ void KisAutoBrushTest::testMaskGeneration()
     image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_3.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
     // Check creating a mask dab with a color taken from a paint device
@@ -84,7 +86,7 @@ void KisAutoBrushTest::testMaskGeneration()
     image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_4.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }
@@ -96,24 +98,24 @@ void KisAutoBrushTest::testSizeRotation()
         KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
         QCOMPARE(a->width(), 10);
         QCOMPARE(a->height(), 5);
-        QCOMPARE(a->maskWidth(1.0,0.0), 11);
-        QCOMPARE(a->maskHeight(1.0,0.0), 6);
-        QCOMPARE(a->maskWidth(2.0,0.0), 21);
-        QCOMPARE(a->maskHeight(2.0,0.0), 11);
-        QCOMPARE(a->maskWidth(0.5,0.0), 6);
-        QCOMPARE(a->maskHeight(0.5,0.0), 4);
-        QCOMPARE(a->maskWidth(1.0,M_PI), 11);
-        QCOMPARE(a->maskHeight(1.0,M_PI), 6);
-        QCOMPARE(a->maskWidth(1.0,M_PI_2), 6);
-        QCOMPARE(a->maskHeight(1.0,M_PI_2), 11);
-        QCOMPARE(a->maskWidth(1.0,-M_PI_2), 6);
-        QCOMPARE(a->maskHeight(1.0,-M_PI_2), 11);
-        QCOMPARE(a->maskWidth(1.0,0.25*M_PI), 12);
-        QCOMPARE(a->maskHeight(1.0,0.25*M_PI), 12);
-        QCOMPARE(a->maskWidth(2.0,0.25*M_PI), 23);
-        QCOMPARE(a->maskHeight(2.0,0.25*M_PI), 23);
-        QCOMPARE(a->maskWidth(0.5,0.25*M_PI), 7);
-        QCOMPARE(a->maskHeight(0.5,0.25*M_PI), 7);
+        QCOMPARE(a->maskWidth(1.0,0.0, KisPaintInformation()), 11);
+        QCOMPARE(a->maskHeight(1.0,0.0, KisPaintInformation()), 6);
+        QCOMPARE(a->maskWidth(2.0,0.0, KisPaintInformation()), 21);
+        QCOMPARE(a->maskHeight(2.0,0.0, KisPaintInformation()), 11);
+        QCOMPARE(a->maskWidth(0.5,0.0, KisPaintInformation()), 6);
+        QCOMPARE(a->maskHeight(0.5,0.0, KisPaintInformation()), 4);
+        QCOMPARE(a->maskWidth(1.0,M_PI, KisPaintInformation()), 11);
+        QCOMPARE(a->maskHeight(1.0,M_PI, KisPaintInformation()), 6);
+        QCOMPARE(a->maskWidth(1.0,M_PI_2, KisPaintInformation()), 6);
+        QCOMPARE(a->maskHeight(1.0,M_PI_2, KisPaintInformation()), 11);
+        QCOMPARE(a->maskWidth(1.0,-M_PI_2, KisPaintInformation()), 6);
+        QCOMPARE(a->maskHeight(1.0,-M_PI_2, KisPaintInformation()), 11);
+        QCOMPARE(a->maskWidth(1.0,0.25*M_PI, KisPaintInformation()), 12);
+        QCOMPARE(a->maskHeight(1.0,0.25*M_PI, KisPaintInformation()), 12);
+        QCOMPARE(a->maskWidth(2.0,0.25*M_PI, KisPaintInformation()), 23);
+        QCOMPARE(a->maskHeight(2.0,0.25*M_PI, KisPaintInformation()), 23);
+        QCOMPARE(a->maskWidth(0.5,0.25*M_PI, KisPaintInformation()), 7);
+        QCOMPARE(a->maskHeight(0.5,0.25*M_PI, KisPaintInformation()), 7);
     }
 }
 

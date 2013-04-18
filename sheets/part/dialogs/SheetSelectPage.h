@@ -42,7 +42,7 @@ class SheetSelectPage : public QWidget, public Ui::SheetSelectWidget
 {
     Q_OBJECT
 public:
-    SheetSelectPage(QWidget *parent = 0);
+    explicit SheetSelectPage(QWidget *parent = 0);
 //     ~SheetSelectPage();
 
     /**

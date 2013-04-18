@@ -17,7 +17,7 @@
   <!ENTITY functions SYSTEM "functions.docbook">
 ]>
 
-<book lang="&language;">
+<book id="sheets" lang="&language;">
 
 <bookinfo>
 <title>The &sheets; Handbook</title>
@@ -60,8 +60,8 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2012-01-01</date>
-<releaseinfo>2.4</releaseinfo>
+<date>2013-03-11</date>
+<releaseinfo>2.7</releaseinfo>
 
 
 <abstract>
@@ -86,7 +86,7 @@
 url="http://www.bricklin.com/visicalc.htm">Visicalc.</ulink></para>
 
 <important> <para>Please check <ulink
-url="http://docs.kde.org/development/en/calligra/tables/index.html">http://docs.kde.org</ulink>
+url="http://docs.kde.org/development/en/calligra/sheets/index.html">http://docs.kde.org</ulink>
 for updated versions of this document.</para></important>
 
 <para>
@@ -97,7 +97,7 @@ productivity suite for &kde;.</para>
 
 <para>You might care to visit <ulink url="http://www.kde.org">
 http://www.kde.org</ulink> for more information about &kde; in general, or the
-&koffice; web site at <ulink url="http://www.calligra.org">
+&calligra; web site at <ulink url="http://www.calligra.org">
 http://www.calligra.org</ulink></para>
 
 </chapter>

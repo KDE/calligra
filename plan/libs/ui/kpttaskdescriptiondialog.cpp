@@ -22,9 +22,9 @@
 #include "kpttask.h"
 #include "kptcommand.h"
 
-#include <KLocale>
-#include <KTextEdit>
-#include <KActionCollection>
+#include <klocale.h>
+#include <ktextedit.h>
+#include <kactioncollection.h>
 #include <kdebug.h>
 
 namespace KPlato

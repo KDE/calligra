@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,11 +52,11 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kurlcombobox.h>
-#include <KTitleWidget>
-#include <KCategoryDrawer>
-#include <KPushButton>
-#include <KAcceleratorManager>
-#include <KFileDialog>
+#include <ktitlewidget.h>
+#include <kcategorydrawer.h>
+#include <kpushbutton.h>
+#include <kacceleratormanager.h>
+#include <kfiledialog.h>
 
 #include <QPushButton>
 #include <QLayout>
@@ -205,7 +206,7 @@ static QString defaultDatabaseName()
 KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
  : KexiAssistantPage(i18n("Project Title & Filename"),
                   i18n("Enter title for the new project. "
-                       "Filename will created automatically based on the title. "
+                       "Filename will be created automatically based on the title. "
                        "You can change the filename too."),
                   parent)
 {
@@ -321,21 +322,31 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
-
-    QVBoxLayout *lyr = new QVBoxLayout;
-    connSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
-        "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Saving);
-    lyr->addWidget(connSelector);
-    connSelector->showAdvancedConn();
-    connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
-            this, SLOT(next()));
-    connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    connSelector->hideHelpers();
-    connSelector->hideDescription();
-    setContents(lyr);
-    setFocusWidget(connSelector->connectionsList());
+    if (KexiDB::hasDatabaseServerDrivers()) {
+        QVBoxLayout *lyr = new QVBoxLayout;
+        connSelector = new KexiConnectionSelectorWidget(
+            Kexi::connset(),
+            "kfiledialog:///OpenExistingOrCreateNewProject",
+            KAbstractFileWidget::Saving);
+        lyr->addWidget(connSelector);
+        connSelector->showAdvancedConn();
+        connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+                this, SLOT(next()));
+        connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+        connSelector->hideHelpers();
+        connSelector->hideDescription();
+        setContents(lyr);
+        setFocusWidget(connSelector->connectionsList());
+    }
+    else {
+        setDescription(QString());
+        setNextButtonVisible(false);
+        m_errorMessagePopup = new KexiServerDriverNotFoundMessage(this);
+        setContents(m_errorMessagePopup);
+        layout()->setAlignment(m_errorMessagePopup, Qt::AlignTop);
+        m_errorMessagePopup->setAutoDelete(false);
+        m_errorMessagePopup->animatedShow();
+    }
 }
 
 KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
@@ -348,7 +359,7 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     KexiNewProjectAssistant* parent)
  : KexiAssistantPage(i18n("Project Title & Database Name"),
                   i18n("Enter title for the new project. "
-                       "Database name will created automatically based on the title. "
+                       "Database name will be created automatically based on the title. "
                        "You can change the database name too."),
                   parent)
  , m_assistant(parent)
@@ -377,7 +388,9 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
             this, SLOT(next()));
     contents->le_title->setText(defaultDatabaseName());
     contents->le_title->selectAll();
-    contents->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this));
+    KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(this);
+    idValidator->setLowerCaseForced(true);
+    contents->le_dbname->setValidator(idValidator);
     m_projectSelector = new KexiProjectSelectorWidget(
         contents->frm_dblist, 0,
         true, // showProjectNameColumn
@@ -430,7 +443,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
-        QString captionAsId = KexiUtils::string2Identifier(capt);
+        QString captionAsId = KexiUtils::string2Identifier(capt).toLower();
         contents->le_dbname->setText(captionAsId);
         m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;

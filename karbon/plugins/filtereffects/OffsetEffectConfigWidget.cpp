@@ -20,8 +20,8 @@
 #include "OffsetEffectConfigWidget.h"
 #include "OffsetEffect.h"
 #include "KoFilterEffect.h"
-#include <KNumInput>
-#include <KLocale>
+#include <knuminput.h>
+#include <klocale.h>
 #include <QGridLayout>
 #include <QLabel>
 

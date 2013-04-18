@@ -58,11 +58,11 @@
 
 //KDE Headers
 #include <klocale.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <kconfiggroup.h>
-#include <KGlobalSettings>
-#include <KMessageBox>
-#include <KActionCollection>
+#include <kglobalsettings.h>
+#include <kmessagebox.h>
+#include <kactioncollection.h>
 
 const int DEFAULT_ICON_SIZE = 200;
 
@@ -166,7 +166,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     connect(m_buttonAddSlideToCurrentShow, SIGNAL(clicked()), this, SLOT(addSlideToCustomShow()));
     connect(m_buttonDelSlideFromCurrentShow, SIGNAL(clicked()), this, SLOT(deleteSlidesFromCustomShow()));
     connect(m_customSlideShowModel, SIGNAL(customSlideShowsChanged()), this, SLOT(updateCustomSlideShowsList()));
-    connect(m_customSlideShowModel, SIGNAL(selectPages(int,int)), this, SLOT(selectCustomShowPages(int, int)));
+    connect(m_customSlideShowModel, SIGNAL(selectPages(int,int)), this, SLOT(selectCustomShowPages(int,int)));
 
     //setup signals for manage edit actions
     connect(view->copyController(), SIGNAL(copyRequested()), this, SLOT(editCopy()));
@@ -276,15 +276,15 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
     //setup signals
     connect(m_slidesSorterView,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
-    connect(m_slidesSorterView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(const QModelIndex)));
+    connect(m_slidesSorterView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
 
     //change zoom saving slot
-    connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
+    connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(updateZoom(KoZoomMode::Mode,qreal)));
 
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
-        disconnect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+        disconnect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
         m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
         loadZoomConfig();
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
@@ -308,14 +308,14 @@ void KPrViewModeSlidesSorter::deactivate()
     saveZoomConfig(zoom());
 
     //change zoom saving slot and restore normal view zoom values
-    disconnect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
+    disconnect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(updateZoom(KoZoomMode::Mode,qreal)));
     m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_PAGE | KoZoomMode::ZOOM_WIDTH);
     m_view->setActivePage(m_view->kopaDocument()->pageByIndex(m_slidesSorterView->currentIndex().row(), false));
 
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
         kPrview->restoreZoomConfig();
-        connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+        connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
         connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
     }
@@ -584,7 +584,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     bool panelVisible = true;
     if (showNumber < 1) {
         panelVisible = false;
-        name = QString();
+        name.clear();
     }
 
     //Change document current custom slide show
@@ -692,9 +692,8 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
        updateCustomSlideShowsList();
     }
     else {
-        KMessageBox Message;
-        Message.sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
-                      KMessageBox::Notify);
+        KMessageBox::sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
+                           KMessageBox::Notify);
         updateCustomSlideShowsList();
     }
 }

@@ -125,6 +125,7 @@ public:
     vKisAnnotationSP annotations;
 
     QAtomicInt disableUIUpdateSignals;
+    QAtomicInt disableDirtyRequests;
     KisImageSignalRouter *signalRouter;
     KisUpdateScheduler *scheduler;
 
@@ -147,6 +148,11 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 KisImage::~KisImage()
 {
     dbgImage << "deleting kisimage" << objectName();
+
+    /**
+     * Request the tools to end currently running strokes
+     */
+    waitForDone();
 
     /**
      * First delete the nodes, while strokes
@@ -217,6 +223,7 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
     else {
         if (!selectionMask) {
             selectionMask = new KisSelectionMask(this);
+            selectionMask->initSelection(0, m_d->rootLayer);
             addNode(selectionMask);
             selectionMask->setActive(true);
         }
@@ -333,6 +340,8 @@ bool KisImage::locked() const
 void KisImage::barrierLock()
 {
     if (!locked()) {
+        requestStrokeEnd();
+
         if (m_d->scheduler) {
             m_d->scheduler->barrierLock();
         }
@@ -365,6 +374,8 @@ bool KisImage::tryBarrierLock()
 void KisImage::lock()
 {
     if (!locked()) {
+        requestStrokeEnd();
+
         if (m_d->scheduler) {
             m_d->scheduler->lock();
         }
@@ -587,7 +598,7 @@ void KisImage::rotateImpl(const QString &actionName,
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
                                        emitSignals, actionName);
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Bicubic");
 
     KisProcessingVisitorSP visitor =
             new KisTransformProcessingVisitor(1.0, 1.0, 0.0, 0.0,
@@ -658,7 +669,7 @@ void KisImage::shearImpl(const QString &actionName,
                                        signalFlags,
                                        emitSignals, actionName);
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Bilinear");
 
     KisProcessingVisitorSP visitor =
             new KisTransformProcessingVisitor(1.0, 1.0,
@@ -980,19 +991,37 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     KisNodeSP parent = layer->parent(); // parent is set to null when the layer is removed from the node
     dbgImage << ppVar(parent);
 
-    // XXX: merge the masks!
-    // AAA: do you really think you need it? ;) -- yes, we don't want to lose the masks
-
     // FIXME: "Merge Down"?
     undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, mergedLayer, parent, layer));
-    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, prevLayer));
-    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
+    safeRemoveTwoNodes(layer, prevLayer);
 
     undoAdapter()->endMacro();
 
     return mergedLayer;
+}
+
+/**
+ * The removal of two nodes in one go may be a bit tricky, because one
+ * of them may be the clone of another. If we remove the source of a
+ * clone layer, it will reincarnate into a paint layer. In this case
+ * the pointer to the second layer will be lost.
+ *
+ * That's why we need to care about the order of the nodes removal:
+ * the clone --- first, the source --- last.
+ */
+void KisImage::safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2)
+{
+    KisCloneLayer *clone1 = dynamic_cast<KisCloneLayer*>(node1.data());
+
+    if (clone1 && KisNodeSP(clone1->copyFrom()) == node2) {
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node1));
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node2));
+    } else {
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node2));
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node1));
+    }
 }
 
 KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
@@ -1320,6 +1349,8 @@ KisImageSignalRouter* KisImage::signalRouter()
 
 void KisImage::waitForDone()
 {
+    requestStrokeEnd();
+
     if (m_d->scheduler) {
         m_d->scheduler->waitForDone();
     }
@@ -1327,6 +1358,15 @@ void KisImage::waitForDone()
 
 KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
 {
+    /**
+     * Ask open strokes to end gracefully. All the strokes clients
+     * (including the one calling this method right now) will get
+     * a notification that they should probably end their strokes.
+     * However this is purely their choice whether to end a stroke
+     * or not.
+     */
+    requestStrokeEnd();
+
     KisStrokeId id;
 
     if (m_d->scheduler) {
@@ -1357,6 +1397,21 @@ bool KisImage::cancelStroke(KisStrokeId id)
         result = m_d->scheduler->cancelStroke(id);
     }
     return result;
+}
+
+void KisImage::requestUndoDuringStroke()
+{
+    emit sigUndoDuringStrokeRequested();
+}
+
+void KisImage::requestStrokeCancellation()
+{
+    emit sigStrokeCancellationRequested();
+}
+
+void KisImage::requestStrokeEnd()
+{
+    emit sigStrokeEndRequested();
 }
 
 void KisImage::refreshGraph(KisNodeSP root)
@@ -1403,6 +1458,16 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::disableDirtyRequests()
+{
+    m_d->disableDirtyRequests.ref();
+}
+
+void KisImage::enableDirtyRequests()
+{
+    m_d->disableDirtyRequests.deref();
+}
+
 void KisImage::disableUIUpdates()
 {
     m_d->disableUIUpdateSignals.ref();
@@ -1422,6 +1487,8 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
+    if (m_d->disableDirtyRequests) return;
+
     KisNodeGraphListener::requestProjectionUpdate(node, rect);
 
     if (m_d->scheduler) {

@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=tyristor diode
+Name[bs]=tiristor dioda
 Name[ca]=diode tiristor
 Name[ca@valencia]=diode tiristor
+Name[da]=tyristordiode
 Name[de]=Tyristor-Diode
 Name[el]=δίοδος θυρίστορ
 Name[es]=diodo tíristor
 Name[et]=Türistordiood
+Name[fr]=diode tyristor
+Name[gl]=Díodo tiristor
 Name[it]= tiristore di diodo
 Name[kk]=тиристор-диод
 Name[nb]=tyristordiode
@@ -18,4 +22,5 @@ Name[sk]=tyristor dióda
 Name[sv]=tyristordiod
 Name[uk]=Тиристорний діод
 Name[x-test]=xxtyristor diodexx
+Name[zh_CN]=可控硅二极管
 Name[zh_TW]=tyristor diode

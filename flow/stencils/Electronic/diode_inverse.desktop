@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=diode inverse
+Name[bs]=inverzna dioda
 Name[ca]=diode invertit
 Name[ca@valencia]=diode invertit
+Name[da]=diode inverse
 Name[el]=αντίστροφη δίοδος
 Name[es]=diodo inverso
 Name[et]=Pöörddiood
+Name[fr]=diode inverse
+Name[gl]=Díodo inverso
 Name[it]=diodo inverso
 Name[kk]=теріс диод
 Name[nb]=invers diode
@@ -17,4 +21,5 @@ Name[sk]=dióda inverzná
 Name[sv]=diod invers
 Name[uk]=Обернений діод
 Name[x-test]=xxdiode inversexx
+Name[zh_CN]=反向二极管
 Name[zh_TW]=diode inverse

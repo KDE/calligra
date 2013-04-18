@@ -31,7 +31,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QList>
-#include <QPushButton>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 // KDE
@@ -40,7 +40,8 @@
 #include <klineedit.h>
 #include <klistwidget.h>
 #include <kmessagebox.h>
-#include <KStandardGuiItem>
+#include <kstandardguiitem.h>
+#include <kpushbutton.h>
 
 #include <KoCanvasBase.h>
 
@@ -60,12 +61,8 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)
         , m_selection(selection)
 {
-    setButtons(KDialog::Ok | KDialog::Close | KDialog::User1 | KDialog::User2 | KDialog::User3);
-    setButtonsOrientation(Qt::Vertical);
+    setButtons(KDialog::Ok | KDialog::Close);
     setButtonText(KDialog::Ok, i18n("&Select"));
-    setButtonText(KDialog::User1, i18n("&Remove"));
-    setButtonText(KDialog::User2, i18n("&Edit..."));
-    setButtonText(KDialog::User3, i18n("&New..."));
     setCaption(i18n("Named Areas"));
     setModal(true);
     setObjectName(QLatin1String("NamedAreaDialog"));
@@ -73,9 +70,10 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     QWidget* widget = new QWidget(this);
     setMainWidget(widget);
 
-    QVBoxLayout *vboxLayout = new QVBoxLayout(widget);
-    vboxLayout->setMargin(0);
-    vboxLayout->setSpacing(KDialog::spacingHint());
+    QHBoxLayout *hboxLayout = new QHBoxLayout(widget);
+    hboxLayout->setMargin(0);
+
+    QVBoxLayout *vboxLayout = new QVBoxLayout();
 
     m_list = new KListWidget(this);
     m_list->setSortingEnabled(true);
@@ -85,25 +83,40 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     m_rangeName->setText(i18n("Area: %1", QString()));
     vboxLayout->addWidget(m_rangeName);
 
+    hboxLayout->addLayout(vboxLayout);
+
+    // list buttons
+    QVBoxLayout *listButtonLayout = new QVBoxLayout();
+
+    m_newButton = new KPushButton(i18n("&New..."), widget);
+    listButtonLayout->addWidget(m_newButton);
+    m_editButton = new KPushButton(i18n("&Edit..."), widget);
+    listButtonLayout->addWidget(m_editButton);
+    m_removeButton = new KPushButton(i18n("&Remove"), widget);
+    listButtonLayout->addWidget(m_removeButton);
+    listButtonLayout->addStretch(1);
+
+    hboxLayout->addLayout(listButtonLayout);
+
     const QList<QString> namedAreas = m_selection->activeSheet()->map()->namedAreaManager()->areaNames();
     for (int i = 0; i < namedAreas.count(); ++i)
         m_list->addItem(namedAreas[i]);
 
     if (m_list->count() == 0) {
         enableButtonOk(false);
-        enableButton(KDialog::User1, false);
-        enableButton(KDialog::User2, false);
+        m_removeButton->setEnabled(false);
+        m_editButton->setEnabled(false);
         m_list->setCurrentRow(0);
     }
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
     connect(this, SIGNAL(cancelClicked()), this, SLOT(slotClose()));
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(slotRemove()));
-    connect(this, SIGNAL(user2Clicked()), this, SLOT(slotEdit()));
-    connect(this, SIGNAL(user3Clicked()), this, SLOT(slotNew()));
+    connect(m_newButton, SIGNAL(clicked(bool)), this, SLOT(slotNew()));
+    connect(m_editButton, SIGNAL(clicked(bool)), this, SLOT(slotEdit()));
+    connect(m_removeButton, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
     connect(m_list, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotOk()));
-    connect(m_list, SIGNAL(currentTextChanged(const QString&)),
-            this, SLOT(displayAreaValues(const QString&)));
+    connect(m_list, SIGNAL(currentTextChanged(QString)),
+            this, SLOT(displayAreaValues(QString)));
 
     if (m_list->count() > 0)
         m_list->setCurrentItem(m_list->item(0));
@@ -160,8 +173,8 @@ void NamedAreaDialog::slotNew()
     delete dialog;
 
     enableButtonOk(true);
-    enableButton(KDialog::User1, true);
-    enableButton(KDialog::User2, true);
+    m_removeButton->setEnabled(true);
+    m_editButton->setEnabled(true);
 }
 
 void NamedAreaDialog::slotEdit()
@@ -204,8 +217,8 @@ void NamedAreaDialog::slotRemove()
 
     if (m_list->count() == 0) {
         enableButtonOk(false);
-        enableButton(KDialog::User1, false);
-        enableButton(KDialog::User2, false);
+        m_removeButton->setEnabled(false);
+        m_editButton->setEnabled(false);
         displayAreaValues(QString());
     } else
         displayAreaValues(m_list->currentItem()->text());
@@ -226,8 +239,6 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     setMainWidget(page);
 
     QGridLayout * gridLayout = new QGridLayout(page);
-    gridLayout->setMargin(KDialog::marginHint());
-    gridLayout->setSpacing(KDialog::spacingHint());
 
     QLabel * textLabel4 = new QLabel(page);
     textLabel4->setText(i18n("Cells:"));
@@ -259,8 +270,8 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     }
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(m_areaNameEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotAreaNameModified(const QString&)));
+    connect(m_areaNameEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotAreaNameModified(QString)));
 }
 
 EditNamedAreaDialog::~EditNamedAreaDialog()

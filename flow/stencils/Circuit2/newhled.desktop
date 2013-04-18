@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Horizontal LED
+Name[bs]=Horizontalni LED
 Name[ca]=LED horitzontal
 Name[ca@valencia]=LED horitzontal
+Name[da]=Vandret LED
 Name[de]=Waagerechte LED
 Name[el]=Οριζόντιο LED
 Name[es]=LED horizontal
 Name[et]=Horisontaalne LED
+Name[fr]=Horizontal LED
+Name[gl]=LED horizontal
 Name[hu]=Vízszintes LED
 Name[it]=LED orizzontale
 Name[kk]=Жатық сәуледиод
@@ -17,7 +21,9 @@ Name[pt]=LED Horizontal
 Name[pt_BR]=LED Horizontal
 Name[ru]=Горизонтальный светодиод
 Name[sk]=Vodorovná LED
+Name[sl]=Vodoravna LED
 Name[sv]=Horisontell lysdiod
+Name[tr]=Yatay LED
 Name[uk]=Світлодіод (горизонтально)
 Name[x-test]=xxHorizontal LEDxx
 Name[zh_CN]=水平发光二极管

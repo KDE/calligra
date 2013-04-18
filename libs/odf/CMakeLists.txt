@@ -40,11 +40,11 @@ set(koodf_LIB_SRCS
     KoTarStore.cpp
     KoDirectoryStore.cpp
     KoZipStore.cpp
+    KoXmlStreamReader.cpp
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoEncryptedStore.cpp
     KoEncryptionChecker.cpp
-    KoProperties.cpp
     KoUnit.cpp
     KoOdfNotesConfiguration.cpp
     KoOdfBibliographyConfiguration.cpp
@@ -64,6 +64,10 @@ set(koodf_LIB_SRCS
     KoRowStyle.cpp
     KoTblStyle.cpp
     KoElementReference.cpp
+
+    styles/KoOdfStyle.cpp
+    styles/KoOdfStyleProperties.cpp
+    styles/KoOdfStyleManager.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
@@ -114,10 +118,10 @@ install( FILES
     KoColumns.h
     KoStore.h
     KoStoreDevice.h
+    KoXmlStreamReader.h
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h
-    KoProperties.h
     KoUnit.h
     KoElementReference.h
     KoTableTemplate.h

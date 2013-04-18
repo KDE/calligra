@@ -21,18 +21,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoApplication.h"
 #include "KoPart.h"
+
+#include "KoApplication.h"
 #include "KoMainWindow.h"
 #include "KoDocument.h"
 #include "KoView.h"
-#include "KoCanvasController.h"
-#include "KoCanvasControllerWidget.h"
 #include "KoOpenPane.h"
-#include "KoMainWindow.h"
 #include "KoProgressProxy.h"
 #include "KoFilterManager.h"
 #include "KoServiceProvider.h"
+#include <KoDocumentInfoDlg.h>
+
+#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -40,7 +42,6 @@
 #include <kdeprintdialog.h>
 #include <knotification.h>
 #include <kdialog.h>
-#include <kmessagebox.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
@@ -51,6 +52,11 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
+
+#ifndef QT_NO_DBUS
+#include <QDBusConnection>
+#include "KoPartAdaptor.h"
+#endif
 
 namespace {
 
@@ -98,6 +104,11 @@ public:
     {
     }
 
+    ~Private()
+    {
+        delete canvasItem;
+    }
+
     QList<KoView*> views;
     QList<KoMainWindow*> shells;
     KoDocument *document;
@@ -115,6 +126,10 @@ KoPart::KoPart(QObject *parent)
     // we're not a part in a part, so we cannot be selected, we're always top-level
     setSelectable(false);
 
+#ifndef QT_NO_DBUS
+    new KoPartAdaptor(this);
+    QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
+#endif
 
     connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }
@@ -168,32 +183,50 @@ void KoPart::setReadWrite(bool readwrite)
 
 bool KoPart::openFile()
 {
-    KoMainWindow *shell = 0;
-    if (shellCount() > 0) {
-        shell = shells()[0];
+    DocumentProgressProxy *progressProxy = 0;
+    if (!d->document->progressProxy()) {
+        KoMainWindow *shell = 0;
+        if (shellCount() > 0) {
+            shell = shells()[0];
+        }
+        progressProxy = new DocumentProgressProxy(shell);
+        d->document->setProgressProxy(progressProxy);
     }
-    DocumentProgressProxy progressProxy(shell);
-    d->document->setProgressProxy(&progressProxy);
     d->document->setUrl(url());
 
     // THIS IS WRONG! KoDocument::openFile should move here, and whoever subclassed KoDocument to
     // reimplement openFile shold now subclass KoPart.
-    return d->document->openFile();
+    bool ok = d->document->openFile();
+
+    if (progressProxy) {
+        d->document->setProgressProxy(0);
+        delete progressProxy;
+    }
+    return ok;
 }
 
 bool KoPart::saveFile()
 {
-    KoMainWindow *shell = 0;
-    if (shellCount() > 0) {
-        shell = shells()[0];
+    DocumentProgressProxy *progressProxy = 0;
+    if (!d->document->progressProxy()) {
+        KoMainWindow *shell = 0;
+        if (shellCount() > 0) {
+            shell = shells()[0];
+        }
+        progressProxy = new DocumentProgressProxy(shell);
+        d->document->setProgressProxy(progressProxy);
     }
-    DocumentProgressProxy progressProxy(shell);
-    d->document->setProgressProxy(&progressProxy);
     d->document->setUrl(url());
 
     // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
     // reimplement saveFile shold now subclass KoPart.
-    return d->document->saveFile();
+    bool ok = d->document->saveFile();
+
+    if (progressProxy) {
+        d->document->setProgressProxy(0);
+        delete progressProxy;
+    }
+    return ok;
 }
 
 KoView *KoPart::createView(QWidget *parent)
@@ -302,6 +335,11 @@ KoMainWindow *KoPart::currentShell() const
     }
     return shell;
 
+}
+
+KoDocumentInfoDlg *KoPart::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
+{
+    return new KoDocumentInfoDlg(parent, docInfo);
 }
 
 void KoPart::showSavingErrorDialog()

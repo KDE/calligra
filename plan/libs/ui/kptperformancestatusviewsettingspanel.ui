@@ -6,14 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>444</width>
-    <height>248</height>
+    <width>312</width>
+    <height>233</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
@@ -25,6 +22,9 @@
         <property name="text">
          <string>Line chart</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -34,92 +34,216 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QRadioButton" name="ui_table">
+        <property name="text">
+         <string>Table</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="margin">
-       <number>0</number>
-      </property>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QGroupBox" name="ui_cost">
-        <property name="title">
-         <string>Cost</string>
-        </property>
-        <property name="flat">
-         <bool>false</bool>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
+       <widget class="QRadioButton" name="ui_showbasevalues">
+        <property name="text">
+         <string>Base values</string>
         </property>
         <property name="checked">
          <bool>true</bool>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0" colspan="2">
-          <widget class="QCheckBox" name="ui_bcwsCost">
-           <property name="text">
-            <string>Show BCWS plot</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="ui_bcwpCost">
-           <property name="text">
-            <string>Show BCWP plot</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="ui_acwpCost">
-           <property name="text">
-            <string>Show ACWP plot</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="ui_effort">
-        <property name="title">
-         <string>Effort</string>
+       <widget class="QRadioButton" name="ui_showindices">
+        <property name="text">
+         <string>Indices</string>
         </property>
-        <property name="flat">
-         <bool>false</bool>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0" colspan="2">
-          <widget class="QCheckBox" name="ui_bcwsEffort">
-           <property name="text">
-            <string>Show BCWS plot</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="ui_acwpEffort">
-           <property name="text">
-            <string>Show ACWP plot</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="ui_bcwpEffort">
-           <property name="text">
-            <string>Show BCWP plot</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QStackedWidget" name="ui_stackWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QGroupBox" name="ui_cost">
+           <property name="title">
+            <string>Cost</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QCheckBox" name="ui_bcwsCost">
+              <property name="text">
+               <string>Show BCWS plot</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="ui_bcwpCost">
+              <property name="text">
+               <string>Show BCWP plot</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="ui_acwpCost">
+              <property name="text">
+               <string>Show ACWP plot</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+           <zorder>ui_acwpCost</zorder>
+           <zorder>ui_bcwpCost</zorder>
+           <zorder>ui_bcwsCost</zorder>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="ui_effort">
+           <property name="title">
+            <string>Effort</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QCheckBox" name="ui_bcwsEffort">
+              <property name="text">
+               <string>Show BCWS plot</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="ui_bcwpEffort">
+              <property name="text">
+               <string>Show BCWP plot</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="ui_acwpEffort">
+              <property name="text">
+               <string>Show ACWP plot</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+           <zorder>ui_bcwpEffort</zorder>
+           <zorder>ui_acwpEffort</zorder>
+           <zorder>ui_bcwsEffort</zorder>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="ui_spicost">
+           <property name="text">
+            <string>SPI Cost</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="ui_spieffort">
+           <property name="text">
+            <string>SPI Effort</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QCheckBox" name="ui_cpieffort">
+           <property name="text">
+            <string>CPI Effort</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="ui_cpicost">
+           <property name="text">
+            <string>CPI Cost</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>0</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+        <zorder>ui_spicost</zorder>
+        <zorder>ui_cpicost</zorder>
+        <zorder>ui_spieffort</zorder>
+        <zorder>ui_cpieffort</zorder>
+       </widget>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <spacer name="verticalSpacer">
@@ -129,13 +253,32 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>0</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>ui_linechart</tabstop>
+  <tabstop>ui_barchart</tabstop>
+  <tabstop>ui_table</tabstop>
+  <tabstop>ui_showbasevalues</tabstop>
+  <tabstop>ui_showindices</tabstop>
+  <tabstop>ui_spicost</tabstop>
+  <tabstop>ui_cpicost</tabstop>
+  <tabstop>ui_spieffort</tabstop>
+  <tabstop>ui_cpieffort</tabstop>
+  <tabstop>ui_cost</tabstop>
+  <tabstop>ui_effort</tabstop>
+  <tabstop>ui_bcwsCost</tabstop>
+  <tabstop>ui_bcwsEffort</tabstop>
+  <tabstop>ui_bcwpCost</tabstop>
+  <tabstop>ui_bcwpEffort</tabstop>
+  <tabstop>ui_acwpCost</tabstop>
+  <tabstop>ui_acwpEffort</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

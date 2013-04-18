@@ -257,16 +257,13 @@ public:
     virtual bool hasHighDynamicRange() const = 0;
 
 
-    //========== Display profiles =============================================//
+//========== Display profiles =============================================//
 
     /**
      * Return the profile of this color space.
      */
     virtual const KoColorProfile * profile() const = 0;
-    /**
-     * Return the profile of this color space.
-     */
-    virtual KoColorProfile * profile() = 0;
+
 
 //================= Conversion functions ==================================//
 
@@ -424,6 +421,18 @@ public:
     virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
 
     /**
+     * Applies the specified float alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
+     */
+    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
+
+    /**
+     * Applies the inverted specified float alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
+     */
+    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
+
+    /**
      * Create an adjustment object for adjusting the brightness and contrast
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.
@@ -544,6 +553,33 @@ protected:
      * yet, it is created. If it is currently too small, it is resized.
      */
     QVector<quint8> * threadLocalConversionCache(quint32 size) const;
+
+    /**
+     * This function defines the behavior of the bitBlt function
+     * when the composition of pixels in different colorspaces is
+     * requested, that is in case:
+     *
+     * srcCS == any
+     * dstCS == this
+     *
+     * 1) preferCompositionInSourceColorSpace() == false,
+     *
+     *    the source pixels are first converted to *this color space
+     *    and then composition is performed.
+     *
+     *2)  preferCompositionInSourceColorSpace() == true,
+     *
+     *    the destination pixels are first converted into *srcCS color
+     *    space, then the composition is done, and the result is finally
+     *    converted into *this colorspace.
+     *
+     *    This is used by alpha8() color space mostly, because it has
+     *    weaker representation of the color, so the composition
+     *    should be done in CS with richer functionality.
+     */
+
+    virtual bool preferCompositionInSourceColorSpace() const;
+
 
     struct Private;
     Private * const d;

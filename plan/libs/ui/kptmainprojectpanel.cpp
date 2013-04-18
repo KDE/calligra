@@ -31,11 +31,9 @@
 
 #include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
-#endif
 #endif
 
 
@@ -57,9 +55,10 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
 #ifndef PLAN_KDEPIMLIBS_FOUND
     chooseLeader->hide();
 #endif
-#if ! KDE_IS_VERSION( 4, 5, 0 )
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
     chooseLeader->hide();
-#endif
 
     QString s = i18n( "The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.\nThe WBS code is auto-generated.\nYou can define the WBS code pattern using the Define WBS Pattern command in the Tools menu." );
     wbslabel->setWhatsThis( s );
@@ -140,7 +139,6 @@ void MainProjectPanel::slotCheckAllFieldsFilled()
 void MainProjectPanel::slotChooseLeader()
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -153,7 +151,7 @@ void MainProjectPanel::slotChooseLeader()
                 }
                 s += selection.email();
                 if ( ! selection.name().isEmpty() ) {
-                    s += ">";
+                    s += '>';
                 }
                 if ( ! s.isEmpty() ) {
                     names << s;
@@ -164,7 +162,6 @@ void MainProjectPanel::slotChooseLeader()
             leaderfield->setText( names.join( ", " ) );
         }
     }
-#endif
 #endif
 }
 

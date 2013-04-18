@@ -86,8 +86,7 @@ bool KexiDBFieldList::removeField(QObject* field)
 {
     KexiDBField* f = dynamic_cast<KexiDBField*>(field);
     if (! f) return false;
-    m_fieldlist->removeField(f->field());
-    return true; // (! m_fieldlist->hasField( f->field() ));
+    return m_fieldlist->removeField(f->field());
 }
 
 void KexiDBFieldList::clear()

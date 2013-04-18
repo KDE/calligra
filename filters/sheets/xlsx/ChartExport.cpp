@@ -27,7 +27,7 @@
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 //#include <KoOdfNumberStyles.h>
-#include <KDebug>
+#include <kdebug.h>
 #include "XlsxXmlDrawingReader.h"
 #include "Charting.h"
 
@@ -52,8 +52,9 @@ ChartExport::~ChartExport()
 // Takes a Excel cellrange and translates it into a ODF cellrange
 QString normalizeCellRange(QString range)
 {
-    if(range.startsWith('[') && range.endsWith(']'))
-        range = range.mid(1, range.length() - 2);
+    if(range.startsWith('[') && range.endsWith(']')) {
+        range.remove(0, 1).chop(1);
+    }
     range = range.remove('$');
 
     const bool isPoint = !range.contains( ':' );
@@ -61,8 +62,8 @@ QString normalizeCellRange(QString range)
     if(regEx.indexIn(range) >= 0) {
         range.clear();
         QString sheetName = regEx.cap(1);
-        if(sheetName.endsWith('.') || sheetName.endsWith('!'))
-            sheetName = sheetName.left(sheetName.length() - 1);
+        if(sheetName.endsWith(QLatin1Char('.')) || sheetName.endsWith(QLatin1Char('!')))
+            sheetName.chop(1);
         if(!sheetName.isEmpty())
             range = sheetName + '.';
         range += regEx.cap(2);
@@ -981,7 +982,7 @@ void ChartExport::addDataThemeToStyle( KoGenStyle& style, int dataNumber, int ma
             if ( rounds > 1 )
                 seriesColor = tintColor( seriesColor, tintFactor );
         }
-    } else if ( std::find( patternFourIndexes, patternFourIndexes + 5, chart()->m_style ) != patternFourIndexes + 5 ) {
+    } else if ( std::find( patternFourIndexes, patternFourIndexes + 1, chart()->m_style ) != patternFourIndexes + 1 ) {
         const QString themeColorString = QString::fromLatin1( "dk1" );
         MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value( themeColorString );
         if ( colorSchemeItem ) {

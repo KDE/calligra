@@ -33,6 +33,7 @@ class CADocumentController : public QObject
     Q_PROPERTY (QString documentUri READ documentUri WRITE setDocumentUri NOTIFY documentUriChanged)
     Q_PROPERTY (CACanvasController* canvasController READ canvasController WRITE setCanvasController NOTIFY canvasControllerChanged)
     Q_PROPERTY (QString documentTypeName READ documentTypeName NOTIFY documentTypeNameChanged)
+    Q_PROPERTY (CAAbstractDocumentHandler* documentHandler READ documentHandler NOTIFY documentHandlerChanged)
 
 public:
     explicit CADocumentController (QObject* parent = 0);
@@ -45,7 +46,7 @@ public:
     void setCanvasController (CACanvasController* canvasController);
 
     QString documentTypeName() const;
-    Q_INVOKABLE QObject* documentHandler();
+    CAAbstractDocumentHandler* documentHandler();
 
 signals:
     void documentUriChanged();
@@ -53,6 +54,7 @@ signals:
     void documentOpened();
     void documentTypeNameChanged();
     void failedToOpenDocument();
+    void documentHandlerChanged();
 
 public slots:
     void loadDocument();

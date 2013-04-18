@@ -107,8 +107,10 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
         break;
     case QTextOption::DelimiterTab:
         polygon << QPointF(x-5.5, height() - 2.5)
-            << QPointF(x+0.5, height() - 8.5)
             << QPointF(x+6.5, height() - 2.5);
+        painter.drawPolyline(polygon);
+        polygon << QPointF(x+0.5, height() - 2.5)
+            << QPointF(x+0.5, height() - 8.5);
         painter.drawPolyline(polygon);
         break;
     default:
@@ -251,9 +253,9 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
 void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle)
 {
     qreal numberStep = d->numberStepForUnit(); // number step in unit
-    QRectF activeRangeRectangle;
+//    QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
-    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
+//    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
 
     const QFont font = KGlobalSettings::smallestReadableFont();
     const QFontMetrics fontMetrics(font);

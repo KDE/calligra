@@ -1,13 +1,17 @@
 [Desktop Entry]
 Name=CMOS
 Name[bg]=CMOS
+Name[bs]=CMOS
 Name[ca]=CMOS
 Name[ca@valencia]=CMOS
+Name[da]=CMOS
 Name[de]=CMOS
 Name[el]=CMOS
 Name[es]=CMOS
 Name[et]=CMOS
 Name[fi]=CMOS
+Name[fr]=CMOS
+Name[gl]=CMOS
 Name[hu]=CMOS
 Name[it]=CMOS
 Name[ja]=CMOS
@@ -20,6 +24,7 @@ Name[pt]=CMOS
 Name[pt_BR]=CMOS
 Name[ru]=CMOS
 Name[sk]=CMOS
+Name[sl]=CMOS
 Name[sv]=CMOS
 Name[uk]=CMOS
 Name[x-test]=xxCMOSxx

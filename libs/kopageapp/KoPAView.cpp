@@ -201,7 +201,7 @@ void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    foreach(const QImage image, imageList) {
+    foreach(const QImage &image, imageList) {
 
         KoProperties params;
         QVariant v;
@@ -327,16 +327,13 @@ void KoPAView::initGUI()
     connect(shapeManager(), SIGNAL(contentChanged()), this, SLOT(updateCanvasSize()));
     connect(d->doc, SIGNAL(shapeAdded(KoShape *)), this, SLOT(updateCanvasSize()));
     connect(d->doc, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(updateCanvasSize()));
+    connect(d->doc, SIGNAL(update(KoPAPageBase*)), this, SLOT(updateCanvasSize()));
     connect(d->canvas, SIGNAL(documentSize(const QSize&)), d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
 
     if (shell()) {
         KoToolManager::instance()->requestToolActivation( d->canvasController );
-    }
-    if (d->doc->inlineTextObjectManager()) {
-        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
-           d->doc->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
 }
 
@@ -842,11 +839,8 @@ void KoPAView::pageOffsetChanged()
 
 void KoPAView::updateMousePosition(const QPoint& position)
 {
-    QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
-    // the offset is positive it the canvas is shown fully visible
-    canvasOffset.setX(canvasOffset.x() < 0 ? canvasOffset.x(): 0);
-    canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
-    QPoint viewPos = position - canvasOffset;
+    const QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
+    const QPoint viewPos = position - d->canvas->documentOrigin() - canvasOffset;
 
     d->horizontalRuler->updateMouseCoordinate(viewPos.x());
     d->verticalRuler->updateMouseCoordinate(viewPos.y());

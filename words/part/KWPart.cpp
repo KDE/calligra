@@ -27,18 +27,25 @@
 #include "frames/KWTextFrameSet.h"
 #include "dialogs/KWStartupWidget.h"
 
+#ifdef SHOULD_BUILD_RDF
+#include <KoDocumentRdf.h>
+#include <KoDocumentRdfEditWidget.h>
+#endif
+
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
+#include <KoDocumentInfoDlg.h>
 
 #include <kglobal.h>
 #include <kmessagebox.h>
 
 KWPart::KWPart(QObject *parent)
     : KoPart(parent)
+    , m_document(0)
 {
     setComponentData(KWFactory::componentData(), false);
 
@@ -55,10 +62,22 @@ void KWPart::setDocument(KWDocument *document)
     m_document = document;
 }
 
+KWDocument *KWPart::document() const
+{
+    return m_document;
+}
+
 KoView *KWPart::createViewInstance(QWidget *parent)
 {
     KWView *view = new KWView(this, m_document, parent);
-    connect(m_document, SIGNAL(shapeAdded(KoShape *)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *)));
+    setupViewInstance(view);
+    return view;
+}
+
+void KWPart::setupViewInstance(KWView *view)
+{
+    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *, KoShapeManager::Repaint)));
+    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape *)));
     connect(m_document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
 
     bool switchToolCalled = false;
@@ -81,7 +100,6 @@ KoView *KWPart::createViewInstance(QWidget *parent)
     }
     if (!switchToolCalled)
         KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
-    return view;
 }
 
 QGraphicsItem *KWPart::createCanvasItem()
@@ -120,6 +138,17 @@ void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     else
         KoPart::showStartUpWidget(parent, alwaysShow);
+}
+
+KoDocumentInfoDlg *KWPart::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
+{
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+#ifdef SHOULD_BUILD_RDF
+    KoPageWidgetItem *rdfEditWidget = new KoDocumentRdfEditWidget(static_cast<KoDocumentRdf*>(document()->documentRdf()));
+    dlg->addPageItem(rdfEditWidget);
+#endif
+    return dlg;
+
 }
 
 void KWPart::showErrorAndDie()

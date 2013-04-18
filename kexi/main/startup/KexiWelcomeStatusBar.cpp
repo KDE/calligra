@@ -26,27 +26,27 @@
 #include <kexiutils/KexiContextMessage.h>
 #include "KexiUserFeedbackAgent.h"
 
-#include <KGlobalSettings>
-#include <KColorUtils>
-#include <KColorScheme>
-#include <KStandardDirs>
-#include <KLocale>
-#include <KDebug>
-#include <KAction>
-#include <KStandardGuiItem>
-#include <KFadeWidgetEffect>
-#include <KConfigGroup>
+#include <kglobalsettings.h>
+#include <kcolorutils.h>
+#include <kcolorscheme.h>
+#include <kstandarddirs.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kaction.h>
+#include <kstandardguiitem.h>
+#include <kfadewidgeteffect.h>
+#include <kconfiggroup.h>
 #include <KIO/Job>
 #include <KIO/CopyJob>
-#include <KCodecs>
-#include <KTemporaryFile>
-#include <KTempDir>
+#include <kcodecs.h>
+#include <ktemporaryfile.h>
+#include <ktempdir.h>
 #include <kde_file.h>
 
 #include <QEvent>
 #include <QLayout>
 #include <QProgressBar>
-#include <QtCore/qmath.h>
+#include <qmath.h>
 #include <QFile>
 #include <QDesktopServices>
 #include <QUiLoader>
@@ -59,9 +59,16 @@ static const int GUI_UPDATE_INTERVAL = 60; // update interval for GUI, in minute
 static const int UPDATE_FILES_LIST_SIZE_LIMIT = 1024 * 128;
 static const int UPDATE_FILES_COUNT_LIMIT = 128;
 
+// returns x.y.0
+static QString stableVersionStringDot0()
+{
+    return QString::number(Kexi::stableVersionMajor()) + '.'
+           + QString::number(Kexi::stableVersionMinor()) + ".0";
+}
+
 static QString basePath()
 {
-    return QString("kexi/status/") + Kexi::stableVersionString();
+    return QString("kexi/status/") + stableVersionStringDot0();
 }
 
 static QString findFilename(const QString &guiFileName)
@@ -99,7 +106,7 @@ KexiWelcomeStatusBarGuiUpdater::~KexiWelcomeStatusBarGuiUpdater()
 QString KexiWelcomeStatusBarGuiUpdater::uiPath(const QString &fname) const
 {
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
-    return f->serviceUrl() + QString("/ui/%1/").arg(Kexi::stableVersionString())
+    return f->serviceUrl() + QString("/ui/%1/").arg(stableVersionStringDot0())
         + fname;
 }
 
@@ -124,7 +131,7 @@ void KexiWelcomeStatusBarGuiUpdater::update()
 
 void KexiWelcomeStatusBarGuiUpdater::slotRedirectLoaded()
 {
-    QByteArray postData = Kexi::stableVersionString().toLatin1();
+    QByteArray postData = stableVersionStringDot0().toLatin1();
     KIO::Job* sendJob = KIO::storedHttpPost(postData,
                                             KUrl(uiPath(".list")),
                                             KIO::HideProgressInfo);

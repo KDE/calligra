@@ -50,7 +50,7 @@ class KPLATOUI_EXPORT ScheduleTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    ScheduleTreeView( QWidget *parent );
+    explicit ScheduleTreeView(QWidget *parent);
 
     ScheduleItemModel *model() const { return static_cast<ScheduleItemModel*>( TreeViewBase::model() ); }
 
@@ -150,7 +150,7 @@ class KPLATOUI_EXPORT ScheduleLogTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    ScheduleLogTreeView( QWidget *parent );
+    explicit ScheduleLogTreeView(QWidget *parent);
 
     Project *project() const { return logModel()->project(); }
     void setProject( Project *project ) { logModel()->setProject( project ); }

@@ -117,7 +117,7 @@ public:
             : m_account(0), m_objectId(), m_node(0), m_resource(0), m_running(false), m_startup(false), m_shutdown(false)
         {}
         /// Create an empty cost place for account @p acc
-        CostPlace(Account *acc) 
+        explicit CostPlace(Account *acc)
             : m_account(acc), m_objectId(), m_node(0), m_resource(0), m_running(false), m_startup(false), m_shutdown(false)
         {}
         /// Create a cost place for a task
@@ -126,7 +126,7 @@ public:
         /// Create a cost place for a resource
         CostPlace(Account *acc, Resource *resource, bool running=false);
 
-        CostPlace(CostPlace *cp) {
+        explicit CostPlace(CostPlace *cp) {
             m_account = cp->m_account;
             m_objectId = cp->m_objectId;
             m_node = cp->m_node;

@@ -25,7 +25,7 @@
 namespace KPlato
 {
 
-class Part;
+class MainDocument;
 class Account;
 class ResourceGroup;
 class Resource;
@@ -57,14 +57,14 @@ private slots:
     void testExistingTeamResourceRequest();
 
 private:
-    Account *addAccount( Part &part, Account *parent = 0 );
-    Calendar *addCalendar( Part &part );
-    ResourceGroup *addResourceGroup( Part &part );
-    Resource *addResource( Part &part, ResourceGroup *g = 0 );
-    Task *addTask( Part &part );
-    void addGroupRequest( Part &part );
-    void addResourceRequest( Part &part );
-    Relation *addDependency( Part &part, Task *t1, Task *t2 );
+    Account *addAccount( MainDocument &part, Account *parent = 0 );
+    Calendar *addCalendar( MainDocument &part );
+    ResourceGroup *addResourceGroup( MainDocument &part );
+    Resource *addResource( MainDocument &part, ResourceGroup *g = 0 );
+    Task *addTask( MainDocument &part );
+    void addGroupRequest( MainDocument &part );
+    void addResourceRequest( MainDocument &part );
+    Relation *addDependency( MainDocument &part, Task *t1, Task *t2 );
 };
 
 }

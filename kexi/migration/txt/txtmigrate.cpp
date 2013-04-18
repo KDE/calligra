@@ -18,7 +18,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 
 #include "txtmigrate.h"
-#include <KDebug>
+#include <kdebug.h>
 #include <QDir>
 
 namespace KexiMigration
@@ -42,7 +42,7 @@ bool TxtMigrate::drv_connect()
 {
   QDir d;
 
-  m_Folder = m_migrateData->source->dbPath();
+  m_Folder = data()->source->dbPath();
   return d.exists(m_Folder);
 }
 
@@ -58,7 +58,7 @@ bool TxtMigrate::drv_disconnect()
 
 bool TxtMigrate::drv_tableNames(QStringList& tablenames)
 {
-  tablenames << m_migrateData->source->dbFileName();
+  tablenames << data()->source->dbFileName();
   return true;
 }
 

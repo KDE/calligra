@@ -48,7 +48,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
-#include <kactionmenu.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
@@ -343,6 +342,7 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
     connect(baseModel(), SIGNAL(projectShownChanged(bool)), SLOT(slotProjectShown(bool)));
+    connect(model(), SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), this, SLOT(slotEnableActions()));
 }
 
 void TaskEditor::slotProjectShown( bool on )
@@ -1233,37 +1233,35 @@ KoPrintJob *TaskView::createPrintJob()
 }
 
 //---------------------------------
-GeneralNodeTreeView::GeneralNodeTreeView( QWidget *parent )
+WorkPackageTreeView::WorkPackageTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
-    GeneralNodeItemModel *m = new GeneralNodeItemModel( this );
+    kDebug(planDbg())<<"----------"<<this<<"----------";
+    m = new WorkPackageProxyModel( this );
     setModel( m );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
 
-    createItemDelegates( m );
+    createItemDelegates( baseModel() );
+
+    setSortingEnabled( true );
+    sortByColumn( NodeModel::NodeWBSCode, Qt::AscendingOrder );
 
     connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
 }
 
-void GeneralNodeTreeView::setModus( int mode )
+NodeItemModel *WorkPackageTreeView::baseModel() const
 {
-    baseModel()->setModus( mode );
+    return m->baseModel();
 }
 
-GeneralNodeItemModel *GeneralNodeTreeView::baseModel() const
+void WorkPackageTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
 {
-    NodeSortFilterProxyModel *pr = proxyModel();
-    if ( pr ) {
-        return static_cast<GeneralNodeItemModel*>( pr->sourceModel() );
-    }
-    return static_cast<GeneralNodeItemModel*>( model() );
-}
-
-void GeneralNodeTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
-{
-    QModelIndex idx = index;
+    Q_UNUSED(index);
+    Q_UNUSED(dropIndicatorPosition);
+    Q_UNUSED(event);
+/*    QModelIndex idx = index;
     NodeSortFilterProxyModel *pr = proxyModel();
     if ( pr ) {
         idx = pr->mapToSource( index );
@@ -1271,7 +1269,7 @@ void GeneralNodeTreeView::slotDropAllowed( const QModelIndex &index, int dropInd
     event->ignore();
     if ( baseModel()->dropAllowed( idx, dropIndicatorPosition, event->mimeData() ) ) {
         event->accept();
-    }
+    }*/
 }
 
 //--------------------------------
@@ -1281,18 +1279,7 @@ TaskWorkPackageView::TaskWorkPackageView(KoPart *part, KoDocument *doc, QWidget 
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new GeneralNodeTreeView( this );
-    m_view->setModus( GeneralNodeItemModel::Flat | GeneralNodeItemModel::WorkPackage );
-    NodeSortFilterProxyModel *p = new NodeSortFilterProxyModel( m_view->baseModel(), m_view, false );
-    m_view->setModel( p );
-
-    m_view->setSortingEnabled( true );
-    m_view->sortByColumn( NodeModel::NodeWBSCode, Qt::AscendingOrder );
-
-    // match empty string or Type_Task
-    p->setFilterRegExp( QRegExp( QString( "^$|%1").arg( Node::Type_Task ) ) );
-    p->setFilterRole( Qt::EditRole );
-    p->setFilterKeyColumn( NodeModel::NodeType );
+    m_view = new WorkPackageTreeView( this );
 
     l->addWidget( m_view );
     setupGui();
@@ -1369,7 +1356,7 @@ void TaskWorkPackageView::setProject( Project *project )
     m_view->setProject( project );
 }
 
-NodeSortFilterProxyModel *TaskWorkPackageView::proxyModel() const
+WorkPackageProxyModel *TaskWorkPackageView::proxyModel() const
 {
     return m_view->proxyModel();
 }
@@ -1420,7 +1407,7 @@ QList<Node*> TaskWorkPackageView::selectedNodes() const {
         return lst;
     }
     foreach ( const QModelIndex &i, sm->selectedRows() ) {
-        Node * n = m_view->baseModel()->node( proxyModel()->mapToSource( i ) );
+        Node * n = proxyModel()->taskFromIndex( i );
         if ( n != 0 && n->type() != Node::Type_Project ) {
             lst.append( n );
         }
@@ -1438,7 +1425,7 @@ Node *TaskWorkPackageView::selectedNode() const
 }
 
 Node *TaskWorkPackageView::currentNode() const {
-    Node * n = m_view->baseModel()->node( proxyModel()->mapToSource( m_view->selectionModel()->currentIndex() ) );
+    Node * n = proxyModel()->taskFromIndex( m_view->selectionModel()->currentIndex() );
     if ( n == 0 || n->type() == Node::Type_Project ) {
         return 0;
     }
@@ -1448,7 +1435,7 @@ Node *TaskWorkPackageView::currentNode() const {
 void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
     QString name;
-    Node *node = m_view->baseModel()->node( proxyModel()->mapToSource( index ) );
+    Node *node = proxyModel()->taskFromIndex( index );
     if ( node ) {
         switch ( node->type() ) {
             case Node::Type_Task:

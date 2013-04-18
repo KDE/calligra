@@ -20,7 +20,7 @@
 #ifndef KEXIMIGRATIONOPTIONSDIALOG_H
 #define KEXIMIGRATIONOPTIONSDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 
 class QCheckBox;
 class KexiCharacterEncodingComboBox;

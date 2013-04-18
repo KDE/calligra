@@ -1,12 +1,19 @@
 [Desktop Entry]
 Name=place
+Name[bs]=mjesto
 Name[ca]=lloc
 Name[ca@valencia]=lloc
+Name[da]=place
 Name[el]=τόπος
 Name[es]=lugar
 Name[et]=Olek
+Name[fr]=lieu
+Name[gl]=Lugar
+Name[hu]=hely
+Name[ia]=placia
 Name[it]=locale
 Name[kk]=орын
+Name[mr]=जागा
 Name[nb]=sted
 Name[nl]=Plaats
 Name[pl]=miejsce
@@ -14,6 +21,7 @@ Name[pt]=local
 Name[pt_BR]=local
 Name[ru]=место
 Name[sk]=miesto
+Name[sl]=kraj
 Name[sv]=plats
 Name[ug]=ئورۇن
 Name[uk]=Місце

@@ -45,15 +45,6 @@ KisBMPExport::~KisBMPExport()
 {
 }
 
-bool hasVisibleWidgets()
-{
-    QWidgetList wl = QApplication::allWidgets();
-    foreach(QWidget* w, wl) {
-        if (w->isVisible()) return true;
-    }
-    return false;
-}
-
 KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "BMP export! From:" << from << ", To:" << to << "";
@@ -62,7 +53,7 @@ KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const Q
     QString filename = m_chain->outputFile();
 
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 

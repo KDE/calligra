@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=ACgen
+Name[bs]=ACgen
 Name[ca]=ACgen
 Name[ca@valencia]=ACgen
+Name[da]=Vekselspænding
+Name[de]=Wechselstromgenerator
 Name[el]=ACgen
 Name[es]=Generador de C.A.
 Name[et]=Vahelduvvoolu generaator
+Name[fr]=ACgen
+Name[gl]=Xerador de corrente alterna
 Name[it]=GeneratoreAC
 Name[kk]=Айнымалы ток генераторы
 Name[nb]=Generator

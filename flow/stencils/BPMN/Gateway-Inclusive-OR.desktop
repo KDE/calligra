@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Gateway-Inclusive-OR
+Name[bs]=Gateway uključivo ili
 Name[ca]=Passarel·la-Inclusiu-OR
 Name[ca@valencia]=Passarel·la-Inclusiu-OR
+Name[de]=Inklusives Gateway
 Name[el]=Πύλη-Inclusive-OR
 Name[es]=Puerta de enlace O inclusiva
 Name[et]=Inklusiivne (OR) värav
+Name[fr]=entrée intrusive OR
+Name[gl]=Porta OU inclusiva
+Name[hu]=Átjáró-Inkluzív-VAGY
 Name[it]=Gateway-Inclusivo-OR
 Name[kk]=Сыйысатын НЕМЕСЕ шлюзі
 Name[nb]=Portner-inklusive-OR
@@ -17,4 +22,5 @@ Name[sk]=Gateway-Inclusive-OR
 Name[sv]=Port-inklusiv-eller
 Name[uk]=Шлюз включного АБО
 Name[x-test]=xxGateway-Inclusive-ORxx
+Name[zh_CN]=网关-包含 OR
 Name[zh_TW]=閘道─Inclusive-OR

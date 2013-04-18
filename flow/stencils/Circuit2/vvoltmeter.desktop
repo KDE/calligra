@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Vertical Voltmeter
+Name[bs]=Vertikalni voltmetar
 Name[ca]=Voltímetre vertical
 Name[ca@valencia]=Voltímetre vertical
+Name[da]=Lodret voltmeter
 Name[de]=Sekrechtes Voltmeter
 Name[el]=Κάθετο βολτόμετρο
 Name[es]=Voltímetro vertical
 Name[et]=Vertikaalne voltmeeter
+Name[fr]=Vertical Voltmeter
+Name[gl]=Voltímetro vertical
+Name[hu]=Függőleges voltmérő
 Name[it]=Voltmetro verticale
 Name[kk]=Тік вольтметр
 Name[nb]=Loddrett voltmeter
@@ -16,7 +21,9 @@ Name[pt]=Voltímetro Vertical
 Name[pt_BR]=Voltímetro vertical
 Name[ru]=Вертикальный вольтметр
 Name[sk]=Vodorovný voltmeter
+Name[sl]=Navpičen voltmeter
 Name[sv]=Vertikal voltmätare
+Name[tr]=Dikey Voltmetre
 Name[uk]=Вольтметр (вертикально)
 Name[x-test]=xxVertical Voltmeterxx
 Name[zh_TW]=垂直電壓計

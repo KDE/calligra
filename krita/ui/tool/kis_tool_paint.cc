@@ -422,7 +422,7 @@ void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
-    if (!node || node->systemLocked() || node->inherits("KisSelectionMask")) {
+    if (!node || node->systemLocked()) {
         return NONE;
     }
     if (node->inherits("KisShapeLayer")) {
@@ -468,19 +468,19 @@ void KisToolPaint::stepAlpha(float step)
 {
     qreal alpha = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
     alpha += step;
-    alpha = qBound(0.0, alpha, 1.0);
+    alpha = qBound<qreal>(0.0, alpha, 1.0);
     canvas()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
 }
 
 
 void KisToolPaint::increaseOpacity()
 {
-    stepAlpha(0.1);
+    stepAlpha(0.1f);
 }
 
 void KisToolPaint::decreaseOpacity()
 {
-    stepAlpha(-0.1);
+    stepAlpha(-0.1f);
 }
 
 

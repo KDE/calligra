@@ -18,8 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoUnit.h>
 #include "KoShadowStyle.h"
+
+#include <KoUnit.h>
+
 
 // KoShadowStyle private class
 class KoShadowStylePrivate: public QSharedData
@@ -73,7 +75,7 @@ bool KoShadowStyle::operator==(const KoShadowStyle &other) const
     if (shadowCount() != other.shadowCount())
         return false;
 
-    foreach (ShadowData data, d->shadows)
+    foreach (const ShadowData &data, d->shadows)
     {
         if (!other.d->shadows.contains(data))
             return false;

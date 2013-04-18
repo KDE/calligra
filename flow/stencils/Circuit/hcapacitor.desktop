@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Horizontal Capacitor
 Name[bg]=Хоризонтален кондензатор
+Name[bs]=Horizontalni kondenzator
 Name[ca]=Capacitador horitzontal
 Name[ca@valencia]=Capacitador horitzontal
+Name[da]=Vandret kapacitor
 Name[de]=Waagerechter Kondensator
 Name[el]=Οριζόντιος πυκνωτής
 Name[es]=Condensador horizontal
 Name[et]=Horisontaalne kondensaator
+Name[fr]=Horizontal Capacitor
+Name[gl]=Condensador horizontal
+Name[hu]=Vízszintes kondenzátor
 Name[it]=Condensatore orizzontale
 Name[kk]=Жатық конденсатор
 Name[nb]=Vannrett kondensator
@@ -18,6 +23,7 @@ Name[pt_BR]=Capacitor horizontal
 Name[ru]=Горизонтальный конденсатор
 Name[sk]=Vodorovný kondenzátor
 Name[sv]=Horisontell kondensator
+Name[tr]=Yatay Kapasitör
 Name[uk]=Конденсатор (горизонтально)
 Name[x-test]=xxHorizontal Capacitorxx
 Name[zh_CN]=水平电容

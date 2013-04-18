@@ -42,6 +42,14 @@ KisFixedPaintDevice::KisFixedPaintDevice(const KisFixedPaintDevice& rhs)
     m_data = rhs.m_data;
 }
 
+KisFixedPaintDevice& KisFixedPaintDevice::operator=(const KisFixedPaintDevice& rhs)
+{
+    m_bounds = rhs.m_bounds;
+    m_colorSpace = rhs.m_colorSpace;
+    m_data = rhs.m_data;
+    return *this;
+}
+
 void KisFixedPaintDevice::setRect(const QRect& rc)
 {
     m_bounds = rc;
@@ -123,7 +131,7 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
     }
 }
 
-QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     qint32 x1;
     qint32 y1;
@@ -138,7 +146,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
     return convertToQImage(dstProfile, x1, y1, w, h, intent, conversionFlags);
 }
 
-QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT( m_bounds.contains(QRect(x1,y1,w,h)) );
 

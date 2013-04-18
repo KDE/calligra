@@ -20,7 +20,7 @@
 
 #include "TestKspreadCommon.h"
 
-#include <KStandardDirs>
+#include <kstandarddirs.h>
 
 void TestBitopsFunctions::initTestCase()
 {
