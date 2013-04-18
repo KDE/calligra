@@ -1,3 +1,10 @@
+coffice (1.4) unstable; urgency=low
+
+  * Add support for Microsoft Word DOC, DOT, DOCM and DOTM file formats.
+  * Fix temporary file leak, made arm5+v7a apk.
+
+ -- Sebastian Sauer <mail@dipe.org>  Sun, 18 Apr 2013 23:24:26 +0100
+
 coffice (1.3) unstable; urgency=low
 
   * Add support for Microsoft Word DOCX and DOTX file formats.
