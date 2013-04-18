@@ -593,10 +593,10 @@ ReportNavigator::ReportNavigator( QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
-    ui_first->setIcon(koIcon("go-first-view-page"));
-    ui_last->setIcon(koIcon("go-last-view-page"));
-    ui_prev->setIcon(koIcon("go-previous-view-page"));
-    ui_next->setIcon(koIcon("go-next-view-page"));
+    ui_first->setIcon(koIcon("go-first-view"));
+    ui_last->setIcon(koIcon("go-last-view"));
+    ui_prev->setIcon(koIcon("go-previous-view"));
+    ui_next->setIcon(koIcon("go-next-view"));
 
     connect( ui_max, SIGNAL(valueChanged(int)), SLOT(slotMaxChanged(int)));
 
