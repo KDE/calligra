@@ -18,4 +18,4 @@ CMakeLists.txt.user*
 *.files
 *.includes
 .DS_Store
-*.kate-swap
+*.kate-swp
