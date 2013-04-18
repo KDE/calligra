@@ -24,9 +24,9 @@
 
 #include <QObject>
 
-namespace Phonon {
-    class MediaObject;
-}
+//namespace Phonon {
+//    class MediaObject;
+//}
 
 class KPrSoundData;
 
@@ -52,7 +52,7 @@ public slots:
     void finished();
 
 private:
-    Phonon::MediaObject * m_media;
+//    Phonon::MediaObject * m_media;
     KPrSoundData *m_soundData;
 };
 

@@ -19,7 +19,7 @@
 
 #include "KPrSoundEventAction.h"
 
-#include <phonon/mediaobject.h>
+//#include <phonon/mediaobject.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -34,7 +34,7 @@
 KPrSoundEventAction::KPrSoundEventAction()
 : QObject()
 , KoEventAction()
-, m_media( 0 )
+//, m_media( 0 )
 , m_soundData( 0 )
 {
     setId(KPrSoundEventActionId);
@@ -42,7 +42,7 @@ KPrSoundEventAction::KPrSoundEventAction()
 
 KPrSoundEventAction::~KPrSoundEventAction()
 {
-    delete m_media;
+//    delete m_media;
     delete m_soundData;
 }
 
@@ -93,19 +93,19 @@ void KPrSoundEventAction::start()
 {
     if ( m_soundData ) {
         finish();
-        m_media = Phonon::createPlayer( Phonon::MusicCategory,
-                                        Phonon::MediaSource( m_soundData->nameOfTempFile() ) );
-        connect( m_media, SIGNAL(finished()), this, SLOT(finished()) );
-        m_media->play();
+//        m_media = Phonon::createPlayer( Phonon::MusicCategory,
+//                                        Phonon::MediaSource( m_soundData->nameOfTempFile() ) );
+//        connect( m_media, SIGNAL(finished()), this, SLOT(finished()) );
+//        m_media->play();
     }
 }
 
 void KPrSoundEventAction::finish()
 {
-    if ( m_media ) {
-        m_media->stop();
-        finished();
-    }
+//    if ( m_media ) {
+//        m_media->stop();
+//        finished();
+//    }
 }
 
 void KPrSoundEventAction::setSoundData( KPrSoundData * soundData )
@@ -121,8 +121,8 @@ KPrSoundData * KPrSoundEventAction::soundData() const
 
 void KPrSoundEventAction::finished()
 {
-    delete m_media;
-    m_media = 0;
+//    delete m_media;
+//    m_media = 0;
 }
 
 #include <KPrSoundEventAction.moc>
