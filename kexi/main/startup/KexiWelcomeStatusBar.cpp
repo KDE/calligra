@@ -39,7 +39,7 @@
 #include <KIO/Job>
 #include <KIO/CopyJob>
 #include <ktemporaryfile.h>
-#include <ktempdir.h>
+#include <QTemporaryDir>
 #include <kde_file.h>
 
 #include <QEvent>
@@ -195,12 +195,12 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
     foreach (const QString &fname, d->fileNamesToUpdate) {
         sourceFiles.append(KUrl(uiPath(fname)));
     }
-    KTempDir tempDir(KStandardDirs::locateLocal("tmp", "kexi-status"));
+    QTemporaryDir tempDir(KStandardDirs::locateLocal("tmp", "kexi-status"));
     tempDir.setAutoRemove(false);
-    d->tempDir = tempDir.name();
-    kDebug() << tempDir.name();
+    d->tempDir = tempDir.path() + "/";
+    kDebug() << tempDir.path() + "/";
     KIO::CopyJob *copyJob = KIO::copy(sourceFiles,
-                                        KUrl("file://" + tempDir.name()),
+                                        KUrl("file://" + tempDir.path() + "/"),
                                         KIO::HideProgressInfo | KIO::Overwrite);
     connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(filesCopyFinished(KJob*)));
         //kDebug() << "copying from" << KUrl(uiPath(fname)) << "to"
@@ -252,7 +252,7 @@ void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
             kWarning() << "cannot move" << (d->tempDir + fname) << "to" << (dir + fname);
         }
     }
-    KTempDir::removeDir(d->tempDir);
+    QTemporaryDir::removeDir(d->tempDir);
 }
 
 // ---

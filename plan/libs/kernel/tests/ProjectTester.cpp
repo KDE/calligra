@@ -41,21 +41,21 @@ void ProjectTester::initTestCase()
     QVERIFY( m_tmp.exists() );
 
     QFile f;
-    f.setFileName( m_tmp.name() + QLatin1String( "zone.tab" ) );
+    f.setFileName( m_tmp.path() + "/" + QLatin1String( "zone.tab" ) );
     f.open(QIODevice::WriteOnly);
     QTextStream fStream(&f);
     fStream << "DE  +5230+01322 Europe/Berlin\n";
     f.close();
-    QDir dir(m_tmp.name());
+    QDir dir(m_tmp.path() + "/");
     QVERIFY(dir.mkdir("Europe"));
-    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), m_tmp.name() + QLatin1String("Europe/Berlin"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), m_tmp.path() + "/" + QLatin1String("Europe/Berlin"));
 
     // NOTE: QTEST_KDEMAIN_CORE puts the config file in QDir::homePath() + "/.kde-unit-test"
     //       and hence, this is common to all unit tests
     KConfig config("ktimezonedrc");
     KConfigGroup group(&config, "TimeZones");
-    group.writeEntry("ZoneinfoDir", m_tmp.name());
-    group.writeEntry("Zonetab", m_tmp.name() + QString::fromLatin1("zone.tab"));
+    group.writeEntry("ZoneinfoDir", m_tmp.path() + "/");
+    group.writeEntry("Zonetab", m_tmp.path() + "/" + QString::fromLatin1("zone.tab"));
     group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
     config.sync();
 

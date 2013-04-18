@@ -23,7 +23,7 @@
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 
-#include <ktempdir.h>
+#include <QTemporaryDir>
 #include <kdebug.h>
 
 #include <jni.h>
@@ -73,8 +73,8 @@ KoFilter::ConversionStatus MpxjImport::convert(const QByteArray& from, const QBy
     }
     QString inputFile = m_chain->inputFile();
     kDebug(planMpxjDbg())<<"Import from:"<<inputFile;
-    KTempDir *tmp = new KTempDir();
-    QString outFile( tmp->name() + "maindoc.xml" );
+    QTemporaryDir *tmp = new QTemporaryDir();
+    QString outFile( tmp->path() + "/maindoc.xml" );
     kDebug(planMpxjDbg())<<"Temp file:"<<outFile;
     KoFilter::ConversionStatus sts = doImport( inputFile.toUtf8(), outFile.toUtf8() );
     kDebug(planMpxjDbg())<<"doImport returned:"<<(sts == KoFilter::OK);

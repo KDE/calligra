@@ -21,7 +21,7 @@
 #define KPlato_ProjectTester_h
 
 #include <QtTest/QtTest>
-#include <ktempdir.h>
+#include <QTemporaryDir>
 
 #include "kptproject.h"
 #include "kptdatetime.h"
@@ -48,7 +48,7 @@ private:
     void initTimezone();
     void cleanupTimezone();
 
-    KTempDir m_tmp;
+    QTemporaryDir m_tmp;
     Project *m_project;
     Calendar *m_calendar;
     Task *m_task;

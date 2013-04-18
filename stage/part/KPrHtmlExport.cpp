@@ -22,7 +22,7 @@
 
 #include <QDir>
 #include <kio/copyjob.h>
-#include <ktempdir.h>
+#include <QTemporaryDir>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <krun.h>
@@ -46,8 +46,8 @@ void KPrHtmlExport::exportHtml(const KPrHtmlExport::Parameter &parameters)
     m_parameters = parameters;
 
     // Create a temporary dir
-    KTempDir tmpDir;
-    m_tmpDirPath = tmpDir.name();
+    QTemporaryDir tmpDir;
+    m_tmpDirPath = tmpDir.path() + "/";
     tmpDir.setAutoRemove(false);
     extractStyle();
     exportImageToTmpDir();
@@ -68,15 +68,15 @@ KUrl KPrHtmlExport::exportPreview(const Parameter &parameters)
     m_parameters = parameters;
 
     // Create a temporary dir
-    KTempDir tmpDir;
+    QTemporaryDir tmpDir;
     tmpDir.setAutoRemove(false);
-    m_tmpDirPath = tmpDir.name();
+    m_tmpDirPath = tmpDir.path() + "/";
     extractStyle();
     exportImageToTmpDir();
     generateHtml();
 
     KUrl previewUrl;
-    previewUrl.setPath(tmpDir.name());
+    previewUrl.setPath(tmpDir.path() + "/");
     previewUrl.addPath("slide0.html");
     return previewUrl;
 }
@@ -154,7 +154,7 @@ void KPrHtmlExport::copyFromTmpToDest()
 
 void KPrHtmlExport::moveResult(KJob *job)
 {
-    KTempDir::removeDir(m_tmpDirPath);
+    QTemporaryDir::removeDir(m_tmpDirPath);
     if (job->error()) {
         KMessageBox::error(m_parameters.kprView, job->errorText());
     }
