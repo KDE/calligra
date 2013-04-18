@@ -81,8 +81,8 @@ public:
      is in parent table of this query. \sa setReadOnly() */
     bool isReadOnly() const;
 
-//TODO: synchronize this with table view:
     //! forces readOnly flag to be set to \a ro
+    //! @todo synchronize this with table view:
     void setReadOnly(bool ro);
 
     //! Column visibility. By default column is visible.
