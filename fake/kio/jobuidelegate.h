@@ -3,6 +3,8 @@
 
 #include "kofake_export.h"
 
+#include <QWidget>
+
 namespace KIO {
 
 class JobUiDelegate : public QWidget
