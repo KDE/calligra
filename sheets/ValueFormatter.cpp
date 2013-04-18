@@ -27,7 +27,6 @@
 #include "Localization.h"
 #include "ValueConverter.h"
 
-#include <kcalendarsystem.h>
 #include <kdebug.h>
 #include <klocale.h>
 
