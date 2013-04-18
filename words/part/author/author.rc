@@ -44,6 +44,8 @@
   <Action name="view_grid"/>
   <Action name="view_snaptogrid"/>
   <Separator/>
+  <Action name="view_statsInStatusBar"/>
+  <Separator/>
   <Action name="zoom_out"/>
   <Action name="zoom_in"/>
   <Action name="view_zoom"/>
@@ -79,7 +81,6 @@
   <Action name="enable_autocorrection"/>
   <Action name="configure_autocorrection"/>
   <Action name="showStatusBar" group="settings_show"/>
-  <Action name="showStatsInStatusBar" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
   <Action name="settings_active_author" group="settings_configure"/>
   <Action name="configure" group="settings_configure"/>

@@ -39,7 +39,7 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
     :KWView(part, document, parent)
 {
         setComponentData(CAuFactory::componentData());
-        setXMLFile("author.rc");
+        setXMLFile("author2.rc");
 
         buildAssociatedWidget();
         setupActions();
@@ -54,11 +54,11 @@ void CAuView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(selectCoverImage()));
 
     // -------- Statistics in the status bar
-    KToggleAction *tAction = new KToggleAction(i18n("Show stats in bar"), this);
-    tAction->setToolTip(i18n("Shows or hides the stats in status bar"));
+    KToggleAction *tAction = new KToggleAction(i18n("Word Count"), this);
+    tAction->setToolTip(i18n("Shows or hides word counting in status bar"));
     //always display at start so -> "true"
     tAction->setChecked(true);
-    actionCollection()->addAction("showStatsInStatusBar", tAction);
+    actionCollection()->addAction("view_statsInStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatsInStatusBar(bool)));
 }
 
