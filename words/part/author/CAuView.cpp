@@ -39,7 +39,7 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
     :KWView(part, document, parent)
 {
         setComponentData(CAuFactory::componentData());
-        setXMLFile("author2.rc");
+        setXMLFile("author.rc");
 
         buildAssociatedWidget();
         setupActions();
@@ -58,7 +58,7 @@ void CAuView::setupActions()
     tAction->setToolTip(i18n("Shows or hides word counting in status bar"));
     //always display at start so -> "true"
     tAction->setChecked(true);
-    actionCollection()->addAction("view_statsInStatusBar", tAction);
+    actionCollection()->addAction("view_wordCount", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatsInStatusBar(bool)));
 }
 
