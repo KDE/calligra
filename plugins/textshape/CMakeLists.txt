@@ -55,7 +55,7 @@ SET ( textshape_SRCS
     dialogs/SimpleCitationBibliographyWidget.cpp
     dialogs/SimpleLinksWidget.cpp
     dialogs/SimpleSpellCheckingWidget.cpp
-    dialogs/CitationInsertionDialog.cpp
+    dialogs/InsertCitationDialog.cpp
     dialogs/InsertBibliographyDialog.cpp
     dialogs/SimpleFootEndNotesWidget.cpp
     dialogs/NotesConfigurationDialog.cpp
@@ -136,6 +136,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCitationBibliographyWidget.ui
     dialogs/SimpleSpellCheckingWidget.ui
     dialogs/CitationInsertionDialog.ui
+    dialogs/InsertCitationDialog.ui
     dialogs/InsertBibliographyDialog.ui
     dialogs/SimpleFootEndNotesWidget.ui
     dialogs/NotesConfigurationDialog.ui
