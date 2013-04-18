@@ -135,6 +135,7 @@ kparts/mainwindow.h
 kparts/part.h
 kparts/partmanager.h
 kparts/plugin.h
+kio/renamedialog.h
 )
 
 QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS})
