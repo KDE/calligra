@@ -264,9 +264,9 @@ void WMFImportParser::drawArc(Libwmf::WmfDeviceContext &context, int x, int y, i
     const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
     const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
 
-    QString path;
-    path += QString("M%1,%2 ").arg(p1.x()).arg(p1.y());
-    path += QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
+    QString path =
+            QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
+            QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
 
     const QString strokeStyle = saveStroke(context);
 
@@ -292,11 +292,11 @@ void WMFImportParser::drawPie(Libwmf::WmfDeviceContext &context, int x, int y, i
     const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
     const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
 
-    QString path;
-    path += QString("M%1,%2 ").arg(bound.center().x()).arg(bound.center().y());
-    path += QString("L%1,%2 ").arg(p1.x()).arg(p1.y());
-    path += QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
-    path += QString("L%1,%2").arg(bound.center().x()).arg(bound.center().y());
+    QString path =
+            QString("M%1,%2 ").arg(bound.center().x()).arg(bound.center().y()) +
+            QString("L%1,%2 ").arg(p1.x()).arg(p1.y()) +
+            QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
+            QString("L%1,%2").arg(bound.center().x()).arg(bound.center().y());
 
     const QString fillStyle = saveFill(context);
     const QString strokeStyle = saveStroke(context);
@@ -323,10 +323,10 @@ void WMFImportParser::drawChord(Libwmf::WmfDeviceContext &context, int x, int y,
     const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
     const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
 
-    QString path;
-    path += QString("M%1,%2 ").arg(p1.x()).arg(p1.y());
-    path += QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
-    path += QString("L%1,%2").arg(p1.x()).arg(p1.y());
+    QString path =
+            QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
+            QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
+            QString("L%1,%2").arg(p1.x()).arg(p1.y());
 
     const QString fillStyle = saveFill(context);
     const QString strokeStyle = saveStroke(context);
@@ -510,10 +510,10 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
     if (context.escapement) {
         // we rotate around the anchor point
         // rotation is in 1/10th of a degree
-        QString transform;
-        transform += QString("translate(%1,%2) ").arg(pos.x()).arg(pos.y());
-        transform += QString("rotate(%1) ").arg(qreal(context.escapement) / -10.0);
-        transform += QString("translate(%1,%2)").arg(-pos.x()).arg(-pos.y());
+        QString transform =
+                QString("translate(%1,%2) ").arg(pos.x()).arg(pos.y()) +
+                QString("rotate(%1) ").arg(qreal(context.escapement) / -10.0) +
+                QString("translate(%1,%2)").arg(-pos.x()).arg(-pos.y());
         m_svgWriter.addAttribute("transform", transform);
     }
 

@@ -398,9 +398,7 @@ void FormulaDialog::slotChangeText(const QString&)
     if (m_focus == 0)
         return;
 
-    QString tmp = m_leftText + m_funcName + '(';
-    tmp += createFormula();
-    tmp = tmp + ')' + m_rightText;
+    QString tmp = m_leftText + m_funcName + '(' + createFormula() + ')' + m_rightText;
 
     result->setText(tmp);
 }

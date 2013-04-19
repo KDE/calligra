@@ -753,42 +753,42 @@ QString DatabaseDialog::getWhereCondition(QString const & column,
 
     switch (op) {
     case 0:
-        wherePart += column;
-        wherePart += " = ";
+        wherePart += column +
+                     " = ";
         break;
     case 1:
-        wherePart += "NOT ";
-        wherePart += column;
-        wherePart += " = ";
+        wherePart += "NOT " +
+                     column +
+                     " = ";
         break;
     case 2:
-        wherePart += column;
-        wherePart += " IN ";
+        wherePart += column +
+                     " IN ";
         break;
     case 3:
-        wherePart += "NOT ";
-        wherePart += column;
-        wherePart += " IN ";
+        wherePart += "NOT " +
+                     column +
+                     " IN ";
         break;
     case 4:
-        wherePart += column;
-        wherePart += " LIKE ";
+        wherePart += column +
+                     " LIKE ";
         break;
     case 5:
-        wherePart += column;
-        wherePart += " > ";
+        wherePart += column +
+                     " > ";
         break;
     case 6:
-        wherePart += column;
-        wherePart += " < ";
+        wherePart += column +
+                     " < ";
         break;
     case 7:
-        wherePart += column;
-        wherePart += " >= ";
+        wherePart += column +
+                     " >= ";
         break;
     case 8:
-        wherePart += column;
-        wherePart += " <= ";
+        wherePart += column +
+                     " <= ";
         break;
     }
 
@@ -885,12 +885,12 @@ bool DatabaseDialog::optionsDoNext()
     int i;
     int l = m_columns_1->count() - 1;
     for (i = 0; i < l; ++i) {
-        query += m_columns_1->itemText(i);
-        query += ", ";
+        query += m_columns_1->itemText(i) +
+                 ", ";
     }
-    query += m_columns_1->itemText(l);
+    query += m_columns_1->itemText(l) +
 
-    query += "\nFROM ";
+             "\nFROM ";
 
     bool b = false;
     for (int i = 0; i < m_tableView->count(); ++i) {

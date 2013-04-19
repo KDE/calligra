@@ -114,7 +114,7 @@ int main(int argc, char** argv)
                                           "   returns debug string for a given\n"
                                           "   sql statement or error message\n"
                                           "- dr_prop: shows properties of selected driver"));
-    options.add("buffered-cursors", ki18n("Optional switch :turns cursors used in any tests\n"
+    options.add("buffered-cursors", ki18n("Optional switch: turns cursors used in any tests\n"
                                           " to be buffered"));
     options.add("query-params <params>", ki18n("Query parameters separated\n"
                 "by '|' character that will be passed to query\n"
@@ -126,7 +126,7 @@ int main(int argc, char** argv)
                           "3. All other tests require <db_name>\n"
                           " and <driver_name> arguments.\n"
                           "4. 'tables' test automatically runs 'dbcreation'\n"
-                          " test. (<new_db_name> is removed if already exists.\n"
+                          " test. (<new_db_name> is removed if already exists).\n"
                           "5. <db_name> must be a valid kexi database\n"
                           " e.g. created with 'tables' test."));
     options.add("+driver_name", ki18n("Driver name"));
