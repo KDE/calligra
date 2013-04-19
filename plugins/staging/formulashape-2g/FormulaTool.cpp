@@ -124,20 +124,20 @@ void FormulaTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (!m_formulaShape) {
         return;
     }
-    
+
     m_formulaShape->update();
 }
 
 void FormulaTool::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Backspace) {
-      if(cursor()) {
+        if(cursor()) {
             KUndo2Command *command = cursor()->deleteText();
             if (command!=0) {
                 canvas()->addCommand(command);
                 emit formulaContentChanged(m_formulaShape->MML());
             }
-      }
+        }
     } else if (event->key() == Qt::Key_Delete) {
         if(cursor()) {
             KUndo2Command *command = cursor()->deleteNode();
@@ -153,11 +153,11 @@ void FormulaTool::keyPressEvent(QKeyEvent *event)
     } else if ((event->key() == Qt::Key_Right) && (event->modifiers() & Qt::ControlModifier) == 0) {
         if(cursor()) {
             cursor()->nextNode();
-	    }
+        }
     } else if ((event->key() == Qt::Key_Up) && (event->modifiers() & Qt::ControlModifier) == 0) {
-        
+
     } else if ((event->key() == Qt::Key_Down) && (event->modifiers() & Qt::ControlModifier) == 0) {
-        
+
     } else {
         if(cursor()) {
             KUndo2Command *command = cursor()->insertText(event->text());
@@ -168,13 +168,13 @@ void FormulaTool::keyPressEvent(QKeyEvent *event)
         }
     }
 }
- 
-FormulaCursor *FormulaTool::cursor() 
+
+FormulaCursor *FormulaTool::cursor()
 {
     if (!m_formulaShape) {
         return 0;
     }
-     
+
     return m_formulaShape->cursor();
 }
 

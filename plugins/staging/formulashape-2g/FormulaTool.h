@@ -57,18 +57,18 @@ public:
 protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
-    
+
 signals:
     void formulaContentChanged(const QString &content);
-    
-private slots: 
-    void insertPressed(); 
+
+private slots:
+    void insertPressed();
 
 private:
     // Pointer to the shape that we manipulate.
     FormulaShape *m_formulaShape;
     QTextEdit *m_textEdit;
-    
+
     FormulaCursor *cursor();
 };
 

@@ -31,10 +31,10 @@ class MmlTextNode;
 class AlterFormulaCommand : public KUndo2Command
 {
 public:
-    AlterFormulaCommand(FormulaCursor *cursor, 
+    AlterFormulaCommand(FormulaCursor *cursor,
                         const QString &newText,
-                        int newIndex, 
-                         KUndo2Command *parent = 0);
+                        int newIndex,
+                        KUndo2Command *parent = 0);
     virtual ~AlterFormulaCommand();
 
     /// redo the command
@@ -52,4 +52,4 @@ private:
 };
 
 #endif /* ALTERFORMULACOMMAND_H */
- 
+

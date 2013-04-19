@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Formula Shape 2G
+Name=Formula Shape
 Name[ca]=Forma de plantilla
 Name[da]=Skabelon-form
 Name[de]=Vorlagen-Objekt
@@ -19,7 +19,7 @@ Name[pt_BR]=Forma de modelo
 Name[sk]=Tvar vzorca
 Name[sv]=Mallform
 Name[uk]=Форма-шаблон
-Name[x-test]=xxFormula Shape 2Gxx
+Name[x-test]=xxFormula Shapexx
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=formulashape2g

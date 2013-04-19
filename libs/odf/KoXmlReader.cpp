@@ -1788,7 +1788,7 @@ static void itemAsQDomNode(QDomDocument& ownerDoc, KoXmlPackedDocument* packedDo
                 if (i != -1) prefix = qName.left(i);
                 if (i != -1) localName = qName.mid(i + 1);
 
-                if (packedDoc->processNamespace && i != -1) {
+                if (packedDoc->processNamespace) {
                     element.setAttributeNS(qname.nsURI, qName, value);
                     element.setAttribute(localName, value);
                 } else
@@ -1881,7 +1881,7 @@ static void itemAsQDomNode(QDomDocument& ownerDoc, KoXmlPackedDocument* packedDo
                 if (i != -1) prefix = qName.left(i);
                 if (i != -1) localName = qName.mid(i + 1);
 
-                if (packedDoc->processNamespace && i != -1) {
+                if (packedDoc->processNamespace) {
                     element.setAttributeNS(nsURI, qName, value);
                     element.setAttribute(localName, value);
                 } else

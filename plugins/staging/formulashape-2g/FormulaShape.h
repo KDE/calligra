@@ -62,7 +62,7 @@ public:
 
     void setMML(const QString &mmlText);
     QString MML();
-    
+
     FormulaDocument *document();
     FormulaCursor *cursor();
 private:

@@ -26,11 +26,11 @@
 
 
 ChangeFormulaCommand::ChangeFormulaCommand(FormulaCursor *cursor, KUndo2Command *parent)
-  : KUndo2Command(parent)
-  , m_node(cursor->m_node)
-  , m_document(cursor->m_document)
-  , m_cursor(cursor)
-  , m_isLastCommandRedo(false)
+    : KUndo2Command(parent)
+    , m_node(cursor->m_node)
+    , m_document(cursor->m_document)
+    , m_cursor(cursor)
+    , m_isLastCommandRedo(false)
 {
     Q_ASSERT(cursor);
     setText(i18nc("(qtundo-format)", "Delete formula element"));
@@ -46,21 +46,21 @@ ChangeFormulaCommand::~ChangeFormulaCommand()
 void ChangeFormulaCommand::redo()
 {
     m_isLastCommandRedo = true;
-    
+
     //set the cursor to the parent of the node being deleted
     m_cursor->setNode(m_node->parent());
     m_document->deleteNode(m_node);
-    
+
     m_document->layout();
 }
 
 void ChangeFormulaCommand::undo()
 {
-    m_isLastCommandRedo = true;
+    m_isLastCommandRedo = false;
 
     m_document->insertSibling(m_node, m_node->parent(), m_node->previousSibling(), m_node->nextSibling());
     //set the cursor to the deleted node
     m_cursor->setNode(m_node);
-    
+
     m_document->layout();
 }

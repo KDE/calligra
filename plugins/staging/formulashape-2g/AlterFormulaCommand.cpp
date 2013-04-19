@@ -28,10 +28,10 @@
 
 AlterFormulaCommand::AlterFormulaCommand(FormulaCursor *cursor, const QString &newText,
                                          int newIndex, KUndo2Command *parent)
-  : KUndo2Command(parent)
-  , m_document(cursor->m_document)
-  , m_newText(newText)
-  , m_newIndex(newIndex)
+    : KUndo2Command(parent)
+    , m_document(cursor->m_document)
+    , m_newText(newText)
+    , m_newIndex(newIndex)
 {
     Q_ASSERT(cursor);
     Q_ASSERT(dynamic_cast<MmlTextNode *>(cursor->m_node));
@@ -49,7 +49,7 @@ void AlterFormulaCommand::redo()
 {
     m_textNode->m_cursorIndex = m_newIndex;
     m_textNode->setText(m_newText);
-    
+
     m_document->layout();
 }
 
@@ -57,7 +57,6 @@ void AlterFormulaCommand::undo()
 {
     m_textNode->m_cursorIndex = m_currentIndex;
     m_textNode->setText(m_currentText);
-    
+
     m_document->layout();
 }
- 

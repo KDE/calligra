@@ -45,8 +45,8 @@ void FormulaCursor::init()
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
 }
 
-void FormulaCursor::setNode(MmlNode *node) 
-{  
+void FormulaCursor::setNode(MmlNode *node)
+{
     if (m_node) {
         m_node->m_showCursor = false;
     }
@@ -76,14 +76,14 @@ void FormulaCursor::nextNode()
 {
     if (!m_node) {
         return;
-    }    
+    }
 
     if (m_node->m_node_type == MmlNode::TextNode &&
-        static_cast<MmlTextNode *>(m_node)->m_cursorIndex < ((static_cast<MmlTextNode *>(m_node)->text()).length())) {
+            static_cast<MmlTextNode *>(m_node)->m_cursorIndex < ((static_cast<MmlTextNode *>(m_node)->text()).length())) {
         static_cast<MmlTextNode *>(m_node)->m_cursorIndex++;
         return;
     }
-    
+
     MmlNode *newNode = 0;
     if (m_node->hasChildNodes()) {
         newNode = m_node->firstChild();
@@ -94,7 +94,7 @@ void FormulaCursor::nextNode()
     if (newNode->m_node_type == MmlNode::TextNode) {
         static_cast<MmlTextNode *>(newNode)->m_cursorIndex = 0;
     }
-    
+
     if (newNode) {
         setNode(newNode);
     }
@@ -107,22 +107,22 @@ void FormulaCursor::previousNode()
     }
 
     if (m_node->m_node_type == MmlNode::TextNode &&
-        static_cast<MmlTextNode *>(m_node)->m_cursorIndex > 0) {
+            static_cast<MmlTextNode *>(m_node)->m_cursorIndex > 0) {
         static_cast<MmlTextNode *>(m_node)->m_cursorIndex--;
         return;
     }
-    
+
     MmlNode *newNode = 0;
     if (MmlNode *previousMmlNode = previousNode(m_node)) {
         newNode = previousMmlNode;
     } else if (m_node->hasChildNodes()) {
-        newNode = m_node->firstChild()->lastSibling(); 
+        newNode = m_node->firstChild()->lastSibling();
     }
-    
+
     if (newNode->m_node_type == MmlNode::TextNode) {
         static_cast<MmlTextNode *>(newNode)->m_cursorIndex = ((static_cast<MmlTextNode *>(newNode)->text()).length()) - 1;
     }
-    
+
     if (newNode) {
         setNode(newNode);
     }
@@ -157,7 +157,7 @@ KUndo2Command *FormulaCursor::deleteNode()
         QString currentText = currentCursorNode->text();
         currentText.remove(currentCursorNode->m_cursorIndex, 1);
         return new AlterFormulaCommand(this, currentText, currentCursorNode->m_cursorIndex);
-    } else { 
+    } else {
         return new ChangeFormulaCommand(this);
     }
 }
@@ -180,7 +180,7 @@ KUndo2Command *FormulaCursor::deleteText()
         QString currentText = currentCursorNode->text();
         currentText.remove(currentCursorNode->m_cursorIndex - 1, 1);
         return new AlterFormulaCommand(this, currentText, currentCursorNode->m_cursorIndex - 1);
-    }  
+    }
     return 0;
 }
 void FormulaCursor::activate()

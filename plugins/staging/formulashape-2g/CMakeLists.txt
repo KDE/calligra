@@ -10,7 +10,7 @@ SET (formulashape2g_LIB_SRCS
     FormulaShapeFactory.cpp
     FormulaShape.cpp
 
-    FormulaToolFactory.cpp     
+    FormulaToolFactory.cpp
     FormulaTool.cpp
     FormulaDocument.cpp
     FormulaPart.cpp

@@ -20,7 +20,7 @@
 
 #ifndef FORMULACURSOR_H
 #define FORMULACURSOR_H
- 
+
 #include <QObject>
 #include <QTimer>
 
@@ -28,42 +28,42 @@ class FormulaDocument;
 class MmlNode;
 class ChangeFormulaCommand;
 class KUndo2Command;
- 
+
 class FormulaCursor : public QObject
 {
-  friend class ChangeFormulaCommand;
-  friend class AlterFormulaCommand;
-  
-  Q_OBJECT
-  
+    friend class ChangeFormulaCommand;
+    friend class AlterFormulaCommand;
+
+    Q_OBJECT
+
 public:
     explicit FormulaCursor(FormulaDocument *document);
     ~FormulaCursor();
-    
+
     void setNode(MmlNode *node);
-    
+
     void nextNode();
     void previousNode();
-    
-    KUndo2Command *deleteNode();   
+
+    KUndo2Command *deleteNode();
     //inserts text at the current cursor position
     KUndo2Command *insertText(const QString &text);
     KUndo2Command *deleteText();
-    
+
     void activate();
     void deactivate();
-    
+
 public slots:
     void blinkCaret();
-    
+
 private:
     MmlNode *m_node;
     QTimer m_caretTimer;
     FormulaDocument *m_document;
-    
+
     void init();
     MmlNode *nextNode(MmlNode *node);
     MmlNode *previousNode(MmlNode *node);
 };
- 
+
 #endif //FORMULACURSOR_H

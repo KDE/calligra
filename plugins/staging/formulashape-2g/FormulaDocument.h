@@ -44,17 +44,17 @@ class FormulaDocument : public KoDocument, public QtMmlDocument
 public:
     explicit FormulaDocument(FormulaShape *parent);
     ~FormulaDocument();
-    
+
     bool loadOdf( KoOdfReadStore &odfStore );
     bool loadXML( const KoXmlDocument &doc, KoStore *store );
-    
+
     bool saveOdf( SavingContext &context );
     KoView *createViewInstance( QWidget *parent );
-    
-    void paintContent( QPainter &painter, const QRect &rect ); 
+
+    void paintContent( QPainter &painter, const QRect &rect );
 
     bool setContent(QString text, QString *errorMsg, int *errorLine, int *errorColumn);
-    
+
 private:
     class Private;
     Private * const d;

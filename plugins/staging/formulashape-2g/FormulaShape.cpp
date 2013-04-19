@@ -47,7 +47,7 @@
 
 FormulaShape::FormulaShape(KoDocumentResourceManager *documentResourceManager)
     : QObject()
-    , KoFrameShape( KoXmlNS::draw, "object" )
+    , KoFrameShape(KoXmlNS::draw, "object")
     , m_document(new FormulaDocument(this))
     , m_isInline(false)
     , m_cursor(new FormulaCursor(m_document))
@@ -57,13 +57,15 @@ FormulaShape::FormulaShape(KoDocumentResourceManager *documentResourceManager)
 
 FormulaShape::~FormulaShape()
 {
+    delete m_cursor;
+    delete m_document;
 }
 
 void FormulaShape::paint(QPainter &painter, const KoViewConverter &converter,
-                          KoShapePaintingContext &context)
+                         KoShapePaintingContext &context)
 {
     Q_UNUSED(context);
-    
+
     painter.setPen(QPen(QColor(0, 0, 0)));
     painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
 
@@ -93,16 +95,16 @@ bool FormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &
 }
 
 bool FormulaShape::loadOdfFrameElement(const KoXmlElement &element,
-                                         KoShapeLoadingContext &context)
+                                       KoShapeLoadingContext &context)
 {
     // If this formula is embedded and not inline, then load the embedded document.
-    if ( element.tagName() == "object" && element.hasAttributeNS( KoXmlNS::xlink, "href" )) {
+    if (element.tagName() == "object" && element.hasAttributeNS( KoXmlNS::xlink, "href")) {
         m_isInline = false;
 
         // This calls loadOdfEmbedded().
-        return loadEmbeddedDocument( context.odfLoadingContext().store(),
-                                     element,
-                                     context.odfLoadingContext() );
+        return loadEmbeddedDocument(context.odfLoadingContext().store(),
+                                    element,
+                                    context.odfLoadingContext());
     }
 
     // It's not a frame:object, so it must be inline.
@@ -122,10 +124,10 @@ bool FormulaShape::loadOdfFrameElement(const KoXmlElement &element,
 }
 
 bool FormulaShape::loadEmbeddedDocument( KoStore *store,
-                                           const KoXmlElement &objectElement,
-                                           const KoOdfLoadingContext &odfLoadingContext)
+                                         const KoXmlElement &objectElement,
+                                         const KoOdfLoadingContext &odfLoadingContext)
 {
-    if ( !objectElement.hasAttributeNS( KoXmlNS::xlink, "href" ) ) {
+    if (!objectElement.hasAttributeNS( KoXmlNS::xlink, "href")) {
         kError() << "Object element has no valid xlink:href attribute";
         return false;
     }
@@ -134,102 +136,102 @@ bool FormulaShape::loadEmbeddedDocument( KoStore *store,
 
     // It can happen that the url is empty e.g. when it is a
     // presentation:placeholder.
-    if ( url.isEmpty() ) {
+    if (url.isEmpty()) {
         return true;
     }
 
     QString tmpURL;
-    if ( url[0] == '#' )
-        url = url.mid( 1 );
+    if (url[0] == '#')
+        url = url.mid(1);
 
 #define INTERNAL_PROTOCOL "intern"
 #define STORE_PROTOCOL "tar"
 
-    if (KUrl::isRelativeUrl( url )) {
-        if ( url.startsWith( "./" ) )
-            tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
+    if (KUrl::isRelativeUrl(url)) {
+        if (url.startsWith("./"))
+            tmpURL = QString(INTERNAL_PROTOCOL) + ":/" + url.mid(2);
         else
-            tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url;
+            tmpURL = QString(INTERNAL_PROTOCOL) + ":/" + url;
     }
     else
         tmpURL = url;
 
     QString path = tmpURL;
-    if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {
+    if (tmpURL.startsWith(INTERNAL_PROTOCOL)) {
         path = store->currentDirectory();
-        if ( !path.isEmpty() && !path.endsWith( '/' ) )
+        if (!path.isEmpty() && !path.endsWith('/'))
             path += '/';
-        QString relPath = KUrl( tmpURL ).path();
-        path += relPath.mid( 1 ); // remove leading '/'
+        QString relPath = KUrl(tmpURL).path();
+        path += relPath.mid(1); // remove leading '/'
     }
-    if ( !path.endsWith( '/' ) )
+    if (!path.endsWith('/'))
         path += '/';
 
-    const QString mimeType = odfLoadingContext.mimeTypeForPath( path );
+    const QString mimeType = odfLoadingContext.mimeTypeForPath(path);
     //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
-    if ( mimeType.isEmpty() ) {
+    if (mimeType.isEmpty()) {
         //kDebug(35001) << "Manifest doesn't have media-type for" << path;
         return false;
     }
 
-    const bool isOdf = mimeType.startsWith( "application/vnd.oasis.opendocument" );
-    if ( !isOdf ) {
+    const bool isOdf = mimeType.startsWith("application/vnd.oasis.opendocument");
+    if (!isOdf) {
         tmpURL += "/maindoc.xml";
         //kDebug(35001) << "tmpURL adjusted to" << tmpURL;
     }
 
     //kDebug(35001) << "tmpURL=" << tmpURL;
     QString errorMsg;
-    KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
-    if ( e.isEmpty() ) {
+    KoDocumentEntry e = KoDocumentEntry::queryByMimeType(mimeType);
+    if (e.isEmpty()) {
         return false;
     }
 
     bool res = true;
-    if ( tmpURL.startsWith( STORE_PROTOCOL )
-         || tmpURL.startsWith( INTERNAL_PROTOCOL )
-         || KUrl::isRelativeUrl( tmpURL ) )
+    if (tmpURL.startsWith(STORE_PROTOCOL)
+         || tmpURL.startsWith(INTERNAL_PROTOCOL)
+         || KUrl::isRelativeUrl(tmpURL))
     {
-        if ( isOdf ) {
+        if (isOdf) {
             store->pushDirectory();
-            Q_ASSERT( tmpURL.startsWith( INTERNAL_PROTOCOL ) );
-            QString relPath = KUrl( tmpURL ).path().mid( 1 );
-            store->enterDirectory( relPath );
-            res = m_document->loadOasisFromStore( store );
+            Q_ASSERT(tmpURL.startsWith(INTERNAL_PROTOCOL));
+            QString relPath = KUrl(tmpURL).path().mid(1);
+            store->enterDirectory(relPath);
+            res = m_document->loadOasisFromStore(store);
             store->popDirectory();
         } else {
-            if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) )
-                tmpURL = KUrl( tmpURL ).path().mid( 1 );
-            res = m_document->loadFromStore( store, tmpURL );
+            if (tmpURL.startsWith(INTERNAL_PROTOCOL))
+                tmpURL = KUrl(tmpURL).path().mid(1);
+            res = m_document->loadFromStore(store, tmpURL);
         }
-        m_document->setStoreInternal( true );
+        m_document->setStoreInternal(true);
     }
     else {
         // Reference to an external document. Hmmm...
-        m_document->setStoreInternal( false );
-        KUrl url( tmpURL );
-        if ( !url.isLocalFile() ) {
+        m_document->setStoreInternal(false);
+        KUrl url(tmpURL);
+        if (!url.isLocalFile()) {
             //QApplication::restoreOverrideCursor();
 
             // For security reasons we need to ask confirmation if the
             // url is remote.
             int result = KMessageBox::warningYesNoCancel(
-                0, i18n( "This document contains an external link to a remote document\n%1", tmpURL ),
-                i18n( "Confirmation Required" ), KGuiItem( i18n( "Download" ) ), KGuiItem( i18n( "Skip" ) ) );
+                        0, i18n( "This document contains an external link to a remote document\n%1", tmpURL ),
+                        i18n("Confirmation Required"), KGuiItem(i18n("Download")), KGuiItem(i18n("Skip")));
 
-            if ( result == KMessageBox::Cancel ) {
+            if (result == KMessageBox::Cancel) {
                 //d->m_parent->setErrorMessage("USER_CANCELED");
                 return false;
             }
-            if ( result == KMessageBox::Yes )
-                res = m_document->openUrl( url );
+            if (result == KMessageBox::Yes)
+                res = m_document->openUrl(url);
             // and if == No, res will still be false so we'll use a kounavail below
         }
         else
-            res = m_document->openUrl( url );
+            res = m_document->openUrl(url);
     }
 
-    if ( !res ) {
+    if (!res) {
         QString errorMessage = m_document->errorMessage();
         return false;
     }
@@ -255,12 +257,12 @@ void FormulaShape::setMML(const QString &mmlText)
     QString error_msg;
     int error_line, error_column;
     bool result = m_document->setContent(mmlText, &error_msg, &error_line,
-                        &error_column);
+                                         &error_column);
     this->setSize(m_document->size());
 
     if (!result) {
         qDebug()<<"Parse error: line " + QString::number(error_line)
-                    + ", col " + QString::number(error_column)+ ": " + error_msg;
+                  + ", col " + QString::number(error_column)+ ": " + error_msg;
     }
 }
 

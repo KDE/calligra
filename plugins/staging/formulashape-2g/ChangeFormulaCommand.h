@@ -31,7 +31,7 @@ class MmlNode;
 class ChangeFormulaCommand : public KUndo2Command
 {
 public:
-    ChangeFormulaCommand(FormulaCursor *cursor, 
+    ChangeFormulaCommand(FormulaCursor *cursor,
                          KUndo2Command *parent = 0);
     virtual ~ChangeFormulaCommand();
 

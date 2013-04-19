@@ -85,7 +85,7 @@ KoShape *FormulaShapeFactory::createDefaultShape(KoDocumentResourceManager *docu
 }
 
 KoShape *FormulaShapeFactory::createShape(const KoProperties *params,
-                                           KoDocumentResourceManager *documentResources) const
+                                          KoDocumentResourceManager *documentResources) const
 {
     FormulaShape *shape = static_cast<FormulaShape*>(createDefaultShape(documentResources));
 

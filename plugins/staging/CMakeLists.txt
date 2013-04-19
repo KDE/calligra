@@ -1,5 +1,4 @@
 
-add_subdirectory(threedshape)
 add_subdirectory(formulashape-2g)
 if(SHOULD_BUILD_PLUGIN_GOOGLEDOCS)
     add_subdirectory(googledocs)
