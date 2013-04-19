@@ -56,7 +56,7 @@ HtmlView::HtmlView(KoPart *part, KoDocument *doc, QWidget *parent)
 
     KParts::BrowserExtension *ext = m_htmlPart->browserExtension();
     if ( ext ) {
-        connect( ext, SIGNAL( openUrlRequest (const KUrl &, const KParts::OpenUrlArguments&, const KParts::BrowserArguments& ) ), SLOT( slotOpenUrlRequest(const KUrl &, const KParts::OpenUrlArguments&, const KParts::BrowserArguments& ) ) );
+        connect( ext, SIGNAL(openUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)), SLOT(slotOpenUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)) );
     }
 }
 
@@ -79,7 +79,7 @@ void HtmlView::setGuiActive( bool activate )
     kDebug(planDbg())<<activate;
 }
 
-void HtmlView::slotContextMenuRequested( QModelIndex /*index*/, const QPoint& /*pos */)
+void HtmlView::slotContextMenuRequested( const QModelIndex &/*index*/, const QPoint& /*pos */)
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
 }

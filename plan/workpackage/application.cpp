@@ -33,7 +33,6 @@
 
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
-#include <KoDocument.h>
 #include <KoDocumentEntry.h>
 #include <KoDocumentInfo.h>
 #include <KoFilterManager.h>
@@ -45,7 +44,6 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>

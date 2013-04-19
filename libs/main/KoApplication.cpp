@@ -94,9 +94,7 @@ KoApplication::KoApplication()
 #endif
 
     m_starting = true;
-#ifdef Q_OS_WIN32
-    setStyle("Plastique");
-#elif defined Q_OS_MAC
+#ifdef Q_OS_MAC
     QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
     if (styleSheetPath.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "Cannot find OS X UI stylesheet." << endl;
@@ -111,7 +109,7 @@ KoApplication::KoApplication()
 #endif
 
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        // There are two themes that work for Krita, oxygen and plastique. Try plastique first, then oxygen
+        // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         setStyle("Plastique");
         setStyle("Oxygen");
     }
@@ -278,10 +276,10 @@ bool KoApplication::start()
         // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
         QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
 
-        foreach (QString name, reply.value()) {
+        foreach (const QString &name, reply.value()) {
             if (name.contains(part->componentData().componentName())) {
                 // we got another instance of ourselves running, let's get the pid
-                QString pid = name.split("-").last();
+                QString pid = name.split('-').last();
                 if (pid != ourPid) {
                     pids << pid;
                 }
@@ -295,7 +293,7 @@ bool KoApplication::start()
                 autoSaveFiles.removeAll(autoSaveFileName);
                 continue;
             }
-            QStringList split = autoSaveFileName.split("-");
+            QStringList split = autoSaveFileName.split('-');
             if (split.size() == 4) {
                 if (pids.contains(split[1])) {
                     // We've got an active, owned autosave file. Remove.

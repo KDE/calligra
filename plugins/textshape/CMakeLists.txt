@@ -1,11 +1,12 @@
 project( textPlugin)
 
-# only build the textdocument inspector in debug builds
-set(BUILD_TEXTDOCUMENT_INSPECTOR (CMAKE_BUILD_TYPE STREQUAL "Debug"))
-
-if(BUILD_TEXTDOCUMENT_INSPECTOR)
+# only build the textdocument inspector in non-release builds
+if(NOT RELEASE_BUILD)
+    set(BUILD_TEXTDOCUMENT_INSPECTOR TRUE)
     add_definitions(-DCREATE_TEXTDOCUMENT_INSPECTOR)
-endif(BUILD_TEXTDOCUMENT_INSPECTOR)
+else(NOT RELEASE_BUILD)
+    set(BUILD_TEXTDOCUMENT_INSPECTOR FALSE)
+endif(NOT RELEASE_BUILD)
 
 
 add_subdirectory( pics )
@@ -49,8 +50,10 @@ SET ( textshape_SRCS
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
     dialogs/SimpleInsertWidget.cpp
+    dialogs/LinkInsertionDialog.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
     dialogs/SimpleCitationBibliographyWidget.cpp
+    dialogs/SimpleLinksWidget.cpp
     dialogs/SimpleSpellCheckingWidget.cpp
     dialogs/CitationInsertionDialog.cpp
     dialogs/InsertBibliographyDialog.cpp
@@ -101,6 +104,7 @@ SET ( textshape_SRCS
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
     dialogs/ListLevelChooser.cpp
+    dialogs/ManageBookmarkDialog.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp
@@ -146,24 +150,27 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableDialog.ui
     dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
+    dialogs/SimpleLinksWidget.ui
     dialogs/TableOfContentsStyleConfigure.ui
-
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
     dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
+    dialogs/LinkInsertionDialog.ui
+    dialogs/ManageBookmark.ui
+
 )
 
-kde4_add_plugin(textshape ${textshape_SRCS})
+kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
 
-target_link_libraries(textshape kotext textlayout komain ${EXTRA_LIBS})
-if( Soprano_FOUND )
-    target_link_libraries(textshape ${SOPRANO_LIBRARIES})
-endif( Soprano_FOUND )
+target_link_libraries(calligra_shape_text kotext kotextlayout komain ${EXTRA_LIBS})
+if( SHOULD_BUILD_RDF )
+    target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
+endif( SHOULD_BUILD_RDF )
 
 
-install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

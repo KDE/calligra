@@ -24,13 +24,8 @@
 
 #include "kptviewbase.h"
 
-#include <QTreeWidget>
-
 #include <QList>
 #include <QTreeWidget>
-#include <QVBoxLayout>
-#include <QTreeWidget>
-
 #include <QVariant>
 #include <QAction>
 #include <QApplication>
@@ -43,11 +38,9 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QVBoxLayout>
-#include <QWidget>
 #include <QSpinBox>
 #include <QLineEdit>
 
-#include <QWidget>
 #include <kptitemmodelbase.h>
 
 #include <kactionselector.h>
@@ -77,7 +70,6 @@ class QSplitter;
 class QTreeWidgetItem;
 
 
- 
 namespace KPlato
 {
 
@@ -89,7 +81,7 @@ class KPLATOUI_EXPORT ResourcesList : public QTreeWidget
     Q_OBJECT
 
 public:
-    ResourcesList( QWidget * parent = 0 );
+    explicit ResourcesList(QWidget *parent = 0);
 
 };
 

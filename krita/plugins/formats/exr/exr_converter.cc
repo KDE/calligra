@@ -197,7 +197,7 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
     for (int y = 0; y < height; ++y) {
         Imf::FrameBuffer frameBuffer;
         Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
+        frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->r,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
@@ -205,7 +205,7 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
                            Imf::Slice(ptype, (char *) &frameBufferData->g,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
+        frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
                            Imf::Slice(ptype, (char *) &frameBufferData->b,
                                       sizeof(Rgba) * 1,
                                       sizeof(Rgba) * width));
@@ -733,9 +733,9 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     ExrPaintLayerSaveInfo info;
     info.layer = layer;
-    info.channels.push_back("B");
-    info.channels.push_back("G");
     info.channels.push_back("R");
+    info.channels.push_back("G");
+    info.channels.push_back("B");
     info.channels.push_back("A");
     info.pixelType = pixelType;
 

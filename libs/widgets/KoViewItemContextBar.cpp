@@ -66,6 +66,8 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
             this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
 
+    connect(m_view->model(), SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+
     m_ContextBar->installEventFilter(this);
     m_view->viewport()->installEventFilter(this);
     m_view->setMouseTracking(true);
@@ -210,7 +212,7 @@ void KoViewItemContextBar::update()
     }
 }
 
-QToolButton * KoViewItemContextBar::addContextButton(QString text, QString iconName)
+QToolButton * KoViewItemContextBar::addContextButton(const QString &text, const QString &iconName)
 {
     KoContextBarButton *newContexButton = new KoContextBarButton(iconName);
     newContexButton->setToolTip(text);
@@ -239,6 +241,12 @@ void KoViewItemContextBar::reset()
     if (m_ContextBar) {
         m_ContextBar->hide();
     }
+}
+
+void KoViewItemContextBar::slotModelReset()
+{
+    // reset the model index so it does no longer point to suff no longer available.
+    m_IndexUnderCursor = QModelIndex();
 }
 
 void KoViewItemContextBar::enableContextBar()

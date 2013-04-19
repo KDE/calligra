@@ -256,7 +256,7 @@ KexiView::KexiView(QWidget *parent)
     }
     setObjectName(
         QString("%1_for_%2_object")
-        .arg(Kexi::nameForViewMode(d->viewMode).replace(" ", "_"))
+        .arg(Kexi::nameForViewMode(d->viewMode).replace(' ', '_'))
         .arg(d->window ? d->window->partItem()->name() : QString("??")));
 
     installEventFilter(this);

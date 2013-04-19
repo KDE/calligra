@@ -15,7 +15,7 @@
  * Copyright (C) 2005 Sven Langkamp <sven.langkamp@gmail.com>
  * Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2005-2013 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2005 Johannes Schaub <johannes.schaub@kdemail.net>
  * Copyright (C) 2006 Gabor Lehel <illissius@gmail.com>
  * Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
@@ -107,9 +107,7 @@ public:
 
     ~Private()
     {
-        qDeleteAll(layers);
         layers.clear();
-        qDeleteAll(objects);
         objects.clear();
         if (!hasExternalDataCenterMap)
             qDeleteAll(dataCenterMap);
@@ -750,6 +748,7 @@ void KarbonDocument::useExternalDataCenterMap(QMap<QString, KoDataCenterBase*> d
 
 void KarbonDocument::loadOdfStyles(KoShapeLoadingContext & context)
 {
+    // Only text styles (old style system).
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
 
     if (! styleManager)

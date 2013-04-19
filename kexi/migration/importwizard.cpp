@@ -842,7 +842,7 @@ tristate ImportWizard::import()
     if (sourceDriver && !result.error()) {
         if (!d->sourceDBEncoding.isEmpty()) {
             sourceDriver->setPropertyValue("source_database_nonunicode_encoding",
-                                           QVariant(d->sourceDBEncoding.toUpper().replace(' ', QString())) // "CP1250", not "cp 1250"
+                                           QVariant(d->sourceDBEncoding.toUpper().remove(' ')) // "CP1250", not "cp 1250"
                                           );
         }
 

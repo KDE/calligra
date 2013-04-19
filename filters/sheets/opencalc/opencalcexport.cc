@@ -1013,8 +1013,8 @@ void OpenCalcExport::convertPart(QString const & part, QDomDocument & doc,
                     addText(text, doc, parent);
                 }
 
-                text = "";
-                var  = "";
+                text.clear();
+                var.clear();
             }
         } else {
             text += part[i];

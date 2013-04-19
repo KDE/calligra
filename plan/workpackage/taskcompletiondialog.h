@@ -85,7 +85,7 @@ public slots:
     void slotEntryChanged();
     void slotSelectionChanged( const QItemSelection &sel );
 
-    void slotEntryAdded( const QDate date );
+    void slotEntryAdded( const QDate& date );
 
     void slotEditmodeChanged( int );
 
@@ -115,7 +115,7 @@ public:
         Property_ActualAccumulated
     };
 
-    CompletionEntryItemModel( QObject *parent = 0 );
+    explicit CompletionEntryItemModel(QObject *parent = 0);
 
     int columnCount( const QModelIndex &idx = QModelIndex() ) const;
     QVariant data( const QModelIndex &idx, int role ) const;

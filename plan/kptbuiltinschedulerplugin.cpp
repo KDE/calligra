@@ -65,8 +65,8 @@ void BuiltinSchedulerPlugin::calculate( Project &project, ScheduleManager *sm, b
     connect(job, SIGNAL(jobStarted(SchedulerThread*)), SLOT(slotStarted(SchedulerThread*)));
     connect(job, SIGNAL(jobFinished(SchedulerThread*)), SLOT(slotFinished(SchedulerThread*)));
 
-//     connect(this, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), &project, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)));
-//     connect(this, SIGNAL( sigCalculationFinished(Project*, ScheduleManager*)), &project, SIGNAL(sigCalculationFinished(Project*, ScheduleManager* )));
+//     connect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
+//     connect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
     sm->setScheduling( true );
     if ( nothread ) {
@@ -108,8 +108,8 @@ void BuiltinSchedulerPlugin::slotFinished( SchedulerThread *job )
     }
     emit sigCalculationFinished( mp, sm );
 
-    disconnect(this, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), mp, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)));
-    disconnect(this, SIGNAL(sigCalculationFinished(Project*, ScheduleManager*)), mp, SIGNAL(sigCalculationFinished(Project*, ScheduleManager* )));
+    disconnect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
+    disconnect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
     job->deleteLater();
     qDebug()<<"BuiltinSchedulerPlugin::slotFinished: <<<";

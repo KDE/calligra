@@ -21,9 +21,9 @@
 #define KEXIRECORDNAVIGATORIFACE_H
 
 #include <kexi_export.h>
-#include <QScrollBar>
 
 class KexiRecordNavigatorHandler;
+class QScrollBar;
 
 class KEXICORE_EXPORT KexiRecordNavigatorIface
 {

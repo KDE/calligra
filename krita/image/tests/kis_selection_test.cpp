@@ -57,11 +57,15 @@ void KisSelectionTest::testGrayColorspaceConversion()
     quint8 color1[1] = {128};
     quint8 color2[2] = {64,32};
 
-    csA->convertPixelsTo(color2, color1, csNoA, 1, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
+    csA->convertPixelsTo(color2, color1, csNoA, 1,
+                         KoColorConversionTransformation::InternalRenderingIntent,
+                         KoColorConversionTransformation::InternalConversionFlags);
 
     QCOMPARE((int)color1[0], 8);
 
-    csNoA->convertPixelsTo(color1, color2, csA, 1, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
+    csNoA->convertPixelsTo(color1, color2, csA, 1,
+                           KoColorConversionTransformation::InternalRenderingIntent,
+                           KoColorConversionTransformation::InternalConversionFlags);
 
     QCOMPARE((int)color2[0], 8);
     QCOMPARE((int)color2[1], 255);
@@ -100,8 +104,8 @@ void KisSelectionTest::testGrayColorspaceOverComposition()
     params.flow = 1.0;
 
     csA->bitBlt(csA, params, csA->compositeOp(COMPOSITE_OVER),
-                KoColorConversionTransformation::IntentPerceptual,
-                KoColorConversionTransformation::Empty);
+                KoColorConversionTransformation::InternalRenderingIntent,
+                KoColorConversionTransformation::InternalConversionFlags);
 
     QCOMPARE((int)color0[0], 56);
     QCOMPARE((int)color0[1], 255);
@@ -109,8 +113,8 @@ void KisSelectionTest::testGrayColorspaceOverComposition()
     params.dstRowStart = color3;
 
     csNoA->bitBlt(csA, params, csNoA->compositeOp(COMPOSITE_OVER),
-                  KoColorConversionTransformation::IntentPerceptual,
-                  KoColorConversionTransformation::Empty);
+                  KoColorConversionTransformation::InternalRenderingIntent,
+                  KoColorConversionTransformation::InternalConversionFlags);
 
     QCOMPARE((int)color3[0], 56);
 }
@@ -118,15 +122,12 @@ void KisSelectionTest::testGrayColorspaceOverComposition()
 void KisSelectionTest::testSelectionComponents()
 {
     KisSelectionSP selection = new KisSelection();
+
     QCOMPARE(selection->hasPixelSelection(), false);
     QCOMPARE(selection->hasShapeSelection(), false);
     QCOMPARE(selection->shapeSelection(), (void*)0);
 
-    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
-    QCOMPARE(selection->pixelSelection(), pixelSelection);
-    QCOMPARE(selection->hasPixelSelection(), true);
-
-    pixelSelection->select(QRect(10,10,10,10));
+    selection->pixelSelection()->select(QRect(10,10,10,10));
     QCOMPARE(selection->hasPixelSelection(), true);
     QCOMPARE(selection->selectedExactRect(), QRect(10,10,10,10));
 }
@@ -137,7 +138,7 @@ void KisSelectionTest::testSelectionActions()
     QVERIFY(selection->hasPixelSelection() == false);
     QVERIFY(selection->hasShapeSelection() == false);
 
-    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
     pixelSelection->select(QRect(0, 0, 20, 20));
 
     KisPixelSelectionSP tmpSel = new KisPixelSelection();
@@ -168,7 +169,7 @@ void KisSelectionTest::testInvertSelection()
     KisImageSP image = new KisImage(0, 1024, 1024, cs, "stest");
 
     KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
-    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
     pixelSelection->select(QRect(20, 20, 20, 20));
 
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 30, 30), MAX_SELECTED);
@@ -203,7 +204,7 @@ void KisSelectionTest::testInvertSelectionSemi()
     KisImageSP image = new KisImage(0, 1024, 1024, cs, "stest");
 
     KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
-    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
     quint8 selectedness = 42;
     pixelSelection->select(QRect(20, 20, 20, 20), selectedness);
 
@@ -231,7 +232,7 @@ void KisSelectionTest::testInvertSelectionSemi()
 void KisSelectionTest::testCopy()
 {
     KisSelectionSP sel = new KisSelection();
-    sel->getOrCreatePixelSelection()->select(QRect(10, 10, 200, 200), 128);
+    sel->pixelSelection()->select(QRect(10, 10, 200, 200), 128);
 
     sel->updateProjection();
 
@@ -277,14 +278,14 @@ void KisSelectionTest::testSetParentNodeAfterCreation()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
     KisSelectionSP selection = new KisSelection();
-    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
 
-    QCOMPARE(selection->parentNode(), KisNodeWSP(0));
+    QCOMPARE(selection->parentNode(), KisNodeSP(0));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(0));
 
     selection->setParentNode(image->root());
 
-    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
+    QCOMPARE(selection->parentNode(), KisNodeSP(image->root()));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
 }
 
@@ -296,9 +297,9 @@ void KisSelectionTest::testSetParentNodeBeforeCreation()
 
     selection->setParentNode(image->root());
 
-    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
 
-    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
+    QCOMPARE(selection->parentNode(), KisNodeSP(image->root()));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
 }
 

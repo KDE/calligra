@@ -15,9 +15,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-if(MSVC)
+if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
-endif(MSVC)
+endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 
 include(CheckFunctionExists)
@@ -110,9 +110,9 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
-if (!WIN32)
+if (NOT WIN32)
     add_subdirectory( benchmarks )
-endif (!WIN32)
+endif (NOT WIN32)
 
 set(kritapart_PART_SRCS krita_part_init.cc)
 kde4_add_plugin(kritapart ${kritapart_PART_SRCS})

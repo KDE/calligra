@@ -42,8 +42,7 @@ class RelationPanel : public QWidget, public Ui_RelationPanel
 {
     Q_OBJECT
 public:
-    RelationPanel(QWidget *parent=0);
-    
+    explicit RelationPanel(QWidget *parent = 0);
 };
 
 class KPLATOUI_EXPORT AddRelationDialog : public KDialog
@@ -55,7 +54,7 @@ public:
 
     virtual MacroCommand *buildCommand();
     int selectedRelationType() const;
-    
+
 protected slots:
     void slotOk();
     void lagChanged();

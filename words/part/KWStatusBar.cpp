@@ -346,7 +346,7 @@ void KWStatusBar::updateMousePosition(const QPoint &pos)
         m_mousePosLabel->setText(QString("%1:%2").arg(pos.x()).arg(pos.y()));
 }
 
-void KWStatusBar::resourceChanged(int key, const QVariant &value)
+void KWStatusBar::canvasResourceChanged(int key, const QVariant &value)
 {
     Q_UNUSED(value);
     if (key ==  KoCanvasResourceManager::CurrentPage) {
@@ -407,8 +407,8 @@ void KWStatusBar::setCurrentView(KWView *view)
         Q_ASSERT(canvas);
         KoCanvasResourceManager *resourceManager = canvas->resourceManager();
         Q_ASSERT(resourceManager);
-        disconnect(resourceManager, SIGNAL(resourceChanged(int, QVariant)),
-            this, SLOT(resourceChanged(int, QVariant)));
+        disconnect(resourceManager, SIGNAL(canvasResourceChanged(int, QVariant)),
+            this, SLOT(canvasResourceChanged(int, QVariant)));
         QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
         if (zoomWidget) {
             m_statusbar->removeWidget(zoomWidget);
@@ -447,7 +447,7 @@ void KWStatusBar::setCurrentView(KWView *view)
 
     KoCanvasResourceManager *resourceManager = view->canvasBase()->resourceManager();
     Q_ASSERT(resourceManager);
-    connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(resourceChanged(int, QVariant)), Qt::QueuedConnection);
+    connect(resourceManager, SIGNAL(canvasResourceChanged(int, QVariant)), this, SLOT(canvasResourceChanged(int, QVariant)), Qt::QueuedConnection);
 
     KWTextFrameSet *fs = m_currentView->kwdocument()->mainFrameSet();
     if (fs) {

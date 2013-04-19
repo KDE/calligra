@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_DEBUG
-#define KPLATO_DEBUG
+#ifndef KPTDEBUG_H
+#define KPTDEBUG_H
 
 #include "kplatokernel_export.h"
 #include <kdebug.h>

@@ -51,7 +51,6 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_layer.h>
 #include <kis_selection.h>
-#include <kis_threaded_applicator.h>
 #include <kis_paint_layer.h>
 #include <kis_system_locker.h>
 
@@ -176,8 +175,8 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KisToolGradient::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::ShiftModifier)) {
 
         if (!nodeEditable()) {
             return;

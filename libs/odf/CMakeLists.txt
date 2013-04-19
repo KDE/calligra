@@ -40,6 +40,7 @@ set(koodf_LIB_SRCS
     KoTarStore.cpp
     KoDirectoryStore.cpp
     KoZipStore.cpp
+    KoXmlStreamReader.cpp
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoEncryptedStore.cpp
@@ -49,19 +50,6 @@ set(koodf_LIB_SRCS
     KoOdfBibliographyConfiguration.cpp
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
-    KoCell.cpp
-    KoCellChild.cpp
-    KoCellValue.cpp
-    KoDummyCellValue.cpp
-    KoCellStyle.cpp
-    KoColumn.cpp
-    KoRawCellChild.cpp
-    KoRow.cpp
-    KoStyle.cpp
-    KoTable.cpp
-    KoColumnStyle.cpp
-    KoRowStyle.cpp
-    KoTblStyle.cpp
     KoElementReference.cpp
 )
 
@@ -113,11 +101,11 @@ install( FILES
     KoColumns.h
     KoStore.h
     KoStoreDevice.h
+    KoXmlStreamReader.h
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h
     KoUnit.h
     KoElementReference.h
     KoTableTemplate.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

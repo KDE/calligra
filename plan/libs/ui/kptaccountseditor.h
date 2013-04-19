@@ -58,7 +58,7 @@ class KPLATOUI_EXPORT AccountTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    AccountTreeView( QWidget *parent );
+    explicit AccountTreeView(QWidget *parent);
 
     AccountItemModel *model() const { return static_cast<AccountItemModel*>( TreeViewBase::model() ); }
 
@@ -71,10 +71,10 @@ public:
     
 signals:
     void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void selectionChanged( const QModelIndexList& );
 
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    void contextMenuRequested( const QModelIndex&, const QPoint& );
     
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
@@ -107,7 +107,7 @@ public:
     
 signals:
     void addAccount( Account *account );
-    void deleteAccounts( QList<Account*> );
+    void deleteAccounts( const QList<Account*>& );
     
 public slots:
     /// Activate/deactivate the gui
@@ -121,10 +121,10 @@ protected slots:
     virtual void slotOptions();
     
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotHeaderContextMenuRequested( const QPoint &pos );
 
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void slotEnableActions( bool on );
 

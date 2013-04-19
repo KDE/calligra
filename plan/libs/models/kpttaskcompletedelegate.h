@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTTASKCOMPLETEDDELEGATE_H
-#define KPTTASKCOMPLETEDDELEGATE_H
+#ifndef KPTTASKCOMPLETEDELEGATE_H
+#define KPTTASKCOMPLETEDELEGATE_H
 
 #include "kptitemmodelbase.h"
 
@@ -31,7 +31,7 @@ class KPLATOMODELS_EXPORT TaskCompleteDelegate : public ProgressBarDelegate
 {
   Q_OBJECT
 public:
-    TaskCompleteDelegate( QObject *parent = 0 );
+    explicit TaskCompleteDelegate(QObject *parent = 0);
 
     ~TaskCompleteDelegate();
 

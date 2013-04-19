@@ -233,15 +233,15 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
     // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
     chooseLeader->hide();
 
-    connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
-    connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
+    connect(namefield, SIGNAL(textChanged(QString)), SLOT(checkAllFieldsFilled()));
+    connect(leaderfield, SIGNAL(textChanged(QString)), SLOT(checkAllFieldsFilled()));
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));
     connect(estimateType, SIGNAL(activated(int)), SLOT(estimationTypeChanged(int)));
     connect(scheduleType, SIGNAL(activated(int)), SLOT(scheduleTypeChanged(int)));
     connect(scheduleStartDate, SIGNAL(dateChanged(QDate)), SLOT(startDateChanged()));
-    connect(scheduleStartTime, SIGNAL(timeChanged(const QTime&)), SLOT(startTimeChanged(const QTime&)));
+    connect(scheduleStartTime, SIGNAL(timeChanged(QTime)), SLOT(startTimeChanged(QTime)));
     connect(scheduleEndDate, SIGNAL(dateChanged(QDate)), SLOT(endDateChanged()));
-    connect(scheduleEndTime, SIGNAL(timeChanged(const QTime&)), SLOT(endTimeChanged(const QTime&)));
+    connect(scheduleEndTime, SIGNAL(timeChanged(QTime)), SLOT(endTimeChanged(QTime)));
     connect(estimate, SIGNAL(valueChanged(double)), SLOT(checkAllFieldsFilled()));
     connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
     connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
@@ -277,7 +277,7 @@ void TaskGeneralPanelImpl::changeLeader()
                 }
                 s += selection.email();
                 if ( ! selection.name().isEmpty() ) {
-                    s += ">";
+                    s += '>';
                 }
                 if ( ! s.isEmpty() ) {
                     names << s;

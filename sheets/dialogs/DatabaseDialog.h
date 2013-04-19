@@ -22,6 +22,8 @@
 #ifndef CALLIGRA_SHEETS_DATABASE_DIALOG
 #define CALLIGRA_SHEETS_DATABASE_DIALOG
 
+#ifndef QT_NO_SQL
+
 #include <QRect>
 #include <QFrame>
 #include <QLabel>
@@ -140,5 +142,7 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
+
+#endif // QT_NO_SQL
 
 #endif // CALLIGRA_SHEETS_DATABASE_DIALOG

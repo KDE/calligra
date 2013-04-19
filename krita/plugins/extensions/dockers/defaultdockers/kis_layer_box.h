@@ -44,6 +44,7 @@ class QModelIndex;
 typedef QList<QModelIndex> QModelIndexList;
 
 class QMenu;
+class QAbstractButton;
 class KoCompositeOp;
 class KisCanvas2;
 class KisNodeModel;
@@ -91,18 +92,8 @@ private slots:
     void slotLeftClicked();
     void slotRightClicked();
     void slotPropertiesClicked();
-    void slotDuplicateClicked();
 
     void slotMergeLayer();
-    void slotNewPaintLayer();
-    void slotNewGroupLayer();
-    void slotNewAdjustmentLayer();
-    void slotNewGeneratorLayer();
-    void slotNewCloneLayer();
-    void slotNewShapeLayer();
-    void slotNewTransparencyMask();
-    void slotNewEffectMask();
-    void slotNewSelectionMask();
     void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
     void slotOpacitySliderMoved(qreal opacity);
@@ -111,6 +102,10 @@ private slots:
     void slotExpanded(const QModelIndex &index);
 
     void slotSelectOpaque();
+
+private:
+    inline void connectActionToButton(QAbstractButton *button, const QString &id);
+    inline void addActionToMenu(QMenu *menu, const QString &id);
 
 private:
 
@@ -126,19 +121,8 @@ private:
 
     QVector<KisAction*> m_actions;
     KisAction* m_removeAction;
-    KisAction* m_dulicateAction;
     KisAction* m_propertiesAction;
-    KisAction* m_newPainterLayerAction;
-    KisAction* m_newGroupLayerAction;
-    KisAction* m_newCloneLayerAction;
-    KisAction* m_newShapeLayerAction;
-    KisAction* m_newAdjustmentLayerAction;
-    KisAction* m_newGeneratorLayerAction;
-    KisAction* m_newTransparencyMaskAction;
-    KisAction* m_newEffectMaskAction;
-    KisAction* m_newSelectionMaskAction;
     KisAction* m_selectOpaque;
-
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

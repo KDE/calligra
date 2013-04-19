@@ -24,7 +24,7 @@
 
 static QString stripText(const QString &text)
 {
-    return QString(text).replace('&', "").replace("...", "");
+    return QString(text).remove('&').remove("...");
 }
 
 KexiMainImportExportPage::KexiMainImportExportPage(
@@ -105,11 +105,6 @@ KexiImportExportAssistant::~KexiImportExportAssistant()
     delete d;
 }
        
-void KexiImportExportAssistant::previousPageRequested(KexiAssistantPage* page)
-{
-    Q_UNUSED(page);
-}
-
 void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);

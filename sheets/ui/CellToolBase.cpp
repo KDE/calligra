@@ -140,7 +140,9 @@
 #include <QHash>
 #include <QMenu>
 #include <QPainter>
+#ifndef QT_NO_SQL
 #include <QSqlDatabase>
+#endif
 
 #ifndef NDEBUG
 #include <QTableView>

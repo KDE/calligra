@@ -81,7 +81,7 @@ KPrTriangleWipeEffectFactory::~KPrTriangleWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Up" ),
     I18N_NOOP( "Up Reverse" ),
     I18N_NOOP( "Right" ),

@@ -22,6 +22,8 @@
 // Local
 #include "DatabaseDialog.h"
 
+#ifndef QT_NO_SQL
+
 #include "Cell.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
@@ -59,8 +61,6 @@
 #include <QTreeWidget>
 
 using namespace Calligra::Sheets;
-
-#ifndef QT_NO_SQL
 
 /********************************************************
  *                 Database Assistant                   *
@@ -827,13 +827,13 @@ QString DatabaseDialog::exchangeWildcards(QString const & value)
     QString str(value);
     int p = str.indexOf('*');
     while (p > -1) {
-        str = str.replace(p, 1, '%');
+        str.replace(p, 1, '%');
         p = str.indexOf('*');
     }
 
     p = str.indexOf('?');
     while (p > -1) {
-        str = str.replace(p, 1, '_');
+        str.replace(p, 1, '_');
         p = str.indexOf('?');
     }
     return str;

@@ -108,7 +108,7 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const QString& transactionName = "");
+    void beginTransaction(const QString& transactionName = QString());
 
     /// Return the transaction's text message
     QString transactionText();
@@ -722,14 +722,6 @@ public:
     * Default and maximum size is 256x256 image
     */
     void setMaskImageSize(qint32 width, qint32 height);
-
-    /**
-     * If the alpha channel is locked, the alpha values of the paint device we are painting on
-     * will not change.
-     */
-    void setLockAlpha(bool protect);
-    bool alphaLocked() const;
-
 
     /**
      * set the rendering intent in case pixels need to be converted before painting

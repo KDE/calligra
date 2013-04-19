@@ -150,7 +150,10 @@ public slots:
      By default this label contains translated "Record:" text. */
     virtual void setLabelText(const QString& text);
 
-    void setButtonToolTipText(KexiRecordNavigator::Button, const QString&);
+    void setButtonToolTipText(KexiRecordNavigator::Button btn, const QString& tooltip);
+    void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& whatsThis);
+    void setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip);
+
 signals:
     void prevButtonClicked();
     void nextButtonClicked();

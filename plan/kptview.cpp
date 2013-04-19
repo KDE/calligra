@@ -142,7 +142,7 @@ ConfigDialog::ConfigDialog(QWidget *parent, const QString& name, KConfigSkeleton
     : KConfigDialog( parent, name, config ),
     m_config( config )
 {
-    KConfigDialogManager::changedMap()->insert("KRichTextWidget", SIGNAL(textChanged() ) );
+    KConfigDialogManager::changedMap()->insert("KRichTextWidget", SIGNAL(textChanged()) );
 }
 
 bool ConfigDialog::hasChanged()
@@ -239,9 +239,9 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget(doc, m_sp);
         m_viewlist->setProject( &( getProject() ) );
-        connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
-        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
-        connect( m_viewlist, SIGNAL( updateViewInfo( ViewListItem* ) ), SLOT( slotUpdateViewInfo( ViewListItem* ) ) );
+        connect( m_viewlist, SIGNAL(selectionChanged(ScheduleManager*)), SLOT(slotSelectionChanged(ScheduleManager*)) );
+        connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), m_viewlist, SLOT(setSelectedSchedule(ScheduleManager*)) );
+        connect( m_viewlist, SIGNAL(updateViewInfo(ViewListItem*)), SLOT(slotUpdateViewInfo(ViewListItem*)) );
     } else {
         ViewListDockerFactory vl(this);
         docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
@@ -255,8 +255,8 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         Q_ASSERT( sd );
 
         sd->setProject( &getProject() );
-        connect( sd, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
-        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), sd, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+        connect( sd, SIGNAL(selectionChanged(ScheduleManager*)), SLOT(slotSelectionChanged(ScheduleManager*)) );
+        connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), sd, SLOT(setSelectedSchedule(ScheduleManager*)) );
 #endif
     }
 
@@ -271,125 +271,125 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     // ------ File
     actionCreateTemplate = new KAction( i18n( "&Create Template From Document..." ), this );
     actionCollection()->addAction("file_createtemplate", actionCreateTemplate );
-    connect( actionCreateTemplate, SIGNAL( triggered( bool ) ), SLOT( slotCreateTemplate() ) );
+    connect( actionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotCreateTemplate()) );
 
     actionCreateNewProject = new KAction( i18n( "&Create New Project..." ), this );
     actionCollection()->addAction("file_createnewproject", actionCreateNewProject );
-    connect( actionCreateNewProject, SIGNAL( triggered( bool ) ), SLOT( slotCreateNewProject() ) );
+    connect( actionCreateNewProject, SIGNAL(triggered(bool)), SLOT(slotCreateNewProject()) );
 
     // ------ Edit
-    actionCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( slotEditCut() ));
-    actionCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
-    actionPaste = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
+    actionCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT(slotEditCut()));
+    actionCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT(slotEditCopy()));
+    actionPaste = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT(slotEditPaste()));
 
     // ------ View
-    actionCollection()->addAction( KStandardAction::Redisplay, "view_refresh" , this, SLOT( slotRefreshView() ) );
+    actionCollection()->addAction( KStandardAction::Redisplay, "view_refresh" , this, SLOT(slotRefreshView()) );
 
     actionViewSelector  = new KToggleAction(i18n("Show Selector"), this);
     actionCollection()->addAction("view_show_selector", actionViewSelector );
-    connect( actionViewSelector, SIGNAL( triggered( bool ) ), SLOT( slotViewSelector( bool ) ) );
+    connect( actionViewSelector, SIGNAL(triggered(bool)), SLOT(slotViewSelector(bool)) );
 
     // ------ Insert
 
     // ------ Project
     actionEditMainProject  = new KAction(koIcon("view-time-schedule-edit"), i18n("Edit Main Project..."), this);
     actionCollection()->addAction("project_edit", actionEditMainProject );
-    connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
+    connect( actionEditMainProject, SIGNAL(triggered(bool)), SLOT(slotProjectEdit()) );
 
     actionEditStandardWorktime  = new KAction(koIcon("configure"), i18n("Define Estimate Conversions..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
-    connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
+    connect( actionEditStandardWorktime, SIGNAL(triggered(bool)), SLOT(slotProjectWorktime()) );
 
 
     // ------ Tools
     actionDefineWBS  = new KAction(koIcon("configure"), i18n("Define WBS Pattern..."), this);
     actionCollection()->addAction("tools_define_wbs", actionDefineWBS );
-    connect( actionDefineWBS, SIGNAL( triggered( bool ) ), SLOT( slotDefineWBS() ) );
+    connect( actionDefineWBS, SIGNAL(triggered(bool)), SLOT(slotDefineWBS()) );
 
     actionInsertFile  = new KAction(koIcon("document-import"), i18n("Insert Project File..."), this);
     actionCollection()->addAction("insert_file", actionInsertFile );
-    connect( actionInsertFile, SIGNAL( triggered( bool ) ), SLOT( slotInsertFile() ) );
+    connect( actionInsertFile, SIGNAL(triggered(bool)), SLOT(slotInsertFile()) );
 
     // ------ Settings
     actionConfigure  = new KAction(koIcon("configure"), i18n("Configure Plan..."), this);
     actionCollection()->addAction("configure", actionConfigure );
-    connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
+    connect( actionConfigure, SIGNAL(triggered(bool)), SLOT(slotConfigure()) );
 
     actionCurrencyConfig  = new KAction(koIcon("configure"), i18n("Define Currency..."), this);
     actionCollection()->addAction( "config_currency", actionCurrencyConfig );
-    connect( actionCurrencyConfig, SIGNAL( triggered( bool ) ), SLOT( slotCurrencyConfig() ) );
+    connect( actionCurrencyConfig, SIGNAL(triggered(bool)), SLOT(slotCurrencyConfig()) );
 
     actionOpenReportFile  = new KAction(koIcon("document-open"), i18n("Open Report Definition File..."), this);
     actionCollection()->addAction( "reportdesigner_open_file", actionOpenReportFile );
-    connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
+    connect( actionOpenReportFile, SIGNAL(triggered(bool)), SLOT(slotOpenReportFile()) );
 
     // ------ Help
     actionIntroduction  = new KAction(koIcon("dialog-information"), i18n("Introduction to Plan"), this);
     actionCollection()->addAction("plan_introduction", actionIntroduction );
-    connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
+    connect( actionIntroduction, SIGNAL(triggered(bool)), SLOT(slotIntroduction()) );
 
     // ------ Popup
     actionOpenNode  = new KAction(koIcon("document-edit"), i18n("Edit..."), this);
     actionCollection()->addAction("node_properties", actionOpenNode );
-    connect( actionOpenNode, SIGNAL( triggered( bool ) ), SLOT( slotOpenNode() ) );
+    connect( actionOpenNode, SIGNAL(triggered(bool)), SLOT(slotOpenNode()) );
     actionTaskProgress  = new KAction(koIcon("document-edit"), i18n("Progress..."), this);
     actionCollection()->addAction("task_progress", actionTaskProgress );
-    connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
+    connect( actionTaskProgress, SIGNAL(triggered(bool)), SLOT(slotTaskProgress()) );
     actionDeleteTask  = new KAction(koIcon("edit-delete"), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
-    connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
+    connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );
     actionTaskDescription  = new KAction(koIcon("document-edit"), i18n("Description..."), this);
     actionCollection()->addAction("task_description", actionTaskDescription );
-    connect( actionTaskDescription, SIGNAL( triggered( bool ) ), SLOT( slotTaskDescription() ) );
+    connect( actionTaskDescription, SIGNAL(triggered(bool)), SLOT(slotTaskDescription()) );
     actionIndentTask = new KAction(koIcon("format-indent-more"), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
-    connect( actionIndentTask, SIGNAL( triggered( bool ) ), SLOT( slotIndentTask() ) );
+    connect( actionIndentTask, SIGNAL(triggered(bool)), SLOT(slotIndentTask()) );
     actionUnindentTask= new KAction(koIcon("format-indent-less"), i18n("Unindent Task"), this);
     actionCollection()->addAction("unindent_task", actionUnindentTask );
-    connect( actionUnindentTask, SIGNAL( triggered( bool ) ), SLOT( slotUnindentTask() ) );
+    connect( actionUnindentTask, SIGNAL(triggered(bool)), SLOT(slotUnindentTask()) );
     actionMoveTaskUp = new KAction(koIcon("arrow-up"), i18n("Move Task Up"), this);
     actionCollection()->addAction("move_task_up", actionMoveTaskUp );
-    connect( actionMoveTaskUp, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskUp() ) );
+    connect( actionMoveTaskUp, SIGNAL(triggered(bool)), SLOT(slotMoveTaskUp()) );
     actionMoveTaskDown = new KAction(koIcon("arrow-down"), i18n("Move Task Down"), this);
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
-    connect( actionMoveTaskDown, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskDown() ) );
+    connect( actionMoveTaskDown, SIGNAL(triggered(bool)), SLOT(slotMoveTaskDown()) );
 
     actionEditResource  = new KAction(koIcon("document-edit"), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
-    connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
+    connect( actionEditResource, SIGNAL(triggered(bool)), SLOT(slotEditResource()) );
 
     actionEditRelation  = new KAction(koIcon("document-edit"), i18n("Edit Dependency..."), this);
     actionCollection()->addAction("edit_dependency", actionEditRelation );
-    connect( actionEditRelation, SIGNAL( triggered( bool ) ), SLOT( slotModifyRelation() ) );
+    connect( actionEditRelation, SIGNAL(triggered(bool)), SLOT(slotModifyRelation()) );
     actionDeleteRelation  = new KAction(koIcon("edit-delete"), i18n("Delete Dependency"), this);
     actionCollection()->addAction("delete_dependency", actionDeleteRelation );
-    connect( actionDeleteRelation, SIGNAL( triggered( bool ) ), SLOT( slotDeleteRelation() ) );
+    connect( actionDeleteRelation, SIGNAL(triggered(bool)), SLOT(slotDeleteRelation()) );
 
     // Viewlist popup
-    connect( m_viewlist, SIGNAL( createView() ), SLOT( slotCreateView() ) );
+    connect( m_viewlist, SIGNAL(createView()), SLOT(slotCreateView()) );
 
     m_estlabel = new QLabel( "", 0 );
     if ( statusBar() ) {
         addStatusBarItem( m_estlabel, 0, true );
     }
 
-    connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
+    connect( &getProject(), SIGNAL(scheduleChanged(MainSchedule*)), SLOT(slotScheduleChanged(MainSchedule*)) );
 
-    connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotScheduleAdded( const MainSchedule* ) ) );
-    connect( &getProject(), SIGNAL( scheduleRemoved( const MainSchedule* ) ), SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
+    connect( &getProject(), SIGNAL(scheduleAdded(const MainSchedule*)), SLOT(slotScheduleAdded(const MainSchedule*)) );
+    connect( &getProject(), SIGNAL(scheduleRemoved(const MainSchedule*)), SLOT(slotScheduleRemoved(const MainSchedule*)) );
     slotPlugScheduleActions();
 
-    connect( doc, SIGNAL( changed() ), SLOT( slotUpdate() ) );
+    connect( doc, SIGNAL(changed()), SLOT(slotUpdate()) );
 
-    connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
+    connect( m_scheduleActionGroup, SIGNAL(triggered(QAction*)), SLOT(slotViewSchedule(QAction*)) );
 
 
-    connect( getPart(), SIGNAL( workPackageLoaded() ), SLOT( slotWorkPackageLoaded() ) );
+    connect( getPart(), SIGNAL(workPackageLoaded()), SLOT(slotWorkPackageLoaded()) );
 
     // hide unused dockers
-    QTimer::singleShot( 0, this, SLOT( hideToolDocker() ) );
+    QTimer::singleShot( 0, this, SLOT(hideToolDocker()) );
     // create views after dockers hidden, views take time for large projects
-    QTimer::singleShot( 100, this, SLOT( initiateViews() ) );
+    QTimer::singleShot( 100, this, SLOT(initiateViews()) );
 
     //kDebug(planDbg())<<" end";
 }
@@ -434,11 +434,11 @@ void View::initiateViews()
     QApplication::setOverrideCursor( Qt::WaitCursor );
     createViews();
 
-    connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
+    connect( m_viewlist, SIGNAL(activated(ViewListItem*,ViewListItem*)), SLOT(slotViewActivated(ViewListItem*,ViewListItem*)) );
     // after createViews() !!
-    connect( m_viewlist, SIGNAL( viewListItemRemoved( ViewListItem* ) ), SLOT( slotViewListItemRemoved( ViewListItem* ) ) );
+    connect( m_viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)) );
     // after createViews() !!
-    connect( m_viewlist, SIGNAL( viewListItemInserted(ViewListItem*, ViewListItem*, int) ), SLOT( slotViewListItemInserted(ViewListItem*, ViewListItem*, int) ) );
+    connect( m_viewlist, SIGNAL(viewListItemInserted(ViewListItem*,ViewListItem*,int)), SLOT(slotViewListItemInserted(ViewListItem*,ViewListItem*,int)) );
 
     QDockWidget *docker = qobject_cast<QDockWidget*>( m_viewlist->parent() );
     if ( docker ) {
@@ -447,7 +447,7 @@ void View::initiateViews()
         connect( m_viewlist, SIGNAL(modified()), getPart(), SLOT(viewlistModified()));
         connect(getPart(), SIGNAL(viewlistModified(bool)), docker, SLOT(updateWindowTitle(bool)));
     }
-    connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
+    connect( m_tab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)) );
 
     loadContext();
 
@@ -648,7 +648,7 @@ void View::slotUpdateViewInfo( ViewListItem *itm )
     }
 }
 
-ViewInfo View::defaultViewInfo( const QString type ) const
+ViewInfo View::defaultViewInfo( const QString &type ) const
 {
     ViewInfo vi;
     if ( type == "CalendarEditor" ) {
@@ -672,7 +672,6 @@ ViewInfo View::defaultViewInfo( const QString type ) const
     } else if ( type == "ScheduleEditor" ) {
         // This view is not used stand-alone atm
         vi.name = i18n( "Schedules" );
-        vi.tip = "";
     } else if ( type == "ScheduleHandlerView" ) {
         vi.name = i18n( "Schedules" );
         vi.tip = i18nc( "@info:tooltip", "Calculate and analyze project schedules" );
@@ -690,16 +689,16 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.tip = i18nc( "@info:tooltip", "View task work package information" );
     } else if ( type == "GanttView" ) {
         vi.name = i18n( "Gantt" );
-        vi.tip = i18nc( "@info:tooltip", "View gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View Gantt chart" );
     } else if ( type == "MilestoneGanttView" ) {
         vi.name = i18n( "Milestone Gantt" );
-        vi.tip = i18nc( "@info:tooltip", "View milestone gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View milestone Gantt chart" );
     } else if ( type == "ResourceAppointmentsView" ) {
         vi.name = i18n( "Resource Assignments" );
         vi.tip = i18nc( "@info:tooltip", "View resource assignments in a table" );
     } else if ( type == "ResourceAppointmentsGanttView" ) {
         vi.name = i18n( "Resource Assignments (Gantt)" );
-        vi.tip = i18nc( "@info:tooltip", "View resource assignments in gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View resource assignments in Gantt chart" );
     } else if ( type == "AccountsView" ) {
         vi.name = i18n( "Cost Breakdown" );
         vi.tip = i18nc( "@info:tooltip", "View planned and actual cost" );
@@ -715,7 +714,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
     return vi;
 }
 
-ViewInfo View::defaultCategoryInfo( const QString type ) const
+ViewInfo View::defaultCategoryInfo( const QString &type ) const
 {
     ViewInfo vi;
     if ( type == "Editors" ) {
@@ -754,13 +753,13 @@ ViewBase *View::createWelcomeView()
 
     slotOpenUrlRequest( v, KUrl( "about:plan/main" ) );
 
-    connect( v, SIGNAL( openUrlRequest( HtmlView*, const KUrl& ) ), SLOT( slotOpenUrlRequest( HtmlView*, const KUrl& ) ) );
+    connect( v, SIGNAL(openUrlRequest(HtmlView*,KUrl)), SLOT(slotOpenUrlRequest(HtmlView*,KUrl)) );
 
     m_tab->addWidget( v );
     return v;
 }
 
-ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ResourceAppointmentsGanttView *v = new ResourceAppointmentsGanttView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -777,11 +776,11 @@ ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QS
     }
 
 
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( v, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
 
     v->setProject( &( getProject() ) );
     v->setScheduleManager( currentScheduleManager() );
@@ -790,7 +789,7 @@ ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QS
 }
 
 
-ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ResourceAppointmentsView *v = new ResourceAppointmentsView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -806,11 +805,11 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
         i->setToolTip( 0, tip );
     }
 
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( v, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
 
     v->setProject( &( getProject() ) );
     v->setScheduleManager( currentScheduleManager() );
@@ -818,7 +817,7 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
     return v;
 }
 
-ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ResourceEditor *resourceeditor = new ResourceEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( resourceeditor );
@@ -835,16 +834,16 @@ ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, cons
         i->setToolTip( 0, tip );
     }
 
-    connect( resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( resourceeditor, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( resourceeditor, SIGNAL( deleteObjectList( QObjectList ) ), SLOT( slotDeleteResourceObjects( QObjectList ) ) );
+    connect( resourceeditor, SIGNAL(deleteObjectList(QObjectList)), SLOT(slotDeleteResourceObjects(QObjectList)) );
 
-    connect( resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( resourceeditor, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     resourceeditor->updateReadWrite( m_readWrite );
     return resourceeditor;
 }
 
-ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     TaskEditor *taskeditor = new TaskEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( taskeditor );
@@ -863,24 +862,24 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     taskeditor->setProject( &(getProject()) );
     taskeditor->setScheduleManager( currentScheduleManager() );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskeditor, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), taskeditor, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( taskeditor, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
-    connect( taskeditor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
-    connect( taskeditor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
-    connect( taskeditor, SIGNAL( addSubMilestone() ), SLOT( slotAddSubMilestone() ) );
-    connect( taskeditor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
-    connect( taskeditor, SIGNAL( moveTaskUp() ), SLOT( slotMoveTaskUp() ) );
-    connect( taskeditor, SIGNAL( moveTaskDown() ), SLOT( slotMoveTaskDown() ) );
-    connect( taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
-    connect( taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
+    connect( taskeditor, SIGNAL(addTask()), SLOT(slotAddTask()) );
+    connect( taskeditor, SIGNAL(addMilestone()), SLOT(slotAddMilestone()) );
+    connect( taskeditor, SIGNAL(addSubtask()), SLOT(slotAddSubTask()) );
+    connect( taskeditor, SIGNAL(addSubMilestone()), SLOT(slotAddSubMilestone()) );
+    connect( taskeditor, SIGNAL(deleteTaskList(QList<Node*>)), SLOT(slotDeleteTask(QList<Node*>)) );
+    connect( taskeditor, SIGNAL(moveTaskUp()), SLOT(slotMoveTaskUp()) );
+    connect( taskeditor, SIGNAL(moveTaskDown()), SLOT(slotMoveTaskDown()) );
+    connect( taskeditor, SIGNAL(indentTask()), SLOT(slotIndentTask()) );
+    connect( taskeditor, SIGNAL(unindentTask()), SLOT(slotUnindentTask()) );
 
-    connect(taskeditor, SIGNAL(saveTaskModule(const KUrl&, Project*)), SLOT(saveTaskModule(const KUrl&, Project*)));
-    connect(taskeditor, SIGNAL(removeTaskModule(const KUrl&)), SLOT(removeTaskModule(const KUrl&)));
+    connect(taskeditor, SIGNAL(saveTaskModule(KUrl,Project*)), SLOT(saveTaskModule(KUrl,Project*)));
+    connect(taskeditor, SIGNAL(removeTaskModule(KUrl)), SLOT(removeTaskModule(KUrl)));
 
-    connect( taskeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( taskeditor, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     taskeditor->updateReadWrite( m_readWrite );
 
     // last:
@@ -888,7 +887,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     return taskeditor;
 }
 
-ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     AccountsEditor *ae = new AccountsEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( ae );
@@ -906,12 +905,12 @@ ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, cons
 
     ae->draw( getProject() );
 
-    connect( ae, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( ae, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
     ae->updateReadWrite( m_readWrite );
     return ae;
 }
 
-ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     CalendarEditor *calendareditor = new CalendarEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( calendareditor );
@@ -929,14 +928,14 @@ ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, cons
 
     calendareditor->draw( getProject() );
 
-    connect( calendareditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( calendareditor, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( calendareditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( calendareditor, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     calendareditor->updateReadWrite( m_readWrite );
     return calendareditor;
 }
 
-ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ScheduleHandlerView *handler = new ScheduleHandlerView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( handler );
@@ -952,20 +951,20 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
         i->setToolTip( 0, tip );
     }
 
-    connect( handler->scheduleEditor(), SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
-    connect( handler->scheduleEditor(), SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
-    connect( handler->scheduleEditor(), SIGNAL( moveScheduleManager(ScheduleManager*, ScheduleManager*, int)), SLOT(slotMoveScheduleManager(ScheduleManager*, ScheduleManager*, int)));
+    connect( handler->scheduleEditor(), SIGNAL(addScheduleManager(Project*)), SLOT(slotAddScheduleManager(Project*)) );
+    connect( handler->scheduleEditor(), SIGNAL(deleteScheduleManager(Project*,ScheduleManager*)), SLOT(slotDeleteScheduleManager(Project*,ScheduleManager*)) );
+    connect( handler->scheduleEditor(), SIGNAL(moveScheduleManager(ScheduleManager*,ScheduleManager*,int)), SLOT(slotMoveScheduleManager(ScheduleManager*,ScheduleManager*,int)));
 
-    connect( handler->scheduleEditor(), SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
+    connect( handler->scheduleEditor(), SIGNAL(calculateSchedule(Project*,ScheduleManager*)), SLOT(slotCalculateSchedule(Project*,ScheduleManager*)) );
 
-    connect( handler->scheduleEditor(), SIGNAL( baselineSchedule( Project*, ScheduleManager* ) ), SLOT( slotBaselineSchedule( Project*, ScheduleManager* ) ) );
+    connect( handler->scheduleEditor(), SIGNAL(baselineSchedule(Project*,ScheduleManager*)), SLOT(slotBaselineSchedule(Project*,ScheduleManager*)) );
 
 
-    connect( handler, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( handler, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), handler, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), handler, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)) );
 
-    connect( handler, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( handler, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
 
     connect(handler, SIGNAL(editNode(Node*)), this, SLOT(slotOpenNode(Node*)));
     connect(handler, SIGNAL(editResource(Resource*)), this, SLOT(slotEditResource(Resource*)));
@@ -979,18 +978,18 @@ ScheduleEditor *View::createScheduleEditor( QWidget *parent )
 {
     ScheduleEditor *scheduleeditor = new ScheduleEditor(getKoPart(), getPart(), parent );
 
-    connect( scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
-    connect( scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+    connect( scheduleeditor, SIGNAL(addScheduleManager(Project*)), SLOT(slotAddScheduleManager(Project*)) );
+    connect( scheduleeditor, SIGNAL(deleteScheduleManager(Project*,ScheduleManager*)), SLOT(slotDeleteScheduleManager(Project*,ScheduleManager*)) );
 
-    connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
+    connect( scheduleeditor, SIGNAL(calculateSchedule(Project*,ScheduleManager*)), SLOT(slotCalculateSchedule(Project*,ScheduleManager*)) );
 
-    connect( scheduleeditor, SIGNAL( baselineSchedule( Project*, ScheduleManager* ) ), SLOT( slotBaselineSchedule( Project*, ScheduleManager* ) ) );
+    connect( scheduleeditor, SIGNAL(baselineSchedule(Project*,ScheduleManager*)), SLOT(slotBaselineSchedule(Project*,ScheduleManager*)) );
 
     scheduleeditor->updateReadWrite( m_readWrite );
     return scheduleeditor;
 }
 
-ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ScheduleEditor *scheduleeditor = new ScheduleEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( scheduleeditor );
@@ -1008,22 +1007,22 @@ ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, cons
 
     scheduleeditor->setProject( &( getProject() ) );
 
-    connect( scheduleeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( scheduleeditor, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
+    connect( scheduleeditor, SIGNAL(addScheduleManager(Project*)), SLOT(slotAddScheduleManager(Project*)) );
 
-    connect( scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+    connect( scheduleeditor, SIGNAL(deleteScheduleManager(Project*,ScheduleManager*)), SLOT(slotDeleteScheduleManager(Project*,ScheduleManager*)) );
 
-    connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
+    connect( scheduleeditor, SIGNAL(calculateSchedule(Project*,ScheduleManager*)), SLOT(slotCalculateSchedule(Project*,ScheduleManager*)) );
 
-    connect( scheduleeditor, SIGNAL( baselineSchedule( Project*, ScheduleManager* ) ), SLOT( slotBaselineSchedule( Project*, ScheduleManager* ) ) );
+    connect( scheduleeditor, SIGNAL(baselineSchedule(Project*,ScheduleManager*)), SLOT(slotBaselineSchedule(Project*,ScheduleManager*)) );
 
     scheduleeditor->updateReadWrite( m_readWrite );
     return scheduleeditor;
 }
 
 
-ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     DependencyEditor *editor = new DependencyEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( editor );
@@ -1041,28 +1040,28 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
 
     editor->draw( getProject() );
 
-    connect( editor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( editor, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( editor, SIGNAL( addRelation( Node*, Node*, int ) ), SLOT( slotAddRelation( Node*, Node*, int ) ) );
-    connect( editor, SIGNAL( modifyRelation( Relation*, int ) ), SLOT( slotModifyRelation( Relation*, int ) ) );
-    connect( editor, SIGNAL( modifyRelation( Relation* ) ), SLOT( slotModifyRelation( Relation* ) ) );
+    connect( editor, SIGNAL(addRelation(Node*,Node*,int)), SLOT(slotAddRelation(Node*,Node*,int)) );
+    connect( editor, SIGNAL(modifyRelation(Relation*,int)), SLOT(slotModifyRelation(Relation*,int)) );
+    connect( editor, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)) );
 
-    connect( editor, SIGNAL( editNode( Node * ) ), SLOT( slotOpenNode( Node * ) ) );
-    connect( editor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
-    connect( editor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
-    connect( editor, SIGNAL( addSubMilestone() ), SLOT( slotAddSubMilestone() ) );
-    connect( editor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
-    connect( editor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
+    connect( editor, SIGNAL(editNode(Node*)), SLOT(slotOpenNode(Node*)) );
+    connect( editor, SIGNAL(addTask()), SLOT(slotAddTask()) );
+    connect( editor, SIGNAL(addMilestone()), SLOT(slotAddMilestone()) );
+    connect( editor, SIGNAL(addSubMilestone()), SLOT(slotAddSubMilestone()) );
+    connect( editor, SIGNAL(addSubtask()), SLOT(slotAddSubTask()) );
+    connect( editor, SIGNAL(deleteTaskList(QList<Node*>)), SLOT(slotDeleteTask(QList<Node*>)) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), editor, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), editor, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( editor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( editor, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     editor->updateReadWrite( m_readWrite );
     editor->setScheduleManager( currentScheduleManager() );
     return editor;
 }
 
-ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createPertEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     PertEditor *perteditor = new PertEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( perteditor );
@@ -1080,13 +1079,13 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
 
     perteditor->draw( getProject() );
 
-    connect( perteditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( perteditor, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
     m_updatePertEditor = true;
     perteditor->updateReadWrite( m_readWrite );
     return perteditor;
 }
 
-ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ProjectStatusView *v = new ProjectStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1102,9 +1101,9 @@ ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, c
         i->setToolTip( 0, tip );
     }
 
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(setScheduleManager(ScheduleManager*)) );
 
     v->updateReadWrite( m_readWrite );
     v->setProject( &getProject() );
@@ -1112,7 +1111,7 @@ ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, c
     return v;
 }
 
-ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     PerformanceStatusView *v = new PerformanceStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1128,11 +1127,11 @@ ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString ta
         i->setToolTip( 0, tip );
     }
 
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( v, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
 
     v->updateReadWrite( m_readWrite );
     v->setProject( &getProject() );
@@ -1141,7 +1140,7 @@ ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString ta
 }
 
 
-ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     TaskStatusView *taskstatusview = new TaskStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( taskstatusview );
@@ -1157,11 +1156,11 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
         i->setToolTip( 0, tip );
     }
 
-    connect( taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( taskstatusview, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskstatusview, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), taskstatusview, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( taskstatusview, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
 
     taskstatusview->updateReadWrite( m_readWrite );
     taskstatusview->draw( getProject() );
@@ -1169,7 +1168,7 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
     return taskstatusview;
 }
 
-ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createTaskView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     TaskView *v = new TaskView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1188,16 +1187,16 @@ ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QStr
     v->draw( getProject() );
     v->setScheduleManager( currentScheduleManager() );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( v, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     v->updateReadWrite( m_readWrite );
     return v;
 }
 
-ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     TaskWorkPackageView *v = new TaskWorkPackageView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1216,21 +1215,21 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag,
     v->setProject( &getProject() );
     v->setScheduleManager( currentScheduleManager() );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( v, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
 
-    connect( v, SIGNAL( mailWorkpackage( Node*, Resource* ) ), SLOT( slotMailWorkpackage( Node*, Resource* ) ) );
-    connect( v, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ), SLOT( slotMailWorkpackages( QList<Node*>&, Resource* ) ) );
+    connect( v, SIGNAL(mailWorkpackage(Node*,Resource*)), SLOT(slotMailWorkpackage(Node*,Resource*)) );
+    connect( v, SIGNAL(mailWorkpackages(QList<Node*>,Resource*)), SLOT(slotMailWorkpackages(QList<Node*>,Resource*)) );
 
     connect(v, SIGNAL(checkForWorkPackages()), getPart(), SLOT(checkForWorkPackages()));
     v->updateReadWrite( m_readWrite );
     return v;
 }
 
-ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
@@ -1249,22 +1248,22 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
     ganttview->setProject( &( getProject() ) );
     ganttview->setScheduleManager( currentScheduleManager() );
 
-    connect( ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( ganttview, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 /*  TODO: Review these
-    connect( ganttview, SIGNAL( addRelation( Node*, Node*, int ) ), SLOT( slotAddRelation( Node*, Node*, int ) ) );
-    connect( ganttview, SIGNAL( modifyRelation( Relation*, int ) ), SLOT( slotModifyRelation( Relation*, int ) ) );
-    connect( ganttview, SIGNAL( modifyRelation( Relation* ) ), SLOT( slotModifyRelation( Relation* ) ) );
-    connect( ganttview, SIGNAL( itemDoubleClicked() ), SLOT( slotOpenNode() ) );
-    connect( ganttview, SIGNAL( itemRenamed( Node*, const QString& ) ), this, SLOT( slotRenameNode( Node*, const QString& ) ) );*/
+    connect( ganttview, SIGNAL(addRelation(Node*,Node*,int)), SLOT(slotAddRelation(Node*,Node*,int)) );
+    connect( ganttview, SIGNAL(modifyRelation(Relation*,int)), SLOT(slotModifyRelation(Relation*,int)) );
+    connect( ganttview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)) );
+    connect( ganttview, SIGNAL(itemDoubleClicked()), SLOT(slotOpenNode()) );
+    connect( ganttview, SIGNAL(itemRenamed(Node*,QString)), this, SLOT(slotRenameNode(Node*,QString)) );*/
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), ganttview, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), ganttview, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( ganttview, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     ganttview->updateReadWrite( m_readWrite );
     return ganttview;
 }
 
-ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
@@ -1283,17 +1282,17 @@ ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, 
     ganttview->setProject( &( getProject() ) );
     ganttview->setScheduleManager( currentScheduleManager() );
 
-    connect( ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( ganttview, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), ganttview, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), ganttview, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( ganttview, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     ganttview->updateReadWrite( m_readWrite );
     return ganttview;
 }
 
 
-ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createAccountsView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     AccountsView *accountsview = new AccountsView(getKoPart(), &getProject(), getPart(), m_tab );
     m_tab->addWidget( accountsview );
@@ -1311,14 +1310,14 @@ ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const 
 
     accountsview->setScheduleManager( currentScheduleManager() );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), accountsview, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), accountsview, SLOT(setScheduleManager(ScheduleManager*)) );
 
-    connect( accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( accountsview, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
     accountsview->updateReadWrite( m_readWrite );
     return accountsview;
 }
 
-ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ResourceAssignmentView *resourceAssignmentView = new ResourceAssignmentView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( resourceAssignmentView );
@@ -1337,14 +1336,14 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString t
 
     resourceAssignmentView->draw( getProject() );
 
-    connect( resourceAssignmentView, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( resourceAssignmentView, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
 
-    connect( resourceAssignmentView, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    connect( resourceAssignmentView, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
     resourceAssignmentView->updateReadWrite( m_readWrite );
     return resourceAssignmentView;
 }
 
-ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ReportView *v = new ReportView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1362,11 +1361,11 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
 
     v->setProject( &getProject() );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager* )), v, SLOT(slotRefreshView()));
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(setScheduleManager(ScheduleManager*)) );
+    connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), v, SLOT(slotRefreshView()));
     v->setScheduleManager( currentScheduleManager() );
 
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( v, SIGNAL(guiActivated(ViewBase*,bool)), SLOT(slotGuiActivated(ViewBase*,bool)) );
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -1576,7 +1575,7 @@ QAction *View::addScheduleAction( Schedule *sch )
         m_scheduleActions.insert( act, sch );
         m_scheduleActionGroup->addAction( act );
         //kDebug(planDbg())<<"Add:"<<n;
-        connect( act, SIGNAL(destroyed( QObject* ) ), SLOT( slotActionDestroyed( QObject* ) ) );
+        connect( act, SIGNAL(destroyed(QObject*)), SLOT(slotActionDestroyed(QObject*)) );
     }
     return act;
 }
@@ -1667,7 +1666,7 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
         return;
     }
     if ( sm == currentScheduleManager() ) {
-        connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        connect( project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
     }
     CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, sm, i18nc( "(qtundo-format) @info:status 1=schedule name", "Calculate %1", sm->name() ) );
     getPart() ->addCommand( cmd );
@@ -1866,7 +1865,7 @@ void View::slotConfigure()
     ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), koIconName("view-task") );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), koIconName("fill-color") );
-    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("planwork") );
+    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("calligraplanwork") );
     dialog->show();
 
 }
@@ -2666,7 +2665,7 @@ void View::slotCreateReport()
     ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), v.createReportModels( &getProject(), currentScheduleManager() ), this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
-    connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
+    connect( dlg, SIGNAL(createReportView(ReportDesignDialog*)), SLOT(slotCreateReportView(ReportDesignDialog*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
     connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();
@@ -2677,7 +2676,7 @@ void View::slotCreateReport()
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
-    connect( vd, SIGNAL( viewCreated( ViewBase* ) ), dlg, SLOT( slotViewCreated( ViewBase* ) ) );
+    connect( vd, SIGNAL(viewCreated(ViewBase*)), dlg, SLOT(slotViewCreated(ViewBase*)) );
     vd->exec();
     delete vd;
 }
@@ -2712,7 +2711,7 @@ void View::slotOpenReportFileFinished( int result )
     ReportDesignDialog *dlg = new ReportDesignDialog( e, Report::createBaseReportDataModels( this ), this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
-    connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
+    connect( dlg, SIGNAL(createReportView(ReportDesignDialog*)), SLOT(slotCreateReportView(ReportDesignDialog*)));
     connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
     dlg->show();
@@ -2962,7 +2961,7 @@ void View::slotMailWorkpackage( Node *node, Resource *resource )
     KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
 }
 
-void View::slotMailWorkpackages( QList<Node*> &nodes, Resource *resource )
+void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
 {
     kDebug(planDbg());
     if ( resource == 0 ) {
@@ -3050,94 +3049,104 @@ void View::removeTaskModule( const KUrl &url )
 
 QString View::standardTaskStatusReport() const
 {
-    QString s;
-    s = "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan\" >";
-    s += "<data-source select-from=\"taskstatus\" ></data-source>";
-    s += "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" >";
-    s += "<report:title>" + i18n( "Report" ) + "</report:title>";
-    s += "<report:script report:script-interpreter=\"javascript\" ></report:script>";
-    s += "<report:grid report:grid-divisions=\"4\" report:grid-snap=\"1\" report:page-unit=\"cm\" report:grid-visible=\"1\" />";
-    s += "<report:page-style report:print-orientation=\"portrait\" fo:margin-bottom=\"1cm\" fo:margin-top=\"1cm\" fo:margin-left=\"1cm\" fo:margin-right=\"1cm\" report:page-size=\"A4\" >predefined</report:page-style>";
-    s += "<report:body>";
-    s += "<report:section svg:height=\"1.75cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-page-any\" >";
-    s += "<report:field report:name=\"field16\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Manager()\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:field>";
-    s += "<report:label report:name=\"label16\" report:horizontal-align=\"left\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0cm\" report:caption=\"" + i18nc( "Project manager", "Manager:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"1\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:label>";
-    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"13cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"1\" >";
-    s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"0%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:field>";
-    s += "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"13cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Project:" ) + "\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:label>";
-    s += "<report:line report:name=\"line15\" svg:y1=\"1.2229cm\" svg:x1=\"0cm\" svg:y2=\"1.2229cm\" svg:x2=\"18.9715cm\" report:z-index=\"0\" >";
-    s += "<report:line-style report:line-style=\"solid\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:line>";
-    s += "</report:section>";
-    s += "<report:section svg:height=\"1.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-report\" >";
-    s += "<report:label report:name=\"label17\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"18.97cm\" svg:y=\"0cm\" report:caption=\"" + i18n( "Task Status Report" ) + "\" report:vertical-align=\"center\" svg:height=\"1.25cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:label>";
-    s += "</report:section>";
-    s += "<report:section svg:height=\"2.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"footer-page-any\" >";
-    s += "<report:field report:name=\"field10\" report:horizontal-align=\"right\" report:item-data-source=\"=constants.PageNumber()\" svg:x=\"6.75cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:field>";
-    s += "<report:field report:name=\"field11\" report:horizontal-align=\"left\" report:item-data-source=\"=constants.PageTotal()\" svg:x=\"8.25cm\" svg:width=\"3cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:field>";
-    s += "<report:label report:name=\"label12\" report:horizontal-align=\"center\" svg:x=\"7.5cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:caption=\"" + i18nc( "As in: Page 1 of 2", "of" ) + "\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:label>";
-    s += "<report:label report:name=\"label13\" report:horizontal-align=\"right\" svg:x=\"5.75cm\" svg:width=\"1cm\" svg:y=\"0.25cm\" report:caption=\"" + i18n( "Page" ) + "\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:label>";
-    s += "<report:line report:name=\"line14\" svg:y1=\"0.2195cm\" svg:x1=\"0cm\" svg:y2=\"0.2195cm\" svg:x2=\"18.9715cm\" report:z-index=\"0\" >";
-    s += "<report:line-style report:line-style=\"solid\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:line>";
-    s += "</report:section>";
-    s += "<report:detail>";
-    s += "<report:group report:group-sort=\"ascending\" report:group-column=\"Parent\" >";
-    s += "<report:section svg:height=\"2.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"group-header\" >";
-    s += "<report:label report:name=\"label6\" report:horizontal-align=\"left\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"1.75cm\" report:caption=\"" + i18nc( "Task name", "Name" ) + "\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
-        s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-        s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:label>";
-    s += "<report:field report:name=\"field8\" report:horizontal-align=\"left\" report:item-data-source=\"Parent\" svg:x=\"0.5cm\" svg:width=\"8cm\" svg:y=\"1cm\" report:vertical-align=\"center\" svg:height=\"0.689cm\" report:z-index=\"0\" >";
-        s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-        s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:field>";
-    s += "<report:label report:name=\"label8\" report:horizontal-align=\"center\" svg:x=\"4.25cm\" svg:width=\"4.25cm\" svg:y=\"1.75cm\" report:caption=\"" + i18nc( "Task completion", "Completion (%)" ) + "\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
-        s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-        s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:label>";
-    s += "</report:section>";
-    s += "</report:group>";
-    s += "<report:section svg:height=\"0.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"detail\" >";
-    s += "<report:field report:name=\"field7\" report:horizontal-align=\"left\" report:item-data-source=\"NodeName\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:field>";
-    s += "<report:field report:name=\"field9\" report:horizontal-align=\"center\" report:item-data-source=\"NodeCompleted\" svg:x=\"4.25cm\" svg:width=\"4.25cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
-    s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
-    s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
-    s += "</report:field>";
-    s += "</report:section>";
-    s += "</report:detail>";
-    s += "</report:body>";
-    s += "</report:content>";
-    s += "</planreportdefinition>";
+    QString s = QString::fromLatin1(
+        "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan\" >"
+        "<data-source select-from=\"taskstatus\" ></data-source>"
+        "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" >"
+        "<report:title>%1</report:title>"
+        "<report:script report:script-interpreter=\"javascript\" ></report:script>"
+        "<report:grid report:grid-divisions=\"4\" report:grid-snap=\"1\" report:page-unit=\"cm\" report:grid-visible=\"1\" />"
+        "<report:page-style report:print-orientation=\"portrait\" fo:margin-bottom=\"1cm\" fo:margin-top=\"1cm\" fo:margin-left=\"1cm\" fo:margin-right=\"1cm\" report:page-size=\"A4\" >predefined</report:page-style>"
+        "<report:body>"
+        "<report:section svg:height=\"1.75cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-page-any\" >"
+        "<report:field report:name=\"field16\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Manager()\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:field>"
+        "<report:label report:name=\"label16\" report:horizontal-align=\"left\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0cm\" report:caption=\"%2\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"1\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:label>"
+        "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"13cm\" svg:y=\"0.4cm\" report:vertical-align=\"bottom\" svg:height=\"0.6cm\" report:z-index=\"1\" >"
+        "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"0%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:field>"
+        "<report:label report:name=\"label18\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"13cm\" svg:y=\"0cm\" report:caption=\"%3\" report:vertical-align=\"center\" svg:height=\"0.4cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:label>"
+        "<report:line report:name=\"line15\" svg:y1=\"1.2229cm\" svg:x1=\"0cm\" svg:y2=\"1.2229cm\" svg:x2=\"18.9715cm\" report:z-index=\"0\" >"
+        "<report:line-style report:line-style=\"solid\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:line>"
+        "</report:section>"
+        "<report:section svg:height=\"1.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-report\" >"
+        "<report:label report:name=\"label17\" report:horizontal-align=\"left\" svg:x=\"0cm\" svg:width=\"18.97cm\" svg:y=\"0cm\" report:caption=\"%4\" report:vertical-align=\"center\" svg:height=\"1.25cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:label>"
+        "</report:section>"
+        "<report:section svg:height=\"2.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"footer-page-any\" >"
+        "<report:field report:name=\"field10\" report:horizontal-align=\"right\" report:item-data-source=\"=constants.PageNumber()\" svg:x=\"6.75cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:field>"
+        "<report:field report:name=\"field11\" report:horizontal-align=\"left\" report:item-data-source=\"=constants.PageTotal()\" svg:x=\"8.25cm\" svg:width=\"3cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:field>"
+        "<report:label report:name=\"label12\" report:horizontal-align=\"center\" svg:x=\"7.5cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:caption=\"%5\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:label>"
+        "<report:label report:name=\"label13\" report:horizontal-align=\"right\" svg:x=\"5.75cm\" svg:width=\"1cm\" svg:y=\"0.25cm\" report:caption=\"%6\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:label>"
+        "<report:line report:name=\"line14\" svg:y1=\"0.2195cm\" svg:x1=\"0cm\" svg:y2=\"0.2195cm\" svg:x2=\"18.9715cm\" report:z-index=\"0\" >"
+        "<report:line-style report:line-style=\"solid\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:line>"
+        "</report:section>"
+        "<report:detail>"
+        "<report:group report:group-sort=\"ascending\" report:group-column=\"Parent\" >"
+        "<report:section svg:height=\"2.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"group-header\" >"
+        "<report:label report:name=\"label6\" report:horizontal-align=\"left\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"1.75cm\" report:caption=\"%7\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:label>"
+        "<report:field report:name=\"field8\" report:horizontal-align=\"left\" report:item-data-source=\"Parent\" svg:x=\"0.5cm\" svg:width=\"8cm\" svg:y=\"1cm\" report:vertical-align=\"center\" svg:height=\"0.689cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:field>"
+        "<report:label report:name=\"label8\" report:horizontal-align=\"center\" svg:x=\"4.25cm\" svg:width=\"4.25cm\" svg:y=\"1.75cm\" report:caption=\"%8\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:label>"
+        "</report:section>"
+        "</report:group>"
+        "<report:section svg:height=\"0.50cm\" fo:background-color=\"#ffffff\" report:section-type=\"detail\" >"
+        "<report:field report:name=\"field7\" report:horizontal-align=\"left\" report:item-data-source=\"NodeName\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:field>"
+        "<report:field report:name=\"field9\" report:horizontal-align=\"center\" report:item-data-source=\"NodeCompleted\" svg:x=\"4.25cm\" svg:width=\"4.25cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >"
+        "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />"
+        "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />"
+        "</report:field>"
+        "</report:section>"
+        "</report:detail>"
+        "</report:body>"
+        "</report:content>"
+        "</planreportdefinition>")
+        .arg(
+            i18n( "Report" ),
+            i18nc( "Project manager", "Manager:" ),
+            i18n( "Project:" ),
+            i18n( "Task Status Report" ),
+            i18nc( "As in: Page 1 of 2", "of" ),
+            i18n( "Page" ),
+            i18nc( "Task name", "Name" ),
+            i18nc( "Task completion", "Completion (%)" )
+        );
     return s;
 }
 

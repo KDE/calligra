@@ -91,7 +91,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsTreeView( QWidget *parent );
+    explicit ResourceAppointmentsTreeView(QWidget *parent);
 
     ResourceAppointmentsItemModel *model() const { return static_cast<ResourceAppointmentsItemModel*>( DoubleTreeViewBase::model() ); }
 
@@ -145,7 +145,7 @@ public:
 signals:
     void requestPopupMenu( const QString&, const QPoint& );
     void addResource( ResourceGroup* );
-    void deleteObjectList( QObjectList );
+    void deleteObjectList( const QObjectList& );
     
 public slots:
     /// Activate/deactivate the gui
@@ -160,9 +160,9 @@ protected:
     void updateActionsEnabled(  bool on = true );
 
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void slotEnableActions( bool on );
 

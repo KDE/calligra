@@ -134,7 +134,7 @@ bool& Kexi::tempShowScripts()
 QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
 {
     if (!withAmpersand)
-        return Kexi::nameForViewMode(mode, true).replace("&", "");
+        return Kexi::nameForViewMode(mode, true).remove('&');
 
     if (mode == NoViewMode)
         return i18n("&No View");
@@ -158,13 +158,6 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
         0;
 
     return QLatin1String(id);
-}
-
-//--------------------------------------------------------------------------------
-
-QString Kexi::msgYouCanImproveData()
-{
-    return i18n("You can correct data in this record or use \"Cancel record changes\" function.");
 }
 
 //--------------------------------------------------------------------------------
@@ -288,12 +281,14 @@ public:
     virtual ~ObjectStatusMessageHandler() {
     }
 
-    virtual void showErrorMessage(const QString &title,
-                                  const QString &details = QString()) {
+    virtual void showErrorMessageInternal(const QString &title,
+                                          const QString &details = QString())
+    {
         m_status->setStatus(title, details);
     }
 
-    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString()) {
+    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString())
+    {
         m_status->setStatus(obj, msg);
     }
 
@@ -323,7 +318,7 @@ void KEXI_UNFINISHED_INTERNAL(const QString& feature_name, const QString& extra_
         QString feature_name_(feature_name);
         *line1 = i18n(
                   "\"%1\" function is not available for version %2 of %3 application.",
-                  feature_name_.replace("&", ""), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
+                  feature_name_.remove('&'), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     }
 
     *line2 = extra_text;

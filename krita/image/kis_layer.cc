@@ -38,7 +38,6 @@
 #include "kis_painter.h"
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
-#include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
@@ -51,9 +50,9 @@ public:
     KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
         QMutexLocker locker(&m_lock);
 
-        if(!m_reusablePaintDevice)
+        if (!m_reusablePaintDevice) {
             m_reusablePaintDevice = new KisPaintDevice(*prototype);
-
+        }
         if(!m_projection ||
            !(*m_projection->colorSpace() == *prototype->colorSpace())) {
             m_projection = m_reusablePaintDevice;
@@ -112,7 +111,6 @@ public:
 
     KisImageWSP image;
     QBitArray channelFlags;
-    KisEffectMaskSP previewMask;
     KisMetaData::Store* metaDataStore;
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
@@ -204,7 +202,7 @@ bool KisLayer::alphaChannelDisabled() const
 
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
-    Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
+    Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
     m_d->channelFlags = channelFlags;
 }
 
@@ -299,10 +297,6 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 {
     QList<KisEffectMaskSP> masks;
 
-    if (m_d->previewMask && m_d->previewMask->visible()) {
-        masks.append(m_d->previewMask);
-    }
-
     if (childCount() > 0) {
         KoProperties properties;
         properties.setProperty("visible", true);
@@ -319,7 +313,6 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 
 bool KisLayer::hasEffectMasks() const
 {
-    if (m_d->previewMask && m_d->previewMask->visible()) return true;
     if (childCount() == 0) return false;
 
     KoProperties properties;
@@ -459,7 +452,6 @@ QRect KisLayer::updateProjection(const QRect& rect)
 {
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
-
     if (!rect.isValid() ||
             !visible() ||
             !originalDevice) return QRect();
@@ -467,6 +459,7 @@ QRect KisLayer::updateProjection(const QRect& rect)
     if (!needProjection() && !hasEffectMasks()) {
         m_d->safeProjection.freeDevice();
     } else {
+
         if (!updatedRect.isEmpty()) {
             KisPaintDeviceSP projection =
                 m_d->safeProjection.getDeviceLazy(originalDevice);
@@ -519,7 +512,9 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) : QImage();
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
 }
 
 qint32 KisLayer::x() const
@@ -555,23 +550,6 @@ QRect KisLayer::exactBounds() const
 {
     KisPaintDeviceSP originalDevice = original();
     return originalDevice ? originalDevice->exactBounds() : QRect();
-}
-
-
-void KisLayer::setPreviewMask(KisEffectMaskSP mask)
-{
-    m_d->previewMask = mask;
-    m_d->previewMask->setParent(this);
-}
-
-KisEffectMaskSP KisLayer::previewMask() const
-{
-    return m_d->previewMask;
-}
-
-void KisLayer::removePreviewMask()
-{
-    m_d->previewMask = 0;
 }
 
 KisLayerSP KisLayer::parentLayer() const

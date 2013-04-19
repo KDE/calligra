@@ -473,7 +473,7 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
     // It'd be nice to use QString.section or QStringList.split, but we need
     // to be careful as enum values can have commas and quote marks in them
     // e.g. CREATE TABLE t(f enum('option,''') gives one option: "option,'"
-    vals = vals.remove(0, 5);
+    vals.remove(0, 5);
     QRegExp rx = QRegExp("^'((?:[^,']|,|'')*)'");
     QStringList values = QStringList();
     int index = 0;

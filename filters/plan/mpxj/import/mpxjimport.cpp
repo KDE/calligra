@@ -26,11 +26,18 @@
 #include <QTemporaryDir>
 #include <kdebug.h>
 
-#include <jni.h>
+// JNI not used ATM, see "NOTE:" below
+// #include <jni.h>
 
 #include "mpxjconfig.h"
 #include <kmessagebox.h>
 #include <kprocess.h>
+
+#ifdef Q_OS_WIN
+#define CLASSPATH_SEPARATOR ";"
+#else
+#define CLASSPATH_SEPARATOR ":"
+#endif
 
 int planMpxjDbg() {
     static int s_area = KDebug::registerArea( "plan(MPXJ import)" );
@@ -47,7 +54,10 @@ MpxjImport::MpxjImport(QObject* parent, const QVariantList &)
 
 QStringList MpxjImport::mimeTypes()
 {
-    return QStringList() << "application/vnd.ms-project" << "application/x-planner";
+    return QStringList()
+        << QLatin1String("application/vnd.ms-project")
+        << QLatin1String("application/x-project")
+        << QLatin1String("application/x-planner");
 }
 
 KoFilter::ConversionStatus MpxjImport::convert(const QByteArray& from, const QByteArray& to)
@@ -107,13 +117,20 @@ We work around this by running java in a separate process until a better solutio
 
 KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray outFile )
 {
-    kDebug(planMpxjDbg())<<inFile<<outFile;
+    QString normalizedInFile;
+    QString normalizedOutFile;
+
+    // Need to convert to "\" on Windows
+    normalizedInFile = QDir::toNativeSeparators(inFile);
+    normalizedOutFile = QDir::toNativeSeparators(outFile);
+
+    kDebug(planMpxjDbg()) << normalizedInFile << normalizedOutFile;
 #if 1
     QString cp = qgetenv( "PLAN_CLASSPATH" );
-    QString x = PLANCONVERT_JAR_FILE;
+    QString x = QDir::toNativeSeparators(PLANCONVERT_JAR_FILE);
     if ( ! x.isEmpty() ) {
         if ( ! cp.isEmpty() ) {
-            cp += ":";
+            cp += CLASSPATH_SEPARATOR;
         }
         cp += x;
     }
@@ -122,7 +139,7 @@ KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray o
     args <<  "-cp";
     args << cp;
     args << "plan.PlanConvert";
-    args << inFile << outFile;
+    args << normalizedInFile << normalizedOutFile;
     int res = KProcess::execute( exe, args );
     kDebug(planMpxjDbg())<<res;
     return res == 0 ? KoFilter::OK : KoFilter::InternalError;
@@ -139,7 +156,7 @@ KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray o
     QByteArray x = PLANCONVERT_JAR_FILE;
     if ( ! x.isEmpty() ) {
         if ( ! cp.isEmpty() ) {
-            cp += ":";
+            cp += CLASSPATH_SEPARATOR;
         }
         cp += x;
     }
@@ -165,8 +182,8 @@ KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray o
         return KoFilter::InternalError;
     }
     kDebug(planMpxjDbg())<<"Found class";
-    jstring in = env->NewStringUTF( inFile );
-    jstring out = env->NewStringUTF( outFile );
+    jstring in = env->NewStringUTF( normalizedInFile );
+    jstring out = env->NewStringUTF( normalizedOutFile );
     jobjectArray args = env->NewObjectArray( 2, env->FindClass("java/lang/String"), in );
 //     env->setObjectArrayElement( args, 0, in );
     env->SetObjectArrayElement( args, 1, out );
@@ -187,7 +204,7 @@ KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray o
     }
     /* We are done. */
     jvm->DestroyJavaVM();
-    if ( ! QFile::exists( outFile ) ) {
+    if ( ! QFile::exists( normalizedOutFile ) ) {
         kDebug(planMpxjDbg())<<"No output file created:"<<outFile;
         return KoFilter::StorageCreationError;
     }

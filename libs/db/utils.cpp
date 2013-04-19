@@ -1357,7 +1357,7 @@ QList<int> KexiDB::stringListToIntList(const QStringList &list, bool *ok)
 // Based on KConfigGroupPrivate::serializeList() from kconfiggroup.cpp (kdelibs 4)
 QString KexiDB::serializeList(const QStringList &list)
 {
-    QString value = "";
+    QString value;
 
     if (!list.isEmpty()) {
         QStringList::ConstIterator it = list.constBegin();
@@ -1611,9 +1611,9 @@ bool KexiDB::isIdentifier(const QString& s)
 QString KexiDB::string2FileName(const QString &s)
 {
     QString fn = s.simplified();
-    fn.replace(' ', "_"); fn.replace('$', "_");
-    fn.replace('\\', "-"); fn.replace('/', "-");
-    fn.replace(':', "-"); fn.replace('*', "-");
+    fn.replace(' ',  '_').replace('$', '_').
+       replace('\\', '-').replace('/', '-').
+       replace(':',  '-').replace('*', '-');
     return fn;
 }
 

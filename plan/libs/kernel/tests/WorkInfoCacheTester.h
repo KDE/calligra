@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPlato_WorkInfoCache_h
-#define KPlato_WorkInfoCache_h
+#ifndef KPlato_WorkInfoCacheTester_h
+#define KPlato_WorkInfoCacheTester_h
 
 #include <QtTest/QtTest>
 

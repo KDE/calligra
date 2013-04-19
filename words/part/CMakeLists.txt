@@ -75,14 +75,15 @@ set(wordsprivate_LIB_SRCS
     author/CAuView.cpp
     author/CAuPart.cpp
     author/CoverImage.cpp
+    author/CoverSelectionDialog.cpp
 )
-if( Soprano_FOUND )
+if( SHOULD_BUILD_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
     )
-endif( Soprano_FOUND )
+endif( SHOULD_BUILD_RDF )
 
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
@@ -97,20 +98,21 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dockers/StatisticsPreferencesPopup.ui
     pagetool/SimpleSetupWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui
+    author/CoverSelectionDialog.ui
 )
-if( Soprano_FOUND )
+if( SHOULD_BUILD_RDF )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
     )
-endif( Soprano_FOUND )
+endif( SHOULD_BUILD_RDF )
 
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(wordsprivate komain textlayout)
-if( Soprano_FOUND )
+target_link_libraries(wordsprivate komain kotextlayout)
+if( SHOULD_BUILD_RDF )
     target_link_libraries(wordsprivate kordf)
-endif( Soprano_FOUND )
+endif( SHOULD_BUILD_RDF )
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(wordsprivate

@@ -38,6 +38,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Project &project, 
     : QWidget(parent)
 {
     QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
     m_view = new ResourceAllocationTreeView( this );
     m_view->setViewSplitMode( false );
     m_view->masterView()->header()->moveSection( ResourceAllocationModel::RequestType, m_view->masterView()->header()->count() - 1 );
@@ -48,7 +49,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Project &project, 
     m_view->expandAll();
     m_view->masterView()->header()->resizeSections( QHeaderView::ResizeToContents );
 
-    connect( m_view, SIGNAL( dataChanged() ), SIGNAL( changed() ) );
+    connect( m_view, SIGNAL(dataChanged()), SIGNAL(changed()) );
 }
 
 bool RequestResourcesPanel::ok()
