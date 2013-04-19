@@ -52,7 +52,6 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
-#include <QPainter>
 
 namespace KPlato
 {

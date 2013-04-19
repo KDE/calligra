@@ -59,7 +59,7 @@ class StandardWorktime;
 class KPLATOKERNEL_EXPORT NamedCommand : public KUndo2Command
 {
 public:
-    NamedCommand( const QString& name )
+    explicit NamedCommand( const QString& name )
         : KUndo2Command( name )
     {}
     virtual void redo() { execute(); }
@@ -83,7 +83,7 @@ protected:
 class KPLATOKERNEL_EXPORT MacroCommand : public KUndo2Command
 {
 public:
-    MacroCommand( const QString& name = QString() )
+    explicit MacroCommand( const QString& name = QString() )
         : KUndo2Command( name )
     {}
     ~MacroCommand();

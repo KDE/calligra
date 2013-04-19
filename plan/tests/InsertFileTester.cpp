@@ -16,7 +16,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <qtest_kde.h>
 
 #include "InsertFileTester.h"
 
@@ -28,6 +27,8 @@
 #include "kptnode.h"
 
 #include <kurl.h>
+
+#include <qtest_kde.h>
 
 #include <QFileInfo>
 

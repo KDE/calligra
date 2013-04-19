@@ -28,15 +28,14 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-#include <cstdlib>
-#include <qtest_kde.h>
-#include <QDir>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>
 #include <kdatetime.h>
 #include <kconfiggroup.h>
+
+#include <QDir>
 #include <QtDBus>
 
 #include <qtest_kde.h>

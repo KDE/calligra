@@ -214,6 +214,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
     // Reset picture properties
     m_xlinkHref.clear();
+    m_ignoreLinkHref = false;
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
@@ -256,13 +257,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(spPr)
-                ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
+                else if (qualifiedName() == QLatin1String("p:blipFill")) {
+                    TRY_READ_IN_CONTEXT(blipFill)
+                    if (!m_xlinkHref.isEmpty()) {
+                        //spPr may also set m_xlinkHref
+                        m_ignoreLinkHref = true;
+                    }
+                }
+#ifdef DOCXXMLDOCREADER_H
+                ELSE_TRY_READ_IF_NS_IN_CONTEXT(pic, blipFill)
+#endif
                 ELSE_TRY_READ_IF(nvPicPr)
                 ELSE_TRY_READ_IF(style)
                 SKIP_UNKNOWN
             }
         }
     }
+
+    m_ignoreLinkHref = false;
 
 #ifndef DOCXXMLDOCREADER_H
     body->startElement("draw:frame"); // CASE #P421
@@ -1751,7 +1763,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
             }
-            else if (qualifiedName() == QLatin1String("a:blipFill")) {
+            else if (!m_ignoreLinkHref && qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IN_CONTEXT(blipFill)
                 if (!m_xlinkHref.isEmpty()) {
                     KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
@@ -3607,7 +3619,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
 
         RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
-
         addManifestEntryForFile(destinationName);
         m_recentDestName = sourceName;
         addManifestEntryForPicturesDir();

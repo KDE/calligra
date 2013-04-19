@@ -48,7 +48,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
-#include <kactionmenu.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
