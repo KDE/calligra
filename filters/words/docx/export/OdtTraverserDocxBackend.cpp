@@ -22,6 +22,9 @@
 // Own
 #include "OdtTraverserDocxBackend.h"
 
+// KDE
+#include <kdebug.h>
+
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -38,6 +41,7 @@
 
 OdtTraverserDocxBackend::OdtTraverserDocxBackend(OdfTraverserContext *context)
     : OdtTraverserBackend(context)
+    , isInsideSpan(false)
 {
 }
 
@@ -140,16 +144,14 @@ void OdtTraverserDocxBackend::tagSpan(KoXmlElement &element, OdfTraverserContext
 
     KoXmlWriter  *writer = docxContext->m_documentWriter;
     if (beginEnd == BeginTag) {
-        writer->startElement("w:r");
-        writer->startElement("w:rPr");
-        // FIXME: Add run properties here
-        writer->endElement(); // w:rPr
+        startRun(element, writer, context);
+        isInsideSpan = true;
     }
     else {
-        writer->endElement(); // w:r
+        endRun(element, writer, context);
+        isInsideSpan = false;
     }
 }
-
 
 void OdtTraverserDocxBackend::characterData(KoXmlNode &node, OdfTraverserContext *context,
                                             BeginEndTag beginEnd)
@@ -159,10 +161,45 @@ void OdtTraverserDocxBackend::characterData(KoXmlNode &node, OdfTraverserContext
         return;
     }
 
+    // In docx, a text always has to be inside a run (w:r). This is
+    // created when a text:span is encountered in odf but text nodes
+    // can exist also without a text:span surrounding it.
     KoXmlWriter  *writer = docxContext->m_documentWriter;
     if (beginEnd == BeginTag) {
+        if (!isInsideSpan) {
+            startRun(node, writer, context);
+        }
+
         writer->startElement("w:t");
+        //kDebug() << "Character data:\"" << node.toText().data() << "\"";
         writer->addTextNode(node.toText().data());
         writer->endElement(); // w:t
     }
+    else {
+        // at EndTag
+        if (!isInsideSpan) {
+            endRun(node, writer, context);
+        }
+    }
+}
+
+
+// ----------------------------------------------------------------
+//                         Private functions
+
+
+void OdtTraverserDocxBackend::startRun(KoXmlNode &node, KoXmlWriter *writer,
+                                       OdfTraverserContext *context)
+{
+        writer->startElement("w:r");
+        writer->startElement("w:rPr");
+        // FIXME: Add run properties here
+        writer->endElement(); // w:rPr
+}
+
+void OdtTraverserDocxBackend::endRun(KoXmlNode &node, KoXmlWriter *writer,
+                                     OdfTraverserContext *context)
+{
+    // FIXME: More here?
+    writer->endElement(); // w:r
 }

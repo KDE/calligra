@@ -54,6 +54,13 @@ class OdtTraverserDocxBackend : public OdtTraverserBackend
     void tagSpan(KoXmlElement &element, OdfTraverserContext *context, BeginEndTag beginEnd);
 
     void characterData(KoXmlNode &node, OdfTraverserContext *context, BeginEndTag beginEnd);
+
+ private:
+    void startRun(KoXmlNode &node, KoXmlWriter *writer, OdfTraverserContext *context);
+    void endRun(KoXmlNode &node, KoXmlWriter *writer, OdfTraverserContext *context);
+
+ private:
+    bool  isInsideSpan;
 };
 
 #endif // ODTTRAVERSERDOCXBACKEND_H
