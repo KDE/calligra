@@ -36,6 +36,9 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
+// This filter
+#include "OpcContentTypes.h"
+
 
 // ================================================================
 //                         class DocxFile
@@ -86,6 +89,15 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
         delete docxStore;
         return status;
     }
+
+    // Finally, write the [Content_Types}.xml file.
+    OpcContentTypes  contentTypes;
+    contentTypes.addDefault("rels", "application/vnd.openxmlformats-package.relationships+xml");
+    contentTypes.addDefault("xml", "application/xml");
+    foreach (const FileInfo *file, files()) {
+        contentTypes.addFile(file->m_fileName, file->m_mimetype);
+    }
+    contentTypes.writeToStore(docxStore);
 
     delete docxStore;
     return status;

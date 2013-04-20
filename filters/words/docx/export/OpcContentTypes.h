@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
+
+   Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,46 +18,43 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef DOCXFILE_H
-#define DOCXFILE_H
+#ifndef OPCCONTENTTYPES_H
+#define OPCCONTENTTYPES_H
 
-// Qt
 #include <QHash>
 
-// Calligra
 #include <KoFilter.h>
-
-// This filter
-#include "FileCollector.h"
 
 
 class QString;
-class QByteArray;
 
 class KoStore;
 
-class OdtTraverserDocxContext;
 
-class DocxFile : public FileCollector
+/**
+ * @brief this class manages the content types in a file in the OPC format
+ */
+class OpcContentTypes
 {
 public:
-    DocxFile();
-    ~DocxFile();
+    OpcContentTypes();
+    ~OpcContentTypes();
 
-    // When you have created all the content and added it using
-    // addContentFile(), call this function once and it will write the
-    // docx to the disk.
-    KoFilter::ConversionStatus  writeDocx(const QString &fileName,
-                                          const QByteArray &appIdentification,
-                                          const OdtTraverserDocxContext &context);
+    // FIXME: So far we only design this for writing.  In the general
+    //        case we should also support lookup and reading.
+
+    void addDefault(const QString &extension, const QString &contentType);
+    void addFile(const QString &partName, const QString &contentType);
+
+    KoFilter::ConversionStatus writeToStore(KoStore *opcStore);
 
 private:
     // Privat functions
-    KoFilter::ConversionStatus  writeTopLevelRels(KoStore *docxStore);
-    KoFilter::ConversionStatus  writeDocumentRels(KoStore *docxStore);
 
 private:
     // data
+    QHash<QString, QString>  defaults;  // Extension, ContentType
+    QHash<QString, QString>  parts;  // Partname, ContentType
 };
 
-#endif // DOCXFILE_H
+#endif // OPCCONTENTTYPES_H
