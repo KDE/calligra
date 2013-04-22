@@ -23,7 +23,6 @@
 
 #include "words_export.h"
 #include "KWPage.h"
-#include "KoAnnotationLayoutManager.h"
 
 #include <KoView.h>
 #include <KoViewConverter.h>
@@ -42,6 +41,7 @@ class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
 class KoFindStyle;
+class KoAnnotationLayoutManager;
 
 #ifdef SHOULD_BUILD_RDF
 class KoRdfSemanticItem;
@@ -244,8 +244,6 @@ private:
     qreal m_textMaxX; // The max x value where text can appear we currently show. Prevents endless loop
     int m_minPageNum;
     int m_maxPageNum;
-
-    KoAnnotationLayoutManager *m_annotationManager;
 };
 
 #endif

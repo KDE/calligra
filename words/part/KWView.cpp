@@ -76,6 +76,7 @@
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentInfo.h>
+#include <KoAnnotationLayoutManager.h>
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #include <KoSemanticStylesheetsEditor.h>
@@ -124,8 +125,6 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     m_currentPage = m_document->pageManager()->begin();
 
-    // FIXME: This (400.0) is just for now i know i know. :)
-    m_annotationManager = new KoAnnotationLayoutManager(400.0);
     connect (m_canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(annotationShapeRemoved(KoShape*)));
 
     setupActions();
@@ -1095,5 +1094,5 @@ void KWView::annotationShapeRemoved(KoShape *shape)
         }
     }
     // Remove From annotation layout manager.
-    m_annotationManager->removeAnnotationShape(shape);
+    m_document->annotationLayoutManager()->removeAnnotationShape(shape);
 }

@@ -494,6 +494,11 @@ KoAnnotation *KoTextEditor::addAnnotation()
     annotation->setManager(textRangeManager);
     addCommand(new AddTextRangeCommand(annotation, topCommand));
 
+    endEditBlock();
+
+    //it's a textrange so we need to ask for a layout so we know where it is
+    d->document->markContentsDirty(annotation->rangeStart(), 0);
+
     return annotation;
 }
 

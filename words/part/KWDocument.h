@@ -54,6 +54,7 @@ class KoPart;
 class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
+class KoAnnotationLayoutManager;
 
 /**
  * The class that represents a Words document containing content and settings.
@@ -96,6 +97,9 @@ public:
     void setIsMasterDocument(bool isMasterDocument);
 
     // others
+    KoAnnotationLayoutManager *annotationLayoutManager() const {
+        return m_annotationManager;
+    }
     /**
      * Return the pageManager used in this document.
      */
@@ -294,7 +298,7 @@ private:
     KoShapeController *m_shapeController;
     QPair<QString, QByteArray> m_coverImage;
     QList<KoShape*> m_loadedAnnotationShapes;
-
+    KoAnnotationLayoutManager *m_annotationManager;
 };
 
 #endif

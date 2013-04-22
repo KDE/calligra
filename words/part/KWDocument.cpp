@@ -70,6 +70,7 @@
 #include <KoTextLayoutRootArea.h>
 #include <KoPart.h>
 #include <KoDocumentRdfBase.h>
+#include <KoAnnotationLayoutManager.h>
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #endif
@@ -94,6 +95,7 @@ KWDocument::KWDocument(KoPart *part)
         m_isMasterDocument(false),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
+        , m_annotationManager(0)
 {
     m_frameLayout.setDocument(this);
     resourceManager()->setOdfDocument(this);
@@ -121,6 +123,8 @@ KWDocument::KWDocument(KoPart *part)
 
 #endif
 
+    // FIXME: This (400.0) is just for now i know i know. :)
+    m_annotationManager = new KoAnnotationLayoutManager(400.0);
 
 /* TODO reenable after release
     QVariant variant;
