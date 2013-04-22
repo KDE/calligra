@@ -154,12 +154,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //horizontal position
     if (m_currentVMLProperties.insideGroup) {
         if (!x_mar.isEmpty()) {
-            x_position = (x_mar.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+            x_position = (x_mar.toDouble() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
                          m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
             x_pos_string = QString("%1pt").arg(x_position);
         }
         else if (!leftPos.isEmpty()) {
-            x_position = (leftPos.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+            x_position = (leftPos.toDouble() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
                          m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
             x_pos_string = QString("%1pt").arg(x_position);
         } else {
@@ -187,12 +187,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //vertical position
     if (m_currentVMLProperties.insideGroup) {
         if (!y_mar.isEmpty()) {
-            y_position = (y_mar.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+            y_position = (y_mar.toDouble() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
                 m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
             y_pos_string = QString("%1pt").arg(y_position);
         }
         else if (!topPos.isEmpty()) {
-            y_position = (topPos.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+            y_position = (topPos.toDouble() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
                 m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
             y_pos_string = QString("%1pt").arg(y_position);
         } else {
@@ -219,7 +219,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //width
     if (m_currentVMLProperties.insideGroup) {
         if (!width.isEmpty()) {
-            widthValue = width.toInt() * m_currentVMLProperties.real_groupWidth /
+            widthValue = width.toDouble() * m_currentVMLProperties.real_groupWidth /
                          m_currentVMLProperties.groupWidth;
             widthString = QString("%1pt").arg(widthValue);
         }
@@ -237,7 +237,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //height
     if (m_currentVMLProperties.insideGroup) {
         if (!height.isEmpty()) {
-            heightValue = height.toInt() * m_currentVMLProperties.real_groupHeight /
+            heightValue = height.toDouble() * m_currentVMLProperties.real_groupHeight /
                           m_currentVMLProperties.groupHeight;
             heightString = QString("%1pt").arg(heightValue);
         }
@@ -885,14 +885,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
     if (temp == "0") {
         temp = "0pt";
     }
-    int fromX = temp.left(2).toInt();
+    qreal fromX = temp.left(temp.size() - 2).toDouble();
     m_currentVMLProperties.vmlStyle["left"] = temp;
     temp = from.mid(index + 1);
     doPrependCheck(temp);
     if (temp == "0") {
         temp = "0pt";
     }
-    int fromY = temp.left(2).toInt();
+    qreal fromY = temp.left(temp.size() - 2).toDouble();
     m_currentVMLProperties.vmlStyle["top"] = temp;
     index = to.indexOf(',');
     temp = to.left(index);
@@ -901,7 +901,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
         temp = "0pt";
     }
     QString unit = temp.right(2);
-    int toX = temp.left(temp.size() - 2).toInt() - fromX;
+    qreal toX = temp.left(temp.size() - 2).toDouble() - fromX;
     m_currentVMLProperties.vmlStyle["width"] = QString("%1%2").arg(toX).arg(unit);
     temp = to.mid(index + 1);
     doPrependCheck(temp);
@@ -909,7 +909,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
         temp = "0pt";
     }
     unit = temp.right(2);
-    int toY = temp.left(temp.size() - 2).toInt() - fromY;
+    qreal toY = temp.left(temp.size() - 2).toDouble() - fromY;
     m_currentVMLProperties.vmlStyle["height"] = QString("%1%2").arg(toY).arg(unit);
 
     while (!atEnd()) {
@@ -1311,12 +1311,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         QString x_mar(m_currentVMLProperties.vmlStyle.value("left"));
         QString y_mar(m_currentVMLProperties.vmlStyle.value("top"));
 
-        m_currentVMLProperties.groupXOffset = (x_mar.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+        m_currentVMLProperties.groupXOffset = (x_mar.toDouble() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
             m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
-        m_currentVMLProperties.groupYOffset = (y_mar.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+        m_currentVMLProperties.groupYOffset = (y_mar.toDouble() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
             m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
-        m_currentVMLProperties.real_groupWidth = width.toInt() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
-        m_currentVMLProperties.real_groupHeight = height.toInt() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
+        m_currentVMLProperties.real_groupWidth = width.toDouble() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
+        m_currentVMLProperties.real_groupHeight = height.toDouble() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
     }
 
     m_currentVMLProperties.groupX = 0;
