@@ -37,6 +37,7 @@ KWApplicationConfig::KWApplicationConfig()
         m_statusBarShowModified(true),
         m_statusBarShowMouse(false),
         m_statusBarShowZoom(true),
+        m_statusBarShowWordCount(true),
         m_showInlineObjectVisualization(true),
         m_zoom(100),
         m_zoomMode(KoZoomMode::ZOOM_WIDTH),
@@ -77,6 +78,7 @@ void KWApplicationConfig::load(KWDocument *document)
     m_statusBarShowModified = interface.readEntry("StatusBarShowModified", m_statusBarShowModified);
     m_statusBarShowMouse = interface.readEntry("StatusBarShowMouse", m_statusBarShowMouse);
     m_statusBarShowZoom = interface.readEntry("StatusBarShowZoom", m_statusBarShowZoom);
+    m_statusBarShowWordCount = interface.readEntry("StatusBarShowWordCount", m_statusBarShowWordCount);
 
 //    m_bShowDocStruct = interface.readEntry("showDocStruct", true);
 //    m_viewModeType = interface.readEntry("viewmode", "ModeNormal");
@@ -148,6 +150,7 @@ void KWApplicationConfig::save()
     interface.writeEntry("StatusBarShowModified", m_statusBarShowModified);
     interface.writeEntry("StatusBarShowMouse", m_statusBarShowMouse);
     interface.writeEntry("StatusBarShowZoom", m_statusBarShowZoom);
+    interface.writeEntry("StatusBarShowWordCount", m_statusBarShowWordCount);
     interface.sync();
 }
 

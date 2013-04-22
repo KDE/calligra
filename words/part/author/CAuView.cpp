@@ -57,9 +57,10 @@ void CAuView::setupActions()
     KToggleAction *tAction = new KToggleAction(i18n("Word Count"), this);
     tAction->setToolTip(i18n("Shows or hides word counting in status bar"));
     //always display at start so -> "true"
-    tAction->setChecked(true);
+    tAction->setChecked(kwdocument()->config().statusBarShowWordCount());
     actionCollection()->addAction("view_wordCount", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatsInStatusBar(bool)));
+    stats->setVisible(kwdocument()->config().statusBarShowWordCount());
 }
 
 void CAuView::buildAssociatedWidget() {
@@ -71,6 +72,7 @@ void CAuView::buildAssociatedWidget() {
 
 void CAuView::showStatsInStatusBar(bool toggled)
 {
+    kwdocument()->config().setStatusBarShowWordCount(toggled);
     stats->setVisible(toggled);
 }
 
