@@ -53,6 +53,9 @@ FormulaShape::FormulaShape(KoDocumentResourceManager *documentResourceManager)
     , m_cursor(new FormulaCursor(m_document))
 {
     m_resourceManager = documentResourceManager;
+    setMML("<math display=\"block\"><mrow></mrow></math>");
+    setSize(QSizeF(50, 50));
+
 }
 
 FormulaShape::~FormulaShape()

@@ -38,7 +38,7 @@ FormulaCursor::~FormulaCursor()
     setNode(0);
 }
 
-void FormulaCursor::init() 
+void FormulaCursor::init()
 {
     m_node = 0;
     m_caretTimer.setInterval(500);
@@ -158,6 +158,9 @@ KUndo2Command *FormulaCursor::deleteNode()
         currentText.remove(currentCursorNode->m_cursorIndex, 1);
         return new AlterFormulaCommand(this, currentText, currentCursorNode->m_cursorIndex);
     } else {
+        if (m_node == m_document->rootNode()) {
+                return 0;
+        }
         return new ChangeFormulaCommand(this);
     }
 }

@@ -45,7 +45,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent*) {}
     /// reimplemented from KoToolBase
     virtual void mouseReleaseEvent(KoPointerEvent*) {}
-    
+
     /// reimplemented from superclass
     virtual void keyPressEvent(QKeyEvent *event);
 
