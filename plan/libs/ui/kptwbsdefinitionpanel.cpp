@@ -23,13 +23,12 @@
 #include "kptproject.h"
 #include "kptdebug.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <klocale.h>
 
 #include <QComboBox>
 #include <QCheckBox>
 #include <QPushButton>
-#include <QComboBox>
 #include <QTableWidget>
 #include <QStringList>
 #include <kundo2command.h>

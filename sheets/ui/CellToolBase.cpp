@@ -122,17 +122,17 @@
 #include <KoIcon.h>
 
 // KDE
-#include <KAction>
-#include <KFind>
-#include <KFontAction>
-#include <KFontSizeAction>
-#include <KInputDialog>
-#include <KLocale>
-#include <KMessageBox>
-#include <KReplace>
-#include <KStandardAction>
-#include <KStandardDirs>
-#include <KToggleAction>
+#include <kaction.h>
+#include <kfind.h>
+#include <kfontaction.h>
+#include <kfontsizeaction.h>
+#include <kinputdialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kreplace.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
+#include <ktoggleaction.h>
 #include <kdeversion.h>
 
 // Qt
@@ -721,7 +721,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("subtotals", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(subtotals()));
     action->setToolTip(i18n("Create different kind of subtotals to a list or database"));
-
+    
     action = new KAction(i18n("Area Name..."), this);
     addAction("setAreaName", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(setAreaName()));
@@ -755,7 +755,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     action = new KAction(koIcon("cell_edit"), i18n("Modify Cell"), this);
     addAction("editCell", action);
-    action->setShortcuts(QList<QKeySequence>() << Qt::Key_F2 << QKeySequence(Qt::CTRL + Qt::Key_M));
+    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
     action->setToolTip(i18n("Edit the highlighted cell"));
 
@@ -1064,6 +1064,14 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
             return;
         break;
 
+    case Qt::Key_Delete:
+	clearContents();
+	break;
+
+    case Qt::Key_F2:
+	edit();
+	break;
+	
     default:
         d->processOtherKey(event);
         return;

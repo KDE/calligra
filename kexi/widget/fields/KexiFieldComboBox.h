@@ -20,7 +20,7 @@
 #ifndef KEXIFIELDCOMBOBOX_H
 #define KEXIFIELDCOMBOBOX_H
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <kexi_export.h>
 
 namespace KexiDB

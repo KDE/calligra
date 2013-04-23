@@ -24,7 +24,6 @@ kde4_add_plugin(kexihandler_autoform ${kexihandler_autoform_SRCS})
 target_link_libraries(kexihandler_autoform
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRARY}
-    ${KDE4_KPARTS_LIBS}
     kexidb
     kexicore
     kexiextendedwidgets

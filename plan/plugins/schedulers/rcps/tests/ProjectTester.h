@@ -21,7 +21,7 @@
 #define KPlato_ProjectTester_h
 
 #include <QtTest>
-#include <KTempDir>
+#include <ktempdir.h>
 
 #include "kptproject.h"
 #include "kptdatetime.h"

@@ -24,7 +24,7 @@
 
 #include <QWidget>
 #include <QList>
-#include <KDialog>
+#include <kdialog.h>
 
 class KWCreateBookmark : public QWidget
 {

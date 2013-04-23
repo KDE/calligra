@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_DOCUMENTMODEL_H
-#define KPLATO_DOCUMENTMODEL_H
+#ifndef KPTDOCUMENTMODEL_H
+#define KPTDOCUMENTMODEL_H
 
 #include "kptitemmodelbase.h"
 

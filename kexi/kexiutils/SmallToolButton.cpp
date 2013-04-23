@@ -26,10 +26,10 @@
 #include <QPointer>
 #include <QAction>
 
-#include <KIcon>
-#include <KIconLoader>
-#include <KGlobalSettings>
-#include <KDebug>
+#include <kicon.h>
+#include <kiconloader.h>
+#include <kglobalsettings.h>
+#include <kdebug.h>
 
 #include "utils.h"
 

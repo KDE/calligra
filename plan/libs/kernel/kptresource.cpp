@@ -37,7 +37,6 @@
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 
-//Added by qt3to4:
 #include <QList>
 
 
@@ -925,7 +924,7 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
         end = r->availableBefore( end, time );
         if ( ! ( time.isValid() && end.isValid() ) ) {
 #ifndef PLAN_NLOGDEBUG
-            if ( m_currentSchedule ) m_currentSchedule->logDebug( "The required resource '" + r->name() + "'is not available in interval:" + node->startTime.toString() + "," + node->endTime.toString() );
+            if ( m_currentSchedule ) m_currentSchedule->logDebug( "The required resource '" + r->name() + "'is not available in interval:" + node->startTime.toString() + ',' + node->endTime.toString() );
 #endif
             break;
         }
@@ -1155,7 +1154,7 @@ Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration 
     }
     if ( ! ( from.isValid() && until.isValid() ) ) {
 #ifndef PLAN_NLOGDEBUG
-        if ( sch ) sch->logDebug( "Resource not available in interval:" + start.toString() + "," + (start+duration).toString() );
+        if ( sch ) sch->logDebug( "Resource not available in interval:" + start.toString() + ',' + (start+duration).toString() );
 #endif
     } else {
         foreach ( Resource *r, required ) {
@@ -1163,7 +1162,7 @@ Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration 
             until = r->availableBefore( until, from );
             if ( ! ( from.isValid() && until.isValid() ) ) {
 #ifndef PLAN_NLOGDEBUG
-                if ( sch ) sch->logDebug( "The required resource '" + r->name() + "'is not available in interval:" + start.toString() + "," + (start+duration).toString() );
+                if ( sch ) sch->logDebug( "The required resource '" + r->name() + "'is not available in interval:" + start.toString() + ',' + (start+duration).toString() );
 #endif
                     break;
             }

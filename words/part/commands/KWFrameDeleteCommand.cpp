@@ -23,7 +23,7 @@
 
 #include <KoShapeDeleteCommand.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 KWFrameDeleteCommand::KWFrameDeleteCommand(KoShapeBasedDocumentBase *shapeController, KWFrame *frame, KUndo2Command *parent)
         : KUndo2Command(i18nc("(qtundo-format)", "Delete Frame"), parent),

@@ -84,13 +84,12 @@ private slots:
     void updateToggleSelectionButton();
     /** Update Bar */
     void update();
+    /** Called when model resets */
+    void slotModelReset();
 
 private:
-    void applyPointingHandCursor();
-    void restoreCursor();
     QAbstractItemView *m_view;
     bool m_enabled;
-    bool m_appliedPointingHandCursor;
     QModelIndex m_IndexUnderCursor;
     QWidget *m_ContextBar;
     QToolButton *m_ToggleSelectionButton;

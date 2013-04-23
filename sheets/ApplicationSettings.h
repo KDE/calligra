@@ -20,7 +20,7 @@
 #ifndef KSPREADAPPLICATIONSETTINGS
 #define KSPREADAPPLICATIONSETTINGS
 
-#include <KGlobalSettings>
+#include <kglobalsettings.h>
 
 #include <QColor>
 #include <QObject>

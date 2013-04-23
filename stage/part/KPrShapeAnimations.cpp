@@ -48,8 +48,8 @@
 
 //KDE Headers
 #include <KoIcon.h>
-#include <KIconLoader>
-#include <KLocale>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 const int COLUMN_COUNT = 10;

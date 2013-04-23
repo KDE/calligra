@@ -37,7 +37,6 @@
 #include "kptcommand.h"
 
 #include <KoZoomHandler.h>
-#include <KoStore.h>
 #include <KoXmlReader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -58,7 +57,6 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kparts/partmanager.h>
-#include <kstandarddirs.h>
 #include <kurl.h>
 #include <kopenwithdialog.h>
 #include <kmimetype.h>
@@ -69,7 +67,7 @@
 #include <kdirwatch.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <KXMLGUIFactory>
+#include <kxmlguifactory.h>
 
 #include <KoGlobal.h>
 #include <KoMainWindow.h>

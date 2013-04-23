@@ -21,8 +21,8 @@
 #include "MorphologyEffect.h"
 #include "KoFilterEffect.h"
 
-#include <KNumInput>
-#include <KLocale>
+#include <knuminput.h>
+#include <klocale.h>
 
 #include <QGridLayout>
 #include <QLabel>

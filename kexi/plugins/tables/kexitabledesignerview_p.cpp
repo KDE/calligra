@@ -26,7 +26,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 
 #include <koproperty/Set.h>
 

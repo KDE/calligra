@@ -83,7 +83,7 @@ void KisTransformProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *
 
 void KisTransformProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    transformSelection(layer->selection(), undoAdapter, ProgressHelper(layer));
+    transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
     layer->resetCache();
     transformClones(layer, undoAdapter);
 }
@@ -106,8 +106,8 @@ void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapte
 void KisTransformProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
     ProgressHelper helper(layer);
-    transformSelection(layer->selection(), undoAdapter, ProgressHelper(layer));
-    layer->resetCache();
+    transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
+    layer->update();
     transformClones(layer, undoAdapter);
 }
 

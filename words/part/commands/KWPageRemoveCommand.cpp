@@ -28,8 +28,8 @@
 
 #include <KoShapeMoveCommand.h>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, KUndo2Command *parent)
         : KUndo2Command(i18nc("(qtundo-format)", "Remove Page"), parent),

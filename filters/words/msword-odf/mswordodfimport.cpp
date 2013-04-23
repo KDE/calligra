@@ -24,9 +24,9 @@
 #include <QFile>
 #include <QString>
 #include <QBuffer>
-//Added by qt3to4:
 #include <QByteArray>
 
+#include <kpluginfactory.h>
 #include <kdebug.h>
 
 #include <KoFilterChain.h>

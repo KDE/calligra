@@ -17,10 +17,15 @@
   Boston, MA 02110-1301, USA.
 */
 
+#ifndef KPTSCHEDULERPLUGIN_MACROS_H
+#define KPTSCHEDULERPLUGIN_MACROS_H
+
 #include <kdemacros.h>
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
  
 #define KPLATO_SCHEDULERPLUGIN_EXPORT( c ) \
   K_PLUGIN_FACTORY( SchedulerFactory, registerPlugin< c >(); ) \
   K_EXPORT_PLUGIN( SchedulerFactory("c") )
+
+#endif

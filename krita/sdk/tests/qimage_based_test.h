@@ -63,7 +63,7 @@ protected:
      * Creates a complex image connected to a surrogate undo store
      */
     KisImageSP createImage(KisSurrogateUndoStore *undoStore) {
-        QImage sourceImage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+        QImage sourceImage(fetchDataFileLazy("hakonepa.png"));
 
         QRect imageRect = QRect(QPoint(0,0), sourceImage.size());
 
@@ -81,8 +81,8 @@ protected:
         Q_ASSERT(configuration);
 
         KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
-        blur1->selection()->clear();
-        blur1->selection()->getOrCreatePixelSelection()->select(blurRect);
+        blur1->internalSelection()->clear();
+        blur1->internalSelection()->getOrCreatePixelSelection()->select(blurRect);
         blur1->setX(blurShift.x());
         blur1->setY(blurShift.y());
 
@@ -138,6 +138,12 @@ protected:
         shapeLayer->addShape(shape2);
 
         QApplication::processEvents();
+    }
+
+    bool checkLayersInitial(KisImageWSP image, int baseFuzzyness = 0) {
+        QString prefix = "initial_with_selection";
+        QString prefix2 = findNode(image->root(), "shape") ? "_with_shape" : "";
+        return checkLayers(image, prefix + prefix2, baseFuzzyness);
     }
 
     /**
@@ -208,17 +214,27 @@ private:
 
         bool valid = true;
 
-        QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
-                   m_directoryName + QDir::separator() +
-                   prefix + QDir::separator() + realName);
+        QString fullPath = fetchDataFileLazy(m_directoryName + QDir::separator() +
+                                             prefix + QDir::separator() + realName);
+
+        if (fullPath.isEmpty()) {
+            // Try without the testname subdirectory
+            fullPath = fetchDataFileLazy(prefix + QDir::separator() +
+                                         realName);
+        }
+
+        QImage ref(fullPath);
 
         QPoint temp;
         int fuzzy = baseFuzzyness;
 
         {
             QStringList terms = name.split('_');
-            if(terms[0] == "root" || terms[0] == "blur1") {
-                fuzzy = 1;
+            if(terms[0] == "root" ||
+               terms[0] == "blur1" ||
+               terms[0] == "shape") {
+
+                fuzzy++;
             }
         }
 

@@ -35,12 +35,12 @@
 #include <QFont>
 
 //KDE Headers
-#include <KLocale>
-#include <KIconLoader>
+#include <klocale.h>
+#include <kiconloader.h>
 #include <KoIcon.h>
-#include <KStandardDirs>
-#include <KConfigGroup>
-#include <KDebug>
+#include <kstandarddirs.h>
+#include <kconfiggroup.h>
+#include <kdebug.h>
 
 //Calligra Headers
 #include <KoOdfLoadingContext.h>

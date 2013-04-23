@@ -75,6 +75,7 @@ set(wordsprivate_LIB_SRCS
     author/CAuView.cpp
     author/CAuPart.cpp
     author/CoverImage.cpp
+    author/CoverSelectionDialog.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -97,6 +98,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dockers/StatisticsPreferencesPopup.ui
     pagetool/SimpleSetupWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui
+    author/CoverSelectionDialog.ui
 )
 if( Soprano_FOUND )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
@@ -185,7 +187,7 @@ set(author_KDEINIT_SRCS author/main.cpp )
 kde4_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../app/Info.plist.template)
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.author")
    set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
 endif (Q_WS_MAC)

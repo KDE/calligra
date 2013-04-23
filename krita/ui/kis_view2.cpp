@@ -96,7 +96,6 @@
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
-#include "kis_custom_palette.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
@@ -262,7 +261,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     grp.writeEntry("CreatingCanvas", true);
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
     grp.writeEntry("CreatingCanvas", false);
-    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
+    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile*)));
 
     m_d->canvasController->setCanvas(m_d->canvas);
 
@@ -362,15 +361,15 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
         shell()->dockerManager()->setIcons(false);
     }
 
     m_d->statusBar = new KisStatusBar(this);
-    connect(m_d->canvasController->proxyObject, SIGNAL(documentMousePositionChanged(const QPointF &)),
-            m_d->statusBar, SLOT(documentMousePositionChanged(const QPointF &)));
+    connect(m_d->canvasController->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)),
+            m_d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
@@ -381,8 +380,8 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->doc->image(), SLOT(requestStrokeEnd()));
 
-    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
-            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
+    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
+            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
@@ -586,6 +585,8 @@ void KisView2::dropEvent(QDropEvent *event)
             }
         }
     }
+    qApp->setActiveWindow(shell());
+    activateWindow();
 }
 
 KoZoomController *KisView2::zoomController() const
@@ -715,11 +716,11 @@ KisUndoAdapter * KisView2::undoAdapter()
 void KisView2::slotLoadingFinished()
 {
     /**
-     * Cold-start of image-size signals
+     * Cold-start of image size/resolution signals
      */
-    slotImageSizeChanged();
+    slotImageResolutionChanged();
     if (m_d->statusBar) {
-        m_d->statusBar->imageSizeChanged(image()->width(), image()->height());
+        m_d->statusBar->imageSizeChanged();
     }
     if (m_d->resourceProvider) {
         m_d->resourceProvider->slotImageSizeChanged();
@@ -782,11 +783,7 @@ void KisView2::createActions()
 {
     actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
 
-    KAction* action = new KAction(i18n("Edit Palette..."), this);
-    actionCollection()->addAction("edit_palette", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
-
-    action = new KAction(i18n("Cleanup removed files..."), this);
+    KAction *action = new KAction(i18n("Cleanup removed files..."), this);
     actionCollection()->addAction("edit_blacklist_cleanup", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }
@@ -847,20 +844,20 @@ void KisView2::connectCurrentImage()
 {
     if (image()) {
         if (m_d->statusBar) {
-            connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile *)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
+            connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+            connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), m_d->statusBar, SLOT(imageSizeChanged()));
 
         }
-        connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
 
-        connect(image(), SIGNAL(sigResolutionChanged(double, double)),
+        connect(image(), SIGNAL(sigResolutionChanged(double,double)),
                 m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
-        connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+        connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
                 m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
 
-        connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
-        connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
+        connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
         connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
@@ -876,7 +873,7 @@ void KisView2::connectCurrentImage()
     m_d->canvas->connectCurrentImage();
 
     if (m_d->controlFrame) {
-        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
     }
 
 }
@@ -913,40 +910,77 @@ void KisView2::slotPreferences()
     }
 }
 
-void KisView2::slotEditPalette()
-{
-    QList<KoColorSet*> palettes = KoResourceServerProvider::instance()->paletteServer()->resources();
-
-    KDialog* base = new KDialog(this);
-    base->setCaption(i18n("Edit Palette"));
-    base->setButtons(KDialog::Ok);
-    base->setDefaultButton(KDialog::Ok);
-    KisCustomPalette* cp = new KisCustomPalette(palettes, base, "edit palette", i18n("Edit Palette"), this);
-    base->setMainWidget(cp);
-    base->show();
-}
-
 void KisView2::slotBlacklistCleanup()
 {
     KisDlgBlacklistCleanup dialog;
     dialog.exec();
 }
 
+void KisView2::resetImageSizeAndScroll(bool changeCentering,
+                                       const QPointF oldImageStillPoint,
+                                       const QPointF newImageStillPoint) {
 
-void KisView2::slotImageSizeChanged()
-{
+    const KisCoordinatesConverter *converter =
+        canvasBase()->coordinatesConverter();
+
+    QPointF oldPreferredCenter =
+        m_d->canvasController->preferredCenter();
+
+    /**
+     * Calculating the still point in old coordinates depending on the
+     * parameters given
+     */
+
+    QPointF oldStillPoint;
+
+    if (changeCentering) {
+        oldStillPoint =
+            converter->imageToWidget(oldImageStillPoint) +
+            converter->documentOffset();
+    } else {
+        QSize oldDocumentSize = m_d->canvasController->documentSize();
+        oldStillPoint = QPointF(0.5 * oldDocumentSize.width(), 0.5 * oldDocumentSize.height());
+    }
+
+    /**
+     * Updating the document size
+     */
+
     QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
-    m_d->zoomManager->zoomController()->setPageSize(size);
-    m_d->zoomManager->zoomController()->setDocumentSize(size);
+    KoZoomController *zc = m_d->zoomManager->zoomController();
+    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom());
+    zc->setPageSize(size);
+    zc->setDocumentSize(size, true);
 
-    canvasBase()->notifyZoomChanged();
-    QSize widgetSize = canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect().size();
-    m_d->canvasController->updateDocumentSize(widgetSize, true);
+    /**
+     * Calculating the still point in new coordinates depending on the
+     * parameters given
+     */
 
+    QPointF newStillPoint;
+
+    if (changeCentering) {
+        newStillPoint =
+            converter->imageToWidget(newImageStillPoint) +
+            converter->documentOffset();
+    } else {
+        QSize newDocumentSize = m_d->canvasController->documentSize();
+        newStillPoint = QPointF(0.5 * newDocumentSize.width(), 0.5 * newDocumentSize.height());
+    }
+
+    m_d->canvasController->setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
+}
+
+void KisView2::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
+{
+    resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     m_d->zoomManager->updateGUI();
+}
 
-    //update view
-    canvas()->update();
+void KisView2::slotImageResolutionChanged()
+{
+    resetImageSizeAndScroll(false);
+    m_d->zoomManager->updateGUI();
 }
 
 void KisView2::slotNodeChanged()

@@ -30,7 +30,7 @@
 #include <KoIcon.h>
 
 // KDE
-#include <KAction>
+#include <kaction.h>
 #include <kdebug.h>
 
 // Qt

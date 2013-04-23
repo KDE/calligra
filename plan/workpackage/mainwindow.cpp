@@ -40,9 +40,7 @@
 #include <KoDocument.h>
 #include <KoGlobal.h>
 
-#include <kcomponentdata.h>
 #include <kmimetypetrader.h>
-
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
@@ -67,12 +65,10 @@
 #include <kxmlguifactory.h>
 #include <kcomponentdata.h>
 #include <ktoolinvocation.h>
-#include <kservice.h>
 #include <kio/netaccess.h>
 #include <kxmlguiwindow.h>
 
 #include <KoDocumentInfo.h>
-#include <KoDocument.h>
 #include <KoView.h>
 #include <KoFilterManager.h>
 

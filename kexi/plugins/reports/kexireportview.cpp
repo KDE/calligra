@@ -37,7 +37,8 @@
 #include "krscriptfunctions.h"
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
-#include <KRun>
+#include <krun.h>
+#include <kactionmenu.h>
 
 #include <KoIcon.h>
 #include <renderobjects.h>
@@ -84,6 +85,10 @@ KexiReportView::KexiReportView(QWidget *parent)
     a->setToolTip(i18n("Print report"));
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
+
+    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), i18nc("@title:menu","E&xport As"), this);
+    exportMenu->setObjectName("report_export_as");
+    exportMenu->setDelayed(false);
 #endif
 
 #ifdef KEXI_MOBILE
@@ -92,7 +97,8 @@ KexiReportView::KexiReportView(QWidget *parent)
     // " ", not "", is said to be needed in maemo, the icon didn't display properly without it
     viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), i18n("Export as Text Document"), this));
+    exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.text"),
+                                          i18nc("open dialog to export as text document", "Text Document..."), this));
 #endif
     a->setObjectName("export_as_text_document");
     a->setToolTip(i18n("Export the report as a text document (in OpenDocument Text format)"));
@@ -103,7 +109,8 @@ KexiReportView::KexiReportView(QWidget *parent)
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Export as Spreadsheet"), this));
+    exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"),
+                                          i18nc("open dialog to export as spreadsheet", "Spreadsheet..."), this));
 #endif
     a->setObjectName("export_as_spreadsheet");
     a->setToolTip(i18n("Export the report as a spreadsheet (in OpenDocument Spreadsheet format)"));
@@ -114,7 +121,8 @@ KexiReportView::KexiReportView(QWidget *parent)
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(koIcon("text-html"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(koIcon("text-html"), i18n("Export as Web Page"), this));
+    exportMenu->addAction(a = new KAction(koIcon("text-html"),
+                                          i18nc("open dialog to export as web page", "Web Page..."), this));
 #endif
     a->setObjectName("export_as_web_page");
     a->setToolTip(i18n("Export the report as a web page (in HTML format)"));
@@ -125,6 +133,13 @@ KexiReportView::KexiReportView(QWidget *parent)
     setViewActions(viewActions);
 
 #ifndef KEXI_MOBILE
+    // setup main menu actions
+    QList<QAction*> mainMenuActions;
+
+    mainMenuActions << exportMenu;
+
+    setMainMenuActions(mainMenuActions);
+
     connect(m_pageSelector, SIGNAL(nextButtonClicked()), this, SLOT(nextPage()));
     connect(m_pageSelector, SIGNAL(prevButtonClicked()), this, SLOT(prevPage()));
     connect(m_pageSelector, SIGNAL(firstButtonClicked()), this, SLOT(firstPage()));

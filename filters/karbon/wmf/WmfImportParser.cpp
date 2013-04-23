@@ -22,7 +22,7 @@
 #include <WmfDeviceContext.h>
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <QBuffer>
 #include <math.h>
 

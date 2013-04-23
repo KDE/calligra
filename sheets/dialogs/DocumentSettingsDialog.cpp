@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 
 #include <ksharedconfig.h>
-#include <KStandardDirs>
+#include <kstandarddirs.h>
 #include <sonnet/configwidget.h>
 
 #include <KoIcon.h>

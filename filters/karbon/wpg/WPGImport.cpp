@@ -26,7 +26,7 @@
 #include <KoXmlWriter.h>
 
 #include <kpluginfactory.h>
-#include <KDebug>
+#include <kdebug.h>
 
 
 #include <QString>

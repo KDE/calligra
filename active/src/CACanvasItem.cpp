@@ -23,7 +23,7 @@
 
 #include <KoCanvasBase.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <KoCanvasController.h>
 
 #include <QGraphicsWidget>

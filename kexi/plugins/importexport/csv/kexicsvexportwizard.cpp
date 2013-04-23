@@ -47,7 +47,7 @@
 #include <kdebug.h>
 #include <ksavefile.h>
 #include <kglobal.h>
-#include <KDialog>
+#include <kdialog.h>
 
 KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         QWidget * parent)

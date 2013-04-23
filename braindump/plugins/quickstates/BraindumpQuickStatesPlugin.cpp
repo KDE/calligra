@@ -22,10 +22,10 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
-#include <KActionCollection>
-#include <KActionMenu>
-#include <KGenericFactory>
-#include <KStandardDirs>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <kgenericfactory.h>
+#include <kstandarddirs.h>
 
 #include "State.h"
 #include "StatesRegistry.h"

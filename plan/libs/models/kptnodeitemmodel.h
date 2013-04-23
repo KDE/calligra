@@ -373,9 +373,9 @@ class KPLATOMODELS_EXPORT GanttItemModel : public NodeItemModel
 public:
     enum GanttModelRoles { SpecialItemTypeRole = Qt::UserRole + 123 }; //FIXME
 
-    GanttItemModel( QObject *parent = 0 );
+    explicit GanttItemModel(QObject *parent = 0);
     ~GanttItemModel();
-    
+
     virtual int rowCount( const QModelIndex &parent ) const;
     using NodeItemModel::index;
     virtual QModelIndex index( int row, int column, const QModelIndex &parent ) const;
@@ -485,7 +485,7 @@ class KPLATOMODELS_EXPORT TaskModuleModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    TaskModuleModel( QObject *parent = 0 );
+    explicit TaskModuleModel(QObject *parent = 0);
 
     void addTaskModule( Project *project );
 

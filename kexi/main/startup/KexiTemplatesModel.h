@@ -22,7 +22,7 @@
 
 #include <QAbstractListModel>
 
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorizedsortfilterproxymodel.h>
 #include <core/kexitemplateloader.h>
 
 class KexiTemplatesModel : public QAbstractListModel

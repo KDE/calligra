@@ -21,8 +21,8 @@
 #include <QStringList>
 #include <QFile>
 
-#include <KDebug>
-#include <KTemporaryFile>
+#include <kdebug.h>
+#include <ktemporaryfile.h>
 
 #include "xbaseconnection_p.h"
 #include "xbaseexport.h"

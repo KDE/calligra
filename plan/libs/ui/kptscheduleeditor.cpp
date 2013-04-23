@@ -50,10 +50,10 @@
 #include <klocale.h>
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
-#include <KTabWidget>
+#include <ktabwidget.h>
 
-#include <KMenu>
-#include <KToggleAction>
+#include <kmenu.h>
+#include <ktoggleaction.h>
 
 
 namespace KPlato
@@ -266,7 +266,7 @@ void ScheduleEditor::slotEnableActions()
         sm->isBaselined() ? koIconNameCStr("view-time-schedule-baselined-remove") : koIconNameCStr("view-time-schedule-baselined-add");
     actionBaselineSchedule->setIcon(KIcon(QLatin1String(actionBaselineScheduleIconName)));
 
-    // enable if scheduled and noone else is baselained
+    // enable if scheduled and no one else is baselined
     bool en = sm->isScheduled() && ( sm->isBaselined() || ! m_view->project()->isBaselined() );
     actionBaselineSchedule->setEnabled( en );
 
@@ -550,7 +550,7 @@ void ScheduleLogTreeView::slotEditCopy()
                 continue;
             }
             if ( ! s.isEmpty() ) {
-                s += " ";
+                s += ' ';
             }
             s = QString( "%1%2" ).arg( s ).arg( idx.data().toString(), -10 );
         }
@@ -571,7 +571,6 @@ ScheduleLogView::ScheduleLogView(KoPart *part, KoDocument *doc, QWidget *parent)
     slotEnableActions( 0 );
 
     QVBoxLayout * l = new QVBoxLayout( this );
-    l->setMargin( 0 );
     m_view = new ScheduleLogTreeView( this );
     l->addWidget( m_view );
 //    m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );

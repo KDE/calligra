@@ -41,9 +41,9 @@
 #include <KoShapeManager.h>
 #include <KoFindBase.h>
 
-#include <KDebug>
-#include <KMimeType>
-#include <KMimeTypeTrader>
+#include <kdebug.h>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
 
 #include <QSize>
 #include <QTimer>
@@ -108,7 +108,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
     KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
+                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
 
     if (!part) {
         kDebug() << "Doc can't be openend" << error;
@@ -287,7 +287,7 @@ void CAPresentationHandler::searchOtherSlides(SearchDirection direction) {
 void CAPresentationHandler::findNext() {
     d->countMatchesPerSlide++;
     d->findText->findNext();
-    if((d->countMatchesPerSlide >= d->findText->matches().count()) or (d->findText->matches().count() == 0)) {
+    if((d->countMatchesPerSlide >= d->findText->matches().count()) || (d->findText->matches().count() == 0)) {
       searchOtherSlides(SearchForward);
     }
 }

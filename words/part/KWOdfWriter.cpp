@@ -50,7 +50,7 @@
 
 #include <QBuffer>
 #include <QTextCursor>
-#include <KDebug>
+#include <kdebug.h>
 #include <ktemporaryfile.h>
 
 static const struct {

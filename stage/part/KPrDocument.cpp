@@ -46,10 +46,10 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KGlobal>
-#include <KStandardDirs>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 #include <QTimer>
 #include <QCoreApplication>

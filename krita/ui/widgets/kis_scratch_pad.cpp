@@ -110,7 +110,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_undoAdapter = new KisPostExecutionUndoAdapter(m_undoStore, m_updateScheduler);
     m_nodeListener = new KisScratchPadNodeListener(this);
 
-    connect(this, SIGNAL(sigUpdateCanvas(const QRect&)), SLOT(slotUpdateCanvas(const QRect&)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigUpdateCanvas(QRect)), SLOT(slotUpdateCanvas(QRect)), Qt::QueuedConnection);
 
     // filter will be deleted by the QObject hierarchy
     m_eventFilter = new KisScratchPadEventFilter(this);
@@ -295,8 +295,8 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
                                                alignedImageRect.y(),
                                                alignedImageRect.width(),
                                                alignedImageRect.height(),
-                                               KoColorConversionTransformation::IntentPerceptual,
-                                               KoColorConversionTransformation::BlackpointCompensation);
+                                               KoColorConversionTransformation::InternalRenderingIntent,
+                                               KoColorConversionTransformation::InternalConversionFlags);
 
     QPainter gc(this);
     gc.fillRect(event->rect(), m_checkBrush);
@@ -329,8 +329,8 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));
 
-    connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal, qreal)),
-            SLOT(setOnScreenResolution(qreal, qreal)));
+    connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal,qreal)),
+            SLOT(setOnScreenResolution(qreal,qreal)));
 
     m_defaultColor = KoColor(defaultColor, KoColorSpaceRegistry::instance()->rgb8());
 
@@ -355,7 +355,7 @@ QImage KisScratchPad::cutoutOverlay() const
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
     QRect rc = widgetToDocument().mapRect(m_cutoutOverlay);
-    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 
     QImage scaledImage = rawImage.scaled(m_cutoutOverlay.size(),
                                          Qt::IgnoreAspectRatio,

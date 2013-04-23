@@ -95,6 +95,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
    commands_new/kis_update_command.cpp
+   processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
    filter/kis_filter.cc
@@ -182,7 +183,6 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp
    kis_selection_transaction_data.cpp
@@ -204,6 +204,7 @@ set(kritaimage_LIB_SRCS
    krita_utils.cpp
    kis_outline_generator.cpp
    kis_layer_composition.cpp
+   kis_selection_filters.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc

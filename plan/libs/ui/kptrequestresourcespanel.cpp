@@ -38,6 +38,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Project &project, 
     : QWidget(parent)
 {
     QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
     m_view = new ResourceAllocationTreeView( this );
     m_view->setViewSplitMode( false );
     m_view->masterView()->header()->moveSection( ResourceAllocationModel::RequestType, m_view->masterView()->header()->count() - 1 );

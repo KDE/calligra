@@ -30,9 +30,9 @@
 #include <KoPAPageBase.h>
 
 #include <kaboutdata.h>
-#include <KPluginFactory>
-#include <KStandardDirs>
-#include <KMimeType>
+#include <kpluginfactory.h>
+#include <kstandarddirs.h>
+#include <kmimetype.h>
 #include <KParts/ComponentFactory>
 
 #include <okular/core/page.h>
@@ -75,7 +75,7 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
 
     QString error;
     KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
-                               mimetype, QLatin1String("CalligraPart"), 0, QString(),
+                               mimetype, QLatin1String("Calligra/Part"), 0, QString(),
                                QVariantList(), &error );
 
     if (!error.isEmpty()) {

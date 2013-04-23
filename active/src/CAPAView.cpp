@@ -42,7 +42,7 @@
 #include <KoZoomHandler.h>
 #include <KoPart.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 //TODO: Cleanup code that is not called
 CAPAView::CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)

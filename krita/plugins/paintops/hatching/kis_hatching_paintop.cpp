@@ -72,7 +72,7 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     //------START SIMPLE ERROR CATCHING-------
     if (!painter()->device()) return 1;
     if (!m_hatchedDab)
-        m_hatchedDab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_hatchedDab = source()->createCompositionSourceDevice();
     else
         m_hatchedDab->clear();
 
@@ -121,7 +121,7 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 
     KisFixedPaintDeviceSP maskDab =
         m_dabCache->fetchDab(cs, color, scale, scale,
-                             0.0, info, xFraction, yFraction, 0.0);;
+                             0.0, info, xFraction, yFraction);
 
     /*-----Convenient renaming for the limits of the maskDab, this will be used
     to hatch a dab of just the right size------*/

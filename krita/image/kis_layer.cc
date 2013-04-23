@@ -136,7 +136,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
-        setName(i18n("Duplicate of '%1'", rhs.name()));
+        setName(rhs.name());
     }
 }
 
@@ -519,7 +519,9 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) : QImage();
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
 }
 
 qint32 KisLayer::x() const
