@@ -25,6 +25,7 @@
 #include <db/tableschema.h>
 #include <db/parser/sqlparser.h>
 #include <db/roweditbuffer.h>
+#include <db/tableviewdata.h>
 
 #include <QAbstractTableModel>
 #include <QString>
@@ -33,12 +34,28 @@
 BibliographyTableModel::BibliographyTableModel(KexiDB::Connection *conn, QObject * parent) :
     QAbstractTableModel(parent),
     m_conn(conn),
-    m_schema(m_conn->tableSchema("bibref")),
-    m_cursor(m_conn->executeQuery(*m_schema))
+    m_cursor(0),
+    m_data(0)
 {
     Q_ASSERT(m_conn);
-    Q_ASSERT(m_cursor);
-    Q_ASSERT(m_schema);
+    const char *tableName = "bibref";
+    m_schema = m_conn->tableSchema(tableName);
+    if (m_schema) {
+        m_cursor = m_conn->executeQuery(*m_schema);
+    }
+    else {
+        kWarning() << tableName << "table not found";
+    }
+    if (m_cursor) {
+        m_data = new KexiDB::TableViewData(m_cursor);
+        m_data->preloadAllRows();
+    }
+}
+
+BibliographyTableModel::~BibliographyTableModel()
+{
+    delete m_data;
+    //m_conn->deleteCursor(m_cursor);
 }
 
 QModelIndex BibliographyTableModel::index(int row, int column, const QModelIndex &parent) const
@@ -59,52 +76,41 @@ QModelIndex BibliographyTableModel::index(int row, int column, const QModelIndex
 int BibliographyTableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    int count = 1;
-    m_cursor->moveFirst();
-
-    if (!m_cursor) {
-        return 0;
-    }
-    while(m_cursor->moveNext()) {
-        count++;
-    }
-    return count;
+    return m_data ? m_data->count() : 0;
 }
 
 int BibliographyTableModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_schema->fieldCount() - 1;
+    return m_data ? m_data->columnsCount() : 0;
 }
 
 QVariant BibliographyTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role != Qt::DisplayRole) {
+    if (role != Qt::DisplayRole || !m_data) {
         return QVariant();
     }
 
     if (orientation == Qt::Horizontal) {
-        return capitalize(m_schema->fields()->at(section)->captionOrName().replace('_', ' '));
-    } else {
+        const KexiDB::TableViewColumn *col = m_data->column(section);
+        return col->captionAliasOrName();
+    }
+    else {
         return QVariant(section + 1);
     }
 }
 
 QVariant BibliographyTableModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid()) {
+    if (!index.isValid() || !m_data) {
         return QVariant();
     }
 
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
-        int row = index.row(), count = 0;
-        m_cursor->moveFirst();
-
-        while(count < row) {
-            m_cursor->moveNext();
-            count++;
+        const KexiDB::RecordData *record = m_data->at(index.row());
+        if (record) {
+            return record->at(index.column());
         }
-        return m_cursor->value(index.column());
     }
     return QVariant();
 }
@@ -112,9 +118,13 @@ QVariant BibliographyTableModel::data(const QModelIndex &index, int role) const
 bool BibliographyTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid() && role == Qt::EditRole) {
-        //TODO: set value to (row, col) index using cursor and conn
-        emit dataChanged(index, index);
-        return true;
+        KexiDB::RecordData *record = m_data->at(index.row());
+        if (record && m_data->updateRowEditBuffer(record, index.column(), value)) {
+            if (m_data->saveRowChanges(*record)) {
+                emit dataChanged(index, index);
+                return true;
+            }
+        }
     }
     return false;
 }
@@ -130,29 +140,30 @@ Qt::ItemFlags BibliographyTableModel::flags(const QModelIndex &index) const
     }
 }
 
-int BibliographyTableModel::getRelationInt(QString comparison)
+static QMap<QString, int> g_BibliographyTableModel_relations;
+
+static int getRelationInt(const QString &comparison)
 {
-    if (comparison == "=") {
-        return '=';
-    } else if (comparison == "<>") {
-        return NOT_EQUAL;
-    } else if (comparison == "<=") {
-        return LESS_OR_EQUAL;
-    } else if (comparison == ">=") {
-        return GREATER_OR_EQUAL;
-    } else if (comparison == "LIKE") {
-        return LIKE;
-    } else if (comparison == "NULL") {
-        return SQL_IS_NULL;
-    } else if (comparison == "NOT NULL") {
-        return SQL_IS_NOT_NULL;
-    } else {        // comparison left "less than", "greater than", "isn't like"
-        return NOT_EQUAL;
+    if (g_BibliographyTableModel_relations.isEmpty()) {
+        g_BibliographyTableModel_relations.insert("=", '=');
+        g_BibliographyTableModel_relations.insert("<>", NOT_EQUAL);
+        g_BibliographyTableModel_relations.insert("<=", LESS_OR_EQUAL);
+        g_BibliographyTableModel_relations.insert(">=", GREATER_OR_EQUAL);
+        g_BibliographyTableModel_relations.insert("LIKE", LIKE);
+        g_BibliographyTableModel_relations.insert("NULL", SQL_IS_NULL);
+        g_BibliographyTableModel_relations.insert("NOT NULL", SQL_IS_NOT_NULL);
     }
+    QMap<QString, int>::ConstIterator it = g_BibliographyTableModel_relations.constFind(comparison);
+    return it == g_BibliographyTableModel_relations.constEnd()
+            ? NOT_EQUAL // comparison left "less than", "greater than", "isn't like"
+            : it.value();
 }
 
 void BibliographyTableModel::setFilter(QList<BibDbFilter *> *filters)
 {
+    delete m_data;
+    //m_conn->deleteCursor(m_cursor);
+
     KexiDB::QuerySchema *query = new KexiDB::QuerySchema(*m_schema);
     if (filters) {
         foreach(BibDbFilter *filter, *filters) {
@@ -164,17 +175,14 @@ void BibliographyTableModel::setFilter(QList<BibDbFilter *> *filters)
 
     qDebug() << query->debugString();
     m_cursor = m_conn->executeQuery(*query);
+    m_data = new KexiDB::TableViewData(m_cursor);
+    m_data->preloadAllRows();
 }
 
-QString BibliographyTableModel::capitalize(QString s) const
+QString BibliographyTableModel::capitalize(const QString &s) const
 {
     QString tmp = s;
     tmp = tmp.toLower();
     tmp[0] = s[0].toUpper();
     return tmp;
-}
-
-BibliographyTableModel::~BibliographyTableModel()
-{
-//    m_conn->deleteCursor(m_cursor);
 }
