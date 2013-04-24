@@ -23,11 +23,15 @@
 #include "kotext_export.h"
 
 #include <QAbstractTableModel>
+#include <QMap>
 
 #include <db/connection.h>
 
-class QString;
 class BibDbFilter;
+
+namespace KexiDB {
+class TableViewData;
+}
 
 class KOTEXT_EXPORT BibliographyTableModel : public QAbstractTableModel
 {
@@ -46,14 +50,13 @@ public:
     void setFilter(QList<BibDbFilter*> *filters);
     void clearFilter();
 
-    static int getRelationInt(QString comparison);
-
 private:
+    QString capitalize(const QString &s) const;
+
     KexiDB::Connection *m_conn;
     KexiDB::TableSchema *m_schema;
     KexiDB::Cursor *m_cursor;
-
-    QString capitalize(QString s) const;
+    KexiDB::TableViewData *m_data;
 };
 
 #endif // BIBLIOGRAPHYTABLEMODEL_H
