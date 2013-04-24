@@ -22,57 +22,48 @@
    Original Project: buX (www.bux.at)
 */
 
-#ifndef KEXITABLEVIEWCOLUMN_H
-#define KEXITABLEVIEWCOLUMN_H
+#ifndef KEXIDB_TABLEVIEWCOLUMN_H
+#define KEXIDB_TABLEVIEWCOLUMN_H
 
-#include <QVariant>
-#include <QVector>
-#include <QList>
+#include "queryschema.h"
 
-#include <db/field.h>
-#include <db/queryschema.h>
-
-#include <kexi_export.h>
-
-namespace KexiUtils
+namespace KexiDB
 {
+class TableViewData;
 class Validator;
-}
-class KexiTableViewData;
-
 
 /*! Single column definition. */
-class KEXIDATAVIEWCOMMON_EXPORT KexiTableViewColumn
+class CALLIGRADB_EXPORT TableViewColumn
 {
 public:
-    typedef QList<KexiTableViewColumn*> List;
-    typedef QList<KexiTableViewColumn*>::ConstIterator ListIterator;
+    typedef QList<TableViewColumn*> List;
+    typedef QList<TableViewColumn*>::ConstIterator ListIterator;
 
     /*! Not db-aware ctor. if \a owner is true, the field \a will be owned by this column,
      so you shouldn't care about destroying this field. */
-    KexiTableViewColumn(KexiDB::Field& f, bool owner = false);
+    TableViewColumn(Field& f, bool owner = false);
 
     /*! Not db-aware, convenience ctor, like above. The field is created using specified parameters that are
      equal to these accepted by KexiDB::Field ctor. The column will be the owner
      of this automatically generated field.
      */
-    KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
-                        uint cconst = KexiDB::Field::NoConstraints,
-                        uint options = KexiDB::Field::NoOptions,
+    TableViewColumn(const QString& name, Field::Type ctype,
+                        uint cconst = Field::NoConstraints,
+                        uint options = Field::NoOptions,
                         uint length = 0, uint precision = 0,
                         QVariant defaultValue = QVariant(),
                         const QString& caption = QString(),
                         const QString& description = QString());
 
     /*! Not db-aware, convenience ctor, simplified version of the above. */
-    KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
+    TableViewColumn(const QString& name, Field::Type ctype, const QString& caption,
                         const QString& description = QString());
 
     //! Db-aware version.
-    KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& aColumnInfo,
-                        KexiDB::QueryColumnInfo* aVisibleLookupColumnInfo = 0);
+    TableViewColumn(const QuerySchema &query, QueryColumnInfo& aColumnInfo,
+                        QueryColumnInfo* aVisibleLookupColumnInfo = 0);
 
-    virtual ~KexiTableViewColumn();
+    virtual ~TableViewColumn();
 
     virtual bool acceptsFirstChar(const QChar& ch) const;
 
@@ -113,11 +104,11 @@ public:
 
     /*! Assigns validator \a v for this column.
      If the validator has no parent object, it will be owned by the column,
-     so you shouldn't care about destroying it. */
-    void setValidator(KexiUtils::Validator* v);
+     so you shouldn't KexiDB about destroying it. */
+    void setValidator(KexiDB::Validator* v);
 
     //! \return validator assigned for this column of 0 if there is no validator assigned.
-    KexiUtils::Validator* validator() const;
+    KexiDB::Validator* validator() const;
 
     /*! For not-db-aware data only:
      Sets related data \a data for this column, what defines simple one-field,
@@ -126,16 +117,16 @@ public:
      This assignment has no result if \a data has no primary key defined.
      \a data is owned, so is will be destroyed when needed. It is also destroyed
      when another data (or NULL) is set for the same column. */
-    void setRelatedData(KexiTableViewData *data);
+    void setRelatedData(TableViewData *data);
 
     /*! For not-db-aware data only:
      Related data \a data for this column, what defines simple one-field.
      NULL by default. \sa setRelatedData() */
-    KexiTableViewData *relatedData() const;
+    TableViewData *relatedData() const;
 
     /*! \return field for this column.
      For db-aware information is taken from columnInfo(). */
-    KexiDB::Field* field() const;
+    Field* field() const;
 
     /*! Only usable if related data is set (ie. this is for combo boxes).
      Sets 'editable' flag for this column, what means a new value can be entered
@@ -149,14 +140,14 @@ public:
 
     /*! A rich field information for db-aware data.
      For not-db-aware data it is always 0 (use field() instead). */
-    KexiDB::QueryColumnInfo* columnInfo() const;
+    QueryColumnInfo* columnInfo() const;
 
     /*! A rich field information for db-aware data. Specifies information for a column
      that should be visible instead of columnInfo. For example case see
      @ref KexiDB::QueryColumnInfo::Vector KexiDB::QuerySchema::fieldsExpanded(KexiDB::QuerySchema::FieldsExpandedOptions options = Default)
 
      For not-db-aware data it is always 0. */
-    KexiDB::QueryColumnInfo* visibleLookupColumnInfo() const;
+    QueryColumnInfo* visibleLookupColumnInfo() const;
 
     //! \return true if data is stored in DB, not only in memeory.
     bool isDBAware() const;
@@ -171,18 +162,19 @@ public:
 
 protected:
     //! special ctor that does not allocate d member;
-    KexiTableViewColumn(bool);
+    TableViewColumn(bool);
 
     void init();
 
-    //! used by KexiTableViewData::addColumn()
-    void setData(KexiTableViewData* data);
+    //! used by TableViewData::addColumn()
+    void setData(TableViewData* data);
 
 private:
     class Private;
     Private * const d;
 
-    friend class KexiTableViewData;
+    friend class TableViewData;
 };
+}
 
 #endif
