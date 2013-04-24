@@ -22,8 +22,7 @@
 
 #include "kexidb_export.h"
 
-#include <kexiutils/validator.h>
-#include <QString>
+#include <db/validator.h>
 #include <QPointer>
 
 namespace KexiDB
@@ -33,7 +32,7 @@ class Driver;
 
 /*! Validates input:
  accepts if the name is not reserved for internal kexi objects. */
-class KEXI_DB_EXPORT ObjectNameValidator : public KexiUtils::Validator
+class KEXI_DB_EXPORT ObjectNameValidator : public KexiDB::Validator
 {
 public:
     /*! \a drv is a KexiDB driver on which isSystemObjectName() will be
@@ -43,7 +42,7 @@ public:
     virtual ~ObjectNameValidator();
 
 protected:
-    virtual KexiUtils::Validator::Result internalCheck(const QString &valueName, const QVariant& v,
+    virtual KexiDB::Validator::Result internalCheck(const QString &valueName, const QVariant& v,
             QString &message, QString &details);
     QPointer<KexiDB::Driver> m_drv;
 };
