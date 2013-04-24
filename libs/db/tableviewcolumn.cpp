@@ -22,22 +22,20 @@
    Original Project: buX (www.bux.at)
 */
 
-#include "KexiTableViewColumn.h"
-#include "kexitableviewdata.h"
+#include "tableviewcolumn.h"
 
-#include <kexiutils/validator.h>
+#include <db/validator.h>
 
-#include <db/field.h>
-#include <db/queryschema.h>
-#include <db/roweditbuffer.h>
-#include <db/cursor.h>
-#include <db/utils.h>
-#include <kexi.h>
+#include "field.h"
+#include "queryschema.h"
+#include "roweditbuffer.h"
+#include "cursor.h"
+#include "utils.h"
+#include "tableviewdata.h"
+//#include <kexi.h>
 
-#include <kdebug.h>
-#include <klocale.h>
-
-class KexiTableViewColumn::Private
+namespace KexiDB {
+class TableViewColumn::Private
 {
 public:
   Private()
@@ -48,25 +46,25 @@ public:
     {
     }
 
-    //! Data that this column is assigned to. Set by KexiTableViewColumn::setData()
-    KexiTableViewData* data;
+    //! Data that this column is assigned to. Set by TableViewColumn::setData()
+    KexiDB::TableViewData* data;
 
     QString captionAliasOrName;
 
     QIcon icon;
 
-    KexiUtils::Validator* validator;
+    KexiDB::Validator* validator;
 
-    KexiTableViewData* relatedData;
+    KexiDB::TableViewData* relatedData;
     uint relatedDataPKeyID;
 
-    KexiDB::Field* field;
+    Field* field;
 
     //! @see columnInfo()
-    KexiDB::QueryColumnInfo* columnInfo;
+    QueryColumnInfo* columnInfo;
 
     //! @see visibleLookupColumnInfo()
-    KexiDB::QueryColumnInfo* visibleLookupColumnInfo;
+    QueryColumnInfo* visibleLookupColumnInfo;
 
     uint width;
     bool isDBAware; //!< true if data is stored in DB, not only in memeory
@@ -76,10 +74,13 @@ public:
     bool relatedDataEditable;
     bool headerTextVisible;
 };
+}
 
 //------------------------
 
-KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
+using namespace KexiDB;
+
+TableViewColumn::TableViewColumn(Field& f, bool owner)
         : d(new Private)
 {
     d->field = &f;
@@ -89,7 +90,7 @@ KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
     init();
 }
 
-KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
+TableViewColumn::TableViewColumn(const QString& name, Field::Type ctype,
         uint cconst,
         uint options,
         uint length, uint precision,
@@ -97,7 +98,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
         const QString& caption, const QString& description)
         : d(new Private)
 {
-    d->field = new KexiDB::Field(
+    d->field = new Field(
         name, ctype,
         cconst,
         options,
@@ -111,14 +112,14 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
     init();
 }
 
-KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
+TableViewColumn::TableViewColumn(const QString& name, Field::Type ctype,
         const QString& caption, const QString& description)
         : d(new Private)
 {
-    d->field = new KexiDB::Field(
+    d->field = new Field(
         name, ctype,
-        KexiDB::Field::NoConstraints,
-        KexiDB::Field::NoOptions,
+        Field::NoConstraints,
+        Field::NoOptions,
         0, 0,
         QVariant(),
         caption, description);
@@ -130,9 +131,9 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 }
 
 // db-aware
-KexiTableViewColumn::KexiTableViewColumn(
-    const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& aColumnInfo,
-    KexiDB::QueryColumnInfo* aVisibleLookupColumnInfo)
+TableViewColumn::TableViewColumn(
+    const QuerySchema &query, QueryColumnInfo& aColumnInfo,
+    QueryColumnInfo* aVisibleLookupColumnInfo)
         : d(new Private)
 {
     d->field = aColumnInfo.field;
@@ -162,21 +163,21 @@ KexiTableViewColumn::KexiTableViewColumn(
                  || (query.connection() && query.connection()->isReadOnly());
 //  || (query.connection() && (query.connection()->isReadOnly() || visibleLookupColumnInfo));
 //! @todo 2.0: remove this when queries become editable            ^^^^^^^^^^^^^^
-// kDebug() << "KexiTableViewColumn: query.masterTable()=="
+// kDebug() << "TableViewColumn: query.masterTable()=="
 //  << (query.masterTable() ? query.masterTable()->name() : "notable") << ", columnInfo->field->table()=="
 //  << (columnInfo->field->table() ? columnInfo->field->table()->name()  : "notable");
 
 // d->visible = query.isFieldVisible(&f);
 }
 
-KexiTableViewColumn::KexiTableViewColumn(bool)
+TableViewColumn::TableViewColumn(bool)
         : d(new Private)
 {
     d->isDBAware = false;
     init();
 }
 
-KexiTableViewColumn::~KexiTableViewColumn()
+TableViewColumn::~TableViewColumn()
 {
     if (d->fieldOwned)
         delete d->field;
@@ -185,7 +186,7 @@ KexiTableViewColumn::~KexiTableViewColumn()
     delete d;
 }
 
-void KexiTableViewColumn::init()
+void TableViewColumn::init()
 {
     d->relatedData = 0;
     d->readOnly = false;
@@ -196,7 +197,7 @@ void KexiTableViewColumn::init()
     d->width = 0;
 }
 
-void KexiTableViewColumn::setValidator(KexiUtils::Validator* v)
+void TableViewColumn::setValidator(KexiDB::Validator* v)
 {
     if (d->validator) {//remove old one
         if (!d->validator->parent()) //destroy if has no parent
@@ -205,12 +206,12 @@ void KexiTableViewColumn::setValidator(KexiUtils::Validator* v)
     d->validator = v;
 }
 
-void KexiTableViewColumn::setData(KexiTableViewData* data)
+void TableViewColumn::setData(KexiDB::TableViewData* data)
 {
     d->data = data;
 }
 
-void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
+void TableViewColumn::setRelatedData(KexiDB::TableViewData *data)
 {
     if (d->isDBAware)
         return;
@@ -220,9 +221,9 @@ void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
     if (!data)
         return;
     //find a primary key
-    const KexiTableViewColumn::List *columns = data->columns();
+    const TableViewColumn::List *columns = data->columns();
     int id = -1;
-    foreach(KexiTableViewColumn* col, *columns) {
+    foreach(TableViewColumn* col, *columns) {
         id++;
         if (col->field()->isPrimaryKey()) {
             //found, remember
@@ -233,100 +234,100 @@ void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
     }
 }
 
-bool KexiTableViewColumn::isReadOnly() const
+bool TableViewColumn::isReadOnly() const
 {
     return d->readOnly || (d->data && d->data->isReadOnly());
 }
 
-void KexiTableViewColumn::setReadOnly(bool ro)
+void TableViewColumn::setReadOnly(bool ro)
 {
     d->readOnly = ro;
 }
 
-bool KexiTableViewColumn::isVisible() const
+bool TableViewColumn::isVisible() const
 {
     return d->columnInfo ? d->columnInfo->visible : d->visible;
 }
 
-void KexiTableViewColumn::setVisible(bool v)
+void TableViewColumn::setVisible(bool v)
 {
     if (d->columnInfo)
         d->columnInfo->visible = v;
     d->visible = v;
 }
 
-void KexiTableViewColumn::setIcon(const QIcon& icon)
+void TableViewColumn::setIcon(const QIcon& icon)
 {
     d->icon = icon;
 }
 
-QIcon KexiTableViewColumn::icon() const
+QIcon TableViewColumn::icon() const
 {
     return d->icon;
 }
 
-void KexiTableViewColumn::setHeaderTextVisible(bool visible)
+void TableViewColumn::setHeaderTextVisible(bool visible)
 {
     d->headerTextVisible = visible;
 }
 
-bool KexiTableViewColumn::isHeaderTextVisible() const
+bool TableViewColumn::isHeaderTextVisible() const
 {
     return d->headerTextVisible;
 }
 
-QString KexiTableViewColumn::captionAliasOrName() const
+QString TableViewColumn::captionAliasOrName() const
 {
     return d->captionAliasOrName;
 }
 
-KexiUtils::Validator* KexiTableViewColumn::validator() const
+KexiDB::Validator* TableViewColumn::validator() const
 {
     return d->validator;
 }
 
-KexiTableViewData *KexiTableViewColumn::relatedData() const
+KexiDB::TableViewData *TableViewColumn::relatedData() const
 {
     return d->relatedData;
 }
 
-KexiDB::Field* KexiTableViewColumn::field() const
+Field* TableViewColumn::field() const
 {
     return d->field;
 }
 
-void KexiTableViewColumn::setRelatedDataEditable(bool set)
+void TableViewColumn::setRelatedDataEditable(bool set)
 {
     d->relatedDataEditable = set;
 }
 
-bool KexiTableViewColumn::isRelatedDataEditable() const
+bool TableViewColumn::isRelatedDataEditable() const
 {
     return d->relatedDataEditable;
 }
 
-KexiDB::QueryColumnInfo* KexiTableViewColumn::columnInfo() const
+QueryColumnInfo* TableViewColumn::columnInfo() const
 {
     return d->columnInfo;
 }
 
-KexiDB::QueryColumnInfo* KexiTableViewColumn::visibleLookupColumnInfo() const
+QueryColumnInfo* TableViewColumn::visibleLookupColumnInfo() const
 {
     return d->visibleLookupColumnInfo;
 }
 
 //! \return true if data is stored in DB, not only in memeory.
-bool KexiTableViewColumn::isDBAware() const
+bool TableViewColumn::isDBAware() const
 {
     return d->isDBAware;
 }
 
 
-bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
+bool TableViewColumn::acceptsFirstChar(const QChar& ch) const
 {
     // the field we're looking at can be related to "visible lookup column"
     // if lookup column is present
-    KexiDB::Field *visibleField = d->visibleLookupColumnInfo
+    Field *visibleField = d->visibleLookupColumnInfo
                                   ? d->visibleLookupColumnInfo->field : d->field;
     if (visibleField->isNumericType()) {
         if (ch == '.' || ch == ',')
@@ -339,23 +340,23 @@ bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
     }
 
     switch (visibleField->type()) {
-    case KexiDB::Field::Boolean:
+    case Field::Boolean:
         return false;
-    case KexiDB::Field::Date:
-    case KexiDB::Field::DateTime:
-    case KexiDB::Field::Time:
+    case Field::Date:
+    case Field::DateTime:
+    case Field::Time:
         return ch >= '0' && ch <= '9';
     default:;
     }
     return true;
 }
 
-void KexiTableViewColumn::setWidth(uint w)
+void TableViewColumn::setWidth(uint w)
 {
     d->width = w;
 }
 
-uint KexiTableViewColumn::width() const
+uint TableViewColumn::width() const
 {
     return d->width;
 }

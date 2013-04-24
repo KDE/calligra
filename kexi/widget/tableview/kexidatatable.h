@@ -26,11 +26,11 @@
 
 class KexiDataTableView;
 class KexiTableView;
-class KexiTableViewData;
 
 namespace KexiDB
 {
 class Cursor;
+class TableViewData;
 }
 
 /*! @short Provides a data-driven (record-based) tabular view.
@@ -50,7 +50,7 @@ public:
       and KexiDataTableView is used internally.
      Otherwise, table will be not-db-aware,
       and KexiTableView is used internally. In the latter case,
-      data can be set by calling tableView()->setData(KexiTableViewData* data). */
+      data can be set by calling tableView()->setData(KexiDB::TableViewData* data). */
     KexiDataTable(QWidget *parent, bool dbAware = true);
 
     /*! CTOR2: Creates db-aware, table view initialized with \a cursor.
@@ -64,7 +64,7 @@ public:
     //! Loads settings for table into @a data model.
     //! Used after loading data model in KexiDataTableView::setData(KexiDB::Cursor*), before calling KexiTableView::setData().
     //! @return true on success
-    bool loadTableViewSettings(KexiTableViewData* data);
+    bool loadTableViewSettings(KexiDB::TableViewData* data);
 
 public slots:
     /*! Sets data. Only works for db-aware table. */
