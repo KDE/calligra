@@ -281,12 +281,12 @@ void BibliographyDatabaseWindow::newDatabase()
     }
 
     BibliographyDb *table = new BibliographyDb(this, fileInfo.dir().absolutePath(), fileInfo.fileName());
-//    if (!table->isValid()) {
-//        table->createTable();            //creates bibref table in database file
-//    }
 
-    //add to table list
-    addTableEntry(fileInfo);
+    if (table->isValid()) {
+        //add to table list
+        addTableEntry(fileInfo);
+    }
+    delete table;
 }
 
 void BibliographyDatabaseWindow::addTableEntry(QFileInfo fileInfo)
