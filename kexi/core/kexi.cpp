@@ -162,13 +162,6 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
 
 //--------------------------------------------------------------------------------
 
-QString Kexi::msgYouCanImproveData()
-{
-    return i18n("You can correct data in this record or use \"Cancel record changes\" function.");
-}
-
-//--------------------------------------------------------------------------------
-
 ObjectStatus::ObjectStatus()
         : msgHandler(0)
 {
