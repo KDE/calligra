@@ -35,6 +35,7 @@ set(wordsprivate_LIB_SRCS
     pagetool/KWPageToolFactory.cpp
     pagetool/SimpleSetupWidget.cpp
     pagetool/SimpleHeaderFooterWidget.cpp
+    pagetool/SimplePageStyleWidget.cpp
 
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
@@ -97,6 +98,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWInsertImage.ui
     dockers/StatisticsPreferencesPopup.ui
     pagetool/SimpleSetupWidget.ui
+    pagetool/SimplePageStyleWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui
     author/CoverSelectionDialog.ui
 )

@@ -20,6 +20,7 @@
 //pagetool includes
 #include "SimpleHeaderFooterWidget.h"
 #include "SimpleSetupWidget.h"
+#include "SimplePageStyleWidget.h"
 #include "KWPageTool.h"
 #include "frames/KWTextFrameSet.h"
 
@@ -229,8 +230,12 @@ void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
 
         int xMouse = xMouseInPage();
         int yMouse = yMouseInPage();
+        qDebug() << "STYLE WIDGET: " << m_styleFomWiget;
 
         //Refresh the cursor icon
+        if (m_styleFomWiget != "") {
+            useCursor(Qt::UpArrowCursor);
+        }
         if ((xMouse > leftMargin - SELECT_SPACE && xMouse < leftMargin + SELECT_SPACE)
          || (xMouse > rightMargin - SELECT_SPACE && xMouse < rightMargin + SELECT_SPACE)
          || (xMouse < SELECT_SPACE || xMouse > layout.width - SELECT_SPACE)) {
@@ -248,11 +253,27 @@ void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
+void KWPageTool::applyStyle(int page, QString style) {
+    qDebug() << "Application de " << style << " sur " << page;
+    applyStyle(page, m_document->pageManager()->pageStyle(style));
+}
+
+void KWPageTool::applyStyle(int page, KWPageStyle style) {
+    qDebug() << "Application de " << style.name() << " sur " << page;
+    m_document->pageManager()->page(page).setPageStyle(style);
+    m_document->pageManager()->page(page).pageStyle().setPageLayout(style.pageLayout());
+    refreshCanvas();
+}
+
 void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KWPageStyle style = pageUnderMouse().pageStyle();;
     KoPageLayout layout = style.pageLayout();
     int yMouse = yMouseInPage();
+    if (m_styleFomWiget != "") {
+        applyStyle(pageUnderMouse().pageNumber(),m_document->pageManager()->pageStyle(m_styleFomWiget));
+    }
+    m_styleFomWiget = "";
     if (m_selection != NONE){
         m_selection = NONE;
     }
@@ -410,12 +431,7 @@ int KWPageTool::xMouseInPage()
 
 int KWPageTool::yMouseInPage()
 {
-    int yMouseInPage = int(yMouseInDocument());
-    if (yMouseInPage > 0) {
-        KoPageLayout layout =
-                pageUnderMouse().pageStyle().pageLayout();
-        yMouseInPage %= (int(layout.height) + 21);
-    }
+    int yMouseInPage = int(yMouseInDocument()) - distanceOverPage(pageUnderMouse().pageNumber());
     return yMouseInPage;
 }
 
@@ -428,6 +444,14 @@ qreal KWPageTool::yMouseInDocument()
 KWPage KWPageTool::pageUnderMouse()
 {
     return m_document->pageManager()->page(yMouseInDocument());
+}
+
+int KWPageTool::distanceOverPage(int pageNumber) {
+    int distance = 0;
+    for(int i = 1; i < pageNumber; i++) {
+        distance += m_document->pageManager()->page(i).pageStyle().pageLayout().height + 21;
+    }
+    return distance;
 }
 
 void KWPageTool::insertPageBreak()
@@ -480,11 +504,19 @@ QList<QWidget *> KWPageTool::createOptionWidgets()
     ssw->setWindowTitle(i18n("Page Setup"));
     widgets.append(ssw);
 
+    SimplePageStyleWidget *spsw = new SimplePageStyleWidget(m_canvas->view(),this);
+    spsw->setWindowTitle(i18n("Pages Style"));
+    widgets.append(spsw);
+
     SimpleHeaderFooterWidget *shfw = new SimpleHeaderFooterWidget(m_canvas->view());
     shfw->setWindowTitle(i18n("Header & Footer"));
     widgets.append(shfw);
 
     return widgets;
+}
+
+void KWPageTool::setStyleFromWidget(QString style) {
+    m_styleFomWiget = style;
 }
 
 void KWPageTool::refreshCanvas()

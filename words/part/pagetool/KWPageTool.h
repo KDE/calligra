@@ -39,6 +39,9 @@ public:
     explicit KWPageTool(KoCanvasBase *canvas);
     virtual ~KWPageTool();
     bool wantsAutoScroll() const;
+    void setStyleFromWidget(QString style);
+    void applyStyle(int page, QString style);
+    void applyStyle(int page, KWPageStyle style);
 public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
@@ -75,6 +78,8 @@ private:
     enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
     Selection m_selection;
 
+    //Style from SimplePagesStyles
+    QString m_styleFomWiget;
     //Margin margin;
     KWCanvas *m_canvas;
     KWDocument *m_document;
@@ -88,6 +93,7 @@ private:
     int yMouseInPage();
     qreal yMouseInDocument();
     KWPage pageUnderMouse();
+    int distanceOverPage(int pageNumber);
     void changeLayoutInStyle(KoPageLayout layout, KWPageStyle style);
 
     //To check if header/footer is already created
