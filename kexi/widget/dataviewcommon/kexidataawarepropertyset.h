@@ -29,8 +29,10 @@
 #include <db/RecordData.h>
 
 class KexiView;
-class KexiTableViewData;
 class KexiDataAwareObjectInterface;
+namespace KexiDB {
+class TableViewData;
+}
 
 /*! This helper class handles data changes of a single
  object implementing KexiDataAwareObjectInterface (e.g. KexiTableView) inside
@@ -117,7 +119,7 @@ public slots:
 
 protected slots:
     /*! Handles table view's data source changes. */
-    void slotDataSet(KexiTableViewData *data);
+    void slotDataSet(KexiDB::TableViewData *data);
 
     //! Called on row delete in a tableview.
     void slotRowDeleted();

@@ -26,7 +26,8 @@
 #include <QVariant>
 #include <QDateTime>
 #include <QList>
-#include <kdebug.h>
+#include <KDebug>
+#include <KLocale>
 
 #include <kexiutils/identifier.h>
 using namespace KexiMigration;

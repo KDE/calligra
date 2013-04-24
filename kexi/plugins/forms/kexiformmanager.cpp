@@ -49,6 +49,7 @@
 #include <widget/properties/KexiCustomPropertyFactory.h>
 #include <core/KexiMainWindowIface.h>
 #include <kexiutils/SmallToolButton.h>
+#include <kexiutils/utils.h>
 
 class KexiFormManagerPrivate {
 public:
