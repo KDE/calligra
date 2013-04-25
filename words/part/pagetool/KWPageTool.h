@@ -56,7 +56,7 @@ public: // Events
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-//  virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
 //  virtual void keyPressEvent(QKeyEvent *event);
 public slots:

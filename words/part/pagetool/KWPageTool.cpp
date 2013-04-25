@@ -198,13 +198,19 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
     else if (yMouse > bottomMargin - SELECT_SPACE && yMouse < bottomMargin + SELECT_SPACE) {
         m_selection = MBOTTOM;
     }
+}
+
+void KWPageTool::mouseDoubleClickEvent(KoPointerEvent *event) {
     //For the creation of header
-    else if (yMouse < layout.height /2
-         && pageUnderMouse().pageStyle().headerPolicy() == Words::HFTypeNone){
+    event->accept();
+    KWPageStyle style = pageUnderMouse().pageStyle();
+    KoPageLayout layout = style.pageLayout();
+
+    int yMouse = yMouseInPage();
+    if (yMouse < layout.height /2 && pageUnderMouse().pageStyle().headerPolicy() == Words::HFTypeNone){
         enableHeader();
     }
-    else if(yMouse > layout.height / 2
-         && pageUnderMouse().pageStyle().footerPolicy() == Words::HFTypeNone){
+    else if(yMouse > layout.height / 2 && pageUnderMouse().pageStyle().footerPolicy() == Words::HFTypeNone){
         enableFooter();
     }
 }
