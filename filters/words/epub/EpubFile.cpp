@@ -153,7 +153,6 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.startElement("metadata");
 
     // Required elements are: title, language and identifier
-
     writer.startElement("dc:title");
     writer.addTextNode(metadata.value("title"));
     writer.endElement(); // dc:title
@@ -177,7 +176,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.endElement(); // dc:identifier
 
     writer.startElement("dc:creator");
-    writer.addTextNode("");  // FIXME: Here should come the author name
+    writer.addTextNode(metadata.value("creator"));  // FIXME: Here should come the author name
     writer.endElement(); // dc:creator
 
     writer.startElement("dc:subject");
