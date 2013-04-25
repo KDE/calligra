@@ -37,7 +37,7 @@ KWApplicationConfig::KWApplicationConfig()
         m_statusBarShowModified(true),
         m_statusBarShowMouse(false),
         m_statusBarShowZoom(true),
-        m_statusBarShowWordCount(true),
+        m_statusBarShowWordCount(false),
         m_showInlineObjectVisualization(true),
         m_zoom(100),
         m_zoomMode(KoZoomMode::ZOOM_WIDTH),

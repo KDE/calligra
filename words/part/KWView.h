@@ -23,6 +23,8 @@
 
 #include "words_export.h"
 #include "KWPage.h"
+#include "./dockers/KWStatisticsWidget.h"
+#include "./dockers/KWStatisticsDocker.h"
 
 #include <KoView.h>
 #include <KoViewConverter.h>
@@ -200,6 +202,8 @@ private slots:
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard
     void pasteRequested();
+    /// Call when the user want to show/hide the WordsCount in the statusbar
+    void showWordCountInStatusBar(bool toggled);
 
 private:
     KWGui *m_gui;
@@ -236,6 +240,9 @@ private:
     qreal m_textMaxX; // The max x value where text can appear we currently show. Prevents endless loop
     int m_minPageNum;
     int m_maxPageNum;
+
+    void buildAssociatedWidget();
+    KWStatisticsWidget *wordCount;
 };
 
 #endif

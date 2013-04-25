@@ -122,6 +122,11 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     m_currentPage = m_document->pageManager()->begin();
 
+    //We need to create associate widget before connect them in actions
+    //Perhaps there is a better place for the WordCount widget creates here
+    //If you know where to move it in a better place, just do it
+    buildAssociatedWidget();
+
     setupActions();
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -216,6 +221,13 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("create_custom_outline");
     if (action) action->setEnabled(readWrite);
+}
+
+void KWView::buildAssociatedWidget() {
+    wordCount = new KWStatisticsWidget(this,true);
+    wordCount->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
+    wordCount->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
+    statusBar()->insertWidget(0,wordCount);
 }
 
 void KWView::setupActions()
@@ -381,6 +393,14 @@ void KWView::setupActions()
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
 
 
+    // -------- Statistics in the status bar
+    KToggleAction *tActionBis = new KToggleAction(i18n("Word Count"), this);
+    tActionBis->setToolTip(i18n("Shows or hides word counting in status bar"));
+    tActionBis->setChecked(kwdocument()->config().statusBarShowWordCount());
+    actionCollection()->addAction("view_wordCount", tActionBis);
+    connect(tActionBis, SIGNAL(toggled(bool)), this, SLOT(showWordCountInStatusBar(bool)));
+    wordCount->setVisible(kwdocument()->config().statusBarShowWordCount());
+
     /* ********** From old kwview ****
     We probably want to have each of these again, so just move them when you want to implement it
     This saves problems with finding out which we missed near the end.
@@ -452,6 +472,12 @@ void KWView::pasteRequested()
         images.append(img);
         addImages(images, canvas()->mapFromGlobal(QCursor::pos()));
     }
+}
+
+void KWView::showWordCountInStatusBar(bool toggled)
+{
+    kwdocument()->config().setStatusBarShowWordCount(toggled);
+    wordCount->setVisible(toggled);
 }
 
 void KWView::editFrameProperties()

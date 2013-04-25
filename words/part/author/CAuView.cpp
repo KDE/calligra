@@ -41,7 +41,6 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
         setComponentData(CAuFactory::componentData());
         setXMLFile("author.rc");
 
-        buildAssociatedWidget();
         setupActions();
 }
 
@@ -53,27 +52,6 @@ void CAuView::setupActions()
     action->setToolTip(i18n("Set cover for your ebook"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectCoverImage()));
 
-    // -------- Statistics in the status bar
-    KToggleAction *tAction = new KToggleAction(i18n("Word Count"), this);
-    tAction->setToolTip(i18n("Shows or hides word counting in status bar"));
-    //always display at start so -> "true"
-    tAction->setChecked(kwdocument()->config().statusBarShowWordCount());
-    actionCollection()->addAction("view_wordCount", tAction);
-    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatsInStatusBar(bool)));
-    stats->setVisible(kwdocument()->config().statusBarShowWordCount());
-}
-
-void CAuView::buildAssociatedWidget() {
-    stats = new KWStatisticsWidget(this,true);
-    stats->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
-    stats->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
-    statusBar()->insertWidget(0,stats);
-}
-
-void CAuView::showStatsInStatusBar(bool toggled)
-{
-    kwdocument()->config().setStatusBarShowWordCount(toggled);
-    stats->setVisible(toggled);
 }
 
 void CAuView::selectCoverImage()
