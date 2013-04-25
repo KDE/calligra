@@ -77,6 +77,7 @@ void CQCanvasController::pan(const QPoint& distance)
     QPoint offset = documentOffset() + distance;
     setDocumentOffset(offset);
     proxyObject->emitMoveDocumentOffset(offset);
+    emit documentPositionChanged(offset);
 }
 
 QPointF CQCanvasController::preferredCenter() const

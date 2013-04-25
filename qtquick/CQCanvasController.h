@@ -67,6 +67,7 @@ public:
 
 signals:
     void documentSizeChanged(const QSize &sz);
+    void documentPositionChanged(const QPoint &pos);
 
 private:
     class Private;
