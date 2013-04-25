@@ -67,6 +67,7 @@ protected:
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize& size);
+    void updateDocumentPosition(const QPoint& pos);
     void canvasControllerChanged();
 
 private:
