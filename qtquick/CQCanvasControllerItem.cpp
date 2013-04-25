@@ -209,7 +209,9 @@ QVariant CQCanvasControllerItem::itemChange(QGraphicsItem::GraphicsItemChange ch
         QPointF pos(d->flickable->property("contentX").toReal(), d->flickable->property("contentY").toReal());
         float xDiff = pos.x() - d->lastX;
         float yDiff = pos.y() - d->lastY;
+        d->canvasController->blockSignals(true);
         d->canvasController->pan(QPoint(xDiff, yDiff));
+        d->canvasController->blockSignals(false);
         d->lastX = pos.x();
         d->lastY = pos.y();
     }
@@ -230,15 +232,25 @@ void CQCanvasControllerItem::updateDocumentSize(const QSize &size)
     emit documentSizeChanged();
 }
 
+void CQCanvasControllerItem::updateDocumentPosition(const QPoint& pos)
+{
+    if(d->flickable) {
+        d->flickable->setProperty("contentX", QVariant::fromValue<qreal>(pos.x()));
+        d->flickable->setProperty("contentY", QVariant::fromValue<qreal>(pos.y()));
+    }
+}
+
 void CQCanvasControllerItem::canvasControllerChanged()
 {
     if(d->canvasController) {
         disconnect(d->canvasController, SIGNAL(documentSizeChanged(QSize)), this, SLOT(updateDocumentSize(QSize)));
+        disconnect(d->canvasController, SIGNAL(documentPositionChanged(QPoint)), this, SLOT(updateDocumentPosition(QPoint)));
     }
 
     d->canvasController = d->canvas->canvasController();
     if(d->canvasController) {
         connect(d->canvasController, SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
+        connect(d->canvasController, SIGNAL(documentPositionChanged(QPoint)), SLOT(updateDocumentPosition(QPoint)));
         updateDocumentSize(d->canvasController->documentSize());
     }
 }
