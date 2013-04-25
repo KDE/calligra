@@ -6,6 +6,7 @@ Page {
 
     function openFile(file) {
         infoLabel.text = ""
+        zoomButton.enabled = false
 
         documentViewItem.openFile(file)
 
@@ -31,10 +32,31 @@ Page {
                     spacing: 5
                     Button {
                         id: fileButton
-                        //iconSource: "qrc:///images/file.png"
+                        //iconSource: "qrc:///images/open.png"
                         text: "Open"
                         onClicked: {
                             documentPage.openClicked()
+                        }
+                    }
+                    Button {
+                        id: zoomButton
+                        //iconSource: "qrc:///images/zoom.png"
+                        text: "Zoom"
+                        checkable: true
+                        checked: false
+                        enabled: false
+                        onEnabledChanged: {
+                            if (checked && !enabled)
+                                checked = false
+                        }
+                        Behavior on checked {
+                            NumberAnimation {
+                                duration: 100
+                                target: zoomSlider
+                                properties: "height"
+                                from: zoomButton.checked ? zoomSlider.wantedHeight : 0
+                                to: zoomButton.checked ? 0 : zoomSlider.wantedHeight
+                            }
                         }
                     }
                     Label {
@@ -57,11 +79,36 @@ Page {
         }
     }
 
+    Slider {
+        id: zoomSlider
+        anchors {
+            top: buttonBar.bottom
+            left: parent.left
+            right: parent.right
+        }
+        property real wantedHeight: barPageStack.height
+        height: 0
+        //visible: height > 0
+        clip: true
+        property bool valueIsChanging: false
+        onValueChanged: {
+            if (!valueIsChanging) {
+                valueIsChanging = true;
+                documentViewItem.setZoomBegin()
+            }
+            documentViewItem.zoom = value / maximum * 2.0
+        }
+        onValueChangedDone: {
+            valueIsChanging = false
+            documentViewItem.setZoomEnd()
+        }
+    }
+
     Rectangle {
         id: infoBox
         visible: infoLabel.text.length > 0
         anchors {
-            top: buttonBar.bottom
+            top: zoomSlider.bottom
             left: parent.left
             right: parent.right
             margins: 5
@@ -84,7 +131,7 @@ Page {
     Flickable {
         id: flickable
         anchors {
-            top: infoBox.visible ? infoBox.bottom : buttonBar.bottom
+            top: infoBox.visible ? infoBox.bottom : zoomSlider.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -94,6 +141,7 @@ Page {
         contentWidth: Math.max(documentViewItem.implicitWidth * documentViewItem.scale, parent.width)
         clip: true
 
+        /*
         PinchArea {
             id: pinchArea
             width: Math.max(flickable.contentWidth, flickable.width)
@@ -140,12 +188,14 @@ Page {
                 //flickable.returnToBounds()
             }
         }
+        */
 
         DocumentViewItem {
             id: documentViewItem
             pageColor: "#ffffff"
             onOpenFileFailed: {
                 infoLabel.text = qsTr("Error: %1").arg(error)
+                zoomButton.enabled = false
             }
             onProgressUpdated: {
                 if (percent < 0) {
@@ -153,6 +203,7 @@ Page {
                     if (barPageStack.currentPage == progressPage)
                         barPageStack.push(buttonPage, true)
                     progressBar.value = 0
+                    zoomButton.enabled = true
                 } else {
                     if (barPageStack.currentPage != progressPage)
                         barPageStack.push(progressPage, true)
@@ -164,6 +215,7 @@ Page {
 
     Component.onCompleted: {
         var file = Settings.openFileRequested()
+//file='/home/android/Call-Accounting-System_Quota-Howto.docx'
         if (file.length > 0)
             documentPage.openFile(file)
         else
@@ -173,5 +225,6 @@ Page {
             if (file.length > 0)
                 documentPage.openFile(file)
         } )
+//zoomButton.checked = true
     }
 }

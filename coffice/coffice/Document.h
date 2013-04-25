@@ -18,7 +18,9 @@ public:
     virtual ~Page();
     Document* doc() const;
     int pageNumber() const;
+    QRectF originalRect() const;
     QRectF rect() const;
+    void setRect(const QRectF &r);
     bool isDirty() const;
     void setDirty(bool dirty);
 Q_SIGNALS:
@@ -34,15 +36,19 @@ class Document : public QObject
 public:
     explicit Document(QObject *parent = 0);
     virtual ~Document();
+
     QList< QSharedPointer<Page> > pages() const;
+
     QString file() const;
     bool openFile(const QString &file);
     void emitProgressUpdated(int percent);
+
 Q_SIGNALS:
     //void openFileSucceeded();
     void openFileFailed(const QString &file, const QString &error);
     void progressUpdated(int percent);
     void layoutFinished();
+
 public Q_SLOTS:
     void updatePage(const QSharedPointer<Page> &page);
 private:

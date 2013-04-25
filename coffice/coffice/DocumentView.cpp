@@ -48,7 +48,9 @@ QSharedPointer<Page> PageItem::page() const
 QRectF PageItem::boundingRect() const
 {
     QRectF r = QGraphicsPixmapItem::boundingRect();
-    r.setSize(m_page->rect().size());
+    QRectF p = m_page->rect();
+    r.setWidth(p.width());
+    r.setHeight(p.height());
     return r;
 }
 
@@ -83,10 +85,15 @@ DocumentItem::DocumentItem(QObject *parentObject, QGraphicsItem *parentItem)
     : QObject(parentObject)
     , QGraphicsRectItem(parentItem)
     , m_doc(new Document())
+    , m_originalWidth(0.0)
+    , m_originalHeight(0.0)
     , m_width(0.0)
     , m_height(0.0)
     , m_margin(5.0)
     , m_spacing(5.0)
+    , m_zoom(1.0)
+    , m_zoomTemp(1.0)
+    , m_zoomTempBegin(0)
 {
     connect(m_doc, SIGNAL(layoutFinished()), this, SLOT(slotLayoutFinished()));
 }
@@ -96,10 +103,85 @@ DocumentItem::~DocumentItem()
     delete m_doc;
 }
 
+void DocumentItem::setZoomBegin()
+{
+    ++m_zoomTempBegin;
+}
+
+void DocumentItem::setZoomEnd()
+{
+    if (m_zoomTempBegin > 0 && --m_zoomTempBegin == 0)
+        setZoom(m_zoomTemp);
+}
+
+qreal DocumentItem::zoom() const
+{
+    return (m_zoomTempBegin > 0) ? m_zoomTemp : m_zoom;
+}
+
+void DocumentItem::setZoom(qreal factor)
+{
+    if (m_zoomTempBegin > 0) {
+        m_zoomTemp = factor;
+        setScale(m_zoomTemp / m_zoom);
+        return;
+    }
+
+    //prepareGeometryChange();
+
+    Q_FOREACH(QGraphicsItem *item, childItems()) {
+        PageItem *pageItem = static_cast<PageItem*>(item);
+        QSharedPointer<Page> page = pageItem->page();
+        //pageItem->prepareGeometryChange();
+        QRectF r = page->originalRect();
+        r.setWidth(r.width() * factor);
+        r.setHeight(r.height() * factor);
+        page->setRect(r);
+        QPixmap image = pageItem->pixmap();
+        if (!image.isNull()) {
+            pageItem->setPixmap(image.scaled(r.size().toSize()));
+        }
+    }
+
+    m_zoom = factor;
+    m_zoomTemp = 1.0;
+    setScale(1.0);
+
+    //m_doc->update(QRectF());
+
+    updateSize();
+    Q_EMIT sizeChanged();
+
+    //this->update();
+}
+
+void DocumentItem::updateSize()
+{
+    m_width = m_height = 0.0;
+    QList<QGraphicsItem *> pageItems = childItems();
+    for(int i = 0; i < pageItems.count(); ++i) {
+        PageItem *pageItem = static_cast<PageItem*>(pageItems[i]);
+        QSharedPointer<Page> page = pageItem->page();
+        if (m_height > 0.0)
+            m_height += m_spacing * m_zoom;
+        qreal margin = m_margin * m_zoom;
+        pageItem->setPos(margin, (margin + m_height));
+        //pageItem->itemChange()
+        m_height += page->rect().height();
+        m_width = qMax(m_width, page->rect().width());
+    }
+    if (m_originalWidth == 0.0 && m_originalHeight == 0.0) {
+        m_originalWidth = m_width;
+        m_originalHeight = m_height;
+    }
+}
+
 void DocumentItem::slotLayoutFinished()
 {
     qDebug() << Q_FUNC_INFO;
 \
+    prepareGeometryChange();
+
     QList< QSharedPointer<Page> > pages = m_doc->pages();
     QList<QGraphicsItem *> pageItems = childItems();
 
@@ -123,21 +205,20 @@ void DocumentItem::slotLayoutFinished()
     }
 
     // Determinate the properly new height/width values
-    m_width = m_height = 0.0;
-    for(int i = 0; i < pageItems.count(); ++i) {
-        PageItem *pageItem = static_cast<PageItem*>(pageItems[i]);
-        QSharedPointer<Page> page = pageItem->page();
-        m_height += page->rect().height();
-        m_width = qMax(m_width, page->rect().width());
-    }
+    updateSize();
 
     // Create new PageItem's
     for(int i = pageItems.count(); i < pages.count(); ++i) {
         const QSharedPointer<Page> &page = pages[i];
+        QRectF r = page->originalRect();
+        r.setWidth(r.width() * m_zoom);
+        r.setHeight(r.height() * m_zoom);
+        page->setRect(r);
         PageItem *pageItem = new PageItem(this, page);
         if (m_height > 0.0)
-            m_height += m_spacing;
-        pageItem->setPos(m_margin, m_margin + m_height);
+            m_height += m_spacing * m_zoom;
+        qreal margin = m_margin * m_zoom;
+        pageItem->setPos(margin, (margin + m_height));
         m_height += page->rect().height();
         m_width = qMax(m_width, page->rect().width());
     }
@@ -149,8 +230,14 @@ QRectF DocumentItem::boundingRect() const
 {
     qreal width = m_width + m_margin*2;
     qreal height = m_height + m_margin*2;
-    qreal x = (width * scale() - width);
-    qreal y = (height * scale() - height);
+    //qreal x = (width * scale() - width);
+    //qreal y = (height * scale() - height);
+//    qreal x = (width * m_zoom - width);
+//    qreal y = (height * m_zoom - height);
+    qreal x = 0;
+    qreal y = 0;
+//    width += (width * m_zoom);
+//    height += (height * m_zoom);
     return QRectF(QPointF(x, y), QSizeF(width, height));
 }
 
@@ -244,9 +331,28 @@ void DocumentView::setPos(const QPointF &position)
     m_doc->setPos(position.x(), position.y());
 }
 
+void DocumentView::setZoomBegin()
+{
+    m_doc->setZoomBegin();
+}
+
+void DocumentView::setZoomEnd()
+{
+    m_doc->setZoomEnd();
+}
+
 qreal DocumentView::zoom() const
 {
-    return m_doc->scale();
+    return m_doc->zoom();
+}
+
+void DocumentView::setZoom(qreal factor)
+{
+    if (qFuzzyCompare(m_doc->zoom(), factor))
+        return;
+    m_doc->setZoom(factor);
+    Q_EMIT zoomChanged();
+    slotSizeChanged();
 }
 
 //bool DocumentView::isZoomToFit() const
@@ -254,11 +360,6 @@ qreal DocumentView::zoom() const
 //    QSizeF size = m_doc->boundingRect().size();
 //    return qFuzzyCompare(qMin(width() / size.width(), height() / size.height()), m_totalScaleFactor);
 //}
-
-void DocumentView::setZoom(qreal factor)
-{
-    m_doc->setScale(factor);
-}
 
 //void DocumentView::zoomToFit()
 //{

@@ -17,7 +17,7 @@ Rectangle {
     height: contentColumn.height + 14
     width: contentColumn.width + 14
     border.width: 1
-    border.color: "#a0a0a0"
+    border.color: "#909090"
     radius: 4
     smooth: true
     clip: true
@@ -40,6 +40,7 @@ Rectangle {
             if (!root.enabled)
                 return
             if (root.checkable) {
+                root.checked = !root.checked
                 root.toggled()
             } else {
                 root.clicked()
@@ -64,7 +65,7 @@ Rectangle {
         Label {
             id: label
             anchors.horizontalCenter: parent.horizontalCenter
-            color: root.enabled ? "#ffffff" : "#c0c0c0"
+            color: root.enabled ? "#ffffff" : "#a0a0a0"
             clip: true
         }
     }

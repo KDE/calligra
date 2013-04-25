@@ -300,19 +300,11 @@ public:
 
         KoShapeManager *shapeManager = canvasItem->shapeManager();
 
-        QRectF pageRect = kwpage.rect();
+        QRectF pageRect = m_page->rect();
+        //QRectF pageRect = kwpage.rect();
 
-        /*
-        QRectF pRect(page.rect());
-        KoPageLayout layout;
-        layout.width = pRect.width();
-        layout.height = pRect.height();
-
-        KoPAUtil::setZoom(layout, thumbSize, zoomHandler);
-        QRect pageRect = KoPAUtil::pageRect(layout, thumbSize, zoomHandler);
-        */
-
-        QSize pageSize = pageRect.size().toSize();
+        QSizeF pageSizeF = pageRect.size();
+        QSize pageSize = pageSizeF.toSize();
         QImage thumbnail(pageSize, QImage::Format_RGB32);
         thumbnail.fill(QColor(Qt::white).rgb());
 
@@ -334,10 +326,11 @@ public:
 class AppManager::Private
 {
 public:
-    bool m_kill;
     QMutex m_waitMutex, m_workMutex;
     QWaitCondition m_waitCondition;
     QQueue<Command*> m_prendingCommands;
+    bool m_kill;
+
     Private() : m_kill(false) {}
 };
 

@@ -2,6 +2,8 @@
 #include "Document_p.h"
 #include "AppManager.h"
 
+#include <QReadWriteLock>
+
 /**************************************************************************
  * Page
  */
@@ -11,9 +13,11 @@ class Page::Private
 public:
     Document *m_doc;
     int m_pageNumber;
+    QRectF m_originalRect;
     QRectF m_rect;
+    QReadWriteLock m_rectLock;
     bool m_isDirty;
-    Private(Document *doc, int pageNumber, const QRectF &rect) : m_doc(doc), m_pageNumber(pageNumber), m_rect(rect), m_isDirty(true) {}
+    Private(Document *doc, int pageNumber, const QRectF &rect) : m_doc(doc), m_pageNumber(pageNumber), m_originalRect(rect), m_rect(rect), m_isDirty(true) {}
 };
 
 Page::Page(Document *doc, int pageNumber, const QRectF &rect)
@@ -37,9 +41,28 @@ int Page::pageNumber() const
     return d->m_pageNumber;
 }
 
+QRectF Page::originalRect() const
+{
+    return d->m_originalRect;
+}
+
 QRectF Page::rect() const
 {
-    return d->m_rect;
+    QRectF r;
+    {
+        QReadLocker locker(&d->m_rectLock);
+        r = d->m_rect;
+    }
+    return r;
+}
+
+void Page::setRect(const QRectF &r)
+{
+    {
+        QWriteLocker locker(&d->m_rectLock);
+        d->m_rect = r;
+    }
+    setDirty(true);
 }
 
 bool Page::isDirty() const
