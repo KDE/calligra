@@ -138,7 +138,7 @@ it using this menu item.</para>
 <varlistentry>
 <term><guilabel>Fraction</guilabel></term>
 <listitem><para>The <guilabel>Fraction</guilabel> format changes your number into a fraction. For
-example, 0.1 can be changed to 1/8, 2/16, 1/10, &etc;. You define the type of
+example, 0.1 can be changed to 1/8, 2/16, 1/10, &etc; You define the type of
 fraction by choosing it in the field on the right. If the exact fraction is not
 possible in the fraction mode you choose, the nearest closest match is chosen. 
 For example: when we have 1.5 as number, we choose <guilabel>Fraction</guilabel>
