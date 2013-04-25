@@ -31,6 +31,7 @@ class KWDocument;
 class KWPage;
 class KoPageLayout;
 class KWPageStyle;
+enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
 
 class KWPageTool : public KoToolBase
 {
@@ -44,7 +45,8 @@ public:
     void applyStyle(int page, KWPageStyle style);
 public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-
+    //Get the page under the mouse
+    KWPage pageUnderMouse();
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
@@ -57,47 +59,48 @@ public: // Events
 //  virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
 //  virtual void keyPressEvent(QKeyEvent *event);
+public slots:
+    void enableHeader();
+    void enableFooter();
 
 private slots:
     ///Force the remaining content on the page to next page.
     void insertPageBreak();
     void resizePage();
 
-    void enableHeader();
-    void enableFooter();
-
 private:
     KWCanvas *getCanvas() const;
     KWDocument *getDocument() const;
+    //Return or set the position x or y of the margin
+    int marginInPx(Selection selection);
+    //Set position of margin in px
+    void setMarginInPx(Selection selection, int postionX, int positionY);
+    //Get the position of the mouse
+    int xMouseInPage();
+    int yMouseInPage();
+    //Get the y position of the mouse in the document
+    qreal yMouseInDocument();
+    //Get the distance to the beginning of the document over the page in parameter
+    int distanceOverPage(int pageNumber);
+    //Change the layout of a page style
+    void changeLayoutInStyle(KoPageLayout layout, KWPageStyle style);
 
 protected:
     QList<QWidget *> createOptionWidgets();
     void refreshCanvas();
 
 private:
-    enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
     Selection m_selection;
 
     //Style from SimplePagesStyles
     QString m_styleFomWiget;
-    //Margin margin;
+    int m_numberPageClicked;
     KWCanvas *m_canvas;
     KWDocument *m_document;
     QPoint *m_mousePosTmp;
     //Need to control the page resizing when cursor is out of canvas
     QTimer *m_resizeTimer;
-    //Return or set the position x or y of the margin
-    int marginInPx(Selection selection);
-    void setMarginInPx(Selection selection, int postionX, int positionY);
-    int xMouseInPage();
-    int yMouseInPage();
-    qreal yMouseInDocument();
-    KWPage pageUnderMouse();
-    int distanceOverPage(int pageNumber);
-    void changeLayoutInStyle(KoPageLayout layout, KWPageStyle style);
 
-    //To check if header/footer is already created
-    bool header, footer;
     KAction *m_actionViewHeader;
     KAction *m_actionViewFooter;
 };

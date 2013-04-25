@@ -71,7 +71,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     showPageSpread(false); //TODO better would be allow n pages to face rather then only 2
     showTextDirection(true); // TODO can we hide this in selected usecases? Use the resource manager bidi-check maybe?
     //showApplyToDocument(true); // TODO uncommand when we can handle it.
-
+    connect(m_document,SIGNAL(pageSetupChanged()),this,SLOT(refreshInformations()));
 #if 0
     bool simpleSetup = m_document->pageCount() == 1
             || (m_document->pageCount() == 2 && page.pageSide() == KWPage::PageSpread);
@@ -240,12 +240,27 @@ void KWPageSettingsDialog::pageStyleCurrentRowChanged(int row)
     KWPageStyle pagestyle = item ? m_document->pageManager()->pageStyle(item->text()) : KWPageStyle();
     if (pagestyle.isValid())
         m_pageStyle = pagestyle;
-    setPageLayout(m_pageStyle.pageLayout());
-    setPageSpread(m_pageStyle.isPageSpread());
-    setTextDirection(m_pageStyle.direction());
-    m_columns->setColumns(m_pageStyle.columns());
+    refreshInformations();
     m_clonePageStyleButton->setEnabled(pagestyle.isValid());
     m_deletePageStyleButton->setEnabled(pagestyle.isValid() && item->text() != m_document->pageManager()->defaultPageStyle().name());
     enableButtonOk(pagestyle.isValid());
     enableButtonApply(pagestyle.isValid());
 }
+
+void KWPageSettingsDialog::refreshInformations() {
+        /////////////
+        //Only way found to refresh all field in the dialog box
+        //Indeed, all fields are refreshed when we change the page format
+        /*KoPageLayout layout = m_pageStyle.pageLayout();
+        layout.format = KoPageFormat::IsoA0Size;
+        setPageLayout(layout);
+        layout.format = KoPageFormat::CustomSize;
+        setPageLayout(layout);*/
+        setPageLayout(m_pageStyle.pageLayout());
+        //////////////////////
+        setPageSpread(m_pageStyle.isPageSpread());
+        setTextDirection(m_pageStyle.direction());
+        m_columns->setColumns(m_pageStyle.columns());
+}
+
+

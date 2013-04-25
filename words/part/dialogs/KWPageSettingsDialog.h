@@ -50,6 +50,7 @@ private slots:
     void pageStyleCloneClicked();
     void pageStyleDeleteClicked();
     void pageStyleCurrentRowChanged(int row);
+    void refreshInformations();
 private:
     KWDocument *m_document;
     KWPage m_page;

@@ -58,7 +58,7 @@ protected slots:
     void accept();
     void reject();
 
-private:
+protected:
     class Private;
     Private * const d;
 };

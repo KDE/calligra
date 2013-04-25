@@ -25,16 +25,24 @@
 #include "ui_SimpleHeaderFooterWidget.h"
 
 class KWView;
+class KWPageTool;
 
 class SimpleHeaderFooterWidget : public QWidget
 {
     Q_OBJECT
 public:
 
-    explicit SimpleHeaderFooterWidget(KWView *view, QWidget *parent = 0);
+    explicit SimpleHeaderFooterWidget(KWView *view, KWPageTool *pageTool, QWidget *parent = 0);
     ~SimpleHeaderFooterWidget();
 
+private slots:
+    void on_insertHeader_clicked();
+
+    void on_insertFooter_clicked();
+
 private:
+    KWView* m_view;
+    KWPageTool* m_pageTool;
     Ui::SimpleHeaderFooterWidget widget;
 };
 

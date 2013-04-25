@@ -118,7 +118,6 @@ KWPageTool::KWPageTool(KoCanvasBase *canvas)
     if (m_canvas) {
         m_document = m_canvas->document();
     }
-    header = footer = false;
     m_resizeTimer = new QTimer(this);
     connect( m_resizeTimer, SIGNAL(timeout()), this, SLOT(resizePage()));
     m_resizeTimer->stop();
@@ -157,10 +156,10 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
     KWPageStyle style = pageUnderMouse().pageStyle();
     KoPageLayout layout = style.pageLayout();
 
-    qDebug() << pageUnderMouse().pageNumber() << " " << style.name();
-
     int xMouse = xMouseInPage();
     int yMouse = yMouseInPage();
+
+    m_numberPageClicked = pageUnderMouse().pageNumber();
 
     //For the orientation modification
     m_mousePosTmp = new QPoint(xMouse,yMouse);
@@ -200,15 +199,13 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
         m_selection = MBOTTOM;
     }
     //For the creation of header
-    else if (yMouse < layout.height /2 && !header){
-        m_selection = HEADER;
+    else if (yMouse < layout.height /2
+         && pageUnderMouse().pageStyle().headerPolicy() == Words::HFTypeNone){
         enableHeader();
-        header = true;
     }
-    else if(yMouse > layout.height / 2 && !footer){
-        m_selection = FOOTER;
+    else if(yMouse > layout.height / 2
+         && pageUnderMouse().pageStyle().footerPolicy() == Words::HFTypeNone){
         enableFooter();
-        footer = true;
     }
 }
 
@@ -230,7 +227,6 @@ void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
 
         int xMouse = xMouseInPage();
         int yMouse = yMouseInPage();
-        qDebug() << "STYLE WIDGET: " << m_styleFomWiget;
 
         //Refresh the cursor icon
         if (m_styleFomWiget != "") {
@@ -254,15 +250,16 @@ void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
 }
 
 void KWPageTool::applyStyle(int page, QString style) {
-    qDebug() << "Application de " << style << " sur " << page;
-    applyStyle(page, m_document->pageManager()->pageStyle(style));
+    if(page != -1) {
+        applyStyle(page, m_document->pageManager()->pageStyle(style));
+    }
 }
 
 void KWPageTool::applyStyle(int page, KWPageStyle style) {
-    qDebug() << "Application de " << style.name() << " sur " << page;
-    m_document->pageManager()->page(page).setPageStyle(style);
-    m_document->pageManager()->page(page).pageStyle().setPageLayout(style.pageLayout());
-    refreshCanvas();
+    if(page != -1) {
+        m_document->pageManager()->page(page).setPageStyle(style);
+        refreshCanvas();
+    }
 }
 
 void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -371,7 +368,7 @@ void KWPageTool::setMarginInPx(Selection selection, int positionX, int positionY
 
 void KWPageTool::resizePage()
 {
-    KWPageStyle style = pageUnderMouse().pageStyle();
+    KWPageStyle style = m_document->pageManager()->page(m_numberPageClicked).pageStyle();
     KoPageLayout layout = style.pageLayout();
     //Get the size of the resizing
     int widthResize =
@@ -381,7 +378,6 @@ void KWPageTool::resizePage()
     m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
     //In order to refresh the scroll position in order to follow the page that we resize
     float heightOld = layout.height;
-
     //Apply the resize
     switch(m_selection) {
     case BLEFT:
@@ -407,7 +403,16 @@ void KWPageTool::resizePage()
            , qreal(marginInPx(MTOP) + (layout.height - marginInPx(MBOTTOM)) + SELECT_SPACE));
     //We follow the page
     float heightNew = layout.height;
-    float ratio = heightNew / heightOld;
+
+    int numberPageModified = 0;
+    for(int i = 1; i <= m_numberPageClicked; i++) {
+        if(m_document->pageManager()->page(i).pageStyle().name() == style.name()) {
+            numberPageModified++;
+        }
+    }
+    float ratio = ((heightNew / heightOld) * numberPageModified
+                + (m_numberPageClicked - numberPageModified)) / m_numberPageClicked;
+    qDebug() << "RATIO " << ratio;
     m_canvas->canvasController()->setPreferredCenter(
                 QPointF(m_canvas->canvasController()->preferredCenter().x()
                        ,m_canvas->canvasController()->preferredCenter().y()*ratio));
@@ -441,9 +446,20 @@ qreal KWPageTool::yMouseInDocument()
     return m_canvas->viewConverter()->viewToDocumentY(posYInCanvas + m_canvas->documentOffset().y());
 }
 
+
 KWPage KWPageTool::pageUnderMouse()
 {
-    return m_document->pageManager()->page(yMouseInDocument());
+    int yPosition = 0;
+    int yMouse = int(yMouseInDocument());
+    for(int i = 1; i <= m_document->pageCount(); i++) {
+        if(yPosition > yMouse) {
+            return m_document->pageManager()->page(i-1);
+        }
+        yPosition += m_document->pageManager()->page(i).pageStyle().pageLayout().height + 21;
+    }
+    return m_document->pageManager()->page(m_document->pageCount());
+    //return m_document->pageManager()->page(yMouseInDocument());
+    //Sometimes page(qreal y) return a page after the one that's really under the mouse
 }
 
 int KWPageTool::distanceOverPage(int pageNumber) {
@@ -465,10 +481,9 @@ void KWPageTool::insertPageBreak()
     }
 }
 
-
 void KWPageTool::enableHeader()
 {
-    KWPage m_currentPage = m_canvas->view()->currentPage();
+    KWPage m_currentPage = pageUnderMouse();
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
@@ -480,7 +495,7 @@ void KWPageTool::enableHeader()
 
 void KWPageTool::enableFooter()
 {
-    KWPage m_currentPage = m_canvas->view()->currentPage();
+    KWPage m_currentPage = pageUnderMouse();
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
@@ -508,7 +523,7 @@ QList<QWidget *> KWPageTool::createOptionWidgets()
     spsw->setWindowTitle(i18n("Pages Style"));
     widgets.append(spsw);
 
-    SimpleHeaderFooterWidget *shfw = new SimpleHeaderFooterWidget(m_canvas->view());
+    SimpleHeaderFooterWidget *shfw = new SimpleHeaderFooterWidget(m_canvas->view(),this);
     shfw->setWindowTitle(i18n("Header & Footer"));
     widgets.append(shfw);
 

@@ -20,16 +20,32 @@
 #include "SimpleHeaderFooterWidget.h"
 
 #include "KWView.h"
+#include "KWPageTool.h"
 
-SimpleHeaderFooterWidget::SimpleHeaderFooterWidget(KWView *view, QWidget *parent)
+SimpleHeaderFooterWidget::SimpleHeaderFooterWidget( KWView *view
+                                                  , KWPageTool* pageTool
+                                                  , QWidget *parent)
     : QWidget(parent)
 {
     widget.setupUi(this);
-
+    m_pageTool = pageTool;
+    m_view = view;
     widget.insertFooter->setDefaultAction(view->action("insert_footer"));
     widget.insertHeader->setDefaultAction(view->action("insert_header"));
 }
 
 SimpleHeaderFooterWidget::~SimpleHeaderFooterWidget()
 {
+}
+
+void SimpleHeaderFooterWidget::on_insertHeader_clicked()
+{
+    m_view->setCurrentPage(m_pageTool->pageUnderMouse());
+    m_pageTool->enableHeader();
+}
+
+void SimpleHeaderFooterWidget::on_insertFooter_clicked()
+{
+    m_view->setCurrentPage(m_pageTool->pageUnderMouse());
+    m_pageTool->enableFooter();
 }
