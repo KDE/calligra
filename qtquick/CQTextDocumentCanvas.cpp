@@ -123,6 +123,7 @@ void CQTextDocumentCanvas::gotoPage(int pageNumber, KoDocument *document)
     KWPage currentTextDocPage = kwDoc->pageManager()->page(pageNumber);
 
     QRectF rect = d->canvasBase->viewConverter()->documentToView(currentTextDocPage.rect());
+    canvasController()->pan(rect.topLeft().toPoint() - d->canvasBase->viewConverter()->documentToView(canvasController()->documentOffset()).toPoint());
     alignTopWith(rect.top());
     updateCanvas();
 }
