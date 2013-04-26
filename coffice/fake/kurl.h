@@ -358,6 +358,8 @@ public:
 
     void adjustPath(AdjustPathOption trailing) {}
 
+    static bool isRelativeUrl(const QString &url) { return QUrl(url).isRelative(); }
+
 private:
 
     static QString trailingSlash( KUrl::AdjustPathOption trailing, const QString &path )

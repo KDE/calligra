@@ -24,7 +24,8 @@ class KStandardDirs;
 class KDECORE_EXPORT KComponentData
 {
 public:
-    KComponentData(KAboutData *about = 0) { if(about) m_about = *about; }
+    KComponentData(const QByteArray &name = QByteArray()) {}
+    KComponentData(KAboutData *about) { m_about = *about; }
     KSharedConfigPtr config() const;
     KStandardDirs* dirs() const;
     bool isValid() const;
