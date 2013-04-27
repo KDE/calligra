@@ -1,3 +1,9 @@
+coffice (1.5) unstable; urgency=low
+
+  * Add zooming, pinch-to-zoom
+
+ -- Sebastian Sauer <mail@dipe.org>  Sun, 27 Apr 2013 23:30:00 +0100
+
 coffice (1.4) unstable; urgency=low
 
   * Add support for Microsoft Word DOC, DOT, DOCM and DOTM file formats.
