@@ -94,6 +94,8 @@ private:
     {
         QLibrary loader(lib);
         bool ok = loader.load();
+        if (!ok)
+            qWarning() << Q_FUNC_INFO << "Failed loading library=" << lib << "error=" << loader.errorString();
         return ok;
     }
 

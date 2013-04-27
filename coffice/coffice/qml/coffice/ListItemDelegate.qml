@@ -3,7 +3,7 @@ import QtQuick 1.1
 Item {
     id: listItem
     width: parent.width
-    height: listItemContent.implicitHeight + 5
+    height: listItemContent.implicitHeight + 10
 
     property alias titleText: titleLabel.text
     property alias detailText: detailLabel.text
@@ -28,6 +28,8 @@ Item {
     Column {
         id: listItemContent
         x: 5
+        y: 4
+        spacing: 2
         Label {
             id: titleLabel
             font.weight: Font.Bold

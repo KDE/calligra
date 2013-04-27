@@ -351,8 +351,8 @@ void DocumentView::setZoom(qreal factor)
     if (qFuzzyCompare(m_doc->zoom(), factor))
         return;
     m_doc->setZoom(factor);
-    Q_EMIT zoomChanged();
     slotSizeChanged();
+    Q_EMIT zoomChanged();
 }
 
 //bool DocumentView::isZoomToFit() const

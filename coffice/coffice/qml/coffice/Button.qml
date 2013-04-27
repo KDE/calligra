@@ -11,11 +11,14 @@ Rectangle {
     property bool enabled: true
     property alias iconSource: icon.source
 
+    property real margin: 5
+    //property real margin: label.implicitHeight/2
+
     signal clicked
     signal toggled
 
-    height: contentColumn.height + 14
-    width: contentColumn.width + 14
+    height: contentColumn.height + root.margin*2 + 5
+    width: contentColumn.width + root.margin*2 + 5
     border.width: 1
     border.color: "#909090"
     radius: 4
@@ -52,7 +55,7 @@ Rectangle {
         id: contentColumn
         anchors {
             centerIn: parent
-            margins: 5
+            //margins: root.margin
         }
 
         Image {

@@ -10,7 +10,7 @@ Page {
 
         documentViewItem.openFile(file)
 
-        documentViewItem.scale = 1.0
+        //documentViewItem.zoom = 1.0
         documentViewItem.x = 0.0
         documentViewItem.y = 0.0
         flickable.contentX = 0.0
@@ -90,17 +90,27 @@ Page {
         height: 0
         //visible: height > 0
         clip: true
+        minimum: 0
+        maximum: 400
+        value: 100
         property bool valueIsChanging: false
         onValueChanged: {
             if (!valueIsChanging) {
                 valueIsChanging = true;
                 documentViewItem.setZoomBegin()
             }
-            documentViewItem.zoom = value / maximum * 2.0
+            var factor = value / 100.0
+            documentViewItem.setZoom(factor, flickable.contentX, flickable.contentY)
         }
         onValueChangedDone: {
             valueIsChanging = false
             documentViewItem.setZoomEnd()
+        }
+        Component.onCompleted: {
+            documentViewItem.zoomChanged.connect( function() {
+                var v = documentViewItem.zoom * 100.0
+                zoomSlider.value = v
+            })
         }
     }
 
@@ -137,66 +147,82 @@ Page {
             right: parent.right
             //margins: 5
         }
-        contentHeight: documentViewItem.implicitHeight * documentViewItem.scale
-        contentWidth: Math.max(documentViewItem.implicitWidth * documentViewItem.scale, parent.width)
+        contentHeight: documentViewItem.implicitHeight
+        contentWidth: Math.max(documentViewItem.implicitWidth, parent.width)
         clip: true
 
-        /*
         PinchArea {
             id: pinchArea
             width: Math.max(flickable.contentWidth, flickable.width)
             height: Math.max(flickable.contentHeight, flickable.height)
 
             function distance(p1, p2) {
-                var dx = p2.x - p1.x;
-                var dy = p2.y - p1.y;
-                return Math.sqrt(dx*dx + dy*dy);
+                var dx = p2.x - p1.x
+                var dy = p2.y - p1.y
+                return Math.sqrt(dx*dx + dy*dy)
             }
 
             property real initialDistance
+            property real initialZoom
+            property real zoomCenterX
+            property real zoomCenterY
+            property real zoomValue
+            onZoomValueChanged: {
+                if (zoomValue != documentViewItem.zoom)
+                    documentViewItem.setZoom(zoomValue, zoomCenterX, zoomCenterY)
+            }
+            SmoothedAnimation {
+                id: zoomAnimation
+                duration: 300
+                target: pinchArea
+                properties: "zoomValue"
+                velocity: -1
+            }
 
             onPinchStarted: {
-                initialDistance = distance(pinch.point1, pinch.point2);
+                initialDistance = distance(pinch.point1, pinch.point2)
+                initialZoom = documentViewItem.zoom
+                zoomValue = documentViewItem.zoom
+                zoomAnimation.from = documentViewItem.zoom
+                documentViewItem.setZoomBegin()
             }
+
             onPinchUpdated: {
-                var currentDistance = distance(pinch.point1, pinch.point2);
-                var scale = currentDistance / initialDistance;
+                //if (pinch.pointCount < 2)
+                //    return
 
-                var widthChange = documentViewItem.width * scale - documentViewItem.width
-                var heightChange = documentViewItem.height * scale - documentViewItem.height
+                var currentDistance = distance(pinch.point1, pinch.point2)
+                var scale = (currentDistance / initialDistance) * initialZoom
 
-                var vx = (pinch.center.x * scale) - (pinch.center.x - flickable.contentX) + (pinch.previousCenter.x - pinch.center.x)
-                var vy = (pinch.center.y * scale) - (pinch.center.y - flickable.contentY) + (pinch.previousCenter.y - pinch.center.y)
-                var newContentX = Math.max(0, Math.min(flickable.contentWidth * scale - flickable.width, vx))
-                var newContentY = Math.max(0, Math.min(flickable.contentHeight * scale - flickable.height, vy))
-
-                documentViewItem.scale = scale
-                documentViewItem.x = widthChange/2
-                documentViewItem.y = heightChange/2
-                flickable.contentX = newContentX
-                flickable.contentY = newContentY
+                zoomCenterX = flickable.contentX // + pinch.center.x
+                zoomCenterY = flickable.contentY // + pinch.center.y
+                zoomAnimation.to = scale
+                zoomAnimation.start()
             }
+
             onPinchFinished: {
-                //var finalWidth = Math.max(flickable.contentWidth, flickable.minimumWidth)
-                //var finalHeight = Math.max(flickable.contentHeight, flickable.minimumHeight)
-
-                //Reasure the maximum Scale
-                //finalWidth = Math.min(finalWidth, image.sourceSize.width)
-                //finalHeight = Math.min(finalHeight, image.sourceSize.height)
-
-                //flickable.resizeContent(finalWidth, finalHeight, pinch.center)
-                //flickable.returnToBounds()
+                zoomAnimation.complete()
+                documentViewItem.setZoomEnd()
             }
         }
-        */
 
         DocumentViewItem {
             id: documentViewItem
             pageColor: "#ffffff"
+
+            function setZoom(factor, x, y) {
+                var prevImplicitWidth = documentViewItem.implicitWidth
+                var prevImplicitHeight = documentViewItem.implicitHeight
+                documentViewItem.zoom = factor
+                flickable.contentX += (documentViewItem.implicitWidth - prevImplicitWidth) * (x / prevImplicitWidth)
+                flickable.contentY += (documentViewItem.implicitHeight - prevImplicitHeight) * (y / prevImplicitHeight)
+            }
+
             onOpenFileFailed: {
                 infoLabel.text = qsTr("Error: %1").arg(error)
                 zoomButton.enabled = false
             }
+
             onProgressUpdated: {
                 if (percent < 0) {
                     fileLabel.text = file()
