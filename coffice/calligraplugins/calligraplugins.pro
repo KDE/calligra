@@ -127,28 +127,57 @@ HEADERS += $$files($$CALLIGRAPLUGINS_VECTORSHAPE_DIR/*.h)
 #####################################################################
 # ChartShape
 
-SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/*.cpp)
-SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/LeveyJennings/*.cpp)
-SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/PrerenderedElements/*.cpp)
-SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/Scenery/*.cpp)
-SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/Ternary/*.cpp)
+# Disabled cause the ChartShape and KDChart make heavy use of
+# QWidget's and that in turn means that the ChartShape is only
+# usuable when run within the QApplication::instance()->thread()
+# aka the UI-thread.
+#
+# Just locking or doing the widget creation in the UI-thread
+# using Qt::QueuedConnection's isn't so easy cause widgets and
+# layouts are created all over the code and we still would need
+# to decorate all calls to proper lock them. Lots of work :/
+#
+# The other option would be to port kdchart and the chartShape
+# away from widgets. Lesser work but still lots of. It has the
+# advantage that we could probably push the largest parts of
+# the patch (kdchart) upstream. But then the in Calligra used
+# version is old (2.4) whereas the newest 2.5 got lots of work
+# and would need proper testing before to be sure 2.4=>2.5
+# doesn't introduce regressions plus such a patch would maybe
+# earliest land in 2.6...
+#
+# The theird, any maybe easiest, option could be to decorate
+# the whole ChartShape with a dummy shape. The dummy shape
+# would just keep state (input-data, context, etc), create the
+# ChartShape in the UI-thread, pass the data on, render and
+# fetch the result for display and probably destroy the
+# ChartShape again and keep the result as cached image.
 
-HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/*.h)
-HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/LeveyJennings/*.h)
-HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/PrerenderedElements/*.h)
-HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/Scenery/*.h)
-HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/Ternary/*.h)
+#SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/*.cpp)
+#SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/LeveyJennings/*.cpp)
+#SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/PrerenderedElements/*.cpp)
+#SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/Scenery/*.cpp)
+#SOURCES += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/Ternary/*.cpp)
 
-SOURCES += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/*.cpp)
-SOURCES += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/commands/*.cpp)
-SOURCES += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/dialogs/*.cpp)
+#HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/*.h)
+#HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/LeveyJennings/*.h)
+#HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/PrerenderedElements/*.h)
+#HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/Scenery/*.h)
+#HEADERS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/Ternary/*.h)
 
-HEADERS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/*.h)
-HEADERS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/commands/*.h)
-HEADERS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/dialogs/*.h)
+#SOURCES += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/*.cpp)
+#SOURCES += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/commands/*.cpp)
+#SOURCES += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/dialogs/*.cpp)
+#SOURCES -= $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/ChartConfigWidget.cpp)
 
-FORMS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/*.ui)
-FORMS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/*.ui)
-FORMS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/dialogs/*.ui)
+#HEADERS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/*.h)
+#HEADERS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/commands/*.h)
+#HEADERS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/dialogs/*.h)
+#HEADERS -= $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/ChartConfigWidget.h)
+
+#FORMS += $$files($$CALLIGRAPLUGINS_KDCHART_DIR/src/*.ui)
+#FORMS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/*.ui)
+#FORMS += $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/dialogs/*.ui)
+#FORMS -= $$files($$CALLIGRAPLUGINS_CHARTSHAPE_DIR/ChartConfigWidget.ui)
 
 mocWrapper(HEADERS)
