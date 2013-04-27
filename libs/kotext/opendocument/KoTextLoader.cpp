@@ -1089,15 +1089,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     annotation->setRangeEnd(cursor.position());
                 }
             } else {
-                int position = cursor.position();
                 KoAnnotation *annotation = new KoAnnotation(cursor);
                 annotation->setManager(textRangeManager);
-                annotation->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
-                if (textRangeManager && annotation->loadOdf(ts, d->context)) {
+                if (textRangeManager /*&& annotation->loadOdf(ts, d->context)*/) {
                     textRangeManager->insert(annotation);
-                    cursor.setPosition(position);
-                    annotation->setRangeEnd(cursor.position());
-
                     // Load the annotation shape.
                     //
                     // FIXME: For now let keep KoAnnotation::loadodf
