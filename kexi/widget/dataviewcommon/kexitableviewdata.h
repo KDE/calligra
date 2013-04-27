@@ -55,7 +55,6 @@ public:
     //! db-aware version
     KexiTableViewData(KexiDB::Cursor *c);
 
-//TODO: make this more generic: allow to add more columns!
     /*! Defines two-column table usually used with comboboxes.
      First column is invisible and contains key values.
      Second column and contains user-visible value.
@@ -63,6 +62,8 @@ public:
      @param values a list of text values (must be of the same length as keys list)
      @param keyType a type for keys
      @param valueType a type for values
+
+     @todo make this more generic: allow to add more columns!
     */
     KexiTableViewData(
         const QList<QVariant> &keys, const QList<QVariant> &values,
@@ -76,7 +77,6 @@ public:
     KexiTableViewData(KexiDB::Field::Type keyType, KexiDB::Field::Type valueType);
 
     virtual ~KexiTableViewData();
-//js void setSorting(int key, bool order=true, short type=1);
 
     /*! Preloads all rows provided by cursor (only for db-aware version). */
     bool preloadAllRows();
@@ -104,8 +104,8 @@ public:
     int globalColumnID(int visibleID) const;
     int visibleColumnID(int globalID) const;
 
-    /*virtual?*/
     /*! \return true if this db-aware data set. */
+    /*! @todo virtual? */
     bool isDBAware() const;
 
     /*! For db-aware data set only: table name is returned;
@@ -221,12 +221,11 @@ public:
      Note: Reasonable only for not not-db-aware version. */
     void insertRow(KexiDB::RecordData& record, uint index, bool repaint = false);
 
-    /*TODO: add this as well?
-      void insertRow(KexiDB::RecordData& record, KexiDB::RecordData& aboveRecord); */
+    //! @todo add this as well? void insertRow(KexiDB::RecordData& record, KexiDB::RecordData& aboveRecord)
 
     //! \return index of autoincremented column. The result is cached.
-//! \todo what about multiple autoinc columns?
-//! \todo what about changing column order?
+    //! \todo what about multiple autoinc columns?
+    //! \todo what about changing column order?
     int autoIncrementedColumn();
 
     //! Emits reloadRequested() signal to reload presenters.
@@ -249,7 +248,6 @@ public:
     inline KexiDB::RecordData* last() {
         return KexiTableViewDataBase::last();
     }
-//Qt 4 inline int findRef( const KexiDB::RecordData* record ) { return KexiTableViewDataBase::findRef(record); }
     inline int indexOf(const KexiDB::RecordData* record, int from = 0) const {
         return KexiTableViewDataBase::indexOf(const_cast<KexiDB::RecordData*>(record), from);
     }
@@ -265,8 +263,6 @@ public:
     inline void prepend(KexiDB::RecordData* record) {
         KexiTableViewDataBase::prepend(record);
     }
-// inline Iterator iterator() { return Iterator(*this); }
-// inline Iterator* createIterator() { return new Iterator(*this); }
     inline KexiTableViewData::Iterator constBegin() const {
         return KexiTableViewDataBase::constBegin();
     }
@@ -340,21 +336,6 @@ private:
         const QList<QVariant> &keys, const QList<QVariant> &values,
         KexiDB::Field::Type keyType, KexiDB::Field::Type valueType);
 
-    /* Qt4
-      virtual int compareItems(Item item1, Item item2);
-      int cmpStr(Item item1, Item item2);
-      int cmpInt(Item item1, Item item2);
-      int cmpUInt(Item item1, Item item2);
-      int cmpLongLong(Item item1, Item item2);
-      int cmpULongLong(Item item1, Item item2);
-      int cmpDouble(Item item1, Item item2);
-      int cmpDate(Item item1, Item item2);
-      int cmpDateTime(Item item1, Item item2);
-      int cmpTime(Item item1, Item item2);
-
-      //! Compare function for BLOB data (QByteArray). Uses size as the weight.
-      int cmpBLOB(Item item1, Item item2);*/
-
     //! @internal for saveRowChanges() and saveNewRow()
     bool saveRow(KexiDB::RecordData& record, bool insert, bool repaint);
 
@@ -366,7 +347,6 @@ private:
 
     //! Temporary, used in compare functions like cmpInt(), cmpString()
     //! to avoid memory allocations.
-//moved QVariant m_leftTmp, m_rightTmp;
 
     class Private;
     Private * const d;
