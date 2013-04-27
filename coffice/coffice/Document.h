@@ -23,6 +23,8 @@ public:
     void setRect(const QRectF &r);
     bool isDirty() const;
     void setDirty(bool dirty);
+    bool isUpdating() const;
+    void setUpdating(bool updating);
 Q_SIGNALS:
     void thumbnailFinished(const QImage &image);
 private:

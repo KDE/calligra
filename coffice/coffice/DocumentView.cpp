@@ -74,7 +74,14 @@ void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 void PageItem::slotThumbnailFinished(const QImage &image)
 {
     qDebug() << Q_FUNC_INFO << image.size();
-    setPixmap(QPixmap::fromImage(image));
+
+    QPixmap pixmap = QPixmap::fromImage(image);
+
+    QSize size = m_page->rect().size().toSize();
+    if (image.size() != size) // for the case the page was rescaled in between
+        pixmap = pixmap.scaled(size);
+
+    setPixmap(pixmap);
 }
 
 /**************************************************************************
@@ -105,11 +112,13 @@ DocumentItem::~DocumentItem()
 
 void DocumentItem::setZoomBegin()
 {
+    qDebug() << Q_FUNC_INFO << m_zoomTempBegin+1;
     ++m_zoomTempBegin;
 }
 
 void DocumentItem::setZoomEnd()
 {
+    qDebug() << Q_FUNC_INFO << m_zoomTempBegin-1;
     if (m_zoomTempBegin > 0 && --m_zoomTempBegin == 0)
         setZoom(m_zoomTemp);
 }

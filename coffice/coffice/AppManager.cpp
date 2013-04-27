@@ -287,6 +287,8 @@ public:
     {
         qDebug() << Q_FUNC_INFO << "Starting updating page" << m_page->pageNumber() << "document=" << m_doc->file();
 
+        m_page->setUpdating(false);
+
         KoPart *kopart = m_doc->d->m_kopart;
         KWDocument *kwdoc = dynamic_cast<KWDocument*>(kopart->document());
         Q_ASSERT(kwdoc);
@@ -374,6 +376,9 @@ bool AppManager::openFile(Document *doc, const QString &file)
 
 void AppManager::update(const QSharedPointer<Page> &page)
 {
+    if (page->isUpdating())
+        return;
+    page->setUpdating(true);
     UpdatePageCommand *command = new UpdatePageCommand(page);
     {
         QMutexLocker locker(&d->m_workMutex);

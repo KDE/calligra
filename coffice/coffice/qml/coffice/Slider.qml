@@ -9,7 +9,8 @@ Rectangle {
     property real minimum: 0
     property real maximum: 100
     property real value: 50
-    signal valueChangedDone()
+    signal valueChangedBegin()
+    signal valueChangedEnd()
 
     property int xMax: width - handle.width - 4
     onXMaxChanged: updatePosition()
@@ -36,8 +37,13 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
-        onPressed: setPosition(mouseX)
-        onReleased: slider.valueChangedDone()
+        onPressed: {
+            valueChangedBegin()
+            setPosition(mouseX)
+        }
+        onReleased: {
+            slider.valueChangedEnd()
+        }
     }
 
     Rectangle {
@@ -81,7 +87,8 @@ Rectangle {
             drag.minimumX: 2
             drag.maximumX: slider.xMax + 2
             onPositionChanged: setPosition(handle.x - 2)
-            onReleased: slider.valueChangedDone()
+            onPressed: slider.valueChangedBegin()
+            onReleased: slider.valueChangedEnd()
         }
     }
 }

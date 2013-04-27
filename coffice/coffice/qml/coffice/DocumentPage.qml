@@ -95,14 +95,16 @@ Page {
         value: 100
         property bool valueIsChanging: false
         onValueChanged: {
-            if (!valueIsChanging) {
-                valueIsChanging = true;
-                documentViewItem.setZoomBegin()
+            if (valueIsChanging) {
+                var factor = value / 100.0
+                documentViewItem.setZoom(factor, flickable.contentX, flickable.contentY)
             }
-            var factor = value / 100.0
-            documentViewItem.setZoom(factor, flickable.contentX, flickable.contentY)
         }
-        onValueChangedDone: {
+        onValueChangedBegin: {
+            valueIsChanging = true
+            documentViewItem.setZoomBegin()
+        }
+        onValueChangedEnd: {
             valueIsChanging = false
             documentViewItem.setZoomEnd()
         }
@@ -162,6 +164,7 @@ Page {
                 return Math.sqrt(dx*dx + dy*dy)
             }
 
+            property int zoomEndScheduled: 0
             property real initialDistance
             property real initialZoom
             property real zoomCenterX
@@ -177,6 +180,10 @@ Page {
                 target: pinchArea
                 properties: "zoomValue"
                 velocity: -1
+                onCompleted: {
+                    for ( ; pinchArea.zoomEndScheduled > 0; pinchArea.zoomEndScheduled--)
+                        documentViewItem.setZoomEnd()
+                }
             }
 
             onPinchStarted: {
@@ -188,8 +195,8 @@ Page {
             }
 
             onPinchUpdated: {
-                //if (pinch.pointCount < 2)
-                //    return
+                if (pinch.pointCount < 2)
+                    return
 
                 var currentDistance = distance(pinch.point1, pinch.point2)
                 var scale = (currentDistance / initialDistance) * initialZoom
@@ -201,8 +208,12 @@ Page {
             }
 
             onPinchFinished: {
-                zoomAnimation.complete()
-                documentViewItem.setZoomEnd()
+                if (zoomAnimation.running) {
+                    pinchArea.zoomEndScheduled++
+                    zoomAnimation.stop()
+                } else {
+                    documentViewItem.setZoomEnd()
+                }
             }
         }
 

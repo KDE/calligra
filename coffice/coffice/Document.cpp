@@ -15,9 +15,10 @@ public:
     int m_pageNumber;
     QRectF m_originalRect;
     QRectF m_rect;
-    QReadWriteLock m_rectLock;
+    QReadWriteLock m_lock;
     bool m_isDirty;
-    Private(Document *doc, int pageNumber, const QRectF &rect) : m_doc(doc), m_pageNumber(pageNumber), m_originalRect(rect), m_rect(rect), m_isDirty(true) {}
+    bool m_isUpdating;
+    Private(Document *doc, int pageNumber, const QRectF &rect) : m_doc(doc), m_pageNumber(pageNumber), m_originalRect(rect), m_rect(rect), m_isDirty(true), m_isUpdating(false) {}
 };
 
 Page::Page(Document *doc, int pageNumber, const QRectF &rect)
@@ -48,31 +49,39 @@ QRectF Page::originalRect() const
 
 QRectF Page::rect() const
 {
-    QRectF r;
-    {
-        QReadLocker locker(&d->m_rectLock);
-        r = d->m_rect;
-    }
-    return r;
+    QReadLocker locker(&d->m_lock);
+    return d->m_rect;
 }
 
 void Page::setRect(const QRectF &r)
 {
-    {
-        QWriteLocker locker(&d->m_rectLock);
-        d->m_rect = r;
-    }
-    setDirty(true);
+    QWriteLocker locker(&d->m_lock);
+    d->m_rect = r;
+    d->m_isDirty = true;
 }
 
 bool Page::isDirty() const
 {
+    QReadLocker locker(&d->m_lock);
     return d->m_isDirty;
 }
 
 void Page::setDirty(bool dirty)
 {
+    QWriteLocker locker(&d->m_lock);
     d->m_isDirty = dirty;
+}
+
+bool Page::isUpdating() const
+{
+    QReadLocker locker(&d->m_lock);
+    return d->m_isUpdating;
+}
+
+void Page::setUpdating(bool updating)
+{
+    QWriteLocker locker(&d->m_lock);
+    d->m_isUpdating = updating;
 }
 
 /**************************************************************************
