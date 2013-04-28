@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=SIP Proxy server
 Name[bg]=Сървър-посредник SIP
-Name[ca]=Servidor proxy SIP
-Name[ca@valencia]=Servidor proxy SIP
+Name[bs]=SIP Proxy server
+Name[ca]=Servidor intermediari SIP
+Name[ca@valencia]=Servidor intermediari SIP
+Name[da]=SIP-proxyserver
 Name[de]=SIP-Proxy-Server
 Name[el]=Ενδιάμεσος εξυπηρετητής SIP
 Name[es]=Servidor proxy SIP
 Name[et]=SIP puhverserver
+Name[fr]=Serveur mandataire SIP
+Name[gl]=Servidor proxy SIP
+Name[hu]=SIP proxykiszolgáló
 Name[it]=SIP Proxy server
 Name[kk]=SIP прокси сервері
 Name[nb]=SIP mellomtjener
@@ -17,6 +22,7 @@ Name[pt]=Servidor 'proxy' SIP
 Name[pt_BR]=Servidor 'Proxy' SIP
 Name[ru]=Прокси-сервер SIP
 Name[sk]=SIP Proxy server
+Name[sl]=Posredniški strežnik SIP
 Name[sv]=SIP-proxyserver
 Name[uk]=Проксі-сервер SIP
 Name[x-test]=xxSIP Proxy serverxx

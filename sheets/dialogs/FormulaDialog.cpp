@@ -28,7 +28,7 @@
 // Local
 #include "FormulaDialog.h"
 
-#include <KTabWidget>
+#include <ktabwidget.h>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QGridLayout>
@@ -45,6 +45,8 @@
 #include "Map.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
+
+#include <KoIcon.h>
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -88,8 +90,6 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     setMainWidget(page);
 
     QGridLayout *grid1 = new QGridLayout(page);
-    grid1->setMargin(KDialog::marginHint());
-    grid1->setSpacing(KDialog::spacingHint());
 
     searchFunct = new KLineEdit(page);
     searchFunct->setClearButtonShown(true);
@@ -119,7 +119,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     QItemSelectionModel* selectionmodel = new QItemSelectionModel(proxyModel, this);
     functions->setSelectionModel(selectionmodel);
-    connect(selectionmodel, SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
+    connect(selectionmodel, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotSelected()));
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help without inserting the function
@@ -131,7 +131,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     selectFunction = new QPushButton(page);
     selectFunction->setToolTip(i18n("Insert function"));
-    selectFunction->setIcon(BarIcon("go-down", KIconLoader::SizeSmall));
+    selectFunction->setIcon(koIcon("go-down"));
     grid1->addWidget(selectFunction, 3, 0);
 
     result = new KLineEdit(page);
@@ -150,8 +150,6 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     m_input = new QWidget(m_tabwidget);
     QVBoxLayout *grid2 = new QVBoxLayout(m_input);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
 
     // grid2->setResizeMode (QLayout::Minimum);
 
@@ -196,13 +194,13 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     connect(this, SIGNAL(cancelClicked()), this, SLOT(slotClose()));
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(typeFunction, SIGNAL(activated(const QString &)),
-            this, SLOT(slotActivated(const QString &)));
+    connect(typeFunction, SIGNAL(activated(QString)),
+            this, SLOT(slotActivated(QString)));
     /*
-        connect( functions, SIGNAL( highlighted(const QString &) ),
-                 this, SLOT( slotSelected(const QString &) ) );
-        connect( functions, SIGNAL( selected(const QString &) ),
-                 this, SLOT( slotSelected(const QString &) ) );
+        connect( functions, SIGNAL(highlighted(QString)),
+                 this, SLOT(slotSelected(QString)) );
+        connect( functions, SIGNAL(selected(QString)),
+                 this, SLOT(slotSelected(QString)) );
     */
     connect(functions, SIGNAL(activated(QModelIndex)),
             this , SLOT(slotDoubleClicked(QModelIndex)));
@@ -212,22 +210,22 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     connect(selectFunction, SIGNAL(clicked()),
             this, SLOT(slotSelectButton()));
 
-    connect(firstElement, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotChangeText(const QString &)));
-    connect(secondElement, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotChangeText(const QString &)));
-    connect(thirdElement, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotChangeText(const QString &)));
-    connect(fourElement, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotChangeText(const QString &)));
-    connect(fiveElement, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotChangeText(const QString &)));
+    connect(firstElement, SIGNAL(textChanged(QString)),
+            this, SLOT(slotChangeText(QString)));
+    connect(secondElement, SIGNAL(textChanged(QString)),
+            this, SLOT(slotChangeText(QString)));
+    connect(thirdElement, SIGNAL(textChanged(QString)),
+            this, SLOT(slotChangeText(QString)));
+    connect(fourElement, SIGNAL(textChanged(QString)),
+            this, SLOT(slotChangeText(QString)));
+    connect(fiveElement, SIGNAL(textChanged(QString)),
+            this, SLOT(slotChangeText(QString)));
 
-    connect(m_selection, SIGNAL(changed(const Region&)),
+    connect(m_selection, SIGNAL(changed(Region)),
             this, SLOT(slotSelectionChanged()));
 
-    connect(m_browser, SIGNAL(urlClick(const QString&)),
-            this, SLOT(slotShowFunction(const QString&)));
+    connect(m_browser, SIGNAL(urlClick(QString)),
+            this, SLOT(slotShowFunction(QString)));
 
     // Save the name of the active sheet.
     m_sheetName = m_selection->activeSheet()->sheetName();
@@ -281,8 +279,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     if (functions->currentIndex().isValid())
         selectFunction->setEnabled(false);
 
-    connect(searchFunct, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotSearchText(const QString &)));
+    connect(searchFunct, SIGNAL(textChanged(QString)),
+            this, SLOT(slotSearchText(QString)));
     connect(searchFunct, SIGNAL(returnPressed()),
             this, SLOT(slotPressReturn()));
 
@@ -715,8 +713,6 @@ void FormulaDialog::slotShowFunction(const QString& function)
     slotActivated(category);
 
     // select the function
-    //Q3ListBoxItem* item = functions->findItem( function, QKeySequence::ExactMatch | Qt::CaseSensitive );
-    //if( item ) functions->setCurrentItem( item );
     int row = functionsModel->stringList().indexOf(function);
     const QModelIndex sourcemodelindex = functionsModel->index(row, 0);
     const QModelIndex proxymodelindex = proxyModel->mapFromSource(sourcemodelindex);

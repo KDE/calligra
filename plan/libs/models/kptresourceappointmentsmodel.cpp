@@ -117,7 +117,7 @@ void ResourceAppointmentsItemModel::slotResourceGroupToBeInserted( const Resourc
 void ResourceAppointmentsItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 {
     //kDebug(planDbg())<<group->name()<<endl;
-    Q_ASSERT( group == m_group );
+    Q_ASSERT( group == m_group ); Q_UNUSED( group );
     endInsertRows();
     m_group = 0;
 }
@@ -134,7 +134,7 @@ void ResourceAppointmentsItemModel::slotResourceGroupToBeRemoved( const Resource
 void ResourceAppointmentsItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
 {
     //kDebug(planDbg())<<group->name()<<endl;
-    Q_ASSERT( group == m_group );
+    Q_ASSERT( group == m_group ); Q_UNUSED( group );
     endRemoveRows();
     m_group = 0;
 }
@@ -802,7 +802,7 @@ QVariant ResourceAppointmentsItemModel::data( const QModelIndex &index, int role
         if ( result.isValid() ) {
             if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
                 // HACK to show focus in empty cells
-                result = " ";
+                result = ' ';
             }
             return result;
         }
@@ -819,7 +819,7 @@ QVariant ResourceAppointmentsItemModel::data( const QModelIndex &index, int role
         if ( result.isValid() ) {
             if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
-                result = " ";
+                result = ' ';
             }
             return result;
         }
@@ -839,7 +839,7 @@ QVariant ResourceAppointmentsItemModel::data( const QModelIndex &index, int role
         if ( result.isValid() ) {
             if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
-                result = " ";
+                result = ' ';
             }
             return result;
         }
@@ -860,7 +860,7 @@ QVariant ResourceAppointmentsItemModel::data( const QModelIndex &index, int role
         if ( result.isValid() ) {
             if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
-                result = " ";
+                result = ' ';
             }
             return result;
         }

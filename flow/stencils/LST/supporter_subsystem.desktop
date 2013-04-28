@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Supporter
+Name[bs]=Branitelj
 Name[ca]=Seguidor
 Name[ca@valencia]=Seguidor
+Name[da]=Supporter
 Name[el]=Υποστηρικτής
 Name[es]=Soporte
 Name[et]=Toetaja
+Name[fr]=Mainteneur
+Name[gl]=Apoiador
 Name[it]=Supporto
 Name[kk]=Қолдағышы
 Name[nb]=Supporter
@@ -16,6 +20,8 @@ Name[ru]=Поддерживающий
 Name[sk]=Nosič
 Name[sl]=Podpornik
 Name[sv]=Stödenhet
+Name[tr]=Destekleyen
 Name[uk]=Підсистема підтримки
 Name[x-test]=xxSupporterxx
+Name[zh_CN]=支撑者
 Name[zh_TW]=支持者

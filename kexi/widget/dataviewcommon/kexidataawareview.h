@@ -55,9 +55,7 @@ public:
 
     virtual QSize sizeHint() const;
 
-    KexiDataAwareObjectInterface* dataAwareObject() const {
-        return m_dataAwareObject;
-    }
+    KexiDataAwareObjectInterface* dataAwareObject() const;
 
     /*! Sets up data for find/replace dialog, based on view's data model.
      Implemented for KexiSearchAndReplaceViewInterface. */
@@ -130,9 +128,11 @@ protected:
     void initActions();
     virtual void updateActions(bool activated);
 
-    QWidget* m_internalView;
-    KexiSharedActionClient* m_actionClient;
-    KexiDataAwareObjectInterface* m_dataAwareObject;
+    QWidget* internalView() const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

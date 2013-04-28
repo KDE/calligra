@@ -24,6 +24,7 @@
 #include "Selection.h"
 
 // Calligra
+#include <KoIcon.h>
 
 // KDE
 #include <kdebug.h>
@@ -66,7 +67,7 @@ RegionSelector::RegionSelector(QWidget* parent)
     d->dialog = 0;
     d->button = new QToolButton(this);
     d->button->setCheckable(true);
-    d->button->setIcon(KIcon("selection"));
+    d->button->setIcon(koIcon("selection"));
     d->highlighter = 0;
     d->textEdit = new KTextEdit(this);
     d->textEdit->setLineWrapMode(QTextEdit::NoWrap);
@@ -106,7 +107,7 @@ void RegionSelector::setSelection(Selection* selection)
 {
     d->selection = selection;
     d->highlighter = new FormulaEditorHighlighter(d->textEdit, d->selection);
-    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(choiceChanged()));
+    connect(d->selection, SIGNAL(changed(Region)), this, SLOT(choiceChanged()));
 }
 
 void RegionSelector::setDialog(QDialog* dialog)

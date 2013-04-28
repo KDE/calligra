@@ -22,14 +22,15 @@
 
 #include <KoToolRegistry.h>
 
-#include <KLocale>
+#include <KoIcon.h>
+#include <klocale.h>
 
 KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
         : KoToolFactoryBase("KarbonFilterEffectsTool")
 {
     setToolTip(i18n("Filter Effects Editing Tool"));
     setToolType("karbon,krita");
-    setIcon("effectimages");
+    setIconName(koIconNameCStr("tool_imageeffects")); // TODO: better icon, e.g. black Fx bad on dark UI
     setPriority(3);
 }
 

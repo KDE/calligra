@@ -23,13 +23,16 @@
 #define FLOWDOCUMENT_H
 
 #include <KoPADocument.h>
+#include "flow_export.h"
 
-class FlowDocument : public KoPADocument
+class KoPart;
+
+class FLOW_EXPORT FlowDocument : public KoPADocument
 {
     Q_OBJECT
 
     public:
-        FlowDocument(QObject* parent);
+        explicit FlowDocument(KoPart *part);
         ~FlowDocument();
 
         virtual KoOdf::DocumentType documentType() const;
@@ -39,9 +42,6 @@ class FlowDocument : public KoPADocument
         void updateGui();
 
     protected:
-        /// Creates a FlowView instance and returns it
-        virtual KoView* createViewInstance(QWidget* parent);
-        virtual QGraphicsItem *createCanvasItem();
         const char *odfTagName( bool withNamespace );
 };
 

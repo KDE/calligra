@@ -32,25 +32,24 @@
 #include <KoShapeGroup.h>
 #include <KoZoomHandler.h>
 #include <KoProperties.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kicon.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <knewstuff3/downloaddialog.h>
-#include <KFileDialog>
+#include <kfiledialog.h>
 #include <KIO/NetAccess>
-#include <KStandardDirs>
-#include <KTar>
+#include <kstandarddirs.h>
+#include <ktar.h>
 
 #include <QVBoxLayout>
 #include <QListView>
@@ -98,14 +97,14 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     setWidget(mainWidget);
 
     m_menu = new QMenu();
-    QAction* ghnsAction = m_menu->addAction(KIcon("get-hot-new-stuff"), i18n("Get more stencils"));
-    QAction* installAction = m_menu->addAction(KIcon("document-open-folder"), i18n("Install stencil"));
+    QAction *ghnsAction = m_menu->addAction(koIcon("get-hot-new-stuff"), i18n("Get more stencils"));
+    QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Install stencil"));
 
     connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
     connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
 
     m_button = new QToolButton;
-    m_button->setIcon(SmallIcon("list-add"));
+    m_button->setIcon(koIcon("list-add"));
     m_button->setToolTip(i18n("More shapes"));
     m_button->setMenu(m_menu);
     m_button->setPopupMode(QToolButton::InstantPopup);
@@ -138,7 +137,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_treeWidget->regenerateFilteredMap();
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
-    connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
+    connect(m_filterLineEdit, SIGNAL(textEdited(QString)), this, SLOT(reapplyFilter()));
 }
 
 void StencilBoxDocker::getHotNewStuff()
@@ -227,7 +226,7 @@ void StencilBoxDocker::loadDefaultShapes()
             temp.id = shapeTemplate.id;
             temp.name = shapeTemplate.name;
             temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = KIcon(shapeTemplate.icon);
+            temp.icon = KIcon(shapeTemplate.iconName);
             temp.properties = shapeTemplate.properties;
 
             if(familyMap.contains(shapeTemplate.family))
@@ -248,7 +247,7 @@ void StencilBoxDocker::loadDefaultShapes()
             temp.id = factory->id();
             temp.name = factory->name();
             temp.toolTip = factory->toolTip();
-            temp.icon = KIcon(factory->icon());
+            temp.icon = KIcon(factory->iconName());
             temp.properties = 0;
 
             if(familyMap.contains(factory->family()))

@@ -25,16 +25,15 @@
 using namespace KexiUtils;
 
 StyleProxy::StyleProxy(QStyle* parentStyle)
-        : QStyle()
-        , m_method(new int(0))
+    : QStyle(), m_method(new int(0))
 {
     setParentStyle(parentStyle);
 }
 
 StyleProxy::~StyleProxy()
 {
-    delete m_style;
     delete m_method;
+    delete m_style;
 }
 
 void StyleProxy::setParentStyle(QStyle* style)
@@ -58,3 +57,4 @@ QStyle* StyleProxy::parentStyle(int methodIndex) const
     *m_method = methodIndex;
     return m_style;
 }
+

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Basic project
+Name[bs]=Osnovni projekt
 Name[ca]=Projecte bàsic
 Name[ca@valencia]=Projecte bàsic
 Name[cs]=Základní projekt
@@ -10,10 +11,14 @@ Name[en_GB]=Basic project
 Name[es]=Proyecto básico
 Name[et]=Lihtne projekt
 Name[fi]=Perusprojekti
+Name[fr]=Projet de base
 Name[ga]=Buntionscadal
+Name[gl]=Proxecto básico
+Name[hu]=Alap projekt
 Name[it]=Progetto di base
 Name[ja]=基本的なプロジェクト
 Name[kk]=Негізгі жоба
+Name[mr]=मूळ परियोजना
 Name[nb]=Enkelt prosjekt
 Name[nds]=Eenfach Projekt
 Name[nl]=Basisproject

@@ -105,8 +105,8 @@ bool saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out)
 const char* getMimetype(quint16 type)
 {
     switch (type) {
-    case officeArtBlipEMF: return "application/octet-stream";
-    case officeArtBlipWMF: return "application/octet-stream";
+    case officeArtBlipEMF: return "image/x-emf";
+    case officeArtBlipWMF: return "image/x-wmf";
     case officeArtBlipPICT: return "image/pict";
     case officeArtBlipJPEG: return "image/jpeg";
     case officeArtBlipPNG: return "image/png";

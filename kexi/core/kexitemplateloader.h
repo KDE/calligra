@@ -21,7 +21,7 @@
 #define KEXI_TEMPLLOADER_H
 
 #include <QList>
-#include <KIcon>
+#include <kicon.h>
 #include "kexiprojectdata.h"
 
 //! A structure providing information about single kexi database template

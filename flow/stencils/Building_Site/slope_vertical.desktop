@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Vertical Slope
+Name[bs]=Vertikalni nagib
 Name[ca]=Desnivell vertical
 Name[ca@valencia]=Desnivell vertical
+Name[da]=Lodret hældning
+Name[de]=Senkrechte Böschung
 Name[el]=Κάθετη κλίση
 Name[es]=Rampa vertical
 Name[et]=Vertikaalne kallak
 Name[fi]=Pystysuora luiska
+Name[fr]=Pente verticale
+Name[gl]=Costa vertical
 Name[hu]=Függőleges lejtő
 Name[it]=Pendio verticale
 Name[kk]=Тік еңіс
@@ -17,6 +22,8 @@ Name[pt_BR]=Rampa vertical
 Name[ru]=Вертикальный склон
 Name[sk]=Zvislý svah
 Name[sv]=Vertikal backe
+Name[tr]=Dikey Eğim
 Name[uk]=Вертикальний ухил
 Name[x-test]=xxVertical Slopexx
+Name[zh_CN]=垂直斜面
 Name[zh_TW]=垂直坡

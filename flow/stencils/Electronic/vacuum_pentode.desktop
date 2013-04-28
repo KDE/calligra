@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=vacuum pentode
+Name[bs]=vakum pentoda
 Name[ca]=pentode de buit
 Name[ca@valencia]=pentode de buit
+Name[cs]=vakuová pentoda
+Name[da]=vacuumpentode
 Name[de]=Vakuum-Pentode
 Name[el]=πέντοδος κενού
 Name[es]=pentodo vacío
 Name[et]=Vaakumpentood
+Name[fr]=pentode vacuum
+Name[gl]=Péntodo de baleiro
 Name[it]=pentodo a vuoto
 Name[kk]=лампа-пентод
 Name[nb]=vakuum-pentode
@@ -18,4 +23,5 @@ Name[sk]=vákuová pentóda
 Name[sv]=vakuumpentod
 Name[uk]=Вакуумний пентод
 Name[x-test]=xxvacuum pentodexx
+Name[zh_CN]=真空五极管
 Name[zh_TW]=vacuum pentode

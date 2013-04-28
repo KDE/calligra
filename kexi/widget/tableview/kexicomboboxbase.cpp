@@ -203,6 +203,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
 QString KexiComboBoxBase::valueForString(const QString& str, int* row,
         uint lookInColumn, uint returnFromColumn, bool allowNulls)
 {
+    Q_UNUSED(returnFromColumn);
     KexiTableViewData *relData = column() ? column()->relatedData() : 0;
     if (!relData)
         return QString(); //safety
@@ -356,8 +357,8 @@ void KexiComboBoxBase::createPopup(bool show)
     if (!popup()) {
         setPopup(column() ? new KexiComboBoxPopup(thisWidget, *column())
                  : new KexiComboBoxPopup(thisWidget, *field()));
-        QObject::connect(popup(), SIGNAL(rowAccepted(KexiDB::RecordData*, int)),
-                         thisWidget, SLOT(slotRowAccepted(KexiDB::RecordData*, int)));
+        QObject::connect(popup(), SIGNAL(rowAccepted(KexiDB::RecordData*,int)),
+                         thisWidget, SLOT(slotRowAccepted(KexiDB::RecordData*,int)));
         QObject::connect(popup()->tableView(), SIGNAL(itemSelected(KexiDB::RecordData*)),
                          thisWidget, SLOT(slotItemSelected(KexiDB::RecordData*)));
 

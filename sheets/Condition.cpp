@@ -350,7 +350,7 @@ QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueCon
     case Conditional::IsTrueFormula:
         value = "is-true-formula(";
         value += Odf::encodeFormula(condition.value1.asString());
-        value += ")";
+        value += ')';
     }
     return value;
 }
@@ -467,9 +467,9 @@ void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditiona
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
         loadOdfValidationValue(listVal, newCondition, parser);
         newCondition.cond = Conditional::Different;
-    } else if (val.startsWith("is-true-formula(")) {
+    } else if (val.startsWith(QLatin1String("is-true-formula("))) {
         val = val.mid(16);
-        if (val.endsWith(")")) val = val.left(val.length() - 1);
+        if (val.endsWith(QLatin1Char(')'))) val.chop(1);
         newCondition.cond = Conditional::IsTrueFormula;
         newCondition.value1 = Value(Odf::decodeFormula(val));
     }

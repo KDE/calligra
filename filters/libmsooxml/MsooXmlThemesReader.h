@@ -131,7 +131,7 @@ class MSOOXML_EXPORT DrawingMLFillBase
 {
 public:
     virtual ~DrawingMLFillBase();
-    // This function will create the fill style and fill the approriate styles
+    // This function will create the fill style and fill the appropriate styles
     // and filePath if needed.
     // Number is used to index to correct style, color is the color which should be used when making the styles
     virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color) = 0;
@@ -150,7 +150,7 @@ public:
 class MSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 {
 public:
-    DrawingMLBlipFill(QString filePath);
+    explicit DrawingMLBlipFill(const QString &filePath);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
 
     DrawingMLBlipFill* clone() const { return new DrawingMLBlipFill(*this); }
@@ -162,7 +162,7 @@ private:
 class MSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
-    // Simplified gradient constuctor
+    // Simplified gradient constructor
     DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
                           QVector<int> alphaModifier, QVector<int> gradPositions, QString gradAngle);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
@@ -228,7 +228,7 @@ class MSOOXML_EXPORT MsooXmlThemesReader : public MSOOXML::MsooXmlCommonReader
 public:
     //! Creates MsooXmlThemesReader object.
     //! On successful reading, @a theme will be written with theme definition.
-    MsooXmlThemesReader(KoOdfWriters *writers);
+    explicit MsooXmlThemesReader(KoOdfWriters *writers);
 
     virtual ~MsooXmlThemesReader();
 

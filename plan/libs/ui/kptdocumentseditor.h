@@ -39,7 +39,7 @@ class KPLATOUI_EXPORT DocumentTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    DocumentTreeView( QWidget *parent );
+    explicit DocumentTreeView(QWidget *parent);
 
     DocumentItemModel *model() const { return static_cast<DocumentItemModel*>( TreeViewBase::model() ); }
 
@@ -63,7 +63,7 @@ class KPLATOUI_EXPORT DocumentsEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    DocumentsEditor( KoDocument *part, QWidget *parent );
+    DocumentsEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     using ViewBase::draw;

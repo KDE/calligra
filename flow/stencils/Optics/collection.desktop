@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Optics
+Name[bs]=Optika
 Name[ca]=Òptica
 Name[ca@valencia]=Òptica
+Name[cs]=Optika
+Name[da]=Optik
 Name[de]=Optik
 Name[el]=Οπτική
 Name[es]=Óptica
 Name[et]=Optika
 Name[fi]=Optiikka
+Name[fr]=Optics
+Name[gl]=Óptica
 Name[it]=Ottica
 Name[kk]=Оптика
 Name[nb]=Optikk
@@ -16,7 +21,9 @@ Name[pt]=Óptica
 Name[pt_BR]=Ótica
 Name[ru]=Оптика
 Name[sk]=Optika
+Name[sl]=Optika
 Name[sv]=Optik
+Name[tr]=Optik
 Name[uk]=Оптика
 Name[x-test]=xxOpticsxx
 Name[zh_TW]=光學器具

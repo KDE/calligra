@@ -18,25 +18,13 @@
  */
 
 #include "StatisticsPreferencesPopup.h"
-#include "ui_StatisticsPreferencesPopup.h"
-
 #include <QMenu>
 
 StatisticsPreferencesPopup::StatisticsPreferencesPopup(QWidget *parent)
     : QMenu(parent)
 {
-    Ui::StatisticsPreferencesPopup *w = new Ui::StatisticsPreferencesPopup();
-
+    w = new Ui::StatisticsPreferencesPopup();
     w->setupUi(this);
-
-    w->check_words->setCheckState(Qt::Checked);
-    w->check_sentences->setCheckState(Qt::Checked);
-    w->check_lines->setCheckState(Qt::Checked);
-    w->check_syllables->setCheckState(Qt::Checked);
-    w->check_charspace->setCheckState(Qt::Checked);
-    w->check_charnospace->setCheckState(Qt::Checked);
-    w->check_east->setCheckState(Qt::Checked);
-    w->check_flesch->setCheckState(Qt::Checked);
     connect(w->check_words, SIGNAL(stateChanged(int)), this, SIGNAL(wordsDisplayChange(int)));
     connect(w->check_sentences, SIGNAL(stateChanged(int)), this, SIGNAL(sentencesDisplayChange(int)));
     connect(w->check_syllables, SIGNAL(stateChanged(int)), this, SIGNAL(syllablesDisplayChange(int)));

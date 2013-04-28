@@ -25,8 +25,10 @@
 
 #include <db/utils.h>
 
-#include <KDateTime>
-#include <KDebug>
+#include <KoIcon.h>
+
+#include <kdatetime.h>
+#include <kdebug.h>
 
 KexiRecentProjectsModel::KexiRecentProjectsModel(
     const KexiRecentProjects& projects, QObject *parent)
@@ -130,10 +132,10 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
     case Qt::DecorationRole: {
         //! @todo show icon specific to given database or mimetype
         if (fileBased) {
-            return KIcon(KexiDB::defaultFileBasedDriverIcon());
+            return KIcon(KexiDB::defaultFileBasedDriverIconName());
         }
         else {
-            return KIcon(KEXI_ICON_DATABASE_SERVER);
+            return KIcon(KEXI_DATABASE_SERVER_ICON_NAME);
         }
     }
     /*case KCategorizedSortFilterProxyModel::CategorySortRole: {

@@ -32,15 +32,14 @@
 #include <QStyle>
 #include <QLayout>
 
-#include <KDebug>
-#include <KCursor>
-#include <KApplication>
-#include <KIconEffect>
-#include <KIconLoader>
-#include <KGlobalSettings>
-#include <KAction>
-#include <KDialog>
-#include <KColorScheme>
+#include <kdebug.h>
+#include <kcursor.h>
+#include <kapplication.h>
+#include <kiconeffect.h>
+#include <kglobalsettings.h>
+#include <kaction.h>
+#include <kdialog.h>
+#include <kcolorscheme.h>
 
 using namespace KexiUtils;
 
@@ -292,7 +291,7 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
         factor = 100;
     if (s >= 250 && v >= 250) //for colors like cyan or red, make the result more white
         s = qMax(0, s - factor - 50);
-    else if (s <= 5 && s <= 5)
+    else if (s <= 5 && v <= 5)
         v += factor - 50;
     c2.setHsv(h, s, qMin(255, v + factor - 100));
     return c2;
@@ -684,7 +683,7 @@ bool KexiUtils::isLightColorScheme()
 QPalette KexiUtils::paletteForReadOnly(const QPalette &palette)
 {
     QPalette p(palette);
-    p.setBrush(QPalette::QPalette::Base, palette.brush(QPalette::Disabled, QPalette::Base));
+    p.setBrush(QPalette::Base, palette.brush(QPalette::Disabled, QPalette::Base));
     p.setBrush(QPalette::Text, palette.brush(QPalette::Disabled, QPalette::Text));
     p.setBrush(QPalette::Highlight, palette.brush(QPalette::Disabled, QPalette::Highlight));
     p.setBrush(QPalette::HighlightedText, palette.brush(QPalette::Disabled, QPalette::HighlightedText));

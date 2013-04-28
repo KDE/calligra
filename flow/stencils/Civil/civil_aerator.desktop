@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Aerator
 Name[bg]=Аератор
+Name[bs]=Aerator
 Name[ca]=Airejador
 Name[ca@valencia]=Airejador
+Name[da]=Aerator
 Name[de]=Lüfter
 Name[el]=Aerator
 Name[es]=Aireador
 Name[et]=Aeraator
+Name[fr]=aérateur
+Name[gl]=Aireador
+Name[hu]=Levegőztető
 Name[it]=Aeratore
 Name[kk]=Аэратор
 Name[nb]=Lufter
@@ -19,4 +24,5 @@ Name[sk]=Aerátor
 Name[sv]=Luftare
 Name[uk]=Аератор
 Name[x-test]=xxAeratorxx
+Name[zh_CN]=曝气器
 Name[zh_TW]=通風裝置

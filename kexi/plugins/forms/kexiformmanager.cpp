@@ -24,13 +24,15 @@
 #include "kexiformview.h"
 #include "kexidatasourcepage.h"
 
+#include <KoIcon.h>
+
 #include <QToolButton>
-#include <KAction>
-#include <KToggleAction>
-#include <KActionCollection>
-#include <KPageDialog>
-#include <KTextEdit>
-#include <KToolBar>
+#include <kaction.h>
+#include <ktoggleaction.h>
+#include <kactioncollection.h>
+#include <kpagedialog.h>
+#include <ktextedit.h>
+#include <ktoolbar.h>
 
 //2.0 #include <formeditor/formmanager.h>
 //2.0 #include <formeditor/widgetpropertyset.h>
@@ -107,8 +109,8 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
 
     connect(d->lib, SIGNAL(widgetCreated(QWidget*)),
             this, SLOT(slotWidgetCreatedByFormsLibrary(QWidget*)));
-    connect(d->lib, SIGNAL(widgetActionToggled(const QByteArray&)),
-        this, SLOT(slotWidgetActionToggled(const QByteArray&)));
+    connect(d->lib, SIGNAL(widgetActionToggled(QByteArray)),
+        this, SLOT(slotWidgetActionToggled(QByteArray)));
 
     d->part = part;
     KActionCollection *col = /*tmp*/ new KActionCollection(this); // 2.0 d->part->actionCollectionForMode(Kexi::DesignViewMode);
@@ -133,8 +135,8 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
 #else
 #pragma WARNING( Port code related to KFormDesigner::FormManager::m_treeview here )
 #endif
-//todo        connect(m_propSet, SIGNAL(widgetNameChanged(const QByteArray&, const QByteArray&)),
-//todo                m_treeview, SLOT(renameItem(const QByteArray&, const QByteArray&)));
+//todo        connect(m_propSet, SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
+//todo                m_treeview, SLOT(renameItem(QByteArray,QByteArray)));
     }
 }
 
@@ -153,7 +155,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     d->lib->createWidgetActions(d->widgetActionGroup);
 //! @todo insertWidget() slot?
 //2.0    d->lib->createWidgetActions(client, d->collection,
-//2.0                                this, SLOT(insertWidget(const QByteArray &)));
+//2.0                                this, SLOT(insertWidget(QByteArray)));
 
 #ifdef KFD_SIGSLOTS
     if (d->features & KFormDesigner::Form::EnableConnections) {
@@ -161,7 +163,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     }
     else {
         d->dragConnectionAction = new KToggleAction(
-            KIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
+            koIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
         d->dragConnectionAction->setObjectName("drag_connection");
 //        d->widgetActionGroup->addAction(d->dragConnectionAction);
         connect(d->dragConnectionAction, SIGNAL(triggered()),
@@ -171,7 +173,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #endif
 
     d->pointerAction = new KToggleAction(
-        KIcon("mouse_pointer"), i18n("Pointer"), d->collection);
+        koIcon("mouse_pointer"), i18n("Pointer"), d->collection);
     d->pointerAction->setObjectName("edit_pointer");
     d->widgetActionGroup->addAction(d->pointerAction);
     connect(d->pointerAction, SIGNAL(triggered()),
@@ -216,7 +218,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifdef KEXI_DEBUG_GUI
     KConfigGroup generalGroup(KGlobal::config()->group("General"));
     if (generalGroup.readEntry("ShowInternalDebugger", false)) {
-        KAction *a = new KAction(KIcon("run-build-file"), i18n("Show Form UI Code"), this);
+        KAction *a = new KAction(koIcon("run-build-file"), i18n("Show Form UI Code"), this);
         d->collection->addAction("show_form_ui", a);
         a->setShortcut(Qt::CTRL + Qt::Key_U);
         connect(a, SIGNAL(triggered()), this, SLOT(showFormUICode()));

@@ -23,12 +23,11 @@
 #include <QPainter>
 #include <QStyle>
 
-#include <KLocale>
-#include <KDebug>
-#include <KIconLoader>
-#include <KActionCollection>
-#include <KStandardAction>
-#include <KPluginFactory>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kactioncollection.h>
+#include <kstandardaction.h>
+#include <kpluginfactory.h>
 
 #include <formeditor/container.h>
 #include <formeditor/form.h>
@@ -58,12 +57,12 @@
 KexiDBFactoryBase::KexiDBFactoryBase(QObject *parent, const char *name)
         : KFormDesigner::WidgetFactory(parent, name)
 {
-    m_propDesc["dataSource"] = i18n("Data Source");
+    setPropertyDescription("dataSource", i18n("Data Source"));
 
     //used in labels, frames...
-    m_propDesc["frameColor"] = i18n("Frame Color");
+    setPropertyDescription("frameColor", i18n("Frame Color"));
 
-    m_propDesc["readOnly"] = i18n("Read Only");
+    setPropertyDescription("readOnly", i18n("Read Only"));
 }
 
 KexiDBFactoryBase::~KexiDBFactoryBase()

@@ -45,7 +45,6 @@
 
 #include <QGroupBox>
 #include <QLabel>
-//Added by qt3to4:
 #include <QGridLayout>
 
 using namespace Calligra::Sheets;
@@ -183,9 +182,9 @@ ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::
     textLabel2_2->setText(i18n("Cell style"));
     textLabel2_3->setText(i18n("Cell style"));
 
-    connect(m_condition_1, SIGNAL(highlighted(const QString &)), this, SLOT(slotTextChanged1(const QString &)));
-    connect(m_condition_2, SIGNAL(highlighted(const QString &)), this, SLOT(slotTextChanged2(const QString &)));
-    connect(m_condition_3, SIGNAL(highlighted(const QString &)), this, SLOT(slotTextChanged3(const QString &)));
+    connect(m_condition_1, SIGNAL(highlighted(QString)), this, SLOT(slotTextChanged1(QString)));
+    connect(m_condition_2, SIGNAL(highlighted(QString)), this, SLOT(slotTextChanged2(QString)));
+    connect(m_condition_3, SIGNAL(highlighted(QString)), this, SLOT(slotTextChanged3(QString)));
 }
 
 ConditionalWidget::~ConditionalWidget()
@@ -266,7 +265,6 @@ ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
     m_dlg->m_style_2->insertItems(0, list);
     m_dlg->m_style_3->insertItems(0, list);
 
-    setButtonsOrientation(Qt::Vertical);
     setMainWidget(m_dlg);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));

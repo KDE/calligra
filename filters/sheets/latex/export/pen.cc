@@ -25,7 +25,6 @@
 
 //#include "fileheader.h" /* for the use of _header (color and underlined) */
 #include "pen.h"
-//Added by qt3to4:
 #include <QTextStream>
 
 Pen::Pen()

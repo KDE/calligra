@@ -1,14 +1,20 @@
 [Desktop Entry]
 Name=Route Switch Processor
 Name[bg]=Процесор за комутиране на маршрути
+Name[bs]=Procesor prekidača rute
 Name[ca]=Processador de commutació de rutes
 Name[ca@valencia]=Processador de commutació de rutes
+Name[da]=Route Switch Processor
 Name[de]=Router-Switch-Prozessor
 Name[el]=Επεξεργαστής δρομολόγησης
 Name[es]=Procesador de conmutación de rutas
 Name[et]=Marsruuter-kommutaatori protsessor
+Name[fr]=processeur de bascule
+Name[gl]=Procesador dun conmutador encamiñador
+Name[hu]=Route Switch Processzor
 Name[it]=Route Switch Processor
 Name[kk]=Маршруттауыш қосқыш процесоры
+Name[lt]=Kelio perjungimo procesorius
 Name[nb]=Rute-svitsj-prosessor
 Name[nds]=Nettweeg-Ümschaltperzesser
 Name[nl]=Route-switch-processor

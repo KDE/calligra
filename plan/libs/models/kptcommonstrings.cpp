@@ -162,6 +162,8 @@ namespace KPlato
         );
     }
 
+    QString ToolTip::scheduleGranularity() { return i18nc( "@info:tooltip", "The granularity used when calculating the project schedule" ); }
+
     QString ToolTip::documentUrl() { return i18nc( "@info:tooltip", "The url of the document" ); }
     QString ToolTip::documentType() { return i18nc( "@info:tooltip", "The type of the document" ); }
     QString ToolTip::documentStatus() { return i18nc( "@info:tooltip", "The status of the document" ); }

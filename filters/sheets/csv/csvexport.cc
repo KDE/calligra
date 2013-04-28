@@ -22,7 +22,6 @@
 
 #include <QFile>
 #include <QTextCodec>
-//Added by qt3to4:
 #include <QTextStream>
 #include <QByteArray>
 
@@ -31,6 +30,7 @@
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
+#include <KoPart.h>
 
 #include <sheets/CellStorage.h>
 #include <sheets/Map.h>
@@ -135,7 +135,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         return KoFilter::NotImplemented;
     }
 
-    Doc const * const ksdoc = static_cast<const Doc *>(document);
+    Doc *ksdoc = qobject_cast<Doc *>(document);
 
     if (ksdoc->mimeType() != "application/x-kspread") {
         kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
@@ -189,7 +189,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
 
     if (expDialog && expDialog->exportSelectionOnly()) {
         kDebug(30501) << "Export as selection mode";
-        View const * const view = ksdoc->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->views().first());
+        View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->documentPart()->views().first());
 
         if (!view) { // no view if embedded document
             delete expDialog;

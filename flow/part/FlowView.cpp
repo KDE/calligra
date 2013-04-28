@@ -19,17 +19,18 @@
 
 #include "FlowView.h"
 
-#include <klocale.h>
-#include <kactioncollection.h>
-#include <kactionmenu.h>
+#include "FlowDocument.h"
+#include "FlowPart.h"
 
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
-#include "FlowDocument.h"
+#include <klocale.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
 
-FlowView::FlowView(FlowDocument* document, QWidget* parent)
-  : KoPAView(document, parent), m_document(document)
+FlowView::FlowView(FlowPart *part, FlowDocument* document, QWidget* parent)
+  : KoPAView(part, document, parent), m_document(document)
 {
     Q_ASSERT(m_document);
 

@@ -35,7 +35,7 @@ class Region;
 class RegionModel : public SheetModel
 {
 public:
-    RegionModel(const Region& region);
+    explicit RegionModel(const Region &region);
     virtual ~RegionModel();
 
     /**

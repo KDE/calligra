@@ -50,7 +50,7 @@ class KPLATOUI_EXPORT ScheduleTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    ScheduleTreeView( QWidget *parent );
+    explicit ScheduleTreeView(QWidget *parent);
 
     ScheduleItemModel *model() const { return static_cast<ScheduleItemModel*>( TreeViewBase::model() ); }
 
@@ -78,7 +78,7 @@ class KPLATOUI_EXPORT ScheduleEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    ScheduleEditor( KoDocument *part, QWidget *parent );
+    ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -150,7 +150,7 @@ class KPLATOUI_EXPORT ScheduleLogTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    ScheduleLogTreeView( QWidget *parent );
+    explicit ScheduleLogTreeView(QWidget *parent);
 
     Project *project() const { return logModel()->project(); }
     void setProject( Project *project ) { logModel()->setProject( project ); }
@@ -191,7 +191,7 @@ class KPLATOUI_EXPORT ScheduleLogView : public ViewBase
 {
     Q_OBJECT
 public:
-    ScheduleLogView( KoDocument *part, QWidget *parent );
+    ScheduleLogView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
     virtual void setProject( Project *project );
@@ -240,7 +240,7 @@ class KPLATOUI_EXPORT ScheduleHandlerView : public SplitterView
 {
     Q_OBJECT
 public:
-    ScheduleHandlerView( KoDocument *part, QWidget *parent );
+    ScheduleHandlerView(KoPart *part, KoDocument *doc, QWidget *parent);
     
     Project *project() const { return 0; }
 

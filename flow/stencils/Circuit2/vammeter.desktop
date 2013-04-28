@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Vertical Ammeter
+Name[bs]=Vertikalni ampermetar
 Name[ca]=Amperímetre vertical
 Name[ca@valencia]=Amperímetre vertical
+Name[da]=Lodret amperemeter
 Name[de]=Senkrechtes Amperemeter
 Name[el]=Κάθετο αμπερόμετρο
 Name[es]=Amperímetro vertical
 Name[et]=Vertikaalne ampermeeter
+Name[fr]=Vertical Ammeter
+Name[gl]=Amperímetro vertical
+Name[hu]=Függőleges árammérő
 Name[it]=Amperometro verticale
 Name[kk]=Тік амперметр
 Name[nb]=Loddrett ampmeter
@@ -17,6 +22,7 @@ Name[pt_BR]=Amperímetro vertical
 Name[ru]=Вертикальный амперметр
 Name[sk]=Zvislý ampérmeter
 Name[sv]=Vertikal Amperemätare
+Name[tr]=Dikey Ampermetre
 Name[uk]=Амперметр (вертикально)
 Name[x-test]=xxVertical Ammeterxx
 Name[zh_TW]=垂直電流計

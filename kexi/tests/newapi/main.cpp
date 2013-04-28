@@ -27,6 +27,8 @@
 #include <kiconloader.h>
 #include <kaboutdata.h>
 
+#include <KoIcon.h>
+
 #include <db/drivermanager.h>
 #include <db/driver.h>
 #include <db/connection.h>
@@ -58,7 +60,7 @@ KComponentData *instance = 0;
 #include "dbcreation_test.h"
 #include "cursors_test.h"
 #include "schema_test.h"
-#include "tables_test.h"
+#include <db/tests/tables_test.h>
 #ifndef NO_GUI
 # include "tableview_test.h"
 #endif
@@ -88,16 +90,14 @@ int main(int argc, char** argv)
     QFileInfo info = QFileInfo(argv[0]);
     prgname = info.baseName().toLatin1();
 
-    KCmdLineArgs::init(argc, argv,
-                       new KAboutData(prgname, 0, ki18n("KexiDBTest"),
-                                      KEXI_VERSION_STRING, KLocalizedString(), KAboutData::License_GPL,
-                                      ki18n("(c) 2003-2010, Kexi Team\n"
-                                            "(c) 2003-2006, OpenOffice Software.\n"),
-                                      KLocalizedString(),
-                                      "http://www.calligra.org/kexi",
-                                      "submit@bugs.kde.org"
-                                     )
-                      );
+    KAboutData aboutData(prgname, 0, ki18n("KexiDBTest"),
+                         KEXI_VERSION_STRING, KLocalizedString(), KAboutData::License_GPL,
+                         ki18n("(c) 2003-2010, Kexi Team\n"
+                               "(c) 2003-2006, OpenOffice Software.\n"),
+                         KLocalizedString(),
+                         "http://www.calligra.org/kexi",
+                         "submit@bugs.kde.org");
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
     options.add("test <test_name>", ki18n("Available tests:\n"
@@ -163,7 +163,7 @@ int main(int argc, char** argv)
 
     if (gui) {
         app = new KApplication(true);
-        app->setWindowIcon(KIcon("table"));
+        app->setWindowIcon(koIcon("table"));
         instance = new KComponentData(KGlobal::mainComponent());
         KIconLoader::global()->addAppDir("kexi");
     } else {

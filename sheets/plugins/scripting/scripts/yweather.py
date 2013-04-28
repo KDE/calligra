@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 
 """
-KSpread python script that provides the Yahoo! Weather formula function.
+Sheets python script that provides the Yahoo! Weather formula function.
 
 Yahoo! Terms of Use
 The feeds are provided free of charge for use by individuals and non-profit
@@ -18,13 +18,15 @@ feeds at any time for any reason.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 This script is licensed under the BSD license.
 """
 
 import re, urllib
 from xml.dom import minidom
 import Kross, KSpread
+
+T = Kross.module("kdetranslation")
 
 class Yweather:
     def __init__(self, scriptaction):
@@ -34,15 +36,13 @@ class Yweather:
         func = KSpread.function("YWEATHER")
         func.minparam = 1
         func.maxparam = 2
-        func.comment = (
-            "The YWEATHER() function uses the Yahoo! Weather Web Service "
-            "to display the weather of a location. "
+        func.comment = ( T.i18n("The YWEATHER() function uses the Yahoo! Weather Web Service to display the weather of a location.")
         )
-        func.syntax = "YWEATHER(string;string)"
-        func.addParameter("String", "The US zip code, Location ID or cell that contains them.")
-        func.addParameter("String", "Units for temperature. f=Fahrenheit and c=Celsius")
-        func.addExample("YWEATHER(\"=A1\")")
-        func.addExample("YWEATHER(\"GMXX0151\";\"c\")")
+        func.syntax = T.i18n("YWEATHER(string;string)")
+        func.addParameter("String", T.i18n("The US zip code, Location ID or cell that contains them."))
+        func.addParameter("String", T.i18n("Units for temperature. f=Fahrenheit and c=Celsius"))
+        func.addExample(T.i18n("YWEATHER(\"=A1\")"))
+        func.addExample(T.i18n("YWEATHER(\"GMXX0151\";\"c\")"))
 
         def update(argument):
             print "Yweather.update !"
@@ -52,7 +52,7 @@ class Yweather:
                 location = sheet.text(location[1:])
 
             if location == None or not re.compile('^[a-zA-Z0-9]+$').match(location):
-                func.error = "Invalid location"
+                func.error = T.i18n("Invalid location")
                 return
 
             url = "http://weather.yahooapis.com/forecastrss?p=%s" % location
@@ -65,7 +65,7 @@ class Yweather:
             try:
                 dom = minidom.parse(urllib.urlopen(url))
             except:
-                func.error = "Web services request failed"
+                func.error = T.i18n("Web services request failed")
                 return
 
             forecasts = []
@@ -80,7 +80,7 @@ class Yweather:
             try:
                 ycondition = dom.getElementsByTagNameNS(namespace, 'condition')[0]
             except IndexError:
-                func.error = "Invalid condition"
+                func.error = T.i18n("Invalid condition")
                 return
             #my_current_condition = ycondition.getAttribute('text')
             #my_current_temp = ycondition.getAttribute('temp')
@@ -88,7 +88,7 @@ class Yweather:
             #my_title = dom.getElementsByTagName('title')[0].firstChild.data
 
             temp = ycondition.getAttribute('temp')
-            print "Y! Weather Temperatur: %s" % temp
+            print "Y! Weather Temperature: %s" % temp
             func.result = temp
 
         func.connect("called(QVariantList)", update)

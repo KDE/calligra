@@ -248,6 +248,11 @@ throw(InvalidFormatException)
 #ifdef WV2_DEBUG_STYLESHEET
         wvlog << "cbUPX: " << cbUPX << endl;
 #endif
+        // do not overflow the allocated buffer grupx
+        if (offset + cbUPX > grupxLen) {
+            wvlog << "====> Error: grupx would overflow!" << endl;
+            return false;
+        }
         for ( U16 j = 0; j < cbUPX; ++j ) {
             grupx[ offset + j ] = stream->readU8();  // read the whole UPX
 #ifdef WV2_DEBUG_STYLESHEET

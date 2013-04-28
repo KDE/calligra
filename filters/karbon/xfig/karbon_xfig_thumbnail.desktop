@@ -1,6 +1,29 @@
 [Desktop Entry]
 Type=Service
 Name=XFig Images
+Name[ca]=Imatges de l'XFig
+Name[da]=XFig-billeder
+Name[de]=XFig-Bilder
+Name[el]=Εικόνες XFig
+Name[es]=Imágenes XFig
+Name[et]=XFig-pildid
+Name[fr]=Images XFig
+Name[gl]=Imaxes XFig
+Name[hu]=XFig képek
+Name[it]=Immagini XFig
+Name[kk]=XFig кескіндері
+Name[nb]=XFig-bilder
+Name[nl]=XFig-afbeeldingen
+Name[pl]=Obrazy XFig
+Name[pt]=Imagens do XFig
+Name[pt_BR]=Imagens XFig
+Name[sk]=XFig obrázky
+Name[sl]=Slike XFig
+Name[sv]=XFig-bilder
+Name[tr]=Xfig Görüntüleri
+Name[uk]=Зображення XFig
+Name[x-test]=xxXFig Imagesxx
+Name[zh_CN]=XFig 图像
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/x-xfig;

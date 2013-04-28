@@ -93,11 +93,21 @@ private:
     Delegate::EndEditHint m_lastHint;
 };
 
+class KPLATOMODELS_EXPORT CheckStateItemDelegate : public ItemDelegate
+{
+    Q_OBJECT
+public:
+    explicit CheckStateItemDelegate(QObject *parent = 0);
+
+protected:
+    bool editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index );
+};
+
 class KPLATOMODELS_EXPORT DateTimeCalendarDelegate : public ItemDelegate
 {
   Q_OBJECT
 public:
-    DateTimeCalendarDelegate( QObject *parent = 0 );
+    explicit DateTimeCalendarDelegate(QObject *parent = 0);
 
     QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
     void setEditorData( QWidget *editor, const QModelIndex &index ) const;
@@ -110,7 +120,7 @@ class KPLATOMODELS_EXPORT ProgressBarDelegate : public ItemDelegate
 {
   Q_OBJECT
 public:
-    ProgressBarDelegate( QObject *parent = 0 );
+    explicit ProgressBarDelegate(QObject *parent = 0);
 
     ~ProgressBarDelegate();
 
@@ -139,7 +149,7 @@ class KPLATOMODELS_EXPORT SelectorDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    SelectorDelegate(QObject *parent = 0);
+    explicit SelectorDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -153,7 +163,7 @@ class KPLATOMODELS_EXPORT EnumDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    EnumDelegate(QObject *parent = 0);
+    explicit EnumDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -168,7 +178,7 @@ class KPLATOMODELS_EXPORT RequieredResourceDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    RequieredResourceDelegate(QObject *parent = 0);
+    explicit RequieredResourceDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -183,7 +193,7 @@ class KPLATOMODELS_EXPORT DurationSpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    DurationSpinBoxDelegate(QObject *parent = 0);
+    explicit DurationSpinBoxDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -197,7 +207,7 @@ class KPLATOMODELS_EXPORT SpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    SpinBoxDelegate(QObject *parent = 0);
+    explicit SpinBoxDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -211,7 +221,7 @@ class KPLATOMODELS_EXPORT DoubleSpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    DoubleSpinBoxDelegate(QObject *parent = 0);
+    explicit DoubleSpinBoxDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -225,7 +235,7 @@ class KPLATOMODELS_EXPORT MoneyDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    MoneyDelegate(QObject *parent = 0);
+    explicit MoneyDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -239,7 +249,7 @@ class KPLATOMODELS_EXPORT TimeDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    TimeDelegate(QObject *parent = 0);
+    explicit TimeDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 

@@ -93,8 +93,8 @@ void ResourceAssignmentView::drawResourcesName( QTreeWidgetItem *parent, Resourc
 
 
 /*Constructor*/
-ResourceAssignmentView::ResourceAssignmentView( KoDocument *part, QWidget *parent)
-    : ViewBase( part, parent ),
+ResourceAssignmentView::ResourceAssignmentView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_project( 0 )
 {
     kDebug(planDbg()) <<" ---------------- KPlato: Creating ResourceAssignmentView ----------------";
@@ -131,7 +131,7 @@ ResourceAssignmentView::ResourceAssignmentView( KoDocument *part, QWidget *paren
     m_splitter = widget.m_splitter;
     m_resList = (ResourcesList *)widget.m_resList;
     m_taskList = (ResourcesList *)widget.m_taskList;
-    m_part = part;
+    m_part = doc;
     m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
 
     connect( m_resList, SIGNAL( itemSelectionChanged() ), SLOT( resSelectionChanged() ) );

@@ -30,7 +30,7 @@
 #include <Formula.h>
 
 #include <kdebug.h>
-#include <KLocale>
+#include <klocale.h>
 
 // needed for MODE
 #include <QList>
@@ -576,7 +576,7 @@ Value InverseIterator::exec(double unknown, double x0, double x1, bool& converge
 
     double xs;
     int i;
-    for (i = 0; i < 1000 && f0*f1 > 0.0; i++) {
+    for (i = 0; i < 1000 && f0*f1 > 0.0; ++i) {
         if (fabs(f0) <= fabs(f1)) {
             xs = x0;
             x0 += 2.0 * (x0 - x1);
@@ -605,7 +605,7 @@ Value InverseIterator::exec(double unknown, double x0, double x1, bool& converge
     double x00 = x0;
     double x11 = x1;
     double fs = 0.0;
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < 100; ++i) {
         xs = 0.5 * (x0 + x1);
         if (fabs(f1 - f0) >= eps) {
             fs = unknown - getValue(xs);
@@ -648,7 +648,7 @@ void func_mode_helper(Value range, ValueCalc *calc, ContentSheet &sh)
 {
     if (!range.isArray()) {
         double d = numToDouble(calc->conv()->toFloat(range));
-        sh[d]++;
+        ++sh[d];
         return;
     }
 
@@ -659,7 +659,7 @@ void func_mode_helper(Value range, ValueCalc *calc, ContentSheet &sh)
                 func_mode_helper(v, calc, sh);
             else {
                 double d = numToDouble(calc->conv()->toFloat(v));
-                sh[d]++;
+                ++sh[d];
             }
         }
 }
@@ -977,7 +977,7 @@ Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *)
                 else {
                     res = 1.0 - factor;
                     unsigned long max = (unsigned long)(n - x) - 1;
-                    for (unsigned long i = 0; i < max && factor > 0.0; i++) {
+                    for (unsigned long i = 0; i < max && factor > 0.0; ++i) {
                         factor *= (n - i) / (i + 1) * q / p;
                         res -= factor;
                     }
@@ -987,7 +987,7 @@ Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *)
             } else {
                 res = factor;
                 unsigned long max = (unsigned long) x;
-                for (unsigned long i = 0; i < max && factor > 0.0; i++) {
+                for (unsigned long i = 0; i < max && factor > 0.0; ++i) {
                     factor *= (n - i) / (i + 1) * p / q;
                     res += factor;
                 }
@@ -1003,13 +1003,13 @@ Value func_binomdist(valVector args, ValueCalc *calc, FuncExtra *)
                 return Value::errorNA(); //SetNoValue();
             else {
                 unsigned long max = (unsigned long)(n - x);
-                for (unsigned long i = 0; i < max && factor > 0.0; i++)
+                for (unsigned long i = 0; i < max && factor > 0.0; ++i)
                     factor *= (n - i) / (i + 1) * q / p;
                 res = factor;
             }
         } else {
             unsigned long max = (unsigned long) x;
-            for (unsigned long i = 0; i < max && factor > 0.0; i++)
+            for (unsigned long i = 0; i < max && factor > 0.0; ++i)
                 factor *= (n - i) / (i + 1) * p / q;
             res = factor;
         }
@@ -1332,7 +1332,7 @@ Value func_ftest(valVector args, ValueCalc *calc, FuncExtra*)
     // matrixA
     for (uint v = 0; v < matrixA.count(); ++v) {
         if (matrixA.element(v).isNumber()) {
-            countA++;
+            ++countA;
             val = numToDouble(matrixA.element(v).asFloat());
             sumA    += val;       // add sum
             sumSqrA += val * val; // add square
@@ -1342,7 +1342,7 @@ Value func_ftest(valVector args, ValueCalc *calc, FuncExtra*)
     // matrixB
     for (uint v = 0; v < matrixB.count(); ++v) {
         if (matrixB.element(v).isNumber()) {
-            countB++;
+            ++countB;
             val = numToDouble(matrixB.element(v).asFloat());
             sumB    += val;       // add sum
             sumSqrB += val * val; // add square
@@ -1479,7 +1479,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
     }
 
     // check if array known_Y contains only numbers
-    for (uint i = 0; i < known_Y.count(); i++) {
+    for (uint i = 0; i < known_Y.count(); ++i) {
         if (!known_Y.element(i).isNumber()) {
             kDebug() << "count_Y (" << i << ") is non Value";
             return Value::errorNA();
@@ -1503,8 +1503,8 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
     kDebug() << "Y has " << cols_Y << " cols";
 
     // convert all Value in known_Y into log
-    for (uint r = 0; r < rows_Y; r++)
-        for (uint c = 0; c < cols_Y; c++) {
+    for (uint r = 0; r < rows_Y; ++r)
+        for (uint c = 0; c < cols_Y; ++c) {
             kDebug() << "col " << c << " row " << r << " log of Y(" << known_Y.element(c, r) << ") Value=" << calc->log(known_Y.element(c, r)); // Debug
             known_Y.setElement(c, r, calc->ln(known_Y.element(c, r)));
         }
@@ -1528,7 +1528,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         //
         // check if array known_X contains only numbers
         //
-        for (uint i = 0; i < known_X.count(); i++) {
+        for (uint i = 0; i < known_X.count(); ++i) {
             if (!known_X.element(i).isNumber()) {
                 kDebug() << "count_X (" << i << ") is non Value";
                 return Value::errorNA();
@@ -1577,7 +1577,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
     {
         kDebug() << "fill X-Matrix with 0,1,2,3 .. sequence";
         const int known_Y_count = known_Y.count();
-        for (int i = 0; i < known_Y_count; i++)
+        for (int i = 0; i < known_Y_count; ++i)
             known_X.setElement(i, 0, Value(i));
 
         cols_X = cols_Y;
@@ -1607,7 +1607,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         }
 
         // check if array newX contains only numbers
-        for (uint i = 0; i < newX.count(); i++) {
+        for (uint i = 0; i < newX.count(); ++i) {
             if (!newX.element(i).isNumber()) {
                 kDebug() << "newX (" << i << ") is non Value";
                 return Value::errorNA();
@@ -1640,8 +1640,8 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
         //
         // Gehe �ber Matrix Reihen/Spaltenweise
         //
-        for (uint c = 0; c < cols_Y; c++) {
-            for (uint r = 0; r < rows_Y; r++) {
+        for (uint c = 0; c < cols_Y; ++c) {
+            for (uint r = 0; r < rows_Y; ++r) {
                 valX = known_X.element(c, r).asFloat();
                 valY = known_Y.element(c, r).asFloat();
                 sumX    += valX;
@@ -1649,7 +1649,7 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
                 sumY    += valY;
                 sumSqrY += valY * valY;
                 sumXY   += valX * valY;
-                count++;
+                ++count;
             }
         }
 
@@ -1674,8 +1674,8 @@ Value func_growth(valVector args, ValueCalc *calc, FuncExtra *)
             //
             // Fill result matrix
             //
-            for (uint c = 0; c < cols_newX; c++) {
-                for (uint r = 0; r < rows_newX; r++) {
+            for (uint c = 0; c < cols_newX; ++c) {
+                for (uint r = 0; r < rows_newX; ++r) {
                     double result = 0.0;
                     result = exp(newX.element(c, r).asFloat() * m + b);
                     kDebug() << "res(" << c << "," << r << ") = " << result;
@@ -1743,7 +1743,7 @@ Value func_hypgeomdist(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     if (kum) {
-        for (int i = 0; i < x + 1; i++) {
+        for (int i = 0; i < x + 1; ++i) {
             Value d1 = calc->combin(M, i);
             Value d2 = calc->combin(N - M, n - i);
             Value d3 = calc->combin(N, n);
@@ -2108,7 +2108,7 @@ Value func_negbinomdist(valVector args, ValueCalc *calc, FuncExtra *)
     double q = 1.0 - p;
     double res = pow(p, r);
 
-    for (double i = 0.0; i < x; i++)
+    for (double i = 0.0; i < x; ++i)
         res *= (i + r) / (i + 1.0) * q;
 
     return Value(res);
@@ -2276,7 +2276,7 @@ Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *)
             result = Value(1.0);
             Value fFak(1.0);
             qint64 nEnd = calc->conv()->asInteger(x).asInteger();
-            for (qint64 i = 1; i <= nEnd; i++) {
+            for (qint64 i = 1; i <= nEnd; ++i) {
                 // fFak *= i
                 fFak = calc->mul(fFak, (int)i);
                 // result += pow (lambda, i) / fFak
@@ -2317,7 +2317,7 @@ Value func_rank(valVector args, ValueCalc *calc, FuncExtra*)
     // sort array
     qSort(array);
 
-    for (int i = 0; i < array.count(); i++) {
+    for (int i = 0; i < array.count(); ++i) {
         if (descending)
             val = array[array.count()-count];
         else
@@ -2329,7 +2329,7 @@ Value func_rank(valVector args, ValueCalc *calc, FuncExtra*)
             valid = true;
             break;
         } else if ((!descending && x > val) || (descending && x < val))
-            count++;
+            ++count;
     }
 
     if (valid)
@@ -2366,7 +2366,7 @@ Value func_rsq(valVector args, ValueCalc *calc, FuncExtra*)
         if (!vA.isError() && !vB.isError()) {// only if numbers are in both fields
             valA = calc->conv()->asFloat(matrixA.element(v)).asFloat();
             valB = calc->conv()->asFloat(matrixB.element(v)).asFloat();
-            count++;
+            ++count;
             //kDebug()<<"valA ="<<valA<<" valB ="<<valB;
 
             // value A
@@ -2756,7 +2756,7 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
     //
     if (args[1].isEmpty()) {
         // if knownX is empty it has to be set to the sequence 1,2,3... n (n number of counts knownY)
-        for (uint i = 1; i < args[0].count() + 1; i++)
+        for (uint i = 1; i < args[0].count() + 1; ++i)
             knownX.append(i);
     } else {
         // check constraints / TODO if 2d array, then we must check dimension row&col?
@@ -2771,7 +2771,7 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
     // newX
     //
     if (args[2].isEmpty()) {
-        for (uint i = 1; i < args[0].count() + 1; i++)
+        for (uint i = 1; i < args[0].count() + 1; ++i)
             newX.append(i);
     } else {
         // copy array to list
@@ -2861,7 +2861,7 @@ Value func_trimmean(valVector args, ValueCalc *calc, FuncExtra *)
 
     qSort(array);
 
-    for (int i = cutOff; i < valCount - cutOff ; i++)
+    for (int i = cutOff; i < valCount - cutOff ; ++i)
         res += array[i];
 
     res /= (valCount - 2 * cutOff);

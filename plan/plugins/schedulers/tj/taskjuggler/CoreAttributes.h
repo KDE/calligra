@@ -128,7 +128,7 @@ protected:
     uint sequenceNo;
 
     /**
-     * The index of the attribute declaration within it's parents childs.
+     * The index of the attribute declaration within it's parents children.
      */
     uint hierarchNo;
     /**

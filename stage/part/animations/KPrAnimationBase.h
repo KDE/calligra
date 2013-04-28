@@ -34,12 +34,26 @@ class KPrShapeAnimation;
 class KPrAnimationBase : public QAbstractAnimation, KPrAnimationData
 {
 public:
-    KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
+    enum FillType {
+        FillRemove,
+        FillFreeze,
+        FillHold,
+        FillTransition,
+        FillAuto,
+        FillDefault
+    };
+    explicit KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimationBase();
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual bool saveOdf(KoPASavingContext &paContext) const = 0;
 
+    /// Total duration including time delay
     virtual int duration() const;
+    virtual int begin() const;
+    virtual void setBegin(int value);
+
+    /// Set duration (without time delay)
+    virtual void setDuration(int value);
     virtual void init(KPrAnimationCache *animationCache, int step) = 0;
     int animationDuration() const;
     virtual bool saveAttribute(KoPASavingContext &paContext) const;
@@ -53,6 +67,7 @@ protected:
     KPrAnimationCache * m_animationCache;
     int m_begin; // in milliseconds
     int m_duration; // in milliseconds
+    FillType m_fill;
 };
 
 #endif /* KPRANIMATIONBASE_H */

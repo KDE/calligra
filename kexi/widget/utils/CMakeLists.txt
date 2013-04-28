@@ -8,7 +8,6 @@ set(kexiguiutils_LIB_SRCS
    kexirecordmarker.cpp 
    kexidisplayutils.cpp 
    kexitooltip.cpp
-   kexiarrowtip.cpp
    kexicontextmenuutils.cpp
    kexidropdownbutton.cpp
    kexicomboboxdropdownbutton.cpp

@@ -32,6 +32,7 @@
 #include "Value.h"
 #include "ValueFormatter.h"
 #include "DocBase.h"
+#include "ElapsedTime_p.h"
 
 #include <KoUpdater.h>
 
@@ -215,7 +216,7 @@ void RecalcManager::addSheet(Sheet *sheet)
     // Manages also the revival of a deleted sheet.
     Q_UNUSED(sheet);
 
-    // sebsauer: not recalc everytime on loading - bug 284325
+    // sebsauer: not recalc every time on loading - bug 284325
     if (!d->map->isLoading()) {
         recalcMap(); // FIXME Stefan: Implement a more elegant solution.
     }

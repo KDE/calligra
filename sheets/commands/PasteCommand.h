@@ -72,8 +72,8 @@ public:
     static bool supports(const QMimeData *mimeData);
 
     /**
-     * Checks wether the clipboard data contains columns or rows.
-     * Used to decide wether the paste with insertion dialog, where
+     * Checks whether the clipboard data contains columns or rows.
+     * Used to decide whether the paste with insertion dialog, where
      * you can choose between shifting cells down or to the right,
      * has to be shown.
      * \param mimeData the MIME data to check

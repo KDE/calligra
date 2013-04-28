@@ -210,9 +210,9 @@ void TestValueFormatter::testCreateNumberFormat_data()
     QTest::newRow("unspecified precision 0.5") <<
             0.5 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << false << "0.5";
 
-    QTest::newRow("no thousands seperators") <<
+    QTest::newRow("no thousands separators") <<
             3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << false << "3000";
-    QTest::newRow("with thousands seperators") <<
+    QTest::newRow("with thousands separators") <<
             3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "3,000";
 
 }

@@ -28,10 +28,9 @@
 #include <kmessagebox.h>
 #include <kdesktopfile.h>
 #include <kstandarddirs.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #include <QFile>
 
 

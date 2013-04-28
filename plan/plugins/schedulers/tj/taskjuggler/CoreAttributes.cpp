@@ -126,7 +126,7 @@ CoreAttributes::setHierarchIndex(uint no)
         return;
     }
 
-    /* Find the highest hierarchIndex of all childs of this CAs parent. */
+    /* Find the highest hierarchIndex of all children of this CAs parent. */
     uint max = 0;
     foreach (CoreAttributes *a, (*parent->sub)) {
         if (a->hierarchIndex > max)

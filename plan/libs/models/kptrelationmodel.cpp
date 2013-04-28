@@ -32,7 +32,6 @@
 #include <QModelIndex>
 #include <QWidget>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -374,7 +373,7 @@ QVariant RelationItemModel::data( const QModelIndex &index, int role ) const
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
-            result = " ";
+            result = ' ';
         }
         return result;
     }

@@ -23,15 +23,19 @@
 #include "kptdebug.h"
 
 #include <kaction.h>
-#include <ktoggleaction.h>
-#include <kicon.h>
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 #include <knotification.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <kmenu.h>
 
+#include <KoIcon.h>
 #include "calligraversion.h"
 #include <KoDocument.h>
+#include <KoPart.h>
+#include <KoMainWindow.h>
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
@@ -48,12 +52,9 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
-#include <QPainter>
-#include <QMainWindow>
 
 namespace KPlato
 {
-
 
 DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &title )
     : QDockWidget( v ),
@@ -65,26 +66,49 @@ DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &ti
 {
     setWindowTitle( title );
     setObjectName( v->objectName() + '-' + identity );
+    toggleViewAction()->setObjectName( objectName() );
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(setLocation(Qt::DockWidgetArea)));
 }
 
-void DockWidget::activate( QMainWindow *shell )
+void DockWidget::activate( KoMainWindow *shell )
 {
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
     setVisible( m_shown );
     shell->addDockWidget( location, this );
+
+    foreach(const KActionCollection *c, KActionCollection::allCollections()) {
+        KActionMenu *a = qobject_cast<KActionMenu*>(c->action("settings_dockers_menu"));
+        if ( a ) {
+            a->addAction( toggleViewAction() );
+            break;
+        }
+    }
 }
 
-void DockWidget::deactivate( QMainWindow *shell )
+void DockWidget::deactivate( KoMainWindow *shell )
 {
     disconnect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
     shell->removeDockWidget( this );
+     // activation re-parents to QMainWindow, so re-parent back to view
+    setParent( const_cast<ViewBase*>( view ) );
+    foreach(const KActionCollection *c, KActionCollection::allCollections()) {
+        KActionMenu *a = qobject_cast<KActionMenu*>(c->action("settings_dockers_menu"));
+        if ( a ) {
+            a->removeAction( toggleViewAction() );
+            break;
+        }
+    }
 }
 
 void DockWidget::setShown( bool show )
 {
     m_shown = show;
     setVisible( show );
+}
+
+bool KPlato::DockWidget::shown() const
+{
+    return m_shown;
 }
 
 void DockWidget::setLocation( Qt::DockWidgetArea area )
@@ -463,8 +487,8 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
 }
 
 //--------------
-ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
-    : KoView( doc, parent ),
+ViewBase::ViewBase(KoPart *part, KoDocument *doc, QWidget *parent)
+    : KoView(part, doc, parent),
     m_readWrite( false ),
     m_proj( 0 ),
     m_schedulemanager( 0 )
@@ -579,7 +603,7 @@ void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void ViewBase::createOptionAction()
 {
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
@@ -648,7 +672,7 @@ void ViewBase::saveContext( QDomElement &context ) const
 
 void ViewBase::addDocker( DockWidget *ds )
 {
-    addAction( "view_docker_list", ds->toggleViewAction() );
+    //addAction( "view_docker_list", ds->toggleViewAction() );
     m_dockers << ds;
 }
 
@@ -1808,7 +1832,7 @@ void DoubleTreeViewBase::init()
     connect( m_leftview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
     connect( m_rightview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
 
-    m_actionSplitView = new KAction(KIcon("view-split-left-right"), "", this);
+    m_actionSplitView = new KAction(koIcon("view-split-left-right"), QString(), this);
     setViewSplitMode( true );
 
     connect( m_leftview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotLeftSortIndicatorChanged( int, Qt::SortOrder ) ) );
@@ -2144,10 +2168,10 @@ void DoubleTreeViewBase::setViewSplitMode( bool split )
 {
     if ( split ) {
         m_actionSplitView->setText( i18n( "Unsplit View" ) );
-        m_actionSplitView->setIcon( KIcon( "view-close" ) );
+        m_actionSplitView->setIcon(koIcon("view-close"));
     } else {
         m_actionSplitView->setText( i18n( "Split View" ) );
-        m_actionSplitView->setIcon( KIcon( "view-split-left-right" ) );
+        m_actionSplitView->setIcon(koIcon("view-split-left-right"));
     }
 
     if ( m_mode == split ) {

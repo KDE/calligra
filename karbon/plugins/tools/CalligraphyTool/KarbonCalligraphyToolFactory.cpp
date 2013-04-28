@@ -22,6 +22,7 @@
 
 #include <KoToolRegistry.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -30,7 +31,7 @@ KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory()
 {
     setToolTip(i18n("Calligraphy Tool"));
     setToolType("karbon,krita");
-    setIcon("calligraphy");
+    setIconName(koIconNameCStr("calligraphy"));
     setPriority(3);
     setActivationShapeId("flake/edit");
 }

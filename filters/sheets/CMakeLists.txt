@@ -1,22 +1,25 @@
-include_directories(
-    ${KOTEXT_INCLUDES}
-)
-
-if(NOT TINY)
+if(SHOULD_BUILD_FILTER_APPLIXSPREAD_TO_KSPREAD)
     add_subdirectory( applixspread )
-    add_subdirectory( csv )
-    add_subdirectory( dbase )
-    add_subdirectory( gnumeric )
-    add_subdirectory( opencalc )
-    add_subdirectory( qpro )
+endif(SHOULD_BUILD_FILTER_APPLIXSPREAD_TO_KSPREAD)
 
-    if(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
-        add_subdirectory( html )
-        if (QT3SUPPORT)
-            add_subdirectory( latex )
-        endif (QT3SUPPORT)
-    endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
-endif(NOT TINY)
+add_subdirectory( csv )
+
+if(SHOULD_BUILD_FILTER_DBASE_TO_KSPREAD)
+    add_subdirectory( dbase )
+endif(SHOULD_BUILD_FILTER_DBASE_TO_KSPREAD)
+
+add_subdirectory( gnumeric )
+add_subdirectory( opencalc )
+
+if(SHOULD_BUILD_FILTER_QUATTROPRO_TO_SHEETS)
+    add_subdirectory( qpro )
+endif(SHOULD_BUILD_FILTER_QUATTROPRO_TO_SHEETS)
+
+add_subdirectory( html )
+add_subdirectory( latex )
 
 add_subdirectory( excel )
-add_subdirectory( xlsx )
+
+if(SHOULD_BUILD_FILTER_XLSX_TO_ODS)
+    add_subdirectory( xlsx )
+endif(SHOULD_BUILD_FILTER_XLSX_TO_ODS)

@@ -5,6 +5,7 @@ include_directories( ${KOPAGEAPP_INCLUDES})
 ### flowprivate ###
 set(flowprivate_LIB_SRCS
   FlowFactory.cpp
+  FlowPart.cpp
   FlowDocument.cpp
   FlowView.cpp
   #FlowCanvas.cpp
@@ -33,6 +34,8 @@ install(TARGETS flowpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ### kdeinit flow ###
 set(flow_KDEINIT_SRCS main.cpp )
+
+kde4_add_app_icon(flow_KDEINIT_SRCS "../pics/hi*-app-calligraflow.png")
 
 kde4_add_kdeinit_executable(calligraflow ${flow_KDEINIT_SRCS})
 

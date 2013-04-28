@@ -76,7 +76,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inSty
 
     //init the background-color stack to page background-color
     if (m_bgColors.size() > 0) {
-        kWarning(30513) << "BUG: m_bgColors stack NOT emty, clearing!";
+        kWarning(30513) << "BUG: m_bgColors stack NOT empty, clearing!";
         m_bgColors.clear();
     }
 
@@ -125,7 +125,7 @@ void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::Paragraph
     }
     //Check the background-color of the named paragraph style.
     else {
-        const KoGenStyle *pStyle = m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()));
+        const KoGenStyle *pStyle = m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()), m_paragraphStyle->type() == sgcPara ? "paragraph" : "text");
         if (pStyle) {
             color = pStyle->property("fo:background-color", KoGenStyle::ParagraphType);
             if (color.isEmpty() || color == "transparent") {

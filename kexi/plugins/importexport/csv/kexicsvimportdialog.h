@@ -40,7 +40,7 @@
 # include <QElapsedTimer>
 #endif
 
-#include <kdialog.h>
+#include <kassistantdialog.h>
 
 #include <db/tristate.h>
 #include <db/connection.h>
@@ -53,16 +53,26 @@ class QGridLayout;
 class QCheckBox;
 class QLabel;
 class QTableView;
+class QTreeView;
 class QFile;
+class QStackedWidget;
 class KComboBox;
 class KIntSpinBox;
 class KProgressDialog;
+class QProgressBar;
+class KPageWidgetItem;
 
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiProject;
 class KexiCSVImportDialogModel;
+class KexiFileWidget;
+class KexiCommandLinkButton;
+class KexiNameWidget;
+class KexiProjectNavigator;
+class KexiFieldListModel;
+
 namespace KexiPart {
 class Item;
 }
@@ -81,7 +91,7 @@ class Item;
  * The different purposed mentioned above is determined
  * using mode, which can be Column, File, or Clipboard respectively.
 */
-class KexiCSVImportDialog : public KDialog
+class KexiCSVImportDialog : public KAssistantDialog
 {
     Q_OBJECT
 
@@ -100,6 +110,7 @@ public:
 protected:
     bool openData();
     virtual void accept();
+    virtual void reject();
 
 private:
     //! Used in emergency by accept()
@@ -124,6 +135,31 @@ private:
     QCheckBox* m_ignoreDuplicates;
     QCheckBox* m_1stRowForFieldNames;
     QCheckBox* m_primaryKeyField;
+    KexiFileWidget *m_openFileWidget;
+    QWidget *m_optionsWidget;
+    QWidget *m_saveMethodWidget;
+    KPageWidgetItem *m_openFilePage;
+    KPageWidgetItem *m_optionsPage;
+    KPageWidgetItem *m_saveMethodPage;
+    KPageWidgetItem *m_chooseTablePage;
+    KexiCommandLinkButton *m_newTableButton;
+    KexiCommandLinkButton *m_existentTableButton;
+
+    QStackedWidget *m_tableNameWidget;
+    KPageWidgetItem *m_tableNamePage;
+    KexiNameWidget *m_newTableWidget;
+    KexiProjectNavigator *m_tablesList;
+    QTreeView *m_fieldsListView;
+    QLabel *m_tableCaptionLabel;
+    QLabel *m_tableNameLabel;
+    QLabel *m_rowCountLabel;
+    QLabel *m_colCountLabel;
+
+    QWidget *m_importWidget;
+    KPageWidgetItem *m_importPage;
+    KexiCSVInfoLabel *m_fromLabel;
+    KexiCSVInfoLabel *m_toLabel;
+    QLabel *m_importProgressLabel;
 
     void detectTypeAndUniqueness(int row, int col, const QString& text);
     void setText(int row, int col, const QString& text, bool inGUI);
@@ -193,16 +229,7 @@ private:
     QByteArray m_fileArray;
     Mode m_mode;
 
-    //! vector of detected types, 0==text (the default), 1==number, 2==date
-//! @todo more types
-    QVector<int> m_detectedTypes;
-
-    //! m_detectedUniqueColumns[i]==true means that i-th column has unique values
-    //! (only for numeric type)
-    QVector< QList<int>* > m_uniquenessTest;
-
     QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp1, m_fpNumberRegExp2;
-    QVector<QString> m_typeNames;
     bool m_columnsAdjusted : 1; //!< to call adjustColumn() only once
     bool m_1stRowForFieldNamesDetected : 1; //!< used to force rerun fillTable() after 1st row
     bool m_firstFillTableCall : 1; //!< used to know whether it's 1st fillTable() call
@@ -221,14 +248,16 @@ private:
     QFile* m_file;
     QTextStream *m_inputStream; //!< used in loadData()
     KexiCSVImportOptions m_options;
-    KProgressDialog *m_loadingProgressDlg, *m_importingProgressDlg;
+    KProgressDialog *m_loadingProgressDlg;
+    QProgressBar *m_importingProgressBar;
     bool m_dialogCancelled;
     KexiCSVInfoLabel *m_infoLbl;
     KexiDB::Connection *m_conn; //!< (temp) database connection used for importing
+    KexiFieldListModel *m_fieldsListModel;
     KexiDB::TableSchema *m_destinationTableSchema;  //!< (temp) dest. table schema used for importing
     KexiDB::PreparedStatement::Ptr m_importingStatement;
     QList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
-    bool m_implicitPrimaryKeyAdded : 1; //!< (temp) used for importing
+    bool m_implicitPrimaryKeyAdded; //!< (temp) used for importing
     bool m_allRowsLoadedInPreview : 1; //!< we need to know whether all rows were loaded or it's just a partial data preview
     bool m_stoppedAt_MAX_BYTES_TO_PREVIEW : 1; //!< used to compute m_allRowsLoadedInPreview
     const QString m_stringNo, m_stringI18nNo, m_stringFalse, m_stringI18nFalse; //!< used for importing boolean values
@@ -242,6 +271,23 @@ private:
 #endif
     qint64 m_elapsedMs;
 
+    void createImportMethodPage();
+    void createOptionsPage();
+    void createFileOpenPage();
+    void createTableNamePage();
+    void createImportPage();
+
+    bool m_newTable;
+    QList<QVariant> m_tmpValues;
+    KexiPart::Item* m_partItemForSavedTable;
+    bool m_importInProgress;
+    bool m_importCancelled;
+    class Private;
+    Private * const d;
+
+public slots:
+    virtual void next();
+
 private slots:
     void fillTable();
     void fillTableLater();
@@ -250,10 +296,14 @@ private slots:
     void delimiterChanged(const QString& delimiter);
     void startlineSelected(int line);
     void textquoteSelected(int);
-    void currentCellChanged(const QModelIndex &prev, const QModelIndex &cur);
+    void currentCellChanged(const QModelIndex &cur, const QModelIndex &prev);
     void ignoreDuplicatesChanged(int);
     void slot1stRowForFieldNamesChanged(int state);
     void optionsButtonClicked();
     void slotPrimaryKeyFieldToggled(bool on);
+    void slotCurrentPageChanged(KPageWidgetItem *page, KPageWidgetItem *prev);
+    void slotCommandLinkClicked();
+    void slotShowSchema(KexiPart::Item *item);
+    void import();
 };
 #endif

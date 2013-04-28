@@ -228,6 +228,9 @@ void Document::processAssociatedStrings()
         }
     }
 
+    static const quint16 CP_WINUNICODE = 0x04B0;
+    bool isUnicode16 = false;
+
     QString title;
     QString subject;
     QString keywords;
@@ -241,6 +244,13 @@ void Document::processAssociatedStrings()
 
         for (uint i = 0; i < ps.numProperties; i++) {
             switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
+            case PIDSI_CODEPAGE:
+                if (ps.property.at(i)._has_vt_I2) {
+                    if (ps.property.at(i).vt_I2 == CP_WINUNICODE) {
+                        isUnicode16 = true;
+                    }
+                }
+                break;
             case PIDSI_TITLE:
                 p_str = &title;
                 break;
@@ -264,7 +274,11 @@ void Document::processAssociatedStrings()
             }
             if (p_str) {
                 if (ps.property.at(i).vt_lpstr) {
-                    *p_str = ps.property.at(i).vt_lpstr->characters;
+                    if (isUnicode16) {
+                        *p_str = QString::fromUtf16((ushort*)ps.property.at(i).vt_lpstr->characters.data());
+                    } else {
+                        *p_str = QString::fromUtf8(ps.property.at(i).vt_lpstr->characters.data());
+                    }
                 }
                 p_str = 0;
             }
@@ -414,7 +428,7 @@ void Document::processStyles()
             kDebug(30513) << "added style " << actualName;
         }
     }
-    //also create a defaul style which is needed to store the default tab spacing
+    //also create a default style which is needed to store the default tab spacing
     KoGenStyle defaultStyle(KoGenStyle::ParagraphStyle, "paragraph");
     defaultStyle.setDefaultStyle(true);
     defaultStyle.addPropertyPt("style:tab-stop-distance", (qreal)m_parser->dop().dxaTab / 20.0);
@@ -990,7 +1004,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     // NOTE: margin-top and margin-bottom are updated in slotSectionFound based
     // on the information if the header/footer was empty/non-empty.
     //
-    // Maybe we shoud set the minimum height of header/footer to qAbs(dyaTop -
+    // Maybe we should set the minimum height of header/footer to qAbs(dyaTop -
     // dyaHdrTop)/qAbs(dyaBottom - dyaHdrBottom)
     //
     // The height of both header and footer is unknown, so it's not possible to
@@ -1095,7 +1109,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
     pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
 
-    // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
+    // the pgbOffsetFrom variable determines how to calculate the margins and paddings.
     switch (sep->pgbOffsetFrom) {
     case pgbFromText:
         pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);

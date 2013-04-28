@@ -29,14 +29,16 @@
 #include <kundo2stack.h>
 
 #include <kdebug.h>
-#include <KLocale>
-#include <KAction>
-#include <KMessageBox>
-#include <KActionCollection>
-#include <KMenu>
-#include <KFontDialog>
-#include <KTextEdit>
-#include <KLineEdit>
+#include <klocale.h>
+#include <kaction.h>
+#include <kmessagebox.h>
+#include <kactioncollection.h>
+#include <kmenu.h>
+#include <kfontdialog.h>
+#include <ktextedit.h>
+#include <klineedit.h>
+
+#include <KoIcon.h>
 
 #include "WidgetInfo.h"
 #include "FormWidget.h"
@@ -574,10 +576,10 @@ void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KForm
     d->features = 0;
     d->widgetActionGroup = &group;
 
-    connect(&d->propertySet, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
-    connect(&d->propertySet, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
+    connect(&d->propertySet, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+    connect(&d->propertySet, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyReset(KoProperty::Set&,KoProperty::Property&)));
 
     // Init actions
     d->collection = &col; //new KActionCollection(this);
@@ -1568,7 +1570,7 @@ void Form::setFormWidget(FormWidget* w)
     d->formWidget = w;
     if (!d->formWidget)
         return;
-    d->formWidget->m_form = this;
+    d->formWidget->setForm(this);
 }
 
 // moved from FormManager
@@ -2258,7 +2260,7 @@ void Form::createPropertiesForWidget(QWidget *w)
         m_lib->setPropertyOptions(d->propertySet, *winfo, w);
         d->propertySet.addProperty(newProp = new KoProperty::Property("this:classString", winfo->name()));
         newProp->setVisible(false);
-        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->pixmap()));
+        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->iconName()));
         newProp->setVisible(false);
     }
     d->propertySet.addProperty(newProp = new KoProperty::Property("this:className",
@@ -2420,17 +2422,17 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     QString titleText;
     if (!multiple) {
         if (w == container->form()->widget()) {
-            icon = SmallIcon("form");
+            icon = koIcon("form");
             titleText = i18n("%1 : Form", w->objectName());
         }
         else {
-            icon = SmallIcon(
+            icon = KIcon(
                        container->form()->library()->iconName(w->metaObject()->className()));
             titleText = QString(w->objectName()) + " : " + n;
         }
     }
     else {
-        icon = SmallIcon("multiple_obj");
+        icon = koIcon("multiple_obj");
         titleText = i18n("Multiple Widgets (%1)", widgetsCount);
     }
 
@@ -3442,7 +3444,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         editor->show();
         editor->setFocus();
         editor->selectAll();
-        connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeInlineTextInternal(const QString&)));
+        connect(editor, SIGNAL(textChanged(QString)), this, SLOT(changeInlineTextInternal(QString)));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
         connect(editor, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     }
@@ -3459,7 +3461,9 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     else {
         baseBrush = pal.base();
         QColor baseColor(baseBrush.color());
-        baseColor.setAlpha(120);
+        if (!args.widget->inherits("KexiCommandLinkButton")) { //! @todo HACK! any idea??
+            baseColor.setAlpha(120);
+        }
         baseBrush.setColor(baseColor);
     }
     pal.setBrush(QPalette::Base, baseBrush);

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -33,6 +33,8 @@
 #include <QStyleOptionComplex>
 
 #include <kmessagebox.h>
+
+#include <KoIcon.h>
 
 #include <kexi.h>
 #include <kexi_global.h>
@@ -99,6 +101,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_scrollBarTip->setFrameStyle(QFrame::Plain | QFrame::Box);
     m_scrollBarTip->setLineWidth(1);
  */
+    m_lengthExceededMessageVisible = false;
     clearVariables();
 }
 
@@ -141,11 +144,11 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
     clearColumnsInternal(false);
     if (m_data) {
         int i = -1;
-        foreach(KexiTableViewColumn *col, m_data->columns()) {
+        foreach(KexiTableViewColumn *col, *m_data->columns()) {
             i++;
             KexiDB::Field *f = col->field();
             if (col->isVisible()) {
-                int wid = f->width();
+                int wid = col->width();
                 if (wid == 0)
                     wid = KEXI_DEFAULT_DATA_COLUMN_WIDTH;//default col width in pixels
 //! @todo add col width configuration and storage
@@ -173,15 +176,15 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
         QObject* thisObject = dynamic_cast<QObject*>(this);
         if (thisObject) {
             QObject::connect(m_data, SIGNAL(destroying()), thisObject, SLOT(slotDataDestroying()));
-            QObject::connect(m_data, SIGNAL(rowsDeleted(const QList<int> &)),
-                             thisObject, SLOT(slotRowsDeleted(const QList<int> &)));
-            QObject::connect(m_data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)),
-                             thisObject, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)));
+            QObject::connect(m_data, SIGNAL(rowsDeleted(QList<int>)),
+                             thisObject, SLOT(slotRowsDeleted(QList<int>)));
+            QObject::connect(m_data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)),
+                             thisObject, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)));
             QObject::connect(m_data, SIGNAL(rowDeleted()), thisObject, SLOT(slotRowDeleted()));
-            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*, bool)),
-                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*, bool)));
-            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*, uint, bool)),
-                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*, uint, bool))); //not db-aware
+            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*,bool)),
+                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*,bool)));
+            QObject::connect(m_data, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
+                             thisObject, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool))); //not db-aware
             QObject::connect(m_data, SIGNAL(rowRepaintRequested(KexiDB::RecordData&)),
                              thisObject, SLOT(slotRowRepaintRequested(KexiDB::RecordData&)));
             // setup scrollbar's tooltip
@@ -203,7 +206,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
         if (!m_insertItem) {//first setData() call - add 'insert' item
             m_insertItem = m_data->createItem();
         } else {//just reinit
-            m_insertItem->init(m_data->columns().count());
+            m_insertItem->init(m_data->columnsCount());
         }
     }
 
@@ -561,7 +564,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             }
         }
         if (m_errorMessagePopup) {
-            m_errorMessagePopup->close();
+            m_errorMessagePopup->animatedHide();
         }
 
         if ((m_curRow != newrow || forceSet) && m_navPanel)  {//update current row info
@@ -920,7 +923,7 @@ void KexiDataAwareObjectInterface::removeEditor()
 bool KexiDataAwareObjectInterface::cancelEditor()
 {
     if (m_errorMessagePopup) {
-        m_errorMessagePopup->close();
+        m_errorMessagePopup->animatedHide();
     }
     if (!m_editor)
         return true;
@@ -955,24 +958,14 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         if (!m_editor->valueIsValid()) {
             //used e.g. for date or time values - the value can be null but not necessary invalid
             res = Validator::Error;
-            QWidget *par = dynamic_cast<QScrollArea*>(this) ? dynamic_cast<QScrollArea*>(this)->widget() :
-                           dynamic_cast<QWidget*>(this);
-            QWidget *edit = dynamic_cast<QWidget*>(m_editor);
-            if (par && edit) {
-//! @todo allow displaying user-defined warning
-//! @todo also use for other error messages
-                if (!m_errorMessagePopup) {
-//     m_errorMessagePopup->close();
-                    m_errorMessagePopup = new KexiArrowTip(
+            //! @todo allow displaying user-defined warning
+            showEditorContextMessage(
+                        m_editor,
                         i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
-                        dynamic_cast<QWidget*>(this));
-                    m_errorMessagePopup->move(
-                        par->mapToGlobal(edit->pos()) + QPoint(6, edit->height() + 0));
-                    m_errorMessagePopup->show();
-                }
-                m_editor->setFocus();
-            }
-        } else if (m_editor->valueIsNull()) {//null value entered
+                        KMessageWidget::Error,
+                        KMessageWidget::Up);
+        }
+        else if (m_editor->valueIsNull()) {//null value entered
 //   if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
             if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
                 kDebug() << "NULL NOT ALLOWED!";
@@ -1024,6 +1017,19 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     setNull = true;
                 }
             }
+        }
+        else {
+            // try to fixup the value before accepting, e.g. trim the text
+            if (!m_editor->fixup()) {
+                res = Validator::Error;
+            }
+            if (m_errorMessagePopup) {
+                m_errorMessagePopup->animatedHide();
+            }
+            if (res != Validator::Ok) {
+                //! @todo display message related to failed fixup if needed
+            }
+            //! @todo after fixup we may want to apply validation rules again
         }
     }//changed
 
@@ -1219,7 +1225,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(
                     dynamic_cast<QWidget*>(this),
                     i18n("Do you want to delete selected record?"), QString(),
-                    KGuiItem(i18n("&Delete Record"), "edit-delete"), KStandardGuiItem::cancel(),
+                    KGuiItem(i18n("&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
                     "dontAskBeforeDeleteRow"/*config entry*/,
                     KMessageBox::Notify | KMessageBox::Dangerous))
         {
@@ -1463,7 +1469,7 @@ int KexiDataAwareObjectInterface::dataColumns() const
 {
     if (!hasData())
         return 0;
-    return m_data->columns().count();
+    return m_data->columnsCount();
 }
 
 QVariant KexiDataAwareObjectInterface::columnDefaultValue(int /*col*/) const
@@ -2151,4 +2157,80 @@ void KexiDataAwareObjectInterface::setRowEditing(bool set)
         emit rowEditStarted(m_curRow);
     else
         emit rowEditTerminated(m_curRow);
+}
+
+int KexiDataAwareObjectInterface::horizontalHeaderHeight() const
+{
+    return 0;
+}
+
+void KexiDataAwareObjectInterface::showEditorContextMessage(
+        KexiDataItemInterface *item,
+        const QString &message,
+        KMessageWidget::MessageType type,
+        KMessageWidget::CalloutPointerDirection direction)
+{
+    QWidget *par = dynamic_cast<QScrollArea*>(this)
+                   ? dynamic_cast<QScrollArea*>(this)->widget() : dynamic_cast<QWidget*>(this);
+    QWidget *edit = dynamic_cast<QWidget*>(item);
+    if (par && edit) {
+        delete m_errorMessagePopup;
+        KexiContextMessage msg(message);
+        m_errorMessagePopup = new KexiContextMessageWidget(dynamic_cast<QWidget*>(this), 0, 0, msg);
+        QPoint arrowPos = par->mapToGlobal(edit->pos()) + QPoint(12, edit->height() + 6);
+        if (m_verticalHeader) {
+            arrowPos += QPoint(m_verticalHeader->width(), horizontalHeaderHeight());
+        }
+        m_errorMessagePopup->setMessageType(type);
+        m_errorMessagePopup->setCalloutPointerDirection(direction);
+        m_errorMessagePopup->setCalloutPointerPosition(arrowPos);
+        m_errorMessagePopup->setWordWrap(false);
+        m_errorMessagePopup->setClickClosesMessage(true);
+        m_errorMessagePopup->resizeToContents();
+        QObject::connect(m_errorMessagePopup, SIGNAL(animatedHideFinished()),
+                         edit, SLOT(setFocus()));
+        m_errorMessagePopup->animatedShow();
+
+        edit->setFocus();
+    }
+}
+
+static QString lengthExceededMessage(KexiDataItemInterface *item)
+{
+    return i18np(
+        "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 character.\n"
+        "Fix the text or it will be truncated upon saving changes.",
+        "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 characters.\n"
+        "Fix the text or it will be truncated upon saving changes.",
+        item->value().toString().length() - item->columnInfo()->field->maxLength(),
+        item->columnInfo()->field->maxLength(),
+        item->columnInfo()->captionOrAliasOrName());
+}
+
+void KexiDataAwareObjectInterface::showLengthExceededMessage(KexiDataItemInterface *item, bool exceeded)
+{
+    if (exceeded) {
+        if (item) {
+            showEditorContextMessage(
+                item,
+                lengthExceededMessage(item),
+                KMessageWidget::Warning,
+                KMessageWidget::Up);
+            m_lengthExceededMessageVisible = true;
+        }
+    }
+    else {
+         if (m_errorMessagePopup) {
+             m_errorMessagePopup->animatedHide();
+             m_lengthExceededMessageVisible = false;
+         }
+    }
+}
+
+void KexiDataAwareObjectInterface::showUpdateForLengthExceededMessage(KexiDataItemInterface *item)
+{
+    if (m_errorMessagePopup && m_lengthExceededMessageVisible) {
+        m_errorMessagePopup->setText(lengthExceededMessage(item));
+        m_errorMessagePopup->resizeToContents();
+    }
 }

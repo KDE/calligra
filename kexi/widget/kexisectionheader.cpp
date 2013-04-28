@@ -29,7 +29,6 @@
 #include <QEvent>
 #include <QApplication>
 
-#include <KIcon>
 #include <kpushbutton.h>
 
 //! @internal

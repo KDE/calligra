@@ -84,7 +84,7 @@ class KPLATOUI_EXPORT AccountsView : public ViewBase
 {
     Q_OBJECT
 public:
-    AccountsView( Project *project, KoDocument *part, QWidget *parent );
+    AccountsView(KoPart *part, Project *project, KoDocument *doc, QWidget *parent);
 
     //~AccountsView();
     void setupGui();

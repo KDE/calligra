@@ -53,7 +53,7 @@ public:
     /// An enum to define if this is a page that is printed to be a left or a right page
     enum PageSide {
         Left,       ///< A left page. Used for even-numbered pages
-        Right,      ///< A right page. Used for odd numbered pages
+        Right       ///< A right page. Used for odd numbered pages
     };
 
     /// return the width of this page (in pt)
@@ -181,7 +181,7 @@ public:
      * @param shapeManager the shape manager containing the page's shapes
      * @returns the thumbnail
      */
-    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager);
+    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager) const;
 
     bool operator==(const KWPage &other) const;
     inline bool operator!=(const KWPage &other) const { return ! operator==(other); }

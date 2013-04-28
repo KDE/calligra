@@ -35,7 +35,7 @@ class SectionsIO : public QObject
 {
     Q_OBJECT
 public:
-    SectionsIO(RootSection* rootSection);
+    explicit SectionsIO(RootSection* rootSection);
     ~SectionsIO();
 public:
     enum PushMode {

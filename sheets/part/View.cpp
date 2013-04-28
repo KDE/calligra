@@ -54,7 +54,6 @@
 #include <QToolButton>
 #include <QSqlDatabase>
 #include <QSizePolicy>
-#include <QList>
 #include <QScrollBar>
 
 // KDE includes
@@ -63,7 +62,7 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-#include <KFontChooser>
+#include <kfontchooser.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kpassivepopup.h>
@@ -71,12 +70,11 @@
 #include <kreplacedialog.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
-#include <KToggleAction>
+#include <ktoggleaction.h>
 #include <ktoolinvocation.h>
 #include <kparts/event.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
-#include <kicon.h>
 #include <knotifyconfigwidget.h>
 
 // Calligra includes
@@ -102,8 +100,9 @@
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
 #include <KoModeBoxFactory.h>
+#include <KoIcon.h>
 
-// KSpread includes
+// Sheets includes
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -136,6 +135,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "PrintJob.h"
+#include "ElapsedTime_p.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -158,8 +158,10 @@
 #include "ui/PixmapCachingSheetView.h"
 
 // D-Bus
+#ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
-#include <QtDBus/QtDBus>
+#include <QtDBus>
+#endif
 
 using namespace Calligra::Sheets;
 
@@ -284,18 +286,18 @@ void View::Private::initActions()
     connect(actions->sheetProperties, SIGNAL(triggered(bool)), view, SLOT(sheetProperties()));
     actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));
 
-    actions->insertSheet = new KAction(KIcon("insert-table"), i18n("Sheet"), view);
+    actions->insertSheet = new KAction(koIcon("insert-table"), i18n("Sheet"), view);
     actions->insertSheet->setIconText(i18n("Insert Sheet"));
     actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
     ac->addAction("insertSheet", actions->insertSheet);
     connect(actions->insertSheet, SIGNAL(triggered(bool)), view, SLOT(insertSheet()));
 
-    actions->duplicateSheet = new KAction(/*KIcon("inserttable"),*/ i18n("Duplicate Sheet"), view);
+    actions->duplicateSheet = new KAction(/*koIcon("inserttable"),*/ i18n("Duplicate Sheet"), view);
     actions->duplicateSheet->setToolTip(i18n("Duplicate the selected sheet"));
     ac->addAction("duplicateSheet", actions->duplicateSheet);
     connect(actions->duplicateSheet, SIGNAL(triggered(bool)), view, SLOT(duplicateSheet()));
 
-    actions->deleteSheet = new KAction(KIcon("edit-delete"), i18n("Sheet"), view);
+    actions->deleteSheet = new KAction(koIcon("edit-delete"), i18n("Sheet"), view);
     actions->deleteSheet->setIconText(i18n("Remove Sheet"));
     actions->deleteSheet->setToolTip(i18n("Remove the active sheet"));
     ac->addAction("deleteSheet", actions->deleteSheet);
@@ -332,7 +334,7 @@ void View::Private::initActions()
     connect(actions->showPageBorders, SIGNAL(toggled(bool)), view, SLOT(togglePageBorders(bool)));
 
     actions->recalcWorksheet  = new KAction(i18n("Recalculate Sheet"), view);
-    actions->recalcWorksheet->setIcon(KIcon("view-refresh"));
+    actions->recalcWorksheet->setIcon(koIcon("view-refresh"));
     actions->recalcWorksheet->setIconText(i18n("Recalculate"));
     ac->addAction("RecalcWorkSheet", actions->recalcWorksheet);
     actions->recalcWorksheet->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F9));
@@ -340,7 +342,7 @@ void View::Private::initActions()
     actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
 
     actions->recalcWorkbook  = new KAction(i18n("Recalculate Document"), view);
-    actions->recalcWorkbook->setIcon(KIcon("view-refresh"));
+    actions->recalcWorkbook->setIcon(koIcon("view-refresh"));
     actions->recalcWorkbook->setIconText(i18n("Recalculate"));
     ac->addAction("RecalcWorkBook", actions->recalcWorkbook);
     actions->recalcWorkbook->setShortcut(QKeySequence(Qt::Key_F9));
@@ -370,33 +372,33 @@ void View::Private::initActions()
     actions->shapeAnchor->setEnabled(false);
     actions->shapeAnchor->setToolTip(i18n("Switch shape anchoring"));
     ac->addAction("shapeAnchor", actions->shapeAnchor);
-    connect(actions->shapeAnchor, SIGNAL(triggered(const QString&)),
-            view, SLOT(setShapeAnchoring(const QString&)));
+    connect(actions->shapeAnchor, SIGNAL(triggered(QString)),
+            view, SLOT(setShapeAnchoring(QString)));
 
     // -- navigation actions --
 
-    actions->nextSheet  = new KAction(KIcon("go-next"), i18n("Next Sheet"), view);
+    actions->nextSheet  = new KAction(koIcon("go-next"), i18n("Next Sheet"), view);
     actions->nextSheet->setIconText(i18n("Next"));
     actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
     ac->addAction("go_next", actions->nextSheet);
     actions->nextSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageDown));
     connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT(nextSheet()));
 
-    actions->prevSheet  = new KAction(KIcon("go-previous"), i18n("Previous Sheet"), view);
+    actions->prevSheet  = new KAction(koIcon("go-previous"), i18n("Previous Sheet"), view);
     actions->prevSheet->setIconText(i18n("Previous"));
     actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
     ac->addAction("go_previous", actions->prevSheet);
     actions->prevSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageUp));
     connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT(previousSheet()));
 
-    actions->firstSheet  = new KAction(KIcon("go-first"), i18n("First Sheet"), view);
+    actions->firstSheet  = new KAction(koIcon("go-first"), i18n("First Sheet"), view);
     actions->firstSheet->setIconText(i18n("First"));
     actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
     ac->addAction("go_first", actions->firstSheet);
     connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT(firstSheet()));
 
-    actions->lastSheet  = new KAction(KIcon("go-last"), i18n("Last Sheet"), view);
-    actions->lastSheet->setIconText(i18n("Last"));
+    actions->lastSheet  = new KAction(koIcon("go-last"), i18n("Last Sheet"), view);
+    actions->lastSheet->setIconText(i18nc("Move to the last sheet", "Last"));
     actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
     ac->addAction("go_last", actions->lastSheet);
     connect(actions->lastSheet, SIGNAL(triggered(bool)), view, SLOT(lastSheet()));
@@ -499,7 +501,7 @@ void View::Private::initActions()
     actions->calcCountA->setActionGroup(groupCalc);
 
     //Shape actions
-    actions->deleteShape = new KAction(KIcon("edit-delete"), i18n("Delete"), view);
+    actions->deleteShape = new KAction(koIcon("edit-delete"), i18n("Delete"), view);
     actions->deleteShape->setShortcut(QKeySequence("Del"));
     connect(actions->deleteShape, SIGNAL(triggered()), view, SLOT(editDeleteSelection()));
     connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), actions->deleteShape, SLOT(setEnabled(bool)));
@@ -552,8 +554,8 @@ void View::Private::adjustActions(bool mode)
  *
  *****************************************************************************/
 
-View::View(QWidget *_parent, Doc *_doc)
-        : KoView(_doc, _parent)
+View::View(KoPart *part, QWidget *_parent, Doc *_doc)
+        : KoView(part, _doc, _parent)
         , d(new Private)
 {
     ElapsedTime et("View constructor");
@@ -566,10 +568,7 @@ View::View(QWidget *_parent, Doc *_doc)
     d->loading = true;
 
     setComponentData(Factory::global());
-    if (doc()->isReadWrite())
-        setXMLFile("sheets.rc");
-    else
-        setXMLFile("sheets_readonly.rc");
+    setXMLFile("sheets.rc");
 
     // GUI Initializations
     initView();
@@ -590,11 +589,11 @@ View::View(QWidget *_parent, Doc *_doc)
             this, SLOT(removeSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(sheetRevived(Sheet*)),
             this, SLOT(addSheet(Sheet*)));
-    connect(doc()->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            this, SLOT(handleDamages(const QList<Damage*>&)));
+    connect(doc()->map(), SIGNAL(damagesFlushed(QList<Damage*>)),
+            this, SLOT(handleDamages(QList<Damage*>)));
     if (statusBar()) {
-        connect(doc()->map(), SIGNAL(statusMessage(const QString&, int)),
-                statusBar(), SLOT(showMessage(const QString&, int)));
+        connect(doc()->map(), SIGNAL(statusMessage(QString,int)),
+                statusBar(), SLOT(showMessage(QString,int)));
     }
 
     connect(&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
@@ -606,16 +605,18 @@ View::View(QWidget *_parent, Doc *_doc)
     // process, is called from resizeEvent(). The loading flag will be unset
     // at the end of initialPosition().
 
+#ifndef QT_NO_DBUS
     new ViewAdaptor(this);
+#endif
+
     d->canvas->setFocus();
 }
 
 View::~View()
 {
-    if (doc()->isReadWrite())   // make sure we're not embedded in Konq
-        selection()->emitCloseEditor(true); // save changes
+    selection()->emitCloseEditor(true); // save changes
 
-    // if (d->calcLabel) disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
+    // if (d->calcLabel) disconnect(d->calcLabel,SIGNAL(pressed(int)),this,SLOT(statusBarClicked(int)));
 
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);
@@ -692,10 +693,10 @@ void View::initView()
 
     // Setup the selection.
     d->selection = new Selection(d->canvas);
-    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
-    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotScrollChoice(const Region&)));
-    connect(d->selection, SIGNAL(aboutToModify(const Region&)), this, SLOT(aboutToModify(const Region&)));
-    connect(d->selection, SIGNAL(modified(const Region&)), this, SLOT(refreshSelection(const Region&)));
+    connect(d->selection, SIGNAL(changed(Region)), this, SLOT(slotChangeSelection(Region)));
+    connect(d->selection, SIGNAL(changed(Region)), this, SLOT(slotScrollChoice(Region)));
+    connect(d->selection, SIGNAL(aboutToModify(Region)), this, SLOT(aboutToModify(Region)));
+    connect(d->selection, SIGNAL(modified(Region)), this, SLOT(refreshSelection(Region)));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
     connect(d->selection, SIGNAL(refreshSheetViews()), this, SLOT(refreshSheetViews()));
     connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
@@ -718,20 +719,21 @@ void View::initView()
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        shell()->createDockWidget(&modeBoxFactory);
+        QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
         shell()->dockerManager()->removeToolOptionsDocker();
+        dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
-        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-        //        shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
+        //        shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
     d->zoomController = new KoZoomController(d->canvasController, d->zoomHandler, actionCollection(), 0, this);
     d->zoomController->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
     addStatusBarItem(d->zoomController->zoomAction()->createWidget(statusBar()), 0, true);
-    connect(d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
-            this, SLOT(viewZoom(KoZoomMode::Mode, qreal)));
+    connect(d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            this, SLOT(viewZoom(KoZoomMode::Mode,qreal)));
 
     d->columnHeader = new ColumnHeaderWidget(this, d->canvas, this);
     d->rowHeader = new RowHeaderWidget(this, d->canvas , this);
@@ -770,11 +772,11 @@ void View::initView()
     d->horzScrollBar->setSingleStep(60); //just random guess based on what feels okay
     d->horzScrollBar->setPageStep(60);
 
-    connect(d->tabBar, SIGNAL(tabChanged(const QString&)), this, SLOT(changeSheet(const QString&)));
-    connect(d->tabBar, SIGNAL(tabMoved(unsigned, unsigned)),
-            this, SLOT(moveSheet(unsigned, unsigned)));
-    connect(d->tabBar, SIGNAL(contextMenu(const QPoint&)),
-            this, SLOT(popupTabBarMenu(const QPoint&)));
+    connect(d->tabBar, SIGNAL(tabChanged(QString)), this, SLOT(changeSheet(QString)));
+    connect(d->tabBar, SIGNAL(tabMoved(unsigned,unsigned)),
+            this, SLOT(moveSheet(unsigned,unsigned)));
+    connect(d->tabBar, SIGNAL(contextMenu(QPoint)),
+            this, SLOT(popupTabBarMenu(QPoint)));
     connect(d->tabBar, SIGNAL(doubleClicked()),
             this, SLOT(slotRename()));
 
@@ -803,10 +805,10 @@ void View::initView()
     }
 
     // signal slot
-    connect(d->canvas, SIGNAL(documentSizeChanged(const QSize&)),
-            d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
-    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
-            d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(d->canvas, SIGNAL(documentSizeChanged(QSize)),
+            d->canvasController->proxyObject, SLOT(updateDocumentSize(QSize)));
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)),
+            d->canvas, SLOT(setDocumentOffset(QPoint)));
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
             this, SLOT(shapeSelectionChanged()));
 }
@@ -888,10 +890,10 @@ SheetView* View::sheetView(const Sheet* sheet) const
         sheetView = new SheetView(sheet);
         d->sheetViews.insert(sheet, sheetView);
         sheetView->setViewConverter(zoomHandler());
-        connect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
-                d->canvas, SLOT(setDocumentSize(const QSizeF&)));
-        connect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
-                d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        connect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
+                d->canvas, SLOT(setDocumentSize(QSizeF)));
+        connect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
+                d->zoomController, SLOT(setDocumentSize(QSizeF)));
         connect(sheet, SIGNAL(visibleSizeChanged()),
                 sheetView, SLOT(updateAccessedCellRange()));
         connect(sheet, SIGNAL(destroyed(QObject*)),
@@ -910,10 +912,10 @@ void View::refreshSheetViews()
     }
 
     foreach (SheetView *sheetView, sheetViews) {
-        disconnect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   d->canvas, SLOT(setDocumentSize(const QSizeF&)));
-        disconnect(sheetView, SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
+                   d->canvas, SLOT(setDocumentSize(QSizeF)));
+        disconnect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
+                   d->zoomController, SLOT(setDocumentSize(QSizeF)));
         disconnect(sheetView->sheet(), SIGNAL(visibleSizeChanged()),
                    sheetView, SLOT(updateAccessedCellRange()));
     }
@@ -1112,8 +1114,7 @@ void View::initialPosition()
     // Initialize shape anchoring action.
     shapeSelectionChanged();
 
-    if (koDocument()->isReadWrite())
-        initConfig();
+    initConfig();
 
     d->canvas->setFocus();
 
@@ -1153,7 +1154,7 @@ void View::updateReadWrite(bool readwrite)
         d->actions->hideSheet->setEnabled(true);
     }
     d->actions->showPageBorders->setEnabled(true);
-    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
+    d->tabBar->setReadOnly(doc()->map()->isProtected());
 }
 
 void View::createTemplate()
@@ -1486,7 +1487,7 @@ void View::toggleProtectDoc(bool mode)
 
     doc()->setModified(true);
     stateChanged("map_is_protected", mode ? StateNoReverse : StateReverse);
-    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
+    d->tabBar->setReadOnly(doc()->map()->isProtected());
 }
 
 void View::toggleProtectSheet(bool mode)
@@ -1729,7 +1730,7 @@ void View::deleteSheet()
         return;
     }
     int ret = KMessageBox::warningContinueCancel(this, i18n("You are about to remove the active sheet.\nDo you want to continue?"),
-              i18n("Remove Sheet"), KGuiItem(i18n("&Delete"), "edit-delete"));
+              i18n("Remove Sheet"), KGuiItem(i18n("&Delete"), koIconName("edit-delete")));
 
     if (ret == KMessageBox::Continue) {
         selection()->emitCloseEditor(false); // discard changes
@@ -1886,7 +1887,7 @@ void View::calcStatusBarOp()
 void View::statusBarClicked(const QPoint&)
 {
     QPoint mousepos = QCursor::pos();
-    if (koDocument()->isReadWrite() && factory())
+    if (factory())
         if (QMenu* menu = dynamic_cast<QMenu*>(factory()->container("calc_popup" , this)))
             menu->popup(mousepos);
 }
@@ -1936,19 +1937,19 @@ void View::guiActivateEvent(KParts::GUIActivateEvent *ev)
 
 void View::popupTabBarMenu(const QPoint & _point)
 {
-    if (!koDocument()->isReadWrite() || !factory())
+    if (!factory())
         return;
     if (d->tabBar) {
         QMenu* const menu = static_cast<QMenu*>(factory()->container("menupage_popup", this));
         if (!menu)
             return;
 
-        QAction* insertSheet = new KAction(KIcon("insert-table"), i18n("Insert Sheet"), this);
+        QAction* insertSheet = new KAction(koIcon("insert-table"), i18n("Insert Sheet"), this);
         insertSheet->setToolTip(i18n("Remove the active sheet"));
         connect(insertSheet, SIGNAL(triggered(bool)), this, SLOT(insertSheet()));
         menu->insertAction(d->actions->duplicateSheet, insertSheet);
 
-        QAction* deleteSheet = new KAction(KIcon("delete_table"), i18n("Remove Sheet"), this);
+        QAction* deleteSheet = new KAction(koIcon("delete_table"), i18n("Remove Sheet"), this);
         deleteSheet->setToolTip(i18n("Remove the active sheet"));
         connect(deleteSheet, SIGNAL(triggered(bool)), this, SLOT(deleteSheet()));
         menu->insertAction(d->actions->hideSheet, deleteSheet);
@@ -1994,10 +1995,10 @@ void View::addSheet(Sheet *sheet)
     d->actions->hideSheet->setEnabled(state);
 
     // Connect some signals
-    connect(sheet, SIGNAL(shapeAdded(Sheet *, KoShape *)),
-            d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
-    connect(sheet, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
-            d->mapViewModel, SLOT(removeShape(Sheet *, KoShape *)));
+    connect(sheet, SIGNAL(shapeAdded(Sheet*,KoShape*)),
+            d->mapViewModel, SLOT(addShape(Sheet*,KoShape*)));
+    connect(sheet, SIGNAL(shapeRemoved(Sheet*,KoShape*)),
+            d->mapViewModel, SLOT(removeShape(Sheet*,KoShape*)));
 }
 
 void View::removeSheet(Sheet *sheet)

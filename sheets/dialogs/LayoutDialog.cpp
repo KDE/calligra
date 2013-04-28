@@ -42,8 +42,6 @@
 #include <QFontDatabase>
 #include <QPainter>
 #include <QRadioButton>
-
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QVBoxLayout>
@@ -57,6 +55,7 @@
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
+#include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoUnitDoubleSpinBox.h>
 
@@ -161,19 +160,15 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
         m_dlg(dlg)
 {
     QGridLayout * layout = new QGridLayout(this);
-    layout->setMargin(KDialog::marginHint());
-    layout->setSpacing(KDialog::spacingHint());
 
     QGroupBox * groupBox = new QGroupBox(this);
     groupBox->setTitle(i18n("Style"));
 
     QGridLayout * groupBoxLayout = new QGridLayout(groupBox);
     groupBoxLayout->setAlignment(Qt::AlignTop);
-    groupBoxLayout->setSpacing(KDialog::spacingHint());
-    groupBoxLayout->setMargin(KDialog::marginHint());
 
     QLabel * label1 = new QLabel(groupBox);
-    label1->setText(i18n("Name:"));
+    label1->setText(i18nc("Name of the style", "Name:"));
     groupBoxLayout->addWidget(label1, 0, 0);
 
     m_nameEdit = new KLineEdit(groupBox);
@@ -202,10 +197,10 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
     else
         m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("Default")));
 
-    connect(m_parentBox, SIGNAL(activated(const QString&)),
-            this, SLOT(parentChanged(const QString&)));
-    connect(m_nameEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(styleNameChanged(const QString&)));
+    connect(m_parentBox, SIGNAL(activated(QString)),
+            this, SLOT(parentChanged(QString)));
+    connect(m_nameEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(styleNameChanged(QString)));
 
     groupBoxLayout->addWidget(m_parentBox, 2, 1);
 
@@ -883,8 +878,6 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
 
     QGroupBox *grp = new QGroupBox(i18n("Format"), this);
     QGridLayout *grid = new QGridLayout(grp);
-    grid->setMargin(KDialog::marginHint());
-    grid->setSpacing(KDialog::spacingHint());
 
     int fHeight = grp->fontMetrics().height();
     grid->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
@@ -937,8 +930,6 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     QGroupBox *box2 = new QGroupBox(grp);
     box2->setTitle(i18n("Preview"));
     QGridLayout *grid3 = new QGridLayout(box2);
-    grid3->setMargin(KDialog::marginHint());
-    grid3->setSpacing(KDialog::spacingHint());
 
     exampleLabel = new QLabel(box2);
     exampleLabel->setWhatsThis(i18n("This will display a preview of your choice so you can know what it does before clicking the OK button to validate it."));
@@ -960,8 +951,6 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     QGroupBox *box = new QGroupBox(this);
 
     grid = new QGridLayout(box);
-    grid->setMargin(KDialog::marginHint());
-    grid->setSpacing(KDialog::spacingHint());
 
     postfix = new KLineEdit(box);
     postfix->setWhatsThis(i18n("You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format."));
@@ -1101,9 +1090,9 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
 
     connect(listFormat, SIGNAL(itemSelectionChanged()), this, SLOT(makeformat()));
     connect(precision, SIGNAL(valueChanged(int)), this, SLOT(slotChangeValue(int)));
-    connect(prefix, SIGNAL(textChanged(const QString &)), this, SLOT(makeformat()));
-    connect(postfix, SIGNAL(textChanged(const QString &)), this, SLOT(makeformat()));
-    connect(currency, SIGNAL(activated(const QString &)), this, SLOT(currencyChanged(const QString &)));
+    connect(prefix, SIGNAL(textChanged(QString)), this, SLOT(makeformat()));
+    connect(postfix, SIGNAL(textChanged(QString)), this, SLOT(makeformat()));
+    connect(currency, SIGNAL(activated(QString)), this, SLOT(currencyChanged(QString)));
     connect(format, SIGNAL(activated(int)), this, SLOT(formatChanged(int)));
     connect(format, SIGNAL(activated(int)), this, SLOT(makeformat()));
     slotChangeState();
@@ -1741,8 +1730,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     bTextColorUndefined = !dlg->bTextColor;
 
-    connect(textColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotSetTextColor(const QColor &)));
+    connect(textColorButton, SIGNAL(changed(QColor)),
+            this, SLOT(slotSetTextColor(QColor)));
 
 
     QStringList tmpListFont;
@@ -1767,8 +1756,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
         family_combo->setCurrentRow(0);
     }
 
-    connect(family_combo, SIGNAL(currentTextChanged(const QString &)),
-            SLOT(family_chosen_slot(const QString &)));
+    connect(family_combo, SIGNAL(currentTextChanged(QString)),
+            SLOT(family_chosen_slot(QString)));
 
     QStringList lst;
     lst.append("");
@@ -1780,16 +1769,16 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     size_combo->setInsertPolicy(KComboBox::NoInsert);
 
-    connect(size_combo, SIGNAL(activated(const QString &)),
-            SLOT(size_chosen_slot(const QString &)));
-    connect(size_combo , SIGNAL(textChanged(const QString &)),
-            this, SLOT(size_chosen_slot(const QString &)));
+    connect(size_combo, SIGNAL(activated(QString)),
+            SLOT(size_chosen_slot(QString)));
+    connect(size_combo , SIGNAL(textChanged(QString)),
+            this, SLOT(size_chosen_slot(QString)));
 
-    connect(weight_combo, SIGNAL(activated(const QString &)),
-            SLOT(weight_chosen_slot(const QString &)));
+    connect(weight_combo, SIGNAL(activated(QString)),
+            SLOT(weight_chosen_slot(QString)));
 
-    connect(style_combo, SIGNAL(activated(const QString &)),
-            SLOT(style_chosen_slot(const QString &)));
+    connect(style_combo, SIGNAL(activated(QString)),
+            SLOT(style_chosen_slot(QString)));
 
     strike->setChecked(dlg->strike);
     connect(strike, SIGNAL(clicked()),
@@ -1801,8 +1790,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     example_label->setText(i18n("Dolor Ipse"));
 
-    connect(this, SIGNAL(fontSelected(const QFont&)),
-            this, SLOT(display_example(const QFont&)));
+    connect(this, SIGNAL(fontSelected(QFont)),
+            this, SLOT(display_example(QFont)));
 
     setCombos();
     display_example(selFont);
@@ -2023,8 +2012,6 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
     mergeCell->setEnabled(!dlg->oneCell && ((!dlg->isRowSelected) && (!dlg->isColumnSelected)));
 
     QGridLayout *grid2 = new QGridLayout(indentGroup);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
     grid2->addItem(new QSpacerItem(0, indentGroup->fontMetrics().height() / 8), 0, 0);  // groupbox title
     m_indent = new KoUnitDoubleSpinBox(indentGroup);
     m_indent->setMinimum(0.0);
@@ -2424,8 +2411,6 @@ CellFormatPageBorder::CellFormatPageBorder(QWidget* parent, CellFormatDialog *_d
 void CellFormatPageBorder::InitializeGrids()
 {
     QGridLayout *grid = new QGridLayout(this);
-    grid->setMargin(KDialog::marginHint());
-    grid->setSpacing(KDialog::spacingHint());
     QGridLayout *grid2 = 0;
     QGroupBox* tmpQGroupBox = 0;
 
@@ -2435,11 +2420,16 @@ void CellFormatPageBorder::InitializeGrids()
 
     const char shortcutButtonNames[BorderShortcutType_END][20] = {"remove", "all", "outline"};
 
-    QString borderButtonIconNames[BorderType_END] = {"border_top", "border_bottom", "border_left", "border_right",
-            "border_vertical", "border_horizontal", "border_fall", "border_up"
-                                                    };
+    QString borderButtonIconNames[BorderType_END] = {
+        koIconName("border_top"), koIconName("border_bottom"),
+        koIconName("border_left"), koIconName("border_right"),
+        koIconName("border_vertical"), koIconName("border_horizontal"),
+        koIconName("border_fall"), koIconName("border_up")
+    };
 
-    QString shortcutButtonIconNames[BorderShortcutType_END] = { "border_remove", "", "border_outline"};
+    QString shortcutButtonIconNames[BorderShortcutType_END] = {
+        koIconName("border_remove"), QString(), koIconName("border_outline")
+    };
 
     int borderButtonPositions[BorderType_END][2] = {{0, 2}, {4, 2}, {2, 0}, {2, 4}, {4, 4}, {4, 0}, {0, 0}, {0, 4}};
 
@@ -2451,8 +2441,6 @@ void CellFormatPageBorder::InitializeGrids()
     tmpQGroupBox->setTitle(i18n("Border"));
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
     grid2 = new QGridLayout(tmpQGroupBox);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
     int fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
 
@@ -2481,17 +2469,15 @@ void CellFormatPageBorder::InitializeGrids()
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
 
     grid2 = new QGridLayout(tmpQGroupBox);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
 
     /* the "all" button is different depending on what kind of region is currently
        selected */
     if ((dlg->oneRow == true) && (dlg->oneCol == false)) {
-        shortcutButtonIconNames[BorderShortcutType_All] = "border_vertical";
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_vertical");
     } else if ((dlg->oneRow == false) && (dlg->oneCol == true)) {
-        shortcutButtonIconNames[BorderShortcutType_All] = "border_horizontal";
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_horizontal");
     } else {
-        shortcutButtonIconNames[BorderShortcutType_All] = "border_inside";
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_inside");
     }
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
@@ -2514,8 +2500,6 @@ void CellFormatPageBorder::InitializeGrids()
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
 
     grid2 = new QGridLayout(tmpQGroupBox);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
     fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
 
@@ -2580,8 +2564,6 @@ void CellFormatPageBorder::InitializeGrids()
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
 
     grid2 = new QGridLayout(tmpQGroupBox);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
     fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
 
@@ -2634,8 +2616,8 @@ void CellFormatPageBorder::InitializePatterns()
 
 void CellFormatPageBorder::SetConnections()
 {
-    connect(color, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotSetColorButton(const QColor &)));
+    connect(color, SIGNAL(changed(QColor)),
+            this, SLOT(slotSetColorButton(QColor)));
 
     for (int i = 0; i < NUM_BORDER_PATTERNS; i++) {
         connect(pattern[i], SIGNAL(clicked(PatternSelect*)),
@@ -2643,22 +2625,22 @@ void CellFormatPageBorder::SetConnections()
     }
 
     for (int i = BorderType_Top; i < BorderType_END; i++) {
-        connect(borderButtons[i], SIGNAL(clicked(BorderButton *)),
-                this, SLOT(changeState(BorderButton *)));
+        connect(borderButtons[i], SIGNAL(clicked(BorderButton*)),
+                this, SLOT(changeState(BorderButton*)));
     }
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
-        connect(shortcutButtons[i], SIGNAL(clicked(BorderButton *)),
-                this, SLOT(preselect(BorderButton *)));
+        connect(shortcutButtons[i], SIGNAL(clicked(BorderButton*)),
+                this, SLOT(preselect(BorderButton*)));
     }
 
     connect(area , SIGNAL(redraw()), this, SLOT(draw()));
-    connect(area , SIGNAL(choosearea(QMouseEvent *)),
-            this, SLOT(slotPressEvent(QMouseEvent *)));
+    connect(area , SIGNAL(choosearea(QMouseEvent*)),
+            this, SLOT(slotPressEvent(QMouseEvent*)));
 
     connect(style, SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
-    connect(size, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotChangeStyle(const QString &)));
+    connect(size, SIGNAL(textChanged(QString)),
+            this, SLOT(slotChangeStyle(QString)));
     connect(size , SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
 }
 
@@ -2726,9 +2708,9 @@ QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
     return pixmap;
 }
 
-void CellFormatPageBorder::loadIcon(const QString& _pix, BorderButton *_button)
+void CellFormatPageBorder::loadIcon(const QString &iconName, BorderButton *_button)
 {
-    _button->setIcon(KIcon(_pix));
+    _button->setIcon(KIcon(iconName));
 }
 
 void CellFormatPageBorder::apply(StyleCommand* obj)
@@ -3240,8 +3222,6 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     dlg = _dlg;
 
     QGridLayout *grid = new QGridLayout(this);
-    grid->setMargin(KDialog::marginHint());
-    grid->setSpacing(KDialog::spacingHint());
 
     QGroupBox* tmpQGroupBox;
     tmpQGroupBox = new QGroupBox(this);
@@ -3249,8 +3229,6 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
 
     QGridLayout *grid2 = new QGridLayout(tmpQGroupBox);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
     int fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
 
@@ -3326,7 +3304,6 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     grid2->addItem(grid3, 6, 0, 1, 3);
 
     grid3 = new QGridLayout();
-    grid3->setSpacing(KDialog::spacingHint());
 
     tmpQLabel = new QLabel(tmpQGroupBox);
     grid3->addWidget(tmpQLabel, 0, 0);
@@ -3343,8 +3320,8 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
         bgColor = palette().base().color();
 
     bgColorButton->setColor(bgColor);
-    connect(bgColorButton, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotSetBackgroundColor(const QColor &)));
+    connect(bgColorButton, SIGNAL(changed(QColor)),
+            this, SLOT(slotSetBackgroundColor(QColor)));
 
     notAnyColor = new QPushButton(i18n("No Color"), tmpQGroupBox);
     grid3->addWidget(notAnyColor, 0, 2);
@@ -3361,8 +3338,6 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
 
     grid2 = new QGridLayout(tmpQGroupBox);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
     fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
 
@@ -3426,8 +3401,8 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     palette.setColor(current->backgroundRole(), bgColor);
     current->setPalette(palette);
 
-    connect(color, SIGNAL(changed(const QColor &)),
-            this, SLOT(slotSetColorButton(const QColor &)));
+    connect(color, SIGNAL(changed(QColor)),
+            this, SLOT(slotSetColorButton(QColor)));
 
     slotSetColorButton(dlg->brushColor);
     init();

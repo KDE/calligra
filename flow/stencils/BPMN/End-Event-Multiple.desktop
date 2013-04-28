@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=End-Event-Multiple
+Name[bs]=Kraj događaja
 Name[ca]=Final-Esdeveniment-Múltiple
 Name[ca@valencia]=Final-Esdeveniment-Múltiple
+Name[de]=Endereignis - Mehrfach
 Name[el]=Πολλαπλότητα-γεγονότος-τέλους
 Name[es]=Evento final múltiple
 Name[et]=Mitmiklõpusündmus
+Name[fr]=Multiplication de fin d'évènement
+Name[gl]=Evento final múltiple
+Name[hu]=Vége-Esemény-Többszörös
 Name[it]=Evento-finale-Multiplo
 Name[kk]=Аяқтау-оқиға-тармақтау
 Name[nb]=Slutt-hendelse-flere
@@ -15,6 +20,8 @@ Name[pt_BR]=Evento final múltiplo
 Name[ru]=Составное завершение события
 Name[sk]=End-Event-Multiple
 Name[sv]=Sluthändelse-flera
+Name[tr]=Son-Etkinlik-Çoklu
 Name[uk]=Розгалуження кінцевої події
 Name[x-test]=xxEnd-Event-Multiplexx
+Name[zh_CN]=结束事件-多种
 Name[zh_TW]=結束─事件─多重

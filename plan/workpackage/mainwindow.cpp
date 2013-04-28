@@ -34,16 +34,13 @@
 #include <kundo2qstack.h>
 
 #include <assert.h>
-#include <kicon.h>
 //#include "koshellsettings.h"
 
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
 #include <KoGlobal.h>
 
-#include <kcomponentdata.h>
 #include <kmimetypetrader.h>
-
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
@@ -52,7 +49,6 @@
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
@@ -68,14 +64,11 @@
 #include <kaboutdata.h>
 #include <kxmlguifactory.h>
 #include <kcomponentdata.h>
-#include <kiconloader.h>
 #include <ktoolinvocation.h>
-#include <kservice.h>
 #include <kio/netaccess.h>
 #include <kxmlguiwindow.h>
 
 #include <KoDocumentInfo.h>
-#include <KoDocument.h>
 #include <KoView.h>
 #include <KoFilterManager.h>
 

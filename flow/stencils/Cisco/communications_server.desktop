@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Communications server
 Name[bg]=Комуникационен сървър
+Name[bs]=Komunikacijski server
 Name[ca]=Servidor de comunicacions
 Name[ca@valencia]=Servidor de comunicacions
+Name[da]=Kommunikationsserver
 Name[de]=Kommunikationsserver
 Name[el]=Εξυπηρετητής επικοινωνιών
 Name[es]=Servidor de comunicaciones
 Name[et]=Kommunikatsiooniserver
+Name[fr]=Communications server
+Name[gl]=Servidor de comunicacións
+Name[hu]=Kommunikációs kiszolgáló
 Name[it]=Server di comunicazioni
 Name[kk]=Байланс сервері
 Name[nb]=Kommunikasjonstjener
@@ -17,6 +22,7 @@ Name[pt]=Servidor de comunicações
 Name[pt_BR]=Servidor de comunicações
 Name[ru]=Сервер связей
 Name[sk]=Komunikačný server
+Name[sl]=Komunikacijski strežnik
 Name[sv]=Kommunikationsserver
 Name[uk]=Сервер зв'язку
 Name[x-test]=xxCommunications serverxx

@@ -37,7 +37,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QPainter>
 #include <QWidget>
@@ -247,7 +247,7 @@ void KarbonPatternTool::deactivate()
     m_currentStrategy = 0;
 }
 
-void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
+void KarbonPatternTool::documentResourceChanged(int key, const QVariant & res)
 {
     switch (key) {
     case KoDocumentResourceManager::HandleRadius:

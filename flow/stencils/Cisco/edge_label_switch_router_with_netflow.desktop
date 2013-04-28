@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Edge Label Switch Router with NetFlow
+Name[bs]=Router ivičnog prekidača oznaka sa NetFlow-om
 Name[ca]=Encaminador commutador Edge Label amb NetFlow
 Name[ca@valencia]=Encaminador commutador Edge Label amb NetFlow
+Name[da]=Edge Label Switch Router with NetFlow
 Name[el]=Edge Label Switch Router with NetFlow
 Name[es]=Etiqueta de borde de conmutador enrutador con NetFlow
 Name[et]=Edge Label kommutaator-marsruuter NetFlow'ga
+Name[fr]=Edge Label Switch Router with NetFlow
+Name[gl]=Conmutador encamiñador Edge Label con NetFlow
 Name[it]=Edge Label Switch Router con NetFlow
 Name[kk]=Шеткі NetFlow қосқыш маршруттауышы
 Name[nb]=Edge Label svitsjruter med NetFlow
@@ -17,4 +21,5 @@ Name[sk]=Edge Label Switch Router s NetFlow
 Name[sv]=Edge etikettbytesrouter med nätflöde
 Name[uk]=Комутатор-маршрутизатор Edge з NetFlow
 Name[x-test]=xxEdge Label Switch Router with NetFlowxx
+Name[zh_CN]=使用 NetFlow 的边缘标签交换路由器
 Name[zh_TW]=Edge Label 交換路由器，含 NetFlow

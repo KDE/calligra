@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
+   Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,13 +22,19 @@
 #ifndef KPRANIMATIONTOOL_H
 #define KPRANIMATIONTOOL_H
 
-#include <KoToolBase.h>
+#include <KoPathTool.h>
+#include <QMap>
+
+class KoPathShape;
+class KoSelection;
+class KPrAnimateMotion;
+class KPrShapeAnimationDocker;
 
 /**
  * The animation tool (associated with the clapperboard icon) is the tool in KPresenter where the user
  * animates shapes and sets up slide transitions.
  */
-class KPrAnimationTool : public KoToolBase
+class KPrAnimationTool : public KoPathTool
 {
     Q_OBJECT
 public:
@@ -35,29 +42,63 @@ public:
      * Constructor for animation tool
      * @param canvas the canvas this tool will be working for.
      */
-    explicit KPrAnimationTool( KoCanvasBase *canvas );
+    explicit KPrAnimationTool(KoCanvasBase *canvas);
     virtual ~KPrAnimationTool();
 
-public:
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void mousePressEvent(KoPointerEvent *event);
+
+    void repaintDecorations();
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void deactivate();
 
-public: // Events
+private slots:
 
-    virtual void mousePressEvent( KoPointerEvent *event );
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-//    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    /**
+      * @brief Reload motion path shapes (For all shapes with motion paths on current page)
+      */
+    void reloadMotionPaths();
 
-//    virtual void keyPressEvent(QKeyEvent *event);
+    /**
+      * @brief Verify if a motion path shape has changed (to update the canvas)
+      */
+    void verifyMotionPathChanged(KoShape *shape);
 
 protected:
-    QList<QWidget *> createOptionWidgets();
+    QRectF handlesSize();
+
+    virtual QList<QWidget *> createOptionWidgets();
+
+    /**
+      * @brief Load motion path shapes (For all shapes with motion paths on current page)
+      */
+    void initMotionPathShapes();
+
+    /**
+      * @brief Add motion path shape to the motion path shapes manager
+      */
+    virtual void addPathShape(KoPathShape *pathShape);
+
+    /**
+      * @brief Helper method to get the current page size
+      */
+    QSizeF getPageSize();
+
+    /**
+      * @brief remove motion paths of motion path manager and helper maps
+      */
+    void cleanMotionPathManager();
 
 private:
+    KoPathShape *m_currentMotionPathSelected;
+    QMap<KoPathShape *, KPrAnimateMotion *> m_animateMotionMap;
+    QMap<KoPathShape *, KoShape *> m_shapesMap;
+    KoShapeManager *m_pathShapeManager;
+    bool m_initializeTool;
+    KPrShapeAnimationDocker *m_shapeAnimationWidget;
 };
 
 #endif

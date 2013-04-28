@@ -1,11 +1,17 @@
 [Desktop Entry]
 Name=funnel
+Name[bs]=dimnjak
 Name[ca]=funnel
 Name[ca@valencia]=funnel
+Name[cs]=trychtýř
+Name[da]=tragt
 Name[de]=Trichter
 Name[el]=funnel
 Name[es]=embudo
 Name[et]=Jaotuslehter
+Name[fr]=funnel
+Name[gl]=Funil
+Name[hu]=tölcsér
 Name[it]=imbuto
 Name[kk]=Құйғыш
 Name[nb]=trakt
@@ -16,7 +22,9 @@ Name[pt]=funil
 Name[pt_BR]=funil
 Name[ru]=Воронка
 Name[sk]=lievik
+Name[sl]=lijak
 Name[sv]=tratt
+Name[tr]=huni
 Name[uk]=Лійка
 Name[x-test]=xxfunnelxx
 Name[zh_TW]=漏斗

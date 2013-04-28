@@ -39,7 +39,7 @@
 #include <QHeaderView>
 #include <QStylePainter>
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <klineedit.h>
 
 
@@ -92,6 +92,55 @@ QSize ItemDelegate::sizeHint( const QStyleOptionViewItem & option, const QModelI
     QSize s = QStyledItemDelegate::sizeHint( option, index );
     return QSize( s.width(), qMax( s.height(), 18 ) );
 }
+
+//----------------------
+CheckStateItemDelegate::CheckStateItemDelegate( QObject *parent )
+    : ItemDelegate( parent )
+{
+}
+
+bool CheckStateItemDelegate::editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index )
+{
+    Q_ASSERT(event);
+    Q_ASSERT(model);
+    kDebug(planDbg());
+
+    Qt::ItemFlags flags = model->flags(index);
+    if ( ! ( option.state & QStyle::State_Enabled ) || ! ( flags & Qt::ItemIsEnabled ) ) {
+        return false;
+    }
+
+    // make sure that we have a check state
+    QVariant value = index.data( Qt::EditRole );
+    if ( ! value.isValid() ) {
+        return false;
+    }
+
+    QStyle *style = QApplication::style();
+
+    // make sure that we have the right event type
+    if ( ( event->type() == QEvent::MouseButtonRelease ) || ( event->type() == QEvent::MouseButtonDblClick ) || ( event->type() == QEvent::MouseButtonPress ) ) {
+        QStyleOptionViewItemV4 viewOpt( option );
+        initStyleOption( &viewOpt, index );
+        QRect checkRect = style->subElementRect( QStyle::SE_ItemViewItemDecoration, &viewOpt, 0 );
+        QMouseEvent *me = static_cast<QMouseEvent*>( event );
+        if ( me->button() != Qt::LeftButton || ! checkRect.contains( me->pos() ) ) {
+            return false;
+        }
+        if ( ( event->type() == QEvent::MouseButtonPress ) || ( event->type() == QEvent::MouseButtonDblClick ) ) {
+            return true;
+        }
+    } else if ( event->type() == QEvent::KeyPress ) {
+        if (static_cast<QKeyEvent*>(event)->key() != Qt::Key_Space && static_cast<QKeyEvent*>(event)->key() != Qt::Key_Select) {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    Qt::CheckState state = ( static_cast<Qt::CheckState>( value.toInt() ) == Qt::Checked ? Qt::Unchecked : Qt::Checked );
+    return model->setData(index, state, Qt::CheckStateRole);
+}
+
 
 //----------------------
 DateTimeCalendarDelegate::DateTimeCalendarDelegate( QObject *parent )
@@ -205,7 +254,7 @@ void ProgressBarDelegate::initStyleOptionProgressBar( QStyleOptionProgressBar *o
     int max = index.data( Role::Maximum ).toInt();
     option->maximum = max > option->minimum ? max : option->minimum + 100;
     option->progress = index.data().toInt();
-    option->text = QString::number( ( option->progress * 100 ) / ( option->maximum - option->minimum ) ) + QChar::fromAscii( '%' );
+    option->text = QString::number( ( option->progress * 100 ) / ( option->maximum - option->minimum ) ) + QLatin1Char( '%' );
     option->textAlignment = Qt::AlignCenter;
     option->textVisible = true;
 }
@@ -249,7 +298,7 @@ void Slider::updateTip( int value )
     p.setY( height() / 2 );
     p.setX( style()->sliderPositionFromValue ( minimum(), maximum(), value, width() ) );
 
-    QString text = QString::fromAscii( "%1%" ).arg( value );
+    QString text = QString::number( value ) + QLatin1Char( '%' );
     QToolTip::showText( mapToGlobal( p ), text, this );
 }
 

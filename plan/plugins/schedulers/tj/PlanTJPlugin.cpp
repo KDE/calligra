@@ -26,10 +26,10 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 
-#include <KDebug>
+#include "kptdebug.h"
 
 #include <QApplication>
-#include <KMessageBox>
+#include <kmessagebox.h>
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(PlanTJPlugin)
 
@@ -42,6 +42,10 @@ PlanTJPlugin::PlanTJPlugin( QObject * parent, const QVariantList & )
     if ( locale ) {
         locale->insertCatalog( "plantjplugin" );
     }
+    m_granularities << (long unsigned int) 5 * 60 * 1000
+                    << (long unsigned int) 15 * 60 * 1000
+                    << (long unsigned int) 30 * 60 * 1000
+                    << (long unsigned int) 60 * 60 * 1000;
 }
 
 PlanTJPlugin::~PlanTJPlugin()
@@ -63,6 +67,12 @@ int PlanTJPlugin::capabilities() const
     return SchedulerPlugin::AvoidOverbooking | SchedulerPlugin::ScheduleForward | SchedulerPlugin::ScheduleBackward;
 }
 
+ulong PlanTJPlugin::currentGranularity() const
+{
+    ulong v = m_granularities.value( m_granularity );
+    return qMax( v, (ulong)300000 ); // minimum 5 min
+}
+
 void PlanTJPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
 {
     foreach ( SchedulerThread *j, m_jobs ) {
@@ -72,7 +82,7 @@ void PlanTJPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager 
     }
     sm->setScheduling( true );
 
-    PlanTJScheduler *job = new PlanTJScheduler( &project, sm );
+    PlanTJScheduler *job = new PlanTJScheduler( &project, sm, currentGranularity() );
     m_jobs << job;
     connect(job, SIGNAL(jobFinished(SchedulerThread*)), SLOT(slotFinished(SchedulerThread*)));
 

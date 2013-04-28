@@ -29,6 +29,8 @@
 #include "KPrSlidesSorterItemDelegate.h"
 #include "KPrView.h"
 
+#include <KoIcon.h>
+
 //Qt Headers
 #include <QMenu>
 #include <QContextMenuEvent>
@@ -56,13 +58,11 @@
 
 //KDE Headers
 #include <klocale.h>
-#include <KDebug>
-#include <kicon.h>
+#include <kdebug.h>
 #include <kconfiggroup.h>
-#include <KIconLoader>
-#include <KGlobalSettings>
-#include <KMessageBox>
-#include <KActionCollection>
+#include <kglobalsettings.h>
+#include <kmessagebox.h>
+#include <kactioncollection.h>
 
 const int DEFAULT_ICON_SIZE = 200;
 
@@ -81,6 +81,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     QWidget *m_customShowsToolBar = new QWidget();
 
     QHBoxLayout *toolBarLayout = new QHBoxLayout(m_customShowsToolBar);
+    toolBarLayout->setMargin(0);
     QVBoxLayout *centralWidgetLayout = new QVBoxLayout(m_centralWidget);
     centralWidgetLayout->setMargin(0);
     centralWidgetLayout->setSpacing(0);
@@ -93,21 +94,21 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     slideShowsLabel->setBuddy(m_customSlideShowsList);
 
     m_buttonAddCustomSlideShow = new QToolButton();
-    m_buttonAddCustomSlideShow->setIcon(SmallIcon("list-add"));
+    m_buttonAddCustomSlideShow->setIcon(koIcon("list-add"));
     m_buttonAddCustomSlideShow->setToolTip(i18n("Add a new custom slide show"));
 
     m_buttonDelCustomSlideShow = new QToolButton();
-    m_buttonDelCustomSlideShow->setIcon(SmallIcon("list-remove"));
+    m_buttonDelCustomSlideShow->setIcon(koIcon("list-remove"));
     m_buttonDelCustomSlideShow->setEnabled(false);
     m_buttonDelCustomSlideShow->setToolTip(i18n("Delete current custom slide show"));
 
     m_buttonAddSlideToCurrentShow = new QToolButton();
-    m_buttonAddSlideToCurrentShow->setIcon(SmallIcon("arrow-down"));
+    m_buttonAddSlideToCurrentShow->setIcon(koIcon("arrow-down"));
     m_buttonAddSlideToCurrentShow->setToolTip(i18n("Add slides to current custom slide show"));
     m_buttonAddSlideToCurrentShow->setEnabled(false);
 
     m_buttonDelSlideFromCurrentShow = new QToolButton();
-    m_buttonDelSlideFromCurrentShow->setIcon(SmallIcon("arrow-up"));
+    m_buttonDelSlideFromCurrentShow->setIcon(koIcon("arrow-up"));
     m_buttonDelSlideFromCurrentShow->setToolTip(i18n("Remove slides from current custom slide show"));
     m_buttonDelSlideFromCurrentShow->setEnabled(false);
 
@@ -165,7 +166,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     connect(m_buttonAddSlideToCurrentShow, SIGNAL(clicked()), this, SLOT(addSlideToCustomShow()));
     connect(m_buttonDelSlideFromCurrentShow, SIGNAL(clicked()), this, SLOT(deleteSlidesFromCustomShow()));
     connect(m_customSlideShowModel, SIGNAL(customSlideShowsChanged()), this, SLOT(updateCustomSlideShowsList()));
-    connect(m_customSlideShowModel, SIGNAL(selectPages(int,int)), this, SLOT(selectCustomShowPages(int, int)));
+    connect(m_customSlideShowModel, SIGNAL(selectPages(int,int)), this, SLOT(selectCustomShowPages(int,int)));
 
     //setup signals for manage edit actions
     connect(view->copyController(), SIGNAL(copyRequested()), this, SLOT(editCopy()));
@@ -275,15 +276,15 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
     //setup signals
     connect(m_slidesSorterView,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
-    connect(m_slidesSorterView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(const QModelIndex)));
+    connect(m_slidesSorterView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
 
     //change zoom saving slot
-    connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
+    connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(updateZoom(KoZoomMode::Mode,qreal)));
 
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
-        disconnect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+        disconnect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
         m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
         loadZoomConfig();
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
@@ -293,7 +294,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeSlidesSorter::deactivate()
 {
-    // Give the ressources back to the canvas
+    // Give the resources back to the canvas
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
     // Active the view as a basic but active one
     m_view->setActionEnabled(KoPAView::AllActions, true);
@@ -307,14 +308,14 @@ void KPrViewModeSlidesSorter::deactivate()
     saveZoomConfig(zoom());
 
     //change zoom saving slot and restore normal view zoom values
-    disconnect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
+    disconnect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(updateZoom(KoZoomMode::Mode,qreal)));
     m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_PAGE | KoZoomMode::ZOOM_WIDTH);
     m_view->setActivePage(m_view->kopaDocument()->pageByIndex(m_slidesSorterView->currentIndex().row(), false));
 
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
         kPrview->restoreZoomConfig();
-        connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+        connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
         connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
     }
@@ -537,18 +538,18 @@ int KPrViewModeSlidesSorter::zoom()
 void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_slidesSorterView);
-    menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
-    menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
+    menu.addAction(koIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
+    menu.addAction(koIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
     QModelIndexList selectedItems = m_slidesSorterView->selectionModel()->selectedIndexes();
     if (selectedItems.count() == 1 && selectedItems.first().isValid()) {
-        menu.addAction(KIcon("edit-rename"), i18n("Rename"), this, SLOT(renameCurrentSlide()));
+        menu.addAction(koIcon("edit-rename"), i18n("Rename"), this, SLOT(renameCurrentSlide()));
     }
 
     menu.addSeparator();
-    menu.addAction(KIcon("edit-cut"), i18n("Cut"), this,  SLOT(editCut()));
-    menu.addAction(KIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
-    menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
+    menu.addAction(koIcon("edit-cut"), i18n("Cut"), this,  SLOT(editCut()));
+    menu.addAction(koIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
+    menu.addAction(koIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
     menu.exec(event->globalPos());
     enableEditActions();
 }
@@ -556,7 +557,7 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 void KPrViewModeSlidesSorter::customSlideShowsContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_customSlideShowView);
-    menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlidesFromCustomShow()));
+    menu.addAction(koIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlidesFromCustomShow()));
     menu.exec(event->globalPos());
 }
 
@@ -583,7 +584,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     bool panelVisible = true;
     if (showNumber < 1) {
         panelVisible = false;
-        name = QString();
+        name.clear();
     }
 
     //Change document current custom slide show
@@ -691,9 +692,8 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
        updateCustomSlideShowsList();
     }
     else {
-        KMessageBox Message;
-        Message.sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
-                      KMessageBox::Notify);
+        KMessageBox::sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
+                           KMessageBox::Notify);
         updateCustomSlideShowsList();
     }
 }

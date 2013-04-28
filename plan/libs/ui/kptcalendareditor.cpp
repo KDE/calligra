@@ -33,6 +33,8 @@
 #include "kptintervaledit.h"
 #include "kptdebug.h"
 
+#include <KoIcon.h>
+
 #include <QDragMoveEvent>
 #include <QList>
 #include <QSplitter>
@@ -40,7 +42,6 @@
 #include <QHeaderView>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -385,8 +386,8 @@ CalendarDay *CalendarDayView::selectedDay() const
 }
 
 //-----------------------------------
-CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent ),
     m_model( new DateTableDataModel( this ) )
 {
     setWhatsThis( i18nc( "@info:whatsthis",
@@ -457,9 +458,9 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     m_calendarview->setDragEnabled ( true );
     m_calendarview->setAcceptDrops( true );
 
-    connect( m_calendarview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-    connect( m_dayview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-    connect( m_dayview, SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_calendarview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_dayview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_dayview, SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_calendarview, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentCalendarChanged( QModelIndex ) ) );
     connect( m_calendarview, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotCalendarSelectionChanged( const QModelIndexList ) ) );
@@ -616,17 +617,17 @@ void CalendarEditor::setupGui()
     KActionCollection *coll = actionCollection();
     QString name = "calendareditor_calendar_list";
 
-    actionAddCalendar   = new KAction(KIcon( "resource-calendar-insert" ), i18n("Add Calendar"), this);
+    actionAddCalendar   = new KAction(koIcon("resource-calendar-insert"), i18n("Add Calendar"), this);
     coll->addAction("add_calendar", actionAddCalendar  );
     actionAddCalendar ->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddCalendar () ) );
 
-    actionAddSubCalendar   = new KAction(KIcon( "resource-calendar-child-insert" ), i18n("Add Subcalendar"), this);
+    actionAddSubCalendar   = new KAction(koIcon("resource-calendar-child-insert"), i18n("Add Subcalendar"), this);
     coll->addAction("add_subcalendar", actionAddSubCalendar  );
     actionAddSubCalendar ->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddSubCalendar () ) );
 
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete" ), this );
+    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     coll->addAction("delete_calendar_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteCalendar() ) );

@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Elevated
+Name[bs]=Podignuto
 Name[ca]=Elevat
 Name[ca@valencia]=Elevat
+Name[da]=Elevated
+Name[de]=Erhöhte Straße
 Name[el]=Elevated
 Name[es]=Elevado
 Name[et]=Tõstand
 Name[fi]=Kohotettu
+Name[fr]=Élevé
+Name[gl]=Elevación
 Name[it]=Elevato
 Name[kk]=Көтерлім
 Name[nb]=Løftet
@@ -15,6 +20,7 @@ Name[pt]=Elevado
 Name[pt_BR]=Elevado
 Name[ru]=Железная дорога
 Name[sk]=Zvýšený
+Name[sl]=Dvignjeno
 Name[sv]=Upphöjd
 Name[uk]=Підйом
 Name[x-test]=xxElevatedxx

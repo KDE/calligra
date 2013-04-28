@@ -1,6 +1,32 @@
 [Desktop Entry]
 Type=Service
 Name=Karbon 14 Drawings
+Name[ca]=Dibuixos del Karbon 14 
+Name[cs]=Kresby Karbon 14
+Name[da]=Karbon 14-tegninger
+Name[de]=Karbon 14 Zeichnungen
+Name[el]=Σχέδια Karbon 14
+Name[es]=Dibujos Karbon 14
+Name[et]=Karbon 14 joonised
+Name[fi]=Karbon 14 -piirrokset
+Name[fr]=Graphiques Karbon 14
+Name[gl]=Debuxos Karbon 14
+Name[hu]=Karbon 14 ábrák
+Name[it]=Grafica Karbon 14
+Name[kk]=Karbon 14 суреттері
+Name[mr]=कार्बन 14 चित्रे
+Name[nb]=Karbon14 tegninger
+Name[nl]=Tekeningen van Karbon 14
+Name[pl]=Rysunki Karbon 14
+Name[pt]=Desenhos do Karbon 14
+Name[pt_BR]=Desenhos do Karbon 14
+Name[sk]=Kresby Karbon 14
+Name[sl]=Risbe Karbon14
+Name[sv]=Karbon 14-teckningar
+Name[tr]=Karbon 14 Çizimleri
+Name[uk]=Малюнки Karbon 14
+Name[x-test]=xxKarbon 14 Drawingsxx
+Name[zh_CN]=Karbon 14 绘图
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-karbon;

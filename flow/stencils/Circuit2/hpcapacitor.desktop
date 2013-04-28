@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Horizontal Polarized Capacitor
+Name[bs]=Horizontalni polarizirani kondenzator
 Name[ca]=Capacitador polaritzar horitzontal
 Name[ca@valencia]=Capacitador polaritzar horitzontal
+Name[da]=Vandret elektrolytkondensator
 Name[de]=Waagerechter gepolter Kondensator
 Name[el]=Οριζόντιος πολωμένος πυκνωτής
 Name[es]=Condensador horizontal polarizado
 Name[et]=Horisontaalne polariseeritud kondensaator
+Name[fr]=Horizontal Polarized Capacitor
+Name[gl]=Condensador horizontal polarizado
+Name[hu]=Vízszintes polarizált kondenzátor
 Name[it]=Condensatore orizzontale polarizzato
 Name[kk]=Жатық үйектелген конденсатор
 Name[nb]=Vannrett polarisert kondensator
@@ -17,6 +22,7 @@ Name[pt_BR]=Capacitor horizontal polarizado
 Name[ru]=Горизонтальный полярный конденсатор
 Name[sk]=Vodorovný polazirovaný kondenzátor
 Name[sv]=Horisontell polär kondensator
+Name[tr]=Yatay polarize Kapasitör
 Name[uk]=Поляризований конденсатор (горизонтально)
 Name[x-test]=xxHorizontal Polarized Capacitorxx
 Name[zh_TW]=水平極性電容器

@@ -79,7 +79,7 @@ namespace wvWare {
 
     /**
      * Set the progress of WordDocument Stream processing.  All other
-     * streams (Table, Data) are refered from this one.
+     * streams (Table, Data) are referred from this one.
      */
         virtual void setProgress(const int percent);
 
@@ -317,14 +317,14 @@ namespace wvWare {
 
         /**
          * Very special characters (bad, bad name) are the ones which need additional
-         * information from the file (i.e. the plain "put the current date there" isn't sufficent).
+         * information from the file (i.e. the plain "put the current date there" isn't sufficient).
          */
         enum VerySpecialCharacter { Picture = 1, FootnoteAuto = 2, AnnotationRef = 5,
                                     DrawnObject = 8, FieldBegin = 19,
                                     FieldSeparator = 20, FieldEnd = 21, FieldEscapeChar = 92 };
 
         /**
-         * special charachters that were dfined in parser9x.h  (fSpec = 1) but that weren't used.
+         * special characters that were dfined in parser9x.h  (fSpec = 1) but that weren't used.
          */
         enum UnusedSpecialCharacter {FootnoteSeparator = 3, FootnodeContinuation = 4, HandAnnotationPic = 7,
                                  AbbrevDate = 10, MergeHelper = 41};

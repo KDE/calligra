@@ -36,7 +36,6 @@
 #include <QStringList>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -945,7 +944,8 @@ QVariant ResourceAllocationItemModel::data( const QModelIndex &index, int role )
         }
     }
     if ( role == Qt::DisplayRole && ! result.isValid() ) {
-        result = " "; // HACK to show focus in empty cells
+        // HACK to show focus in empty cells
+        result = ' ';
     }
     return result;
 }

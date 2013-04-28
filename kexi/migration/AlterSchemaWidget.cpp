@@ -26,6 +26,8 @@
 #include <QLineEdit>
 
 #include <db/tableschema.h>
+#include <KoIcon.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <KexiMainWindowIface.h>
@@ -71,7 +73,7 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
 
     setLayout(m_layout);
 
-    connect(m_table, SIGNAL(clicked(const QModelIndex&)), this, SLOT(tableClicked(const QModelIndex&)));
+    connect(m_table, SIGNAL(clicked(QModelIndex)), this, SLOT(tableClicked(QModelIndex)));
     connect(m_columnType, SIGNAL(activated(int)), this, SLOT(typeActivated(int)));
     connect(m_columnPKey, SIGNAL(clicked(bool)), this, SLOT(pkeyClicked(bool)));
     connect(m_tableName, SIGNAL(textChanged(QString)), this, SLOT(nameChanged(QString)));
@@ -171,11 +173,9 @@ QString AlterSchemaWidget::suggestedItemName(const QString& base_name)
 
 void AlterSchemaWidget::nameChanged(const QString& tableName)
 {
-    if (nameExists(tableName)) {
-        m_nameUsedLabel->setPixmap(KIconLoader::global()->loadIcon("dialog-cancel", KIconLoader::Dialog, 24));
-    } else {
-        m_nameUsedLabel->setPixmap(KIconLoader::global()->loadIcon("dialog-ok", KIconLoader::Dialog, 24));
-    }
+    const char *const iconName =
+        (nameExists(tableName) ? koIconNameCStr("dialog-cancel") : koIconNameCStr("dialog-ok"));
+    m_nameUsedLabel->setPixmap(KIconLoader::global()->loadIcon(QLatin1String(iconName), KIconLoader::Dialog, 24));
 }
 
 bool AlterSchemaWidget::nameExists(const QString& baseName)

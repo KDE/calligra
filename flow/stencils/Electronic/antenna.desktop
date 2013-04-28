@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=antenna
 Name[bg]=антена
+Name[bs]=antena
 Name[ca]=antenna
 Name[ca@valencia]=antenna
+Name[cs]=anténa
+Name[da]=antenne
 Name[de]=Antenne
 Name[el]=κεραία
 Name[es]=antena
 Name[et]=Antenn
+Name[fr]=antenne
+Name[gl]=Antena
+Name[hu]=antenna
 Name[it]=antenna
 Name[ja]=アンテナ
 Name[kk]=антенна
@@ -18,6 +24,7 @@ Name[pt]=antena
 Name[pt_BR]=antena
 Name[ru]=антенна
 Name[sk]=anténa
+Name[sl]=antena
 Name[sv]=antenn
 Name[uk]=Антенна
 Name[x-test]=xxantennaxx

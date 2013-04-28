@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_VIEWLIST_H
-#define KPLATO_VIEWLIST_H
+#ifndef KPTVIEWLIST_H
+#define KPTVIEWLIST_H
 
 #include "kplato_export.h"
 
@@ -41,7 +41,7 @@ class ViewBase;
 class ViewListItem;
 class ViewListWidget;
 
-class Part;
+class MainDocument;
 class Context;
 class ScheduleManager;
 
@@ -116,7 +116,7 @@ class KPLATO_EXPORT ViewListWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ViewListWidget( Part *part, QWidget *parent );//QString name, KXmlGuiWindow *parent );
+    ViewListWidget( MainDocument *part, QWidget *parent );//QString name, KXmlGuiWindow *parent );
     ~ViewListWidget();
 
     /// Set read/write permission on all views.
@@ -134,7 +134,7 @@ public:
     /// Create a unique tag
     QString uniqueTag( const QString &seed ) const;
     /// Add a sub-view
-    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, ViewBase *view, KoDocument *doc, const QString& icon = QString(), int index = -1 );
+    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString &name, ViewBase *view, KoDocument *doc, const QString &iconName = QString(), int index = -1 );
 
     void setSelected( QTreeWidgetItem *item );
     ViewListItem *currentItem() const;
@@ -201,7 +201,7 @@ private:
     void setupContextMenus();
 
 private:
-    Part *m_part;
+    MainDocument *m_part;
     ViewListTreeWidget *m_viewlist;
     QComboBox *m_currentSchedule;
     ScheduleSortFilterModel m_sfModel;

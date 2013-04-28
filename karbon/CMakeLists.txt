@@ -17,7 +17,6 @@ include_directories(
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
     ${CMAKE_SOURCE_DIR}/karbon/ui
     ${CMAKE_SOURCE_DIR}/karbon/common
     ${CMAKE_SOURCE_DIR}/karbon/common/commands
@@ -44,7 +43,7 @@ install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbon_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-karbon.png" )
+kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakarbon.png" )
 kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 if (Q_WS_MAC)

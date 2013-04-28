@@ -37,6 +37,9 @@ class FlatProxyModelTester : public QObject
 private slots:
     void emptyModel();
     void test();
+    void testInsertRemoveTop();
+    void testInsertRemoveChildren();
+    void testInsertRemoveGrandChildren();
 
 private:
     FlatProxyModel m_flatmodel;

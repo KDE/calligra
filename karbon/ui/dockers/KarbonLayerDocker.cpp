@@ -22,8 +22,9 @@
 #include "KarbonLayerSortingModel.h"
 #include "KarbonFactory.h"
 
-#include <KarbonDocument.h>
+#include <KarbonCanvas.h>
 #include <KarbonPart.h>
+#include <KarbonDocument.h>
 #include <KarbonLayerReorderCommand.h>
 
 #include <KoShapeManager.h>
@@ -39,15 +40,14 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
-#include <kicon.h>
-#include <kiconloader.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kparts/part.h>
-#include <KMenu>
-#include <KConfigGroup>
+#include <kmenu.h>
+#include <kconfiggroup.h>
 
 #include <QGridLayout>
 #include <QPushButton>
@@ -79,7 +79,7 @@ QDockWidget* KarbonLayerDockerFactory::createDockWidget()
 }
 
 KarbonLayerDocker::KarbonLayerDocker()
-        : m_part(0), m_model(0), m_updateTimer(this)
+        : m_doc(0), m_model(0), m_updateTimer(this)
 {
     setWindowTitle(i18n("Layer view"));
 
@@ -91,25 +91,25 @@ KarbonLayerDocker::KarbonLayerDocker()
     buttonGroup->setExclusive(false);
 
     QPushButton *button = new QPushButton(mainWidget);
-    button->setIcon(SmallIcon("list-add"));
+    button->setIcon(koIcon("list-add"));
     button->setToolTip(i18n("Add a new layer"));
     buttonGroup->addButton(button, Button_New);
     layout->addWidget(button, 1, 0);
 
     button = new QPushButton(mainWidget);
-    button->setIcon(SmallIcon("list-remove"));
+    button->setIcon(koIcon("list-remove"));
     button->setToolTip(i18n("Delete selected objects"));
     buttonGroup->addButton(button, Button_Delete);
     layout->addWidget(button, 1, 1);
 
     button = new QPushButton(mainWidget);
-    button->setIcon(SmallIcon("go-up"));
+    button->setIcon(koIcon("go-up"));
     button->setToolTip(i18n("Raise selected objects"));
     buttonGroup->addButton(button, Button_Raise);
     layout->addWidget(button, 1, 2);
 
     button = new QPushButton(mainWidget);
-    button->setIcon(SmallIcon("go-down"));
+    button->setIcon(koIcon("go-down"));
     button->setToolTip(i18n("Lower selected objects"));
     buttonGroup->addButton(button, Button_Lower);
     layout->addWidget(button, 1, 3);
@@ -119,11 +119,11 @@ KarbonLayerDocker::KarbonLayerDocker()
     QActionGroup *group = new QActionGroup(this);
 
     m_viewModeActions.insert(KoDocumentSectionView::MinimalMode,
-                             menu->addAction(SmallIcon("view-list-text"), i18n("Minimal View"), this, SLOT(minimalView())));
+                             menu->addAction(koIcon("view-list-text"), i18n("Minimal View"), this, SLOT(minimalView())));
     m_viewModeActions.insert(KoDocumentSectionView::DetailedMode,
-                             menu->addAction(SmallIcon("view-list-details"), i18n("Detailed View"), this, SLOT(detailedView())));
+                             menu->addAction(koIcon("view-list-details"), i18n("Detailed View"), this, SLOT(detailedView())));
     m_viewModeActions.insert(KoDocumentSectionView::ThumbnailMode,
-                             menu->addAction(SmallIcon("view-preview"), i18n("Thumbnail View"), this, SLOT(thumbnailView())));
+                             menu->addAction(koIcon("view-preview"), i18n("Thumbnail View"), this, SLOT(thumbnailView())));
 
     foreach(QAction* action, m_viewModeActions) {
         action->setCheckable(true);
@@ -132,7 +132,7 @@ KarbonLayerDocker::KarbonLayerDocker()
 
     toolButton->setMenu(menu);
     toolButton->setPopupMode(QToolButton::InstantPopup);
-    toolButton->setIcon(SmallIcon("view-choose"));
+    toolButton->setIcon(koIcon("view-choose"));
     toolButton->setText(i18n("View mode"));
     layout->addWidget(toolButton, 1, 5);
     layout->setSpacing(0);
@@ -143,9 +143,9 @@ KarbonLayerDocker::KarbonLayerDocker()
     connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
     m_model = new KarbonLayerModel(this);
-    m_model->setDocument(m_part ? &m_part->document() : 0);
+    m_model->setDocument(m_doc ? m_doc : 0);
     m_sortModel = new KarbonLayerSortingModel(this);
-    m_sortModel->setDocument(m_part ? &m_part->document() : 0);
+    m_sortModel->setDocument(m_doc ? m_doc : 0);
     m_sortModel->setSourceModel(m_model);
 
     m_layerView->setItemsExpandable(true);
@@ -200,16 +200,22 @@ void KarbonLayerDocker::updateView()
     m_updateTimer.start();
 }
 
-void KarbonLayerDocker::setPart(KParts::Part * part)
+void KarbonLayerDocker::setCanvas(KoCanvasBase* canvas)
 {
-    m_part = dynamic_cast<KarbonPart*>(part);
-    if (! m_part) {
-        m_sortModel->setDocument(0);
-        m_model->setDocument(0);
-    } else {
-        m_sortModel->setDocument(&m_part->document());
-        m_model->setDocument(&m_part->document());
+    KarbonCanvas *c = dynamic_cast<KarbonCanvas*>(canvas);
+    if (c) {
+        m_doc = c->document();
+        m_sortModel->setDocument(m_doc ? m_doc : 0);
+        m_model->setDocument(m_doc ? m_doc : 0);
+        m_model->update();
     }
+}
+
+void KarbonLayerDocker::unsetCanvas()
+{
+    m_doc = 0;
+    m_sortModel->setDocument(0);
+    m_model->setDocument(0);
     m_model->update();
 }
 
@@ -280,7 +286,7 @@ void KarbonLayerDocker::addLayer()
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName(name);
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        KUndo2Command *cmd = new KoShapeCreateCommand(m_part, layer, 0);
+        KUndo2Command *cmd = new KoShapeCreateCommand(m_doc, layer, 0);
         cmd->setText(i18nc("(qtundo-format)", "Create Layer"));
         canvasController->canvas()->addCommand(cmd);
         m_model->update();
@@ -298,19 +304,19 @@ void KarbonLayerDocker::deleteItem()
     KUndo2Command *cmd = 0;
 
     if (selectedLayers.count()) {
-        if (m_part->document().layers().count() > selectedLayers.count()) {
+        if (m_doc->layers().count() > selectedLayers.count()) {
             QList<KoShape*> deleteShapes;
             foreach(KoShapeLayer* layer, selectedLayers) {
                 deleteShapes += layer->shapes();
                 deleteShapes.append(layer);
             }
-            cmd = new KoShapeDeleteCommand(m_part, deleteShapes);
+            cmd = new KoShapeDeleteCommand(m_doc, deleteShapes);
             cmd->setText(i18nc("(qtundo-format)", "Delete Layer"));
         } else {
             KMessageBox::error(0L, i18n("Could not delete all layers. At least one layer is required."), i18n("Error deleting layers"));
         }
     } else if (selectedShapes.count()) {
-        cmd = new KoShapeDeleteCommand(m_part, selectedShapes);
+        cmd = new KoShapeDeleteCommand(m_doc, selectedShapes);
     }
 
     if (cmd) {
@@ -335,10 +341,10 @@ void KarbonLayerDocker::raiseItem()
     if (selectedLayers.count()) {
         // check if all layers could be raised
         foreach(KoShapeLayer* layer, selectedLayers)
-        if (! m_part->document().canRaiseLayer(layer))
+        if (! m_doc->canRaiseLayer(layer))
             return;
 
-        cmd = new KarbonLayerReorderCommand(&m_part->document(), selectedLayers, KarbonLayerReorderCommand::RaiseLayer);
+        cmd = new KarbonLayerReorderCommand(m_doc, selectedLayers, KarbonLayerReorderCommand::RaiseLayer);
     } else if (selectedShapes.count()) {
         cmd = KoShapeReorderCommand::createCommand(selectedShapes, canvas->shapeManager(), KoShapeReorderCommand::RaiseShape);
     }
@@ -369,10 +375,10 @@ void KarbonLayerDocker::lowerItem()
     if (selectedLayers.count()) {
         // check if all layers could be raised
         foreach(KoShapeLayer* layer, selectedLayers)
-        if (! m_part->document().canLowerLayer(layer))
+        if (! m_doc->canLowerLayer(layer))
             return;
 
-        cmd = new KarbonLayerReorderCommand(&m_part->document(), selectedLayers, KarbonLayerReorderCommand::LowerLayer);
+        cmd = new KarbonLayerReorderCommand(m_doc, selectedLayers, KarbonLayerReorderCommand::LowerLayer);
     } else if (selectedShapes.count()) {
         cmd = KoShapeReorderCommand::createCommand(selectedShapes, canvas->shapeManager(), KoShapeReorderCommand::LowerShape);
     }
@@ -394,7 +400,7 @@ void KarbonLayerDocker::selectLayers(QList<KoShapeLayer*> layers)
     QItemSelectionModel * selModel = m_layerView->selectionModel();
     selModel->clearSelection();
     foreach(KoShapeLayer * layer, layers) {
-        int layerPos = m_part->document().layerPos(layer);
+        int layerPos = m_doc->layerPos(layer);
         QModelIndex child = m_model->index(layerPos, 0);
         selModel->select(m_sortModel->mapFromSource(child), QItemSelectionModel::Select);
     }

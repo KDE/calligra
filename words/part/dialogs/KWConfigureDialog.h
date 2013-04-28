@@ -33,7 +33,7 @@ class KWConfigureDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    KWConfigureDialog(KWView* parent);
+    explicit KWConfigureDialog(KWView* parent);
 
 public slots:
     void slotApply();

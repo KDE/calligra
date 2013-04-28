@@ -32,7 +32,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow (QWidget* parent = 0);
+    explicit MainWindow (QWidget* parent = 0);
     ~MainWindow();
 
     void openFile (const QString& path);
@@ -41,8 +41,6 @@ private:
     QDeclarativeView* m_view;
     KDeclarative kdeclarative;
     QString documentPath;
-
-    void loadMetadataModel();
 
 private slots:
     void adjustWindowSize (QSize size);

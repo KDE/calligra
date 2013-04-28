@@ -32,7 +32,7 @@ class KoXmlWriter;
 class WMFImportParser : public Libwmf::WmfAbstractBackend
 {
 public:
-    WMFImportParser(KoXmlWriter &svgWriter);
+    explicit WMFImportParser(KoXmlWriter &svgWriter);
     virtual ~WMFImportParser();
 
 private:

@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=Horizontal Wall
+Name[bs]=Horizontalni zid
 Name[ca]=Paret horitzontal
 Name[ca@valencia]=Paret horitzontal
+Name[da]=Vandret mur
 Name[de]=Waagerechte Mauer
 Name[el]=Οριζόντιο τείχος
 Name[es]=Pared horizontal
 Name[et]=Horisontaalne sein
 Name[fi]=Vaakasuora muuri
+Name[fr]=Mur horizontale
+Name[gl]=Parece horizontal
 Name[hu]=Vízszintes fal
 Name[it]=Muro orizzontale
 Name[kk]=Жатық қабырға
@@ -18,7 +22,10 @@ Name[pt]=Parede Horizontal
 Name[pt_BR]=Parede horizontal
 Name[ru]=Горизонтальная стена
 Name[sk]=Vodorovná stena
+Name[sl]=Vodoraven zid
 Name[sv]=Horisontell mur
+Name[tr]=Yatay Duvar
 Name[uk]=Горизонтальна стіна
 Name[x-test]=xxHorizontal Wallxx
+Name[zh_CN]=水平墙
 Name[zh_TW]=水平牆

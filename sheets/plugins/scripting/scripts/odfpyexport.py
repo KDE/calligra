@@ -6,15 +6,15 @@ an OpenDocument File using the ODFPY python module.
 
 The script could be used in two ways;
 
-    1. Embedded in KSpread by execution via the "Tools=>Scripts"
+    1. Embedded in Sheets by execution via the "Tools=>Scripts"
        menu or from the "Tools=>Script Manager". In that case
-       the document currently loaded and displayed by KSpread
+       the document currently loaded and displayed by Sheets
        will be exported.
 
     2. As standalone script by running;
 
             # make the script executable
-            chmod 755 `kde4-config --install data`/kspread/scripts/extensions/odfpyexport.py
+            chmod 755 `kde4-config --install data`/sheets/scripts/extensions/odfpyexport.py
             # run the script
             `kde4-config --install data`/kspread/scripts/extensions/odfpyexport.py
 
@@ -26,19 +26,21 @@ The script could be used in two ways;
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 try:
     import Kross
 except:
-    raise "Failed to import the Kross module."
+    raise Exception, "Failed to import the Kross module."
+
+T = Kross.module("kdetranslation")
 
 try:
     import odf.opendocument
 except:
-    raise "<qt>Failed to import the ODFPY python module.<br><br>To use this odfpyexport.py python script to export to OpenDocument you need to install the <a href=\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module.</qt>"
+    raise Exception, T.i18n("<qt>Failed to import the ODFPY python module.<br><br>To use this odfpyexport.py python script to export to OpenDocument you need to install the <a href=\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module.</qt>")
 
 class OdfExporter:
 
@@ -53,7 +55,7 @@ class OdfExporter:
                 if r[2] > maxcolumn:
                     maxcolumn = r[2]
             if maxcolumn < 1:
-                raise "Failed to determinate number of columns."
+                raise Exception, T.i8n("Failed to determinate number of columns.")
             #mincolumn = maxcolumn
             #for r in ranges:
             #    if r[0] < mincolumn:
@@ -69,16 +71,16 @@ class OdfExporter:
                 if len(r) < 4:
                     r = (r[:2] + (lastColumn, lastRow))
                 if r[0] > r[2]:
-                    raise "Invalid range for sheet \"%s\" cause left column value \"%i\" is bigger then right column value \"%i\"." % (sheet.sheetName(),r[0],r[2])
+                    raise Exception, T.i18n("Invalid range for sheet \"%1\" cause left column value \"%2\" is bigger than right column value \"%3\".", [sheet.sheetName()], [r[0]], [r[2]])
                 if r[1] > r[3]:
-                    raise "Invalid range for sheet \"%s\" cause top row value \"%i\" is bigger then bottom row value \"%i\"." % (sheet.sheetName(),r[1],r[3])
+                    raise Exception, T.i18n("Invalid range for sheet \"%1\" cause top row value \"%2\" is bigger than bottom row value \"%3\".", [sheet.sheetName()], [r[1]], [r[3]])
                 rangeList.append(r)
             if len(rangeList) < 1:
                 rangeList.append( (1, 1, lastColumn, lastRow) )
             return rangeList
 
     class OpenDocumentText(_OpenDocumentInterface_):
-        filtername = "OpenDocument Text"
+        filtername = T.i18n("OpenDocument Text")
         filtermask = "*.odt"
 
         def __init__(self, kspread, exportSheets, writeOdfFile):
@@ -135,7 +137,7 @@ class OdfExporter:
             self.doc.text.addElement(table)
 
     class OpenDocumentSpreadsheet(_OpenDocumentInterface_):
-        filtername = "OpenDocument Spreadsheet"
+        filtername = T.i18n("OpenDocument Spreadsheet")
         filtermask = "*.ods"
 
         def __init__(self, kspread, exportSheets, writeOdfFile):
@@ -211,13 +213,13 @@ class OdfPyExport:
             try:
                 self.kspread = Kross.module("kspread")
             except ImportError:
-                raise "Failed to import the Kross module. Please run this script with \"kross odtexport.py\""
+                raise Exception, "Failed to import the Kross module. Please run this script with \"kross odtexport.py\""
 
         if readOdsFile:
             if not self.kspread.openUrl(readOdsFile):
-                raise "Failed to read OpenDocument Spreadsheet file \"%s\"." % readOdsFile
+                raise Exception, ("Failed to read OpenDocument Spreadsheet file \"%1\".", readOdsFile)
         elif not embeddedInKSpread:
-            raise "No OpenDocument Spreadsheet file to read from defined."
+            raise Exception, T.i18n("No OpenDocument Spreadsheet file to read from defined.")
 
         global OdfExporter
         self.exporterClasses = []
@@ -231,12 +233,12 @@ class OdfPyExport:
 
         if embeddedInKSpread or not exportSheets or not writeOdfFile:
             forms = Kross.module("forms")
-            dialog = forms.createDialog("OdfPy Export")
+            dialog = forms.createDialog(T.i18n("OdfPy Export"))
             dialog.setButtons("Ok|Cancel")
             dialog.setFaceType("List") #Auto Plain List Tree Tabbed
             try:
                 if not writeOdfFile:
-                    savepage = dialog.addPage("Save","Save to OpenDocument File","document-save")
+                    savepage = dialog.addPage(T.i18nc("Options page name", "Save"),T.i18n("Save to OpenDocument File"),"document-save")
                     self.savewidget = forms.createFileWidget(savepage, "kfiledialog:///kspreadodfpyexport")
                     self.savewidget.setMode("Saving")
 
@@ -244,12 +246,12 @@ class OdfPyExport:
                     for f in self.exporterClasses:
                         filters.append("%s|%s" % (f.filtermask,f.filtername))
                     if len(self.exporterClasses) > 1:
-                        filters.insert(0, "%s|All Supported Files" % " ".join([f.filtermask for f in self.exporterClasses]))
-                    filters.append("*|All Files")
+                        filters.insert(0, "%s|%s" % (" ".join([f.filtermask for f in self.exporterClasses]),T.i18n("All Supported Files")))
+                    filters.append("*|%s" % T.i18n("All Files"))
                     self.savewidget.setFilter("\n".join(filters))
 
                 if not exportSheets:
-                    datapage = dialog.addPage("Sheets","Export Sheets","spreadsheet")
+                    datapage = dialog.addPage(T.i18n("Sheets"), T.i18n("Export Sheets"), "spreadsheet")
                     self.sheetslistview = self.kspread.createSheetsListView(datapage)
                     self.sheetslistview.setSelectionType("MultiSelect")
                     self.sheetslistview.setEditorType("Range")
@@ -275,7 +277,7 @@ class OdfPyExport:
                 exportSheets.append( [sheetname, True] )
 
         if not writeOdfFile:
-            raise "No OpenDocument file to write to defined."
+            raise Exception, T.i18n("No OpenDocument file to write defined.")
 
         if not odfExporterClass:
             if len(self.exporterClasses) == 1:

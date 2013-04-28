@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Vertical Polarized Capacitor
+Name[bs]=Vertikalni polarizirani kondenzator
 Name[ca]=Capacitador polaritzat vertical
 Name[ca@valencia]=Capacitador polaritzat vertical
+Name[da]=Lodret elektrolytkondensator
 Name[de]=Senkrechter gepolter Kondensator
 Name[el]=Κάθετος πολωμένος πυκνωτής
 Name[es]=Condensador polarizado vertical
 Name[et]=Vertikaalne polariseeritud kondensaator
+Name[fr]=Vertical Polarized Capacitor
+Name[gl]=Condensador vertical polarizado
+Name[hu]=Függőleges polarizált kondenzátor
 Name[it]=Condensatore verticale polarizzato
 Name[kk]=Тік үйектелген конденсатор
 Name[nb]=Loddrett polarisert kondensator
@@ -17,6 +22,7 @@ Name[pt_BR]=Capacitor vertical polarizado
 Name[ru]=Вертикальный полярный конденсатор
 Name[sk]=Zvislý polarizovaný kondenzátor
 Name[sv]=Vertikal polär kondensator
+Name[tr]=Dikey Polarize Kapasitör
 Name[uk]=Поляризований конденсатор (вертикально)
 Name[x-test]=xxVertical Polarized Capacitorxx
 Name[zh_TW]=垂直極性電容器

@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=Tape array
+Name[bs]=Red traka
 Name[ca]=Cinta matriu
 Name[ca@valencia]=Cinta matriu
+Name[da]=Båndstation
+Name[de]=Bandarray
 Name[el]=Tape array
 Name[es]=Array de cintas
 Name[et]=Lindimassiiv
+Name[fr]=Tape array
+Name[gl]=Matriz de cinta
 Name[it]=Array di nastri
 Name[kk]=Таспа (жиым)
+Name[lt]=Juostų masyvas
 Name[nb]=StorageRack3U
 Name[nl]=Tape-array
 Name[pl]=Macierz taśmy

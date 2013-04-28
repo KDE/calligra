@@ -30,6 +30,8 @@
 #include "kptitemmodelbase.h"
 #include "kpttaskcompletedelegate.h"
 
+#include "kdganttglobal.h"
+
 #include <QModelIndex>
 #include <QMetaEnum>
 #include <QObject>
@@ -117,7 +119,7 @@ void TaskWorkPackageModel::slotNodeChanged( Node *node )
     if ( node == 0 || node->type() == Node::Type_Project ) {
         return;
     }
-    int row = node->parentNode()->indexOf( node );
+    int row = indexForNode( node ).row();
     kDebug(planworkDbg())<<node->name()<<row;
     emit dataChanged( createIndex( row, 0, node->parentNode() ), createIndex( row, columnCount()-1, node->parentNode() ) );
 }
@@ -151,9 +153,8 @@ void TaskWorkPackageModel::slotDocumentChanged( Node *node, Document */*doc*/, i
 void TaskWorkPackageModel::addWorkPackage( WorkPackage *package, int row )
 {
     beginInsertRows( QModelIndex(), row, row );
-    endInsertRows();
     Project *project = package->project();
-    kDebug(planworkDbg())<<package->project();
+    endInsertRows();
     if ( project ) {
         connect( project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
@@ -316,8 +317,30 @@ QVariant TaskWorkPackageModel::plannedEffort( Node *n, int role ) const
     return QVariant();
 }
 
+QVariant TaskWorkPackageModel::status( Node *n, int role ) const
+{
+    return m_nodemodel.status( n, role );
+}
+
 QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
 {
+    if ( role >= Qt::UserRole ) {
+//        kDebug(planworkDbg())<<this<<n->name()<<column<<role;
+        switch ( role ) {
+        case KDGantt::ItemTypeRole:
+            switch ( n->type() ) {
+            case Node::Type_Task: return KDGantt::TypeTask;
+            default: break;
+            }
+        case KDGantt::StartTimeRole:
+            kDebug(planworkDbg())<<this<<n->name()<<"start:"<<n->startTime();
+            return m_nodemodel.data( n, NodeModel::NodeStartTime, Qt::EditRole );
+        case KDGantt::EndTimeRole:
+            kDebug(planworkDbg())<<this<<n->name()<<"end:"<<n->endTime();
+            return m_nodemodel.data( n, NodeModel::NodeEndTime, Qt::EditRole );
+        default: break;
+        }
+    }
     switch ( column ) {
         case NodeName: return m_nodemodel.data( n, NodeModel::NodeName, role );
         case NodeType: return m_nodemodel.data( n, NodeModel::NodeType, role );
@@ -338,6 +361,7 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
         case NodeStarted: return m_nodemodel.data( n, NodeModel::NodeStarted, role );
         case NodeActualFinish: return actualFinish( n, role );
         case NodeFinished: return m_nodemodel.data( n, NodeModel::NodeFinished, role );
+        case NodeStatus: return status( n, role );
         case NodeStatusNote: return m_nodemodel.data( n, NodeModel::NodeStatusNote, role );
 
         case ProjectName: return projectName( n, role );
@@ -567,6 +591,7 @@ QVariant TaskWorkPackageModel::headerData( int section, Qt::Orientation orientat
         case NodeStarted: return i18n( "Started" );
         case NodeActualFinish: return i18n( "Actual Finish" );
         case NodeFinished: return i18n( "Finished" );
+        case NodeStatus: return i18nc( "@title:column", "Status" );
         case NodeStatusNote: return i18n( "Note" );
 
         case ProjectName: return i18n( "Project Name" );

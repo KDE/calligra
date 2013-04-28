@@ -935,7 +935,7 @@ open dialog will appear, allowing you to choose a
 <term>
 <menuchoice>
 <guimenu>Insert</guimenu>
-<guimenuitem>Picture...</guimenuitem>
+<guimenuitem>Insert Pictures as Slides...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1957,6 +1957,17 @@ in the menu.
 &kpresenter;...</guimenuitem> menu entry gives two menu boxes. -->
 </para>
 </listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Themes</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Choose the color theme for &stage; window.</action> You can choose
+one of the predefined color schemes or select <guimenuitem>Configuration...</guimenuitem> to
+open <ulink url="help:/kcontrol/colors">&systemsettings; color selection module</ulink>.
+</para></listitem>
 </varlistentry>
 
 <varlistentry>

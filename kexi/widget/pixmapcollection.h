@@ -25,7 +25,6 @@
 #include <QPair>
 #include <q3intdict.h>
 #include <QToolButton>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <kicontheme.h>

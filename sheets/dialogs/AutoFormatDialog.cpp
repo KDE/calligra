@@ -84,8 +84,6 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
     QWidget *page = mainWidget();
 
     QVBoxLayout *vbox = new QVBoxLayout(page);
-    vbox->setMargin(KDialog::marginHint());
-    vbox->setSpacing(KDialog::spacingHint());
 
     QLabel *toplabel = new QLabel(i18n("Select the sheet style to apply:"), page);
     d->combo = new KComboBox(page);

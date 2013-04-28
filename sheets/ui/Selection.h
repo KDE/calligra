@@ -194,7 +194,7 @@ public:
 
     /**
      * Activates the cell location/range, that has \p cell as bottom left or
-     * right cell. If more than one occurence would fit, the first one is taken.
+     * right cell. If more than one occurrence would fit, the first one is taken.
      * \return the index of the activated range or \c -1, if nothing fits
      */
     int setActiveElement(const Cell &cell);

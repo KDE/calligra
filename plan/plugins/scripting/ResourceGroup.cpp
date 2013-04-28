@@ -17,11 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QObject>
-#include <QVariant>
+#include "ResourceGroup.h"
 
-#include <ResourceGroup.h>
-#include <Project.h>
+#include "Project.h"
 
 #include <kptresource.h>
 

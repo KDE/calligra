@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,27 +23,42 @@
 
 #include <kexi_global.h>
 #include <koproperty/Property.h>
-#include <KexiView.h>
+#include <core/KexiView.h>
 
-#define MAX_FIELDS 101 //nice prime number (default prop. set vector size)
+class KexiDataAwarePropertySet::Private
+{
+public:
+    Private(KexiView *aview, KexiDataAwareObjectInterface *adataObject)
+      : view(aview)
+      , dataObject(adataObject)
+      , row(-99)
+    {
+    }
+
+    ~Private()
+    {
+        qDeleteAll(sets);
+        sets.clear();
+    }
+
+    QVector<KoProperty::Set*> sets; //!< prop. sets vector
+
+    QPointer<KexiView> view;
+    KexiDataAwareObjectInterface* dataObject;
+    QPointer<KexiTableViewData> currentTVData;
+
+    int row; //!< used to know if a new row is selected in slotCellSelected()
+};
 
 KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
         KexiDataAwareObjectInterface* dataObject)
         : QObject(view)
-        , m_view(view)
-        , m_dataObject(dataObject)
-        , m_row(-99)
+        , d(new Private(view, dataObject))
 {
     setObjectName(view->objectName() + "_KexiDataAwarePropertySet");
-
-// connect(m_dataObject, SIGNAL(dataSet(KexiTableViewData*)),
-//  this, SLOT(slotDataSet(KexiTableViewData*)));
-    m_dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiTableViewData*)));
-// connect(m_dataObject, SIGNAL(cellSelected(int,int)),
-//  this, SLOT(slotCellSelected(int,int)));
-    m_dataObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int, int)));
-//
-    slotDataSet(m_dataObject->data());
+    d->dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiTableViewData*)));
+    d->dataObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
+    slotDataSet(d->dataObject->data());
     const bool wasDirty = view->isDirty();
     clear();
     if (!wasDirty)
@@ -52,56 +67,70 @@ KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
 
 KexiDataAwarePropertySet::~KexiDataAwarePropertySet()
 {
-    qDeleteAll(m_sets);
-    m_sets.clear();
+    delete d;
 }
 
 void KexiDataAwarePropertySet::slotDataSet(KexiTableViewData *data)
 {
-    if (!m_currentTVData.isNull()) {
-        m_currentTVData->disconnect(this);
+    if (!d->currentTVData.isNull()) {
+        d->currentTVData->disconnect(this);
         clear();
     }
-    m_currentTVData = data;
-    if (!m_currentTVData.isNull()) {
-        connect(m_currentTVData, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
-        connect(m_currentTVData, SIGNAL(rowsDeleted(const QList<int> &)),
-                this, SLOT(slotRowsDeleted(const QList<int> &)));
-        connect(m_currentTVData, SIGNAL(rowInserted(KexiDB::RecordData*, uint, bool)),
-                this, SLOT(slotRowInserted(KexiDB::RecordData*, uint, bool)));
-        connect(m_currentTVData, SIGNAL(reloadRequested()),
+    d->currentTVData = data;
+    if (!d->currentTVData.isNull()) {
+        connect(d->currentTVData, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
+        connect(d->currentTVData, SIGNAL(rowsDeleted(QList<int>)),
+                this, SLOT(slotRowsDeleted(QList<int>)));
+        connect(d->currentTVData, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
+                this, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool)));
+        connect(d->currentTVData, SIGNAL(reloadRequested()),
                 this, SLOT(slotReloadRequested()));
     }
 }
 
 void KexiDataAwarePropertySet::eraseCurrentPropertySet()
 {
-    eraseAt(m_dataObject->currentRow());
+    eraseAt(d->dataObject->currentRow());
 }
 
 void KexiDataAwarePropertySet::eraseAt(uint row)
 {
-    KoProperty::Set *set = m_sets.at(row);
-    if (!set)
+    KoProperty::Set *set = d->sets.value(row);
+    if (!set) {
+        kWarning() << "No row to erase:" << row;
         return;
-    m_sets[row] = 0;
+    }
+    d->sets[row] = 0;
     set->debug();
     delete set;
-    m_view->setDirty();
-    m_view->propertySetSwitched();
+    d->view->setDirty();
+    d->view->propertySetSwitched();
 }
 
 uint KexiDataAwarePropertySet::size() const
 {
-    return m_sets.size();
+    return d->sets.size();
 }
 
-void KexiDataAwarePropertySet::clear(uint minimumSize)
+void KexiDataAwarePropertySet::clear()
 {
-    m_sets.clear();
-    m_sets.resize(qMax(minimumSize, (uint)MAX_FIELDS));
-    m_view->setDirty(true);
-    m_view->propertySetSwitched();
+    qDeleteAll(d->sets);
+    d->sets.clear();
+    d->sets.resize(1000);
+    d->view->setDirty(true);
+    d->view->propertySetSwitched();
+}
+
+void KexiDataAwarePropertySet::enlargeToFitRow(uint row)
+{
+    uint newSize = d->sets.size();
+    if (row < newSize) {
+        return;
+    }
+    while (newSize < (row + 1)) {
+        newSize *= 2;
+    }
+    d->sets.resize(newSize);
 }
 
 void KexiDataAwarePropertySet::slotReloadRequested()
@@ -111,18 +140,22 @@ void KexiDataAwarePropertySet::slotReloadRequested()
 
 void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
 {
-    if (!set || row >= (uint)m_sets.size()) {
-        kWarning() << "invalid args: record=" << row << "propertyset=" << set;
+    if (!set) {
+        Q_ASSERT_X(false, "KexiDataAwarePropertySet::set", "set == 0");
+        kWarning() << "set == 0";
         return;
     }
     if (set->parent() && set->parent() != this) {
-        kWarning() << "property set's parent must be NULL or this KexiDataAwarePropertySet";
+        const char *msg = "property set's parent must be NULL or this KexiDataAwarePropertySet";
+        Q_ASSERT_X(false, "KexiDataAwarePropertySet::set", msg);
+        kWarning() << msg;
         return;
     }
+    enlargeToFitRow(row);
 
-    m_sets[row] = set;
+    d->sets[row] = set;
 
-    connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)), m_view, SLOT(setDirty()));
+    connect(set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)), d->view, SLOT(setDirty()));
 
     if (newOne) {
         //add a special property indicating that this is brand new set,
@@ -130,142 +163,111 @@ void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
         KoProperty::Property* prop = new KoProperty::Property("newrecord");
         prop->setVisible(false);
         set->addProperty(prop);
-        m_view->setDirty();
+        d->view->setDirty();
     }
 }
 
 KoProperty::Set* KexiDataAwarePropertySet::currentPropertySet() const
 {
-    return (m_dataObject->currentRow() >= 0) ? m_sets.at(m_dataObject->currentRow()) : 0;
+    if (d->dataObject->currentRow() < 0) {
+        return 0;
+    }
+    return d->sets.value(d->dataObject->currentRow());
 }
 
 uint KexiDataAwarePropertySet::currentRow() const
 {
-    return m_dataObject->currentRow();
+    return d->dataObject->currentRow();
 }
+
+KoProperty::Set* KexiDataAwarePropertySet::at(uint row) const
+{
+    return d->sets.value(row);
+}
+
 
 void KexiDataAwarePropertySet::slotRowDeleted()
 {
-    m_view->setDirty();
+    d->view->setDirty();
+    enlargeToFitRow(d->dataObject->currentRow());
+    d->sets.remove(d->dataObject->currentRow());
 
-    /* Qt4 : not needed
-      removeCurrentPropertySet();
-
-      //let's move up all property sets that are below that deleted
-      const int r = m_dataObject->currentRow();
-      const int size = int(m_sets.size()) - 1;
-      for (int i = r; i<size; i++)
-        m_sets[ i ] = m_sets.at(i+1);
-      m_sets[ size ] = 0;*/
-
-    // It's simplified in Qt4:
-    m_sets.remove(m_dataObject->currentRow());
-
-    m_view->propertySetSwitched();
+    d->view->propertySetSwitched();
     emit rowDeleted();
 }
 
-void KexiDataAwarePropertySet::slotRowsDeleted(const QList<int> &rows)
+void KexiDataAwarePropertySet::slotRowsDeleted(const QList<int> &_rows)
 {
+    if (_rows.isEmpty()) {
+        return;
+    }
     //let's move most property sets up & delete unwanted
     const int orig_size = size();
     int prev_r = -1;
-    int num_removed = 0, cur_r = -1;
-    for (QList<int>::ConstIterator r_it = rows.constBegin(); r_it != rows.constEnd() && *r_it < orig_size; ++r_it) {
+    int num_removed = 0;
+    int cur_r = -1;
+    QList<int> rows(_rows);
+    qSort(rows);
+    enlargeToFitRow(rows.last());
+    for (QList<int>::ConstIterator r_it = rows.constBegin(); r_it != rows.constEnd() && *r_it <
+         orig_size; ++r_it)
+    {
         cur_r = *r_it;
         if (prev_r >= 0) {
-//   kDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2;
+//   kDebug() << "move " << prev_r+nud->removed-1 << ".." << cur_r-1 << " to " << prev_r+nud->removed-1 << ".." << cur_r-2;
             int i = prev_r;
-            KoProperty::Set *set = m_sets.at(i + num_removed);
-//Qt4   if (set)
-            m_sets.remove(i + num_removed);
+            KoProperty::Set *set = d->sets.at(i + num_removed);
+            d->sets.remove(i + num_removed);
             kDebug() << "property set " << i + num_removed << " deleted";
             delete set;
             num_removed++;
-            /* Qt4 : not needed
-                  for (; (i+num_removed)<cur_r; i++) {
-                    m_sets[ i ] = m_sets.at(i+num_removed);
-                    kDebug() << i << " <- " << i+num_removed;
-                  }*/
         }
         prev_r = cur_r - num_removed;
     }
-    /* Qt4 : not needed
-      //move remaining buffers up
-      if (cur_r>=0) {
-        KoProperty::Set *set = m_sets.at(cur_r);
-        if (set)
-          m_sets.remove(cur_r);
-        kDebug() << "property set " << cur_r << " deleted";
-        delete set;
-        num_removed++;
-        for (int i=prev_r; (i+num_removed)<orig_size; i++) {
-          m_sets[ i ] = m_sets.at(i+num_removed);
-          kDebug() << i << " <- " << i+num_removed;
-        }
-      }
-      */
-    /* Qt4 : not needed
-      //finally: clear last rows
-      for (int i=orig_size-num_removed; i<orig_size; i++) {
-        kDebug() << i << " <- zero";
-        m_sets[ i ] = 0;
-      }
-      for (int i=orig_size-num_removed; i<orig_size; i++) {
-        kDebug() << i << " <- zero";
-        m_sets[ i ] = 0;
-      }*/
-    //(Qt4) finally: add empty rows
-    m_sets.insert(size(), num_removed, 0);
+    //finally: add empty rows
+    d->sets.insert(size(), num_removed, 0);
 
     if (num_removed > 0)
-        m_view->setDirty();
-    m_view->propertySetSwitched();
+        d->view->setDirty();
+    d->view->propertySetSwitched();
 }
 
 void KexiDataAwarePropertySet::slotRowInserted(KexiDB::RecordData*, uint pos, bool /*repaint*/)
 {
-    m_view->setDirty();
+    d->view->setDirty();
+    if (pos > 0) {
+        enlargeToFitRow(pos - 1);
+    }
+    d->sets.insert(pos, 0);
 
-    //let's move down all property set that are below
-// const int r = m_dataObject->currentRow();
-    /* Qt4 : not needed
-      m_sets.resize(m_sets.size()+1);
-      for (int i=int(m_sets.size())-1; i>(int)row; i--)
-        m_sets[i] = m_sets.at(i-1);
-      m_sets[row] = 0;*/
-
-    // It's simplified in Qt4:
-    m_sets.insert(pos, 0);
-
-    m_view->propertySetSwitched();
+    d->view->propertySetSwitched();
     emit rowInserted();
 }
 
 void KexiDataAwarePropertySet::slotCellSelected(int, int row)
 {
-    if (row == m_row)
+    if (row == d->row)
         return;
-    m_row = row;
-    m_view->propertySetSwitched();
+    d->row = row;
+    d->view->propertySetSwitched();
 }
 
-KoProperty::Set* KexiDataAwarePropertySet::findPropertySetForItem(KexiDB::RecordData& record)
+KoProperty::Set* KexiDataAwarePropertySet::findPropertySetForItem(const KexiDB::RecordData& record)
 {
-    if (m_currentTVData.isNull())
+    if (d->currentTVData.isNull())
         return 0;
-    int idx = m_currentTVData->indexOf(&record);
+    int idx = d->currentTVData->indexOf(&record);
     if (idx < 0)
         return 0;
-    return m_sets.at(idx);
+    return d->sets.at(idx);
 }
 
 int KexiDataAwarePropertySet::findRowForPropertyValue(
     const QByteArray& propertyName, const QVariant& value)
 {
-    const int size = m_sets.size();
+    const int size = d->sets.size();
     for (int i = 0; i < size; i++) {
-        KoProperty::Set *set = m_sets.at(i);
+        KoProperty::Set *set = d->sets.at(i);
         if (!set || !set->contains(propertyName))
             continue;
         if (set->propertyValue(propertyName) == value)

@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    BindingManager(const Map* map);
+    explicit BindingManager(const Map *map);
 
     /**
      * Destructor.

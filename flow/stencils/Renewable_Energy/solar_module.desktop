@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Solar Module
+Name[bs]=Solarni modul
 Name[ca]=Mòdul solar
 Name[ca@valencia]=Mòdul solar
+Name[cs]=Solární panel
+Name[da]=Solcelle
 Name[de]=Solar-Modul
 Name[el]=Ηλιακό άρθρωμα
 Name[es]=Módulo solar
 Name[et]=Päikesepaneel
+Name[fr]=Module solaire
+Name[gl]=Módulo solar
 Name[it]=Pannello solare
 Name[kk]=Күн батареясының модулі
 Name[nb]=Solarmodul
@@ -15,6 +20,7 @@ Name[pt]=Módulo Solar
 Name[pt_BR]=Módulo solar
 Name[ru]=Солнечный модуль
 Name[sk]=Slnečný modul
+Name[sl]=Solarni modul
 Name[sv]=Solcellsmodul
 Name[uk]=Модуль сонячної батареї
 Name[x-test]=xxSolar Modulexx

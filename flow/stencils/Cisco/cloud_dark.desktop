@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=Cloud Dark
+Name[bs]=Tamni oblak
 Name[ca]=Núvol fosc
 Name[ca@valencia]=Núvol fosc
+Name[da]=Cloud mørk
+Name[de]=Wolke, dunkel
 Name[el]=Νέφος σκούρο
 Name[es]=Nube oscura
 Name[et]=Tume pilv
+Name[fr]=Cloud Dark
+Name[gl]=Nube escura
 Name[it]=Nuvola scura
 Name[kk]=Күнгірт бұлт
+Name[lt]=Debesis (tamsus)
 Name[nb]=Sky mørk
 Name[nl]=Donkere wolk
 Name[pl]=Chmura ciemna
@@ -14,6 +20,7 @@ Name[pt]=Nuvem Escura
 Name[pt_BR]=Nuvem negra
 Name[ru]=Облако тёмное
 Name[sk]=Oblak tmavý
+Name[sl]=Temen oblak
 Name[sv]=Moln mörkt
 Name[uk]=Темна хмара
 Name[x-test]=xxCloud Darkxx

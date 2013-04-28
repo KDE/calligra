@@ -22,7 +22,7 @@
 
 #include <QtTest>
 
-#include <KTempDir>
+#include <ktempdir.h>
 
 namespace KPlato
 {

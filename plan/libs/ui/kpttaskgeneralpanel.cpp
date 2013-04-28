@@ -37,17 +37,15 @@
 
 #include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
-#endif
 #endif
 
 #include <QDateTime>
 #include <QPushButton>
 
-#include <kdebug.h>
+#include <kptdebug.h>
 
 namespace KPlato
 {
@@ -230,9 +228,10 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
 #ifndef PLAN_KDEPIMLIBS_FOUND
     chooseLeader->hide();
 #endif
-#if ! KDE_IS_VERSION( 4, 5, 0 )
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
     chooseLeader->hide();
-#endif
 
     connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
@@ -266,7 +265,6 @@ int TaskGeneralPanelImpl::schedulingType() const
 void TaskGeneralPanelImpl::changeLeader()
 {
 #ifdef PLAN_KDEPIMLIBS_FOUND
-#if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
         QStringList names;
@@ -279,7 +277,7 @@ void TaskGeneralPanelImpl::changeLeader()
                 }
                 s += selection.email();
                 if ( ! selection.name().isEmpty() ) {
-                    s += ">";
+                    s += '>';
                 }
                 if ( ! s.isEmpty() ) {
                     names << s;
@@ -290,7 +288,6 @@ void TaskGeneralPanelImpl::changeLeader()
             leaderfield->setText( names.join( ", " ) );
         }
     }
-#endif
 #endif
 }
 
@@ -506,22 +503,26 @@ QDateTime TaskGeneralPanelImpl::endDateTime()
 
 void TaskGeneralPanelImpl::setStartTime( const QTime &time )
 {
-    scheduleStartTime->setTime(time);
+    scheduleStartTime->setTime( QTime( time.hour(), time.minute(), 0 ) );
 }
 
 void TaskGeneralPanelImpl::setEndTime( const QTime &time )
 {
-    scheduleEndTime->setTime(time);
+    scheduleEndTime->setTime( QTime( time.hour(), time.minute(), 0 ) );
 }
 
 QTime TaskGeneralPanelImpl::startTime() const
 {
-    return scheduleStartTime->time();
+    QTime t = scheduleStartTime->time();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    return t;
 }
 
 QTime TaskGeneralPanelImpl::endTime()
 {
-    return scheduleEndTime->time();
+    QTime t = scheduleEndTime->time();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    return t;
 }
 
 QDate TaskGeneralPanelImpl::startDate()

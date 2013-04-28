@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_DOCUMENTSPANEL_H
-#define KPLATO_DOCUMENTSPANEL_H
+#ifndef KPTDOCUMENTSPANEL_H
+#define KPTDOCUMENTSPANEL_H
 
 #include "kplatoui_export.h"
 

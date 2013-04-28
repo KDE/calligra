@@ -35,7 +35,7 @@ namespace Sheets
  * \ingroup Protection
  * Provides methods for setting a password protection.
  * The inheriting object decides which of its data should be protected.
- * It has to use isProtected() to check wether it's protected.
+ * It has to use isProtected() to check whether it's protected.
  */
 class CALLIGRA_SHEETS_ODF_EXPORT ProtectableObject
 {

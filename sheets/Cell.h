@@ -376,8 +376,7 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    bool saveOdf(KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
-                 int row, int column, int &repeated,
+    bool saveOdf(int row, int column, int &repeated,
                  OdfSavingContext& savingContext);
 
     /**

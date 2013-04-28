@@ -22,10 +22,10 @@
 #include <KoPathPoint.h>
 
 #include "KarbonSimplifyPath.h"
-#include <KarbonCurveFit.h>
+#include <KoCurveFit.h>
 #include <KoColorBackground.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <cmath>
 #include <cstdlib>

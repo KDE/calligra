@@ -26,7 +26,7 @@
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
 
-#include <KMimeType>
+#include <kmimetype.h>
 
 class CAAbstractDocumentHandler::Private
 {
@@ -88,6 +88,34 @@ QString CAAbstractDocumentHandler::rightToolbarSource() const
 QString CAAbstractDocumentHandler::topToolbarSource() const
 {
     return QString();
+}
+
+QString CAAbstractDocumentHandler::centerOverlaySource() const
+{
+    return QString();
+}
+
+QString CAAbstractDocumentHandler::nextPageImage() const
+{
+    return QString();
+}
+
+QString CAAbstractDocumentHandler::previousPageImage() const
+{
+    return QString();
+}
+
+void CAAbstractDocumentHandler::gotoNextPage()
+{
+}
+
+void CAAbstractDocumentHandler::gotoPreviousPage()
+{
+}
+
+CAAbstractDocumentHandler::FlickModes CAAbstractDocumentHandler::flickMode() const
+{
+    return FlickAutomatically;
 }
 
 #include "CAAbstractDocumentHandler.moc"

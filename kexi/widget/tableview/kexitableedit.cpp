@@ -25,7 +25,6 @@
 
 #include <QPalette>
 #include <QPainter>
-//Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 
@@ -60,7 +59,7 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);
-    installEventFilter(this);
+    //installEventFilter(this);
 
     //margins
     if (displayedField()->isFPNumericType()) {
@@ -103,7 +102,7 @@ void KexiTableEdit::setViewWidget(QWidget *v)
 {
     m_view = v;
     m_view->move(0, 0);
-    m_view->installEventFilter(this);
+    //m_view->installEventFilter(this);
     setFocusProxy(m_view);
 }
 
@@ -126,6 +125,7 @@ void KexiTableEdit::resize(int w, int h)
     }
 }
 
+#if 0
 bool
 KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 {
@@ -152,6 +152,7 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
     return false;
 // return QWidget::eventFilter(watched, e);
 }
+#endif
 
 void KexiTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h)
 {

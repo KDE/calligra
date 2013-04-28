@@ -31,6 +31,7 @@
 #include "words_export.h"
 
 #include <KoDocument.h>
+#include <KoShapeManager.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoXmlReader.h>
 
@@ -43,12 +44,14 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoShapeContainer;
 class KoShapeController;
-
+class KoPart;
+class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
 
@@ -62,7 +65,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(QObject* parent = 0);
+    explicit KWDocument(KoPart *part);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface
@@ -72,8 +75,6 @@ public:
     virtual void removeShape(KoShape *shape);
     // reimplemented from KoShapeBasedDocumentBase
     virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
-
-    void addShape(KoShape *shape, KoTextAnchor *anchor);
 
     // KoDocument interface
     /// reimplemented from KoDocument
@@ -87,13 +88,12 @@ public:
     /// reimplemented from KoOdfDocument
     virtual bool saveOdf(SavingContext &documentContext);
     /// reimplemented from KoDocument
-    virtual KoView* createViewInstance(QWidget*);
-    /// reimplemented from KoDocument
-    virtual QGraphicsItem *createCanvasItem();
-    /// reimplemented from KoDocument
     virtual int pageCount() const {
         return pageManager()->pageCount();
     }
+
+    bool isMasterDocument() const;
+    void setIsMasterDocument(bool isMasterDocument);
 
     // others
     /**
@@ -161,8 +161,8 @@ public:
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
-    /// reimplemented from super
-    QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
+    /// return the textRangeManager for this document.
+    KoTextRangeManager *textRangeManager() const;
 
     KWApplicationConfig &config() {
         return m_config;
@@ -185,13 +185,19 @@ public:
     /// find the frame closest to the given shape or return 0
     KWFrame *findClosestFrame(KoShape *shape) const;
 
-    KoTextAnchor *anchorOfShape(KoShape *shape) const;
+    KoShapeAnchor *anchorOfShape(KoShape *shape) const;
 
     KWFrame *frameOfShape(KoShape *shape) const;
 
     /// returns the document's shapeController. This controller should only be used for deleting shapes.
     //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
     KoShapeController *shapeController() const { return m_shapeController; }
+
+    /// Set cover image data at a QPair<cover mime type, cover data>.
+    void setCoverImage(QPair<QString, QByteArray> cover);
+
+    /// return cover data.
+    QPair<QString, QByteArray> coverImage();
 
 public slots:
     /**
@@ -220,13 +226,20 @@ signals:
     /// signal emitted when a page has been added
     void pageSetupChanged();
 
+    /// emitted whenever a shape is added.
+    void shapeAdded(KoShape *, KoShapeManager::Repaint);
+
+    /// emitted whenever a shape is removed
+    void shapeRemoved(KoShape *);
+
+    /// emitted wheneve a resources needs to be set on the canvasResourceManager
+    void resourceChanged(int key, const QVariant &value);
+
 private slots:
     /// Frame maintenance on already registered framesets
     void addFrame(KWFrame *frame);
     void removeFrame(KWFrame *frame);
-    void removeFrameFromViews(KWFrame*);
     /// Called after the constructor figures out there is an install problem.
-    void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
     void layoutProgressChanged(int percent);
@@ -253,15 +266,14 @@ private:
      */
     void clear();
 
-    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
     /**
      * emits pageSetupChanged
      */
     void saveConfig();
 
 private:
+    bool m_isMasterDocument;
     QList<KWFrameSet*> m_frameSets;
-    QString m_viewMode;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
@@ -269,6 +281,8 @@ private:
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
+    QPair<QString, QByteArray> m_coverImage;
+
 };
 
 #endif

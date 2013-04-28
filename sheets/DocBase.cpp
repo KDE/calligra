@@ -29,8 +29,8 @@
    Boston, MA 02110-1301, USA.
 */
 #include "DocBase.h"
-#include "DocBase.moc"
 #include "DocBase_p.h"
+#include "DocBase.moc"
 
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
@@ -44,12 +44,15 @@
 #include <KoUpdater.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoPart.h>
 
 #include "calligra_sheets_limits.h"
 #include "BindingModel.h"
 #include "CalculationSettings.h"
 #include "Map.h"
 #include "SheetAccessModel.h"
+
+#include "ElapsedTime_p.h"
 
 #include "part/View.h" // TODO: get rid of this dependency
 
@@ -60,8 +63,8 @@ int DocBase::Private::s_docId = 0;
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
-DocBase::DocBase(QObject* parent)
-    : KoDocument(parent)
+DocBase::DocBase(KoPart *part)
+    : KoDocument(part)
     , d(new Private)
 {
     d->resourceManager = new KoDocumentResourceManager();
@@ -331,11 +334,6 @@ void DocBase::paintContent(QPainter &, const QRect &)
 bool DocBase::loadXML(const KoXmlDocument &, KoStore *)
 {
     return false;
-}
-
-KoView* DocBase::createViewInstance(QWidget *)
-{
-    return 0;
 }
 
 void DocBase::saveOdfViewSettings(KoXmlWriter&)

@@ -1,14 +1,18 @@
 [Desktop Entry]
 Name=A Mobile Phone
 Name[bg]=Мобилен телефон
+Name[bs]=neki mobilni telefon
 Name[ca]=Un telèfon mòbil
 Name[ca@valencia]=Un telèfon mòbil
 Name[cs]=Mobilní telefon
+Name[da]=En mobiltelefon
 Name[de]=Mobiltelefon
 Name[el]=Κινητό τηλέφωνο
 Name[es]=Un teléfono móvil
 Name[et]=Mobiiltelefon
 Name[fi]=Matkapuhelin
+Name[fr]=Un téléphone portable
+Name[gl]=Móbil
 Name[it]=Un cellulare
 Name[kk]=Мобайл телефоны
 Name[nb]=En mobiltelefon
@@ -20,6 +24,7 @@ Name[ru]=Мобильный телефон
 Name[sk]=Mobilný telefón
 Name[sl]=Prenosni telefon
 Name[sv]=En mobiltelefon
+Name[tr]=Cep Telefonu
 Name[uk]=Мобільний телефон
 Name[x-test]=xxA Mobile Phonexx
 Name[zh_TW]=行動電話

@@ -71,7 +71,8 @@ KoViewConverter * KPrViewModePresentation::viewConverter( KoPACanvasBase * canva
         return m_pvAnimationDirector->viewConverter();
     }
     else {
-        return 0;
+        // the m_animationDirector is not yet set up fully therefore return the viewConverter of the view
+        return m_view->viewConverter();
     }
 }
 
@@ -162,8 +163,12 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     QRect presentationRect = desktop.screenGeometry( presentationscreen );
 
+#ifdef Q_OS_LINUX
+    // This breaks and is not required on Windows platforms
     m_baseCanvas->setParent(desktop.screen(presentationscreen), Qt::Window); // detach widget to the presentation screen
-    m_baseCanvas->setWindowState( m_baseCanvas->windowState() | Qt::WindowFullScreen ); // make it show full screen
+#endif
+
+    m_baseCanvas->setWindowFlags( Qt::Window ); // make it a window
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
@@ -171,8 +176,9 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     // viewConverter.
     m_animationDirector = new KPrAnimationDirector( m_view, m_baseCanvas, pages, m_view->activePage() );
     // move and resize now as otherwise it is not set when we call activate on the tool.
-    m_baseCanvas->move( presentationRect.topLeft() );
-    m_baseCanvas->resize( presentationRect.size() );
+    m_baseCanvas->setGeometry(presentationRect);
+    m_baseCanvas->setWindowState( m_baseCanvas->windowState() | Qt::WindowFullScreen ); // make it show full screen
+
     // show and setFocus needs to be done after move and resize as otherwise the move and resize have no effect
     m_baseCanvas->show();
     m_baseCanvas->setFocus();
@@ -187,11 +193,13 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
             m_presenterViewCanvas = new KoPACanvas( m_view, document );
             m_presenterViewWidget = new KPrPresenterViewWidget( this, pages, m_presenterViewCanvas );
+#ifdef Q_OS_LINUX
+    // This breaks and is not required on Windows platforms
             m_presenterViewWidget->setParent( desktop.screen(newscreen), Qt::Window );
+#endif
+            m_presenterViewWidget->setGeometry(pvRect);
             m_presenterViewWidget->setWindowState(
                     m_presenterViewWidget->windowState() | Qt::WindowFullScreen );
-            m_presenterViewWidget->move( pvRect.topLeft() );
-            m_presenterViewWidget->resize( pvRect.size() );
             m_presenterViewWidget->updateWidget( pvRect.size(), presentationRect.size() );
             m_presenterViewWidget->show();
             m_presenterViewWidget->setFocus();                             // it shown full screen
@@ -253,6 +261,8 @@ void KPrViewModePresentation::deactivate()
         m_presenterViewWidget = 0;
         m_presenterViewCanvas = 0;
     }
+    // make sure the page does not have an offset after finishing a presentation
+    m_baseCanvas->setDocumentOffset(QPoint(0, 0));
 }
 
 void KPrViewModePresentation::updateActivePage( KoPAPageBase *page )

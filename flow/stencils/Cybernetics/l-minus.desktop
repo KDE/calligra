@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=l-minus
+Name[bs]=l-minus
 Name[ca]=l-minus
 Name[ca@valencia]=l-minus
+Name[da]=l-minus
 Name[el]=l-minus
 Name[es]=sustracción de la entrada izquierda
 Name[et]=Vasak miinus
+Name[fr]=l-minus
+Name[gl]=L menos
+Name[hu]=l-mínusz
 Name[it]=l-minus
 Name[kk]=сол-ж-минус
 Name[nb]=l-minus
@@ -16,4 +21,5 @@ Name[sk]=l-minus
 Name[sv]=v-minus
 Name[uk]=Суматор (віднімання входу ліворуч)
 Name[x-test]=xxl-minusxx
+Name[zh_CN]=L-减
 Name[zh_TW]=l-minus

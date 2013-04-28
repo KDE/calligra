@@ -26,7 +26,7 @@
 
 #include "commands/SheetCommands.h"
 
-#include <KIcon>
+#include <KoIcon.h>
 
 using namespace Calligra::Sheets;
 
@@ -69,10 +69,10 @@ MapModel::MapModel(Map* map)
         , d(new Private)
 {
     d->map = map;
-    connect(d->map, SIGNAL(sheetAdded(Sheet *)),
-            this, SLOT(addSheet(Sheet *)));
-    connect(d->map, SIGNAL(sheetRemoved(Sheet *)),
-            this, SLOT(removeSheet(Sheet *)));
+    connect(d->map, SIGNAL(sheetAdded(Sheet*)),
+            this, SLOT(addSheet(Sheet*)));
+    connect(d->map, SIGNAL(sheetRemoved(Sheet*)),
+            this, SLOT(removeSheet(Sheet*)));
 }
 
 MapModel::~MapModel()
@@ -99,7 +99,7 @@ QVariant MapModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole:
         return QVariant(sheet->sheetName());
     case Qt::DecorationRole:
-        return QVariant(KIcon("x-office-spreadsheet"));
+        return QVariant(koIcon("x-office-spreadsheet"));
     case VisibilityRole:
         return QVariant(!sheet->isHidden());
     case ProtectionRole:

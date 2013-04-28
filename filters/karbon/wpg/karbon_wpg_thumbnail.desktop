@@ -1,6 +1,29 @@
 [Desktop Entry]
 Type=Service
 Name=WordPerfect/DrawPerfect Images
+Name[ca]=imatges del WordPerfect/DrawPerfect
+Name[da]=WordPerfect-/DrawPerfect-billeder
+Name[de]=WordPerfect-/DrawPerfect-Bilder
+Name[el]=Εικόνες WordPerfect/DrawPerfect
+Name[es]=Imágenes WordPerfect/DrawPerfect
+Name[et]=WordPerfect/DrawPerfect pildid
+Name[fr]=Images WordPerfect/DrawPerfect
+Name[gl]=Imaxes WordPerfect/DrawPerfect
+Name[hu]=WordPerfect/DrawPerfect képek
+Name[it]=Immagini WordPerfect/DrawPerfect
+Name[kk]=WordPerfect/DrawPerfect кескіндері
+Name[nb]=WordPerfect/DrawPerfect-bilder
+Name[nl]=Afbeeldingen van WordPerfect/DrawPerfect
+Name[pl]=Obrazy WordPerfect/DrawPerfect
+Name[pt]=Imagens do WordPerfect/DrawPerfect
+Name[pt_BR]=Imagens do WordPerfect/DrawPerfect
+Name[sk]=Obrázky WordPerfect/DrawPerfect
+Name[sl]=Slike WordPerfect/DrawPerfect
+Name[sv]=WordPerfect/DrawPerfect-bilder
+Name[tr]=WordPerfect / DrawPerfect Görüntüleri
+Name[uk]=Зображення WordPerfect/DrawPerfect
+Name[x-test]=xxWordPerfect/DrawPerfect Imagesxx
+Name[zh_CN]=WordPerfect/DrawPerfect 图像
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-wpg;

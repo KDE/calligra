@@ -124,7 +124,7 @@ public:
 
     void setPrintRowLabels( bool value ) { ui_printRowLabels->setChecked( value ); }
     bool printRowLabels() const { return ui_printRowLabels->isChecked(); }
-    
+
     void setSinglePage( bool value )  { value ? ui_singlePage->setChecked( false ) : ui_multiplePages->setChecked( true ); }
     bool singlePage() const { return ui_singlePage->isChecked(); }
 
@@ -137,13 +137,13 @@ class GanttPrintingDialog : public PrintingDialog
     Q_OBJECT
 public:
     GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt );
-    
+
 //     void startPrinting( RemovePolicy removePolicy );
     QList<QWidget*> createOptionWidgets() const;
     void printPage( int page, QPainter &painter );
-    
+
     int documentLastPage() const;
-    
+
 protected slots:
     void slotPrintRowLabelsToogled( bool on );
     void slotSinglePageToogled( bool on );
@@ -157,25 +157,25 @@ protected:
     GanttPrintingOptionsWidget *m_options;
 };
 
-class GanttTreeView : public TreeViewBase
+class KPLATOUI_EXPORT GanttTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    GanttTreeView( QWidget *parent );
+    explicit GanttTreeView(QWidget *parent);
 
 };
 
-class GanttViewBase : public KDGantt::View
+class KPLATOUI_EXPORT GanttViewBase : public KDGantt::View
 {
     Q_OBJECT
 public:
-    GanttViewBase( QWidget *parent );
+    explicit GanttViewBase(QWidget *parent);
 
     GanttTreeView *treeView() const;
     GanttPrintingOptions printingOptions() const { return m_printOptions; }
 
-    bool loadContext( const KoXmlElement &settings );
-    void saveContext( QDomElement &settings ) const;
+    virtual bool loadContext( const KoXmlElement &settings );
+    virtual void saveContext( QDomElement &settings ) const;
 
 public slots:
     void setPrintingOptions( const GanttPrintingOptions &opt ) { m_printOptions = opt; }
@@ -189,7 +189,7 @@ class NodeGanttViewBase : public GanttViewBase
 {
     Q_OBJECT
 public:
-    NodeGanttViewBase( QWidget *parent );
+    explicit NodeGanttViewBase(QWidget *parent);
     ~NodeGanttViewBase();
 
     NodeSortFilterProxyModel *sfModel() const;
@@ -197,9 +197,9 @@ public:
     ItemModelBase *model() const;
     void setProject( Project *project );
     Project *project() const { return m_project; }
-    
+
     GanttItemDelegate *delegate() const { return m_ganttdelegate; }
-    
+
     bool loadContext( const KoXmlElement &settings );
     void saveContext( QDomElement &settings ) const;
 
@@ -214,12 +214,12 @@ class KPLATOUI_EXPORT MyKDGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
 public:
-    MyKDGanttView( QWidget *parent );
-    
+    explicit MyKDGanttView(QWidget *parent);
+
     GanttItemModel *model() const;
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
-    
+
     void clearDependencies();
     void createDependencies();
 
@@ -227,9 +227,9 @@ public slots:
     void addDependency( Relation *rel );
     void removeDependency( Relation *rel );
     void slotProjectCalculated( ScheduleManager *sm );
-    
+
     void slotNodeInserted( Node *node );
-    
+
 protected:
     ScheduleManager *m_manager;
 };
@@ -238,7 +238,7 @@ class KPLATOUI_EXPORT GanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    GanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
 
     //~GanttView();
 
@@ -246,7 +246,7 @@ public:
     void setupGui();
     Project *project() const { return m_gantt->project(); }
     virtual void setProject( Project *project );
-    
+
     using ViewBase::draw;
     virtual void draw( Project &project );
     virtual void drawChanges( Project &project );
@@ -261,7 +261,7 @@ public:
     void updateReadWrite( bool on );
 
     KoPrintJob *createPrintJob();
-    
+
     void setShowSpecialInfo( bool on ) { m_gantt->model()->setShowSpecial( on ); }
     bool showSpecialInfo() const { return m_gantt->model()->showSpecial(); }
 
@@ -318,12 +318,12 @@ class KPLATOUI_EXPORT MilestoneKDGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
 public:
-    MilestoneKDGanttView( QWidget *parent );
+    explicit MilestoneKDGanttView(QWidget *parent);
 
     MilestoneItemModel *model() const;
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
-    
+
 public slots:
     void slotProjectCalculated( ScheduleManager *sm );
 
@@ -335,7 +335,7 @@ class KPLATOUI_EXPORT MilestoneGanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    MilestoneGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    MilestoneGanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
 
     virtual void setZoom( double zoom );
     void show();
@@ -346,7 +346,7 @@ public:
     virtual void drawChanges( Project &project );
 
     void setupGui();
-    
+
     Node *currentNode() const;
 
     void clear();
@@ -401,7 +401,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsGanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    ResourceAppointmentsGanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
     ~ResourceAppointmentsGanttView();
 
     virtual void setZoom( double zoom );
@@ -409,7 +409,7 @@ public:
     Project *project() const;
 
     void setupGui();
-    
+
     virtual bool loadContext( const KoXmlElement &context );
     virtual void saveContext( QDomElement &context ) const;
 

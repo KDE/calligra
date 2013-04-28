@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=burette
+Name[bs]=bireta
 Name[ca]=bureta
 Name[ca@valencia]=bureta
+Name[cs]=bireta
+Name[da]=burette
 Name[de]=Messglas
 Name[el]=burette
 Name[es]=bureta
 Name[et]=Bürett
-Name[gl]=bureta
+Name[fr]=éprouvette
+Name[gl]=Bureta
 Name[it]=buretta
 Name[kk]=Бюретка
 Name[nb]=byrette
@@ -17,6 +21,7 @@ Name[pt_BR]=bureta
 Name[ru]=Бюретка
 Name[sk]=burette
 Name[sv]=byrett
+Name[tr]=büret
 Name[uk]=Бюретка
 Name[x-test]=xxburettexx
 Name[zh_TW]=滴定管

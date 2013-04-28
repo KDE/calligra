@@ -25,7 +25,7 @@
 #include <QListWidget>
 #include <QPushButton>
 
-#include <KInputDialog>
+#include <kinputdialog.h>
 
 #include "TableShape.h"
 #include "Sheet.h"
@@ -63,18 +63,18 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     }
     connect(map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
 
-    QVBoxLayout* btnlayout = new QVBoxLayout(this);
+    QVBoxLayout* btnlayout = new QVBoxLayout();
     layout->addLayout(btnlayout);
 
-    d->renamebtn = new QPushButton(/*KIcon("edit-rename"),*/ i18n("Rename"), this);
+    d->renamebtn = new QPushButton(/*koIcon("edit-rename"),*/ i18n("Rename"), this);
     connect(d->renamebtn, SIGNAL(clicked()), this, SLOT(renameClicked()));
     btnlayout->addWidget(d->renamebtn);
 
-    d->addbtn = new QPushButton(/*KIcon("list-add"),*/ i18n("Add"), this);
+    d->addbtn = new QPushButton(/*koIcon("list-add"),*/ i18n("Add"), this);
     connect(d->addbtn, SIGNAL(clicked()), this, SLOT(addClicked()));
     btnlayout->addWidget(d->addbtn);
 
-    d->rembtn = new QPushButton(/*KIcon("edit-delete"),*/ i18n("Remove"), this);
+    d->rembtn = new QPushButton(/*koIcon("edit-delete"),*/ i18n("Remove"), this);
     connect(d->rembtn, SIGNAL(clicked()), this, SLOT(removeClicked()));
     btnlayout->addWidget(d->rembtn);
 
@@ -93,7 +93,7 @@ void SheetsEditor::sheetAdded(Sheet* sheet)
     QListWidgetItem* item = new QListWidgetItem(sheet->sheetName());
     item->setCheckState(sheet->isHidden() ? Qt::Unchecked : Qt::Checked);
     d->list->addItem(item);
-    connect(sheet, SIGNAL(sig_nameChanged(Sheet*, QString)), this, SLOT(sheetNameChanged(Sheet*, QString)));
+    connect(sheet, SIGNAL(sig_nameChanged(Sheet*,QString)), this, SLOT(sheetNameChanged(Sheet*,QString)));
 }
 
 void SheetsEditor::sheetNameChanged(Sheet* sheet, const QString& old_name)

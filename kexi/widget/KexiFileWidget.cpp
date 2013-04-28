@@ -40,9 +40,9 @@
 #include <kmimetype.h>
 #include <kfile.h>
 #include <kurlcombobox.h>
-#include <KToolBar>
-#include <KActionCollection>
-#include <KFileDialog>
+#include <ktoolbar.h>
+#include <kactioncollection.h>
+#include <kfiledialog.h>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
@@ -108,8 +108,8 @@ KexiFileWidget::KexiFileWidget(
     setFocusProxy(locationEdit());
 //#endif
 
-    connect(this, SIGNAL(fileHighlighted(const QString&)),
-            this, SLOT(slotExistingFileHighlighted(const QString&)));
+    connect(this, SIGNAL(fileHighlighted(QString)),
+            this, SLOT(slotExistingFileHighlighted(QString)));
 }
 
 KexiFileWidget::~KexiFileWidget()

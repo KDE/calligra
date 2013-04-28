@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,12 +34,12 @@
 #include <kmessagebox.h>
 
 class QLabel;
-class KexiAboutData;
+class KAboutData;
 class KexiRecentProjects;
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData);
+KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData);
 
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
@@ -80,6 +80,9 @@ KEXICORE_EXPORT void deleteGlobalObjects();
 
 //! false by default, flag loaded on main window startup
 KEXICORE_EXPORT bool& tempShowMacros();
+
+//! false by default, flag loaded on main window startup
+KEXICORE_EXPORT bool& tempShowScripts();
 
 //! false by default, flag loaded on main window startup
 KEXICORE_EXPORT bool& tempShowScripts();
@@ -138,7 +141,7 @@ KEXICORE_EXPORT QString msgYouCanImproveData();
 }//namespace Kexi
 
 //! Icon name for database servers
-#define KEXI_ICON_DATABASE_SERVER "network-server-database"
+#define KEXI_DATABASE_SERVER_ICON_NAME (koIconName("network-server-database"))
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 

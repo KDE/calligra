@@ -32,12 +32,13 @@
 #include "kptdatetime.h"
 #include "kptdebug.h"
 
+#include <KoIcon.h>
+
 #include <QMimeData>
 #include <QObject>
 #include <QStringList>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -99,7 +100,7 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
             return QVariant();
         case Qt::DecorationRole:
             if ( res->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
              }
              break;
         case Qt::CheckStateRole:
@@ -1525,6 +1526,7 @@ AllocatedResourceItemModel::AllocatedResourceItemModel( QObject *parent )
 
 int AllocatedResourceItemModel::columnCount( const QModelIndex &idx ) const
 {
+    Q_UNUSED(idx);
     return 2;
 }
 

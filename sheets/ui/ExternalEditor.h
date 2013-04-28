@@ -22,7 +22,7 @@
 #ifndef CALLIGRA_SHEETS_EXTERNAL_EDITOR
 #define CALLIGRA_SHEETS_EXTERNAL_EDITOR
 
-#include <KTextEdit>
+#include <ktextedit.h>
 
 #include "calligra_sheets_export.h"
 
@@ -40,7 +40,7 @@ class ExternalEditor : public KTextEdit
 {
     Q_OBJECT
 public:
-    ExternalEditor(QWidget* parent = 0);
+    explicit ExternalEditor(QWidget *parent = 0);
     ~ExternalEditor();
 
     virtual QSize sizeHint() const;

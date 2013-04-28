@@ -39,12 +39,12 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <kicon.h>
-#include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <knotification.h>
+#include <kdeversion.h>
 
+#include <KoIcon.h>
 #include "kptdebug.h"
 
 #include "kdatepicker.moc"
@@ -107,21 +107,31 @@ void KDatePicker::fillWeeksCombo(const QDate &date)
 
   QDate day;
   int year = calendar->year(date);
-  calendar->setYMD(day, year, 1, 1);
+  calendar->setDate(day, year, 1, 1);
   int lastMonth = calendar->monthsInYear(day);
   QDate lastDay, firstDayOfLastMonth;
-  calendar->setYMD(firstDayOfLastMonth, year, lastMonth, 1);
-  calendar->setYMD(lastDay, year, lastMonth, calendar->daysInMonth(firstDayOfLastMonth));
+  calendar->setDate(firstDayOfLastMonth, year, lastMonth, 1);
+  calendar->setDate(lastDay, year, lastMonth, calendar->daysInMonth(firstDayOfLastMonth));
 
   for (; day <= lastDay ; day = calendar->addDays(day, 7 /*calendar->daysOfWeek()*/) )
   {
-    QString week = i18n("Week %1", calendar->weekNumber(day, &year));
+#if KDE_IS_VERSION(4,7,0)
+    const int weekNumber = calendar->week(day, &year);
+#else
+    const int weekNumber = calendar->weekNumber(day, &year);
+#endif
+    QString week = i18n("Week %1", weekNumber);
     if ( year != calendar->year(day) ) week += '*';  // show that this is a week from a different year
     d->selectWeek->addItem(week);
 
     // make sure that the week of the lastDay is always inserted: in Chinese calendar
     // system, this is not always the case
-    if(day < lastDay && day.daysTo(lastDay) < 7 && calendar->weekNumber(day) != calendar->weekNumber(lastDay))
+    if(day < lastDay && day.daysTo(lastDay) < 7 &&
+#if KDE_IS_VERSION(4,7,0)
+        calendar->week(day) != calendar->week(lastDay))
+#else
+        calendar->weekNumber(day) != calendar->weekNumber(lastDay))
+#endif
       day = lastDay.addDays(-7);
   }
 }
@@ -221,7 +231,7 @@ void KDatePicker::init( const QDate &dt )
   d->selectWeek->installEventFilter( this );
 
   d->todayButton = new QPushButton(this);
-  d->todayButton->setIcon(KIcon("go-jump-today"));
+  d->todayButton->setIcon(koIcon("go-jump-today"));
   d->todayButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
   d->todayButton->setMaximumSize( QSize( 25, 25 ) );
   d->todayButton->installEventFilter( this );
@@ -241,17 +251,17 @@ void KDatePicker::init( const QDate &dt )
   d->line->installEventFilter( this );
   if ( QApplication::isRightToLeft() )
   {
-      d->yearForward->setIcon(KIcon(QLatin1String("arrow-left-double")));
-      d->yearBackward->setIcon(KIcon(QLatin1String("arrow-right-double")));
-      d->monthForward->setIcon(KIcon(QLatin1String("arrow-left")));
-      d->monthBackward->setIcon(KIcon(QLatin1String("arrow-right")));
+      d->yearForward->setIcon(koIcon("arrow-left-double"));
+      d->yearBackward->setIcon(koIcon("arrow-right-double"));
+      d->monthForward->setIcon(koIcon("arrow-left"));
+      d->monthBackward->setIcon(koIcon("arrow-right"));
   }
   else
   {
-      d->yearForward->setIcon(KIcon(QLatin1String("arrow-right-double")));
-      d->yearBackward->setIcon(KIcon(QLatin1String("arrow-left-double")));
-      d->monthForward->setIcon(KIcon(QLatin1String("arrow-right")));
-      d->monthBackward->setIcon(KIcon(QLatin1String("arrow-left")));
+      d->yearForward->setIcon(koIcon("arrow-right-double"));
+      d->yearBackward->setIcon(koIcon("arrow-left-double"));
+      d->monthForward->setIcon(koIcon("arrow-right"));
+      d->monthBackward->setIcon(koIcon("arrow-left"));
   }
 
   connect(d->table, SIGNAL(dateChanged(const QDate&)), SLOT(dateChangedSlot(const QDate&)));
@@ -423,9 +433,9 @@ KDatePicker::dateChangedSlot(const QDate &date)
 
     // calculate the item num in the week combo box; normalize selected day so as if 1.1. is the first day of the week
     QDate firstDay;
-    calendar->setYMD(firstDay, calendar->year(date), 1, 1);
+    calendar->setDate(firstDay, calendar->year(date), 1, 1);
     d->selectWeek->setCurrentIndex((calendar->dayOfYear(date) + calendar->dayOfWeek(firstDay) - 2) / 7/*calendar->daysInWeek()*/);
-    d->selectYear->setText(calendar->yearString(date, KCalendarSystem::ShortFormat));
+    d->selectYear->setText(calendar->formatDate(date, KLocale::Year, KLocale::ShortNumber));
 
     emit(dateChanged(date));
 }
@@ -503,7 +513,7 @@ KDatePicker::weekSelected(int week)
   QDate date = d->table->date();
   int year = calendar->year(date);
 
-  calendar->setYMD(date, year, 1, 1);  // first day of selected year
+  calendar->setDate(date, year, 1, 1);  // first day of selected year
 
   // calculate the first day in the selected week (day 1 is first day of week)
   date = calendar->addDays(date, week * 7/*calendar->daysOfWeek()*/ -calendar->dayOfWeek(date) + 1);
@@ -533,7 +543,7 @@ KDatePicker::selectMonthClicked()
 
   int day = calendar->day(date);
   // ----- construct a valid date in this month:
-  calendar->setYMD(date, calendar->year(date), item->data().toInt(), 1);
+  calendar->setDate(date, calendar->year(date), item->data().toInt(), 1);
   date = date.addDays(qMin(day, calendar->daysInMonth(date)) - 1);
   // ----- set this month
   setDate(date);
@@ -568,9 +578,9 @@ KDatePicker::selectYearClicked()
       date=d->table->date();
       day=calendar->day(date);
       // ----- construct a valid date in this month:
-      //date.setYMD(year, date.month(), 1);
-      //date.setYMD(year, date.month(), qMin(day, date.daysInMonth()));
-      calendar->setYMD(date, year, calendar->month(date),
+      //date.setDate(year, date.month(), 1);
+      //date.setDate(year, date.month(), qMin(day, date.daysInMonth()));
+      calendar->setDate(date, year, calendar->month(date),
                        qMin(day, calendar->daysInMonth(date)));
       // ----- set this month
       setDate(date);
@@ -704,7 +714,7 @@ KDatePicker::setCloseButton( bool enable )
         d->navigationLayout->addSpacing(KDialog::spacingHint());
         d->navigationLayout->addWidget(d->closeButton);
         d->closeButton->setToolTip(i18n("Close"));
-        d->closeButton->setIcon( SmallIcon("list-remove") );
+        d->closeButton->setIcon(koIcon("list-remove"));
         connect( d->closeButton, SIGNAL( clicked() ),
                  topLevelWidget(), SLOT( close() ) );
     }

@@ -25,7 +25,7 @@
 #include <kptviewbase.h>
 #include "kptaccountsmodel.h"
 
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 class KoDocument;
 
@@ -58,7 +58,7 @@ class KPLATOUI_EXPORT AccountTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    AccountTreeView( QWidget *parent );
+    explicit AccountTreeView(QWidget *parent);
 
     AccountItemModel *model() const { return static_cast<AccountItemModel*>( TreeViewBase::model() ); }
 
@@ -90,7 +90,7 @@ class KPLATOUI_EXPORT AccountsEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    AccountsEditor( KoDocument *KoDocument, QWidget *parent );
+    AccountsEditor(KoPart *part, KoDocument *document, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }

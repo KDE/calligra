@@ -30,7 +30,7 @@ class KoShape;
 class FlowLayout : public QObject {
   Q_OBJECT
   public:
-    FlowLayout(const QString& _id);
+    explicit FlowLayout(const QString &_id);
     virtual ~FlowLayout();
   public:
     const QString& id() const;

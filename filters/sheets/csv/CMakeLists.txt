@@ -1,6 +1,9 @@
-include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES})
+include_directories(
+    ${CMAKE_SOURCE_DIR}/sheets
+    ${KOMAIN_INCLUDES}
+)
 
-########### next target ###############
+if(SHOULD_BUILD_FILTER_CSV_TO_SHEETS)
 
 set(csvimport_PART_SRCS csvimport.cc)
 
@@ -10,7 +13,12 @@ target_link_libraries(csvimport calligrasheetscommon kowidgets)
 
 install(TARGETS csvimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### next target ###############
+install( FILES  kspread_csv_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
+endif(SHOULD_BUILD_FILTER_CSV_TO_SHEETS)
+
+
+if(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)
 
 set(csvexport_PART_SRCS csvexport.cc csvexportdialog.cpp )
 
@@ -22,6 +30,6 @@ target_link_libraries(csvexport calligrasheetscommon)
 
 install(TARGETS csvexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### install files ###############
+install( FILES  kspread_csv_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-install( FILES  kspread_csv_import.desktop kspread_csv_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)

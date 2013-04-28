@@ -23,7 +23,8 @@
 #include <QLineEdit>
 
 #include <kdebug.h>
-#include <kiconloader.h>
+
+#include <KoIcon.h>
 
 #include <kexi.h>
 #include <kexiproject.h>
@@ -60,7 +61,7 @@ public:
     }
 
     QPointer<KexiProject> prj;
-    QPixmap tableIcon, queryIcon;
+    QIcon tableIcon, queryIcon;
     int tablesCount;
     int prevIndex; //!< Used in slotActivated()
     bool showTables;
@@ -77,12 +78,12 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent)
     setCompletionMode(KGlobalSettings::CompletionPopupAuto);
     setMaxVisibleItems(16);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
-    connect(this, SIGNAL(returnPressed(const QString &)),
-            this, SLOT(slotReturnPressed(const QString &)));
+    connect(this, SIGNAL(returnPressed(QString)),
+            this, SLOT(slotReturnPressed(QString)));
     connect(lineEdit(), SIGNAL(clearButtonClicked()), this, SLOT(slotClearButtonClicked()));
 
-    d->tableIcon = SmallIcon("table");
-    d->queryIcon = SmallIcon("query");
+    d->tableIcon = koIcon("table");
+    d->queryIcon = koIcon("query");
 }
 
 KexiDataSourceComboBox::~KexiDataSourceComboBox()
@@ -114,10 +115,10 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
     //needed for updating contents of the combo box
     connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)),
             this, SLOT(slotNewItemStored(KexiPart::Item&)));
-    connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-            this, SLOT(slotItemRemoved(const KexiPart::Item&)));
-    connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)),
-            this, SLOT(slotItemRenamed(const KexiPart::Item&, const QString&)));
+    connect(d->prj, SIGNAL(itemRemoved(KexiPart::Item)),
+            this, SLOT(slotItemRemoved(KexiPart::Item)));
+    connect(d->prj, SIGNAL(itemRenamed(KexiPart::Item,QString)),
+            this, SLOT(slotItemRenamed(KexiPart::Item,QString)));
 
     KexiDB::Connection *conn = d->prj->dbConnection();
     if (!conn)

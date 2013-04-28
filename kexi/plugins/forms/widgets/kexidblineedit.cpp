@@ -21,10 +21,9 @@
 #include "kexidblineedit.h"
 #include "kexidbautofield.h"
 
-#include <KDebug>
-#include <KNumInput>
-#include <KDateTable>
-#include <KIconEffect>
+#include <kdebug.h>
+#include <knuminput.h>
+#include <kdatetable.h>
 
 #include <QMenu>
 #include <QPainter>
@@ -63,12 +62,14 @@ public:
     KexiDBLineEditStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle), indent(0)
     {
     }
+    virtual ~KexiDBLineEditStyle() {
+    }
 
     void setIndent(int indent) {
         this->indent = indent;
     }
 
-    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const
+    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget = 0) const
     {
         const KFormDesigner::FormWidgetInterface *formWidget = dynamic_cast<const KFormDesigner::FormWidgetInterface*>(widget);
         if (formWidget->designMode()) {
@@ -99,20 +100,26 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
         , m_internalReadOnly(false)
         , m_slotTextChanged_enabled(true)
         , m_paletteChangeEvent_enabled(true)
+        , m_inStyleChangeEvent(false)
 {
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     m_originalPalette = palette();
-    connect(this, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextChanged(const QString&)));
+    connect(this, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTextChanged(QString)));
+    connect(this, SIGNAL(textEdited(QString)),
+            this, SLOT(slotTextEdited(QString)));
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
-    KexiDBLineEditStyle *ks = new KexiDBLineEditStyle(style());
-    ks->setParent(this);
-    ks->setIndent(KexiFormUtils::dataSourceTagIcon().width());
-    setStyle( ks );
+    m_internalStyle = new KexiDBLineEditStyle(style());
+    m_internalStyle->setParent(this);
+    m_internalStyle->setIndent(KexiFormUtils::dataSourceTagIcon().width());
+    m_inStyleChangeEvent = true; // do not allow KLineEdit::event() to touch the style
+    setStyle(m_internalStyle);
+    m_inStyleChangeEvent = false;
+    KexiDataItemInterface::setLengthExceededEmittedAtPreviousChange(false);
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
@@ -138,9 +145,12 @@ void KexiDBLineEdit::setInvalidState(const QString& displayText)
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
     m_slotTextChanged_enabled = false;
-    m_originalText = m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString());
+    bool lengthExceeded;
+    m_originalText = m_textFormatter.toString(
+                removeOld ? QVariant() : KexiDataItemInterface::originalValue(), add.toString(), &lengthExceeded);
     setText(m_originalText);
     setCursorPosition(0); //ok?
+    emitLengthExceededIfNeeded(lengthExceeded);
     m_slotTextChanged_enabled = true;
 }
 
@@ -154,6 +164,24 @@ void KexiDBLineEdit::slotTextChanged(const QString&)
     if (!m_slotTextChanged_enabled)
         return;
     signalValueChanged();
+}
+
+void KexiDBLineEdit::slotTextEdited(const QString& text)
+{
+    bool lengthExceeded = m_textFormatter.lengthExceeded(text);
+    emitLengthExceededIfNeeded(lengthExceeded);
+}
+
+bool KexiDBLineEdit::fixup()
+{
+    const QString t(text());
+    bool lengthExceeded = m_textFormatter.lengthExceeded(t);
+    if (lengthExceeded) {
+        m_slotTextChanged_enabled = false;
+        setText(t.left(field()->maxLength()));
+        m_slotTextChanged_enabled = true;
+    }
+    return true;
 }
 
 void KexiDBLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
@@ -288,14 +316,6 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
         setInputMask(inputMask);
 
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
-
-    if (cinfo->field->isTextType()) {
-        if (!designMode()) {
-            if (cinfo->field->maxLength() > 0) {
-                setMaxLength(cinfo->field->maxLength());
-            }
-        }
-    }
 }
 
 /*todo
@@ -343,8 +363,25 @@ void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 
 bool KexiDBLineEdit::event(QEvent * e)
 {
+    if (e->type() == QEvent::StyleChange) {
+        if (m_inStyleChangeEvent) {
+            return true;
+        }
+        // let the KLineEdit set its KLineEditStyle
+        if (!KLineEdit::event(e)) {
+            return false;
+        }
+        // move the KLineEditStyle inside our internal style as parent
+        m_internalStyle->setParent(style());
+        m_inStyleChangeEvent = true; // avoid recursion
+        setStyle(m_internalStyle);
+        m_inStyleChangeEvent = false;
+        return true;
+    }
+
     const bool ret = KLineEdit::event(e);
     KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
+
     if (e->type() == QEvent::FocusOut) {
         QFocusEvent *fe = static_cast<QFocusEvent *>(e);
         if (fe->reason() == Qt::TabFocusReason || fe->reason() == Qt::BacktabFocusReason) {

@@ -31,8 +31,6 @@
 #include "KPrPlaceholderShapeFactory.h"
 #include "KPrSoundCollection.h"
 #include "KPrDeclarations.h"
-#include "KPrShapeManagerDisplayMasterStrategy.h"
-#include "KPrPageSelectStrategyActive.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
 #include "commands/KPrDeleteSlidesCommand.h"
@@ -48,11 +46,10 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KMessageBox>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 #include <QTimer>
 #include <QCoreApplication>
@@ -69,8 +66,8 @@ public:
     }
 };
 
-KPrDocument::KPrDocument(QObject* parent)
-: KoPADocument(parent)
+KPrDocument::KPrDocument(KoPart *part)
+: KoPADocument(part)
 , m_customSlideShows(new KPrCustomSlideShows())
 , m_presentationMonitor( 0 )
 , m_presenterViewEnabled( false )
@@ -81,9 +78,6 @@ KPrDocument::KPrDocument(QObject* parent)
     // have this is as otherwise we get a warning from the compiler
     // the variable is used and the way it is done is to only call it once
     Q_UNUSED( initOnce );
-
-    setComponentData(KPrFactory::componentData(), false);
-    setTemplateType( "stage_template" );
 
     KoShapeLoadingContext::addAdditionalAttributeData( KoShapeLoadingContext::AdditionalAttributeData(
                                                        KoXmlNS::presentation, "placeholder",
@@ -107,19 +101,7 @@ KPrDocument::~KPrDocument()
 {
     saveKPrConfig();
     delete m_customSlideShows;
-}
-
-KoView * KPrDocument::createViewInstance( QWidget *parent )
-{
-    return new KPrView( this, parent );
-}
-
-QGraphicsItem *KPrDocument::createCanvasItem()
-{
-    KoPACanvasItem *canvasItem = new KoPACanvasItem(this);
-    canvasItem->masterShapeManager()->setPaintingStrategy(new KPrShapeManagerDisplayMasterStrategy(canvasItem->masterShapeManager(),
-						  new KPrPageSelectStrategyActive(canvasItem)));
-    return canvasItem;
+    delete m_declarations;
 }
 
 const char * KPrDocument::odfTagName( bool withNamespace )
@@ -192,7 +174,7 @@ KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
 
 KoPAMasterPage * KPrDocument::newMasterPage()
 {
-    return new KPrMasterPage();
+    return new KPrMasterPage(this);
 }
 
 KoOdf::DocumentType KPrDocument::documentType() const
@@ -216,6 +198,7 @@ void KPrDocument::addAnimation( KPrShapeAnimation * animation )
         shape->setApplicationData( applicationData );
     }
     applicationData->animations().insert( animation );
+    applicationData->setDeleteAnimations(false);
 }
 
 void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData )
@@ -227,12 +210,23 @@ void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFro
     // remove animation from the list of animations
     animations.remove( animation );
 
-    if ( removeFromApplicationData ) {
+    KPrShapeApplicationData *applicationData = dynamic_cast<KPrShapeApplicationData*>(shape->applicationData());
+    Q_ASSERT(applicationData);
+    if (removeFromApplicationData) {
         // remove animation from the shape animation data
-        KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
-        Q_ASSERT( applicationData );
-        applicationData->animations().remove( animation );
+        applicationData->animations().remove(animation);
+    } else {
+        applicationData->setDeleteAnimations(true);
     }
+}
+
+void KPrDocument::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
+{
+    KoShape *shape = oldAnimation->shape();
+    KPrShapeAnimations &animations(animationsByPage(pageByShape(shape)));
+
+    // remove animation from the list of animations
+    animations.replaceAnimation(oldAnimation, newAnimation);
 }
 
 void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
@@ -269,7 +263,7 @@ void KPrDocument::removePages(QList<KoPAPageBase *> &pages)
 
 void KPrDocument::loadKPrConfig()
 {
-    KSharedConfigPtr config = componentData().config();
+    KSharedConfigPtr config = KGlobal::mainComponent().config();
 
     if ( config->hasGroup( "SlideShow" ) ) {
         KConfigGroup configGroup = config->group( "SlideShow" );
@@ -280,7 +274,7 @@ void KPrDocument::loadKPrConfig()
 
 void KPrDocument::saveKPrConfig()
 {
-    KSharedConfigPtr config = componentData().config();
+    KSharedConfigPtr config = KGlobal::mainComponent().config();
     KConfigGroup configGroup = config->group( "SlideShow" );
 
     configGroup.writeEntry( "PresentationMonitor", m_presentationMonitor );
@@ -294,12 +288,12 @@ KoPageApp::PageType KPrDocument::pageType() const
 
 void KPrDocument::initEmpty()
 {
-    QString fileName( KStandardDirs::locate( "stage_template", "Screen/.source/emptyLandscape.otp", componentData() ) );
+    QString fileName(KStandardDirs::locate( "stage_template", "Screen/.source/emptyLandscape.otp", KGlobal::mainComponent()));
     setModified( true );
     bool ok = loadNativeFormat( fileName );
     if ( !ok ) {
         // use initEmpty from  kopageapp
-        showLoadingErrorDialog();
+        documentPart()->showLoadingErrorDialog();
         KoPADocument::initEmpty();
     }
     resetURL();
@@ -376,38 +370,6 @@ bool KPrDocument::loadOdfProlog( const KoXmlElement & body, KoPALoadingContext &
 KPrDeclarations * KPrDocument::declarations() const
 {
     return m_declarations;
-}
-
-void KPrDocument::showStartUpWidget( KoMainWindow * parent, bool alwaysShow )
-{
-    // Go through all (optional) plugins we require and quit if necessary
-    bool error = false;
-    KoShapeFactoryBase * factory;
-
-    factory = KoShapeRegistry::instance()->value( "TextShapeID" );
-    if ( !factory ) {
-        m_errorMessage = i18n("Can not find needed text component, Calligra Stage will quit now.");
-        error = true;
-    }
-    factory = KoShapeRegistry::instance()->value( "PictureShape" );
-    if ( !factory ) {
-        m_errorMessage = i18n("Can not find needed picture component, Calligra Stage will quit now.");
-        error = true;
-    }
-
-    if ( error ) {
-        QTimer::singleShot( 0, this, SLOT( showErrorAndDie() ) );
-    } else {
-        KoDocument::showStartUpWidget( parent, alwaysShow );
-    }
-}
-
-void KPrDocument::showErrorAndDie()
-{
-    KMessageBox::error( widget(), m_errorMessage, i18n( "Installation Error" ) );
-    // This means "the environment is incorrect" on Windows
-    // FIXME: Is this uniform on all platforms?
-    QCoreApplication::exit( 10 );
 }
 
 #include "KPrDocument.moc"

@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@
 #include <QLabel>
 #include <QToolTip>
 #include <Q3WhatsThis>
-#include <KColorScheme>
+#include <kcolorscheme.h>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QFocusEvent>
@@ -49,18 +49,20 @@
 #include <QPixmap>
 #include <QDesktopWidget>
 #include <QMatrix>
+#include <QScrollArea>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
-#include <KAction>
+#include <kaction.h>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>
 #endif
+
+#include <KoIcon.h>
 
 #include "kexitableview.h"
 #include <kexi_global.h>
@@ -241,12 +243,12 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     d->menu_id_addRecord = m_contextMenu->insertItem(
                                i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL + Qt::Key_Insert);
     d->menu_id_removeRecord = m_contextMenu->insertItem(
-                                  KIconLoader::global()->loadIcon("dialog-cancel", KIconLoader::Small),
+                                  koIcon("dialog-cancel"),
                                   i18n("Remove Record"), this, SLOT(removeRecord()), Qt::CTRL + Qt::Key_Delete);
 #endif
 
 //! \todo replace lineedit with table_field icon
-//2.0    setContextMenuTitle(KIcon("lineedit"), i18n("Record"));   // the default
+//2.0    setContextMenuTitle(koIcon("lineedit"), i18n("Record"));   // the default
     // cannot display anything here - most actions in the context menu
     // are related to a single cell (Cut, Copy..) and others to entire row (Delete Row):
     setContextMenuEnabled(false);
@@ -272,8 +274,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     m_horizontalHeader->setOrientation(Qt::Horizontal);
     m_horizontalHeader->setTracking(false);
     m_horizontalHeader->setMovingEnabled(false);
-    connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)),
-        this, SLOT(slotTopHeaderSizeChange(int, int, int)));
+    connect(m_horizontalHeader, SIGNAL(sizeChange(int,int,int)),
+        this, SLOT(slotTopHeaderSizeChange(int,int,int)));
 
     m_verticalHeader = new KexiRecordMarker(this);
     m_verticalHeader->setObjectName("m_verticalHeader");
@@ -313,7 +315,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     // Connect header, table and scrollbars
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), m_horizontalHeader, SLOT(setOffset(int)));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), m_verticalHeader, SLOT(setOffset(int)));
-    connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnWidthChanged(int, int, int)));
+    connect(m_horizontalHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotColumnWidthChanged(int,int,int)));
     connect(m_horizontalHeader, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotSectionHandleDoubleClicked(int)));
     connect(m_horizontalHeader, SIGNAL(clicked(int)), this, SLOT(sortColumnInternal(int)));
 
@@ -1089,7 +1091,7 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
     }
 // d->contentsMousePressEvent_ev = *e;
 // d->contentsMousePressEvent_enabled = true;
-// QTimer::singleShot(2000, this, SLOT( contentsMousePressEvent_Internal() ));
+// QTimer::singleShot(2000, this, SLOT(contentsMousePressEvent_Internal()));
 // d->contentsMousePressEvent_timer.start(100,true);
 
 // if (!d->contentsMousePressEvent_enabled)
@@ -2670,6 +2672,16 @@ bool KexiTableView::cursorAtNewRow() const
     return m_newRowEditing;
 }
 
+void KexiTableView::lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded)
+{
+    showLengthExceededMessage(item, lengthExceeded);
+}
+
+void KexiTableView::updateLengthExceededMessage(KexiDataItemInterface *item)
+{
+    showUpdateForLengthExceededMessage(item);
+}
+
 /* not needed after #2010-01-05 fix
 void KexiTableView::slotContentsMoving(int x, int y)
 {
@@ -2677,6 +2689,11 @@ void KexiTableView::slotContentsMoving(int x, int y)
     Q_UNUSED(y);
     updateContents(); // (js) needed in Qt 4, no idea why, this fix consumed me hours
 }*/
+
+int KexiTableView::horizontalHeaderHeight() const
+{
+    return m_horizontalHeader->height();
+}
 
 QWidget* KexiTableView::navPanelWidget() const
 {

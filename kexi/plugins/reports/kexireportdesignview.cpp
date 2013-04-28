@@ -24,7 +24,8 @@
 #include <QScrollArea>
 #include <core/KexiWindow.h>
 #include "kexisourceselector.h"
-#include <KPushButton>
+#include <kpushbutton.h>
+#include <KoIcon.h>
 
 KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *s)
         : KexiView(parent)
@@ -51,9 +52,9 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     m_sectionEdit = new KAction(i18n("Edit Sections"), this);
     m_sectionEdit->setObjectName("sectionedit");
 
-    m_itemRaiseAction = new KAction(KIcon("arrow-up"), i18n("Raise"), this);
+    m_itemRaiseAction = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
     m_itemRaiseAction->setObjectName("itemraise");
-    m_itemLowerAction = new KAction(KIcon("arrow-down"), i18n("Lower"), this);
+    m_itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
     m_itemLowerAction->setObjectName("itemlower");
     //parameterEdit = new KAction ( i18n ( "Parameter Editor" ), this );
     //parameterEdit->setObjectName("parameteredit");
@@ -81,9 +82,11 @@ void KexiReportDesignView::slotDesignerPropertySetChanged()
     propertySetSwitched();
 }
 
-KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData& sdata,
+                                                       KexiView::StoreNewDataOptions options,
+                                                       bool &cancel)
 {
-    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
+    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
     kDebug() << "new id:" << s->id();
 
     if (!s || cancel) {

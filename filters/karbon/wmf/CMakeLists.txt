@@ -1,7 +1,8 @@
 
-include_directories( ${KWMF_INCLUDES} )
+include_directories( ${VECTORIMAGE_INCLUDES} )
 
-########### next target ###############
+
+if(SHOULD_BUILD_FILTER_WMF_TO_SVG)
 
 set(wmfimport_PART_SRCS 
     WmfImport.cpp 
@@ -10,12 +11,22 @@ set(wmfimport_PART_SRCS
 
 kde4_add_plugin(wmfimport ${wmfimport_PART_SRCS})
 
-target_link_libraries(wmfimport libwmf komain koodf)
+target_link_libraries(wmfimport vectorimage komain koodf)
 
 install(TARGETS wmfimport
         DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### next target ###############
+install(FILES  karbon_wmf_import.desktop
+        DESTINATION ${SERVICES_INSTALL_DIR})
+
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install(FILES  karbon_wmf_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+
+endif(SHOULD_BUILD_FILTER_WMF_TO_SVG)
+
+
+if(SHOULD_BUILD_FILTER_KARBON_TO_WMF)
 
 set(wmfexport_PART_SRCS WmfExport.cpp)
 
@@ -23,7 +34,7 @@ kde4_add_plugin(wmfexport ${wmfexport_PART_SRCS})
 
 target_link_libraries(
     wmfexport
-    libwmf
+    vectorimage
     karboncommon
     karbonui
 )
@@ -31,8 +42,7 @@ target_link_libraries(
 install(TARGETS wmfexport
         DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### install files ###############
-
-install(FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop karbon_wmf_thumbnail.desktop
+install(FILES  karbon_wmf_export.desktop
         DESTINATION ${SERVICES_INSTALL_DIR})
 
+endif(SHOULD_BUILD_FILTER_KARBON_TO_WMF)

@@ -181,15 +181,6 @@ void KexiDBField::setPrecision(uint precision)
     m_field->setPrecision(precision);
 }
 
-uint KexiDBField::width()
-{
-    return m_field->width();
-}
-void KexiDBField::setWidth(uint width)
-{
-    m_field->setWidth(width);
-}
-
 QVariant KexiDBField::defaultValue()
 {
     return m_field->defaultValue();

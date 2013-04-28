@@ -355,7 +355,7 @@ Region Region::intersected(const Region& region) const
   if (region.isEmpty()) return region;
   if (isEmpty()) return Region();
 
-  // Special case 2: If the region contains more elements than this one, do this operation in reverse (optimisation)
+  // Special case 2: If the region contains more elements than this one, do this operation in reverse (optimization)
   if (region.cells().size() > cells().size())
     return region.intersected (*this);
 
@@ -381,7 +381,7 @@ Region Region::intersected(const Region& region) const
     return result;
   }
 
-    // Generic case. TODO: optimise this better - generating a ton of single-cell regions is slow
+    // Generic case. TODO: optimize this better - generating a ton of single-cell regions is slow
     ConstIterator end(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != end; ++it) {
         Element *element = *it;
@@ -1193,7 +1193,7 @@ Region::Point::Point(const QString& string)
     //search for the first character != text
     int result = firstNonCharPos(string, p);
 
-    //get the column number for the character between actual position and the first non text charakter
+    //get the column number for the character between actual position and the first non text character
     if (result != -1)
         x = Util::decodeColumnLabelText(string.mid(p, result - p));     // x is defined now
     else  // If there isn't any, then this is not a point -> return

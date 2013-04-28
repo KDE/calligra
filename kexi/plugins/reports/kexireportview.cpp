@@ -37,8 +37,10 @@
 #include "krscriptfunctions.h"
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
-#include <KRun>
+#include <krun.h>
+#include <kactionmenu.h>
 
+#include <KoIcon.h>
 #include <renderobjects.h>
 #include <KoReportPreRenderer.h>
 
@@ -78,20 +80,25 @@ KexiReportView::KexiReportView(QWidget *parent)
     QAction* a;
 
 #ifndef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("document-print"), i18n("Print"), this));
+    viewActions << (a = new KAction(koIcon("document-print"), i18n("Print"), this));
     a->setObjectName("print_report");
     a->setToolTip(i18n("Print report"));
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
+
+    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), i18nc("@title:menu","E&xport As"), this);
+    exportMenu->setObjectName("report_export_as");
+    exportMenu->setDelayed(false);
 #endif
 
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(i18n("Export:"), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
     // " ", not "", is said to be needed in maemo, the icon didn't display properly without it
-    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
+    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.text"), i18n("Export as Text Document"), this));
+    exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.text"),
+                                          i18nc("open dialog to export as text document", "Text Document..."), this));
 #endif
     a->setObjectName("export_as_text_document");
     a->setToolTip(i18n("Export the report as a text document (in OpenDocument Text format)"));
@@ -100,9 +107,10 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsTextDocument()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
+    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Export as Spreadsheet"), this));
+    exportMenu->addAction(a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"),
+                                          i18nc("open dialog to export as spreadsheet", "Spreadsheet..."), this));
 #endif
     a->setObjectName("export_as_spreadsheet");
     a->setToolTip(i18n("Export the report as a spreadsheet (in OpenDocument Spreadsheet format)"));
@@ -111,9 +119,10 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsSpreadsheet()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("text-html"), QLatin1String(" "), this));
+    viewActions << (a = new KAction(koIcon("text-html"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(KIcon("text-html"), i18n("Export as Web Page"), this));
+    exportMenu->addAction(a = new KAction(koIcon("text-html"),
+                                          i18nc("open dialog to export as web page", "Web Page..."), this));
 #endif
     a->setObjectName("export_as_web_page");
     a->setToolTip(i18n("Export the report as a web page (in HTML format)"));
@@ -124,6 +133,13 @@ KexiReportView::KexiReportView(QWidget *parent)
     setViewActions(viewActions);
 
 #ifndef KEXI_MOBILE
+    // setup main menu actions
+    QList<QAction*> mainMenuActions;
+
+    mainMenuActions << exportMenu;
+
+    setMainMenuActions(mainMenuActions);
+
     connect(m_pageSelector, SIGNAL(nextButtonClicked()), this, SLOT(nextPage()));
     connect(m_pageSelector, SIGNAL(prevButtonClicked()), this, SLOT(prevPage()));
     connect(m_pageSelector, SIGNAL(firstButtonClicked()), this, SLOT(firstPage()));
@@ -163,7 +179,7 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
 {
     KUrl result;
 
-    // loop until an url has been choosen or the file selection has been cancelled
+    // loop until an url has been chosen or the file selection has been cancelled
     while (true) {
         result = KFileDialog::getSaveUrl(KUrl(), mimetype, this, caption);
 
@@ -207,7 +223,7 @@ void KexiReportView::slotExportAsSpreadsheet()
                                i18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
     }
 }
@@ -231,7 +247,7 @@ void KexiReportView::slotExportAsTextDocument()
                                i18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
     }
 }
@@ -269,7 +285,7 @@ void KexiReportView::slotExportAsWebPage()
                            i18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
                            i18n("Export Failed"));
     } else {
-        KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+        (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
     }
 }
 
@@ -338,12 +354,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
             m_reportPage = new KoReportPage(this, m_reportDocument);
             m_reportPage->setObjectName("KexiReportPage");
-	    
-	    m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
-	    m_reportScene->addItem(m_reportPage);
-	    m_reportPage->setPos(20,20);
-	    m_reportView->centerOn(0,0);
-	    
+
+            m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
+            m_reportScene->addItem(m_reportPage);
+            m_reportPage->setPos(20,20);
+            m_reportView->centerOn(0,0);
+
         } else {
             KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
         }
@@ -381,59 +397,59 @@ void KexiReportView::addNewRecordRequested()
 
 void KexiReportView::moveToFirstRecordRequested()
 {
-	if (m_currentPage != 1) {
-		m_currentPage = 1;
-		m_reportPage->renderPage(m_currentPage);
-		#ifndef KEXI_MOBILE
-		m_pageSelector->setCurrentRecordNumber(m_currentPage);  
-		#endif
-	}
+        if (m_currentPage != 1) {
+                m_currentPage = 1;
+                m_reportPage->renderPage(m_currentPage);
+                #ifndef KEXI_MOBILE
+                m_pageSelector->setCurrentRecordNumber(m_currentPage);
+                #endif
+        }
 }
 
 void KexiReportView::moveToLastRecordRequested()
 {
-	if (m_currentPage != m_pageCount) {
-		m_currentPage = m_pageCount;
-		m_reportPage->renderPage(m_currentPage);
-		#ifndef KEXI_MOBILE
-		m_pageSelector->setCurrentRecordNumber(m_currentPage);
-		#endif
-	}
+        if (m_currentPage != m_pageCount) {
+                m_currentPage = m_pageCount;
+                m_reportPage->renderPage(m_currentPage);
+                #ifndef KEXI_MOBILE
+                m_pageSelector->setCurrentRecordNumber(m_currentPage);
+                #endif
+        }
 }
 
 void KexiReportView::moveToNextRecordRequested()
 {
-	if (m_currentPage < m_pageCount) {
-		m_currentPage++;
-		m_reportPage->renderPage(m_currentPage);
-		#ifndef KEXI_MOBILE
-		m_pageSelector->setCurrentRecordNumber(m_currentPage);
-		#endif
-	}
+        if (m_currentPage < m_pageCount) {
+                m_currentPage++;
+                m_reportPage->renderPage(m_currentPage);
+                #ifndef KEXI_MOBILE
+                m_pageSelector->setCurrentRecordNumber(m_currentPage);
+                #endif
+        }
 }
 
 void KexiReportView::moveToPreviousRecordRequested()
 {
-	if (m_currentPage > 1) {
-		m_currentPage--;
-		m_reportPage->renderPage(m_currentPage);
-		#ifndef KEXI_MOBILE
-		m_pageSelector->setCurrentRecordNumber(m_currentPage);
-		#endif
-	}
+        if (m_currentPage > 1) {
+                m_currentPage--;
+                m_reportPage->renderPage(m_currentPage);
+                #ifndef KEXI_MOBILE
+                m_pageSelector->setCurrentRecordNumber(m_currentPage);
+                #endif
+        }
 }
 
 void KexiReportView::moveToRecordRequested(uint r)
 {
-
+    Q_UNUSED(r);
 }
 
-long int KexiReportView::currentRecord()
+int KexiReportView::currentRecord() const
 {
     return m_currentPage;
 }
 
-long int KexiReportView::recordCount()
+int KexiReportView::recordCount() const
 {
     return m_pageCount;
 }

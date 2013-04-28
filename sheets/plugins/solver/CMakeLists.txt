@@ -21,17 +21,16 @@ kde4_add_ui_files( solver_PART_SRCS
 	SolverMainWidget.ui
 )
 
-kde4_add_plugin( kspreadsolver ${solver_PART_SRCS} )
+kde4_add_plugin( sheetssolver ${solver_PART_SRCS} )
 
 
 
-target_link_libraries( kspreadsolver
+target_link_libraries( sheetssolver
 	${GSL_LIBRARIES}
-	${GSL_CBLAS_LIBRARIES}
         calligrasheetscommon
 )
 
-install(TARGETS kspreadsolver  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS sheetssolver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -39,7 +39,7 @@
 #include <KoShapeManager.h>
 #include <KoParagraphStyle.h>
 #include <KoTableStyle.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 
 #include <QTimer>
 #include <kdebug.h>
@@ -154,7 +154,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     if (rootAreaPage && m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
         Q_ASSERT(rootAreaPage->page.isValid());
         Q_ASSERT(rootAreaPage->page.pageStyle().isValid());
-        requiredRootAreaCount = rootAreaPage->page.pageStyle().columns().columns;
+        requiredRootAreaCount = rootAreaPage->page.pageStyle().columns().count;
     }
     if (rootAreaPage && rootAreaPage->rootAreas.count() < requiredRootAreaCount) {
         pageNumber = m_pages.count(); // the root-area is still on the same page
@@ -233,11 +233,21 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                 if (frame->anchoredPageNumber() == pageNumber) {
                     qreal oldOffset = frame->anchoredFrameOffset();
                     qreal newOffset = rootAreaPage->page.offsetInDocument();
+                    KoShape *shape = frame->shape();
                     if (!qFuzzyCompare(1 + oldOffset, 1 + newOffset)) {
                         frame->setAnchoredFrameOffset(newOffset);
-                        QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
-                        frame->shape()->setPosition(pos);
+                        QPointF pos(shape->position().x(), newOffset - oldOffset + shape->position().y());
+                        shape->setPosition(pos);
                     }
+
+                    // During load we make page anchored shapes invisible, because otherwise
+                    // they leave empty rects in the text if there is run-around
+                    // now is the time to make them visible again
+                    shape->setVisible(true);
+
+                    QPointF delta;
+                    KWFrameLayout::proposeShapeMove(shape, delta, rootAreaPage->page);
+                    shape->setPosition(shape->position() + delta);
                 }
             }
         }
@@ -563,6 +573,13 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
 }
 
+void KWRootAreaProvider::updateAll()
+{
+    foreach (KWFrame *frame, m_textFrameSet->frames()) {
+        frame->shape()->update();
+    }
+}
+
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
     KoShape *shape = rootArea->associatedShape();
@@ -615,7 +632,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
                 continue;
             if (! shape->isVisible(true))
                 continue;
-            if (frame->anchorType() != KoTextAnchor::AnchorPage)
+            if (shape->anchor() && shape->anchor()->anchorType() != KoShapeAnchor::AnchorPage)
                 continue;
             if (shape->textRunAroundSide() == KoShape::RunThrough)
                 continue;

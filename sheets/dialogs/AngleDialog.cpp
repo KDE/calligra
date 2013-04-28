@@ -56,7 +56,6 @@ AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
 
     QVBoxLayout *lay = new QVBoxLayout(page);
     lay->setMargin(0);
-    lay->setSpacing(spacingHint());
     m_pAngle = new KIntNumInput(page);
     m_pAngle->setRange(-90, 90, 1);
     m_pAngle->setLabel(i18n("Angle:"));

@@ -23,7 +23,7 @@
 #ifndef CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 #define CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 
-#include <KDialog>
+#include <kdialog.h>
 
 namespace Calligra
 {

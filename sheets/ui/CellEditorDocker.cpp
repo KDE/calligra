@@ -25,9 +25,8 @@
 #include <QToolButton>
 
 // KDE
-#include <KAction>
-#include <KIcon>
-#include <KLocale>
+#include <kaction.h>
+#include <klocale.h>
 
 #include <kdebug.h>
 
@@ -135,7 +134,7 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
     // The triggering width is the same in both cases, but it is calculated in
     // different ways.
     // After a row got occupied, it does not vanish anymore, even if all items
-    // get removed. Hence, check for the existance of the item in the 2nd row.
+    // get removed. Hence, check for the existence of the item in the 2nd row.
     if (!d->layout->itemAtPosition(1, 0)) { /* one row */
         const int column = d->layout->count() - 1;
         QLayoutItem *const item = d->layout->itemAtPosition(0, column);

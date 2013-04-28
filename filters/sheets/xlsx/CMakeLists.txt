@@ -40,7 +40,9 @@ install( FILES
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
 
-install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
 
 ########## unit tests ###################
 
@@ -49,5 +51,5 @@ set(TestFormulaParser_SRCS
     TestFormulaParser.cpp
 )
 
-kde4_add_unit_test(TestFormulaParser TESTNAME kspread-xlsx-FormulaParser ${TestFormulaParser_SRCS})
+kde4_add_unit_test(TestFormulaParser TESTNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
 target_link_libraries(TestFormulaParser msooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})

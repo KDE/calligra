@@ -31,13 +31,14 @@
 #include "kptschedule.h"
 #include "kptdebug.h"
 
+#include <KoIcon.h>
+
 #include <QList>
 #include <QObject>
 
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <KIcon>
 
 
 namespace KPlato
@@ -98,7 +99,7 @@ QVariant AccountModel::name( const Account *a, int role ) const
              return  m_project && m_project->isBaselined() ? QVariant() : Qt::Unchecked;
          case Qt::DecorationRole:
              if ( a->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
              }
              break;
     }
@@ -170,7 +171,7 @@ void AccountItemModel::slotAccountToBeInserted( const Account *parent, int row )
 void AccountItemModel::slotAccountInserted( const Account *account )
 {
     //kDebug(planDbg())<<account->name();
-    Q_ASSERT( account->parent() == m_account );
+    Q_ASSERT( account->parent() == m_account ); Q_UNUSED( account );
     endInsertRows();
     m_account = 0;
 }
@@ -187,7 +188,7 @@ void AccountItemModel::slotAccountToBeRemoved( const Account *account )
 void AccountItemModel::slotAccountRemoved( const Account *account )
 {
     //kDebug(planDbg())<<account->name();
-    Q_ASSERT( account == m_account );
+    Q_ASSERT( account == m_account ); Q_UNUSED( account );
     endRemoveRows();
     m_account = 0;
 }

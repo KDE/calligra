@@ -91,7 +91,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsTreeView( QWidget *parent );
+    explicit ResourceAppointmentsTreeView(QWidget *parent);
 
     ResourceAppointmentsItemModel *model() const { return static_cast<ResourceAppointmentsItemModel*>( DoubleTreeViewBase::model() ); }
 
@@ -119,7 +119,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsView : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsView( KoDocument *part, QWidget *parent );
+    ResourceAppointmentsView(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     virtual void setProject( Project *project );

@@ -38,7 +38,6 @@
 #include <QVBoxLayout>
 #include <QPrinter>
 #include <QPrintDialog>
-#include <QVBoxLayout>
 #include <QHeaderView>
 #include <QMenu>
 
@@ -159,8 +158,8 @@ void AccountsTreeView::setShowMode( int show )
 }
 
 //------------------------
-AccountsView::AccountsView( Project *project, KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+AccountsView::AccountsView(KoPart *part, Project *project, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
         m_project(project),
         m_manager( 0 )
 {
@@ -181,6 +180,7 @@ void AccountsView::setZoom( double zoom )
 void AccountsView::init()
 {
     QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
     m_view = new AccountsTreeView( this );
     l->addWidget( m_view );
     setProject( m_project );

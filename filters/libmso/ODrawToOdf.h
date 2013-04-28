@@ -322,7 +322,7 @@ private:
     void setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out);
 
 public:
-    ODrawToOdf(Client& c) :client(&c) {}
+    explicit ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);

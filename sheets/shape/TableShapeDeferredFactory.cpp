@@ -21,7 +21,6 @@
 #include "TableShapeDeferredFactory.h"
 
 #include <QStringList>
-#include <QSharedPointer>
 
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -31,7 +30,6 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
-#include <KoShapeRegistry.h>
 
 #include <Map.h>
 

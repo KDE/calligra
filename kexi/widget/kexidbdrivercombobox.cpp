@@ -19,9 +19,21 @@
 
 #include "kexidbdrivercombobox.h"
 
+#include <KoIcon.h>
+
+class KexiDBDriverComboBox::Private
+{
+public:
+    Private() {};
+
+    QHash<QString, QString> drivers; //!< a map: driver caption -> driver name
+    QStringList driverNames;
+};
+
 KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
         const KexiDB::Driver::InfoHash& driversInfo, Options options)
         : KComboBox(parent)
+        , d(new Private)
 {
     //retrieve list of drivers and sort it: file-based first, then server-based
     QStringList captionsForFileBasedDrivers, captionsForServerBasedDrivers;
@@ -39,43 +51,46 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
     captionsForServerBasedDrivers.sort();
     //insert file-based
     if (options & ShowFileDrivers) {
-        foreach(QString caption, captionsForFileBasedDrivers) {
+        foreach(const QString &caption, captionsForFileBasedDrivers) {
             const KexiDB::Driver::Info& info = driversInfo[ fileBasedDriversDict[ caption ] ];
             //! @todo change this if better icon is available
-            addItem(KIcon("application-x-executable"), info.caption);
-            m_drivers.insert(info.caption, info.name.toLower());
+            addItem(koIcon("application-x-executable"), info.caption);
+            d->drivers.insert(info.caption, info.name.toLower());
         }
     }
     //insert server-based
     if (options & ShowServerDrivers) {
-        foreach(QString caption, captionsForServerBasedDrivers) {
+        foreach(const QString &caption, captionsForServerBasedDrivers) {
             const KexiDB::Driver::Info& info = driversInfo[ serverBasedDriversDict[ caption ] ];
             //! @todo change this if better icon is available
-            addItem(KIcon("application-x-executable"), info.caption);
-            m_drivers.insert(info.caption, info.name.toLower());
+            addItem(koIcon("application-x-executable"), info.caption);
+            d->drivers.insert(info.caption, info.name.toLower());
         }
     }
 
     // Build the names list after sorting
     for (int i = 0; i < count(); i++)
-        m_driverNames += m_drivers[ itemText(i) ];
+        d->driverNames += d->drivers[ itemText(i) ];
 }
 
 KexiDBDriverComboBox::~KexiDBDriverComboBox()
 {
+    delete d;
+}
+
+QStringList KexiDBDriverComboBox::driverNames() const
+{
+    return d->driverNames;
 }
 
 QString KexiDBDriverComboBox::selectedDriverName() const
 {
-    QHash<QString, QString>::ConstIterator it = m_drivers.find(itemText(currentIndex()));
-    if (it == m_drivers.constEnd())
-        return QString();
-    return it.value();
+    return d->drivers.value(itemText(currentIndex()));
 }
 
 void KexiDBDriverComboBox::setDriverName(const QString& driverName)
 {
-    const int index = m_driverNames.indexOf(driverName.toLower());
+    const int index = d->driverNames.indexOf(driverName.toLower());
     if (index == -1)
         return;
     setCurrentIndex(index);

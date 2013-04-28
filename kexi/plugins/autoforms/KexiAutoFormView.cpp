@@ -121,12 +121,12 @@ void KexiAutoFormView::moveToRecordRequested(uint r)
 
 }
 
-long int KexiAutoFormView::currentRecord()
+int KexiAutoFormView::currentRecord() const
 {
     return m_autoForm->currentRow() + 1;
 }
 
-long int KexiAutoFormView::recordCount()
+int KexiAutoFormView::recordCount() const
 {
     return m_autoForm->rows();
 }

@@ -31,11 +31,10 @@
 #include <QPainter>
 #include <QStyleOptionFrameV2>
 
-#include <KLocale>
-#include <KIconLoader>
-#include <KLineEdit>
-#include <KGuiItem>
-#include <KDebug>
+#include <klocale.h>
+#include <klineedit.h>
+#include <kguiitem.h>
+#include <kdebug.h>
 
 #include "kexirecordnavigator.h"
 #include "kexirecordmarker.h"

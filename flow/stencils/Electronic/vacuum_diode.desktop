@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=vacuum diode
+Name[bs]=vakum dioda
 Name[ca]=diode de buit
 Name[ca@valencia]=diode de buit
+Name[cs]=vakuová dioda
+Name[da]=vacuumdiode
 Name[de]=Vakuum-Diode
 Name[el]=δίοδος κενού
 Name[es]=diodo vacío
 Name[et]=Vaakumdiood
+Name[fr]=diode vacuum
+Name[gl]=Díodo de baleiro
 Name[it]=diodo a vuoto
 Name[kk]=лампа-диод
 Name[nb]=vakuum-diode
@@ -15,6 +20,7 @@ Name[pt]=díodo vácuo
 Name[pt_BR]=diodo de vácuo
 Name[ru]=Вакуумный диод
 Name[sk]=vákuová dióda
+Name[sl]=vakuumska dioda
 Name[sv]=vakuumdiod
 Name[uk]=Вакуумний діод
 Name[x-test]=xxvacuum diodexx

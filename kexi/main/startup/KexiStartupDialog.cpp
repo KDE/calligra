@@ -27,6 +27,8 @@
 #include <db/utils.h>
 #include <kexi_global.h>
 
+#include <KoIcon.h>
+
 #include <QLayout>
 #include <QTabWidget>
 #include <QComboBox>
@@ -53,8 +55,8 @@
 #include <kmimetype.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>
-#include <KIconLoader>
-#include <KUrl>
+#include <kiconloader.h>
+#include <kurl.h>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define KEXI_STARTUP_SHOW_RECENT
@@ -74,8 +76,8 @@ public:
 //  , pageOpenRecentID(-1)
     {
         result = -1;
-        QString iconname(KexiDB::defaultFileBasedDriverIcon());
-        kexi_sqlite_icon = KIconLoader::global()->loadMimeTypeIcon(iconname, KIconLoader::Desktop);
+        QString iconname(KexiDB::defaultFileBasedDriverIconName());
+        kexi_sqlite_icon = KIcon(iconname);
         const char shortcutMimeTypeName[] = "application/x-kexiproject-shortcut";
         KMimeType::Ptr mime(KMimeType::mimeType(shortcutMimeTypeName));
         if (mime.isNull()) {
@@ -83,8 +85,7 @@ public:
             iconname.clear();
         } else
             iconname = mime->iconName();
-        kexi_shortcut_icon = KIconLoader::global()->loadMimeTypeIcon(
-                                 iconname, KIconLoader::Desktop);
+        kexi_shortcut_icon = KIcon(iconname); // TODO: no longer used?
         prj_selector = 0;
         chkDoNotShow = 0;
         openExistingConnWidget = 0;
@@ -118,7 +119,8 @@ public:
 
     int result;
 
-    QPixmap kexi_sqlite_icon, kexi_shortcut_icon;
+    KIcon kexi_sqlite_icon;
+    KIcon kexi_shortcut_icon;
 
 // //! Key string of selected database template. \sa selectedTemplateKey()
 // QString selectedTemplateKey;
@@ -170,7 +172,7 @@ KexiStartupDialog::KexiStartupDialog(
     d->dialogOptions = dialogOptions;
 
     if (dialogType == OpenExisting) {//this dialog has "open" tab only!
-        setWindowIcon(DesktopIcon("document-open"));
+        setWindowIcon(koIcon("document-open"));
     } else {
         setWindowIcon(d->kexi_sqlite_icon);
     }
@@ -205,8 +207,8 @@ KexiStartupDialog::KexiStartupDialog(
 #endif
 
     if (!d->singlePage) {
-        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
-                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
+        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
+                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
         d->templatesWidget->setFocus();
     }
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
@@ -331,8 +333,8 @@ void KexiStartupDialog::setupPageTemplates()
             d->templatesWidget_IconListView->installEventFilter(this);
     }
     lyr->addWidget(d->templatesWidget);
-    connect(d->templatesWidget, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
-            this, SLOT(slotCurrentTemplatesubpageChanged(KPageWidgetItem*, KPageWidgetItem*)));
+    connect(d->templatesWidget, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
+            this, SLOT(slotCurrentTemplatesubpageChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
     if (d->dialogOptions & CheckBoxDoNotShowAgain) {
         d->chkDoNotShow = new QCheckBox(i18n("Do not show me this dialog again"), pageTemplatesFrame);
@@ -352,7 +354,7 @@ void KexiStartupDialog::setupPageTemplates()
     d->templPageWidgetItem_BlankDatabase = d->templatesWidget->addPage(templPageWidget,
                                            i18n("Blank Database"));
     d->templPageWidgetItem_BlankDatabase->setHeader(i18n("New Blank Database Project"));
-    d->templPageWidgetItem_BlankDatabase->setIcon(KIcon("x-office-document"));
+    d->templPageWidgetItem_BlankDatabase->setIcon(koIcon("x-office-document"));
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KDialog::spacingHint());
     QLabel *lbl_blank = new QLabel(
@@ -367,12 +369,11 @@ void KexiStartupDialog::setupPageTemplates()
     //- page "templates"
 // d->templatesSectionID_templates = itemID++;
     QString none;
-    QString kexi_sqlite_icon_name(KexiDB::defaultFileBasedDriverIcon());
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_CreateFromTemplate = d->templatesWidget->addPage(templPageWidget,
             i18n("Create From Template"));
     d->templPageWidgetItem_CreateFromTemplate->setHeader(i18n("New Database Project From Template"));
-    d->templPageWidgetItem_CreateFromTemplate->setIcon(KIcon(kexi_sqlite_icon_name));
+    d->templPageWidgetItem_CreateFromTemplate->setIcon(d->kexi_sqlite_icon);
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KDialog::spacingHint());
     QLabel *lbl_templ = new QLabel(
@@ -385,15 +386,15 @@ void KexiStartupDialog::setupPageTemplates()
 
     d->viewTemplates = new KexiStartupDialogTemplatesPage(templPageWidget);
     tmplyr->addWidget(d->viewTemplates);
-    connect(d->viewTemplates, SIGNAL(selected(const QString&)),
-            this, SLOT(templateSelected(const QString&)));
+    connect(d->viewTemplates, SIGNAL(selected(QString)),
+            this, SLOT(templateSelected(QString)));
     /* connect(d->viewTemplates->templates,SIGNAL(returnPressed(QIconViewItem*)),
         this,SLOT(templateItemExecuted(QIconViewItem*)));
       connect(d->viewTemplates->templates,SIGNAL(currentChanged(QIconViewItem*)),
         this,SLOT(templateItemSelected(QIconViewItem*)));*/
     /*later
       templPageFrame = d->templatesWidget->addPage (
-        i18n("Personal Databases"), i18n("New Personal Database Project Templates"), DesktopIcon("user-home") );
+        i18n("Personal Databases"), i18n("New Personal Database Project Templates"), koDesktopIcon("user-home"));
       tmplyr = new QVBoxLayout(templPageFrame, 0, KDialog::spacingHint());
       d->viewPersonalTempl = new TemplatesPage( Vertical, templPageFrame, "personal_page" );
       tmplyr->addWidget( d->viewPersonalTempl );
@@ -407,7 +408,7 @@ void KexiStartupDialog::setupPageTemplates()
       d->templatesSectionID_custom2 = itemID++;
       templPageFrame = d->templatesWidget->addPage (
         i18n("Business Databases"), i18n("New Business Database Project Templates"),
-        DesktopIcon( "user-identity" ));
+        koDesktopIcon("user-identity"));
       tmplyr = new QVBoxLayout(templPageFrame, 0, KDialog::spacingHint());
       d->viewBusinessTempl = new TemplatesPage( Vertical, templPageFrame, "business_page" );
       tmplyr->addWidget( d->viewBusinessTempl );
@@ -424,7 +425,7 @@ void KexiStartupDialog::setupPageTemplates()
                                             i18n("Import Existing Database"));
     d->templPageWidgetItem_ImportExisting->setHeader(
         i18n("Import Existing Database as New Database Project"));
-    d->templPageWidgetItem_ImportExisting->setIcon(KIcon("document_import_database"));
+    d->templPageWidgetItem_ImportExisting->setIcon(koIcon("document_import_database"));
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KDialog::spacingHint());
     QLabel *lbl_import = new QLabel(
@@ -460,13 +461,13 @@ void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem* curre
           //add items (on demand):
           d->viewTemplates->addItem("cd_catalog", i18n("CD Catalog"),
             i18n("Easy-to-use database for storing information about your CD collection."),
-            DesktopIcon("media-optical"));
+            koDesktopIcon("media-optical"));
           d->viewTemplates->addItem("expenses", i18n("Expenses"),
             i18n("A database for managing your personal expenses."),
-            DesktopIcon("accessories-calculator"));
+            koDesktopIcon("accessories-calculator"));
           d->viewTemplates->addItem("image_gallery", i18n("Image Gallery"),
             i18n("A database for archiving your image collection in a form of gallery."),
-            DesktopIcon("folder-image"));
+            koDesktopIcon("folder-image"));
         }
       }
       else if (idx==d->templatesSectionID_custom2) {//business
@@ -475,7 +476,7 @@ void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem* curre
           //add items (on demand):
           d->viewBusinessTempl->addItem("address_book", i18n("Address Book"),
             i18n("A database that offers you a contact information"),
-            DesktopIcon("help-contents"));
+            koDesktopIcon("help-contents"));
         }
       }*/
 #endif

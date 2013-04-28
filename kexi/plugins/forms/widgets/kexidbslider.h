@@ -25,10 +25,10 @@
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/FormWidgetInterface.h>
 #include <knuminput.h>
-#include <QSlider>
+#include <widget/kexislider.h>
 
 //! @short A db-aware slider 
-class KEXIFORMUTILS_EXPORT KexiDBSlider : public QSlider,
+class KEXIFORMUTILS_EXPORT KexiDBSlider : public KexiSlider,
                                           public KexiFormDataItemInterface,
                                           public KFormDesigner::FormWidgetInterface
 {
@@ -38,7 +38,7 @@ class KEXIFORMUTILS_EXPORT KexiDBSlider : public QSlider,
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
-    KexiDBSlider(QWidget *parent);
+    explicit KexiDBSlider(QWidget *parent = 0);
     virtual ~KexiDBSlider();
 
     inline QString dataSource() const {

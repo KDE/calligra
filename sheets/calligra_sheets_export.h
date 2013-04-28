@@ -44,7 +44,7 @@
 #endif
 
 #ifndef CALLIGRA_SHEETS_SOLVER_EXPORT
-# if defined(MAKE_KSPREADSOLVER_LIB)
+# if defined(MAKE_SHEETSSOLVER_LIB)
 /* We are building this library */
 #  define CALLIGRA_SHEETS_SOLVER_EXPORT KDE_EXPORT
 # else

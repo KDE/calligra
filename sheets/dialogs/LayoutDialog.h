@@ -397,7 +397,7 @@ public slots:
     void draw();
     void slotSetColorButton(const QColor &_color);
     void slotUnselect2(PatternSelect *_select);
-    void loadIcon(const QString& pix, BorderButton *_button);
+    void loadIcon(const QString &iconName, BorderButton *_button);
     void slotPressEvent(QMouseEvent *_ev);
     void slotChangeStyle(int);
     void slotChangeStyle(const QString &);

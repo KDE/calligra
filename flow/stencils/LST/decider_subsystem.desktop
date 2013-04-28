@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Decider
+Name[bs]=Odlučivač
 Name[ca]=Decididor
 Name[ca@valencia]=Decididor
+Name[da]=Decider
 Name[el]=Decider
 Name[es]=Decisor
 Name[et]=Otsustaja
+Name[fr]=décideur
+Name[gl]=Decisor
+Name[hu]=Döntéshozó
 Name[it]=Decisore
 Name[kk]=Шешімге келу жүйесі
 Name[nb]=Beslutningstaker
@@ -18,4 +23,5 @@ Name[sl]=Ledger
 Name[sv]=Beslutsfattare
 Name[uk]=Підсистема прийняття рішень
 Name[x-test]=xxDeciderxx
+Name[zh_CN]=判定器
 Name[zh_TW]=決定器

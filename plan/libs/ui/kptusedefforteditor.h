@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TASKUSEDEFFORTEDITOR_H
-#define TASKUSEDEFFORTEDITOR_H
+#ifndef KPTUSEDEFFORTEDITOR_H
+#define KPTUSEDEFFORTEDITOR_H
 
 #include "kplatoui_export.h"
 
@@ -39,10 +39,10 @@ class KPLATOUI_EXPORT UsedEffortItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    UsedEffortItemModel( QWidget *parent = 0 );
-    
+    explicit UsedEffortItemModel(QWidget *parent = 0);
+
     void setProject( Project *project ) { m_project = project; }
-    
+
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual bool setData( const QModelIndex &index, const QVariant & value, int role = Qt::EditRole );
@@ -51,7 +51,7 @@ public:
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex parent(const QModelIndex &) const { return QModelIndex(); }
     QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    
+
     void setCompletion( Completion *completion );
     const Resource *resource(const QModelIndex &index ) const;
     Completion::UsedEffort *usedEffort(const QModelIndex &index ) const;
@@ -66,11 +66,11 @@ public:
 signals:
     void rowInserted( const QModelIndex& );
     void changed();
-    
+
 public slots:
     bool submit();
     void revert();
-    
+
 private:
     Project *m_project;
     Completion *m_completion;
@@ -85,12 +85,12 @@ class KPLATOUI_EXPORT UsedEffortEditor : public QTableView
 {
     Q_OBJECT
 public:
-    UsedEffortEditor( QWidget *parent );
+    explicit UsedEffortEditor(QWidget *parent);
     void setProject( Project *project );
     void setCompletion( Completion *completion );
     void setCurrentMonday( const QDate &date );
     void addResource();
-    
+
     bool hasFreeResources() const;
 
     UsedEffortItemModel *model() const { return static_cast<UsedEffortItemModel*>( QTableView::model() ); }
@@ -98,7 +98,7 @@ public:
 signals:
     void changed();
     void resourceAdded();
-    
+
 private:
     
 };
@@ -116,10 +116,10 @@ public:
             Property_PlannedEffort    /// Planned Effort
     };
 
-    CompletionEntryItemModel( QObject *parent = 0 );
-    
+    explicit CompletionEntryItemModel(QObject *parent = 0);
+
     void setTask( Task *t );
-    
+
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual bool setData( const QModelIndex &index, const QVariant & value, int role = Qt::EditRole );
@@ -128,7 +128,7 @@ public:
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex parent(const QModelIndex &) const { return QModelIndex(); }
     QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    
+
     void setCompletion( Completion *completion );
     const Resource *resource(const QModelIndex &index ) const;
     Completion::UsedEffort *usedEffort(const QModelIndex &index ) const;
@@ -137,22 +137,22 @@ public:
     QModelIndex addRow();
     void removeRow( int row );
 
-    /// These falgs are in addition to flags return from QAbstractItemModel::flags()
+    /// These flags are in addition to flags return from QAbstractItemModel::flags()
     void setFlags( int col, Qt::ItemFlags flags ) { m_flags[ col ] = flags; }
-    
+
     long id() const { return m_manager == 0 ? -1 : m_manager->scheduleId(); }
 
 signals:
     void rowInserted( const QDate& );
     void rowRemoved( const QDate& );
     void changed();
-    
+
 public slots:
     bool submit();
     void revert();
     void slotDataChanged();
     void setManager( ScheduleManager *sm );
-    
+
 protected:
     QVariant date ( int row, int role = Qt::DisplayRole ) const;
     QVariant percentFinished ( int row, int role ) const;
@@ -163,9 +163,9 @@ protected:
     void removeEntry( const QDate date );
     void addEntry( const QDate date );
     void refresh();
-    
+
     QList<qint64> scales() const;
-    
+
 protected:
     Task *m_node;
     Project *m_project;
@@ -181,9 +181,9 @@ class KPLATOUI_EXPORT CompletionEntryEditor : public QTableView
 {
     Q_OBJECT
 public:
-    CompletionEntryEditor( QWidget *parent );
+    explicit CompletionEntryEditor(QWidget *parent);
     void setCompletion( Completion *completion );
-    
+
     CompletionEntryItemModel *model() const { return static_cast<CompletionEntryItemModel*>( QTableView::model() ); }
     void setCompletionModel( CompletionEntryItemModel *m );
 
@@ -196,7 +196,7 @@ signals:
 public slots:
     void addEntry();
     void removeEntry();
-    
+
 private:
     
 };
@@ -204,4 +204,4 @@ private:
 
 }  //KPlato namespace
 
-#endif // TASKUSEDEFFORTEDITOR_H
+#endif // KPTUSEDEFFORTEDITOR_H

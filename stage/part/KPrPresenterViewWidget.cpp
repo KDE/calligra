@@ -23,9 +23,8 @@
 #include <QKeyEvent>
 #include <QStackedLayout>
 
-#include <KDebug>
-#include <KLocale>
-#include <KIcon>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
@@ -58,17 +57,17 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
 
     m_slidesWidget = new KPrPresenterViewSlidesInterface( pages );
     m_stackedLayout->addWidget( m_slidesWidget );
-    connect( m_slidesWidget, SIGNAL( selectedPageChanged( int, bool ) ), this,
-            SLOT( requestChangePage( int, bool ) ) );
+    connect( m_slidesWidget, SIGNAL(selectedPageChanged(int,bool)), this,
+            SLOT(requestChangePage(int,bool)) );
     
     vLayout->addLayout( m_stackedLayout );
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addStretch();
     m_toolWidget = new KPrPresenterViewToolWidget;
-    connect( m_toolWidget, SIGNAL( slideThumbnailsToggled( bool ) ), this, SLOT( showSlideThumbnails( bool ) ) );
-    connect( m_toolWidget, SIGNAL( previousSlideClicked() ), this, SLOT( requestPreviousSlide() ) );
-    connect( m_toolWidget, SIGNAL( nextSlideClicked() ), this, SLOT( requestNextSlide() ) );
+    connect( m_toolWidget, SIGNAL(slideThumbnailsToggled(bool)), this, SLOT(showSlideThumbnails(bool)) );
+    connect( m_toolWidget, SIGNAL(previousSlideClicked()), this, SLOT(requestPreviousSlide()) );
+    connect( m_toolWidget, SIGNAL(nextSlideClicked()), this, SLOT(requestNextSlide()) );
     hLayout->addWidget( m_toolWidget );
     hLayout->addStretch();
 

@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=subgraph
+Name[bs]=podgraf
 Name[ca]=subgràfic
 Name[ca@valencia]=subgràfic
+Name[da]=subgraf
 Name[el]=υπο-γράφος
 Name[es]=subgrafo
 Name[et]=Alamgraaf
+Name[fr]=subgraph
+Name[gl]=Subgrafo
 Name[it]=sottografo
 Name[kk]=ішграф
 Name[nb]=under-graf

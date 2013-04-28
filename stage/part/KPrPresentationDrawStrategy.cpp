@@ -25,6 +25,7 @@
 
 #include <kiconloader.h>
 
+#include <KoIcon.h>
 #include <KoPACanvas.h>
 
 #include "KPrPresentationTool.h"
@@ -35,11 +36,12 @@ KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * 
 {
     m_widget = new KPrPresentationDrawWidget(canvas());
     // TODO
-    KIconLoader kicon("stage");
-    QPixmap pix(kicon.loadIcon("pen.png", kicon.Small));
+    KIconLoader iconLoader(QLatin1String("stage"));
+    QPixmap pix(iconLoader.loadIcon(koIconName("pen"), KIconLoader::Small));
     const qreal factor = 1.2;
-    pix = pix.scaledToHeight(pix.height()*factor);
-    pix = pix.scaledToWidth(pix.width()*factor);
+    const int oldWidth = pix.width();
+    const int oldHeight = pix.height();
+    pix = pix.scaled(oldWidth*factor, oldHeight*factor);
     QCursor cur(pix);
     QApplication::setOverrideCursor(cur);
 

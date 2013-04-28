@@ -150,7 +150,7 @@ protected:
 class SheetPropertiesCommand : public KUndo2Command
 {
 public:
-    SheetPropertiesCommand(Sheet* sheet);
+    explicit SheetPropertiesCommand(Sheet *sheet);
     void setLayoutDirection(Qt::LayoutDirection direction);
     void setAutoCalculationEnabled(bool b);
     void setShowGrid(bool b);

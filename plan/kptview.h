@@ -18,8 +18,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_VIEW
-#define KPLATO_VIEW
+#ifndef KPTVIEW_H
+#define KPTVIEW_H
 
 #include "kplato_export.h"
 
@@ -35,7 +35,7 @@
 #include <QPointer>
 #include <QPrintDialog>
 
-#include <KConfigDialog>
+#include <kconfigdialog.h>
 
 class QStackedWidget;
 class QSplitter;
@@ -69,7 +69,9 @@ class ScheduleManager;
 class CalculateScheduleCmd;
 class ResourceAssignmentView;
 class TaskStatusView;
+class TaskModuleModel;
 class Calendar;
+class MainDocument;
 class Part;
 class Node;
 class Project;
@@ -83,6 +85,7 @@ class Context;
 class ViewAdaptor;
 class HtmlView;
 class ReportView;
+class ReportWidget;
 
 class ReportDesignDialog;
 
@@ -141,10 +144,12 @@ class KPLATO_EXPORT View : public KoView
     Q_OBJECT
 
 public:
-    explicit View( Part* part, QWidget* parent = 0 );
+    explicit View(KoPart *part, MainDocument *doc, QWidget *parent = 0);
     ~View();
 
-    Part *getPart() const;
+    MainDocument *getPart() const;
+
+    KoPart *getKoPart() const;
 
     Project& getProject() const;
 
@@ -205,6 +210,7 @@ signals:
 public slots:
     void slotUpdate();
     void slotCreateTemplate();
+    void slotCreateNewProject();
     void slotEditResource();
     void slotEditResource( Resource *resource );
     void slotEditCut();
@@ -291,10 +297,11 @@ protected slots:
 
     void slotUpdateViewInfo( ViewListItem *itm );
 
-    void slotEditReportDesign( ReportView *view );
-    void slotCreateReport();
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
+
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
 
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
@@ -311,7 +318,7 @@ protected:
     void updateView( QWidget *widget );
 
     ViewBase *currentView() const;
-    
+
     ViewBase *createWelcomeView();
 
 private slots:
@@ -377,7 +384,7 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
-    // if multiple changes occure, only issue the last change
+    // if multiple changes occur, only issue the last change
     bool m_trigged;
     ScheduleManager *m_nextScheduleManager;
 
@@ -390,6 +397,7 @@ private:
 
     // ------ File
     QAction *actionCreateTemplate;
+    QAction *actionCreateNewProject;
 
     // ------ Edit
     QAction *actionCut;
@@ -409,7 +417,6 @@ private:
     KAction *actionInsertFile;
     KAction *actionCurrencyConfig;
 
-    KAction *actionCreateReport;
     KAction *actionOpenReportFile;
 
     // ------ Settings
@@ -436,6 +443,8 @@ private:
     KAction *actNoInformation;
 
     QMap<ViewListItem*, QAction*> m_reportActionMap;
+
+    KoPart *m_partpart;
 };
 
 

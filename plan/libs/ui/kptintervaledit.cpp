@@ -22,11 +22,12 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 
+#include <KoIcon.h>
+
 #include <QPushButton>
 #include <QTreeWidget>
 #include <QList>
 
-#include <kicon.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -65,11 +66,11 @@ IntervalEditImpl::IntervalEditImpl(QWidget *parent)
     intervalList->setRootIsDecorated( false );
     intervalList->setSortingEnabled( true );
     intervalList->sortByColumn( 0, Qt::AscendingOrder );
-    
-    bAddInterval->setIcon( KIcon( "list-add" ) );
-    bRemoveInterval->setIcon( KIcon( "list-remove" ) );
-    bClear->setIcon( KIcon( "edit-clear-list" ) );
-    
+
+    bAddInterval->setIcon(koIcon("list-add"));
+    bRemoveInterval->setIcon(koIcon("list-remove"));
+    bClear->setIcon(koIcon("edit-clear-list"));
+
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
     connect(bRemoveInterval, SIGNAL(clicked()), SLOT(slotRemoveIntervalClicked()));

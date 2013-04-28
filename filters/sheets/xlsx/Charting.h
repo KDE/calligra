@@ -76,24 +76,24 @@ namespace Charting
             None = 0x0005,
             DarkGrayPattern = 0x0006,
             MediumGrayPattern = 0x0007,
-            LightGrayPattern = 0x0008,
+            LightGrayPattern = 0x0008
         };
         enum Tickness {
             Hairline = 0xFFFF,
             NarrowSingle = 0x0000,
             MediumDouble = 0x0001,
-            WideTriple = 0x0002,
+            WideTriple = 0x0002
         };
         Style m_style;
         Tickness m_tickness;
-        LineFormat(const Style& style = None, const Tickness& tickness = Hairline) : Format(), m_style(style), m_tickness(tickness) {} 
+        explicit LineFormat(const Style& style = None, const Tickness& tickness = Hairline) : Format(), m_style(style), m_tickness(tickness) {} 
     };
     
     class PieFormat : public Format
     {
     public:
         int m_pcExplode; // from PieFormat
-        PieFormat(int pcExplode = 0) : Format(), m_pcExplode(pcExplode) {}
+        explicit PieFormat(int pcExplode = 0) : Format(), m_pcExplode(pcExplode) {}
     };
     
     class AreaFormat : public Format
@@ -102,7 +102,7 @@ namespace Charting
         QColor m_foreground;
         QColor m_background;
         bool m_fill;
-        AreaFormat(const QColor &foreground = QColor(), const QColor &background = QColor(), bool fill = false) : Format(), m_foreground(foreground), m_background(background), m_fill(fill) {}
+        explicit AreaFormat(const QColor &foreground = QColor(), const QColor &background = QColor(), bool fill = false) : Format(), m_foreground(foreground), m_background(background), m_fill(fill) {}
     };
 
     class Gradient
@@ -112,7 +112,7 @@ namespace Charting
         class GradientStop
         {
         public:
-            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor = QString(); }
+            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor.clear(); }
             qreal position;
             QColor knownColorValue;
             qreal tintVal;
@@ -159,7 +159,7 @@ namespace Charting
     public:
         /// Starting angle of the first data point clockwise from the top of the circle.
         int m_anStart;
-        PieImpl(int anStart = 0) : ChartImpl(), m_anStart(anStart) {}
+        explicit PieImpl(int anStart = 0) : ChartImpl(), m_anStart(anStart) {}
         virtual QByteArray name() const { return "circle"; }
     };
 
@@ -168,7 +168,7 @@ namespace Charting
     public:
         /// Size of the center hole in a doughnut chart group as a percentage of the plot area size.
         int m_pcDonut;
-        RingImpl(int anStart = 0, int pcDonut = 0) : PieImpl(anStart), m_pcDonut(pcDonut) {}
+       explicit  RingImpl(int anStart = 0, int pcDonut = 0) : PieImpl(anStart), m_pcDonut(pcDonut) {}
         virtual QByteArray name() const { return "ring"; }
     };
 
@@ -189,7 +189,7 @@ namespace Charting
     public:
         /// If true then the radar-chart is filled (an RadarArea chart) else not.
         bool m_filled;
-        RadarImpl(bool filled = false) : ChartImpl(), m_filled(filled) {}
+        explicit RadarImpl(bool filled = false) : ChartImpl(), m_filled(filled) {}
         virtual QByteArray name() const { return m_filled ? "filled-radar" : "radar"; }
     };
 
@@ -229,7 +229,7 @@ namespace Charting
         unsigned int m_sizeRatio;
         /// Specifies whether data points with negative values are shown.
         bool m_showNegativeBubbles;
-        BubbleImpl(SizeType sizeType = Area, unsigned int sizeRatio = 100, bool showNegativeBubbles = true) : ChartImpl(), m_sizeType(sizeType), m_sizeRatio(sizeRatio), m_showNegativeBubbles(showNegativeBubbles) {}
+        explicit BubbleImpl(SizeType sizeType = Area, unsigned int sizeRatio = 100, bool showNegativeBubbles = true) : ChartImpl(), m_sizeType(sizeType), m_sizeRatio(sizeRatio), m_showNegativeBubbles(showNegativeBubbles) {}
         virtual QByteArray name() const { return "bubble"; }
     };
 
@@ -238,7 +238,7 @@ namespace Charting
     public:
         /// Specifies that the surface is either filled or a wireframe.
         bool m_fill;
-        SurfaceImpl(bool fill = false) : ChartImpl(), m_fill(fill) {}
+        explicit SurfaceImpl(bool fill = false) : ChartImpl(), m_fill(fill) {}
         virtual QByteArray name() const { return "surface"; }
     };
 
@@ -265,7 +265,7 @@ namespace Charting
         enum Type {
             HorizontalValueAxis = 0x0000,
             VerticalValueAxis = 0x0001,
-            SeriesAxis = 0x0002,
+            SeriesAxis = 0x0002
         };
         Type m_type;
 
@@ -273,7 +273,7 @@ namespace Charting
         {
         public:
             LineFormat m_format;
-            Gridline(const LineFormat &format = LineFormat()) : m_format(format) {} 
+            explicit Gridline(const LineFormat &format = LineFormat()) : m_format(format) {}
         };
         Gridline m_majorGridlines;
         Gridline m_minorGridlines;
@@ -290,7 +290,7 @@ namespace Charting
         qreal m_minimum;
         qreal m_maximum;
 
-        Axis(Type type) : Obj(), m_type(type), m_reversed(false), m_logarithmic(false), m_autoMinimum(true), m_autoMaximum(true), m_minimum(0), m_maximum(0) {}
+        explicit Axis(Type type) : Obj(), m_type(type), m_reversed(false), m_logarithmic(false), m_autoMinimum(true), m_autoMaximum(true), m_minimum(0), m_maximum(0) {}
         virtual ~Axis() {}
     };
 

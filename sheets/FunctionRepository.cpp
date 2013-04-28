@@ -31,7 +31,7 @@
 #include <QHash>
 
 #include <kdebug.h>
-#include <KGlobal>
+#include <kglobal.h>
 #include <klocale.h>
 
 using namespace Calligra::Sheets;

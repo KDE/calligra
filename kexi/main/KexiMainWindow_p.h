@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,18 +30,23 @@
 #define PROJECT_NAVIGATOR_TABBAR_ID 0
 #define PROPERTY_EDITOR_TABBAR_ID 1
 
-#include <KToolBar>
-#include <KColorUtils>
-#include <KHelpMenu>
+#include <ktoolbar.h>
+#include <kcolorutils.h>
+#include <khelpmenu.h>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QDesktopWidget>
 #include <QKeyEvent>
-#include <KTabWidget>
+#include <ktabwidget.h>
+#include <KoIcon.h>
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
 #include <kexiutils/SmallToolButton.h>
+#include <kexiutils/styleproxy.h>
+#include <kexiutils/KexiTester.h>
+#include <core/kexi.h>
+
 class KexiProjectNavigator;
 
 static const int KEXITABBEDTOOLBAR_FIRSTTAB_SPACING = 20;
@@ -131,18 +136,25 @@ public:
             , lyr(new QVBoxLayout(this)) {
         lyr->setContentsMargins(0, 0, 0, 0);
     }
+    ~KexiWindowContainer() {
+        //! @todo warning if saveSettings() failed?
+        if (window) {
+            window->saveSettings();
+            delete (KexiWindow*)window;
+        }
+    }
     void setWindow(KexiWindow* w) {
         window = w;
         if (w)
             lyr->addWidget(w);
     }
-    KexiWindow *window;
+    QPointer<KexiWindow> window;
 private:
     QVBoxLayout *lyr;
 };
 
 //#include <qimageblitz/qimageblitz.h>
-#include <KFadeWidgetEffect>
+#include <kfadewidgeteffect.h>
 #include <QStyleOptionMenuItem>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
@@ -228,6 +240,41 @@ public slots:
     void start() { KFadeWidgetEffect::start(m_duration); }
 private:
     int m_duration;
+};
+
+//! A style proxy for KexiMenuWidget
+class KexiMenuWidgetStyle : public KexiUtils::StyleProxy
+{
+public:
+    explicit KexiMenuWidgetStyle(QStyle *style) : KexiUtils::StyleProxy(style) {
+    }
+    virtual ~KexiMenuWidgetStyle() {
+    }
+    virtual void drawControl(ControlElement element, const QStyleOption *option,
+                             QPainter *painter, const QWidget *widget = 0) const
+    {
+        if (element == QStyle::CE_MenuItem
+            && (option->state & QStyle::State_Selected) && (option->state & QStyle::State_Enabled)
+            && parentStyle()->objectName() == QLatin1String("oxygen"))
+        {
+            // Ugly fix for visual glitch of oxygen; no chance for improvement since
+            // we've forked QMenu and oxygen checks for qobject_cast<QMenu*> directly.
+            QColor c(option->palette.color(QPalette::Window));
+            int h, s, v, a;
+            c.getHsv(&h, &s, &v, &a);
+            // Why 0.91208791? I knew you're curious. There are some algorithms in Oxygen
+            // to make color a bit lighter. They are not in the public API nor they are simple.
+            // So the number was computed by me to find the proper value for the color
+            // (the accuracy is quite OK). 
+            // It's also related to the fact that Oxygen's menus have gradient background. 
+            // A lot of computation happens under the mask...
+            c.setHsv(h, s, v * 0.91208791, a); 
+            painter->fillRect(option->rect.x() + 6, option->rect.y() + 6,
+                              option->rect.width() - 12, option->rect.height() - 12,
+                              c);
+        }
+        KexiUtils::StyleProxy::drawControl(element, option, painter, widget);
+    }
 };
 
 //! Main menu
@@ -360,6 +407,13 @@ protected:
             hlyr->setSpacing(0);
             hlyr->setMargin(0);
             m_menuWidget = new KexiMenuWidget;
+            if (KDE::version() < KDE_MAKE_VERSION(4, 8, 0) // a fix is apparently needed for glitch in KDE < 4.8
+                && m_menuWidget->style()->objectName() == QLatin1String("oxygen"))
+            {
+                KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style());
+                m_menuWidget->setStyle(customStyle);
+                customStyle->setParent(this);
+            }
             m_menuWidget->installEventFilter(this);
             m_menuWidget->setFocusPolicy(Qt::StrongFocus);
             setFocusProxy(m_menuWidget);
@@ -506,8 +560,7 @@ public:
     int lowestIndex;
 };
 
-#include <kexiutils/styleproxy.h>
-#include <KTabBar>
+#include <ktabbar.h>
 #include <QTabBar>
 #include <QPainter>
 
@@ -561,8 +614,16 @@ public:
                 if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX)
                     return;
                 bool mouseOver = opt->state & QStyle::State_MouseOver;
+                bool unselectedOrMenuVisible
+                    = !(opt->state & State_Selected) || tbar->mainMenuVisible();
+                if (unselectedOrMenuVisible) {
+                    if (parentStyle()->objectName() == "bespin") {
+                        unselectedOrMenuVisible = false;
+                    }
+                }
+
                 if (!mouseOver
-                    && (!(opt->state & State_Selected) || tbar->mainMenuVisible())
+                    && unselectedOrMenuVisible
                     && index > 0)
                 {
                     QStyleOptionTabV2 newOpt(*opt);
@@ -762,7 +823,8 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
 
     QStyleOptionTab ot;
     ot.initFrom(tabBar);
-    int overlap = tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &ot, tabBar) - 2;
+    int overlap = tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &ot, tabBar)
+                  - tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseHeight, &ot, tabBar);
 //     kDebug() << "4. overlap=" << overlap;
 
     mainMenu->setGeometry(0, pos.y() - overlap /*- q->y()*/,
@@ -879,7 +941,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(),
                                 true/*showWhatsThis*/, d->ac);
     QAction* help_report_bug_action = d->ac->action("help_report_bug");
-    help_report_bug_action->setIcon(KIcon("tools-report-bug")); // good icon for toolbar
+    help_report_bug_action->setIcon(koIcon("tools-report-bug")); // good icon for toolbar
     help_report_bug_action->setWhatsThis(i18n("Shows bug reporting tool for Kexi application."));
     QAction* help_whats_this_action =  d->ac->action("help_whats_this");
     help_whats_this_action->setWhatsThis(i18n("Activates \"What's This\" tool."));
@@ -911,6 +973,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
     d->searchLineEdit = new KexiSearchLineEdit;
+    kexiTester() << KexiTestObject(d->searchLineEdit, "globalSearch.lineEdit");
     d->searchLineEdit->installEventFilter(this);
     helpLyr->addWidget(d->searchLineEdit);
 
@@ -989,7 +1052,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
       addAction(tbar, "help_whats_this");
       addAction(tbar, "help_report_bug");
       a = d->ac->action("help_report_bug");
-      a->setIcon(KIcon("tools-report-bug"));
+      a->setIcon(koIcon("tools-report-bug"));
       addAction(tbar, "help_about_app");
       addAction(tbar, "help_about_kde");
     */
@@ -1129,7 +1192,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         if (watched == d->searchLineEdit) {
             activateSearchLineEdit(); // custom setFocus() for search box, so it's possible to focus
                                       // back on Escape key press
-            return true;
+            return false;
         }
         else if (watched == tabBar()) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);
@@ -1602,10 +1665,6 @@ public:
         return windows.contains(identifier) ? (KexiWindow*)windows.value(identifier) : 0;
     }
 #else
-    KexiWindow *openedWindowFor(const KexiPart::Item* item) {
-        return openedWindowFor(item->identifier());
-    }
-
     KexiWindow *openedWindowFor(int identifier) {
 //todo(threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         return windows.contains(identifier) ? (KexiWindow*)windows.value(identifier) : 0;

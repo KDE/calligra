@@ -23,8 +23,10 @@
 
 #include <QMap>
 #include <QTreeWidget>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 
+#include <kpushbutton.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,17 +47,16 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
         , m_selection(selection)
         , m_styleManager(manager)
 {
-    setButtons(Apply | User1 | User2 | User3 | Close);
-    setButtonText(User3, i18n("&New..."));
-    setButtonText(User2, i18n("&Modify..."));
-    setButtonText(User1, i18n("&Delete..."));
-    setButtonsOrientation(Qt::Vertical);
+    setButtons(Apply | Close);
     setCaption(i18n("Style Manager"));
 
     QWidget* widget = new QWidget(this);
     setMainWidget(widget);
 
-    QVBoxLayout* layout = new QVBoxLayout(widget);
+    QHBoxLayout *hboxLayout = new QHBoxLayout(widget);
+    hboxLayout->setMargin(0);
+
+    QVBoxLayout* layout = new QVBoxLayout();
 
     m_styleList = new QTreeWidget(this);
     m_styleList->setHeaderLabel(i18n("Style"));
@@ -67,24 +68,39 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
     m_displayBox->insertItem(2, i18n("Hierarchical"));
     layout->addWidget(m_displayBox);
 
+    hboxLayout->addLayout(layout);
+
+    // list buttons
+    QVBoxLayout *listButtonLayout = new QVBoxLayout();
+
+    m_newButton = new KPushButton(i18n("&New..."), this);
+    listButtonLayout->addWidget(m_newButton);
+    m_modifyButton = new KPushButton(i18n("&Modify..."), this);
+    listButtonLayout->addWidget(m_modifyButton);
+    m_deleteButton = new KPushButton(i18n("&Delete..."), this);
+    listButtonLayout->addWidget(m_deleteButton);
+    listButtonLayout->addStretch(1);
+
+    hboxLayout->addLayout(listButtonLayout);
+
     slotDisplayMode(0);
-    enableButton(KDialog::User3, true);
-    enableButton(KDialog::User2, true);
-    enableButton(KDialog::User1, false);
+    m_newButton->setEnabled(true);
+    m_modifyButton->setEnabled(true);
+    m_deleteButton->setEnabled(false);
 
     connect(m_displayBox, SIGNAL(activated(int)),
             this, SLOT(slotDisplayMode(int)));
     connect(this, SIGNAL(applyClicked()),
             this, SLOT(slotOk()));
-    connect(this, SIGNAL(user3Clicked()),
+    connect(m_newButton, SIGNAL(clicked(bool)),
             this, SLOT(slotNew()));
-    connect(this, SIGNAL(user2Clicked()),
+    connect(m_modifyButton, SIGNAL(clicked(bool)),
             this, SLOT(slotEdit()));
-    connect(this, SIGNAL(user1Clicked()),
+    connect(m_deleteButton, SIGNAL(clicked(bool)),
             this, SLOT(slotRemove()));
-    connect(m_styleList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+    connect(m_styleList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotEdit()));
-    connect(m_styleList, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+    connect(m_styleList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
             this, SLOT(selectionChanged(QTreeWidgetItem*)));
 }
 
@@ -286,14 +302,11 @@ void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
     else
         style = m_styleManager->style(name);
     if (!style) {
-        enableButton(KDialog::User1, false);
+        m_deleteButton->setEnabled(false);
         return;
     }
 
-    if (style->type() == Style::BUILTIN)
-        enableButton(KDialog::User1, false);
-    else
-        enableButton(KDialog::User1, true);
+    m_deleteButton->setEnabled(style->type() != Style::BUILTIN);
 }
 
 #include "StyleManagerDialog.moc"

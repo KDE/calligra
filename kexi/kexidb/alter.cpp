@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -131,7 +131,7 @@ struct KexiDB_AlterTableHandlerStatic {
         I2("unsigned", PhysicalAlteringRequired, DataConversionRequired); // always?
         I2("maxLength", PhysicalAlteringRequired, DataConversionRequired); // always?
         I2("precision", PhysicalAlteringRequired, DataConversionRequired); // always?
-        I("width", MainSchemaAlteringRequired);
+        I("defaultWidth", ExtendedSchemaAlteringRequired);
         // defaultValue: depends on backend, for mysql it can only by a constant or now()...
         // -- should we look at Driver here?
 #ifdef KEXI_NO_UNFINISHED
@@ -186,7 +186,6 @@ int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
         .arg(QString(propertyName));
     }
     return res;
-    return KexiDB_alteringTypeForProperty->types[propertyName.toLower()];
 }
 
 //---
@@ -257,7 +256,7 @@ static void debugAction(AlterTableHandler::ActionBase *action, int nestingLevel,
         KexiDBDbg << debugString;
 #ifdef KEXI_DEBUG_GUI
         if (simulate)
-            KexiDB::addAlterTableActionDebug(debugString, nestingLevel);
+            KexiDB::alterTableActionDebugGUI(debugString, nestingLevel);
 #endif
     }
 }
@@ -278,7 +277,7 @@ static void debugActionDict(AlterTableHandler::ActionDict *dict, int fieldUID, b
     KexiDBDbg << dbg;
 #ifdef KEXI_DEBUG_GUI
     if (simulate)
-        KexiDB::addAlterTableActionDebug(dbg, 1);
+        KexiDB::alterTableActionDebugGUI(dbg, 1);
 #endif
     for (;it != dict->constEnd(); ++it) {
         debugAction(it.value(), 2, simulate);
@@ -289,7 +288,7 @@ static void debugFieldActions(const AlterTableHandler::ActionDictDict &fieldActi
 {
 #ifdef KEXI_DEBUG_GUI
     if (simulate)
-        KexiDB::addAlterTableActionDebug("** Simplified Field Actions:");
+        KexiDB::alterTableActionDebugGUI("** Simplified Field Actions:");
 #endif
     for (AlterTableHandler::ActionDictDictConstIterator it(fieldActions.constBegin()); it != fieldActions.constEnd(); ++it) {
         debugActionDict(it.value(), it.key(), simulate);
@@ -554,7 +553,7 @@ AlterTableHandler::InsertFieldAction::InsertFieldAction(const InsertFieldAction&
         : FieldActionBase(action) //action.fieldName(), action.uid())
         , m_index(action.index())
 {
-    m_field = new KexiDB::Field(action.field());
+    m_field = new KexiDB::Field(*action.field());
 }
 
 AlterTableHandler::InsertFieldAction::InsertFieldAction(bool)
@@ -622,7 +621,7 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
     }
     if (actionsForThisField) {
         //collect property values that have to be changed in this field
-        QHash<QByteArray, QVariant> values;
+        QMap<QByteArray, QVariant> values;
         ActionDict *newActionsForThisField = new ActionDict(); // this will replace actionsForThisField after the loop
         QSet<ActionBase*> actionsToDelete; // used to collect actions taht we soon delete but cannot delete in the loop below
         for (ActionDictConstIterator it(actionsForThisField->constBegin()); it != actionsForThisField->constEnd();++it) {
@@ -648,19 +647,19 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
         fieldActions.insert(uid(), actionsForThisField);
         if (!values.isEmpty()) {
             //update field, so it will be created as one step
-            KexiDB::Field *f = new KexiDB::Field(field());
+            KexiDB::Field *f = new KexiDB::Field(*field());
             if (KexiDB::setFieldProperties(*f, values)) {
                 //field() = f;
                 setField(f);
-                field().debug();
+                field()->debug();
 #ifdef KEXI_DEBUG_GUI
-                KexiDB::addAlterTableActionDebug(
-                    QString("** Property-set actions moved to field definition itself:\n") + field().debugString(), 0);
+                KexiDB::alterTableActionDebugGUI(
+                    QString("** Property-set actions moved to field definition itself:\n") + field()->debugString(), 0);
 #endif
             } else {
 #ifdef KEXI_DEBUG_GUI
-                KexiDB::addAlterTableActionDebug(
-                    QString("** Failed to set properties for field ") + field().debugString(), 0);
+                KexiDB::alterTableActionDebugGUI(
+                    QString("** Failed to set properties for field ") + field()->debugString(), 0);
 #endif
                 KexiDBWarn << "AlterTableHandler::InsertFieldAction::simplifyActions(): KexiDB::setFieldProperties() failed!";
                 delete f;
@@ -682,8 +681,8 @@ tristate AlterTableHandler::InsertFieldAction::updateTableSchema(TableSchema &ta
     //in most cases we won't add the field to fieldMap
     Q_UNUSED(field);
 //! @todo add it only when there should be fixed value (e.g. default) set for this new field...
-    fieldMap.remove(this->field().name());
-    table.insertField(index(), new Field(this->field()));
+    fieldMap.remove(this->field()->name());
+    table.insertField(index(), new Field(*this->field()));
     return true;
 }
 
@@ -905,14 +904,14 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
 
 #ifdef KEXI_DEBUG_GUI
     if (args.simulate)
-        KexiDB::addAlterTableActionDebug(dbg, 0);
+        KexiDB::alterTableActionDebugGUI(dbg, 0);
 #endif
     dbg = QString("** Ordered, simplified actions (%1, was %2):")
           .arg(currentActionsCount).arg(allActionsCount);
     KexiDBDbg << dbg;
 #ifdef KEXI_DEBUG_GUI
     if (args.simulate)
-        KexiDB::addAlterTableActionDebug(dbg, 0);
+        KexiDB::alterTableActionDebugGUI(dbg, 0);
 #endif
     for (int i = 0; i < allActionsCount; i++) {
         debugAction(actionsVector.at(i), 1, args.simulate, QString("%1: ").arg(i + 1), args.debugString);

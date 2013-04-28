@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_RELATIONEDTIOR_H
-#define KPLATO_RELATIONEDTIOR_H
+#ifndef KPTRELATIONEDITOR_H
+#define KPTRELATIONEDITOR_H
 
 #include "kplatoui_export.h"
 
@@ -67,7 +67,7 @@ class KPLATOUI_EXPORT RelationEditor : public ViewBase
     Q_OBJECT
 public:
     /// Create a relation editor
-    RelationEditor( KoDocument *part, QWidget *parent );
+    RelationEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     virtual void draw( Project &project );

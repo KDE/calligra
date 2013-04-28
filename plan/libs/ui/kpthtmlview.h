@@ -24,8 +24,8 @@
 
 #include "kptviewbase.h"
 
-#include <KHTMLPart>
-#include <KUrl>
+#include "khtml_part.h"
+#include <kurl.h>
 
 class KoDocument;
 
@@ -40,8 +40,8 @@ class KPLATOUI_EXPORT HtmlView : public ViewBase
 {
     Q_OBJECT
 public:
-    HtmlView( KoDocument *part, QWidget *parent );
-    
+    HtmlView(KoPart *part, KoDocument *doc, QWidget *parent);
+
     bool openHtml( const KUrl &url );
 
     void setupGui();

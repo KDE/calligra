@@ -24,7 +24,7 @@
 
 #include "kptproject.h"
 #include "kptdatetime.h"
-#include <KTempDir>
+#include <ktempdir.h>
 
 namespace QTest
 {
@@ -78,6 +78,8 @@ private slots:
     void resourceConflictMustFinishOn();
     void fixedInterval();
     void estimateDuration();
+
+    void startStart();
 
 private:
     Project *m_project;

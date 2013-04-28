@@ -1,13 +1,19 @@
 [Desktop Entry]
 Name=Cellular phone
 Name[bg]=Клетъчен телефон
+Name[bs]=Mobilni telefon
 Name[ca]=Telèfon mòbil
 Name[ca@valencia]=Telèfon mòbil
+Name[cs]=Mobilní telefon
+Name[da]=Mobiltelefon
 Name[de]=Handy
 Name[el]=Κινητό τηλέφωνο
 Name[es]=Teléfono móvil
 Name[et]=Mobiiltelefon
 Name[fi]=Matkapuhelin
+Name[fr]=Téléphone cellulaire
+Name[gl]=Teléfono móbil
+Name[hu]=Mobiltelefon
 Name[it]=Telefono cellulare
 Name[ja]=携帯電話
 Name[kk]=Ұялы телефон
@@ -19,6 +25,7 @@ Name[pt]=Telemóvel
 Name[pt_BR]=Telefone celular
 Name[ru]=Сотовый телефон
 Name[sk]=Mobilný telefón
+Name[sl]=Mobilni telefon
 Name[sv]=Mobiltelefon
 Name[uk]=Стільниковий телефон
 Name[x-test]=xxCellular phonexx

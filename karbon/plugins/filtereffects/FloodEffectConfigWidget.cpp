@@ -23,7 +23,7 @@
 
 #include <KoColorPopupAction.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QGridLayout>
 #include <QLabel>

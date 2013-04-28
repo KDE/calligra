@@ -27,9 +27,10 @@
 #include "Sheet.h"
 
 // Calligra
+#include <KoIcon.h>
 
 // KDE
-#include <KAction>
+#include <kaction.h>
 #include <kdebug.h>
 
 // Qt
@@ -67,12 +68,12 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     connect(this, SIGNAL(cursorPositionChanged()),
             this, SLOT(slotCursorPositionChanged()));
 
-    d->applyAction = new KAction(KIcon("dialog-ok"), i18n("Apply"), this);
+    d->applyAction = new KAction(koIcon("dialog-ok"), i18n("Apply"), this);
     d->applyAction->setToolTip(i18n("Apply changes"));
     d->applyAction->setEnabled(false);
     connect(d->applyAction, SIGNAL(triggered()), SLOT(applyChanges()));
 
-    d->cancelAction = new KAction(KIcon("dialog-cancel"), i18n("Cancel"), this);
+    d->cancelAction = new KAction(koIcon("dialog-cancel"), i18n("Cancel"), this);
     d->cancelAction->setToolTip(i18n("Discard changes"));
     d->cancelAction->setEnabled(false);
     connect(d->cancelAction, SIGNAL(triggered()), SLOT(discardChanges()));

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +40,8 @@
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiProjectSelectorWidget.h>
 
+#include <KoIcon.h>
+
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
@@ -49,11 +52,11 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kurlcombobox.h>
-#include <KTitleWidget>
-#include <KCategoryDrawer>
-#include <KPushButton>
-#include <KAcceleratorManager>
-#include <KFileDialog>
+#include <ktitlewidget.h>
+#include <kcategorydrawer.h>
+#include <kpushbutton.h>
+#include <kacceleratormanager.h>
+#include <kfiledialog.h>
 
 #include <QPushButton>
 #include <QLayout>
@@ -108,7 +111,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "blank";
     info.caption = i18n("Blank database");
     info.description = i18n("Database project without any objects");
-    info.icon = KIcon(KexiDB::defaultFileBasedDriverIcon()); //"x-office-document");
+    info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName()); //"x-office-document");
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
     
@@ -121,7 +124,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "contacts";
     info.caption = i18n("Contacts");
     info.description = i18n("Database for collecting and managing contacts");
-    info.icon = KIcon("view-pim-contacts");
+    info.icon = koIcon("view-pim-contacts");
     //info.enabled = false;
     templateCategory.addTemplate(info);
     
@@ -129,7 +132,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "movie";
     info.caption = i18n("Movie catalog");
     info.description = i18n("Database for collecting movies");
-    info.icon = KIcon("video-x-generic");
+    info.icon = koIcon("video-x-generic");
     //info.enabled = false;
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
@@ -171,11 +174,11 @@ KexiProjectStorageTypeSelectionPage::KexiProjectStorageTypeSelectionPage(QWidget
     setBackButtonVisible(true);
     QWidget* contents = new QWidget;
     setupUi(contents);
-    int dsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-    btn_file->setIcon(KIcon(KexiDB::defaultFileBasedDriverIcon()));
+    const int dsize = IconSize(KIconLoader::Desktop);
+    btn_file->setIcon(KIcon(KexiDB::defaultFileBasedDriverIconName()));
     btn_file->setIconSize(QSize(dsize, dsize));
     connect(btn_file, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-    btn_server->setIcon(KIcon(KEXI_ICON_DATABASE_SERVER));
+    btn_server->setIcon(KIcon(KEXI_DATABASE_SERVER_ICON_NAME));
     btn_server->setIconSize(QSize(dsize, dsize));
     connect(btn_server, SIGNAL(clicked()), this, SLOT(buttonClicked()));
     setFocusWidget(btn_file);
@@ -203,7 +206,7 @@ static QString defaultDatabaseName()
 KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
  : KexiAssistantPage(i18n("Project Title & Filename"),
                   i18n("Enter title for the new project. "
-                       "Filename will created automatically based on the title. "
+                       "Filename will be created automatically based on the title. "
                        "You can change the filename too."),
                   parent)
 {
@@ -319,21 +322,31 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
-
-    QVBoxLayout *lyr = new QVBoxLayout;
-    connSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
-        "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Saving);
-    lyr->addWidget(connSelector);
-    connSelector->showAdvancedConn();
-    connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
-            this, SLOT(next()));
-    connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    connSelector->hideHelpers();
-    connSelector->hideDescription();
-    setContents(lyr);
-    setFocusWidget(connSelector->connectionsList());
+    if (KexiDB::hasDatabaseServerDrivers()) {
+        QVBoxLayout *lyr = new QVBoxLayout;
+        connSelector = new KexiConnectionSelectorWidget(
+            Kexi::connset(),
+            "kfiledialog:///OpenExistingOrCreateNewProject",
+            KAbstractFileWidget::Saving);
+        lyr->addWidget(connSelector);
+        connSelector->showAdvancedConn();
+        connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+                this, SLOT(next()));
+        connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+        connSelector->hideHelpers();
+        connSelector->hideDescription();
+        setContents(lyr);
+        setFocusWidget(connSelector->connectionsList());
+    }
+    else {
+        setDescription(QString());
+        setNextButtonVisible(false);
+        m_errorMessagePopup = new KexiServerDriverNotFoundMessage(this);
+        setContents(m_errorMessagePopup);
+        layout()->setAlignment(m_errorMessagePopup, Qt::AlignTop);
+        m_errorMessagePopup->setAutoDelete(false);
+        m_errorMessagePopup->animatedShow();
+    }
 }
 
 KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
@@ -346,7 +359,7 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     KexiNewProjectAssistant* parent)
  : KexiAssistantPage(i18n("Project Title & Database Name"),
                   i18n("Enter title for the new project. "
-                       "Database name will created automatically based on the title. "
+                       "Database name will be created automatically based on the title. "
                        "You can change the database name too."),
                   parent)
  , m_assistant(parent)
@@ -375,7 +388,9 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
             this, SLOT(next()));
     contents->le_title->setText(defaultDatabaseName());
     contents->le_title->selectAll();
-    contents->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this));
+    KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(this);
+    idValidator->setLowerCaseForced(true);
+    contents->le_dbname->setValidator(idValidator);
     m_projectSelector = new KexiProjectSelectorWidget(
         contents->frm_dblist, 0,
         true, // showProjectNameColumn
@@ -428,7 +443,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
-        QString captionAsId = KexiUtils::string2Identifier(capt);
+        QString captionAsId = KexiUtils::string2Identifier(capt).toLower();
         contents->le_dbname->setText(captionAsId);
         m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;
@@ -673,7 +688,7 @@ void KexiNewProjectAssistant::showErrorMessage(
     //! @todo + _details
     if (!d->messageWidgetActionTryAgain) {
         d->messageWidgetActionTryAgain = new QAction(
-            KIcon("view-refresh"), i18n("Try Again"), this);
+            koIcon("view-refresh"), i18n("Try Again"), this);
         connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
                 this, SLOT(tryAgainActionTriggered()));
     }

@@ -45,6 +45,8 @@
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 
+#include <KoIcon.h>
+
 //KSpread Includes
 #include <Global.h>
 #include "calligra_sheets_limits.h"
@@ -98,8 +100,8 @@ ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
     setDetailsWidget(widget);
 
     // ui refinements Designer is not capable of
-    d->mainWidget.m_addButton->setIcon(KIcon("list-add"));
-    d->mainWidget.m_removeButton->setIcon(KIcon("list-remove"));
+    d->mainWidget.m_addButton->setIcon(koIcon("list-add"));
+    d->mainWidget.m_removeButton->setIcon(koIcon("list-remove"));
 
     d->mainWidget.m_function->addItem(i18n("Sum"), "SUM");
     d->mainWidget.m_function->addItem(i18n("Average"), "AVERAGE");
@@ -117,7 +119,7 @@ ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
     connect(d->mainWidget.m_sourceRange, SIGNAL(returnPressed()),
             this, SLOT(slotReturnPressed()));
 
-    connect(d->selection, SIGNAL(changed(const Region&)),
+    connect(d->selection, SIGNAL(changed(Region)),
             this, SLOT(slotSelectionChanged()));
 }
 

@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_SPLITTERVIEW
-#define KPLATO_SPLITTERVIEW
+#ifndef KPTSPLITTERVIEW_H
+#define KPTSPLITTERVIEW_H
 
 #include "kplatoui_export.h"
 
@@ -60,7 +60,7 @@ class KPLATOUI_EXPORT SplitterView : public ViewBase
     Q_OBJECT
 public:
     /// Contructor
-    SplitterView(KoDocument *doc, QWidget *parent);
+    SplitterView(KoPart *part, KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~SplitterView() {}
 

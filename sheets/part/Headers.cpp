@@ -63,7 +63,7 @@
 #include <KoPointerEvent.h>
 #include <KoGlobal.h>
 
-// KSpread
+// Sheets
 #include "CanvasBase.h"
 #include "Cell.h"
 #include "Doc.h"
@@ -71,6 +71,7 @@
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "Sheet.h"
+#include "ElapsedTime_p.h"
 
 // commands
 #include "commands/RowColumnManipulators.h"
@@ -101,8 +102,6 @@ RowHeader::~RowHeader()
 void RowHeader::mousePress(KoPointerEvent * _ev)
 {
     if (!m_cellToolIsActive)
-        return;
-    if (!m_pCanvas->doc()->isReadWrite())
         return;
 
     register Sheet * const sheet = m_pCanvas->activeSheet();
@@ -194,9 +193,6 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
         m_lSize->hide();
 
     m_bMousePressed = false;
-
-    if (!m_pCanvas->doc()->isReadWrite())
-        return;
 
     register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
@@ -305,7 +301,7 @@ void RowHeader::mouseDoubleClick(KoPointerEvent*)
     if (!sheet)
         return;
 
-    if (!m_pCanvas->doc()->isReadWrite() || sheet->isProtected())
+    if (sheet->isProtected())
         return;
 
     AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
@@ -322,15 +318,13 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
         setCursor(Qt::ArrowCursor);
         return;
     }
-    if (!m_pCanvas->doc()->isReadWrite())
-        return;
 
     register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
-    double ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->pos().y()) + m_pCanvas->yOffset();
-    double dHeight = m_pCanvas->zoomHandler()->unzoomItY(height());
+    qreal ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->pos().y()) + m_pCanvas->yOffset();
+    qreal dHeight = m_pCanvas->zoomHandler()->unzoomItY(height());
 
     // The button is pressed and we are resizing ?
     if (m_bResize) {
@@ -341,7 +335,7 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
     else if (m_bSelection) {
         qreal y;
         int row = sheet->topRow(ev_PosY, y);
-        if (row > KS_rowMax)
+        if (row > KS_rowMax || row <= 0)
             return;
 
         QPoint newAnchor = m_pCanvas->selection()->anchor();
@@ -351,7 +345,7 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
         m_pCanvas->selection()->update(newMarker);
 
         if (_ev->pos().y() < 0)
-            m_pCanvas->setVertScrollBarPos(ev_PosY);
+            m_pCanvas->setVertScrollBarPos(qMax<qreal>(0, ev_PosY));
         else if (_ev->pos().y() > m_pCanvas->height()) {
             if (row < KS_rowMax) {
                 const qreal rowHeight = sheet->rowFormats()->rowHeight(row + 1);
@@ -510,7 +504,7 @@ void RowHeader::focusOut(QFocusEvent*)
 
 void RowHeader::doToolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = toolId.startsWith("KSpread");
+    m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();
 }
 
@@ -546,8 +540,6 @@ ColumnHeader::~ColumnHeader()
 void ColumnHeader::mousePress(KoPointerEvent * _ev)
 {
     if (!m_cellToolIsActive)
-        return;
-    if (!m_pCanvas->doc()->isReadWrite())
         return;
 
     if (_ev->button() == Qt::LeftButton) {
@@ -692,9 +684,6 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
 
     m_bMousePressed = false;
 
-    if (!m_pCanvas->doc()->isReadWrite())
-        return;
-
     register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
@@ -811,7 +800,7 @@ void ColumnHeader::mouseDoubleClick(KoPointerEvent*)
     if (!sheet)
         return;
 
-    if (!m_pCanvas->doc()->isReadWrite() || sheet->isProtected())
+    if (sheet->isProtected())
         return;
 
     AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
@@ -824,8 +813,6 @@ void ColumnHeader::mouseDoubleClick(KoPointerEvent*)
 void ColumnHeader::mouseMove(KoPointerEvent* _ev)
 {
     if (!m_cellToolIsActive)
-        return;
-    if (!m_pCanvas->doc()->isReadWrite())
         return;
 
     register Sheet * const sheet = m_pCanvas->activeSheet();
@@ -850,7 +837,7 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
         qreal x;
         int col = sheet->leftColumn(ev_PosX, x);
 
-        if (col > KS_colMax)
+        if (col > KS_colMax || col <= 0)
             return;
 
         QPoint newMarker = m_pCanvas->selection()->marker();
@@ -1092,7 +1079,7 @@ void ColumnHeader::focusOut(QFocusEvent*)
 
 void ColumnHeader::doToolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = toolId.startsWith("KSpread");
+    m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();
 }
 
@@ -1171,6 +1158,6 @@ void SelectAllButton::mouseRelease(KoPointerEvent* event)
 
 void SelectAllButton::doToolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = toolId.startsWith("KSpread");
+    m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();
 }

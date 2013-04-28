@@ -84,7 +84,7 @@ SubtotalDialog::~SubtotalDialog()
 void SubtotalDialog::accept()
 {
     Sheet *const sheet = d->selection->lastSheet();
-    const QRect range = d->selection->lastRange();
+    QRect range = d->selection->lastRange();
 
     int numOfCols = range.width();
     QVector<int> columns(numOfCols);
@@ -108,9 +108,12 @@ void SubtotalDialog::accept()
     if (d->detailsWidget.m_replaceSubtotals->isChecked())
         removeSubtotalLines();
 
+    range = d->selection->lastRange();
+
     int mainCol = left + d->mainWidget.m_columnBox->currentIndex();
     int bottom = range.bottom();
     int top    = range.top();
+    int newBottom = bottom;
     left       = range.left();
     QString oldText = Cell(sheet, mainCol, top).displayText();
     QString newText;
@@ -163,12 +166,12 @@ void SubtotalDialog::accept()
                 addRow = false;
             }
         }
-        ++y;
+        newBottom = y;
     }
 
     if (d->detailsWidget.m_summaryBelow->isChecked()) {
         addRow = true;
-        int bottom = range.bottom();
+        int bottom = newBottom;
         for (int x = 0; x < numOfCols; ++x) {
             if (columns[x] != -1) {
                 addSubtotal(mainCol, columns[x], bottom, top, addRow, i18n("Grand Total"));

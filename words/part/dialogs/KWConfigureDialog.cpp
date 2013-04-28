@@ -28,9 +28,9 @@
 #include <KoConfigAuthorPage.h>
 #include <KoShapeController.h>
 #include <KoDocument.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
-#include <kicon.h>
 
 KWConfigureDialog::KWConfigureDialog(KWView* parent)
 : KPageDialog(parent)
@@ -43,24 +43,24 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
     m_miscPage = new KoConfigMiscPage(parent->koDocument(), parent->canvasBase()->shapeController()->resourceManager());
     KPageWidgetItem *item = addPage(m_miscPage, i18n("Misc"));
     item->setHeader(i18n("Misc"));
-    item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
+    item->setIcon(koIcon("preferences-other"));
 
     m_gridPage = new KoConfigGridPage(parent->koDocument());
     item = addPage(m_gridPage, i18n("Grid"));
     item->setHeader(i18n("Grid"));
-    item->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
+    item->setIcon(koIcon("grid"));
 
     connect(m_miscPage, SIGNAL(unitChanged(KoUnit)), m_gridPage, SLOT(slotUnitChanged(KoUnit)));
 
     m_docPage = new KoConfigDocumentPage(parent->koDocument());
     item = addPage(m_docPage, i18nc("@title:tab Document settings page", "Document"));
     item->setHeader(i18n("Document Settings"));
-    item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
+    item->setIcon(koIcon("document-properties"));
 
     m_authorPage = new KoConfigAuthorPage();
     item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author"));
     item->setHeader(i18n("Author"));
-    item->setIcon(KIcon("user-identity"));
+    item->setIcon(koIcon("user-identity"));
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));

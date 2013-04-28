@@ -169,7 +169,6 @@ QList<QWidget *> WebTool::createOptionWidgets()
     QList<QWidget *> widgets;
     WebToolWidget* widget = new WebToolWidget(this);
     widget->open(m_currentShape);
-    widget->setWindowTitle(i18n("Web tool options"));
     widgets.append(widget);
     return widgets;
 }

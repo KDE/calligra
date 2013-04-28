@@ -27,7 +27,7 @@
 class ExportWidget : public QWidget, public Ui::ExportWidget
 {
 public:
-    ExportWidget(QWidget *parent) : QWidget(parent) {
+    explicit ExportWidget(QWidget *parent) : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -37,7 +37,7 @@ class ExportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ExportDialog(QWidget *parent = 0);
+    explicit ExportDialog(QWidget *parent = 0);
     ~ExportDialog();
 
     void setSheets(const QStringList &);

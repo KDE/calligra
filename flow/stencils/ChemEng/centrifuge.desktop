@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=centrifuge
+Name[bs]=centrifuga
 Name[ca]=centrífuga
 Name[ca@valencia]=centrífuga
+Name[da]=centrifuge
 Name[de]=Zentrifuge
 Name[el]=κεντρόφυγο
 Name[es]=centrífuga
 Name[et]=Tsentrifuug
+Name[fr]=centrifugeur
+Name[gl]=Centrifugador
+Name[hu]=centrifuga
 Name[it]=centrifuga
 Name[kk]=Центрифуга
 Name[nb]=sentrifuge
@@ -18,6 +23,7 @@ Name[ru]=Центрифуга
 Name[sk]=centrifuge
 Name[sl]=centrifuga
 Name[sv]=centrifug
+Name[tr]=santrifüj
 Name[uk]=Центрифуга
 Name[x-test]=xxcentrifugexx
 Name[zh_TW]=centrifuge

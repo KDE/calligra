@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Quad Arrow
 Name[bg]=Четворна стрелка
+Name[bs]=Cetverostruka strelica
 Name[ca]=Fletxa quad
 Name[ca@valencia]=Fletxa quad
 Name[da]=Pil i fire retninger
@@ -8,6 +9,9 @@ Name[de]=Pfeil in alle vier Richtungen
 Name[el]=Τετραπλό βέλος
 Name[es]=Flecha cuádruple
 Name[et]=Neliknool
+Name[fi]=Nelinuoli
+Name[fr]=Flèche carrée
+Name[gl]=Frecha cuádrupla
 Name[hu]=Négyágú nyíl
 Name[it]=Freccia quadrupla
 Name[kk]=Төртжақты жебесі
@@ -20,6 +24,7 @@ Name[pt_BR]=Seta Quádrupla
 Name[ru]=Стрелки в четыре стороны
 Name[sk]=Štvoritá šípka
 Name[sv]=Fyrdubbel pil
+Name[tr]=Dörtlü Ok
 Name[uk]=Стрілки у чотири боки
 Name[x-test]=xxQuad Arrowxx
 Name[zh_CN]=四向箭头

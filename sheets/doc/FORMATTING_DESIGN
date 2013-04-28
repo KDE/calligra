@@ -54,7 +54,7 @@ and styles to particular cells.
 One way is to simply have
 each cell contain a pointer to its style.  Rather than each cell using
 200ish bytes to store the formatting, it has the single 4 byte pointer,
-and then the the 200ish bytes is shared among all cells with that same
+and then the 200ish bytes is shared among all cells with that same
 formatting information.
 
 The other possibility is to map it by region.  This involves storing

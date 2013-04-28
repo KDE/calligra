@@ -22,6 +22,7 @@
 
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include "TableShape.h"
 #include "TableTool.h"
 
@@ -31,7 +32,7 @@ TableToolFactory::TableToolFactory()
     : KoToolFactoryBase("TableToolFactoryId")
 {
     setToolTip(i18n("Table editing tool"));
-    setIcon("spreadsheetshape");
+    setIconName(koIconNameCStr("spreadsheetshape"));
     setToolType(dynamicToolType());
     setPriority(1);
     setActivationShapeId(TableShapeId);

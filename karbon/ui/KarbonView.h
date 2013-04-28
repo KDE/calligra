@@ -51,7 +51,7 @@ class QRectF;
 class QPrinter;
 
 class KAction;
-class KarbonPart;
+class KarbonDocument;
 class KSelectAction;
 class KToggleAction;
 
@@ -62,6 +62,7 @@ class KoColor;
 class KarbonLayerDocker;
 class KarbonZoomController;
 
+class KarbonPart;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 
@@ -70,11 +71,11 @@ class KARBONUI_EXPORT KarbonView : public KoView
     Q_OBJECT
 
 public:
-    explicit KarbonView(KarbonPart* part, QWidget* parent = 0);
+    KarbonView(KarbonPart *part, KarbonDocument* doc, QWidget* parent = 0);
     virtual ~KarbonView();
 
     /// Returns the view is attached to
-    KarbonPart * part() const;
+    KarbonDocument * part() const;
 
     /// Returns the canvas widget of this view
     KarbonCanvas * canvasWidget() const;
@@ -128,7 +129,7 @@ public slots:
 
     void configure();
 
-    void pageLayout();
+    void configurePageLayout();
 
     void selectionChanged();
 

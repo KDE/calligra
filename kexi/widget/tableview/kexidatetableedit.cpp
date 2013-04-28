@@ -80,7 +80,7 @@ void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
         m_lineedit->setCursorPosition(add.length());
         return;
     }
-    setValueInInternalEditor(m_origValue);
+    setValueInInternalEditor(KexiDataItemInterface::originalValue());
     m_lineedit->setCursorPosition(0); //ok?
 }
 
@@ -131,6 +131,12 @@ bool KexiDateTableEdit::valueIsValid()
     if (m_formatter.isEmpty(m_lineedit->text())) //empty date is valid
         return true;
     return m_formatter.fromString(m_lineedit->text()).isValid();
+}
+
+bool KexiDateTableEdit::valueChanged()
+{
+    //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
 void KexiDateTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)

@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef PPTXXMLDOCREADER_H
-#define PPTXXMLDOCREADER_H
+#ifndef PPTXXMLDOCUMENTREADER_H
+#define PPTXXMLDOCUMENTREADER_H
 
 #include <MsooXmlThemesReader.h>
 #include "PptxXmlSlideReader.h"
@@ -104,4 +104,4 @@ private:
 #include <MsooXmlDrawingReaderTableMethods.h>
 };
 
-#endif //PPTXXMLDOCREADER_H
+#endif //PPTXXMLDOCUMENTREADER_H

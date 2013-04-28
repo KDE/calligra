@@ -26,6 +26,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoPart.h>
 
 #include <part/Doc.h> // FIXME detach from part
 #include <Map.h>
@@ -53,7 +54,7 @@ public:
 
 void SheetTest::init()
 {
-    m_doc = new Doc();
+    m_doc = new Doc(new MockPart);
     m_doc->map()->addNewSheet();
     m_sheet = m_doc->map()->sheet(0);
     m_sheet->map()->setDefaultRowHeight(10.0);
@@ -67,37 +68,50 @@ void SheetTest::cleanup()
 
 void SheetTest::testRemoveRows_data()
 {
+    QTest::addColumn<int>("col");
+    QTest::addColumn<int>("row");
     QTest::addColumn<QString>("formula");
     QTest::addColumn<int>("rowToRemove");
+    QTest::addColumn<int>("numRows");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("exact row")   << "=C4" << 4 << "=#Dependency!";
-    QTest::newRow("earlier row") << "=C4" << 3 << "=C3";
-    QTest::newRow("later row")   << "=C4" << 5 << "=C4";
+    QTest::newRow("exact row")   << 1 << 1 << "=C4" << 4 << 1 << "=#Dependency!";
+    QTest::newRow("earlier row") << 1 << 1 << "=C4" << 3 << 1 << "=C3";
+    QTest::newRow("later row")   << 1 << 1 << "=C4" << 5 << 1 << "=C4";
 
-    QTest::newRow("range before start") << "=SUM(C4:C7)" << 3 << "=SUM(C3:C6)";
-    QTest::newRow("range start row")    << "=SUM(C4:C7)" << 4 << "=SUM(C4:C6)";
-    QTest::newRow("range middle row")   << "=SUM(C4:C7)" << 5 << "=SUM(C4:C6)";
-    QTest::newRow("range end row")      << "=SUM(C4:C7)" << 7 << "=SUM(C4:C6)";
-    QTest::newRow("range after end")    << "=SUM(C4:C7)" << 8 << "=SUM(C4:C7)";
-    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 4 << "=SUM(#Dependency!:#Dependency!)";
+    QTest::newRow("range before start") << 1 << 1 << "=SUM(C4:C7)" << 3 << 1 << "=SUM(C3:C6)";
+    QTest::newRow("range start row")    << 1 << 1 << "=SUM(C4:C7)" << 4 << 1 << "=SUM(C4:C6)";
+    QTest::newRow("range middle row")   << 1 << 1 << "=SUM(C4:C7)" << 5 << 1 << "=SUM(C4:C6)";
+    QTest::newRow("range end row")      << 1 << 1 << "=SUM(C4:C7)" << 7 << 1 << "=SUM(C4:C6)";
+    QTest::newRow("range after end")    << 1 << 1 << "=SUM(C4:C7)" << 8 << 1 << "=SUM(C4:C7)";
+    QTest::newRow("entire range")       << 1 << 1 << "=SUM(C4:C4)" << 4 << 1 << "=SUM(#Dependency!:#Dependency!)";
 
-    QTest::newRow("2d range before start") << "=SUM(C4:E7)" << 3 << "=SUM(C3:E6)";
-    QTest::newRow("2d range start row")    << "=SUM(C4:E7)" << 4 << "=SUM(C4:E6)";
-    QTest::newRow("2d range middle row")   << "=SUM(C4:E7)" << 5 << "=SUM(C4:E6)";
-    QTest::newRow("2d range end row")      << "=SUM(C4:E7)" << 7 << "=SUM(C4:E6)";
-    QTest::newRow("2d range after end")    << "=SUM(C4:E7)" << 8 << "=SUM(C4:E7)";
+    QTest::newRow("2d range before start") << 1 << 1 << "=SUM(C4:E7)" << 3 << 1 << "=SUM(C3:E6)";
+    QTest::newRow("2d range start row")    << 1 << 1 << "=SUM(C4:E7)" << 4 << 1 << "=SUM(C4:E6)";
+    QTest::newRow("2d range middle row")   << 1 << 1 << "=SUM(C4:E7)" << 5 << 1 << "=SUM(C4:E6)";
+    QTest::newRow("2d range end row")      << 1 << 1 << "=SUM(C4:E7)" << 7 << 1 << "=SUM(C4:E6)";
+    QTest::newRow("2d range after end")    << 1 << 1 << "=SUM(C4:E7)" << 8 << 1 << "=SUM(C4:E7)";
+
+    QTest::newRow("refer to last deleted row")      << 1 << 1 << "=A4" << 2 << 3 << "=#Dependency!";
+    QTest::newRow("refer to first not deleted row") << 1 << 1 << "=A4" << 2 << 2 << "=A2";
+
+    // Bug 313056
+    QTest::newRow("bug313056_1") << 4 << 5 << "=A1" << 3 << 2 << "=A1";
+    QTest::newRow("bug313056_2") << 2 << 32 << "=E9" << 5 << 26 << "=#Dependency!";
 }
 
 void SheetTest::testRemoveRows()
 {
+    QFETCH(int, col);
+    QFETCH(int, row);
     QFETCH(QString, formula);
     QFETCH(int, rowToRemove);
+    QFETCH(int, numRows);
     QFETCH(QString, result);
 
-    Cell cell(m_sheet, 1, 1);
+    Cell cell(m_sheet, col, row);
     cell.setUserInput(formula);
-    m_sheet->removeRows(rowToRemove, 1);
+    m_sheet->removeRows(rowToRemove, numRows);
 
     QCOMPARE(cell.userInput(), result);
 }

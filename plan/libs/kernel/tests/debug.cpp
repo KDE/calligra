@@ -28,6 +28,7 @@
 
 #include <kdebug.h>
 
+#include <QTest>
 #include <QStringList>
 #include <QString>
 
@@ -54,13 +55,13 @@ void print( Calendar *c, const QString &str, bool full = true ) {
     qDebug()<<"Debug info: Calendar"<<c->name()<<s<<str;
     for ( int wd = 1; wd <= 7; ++wd ) {
         CalendarDay *d = c->weekday( wd );
-        qDebug()<<"   "<<wd<<":"<<d->stateToString( d->state() );
+        qDebug()<<"   "<<wd<<':'<<d->stateToString( d->state() );
         foreach ( TimeInterval *t,  d->timeIntervals() ) {
-            qDebug()<<"      interval:"<<t->first<<t->second<<"("<<Duration( qint64(t->second) ).toString()<<")";
+            qDebug()<<"      interval:"<<t->first<<t->second<<'('<<Duration( qint64(t->second) ).toString()<<')';
         }
     }
     foreach ( const CalendarDay *d, c->days() ) {
-        qDebug()<<"   "<<d->date()<<":";
+        qDebug()<<"   "<<d->date()<<':';
         foreach ( TimeInterval *t,  d->timeIntervals() ) {
             qDebug()<<"      interval:"<<t->first<<t->second;
         }
@@ -72,10 +73,10 @@ QString printAvailable( Resource *r, const QString &lead = QString() ) {
     sl<<lead<<"Available:"
         <<( r->availableFrom().isValid()
                 ? r->availableFrom().toString()
-                : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+                : ( r->project() ? ('('+r->project()->constraintStartTime().toString()+')' ) : QString() ) )
         <<( r->availableUntil().isValid()
                 ? r->availableUntil().toString()
-                : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
+                : ( r->project() ? ('('+r->project()->constraintEndTime().toString()+')' ) : QString() ) )
         <<QString::number( r->units() )<<"%"
         <<"cost: normal"<<QString::number(r->normalRate() )<<" overtime"<<QString::number(r->overtimeRate() );
     return sl.join( " " );
@@ -89,11 +90,11 @@ void print( Resource *r, const QString &str, bool full = true ) {
     qDebug()<<"Available:"
         <<( r->availableFrom().isValid()
                 ? r->availableFrom().toString()
-                : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+                : ( r->project() ? ('('+r->project()->constraintStartTime().toString()+')' ) : QString() ) )
         <<( r->availableUntil().isValid()
                 ? r->availableUntil().toString()
-                : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
-        <<r->units()<<"%";
+                : ( r->project() ? ('('+r->project()->constraintEndTime().toString()+')' ) : QString() ) )
+        <<r->units()<<'%';
     qDebug()<<"Type:"<<r->typeToString();
     if ( r->type() == Resource::Type_Team ) {
         qDebug()<<"Team members:"<<r->teamMembers().count();
@@ -101,11 +102,11 @@ void print( Resource *r, const QString &str, bool full = true ) {
             qDebug()<<"   "<<tm->name()<<"Available:"
                     <<( r->availableFrom().isValid()
                             ? r->availableFrom().toString()
-                            : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+                            : ( r->project() ? ('('+r->project()->constraintStartTime().toString()+')' ) : QString() ) )
                     <<( r->availableUntil().isValid()
                             ? r->availableUntil().toString()
-                            : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
-                    <<r->units()<<"%";
+                            : ( r->project() ? ('('+r->project()->constraintEndTime().toString()+')' ) : QString() ) )
+                    <<r->units()<<'%';
         }
     } else {
         Calendar *cal = r->calendar( true );
@@ -137,17 +138,21 @@ void print( Resource *r, const QString &str, bool full = true ) {
 static
 void print( Project *p, const QString &str, bool all = false ) {
     qDebug()<<"Debug info: Project"<<p->name()<<str;
-    qDebug()<<"project target start:"<<QTest::toString( p->constraintStartTime() );
-    qDebug()<<"  project target end:"<<QTest::toString( p->constraintEndTime() );
-    qDebug()<<"  project start time:"<<QTest::toString( p->startTime() );
-    qDebug()<<"    project end time:"<<QTest::toString( p->endTime() );
+    qDebug()<<"project target start:"<<QTest::toString( QDateTime(p->constraintStartTime()) );
+    qDebug()<<"  project target end:"<<QTest::toString( QDateTime(p->constraintEndTime()) );
+    if ( p->isScheduled() ) {
+        qDebug()<<"  project start time:"<<QTest::toString( QDateTime(p->startTime()) );
+        qDebug()<<"    project end time:"<<QTest::toString( QDateTime(p->endTime()) );
+    } else {
+        qDebug()<<" Not scheduled";
+    }
     
     if ( ! all ) {
         return;
     }
-    foreach ( Task *t, p->allTasks() ) {
+    for ( int i = 0; i < p->numChildren(); ++i ) {
         qDebug();
-        print( t );
+        print( static_cast<Task*>( p->childNode( i ) ), true );
     }
 }
 static
@@ -163,57 +168,105 @@ void print( Task *t, const QString &str, bool full = true ) {
 }
 static
 void print( Task *t, bool full = true ) {
-    Q_UNUSED(full);
-    qDebug()<<"Task"<<t->name()<<t->typeToString()<<t->constraintToString();
-    qDebug()<<"     earlyStart:"<<QTest::toString( t->earlyStart() );
-    qDebug()<<"      lateStart:"<<QTest::toString( t->lateStart() );
-    qDebug()<<"    earlyFinish:"<<QTest::toString( t->earlyFinish() );
-    qDebug()<<"     lateFinish:"<<QTest::toString( t->lateFinish() );
-    qDebug()<<"      startTime:"<<QTest::toString( t->startTime() );
-    qDebug()<<"        endTime:"<<QTest::toString( t->endTime() );
+    QString pad;
+    if ( t->level() > 0 ) {
+        pad = QString("%1").arg( "", t->level()*2, ' ' );
+    }
+    qDebug()<<pad<<"Task"<<t->name()<<t->typeToString()<<t->constraintToString();
+    if (t->isScheduled()) {
+        qDebug()<<pad<<"     earlyStart:"<<QTest::toString( QDateTime(t->earlyStart()) );
+        qDebug()<<pad<<"      lateStart:"<<QTest::toString( QDateTime(t->lateStart()) );
+        qDebug()<<pad<<"    earlyFinish:"<<QTest::toString( QDateTime(t->earlyFinish()) );
+        qDebug()<<pad<<"     lateFinish:"<<QTest::toString( QDateTime(t->lateFinish()) );
+        qDebug()<<pad<<"      startTime:"<<QTest::toString( QDateTime(t->startTime()) );
+        qDebug()<<pad<<"        endTime:"<<QTest::toString( QDateTime(t->endTime()) );
+    } else {
+        qDebug()<<pad<<"   Not scheduled";
+    }
+    qDebug()<<pad;
     switch ( t->constraint() ) {
         case Node::MustStartOn:
         case Node::StartNotEarlier:
-            qDebug()<<"startConstraint:"<<QTest::toString( t->constraintStartTime() );
+            qDebug()<<pad<<"startConstraint:"<<QTest::toString( QDateTime(t->constraintStartTime()) );
             break;
         case Node::FixedInterval:
-            qDebug()<<"startConstraint:"<<QTest::toString( t->constraintStartTime() );
+            qDebug()<<pad<<"startConstraint:"<<QTest::toString( QDateTime(t->constraintStartTime()) );
         case Node::MustFinishOn:
         case Node::FinishNotLater:
-            qDebug()<<"  endConstraint:"<<QTest::toString( t->constraintEndTime() );
+            qDebug()<<pad<<"  endConstraint:"<<QTest::toString( QDateTime(t->constraintEndTime()) );
             break;
         default: break;
     }
-    foreach ( ResourceGroupRequest *gr, t->requests().requests() ) {
-        qDebug()<<"Group request:"<<gr->group()->name()<<gr->units();
-        foreach ( ResourceRequest *rr, gr->resourceRequests() ) {
-            qDebug()<<printAvailable( rr->resource(), "   " + rr->resource()->name() );
-        }
-    }
-    qDebug();
-    qDebug()<<"Estimate   :"<<t->estimate()->expectedEstimate()<<Duration::unitToString(t->estimate()->unit())
-			<<t->estimate()->typeToString()
+    qDebug()<<pad<<"Estimate   :"<<t->estimate()->expectedEstimate()<<Duration::unitToString(t->estimate()->unit())
+            <<t->estimate()->typeToString()
             <<(t->estimate()->type() == Estimate::Type_Duration
                 ? (t->estimate()->calendar()?t->estimate()->calendar()->name():"Fixed")
                 : QString( "%1 h" ).arg( t->estimate()->expectedValue().toDouble( Duration::Unit_h ) ) );
+
+    foreach ( ResourceGroupRequest *gr, t->requests().requests() ) {
+        qDebug()<<pad<<"Group request:"<<gr->group()->name()<<gr->units();
+        foreach ( ResourceRequest *rr, gr->resourceRequests() ) {
+            qDebug()<<pad<<printAvailable( rr->resource(), "   " + rr->resource()->name() );
+        }
+    }
+    if (t->isStartNode()) {
+        qDebug()<<pad<<"Start node";
+    }
+    QStringList rel;
+    foreach (Relation *r, t->dependChildNodes()) {
+        QString type;
+        switch(r->type()) {
+        case Relation::StartStart: type = "SS"; break;
+        case Relation::FinishFinish: type = "FF"; break;
+        default: type = "FS"; break;
+        }
+        rel << QString("(%1) -> %2, %3 %4").arg(r->parent()->name()).arg(r->child()->name()).arg(type).arg(r->lag() == 0?QString():r->lag().toString(Duration::Format_HourFraction));
+    }
+    if (!rel.isEmpty()) {
+        qDebug()<<pad<<"Successors:"<<rel.join(" : ");
+    }
+    if (t->isEndNode()) {
+        qDebug()<<pad<<"End node";
+    }
+    rel.clear();
+    foreach (Relation *r, t->dependParentNodes()) {
+        QString type;
+        switch(r->type()) {
+        case Relation::StartStart: type = "SS"; break;
+        case Relation::FinishFinish: type = "FF"; break;
+        default: type = "FS"; break;
+        }
+        rel << QString("%1 -> (%2), %3 %4").arg(r->parent()->name()).arg(r->child()->name()).arg(type).arg(r->lag() == 0?QString():r->lag().toString(Duration::Format_HourFraction));
+    }
+    if (!rel.isEmpty()) {
+        qDebug()<<pad<<"Predeccessors:"<<rel.join(" : ");
+    }
+    qDebug()<<pad;
     Schedule *s = t->currentSchedule();
     if ( s ) {
+        qDebug()<<pad<<"Appointments:"<<s->appointments().count();
         foreach ( Appointment *a, s->appointments() ) {
-            qDebug()<<"Resource:"<<a->resource()->resource()->name()<<"booked:"<<QTest::toString( a->startTime() )<<QTest::toString( a->endTime() )<<"effort:"<<a->effort( a->startTime(), a->endTime() ).toDouble( Duration::Unit_h )<<"h";
+            qDebug()<<pad<<"  Resource:"<<a->resource()->resource()->name()<<"booked:"<<QTest::toString( QDateTime(a->startTime()) )<<QTest::toString( QDateTime(a->endTime()) )<<"effort:"<<a->effort( a->startTime(), a->endTime() ).toDouble( Duration::Unit_h )<<'h';
             if ( ! full ) { continue; }
             foreach( const AppointmentInterval &i, a->intervals().map() ) {
-                qDebug()<<"  "<<QTest::toString( i.startTime() )<<QTest::toString( i.endTime() )<<i.load()<<"effort:"<<i.effort( i.startTime(), i.endTime() ).toDouble( Duration::Unit_h )<<"h";
+                qDebug()<<pad<<"    "<<QTest::toString( QDateTime(i.startTime()) )<<QTest::toString( QDateTime(i.endTime()) )<<i.load()<<"effort:"<<i.effort( i.startTime(), i.endTime() ).toDouble( Duration::Unit_h )<<'h';
             }
         }
     }
     if ( t->runningAccount() ) {
-        qDebug()<<"Running account :"<<t->runningAccount()->name();
+        qDebug()<<pad<<"Running account :"<<t->runningAccount()->name();
     }
     if ( t->startupAccount() ) {
-        qDebug()<<"Startup account :"<<t->startupAccount()->name()<<" cost:"<<t->startupCost();
+        qDebug()<<pad<<"Startup account :"<<t->startupAccount()->name()<<" cost:"<<t->startupCost();
     }
     if ( t->shutdownAccount() ) {
-        qDebug()<<"Shutdown account:"<<t->shutdownAccount()->name()<<" cost:"<<t->shutdownCost();
+        qDebug()<<pad<<"Shutdown account:"<<t->shutdownAccount()->name()<<" cost:"<<t->shutdownCost();
+    }
+    if ( full ) {
+        for ( int i = 0; i < t->numChildren(); ++i ) {
+            qDebug()<<pad;
+            print( static_cast<Task*>( t->childNode( i ) ), full );
+        }
     }
 }
 static
@@ -222,15 +275,15 @@ void print( const Completion &c, const QString &name, const QString &s = QString
     qDebug()<<"  Entry mode:"<<c.entryModeToString();
     qDebug()<<"     Started:"<<c.isStarted()<<c.startTime();
     qDebug()<<"    Finished:"<<c.isFinished()<<c.finishTime();
-    qDebug()<<"  Completion:"<<c.percentFinished()<<"%";
+    qDebug()<<"  Completion:"<<c.percentFinished()<<'%';
     
     if ( ! c.usedEffortMap().isEmpty() ) {
         qDebug()<<"     Used effort:";
         foreach ( const Resource *r, c.usedEffortMap().keys() ) {
             Completion::UsedEffort *ue = c.usedEffort( r );
             foreach ( const QDate &d, ue->actualEffortMap().keys() ) {
-                qDebug()<<"         "<<r->name()<<":";
-                qDebug()<<"             "<<d.toString( Qt::ISODate )<<":"<<c.actualEffort( d ).toString()<<c.actualCost( d );
+                qDebug()<<"         "<<r->name()<<':';
+                qDebug()<<"             "<<d.toString( Qt::ISODate )<<':'<<c.actualEffort( d ).toString()<<c.actualCost( d );
             }
         }
     }
@@ -246,15 +299,15 @@ void print( const EffortCostMap &m, const QString &s = QString() ) {
             <<" total="
             <<m.totalEffort().toString()
             <<m.totalCost()
-            <<"("
+            <<'('
             <<m.bcwpTotalEffort()
             <<m.bcwpTotalCost()
-            <<")";
+            <<')';
 
     if ( ! m.days().isEmpty() ) {
         foreach ( const QDate &d, m.days().keys() ) {
-            qDebug()<<"   "<<d.toString(Qt::ISODate)<<":"<<m.hoursOnDate( d )<<"h"<<m.costOnDate( d )
-                                                    <<"("<<m.bcwpEffortOnDate( d )<<"h"<<m.bcwpCostOnDate( d )<<")";
+            qDebug()<<"   "<<d.toString(Qt::ISODate)<<':'<<m.hoursOnDate( d )<<'h'<<m.costOnDate( d )
+                                                    <<'('<<m.bcwpEffortOnDate( d )<<'h'<<m.bcwpCostOnDate( d )<<')';
         }
     }
 }
@@ -296,7 +349,7 @@ void print( const AppointmentInterval &i, const QString &indent = QString() )
     if ( ! i.isValid() ) {
         qDebug()<<s<<"Not valid";
     } else {
-        qDebug()<<s<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<"%";
+        qDebug()<<s<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<'%';
     }
 }
 

@@ -299,7 +299,7 @@ namespace wvWare
         // depending on the parsed content.  These variables have to be saved
         // and restored to make the parsing code reentrant.
         Position* m_tableRowStart;      // If != 0 this represents the start of a table row
-        U32 m_tableRowLength;           // Lenght of the table row (in characters). Only valid
+        U32 m_tableRowLength;           // Length of the table row (in characters). Only valid
         bool m_cellMarkFound;           // if m_tableRowStart != 0
         int m_remainingCells;           // The number of remaining cells for the processed row
 

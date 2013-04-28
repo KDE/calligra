@@ -10,7 +10,7 @@ well Excel behaves.
 your code is an abosolute NO-NO! Complex spreadsheets with possible
 heavy mathematical calculations via dll/so add-ins as well as real
 time feeds will not be managable if you do not painstakingly check
-wether spread->getAutoCalc() is true.
+whether spread->getAutoCalc() is true.
 
 
 2. Learn to understand that without the

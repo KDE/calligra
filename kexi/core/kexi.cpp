@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,11 +18,12 @@
 */
 
 #include "kexi.h"
-#include "kexiaboutdata.h"
 #include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
+#include "KexiMainWindowIface.h"
 #include <kexiutils/identifier.h>
 #include <db/msghandler.h>
+#include <KoIcon.h>
 
 #include <QTimer>
 #include <QImage>
@@ -35,8 +36,6 @@
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
-#include <kiconloader.h>
-#include <kiconeffect.h>
 #include <ksharedptr.h>
 #include <kglobalsettings.h>
 
@@ -47,6 +46,8 @@ using namespace Kexi;
 class KexiInternal
 {
 public:
+    static KexiInternal *_int;
+
     KexiInternal()
             : connset(0)
     {
@@ -54,7 +55,21 @@ public:
     ~KexiInternal() {
         delete connset;
     }
-    
+
+    static KexiInternal* self() {
+        static bool created = false;
+        if (!created) {
+            _int = new KexiInternal;
+            created = true;
+        }
+        return _int;
+    }
+
+    static void destroy() {
+        delete _int;
+        _int = 0;
+    }
+
     KexiDBConnectionSet* connset;
     KexiRecentProjects recentProjects;
     KexiDBConnectionSet recentConnections;
@@ -62,37 +77,37 @@ public:
     KexiPart::Manager partManager;
 };
 
-K_GLOBAL_STATIC(KexiInternal, _int)
+KexiInternal *KexiInternal::_int = 0;
 
 KexiDBConnectionSet& Kexi::connset()
 {
     //delayed
-    if (!_int->connset) {
+    if (!KexiInternal::self()->connset) {
         //load stored set data, OK?
-        _int->connset = new KexiDBConnectionSet();
-        _int->connset->load();
+        KexiInternal::self()->connset = new KexiDBConnectionSet();
+        KexiInternal::self()->connset->load();
     }
-    return *_int->connset;
+    return *KexiInternal::self()->connset;
 }
 
 KexiRecentProjects* Kexi::recentProjects()
 {
-    return &_int->recentProjects;
+    return &KexiInternal::self()->recentProjects;
 }
 
 KexiDB::DriverManager& Kexi::driverManager()
 {
-    return _int->driverManager;
+    return KexiInternal::self()->driverManager;
 }
 
 KexiPart::Manager& Kexi::partManager()
 {
-    return _int->partManager;
+    return KexiInternal::self()->partManager;
 }
 
 void Kexi::deleteGlobalObjects()
 {
-    delete _int;
+    KexiInternal::self()->destroy();
 }
 
 //temp
@@ -136,13 +151,13 @@ QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
 //--------------------------------------------------------------------------------
 QString Kexi::iconNameForViewMode(ViewMode mode)
 {
-    if (mode == DataViewMode)
-        return i18n("state_data");
-    else if (mode == DesignViewMode)
-        return i18n("state_edit");
-    else if (mode == TextViewMode)
-        return i18n("state_sql");
-    return QString();
+    const char *const id =
+        (mode == DataViewMode) ? koIconNameCStr("state_data") :
+        (mode == DesignViewMode) ? koIconNameCStr("state_edit") :
+        (mode == TextViewMode) ? koIconNameCStr("state_sql"): 
+        0;
+
+    return QLatin1String(id);
 }
 
 //--------------------------------------------------------------------------------
@@ -292,7 +307,7 @@ ObjectStatus::operator KexiDB::MessageHandler*()
     return msgHandler;
 }
 
-void Kexi::initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData)
+void Kexi::initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData)
 {
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(kexi_options());

@@ -22,12 +22,13 @@
 #include <QPainter>
 #include <QStyle>
 
-#include <KLocale>
-#include <KDebug>
-#include <KIconLoader>
-#include <KActionCollection>
-#include <KStandardAction>
-#include <KPluginFactory>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kactioncollection.h>
+#include <kstandardaction.h>
+#include <kpluginfactory.h>
+
+#include <KoIcon.h>
 
 #include <formeditor/container.h>
 #include <formeditor/form.h>
@@ -71,7 +72,7 @@
 #include "kexidbfactory.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
-
+#include <QFontMetrics>
 //////////////////////////////////////////
 
 KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
@@ -80,7 +81,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 {
     {
         KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("form");
+        wi->setIconName(koIconName("form"));
         wi->setClassName("KexiDBForm");
         wi->setName(i18n("Form"));
         wi->setNamePrefix(
@@ -93,7 +94,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 #ifndef KEXI_NO_SUBFORM
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("subform");
+        wi->setIconName(koIconName("subform"));
         wi->setClassName("KexiDBSubForm");
         wi->addAlternateClassName("KexiSubForm", true/*override*/); //older
         wi->setName(i18n("Sub Form"));
@@ -109,7 +110,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     {
         // inherited
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("lineedit");
+        wi->setIconName(koIconName("lineedit"));
         wi->setClassName("KexiDBLineEdit");
         wi->setParentFactoryName("stdwidgets");
         wi->setInheritedClassName("KLineEdit");
@@ -128,7 +129,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     {
         // inherited
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("textedit");
+        wi->setIconName(koIconName("textedit"));
         wi->setClassName("KexiDBTextEdit");
         wi->setParentFactoryName("stdwidgets");
         wi->setInheritedClassName("KTextEdit");
@@ -146,7 +147,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     }
     {
         KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
-        wi->setPixmap("frame");
+        wi->setIconName(koIconName("frame"));
         wi->setClassName("KexiFrame");
         wi->setParentFactoryName("containers");
         wi->setInheritedClassName("QFrame"); /* we are inheriting to get i18n'd strings already translated there */
@@ -161,7 +162,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     }
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("label");
+        wi->setIconName(koIconName("label"));
         wi->setClassName("KexiDBLabel");
         wi->setParentFactoryName("stdwidgets");
         wi->setInheritedClassName("QLabel"); /* we are inheriting to get i18n'd strings already translated there */
@@ -179,7 +180,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 #ifndef KEXI_NO_IMAGEBOX_WIDGET
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("pixmaplabel");
+        wi->setIconName(koIconName("pixmaplabel"));
         wi->setClassName("KexiDBImageBox");
         wi->setParentFactoryName("stdwidgets");
         wi->setInheritedClassName("KexiPictureLabel"); /* we are inheriting to get i18n'd strings already translated there */
@@ -200,7 +201,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 #ifdef KEXI_DB_COMBOBOX_WIDGET
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("combo");
+        wi->setIconName(koIconName("combo"));
         wi->setClassName("KexiDBComboBox");
         wi->setParentFactoryName("stdwidgets");
         wi->setInheritedClassName("KComboBox"); /* we are inheriting to get i18n'd strings already translated there */
@@ -215,7 +216,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 #endif
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("check");
+        wi->setIconName(koIconName("check"));
         wi->setClassName("KexiDBCheckBox");
         wi->setParentFactoryName("stdwidgets");
         wi->setInheritedClassName("QCheckBox"); /* we are inheriting to get i18n'd strings already translated there */
@@ -230,7 +231,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("autofield");
+        wi->setIconName(koIconName("autofield"));
         wi->setClassName("KexiDBAutoField");
         wi->addAlternateClassName("KexiDBFieldEdit", true/*override*/); //older
         wi->setName(i18n("Auto Field"));
@@ -242,62 +243,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         addClass(wi);
     }
 #endif
-
-    /*
-      KexiDataAwareWidgetInfo *wDate = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateWidget");
-      wDate->setPixmap("dateedit");
-      wDate->setClassName("KexiDBDateEdit");
-      wDate->addAlternateClassName("QDateEdit", true);//override
-      wDate->addAlternateClassName("KDateWidget", true);//override
-      wDate->setName(i18n("Date Widget"));
-      wDate->setNamePrefix(
-        i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateWidget"));
-      wDate->setDescription(i18n("A widget to input and display a date"));
-      addClass(wDate);
-
-      KexiDataAwareWidgetInfo *wTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KTimeWidget");
-      wTime->setPixmap("timeedit");
-      wTime->setClassName("KexiDBTimeEdit");
-      wTime->addAlternateClassName("QTimeEdit", true);//override
-      wTime->addAlternateClassName("KTimeWidget", true);//override
-      wTime->setName(i18n("Time Widget"));
-      wTime->setNamePrefix(
-        i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "timeWidget"));
-      wTime->setDescription(i18n("A widget to input and display a time"));
-      addClass(wTime);
-
-      KexiDataAwareWidgetInfo *wDateTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateTimeWidget");
-      wDateTime->setPixmap("datetimeedit");
-      wDateTime->setClassName("KexiDBDateTimeEdit");
-      wDateTime->addAlternateClassName("QDateTimeEdit", true);//override
-      wDateTime->addAlternateClassName("KDateTimeWidget", true);//override
-      wDateTime->setName(i18n("Date/Time Widget"));
-      wDateTime->setNamePrefix(
-        i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateTimeWidget"));
-      wDateTime->setDescription(i18n("A widget to input and display a date and time"));
-      addClass(wDateTime);
-    */
-
-    /* KexiDataAwareWidgetInfo *wIntSpinBox = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KIntSpinBox");
-      wIntSpinBox->setPixmap("spin");
-      wIntSpinBox->setClassName("KexiDBIntSpinBox");
-      wIntSpinBox->addAlternateClassName("QSpinBox", true);
-      wIntSpinBox->addAlternateClassName("KIntSpinBox", true);
-      wIntSpinBox->setName(i18n("Integer Number Spin Box"));
-      wIntSpinBox->setNamePrefix(
-        i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "intSpinBox"));
-      wIntSpinBox->setDescription(i18n("A spin box widget to input and display integer numbers"));
-      addClass(wIntSpinBox);
-
-      KexiDataAwareWidgetInfo *wDoubleSpinBox = new KexiDataAwareWidgetInfo(this, "stdwidgets");
-      wDoubleSpinBox->setPixmap("spin");
-      wDoubleSpinBox->setClassName("KexiDBDoubleSpinBox");
-      wDoubleSpinBox->addAlternateClassName("KDoubleSpinBox", true);
-      wDoubleSpinBox->setName(i18n("Floating-point Number Spin Box"));
-      wDoubleSpinBox->setNamePrefix(
-        i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dblSpinBox"));
-      wDoubleSpinBox->setDescription(i18n("A spin box widget to input and display floating-point numbers"));
-      addClass(wDoubleSpinBox);*/
 
     {
         // inherited
@@ -315,7 +260,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     {
         KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
         wi->setClassName("KexiDBCommandLinkButton");
-        wi->setPixmap("button");
+        wi->setIconName(koIconName("button"));
         wi->setName(i18n("Link Button"));
         wi->setNamePrefix(
             i18nc("Widget name. This string will be used to name widgets of this class. "
@@ -325,7 +270,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     }
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("slider");
+        wi->setIconName(koIconName("slider"));
         wi->setClassName("KexiDBSlider");
         wi->setName(i18n("Slider"));
         wi->setNamePrefix(
@@ -336,7 +281,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     }
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("progress");
+        wi->setIconName(koIconName("progress"));
         wi->setClassName("KexiDBProgressBar");
         wi->setName(i18n("Progress Bar"));
         wi->setNamePrefix(
@@ -347,7 +292,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     }
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
-        wi->setPixmap("dateedit");
+        wi->setIconName(koIconName("dateedit"));
         wi->setClassName("KexiDBDatePicker");
         wi->setName(i18n("Date Picker"));
         wi->setNamePrefix(
@@ -357,62 +302,82 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         addClass(wi);
     }
 
-    
+    setPropertyDescription("invertedAppearance", i18n("Inverted"));
+    setPropertyDescription("minimum", i18n("Minimum"));
+    setPropertyDescription("maximum", i18n("Maximum"));
+    setPropertyDescription("format", i18n("Format"));
+    setPropertyDescription("orientation", i18n("Orientation"));
+    setPropertyDescription("textDirection", i18n("Text Direction"));
+    setPropertyDescription("textVisible", i18n("Text Visible"));
+    setPropertyDescription("value", i18n("Value"));
+    setPropertyDescription("date", i18n("Date"));
+    setPropertyDescription("arrowVisible", i18n("Arrow Visible"));
+    setPropertyDescription("description", i18n("Description"));
+    setPropertyDescription("pageStep", i18n("Page Step"));
+    setPropertyDescription("singleStep", i18n("Single Step"));
+    setPropertyDescription("tickInterval", i18n("Tick Interval"));
+    setPropertyDescription("tickPosition", i18n("Tick Position"));
+    setPropertyDescription("showEditor", i18n("Show Editor"));
+    setPropertyDescription("formName", i18n("Form Name"));
+    setPropertyDescription("onClickAction", i18n("On Click"));
+    setPropertyDescription("onClickActionOption", i18n("On Click Option"));
+    setPropertyDescription("autoTabStops", i18n("Auto Tab Order"));
+    setPropertyDescription("shadowEnabled", i18n("Shadow Enabled"));
+    setPropertyDescription("on", i18nc("On: button", "On"));
 
-    m_propDesc["formName"] = i18n("Form Name");
-    m_propDesc["onClickAction"] = i18n("On Click");
-    m_propDesc["onClickActionOption"] = i18n("On Click Option");
-    m_propDesc["autoTabStops"] = i18n("Auto Tab Order");
-    m_propDesc["shadowEnabled"] = i18n("Shadow Enabled");
-    m_propDesc["on"] = i18nc("On: button", "On");
-
-    m_propDesc["widgetType"] = i18n("Editor Type");
+    setPropertyDescription("widgetType", i18n("Editor Type"));
     //for autofield's type: inherit i18n from KexiDB
-    m_propValDesc["Auto"] = i18nc("AutoField editor's type", "Auto");
-    m_propValDesc["Text"] = KexiDB::Field::typeName(KexiDB::Field::Text);
-    m_propValDesc["Integer"] = KexiDB::Field::typeName(KexiDB::Field::Integer);
-    m_propValDesc["Double"] = KexiDB::Field::typeName(KexiDB::Field::Double);
-    m_propValDesc["Boolean"] = KexiDB::Field::typeName(KexiDB::Field::Boolean);
-    m_propValDesc["Date"] = KexiDB::Field::typeName(KexiDB::Field::Date);
-    m_propValDesc["Time"] = KexiDB::Field::typeName(KexiDB::Field::Time);
-    m_propValDesc["DateTime"] = KexiDB::Field::typeName(KexiDB::Field::DateTime);
-    m_propValDesc["MultiLineText"] = i18nc("AutoField editor's type", "Multiline Text");
-    m_propValDesc["ComboBox"] = i18nc("AutoField editor's type", "Drop-Down List");
-    m_propValDesc["Image"] = i18nc("AutoField editor's type", "Image");
+    setValueDescription("Auto", i18nc("AutoField editor's type", "Auto"));
+    setValueDescription("Text", KexiDB::Field::typeName(KexiDB::Field::Text));
+    setValueDescription("Integer", KexiDB::Field::typeName(KexiDB::Field::Integer));
+    setValueDescription("Double", KexiDB::Field::typeName(KexiDB::Field::Double));
+    setValueDescription("Boolean", KexiDB::Field::typeName(KexiDB::Field::Boolean));
+    setValueDescription("Date", KexiDB::Field::typeName(KexiDB::Field::Date));
+    setValueDescription("Time", KexiDB::Field::typeName(KexiDB::Field::Time));
+    setValueDescription("DateTime", KexiDB::Field::typeName(KexiDB::Field::DateTime));
+    setValueDescription("MultiLineText", i18nc("AutoField editor's type", "Multiline Text"));
+    setValueDescription("ComboBox", i18nc("AutoField editor's type", "Drop-Down List"));
+    setValueDescription("Image", i18nc("AutoField editor's type", "Image"));
 
-// m_propDesc["labelCaption"] = i18n("Label Text");
-    m_propDesc["autoCaption"] = i18n("Auto Label");
-    m_propDesc["foregroundLabelColor"] = i18n("Label Text Color");
-    m_propDesc["backgroundLabelColor"] = i18nc("(a property name, keep the text narrow!)",
-                                         "Label Background\nColor");
+    setValueDescription("NoTicks", i18n("No Ticks"));
+    setValueDescription("TicksAbove", i18n("Above"));
+    setValueDescription("TicksLeft", i18n("Left"));
+    setValueDescription("TicksBelow", i18n("Below"));
+    setValueDescription("TicksRight", i18n("Right"));
+    setValueDescription("TicksBothSides", i18n("Both Sides"));
 
-    m_propDesc["labelPosition"] = i18n("Label Position");
-    m_propValDesc["Left"] = i18nc("Label Position", "Left");
-    m_propValDesc["Top"] = i18nc("Label Position", "Top");
-    m_propValDesc["NoLabel"] = i18nc("Label Position", "No Label");
+    setPropertyDescription("autoCaption", i18n("Auto Label"));
+    setPropertyDescription("foregroundLabelColor", i18n("Label Text Color"));
+    setPropertyDescription("backgroundLabelColor", i18nc("(a property name, keep the text narrow!)",
+                                         "Label Background\nColor"));
 
-    m_propDesc["sizeInternal"] = i18n("Size");
-    m_propDesc["pixmapId"] = i18n("Image");
-    m_propDesc["scaledContents"] = i18n("Scaled Contents");
-    m_propDesc["smoothTransformation"] = i18nc("Smoothing when contents are scaled", "Smoothing");
-    m_propDesc["keepAspectRatio"] = i18nc("Keep Aspect Ratio (short)", "Keep Ratio");
+    setPropertyDescription("labelPosition", i18n("Label Position"));
+    setValueDescription("Left", i18nc("Label Position", "Left"));
+    setValueDescription("Top", i18nc("Label Position", "Top"));
+    setValueDescription("NoLabel", i18nc("Label Position", "No Label"));
+
+    setPropertyDescription("sizeInternal", i18n("Size"));
+    setPropertyDescription("pixmapId", i18n("Image"));
+    setPropertyDescription("scaledContents", i18n("Scaled Contents"));
+    setPropertyDescription("smoothTransformation", i18nc("Smoothing when contents are scaled", "Smoothing"));
+    setPropertyDescription("keepAspectRatio", i18nc("Keep Aspect Ratio (short)", "Keep Ratio"));
 
     //hide classes that are replaced by db-aware versions
     hideClass("KexiPictureLabel");
     hideClass("KComboBox");
 
     //used in labels, frames...
-    m_propDesc["dropDownButtonVisible"] =
+    setPropertyDescription("dropDownButtonVisible",
         i18nc("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)",
-              "Drop-Down\nButton Visible");
+              "Drop-Down\nButton Visible"));
 
     //for checkbox
-    m_propValDesc["TristateDefault"] = i18nc("Tristate checkbox, default", "Default");
-    m_propValDesc["TristateOn"] = i18nc("Tristate checkbox, yes", "Yes");
-    m_propValDesc["TristateOff"] = i18nc("Tristate checkbox, no", "No");
+    setValueDescription("TristateDefault", i18nc("Tristate checkbox, default", "Default"));
+    setValueDescription("TristateOn", i18nc("Tristate checkbox, yes", "Yes"));
+    setValueDescription("TristateOff", i18nc("Tristate checkbox, no", "No"));
 
     //for combobox
-    m_propDesc["editable"] = i18nc("Editable combobox", "Editable");
+    setPropertyDescription("editable", i18nc("Editable combobox", "Editable"));
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -474,16 +439,6 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 
     else if (c == "KexiDBComboBox")
         w = new KexiDBComboBox(p);
-    /* else if(c == "KexiDBTimeEdit")
-        w = new KexiDBTimeEdit(QTime::currentTime(), p, n);
-      else if(c == "KexiDBDateEdit")
-        w = new KexiDBDateEdit(QDate::currentDate(), p, n);
-      else if(c == "KexiDBDateTimeEdit")
-        w = new KexiDBDateTimeEdit(QDateTime::currentDateTime(), p, n);*/
-// else if(c == "KexiDBIntSpinBox")
-//  w = new KexiDBIntSpinBox(p, n);
-// else if(c == "KexiDBDoubleSpinBox")
-//  w = new KexiDBDoubleSpinBox(p, n);
     else if (c == "KPushButton" || c == "KexiPushButton")
         w = new KexiPushButton(text, p);
     else if (c == "KexiDBCommandLinkButton" || c == "KexiCommandLinkButton") {
@@ -530,7 +485,7 @@ KexiDBFactory::createCustomActions(KActionCollection* col)
 {
     //this will create shared instance action for design mode (special collection is provided)
     col->addAction("widget_assign_action",
-                   m_assignAction = new KAction(KIcon("form_action"), i18n("&Assign Action..."), this));
+                   m_assignAction = new KAction(koIcon("form_action"), i18n("&Assign Action..."), this));
 }
 
 bool
@@ -588,9 +543,11 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.text = linkButton->text();
         const QRect r(linkButton->style()->subElementRect(
                         QStyle::SE_PushButtonContents, &option, linkButton));
-        args.geometry = QRect(linkButton->x() + r.x(), linkButton->y() + r.y(), r.width(), r.height());
+
+        QFontMetrics fm(linkButton->font());
+        args.geometry = QRect(linkButton->x() + linkButton->iconSize().width() + 6, linkButton->y() + r.y(), r.width()  - 6, fm.height()+14);
+
         return true;
-        
     }
     else if (args.classname == "KexiDBLabel") {
         KexiDBLabel *label = static_cast<KexiDBLabel*>(args.widget);
@@ -609,14 +566,6 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
             else {
                 return false;
             }
-//-->               KFormDesigner::EditRichTextAction(args.container, label, 0, this).trigger();
-//2.0 moved to EditRichTextAction:
-//2.0          if (editRichText(label, text)) {
-//2.0              changeProperty(args.container->form(), label, "textFormat", "RichText", );
-//2.0              changeProperty("text", text, args.container->form());
-//2.0            }
-//2.0          if (args.classname == "KexiDBLabel")
-//2.0              args.widget->resize(args.widget->sizeHint());
         }
         else {
             args.text = label->text();
@@ -656,7 +605,6 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.widget = label;
         args.geometry = label->geometry();
         args.alignment = label->alignment();
-//2.0        createEditor(classname, label->text(), label, container, label, );
         return true;
     }
     else if (args.classname == "KexiDBCheckBox") {
@@ -669,7 +617,6 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
             + cb->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &option, cb).width());
         args.text = cb->text();
         args.geometry = r;
-//2.0        createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
         return true;
     }
     else if (args.classname == "KexiDBImageBox") {
@@ -678,8 +625,6 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.execute = false;
         return true;
     }
-//    else if (args.classname == "QPushButton" || args.classname == "KPushButton" || args.classname == "KexiPushButton") {
-//    }
     return false;
 }
 
@@ -718,6 +663,12 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              ;
      } else if (classname == "KexiDBCommandLinkButton") {
         ok = property != "isDragEnabled"
+             && property != "default"
+             && property != "checkable"
+             && property != "autoDefault"
+             && property != "autoRepeat"
+             && property != "autoRepeatDelay"
+             && property != "autoRepeatInterval"
 #ifdef KEXI_NO_UNFINISHED
              && property != "onClickAction" /*! @todo reenable */
              && property != "onClickActionOption" /*! @todo reenable */
@@ -727,9 +678,11 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
 #endif
              ;
      } else if (classname == "KexiDBSlider") {
-        ok = property != "focusPolicy";
+        ok = property != "sliderPosition"
+             && property != "tracking";
      } else if (classname == "KexiDBProgressBar") {
-        ok = property != "focusPolicy";
+        ok = property != "focusPolicy"
+             && property != "value";
      } else if (classname == "KexiDBLineEdit")
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
@@ -791,6 +744,11 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
             return false;
         ok = property != "autoRepeat";
     }
+    else if (classname == "KexiDBDatePicker") {
+        ok = property != "closeButton"
+             && property != "fontSize";
+    }
+
 
     return ok && KexiDBFactoryBase::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
@@ -809,18 +767,17 @@ KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& 
 bool KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
     const QString &text, QString &oldText)
 {
-//2.0    if (!form)
-//2.0        return false;
-//2.0    if (!form->selectedWidget())
-//2.0        return false;
-//2.0    QByteArray n(form->selectedWidget()->metaObject()->className());
     const QByteArray n(widget->metaObject()->className());
-// QWidget *w = WidgetFactory::widget();
     if (n == "KexiDBAutoField") {
         oldText = widget->property("caption").toString();
         changeProperty(form, widget, "caption", text);
         return true;
+    } else if (n == "KexiDBCommandLinkButton") {
+        oldText = widget->property("text").toString();
+        changeProperty(form, widget, "text", text);
+        return true;
     }
+
 //! @todo check field's geometry
     return false;
 }
@@ -828,9 +785,6 @@ bool KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
 void
 KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QByteArray &classname)
 {
-    //QSize s = widget->size();
-    //QPoint p = widget->pos();
-
     if (classname == "KexiDBAutoField")
         editor->setGeometry(static_cast<KexiDBAutoField*>(w)->label()->geometry());
 }

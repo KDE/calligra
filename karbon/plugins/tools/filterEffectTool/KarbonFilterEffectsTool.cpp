@@ -39,11 +39,12 @@
 #include "KoResourceSelector.h"
 #include <KoPointerEvent.h>
 
-#include <KComboBox>
-#include <KLocale>
-#include <KIcon>
-#include <KDialog>
-#include <KNumInput>
+#include <KoIcon.h>
+
+#include <kcombobox.h>
+#include <klocale.h>
+#include <kdialog.h>
+#include <knuminput.h>
 
 #include <QWidget>
 #include <QGridLayout>
@@ -442,13 +443,13 @@ QList<QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
             this, SLOT(presetSelected(KoResource*)));
 
     QToolButton * editButton = new QToolButton(addFilterWidget);
-    editButton->setIcon(KIcon("view-filter"));
+    editButton->setIcon(koIcon("view-filter"));
     editButton->setToolTip(i18n("View and edit filter"));
     addFilterLayout->addWidget(editButton, 0, 2);
     connect(editButton, SIGNAL(clicked()), this, SLOT(editFilter()));
 
     d->clearButton = new QToolButton(addFilterWidget);
-    d->clearButton->setIcon(KIcon("edit-delete"));
+    d->clearButton->setIcon(koIcon("edit-delete"));
     d->clearButton->setToolTip(i18n("Remove filter from object"));
     addFilterLayout->addWidget(d->clearButton, 0, 3);
     connect(d->clearButton, SIGNAL(clicked()), this, SLOT(clearFilter()));

@@ -27,13 +27,15 @@
 
 #include <kiconloader.h>
 
+#include <KWPart.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
 #include <KoToolRegistry.h>
+#include <KoMainWindow.h>
 
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#include <rdf/KoSemanticStylesheetsEditor.h>
+#include <KoDocumentRdf.h>
+#include <KoSemanticStylesheetsEditor.h>
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
 #endif
@@ -64,9 +66,11 @@ QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QOb
     Q_UNUSED(args);
     Q_UNUSED(keyword);
 
-    KWDocument *doc = new KWDocument(parent);
+    KWPart *part = new KWPart(parent);
+    KWDocument *doc = new KWDocument(part);
+    part->setDocument(doc);
     KoToolRegistry::instance()->add(new KWPageToolFactory());
-    return doc;
+    return part;
 }
 
 KAboutData *KWFactory::aboutData()

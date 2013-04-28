@@ -311,7 +311,7 @@ Item										Prio	Status
       cell selection (they could all be placed in one shared object/library, if
       each plugin (storage/dialog/command) gets a corresponding .desktop file).
     - Some extra logic needs to be hard-coded into 'core', e.g. the check
-      wether the user input fulfills the restrictions set by Validity. Those
+      whether the user input fulfills the restrictions set by Validity. Those
       could hopefully be coded with the help of Qt's model system (item data
       roles). If not, extra interfaces have to be defined, at least for
       non-standard, non-Qt types.
@@ -400,7 +400,7 @@ Things not in bugzilla
       Only StyleStorage::Private::usedArea should track the occupied
       cells only - not those of columns or rows. Adjust the saving algo
       appropriately.
-    - Add configure option to choose wether the style of the current	----
+    - Add configure option to choose whether the style of the current	----
       or of the previous (default) column/row is used on insertion.
     - Launch the garbage collection in a separate thread.		----
 
@@ -461,7 +461,7 @@ Things not in bugzilla
   + Function optimizer ('Solver')				      2 ----
     - evaluate, if we're able to use linear methods (derivatives!)	----
     - evaluate, how to include side conditions				----
-    - check wether the formula cell carries a valid formulas		----
+    - check whether the formula cell carries a valid formulas		----
       and further checks of used cell contents
 
 

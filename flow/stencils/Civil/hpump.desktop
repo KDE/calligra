@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Horizontal Pump
 Name[bg]=Хоризонтална помпа
+Name[bs]=Horizontalna pumpa
 Name[ca]=Bomba horitzontal
 Name[ca@valencia]=Bomba horitzontal
+Name[da]=Vandret pumpe
 Name[de]=Waagerechte Pumpe
 Name[el]=Horizontal Pump
 Name[es]=Bomba horizontal
 Name[et]=Horisontaalne pump
+Name[fr]=Pompe horizontale
+Name[gl]=Bomba horizontal
+Name[hu]=Vízszintes szivattyú
 Name[it]=Pompa orizzontale
 Name[kk]=Жатық сорғыш
 Name[nb]=Vannrett pumpe
@@ -17,6 +22,7 @@ Name[pt]=Bomba Horizontal
 Name[pt_BR]=Bomba horizontal
 Name[ru]=Горизонтальный насос
 Name[sk]=Vodorovná pumpa
+Name[sl]=Vodoravna črpalka
 Name[sv]=Horisontell pump
 Name[uk]=Насос (горизонтально)
 Name[x-test]=xxHorizontal Pumpxx

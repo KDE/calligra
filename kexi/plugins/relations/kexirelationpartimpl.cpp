@@ -24,9 +24,8 @@
 #include <core/KexiWindow.h>
 #include <core/KexiMainWindowIface.h>
 
-#include <KPluginFactory>
-#include <KIconLoader>
-#include <KDebug>
+#include <kpluginfactory.h>
+#include <kdebug.h>
 
 KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)
@@ -50,7 +49,7 @@ KexiRelationPartImpl::createDialog(KexiMainWindow* mainWin, const char *)
 {
   kDebug() << "KexiRelationPartImpl::createDialog()";
   KexiDialogBase * dlg = new KexiDialogBase(mainWin, i18n("Relations"));
-  dlg->setIcon(SmallIcon("relation"));
+  dlg->setIcon(koIcon("relation"));
   dlg->setDocID( mainWin->generatePrivateDocID() );
 
   KexiRelationMainDlg *view = new KexiRelationMainDlg(mainWin, 0, "relations");
@@ -66,7 +65,7 @@ KexiRelationPartImpl::createView(QWidget *parent, const char *)
 {
 // kDebug() << "KexiRelationPartImpl::createDialog()";
 // KexiDialogBase * dlg = new KexiDialogBase(mainWin, i18n("Relations"));
-// dlg->setIcon(SmallIcon("relation"));
+// dlg->setIcon(koIcon("relation"));
 // dlg->setDocID( mainWin->generatePrivateDocID() );
 
     KexiRelationMainDlg *view = new KexiRelationMainDlg(parent);

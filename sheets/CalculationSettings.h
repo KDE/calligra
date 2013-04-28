@@ -157,7 +157,7 @@ public:
     void setCaseSensitiveComparisons(Qt::CaseSensitivity caseSensitive);
 
     /**
-     * Returns wether comparisons in this document are case sensitive.
+     * Returns whether comparisons in this document are case sensitive.
      */
     Qt::CaseSensitivity caseSensitiveComparisons() const;
 private:

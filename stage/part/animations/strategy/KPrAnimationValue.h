@@ -30,7 +30,7 @@ class KPrShapeAnimation;
 class KPrAnimationValue
 {
 public:
-    KPrAnimationValue(KPrShapeAnimation * shapeAnimation);
+    explicit KPrAnimationValue(KPrShapeAnimation * shapeAnimation);
     virtual ~KPrAnimationValue();
     virtual qreal value(qreal time) const = 0;
     virtual qreal startValue() const = 0;
@@ -45,9 +45,9 @@ public:
     };
 protected:
     SmilCalcMode m_calcMode;
-    KPrAnimationCache * m_cache;
-    KoShape * m_shape;
-    KoTextBlockData * m_textBlockData;
+    KPrAnimationCache *m_cache;
+    KoShape *m_shape;
+    QTextBlockUserData *m_textBlockData;
 };
 
 #endif // KPRANIMATIONVALUE_H

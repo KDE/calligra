@@ -28,16 +28,15 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-#include <cstdlib>
-#include <qtest_kde.h>
-#include <QDir>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>
 #include <kdatetime.h>
 #include <kconfiggroup.h>
-#include <QtDBus/QtDBus>
+
+#include <QDir>
+#include <QtDBus>
 
 #include <qtest_kde.h>
 #include <kdebug.h>
@@ -183,6 +182,7 @@ void ProjectTester::oneTask()
         KPlatoRCPSPlugin rcps( 0, QVariantList() );
         rcps.calculate( *m_project, sm, true/*nothread*/ );
     }
+    Debug::printSchedulingLog( *sm, s );
     Debug::print( m_project, s );
     Debug::print( t, s );
 

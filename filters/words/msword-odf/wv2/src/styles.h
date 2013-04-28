@@ -83,7 +83,7 @@ struct STD
     bool write( U16 baseSize, OLEStreamWriter* stream, bool preservePos = false ) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -251,7 +251,7 @@ public:
      * A special purpose constructor which creates an invalid Style
      * class which stores a copy of the provided CHPs.
      */
-    Style(const Word97::CHP& chp);
+    explicit Style(const Word97::CHP& chp);
 
     ~Style();
 

@@ -26,6 +26,7 @@ set(kexiutils_LIB_SRCS
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp
   KexiCategorizedView.cpp
+  KexiTester.cpp
   
   completer/KexiCompleter.cpp
 )
@@ -33,9 +34,11 @@ set(kexiutils_LIB_SRCS
 IF (KEXI_MOBILE)
 
 ELSE (KEXI_MOBILE)
-  LIST(APPEND kexiutils_LIB_SRCS
-    debuggui.cpp 
-  )
+  IF (KEXI_DEBUG_GUI)
+    LIST(APPEND kexiutils_LIB_SRCS
+      debuggui.cpp
+    )
+  ENDIF (KEXI_DEBUG_GUI)
 ENDIF (KEXI_MOBILE)
 
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
@@ -64,3 +67,5 @@ if(FALSE) # TODO: install when we move to independent place
     KexiAssistantWidget.h KexiAnimatedLayout.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 endif(FALSE)
+
+add_subdirectory(tests)

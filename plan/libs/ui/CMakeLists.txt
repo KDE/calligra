@@ -1,28 +1,24 @@
 
-include (${CMAKE_SOURCE_DIR}/kdgantt/CMakeLists.txt)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+    ${KDCHART_INCLUDES}
 
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
     ${CMAKE_BINARY_DIR}/plan/libs/models
     ${CMAKE_SOURCE_DIR}/plan/libs/ui/reports/odt
     ${CMAKE_BINARY_DIR}/plan/libs/ui
-    ${CMAKE_SOURCE_DIR}/kdgantt
-    ${CMAKE_BINARY_DIR}/kdgantt
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+    ${CMAKE_BINARY_DIR}/3rdparty/kdgantt
 
     ${KOODF_INCLUDES} 
     ${KOPROPERTY_INCLUDES}
 
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
+    ${KOREPORT_INCLUDES}
 
     ${KOPROPERTIES_INCLUDES}
 
-    ${KOMAIN_INCLUDES}    
+    ${KOMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 )
@@ -37,14 +33,6 @@ set(kplatoui_LIB_SRCS
     reports/reportsourceeditor.cpp
     reports/reportscripts.cpp
     reports/reportexportpanel.cpp
-    reports/odt/ReportODTRenderer.cpp
-    reports/odt/KoSimpleOdtDocument.cpp
-    reports/odt/KoSimpleOdtImage.cpp
-    reports/odt/KoSimpleOdtPicture.cpp
-    reports/odt/KoSimpleOdtTextBox.cpp
-    reports/odt/KoSimpleOdtLine.cpp
-    reports/odt/KoSimpleOdtCheckBox.cpp
-    reports/odt/KoSimpleOdtPrimitive.cpp
 
     kptganttitemdelegate.cpp
 
@@ -106,6 +94,9 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     reports/reportsourceeditor.ui
     reports/reportnavigator.ui
     reports/reportexportpanel.ui
+    reports/reportsectionswidget.ui
+    reports/reportgroupsectionswidget.ui
+    reports/reporttoolswidget.ui
 
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui
@@ -144,12 +135,11 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
 
     locale/localemon.ui
 )
-add_definitions(-DKDGANTT_STATICLIB)
 
-kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
+kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 
-set ( KPLATO_REPORTS_LIBS koreport koproperty )
-target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart  ${KDE4_KHTML_LIBS} )
+set(KPLATO_REPORTS_LIBS  ${KOREPORT_LIBS} ${KOPROPERTY_LIBS})
+target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart calligrakdgantt ${KDE4_KHTML_LIBS} )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

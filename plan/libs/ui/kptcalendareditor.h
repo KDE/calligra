@@ -51,7 +51,7 @@ class KPLATOUI_EXPORT CalendarTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    CalendarTreeView( QWidget *parent );
+    explicit CalendarTreeView(QWidget *parent);
 
     CalendarItemModel *model() const { return static_cast<CalendarItemModel*>( TreeViewBase::model() ); }
 
@@ -87,7 +87,7 @@ class KPLATOUI_EXPORT CalendarDayView : public QTableView
 {
     Q_OBJECT
 public:
-    CalendarDayView( QWidget *parent );
+    explicit CalendarDayView(QWidget *parent);
 
     CalendarDayItemModel *model() const { return m_model; }
 
@@ -145,7 +145,7 @@ class KPLATOUI_EXPORT CalendarEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    CalendarEditor( KoDocument *part, QWidget *parent );
+    CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_calendarview->project(); }

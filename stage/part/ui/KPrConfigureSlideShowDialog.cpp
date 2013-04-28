@@ -21,8 +21,8 @@
 
 #include <QDesktopWidget>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "KPrDocument.h"
 #include "KPrView.h"
@@ -57,7 +57,7 @@ KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document,
         ui.slidesComboBox->setCurrentIndex( index );
     }
 
-    connect( ui.editSlidesButton, SIGNAL( clicked() ), this, SLOT( editCustomSlideShow() ) );
+    connect( ui.editSlidesButton, SIGNAL(clicked()), this, SLOT(editCustomSlideShow()) );
 }
 
 QString KPrConfigureSlideShowDialog::activeCustomSlideShow() const

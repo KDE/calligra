@@ -1,8 +1,19 @@
 [Desktop Entry]
 Name=Paper Tape
+Name[bs]=Papirna traka
+Name[ca]=Cinta de paper
+Name[ca@valencia]=Cinta de paper
+Name[da]=Hulstrimmel
+Name[de]=Lochstreifen
 Name[el]=Χάρτινη ταινία
+Name[es]=Cinta de papel
 Name[et]=Paberlint
+Name[fr]=Bande de papier
 Name[gl]=Cinta de papel
+Name[hu]=Papírszalag
+Name[it]=Nastro di carta
+Name[kk]=Қағаз таспасы
+Name[nb]=Hullbånd
 Name[nl]=Ponsband
 Name[pl]=Taśma papierowa
 Name[pt]=Fita Perfurada
@@ -10,5 +21,7 @@ Name[pt_BR]=Fita de papel
 Name[sk]=Papierová páska
 Name[sl]=Vrsta papirja
 Name[sv]=Papperstejp
+Name[tr]=Kağıt Bant
 Name[uk]=Паперова стрічка
 Name[x-test]=xxPaper Tapexx
+Name[zh_CN]=纸带

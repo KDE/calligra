@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=End-Event
+Name[bs]=Krajnji događaj
 Name[ca]=Esdeveniment-Final
 Name[ca@valencia]=Esdeveniment-Final
+Name[de]=Endereignis
 Name[el]=Γεγονός-τέλους
 Name[es]=Evento final
 Name[et]=Lõpusündmus
+Name[fr]=Fin d'évènement
+Name[gl]=Evento final
+Name[hu]=Vége-Esemény
 Name[it]=Evento-finale
 Name[kk]=Аяқтау-оқиға
 Name[nb]=Slutt-hendelse
@@ -15,6 +20,8 @@ Name[pt_BR]=Evento final
 Name[ru]=Завершение события
 Name[sk]=End-Event
 Name[sv]=Sluthändelse
+Name[tr]=Son-Etkinlik
 Name[uk]=Кінцева подія
 Name[x-test]=xxEnd-Eventxx
+Name[zh_CN]=结束事件
 Name[zh_TW]=結束─事件

@@ -21,13 +21,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "PowerPointImport.h"
 #include "PptToOdp.h"
+
+#include "PowerPointImport.h"
 #include "globalobjectcollectors.h"
 #include "pictures.h"
 #include "ODrawToOdf.h"
 #include "msodraw.h"
 #include "msppt.h"
+#include "msoleps.h"
 
 #include <kdebug.h>
 #include <KoOdf.h>
@@ -199,7 +201,7 @@ getText(const TextContainer* tc)
         // each item represents the low byte of a UTF-16 Unicode character
         // whose high byte is 0x00
         const QByteArray& textChars(tc->text.get<TextBytesAtom>()->textChars);
-        ret = QString::fromAscii(textChars, textChars.size());
+        ret = QString::fromLatin1(textChars, textChars.size());
     }
     return ret;
 }
@@ -906,7 +908,11 @@ PptToOdp::doConversion(KoStore* storeout)
         return KoFilter::CreationError;
     }
     storeout->write(createContent(styles));
-    storeout->close();
+    if (!storeout->close()) {
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
     manifest->addManifestEntry("content.xml", "text/xml");
 
     // store document styles
@@ -918,20 +924,28 @@ PptToOdp::doConversion(KoStore* storeout)
         p = 0;
         return KoFilter::CreationError;
     }
-    storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        "<office:document-meta xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
-    storeout->close();
+    storeout->write(createMeta());
+    if (!storeout->close()) {
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    manifest->addManifestEntry("meta.xml", "text/xml");
+
     if (!storeout->open("settings.xml")) {
-        kWarning() << "Couldn't open the file 'meta.xml'.";
+        kWarning() << "Couldn't open the file 'settings.xml'.";
         delete p;
         p = 0;
         return KoFilter::CreationError;
     }
     storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
-    storeout->close();
+    if (!storeout->close()) {
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
     manifest->addManifestEntry("settings.xml", "text/xml");
-    manifest->addManifestEntry("meta.xml", "text/xml");
 
     odfWriter.closeManifestWriter();
 
@@ -1690,7 +1704,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
 
     if (imageBullet) {
         QString pictureSize = bulletSize;
-        if (pictureSize.endsWith("%")) {
+        if (pictureSize.endsWith(QLatin1Char('%'))) {
             pictureSize.chop(1);
             bool ok = false;
             qreal size = pictureSize.toDouble(&ok);
@@ -2226,16 +2240,69 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     // office:body
     contentWriter.startElement("office:body");
     contentWriter.startElement("office:presentation");
-
     contentWriter.addCompleteElement(&presentationBuffer);
-
     contentWriter.endElement();  // office:presentation
-
     contentWriter.endElement();  // office:body
-
     contentWriter.endElement();  // office:document-content
     contentWriter.endDocument();
     return contentData;
+}
+
+QByteArray PptToOdp::createMeta()
+{
+    QByteArray metaData;
+    QBuffer buff(&metaData);
+    buff.open(QIODevice::WriteOnly);
+    KoXmlWriter metaWriter(&buff);
+
+    metaWriter.startDocument("office:document-meta");
+    metaWriter.startElement("office:document-meta");
+    metaWriter.addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+    metaWriter.addAttribute("xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+    metaWriter.addAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+    metaWriter.addAttribute("office:version", "1.2");
+    metaWriter.startElement("office:meta");
+
+    const char *p_str = 0;
+    const MSO::PropertySet &ps = p->summaryInfo.propertySet.propertySet1;
+
+    for (uint i = 0; i < ps.numProperties; i++) {
+        switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
+        case PIDSI_TITLE:
+            p_str = "dc:title";
+            break;
+        case PIDSI_SUBJECT:
+            p_str = "dc:subject";
+            break;
+        case PIDSI_AUTHOR:
+            p_str = "meta:initial-creator";
+            break;
+        case PIDSI_KEYWORDS:
+            p_str = "meta:keyword";
+            break;
+        case PIDSI_COMMENTS:
+            p_str = "dc:description";
+            break;
+        case PIDSI_LASTAUTHOR:
+            p_str = "dc:creator";
+            break;
+        default:
+            break;
+        }
+        if (p_str) {
+            if (ps.property.at(i).vt_lpstr) {
+                metaWriter.startElement(p_str);
+                metaWriter.addTextNode(ps.property.at(i).vt_lpstr->characters);
+                metaWriter.endElement();
+            }
+            p_str = 0;
+        }
+    }
+
+    metaWriter.endElement();  // office:meta
+    metaWriter.endElement();  // office:document-meta
+
+    return metaData;
 }
 
 QString PptToOdp::utf16ToString(const QVector<quint16> &data)
@@ -3391,7 +3458,7 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
 
         if (headerFooterAtom && headerFooterAtom->fHasHeader && headerAtom) {
 #if 0
-            QString headerText = QString::fromAscii(headerAtom->header, headerAtom->header.size());
+            QString headerText = QString::fromLatin1(headerAtom->header, headerAtom->header.size());
             QString hdrName = findDeclaration(Header, headerText);
             if (hdrName == 0 ) {
                 hdrName = QString("hdr%1").arg(declaration.values(Header).count() + 1);

@@ -132,6 +132,8 @@ public:
 
     bool isCloseButtonVisible() const;
 
+    bool clickClosesMessage() const;
+
     MessageType messageType() const;
 
     CalloutPointerDirection calloutPointerDirection() const;
@@ -165,6 +167,8 @@ public Q_SLOTS:
 
     void setCloseButtonVisible(bool visible);
 
+    void setClickClosesMessage(bool set);
+
     void setMessageType(KMessageWidget::MessageType type);
 
     void setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction);
@@ -188,6 +192,8 @@ public Q_SLOTS:
      */
     void animatedHide();
 
+    void resizeToContents();
+
 Q_SIGNALS:
     void animatedShowFinished();
     void animatedHideFinished();
@@ -207,6 +213,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void slotTimeLineChanged(qreal))
     Q_PRIVATE_SLOT(d, void slotTimeLineFinished())
+    Q_PRIVATE_SLOT(d, void tryClickCloseMessage())
 };
 
 #endif /* KMESSAGEWIDGET_H */

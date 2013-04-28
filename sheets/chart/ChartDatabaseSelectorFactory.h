@@ -36,6 +36,7 @@ class Map;
 /// factory to create a ChartDatabaseSelector widget
 class ChartDatabaseSelectorFactory : public QObject, public KoShapeConfigFactoryBase
 {
+    Q_OBJECT
 public:
     /// constructor
     ChartDatabaseSelectorFactory(Map *map) : QObject(map), m_map(map) {}

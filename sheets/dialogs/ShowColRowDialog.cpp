@@ -55,8 +55,6 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
     QWidget *page = new QWidget();
     setMainWidget(page);
     QVBoxLayout *lay1 = new QVBoxLayout(page);
-    lay1->setMargin(KDialog::marginHint());
-    lay1->setSpacing(KDialog::spacingHint());
 
     QLabel *label = new QLabel(page);
 
@@ -116,7 +114,7 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
     //selection multiple
     list->setSelectionMode(QAbstractItemView::MultiSelection);
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotDoubleClicked(QListWidgetItem *)));
+    connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotDoubleClicked(QListWidgetItem*)));
     resize(200, 150);
     setFocus();
 }

@@ -40,7 +40,7 @@ class MapModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    MapModel(Map* map);
+    explicit MapModel(Map *map);
     virtual ~MapModel();
 
     // QAbstractItemModel interface

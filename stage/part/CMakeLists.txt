@@ -1,4 +1,4 @@
-project(calligra-stage)
+project(stagepart)
 
 include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
@@ -7,8 +7,9 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
-
-add_subdirectory(tests)
+if (!WIN32) ## Disable tests in Windows whilst they break builds
+	add_subdirectory(tests)
+endif(!WIN32)
 add_subdirectory(tools)
 
 ### calligrastageprivate ###
@@ -16,12 +17,14 @@ set( calligrastageprivate_LIB_SRCS
      KPrFactory.cpp
      KPrDocument.cpp
      KPrDeclarations.cpp
+     KPrPart.cpp
      KPrView.cpp
      KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
      KPrViewModeSlidesSorter.cpp
      KPrViewModePreviewPageEffect.cpp
+     KPrViewModePreviewShapeAnimations.cpp
      KPrPresentationTool.cpp
      KPrAnimationDirector.cpp
      KPrShapeAnimations.cpp
@@ -73,6 +76,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesSorterItemDelegate.cpp
 
      commands/KPrAnimationCreateCommand.cpp
+     commands/KPrAnimationRemoveCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
      commands/KPrPageLayoutCommand.cpp
      commands/KPrEditCustomSlideShowsCommand.cpp
@@ -80,6 +84,10 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrDelCustomSlideShowCommand.cpp
      commands/KPrRenameCustomSlideShowCommand.cpp
      commands/KPrDeleteSlidesCommand.cpp
+     commands/KPrEditAnimationTimeLineCommand.cpp
+     commands/KPrAnimationEditNodeTypeCommand.cpp
+     commands/KPrReorderAnimationCommand.cpp
+     commands/KPrReplaceAnimationCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
@@ -158,37 +166,21 @@ target_link_libraries(calligrastagepart calligrastageprivate )
 
 install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-### kdeinit stage ###
-set(stage_KDEINIT_SRCS main.cpp )
-
-kde4_add_app_icon(stage_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-stage.png")
-
-kde4_add_kdeinit_executable(calligrastage ${stage_KDEINIT_SRCS})
-
-if (Q_WS_MAC)
-   set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.stage")
-   set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Stage 2")
-endif (Q_WS_MAC)
-
-target_link_libraries(kdeinit_calligrastage komain )
-
-install(TARGETS kdeinit_calligrastage ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-target_link_libraries(calligrastage kdeinit_calligrastage)
-install(TARGETS calligrastage ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 ### desktop files ###
 install( FILES stagepart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS stage.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
 install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
 
 install( FILES stagerc DESTINATION ${CONFIG_INSTALL_DIR} )
 
+### Predefined Animations ###
+install(FILES
+        animations/animations.xml
+        DESTINATION ${DATA_INSTALL_DIR}/stage/animations)
+
 ### Include files ###
-install( FILES 
+install( FILES
         stage_export.h
         KPrAnimationDirector.h
         KPrCustomSlideShows.h

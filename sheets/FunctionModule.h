@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include "calligra_sheets_export.h"
 
@@ -49,7 +49,7 @@ public:
      * The derived class should create here the Function objects and
      * should register them via \ref add.
      */
-    FunctionModule(QObject* parent);
+    explicit FunctionModule(QObject *parent);
 
     /**
      * Destroys the module and the provided Function objects.
@@ -68,7 +68,7 @@ public:
     QList<QSharedPointer<Function> > functions() const;
 
     /**
-     * Checks wether this module can be removed, because none of its
+     * Checks whether this module can be removed, because none of its
      * Function objects is in use.
      * Used by the FunctionModuleRegistry to check, if the plugin can be unloaded.
      * \return \c true on success; \c false on failure

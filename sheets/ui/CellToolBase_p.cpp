@@ -67,11 +67,12 @@
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
 #include <KoViewConverter.h>
+#include <KoIcon.h>
 
 // KDE
-#include <KFontAction>
-#include <KFontChooser>
-#include <KFontSizeAction>
+#include <kfontaction.h>
+#include <kfontchooser.h>
+#include <kfontsizeaction.h>
 #include <kdeversion.h>
 
 // Qt
@@ -752,11 +753,7 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     case Qt::Key_Dollar:
         command->setText(i18nc("(qtundo-format)", "Currency Format"));
         command->setFormatType(Format::Money);
-#if KDE_IS_VERSION(4,4,0)
         command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces());
-#else
-        command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits());
-#endif
         break;
 
     case Qt::Key_Percent:
@@ -1261,35 +1258,35 @@ void CellToolBase::Private::createPopupMenuActions()
         popupMenuActions.insert(QString("separator%1").arg(i), action);
     }
 
-    action = new KAction(KIcon("insertcell"), i18n("Insert Cells..."), q);
+    action = new KAction(koIcon("insertcell"), i18n("Insert Cells..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertCells()));
     popupMenuActions.insert("insertCell", action);
 
-    action = new KAction(KIcon("removecell"), i18n("Delete Cells..."), q);
+    action = new KAction(koIcon("removecell"), i18n("Delete Cells..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteCells()));
     popupMenuActions.insert("deleteCell", action);
 
-    action = new KAction(KIcon("adjustcol"), i18n("Adjust Column"), q);
+    action = new KAction(koIcon("adjustcol"), i18n("Adjust Column"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(adjustColumn()));
     popupMenuActions.insert("adjustColumn", action);
 
-    action = new KAction(KIcon("edit-table-insert-column-left"), i18n("Insert Columns"), q);
+    action = new KAction(koIcon("edit-table-insert-column-left"), i18n("Insert Columns"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertColumn()));
     popupMenuActions.insert("insertColumn", action);
 
-    action = new KAction(KIcon("edit-table-delete-column"), i18n("Delete Columns"), q);
+    action = new KAction(koIcon("edit-table-delete-column"), i18n("Delete Columns"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteColumn()));
     popupMenuActions.insert("deleteColumn", action);
 
-    action = new KAction(KIcon("adjustrow"), i18n("Adjust Row"), q);
+    action = new KAction(koIcon("adjustrow"), i18n("Adjust Row"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(adjustRow()));
     popupMenuActions.insert("adjustRow", action);
 
-    action = new KAction(KIcon("edit-table-insert-row-above"), i18n("Insert Rows"), q);
+    action = new KAction(koIcon("edit-table-insert-row-above"), i18n("Insert Rows"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertRow()));
     popupMenuActions.insert("insertRow", action);
 
-    action = new KAction(KIcon("edit-table-delete-row"), i18n("Delete Rows"), q);
+    action = new KAction(koIcon("edit-table-delete-row"), i18n("Delete Rows"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteRow()));
     popupMenuActions.insert("deleteRow", action);
 
@@ -1297,11 +1294,11 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(listChoosePopupMenu()));
     popupMenuActions.insert("listChoose", action);
 
-    action = new KAction(KIcon("comment"), i18n("Comment"), q);
+    action = new KAction(koIcon("comment"), i18n("Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
     popupMenuActions.insert("comment", action);
 
-    action = new KAction(KIcon("clearComment"),i18n("Clear Comment"), q);
+    action = new KAction(koIcon("removecomment"),i18n("Clear Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
     popupMenuActions.insert("clearComment", action);
 

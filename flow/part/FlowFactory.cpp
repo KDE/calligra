@@ -19,14 +19,16 @@
 
 #include "FlowFactory.h"
 
+#include "FlowDocument.h"
+#include "FlowAboutData.h"
+#include "FlowPart.h"
+
+#include <KoPluginLoader.h>
+
 #include <kcomponentdata.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <KoPluginLoader.h>
-
-#include "FlowDocument.h"
-#include "FlowAboutData.h"
 
 KComponentData* FlowFactory::s_instance = 0;
 KAboutData* FlowFactory::s_aboutData = 0;
@@ -48,10 +50,13 @@ FlowFactory::~FlowFactory()
 QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                              const QVariantList& args, const QString& keyword )
 {
-  Q_UNUSED( args );
-  Q_UNUSED( keyword );
-  FlowDocument* doc = new FlowDocument(parent);
-  return doc;
+    Q_UNUSED( args );
+    Q_UNUSED( keyword );
+    FlowPart *part = new FlowPart(parent);
+    FlowDocument* doc = new FlowDocument(part);
+    part->setDocument(doc);
+
+    return part;
 }
 
 const KComponentData &FlowFactory::componentData()

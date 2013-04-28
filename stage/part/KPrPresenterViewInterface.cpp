@@ -27,9 +27,8 @@
 #include <QTextEdit>
 #include <QToolButton>
 
-#include <KDebug>
-#include <KLocale>
-#include <KIcon>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>

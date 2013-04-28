@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Phase Modulator (vertical)
+Name[bs]=Fazni modulator (vertikalni)
 Name[ca]=Modulador de fase (vertical)
 Name[ca@valencia]=Modulador de fase (vertical)
+Name[da]=Fasemodulator (lodret)
 Name[de]=Phasen-Modulator (senkrecht)
 Name[el]=Διαμορφωτής φάσης (κάθετα)
 Name[es]=Modulador Fase (vertical)
 Name[et]=Vertikaalne faasimuundur
+Name[fr]=Modulateur de phase (vertical)
+Name[gl]=Modulador de fases (vertical)
 Name[it]=Modulatore di fase (verticale)
 Name[kk]=Фаза модуляторы (тік)
 Name[nb]=Fasemodulator (loddrett)
@@ -15,6 +19,7 @@ Name[pt]=Modulador Fase (vertical)
 Name[pt_BR]=Modulador de fase (vertical)
 Name[ru]=Фазовый модулятор (вертикальный)
 Name[sk]=Fázový modulátor (zvislý)
+Name[sl]=Fazni modulator (navpični)
 Name[sv]=Fasmodulator (vertikal)
 Name[uk]=Фазовий модулятор (вертикально)
 Name[x-test]=xxPhase Modulator (vertical)xx

@@ -1,15 +1,21 @@
 [Desktop Entry]
 Name=NetFlow router
 Name[bg]=Маршрутизатор NetFlow
+Name[bs]=NetFlow ruter
 Name[ca]=Encaminador NetFlow
 Name[ca@valencia]=Encaminador NetFlow
+Name[cs]=NetFlow router
+Name[da]=NetFlow router
 Name[de]=NetFlow-Router
 Name[el]=Δρομολογητής NetFlow
 Name[es]=Encaminador NetFlow
 Name[et]=NetFlow marsruuter
 Name[fi]=NetFlow-reititin
+Name[fr]=NetFlow router
+Name[gl]=Encamiñador NetFlow
 Name[it]=Router NetFlow
 Name[kk]=NetFlow маршруттауышы
+Name[lt]=NetFlow maršrutizatorius
 Name[nb]=NetFlow ruter
 Name[nds]=NetFlow-Nettweger
 Name[nl]=NetFlow router

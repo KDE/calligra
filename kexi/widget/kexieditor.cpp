@@ -27,7 +27,7 @@
 #include <QLayout>
 #include <QList>
 #include <QMenu>
-#include <KDebug>
+#include <kdebug.h>
 
 //uncomment this to enable KTextEdit-based editor
 //#define KTEXTEDIT_BASED_SQL_EDITOR
@@ -137,8 +137,8 @@ qobject_cast<KTextEditor::ConfigInterface*>( d->view );
         }
       }*/
 
-    connect(d->doc, SIGNAL(textChanged(KTextEditor::Document *)),
-            this, SLOT(slotTextChanged(KTextEditor::Document *)));
+    connect(d->doc, SIGNAL(textChanged(KTextEditor::Document*)),
+            this, SLOT(slotTextChanged(KTextEditor::Document*)));
 #endif
     KexiEditorSharedActionConnector c(this, d->view);
     d->view->installEventFilter(this);

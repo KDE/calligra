@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWFRAMERUNAROUNDPROPERTIES_H
-#define KWFRAMERUNAROUNDPROPERTIES_H
+#ifndef KWRUNAROUNDPROPERTIES_H
+#define KWRUNAROUNDPROPERTIES_H
 
 #include <ui_KWRunAroundProperties.h>
 #include <dialogs/KWShapeConfigFactory.h>
@@ -67,4 +67,4 @@ private:
     KoShape *m_shape;
 };
 
-#endif
+#endif // KWRUNAROUNDPROPERTIES_H

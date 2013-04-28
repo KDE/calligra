@@ -22,7 +22,10 @@
 
 #include "KPrDocument.h"
 
+#include <KoPart.h>
 #include <KoOdf.h>
+
+#include <QGraphicsItem>
 
 class KoView;
 
@@ -30,7 +33,7 @@ class MockDocument : public KPrDocument
 {
 public:
     MockDocument()
-    : KPrDocument(0)
+    : KPrDocument(new MockPart)
     {}
     KoView *createViewInstance(QWidget * /* parent */) {return 0;}
     const char *odfTagName(bool b) {return KoOdf::bodyContentElement(KoOdf::Presentation, b);}

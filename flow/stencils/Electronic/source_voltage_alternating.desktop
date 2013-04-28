@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=source voltage alternating
+Name[bs]=izvor napona izmjenične struje
 Name[ca]=font de voltatge altern
 Name[ca@valencia]=font de voltatge altern
+Name[cs]=zdroj střídavého napětí
+Name[da]=vekselspændingskilde
 Name[el]=εναλλαγή τάσης πηγής
 Name[es]=fuente de tensión alterna
 Name[et]=Vahelduvpinge allikas
+Name[fr]=source voltage alternating
+Name[gl]=Fonte de tensión alterna
 Name[it]=sorgente di tensione alternata
 Name[kk]=аным-кернеу-көзі
 Name[nb]=kildespenning vekselstrøm
@@ -17,4 +22,5 @@ Name[sk]=zdroj striedavého napätia
 Name[sv]=källa växelspänning
 Name[uk]=Джерело змінного струму
 Name[x-test]=xxsource voltage alternatingxx
+Name[zh_CN]=交流电压源
 Name[zh_TW]=source voltage alternating

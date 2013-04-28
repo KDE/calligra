@@ -112,6 +112,7 @@
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
+#include "Part.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -138,10 +139,11 @@ public:
     Sheet* activeSheet;
     ColumnHeaderItem* columnHeader;
     RowHeaderItem* rowHeader;
+    KoPart *part;
 };
 
-CanvasItem::CanvasItem(Doc *doc)
-        : QGraphicsWidget(0)
+CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
+        : QGraphicsWidget(parent)
         , CanvasBase(doc)
         , d(new Private)
 {
@@ -158,6 +160,7 @@ CanvasItem::CanvasItem(Doc *doc)
     setAcceptDrops(true);
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
+    d->part = doc->documentPart();
     d->rowHeader = 0;
     d->columnHeader = 0;
 
@@ -171,13 +174,13 @@ CanvasItem::CanvasItem(Doc *doc)
     connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
     connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
-    connect(doc->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            SLOT(handleDamages(const QList<Damage*>&)));
+    connect(doc->map(), SIGNAL(damagesFlushed(QList<Damage*>)),
+            SLOT(handleDamages(QList<Damage*>)));
 }
 
 CanvasItem::~CanvasItem()
 {
-    if (doc()->isReadWrite())
+    if (d->part->isReadWrite())
         selection()->emitCloseEditor(true);
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);
@@ -270,12 +273,12 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
         kDebug(36004) << "Creating SheetView for" << sheet->sheetName();
         d->sheetViews.insert(sheet, new PixmapCachingSheetView(sheet));
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
-        connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                this, SLOT(setDocumentSize(const QSizeF&)));
+        connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
+                this, SLOT(setDocumentSize(QSizeF)));
         connect(d->sheetViews[ sheet ], SIGNAL(obscuredRangeChanged(QSize)),
                 this, SLOT(setObscuredRange(QSize)));
-        //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
+                //d->zoomController, SLOT(setDocumentSize(QSizeF)));
         connect(sheet, SIGNAL(visibleSizeChanged()),
                 d->sheetViews[ sheet ], SLOT(updateAccessedCellRange()));
     }
@@ -286,12 +289,12 @@ void CanvasItem::refreshSheetViews()
 {
     const QList<SheetView*> sheetViews = d->sheetViews.values();
     for (int i = 0; i < sheetViews.count(); ++i) {
-        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   this, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(QSizeF)),
+                   this, SLOT(setDocumentSize(QSizeF)));
         disconnect(sheetViews[i], SIGNAL(obscuredRangeChanged(QSize)),
                 this, SLOT(setObscuredRange(QSize)));
-        //disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
-                   //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        //disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(QSizeF)),
+                   //d->zoomController, SLOT(setDocumentSize(QSizeF)));
         disconnect(sheetViews[i]->sheet(), SIGNAL(visibleSizeChanged()),
                    sheetViews[i], SLOT(updateAccessedCellRange()));
     }

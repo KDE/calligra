@@ -38,6 +38,8 @@
 // commands
 #include "commands/SortManipulator.h"
 
+#include <KoIcon.h>
+
 // ui
 #include "ui_SortWidget.h"
 #include "ui_SortDetailsWidget.h"
@@ -329,10 +331,10 @@ SortDialog::SortDialog(QWidget* parent, Selection* selection)
     setDetailsWidget(widget);
 
     // UI refinements Designer is not capable of
-    d->mainWidget.m_addButton->setIcon(KIcon("list-add"));
-    d->mainWidget.m_removeButton->setIcon(KIcon("list-remove"));
-    d->mainWidget.m_upButton->setIcon(KIcon("go-up"));
-    d->mainWidget.m_downButton->setIcon(KIcon("go-down"));
+    d->mainWidget.m_addButton->setIcon(koIcon("list-add"));
+    d->mainWidget.m_removeButton->setIcon(koIcon("list-remove"));
+    d->mainWidget.m_upButton->setIcon(koIcon("go-up"));
+    d->mainWidget.m_downButton->setIcon(koIcon("go-down"));
     QHeaderView *const header = d->mainWidget.m_tableWidget->horizontalHeader();
     header->setResizeMode(QHeaderView::ResizeToContents);
     header->setResizeMode(0, QHeaderView::Stretch);
@@ -535,11 +537,11 @@ void SortDialog::itemActivated(QTableWidgetItem *item)
 {
     if (item->column() == 1) /* Sort Order */ {
         if (item->data(Qt::UserRole).value<Qt::SortOrder>() == Qt::AscendingOrder) {
-            item->setIcon(KIcon("view-sort-descending"));
+            item->setIcon(koIcon("view-sort-descending"));
             item->setText(i18n("Descending"));
             item->setData(Qt::UserRole, QVariant::fromValue(Qt::DescendingOrder));
         } else {
-            item->setIcon(KIcon("view-sort-ascending"));
+            item->setIcon(koIcon("view-sort-ascending"));
             item->setText(i18n("Ascending"));
             item->setData(Qt::UserRole, QVariant::fromValue(Qt::AscendingOrder));
         }
@@ -615,7 +617,7 @@ void SortDialog::addCriterion()
     d->mainWidget.m_tableWidget->insertRow(row);
     item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
     d->mainWidget.m_tableWidget->setItem(row, 0, item);
-    item = new QTableWidgetItem(KIcon("view-sort-ascending"), i18n("Ascending"));
+    item = new QTableWidgetItem(koIcon("view-sort-ascending"), i18n("Ascending"));
     item->setData(Qt::UserRole, Qt::AscendingOrder);
     item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable);
     d->mainWidget.m_tableWidget->setItem(row, 1, item);

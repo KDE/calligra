@@ -29,6 +29,8 @@
 #include <kfiledialog.h>
 #include <kstatusbar.h>
 
+#include <KoIcon.h>
+
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoMainWindow.h>
@@ -41,6 +43,7 @@
 #include <KoZoomController.h>
 
 #include "KPrDocument.h"
+#include "KPrPart.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
@@ -64,8 +67,9 @@
 
 #include "KPrPdfPrintJob.h"
 
-KPrView::KPrView( KPrDocument *document, QWidget *parent )
-  : KoPAView( document, parent )
+KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
+  : KoPAView(part, document, parent)
+  , m_part(part)
   , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
@@ -90,9 +94,17 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     actionCollection()->action("page_deletepage")->setWhatsThis(i18n("Delete the current slide"));
     actionCollection()->action("format_masterpage")->setText(i18n("Master Slide..."));
     actionCollection()->action("page_previous")->setText(i18n("Previous Slide"));
+    actionCollection()->action("page_previous")->setToolTip(i18n("Go to previous slide"));
+    actionCollection()->action("page_previous")->setWhatsThis(i18n("Go to previous slide"));
     actionCollection()->action("page_next")->setText(i18n("Next Slide"));
+    actionCollection()->action("page_next")->setToolTip(i18n("Go to next slide"));
+    actionCollection()->action("page_next")->setWhatsThis(i18n("Go to next slide"));
     actionCollection()->action("page_first")->setText(i18n("First Slide"));
+    actionCollection()->action("page_first")->setToolTip(i18n("Go to first slide"));
+    actionCollection()->action("page_first")->setWhatsThis(i18n("Go to first slide"));
     actionCollection()->action("page_last")->setText(i18n("Last Slide"));
+    actionCollection()->action("page_last")->setToolTip(i18n("Go to last slide"));
+    actionCollection()->action("page_last")->setWhatsThis(i18n("Go to last slide"));
     actionCollection()->action("configure")->setText(i18n("Configure Stage..."));
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
@@ -201,7 +213,7 @@ void KPrView::initGUI()
 void KPrView::initActions()
 {
     setComponentData(KPrFactory::componentData());
-    if ( !kopaDocument()->isReadWrite() )
+    if (!m_part->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else
        setXMLFile( "stage.rc" );
@@ -232,8 +244,8 @@ void KPrView::initActions()
 
     if ( QAction *action = actionCollection()->action("view_masterpages") )
         action->setShortcut(QKeySequence("CTRL+F8"));
-    
-    m_actionInsertPictures = new KAction(i18n("Insert Pictures..."), this);
+
+    m_actionInsertPictures = new KAction(i18n("Insert Pictures as Slides..."), this);
     actionCollection()->addAction("insert_pictures", m_actionInsertPictures);
     connect(m_actionInsertPictures, SIGNAL(activated()), this, SLOT(insertPictures()));
 
@@ -244,23 +256,23 @@ void KPrView::initActions()
 
     m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
-    connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
+    connect( m_actionCreateAnimation, SIGNAL(activated()), this, SLOT(createAnimation()) );
 
     m_actionEditCustomSlideShows = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
     actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
-    connect( m_actionEditCustomSlideShows, SIGNAL( activated() ), this, SLOT( editCustomSlideShows() ) );
+    connect( m_actionEditCustomSlideShows, SIGNAL(activated()), this, SLOT(editCustomSlideShows()) );
 
-    m_actionStartPresentation = new KActionMenu( KIcon("view-presentation"), i18n( "Start Presentation" ), this );
+    m_actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
-    connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+    connect( m_actionStartPresentation, SIGNAL(activated()), this, SLOT(startPresentation()) );
     KAction* action = new KAction( i18n( "From Current Slide" ), this );
     action->setShortcut(QKeySequence("Shift+F5"));
     m_actionStartPresentation->addAction( action );
-    connect( action, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+    connect( action, SIGNAL(activated()), this, SLOT(startPresentation()) );
     action = new KAction( i18n( "From First Slide" ), this );
     action->setShortcut(QKeySequence("F5"));
     m_actionStartPresentation->addAction( action );
-    connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
+    connect( action, SIGNAL(activated()), this, SLOT(startPresentationFromBeginning()) );
 
     KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
     showStatusbarAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
@@ -275,31 +287,31 @@ void KPrView::initActions()
 
     action = new KAction( i18n( "Configure Slide Show..." ), this );
     actionCollection()->addAction( "slideshow_configure", action );
-    connect( action, SIGNAL( activated() ), this, SLOT( configureSlideShow() ) );
+    connect( action, SIGNAL(activated()), this, SLOT(configureSlideShow()) );
 
     action = new KAction( i18n( "Configure Presenter View..." ), this );
     actionCollection()->addAction( "slideshow_presenterview", action );
-    connect( action, SIGNAL( activated() ), this, SLOT( configurePresenterView() ) );
+    connect( action, SIGNAL(activated()), this, SLOT(configurePresenterView()) );
 
     m_actionDrawOnPresentation = new KAction( i18n( "Draw on the presentation..." ), this );
     m_actionDrawOnPresentation->setShortcut(Qt::Key_P);
     m_actionDrawOnPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "draw_on_presentation", m_actionDrawOnPresentation );
-    connect( m_actionDrawOnPresentation, SIGNAL( activated() ), this, SLOT( drawOnPresentation() ) );
+    connect( m_actionDrawOnPresentation, SIGNAL(activated()), this, SLOT(drawOnPresentation()) );
     m_actionDrawOnPresentation->setEnabled(false);
 
     m_actionHighlightPresentation = new KAction( i18n( "Highlight the presentation..." ), this );
     m_actionHighlightPresentation->setShortcut(Qt::Key_H);
     m_actionHighlightPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "highlight_presentation", m_actionHighlightPresentation );
-    connect( m_actionHighlightPresentation, SIGNAL( activated() ), this, SLOT( highlightPresentation() ) );
+    connect( m_actionHighlightPresentation, SIGNAL(activated()), this, SLOT(highlightPresentation()) );
     m_actionHighlightPresentation->setEnabled(false);
 
     m_actionBlackPresentation = new KAction( i18n( "Blackscreen on the presentation..." ), this );
     m_actionBlackPresentation->setShortcut(Qt::Key_B);
     m_actionBlackPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "black_presentation", m_actionBlackPresentation );
-    connect( m_actionBlackPresentation, SIGNAL( activated() ), this, SLOT( blackPresentation() ) );
+    connect( m_actionBlackPresentation, SIGNAL(activated()), this, SLOT(blackPresentation()) );
     m_actionBlackPresentation->setEnabled(false);
 
     connect(tabBar(), SIGNAL(currentChanged(int)), this, SLOT(changeViewByIndex(int)));
@@ -517,6 +529,13 @@ void KPrView::restoreZoomConfig()
 {
     zoomController()->setZoom(zoomMode(), zoom()/100.);
     centerPage();
+}
+
+void KPrView::replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage)
+{
+    if (page == activePage() ) {
+        viewMode()->updateActivePage(newActivePage);
+    }
 }
 
 #include "KPrView.moc"

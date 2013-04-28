@@ -20,6 +20,8 @@
 #include "reportexportpanel.h"
 #include "report.h"
 
+#include <KoIcon.h>
+
 #include <kdebug.h>
 
 namespace KPlato
@@ -29,10 +31,11 @@ ReportExportPanel::ReportExportPanel( QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
-    ui_format->insertItem ( 0,  KIcon( "application-vnd.oasis.opendocument.text" ), i18n( "Open document text" ), (int)Reports::EF_Odt );
-    ui_format->insertItem ( 0,  KIcon( "application-vnd.oasis.opendocument.spreadsheet" ), i18n( "Open document spreadsheet" ), (int)Reports::EF_Ods );
-    ui_format->insertItem ( 1, KIcon( "text-html" ), i18n( "HTML" ), (int)Reports::EF_Html );
-    ui_format->insertItem ( 2, KIcon( "application-xhtml+xml" ), i18n( "XHTML" ), (int)Reports::EF_XHtml );
+    ui_format->insertItem (0, koIcon("application-vnd.oasis.opendocument.text"), i18n("Open document text (table)"), (int)Reports::EF_OdtTable);
+    ui_format->insertItem (1, koIcon("application-vnd.oasis.opendocument.text"), i18n("Open document text (frames)"), (int)Reports::EF_OdtFrames);
+    ui_format->insertItem (2, koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Open document spreadsheet"), (int)Reports::EF_Ods);
+    ui_format->insertItem (3, koIcon("text-html"), i18n("HTML"), (int)Reports::EF_Html);
+    ui_format->insertItem (4, koIcon("application-xhtml+xml"), i18n("XHTML"), (int)Reports::EF_XHtml);
 }
 
 int ReportExportPanel::selectedFormat() const

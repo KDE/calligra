@@ -20,6 +20,8 @@
 
 #include "kptproject.h"
 
+#include <KoIcon.h>
+
 #include <QTextCodec>
 #include <QApplication>
 #include <QDir>
@@ -30,8 +32,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <KUrl>
-#include <KHTMLPart>
+#include <kurl.h>
+#include <khtml_part.h>
 
 KPlatoAboutPage::KPlatoAboutPage()
     : m_project( 0 )
@@ -49,7 +51,9 @@ QString KPlatoAboutPage::main()
     if ( res.isEmpty() ) {
         return res;
     }
-    QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+    const char *const continue_icon_id =
+        (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
+    const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
     QString icon_path = "<img width='16' height='16' src=\"" + continue_icon_path + "\">";
 
@@ -82,7 +86,9 @@ QString KPlatoAboutPage::intro()
     if ( res.isEmpty() ) {
         return res;
     }
-    QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+    const char *const continue_icon_id =
+        (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
+    const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
     res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -113,20 +119,22 @@ QString KPlatoAboutPage::tips()
 
     KIconLoader *iconloader = KIconLoader::global();
     QString viewmag_icon_path =
-	    iconloader->iconPath("zoom-in", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("zoom-in"), KIconLoader::Small);
     QString history_icon_path =
-	    iconloader->iconPath("view-history", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("view-history"), KIconLoader::Small);
     QString openterm_icon_path =
-	    iconloader->iconPath("utilities-terminal", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("utilities-terminal"), KIconLoader::Small);
     QString locationbar_erase_rtl_icon_path =
-	    iconloader->iconPath("edit-clear-locationbar-rtl", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("edit-clear-locationbar-rtl"), KIconLoader::Small);
     QString locationbar_erase_icon_path =
-	    iconloader->iconPath("edit-clear-locationbar-ltr", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("edit-clear-locationbar-ltr"), KIconLoader::Small);
     QString window_fullscreen_icon_path =
-	    iconloader->iconPath("view-fullscreen", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("view-fullscreen"), KIconLoader::Small);
     QString view_left_right_icon_path =
-	    iconloader->iconPath("view-split-left-right", KIconLoader::Small );
-    QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("view-split-left-right"), KIconLoader::Small);
+    const char *const continue_icon_id =
+        (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
+    const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
     res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -155,8 +163,8 @@ QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, c
         return res;
     }
 
-    KIconLoader *iconloader = KIconLoader::global();
-    QString next_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+    const char *const nextIconName = QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next");
+    const QString next_icon_path = KIconLoader::global()->iconPath(nextIconName, KIconLoader::Small );
 
     res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -192,7 +200,7 @@ QString KPlatoAboutPage::tutorial1()
             "<li>Create a schedule by selecting <em>Add Schedule</em> in the toolbar.</li>"
             "<li>Calculate the schedule by selecting <em>Calculate</em> in the toolbar.</li>"
             "</ul>"
-            "The task should now have been scheduled to start %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>."
+            "The task should now have been scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>."
         , KGlobal::locale()->formatDateTime( m_project->startTime(), KLocale::FancyLongDate ) ),
         "tutorial2",
         i18n( "Next: Resource allocation" )
@@ -216,7 +224,7 @@ QString KPlatoAboutPage::tutorial2()
             "</ul>"
             "Now you need to schedule the project again with the new allocation:"
             "<br/>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."
-            "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>.<p>"
+            "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>.<p>"
         , KGlobal::locale()->formatDateTime( dt, KLocale::FancyLongDate ) ),
         "main",
         i18n( "Next: Introduction" )

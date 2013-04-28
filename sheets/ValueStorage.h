@@ -40,7 +40,7 @@ public:
             : PointStorage<Value>() {
     }
 
-    ValueStorage(const PointStorage<Value>& o)
+    ValueStorage(const PointStorage<Value>& o)  //krazy:exclude=explicit
             : PointStorage<Value>(o) {
     }
 

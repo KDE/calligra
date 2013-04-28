@@ -175,7 +175,7 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
     alt_act->setObjectName(altName);
     alt_act->setText(alternativeText);
     alt_act->setParent(ka->parent());
-    alt_act->setIcon(KIcon(ka->icon()));
+    alt_act->setIcon(ka->icon());
     alt_act->setShortcut(ka->shortcut());
 
     QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(trigger()));
@@ -202,7 +202,7 @@ void KexiActionProxy::plugSharedActionToExternalGUI(const QString& action_name, 
 
 void KexiActionProxy::plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client)
 {
-    foreach(QString n, action_names) {
+    foreach(const QString &n, action_names) {
         plugSharedActionToExternalGUI(n, client);
     }
 }

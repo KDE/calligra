@@ -42,7 +42,7 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QGridLayout>
 #include <QPainter>
@@ -468,7 +468,7 @@ void KarbonGradientTool::deactivate()
     canvas()->snapGuide()->reset();
 }
 
-void KarbonGradientTool::resourceChanged(int key, const QVariant & res)
+void KarbonGradientTool::documentResourceChanged(int key, const QVariant & res)
 {
     switch (key) {
     case KoDocumentResourceManager::HandleRadius:

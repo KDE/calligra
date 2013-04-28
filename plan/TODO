@@ -1,4 +1,4 @@
-Some usefull stuff:              
+Some useful stuff:              
 You can search the source code for FIXME and TODO entries with:
 find . -name "*.c*" -o -name "*.h" | xargs grep -E "(###|TODO|FIXME|todo)"
 

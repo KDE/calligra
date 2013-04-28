@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=compilh
+Name[bs]=compilh
 Name[ca]=compilh
 Name[ca@valencia]=compilh
+Name[da]=compilh
+Name[de]=Indirekte Steuerung über hydraulischen Treiber
 Name[el]=compilh
 Name[es]=compilh
 Name[et]=Hüdrauliline juhtimine
+Name[fr]=compilh
+Name[gl]=Orde indirecta hidráulica
 Name[it]=compilh
 Name[kk]=compilh
 Name[nb]=hydr. indirekte kommando

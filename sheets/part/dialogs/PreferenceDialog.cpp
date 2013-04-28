@@ -28,6 +28,8 @@
 // Local
 #include "PreferenceDialog.h"
 
+#include <KoIcon.h>
+
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -36,7 +38,6 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
@@ -44,11 +45,11 @@
 #include <KoConfigAuthorPage.h>
 
 #include <kcolorbutton.h>
-#include <KPluginInfo>
-#include <KPluginSelector>
-#include <KServiceTypeTrader>
+#include <kplugininfo.h>
+#include <kpluginselector.h>
+#include <kservicetypetrader.h>
 #include <ksharedconfig.h>
-#include <KStandardDirs>
+#include <kstandarddirs.h>
 #include <sonnet/configwidget.h>
 
 #include "ApplicationSettings.h"
@@ -318,7 +319,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     widget = new QWidget(this);
     d->interfaceOptions.setupUi(widget);
     page = new KPageWidgetItem(widget, i18n("Interface"));
-    page->setIcon(KIcon("preferences-desktop-theme"));
+    page->setIcon(koIcon("preferences-desktop-theme"));
     addPage(page);
     d->page2 = page;
 
@@ -351,7 +352,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     widget = new QWidget(this);
     d->fileOptions.setupUi(widget);
     page = new KPageWidgetItem(widget, i18n("Open/Save"));
-    page->setIcon(KIcon("document-save"));
+    page->setIcon(koIcon("document-save"));
     addPage(page);
     d->page3 = page;
 
@@ -359,8 +360,8 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     // Plugin Options Widget
     d->pluginSelector = new KPluginSelector(this);
-    const QString serviceType = QLatin1String("KSpread/Plugin");
-    const QString query = QLatin1String("([X-KSpread-InterfaceVersion] == 0)");
+    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
+    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0)");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
     d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
@@ -369,7 +370,7 @@ PreferenceDialog::PreferenceDialog(View* view)
                                   i18n("Tools"), "Tool");
     d->pluginSelector->load();
     page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
-    page->setIcon(KIcon("preferences-plugin"));
+    page->setIcon(koIcon("preferences-plugin"));
     addPage(page);
     d->pluginPage = page;
 
@@ -377,7 +378,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
     d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
-    page->setIcon(KIcon("tools-check-spelling"));
+    page->setIcon(koIcon("tools-check-spelling"));
     page->setHeader(i18n("Spell Checker Behavior"));
     addPage(page);
     d->page4 = page;
@@ -386,7 +387,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
     page = addPage(d->authorPage, i18nc("@title:tab Author page", "Author"));
     page->setHeader(i18n("Author"));
-    page->setIcon(KIcon("user-identity"));
+    page->setIcon(koIcon("user-identity"));
 }
 
 PreferenceDialog::~PreferenceDialog()
@@ -472,7 +473,7 @@ listType += i18n("Semi-Automatic");
 typeCompletion->insertItems(0, listType);
 typeCompletion->setCurrentIndex(0);
 comboChanged = false;
-connect(typeCompletion, SIGNAL(activated(const QString &)), this, SLOT(slotTextComboChanged(const QString &)));
+connect(typeCompletion, SIGNAL(activated(QString)), this, SLOT(slotTextComboChanged(QString)));
 #endif
 
 #include "PreferenceDialog.moc"

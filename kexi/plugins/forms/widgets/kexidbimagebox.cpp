@@ -42,8 +42,9 @@
 #include <kstdaccel.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <KIconEffect>
+#include <kiconeffect.h>
 
+#include <KoIcon.h>
 #include <widget/utils/kexidropdownbutton.h>
 #include <kexiutils/utils.h>
 #include <db/field.h>
@@ -117,12 +118,12 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 
     m_paletteBackgroundColorChanged = false; //set this here, not before
 
-    connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)),
-            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
-    connect(m_contextMenu, SIGNAL(insertFromFileRequested(const KUrl&)),
-            this, SLOT(handleInsertFromFileAction(const KUrl&)));
-    connect(m_contextMenu, SIGNAL(saveAsRequested(const QString&)),
-            this, SLOT(handleSaveAsAction(const QString&)));
+    connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
+            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
+    connect(m_contextMenu, SIGNAL(insertFromFileRequested(KUrl)),
+            this, SLOT(handleInsertFromFileAction(KUrl)));
+    connect(m_contextMenu, SIGNAL(saveAsRequested(QString)),
+            this, SLOT(handleSaveAsAction(QString)));
     connect(m_contextMenu, SIGNAL(cutRequested()),
             this, SLOT(handleCutAction()));
     connect(m_contextMenu, SIGNAL(copyRequested()),
@@ -174,7 +175,7 @@ void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool 
     if (removeOld)
         m_value = add.toByteArray();
     else //do not add "m_origValue" to "add" as this is QByteArray
-        m_value = m_origValue.toByteArray();
+        m_value = KexiDataItemInterface::originalValue().toByteArray();
     bool ok = !m_value.isEmpty();
     if (ok) {
         ///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );
@@ -809,7 +810,7 @@ void KexiDBImageBox::updatePixmap()
     if (!KexiDBImageBox_static->pixmap) {
         const QString fname(KStandardDirs::locate("data", QLatin1String("kexi/pics/imagebox.png")));
         QPixmap pm( KIconLoader::global()->loadMimeTypeIcon(
-            "image-x-generic", KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
+            koIconNameCStr("image-x-generic"), KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
         if (!pm.isNull()) {
             KIconEffect::semiTransparent(pm);
             KIconEffect::semiTransparent(pm);

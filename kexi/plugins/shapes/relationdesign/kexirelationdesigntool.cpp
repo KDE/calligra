@@ -29,15 +29,17 @@
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
+#include <KoIcon.h>
+
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QLabel>
 #include <QPainter>
-#include <KUrl>
-#include <KFileDialog>
+#include <kurl.h>
+#include <kfiledialog.h>
 #include <KIO/Job>
 #include <kdebug.h>
-#include <KComboBox>
+#include <kcombobox.h>
 
 KexiRelationDesignTool::KexiRelationDesignTool(KoCanvasBase *canvas) : KoToolBase(canvas)
 {
@@ -95,11 +97,11 @@ QWidget *KexiRelationDesignTool::createOptionWidget()
     m_relationCombo = new KComboBox();
 
     fileButton = new QToolButton(optionWidget);
-    fileButton->setIcon(SmallIcon("document-open"));
+    fileButton->setIcon(koIcon("document-open"));
     fileButton->setToolTip(i18n("Open Database"));
 
     connect(fileButton, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
-    connect(m_relationCombo, SIGNAL(activated(const QString &)), this, SLOT(relationSelected(const QString &)));
+    connect(m_relationCombo, SIGNAL(activated(QString)), this, SLOT(relationSelected(QString)));
 
     layout->addWidget(fileButton);
     layout->addWidget(m_fileLabel);
@@ -120,7 +122,7 @@ void KexiRelationDesignTool::changeUrlPressed()
 
     if (!m_dbDialog) {
         m_dbDialog = new KexiStartupDialog(KexiStartupDialog::OpenExisting, 0, kcs, kps);
-        //connect( m_dbDialog, SIGNAL( okClicked() ), this, SLOT( openDatabase() ) );
+        //connect( m_dbDialog, SIGNAL(okClicked()), this, SLOT(openDatabase()) );
     }
 
     int res = m_dbDialog->exec();

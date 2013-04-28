@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=Man/Woman
 Name[bg]=Мъж/Жена
+Name[bs]=Muškarac/Žena
 Name[ca]=Home/Dona
 Name[ca@valencia]=Home/Dona
+Name[da]=Mand/kvinde
 Name[de]=Mann/Frau
 Name[el]=Άνδρας/Γυναίκα
 Name[es]=Hombre/Mujer
 Name[et]=Mees/naine
+Name[fr]=Man/Woman
+Name[gl]=Home e muller
 Name[hu]=Férfi/Nő
 Name[it]=Uomo/Donna
 Name[kk]=Еркек/Әйел
@@ -18,6 +22,7 @@ Name[pt]=Homem/Mulher
 Name[pt_BR]=Homem/Mulher
 Name[ru]=Мужчина/Женщина
 Name[sk]=Muž/žena
+Name[sl]=Moški/ženska
 Name[sv]=Man/kvinna
 Name[uk]=Чоловік/Жінка
 Name[x-test]=xxMan/Womanxx

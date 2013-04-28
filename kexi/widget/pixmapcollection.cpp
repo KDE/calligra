@@ -31,13 +31,14 @@
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kcombobox.h>
-#include <kicondialog.h>
 #include <klineedit.h>
 #include <kicontheme.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+
+#include <KoIcon.h>
 
 #include "pixmapcollection.h"
 
@@ -177,11 +178,11 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
 
     // Icon chooser button
     m_button = new KIconButton(frame);
-    m_button->setIcon("kexi");
+    m_button->setIcon(koIconName("calligrakexi"));
     m_button->setIconSize(KIconLoader::SizeMedium);
     l->addWidget(m_button, 0, 2, 2, 1);
     connect(m_button, SIGNAL(iconChanged(QString)), this, SLOT(updateIconName(QString)));
-    connect(m_nameInput, SIGNAL(textChanged(const QString &)), this, SLOT(setIcon(const QString &)));
+    connect(m_nameInput, SIGNAL(textChanged(QString)), this, SLOT(setIcon(QString)));
 }
 
 void
@@ -237,21 +238,21 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(l);
     QToolButton *newItemPath = new QToolButton(frame);
-    newItemPath->setIconSet(KIcon("document-open"));
+    newItemPath->setIconSet(koIcon("document-open"));
     newItemPath->setTextLabel(i18n("&Add File"), true);
     vlayout->addWidget(newItemPath);
     m_buttons.insert(BNewItemPath, newItemPath);
     connect(newItemPath, SIGNAL(clicked()), this, SLOT(newItemByPath()));
 
     QToolButton *newItemName = new QToolButton(frame);
-    newItemName->setIconSet(KIcon("list-add"));
+    newItemName->setIconSet(koIcon("list-add"));
     newItemName->setTextLabel(i18n("&Add an Icon"), true);
     vlayout->addWidget(newItemName);
     m_buttons.insert(BNewItemName, newItemName);
     connect(newItemName, SIGNAL(clicked()), this, SLOT(newItemByName()));
 
     QToolButton *delItem = new QToolButton(frame);
-    delItem->setIconSet(KIcon("list-remove"));
+    delItem->setIconSet(koIcon("list-remove"));
     delItem->setTextLabel(i18n("&Remove Selected Item"), true);
     vlayout->addWidget(delItem);
     m_buttons.insert(BDelItem, delItem);
@@ -265,8 +266,8 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
     m_iconView->setAutoArrange(true);
     m_iconView->setMode(K3IconView::Select);
     l->addWidget(m_iconView);
-    connect(m_iconView, SIGNAL(contextMenuRequested(Q3IconViewItem*, const QPoint&)), this, SLOT(displayMenu(Q3IconViewItem*, const QPoint&)));
-    connect(m_iconView, SIGNAL(itemRenamed(Q3IconViewItem*, const QString &)), this, SLOT(renameCollectionItem(Q3IconViewItem*, const QString&)));
+    connect(m_iconView, SIGNAL(contextMenuRequested(Q3IconViewItem*,QPoint)), this, SLOT(displayMenu(Q3IconViewItem*,QPoint)));
+    connect(m_iconView, SIGNAL(itemRenamed(Q3IconViewItem*,QString)), this, SLOT(renameCollectionItem(Q3IconViewItem*,QString)));
 
     PixmapMap::ConstIterator it;
     PixmapMap::ConstIterator endIt = collection->m_pixmaps.end();
@@ -357,8 +358,8 @@ PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 {
     if (!it) return;
     KMenu *menu = new KMenu();
-    menu->insertItem(KIcon("edit-rename"), i18n("Rename Item"), this, SLOT(renameItem()));
-    menu->insertItem(KIcon("list-remove"), i18n("Remove Item"), this, SLOT(removeItem()));
+    menu->insertItem(koIcon("edit-rename"), i18n("Rename Item"), this, SLOT(renameItem()));
+    menu->insertItem(koIcon("list-remove"), i18n("Remove Item"), this, SLOT(removeItem()));
     menu->exec(p);
 }
 

@@ -22,7 +22,7 @@
 #define KARBONCONFIGUREDIALOG_H
 
 #include <KoUnit.h>
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 class KarbonView;
 class KarbonConfigInterfacePage;
@@ -36,7 +36,7 @@ class KarbonConfigureDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    KarbonConfigureDialog(KarbonView* parent);
+    explicit KarbonConfigureDialog(KarbonView *parent);
 
 public slots:
     void slotApply();

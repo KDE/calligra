@@ -45,7 +45,7 @@ class KPLATOUI_EXPORT GanttItemDelegate : public KDGantt::ItemDelegate
 {
     Q_OBJECT
 public:
-    GanttItemDelegate( QObject *parent = 0 );
+    explicit GanttItemDelegate(QObject *parent = 0);
 
     virtual QString toolTip( const QModelIndex& idx ) const;
     virtual KDGantt::Span itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
@@ -79,10 +79,12 @@ public:
 protected:
     void paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx, int typ );
 
-private:
-    Q_DISABLE_COPY(GanttItemDelegate)
+protected:
     QBrush m_criticalBrush;
     QBrush m_schedulingErrorBrush;
+
+private:
+    Q_DISABLE_COPY(GanttItemDelegate)
 
 };
 
@@ -90,7 +92,7 @@ class KPLATOUI_EXPORT ResourceGanttItemDelegate : public KDGantt::ItemDelegate
 {
     Q_OBJECT
 public:
-    ResourceGanttItemDelegate( QObject *parent = 0 );
+    explicit ResourceGanttItemDelegate(QObject *parent = 0);
 
     QVariant data( const QModelIndex& idx, int column, int role = Qt::DisplayRole ) const;
 

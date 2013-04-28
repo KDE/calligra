@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Concatenated Payload
-Name[ca]=Càrrega útil concatenada
-Name[ca@valencia]=Càrrega útil concatenada
+Name[bs]=Ulančana nosivost
+Name[ca]=Contingut concatenat
+Name[ca@valencia]=Contingut concatenat
+Name[da]=Concatenated Payload
 Name[el]=Συγκέντρωση φόρτου
 Name[es]=Carga útil concatenada
 Name[et]=Ühendatud koormus
+Name[fr]=Concatenated Payload
+Name[gl]=Carga explosiva concatenada
 Name[it]=Dati concatenati
 Name[kk]=Қосылған жүктемесі
 Name[nb]=Sammensatt nyttelast
@@ -17,4 +21,5 @@ Name[sk]=Concatenated Payload
 Name[sv]=Sammansatt nyttolast
 Name[uk]=З'єднане навантаження
 Name[x-test]=xxConcatenated Payloadxx
+Name[zh_CN]=连接有效载荷
 Name[zh_TW]=串接負載

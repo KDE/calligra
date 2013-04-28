@@ -25,7 +25,6 @@
 #include <koproperty/Property.h>
 
 #include <klocale.h>
-#include <kiconloader.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -94,11 +93,11 @@ void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
         d->infoLabel->show();
 
     if (d->infoLabel->objectClassName() == className
-            && d->infoLabel->objectClassIcon() == iconName
+            && d->infoLabel->objectClassIconName() == iconName
             && d->infoLabel->objectName() == objectName)
         return;
 
-    d->infoLabel->setObjectClassIcon(iconName);
+    d->infoLabel->setObjectClassIconName(iconName);
     d->infoLabel->setObjectClassName(className);
     d->infoLabel->setObjectName(objectName);
 }

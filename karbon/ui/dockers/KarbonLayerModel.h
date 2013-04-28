@@ -34,7 +34,7 @@ class KarbonLayerModel : public KoDocumentSectionModel
 
 public:
     /// Constructs a new layer model using the specified documents data
-    KarbonLayerModel(QObject * parent = 0);
+    explicit KarbonLayerModel(QObject *parent = 0);
 
     /// Sets a new document to show contents of
     void setDocument(KarbonDocument * newDocument);

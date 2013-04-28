@@ -77,7 +77,7 @@ void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
         m_lineedit->setCursorPosition(add.length());
         return;
     }
-    setValueInInternalEditor(m_origValue);
+    setValueInInternalEditor(KexiDataItemInterface::originalValue());
     m_lineedit->setCursorPosition(0); //ok?
 }
 
@@ -126,6 +126,12 @@ bool KexiTimeTableEdit::valueIsValid()
     if (m_formatter.isEmpty(m_lineedit->text()))   //empty time is valid
         return true;
     return m_formatter.fromString(m_lineedit->text()).isValid();
+}
+
+bool KexiTimeTableEdit::valueChanged()
+{
+    kDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << m_lineedit->text();
+    return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
 void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)

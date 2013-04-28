@@ -1,7 +1,7 @@
 [Desktop Entry]
-Version=1.0
 Type=Application
 Name=Calligra Active
+Name[bs]=Calligra aktivno
 Name[ca]=Calligra Actiu
 Name[ca@valencia]=Calligra Actiu
 Name[cs]=Calligra Active
@@ -10,28 +10,31 @@ Name[el]=Calligra Active
 Name[es]=Calligra Active
 Name[et]=Calligra Active
 Name[fi]=Calligra Active
+Name[fr]=Calligra en cours
+Name[gl]=Calligra Active
 Name[hu]=Calligra Active
 Name[it]=Calligra Active
 Name[kk]=Calligra Active
+Name[mr]=कॅलिग्रा एक्टिव्ह
+Name[ms]=Calligra Aktif
 Name[nb]=Calligra Active
 Name[nl]=Calligra is actief
-Name[pl]=Calligra Aktywna
+Name[pl]=Calligra Active
 Name[pt]=Calligra Active
 Name[pt_BR]=Calligra Active
 Name[ru]=Calligra Active
 Name[sk]=Calligra Active
 Name[sl]=Calligra Active
 Name[sv]=Calligra Active
+Name[tr]=Calligra Active
 Name[uk]=Портативна Calligra
 Name[x-test]=xxCalligra Activexx
-Name[zh_CN]=Calligra Active
+Name[zh_CN]=Calligra 活动
 Name[zh_TW]=Calligra Active
-Exec=/usr/bin/calligraactive
+Exec=calligraactive
 Icon=calligramobile
-X-Window-Icon=calligramobile
-X-Window-Icon-Dimmed=calligramobile
-# This line is required for the Maemo file manager to open FreOffice.
-#X-Osso-Service=com.nokia.CalligraMobile
-#X-Osso-Type=application/x-executable
-MimeType=application/vnd.oasis.opendocument.text;application/msword;text/plain;application/x-mswrite;application/vnd.oasis.opendocument.presentation;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.ms-word;
+MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;
+#This is to make Active be picked over desktop apps if you've installed Calligra Active
+#The right solution would be to make it possible to build libs without building the apps
+InitialPreference=4
 Categories=Qt;KDE;Office;

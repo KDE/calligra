@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=Gas Bottle
 Name[bg]=Газова бутилка
+Name[bs]=Plinska boca
 Name[ca]=Ampolla de gas
 Name[ca@valencia]=Ampolla de gas
+Name[da]=Gasflaske
 Name[de]=Gasflasche
 Name[el]=Μπουκάλα αερίου
 Name[es]=Botella de gas
 Name[et]=Gaasiballoon
+Name[fr]=Bouteille de gaz
+Name[gl]=Botella de gas
 Name[hu]=Gázpalack
 Name[it]=Bombola di gas
 Name[kk]=Газ баллоны
@@ -18,6 +22,7 @@ Name[pt]=Botija Gás
 Name[pt_BR]=Garrafa de gás
 Name[ru]=Газовый баллон
 Name[sk]=Plynová nádoba
+Name[sl]=Jeklenka za plin
 Name[sv]=Gastub
 Name[uk]=Газовий балон
 Name[x-test]=xxGas Bottlexx

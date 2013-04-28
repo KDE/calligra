@@ -54,7 +54,6 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     setMainWidget(page);
     QVBoxLayout *lay1 = new QVBoxLayout(page);
     lay1->setMargin(0);
-    lay1->setSpacing(spacingHint());
 
     QLabel *label = new QLabel(i18n("Select hidden sheets to show:"), page);
     lay1->addWidget(label);
@@ -69,7 +68,7 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     m_listWidget->addItems(tabsList);
     if (!m_listWidget->count())
         enableButtonOk(false);
-    connect(m_listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+    connect(m_listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
             this, SLOT(accept()));
     resize(200, 150);
     setFocus();

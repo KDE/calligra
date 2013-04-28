@@ -853,6 +853,16 @@ Validity Checking</link> for more details.
 </para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Pivot...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open the Pivot Table configuration dialog</action>. See
+<link linkend="pivottable">Pivot Table</link> for details.
+</para></listitem>
+</varlistentry>
+
 </variablelist></para>
 </sect1>
 
@@ -937,14 +947,21 @@ is protected.</action>
 </para></listitem>
 </varlistentry>
 -->
-  <!-- FIXME missing Execute Script File -->
+  
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Execute Script File...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Execute the chosen external script in &sheets;. &sheets; supports scripting in JavaScript, Python and Ruby. Default examples of the scripts can be found in the <menuchoice><guimenu>Tools</guimenu><guisubmenu>Scripts</guisubmenu></menuchoice> submenu.</para></listitem>
+</varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
 <guisubmenu>Scripts</guisubmenu>
 </menuchoice></term>
-<listitem><para>Here you can execute the script <guilabel>Export to HTML File</guilabel> or start the <guilabel>Script Editor</guilabel>.
-</para></listitem>
+<listitem><para>Here you can execute the script to export or import data in various formats, save your &sheets; log into file, use <ulink url="https://live.gnome.org/Orca">Orca speech</ulink> for accessibility, debug Python and Ruby scripts or add functions to display stock or weather condition values. You can even use some <ulink url="http://www.r-project.org/">R functions</ulink> (<ulink url="http://rpy.sourceforge.net/rpy.html">RPy module</ulink> should be installed).</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -956,7 +973,15 @@ is protected.</action>
 </para></listitem>
 </varlistentry>
 
-</variablelist></para>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Function Optimizer...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens</action> the <guilabel>Function Optimizer</guilabel> dialog where you can choose an objective function cell, optimization target (<guilabel>Maximize</guilabel>, <guilabel>Minimize</guilabel> or enter the <guilabel>Value</guilabel>) and a set of decision parameter cells.
+</para></listitem>
+</varlistentry>
+  </variablelist></para>
 </sect1>
 
 <sect1 id="settingsmenu">
@@ -1033,14 +1058,57 @@ information.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure &sheets;...</guimenuitem>
+<guimenuitem>Configure Toolbars...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>General &sheets; configuration.</action> See the 
-section on <link linkend="configdialog">&sheets; configuration</link> for 
-more details.
+<listitem><para><action>Configure the toolbars.</action> The section on
+<link linkend="configtoolbars">configuring toolbars</link> has more
+information.
 </para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Themes</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Choose the color theme for &sheets; window.</action> You can choose
+one of the predefined color schemes or select <guimenuitem>Configuration...</guimenuitem> to
+open <ulink url="help:/kcontrol/colors">&systemsettings; color selection module</ulink>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Active Author Profile</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure the author profile for the current document.</action> You can choose
+one of the profiles defined using <link linkend="configauthor">&sheets; configuration window</link>,
+<guimenuitem>Default Author Profile</guimenuitem> as defined by &systemsettings; data or
+blank <guimenuitem>Anonymous</guimenuitem> profile which can ensure your privacy.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Notifications...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure &sheets; notification system.</action> There are no actions
+that you can be notified in the current version of &sheets;.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure &sheets;...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>General &sheets; configuration.</action> See the
+section on <link linkend="configdialog">&sheets; configuration</link> for
+more details.
+</para></listitem>
+</varlistentry>
 
 </variablelist></para>
 </sect1>

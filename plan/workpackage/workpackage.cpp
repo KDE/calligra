@@ -44,10 +44,9 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kstandarddirs.h>
 #include <kurl.h>
 #include <kmimetype.h>
-#include <KDateTime>
+#include <kdatetime.h>
 
 #include <QDomDocument>
 
@@ -82,7 +81,8 @@ WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
         // should be only one manager
         project->setCurrentSchedule( m_project->scheduleManagers().first()->scheduleId() );
     }
-    connect( project, SIGNAL( changed() ), this, SLOT( projectChanged() ) );
+    connect( project, SIGNAL( projectChanged() ), this, SLOT( projectChanged() ) );
+
 }
 
 WorkPackage::~WorkPackage()
@@ -566,11 +566,20 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp, KoStore *store )
             }
         }
     }
+    const Project *fromProject = wp->project();
+    Project *toProject = m_project;
+    const ScheduleManager *fromSm = fromProject->scheduleManagers().value( 0 );
+    Q_ASSERT( fromSm );
+    ScheduleManager *toSm = toProject->scheduleManagers().value( 0 );
+    Q_ASSERT( toSm );
+    if ( fromSm->managerId() != toSm->managerId() || fromSm->scheduleId() != toSm->scheduleId() ) {
+        // rescheduled, update schedules
+        m->addCommand( new CopySchedulesCmd( *fromProject, *toProject ) );
+    }
     if ( m->isEmpty() ) {
         delete m;
     } else {
         part->addCommand( m );
-        setModified( true ); // FIXME needs to follow redo/undo
     }
 }
 
@@ -722,6 +731,93 @@ void ModifyPackageSettingsCmd::execute()
 void ModifyPackageSettingsCmd::unexecute()
 {
     m_wp->setSettings( m_oldvalue );
+}
+
+//---------------------
+CopySchedulesCmd::CopySchedulesCmd( const Project &fromProject, Project &toProject, const QString &name )
+    : NamedCommand( name ),
+      m_project( toProject )
+{
+    QDomDocument olddoc;
+    QDomElement e = olddoc.createElement( "old" );
+    olddoc.appendChild( e );
+    toProject.save( e );
+    m_olddoc = olddoc.toString();
+
+    QDomDocument newdoc;
+    e = newdoc.createElement( "new" );
+    newdoc.appendChild( e );
+    fromProject.save( e );
+    m_newdoc = newdoc.toString();
+}
+void CopySchedulesCmd::execute()
+{
+    load( m_newdoc );
+}
+void CopySchedulesCmd::unexecute()
+{
+    load( m_olddoc );
+}
+
+void CopySchedulesCmd::load( const QString &doc )
+{
+    clearSchedules();
+
+    KoXmlDocument d;
+    d.setContent( doc );
+    KoXmlElement proj = d.documentElement().namedItem( "project").toElement();
+    Q_ASSERT( ! proj.isNull() );
+    KoXmlElement task = proj.namedItem( "task").toElement();
+    Q_ASSERT( ! task.isNull() );
+    KoXmlElement ts = task.namedItem( "schedules").namedItem( "schedule").toElement();
+    Q_ASSERT( ! ts.isNull() );
+    KoXmlElement ps = proj.namedItem( "schedules").namedItem( "plan" ).toElement();
+    Q_ASSERT( ! ps.isNull() );
+
+    XMLLoaderObject status;
+    status.setProject( &m_project );
+    status.setVersion( PLAN_FILE_SYNTAX_VERSION );
+    // task first
+    NodeSchedule *ns = new NodeSchedule();
+    if ( ns->loadXML( ts, status ) ) {
+        kDebug(planworkDbg())<<ns->name()<<ns->type()<<ns->id();
+        ns->setNode( m_project.childNode( 0 ) );
+        m_project.childNode( 0 )->addSchedule( ns );
+    } else {
+        Q_ASSERT( false );
+        delete ns;
+    }
+    // schedule manager next (includes main schedule and resource schedule)
+    ScheduleManager *sm = new ScheduleManager( m_project );
+    if ( sm->loadXML( ps, status ) ) {
+        m_project.addScheduleManager( sm );
+    } else {
+        Q_ASSERT( false );
+        delete sm;
+    }
+    if ( sm ) {
+        m_project.setCurrentSchedule( sm->scheduleId() );
+    }
+    m_project.childNode( 0 )->changed();
+}
+
+void CopySchedulesCmd::clearSchedules()
+{
+    foreach ( Schedule *s, m_project.schedules() ) {
+        m_project.takeSchedule( s );
+    }
+    foreach ( Schedule *s, m_project.childNode( 0 )->schedules() ) {
+        foreach ( Appointment *a, s->appointments() ) {
+            if ( a->resource() && a->resource()->resource() ) {
+                a->resource()->resource()->takeSchedule( a->resource() );
+            }
+        }
+        m_project.childNode( 0 )->takeSchedule( s );
+    }
+    foreach ( ScheduleManager *sm,  m_project.scheduleManagers() ) {
+        m_project.takeScheduleManager( sm );
+        delete sm;
+    }
 }
 
 

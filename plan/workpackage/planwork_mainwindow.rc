@@ -1,3 +1,7 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kplatowork_mainwindow" version="1">
+<kpartgui name="planwork_mainwindow" version="2">
+  <MenuBar>
+    <Menu name="edit"><text>&amp;Edit</text>
+    </Menu>
+  </MenuBar>
 </kpartgui>

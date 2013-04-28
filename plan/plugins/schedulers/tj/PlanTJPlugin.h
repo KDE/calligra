@@ -52,6 +52,9 @@ public:
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
 
+    /// Return the scheduling granularity in milliseconds
+    ulong currentGranularity() const;
+
 signals:
     void sigCalculationStarted(Project*, ScheduleManager*);
     void sigCalculationFinished(Project*, ScheduleManager*);

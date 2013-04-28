@@ -22,15 +22,17 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
+#include "KarbonDocument.h"
 #include "KarbonConfigInterfacePage.h"
+
+#include <KoIcon.h>
 
 #include <KoConfigGridPage.h>
 #include <KoConfigDocumentPage.h>
 #include <KoConfigMiscPage.h>
 #include <KoConfigAuthorPage.h>
 
-#include <KLocale>
-#include <KIcon>
+#include <klocale.h>
 
 KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     : KPageDialog(parent)
@@ -43,29 +45,29 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     m_interfacePage = new KarbonConfigInterfacePage(parent);
     KPageWidgetItem* item = addPage(m_interfacePage, i18n("Interface"));
     item->setHeader(i18n("Interface"));
-    item->setIcon(KIcon(BarIcon("preferences-desktop-theme", KIconLoader::SizeMedium)));
+    item->setIcon(koIcon("preferences-desktop-theme"));
 
     m_miscPage = new KoConfigMiscPage(parent->part(), parent->part()->resourceManager());
     item = addPage(m_miscPage, i18n("Misc"));
     item->setHeader(i18n("Misc"));
-    item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
+    item->setIcon(koIcon("preferences-other"));
 
     m_gridPage = new KoConfigGridPage(parent->part());
     item = addPage(m_gridPage, i18n("Grid"));
     item->setHeader(i18n("Grid"));
-    item->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
+    item->setIcon(koIcon("grid"));
 
     connect(m_miscPage, SIGNAL(unitChanged(int)), m_gridPage, SLOT(slotUnitChanged(int)));
 
     m_defaultDocPage = new KoConfigDocumentPage(parent->part());
     item = addPage(m_defaultDocPage, i18nc("@title:tab Document settings page", "Document"));
     item->setHeader(i18n("Document Settings"));
-    item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
+    item->setIcon(koIcon("document-properties"));
 
     m_authorPage = new KoConfigAuthorPage();
     item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
     item->setHeader(i18n("Author"));
-    item->setIcon(KIcon("user-identity"));
+    item->setIcon(koIcon("user-identity"));
 
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));

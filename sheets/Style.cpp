@@ -27,6 +27,7 @@
 #include <QPen>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 #include <KoGenStyles.h>
@@ -110,7 +111,7 @@ QString SubStyle::name(Style::Key key)
     case Style::Prefix:                 name = "Prefix"; break;
     case Style::Postfix:                name = "Postfix"; break;
     case Style::Precision:              name = "Precision"; break;
-    case Style::ThousandsSep:           name = "Thousands seperator"; break;
+    case Style::ThousandsSep:           name = "Thousands separator"; break;
     case Style::FormatTypeKey:          name = "Format type"; break;
     case Style::FloatFormatKey:         name = "Float format"; break;
     case Style::FloatColorKey:          name = "Float color"; break;
@@ -721,23 +722,23 @@ Currency Style::numberCurrency(const QString &_format)
 
 Format::Type Style::fractionType(const QString &_format)
 {
-    if (_format.endsWith("/2"))
+    if (_format.endsWith(QLatin1String("/2")))
         return Format::fraction_half;
-    else if (_format.endsWith("/4"))
+    else if (_format.endsWith(QLatin1String("/4")))
         return Format::fraction_quarter;
-    else if (_format.endsWith("/8"))
+    else if (_format.endsWith(QLatin1String("/8")))
         return Format::fraction_eighth;
-    else if (_format.endsWith("/16"))
+    else if (_format.endsWith(QLatin1String("/16")))
         return Format::fraction_sixteenth;
-    else if (_format.endsWith("/10"))
+    else if (_format.endsWith(QLatin1String("/10")))
         return Format::fraction_tenth;
-    else if (_format.endsWith("/100"))
+    else if (_format.endsWith(QLatin1String("/100")))
         return Format::fraction_hundredth;
-    else if (_format.endsWith("/?"))
+    else if (_format.endsWith(QLatin1String("/?")))
         return Format::fraction_one_digit;
-    else if (_format.endsWith("/??"))
+    else if (_format.endsWith(QLatin1String("/??")))
         return Format::fraction_two_digits;
-    else if (_format.endsWith("/???"))
+    else if (_format.endsWith(QLatin1String("/???")))
         return Format::fraction_three_digits;
     else
         return Format::fraction_three_digits;
@@ -1643,7 +1644,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         HAlign a = (HAlign) format.attribute(type() == AUTO ? "align" : "alignX").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 4) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 4) {
             setHAlign(a);
         }
     }
@@ -1651,7 +1652,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         VAlign a = (VAlign) format.attribute("alignY").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a < 4) {
+        if ((unsigned int) a >= 1 && (unsigned int) a < 4) {
             setVAlign(a);
         }
     }
@@ -1691,7 +1692,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         FloatFormat a = (FloatFormat)format.attribute("float").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 3) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 3) {
             setFloatFormat(a);
         }
     }
@@ -1699,7 +1700,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
     if (format.hasAttribute("floatcolor")) {
         FloatColor a = (FloatColor) format.attribute("floatcolor").toInt(&ok);
         if (!ok) return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 2) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 2) {
             setFloatColor(a);
         }
     }

@@ -1,13 +1,18 @@
 [Desktop Entry]
 Name=Front End Processor
+Name[bs]=Prednji procesor
 Name[ca]=Processador frontal
 Name[ca@valencia]=Processador frontal
+Name[da]=Frontend-processor
 Name[de]=Frontend-Prozessor
 Name[el]=Περιβάλλον επεξεργαστή
 Name[es]=Procesador frontal
 Name[et]=Eesprotsessor
+Name[fr]=processeur externe
+Name[gl]=Procesador de interfaces
 Name[it]=Front End Processor
 Name[kk]=Алдыңғы процессор
+Name[lt]=Priešakinės eilės procesorius
 Name[nb]=Inngangs-avlastingsmaskin
 Name[nds]=Frontend-Perzesser
 Name[nl]=Frontend-processor

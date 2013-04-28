@@ -24,7 +24,6 @@
 #include "cell.h"
 #include "table.h"
 #include "column.h"
-//Added by qt3to4:
 #include <QTextStream>
 
 /*******************************************/

@@ -24,17 +24,20 @@
 #include "kexidataawarewidgetinfo.h"
 #include "WebBrowserWidget.h"
 
+#include <KoIcon.h>
+
 #include <QVariant>
 #include <QVariantList>
-#include <KDebug>
-#include <KLocale>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kpluginfactory.h>
 
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
   : KexiDBFactoryBase(parent, "webbrowser")
 {
+    Q_UNUSED(args);
     KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
-    webBrowser->setPixmap("web_browser");
+    webBrowser->setIconName(koIconName("web_browser"));
     webBrowser->setClassName("WebBrowserWidget");
     webBrowser->setName(i18n("Web Browser"));
     webBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
@@ -43,12 +46,9 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
     webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
 
-    m_propDesc["zoomFactor"] = i18n("Zoom Factor");
-    m_propDesc["url"] = i18n("Url");
+    setPropertyDescription("zoomFactor", i18n("Zoom Factor"));
+    setPropertyDescription("url", i18n("Url"));
 }
-
-
-
 
 WebBrowserFactory::~WebBrowserFactory()
 {
@@ -61,6 +61,7 @@ QWidget* WebBrowserFactory::createWidget(const QByteArray& classname,
                             KFormDesigner::Container* container,
                             KFormDesigner::WidgetFactory::CreateWidgetOptions options)
 {
+    Q_UNUSED(options);
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(name, classname));
 //2.0    const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
@@ -80,11 +81,16 @@ QWidget* WebBrowserFactory::createWidget(const QByteArray& classname,
 bool WebBrowserFactory::createMenuActions(const QByteArray &classname, QWidget *w,
                                     QMenu *menu, KFormDesigner::Container *container)
 {
+    Q_UNUSED(classname);
+    Q_UNUSED(w);
+    Q_UNUSED(menu);
+    Q_UNUSED(container);
     return false;
 }
 
 bool WebBrowserFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
+    Q_UNUSED(args);
     return false;
 }
 

@@ -80,7 +80,7 @@ class PptxPlaceholder
 {
 public:
     PptxPlaceholder();
-    PptxPlaceholder(const PptxShapeProperties &other);
+    explicit PptxPlaceholder(const PptxShapeProperties &other);
     ~PptxPlaceholder();
     int x;
     int y;
@@ -267,7 +267,7 @@ protected:
     void inheritShapeGeometry();
 
     /**
-     * MS PowerPoint specifc calculation of the paragraph margin.
+     * MS PowerPoint specific calculation of the paragraph margin.
      * @param spcAft/spcBef (paragraph spacing) as provided in pptx [%]
      * @param minimum font size detected in the paragraph [point]
      * @return paragraph margin [point]

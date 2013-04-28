@@ -22,6 +22,7 @@
 #include "KPrAnimationTool.h"
 #include "KPrView.h"
 #include <KoPACanvas.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -32,7 +33,7 @@ KPrAnimationToolFactory::KPrAnimationToolFactory()
     setToolTip(i18n("Animation"));
     setToolType("calligrastage");
     setPriority(40);
-    setIcon("animation-stage");
+    setIconName(koIconNameCStr("animation-stage"));
     setActivationShapeId("flake/edit");
 }
 

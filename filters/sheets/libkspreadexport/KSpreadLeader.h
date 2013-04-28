@@ -21,7 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef KSPREAD_LEADER_H
 #define KSPREAD_LEADER_H
 
-#include <KSpreadBaseWorker.h>
+#include <kspreadbaseworker.h.h>
 #include <KoFilterChain.h>
 #include <kdebug.h>
 #include <kspread_doc.h>
@@ -52,7 +52,7 @@ public:
     *
     * @param filterChain the filter chain of the filter using the lib.
     */
-    Leader(KoFilterChain *filterChain);
+    explicit Leader(KoFilterChain *filterChain);
 
     /**
     * This constructor set up the Worker at initialization.

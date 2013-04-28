@@ -1,13 +1,17 @@
 [Desktop Entry]
 Name=A Telephone
 Name[bg]=Телефон
+Name[bs]=neki telefon
 Name[ca]=Un telèfon
 Name[ca@valencia]=Un telèfon
+Name[da]=En telefon
 Name[de]=Telefon
 Name[el]=Τηλέφωνο
 Name[es]=Un teléfono
 Name[et]=Telefon
 Name[fi]=Puhelin
+Name[fr]=Un téléphone
+Name[gl]=Teléfono
 Name[it]=Un telefono
 Name[ja]=電話
 Name[kk]=Телефон
@@ -20,6 +24,7 @@ Name[ru]=Телефон
 Name[sk]=Telefón
 Name[sl]=Telefon
 Name[sv]=En telefon
+Name[tr]=Telefon
 Name[uk]=Телефон
 Name[x-test]=xxA Telephonexx
 Name[zh_TW]=電話

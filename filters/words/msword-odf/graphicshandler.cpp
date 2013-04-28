@@ -1151,6 +1151,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.endElement(); //draw:image
 
     //check for user edited wrap points
+#if 0
     if (ds.fEditedWrap()) {
         QString points;
         IMsoArray _v = ds.pWrapPolygonVertices_complex();
@@ -1178,6 +1179,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
         out.xml.addAttribute("draw:points", points);
         out.xml.endElement(); //draw:contour-polygon
     }
+#endif
     out.xml.endElement(); //draw:frame
     return;
 }
@@ -1207,7 +1209,7 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
 
     QString hrAlign;
     QString xPos = QString::number(0.0f).append("in");
-    const float base_width = 6.1378;
+    const float base_width = 6.1378f;
 
     switch (ds.alignHR()) {
     case hAlignLeft:

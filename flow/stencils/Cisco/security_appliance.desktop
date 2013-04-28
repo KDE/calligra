@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=Security appliance
+Name[bs]=Sigurnosni uređaj
 Name[ca]=Aplicació de seguretat
 Name[ca@valencia]=Aplicació de seguretat
+Name[da]=Sikkerhedsapparat
+Name[de]=Sicherheitsgerät
 Name[el]=Συσκευή ασφάλειας
 Name[es]=Dispositivo de seguridad
 Name[et]=Turbeseade
+Name[fr]=Security appliance
+Name[gl]=Dispositivo de seguridade
 Name[it]=Apparato di sicurezza
 Name[kk]=Қауіпсіздік жабдығы
+Name[lt]=Saugumo įrengimas
 Name[nb]=Sikkerhetsapparat
 Name[nl]=Beveiligingsapparaat
 Name[pl]=Zastosowanie bezpieczeństwa
@@ -14,6 +20,7 @@ Name[pt]=Aplicação de segurança
 Name[pt_BR]=Aplicação de segurança
 Name[ru]=Устройство безопасности
 Name[sk]=Bezpečnostný prostriedok
+Name[sl]=Varnostna naprava
 Name[sv]=Säkerhetsapparat
 Name[uk]=Пристрій захисту
 Name[x-test]=xxSecurity appliancexx

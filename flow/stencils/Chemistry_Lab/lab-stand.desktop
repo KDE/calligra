@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=lab-stand
+Name[bs]=laboratorijski stalak
 Name[ca]=laboratori stand
 Name[ca@valencia]=laboratori stand
+Name[da]=stativ
+Name[de]=Laborstand
 Name[el]=lab-stand
 Name[es]=soporte de laboratorio
 Name[et]=Statiiv
+Name[fr]=lab-stand
+Name[gl]=Soporte lateral
 Name[it]=lab-stand
 Name[kk]=Лаб. штативі
 Name[nb]=lab-holder
@@ -15,6 +20,7 @@ Name[pt_BR]=mesa de laboratório
 Name[ru]=Лабораторный стенд
 Name[sk]=lab-stand
 Name[sv]=laboratoriehållare
+Name[tr]=laboratuvar standı
 Name[uk]=Лабораторний штатив
 Name[x-test]=xxlab-standxx
 Name[zh_TW]=實驗站
