@@ -145,30 +145,30 @@ void TestShapeReorderCommand::testParentChildSorting()
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
 /* This is the expected result
-s3  0 fg
+s7  7
+s6  3
+s3  0
+
   s4  9999
   s5 -9999
  c2  57
  c3  0
  s1 -2
-c1 -55 fg
-
-s7  7
-s6  3
+c1 -55
 
 s2  5 bg
 */
 
-    QCOMPARE(shapes.indexOf(shape1), 4);
+    QCOMPARE(shapes.indexOf(shape1), 2);
     QCOMPARE(shapes.indexOf(shape2), 0);
-    QCOMPARE(shapes.indexOf(shape3), 9);
-    QCOMPARE(shapes.indexOf(shape4), 8);
-    QCOMPARE(shapes.indexOf(shape5), 7);
-    QCOMPARE(shapes.indexOf(shape6), 1);
-    QCOMPARE(shapes.indexOf(shape7), 2);
-    QCOMPARE(shapes.indexOf(container1), 3);
-    QCOMPARE(shapes.indexOf(container2), 6);
-    QCOMPARE(shapes.indexOf(container3), 5);
+    QCOMPARE(shapes.indexOf(shape3), 7);
+    QCOMPARE(shapes.indexOf(shape4), 6);
+    QCOMPARE(shapes.indexOf(shape5), 5);
+    QCOMPARE(shapes.indexOf(shape6), 8);
+    QCOMPARE(shapes.indexOf(shape7), 9);
+    QCOMPARE(shapes.indexOf(container1), 1);
+    QCOMPARE(shapes.indexOf(container2), 4);
+    QCOMPARE(shapes.indexOf(container3), 3);
 
     delete container1;
     delete shape2;
