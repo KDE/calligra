@@ -75,6 +75,12 @@ INCLUDEPATH = \
 # Set the directories where our own libraries are located
 LIBS += -L$${TOP_BUILD_DIR}/lib
 
+load(sailfishsilicabackground)
+contains(LIBS,-lsailfishsilicabackground): {
+    SAILFISH = 1
+    DEFINES += SAILFISHOS
+}
+
 #new_moc.output = ${QMAKE_FILE_BASE}.moc
 #new_moc.commands = moc ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 #new_moc.depend_command = g++ -E -M ${QMAKE_FILE_NAME} | sed "s,^.*: ,,"
@@ -101,7 +107,8 @@ defineTest( mocWrapper ) {
 
             # TODO Atm we just create a wrapper for all files but that's certainly not needed
             # and we could optimize by only creating wrappers for files that need them...
-            #system(moc -E \"$$in\" | grep \"class\")
+            #system(moc -E \"$$hdr\" | grep \"class\")
+            #system(cat \"$$hdr\" | grep \"Q_OBJECT\")
 
             system(echo \"$$in\" > \"$$out\")
         }

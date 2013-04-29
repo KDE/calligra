@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=coffice
+Icon=icon-launcher-gallery
+Exec=invoker --type=j -s /opt/sdk/bin/coffice
+Comment=Coffice

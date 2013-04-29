@@ -54,21 +54,32 @@ HEADERS += \
     Document.h \
     Document_p.h
 
-## Install extraLibraries
-#x86 {
-#      extraLibraries.path = /libs/x86
-#} else: armeabi-v7a {
-#      extraLibraries.path = /libs/armeabi-v7a
-#} else {
-#      extraLibraries.path = /libs/armeabi
-#}
-#INSTALLS += external_libs
+!isEmpty($$SAILFISH) {
+    message(SailfishOS build)
+    SOURCES += sailfishapplication/sailfishapplication.cpp
+    HEADERS += sailfishapplication/sailfishapplication.h
+    desktop.files = ../sailfish/coffice.desktop
+    qml.files = qml/sailfish/*.qml
+    include(sailfishapplication/sailfishapplication.pri)
+    OTHER_FILES = ../sailfish/coffice.yaml
+} else {
 
-# Add more folders to ship with the application, here
-folder_01.source = qml/coffice
-folder_01.target = qml
-DEPLOYMENTFOLDERS += folder_01
+    ## Install extraLibraries
+    #x86 {
+    #      extraLibraries.path = /libs/x86
+    #} else: armeabi-v7a {
+    #      extraLibraries.path = /libs/armeabi-v7a
+    #} else {
+    #      extraLibraries.path = /libs/armeabi
+    #}
+    #INSTALLS += external_libs
 
-# Please do not modify the following two lines. Required for deployment.
-include(qmlapplicationviewer/qmlapplicationviewer.pri)
-qtcAddDeployment()
+    # Add more folders to ship with the application, here
+    folder_01.source = qml/coffice
+    folder_01.target = qml
+    DEPLOYMENTFOLDERS += folder_01
+
+    # Please do not modify the following two lines. Required for deployment.
+    include(qmlapplicationviewer/qmlapplicationviewer.pri)
+    qtcAddDeployment()
+}

@@ -5,7 +5,13 @@
 #include <QWindowsStyle>
 #include <QDebug>
 
-#include "qmlapplicationviewer.h"
+#ifdef SAILFISHOS
+    #include <QDeclarativeView>
+    #include "sailfishapplication/sailfishapplication.h"
+    using namespace Sailfish;
+#else
+    #include "qmlapplicationviewer.h"
+#endif
 
 #include "FileSystemModel.h"
 #include "DocumentView.h"
@@ -67,12 +73,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         }
     }
 
-    QmlApplicationViewer viewer;
-    QDeclarativeContext *ctxt = viewer.rootContext();
-
     qmlRegisterType<FileSystemModel>("FileSystemModel", 1, 0, "FileSystemModelItem");
     qmlRegisterType<DocumentView>("DocumentView", 1, 0, "DocumentViewItem");
 
+#ifdef SAILFISHOS
+    QScopedPointer<QDeclarativeView> view(createView("main.qml"));
+    showView(view.data());
+#else
+    QmlApplicationViewer viewer;
+    QDeclarativeContext *ctxt = viewer.rootContext();
     ctxt->setContextProperty("Settings", Settings::instance());
 
     QString url("qml/coffice/main.qml");
@@ -82,9 +91,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     if (QFile(hack).exists()) url = hack;
 
     viewer.setMainQmlFile(url);
-
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.showExpanded();
+#endif
 
     int result = app->exec();
 

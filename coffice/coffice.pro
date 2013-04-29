@@ -17,7 +17,7 @@ SUBDIRS += calligraplugins
 SUBDIRS += calligrawords
 SUBDIRS += coffice
 
-OTHER_FILES += \
+android:OTHER_FILES += \
     android/src/org/kde/necessitas/origo/QtApplication.java \
     android/src/org/kde/necessitas/origo/QtActivity.java \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
