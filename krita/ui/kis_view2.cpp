@@ -79,6 +79,7 @@
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentEntry.h>
 #include <KoProperties.h>
+#include <KoPart.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
@@ -107,7 +108,6 @@
 #include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
-#include "kis_part2.h"
 #include "kis_print_job.h"
 #include "kis_progress_widget.h"
 #include "kis_resource_server_provider.h"
@@ -118,7 +118,6 @@
 #include "kis_zoom_manager.h"
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
-
 
 #include <QDebug>
 #include <QPoint>
@@ -154,7 +153,6 @@ public:
     KisView2Private()
         : canvas(0)
         , doc(0)
-        , part(0)
         , viewConverter(0)
         , canvasController(0)
         , resourceProvider(0)
@@ -196,7 +194,6 @@ public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
-    KisPart2 *part;
     KisCoordinatesConverter *viewConverter;
     KisCanvasController *canvasController;
     KisCanvasResourceProvider *resourceProvider;
@@ -221,7 +218,7 @@ public:
 };
 
 
-KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
+KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     : KoView(part, doc, parent),
       m_d(new KisView2Private())
 {
@@ -235,7 +232,6 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     }
 
     m_d->doc = doc;
-    m_d->part = part;
     m_d->viewConverter = new KisCoordinatesConverter();
 
     KisCanvasController *canvasController = new KisCanvasController(this, actionCollection());
@@ -466,10 +462,7 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisPart2 part;
-            KisDoc2 tempDoc(&part);
-            part.setDocument(&tempDoc);
-
+            KisDoc2 tempDoc;
             tempDoc.loadNativeFormatFromStore(ba);
 
             KisImageWSP tempImage = tempDoc.image();
@@ -567,8 +560,8 @@ void KisView2::dropEvent(QDropEvent *event)
                         m_d->imageManager->importImage(KUrl(url));
                     }
                     else if (action == replaceCurrentDocument) {
-                        if (m_d->part->isModified()) {
-                            m_d->part->save();
+                        if (m_d->doc->isModified()) {
+                            m_d->doc->documentPart()->save();
                         }
                         if (shell() != 0) {
                             shell()->openDocument(url);
@@ -716,11 +709,11 @@ KisUndoAdapter * KisView2::undoAdapter()
 void KisView2::slotLoadingFinished()
 {
     /**
-     * Cold-start of image-size signals
+     * Cold-start of image size/resolution signals
      */
-    slotImageSizeChanged();
+    slotImageResolutionChanged();
     if (m_d->statusBar) {
-        m_d->statusBar->imageSizeChanged(image()->width(), image()->height());
+        m_d->statusBar->imageSizeChanged();
     }
     if (m_d->resourceProvider) {
         m_d->resourceProvider->slotImageSizeChanged();
@@ -846,18 +839,18 @@ void KisView2::connectCurrentImage()
         if (m_d->statusBar) {
             connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
             connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigSizeChanged(qint32,qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32,qint32)));
+            connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), m_d->statusBar, SLOT(imageSizeChanged()));
 
         }
-        connect(image(), SIGNAL(sigSizeChanged(qint32,qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
 
         connect(image(), SIGNAL(sigResolutionChanged(double,double)),
                 m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
         connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
                 m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
 
-        connect(image(), SIGNAL(sigSizeChanged(qint32,qint32)), this, SLOT(slotImageSizeChanged()));
-        connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
+        connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
         connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
@@ -916,21 +909,71 @@ void KisView2::slotBlacklistCleanup()
     dialog.exec();
 }
 
+void KisView2::resetImageSizeAndScroll(bool changeCentering,
+                                       const QPointF oldImageStillPoint,
+                                       const QPointF newImageStillPoint) {
 
-void KisView2::slotImageSizeChanged()
-{
+    const KisCoordinatesConverter *converter =
+        canvasBase()->coordinatesConverter();
+
+    QPointF oldPreferredCenter =
+        m_d->canvasController->preferredCenter();
+
+    /**
+     * Calculating the still point in old coordinates depending on the
+     * parameters given
+     */
+
+    QPointF oldStillPoint;
+
+    if (changeCentering) {
+        oldStillPoint =
+            converter->imageToWidget(oldImageStillPoint) +
+            converter->documentOffset();
+    } else {
+        QSize oldDocumentSize = m_d->canvasController->documentSize();
+        oldStillPoint = QPointF(0.5 * oldDocumentSize.width(), 0.5 * oldDocumentSize.height());
+    }
+
+    /**
+     * Updating the document size
+     */
+
     QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
-    m_d->zoomManager->zoomController()->setPageSize(size);
-    m_d->zoomManager->zoomController()->setDocumentSize(size);
+    KoZoomController *zc = m_d->zoomManager->zoomController();
+    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom());
+    zc->setPageSize(size);
+    zc->setDocumentSize(size, true);
 
-    canvasBase()->notifyZoomChanged();
-    QSize widgetSize = canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect().size();
-    m_d->canvasController->updateDocumentSize(widgetSize, true);
+    /**
+     * Calculating the still point in new coordinates depending on the
+     * parameters given
+     */
 
+    QPointF newStillPoint;
+
+    if (changeCentering) {
+        newStillPoint =
+            converter->imageToWidget(newImageStillPoint) +
+            converter->documentOffset();
+    } else {
+        QSize newDocumentSize = m_d->canvasController->documentSize();
+        newStillPoint = QPointF(0.5 * newDocumentSize.width(), 0.5 * newDocumentSize.height());
+    }
+
+    m_d->canvasController->setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
+}
+
+void KisView2::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint)
+{
+    resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     m_d->zoomManager->updateGUI();
+}
 
-    //update view
-    canvas()->update();
+void KisView2::slotImageResolutionChanged()
+{
+    resetImageSizeAndScroll(false);
+    m_d->zoomManager->updateGUI();
 }
 
 void KisView2::slotNodeChanged()
@@ -1100,7 +1143,7 @@ void KisView2::slotSaveIncremental()
         return;
     }
     pDoc->setSaveInBatchMode(true);
-    m_d->part->saveAs(fileName);
+    m_d->doc->documentPart()->saveAs(fileName);
     pDoc->setSaveInBatchMode(false);
 
     shell()->updateCaption();
@@ -1167,7 +1210,7 @@ void KisView2::slotSaveIncrementalBackup()
             KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
             return;
         }
-        m_d->part->saveAs(fileName);
+        m_d->doc->documentPart()->saveAs(fileName);
 
         shell()->updateCaption();
     }
@@ -1204,8 +1247,8 @@ void KisView2::slotSaveIncrementalBackup()
 
         // Save both as backup and on current file for interapplication workflow
         pDoc->setSaveInBatchMode(true);
-        m_d->part->saveAs(backupFileName);
-        m_d->part->saveAs(fileName);
+        m_d->doc->documentPart()->saveAs(backupFileName);
+        m_d->doc->documentPart()->saveAs(fileName);
         pDoc->setSaveInBatchMode(false);
 
         shell()->updateCaption();
