@@ -18,9 +18,11 @@
  */
 #include "KoAnnotationLayoutManager.h"
 #include <KoShape.h>
+//#include <KoTextShapeData.h>
 
 #include <QList>
 #include <QHash>
+#include <QMap>
 #include <kdebug.h>
 
 #define default_shapeHeight 100.0
@@ -35,7 +37,7 @@ public:
     {}
 
     qreal x;
-    QHash<KoShape *, qreal> annotationShapePositions;
+    QMultiMap<qreal,KoShape *> annotationShapePositions;
 };
 
 KoAnnotationLayoutManager::KoAnnotationLayoutManager(qreal annotationX, QObject *parent)
@@ -49,25 +51,37 @@ KoAnnotationLayoutManager::~KoAnnotationLayoutManager()
 }
 
 void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotationShape, QPointF pos) {
-    d->annotationShapePositions.insert(annotationShape, pos.y());
+    if (!d->annotationShapePositions.values().contains(annotationShape)) {
+        d->annotationShapePositions.insert(pos.y(), annotationShape);
+    }
     layoutAnnotationShapes();
 }
 
 void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape) {
-    d->annotationShapePositions.remove(annotationShape);
+    QMap<qreal, KoShape*>::const_iterator i = d->annotationShapePositions.constBegin();
+    while (i != d->annotationShapePositions.constEnd()) {
+        if (i.value() == annotationShape) {
+            d->annotationShapePositions.remove(i.key(), i.value());
+        }
+        i++;
+    }
     layoutAnnotationShapes();
 }
 
 void KoAnnotationLayoutManager::layoutAnnotationShapes()
 {
     qreal currentY = 0.0;
-    foreach(KoShape *shape, d->annotationShapePositions.keys()) {
-        qreal refPosition = d->annotationShapePositions[shape];
+    QMap<qreal, KoShape*>::const_iterator i = d->annotationShapePositions.constBegin();
+    while (i != d->annotationShapePositions.constEnd()) {
+        KoShape *shape = i.value();
+        qreal refPosition = i.key();
         if (refPosition > currentY) {
             currentY = refPosition;
         }
         shape->setSize(QSize(shapeWidth, shape->size().height()));
         shape->setPosition(QPointF(d->x, currentY));
         currentY += shape->size().height() + 20.0;
+
+        i++;
     }
 }
