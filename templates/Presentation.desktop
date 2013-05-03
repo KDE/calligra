@@ -56,6 +56,7 @@ Name[x-test]=xxPresentation Document...xx
 Name[zh_CN]=演示文稿...
 Name[zh_TW]=簡報文件...
 Comment=New Stage presentation document:
+Comment[ca]=Document nou de presentació de l'Stage:
 Comment[cs]=Nový dokument prezentace Stage:
 Comment[de]=Neues Stage-Präsentationsdokument:
 Comment[el]=Νέο έγγραφο παρουσιάσεων Stage:
