@@ -61,7 +61,6 @@ public:
 #endif
         , lastTabletEvent(0)
         , lastTouchEvent(0)
-        , enabled(false)
     { }
 
     bool tryHidePopupPalette();
@@ -100,8 +99,6 @@ public:
     QTouchEvent *lastTouchEvent;
 
     KisAbstractInputAction *defaultInputAction;
-
-    bool enabled;
 };
 
 static inline QList<Qt::Key> KEYS() {
@@ -314,7 +311,6 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
      * Happily, the error is linear (without the offset) so we can simply
      * scale it a bit.
      */
-
     if (event->type() == QEvent::TabletPress) {
         if ((event->globalPos() - event->hiResGlobalPos()).manhattanLength() > 4) {
             hiResEventsWorkaroundCoeff = dividePoints(event->globalPos(), event->hiResGlobalPos());
@@ -409,18 +405,7 @@ KisInputManager::~KisInputManager()
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object)
-    if(event->type() == QEvent::TabletPress) {
-        //We want both the tablet information and the mouse button state.
-        //Since QTabletEvent only provides the tablet information, we save that
-        //and then ignore the event so it will generate a mouse event.
-        QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
-        d->saveTabletEvent(tevent);
-        tevent->ignore();
-    }
-
-    if(!d->enabled)
-        return false;
-
+    
     bool retval = false;
 
     // KoToolProxy needs to pre-process some events to ensure the
@@ -448,8 +433,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::MouseButtonRelease: {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
-        if (retval)
-            d->enabled = false;
         d->resetSavedTabletEvent(event->type());
         break;
     }
@@ -479,8 +462,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);
-            if(retval)
-                d->enabled = false;
         }
         break;
     }
@@ -552,8 +533,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::TouchEnd:
         d->saveTouchEvent(static_cast<QTouchEvent*>(event));
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
-        if (retval)
-            d->enabled = false;
         event->accept();
         d->resetSavedTabletEvent(event->type());
         break;
@@ -588,11 +567,6 @@ void KisInputManager::setMirrorAxis()
 {
     d->setMirrorMode = true;
     QApplication::setOverrideCursor(Qt::CrossCursor);
-}
-
-void KisInputManager::setEnabled(bool enabled)
-{
-    d->enabled = enabled;
 }
 
 void KisInputManager::slotToolChanged()

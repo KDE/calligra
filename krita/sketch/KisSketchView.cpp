@@ -518,8 +518,6 @@ void KisSketchView::documentChanged()
     d->view->hide();
     d->canvas = d->view->canvasBase();
 
-    qApp->installEventFilter(d->canvas->inputManager());
-
     d->undoStack = d->doc->undoStack();
     d->undoAction = d->view->actionCollection()->action("edit_undo");
     connect(d->undoAction, SIGNAL(changed()), this, SIGNAL(canUndoChanged()));
@@ -573,52 +571,45 @@ bool KisSketchView::sceneEvent(QEvent* event)
     if (d->canvas) {
         switch(event->type()) {
         case QEvent::GraphicsSceneMousePress: {
-            d->canvas->inputManager()->setEnabled(true);
-
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
             QMouseEvent mevent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-            QApplication::sendEvent(qApp, &mevent);
-
+            QApplication::sendEvent(d->canvasWidget, &mevent);
             emit interactionStarted();
             return true;
         }
-//         case QEvent::GraphicsSceneMouseMove: {
-//             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-//             QMouseEvent mevent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-//             QApplication::sendEvent(d->canvasWidget, &mevent);
-//             update();
-//             emit interactionStarted();
-//             return true;
-//         }
-//         case QEvent::GraphicsSceneMouseRelease: {
-//             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-//             QMouseEvent mevent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-//             QApplication::sendEvent(d->canvasWidget, &mevent);
-//             emit interactionStarted();
-//             return true;
-//         }
+        case QEvent::GraphicsSceneMouseMove: {
+            QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
+            QMouseEvent mevent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+            QApplication::sendEvent(d->canvasWidget, &mevent);
+            update();
+            emit interactionStarted();
+            return true;
+        }
+        case QEvent::GraphicsSceneMouseRelease: {
+            QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
+            QMouseEvent mevent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+            QApplication::sendEvent(d->canvasWidget, &mevent);
+            emit interactionStarted();
+            return true;
+        }
         case QEvent::GraphicsSceneWheel: {
-            d->canvas->inputManager()->setEnabled(true);
-
             QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
             QWheelEvent wevent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
-            QApplication::sendEvent(qApp, &wevent);
-
+            QApplication::sendEvent(d->canvasWidget, &wevent);
             emit interactionStarted();
             return true;
         }
         case QEvent::TouchBegin: {
-            d->canvas->inputManager()->setEnabled(true);
-            QApplication::sendEvent(qApp, event);
+            QApplication::sendEvent(d->canvasWidget, event);
             event->accept();
             emit interactionStarted();
             return true;
         }
-//         default:
-//             if(QApplication::sendEvent(d->canvasWidget, event)) {
-//                 emit interactionStarted();
-//                 return true;
-//             }
+        default:
+            if(QApplication::sendEvent(d->canvasWidget, event)) {
+            emit interactionStarted();
+                return true;
+        }
         }
     }
     return QDeclarativeItem::sceneEvent(event);

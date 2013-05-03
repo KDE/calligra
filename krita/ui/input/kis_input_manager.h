@@ -21,8 +21,6 @@
 
 #include <QObject>
 
-#include "krita_export.h"
-
 class QPointF;
 class QTabletEvent;
 class QTouchEvent;
@@ -48,7 +46,7 @@ class KisInputAction;
  *
  * \todo Implement shortcut configuration
  */
-class KRITAUI_EXPORT KisInputManager : public QObject
+class KisInputManager : public QObject
 {
     Q_OBJECT
 
@@ -97,8 +95,6 @@ public:
      * Convert a widget position to a pixel position.
      */
     QPointF widgetToPixel(const QPointF &position);
-
-    void setEnabled(bool enabled);
 
 public Q_SLOTS:
     void setMirrorAxis();
