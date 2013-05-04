@@ -535,6 +535,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
         event->accept();
         d->resetSavedTabletEvent(event->type());
+        delete d->lastTouchEvent;
+        d->lastTouchEvent = 0;
         break;
     default:
         break;
