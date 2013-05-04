@@ -27,6 +27,7 @@
 #include <QByteArray>
 #include <koproperty/Set.h>
 #include <db/RecordData.h>
+#include <db/tableviewdata.h>
 
 class KexiView;
 class KexiDataAwareObjectInterface;

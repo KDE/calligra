@@ -48,6 +48,7 @@ KisPart2::KisPart2(QObject *parent)
     : KoPart(parent)
     , m_flipbook(0)
     , m_dieOnError(false)
+    , m_document(0)
 {
     setComponentData(KisFactory2::componentData(), false);
     setTemplateType("krita_template");
@@ -139,6 +140,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         item.icon = "application-x-krita";
         widgetList << item;
     }
+#if 0
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisFlipbookSelector(parent, qobject_cast<KisDoc2*>(document()));
@@ -146,7 +148,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         item.icon = "folder-video";
         widgetList << item;
     }
-
+#endif
     return widgetList;
 }
 

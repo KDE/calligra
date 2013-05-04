@@ -55,6 +55,7 @@ Name[x-test]=xxSpread Sheet Document...xx
 Name[zh_CN]=电子表格文档...
 Name[zh_TW]=工作表文件...
 Comment=New Sheets document:
+Comment[ca]=Document nou del Sheets:
 Comment[cs]=Nový dokument Sheets:
 Comment[de]=Neues Sheets-Dokument:
 Comment[el]=Νέο έγγραφο Sheets:

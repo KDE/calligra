@@ -43,7 +43,6 @@
 #include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
-#include "kis_part2.h"
 #include "kis_statusbar.h"
 #include "kis_progress_widget.h"
 
@@ -52,10 +51,10 @@
 struct KisImportCatcher::Private
 {
 public:
-    KisPart2* part;
     KisDoc2* doc;
     KisView2* view;
     KUrl url;
+    bool importAsLayer;
 
     void importAsPaintLayer(KisPaintDeviceSP device);
     void importAsTransparencyMask(KisPaintDeviceSP device);
@@ -116,26 +115,39 @@ void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device
 KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool importAsLayer)
         : m_d(new Private)
 {
-    KisPart2 *part = new KisPart2(0);
-    m_d->doc = new KisDoc2(part);
-    part->setDocument(m_d->doc);
+    m_d->doc = new KisDoc2();
 
     KoProgressProxy *progressProxy = view->statusBar()->progress()->progressProxy();
     m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
-    m_d->doc->openUrl(url);
+    m_d->importAsLayer = importAsLayer;
+    connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    bool result = m_d->doc->openUrl(url);
 
+    if (!result) {
+        deleteMyself();
+    }
+}
+
+void KisImportCatcher::slotLoadingFinished()
+{
     KisImageWSP importedImage = m_d->doc->image();
+    importedImage->waitForDone();
 
     if (importedImage && importedImage->projection()->exactBounds().isValid()) {
-        if (importAsLayer) {
+        if (m_d->importAsLayer) {
             m_d->importAsPaintLayer(importedImage->projection());
         } else {
             m_d->importAsTransparencyMask(importedImage->projection());
         }
     }
 
+    deleteMyself();
+}
+
+void KisImportCatcher::deleteMyself()
+{
     m_d->doc->deleteLater();
     deleteLater();
 }
