@@ -19,53 +19,35 @@
  */
 
 
-#ifndef KOODF_STYLE_PROPERTIES_H
-#define KOODF_STYLE_PROPERTIES_H
+#ifndef KOODF_GRAPHIC_PROPERTIES_H
+#define KOODF_GRAPHIC_PROPERTIES_H
 
-// Qt
-#include <QString>
-#include <QHash>
-
+#include "KoOdfStyleProperties.h"
 
 #include "koodf_export.h"
-#include "KoXmlStreamReader.h"
 
 
 class QString;
+class KoXmlStreamReader;
 class KoXmlWriter;
 
 
-typedef  QHash<QString, QString>  AttributeSet;  // name, value
-
-
-class KOODF_EXPORT KoOdfStyleProperties
+class KOODF_EXPORT KoOdfGraphicProperties : public KoOdfStyleProperties
 {
  public:
-    KoOdfStyleProperties();
-    virtual ~KoOdfStyleProperties();
+    KoOdfGraphicProperties();
+    virtual ~KoOdfGraphicProperties();
 
-    QString attribute(QString &property) const;
-    void    setAttribute(QString &property, QString &value);
-
+    // Inherited from KoOdfStyleProperties
     virtual void clear();
 
     virtual bool readOdf(KoXmlStreamReader &reader);
     virtual bool saveOdf(const QString &propertySet, KoXmlWriter *writer);
 
- protected:
-    /// Read all attributes from the XML element.
-    /// This function is normally called from readOdf().
-    bool readAttributes(KoXmlStreamReader &reader);
-    bool saveAttributes(KoXmlWriter *writer);
-
  private:
     class Private;
     Private * const d;
 };
-
-
-void copyAttributes(KoXmlStreamReader &reader, AttributeSet &attributes);
-void saveAttributes(AttributeSet &attributes, KoXmlWriter *writer);
 
 
 #endif

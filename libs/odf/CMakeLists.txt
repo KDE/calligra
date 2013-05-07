@@ -67,6 +67,9 @@ set(koodf_LIB_SRCS
 
     styles/KoOdfStyle.cpp
     styles/KoOdfStyleProperties.cpp
+    styles/KoOdfTextProperties.cpp
+    styles/KoOdfParagraphProperties.cpp
+    styles/KoOdfGraphicProperties.cpp
     styles/KoOdfStyleManager.cpp
 )
 
