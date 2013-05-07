@@ -94,6 +94,8 @@
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <QMenu>
+#include <QToolBar>
+#include <ktoolbar.h>
 
 #include <limits>
 
@@ -330,6 +332,12 @@ void KWView::setupActions()
     tAction->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+
+    tAction = new KToggleAction(i18n("Distraction Free Mode"), this);
+    tAction->setToolTip(i18n("Set view in distraction mode"));
+    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    actionCollection()->addAction("view_distractionfree_mode", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setDistractionFreeMode(bool)));
 
 #ifdef SHOULD_BUILD_RDF
     action = new KAction(i18n("Semantic Stylesheets..."), this);
@@ -706,6 +714,21 @@ void KWView::createLinkedFrame()
 void KWView::showStatusBar(bool toggled)
 {
     if (statusBar()) statusBar()->setVisible(toggled);
+}
+
+void KWView::setDistractionFreeMode(bool toggled)
+{
+    //stause bar
+    if (statusBar())
+        statusBar()->setVisible(!toggled);
+    //Tool bar
+    hideToolBar(toggled);
+    //Menu bar
+    hideMenuBar(!toggled);
+    //Docker
+    hideDocker(!toggled);
+    //Full screen mode
+    setFullScreenMode(toggled);
 }
 
 void KWView::editSelectAllFrames()

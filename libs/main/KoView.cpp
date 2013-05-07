@@ -56,6 +56,8 @@
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
+#include <ktoolbar.h>
+#include <kmenubar.h>
 
 #include <QTimer>
 #include <QDockWidget>
@@ -623,6 +625,33 @@ QToolBar* KoView::viewBar()
     }
 
     return d->viewBar;
+}
+
+void KoView::hideToolBar(bool hide)
+{
+    if (hide) {
+        shell()->toolBar("mainToolBar")->hide();
+        shell()->toolBar("edit_toolbar")->hide();
+    }
+    else {
+        shell()->toolBar("mainToolBar")->show();
+        shell()->toolBar("edit_toolbar")->show();
+    }
+}
+
+void KoView::hideDocker(bool hide)
+{
+    shell()->toggleDockersVisibility(hide);
+}
+
+void KoView::hideMenuBar(bool hide)
+{
+    shell()->menuBar()->setVisible(hide);
+}
+
+void KoView::setFullScreenMode(bool on)
+{
+    shell()->viewFullscreen(on);
 }
 
 QList<QAction*> KoView::createChangeUnitActions()

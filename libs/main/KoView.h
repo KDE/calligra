@@ -299,6 +299,11 @@ public:
      */
     QToolBar* viewBar();
 
+    void hideToolBar(bool);
+    void hideDocker(bool);
+    void hideMenuBar(bool);
+    void setFullScreenMode(bool);
+
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions();
 

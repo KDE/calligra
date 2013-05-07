@@ -200,6 +200,8 @@ private slots:
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard
     void pasteRequested();
+    /// Set view into dsitraction free mode.
+    void setDistractionFreeMode(bool);
 
 private:
     KWGui *m_gui;
