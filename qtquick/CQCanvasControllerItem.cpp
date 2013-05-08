@@ -193,6 +193,8 @@ void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
 
         d->placeholderTarget.moveLeft(d->placeholderTarget.x() + (center.x() * d->placeholderTarget.width() / oldWidth) - center.x());
         d->placeholderTarget.moveTop(d->placeholderTarget.y() + (center.y() * d->placeholderTarget.height() / oldHeight) - center.y());
+
+        update();
     }
 }
 

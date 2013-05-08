@@ -15,6 +15,7 @@ set(calligraqtquickcomponents_SRCS
     CQPresentationView.cpp
     CQPresentationCanvas.cpp
     CQTextToCModel.cpp
+    CQPluginLoaderProxy.cpp
 )
 
 include_directories(
