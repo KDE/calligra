@@ -30,8 +30,10 @@
 #include "CQSpreadsheetListModel.h"
 #include "CQPresentationModel.h"
 #include "CQThumbnailItem.h"
+#include "CQPluginLoaderProxy.h"
 
 #include <QDeclarativeEngine>
+#include <QDeclarativeContext>
 
 void CalligraQtQuickComponentsPlugin::registerTypes(const char* uri)
 {
@@ -50,6 +52,8 @@ void CalligraQtQuickComponentsPlugin::initializeEngine(QDeclarativeEngine* engin
 {
     CQImageProvider::s_imageProvider = new CQImageProvider;
     engine->addImageProvider(CQImageProvider::identificationString, CQImageProvider::s_imageProvider);
+
+    engine->rootContext()->setContextProperty( "Calligra", new CQPluginLoaderProxy( engine ) );
 
     QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
 }
