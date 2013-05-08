@@ -627,9 +627,13 @@ QToolBar* KoView::viewBar()
     return d->viewBar;
 }
 
-void KoView::hideToolBar(bool hide)
+void KoView::distractionFreeViewMode(bool toggle)
 {
-    if (hide) {
+    shell()->toggleDockersVisibility(!toggle);
+    shell()->menuBar()->setVisible(!toggle);
+    shell()->statusBar()->setVisible(!toggle);
+    shell()->viewFullscreen(toggle);
+    if (toggle) {
         shell()->toolBar("mainToolBar")->hide();
         shell()->toolBar("edit_toolbar")->hide();
     }
@@ -637,21 +641,6 @@ void KoView::hideToolBar(bool hide)
         shell()->toolBar("mainToolBar")->show();
         shell()->toolBar("edit_toolbar")->show();
     }
-}
-
-void KoView::hideDocker(bool hide)
-{
-    shell()->toggleDockersVisibility(hide);
-}
-
-void KoView::hideMenuBar(bool hide)
-{
-    shell()->menuBar()->setVisible(hide);
-}
-
-void KoView::setFullScreenMode(bool on)
-{
-    shell()->viewFullscreen(on);
 }
 
 QList<QAction*> KoView::createChangeUnitActions()

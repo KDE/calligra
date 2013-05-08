@@ -1588,7 +1588,6 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
     //kDebug(30003) <<"KoMainWindow::slotToolbarToggled" << sender()->name() <<" toggle=" << true;
     // The action (sender) and the toolbar have the same name
     KToolBar * bar = toolBar(sender()->objectName());
-    kDebug(31000) << " ####### ToolBar ######" <<sender()->objectName();
     if (bar) {
         if (toggle)
             bar->show();

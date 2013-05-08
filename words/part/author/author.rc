@@ -48,6 +48,7 @@
   <Action name="zoom_in"/>
   <Action name="view_zoom"/>
   <Action name="view_fullscreen"/>
+  <Action name="view_distractionfree_mode"/>
  </Menu>
  
   <Menu name="book"><text>Book</text>
