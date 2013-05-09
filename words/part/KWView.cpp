@@ -75,6 +75,8 @@
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
+#include <KoFloatingMessage.h>
+
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #include <KoSemanticStylesheetsEditor.h>
@@ -94,7 +96,6 @@
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
-#include <QMenu>
 #include <ktoolbar.h>
 #include <kmenubar.h>
 
@@ -727,6 +728,10 @@ void KWView::setDistractionFreeMode(bool toggled)
         if (toolbar->isVisible() == toggled) {
             toolbar->setVisible(!toggled);
         }
+    }
+    if (toggled) {
+        KoFloatingMessage *fm = new KoFloatingMessage(i18n("Going into Distraction-Free mode.\n Press Ctrl+H to go back."), this);
+        fm->showMessage();
     }
 }
 
