@@ -1,5 +1,5 @@
 /*
- *  This file is part of KimageShop^WKrayon^WKrita
+ *  This file is part of the KDE project
  *
  *  Copyright (c) 2012 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Christian Muehlhaeuser <chris@chris.de>
