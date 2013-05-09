@@ -723,13 +723,10 @@ void KWView::setDistractionFreeMode(bool toggled)
     shell()->menuBar()->setVisible(!toggled);
     shell()->statusBar()->setVisible(!toggled);
     shell()->viewFullscreen(toggled);
-    if (toggled) {
-        shell()->toolBar("mainToolBar")->hide();
-        shell()->toolBar("edit_toolbar")->hide();
-    }
-    else {
-        shell()->toolBar("mainToolBar")->show();
-        shell()->toolBar("edit_toolbar")->show();
+    foreach(KToolBar* toolbar, shell()->toolBars()) {
+        if (toolbar->isVisible() == toggled) {
+            toolbar->setVisible(!toggled);
+        }
     }
 }
 
