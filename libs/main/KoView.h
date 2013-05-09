@@ -299,11 +299,6 @@ public:
      */
     QToolBar* viewBar();
 
-    /**
-     * Hide all menu bar, tool bar, staus bar, dockes and set view in full screen mode.
-     */
-    void distractionFreeViewMode(bool);
-
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions();
 

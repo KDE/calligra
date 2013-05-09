@@ -74,6 +74,7 @@
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentInfo.h>
+#include <KoMainWindow.h>
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #include <KoSemanticStylesheetsEditor.h>
@@ -94,8 +95,8 @@
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <QMenu>
-#include <QToolBar>
 #include <ktoolbar.h>
+#include <kmenubar.h>
 
 #include <limits>
 
@@ -718,7 +719,18 @@ void KWView::showStatusBar(bool toggled)
 
 void KWView::setDistractionFreeMode(bool toggled)
 {
-    distractionFreeViewMode(toggled);
+    shell()->toggleDockersVisibility(!toggled);
+    shell()->menuBar()->setVisible(!toggled);
+    shell()->statusBar()->setVisible(!toggled);
+    shell()->viewFullscreen(toggled);
+    if (toggled) {
+        shell()->toolBar("mainToolBar")->hide();
+        shell()->toolBar("edit_toolbar")->hide();
+    }
+    else {
+        shell()->toolBar("mainToolBar")->show();
+        shell()->toolBar("edit_toolbar")->show();
+    }
 }
 
 void KWView::editSelectAllFrames()

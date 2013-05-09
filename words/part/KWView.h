@@ -200,7 +200,9 @@ private slots:
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard
     void pasteRequested();
-    /// Set view into dsitraction free mode.
+    /** Set view into dsitraction free mode, hide menu bar, staus bar, tool bar, dockes
+     * and set view into  full screen mode.
+     */
     void setDistractionFreeMode(bool);
 
 private:
