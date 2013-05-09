@@ -116,6 +116,8 @@ public:
     int minPageNumber() const { return m_minPageNum; }
     int maxPageNumber() const { return m_maxPageNum; }
 
+    void canvasMouseMoveEvent(QMouseEvent *e);
+
 signals:
     void shownPagesChanged();
 
@@ -240,6 +242,8 @@ private:
     qreal m_textMaxX; // The max x value where text can appear we currently show. Prevents endless loop
     int m_minPageNum;
     int m_maxPageNum;
+
+    bool m_isDistractionFreeMode;
 };
 
 #endif

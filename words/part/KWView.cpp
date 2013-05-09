@@ -108,6 +108,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         , m_textMaxX(600)
         , m_minPageNum(1)
         , m_maxPageNum(1)
+        , m_isDistractionFreeMode(false)
 {
     setAcceptDrops(true);
 
@@ -732,6 +733,19 @@ void KWView::setDistractionFreeMode(bool toggled)
     if (toggled) {
         KoFloatingMessage *fm = new KoFloatingMessage(i18n("Going into Distraction-Free mode.\n Press Ctrl+H to go back."), this);
         fm->showMessage();
+    }
+    m_isDistractionFreeMode = toggled;
+}
+
+void KWView::canvasMouseMoveEvent(QMouseEvent *e)
+{
+    if (!m_isDistractionFreeMode)
+        return;
+    if (e->y() >= (m_canvas->size().height() - statusBar()->size().height())) {
+        shell()->statusBar()->setVisible(true);
+    }
+    else {
+       shell()->statusBar()->setVisible(false);
     }
 }
 
