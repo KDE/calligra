@@ -29,10 +29,10 @@
 
 #include <db/cursor.h>
 #include <db/utils.h>
+#include <db/tableviewdata.h>
 
 #include "kexidatatableview.h"
 #include "kexidatatable.h"
-#include <widget/dataviewcommon/kexitableviewdata.h>
 #include <core/KexiWindow.h>
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
@@ -81,7 +81,7 @@ KexiDataTable::~KexiDataTable()
     delete d;
 }
 
-bool KexiDataTable::loadTableViewSettings(KexiTableViewData* data)
+bool KexiDataTable::loadTableViewSettings(KexiDB::TableViewData* data)
 {
     Q_ASSERT(data);
     const int id = window()->id();
@@ -99,7 +99,7 @@ bool KexiDataTable::loadTableViewSettings(KexiTableViewData* data)
                 kWarning() << "Invalud format of 'columnWidths' value:" << columnWidthsString;
                 return false;
             }
-            KexiTableViewColumn::List* columns = data->columns();
+            KexiDB::TableViewColumn::List* columns = data->columns();
             if (columnWidths.count() == columns->count()) {
                 int i = 0;
                 foreach (int width, columnWidths) {

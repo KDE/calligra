@@ -103,7 +103,7 @@ bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
 {
     copyAttributes(reader, d->attributes);
 
-    kDebug() << "read attributes: " << d->attributes;
+    //kDebug() << "read attributes: " << d->attributes;
 
     return true;
 }
