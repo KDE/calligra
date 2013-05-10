@@ -46,12 +46,16 @@ class KOWIDGETS_EXPORT KoFloatingMessage : public QWidget
 public:
 
     explicit KoFloatingMessage(const QString &message, QWidget *parent, bool showOverParent = false);
+    ~KoFloatingMessage();
     void showMessage();
 
     /// Show message above parent widget instead of screen
     void setShowOverParent(bool show);
 
     void setIcon(const QIcon& icon);
+private:
+    QRect determineMetrics( const int M );
+
 protected:
 
     void paintEvent(QPaintEvent *e);
@@ -63,15 +67,8 @@ private slots:
     void updateOpacity(int value);
 private:
 
-    QRect determineMetrics(const int M);
-
-    QString m_message;
-    QImage m_icon;
-    QPixmap m_scaledIcon;
-    QTimer m_timer;
-    int m_m;
-    QTimeLine m_fadeTimeLine;
-    bool m_showOverParent;
+    class Private;
+    Private *const d;
 };
 
 #endif // KOFLOATINGMESSAGE_H

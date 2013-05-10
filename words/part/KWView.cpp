@@ -778,7 +778,7 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
     // Handle verticl scroll bar.
     QScrollBar *vsb = static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar();
 
-    if (e->x() >= (m_gui->size().width() - vsb->size().width() - 5)) {
+    if (e->x() >= (m_gui->size().width() - vsb->size().width() - 10)) {
         vsb->setVisible(true);
     }
     else {
