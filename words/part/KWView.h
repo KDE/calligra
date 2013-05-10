@@ -42,6 +42,7 @@ class KoZoomController;
 class KoFindText;
 class KoFindStyle;
 
+class QPushButton;
 #ifdef SHOULD_BUILD_RDF
 class KoRdfSemanticItem;
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
@@ -206,7 +207,7 @@ private slots:
     /** Set view into dsitraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.
      */
-    void setDistractionFreeMode(bool);
+    void setDistractionFreeMode(bool toggled = false);
     void hideCursor();
 
 private:
@@ -247,6 +248,9 @@ private:
 
     bool m_isDistractionFreeMode;
     QTimer *m_hideCursorTimer;
+    // The button will add to staus bar in distraction-free mode to let user can
+    // back to standard view.
+    QPushButton *m_dfmExitButton;
 };
 
 #endif

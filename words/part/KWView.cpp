@@ -91,6 +91,7 @@
 // KDE + Qt includes
 #include <QTimer>
 #include <QScrollBar>
+#include <QPushButton>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
@@ -165,6 +166,11 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     //Timer start in Distraction-Free mode view.
     m_hideCursorTimer = new QTimer(this);
     connect(m_hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
+
+    m_dfmExitButton = new QPushButton(i18n("Exit Distraction-Free Mode"));
+    addStatusBarItem(m_dfmExitButton, 0);
+    m_dfmExitButton->setVisible(false);
+    connect(m_dfmExitButton, SIGNAL(clicked()), this, SLOT(setDistractionFreeMode()));
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
@@ -738,6 +744,10 @@ void KWView::setDistractionFreeMode(bool toggled)
             toolbar->setVisible(!toggled);
         }
     }
+
+    // Exit Distraction-Free mode button.
+    m_dfmExitButton->setVisible(toggled);
+
     // Show a floating message.
     if (toggled) {
         KoFloatingMessage *fm = new KoFloatingMessage(i18n("Going into Distraction-Free mode.\n Press Ctrl+H to go back."), this);
