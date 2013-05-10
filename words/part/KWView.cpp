@@ -76,6 +76,7 @@
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
 #include <KoFloatingMessage.h>
+#include <KoCanvasControllerWidget.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
@@ -89,6 +90,7 @@
 
 // KDE + Qt includes
 #include <QTimer>
+#include <QScrollBar>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
@@ -725,6 +727,8 @@ void KWView::showStatusBar(bool toggled)
 
 void KWView::setDistractionFreeMode(bool toggled)
 {
+    m_isDistractionFreeMode = toggled;
+
     shell()->toggleDockersVisibility(!toggled);
     shell()->menuBar()->setVisible(!toggled);
     shell()->statusBar()->setVisible(!toggled);
@@ -734,11 +738,12 @@ void KWView::setDistractionFreeMode(bool toggled)
             toolbar->setVisible(!toggled);
         }
     }
+    // Show a floating message.
     if (toggled) {
         KoFloatingMessage *fm = new KoFloatingMessage(i18n("Going into Distraction-Free mode.\n Press Ctrl+H to go back."), this);
         fm->showMessage();
     }
-    m_isDistractionFreeMode = toggled;
+    //Hide cursor.
     if(toggled) {
         m_hideCursorTimer->start(4000);
     }
@@ -746,21 +751,38 @@ void KWView::setDistractionFreeMode(bool toggled)
         // FIXME: Return back cursor to canvas if cursor is blank cursor.
         m_hideCursorTimer->stop();
     }
+    // Hide Vertical scroll bar.
+    static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar()->setVisible(!toggled);
 }
 
 void KWView::hideCursor(){
     m_canvas->setCursor(Qt::BlankCursor);
+    m_gui->setCursor(Qt::BlankCursor);
 }
 
-void KWView::canvasMouseMoveEvent(QMouseEvent *e)
+void KWView::viewMouseMoveEvent(QMouseEvent *e)
 {
     if (!m_isDistractionFreeMode)
         return;
-    if (e->y() >= (m_canvas->size().height() - statusBar()->size().height())) {
+
+    m_gui->setCursor(Qt::ArrowCursor);
+
+    // Handle stause bar.
+    if (e->y() >= (m_gui->size().height() - statusBar()->size().height())) {
         shell()->statusBar()->setVisible(true);
     }
     else {
        shell()->statusBar()->setVisible(false);
+    }
+
+    // Handle verticl scroll bar.
+    QScrollBar *vsb = static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar();
+
+    if (e->x() >= (m_gui->size().width() - vsb->size().width() - 5)) {
+        vsb->setVisible(true);
+    }
+    else {
+        vsb->setVisible(false);
     }
 }
 

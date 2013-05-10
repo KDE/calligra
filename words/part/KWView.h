@@ -116,7 +116,7 @@ public:
     int minPageNumber() const { return m_minPageNum; }
     int maxPageNumber() const { return m_maxPageNum; }
 
-    void canvasMouseMoveEvent(QMouseEvent *e);
+    void viewMouseMoveEvent(QMouseEvent *e);
 
 
 signals:
