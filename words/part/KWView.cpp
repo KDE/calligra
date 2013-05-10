@@ -762,7 +762,8 @@ void KWView::setDistractionFreeMode(bool toggled)
         m_hideCursorTimer->stop();
     }
     // Hide Vertical scroll bar.
-    static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar()->setVisible(!toggled);
+    static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void KWView::hideCursor(){
@@ -777,22 +778,24 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
 
     m_gui->setCursor(Qt::ArrowCursor);
 
-    // Handle stause bar.
+    // Handle stause bar & horizonta scroll bar.
+    QScrollBar *hsb = static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar();
     if (e->y() >= (m_gui->size().height() - statusBar()->size().height())) {
         shell()->statusBar()->setVisible(true);
+        static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     }
     else {
        shell()->statusBar()->setVisible(false);
+       static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 
     // Handle verticl scroll bar.
     QScrollBar *vsb = static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar();
-
     if (e->x() >= (m_gui->size().width() - vsb->size().width() - 10)) {
-        vsb->setVisible(true);
+         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
     else {
-        vsb->setVisible(false);
+         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 }
 
