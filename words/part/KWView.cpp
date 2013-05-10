@@ -160,6 +160,10 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
 
+    //Timer start in Distraction-Free mode view.
+    m_hideCursorTimer = new QTimer(this);
+    connect(m_hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
+
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)),
@@ -735,6 +739,17 @@ void KWView::setDistractionFreeMode(bool toggled)
         fm->showMessage();
     }
     m_isDistractionFreeMode = toggled;
+    if(toggled) {
+        m_hideCursorTimer->start(4000);
+    }
+    else {
+        // FIXME: Return back cursor to canvas if cursor is blank cursor.
+        m_hideCursorTimer->stop();
+    }
+}
+
+void KWView::hideCursor(){
+    m_canvas->setCursor(Qt::BlankCursor);
 }
 
 void KWView::canvasMouseMoveEvent(QMouseEvent *e)

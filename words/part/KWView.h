@@ -118,6 +118,7 @@ public:
 
     void canvasMouseMoveEvent(QMouseEvent *e);
 
+
 signals:
     void shownPagesChanged();
 
@@ -206,6 +207,7 @@ private slots:
      * and set view into  full screen mode.
      */
     void setDistractionFreeMode(bool);
+    void hideCursor();
 
 private:
     KWGui *m_gui;
@@ -244,6 +246,7 @@ private:
     int m_maxPageNum;
 
     bool m_isDistractionFreeMode;
+    QTimer *m_hideCursorTimer;
 };
 
 #endif
