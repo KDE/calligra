@@ -18,8 +18,9 @@
 */
 
 #include "validator.h"
+#include <KLocale>
 
-namespace KexiUtils
+namespace KexiDB
 {
 class Validator::Private
 {
@@ -27,32 +28,13 @@ public:
     Private()
             : acceptsEmptyValue(false) {
     }
-    bool acceptsEmptyValue : 1;
+    bool acceptsEmptyValue;
 };
 }
 
 //-----------------------------------------------------------
 
-namespace KexiUtils
-{
-class MultiValidator::Private
-{
-public:
-    Private() {
-    }
-    ~Private() {
-        qDeleteAll(ownedSubValidators);
-        ownedSubValidators.clear();
-    }
-
-    QList<QValidator*> ownedSubValidators;
-    QList<QValidator*> subValidators;
-};
-}
-
-//-----------------------------------------------------------
-
-using namespace KexiUtils;
+using namespace KexiDB;
 
 Validator::Validator(QObject * parent)
         : QValidator(parent)
@@ -102,71 +84,5 @@ bool Validator::acceptsEmptyValue() const
 const QString Validator::msgColumnNotEmpty()
 {
     return I18N_NOOP("\"%1\" value has to be entered.");
-}
-
-//-----------------------------------------------------------
-
-MultiValidator::MultiValidator(QObject* parent)
-        : Validator(parent)
-        , d(new Private)
-{
-}
-
-MultiValidator::MultiValidator(QValidator *validator, QObject * parent)
-        : Validator(parent)
-        , d(new Private)
-{
-    addSubvalidator(validator);
-}
-
-MultiValidator::~MultiValidator()
-{
-    delete d;
-}
-
-void MultiValidator::addSubvalidator(QValidator* validator, bool owned)
-{
-    if (!validator)
-        return;
-    d->subValidators.append(validator);
-    if (owned && !validator->parent())
-        d->ownedSubValidators.append(validator);
-}
-
-QValidator::State MultiValidator::validate(QString & input, int & pos) const
-{
-    State s;
-    foreach(QValidator* validator, d->subValidators) {
-        s = validator->validate(input, pos);
-        if (s == Intermediate || s == Invalid)
-            return s;
-    }
-    return Acceptable;
-}
-
-void MultiValidator::fixup(QString & input) const
-{
-    foreach(QValidator* validator, d->subValidators) {
-        validator->fixup(input);
-    }
-}
-
-Validator::Result MultiValidator::internalCheck(
-    const QString &valueName, const QVariant& v,
-    QString &message, QString &details)
-{
-    Result r;
-    bool warning = false;
-    foreach(QValidator* validator, d->subValidators) {
-        if (dynamic_cast<Validator*>(validator))
-            r = dynamic_cast<Validator*>(validator)->internalCheck(valueName, v, message, details);
-        else
-            r = Ok; //ignore
-        if (r == Error)
-            return Error;
-        else if (r == Warning)
-            warning = true;
-    }
-    return warning ? Warning : Ok;
 }
 

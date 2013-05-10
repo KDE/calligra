@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,10 @@ public:
     virtual ~KexiDBPasswordDialog();
 
     bool showConnectionDetailsRequested() const;
+
+    //! Asks the user for password and sets it to data.
+    //! @return true is user provided the password.
+    static bool getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent = 0);
 
 protected slots:
     virtual void done(int r);

@@ -31,7 +31,7 @@
 #include <kglobalsettings.h>
 
 
-KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiBoolTableEdit::KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
     kDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();

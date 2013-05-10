@@ -597,6 +597,10 @@ QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
         || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
         size.setHeight(1E6);
     }
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+        || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+        rootArea->setNoWrap(1E6);
+    }
 
     return size;
 }
