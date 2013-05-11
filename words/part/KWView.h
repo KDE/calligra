@@ -204,11 +204,16 @@ private slots:
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard
     void pasteRequested();
-    /** Set view into dsitraction free mode, hide menu bar, staus bar, tool bar, dockes
+
+    /**
+     * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.
      */
-    void setDistractionFreeMode(bool toggled = false);
+    void setDistractionFreeMode(bool);
+    /// Call after 4 seconds, user doesn't move cursor.
     void hideCursor();
+    /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
+    void exitDistractioFreeMode();
 
 private:
     KWGui *m_gui;
@@ -248,7 +253,7 @@ private:
 
     bool m_isDistractionFreeMode;
     QTimer *m_hideCursorTimer;
-    // The button will add to staus bar in distraction-free mode to let user can
+    // The button will add to staus bar in distraction-free mode to let user come
     // back to standard view.
     QPushButton *m_dfmExitButton;
 };

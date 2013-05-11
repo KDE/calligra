@@ -56,8 +56,6 @@
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
-#include <ktoolbar.h>
-#include <kmenubar.h>
 
 #include <QTimer>
 #include <QDockWidget>

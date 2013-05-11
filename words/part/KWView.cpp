@@ -170,7 +170,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_dfmExitButton = new QPushButton(i18n("Exit Distraction-Free Mode"));
     addStatusBarItem(m_dfmExitButton, 0);
     m_dfmExitButton->setVisible(false);
-    connect(m_dfmExitButton, SIGNAL(clicked()), this, SLOT(setDistractionFreeMode()));
+    connect(m_dfmExitButton, SIGNAL(clicked()), this, SLOT(exitDistractioFreeMode()));
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
@@ -351,7 +351,7 @@ void KWView::setupActions()
     tAction = new KToggleAction(i18n("Distraction Free Mode"), this);
     tAction->setToolTip(i18n("Set view in distraction free mode"));
     tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
-    actionCollection()->addAction("view_distractionfree_mode", tAction);
+    actionCollection()->addAction("view_distractionfreemode", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setDistractionFreeMode(bool)));
 
 #ifdef SHOULD_BUILD_RDF
@@ -731,37 +731,37 @@ void KWView::showStatusBar(bool toggled)
     if (statusBar()) statusBar()->setVisible(toggled);
 }
 
-void KWView::setDistractionFreeMode(bool toggled)
+void KWView::setDistractionFreeMode(bool status)
 {
-    m_isDistractionFreeMode = toggled;
+    m_isDistractionFreeMode = status;
 
-    shell()->toggleDockersVisibility(!toggled);
-    shell()->menuBar()->setVisible(!toggled);
-    shell()->statusBar()->setVisible(!toggled);
-    shell()->viewFullscreen(toggled);
+    shell()->toggleDockersVisibility(!status);
+    shell()->menuBar()->setVisible(!status);
+    shell()->statusBar()->setVisible(!status);
+    shell()->viewFullscreen(status);
     foreach(KToolBar* toolbar, shell()->toolBars()) {
-        if (toolbar->isVisible() == toggled) {
-            toolbar->setVisible(!toggled);
+        if (toolbar->isVisible() == status) {
+            toolbar->setVisible(!status);
         }
     }
 
     // Exit Distraction-Free mode button.
-    m_dfmExitButton->setVisible(toggled);
+    m_dfmExitButton->setVisible(status);
 
     // Show a floating message.
-    if (toggled) {
+    if (status) {
         KoFloatingMessage *fm = new KoFloatingMessage(i18n("Going into Distraction-Free mode.\n Press Ctrl+H to go back."), this);
         fm->showMessage();
     }
     //Hide cursor.
-    if(toggled) {
+    if(status) {
         m_hideCursorTimer->start(4000);
     }
     else {
         // FIXME: Return back cursor to canvas if cursor is blank cursor.
         m_hideCursorTimer->stop();
     }
-    // Hide Vertical scroll bar.
+    // Hide vertical  and horizontal scroll bar.
     static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
@@ -771,6 +771,14 @@ void KWView::hideCursor(){
     m_gui->setCursor(Qt::BlankCursor);
 }
 
+void KWView::exitDistractioFreeMode()
+{
+    QAction *action = actionCollection()->action("view_distractionfreemode");
+    action->setChecked(false);
+    m_gui->setCursor(Qt::ArrowCursor);
+    setDistractionFreeMode(false);
+}
+
 void KWView::viewMouseMoveEvent(QMouseEvent *e)
 {
     if (!m_isDistractionFreeMode)
@@ -778,8 +786,7 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
 
     m_gui->setCursor(Qt::ArrowCursor);
 
-    // Handle stause bar & horizonta scroll bar.
-    QScrollBar *hsb = static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar();
+    // Handle stause bar and horizonta scroll bar.
     if (e->y() >= (m_gui->size().height() - statusBar()->size().height())) {
         shell()->statusBar()->setVisible(true);
         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -789,7 +796,7 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
        static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 
-    // Handle verticl scroll bar.
+    // Handle vertical scroll bar.
     QScrollBar *vsb = static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->verticalScrollBar();
     if (e->x() >= (m_gui->size().width() - vsb->size().width() - 10)) {
          static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
