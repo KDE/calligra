@@ -43,7 +43,6 @@
 #include <QAction>
 #include <QScrollBar>
 #include <KoMainWindow.h>
-#include <kdebug.h>
 
 KWGui::KWGui(const QString &viewMode, KWView *parent)
         : QWidget(parent),
@@ -52,8 +51,6 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setMargin(0);
     gridLayout->setSpacing(0);
-
-    setMouseTracking(true);
 
     // Ruler
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_view->viewConverter());
@@ -186,8 +183,3 @@ void KWGui::setupUnitActions()
     m_horizontalRuler->setPopupActionList(unitActions);
 }
 
-
-void KWGui::mouseMoveEvent(QMouseEvent *e)
-{
-    m_view->viewMouseMoveEvent(e);
-}
