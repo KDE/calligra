@@ -43,9 +43,9 @@ public:
     Private() {};
     ~Private() {};
 
-    // Background Image
-    // Columns
-    // List Style
+    // NYI: Background Image
+    // NYI: Columns
+    // NYI: List Style
 };
 
 
@@ -83,14 +83,17 @@ bool KoOdfGraphicProperties::readOdf(KoXmlStreamReader &reader)
         QString child = reader.qualifiedName().toString();
 
         if (child == "style:background-image") {
-            reader.skipCurrentElement();
+            // FIXME: NYI
         }
         else if (child == "style:columns") {
-            reader.skipCurrentElement();
+            // FIXME: NYI
         }
         else if (child == "text:list-style") {
-            reader.skipCurrentElement();
+            // FIXME: NYI
         }
+
+        // Skip rest of each element including children that are not read yet (shouldn't be any).
+        reader.skipCurrentElement();
     }
 
     return retval;
@@ -102,6 +105,12 @@ bool KoOdfGraphicProperties::saveOdf(const QString &propertySet, KoXmlWriter *wr
 
     writer->startElement("style:graphic-properties");
     saveAttributes(writer);
+
+    // Save child elements of style:graphic-properties
+    // FIXME NYI: style:background-image
+    // FIXME NYI: style:columns
+    // FIXME NYI: text:list-style
+
     writer->endElement(); // style:graphic-properties
 
     return true;

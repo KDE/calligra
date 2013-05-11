@@ -43,7 +43,7 @@ public:
     Private();
     ~Private();
 
-    // Background Image
+    // NYI: Background Image
     KoOdfStyleDropCap         *dropCap;
     QList<KoOdfStyleTabStop*>  tabStops;
 };
@@ -57,6 +57,7 @@ KoOdfParagraphProperties::Private::~Private()
 {
     if (dropCap) {
         delete dropCap;
+        dropCap = 0;
     }
     qDeleteAll(tabStops);
 }
@@ -80,6 +81,13 @@ KoOdfParagraphProperties::~KoOdfParagraphProperties()
 void KoOdfParagraphProperties::clear()
 {
     KoOdfStyleProperties::clear();
+
+    // FIXME: background image
+    if (d->dropCap) {
+        delete d->dropCap;
+        d->dropCap = 0;
+    }
+    qDeleteAll(d->tabStops);
 }
 
 
@@ -96,7 +104,7 @@ bool KoOdfParagraphProperties::readOdf(KoXmlStreamReader &reader)
         QString child = reader.qualifiedName().toString();
 
         if (child == "style:background-image") {
-            // FIXME: Implement background image
+            // FIXME: NYI
         }
         else if (child == "style:drop-cap") {
             if (d->dropCap) {
@@ -133,7 +141,7 @@ bool KoOdfParagraphProperties::saveOdf(const QString &propertySet, KoXmlWriter *
     saveAttributes(writer);
 
     // Save child elements of style:paragraph-properties
-    // FIXME: Save background image here
+    // FIXME NYI: background image
     if (d->dropCap) {
         writer->startElement("style:drop-cap");
         ::saveAttributes(d->dropCap->attributes, writer);
