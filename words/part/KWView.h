@@ -42,6 +42,7 @@ class KoZoomController;
 class KoFindText;
 class KoFindStyle;
 
+class QPushButton;
 #ifdef SHOULD_BUILD_RDF
 class KoRdfSemanticItem;
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
@@ -115,6 +116,9 @@ public:
 
     int minPageNumber() const { return m_minPageNum; }
     int maxPageNumber() const { return m_maxPageNum; }
+
+    void viewMouseMoveEvent(QMouseEvent *e);
+
 
 signals:
     void shownPagesChanged();
@@ -201,6 +205,16 @@ private slots:
     /// user wants to past data from the clipboard
     void pasteRequested();
 
+    /**
+     * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
+     * and set view into  full screen mode.
+     */
+    void setDistractionFreeMode(bool);
+    /// Call after 4 seconds, user doesn't move cursor.
+    void hideCursor();
+    /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
+    void exitDistractioFreeMode();
+
 private:
     KWGui *m_gui;
     KWCanvas *m_canvas;
@@ -236,6 +250,12 @@ private:
     qreal m_textMaxX; // The max x value where text can appear we currently show. Prevents endless loop
     int m_minPageNum;
     int m_maxPageNum;
+
+    bool m_isDistractionFreeMode;
+    QTimer *m_hideCursorTimer;
+    // The button will add to staus bar in distraction-free mode to let user come
+    // back to standard view.
+    QPushButton *m_dfmExitButton;
 };
 
 #endif
