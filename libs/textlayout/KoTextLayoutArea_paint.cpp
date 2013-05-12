@@ -824,10 +824,9 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
     }
 
 
-    // Finally let's paint our own spelling markings
+    // Finally let's paint our own spelling and grammar markings
     // TODO Should we make this optional at this point (right on/off handled by the plugin)
     // also we might want to provide alternative ways of drawing it
-    KoTextBlockData blockData(block);
     QPen penBackup = painter->pen();
     QPen pen;
     pen.setColor(QColor(Qt::red));
@@ -835,7 +834,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, b
     QVector<qreal> pattern;
     pattern << 1 << 2;
     pen.setDashPattern(pattern);
-    painter->setPen(pen);
+    applyCustomMarkups(painter, block, KoTextBlockData::Misspell, pen);
 
     QList<KoTextBlockData::MarkupRange>::Iterator markIt = blockData.markupsBegin(KoTextBlockData::Misspell);
     QList<KoTextBlockData::MarkupRange>::Iterator markEnd = blockData.markupsEnd(KoTextBlockData::Misspell);

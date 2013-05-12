@@ -26,6 +26,7 @@
 
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextBlockData.h>
 #include <KoInsets.h>
 
 #include <QRectF>
@@ -207,6 +208,8 @@ private:
     void drawListItem(QPainter *painter, QTextBlock &block);
 
     void decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacter);
+    
+    void applyCustomMarkups(QPainter *painter, QTextBlock &block, KoTextBlockData::MarkupType type, QPen &pen);
 
     void drawStrikeOuts(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
