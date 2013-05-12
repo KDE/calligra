@@ -27,6 +27,10 @@ if(SHOULD_BUILD_LIB_ODFTRAVERSE)
     add_subdirectory(libodftraverse)
 endif(SHOULD_BUILD_LIB_ODFTRAVERSE)
 
+if(SHOULD_BUILD_LIB_ODFREADER)
+    add_subdirectory(libodfreader)
+endif(SHOULD_BUILD_LIB_ODFREADER)
+
 if(SHOULD_BUILD_LIB_MSO)
     add_subdirectory(libmso)
 endif(SHOULD_BUILD_LIB_MSO)

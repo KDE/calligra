@@ -29,7 +29,7 @@ set(AsciiExport_PART_SRCS
     OdtTraverserAsciiBackend.cpp
 )
 kde4_add_plugin(asciiexport ${AsciiExport_PART_SRCS})
-target_link_libraries(asciiexport odftraverse komain koodf)
+target_link_libraries(asciiexport odftraverse odfreader komain koodf)
 install(TARGETS asciiexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES words_ascii_export.desktop DESTINATION ${SERVICES_INSTALL_DIR})
