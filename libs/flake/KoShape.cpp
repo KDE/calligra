@@ -25,6 +25,7 @@
 #include "KoShape_p.h"
 #include "KoShapeContainer.h"
 #include "KoShapeLayer.h"
+#include "KoShapeAnchor.h"
 #include "KoShapeContainerModel.h"
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
@@ -470,11 +471,6 @@ QTransform KoShape::transformation() const
     return d->localMatrix;
 }
 
-KoShape::ChildZOrderPolicy KoShape::childZOrderPolicy()
-{
-    return ChildZDefault;
-}
-
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
     // First sort according to runThrough which is sort of a master level
@@ -483,20 +479,14 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
     int runThrough1 = s1->runThrough();
     int runThrough2 = s2->runThrough();
     while (parentShapeS1) {
-        if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
-            runThrough1 = parentShapeS1->runThrough();
-        } else {
-            runThrough1 = runThrough1 + parentShapeS1->runThrough();
-        }
+        runThrough1 = runThrough1 + parentShapeS1->runThrough();
+
         parentShapeS1 = parentShapeS1->parent();
     }
 
     while (parentShapeS2) {
-        if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
-            runThrough2 = parentShapeS2->runThrough();
-        } else {
-            runThrough2 = runThrough2 + parentShapeS2->runThrough();
-        }
+        runThrough2 = runThrough2 + parentShapeS2->runThrough();
+
         parentShapeS2 = parentShapeS2->parent();
     }
 
@@ -525,30 +515,39 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
         parentShapeS2 = s2;
         index2 = parentShapeS2->zIndex();
         while (parentShapeS2) {
+            // If the one shape is a parent/child of the other then sort so.
+            if (s1 == parentShapeS2) {
+                return true;
+            }
+            if (s2 == parentShapeS1) {
+                return false;
+            }
+
+            // if we have a common parent then flag and immediately bail out inner loop
             if (parentShapeS2 == parentShapeS1) {
                 foundCommonParent = true;
                 break;
             }
-            if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
-                index2 = parentShapeS2->zIndex();
-            }
+            index2 = parentShapeS2->zIndex();
             parentShapeS2 = parentShapeS2->parent();
         }
 
         if (!foundCommonParent) {
-            if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
-                index1 = parentShapeS1->zIndex();
-            }
+            index1 = parentShapeS1->zIndex();
             parentShapeS1 = parentShapeS1->parent();
         }
     }
 
-    // If the one shape is a parent/child of the other then sort so.
-    if (s1 == parentShapeS2) {
-        return true;
-    }
-    if (s2 == parentShapeS1) {
-        return false;
+    if (s1->parent() && s1->parent() == s2->parent()) {
+        // Both shapes have the same direct (and real) parent.
+        // If one is as-char it should be below any other children
+        // If both are as-char shapes they can't overlap, so no need to worry about that case
+        if (s1->anchor() && s1->anchor()->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
+            return true;
+        }
+        if (s2->anchor() && s2->anchor()->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
+            return false;
+        }
     }
 
     // If we went that far then the z-Index is used for sorting.
@@ -899,22 +898,21 @@ KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
     return d->textRunAroundSide;
 }
 
-void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrought)
+void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel level)
 {
     Q_D(KoShape);
 
     if (side == RunThrough) {
-        if (runThrought == Background) {
+        if (level == Background) {
             setRunThrough(-1);
         } else {
-            setRunThrough(1);
+            setRunThrough(0);
         }
     } else {
+        if (d->textRunAroundSide == side) {
+            return;
+        }
         setRunThrough(0);
-    }
-
-    if ( d->textRunAroundSide == side) {
-        return;
     }
 
     d->textRunAroundSide = side;
