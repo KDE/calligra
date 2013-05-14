@@ -80,7 +80,7 @@ protected:
 
     
 signals:
-    void dataSet(KexiTableViewData *data);
+    void dataSet(KexiDB::TableViewData *data);
 
     void itemSelected(KexiDB::RecordData *);
     void cellSelected(int col, int row);

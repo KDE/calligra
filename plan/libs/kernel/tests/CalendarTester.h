@@ -21,7 +21,7 @@
 #define KPlato_CalendarTester_h
 
 #include <QtTest>
-#include <KTempDir>
+#include <ktempdir.h>
 
 namespace KPlato
 {

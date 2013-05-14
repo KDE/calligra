@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_FLATPROXYMODEL_H
-#define KPLATO_FLATPROXYMODEL_H
+#ifndef KPTFLATPROXYMODEL_H
+#define KPTFLATPROXYMODEL_H
 
 #include "kplatomodels_export.h"
 
@@ -51,7 +51,7 @@ class KPLATOMODELS_EXPORT FlatProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 public:
-    FlatProxyModel ( QObject * parent = 0 );
+    explicit FlatProxyModel(QObject *parent = 0);
 
     virtual QModelIndex mapFromSource ( const QModelIndex & sourceIndex ) const;
     virtual QItemSelection mapSelectionFromSource ( const QItemSelection & sourceSelection ) const;

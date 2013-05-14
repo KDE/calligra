@@ -24,8 +24,8 @@
 
 #include "kptviewbase.h"
 
-#include <KHTMLPart>
-#include <KUrl>
+#include "khtml_part.h"
+#include <kurl.h>
 
 class KoDocument;
 

@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kurl.h>
-#include <KNumInput>
+#include <knuminput.h>
 
 #include <QFileInfo>
 #include <QPointF>

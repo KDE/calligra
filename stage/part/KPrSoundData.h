@@ -21,7 +21,7 @@
 #ifndef KPRSOUNDDATA_H
 #define KPRSOUNDDATA_H
 
-#include <KUrl>
+#include <kurl.h>
 #include "stage_export.h"
 
 class KPrSoundCollection;

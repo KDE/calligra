@@ -23,8 +23,8 @@
 #include <ui_latexexportwidget.h>
 
 // KDE
-#include <KDialog>
-#include <KUrl>
+#include <kdialog.h>
+#include <kurl.h>
 // Qt
 #include <QStringList>
 

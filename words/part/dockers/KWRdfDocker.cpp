@@ -40,7 +40,7 @@
 #include <kdebug.h>
 
 #include <QTextDocument>
-#include <KMenu>
+#include <kmenu.h>
 
 #include "KoRdfSemanticTreeWidgetItem.h"
 

@@ -38,8 +38,8 @@ class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase
 {
     Q_OBJECT
 public:
-    ConfigTaskPanelImpl( QWidget *parent );
-    
+    explicit ConfigTaskPanelImpl(QWidget *parent);
+
     void initDescription();
 
 public slots:

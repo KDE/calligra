@@ -26,7 +26,7 @@
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
 
-#include <KMimeType>
+#include <kmimetype.h>
 
 class CAAbstractDocumentHandler::Private
 {

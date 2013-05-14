@@ -26,7 +26,7 @@
 #include "MsooXmlImport.h"
 #include <KoOdfExporter.h>
 #include <QSet>
-#include <KDebug>
+#include <kdebug.h>
 
 using namespace MSOOXML;
 

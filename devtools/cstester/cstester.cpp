@@ -25,7 +25,7 @@
 #include <KWDocument.h>
 #include <sheets/part/Doc.h>
 #include <KoPart.h>
-#include <KMimeType>
+#include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kcmdlineargs.h>

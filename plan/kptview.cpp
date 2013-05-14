@@ -56,7 +56,7 @@
 #include <ktoolbar.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
-#include <KConfigDialogManager>
+#include <kconfigdialogmanager.h>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
@@ -65,10 +65,10 @@
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
-#include <KConfigDialog>
-#include <KToolInvocation>
-#include <KRun>
-#include <KStandardDirs>
+#include <kconfigdialog.h>
+#include <ktoolinvocation.h>
+#include <krun.h>
+#include <kstandarddirs.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -690,16 +690,16 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.tip = i18nc( "@info:tooltip", "View task work package information" );
     } else if ( type == "GanttView" ) {
         vi.name = i18n( "Gantt" );
-        vi.tip = i18nc( "@info:tooltip", "View gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View Gantt chart" );
     } else if ( type == "MilestoneGanttView" ) {
         vi.name = i18n( "Milestone Gantt" );
-        vi.tip = i18nc( "@info:tooltip", "View milestone gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View milestone Gantt chart" );
     } else if ( type == "ResourceAppointmentsView" ) {
         vi.name = i18n( "Resource Assignments" );
         vi.tip = i18nc( "@info:tooltip", "View resource assignments in a table" );
     } else if ( type == "ResourceAppointmentsGanttView" ) {
         vi.name = i18n( "Resource Assignments (Gantt)" );
-        vi.tip = i18nc( "@info:tooltip", "View resource assignments in gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View resource assignments in Gantt chart" );
     } else if ( type == "AccountsView" ) {
         vi.name = i18n( "Cost Breakdown" );
         vi.tip = i18nc( "@info:tooltip", "View planned and actual cost" );
@@ -1866,7 +1866,7 @@ void View::slotConfigure()
     ConfigDialog *dialog = new ConfigDialog( this, "Plan Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), koIconName("view-task") );
     dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), koIconName("fill-color") );
-    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("planwork") );
+    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), koIconName("calligraplanwork") );
     dialog->show();
 
 }

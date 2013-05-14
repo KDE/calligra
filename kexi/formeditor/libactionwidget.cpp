@@ -26,7 +26,7 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 
 //unused #include "formmanager.h"
 

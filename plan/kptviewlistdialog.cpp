@@ -48,9 +48,6 @@ ViewListDialog::ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *p
     connect( m_panel, SIGNAL( viewCreated( ViewBase* ) ), SIGNAL( viewCreated( ViewBase* ) ) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
-
-    // HACK: the dialog does not resize to reasonable size
-    resize( m_panel->size() + QSize( 10, 43 ) );
 }
 
 void ViewListDialog::slotViewListItemRemoved( ViewListItem * )
@@ -292,9 +289,6 @@ ViewListEditViewDialog::ViewListEditViewDialog( ViewListWidget &viewlist, ViewLi
     connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
-
-    // HACK: the dialog does not resize to reasonable size
-    resize( m_panel->size() + QSize( 10, 43 ) );
 }
 
 void ViewListEditViewDialog::slotViewListItemRemoved( ViewListItem * )
@@ -409,9 +403,6 @@ ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist
     connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
-
-    // HACK: the dialog does not resize to reasonable size
-    resize( m_panel->size() + QSize( 10, 43 ) );
 }
 
 void ViewListEditCategoryDialog::slotViewListItemRemoved( ViewListItem * )
@@ -501,9 +492,6 @@ ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewli
     connect( m_panel, SIGNAL( viewCreated( ViewBase* ) ), SIGNAL( viewCreated( ViewBase* ) ) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
-
-    // HACK: the dialog does not resize to reasonable size
-    resize( m_panel->size() + QSize( 10, 43 ) );
 }
 
 void ViewListReportsDialog::slotViewListItemRemoved( ViewListItem * )

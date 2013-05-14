@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorizedsortfilterproxymodel.h>
 
 #include "State.h"
 #include "StateCategory.h"

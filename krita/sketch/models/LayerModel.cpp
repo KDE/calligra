@@ -32,6 +32,7 @@
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_filter_mask.h>
+#include <kis_shape_controller.h>
 #include <kis_adjustment_layer.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -253,7 +254,7 @@ void LayerModel::setView(QObject *newView)
         d->layers.clear();
         d->activeNode.clear();
         d->canvas = 0;
-        d->nodeModel->setDummiesFacade(0, 0);
+        d->nodeModel->setDummiesFacade(0, 0, 0);
 
     }
 
@@ -277,7 +278,8 @@ void LayerModel::setView(QObject *newView)
         d->nodeManager = d->canvas->view()->nodeManager();
 
         KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->view()->document()->shapeController());
-        d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image);
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->view()->document()->shapeController());
+        d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController);
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(d->image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(nodeChanged(KisNodeSP)));

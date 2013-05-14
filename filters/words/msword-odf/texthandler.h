@@ -470,6 +470,9 @@ private:
     //character properties applied to the bunch of nested fields
     wvWare::SharedPtr<const wvWare::Word97::CHP> m_fldChp;
 
+    int m_textBoxX;
+    int m_textBoxY;
+
     // ************************************************
     //  Obsolete
     // ************************************************

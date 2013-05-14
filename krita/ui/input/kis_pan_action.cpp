@@ -23,7 +23,7 @@
 #include <QApplication>
 #include <QGesture>
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include <KoCanvasController.h>
 

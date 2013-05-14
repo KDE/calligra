@@ -151,7 +151,7 @@ void MainProjectPanel::slotChooseLeader()
                 }
                 s += selection.email();
                 if ( ! selection.name().isEmpty() ) {
-                    s += ">";
+                    s += '>';
                 }
                 if ( ! s.isEmpty() ) {
                     names << s;

@@ -30,7 +30,7 @@
 #include <Formula.h>
 
 #include <kdebug.h>
-#include <KLocale>
+#include <klocale.h>
 
 // needed for MODE
 #include <QList>

@@ -33,7 +33,7 @@
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>

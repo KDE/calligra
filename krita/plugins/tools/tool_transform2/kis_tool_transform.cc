@@ -856,7 +856,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
-    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier)) {
+    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier)) {
 
         KisTool::mousePressEvent(event);
         return;
@@ -2170,14 +2170,17 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
         QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
 
         m_origImg = m_selectedPortionCache->
-                createThumbnail(thumbRect.width(),
-                                thumbRect.height(),
-                                srcRect,
-                                KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+            createThumbnail(thumbRect.width(),
+                            thumbRect.height(),
+                            srcRect,
+                            KoColorConversionTransformation::InternalRenderingIntent,
+                            KoColorConversionTransformation::InternalConversionFlags);
         m_thumbToImageTransform = scaleTransform.inverted();
 
     } else {
-        m_origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        m_origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h,
+                                                            KoColorConversionTransformation::InternalRenderingIntent,
+                                                            KoColorConversionTransformation::InternalConversionFlags);
         m_thumbToImageTransform = QTransform();
     }
 

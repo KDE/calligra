@@ -1,9 +1,9 @@
 #include <migration/migratemanager.h>
 #include <migration/keximigrate.h>
 #include <kdebug.h>
-#include <KAboutData>
-#include <KApplication>
-#include <KCmdLineArgs>
+#include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
 
 int main(int argc, char *argv[])
 {

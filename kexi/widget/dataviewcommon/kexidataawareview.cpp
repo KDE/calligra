@@ -27,8 +27,8 @@
 
 #include <QVBoxLayout>
 
-#include <KActionCollection>
-#include <KMenu>
+#include <kactioncollection.h>
+#include <kmenu.h>
 
 class KexiDataAwareView::Private
 {
@@ -408,8 +408,8 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
 {
     if (!dataAwareObject() || !dataAwareObject()->data())
         return false;
-    const KexiTableViewColumn::List *columns = dataAwareObject()->data()->columns();
-    foreach(KexiTableViewColumn *col, *columns) {
+    const KexiDB::TableViewColumn::List *columns = dataAwareObject()->data()->columns();
+    foreach(KexiDB::TableViewColumn *col, *columns) {
         if (!col->isVisible())
             continue;
         columnNames.append(col->field()->name());
@@ -419,7 +419,7 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
     //update "look in" selection if there was any
     const int currentColumnNumber = dataAwareObject()->currentColumn();
     if (currentColumnNumber >= 0 && currentColumnNumber < columns->count()) {
-        KexiTableViewColumn *col = columns->at(currentColumnNumber);
+        KexiDB::TableViewColumn *col = columns->at(currentColumnNumber);
         if (col && col->field())
             currentColumnName = col->field()->name();
     }

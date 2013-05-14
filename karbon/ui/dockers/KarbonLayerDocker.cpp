@@ -46,8 +46,8 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kparts/part.h>
-#include <KMenu>
-#include <KConfigGroup>
+#include <kmenu.h>
+#include <kconfiggroup.h>
 
 #include <QGridLayout>
 #include <QPushButton>

@@ -56,6 +56,7 @@
 #include "kis_selection_component.h"
 #include "flake/kis_shape_selection.h"
 #include "kis_image_config.h"
+#include "kis_infinity_manager.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -182,10 +183,15 @@ void KisCanvas2::setCanvasWidget(KisCanvasWidgetBase* widget)
         widget->setDecorations(m_d->canvasWidget->decorations());
     m_d->canvasWidget = widget;
 
-//     tmp->setAutoFillBackground(false);
-//     widget->setAttribute(Qt::WA_OpaquePaintEvent);
-//     widget->setMouseTracking(true);
-//     widget->setAcceptDrops(true);
+    if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
+        KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);
+        m_d->canvasWidget->addDecoration(manager);
+    }
+
+//    widget->setAutoFillBackground(false);
+//    widget->setAttribute(Qt::WA_OpaquePaintEvent);
+//    widget->setMouseTracking(true);
+//    widget->setAcceptDrops(true);
     tmp->installEventFilter(m_d->inputManager);
 //     widget->setAttribute(Qt::WA_AcceptTouchEvents, true);
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
@@ -357,13 +363,13 @@ void KisCanvas2::connectCurrentImage()
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
             this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
 
-    connect(image, SIGNAL(sigSizeChanged(qint32,qint32)),
-            SLOT(startResizingImage(qint32,qint32)),
+    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+            SLOT(startResizingImage()),
             Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)),
             this, SLOT(finishResizingImage(qint32,qint32)));
 
-    startResizingImage(image->width(), image->height());
+    startResizingImage();
 
     emit imageChanged(image);
 }
@@ -445,8 +451,12 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 
 }
 
-void KisCanvas2::startResizingImage(qint32 w, qint32 h)
+void KisCanvas2::startResizingImage()
 {
+    KisImageWSP image = this->image();
+    qint32 w = image->width();
+    qint32 h = image->height();
+
     emit sigContinueResizeImage(w, h);
 
     QRect imageBounds(0, 0, w, h);
@@ -544,6 +554,8 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
     QPointF moveOffset = offsetAfter - offsetBefore;
 
     m_d->canvasWidget->viewportMoved(moveOffset);
+
+    emit documentOffsetUpdateFinished();
 
     updateCanvas();
 }

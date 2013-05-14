@@ -22,7 +22,7 @@
 
 #include <KoUnit.h>
 #include <KoGlobal.h>
-#include <KConfigGroup>
+#include <kconfiggroup.h>
 
 KWApplicationConfig::KWApplicationConfig()
         : m_viewFrameBorders(true),

@@ -26,8 +26,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <KAction>
-#include <KShortcut>
+#include <kaction.h>
+#include <kshortcut.h>
 
 #include <QCheckBox>
 #include <QLabel>
