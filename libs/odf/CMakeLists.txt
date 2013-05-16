@@ -30,6 +30,7 @@ set(koodf_LIB_SRCS
     KoGenChanges.cpp
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
+    KoBackgroundImage.cpp
     KoBorder.cpp
     Ko3dScene.cpp
     KoShadowStyle.cpp
@@ -110,6 +111,7 @@ install( FILES
     KoGenChange.h
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
+    KoBackgroundImage.h
     KoBorder.h
     Ko3dScene.h
     KoShadowStyle.h
