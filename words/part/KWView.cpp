@@ -75,7 +75,6 @@
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
-#include <KoFloatingMessage.h>
 #include <KoCanvasControllerWidget.h>
 
 #ifdef SHOULD_BUILD_RDF
@@ -737,7 +736,7 @@ void KWView::setDistractionFreeMode(bool status)
 
     shell()->toggleDockersVisibility(!status);
     shell()->menuBar()->setVisible(!status);
-    shell()->statusBar()->setVisible(!status);
+
     shell()->viewFullscreen(status);
     foreach(KToolBar* toolbar, shell()->toolBars()) {
         if (toolbar->isVisible() == status) {
@@ -745,14 +744,16 @@ void KWView::setDistractionFreeMode(bool status)
         }
     }
 
+    if (status) {
+         QTimer::singleShot(2000, this, SLOT(hideUI()));
+    } else {
+         shell()->statusBar()->setVisible(true);
+         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    }
     // Exit Distraction-Free mode button.
     m_dfmExitButton->setVisible(status);
 
-    // Show a floating message.
-    if (status) {
-        KoFloatingMessage *fm = new KoFloatingMessage(i18n("Going into Distraction-Free mode.\n Press Ctrl+H to go back."), this);
-        fm->showMessage();
-    }
     //Hide cursor.
     if(status) {
         m_hideCursorTimer->start(4000);
@@ -761,9 +762,14 @@ void KWView::setDistractionFreeMode(bool status)
         // FIXME: Return back cursor to canvas if cursor is blank cursor.
         m_hideCursorTimer->stop();
     }
-    // Hide vertical  and horizontal scroll bar.
-    static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
+void KWView::hideUI()
+{
+     shell()->statusBar()->setVisible(false);
+     // Hide vertical  and horizontal scroll bar.
+     static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+     static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void KWView::hideCursor(){

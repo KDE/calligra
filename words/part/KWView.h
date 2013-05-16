@@ -204,7 +204,6 @@ private slots:
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard
     void pasteRequested();
-
     /**
      * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.
@@ -212,6 +211,8 @@ private slots:
     void setDistractionFreeMode(bool);
     /// Call after 4 seconds, user doesn't move cursor.
     void hideCursor();
+    /// Hide status bar and scroll bars after seconds in Distraction-Free mode.
+    void hideUI();
     /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
     void exitDistractioFreeMode();
 
