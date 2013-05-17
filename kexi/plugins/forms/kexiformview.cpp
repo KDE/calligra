@@ -48,7 +48,7 @@
 #include <db/cursor.h>
 #include <db/utils.h>
 #include <db/preparedstatement.h>
-#include <dataviewcommon/kexitableviewdata.h>
+#include <db/tableviewdata.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>
@@ -876,8 +876,8 @@ void KexiFormView::initDataSource()
 
     if (ok) {
 //! @todo PRIMITIVE!! data setting:
-//! @todo KexiTableViewData is not great name for data class here... rename/move?
-        KexiTableViewData* data = new KexiTableViewData(d->cursor);
+//! @todo KexiDB::TableViewData is not great name for data class here... rename/move?
+        KexiDB::TableViewData* data = new KexiDB::TableViewData(d->cursor);
         if (forceReadOnlyDataSource)
             data->setReadOnly(true);
         data->preloadAllRows();

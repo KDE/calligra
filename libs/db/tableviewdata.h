@@ -22,38 +22,33 @@
    Original Project: buX (www.bux.at)
 */
 
-#ifndef KEXITABLEVIEWDATA_H
-#define KEXITABLEVIEWDATA_H
+#ifndef KEXIDB_TABLEVIEWDATA_H
+#define KEXIDB_TABLEVIEWDATA_H
 
-#include <QVariant>
-#include <QVector>
-
-#include "KexiTableViewColumn.h"
-#include <kexiutils/utils.h>
-#include <db/RecordData.h>
+#include "tableviewcolumn.h"
+#include "RecordData.h"
 
 namespace KexiDB
 {
 class RowEditBuffer;
 class Cursor;
-}
 
-typedef KexiDB::AutodeletedList<KexiDB::RecordData*> KexiTableViewDataBase;
+typedef AutodeletedList<RecordData*> TableViewDataBase;
 
 /*! Reimplements list of records to allow configurable sorting and more.
 */
-class KEXIDATAVIEWCOMMON_EXPORT KexiTableViewData : public QObject, protected KexiTableViewDataBase
+class CALLIGRADB_EXPORT TableViewData : public QObject, protected TableViewDataBase
 {
     Q_OBJECT
 
 public:
-    typedef KexiTableViewDataBase::ConstIterator Iterator;
+    typedef TableViewDataBase::ConstIterator Iterator;
 
     //! not db-aware version
-    KexiTableViewData();
+    TableViewData();
 
     //! db-aware version
-    KexiTableViewData(KexiDB::Cursor *c);
+    explicit TableViewData(Cursor *c);
 
     /*! Defines two-column table usually used with comboboxes.
      First column is invisible and contains key values.
@@ -65,18 +60,18 @@ public:
 
      @todo make this more generic: allow to add more columns!
     */
-    KexiTableViewData(
+    TableViewData(
         const QList<QVariant> &keys, const QList<QVariant> &values,
-        KexiDB::Field::Type keyType = KexiDB::Field::Text,
-        KexiDB::Field::Type valueType = KexiDB::Field::Text);
+        Field::Type keyType = Field::Text,
+        Field::Type valueType = Field::Text);
 
     /*! Like above constructor, but keys and values are not provided.
      You can do this later by calling append(KexiDB::RecordData*) method.
      (KexiDB::RecordData object must have exactly two columns)
     */
-    KexiTableViewData(KexiDB::Field::Type keyType, KexiDB::Field::Type valueType);
+    TableViewData(Field::Type keyType, Field::Type valueType);
 
-    virtual ~KexiTableViewData();
+    virtual ~TableViewData();
 
     /*! Preloads all rows provided by cursor (only for db-aware version). */
     bool preloadAllRows();
@@ -99,7 +94,7 @@ public:
 
     /*! Adds column \a col.
      Warning: \a col will be owned by this object, and deleted on its destruction. */
-    void addColumn(KexiTableViewColumn* col);
+    void addColumn(TableViewColumn* col);
 
     int globalColumnID(int visibleID) const;
     int visibleColumnID(int globalID) const;
@@ -112,18 +107,18 @@ public:
      equivalent to cursor()->query()->parentTable()->name(). */
     QString dbTableName() const;
 
-    KexiDB::Cursor* cursor() const;
+    Cursor* cursor() const;
 
     inline uint columnsCount() const {
         return m_columns.count();
     }
 
-    inline KexiTableViewColumn* column(uint c) {
+    inline TableViewColumn* column(uint c) {
         return m_columns.value(c);
     }
 
     /*! \return columns information */
-    inline KexiTableViewColumn::List* columns() {
+    inline TableViewColumn::List* columns() {
         return &m_columns;
     }
 
@@ -163,12 +158,12 @@ public:
      for a lookup field (only reasonable if col->visibleLookupColumnInfo != 0).
      Note that \a newval may be changed in aboutToChangeCell() signal handler.
      \sa KexiDB::RowEditBuffer */
-    bool updateRowEditBufferRef(KexiDB::RecordData *record,
-                                int colnum, KexiTableViewColumn* col, QVariant& newval, bool allowSignals = true,
+    bool updateRowEditBufferRef(RecordData *record,
+                                int colnum, TableViewColumn* col, QVariant& newval, bool allowSignals = true,
                                 QVariant *visibleValueForLookupField = 0);
 
     /*! Added for convenience. Like above but \a newval is passed by value. */
-    inline bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum, KexiTableViewColumn* col,
+    inline bool updateRowEditBuffer(RecordData *record, int colnum, TableViewColumn* col,
                                     QVariant newval, bool allowSignals = true) {
         QVariant newv(newval);
         return updateRowEditBufferRef(record, colnum, col, newv, allowSignals);
@@ -176,23 +171,23 @@ public:
 
     /*! Added for convenience. Like above but it's assumed that \a record record's columns are ordered
      like in table view, not like in form view. Don't use this with form views. */
-    inline bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum,
+    inline bool updateRowEditBuffer(RecordData *record, int colnum,
                                     QVariant newval, bool allowSignals = true) {
-        KexiTableViewColumn* col = m_columns.value(colnum);
+        TableViewColumn* col = m_columns.value(colnum);
         return col ? updateRowEditBufferRef(record, colnum, col, newval, allowSignals) : false;
     }
 
     //! \return row edit buffer for currently edited record. Can be 0 or empty.
-    KexiDB::RowEditBuffer* rowEditBuffer() const;
+    RowEditBuffer* rowEditBuffer() const;
 
     /*! \return last operation's result information (always not null). */
-    const KexiDB::ResultInfo& result() const;
+    const ResultInfo& result() const;
 
-    bool saveRowChanges(KexiDB::RecordData& record, bool repaint = false);
+    bool saveRowChanges(RecordData& record, bool repaint = false);
 
-    bool saveNewRow(KexiDB::RecordData& record, bool repaint = false);
+    bool saveNewRow(RecordData& record, bool repaint = false);
 
-    bool deleteRow(KexiDB::RecordData& record, bool repaint = false);
+    bool deleteRow(RecordData& record, bool repaint = false);
 
     /*! Deletes rows (by number) passed with \a rowsToDelete.
      Currently, this method is only for non data-aware tables. */
@@ -219,7 +214,7 @@ public:
     /*! Inserts new \a record at index \a index.
      \a record will be owned by this data object.
      Note: Reasonable only for not not-db-aware version. */
-    void insertRow(KexiDB::RecordData& record, uint index, bool repaint = false);
+    void insertRow(RecordData& record, uint index, bool repaint = false);
 
     //! @todo add this as well? void insertRow(KexiDB::RecordData& record, KexiDB::RecordData& aboveRecord)
 
@@ -233,41 +228,41 @@ public:
         emit reloadRequested();
     }
 
-    inline KexiDB::RecordData* at(uint index) {
-        return KexiTableViewDataBase::at(index);
+    inline RecordData* at(uint index) {
+        return TableViewDataBase::at(index);
     }
     inline virtual uint count() const {
-        return KexiTableViewDataBase::count();
+        return TableViewDataBase::count();
     }
     inline bool isEmpty() const {
-        return KexiTableViewDataBase::isEmpty();
+        return TableViewDataBase::isEmpty();
     }
-    inline KexiDB::RecordData* first() {
-        return KexiTableViewDataBase::first();
+    inline RecordData* first() {
+        return TableViewDataBase::first();
     }
-    inline KexiDB::RecordData* last() {
-        return KexiTableViewDataBase::last();
+    inline RecordData* last() {
+        return TableViewDataBase::last();
     }
-    inline int indexOf(const KexiDB::RecordData* record, int from = 0) const {
-        return KexiTableViewDataBase::indexOf(const_cast<KexiDB::RecordData*>(record), from);
+    inline int indexOf(const RecordData* record, int from = 0) const {
+        return TableViewDataBase::indexOf(const_cast<RecordData*>(record), from);
     }
     inline void removeFirst() {
-        KexiTableViewDataBase::removeFirst();
+        TableViewDataBase::removeFirst();
     }
     inline void removeLast() {
-        KexiTableViewDataBase::removeLast();
+        TableViewDataBase::removeLast();
     }
-    inline void append(KexiDB::RecordData* record) {
-        KexiTableViewDataBase::append(record);
+    inline void append(RecordData* record) {
+        TableViewDataBase::append(record);
     }
-    inline void prepend(KexiDB::RecordData* record) {
-        KexiTableViewDataBase::prepend(record);
+    inline void prepend(RecordData* record) {
+        TableViewDataBase::prepend(record);
     }
-    inline KexiTableViewData::Iterator constBegin() const {
-        return KexiTableViewDataBase::constBegin();
+    inline TableViewData::Iterator constBegin() const {
+        return TableViewDataBase::constBegin();
     }
-    inline KexiTableViewData::Iterator constEnd() const {
-        return KexiTableViewDataBase::constEnd();
+    inline TableViewData::Iterator constEnd() const {
+        return TableViewDataBase::constEnd();
     }
 
     /*! \return true if ROWID information is stored within every row.
@@ -278,8 +273,8 @@ public:
      so every KexiDB::RecordData's length is expanded by one. */
     bool containsROWIDInfo() const;
 
-    inline KexiDB::RecordData* createItem() const {
-        return new KexiDB::RecordData(m_itemSize);
+    inline RecordData* createItem() const {
+        return new RecordData(m_itemSize);
     }
 
 public slots:
@@ -293,31 +288,31 @@ signals:
      Connect this signal to your slot and set \a result->success to false
      to disallow this change. You can also change \a newValue to other value,
      or change other columns in \a record. */
-    void aboutToChangeCell(KexiDB::RecordData *record, int colnum, QVariant& newValue,
-                           KexiDB::ResultInfo* result);
+    void aboutToChangeCell(RecordData *record, int colnum, QVariant& newValue,
+                           ResultInfo* result);
 
     /*! Emitted before inserting of a new, current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this inserting. You can also change columns in \a record. */
-    void aboutToInsertRow(KexiDB::RecordData *record, KexiDB::ResultInfo* result, bool repaint);
+    void aboutToInsertRow(RecordData *record, ResultInfo* result, bool repaint);
 
     /*! Emitted before changing of an edited, current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this change. You can also change columns in \a record. */
-    void aboutToUpdateRow(KexiDB::RecordData *record, KexiDB::RowEditBuffer* buffer,
-                          KexiDB::ResultInfo* result);
+    void aboutToUpdateRow(RecordData *record, RowEditBuffer* buffer,
+                          ResultInfo* result);
 
-    void rowUpdated(KexiDB::RecordData*); //!< Current row has been updated
+    void rowUpdated(RecordData*); //!< Current row has been updated
 
-    void rowInserted(KexiDB::RecordData*, bool repaint); //!< A row has been inserted
+    void rowInserted(RecordData*, bool repaint); //!< A row has been inserted
 
     //! A row has been inserted at \a index position (not db-aware data only)
-    void rowInserted(KexiDB::RecordData*, uint index, bool repaint);
+    void rowInserted(RecordData*, uint index, bool repaint);
 
     /*! Emitted before deleting of a current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this deleting. */
-    void aboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);
+    void aboutToDeleteRow(RecordData& record, ResultInfo* result, bool repaint);
 
     //! Current row has been deleted
     void rowDeleted();
@@ -328,22 +323,22 @@ signals:
     //! Displayed data needs to be reloaded in all presenters.
     void reloadRequested();
 
-    void rowRepaintRequested(KexiDB::RecordData&);
+    void rowRepaintRequested(RecordData&);
 
 private:
     void init();
     void init(
         const QList<QVariant> &keys, const QList<QVariant> &values,
-        KexiDB::Field::Type keyType, KexiDB::Field::Type valueType);
+        Field::Type keyType, Field::Type valueType);
 
     //! @internal for saveRowChanges() and saveNewRow()
-    bool saveRow(KexiDB::RecordData& record, bool insert, bool repaint);
+    bool saveRow(RecordData& record, bool insert, bool repaint);
 
     //! Number of physical columns
     int m_itemSize;
 
     /*! Columns information */
-    KexiTableViewColumn::List m_columns;
+    TableViewColumn::List m_columns;
 
     //! Temporary, used in compare functions like cmpInt(), cmpString()
     //! to avoid memory allocations.
@@ -351,5 +346,6 @@ private:
     class Private;
     Private * const d;
 };
+}
 
 #endif
