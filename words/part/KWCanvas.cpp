@@ -37,6 +37,7 @@
 
 // KDE + Qt includes
 #include <kdebug.h>
+#include <kstatusbar.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
@@ -93,6 +94,7 @@ void KWCanvas::contextMenuEvent(QContextMenuEvent *e)
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
+    m_view->viewMouseMoveEvent(e);
     m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
