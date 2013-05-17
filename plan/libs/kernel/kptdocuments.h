@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_DOCUMENTS_H
-#define KPLATO_DOCUMENTS_H
+#ifndef KPTDOCUMENTS_H
+#define KPTDOCUMENTS_H
 
 #include "kplatokernel_export.h"
 

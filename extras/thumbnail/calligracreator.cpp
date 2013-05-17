@@ -48,7 +48,6 @@ CalligraCreator::CalligraCreator()
 
 CalligraCreator::~CalligraCreator()
 {
-    delete m_part;
     delete m_doc;
 }
 

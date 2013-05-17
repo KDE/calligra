@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -19,13 +19,10 @@
  */
 
 #include "KexiOpenProjectAssistant.h"
+#include "KexiStartup.h"
+#include "KexiPasswordPage.h"
+#include "ui_KexiProjectStorageTypeSelectionPage.h"
 
-#include <QTimer>
-#include <QVBoxLayout>
-
-#include <ktabwidget.h>
-
-#include <KoIcon.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiFileWidget.h>
@@ -34,6 +31,13 @@
 #include <kexiprojectset.h>
 #include <kexiprojectdata.h>
 #include <kexi.h>
+
+#include <KoIcon.h>
+
+#include <KTabWidget>
+
+#include <QTimer>
+#include <QVBoxLayout>
 
 KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
  : KexiAssistantPage(i18n("Open Project"),
@@ -214,7 +218,10 @@ public:
     KexiProjectDatabaseSelectionPage* projectDatabaseSelectionPage() {
         return page<KexiProjectDatabaseSelectionPage>(&m_projectDatabaseSelectionPage, q);
     }
-    
+    KexiPasswordPage* passwordPage() {
+        return page<KexiPasswordPage>(&m_passwordPage, q);
+    }
+
     template <class C>
     C* page(QPointer<C>* p, KexiOpenProjectAssistant *parent = 0) {
         if (p->isNull()) {
@@ -226,7 +233,8 @@ public:
 
     QPointer<KexiMainOpenProjectPage> m_projectOpenPage;
     QPointer<KexiProjectDatabaseSelectionPage> m_projectDatabaseSelectionPage;
-    
+    QPointer<KexiPasswordPage> m_passwordPage;
+
     KexiOpenProjectAssistant *q;
 };
 
@@ -244,13 +252,6 @@ KexiOpenProjectAssistant::~KexiOpenProjectAssistant()
 {
     delete d;
 }
-       
-void KexiOpenProjectAssistant::previousPageRequested(KexiAssistantPage* page)
-{
-    if (page == d->m_projectDatabaseSelectionPage) {
-        setCurrentPage(d->projectOpenPage());
-    }
-}
 
 void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
 {
@@ -266,10 +267,23 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
             KexiDB::ConnectionData *cdata
                 = d->m_projectOpenPage->connSelector->selectedConnectionData();
             if (cdata) {
+                if (cdata->passwordNeeded()) {
+                    d->passwordPage()->setConnectionData(*cdata);
+                    setCurrentPage(d->passwordPage());
+                    return;
+                }
                 if (d->projectDatabaseSelectionPage()->setConnection(cdata)) {
                     setCurrentPage(d->projectDatabaseSelectionPage());
                 }
             }
+        }
+    }
+    else if (page == d->m_passwordPage) {
+        KexiDB::ConnectionData *cdata
+            = d->projectOpenPage()->connSelector->selectedConnectionData();
+        d->passwordPage()->updateConnectionData(cdata);
+        if (cdata && d->projectDatabaseSelectionPage()->setConnection(cdata)) {
+            setCurrentPage(d->projectDatabaseSelectionPage());
         }
     }
     else if (page == d->m_projectDatabaseSelectionPage) {
@@ -284,68 +298,28 @@ void KexiOpenProjectAssistant::cancelRequested(KexiAssistantPage* page)
     //TODO?
 }
 
-void KexiOpenProjectAssistant::showErrorMessage(
-    const QString &title, const QString &details)
-{
-    Q_UNUSED(title);
-    Q_UNUSED(details);
-}
-
-void KexiOpenProjectAssistant::showErrorMessage(
-    KexiDB::Object *obj, const QString& msg)
-{
-    Q_UNUSED(obj);
-    Q_UNUSED(msg);
-#if 0
-    QString _msg, _details;
-    if (!obj) {
-        showErrorMessage(_msg);
-        return;
-    }
-    //QString _details(details);
-    KexiTextMessageHandler textHandler(_msg, _details);
-    textHandler.showErrorMessage(obj, msg);
-    //KexiDB::getHTMLErrorMesage(obj, _msg, _details);
-    //showErrorMessage(_msg, _details);
-
-    KexiContextMessage message(_msg); 
-    //! @todo + _details
-    if (!d->messageWidgetActionTryAgain) {
-        d->messageWidgetActionTryAgain = new QAction(
-            koIcon("view-refresh"), i18n("Try Again"), this);
-        connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
-                this, SLOT(tryAgainActionTriggered()));
-    }
-    if (!d->messageWidgetActionNo) {
-        d->messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), this);
-    }
-    d->messageWidgetActionNo->setText(KStandardGuiItem::cancel().text());
-    message.addAction(d->messageWidgetActionTryAgain);
-    message.setDefaultAction(d->messageWidgetActionNo);
-    message.addAction(d->messageWidgetActionNo);
-    delete d->messageWidget;
-    d->messageWidget = new KexiContextMessageWidget(
-        this, 0 /*contents->formLayout*/,
-        0/*contents->le_dbname*/, message);
-    //d->messageWidget->setNextFocusWidget(contents->le_title);
-    d->messageWidget->setCalloutPointerDirection(KMessageWidget::Right);
-    QWidget *b = currentPage()->nextButton();
-    d->messageWidget->setCalloutPointerPosition(
-        b->mapToGlobal(QPoint(0, b->height() / 2)));
-#endif
-}
-
-#if 0
-void KexiOpenProjectAssistant::tryAgainActionTriggered()
-{
-    d->m_projectConnectionSelectionPage->next();
-}
-#endif
-
 void KexiOpenProjectAssistant::slotOpenProject(KexiProjectData* data)
 {
     if (data)
         emit openProject(*data);
+}
+
+void KexiOpenProjectAssistant::tryAgainActionTriggered()
+{
+    messageWidget()->animatedHide();
+    currentPage()->next();
+}
+
+void KexiOpenProjectAssistant::cancelActionTriggered()
+{
+    if (currentPage() == d->m_passwordPage) {
+        d->passwordPage()->focusWidget()->setFocus();
+    }
+}
+
+QWidget* KexiOpenProjectAssistant::calloutWidget() const
+{
+    return currentPage()->nextButton();
 }
 
 #include "KexiOpenProjectAssistant.moc"

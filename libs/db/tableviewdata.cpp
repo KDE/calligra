@@ -22,21 +22,21 @@
    Original Project: buX (www.bux.at)
 */
 
-#include "kexitableviewdata.h"
+#include "tableviewdata.h"
 
-#include <kexiutils/validator.h>
-
-#include <db/field.h>
-#include <db/roweditbuffer.h>
-#include <db/cursor.h>
-#include <db/utils.h>
-#include <db/error.h>
-#include <kexi.h>
+#include "field.h"
+#include "roweditbuffer.h"
+#include "cursor.h"
+#include "utils.h"
+#include "error.h"
 
 #include <kdebug.h>
 #include <klocale.h>
 
 #include <QApplication>
+#include <QVector>
+
+using namespace KexiDB;
 
 unsigned short charTable[] = {
 #include "chartable.txt"
@@ -136,28 +136,28 @@ public:
     {
     }
 
-    void setColumnType(const KexiDB::Field& field) {
-        const KexiDB::Field::Type t = field.type();
+    void setColumnType(const Field& field) {
+        const Field::Type t = field.type();
         if (field.isTextType())
             m_lessThanFunction = &cmpString;
-        if (KexiDB::Field::isFPNumericType(t))
+        if (Field::isFPNumericType(t))
             m_lessThanFunction = &cmpDouble;
-        else if (t == KexiDB::Field::Integer && field.isUnsigned())
+        else if (t == Field::Integer && field.isUnsigned())
             m_lessThanFunction = &cmpUInt;
-        else if (t == KexiDB::Field::Boolean || KexiDB::Field::isNumericType(t))
+        else if (t == Field::Boolean || Field::isNumericType(t))
             m_lessThanFunction = &cmpInt; //other integers
-        else if (t == KexiDB::Field::BigInteger) {
+        else if (t == Field::BigInteger) {
             if (field.isUnsigned())
                 m_lessThanFunction = &cmpULongLong;
             else
                 m_lessThanFunction = &cmpLongLong;
-        } else if (t == KexiDB::Field::Date)
+        } else if (t == Field::Date)
             m_lessThanFunction = &cmpDate;
-        else if (t == KexiDB::Field::Time)
+        else if (t == Field::Time)
             m_lessThanFunction = &cmpTime;
-        else if (t == KexiDB::Field::DateTime)
+        else if (t == Field::DateTime)
             m_lessThanFunction = &cmpDateTime;
-        else if (t == KexiDB::Field::BLOB)
+        else if (t == Field::BLOB)
             //! @todo allow users to define BLOB sorting function?
             m_lessThanFunction = &cmpBLOB;
         else
@@ -175,7 +175,7 @@ public:
 #define _IIF(a,b) ((a) ? (b) : !(b))
 
     //! Main comparison operator that takes column number, type and order into account
-    bool operator()(KexiDB::RecordData* record1, KexiDB::RecordData* record2) {
+    bool operator()(RecordData* record1, RecordData* record2) {
         // compare NULLs : NULL is smaller than everything
         if ((m_leftTmp = record1->at(m_sortedColumn)).isNull())
             return _IIF(m_ascendingOrder, !record2->at(m_sortedColumn).isNull());
@@ -189,7 +189,7 @@ public:
 #undef CAST_AND_COMPARE
 
 //! @internal
-class KexiTableViewData::Private
+class TableViewData::Private
 {
 public:
     Private()
@@ -219,17 +219,15 @@ public:
     //! real sorted column number, set by setSorting(), used by cmp*() methods
     int realSortedColumn;
 
-//  int (KexiTableViewData::*cmpFunc)(void *, void *);
-//  bool (KexiTableViewData::*lessThanFunction)(KexiDB::RecordData*, KexiDB::RecordData*);
     LessThanFunctor lessThanFunctor;
 
     short type;
 
-    KexiDB::RowEditBuffer *pRowEditBuffer;
+    RowEditBuffer *pRowEditBuffer;
 
-    QPointer<KexiDB::Cursor> cursor;
+    QPointer<Cursor> cursor;
 
-    KexiDB::ResultInfo result;
+    ResultInfo result;
 
     uint visibleColumnsCount;
 
@@ -240,10 +238,10 @@ public:
     bool insertingEnabled;
 
     /*! Used in acceptEditor() to avoid infinite recursion,
-     eg. when we're calling KexiTableviewData::acceptRowEdit() during cell accepting phase. */
+     eg. when we're calling TableViewData::acceptRowEdit() during cell accepting phase. */
 //  bool inside_acceptEditor;
 
-    //! @see KexiTableviewData::containsROWIDInfo()
+    //! @see TableViewData::containsROWIDInfo()
     bool containsROWIDInfo;
 
     //! true if ascending sort order is set
@@ -257,73 +255,73 @@ public:
 
 //-------------------------------
 
-KexiTableViewData::KexiTableViewData()
+TableViewData::TableViewData()
         : QObject()
-        , KexiTableViewDataBase()
+        , TableViewDataBase()
         , d(new Private)
 {
     init();
 }
 
 // db-aware ctor
-KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
+TableViewData::TableViewData(Cursor *c)
         : QObject()
-        , KexiTableViewDataBase()
+        , TableViewDataBase()
         , d(new Private)
 {
     init();
     d->cursor = c;
     d->containsROWIDInfo = d->cursor->containsROWIDInfo();
     if (d->cursor && d->cursor->query()) {
-        const KexiDB::QuerySchema::FieldsExpandedOptions fieldsExpandedOptions
-        = d->containsROWIDInfo ? KexiDB::QuerySchema::WithInternalFieldsAndRowID
-          : KexiDB::QuerySchema::WithInternalFields;
+        const QuerySchema::FieldsExpandedOptions fieldsExpandedOptions
+        = d->containsROWIDInfo ? QuerySchema::WithInternalFieldsAndRowID
+          : QuerySchema::WithInternalFields;
         m_itemSize = d->cursor->query()->fieldsExpanded(fieldsExpandedOptions).count();
     } else
         m_itemSize = m_columns.count() + (d->containsROWIDInfo ? 1 : 0);
 
-    // Allocate KexiTableViewColumn objects for each visible query column
-    const KexiDB::QueryColumnInfo::Vector fields = d->cursor->query()->fieldsExpanded();
+    // Allocate TableViewColumn objects for each visible query column
+    const QueryColumnInfo::Vector fields = d->cursor->query()->fieldsExpanded();
     const uint fieldsCount = fields.count();
     for (uint i = 0;i < fieldsCount;i++) {
-        KexiDB::QueryColumnInfo *ci = fields[i];
+        QueryColumnInfo *ci = fields[i];
         if (ci->visible) {
-            KexiDB::QueryColumnInfo *visibleLookupColumnInfo = 0;
+            QueryColumnInfo *visibleLookupColumnInfo = 0;
             if (ci->indexForVisibleLookupValue() != -1) {
                 //Lookup field is defined
                 visibleLookupColumnInfo = d->cursor->query()->expandedOrInternalField(ci->indexForVisibleLookupValue());
                 /* not needed
                 if (visibleLookupColumnInfo) {
-                  // 2. Create a KexiTableViewData object for each found lookup field
+                  // 2. Create a TableViewData object for each found lookup field
                 }*/
             }
-            KexiTableViewColumn* col = new KexiTableViewColumn(*d->cursor->query(), *ci, visibleLookupColumnInfo);
+            TableViewColumn* col = new TableViewColumn(*d->cursor->query(), *ci, visibleLookupColumnInfo);
             addColumn(col);
         }
     }
 }
 
-KexiTableViewData::KexiTableViewData(
+TableViewData::TableViewData(
     const QList<QVariant> &keys, const QList<QVariant> &values,
-    KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
+    Field::Type keyType, Field::Type valueType)
         : QObject()
-        , KexiTableViewDataBase()
+        , TableViewDataBase()
         , d(new Private)
 {
     init(keys, values, keyType, valueType);
 }
 
-KexiTableViewData::KexiTableViewData(
-    KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
+TableViewData::TableViewData(
+    Field::Type keyType, Field::Type valueType)
         : QObject()
-        , KexiTableViewDataBase()
+        , TableViewDataBase()
         , d(new Private)
 {
     const QList<QVariant> empty;
     init(empty, empty, keyType, valueType);
 }
 
-KexiTableViewData::~KexiTableViewData()
+TableViewData::~TableViewData()
 {
     emit destroying();
     clearInternal(false /* !processEvents */);
@@ -331,52 +329,45 @@ KexiTableViewData::~KexiTableViewData()
     delete d;
 }
 
-void KexiTableViewData::init(
+void TableViewData::init(
     const QList<QVariant> &keys, const QList<QVariant> &values,
-    KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
+    Field::Type keyType, Field::Type valueType)
 {
     init();
-    KexiDB::Field *keyField = new KexiDB::Field("key", keyType);
+    Field *keyField = new Field("key", keyType);
     keyField->setPrimaryKey(true);
-    KexiTableViewColumn *keyColumn = new KexiTableViewColumn(*keyField, true);
+    TableViewColumn *keyColumn = new TableViewColumn(*keyField, true);
     keyColumn->setVisible(false);
     addColumn(keyColumn);
 
-    KexiDB::Field *valueField = new KexiDB::Field("value", valueType);
-    KexiTableViewColumn *valueColumn = new KexiTableViewColumn(*valueField, true);
+    Field *valueField = new Field("value", valueType);
+    TableViewColumn *valueColumn = new TableViewColumn(*valueField, true);
     addColumn(valueColumn);
 
     uint cnt = qMin(keys.count(), values.count());
     QList<QVariant>::ConstIterator it_keys = keys.constBegin();
     QList<QVariant>::ConstIterator it_values = values.constBegin();
     for (;cnt > 0;++it_keys, ++it_values, cnt--) {
-        KexiDB::RecordData *record = new KexiDB::RecordData(2);
+        RecordData *record = new RecordData(2);
         (*record)[0] = (*it_keys);
         (*record)[1] = (*it_values);
         append(record);
     }
 }
 
-void KexiTableViewData::init()
+void TableViewData::init()
 {
     m_itemSize = 0;
-//Qt 4 setAutoDelete(true);
-//Qt 4 m_columns.setAutoDelete(true);
 }
 
-void KexiTableViewData::deleteLater()
+void TableViewData::deleteLater()
 {
     d->cursor = 0;
     QObject::deleteLater();
 }
 
-void KexiTableViewData::addColumn(KexiTableViewColumn* col)
+void TableViewData::addColumn(TableViewColumn* col)
 {
-// if (!col->isDBAware()) {
-//  if (!d->simpleColumnsByName)
-//   d->simpleColumnsByName = new QDict<KexiTableViewColumn>(101);
-//  d->simpleColumnsByName->insert(col->caption,col);//for faster lookup
-// }
     m_columns.append(col);
     col->setData(this);
     if (d->globalColumnsIDs.size() < (int)m_columns.count()) {//sanity
@@ -397,53 +388,54 @@ void KexiTableViewData::addColumn(KexiTableViewColumn* col)
         m_itemSize = m_columns.count() + (d->containsROWIDInfo ? 1 : 0);
 }
 
-int KexiTableViewData::globalColumnID(int visibleID) const
+int TableViewData::globalColumnID(int visibleID) const
 {
     return d->globalColumnsIDs.value(visibleID, -1);
 }
-int KexiTableViewData::visibleColumnID(int globalID) const
+
+int TableViewData::visibleColumnID(int globalID) const
 {
     return d->visibleColumnsIDs.value(globalID, -1);
 }
 
-bool KexiTableViewData::isDBAware() const
+bool TableViewData::isDBAware() const
 {
     return d->cursor != 0;
 }
 
-KexiDB::Cursor* KexiTableViewData::cursor() const
+Cursor* TableViewData::cursor() const
 {
     return d->cursor;
 }
 
-bool KexiTableViewData::isInsertingEnabled() const
+bool TableViewData::isInsertingEnabled() const
 {
     return d->insertingEnabled;
 }
 
-KexiDB::RowEditBuffer* KexiTableViewData::rowEditBuffer() const
+RowEditBuffer* TableViewData::rowEditBuffer() const
 {
     return d->pRowEditBuffer;
 }
 
-const KexiDB::ResultInfo& KexiTableViewData::result() const
+const ResultInfo& TableViewData::result() const
 {
     return d->result;
 }
 
-bool KexiTableViewData::containsROWIDInfo() const
+bool TableViewData::containsROWIDInfo() const
 {
     return d->containsROWIDInfo;
 }
 
-QString KexiTableViewData::dbTableName() const
+QString TableViewData::dbTableName() const
 {
     if (d->cursor && d->cursor->query() && d->cursor->query()->masterTable())
         return d->cursor->query()->masterTable()->name();
     return QString();
 }
 
-void KexiTableViewData::setSorting(int column, bool ascending)
+void TableViewData::setSorting(int column, bool ascending)
 {
     if (column >= 0 && column < (int)m_columns.count()) {
         d->ascendingOrder = ascending;
@@ -456,9 +448,9 @@ void KexiTableViewData::setSorting(int column, bool ascending)
         return;
     }
     // find proper column information for sorting (lookup column points to alternate column with visible data)
-    const KexiTableViewColumn *tvcol = m_columns.at(column);
-    KexiDB::QueryColumnInfo* visibleLookupColumnInfo = tvcol->visibleLookupColumnInfo();
-    const KexiDB::Field *field = visibleLookupColumnInfo ? visibleLookupColumnInfo->field : tvcol->field();
+    const TableViewColumn *tvcol = m_columns.at(column);
+    QueryColumnInfo* visibleLookupColumnInfo = tvcol->visibleLookupColumnInfo();
+    const Field *field = visibleLookupColumnInfo ? visibleLookupColumnInfo->field : tvcol->field();
     d->sortedColumn = column;
     d->realSortedColumn = tvcol->columnInfo()->indexForVisibleLookupValue() != -1
                           ? tvcol->columnInfo()->indexForVisibleLookupValue() : d->sortedColumn;
@@ -469,30 +461,23 @@ void KexiTableViewData::setSorting(int column, bool ascending)
     d->lessThanFunctor.setSortedColumn(column);
 }
 
-int KexiTableViewData::sortedColumn() const
+int TableViewData::sortedColumn() const
 {
     return d->sortedColumn;
 }
 
-int KexiTableViewData::sortingOrder() const
+int TableViewData::sortingOrder() const
 {
     return d->ascendingOrder ? 1 : (d->descendingOrder ? -1 : 0);
 }
 
-void KexiTableViewData::sort()
+void TableViewData::sort()
 {
     if (0 != sortingOrder())
         qSort(begin(), end(), d->lessThanFunctor);
 }
 
-/*
-Qt 4
-int KexiTableViewData::compareItems(Item record1, Item record2)
-{
-  return ((this->*cmpFunc) (record1, record2));
-}*/
-
-void KexiTableViewData::setReadOnly(bool set)
+void TableViewData::setReadOnly(bool set)
 {
     if (d->readOnly == set)
         return;
@@ -501,7 +486,7 @@ void KexiTableViewData::setReadOnly(bool set)
         setInsertingEnabled(false);
 }
 
-void KexiTableViewData::setInsertingEnabled(bool set)
+void TableViewData::setInsertingEnabled(bool set)
 {
     if (d->insertingEnabled == set)
         return;
@@ -510,17 +495,17 @@ void KexiTableViewData::setInsertingEnabled(bool set)
         setReadOnly(false);
 }
 
-void KexiTableViewData::clearRowEditBuffer()
+void TableViewData::clearRowEditBuffer()
 {
     //init row edit buffer
     if (!d->pRowEditBuffer)
-        d->pRowEditBuffer = new KexiDB::RowEditBuffer(isDBAware());
+        d->pRowEditBuffer = new RowEditBuffer(isDBAware());
     else
         d->pRowEditBuffer->clear();
 }
 
-bool KexiTableViewData::updateRowEditBufferRef(KexiDB::RecordData *record,
-        int colnum, KexiTableViewColumn* col, QVariant& newval, bool allowSignals,
+bool TableViewData::updateRowEditBufferRef(RecordData *record,
+        int colnum, TableViewColumn* col, QVariant& newval, bool allowSignals,
         QVariant *visibleValueForLookupField)
 {
     d->result.clear();
@@ -529,13 +514,13 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiDB::RecordData *record,
     if (!d->result.success)
         return false;
 
-    kDebug() << "column #" << colnum << " = " << newval.toString();
+    //kDebug() << "column #" << colnum << " = " << newval.toString();
     if (!col) {
         kWarning() << "column #" << colnum << "not found! col==0";
         return false;
     }
     if (!d->pRowEditBuffer)
-        d->pRowEditBuffer = new KexiDB::RowEditBuffer(isDBAware());
+        d->pRowEditBuffer = new RowEditBuffer(isDBAware());
     if (d->pRowEditBuffer->isDBAware()) {
         if (!(col->columnInfo())) {
             kWarning() << "column #" << colnum << " not found!";
@@ -574,27 +559,27 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiDB::RecordData *record,
     }
 
 //! @todo if there're multiple views for this data, we need multiple buffers!
-bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool repaint)
+bool TableViewData::saveRow(RecordData& record, bool insert, bool repaint)
 {
     if (!d->pRowEditBuffer)
         return true; //nothing to do
 
     //check constraints:
     //-check if every NOT NULL and NOT EMPTY field is filled
-    KexiTableViewColumn::ListIterator it_f(m_columns.constBegin());
-    KexiDB::RecordData::ConstIterator it_r = record.constBegin();
+    TableViewColumn::ListIterator it_f(m_columns.constBegin());
+    RecordData::ConstIterator it_r = record.constBegin();
     int col = 0;
     const QVariant *pval = 0;
     QVariant val;
     for (;it_f != m_columns.constEnd() && it_r != record.constEnd();++it_f, ++it_r, col++) {
-        KexiDB::Field *f = (*it_f)->field();
+        Field *f = (*it_f)->field();
         if (f->isNotNull()) {
             GET_VALUE;
             //check it
             if (val.isNull() && !f->isAutoIncrement()) {
                 //NOT NULL violated
                 d->result.msg = i18n("\"%1\" column requires a value to be entered.",
-                                     f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
+                                     f->captionOrName()) + "\n\n" + KexiDB::msgYouCanImproveData();
                 d->result.desc = i18n("The column's constraint is declared as NOT NULL.");
                 d->result.column = col;
                 return false;
@@ -605,7 +590,7 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
             if (!f->isAutoIncrement() && (val.isNull() || KexiDB::isEmptyValue(f, val))) {
                 //NOT EMPTY violated
                 d->result.msg = i18n("\"%1\" column requires a value to be entered.",
-                                     f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
+                                     f->captionOrName()) + "\n\n" + KexiDB::msgYouCanImproveData();
                 d->result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
                 d->result.column = col;
                 return false;
@@ -618,12 +603,12 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
             if (!d->cursor->insertRow(record, *d->pRowEditBuffer,
                                       d->containsROWIDInfo/*also retrieve ROWID*/)) {
                 d->result.msg = i18n("Record inserting failed.") + "\n\n"
-                                + Kexi::msgYouCanImproveData();
+                                + KexiDB::msgYouCanImproveData();
                 KexiDB::getHTMLErrorMesage(d->cursor, &d->result);
 
                 /*   if (desc)
                       *desc =
-                js: TODO: use KexiMainWindow::showErrorMessage(const QString &title, KexiDB::Object *obj)
+                js: TODO: use KexiMainWindow::showErrorMessage(const QString &title, Object *obj)
                   after it will be moved somewhere to kexidb (this will require moving other
                     showErrorMessage() methods from KexiMainWindow to libkexiutils....)
                   then: just call: *desc = KexiDB::errorMessage(d->cursor);
@@ -633,19 +618,19 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
         } else { // row updating
 //   if (d->containsROWIDInfo)
 //    ROWID = record[columns.count()].toULongLong();
-            if (!d->cursor->updateRow(static_cast<KexiDB::RecordData&>(record), *d->pRowEditBuffer,
+            if (!d->cursor->updateRow(static_cast<RecordData&>(record), *d->pRowEditBuffer,
                                       d->containsROWIDInfo/*use ROWID*/)) {
-                d->result.msg = i18n("Record changing failed.") + "\n\n" + Kexi::msgYouCanImproveData();
+                d->result.msg = i18n("Record changing failed.") + "\n\n" + KexiDB::msgYouCanImproveData();
 //! @todo set d->result.column if possible
                 KexiDB::getHTMLErrorMesage(d->cursor, d->result.desc);
                 return false;
             }
         }
     } else {//not db-aware version
-        KexiDB::RowEditBuffer::SimpleMap b = d->pRowEditBuffer->simpleBuffer();
-        for (KexiDB::RowEditBuffer::SimpleMap::ConstIterator it = b.constBegin();it != b.constEnd();++it) {
+        RowEditBuffer::SimpleMap b = d->pRowEditBuffer->simpleBuffer();
+        for (RowEditBuffer::SimpleMap::ConstIterator it = b.constBegin();it != b.constEnd();++it) {
             uint i = -1;
-            foreach(KexiTableViewColumn *col, m_columns) {
+            foreach(TableViewColumn *col, m_columns) {
                 i++;
                 if (col->field()->name() == it.key()) {
                     kDebug() << col->field()->name() << ": " << record.at(i).toString()
@@ -663,9 +648,9 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
     return true;
 }
 
-bool KexiTableViewData::saveRowChanges(KexiDB::RecordData& record, bool repaint)
+bool TableViewData::saveRowChanges(RecordData& record, bool repaint)
 {
-    kDebug() << "...";
+    //kDebug() << "...";
     d->result.clear();
     emit aboutToUpdateRow(&record, d->pRowEditBuffer, &d->result);
     if (!d->result.success)
@@ -678,9 +663,9 @@ bool KexiTableViewData::saveRowChanges(KexiDB::RecordData& record, bool repaint)
     return false;
 }
 
-bool KexiTableViewData::saveNewRow(KexiDB::RecordData& record, bool repaint)
+bool TableViewData::saveNewRow(RecordData& record, bool repaint)
 {
-    kDebug() << "...";
+    //kDebug() << "...";
     d->result.clear();
     emit aboutToInsertRow(&record, &d->result, repaint);
     if (!d->result.success)
@@ -693,7 +678,7 @@ bool KexiTableViewData::saveNewRow(KexiDB::RecordData& record, bool repaint)
     return false;
 }
 
-bool KexiTableViewData::deleteRow(KexiDB::RecordData& record, bool repaint)
+bool TableViewData::deleteRow(RecordData& record, bool repaint)
 {
     d->result.clear();
     emit aboutToDeleteRow(record, &d->result, repaint);
@@ -702,9 +687,9 @@ bool KexiTableViewData::deleteRow(KexiDB::RecordData& record, bool repaint)
 
     if (d->cursor) {//db-aware
         d->result.success = false;
-        if (!d->cursor->deleteRow(static_cast<KexiDB::RecordData&>(record), d->containsROWIDInfo/*use ROWID*/)) {
+        if (!d->cursor->deleteRow(static_cast<RecordData&>(record), d->containsROWIDInfo/*use ROWID*/)) {
             d->result.msg = i18n("Record deleting failed.");
-            /*js: TODO: use KexiDB::errorMessage() for description (desc) as in KexiTableViewData::saveRow() */
+            /*js: TODO: use KexiDB::errorMessage() for description (desc) as in TableViewData::saveRow() */
             KexiDB::getHTMLErrorMesage(d->cursor, &d->result);
             d->result.success = false;
             return false;
@@ -723,14 +708,14 @@ bool KexiTableViewData::deleteRow(KexiDB::RecordData& record, bool repaint)
     return true;
 }
 
-void KexiTableViewData::deleteRows(const QList<int> &rowsToDelete, bool repaint)
+void TableViewData::deleteRows(const QList<int> &rowsToDelete, bool repaint)
 {
     Q_UNUSED(repaint);
 
     if (rowsToDelete.isEmpty())
         return;
     int last_r = 0;
-    KexiTableViewData::iterator it(begin());
+    TableViewData::iterator it(begin());
     for (QList<int>::ConstIterator r_it = rowsToDelete.constBegin(); r_it != rowsToDelete.constEnd(); ++r_it) {
         for (; last_r < (*r_it); last_r++)
             ++it;
@@ -742,18 +727,18 @@ void KexiTableViewData::deleteRows(const QList<int> &rowsToDelete, bool repaint)
     emit rowsDeleted(rowsToDelete);
 }
 
-void KexiTableViewData::insertRow(KexiDB::RecordData& record, uint index, bool repaint)
+void TableViewData::insertRow(RecordData& record, uint index, bool repaint)
 {
     insert(index = qMin(index, count()), &record);
     emit rowInserted(&record, index, repaint);
 }
 
-void KexiTableViewData::clearInternal(bool processEvents)
+void TableViewData::clearInternal(bool processEvents)
 {
     clearRowEditBuffer();
 // qApp->processEvents( 1 );
 //TODO: this is time consuming: find better data model
-// KexiTableViewDataBase::clear();
+// TableViewDataBase::clear();
     const uint c = count();
 #ifndef KEXI_NO_PROCESS_EVENTS
     const bool _processEvents = processEvents && !qApp->closingDown();
@@ -767,7 +752,7 @@ void KexiTableViewData::clearInternal(bool processEvents)
     }
 }
 
-bool KexiTableViewData::deleteAllRows(bool repaint)
+bool TableViewData::deleteAllRows(bool repaint)
 {
     clearInternal();
 
@@ -782,12 +767,12 @@ bool KexiTableViewData::deleteAllRows(bool repaint)
     return res;
 }
 
-int KexiTableViewData::autoIncrementedColumn()
+int TableViewData::autoIncrementedColumn()
 {
     if (d->autoIncrementedColumn == -2) {
         //find such a column
         d->autoIncrementedColumn = -1;
-        foreach(KexiTableViewColumn *col, m_columns) {
+        foreach(TableViewColumn *col, m_columns) {
             d->autoIncrementedColumn++;
             if (col->field()->isAutoIncrement())
                 break;
@@ -796,7 +781,7 @@ int KexiTableViewData::autoIncrementedColumn()
     return d->autoIncrementedColumn;
 }
 
-bool KexiTableViewData::preloadAllRows()
+bool TableViewData::preloadAllRows()
 {
     if (!d->cursor)
         return false;
@@ -810,7 +795,7 @@ bool KexiTableViewData::preloadAllRows()
 #endif
 
     for (int i = 0;!d->cursor->eof();i++) {
-        KexiDB::RecordData *record = d->cursor->storeCurrentRow();
+        RecordData *record = d->cursor->storeCurrentRow();
         if (!record) {
             clear();
             return false;
@@ -829,9 +814,9 @@ bool KexiTableViewData::preloadAllRows()
     return true;
 }
 
-bool KexiTableViewData::isReadOnly() const
+bool TableViewData::isReadOnly() const
 {
     return d->readOnly || (d->cursor && d->cursor->connection()->isReadOnly());
 }
 
-#include "kexitableviewdata.moc"
+#include "tableviewdata.moc"

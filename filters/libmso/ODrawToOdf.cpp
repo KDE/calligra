@@ -176,7 +176,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:auto-grow-height
     style.addProperty("draw:auto-grow-height", ds.fFitShapeToText(), gt);
     // draw:auto-grow-width
-    style.addProperty("draw:auto-grow-width", ds.fFitShapeToText(), gt);
+    style.addProperty("draw:auto-grow-width", ds.fFitShapeToText() && ds.wrapText()==msowrapNone, gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type

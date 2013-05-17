@@ -46,6 +46,7 @@ public:
     QColor linkColor() const;
     KexiAssistantPage * const q;
     QGridLayout* mainLyr;
+    KexiTitleLabel* titleLabel;
     QLabel* descriptionLabel;
     KexiLinkWidget* backButton;
     KexiLinkWidget* nextButton;
@@ -112,8 +113,8 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->mainLyr->setContentsMargins(0, 0, 0, 0);
     d->mainLyr->setColumnStretch(1, 1);
     d->mainLyr->setRowStretch(2, 1);
-    KexiTitleLabel* titleLabel = new KexiTitleLabel(title);
-    d->mainLyr->addWidget(titleLabel, 0, 1, Qt::AlignTop);
+    d->titleLabel = new KexiTitleLabel(title);
+    d->mainLyr->addWidget(d->titleLabel, 0, 1, Qt::AlignTop);
     d->descriptionLabel = new QLabel(description);
     int space = d->descriptionLabel->fontMetrics().height();
     d->descriptionLabel->setContentsMargins(2, 0, 0, space);
@@ -213,6 +214,16 @@ QWidget* KexiAssistantPage::focusWidget() const
 void KexiAssistantPage::setFocusWidget(QWidget* widget)
 {
     d->focusWidget = widget;
+}
+
+QString KexiAssistantPage::title() const
+{
+    return d->titleLabel->text();
+}
+
+QString KexiAssistantPage::description() const
+{
+    return d->descriptionLabel->text();
 }
 
 #include "KexiAssistantPage.moc"

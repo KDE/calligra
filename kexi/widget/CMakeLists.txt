@@ -60,6 +60,7 @@ ELSE (KEXI_MOBILE)
 #      in kexiactionselectiondialog and remove them
     KexiNameWidget.cpp
     KexiNameDialog.cpp
+    KexiPasswordWidget.cpp
   )
   if (APPLE)
     LIST(APPEND kexiextendedwidgets_LIB_SRCS
@@ -78,6 +79,7 @@ ELSE (KEXI_MOBILE)
     kexidbconnectionwidget.ui
     kexidbconnectionwidgetdetails.ui
     kexiprjtypeselector.ui
+    KexiPasswordWidget.ui
   )
 ENDIF (KEXI_MOBILE)
 

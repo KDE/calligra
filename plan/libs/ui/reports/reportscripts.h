@@ -34,7 +34,7 @@ class ProjectAccess : public QObject
 {
     Q_OBJECT
 public:
-    ProjectAccess( ReportData *rd );
+    explicit ProjectAccess(ReportData *rd);
 
 public slots:
     QString Name() const;

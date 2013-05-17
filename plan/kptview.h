@@ -18,8 +18,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_VIEW
-#define KPLATO_VIEW
+#ifndef KPTVIEW_H
+#define KPTVIEW_H
 
 #include "kplato_export.h"
 

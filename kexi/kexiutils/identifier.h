@@ -21,8 +21,9 @@
 #ifndef KEXIUTILS_IDENTIFIER_H
 #define KEXIUTILS_IDENTIFIER_H
 
-#include "validator.h"
-#include <QString>
+#include "kexiutils_export.h"
+
+#include <db/validator.h>
 
 namespace KexiUtils
 {
@@ -39,10 +40,10 @@ KEXIUTILS_EXPORT QString identifierExpectedMessage(const QString &valueName,
         const QVariant& v);
 
 //! Validates input for identifier name.
-class KEXIUTILS_EXPORT IdentifierValidator : public Validator
+class KEXIUTILS_EXPORT IdentifierValidator : public KexiDB::Validator
 {
 public:
-    IdentifierValidator(QObject * parent = 0);
+    explicit IdentifierValidator(QObject * parent = 0);
     virtual ~IdentifierValidator();
     virtual State validate(QString & input, int & pos) const;
 

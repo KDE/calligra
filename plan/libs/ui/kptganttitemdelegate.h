@@ -45,7 +45,7 @@ class KPLATOUI_EXPORT GanttItemDelegate : public KDGantt::ItemDelegate
 {
     Q_OBJECT
 public:
-    GanttItemDelegate( QObject *parent = 0 );
+    explicit GanttItemDelegate(QObject *parent = 0);
 
     virtual QString toolTip( const QModelIndex& idx ) const;
     virtual KDGantt::Span itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
@@ -92,7 +92,7 @@ class KPLATOUI_EXPORT ResourceGanttItemDelegate : public KDGantt::ItemDelegate
 {
     Q_OBJECT
 public:
-    ResourceGanttItemDelegate( QObject *parent = 0 );
+    explicit ResourceGanttItemDelegate(QObject *parent = 0);
 
     QVariant data( const QModelIndex& idx, int column, int role = Qt::DisplayRole ) const;
 

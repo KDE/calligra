@@ -72,7 +72,7 @@ public:
      Reimplemented for KexiDataAwareObjectInterface:
      column data corresponding to widget number is used here
      (see fieldNumberForColumn()). */
-    virtual KexiTableViewColumn* column(int col);
+    virtual KexiDB::TableViewColumn* column(int col);
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. */
@@ -152,7 +152,7 @@ signals:
     void currentItemDeleteRequest();
     void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
     void dataRefreshed();
-    void dataSet(KexiTableViewData *data);
+    void dataSet(KexiDB::TableViewData *data);
     void itemSelected(KexiDB::RecordData*);
     void cellSelected(int col, int row);
     void sortedColumnChanged(int col);
@@ -164,20 +164,20 @@ signals:
 protected slots:
     void slotResizingStarted();
 
-    //! Handles KexiTableViewData::rowRepaintRequested() signal
+    //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
-    //! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+    //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
     virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
         KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
     }
 
-    //! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
     virtual void slotRowDeleted() {
         KexiDataAwareObjectInterface::slotRowDeleted();
     }
 
-    //! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData* record, bool repaint);
 
     //! Like above, not db-aware version
@@ -190,7 +190,7 @@ protected slots:
     }
 
     /*! Reloads data for this widget.
-     Handles KexiTableViewData::reloadRequested() signal. */
+     Handles KexiDB::TableViewData::reloadRequested() signal. */
     virtual void reloadData() {
         KexiDataAwareObjectInterface::reloadData();
     }

@@ -41,8 +41,8 @@ int main(int argc, char* argv[])
     /* KexiTableView tv;
       app.setMainWidget(&tv);
 
-      KexiTableViewData data;
-      KexiTableViewColumn col;
+      KexiDB::TableViewData data;
+      KexiDB::TableViewColumn col;
       col.type = QVariant::Int; col.caption = "Id"; data.addColumn( col );
       col.type = QVariant::String; col.caption = "Name"; data.addColumn( col );
       col.type = QVariant::Int; col.caption = "Age"; data.addColumn( col );

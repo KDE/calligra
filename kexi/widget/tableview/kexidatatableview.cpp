@@ -104,7 +104,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
         return false;
     }
 
-    KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
+    KexiDB::TableViewData *tv_data = new KexiDB::TableViewData(m_cursor);
     KexiDataTable* dataTable = qobject_cast<KexiDataTable*>(parentWidget());
     if (dataTable) {
         dataTable->loadTableViewSettings(tv_data);

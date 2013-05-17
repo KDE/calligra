@@ -64,7 +64,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="ui_showindeces">
+       <widget class="QRadioButton" name="ui_showindices">
         <property name="text">
          <string>Indices</string>
         </property>
@@ -265,7 +265,7 @@
   <tabstop>ui_barchart</tabstop>
   <tabstop>ui_table</tabstop>
   <tabstop>ui_showbasevalues</tabstop>
-  <tabstop>ui_showindeces</tabstop>
+  <tabstop>ui_showindices</tabstop>
   <tabstop>ui_spicost</tabstop>
   <tabstop>ui_cpicost</tabstop>
   <tabstop>ui_spieffort</tabstop>

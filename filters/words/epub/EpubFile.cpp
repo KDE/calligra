@@ -138,7 +138,8 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     KoStoreDevice opfDevice(epubStore);
     KoXmlWriter writer(&opfDevice);
 
-    //FIXME: Write   <?xml version="1.0"?>
+    //FIXME: Write   <?xml version="1.0"?> -> FIXED
+    writer.startDocument(NULL,NULL,NULL);
 
     // FIXME: Get the unique identifier
     writer.startElement("package");
@@ -156,6 +157,11 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.startElement("dc:title");
     writer.addTextNode(metadata.value("title"));
     writer.endElement(); // dc:title
+
+    writer.startElement("meta");
+    writer.addAttribute("name", "cover");
+    writer.addAttribute("content", "cover-image");
+    writer.endElement();
 
     writer.startElement("dc:language");
     if (!metadata.value("language").isEmpty())

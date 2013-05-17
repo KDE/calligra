@@ -631,16 +631,63 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
         Q_ASSERT(masterPageStyle);
 
         //set the margins - depends on whether a header/footer is present
-        if (m_hasHeader_list[i]) {
-            pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
-        } else if (sep->brcTop.brcType == 0) {
-            pageLayoutStyle->addPropertyPt("fo:margin-top", qAbs((double)sep->dyaTop) / 20.0);
+
+        // Set default left/right margins for the case when there is no border.
+        // This will be changed below if there are borders defined.
+        pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
+        pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
+
+        // the pgbOffsetFrom variable determines how to calculate the margins and paddings.
+        switch (sep->pgbOffsetFrom) {
+        case pgbFromText:
+            pageLayoutStyle->addPropertyPt("fo:margin-left", sep->dxaLeft / 20.0 - sep->brcLeft.dptSpace);
+            pageLayoutStyle->addPropertyPt("fo:margin-right", sep->dxaRight / 20.0 - sep->brcRight.dptSpace);
+            if (m_hasHeader_list[i]) {
+                // This is correct if border is supposed to be outside header (it's a .doc setting
+                // somewhere). Not sure .odt is even capable of this
+                // minimum height of headers is not yet calculated but should be smth like:
+                //   sep->dyaTop - sep->dyaHdrTop
+                 pageLayoutStyle->addPropertyPt("fo:margin-top", (sep->dyaHdrTop + sep->dyaTop) / 20.0 - sep->brcTop.dptSpace);
+            } else {
+                pageLayoutStyle->addPropertyPt("fo:margin-top", sep->dyaTop / 20.0 - sep->brcTop.dptSpace);
+            }
+            if (m_hasFooter_list[i]) {
+                pageLayoutStyle->addPropertyPt("fo:margin-bottom", (sep->dyaHdrBottom + sep->dyaBottom) / 20.0 - sep->brcBottom.dptSpace);
+            } else {
+                // same comment for footer as for header
+                pageLayoutStyle->addPropertyPt("fo:margin-bottom", sep->dyaBottom / 20.0 - sep->brcBottom.dptSpace);
+            }
+
+            pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);
+            pageLayoutStyle->addPropertyPt("fo:padding-right",  sep->brcRight.dptSpace);
+            pageLayoutStyle->addPropertyPt("fo:padding-top",    sep->brcTop.dptSpace);
+            pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->brcBottom.dptSpace);
+            break;
+
+        case pgbFromEdge:
+            pageLayoutStyle->addPropertyPt("fo:margin-left", sep->brcLeft.dptSpace);
+            pageLayoutStyle->addPropertyPt("fo:margin-right", sep->brcRight.dptSpace);
+            pageLayoutStyle->addPropertyPt("fo:margin-top", sep->brcTop.dptSpace);
+            pageLayoutStyle->addPropertyPt("fo:margin-bottom", sep->brcBottom.dptSpace);
+
+            pageLayoutStyle->addPropertyPt("fo:padding-left", sep->dxaLeft / 20.0 - sep->brcLeft.dptSpace);
+            pageLayoutStyle->addPropertyPt("fo:padding-right", sep->dxaRight / 20.0 - sep->brcRight.dptSpace);
+            if (m_hasHeader_list[i]) {
+                // minimum height of headers is not yet calculated but should be smth like:
+                //   sep->dyaTop - sep->dyaHdrTop
+                pageLayoutStyle->addPropertyPt("fo:padding-top", sep->dyaHdrTop / 20.0 - sep->brcTop.dptSpace);
+            } else {
+                pageLayoutStyle->addPropertyPt("fo:padding-top", sep->dyaTop / 20.0 - sep->brcTop.dptSpace);
+            }
+            if (m_hasFooter_list[i]) {
+                // same comment for footer as for header
+                pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->dyaHdrBottom / 20.0 - sep->brcBottom.dptSpace);
+            } else {
+                pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->dyaBottom / 20.0 - sep->brcBottom.dptSpace);
+            }
+            break;
         }
-        if (m_hasFooter_list[i]) {
-            pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
-        } else if (sep->brcBottom.brcType == 0) {
-            pageLayoutStyle->addPropertyPt("fo:margin-bottom", qAbs((double)sep->dyaBottom) / 20.0);
-        }
+
 
         pageLayoutName = m_mainStyles->insert(*pageLayoutStyle, "Mpm");
         masterPageStyle->addAttribute("style:page-layout-name", pageLayoutName);
@@ -1103,38 +1150,6 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
             pageLayoutStyle->addProperty("calligra:specialborder-bottom",
                                          Conversion::borderCalligraAttributes(sep->brcBottom));
         }
-    }
-    // Set default left/right margins for the case when there is no border.
-    // This will be changed below if there are borders defined.
-    pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
-    pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
-
-    // the pgbOffsetFrom variable determines how to calculate the margins and paddings.
-    switch (sep->pgbOffsetFrom) {
-    case pgbFromText:
-        pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);
-        pageLayoutStyle->addPropertyPt("fo:padding-top",    sep->brcTop.dptSpace);
-        pageLayoutStyle->addPropertyPt("fo:padding-right",  sep->brcRight.dptSpace);
-        pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->brcBottom.dptSpace);
-        // FIXME: How should fo:margin be created in this case?
-        break;
-    case pgbFromEdge:
-        // Add margin. This value is fetched directly from the BRC's.
-        pageLayoutStyle->addPropertyPt("fo:margin-left",   sep->brcLeft.dptSpace);
-        pageLayoutStyle->addPropertyPt("fo:margin-top",    sep->brcTop.dptSpace);
-        pageLayoutStyle->addPropertyPt("fo:margin-right",  sep->brcRight.dptSpace);
-        pageLayoutStyle->addPropertyPt("fo:margin-bottom", sep->brcBottom.dptSpace);
-
-        // The *20 and /20 below is the conversion between twips (1/20th of a point) and points.
-        pageLayoutStyle->addPropertyPt("fo:padding-left",
-                                         (sep->dxaLeft - (sep->brcLeft.dptSpace * 20)) / 20);
-        pageLayoutStyle->addPropertyPt("fo:padding-top",
-                                         (qAbs(sep->dyaTop) - (sep->brcTop.dptSpace * 20)) / 20);
-        pageLayoutStyle->addPropertyPt("fo:padding-right",
-                                         (sep->dxaRight - (sep->brcRight.dptSpace * 20)) / 20);
-        pageLayoutStyle->addPropertyPt("fo:padding-bottom",
-                                         (qAbs(sep->dyaBottom) - (sep->brcBottom.dptSpace * 20)) / 20);
-        break;
     }
     // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }

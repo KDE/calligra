@@ -44,7 +44,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kstandarddirs.h>
 #include <kurl.h>
 #include <kmimetype.h>
 #include <kdatetime.h>
