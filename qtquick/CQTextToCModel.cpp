@@ -198,10 +198,8 @@ void CQTextToCModel::setCanvas(QObject* newCanvas)
     d->document = 0;
     d->documentLayout = 0;
     CQTextDocumentCanvas* canvas = qobject_cast<CQTextDocumentCanvas*>(newCanvas);
-    qDebug() << "Set thing...";
     if(canvas)
     {
-        qDebug() << "Thing set!";
         d->canvas = canvas;
         d->document = canvas->document()->mainFrameSet()->document();
         d->documentLayout = static_cast<KoTextDocumentLayout *>(d->document->documentLayout());
