@@ -138,7 +138,10 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
             m_view->goToPreviousPage(e->modifiers());
         else if (e->key() == Qt::Key_PageDown)
             m_view->goToNextPage(e->modifiers());
-    }
+         }
+    if(e->key() == Qt::Key_Escape)
+        m_view->exitDistractioFreeMode();
+
 }
 
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const

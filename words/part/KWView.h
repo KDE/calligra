@@ -141,6 +141,8 @@ public slots:
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
     void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
+    void exitDistractioFreeMode();
 
 protected:
     /// reimplemented method from superclass
@@ -213,8 +215,6 @@ private slots:
     void hideCursor();
     /// Hide status bar and scroll bars after seconds in Distraction-Free mode.
     void hideUI();
-    /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
-    void exitDistractioFreeMode();
 
 private:
     KWGui *m_gui;

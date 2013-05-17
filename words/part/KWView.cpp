@@ -766,10 +766,12 @@ void KWView::setDistractionFreeMode(bool status)
 
 void KWView::hideUI()
 {
-     shell()->statusBar()->setVisible(false);
-     // Hide vertical  and horizontal scroll bar.
-     static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-     static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    if (m_isDistractionFreeMode) {
+        shell()->statusBar()->setVisible(false);
+        // Hide vertical  and horizontal scroll bar.
+        static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
 }
 
 void KWView::hideCursor(){
@@ -779,10 +781,12 @@ void KWView::hideCursor(){
 
 void KWView::exitDistractioFreeMode()
 {
-    QAction *action = actionCollection()->action("view_distractionfreemode");
-    action->setChecked(false);
-    m_gui->setCursor(Qt::ArrowCursor);
-    setDistractionFreeMode(false);
+    if (m_isDistractionFreeMode) {
+        QAction *action = actionCollection()->action("view_distractionfreemode");
+        action->setChecked(false);
+        m_gui->setCursor(Qt::ArrowCursor);
+        setDistractionFreeMode(false);
+    }
 }
 
 void KWView::viewMouseMoveEvent(QMouseEvent *e)
