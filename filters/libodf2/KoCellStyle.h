@@ -22,14 +22,14 @@
 #include "KoStyle.h"
 #include "KoBorder.h"
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 /**
  * A \class KoCellStyle represents a style of a cell to be applied to one or more cells.
  *
  * As all the styles it can be shared
  */
-class KOODF_EXPORT KoCellStyle : public KoStyle
+class KOODF2_EXPORT KoCellStyle : public KoStyle
 {
     KoCellStyle();
 

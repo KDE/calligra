@@ -88,9 +88,10 @@ calligra_define_product(LIB_CALLIGRADB "libcalligradb")
 # calligra libs
 calligra_define_product(CALLIGRA_LIBS "Calligra core libs")
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_ODF2 "libodf2"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_ODFTRAVERSE "libodftraverse"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
 calligra_define_product(SCRIPTING "") # TODO
 # apps
 calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS)
@@ -778,6 +779,15 @@ set(KDCHART_INCLUDES
 
 set(WRITERPERFECT_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/writerperfect
+)
+
+#############################################
+####           filter libraries          ####
+#############################################
+
+# libodf2
+set(KOODF2_INCLUDES
+    ${CMAKE_SOURCE_DIR}/filters/libodf2
 )
 
  #########################################

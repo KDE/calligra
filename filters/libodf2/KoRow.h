@@ -16,32 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCOLUMN_H
-#define KoCOLUMN_H
+#ifndef KOROW_H
+#define KOROW_H
 
+class KoTable;
 #include "KoCellStyle.h"
-#include "KoColumnStyle.h"
+#include "KoRowStyle.h"
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
-class KoXmlWriter;
 class KoGenStyles;
+class KoXmlWriter;
 
 /**
- * A \class KoColumn represents a column inside a table.
+ * A \class KoRow represents a row inside a table.
  * its properties aren't shared unlike the KoStyle's it contains.
  */
 
-class KOODF_EXPORT KoColumn
+class KOODF2_EXPORT KoRow
 {
     friend class KoTable;
-    KoColumn();
+    KoRow();
 
 public:
-    ~KoColumn();
+    ~KoRow();
 
-    KoColumnStyle::Ptr style();
-    void setStyle(KoColumnStyle::Ptr style);
+    KoRowStyle::Ptr style();
+    void setStyle(KoRowStyle::Ptr style);
 
     KoCellStyle::Ptr defualtCellStyle() const;
     void setDefaultCellStyle(KoCellStyle::Ptr defaultStyle);
@@ -56,12 +57,13 @@ public:
 
 private:
     void saveOdf(KoXmlWriter& writer, KoGenStyles& styles);
+    void finishSaveOdf(KoXmlWriter& writer, KoGenStyles& styles);
 
-    KoColumn(const KoColumn&);
-    KoColumn& operator=(const KoColumn&);
+    KoRow(const KoRow&);
+    KoRow& operator=(const KoRow&);
 
     KoCellStyle::Ptr m_defaultCellStyle;
-    KoColumnStyle::Ptr m_style;
+    KoRowStyle::Ptr m_style;
     Visibility m_visibility;
 };
 
