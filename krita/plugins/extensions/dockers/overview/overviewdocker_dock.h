@@ -19,24 +19,28 @@
 #define _DIGITALMIXER_DOCK_H_
 
 #include <QDockWidget>
-#include <KoColor.h>
+#include <QTimer>
+
 #include <KoCanvasObserverBase.h>
 
-class KoColorPopupAction;
-class KoColorSlider;
-class KoColorPatch;
-class KisView2;
+class KisCanvas2;
+class QLabel;
 
-class PresetDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
-    PresetDockerDock( );
+    OverviewDockerDock( );
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
 public slots:
-private slots:
+    void kickTimer();
+    void startUpdateCanvasProjection();
+protected:
+    void resizeEvent(QResizeEvent *);
 private:
-    KoCanvasBase* m_canvas;
+    QLabel *m_preview;
+    KisCanvas2* m_canvas;
+    QTimer m_delayTimer;
 };
 
 

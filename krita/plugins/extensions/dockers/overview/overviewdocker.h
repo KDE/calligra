@@ -15,29 +15,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _DIGITALMIXER_DOCK_H_
-#define _DIGITALMIXER_DOCK_H_
+#ifndef _OVERVIEW_DOCKER_H_
+#define _OVERVIEW_DOCKER_H_
 
-#include <QDockWidget>
-#include <KoColor.h>
-#include <KoCanvasObserverBase.h>
+#include <QObject>
+#include <QVariant>
 
-class KoColorPopupAction;
-class KoColorSlider;
-class KoColorPatch;
 class KisView2;
 
-class PresetDockerDock : public QDockWidget, public KoCanvasObserverBase {
+/**
+ * Template of view plugin
+ */
+class OverviewDockerPlugin : public QObject
+{
     Q_OBJECT
-public:
-    PresetDockerDock( );
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
-public slots:
-private slots:
-private:
-    KoCanvasBase* m_canvas;
+    public:
+        OverviewDockerPlugin(QObject *parent, const QVariantList &);
+        virtual ~OverviewDockerPlugin();
+    private:
+        KisView2* m_view;
 };
-
 
 #endif
