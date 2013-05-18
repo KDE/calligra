@@ -165,13 +165,13 @@ calligra_define_product(FILTER_FLOW "All Flow filter"  WANTS FILTER_FLOW_IMPORT 
 # Stage filters
 calligra_define_product(FILTER_KPR_TO_OPD "KPresenter to ODP filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPT_TO_ODP "PPT to OPD filter" NEEDS LIB_MSO CALLIGRA_LIBS)
-calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter" NEEDS LIB_MSOOXML CALLIGRA_LIBS)
+calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter" NEEDS LIB_MSOOXML LIB_ODF2 CALLIGRA_LIBS)
 calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filter"  WANTS FILTER_KPR_TO_OPD FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
 calligra_define_product(FILTER_STAGE_EXPORT "All Stage export filter"  WANTS )
 calligra_define_product(FILTER_STAGE "All Stage filter"  WANTS FILTER_STAGE_IMPORT FILTER_STAGE_EXPORT)
 # Words filters
 calligra_define_product(FILTER_DOC_TO_ODT "DOC to ODT filter" NEEDS LIB_MSO LIB_MSOOXML CALLIGRA_LIBS)
-calligra_define_product(FILTER_DOCX_TO_ODT "DOCX to ODT filter" NEEDS LIB_MSOOXML CALLIGRA_LIBS)
+calligra_define_product(FILTER_DOCX_TO_ODT "DOCX to ODT filter" NEEDS LIB_MSOOXML LIB_ODF2 CALLIGRA_LIBS)
 calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
 calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter"  NEEDS CALLIGRA_LIBS)
