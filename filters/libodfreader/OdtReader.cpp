@@ -129,7 +129,8 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
 
 
 #if 0
-// This is a template function for the reader library
+// This is a template function for the reader library.
+// Copy this one and change the name and fill in the code.
 void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 {
     m_backend->elementNamespaceTagname(reader, m_context);
@@ -195,8 +196,8 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     // <office:text> has the following children in ODF 1.2:
     //
     // In addition to the text level tags like <text:p> etc that can
-    // be found in any textbox, table cell, etc, it has the following
-    // text document children:
+    // be found in any textbox, table cell or similar, it has the
+    // following text document children:
     //
     //   <office:forms> 13.2
     //   <table:calculation-settings> 9.4.1
@@ -222,9 +223,8 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
         if (tagName == "office:forms") {
             // FIXME: NYI
             reader.skipCurrentElement();
-            
         }
-        else if (tagName == "office:body") {
+        else if (tagName == "...") {
             // HANDLE CONTENTS HERE
         }
         else {
@@ -313,7 +313,9 @@ void OdtReader::readElementTextH(KoXmlStreamReader &reader)
 {
     m_backend->elementTextH(reader, m_context);
 
+    m_context->setIsInsideParagraph(true);
     readParagraphLevelElements(reader);
+    m_context->setIsInsideParagraph(false);
 
     m_backend->elementTextH(reader, m_context);
 }
@@ -322,7 +324,9 @@ void OdtReader::readElementTextP(KoXmlStreamReader &reader)
 {
     m_backend->elementTextP(reader, m_context);
 
+    m_context->setIsInsideParagraph(true);
     readParagraphLevelElements(reader);
+    m_context->setIsInsideParagraph(false);
 
     m_backend->elementTextP(reader, m_context);
 }
@@ -352,6 +356,7 @@ void OdtReader::readParagraphLevelElements(KoXmlStreamReader &reader)
 
     QString tagName = reader.qualifiedName().toString();
         
+    // FIXME: Add a list of paragraph level elements here
     // FIXME: Only very few tags are handled right now.
     if (tagName == "text:span") {
         readElementTextSpan(reader);
@@ -392,8 +397,14 @@ void OdtReader::readElementTextSpan(KoXmlStreamReader &reader)
 
 void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
 {
-    // FIXME: NYI
-    reader.skipCurrentElement();
+    while (reader.readNextStartElement()) {
+        if (m_context->isInsideParagraph()) {
+            readParagraphLevelElements(reader);
+        }
+        else {
+            readTextLevelElements(reader);
+        }
+    }
 }
 
 

@@ -48,6 +48,9 @@ public:
     QHash<QString, QString>    manifest;
     KoOdfStyleManager         *styleManager;
 
+    // This data changes while the parsing proceeds.
+    bool  isInsideParagraph;  // True while we are parsing paragraph contents.
+
     // This data is created during the reading and can be used after
     // it is finished.
     QHash<QString, QSizeF>   images;
@@ -58,6 +61,7 @@ public:
 OdfReaderContext::Private::Private(KoStore *store)
     : odfStore(store)
     , styleManager(new KoOdfStyleManager())
+    , isInsideParagraph(false)
 {
 }
 
@@ -126,6 +130,17 @@ QHash<QString, QString> OdfReaderContext::metadata() const
 QHash<QString, QString> OdfReaderContext::manifest() const
 {
     return d->manifest;
+}
+
+
+bool OdfReaderContext::isInsideParagraph() const
+{
+    return d->isInsideParagraph;
+}
+
+void OdfReaderContext::setIsInsideParagraph(bool isInside)
+{
+    d->isInsideParagraph = isInside;
 }
 
 

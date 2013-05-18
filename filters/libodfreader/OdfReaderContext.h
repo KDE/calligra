@@ -107,6 +107,11 @@ class ODFREADER_EXPORT OdfReaderContext
      */
     QHash<QString, QString> manifest() const;
 
+    // This data changes while the parsing proceeds.
+    bool isInsideParagraph() const;
+    void setIsInsideParagraph(bool isInside);
+
+
     // This data below is created during the traversal and can be
     // accessed after the traversal is finished.
 
