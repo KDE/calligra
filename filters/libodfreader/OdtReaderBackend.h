@@ -80,22 +80,22 @@ class ODFREADER_EXPORT OdtReaderBackend
 
     // ----------------------------------------------------------------
     // ODT document level functions
-    void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
-    void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
-    void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
 
-    void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 
  private:
     class Private;

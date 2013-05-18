@@ -56,12 +56,15 @@ OdtReader::~OdtReader()
 
 bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context)
 {
+    kDebug(30503) << "entering";
+
     m_backend = backend;
     m_context = context;
 
     if (context->analyzeOdfFile() != KoFilter::OK) {
         return false;
     }
+    kDebug(30503) << "analyze ok";
 
     // ----------------------------------------------------------------
     // Read the body from content.xml
@@ -72,6 +75,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
         kError(30503) << "Unable to open input file content.xml" << endl;
         return false;
     }
+    kDebug(30503) << "open content.xml ok";
 
     KoXmlStreamReader reader;
     prepareForOdfInternal(reader);
@@ -163,6 +167,7 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 
 void OdtReader::readElementOfficeBody(KoXmlStreamReader &reader)
 {
+    kDebug(30503) << "entering" << reader.qualifiedName().toString();
     m_backend->elementOfficeBody(reader, m_context);
 
     // <office:body> has the following children in ODF 1.2:
@@ -187,10 +192,12 @@ void OdtReader::readElementOfficeBody(KoXmlStreamReader &reader)
     }
 
     m_backend->elementOfficeBody(reader, m_context);
+    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
 }
 
 void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
 {
+    kDebug(30503) << "entering" << reader.qualifiedName().toString();
     m_backend->elementOfficeText(reader, m_context);
 
     // <office:text> has the following children in ODF 1.2:
@@ -224,8 +231,50 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
             // FIXME: NYI
             reader.skipCurrentElement();
         }
-        else if (tagName == "...") {
-            // HANDLE CONTENTS HERE
+        else if (tagName == "table:calculation-settings") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:consolidation") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:content-validation") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:database-ranges") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:data-pilot-tables") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:dde-links") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:label-ranges") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:named-expressions") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "text:alphabetical-index-auto-mark-file") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "text:dde-connection-decls") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "text:page-sequence") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "text:sequence-decls") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "text:tracked-changes") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "text:user-field-decls") {
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "text:variable-decls") {
+            reader.skipCurrentElement();
         }
         else {
             readTextLevelElements(reader);
@@ -233,6 +282,7 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     }
 
     m_backend->elementOfficeText(reader, m_context);
+    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
 }
 
 
@@ -246,6 +296,8 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
 //
 void OdtReader::readTextLevelElements(KoXmlStreamReader &reader)
 {
+    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+
     // We should not call any backend functions here.  That is already
     // done in the functions that call this one.
 
@@ -306,6 +358,8 @@ void OdtReader::readTextLevelElements(KoXmlStreamReader &reader)
     else {
         readUnknownElement(reader);
     }
+
+    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
 }
 
 
@@ -322,13 +376,18 @@ void OdtReader::readElementTextH(KoXmlStreamReader &reader)
 
 void OdtReader::readElementTextP(KoXmlStreamReader &reader)
 {
+    kDebug(30503) << "entering" << reader.qualifiedName().toString();
     m_backend->elementTextP(reader, m_context);
 
     m_context->setIsInsideParagraph(true);
+    reader.readNext();
     readParagraphLevelElements(reader);
     m_context->setIsInsideParagraph(false);
 
+    //reader.skipCurrentElement();
     m_backend->elementTextP(reader, m_context);
+
+    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
 }
 
 
@@ -342,52 +401,70 @@ void OdtReader::readElementTextP(KoXmlStreamReader &reader)
 //
 void OdtReader::readParagraphLevelElements(KoXmlStreamReader &reader)
 {
+    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+
     // We should not call any backend functions here.  That is already
     // done in the functions that call this one.
 
-    if (reader.isCharacters()) {
-        m_backend->characterData(reader, m_context);
-    }
+    while (!reader.atEnd() && !reader.isEndElement()) {
+        reader.readNext();
 
-    // We define the common elements on the paragraph level as the
-    // following list.  They are the basic paragraph level contents that
-    // can be found in a paragraph (text:p), heading (text:h), etc
-    //
+        if (reader.isCharacters()) {
+            kDebug(30503) << "Found character data";
+            m_backend->characterData(reader, m_context);
+            continue;
+        }
 
-    QString tagName = reader.qualifiedName().toString();
+        if (!reader.isStartElement())
+            continue;
+
+        // We define the common elements on the paragraph level as the
+        // following list.  They are the basic paragraph level contents that
+        // can be found in a paragraph (text:p), heading (text:h), etc
+        //
+        // FIXME: Add a list of paragraph level elements here
         
-    // FIXME: Add a list of paragraph level elements here
-    // FIXME: Only very few tags are handled right now.
-    if (tagName == "text:span") {
-        readElementTextSpan(reader);
+        // FIXME: Only very few tags are handled right now.
+        QString tagName = reader.qualifiedName().toString();
+        if (tagName == "text:span") {
+            readElementTextSpan(reader);
+        }
+        else if (tagName == "text:s") {
+            readElementTextS(reader);
+        }
+        else {
+            readUnknownElement(reader);
+        }
     }
-    else if (tagName == "text:s") {
-        readElementTextS(reader);
-    }
-    else {
-        readUnknownElement(reader);
-    }
+    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
+
+    if (reader.isEndElement())
+        reader.readNext();
 }
 
 
 void OdtReader::readElementTextS(KoXmlStreamReader &reader)
 {
+    kDebug(30503) << "entering" << reader.qualifiedName().toString();
     m_backend->elementTextS(reader, m_context);
 
     // FIXME: NYI
     reader.skipCurrentElement();
 
     m_backend->elementTextS(reader, m_context);
+    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
 }
 
 void OdtReader::readElementTextSpan(KoXmlStreamReader &reader)
 {
+    kDebug(30503) << "entering" << reader.qualifiedName().toString();
     m_backend->elementTextSpan(reader, m_context);
 
     // FIXME: NYI
     reader.skipCurrentElement();
 
     m_backend->elementTextSpan(reader, m_context);
+    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
 }
 
 
@@ -397,6 +474,7 @@ void OdtReader::readElementTextSpan(KoXmlStreamReader &reader)
 
 void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
 {
+    kDebug(30503) << "entering" << reader.qualifiedName().toString();
     while (reader.readNextStartElement()) {
         if (m_context->isInsideParagraph()) {
             readParagraphLevelElements(reader);
@@ -405,6 +483,7 @@ void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
             readTextLevelElements(reader);
         }
     }
+    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
 }
 
 

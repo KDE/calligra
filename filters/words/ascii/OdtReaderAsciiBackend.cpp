@@ -22,6 +22,9 @@
 // Own
 #include "OdtReaderAsciiBackend.h"
 
+// KDE
+#include "kdebug.h"
+
 // Calligra
 #include <KoXmlReader.h>
 
@@ -56,16 +59,20 @@ void OdtReaderAsciiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderCon
 
 void OdtReaderAsciiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
+    kDebug(30503) << "start";
     if (!reader.isEndElement())
         return;
+    kDebug(30503) << "isEndElement";
 
     OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
     if (!asciiContext) {
         return;
     }
+    kDebug(30503) << "ascii context ok";
 
     // At the end of a paragraph, output two newlines.
     asciiContext->outStream << "\n\n";
+    kDebug(30503) << "end";
 }
 
 
@@ -107,6 +114,8 @@ void OdtReaderAsciiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCo
     if (!asciiContext) {
         return;
     }
+    kDebug(30503) << "character data ok";
 
-    asciiContext->outStream << reader.text().data();
+    asciiContext->outStream << "the-text";
+    asciiContext->outStream << reader.text().toString();
 }
