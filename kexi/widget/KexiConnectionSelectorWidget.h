@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
+   Copyright (C) 2013 Yue Liu <yue.liu@mail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,14 +27,10 @@
 #include <kexiutils/KexiContextMessage.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
 
-#include <kdialog.h>
-#include <kabstractfilewidget.h>
-
 #include <QPointer>
 #include <QTreeWidgetItem>
 #include <QLineEdit>
-
-class KexiFileWidget;
+#include <QFileDialog>
 
 //! helper class
 class KEXIEXTWIDGETS_EXPORT ConnectionDataLVItem : public QTreeWidgetItem
@@ -62,26 +59,16 @@ class KEXIEXTWIDGETS_EXPORT KexiConnectionSelectorWidget : public QWidget
     Q_OBJECT
 
 public:
-    //! Defines connection type
-    enum ConnectionType {
-        FileBased = 1, //!< the widget displays file-based connection
-        ServerBased = 2 //!< the widget displays server-based connection
-    };
 
     /*! Constructs a new widget which contains \a conn_set as connection set.
      \a conn_set can be altered, because Add/Edit/Remove buttons are available
-     to users. \a startDirOrVariable can be provided to specify a start dir for file browser
-     (it can also contain a configuration variable name with "kfiledialog:///" prefix
-     as described in KRecentDirs documentation). */
+     to users. \a startDirOrVariable can be provided to specify a start dir for file
+     browser. */
     KexiConnectionSelectorWidget(KexiDBConnectionSet& conn_set,
                            const QString& startDirOrVariable,
-                           KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent = 0);
+                           QFileDialog::AcceptMode fileAccessType, QWidget* parent = 0);
 
     virtual ~KexiConnectionSelectorWidget();
-
-    /*! After accepting this dialog this method returns wherher user selected
-     file- or server-based connection. */
-    ConnectionType selectedConnectionType() const;
 
     /*! \return data of selected connection, if server-based connection was selected.
      Returns NULL if no selection has been made or file-based connection
@@ -95,15 +82,13 @@ public:
      has been selected.
      @see selectedConnectionType()
     */
-    QString selectedFileName();
+    QString selectedFile();
 
     /*! Sets selected filename to \a fileName.
      Only works when selectedConnectionType()==FileBased. */
-    void setSelectedFileName(const QString& fileName);
+    void setSelectedFile(const QString& file);
 
     QTreeWidget* connectionsList() const;
-
-    KexiFileWidget *fileWidget;
 
     /*! If true, user will be asked to accept overwriting existing project.
      This is true by default. */
@@ -119,18 +104,9 @@ signals:
     void connectionItemExecuted(ConnectionDataLVItem *item);
     void connectionItemHighlighted(ConnectionDataLVItem *item);
     void connectionSelected(bool hasSelected);
+    void fileSelected(bool hasSelected);
 
 public slots:
-    void showSimpleConn();
-    void showAdvancedConn();
-    virtual void setFocus();
-
-    /*! Hides helpers on the server based connection page
-      (sometimes it's convenient not to have these):
-    - "Select existing database server's connection..." (label at the top)
-    - "Click "Back" button" (label at the bottom)
-    - "Back" button itself */
-    void hideHelpers();
     void hideConnectonIcon();
     void hideDescription();
 
@@ -141,13 +117,15 @@ protected slots:
     void slotRemoteEditBtnClicked();
     void slotRemoteRemoveBtnClicked();
     void slotConnectionSelectionChanged();
-    void slotPrjTypeSelected(int id);
     void slotConnectionSelected();
 
+private slots:
+    void slotOpenFileBtnClicked();
 private:
     ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
     QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
+    QString m_file;
     
     class Private;
     Private * const d;

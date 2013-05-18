@@ -62,12 +62,12 @@ class KProgressDialog;
 class QProgressBar;
 class KPageWidgetItem;
 
+class KoFileDialog;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiProject;
 class KexiCSVImportDialogModel;
-class KexiFileWidget;
 class KexiCommandLinkButton;
 class KexiNameWidget;
 class KexiProjectNavigator;
@@ -135,7 +135,7 @@ private:
     QCheckBox* m_ignoreDuplicates;
     QCheckBox* m_1stRowForFieldNames;
     QCheckBox* m_primaryKeyField;
-    KexiFileWidget *m_openFileWidget;
+    //KexiFileWidget *m_openFileWidget;
     QWidget *m_optionsWidget;
     QWidget *m_saveMethodWidget;
     KPageWidgetItem *m_openFilePage;

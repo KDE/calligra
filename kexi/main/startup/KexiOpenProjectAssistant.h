@@ -31,7 +31,6 @@
 #include <kexiutils/utils.h>
 #include <widget/KexiServerDriverNotFoundMessage.h>
 
-class KTabWidget;
 class KexiProjectData;
 class KexiProjectSet;
 class KexiConnectionSelectorWidget;
@@ -46,15 +45,9 @@ public:
     explicit KexiMainOpenProjectPage(QWidget* parent = 0);
     ~KexiMainOpenProjectPage();
 
-    KTabWidget* tabWidget;
-    KexiConnectionSelectorWidget* fileSelector;
     KexiConnectionSelectorWidget* connSelector;
-private slots:
-    void init();
-    void tabChanged(int index);
+
 private:
-    QWidget* m_fileSelectorWidget;
-    QWidget* m_connSelectorWidget;
     QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
 };
 

@@ -37,12 +37,13 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
-#include <widget/KexiFileWidget.h>
+//#include <widget/KexiFileWidget.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiProjectSelectorWidget.h>
 
 #include <KoIcon.h>
+#include <KoFileDialog.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -58,7 +59,7 @@
 #include <kcategorydrawer.h>
 #include <kpushbutton.h>
 #include <kacceleratormanager.h>
-#include <kfiledialog.h>
+//#include <kfiledialog.h>
 
 #include <QLayout>
 #include <QCheckBox>
@@ -226,7 +227,7 @@ KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
     connect(fileHandler, SIGNAL(askForOverwriting(KexiContextMessage)),
             this, SLOT(askForOverwriting(KexiContextMessage)));
 
-    contents->file_requester->fileDialog()->setCaption(i18n("Save New Project As"));
+    //contents->file_requester->fileDialog()->setCaption(i18n("Save New Project As"));
     updateUrl();
 
     setContents(contents);
@@ -328,13 +329,13 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
         connSelector = new KexiConnectionSelectorWidget(
             Kexi::connset(),
             "kfiledialog:///OpenExistingOrCreateNewProject",
-            KAbstractFileWidget::Saving);
+            QFileDialog::AcceptSave);
         lyr->addWidget(connSelector);
-        connSelector->showAdvancedConn();
+        //TODO connSelector->showAdvancedConn();
         connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
                 this, SLOT(next()));
         connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-        connSelector->hideHelpers();
+        //TODO connSelector->hideHelpers();
         connSelector->hideDescription();
         setContents(lyr);
         setFocusWidget(connSelector->connectionsList());

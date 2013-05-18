@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "importwizard.h"
+//TODO #include "importwizard.h"
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -30,7 +30,7 @@ This will be an example program to demonstrate how to import an existing db into
 a new kexi based db
 */
 
-using namespace KexiMigration;
+//TODO using namespace KexiMigration;
 
 int main(int argc, char *argv[])
 {
@@ -38,9 +38,9 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 
-    ImportWizard* iw = new ImportWizard();
+    /*TODO ImportWizard* iw = new ImportWizard();
     iw->setGeometry(300, 300, 300, 250);
-    iw->show();
+    iw->show();*/
 
     return app.exec();
 }

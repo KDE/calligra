@@ -36,8 +36,8 @@ set(keximigrate_LIB_SRCS AlterSchemaTableModel.cpp
    keximigrate.cpp 
    keximigratedata.cpp 
    migratemanager.cpp 
-   importwizard.cpp
-   importtablewizard.cpp
+   #importwizard.cpp
+   #importtablewizard.cpp
    importoptionsdlg.cpp
    AlterSchemaWidget.cpp)
 

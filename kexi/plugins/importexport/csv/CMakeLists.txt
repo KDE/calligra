@@ -27,6 +27,7 @@ target_link_libraries(
     kexiutils
     kexiextendedwidgets
     keximain
+    komain
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KFILE_LIBS}

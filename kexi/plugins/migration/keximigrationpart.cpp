@@ -19,8 +19,8 @@
 
 #include "keximigrationpart.h"
 
-#include <migration/importwizard.h>
-#include <migration/importtablewizard.h>
+//TODO #include <migration/importwizard.h>
+//TODO #include <migration/importtablewizard.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
@@ -42,10 +42,10 @@ QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
     QWidget *w;
 
     if (QString(widgetClass) == "migration") {
-        w = new KexiMigration::ImportWizard(parent, args);
+        //TODO w = new KexiMigration::ImportWizard(parent, args);
     }
     else if (QString(widgetClass) == "importtable") {
-        w = new KexiMigration::ImportTableWizard(KexiMainWindowIface::global()->project()->dbConnection(), parent);
+        //TODO w = new KexiMigration::ImportTableWizard(KexiMainWindowIface::global()->project()->dbConnection(), parent);
     }
     else
         return 0;

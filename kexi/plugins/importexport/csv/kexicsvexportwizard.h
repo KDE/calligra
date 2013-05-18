@@ -30,7 +30,6 @@ class QCheckBox;
 class QGroupBox;
 class QHBoxLayout;
 class KPushButton;
-class KexiFileWidget;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
@@ -60,7 +59,6 @@ protected slots:
     virtual void done(int result);
     void slotShowOptionsButtonClicked();
     void slotDefaultsButtonClicked();
-    void slotCurrentPageChanged(KPageWidgetItem*, KPageWidgetItem*);
 
 protected:
 
@@ -94,7 +92,7 @@ protected:
     KexiCSVExport::Options m_options;
 //  Mode m_mode;
 //  int m_itemId;
-    KexiFileWidget* m_fileSaveWidget;
+    QString m_exportFile;
     QWidget* m_exportOptionsWidget;
     KPageWidgetItem *m_fileSavePage;
     KPageWidgetItem *m_exportOptionsPage;

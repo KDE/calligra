@@ -64,7 +64,7 @@ ELSE (KEXI_MOBILE)
   )
   if (APPLE)
     LIST(APPEND kexiextendedwidgets_LIB_SRCS
-      KexiConnectionSelectorWidgetNew.cpp
+      KexiConnectionSelectorWidget.cpp
     )
   else (APPLE)
     LIST(APPEND kexiextendedwidgets_LIB_SRCS
