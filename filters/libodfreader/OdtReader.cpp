@@ -45,6 +45,7 @@
 static void prepareForOdfInternal(KoXmlStreamReader &reader);
 
 
+#if 0
 static int debugIndent = 0;
 #define DEBUGSTART() \
     ++debugIndent; \
@@ -56,7 +57,14 @@ static int debugIndent = 0;
     kDebug(30503) << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
     << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
-
+#else
+#define DEBUGSTART() \
+    // NOTHING
+#define DEBUGEND() \
+    // NOTHING
+#define DEBUG_READING(param) \
+    // NOTHING
+#endif
 
 
 OdtReader::OdtReader()

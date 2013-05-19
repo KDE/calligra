@@ -32,9 +32,15 @@
 #include "OdfReaderAsciiContext.h"
 
 
+#if 0
 #define DEBUG_BACKEND() \
     kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
+#else
+#define DEBUG_BACKEND() \
+    //NOTHING
+#endif
+
 
 // ================================================================
 //                 class OdtReaderAsciiBackend
