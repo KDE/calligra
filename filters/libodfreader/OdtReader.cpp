@@ -53,6 +53,10 @@ OdtReader::~OdtReader()
 {
 }
 
+#define DEBUG_READING(param) \
+    kDebug(30503) << param << ": " \
+    << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
+    << reader.qualifiedName().toString()
 
 bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context)
 {
@@ -137,7 +141,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
 // Copy this one and change the name and fill in the code.
 void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 {
-    m_backend->elementNamespaceTagname(reader, m_context);
+    DEBUG_READING("entering");
 
     // <namespace:tagname> has the following children in ODF 1.2:
     //   FILL IN THE CHILDREN LIKE THIS EXAMPLE (taken from office:document-content):
@@ -161,13 +165,14 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
     }
 
     m_backend->elementNamespaceTagname(reader, m_context);
+    DEBUG_READING("exiting");
 }
 #endif
 
 
 void OdtReader::readElementOfficeBody(KoXmlStreamReader &reader)
 {
-    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+    DEBUG_READING("entering");
     m_backend->elementOfficeBody(reader, m_context);
 
     // <office:body> has the following children in ODF 1.2:
@@ -192,12 +197,12 @@ void OdtReader::readElementOfficeBody(KoXmlStreamReader &reader)
     }
 
     m_backend->elementOfficeBody(reader, m_context);
-    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
+    DEBUG_READING("exiting");
 }
 
 void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
 {
-    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+    DEBUG_READING("entering");
     m_backend->elementOfficeText(reader, m_context);
 
     // <office:text> has the following children in ODF 1.2:
@@ -225,6 +230,7 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     //
     // FIXME: For now, none of these are handled
     while (reader.readNextStartElement()) {
+        DEBUG_READING("looping");
         QString tagName = reader.qualifiedName().toString();
         
         if (tagName == "office:forms") {
@@ -282,7 +288,7 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     }
 
     m_backend->elementOfficeText(reader, m_context);
-    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
+    DEBUG_READING("exiting");
 }
 
 
@@ -296,7 +302,7 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
 //
 void OdtReader::readTextLevelElements(KoXmlStreamReader &reader)
 {
-    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+    DEBUG_READING("entering");
 
     // We should not call any backend functions here.  That is already
     // done in the functions that call this one.
@@ -359,24 +365,29 @@ void OdtReader::readTextLevelElements(KoXmlStreamReader &reader)
         readUnknownElement(reader);
     }
 
-    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
+    DEBUG_READING("exiting");
 }
 
 
 void OdtReader::readElementTextH(KoXmlStreamReader &reader)
 {
+    DEBUG_READING("entering");
     m_backend->elementTextH(reader, m_context);
 
     m_context->setIsInsideParagraph(true);
+    reader.readNext();
     readParagraphLevelElements(reader);
     m_context->setIsInsideParagraph(false);
 
     m_backend->elementTextH(reader, m_context);
+    DEBUG_READING("exiting");
+
+    reader.readNext();
 }
 
 void OdtReader::readElementTextP(KoXmlStreamReader &reader)
 {
-    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+    DEBUG_READING("entering");
     m_backend->elementTextP(reader, m_context);
 
     m_context->setIsInsideParagraph(true);
@@ -384,10 +395,10 @@ void OdtReader::readElementTextP(KoXmlStreamReader &reader)
     readParagraphLevelElements(reader);
     m_context->setIsInsideParagraph(false);
 
-    //reader.skipCurrentElement();
     m_backend->elementTextP(reader, m_context);
+    DEBUG_READING("exiting");
 
-    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
+    reader.readNext();
 }
 
 
@@ -401,17 +412,16 @@ void OdtReader::readElementTextP(KoXmlStreamReader &reader)
 //
 void OdtReader::readParagraphLevelElements(KoXmlStreamReader &reader)
 {
-    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+    DEBUG_READING("entering");
 
     // We should not call any backend functions here.  That is already
     // done in the functions that call this one.
 
     while (!reader.atEnd() && !reader.isEndElement()) {
-        reader.readNext();
-
         if (reader.isCharacters()) {
             kDebug(30503) << "Found character data";
             m_backend->characterData(reader, m_context);
+            reader.readNext();
             continue;
         }
 
@@ -436,35 +446,35 @@ void OdtReader::readParagraphLevelElements(KoXmlStreamReader &reader)
             readUnknownElement(reader);
         }
     }
-    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
 
-    if (reader.isEndElement())
-        reader.readNext();
+    DEBUG_READING("exiting");
 }
 
 
 void OdtReader::readElementTextS(KoXmlStreamReader &reader)
 {
-    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+    DEBUG_READING("entering");
     m_backend->elementTextS(reader, m_context);
 
-    // FIXME: NYI
+    // This element has no child elements.
     reader.skipCurrentElement();
-
     m_backend->elementTextS(reader, m_context);
-    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
+
+    DEBUG_READING("exiting");
 }
 
 void OdtReader::readElementTextSpan(KoXmlStreamReader &reader)
 {
-    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+    DEBUG_READING("entering");
     m_backend->elementTextSpan(reader, m_context);
 
-    // FIXME: NYI
-    reader.skipCurrentElement();
+    reader.readNext();
+    readParagraphLevelElements(reader);
 
     m_backend->elementTextSpan(reader, m_context);
-    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
+    DEBUG_READING("exiting");
+
+    reader.readNext();
 }
 
 
@@ -474,7 +484,8 @@ void OdtReader::readElementTextSpan(KoXmlStreamReader &reader)
 
 void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
 {
-    kDebug(30503) << "entering" << reader.qualifiedName().toString();
+    DEBUG_READING("entering");
+
     while (reader.readNextStartElement()) {
         if (m_context->isInsideParagraph()) {
             readParagraphLevelElements(reader);
@@ -483,7 +494,8 @@ void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
             readTextLevelElements(reader);
         }
     }
-    kDebug(30503) << "exiting" << reader.qualifiedName().toString();
+
+    DEBUG_READING("exiting");
 }
 
 
