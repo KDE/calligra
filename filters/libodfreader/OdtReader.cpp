@@ -247,18 +247,10 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     //   <text:variable-decls> 7.4.2
     //
     // FIXME: For now, none of these are handled
-#if 0
-    reader.readNext();
-    while (!reader.atEnd() && !reader.isEndElement()) {
-        DEBUG_READING("loop-start");
-        if (!reader.isStartElement())
-            continue;
-#else
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
-#endif
-        QString tagName = reader.qualifiedName().toString();
         
+        QString tagName = reader.qualifiedName().toString();
         if (tagName == "office:forms") {
             // FIXME: NYI
             reader.skipCurrentElement();
