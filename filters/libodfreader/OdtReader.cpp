@@ -522,7 +522,9 @@ void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
         readParagraphContents(reader);
     }
     else {
-        readTextLevelElement(reader);
+        while (reader.readNextStartElement()) {
+            readTextLevelElement(reader);
+        }
     }
 
     DEBUGEND();
