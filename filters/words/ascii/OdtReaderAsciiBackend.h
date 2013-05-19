@@ -48,8 +48,9 @@ class OdtReaderAsciiBackend : public OdtReaderBackend
 
     // ----------------------------------------------------------------
     // ODT document level functions
+
     //void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
-    //void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc

@@ -32,6 +32,9 @@
 #include "OdfReaderAsciiContext.h"
 
 
+#define DEBUG_BACKEND() \
+    kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
+    << reader.qualifiedName().toString()
 
 // ================================================================
 //                 class OdtReaderAsciiBackend
@@ -47,32 +50,42 @@ OdtReaderAsciiBackend::~OdtReaderAsciiBackend()
 }
 
 
+// ----------------------------------------------------------------
+// ODT document level functions
+
+
+
+void OdtReaderAsciiBackend::elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    DEBUG_BACKEND();
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
 
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
 void OdtReaderAsciiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
+    DEBUG_BACKEND();
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
 
 void OdtReaderAsciiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
-    kDebug(30503) << "start";
+    DEBUG_BACKEND();
     if (!reader.isEndElement())
         return;
-    kDebug(30503) << "isEndElement";
 
     OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
     if (!asciiContext) {
         return;
     }
-    kDebug(30503) << "ascii context ok";
 
     // At the end of a paragraph, output two newlines.
     asciiContext->outStream << "\n\n";
-    kDebug(30503) << "end";
 }
 
 
@@ -81,12 +94,14 @@ void OdtReaderAsciiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCon
 
 void OdtReaderAsciiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
+    DEBUG_BACKEND();
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
 
 void OdtReaderAsciiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
+    DEBUG_BACKEND();
     if (!reader.isStartElement())
         return;
 
@@ -110,12 +125,12 @@ void OdtReaderAsciiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCon
 
 void OdtReaderAsciiBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
+    DEBUG_BACKEND();
     OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
     if (!asciiContext) {
         return;
     }
-    kDebug(30503) << "character data ok";
+    kDebug(30503) << reader.text().toString();
 
-    asciiContext->outStream << "the-text";
     asciiContext->outStream << reader.text().toString();
 }

@@ -82,7 +82,7 @@ class ODFREADER_EXPORT OdtReader
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
     // Read all common text level elements like text:p, text:h, draw:frame, etc.
-    void readTextLevelElements(KoXmlStreamReader &reader);
+    void readTextLevelElement(KoXmlStreamReader &reader);
 
     void readElementTextH(KoXmlStreamReader &reader);
     void readElementTextP(KoXmlStreamReader &reader);
@@ -90,7 +90,7 @@ class ODFREADER_EXPORT OdtReader
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
-    void readParagraphLevelElements(KoXmlStreamReader &reader);
+    void readParagraphContents(KoXmlStreamReader &reader);
 
     void readElementTextSpan(KoXmlStreamReader &reader);
     void readElementTextS(KoXmlStreamReader &reader);
