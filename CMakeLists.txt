@@ -89,6 +89,7 @@ calligra_define_product(LIB_CALLIGRADB "libcalligradb")
 calligra_define_product(CALLIGRA_LIBS "Calligra core libs")
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_ODFTRAVERSE "libodftraverse"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_ODFREADER "libodfreader"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(SCRIPTING "") # TODO
@@ -101,6 +102,7 @@ calligra_define_product(SHEETS_PART "Sheets engine"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)"  NEEDS SHEETS_PART)
 calligra_define_product(AUTHOR_APP "Full Author (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(KARBON_APP "Full Karbon (for Desktop)"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(KRITA_APP "Full Krita (for Desktop)"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(KEXI_APP "Full Kexi (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOREPORT LIB_CALLIGRADB)
 calligra_define_product(FLOW_APP "Full Flow (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOPAGEAPP)
 calligra_define_product(PLAN_APP "Full Plan (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
@@ -175,7 +177,7 @@ calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  
 calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ASCII_TO_WORDS "Words ASCII import filter"  NEEDS WORDS_PART)
-calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter"  NEEDS LIB_ODFTRAVERSE CALLIGRA_LIBS)
+calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter"  NEEDS LIB_ODFTRAVERSE LIB_ODFREADER CALLIGRA_LIBS)
 calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter"  NEEDS LIB_VECTORIMAGE CALLIGRA_LIBS)
@@ -206,8 +208,8 @@ calligra_define_product(STAGE "Full Stage (for Desktop)"  NEEDS STAGE_APP  WANTS
 calligra_define_product(SHEETS "Full Sheets (for Desktop)"  NEEDS SHEETS_APP  WANTS FILTER_SHEETS)
 calligra_define_product(AUTHOR "Full Author (for Desktop)"  NEEDS AUTHOR_APP  WANTS FILTER_WORDS)
 calligra_define_product(KARBON "Full Karbon (for Desktop)"  NEEDS KARBON_APP  WANTS FILTER_KARBON)
-calligra_define_product(KRITA "Full Krita (for Desktop)"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS KEXI_APP  WANTS PLUGIN_KEXI_SPREADSHEETMIGRATION)
+calligra_define_product(KRITA "Full Krita (for Desktop)"  NEEDS KRITA_APP)
+calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS KEXI_APP  WANTS PLUGIN_KEXI_SPREADSHEETMIGRATION PLUGIN_REPORTING)
 calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS FLOW_APP  WANTS FILTER_FLOW)
 calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS PLAN_APP  WANTS FILTER_PLAN)
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)"  NEEDS BRAINDUMP_APP)
@@ -804,7 +806,7 @@ endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2, sharedmimeinfo
 if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
-   set(SHOULD_BUILD_KRITA FALSE)
+   set(SHOULD_BUILD_KRITA_APP FALSE)
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 
@@ -822,7 +824,7 @@ endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
 #endif(NOT QIMAGEBLITZ_FOUND)
 
 if (NOT QT3SUPPORT)
-    set (SHOULD_BUILD_KEXI FALSE)
+    set (SHOULD_BUILD_KEXI_APP FALSE)
 endif (NOT QT3SUPPORT)
 
 if(NOT OKULAR_FOUND)
@@ -871,6 +873,22 @@ if(WIN32)
 endif()
 
 #############################################
+####  Backward compatibility BUILD_x=off ####
+#############################################
+
+# workaround: disable directly all products which might be activated by internal
+# dependencies, but belong to scope of old flag
+calligra_drop_products_on_old_flag(braindump BRAINDUMP_APP)
+calligra_drop_products_on_old_flag(flow FLOW_APP)
+calligra_drop_products_on_old_flag(karbon KARBON_APP)
+calligra_drop_products_on_old_flag(kexi KEXI_APP)
+calligra_drop_products_on_old_flag(krita KRITA_APP)
+calligra_drop_products_on_old_flag(plan  PLAN_APP)
+calligra_drop_products_on_old_flag(sheets SHEETS_PART SHEETS_APP)
+calligra_drop_products_on_old_flag(stage  STAGE_PART STAGE_APP)
+calligra_drop_products_on_old_flag(words  WORDS_PART WORDS_APP)
+
+#############################################
 ####      Temporarily broken products    ####
 #############################################
 
@@ -910,9 +928,9 @@ endif(SHOULD_BUILD_PLAN_APP)
 
 add_subdirectory(sheets)
 
-if(SHOULD_BUILD_KRITA)
+if(SHOULD_BUILD_KRITA_APP)
   add_subdirectory(krita)
-endif(SHOULD_BUILD_KRITA)
+endif(SHOULD_BUILD_KRITA_APP)
 
 if(SHOULD_BUILD_KARBON_APP)
   add_subdirectory(karbon)
