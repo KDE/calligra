@@ -40,5 +40,5 @@ X-KDE-ServiceTypes=Calligra/Dock
 Type=Service
 X-KDE-PluginInfo-Name=karbondockersplugin
 X-KDE-Library=karbondockersplugin
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28

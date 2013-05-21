@@ -27,7 +27,7 @@ class KoTable;
 class KoXmlWriter;
 class KoGenStyles;
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 #include <QList>
 
@@ -35,7 +35,7 @@ class KoGenStyles;
  * A \class KoCell represents a cell inside a table.
  *
  **/
-class KOODF_EXPORT KoCell
+class KOODF2_EXPORT KoCell
 {
     friend class KoTable;
 
