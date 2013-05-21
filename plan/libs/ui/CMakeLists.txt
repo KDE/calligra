@@ -2,16 +2,15 @@
 
 include_directories(
     ${KDCHART_INCLUDES}
+    ${KDGANTT_INCLUDES}
 
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
     ${CMAKE_BINARY_DIR}/plan/libs/models
     ${CMAKE_SOURCE_DIR}/plan/libs/ui/reports/odt
     ${CMAKE_BINARY_DIR}/plan/libs/ui
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
-    ${CMAKE_BINARY_DIR}/3rdparty/kdgantt
 
-    ${KOODF_INCLUDES} 
+    ${KOODF_INCLUDES}
     ${KOPROPERTY_INCLUDES}
 
     ${KOREPORT_INCLUDES}

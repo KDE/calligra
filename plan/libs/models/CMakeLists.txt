@@ -5,7 +5,7 @@ include_directories(
     ../kernel 
     ${KOMAIN_INCLUDES}
     ${KUNDO2_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+    ${KDGANTT_INCLUDES}
     ${KDCHART_INCLUDES}
     ${KDE4_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
