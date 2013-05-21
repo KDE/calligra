@@ -22,14 +22,17 @@ if(SHOULD_BUILD_FILTER_ODT_TO_ASCII)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/filters/libodftraverse
+    ${CMAKE_SOURCE_DIR}/filters/libodfreader
 )
 
 set(AsciiExport_PART_SRCS
     AsciiExport.cpp
     OdtTraverserAsciiBackend.cpp
+    OdtReaderAsciiBackend.cpp
+    OdfReaderAsciiContext.cpp
 )
 kde4_add_plugin(asciiexport ${AsciiExport_PART_SRCS})
-target_link_libraries(asciiexport odftraverse komain koodf)
+target_link_libraries(asciiexport odftraverse odfreader komain koodf)
 install(TARGETS asciiexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES words_ascii_export.desktop DESTINATION ${SERVICES_INSTALL_DIR})

@@ -27,6 +27,10 @@ if(SHOULD_BUILD_LIB_ODFTRAVERSE)
     add_subdirectory(libodftraverse)
 endif(SHOULD_BUILD_LIB_ODFTRAVERSE)
 
+if(SHOULD_BUILD_LIB_ODFREADER)
+    add_subdirectory(libodfreader)
+endif(SHOULD_BUILD_LIB_ODFREADER)
+
 if(SHOULD_BUILD_LIB_MSO)
     add_subdirectory(libmso)
 endif(SHOULD_BUILD_LIB_MSO)
@@ -35,21 +39,9 @@ if(SHOULD_BUILD_LIB_MSOOXML)
     add_subdirectory( libmsooxml )
 endif(SHOULD_BUILD_LIB_MSOOXML)
 
-if (SHOULD_BUILD_WORDS_PART)
-    add_subdirectory(words)
-endif (SHOULD_BUILD_WORDS_PART)
-
-if(SHOULD_BUILD_STAGE_PART)
-    add_subdirectory(stage)
-endif(SHOULD_BUILD_STAGE_PART)
-
+add_subdirectory(words)
+add_subdirectory(stage)
 add_subdirectory(sheets)
-
 add_subdirectory(flow)
-
 add_subdirectory(plan)
-
-if(SHOULD_BUILD_KARBON)
-  add_subdirectory(karbon)
-endif(SHOULD_BUILD_KARBON)
-
+add_subdirectory(karbon)
