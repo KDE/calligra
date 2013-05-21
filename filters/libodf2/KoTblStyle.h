@@ -20,7 +20,7 @@
 #define KOTBLSTYLE_H
 
 #include "KoStyle.h"
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 #include <QColor>
 
@@ -31,7 +31,7 @@
  * As all the styles it can be shared.
  **/
 
-class KOODF_EXPORT KoTblStyle : public KoStyle
+class KOODF2_EXPORT KoTblStyle : public KoStyle
 {
     KoTblStyle();
 

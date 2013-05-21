@@ -16,25 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCOLUMNSTYLE_H
-#define KOCOLUMNSTYLE_H
+#ifndef KOROWSTYLE_H
+#define KOROWSTYLE_H
 
 #include "KoStyle.h"
-#include "koodf_export.h"
+#include "koodf2_export.h"
+
+#include <QColor>
 
 /**
- * A \class KoColumnStyle represents a style to be applied to one or more columns.
+ * A \class KoRowStyle represents a style of a row to be applied to one or more rows.
  * 
  * As all the styles it can be shared
  */
 
-class KOODF_EXPORT KoColumnStyle : public KoStyle
+class KOODF2_EXPORT KoRowStyle : public KoStyle
 {
-    KoColumnStyle();
-public:
-    KOSTYLE_DECLARE_SHARED_POINTER(KoColumnStyle)
+    KoRowStyle();
 
-    ~KoColumnStyle();
+public:
+    KOSTYLE_DECLARE_SHARED_POINTER(KoRowStyle)
+    ~KoRowStyle();
+
+    void setBackgroundColor(const QColor& color);
+    QColor backgroundColor() const;
+
+    enum HeightType{
+        MinimumHeight,
+        ExactHeight,
+        OptimalHeight
+    };
+    void setHeight(qreal height);
+    void setHeightType(HeightType type);
+    qreal height() const;
 
     enum BreakType {
         NoBreak,
@@ -48,28 +62,33 @@ public:
     void setBreakAfter(BreakType breakAfter);
     BreakType breakAfter() const;
 
-    enum WidthType {
-        MinimumWidth,
-        ExactWidth,
-        OptimalWidth
+    enum KeepTogetherType {
+        DontKeepTogether,
+        AutoKeepTogether,
+        AlwaysKeeptogether
     };
-    void setWidth(qreal width);
-    qreal width() const;
-    void setWidthType(WidthType type);
-    WidthType widthType() const;
+    void setKeepTogether(KeepTogetherType keepTogether);
+    KeepTogetherType keepTogether() const;
+
+//     void setBackgroundImage(Image image);
+//     Image backgroundImage() const;
 
 protected:
-    virtual void prepareStyle(KoGenStyle& style) const;
-    virtual QString defaultPrefix() const;
-    virtual KoGenStyle::Type styleType() const;
     virtual KoGenStyle::Type automaticstyleType() const;
+    virtual QString defaultPrefix() const;
+    virtual void prepareStyle(KoGenStyle& style) const;
     virtual const char* styleFamilyName() const;
+    virtual KoGenStyle::Type styleType() const;
 
 private:
+    QColor m_backgroundColor;
+//     Image* m_image;
+
+    qreal m_height;
+    HeightType m_heightType;
     BreakType m_breakAfter;
     BreakType m_breakBefore;
-    qreal m_width;
-    WidthType m_widthType;
+    KeepTogetherType m_keepTogether;
 };
 
 #endif

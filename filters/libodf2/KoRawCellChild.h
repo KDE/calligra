@@ -19,10 +19,11 @@
 #ifndef KORAWCELLCHILD_H
 #define KORAWCELLCHILD_H
 
-#include "KoCellChild.h"
-#include "koodf_export.h"
+#include <QByteArray>
 
-#include <QBuffer>
+#include "KoCellChild.h"
+#include "koodf2_export.h"
+
 
 /**
  * A \class KoRawCellChild is a Cell child that can take any given QBuffer 
@@ -35,7 +36,7 @@
  * It's the user's responsibility to ensure that it's not the case.
  * \note KoRawCellData takes ownership of the given buffer.
  */
-class KOODF_EXPORT KoRawCellChild : public KoCellChild
+class KOODF2_EXPORT KoRawCellChild : public KoCellChild
 {
 public:
     explicit KoRawCellChild(const QByteArray &content);
