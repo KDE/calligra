@@ -36,9 +36,12 @@
 
 // Filter libraries
 #include "OdtTraverser.h"
+#include "OdtReader.h"
 
 // This filter
 #include "OdtTraverserAsciiBackend.h"
+#include "OdtReaderAsciiBackend.h"
+#include "OdfReaderAsciiContext.h"
 
 
 K_PLUGIN_FACTORY(AsciiExportFactory, registerPlugin<AsciiExport>();)
@@ -85,12 +88,19 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
         return KoFilter::FileNotFound;
     }
 
+#if 1
+    OdfReaderAsciiContext  asciiBackendContext(odfStore, outfile);
+    OdtReaderAsciiBackend  asciiBackend(&asciiBackendContext);
+
+    OdtReader              odtReader;
+    odtReader.readContent(&asciiBackend, &asciiBackendContext);
+#else
     OdtTraverserAsciiContext  asciiBackendContext(odfStore, outfile);
     OdtTraverserAsciiBackend  asciiBackend(&asciiBackendContext);
 
     OdtTraverser              odtTraverser;
     odtTraverser.traverseContent(&asciiBackend, &asciiBackendContext);
-
+#endif
     outfile.close();
 
     return KoFilter::OK;
