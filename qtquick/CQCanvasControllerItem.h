@@ -30,7 +30,8 @@ class CQCanvasControllerItem : public QDeclarativeItem
     Q_PROPERTY(QDeclarativeItem* flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
-    //Q_PROPERTY()
+    Q_PROPERTY(qreal minimumZoom READ minimumZoom WRITE setMinimumZoom NOTIFY minimumZoomChanged)
+    Q_PROPERTY(qreal maximumZoom READ maximumZoom WRITE setMaximumZoom NOTIFY maximumZoomChanged)
 
 public:
     explicit CQCanvasControllerItem(QDeclarativeItem* parent = 0);
@@ -49,17 +50,27 @@ public:
     qreal zoom() const;
     void setZoom(qreal newZoom);
 
+    qreal minimumZoom() const;
+    void setMinimumZoom(qreal newZoom);
+
+    qreal maximumZoom() const;
+    void setMaximumZoom(qreal newZoom);
+
 public Q_SLOTS:
     void beginZoomGesture();
     void endZoomGesture();
 
     void zoomBy(qreal amount, const QPointF& center = QPointF());
 
+    void fitToWidth(qreal width);
+
 Q_SIGNALS:
     void canvasChanged();
     void flickableChanged();
     void documentSizeChanged();
     void zoomChanged();
+    void minimumZoomChanged();
+    void maximumZoomChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
