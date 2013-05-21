@@ -33,7 +33,19 @@
 class CQCanvasControllerItem::Private
 {
 public:
-    Private() : canvas(0), flickable(0), canvasController(0), lastX(0), lastY(0), zoom(1.0f), zoomChange(0.f), zooming(false), placeholder(0) { }
+    Private()
+        : canvas(0),
+          flickable(0),
+          canvasController(0),
+          lastX(0),
+          lastY(0),
+          zoom(0.0f),
+          zoomChange(0.f),
+          zooming(false),
+          minimumZoom( -1.f ),
+          maximumZoom( 2.f ),
+          placeholder(0)
+          { }
 
     CQCanvasBase *canvas;
     QDeclarativeItem* flickable;
@@ -49,6 +61,8 @@ public:
     qreal zoom;
     qreal zoomChange;
     bool zooming;
+    qreal minimumZoom;
+    qreal maximumZoom;
 
     QPixmap *placeholder;
 };
@@ -133,9 +147,38 @@ void CQCanvasControllerItem::setZoom(qreal newZoom)
 {
     qreal tempZoom = qBound(KoZoomMode::minimumZoom(), newZoom, KoZoomMode::maximumZoom());
     if(!qFuzzyCompare(d->zoom, tempZoom)) {
-        d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, tempZoom);
         d->zoom = tempZoom;
+        d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, tempZoom);
         emit zoomChanged();
+    }
+}
+
+qreal CQCanvasControllerItem::minimumZoom() const
+{
+    return d->minimumZoom;
+}
+
+qreal CQCanvasControllerItem::maximumZoom() const
+{
+    return d->maximumZoom;
+}
+
+void CQCanvasControllerItem::setMinimumZoom(qreal newZoom)
+{
+    if(newZoom != d->minimumZoom) {
+        d->minimumZoom = newZoom;
+        if( d->minimumZoom > 0.f )
+            KoZoomMode::setMinimumZoom( d->minimumZoom );
+        emit minimumZoomChanged();
+    }
+}
+
+void CQCanvasControllerItem::setMaximumZoom(qreal newZoom)
+{
+    if(newZoom != d->maximumZoom) {
+        d->maximumZoom = newZoom;
+        KoZoomMode::setMaximumZoom( d->maximumZoom );
+        emit maximumZoomChanged();
     }
 }
 
@@ -182,7 +225,8 @@ void CQCanvasControllerItem::endZoomGesture()
 
 void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
 {
-    if(d->zooming && (1.0 + d->zoomChange + amount) * d->documentSize.width() >= d->flickable->width()) {
+    qreal newZoom = d->zoom + d->zoomChange + amount;
+    if(d->zooming && newZoom >= KoZoomMode::minimumZoom() && newZoom <= KoZoomMode::maximumZoom() ) {
         qreal oldWidth = d->placeholderTarget.width();
         qreal oldHeight = d->placeholderTarget.height();
 
@@ -196,6 +240,18 @@ void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
 
         update();
     }
+}
+
+void CQCanvasControllerItem::fitToWidth( qreal width )
+{
+    if( width < 0.01f )
+        return;
+
+    if( d->zoom < 0.01f )
+        return;
+
+    if( d->documentSize.width() > 0.f && d->documentSize.width() < 2e6 )
+        setZoom( width / ( d->documentSize.width() / d->zoom ) );
 }
 
 void CQCanvasControllerItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -229,6 +285,19 @@ void CQCanvasControllerItem::updateDocumentSize(const QSize &size)
     if(d->flickable) {
         d->flickable->setProperty("contentWidth", d->documentSize.width());
         d->flickable->setProperty("contentHeight", d->documentSize.height());
+
+        //If we have a correct document size, try to set the minimum zoom level, but
+        //do not try to set it when we're dealing with a nearly-infinite document. (E.g. Sheets)
+        if( d->minimumZoom < 0 && d->documentSize.width() > 0 && d->documentSize.width() < 2e6 )
+        {
+            qreal minZoom = d->flickable->width() / ( d->documentSize.width() / ( d->zoom > 0.f ? d->zoom : 1.0 ) );
+
+            if( KoZoomMode::minimumZoom() != minZoom )
+            {
+                KoZoomMode::setMinimumZoom( minZoom );
+                setZoom( d->zoom );
+            }
+        }
     }
 
     emit documentSizeChanged();
