@@ -73,13 +73,10 @@ class ODFREADER_EXPORT OdtReaderBackend
     explicit OdtReaderBackend(OdfReaderContext *context);
     virtual ~OdtReaderBackend();
 
-    // Called before and after the actual traversal.
-    // FIXME: NYI
-
-    // Called when there is a document level element with children.
-
     // ----------------------------------------------------------------
     // ODT document level functions
+
+    virtual void elementOfficeDocumentcontent(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 

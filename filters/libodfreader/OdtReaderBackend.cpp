@@ -72,6 +72,14 @@ OdtReaderBackend::~OdtReaderBackend()
 // ----------------------------------------------------------------
 //                 ODT document level functions
 
+
+void OdtReaderBackend::elementOfficeDocumentcontent(KoXmlStreamReader &reader,
+                                                    OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
 void OdtReaderBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);

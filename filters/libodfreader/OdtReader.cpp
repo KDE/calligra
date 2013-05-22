@@ -116,7 +116,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
         kError(30503) << "Couldn't find the content in content.xml" << endl;
     }
 
-    // FIXME: Call backend function for starting the document here.
+    m_backend->elementOfficeDocumentcontent(reader, m_context);
 
     // <office:document-content> has the following children in ODF 1.2:
     //   <office:automatic-styles> 3.15.3
@@ -147,7 +147,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
         }
     }
 
-    // FIXME: Call backend function for ending the document here.
+    m_backend->elementOfficeDocumentcontent(reader, m_context);
     odfStore->close();
 
     return true;
