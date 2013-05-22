@@ -41,6 +41,8 @@
 #include "DocxFile.h"
 #include "OdtTraverserDocxContext.h"
 #include "OdtTraverserDocxBackend.h"
+#include "OdfReaderDocxContext.h"
+#include "OdtReaderDocxBackend.h"
 
 
 K_PLUGIN_FACTORY(DocxExportFactory, registerPlugin<DocxExport>();)
@@ -78,23 +80,19 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     }
     odfStore->close();
 
-#if 0
-    // Create output file.
-    // FIXME: This was taken from the Ascii filter and needs to use OPC instead.
-    KoStore *docxStore = KoStore::createStore(m_chain->outputFile(), KoStore::Write,
-                                             "", KoStore::Auto);
-
-    QFile outfile(m_chain->outputFile());
-    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
-        kError(30501) << "Unable to open output file!" << endl;
-        outfile.close();
-        return KoFilter::FileNotFound;
-    }
-#endif
     // Start the conversion
 
     // Collects all the embedded files and writes the result at the end.
     DocxFile docxFile;
+
+#if 1
+    OdfReaderDocxContext  docxBackendContext(odfStore, &docxFile);
+    OdtReaderDocxBackend  docxBackend(&docxBackendContext);
+
+    OdtReader  odtReader;
+    odtReader.readContent(&docxBackend, &docxBackendContext);
+
+#else
 
     OdtTraverserDocxContext  docxBackendContext(odfStore, &docxFile);
     OdtTraverserDocxBackend  docxBackend(&docxBackendContext);
@@ -104,6 +102,7 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     // backend context.
     OdtTraverser  odtTraverser;
     odtTraverser.traverseContent(&docxBackend, &docxBackendContext);
+#endif
 
     // Add the newly converted document contents to the docx file.
     docxFile.addContentFile("", "word/document.xml",

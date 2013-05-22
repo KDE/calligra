@@ -104,6 +104,60 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
 }
 
 
+KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
+                                               const QByteArray &appIdentification,
+                                               const OdfReaderDocxContext &context)
+{
+    // Create the store and check if everything went well.
+    // FIXME: Should docxStore be deleted from a finalizer?
+    KoStore *docxStore = KoStore::createStore(fileName, KoStore::Write,
+                                              appIdentification, KoStore::Auto);
+    if (!docxStore || docxStore->bad()) {
+        kWarning(30003) << "Unable to create output file!";
+        delete docxStore;
+        return KoFilter::FileNotFound;
+    }
+    docxStore->disallowNameExpansion();
+
+    KoFilter::ConversionStatus  status;
+
+    // Write top-level rels
+    status = writeTopLevelRels(docxStore);
+    if (status != KoFilter::OK) {
+        delete docxStore;
+        return status;
+    }
+
+    // Write rels for word/document.xml
+    status = writeDocumentRels(docxStore);
+    if (status != KoFilter::OK) {
+        delete docxStore;
+        return status;
+    }
+
+    // Write contents of added files.
+    status = FileCollector::writeFiles(docxStore);
+    if (status != KoFilter::OK) {
+        delete docxStore;
+        return status;
+    }
+
+    // Finally, write the [Content_Types}.xml file.
+    OpcContentTypes  contentTypes;
+    contentTypes.addDefault("rels", "application/vnd.openxmlformats-package.relationships+xml");
+    contentTypes.addDefault("xml", "application/xml");
+    foreach (const FileInfo *file, files()) {
+        contentTypes.addFile(file->m_fileName, file->m_mimetype);
+    }
+    contentTypes.writeToStore(docxStore);
+
+    delete docxStore;
+    return status;
+}
+
+
+
+
 // ----------------------------------------------------------------
 //                         Private functions
 

@@ -36,6 +36,8 @@ class QByteArray;
 class KoStore;
 
 class OdtTraverserDocxContext;
+class OdfReaderDocxContext;
+
 
 class DocxFile : public FileCollector
 {
@@ -49,6 +51,13 @@ public:
     KoFilter::ConversionStatus  writeDocx(const QString &fileName,
                                           const QByteArray &appIdentification,
                                           const OdtTraverserDocxContext &context);
+
+    // When you have created all the content and added it using
+    // addContentFile(), call this function once and it will write the
+    // docx to the disk. This function is overloaded.
+    KoFilter::ConversionStatus  writeDocx(const QString &fileName,
+                                          const QByteArray &appIdentification,
+                                          const OdfReaderDocxContext &context);
 
 private:
     // Privat functions
