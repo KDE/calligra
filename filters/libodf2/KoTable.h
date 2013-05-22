@@ -27,7 +27,7 @@ class KoCell;
 class KoXmlWriter;
 class KoGenStyles;
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 #include <QMap>
 #include <QVector>
@@ -46,7 +46,7 @@ class KoGenStyles;
 * its methods.
 **/
 
-class KOODF_EXPORT KoTable
+class KOODF2_EXPORT KoTable
 {
 public:
     KoTable();
