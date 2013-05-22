@@ -796,80 +796,78 @@ set(WRITERPERFECT_INCLUDES
 # the test to the if construct
 #
 
-# libooxml needs to install own mimetypes
 if(NOT SHARED_MIME_INFO_FOUND)
-    set(SHOULD_BUILD_LIB_MSOOXML FALSE)
+    calligra_disable_product(LIB_MSOOXML "SharedMimeInfo not found (needed to install mimetypes)")
 endif(NOT SHARED_MIME_INFO_FOUND)
 
-### Calligra Sheets: eigen2, boost
 if(NOT EIGEN2_FOUND)
-    set(SHOULD_BUILD_SHEETS_PART FALSE)
+    calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
 
-### Krita: pigment, eigen2, exiv2, sharedmimeinfo
 if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
-   set(SHOULD_BUILD_KRITA FALSE)
+    calligra_disable_product(KRITA "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
-
-### Active: only build with Qt 4.7.0 or better
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
-    set(SHOULD_BUILD_ACTIVE FALSE)
+    calligra_disable_product(ACTIVE "Qt version <= 4.7.0")
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 
 if (NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
-    set(SHOULD_BUILD_ACTIVE FALSE)
+    calligra_disable_product(ACTIVE "QtDeclarative|KDeclarative not found")
 endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
 
-#if(NOT QIMAGEBLITZ_FOUND)
-#    set (SHOULD_BUILD_KEXI FALSE)
-#endif(NOT QIMAGEBLITZ_FOUND)
-
 if (NOT QT3SUPPORT)
-    set (SHOULD_BUILD_KEXI FALSE)
+    calligra_disable_product(KEXI "Qt3Support not found")
 endif (NOT QT3SUPPORT)
 
 if(NOT OKULAR_FOUND)
-    set(SHOULD_BUILD_OKULARODPGENERATOR FALSE)
+    calligra_disable_product(OKULARODPGENERATOR "Okular devel not found")
 endif(NOT OKULAR_FOUND)
 
 if (NOT WPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
-    set(SHOULD_BUILD_FILTER_VISIO_TO_ODG FALSE)
+    calligra_disable_product(FILTER_VISIO_TO_ODG "libwpd|libwpg|libvisio devel not found")
 endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
 
 if(NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-    set(SHOULD_BUILD_FILTER_WORDPERFECT_TO_ODT FALSE)
+    calligra_disable_product(FILTER_WORDPERFECT_TO_ODT "libwpd|libwpg devel not found")
 endif(NOT WPD_FOUND OR NOT LIBWPG_FOUND)
 
 if(NOT WPD_FOUND OR NOT LIBWPS_FOUND)
-    set(SHOULD_BUILD_FILTER_WORKS_TO_ODT FALSE)
+    calligra_disable_product(FILTER_WORKS_TO_ODT "libwpd|libwps devel not found")
 endif(NOT WPD_FOUND OR NOT LIBWPS_FOUND)
 
 if (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-    set(SHOULD_BUILD_LIB_WRITERPERFECT FALSE)
+    calligra_disable_product(LIB_WRITERPERFECT "libwpd|libwpg devel not found")
 endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
 
 if (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-    set(SHOULD_BUILD_FILTER_WPG_TO_SVG FALSE)
+    calligra_disable_product(FILTER_WPG_TO_SVG "libwpd|libwpg devel not found")
 endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
 
 if (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)
-    set(SHOULD_BUILD_FILTER_PDF_TO_SVG FALSE)
+    calligra_disable_product(FILTER_PDF_TO_SVG "poppler xpdf headers not found or on win")
 endif (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)
 
 if(WIN32 OR QT_MAC_USE_COCOA)
-    set(SHOULD_BUILD_FILTER_HTML_TO_ODS FALSE)
+    calligra_disable_product(FILTER_HTML_TO_ODS "not supported on platform")
 endif(WIN32 OR QT_MAC_USE_COCOA)
 
 if(WIN32 OR QT_MAC_USE_COCOA)
-    set(SHOULD_BUILD_FILTER_SHEETS_TO_HTML FALSE)
+    calligra_disable_product(FILTER_SHEETS_TO_HTML "not supported on platform")
 endif(WIN32 OR QT_MAC_USE_COCOA)
 
 if(WIN32 OR QT_MAC_USE_COCOA)
-    set(SHOULD_BUILD_FILTER_KSPREAD_TO_LATEX FALSE)
+    calligra_disable_product(FILTER_KSPREAD_TO_LATEX "not supported on platform")
 endif(WIN32 OR QT_MAC_USE_COCOA)
 
-# finally disable all those which are missing internal dependencies
+if(WIN32)
+    calligra_disable_product(BRAINDUMP_APP "unmaintained on Windows")
+endif()
+
+#############################################
+####     Calculate buildable products    ####
+#############################################
+
 calligra_drop_unbuildable_products()
 
  ###################
