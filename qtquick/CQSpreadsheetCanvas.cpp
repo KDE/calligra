@@ -36,9 +36,12 @@
 #include <sheets/part/CanvasItem.h>
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>
+#include <KoShape.h>
 #include <KDebug>
 #include <KActionCollection>
 #include <QGraphicsWidget>
+#include <QTextFrame>
+#include <QTextLayout>
 
 class CQSpreadsheetCanvas::Private
 {
@@ -49,6 +52,68 @@ public:
     Calligra::Sheets::Doc * document;
 
     int currentSheet;
+    QObjectList linkTargets;
+
+    void updateLinkTargets()
+    {
+        qDeleteAll(linkTargets);
+        linkTargets.clear();
+
+        if(!canvas)
+            return;
+        foreach(const KoShape* shape, canvas->activeSheet()->shapes()) {
+            if(!shape->hyperLink().isEmpty()) {
+                QObject * obj = new QObject(canvas);
+                obj->setProperty("linkRect", shape->boundingRect());
+                obj->setProperty("linkTarget", QUrl(shape->hyperLink()));
+                linkTargets.append(obj);
+            }
+        }
+
+        QList<QTextDocument*> texts;
+        KoFindText::findTextInShapes(canvas->activeSheet()->shapes(), texts);
+        foreach(QTextDocument* text, texts) {
+            QTextBlock block = text->rootFrame()->firstCursorPosition().block();
+            for (; block.isValid(); block = block.next()) {
+                block.begin();
+                QTextBlock::iterator it;
+                for (it = block.begin(); !(it.atEnd()); ++it) {
+                    QTextFragment fragment = it.fragment();
+                    if (fragment.isValid()) {
+                        QTextCharFormat format = fragment.charFormat();
+                        if(format.isAnchor()) {
+                            // This is an anchor, store target and position...
+                            QObject * obj = new QObject(canvas);
+                            QRectF rect = getFragmentPosition(block, fragment);
+                            obj->setProperty("linkRect", canvas->viewConverter()->documentToView(rect));
+                            obj->setProperty("linkTarget", QUrl(format.anchorHref()));
+                            linkTargets.append(obj);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    QRectF getFragmentPosition(QTextBlock block, QTextFragment fragment)
+    {
+        // TODO this only produces a position for the first part, if the link spans more than one line...
+        // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
+        // For now leave it like this, more important things are needed.
+        QTextLayout* layout = block.layout();
+        QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
+        if(!line.isValid())
+        {
+            // fragment has no valid position and consequently no line...
+            return QRectF();
+        }
+        qreal top = line.position().y();
+        qreal bottom = line.position().y() + line.height();
+        qreal left = line.cursorToX(fragment.position() - block.position());
+        qreal right = line.cursorToX((fragment.position() - block.position()) + fragment.length());
+        QRectF fragmentPosition(QPointF(top, left), QPointF(bottom, right));
+        return fragmentPosition.adjusted(layout->position().x(), layout->position().y(), 0, 0);
+    }
 };
 
 CQSpreadsheetCanvas::CQSpreadsheetCanvas(QDeclarativeItem* parent)
@@ -72,6 +137,11 @@ Calligra::Sheets::Map* CQSpreadsheetCanvas::documentMap() const
     return d->document->map();
 }
 
+QObjectList CQSpreadsheetCanvas::linkTargets() const
+{
+    return d->linkTargets;
+}
+
 void CQSpreadsheetCanvas::setCurrentSheet(int sheet)
 {
     sheet = qBound(0, sheet, d->document->map()->count() - 1);
@@ -79,6 +149,8 @@ void CQSpreadsheetCanvas::setCurrentSheet(int sheet)
         d->currentSheet = sheet;
         d->canvas->setActiveSheet(d->document->map()->sheet(d->currentSheet));
         emit currentSheetChanged();
+        d->updateLinkTargets();
+        emit linkTargetsChanged();
     }
 }
 
@@ -112,6 +184,9 @@ void CQSpreadsheetCanvas::openFile(const QString& uri)
     d->canvas->installEventFilter(this);
     d->canvas->setVisible(true);
     d->canvas->setGeometry(x(), y(), width(), height());
+
+    d->updateLinkTargets();
+    emit linkTargetsChanged();
 
     Calligra::Sheets::Sheet *sheet = d->document->map()->sheet(0);
     if(sheet) {
