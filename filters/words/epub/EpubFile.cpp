@@ -176,11 +176,11 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.endElement(); // dc:identifier
 
     writer.startElement("dc:creator");
-    writer.addTextNode(metadata.value("creator"));  // FIXME: Here should come the author name
+    writer.addTextNode(metadata.value("creator"));  // It's the "Author" profile name
     writer.endElement(); // dc:creator
 
     writer.startElement("dc:subject");
-    writer.addTextNode("");  // FIXME: Here should come suject info (Fiction &amp; Fantasy &amp; ...)
+    writer.addTextNode("");  // FIXME: Here should come suject info with form : Fiction &amp; Fantasy &amp; ...
     writer.endElement(); // dc:subject
 
     // FIXME: many more (optional)
@@ -251,11 +251,17 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
 
     // ==== Guide ====
     writer.startElement("guide");
+
+    //if there is a cover
+    foreach (FileInfo *file, files()) {
+        if ( file->m_id == "cover") {
         writer.startElement("reference");
         writer.addAttribute("href", "cover.xhtml");
         writer.addAttribute("type", "cover");
-        writer.addAttribute("type", "Cover");
         writer.endElement(); // reference
+        }
+    }
+
     writer.endElement(); // guide
 
     writer.endElement(); // package
