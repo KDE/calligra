@@ -33,6 +33,7 @@ class CQPresentationCanvas : public CQCanvasBase
     Q_OBJECT
     Q_PROPERTY(int currentSlide READ currentSlide WRITE setCurrentSlide NOTIFY currentSlideChanged)
     Q_PROPERTY(QSizeF pageSize READ pageSize NOTIFY currentSlideChanged)
+    Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
 
 public:
     explicit CQPresentationCanvas(QDeclarativeItem* parent = 0);
@@ -42,12 +43,15 @@ public:
     KPrDocument* document() const;
     QSizeF pageSize() const;
 
+    QObjectList linkTargets() const;
+
     void setCurrentSlide(int slide);
 
     virtual void render(QPainter* painter, const QRectF& target);
 
 Q_SIGNALS:
     void currentSlideChanged();
+    void linkTargetsChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);

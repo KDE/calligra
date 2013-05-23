@@ -37,10 +37,14 @@
 #include <KDebug>
 #include <KActionCollection>
 #include <QGraphicsWidget>
+#include <QTextDocument>
+#include <QTextFrame>
+#include <QTextLayout>
 
 #include <KoPAPageBase.h>
 
 #include <stage/part/KPrDocument.h>
+#include <KoShapeManager.h>
 
 #include "CQPresentationView.h"
 
@@ -55,6 +59,68 @@ public:
 
     int currentSlide;
     QSizeF pageSize;
+    QObjectList linkTargets;
+
+    void updateLinkTargets()
+    {
+        qDeleteAll(linkTargets);
+        linkTargets.clear();
+
+        if(!view)
+            return;
+        foreach(const KoShape* shape, view->activePage()->shapes()) {
+            if(!shape->hyperLink().isEmpty()) {
+                QObject * obj = new QObject(view);
+                obj->setProperty("linkRect", shape->boundingRect());
+                obj->setProperty("linkTarget", QUrl(shape->hyperLink()));
+                linkTargets.append(obj);
+            }
+        }
+
+        QList<QTextDocument*> texts;
+        KoFindText::findTextInShapes(view->activePage()->shapes(), texts);
+        foreach(QTextDocument* text, texts) {
+            QTextBlock block = text->rootFrame()->firstCursorPosition().block();
+            for (; block.isValid(); block = block.next()) {
+                block.begin();
+                QTextBlock::iterator it;
+                for (it = block.begin(); !(it.atEnd()); ++it) {
+                    QTextFragment fragment = it.fragment();
+                    if (fragment.isValid()) {
+                        QTextCharFormat format = fragment.charFormat();
+                        if(format.isAnchor()) {
+                            // This is an anchor, store target and position...
+                            QObject * obj = new QObject(view);
+                            QRectF rect = getFragmentPosition(block, fragment);
+                            obj->setProperty("linkRect", canvasBase->viewConverter()->documentToView(rect));
+                            obj->setProperty("linkTarget", QUrl(format.anchorHref()));
+                            linkTargets.append(obj);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    QRectF getFragmentPosition(QTextBlock block, QTextFragment fragment)
+    {
+        // TODO this only produces a position for the first part, if the link spans more than one line...
+        // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
+        // For now leave it like this, more important things are needed.
+        QTextLayout* layout = block.layout();
+        QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
+        if(!line.isValid())
+        {
+            // fragment has no valid position and consequently no line...
+            return QRectF();
+        }
+        qreal top = line.position().y();
+        qreal bottom = line.position().y() + line.height();
+        qreal left = line.cursorToX(fragment.position() - block.position());
+        qreal right = line.cursorToX((fragment.position() - block.position()) + fragment.length());
+        QRectF fragmentPosition(QPointF(top, left), QPointF(bottom, right));
+        return fragmentPosition.adjusted(layout->position().x(), layout->position().y(), 0, 0);
+    }
 };
 
 CQPresentationCanvas::CQPresentationCanvas(QDeclarativeItem* parent)
@@ -71,6 +137,11 @@ CQPresentationCanvas::~CQPresentationCanvas()
 int CQPresentationCanvas::currentSlide() const
 {
     return d->currentSlide;
+}
+
+QObjectList CQPresentationCanvas::linkTargets() const
+{
+    return d->linkTargets;
 }
 
 KPrDocument* CQPresentationCanvas::document() const
@@ -91,6 +162,8 @@ void CQPresentationCanvas::setCurrentSlide(int slide)
         d->view->doUpdateActivePage(d->document->pageByIndex(slide, false));
         d->pageSize = d->view->activePage()->size();
         emit currentSlideChanged();
+        d->updateLinkTargets();
+        emit linkTargetsChanged();
     }
 }
 
@@ -136,6 +209,9 @@ void CQPresentationCanvas::openFile(const QString& uri)
     d->view->doUpdateActivePage(d->document->pageByIndex(0, false));
     d->pageSize = d->view->activePage()->size();
     emit currentSlideChanged();
+
+    d->updateLinkTargets();
+    emit linkTargetsChanged();
 }
 
 void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
