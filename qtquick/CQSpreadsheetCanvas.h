@@ -38,6 +38,7 @@ class CQSpreadsheetCanvas : public CQCanvasBase
 {
     Q_OBJECT
     Q_PROPERTY(int currentSheet READ currentSheet WRITE setCurrentSheet NOTIFY currentSheetChanged)
+    Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
 
 public:
     explicit CQSpreadsheetCanvas(QDeclarativeItem* parent = 0);
@@ -46,12 +47,15 @@ public:
     int currentSheet() const;
     Calligra::Sheets::Map* documentMap() const;
 
+    QObjectList linkTargets() const;
+
     void setCurrentSheet(int sheet);
 
     virtual void render(QPainter* painter, const QRectF& target);
 
 Q_SIGNALS:
     void currentSheetChanged();
+    void linkTargetsChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
