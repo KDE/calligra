@@ -44,6 +44,7 @@ class CQTextDocumentCanvas : public CQCanvasBase
     Q_PROPERTY(QObject* documentModel READ documentModel NOTIFY documentModelChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(int currentPageNumber READ currentPageNumber WRITE setCurrentPageNumber NOTIFY currentPageNumberChanged)
+    Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
 
 public:
     CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
@@ -64,12 +65,15 @@ public:
 
     KWDocument* document() const;
 
+    QObjectList linkTargets() const;
+
 signals:
     void searchTermChanged();
     void documentModelChanged();
     void documentSizeChanged();
     void currentPageNumberChanged();
     void cameraYChanged();
+    void linkTargetsChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);

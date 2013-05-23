@@ -38,9 +38,12 @@
 #include <KWDocument.h>
 #include <KWPage.h>
 #include <KWCanvasItem.h>
+#include <KoShape.h>
 #include <KActionCollection>
 #include <QGraphicsWidget>
 #include <QTextDocument>
+#include <QTextFrame>
+#include <QTextLayout>
 #include <KDebug>
 
 class CQTextDocumentCanvas::Private
@@ -61,6 +64,71 @@ public:
     QSize documentSize;
     int pageNumber;
     QPoint currentPoint;
+    QObjectList linkTargets;
+
+    void updateLinkTargets()
+    {
+        qDeleteAll(linkTargets);
+        linkTargets.clear();
+
+        KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(canvasBase);
+        if(!kwCanvasItem)
+            return;
+        foreach(const KoShape* shape, kwCanvasItem->shapeManager()->shapes()) {
+            if(!shape->hyperLink().isEmpty()) {
+                QObject * obj = new QObject(documentModel);
+                obj->setProperty("linkRect", shape->boundingRect());
+                obj->setProperty("linkTarget", QUrl(shape->hyperLink()));
+                linkTargets.append(obj);
+            }
+        }
+
+        foreach(QTextDocument* text, findText->documents()) {
+            QTextBlock block = text->rootFrame()->firstCursorPosition().block();
+            for (; block.isValid(); block = block.next()) {
+                block.begin();
+                QTextBlock::iterator it;
+                for (it = block.begin(); !(it.atEnd()); ++it) {
+                    QTextFragment fragment = it.fragment();
+                    if (fragment.isValid()) {
+                        QTextCharFormat format = fragment.charFormat();
+                        if(format.isAnchor()) {
+                            // This is an anchor, store target and position...
+                            QObject * obj = new QObject(documentModel);
+                            QRectF rect = getFragmentPosition(block, fragment);
+                            KWPage page = document->pageManager()->page(rect.left());
+                            rect.translate(page.topMargin(), page.rightMargin());
+                            rect = canvasBase->viewConverter()->documentToView(rect);
+                            rect.moveLeft(rect.left() - (page.pageNumber() * 8) + 28);
+                            obj->setProperty("linkRect", rect);
+                            obj->setProperty("linkTarget", QUrl(format.anchorHref()));
+                            linkTargets.append(obj);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    QRectF getFragmentPosition(QTextBlock block, QTextFragment fragment)
+    {
+        // TODO this only produces a position for the first part, if the link spans more than one line...
+        // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
+        // For now leave it like this, more important things are needed.
+        QTextLayout* layout = block.layout();
+        QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
+        if(!line.isValid())
+        {
+            // fragment has no valid position and consequently no line...
+            return QRectF();
+        }
+        qreal top = line.position().y();
+        qreal bottom = line.position().y() + line.height();
+        qreal left = line.cursorToX(fragment.position() - block.position());
+        qreal right = line.cursorToX((fragment.position() - block.position()) + fragment.length());
+        QRectF fragmentPosition(QPointF(top, left), QPointF(bottom, right));
+        return fragmentPosition.adjusted(layout->position().x(), layout->position().y(), 0, 0);
+    }
 };
 
 CQTextDocumentCanvas::CQTextDocumentCanvas(QDeclarativeItem* parent)
@@ -115,6 +183,10 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     d->document = static_cast<KWDocument*>(document);
     d->documentModel = new CQTextDocumentModel(this, d->document, kwCanvasItem->shapeManager());
     emit documentModelChanged();
+
+    d->updateLinkTargets();
+    emit linkTargetsChanged();
+
 }
 
 void CQTextDocumentCanvas::gotoPage(int pageNumber, KoDocument *document)
@@ -258,6 +330,11 @@ QObject* CQTextDocumentCanvas::documentModel() const
 KWDocument* CQTextDocumentCanvas::document() const
 {
     return d->document;
+}
+
+QObjectList CQTextDocumentCanvas::linkTargets() const
+{
+    return d->linkTargets;
 }
 
 QSize CQTextDocumentCanvas::documentSize() const
