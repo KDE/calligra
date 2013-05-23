@@ -1,6 +1,7 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30526)
 
 include_directories(
+    ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
     ${KOMAIN_INCLUDES}
@@ -30,6 +31,7 @@ kde4_add_plugin(docximport ${docximport_PART_SRCS})
 target_link_libraries(
     docximport
     msooxml
+    koodf2
     koodf
     komain
 )

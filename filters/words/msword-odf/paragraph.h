@@ -48,7 +48,7 @@ public:
      * @return the name of the last KoGenStyle inserted into the styles
      * collection.
      */
-    QString writeToFile(KoXmlWriter* writer, QChar* tabLeader=0);
+    QString writeToFile(KoXmlWriter* writer, bool openNewTextBox, QChar* tabLeader=0);
 
     void addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName,
                       const wvWare::StyleSheet& styles, bool addCompleteElement=false);
