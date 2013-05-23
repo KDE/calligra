@@ -31,6 +31,7 @@
 #include "CQPresentationModel.h"
 #include "CQThumbnailItem.h"
 #include "CQPluginLoaderProxy.h"
+#include "CQLinkArea.h"
 
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
@@ -46,6 +47,7 @@ void CalligraQtQuickComponentsPlugin::registerTypes(const char* uri)
     qmlRegisterType<CQSpreadsheetListModel> (uri, 0, 1, "SpreadsheetListModel");
     qmlRegisterType<CQPresentationModel>(uri, 0, 1, "PresentationModel");
     qmlRegisterType<CQThumbnailItem>(uri, 0, 1, "Thumbnail");
+    qmlRegisterType<CQLinkArea>( uri, 0, 1, "LinkArea" );
 }
 
 void CalligraQtQuickComponentsPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
