@@ -37,7 +37,7 @@
 #include <QTextBlock>
 #include <QTimer>
 
-KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool short_version)
+KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
         : QWidget(parent),
           m_resourceManager(0),
           m_selection(0),
@@ -53,7 +53,7 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool short_version)
           m_lines(0),
           m_paragraphs(0)
 {
-    shortVersion = short_version;
+    this->shortVersion = shortVersion;
     m_timer = new QTimer(this);
     initUi();
     initLayout();
@@ -99,15 +99,15 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool short_version)
         m_menu->w->check_sentences->setCheckState(Qt::Checked);
     }
 
+    // --- Elements present ONLY in full version --
     visible = cfgGroup.readEntry("FleschVisible", true);
-    visible |= !shortVersion;
+    visible &= !shortVersion;
     m_fleschLabel->setVisible(visible);
     m_countFlesch->setVisible(visible);
-    if (visible && !shortVersion) {
+    if (visible) {
         m_menu->w->check_flesch->setCheckState(Qt::Checked);
     }
 
-    // --- Elements present ONLY in full version --
     visible = cfgGroup.readEntry("SyllablesVisible", true);
     visible &= !shortVersion;
     m_syllablesLabel->setVisible(visible);

@@ -42,9 +42,9 @@
 
 #include <kdebug.h>
 
-#include <widget/dataviewcommon/kexitableviewdata.h>
 #include "kexitableedit.h"
 #include <db/tristate.h>
+#include <db/tableviewdata.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
@@ -153,11 +153,11 @@ public:
         QColor recordMouseOverAlternateHighlightingColor;
     };
 
-    KexiTableView(KexiTableViewData* data = 0, QWidget* parent = 0, const char* name = 0);
+    KexiTableView(KexiDB::TableViewData* data = 0, QWidget* parent = 0, const char* name = 0);
     virtual ~KexiTableView();
 
     //! redeclared to avoid conflict with private QWidget::data
-    inline KexiTableViewData *data() const {
+    inline KexiDB::TableViewData *data() const {
         return KexiDataAwareObjectInterface::data();
     }
 
@@ -270,7 +270,7 @@ public:
     }
 
 public slots:
-    virtual void setData(KexiTableViewData *data, bool owner = true) {
+    virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
         KexiDataAwareObjectInterface::setData(data, owner);
     }
 
@@ -392,7 +392,7 @@ public slots:
     }
 
 signals:
-    void dataSet(KexiTableViewData *data);
+    void dataSet(KexiDB::TableViewData *data);
 
     void itemSelected(KexiDB::RecordData *);
     void cellSelected(int col, int row);
@@ -458,23 +458,23 @@ protected slots:
     void slotEditRequested();
 
     /*! Reloads data for this widget.
-     Handles KexiTableViewData::reloadRequested() signal. */
+     Handles KexiDB::TableViewData::reloadRequested() signal. */
     virtual void reloadData();
 
-    //! Handles KexiTableViewData::rowRepaintRequested() signal
+    //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
-    //! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+    //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
     virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
         KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
     }
 
-    //! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
     virtual void slotRowDeleted() {
         KexiDataAwareObjectInterface::slotRowDeleted();
     }
 
-    //! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint) {
         KexiDataAwareObjectInterface::slotRowInserted(record, repaint);
     }
@@ -517,7 +517,7 @@ protected:
     /*! Reimplementation for KexiDataAwareObjectInterface
      Initializes data contents (resizes it, sets cursor at 1st row).
      Called on setData(). Also called once on show event after
-     reloadRequested() signal was received from KexiTableViewData object. */
+     reloadRequested() signal was received from KexiDB::TableViewData object. */
     virtual void initDataContents();
 
     /*! Implementation for KexiDataAwareObjectInterface.
@@ -677,7 +677,7 @@ protected:
      Used in KexiTableView::paintCell() and KexiTableViewCellToolTip::maybeTip()
      \return true is \a cellValue has been found. */
     bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
-                               KexiDB::RecordData *record, KexiTableViewColumn *tvcol) const;
+                               KexiDB::RecordData *record, KexiDB::TableViewColumn *tvcol) const;
 
 // //! Called to repaint contents after a row is deleted.
 // void repaintAfterDelete();

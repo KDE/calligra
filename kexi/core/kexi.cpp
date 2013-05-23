@@ -162,13 +162,6 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
 
 //--------------------------------------------------------------------------------
 
-QString Kexi::msgYouCanImproveData()
-{
-    return i18n("You can correct data in this record or use \"Cancel record changes\" function.");
-}
-
-//--------------------------------------------------------------------------------
-
 ObjectStatus::ObjectStatus()
         : msgHandler(0)
 {
@@ -288,12 +281,14 @@ public:
     virtual ~ObjectStatusMessageHandler() {
     }
 
-    virtual void showErrorMessage(const QString &title,
-                                  const QString &details = QString()) {
+    virtual void showErrorMessageInternal(const QString &title,
+                                          const QString &details = QString())
+    {
         m_status->setStatus(title, details);
     }
 
-    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString()) {
+    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString())
+    {
         m_status->setStatus(obj, msg);
     }
 

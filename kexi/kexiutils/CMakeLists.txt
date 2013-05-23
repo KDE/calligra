@@ -8,7 +8,7 @@ include_directories(
 
 set(kexiutils_LIB_SRCS 
   identifier.cpp 
-  validator.cpp 
+  multivalidator.cpp 
   utils.cpp 
   styleproxy.cpp 
   longlongvalidator.cpp 

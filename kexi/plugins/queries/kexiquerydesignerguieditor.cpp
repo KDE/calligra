@@ -41,12 +41,13 @@
 #include <db/parser/sqlparser.h>
 #include <db/utils.h>
 #include <db/roweditbuffer.h>
+#include <db/tableviewdata.h>
 #include <kexiutils/identifier.h>
+#include <kexiutils/utils.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <kexiinternalpart.h>
 #include <kexitableview.h>
-#include <widget/dataviewcommon/kexitableviewdata.h>
 #include <kexidragobjects.h>
 #include <kexidatatable.h>
 #include <kexi.h>
@@ -100,7 +101,7 @@ public:
         return true;
     }
 
-    KexiTableViewData *data;
+    KexiDB::TableViewData *data;
     KexiDataTable *dataTable;
     QPointer<KexiDB::Connection> conn;
 
@@ -111,7 +112,7 @@ public:
     /*! Used to remember in slotDroppedAtRow() what data was dropped,
      so we can create appropriate prop. set in slotRowInserted()
      This information is cached and entirely refreshed on updateColumnsData(). */
-    KexiTableViewData *fieldColumnData, *tablesColumnData;
+    KexiDB::TableViewData *fieldColumnData, *tablesColumnData;
 
     /*! Collects identifiers selected in 1st (field) column,
      so we're able to distinguish between table identifiers selected from
@@ -173,7 +174,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     d->dataTable->setObjectName("guieditor_dataTable");
     d->dataTable->dataAwareObject()->setSpreadSheetMode();
 
-    d->data = new KexiTableViewData(); //just empty data
+    d->data = new KexiDB::TableViewData(); //just empty data
     d->sets = new KexiDataAwarePropertySet(this, d->dataTable->dataAwareObject());
     initTableColumns();
     initTableRows();
@@ -223,28 +224,28 @@ KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 void
 KexiQueryDesignerGuiEditor::initTableColumns()
 {
-    KexiTableViewColumn *col1 = new KexiTableViewColumn("column", KexiDB::Field::Enum, i18n("Column"),
+    KexiDB::TableViewColumn *col1 = new KexiDB::TableViewColumn("column", KexiDB::Field::Enum, i18n("Column"),
             i18n("Describes field name or expression for the designed query."));
     col1->setRelatedDataEditable(true);
 
-    d->fieldColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    d->fieldColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
     col1->setRelatedData(d->fieldColumnData);
     d->data->addColumn(col1);
 
-    KexiTableViewColumn *col2 = new KexiTableViewColumn("table", KexiDB::Field::Enum, i18n("Table"),
+    KexiDB::TableViewColumn *col2 = new KexiDB::TableViewColumn("table", KexiDB::Field::Enum, i18n("Table"),
             i18n("Describes table for a given field. Can be empty."));
-    d->tablesColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    d->tablesColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
     col2->setRelatedData(d->tablesColumnData);
     d->data->addColumn(col2);
 
-    KexiTableViewColumn *col3 = new KexiTableViewColumn("visible", KexiDB::Field::Boolean, i18n("Visible"),
+    KexiDB::TableViewColumn *col3 = new KexiDB::TableViewColumn("visible", KexiDB::Field::Boolean, i18n("Visible"),
             i18n("Describes visibility for a given field or expression."));
     col3->field()->setDefaultValue(QVariant(false));
     col3->field()->setNotNull(true);
     d->data->addColumn(col3);
 
 #ifndef KEXI_NO_QUERY_TOTALS
-    KexiTableViewColumn *col4 = new KexiTableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
+    KexiDB::TableViewColumn *col4 = new KexiDB::TableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
             i18n("Describes a way of computing totals for a given field or expression."));
     QVector<QString> totalsTypes;
     totalsTypes.append(i18n("Group by"));
@@ -257,7 +258,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     d->data->addColumn(col4);
 #endif
 
-    KexiTableViewColumn *col5 = new KexiTableViewColumn("sort", KexiDB::Field::Enum, i18n("Sorting"),
+    KexiDB::TableViewColumn *col5 = new KexiDB::TableViewColumn("sort", KexiDB::Field::Enum, i18n("Sorting"),
             i18n("Describes a way of sorting for a given field."));
     QVector<QString> sortTypes;
     sortTypes.append("");
@@ -266,11 +267,11 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     col5->field()->setEnumHints(sortTypes);
     d->data->addColumn(col5);
 
-    KexiTableViewColumn *col6 = new KexiTableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
+    KexiDB::TableViewColumn *col6 = new KexiDB::TableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
             i18n("Describes the criteria for a given field or expression."));
     d->data->addColumn(col6);
 
-// KexiTableViewColumn *col7 = new KexiTableViewColumn(i18n("Or"), KexiDB::Field::Text);
+// KexiDB::TableViewColumn *col7 = new KexiDB::TableViewColumn(i18n("Or"), KexiDB::Field::Text);
 // d->data->addColumn(col7);
 }
 
@@ -402,7 +403,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
     KexiDB::BaseExpr *whereExpr = 0;
     const uint count = qMin(d->data->count(), d->sets->size());
     bool fieldsFound = false;
-    KexiTableViewData::Iterator it(d->data->constBegin());
+    KexiDB::TableViewData::Iterator it(d->data->constBegin());
     for (uint i = 0; i < count && it != d->data->constEnd(); ++it, i++) {
         if (!(**it)[COLUMN_ID_TABLE].isNull()
                 && (**it)[COLUMN_ID_COLUMN].isNull()) {
