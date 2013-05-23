@@ -38,7 +38,6 @@
 //                 class OdtTraverserDocxBackend
 
 
-
 OdtTraverserDocxBackend::OdtTraverserDocxBackend(OdfTraverserContext *context)
     : OdtTraverserBackend(context)
     , isInsideSpan(false)

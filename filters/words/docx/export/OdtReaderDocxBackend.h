@@ -65,6 +65,13 @@ class OdtReaderDocxBackend : public OdtReaderBackend
     void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
+
+ private:
+    void startRun(KoXmlWriter *writer, OdfReaderContext *context);
+    void endRun(KoXmlWriter *writer, OdfReaderContext *context);
+
+ private:
+    bool  m_isInsideSpan;
 };
 
 
