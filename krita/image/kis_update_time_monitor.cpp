@@ -27,6 +27,7 @@
 #include <QLineF>
 #include <QRect>
 #include <QRegion>
+#include <QFile>
 
 #include "kis_debug.h"
 
@@ -122,8 +123,14 @@ void KisUpdateTimeMonitor::printValues()
     qreal jobsPerUpdate = qreal(m_d->numTickets) / m_d->numUpdates;
     qreal mouseSpeed = qreal(m_d->mousePath) / strokeTime;
 
-    qDebug() << "spd : jpu : nonupd : rsp :"
-             << mouseSpeed << jobsPerUpdate << nonUpdateTime << responseTime;
+    QFile logFile("stroke.rdata");
+    logFile.open(QIODevice::Append);
+    QTextStream stream(&logFile);
+    stream << mouseSpeed << "\t"
+           << jobsPerUpdate << "\t"
+           << nonUpdateTime << "\t"
+           << responseTime << "\n";
+    logFile.close();
 }
 
 void KisUpdateTimeMonitor::reportJobStarted(void *key)
