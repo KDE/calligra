@@ -263,7 +263,7 @@ void CQCanvasControllerItem::geometryChanged(const QRectF& newGeometry, const QR
 QVariant CQCanvasControllerItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
     Q_UNUSED(value);
-    if(change == QGraphicsItem::ItemScenePositionHasChanged) {
+    if(change == QGraphicsItem::ItemScenePositionHasChanged && d->canvasController) {
         QPointF pos(d->flickable->property("contentX").toReal(), d->flickable->property("contentY").toReal());
         float xDiff = pos.x() - d->lastX;
         float yDiff = pos.y() - d->lastY;
