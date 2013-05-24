@@ -7,6 +7,7 @@ endif(QCA2_FOUND)
 
 include_directories(
     ${KOMAIN_INCLUDES}
+    ${KOODF2_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIRECTORY}
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
 )
@@ -40,7 +41,7 @@ set(msooxml_LIB_SRCS
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
 
-target_link_libraries(msooxml koodf komain)
+target_link_libraries(msooxml koodf2 koodf komain)
 if(QCA2_FOUND)
    target_link_libraries(msooxml ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)

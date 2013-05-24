@@ -28,6 +28,8 @@ class KWCanvas;
 class KoCanvasController;
 class KoRuler;
 
+class QMouseEvent;
+
 /**
  * This class is a widget that is the sole widget under a KWView instance
  * separating concerns.
@@ -82,6 +84,9 @@ public:
     KoCanvasController *canvasController() const {
         return m_canvasController;
     }
+
+protected :
+    virtual void mouseMoveEvent(QMouseEvent *e);
 
 private slots:
     void pageSetupChanged();

@@ -26,9 +26,12 @@
 #include "KWDocument.h"
 
 #include <KoPart.h>
+#include <KoDockRegistry.h>
+#include <KStatusBar>
 
 #include <QWidget>
 #include <QFileDialog>
+#include <ktoggleaction.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 
@@ -37,6 +40,7 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
 {
         setComponentData(CAuFactory::componentData());
         setXMLFile("author.rc");
+
         setupActions();
 }
 
@@ -47,6 +51,7 @@ void CAuView::setupActions()
     actionCollection()->addAction("insert_coverimage", action);
     action->setToolTip(i18n("Set cover for your ebook"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectCoverImage()));
+
 }
 
 void CAuView::selectCoverImage()

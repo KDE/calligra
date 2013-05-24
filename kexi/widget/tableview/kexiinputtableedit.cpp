@@ -59,7 +59,7 @@ protected:
 
 //======================================================
 
-KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiInputTableEdit::KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
 // m_type = f.type(); //copied because the rest of code uses m_type

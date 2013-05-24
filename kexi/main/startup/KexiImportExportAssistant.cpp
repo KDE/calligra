@@ -105,11 +105,6 @@ KexiImportExportAssistant::~KexiImportExportAssistant()
     delete d;
 }
        
-void KexiImportExportAssistant::previousPageRequested(KexiAssistantPage* page)
-{
-    Q_UNUSED(page);
-}
-
 void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);

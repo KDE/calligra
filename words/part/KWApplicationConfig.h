@@ -129,6 +129,13 @@ public:
         return m_statusBarShowZoom;
     }
 
+    void setStatusBarShowWordCount(bool on) {
+        m_statusBarShowWordCount = on;
+    }
+
+    bool statusBarShowWordCount() {
+        return m_statusBarShowWordCount;
+    }
     /**
      * Set the zoom level for new views and for next startups of words.
      * Documents shown at 100% will show the page on screen at the same amount of
@@ -178,6 +185,7 @@ private:
     bool m_statusBarShowPage, m_statusBarShowPageStyle, m_statusBarShowPageSize;
     bool m_statusBarShowLineNumber, m_statusBarShowModified;
     bool m_statusBarShowMouse, m_statusBarShowZoom;
+    bool m_statusBarShowWordCount;
     bool m_showInlineObjectVisualization;
 
     int m_zoom; /// < zoom level in percent
