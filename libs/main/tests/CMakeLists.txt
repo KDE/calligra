@@ -1,7 +1,7 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${KOMAIN_INCLUDES} )
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 
 ########### next target ###############
 
@@ -33,12 +33,6 @@ target_link_libraries(rtreetestapp komain ${QT_QTTEST_LIBRARY} )
 set(documentstructuretest_SRCS documentstructuretest.cpp )
 kde4_add_unit_test(DocumentStructureTest TESTNAME libs-komain-DocumentStructureTest ${documentstructuretest_SRCS})
 target_link_libraries(DocumentStructureTest komain  ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
-kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-komain-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
-target_link_libraries(KoProgressUpdaterTest komain ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
 
 ########### next target ###############
 

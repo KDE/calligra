@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,12 +29,14 @@
 #include <QImage>
 
 #include <KoXmlNS.h>
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoDocumentResourceManager.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoProperties.h>
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -41,12 +44,16 @@ PictureShapeFactory::PictureShapeFactory()
     : KoShapeFactoryBase(PICTURESHAPEID, i18n("Image"))
 {
     setToolTip(i18n("Image shape that can display jpg, png etc."));
-    setIcon("x-shape-image");
-    setOdfElementNames(KoXmlNS::draw, QStringList("image"));
+    setIconName(koIconNameCStr("x-shape-image"));
     setLoadingPriority(1);
+
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("image")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("image")));
+    setXmlElements(elementNamesList);
 }
 
-KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *PictureShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     PictureShape * defaultShape = new PictureShape();
     defaultShape->setShapeId(PICTURESHAPEID);
@@ -56,7 +63,7 @@ KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentReso
     return defaultShape;
 }
 
-KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
+KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
     PictureShape *shape = static_cast<PictureShape*>(createDefaultShape(documentResources));
     if (params->contains("qimage")) {
@@ -80,8 +87,8 @@ bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
         QString href = e.attribute("href");
         if (!href.isEmpty()) {
             // check the mimetype
-            if (href.startsWith("./")) {
-                href.remove(0,2);
+            if (href.startsWith(QLatin1String("./"))) {
+                href.remove(0, 2);
             }
             QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
             if (!mimetype.isEmpty()) {
@@ -111,7 +118,7 @@ QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
     return panels;
 }
 
-void PictureShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void PictureShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     if (!manager->imageCollection())
         manager->setImageCollection(new KoImageCollection(manager));

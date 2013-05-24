@@ -22,6 +22,7 @@
 
 #include "kotext_export.h"
 #include <KoXmlReaderForward.h>
+#include <KoElementReference.h>
 
 #include <QTextBlockUserData>
 #include <QTextTableCell>
@@ -29,6 +30,7 @@
 class KoXmlWriter;
 class KoShapeSavingContext;
 class KoBookmark;
+class KoAnnotation;
 class KoTextMeta;
 class KoTextInlineRdf;
 class RdfSemanticItem;
@@ -69,13 +71,17 @@ class KoTextEditor;
  * FIXME: createXmlId() should consult with the Calligra codebase when
  * generating new xml:id values during save.
  */
-class KOTEXT_EXPORT KoTextInlineRdf
+class KOTEXT_EXPORT KoTextInlineRdf : public QObject
 {
+
+    Q_OBJECT
+
 public:
-    KoTextInlineRdf(QTextDocument *doc, const QTextBlock &b);
-    KoTextInlineRdf(QTextDocument *doc, KoBookmark *b);
-    KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b);
-    KoTextInlineRdf(QTextDocument *doc, const QTextTableCell &b);
+    KoTextInlineRdf(const QTextDocument *doc, const QTextBlock &b);
+    KoTextInlineRdf(const QTextDocument *doc, KoBookmark *b);
+    KoTextInlineRdf(const QTextDocument *doc, KoAnnotation *b);
+    KoTextInlineRdf(const QTextDocument *doc, KoTextMeta *b);
+    KoTextInlineRdf(const QTextDocument *doc, const QTextTableCell &b);
 
     virtual ~KoTextInlineRdf();
 
@@ -97,7 +103,7 @@ public:
     static void attach(KoTextInlineRdf *inlineRdf, QTextCursor &cursor);
 
     bool loadOdf(const KoXmlElement &element);
-    bool saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer);
+    bool saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id = KoElementReference());
 
     /**
      * Get the RDF subject for this inline RDF
@@ -138,7 +144,7 @@ public:
     /**
      * Create a new and unique xml:id
      */
-    QString createXmlId(KoXmlWriter *writer = 0);
+    QString createXmlId();
 
 private:
 

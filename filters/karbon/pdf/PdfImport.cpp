@@ -20,14 +20,14 @@
 #include "PdfImport.h"
 #include "SvgOutputDev.h"
 
-#include <QtCore/QString>
-#include <QtCore/QFile>
+#include <QString>
+#include <QFile>
 
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
-#include <KPluginFactory>
-#include <KDebug>
+#include <kpluginfactory.h>
+#include <kdebug.h>
 
 #include <poppler/PDFDoc.h>
 #include <poppler/GlobalParams.h>

@@ -1,0 +1,29 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="PlanWork" version="4">
+    <MenuBar>
+        <Menu name="edit"><text>&amp;Edit</text>
+           <Action name="package_remove_current"/>
+        </Menu>
+    </MenuBar>
+    <ToolBar name="view_selection" position="left"><text>View</text>
+        <Action name="view_list"/>
+        <Action name="view_gantt"/>
+    </ToolBar>
+    <Menu name="taskstatus_popup">
+        <Action name="task_progress"/>
+        <Action name="task_description"/>
+        <Action name="edit_sendpackage"/>
+        <Action name="edit_packagesettings"/>
+        <Action name="package_remove_current"/>
+    </Menu>
+    <Menu name="editdocument_popup">
+        <Action name="view_document"/>
+        <Action name="edit_document"/>
+        <Action name="remove_document"/>
+    </Menu>
+    <Menu name="viewdocument_popup">
+        <Action name="view_document"/>
+        <Action name="remove_document"/>
+    </Menu>
+
+</kpartgui>

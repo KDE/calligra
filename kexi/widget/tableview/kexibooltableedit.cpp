@@ -19,11 +19,11 @@
 
 #include "kexibooltableedit.h"
 
-#include <kexidb/field.h>
+#include <db/field.h>
 
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -31,13 +31,13 @@
 #include <kglobalsettings.h>
 
 
-KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiBoolTableEdit::KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
-    kDebug() << "m_origValue.typeName()==" << m_origValue.typeName();
+    kDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();
     kDebug() << "type== " << field()->typeName();
-    m_hasFocusableWidget = false;
-    m_acceptEditorAfterDeleteContents = true;
+    KexiDataItemInterface::setHasFocusableWidget(false);
+    KexiDataItemInterface::setAcceptEditorAfterDeleteContents(true);
     m_usesSelectedTextColor = false;
 }
 
@@ -47,7 +47,7 @@ KexiBoolTableEdit::~KexiBoolTableEdit()
 
 void KexiBoolTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
-    m_currentValue = m_origValue;
+    m_currentValue = KexiDataItemInterface::originalValue();
     //nothing to do more...
 }
 
@@ -117,6 +117,7 @@ void KexiBoolTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
 
 void KexiBoolTableEdit::clickedOnContents()
 {
+    const QVariant oldValue = m_currentValue;
     if (field()->isNotNull())
         m_currentValue = QVariant(!m_currentValue.toBool());
     else {
@@ -125,6 +126,10 @@ void KexiBoolTableEdit::clickedOnContents()
             m_currentValue = QVariant(true);
         else
             m_currentValue = m_currentValue.toBool() ? QVariant(false) : QVariant();
+    }
+    kDebug() << KexiDataItemInterface::originalValue() << m_currentValue;
+    if (oldValue != m_currentValue) {
+        signalValueChanged();
     }
 }
 
@@ -148,7 +153,7 @@ void KexiBoolTableEdit::handleAction(const QString& actionName)
         m_currentValue = field()->isNotNull()
                          ? QVariant(0)/*0 instead of NULL - handle case when null is not allowed*/
                          : QVariant();
-        handleCopyAction(m_origValue, QVariant());
+        handleCopyAction(KexiDataItemInterface::originalValue(), QVariant());
         repaintRelatedCell();
     }
 }

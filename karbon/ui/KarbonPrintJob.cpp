@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2009,2012 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,30 +22,37 @@
 #include "KarbonView.h"
 #include "KarbonCanvas.h"
 #include "KarbonPart.h"
+#include "KarbonDocument.h"
+#include "KarbonDocument.h"
 
 #include <KoShapeManager.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
-KarbonPrintJob::KarbonPrintJob(KarbonView *view)
+KarbonPrintJob::KarbonPrintJob(KarbonView *view, PrintMode printMode)
         : KoPrintingDialog(view),
         m_view(view)
 {
     setShapeManager(m_view->canvasWidget()->shapeManager());
     printer().setFromTo(1, 1);
 
-    QSizeF pageSize = m_view->part()->document().pageSize();
+    QSizeF pageSize = m_view->part()->pageSize();
     if (pageSize.width() > pageSize.height())
         printer().setOrientation(QPrinter::Landscape);
     else
         printer().setOrientation(QPrinter::Portrait);
+
+    if (printMode == PrintToPdf) {
+        printer().setPaperSize(pageSize, QPrinter::Point);
+        printer().setFullPage(true);
+    }
 }
 
 QRectF KarbonPrintJob::preparePage(int)
 {
     // if we have any custom tabs, here is where can can read them out and do our thing.
 
-    const QSizeF contentSize = m_view->part()->document().pageSize();
+    const QSizeF contentSize = m_view->part()->pageSize();
     const QRectF pageRectPt = printer().pageRect(QPrinter::Point);
     const double scale = POINT_TO_INCH(printer().resolution());
 

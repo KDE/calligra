@@ -32,16 +32,18 @@ struct Edge {
 class KoTextBlockBorderData::Private
 {
 public:
-    Private() : refCount(0) {}
+    Private() : refCount(0), mergeWithNext(true) {}
     Edge edges[4];
 
     QAtomicInt refCount;
+    bool mergeWithNext;
 };
 
 KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
         : d(new Private())
 {
     ///TODO Remove parameter paragRect and update references to this constructor.
+    Q_UNUSED(paragRect);
 }
 
 KoTextBlockBorderData::~KoTextBlockBorderData()
@@ -52,8 +54,15 @@ KoTextBlockBorderData::~KoTextBlockBorderData()
 KoTextBlockBorderData::KoTextBlockBorderData(const KoTextBlockBorderData &other)
         : d(new Private())
 {
+    d->mergeWithNext = other.d->mergeWithNext;
+
     for (int i = Top; i <= Right; i++)
         d->edges[i] = other.d->edges[i];
+}
+
+void KoTextBlockBorderData::setMergeWithNext(bool merge)
+{
+    d->mergeWithNext = merge;
 }
 
 bool KoTextBlockBorderData::hasBorders() const
@@ -64,12 +73,15 @@ bool KoTextBlockBorderData::hasBorders() const
     return false;
 }
 
-bool KoTextBlockBorderData::operator==(const KoTextBlockBorderData &border)
+bool KoTextBlockBorderData::operator==(const KoTextBlockBorderData &border) const
 {
     return equals(border);
 }
-bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border)
+bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border) const
 {
+    if (!d->mergeWithNext) {
+        return false;
+    }
     for (int i = Top; i <= Right; i++) {
         if (d->edges[i].outerPen != border.d->edges[i].outerPen)
             return false;
@@ -156,8 +168,8 @@ void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
     switch (borderStyle) {
     case KoBorder::BorderDotted: edge.innerPen.setStyle(Qt::DotLine); break;
     case KoBorder::BorderDashed: edge.innerPen.setStyle(Qt::DashLine); break;
-    case KoBorder::BorderDashDotPattern: edge.innerPen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDotPattern: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
+    case KoBorder::BorderDashDot: edge.innerPen.setStyle(Qt::DashDotLine); break;
+    case KoBorder::BorderDashDotDot: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
     case KoBorder::BorderGroove: /* TODO */ break;
     case KoBorder::BorderRidge: /* TODO */ break;
     case KoBorder::BorderInset: /* TODO */ break;

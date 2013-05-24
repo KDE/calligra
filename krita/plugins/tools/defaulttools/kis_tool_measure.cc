@@ -39,14 +39,14 @@
 
 KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double resolution)
         : QWidget(parent),
-        m_resolution(resolution)
+        m_resolution(resolution),
+        m_unit(KoUnit::Pixel)
 {
     m_distance = 0.0;
 
     QGridLayout* optionLayout = new QGridLayout(this);
     Q_CHECK_PTR(optionLayout);
     optionLayout->setMargin(0);
-    optionLayout->setSpacing(6);
 
     optionLayout->addWidget(new QLabel(i18n("Distance: "), this), 0, 0);
     optionLayout->addWidget(new QLabel(i18n("Angle: "), this), 1, 0);
@@ -60,9 +60,9 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
     optionLayout->addWidget(m_angleLabel, 1, 1);
 
     KComboBox* unitBox = new KComboBox(this);
-    unitBox->addItems(KoUnit::listOfUnitName(false));
+    unitBox->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
     connect(unitBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
-    unitBox->setCurrentIndex(KoUnit::Pixel);
+    unitBox->setCurrentIndex(m_unit.indexInListForUi(KoUnit::ListAll));
 
     optionLayout->addWidget(unitBox, 0, 2);
     optionLayout->addWidget(new QLabel("deg", this), 1, 2);
@@ -82,7 +82,7 @@ void KisToolMeasureOptionsWidget::slotSetAngle(double angle)
 
 void KisToolMeasureOptionsWidget::slotUnitChanged(int index)
 {
-    m_unit = KoUnit((KoUnit::Unit)index, m_resolution);
+    m_unit = KoUnit::fromListForUi(index, KoUnit::ListAll, m_resolution);
     updateDistance();
 }
 
@@ -138,8 +138,8 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolMeasure::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::AltModifier)) {
 
         setMode(KisTool::PAINT_MODE);
 

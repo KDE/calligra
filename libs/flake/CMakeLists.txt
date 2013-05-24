@@ -7,13 +7,16 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
+add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(pics)
 
 set(flake_SRCS
     KoFlake.cpp
     KoCanvasBase.cpp
-    KoResourceManager.cpp
+    KoResourceManager_p.cpp
+    KoCanvasResourceManager.cpp
+    KoDocumentResourceManager.cpp
     KoCanvasObserverBase.cpp
     KoCanvasSupervisor.cpp
     KoCutController.cpp
@@ -29,7 +32,8 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
-    KoShapeControllerBase.cpp
+    KoShapeAnchor.cpp
+    KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
@@ -37,9 +41,14 @@ set(flake_SRCS
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
+    KoShapePaintingContext.cpp
     KoShapePainter.cpp
     KoFrameShape.cpp
     KoUnavailShape.cpp
+    KoMarkerData.cpp
+    KoMarker.cpp
+    KoMarkerCollection.cpp
+    KoMarkerSharedLoadingData.cpp
     #KoUnavailData.cpp
     #KoUnavailCollection.cpp
     KoToolBase.cpp
@@ -52,7 +61,6 @@ set(flake_SRCS
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
     KoShapeUserData.cpp
-    KoPointGroup.cpp
     KoParameterShape.cpp
     KoPointerEvent.cpp
     KoShapeController.cpp
@@ -69,14 +77,13 @@ set(flake_SRCS
     KoLoadingShapeUpdater.cpp
     KoPathShapeLoader.cpp
     ShapeDeleter_p.cpp
-    KoShapeBorderModel.cpp
-    KoShapeBorderFactoryBase.cpp
-    KoShapeBorderRegistry.cpp
-    KoLineBorder.cpp
-    KoLineBorderFactory.cpp
+    KoShapeStrokeModel.cpp
+    KoShapeStroke.cpp
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp
+    KoOdfGradientBackground.cpp
+    KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
     KoShapeConfigFactoryBase.cpp
@@ -118,10 +125,10 @@ set(flake_SRCS
     KoTosContainer.cpp
     KoTosContainerModel.cpp
     KoClipPath.cpp
+    KoCurveFit.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
-    commands/KoShapeBorderCommand.cpp
     commands/KoShapeCreateCommand.cpp
     commands/KoShapeDeleteCommand.cpp
     commands/KoShapeDistributeCommand.cpp
@@ -129,6 +136,7 @@ set(flake_SRCS
     commands/KoShapeMoveCommand.cpp
     commands/KoShapeShearCommand.cpp
     commands/KoShapeSizeCommand.cpp
+    commands/KoShapeStrokeCommand.cpp
     commands/KoShapeUngroupCommand.cpp
     commands/KoShapeReorderCommand.cpp
     commands/KoShapeKeepAspectRatioCommand.cpp
@@ -142,7 +150,6 @@ set(flake_SRCS
     commands/KoPathBreakAtPointCommand.cpp
     commands/KoPathSegmentTypeCommand.cpp
     commands/KoPathCombineCommand.cpp
-    commands/KoPathSeparateCommand.cpp
     commands/KoSubpathRemoveCommand.cpp
     commands/KoSubpathJoinCommand.cpp
     commands/KoParameterHandleMoveCommand.cpp
@@ -155,12 +162,13 @@ set(flake_SRCS
     commands/KoEventActionAddCommand.cpp
     commands/KoEventActionRemoveCommand.cpp
     commands/KoShapeRenameCommand.cpp
+    commands/KoShapeRunAroundCommand.cpp
     commands/KoPathPointMergeCommand.cpp
     commands/KoShapeTransparencyCommand.cpp
     commands/KoShapeClipCommand.cpp
     commands/KoShapeUnclipCommand.cpp
-    tools/KoCreatePathTool.cpp
-    tools/KoCreatePathToolFactory.cpp
+    commands/KoPathShapeMarkerCommand.cpp
+    commands/KoShapeConnectionChangeCommand.cpp
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
@@ -184,6 +192,21 @@ set(flake_SRCS
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/KoPathSegmentChangeStrategy.cpp
+    svg/SvgUtil.cpp
+    svg/SvgGraphicContext.cpp
+    svg/SvgSavingContext.cpp
+    svg/SvgWriter.cpp
+    svg/SvgStyleWriter.cpp
+    svg/SvgShape.cpp
+    svg/SvgParser.cpp
+    svg/SvgStyleParser.cpp
+    svg/SvgGradientHelper.cpp
+    svg/SvgPatternHelper.cpp
+    svg/SvgFilterHelper.cpp
+    svg/SvgCssHelper.cpp
+    svg/SvgClipPathHelper.cpp
+    svg/SvgLoadingContext.cpp
+    svg/SvgShapeFactory.cpp
 )
 
 kde4_add_ui_files(flake_SRCS
@@ -195,9 +218,9 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms koodf)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
 
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms koodf)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
 target_link_libraries(flake kundo2)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 
@@ -212,13 +235,13 @@ set_target_properties(flake PROPERTIES
 ########### install files ###############
 
 install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES 
-    flake.desktop 
-    flaketool.desktop 
-    flakeshape.desktop 
-    flakedevice.desktop 
-    presentationeventaction.desktop 
-    scripteventaction.desktop 
+install( FILES
+    flake.desktop
+    flaketool.desktop
+    flakeshape.desktop
+    flakedevice.desktop
+    presentationeventaction.desktop
+    scripteventaction.desktop
     filtereffect.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
@@ -230,7 +253,8 @@ install(
     KoCanvasControllerWidget.h
     KoCanvasObserverBase.h
     KoCanvasSupervisor.h
-    KoResourceManager.h
+    KoCanvasResourceManager.h
+    KoDocumentResourceManager.h
     KoConnectionPoint.h
     KoCopyController.h
     KoCutController.h
@@ -252,13 +276,14 @@ install(
     KoRTree.h
     KoSelection.h
     KoShape.h
-    KoShapeBorderModel.h
+    KoShapeAnchor.h
+    KoShapeStrokeModel.h
     KoToolSelection.h
     KoShapeContainer.h
     KoShapeContainerModel.h
     KoShapeContainerDefaultModel.h
     KoShapeController.h
-    KoShapeControllerBase.h
+    KoShapeBasedDocumentBase.h
     KoShapeFactoryBase.h
     KoShapeGroup.h
     KoShapeLayer.h
@@ -300,10 +325,9 @@ install(
     commands/KoPathPointTypeCommand.h
     commands/KoPathReverseCommand.h
     commands/KoPathSegmentTypeCommand.h
-    commands/KoPathSeparateCommand.h
     commands/KoShapeAlignCommand.h
     commands/KoShapeBackgroundCommand.h
-    commands/KoShapeBorderCommand.h
+    commands/KoShapeStrokeCommand.h
     commands/KoShapeCreateCommand.h
     commands/KoShapeDeleteCommand.h
     commands/KoShapeDistributeCommand.h
@@ -317,6 +341,7 @@ install(
     commands/KoShapeTransformCommand.h
     commands/KoShapeUngroupCommand.h
     commands/KoSubpathRemoveCommand.h
+    commands/KoPathShapeMarkerCommand.h
     tools/KoInteractionTool.h
     tools/KoPanTool.h
     KoViewConverter.h

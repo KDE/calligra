@@ -22,7 +22,7 @@
 
 #include <kexi_export.h>
 #include <koproperty/Property.h>
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 #include <QVariant>
 
 class QByteArray;

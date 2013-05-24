@@ -25,9 +25,9 @@
 #include <QString>
 #include <QStringList>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <kexidb/tableschema.h>
+#include <db/tableschema.h>
 
 #include <google/template.h>
 

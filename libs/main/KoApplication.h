@@ -23,7 +23,10 @@
 #include <kapplication.h>
 #include "komain_export.h"
 
+class KoPart;
+
 class KoApplicationPrivate;
+class QSplashScreen;
 
 /**
  *  @brief Base class for all %Calligra apps
@@ -72,10 +75,32 @@ public:
      */
     static bool isStarting();
 
-signals:
-    /// KoDocument needs to be able to emit document signals from here.
-    friend class KoDocument;
+    /**
+     * Tell KoApplication to show this splashscreen when you call start();
+     * when start returns, the splashscreen is hidden. Use KSplashScreen
+     * to have the splash show correctly on Xinerama displays. 
+     */
+    void setSplashScreen(QSplashScreen *splash);
 
+
+    QList<KoPart*> partList() const;
+
+    void addPart(KoPart* part);
+
+    /**
+     *  Get the number of currently open documents.
+     */
+    int documents();
+
+
+    // Overridden to handle exceptions from event handlers.
+    bool notify(QObject *receiver, QEvent *event);
+
+signals:
+
+    /// KoDocument needs to be able to emit document signals from here.
+    friend class KoDocument; // remove this line when done
+    friend class KoPart;
     /**
      * emitted when a new document is opened.
      */

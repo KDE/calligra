@@ -23,7 +23,6 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
-#include <KoResourceManager.h>
 
 #include "kis_color_selector_ng_dock.h"
 #include "kis_color_selector_settings.h"
@@ -68,12 +67,21 @@ ColorSelectorNgPlugin::ColorSelectorNgPlugin(QObject *parent, const QVariantList
 
     KisColorSelectorSettingsFactory* settingsFactory = new KisColorSelectorSettingsFactory();
 
+    //load and save preferences
+    //if something in kritarc is missing, then the default from this load function will be used and saved back to kconfig.
+    //this way, cfg.readEntry() in any part won't be able to set its own default
+    KisColorSelectorSettings* settings;
+    settings = dynamic_cast<KisColorSelectorSettings*>(settingsFactory->createPreferenceSet());
+    Q_ASSERT(settings);
+    settings->loadPreferences();
+    settings->savePreferences();
+
     preferenceSetRegistry->add("KisColorSelectorSettingsFactory", settingsFactory);
 }
 
 ColorSelectorNgPlugin::~ColorSelectorNgPlugin()
 {
-    
+
 }
 
 #include "colorselectorng.moc"

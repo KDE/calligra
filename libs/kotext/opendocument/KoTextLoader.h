@@ -61,12 +61,16 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
 public:
 
     /**
-     * Tries to determine if passing \p element to \a loadBody() would result in rich text
-     *
-     * \param element the element to test for richtext
-     * \return \p true if rich text was detected
-     */
-    static bool containsRichText(const KoXmlElement &element);
+    * Normalizes the whitespaces in the string \p in according to the ODF ruleset
+    * for stripping whitespaces and returns the result. If \p leadingSpace is
+    * true a leading space is stripped too.
+    *
+    * This is different from QString::simplifyWhiteSpace() because that one removes
+    * leading and trailing whitespace, but such whitespace is significant in ODF.
+    * So we use this function to compress sequences of space characters into single
+    * spaces.
+    */
+    static QString normalizeWhitespace(const QString &in, bool leadingSpace);
 
     /**
     * Constructor.
@@ -89,13 +93,9 @@ public:
     * instance likes to load an ODF element.
     *
     * @param element the element to start loadingat
-    * @param cursor the text cursor to insert the body after
-    * @param section If non-zero, all the following text belongs with this section. The
-    *                section is added to the first block of the body.
-    *
+    * @param cursor the text cursor to insert the body after    *
     */
     void loadBody(const KoXmlElement &element, QTextCursor &cursor);
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor, KoSection *section);
 
 signals:
 
@@ -118,12 +118,6 @@ private:
     void loadHeading(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
-    * Load delete changes that result in a merge into the cursor
-    * Returns the next Node to be processed
-    */
-    KoXmlNode loadDeleteMerges(const KoXmlElement &element, QString *generatedXmlString);
-
-    /**
     * Load the list from the \p element into the \p cursor .
     */
     void loadList(const KoXmlElement &element, QTextCursor &cursor);
@@ -138,7 +132,6 @@ private:
     */
     void loadSection(const KoXmlElement &element, QTextCursor &cursor);
 
-
     /**
     * Load the text into the \p cursor .
     */
@@ -149,21 +142,6 @@ private:
     * Load the span from the \p element into the \p cursor .
     */
     void loadSpan(const KoXmlElement &element, QTextCursor &cursor, bool *leadingSpace);
-
-    /**
-    * Load the deleted change within a \p or a \h and store it in the Delete Change Marker
-    */
-    void loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor);
-
-    /**
-    * Load the contents of delta:merge. Called from loadSpan
-    */
-    void loadMerge(const KoXmlElement &element, QTextCursor &cursor);
-
-    /**
-    * Load the deleted change outside of a \p or a \h and store it in the Delete Change Marker
-    */
-    void loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor);
 
     /**
      * Load the table from the \p element into the \p cursor.
@@ -193,6 +171,11 @@ private:
     void loadNote(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
+     * Load a citation \p element into the \p cursor.
+     */
+    void loadCite(const KoXmlElement &element, QTextCursor& cursor);
+
+    /**
     * Load the shape element and assign hyperlink to it \p element into the \p cursor .
     */
     void loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor& cursor);
@@ -208,6 +191,11 @@ private:
     void loadTableOfContents(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
+    * Load the bibliography element \p element into the \p cursor .
+    */
+    void loadBibliography(const KoXmlElement &element, QTextCursor& cursor);
+
+    /**
     * This is called in loadBody before reading the body starts.
     */
     void startBody(int total);
@@ -221,20 +209,6 @@ private:
     * This is called in loadBody once the body was read.
     */
     void endBody();
-
-    /**
-    * Store the delete changes in the deleteChangeTable. Will be processed when "change" is encountered
-    */
-    void storeDeleteChanges(KoXmlElement &tag);
-
-    /**
-    * This is called in case of a paragraph or a header split.
-    * Mark the blocks from the start of the split till the end as an insertion type
-    * and set the corresponding changeId in the charFormat
-    */
-    void markBlocksAsInserted(QTextCursor &cursor, int from, const QString& changeId);
-
-
 
     /// \internal d-pointer class.
     class Private;

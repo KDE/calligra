@@ -19,19 +19,19 @@
 
 #include "sybasemigrate.h"
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qvariant.h>
-#include <qlist.h>
+#include <QString>
+#include <QRegExp>
+#include <QFile>
+#include <QVariant>
+#include <QList>
 #include <kdebug.h>
 
 #include <migration/keximigratedata.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
 #include <kexidb/drivers/sybase/sybaseconnection_p.cpp>
-#include <kexidb/drivermanager.h>
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
@@ -54,7 +54,7 @@ SybaseMigrate::SybaseMigrate(QObject *parent, const QVariantList&args) :
         //,m_mysqlres(0)
 {
     KexiDB::DriverManager manager;
-    m_kexiDBDriver = manager.driver("sybase");
+    setDriver(manager.driver("sybase"));
 }
 
 /* ************************************************************************** */
@@ -68,9 +68,9 @@ SybaseMigrate::~SybaseMigrate()
 /*! Connect to the db backend */
 bool SybaseMigrate::drv_connect()
 {
-    if (!d->db_connect(*m_migrateData->source))
+    if (!d->db_connect(*data()->source))
         return false;
-    return d->useDatabase(m_migrateData->sourceName);
+    return d->useDatabase(data()->sourceName);
 }
 
 
@@ -195,7 +195,7 @@ tristate SybaseMigrate::drv_queryStringListFromSQL(
             if (returnCode == FAIL)
                 r = false;
             else if (returnCode == NO_MORE_RESULTS)
-                r = (numRecords == -1) ? true : cancelled;
+                r = (numRecords == -1) ? tristate(true) : tristate(cancelled);
             return r;
         }
 

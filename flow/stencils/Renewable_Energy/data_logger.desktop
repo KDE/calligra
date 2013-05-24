@@ -1,9 +1,23 @@
 [Desktop Entry]
 Name=Data Logger
+Name[bs]=Bilježnik podataka
+Name[ca]=Registrador de dades
+Name[ca@valencia]=Registrador de dades
+Name[da]=Datalogger
 Name[el]=Καταγραφέας δεδομένων
+Name[es]=Registro de datos
+Name[et]=Andmesalvesti
+Name[fr]=Data Logger
+Name[gl]=Rexistro de datos
+Name[it]=Registro dati
+Name[kk]=Дерек жазғышы
 Name[nb]=Datalogger
+Name[nl]=Gegevenslogger
+Name[pl]=Rejestrator danych
 Name[pt]=Registo Dados
 Name[pt_BR]=Registro de dados
+Name[ru]=Элемент, записывающий информацию
+Name[sk]=Zaznamenávač dát
 Name[sv]=Datainsamlare
 Name[uk]=Пристрій для запису даних
 Name[x-test]=xxData Loggerxx

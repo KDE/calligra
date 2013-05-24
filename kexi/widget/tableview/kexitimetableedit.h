@@ -34,7 +34,7 @@ class KexiTimeTableEdit : public KexiInputTableEdit
     Q_OBJECT
 
 public:
-    KexiTimeTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
+    KexiTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiTimeTableEdit();
     virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
@@ -42,6 +42,7 @@ public:
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
     virtual bool valueIsValid();
+    virtual bool valueChanged();
 
     /*! Reimplemented after KexiInputTableEdit. */
     virtual void handleAction(const QString& actionName);

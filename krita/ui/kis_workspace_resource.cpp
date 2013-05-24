@@ -48,6 +48,11 @@ bool KisWorkspaceResource::save()
     QDomElement state = doc.createElement("state");
     state.appendChild(doc.createCDATASection(m_dockerState.toBase64()));
     root.appendChild(state);
+
+    // Save KisPropertiesConfiguration settings
+    QDomElement settings = doc.createElement("settings");
+    KisPropertiesConfiguration::toXML(doc, settings);
+    root.appendChild(settings);
     doc.appendChild(root);
      
     QTextStream textStream(&file);
@@ -80,8 +85,14 @@ bool KisWorkspaceResource::load()
     QDomElement state = element.firstChildElement("state");
     
     if(!state.isNull()) {
-        m_dockerState = QByteArray::fromBase64(state.text().toAscii());
+        m_dockerState = QByteArray::fromBase64(state.text().toLatin1());
     }
+
+    QDomElement settings = element.firstChildElement("settings");
+    if(!settings.isNull()) {
+        KisPropertiesConfiguration::fromXML(settings);
+    }
+
     setValid(true);
     return true;
 }

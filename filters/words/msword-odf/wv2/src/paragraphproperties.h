@@ -46,15 +46,21 @@ namespace wvWare
         /**
          * If this paragraph belongs to a list, the ListInfo object will be
          * valid and contain useful information about the formatting of the
-         * list counter. If the paragraph is not inside a list, this method
-         * will return 0.
+         * list counter. @return 0 if the paragraph is not inside of a list
          */
         const ListInfo* listInfo() const;
 
         /**
-         * @internal
+         * Set the name of the bullet picture into ListInfo.
          */
-        void createListInfo( ListInfoProvider& listInfoProvider );
+        void setBulletPictureName(const QString& name);
+
+        /**
+         * @internal
+         * @param list info provider
+         * @param pragraph mark's CHPs
+         */
+        void createListInfo( ListInfoProvider& listInfoProvider, Word97::CHP& chp );
 
     private:
         ParagraphProperties& operator=( const ParagraphProperties& rhs );

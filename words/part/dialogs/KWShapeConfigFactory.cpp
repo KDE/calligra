@@ -21,7 +21,7 @@
 #include "KWGeneralFrameProperties.h"
 #include "KWRunAroundProperties.h"
 #include "KWFrameConnectSelector.h"
-#include "KWFrameGeometry.h"
+#include "KWAnchoringProperties.h"
 #include <KWCanvas.h>
 #include <frames/KWFrame.h>
 #include <frames/KWFrameSet.h>
@@ -46,19 +46,19 @@ bool KWFrameConnectSelectorFactory::showForShapeId(const QString &id) const
 }
 
 
-KoShapeConfigWidgetBase *KWFrameGeometryFactory::createConfigWidget(KoShape *shape)
+KoShapeConfigWidgetBase *KWAnchoringFactory::createConfigWidget(KoShape *shape)
 {
-    KWFrameGeometry *widget = new KWFrameGeometry(m_state);
+    KWAnchoringProperties *widget = new KWAnchoringProperties(m_state);
     widget->open(shape);
     return widget;
 }
 
-QString KWFrameGeometryFactory::name() const
+QString KWAnchoringFactory::name() const
 {
     return i18n("Geometry");
 }
 
-bool KWFrameGeometryFactory::showForShapeId(const QString &id) const
+bool KWAnchoringFactory::showForShapeId(const QString &id) const
 {
     return id == TextShape_SHAPEID;
 }

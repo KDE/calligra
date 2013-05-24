@@ -1,21 +1,26 @@
 include_directories( 
         ${KDE4_INCLUDE_DIR} 
         ${QT_INCLUDES} 
-        ${KOMAIN_INCLUDES}         
+        ${KOODF_INCLUDES}
+        ${KOMAIN_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon/
         ${CMAKE_SOURCE_DIR}/karbon/ui
         ${CMAKE_SOURCE_DIR}/karbon/ui/dialogs
         ${CMAKE_SOURCE_DIR}/karbon/ui/dockers
         ${CMAKE_SOURCE_DIR}/karbon/ui/widgets
+        ${CMAKE_SOURCE_DIR}/karbon/ui/commands
 )
 
 set(karbonui_SRCS
     KarbonFactory.cpp
-    KarbonPart.cpp 
+    KarbonDocument.cpp
+    KarbonPart.cpp
     KarbonView.cpp 
     KarbonPrintJob.cpp
     KarbonZoomController.cpp
     KarbonDocumentMergeCommand.cpp
+    
+    commands/KarbonLayerReorderCommand.cpp
     
     dialogs/KarbonConfigureDialog.cpp
 
@@ -28,6 +33,9 @@ set(karbonui_SRCS
     widgets/KarbonGradientEditWidget.cpp
     widgets/KarbonSmallStylePreview.cpp
     widgets/KarbonPatternOptionsWidget.cpp
+    widgets/KarbonPaletteBarWidget.cpp
+    widgets/KarbonPaletteWidget.cpp
+    widgets/KarbonConfigInterfacePage.cpp
 )
 
 kde4_add_ui_files(karbonui_SRCS
@@ -37,7 +45,7 @@ kde4_add_ui_files(karbonui_SRCS
 
 kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
 
-target_link_libraries(karbonui karboncommon kowidgets)
+target_link_libraries(karbonui karboncommon kowidgets koodf)
 target_link_libraries(karbonui LINK_INTERFACE_LIBRARIES karboncommon)
 
 set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

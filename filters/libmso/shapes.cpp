@@ -37,7 +37,7 @@
 #include <kdebug.h>
 
 #include <QTransform>
-#include <qbuffer.h>
+#include <QBuffer>
 
 #include <cmath>
 
@@ -111,8 +111,34 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
     return rect;
 }
 
-
 void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
+{
+    // TODO: Use client->isPlaceholder - might require an update of the
+    // placeholderAllowed function in the PPT filter.  Trying to save as many
+    // shapes into draw:text-box at the moment, becasue vertical alignment in
+    // draw:custom-shape does not work properly (bug 288047).
+    if (o.clientData && client->processRectangleAsTextBox(*o.clientData)) {
+        processTextBox(o, out);
+    } else {
+        const DrawStyle ds(0, 0, &o);
+        if (ds.pib()) {
+            // see bug https://bugs.kde.org/show_bug.cgi?id=285577
+            processPictureFrame(o, out);
+        } else {
+            out.xml.startElement("draw:custom-shape");
+            processStyleAndText(o, out);
+            out.xml.startElement("draw:enhanced-geometry");
+            out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+            out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N");
+            out.xml.addAttribute("draw:type", "rectangle");
+            setShapeMirroring(o, out);
+            out.xml.endElement(); // draw:enhanced-geometry
+            out.xml.endElement(); // draw:custom-shape
+        }
+    }
+}
+
+void ODrawToOdf::processTextBox(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:frame");
     processStyle(o, out);
@@ -121,7 +147,6 @@ void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:text-box
     out.xml.endElement(); // draw:frame
 }
-
 
 void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -368,23 +393,6 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
     QPainterPath shapePath;
     (this->*drawPath)(sx1, sy1, sx2, sy2, out, shapePath);
 
-    // Temporary support for arrowheads: remove when the core gets marker
-    // support (we already support that via addGraphicStyleToDrawElement).
-    //
-    // The idea is not to render perfectly (rotation, style etc.), but convey
-    // the semantic sense that there *is* an arrowhead.
-    if (ds.lineStartArrowhead()) {
-        shapePath.moveTo(sx1, sy1);
-        shapePath.lineTo(sx1 + 70, sy1 + 70/2);
-        shapePath.lineTo(sx1 + 70, sy1 - 70/2);
-        shapePath.closeSubpath();
-    }
-    if (ds.lineEndArrowhead()) {
-        shapePath.moveTo(sx2, sy2);
-        shapePath.lineTo(sx2 - 70, sy2 + 70/2);
-        shapePath.lineTo(sx2 - 70, sy2 - 70/2);
-        shapePath.closeSubpath();
-    }
     shapePath = m.map(shapePath);
 
     // translate the QPainterPath into svg:d attribute
@@ -410,7 +418,10 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     if (!ds.pib()) return;
 
     out.xml.startElement("draw:frame");
-    processStyleAndText(o, out);
+    processStyle(o, out);
+
+    //NOTE: OfficeArtClienData might contain additional information
+    //about a shape.
 
     QString url;
     if (client) {
@@ -434,18 +445,23 @@ void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer&
 {
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
-
     out.xml.startElement("draw:enhanced-geometry");
     setEnhancedGeometry(o, out);
     out.xml.endElement(); //draw:enhanced-geometry
-
     out.xml.endElement(); //draw:custom-shape
 }
 
 
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
+    if (!client) {
+        kWarning() << "Warning: There's no Client!";
+        return;
+    }
+
     quint16 shapeType = o.shapeProp.rh.recInstance;
+    client->m_currentShapeType = o.shapeProp.rh.recInstance;
+
     switch (shapeType) {
     case msosptNotPrimitive:
         processNotPrimitive(o, out);
@@ -457,7 +473,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processRoundRectangle(o, out);
         break;
     case msosptEllipse:
-        // TODO: Something has to be done here (LukasT).
+        // TODO: Something has to be done here (LukasT).  LukasT:
+        // "Great comment", can you provide more details? :)
         processEllipse(o, out);
         break;
     case msosptDiamond:
@@ -932,10 +949,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     case msosptHostControl:
         processPictureFrame(o, out);
         break;
-    // TODO: Implement processTextBox, do not process msosptTextBox as
-    // msosptRectangle.
     case msosptTextBox:
-        processRectangle(o, out);
+        processTextBox(o, out);
         break;
     default:
         qDebug() << "Cannot handle shape 0x" << hex << shapeType;
@@ -960,7 +975,12 @@ void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
 void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                              Writer& out)
 {
-    if (o.clientData && client && client->onlyClientData(*o.clientData)) {
+    if (!client) {
+        kWarning() << "Warning: There's no Client!";
+        return;
+    }
+
+    if (o.clientData && client->onlyClientData(*o.clientData)) {
         client->processClientData(o.clientTextbox.data(), *o.clientData, out);
     } else if (o.clientTextbox) {
         client->processClientTextBox(*o.clientTextbox, o.clientData.data(), out);
@@ -1022,7 +1042,6 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //draw:class-names
     //draw:data
     //draw:engine
-    //draw:id
     //draw:layer
     out.xml.addAttribute("draw:layer", "layout");
     //draw:name
@@ -1051,6 +1070,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
         out.xml.addAttribute("svg:x", client->formatPos(trect.x()));
         out.xml.addAttribute("svg:y", client->formatPos(trect.y()));
     }
+    //NOTE: z-index is set in ODrawToOdf::Client::addTextStyles
     //draw:z-index
     //presentation:class-names
     //presentation:style-name
@@ -1074,9 +1094,9 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
     const DrawStyle ds(drawingGroup, master, &o);
 
     IMsoArray _v = ds.pVertices_complex();
-    IMsoArray _c = ds.pSegmentInfo_complex();
+    IMsoArray segmentInfo = ds.pSegmentInfo_complex();
 
-    if (!_v.data.isEmpty() && !_c.data.isEmpty()) {
+    if (!_v.data.isEmpty() && !segmentInfo.data.isEmpty()) {
 
         QVector<QPoint> verticesPoints;
 
@@ -1126,9 +1146,9 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         ushort msopathtype;
         bool nOffRange = false;
 
-        for (int i = 0, n = 0; ((i < _c.nElems) && !nOffRange); i++) {
+        for (int i = 0, n = 0; ((i < segmentInfo.nElems) && !nOffRange); i++) {
 
-            msopathtype = (((*(ushort *)(_c.data.data() + i * 2)) >> 13) & 0x7);
+            msopathtype = (((*(ushort *)(segmentInfo.data.data() + i * 2)) >> 13) & 0x7);
 
             switch (msopathtype) {
             case msopathLineTo:
@@ -1145,7 +1165,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
             case msopathCurveTo:
             {
-                if (n + 2 > verticesPoints.size()) {
+                if (n + 2 >= verticesPoints.size()) {
                     qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
                     nOffRange = true;
                     break;

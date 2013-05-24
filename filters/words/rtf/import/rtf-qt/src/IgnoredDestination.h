@@ -18,8 +18,8 @@
 #ifndef RTFREADER_IGNOREDDESTINATION_H
 #define RTFREADER_IGNOREDDESTINATION_H
 
-#include <QtCore/QString>
-#include <QtGui/QColor>
+#include <QString>
+#include <QColor>
 
 #include "Destination.h"
 #include "rtfreader_export.h"

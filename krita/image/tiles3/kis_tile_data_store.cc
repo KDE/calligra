@@ -86,12 +86,6 @@ KisTileDataStore::~KisTileDataStore()
                     << "some tiles have leaked from the Krita control!";
         qCritical() << "CRITICAL: Tiles in memory:" << numTilesInMemory()
                     << "Total tiles:" << numTiles();
-
-#ifndef HAVE_MEMORY_LEAK_TRACKER
-        Q_ASSERT_X(0, "KisTileDataStore::~KisTileDataStore",
-                   "Let's crash to be on the safe side! ;)");
-#endif /* HAVE_MEMORY_LEAK_TRACKER */
-
     }
 }
 
@@ -197,14 +191,29 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
          * Change it only in case, you really know what you are doing.
          */
         m_listLock.lock();
-        td->m_swapLock.lockForWrite();
+
+        /**
+         * If someone has managed to load the td from swap, then, most
+         * probably, they have already taken the swap lock. This may
+         * lead to a deadlock, because COW mechanism breaks lock
+         * ordering rules in duplicateTileData() (it takes m_listLock
+         * while the swap lock is held). In our case it is enough just
+         * to check whether the other thread has already fetched the
+         * data. Please notice that we do not take both of the locks
+         * while checking this, because holding m_listLock is
+         * enough. Nothing can happen to the tile while we hold
+         * m_listLock.
+         */
 
         if(!td->data()) {
+            td->m_swapLock.lockForWrite();
+
             m_swappedStore.swapInTileData(td);
             registerTileDataImp(td);
+
+            td->m_swapLock.unlock();
         }
 
-        td->m_swapLock.unlock();
         m_listLock.unlock();
 
         /**
@@ -289,11 +298,9 @@ void KisTileDataStore::debugSwapAll()
     }
     endIteration(iter);
 
-    qDebug() << "Number of tiles:" << numTiles();
-    qDebug() << "Tiles in memory:" << numTilesInMemory();
-
-
-    m_swappedStore.debugStatistics();
+//    qDebug() << "Number of tiles:" << numTiles();
+//    qDebug() << "Tiles in memory:" << numTilesInMemory();
+//    m_swappedStore.debugStatistics();
 }
 
 void KisTileDataStore::debugClear()
@@ -309,6 +316,12 @@ void KisTileDataStore::debugClear()
 
     m_numTiles = 0;
     m_memoryMetric = 0;
+}
+
+void KisTileDataStore::testingRereadConfig() {
+    m_pooler.testingRereadConfig();
+    m_swapper.testingRereadConfig();
+    kickPooler();
 }
 
 void KisTileDataStore::testingSuspendPooler()

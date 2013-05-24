@@ -21,7 +21,7 @@
 #include "kexidbcheckbox.h"
 
 #include <kexiutils/utils.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 
 KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent)
         : QCheckBox(text, parent), KexiFormDataItemInterface()
@@ -69,10 +69,10 @@ void KexiDBCheckBox::setValueInternal(const QVariant &add, bool removeOld)
     Q_UNUSED(add);
     Q_UNUSED(removeOld);
     if (isTristateInternal())
-        setCheckState(m_origValue.isNull()
-                      ? Qt::PartiallyChecked : (m_origValue.toBool() ? Qt::Checked : Qt::Unchecked));
+        setCheckState(KexiDataItemInterface::originalValue().isNull()
+                      ? Qt::PartiallyChecked : (KexiDataItemInterface::originalValue().toBool() ? Qt::Checked : Qt::Unchecked));
     else
-        setCheckState(m_origValue.toBool() ? Qt::Checked : Qt::Unchecked);
+        setCheckState(KexiDataItemInterface::originalValue().toBool() ? Qt::Checked : Qt::Unchecked);
 }
 
 QVariant KexiDBCheckBox::value()

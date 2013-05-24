@@ -28,11 +28,12 @@
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextTable>
 #include <QTextTableFormat>
 
+#include <KoShadowStyle.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
@@ -204,6 +205,18 @@ void KoTableStyle::setKeepWithNext(bool keep)
 bool KoTableStyle::keepWithNext() const
 {
     return propertyBoolean(KeepWithNext);
+}
+
+void KoTableStyle::setShadow(const KoShadowStyle &shadow)
+{
+    d->setProperty(Shadow, QVariant::fromValue<KoShadowStyle>(shadow));
+}
+
+KoShadowStyle KoTableStyle::shadow() const
+{
+    if (hasProperty(Shadow))
+        return value(Shadow).value<KoShadowStyle>();
+    return KoShadowStyle();
 }
 
 void KoTableStyle::setMayBreakBetweenRows(bool allow)
@@ -519,6 +532,12 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         setPageNumber(styleStack.property(KoXmlNS::style, "page-number").toInt());
     }
 
+    if (styleStack.hasProperty(KoXmlNS::style, "shadow")) {
+        KoShadowStyle shadow;
+        if (shadow.loadOdf(styleStack.property(KoXmlNS::style, "shadow")))
+            setShadow(shadow);
+    }
+
     // The fo:background-color attribute specifies the background color of a paragraph.
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
@@ -614,13 +633,13 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameLeftMargin)) {
+        } else if (key == QTextFormat::FrameLeftMargin) {
             style.addPropertyLength("fo:margin-left", propertyLength(QTextFormat::FrameLeftMargin), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameRightMargin)) {
+        } else if (key == QTextFormat::FrameRightMargin) {
             style.addPropertyLength("fo:margin-right", propertyLength(QTextFormat::FrameRightMargin), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameTopMargin)) {
+        } else if (key == QTextFormat::FrameTopMargin) {
             style.addPropertyLength("fo:margin-top", propertyLength(QTextFormat::FrameTopMargin), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameBottomMargin)) {
+        } else if (key == QTextFormat::FrameBottomMargin) {
             style.addPropertyLength("fo:margin-bottom", propertyLength(QTextFormat::FrameBottomMargin), KoGenStyle::TableType);
         } else if (key == KoTableStyle::CollapsingBorders) {
             if (collapsingBorderModel())
@@ -641,6 +660,8 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:page-number", "auto", KoGenStyle::TableType);
         } else if (key == TextProgressionDirection) {
             style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableType);
+        } else if (key == KoTableStyle::Shadow) {
+            style.addProperty("style:shadow", shadow().saveOdf());
         }
     }
 }

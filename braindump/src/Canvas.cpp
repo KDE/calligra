@@ -24,7 +24,7 @@
 #include <QMouseEvent>
 
 #include <kxmlguifactory.h>
-#include <KAction>
+#include <kaction.h>
 #include <kundo2stack.h>
 
 #include <KoCanvasController.h>
@@ -147,8 +147,6 @@ void Canvas::paintEvent(QPaintEvent *event)
     shapeManager()->paint(painter, *converter, false);
     painter.setRenderHint(QPainter::Antialiasing, false);
 
-    QRectF updateRect = converter->viewToDocument(clipRect);
-
     painter.setRenderHint(QPainter::Antialiasing);
     m_toolProxy->paint(painter, *converter);
 }
@@ -164,8 +162,9 @@ void Canvas::mousePressEvent(QMouseEvent *event)
 
     if(!event->isAccepted() && event->button() == Qt::RightButton) {
         showContextMenu(event->globalPos(), toolProxy()->popupActionList());
-        event->setAccepted(true);
     }
+
+    event->setAccepted(true);
 }
 
 void Canvas::mouseDoubleClickEvent(QMouseEvent *event)
@@ -241,6 +240,12 @@ void Canvas::updateInputMethodInfo()
 
 QVariant Canvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        QPointF scroll(canvasController()->scrollBarValue());
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 

@@ -29,37 +29,70 @@
 void KisStrokesQueueTest::testSequentialJobs()
 {
     KisStrokesQueue queue;
-    queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
-    queue.addJob(0);
-    queue.addJob(0);
-    queue.addJob(0);
-    queue.endStroke();
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id);
 
     KisTestableUpdaterContext context(2);
     QVector<KisUpdateJobItem*> jobs;
 
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "tri_init");
     VERIFY_EMPTY(jobs[1]);
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "tri_dab");
     COMPARE_NAME(jobs[1], "tri_dab");
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "tri_dab");
     VERIFY_EMPTY(jobs[1]);
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "tri_finish");
+    VERIFY_EMPTY(jobs[1]);
+}
+
+void KisStrokesQueueTest::testConcurrentSequentialBarrier()
+{
+    KisStrokesQueue queue;
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id);
+
+    // make the number of threads higher
+    KisTestableUpdaterContext context(3);
+    QVector<KisUpdateJobItem*> jobs;
+
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "tri_init");
+    VERIFY_EMPTY(jobs[1]);
+
+    context.clear();
+    queue.processQueue(context, false);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "tri_dab");
+    COMPARE_NAME(jobs[1], "tri_dab");
+
+    context.clear();
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "tri_finish");
@@ -69,11 +102,11 @@ void KisStrokesQueueTest::testSequentialJobs()
 void KisStrokesQueueTest::testExclusiveStrokes()
 {
     KisStrokesQueue queue;
-    queue.startStroke(new KisTestingStrokeStrategy("excl_", true));
-    queue.addJob(0);
-    queue.addJob(0);
-    queue.addJob(0);
-    queue.endStroke();
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("excl_", true));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id);
 
     // well, this walker is not initialized... but who cares?
     KisBaseRectsWalkerSP walker = new KisMergeWalker(QRect());
@@ -82,7 +115,7 @@ void KisStrokesQueueTest::testExclusiveStrokes()
     QVector<KisUpdateJobItem*> jobs;
 
     context.addMergeJob(walker);
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_WALKER(jobs[0], walker);
@@ -90,7 +123,7 @@ void KisStrokesQueueTest::testExclusiveStrokes()
     QCOMPARE(queue.needsExclusiveAccess(), true);
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "excl_init");
@@ -98,7 +131,7 @@ void KisStrokesQueueTest::testExclusiveStrokes()
     QCOMPARE(queue.needsExclusiveAccess(), true);
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "excl_dab");
@@ -107,14 +140,14 @@ void KisStrokesQueueTest::testExclusiveStrokes()
 
     context.clear();
     context.addMergeJob(walker);
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     COMPARE_WALKER(jobs[0], walker);
     VERIFY_EMPTY(jobs[1]);
     QCOMPARE(queue.needsExclusiveAccess(), true);
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "excl_dab");
@@ -122,7 +155,7 @@ void KisStrokesQueueTest::testExclusiveStrokes()
     QCOMPARE(queue.needsExclusiveAccess(), true);
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "excl_finish");
@@ -130,38 +163,142 @@ void KisStrokesQueueTest::testExclusiveStrokes()
     QCOMPARE(queue.needsExclusiveAccess(), true);
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     QCOMPARE(queue.needsExclusiveAccess(), false);
+}
+
+void KisStrokesQueueTest::testBarrierStrokeJobs()
+{
+    KisStrokesQueue queue;
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("nor_", false));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::BARRIER));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id);
+
+    // yes, this walker is not initialized again... but who cares?
+    KisBaseRectsWalkerSP walker = new KisMergeWalker(QRect());
+    bool externalJobsPending = false;
+
+    KisTestableUpdaterContext context(3);
+    QVector<KisUpdateJobItem*> jobs;
+
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "nor_init");
+    VERIFY_EMPTY(jobs[1]);
+    VERIFY_EMPTY(jobs[2]);
+
+    context.clear();
+
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "nor_dab");
+    VERIFY_EMPTY(jobs[1]);
+    VERIFY_EMPTY(jobs[2]);
+
+    // Now some updates has come...
+    context.addMergeJob(walker);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "nor_dab");
+    COMPARE_WALKER(jobs[1], walker);
+    VERIFY_EMPTY(jobs[2]);
+
+    // No difference for the queue
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "nor_dab");
+    COMPARE_WALKER(jobs[1], walker);
+    VERIFY_EMPTY(jobs[2]);
+
+    // Even more updates has come...
+    externalJobsPending = true;
+
+    // Still no difference for the queue
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "nor_dab");
+    COMPARE_WALKER(jobs[1], walker);
+    VERIFY_EMPTY(jobs[2]);
+
+    // Now clear the context
+    context.clear();
+
+    // And still no difference for the queue
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    VERIFY_EMPTY(jobs[0]);
+    VERIFY_EMPTY(jobs[1]);
+    VERIFY_EMPTY(jobs[2]);
+
+    // Process the last update...
+    context.addMergeJob(walker);
+    externalJobsPending = false;
+
+    // Yep, the queue is still waiting
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    COMPARE_WALKER(jobs[0], walker);
+    VERIFY_EMPTY(jobs[1]);
+    VERIFY_EMPTY(jobs[2]);
+
+    context.clear();
+
+    // Finally, we can do our work
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "nor_dab");
+    COMPARE_NAME(jobs[1], "nor_dab");
+    VERIFY_EMPTY(jobs[2]);
+
+    context.clear();
+
+    queue.processQueue(context, externalJobsPending);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "nor_finish");
+    VERIFY_EMPTY(jobs[1]);
+    VERIFY_EMPTY(jobs[2]);
+
+    context.clear();
 }
 
 void KisStrokesQueueTest::testStrokesOverlapping()
 {
     KisStrokesQueue queue;
-    queue.startStroke(new KisTestingStrokeStrategy("1_", false, true));
-    queue.addJob(0);
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("1_", false, true));
+    queue.addJob(id, 0);
 
     // comment out this line to catch an assert
-    queue.endStroke();
+    queue.endStroke(id);
 
-    queue.startStroke(new KisTestingStrokeStrategy("2_", false, true));
-    queue.addJob(0);
-    queue.endStroke();
+    id = queue.startStroke(new KisTestingStrokeStrategy("2_", false, true));
+    queue.addJob(id, 0);
+    queue.endStroke(id);
 
     // uncomment this line to catch an assert
-    // queue.addJob(0);
+    // queue.addJob(id, 0);
 
     KisTestableUpdaterContext context(2);
     QVector<KisUpdateJobItem*> jobs;
 
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "1_dab");
     VERIFY_EMPTY(jobs[1]);
 
     context.clear();
-    queue.processQueue(context);
+    queue.processQueue(context, false);
 
     jobs = context.getJobs();
     COMPARE_NAME(jobs[0], "2_dab");

@@ -20,9 +20,9 @@
 #ifndef KexiStartupDialog_h
 #define KexiStartupDialog_h
 
-#include <KPageDialog>
+#include <kpagedialog.h>
 
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <core/kexiprojectdata.h>
 
 class KexiProjectData;
@@ -34,7 +34,7 @@ class QEvent;
 //! @short Kexi startup dialog
 /*!
  This class is used to show the template/open-existing/open-recent tabbed dialog
- on Kexi startup. If only one page is shown, tab is no displayed, so dialog
+ on Kexi startup. If only one page is shown, tab is not displayed, so the dialog
  becomes a normal "plain" type dialog.
 */
 class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog

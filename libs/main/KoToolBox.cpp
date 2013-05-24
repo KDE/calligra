@@ -23,23 +23,14 @@
 #include "KoToolBoxLayout_p.h"
 
 #include <KoCanvasController.h>
-#include <KoToolManager.h>
 #include <KoShapeLayer.h>
-#include <KoInteractionTool.h>
-
-#include <KDebug>
-#include <QLayout>
-#include <QMap>
 #include <QButtonGroup>
 #include <QToolButton>
-#include <QHash>
+#include <QStyleOptionFrameV3>
 #include <QPainter>
-#include <QRect>
+#include <QHash>
+#include <QApplication>
 #include <QTimer>
-
-#include "math.h"
-#include <KoDockWidgetTitleBar.h>
-
 
 class KoToolBox::Private
 {
@@ -109,10 +100,22 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
     // ensure same L&F
     button->setCheckable(true);
     button->setAutoRaise(true);
-    Section *sectionWidget = d->sections.value(section);
+
+    QString sectionToBeAddedTo;
+    if (section.contains(qApp->applicationName())) {
+        sectionToBeAddedTo = "main";
+    } else if (section.contains("main")) {
+        sectionToBeAddedTo = "main";
+    }  else if (section.contains("dynamic")) {
+        sectionToBeAddedTo = "dynamic";
+    } else {
+        sectionToBeAddedTo = section;
+    }
+
+    Section *sectionWidget = d->sections.value(sectionToBeAddedTo);
     if (sectionWidget == 0) {
         sectionWidget = new Section(this);
-        d->addSection(sectionWidget, section);
+        d->addSection(sectionWidget, sectionToBeAddedTo);
     }
     sectionWidget->addButton(button, priority);
 
@@ -204,15 +207,22 @@ void KoToolBox::paintEvent(QPaintEvent *)
     }
     while(iterator != sections.end()) {
         Section *section = *iterator;
+        QStyleOptionFrameV3 frameoption;
+        frameoption.lineWidth = 1;
+        frameoption.midLineWidth = 0;
 
-        if (section->seperators() & Section::SeperatorTop) {
+        if (section->separators() & Section::SeparatorTop) {
             int y = section->y() - halfSpacing;
-            painter.drawLine(section->x(), y, section->x() + section->width(), y);
+            frameoption.frameShape = QFrame::HLine;
+            frameoption.rect = QRect(section->x(), y, section->width(), 2);
+            style()->drawControl(QStyle::CE_ShapedFrame, &frameoption, &painter);
         }
 
-        if (section->seperators() & Section::SeperatorLeft) {
+        if (section->separators() & Section::SeparatorLeft) {
             int x = section->x() - halfSpacing;
-            painter.drawLine(x, section->y(), x, section->y() + section->height());
+            frameoption.frameShape = QFrame::VLine;
+            frameoption.rect = QRect(x, section->y(), 2, section->height());
+            style()->drawControl(QStyle::CE_ShapedFrame, &frameoption, &painter);
         }
 
         ++iterator;

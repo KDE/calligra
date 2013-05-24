@@ -20,12 +20,13 @@
 
 #include "KoReportPluginManager.h"
 #include "KoReportPluginManagerPrivate.h"
+#include "KoReportPluginInfo.h"
 
 #include <kicon.h>
-#include <QAction>
-#include "KoReportPluginInfo.h"
-#include <KService>
-#include <KServiceTypeTrader>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <kiconloader.h>
+#include <ktoggleaction.h>
 
 //Include the static items
 #include "../items/label/KoReportLabelPlugin.h"
@@ -42,6 +43,7 @@ KoReportPluginManager* KoReportPluginManager::self()
 
 KoReportPluginManager::KoReportPluginManager() : d(new KoReportPluginManagerPrivate())
 {
+    KIconLoader::global()->addAppDir("calligra");
 }
 
 KoReportPluginManager::~KoReportPluginManager()
@@ -67,7 +69,7 @@ QList<QAction*> KoReportPluginManager::actions()
     foreach(KoReportPluginInterface* plugin, plugins) {
         KoReportPluginInfo *info = plugin->info();
         if (info) {
-            QAction *act = new QAction(KIcon(info->icon()), info->name(), this);
+            KToggleAction *act = new KToggleAction(KIcon(info->icon()), info->name(), this);
             act->setObjectName(info->className());
 
             //Store the order priority in the user data field

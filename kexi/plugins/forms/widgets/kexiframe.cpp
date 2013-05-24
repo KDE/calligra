@@ -19,7 +19,7 @@
 
 #include "kexiframe.h"
 
-#include <qpainter.h>
+#include <QPainter>
 #include <qdrawutil.h>
 #include <kexiutils/utils.h>
 #include <formeditor/utils.h>
@@ -47,7 +47,7 @@ KexiFrame::KexiFrame(QWidget * parent, Qt::WindowFlags f)
         , d(new Private())
 {
     //defaults
-    d->frameColor = palette().active().foreground();
+    d->frameColor = palette().color(QPalette::Foreground);
 //! @todo obtain these defaults from current template's style...
     setLineWidth(2);
     setFrameStyle(QFrame::StyledPanel | QFrame::Raised);

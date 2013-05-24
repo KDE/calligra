@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,21 @@
 
 #include <kiconloader.h>
 
+#include <KWPart.h>
+#include <KoDockRegistry.h>
+#include <KoDocumentRdfBase.h>
+#include <KoToolRegistry.h>
+#include <KoMainWindow.h>
+
+#ifdef SHOULD_BUILD_RDF
+#include <KoDocumentRdf.h>
+#include <KoSemanticStylesheetsEditor.h>
+#include "dockers/KWRdfDocker.h"
+#include "dockers/KWRdfDockerFactory.h"
+#endif
+#include "dockers/KWStatisticsDocker.h"
+#include "pagetool/KWPageToolFactory.h"
+
 KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
 
@@ -45,18 +61,16 @@ KWFactory::~KWFactory()
     s_instance = 0;
 }
 
-QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
-    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
 
-    KWDocument *doc = new KWDocument(parentWidget, parent, !bWantKoDocument);
-
-    if (!bWantKoDocument)
-        doc->setReadWrite(false);
-
-    return doc;
+    KWPart *part = new KWPart(parent);
+    KWDocument *doc = new KWDocument(part);
+    part->setDocument(doc);
+    KoToolRegistry::instance()->add(new KWPageToolFactory());
+    return part;
 }
 
 KAboutData *KWFactory::aboutData()
@@ -77,6 +91,15 @@ const KComponentData &KWFactory::componentData()
         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
 
         KIconLoader::global()->addAppDir("calligra");
+
+
+        KoDockRegistry *dockRegistry = KoDockRegistry::instance();
+        dockRegistry->add(new KWStatisticsDockerFactory());
+#ifdef SHOULD_BUILD_RDF
+// TODO reenable after release
+        dockRegistry->add(new KWRdfDockerFactory());
+#endif
+
     }
     return *s_instance;
 }

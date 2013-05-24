@@ -21,7 +21,7 @@
 #ifndef ORACLEPREPAREDSTATEMENT_H
 #define ORACLEPREPAREDSTATEMENT_H
 
-#include <kexidb/preparedstatement.h>
+#include <db/preparedstatement.h>
 #include "oracleconnection_p.h"
 
 //todo 1.1 - unfinished: #define KEXI_USE_MYSQL_STMT

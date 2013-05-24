@@ -47,7 +47,7 @@ WebShape::~WebShape()
 }
 
 void WebShape::paint(QPainter &painter,
-                     const KoViewConverter &converter)
+                     const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF target = converter.documentToView(QRectF(QPointF(0, 0), size()));
     m_webPage->setViewportSize(target.size().toSize());

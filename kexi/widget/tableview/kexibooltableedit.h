@@ -20,7 +20,7 @@
 #ifndef KEXIBOOLTABLEEDIT_H
 #define KEXIBOOLTABLEEDIT_H
 
-#include <qvariant.h>
+#include <QVariant>
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
@@ -32,7 +32,7 @@ class KexiBoolTableEdit : public KexiTableEdit
     Q_OBJECT
 
 public:
-    KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
+    KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiBoolTableEdit();
 

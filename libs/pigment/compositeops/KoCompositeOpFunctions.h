@@ -178,6 +178,22 @@ inline T cfHardLight(T src, T dst) {
 }
 
 template<class T>
+inline T cfSoftLightSvg(T src, T dst) {
+    using namespace Arithmetic;
+
+    qreal fsrc = scale<qreal>(src);
+    qreal fdst = scale<qreal>(dst);
+
+    if(fsrc > 0.5f) {
+        qreal D = (fdst > 0.25f) ? sqrt(fdst) : ((16.0f*fdst - 12.0)*fdst + 4.0f)*fdst;
+        return scale<T>(fdst + (2.0f*fsrc - 1.0f) * (D - fdst));
+    }
+
+    return scale<T>(fdst - (1.0f - 2.0f * fsrc) * fdst * (1.0f - fdst));
+}
+
+
+template<class T>
 inline T cfSoftLight(T src, T dst) {
     using namespace Arithmetic;
     
@@ -185,8 +201,7 @@ inline T cfSoftLight(T src, T dst) {
     qreal fdst = scale<qreal>(dst);
     
     if(fsrc > 0.5f) {
-        qreal D = (fdst > 0.25f) ? sqrt(fdst) : ((16.0f*fdst - 12.0)*fdst + 4.0f)*fdst;
-        return scale<T>(fdst + (2.0f*fsrc - 1.0f) * (D - fdst));
+        return scale<T>(fdst + (2.0f * fsrc - 1.0f) * (sqrt(fdst) - fdst));
     }
     
     return scale<T>(fdst - (1.0f - 2.0f*fsrc) * fdst * (1.0f - fdst));
@@ -294,7 +309,7 @@ inline T cfHardMix(T src, T dst) {
 }
 
 template<class T>
-inline T cfAdditiveSubstractive(T src, T dst) {
+inline T cfAdditiveSubtractive(T src, T dst) {
     using namespace Arithmetic;
     // min(1,max(0,abs(sqr(CB)-sqr(CT))))
     qreal x = sqrt(scale<qreal>(dst)) - sqrt(scale<qreal>(src));

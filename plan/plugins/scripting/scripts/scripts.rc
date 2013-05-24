@@ -1,0 +1,69 @@
+<!DOCTYPE KrossScripting SYSTEM "kpartgui.dtd">
+<KrossScripting>
+
+    <!--
+        The "Resource Busy Information" collection provides scripts to handle rbi content in Plan.
+        //-->
+    <collection name="Resource Busy Information" text="Resource Busy Information" comment="Handle resource busy information">
+        <script text="Export Resource Busy Information" comment="Python script to export busy information to file"
+               name="pyexportbusyinfo"
+               interpreter="python"
+               file="extensions/busyinfoexport.py" />
+        <script text="Import Resource Busy Information" comment="Python script to import busy information from file"
+                name="pyimportbusyinfo"
+                interpreter="python"
+                file="extensions/busyinfoimport.py" />
+        <script text="Clear Resource Busy Information" comment="Python script to clear the imported resource busy information"
+               name="pyclearbusyinfo"
+               interpreter="python"
+               file="extensions/busyinfoclear.py" />
+    </collection>
+    <collection name="import" text="Import" comment="Import content">
+        <script text="Resources from Plan File" comment="Python script to import resources from project file"
+               name="pyimportresources"
+               interpreter="python"
+               file="extensions/resourcesimport.py" />
+    </collection>
+
+    <!--
+        The "export" collection provides scripts to export content from Plan.
+        //-->
+    <collection name="export" text="Export" comment="Export content">
+        <script text="To csv" comment="Export data as comma separated values"
+               name="pyexporttocsv"
+               interpreter="python"
+               file="extensions/plan2csvexport.py" />
+        <script text="To ods" comment="Export data to Open Spreadsheet document"
+               name="pyexporttoods"
+               interpreter="python"
+               file="extensions/plan2odsexport.py" />
+               </collection>
+    
+    <!--
+        The "samples" collection provides misc example scripts to demonstrate
+        parts of the Plan scripting functionality.
+        //-->
+<!--    <collection name="tools" text="Tools" comment="Miscellaneous scripts">
+       <script text="Online Help" comment="Python script that uses the KHTML Part to display the Plan Scripting online help"
+               name="pyonlinehelp"
+               interpreter="python"
+               file="extensions/onlinehelp.py" />
+    </collection>-->
+
+
+    <!--
+        The "samples" collection provides misc example scripts to demonstrate
+        parts of the Plan scripting functionality.
+        //-->
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with Plan" enabled="false">
+        <script text="Print Project Information..." comment="Example python script that print project information"
+            name="pysampleproject"
+            interpreter="python"
+            file="samples/sample_project.py" />
+        <script text="Print Resource busy Information..." comment="Example python script that print resource busy information"
+            name="pysamplebusyinfocheck" 
+            interpreter="python"
+            file="samples/sample_busyinfocheck.py" />
+    </collection>
+
+</KrossScripting>

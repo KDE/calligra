@@ -74,7 +74,7 @@ private:
     };
 
     void loadSettings(const KoXmlDocument &settings, QTextDocument *textDoc);
-    void loadMasterPageStyles(KoShapeLoadingContext& context, bool hasMainTextFS);
+    void loadMasterPageStyles(KoShapeLoadingContext& context);
     void loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPageStyle, HFLoadType headerFooter);
     void loadFinished(KoOdfLoadingContext &context, QTextCursor &cursor);
 

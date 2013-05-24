@@ -27,9 +27,9 @@
 
 #include <climits>
 
-#include <KGlobal>
-#include <KLocale>
-#include <KDebug>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <QVariant>
 #include <QPainter>
@@ -37,9 +37,7 @@
 #include <QEvent>
 #include <QLineEdit>
 
-#ifdef KOPROPERTY_USE_KOLIBS
-# include <KoUnit.h>
-#endif
+#include <KoUnit.h>
 
 using namespace KoProperty;
 
@@ -263,13 +261,13 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     QLineEdit* le = 0;
     if (sb) {
         le = sb->findChild<QLineEdit*>();
+        sb->setFrame(false);
     }
     if (le) {
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
+        le->setFrame(false);
     }
-    sb->setFrame(false);
-    le->setFrame(false);
 /*    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
         QString::fromLatin1(
             "QDoubleSpinBox { border-left: 0; border-right: 0; } "
@@ -317,22 +315,18 @@ void DoubleSpinBox::resizeEvent( QResizeEvent * event )
 
 void DoubleSpinBox::setValue(double v)
 {
-#ifdef KOPROPERTY_USE_KOLIBS
     if (!m_unit.isEmpty()) {
-        KDoubleNumInput::setValue(KoUnit::unit(m_unit).toUserValue(v));
+        KDoubleNumInput::setValue(KoUnit::fromSymbol(m_unit).toUserValue(v));
         return;
     }
-#endif
     KDoubleNumInput::setValue(v);
 }
 
 double DoubleSpinBox::value() const
 {
-#ifdef KOPROPERTY_USE_KOLIBS
     if (!m_unit.isEmpty()) {
-        return KoUnit::unit(m_unit).fromUserValue(KDoubleNumInput::value());
+        return KoUnit::fromSymbol(m_unit).fromUserValue(KDoubleNumInput::value());
     }
-#endif
     return KDoubleNumInput::value();
 }
 
@@ -537,17 +531,16 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
             if (unit.isEmpty())
                 return minValueText;
             else
-                return minValueText + " " + unit;
+                return minValueText + ' ' + unit;
         }
     }
 //! @todo precision?
 //! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
     QString display;
-#ifdef KOPROPERTY_USE_KOLIBS
     if (!unit.isEmpty()) {
-        return KGlobal::locale()->formatNumber(KoUnit::unit(unit).toUserValue(prop->value().toDouble())) + " " + unit;
+        return KGlobal::locale()->formatNumber(KoUnit::fromSymbol(unit).toUserValue(prop->value().toDouble())) +
+               QLatin1Char(' ') + unit;
     }
-#endif
     return KGlobal::locale()->formatNumber(prop->value().toDouble());
 }
 

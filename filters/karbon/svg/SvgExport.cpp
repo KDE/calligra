@@ -34,7 +34,7 @@
 */
 
 #include "SvgExport.h"
-#include "SvgWriter.h"
+#include <SvgWriter.h>
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
@@ -42,9 +42,9 @@
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
-#include <QtCore/QString>
+#include <QString>
 
 K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
 K_EXPORT_PLUGIN(SvgExportFactory("calligrafilters"))
@@ -63,12 +63,11 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
     if (!document)
         return KoFilter::ParsingError;
 
-    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>(document);
+    KarbonDocument * karbonPart = dynamic_cast<KarbonDocument*>(document);
     if (!karbonPart)
         return KoFilter::WrongFormat;
 
-    const KarbonDocument &data = karbonPart->document();
-    SvgWriter writer(data.layers(), data.pageSize());
+    SvgWriter writer(karbonPart->layers(), karbonPart->pageSize());
     if (!writer.save(m_chain->outputFile(), true))
         return KoFilter::CreationError;
 

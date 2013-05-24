@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=vcommand
+Name[bs]=v komanda
+Name[ca]=vcommand
+Name[ca@valencia]=vcommand
+Name[da]=vcommand
+Name[de]=Relais-Steuerteil, senkrecht
 Name[el]=vcommand
+Name[es]=comando vertical
+Name[et]=Vertikaalne kontaktor
+Name[fr]=vcommand
+Name[gl]=Orde vertical
+Name[it]=vcommand
+Name[kk]=реле-басқ-тетігі тік
 Name[nb]=loddrett kommando
 Name[nl]=vcommand
+Name[pl]=v_polecenie
 Name[pt]=comando-v
 Name[pt_BR]=comando-v
+Name[ru]=vcommand
+Name[sk]=vcommand
 Name[sv]=vertikalt kommando
 Name[uk]=Керівний механізм реле (вертикально)
 Name[x-test]=xxvcommandxx

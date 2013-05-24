@@ -45,6 +45,27 @@ public:
         return m_viewFrameBorders;
     }
 
+    void setShowFormattingChars(bool on) {
+        m_showFormattingChars = on;
+    }
+    bool showFormattingChars() const {
+        return m_showFormattingChars;
+    }
+
+    void setShowInlineObjectVisualization(bool on) {
+        m_showInlineObjectVisualization = on;
+    }
+    bool showInlineObjectVisualization() const {
+        return m_showInlineObjectVisualization;
+    }
+
+    void setShowTableBorders(bool on) {
+        m_showTableBorders = on;
+    }
+    bool showTableBorders() const {
+        return m_showTableBorders;
+    }
+
     void setViewRulers(bool on) {
         m_viewRulers = on;
     }
@@ -150,12 +171,14 @@ public:
     void setUnit(const KoUnit &unit);
 
 private:
-    bool m_viewFrameBorders, m_viewRulers, m_viewFormattingChars, m_viewFormattingBreak, m_viewFormattingSpace;
-    bool m_viewFormattingEndParag, m_viewFormattingTabs;
+    bool m_viewFrameBorders, m_viewRulers;
+    bool m_showFormattingChars;
+    bool m_showTableBorders;
     bool m_createBackupFile;
     bool m_statusBarShowPage, m_statusBarShowPageStyle, m_statusBarShowPageSize;
     bool m_statusBarShowLineNumber, m_statusBarShowModified;
     bool m_statusBarShowMouse, m_statusBarShowZoom;
+    bool m_showInlineObjectVisualization;
 
     int m_zoom; /// < zoom level in percent
     KoZoomMode::Mode m_zoomMode;

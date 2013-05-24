@@ -1,9 +1,27 @@
 [Desktop Entry]
 Name=Carrier Routing System
+Name[bs]=Nosač usmjeravanja sistema
+Name[ca]=Carrier Routing System
+Name[ca@valencia]=Carrier Routing System
+Name[da]=Carrier Routing System
+Name[de]=Routing-System eines Netzbetreibers
+Name[el]=Carrier Routing System
+Name[es]=Sistema de enrutado de portadora
+Name[et]=Carrier Routing System
+Name[fr]=Carrier Routing System
+Name[gl]=Sistema portador de encamiñación
+Name[it]=Sistema instradamento carrier
+Name[kk]=Тасушыны маршруттау жүйесі
+Name[lt]=Carrier Routing System
 Name[nb]=Carrier Routing System
+Name[nl]=Carrier-routingsysteem
+Name[pl]=Carrier Routing System
 Name[pt]=Sistema Encaminhamento Portadoras
 Name[pt_BR]=Sistema de roteamento de portadoras
+Name[ru]=Система маршрутизации носителя
+Name[sk]=Nosný routovací systém
 Name[sv]=Carrier Routing System
 Name[uk]=Система маршрутизації носія
 Name[x-test]=xxCarrier Routing Systemxx
+Name[zh_CN]=传送路由选择系统
 Name[zh_TW]=載波路由系統

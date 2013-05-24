@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=contact pair
+Name[bs]=kontakt par
+Name[ca]=parell de contactes
+Name[ca@valencia]=parell de contactes
+Name[da]=kontaktpar
+Name[el]=ζεύγος επαφής
+Name[es]=par de contactos
+Name[et]=Kontaktipaar
+Name[fr]=contact pair
+Name[gl]=Par de contactos
+Name[it]=coppia di contatti
+Name[kk]=қос контакт
+Name[mr]=संपर्क जोडी
 Name[nb]=kontaktpar
 Name[nl]=contactpaar
+Name[pl]=para kontaktu
 Name[pt]=par de contactos
 Name[pt_BR]=par de contatos
+Name[ru]=Контактная пара
+Name[sk]=kontaktný pár
 Name[sv]=kontaktpar
 Name[uk]=Пара контактів
 Name[x-test]=xxcontact pairxx
+Name[zh_CN]=接触对
 Name[zh_TW]=contact pair

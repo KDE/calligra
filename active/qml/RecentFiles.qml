@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,39 +21,61 @@
 
 import QtQuick 1.0
 import CalligraActive 1.0
+import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 ListView {
     id: recentFilesListView
     property int buttonWidth
     property int buttonHeight
+    property string typeFilter
 
     width: parent.width; height: parent.height;
     spacing: 10
 
-    model: recentFilesModel
-    delegate: Button {
-        textPosition: "right"
+    PlasmaCore.SortFilterModel {
+        id: metadataModel
+        sourceModel: metadataInternalModel
+        sortOrder: Qt.AscendingOrder
+    }
 
-        text: modelData.name
-        width: buttonWidth; height: buttonHeight;
-        imageSource: {
-            switch(modelData.type) {
-                case CADocumentInfo.TextDocument:
-                    "qrc:///images/words.png"
-                    break;
-                case CADocumentInfo.Spreadsheet:
-                    "qrc:///images/tables.png"
-                    break;
-                case CADocumentInfo.Presentation:
-                    "qrc:///images/stage.png"
-                    break;
+    model: metadataModel
+    delegate:
+        PlasmaComponents.Button {
+            text: label
+            width: buttonWidth; height: buttonHeight;
+            iconSource: {
+                switch(typeFilter) {
+                    case "PaginatedTextDocument":
+                        "words"
+                        break;
+                    case "Spreadsheet":
+                        "kspread"
+                        break;
+                    case "Presentation":
+                        "stage"
+                        break;
+                }
             }
+
+            onClicked: homeScreen.openDocument(model["url"]);
         }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: homeScreen.openDocument(modelData.path);
+    onTypeFilterChanged: {
+        metadataInternalModel.resourceType = "nfo:" + typeFilter;
+        if (typeFilter == "PaginatedTextDocument") {
+            metadataModel.filterRole = "mimeType";
+            metadataModel.filterRegExp = "application/vnd.oasis.opendocument.text";
+        } else {
+            metadataModel.filterRole = "";
+            metadataModel.filterRegExp = "";
         }
+    }
+
+    PlasmaComponents.Label {
+        text: i18n("No files here")
+        anchors.centerIn: parent
+        visible: recentFilesListView.count == 0 && typeFilter != ""
     }
 }
 

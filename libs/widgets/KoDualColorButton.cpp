@@ -17,7 +17,6 @@
 */
 
 #include "KoDualColorButton.h"
-#include "KoUniColorDialog.h"
 #include "KoColor.h"
 #include <kcolormimedata.h>
 
@@ -25,10 +24,13 @@
 #include "dcolorreset.xpm"
 
 #include <kglobalsettings.h>
-#include <QtGui/QBitmap>
-#include <QtGui/QBrush>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QPainter>
+#include <kcolordialog.h>
+
+#include <QBitmap>
+#include <QBrush>
+#include <QDrag>
+#include <QDragEnterEvent>
+#include <QPainter>
 
 class KoDualColorButton::Private
 {
@@ -132,16 +134,16 @@ void KoDualColorButton::paintEvent(QPaintEvent *)
   QBrush foregroundBrush( d->foregroundColor.toQColor(), Qt::SolidPattern );
   QBrush backgroundBrush( d->backgroundColor.toQColor(), Qt::SolidPattern );
 
-  qDrawShadeRect( &painter, backgroundRect, palette(), false, 2, 0,
+  qDrawShadeRect( &painter, backgroundRect, palette(), false, 1, 0,
                   isEnabled() ? &backgroundBrush : &defBrush );
 
-  qDrawShadeRect( &painter, foregroundRect, palette(), false, 2, 0,
+  qDrawShadeRect( &painter, foregroundRect, palette(), false, 1, 0,
                   isEnabled() ? &foregroundBrush : &defBrush );
 
   painter.setPen( palette().color( QPalette::Shadow ) );
 
-  painter.drawPixmap( foregroundRect.right() + 2, 0, d->arrowBitmap );
-  painter.drawPixmap( 0, foregroundRect.bottom() + 2, d->resetPixmap );
+  painter.drawPixmap( foregroundRect.right() + 1, 0, d->arrowBitmap );
+  painter.drawPixmap( 0, foregroundRect.bottom() + 1, d->resetPixmap );
 }
 
 void KoDualColorButton::dragEnterEvent( QDragEnterEvent *event )
@@ -241,10 +243,10 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     if ( foregroundRect.contains( event->pos() )) {
         if(d->tmpSelection == Foreground ) {
             if( d->popDialog) {
-                KoUniColorDialog *dialog = new KoUniColorDialog(d->foregroundColor, d->dialogParent);
-                if(dialog->exec() == KPageDialog::Accepted) {
-                    d->foregroundColor = dialog->color();
-                    emit foregroundColorChanged( d->foregroundColor );
+                QColor c = d->foregroundColor.toQColor();
+                if (KColorDialog::getColor(c, this) == KColorDialog::Accepted) {
+                    d->foregroundColor.fromQColor(c);
+                    emit foregroundColorChanged(d->foregroundColor);
                 }
             }
             else
@@ -257,10 +259,10 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     } else if ( backgroundRect.contains( event->pos() )) {
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
-                KoUniColorDialog *dialog = new KoUniColorDialog(d->backgroundColor, d->dialogParent);
-                if(dialog->exec() == KPageDialog::Accepted) {
-                    d->backgroundColor = dialog->color();
-                    emit backgroundColorChanged( d->backgroundColor );
+                QColor c = d->backgroundColor.toQColor();
+                if (KColorDialog::getColor(c, this) == KColorDialog::Accepted) {
+                    d->backgroundColor.fromQColor(c);
+                    emit backgroundColorChanged(d->backgroundColor);
                 }
             }
             else
@@ -275,3 +277,4 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
 }
 
 #include <KoDualColorButton.moc>
+;

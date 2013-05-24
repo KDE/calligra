@@ -22,14 +22,14 @@
 
 #include <klocale.h>
 #include <KoXmlNS.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoOdfDocument.h>
 #include <KoShapeLoadingContext.h>
 
 CommentShapeFactory::CommentShapeFactory()
 : KoShapeFactoryBase(COMMENTSHAPEID, i18n("Comment"))
 {
-    setOdfElementNames(KoXmlNS::officeooo, QStringList("annotation"));
+    setXmlElementNames(KoXmlNS::officeooo, QStringList("annotation"));
     setHidden(true);
 }
 
@@ -38,7 +38,7 @@ CommentShapeFactory::~CommentShapeFactory()
 }
 
 
-KoShape* CommentShapeFactory::createDefaultShape(KoResourceManager* documentResources) const
+KoShape* CommentShapeFactory::createDefaultShape(KoDocumentResourceManager* documentResources) const
 {
     return new CommentShape(documentResources);
 }

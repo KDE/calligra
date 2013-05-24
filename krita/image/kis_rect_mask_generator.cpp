@@ -37,7 +37,12 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, 
         d->m_c = 0;
     } else {
         d->m_c = (KisMaskGenerator::d->fv / KisMaskGenerator::d->fh);
+#ifdef Q_CC_MSVC
         Q_ASSERT(!isnan(d->m_c));
+#else
+        Q_ASSERT(!std::isnan(d->m_c));
+#endif
+
     }
     d->m_halfWidth = KisMaskGenerator::d->diameter * 0.5;
     d->m_halfHeight = d->m_halfWidth * KisMaskGenerator::d->ratio;
@@ -46,6 +51,11 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, 
 KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
 {
     delete d;
+}
+
+bool KisRectangleMaskGenerator::shouldSupersample() const
+{
+    return width() < 10 || height() < 10;
 }
 
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const

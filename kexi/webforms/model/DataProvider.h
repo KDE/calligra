@@ -21,9 +21,9 @@
 #ifndef KEXIWEBFORMS_DATAPROVIDER_H
 #define KEXIWEBFORMS_DATAPROVIDER_H
 
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/drivermanager.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/drivermanager.h>
 
 class QString;
 

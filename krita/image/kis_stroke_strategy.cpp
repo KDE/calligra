@@ -32,40 +32,37 @@ KisStrokeStrategy::~KisStrokeStrategy()
 }
 
 
-KisDabProcessingStrategy* KisStrokeStrategy::createInitStrategy()
+KisStrokeJobStrategy* KisStrokeStrategy::createInitStrategy()
 {
     return 0;
 }
 
-KisDabProcessingStrategy* KisStrokeStrategy::createFinishStrategy()
+KisStrokeJobStrategy* KisStrokeStrategy::createFinishStrategy()
 {
     return 0;
 }
 
-KisDabProcessingStrategy* KisStrokeStrategy::createCancelStrategy()
+KisStrokeJobStrategy* KisStrokeStrategy::createCancelStrategy()
 {
     return 0;
 }
 
-KisDabProcessingStrategy* KisStrokeStrategy::createDabStrategy()
+KisStrokeJobStrategy* KisStrokeStrategy::createDabStrategy()
 {
     return 0;
 }
 
-KisDabProcessingStrategy::DabProcessingData*
-KisStrokeStrategy::createInitData()
+KisStrokeJobData* KisStrokeStrategy::createInitData()
 {
     return 0;
 }
 
-KisDabProcessingStrategy::DabProcessingData*
-KisStrokeStrategy::createFinishData()
+KisStrokeJobData* KisStrokeStrategy::createFinishData()
 {
     return 0;
 }
 
-KisDabProcessingStrategy::DabProcessingData*
-KisStrokeStrategy::createCancelData()
+KisStrokeJobData* KisStrokeStrategy::createCancelData()
 {
     return 0;
 }

@@ -21,10 +21,10 @@
 #include <kapplication.h>
 
 //#include <tableview/kexitableview.h>
-/*#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>*/
+/*#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/cursor.h>*/
 
 #include "main/startup/KexiStartupDialog.h"
 #include "main/startup/KexiConnSelector.h"
@@ -41,8 +41,8 @@ int main(int argc, char* argv[])
     /* KexiTableView tv;
       app.setMainWidget(&tv);
 
-      KexiTableViewData data;
-      KexiTableViewColumn col;
+      KexiDB::TableViewData data;
+      KexiDB::TableViewColumn col;
       col.type = QVariant::Int; col.caption = "Id"; data.addColumn( col );
       col.type = QVariant::String; col.caption = "Name"; data.addColumn( col );
       col.type = QVariant::Int; col.caption = "Age"; data.addColumn( col );

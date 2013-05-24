@@ -19,11 +19,15 @@
 #include "kis_hline_iterator.h"
 
 
-KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable) : KisBaseIterator(dataManager, writable, offsetX, offsetY)
+KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable)
+    : KisBaseIterator(dataManager, writable, offsetX, offsetY)
 {
     x -= offsetX;
     y -= offsetY;
     Q_ASSERT(dataManager != 0);
+
+    Q_ASSERT(w > 0); // for us, to warn us when abusing the iterators
+    if (w < 1) w = 1;  // for release mode, to make sure there's always at least one pixel read.
 
     m_x = x;
     m_y = y;
@@ -139,15 +143,20 @@ KisHLineIterator2::~KisHLineIterator2()
 }
 
 
-quint8 * KisHLineIterator2::rawData()
+quint8* KisHLineIterator2::rawData()
 {
     return m_data;
 }
 
 
-const quint8 * KisHLineIterator2::oldRawData() const
+const quint8* KisHLineIterator2::oldRawData() const
 {
     return m_oldData;
+}
+
+const quint8* KisHLineIterator2::rawDataConst() const
+{
+    return m_data;
 }
 
 void KisHLineIterator2::switchToTile(qint32 xInTile)
@@ -158,9 +167,12 @@ void KisHLineIterator2::switchToTile(qint32 xInTile)
     m_data = m_tilesCache[m_index].data;
     m_oldData = m_tilesCache[m_index].oldData;
 
-    m_data += m_pixelSize * (m_yInTile * KisTileData::WIDTH);
+    int offset_row = m_pixelSize * (m_yInTile * KisTileData::WIDTH);
+    m_data += offset_row;
     m_dataRight = m_data + m_tileWidth;
-    m_data  += m_pixelSize * xInTile;
+    int offset_col = m_pixelSize * xInTile;
+    m_data  += offset_col;
+    m_oldData += offset_row + offset_col;
 }
 
 

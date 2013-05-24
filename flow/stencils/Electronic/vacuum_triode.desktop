@@ -1,11 +1,27 @@
 [Desktop Entry]
 Name=vacuum triode
+Name[bs]=vakum trioda
+Name[ca]=triode de buit
+Name[ca@valencia]=triode de buit
+Name[cs]=vakuová trioda
+Name[da]=vacuumtriode
+Name[de]=Vakuum-Triode
 Name[el]=τρίοδος κενού
+Name[es]=triodo vacío
+Name[et]=Vaakumtriood
+Name[fr]=triode vacuum
+Name[gl]=Tríodo de baleiro
+Name[it]=triodo a vuoto
+Name[kk]=лампа-триод
 Name[nb]=vakuum-triode
 Name[nl]=vacuum triode
+Name[pl]=trioda próżniowa
 Name[pt]=tríodo vácuo
 Name[pt_BR]=triodo de vácuo
+Name[ru]=Вакуумный триод
+Name[sk]=vákuová trióda
 Name[sv]=vakuumtriod
 Name[uk]=Вакуумний тріод
 Name[x-test]=xxvacuum triodexx
+Name[zh_CN]=真空三极管
 Name[zh_TW]=vacuum triode

@@ -49,7 +49,7 @@ KoFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArra
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -62,7 +62,7 @@ KoFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        exrConverter ib(doc, doc -> undoAdapter());
+        exrConverter ib(doc);
 
 
         switch (ib.buildImage(url)) {

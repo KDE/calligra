@@ -26,8 +26,8 @@
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <KexiWindowData.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/connection.h>
+#include <db/queryschema.h>
+#include <db/connection.h>
 
 namespace KexiDB
 {
@@ -45,7 +45,7 @@ public:
     KexiQueryPart(QObject *parent, const QVariantList &);
     virtual ~KexiQueryPart();
 
-    virtual bool remove(KexiPart::Item &item);
+    virtual tristate remove(KexiPart::Item &item);
 
     //! @short Temporary data kept in memory while switching between Query Window's views
     class TempData : public KexiWindowData,

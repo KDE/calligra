@@ -1,9 +1,23 @@
 [Desktop Entry]
 Name=realtimeglobalfield
+Name[bs]=globalnaoblaststvarnogvremena
+Name[ca]=camp global en temps real
+Name[ca@valencia]=camp global en temps real
+Name[da]=realtimeglobalfield
 Name[el]=realtimeglobalfield
+Name[es]=campo global en tiempo real
+Name[et]=Globaalne reaalajaväli
+Name[fr]=realtimeglobalfield
+Name[gl]=Campo global en tempo real
+Name[it]=realtimeglobalfield
+Name[kk]=толықуақытжалпыөрісі
 Name[nb]=realtimeglobalfield
+Name[nl]=realtimeglobalfield
+Name[pl]=globalnepolewczasierzeczywistym
 Name[pt]=campo-global-tempo-real
 Name[pt_BR]=campo-global-tempo-real
+Name[ru]=Глобальное поле реального времени
+Name[sk]=realtimeglobalfield
 Name[sv]=globalt realtidsfält
 Name[uk]=Загальне поле у режимі реального часу
 Name[x-test]=xxrealtimeglobalfieldxx

@@ -42,6 +42,7 @@
  *
  * SRC: wv2/src/generator/generator_wword8.htm
  */
+
 #define stiNormal      0     // 0x0000  Default paragraph style
 
 #define stiLev1        1     // 0x0001
@@ -177,12 +178,50 @@ enum PgbOffsetFrom
 };
 
 /**
+ * An unsigned integer that specifies the type of border.  Values that are
+ * larger than 0x1B are not valid unless they describe a page border, in which
+ * case they can be a value in the range of 0x40 to 0xE3, inclusive.
+ * [MS-DOC] — v20101219
+ */
+enum BrcType
+{
+    BorderNone,                  // 0x00  No border.
+    BorderSingle,                // 0x01  A single line.
+    BorderDouble = 0x03,         // 0x03  A double line.
+    BorderThin = 0x05,           // 0x05  A thin single solid line.
+    BorderDotted,                // 0x06  A dotted border.
+    BorderDashed,                // 0x07  A dashed border with large gaps between the dashes.
+    BorderDotDash,               // 0x08  A border of alternating dots and dashes.
+    BorderDotDotDash,            // 0x09  A border of alternating sets of two dots and one dash.
+    BorderTriple,                // 0x0A  A triple line border.
+    BorderThinThickSmallGap,     // 0x0B  A thin outer border and a thick inner border with a small gap between them.
+    BorderThickThinSmallGap,     // 0x0C  A thin outer border and thick inner border with a small gap between them.
+    BorderThinThickThinSmallGap, // 0x0D  A thin outer border, a thick middle border, and a thin inner border with a small gap between them.
+    BorderThinThickMediumGap,    // 0x0E  A thin outer border and a thick inner border with a medium gap between them.
+    BorderThickThinMediumGap,    // 0x0F  A thin outer border and a thick inner border and a medium gap between them.
+    BorderThinThickThinMediumGap,// 0x10  A thin outer border, a thick middle border, and a thin inner border with a medium gaps between them.
+    BorderThinThickLargeGap,     // 0x11  A thick outer border and a thin inner border with a large gap between them.
+    BorderThickThinLargeGap,     // 0x12  A thin outer border and a thick inner border with a large gap between them.
+    BorderThinThickThinLargeGap, // 0x13  A thin outer border, a thick middle border, and a thin inner border with large gaps between them.
+    BorderWave,                  // 0x14  A single wavy line.
+    BorderDoubleWave,            // 0x15  A double wavy line.
+    BorderDashSmallGap,          // 0x16  A dashed border with small gaps between the dashes.
+    BorderDashDotStroked,        // 0x17  A border consisting of alternating groups of 5 and 1 thin diagonal lines.
+    BorderThreeDEmboss,          // 0x18  A thin light gray outer border, a thick medium gray middle border, and a thin black inner border with no gaps between them.
+    BorderThreeDEngrave,         // 0x19  A thin black outer border, a thick medium gray middle border, and a thin light gray inner border with no gaps between them.
+    BorderOutset,                // 0x1A  A thin light gray outer border and a thin medium gray inner border with a large gap between them.
+    BorderInset,                 // 0x1B  A thin medium gray outer border and a thin light gray inner border with a large gap between them.
+                                 // 0x40 - 0xE3  An image border.
+    BorderNil = 0xFF             // 0xFF  This MUST be ignored.
+};
+
+/**
  * Specifies the type of the section break that is being described.
  * [MS-DOC] — v20101219
  */
-enum SBkcOperand 
+enum SBkcOperand
 {
-    bkcContinuous = 0x00, 
+    bkcContinuous = 0x00,
     bkcNewColumn,
     bkcNewPage,
     bkcEvenPage,
@@ -248,6 +287,32 @@ enum IPAT
     ipatPctNew95,         //0x003C  95%,                 ST_Shd: pct95
     ipatPctNew97,         //0x003D  97.5% fill pattern
     ipatNil = 0xFFFF      //0xFFFF  Nil,                 ST_Shd: nil
+};
+
+/**
+ * The Kul enumeration specifies the style of underlining for text.  [MS-DOC] —
+ * v20101219
+ */
+enum KUL
+{
+    kulNone,                //0x00 No underlining.
+    kulSingle,              //0x01 Normal single underline.
+    kulWords,               //0x02 Underline words only.
+    kulDouble,              //0x03 Double underline.
+    kulDotted,              //0x04 Dotted underline.
+    kulThick = 0x06,        //0x06 Heavy underline.
+    kulDash,                //0x07 Dashed underline.
+    kulDotDash = 0x09,      //0x09 Dot-dash underline.
+    kulDotDotDash,          //0x0A Dot-dot-dash underline.
+    kulWavy,                //0x0B Wavy underline.
+    kulDottedHeavy = 0x14,  //0x14 Heavy dotted underline.
+    kulDashHeavy = 0x17,    //0x17 Heavy dashed underline.
+    kulDotDashHeavy = 0x19, //0x19 Heavy dot-dash underline.
+    kulDotDotDashHeavy,     //0x1A Heavy dot-dot-dash underline.
+    kulWavyHeavy,           //0x1B Heavy wavy underline.
+    kulDashLong = 0x27,     //0x27 Long-dash underline.
+    kulWavyDouble = 0x2B,   //0x2B Wavy double underline.
+    kulDashLongHeavy = 0x37 //0x37 Heavy long-dash underline.
 };
 
 /**
@@ -331,6 +396,41 @@ enum ST_StyleType
     sgcTbl = 3,    //Table style
     sgcNmbr = 4    //Numbering style
 };
+
+/**
+ * Specifies the type of alignment which is applied to the text that
+ * is entered at the tab stop.
+ */
+enum TabJC {
+    jcLeft,      //Left justification.
+    jcCenter,    //Center justification.
+    jcRight,     //Right justification.
+    jcDecimal,   //[1]
+    jcBar,       //Specifies that the current tab is a bar tab.
+    jcList = 0x6 //Specifies that the current tab is a list tab.
+};
+
+//specifies the characters that are used to fill in the space which is created
+//by a tab that ends at a custom tab stop.
+enum TabLC {
+    tlcNone,         //No leader.
+    tlcDot,          //Dot leader.
+    tlcHyphen,       //Dashed leader.
+    tlcUnderscore,   //Underscore leader.
+    tlcHeavy,        //Same as tlcUnderscore.
+    tlcMiddleDot,    //Centered dot leader.
+    tlcDefault = 0x7 //Same as tlcNone.
+};
+
+/*
+  [1] - Specifies that the current tab stop results in a location in
+  the document at which all following text is aligned around the first
+  decimal separator in the following text runs.  If there is no
+  decimal separator, text is aligned around the implicit decimal
+  separator after the last digit of the first numeric value that
+  appears in the following text.  All text runs before the first
+  decimal character appear before the tab stop; all text runs after it
+  appear after the tab stop location. */
 
 /*
  * ---------------------------------------------------

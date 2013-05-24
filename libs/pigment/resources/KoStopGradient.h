@@ -18,8 +18,8 @@
 #ifndef KOSTOPGRADIENT_H
 #define KOSTOPGRADIENT_H
 
-#include <QtCore/QPair>
-#include <QtGui/QGradient>
+#include <QPair>
+#include <QGradient>
 
 #include "KoColor.h"
 #include "KoAbstractGradient.h"
@@ -37,7 +37,7 @@ class PIGMENTCMS_EXPORT KoStopGradient : public KoAbstractGradient
 {
 
 public:
-    KoStopGradient(const QString& filename);
+    explicit KoStopGradient(const QString &filename);
     virtual ~KoStopGradient();
 
     virtual bool load();

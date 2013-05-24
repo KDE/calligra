@@ -29,7 +29,7 @@
 #include <wv2/src/functordata.h>
 #include <wv2/src/fields.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QRegExp>
 #include <QString>
 #include <QMap>
@@ -39,7 +39,7 @@
 
 //#define CONVERSION_DEBUG_SHD
 
-static QMap<int, qreal> myValues() {
+static QMap<int, qreal> prepareShdPairs() {
     QMap<int, qreal> shadingTable;
     shadingTable[2] = 0.05;
     shadingTable[3] = 0.10;
@@ -83,7 +83,7 @@ static QMap<int, qreal> myValues() {
     return shadingTable;
 }
 
-static const QMap<int, qreal> SHADING_TABLE = myValues();
+static const QMap<int, qreal> SHADING_TABLE = prepareShdPairs();
 
 
 QString Conversion::styleName2QString(const wvWare::UString& str)
@@ -245,9 +245,9 @@ int yMix(int yFore, int yBack, qreal pct) {
     return yBack + (yFore - yBack) * pct;
 }
 
-QString Conversion::contrastFontColor(const QString& bgColor)
+QString Conversion::contrastColor(const QString& color)
 {
-    if (bgColor.isNull()) {
+    if (color.isNull()) {
         return QColor(Qt::black).name();
     }
 
@@ -265,7 +265,7 @@ QString Conversion::contrastFontColor(const QString& bgColor)
     }
     return  QColor(d, d, d).name();
 #else
-    int luminosity = luma(QColor(bgColor));
+    int luminosity = luma(QColor(color));
     if (luminosity <= 60) {
          return QColor(Qt::white).name();
     } else {
@@ -279,16 +279,25 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     // NOTE: by definition, see
     // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
 
-    if (shd.shdAutoOrNill) {
-        return contrastFontColor(bgColor);
+#ifdef CONVERSION_DEBUG_SHD
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "bgColor:" << bgColor;
+    qDebug() << "fontColor:" << fontColor;
+    qDebug() << "ipat:" << shd.ipat;
+    qDebug() << "cvBack:" << hex << shd.cvBack;
+    qDebug() << "cvFore:" << hex << shd.cvFore;
+#endif
+
+    if (shd.isShdAuto() || shd.isShdNil()) {
+        return contrastColor(bgColor);
     }
 
     QColor foreColor;
     QColor backColor;
 
     if (shd.cvFore == wvWare::Word97::cvAuto) {
-        if (fontColor.isNull()) {
-            foreColor = QColor(contrastFontColor(bgColor));
+        if (fontColor.isEmpty()) {
+            foreColor = QColor(contrastColor(bgColor));
         } else {
             foreColor = QColor(fontColor);
         }
@@ -297,7 +306,7 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     }
 
     if (shd.cvBack == wvWare::Word97::cvAuto) {
-        if (bgColor.isNull()) {
+        if (bgColor.isEmpty()) {
             backColor = QColor(Qt::white).name();
         } else {
             backColor = QColor(bgColor);
@@ -332,7 +341,6 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     qDebug() << (shd.cvFore == wvWare::Word97::cvAuto);
     qDebug() << (shd.cvBack == wvWare::Word97::cvAuto);
     qDebug() << "ipat" << shd.ipat;
-
     qDebug() << "fore" << QString::number(shd.cvFore | 0xff000000, 16).right(6) << foreColor.name();
     qDebug() << "back" << QString::number(shd.cvBack | 0xff000000, 16).right(6) << backColor.name();
     qDebug() << "luminosity " << luminosity;
@@ -350,19 +358,19 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
 
 QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
 {
-    QString ret;
-    if (shd.shdAutoOrNill) {
-        return ret;
-    }
-
 #ifdef CONVERSION_DEBUG_SHD
-    qDebug() << "==> shdToColorStr";
+    qDebug() << Q_FUNC_INFO;
     qDebug() << "bgColor:" << bgColor;
     qDebug() << "fontColor:" << fontColor;
     qDebug() << "ipat:" << shd.ipat;
-    qDebug() << "cvBack:" << QColor(shd.cvBack).name();
-    qDebug() << "cvFore:" << QColor(shd.cvFore).name();
+    qDebug() << "cvBack:" << hex << shd.cvBack;
+    qDebug() << "cvFore:" << hex << shd.cvFore;
 #endif
+
+    QString ret;
+    if (shd.isShdAuto() || shd.isShdNil()) {
+        return ret;
+    }
 
     switch (shd.ipat) {
     case ipatAuto: // "Clear" in MS Word UI
@@ -372,7 +380,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         break;
     case ipatSolid:
         if (shd.cvFore == wvWare::Word97::cvAuto) {
-            ret = contrastFontColor(bgColor);
+            ret = contrastColor(bgColor);
         } else {
             ret.append(QString::number(shd.cvFore | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
@@ -382,7 +390,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         break;
     default:
     {
-        //handle remaining Ipat values
+        //handle remaining ipat values
         quint32 grayClr = shadingPatternToColor(shd.ipat);
         if (grayClr == wvWare::Word97::cvAuto) {
             ret = computeAutoColor(shd, bgColor, fontColor);
@@ -403,7 +411,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
             QColor foreColor;
             QColor backColor;
             if (shd.cvFore == wvWare::Word97::cvAuto) {
-                foreColor = QColor(contrastFontColor(bgColor));
+                foreColor = QColor(contrastColor(bgColor));
                 //qDebug() << "fr auto" << foreColor.name() << "bgColor" << bgColor;
             } else {
                 foreColor = QColor(shd.cvFore);
@@ -412,7 +420,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
 
             if (shd.cvBack == wvWare::Word97::cvAuto) {
                 // it's not autocolor, it's probably background color
-                backColor = contrastFontColor(foreColor.name());
+                backColor = contrastColor(foreColor.name());
                 //qDebug() << "bg auto" << backColor.name();
             } else {
                 backColor = QColor(shd.cvBack);
@@ -629,85 +637,84 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 
     //set the border width
     qreal w;
-    if (brc.brcType < 0x40) // this is according to http://msdn.microsoft.com/en-us/library/dd907496.aspx
+    // this is according to http://msdn.microsoft.com/en-us/library/dd907496.aspx
+    if (brc.brcType < 0x40) {
         w = brc.dptLineWidth / 8.0;
-    else
+    } else {
         w = brc.dptLineWidth;
+    }
 
     QString style("solid");   //reasonable default
     QString color = '#' + QString::number(brc.cv | 0xff000000, 16).right(6).toUpper();
 
     switch (brc.brcType) {
-    case 0: // none
+    case BorderNone:
         //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise words will show a border!
         style = "none";
         break;
-    case 11: // thin-thick small gap
-    case 12: // thick-thin small gap
+    case BorderThinThickSmallGap:
+    case BorderThickThinSmallGap:
         style = "double";
         w *= 1.5;
         break;
-    case 17: // thin-thick large gap
-    case 18: //  thick-thin large gap
+    case BorderThinThickLargeGap:
+    case BorderThickThinLargeGap:
         style = "double";
         w *= 1.75;
         break;
-    case 14: // thin-thick medium gap
-    case 15: // thick-thin medium gap
+    case BorderThinThickMediumGap:
+    case BorderThickThinMediumGap:
         style = "double";
         w *= 2.0;
         break;
-    case 3: // double
+    case BorderDouble:
         style = "double";
         w *= 3;
         break;
-    case 5: //"hairline"
+    case BorderThin: //"hairline"
         w = 0.01;
         break;
 
         //ODF doesn't support dot dashed or wavy borders???
 
-    case 7: // dash large gap
-    case 22: // dash small gap
-        style = "dashed"; // Words: dashes //FIXME
+    case BorderDashed:
+    case BorderDashSmallGap:
+        style = "dashed"; // Words: dashes //FIXME:
         break;
-    case 6: // dot
+    case BorderDotted:
         style = "dotted";
         break;
-    case 8: // dot dash
-        style = "dashed"; //FIXME
+    case BorderDotDash:
+        style = "dashed"; //FIXME:
         break;
-    case 9: // dot dot dash
-        style = "dashed"; //FIXME
+    case BorderDotDotDash:
+        style = "dashed"; //FIXME:
         break;
-
-    case 20: // wave
+    case BorderWave:
         w *= 4; // Note: we can't make a wave but at least we can make it just as wide
         break;
-    case 21: // double wave
+    case BorderDoubleWave:
         w *= 6.25;
         style = "double"; // Note: we can't make a wave but at least we can make it just as wide
         break;
-
-    case 10: // triple
+    case BorderTriple:
         w *= 5;
         style = "double"; //Note: odf only support double so that will have to do
         break;
-
+    //FIXME: BorderInset = 0x1B (27)
     case 25: // inset
         style = "inset";
         break;
-
-    case 13: // thin-thick-thin small gap
-    case 16: // thin-thick-thin medium gap
-    case 19: // thin-thick-thin large gap
+    case BorderThinThickThinSmallGap:
+    case BorderThinThickThinMediumGap:
+    case BorderThinThickThinLargeGap:
     default:
-        //if a fancy unsupported border is specified -> better a normal border than none
-        //so just leave values as defaults
+        //if a fancy unsupported border is specified -> better a normal border
+        //than none so just leave values as defaults
         break;
     }
 
-    QString width =  QString::number(w) + "pt";
+    QString width =  QString::number(w,'f') + "pt";
 
     QString value(width);
     value.append(" ");
@@ -919,9 +926,22 @@ qreal Conversion::twipsToPt(int twips)
     return pt;
 }
 
-QString Conversion::rncToStartNumberingAt(int rnc)
+const char* Conversion::fpcToFtnPosition(quint16 fpc)
 {
-    switch(rnc) {
+    switch (fpc) {
+    case 0:
+        return "section";
+    case 2:
+        return "text";
+    case 1:
+    default:
+        return "page";
+    }
+}
+
+const char* Conversion::rncToStartNumberingAt(quint16 rnc)
+{
+    switch (rnc) {
     case 0:
         return "document";
     case 1:
@@ -934,8 +954,8 @@ QString Conversion::rncToStartNumberingAt(int rnc)
 
 const char* Conversion::getHorizontalPos(qint16 dxaAbs)
 {
-    // [MS-DOC] — v20101219: (-4) - center, (-8) - right, (-12) - inside, (-16)
-    // - outside
+    // [MS-DOC] — v20101219, sprmPDxaAbs:
+    // (-4) center, (-8) right, (-12) inside, (-16) outside
     switch (dxaAbs) {
     case (-4):
         return "center";
@@ -952,7 +972,8 @@ const char* Conversion::getHorizontalPos(qint16 dxaAbs)
 
 const char* Conversion::getHorizontalRel(uint pcHorz)
 {
-    // [MS-DOC] — v20101219: 0 - current column, 1 - margin, 2 - page
+    // [MS-DOC] — v20101219:
+    // 0 - current column, 1 - margin, 2 - page
     switch (pcHorz) {
     case 0:
         return "paragraph";
@@ -967,8 +988,8 @@ const char* Conversion::getHorizontalRel(uint pcHorz)
 
 const char* Conversion::getVerticalPos(qint16 dyaAbs)
 {
-    // [MS-DOC] — v20101219: (-4) - top, (-8) - middle, (-12) - bottom, (-16) -
-    // inside, (-20) - outside
+    // [MS-DOC] — v20101219, sprmPDyaAbs:
+    // (-4) top, (-8) middle, (-12) bottom, (-16) inside, (-20) outside
     switch (dyaAbs) {
     case (-4):
         return "top";
@@ -987,7 +1008,8 @@ const char* Conversion::getVerticalPos(qint16 dyaAbs)
 
 const char* Conversion::getVerticalRel(uint pcVert)
 {
-    // [MS-DOC] — v20101219: 0 - margin, 1 - page, 2 - paragraph
+    // [MS-DOC] — v20101219:
+    // 0 - margin, 1 - page, 2 - paragraph
     switch (pcVert) {
     case 0:
         return "page-content";

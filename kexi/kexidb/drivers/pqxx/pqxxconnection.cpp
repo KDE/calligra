@@ -18,11 +18,11 @@
 */
 
 #include "pqxxconnection.h"
-#include <qvariant.h>
-#include <qfile.h>
+#include <QVariant>
+#include <QFile>
 #include <kdebug.h>
-#include <kexidb/error.h>
-#include <kexidb/global.h>
+#include <db/error.h>
+#include <db/global.h>
 #include <klocale.h>
 #include <string>
 #include "pqxxpreparedstatement.h"
@@ -319,7 +319,7 @@ quint64 pqxxSqlConnection::drv_lastInsertRowID()
 //<queries taken from pqxxMigrate>
 bool pqxxSqlConnection::drv_containsTable(const QString &tableName)
 {
-    bool success;
+    bool success=false;
     return resultExists(QString("select 1 from pg_class where relkind='r' and relname LIKE %1")
                         .arg(driver()->escapeString(tableName)), success) && success;
 }

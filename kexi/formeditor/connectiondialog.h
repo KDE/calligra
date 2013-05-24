@@ -30,11 +30,12 @@ namespace KexiDB
 {
 class ResultInfo;
 class RecordData;
+class TableViewData;
 }
 
 class QLabel;
 class KexiTableView;
-class KexiTableViewData;
+
 
 namespace KFormDesigner
 {
@@ -101,15 +102,10 @@ protected slots:
      If the user presses 'Cancel', nothing happens. */
     virtual void slotOk();
 
-protected:
-    Form *m_form;
-    ConnectionBuffer *m_buffer;
-    KexiTableView  *m_table;
-    KexiTableViewData  *m_data;
-    KexiTableViewData *m_widgetsColumnData,
-    *m_slotsColumnData, *m_signalsColumnData;
-    QLabel  *m_pixmapLabel, *m_textLabel;
-    KPushButton *m_addButton, *m_removeButton;
+private:
+    class Private;
+
+    Private* const d;
 };
 
 }

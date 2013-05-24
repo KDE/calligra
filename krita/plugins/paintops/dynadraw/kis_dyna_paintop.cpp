@@ -34,7 +34,7 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_selection.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 
 #include "kis_dynaop_option.h"
 
@@ -81,7 +81,7 @@ KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1,
     if (!painter()) return KisDistanceInformation();
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = source()->createCompositionSourceDevice();
     } else {
         m_dab->clear();
     }

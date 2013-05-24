@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,13 +21,13 @@
 #ifndef KEXIFORMSCROLLVIEW_H
 #define KEXIFORMSCROLLVIEW_H
 
-#include "kexidataprovider.h"
+#include <widget/dataviewcommon/kexidataprovider.h>
 #include <formeditor/kexiformeventhandler.h>
 #include "widgets/kexidbform.h"
 #include <widget/kexiscrollview.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include <widget/tableview/kexidataawareobjectiface.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
 
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
 /*! This class also implements:
@@ -38,6 +38,9 @@
 
     @see KexiTableView
 */
+
+#include <core/KexiRecordNavigatorHandler.h>
+
 class KEXIFORMUTILS_EXPORT KexiFormScrollView :
             public KexiScrollView,
             public KexiRecordNavigatorHandler,
@@ -53,9 +56,7 @@ public:
     KexiFormScrollView(QWidget *parent, bool preview);
     virtual ~KexiFormScrollView();
 
-    void setForm(KFormDesigner::Form *form) {
-        m_form = form;
-    }
+    void setForm(KFormDesigner::Form *form);
 
     /*! Reimplemented from KexiDataAwareObjectInterface
      for checking 'readOnly' flag from a widget
@@ -71,23 +72,16 @@ public:
      Reimplemented for KexiDataAwareObjectInterface:
      column data corresponding to widget number is used here
      (see fieldNumberForColumn()). */
-    virtual KexiTableViewColumn* column(int col);
+    virtual KexiDB::TableViewColumn* column(int col);
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. */
-    virtual int fieldNumberForColumn(int col) {
-        KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
-                                              dbFormWidget()->orderedDataAwareWidgets()->at(col));
-        if (!item)
-            return -1;
-        KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find(item));
-        return it != m_fieldNumbersForDataItems.constEnd() ? (int)it.value() : -1;
-    }
+    virtual int fieldNumberForColumn(int col);
 
     /*! @internal Used by KexiFormView in view switching. */
     void beforeSwitchView();
 
-    /*! \return last row visible on the screen (counting from 0).
+    /*! \return last record visible on the screen (counting from 0).
      The returned value is guaranteed to be smaller or equal to currentRow() or -1
      if there are no rows.
      Implemented for KexiDataAwareObjectInterface. */
@@ -137,7 +131,7 @@ public slots:
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
 //! @todo unused for now, will be used for continuous forms
 /*    virtual void vScrollBarSliderReleased() {
         KexiDataAwareObjectInterface::vScrollBarSliderReleased();
@@ -158,31 +152,32 @@ signals:
     void currentItemDeleteRequest();
     void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
     void dataRefreshed();
-    void dataSet(KexiTableViewData *data);
+    void dataSet(KexiDB::TableViewData *data);
     void itemSelected(KexiDB::RecordData*);
     void cellSelected(int col, int row);
     void sortedColumnChanged(int col);
     void rowEditStarted(int row);
     void rowEditTerminated(int row);
+    void updateSaveCancelActions();
     void reloadActions();
 
 protected slots:
     void slotResizingStarted();
 
-    //! Handles KexiTableViewData::rowRepaintRequested() signal
+    //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
-    //! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+    //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
     virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
         KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
     }
 
-    //! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
     virtual void slotRowDeleted() {
         KexiDataAwareObjectInterface::slotRowDeleted();
     }
 
-    //! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData* record, bool repaint);
 
     //! Like above, not db-aware version
@@ -195,7 +190,7 @@ protected slots:
     }
 
     /*! Reloads data for this widget.
-     Handles KexiTableViewData::reloadRequested() signal. */
+     Handles KexiDB::TableViewData::reloadRequested() signal. */
     virtual void reloadData() {
         KexiDataAwareObjectInterface::reloadData();
     }
@@ -273,10 +268,16 @@ protected:
     virtual void valueChanged(KexiDataItemInterface* item);
 
     /*! Reimplemented from KexiFormDataProvider.
-     \return information whether we're currently at new row or now.
+     \return information whether we're currently at new record or not.
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
+
+    /*! Implementation for KexiFormDataProvider. */
+    virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded);
+
+    /*! Implementation for KexiFormDataProvider. */
+    virtual void updateLengthExceededMessage(KexiDataItemInterface *item);
 
     //! Implementation for KexiDataAwareObjectInterface
     //! Called by KexiDataAwareObjectInterface::setCursorPosition()
@@ -287,13 +288,13 @@ protected:
     virtual void initDataContents();
 
     /*! @internal
-     Updates row appearance after canceling row edit.
+     Updates record appearance after canceling record edit.
      Reimplemented from KexiDataAwareObjectInterface: just undoes changes for every data item.
      Used by cancelRowEdit(). */
     virtual void updateAfterCancelRowEdit();
 
     /*! @internal
-     Updates row appearance after accepting row edit.
+     Updates record appearance after accepting record edit.
      Reimplemented from KexiDataAwareObjectInterface: just clears 'edit' indicator.
      Used by cancelRowEdit(). */
     virtual void updateAfterAcceptRowEdit();
@@ -307,10 +308,9 @@ protected:
 
     //virtual bool focusNextPrevChild( bool next );
 
-    KFormDesigner::Form *m_form;
-    int m_currentLocalSortColumn, m_localSortingOrder;
-    //! Used in selectCellInternal() to avoid fetching the same record twice
-    KexiDB::RecordData *m_previousRecord;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

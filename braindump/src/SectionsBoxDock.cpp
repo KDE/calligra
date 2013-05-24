@@ -19,7 +19,9 @@
 
 #include "SectionsBoxDock.h"
 
-#include <KMenu>
+#include <KoIcon.h>
+
+#include <kmenu.h>
 
 #include "DocumentModel.h"
 #include "Section.h"
@@ -40,7 +42,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     m_wdgSectionsBox.setupUi(mainWidget);
 
     // Setup list sections
-    connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(const QModelIndex&)), SLOT(slotSectionActivated(const QModelIndex&)));
+    connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(QModelIndex)), SLOT(slotSectionActivated(QModelIndex)));
     m_wdgSectionsBox.listSections->setModel(m_proxy);
 
     // Setup the view mode button
@@ -48,11 +50,11 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;
 
-    actions << m_viewModeMenu->addAction(KIcon("view-list-text"),
+    actions << m_viewModeMenu->addAction(koIcon("view-list-text"),
                                          i18n("Minimal View"), this, SLOT(slotMinimalView()));
-    actions << m_viewModeMenu->addAction(KIcon("view-list-details"),
+    actions << m_viewModeMenu->addAction(koIcon("view-list-details"),
                                          i18n("Detailed View"), this, SLOT(slotDetailedView()));
-    actions << m_viewModeMenu->addAction(KIcon("view-preview"),
+    actions << m_viewModeMenu->addAction(koIcon("view-preview"),
                                          i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
 
     for(int i = 0, n = actions.count(); i < n; ++i) {
@@ -63,14 +65,14 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
 
     m_wdgSectionsBox.bnViewMode->setMenu(m_viewModeMenu);
     m_wdgSectionsBox.bnViewMode->setPopupMode(QToolButton::InstantPopup);
-    m_wdgSectionsBox.bnViewMode->setIcon(KIcon("view-choose"));
+    m_wdgSectionsBox.bnViewMode->setIcon(koIcon("view-choose"));
     m_wdgSectionsBox.bnViewMode->setText(i18n("View mode"));
 
     // Setup the search box
     connect(m_wdgSectionsBox.searchLine, SIGNAL(textChanged(QString)), m_proxy, SLOT(setFilterWildcard(QString)));
 
     // Setup the add button
-    m_wdgSectionsBox.bnAdd->setIcon(SmallIcon("list-add"));
+    m_wdgSectionsBox.bnAdd->setIcon(koIcon("list-add"));
 
     KMenu* newSectionMenu = new KMenu(this);
     m_wdgSectionsBox.bnAdd->setMenu(newSectionMenu);
@@ -81,21 +83,21 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     m_newSectionAsChild = newSectionMenu->addAction(i18n("Add new whiteboard as child of current."), this, SLOT(slotNewSectionAsChildOfCurrent()));
 
     // Setup the delete button
-    m_wdgSectionsBox.bnDelete->setIcon(SmallIcon("list-remove"));
+    m_wdgSectionsBox.bnDelete->setIcon(koIcon("list-remove"));
     connect(m_wdgSectionsBox.bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
 
     // Setup the raise button
     m_wdgSectionsBox.bnRaise->setEnabled(false);
-    m_wdgSectionsBox.bnRaise->setIcon(SmallIcon("go-up"));
+    m_wdgSectionsBox.bnRaise->setIcon(koIcon("go-up"));
     connect(m_wdgSectionsBox.bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
 
     // Setup the lower button
     m_wdgSectionsBox.bnLower->setEnabled(false);
-    m_wdgSectionsBox.bnLower->setIcon(SmallIcon("go-down"));
+    m_wdgSectionsBox.bnLower->setIcon(koIcon("go-down"));
     connect(m_wdgSectionsBox.bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
 
     // Setup the duplicate button
-    m_wdgSectionsBox.bnDuplicate->setIcon(SmallIcon("edit-copy"));
+    m_wdgSectionsBox.bnDuplicate->setIcon(koIcon("edit-copy"));
     connect(m_wdgSectionsBox.bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
 
 }
@@ -119,8 +121,8 @@ void SectionsBoxDock::setup(RootSection* document, View* view)
     m_model = model;
 
     connect(m_model, SIGNAL(activeSectionChanged(Section*)), SLOT(slotSectionActivated(Section*)));
-    connect(m_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(insertedSection(QModelIndex, int)));
-    connect(m_model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(removedSection()));
+    connect(m_model, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(insertedSection(QModelIndex,int)));
+    connect(m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(removedSection()));
 
     updateGUI();
 }

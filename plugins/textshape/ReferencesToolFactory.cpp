@@ -22,16 +22,17 @@
 #include "TextShape.h"
 
 #include <KoCanvasBase.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 
 ReferencesToolFactory::ReferencesToolFactory()
         : KoToolFactoryBase("ReferencesToolFactory_ID")
 {
-    setToolTip(i18n("References tool"));
-    setToolType(dynamicToolType());
-    setIcon("tool-references");
-    setPriority(3);
+    setToolTip(i18n("References"));
+    setToolType("calligrawords");
+    setIconName(koIconNameCStr("tool_references"));
+    setPriority(20);
     setActivationShapeId(TextShape_SHAPEID);
 }
 
@@ -46,5 +47,6 @@ KoToolBase * ReferencesToolFactory::createTool(KoCanvasBase *canvas)
 
 bool ReferencesToolFactory::canCreateTool(KoCanvasBase* canvas) const
 {
+    Q_UNUSED(canvas);
     return true;
 }

@@ -15,57 +15,148 @@ Splitting Calligra into packages:
 Table Of Contents
 -----------------
 1. Kexi
-1.1. Kexi database and migration drivers
-1.2. Kexi default database driver: SQLite
+1.1. Kexi database and migration drivers to package separately
+1.2. Other Kexi plugins to package separately
 1.3. Kexi development files
 1.4. Quick command-line tests of Kexi installation
 2. Krita
 2.1. Krita development files
 3. Debug information
-4. Calligra libraries
+4. Calligra plugins
+5. Calligra libraries
+5.1. Calligra default database driver: SQLite
+6. WARNING against qt 4.8.0 and 4.8.1
+7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
 
 1. Kexi
 =======
 
-1.1. Kexi database and migration drivers
-----------------------------------------
+1.1. Kexi database and migration drivers to package separately
+--------------------------------------------------------------
 
 Kexi provides database drivers and migration drivers for a number of
-database types or data sources. The following matrix lists them:
+database types or data sources.
 
- Name         Database driver files            Migration driver files
- ------------------------------------------------------------------------
- MySQL        kexidb_mysqldriver.so            keximigrate_mysql.so
-              kexidb_mysqldriver.desktop       keximigrate_mysql.desktop
- PostgreSQL   kexidb_pqxxsqldriver.so          keximigrate_pqxx.so
-              kexidb_pqxxsqldriver.desktop     keximigrate_pqxx.desktop
- Sybase & MS SQL Server
-              kexidb_sybasedriver.so           keximigrate_sybase.so
-              kexidb_sybasedriver.desktop      keximigrate_sybase.desktop
- XBase
-              kexidb_xbasedriver.so            keximigrate_xbase.so
-              kexidb_xbasedriver.desktop       keximigrate_xbase.desktop
-
-(Oracle driver is not currently distributed)
-
-Plugin .so files typically go to $KDEDIR/lib/kde4,
-and .desktop service files go to $KDEDIR/share/services/.
-
-We suggest putting each driver in a separate package, and that installation of
+We encourage to put each driver in a separate package, and that installation of
 these packages be optional.  Each driver package may then depend on the corresponding
 'native' libraries. For example libmysqlclient for MySQL and libpqxx for PostgreSQL
 (libpqxx in turn depends on libpq).
 
-TODO: add dependencies to the table above and minimal versions of them
+The following matrix lists the packages and dependencies.
 
-1.2. Kexi default database driver: SQLite
------------------------------------------
+ Suggested Name            Details
+ ------------------------------------------------------------------------
+ kexi-mysql-driver         Description: Kexi MySQL driver
+                           Database driver files:
+                               kexidb_mysqldriver.so
+                               kexidb_mysqldriver.desktop
+                           Migration driver files:
+                               keximigrate_mysql.so
+                               keximigrate_mysql.desktop
+                           Dependencies:
+                               libmysqlclient
+ ------------------------------------------------------------------------
+ kexi-postgresql-driver    Description: Kexi PostgreSQL driver
+                           Database driver files:
+                               kexidb_pqxxsqldriver.so
+                               kexidb_pqxxsqldriver.desktop
+                           Migration driver files:
+                               keximigrate_pqxx.so
+                               keximigrate_pqxx.desktop
+                           Dependencies:
+                               libpq
+                               libpqxx
+ ------------------------------------------------------------------------
+ kexi-sybase-driver        Description: Kexi Sybase & MS SQL driver
+                           Database driver files:
+                               kexidb_sybasedriver.so
+                               kexidb_sybasedriver.desktop
+                           Migration driver files:
+                               keximigrate_sybase.so
+                               keximigrate_sybase.desktop
+                           Dependencies:
+                               libsybdb (FreeTDS)
+ ------------------------------------------------------------------------
+ kexi-xbase-driver         Description: Kexi XBase driver
+                           Database driver files:
+                               kexidb_xbasedriver.so
+                               kexidb_xbasedriver.desktop
+                           Migration driver files:
+                               keximigrate_xbase.so
+                               keximigrate_xbase.desktop
+                           Dependencies:
+                               libxbase
+ ------------------------------------------------------------------------
+ kexi-spreadsheet-import   Description: Spreadsheet-to-Kexi-table import plugin
+                           Files:
+                               keximigrate_spreadsheet.so
+                               keximigrate_spreadsheet.desktop
+                           Translation File:
+                               keximigrate_spreadsheet.mo
+                           Dependencies:
+                               sheets (Calligra Sheets)
+ ------------------------------------------------------------------------
 
-In contrast to the other database drivers, SQLite 3 driver should be part
-of the main Kexi package. Thus, Kexi main package should depend on SQLite 3 package.
 
-TODO: explain minimal SQLite version, and its features (http://kdedevelopers.org/node/4156)
+Plugin .so files are typically installed to $KDEDIR/lib/kde4/,
+and .desktop service files are installed to $KDEDIR/share/services/.
 
+Notes:
+* Oracle driver is not currently distributed.
+
+TODOs:
+* Add minimal versions of dependencies.
+
+
+1.2. Other Kexi plugins to package separately
+---------------------------------------------
+
+Kexi provides less a number of plugin types that are optional either because 
+are less frequently used or because have larger dependencies. We encourage 
+to put each driver in a separate package, and that installation of these
+packages be optional. 
+
+The following matrix lists the packages and dependencies.
+
+ Suggested Name            Details
+ ------------------------------------------------------------------------
+ kexi-web-form-widget      Description: Kexi web form widget
+                           Contents:
+                               kformdesigner_webbrowser.so
+                               kformdesigner_webbrowser.desktop
+                           Translation File:
+                               kformdesigner_webbrowser.mo
+                           Dependencies:
+                               libqt4-webkit or libQtWebKit4 (provides QtWebKit)
+ ------------------------------------------------------------------------
+ calligra-reports-web-element Description: Web element for Calligra Reports
+                           Contents:
+                               koreport_webplugin.so
+                               koreport_webplugin.desktop
+                           Translation File:
+                               koreport_webplugin.mo
+                           Dependencies:
+                               libqt4-webkit or libQtWebKit4 (provides QtWebKit)
+ ------------------------------------------------------------------------
+ kexi-map-form-widget      Description: Kexi map form widget
+                           Contents:
+                               kformdesigner_mapbrowser.so
+                               kformdesigner_mapbrowser.desktop
+                           Translation File:
+                               kformdesigner_mapbrowser.mo
+                           Dependencies:
+                               libmarble4-kde4 or marble
+                                                      (provides libmarblewidget)
+ ------------------------------------------------------------------------
+ calligra-reports-map-element Description: Map element for Calligra Reports
+                           Contents:
+                               koreport_mapsplugin.so
+                               koreport_mapsplugin.desktop
+                           Translation File:
+                               koreport_mapsplugin.mo
+                           Dependencies:
+                               libmarble4-kde4 or marble
+                                                      (provides libmarblewidget)
 
 1.3. Kexi development files
 ---------------------------
@@ -111,12 +202,31 @@ production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended
 A significant performance increase will be the result.
 
 
-4. Calligra libraries
+4. Calligra plugins
+===================
+
+Calligra applications can use plugins, placed in plugins/ subdirectory.
+Some of them are very special and/or have extra dependencies so should
+be packaged separately.
+
+ Suggested Name            Details
+ ------------------------------------------------------------------------
+ calligra-map-shape      Description: Map shape for Calligra applications
+                           Contents:
+                               mapshape.so
+                               mapshape.desktop
+                           Translation File:
+                               MapShape.mo
+                           Dependencies:
+                               libmarble4-kde4 or marble
+                                                      (provides libmarblewidget)
+
+5. Calligra libraries
 ====================
 
-Calligra share common functionality within libraries, placed in libs/ subdirectory.
-Calligra libraries should be placed in a single package, separate from Calligra applications.
-Below is the list of the libraries.
+Calligra share common functionality within libraries, placed in libs/
+subdirectory. Calligra libraries should be placed in a single package,
+separate from Calligra applications. Below is the list of the libraries.
 
 Name       Conditional compilation flag    Globally used in Calligra?   Public API
                                                                        (headers installed)
@@ -124,13 +234,83 @@ Name       Conditional compilation flag    Globally used in Calligra?   Public A
 ------------------------------------------------------------------------------------------
 
 flake
-kokross    SHOULD_BUILD_SCRIPTING                                      NO
+kokross                                                                NO
 kopageapp
 koplugin                                                               NO
-koproperty                                 Kexi, KPlato                NO
-koreports                                  Kexi, KPlato                NO
+koproperty                                 Kexi, Plan                  NO
+koreports                                  Kexi, Plan                  NO
 kotext
 main
 odf
 pigment
 widgets
+
+
+5.1. Calligra default database driver: SQLite
+---------------------------------------------
+
+In contrast to the all other Kexi database drivers, SQLite 3 driver SHOULD BE PART
+of the Calligra libraries package nor Kexi package, and it SOULD NOT be in optional.
+Thus, the Calligra libraries package should depend on SQLite 3 package.
+
+The SQLite 3 driver depends on the calligradb library, and not on Kexi itself.
+
+Recommended version of SQLite package is defined in the source code and can
+be obtained by executing this command in calligra/ directory:
+ % grep SQLITE_RECOMMENDED_VERSION CMakeLists.txt
+
+Minimal version of SQLite package is defined in the source code and can
+be obtained by executing this command in calligra/ directory:
+ % grep CalligraSqlite CMakeLists.txt
+
+Without SQLite in at least this version Calligra will not compile.
+
+
+6. WARNING against qt 4.8.0 and 4.8.1
+====================
+Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch in this directory
+
+
+7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
+====================
+
+IN BRIEF: 1) Intall Vc library [1] and don't forget to activate
+             PACKAGERS_BUILD=ON option when building a package.
+          2) Vc libary should be present on the building system only,
+             it need not be installed on all the client systems.
+
+Krita and Pigment can make use of the vector capabilities of the
+user's CPU. To make it possible Vc library [1] should be present in
+the host system. This is a static library and fully included into the
+final Pigment/Krita binary, so it is not necessary to have it
+installed in the client system.
+
+The code generation is generally controlled by two factors: the
+presence of the Vc library and a special cmake option
+'PACKAGERS_BUILD'. Consider three cases:
+
+1) Vc library is not present. PACKAGERS_BUILD=<don't care>.
+
+The calligra is build with default compiller options. The resulting
+binary is non-optimized and portable among different CPU
+architectures.
+
+2) Vc library is present. PACKAGERS_BUILD=OFF (default).
+
+All the calligra binaries are optimized for the host CPU. This is the
+most efficient type of build of Krita. But be careful, because such
+binaries are not portable among different CPU architectures! Using
+this build for packages distributed to many users will most probably
+result in SIGILL crashes on the client system. Use this option for
+private builds only.
+
+3) Vc library is present. PACKAGERS_BUILD=ON.
+
+This option disables CPU optimizations for the most of Calligra, but
+gnerates several versions of the code for its hottest parts. The
+specific implementation of the code is chosen on the fly when Calligra
+starts. This version is a bit slower than 2) but much faster than 1)
+and is *portable* among all the CPU architectures. Use this type of
+build for building distributable packages.
+
+[1] - http://code.compeng.uni-frankfurt.de/projects/vc

@@ -27,13 +27,13 @@
 #include "../kis_categorized_item_delegate.h"
 
 KisPaintOpListWidget::KisPaintOpListWidget(QWidget* parent, const char* name):
-    KisCategorizedListView(parent)
+    KisCategorizedListView(false, parent)
 {
     setObjectName(name);
-    connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotOpActivated(QModelIndex)));
-    
+    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpActivated(QModelIndex)));
+
     m_model    = new KisPaintOpListModel();
-    m_delegate = new KisCategorizedItemDelegate(m_model, false);
+    m_delegate = new KisCategorizedItemDelegate(false);
     setModel(m_model);
     setItemDelegate(m_delegate);
 }
@@ -52,10 +52,10 @@ void KisPaintOpListWidget::setPaintOpList(const QList<KisPaintOpFactory*>& list)
 QString KisPaintOpListWidget::itemAt(int idx) const
 {
     KisPaintOpInfo info;
-    
+
     if(m_model->entryAt(info, idx))
         return info.id;
-    
+
     return "";
 }
 

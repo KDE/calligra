@@ -28,6 +28,8 @@
 #include <krita_export.h>
 #include "kis_types.h"
 
+#include <QByteArray>
+
 class QImage;
 class KoColorSpace;
 class KisPaintDevice;
@@ -37,7 +39,7 @@ class KRITAIMAGE_EXPORT KisPattern : public KoPattern
 
 public:
     KisPattern(const QString &file);
-    KisPattern(const QImage &image, const QString &name);
+    KisPattern(const QImage &image, const QString &name, const QString &folderName);
     virtual ~KisPattern();
 
     /**
@@ -47,8 +49,12 @@ public:
     KisPaintDeviceSP paintDevice(const KoColorSpace * colorSpace) const;
 
     KisPattern* clone() const;
+
+    QByteArray md5() const;
+
 private:
     mutable QMap<QString, KisPaintDeviceSP> m_colorspaces;
+    mutable QByteArray m_md5;
 };
 
 #endif

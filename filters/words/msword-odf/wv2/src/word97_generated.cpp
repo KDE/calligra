@@ -559,10 +559,7 @@ bool SHD::read(OLEStreamReader *stream, bool preservePos) {
     shifterU16>>=5;
     ipat=shifterU16;
 
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
-
-    if(preservePos)
+    if (preservePos)
         stream->pop();
     return true;
 }
@@ -587,11 +584,6 @@ void SHD::readPtr(const U8 *ptr) {
     wvlog << "icoBack: 0x" << hex << icoBack << endl;
     wvlog << "ipat: 0x" << hex << ipat << endl;
 #endif
-
-    //check for Shd80Nil 
-    if (icoFore == 0x001F && icoBack == 0x001F && ipat == 0x003F) {
-        shdAutoOrNill = true;
-    }
 }
 
 void SHD::read90Ptr(const U8 *ptr) {
@@ -619,9 +611,6 @@ void SHD::read90Ptr(const U8 *ptr) {
     cvBack=(cvauto<<24)|(r<<16)|(g<<8)|(b);
     shifterU16=readU16(ptr);
     ipat=shifterU16;
-
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
 }
 
 void SHD::readSHDOperandPtr(const U8 *ptr) {
@@ -663,28 +652,22 @@ void SHD::readSHDOperandPtr(const U8 *ptr) {
     wvlog << "cvBack: 0x" << hex << cvBack << endl;
     wvlog << "ipat: 0x" << hex << ipat << endl;
 #endif
-
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
 }
 
-bool SHD::isShdAutoOrNill()
+bool SHD::isShdAuto() const
 {
-    shdAutoOrNill = false;
-
-    //ShdAuto
     if (cvFore == 0xff000000 && cvBack == 0xff000000 && ipat == 0x0000) {
-        shdAutoOrNill = true;
+        return true;
     }
-    //ShdNil
-    if (cvFore == 0xffffffff && cvBack == 0xffffffff && 
-        (ipat == 0x0000 || ipat == 0xffff)) 
-    {
-        shdAutoOrNill = true;
+    return false;
+}
+
+bool SHD::isShdNil() const
+{
+    if (cvFore == 0xffffffff && cvBack == 0xffffffff && ipat == 0x0000) {
+        return true;
     }
-
-
-    return shdAutoOrNill;
+    return false;
 }
 
 bool SHD::write(OLEStreamWriter *stream, bool preservePos) const {
@@ -708,9 +691,6 @@ void SHD::clear() {
     cvFore=0xff000000;
     cvBack=0xff000000;
     ipat=0;
-
-    // call just to set the member variable shdAutoOrNill
-    isShdAutoOrNill();
 }
 
 void SHD::dump() const
@@ -3264,8 +3244,12 @@ void CHP::clear() {
     shd.clear();
     brc.clear();
     cv=cvAuto;
+    cvUl=cvAuto;
     fTNY=0;
     fTNYCompress=0;
+    picBulletCP=0;
+    fPicBullet=0;
+    fNoAutoSize=0;
 }
 
 void CHP::dump() const
@@ -3436,12 +3420,18 @@ std::string CHP::toString() const
     s += uint2string( fTNYCompress );
     for(int _i=0; _i<(16); ++_i) {
         s += "\nxstDispFldRMark[" + int2string( _i ) + "]=";
-    s += uint2string( xstDispFldRMark[_i] );
+        s += uint2string( xstDispFldRMark[_i] );
     }
     s += "\nshd=";
     s += "\n{" + shd.toString() + "}\n";
     s += "\nbrc=";
     s += "\n{" + brc.toString() + "}\n";
+    s += "\npicBulletCP=";
+    s += uint2string(picBulletCP);
+    s += "\nfPicBullet=";
+    s += uint2string(fPicBullet);
+    s += "\nfNoAutoSize=";
+    s += uint2string(fNoAutoSize);
     s += "\nCHP Done.";
     return s;
 }
@@ -3485,6 +3475,7 @@ bool operator==(const CHP &lhs, const CHP &rhs) {
            lhs.kul==rhs.kul &&
            lhs.fSpecSymbol==rhs.fSpecSymbol &&
            lhs.cv==rhs.cv &&
+           lhs.cvUl==rhs.cvUl &&
            lhs.unused23_5==rhs.unused23_5 &&
            lhs.fSysVanish==rhs.fSysVanish &&
            lhs.hpScript==rhs.hpScript &&
@@ -4771,7 +4762,7 @@ bool FIB::read(OLEStreamReader *stream, bool preservePos) {
     wvlog << "FIB bytes read:" << n << endl;
 #endif
     if ((expected - n) > 0) {
-        stream->seek( (expected - n), G_SEEK_SET );
+        stream->seek( (expected - n), WV2_SEEK_SET );
     }
     //this is new compared to Word6/Word8
     cswNew=stream->readU16();
@@ -7287,7 +7278,8 @@ std::string PAP::toString() const
     s += "\n{" + numrm.toString() + "}\n";
     s += "\nitbdMac=";
     s += int2string( itbdMac );
-    s += "\nrgdxaTab=";
+    s += "\nrgdxaTab.size()=";
+    s += int2string( rgdxaTab.size() );
     // skipping the std::vector rgdxaTab
     s += "\n------------------------------";
     s += "\nfInTable=";

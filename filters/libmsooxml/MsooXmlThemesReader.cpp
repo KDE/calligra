@@ -24,19 +24,21 @@
 #include "MsooXmlThemesReader.h"
 #include "MsooXmlSchemas.h"
 #include "MsooXmlUtils.h"
+#include "MsooXmlUnits.h"
 #include "KoXmlWriter.h"
+
 #include <KoOdfGraphicStyles.h>
 #include <MsooXmlRelationships.h>
 
 #define MSOOXML_CURRENT_NS "a"
 #define MSOOXML_CURRENT_CLASS MsooXmlThemesReader
+#define MSOOXML_THEMESREADER_CPP
 
 #include "MsooXmlReader_p.h"
 
 #include <QPalette>
 
 #include <memory>
-
 #include <math.h>
 
 #ifndef M_PI
@@ -77,7 +79,7 @@ void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphic
     graphicStyle->addProperty("draw:fill-gradient-name", gradName);
 }
 
-DrawingMLBlipFill::DrawingMLBlipFill(QString filePath) : m_filePath(filePath)
+DrawingMLBlipFill::DrawingMLBlipFill(const QString &filePath) : m_filePath(filePath)
 {
 }
 
@@ -119,15 +121,17 @@ QColor DrawingMLColorSchemeSystemItem::value() const
         return lastColor;
     }
 
+    //TODO: use the style:use-window-font-color attribute
+
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
-    if (   systemColor == QLatin1String("windowText")
-        || systemColor == QLatin1String("menuText"))
+    if ( systemColor == QLatin1String("windowText") ||
+         systemColor == QLatin1String("menuText"))
     {
         return QPalette().color(QPalette::Active, QPalette::WindowText);
     }
-    else if (    systemColor == QLatin1String("window")
-              || systemColor == QLatin1String("menu")
-              || systemColor == QLatin1String("menuBar"))
+    else if ( systemColor == QLatin1String("window") ||
+              systemColor == QLatin1String("menu") ||
+              systemColor == QLatin1String("menuBar"))
     {
         return QPalette().color(QPalette::Active, QPalette::Window);
     }
@@ -238,7 +242,7 @@ DrawingMLFormatScheme::DrawingMLFormatScheme(const DrawingMLFormatScheme& format
         i.next();
         fillStyles.insert(i.key(), i.value()->clone());
     }
-    lineStyles = format.lineStyles;
+    lnStyleLst = format.lnStyleLst;
 }
 
 DrawingMLFormatScheme& DrawingMLFormatScheme::operator=(const DrawingMLFormatScheme& format)
@@ -248,7 +252,7 @@ DrawingMLFormatScheme& DrawingMLFormatScheme::operator=(const DrawingMLFormatSch
         i.next();
         fillStyles.insert(i.key(), i.value()->clone());
     }
-    lineStyles = format.lineStyles;
+    lnStyleLst = format.lnStyleLst;
 
     return *this;
 }
@@ -270,7 +274,7 @@ MsooXmlThemesReaderContext::MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXM
 
 MsooXmlThemesReader::MsooXmlThemesReader(KoOdfWriters *writers)
         : MsooXmlCommonReader(writers)
-        , m_currentColor(0)
+        , m_currentColor_local(0)
         , m_context(0)
 {
     init();
@@ -445,17 +449,6 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_custClrLst()
 }
 
 //! @todo !!!!!!!!!!!!!MERGE with Document Reader!!!!!!!!!!!!!
-#undef CURRENT_EL
-#define CURRENT_EL extLst
-//! extLst (Extension List)
-/*! ECMA-376, 20.1.2.2.15, p.3036.
-
- @todo implement
-*/
-KoFilter::ConversionStatus MsooXmlThemesReader::read_extLst()
-{
-    SKIP_EVERYTHING_AND_RETURN
-}
 
 #undef CURRENT_EL
 #define CURRENT_EL clrMap
@@ -571,21 +564,21 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
         if (isStartElement()) {
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
-                Q_ASSERT(!m_currentColor);
+                Q_ASSERT(!m_currentColor_local);
                 RETURN_IF_ERROR( (this->*readMethod)() )
-                Q_ASSERT(m_currentColor);
-                if (!m_currentColor) {
+                Q_ASSERT(m_currentColor_local);
+                if (!m_currentColor_local) {
                     return KoFilter::InternalError;
                 }
                 const QString colorName( this->name().toString() );
                 //kDebug() << "inserting color for" << colorName;
-                m_context->theme->colorScheme.insert(colorName, m_currentColor);
+                m_context->theme->colorScheme.insert(colorName, m_currentColor_local);
                 const QString colorIndex(m_colorSchemeIndices.value(colorName));
                 if (!colorIndex.isEmpty()) {
-                    m_context->theme->colorScheme.insert(colorIndex, m_currentColor);
+                    m_context->theme->colorScheme.insert(colorIndex, m_currentColor_local);
                 }
 
-                m_currentColor = 0;
+                m_currentColor_local = 0;
             }
             ELSE_WRONG_FORMAT_DEBUG("!readMethod")
         }
@@ -598,8 +591,10 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
 #undef CURRENT_EL
 //! accent[1-6] (Accent [1-6]), dk1/2, lt1/2
 /*! ECMA-376, 20.1.4.1.1-6, p.3098, etc.
+
  Parent elements:
  - [done] clrScheme (§20.1.6.2)
+
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - prstClr (Preset Color) §20.1.2.3.22
@@ -623,8 +618,8 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
 //! @todo remove _SKIP
         BIND_READ_SKIP(scrgbClr)
 
-        BIND_READ(srgbClr)
-        BIND_READ(sysClr)
+        BIND_READ(srgbClr_local)
+        BIND_READ(sysClr_local)
     }
 
     while (!atEnd()) {
@@ -632,7 +627,16 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
         //kDebug() << *this;
         BREAK_IF_END_OF_QSTRING(qn)
         if (isStartElement()) {
-            ReadMethod readMethod = m_readMethods.value(this->name().toString());
+            QString name = this->name().toString();
+
+            //using local versions at the moment
+            if (name == "srgbClr") {
+                name = "srgbClr_local";
+            } else if (name == "sysClr") {
+                name = "sysClr_local";
+            }
+
+            ReadMethod readMethod = m_readMethods.value(name);
             if (readMethod) {
                 RETURN_IF_ERROR( (this->*readMethod)() )
             }
@@ -650,9 +654,9 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
 //! @todo !!!!!!!!!!!!!MERGE with Document Reader!!!!!!!!!!!!!
 #undef CURRENT_EL
 #define CURRENT_EL srgbClr
-/*! ECMA-376
- - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
-
+//! srgbClr (RGB Color Model - Hex Variant)
+//! ECMA-376 20.1.2.3.32, p. 3085.
+/*!
  Parent elements:
     [done] accent1 (§20.1.4.1.1); accent2 (§20.1.4.1.2); accent3 (§20.1.4.1.3); accent4 (§20.1.4.1.4);
     [done] accent5 (§20.1.4.1.5); accent6 (§20.1.4.1.6);
@@ -660,16 +664,43 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
     [done] lt1 (§20.1.4.1.22); lt2 (§20.1.4.1.23);
     [done] folHlink (§20.1.4.1.15); hlink (§20.1.4.1.19);
 
-    todo:
-    alphaInv (§20.1.8.4); bgClr (§20.1.8.10); bgRef (§19.3.1.3); buClr (§21.1.2.4.4); clrFrom
-    (§20.1.8.17); clrMru (§19.2.1.4); clrRepl (§20.1.8.18); clrTo (§20.1.8.19); clrVal (§19.5.27); contourClr
-    (§20.1.5.6); custClr (§20.1.4.1.8); duotone (§20.1.8.23); effectClrLst
-    (§21.4.4.7); effectRef (§20.1.4.2.8); extrusionClr (§20.1.5.7); fgClr (§20.1.8.27); fillClrLst (§21.4.4.8); fillRef
-    (§20.1.4.2.10); fontRef (§20.1.4.1.17); from (§19.5.43); glow (§20.1.8.32); gs
-    (§20.1.8.36); highlight (§21.1.2.3.4); innerShdw (§20.1.8.40); linClrLst (§21.4.4.9); lnRef
-    (§20.1.4.2.19); outerShdw (§20.1.8.45); penClr (§19.2.1.23); prstShdw
-    (§20.1.8.49); solidFill (§20.1.8.54); tcTxStyle (§20.1.4.2.30); to (§19.5.90); txEffectClrLst (§21.4.4.12);
-    txFillClrLst (§21.4.4.13); txLinClrLst (§21.4.4.14)
+    TODO:
+    alphaInv (§20.1.8.4);
+    bgClr (§20.1.8.10);
+    bgRef (§19.3.1.3);
+    buClr (§21.1.2.4.4);
+    clrFrom (§20.1.8.17);
+    clrMru (§19.2.1.4);
+    clrRepl (§20.1.8.18);
+    clrTo (§20.1.8.19);
+    clrVal (§19.5.27);
+    contourClr (§20.1.5.6);
+    custClr (§20.1.4.1.8);
+    duotone (§20.1.8.23);
+    effectClrLst (§21.4.4.7);
+    effectRef (§20.1.4.2.8);
+    extrusionClr (§20.1.5.7);
+    fgClr (§20.1.8.27);
+    fillClrLst (§21.4.4.8);
+    fillRef (§20.1.4.2.10);
+    fontRef (§20.1.4.1.17);
+    from (§19.5.43);
+    glow (§20.1.8.32);
+    gs (§20.1.8.36);
+    highlight (§21.1.2.3.4);
+    innerShdw (§20.1.8.40);
+    linClrLst (§21.4.4.9);
+    lnRef (§20.1.4.2.19);
+    outerShdw (§20.1.8.45);
+    penClr (§19.2.1.23);
+    prstShdw (§20.1.8.49);
+    solidFill (§20.1.8.54);
+    tcTxStyle (§20.1.4.2.30);
+    to (§19.5.90);
+    txEffectClrLst (§21.4.4.12);
+    txFillClrLst (§21.4.4.13);
+    txLinClrLst (§21.4.4.14)
+
  Child elements:
     alpha (Alpha) §20.1.2.3.1
     alphaMod (Alpha Modulation) §20.1.2.3.2
@@ -700,12 +731,13 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
     shade (Shade) §20.1.2.3.31
     tint (Tint) §20.1.2.3.34
 
-    @todo these child elements are common for all *Clr() methods, so create common function for parsing them
+    TODO: these child elements are common for all *Clr() methods, so
+    create common function for parsing them
 */
-KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
+KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr_local()
 {
     std::auto_ptr<DrawingMLColorSchemeItem> color(new DrawingMLColorSchemeItem);
-    m_currentColor = 0;
+    m_currentColor_local = 0;
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
@@ -715,7 +747,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
 
     readNext();
     READ_EPILOGUE_WITHOUT_RETURN
-    m_currentColor = color.release();
+    m_currentColor_local = color.release();
 
     return KoFilter::OK;
 }
@@ -727,22 +759,56 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
  - sysClr (System Color) §20.1.2.3.33
 
  Parent elements:
-    [done] accent1 (§20.1.4.1.1); accent2 (§20.1.4.1.2); accent3 (§20.1.4.1.3); accent4 (§20.1.4.1.4);
-    [done] accent5 (§20.1.4.1.5); accent6 (§20.1.4.1.6);
-    [done] dk1 (§20.1.4.1.9); dk2 (§20.1.4.1.10);
-    [done] lt1 (§20.1.4.1.22); lt2 (§20.1.4.1.23);
-    [done] folHlink (§20.1.4.1.15); hlink (§20.1.4.1.19);
+    [done] accent1 (§20.1.4.1.1);
+    accent2 (§20.1.4.1.2);
+    accent3 (§20.1.4.1.3);
+    accent4 (§20.1.4.1.4);
+    [done] accent5 (§20.1.4.1.5);
+    accent6 (§20.1.4.1.6);
+    [done] dk1 (§20.1.4.1.9);
+    dk2 (§20.1.4.1.10);
+    [done] lt1 (§20.1.4.1.22);
+    lt2 (§20.1.4.1.23);
+    [done] folHlink (§20.1.4.1.15);
+    hlink (§20.1.4.1.19);
 
-    todo:
-    alphaInv (§20.1.8.4); bgClr (§20.1.8.10); bgRef (§19.3.1.3); buClr (§21.1.2.4.4); clrFrom
-    (§20.1.8.17); clrMru (§19.2.1.4); clrRepl (§20.1.8.18); clrTo (§20.1.8.19); clrVal (§19.5.27); contourClr
-    (§20.1.5.6); custClr (§20.1.4.1.8); duotone (§20.1.8.23); effectClrLst
-    (§21.4.4.7); effectRef (§20.1.4.2.8); extrusionClr (§20.1.5.7); fgClr (§20.1.8.27); fillClrLst (§21.4.4.8); fillRef
-    (§20.1.4.2.10); fontRef (§20.1.4.1.17); from (§19.5.43); glow (§20.1.8.32); gs
-    (§20.1.8.36); highlight (§21.1.2.3.4); innerShdw (§20.1.8.40); linClrLst (§21.4.4.9); lnRef
-    (§20.1.4.2.19); outerShdw (§20.1.8.45); penClr (§19.2.1.23); prstShdw
-    (§20.1.8.49); solidFill (§20.1.8.54); tcTxStyle (§20.1.4.2.30); to (§19.5.90); txEffectClrLst (§21.4.4.12);
-    txFillClrLst (§21.4.4.13); txLinClrLst (§21.4.4.14)
+    TODO:
+    alphaInv (§20.1.8.4);
+    bgClr (§20.1.8.10);
+    bgRef (§19.3.1.3);
+    buClr (§21.1.2.4.4);
+    clrFrom (§20.1.8.17);
+    clrMru (§19.2.1.4);
+    clrRepl (§20.1.8.18);
+    clrTo (§20.1.8.19);
+    clrVal (§19.5.27);
+    contourClr (§20.1.5.6);
+    custClr (§20.1.4.1.8);
+    duotone (§20.1.8.23);
+    effectClrLst (§21.4.4.7);
+    effectRef (§20.1.4.2.8);
+    extrusionClr (§20.1.5.7);
+    fgClr (§20.1.8.27);
+    fillClrLst (§21.4.4.8);
+    fillRef (§20.1.4.2.10);
+    fontRef (§20.1.4.1.17);
+    from (§19.5.43);
+    glow (§20.1.8.32);
+    gs (§20.1.8.36);
+    highlight (§21.1.2.3.4);
+    innerShdw (§20.1.8.40);
+    linClrLst (§21.4.4.9);
+    lnRef (§20.1.4.2.19);
+    outerShdw (§20.1.8.45);
+    penClr (§19.2.1.23);
+    prstShdw (§20.1.8.49);
+    solidFill (§20.1.8.54);
+    tcTxStyle (§20.1.4.2.30);
+    to (§19.5.90);
+    txEffectClrLst (§21.4.4.12);
+    txFillClrLst (§21.4.4.13);
+    xLinClrLst (§21.4.4.14)
+
  Child elements:
     alpha (Alpha) §20.1.2.3.1
     alphaMod (Alpha Modulation) §20.1.2.3.2
@@ -773,25 +839,25 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
     shade (Shade) §20.1.2.3.31
     tint (Tint) §20.1.2.3.34
 */
-KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
+KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr_local()
 {
     std::auto_ptr<DrawingMLColorSchemeSystemItem> color(new DrawingMLColorSchemeSystemItem);
-    m_currentColor = 0;
+    m_currentColor_local = 0;
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(lastClr)
     color.get()->lastColor = Utils::ST_HexColorRGB_to_QColor(lastClr);
-    //kDebug() << "lastClr:" << color.get()->lastColor;
+//     kDebug() << "lastClr:" << color.get()->lastColor.name();
 
-    // System color value. This color is based upon the value that this color currently has
-    // within the system on which the document is being viewed.
+    // System color value. This color is based upon the value that this color
+    // currently has within the system on which the document is being viewed.
     READ_ATTR_WITHOUT_NS_INTO(val, color.get()->systemColor)
-    //kDebug() << "val:" << color.get()->systemColor;
+//     kDebug() << "val:" << color.get()->systemColor;
 
     readNext();
     READ_EPILOGUE_WITHOUT_RETURN
-    m_currentColor = color.release();
+    m_currentColor_local = color.release();
 
     return KoFilter::OK;
 }
@@ -828,40 +894,36 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fmtScheme()
 #undef CURRENT_EL
 #define CURRENT_EL lnStyleLst
 //! lnStyleLst (Line style list)
+//! ECMA-376, 20.1.4.1.21, p.3115
+/*!
+  This element defines a list of three line styles for use within a
+  theme. The three line styles are arranged in order from subtle to
+  moderate to intense versions of lines. This list makes up part of
+  the style matrix.
+
+  Parent elements:
+  - [done] fmtScheme (§20.1.4.1.14)
+
+  Child elements:
+  - [done] ln (Outline) (§20.1.2.2.24)
+*/
 KoFilter::ConversionStatus MsooXmlThemesReader::read_lnStyleLst()
 {
     READ_PROLOGUE
+
+    QList<KoGenStyle> *list = &m_context->theme->formatScheme.lnStyleLst;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
+            pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
             TRY_READ_IF(ln)
-            SKIP_UNKNOWN
+            list->append(*m_currentDrawStyle);
+            popCurrentDrawStyle();
         }
     }
-    READ_EPILOGUE
-}
 
-#undef CURRENT_EL
-#define CURRENT_EL ln
-//! lnStyleLst (Line style list)
-KoFilter::ConversionStatus MsooXmlThemesReader::read_ln()
-{
-    READ_PROLOGUE
-
-    QXmlStreamAttributes attrs = attributes();
-
-    TRY_READ_ATTR_WITHOUT_NS(w)
-
-    m_context->theme->formatScheme.lineStyles.push_back(w);
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            skipCurrentElement();
-        }
-    }
     READ_EPILOGUE
 }
 
@@ -1101,3 +1163,5 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_SKIP()
 {
     SKIP_EVERYTHING_AND_RETURN
 }
+
+#include "MsooXmlDrawingMLSharedImpl.h"

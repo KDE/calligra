@@ -42,6 +42,9 @@ class KoStyleManager;
 class KoShape;
 class KoShapeLoadingContext;
 class KoOdfNotesConfiguration;
+class KoOdfBibliographyConfiguration;
+class KoShapeAnchor;
+class KoTextTableTemplate;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"
 
@@ -81,6 +84,14 @@ public:
     KoParagraphStyle *paragraphStyle(const QString &name, bool stylesDotXml) const;
 
     /**
+     * Return all paragraph styles.
+     *
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
+     * @return All paragraph styles from the given file
+     */
+    QList<KoParagraphStyle *> paragraphStyles(bool stylesDotXml) const;
+
+    /**
      * Get the character style for the given name
      *
      * The name is the style:name given in the file
@@ -95,7 +106,7 @@ public:
      * Return all character styles.
      *
      * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
-     * @return All character styles from the givin file
+     * @return All character styles from the given file
      */
     QList<KoCharacterStyle*> characterStyles(bool stylesDotXml) const;
 
@@ -166,17 +177,10 @@ public:
     KoOdfNotesConfiguration endnotesConfiguration() const;
 
     /**
-     * Set the appication default style
-     *
-     * This is done so the application default style needs to be loaded only once.
-     * The ownership of the style is transfered to this class.
+     * Get the document-wide configuration for bibliography this contains information
+     * about prefix, suffix, sort by position, sort algorithm etc.
      */
-    void setApplicationDefaultStyle(KoCharacterStyle *applicationDefaultStyle);
-
-    /**
-     * Get the application default style
-     */
-    KoCharacterStyle *applicationDefaultStyle() const;
+    KoOdfBibliographyConfiguration bibliographyConfiguration() const;
 
 protected:
     /**
@@ -211,6 +215,8 @@ private:
     };
     QList<OdfCharStyle> loadCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
 
+    void addDefaultCharacterStyle(KoShapeLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager);
+
     // helper functions for loading of list styles
     void addListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
@@ -244,6 +250,12 @@ private:
     void addOutlineStyle(KoShapeLoadingContext & context, KoStyleManager *styleManager);
 
     void addNotesConfiguration(KoShapeLoadingContext &context);
+
+    void addBibliographyConfiguration(KoShapeLoadingContext &context);
+
+    void addTableTemplate(KoShapeLoadingContext &context, KoStyleManager *styleManager);
+    QList<QPair<QString, KoTextTableTemplate *> > loadTableTemplates(KoShapeLoadingContext &context);
+
 
     class Private;
     Private * const d;

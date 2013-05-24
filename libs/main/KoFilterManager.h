@@ -19,12 +19,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef __calligra_filter_manager_h__
-#define __calligra_filter_manager_h__
+#ifndef __KO_FILTER_MANAGER_H__
+#define __KO_FILTER_MANAGER_H__
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QByteArray>
+#include <QObject>
+#include <QMap>
+#include <QByteArray>
 
 #include "KoFilterChain.h"
 #include "KoFilterGraph.h"
@@ -199,4 +199,4 @@ private:
     Private * const d;
 };
 
-#endif  // __calligra_filter_manager_h__
+#endif  // __KO_FILTER_MANAGER_H__

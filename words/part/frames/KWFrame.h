@@ -29,8 +29,8 @@
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeApplicationData.h>
+#include <KoShapeAnchor.h>
 
-class KoTextAnchor;
 class KWFrameSet;
 class KoViewConverter;
 class KWOutlineShape;
@@ -50,10 +50,8 @@ public:
      * Constructor
      * @param shape the shape that displays the content, containing size/position
      * @param parent the parent frameset
-     * @param pageNumber the page number is normally -1, only set when loading page anchored frames to the
-     *      page where the frame should be positioned
      */
-    KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber = -1);
+    KWFrame(KoShape *shape, KWFrameSet *parent);
     virtual ~KWFrame();
 
     /**
@@ -128,7 +126,7 @@ public:
     */
 
     int anchoredPageNumber() const {
-        return m_anchoredPageNumber;
+        return m_shape->anchor() ? m_shape->anchor()->pageNumber() : -1;
     }
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
@@ -171,12 +169,7 @@ private:
     Words::FrameBehavior m_frameBehavior;
     bool m_copyToEverySheet;
     Words::NewFrameBehavior m_newFrameBehavior;
-    // The page number is only used during loading.
-    // It is set to the page number if the frame contains a page anchored frame.
-    // In all other cases it is set to -1.
-    int m_anchoredPageNumber;
     qreal m_anchoredFrameOffset;
-
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
     QList<KWFrame*> m_copyShapes;

@@ -48,7 +48,7 @@ class KWPageCacheManager;
 class WORDS_EXPORT KWCanvasBase : public KoCanvasBase
 {
 public:
-    KWCanvasBase(KWDocument *document, QObject *parent = 0);
+    explicit KWCanvasBase(KWDocument *document, QObject *parent = 0);
     ~KWCanvasBase();
 
 public: // KoCanvasBase interface methods.
@@ -95,7 +95,7 @@ public: // KoCanvasBase interface methods.
      *
      * @param enabled: if true, we cache the contents of the document for this canvas,
      *  for the current zoomlevel
-     * @param cachesize: the the maximum size for the cache. The cache will throw away
+     * @param cachesize: the maximum size for the cache. The cache will throw away
      *  pages once this size is reached. Depending on Qt's implementation of QCache, the
      *  unit is pages.
      * @param maxZoom above this zoomlevel we'll paint a scaled version of the cache, instead
@@ -103,13 +103,16 @@ public: // KoCanvasBase interface methods.
      */
     virtual void setCacheEnabled(bool enabled, int cacheSize = 50, qreal maxZoom = 2.0);
 
+    /// @return the offset of the document in this canvas
+    QPoint documentOffset() const;
+
 protected:
 
     void paint(QPainter &painter, const QRectF &paintRect);
 
     void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
-
-    void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
+    void paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap);
+    void doPaintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
 
     void paintGrid(QPainter &painter, KWViewMode::ViewMap &viewMap);
 

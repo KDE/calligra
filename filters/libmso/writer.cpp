@@ -19,7 +19,7 @@
 
 #include "writer.h"
 
-#include <QtCore/QRegExp>
+#include <QRegExp>
 
 namespace
 {

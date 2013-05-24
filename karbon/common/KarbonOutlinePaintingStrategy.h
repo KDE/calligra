@@ -24,17 +24,17 @@
 #include <KoShapeManagerPaintingStrategy.h>
 
 class KoShapeManager;
-class KoLineBorder;
+class KoShapeStroke;
 
 class KARBONCOMMON_EXPORT KarbonOutlinePaintingStrategy : public KoShapeManagerPaintingStrategy
 {
 public:
-    KarbonOutlinePaintingStrategy(KoShapeManager * shapeManager);
+    explicit KarbonOutlinePaintingStrategy(KoShapeManager *shapeManager);
     ~KarbonOutlinePaintingStrategy();
     /// reimplemented from KoShapeManagerPaintingStrategy
-    virtual void paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint);
+    virtual void paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 private:
-    KoLineBorder * m_border;
+    KoShapeStroke *m_stroke;
 };
 
 #endif // KARBONOUTLINEPAINTINGSTRATEGY_H

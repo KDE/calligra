@@ -22,9 +22,8 @@
 #include <QString>
 #include <QStringList>
 
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
-#include <kexidb/parser/parser.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 
 #include <KoReportData.h>
 
@@ -33,17 +32,6 @@
 */
 class KexiDBReportData : public KoReportData
 {
-private:
-    QString m_qstrQuery;
-
-    KexiDB::Cursor *m_cursor;
-    KexiDB::Connection *m_connection;
-    KexiDB::QuerySchema *m_originalSchema;
-    KexiDB::QuerySchema *m_copySchema;
-    KexiDB::Parser *m_parser;
-    
-    bool getSchema();
-
 public:
     KexiDBReportData(const QString &qstrSQL, KexiDB::Connection *conn);
     virtual ~KexiDBReportData();
@@ -53,7 +41,7 @@ public:
     virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
 
     virtual QString sourceName() const;
-    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual int fieldNumber(const QString &field) const;
     virtual QVariant value(unsigned int) const;
     virtual QVariant value(const QString &field) const;
 
@@ -72,6 +60,12 @@ public:
     virtual QString scriptCode(const QString& script, const QString& language) const;
     virtual QStringList dataSources() const;
     virtual KoReportData* data(const QString&);
+
+private:
+    class Private;
+    Private * const d;
+
+    bool getSchema();
 };
 
 #endif

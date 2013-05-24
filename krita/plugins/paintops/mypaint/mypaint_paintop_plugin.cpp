@@ -18,7 +18,6 @@
 
 #include "mypaint_paintop_plugin.h"
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -36,7 +35,6 @@ K_EXPORT_PLUGIN(MyPaintPluginFactory("krita"))
 MyPaintPlugin::MyPaintPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(MyPaintPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     MyPaintFactory* factory = new MyPaintFactory;
     r->add(factory);

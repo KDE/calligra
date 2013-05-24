@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,7 @@
 #include "kis_layer.h"
 
 
-#include <kicon.h>
 #include <klocale.h>
-#include <QIcon>
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
@@ -95,11 +93,19 @@ public:
         }
     }
 
+    const QList<KisCloneLayerWSP> registeredClones() const {
+        return m_clonesList;
+    }
+
+    bool hasClones() const {
+        return !m_clonesList.isEmpty();
+    }
+
 private:
     QList<KisCloneLayerWSP> m_clonesList;
 };
 
-class KisLayer::Private
+struct KisLayer::Private
 {
 
 public:
@@ -130,7 +136,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
-        setName(i18n("Duplicate of '%1'", rhs.name()));
+        setName(rhs.name());
     }
 }
 
@@ -142,7 +148,7 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    if (m_d->image.isValid())
+    if (m_d->image)
         return m_d->image->colorSpace();
     return 0;
 }
@@ -181,24 +187,24 @@ void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyL
 void KisLayer::disableAlphaChannel(bool disable)
 {
     if(m_d->channelFlags.isEmpty())
-        m_d->channelFlags = colorSpace()->channelFlags(true, true, true, true);
-    
+        m_d->channelFlags = colorSpace()->channelFlags(true, true);
+
     if(disable)
-        m_d->channelFlags &= colorSpace()->channelFlags(true, false, true, true);
+        m_d->channelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->channelFlags |= colorSpace()->channelFlags(false, true, false, false);
+        m_d->channelFlags |= colorSpace()->channelFlags(false, true);
 }
 
 bool KisLayer::alphaChannelDisabled() const
 {
-    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->channelFlags;
+    QBitArray flags = colorSpace()->channelFlags(false, true) & m_d->channelFlags;
     return flags.count(true) == 0 && !m_d->channelFlags.isEmpty();
 }
 
 
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
-    Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
+    Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
     m_d->channelFlags = channelFlags;
 }
 
@@ -233,14 +239,6 @@ void KisLayer::setImage(KisImageWSP image)
     }
 }
 
-void KisLayer::setDirty(const QRect & rect)
-{
-    if(m_d->image) {
-        m_d->image->updateProjection(this, rect);
-    }
-    m_d->clonesList.setDirty(rect);
-}
-
 void KisLayer::registerClone(KisCloneLayerWSP clone)
 {
     m_d->clonesList.addClone(clone);
@@ -249,6 +247,21 @@ void KisLayer::registerClone(KisCloneLayerWSP clone)
 void KisLayer::unregisterClone(KisCloneLayerWSP clone)
 {
     m_d->clonesList.removeClone(clone);
+}
+
+const QList<KisCloneLayerWSP> KisLayer::registeredClones() const
+{
+    return m_d->clonesList.registeredClones();
+}
+
+bool KisLayer::hasClones() const
+{
+    return m_d->clonesList.hasClones();
+}
+
+void KisLayer::updateClones(const QRect &rect)
+{
+    m_d->clonesList.setDirty(rect);
 }
 
 KisSelectionMaskSP KisLayer::selectionMask() const
@@ -260,22 +273,23 @@ KisSelectionMaskSP KisLayer::selectionMask() const
 
     //finds the active selection mask
     if (masks.size() == 1) {
-        KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
-        return selection;
+        KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(masks[0].data());
+        return selectionMask;
     }
     return 0;
 }
 
 KisSelectionSP KisLayer::selection() const
 {
-   KisLayer *layer=(KisLayer *)this;
-
-    if (layer->selectionMask())
-        return layer->selectionMask()->selection();
-    else if (m_d->image.isValid())
+    if (selectionMask()) {
+        return selectionMask()->selection();
+    }
+    else if (m_d->image) {
         return m_d->image->globalSelection();
-    else
-        return KisSelectionSP(new KisSelection());
+    }
+    else {
+        return 0;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -283,18 +297,22 @@ KisSelectionSP KisLayer::selection() const
 
 QList<KisEffectMaskSP> KisLayer::effectMasks() const
 {
-    KoProperties properties;
-    properties.setProperty("visible", true);
-    QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
     QList<KisEffectMaskSP> masks;
 
-    if (m_d->previewMask && m_d->previewMask->visible())
+    if (m_d->previewMask && m_d->previewMask->visible()) {
         masks.append(m_d->previewMask);
+    }
 
-    foreach(const KisNodeSP& node,  nodes) {
-        KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
-        if (mask)
-            masks.append(mask);
+    if (childCount() > 0) {
+        KoProperties properties;
+        properties.setProperty("visible", true);
+        QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
+
+        foreach(const KisNodeSP& node,  nodes) {
+            KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
+            if (mask)
+                masks.append(mask);
+        }
     }
     return masks;
 }
@@ -302,6 +320,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 bool KisLayer::hasEffectMasks() const
 {
     if (m_d->previewMask && m_d->previewMask->visible()) return true;
+    if (childCount() == 0) return false;
 
     KoProperties properties;
     properties.setProperty("visible", true);
@@ -500,7 +519,9 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
 }
 
 qint32 KisLayer::x() const

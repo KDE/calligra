@@ -7,7 +7,7 @@ This python script connects Words and OpenOffice.org together.
 (C)2006 Sebastian Sauer <mail@dipe.org>
 
 http://kross.dipe.org
-http://www.calligra-suite.org/words
+http://www.calligra.org/words
 http://udk.openoffice.org/python/python-bridge.html
 
 Dual-licensed under LGPL v2+higher and the BSD license.

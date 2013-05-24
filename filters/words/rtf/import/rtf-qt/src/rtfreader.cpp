@@ -43,9 +43,9 @@
 #include "TitlePcdataDestination.h"
 #include "UserPropsDestination.h"
 
-#include "Qt/qstack.h"
-#include "Qt/qtextcursor.h"
-#include "Qt/qurl.h"
+#include <QStack>
+#include <QTextCursor>
+#include <QUrl>
 
 namespace RtfReader
 {
@@ -221,7 +221,7 @@ namespace RtfReader
 
     void Reader::parseDocument()
     {
-	struct RtfGroupState state;
+	class RtfGroupState state;
 
 	// Push an end-of-file marker onto the stack
 	state.endOfFile = true;

@@ -49,6 +49,9 @@ protected:
     virtual void undoNoUpdate();
 
 private:
+    void startUpdates();
+
+private:
     class Private;
     Private * const m_d;
 };

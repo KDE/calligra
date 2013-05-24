@@ -1,12 +1,25 @@
 [Desktop Entry]
 Name=Decode Subsystem
+Name[bs]=Dekodni podsistem
+Name[ca]=Subsistema descodificador
+Name[ca@valencia]=Subsistema descodificador
+Name[da]=Decode Subsystem
 Name[el]=Αποκωδικοποίηση υποσυστήματος
 Name[es]=Subsistema de decodificación
+Name[et]=Allsüsteemi dekodeerimine
+Name[fr]=Decode Subsystem
+Name[gl]=Subsistema de descodificación
+Name[it]=Sottosistema di decodifica
+Name[kk]=Ішкі декодер жүйесі
 Name[nb]=Avkodingsdelsystem
 Name[nl]=Decodeer-subsysteem
+Name[pl]=Podsystem dekodujący
 Name[pt]=Sub-sistema Descodificação
 Name[pt_BR]=Subsistema de decodificação
+Name[ru]=Подсистема декодирования
+Name[sk]=Dekódovať sybsystém
 Name[sv]=Avkodningsdelsystem
 Name[uk]=Підсистема декодування
 Name[x-test]=xxDecode Subsystemxx
+Name[zh_CN]=解码子系统
 Name[zh_TW]=解碼子系統

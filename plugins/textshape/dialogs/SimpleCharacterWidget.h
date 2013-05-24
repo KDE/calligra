@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,33 +29,57 @@
 
 class TextTool;
 class KoStyleManager;
+class KoCharacterStyle;
+class KoParagraphStyle;
+class KoStyleThumbnailer;
+class DockerStylesComboModel;
+class StylesDelegate;
+class StylesModel;
 
 class SimpleCharacterWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit SimpleCharacterWidget(TextTool *tool, QWidget *parent = 0);
+    virtual ~SimpleCharacterWidget();
+
+    void setInitialUsedStyles(QVector<int> list);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
-    void setCurrentFormat(const QTextCharFormat& format);
+    void setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat);
+    void setCurrentBlockFormat(const QTextBlockFormat &format);
+    void slotCharacterStyleApplied(const KoCharacterStyle *style);
 
 private slots:
     void fontFamilyActivated(int index);
     void fontSizeActivated(int index);
+    void styleSelected(int index);
+    void styleSelected(QModelIndex &index);
+    void slotShowStyleManager(int index);
 
 signals:
     void doneWithFocus();
+    void characterStyleSelected(KoCharacterStyle *);
+    void newStyleRequested(QString name);
+    void showStyleManager(int styleId);
 
 private:
+    void clearUnsetProperties(QTextFormat &format);
+
     Ui::SimpleCharacterWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     bool m_comboboxHasBidiItems;
     int m_lastFontFamilyIndex;
     int m_lastFontSizeIndex;
-    QTextBlock m_currentBlock;
     TextTool *m_tool;
+    QTextCharFormat m_currentCharFormat;
+    QTextBlockFormat m_currentBlockFormat;
+    KoStyleThumbnailer *m_thumbnailer;
+    StylesModel *m_stylesModel;
+    DockerStylesComboModel *m_sortedStylesModel;
+    StylesDelegate *m_stylesDelegate;
 };
 
 #endif

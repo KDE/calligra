@@ -20,14 +20,17 @@
 
 #include <kcomponentdata.h>
 #include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
-#include <KoResourceManager.h>
 
 #include "HistoryDock.h"
 
-K_EXPORT_COMPONENT_FACTORY(kritahistorydocker, KGenericFactory<HistoryPlugin>("krita-history-docker"))
+K_PLUGIN_FACTORY(HistoryPluginFactory, registerPlugin<HistoryPlugin>();)
+K_EXPORT_PLUGIN(HistoryPluginFactory( "krita" ) )
 
 class HistoryDockFactory : public KoDockFactoryBase
 {
@@ -56,7 +59,7 @@ public:
 };
 
 
-HistoryPlugin::HistoryPlugin(QObject *parent, const QStringList &)
+HistoryPlugin::HistoryPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
 

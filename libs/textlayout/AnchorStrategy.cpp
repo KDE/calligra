@@ -31,10 +31,10 @@
 
 
 
-AnchorStrategy::AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
-        : m_model(0)
-        , m_anchor(anchor)
+AnchorStrategy::AnchorStrategy(KoShapeAnchor *anchor, KoTextLayoutRootArea *rootArea)
+        : m_anchor(anchor)
         , m_rootArea(rootArea)
+        , m_model(0)
         , m_pageRect(0,0,10,10)
         , m_pageContentRect(0,0,10,10)
         , m_paragraphRect(0,0,0,0)
@@ -68,7 +68,7 @@ QRectF AnchorStrategy::pageContentRect()
     return m_pageContentRect;
 }
 
-void AnchorStrategy::setPageContentRect(QRectF &pageContentRect)
+void AnchorStrategy::setPageContentRect(const QRectF &pageContentRect)
 {
     m_pageContentRect = pageContentRect;
 }
@@ -83,6 +83,26 @@ void AnchorStrategy::setParagraphRect(const QRectF &paragraphRect)
     m_paragraphRect = paragraphRect;
 }
 
+QRectF AnchorStrategy::paragraphContentRect()
+{
+    return m_paragraphContentRect;
+}
+
+void AnchorStrategy::setParagraphContentRect(const QRectF &paragraphContentRect)
+{
+    m_paragraphContentRect = paragraphContentRect;
+}
+
+QRectF AnchorStrategy::layoutEnvironmentRect()
+{
+    return m_layoutEnvironmentRect;
+}
+
+void AnchorStrategy::setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
+{
+    m_layoutEnvironmentRect = layoutEnvironmentRect;
+}
+
 int AnchorStrategy::pageNumber()
 {
     return m_pageNumber;
@@ -93,10 +113,10 @@ void AnchorStrategy::setPageNumber(int pageNumber)
     m_pageNumber = pageNumber;
 }
 
-
-/// as multiple shapes can hold 1 text flow; the anchored shape can be moved between containers and thus models
-void AnchorStrategy::updatePosition(KoShape *shape, const QTextDocument *document, int posInDocument)
+void AnchorStrategy::updateContainerModel()
 {
+    KoShape *shape = m_anchor->shape();
+
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(m_rootArea->associatedShape());
     if (container == 0) {
         if (m_model)
@@ -105,6 +125,7 @@ void AnchorStrategy::updatePosition(KoShape *shape, const QTextDocument *documen
         shape->setParent(0);
         return;
     }
+
     KoTextShapeContainerModel *theModel = dynamic_cast<KoTextShapeContainerModel*>(container->model());
     if (theModel != m_model) {
         if (m_model)

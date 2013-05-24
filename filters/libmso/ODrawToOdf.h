@@ -66,6 +66,13 @@ public:
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,
                                           Writer& out) = 0;
+
+        /**
+         * Ask the host application whether to process an msosptRectangle type
+         * shape container as an msosptTextBox.
+         */
+        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd) = 0;
+
         /**
          * Create a fitting style for the current object.
          * This will be a style that can contain graphic style elements. So the
@@ -79,17 +86,28 @@ public:
             Writer& out) = 0;
 
         /**
-         * Add text properties to the style.
-         * Host application specific style properties are added. These
-         * properties are attributes to the elements style:paragraph-properties
-         * or style:text-properties.
+         * Add host application specific formatting properties for text and
+         * paragraphs to the style of the draw element.  These properties are
+         * attributes to style:paragraph-properties or style:text-properties.
+         * Also add host application specific attributes to the draw element.
          **/
         virtual void addTextStyles(
-            const quint16 msospt,
             const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
             KoGenStyle& style,
             Writer& out) = 0;
+
+        /**
+         * Convert the OfficeArtCOLORREF to a QColor.  This conversion requires
+         * color scheme information.
+         **/
+        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c) = 0;
+
+        /**
+         *
+         */
+        virtual QString formatPos(qreal v) = 0;
+
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.
@@ -102,14 +120,10 @@ public:
          **/
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
 
-        /**
-         * Convert the OfficeArtCOLORREF to a QColor.
-         * This conversion requires color scheme information.
-         **/
-        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c) = 0;
+        quint16 m_currentShapeType;
 
-        virtual QString formatPos(qreal v) = 0;
-    };
+    }; //End class Client
+
 private:
     Client* const client;
 
@@ -137,6 +151,7 @@ private:
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processTextBox(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -153,7 +168,7 @@ private:
     void drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
     void drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const;
     void processConnector(const MSO::OfficeArtSpContainer& o, Writer& out, PathArtist drawPath);
-    
+
     // shapes2.cpp
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -305,15 +320,23 @@ private:
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     QString path2svg(const QPainterPath &path);
     void setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out);
+
 public:
-    ODrawToOdf(Client& c) :client(&c) {}
+    explicit ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
-    QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);
+    QString defineDashStyle(KoGenStyles& styles, const quint32 lineDashing);
+
+    /**
+     * Define and insert standard marker style into styles collection.
+     * @return the name that has been assigned for the inserted style
+     * or an empty string in case of an unsupported arrowType.
+     */
+    QString defineMarkerStyle(KoGenStyles& styles, const quint32 arrowType);
 
     /**
      * Apply the logic defined in MS-ODRAW subsection 2.2.2 to the provided
@@ -334,6 +357,7 @@ inline qreal toQReal(const MSO::FixedPoint& f)
     return f.integral + f.fractional / 65536.0;
 }
 
+const char* getFillRule(quint16 shapeType);
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);
@@ -343,5 +367,7 @@ const char* getVerticalPos(quint32 posV);
 const char* getVerticalRel(quint32 posRelV);
 const char* getHorizontalAlign(quint32 anchorText);
 const char* getVerticalAlign(quint32 anchorText);
+const char* getStrokeLineCap(quint32 capStyle);
+const char* getStrokeLineJoin(quint32 joinStyle);
 
 #endif

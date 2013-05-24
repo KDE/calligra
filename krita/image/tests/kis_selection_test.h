@@ -19,7 +19,7 @@
 #ifndef KIS_SELETION_TEST_H
 #define KIS_SELETION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoColorSpace;
 
@@ -28,14 +28,17 @@ class KisSelectionTest : public QObject
     Q_OBJECT
 
 private slots:
+    void testGrayColorspaceConversion();
+    void testGrayColorspaceOverComposition();
 
     void testSelectionComponents();
     void testSelectionActions();
     void testInvertSelection();
-    void testUpdatePixelSelection();
-    void testUpdateSelectionProjection();
+    void testInvertSelectionSemi();
     void testCopy();
     void testSelectionExactBounds();
+    void testSetParentNodeAfterCreation();
+    void testSetParentNodeBeforeCreation();
 };
 
 #endif

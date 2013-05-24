@@ -27,7 +27,6 @@
 #include <kexi_global.h>
 
 #include <QApplication>
-#include <kiconloader.h>
 #include <kguiitem.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
@@ -41,7 +40,7 @@ KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h
         , host(h)
 {
     setObjectName("KexiSharedActionHostPrivate");
-    connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
+    connect(&actionMapper, SIGNAL(mapped(QString)), this, SLOT(slotAction(QString)));
 }
 
 KexiSharedActionHostPrivate::~KexiSharedActionHostPrivate()
@@ -211,13 +210,6 @@ KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
     return 0;
 }
 
-#if 0 // 2.x
-bool KexiSharedActionHost::acceptsSharedActions(QObject *)
-{
-    return false;
-}
-#endif
-
 QWidget* KexiSharedActionHost::findWindow(QWidget */*w*/)
 {
     return 0;
@@ -225,28 +217,11 @@ QWidget* KexiSharedActionHost::findWindow(QWidget */*w*/)
 
 QWidget* KexiSharedActionHost::focusWindow()
 {
-#if 0 //sebsauer 20061120: KDE3
-    if (dynamic_cast<KMdiMainFrm*>(d->mainWin)) {
-        fw = dynamic_cast<KMdiMainFrm*>(d->mainWin)->activeWindow();
-    } else {
-        QWidget *aw = qApp->activeWindow();
-        if (!aw)
-            aw = d->mainWin;
-        fw = aw->focusWidget();
-    }
-    while (fw && !acceptsSharedActions(fw))
-        fw = fw->parentWidget();
-    return fw;
-#else
     QWidget *aw = QApplication::activeWindow();
     if (!aw)
         aw = dynamic_cast<QWidget*>(d->mainWin);
     QWidget *fw = aw->focusWidget();
     return findWindow(fw);
-/*2.x    while (fw && !acceptsSharedActions(fw))
-        fw = fw->parentWidget();
-    return fw;*/
-#endif
 }
 
 KAction* KexiSharedActionHost::createSharedActionInternal(KAction *action)
@@ -275,26 +250,26 @@ QList<KAction*> KexiSharedActionHost::sharedActions() const
   QPtrDict<QWidget> unplugged;
 };*/
 
-KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name,
+KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &iconName,
         const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
 {
     if (!col)
         col = d->mainWin->actionCollection();
 
     if (subclassName == 0) {
-        KAction* action = new KAction(KIcon(pix_name), text, col);
+        KAction *action = new KAction(KIcon(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);
         return createSharedActionInternal(action);
     } else if (qstricmp(subclassName, "KToggleAction") == 0) {
-        KToggleAction* action = new KToggleAction(KIcon(pix_name), text, col);
+        KToggleAction *action = new KToggleAction(KIcon(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);
         return createSharedActionInternal(action);
     } else if (qstricmp(subclassName, "KActionMenu") == 0) {
-        KActionMenu* action = new KActionMenu(KIcon(pix_name), text, col);
+        KActionMenu *action = new KActionMenu(KIcon(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);

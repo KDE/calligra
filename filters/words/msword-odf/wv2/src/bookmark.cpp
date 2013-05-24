@@ -42,7 +42,7 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
     if (fib.lcbPlcfbkf != 0)
     {
-        tableStream->seek( fib.fcPlcfbkf, G_SEEK_SET );
+        tableStream->seek( fib.fcPlcfbkf, WV2_SEEK_SET );
 
         m_start = new PLCF<Word97::BKF>(fib.lcbPlcfbkf, tableStream);
         m_startIt = new PLCFIterator<Word97::BKF>(*m_start);
@@ -57,7 +57,7 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     if ( fib.lcbSttbfbkmk != 0 )
     {
         if ( static_cast<U32>( tableStream->tell() ) != fib.fcSttbfbkmk ) {
-            tableStream->seek( fib.fcSttbfbkmk, G_SEEK_SET );
+            tableStream->seek( fib.fcSttbfbkmk, WV2_SEEK_SET );
         }
         // The bookmark names in the STTBF are always Unicode, the lid doesn't matter
         U16 usLid = 0x409;
@@ -69,6 +69,8 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
         for (uint i = 0; i < name->count(); i++ ) {
             m_name.push_back(name->stringAt(i));
         }
+
+        delete name;
     }
 
     //The BKL is no longer stored in the plcfbkl or plcfatnbkl, and is instead
@@ -80,7 +82,7 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     if (fib.lcbPlcfbkl != 0)
     {
         int count = 0;
-        tableStream->seek( fib.fcPlcfbkl, G_SEEK_SET );
+        tableStream->seek( fib.fcPlcfbkl, WV2_SEEK_SET );
 
         //Word Version 6,7
         if ( fib.nFib < Word8nFib ) {
@@ -133,18 +135,16 @@ Bookmarks::~Bookmarks()
     delete m_start;
 }
 
-BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
+BookmarkData Bookmarks::bookmark( const U32 globalCP, bool& ok )
 {
 #ifdef WV2_DEBUG_BOOKMARK
     wvlog << " globalCP=" << globalCP << endl;
 #endif
-
+    ok = false;
     if ( (m_startIt && m_startIt->current()) &&
          (m_startIt->currentStart() == globalCP) &&
          (m_nameIt != m_name.end()) )
     {
-        ok = false;
-
         if (m_valid.isEmpty()) {
             wvlog << "BUG: m_valid empty?";
         } else if (m_valid.first()) {
@@ -176,9 +176,45 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 #endif
         return BookmarkData( start, end, name );
     }
-
-    ok = false;
     return BookmarkData( 0, 0, wvWare::UString("") );
+}
+
+BookmarkData Bookmarks::bookmark(const UString& name, bool& ok ) const
+{
+    std::vector<UString>::const_iterator nameIt = m_name.begin();
+    PLCFIterator<Word97::BKF> startIt(*m_start);
+
+    PLCFIterator<Word97::BKL>* endIt = 0;
+    if (m_nFib < Word8nFib) {
+        endIt = new PLCFIterator<Word97::BKL>(*m_end);
+    }
+
+    while (startIt.current()) {
+        if (*nameIt == name) {
+            U32 start = startIt.currentStart();
+            U32 end = start;
+            if (m_nFib < Word8nFib) {
+                end = endIt->currentStart();
+                delete endIt;
+            } else {
+                U16 ibkl = startIt.current()->ibkl;
+                end = m_endCP[ibkl];
+            }
+            ok = true;
+            return BookmarkData( start, end, name );
+        }
+        ++startIt;
+        ++nameIt;
+
+        if (m_nFib < Word8nFib) {
+            ++( *endIt );
+        }
+    }
+    if (m_nFib < Word8nFib) {
+        delete endIt;
+    }
+    ok = false;
+    return BookmarkData( 0, 0, UString("") );
 }
 
 U32 Bookmarks::nextBookmarkStart()
@@ -248,7 +284,6 @@ void Bookmarks::check( U32 globalCP )
 
 #ifdef WV2_DEBUG_BOOKMARK
         wvlog << "Bookmark skipped! CP:" << globalCP;
-        m_num--;
 #endif
     }
 }
@@ -312,7 +347,7 @@ bool Bookmarks::valid(U16 &num, const U32 ccpText)
                 ret = false;
                 num++;
 #ifdef WV2_DEBUG_BOOKMARK
-		wvlog << "bkmk" << n << ": startCP > endCP (" <<
+        wvlog << "bkmk" << n << ": startCP > endCP (" <<
                     startIt.currentStart() << "|" << m_endCP[ibkl] << ")";
 #endif
             } else {
@@ -328,7 +363,7 @@ bool Bookmarks::valid(U16 &num, const U32 ccpText)
     //check bookmark names
     for (uint i = 0; i < m_name.size(); i++) {
         if ( (m_name[i] == UString::null) ) {
-            m_name[i] == UString().from(i + 1);
+            m_name[i] = UString().from(i + 1);
         }
     }
     if (m_name.size() < m_start->count()) {

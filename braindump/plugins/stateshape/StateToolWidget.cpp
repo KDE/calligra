@@ -22,7 +22,7 @@
 #include <QItemDelegate>
 #include <kundo2command.h>
 
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorizedsortfilterproxymodel.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>

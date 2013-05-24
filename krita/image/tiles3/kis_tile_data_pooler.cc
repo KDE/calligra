@@ -134,7 +134,7 @@ void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
     if (numClones > 0) {
         td->blockSwapping();
         for (qint32 i = 0; i < numClones; i++) {
-            td->m_clonesStack.push(new KisTileData(*td));
+            td->m_clonesStack.push(new KisTileData(*td, false));
         }
         td->unblockSwapping();
     } else {
@@ -349,4 +349,10 @@ void KisTileDataPooler::debugTileStatistics()
     m_store->endIteration(iter);
 
     qDebug() << "Tiles statistics:\t total:" << m_store->numTiles() << "\t preallocated:"<< preallocatedTiles;
+}
+
+void KisTileDataPooler::testingRereadConfig()
+{
+    KisImageConfig config;
+    m_memoryLimit = MiB_TO_METRIC(config.poolLimit());
 }

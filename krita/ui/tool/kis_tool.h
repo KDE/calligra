@@ -24,7 +24,7 @@
 #include <KoColor.h>
 #include <KoToolBase.h>
 #include <KoID.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <krita_export.h>
 #include <kis_types.h>
 
@@ -50,6 +50,7 @@
 
 #define MOVE_CONDITION(_event, _mode) (mode() == (_mode))
 
+class KActionCollection;
 class KoCanvasBase;
 class KisPattern;
 class KoAbstractGradient;
@@ -86,9 +87,9 @@ public:
 
     KisTool(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisTool();
-    
+
     virtual int flags() const { return 0; }
-    
+
     void deleteSelection();
 // KoToolBase Implementation.
 
@@ -148,7 +149,6 @@ protected:
     void updateCanvasViewRect(const QRectF &viewRect);
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     inline void setOutlineStyle(PaintMode mode) {
         m_outlinePaintMode = mode;
@@ -156,6 +156,7 @@ protected:
 
 protected:
     bool specialModifierActive();
+    virtual bool isGestureSupported() const;
     virtual void gesture(const QPointF &offsetInDocPixels,
                          const QPointF &initialDocPoint);
 
@@ -170,16 +171,13 @@ protected:
 
     KisImageWSP currentImage();
     KisPattern* currentPattern();
-    KoAbstractGradient * currentGradient();
+    KoAbstractGradient *currentGradient();
     KisNodeSP currentNode();
     KoColor currentFgColor();
     KoColor currentBgColor();
     KisPaintOpPresetSP currentPaintOpPreset();
-    KisFilterConfiguration * currentGenerator();
+    KisFilterConfiguration *currentGenerator();
 
-    /// convenience method to fill the painter's settings with all the current resources
-    virtual void setupPainter(KisPainter * painter);
-    
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
@@ -196,9 +194,15 @@ protected:
     /// Call after finishing use of native OpenGL commands when painting this tool's decorations.
     /// This is a convenience method that calls endOpenGL() on the OpenGL canvas object.
     void endOpenGL();
-    
+
     /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
     void setCurrentNodeLocked(bool locked);
+
+    /// Checks checks if the current node is editable
+    bool nodeEditable();
+
+    /// Checks checks if the selection is editable, only applies to local selection as global selection is always editable
+    bool selectionEditable();
 
 protected:
     enum ToolMode {
@@ -212,7 +216,7 @@ protected:
     };
 
     virtual void setMode(ToolMode mode);
-    virtual ToolMode mode();
+    virtual ToolMode mode() const;
 
 
 protected slots:
@@ -221,9 +225,35 @@ protected slots:
      */
     virtual void resetCursorStyle();
 
+    /**
+     * Called when the user requested undo while the stroke is
+     * active. If you tool supports undo of the part of its actions,
+     * override this method and do the needed work there.
+     *
+     * NOTE: Default implementation forwards this request to
+     *       requestStrokeCancellation() method, so that the stroke
+     *       would be cancelled.
+     */
+    virtual void requestUndoDuringStroke();
+
+    /**
+     * Called when the user requested the cancellation of the current
+     * stroke. If you tool supports cancelling, override this method
+     * and do the needed work there
+     */
+    virtual void requestStrokeCancellation();
+
+    /**
+     * Called when the image decided that the stroke should better be
+     * ended. If you tool supports long strokes, override this method
+     * and do the needed work there
+     */
+    virtual void requestStrokeEnd();
+
 private slots:
     void slotToggleFgBg();
     void slotResetFgBg();
+    void slotDelayedGesture();
 
 private:
     void initPan(const QPointF &docPoint);

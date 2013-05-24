@@ -44,7 +44,7 @@ public:
     virtual ~KexiDBComboBox();
 
     //! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)
-    virtual KexiTableViewColumn *column() const {
+    virtual KexiDB::TableViewColumn *column() const {
         return 0;
     }
 
@@ -55,7 +55,7 @@ public:
 
     //! Implemented for KexiComboBoxBase
     virtual QVariant origValue() const {
-        return m_origValue;
+        return KexiDataItemInterface::originalValue();
     }
 
     void setEditable(bool set);
@@ -137,7 +137,7 @@ protected:
 
     //! Implemented for KexiComboBoxBase
     virtual QWidget *internalEditor() const {
-        return /*WidgetWithSubpropertiesInterface*/m_subwidget;
+        return /*WidgetWithSubpropertiesInterface*/subwidget();
     }
 
     //! Implemented for KexiComboBoxBase. Does nothing if the widget is not editable.

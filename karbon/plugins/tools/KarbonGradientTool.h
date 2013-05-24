@@ -22,8 +22,8 @@
 
 #include <KoToolBase.h>
 #include <KoSnapGuide.h>
-#include <QtGui/QGradient>
-#include <QtCore/QMultiMap>
+#include <QGradient>
+#include <QMultiMap>
 
 class GradientStrategy;
 class KarbonGradientEditWidget;
@@ -56,14 +56,14 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
+public slots:
+    virtual void documentResourceChanged(int key, const QVariant & res);
+
 protected:
-    /// reimplemented from KoToolBase
-    virtual QWidget * createOptionWidget();
     /// reimplemented from KoToolBase
     virtual QList<QWidget *> createOptionWidgets();
 
 private Q_SLOTS:
-    virtual void resourceChanged(int key, const QVariant & res);
     void initialize();
     void gradientChanged();
     void gradientSelected(KoResource*);

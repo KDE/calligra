@@ -19,13 +19,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <kexidb/field.h>
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/tableschema.h>
+#include <db/field.h>
+#include <db/cursor.h>
+#include <db/connection.h>
+#include <db/queryschema.h>
+#include <db/tableschema.h>
 
 #include "DataProvider.h"
 

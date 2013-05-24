@@ -32,6 +32,7 @@
 #include <krita_export.h>
 
 class KoResource;
+class KoResourceLoaderThread;
 class KisPattern;
 class KisPaintOpPreset;
 class KisWorkspaceResource;
@@ -49,6 +50,10 @@ public:
     KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
 
+    void brushBlacklistCleanup();
+signals:
+    void notifyBrushBlacklistCleanup();
+    
 private:
 
     KisResourceServerProvider();
@@ -59,17 +64,11 @@ private:
     KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
 
-private slots:
-
-    void patternThreadDone();
-    void paintOpPresetThreadDone();
-    void workspaceThreadDone();
-
 private:
 
-    QThread * patternThread;
-    QThread * paintOpPresetThread;
-    QThread * workspaceThread;
+    KoResourceLoaderThread *patternThread;
+    KoResourceLoaderThread *paintOpPresetThread;
+    KoResourceLoaderThread *workspaceThread;
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

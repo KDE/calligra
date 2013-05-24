@@ -22,16 +22,15 @@
  *   OTHER DEALINGS IN THE SOFTWARE.                                       *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
+#include <QLayout>
+#include <QPushButton>
 #include <Q3VBoxLayout>
 #include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kcomponentdata.h>
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 #include <widget/kexidbdrivercombobox.h>
 
 /*

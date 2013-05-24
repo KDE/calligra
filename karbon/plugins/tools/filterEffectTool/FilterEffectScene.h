@@ -20,10 +20,10 @@
 #ifndef FILTEREFFECTSCENE_H
 #define FILTEREFFECTSCENE_H
 
-#include <QtGui/QGraphicsScene>
-#include <QtCore/QString>
-#include <QtCore/QSet>
-#include <QtCore/QMap>
+#include <QGraphicsScene>
+#include <QString>
+#include <QSet>
+#include <QMap>
 
 class KoShape;
 class KoFilterEffect;
@@ -82,7 +82,7 @@ class FilterEffectScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    FilterEffectScene(QObject *parent = 0);
+    explicit FilterEffectScene(QObject *parent = 0);
     virtual ~FilterEffectScene();
 
     /// initializes the scene from the filter effect stack

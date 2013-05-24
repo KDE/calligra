@@ -71,11 +71,10 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
         subpathx = subpathy = curx = cury = contrlx = contrly = 0.0;
         while (ptr < end) {
             if (*ptr == ' ')
-                ptr++;
+                ++ptr;
 
             relative = false;
 
-            //std::cout << "Command : " << command << std::endl;
             switch (command) {
             case 'm':
                 relative = true;
@@ -147,8 +146,16 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             case 'Z': {
                 // reset curx, cury for next path
                 if (process) {
-                    curx = subpathx;
-                    cury = subpathy;
+                    // The "closepath" (Z or z) ends the current subpath and causes an automatic
+                    // straight line to be drawn from the current point to the initial point of the
+                    // current subpath. If a "closepath" is followed immediately by a "moveto", then
+                    // the "moveto" identifies the start point of the next subpath. If a "closepath"
+                    // is followed immediately by any other command, then the next subpath starts at
+                    // the same initial point as the current subpath.
+                    if (*ptr != 'm' && *ptr != 'M') {
+                        curx = subpathx;
+                        cury = subpathy;
+                    }
                 }
                 svgClosePath();
                 break;
@@ -342,9 +349,9 @@ const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
 
     // read the sign
     if (*ptr == '+')
-        ptr++;
+        ++ptr;
     else if (*ptr == '-') {
-        ptr++;
+        ++ptr;
         sign = -1;
     }
 
@@ -352,19 +359,19 @@ const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
     while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
         integer = (integer * 10) + *(ptr++) - '0';
     if (*ptr == '.') { // read the decimals
-        ptr++;
+        ++ptr;
         while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
             decimal += (*(ptr++) - '0') * (frac *= 0.1);
     }
 
     if (*ptr == 'e' || *ptr == 'E') { // read the exponent part
-        ptr++;
+        ++ptr;
 
         // read the sign of the exponent
         if (*ptr == '+')
-            ptr++;
+            ++ptr;
         else if (*ptr == '-') {
-            ptr++;
+            ++ptr;
             expsign = -1;
         }
 
@@ -372,7 +379,7 @@ const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
         while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9') {
             exponent *= 10;
             exponent += *ptr - '0';
-            ptr++;
+            ++ptr;
         }
     }
     number = integer + decimal;
@@ -380,7 +387,7 @@ const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
 
     // skip the following space
     if (*ptr == ' ')
-        ptr++;
+        ++ptr;
 
     return ptr;
 }
@@ -480,7 +487,7 @@ void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &c
 
     n_segs = (int)(int) ceil(fabs(th_arc / (M_PI * 0.5 + 0.001)));
 
-    for (i = 0; i < n_segs; i++) {
+    for (i = 0; i < n_segs; ++i) {
         {
             qreal sin_th, cos_th;
             qreal a00, a01, a10, a11;

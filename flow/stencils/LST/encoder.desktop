@@ -1,11 +1,27 @@
 [Desktop Entry]
 Name=Encoder
+Name[bs]=Enkoder
+Name[ca]=Codificador
+Name[ca@valencia]=Codificador
+Name[cs]=Kodér
+Name[da]=Encoder
+Name[de]=Kodierer
 Name[el]=Κωδικοποιητής
 Name[es]=Codificador
+Name[et]=Kooder
+Name[fr]=Encodeur
+Name[gl]=Codificador
+Name[it]=Codificatore
+Name[kk]=Кодер
+Name[mr]=एन्कोडर
 Name[nb]=Koder
 Name[nl]=Encoder
+Name[pl]=Enkoder
 Name[pt]=Codificador
 Name[pt_BR]=Codificador
+Name[ru]=Кодировщик
+Name[sk]=Kódovač
+Name[sl]=Kodirnik
 Name[sv]=Kodare
 Name[uk]=Кодувальник
 Name[x-test]=xxEncoderxx

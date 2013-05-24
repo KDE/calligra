@@ -21,10 +21,10 @@
 #define _KIS_VLINE_ITERATOR_H_
 
 #include "kis_base_iterator.h"
-
+#include "krita_export.h"
 #include "kis_iterator_ng.h"
 
-class KisVLineIterator2 : public KisVLineIteratorNG, KisBaseIterator {
+class KRITAIMAGE_EXPORT KisVLineIterator2 : public KisVLineIteratorNG, KisBaseIterator {
     KisVLineIterator2(const KisVLineIterator2&);
     KisVLineIterator2& operator=(const KisVLineIterator2&);
 
@@ -43,6 +43,7 @@ public:
 
     virtual bool nextPixel();
     virtual void nextColumn();
+    virtual const quint8* rawDataConst() const;
     virtual const quint8* oldRawData() const;
     virtual quint8* rawData();
     virtual qint32 nConseqPixels() const;

@@ -35,12 +35,12 @@ kde4_add_plugin(keximigrate_mdb ${keximigrate_mdbmigrate_PART_SRCS})
 
 
 target_link_libraries(keximigrate_mdb
-${KDE4_KPARTS_LIBS}
 ${GLIB2_LIBRARIES}
 ${ICONV_LIBRARIES}
 keximigrate
 kexidb
 kexiutils
+${CALLIGRADB_LIBS}
 )
 
 install(TARGETS keximigrate_mdb  DESTINATION ${PLUGIN_INSTALL_DIR})

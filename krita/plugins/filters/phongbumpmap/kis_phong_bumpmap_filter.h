@@ -46,11 +46,7 @@ public:
     QRect neededRect(const QRect &rect, const KisFilterConfiguration *config) const;
     QRect changedRect(const QRect &rect, const KisFilterConfiguration *config) const;
 
-    bool supportsAdjustmentLayers() const {
-        return false;
-    }
-
-    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 

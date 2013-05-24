@@ -41,6 +41,7 @@ class PAINTOP_EXPORT KisPaintOpOption : public QObject
 public:
     static QString brushCategory();
     static QString colorCategory();
+    static QString textureCategory();
 
 public:
 
@@ -94,7 +95,7 @@ protected:
 
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

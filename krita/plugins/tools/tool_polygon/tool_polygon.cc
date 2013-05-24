@@ -25,7 +25,6 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -46,8 +45,6 @@ K_EXPORT_PLUGIN(ToolPolygonFactory("krita"))
 ToolPolygon::ToolPolygon(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolPolygonFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolPolygonFactory(QStringList()));
 }

@@ -20,7 +20,8 @@
 #include "kis_curve_option.h"
 
 KisCurveOption::KisCurveOption(const QString & label, const QString& name, const QString & category,
-                               bool checked, qreal value, qreal min, qreal max, bool useCurve, bool separateCurveValue
+                               bool checked, qreal value, qreal min, qreal max, bool useCurve,
+                               bool separateCurveValue
 )
         : m_label(label)
         , m_category(category)
@@ -98,11 +99,13 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     if(sensor)
         setSensor(sensor);
 
-    bool customCurve = setting->getBool("Custom" + prefix, false);
-    
-    if(customCurve)
-        m_sensor->setCurve(setting->getCubicCurve("Curve" + prefix));
-    
+    // only load the old curve format if the curve wasn't saved by the sensor
+    if(!setting->getString(prefix + "Sensor").contains("curve")) {
+        bool customCurve = setting->getBool("Custom" + prefix, false);
+
+        if(customCurve)
+            m_sensor->setCurve(setting->getCubicCurve("Curve" + prefix));
+    }
     m_value    = setting->getDouble(m_name + "Value"   , m_maxValue);
     m_useCurve = setting->getBool  (m_name + "UseCurve", true);
 }

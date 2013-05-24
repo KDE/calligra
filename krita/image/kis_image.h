@@ -28,24 +28,32 @@
 
 #include <KoColorConversionTransformation.h>
 
+#include "kis_paint_device.h" // msvc cannot handle forward declarations, so include kis_paint_device here
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include "kis_default_bounds.h"
-#include "kis_dab_processing_strategy.h"
+#include "kis_image_interfaces.h"
 
+#include <krita_export.h>
+
+class KoDocument;
 class KoColorSpace;
 class KoCompositeOp;
 class KoColor;
 
+class KisCompositeProgressProxy;
 class KisActionRecorder;
+class KisUndoStore;
 class KisUndoAdapter;
+class KisImageSignalRouter;
+class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
-class KisStrokeStrategy;
+class KisLayerComposition;
 
 namespace KisMetaData
 {
@@ -57,7 +65,13 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject,
+        public KisStrokesFacade,
+        public KisUpdatesFacade,
+        public KisProjectionUpdateListener,
+        public KisNodeFacade,
+        public KisNodeGraphListener,
+        public KisShared
 {
 
     Q_OBJECT
@@ -65,8 +79,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public 
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
-    KisImage(const KisImage& rhs);
+    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -74,10 +87,11 @@ public: // KisNodeGraphListener implementation
     void aboutToAddANode(KisNode *parent, int index);
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
-    void nodeHasBeenRemoved(KisNode *parent, int index);
-    void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex);
-    void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex);
     void nodeChanged(KisNode * node);
+    void requestProjectionUpdate(KisNode *node, const QRect& rect);
+
+public: // KisProjectionUpdateListener implementation
+    void notifyProjectionUpdated(const QRect &rc);
 
 public:
 
@@ -117,20 +131,17 @@ public:
     QImage convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
-     * Lock the image to make sure no recompositing-causing signals
-     * get emitted while you're messing with the layers. Don't forget
-     * to unlock again.
+     * Calls KisUpdateScheduler::lock
      */
     void lock();
 
     /**
-     * Unlock the image to make sure the rest of Krita learns about
-     * changes in the image again.
+     * Calls KisUpdateScheduler::unlock
      */
     void unlock();
 
     /**
-     * Returns true if the image is locked.
+     * Returns true if lock() has been called more often than unlock().
      */
     bool locked() const;
 
@@ -151,28 +162,6 @@ public:
     KisSelectionSP globalSelection() const;
 
     /**
-     * Replaces the current global selection with globalSelection. If
-     * globalSelection is empty, a new selection object will be
-     * created that is by default completely deselected.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection = 0);
-
-    /**
-     * Removes the global selection.
-     */
-    void removeGlobalSelection();
-
-    /**
-     * @return the deselected global selection or 0 if no global selection was deselected
-     */
-    KisSelectionSP deselectedGlobalSelection();
-
-    /**
-     * Set deselected global selection
-     */
-    void setDeleselectedGlobalSelection(KisSelectionSP selection);
-
-    /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
      */
     QString nextLayerName() const;
@@ -188,61 +177,61 @@ public:
     KisPerspectiveGrid* perspectiveGrid();
 
     /**
-     * Resize the image to the specified width and height. The resize
+     * Resize the image to the specified rect. The resize
      * method handles the creating on an undo step itself.
      *
-     * @param w the new width of the image
-     * @param h the new height of the image
-     * @param x the x position of the crop on all layer if cropLayers is true
-     * @param y the y position of the crop on all layer if cropLayers is true
-     * @param cropLayers if true, all layers are cropped to the new size.
+     * @param newRect the rect describing the new width, height and offset
+     *        of the image
      */
-    void resize(qint32 w, qint32 h, qint32 x = 0, qint32 y = 0,  bool cropLayers = false);
+    void resizeImage(const QRect& newRect);
 
     /**
-     * Resize the image to the specified width and height. The resize
+     * Crop the image to the specified rect. The crop
      * method handles the creating on an undo step itself.
      *
-     * @param rc the rect describing the new width and height of the image
-     * @param cropLayers if true, all layers are cropped to the new rect
+     * @param newRect the rect describing the new width, height and offset
+     *        of the image
      */
-    void resize(const QRect& rc, bool cropLayers = false);
+    void cropImage(const QRect& newRect);
+
 
     /**
-     * Resize the image to the specified width and height. The previous
-     * image is offset by the amount specified.
-     *
-     * @param w the width of the image
-     * @param h the height of the image
-     * @param xOffset the horizontal offset of the previous image
-     * @param yOffset the vertical offset of the previous image
+     * Crop a node to @newRect. The node will *not* be moved anywhere,
+     * it just drops some content
      */
-    void resizeWithOffset(qint32 w, qint32 h, qint32 xOffset = 0, qint32 yOffset = 0);
+    void cropNode(KisNodeSP node, const QRect& newRect);
 
-    /**
-     * Execute a scale transform on all layers in this image.
-     * @param sx x-axis scale factor
-     * @param sy y-axis scale factor
-     * @param m_progress progress updater
-     * @param filterStrategy filtering strategy be used to scaling pixels 
-     * @param scaleOnlyShapes only scale shapes, but not image and pixels
-     */
-    void scale(double sx, double sy, KoUpdater *m_progress, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes = false);
+    void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
 
     /**
      * Execute a rotate transform on all layers in this image.
+     * Image is resized to fit rotated image.
      */
-    void rotate(double radians, KoUpdater *m_progress);
+    void rotateImage(double radians);
+
+    /**
+     * Execute a rotate transform on on a subtree of this image.
+     * Image is not resized.
+     */
+    void rotateNode(KisNodeSP node, double radians);
 
     /**
      * Execute a shear transform on all layers in this image.
      */
-    void shear(double angleX, double angleY, KoUpdater *m_progress);
+    void shear(double angleX, double angleY);
+
+    /**
+     * Shear a node and all its children.
+     * @param angleX, @param angleY are given in degrees.
+     */
+    void shearNode(KisNodeSP node, double angleX, double angleY);
 
     /**
      * Convert the image and all its layers to the dstColorSpace
      */
-    void convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    void convertImageColorSpace(const KoColorSpace *dstColorSpace,
+                                KoColorConversionTransformation::Intent renderingIntent,
+                                KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Set the color space of  the projection (and the root layer)
@@ -263,20 +252,41 @@ public:
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
+     *
+     * This does not create an undo action; only call it when creating or
+     * loading an image.
      */
     void assignImageProfile(const KoColorProfile *profile);
 
     /**
-     * Replace the current undo adapter with the specified undo adapter.
-     * The current undo adapter will _not_ be deleted.
+     * Returns the current undo adapter. You can add new commands to the
+     * undo stack using the adapter. This adapter is used for a backward
+     * compatibility for old commands created before strokes. It blocks
+     * all the porcessing at the scheduler, waits until it's finished
+     * adn executes commands exclusively.
      */
-    void setUndoAdapter(KisUndoAdapter * undoAdapter);
+    KisUndoAdapter* undoAdapter() const;
 
     /**
-     * Returns the current undo adapter. You can add new commands to the
-     * undo stack using the adapter
+     * This adapter is used by the strokes system. The commands are added
+     * to it *after* redo() is done (in the scheduler context). They are
+     * wrapped into a special command and added to the undo stack. redo()
+     * in not called.
      */
-    KisUndoAdapter *undoAdapter() const;
+    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
+
+    /**
+     * Replace current undo store with the new one. The old store
+     * will be deleted.
+     * This method is used by KisDoc2 for dropping all the commands
+     * during file loading.
+     */
+    void setUndoStore(KisUndoStore *undoStore);
+
+    /**
+     * Return current undo store of the image
+     */
+    KisUndoStore* undoStore();
 
     /**
      * @return the action recorder associated with this image
@@ -378,22 +388,6 @@ public:
     }
 
     /**
-     * Starting form 2.3 mergedImage() is declared deprecated.
-     * If you want to get a projection of the image, please use
-     * something like:
-     *
-     * image->lock();
-     * read_something_from_the_image(image->projection());
-     * image->unlock();
-     *
-     * or if you want to get a full refresh of the image graph
-     * performed beforehand (do you really want it?) (sure?) then
-     * you can add a call to image->refreshGraph() before locking
-     * the image.
-     */
-    KDE_DEPRECATED KisPaintDeviceSP mergedImage();
-
-    /**
      * @return the root node of the image node graph
      */
     KisGroupLayerSP rootLayer() const;
@@ -425,7 +419,7 @@ public:
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.
      */
-    KisLayerSP mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
+    KisLayerSP mergeDown(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
 
     /**
      * flatten the layer: that is, the projection becomes the layer
@@ -441,18 +435,6 @@ public:
 
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
-
-    void notifyPropertyChanged(KisLayerSP layer);
-
-    /**
-     * Called whenever a layer has changed. The layer is added to a
-     * list of dirty layers and as soon as the document stores the
-     * command that is now in progress, the image will be notified.
-     * Then the image will notify the dirty layers, the dirty layers
-     * will notify their parents & emit a signal that will be caught
-     * by the layer box, which will request a new thumbnail.
-    */
-    void notifyLayerUpdated(KisLayerSP layer);
 
     void setRootLayer(KisGroupLayerSP rootLayer);
 
@@ -482,22 +464,36 @@ public:
      */
     void notifyAboutToBeDeleted();
 
+    KisImageSignalRouter* signalRouter();
+
+    /**
+     * Returns whether we can reselect current global selection
+     *
+     * \see reselectGlobalSelection()
+     */
+    bool canReselectGlobalSelection();
+
+    /**
+     * Returns the layer compositions for the image
+     */
+    QList<KisLayerComposition*> compositions();
+
+    /**
+     * Adds a new layer composition, will be saved with the image
+     */
+    void addComposition(KisLayerComposition* composition);
+
+    /**
+     * Remove the layer compostion
+     */
+    void removeComposition(KisLayerComposition* composition);
+
+public:
+    void startIsolatedMode(KisNodeSP node);
+    void stopIsolatedMode();
+    KisNodeSP isolatedModeRoot() const;
+
 signals:
-
-    /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
-    void sigLayerPropertiesChanged(KisLayerSP layer);
-
-    /**
-     * Emitted when the list of layers has changed completely.
-     * This means e.g. when the image is flattened, but not when it is rotated,
-     * as the layers only change internally then.
-     */
-    void sigLayersChanged(KisGroupLayerSP rootLayer);
-    /**
-     * Emitted when the list of layers has changed completely, and emitted after \ref sigLayersChanged has been
-     * emitted.
-     */
-    void sigPostLayersChanged(KisGroupLayerSP rootLayer);
 
     /**
      *  Emitted whenever an action has caused the image to be
@@ -513,73 +509,219 @@ signals:
      */
     void sigImageModified();
 
-    void sigSizeChanged(qint32 w, qint32 h);
+    /**
+     * The signal is emitted when the size of the image is changed.
+     * \p oldStillPoint and \p newStillPoint give the reciever the
+     * hint about how the new and old rect of the image correspond to
+     * each other. They specify the point of the image around which
+     * the conversion was done. This point will stay still on the
+     * user's screen. That is the \p newStillPoint of the new image
+     * will be painted at the same screen position, where \p
+     * oldStillPoint of the old image was painted.
+     *
+     * \param oldStillPoint is a still point represented in *old*
+     *                      image coordinates
+     *
+     * \param newStillPoint is a still point represented in *new*
+     *                      image coordinates
+     */
+    void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
 
     /**
-     * Inform the model that we're going to add a layer.
-     */
-    void sigAboutToAddANode(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're done adding a layer.
-     */
-    void sigNodeHasBeenAdded(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're going to remove a layer.
-     */
-    void sigAboutToRemoveANode(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're done removing a layer.
-     */
-    void sigNodeHasBeenRemoved(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're about to move a layer.
-     */
-    void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-
-    /**
-     * Inform the model we're done moving a layer.
-     */
-    void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-    
-    /**
      * Inform the model that a node was changed
      */
-    void sigNodeChanged(KisNode * node);
+    void sigNodeChanged(KisNodeSP node);
 
     /**
      * Inform that the image is going to be deleted
      */
     void sigAboutToBeDeleted();
 
-public slots:
+    /**
+     * The signal is emitted right after a node has been connected
+     * to the graph of the nodes.
+     *
+     * WARNING: you must not request any graph-related information
+     * about the node being run in a not-scheduler thread. If you need
+     * information about the parent/siblings of the node connect
+     * with Qt::DirectConnection, get needed information and then
+     * emit another Qt::AutoConnection signal to pass this information
+     * to your thread. See details of the implementation
+     * in KisDummiesfacadeBase.
+     */
+    void sigNodeAddedAsync(KisNodeSP node);
 
+    /**
+     * This signal is emitted right before a node is going to removed
+     * from the graph of the nodes.
+     *
+     * WARNING: you must not request any graph-related information
+     * about the node being run in a not-scheduler thread.
+     *
+     * \see comment in sigNodeAddedAsync()
+     */
+    void sigRemoveNodeAsync(KisNodeSP node);
+
+    /**
+     * Emitted when the root node of the image has changed.
+     * It happens, e.g. when we flatten the image. When
+     * this happens the receiver should reload information
+     * about the image
+     */
+    void sigLayersChangedAsync();
+
+    /**
+     * Emitted when the UI has requested the undo of the last stroke's
+     * operation. The point is, we cannot deal with the internals of
+     * the stroke without its creator knowing about it (which most
+     * probably cause a crash), so we just forward this request from
+     * the UI to the creator of the stroke.
+     *
+     * If your tool supports undoing part of its work, just listen to
+     * this signal and undo when it comes
+     */
+    void sigUndoDuringStrokeRequested();
+
+    /**
+     * Emitted when the UI has requested the cancellation of
+     * the stroke. The point is, we cannot cancel the stroke
+     * without its creator knowing about it (which most probably
+     * cause a crash), so we just forward this request from the UI
+     * to the creator of the stroke.
+     *
+     * If your tool supports cancelling of its work in the middle
+     * of operation, just listen to this signal and cancel
+     * the stroke when it comes
+     */
+    void sigStrokeCancellationRequested();
+
+    /**
+     * Emitted when the image decides that the stroke should better
+     * be ended. The point is, we cannot just end the stroke
+     * without its creator knowing about it (which most probably
+     * cause a crash), so we just forward this request from the UI
+     * to the creator of the stroke.
+     *
+     * If your tool supports long  strokes that may involve multiple
+     * mouse actions in one stroke, just listen to this signal and
+     * end the stroke when it comes.
+     */
+    void sigStrokeEndRequested();
+
+    /**
+     * Emitted when the isolated mode status has changed.
+     *
+     * Can be used by the recievers to catch a fact of forcefully
+     * stopping the isolated mode by the image when some complex
+     * action was requested
+     */
+    void sigIsolatedModeChanged();
+
+public slots:
+    KisCompositeProgressProxy* compositeProgressProxy();
+
+    void barrierLock();
+    bool tryBarrierLock();
     void waitForDone();
 
-    void startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
-    void endStroke();
-    void cancelStroke();
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
+    void addJob(KisStrokeId id, KisStrokeJobData *data);
+    void endStroke(KisStrokeId id);
+    bool cancelStroke(KisStrokeId id);
 
-    void slotProjectionUpdated(const QRect & rc);
-    void updateProjection(KisNodeSP node, const QRect& rc);
+    void blockUpdates();
+    void unblockUpdates();
+
+    /**
+     * Disables notification of the UI about the changes in the image.
+     * This feature is used by KisProcessingApplicator. It is needed
+     * when we change the size of the image. In this case, the whole
+     * image will be reloaded into UI by sigSizeChanged(), so there is
+     * no need to inform the UI about individual dirty rects.
+     */
+    void disableUIUpdates();
+
+    /**
+     * \see disableUIUpdates
+     */
+    void enableUIUpdates();
+
+    /**
+     * Disables the processing of all the setDirty() requests that
+     * come to the image. The incoming requests are effectively
+     * *dropped*.
+     *
+     * This feature is used by KisProcessingApplicator. For many cases
+     * it provides its own updates interface, which recalculates the
+     * whole subtree of nodes. But while we change any particular
+     * node, it can ask for an update itself. This method is a way of
+     * blocking such intermediate (and excessive) requests.
+     */
+    void disableDirtyRequests();
+
+    /**
+     * \see disableDirtyRequests()
+     */
+    void enableDirtyRequests();
+
+    void refreshGraphAsync(KisNodeSP root = 0);
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc);
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
 
     /**
      * Triggers synchronous recomposition of the projection
      */
     void refreshGraph(KisNodeSP root = 0);
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+    void initialRefreshGraph();
+
+    /**
+     * This method is called by the UI (*not* by the creator of the
+     * stroke) when it thinks current stroke should undo its last
+     * action. For example, when the user presses Ctrl+Z while some
+     * stroke is active. If the creator of the stroke supports undoing
+     * of intermediate actions, it will be notified about this request
+     * and (if it decides he likes to do it) will undo its last
+     * action.
+     */
+    void requestUndoDuringStroke();
+
+    /**
+     * This method is called by the UI (*not* by the creator
+     * of the stroke) when it thinks current stroke should be
+     * cancelled. If the creator of the stroke supports cancelling
+     * of the stroke, it will be notified about the request and
+     * the stroke will be cancelled
+     */
+    void requestStrokeCancellation();
+
+    /**
+     * This method is called when image or some other part of Krita
+     * (*not* the creator of the stroke) decides that the stroke
+     * should be ended. If the creator of the stroke supports it, it
+     * will be notified and the stroke will be cancelled
+     */
+    void requestStrokeEnd();
 
 private:
+
+    KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
+    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();
+
+    void resizeImageImpl(const QRect& newRect, bool cropLayers);
+    void rotateImpl(const QString &actionName, KisNodeSP rootNode,
+                    bool resizeImage, double radians);
+    void shearImpl(const QString &actionName, KisNodeSP rootNode,
+                   bool resizeImage, double angleX, double angleY,
+                   const QPointF &origin);
+
+    void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
@@ -589,6 +731,33 @@ private:
 
     friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
+
+
+    friend class KisDeselectGlobalSelectionCommand;
+    friend class KisReselectGlobalSelectionCommand;
+    friend class KisSetGlobalSelectionCommand;
+    friend class KisImageTest;
+
+    /**
+     * Replaces the current global selection with globalSelection. If
+     * \p globalSelection is empty, removes the selection object, so that
+     * \ref globalSelection() will return 0 after that.
+     */
+    void setGlobalSelection(KisSelectionSP globalSelection);
+
+    /**
+     * Deselects current global selection.
+     * \ref globalSelection() will return 0 after that.
+     */
+    void deselectGlobalSelection();
+
+    /**
+     * Reselects current deselected selection
+     *
+     * \see deselectGlobalSelection()
+     */
+    void reselectGlobalSelection();
+
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

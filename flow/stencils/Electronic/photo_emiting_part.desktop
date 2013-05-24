@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=photo emitting part
+Name[bs]=foto-emitirajući dio
+Name[ca]=Part foto emissora
+Name[ca@valencia]=Part foto emissora
+Name[cs]=fotoemitor
+Name[da]=lysudsendende del
 Name[el]=φωτο εκπέμπον μέρος
+Name[es]=componente foto-emisor
+Name[et]=Valgust kiirgav komponent
+Name[fr]=photo emitting part
+Name[gl]=Compoñente de emisión de luz
+Name[it]=parte foto-emittente
+Name[kk]=фотосәуле-шығ-бөлшек
 Name[nb]=lysende enhet
+Name[nl]=fotogevend deel
+Name[pl]=moduł emisji fotonów
 Name[pt]=componente foto-emissor
 Name[pt_BR]=componente foto-emissor
+Name[ru]=Фотоизлучательный элемент
+Name[sk]=svetlo emitujúca časť
 Name[sv]=fotoemitter
 Name[uk]=Випромінювач світла
 Name[x-test]=xxphoto emitting partxx
+Name[zh_CN]=照片发射部分
 Name[zh_TW]=photo emitting part

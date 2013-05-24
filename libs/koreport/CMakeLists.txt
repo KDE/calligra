@@ -1,7 +1,13 @@
 #make it a project so cmake spits out a codeblocks project
 #project(reports)
 
+if(KDE4_BUILD_TESTS)
+    # only with this definition will the KOREPORT_TEST_EXPORT macro do something
+    add_definitions(-DCOMPILING_TESTS)
+endif(KDE4_BUILD_TESTS)
+
 add_subdirectory(pics)
+add_subdirectory(tests)
 
 include_directories( ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/
@@ -12,11 +18,12 @@ include_directories( ${KOMAIN_INCLUDES}
 )
 
 #build a shared library
-set(koreport_LIB_SRCS
+set(koreport_LIB_SRCS 
     common/krutils.cpp
     common/krpos.cpp
     common/krsize.cpp
     common/KoReportItemBase.cpp
+    common/KoReportASyncItemBase.cpp
     common/krsectiondata.cpp
     common/labelsizeinfo.cpp
     common/reportpageoptions.cpp
@@ -31,11 +38,13 @@ set(koreport_LIB_SRCS
 
     renderer/KoReportPrintRenderer.cpp
     renderer/KoReportPreRenderer.cpp
+    renderer/KoReportASyncItemManager.cpp
     renderer/KoReportScreenRenderer.cpp
     renderer/KoReportHTMLTableRenderer.cpp
     renderer/KoReportHTMLCSSRenderer.cpp
     renderer/KoReportKSpreadRenderer.cpp
     renderer/KoReportODTRenderer.cpp
+    renderer/KoOdtFrameReportRenderer.cpp
     renderer/KoReportRendererBase.cpp
     renderer/KoReportPage.cpp
 
@@ -46,6 +55,14 @@ set(koreport_LIB_SRCS
     renderer/scripting/krscriptreport.cpp
     renderer/scripting/krscriptsection.cpp
     renderer/scripting/krscriptline.cpp
+
+    renderer/odtframe/KoOdtFrameReportDocument.cpp
+    renderer/odtframe/KoOdtFrameReportCheckBox.cpp
+    renderer/odtframe/KoOdtFrameReportImage.cpp
+    renderer/odtframe/KoOdtFrameReportTextBox.cpp
+    renderer/odtframe/KoOdtFrameReportLine.cpp
+    renderer/odtframe/KoOdtFrameReportPicture.cpp
+    renderer/odtframe/KoOdtFrameReportPrimitive.cpp
 
     renderer/ods/KoSimpleOdsDocument.cpp
     renderer/ods/KoSimpleOdsSheet.cpp

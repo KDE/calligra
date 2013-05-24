@@ -36,11 +36,9 @@
 
 
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
-#include "kis_iterator.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
-#include "kgradientslider.h"
+#include "kis_gradient_slider.h"
 #include "kis_processing_information.h"
 #include "kis_selection.h"
 #include "kis_types.h"
@@ -48,6 +46,7 @@
 KisLevelFilter::KisLevelFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels..."))
 {
+    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_L)));
     setSupportsPainting(false);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
@@ -57,9 +56,9 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
-    return new KisLevelConfigWidget(parent, dev, image->bounds());
+    return new KisLevelConfigWidget(parent, dev);
 }
 
 bool KisLevelFilter::workWith(KoColorSpace* cs) const
@@ -99,7 +98,7 @@ KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* 
     return cs->createBrightnessContrastAdjustment(transfer);
 }
 
-KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds)
+KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)
         : KisConfigWidget(parent)
 {
     m_page.setupUi(this);
@@ -144,7 +143,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
-    histogram = new KisHistogram(dev, bounds, producer, LINEAR);
+    histogram = new KisHistogram(dev, dev->exactBounds(), producer, LINEAR);
     m_histlog = false;
     slotDrawHistogram();
 

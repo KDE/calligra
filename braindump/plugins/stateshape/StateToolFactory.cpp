@@ -21,6 +21,7 @@
 #include "StateTool.h"
 #include "StateShape.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 StateToolFactory::StateToolFactory()
@@ -28,7 +29,7 @@ StateToolFactory::StateToolFactory()
 {
     setToolTip(i18n("State Tool"));
     setToolType(dynamicToolType());
-    setIcon("statetool");
+    setIconName(koIconNameCStr("statetool"));
     setPriority(1);
     setActivationShapeId(STATESHAPEID);
 }
@@ -42,4 +43,3 @@ KoToolBase* StateToolFactory::createTool(KoCanvasBase * canvas)
     return new StateTool(canvas);
 }
 
-#include "StateToolFactory.moc"

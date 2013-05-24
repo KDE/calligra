@@ -37,12 +37,14 @@
 #include "kis_paint_device.h"
 #include "kis_global.h"
 #include "kis_boundary.h"
-#include "kis_iterators_pixel.h"
 #include "kis_image.h"
 #include "kis_scaled_brush.h"
 #include "kis_qimage_mask.h"
-
+#include "kis_iterator_ng.h"
 #include "kis_brush_registry.h"
+#include <kis_paint_information.h>
+#include <kis_fixed_paint_device.h>
+
 
 const static int MAXIMUM_MIPMAP_SCALE = 10;
 const static int MAXIMUM_MIPMAP_SIZE  = 400;
@@ -72,13 +74,14 @@ void KisBrush::PlainColoringInformation::nextRow()
 {
 }
 
-KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width) : m_source(source), m_iterator(new KisHLineConstIteratorPixel(m_source->createHLineConstIterator(0, 0, width)))
+KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width)
+    : m_source(source)
+    , m_iterator(m_source->createHLineConstIteratorNG(0, 0, width))
 {
 }
 
 KisBrush::PaintDeviceColoringInformation::~PaintDeviceColoringInformation()
 {
-    delete m_iterator;
 }
 
 const quint8* KisBrush::PaintDeviceColoringInformation::color() const
@@ -88,7 +91,7 @@ const quint8* KisBrush::PaintDeviceColoringInformation::color() const
 
 void KisBrush::PaintDeviceColoringInformation::nextColumn()
 {
-    ++(*m_iterator);
+    m_iterator->nextPixel();
 }
 void KisBrush::PaintDeviceColoringInformation::nextRow()
 {
@@ -97,20 +100,31 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 
 struct KisBrush::Private {
-    Private() : boundary(0), angle(0), scale(1.0) {}
+    Private()
+        : boundary(0)
+        , angle(0)
+        , scale(1.0)
+        , hasColor(false)
+    , brushType(INVALID)
+    {}
+
     ~Private() {
         delete boundary;
     }
+
+    mutable KisBoundary* boundary;
+    qreal angle;
+    qreal scale;
+    bool hasColor;
     enumBrushType brushType;
+
     qint32 width;
     qint32 height;
     double spacing;
     QPointF hotSpot;
     mutable QVector<KisScaledBrush> scaledBrushes;
-    bool hasColor;
-    mutable KisBoundary* boundary;
-    qreal angle;
-    qreal scale;
+
+
 };
 
 KisBrush::KisBrush()
@@ -138,10 +152,10 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->hotSpot = rhs.d->hotSpot;
     d->scaledBrushes.clear();
     d->hasColor = rhs.d->hasColor;
-    d->boundary = rhs.d->boundary;
     d->angle = rhs.d->angle;
     d->scale = rhs.d->scale;
     setFilename(rhs.filename());
+    // don't copy the boundery, it will be regenerated -- see bug 291910
 }
 
 KisBrush::~KisBrush()
@@ -193,11 +207,12 @@ void KisBrush::setHotSpot(QPointF pt)
     d->hotSpot = QPointF(x, y);
 }
 
-QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation) const
+QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const
 {
     Q_UNUSED(scaleY);
-    double w = maskWidth( scaleX, rotation);
-    double h = maskHeight( scaleX, rotation);
+
+    double w = maskWidth(scaleX, rotation, info);
+    double h = maskHeight(scaleX, rotation, info);
 
     // The smallest brush we can produce is a single pixel.
     if (w < 1) {
@@ -254,7 +269,7 @@ enumBrushType KisBrush::brushType() const
     return d->brushType;
 }
 
-void KisBrush::toXML(QDomDocument& document , QDomElement& element) const
+void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
 {
     element.setAttribute("BrushVersion", "2");
 }
@@ -269,8 +284,10 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
     return brush;
 }
 
-qint32 KisBrush::maskWidth(double scale, double angle) const
+qint32 KisBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
 {
+    Q_UNUSED(info);
+
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
@@ -279,7 +296,7 @@ qint32 KisBrush::maskWidth(double scale, double angle) const
     scale *= d->scale;
 
     double width_ = width() * scale;
-    if(angle == 0.0) return qint32(width_ + 1);
+    if(angle == 0.0) return (qint32)ceil(width_ + 1);
 
     double height_ = height() * scale;
 
@@ -295,8 +312,10 @@ qint32 KisBrush::maskWidth(double scale, double angle) const
     }
 }
 
-qint32 KisBrush::maskHeight(double scale, double angle) const
+qint32 KisBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
 {
+    Q_UNUSED(info);
+
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
@@ -304,7 +323,7 @@ qint32 KisBrush::maskHeight(double scale, double angle) const
     if(angle > 2 * M_PI) angle -= 2 * M_PI;
     scale *= d->scale;
     double height_ = height() * scale;
-    if(angle == 0.0) return qint32(height_ + 1);
+    if(angle == 0.0) return ceil(height_ + 1);
 
     double width_ = width() * scale;
 
@@ -349,6 +368,7 @@ double KisBrush::ySpacing(double scale) const
 
 void KisBrush::setSpacing(double s)
 {
+    if (s < 0.02) s = 0.02;
     d->spacing = s;
 }
 
@@ -356,6 +376,10 @@ double KisBrush::spacing() const
 {
     return d->spacing;
 }
+
+void KisBrush::notifyCachedDabPainted() {
+}
+
 void KisBrush::mask(KisFixedPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info , double subPixelX, double subPixelY, qreal softnessFactor) const
 {
     generateMaskAndApplyMaskOrCreateDab(dst, 0, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
@@ -369,7 +393,7 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, double scal
 
 void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
 {
-    PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle));
+    PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle, info));
     generateMaskAndApplyMaskOrCreateDab(dst, &pdci, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 
@@ -399,8 +423,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 
     KisQImagemaskSP outputMask = createMask(scale, subPixelX, subPixelY);
 
-    if (angle != 0)
-    {
+    if (angle != 0) {
         outputMask->rotation(angle);
     }
 
@@ -408,17 +431,27 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     qint32 maskHeight = outputMask->height();
 
     if (coloringInformation || dst->data() == 0 || dst->bounds().isEmpty()) {
-        // old bounds
-        QRect bounds = dst->bounds();
-
-        // new bounds. we don't care if there is some extra memory occcupied.
+        // Lazy initialization
         dst->setRect(QRect(0, 0, maskWidth, maskHeight));
         dst->initialize();
     }
 
+    {
+        QSize dabSize = dst->bounds().size();
+        if (dabSize.width() != maskWidth || dabSize.height() != maskHeight) {
+            qWarning() << "WARNING: KisBrush::generateMaskAndApplyMaskOrCreateDab";
+            qWarning() << "         the sizes of the mask and the supplied dab are not"
+                       << "equal. We shall workaround it now, but please report a bug.";
+            qWarning() << "        " << ppVar(maskWidth) << ppVar(maskHeight);
+            qWarning() << "        " << ppVar(dabSize);
+
+            dst->setRect(QRect(0, 0, maskWidth, maskHeight));
+            dst->initialize();
+        }
+    }
+
     Q_ASSERT(dst->bounds().size().width() >= maskWidth && dst->bounds().size().height() >= maskHeight);
 
-    quint8* dabPointer = dst->data();
     quint8* color = 0;
 
     if (coloringInformation) {
@@ -427,33 +460,29 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         }
     }
 
-    int rowWidth = dst->bounds().width();
-
+    quint8* dabPointer = dst->data();
     quint8* rowPointer = dabPointer;
+    int rowWidth = dst->bounds().width();
 
     for (int y = 0; y < maskHeight; y++) {
         quint8* maskPointer = outputMask->scanline(y);
-        for (int x = 0; x < maskWidth; x++) {
-            if (coloringInformation) {
+        if (coloringInformation) {
+            for (int x = 0; x < maskWidth; x++) {
                 if (color) {
                     memcpy(dabPointer, color, pixelSize);
                 } else {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
                     coloringInformation->nextColumn();
                 }
+                dabPointer += pixelSize;
             }
-
-            dabPointer += pixelSize;
         }
         cs->applyAlphaU8Mask(rowPointer, maskPointer, maskWidth);
-        maskPointer += maskWidth;
-        rowPointer += maskWidth * pixelSize;
+        rowPointer += rowWidth * pixelSize;
+        dabPointer = rowPointer;
 
         if (!color && coloringInformation) {
             coloringInformation->nextRow();
-        }
-        if (maskWidth < rowWidth) {
-            dabPointer += (pixelSize * (rowWidth - maskWidth));
         }
     }
 }
@@ -464,7 +493,6 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
                                             double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
-    Q_UNUSED(colorSpace);
     Q_UNUSED(info);
     angle += d->angle;
 
@@ -510,7 +538,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
     if (angle != 0.0)
     {
-        outputImage = outputImage.transformed(QTransform().rotate(-angle * 180 / M_PI));
+        outputImage = outputImage.transformed(QTransform().rotate(-angle * 180 / M_PI), Qt::SmoothTransformation);
     }
 
     int outputWidth = outputImage.width();
@@ -553,6 +581,15 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
         }
     }
+    if (colorSpace != KoColorSpaceRegistry::instance()->rgb8()) {
+        KisFixedPaintDeviceSP dab2 = new KisFixedPaintDevice(colorSpace);
+        dab2->setRect(outputImage.rect());
+        dab2->initialize();
+        dabPointer = dab->data();
+        quint8* dabPointer2 = dab2->data();
+        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+        dab = dab2;
+    }
     return dab;
 }
 
@@ -573,12 +610,12 @@ void KisBrush::createScaledBrushes() const
 
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
-    // IMORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
-    // will not get scaled up anymore or the memory consumption gets to height
+    // IMPORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
+    // will not get scaled up anymore or the memory consumption gets too high
     // also don't scale the brush up more then MAXIMUM_MIPMAP_SCALE times
     int scale  = qBound(1, MAXIMUM_MIPMAP_SIZE*2 / qMax(image().width(),image().height()), MAXIMUM_MIPMAP_SCALE);
-    int width  = image().width()  * scale;
-    int height = image().height() * scale;
+    int width  = ceil((double)(image().width()  * scale));
+    int height = ceil((double)(image().height() * scale));
 
     QImage scaledImage;
     while (true) {
@@ -626,17 +663,9 @@ KisQImagemaskSP KisBrush::createMask(double scale, double subPixelX, double subP
     KisQImagemaskSP outputMask = KisQImagemaskSP(0);
 
     if (belowBrush != 0) {
-        // We're in between two masks. Interpolate between them.
-
-        KisQImagemaskSP scaledAboveMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
-        KisQImagemaskSP scaledBelowMask = scaleMask(belowBrush, scale, subPixelX, subPixelY);
-
-        Q_ASSERT( scale < aboveBrush->scale());
-        Q_ASSERT( scale > belowBrush->scale());
-
         double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
 
-        outputMask = KisQImagemask::interpolate(scaledBelowMask, scaledAboveMask, t);
+        outputMask = scaleMask( (t >= 0.5) ? aboveBrush : belowBrush, scale, subPixelX, subPixelY);
     } else {
         if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {
             // Exact match.

@@ -21,101 +21,77 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
-#include "kis_base_stroke_job_strategies.h"
 #include "kis_painter.h"
+
 
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
-                                               KisPainter *painter)
-    : KisStrokeStrategy("FREEHAND_STROKE", "Freehand stroke"),
-      m_resources(resources),
-      m_painter(painter)
+                                               PainterInfo *painterInfo,
+                                               const QString &name)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
+                                    resources, painterInfo)
+{
+    init(needsIndirectPainting);
+}
+
+FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
+                                               KisResourcesSnapshotSP resources,
+                                               QVector<PainterInfo*> painterInfos,
+                                               const QString &name)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
+                                    resources, painterInfos)
+{
+    init(needsIndirectPainting);
+}
+
+void FreehandStrokeStrategy::init(bool needsIndirectPainting)
 {
     setNeedsIndirectPainting(needsIndirectPainting);
-}
-
-KisDabProcessingStrategy* FreehandStrokeStrategy::createInitStrategy()
-{
-    return new InitStrokeJobStrategy();
-}
-
-KisDabProcessingStrategy* FreehandStrokeStrategy::createFinishStrategy()
-{
-    return new FinishStrokeJobStrategy();
-}
-
-KisDabProcessingStrategy* FreehandStrokeStrategy::createCancelStrategy()
-{
-    return new CancelStrokeJobStrategy();
-}
-
-KisDabProcessingStrategy* FreehandStrokeStrategy::createDabStrategy()
-{
-    return new FreehandStrokeJobStrategy();
-}
-
-KisDabProcessingStrategy::DabProcessingData*
-FreehandStrokeStrategy::createInitData()
-{
-    return new InitStrokeJobStrategy::Data(m_painter, m_resources,
-                                           needsIndirectPainting(),
-                                           name());
-}
-
-KisDabProcessingStrategy::DabProcessingData*
-FreehandStrokeStrategy::createFinishData()
-{
-    return new FinishStrokeJobStrategy::Data(m_painter, m_resources);
-}
-
-KisDabProcessingStrategy::DabProcessingData*
-FreehandStrokeStrategy::createCancelData()
-{
-    return new CancelStrokeJobStrategy::Data(m_painter, m_resources);
-}
-
-
-////////////////////////////////////////////////////////////////////////
-
-FreehandStrokeJobStrategy::FreehandStrokeJobStrategy()
-  : KisDabProcessingStrategy(true, false)
-{
+    enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
 #include "kis_update_time_monitor.h"
 
-void FreehandStrokeJobStrategy::processDab(DabProcessingData *data)
+void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    Data *internalData = dynamic_cast<Data*>(data);
-    QVector<QRect> dirtyRects;
+    Data *d = dynamic_cast<Data*>(data);
+    PainterInfo *info = d->painterInfo;
 
-
-    switch(internalData->type) {
+    switch(d->type) {
     case Data::POINT:
-        internalData->dragDistance = KisDistanceInformation(0,0);
-        internalData->painter->paintAt(internalData->pi1);
-        dirtyRects = internalData->painter->takeDirtyRegion();
+        *info->dragDistance = KisDistanceInformation(0,0);
+        info->painter->paintAt(d->pi1);
         break;
     case Data::LINE:
-        internalData->dragDistance =
-            internalData->painter->paintLine(internalData->pi1,
-                                             internalData->pi2,
-                                             internalData->dragDistance);
-        dirtyRects = internalData->painter->takeDirtyRegion();
+        *info->dragDistance =
+            info->painter->paintLine(d->pi1, d->pi2, *info->dragDistance);
         break;
     case Data::CURVE:
-        internalData->dragDistance =
-            internalData->painter->paintBezierCurve(internalData->pi1,
-                                                    internalData->control1,
-                                                    internalData->control2,
-                                                    internalData->pi2,
-                                                    internalData->dragDistance);
-        dirtyRects = internalData->painter->takeDirtyRegion();
+        *info->dragDistance =
+            info->painter->paintBezierCurve(d->pi1,
+                                            d->control1,
+                                            d->control2,
+                                            d->pi2,
+                                            *info->dragDistance);
         break;
+    case Data::POLYLINE:
+        info->painter->paintPolyline(d->points, 0, d->points.size());
+        break;
+    case Data::POLYGON:
+        info->painter->paintPolygon(d->points);
+        break;
+    case Data::RECT:
+        info->painter->paintRect(d->rect);
+        break;
+    case Data::ELLIPSE:
+        info->painter->paintEllipse(d->rect);
+        break;
+    case Data::PAINTER_PATH:
+        info->painter->paintPainterPath(d->path);
     };
 
+    QVector<QRect> dirtyRects = info->painter->takeDirtyRegion();
     KisUpdateTimeMonitor::instance()->reportJobFinished(data, dirtyRects);
-
-    internalData->node->setDirty(dirtyRects);
+    d->node->setDirty(dirtyRects);
 }

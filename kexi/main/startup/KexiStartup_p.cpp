@@ -25,9 +25,9 @@
 #include <klocale.h>
 #include <kde_file.h>
 
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qapplication.h>
+#include <QFileInfo>
+#include <QDir>
+#include <QApplication>
 
 SQLite2ToSQLite3Migration::SQLite2ToSQLite3Migration(const QString& filePath)
         : m_filePath(filePath)
@@ -65,8 +65,8 @@ tristate SQLite2ToSQLite3Migration::run()
     m_process = new KProcess(this, "process");
     *m_process << ksqlite2to3_app << m_filePath;
     m_process->setWorkingDirectory(fi.dir(true).absolutePath());
-    connect(m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(receivedStderr(KProcess*, char*, int)));
+    connect(m_process, SIGNAL(receivedStderr(KProcess*,char*,int)),
+            this, SLOT(receivedStderr(KProcess*,char*,int)));
     connect(m_process, SIGNAL(processExited(KProcess*)), this, SLOT(processExited(KProcess*)));
     if (!m_process->start(KProcess::NotifyOnExit, KProcess::Stderr))
         return false;

@@ -23,9 +23,9 @@
 
 #include <KoShapeCreateCommand.h>
 
-#include <KLocale>
+#include <klocale.h>
 
-KWFrameCreateCommand::KWFrameCreateCommand(KoShapeControllerBase *shapeController, KWFrame *frame, KUndo2Command *parent)
+KWFrameCreateCommand::KWFrameCreateCommand(KoShapeBasedDocumentBase *shapeController, KWFrame *frame, KUndo2Command *parent)
         : KUndo2Command(i18nc("(qtundo-format)", "Create Frame"), parent),
         m_frame(frame),
         m_frameSet(frame->frameSet())

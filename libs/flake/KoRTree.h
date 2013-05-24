@@ -22,19 +22,19 @@
 #ifndef KORTREE_H
 #define KORTREE_H
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <QtCore/QPair>
-#include <QtCore/QMap>
-#include <QtCore/QList>
-#include <QtCore/QVector>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
-#include <QtCore/QVarLengthArray>
+#include <QPair>
+#include <QMap>
+#include <QList>
+#include <QVector>
+#include <QPointF>
+#include <QRectF>
+#include <QVarLengthArray>
 
 // #define CALLIGRA_RTREE_DEBUG
 #ifdef CALLIGRA_RTREE_DEBUG
-#include <QtGui/QPainter>
+#include <QPainter>
 #endif
 
 /**
@@ -106,7 +106,7 @@ public:
 
     /**
      * @brief Find all data rectangles
-     * The order is guaranteed to be the same as that used by values().
+     * The order is NOT guaranteed to be the same as that used by values().
      *
      * @return a list containing all the data rectangles used in the tree
      */
@@ -114,7 +114,7 @@ public:
 
     /**
      * @brief Find all data items
-     * The order is guaranteed to be the same as that used by keys().
+     * The order is NOT guaranteed to be the same as that used by keys().
      *
      * @return a list containing all the data used in the tree
      */
@@ -424,7 +424,7 @@ void KoRTree<T>::remove(const T&data)
     //qDebug() << "KoRTree remove";
     LeafNode * leaf = m_leafMap[data];
     if (leaf == 0) {
-        kWarning(30003) << "KoRTree<T>::remove( const T&data) data not found";
+        kWarning(30006) << "KoRTree<T>::remove( const T&data) data not found";
         return;
     }
     m_leafMap.remove(data);

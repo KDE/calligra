@@ -1,0 +1,199 @@
+/* This file is part of the KDE project
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2000-2005 Laurent Montel <montel@kde.org>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 2002 Phillip Mueller <philipp.mueller@gmx.de>
+   Copyright 2000 Werner Trobin <trobin@kde.org>
+   Copyright 1999-2000 Simon Hausmann <hausmann@kde.org>
+   Copyright 1999 David Faure <faure@kde.org>
+   Copyright 1998-2000 Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef CALLIGRA_SHEETS_DOC
+#define CALLIGRA_SHEETS_DOC
+
+#include <QList>
+#include <QMap>
+#include <QRect>
+#include <QString>
+
+#include <kglobalsettings.h>
+
+#include <KoDocument.h>
+#include <KoXmlReader.h>
+#include <KoGenStyle.h>
+
+#include "../Global.h"
+#include "../DocBase.h"
+
+#include "../calligra_sheets_export.h"
+
+class QDomDocument;
+class QPainter;
+
+class KoGenStyles;
+class KoOasisSettings;
+class KoDocumentResourceManager;
+class KoStore;
+class KoXmlWriter;
+class KoView;
+class KoPart;
+
+#define MIME_TYPE "application/x-kspread"
+
+
+namespace Calligra
+{
+namespace Sheets
+{
+class Sheet;
+class Doc;
+class View;
+class Map;
+class Region;
+class UndoAction;
+class SheetAccessModel;
+
+/**
+ * This class holds the data that makes up a spreadsheet.
+ */
+class CALLIGRA_SHEETS_COMMON_EXPORT Doc : public DocBase
+{
+    Q_OBJECT
+    Q_PROPERTY(int syntaxVersion READ syntaxVersion)
+
+public:
+    /**
+     * Creates a new document.
+     * @param parentWidget the parent widget
+     * @param parent the parent object
+     * @param singleViewMode enables single view mode, if @c true
+     */
+    explicit Doc(KoPart *part = 0);
+
+    /**
+     * Destroys the document.
+     */
+    ~Doc();
+
+
+    /**
+     * @return the MIME type of KSpread document
+     */
+    virtual QByteArray mimeType() const {
+        return MIME_TYPE;
+    }
+
+    virtual bool completeSaving(KoStore* _store);
+
+
+    /**
+     * \ingroup NativeFormat
+     * Main saving method.
+     */
+    virtual QDomDocument saveXML();
+
+    /**
+     * \ingroup NativeFormat
+     * Main loading method.
+     */
+    virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOdfCalculationSettings(const KoXmlElement& body);
+
+
+    virtual int supportedSpecialFormats() const;
+
+    virtual bool loadChildren(KoStore* _store);
+
+    bool docData(QString const & xmlTag, QDomDocument & data);
+
+    // reimplemented; paints the thumbnail
+    virtual void paintContent(QPainter & painter, const QRect & rect);
+    virtual void paintContent(QPainter & painter, const QRect & rect, Sheet* sheet);
+
+    void initConfig();
+    void saveConfig();
+
+    void addIgnoreWordAll(const QString & word);
+    void clearIgnoreWordAll();
+    void addIgnoreWordAllList(const QStringList & _lst);
+    QStringList spellListIgnoreAll() const ;
+
+    /* Function specific when we load config from file */
+    void loadConfigFromFile();
+    bool configLoadFromFile() const;
+
+
+    virtual bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
+                       QString* plainText = 0);
+
+    /**
+     * Requests an update of all attached user interfaces (views).
+     */
+    void updateAllViews();
+
+
+public Q_SLOTS:
+    virtual void initEmpty();
+
+Q_SIGNALS:
+    /**
+     * Emitted, if all user interfaces (views) have to be updated.
+     */
+    void updateView();
+
+    /**
+     * Emitted, if all editors have to be closed.
+     */
+    void closeEditor(bool);
+
+protected Q_SLOTS:
+    void sheetAdded(Sheet* sheet);
+
+protected:
+
+    /**
+     * @reimp Overloaded function of KoDocument.
+     */
+    virtual bool completeLoading(KoStore*);
+
+    virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
+    virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
+private:
+    Q_DISABLE_COPY(Doc)
+
+    class Private;
+    Private * const dd;
+
+    /**
+     * \ingroup NativeFormat
+     */
+    void loadPaper(KoXmlElement const & paper);
+};
+
+} // namespace Sheets
+} // namespace Calligra
+
+#endif /* CALLIGRA_SHEETS_DOC */

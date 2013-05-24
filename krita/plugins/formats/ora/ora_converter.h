@@ -26,7 +26,6 @@
 
 #include "kis_types.h"
 class KisDoc2;
-class KisUndoAdapter;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -52,21 +51,22 @@ class OraConverter : public QObject
 {
     Q_OBJECT
 public:
-    OraConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
+    OraConverter(KisDoc2 *doc);
     virtual ~OraConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image);
+    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image, vKisNodeSP activeNodes);
     /**
      * Retrieve the constructed image
      */
     KisImageWSP image();
+    vKisNodeSP activeNodes();
 public slots:
     virtual void cancel();
 private:
     KisImageWSP m_image;
     KisDoc2 *m_doc;
-    KisUndoAdapter *m_adapter;
+    vKisNodeSP m_activeNodes;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

@@ -22,16 +22,13 @@
 
 #include <KoUnit.h>
 #include <KoGlobal.h>
-#include <KConfigGroup>
+#include <kconfiggroup.h>
 
 KWApplicationConfig::KWApplicationConfig()
         : m_viewFrameBorders(true),
         m_viewRulers(false),
-        m_viewFormattingChars(false),
-        m_viewFormattingBreak(false),
-        m_viewFormattingSpace(false),
-        m_viewFormattingEndParag(false),
-        m_viewFormattingTabs(false),
+        m_showFormattingChars(false),
+        m_showTableBorders(true),
         m_createBackupFile(true),
         m_statusBarShowPage(true),
         m_statusBarShowPageStyle(true),
@@ -40,6 +37,7 @@ KWApplicationConfig::KWApplicationConfig()
         m_statusBarShowModified(true),
         m_statusBarShowMouse(false),
         m_statusBarShowZoom(true),
+        m_showInlineObjectVisualization(true),
         m_zoom(100),
         m_zoomMode(KoZoomMode::ZOOM_WIDTH),
         m_autoSaveSeconds(KoDocument::defaultAutoSave()),
@@ -54,17 +52,18 @@ void KWApplicationConfig::load(KWDocument *document)
 //    setCursorInProtectedArea(interface.readEntry("cursorInProtectArea", true));
     // Config-file value in mm, default 10 pt
     m_viewRulers = interface.readEntry("Rulers", m_viewRulers);
-    m_autoSaveSeconds = interface.readEntry("AutoSave", qRound(m_autoSaveSeconds / 60.0)) * 60; // read key in minutes
+    m_autoSaveSeconds = interface.readEntry("AutoSave", m_autoSaveSeconds);
+    document->setAutoSave(m_autoSaveSeconds);
+
     m_createBackupFile = interface.readEntry("BackupFile", m_createBackupFile);
+    document->setBackupFile(m_createBackupFile);
 
 //    setNbPagePerRow(interface.readEntry("nbPagePerRow",4));
 //    m_maxRecentFiles = interface.readEntry("NbRecentFile", 10);
 
-    m_viewFormattingChars = interface.readEntry("ViewFormattingChars", m_viewFormattingChars);
-    m_viewFormattingBreak = interface.readEntry("ViewFormattingBreaks", m_viewFormattingBreak);
-    m_viewFormattingSpace = interface.readEntry("ViewFormattingSpace", m_viewFormattingSpace);
-    m_viewFormattingEndParag = interface.readEntry("ViewFormattingEndParag", m_viewFormattingEndParag);
-    m_viewFormattingTabs = interface.readEntry("ViewFormattingTabs", m_viewFormattingTabs);
+    m_showFormattingChars = interface.readEntry("ViewFormattingChars", m_showFormattingChars);
+    m_showInlineObjectVisualization = interface.readEntry("ViewFieldShadings", m_showInlineObjectVisualization);
+    m_showTableBorders = interface.readEntry("ViewTableBorders", m_showTableBorders);
 
     m_viewFrameBorders = interface.readEntry("ViewFrameBorders", m_viewFrameBorders);
 
@@ -94,14 +93,12 @@ void KWApplicationConfig::load(KWDocument *document)
 //    setShowGrid(interface.readEntry("ShowGrid" , false));
 //    setSnapToGrid(interface.readEntry("SnapToGrid", false));
 
-    int undo = 30;
     KConfigGroup misc = config->group("Misc");
     if (misc.exists()) {
-        undo = misc.readEntry("UndoRedo", -1);
 
         //load default unit setting - this is only used for new files (from templates) or empty files
         if (document && misc.hasKey("Units"))
-            document->setUnit(KoUnit::unit(misc.readEntry("Units")));
+            document->setUnit(KoUnit::fromSymbol(misc.readEntry("Units")));
         m_defaultColumnSpacing = misc.readEntry("ColumnSpacing", m_defaultColumnSpacing);
     }
 
@@ -132,11 +129,9 @@ void KWApplicationConfig::save()
 {
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");
-    interface.writeEntry("ViewFormattingChars", m_viewFormattingChars);
-    interface.writeEntry("ViewFormattingBreaks", m_viewFormattingBreak);
-    interface.writeEntry("ViewFormattingEndParag", m_viewFormattingEndParag);
-    interface.writeEntry("ViewFormattingTabs", m_viewFormattingTabs);
-    interface.writeEntry("ViewFormattingSpace", m_viewFormattingSpace);
+    interface.writeEntry("ViewFormattingChars", m_showFormattingChars);
+    interface.writeEntry("ViewFieldShadings", m_showInlineObjectVisualization);
+    interface.writeEntry("ViewTableBorders", m_showTableBorders);
     interface.writeEntry("ViewFrameBorders", m_viewFrameBorders);
     interface.writeEntry("Zoom", m_zoom);
     interface.writeEntry("ZoomMode", (int)m_zoomMode);
@@ -160,6 +155,6 @@ void KWApplicationConfig::setUnit(const KoUnit &unit)
 {
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup misc = config->group("Misc");
-    misc.writeEntry("Units", KoUnit::unitName(unit));
+    misc.writeEntry("Units", unit.symbol());
     misc.sync();
 }

@@ -37,6 +37,7 @@
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
 
+
 class KisBrushBasedPaintOpSettings;
 
 class QWidget;
@@ -57,7 +58,7 @@ public:
     virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
 
 private:
-    KisColorSource* m_colorSource;
+    KisColorSource *m_colorSource;
     KisPressureSizeOption m_sizeOption;
     KisPressureSpacingOption m_spacingOption;
     KisPressureMirrorOption m_mirrorOption;
@@ -69,8 +70,9 @@ private:
     KisPressureMixOption m_mixOption;
     KisPressureScatterOption m_scatterOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
-    KoColorTransformation* m_hsvTransfo;
-    KisPaintDeviceSP m_dab;
+
+    KoColorTransformation *m_hsvTransformation;
+    KisPaintDeviceSP m_lineCacheDevice;
     KisPaintDeviceSP m_colorSourceDevice;
 };
 

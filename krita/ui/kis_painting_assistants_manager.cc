@@ -23,11 +23,11 @@
 #include <QList>
 #include <QPointF>
 #include <klocale.h>
-#include <KActionCollection>
-#include <KToggleAction>
+#include <kactioncollection.h>
+#include <ktoggleaction.h>
 
 #include "kis_painting_assistant.h"
-#include <qpainter.h>
+#include <QPainter>
 
 struct KisPaintingAssistantsManager::Private {
     QList<KisPaintingAssistant*> assistants;
@@ -113,12 +113,10 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
     d->updateAction();
 }
 
-void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
 {
     foreach(KisPaintingAssistant* assistant, d->assistants) {
-        gc.save();
-        assistant->drawAssistant(gc, updateRect, converter);
-        gc.restore();
+        assistant->drawAssistant(gc, updateRect, converter,canvas);
     }
 }
 
@@ -127,6 +125,11 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles()
     QList<KisPaintingAssistantHandleSP> hs;
     foreach(KisPaintingAssistant* assistant, d->assistants) {
         foreach(const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+            if (!hs.contains(handle)) {
+                hs.push_back(handle);
+            }
+        }
+        foreach(const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
             if (!hs.contains(handle)) {
                 hs.push_back(handle);
             }

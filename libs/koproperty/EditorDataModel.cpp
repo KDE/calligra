@@ -22,9 +22,9 @@
 #include "Property.h"
 #include "Set.h"
 
-#include <QtCore/QHash>
+#include <QHash>
 
-#include <KLocale>
+#include <klocale.h>
 #include <kdebug.h>
 
 using namespace KoProperty;

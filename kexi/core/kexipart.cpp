@@ -30,12 +30,11 @@
 #include "KexiMainWindowIface.h"
 #include "kexi.h"
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 
 #include <kactioncollection.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kxmlguifactory.h>
@@ -279,17 +278,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
      - displaying item.caption() as caption, if not empty, without instanceName
      - displaying the same as above in tabCaption (or not) */
     window->setId(item.identifier()); //not needed, but we did it
-    window->setWindowIcon(SmallIcon(window->itemIcon()));
-#ifdef __GNUC__
-#warning todo
-#else
-#pragma WARNING( todo )
-#endif
-#if 0
-    if (window->mdiParent())
-        window->mdiParent()->setIcon(*window->icon());
-#endif
-// window->setWindowIcon( *window->icon() );
+    window->setWindowIcon(KIcon(window->itemIconName()));
     KexiWindowData *windowData = createWindowData(window);
     if (!windowData) {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
@@ -363,15 +352,6 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
     window->registerWindow(); //ok?
     window->show();
 
-#ifdef __GNUC__
-#warning Part::openInstance(): resize window->resize(window->sizeHint()) for standalone windows
-#else
-#pragma WARNING( Part::openInstance(): resize window->resize(window->sizeHint()) for standalone windows )
-#endif
-#if 0
-    if (window->mdiParent() && window->mdiParent()->state() == KexiMdiMainFrm::Normal) //only resize the window if it is in normal state
-        window->resize(window->sizeHint());
-#endif
     window->setMinimumSize(window->minimumSizeHint().width(), window->minimumSizeHint().height());
 
     //dirty only if it's a new object
@@ -424,7 +404,7 @@ void Part::initInstanceActions()
 {
 }
 
-bool Part::remove(KexiPart::Item &item)
+tristate Part::remove(KexiPart::Item &item)
 {
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn)
@@ -536,10 +516,10 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
         }
     }
 
-// new KAction(part->d->names["new"], part->info()->itemIcon(), 0, this,
+// new KAction(part->d->names["new"], part->info()->itemIconName(), 0, this,
 //  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
 
-// new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this,
+// new KAction(i18nInstanceName+"...", part->info()->itemIconName(), 0, this,
 //  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
 
 // win->guiFactory()->addClient(this);

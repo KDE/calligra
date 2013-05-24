@@ -34,7 +34,7 @@
 #include <wv2/src/functordata.h>
 
 #include <QString>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QObject>
 #include <QStringList>
 #include <QRectF>
@@ -54,7 +54,7 @@ namespace wvWare
 {
 class Parser;
 namespace Word97 {
-class BRC;
+struct BRC;
 }
 }
 class MSWordOdfImport;
@@ -74,10 +74,10 @@ public:
 /*              KoFilterChain* chain, */
              KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, KoGenStyles* mainStyles,
-             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data);
+             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream *data, LEInputStream *si);
     virtual ~Document();
 
-    virtual void setProgress(int percent);
+    virtual void setProgress(const int percent);
 
     virtual void bodyStart();
     virtual void bodyEnd();
@@ -209,12 +209,6 @@ private:
     void processStyles();
     void processAssociatedStrings();
 
-/*     enum NewFrameBehavior { Reconnect = 0, NoFollowup = 1, Copy = 2 }; */
-/*     void generateFrameBorder(QDomElement& frameElementOut, */
-/*                              const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, */
-/*                              const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, */
-/*                              const wvWare::Word97::SHD& shd); */
-
     void setPageLayoutStyle(KoGenStyle* pageLayoutStyle, wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                             bool firstPage);
 
@@ -228,8 +222,9 @@ private:
 /*     KoFilterChain* m_chain; */
 
     wvWare::SharedPtr<wvWare::Parser> m_parser;
+
     std::queue<SubDocument> m_subdocQueue;
-    std::queue<Words::Table> m_tableQueue;
+/*     std::queue<Words::Table> m_tableQueue; */
 
     bool m_bodyFound;
 
@@ -262,9 +257,6 @@ private:
     bool m_omittMasterPage; //whether master-page style for current section has been omitted
     bool m_useLastMasterPage; //whether to use the last define master-page style for current section
 
-    int m_initialFootnoteNumber;
-    int m_initialEndnoteNumber;
-
     QString m_lineNumbersStyleName;
     QString m_lastMasterPageName;
 
@@ -272,9 +264,10 @@ private:
     LEInputStream& m_wdstm;
     LEInputStream* m_tblstm;
     LEInputStream* m_datastm;
+    LEInputStream* m_sistm;
     POLE::Stream& m_tblstm_pole;
 
-    //A stack for backgroud-colors, which represets a background color context
+    //A stack for background-colors, which represets a background color context
     //for automatic colors.
     QStack<QString> m_bgColors;
 

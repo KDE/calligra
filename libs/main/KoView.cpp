@@ -22,14 +22,25 @@
 #include "KoView.h"
 
 // local directory
-
 #include "KoView_p.h"
+
+#include "KoPart.h"
 #include "KoDockRegistry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+
+#ifndef QT_NO_DBUS
 #include "KoViewAdaptor.h"
+#endif
+
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
+#include "KoGlobal.h"
+#include "KoPageLayout.h"
+#include "KoPrintJob.h"
+#include "KoDocumentInfo.h"
+
+#include <KoIcon.h>
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -38,12 +49,24 @@
 #include <kparts/event.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
+#include <kurl.h>
+#include <kmessagebox.h>
+#include <kio/netaccess.h>
+#include <ktemporaryfile.h>
+#include <kselectaction.h>
+#include <kconfiggroup.h>
+#include <kdeprintdialog.h>
+
 #include <QTimer>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 #include <QToolBar>
 #include <QApplication>
 #include <QList>
-
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QImage>
+#include <QUrl>
+#include <QPrintDialog>
 
 //static
 QString KoView::newObjectName()
@@ -62,11 +85,13 @@ public:
         registered = false;
         documentDeleted = false;
         viewBar = 0;
+        actionAuthor = 0;
     }
     ~KoViewPrivate() {
     }
 
     QPointer<KoDocument> document; // our KoDocument
+    QPointer<KoPart> part; // our part
     QPointer<KParts::PartManager> manager;
     QWidget *tempActiveWidget;
     bool registered;  // are we registered at the part manager?
@@ -138,21 +163,27 @@ public:
     QList<StatusBarItem> statusBarItems; // Our statusbar items
     bool inOperation; //in the middle of an operation (no screen refreshing)?
     QToolBar* viewBar;
+    KSelectAction *actionAuthor; // Select action for author profile.
 };
 
-KoView::KoView(KoDocument *document, QWidget *parent)
+KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
         : QWidget(parent)
         , d(new KoViewPrivate)
 {
     Q_ASSERT(document);
+    Q_ASSERT(part);
 
     setObjectName(newObjectName());
 
+#ifndef QT_NO_DBUS
     new KoViewAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
+#endif
 
     //kDebug(30003) <<"KoView::KoView" << this;
     d->document = document;
+    d->part = part;
+
     KParts::PartBase::setPartObject(this);
 
     setFocusPolicy(Qt::StrongFocus);
@@ -166,7 +197,6 @@ KoView::KoView(KoDocument *document, QWidget *parent)
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
-    d->document->setCurrent();
 
     d->scrollTimer = new QTimer(this);
     connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
@@ -188,14 +218,67 @@ KoView::~KoView()
     kDebug(30003) << "KoView::~KoView" << this;
     delete d->scrollTimer;
     if (!d->documentDeleted) {
-        if (koDocument() && !koDocument()->isSingleViewMode()) {
+        if (d->document) {
             if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
-                d->manager->removePart(koDocument());
-            d->document->removeView(this);
-            d->document->setCurrent(false);
+                d->manager->removePart(d->part);
+            d->part->removeView(this);
         }
     }
     delete d;
+}
+
+
+void KoView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasImage()
+            || event->mimeData()->hasUrls()) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void KoView::dropEvent(QDropEvent *event)
+{
+    // we can drop a list of urls from, for instance dolphin
+    QList<QImage> images;
+
+    if (event->mimeData()->hasImage()) {
+        images << event->mimeData()->imageData().value<QImage>();
+    }
+    else if (event->mimeData()->hasUrls()) {
+        QList<QUrl> urls = event->mimeData()->urls();
+        foreach (const QUrl &url, urls) {
+            QImage image;
+            KUrl kurl(url);
+            // make sure we download the files before inserting them
+            if (!kurl.isLocalFile()) {
+                QString tmpFile;
+                if( KIO::NetAccess::download(kurl, tmpFile, this)) {
+                    image.load(tmpFile);
+                    KIO::NetAccess::removeTempFile(tmpFile);
+                } else {
+                    KMessageBox::error(this, KIO::NetAccess::lastErrorString());
+                }
+            }
+            else {
+                image.load(kurl.toLocalFile());
+            }
+            if (!image.isNull()) {
+                images << image;
+            }
+        }
+    }
+
+    if (!images.isEmpty()) {
+        addImages(images, event->pos());
+    }
+}
+
+
+void KoView::addImages(const QList<QImage> &, const QPoint &)
+{
+    // override in your application
 }
 
 KoDocument *KoView::koDocument() const
@@ -216,10 +299,9 @@ bool KoView::documentDeleted() const
 void KoView::setPartManager(KParts::PartManager *manager)
 {
     d->manager = manager;
-    if (!koDocument()->isSingleViewMode() &&
-            !manager->parts().contains(koDocument())) {  // is there another view registered?
+    if (!manager->parts().contains(d->part)) {  // is there another view registered?
         d->registered = true; // no, so we have to register now and ungregister again in the DTOR
-        manager->addPart(koDocument(), false);
+        manager->addPart(d->part, false);
     } else
         d->registered = false;  // There is already another view registered for that part...
 }
@@ -237,7 +319,7 @@ QAction *KoView::action(const QDomElement &element) const
     QAction *act = KXMLGUIClient::action(name.toUtf8());
 
     if (!act)
-        act = d->document->KXMLGUIClient::action(name.toUtf8());
+        act = d->part->KXMLGUIClient::action(name.toUtf8());
 
     // last resort, try to get action from the main window if there is one
     if (!act && shell())
@@ -251,7 +333,7 @@ QAction *KoView::action(const char* name) const
     QAction *act = KXMLGUIClient::action(name);
 
     if (!act)
-        act = d->document->KXMLGUIClient::action(name);
+        act = d->part->KXMLGUIClient::action(name);
 
     // last resort, try to get action from the main window if there is one
     if (!act && shell())
@@ -263,7 +345,7 @@ QAction *KoView::action(const char* name) const
 KoDocument *KoView::hitTest(const QPoint &viewPos)
 {
     Q_UNUSED(viewPos);
-    return koDocument(); // we no longer have child documents
+    return d->document; // we no longer have child documents
 }
 
 int KoView::leftBorder() const
@@ -381,11 +463,6 @@ void KoView::disableAutoScroll()
     d->scrollTimer->stop();
 }
 
-void KoView::paintEverything(QPainter &painter, const QRect &rect)
-{
-    koDocument()->paintEverything(painter, rect, this);
-}
-
 int KoView::autoScrollAcceleration(int offset) const
 {
     if (offset < 40)
@@ -438,24 +515,58 @@ KoPrintJob * KoView::createPdfPrintJob()
     return createPrintJob();
 }
 
+KoPageLayout KoView::pageLayout() const
+{
+    return koDocument()->pageLayout();
+}
+
+QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
+{
+    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printJob->printer(),
+                                printJob->createOptionWidgets(), parent);
+    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
+    printDialog->setEnabledOptions(printJob->printDialogOptions());
+    return printDialog;
+}
+
 void KoView::setupGlobalActions()
 {
-    KAction *actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
+    KAction *actionNewView  = new KAction(koIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView);
     connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
 
     actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
     actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
+
+    d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
+    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
+    actionCollection()->addAction("settings_active_author", d->actionAuthor);
+
+    slotUpdateAuthorProfileActions();
 }
 
 void KoView::newView()
 {
-    Q_ASSERT((d != 0 && d->document));
+    Q_ASSERT((d != 0 && d->document && d->part));
 
     KoDocument *thisDocument = d->document;
-    KoMainWindow *shell = new KoMainWindow(thisDocument->componentData());
-    shell->setRootDocument(thisDocument);
+    KoMainWindow *shell = new KoMainWindow(d->part->componentData());
+    shell->setRootDocument(thisDocument, d->part);
     shell->show();
+}
+
+void KoView::changeAuthorProfile(const QString &profileName)
+{
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    if (profileName.isEmpty()) {
+        appAuthorGroup.writeEntry("active-profile", "");
+    } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
+        appAuthorGroup.writeEntry("active-profile", "anonymous");
+    } else {
+        appAuthorGroup.writeEntry("active-profile", profileName);
+    }
+    appAuthorGroup.sync();
+    d->document->documentInfo()->updateParameters();
 }
 
 KoMainWindow * KoView::shell() const
@@ -488,6 +599,33 @@ void KoView::slotClearStatusText()
         sb->clearMessage();
 }
 
+void KoView::slotUpdateAuthorProfileActions()
+{
+    Q_ASSERT(d->actionAuthor);
+    if (!d->actionAuthor) {
+        return;
+    }
+    d->actionAuthor->clear();
+    d->actionAuthor->addAction(i18n("Default Author Profile"));
+    d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
+
+    KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    foreach (const QString &profile , profiles) {
+        d->actionAuthor->addAction(profile);
+    }
+
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profileName = appAuthorGroup.readEntry("active-profile", "");
+    if (profileName == "anonymous") {
+        d->actionAuthor->setCurrentItem(1);
+    } else if (profiles.contains(profileName)) {
+        d->actionAuthor->setCurrentAction(profileName);
+    } else {
+        d->actionAuthor->setCurrentItem(0);
+    }
+}
+
 QToolBar* KoView::viewBar()
 {
     if (!d->viewBar) {
@@ -500,21 +638,8 @@ QToolBar* KoView::viewBar()
 
 QList<QAction*> KoView::createChangeUnitActions()
 {
-    QActionGroup *unitGroup = new QActionGroup(this);
-    QList<QAction*> answer;
-    answer.append(new UnitChangeAction(KoUnit::Millimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Centimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Decimeter, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Inch, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Pica, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Cicero, unitGroup, d->document));
-    answer.append(new UnitChangeAction(KoUnit::Point, unitGroup, d->document));
-
-    const int currentUnit = d->document.data()->unit().indexInList();
-    Q_ASSERT(currentUnit < answer.count());
-    if (currentUnit >= 0)
-        answer.value(currentUnit)->setChecked(true);
-    return answer;
+    UnitActionGroup* unitActions = new UnitActionGroup(d->document, this);
+    return unitActions->actions();
 }
 
 #include <KoView_p.moc>

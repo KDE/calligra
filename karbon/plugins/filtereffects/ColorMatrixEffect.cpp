@@ -22,8 +22,8 @@
 #include <KoFilterEffectRenderContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KLocale>
-#include <QtCore/QRect>
+#include <klocale.h>
+#include <QRect>
 #include <math.h>
 
 const int MatrixSize = 20;

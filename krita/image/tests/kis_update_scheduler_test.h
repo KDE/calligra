@@ -19,7 +19,7 @@
 #ifndef KIS_UPDATE_SCHEDULER_TEST_H
 #define KIS_UPDATE_SCHEDULER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_types.h"
 
@@ -35,8 +35,10 @@ private slots:
     void benchmarkOverlappedMerge();
     void testLocking();
     void testExclusiveStrokes();
-
     void testTimeMonitor();
+    void testEmptyStroke();
+    void testLazyWaitCondition();
+    void testBlockUpdates();
 };
 
 #endif /* KIS_UPDATE_SCHEDULER_TEST_H */

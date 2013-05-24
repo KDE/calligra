@@ -20,13 +20,13 @@
 #ifndef _KARBON_H_
 #define _KARBON_H_
 
-#include "KoResourceManager.h"
+#include "KoCanvasResourceManager.h"
 
 namespace Karbon
 {
 
 enum KarbonCanvasResource {
-    FirstKarbonResource = KoCanvasResource::KarbonStart,
+    FirstKarbonResource = KoCanvasResourceManager::KarbonStart,
 };
 }
 

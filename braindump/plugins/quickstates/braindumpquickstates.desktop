@@ -1,20 +1,34 @@
 [Desktop Entry]
 Name=Quickstates Plugin
+Name[bs]=Quickstates Plugin
+Name[ca]=Connector Quickstates
+Name[ca@valencia]=Connector Quickstates
+Name[da]=Quickstates-plugin
 Name[el]=Πρόσθετο Quickstates
 Name[en_GB]=Quickstates Plugin
 Name[es]=Complemento de estados rápidos
 Name[et]=Olekuplugin
+Name[fr]=Extension d'états rapides
+Name[gl]=Complemento Quickstates
+Name[hu]=Quickstates bővítmény
 Name[it]=Estensione per stati veloci
+Name[kk]=Quickstates плагині
+Name[mr]=क्विकस्टेट्स प्लगइन
 Name[nb]=Quickstates programtillegg
-Name[nl]=Plugin voor snelstatussen
+Name[nl]=Plug-in voor snelstatussen
+Name[pl]=Wtyczka SzybkichStanów
 Name[pt]='Plugin' de Estados Rápidos
-Name[pt_BR]=Plug-in de estados rápidos
+Name[pt_BR]=Plugin de estados rápidos
+Name[ru]=Модуль Quickstates
+Name[sk]=Quickstates Plugin
 Name[sv]=Insticksprogram med snabbtillstånd
+Name[tr]=Quickstates eklentisi
 Name[uk]=Додаток станів
 Name[x-test]=xxQuickstates Pluginxx
+Name[zh_CN]=快速状态插件
 Name[zh_TW]=Quickstates 外掛程式
 
 X-KDE-ServiceTypes=Braindump/Extensions
 Type=Service
 X-KDE-Library=braindumpquickstates
-X-Braindump-Version=1
+X-Braindump-Version=28

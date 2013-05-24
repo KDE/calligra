@@ -2,6 +2,15 @@ add_subdirectory( tests )
 add_subdirectory( pics )
 
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
+include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
+if (LIBATTICA_FOUND)
+    include_directories(${LIBATTICA_INCLUDE_DIR})
+endif (LIBATTICA_FOUND)
+
+if(NEPOMUK)
+    include(SopranoAddOntology)
+    include_directories(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDES})
+endif(NEPOMUK)
 
 set(kowidgets_LIB_SRCS
     KoAspectButton.cpp
@@ -12,6 +21,7 @@ set(kowidgets_LIB_SRCS
     KoPagePreviewWidget.cpp
     KoPositionSelector.cpp
     KoSliderCombo.cpp
+    KoColorPopupButton.cpp
     KoUnitDoubleSpinBox.cpp
     KoZoomAction.cpp
     KoZoomController.cpp
@@ -30,7 +40,10 @@ set(kowidgets_LIB_SRCS
     KoUniColorChooser.cpp
     KoUniColorDialog.cpp
     KoXYColorSelector.cpp
+    KoResourcePopupAction.cpp
     KoStrokeConfigWidget.cpp
+    KoFillConfigWidget.cpp
+    KoOpacityConfigWidget.cpp
     KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
@@ -46,8 +59,15 @@ set(kowidgets_LIB_SRCS
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
+    KoMarkerModel.cpp
+    KoMarkerItemDelegate.cpp
+    KoMarkerSelector.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
+    KoViewItemContextBar.cpp
+    KoContextBarButton.cpp
+    KoResourceFiltering.cpp
+
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -60,13 +80,17 @@ kde4_add_ui_files( kowidgets_LIB_SRCS
 
 kde4_add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 
-if(GHNS) 
-    target_link_libraries(kowidgets kotext pigmentcms ${KDE4_KNEWSTUFF3_LIBS})
+if(GHNS)
+    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kowidgets kotext pigmentcms )
+    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
 endif (GHNS)
 
-target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms ${KDE4_KDEUI_LIBS})
+if(NEPOMUK)
+    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${NEPOMUK_LIBRARIES} ${SOPRANO_LIBRARIES})
+endif(NEPOMUK)
+
+target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -90,6 +114,8 @@ install( FILES
 
     KoColorPatch.h
     KoStrokeConfigWidget.h
+    KoFillConfigWidget.h
+    KoOpacityConfigWidget.h
     KoShadowConfigWidget.h
     KoColorPopupAction.h
     KoColorSetWidget.h

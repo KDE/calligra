@@ -1,0 +1,58 @@
+<ui version="4.0" >
+ <author>Dag Andersen &lt;danders@get2net.dk></author>
+ <class>KPlato::MilestoneProgressPanelBase</class>
+ <widget class="QWidget" name="KPlato::MilestoneProgressPanelBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>321</width>
+    <height>90</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="spacing" >
+    <number>4</number>
+   </property>
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QCheckBox" name="finished" >
+     <property name="text" >
+      <string>Finished</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDateTimeEdit" name="finishTime" >
+     <property name="calendarPopup" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>321</width>
+       <height>31</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+  <includes>
+  <include location="local" >kdatetimewidget.h</include>
+  <include location="local" >kdatewidget.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

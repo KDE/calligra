@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_COMPOSITE_COPY_OP_ABSTRACT_H
-#define KO_COMPOSITE_COPY_OP_ABSTRACT_H
+#ifndef KO_COMPOSITE_OP_COPY_H
+#define KO_COMPOSITE_OP_COPY_H
 
 /**
  * Generic implementation of the COPY composite op.
@@ -55,7 +55,7 @@ public:
 
         const KoColorSpace* cs = colorSpace();
         qint32 bytesPerPixel = cs->pixelSize();
-        
+
         qint32 srcInc = (srcRowStride == 0) ? 0 : bytesPerPixel;
 
         quint8 *dst = dstRowStart;
@@ -68,7 +68,7 @@ public:
                 const quint8* srcN = src;
                 const quint8* maskN = mask;
                 qint32 columns = numColumns;
-                
+
                 while (columns > 0) {
                     if (*maskN != 0){
                         memcpy(dstN, srcN, bytesPerPixel);
@@ -79,16 +79,14 @@ public:
                     maskN++; // byte
                     columns--;
                 }
-            
+
                 dst += dstRowStride;
                 src += srcRowStride;
                 mask += maskRowStride;
                 --rows;
             }
-        }else{
-        
-        
-        
+        }
+        else {
             while (rows > 0) {
                 if (srcInc == 0) {
                     quint8* dstN = dst;

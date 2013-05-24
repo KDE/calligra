@@ -83,7 +83,7 @@ struct STD
     bool write( U16 baseSize, OLEStreamWriter* stream, bool preservePos = false ) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -248,21 +248,26 @@ public:
     Style( const U16 stdfSize, OLEStreamReader* tableStream, U16* ftc );
 
     /**
-     * A special purpose constructor which creates an invalid Style class which
-     * stores a copy of the provided CHPs.
+     * A special purpose constructor which creates an invalid Style
+     * class which stores a copy of the provided CHPs.
      */
-    Style(const Word97::CHP& chp);
+    explicit Style(const Word97::CHP& chp);
 
     ~Style();
 
     /**
-     * Additional validation of the style, which requires the whole stylesheet
-     * to be loaded to check the STD structure.  You MUST call this one after
-     * loading of the stylesheet, else the isValid method informs only about
-     * the parsing errors.
+     * Additional validation of the style, which requires the whole
+     * stylesheet to be loaded to check the STD structure.  You MUST
+     * call this one after the stylesheet is loaded, else the isValid
+     * method informs only about the parsing errors.
+     *
+     * At the moment a number of selected repair procedures is
+     * included.  Remember that the filter is NOT prepared to process
+     * corrupt and invalid files.  If you relax the validation process
+     * a number of corrupt files will squeeze through.
      */
-    bool validate(const U16 istd, const U16 rglpstd_cnt,
-                  const std::vector<Style*>& styles);
+    void validate(const U16 istd, const U16 rglpstd_cnt,
+                  const std::vector<Style*>& styles, U16& udsNum);
 
     /**
      * Check if the style is valid.
@@ -382,8 +387,15 @@ public:
      * Return the number of styles.
      */
     unsigned int size() const;
+
+    /**
+     * @return 0 in case the style sheet does not contain the requested style.
+     */
     const Style* styleByIndex( U16 istd ) const;
 
+    /**
+     * @return 0 in case the style sheet does not contain the requested style.
+     */
     const Style* styleByID( U16 sti ) const;
 
     U16 indexByID( U16 sti, bool& ok ) const;
@@ -394,6 +406,10 @@ private:
 
     Word97::STSHI m_stsh;
     std::vector<Style*> m_styles;
+
+    //Number of user defined styles with empty style name.
+    U16 m_udsNum;
+
 }; // StyleSheet
 
 }  // namespace wvWare

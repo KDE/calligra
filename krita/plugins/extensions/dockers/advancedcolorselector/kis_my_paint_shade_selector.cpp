@@ -33,15 +33,15 @@
 #include <QtGlobal>
 #include <QTimer>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
-#include "KoResourceManager.h"
+#include "KoCanvasResourceManager.h"
 
 inline int sqr(int x);
 inline qreal sqr2(qreal x);
@@ -83,10 +83,10 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     for (int x=0; x<width(); x++) {
         for (int y=0; y<height(); y++) {
 
-            float v_factor = 0.6;
-            float s_factor = 0.6;
-            float v_factor2 = 0.013;
-            float s_factor2 = 0.013;
+            float v_factor = 0.6f;
+            float s_factor = 0.6f;
+            float v_factor2 = 0.013f;
+            float s_factor2 = 0.013f;
 
             int stripe_width = 15*size/255.;
 
@@ -96,7 +96,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
             int dx = x-width()/2;
             int dy = y-height()/2;
-            int diag = sqrt(2)*size/2;
+            int diag = sqrt(2.0)*size/2;
 
             int dxs, dys;
             if (dx > 0)
@@ -256,8 +256,8 @@ void KisMyPaintShadeSelector::resourceChanged(int key, const QVariant &v)
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
-    if ((key == KoCanvasResource::ForegroundColor && onForeground)
-        || (key == KoCanvasResource::BackgroundColor && onBackground)) {
+    if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
+        || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
         setColor(findGeneratingColor(v.value<KoColor>()));
     }
 }

@@ -34,6 +34,8 @@
 
 #include "LcmsColorProfileContainer.h"
 
+#include "lcms2.h"
+
 struct IccColorProfile::Data::Private {
     QByteArray rawData;
 };
@@ -41,7 +43,7 @@ struct IccColorProfile::Data::Private {
 IccColorProfile::Data::Data() : d(new Private)
 {
 }
-IccColorProfile::Data::Data(QByteArray rawData) : d(new Private)
+IccColorProfile::Data::Data(const QByteArray &rawData) : d(new Private)
 {
     d->rawData = rawData;
 }
@@ -85,7 +87,7 @@ struct IccColorProfile::Private {
     Shared* shared;
 };
 
-IccColorProfile::IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, QString name) : KoColorProfile(""), d(new Private)
+IccColorProfile::IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, const QString &name) : KoColorProfile(QString()), d(new Private)
 {
     d->shared = new Private::Shared();
     d->shared->count ++;
@@ -96,7 +98,7 @@ IccColorProfile::IccColorProfile(const KoRGBChromaticities& chromacities, qreal 
     init();
 }
 
-IccColorProfile::IccColorProfile(QString fileName) : KoColorProfile(fileName), d(new Private)
+IccColorProfile::IccColorProfile(const QString &fileName) : KoColorProfile(fileName), d(new Private)
 {
     d->shared = new Private::Shared();
     d->shared->count ++;
@@ -185,9 +187,9 @@ bool IccColorProfile::load()
     QByteArray rawData = file.readAll();
     setRawData(rawData);
     file.close();
-    if (init())
+    if (init()) {
         return true;
-
+    }
     warnPigment << "Failed to load profile from " << fileName();
     return false;
 }

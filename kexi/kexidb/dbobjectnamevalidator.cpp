@@ -19,10 +19,11 @@
 
 #include "dbobjectnamevalidator.h"
 
-#include "driver.h"
+#include <db/driver.h>
+
+#include <KLocale>
 
 using namespace KexiDB;
-using namespace KexiUtils;
 
 ObjectNameValidator::ObjectNameValidator(
     KexiDB::Driver *drv, QObject * parent)

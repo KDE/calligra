@@ -29,6 +29,7 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 
@@ -52,7 +53,7 @@ KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
 {
     m_selectionStatusLabel = new QLabel(view);
-    m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
+    m_selectionStatusLabel->setPixmap(koIcon("tool_rect_selection").pixmap(22));
     m_selectionStatusLabel->setEnabled(false);
     view->addStatusBarItem(m_selectionStatusLabel);
 
@@ -67,6 +68,9 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
+    m_progress = new KisProgressWidget(view);
+    view->addStatusBarItem(m_progress);
+
     m_imageSizeLabel = new QLabel(QString(), view);
     m_imageSizeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_imageSizeLabel->setMinimumWidth(100);
@@ -77,13 +81,6 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_pointerPositionLabel->setMinimumWidth(100);
     view->addStatusBarItem(m_pointerPositionLabel);
     m_pointerPositionLabel->setVisible(false);
-
-    m_progress = new KisProgressWidget(view);
-    m_progress->setMaximumWidth(225);
-    m_progress->setMinimumWidth(225);
-    view->addStatusBarItem(m_progress, 2, true);
-
-    m_progress->hide();
 }
 
 KisStatusBar::~KisStatusBar()
@@ -119,8 +116,12 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
     m_pointerPositionLabel->setText(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()));
 }
 
-void KisStatusBar::imageSizeChanged(qint32 w, qint32 h)
+void KisStatusBar::imageSizeChanged()
 {
+    KisImageWSP image = m_view->image();
+    qint32 w = image->width();
+    qint32 h = image->height();
+
     m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
 }
 
@@ -129,7 +130,7 @@ void KisStatusBar::setSelection(KisImageWSP image)
     Q_UNUSED(image);
 
     KisSelectionSP selection = m_view->selection();
-    if (selection && !selection->isDeselected()) {
+    if (selection) {
         m_selectionStatusLabel->setEnabled(true);
 
         QRect r = selection->selectedExactRect();

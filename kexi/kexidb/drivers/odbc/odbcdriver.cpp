@@ -24,9 +24,9 @@
 #include "odbctypeinfoqueryunit.h"
 #include "odbcspecialcolumnsqueryunit.h"
 
-#include <kexidb/field.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 
 #include <QVariant>
 #include <QFile>
@@ -34,7 +34,7 @@
 #include <sql.h>
 #include <sqltypes.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 using namespace KexiDB;
 
@@ -327,7 +327,7 @@ bool ODBCDriver::populateTypeInfo(ODBCConnection* connection )
 
 bool ODBCDriver::populateROWID(ODBCConnection* connection ) {
     // pass true, as we want *some* table. If there are no tables which already exist
-    // lets atleast get the kexidb system tables
+    // lets at least get the kexidb system tables
     QStringList tableNames = connection->tableNames(true);
     if ( tableNames.size() == 0 ) {
         return false;
@@ -417,7 +417,7 @@ bool ODBCDriver::populateGeneralInfo(ODBCConnection* connection)
     // TODO TODO convert the keywordList to a character array
     int i = 0;
     foreach( const QString& keyword, keywordList ) {
-        QByteArray ba = keyword.toAscii();
+        QByteArray ba = keyword.toLatin1();
         // we want ownership as the bytearray is going to be destroyed.
         // we don't want ownership as the KexiUtils::StaticSetOfStrings, is not going to delete thiss
         // TODO: find a solution :)
@@ -447,7 +447,7 @@ bool ODBCDriver::populateBehaviourInfo(const QString& dbName)
 
     KexiDBDrvDbg <<"Loading behaviour for :"<< dbName;
 
-    DriverBehaviour* db = o_d->driverBehaviour(dbName.toAscii());
+    DriverBehaviour* db = o_d->driverBehaviour(dbName.toLatin1());
     if ( !db ) {
         db = o_d->driverBehaviour( "default" );
         defaultBehaviourLoaded = true;

@@ -1,7 +1,7 @@
 Compile-Time Options for Kexi
 -----------------------------
 
-(c) 2005-2007, Jarosław Staniek, <staniek @ kde.org>
+(c) 2005-2011, Jarosław Staniek, <staniek @ kde.org>
 
 
 See http://www.kexi-project.org/wiki/wikiview/index.php@AdvancedBuildNotes.html
@@ -73,12 +73,6 @@ Description: If defined, image box (KexiImageBox) widget will not be available
 Type: defined/undefined, temporary
 Default: undefined for 2.x
 Description: If defined, layouts (and spacers) for forms will not be available
-
-* CUSTOM_VERSION
-Type: defined/undefined
-Default: undefined
-Description: Defined means Kexi version compiled for standalone distribution 
-with some minor vendor-specific tweaks. Used for OOPL version.
 
 * KEXI_DEBUG_GUI
 Type: defined/undefined

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,7 +77,9 @@ protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
     virtual tristate storeData(bool dontAsk = false);
 
     /*! Updates data in columns depending on tables that are currently inserted.
@@ -158,6 +160,24 @@ protected slots:
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
 
 private:
+    void slotBeforeColumnCellChanged(KexiDB::RecordData *record,
+        QVariant& newValue, KexiDB::ResultInfo* result);
+
+    void slotBeforeTableCellChanged(KexiDB::RecordData *record,
+        QVariant& newValue, KexiDB::ResultInfo* result);
+
+    void slotBeforeVisibleCellChanged(KexiDB::RecordData *record,
+        QVariant& newValue, KexiDB::ResultInfo* result);
+
+    void slotBeforeTotalsCellChanged(KexiDB::RecordData *record,
+        QVariant& newValue, KexiDB::ResultInfo* result);
+
+    void slotBeforeSortingCellChanged(KexiDB::RecordData *record,
+        QVariant& newValue, KexiDB::ResultInfo* result);
+
+    void slotBeforeCriteriaCellChanged(KexiDB::RecordData *record,
+        QVariant& newValue, KexiDB::ResultInfo* result);
+
     class Private;
     Private * const d;
 

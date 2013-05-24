@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -42,12 +42,13 @@
 
 #include <kdebug.h>
 
-#include "kexitableviewdata.h"
 #include "kexitableedit.h"
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
+#include <db/tableviewdata.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include "kexidataawareobjectiface.h"
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 class QPrinter;
 class QPrintDialog;
@@ -69,7 +70,8 @@ class KEXIDATATABLE_EXPORT KexiTableView :
             public Q3ScrollView,
             public KexiRecordNavigatorHandler,
             public KexiSharedActionClient,
-            public KexiDataAwareObjectInterface
+            public KexiDataAwareObjectInterface,
+            public KexiDataItemChangesListener
 {
     Q_OBJECT
     KEXI_DATAAWAREOBJECTINTERFACE
@@ -102,12 +104,12 @@ public:
         /*! true if background altering should be enabled, true by default */
         bool backgroundAltering;
 
-        /*! true if full-row-selection mode is set,
-         what means that all cells of the current row are always selected, instead of single cell.
+        /*! true if full-record-selection mode is set,
+         what means that all cells of the current record are always selected, instead of single cell.
          This mode is usable for read-only table views, when we're interested only in navigating
-         by rows. False by default, even for read-only table views.
+         by records. False by default, even for read-only table views.
         */
-        bool fullRowSelection;
+        bool fullRecordSelection;
 
         /*! true if fullgrid is enabled. True by default.
          It is set to false for comboboxpopup table, to mimic original
@@ -118,44 +120,44 @@ public:
          True by default. */
         bool navigatorEnabled;
 
-        /*! true if "row highlight" behaviour is enabled. False by default. */
-        bool rowHighlightingEnabled;
+        /*! true if "record highlight" behaviour is enabled. False by default. */
+        bool recordHighlightingEnabled;
 
-        /*! true if "row highlight over " behaviour is enabled. False by default. */
-        bool rowMouseOverHighlightingEnabled;
+        /*! true if "record highlight over " behaviour is enabled. False by default. */
+        bool recordMouseOverHighlightingEnabled;
 
-        /*! true if selection of a row should be kept when a user moved mouse
-         pointer over other rows. Makes only sense when rowMouseOverHighlightingEnabled is true.
+        /*! true if selection of a record should be kept when a user moved mouse
+         pointer over other records. Makes only sense when recordMouseOverHighlightingEnabled is true.
          True by default. It is set to false for comboboxpopup table, to mimic original
          combobox look and feel. */
         bool persistentSelections;
 
-        /*! color for row highlight, default is intermediate (33%/60%) between
+        /*! color for record highlight, default is intermediate (33%/60%) between
          active highlight and base color. */
-        QColor rowHighlightingColor;
+        QColor recordHighlightingColor;
 
-        /*! color for text under row highlight, default is the same as textColor.
-         Used when rowHighlightingEnabled is true; */
-        QColor rowHighlightingTextColor;
+        /*! color for text under record highlight, default is the same as textColor.
+         Used when recordHighlightingEnabled is true; */
+        QColor recordHighlightingTextColor;
 
-        /*! color for row highlight for mouseover, default is intermediate (20%/80%) between
-         active highlight and base color. Used when rowMouseOverHighlightingEnabled is true. */
-        QColor rowMouseOverHighlightingColor;
+        /*! color for record highlight for mouseover, default is intermediate (20%/80%) between
+         active highlight and base color. Used when recordMouseOverHighlightingEnabled is true. */
+        QColor recordMouseOverHighlightingColor;
 
-        /*! color for text under row highlight for mouseover, default is the same as textColor.
-         Used when rowMouseOverHighlightingEnabled is true; */
-        QColor rowMouseOverHighlightingTextColor;
+        /*! color for text under record highlight for mouseover, default is the same as textColor.
+         Used when recordMouseOverHighlightingEnabled is true; */
+        QColor recordMouseOverHighlightingTextColor;
 
-        /*! Like rowMouseOverHighlightingColor but for areas painted with alternate color.
+        /*! Like recordMouseOverHighlightingColor but for areas painted with alternate color.
          This is computed using active highlight color and alternateBackgroundColor. */
-        QColor rowMouseOverAlternateHighlightingColor;
+        QColor recordMouseOverAlternateHighlightingColor;
     };
 
-    KexiTableView(KexiTableViewData* data = 0, QWidget* parent = 0, const char* name = 0);
+    KexiTableView(KexiDB::TableViewData* data = 0, QWidget* parent = 0, const char* name = 0);
     virtual ~KexiTableView();
 
     //! redeclared to avoid conflict with private QWidget::data
-    inline KexiTableViewData *data() const {
+    inline KexiDB::TableViewData *data() const {
         return KexiDataAwareObjectInterface::data();
     }
 
@@ -181,7 +183,7 @@ public:
     /*! Enables or disables vertical scrollbar's. */
 //moved void setScrollbarToolTipsEnabled(bool set);
 
-    /*! \return maximum number of rows that can be displayed per one "page"
+    /*! \return maximum number of records that can be displayed per one "page"
      for current table view's size. */
     virtual int rowsPerPage() const;
 
@@ -255,10 +257,10 @@ public:
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
 
-    /*! \return highlighted row number or -1 if no row is highlighted.
-     Makes sense if row highlighting is enabled.
-     @see Appearance::rowHighlightingEnabled setHighlightedRow() */
-    int highlightedRow() const;
+    /*! \return highlighted record number or -1 if no record is highlighted.
+     Makes sense if record highlighting is enabled.
+     @see Appearance::recordHighlightingEnabled setHighlightedRecord() */
+    int highlightedRecord() const;
 
     KexiDB::RecordData *highlightedItem() const;
 
@@ -268,7 +270,7 @@ public:
     }
 
 public slots:
-    virtual void setData(KexiTableViewData *data, bool owner = true) {
+    virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
         KexiDataAwareObjectInterface::setData(data, owner);
     }
 
@@ -298,14 +300,14 @@ public slots:
      \sa setColumnStretchEnabled() QHeader::adjustHeaderSize() */
     void adjustHorizontalHeaderSize();
 
-    /*! Sets highlighted row number or -1 if no row has to be highlighted.
-     Makes sense if row highlighting is enabled.
-     @see Appearance::rowHighlightingEnabled */
-    void setHighlightedRow(int row);
+    /*! Sets highlighted record number or -1 if no record has to be highlighted.
+     Makes sense if record highlighting is enabled.
+     @see Appearance::recordHighlightingEnabled */
+    void setHighlightedRecord(int record);
 
-    /*! Sets no row that will be highlighted. Equivalent to setHighlightedRow(-1). */
-    inline void clearHighlightedRow() {
-        setHighlightedRow(-1);
+    /*! Sets no record that will be highlighted. Equivalent to setHighlightedRecord(-1). */
+    inline void clearHighlightedRecord() {
+        setHighlightedRecord(-1);
     }
 
     /*! Ensures that cell at \a row and \a col is visible.
@@ -345,7 +347,7 @@ public slots:
     }
 
     /*! Deletes currently selected cell's contents, if allowed.
-     In most cases delete is not accepted immediately but "row editing" mode is just started. */
+     In most cases delete is not accepted immediately but "record editing" mode is just started. */
     virtual void deleteAndStartEditCurrentCell() {
         KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell();
     }
@@ -390,7 +392,7 @@ public slots:
     }
 
 signals:
-    void dataSet(KexiTableViewData *data);
+    void dataSet(KexiDB::TableViewData *data);
 
     void itemSelected(KexiDB::RecordData *);
     void cellSelected(int col, int row);
@@ -415,13 +417,16 @@ signals:
 // void contextMenuRequested(KexiDB::RecordData *,  int row, int col, const QPoint &);
     void sortedColumnChanged(int col);
 
-    //! emmited when row editing is started (for updating or inserting)
+    //! emitted when row editing is started (for updating or inserting)
     void rowEditStarted(int row);
 
-    //! emmited when row editing is terminated (for updating or inserting)
+    //! emitted when row editing is terminated (for updating or inserting)
     //! no matter if accepted or not
     void rowEditTerminated(int row);
 
+    //! emitted when state of 'save/cancel record changes' actions should be updated.
+    void updateSaveCancelActions();
+    
     //! Emitted in initActions() to force reload actions
     //! You should remove existing actions and add them again.
     void reloadActions();
@@ -453,23 +458,23 @@ protected slots:
     void slotEditRequested();
 
     /*! Reloads data for this widget.
-     Handles KexiTableViewData::reloadRequested() signal. */
+     Handles KexiDB::TableViewData::reloadRequested() signal. */
     virtual void reloadData();
 
-    //! Handles KexiTableViewData::rowRepaintRequested() signal
+    //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
-    //! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+    //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
     virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
         KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
     }
 
-    //! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
     virtual void slotRowDeleted() {
         KexiDataAwareObjectInterface::slotRowDeleted();
     }
 
-    //! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint) {
         KexiDataAwareObjectInterface::slotRowInserted(record, repaint);
     }
@@ -486,7 +491,7 @@ protected slots:
     }
 
 #if 0 // 2.0
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
 /*replaced by QToolTip    virtual void vScrollBarSliderReleased() {
         KexiDataAwareObjectInterface::vScrollBarSliderReleased();
     }*/
@@ -512,7 +517,7 @@ protected:
     /*! Reimplementation for KexiDataAwareObjectInterface
      Initializes data contents (resizes it, sets cursor at 1st row).
      Called on setData(). Also called once on show event after
-     reloadRequested() signal was received from KexiTableViewData object. */
+     reloadRequested() signal was received from KexiDB::TableViewData object. */
     virtual void initDataContents();
 
     /*! Implementation for KexiDataAwareObjectInterface.
@@ -617,7 +622,7 @@ protected:
 
     /*! Shows context menu at \a pos for selected cell
      if menu is configured,
-     else: contextMenuRequested() signal is emmited.
+     else: contextMenuRequested() signal is emitted.
      Method used in contentsMousePressEvent() (for right button)
      and keyPressEvent() for Qt::Key_Menu key.
      If \a pos is QPoint(-1,-1) (the default), menu is positioned below the current cell.
@@ -672,11 +677,28 @@ protected:
      Used in KexiTableView::paintCell() and KexiTableViewCellToolTip::maybeTip()
      \return true is \a cellValue has been found. */
     bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
-                               KexiDB::RecordData *record, KexiTableViewColumn *tvcol) const;
+                               KexiDB::RecordData *record, KexiDB::TableViewColumn *tvcol) const;
 
 // //! Called to repaint contents after a row is deleted.
 // void repaintAfterDelete();
 
+    /*! Implementation for KexiDataItemChangesListener.
+     Reaction for change of \a item. */
+    virtual void valueChanged(KexiDataItemInterface* item);
+
+    /*! Implementation for KexiDataItemChangesListener. */
+    virtual bool cursorAtNewRow() const;
+
+    /*! Implementation for KexiDataItemChangesListener. */
+    virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded);
+
+    /*! Implementation for KexiDataItemChangesListener. */
+    virtual void updateLengthExceededMessage(KexiDataItemInterface *item);
+
+    virtual int horizontalHeaderHeight() const;
+
+    QWidget* navPanelWidget() const;
+    
     KexiTableViewPrivate * const d;
 
     class WhatsThis;

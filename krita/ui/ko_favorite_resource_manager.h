@@ -24,7 +24,6 @@
 #include "kis_color_data_list.h"
 #include <QQueue>
 #include <QList>
-#include <QPixmap>
 #include "KoResourceServerObserver.h"
 
 class QString;
@@ -67,7 +66,7 @@ public:
     void removeFavoritePreset(const QString& name);
     //returns -1 if paintop is not in the list, returns the paintop position otherwise
     int isFavoriteBrushSaved(const QString& name);
-    int favoritePresetsTotal();
+    int numFavoritePresets();
 
     QStringList favoritePresetList();
 
@@ -80,6 +79,12 @@ public:
     virtual void removingResource(KisPaintOpPreset* resource);
     virtual void resourceAdded(KisPaintOpPreset* resource);
     virtual void resourceChanged(KisPaintOpPreset* resource);
+
+    /**
+     Set palette to block updates, paintops won't be deleted when they are deleted from server
+     Used when overwriting a resource
+     **/
+    void setBlockUpdates(bool block);
 
 signals:
     void sigSetFGColor(const KoColor& c);
@@ -114,6 +119,8 @@ private:
 
     /**The list of recently used colors**/
     KisColorDataList * m_colorList;
+
+    bool m_blockUpdates;
 
     bool isFavoritePresetsFull();
     void saveFavoritePresets();

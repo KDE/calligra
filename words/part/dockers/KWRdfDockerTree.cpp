@@ -1,5 +1,6 @@
-    /* This file is part of the KDE project
+/* This file is part of the KDE project
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +24,13 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 
+#include <QDrag>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
 #include <QMimeData>
 
-#include <rdf/KoDocumentRdf.h>
+#include <KoDocumentRdf.h>
 
-#include "KWView.h"
 #include "KWCanvas.h"
 
 #include "KoRdfSemanticTreeWidgetItem.h"
@@ -81,13 +82,6 @@ void KWRdfDockerTree::dragMoveEvent(QDragMoveEvent *e)
     e->accept();
 }
 
-KoTextEditor* KWRdfDockerTree::editor()
-{
-    if (m_canvas)
-        return qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
-    return 0;
-}
-
 bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
         const QMimeData *data, Qt::DropAction action)
 {
@@ -102,12 +96,12 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
     } else if (data->hasFormat("text/calendar")) {
         QByteArray ba = data->data("text/calendar");
         //kDebug(30015) << "data:" << ba;
-        KoRdfSemanticItem *semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Event");
+        hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Event");
         semObj->importFromData(ba, m_rdf, m_canvas);
     } else if (data->hasFormat("text/x-vcard")) {
         QByteArray ba = data->data("text/x-vcard");
         //kDebug(30015) << "data:" << ba;
-        KoRdfSemanticItem* semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
+        hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
         semObj->importFromData(ba, m_rdf, m_canvas);
     } else if (data->hasFormat("text/uri-list")) {
         QByteArray urilist = data->data("text/uri-list");
@@ -116,8 +110,8 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
         while (!ss.atEnd()) {
             QString fileName = ss.readLine();
             //kDebug(30015) << "fileName:" << fileName;
-            if (fileName.startsWith("file:")) {
-                fileName = fileName.mid(strlen("file:"));
+            if (fileName.startsWith(QLatin1String("file:"))) {
+                fileName.remove(0, 5);
             }
             QFile f(fileName);
             f.open(QIODevice::ReadOnly);
@@ -127,7 +121,7 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
             //kDebug(30015) << "MIME Type:" << mt;
             // BEGIN:VCARD
             if (mt == "text/directory") {
-                KoRdfSemanticItem* semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
+                hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
                 semObj->importFromData(ba, m_rdf, m_canvas);
             }
         }

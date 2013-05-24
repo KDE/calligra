@@ -20,7 +20,7 @@
 #ifndef KEXI_CSVEXPORT_H
 #define KEXI_CSVEXPORT_H
 
-#include <kexidb/utils.h>
+#include <db/utils.h>
 
 class QTextStream;
 

@@ -31,15 +31,13 @@
 #include <kis_open_raster_stack_load_visitor.h>
 #include <kis_open_raster_stack_save_visitor.h>
 #include <kis_paint_layer.h>
-#include <kis_undo_adapter.h>
 
 #include "ora_load_context.h"
 #include "ora_save_context.h"
 
-OraConverter::OraConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+OraConverter::OraConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -47,7 +45,6 @@ OraConverter::OraConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 OraConverter::~OraConverter()
 {
 }
-
 
 KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
 {
@@ -58,33 +55,34 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
-    // We're not set up to handle asynchronous loading at the moment.
-    QString tmpFile;
-
     KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
+    store->disallowNameExpansion();
 
     OraLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
     orslv.loadImage();
     m_image = orslv.image();
-    
+    m_activeNodes = orslv.activeNodes();
     delete store;
-    
+
     return KisImageBuilder_RESULT_OK;
 
 }
-
 
 KisImageWSP OraConverter::image()
 {
     return m_image;
 }
 
+vKisNodeSP OraConverter::activeNodes()
+{
+    return m_activeNodes;
+}
 
-KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image)
+KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image, vKisNodeSP activeNodes)
 {
 
     if (uri.isEmpty())
@@ -97,9 +95,9 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-
+    store->disallowNameExpansion();
     OraSaveContext osc(store);
-    KisOpenRasterStackSaveVisitor orssv(&osc);
+    KisOpenRasterStackSaveVisitor orssv(&osc, activeNodes);
 
     image->rootLayer()->accept(orssv);
 

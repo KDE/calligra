@@ -435,9 +435,9 @@ private:
       rgb_to_hsv_float (&color_h, &color_s, &color_v);
     }
 
-    if (settings_value[BRUSH_SMUDGE_LENGTH] < 1.0 and
+    if (settings_value[BRUSH_SMUDGE_LENGTH] < 1.0 &&
         // optimization, since normal brushes have smudge_length == 0.5 without actually smudging
-        (settings_value[BRUSH_SMUDGE] != 0.0 or not settings[BRUSH_SMUDGE]->is_constant())) {
+        (settings_value[BRUSH_SMUDGE] != 0.0 || !settings[BRUSH_SMUDGE]->is_constant())) {
 
       float smudge_radius = radius * expf(settings_value[BRUSH_SMUDGE_RADIUS_LOG]);
       smudge_radius = CLAMP(smudge_radius, ACTUAL_RADIUS_MIN, ACTUAL_RADIUS_MAX);
@@ -491,7 +491,7 @@ private:
   }
 
   // How many dabs will be drawn between the current and the next (x, y, pressure, +dt) position?
-  float count_dabs_to (float x, float y, float pressure, float dt)
+  float count_dabs_to (float x, float y, float /*pressure*/, float dt)
   {
     float xx, yy;
     float res1, res2, res3;

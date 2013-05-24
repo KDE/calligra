@@ -23,6 +23,7 @@
 #include "kis_merge_walker.h"
 #include "kis_stroke_strategy.h"
 #include "kis_stroke_job.h"
+#include "kis_stroke.h"
 
 
 #define SCOMPARE(s1, s2) QCOMPARE(QString(s1), QString(s2))
@@ -33,6 +34,15 @@
     QCOMPARE(getJobName(item->strokeJob()), QString(name))
 #define VERIFY_EMPTY(item)                                      \
     QVERIFY(!item->isRunning())
+
+void executeStrokeJobs(KisStroke *stroke) {
+    KisStrokeJob *job;
+
+    while((job = stroke->popOneJob())) {
+        job->run();
+        delete job;
+    }
+}
 
 bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
     if(walker->requestedRect() == rect) {
@@ -45,15 +55,14 @@ bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
     }
 }
 
-class KisNoopDabStrategy : public KisDabProcessingStrategy
+class KisNoopDabStrategy : public KisStrokeJobStrategy
 {
 public:
-KisNoopDabStrategy(QString name, bool sequential = true)
-        : KisDabProcessingStrategy(sequential),
-          m_name(name)
+KisNoopDabStrategy(QString name)
+        : m_name(name)
     {}
 
-    void processDab(DabProcessingData *data) {
+    void run(KisStrokeJobData *data) {
         Q_UNUSED(data);
     }
 
@@ -77,23 +86,23 @@ public:
         setExclusive(exclusive);
     }
 
-    KisDabProcessingStrategy* createInitStrategy() {
+    KisStrokeJobStrategy* createInitStrategy() {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "init", true) : 0;
+            new KisNoopDabStrategy(m_prefix + "init") : 0;
     }
 
-    KisDabProcessingStrategy* createFinishStrategy() {
+    KisStrokeJobStrategy* createFinishStrategy() {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "finish", true) : 0;
+            new KisNoopDabStrategy(m_prefix + "finish") : 0;
     }
 
-    KisDabProcessingStrategy* createCancelStrategy() {
+    KisStrokeJobStrategy* createCancelStrategy() {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "cancel", true) : 0;
+            new KisNoopDabStrategy(m_prefix + "cancel") : 0;
     }
 
-    KisDabProcessingStrategy* createDabStrategy() {
-        return new KisNoopDabStrategy(m_prefix + "dab", false);
+    KisStrokeJobStrategy* createDabStrategy() {
+        return new KisNoopDabStrategy(m_prefix + "dab");
     }
 
 private:

@@ -23,13 +23,8 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -41,8 +36,9 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_statusbar.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <widgets/kis_progress_widget.h>
+#include <kis_action.h>
 
 #include "kis_channel_separator.h"
 #include "dlg_separate.h"
@@ -51,17 +47,11 @@ K_PLUGIN_FACTORY(KisSeparateChannelsPluginFactory, registerPlugin<KisSeparateCha
 K_EXPORT_PLUGIN(KisSeparateChannelsPluginFactory("krita"))
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/imageseparate.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setComponentData(KisSeparateChannelsPluginFactory::componentData());
-
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageseparate.rc"), true);
-        m_view = (KisView2*) parent;
-        KAction *action  = new KAction(i18n("Separate Image..."), this);
-        actionCollection()->addAction("separate", action);
-        connect(action, SIGNAL(triggered(bool)), SLOT(slotSeparate()));
-    }
+    KisAction *action  = new KisAction(i18n("Separate Image..."), this);
+    addAction("separate", action);
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotSeparate()));
 }
 
 KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
@@ -73,7 +63,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisLayerSP l = m_view->layerManager()->activeLayer();
+    KisLayerSP l = m_view->nodeManager()->activeLayer();
     if (!l) return;
 
     KisPaintDeviceSP dev = l->paintDevice();

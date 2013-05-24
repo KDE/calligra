@@ -25,8 +25,8 @@ class QTextCursor;
 class QTextDocument;
 class QTextImageFormat;
 
-#include <QtCore/QStack>
-#include <QtGui/QTextCharFormat>
+#include <QStack>
+#include <QTextCharFormat>
 #include "rtfreader_export.h"
 namespace RtfReader
 {
@@ -35,7 +35,7 @@ namespace RtfReader
     class RTFREADER_EXPORT TextDocumentRtfOutput: public AbstractRtfOutput
     {
       public:
-	TextDocumentRtfOutput( QTextDocument *document );
+	explicit TextDocumentRtfOutput( QTextDocument *document );
 
 	virtual ~TextDocumentRtfOutput();
 

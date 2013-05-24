@@ -26,7 +26,6 @@
 #include <KoUpdater.h>
 
 #include <kis_mask_generator.h>
-#include <kis_iterators_pixel.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
 #include <kis_global.h>
@@ -48,10 +47,9 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(0, 255, 15, i18n("Threshold"), "threshold"));
     param.push_back(KisIntegerWidgetParam(0, 10, 1, i18n("Window size"), "windowsize"));

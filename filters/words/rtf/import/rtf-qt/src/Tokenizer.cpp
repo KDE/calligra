@@ -17,7 +17,7 @@
 
 #include "Tokenizer.h"
 #include <ctype.h>
-#include <QtCore/QDebug>
+#include <QDebug>
 
 namespace RtfReader
 {

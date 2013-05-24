@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=Multilayer Remote Switch
+Name[bs]=Višeslojni daljinski prekidač
+Name[ca]=Commutador remota multicapa
+Name[ca@valencia]=Commutador remota multicapa
+Name[da]=Multilayer Remote Switch
+Name[el]=Πολυεπίπεδος απομακρυσμένος μεταγωγέας
+Name[es]=Conmutador multicapa remoto
+Name[et]=Mitmekihiline kaugkommutaator
+Name[fr]=Multilayer Remote Switch
+Name[gl]=Conmutador remoto de varias capas
+Name[it]=Switch remoto multilayer
+Name[kk]=Көпқабатты қашық қосқышы
+Name[lt]=Daugiasluoksnis nutolęs perjungiklis
 Name[nb]=Flerlags fjernsvitsj
 Name[nl]=Multilayer remote switch
+Name[pl]=Przełącznik wielopoziomowy zdalny
 Name[pt]=Comutador Remoto Multi-Nível
 Name[pt_BR]=Comutador remoto multi-camada
+Name[ru]=Многоуровневый удалённый коммутатор
+Name[sk]=Viacvrstvový vzdialený prepínač
 Name[sv]=Flerlagers-fjärrväxel
 Name[uk]=Віддалений багаторівневий комутатор
 Name[x-test]=xxMultilayer Remote Switchxx
+Name[zh_CN]=Multilayer 远程交换机
 Name[zh_TW]=多層遠端交換器

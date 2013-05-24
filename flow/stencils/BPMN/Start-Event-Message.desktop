@@ -1,11 +1,26 @@
 [Desktop Entry]
 Name=Start-Event-Message
+Name[bs]=Poruka početnog događaja
+Name[ca]=Inicia-Esdeveniment-Missatge
+Name[ca@valencia]=Inicia-Esdeveniment-Missatge
+Name[de]=Startereignis - Nachricht
+Name[el]=Μήνυμα-γεγονότος-εκκίνησης
 Name[es]=Mensaje del evento inicial
-Name[et]=Sündmuse alguse sõnum
+Name[et]=Algussündmuse sõnum
+Name[fr]=Message de démarrage d'évènement
+Name[gl]=Evento inicial de mensaxe
+Name[hu]=Indítás-Esemény-Üzenet
+Name[it]=Evento-iniziale-Messaggio
+Name[kk]=Бастау-оқиға-хабарлама
 Name[nb]=Start-hendelse-melding
+Name[nl]=Begin-gebeurtenis-bericht
+Name[pl]=Komunikat-Zdarzenia-Rozpoczynającego
 Name[pt]=Evento-Inicial-Mensagem
 Name[pt_BR]=Mensagem do evento inicial
+Name[ru]=Начальное событие - сообщение
+Name[sk]=Start-Event-Message
 Name[sv]=Starthändelse-brev
 Name[uk]=Повідомлення початкової події
 Name[x-test]=xxStart-Event-Messagexx
+Name[zh_CN]=开始事件-消息
 Name[zh_TW]=開始─事件─訊息

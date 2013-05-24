@@ -42,7 +42,6 @@
 #include "kis_shape_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include "kis_transformation_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
@@ -57,9 +56,8 @@ void KisKraSaverTest::testRoundTrip()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    delete doc;
-
     KisDoc2 doc2;
+
     doc2.loadNativeFormat("roundtriptest.kra");
 
     KisCountVisitor cv2(list, KoProperties());
@@ -67,5 +65,20 @@ void KisKraSaverTest::testRoundTrip()
     QCOMPARE(cv1.count(), cv2.count());
 }
 
+void KisKraSaverTest::testSaveEmpty()
+{
+    KisDoc2* doc = createEmptyDocument();
+    doc->saveNativeFormat("emptytest.kra");
+    QStringList list;
+    KisCountVisitor cv1(list, KoProperties());
+    doc->image()->rootLayer()->accept(cv1);
+
+    KisDoc2 doc2;
+    doc2.loadNativeFormat("emptytest.kra");
+
+    KisCountVisitor cv2(list, KoProperties());
+    doc2.image()->rootLayer()->accept(cv2);
+    QCOMPARE(cv1.count(), cv2.count());
+}
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
 #include "kis_kra_saver_test.moc"

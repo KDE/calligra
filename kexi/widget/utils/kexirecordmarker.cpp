@@ -33,7 +33,7 @@
 #include <QStyle>
 #include <QStyleOptionHeader>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
@@ -54,8 +54,10 @@ struct KexiRecordMarkerStatic {
     {
         // color-ify the icons to match the foreground color
         QColor fc(qApp->palette().color(QPalette::Foreground));
-        pen = KexiUtils::replaceColors( QPixmap(tableview_pen_xpm), fc);
-        plus = KexiUtils::replaceColors( QPixmap(tableview_plus_xpm), fc);
+        pen = QPixmap(tableview_pen_xpm);
+        KexiUtils::replaceColors(&pen, fc);
+        plus = QPixmap(tableview_plus_xpm);
+        KexiUtils::replaceColors(&plus, fc);
     }
     QPixmap pen, plus;
 };
@@ -72,7 +74,7 @@ public:
             : rowHeight(1)
             , offset(0)
             , currentRow(-1)
-            , highlightedRow(-1)
+            , highlightedRecord(-1)
             , editRow(-1)
             , rows(0)
             , showInsertRow(true) {
@@ -80,7 +82,7 @@ public:
     int rowHeight;
     int offset;
     int currentRow;
-    int highlightedRow;
+    int highlightedRecord;
     int editRow;
     int rows;
     QBrush selectionBackgroundBrush;
@@ -184,7 +186,7 @@ void KexiRecordMarker::paintEvent(QPaintEvent *)
             alteredColor = KexiUtils::blendedColors(
                                palette().color(QPalette::Window), d->selectionBackgroundBrush.color(), 2, 1);
         }
-        else if (d->highlightedRow == i) {
+        else if (d->highlightedRecord == i) {
             alteredColor = KexiUtils::blendedColors(
                                palette().color(QPalette::Window), d->selectionBackgroundBrush.color(), 4, 1);
             optionHeader.state |= QStyle::State_MouseOver;
@@ -245,17 +247,17 @@ void KexiRecordMarker::setCurrentRow(int row)
         update(0, (d->rowHeight*d->currentRow) - d->offset - 1, width() + 2, d->rowHeight + 2);
 }
 
-void KexiRecordMarker::setHighlightedRow(int row)
+void KexiRecordMarker::setHighlightedRecord(int record)
 {
-    if (row == d->highlightedRow)
+    if (record == d->highlightedRecord)
         return;
-    int oldRow = d->highlightedRow;
-    d->highlightedRow = row;
+    int oldRecord = d->highlightedRecord;
+    d->highlightedRecord = record;
 
-    if (oldRow != -1)
-        update(0, (d->rowHeight*(oldRow)) - d->offset - 1, width() + 2, d->rowHeight + 2);
+    if (oldRecord != -1)
+        update(0, (d->rowHeight*oldRecord) - d->offset - 1, width() + 2, d->rowHeight + 2);
     if (d->currentRow != -1)
-        update(0, (d->rowHeight*d->highlightedRow) - d->offset - 1, width() + 2, d->rowHeight + 2);
+        update(0, (d->rowHeight*d->highlightedRecord) - d->offset - 1, width() + 2, d->rowHeight + 2);
 }
 
 void KexiRecordMarker::setOffset(int offset)
@@ -301,12 +303,12 @@ void KexiRecordMarker::mouseMoveEvent(QMouseEvent *e)
 //    kDebug() << "y / d->rowHeight:" << (y / d->rowHeight);
     const uint row = y / d->rowHeight;
     if ((int)row < rows()) {
-        setHighlightedRow(row);
-        emit rowHighlighted(row);
+        setHighlightedRecord(row);
+        emit recordHighlighted(row);
     }
     else {
-        setHighlightedRow(-1);
-        emit rowHighlighted(-1);
+        setHighlightedRecord(-1);
+        emit recordHighlighted(-1);
     }
     QWidget::mouseMoveEvent(e);
 }
@@ -323,8 +325,8 @@ void KexiRecordMarker::mousePressEvent(QMouseEvent *e)
 
 void KexiRecordMarker::leaveEvent(QEvent *e)
 {
-    setHighlightedRow(-1);
-    emit rowHighlighted(-1);
+    setHighlightedRecord(-1);
+    emit recordHighlighted(-1);
     QWidget::leaveEvent(e);
 }
 

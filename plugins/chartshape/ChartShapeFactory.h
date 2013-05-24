@@ -41,7 +41,7 @@ class ChartShapePlugin : public QObject
     Q_OBJECT
 public:
 
-    ChartShapePlugin( QObject * parent,  const QVariantList & );
+    ChartShapePlugin(QObject *parent, const QVariantList&);
     ~ChartShapePlugin() {}
 };
 
@@ -54,8 +54,10 @@ public:
 
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-    virtual void newDocumentResourceManager(KoResourceManager *manager);
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    // reimplemented to not create a default shape to just overwrite it afterwards
+    virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
 
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

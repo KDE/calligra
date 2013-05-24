@@ -1,0 +1,34 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Powerpoint Presentations
+Name[ca]=Presentacions del Microsoft Powerpoint
+Name[da]=Microsoft Powerpoint-præsentationer
+Name[de]=Microsoft Powerpoint Präsentationen
+Name[el]=Παρουσιάσεις Microsoft PowerPoint
+Name[es]=Presentaciones Microsoft Powerpoint
+Name[et]=Microsoft PowerPointi esitlused
+Name[fi]=Microsoft Powerpoint -esitykset
+Name[fr]=Présentations Microsoft PowerPoint
+Name[gl]=Presentacións de Microsoft Powerpoint
+Name[hu]=Microsoft Powerpoint bemutatók
+Name[it]=Presentazioni Microsoft PowerPoint
+Name[kk]=Microsoft PowerPoint презентациялары
+Name[lt]=„Microsoft PowerPoint“ pristatymai
+Name[nb]=Microsoft Powerpoint presentasjoner
+Name[nl]=Microsoft Powerpoint-presentaties
+Name[pl]=Prezentacje Microsoft Powerpoint
+Name[pt]=Apresentações do Microsoft PowerPoint
+Name[pt_BR]=Apresentações do Microsoft Powerpoint
+Name[sk]=Prezentácie Microsoft Powerpoint
+Name[sl]=Predstavitve Microsoft Powerpoint
+Name[sv]=Microsoft Powerpoint-presentationer
+Name[tr]=Microsoft Powerpoint Sunuları
+Name[uk]=Презентації Microsoft Powerpoint
+Name[x-test]=xxMicrosoft Powerpoint Presentationsxx
+Name[zh_CN]=Microsoft PowerPoint 演示文稿
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.ms-powerpoint;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

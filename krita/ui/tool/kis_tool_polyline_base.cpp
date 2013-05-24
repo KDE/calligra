@@ -30,30 +30,24 @@
 
 #define PREVIEW_LINE_WIDTH 1
 
-KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & cursor) :
-        KisToolShape(canvas, cursor),
-        m_dragging(false)
+KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolylineBase::ToolType type, const QCursor & cursor)
+    : KisToolShape(canvas, cursor),
+      m_dragging(false),
+      m_type(type)
 {
-    KAction *action = new KAction(i18n("&Finish"), this);
-    addAction("finish_polyline", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(finish()));
-    action = new KAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
-    addAction("cancel_polyline", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
-
-
-    QList<QAction*> list;
-    list.append(this->action("finish_polyline"));
-    list.append(this->action("cancel_polyline"));
-    setPopupActionList(list);
 }
 
 void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
 {
-    if (nodePaintAbility() == NONE) {
-        return;
+    if (m_type == PAINT) {
+        if (!nodeEditable() || nodePaintAbility() == NONE) {
+            return;
+        }
+    } else {
+        if (!selectionEditable()) {
+            return;
+        }
     }
-
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                           Qt::LeftButton, Qt::ShiftModifier)) {
 
@@ -174,17 +168,13 @@ void KisToolPolylineBase::updateArea()
 void KisToolPolylineBase::finish()
 {
     Q_ASSERT(canvas() && currentImage());
-    if (!currentNode())
-        return;
 
-    setCurrentNodeLocked(true);
     m_dragging = false;
     updateArea();
     if(m_points.count() > 1) {
         finishPolyline(m_points);
     }
     m_points.clear();
-    setCurrentNodeLocked(false);
 }
 
 QRectF KisToolPolylineBase::dragBoundingRect()

@@ -100,24 +100,24 @@ private:
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,
                                           Writer& out);
+        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
         virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                               const MSO::OfficeArtClientData* cd,
                                               const DrawStyle& ds,
                                               Writer& out);
-        virtual void addTextStyles(const quint16 msospt,
-                                   const MSO::OfficeArtClientTextBox* clientTextbox,
+        virtual void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                                    const MSO::OfficeArtClientData* clientData,
                                    KoGenStyle& style, Writer& out);
 
-
-        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
         virtual QString formatPos(qreal v);
 
+        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
+        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+
         WordsGraphicsHandler* const gh;
     public:
-        DrawClient(WordsGraphicsHandler* p) :gh(p) {}
+        explicit DrawClient(WordsGraphicsHandler *p) :gh(p) {}
 };
 public:
     WordsGraphicsHandler(Document* document,
@@ -144,7 +144,7 @@ public:
      * This method gets called when an inline object is found by wv2 parser.
      * @param data PictureData as defined in functordata.h
      */
-    virtual void handleInlineObject(const wvWare::PictureData& data);
+    virtual QString handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture = false);
 
     /**
      * Get the DrawStyle to access document backgroud properties and defaults.

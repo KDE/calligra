@@ -18,7 +18,6 @@
 
 #include "kis_transaction_test.h"
 #include <qtest_kde.h>
-#include <KoStore.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -28,34 +27,12 @@
 #include "kis_transform_worker.h"
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
-
-class KisTestingUndoAdapter : public KisUndoAdapter
-{
-public:
-    KisTestingUndoAdapter()
-        : KisUndoAdapter(0)
-    {}
-
-    void addCommand(KUndo2Command *command) {
-        m_stack.push(command);
-    }
-
-    void undo() {
-        m_stack.undo();
-    }
-
-    void redo() {
-        m_stack.redo();
-    }
-
-private:
-    KUndo2QStack m_stack;
-};
+#include "kis_surrogate_undo_adapter.h"
+#include "kis_image.h"
 
 void KisTransactionTest::testUndo()
 {
-    KisTestingUndoAdapter undoAdapter;
-
+    KisSurrogateUndoAdapter undoAdapter;
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
@@ -75,6 +52,7 @@ void KisTransactionTest::testUndo()
 
     KisTransaction transaction("mirror", dev, 0);
     KisTransformWorker::mirrorX(dev);
+    transaction.commit(&undoAdapter);
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -82,7 +60,6 @@ void KisTransactionTest::testUndo()
     QVERIFY(c1 == Qt::black);
     QVERIFY(c2 == Qt::white);
 
-    transaction.commit(&undoAdapter);
     undoAdapter.undo();
 
     dev->pixel(5, 5, &c1);
@@ -95,7 +72,7 @@ void KisTransactionTest::testUndo()
 
 void KisTransactionTest::testRedo()
 {
-    KisTestingUndoAdapter undoAdapter;
+    KisSurrogateUndoAdapter undoAdapter;
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -116,6 +93,7 @@ void KisTransactionTest::testRedo()
 
     KisTransaction transaction("mirror", dev, 0);
     KisTransformWorker::mirrorX(dev);
+    transaction.commit(&undoAdapter);
 
     dev->pixel(5, 5, &c1);
     dev->pixel(517, 5, &c2);
@@ -123,7 +101,7 @@ void KisTransactionTest::testRedo()
     QVERIFY(c1 == Qt::black);
     QVERIFY(c2 == Qt::white);
 
-    transaction.commit(&undoAdapter);
+
     undoAdapter.undo();
 
     dev->pixel(5, 5, &c1);
@@ -139,6 +117,51 @@ void KisTransactionTest::testRedo()
 
     QVERIFY(c1 == Qt::black);
     QVERIFY(c2 == Qt::white);
+}
+
+void KisTransactionTest::testDeviceMove()
+{
+    KisSurrogateUndoAdapter undoAdapter;
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QCOMPARE(dev->x(), 0);
+    QCOMPARE(dev->y(), 0);
+
+    KisTransaction t1("move1", dev, 0);
+    dev->move(10,20);
+    t1.commit(&undoAdapter);
+
+    QCOMPARE(dev->x(), 10);
+    QCOMPARE(dev->y(), 20);
+
+    KisTransaction t2("move2", dev, 0);
+    dev->move(7,11);
+    t2.commit(&undoAdapter);
+
+    QCOMPARE(dev->x(),  7);
+    QCOMPARE(dev->y(), 11);
+
+    undoAdapter.undo();
+
+    QCOMPARE(dev->x(), 10);
+    QCOMPARE(dev->y(), 20);
+
+    undoAdapter.undo();
+
+    QCOMPARE(dev->x(), 0);
+    QCOMPARE(dev->y(), 0);
+
+    undoAdapter.redo();
+
+    QCOMPARE(dev->x(), 10);
+    QCOMPARE(dev->y(), 20);
+
+    undoAdapter.redo();
+
+    QCOMPARE(dev->x(),  7);
+    QCOMPARE(dev->y(), 11);
 }
 
 QTEST_KDEMAIN(KisTransactionTest, GUI)

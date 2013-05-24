@@ -54,12 +54,18 @@ public:
     QSizeF brushSize() const;
 
 private slots:
-
     void paramChanged();
+    void setStackedWidget(int);
     void spinBoxHorizontalChanged(qreal);
     void spinBoxVerticalChanged(qreal);
     void linkFadeToggled(bool);
-
+    void spinBoxRatioChanged(qreal);
+    void spinBoxRandomnessChanged(qreal);
+    void spinBoxRadiusChanged(qreal);
+    void spinBoxSpikesChanged(int);
+    void spinBoxSpacingChanged(qreal);
+    void spinBoxAngleChanged(int);
+    void spinBoxDensityChanged(qreal);
 
 signals:
 
@@ -71,7 +77,6 @@ protected:
 private:
     QImage m_brush;
     KisBrushSP m_autoBrush;
-    bool m_linkSize;
     bool m_linkFade;
 };
 

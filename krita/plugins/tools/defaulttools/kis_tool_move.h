@@ -25,6 +25,7 @@
 #include <kis_types.h>
 #include <kis_tool.h>
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 #include <QWidget>
 #include <QGroupBox>
 #include <QRadioButton>
@@ -40,7 +41,14 @@ class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
 public:
     MoveToolOptionsWidget(QWidget *parent) : QWidget(parent) {
         setupUi(this);
+        connectSignals();
     }
+
+signals:
+    void sigConfigurationChanged();
+
+private:
+    void connectSignals();
 };
 
 
@@ -53,6 +61,9 @@ public:
     KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
+    void deactivate();
+    void requestStrokeEnd();
+    void requestStrokeCancellation();
 
 public:
 
@@ -63,21 +74,23 @@ public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
 private:
-    void drag(const QPoint& pos);
+    void drag(const QPoint& newPos);
+    void cancelStroke();
+    QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
+
+private slots:
+    void endStroke();
 
 private:
 
     MoveToolOptionsWidget* m_optionsWidget;
-    QRect m_deviceBounds;
+
     QPoint m_dragStart;
-    QPoint m_layerStart;
-    QPoint m_layerPosition;
-    KisNodeSP m_selectedNode;
-    KisNodeSP m_targetLayer;
-    KisSelectionSP m_selection;
+    QPoint m_lastDragPos;
+
+    KisStrokeId m_strokeId;
 };
 
 
@@ -91,8 +104,8 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
-        setIcon("krita_tool_move");
-        //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
+        setIconName(koIconNameCStr("krita_tool_move"));
+        setShortcut( KShortcut(QKeySequence( Qt::Key_T )) );
     }
 
     virtual ~KisToolMoveFactory() {}

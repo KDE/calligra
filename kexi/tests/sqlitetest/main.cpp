@@ -1,11 +1,11 @@
 #include <kdebug.h>
-#include <KAboutData>
-#include <KApplication>
-#include <KCmdLineArgs>
+#include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/drivermanager.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/drivermanager.h>
+#include <db/cursor.h>
 
 int main(int argc, char** argv)
 {

@@ -36,6 +36,8 @@ class QTextTable;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
+class KoShadowStyle;
+
 #include "KoXmlReaderForward.h"
 class KoOdfLoadingContext;
 
@@ -52,26 +54,36 @@ class KOTEXT_EXPORT KoTableStyle : public QObject
     Q_OBJECT
 public:
     enum Property {
-        StyleId = QTextTableFormat::UserProperty + 1,
+        StyleId = QTextTableFormat::UserProperty + 100,
         // Linespacing properties
-        KeepWithNext,    ///< If true, keep table with next paragraph
-        BreakBefore,    ///< If true, insert a frame break before this table
-        BreakAfter,     ///< If true, insert a frame break after this table
-        MayBreakBetweenRows,     ///< If true, then the table is allowed to break between rows
-        ColumnAndRowStyleManager,     ///< QVariant of a KoColumnAndRowStyleManager
-                                                             /// It's not really a property of KoTableStyle but defined here for convenience
-        CollapsingBorders,     ///< If true, then the table has collapsing border model
-        MasterPageName,         ///< Optional name of the master-page
-        NumberHeadingRows,      ///< Count the number of heading rows
-        Visible,                ///< If true, the table is visible
-        PageNumber,             ///< The page number that is applied after the page break
-        TextProgressionDirection    ///< The direction of the text in the table
+        KeepWithNext,               ///< If true, keep table with next paragraph
+        BreakBefore,                ///< If true, insert a frame break before this table
+        BreakAfter,                 ///< If true, insert a frame break after this table
+        MayBreakBetweenRows,        ///< If true, then the table is allowed to break between rows
+        ColumnAndRowStyleManager,   ///< QVariant of a KoColumnAndRowStyleManager
+                                        /// It's not really a property of KoTableStyle but defined here for convenience
+        CollapsingBorders,          ///< If true, then the table has collapsing border model
+        MasterPageName,             ///< Optional name of the master-page
+        NumberHeadingRows,          ///< Count the number of heading rows
+        Visible,                    ///< If true, the table is visible
+        PageNumber,                 ///< The page number that is applied after the page break
+        TextProgressionDirection,   ///< The direction of the text in the table
+        TableIsProtected,           ///< boolean, if true, the table is protected against edits
+                                        /// It's not really a property of KoTableStyle but defined here for convenience
+        Shadow,                      ///< KoShadowStyle, the table shadow
+        TableTemplate,               ///< KoTextTableTemplate, template for the table
+        UseBandingColumnStyles,      ///< table:use-banding-column-styles ODF 1.2 19.736
+        UseBandingRowStyles,         ///< table:use-banding-row-styles ODF 1.2 19.737
+        UseFirstColumnStyles,        ///< table:use-first-column-styles ODF 1.2 19.738
+        UseFirstRowStyles,           ///< table:use-first-row-styles ODF 1.2 19.739
+        UseLastColumnStyles,         ///< table:use-last-column-styles ODF 1.2 19.740
+        UseLastRowStyles             ///< table:use-last-row-styles ODF 1.2 19.741
     };
 
     /// Constructor
-    KoTableStyle(QObject *parent = 0);
+    explicit KoTableStyle(QObject *parent = 0);
     /// Creates a KoTableStyle with the given table format, and \a parent
-    KoTableStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
+    explicit KoTableStyle(const QTextTableFormat &blockFormat, QObject *parent = 0);
     /// Destructor
     ~KoTableStyle();
 
@@ -88,6 +100,11 @@ public:
     void setKeepWithNext(bool keep);
     
     bool keepWithNext() const;
+
+    /// This property describe the shadow of the table, if any
+    void setShadow (const KoShadowStyle &shadow);
+
+    KoShadowStyle shadow() const;
 
     /// The property specifies if the table should allow it to be break. Break within a row is specified per row
     void setMayBreakBetweenRows(bool allow);

@@ -19,17 +19,22 @@
 #ifndef KIS_SIMPLE_UPDATE_QUEUE_TEST_H
 #define KIS_SIMPLE_UPDATE_QUEUE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 
 class KisSimpleUpdateQueueTest : public QObject
 {
     Q_OBJECT
 
+private:
+    void testSplit(bool useFullRefresh);
+
 private slots:
     void testJobProcessing();
-    void testSplit();
+    void testSplitUpdate();
+    void testSplitFullRefresh();
     void testChecksum();
+    void testMixingTypes();
 };
 
 #endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */

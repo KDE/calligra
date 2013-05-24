@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,10 +21,10 @@
 #include "SpellCheckMenu.h"
 #include "SpellCheck.h"
 
-#include <KDebug>
-#include <KActionMenu>
-#include <KMenu>
-#include <KLocale>
+#include <kdebug.h>
+#include <kactionmenu.h>
+#include <kmenu.h>
+#include <klocale.h>
 
 #include <QSignalMapper>
 
@@ -44,8 +45,14 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
 
     m_addToDictionaryAction = new KAction(i18n("Add to Dictionary"), this);
     connect(m_addToDictionaryAction, SIGNAL(triggered()), this, SLOT(addWordToDictionary()));
-    m_ignoreWordAction = new KAction(i18n("Ignore Word"), this);
-    connect(m_ignoreWordAction, SIGNAL(triggered()), this, SLOT(ignoreWord()));
+
+    // disabling this as if it calls the speller it's only changed in a local copy
+    // see addWordToDictionary for how it should be done, except background checker
+    // doesn't have suche a method for ignoreWord
+    // Only option left is to personally ignore words
+
+    // m_ignoreWordAction = new KAction(i18n("Ignore Word"), this);
+    // connect(m_ignoreWordAction, SIGNAL(triggered()), this, SLOT(ignoreWord()));
 
     connect(m_suggestionsSignalMapper, SIGNAL(mapped(const QString&)), 
             this, SLOT(replaceWord(const QString&)));
@@ -103,7 +110,8 @@ void SpellCheckMenu::addWordToDictionary()
     if (m_currentMisspelled.isEmpty() || m_currentMisspelledPosition < 0)
         return;
 
-    m_speller.addToPersonal(m_currentMisspelled);
+    // see comment in ctor above why this will never work
+    m_spellCheck->addWordToPersonal(m_currentMisspelled);
 
     emit clearHighlightingForWord(m_currentMisspelledPosition);
 
@@ -111,9 +119,10 @@ void SpellCheckMenu::addWordToDictionary()
     m_currentMisspelledPosition = -1;
 }
 
-void SpellCheckMenu::setMisspelled(const QString word, int position)
+void SpellCheckMenu::setMisspelled(const QString word, int position,int length)
 {
     m_currentMisspelled = word;
+    m_lengthMisspelled=length;
     m_currentMisspelledPosition = position;
 }
 
@@ -146,7 +155,7 @@ void SpellCheckMenu::replaceWord(const QString &suggestion)
     if (suggestion.isEmpty() || m_currentMisspelledPosition < 0)
         return;
 
-    m_spellCheck->replaceWordBySuggestion(suggestion, m_currentMisspelledPosition);
+    m_spellCheck->replaceWordBySuggestion(suggestion, m_currentMisspelledPosition,m_lengthMisspelled);
 
     m_currentMisspelled.clear();
     m_currentMisspelledPosition = -1;

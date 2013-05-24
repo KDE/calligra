@@ -32,7 +32,7 @@ class KoTextBlockPaintStrategyBase;
  * This class is used to store properties for KoText layouting inside Qt QTextBlock
  * instances.
  */
-class KOTEXT_EXPORT KoTextBlockData : public QTextBlockUserData
+class KOTEXT_EXPORT KoTextBlockData
 {
 public:
     /**
@@ -53,8 +53,62 @@ public:
         QList<qreal> tabLength;
     };
 
-    KoTextBlockData();
+    /**
+     * Datastructure to define a range of characters assigned a temporary meaning.
+     * Common use cases are spellchecking and grammar.
+     */
+    struct MarkupRange {
+        int firstChar;
+        int lastChar;
+        qreal startX;
+        qreal endX;
+    };
+
+    /**
+     * The different types of markups.
+     */
+    enum MarkupType {
+        Misspell,
+        Grammar
+    };
+
+    explicit KoTextBlockData(QTextBlock &block);
+    explicit KoTextBlockData(QTextBlockUserData *userData);
     virtual ~KoTextBlockData();
+
+    /**
+     * Add a range to the _end_ of the list of markups. It's important that firstChar is after
+     * lastChar of the previous range for that type of markup.
+     */
+    void appendMarkup(MarkupType type, int firstChar, int lastChar);
+
+    /**
+     * Clear all ranges for a specific type of markup.
+     */
+    void clearMarkups(MarkupType type);
+
+    /**
+     * Move all ranges following fromPosition delta number of characters to the right.
+     * Applies to a specific type of markup.
+     */
+    void rebaseMarkups(MarkupType type, int fromPosition, int delta);
+
+    /**
+     * Find a range that contains positionWithin.
+     * If none is found a default Markuprange firstChar = lastChar = 0 is returned
+     */
+    MarkupRange findMarkup(MarkupType type, int positionWithin) const;
+
+    void setMarkupsLayoutValidity(MarkupType type, bool valid);
+    bool isMarkupsLayoutValid(MarkupType type) const;
+
+    QList<MarkupRange>::Iterator markupsBegin(MarkupType type);
+    QList<MarkupRange>::Iterator markupsEnd(MarkupType type);
+
+    /**
+     * Clear the counter and set everything to default values.
+     */
+    void clearCounter();
 
     /// return if this block has up-to-date counter data
     bool hasCounterData() const;
@@ -66,10 +120,6 @@ public:
     qreal counterSpacing() const;
     /// set the spacing (in pt) between the counter and the text
     void setCounterSpacing(qreal spacing);
-    /// set the exact text that will be painted as the counter
-    void setCounterText(const QString &text);
-    /// return the exact text that will be painted as the counter
-    QString counterText() const;
 
     /** sets the index that is used at this level.
      * If this represents a paragraph with counter 3.1, then the text is the 1.
@@ -78,6 +128,9 @@ public:
     void setCounterIndex(int index);
     /// returns the index for the counter at this level
     int counterIndex() const;
+
+    /// return the exact text that will be painted as the counter
+    QString counterText() const;
 
     /**
      * set the text that is used for the counter at this level. the text is formatted
@@ -90,6 +143,17 @@ public:
     void setPartialCounterText(const QString &text);
     /// return the partial text for this paragraphs counter
     QString partialCounterText() const;
+
+    /// set the plain counter text which equals the counterText minus prefix and sufix
+    void setCounterPlainText(const QString &text);
+    /// return the plain counter text which equals the counterText minus prefix and sufix
+    QString counterPlainText() const;
+
+    void setCounterPrefix(const QString &text);
+    QString counterPrefix() const;
+
+    void setCounterSuffix(const QString &text);
+    QString counterSuffix() const;
 
     /// Set if the counter is a image or not
     void setCounterIsImage(bool isImage);
@@ -142,11 +206,19 @@ public:
      */
     KoTextBlockPaintStrategyBase *paintStrategy() const;
 
+    /**
+     * @brief saveXmlID can be used to determine whether we need to save the xml:id
+     *    for this text block data object. This is true if the text block data describes
+     *    animations.
+     * @return true of we need to save the xml id, false if not.
+     */
+    bool saveXmlID() const;
+
 private:
     class Private;
     Private * const d;
 };
 
-Q_DECLARE_METATYPE(KoTextBlockData*)
+Q_DECLARE_METATYPE(QTextBlockUserData*)
 
 #endif

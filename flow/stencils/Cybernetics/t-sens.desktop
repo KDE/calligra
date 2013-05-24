@@ -1,11 +1,24 @@
 [Desktop Entry]
 Name=t-sens
+Name[bs]=t-sens
+Name[ca]=t-sens
+Name[ca@valencia]=t-sens
+Name[da]=t-sens
 Name[el]=t-sens
+Name[es]=sensor superior
+Name[et]=Ülemine sensor
+Name[fr]=t-sens
+Name[gl]=Sensor T
+Name[it]=t-sens
+Name[kk]=жоғ-сезгіш
 Name[nb]=t-sens
 Name[nl]=t-sens
+Name[pl]=t-sens
 Name[pt]=t-sensor
 Name[pt_BR]=t-sensor
+Name[sk]=t-sens
 Name[sv]=t-sensor
 Name[uk]=Датчик (згори)
 Name[x-test]=xxt-sensxx
+Name[zh_CN]=T-SENS
 Name[zh_TW]=t-sens

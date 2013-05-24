@@ -23,10 +23,10 @@
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <KLocale>
-#include <QtCore/QRect>
-#include <QtCore/QVector>
-#include <QtGui/QPainter>
+#include <klocale.h>
+#include <QRect>
+#include <QVector>
+#include <QPainter>
 #include <cmath>
 
 ConvolveMatrixEffect::ConvolveMatrixEffect()

@@ -56,7 +56,7 @@ public:
     /**
      * Create a new KoDocumentSectionView.
      */
-    KoDocumentSectionView(QWidget *parent = 0);
+    explicit KoDocumentSectionView(QWidget *parent = 0);
     virtual ~KoDocumentSectionView();
 
     /// how items should be displayed
@@ -70,6 +70,16 @@ public:
         /// no thumbnails, with titles and property icons in a single row
         MinimalMode
     };
+
+    virtual void paintEvent (QPaintEvent *event);
+
+    virtual void dropEvent(QDropEvent *ev);
+
+    virtual void dragEnterEvent(QDragEnterEvent *e);
+
+    virtual void dragMoveEvent(QDragMoveEvent *ev);
+
+    virtual void dragLeaveEvent(QDragLeaveEvent *e);
 
     /**
      * Set the display mode of the view to one of the options.
@@ -116,6 +126,13 @@ protected:
     virtual bool viewportEvent(QEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void showContextMenu(const QPoint &globalPos, const QModelIndex &index);
+    virtual void startDrag (Qt::DropActions supportedActions);
+    QPixmap createDragPixmap() const;
+
+    /**
+     * Calculates the index of the nearest item to the cursor position
+     */
+    int cursorPageIndex() const;
 
 protected slots:
     virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
@@ -125,6 +142,22 @@ private slots:
     void slotActionToggled(bool on, const QPersistentModelIndex &index, int property);
 
 private:
+    /**
+     * Permit to know if a slide is dragging
+     *
+     * @return boolean
+     */
+    bool isDragging() const;
+
+    /**
+     * Setter for the dragging flag
+     *
+     * @param flag boolean
+     */
+    void setDraggingFlag(bool flag = true);
+
+    bool m_draggingFlag;
+
     QStyleOptionViewItem optionForIndex(const QModelIndex &index) const;
     typedef KoDocumentSectionModel Model;
     class PropertyAction;

@@ -20,28 +20,27 @@
 
 #include <stdlib.h>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qapplication.h>
-#include <qbitmap.h>
-#include <qstyle.h>
+#include <QLabel>
+#include <QPushButton>
+#include <QCursor>
+#include <QPoint>
+#include <QApplication>
+#include <QBitmap>
+#include <QStyle>
 #include <QEvent>
 #include <QDropEvent>
 #include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
 
-#include <KDebug>
-#include <KIconLoader>
+#include <kdebug.h>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
 
 #include <kexiutils/utils.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/utils.h>
 #include <kexidragobjects.h>
 #include "KexiRelationsTableContainer.h"
 #include "KexiRelationsTableContainer_p.h"
@@ -101,10 +100,10 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
 // d->fieldList->resize( d->fieldList->sizeHint() );
     lyr->addWidget(d->fieldList);
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
-    connect(d->fieldList, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
-            this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
-    connect(d->fieldList, SIGNAL(doubleClicked(const QModelIndex &)),
-            this, SLOT(slotFieldsDoubleClicked(const QModelIndex &)));
+    connect(d->fieldList, SIGNAL(contextMenu(K3ListView*,Q3ListViewItem*,QPoint)),
+            this, SLOT(slotContextMenu(K3ListView*,Q3ListViewItem*,QPoint)));
+    connect(d->fieldList, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(slotFieldsDoubleClicked(QModelIndex)));
 }
 
 KexiRelationsTableContainer::~KexiRelationsTableContainer()

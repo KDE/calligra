@@ -2,7 +2,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formedito
 
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
-
 ########### next target ###############
 
 set(kformdesigner_containers_PART_SRCS containerfactory.cpp )
@@ -15,6 +14,7 @@ kde4_add_plugin(kformdesigner_containers ${kformdesigner_containers_PART_SRCS})
 target_link_libraries(
     kformdesigner_containers
     kformdesigner
+    kundo2
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
@@ -53,3 +53,4 @@ install(TARGETS kformdesigner_stdwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kformdesigner_containers.desktop kformdesigner_stdwidgets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kformdesigner)
+

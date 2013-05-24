@@ -29,58 +29,23 @@
 
 #include "KoColorSpaceRegistry.h"
 
-namespace
-{
-enum enumPaletteType {
-    FORMAT_UNKNOWN,
-    FORMAT_GPL, // Gimp palette
-    FORMAT_PAL, // RIFF palette
-    FORMAT_ACT // Photoshop binary color palette
-};
-
-}
-
-
-/*
-KoColorSet::KoColorSet(const KisGradient * gradient, qint32 nColors, const QString & name)
-    : super(QString("")),
-      m_name(name)
-{
-    Q_ASSERT(nColors > 0);
-    Q_ASSERT(gradient != 0);
-
-    qreal dx, cur_x;
-    qint32 i;
-    dx = 1.0 / (nColors - 1);
-
-    KoColorSetEntry e;
-    KoColor c;
-    for (i = 0, cur_x = 0; i < nColors; i++, cur_x += dx) {
-        gradient->colorAt(c,cur_x);
-        e.color = c;
-        e.name = "Untitled";
-        add(e);
-    }
-
-    m_columns = 0; // Set the default value that the GIMP uses...
-}
-*/
 KoColorSet::KoColorSet(const QString& filename)
-        : super(filename)
+        : KoResource(filename)
 {
-    // Implemented in super class
+    // Implemented in KoResource class
     m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 KoColorSet::KoColorSet()
-        : super("")
+        : KoResource("")
 {
     m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-        : super("")
+        : QObject(0)
+        , KoResource("")
 {
     setFilename(rhs.filename());
     m_ownData = false;
@@ -138,7 +103,7 @@ qint32 KoColorSet::nColors()
 
 bool KoColorSet::init()
 {
-    enumPaletteType format = FORMAT_UNKNOWN;
+    m_colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
 
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
@@ -149,7 +114,6 @@ bool KoColorSet::init()
 
 
     if (s.startsWith("RIFF") || s.startsWith("PAL data")) {
-        format = FORMAT_PAL;
     } else if (s.startsWith("GIMP Palette")) {
         // XXX: No checks for wrong input yet!
         quint32 index = 0;
@@ -166,15 +130,13 @@ bool KoColorSet::init()
         QColor color;
         KoColorSetEntry e;
 
-        format = FORMAT_GPL;
-
         // Read name
         if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP")) {
             kWarning(30009) << "Illegal Gimp palette file: " << filename();
             return false;
         }
 
-        setName(i18n(lines[1].mid(strlen("Name: ")).trimmed().toAscii()));
+        setName(i18n(lines[1].mid(strlen("Name: ")).trimmed().toLatin1()));
 
         index = 2;
 
@@ -222,7 +184,6 @@ bool KoColorSet::init()
         return true;
     } else if (s.length() == 768) {
         kWarning(30009) << "Photoshop format palette file. Not implemented yet";
-        format = FORMAT_ACT;
     }
     return false;
 }

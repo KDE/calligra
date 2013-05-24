@@ -20,13 +20,13 @@
 #ifndef SCRIPTING_KEXIDBSCHEMA_H
 #define SCRIPTING_KEXIDBSCHEMA_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/schemadata.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
+#include <db/drivermanager.h>
+#include <db/schemadata.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
 
 namespace Scripting
 {

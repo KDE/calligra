@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=place marquee
+Name[bs]=mjesto nadstrešnice
+Name[ca]=placa de marquesina
+Name[ca@valencia]=placa de marquesina
+Name[da]=place marquee
+Name[el]=place marquee
+Name[es]=lugar de marquesina
+Name[et]=Märgitud olek
+Name[fr]=place marquee
+Name[gl]=Lugar marcado
+Name[it]=marcatore locale
+Name[kk]=аумақ
 Name[nb]=stedsbaldakin
+Name[nl]=gemarkeerde plaats
+Name[pl]=znacznik miejsca
 Name[pt]=marcador local
 Name[pt_BR]=marcador de local
+Name[sk]=umiestnenie v rámčeku
 Name[sv]=markerad plats
 Name[uk]=Область
 Name[x-test]=xxplace marqueexx

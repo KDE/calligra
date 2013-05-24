@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=vrelay
+Name[bs]=vrelej
+Name[ca]=vrelay
+Name[ca@valencia]=vrelay
+Name[da]=vrelay
+Name[de]=Relais, senkrecht
 Name[el]=vrelay
+Name[es]=relé vertical
+Name[et]=Vertikaalne relee
+Name[fr]=vrelay
+Name[gl]=Relé vertical
+Name[it]=relé-v
+Name[kk]=реле тік
 Name[nb]=rele loddr
 Name[nl]=vrelais
+Name[pl]=v_przkaźnik
 Name[pt]=relé-v
 Name[pt_BR]=relé-v
+Name[ru]=v-реле
+Name[sk]=vrelay
 Name[sv]=vertikalt relä
 Name[uk]=Реле (вертикально)
 Name[x-test]=xxvrelayxx

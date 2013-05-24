@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2010-2011 José Luis Vergara <pentalis@gmail.com>
+*  Copyright (c) 2010-2012 José Luis Vergara <pentalis@gmail.com>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,9 @@
 #include <KoColorSpaceRegistry.h>
 #include <iostream>
 
-PhongPixelProcessor::PhongPixelProcessor(const KisPropertiesConfiguration* config)
+PhongPixelProcessor::PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfiguration* config)
 {
+    m_pixelArea = pixelArea;
     initialize(config);
 }
 
@@ -57,12 +58,16 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
             light[i].RGBvalue << guiLight[i].value<QColor>().greenF();
             light[i].RGBvalue << guiLight[i].value<QColor>().blueF();
 
-            azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i]);
+            azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i]) - 90;
             inclination = config->getInt(PHONG_ILLUMINANT_INCLINATION[i]);
-            light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) );
-            light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) );
-            light[i].lightVector.setZ( cos( inclination * M_PI / 180 ) );
-
+            
+            qreal m; //2D vector magnitude
+            light[i].lightVector.setZ( sin( inclination * M_PI / 180 ) );
+            m = cos( inclination * M_PI / 180);
+            
+            light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) * m  );
+            light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) * m  );
+            
             //Pay close attention to this, indexes will move in this line
             lightSources.append(light[i]);
         }
@@ -87,8 +92,7 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
     diffuseLightIsEnabled = config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED);
     specularLightIsEnabled = config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED);
     
-    //TODO BUG THIS IS HARDCODED FIX IT
-    realheightmap = QVector<double>(300000, 0);
+    realheightmap = QVector<double>(m_pixelArea, 0);
 }
 
 
@@ -393,7 +397,7 @@ QColor PhongPixelProcessor::illuminatePixel(quint32 posup, quint32 posdown, quin
     normal_vector.normalize();
     reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
 
-    foreach (Illuminant illuminant, lightSources) {
+    foreach (const Illuminant &illuminant, lightSources) {
         for (int channel = 0; channel < totalChannels; channel++) {
             //I = each RGB value
             Il = illuminant.RGBvalue[channel];

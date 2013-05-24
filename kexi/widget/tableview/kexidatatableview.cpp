@@ -19,18 +19,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qtimer.h>
-#include <qapplication.h>
+#include <QTimer>
+#include <QApplication>
 
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kaction.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 
 #include "kexidatatableview.h"
+#include "kexidatatable.h"
 
 
 KexiDataTableView::KexiDataTableView(QWidget *parent)
@@ -59,7 +60,7 @@ KexiDataTableView::init()
 // m_records = 0;
 // m_first = false;
 
-// connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotMoving(int)));
+// connect(this, SIGNAL(contentsMoving(int,int)), this, SLOT(slotMoving(int)));
 // connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
 
@@ -103,7 +104,11 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
         return false;
     }
 
-    KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
+    KexiDB::TableViewData *tv_data = new KexiDB::TableViewData(m_cursor);
+    KexiDataTable* dataTable = qobject_cast<KexiDataTable*>(parentWidget());
+    if (dataTable) {
+        dataTable->loadTableViewSettings(tv_data);
+    }
 
     QString windowTitle(m_cursor->query()->caption());
     if (windowTitle.isEmpty())

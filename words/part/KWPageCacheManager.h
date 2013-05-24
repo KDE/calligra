@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Marijn Kruisselbrink <mkruisselbrink@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,14 +21,11 @@
 #define KWPAGECACHEMANAGER_H
 
 #include "KWPage.h"
-
+// Qt
 #include <QCache>
-#include <QRectF>
 #include <QImage>
-#include <QQueue>
-#include <QSize>
-#include <QObject>
 
+class QSize;
 
 class KWPageCacheManager;
 
@@ -38,12 +36,15 @@ public:
 
     /// create a pagecache object with the existing
     /// QImage.
-    KWPageCache(QImage *img);
+    //KWPageCache(KWPageCacheManager *manager, QImage *img);
     /// create a new pagecache object with a new QImage
-    KWPageCache(int w, int h);
+    KWPageCache(KWPageCacheManager *manager, int w, int h);
     ~KWPageCache();
 
-    QImage *cache;
+    KWPageCacheManager* m_manager;
+    QList<QImage> cache;
+    int m_tilesx, m_tilesy;
+    QSize m_size;
     // List of logical exposed rects in view coordinates
     // These are the rects that are queued for updating, not
     // the rects that have already been painted.
@@ -56,22 +57,21 @@ class KWPageCacheManager {
 
 public:
 
-    KWPageCacheManager(const QSize &size, int cacheSize);
+    explicit KWPageCacheManager(int cacheSize);
 
     ~KWPageCacheManager();
 
-    KWPageCache *take(const KWPage page);
+    KWPageCache *take(const KWPage &page);
 
-    void insert(const KWPage page, KWPageCache *cache);
+    void insert(const KWPage &page, KWPageCache *cache);
 
-    KWPageCache *cache(QSize size);
+    KWPageCache *cache(const QSize &size);
 
     void clear();
 
 private:
-    QMap<KWPage, KWPageCache*> m_cache;
-    QQueue<QImage*> m_imageQueue;
-    int m_cacheSize;
+    QCache<KWPage, KWPageCache> m_cache;
+    friend class KWPageCache;
 };
 
 #endif

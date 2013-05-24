@@ -51,13 +51,7 @@ KoFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteA
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
-
-    KisView2 * view = 0;
-
-    if (!doc->views().isEmpty()) {
-        view = static_cast<KisView2*>(doc->views().first());
-    }
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -70,7 +64,7 @@ KoFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteA
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        KisPNGConverter ib(doc, doc -> undoAdapter());
+        KisPNGConverter ib(doc);
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

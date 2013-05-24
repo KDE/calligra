@@ -1,0 +1,173 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="Calligra Plan" version="25">
+    <MenuBar>
+        <Menu name="file"><text>&amp;File</text>
+            <Separator/>
+            <Action name="file_createtemplate"/>
+            <Action name="file_createnewproject"/>
+        </Menu>
+       <Menu name="edit"><text>&amp;Edit</text>
+            <Action name="edit_undo"/>
+            <Action name="edit_redo"/>
+            <Separator/>
+            <ActionList name="edit_copypaste"/>
+            <Separator/>
+            <Action name="project_edit"/>
+            <!--            <Action name="edit_cut"/>
+            <Action name="edit_copy"/>
+            <Action name="edit_paste"/>
+            <Separator/> -->
+            <Separator/>
+            <ActionList name="taskeditor_add_list"/>
+            <Separator/>
+            <ActionList name="taskeditor_move_list"/>
+            <Separator/>
+            <ActionList name="resourceeditor_edit_list"/>
+            <Separator/>
+            <ActionList name="scheduleeditor_edit_list"/>
+            <Separator/>
+            <ActionList name="accountseditor_edit_list"/>
+            <Separator/>
+            <ActionList name="calendareditor_calendar_list"/>
+            <Separator/>
+            <ActionList name="calendareditor_day_list"/>
+        </Menu>
+        <Menu name="view"><text>&amp;View</text>
+            <Action name="view_newview"/>
+            <Separator/>
+            <ActionList name="view_docker_list"/>
+            <Separator/>
+            <ActionList name="view_schedule_list"/>
+        </Menu>
+<!--        <Menu name="project"><text>&amp;Project</text>
+            <Action name="project_edit"/>
+            <Action name="project_worktime"/>
+            <Action name="project_calendar"/>
+            <Action name="project_accounts"/>
+            <Action name="project_resources"/>
+        </Menu>-->
+        <Menu name="tools"><text>&amp;Tools</text>
+            <Action name="insert_file"/>
+            <Action name="project_worktime"/>
+            <Action name="tools_define_wbs"/>
+            <Action name="config_currency"/>
+            <Action name="reportdesigner_open_file"/>
+        </Menu>
+        <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="configure" group="settings_configure"/>
+        </Menu>
+        <Menu name="help"><text>&amp;Help</text>
+            <Action name="plan_introduction"/>
+        </Menu>
+    </MenuBar>
+    <ToolBar name="project" position="top"><Text>Project</Text>
+        <Action name="edit_undo"/>
+        <Action name="edit_redo"/>
+        <Separator/>
+        <Action name="project_edit"/>
+        <Separator/>
+        <ActionList name="dummy"/> <!-- HACK to get a separator -->
+
+        <Separator/>
+        <ActionList name="taskeditor_add_list"/>
+        <Separator/>
+        <ActionList name="taskeditor_move_list"/>
+        <Separator/>
+        <ActionList name="resourceeditor_edit_list"/>
+        <Separator/>
+        <ActionList name="accountseditor_edit_list"/>
+        <Separator/>
+        <ActionList name="scheduleeditor_edit_list"/>
+        <Separator/>
+        <ActionList name="calendareditor_calendar_list"/>
+        <Separator/>
+        <ActionList name="calendareditor_day_list"/>
+        <Separator/>
+        <ActionList name="workpackage_list"/>
+        <Separator/>
+        <ActionList name="reportview_list"/>
+        <Separator/>
+        <ActionList name="reportdesigner_list"/>
+    </ToolBar>
+    <Menu name="task_edit_popup">
+        <Action name="node_properties"/>
+    </Menu>
+    <Menu name="task_popup">
+        <Action name="node_properties"/>
+        <Action name="task_progress"/>
+    </Menu>
+    <Menu name="summarytask_popup">
+        <Action name="node_properties"/>
+    </Menu>
+    <Menu name="taskstatus_popup">
+        <Action name="task_description"/>
+        <Action name="task_progress"/>
+    </Menu>
+    <Menu name="taskview_popup">
+        <Action name="task_description"/>
+        <Action name="task_progress"/>
+    </Menu>
+    <Menu name="taskeditor_milestone_popup">
+        <Action name="node_properties"/>
+        <Action name="task_progress"/>
+    </Menu>
+    <Menu name="taskview_milestone_popup">
+        <Action name="task_description"/>
+        <Action name="task_progress"/>
+    </Menu>
+    <Menu name="taskview_summary_popup">
+        <Action name="task_description"/>
+   </Menu>
+     <Menu name="workpackage_popup">
+    </Menu>
+   <Menu name="resourceappointment_popup">
+        <Action name="task_description"/>
+        <Action name="task_progress"/>
+    </Menu>
+    <Menu name="resourceassigment_popup">
+        <Action name="task_description"/>
+        <Action name="task_progress"/>
+    </Menu>
+    <Menu name="resourceeditor_resource_popup">
+        <Action name="edit_resource"/>
+    </Menu>
+    <Menu name="accountseditor_popup">
+        <Action name="add_account"/>
+    </Menu>
+    <Menu name="accountseditor_account_popup">
+        <Action name="add_account"/>
+        <Action name="add_subaccount"/>
+        <Action name="delete_account"/>
+    </Menu>
+    <Menu name="accountseditor_edit_list">
+        <Action name="add_account"/>
+        <Action name="add_subaccount"/>
+        <Action name="delete_account"/>
+    </Menu>
+    <Menu name="calendareditor_calendar_list">
+        <Action name="add_calendar"/>
+        <Action name="add_subcalendar"/>
+        <Action name="delete_calendar_selection"/>
+    </Menu>
+    <Menu name="calendareditor_day_list">
+        <Action name="delete_day_selection"/>
+        <Action name="add_calendarday"/>
+        <Action name="add_workinterval"/>
+    </Menu>
+    <Menu name="calendareditor_popup">
+        <Action name="add_calendar"/>
+    </Menu>
+    <Menu name="calendareditor_calendar_popup">
+        <Action name="edit_calendar"/>
+        <Action name="delete_calendar_selection"/>
+    </Menu>
+    <Menu name="calendareditor_day_popup">
+        <Action name="add_calendarday"/>
+        <Action name="add_workinterval"/>
+        <Action name="delete_workinterval"/>
+    </Menu>
+    <Menu name="relation_popup">
+        <Action name="edit_dependency"/>
+        <Action name="delete_dependency"/>
+    </Menu>
+</kpartgui>

@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2009-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,31 +23,53 @@
 #include "KoTextEditor.h"
 #include "KoTextEditor_p.h"
 
+#include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
+#include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoInlineNote.h"
+#include "KoInlineCite.h"
+#include "BibliographyGenerator.h"
 #include <KoOdf.h>
+#include <KoTextPaste.h>
+#include <KoShapeController.h>
+#include <KoTextOdfSaveHelper.h>
+#include "KoShapeAnchor.h"
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
 #include "KoTextOdfSaveHelper.h"
-#include "KoTextPaste.h"
 #include "KoTableOfContentsGeneratorInfo.h"
+#include "KoBibliographyInfo.h"
+#include "KoInlineCite.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
-#include "changetracker/KoDeleteChangeMarker.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
+#include "styles/KoTableStyle.h"
 #include "KoTableColumnAndRowStyleManager.h"
 #include "commands/DeleteTableRowCommand.h"
 #include "commands/DeleteTableColumnCommand.h"
 #include "commands/InsertTableRowCommand.h"
 #include "commands/InsertTableColumnCommand.h"
+#include "commands/ResizeTableCommand.h"
+#include "commands/TextPasteCommand.h"
+#include "commands/ChangeTrackedDeleteCommand.h"
+#include "commands/ListItemNumberingCommand.h"
+#include "commands/ChangeListCommand.h"
+#include "commands/InsertInlineObjectCommand.h"
+#include "commands/DeleteCommand.h"
+#include "commands/DeleteAnchorsCommand.h"
+#include "commands/InsertNoteCommand.h"
+#include "commands/AddTextRangeCommand.h"
 
-#include <KLocale>
+#include <KoShapeCreateCommand.h>
+
+#include <klocale.h>
 #include <kundo2stack.h>
 
 #include <QApplication>
@@ -63,227 +87,126 @@
 #include <kundo2command.h>
 
 #include <kdebug.h>
+#include "KoTextDebug.h"
 
-static bool isRightToLeft(const QString &text)
-{
-    int ltr = 0, rtl = 0;
+#include <KoDocumentRdfBase.h>
 
-    QString::const_iterator iter = text.begin();
-    while (iter != text.end()) {
-        switch (QChar::direction((*iter).unicode())) {
-        case QChar::DirL:
-        case QChar::DirLRO:
-        case QChar::DirLRE:
-            ltr++;
-            break;
-        case QChar::DirR:
-        case QChar::DirAL:
-        case QChar::DirRLO:
-        case QChar::DirRLE:
-            rtl++;
-        default:
-            break;
-        }
-        ++iter;
-    }
-    return ltr < rtl;
-}
+Q_DECLARE_METATYPE(QTextFrame*)
 
 /*Private*/
 
 KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
-    : q(qq),
-    document (document),
-    headCommand(0),
-    isBidiDocument(false)
+    : q(qq)
+    , document (document)
+    , addNewCommand(true)
+    , dummyMacroAdded(false)
+    , customCommandCount(0)
+    , editProtectionCached(false)
 {
     caret = QTextCursor(document);
     editorState = NoOp;
-    updateRtlTimer.setSingleShot(true);
-    updateRtlTimer.setInterval(250);
-    QObject::connect(&updateRtlTimer, SIGNAL(timeout()), q, SLOT(runDirectionUpdater()));
 }
 
-void KoTextEditor::Private::documentCommandAdded()
+void KoTextEditor::Private::emitTextFormatChanged()
 {
-    class UndoTextCommand : public KUndo2Command
-    {
-    public:
-        UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-        : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
-        m_document(document)
-        {}
+    emit q->textFormatChanged();
+}
 
-        void undo() {
-            QTextDocument *doc = m_document.data();
-            if (doc == 0)
-                return;
-            doc->undo(KoTextDocument(doc).textEditor()->cursor());
-        }
+void KoTextEditor::Private::newLine(KUndo2Command *parent)
+{
+    // Handle if this is the special block before a table
+    bool hiddenTableHandling = caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
+    if (hiddenTableHandling) {
+        // Easy solution is to go back the the end of previous block and do the insertion from there.
+        // However if there is no block before we have a problem. This may be the case if there is
+        // a table before or we are at the beginning of a cell or a document.
+        // So here is a better approach
+        // 1) create block
+        // 2) select the previous block so it get's deleted and replaced
+        // 3) remove HiddenByTable from both new and previous block
+        // 4) actually make new line replacing the block we just inserted
+        // 5) set HiddenByTable on the block just before the table again
+        caret.insertText("oops you should never see this");
+        caret.insertBlock();
+        caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+        caret.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+        QTextBlockFormat bf = caret.blockFormat();
+        bf.clearProperty(KoParagraphStyle::HiddenByTable);
+        caret.setBlockFormat(bf);
+   }
 
-        void redo() {
-            QTextDocument *doc = m_document.data();
-            if (doc == 0)
-                return;
-            doc->redo(KoTextDocument(doc).textEditor()->cursor());
-        }
 
-        QWeakPointer<QTextDocument> m_document;
-    };
-
-    //kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;
-    if (!headCommand || editorState == NoOp) {
-        headCommand = new KUndo2Command(commandTitle);
-        if (KoTextDocument(document).undoStack()) {
-            //kDebug() << "pushing head: " << headCommand->text();
-            KoTextDocument(document).undoStack()->push(headCommand);
-        }
+    if (caret.hasSelection()) {
+        q->deleteChar(false, parent);
     }
-    else if ((editorState == KeyPress || editorState == Delete) && headCommand->childCount()) {
-        headCommand = new KUndo2Command(commandTitle);
-        if (KoTextDocument(document).undoStack()) {
-            //kDebug() << "pushing head: " << headCommand->text();
-            KoTextDocument(document).undoStack()->push(headCommand);
-        }
+    KoTextDocument textDocument(document);
+    KoStyleManager *styleManager = textDocument.styleManager();
+    KoParagraphStyle *nextStyle = 0;
+    KoParagraphStyle *currentStyle = 0;
+    if (styleManager) {
+        int id = caret.blockFormat().intProperty(KoParagraphStyle::StyleId);
+        currentStyle = styleManager->paragraphStyle(id);
+        if (currentStyle == 0) // not a style based parag.  Lets make the next one correct.
+            nextStyle = styleManager->defaultParagraphStyle();
+        else
+            nextStyle = styleManager->paragraphStyle(currentStyle->nextStyle());
+        Q_ASSERT(nextStyle);
+        if (currentStyle == nextStyle)
+            nextStyle = 0;
     }
 
-    new UndoTextCommand(document, headCommand);
-}
-
-void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, QString title)
-{
-    if (editorState == Custom && newState !=NoOp)
-        return;
-    //kDebug() << "updateState from: " << editorState << " to: " << newState;
-    if (editorState != newState || commandTitle != title) {
-        if (headCommand /*&& headCommand->childCount() && KoTextDocument(document).undoStack()*/) {
-            //kDebug() << "reset headCommand";
-            //            KoTextDocument(document).undoStack()->push(headCommand);
-            headCommand = 0;
-        }
+    QTextCharFormat format = caret.charFormat();
+    if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+        format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
-    editorState = newState;
-    if (!title.isEmpty())
-        commandTitle = title;
-    else
-        commandTitle = i18n("Text");
-    //kDebug() << "commandTitle is now: " << commandTitle;
-}
 
-bool KoTextEditor::Private::deleteInlineObjects(bool backwards)
-{
-    Q_UNUSED(backwards)
-    return false;
-    // TODO don't just blindly delete, make this a command so we can undo it later.
-    // Also note that the below code needs unit testing since I found some issues already
-    /*
-    QTextCursor cursor(*d->caret);
+    // Build the block format and subtract the properties that are not inherited
+    QTextBlockFormat bf = caret.blockFormat();
 
-    KoInlineTextObjectManager *manager = KoTextocument(d->document).inlineObjectTextManager();
-    KoInlineObject *object;
-    bool found = false;
+    bf.clearProperty(KoParagraphStyle::BreakBefore);
+    bf.clearProperty(KoParagraphStyle::ListStartValue);
+    bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
+    bf.clearProperty(KoParagraphStyle::IsListHeader);
+    bf.clearProperty(KoParagraphStyle::MasterPageName);
+    bf.clearProperty(KoParagraphStyle::OutlineLevel);
+    bf.clearProperty(KoParagraphStyle::HiddenByTable);
+    // Build the block char format which is just a copy
+    QTextCharFormat bcf = caret.blockCharFormat();
 
-    if (d->caret->hasSelection()) {
-   QString selected = cursor.selectedText();
-   cursor.setPosition(cursor.selectionStart() + 1);
-   int position = cursor.position();
-   const QChar *data = selected.constData();
-   for (int i = 0; i < selected.length(); i++) {
-   if (data->unicode() == QChar::ObjectReplacementCharacter) {
-   found = true;
-   cursor.setPosition(position);
-   object = manager->inlineTextObject(cursor);
+    // Actually insert the new paragraph char
+    int startPosition = caret.position();
 
-   if (object)
-   manager->removeInlineObject(cursor);
-}
-// if there is an inline object, the InlineTextObjectManager will also delete the char
-// so only need to update position if inline object not found
-else
-    position++;
-data++;
-}
-} else {
-    if (!backward)
-    cursor.movePosition(QTextCursor::Right);
-    object = manager->inlineTextObject(cursor);
+    caret.insertBlock(bf, bcf);
 
-    if (object) {
-   manager->removeInlineObject(cursor);
-   found = true;
-}
-}
-return found;
-*/
-}
+    int endPosition = caret.position();
 
-void KoTextEditor::Private::deleteSelection()
-{
-    QTextCursor delText = QTextCursor(caret);
-    if (!delText.hasSelection())
-        delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    // XXX: is there are reason for these two unused variables? Side effects? (boud)
-    QString text = delText.selectedText();
-    Q_UNUSED(text);
-    QTextDocumentFragment selection = delText.selection();
-    Q_UNUSED(selection);
-    caret.deleteChar();
-}
+    // Mark the CR as a tracked change
+    QTextCursor changeCursor(document);
+    changeCursor.beginEditBlock();
+    changeCursor.setPosition(startPosition);
+    changeCursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+    changeCursor.endEditBlock();
 
-void KoTextEditor::Private::runDirectionUpdater()
-{
-    while (! dirtyBlocks.isEmpty()) {
-        const int blockNumber = dirtyBlocks.first();
-        dirtyBlocks.removeAll(blockNumber);
-        QTextBlock block = document->findBlockByNumber(blockNumber);
-        if (block.isValid()) {
-            KoText::Direction newDirection = KoText::AutoDirection;
-            QTextBlockFormat format = block.blockFormat();
-            KoText::Direction dir =
-                static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
+    q->registerTrackedChange(changeCursor, KoGenChange::InsertChange, i18nc("(qtundo-format)", "New Paragraph"), format, format, false);
 
-            if (dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom
-                    || dir == KoText::PerhapsRightLeftTopBottom
-                    || dir == KoText::InheritDirection) {
-                bool rtl = isRightToLeft(block.text());
-                if (rtl && (dir != KoText::AutoDirection || QApplication::isLeftToRight()))
-                    newDirection = KoText::PerhapsRightLeftTopBottom;
-                else if (!rtl && (dir != KoText::AutoDirection || QApplication::isRightToLeft())) // remove previously set one if needed.
-                    newDirection = KoText::PerhapsLeftRightTopBottom;
-
-                QTextCursor cursor(block);
-                if (format.property(KoParagraphStyle::TextProgressionDirection).toInt() != newDirection) {
-                    format.setProperty(KoParagraphStyle::TextProgressionDirection, newDirection);
-                    cursor.setBlockFormat(format); // note that setting this causes a re-layout.
-                }
-                if (!isBidiDocument) {
-                    if ((QApplication::isLeftToRight() && (newDirection == KoText::RightLeftTopBottom
-                                    || newDirection == KoText::PerhapsRightLeftTopBottom))
-                            || (QApplication::isRightToLeft() && (newDirection == KoText::LeftRightTopBottom
-                                    || newDirection == KoText::PerhapsLeftRightTopBottom))) {
-                        isBidiDocument = true;
-                        emit q->isBidiUpdated();
-                    }
-                }
-            }
-        }
+    // possibly change the style if requested
+    if (nextStyle) {
+        QTextBlock block = caret.block();
+        if (currentStyle)
+            currentStyle->unapplyStyle(block);
+        nextStyle->applyStyle(block);
+        format = block.charFormat();
     }
-}
 
-void KoTextEditor::Private::clearCharFormatProperty(int property)
-{
-    class PropertyWiper : public CharFormatVisitor
-    {
-    public:
-        PropertyWiper(int propertyId) : propertyId(propertyId) {};
-        void visit(QTextCharFormat &format) const {
-            format.clearProperty(propertyId);
-        }
+    caret.setCharFormat(format);
 
-    int propertyId;
-    };
-    PropertyWiper wiper(property);
-    CharFormatVisitor::visitSelection(q, wiper,QString(), false);
+    if (hiddenTableHandling) {
+        // see code and comment above
+        QTextBlockFormat bf = caret.blockFormat();
+        bf.setProperty(KoParagraphStyle::HiddenByTable, true);
+        caret.setBlockFormat(bf);
+        caret.movePosition(QTextCursor::PreviousCharacter);
+    }
 }
 
 /*KoTextEditor*/
@@ -296,8 +219,8 @@ void KoTextEditor::Private::clearCharFormatProperty(int property)
 
 
 KoTextEditor::KoTextEditor(QTextDocument *document)
-    : KoToolSelection(document),
-    d (new Private(this, document))
+    : QObject(document),
+      d (new Private(this, document))
 {
     connect (d->document, SIGNAL (undoCommandAdded()), this, SLOT (documentCommandAdded()));
 }
@@ -307,9 +230,18 @@ KoTextEditor::~KoTextEditor()
     delete d;
 }
 
-void KoTextEditor::updateDefaultTextDirection(KoText::Direction direction)
+KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
 {
-    d->direction = direction;
+    KoSelection *selection = canvas->shapeManager()->selection();
+    if (selection) {
+        foreach(KoShape *shape, selection->selectedShapes()) {
+            if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                KoTextDocument doc(textData->document());
+                return doc.textEditor();
+            }
+        }
+    }
+    return 0;
 }
 
 QTextCursor* KoTextEditor::cursor()
@@ -317,23 +249,15 @@ QTextCursor* KoTextEditor::cursor()
     return &(d->caret);
 }
 
-void KoTextEditor::addCommand(KUndo2Command *command, bool addCommandToStack)
+const QTextCursor KoTextEditor::constCursor() const
 {
-    d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
-    //kDebug() << "will push the custom command: " << command->text();
-    d->headCommand = command;
-    KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
-    if (stack && addCommandToStack)
-        stack->push(command);
-    else
-        command->redo();
-    //kDebug() << "custom command pushed";
-    d->updateState(KoTextEditor::Private::NoOp);
+    return QTextCursor(d->caret);
 }
 
-void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
+void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const QString &title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
-    if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->recordChanges()) {
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    if (!changeTracker || !changeTracker->recordChanges()) {
         // clear the ChangeTrackerId from the passed in selection, without recursively registring
         // change tracking again  ;)
         int start = qMin(selection.position(), selection.anchor());
@@ -384,7 +308,6 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             int selectionEnd = qMax(checker.anchor(), checker.position());
 
             checker.setPosition(selectionBegin);
-            KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
             if (!checker.atBlockStart()) {
                 int changeId = checker.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
                 if (changeId && changeTracker->elementById(changeId)->getChangeType() == changeType)
@@ -405,18 +328,18 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             checker.setPosition(selectionEnd);
             if (!checker.atEnd()) {
                 checker.movePosition(QTextCursor::NextCharacter);
-                idAfter = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                idAfter = changeTracker->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
             }
             changeId = (idBefore)?idBefore:idAfter;
 
             switch (changeType) {//TODO: this whole thing actually needs to be done like a visitor. If the selection contains several change regions, the parenting needs to be individualised.
             case KoGenChange::InsertChange:
                 if (!changeId)
-                    changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+                    changeId = changeTracker->getInsertChangeId(title, 0);
                 break;
             case KoGenChange::FormatChange:
                 if (!changeId)
-                    changeId = KoTextDocument(d->document).changeTracker()->getFormatChangeId(title, format, prevFormat, 0);
+                    changeId = changeTracker->getFormatChangeId(title, format, prevFormat, 0);
                 break;
             case KoGenChange::DeleteChange:
                 //this should never be the case
@@ -437,350 +360,174 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             QTextBlock startBlock = selection.document()->findBlock(selection.anchor());
             QTextBlock endBlock = selection.document()->findBlock(selection.position());
 
-            if (startBlock != endBlock) {
-                do {
-                    startBlock = startBlock.next();
-                    QTextCursor cursor(startBlock);
-                    QTextBlockFormat blockFormat;
-                    blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                    cursor.mergeBlockFormat(blockFormat);
+            while (startBlock.isValid() && startBlock != endBlock) {
+                startBlock = startBlock.next();
+                QTextCursor cursor(startBlock);
+                QTextBlockFormat blockFormat;
+                blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                cursor.mergeBlockFormat(blockFormat);
 
-                    QTextCharFormat blockCharFormat = cursor.blockCharFormat();
-                    if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
-                        blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                        cursor.setBlockCharFormat(blockCharFormat);
-                    }
-                } while(startBlock != endBlock);
+                QTextCharFormat blockCharFormat = cursor.blockCharFormat();
+                if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                    blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    cursor.setBlockCharFormat(blockCharFormat);
+                }
             }
         }
     }
 }
 
-void KoTextEditor::bold(bool bold)
+// To figure out if a the blocks of the selection are write protected we need to
+// traverse the entire document as sections build up the protectiveness recursively.
+void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const
 {
-    d->updateState(KoTextEditor::Private::Format, i18n("Bold"));
-    QTextCharFormat format;
-    format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
+    do {
+        if (visitor.abortVisiting())
+            return;
 
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Bold"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
+        if (table) {
+            // There are 4 ways this table can be selected:
+            //  - "before to mid"
+            //  - "mid to after"
+            //  - "complex mid to mid"
+            //  - "simple mid to mid"
+            // The 3 first are entire cells, the fourth is within a cell
 
-void KoTextEditor::italic(bool italic)
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Italic"));
-    QTextCharFormat format;
-    format.setFontItalic(italic);
+            if (d->caret.selectionStart() <= table->lastPosition()
+                    && d->caret.selectionEnd() >= table->firstPosition()) {
+                // We have a selection somewhere
+                QTextTableCell cell1 = table->cellAt(d->caret.selectionStart());
+                QTextTableCell cell2 = table->cellAt(d->caret.selectionEnd());
+                if (cell1 != cell2 || !cell1.isValid() || !cell2.isValid()) {
+                    // And the selection is complex or entire table
+                    int selectionRow;
+                    int selectionColumn;
+                    int selectionRowSpan;
+                    int selectionColumnSpan;
+                    if (!cell1.isValid() || !cell2.isValid()) {
+                        // entire table
+                        selectionRow = selectionColumn = 0;
+                        selectionRowSpan = table->rows();
+                        selectionColumnSpan = table->columns();
+                    } else {
+                        d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                    }
 
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Italic"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
+                    for (int r = selectionRow; r < selectionRow + selectionRowSpan; r++) {
+                        for (int c = selectionColumn; c < selectionColumn +
+                             selectionColumnSpan; c++) {
+                            QTextTableCell cell = table->cellAt(r,c);
+                            if (!cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                                recursivelyVisitSelection(cell.begin(), visitor);
+                            } else {
+                                visitor.nonVisit();
+                            }
 
-void KoTextEditor::underline(bool underline)
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Underline"));
-    QTextCharFormat format;
-    if (underline) {
-        format.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
-        format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
-    } else {
-        format.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::NoLineType);
-        format.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::NoLineStyle);
-    }
-
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Underline"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::strikeOut(bool strikeout)
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Strike Out"));
-    QTextCharFormat format;
-    if (strikeout) {
-        format.setProperty(KoCharacterStyle::StrikeOutType, KoCharacterStyle::SingleLine);
-        format.setProperty(KoCharacterStyle::StrikeOutStyle, KoCharacterStyle::SolidLine);
-    } else {
-        format.setProperty(KoCharacterStyle::StrikeOutType, KoCharacterStyle::NoLineType);
-        format.setProperty(KoCharacterStyle::StrikeOutStyle, KoCharacterStyle::NoLineStyle);
-    }
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Strike Out"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
-{
-    class Aligner : public BlockFormatVisitor
-    {
-    public:
-        Aligner(Qt::Alignment align) : alignment(align) {}
-        void visit(QTextBlockFormat &format) const {
-            format.setAlignment(alignment);
-        }
-        Qt::Alignment alignment;
-    };
-
-    Aligner aligner(align);
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Horizontal Alignment"));
-    BlockFormatVisitor::visitSelection(this, aligner, i18n("Set Horizontal Alignment"));
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setVerticalTextAlignment(Qt::Alignment align)
-{
-    QTextCharFormat::VerticalAlignment charAlign = QTextCharFormat::AlignNormal;
-    if (align == Qt::AlignTop)
-        charAlign = QTextCharFormat::AlignSuperScript;
-    else if (align == Qt::AlignBottom)
-        charAlign = QTextCharFormat::AlignSubScript;
-
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Vertical Alignment"));
-    QTextCharFormat format;
-    format.setVerticalAlignment(charAlign);
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Vertical Alignment"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::decreaseIndent()
-{
-    class Indenter : public BlockFormatVisitor
-    {
-    public:
-        void visit(QTextBlockFormat &format) const {
-            // TODO make the 10 configurable.
-            format.setLeftMargin(qMax(qreal(0.0), format.leftMargin() - 10));
-        }
-        Qt::Alignment alignment;
-    };
-
-    Indenter indenter;
-    d->updateState(KoTextEditor::Private::Format, i18n("Decrease Indent"));
-    BlockFormatVisitor::visitSelection(this, indenter, i18n("Decrease Indent"));
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::increaseIndent()
-{
-    class Indenter : public BlockFormatVisitor
-    {
-    public:
-        void visit(QTextBlockFormat &format) const {
-            // TODO make the 10 configurable.
-            format.setLeftMargin(format.leftMargin() + 10);
-        }
-        Qt::Alignment alignment;
-    };
-
-    Indenter indenter;
-    d->updateState(KoTextEditor::Private::Format, i18n("Increase Indent"));
-    BlockFormatVisitor::visitSelection(this, indenter, i18n("Increase Indent"));
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-class FontResizer : public CharFormatVisitor
-{
-public:
-    enum Type { Grow, Shrink };
-    FontResizer(Type type_) : type(type_) {
-        QFontDatabase fontDB;
-        defaultSizes = fontDB.standardSizes();
-    }
-    void visit(QTextCharFormat &format) const {
-        const qreal current = format.fontPointSize();
-        int prev = 1;
-        foreach(int pt, defaultSizes) {
-            if ((type == Grow && pt > current) || (type == Shrink && pt >= current)) {
-                format.setFontPointSize(type == Grow ? pt : prev);
+                            if (visitor.abortVisiting())
+                                return;
+                        }
+                    }
+                } else {
+                    // And the selection is simple
+                    if (!cell1.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                        recursivelyVisitSelection(cell1.begin(), visitor);
+                    } else {
+                        visitor.nonVisit();
+                    }
+                    return;
+                }
+            }
+            if (d->caret.selectionEnd() <= table->lastPosition()) {
                 return;
             }
-            prev = pt;
-        }
-    }
-
-    QList<int> defaultSizes;
-    const Type type;
-};
-
-void KoTextEditor::decreaseFontSize()
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Decrease font size"));
-    FontResizer sizer(FontResizer::Shrink);
-    CharFormatVisitor::visitSelection(this, sizer, i18n("Decrease font size"));
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::increaseFontSize()
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Increase font size"));
-    FontResizer sizer(FontResizer::Grow);
-    CharFormatVisitor::visitSelection(this, sizer, i18n("Increase font size"));
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setFontFamily(const QString &font)
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Font"));
-    QTextCharFormat format;
-    format.setFontFamily(font);
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Font"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setFontSize(qreal size)
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Font Size"));
-    QTextCharFormat format;
-    format.setFontPointSize(size);
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Font Size"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setTextBackgroundColor(const QColor &color)
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Background Color"));
-    QTextCharFormat format;
-    format.setBackground(QBrush(color));
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Background Color"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setTextColor(const QColor &color)
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Text Color"));
-    QTextCharFormat format;
-    format.setForeground(QBrush(color));
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Text Color"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setStyle(KoCharacterStyle *style)
-{
-    Q_ASSERT(style);
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Character Style"));
-    QTextCharFormat format;
-    style->applyStyle(format);
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.setCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Character Style"), format, prevFormat, false);
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setStyle(KoParagraphStyle *style)
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Paragraph Style"));
-    const int start = qMin(position(), anchor());
-    const int end = qMax(position(), anchor());
-    QTextBlock block = d->document->findBlock(start);
-    KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
-    while (block.isValid() && block.position() <= end) { // now loop over all blocks
-        QTextBlockFormat bf = block.blockFormat();
-        if (styleManager) {
-            KoParagraphStyle *old = styleManager->paragraphStyle(bf.intProperty(KoParagraphStyle::StyleId));
-            if (old)
-                old->unapplyStyle(block);
-        }
-        style->applyStyle(block);
-        block = block.next();
-    }
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::setDefaultFormat()
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Set default format"));
-    if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
-        KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
-        QTextCharFormat format;
-        defaultCharStyle->applyStyle(format);
-        QTextCharFormat prevFormat(d->caret.charFormat());
-        d->caret.setCharFormat(format);
-        registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set default format"), format, prevFormat, false);
-    }
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::addBookmark(const QString &name)
-{//TODO changeTracking
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bookmark"));
-    KoBookmark *bookmark = new KoBookmark(d->document);
-    bookmark->setName(name);
-    int startPos = -1, endPos = -1, caretPos = -1;
-
-    if (d->caret.hasSelection()) {
-        startPos = d->caret.selectionStart();
-        endPos = d->caret.selectionEnd();
-        caretPos = d->caret.position();
-
-        d->caret.setPosition(endPos);
-        KoBookmark *endBookmark = new KoBookmark(d->document);
-        endBookmark->setName(name);
-        bookmark->setType(KoBookmark::StartBookmark);
-        endBookmark->setType(KoBookmark::EndBookmark);
-        KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, endBookmark);
-        bookmark->setEndBookmark(endBookmark);
-        d->caret.setPosition(startPos);
-    } else {
-        bookmark->setType(KoBookmark::SinglePosition);
-    }
-    // TODO the macro & undo things
-    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, bookmark);
-    if (startPos != -1) {
-        // TODO repaint selection properly
-        if (caretPos == startPos) {
-            startPos = endPos + 1;
-            endPos = caretPos;
+        } if (subFrame) {
         } else {
-            endPos += 2;
+            // TODO build up the section stack
+
+            if (d->caret.selectionStart() < block.position() + block.length()
+                    && d->caret.selectionEnd() >= block.position()) {
+                // We have a selection somewhere
+                if (true) { // TODO don't change if block is protected by section
+                    visitor.visitBlock(block, d->caret);
+                } else {
+                    visitor.nonVisit();
+                }
+            }
+
+            // TODO tear down the section stack
+
+            if (d->caret.selectionEnd() < block.position() + block.length()) {
+                return;
+            }
         }
-        d->caret.setPosition(startPos);
-        d->caret.setPosition(endPos, QTextCursor::KeepAnchor);
-    }
-    d->updateState(KoTextEditor::Private::NoOp);
+        if (!it.atEnd()) {
+            ++it;
+        }
+    } while (!it.atEnd());
 }
 
-bool KoTextEditor::insertIndexMarker()
+KoBookmark *KoTextEditor::addBookmark(const QString &name)
 {//TODO changeTracking
+    KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Bookmark"));
+
+    KoBookmark *bookmark = new KoBookmark(d->caret);
+    bookmark->setName(name);
+    bookmark->setManager(KoTextDocument(d->document).textRangeManager());
+
+    addCommand(new AddTextRangeCommand(bookmark, topCommand));
+
+    endEditBlock();
+
+    return bookmark;
+}
+
+KoInlineObject *KoTextEditor::insertIndexMarker()
+{//TODO changeTracking
+    if (isEditProtected()) {
+        return 0;
+    }
+
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Index"));
+
+    if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+        d->newLine(0);
+    }
+
     QTextBlock block = d->caret.block();
     if (d->caret.position() >= block.position() + block.length() - 1)
-        return false; // can't insert one at end of text
+        return 0; // can't insert one at end of text
     if (block.text()[ d->caret.position() - block.position()].isSpace())
-        return false; // can't insert one on a whitespace as that does not indicate a word.
+        return 0; // can't insert one on a whitespace as that does not indicate a word.
 
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Index"));
     KoTextLocator *tl = new KoTextLocator();
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, tl);
     d->updateState(KoTextEditor::Private::NoOp);
-    return true;
+    return tl;
 }
 
-void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
+void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cmd)
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Variable"));
+    if (isEditProtected()) {
+        return;
+    }
+
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Variable"));
 
     int startPosition = d->caret.position();
+
+    if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+        d->newLine(0);
+        startPosition = d->caret.position();
+    }
+
     QTextCharFormat format = d->caret.charFormat();
     if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
 
-    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
@@ -788,13 +535,49 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
     d->caret.clearSelection();
 
+    InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, cmd);
+
+    if (!cmd) {
+        addCommand(insertInlineObjectCommand);
+    }
+
     d->updateState(KoTextEditor::Private::NoOp);
+
     emit cursorPositionChanged();
+}
+
+void KoTextEditor::updateInlineObjectPosition(int start, int end)
+{
+    KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(d->document).inlineTextObjectManager();
+    // and, of course, every inline object after the current position has the wrong position
+    QTextCursor cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), start);
+    while (!cursor.isNull() && (end > -1 && cursor.position() < end )) {
+        QTextCharFormat fmt = cursor.charFormat();
+        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
+        obj->updatePosition(d->document, cursor.position(), fmt);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
+    }
+
+}
+
+void KoTextEditor::removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent)
+{
+    Q_ASSERT(parent);
+    addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
 }
 
 void KoTextEditor::insertFrameBreak()
 {
-    d->updateState(KoTextEditor::Private::KeyPress, i18n("Insert Break"));
+    if (isEditProtected()) {
+        return;
+    }
+
+    QTextCursor curr(d->caret.block());
+    if (dynamic_cast<QTextTable *> (curr.currentFrame())) {
+        return;
+    }
+
+    d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Insert Break"));
     QTextBlock block = d->caret.block();
     if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
         QTextBlockFormat bf = d->caret.blockFormat();
@@ -804,7 +587,9 @@ void KoTextEditor::insertFrameBreak()
             block.textList()->remove(block);
     } else {
         QTextBlockFormat bf = d->caret.blockFormat();
-        newLine();
+        if (!d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+            newLine();
+        }
         bf = d->caret.blockFormat();
         bf.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
         d->caret.setBlockFormat(bf);
@@ -813,10 +598,178 @@ void KoTextEditor::insertFrameBreak()
     emit cursorPositionChanged();
 }
 
-bool KoTextEditor::deleteInlineObjects(bool backward)
+//TODO: use the KoTextDocument provided shapeController. Then remove the parameter sent from the TextTool
+void KoTextEditor::paste(const QMimeData *mimeData,
+                         KoShapeController *shapeController,
+                         bool pasteAsText)
 {
-    return d->deleteInlineObjects(backward);
+    if (isEditProtected()) {
+        return;
+    }
+
+    addCommand(new TextPasteCommand(mimeData,
+                                    d->document,
+                                    shapeController,
+                                    0,
+                                    pasteAsText));
 }
+
+bool KoTextEditor::paste(KoTextEditor *editor,
+                         KoShapeController *shapeController,
+                         bool pasteAsText)
+{
+
+    Q_ASSERT(editor);
+    Q_ASSERT(editor != this);
+
+    if (!editor->hasSelection()) {
+        editor->setPosition(0);
+        editor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    }
+
+    int from = editor->position();
+    int to = editor->anchor();
+    KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
+    KoTextDrag drag;
+#ifdef SHOULD_BUILD_RDF
+    KoDocumentRdfBase *rdf = 0;
+    if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
+        rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
+        saveHelper.setRdfModel(rdf->model());
+    }
+#endif
+    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+
+    beginEditBlock();
+
+    if (hasSelection()) {
+        addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, shapeController));
+    }
+
+    // check for mime type
+    const QMimeData *data = drag.mimeData();
+
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                    || data->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+        KoOdf::DocumentType odfType = KoOdf::Text;
+        if (!data->hasFormat(KoOdf::mimeType(odfType))) {
+            odfType = KoOdf::OpenOfficeClipboard;
+        }
+
+        if (pasteAsText) {
+            insertText(data->text());
+        } else {
+            QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
+#ifdef SHOULD_BUILD_RDF
+            if(!rdf) {
+                rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
+            } else {
+                rdfModel = rdf->model();
+            }
+#endif
+
+            //kDebug() << "pasting odf text";
+            KoTextPaste paste(this, shapeController, rdfModel);
+            paste.paste(odfType, data);
+            //kDebug() << "done with pasting odf";
+
+#ifdef SHOULD_BUILD_RDF
+            if (rdf) {
+                rdf->updateInlineRdfStatements(d->document);
+            }
+#endif
+        }
+    }
+
+    endEditBlock();
+
+    return true;
+}
+
+void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
+
+    // Find out if we should track changes or not
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    bool trackChanges = false;
+    if (changeTracker && changeTracker->recordChanges()) {
+        trackChanges = true;
+    }
+
+    if (previous) {
+        if (d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+            movePosition(QTextCursor::PreviousCharacter);
+            if (d->caret.block().length() <= 1) {
+                movePosition(QTextCursor::NextCharacter);
+            } else
+                return; // it becomes just a cursor movement;
+        }
+    } else {
+        if (d->caret.block().length() > 1) {
+            QTextCursor tmpCursor = d->caret;
+            tmpCursor.movePosition(QTextCursor::NextCharacter);
+            if (tmpCursor.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+                movePosition(QTextCursor::NextCharacter);
+                return; // it becomes just a cursor movement;
+            }
+        }
+    }
+
+    if (previous) {
+        addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+                                        d->document,
+                                        shapeController, parent));
+    } else {
+        addCommand(new DeleteCommand(DeleteCommand::NextChar,
+                                        d->document,
+                                        shapeController, parent));
+    }
+}
+
+void KoTextEditor::toggleListNumbering(bool numberingEnabled)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    addCommand(new ListItemNumberingCommand(block(), numberingEnabled));
+    emit textFormatChanged();
+}
+
+void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
+                                     ChangeListFlags flags, KUndo2Command *parent)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    if (flags & AutoListStyle && d->caret.block().textList() == 0) {
+        flags = MergeWithAdjacentList;
+    }
+
+    if (KoList *list = KoTextDocument(d->document).list(d->caret.block().textList())) {
+        KoListStyle *listStyle = list->style();
+        if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
+            QList<KoParagraphStyle *> paragraphStyles = styleManager->paragraphStyles();
+            foreach (KoParagraphStyle *paragraphStyle, paragraphStyles) {
+                if (paragraphStyle->listStyle() == listStyle ||
+                        (paragraphStyle->list() && paragraphStyle->list()->style() == listStyle)) {
+                    flags = NoFlags;
+                    break;
+                }
+            }
+        }
+    }
+
+    addCommand(new ChangeListCommand(d->caret, llp, flags, parent));
+    emit textFormatChanged();
+}
+
 
 int KoTextEditor::anchor() const
 {
@@ -835,6 +788,17 @@ bool KoTextEditor::atBlockStart() const
 
 bool KoTextEditor::atEnd() const
 {
+    QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+    cursor.movePosition(QTextCursor::PreviousCharacter);
+    QTextFrame *auxFrame = cursor.currentFrame();
+
+    if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+        //auxFrame really is the auxillary frame
+        if (d->caret.position() == auxFrame->firstPosition() - 1) {
+            return true;
+        }
+        return false;
+    }
     return d->caret.atEnd();
 }
 
@@ -848,24 +812,9 @@ QTextBlock KoTextEditor::block() const
     return d->caret.block();
 }
 
-QTextCharFormat KoTextEditor::blockCharFormat() const
-{
-    return d->caret.blockCharFormat();
-}
-
-QTextBlockFormat KoTextEditor::blockFormat() const
-{
-    return d->caret.blockFormat();
-}
-
 int KoTextEditor::blockNumber() const
 {
     return d->caret.blockNumber();
-}
-
-QTextCharFormat KoTextEditor::charFormat() const
-{
-    return d->caret.charFormat();
 }
 
 void KoTextEditor::clearSelection()
@@ -880,33 +829,72 @@ int KoTextEditor::columnNumber() const
 
 void KoTextEditor::deleteChar()
 {
-    if (!d->caret.hasSelection() && d->caret.atEnd())
+    if (isEditProtected()) {
         return;
-    if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
-        d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
-
-        if (!d->caret.hasSelection())
-            d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-        d->deleteSelection();
     }
+
+    if (!d->caret.hasSelection()) {
+        if (d->caret.atEnd())
+            return;
+
+        // We also need to refuse delete if it will delete a note frame
+        QTextCursor after(d->caret);
+        after.movePosition(QTextCursor::NextCharacter);
+
+        QTextFrame *beforeFrame = d->caret.currentFrame();
+        while (qobject_cast<QTextTable *>(beforeFrame)) {
+            beforeFrame = beforeFrame->parentFrame();
+        }
+
+        QTextFrame *afterFrame = after.currentFrame();
+        while (qobject_cast<QTextTable *>(afterFrame)) {
+            afterFrame = afterFrame->parentFrame();
+        }
+        if (beforeFrame != afterFrame) {
+            return;
+        }
+    }
+
+    deleteChar(false);
+
     emit cursorPositionChanged();
 }
 
 void KoTextEditor::deletePreviousChar()
 {
-    if (!d->caret.hasSelection() && d->caret.atStart())
+    if (isEditProtected()) {
         return;
-    if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
-        d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
-
-        if (!d->caret.hasSelection())
-            d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-        d->deleteSelection();
     }
+
+    if (!d->caret.hasSelection()) {
+        if (d->caret.atStart())
+            return;
+
+        // We also need to refuse delete if it will delete a note frame
+        QTextCursor after(d->caret);
+        after.movePosition(QTextCursor::PreviousCharacter);
+
+        QTextFrame *beforeFrame = d->caret.currentFrame();
+        while (qobject_cast<QTextTable *>(beforeFrame)) {
+            beforeFrame = beforeFrame->parentFrame();
+        }
+
+        QTextFrame *afterFrame = after.currentFrame();
+        while (qobject_cast<QTextTable *>(afterFrame)) {
+            afterFrame = afterFrame->parentFrame();
+        }
+
+        if (beforeFrame != afterFrame) {
+            return;
+        }
+    }
+
+    deleteChar(true);
+
     emit cursorPositionChanged();
 }
 
-QTextDocument* KoTextEditor::document() const
+QTextDocument *KoTextEditor::document() const
 {
     return d->caret.document();
 }
@@ -916,48 +904,74 @@ bool KoTextEditor::hasComplexSelection() const
     return d->caret.hasComplexSelection();
 }
 
-bool KoTextEditor::hasSelection()
+bool KoTextEditor::hasSelection() const
 {
     return d->caret.hasSelection();
 }
 
-void KoTextEditor::insertBlock()
-{
-//TODO
-}
 
-void KoTextEditor::insertBlock(const QTextBlockFormat &format)
+class ProtectionCheckVisitor : public KoTextVisitor
 {
-    Q_UNUSED(format)
-//TODO
-}
+public:
+    ProtectionCheckVisitor(const KoTextEditor *editor)
+        : KoTextVisitor(const_cast<KoTextEditor *>(editor))
+    {
+    }
 
-void KoTextEditor::insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat)
-{
-    Q_UNUSED(format)
-    Q_UNUSED(charFormat)
-//TODO
-}
+    // override super's implementation to not waste cpu cycles
+    virtual void visitBlock(QTextBlock&, const QTextCursor &)
+    {
+    }
 
-void KoTextEditor::insertFragment(const QTextDocumentFragment &fragment)
+    virtual void nonVisit()
+    {
+        setAbortVisiting(true);
+    }
+};
+
+bool KoTextEditor::isEditProtected(bool useCached) const
 {
-    Q_UNUSED(fragment)
-//TODO
+    ProtectionCheckVisitor visitor(this);
+
+    if (useCached) {
+        if (! d->editProtectionCached) {
+            recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+            d->editProtected = visitor.abortVisiting();
+            d->editProtectionCached = true;
+        }
+        return d->editProtected;
+    }
+    d->editProtectionCached = false;
+    recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+    return visitor.abortVisiting();
 }
 
 void KoTextEditor::insertTable(int rows, int columns)
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table"));
+    if (isEditProtected() || rows <= 0 || columns <= 0) {
+        return;
+    }
+
+    bool hasSelection = d->caret.hasSelection();
+    if (!hasSelection) {
+        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Table"));
+    } else {
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Table"));
+        deleteChar(false, topCommand);
+        d->caret.beginEditBlock();
+    }
+
     QTextTableFormat tableFormat;
 
     tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
+    tableFormat.setProperty(KoTableStyle::CollapsingBorders, true);
     tableFormat.setMargin(5);
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();
         QTextBlockFormat blockFormat = d->caret.blockFormat();
-        QString title = i18n("Insert Table");
+        QString title = i18nc("(qtundo-format)", "Insert Table");
 
         int changeId;
         if (!d->caret.atBlockStart()) {
@@ -967,13 +981,29 @@ void KoTextEditor::insertTable(int rows, int columns)
         }
 
         if (!changeId) {
-            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            changeId = changeTracker->getInsertChangeId(title, 0);
         }
 
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
+    QTextBlock currentBlock = d->caret.block();
+    if (d->caret.position() != currentBlock.position()) {
+        d->caret.insertBlock();
+        currentBlock = d->caret.block();
+    }
+
     QTextTable *table = d->caret.insertTable(rows, columns, tableFormat);
+
+    // Get (and thus create) columnandrowstyle manager so it becomes part of undo
+    // and not something that happens uncontrollably during layout
+    KoTableColumnAndRowStyleManager::getManager(table);
+
+    // 'Hide' the block before the table
+    QTextBlockFormat blockFormat = currentBlock.blockFormat();
+    QTextCursor cursor(currentBlock);
+    blockFormat.setProperty(KoParagraphStyle::HiddenByTable, true);
+    cursor.setBlockFormat(blockFormat);
 
     // Format the cells a bit.
     for (int row = 0; row < table->rows(); ++row) {
@@ -981,10 +1011,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);
@@ -992,18 +1022,28 @@ void KoTextEditor::insertTable(int rows, int columns)
         }
     }
 
-    d->updateState(KoTextEditor::Private::NoOp);
+    if (hasSelection) {
+        d->caret.endEditBlock();
+        endEditBlock();
+    } else {
+        d->updateState(KoTextEditor::Private::NoOp);
+    }
+
     emit cursorPositionChanged();
 }
 
 void KoTextEditor::insertTableRowAbove()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18n("Insert Row Above"));
+            QString title(i18nc("(qtundo-format)", "Insert Row Above"));
             changeId = changeTracker->getInsertChangeId(title, 0);
         }
         addCommand(new InsertTableRowCommand(this, table, false, changeId));
@@ -1012,12 +1052,16 @@ void KoTextEditor::insertTableRowAbove()
 
 void KoTextEditor::insertTableRowBelow()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18n("Insert Row Above"));
+            QString title(i18nc("(qtundo-format)", "Insert Row Above"));
             changeId = changeTracker->getInsertChangeId(title, 0);
         }
         addCommand(new InsertTableRowCommand(this, table, true, changeId));
@@ -1026,12 +1070,16 @@ void KoTextEditor::insertTableRowBelow()
 
 void KoTextEditor::insertTableColumnLeft()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18n("Insert Column Left"));
+            QString title(i18nc("(qtundo-format)", "Insert Column Left"));
             changeId = changeTracker->getInsertChangeId(title, 0);
         }
         addCommand(new InsertTableColumnCommand(this, table, false, changeId));
@@ -1040,12 +1088,16 @@ void KoTextEditor::insertTableColumnLeft()
 
 void KoTextEditor::insertTableColumnRight()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18n("Insert Column Right"));
+            QString title(i18nc("(qtundo-format)", "Insert Column Right"));
             changeId = changeTracker->getInsertChangeId(title, 0);
         }
         addCommand(new InsertTableColumnCommand(this, table, true, changeId));
@@ -1054,12 +1106,16 @@ void KoTextEditor::insertTableColumnRight()
 
 void KoTextEditor::deleteTableColumn()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18n("Delete Column"));
+            QString title(i18nc("(qtundo-format)", "Delete Column"));
             changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
         }
 
@@ -1069,12 +1125,16 @@ void KoTextEditor::deleteTableColumn()
 
 void KoTextEditor::deleteTableRow()
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     QTextTable *table = d->caret.currentTable();
     if (table) {
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         int changeId = 0;
         if (changeTracker && changeTracker->recordChanges()) {
-            QString title(i18n("Delete Row"));
+            QString title(i18nc("(qtundo-format)", "Delete Row"));
             changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
         }
         addCommand(new DeleteTableRowCommand(this, table, changeId));
@@ -1083,7 +1143,11 @@ void KoTextEditor::deleteTableRow()
 
 void KoTextEditor::mergeTableCells()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Merge Cells"));
+    if (isEditProtected()) {
+        return;
+    }
+
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Merge Cells"));
 
     QTextTable *table = d->caret.currentTable();
 
@@ -1096,7 +1160,11 @@ void KoTextEditor::mergeTableCells()
 
 void KoTextEditor::splitTableCells()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Split Cells"));
+    if (isEditProtected()) {
+        return;
+    }
+
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Split Cells"));
 
     QTextTable *table = d->caret.currentTable();
 
@@ -1108,22 +1176,108 @@ void KoTextEditor::splitTableCells()
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
-void KoTextEditor::insertTableOfContents()
+void KoTextEditor::adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand)
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
+    ResizeTableCommand *cmd = new ResizeTableCommand(table, true, column, width, parentCommand);
+
+    addCommand(cmd);
+}
+
+
+void KoTextEditor::adjustTableRowHeight(QTextTable *table, int column, qreal height, KUndo2Command *parentCommand)
+{
+    ResizeTableCommand *cmd = new ResizeTableCommand(table, false, column, height, parentCommand);
+
+    addCommand(cmd);
+}
+
+void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight)
+{
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Adjust Table Width"));
+    d->caret.beginEditBlock();
+    QTextTableFormat fmt = table->format();
+    if (dLeft) {
+        fmt.setLeftMargin(fmt.leftMargin() + dLeft);
+    }
+    if (dRight) {
+        fmt.setRightMargin(fmt.rightMargin() + dRight);
+    }
+    table->setFormat(fmt);
+    d->caret.endEditBlock();
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
+         KoBorder::BorderSide cellSide, const KoBorder::BorderData &data)
+{
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Change Border Formatting"));
+    d->caret.beginEditBlock();
+    QTextTableCell cell = table->cellAt(row, column);
+    QTextCharFormat fmt = cell.format();
+    KoBorder border = fmt.property(KoTableCellStyle::Borders).value<KoBorder>();
+
+    border.setBorderData(cellSide, data);
+    fmt.setProperty(KoTableCellStyle::Borders, QVariant::fromValue<KoBorder>(border));
+    cell.setFormat(fmt);
+    d->caret.endEditBlock();
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+KoInlineNote *KoTextEditor::insertFootNote()
+{
+    if (isEditProtected()) {
+        return 0;
+    }
+
+    InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Footnote, d->document);
+    addCommand(cmd);
+
+    emit cursorPositionChanged();
+    return cmd->m_inlineNote;
+}
+
+KoInlineNote *KoTextEditor::insertEndNote()
+{
+    if (isEditProtected()) {
+        return 0;
+    }
+
+    InsertNoteCommand *cmd = new InsertNoteCommand(KoInlineNote::Endnote, d->document);
+    addCommand(cmd);
+
+    emit cursorPositionChanged();
+    return cmd->m_inlineNote;
+}
+
+void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    bool hasSelection = d->caret.hasSelection();
+    if (!hasSelection) {
+        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Table Of Contents"));
+    } else {
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Table Of Contents"));
+        deleteChar(false, topCommand);
+        d->caret.beginEditBlock();
+    }
 
     QTextBlockFormat tocFormat;
-    tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);
-    KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
+    KoTableOfContentsGeneratorInfo *newToCInfo = info->clone();
     QTextDocument *tocDocument = new QTextDocument();
-    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-    tocFormat.setProperty(KoParagraphStyle::TableOfContentsDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo *>(newToCInfo) );
+    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument));
+
+    //make sure we set up the textrangemanager on the subdocument as well
+    KoTextDocument(tocDocument).setTextRangeManager(new KoTextRangeManager);
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();
         QTextBlockFormat blockFormat = d->caret.blockFormat();
-        QString title = i18n("Insert Table Of Contents");
+        QString title = i18nc("(qtundo-format)", "Insert Table Of Contents");
 
         int changeId;
         if (!d->caret.atBlockStart()) {
@@ -1133,166 +1287,340 @@ void KoTextEditor::insertTableOfContents()
         }
 
         if (!changeId) {
-            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            changeId = changeTracker->getInsertChangeId(title, 0);
         }
 
         tocFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
+    d->caret.insertBlock();
+    d->caret.movePosition(QTextCursor::Left);
     d->caret.insertBlock(tocFormat);
     d->caret.movePosition(QTextCursor::Right);
 
-    d->updateState(KoTextEditor::Private::NoOp);
+    if (hasSelection) {
+        d->caret.endEditBlock();
+        endEditBlock();
+    } else {
+        d->updateState(KoTextEditor::Private::NoOp);
+    }
+
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::insertText(const QString &text)
+void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, const QTextBlock &block)
 {
-    d->updateState(KoTextEditor::Private::KeyPress, i18n("Key Press"));
+    if (isEditProtected()) {
+        return;
+    }
+
+    KoTableOfContentsGeneratorInfo *newToCInfo=info->clone();
+
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Modify Table Of Contents"));
+
+    QTextCursor cursor(block);
+    QTextBlockFormat tocBlockFormat=block.blockFormat();
+
+    tocBlockFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(newToCInfo) );
+    cursor.setBlockFormat(tocBlockFormat);
+
+    d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
+    const_cast<QTextDocument *>(document())->markContentsDirty(document()->firstBlock().position(), 0);
+}
+
+void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
+{
+    bool hasSelection = d->caret.hasSelection();
+    if (!hasSelection) {
+        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Bibliography"));
+    } else {
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Bibliography"));
+        deleteChar(false, topCommand);
+        d->caret.beginEditBlock();
+    }
+
+    QTextBlockFormat bibFormat;
+    KoBibliographyInfo *newBibInfo = info->clone();
+    QTextDocument *bibDocument = new QTextDocument();
+
+    bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(newBibInfo));
+    bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+
+    //make sure we set up the textrangemanager on the subdocument as well
+    KoTextDocument(bibDocument).setTextRangeManager(new KoTextRangeManager);
+
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    if (changeTracker && changeTracker->recordChanges()) {
+        QTextCharFormat charFormat = d->caret.charFormat();
+        QTextBlockFormat blockFormat = d->caret.blockFormat();
+        QString title = i18nc("(qtundo-format)", "Insert Bibliography");
+
+        int changeId;
+        if (!d->caret.atBlockStart()) {
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        } else {
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        }
+
+        if (!changeId) {
+            changeId = changeTracker->getInsertChangeId(title, 0);
+        }
+
+        bibFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    }
+
+    d->caret.insertBlock();
+    d->caret.movePosition(QTextCursor::Left);
+    d->caret.insertBlock(bibFormat);
+    d->caret.movePosition(QTextCursor::Right);
+
+    new BibliographyGenerator(bibDocument, block(), newBibInfo);
+
+    if (hasSelection) {
+        d->caret.endEditBlock();
+        endEditBlock();
+    } else {
+        d->updateState(KoTextEditor::Private::NoOp);
+    }
+
+    emit cursorPositionChanged();
+}
+
+KoInlineCite *KoTextEditor::insertCitation()
+{
+    bool hasSelection = d->caret.hasSelection();
+    if (!hasSelection) {
+        d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Add Citation"));
+    } else {
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Citation"));
+        deleteChar(false, topCommand);
+        d->caret.beginEditBlock();
+    }
+
+    KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,cite);
+
+    if (hasSelection) {
+        d->caret.endEditBlock();
+        endEditBlock();
+    } else {
+        d->updateState(KoTextEditor::Private::NoOp);
+    }
+
+    return cite;
+}
+
+void KoTextEditor::insertText(const QString &text, const QString &hRef)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    bool hasSelection = d->caret.hasSelection();
+    if (!hasSelection) {
+        d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Typing"));
+    } else {
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Typing"));
+        deleteChar(false, topCommand);
+        d->caret.beginEditBlock();
+    }
 
     //first we make sure that we clear the inlineObject charProperty, if we have no selection
-    if (!d->caret.hasSelection() && d->caret.charFormat().hasProperty(KoCharacterStyle::InlineInstanceId))
+    if (!hasSelection && d->caret.charFormat().hasProperty(KoCharacterStyle::InlineInstanceId))
         d->clearCharFormatProperty(KoCharacterStyle::InlineInstanceId);
 
     int startPosition = d->caret.position();
+
+    if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+        d->newLine(0);
+        startPosition = d->caret.position();
+    }
+
     QTextCharFormat format = d->caret.charFormat();
     if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
+    static QRegExp urlScanner("\\S+://\\S+");
+    if (!hRef.isEmpty()) {
+        format.setAnchor(true);
+        format.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
+        if ((urlScanner.indexIn(hRef)) == 0) {//web url
+            format.setAnchorHref(hRef);
+        } else {
+            format.setAnchorHref("#"+hRef);
+        }
+    }
     d->caret.insertText(text, format);
+
     int endPosition = d->caret.position();
 
     //Mark the inserted text
     d->caret.setPosition(startPosition);
     d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
 
-    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
+    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18nc("(qtundo-format)", "Typing"), format, format, false);
 
     d->caret.clearSelection();
 
-    int blockNumber = d->caret.blockNumber();
-    while (blockNumber <= d->caret.blockNumber()) {
-        d->dirtyBlocks << blockNumber;
-        ++blockNumber;
+    if (hasSelection) {
+        d->caret.endEditBlock();
+        endEditBlock();
     }
-    d->updateRtlTimer.stop();
-    d->updateRtlTimer.start();
-
+    if (!hRef.isEmpty()) {
+        format.setAnchor(false);
+        format.clearProperty(KoCharacterStyle::Anchor);
+        format.clearProperty(KoCharacterStyle::AnchorType);
+        d->caret.setCharFormat(format);
+    }
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format)
+void KoTextEditor::insertHtml(const QString &html)
 {
-    Q_UNUSED(text)
-    Q_UNUSED(format)
-//TODO
-}
+    if (isEditProtected()) {
+        return;
+    }
 
-void KoTextEditor::mergeBlockCharFormat(const QTextCharFormat &modifier)
-{
-    Q_UNUSED(modifier)
-//TODO
-}
+    // XXX: do the changetracking and everything!
+    QTextBlock currentBlock = d->caret.block();
+    d->caret.insertHtml(html);
 
-void KoTextEditor::mergeBlockFormat(const QTextBlockFormat &modifier)
-{
-    Q_UNUSED(modifier)
-//TODO
-}
+    QList<QTextList *> pastedLists;
+    KoList *currentPastedList = 0;
+    while (currentBlock != d->caret.block()) {
+        currentBlock = currentBlock.next();
+        QTextList *currentTextList = currentBlock.textList();
+        if(currentTextList && !pastedLists.contains(currentBlock.textList())) {
+            KoListStyle *listStyle = KoTextDocument(d->document).styleManager()->defaultListStyle()->clone();
+            listStyle->setName("");
+            listStyle->setStyleId(0);
+            currentPastedList = new KoList(d->document, listStyle);
+            QTextListFormat currentTextListFormat = currentTextList->format();
 
-void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
-{
-    Q_UNUSED(modifier)
-//TODO
+            KoListLevelProperties levelProperty = listStyle->levelProperties(currentTextListFormat.indent());
+            levelProperty.setStyle(static_cast<KoListStyle::Style>(currentTextListFormat.style()));
+            levelProperty.setLevel(currentTextListFormat.indent());
+            levelProperty.setListItemPrefix("");
+            levelProperty.setListItemSuffix("");
+            levelProperty.setListId((KoListStyle::ListIdType)currentTextList);
+            listStyle->setLevelProperties(levelProperty);
+
+            currentTextListFormat.setProperty(KoListStyle::Level, currentTextListFormat.indent());
+            currentBlock.textList()->setFormat(currentTextListFormat);
+
+            currentPastedList->updateStoredList(currentBlock);
+            currentPastedList->setStyle(listStyle);
+
+            pastedLists.append(currentBlock.textList());
+        }
+    }
 }
 
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
 {
-    bool b = d->caret.movePosition (operation, mode, n);
-    emit cursorPositionChanged();
-    return b;
+    d->editProtectionCached = false;
+
+    // We need protection against moving in and out of note areas
+    QTextCursor after(d->caret);
+    bool b = after.movePosition (operation, mode, n);
+
+    QTextFrame *beforeFrame = d->caret.currentFrame();
+    while (qobject_cast<QTextTable *>(beforeFrame)) {
+        beforeFrame = beforeFrame->parentFrame();
+    }
+
+    QTextFrame *afterFrame = after.currentFrame();
+    while (qobject_cast<QTextTable *>(afterFrame)) {
+        afterFrame = afterFrame->parentFrame();
+    }
+
+    if (beforeFrame == afterFrame) {
+        if (after.selectionEnd() == after.document()->characterCount() -1) {
+            QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+            cursor.movePosition(QTextCursor::PreviousCharacter);
+            QTextFrame *auxFrame = cursor.currentFrame();
+
+            if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+                if (operation == QTextCursor::End) {
+                    d->caret.setPosition(auxFrame->firstPosition() - 1, mode);
+                    emit cursorPositionChanged();
+                    return true;
+                }
+                return false;
+            }
+        }
+        d->caret = after;
+        emit cursorPositionChanged();
+        return b;
+    }
+    return false;
 }
 
 void KoTextEditor::newLine()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Line Break"));
-    if (d->caret.hasSelection())
-        d->deleteInlineObjects();
-    KoTextDocument koDocument(d->document);
-    KoStyleManager *styleManager = koDocument.styleManager();
-    KoParagraphStyle *nextStyle = 0;
-    KoParagraphStyle *currentStyle = 0;
-    if (styleManager) {
-        int id = d->caret.blockFormat().intProperty(KoParagraphStyle::StyleId);
-        currentStyle = styleManager->paragraphStyle(id);
-        if (currentStyle == 0) // not a style based parag.  Lets make the next one correct.
-            nextStyle = styleManager->defaultParagraphStyle();
-        else
-            nextStyle = styleManager->paragraphStyle(currentStyle->nextStyle());
-        Q_ASSERT(nextStyle);
-        if (currentStyle == nextStyle)
-            nextStyle = 0;
+    if (isEditProtected()) {
+        return;
     }
 
-    int startPosition = d->caret.position();
-    QTextCharFormat format = d->caret.charFormat();
-    if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
-        format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+    bool hasSelection = d->caret.hasSelection();
+    if (!hasSelection) {
+        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "New Paragraph"));
+    } else {
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "New Paragraph"));
+        deleteChar(false, topCommand);
     }
-    d->caret.insertBlock();
-    int endPosition = d->caret.position();
+    d->caret.beginEditBlock();
 
-    //Mark the inserted text
-    d->caret.setPosition(startPosition);
-    d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
+    d->newLine(0);
 
-    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
+    d->caret.endEditBlock();
 
-    d->caret.clearSelection();
-    QTextBlockFormat bf = d->caret.blockFormat();
-    QVariant direction = bf.property(KoParagraphStyle::TextProgressionDirection);
-    bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
-    bf.clearProperty(KoParagraphStyle::ListStartValue);
-    bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
-    bf.clearProperty(KoParagraphStyle::IsListHeader);
-    bf.clearProperty(KoParagraphStyle::MasterPageName);
-    d->caret.setBlockFormat(bf);
-    if (nextStyle) {
-        QTextBlock block = d->caret.block();
-        if (currentStyle)
-            currentStyle->unapplyStyle(block);
-        nextStyle->applyStyle(block);
+    if (hasSelection) {
+        endEditBlock();
+    } else {
+        d->updateState(KoTextEditor::Private::NoOp);
     }
 
-    bf = d->caret.blockFormat();
-    if (d->direction != KoText::AutoDirection) { // inherit from shape
-        KoText::Direction dir;
-        switch (d->direction) {
-        case KoText::RightLeftTopBottom:
-            dir = KoText::PerhapsRightLeftTopBottom;
-            break;
-        case KoText::LeftRightTopBottom:
-        default:
-            dir = KoText::PerhapsLeftRightTopBottom;
-        }
-        bf.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
-    } else if (! direction.isNull()) { // then we inherit from the previous paragraph.
-        bf.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
-    }
-    d->caret.setBlockFormat(bf);
-    d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
+}
+
+class WithinSelectionVisitor : public KoTextVisitor
+{
+public:
+    WithinSelectionVisitor(KoTextEditor *editor, int position)
+        : KoTextVisitor(editor)
+        , m_position(position)
+        , m_returnValue(false)
+    {
+    }
+
+    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
+    {
+        if (m_position >= qMax(block.position(), caret.selectionStart())
+                    && m_position <= qMin(block.position() + block.length(), caret.selectionEnd())) {
+            m_returnValue = true;
+            setAbortVisiting(true);
+        }
+    }
+    int m_position; //the position we are searching for
+    bool m_returnValue; //if position is within the selection
+};
+
+bool KoTextEditor::isWithinSelection(int position) const
+{
+    // we know the visitor doesn't do anything with the texteditor so let's const cast
+    // to have a more beautiful outer api
+    WithinSelectionVisitor visitor(const_cast<KoTextEditor *>(this), position);
+
+    recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+    return visitor.m_returnValue;
 }
 
 int KoTextEditor::position() const
 {
     return d->caret.position();
-}
-
-void KoTextEditor::removeSelectedText()
-{
-    d->caret.removeSelectedText();
-    emit cursorPositionChanged();
 }
 
 void KoTextEditor::select(QTextCursor::SelectionType selection)
@@ -1321,34 +1649,43 @@ int KoTextEditor::selectionStart() const
     return d->caret.selectionStart();
 }
 
-void KoTextEditor::setBlockCharFormat(const QTextCharFormat &format)
+void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 {
-    Q_UNUSED(format)
-//TODO
-}
+    d->editProtectionCached = false;
 
-void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
-{
-    Q_UNUSED(format)
-//TODO
-}
+    if (pos == d->caret.document()->characterCount() -1) {
+        QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+        cursor.movePosition(QTextCursor::PreviousCharacter);
+        QTextFrame *auxFrame = cursor.currentFrame();
 
-void KoTextEditor::setCharFormat(const QTextCharFormat &format)
-{
-    Q_UNUSED(format)
-//TODO
-}
+        if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+            return;
+        }
+    }
 
-void KoTextEditor::setTableFormat(const QTextTableFormat &format)
-{
-    Q_UNUSED(format)
-//TODO
-}
+    if (mode == QTextCursor::MoveAnchor) {
+        d->caret.setPosition (pos, mode);
+        emit cursorPositionChanged();
+    }
 
-void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
-{
-    d->caret.setPosition (pos, m);
-    emit cursorPositionChanged();
+    // We need protection against moving in and out of note areas
+    QTextCursor after(d->caret);
+    after.setPosition (pos, mode);
+
+    QTextFrame *beforeFrame = d->caret.currentFrame();
+    while (qobject_cast<QTextTable *>(beforeFrame)) {
+        beforeFrame = beforeFrame->parentFrame();
+    }
+
+    QTextFrame *afterFrame = after.currentFrame();
+    while (qobject_cast<QTextTable *>(afterFrame)) {
+        afterFrame = afterFrame->parentFrame();
+    }
+
+    if (beforeFrame == afterFrame) {
+        d->caret = after;
+        emit cursorPositionChanged();
+    }
 }
 
 void KoTextEditor::setVisualNavigation(bool b)
@@ -1361,34 +1698,19 @@ bool KoTextEditor::visualNavigation() const
     return d->caret.visualNavigation();
 }
 
-bool KoTextEditor::isBidiDocument() const
+const QTextFrame *KoTextEditor::currentFrame () const
 {
-    return d->isBidiDocument;
+    return d->caret.currentFrame();
 }
 
-void KoTextEditor::beginEditBlock()
+const QTextList *KoTextEditor::currentList () const
 {
-    d->updateState(KoTextEditor::Private::Custom);
-    d->caret.beginEditBlock();
+    return d->caret.currentList();
 }
 
-void KoTextEditor::endEditBlock()
+const QTextTable *KoTextEditor::currentTable () const
 {
-    d->caret.endEditBlock();
-    d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::finishedLoading()
-{
-    QTextBlock block = d->document->begin();
-    while (!d->isBidiDocument && block.isValid()) {
-        bool rtl = isRightToLeft(block.text());
-        if ((QApplication::isLeftToRight() && rtl) || (QApplication::isRightToLeft() && !rtl)) {
-            d->isBidiDocument = true;
-            emit isBidiUpdated();
-        }
-        block = block.next();
-    }
+    return d->caret.currentTable();
 }
 
 #include <KoTextEditor.moc>

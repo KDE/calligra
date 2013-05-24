@@ -24,7 +24,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoOdfWriteStore.h>
 #include <KoStoreDevice.h>
@@ -175,20 +175,12 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     settings->startElement("office:settings");
     settings->startElement("config:config-item-set");
     settings->addAttribute("config:name", "ooo:configuration-settings");
-    settings->startElement("config:config-item");
-    settings->addAttribute("config:name", "UseFormerLineSpacing");
-    settings->addAttribute("config:type", "boolean");
-    settings->addTextSpan("false");
-    settings->endElement(); // config:config-item
-    settings->startElement("config:config-item");
-    settings->addAttribute("config:name", "TabsRelativeToIndent");
-    settings->addAttribute("config:type", "boolean");
-    settings->addTextSpan("false"); // ODF=true, MSOffice=false
-    settings->endElement(); // config:config-item
+    writeConfigurationSettings(settings);
     settings->endElement(); // config:config-item-set
     settings->endElement(); // office:settings
     settings->endElement(); // office:document-settings
     settings->endDocument();
+    delete settings;
     realManifestWriter->addManifestEntry("settings.xml", "text/xml");
     if (!outputStore->close()) {
         delete outputStore;
@@ -207,6 +199,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     meta->endElement(); //office:meta
     meta->endElement(); //office:document-meta
     meta->endDocument();
+    delete meta;
     if (!outputStore->close()) {
         delete outputStore;
         return KoFilter::CreationError;

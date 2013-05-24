@@ -1,15 +1,14 @@
-add_subdirectory( kdchart )
 add_subdirectory( tests )
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
-                     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
                      ${CMAKE_SOURCE_DIR}/plugins/chartshape/dialogs
                      ${CMAKE_SOURCE_DIR}/interfaces
+                     ${KDCHART_INCLUDES}
                      ${KOMAIN_INCLUDES}
                      ${TEXTLAYOUT_INCLUDES}
 )
 
-########### Flake Plugin library ###############
+########### Chart shape Plugin library ###############
 
 SET (chartshape_LIB_SRCS
     kchart_global.cpp
@@ -26,9 +25,8 @@ SET (chartshape_LIB_SRCS
     ChartProxyModel.cpp
     KDChartModel.cpp
     Surface.cpp
-    ThreeDScene.cpp
-    ThreeDTransformation.cpp
     ChartDocument.cpp
+    ChartPart.cpp
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
@@ -42,7 +40,13 @@ SET (chartshape_LIB_SRCS
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     dialogs/CellRegionDialog.cpp
+    dialogs/FontEditorDialog.cpp
+    dialogs/FormatErrorBarDialog.cpp
     commands/ChartTypeCommand.cpp
+    commands/LegendCommand.cpp
+    commands/AxisCommand.cpp
+    commands/DatasetCommand.cpp
+    commands/ChartTextShapeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
@@ -51,17 +55,21 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
     dialogs/CellRegionDialog.ui
+    dialogs/FormatErrorBarDialog.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
-target_link_libraries(chartshapelib kdchart komain textlayout)
-target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES kdchart)
-set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+target_link_libraries(chartshapelib ${KDCHART_LIBS} komain textlayout)
+target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES ${KDCHART_LIBS})
+set_target_properties(chartshapelib PROPERTIES
+    VERSION   ${GENERIC_CALLIGRA_LIB_VERSION}
+    SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+)
 
 install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 kde4_add_plugin(chartshape ChartShapeFactory.cpp )
-target_link_libraries(chartshape chartshapelib kdchart flake)
+target_link_libraries(chartshape chartshapelib ${KDCHART_LIBS} flake)
 install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

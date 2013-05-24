@@ -33,8 +33,9 @@ public:
     KisStroke(KisStrokeStrategy *strokeStrategy);
     ~KisStroke();
 
-    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
+    void addJob(KisStrokeJobData *data);
 
+    QString name() const;
     bool hasJobs() const;
     qint32 numJobs() const;
     KisStrokeJob* popOneJob();
@@ -50,15 +51,18 @@ public:
     bool prevJobSequential() const;
     bool nextJobSequential() const;
 
+    bool nextJobBarrier() const;
+
 private:
-    void enqueue(KisDabProcessingStrategy *strategy,
-                 KisDabProcessingStrategy::DabProcessingData *data);
+    void enqueue(KisStrokeJobStrategy *strategy,
+                 KisStrokeJobData *data);
     KisStrokeJob* dequeue();
     void clearQueue();
 
 private:
     // for testing use only, do not use in real code
     friend class KisStrokeTest;
+    friend class KisStrokeStrategyUndoCommandBasedTest;
     QQueue<KisStrokeJob*>& testingGetQueue() {
         return m_jobsQueue;
     }
@@ -66,14 +70,15 @@ private:
 private:
     // the strategies are owned by the stroke
     KisStrokeStrategy *m_strokeStrategy;
-    KisDabProcessingStrategy *m_initStrategy;
-    KisDabProcessingStrategy *m_dabStrategy;
-    KisDabProcessingStrategy *m_cancelStrategy;
-    KisDabProcessingStrategy *m_finishStrategy;
+    KisStrokeJobStrategy *m_initStrategy;
+    KisStrokeJobStrategy *m_dabStrategy;
+    KisStrokeJobStrategy *m_cancelStrategy;
+    KisStrokeJobStrategy *m_finishStrategy;
 
     QQueue<KisStrokeJob*> m_jobsQueue;
     bool m_strokeInitialized;
     bool m_strokeEnded;
+    bool m_isCancelled; // cancelled strokes are always 'ended' as well
     bool m_prevJobSequential;
 };
 

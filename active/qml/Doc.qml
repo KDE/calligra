@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,85 +19,161 @@
  * 02110-1301 USA
  */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import CalligraActive 1.0
 
-Item {
+Rectangle {
     id: docRootRect
     signal documentLoaded
-    property alias loadProgress: canvas.loadProgress
+
     clip: true
+    color: "white"
 
-    function openDocument(path) {
-        canvas.openDocument(path);
-    }
-
-    function initToolbar() {
-        if (canvas.documentType == CADocumentInfo.Spreadsheet) {
-            toolbarLoader.source = "SpreadsheetToolbar.qml"
-        } else if (canvas.documentType == CADocumentInfo.TextDocument) {
-            toolbarLoader.source = "WordsToolbar.qml"
-        } else if (canvas.documentType == CADocumentInfo.Presentation) {
-            toolbarLoader.source = "PresentationToolbar.qml"
+    CADocumentController {
+        id: docDocumentController
+        canvasController: theCanvasController
+        onDocumentOpened: {
+            docRootRect.documentLoaded();
+            docToolbars.initToolbars();
+            theCanvasController.updateFlickableDirection()
         }
     }
 
-    CanvasController {
-        id: canvas
-
-        anchors.fill: parent
-        z: -1
-
-        cameraX: docFlickable.contentX
-        cameraY: docFlickable.contentY
-
-        Component.onCompleted: documentLoaded.connect(initToolbar)
-        onDocumentLoaded: docRootRect.documentLoaded()
-    }
-
-    MouseArea {
-        id: flickableMouseArea
-        anchors.fill: parent
-        drag.filterChildren: true
-
-        Flickable {
-            id: docFlickable
-            x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
-
-            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+    Image {
+        id: previousPageImage
+        anchors {
+            top: parent.top; bottom: parent.bottom
+            right: parent.left
         }
-
-        Loader {
-            id: toolbarLoader
-            property bool containsMouse: false
-
-            anchors.fill: parent
-            opacity: 0
-        }
-
-        Connections {
-            target: toolbarLoader.item
-            onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
-        }
-    }
-
-    states : [
-        State {
-            name: "toolbarShown";
-            when: (flickableMouseArea.pressed || toolbarLoader.containsMouse) && !docFlickable.moving
-            PropertyChanges { target: toolbarLoader; opacity: 1 }
-        }
-    ]
-
-    transitions : [
-        Transition {
-            from: "toolbarShown"
-            SequentialAnimation {
-                PauseAnimation { duration: 2000 }
-                NumberAnimation {
-                    target: toolbarLoader; properties: "opacity"; duration: 3000
+        source: docDocumentController.documentHandler.previousPageImage
+        states: [
+            State {
+                name: "visible"
+                AnchorChanges {
+                    target: previousPageImage
+                    anchors.right: undefined
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
+        ]
+        transitions: Transition {
+            from: ""
+            SequentialAnimation {
+                AnchorAnimation { duration: 500 }
+                ScriptAction { script: theCanvasController.gotoPreviousPage() }
+                ScriptAction { script: docRootRect.restoreCanvasControllerToCenter() }
+            }
         }
-    ]
+    }
+
+    CanvasContainer {
+        id: theCanvasController
+        anchors {
+            top: parent.top; right: parent.right
+            bottom: parent.bottom; left: parent.left;
+        }
+
+        documentController: docDocumentController
+
+        onNeedToolbars: docToolbars.toggle()
+        onFlickedToRight: { updateImages(); state = "movedToRight" }
+        onFlickedToLeft: { updateImages(); state = "movedToLeft" }
+
+        states: [
+            State {
+                name: "movedToLeft"
+                AnchorChanges {
+                    target: theCanvasController
+                    anchors.left: undefined
+                    anchors.right: parent.left
+                }
+                PropertyChanges { target: nextPageImage; state: "visible" }
+            },
+            State {
+                name: "movedToRight"
+                AnchorChanges {
+                    target: theCanvasController
+                    anchors.right: undefined
+                    anchors.left: parent.right
+                }
+                PropertyChanges { target: previousPageImage; state: "visible" }
+            }
+        ]
+
+        onStateChanged: if (state == "") {
+            nextPageImage.state = ""
+            previousPageImage.state = ""
+        }
+
+        transitions: Transition {
+            from: ""
+            AnchorAnimation { duration: 500 }
+        }
+
+        function updateImages()
+        {
+            previousPageImage.width = caCanvasItem.width
+            nextPageImage.width = caCanvasItem.width
+        }
+    }
+
+    Image {
+        id: nextPageImage
+        anchors {
+            top: parent.top; bottom: parent.bottom
+            left: parent.right
+        }
+        source: docDocumentController.documentHandler.nextPageImage
+        states: [
+            State {
+                name: "visible"
+                AnchorChanges {
+                    target: nextPageImage
+                    anchors.left: undefined
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        ]
+        transitions: Transition {
+            from: ""
+            SequentialAnimation {
+                AnchorAnimation { duration: 500 }
+                ScriptAction { script: theCanvasController.gotoNextPage() }
+                ScriptAction { script: docRootRect.restoreCanvasControllerToCenter() }
+            }
+        }
+    }
+
+    Toolbars {
+        id: docToolbars
+        anchors.fill: parent
+
+        documentController: docDocumentController
+        docRootItem: docRootRect
+    }
+
+    HomeScreen {
+        id: homescreen
+        anchors.fill: parent
+    }
+
+    onDocumentLoaded: homescreen.visible = false
+
+    function openDocument(path) {
+        docDocumentController.documentUri = path;
+        docDocumentController.loadDocument();
+    }
+
+    function toggleEditing() {
+        theCanvasController.toggleEditing()
+    }
+
+    function restoreCanvasControllerToCenter() {
+        theCanvasController.state = ""
+    }
+
+    function hideOpenButton()
+    {
+        homescreen.hideOpenButton()
+    }
 }

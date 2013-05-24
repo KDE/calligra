@@ -25,18 +25,18 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <KIconLoader>
-#include <KLocale>
-#include <KDebug>
-#include <KFadeWidgetEffect>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kfadewidgeteffect.h>
 
-#include <widget/KexiPropertyEditorView.h>
+#include <KoIcon.h>
+#include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/KexiObjectInfoLabel.h>
-#include <widget/kexidatasourcecombobox.h>
-#include <widget/kexifieldlistview.h>
-#include <widget/kexifieldcombobox.h>
+#include <widget/KexiDataSourceComboBox.h>
+#include <widget/fields/KexiFieldListView.h>
+#include <widget/fields/KexiFieldComboBox.h>
 #include <kexiutils/SmallToolButton.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <kexiproject.h>
 
 #include <formeditor/commands.h>
@@ -50,6 +50,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         , m_noDataSourceAvailableMultiText(
             i18n("No data source could be assigned for multiple widgets.") )
         , m_insideClearFormDataSourceSelection(false)
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+        , m_tableOrQuerySchema(0)
+#endif
 {
 /*moved
     Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
@@ -98,7 +101,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
 #if 0 //2.0: clear button is available in the combobox itself
     m_clearWidgetDSButton = new KexiSmallToolButton(
-        KIcon("edit-clear-locationbar-rtl"), QString(), this);
+        koIcon("edit-clear-locationbar-rtl"), QString(), this);
     m_clearWidgetDSButton->setObjectName("clearWidgetDSButton");
     m_clearWidgetDSButton->setMinimumHeight(m_widgetDSLabel->minimumHeight());
     m_clearWidgetDSButton->setToolTip(i18n("Clear widget's data source"));
@@ -139,7 +142,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 //m_dataSourceLabel->setPaletteBackgroundColor(Qt::red);
 
     m_gotoButton = new KexiSmallToolButton(
-        KIcon("go-jump"), QString(), this);
+        koIcon("go-jump"), QString(), this);
     m_gotoButton->setObjectName("gotoButton");
 //2.0    m_gotoButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
     m_gotoButton->setToolTip(i18n("Go to selected form's data source"));
@@ -149,7 +152,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
 #if 0 //2.0: clear button is available in the combobox itself
     m_clearDSButton = new KexiSmallToolButton(
-        KIcon("edit-clear-locationbar-rtl"), QString(), this);
+        koIcon("edit-clear-locationbar-rtl"), QString(), this);
     m_clearDSButton->setObjectName("clearDSButton");
     m_clearDSButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
     m_clearDSButton->setToolTip(i18n("Clear form's data source"));
@@ -199,7 +202,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     mainLayout()->addLayout(hlyr);
     m_mousePointerLabel = new QLabel(this);
     hlyr->addWidget(m_mousePointerLabel);
-    m_mousePointerLabel->setPixmap(SmallIcon("mouse_pointer"));
+    m_mousePointerLabel->setPixmap(koIcon("mouse_pointer"));
     m_mousePointerLabel->setFixedWidth(m_mousePointerLabel->pixmap()
                                        ? m_mousePointerLabel->pixmap()->width() : 0);
     m_availableFieldsDescriptionLabel = new QLabel(
@@ -221,7 +224,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     hlyr->addWidget(m_availableFieldsLabel);
 
     m_addField = new KexiSmallToolButton(
-        KIcon("add_field"), i18nc("Insert selected field into form", "Insert"), this);
+        koIcon("add_field"), i18nc("Insert selected field into form", "Insert"), this);
     m_addField->setObjectName("addFieldButton");
 //2.0    m_addField->setMinimumHeight(m_availableFieldsLabel->minimumHeight());
 // m_addField->setTextPosition(QToolButton::Right);
@@ -240,14 +243,14 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     connect(m_fieldListView, SIGNAL(selectionChanged()),
             this, SLOT(slotFieldListViewSelectionChanged()));
     connect(m_fieldListView,
-            SIGNAL(fieldDoubleClicked(const QString&, const QString&, const QString&)),
-            this, SLOT(slotFieldDoubleClicked(const QString&, const QString&, const QString&)));
+            SIGNAL(fieldDoubleClicked(QString,QString,QString)),
+            this, SLOT(slotFieldDoubleClicked(QString,QString,QString)));
 #endif
 
     mainLayout()->addStretch(1);
 
-    connect(m_formDataSourceCombo, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotFormDataSourceTextChanged(const QString &)));
+    connect(m_formDataSourceCombo, SIGNAL(textChanged(QString)),
+            this, SLOT(slotFormDataSourceTextChanged(QString)));
     connect(m_formDataSourceCombo, SIGNAL(dataSourceChanged()),
             this, SLOT(slotFormDataSourceChanged()));
     connect(m_widgetDataSourceCombo, SIGNAL(selected()),
@@ -259,6 +262,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
 KexiDataSourcePage::~KexiDataSourcePage()
 {
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+    delete m_tableOrQuerySchema;
+#endif
 }
 
 void KexiDataSourcePage::setProject(KexiProject *prj)

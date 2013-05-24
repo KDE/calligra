@@ -19,8 +19,8 @@
 
 #include "rectedit.h"
 
-#include <KLocale>
-#include <QtCore/QRect>
+#include <klocale.h>
+#include <QRect>
 
 using namespace KoProperty;
 

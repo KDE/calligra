@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=transistor single pn
+Name[bs]=tranzistor jediničnog pn spoja
+Name[ca]=transistor single pn
+Name[ca@valencia]=transistor single pn
+Name[cs]=tranzistor jeden pn
+Name[da]=transistor single pn
 Name[el]=transistor single pn
+Name[es]=transistor simple PN
+Name[et]=Transistor single pn
+Name[fr]=transistor single pn
+Name[gl]=Transistor simple PN
+Name[it]=transistore pn singolo
+Name[kk]=бөлек pn-арна транзистор
 Name[nb]=transistor enkel pn
 Name[nl]=transistor single pn
+Name[pl]=tranzystor pojedyncze pn
 Name[pt]=transístor simples PN
 Name[pt_BR]=transistor simples pn
+Name[ru]=Транзистор single pn
+Name[sk]=tranzistor jednoduchý pn
 Name[sv]=transistor enkel pn
 Name[uk]=Єдине позначення PN-канального транзистора
 Name[x-test]=xxtransistor single pnxx

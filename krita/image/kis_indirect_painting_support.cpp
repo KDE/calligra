@@ -37,9 +37,6 @@ struct KisIndirectPaintingSupport::Private {
     quint8 compositeOpacity;
     QBitArray channelFlags;
     QReadWriteLock lock;
-
-    QMutex dirtyRegionMutex;
-    QRegion dirtyRegion;
 };
 
 
@@ -56,7 +53,6 @@ KisIndirectPaintingSupport::~KisIndirectPaintingSupport()
 
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t)
 {
-    d->dirtyRegion = QRegion();
     d->temporaryTarget = t;
 }
 
@@ -115,28 +111,20 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
     return d->temporaryTarget;
 }
 
-void KisIndirectPaintingSupport::setDirty(const QRect &rect)
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
 {
-    lockTemporaryTarget();
-    if(hasTemporaryTarget()) {
-        addIndirectlyDirtyRect(rect);
-    }
-    unlockTemporaryTarget();
+    mergeToLayerImpl(layer, undoAdapter, transactionText);
 }
 
-void KisIndirectPaintingSupport::addIndirectlyDirtyRect(const QRect &rect)
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText)
 {
-    QMutexLocker locker(&d->dirtyRegionMutex);
-    d->dirtyRegion += rect;
+    mergeToLayerImpl(layer, undoAdapter, transactionText);
 }
 
-QRegion KisIndirectPaintingSupport::indirectlyDirtyRegion()
-{
-    QMutexLocker locker(&d->dirtyRegionMutex);
-    return d->dirtyRegion;
-}
-
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QString &transactionText)
+template<class UndoAdapter>
+void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
+                                                  UndoAdapter *undoAdapter,
+                                                  const QString &transactionText)
 {
     /**
      * We do not apply selection here, because it has already
@@ -148,19 +136,20 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QString &t
     gc.setChannelFlags(d->channelFlags);
 
     d->lock.lockForWrite();
-    if(layer->image()) {
+
+    /**
+     * Scratchpad may not have an undo adapter
+     */
+    if(undoAdapter) {
         gc.beginTransaction(transactionText);
     }
-
-    QRegion dirtyRegion = indirectlyDirtyRegion();
-    foreach(const QRect& rc, dirtyRegion.rects()) {
+    foreach (const QRect &rc, d->temporaryTarget->region().rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     d->temporaryTarget = 0;
 
-    // in the scratchpad the layer has no image and there is no undo adapter
-    if(layer->image()) {
-        gc.endTransaction(layer->image()->undoAdapter());
+    if(undoAdapter) {
+        gc.endTransaction(undoAdapter);
     }
 
     d->lock.unlock();

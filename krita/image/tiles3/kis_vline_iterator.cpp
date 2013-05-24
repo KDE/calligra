@@ -26,6 +26,10 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     x -= offsetX;
     y -= offsetY;
     Q_ASSERT(dataManager != 0);
+
+    Q_ASSERT(h > 0); // for us, to warn us when abusing the iterators
+    if (h < 1) h = 1;  // for release mode, to make sure there's always at least one pixel read.
+
     m_lineStride = m_pixelSize * KisTileData::WIDTH;
 
     m_x = x;
@@ -140,15 +144,20 @@ KisVLineIterator2::~KisVLineIterator2()
 }
 
 
-quint8 * KisVLineIterator2::rawData()
+quint8* KisVLineIterator2::rawData()
 {
     return m_data;
 }
 
 
-const quint8 * KisVLineIterator2::oldRawData() const
+const quint8* KisVLineIterator2::oldRawData() const
 {
     return m_oldData;
+}
+
+const quint8* KisVLineIterator2::rawDataConst() const
+{
+    return m_data;
 }
 
 void KisVLineIterator2::switchToTile(qint32 yInTile)
@@ -157,11 +166,14 @@ void KisVLineIterator2::switchToTile(qint32 yInTile)
     Q_ASSERT(m_index < m_tilesCacheSize);
     Q_ASSERT(m_index >= 0);
 
+    int offset_row = m_pixelSize * m_xInTile;
     m_data = m_tilesCache[m_index].data;
     m_oldData = m_tilesCache[m_index].oldData;
-    m_data += m_pixelSize * m_xInTile;
+    m_data += offset_row;
     m_dataBottom = m_data + m_tileSize;
-    m_data  += m_pixelSize * yInTile * KisTileData::WIDTH;
+    int offset_col = m_pixelSize * yInTile * KisTileData::WIDTH;
+    m_data  += offset_col;
+    m_oldData += offset_row + offset_col;
 }
 
 

@@ -20,7 +20,9 @@
 
 #include "psd.h"
 #include "psd_header.h"
+
 #include <QByteArray>
+#include <QColor>
 
 class PSDColorModeBlock
 {
@@ -37,6 +39,12 @@ public:
     QByteArray data;
 
     QString error;
+
+    /* to store rgb colormap values of indexed image
+    */
+    QList<QColor> colormap;
+    QByteArray duotoneSpecification; // Krita should save this in an annotation and write it back, if present
+
 };
 
 #endif // PSD_COLORMODE_BLOCK_H

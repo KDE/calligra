@@ -199,7 +199,7 @@
          <bool>false</bool>
         </property>
         <property name="buddy" >
-         <cstring></cstring>
+         <cstring>frmEngine</cstring>
         </property>
        </widget>
       </item>

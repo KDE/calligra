@@ -24,7 +24,6 @@
 #include <KoCanvasBase.h>
 
 #include <KoTextShapeData.h>
-#include <KoTextSelectionHandler.h>
 #include <KoToolProxy.h>
 #include <QTextCursor>
 #include <KoShapeRegistry.h>
@@ -53,7 +52,7 @@ void QuickStateHandler::activate()
     KoToolSelection* selection = canvas->toolProxy()->selection();
     if(not selection) return;
 
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (selection);
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (selection);
     if(not handler) return;
     QTextCursor cursor = handler->caret();
     cursor.movePosition(QTextCursor::StartOfBlock);

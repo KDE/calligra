@@ -21,7 +21,7 @@
 #define TABLEVIEW_TEST_H
 
 #include <widget/tableview/kexidatatableview.h>
-#include <kexidb/cursor.h>
+#include <db/cursor.h>
 
 #include <QDesktopWidget>
 

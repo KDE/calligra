@@ -20,88 +20,81 @@
 
 #include "kis_tool_select_similar.h"
 
-#include <QPoint>
-#include <QLayout>
-#include <QCheckBox>
 #include <QLabel>
-#include <QComboBox>
-#include <QTimer>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#include <klocale.h>
-#include <knuminput.h>
-
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
 
 #include <kis_cursor.h>
-#include <kis_selection_manager.h>
-#include <kis_image.h>
-#include <kis_layer.h>
 #include <KoPointerEvent.h>
 #include <kis_selection_options.h>
-#include <kis_selection.h>
 #include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>
-#include "canvas/kis_canvas2.h"
+#include "kis_canvas2.h"
 #include <kis_pixel_selection.h>
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
+#include "kis_iterator_ng.h"
 
 void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness)
 {
     // XXX: Multithread this!
     qint32 x, y, w, h;
-
-    dev->exactBounds(x, y, w, h);
+    QRect rc;
+    rc = dev->exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
 
     const KoColorSpace * cs = dev->colorSpace();
 
-    KisHLineConstIterator hiter = dev->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = selection->createHLineIterator(x, y, w);
+    KisHLineConstIteratorSP hiter = dev->createHLineConstIteratorNG(x, y, w);
+    KisHLineIteratorSP selIter = selection->createHLineIteratorNG(x, y, w);
 
     for (int row = y; row < y + h; ++row) {
-        while (!hiter.isDone()) {
+        do {
             //if (dev->colorSpace()->hasAlpha())
-            //    opacity = dev->colorSpace()->alpha(hiter.rawData());
+            //    opacity = dev->colorSpace()->alpha(hiter->rawData());
 
-            quint8 match = cs->difference(c, hiter.rawData());
+            quint8 match = cs->difference(c, hiter->oldRawData());
 
             if (match <= fuzziness) {
-                *(selIter.rawData()) = MAX_SELECTED;
+                *(selIter->rawData()) = MAX_SELECTED;
             }
-            ++hiter;
-            ++selIter;
-        }
-        hiter.nextRow();
-        selIter.nextRow();
+        } while (hiter->nextPixel() && selIter->nextPixel());
+
+        hiter->nextRow();
+        selIter->nextRow();
     }
 
 }
 
 KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_similar_selection_cursor.png", 6, 6))
-{
-    m_fuzziness = 20;
-}
-
-KisToolSelectSimilar::~KisToolSelectSimilar()
+    : KisToolSelectBase(canvas,
+                        KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
+                        i18n("Similar Selection")),
+      m_fuzziness(20)
 {
 }
-
 
 void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
 {
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        quint8 opacity = OPACITY_OPAQUE_U8;
+        if (!currentNode()) {
+            return;
+        }
 
         KisPaintDeviceSP dev = currentNode()->projection();
 
         if (!dev || !currentNode()->visible())
             return;
+
+        if (!selectionEditable()) {
+            return;
+        }
 
         QPointF pos = convertToPixelCoord(event);
 
@@ -113,15 +106,14 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
 
         KoColor c;
         dev->pixel(pos.x(), pos.y(), &c);
-        opacity = dev->colorSpace()->opacityU8(c.data());
 
         // XXX we should make this configurable: "allow to select transparent"
         // if (opacity > OPACITY_TRANSPARENT)
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
         selectByColor(dev, tmpSel, c.data(), m_fuzziness);
 
-        KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Similar Selection"));
-        helper.selectPixelSelection(tmpSel, m_selectAction);
+        KisSelectionToolHelper helper(kisCanvas, i18n("Similar Selection"));
+        helper.selectPixelSelection(tmpSel, selectionAction());
 
         QApplication::restoreOverrideCursor();
     }
@@ -129,7 +121,6 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
         KisTool::mousePressEvent(event);
     }
 }
-
 
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 {
@@ -139,15 +130,15 @@ void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 QWidget* KisToolSelectSimilar::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Similar Selection"));
-    m_optWidget->disableAntiAliasSelectionOption();
-    m_optWidget->disableSelectionModeOption();
+    KisSelectionOptions *selectionWidget = selectionOptionWidget();
+    selectionWidget->disableAntiAliasSelectionOption();
+    selectionWidget->disableSelectionModeOption();
 
     QHBoxLayout* fl = new QHBoxLayout();
-    QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
+    QLabel * lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
     fl->addWidget(lbl);
 
-    KisSliderSpinBox* input = new KisSliderSpinBox(m_optWidget);
+    KisSliderSpinBox* input = new KisSliderSpinBox(selectionWidget);
     input->setObjectName("fuzziness");
     input->setRange(0, 200);
     input->setSingleStep(10);
@@ -155,12 +146,9 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
-    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     l->insertLayout(1, fl);
 
-    return m_optWidget;
+    return selectionWidget;
 }
-
-
-#include "kis_tool_select_similar.moc"

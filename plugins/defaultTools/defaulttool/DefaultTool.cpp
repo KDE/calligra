@@ -3,7 +3,7 @@
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,7 +45,7 @@
 #include <KoDrag.h>
 #include <KoDocument.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
@@ -53,8 +53,14 @@
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
+#include <KoStrokeConfigWidget.h>
+#include <KoFillConfigWidget.h>
+#include <KoShadowConfigWidget.h>
+#include <KoOpacityConfigWidget.h>
 
-#include <KAction>
+#include <KoIcon.h>
+
+#include <kaction.h>
 #include <QKeyEvent>
 #include <QClipboard>
 #include <kstandarddirs.h>
@@ -62,6 +68,20 @@
 #include <math.h>
 
 #define HANDLE_DISTANCE 10
+
+class NopInteractionStrategy : public KoInteractionStrategy
+{
+public:
+    explicit NopInteractionStrategy(KoToolBase* parent) : KoInteractionStrategy(parent) {}
+
+    virtual KUndo2Command* createCommand()
+    {
+        return 0;
+    }
+
+    virtual void handleMouseMove(const QPointF& /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) {}
+    virtual void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) {}
+};
 
 class SelectionHandler : public KoToolSelection
 {
@@ -134,8 +154,10 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     setupActions();
 
     QPixmap rotatePixmap, shearPixmap;
-    rotatePixmap.load(KStandardDirs::locate("data", "calligra/icons/rotate.png"));
-    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/shear.png"));
+    rotatePixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_rotate.png"));
+    Q_ASSERT(!rotatePixmap.isNull());
+    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_shear.png"));
+    Q_ASSERT(!shearPixmap.isNull());
 
     m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QTransform().rotate(45)));
     m_rotateCursors[1] = QCursor(rotatePixmap.transformed(QTransform().rotate(90)));
@@ -188,63 +210,63 @@ bool DefaultTool::wantsAutoScroll() const
 
 void DefaultTool::setupActions()
 {
-    KAction* actionBringToFront = new KAction(KIcon("object-order-front-calligra"),
+    KAction* actionBringToFront = new KAction(koIcon("object-order-front-calligra"),
                                                i18n("Bring to &Front"), this);
     addAction("object_order_front", actionBringToFront);
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction* actionRaise = new KAction(KIcon("object-order-raise-calligra"), i18n("&Raise"), this);
+    KAction* actionRaise = new KAction(koIcon("object-order-raise-calligra"), i18n("&Raise"), this);
     addAction("object_order_raise", actionRaise);
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction* actionLower = new KAction(KIcon("object-order-lower-calligra"), i18n("&Lower"), this);
+    KAction* actionLower = new KAction(koIcon("object-order-lower-calligra"), i18n("&Lower"), this);
     addAction("object_order_lower", actionLower);
     actionLower->setShortcut(QKeySequence("Ctrl+["));
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction* actionSendToBack = new KAction(KIcon("object-order-back-calligra"),
+    KAction* actionSendToBack = new KAction(koIcon("object-order-back-calligra"),
                                              i18n("Send to &Back"), this);
     addAction("object_order_back", actionSendToBack);
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    KAction* actionAlignLeft = new KAction(KIcon("object-align-horizontal-left-calligra"),
+    KAction* actionAlignLeft = new KAction(koIcon("object-align-horizontal-left-calligra"),
                                             i18n("Align Left"), this);
     addAction("object_align_horizontal_left", actionAlignLeft);
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    KAction* actionAlignCenter = new KAction(KIcon("object-align-horizontal-center-calligra"),
+    KAction* actionAlignCenter = new KAction(koIcon("object-align-horizontal-center-calligra"),
                                               i18n("Horizontally Center"), this);
     addAction("object_align_horizontal_center", actionAlignCenter);
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    KAction* actionAlignRight = new KAction(KIcon("object-align-horizontal-right-calligra"),
+    KAction* actionAlignRight = new KAction(koIcon("object-align-horizontal-right-calligra"),
                                              i18n("Align Right"), this);
     addAction("object_align_horizontal_right", actionAlignRight);
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    KAction* actionAlignTop = new KAction(KIcon("object-align-vertical-top-calligra"), i18n("Align Top"), this);
+    KAction* actionAlignTop = new KAction(koIcon("object-align-vertical-top-calligra"), i18n("Align Top"), this);
     addAction("object_align_vertical_top", actionAlignTop);
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    KAction* actionAlignMiddle = new KAction(KIcon("object-align-vertical-center-calligra"),
+    KAction* actionAlignMiddle = new KAction(koIcon("object-align-vertical-center-calligra"),
                                               i18n("Vertically Center"), this);
     addAction("object_align_vertical_center", actionAlignMiddle);
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    KAction* actionAlignBottom = new KAction(KIcon("object-align-vertical-bottom-calligra"),
+    KAction* actionAlignBottom = new KAction(koIcon("object-align-vertical-bottom-calligra"),
                                               i18n("Align Bottom"), this);
     addAction("object_align_vertical_bottom", actionAlignBottom);
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
-    KAction* actionGroupBottom = new KAction(KIcon("object-group-calligra"),
+    KAction* actionGroupBottom = new KAction(koIcon("object-group-calligra"),
                                               i18n("Group"), this);
     addAction("object_group", actionGroupBottom);
     connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
 
-    KAction* actionUngroupBottom = new KAction(KIcon("object-ungroup-calligra"),
+    KAction* actionUngroupBottom = new KAction(koIcon("object-ungroup-calligra"),
                                                 i18n("Ungroup"), this);
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
@@ -981,6 +1003,10 @@ void DefaultTool::selectionGroup()
     canvas()->shapeController()->addShapeDirect(group, cmd);
     KoShapeGroupCommand::createCommand(group, groupedShapes, cmd);
     canvas()->addCommand(cmd);
+
+    // update selection so we can ungroup immediately again
+    selection->deselectAll();
+    selection->select(group);
 }
 
 void DefaultTool::selectionUngroup()
@@ -1036,9 +1062,9 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
 
     // single selected shape is automatically aligned to document rect
     if (editableShapes.count() == 1 ) {
-        if (!canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize))
+        if (!canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize))
             return;
-        bb = QRectF(QPointF(0,0), canvas()->resourceManager()->sizeResource(KoCanvasResource::PageSize));
+        bb = QRectF(QPointF(0,0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
     } else {
         foreach( KoShape * shape, editableShapes ) {
             bb |= shape->boundingRect();
@@ -1100,8 +1126,26 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
-    canvas()->createSnapGuideConfigWidget()->setWindowTitle(i18n("Snapping"));
-    widgets.append(canvas()->createSnapGuideConfigWidget());
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    strokeWidget->setWindowTitle(i18n("Line"));
+    strokeWidget->setCanvas(canvas());
+    widgets.append(strokeWidget);
+
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    fillWidget->setWindowTitle(i18n("Fill"));
+    fillWidget->setCanvas(canvas());
+    widgets.append(fillWidget);
+
+    KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
+    shadowWidget->setWindowTitle(i18n("Shadow"));
+    shadowWidget->setCanvas(canvas());
+    widgets.append(shadowWidget);
+
+    KoOpacityConfigWidget *opacityWidget = new KoOpacityConfigWidget(0);
+    opacityWidget->setWindowTitle(i18n("Shape Opacity"));
+    opacityWidget->setCanvas(canvas());
+    widgets.append(opacityWidget);
+
     return widgets;
 }
 
@@ -1213,6 +1257,10 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             shapeManager->selection()->deselectAll();
         select->select(shape, selectNextInStack ? false : true);
         repaintDecorations();
+        // tablet selection isn't precise and may lead to a move, preventing that
+        if (event->isTabletEvent()) {
+            return new NopInteractionStrategy(this);
+        }
         return new ShapeMoveStrategy(this, event->point);
     }
     return 0;
@@ -1243,7 +1291,7 @@ void DefaultTool::updateActions()
     action("object_order_raise")->setEnabled(enable);
     action("object_order_lower")->setEnabled(enable);
     action("object_order_back")->setEnabled(enable);
-    enable = (editableShapes.count () > 1) || (enable && canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize));
+    enable = (editableShapes.count () > 1) || (enable && canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
     action("object_align_horizontal_left")->setEnabled(enable);
     action("object_align_horizontal_center")->setEnabled(enable);
     action("object_align_horizontal_right")->setEnabled(enable);

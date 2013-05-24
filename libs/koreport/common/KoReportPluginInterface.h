@@ -21,12 +21,12 @@
 #ifndef KOREPORTPLUGININTERFACE_H
 #define KOREPORTPLUGININTERFACE_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <KoReportDesigner.h>
 #include <QGraphicsScene>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include "koreport_export.h"
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 class KService;
 class KoReportPluginInfo;
@@ -35,8 +35,7 @@ class KOREPORT_EXPORT KoReportPluginInterface : public QObject
 {
     Q_OBJECT
     public:
-        KoReportPluginInterface(QObject *parent, const QVariantList &args = QVariantList());
-        KoReportPluginInterface();
+        explicit KoReportPluginInterface(QObject *parent = 0, const QVariantList &args = QVariantList());
     
         virtual ~KoReportPluginInterface();
         

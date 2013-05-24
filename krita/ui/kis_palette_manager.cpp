@@ -31,6 +31,8 @@
 #include "kis_palette_manager.h"
 #include <QtGui>
 #include "klocale.h"
+#include <kmenu.h>
+#include <KoIcon.h>
 #include <kis_paintop_settings_widget.h>
 
 #include <KoToolManager.h>
@@ -51,6 +53,7 @@
 #include "KoResourceServerAdapter.h"
 #include "kis_paintop_preset.h"
 #include "kis_preset_chooser.h"
+#include <kconfiggroup.h>
 
 KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
     : QDialog(paintOpBox)
@@ -64,14 +67,12 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     m_allPresetsView = new KisPresetChooser(this);
     m_allPresetsView->showButtons(false);
     m_allPresetsView->showTaggingBar(false,false);
-    m_allPresetsView->setPresetFilter(KoID("dummy",""));
-    m_allPresetsView->setShowAll(true);
+    m_allPresetsView->enableContextMenu(false);
 
     m_palettePresetsView = new KisPresetChooser(this);
     m_palettePresetsView->showButtons(false);
     m_palettePresetsView->showTaggingBar(false,false);
-    m_palettePresetsView->setPresetFilter(KoID("dummy",""));
-    m_palettePresetsView->setShowAll(true);
+    m_palettePresetsView->enableContextMenu(false);
 
     /*LEFT COMPONENTS*/
     QFrame *HSeparator = new QFrame();
@@ -102,7 +103,37 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     QVBoxLayout *rightLayout = new QVBoxLayout();
     rightLayout->addWidget(new QLabel(i18n("Favorite Presets")));
     rightLayout->addWidget(m_palettePresetsView);
-    rightLayout->addWidget(m_removeButton);
+
+    /*RIGHT BOTTOM LAYOUT*/
+    QHBoxLayout *rightBottomLayout = new QHBoxLayout();
+    rightBottomLayout->addWidget(m_removeButton);
+    rightBottomLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    QToolButton* viewButton = new QToolButton();
+    viewButton->setPopupMode(QToolButton::InstantPopup);
+    rightBottomLayout->addWidget(viewButton);
+    rightLayout->addLayout(rightBottomLayout);
+
+    KMenu* menu = new KMenu(this);
+
+    QActionGroup *actionGroup = new QActionGroup(this);
+
+    KConfigGroup group(KGlobal::config(), "favoriteList");
+    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)group.readEntry("presetChooserViewMode", 0);
+    m_allPresetsView->setViewMode(mode);
+    m_palettePresetsView->setViewMode(mode);
+
+    QAction* action = menu->addAction(koIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::THUMBNAIL);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(koIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::DETAIL);
+    action->setActionGroup(actionGroup);
+
+    viewButton->setIcon(koIcon("view-choose"));
+    viewButton->setMenu(menu);
 
     /*MAIN LAYOUT*/
     QHBoxLayout *mainLayout = new QHBoxLayout();
@@ -178,8 +209,31 @@ void KisPaletteManager::showEvent(QShowEvent* e)
 
 void KisPaletteManager::updatePaletteView()
 {
-    m_palettePresetsView->setFilteredNames(m_resourceManager->favoritePresetList());
+    QStringList faves = m_resourceManager->favoritePresetList();
+    // this filters all the resources, making the view empty
+    // the palette view is a special case that basically uses all presets
+    // by virtue of using kis_preset_chooser even though it's only interested
+    // in up to ten of them. not sure if that warrants an 'empty' mode somewhere.
+    if (faves.isEmpty())faves.push_back("!!!!!!");
+    m_palettePresetsView->setFilteredNames(faves);
 }
 
+void KisPaletteManager::slotThumbnailMode()
+{
+    KConfigGroup group(KGlobal::config(), "favoriteList");
+    group.writeEntry("presetChooserViewMode", (int)KisPresetChooser::THUMBNAIL);
+
+    m_allPresetsView->setViewMode(KisPresetChooser::THUMBNAIL);
+    m_palettePresetsView->setViewMode(KisPresetChooser::THUMBNAIL);
+}
+
+void KisPaletteManager::slotDetailMode()
+{
+    KConfigGroup group(KGlobal::config(), "favoriteList");
+    group.writeEntry("presetChooserViewMode", (int)KisPresetChooser::DETAIL);
+
+    m_allPresetsView->setViewMode(KisPresetChooser::DETAIL);
+    m_palettePresetsView->setViewMode(KisPresetChooser::DETAIL);
+}
 
 #include "kis_palette_manager.moc"

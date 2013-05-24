@@ -62,8 +62,14 @@ public:
 
     static int totalRAM(); // MiB
 
+    /**
+     * @return a specific directory for the swapfile, if set. If not set, return an
+     * empty QString and use the default KDE directory.
+     */
+    QString swapDir();
+
 private:
-    Q_DISABLE_COPY(KisImageConfig);
+    Q_DISABLE_COPY(KisImageConfig)
 
 private:
     KConfigGroup m_config;

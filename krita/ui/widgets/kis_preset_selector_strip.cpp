@@ -23,42 +23,42 @@
 #include "KoResourceItemChooser.h"
 #include "kis_paintop_registry.h"
 
-#include <QtGui/QAbstractScrollArea>
-#include <QtGui/QMouseEvent>
-#include <QtCore/QTimer>
+#include <KoIcon.h>
+
+#include <QAbstractScrollArea>
+#include <QMouseEvent>
+#include <QTimer>
 
 KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
-                      : QWidget(parent)
+    : QWidget(parent)
 {
     setupUi(this);
     smallPresetChooser->showButtons(false);
     smallPresetChooser->setViewMode(KisPresetChooser::STRIP);
-    antiOOPHack = smallPresetChooser->findChild<KoResourceItemView*>();
-    antiOOPHack->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    antiOOPHack->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_resourceItemView = smallPresetChooser->itemChooser()->itemView();
+    m_resourceItemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_resourceItemView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    refresher = new QTimer(this);
-    refresher->setSingleShot(true);
+    m_refresher = new QTimer(this);
+    m_refresher->setSingleShot(true);
     
     /* This is an heuristic to fill smallPresetChooser with only the presets
      * for the paintop that comes selected by default: Pixel Brush. */
     const QString PIXEL_BRUSH_ID = "paintbrush";
-    smallPresetChooser->setPresetFilter(KoID(PIXEL_BRUSH_ID));
-    
-    const QString TRASH_ICON = "trash-empty";
-    deletePresetBtn->setIcon(SmallIcon(TRASH_ICON, KIconLoader::SizeSmall));
+
+    deletePresetBtn->setIcon(koIcon("trash-empty"));
     deletePresetBtn->setVisible(true);
-    
+
     connect(smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(prepareDeleteButton()));
     connect(smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(startRefreshingTimer()));
-    connect(refresher, SIGNAL(timeout()), this, SLOT(repaintDeleteButton()));
+    connect(m_refresher, SIGNAL(timeout()), this, SLOT(repaintDeleteButton()));
 }
 
 KisPresetSelectorStrip::~KisPresetSelectorStrip()
 {
-    delete refresher;
+    delete m_refresher;
 }
 
 void KisPresetSelectorStrip::showEvent(QShowEvent* event)
@@ -69,12 +69,6 @@ void KisPresetSelectorStrip::showEvent(QShowEvent* event)
 
 void KisPresetSelectorStrip::currentPaintopChanged(QString paintOpID)
 {
-    foreach (KoID paintOp, KisPaintOpRegistry::instance()->listKeys()) {
-        if (paintOp.id() == paintOpID) {
-            smallPresetChooser->setPresetFilter(paintOp);
-            break;
-        }
-    }
     deletePresetBtn->hide();
 }
 
@@ -82,7 +76,7 @@ void KisPresetSelectorStrip::startRefreshingTimer()
 {
     // Estimated time it takes for the ResourceView to scroll when a widget
     // that is only partially visible becomes visible
-    refresher->start(450);
+    m_refresher->start(450);
 }
 
 void KisPresetSelectorStrip::repaintDeleteButton()
@@ -94,15 +88,15 @@ void KisPresetSelectorStrip::repaintDeleteButton()
 
 void KisPresetSelectorStrip::prepareDeleteButton()
 {
-    const quint8 HEURISTIC_OFFSET = 3;  // This number is just conjured out of the nether to make
+    const quint8 HEURISTIC_OFFSET = 7;  // This number is just conjured out of the nether to make
                                         // things look good
     quint16 buttonWidth     = deletePresetBtn->width();
     quint16 buttonHeight    = deletePresetBtn->height();
-    quint16 columnWidth     = antiOOPHack->columnWidth(0);  // All columns assumed equal in width
-    quint16 currentColumn   = antiOOPHack->currentIndex().column();
-    quint16 rowHeight       = antiOOPHack->rowHeight(0);    // There is only 1 row in this widget
+    quint16 columnWidth     = m_resourceItemView->columnWidth(0);  // All columns assumed equal in width
+    quint16 currentColumn   = m_resourceItemView->currentIndex().column();
+    quint16 rowHeight       = m_resourceItemView->rowHeight(0);    // There is only 1 row in this widget
     quint16 yPos            = rowHeight - deletePresetBtn->height() + HEURISTIC_OFFSET;
-    quint16 xPos            = antiOOPHack->columnViewportPosition(currentColumn)
+    quint16 xPos            = m_resourceItemView->columnViewportPosition(currentColumn)
                               + columnWidth + HEURISTIC_OFFSET - buttonWidth;
     
     deletePresetBtn->setGeometry(xPos, yPos, buttonWidth, buttonHeight);
@@ -113,7 +107,7 @@ void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
 {
     // Deciding how far beyond the left margin (10 pixels) was an arbitrary decision
     QPoint beyondLeftMargin(-10, 0);
-    antiOOPHack->scrollTo(antiOOPHack->indexAt(beyondLeftMargin), QAbstractItemView::EnsureVisible);
+    m_resourceItemView->scrollTo(m_resourceItemView->indexAt(beyondLeftMargin), QAbstractItemView::EnsureVisible);
     
     deletePresetBtn->setVisible(false);
 }
@@ -121,16 +115,16 @@ void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
 void KisPresetSelectorStrip::on_rightScrollBtn_pressed()
 {
     // Deciding how far beyond the right margin to put the point (10 pixels) was an arbitrary decision
-    QPoint beyondRightMargin(10 + antiOOPHack->viewport()->width(), 0);
-    antiOOPHack->scrollTo(antiOOPHack->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
+    QPoint beyondRightMargin(10 + m_resourceItemView->viewport()->width(), 0);
+    m_resourceItemView->scrollTo(m_resourceItemView->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
     
     deletePresetBtn->setVisible(false);
 }
 
-void KisPresetSelectorStrip::on_deletePresetBtn_pressed()
+void KisPresetSelectorStrip::on_deletePresetBtn_clicked()
 {
-    KoResourceItemChooser* veryAntiOOPHack = smallPresetChooser->findChild<KoResourceItemChooser*>();
-    veryAntiOOPHack->slotButtonClicked(KoResourceItemChooser::Button_Remove);
+    KoResourceItemChooser* itemChooser = smallPresetChooser->itemChooser();
+    itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Remove);
     deletePresetBtn->hide();
     smallPresetChooser->updateViewSettings();
 }

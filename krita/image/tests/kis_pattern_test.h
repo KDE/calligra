@@ -19,7 +19,7 @@
 #ifndef KIS_PATTERN_TEST_H
 #define KIS_PATTERN_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPatternTest : public QObject
 {
@@ -27,6 +27,7 @@ class KisPatternTest : public QObject
 private slots:
 
     void testCreation();
+    void testRoundTripMd5();
 
 };
 

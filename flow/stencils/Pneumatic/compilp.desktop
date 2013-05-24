@@ -1,9 +1,23 @@
 [Desktop Entry]
 Name=compilp
+Name[bs]=compilp
+Name[ca]=compilp
+Name[ca@valencia]=compilp
+Name[da]=compilp
+Name[de]=Indirekte Steuerung über pneumatischer Treiber
 Name[el]=compilp
+Name[es]=compilp
+Name[et]=Pneumaatiline juhtimine
+Name[fr]=compilp
+Name[gl]=Orde indirecta pneumática
+Name[it]=compilp
+Name[kk]=compilp
 Name[nb]=indirekte kommando
+Name[nl]=compilp
+Name[pl]=compilp
 Name[pt]=compilp
 Name[pt_BR]=compilp
+Name[sk]=compilp
 Name[sv]=compilp
 Name[uk]=Непряма команда від пневматичного керування
 Name[x-test]=xxcompilpxx

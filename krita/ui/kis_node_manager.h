@@ -37,8 +37,7 @@ class KisDoc2;
 class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
-class KisLayerManager;
-class KisMaskManager;
+class KisActionManager;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -54,12 +53,32 @@ public:
     KisNodeManager(KisView2 * view,  KisDoc2 * doc);
     ~KisNodeManager();
 
-    void setup(KActionCollection * collection);
+    
+signals:
+
+    /// emitted whenever a node is selected.
+    void sigNodeActivated(KisNodeSP node);
+    
+    /// emitted whenever a different layer is selected.
+    void sigLayerActivated(KisLayerSP layer);
+    
+    /// for the layer box: this sets the current node in the layerbox
+    /// without telling the node manager that the node is activated,
+    /// preventing loops (I think...)
+    void sigUiNeedChangeActiveNode(KisNodeSP node);
+    
+public:
+    
+    void setup(KActionCollection * collection, KisActionManager* actionManager);
     void updateGUI();
 
-    /// Convenience function to get the active layer
+    /// Convenience function to get the active layer or mask
     KisNodeSP activeNode();
 
+    /// convenience function to get the active layer. If a mask is
+    /// active, it's parent layer is the active layer.
+    KisLayerSP activeLayer();
+    
     /// Get the paint device the user wants to paint on now
     KisPaintDeviceSP activePaintDevice();
 
@@ -79,28 +98,22 @@ public:
      */
     void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 
+public slots:
+
     /**
      * Explicitly activates \p node
      * The UI will be noticed that active node has been changed.
-     *
      * Both sigNodeActivated and sigUiNeedChangeActiveNode are emitted.
+     *
+     * WARNING: normally you needn't call this method manually. It is
+     * automatically called when a node is added to the graph. If you
+     * have some special cases when you need to activate a node, consider
+     * adding them to KisDummiesFacadeBase instead. Calling this method
+     * directly  should be the last resort.
      *
      * \see slotUiActivatedNode for comparison
      */
-    void activateNode(KisNodeSP node);
-
-    /// Get the class that manages the layer user interface
-    KisLayerManager * layerManager();
-
-    /// Get the class that manages the user interface for the masks
-    KisMaskManager * maskManager();
-
-signals:
-
-    void sigNodeActivated(KisNodeSP node);
-    void sigUiNeedChangeActiveNode(KisNodeSP node);
-
-public slots:
+    void slotNonUiActivatedNode(KisNodeSP node);
 
     /**
      * Activates \p node.
@@ -111,19 +124,38 @@ public slots:
      */
     void slotUiActivatedNode(KisNodeSP node);
 
-    void addNode(KisNodeSP node, KisNodeSP activeNode);
-    void insertNode(KisNodeSP node, KisNodeSP parent, int index);
-    void moveNode(KisNodeSP node, KisNodeSP activeNode);
+    /**
+     * Adds a node without searching appropriate position for it.
+     * You *must* ensure that the node is allowed to be added to
+     * the parent, otherwise you'll get an assert.
+     */
+    void addNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+
+    /**
+     * Moves a node without searching appropriate position for it.
+     * You *must* ensure that the node is allowed to be added to
+     * the parent, otherwise you'll get an assert.
+     */
+    void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+
+    void toggleIsolateMode(bool checked);
+    void slotUpdateIsolateModeAction();
+    void slotTryFinishIsolatedMode();
+
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString & node);
+    void createNode(const QString &node);
+    void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
     void nodeOpacityChanged(qreal opacity, bool finalChange);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode();
-    void removeNode(KisNodeSP node);
+    void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
+    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
+    void activateNextNode();
+    void activatePreviousNode();
 
     /**
      * move the active node up the nodestack.
@@ -148,14 +180,23 @@ public slots:
      * belonging to the current layer.
      */
     void nodeToBottom();
-private slots:
-    // Those slots are used to ensure that the node that was selected remains selected after a move
-    void aboutToMoveNode();
-    void nodeHasBeenMoved();
+    
+    void rotate(double radians);
+    void rotate180();
+    void rotateLeft90();
+    void rotateRight90();
 
+    void saveNodeAsImage();
+public:
+
+    // merges the active layer with the layer below it.
+    void mergeLayerDown();
+    
+    void shear(double angleX, double angleY);
+
+    void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
+    
 private:
-    void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
-
     /**
      * Scales opacity from the range 0...1
      * to the integer range 0...255
@@ -164,7 +205,6 @@ private:
 
     struct Private;
     Private * const m_d;
-    Q_PRIVATE_SLOT(m_d, void slotLayersChanged(KisGroupLayerSP))
 };
 
 #endif

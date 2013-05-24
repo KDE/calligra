@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KOCOMPOSITEO_GENERIC_H_
-#define _KOCOMPOSITEO_GENERIC_H_
+#ifndef _KOCOMPOSITEOP_GENERIC_H_
+#define _KOCOMPOSITEOP_GENERIC_H_
 
 #include "KoCompositeOpFunctions.h"
 #include "KoCompositeOpBase.h"
@@ -43,8 +43,8 @@ class KoCompositeOpGenericSC: public KoCompositeOpBase< Traits, KoCompositeOpGen
     static const qint32 alpha_pos   = Traits::alpha_pos;
     
 public:
-    KoCompositeOpGenericSC(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true)
-        : base_class(cs, id, description, category, userVisible) { }
+    KoCompositeOpGenericSC(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
+        : base_class(cs, id, description, category) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>
@@ -101,8 +101,8 @@ class KoCompositeOpGenericHSL: public KoCompositeOpBase< Traits, KoCompositeOpGe
     static const qint32 blue_pos  = Traits::blue_pos;
     
 public:
-    KoCompositeOpGenericHSL(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true)
-        : base_class(cs, id, description, category, userVisible) { }
+    KoCompositeOpGenericHSL(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
+        : base_class(cs, id, description, category) { }
     
 public:
     template<bool alphaLocked, bool allChannelFlags>
@@ -166,4 +166,4 @@ public:
     }
 };
 
-#endif // _KOCOMPOSITEO_GENERIC_H_
+#endif // _KOCOMPOSITEOP_GENERIC_H_

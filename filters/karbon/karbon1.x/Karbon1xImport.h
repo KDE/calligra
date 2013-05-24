@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,16 +20,13 @@
 #ifndef KARBON_IMPORT_H
 #define KARBON_IMPORT_H
 
-#include <KarbonDocument.h>
-
 #include <KoFilter.h>
 #include <KoXmlReader.h>
+#include <QVariant>
+#include <QTransform>
+#include <QStack>
 
-#include <QtCore/QVariant>
-#include <QtGui/QMatrix>
-
-class KoShape;
-class KoShapeContainer;
+class KoXmlWriter;
 
 class KarbonImport : public KoFilter
 {
@@ -47,35 +44,36 @@ protected:
     bool convert(const KoXmlDocument &);
     bool loadXML(const KoXmlElement& doc);
 
-    void loadGroup(KoShapeContainer * parent, const KoXmlElement &element);
-    void loadStyle(KoShape * shape, const KoXmlElement &element);
-    void loadCommon(KoShape * shape, const KoXmlElement &element);
-    void loadStroke(KoShape * shape, const KoXmlElement &element);
-    void loadFill(KoShape * shape, const KoXmlElement &element);
+    QString loadStyle(const KoXmlElement &element);
+    void loadCommon(const KoXmlElement &element, bool ignoreTransform = false);
+    QString loadStroke(const KoXmlElement &element);
+    QString loadFill(const KoXmlElement &element);
     QColor loadColor(const KoXmlElement &element);
     QVector<qreal> loadDashes(const KoXmlElement& element);
-    QBrush loadGradient(KoShape * shape, const KoXmlElement &element);
-    void loadPattern(KoShape * shape, const KoXmlElement &element);
+    QString loadGradient(const KoXmlElement &element);
+    void loadColorStops(const KoXmlElement &element);
+    QString loadPattern(const KoXmlElement &element);
 
-    KoShape * loadPath(const KoXmlElement &element);
-    KoShape * loadEllipse(const KoXmlElement &element);
-    KoShape * loadRect(const KoXmlElement &element);
-    KoShape * loadPolyline(const KoXmlElement &element);
-    KoShape * loadPolygon(const KoXmlElement &element);
-    KoShape * loadSinus(const KoXmlElement &element);
-    KoShape * loadSpiral(const KoXmlElement &element);
-    KoShape * loadStar(const KoXmlElement &element);
-    KoShape * loadImage(const KoXmlElement &element);
-    KoShape * loadText(const KoXmlElement &element);
+    void loadGroup(const KoXmlElement &element);
+    void loadPath(const KoXmlElement &element);
+    void loadEllipse(const KoXmlElement &element);
+    void loadRect(const KoXmlElement &element);
+    void loadPolyline(const KoXmlElement &element);
+    void loadPolygon(const KoXmlElement &element);
+    void loadSinus(const KoXmlElement &element);
+    void loadSpiral(const KoXmlElement &element);
+    void loadStar(const KoXmlElement &element);
+    void loadImage(const KoXmlElement &element);
+    void loadText(const KoXmlElement &element);
 
-    double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue);
-    int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue);
-    int nextZIndex();
-    KoShape * createShape(const QString &shapeID) const;
+    QString makeUnique(const QString &id);
 
 private:
-    KarbonDocument * m_document;
     QTransform m_mirrorMatrix;
+    KoXmlWriter *m_svgWriter;
+    QHash<QString, int> m_uniqueNames;
+    QString m_lastId;
+    QStack<QTransform> m_transformation;
 };
 
 #endif // KARBON_IMPORT_H

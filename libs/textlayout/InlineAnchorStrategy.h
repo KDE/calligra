@@ -26,22 +26,24 @@ class KoTextLayoutRootArea;
 class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
+class KoAnchorInlineObject;
 
 class InlineAnchorStrategy  : public AnchorStrategy
 {
 public:
-    InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
+    InlineAnchorStrategy(KoAnchorInlineObject *anchor, KoTextLayoutRootArea *rootArea);
     virtual ~InlineAnchorStrategy();
 
     virtual bool moveSubject();
 
 private:
 
-    bool countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout);
-    bool countVerticalPos(QPointF &newPosition, KoTextShapeData *data, QTextBlock &block, QTextLayout *layout);
-    KoTextAnchor *const m_anchor;
+    inline bool countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout);
+    inline bool countVerticalPos(QPointF &newPosition, KoTextShapeData *data, QTextBlock &block, QTextLayout *layout);
 
-    bool m_finished; // true if shape position was found
+    //check the border of the parent shape an move the shape back to have it inside the parent shape
+    inline void checkParentBorder(QPointF &newPosition);
+    KoAnchorInlineObject *m_anchorObject;
 };
 
 #endif /* INLINEANCHORSTRATEGY_H_ */

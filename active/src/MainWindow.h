@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,7 +22,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
+
+#include <kdeclarative.h>
 
 class QDeclarativeView;
 
@@ -30,15 +32,22 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(QWidget *parent = 0);
+    explicit MainWindow (QWidget* parent = 0);
     ~MainWindow();
 
-    void openFile(const QString &path);
+    void openFile (const QString& path);
+
 private:
-    QDeclarativeView *m_view;
+    QDeclarativeView* m_view;
+    KDeclarative kdeclarative;
+    QString documentPath;
 
 private slots:
-    void adjustWindowSize(QSize size);
+    void adjustWindowSize (QSize size);
+    void checkForAndOpenDocument();
+
+public Q_SLOTS:
+    void openFileDialog();
 };
 
 #endif // MAINWINDOW_H

@@ -24,11 +24,12 @@
 
 #include <KoOdf.h>
 #include <KoDocument.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
 class KoShapeSavingContext;
+class KoPAPart;
 class KoPAPage;
 class KoPAPageBase;
 class KoPAMasterPage;
@@ -39,14 +40,15 @@ class KoXmlWriter;
 class KoInlineTextObjectManager;
 
 /// Document class that stores KoPAPage and KoPAMasterPage objects
-class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase
+class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeBasedDocumentBase
 {
     Q_OBJECT
 public:
 
-    explicit KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
+    explicit KoPADocument(KoPart *part);
     virtual ~KoPADocument();
 
+    QPixmap generatePreview(const QSize& size);
     void paintContent( QPainter &painter, const QRect &rect);
 
     bool loadXML( const KoXmlDocument & doc, KoStore *store );
@@ -155,6 +157,15 @@ public:
      */
     virtual void removePage( KoPAPageBase * page );
 
+    /**
+     * Remove the given pages from the document
+     *
+     * This generates the command and adds the command that deletes the pages
+     *
+     * @param pages The list of pages that gets removed
+     */
+    virtual void removePages(QList<KoPAPageBase*> &pages);
+
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
 
@@ -199,13 +210,6 @@ public:
     KoPAPageBase * pageByShape( KoShape * shape ) const;
 
     /**
-     * Update all views this document is displayed on
-     *
-     * @param page specify a page to be updated, all views with this page as active page will be updated.
-     */
-    void updateViews(KoPAPageBase *page);
-
-    /**
      * Get the page type used in the document
      *
      * The default page type KoPageApp::Page is returned
@@ -219,6 +223,10 @@ public:
      */
     QPixmap pageThumbnail(KoPAPageBase* page, const QSize& size);
 
+    QImage pageThumbImage(KoPAPageBase* page, const QSize& size);
+
+    void emitUpdate(KoPAPageBase *page) {emit update(page);}
+
 public slots:
     /// reimplemented
     virtual void initEmpty();
@@ -227,11 +235,31 @@ signals:
     void shapeAdded(KoShape* shape);
     void shapeRemoved(KoShape* shape);
     void pageAdded(KoPAPageBase* page);
+
+    /// This is a general signal to tell you a page was removed
     void pageRemoved(KoPAPageBase* page);
 
-protected:
-    virtual KoView *createViewInstance( QWidget *parent ) = 0;
+    /// when page is removed this signal indicates you should replace it if it was active
+    void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
 
+    /**
+     * Update all views this document is displayed on
+     *
+     * @param page specify a page to be updated, all views with this page as active page will be updated.
+     */
+    void update(KoPAPageBase *page);
+
+    /**
+     * @brief Tells if an action is possible or not
+     *
+     * The actions are of Type KoPAAction
+     *
+     * @param actions bitwise or of which actions should be enabled/disabled
+     * @param possible new state of the actions
+     */
+    void actionsPossible(int actions, bool enable);
+
+protected:
     /**
      * Load the presentation declaration
      *
@@ -296,16 +324,6 @@ protected:
      * @param parent The command that will be used to delete the page
      */
     virtual void pageRemoved( KoPAPageBase * page, KUndo2Command * parent );
-
-    /**
-     * @brief Enables/Disables the given actions in all views
-     *
-     * The actions are of Type KoPAAction
-     *
-     * @param actions which should be enabled/disabled
-     * @param enable new state of the actions
-     */
-    void setActionEnabled( int actions, bool enable );
 
     /// Load the configuration
     void loadConfig();

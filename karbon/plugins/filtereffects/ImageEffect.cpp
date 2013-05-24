@@ -23,13 +23,13 @@
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <KLocale>
-#include <KMimeType>
-#include <QtCore/QRect>
-#include <QtCore/QBuffer>
-#include <QtGui/QPainter>
+#include <klocale.h>
+#include <kmimetype.h>
+#include <QRect>
+#include <QBuffer>
+#include <QPainter>
 
-#include <KDebug>
+#include <kdebug.h>
 
 ImageEffect::ImageEffect()
     : KoFilterEffect(ImageEffectId, i18n("Image"))

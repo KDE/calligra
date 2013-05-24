@@ -42,8 +42,8 @@ set(kformdesigner_LIBS
   kexiutils
   kexicore
   kexiextendedwidgets
+  ${CALLIGRADB_LIBS}
   ${KDE4_KDE3SUPPORT_LIBS}
-  ${KDE4_KPARTS_LIBS}
 )
 
 # enable to add signal/slot connections

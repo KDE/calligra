@@ -33,8 +33,9 @@
 #include <QBuffer>
 #include <KoFilterChain.h>
 #include <KoXmlReader.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <KoGenStyle.h>
+#include <KoGenStyles.h>
 
 class QLocale;
 class QDomElement;
@@ -66,6 +67,10 @@ enum autoFitStatus {
     autoFitUnUsed, autoFitOn, autoFitOff
 };
 
+enum MSOOXMLFilter {
+    DocxFilter, PptxFilter, XlsxFilter
+};
+
 class MSOOXML_EXPORT ParagraphBulletProperties
 {
 public:
@@ -74,11 +79,13 @@ public:
 
     void clear();
 
-    QString convertToListProperties() const;
+    QString convertToListProperties(KoGenStyles& mainStyles, MSOOXMLFilter filter = XlsxFilter);
 
     bool isEmpty() const;
 
     void setBulletChar(const QString& bulletChar);
+
+    void setPrefix(const QString& prefixChar);
 
     void setSuffix(const QString& suffixChar);
 
@@ -86,17 +93,33 @@ public:
 
     void setNumFormat(const QString& numFormat);
 
-    void setMargin(qreal margin);
+    void setMargin(const qreal margin);
 
-    void setIndent(qreal indent);
+    void setIndent(const qreal indent);
 
     void setPicturePath(const QString& picturePath);
-
-    void setBulletSize(const QSize& size);
 
     void setBulletFont(const QString& font);
 
     void setBulletColor(const QString& bulletColor);
+
+    void setStartValue(const QString& value);
+
+    void setBulletRelativeSize(const int size);
+
+    void setBulletSizePt(const qreal size);
+
+    void setFollowingChar(const QString& value);
+
+    void setTextStyle(const KoGenStyle& textStyle);
+
+    void setStartOverride(const bool startOverride);
+
+    QString startValue() const;
+
+    QString bulletRelativeSize() const;
+
+    QString bulletSizePt() const;
 
     QString bulletColor() const;
 
@@ -104,13 +127,17 @@ public:
 
     QString bulletFont() const;
 
+    QString indent() const;
+
+    QString margin() const;
+
+    QString followingChar() const;
+
+    KoGenStyle textStyle() const;
+
+    bool startOverride() const;
+
     void addInheritedValues(const ParagraphBulletProperties& properties);
-
-    void setBulletRelativeSize(int size);
-
-    QString bulletRelativeSize() const;
-
-    void setStartValue(const QString& value);
 
     int m_level;
 
@@ -123,14 +150,25 @@ private:
     QString m_bulletFont;
     QString m_bulletChar;
     QString m_numFormat;
+    QString m_prefix;
     QString m_suffix;
     QString m_align;
     QString m_indent;
     QString m_margin;
     QString m_picturePath;
     QString m_bulletColor;
-    QSize m_bulletSize;
+    QString m_followingChar;
     QString m_bulletRelativeSize;
+    QString m_bulletSize;
+
+    KoGenStyle m_textStyle;
+
+    // MSWord specific: Restart the numbering when this list style is
+    // used for the 1st time.  Otherwise don't restart in case any of the
+    // styles inheriting from the same abstract numbering definition was
+    // already used.  Let's ignore presence of this attribute in
+    // addInheritedValues.
+    bool m_startOverride;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.
@@ -350,16 +388,22 @@ MSOOXML_EXPORT QString columnName(uint column);
 MSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
 
 //! Returns calculated angle and xDiff, yDiff, caller has to apply these to style
-MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff,
-    bool flipH, bool flipV);
+MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff);
+
+//! Marker related utils
+MSOOXML_EXPORT QString defineMarkerStyle(KoGenStyles& mainStyles, const QString& markerType);
+
+MSOOXML_EXPORT qreal defineMarkerWidth(const QString &markerWidth, const qreal lineWidth);
 
 //! A helper allowing to buffer xml streams and writing them back later
-/*! This class is useful when information that has to be written in advance is based
-    on XML elements parsed later. In such case the information cannot be saved in one pass.
-    Example of this is paragraphs style name: is should be written to style:name attribute but
-    relevant XML elements (that we use for building the style) are appearing later.
-    So we first output created XML to a buffer, then save the parent element with the style name
-    and use KoXmlWriter::addCompleteElement() to redirect the buffer contents as a subelement.
+/*! This class is useful when information that has to be written in advance is
+    based on XML elements parsed later.  In such case the information cannot be
+    saved in one pass.  Example of this is paragraphs style name: is should be
+    written to style:name attribute but relevant XML elements (that we use for
+    building the style) are appearing later.  So we first output created XML to
+    a buffer, then save the parent element with the style name and use
+    KoXmlWriter::addCompleteElement() to redirect the buffer contents as a
+    subelement.
 
      Example use:
      @code
@@ -374,9 +418,11 @@ MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const 
      body->addAttribute("text:style-name", currentTextStyleName);
      body->addTextSpan(text);
      body->endElement();
-     // We are done with the buffered body writer, now release it and restore the original body writer.
-     // This inserts all the XML buffered by buf into the original body writer
-     // (internally using KoXmlWriter::addCompleteElement()).
+
+     // We are done with the buffered body writer, now release it and restore
+     // the original body writer.  This inserts all the XML buffered by buf
+     // into the original body writer (using KoXmlWriter::addCompleteElement()).
+
      body = buf.releaseWriter();
      @endcode */
 class MSOOXML_EXPORT XmlWriteBuffer
@@ -403,6 +449,13 @@ public:
              altered by the recent use of setWriter(). */
     KoXmlWriter* releaseWriter();
 
+    //! Releases the original writer set before using setWriter(KoXmlWriter*&).
+    /*! This inserts all the XML buffered by buffer into @a bkpXmlSnippet
+     @return the original writer set in setWriter();
+             this writer usually should be assigned back to the variable
+             altered by the recent use of setWriter(). */
+    KoXmlWriter* releaseWriter(QString& bkpXmlSnippet);
+
     //! @return the original writer set in setWriter(). Does not change the state of the buffer.
     /*! Use this method when you need to access the remembered writer without releasing it. */
     KoXmlWriter* originalWriter() const {
@@ -411,6 +464,12 @@ public:
 
     //! Clears this buffer without performing any output to the writer.
     void clear();
+
+    //! Returns true if the buffer is empty; otherwise returns false.
+    bool isEmpty() const {
+        return m_buffer.buffer().isEmpty();
+    }
+
 private:
     //! Internal, used in releaseWriter() and the destructor; Does not assert when there's nothing to release.
     KoXmlWriter* releaseWriterInternal();
@@ -418,6 +477,30 @@ private:
     QBuffer m_buffer;
     KoXmlWriter* m_origWriter;
     KoXmlWriter* m_newWriter;
+};
+
+//! The purpose of this class is to make sure the this->body variable is proper
+//! set back to what it was before even if one of the TRY_READ calls lead to
+//! us skipping out of this method. In that case we need to make sure to restore
+//! the body variable else things may later crash.
+//!
+//! FIXME refactor the XmlWriteBuffer and merge this hack in so we don't
+//! need to work-around at any place where it's used.
+template <typename T>
+class AutoRestore
+{
+public:
+    explicit AutoRestore(T** originalPtr)
+            : m_originalPtr(originalPtr), m_prevValue(*originalPtr) {
+    }
+    ~AutoRestore() {
+        if (m_originalPtr) {
+            *m_originalPtr = m_prevValue;
+        }
+    }
+private:
+    T** m_originalPtr;
+    T* m_prevValue;
 };
 
 } // Utils namespace

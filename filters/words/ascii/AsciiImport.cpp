@@ -25,6 +25,8 @@
 
 #include <QTextCodec>
 #include <QFile>
+#include <QTextDocument>
+#include <QTextCursor>
 
 #include <kdebug.h>
 #include <kpluginfactory.h>
@@ -37,10 +39,29 @@
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
+#include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
+#include <KoCharacterStyle.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoShapeSavingContext.h>
+#include <KoTextWriter.h>
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
+#include <KoTextDocumentLayout.h>
 
 #include "ImportDialog.h"
 
-#define MAXLINES 10000
+#include <KWDocument.h>
+#include <KWPage.h>
+#include <frames/KWTextFrameSet.h>
+
+// If defined then the output will be written to OpenDocument ODT rather then
+// accessing the Calligra Words API direct. Using the additional ODT-roundtrip
+// is slower then using the Calligra Words API direct.
+//#define OUTPUT_AS_ODT_FILE
 
 K_PLUGIN_FACTORY(AsciiImportFactory, registerPlugin<AsciiImport>();)
 K_EXPORT_PLUGIN(AsciiImportFactory("wordsasciiimportng", "calligrafilters"))
@@ -80,61 +101,52 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         return KoFilter::FileNotFound;
     }
 
+#ifdef OUTPUT_AS_ODT_FILE
+    
+#else
+    KoDocument* document = m_chain->outputDocument();
+    if (!document)
+        return KoFilter::StupidError;
+    KWDocument *outputDoc = qobject_cast<KWDocument*>(document);
+    outputDoc->setOutputMimeType(to);
+    //outputDoc->setSaveInBatchMode(true);
+
+    QPointer<KoUpdater> loadUpdater = outputDoc->progressUpdater()->startSubtask(2, "load");
+    loadUpdater->setRange(0, in.size());
+
+    QPointer<KoUpdater> layoutUpdater = outputDoc->progressUpdater()->startSubtask(3, "layout");
+#endif
+
     // try to read 100000 bytes so we can be quite sure the guessed encoding is correct.
+    // this code is inspired by the kate encoding guessing first try UTF-8
     QByteArray data = in.read(100000);
     in.seek(0);
-
-    // this code is inspired by the kate encoding guessing
-    // first try UTF-8
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     if (!checkEncoding(codec, data)) {
-        // then try to guess the encoding from the content
         KEncodingProber prober(KEncodingProber::Universal);
         prober.feed(data);
         kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
-        if (prober.confidence() > 0.5) {
+        if (prober.confidence() > 0.5)
             codec = QTextCodec::codecForName(prober.encoding());
-        }
         if (!codec || !checkEncoding(codec, data )) {
-            // then try the fallback ISO 8859-15
             codec = QTextCodec::codecForName("ISO 8859-15");
-            if (!checkEncoding(codec, data)) {
-                // if all failed use UTF-8
+            if (!checkEncoding(codec, data))
                 codec = QTextCodec::codecForName("UTF-8");
-                kWarning(30502) << "fallback to UTF-8 encoding";
-            }
         }
     }
 
     int paragraphStrategy = 0;
-
     if (!m_chain->manager()->getBatchMode()) {
         QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(codec->name(), QApplication::activeWindow());
-        if (!dialog) {
-            kError(30502) << "Dialog has not been created! Aborting!" << endl;
-            in.close();
-            return KoFilter::StupidError;
-        }
-        if (!dialog->exec()) {
-            kDebug(30502) << "Dialog was aborted! Aborting filter!"; // this isn't an error!
-            in.close();
-            return KoFilter::UserCancelled;
-        }
+        if (!dialog) { in.close(); return KoFilter::StupidError; }
+        if (!dialog->exec()) { in.close(); return KoFilter::UserCancelled; }
         codec = dialog->getCodec();
         paragraphStrategy = dialog->getParagraphStrategy();
     }
-
-    if (!codec) {
-        kError(30502) << "Could not create QTextCodec! Aborting" << endl;
-        return KoFilter::StupidError;
-    }
-
+    if (!codec) return KoFilter::StupidError;
     kDebug(30502) << "Charset used:" << codec->name();
 
-    QTextStream stream(&in);
-    stream.setCodec(codec);
-
-    //create output files
+#ifdef OUTPUT_AS_ODT_FILE
     KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
     if (!store || store->bad()) {
         kWarning(30502) << "Unable to open output file!";
@@ -169,158 +181,163 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     QString name(QString(QUrl::toPercentEncoding(styleName, "", " ")).replace('%', '_'));
 
     name = mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+#else
+    KoStyleManager *styleManager = outputDoc->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    KoParagraphStyle *p = styleManager->defaultParagraphStyle();
+    p->setFontFamily("dejavu sans mono");
+    p->setFontPointSize(10);
+    p->setFontStyleHint(QFont::TypeWriter);
+
+    outputDoc->appendPage();
+    QTextDocument *doc = outputDoc->mainFrameSet()->document();
+    //doc->setDefaultFont(p->font());
+
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
+    Q_ASSERT(lay);
+    lay->setBlockLayout(true);
+    connect(lay, SIGNAL(layoutProgressChanged(int)), layoutUpdater, SLOT(setProgress(int)));
+
+    QTextCursor cursor(doc);
+    cursor.beginEditBlock();
+
+    QTextCharFormat charFormat;
+    ((KoCharacterStyle*)p)->applyStyle(charFormat);
+    cursor.setCharFormat(charFormat);
+#endif
+
+    QTextStream stream(&in);
+    Q_ASSERT(codec);
+    stream.setCodec(codec);
 
     switch (paragraphStrategy) {
-    case 1:
-        convertSentence(stream, bodyWriter, name);
-        break;
-    case 2:
-        convertEmptyLine(stream, bodyWriter, name);
-        break;
-    default:
-        convertAsIs(stream, bodyWriter, name);
-        break;
+    case 1: { // Sentence: Line-break at the end of a sentence.
+        QString stoppingPunctuation(".!?");
+        QString skippingEnd(" \"')");
+        while (!stream.atEnd()) {
+            QString paragraph;
+            for (;;) {
+                const QString line = stream.readLine();
+                if (line.isEmpty())
+                    break;
+                paragraph += line + ' ';
+                int lastPos = line.length() - 1;
+                int maxCheck = lastPos >= 10 ? 10: lastPos + 1;
+                QChar lastChar;
+                // Skip a maximum of 10 quotes (or similar) at the end of the line
+                for (int i = 0; i < maxCheck; ++i, --lastPos) {
+                    lastChar = line[lastPos];
+                    if (lastPos == 0 || lastChar.isNull() || skippingEnd.indexOf(lastChar) == -1)
+                        break;
+                }
+                lastChar = line[lastPos];
+                if (lastChar.isNull())
+                    continue;
+                if (stoppingPunctuation.indexOf(lastChar) != -1)
+                    break;
+            }
+            if (!paragraph.isNull()) {
+                QString s = paragraph.simplified();
+#ifdef OUTPUT_AS_ODT_FILE
+                bodyWriter->startElement("text:p");
+                bodyWriter->addAttribute("text:style-name", styleName);
+                if (!s.isEmpty())
+                    bodyWriter->addTextSpan(s);
+                bodyWriter->endElement();
+#else
+                if (!s.isEmpty())
+                    cursor.insertText(s /*, charFormat*/);
+                cursor.insertBlock();
+                loadUpdater->setValue(stream.device()->pos());
+#endif
+            }
+        }
+    } break;
+    case 2: { // Empty Line: Line-break if the line is empty.  
+        while (!stream.atEnd()) {
+            QString paragraph;
+            do {
+                const QString line = stream.readLine();
+                if (line.isEmpty())
+                    break;
+                paragraph.append(line + ' ');
+            } while(true);
+            if (!paragraph.isNull()) {
+                QString s = paragraph.simplified();
+#ifdef OUTPUT_AS_ODT_FILE
+                bodyWriter->startElement("text:p");
+                bodyWriter->addAttribute("text:style-name", styleName);
+                if (!s.isEmpty())
+                    bodyWriter->addTextSpan(s);
+                bodyWriter->endElement();
+#else
+                if (!s.isEmpty()) {
+                    cursor.insertText(s /*, charFormat*/);
+                    cursor.insertBlock();
+                    loadUpdater->setValue(stream.device()->pos());
+                }
+#endif
+            }
+        }
+    } break;
+    default: { // As Is: Line-break at the end of line.
+        while (!stream.atEnd()) {
+            QString s = stream.readLine();
+#ifdef OUTPUT_AS_ODT_FILE
+            bodyWriter->startElement("text:p");
+            bodyWriter->addAttribute("text:style-name", styleName);
+            if (!s.isEmpty())
+                bodyWriter->addTextSpan(s);
+            bodyWriter->endElement();
+#else
+            if (!s.isEmpty())
+                cursor.insertText(s /*, charFormat*/);
+            cursor.insertBlock();
+            loadUpdater->setValue(stream.device()->pos());
+#endif
+        }
+    } break;
     }
 
+#ifdef OUTPUT_AS_ODT_FILE
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
-
+    
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
     odfStore.closeContentWriter();
 
-    //add manifest line for content.xml
     odfStore.manifestWriter()->addManifestEntry("content.xml", "text/xml");
     if (!mainStyles.saveOdfStylesDotXml(odfStore.store(), odfStore.manifestWriter())) {
         delete store;
         return KoFilter::CreationError;
     }
-
-    if (!createMeta(odfStore)) {
-        kWarning() << "Error while trying to write 'meta.xml'. Partition full?";
-        delete store;
-        return KoFilter::CreationError;
+    if (store->open("meta.xml")) {
+        KoStoreDevice dev(store);
+        KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
+        xmlWriter->startElement("office:meta");
+        xmlWriter->startElement("meta:generator");
+        xmlWriter->addTextNode(QString("Calligra %1").arg(CALLIGRA_VERSION_STRING));
+        xmlWriter->endElement();
+        xmlWriter->startElement("meta:creation-date");
+        xmlWriter->addTextNode(QDateTime::currentDateTime().toString(Qt::ISODate));
+        xmlWriter->endElement();
+        xmlWriter->endElement(); // office:meta
+        xmlWriter->endElement(); // root element
+        xmlWriter->endDocument();
+        delete xmlWriter;
+        if (store->close())
+            odfStore.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
     }
-
-
-    if ( !odfStore.closeManifestWriter() ) {
+    if (!odfStore.closeManifestWriter()) {
         kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
         delete store;
         return KoFilter::CreationError;
     }
-
     delete store;
+#else
+    cursor.endEditBlock();
+    lay->setBlockLayout(false);
+    lay->layout();
+#endif
+
     return KoFilter::OK;
-}
-
-void AsciiImport::convertAsIs(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
-{
-    while (!stream.atEnd()) {
-        QString line = stream.readLine();
-        if (!line.isNull()) {
-            bodyWriter->startElement("text:p");
-            bodyWriter->addAttribute("text:style-name", styleName);
-            if (!line.isEmpty())
-                bodyWriter->addTextSpan(line);
-            bodyWriter->endElement();
-        }
-    }
-}
-
-void AsciiImport::convertSentence(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
-{
-    QString stoppingPunctuation(".!?");
-    QString skippingEnd(" \"')");
-
-    while (!stream.atEnd()) {
-        QString paragraph;
-        for (;;) {
-            const QString line = stream.readLine();
-            if (line.isEmpty()) {
-                break;
-            }
-            paragraph.append(line);
-            paragraph += ' ';
-
-            int lastPos = line.length() - 1;
-            int maxCheck = lastPos >= 10 ? 10: lastPos + 1;
-            QChar lastChar;
-            // Skip a maximum of 10 quotes (or similar) at the end of the line
-            for (int i = 0; i < maxCheck; i++) {
-                lastChar = line[lastPos];
-                if (lastChar.isNull() || skippingEnd.indexOf(lastChar) == -1) {
-                    break;
-                }
-
-                lastPos--;
-            }
-
-            lastChar = line[lastPos];
-            if (lastChar.isNull())
-                continue;
-            else if (stoppingPunctuation.indexOf(lastChar) != -1)
-                break;
-        }
-
-        if (!paragraph.isNull()) {
-            bodyWriter->startElement("text:p");
-            bodyWriter->addAttribute("text:style-name", styleName);
-            QString s = paragraph.simplified();
-            if (!s.isEmpty())
-                bodyWriter->addTextSpan(s);
-            bodyWriter->endElement();
-        }
-    }
-}
-
-void AsciiImport::convertEmptyLine(QTextStream &stream, KoXmlWriter *bodyWriter, const QString &styleName)
-{
-    while (!stream.atEnd()) {
-        QString paragraph;
-        for (int line_no = 0; line_no < MAXLINES; ++line_no) {
-            const QString line = stream.readLine();
-            if (line.isEmpty()) {
-                break;
-            }
-            paragraph.append(line);
-            paragraph += ' ';
-        }
-
-        if (!paragraph.isNull()) {
-            bodyWriter->startElement("text:p");
-            bodyWriter->addAttribute("text:style-name", styleName);
-            QString s = paragraph.simplified();
-            if (!s.isEmpty())
-                bodyWriter->addTextSpan(s);
-            bodyWriter->endElement();
-        }
-    }
-}
-
-bool AsciiImport::createMeta(KoOdfWriteStore &store)
-{
-    if (!store.store()->open("meta.xml")) {
-        return false;
-    }
-
-    KoStoreDevice dev(store.store());
-    KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
-    xmlWriter->startElement("office:meta");
-
-    xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CALLIGRA_VERSION_STRING));
-    xmlWriter->endElement();
-
-    xmlWriter->startElement("meta:creation-date");
-    xmlWriter->addTextNode(QDateTime::currentDateTime().toString(Qt::ISODate));
-    xmlWriter->endElement();
-
-    xmlWriter->endElement();
-    xmlWriter->endElement(); // root element
-    xmlWriter->endDocument(); // root element
-    delete xmlWriter;
-    if (!store.store()->close()) {
-        return false;
-    }
-    store.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
-    return true;
 }

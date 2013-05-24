@@ -23,22 +23,23 @@
 
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
-#include <KoLineBorder.h>
 #include <KoPointerEvent.h>
 #include <KoPathPoint.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KarbonCurveFit.h>
+#include <KoCurveFit.h>
 #include <KoColorBackground.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoColor.h>
+#include <KoShapePaintingContext.h>
+#include <KoFillConfigWidget.h>
 
-#include <KAction>
-#include <KDebug>
-#include <KLocale>
-#include <QtGui/QPainter>
+#include <kaction.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <QPainter>
 
 #include <cmath>
 
@@ -83,7 +84,8 @@ void KarbonCalligraphyTool::paint(QPainter &painter,
 
     painter.setTransform(m_shape->absoluteTransformation(&converter) *
                       painter.transform());
-    m_shape->paint(painter, converter);
+    KoShapePaintingContext paintContext; //FIXME
+    m_shape->paint(painter, converter, paintContext);
 
     painter.restore();
 }
@@ -99,7 +101,7 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_isDrawing = true;
     m_pointCount = 0;
     m_shape = new KarbonCalligraphicShape(m_caps);
-    m_shape->setBackground(new KoColorBackground(canvas()->resourceManager()->backgroundColor().toQColor()));
+    m_shape->setBackground(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor()));
     //addPoint( event );
 }
 
@@ -327,7 +329,7 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed,
 
 void KarbonCalligraphyTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    useCursor(Qt::ArrowCursor);
+    useCursor(Qt::CrossCursor);
     m_lastShape = 0;
 }
 
@@ -340,9 +342,16 @@ void KarbonCalligraphyTool::deactivate()
     }
 }
 
-QWidget *KarbonCalligraphyTool::createOptionWidget()
+QList<QWidget *> KarbonCalligraphyTool::createOptionWidgets()
 {
     // if the widget don't exists yet create it
+    QList<QWidget *> widgets;
+
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    fillWidget->setWindowTitle(i18n("Fill"));
+    fillWidget->setCanvas(canvas());
+    widgets.append(fillWidget);
+
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
     connect(widget, SIGNAL(usePathChanged(bool)),
             this, SLOT(setUsePath(bool)));
@@ -400,8 +409,11 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
 
     // sync all parameters with the loaded profile
     widget->emitAll();
+    widget->setObjectName(i18n("Calligraphy"));
+    widget->setWindowTitle(i18n("Calligraphy"));
+    widgets.append(widget);
 
-    return widget;
+    return widgets;
 }
 
 void KarbonCalligraphyTool::setStrokeWidth(double width)

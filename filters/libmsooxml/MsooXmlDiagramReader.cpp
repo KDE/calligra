@@ -52,6 +52,11 @@ MsooXmlDiagramReaderContext::~MsooXmlDiagramReaderContext()
     delete m_context;
 }
 
+int MsooXmlDiagramReaderContext::shapeListSize() const
+{
+    return m_context->m_shapeList.size();
+}
+
 void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect &rect)
 {
     // The root layout node always inherits the canvas dimensions by default.

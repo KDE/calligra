@@ -23,6 +23,7 @@
 #include "wvlog.h"
 #include "wv2_export.h"
 #include "ustring.h"
+#include "word97_generated.h"
 
 namespace wvWare
 {
@@ -92,12 +93,6 @@ namespace wvWare
         unsigned int startCP;
         unsigned int limCP;
     };
-
-    namespace Word97
-    {
-        struct TAP;
-        struct PICF;
-    }
 
     /**
      * @internal

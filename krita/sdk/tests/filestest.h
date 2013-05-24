@@ -34,12 +34,13 @@
 #include <KoFilterManager.h>
 
 #include <kis_doc2.h>
+#include <KoPart.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <ktemporaryfile.h>
-#include <QtCore/qfileinfo.h>
+#include <QFileInfo>
 
 namespace TestUtil
 {
@@ -64,7 +65,9 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             }
 
             KisDoc2 doc;
+
             KoFilterManager manager(&doc);
+            manager.setBatchMode(true);
             QByteArray nativeFormat = doc.nativeFormatMimeType();
             KoFilter::ConversionStatus status;
             QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
@@ -76,9 +79,11 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             }
 
             QString id = doc.image()->colorSpace()->id();
-            if (id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16") {
+            if (id != "GRAYA" && id != "GRAYAU16" && id != "RGBA" && id != "RGBA16") {
                 dbgKrita << "Images need conversion";
-                doc.image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8());
+                doc.image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
+                                                    KoColorConversionTransformation::IntentAbsoluteColorimetric,
+                                                    KoColorConversionTransformation::NoOptimization);
             }
 
             KTemporaryFile tmpFile;
@@ -86,7 +91,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             tmpFile.open();
             doc.setBackupFile(false);
             doc.setOutputMimeType("image/png");
-            doc.saveAs("file://" + tmpFile.fileName());
+            doc.documentPart()->saveAs("file://" + tmpFile.fileName());
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);

@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -30,31 +30,31 @@ class QDataStream;
 class CADocumentInfo : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(DocumentType)
-    Q_PROPERTY(DocumentType type READ type NOTIFY typeChanged)
-    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+    Q_ENUMS (DocumentType)
+    Q_PROPERTY (DocumentType type READ type NOTIFY typeChanged)
+    Q_PROPERTY (QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY (QString path READ path NOTIFY pathChanged)
 
 public:
     enum DocumentType { Undefined, TextDocument, Spreadsheet, Presentation };
 
-    explicit CADocumentInfo(QObject* parent = 0);
-    explicit CADocumentInfo(DocumentType type, QString name, QString path, QObject* parent = 0);
+    explicit CADocumentInfo (QObject* parent = 0);
+    explicit CADocumentInfo (DocumentType type, QString name, QString path, QObject* parent = 0);
     DocumentType type() const;
     QString name() const;
     QString path() const;
     QStringList toStringList() const;
-    static CADocumentInfo *fromStringList(QStringList list);
+    static CADocumentInfo* fromStringList (QStringList list);
 
-    bool operator==(const CADocumentInfo &docInfo);
+    bool operator== (const CADocumentInfo& docInfo);
 
 private:
     DocumentType m_type;
     QString m_name;
     QString m_path;
 
-    static QString stringFromDocumentType(DocumentType type);
-    static DocumentType documentTypeFromString(QString type);
+    static QString stringFromDocumentType (DocumentType type);
+    static DocumentType documentTypeFromString (QString type);
     static QHash<DocumentType, QString> typeNameHash();
 
 signals:

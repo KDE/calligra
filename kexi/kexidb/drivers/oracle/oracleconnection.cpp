@@ -21,7 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "oracleconnection.h"
 #include "oracledriver.h"
 #include "oraclepreparedstatement.h"
-#include <KDebug>
+#include <kdebug.h>
 #include <string>
 
 using namespace KexiDB;
@@ -403,7 +403,7 @@ bool OracleConnection::drv_alterTableName
 Q_ULLONG OracleConnection::drv_lastInsertRowID()
 {
   KexiDBDrvDbg;
-  int res;
+  int res=0;
   try
   {
     d->rs=d->stmt->executeQuery
@@ -450,7 +450,7 @@ QString OracleConnection::serverErrorMsg()
 bool OracleConnection::drv_containsTable( const QString &tableName )
 {
   KexiDBDrvDbg;
-	bool success;
+	bool success=false;
 	return resultExists(QString("SELECT TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME LIKE %1")
 		.arg(driver()->escapeString(tableName).upper()), success) && success;
 }

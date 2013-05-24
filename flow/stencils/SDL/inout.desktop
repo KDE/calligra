@@ -1,8 +1,26 @@
 [Desktop Entry]
 Name=InOut
+Name[bg]=Вход/изход
+Name[bs]=UVan
+Name[ca]=InOut
+Name[ca@valencia]=InOut
+Name[da]=InOut
+Name[el]=InOut
+Name[es]=Entrada/Salida
+Name[et]=Sisend-väljund
+Name[fi]=Sisään ja ulos
+Name[fr]=InOut
+Name[gl]=Entrada e saída
+Name[it]=InOut
+Name[kk]=Кіріс-Шығыс
 Name[nb]=Inn/Ut
+Name[nds]=In/Ut
+Name[nl]=InOut
+Name[pl]=WeWy
 Name[pt]=EntradaSaída
 Name[pt_BR]=EntradaSaída
+Name[ru]=Ввод/вывод
+Name[sk]=InOut
 Name[sv]=In-ut
 Name[uk]=Вхід-вихід
 Name[x-test]=xxInOutxx

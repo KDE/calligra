@@ -30,40 +30,60 @@
 class FreehandStrokeTester : public utils::StrokeTester
 {
 public:
-    FreehandStrokeTester()
-        : StrokeTester("freehand", QSize(500, 500))
+    FreehandStrokeTester(const QString &presetFilename)
+        : StrokeTester("freehand", QSize(500, 500), presetFilename)
     {
     }
 
 protected:
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
-                                    KisPainter *painter) {
+                                    KisPainter *painter,
+                                    KisImageWSP image) {
+        Q_UNUSED(image);
 
-        return new FreehandStrokeStrategy(indirectPainting, resources, painter);
+        m_painterInfo =
+            new FreehandStrokeStrategy::PainterInfo(painter,
+                                                    new KisDistanceInformation());
+
+        return new FreehandStrokeStrategy(indirectPainting, resources, m_painterInfo, QLatin1String("Freehand Stroke"));
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources,
-                         KisPainter *painter) {
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {
+
+        Q_ASSERT(painter == m_painterInfo->painter);
+        Q_UNUSED(painter);
+
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 
         pi1 = KisPaintInformation(QPointF(200, 200));
         pi2 = KisPaintInformation(QPointF(300, 300));
 
-        image->addJob(
-            new FreehandStrokeJobStrategy::Data(resources->currentNode(),
-                                                painter, pi1, pi2,
-                                                m_dragDistance));
+        image->addJob(strokeId(),
+            new FreehandStrokeStrategy::Data(resources->currentNode(),
+                                             m_painterInfo, pi1, pi2));
     }
 
 private:
-    KisDistanceInformation m_dragDistance;
+    FreehandStrokeStrategy::PainterInfo *m_painterInfo;
 };
 
-void FreehandStrokeTest::testStroke()
+void FreehandStrokeTest::testAutobrushStroke()
 {
-    FreehandStrokeTester tester;
+    FreehandStrokeTester tester("autobrush_300px.kpp");
+    tester.test();
+}
+
+void FreehandStrokeTest::testHatchingStroke()
+{
+    FreehandStrokeTester tester("hatching_30px.kpp");
+    tester.test();
+}
+
+void FreehandStrokeTest::testColorSmudgeStroke()
+{
+    FreehandStrokeTester tester("colorsmudge_predefined.kpp");
     tester.test();
 }
 

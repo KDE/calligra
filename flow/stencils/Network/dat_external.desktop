@@ -1,10 +1,27 @@
 [Desktop Entry]
 Name=An external DAT drive
+Name[bg]=Външно устройство DAT
+Name[bs]=neki vanjski DAT drive
+Name[ca]=Un aparell extern DAT
+Name[ca@valencia]=Un aparell extern DAT
+Name[da]=Et eksternt DAT-drive
+Name[de]=Externes DAT-Laufwerk
 Name[el]=Εξωτερικό DAT drive
+Name[es]=Una unidad DAT externa
 Name[et]=Väline DAT-seade
+Name[fi]=Ulkoinen DAT-asema
+Name[fr]=Un lecteur DAT externe
+Name[gl]=Un lector de DAT externo
+Name[it]=Un lettore DAT esterno
+Name[kk]=Сыртқы DAT жетегі
 Name[nb]=Et ytre DAT-drev
+Name[nl]=Een extern DAT-station
+Name[pl]=Zewnętrzny napęd DAT
 Name[pt]=Unidade DAT externa
 Name[pt_BR]=Unidade DAT externa
+Name[ru]=Внешний привод DAT
+Name[sk]=Externá DAT mechanika
+Name[sl]=Zunanji pogon DAT
 Name[sv]=En extern DAT-enhet
 Name[uk]=Зовнішній пристрій зчитування DAT
 Name[x-test]=xxAn external DAT drivexx

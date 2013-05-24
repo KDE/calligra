@@ -1,11 +1,26 @@
 [Desktop Entry]
 Name=Intermediate-Event-Rule
+Name[bs]=Pravilo srednjeg događajaj
+Name[ca]=Intermedi-Esdeveniment-Regla
+Name[ca@valencia]=Intermedi-Esdeveniment-Regla
+Name[de]=Zwischenereignis - Bedingung
+Name[el]=Κανόνας-ενδιάμεσου-γεγονότος
 Name[es]=Regla del evento intermedio
 Name[et]=Vahesündmuse reegel
+Name[fr]=Règle d'évènement intermédiaire
+Name[gl]=Evento intermedio de regra
+Name[hu]=Közbülső-Esemény-Szabály
+Name[it]=Evento-intermedio-Regola
+Name[kk]=Аралық-оқиға-ереже
 Name[nb]=Mellomliggende-hendelse-regel
+Name[nl]=Tussenin-gebeurtenis-regel
+Name[pl]=Zasada-Zdarzenia-Pośredniego
 Name[pt]=Evento-Intermédio-Regra
 Name[pt_BR]=Regra do evento intermediário
+Name[ru]=Промежуточное событие - правило
+Name[sk]=Intermediate-Event-Rule
 Name[sv]=Mellanliggande-händelse-regel
 Name[uk]=Правило проміжної події
 Name[x-test]=xxIntermediate-Event-Rulexx
+Name[zh_CN]=中间事件-规则
 Name[zh_TW]=中介─事件─規則

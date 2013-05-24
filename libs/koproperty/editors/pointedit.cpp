@@ -21,8 +21,8 @@
 
 #include "pointedit.h"
 
-#include <KLocale>
-#include <QtCore/QPoint>
+#include <klocale.h>
+#include <QPoint>
 
 using namespace KoProperty;
 

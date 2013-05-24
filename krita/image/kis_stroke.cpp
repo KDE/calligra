@@ -25,6 +25,7 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
     : m_strokeStrategy(strokeStrategy),
       m_strokeInitialized(false),
       m_strokeEnded(false),
+      m_isCancelled(false),
       m_prevJobSequential(false)
 {
     m_initStrategy = m_strokeStrategy->createInitStrategy();
@@ -32,7 +33,12 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
     m_cancelStrategy = m_strokeStrategy->createCancelStrategy();
     m_finishStrategy = m_strokeStrategy->createFinishStrategy();
 
-    enqueue(m_initStrategy, m_strokeStrategy->createInitData());
+    if(!m_initStrategy) {
+        m_strokeInitialized = true;
+    }
+    else {
+        enqueue(m_initStrategy, m_strokeStrategy->createInitData());
+    }
 }
 
 KisStroke::~KisStroke()
@@ -47,9 +53,9 @@ KisStroke::~KisStroke()
     delete m_strokeStrategy;
 }
 
-void KisStroke::addJob(KisDabProcessingStrategy::DabProcessingData *data)
+void KisStroke::addJob(KisStrokeJobData *data)
 {
-    Q_ASSERT(!m_strokeEnded);
+    Q_ASSERT(!m_strokeEnded || m_isCancelled);
     enqueue(m_dabStrategy, data);
 }
 
@@ -66,6 +72,11 @@ KisStrokeJob* KisStroke::popOneJob()
     }
 
     return job;
+}
+
+QString KisStroke::name() const
+{
+    return m_strokeStrategy->name();
 }
 
 bool KisStroke::hasJobs() const
@@ -93,6 +104,7 @@ void KisStroke::endStroke()
  * 1) Not initialized, has jobs -- just clear the queue
  * 2) Initialized, has jobs, not finished -- clear the queue,
  *    enqueue the cancel job
+ * 5) Initialized, no jobs, not finished -- enqueue the cancel job
  * 3) Initialized, has jobs, finished -- clear the queue, enqueue
  *    the cancel job
  * 4) Initialized, no jobs, finished -- it's too late to cancel
@@ -104,7 +116,9 @@ void KisStroke::cancelStroke()
     if(!m_strokeInitialized) {
         clearQueue();
     }
-    else if(m_strokeInitialized && !m_jobsQueue.isEmpty()) {
+    else if(m_strokeInitialized &&
+            (!m_jobsQueue.isEmpty() || !m_strokeEnded)) {
+
         clearQueue();
         if(m_cancelStrategy) {
             m_jobsQueue.enqueue(
@@ -116,6 +130,7 @@ void KisStroke::cancelStroke()
     //     too late ...
     // }
 
+    m_isCancelled = true;
     m_strokeEnded = true;
 }
 
@@ -153,8 +168,14 @@ bool KisStroke::nextJobSequential() const
         m_jobsQueue.head()->isSequential() : false;
 }
 
-void KisStroke::enqueue(KisDabProcessingStrategy *strategy,
-                        KisDabProcessingStrategy::DabProcessingData *data)
+bool KisStroke::nextJobBarrier() const
+{
+    return !m_jobsQueue.isEmpty() ?
+        m_jobsQueue.head()->isBarrier() : false;
+}
+
+void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
+                        KisStrokeJobData *data)
 {
     // factory methods can return null, if no action is needed
     if(!strategy) {

@@ -34,13 +34,14 @@ class KoTextReference;
  */
 class KOTEXT_EXPORT KoTextLocator : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// constructor
     KoTextLocator();
     virtual ~KoTextLocator();
 
     /// reimplemented from super
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented from super
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
@@ -51,8 +52,6 @@ public:
 
     /// returns the text of the paragraph that is the first chapter before the index.
     QString chapter() const;
-    /// Return the block data of the chapter, useful for numbering info etc.  Returns 0 if nothing was found.
-    KoTextBlockData *chapterBlockData() const;
     /// return the page number on which the locator is placed.
     int pageNumber() const;
     /// return the position in the text document at which the locator is inserted.

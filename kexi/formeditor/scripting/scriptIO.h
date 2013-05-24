@@ -20,7 +20,7 @@
 #ifndef SCRIPTIO_H
 #define SCRIPTIO_H
 
-#include <qdom.h>
+#include <QDomDocument>
 
 class QObject;
 class Event;

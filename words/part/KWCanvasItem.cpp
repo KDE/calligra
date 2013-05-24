@@ -37,13 +37,14 @@
 #include <KoZoomHandler.h>
 
 // KDE + Qt includes
-#include <KDebug>
+#include <kdebug.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QStyleOptionGraphicsItem>
+
 
 
 KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)

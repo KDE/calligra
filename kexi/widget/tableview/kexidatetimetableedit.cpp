@@ -21,19 +21,19 @@
 
 #include "kexidatetimetableedit.h"
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qvariant.h>
-#include <qrect.h>
-#include <qpalette.h>
-#include <qcolor.h>
-#include <qfontmetrics.h>
-#include <qdatetime.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qlayout.h>
-#include <qtoolbutton.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QPainter>
+#include <QVariant>
+#include <QRect>
+#include <QPalette>
+#include <QColor>
+#include <QFontMetrics>
+#include <QDateTime>
+#include <QCursor>
+#include <QPoint>
+#include <QLayout>
+#include <QToolButton>
+#include <QClipboard>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -46,15 +46,16 @@
 
 #include <kexiutils/utils.h>
 
-KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiInputTableEdit(column, parent)
 {
     setObjectName("KexiDateTimeTableEdit");
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 
+    kDebug() << KexiDateTimeFormatter::inputMask(m_dateFormatter, m_timeFormatter);
     m_lineedit->setInputMask(
-        dateTimeInputMask(m_dateFormatter, m_timeFormatter));
+        KexiDateTimeFormatter::inputMask(m_dateFormatter, m_timeFormatter));
 }
 
 KexiDateTimeTableEdit::~KexiDateTimeTableEdit()
@@ -63,12 +64,8 @@ KexiDateTimeTableEdit::~KexiDateTimeTableEdit()
 
 void KexiDateTimeTableEdit::setValueInInternalEditor(const QVariant &value)
 {
-    if (value.isValid() && value.toDateTime().isValid())
-        m_lineedit->setText(
-            m_dateFormatter.dateToString(value.toDateTime().date()) + " " +
-            m_timeFormatter.timeToString(value.toDateTime().time()));
-    else
-        m_lineedit->setText(QString());
+    m_lineedit->setText(
+        KexiDateTimeFormatter::toString(m_dateFormatter, m_timeFormatter, value.toDateTime()));
 }
 
 void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
@@ -81,7 +78,7 @@ void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOl
         m_lineedit->setCursorPosition(add.length());
         return;
     }
-    setValueInInternalEditor(m_origValue);
+    setValueInInternalEditor(KexiDataItemInterface::originalValue());
     m_lineedit->setCursorPosition(0); //ok?
 }
 
@@ -98,9 +95,7 @@ void KexiDateTimeTableEdit::setupContents(QPainter *p, bool focused, const QVari
 #else
     y_offset = 0;
 #endif
-    if (val.toDateTime().isValid())
-        txt = m_dateFormatter.dateToString(val.toDateTime().date()) + " "
-              + m_timeFormatter.timeToString(val.toDateTime().time());
+    txt = KexiDateTimeFormatter::toString(m_dateFormatter, m_timeFormatter, val.toDateTime());
     align |= Qt::AlignLeft;
 }
 
@@ -108,7 +103,8 @@ bool KexiDateTimeTableEdit::valueIsNull()
 {
     if (textIsEmpty())
         return true;
-    return !stringToDateTime(m_dateFormatter, m_timeFormatter, m_lineedit->text()).isValid();
+    return !KexiDateTimeFormatter::isValid(
+               m_dateFormatter, m_timeFormatter, m_lineedit->text());
 }
 
 bool KexiDateTimeTableEdit::valueIsEmpty()
@@ -120,27 +116,31 @@ QVariant KexiDateTimeTableEdit::value()
 {
     if (textIsEmpty())
         return QVariant();
-    return stringToDateTime(m_dateFormatter, m_timeFormatter, m_lineedit->text());
+    return KexiDateTimeFormatter::fromString(
+               m_dateFormatter, m_timeFormatter, m_lineedit->text());
 }
 
 bool KexiDateTimeTableEdit::valueIsValid()
 {
-    return dateTimeIsValid(m_dateFormatter, m_timeFormatter, m_lineedit->text());
+    return KexiDateTimeFormatter::isValid(m_dateFormatter, m_timeFormatter, m_lineedit->text());
+}
+
+bool KexiDateTimeTableEdit::valueChanged()
+{
+    //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
 bool KexiDateTimeTableEdit::textIsEmpty() const
 {
-    return dateTimeIsEmpty(m_dateFormatter, m_timeFormatter, m_lineedit->text());
+    return KexiDateTimeFormatter::isEmpty(m_dateFormatter, m_timeFormatter, m_lineedit->text());
 }
 
 void KexiDateTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
     Q_UNUSED(visibleValue);
-    if (!value.isNull() && value.toDateTime().isValid())
-        qApp->clipboard()->setText(m_dateFormatter.dateToString(value.toDateTime().date()) + " "
-                                   + m_timeFormatter.timeToString(value.toDateTime().time()));
-    else
-        qApp->clipboard()->setText(QString());
+    qApp->clipboard()->setText(
+        KexiDateTimeFormatter::toString(m_dateFormatter, m_timeFormatter, value.toDateTime()));
 }
 
 void KexiDateTimeTableEdit::handleAction(const QString& actionName)
@@ -148,7 +148,8 @@ void KexiDateTimeTableEdit::handleAction(const QString& actionName)
     const bool alreadyVisible = m_lineedit->isVisible();
 
     if (actionName == "edit_paste") {
-        const QVariant newValue(stringToDateTime(m_dateFormatter, m_timeFormatter, qApp->clipboard()->text()));
+        const QVariant newValue(KexiDateTimeFormatter::fromString(
+            m_dateFormatter, m_timeFormatter, qApp->clipboard()->text()));
         if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
             emit editRequested();
             m_lineedit->clear();

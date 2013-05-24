@@ -74,7 +74,7 @@ namespace wvWare
 
     typedef enum
     {                          // GEL provided types...
-        msoblipERROR = 0,          // An error occured during loading
+        msoblipERROR = 0,          // An error occurred during loading
         msoblipUNKNOWN,            // An unknown blip type
         msoblipEMF,                // Windows Enhanced Metafile
         msoblipWMF,                // Windows Metafile
@@ -106,7 +106,7 @@ namespace wvWare
     class EscherHeader
     {
     public:
-        EscherHeader( OLEStreamReader* stream );
+        explicit EscherHeader( OLEStreamReader* stream );
         ~EscherHeader();
 
         bool isAtom();
@@ -132,7 +132,7 @@ namespace wvWare
     class FBSE
     {
     public:
-        FBSE( OLEStreamReader* stream );
+        explicit FBSE( OLEStreamReader* stream );
         ~FBSE();
 
         int recordSize();//size of the record without the Escher header

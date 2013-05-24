@@ -21,13 +21,13 @@
 #include "MorphologyEffect.h"
 #include "KoFilterEffect.h"
 
-#include <KNumInput>
-#include <KLocale>
+#include <knuminput.h>
+#include <klocale.h>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QRadioButton>
-#include <QtGui/QButtonGroup>
+#include <QGridLayout>
+#include <QLabel>
+#include <QRadioButton>
+#include <QButtonGroup>
 
 MorphologyEffectConfigWidget::MorphologyEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

@@ -25,13 +25,14 @@
 class KAction;
 
 class FlowDocument;
+class FlowPart;
 
 class FlowView : public KoPAView
 {
   Q_OBJECT
 
   public:
-    FlowView(FlowDocument* document, QWidget* parent);
+    FlowView(FlowPart *part, FlowDocument *document, QWidget *parent);
     ~FlowView();
 
     /// Returns the document

@@ -27,19 +27,21 @@
 #include <KoDocument.h>
 
 #include "kis_types.h"
-
 #include <krita_export.h>
+#include <kis_painting_assistant.h>
 
 class QString;
 
-class KoColorSpace;
 class KoColor;
-class KoShape;
+class KoColorSpace;
+class KoShapeBasedDocumentBase;
+class KoShapeLayer;
 
-class KoShapeControllerBase;
-class KisView2;
 class KisChildDoc;
-class KisUndoAdapter;
+class KisUndoStore;
+class KisPaintingAssistant;
+class KisView2;
+
 /**
  * The class that represents a Krita document containing content and
    settings.
@@ -60,16 +62,13 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = true);
+    KisDoc2();
     virtual ~KisDoc2();
 
 public:
-    // Overide KoDocument
-    virtual bool wantExportConfirmation() const {
-        return false;
-    }
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
+    virtual int supportedSpecialFormats() const;
 
     /// Unused
     virtual bool loadOdf(KoOdfReadStore & odfStore);
@@ -80,14 +79,11 @@ public:
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
     virtual QByteArray mimeType() const;
-    virtual QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
      * Draw the image embedded in another Calligra document
      */
     virtual void paintContent(QPainter& painter, const QRect& rect);
-
-    void showStartUpWidget(KoMainWindow* parent, bool alwaysShow);
 
     /// Generate a scaled-down pixmap of the image projection that fits in size
     virtual QPixmap generatePreview(const QSize& size);
@@ -100,7 +96,7 @@ public slots:
      */
     virtual void initEmpty();
 
-    void showErrorAndDie();
+    void setImageModified();
 
 public:
 
@@ -128,48 +124,56 @@ public:
      */
     void setCurrentImage(KisImageWSP image);
 
-    KisUndoAdapter * undoAdapter() const;
+    KisUndoStore* createUndoStore();
 
     /**
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeControllerBase * shapeController() const;
+    KoShapeBasedDocumentBase * shapeController() const;
 
-    KoShape * shapeForNode(KisNodeSP layer) const;
+    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 
     /**
-     * Add a node to the shape controller
+     * @return a list of all layers that are active in all current views
      */
-    KoShape * addShape(const KisNodeSP node);
+    vKisNodeSP activeNodes() const;
+
+    /**
+     * set the list of nodes that were marked as currently active
+     */
+    void setPreActivatedNode(KisNodeSP activatedNode);
+
+    /**
+     * @return the node that was set as active during loading
+     */
+    KisNodeSP preActivatedNode() const;
+
+    /**
+      *@return a list of all the assistants in all current views
+      */
+    QList<KisPaintingAssistant *> assistants();
+
+    /**
+     * @return a list of assistants loaded from a document
+     */
+    QList<KisPaintingAssistant *> preLoadedAssistants();
 
 signals:
 
     void sigLoadingFinished();
 
-public:
-
-    // Overide KoDocument
-    virtual KoView* createViewInstance(QWidget *parent);
 
 protected slots:
 
     void slotLoadingFinished();
-
-    // Overide KoDocument
-    virtual void openExistingFile(const KUrl& url);
-    virtual void openTemplate(const KUrl& url);
-
-private slots:
-
-    void undoIndexChanged(int idx);
 
 private:
 
     bool init();
 
 private:
-
+    class UndoStack;
     class KisDocPrivate;
     KisDocPrivate * const m_d;
 

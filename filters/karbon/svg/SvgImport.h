@@ -24,7 +24,7 @@
 
 #include <KoFilter.h>
 #include <KoXmlReaderForward.h>
-#include <QtCore/QVariant>
+#include <QVariant>
 
 class KoShape;
 class KarbonDocument;

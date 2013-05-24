@@ -13,6 +13,9 @@
 /* Defines if you Get Hot New Stuff support */
 #cmakedefine GHNS 1
 
+/* Defines if you have Nepomuk support */
+#cmakedefine NEPOMUK 1
+
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64
 
@@ -27,7 +30,15 @@
 
 /* Defines if you have GL (Mesa, OpenGL, ...) and Qt GL support */
 #cmakedefine HAVE_OPENGL 1
-/* This file contains all the paths that change when changing the installation prefix */
 
+/* Defines if we use lcms2 */
+#cmakedefine HAVE_LCMS2 1
+/* Defines if we use lcms2.4 */
+#cmakedefine HAVE_LCMS24 1
+
+/* Defines if we use KActivities */
+#cmakedefine HAVE_KACTIVITIES 1
+
+/* This file contains all the paths that change when changing the installation prefix */
 #define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"
 

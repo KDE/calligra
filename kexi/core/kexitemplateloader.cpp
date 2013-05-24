@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,7 +19,7 @@
 
 #include "kexitemplateloader.h"
 #include "kexi.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -27,12 +27,21 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kapplication.h>
 
-#include <qdir.h>
+#include <QDir>
+
+KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
+  : enabled(true)
+{
+}
+
+KexiTemplateCategoryInfo::~KexiTemplateCategoryInfo()
+{
+}
 
 KexiTemplateInfo::KexiTemplateInfo()
+  : enabled(true)
 {
 }
 
@@ -41,10 +50,17 @@ KexiTemplateInfo::~KexiTemplateInfo()
     qDeleteAll(autoopenObjects);
 }
 
-//static
-KexiTemplateInfo::List KexiTemplateLoader::loadListInfo()
+void KexiTemplateCategoryInfo::addTemplate(const KexiTemplateInfo& t)
 {
-    KexiTemplateInfo::List list;
+    KexiTemplateInfo _t = t;
+    _t.category = name;
+    m_templates.append(_t);
+}
+
+//static
+KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
+{
+    KexiTemplateInfoList list;
 // const QString subdir = QString(kapp->instanceName()) + "/templates";
 #ifdef __GNUC
 #ifdef __GNUC__
@@ -57,7 +73,7 @@ KexiTemplateInfo::List KexiTemplateLoader::loadListInfo()
     QString lang(KGlobal::locale()->language());
     QStringList dirs(KGlobal::dirs()->findDirs("data", subdir));
     while (true) {
-        foreach(QString dirname, dirs) {
+        foreach(const QString &dirname, dirs) {
             QDir dir(dirname + lang);
             if (!dir.exists())
                 continue;
@@ -67,7 +83,7 @@ KexiTemplateInfo::List KexiTemplateLoader::loadListInfo()
             }
             const QStringList templateDirs(dir.entryList(QDir::Dirs, QDir::Name));
             const QString absDirPath(dir.absolutePath() + '/');
-            foreach(QString templateDir, templateDirs) {
+            foreach(const QString &templateDir, templateDirs) {
                 if (templateDir == "." || templateDir == "..")
                     continue;
                 KexiTemplateInfo info = KexiTemplateLoader::loadInfo(absDirPath + templateDir);
@@ -114,11 +130,11 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     info.description = cg.readEntry("Description");
     const QString iconFileName(cg.readEntry("Icon"));
     if (!iconFileName.isEmpty())
-        info.icon = QPixmap(directory + '/' + iconFileName);
+        info.icon = KIcon(QPixmap(directory + '/' + iconFileName));
     if (info.icon.isNull())
-        info.icon = DesktopIcon(KexiDB::defaultFileBasedDriverIcon());
+        info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName());
     QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
-    foreach(QString autoopenObjectString, autoopenObjectsString) {
+    foreach(const QString &autoopenObjectString, autoopenObjectsString) {
         KexiProjectData::ObjectInfo* autoopenObject = new KexiProjectData::ObjectInfo();
         QStringList autoopenObjectNameSplitted(autoopenObjectString.split(':'));
         if (autoopenObjectNameSplitted.count() > 1) {

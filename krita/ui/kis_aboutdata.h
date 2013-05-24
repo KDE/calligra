@@ -24,6 +24,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <calligraversion.h>
+#include <KoIcon.h>
 
 KAboutData * newKritaAboutData()
 {
@@ -32,10 +33,11 @@ KAboutData * newKritaAboutData()
                                             CALLIGRA_VERSION_STRING,
                                             ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
-                                            ki18n("(c) 1999-2010 The Krita team.\n"),
+                                            ki18n("(c) 1999-2012 The Krita team.\n"),
                                             KLocalizedString(),
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");
+    aboutData->setProgramIconName(koIconName("calligrakrita"));
     aboutData->addAuthor(ki18n("Adrian Page"), KLocalizedString(), "Adrian.Page@tesco.net");
     aboutData->addAuthor(ki18n("Adam Celarek"), KLocalizedString(), "tuobaatirk@xibo.at");
     aboutData->addAuthor(ki18n("Alan Horkan"), KLocalizedString(), "", "http://www.openclipart.org");
@@ -43,7 +45,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Boudewijn Rempt"), ki18n("Maintainer"), "boud@valdyas.org", "http://www.valdyas.org/fading/index.cgi");
     aboutData->addAuthor(ki18n("David Revoy"), ki18n("Brush and palette set"), "", "http://http://www.davidrevoy.com/");
     aboutData->addAuthor(ki18n("Carsten Pfeiffer"), KLocalizedString(), "carpdjih@cetus.zrz.tu-berlin.de");
-    aboutData->addAuthor(ki18n("Casper Boemann"), KLocalizedString(), "cbr@boemann.dk");
+    aboutData->addAuthor(ki18n("C. Boemann"), KLocalizedString(), "cbo@boemann.dk");
     aboutData->addAuthor(ki18n("Clarence Dang"), KLocalizedString(), "dang@kde.org");
     aboutData->addAuthor(ki18n("Cyrille Berger"), KLocalizedString(), "cyb@lepi.org");
     aboutData->addAuthor(ki18n("Dirk Schoenberger"), KLocalizedString(), "dirk.schoenberger@sz-online.de");
@@ -74,13 +76,14 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Samy Lange"), KLocalizedString(), "enkithan@free.fr");
     aboutData->addAuthor(ki18n("Silvio Heinrich"), KLocalizedString(), "plassy@web.de");
     aboutData->addAuthor(ki18n("Sven Langkamp"), KLocalizedString(), "sven.langkamp@gmail.com");
-    aboutData->addAuthor(ki18n("Timothée Giet"), ki18n("BD Artist and template developer"), "Animtim", "www.animtim.fr.nf");
+    aboutData->addAuthor(ki18n("Timothée Giet"), ki18n("BD Artist, brush presets and templates"), "animtim@gmail.com", "http://www.timotheegiet.com/blog");
     aboutData->addAuthor(ki18n("Toshitaka Fujioka"), KLocalizedString(), "fujioka@kde.org");
     aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
     aboutData->addAuthor(ki18n("Tom Burdick"), KLocalizedString(), "tburdi1@uic.edu");
     aboutData->addAuthor(ki18n("Vera Lukman"), KLocalizedString(), "shicmap@gmail.com");
     aboutData->addAuthor(ki18n("Sander Koning"), KLocalizedString(), "sanderkoning@kde.nl");
     aboutData->addAuthor(ki18n("Andreas Lundin"), KLocalizedString(), "adde@update.uu.se");
+    aboutData->addAuthor(ki18n("Siddharth Sharma"), KLocalizedString(), "siddharth.kde@gmail.com");
     return aboutData;
 }
 

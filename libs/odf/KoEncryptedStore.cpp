@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thomas Schaap <thomas.schaap@kdemail.net>
-   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+   Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -76,6 +76,7 @@ KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode, const QB
 
     m_pZip = new KZip(filename);
     d->good = true;
+    d->localFileName = filename;
 
     init(mode, appIdentification);
 }
@@ -208,7 +209,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                 // Find some things about the checksum
                 if (xmlencnode.toElement().hasAttribute("checksum")) {
                     base64decoder.clear();
-                    encData.checksum = base64decoder.decode(QCA::SecureArray(xmlencnode.toElement().attribute("checksum").toAscii()));
+                    encData.checksum = base64decoder.decode(QCA::SecureArray(xmlencnode.toElement().attribute("checksum").toLatin1()));
                     if (xmlencnode.toElement().hasAttribute("checksum-type")) {
                         QString checksumType = xmlencnode.toElement().attribute("checksum-type");
                         if (checksumType == "SHA1") {
@@ -243,7 +244,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                     // Find some things about the encryption algorithm
                     if (xmlencattr.toElement().localName() == "algorithm" && xmlencattr.toElement().hasAttribute("initialisation-vector")) {
                         algorithmFound = true;
-                        encData.initVector = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("initialisation-vector").toAscii()));
+                        encData.initVector = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("initialisation-vector").toLatin1()));
                         if (xmlencattr.toElement().hasAttribute("algorithm-name") && xmlencattr.toElement().attribute("algorithm-name") != "Blowfish CFB") {
                             if (!unreadableErrorShown) {
                                 KMessage::message(KMessage::Warning, i18n("This document contains an unknown encryption method. Some parts may be unreadable."));
@@ -256,7 +257,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                     // Find some things about the key derivation
                     if (xmlencattr.toElement().localName() == "key-derivation" && xmlencattr.toElement().hasAttribute("salt")) {
                         keyDerivationFound = true;
-                        encData.salt = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("salt").toAscii()));
+                        encData.salt = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("salt").toLatin1()));
                         encData.iterationCount = 1024;
                         if (xmlencattr.toElement().hasAttribute("iteration-count")) {
                             encData.iterationCount = xmlencattr.toElement().attribute("iteration-count").toUInt();

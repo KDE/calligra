@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCOMPOSITEO_BASE_H_
-#define KOCOMPOSITEO_BASE_H_
+#ifndef KOCOMPOSITEOP_BASE_H_
+#define KOCOMPOSITEOP_BASE_H_
 
 #include <KoCompositeOp.h>
 #include "KoCompositeOpFunctions.h"
@@ -47,20 +47,21 @@ class KoCompositeOpBase : public KoCompositeOp
     typedef typename _CSTraits::channels_type channels_type;
     static const qint32 channels_nb = _CSTraits::channels_nb;
     static const qint32 alpha_pos   = _CSTraits::alpha_pos;
-    
+    static const qint32 pixel_size   = _CSTraits::pixelSize;
+
 public:
-    KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible)
-        : KoCompositeOp(cs, id, description, category, userVisible) { }
+    KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
+        : KoCompositeOp(cs, id, description, category) { }
 
     using KoCompositeOp::composite;
-    
+
     virtual void composite(const KoCompositeOp::ParameterInfo& params) const {
-        
+
         const QBitArray& flags           = params.channelFlags.isEmpty() ? QBitArray(channels_nb,true) : params.channelFlags;
         bool             allChannelFlags = params.channelFlags.isEmpty() || params.channelFlags == QBitArray(channels_nb,true);
         bool             alphaLocked     = (alpha_pos != -1) && !flags.testBit(alpha_pos);
         bool             useMask         = params.maskRowStart != 0;
-        
+
         if(useMask) {
             if(alphaLocked) {
                 if(allChannelFlags) { genericComposite<true,true,true> (params, flags); }
@@ -86,39 +87,43 @@ public:
 private:
     template<bool useMask, bool alphaLocked, bool allChannelFlags>
     void genericComposite(const KoCompositeOp::ParameterInfo& params, const QBitArray& channelFlags) const {
-        
+
         using namespace Arithmetic;
-        
+
         qint32        srcInc       = (params.srcRowStride == 0) ? 0 : channels_nb;
         channels_type opacity      = scale<channels_type>(params.opacity);
         quint8*       dstRowStart  = params.dstRowStart;
         const quint8* srcRowStart  = params.srcRowStart;
         const quint8* maskRowStart = params.maskRowStart;
-        
+
         for(qint32 r=0; r<params.rows; ++r) {
             const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
             channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
             const quint8*        mask = maskRowStart;
-            
+
             for(qint32 c=0; c<params.cols; ++c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : dst[alpha_pos];
                 channels_type mskAlpha = useMask ? scale<channels_type>(*mask) : unitValue<channels_type>();
-                
+
+                if (!allChannelFlags && dstAlpha == zeroValue<channels_type>()) {
+                    memset(dst, 0, pixel_size);
+                }
+
                 channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(
                     src, srcAlpha, dst, dstAlpha, mskAlpha, opacity, channelFlags
                 );
-                
+
                 if(alpha_pos != -1)
                     dst[alpha_pos] = alphaLocked ? dstAlpha : newDstAlpha;
-                
+
                 src += srcInc;
                 dst += channels_nb;
-                
+
                 if(useMask)
                     ++mask;
             }
-            
+
             srcRowStart  += params.srcRowStride;
             dstRowStart  += params.dstRowStride;
             maskRowStart += params.maskRowStride;
@@ -126,4 +131,4 @@ private:
     }
 };
 
-#endif // KOCOMPOSITEO_BASE_H_
+#endif // KOCOMPOSITEOP_BASE_H_

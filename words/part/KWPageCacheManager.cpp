@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Marijn Kruisselbrink <mkruisselbrink@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,104 +18,82 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QCache>
-#include <QRectF>
-#include <QImage>
-#include <QQueue>
-#include <QSize>
-#include <QObject>
-
 #include "KWPageCacheManager.h"
 
-KWPageCache::KWPageCache(QImage *img)
-    : cache(img)
-{
-    cache->fill(Qt::white);
-    //qDebug() << "Creating new cache with existing image" << this << "," << cache;
-}
+#include <QImage>
 
-KWPageCache::KWPageCache(int w, int h)
-    : allExposed(true)
+static const int MAX_TILE_SIZE = 1024;
+
+/*
+KWPageCache::KWPageCache(KWPageCacheManager *manager, QImage *img)
+    : m_manager(manager), cache(img), allExposed(true)
 {
-    cache = new QImage(w, h, QImage::Format_ARGB32);
-    cache->fill(Qt::white);
-    //qDebug() << "creating new cache with new image" << this << "," << cache;
+    cache->fill(0xffff);
+}*/
+
+KWPageCache::KWPageCache(KWPageCacheManager *manager, int w, int h)
+    : m_manager(manager), m_tilesx(1), m_tilesy(1), m_size(w, h), allExposed(true)
+{
+    if (w > MAX_TILE_SIZE || h > MAX_TILE_SIZE) {
+        m_tilesx = w / MAX_TILE_SIZE;
+        if (w % MAX_TILE_SIZE != 0) m_tilesx++;
+        m_tilesy = h / MAX_TILE_SIZE;
+        if (h % MAX_TILE_SIZE != 0) m_tilesy++;
+
+        for (int x = 0; x < m_tilesx; x++) {
+            for (int y = 0; y < m_tilesy; y++) {
+                int tilew = qMin(MAX_TILE_SIZE, w - x * MAX_TILE_SIZE);
+                int tileh = qMin(MAX_TILE_SIZE, h - y * MAX_TILE_SIZE);
+                cache.push_back(QImage(tilew, tileh, QImage::Format_RGB16));
+            }
+        }
+    } else {
+        cache.push_back(QImage(w, h, QImage::Format_RGB16));
+    }
 }
 
 
 KWPageCache::~KWPageCache()
 {
-    // DO NOT DELETE THE CACHE IMAGE
-    //qDebug() << "deleting cache " << this << "returning image" << cache;
 }
 
-KWPageCacheManager::KWPageCacheManager(const QSize &size, int cacheSize)
-    : m_cacheSize(cacheSize)
+KWPageCacheManager::KWPageCacheManager(int cacheSize)
+    : m_cache(cacheSize)
 {
-    //qDebug() << "creating new cache manager for size" << size << "creating " << cacheSize <<  "images";
-    for (int i = 0; i < cacheSize; ++i) {
-        QImage *img = new QImage(size, QImage::Format_ARGB32);
-        //qDebug() << "\tcreating new cache image" << img;
-        m_imageQueue.enqueue(img);
-    }
 }
 
 KWPageCacheManager::~KWPageCacheManager()
 {
-    //qDebug() << "delete page cache manager";
     clear();
 }
 
-KWPageCache *KWPageCacheManager::take(const KWPage page)
+KWPageCache *KWPageCacheManager::take(const KWPage &page)
 {
     KWPageCache *cache = 0;
     if (m_cache.contains(page)) {
         cache = m_cache.take(page);
-        //cache->cache->save(QString("cache_%1.png").arg((int)cache->cache));
     }
     return cache;
 }
 
-void KWPageCacheManager::insert(KWPage page, KWPageCache *cache)
+void KWPageCacheManager::insert(const KWPage &page, KWPageCache *cache)
 {
-    // first in, first out, let's keep it simple
-    if (m_cache.size() > m_cacheSize) {
-        KWPageCache *discard = m_cache.take(m_cache.keys().first());
-        m_imageQueue.enqueue(discard->cache);
-        delete discard;
-    }
-    m_cache.insert(page, cache);
+    QSize size = cache->m_size;
+    // make sure always at least two pages can be cached
+    m_cache.insert(page, cache, qMin(m_cache.maxCost() / 2, size.width() * size.height()));
 }
 
-KWPageCache *KWPageCacheManager::cache(QSize size)
+KWPageCache *KWPageCacheManager::cache(const QSize &size)
 {
-    //qDebug() << "creating new page cache";
     KWPageCache *cache = 0;
-    while (!cache && m_imageQueue.size() > 0) {
-        QImage *img = m_imageQueue.dequeue();
-        if (img->size() == size) {
-            cache = new KWPageCache(img);
-        }
-        else {
-            delete img;
-        }
-    }
     if (!cache){
-        cache = new KWPageCache(size.width(), size.height());
+        cache = new KWPageCache(this, size.width(), size.height());
     }
     return cache;
 }
 
 void KWPageCacheManager::clear()
 {
-    //qDebug() << "clearing page cache manager";
-    qDeleteAll(m_imageQueue);
-    m_imageQueue.clear();
-    foreach(KWPageCache *cache, m_cache.values()) {
-        delete cache->cache;
-        delete cache;
-    }
     m_cache.clear();
-
 }
 

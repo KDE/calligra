@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QCursor>
 #include <QStringList>
-#include <QtCore/QRectF>
+#include <QRectF>
 
 #include "flake_export.h"
 
@@ -35,7 +35,7 @@ class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
 class KoToolBasePrivate;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 class KAction;
 class QAction;
@@ -43,6 +43,9 @@ class QKeyEvent;
 class QWidget;
 class QPainter;
 class QInputMethodEvent;
+class QDragMoveEvent;
+class QDragLeaveEvent;
+class QDropEvent;
 
 /**
  * Abstract base class for all tools. Tools can create or manipulate
@@ -75,7 +78,7 @@ public:
      *
      * @param shapeController the new shape controller
      */
-    void updateShapeController(KoShapeControllerBase *shapeController);
+    void updateShapeController(KoShapeBasedDocumentBase *shapeController);
 
     /**
      * request a repaint of the decorations to be made. This triggers
@@ -109,13 +112,6 @@ public:
     QList<QWidget *> optionWidgets();
 
     /**
-     * Returns the internal selection option of this tool.
-     * Each tool can have a selection which is private to that tool and the specified shape that it comes with.
-     * The default returns 0.
-     */
-    virtual KoToolSelection *selection();
-
-    /**
      * Retrieves the entire collection of actions for the tool.
      */
     QHash<QString, KAction*> actions() const;
@@ -139,6 +135,14 @@ public:
      * @param event state and reason of this mouse or stylus press
      */
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+
+    /**
+     * Called when (one of) the mouse or stylus buttons is triple clicked.
+     * Implementors should call event->ignore() if they do not actually use the event.
+     * Default implementation ignores this event.
+     * @param event state and reason of this mouse or stylus press
+     */
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
 
     /**
      * Called when the mouse or stylus moved over the canvas.
@@ -236,6 +240,18 @@ public:
     QCursor cursor() const;
 
     /**
+     * Returns the internal selection object of this tool.
+     * Each tool can have a selection which is private to that tool and the specified shape that it comes with.
+     * The default returns 0.
+     */
+    virtual KoToolSelection *selection();
+
+    /**
+     * @returns true if the tool has selected data.
+     */
+    virtual bool hasSelection();
+
+    /**
      * copies the tools selection to the clipboard.
      * The default implementation is empty to aid tools that don't have any selection.
      * @see selection()
@@ -271,6 +287,31 @@ public:
      * @return QStringList containing the mimetypes that's supported by paste()
      */
     virtual QStringList supportedPasteMimeTypes() const;
+
+    /**
+     * Handle the dragMoveEvent
+     * A tool typically has one or more shapes selected and dropping into should do
+     * something meaningful for this specific shape and tool combination. For example
+     * dropping text in a text tool.
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+
+    /**
+     * Handle the dragLeaveEvent
+     * Basically just a noticification that the drag is no long relevant
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dragLeaveEvent(QDragLeaveEvent *event);
+
+    /**
+     * Handle the dropEvent
+     * A tool typically has one or more shapes selected and dropping into should do
+     * something meaningful for this specific shape and tool combination. For example
+     * dropping text in a text tool.
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dropEvent(QDropEvent *event, const QPointF &point);
 
     /**
      * @return A list of actions to be used for a popup.
@@ -324,6 +365,13 @@ public slots:
      * changes. An example is currently selected foreground color.
      */
     virtual void resourceChanged(int key, const QVariant &res);
+
+    /**
+     * This method is called whenever a property in the resource
+     * provider associated with the document this tool belongs to
+     * changes. An example is the handle radius
+     */
+    virtual void documentResourceChanged(int key, const QVariant &res);
 
     /**
      * This method just relays the given text via the tools statusTextChanged signal.

@@ -19,9 +19,9 @@
 
 #include "sizepolicyedit.h"
 
-#include <QtGui/QSizePolicy>
-#include <KLocale>
-#include <KGlobal>
+#include <QSizePolicy>
+#include <klocale.h>
+#include <kglobal.h>
 
 using namespace KoProperty;
 

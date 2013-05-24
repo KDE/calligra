@@ -48,7 +48,7 @@ public:
     /**
      * Constructor.
      */
-    KoCsvImportDialog(QWidget* parent);
+    explicit KoCsvImportDialog(QWidget *parent);
 
     /**
      * Destructor.
@@ -119,6 +119,9 @@ public:
      * Sets the thousands separator.
      */
     void setThousandsSeparator(const QString& separator);
+
+    QString delimiter() const;
+    void setDelimiter(const QString& delimit);
 
 protected slots:
     void returnPressed();

@@ -35,8 +35,10 @@
 
 protected:
 
+    enum FrameStartElement {FrameStart, EllipseStart, RectStart, LineStart, CustomStart, GroupStart};
+
     // v namespace:
-    KoFilter::ConversionStatus genericReader();
+    KoFilter::ConversionStatus genericReader(FrameStartElement startType);
     KoFilter::ConversionStatus read_oval();
     KoFilter::ConversionStatus read_line();
     KoFilter::ConversionStatus read_roundrect();
@@ -62,8 +64,6 @@ protected:
 
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
-
-    enum FrameStartElement {FrameStart, RectStart, LineStart, CustomStart, GroupStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
 
@@ -114,7 +114,17 @@ public:
         QString viewBox;
         QString shapePath;
         int extraFormulaIndex;
-        QString leftMargin, rightMargin, topMargin, bottomMargin;
+
+        QString internalMarginLeft;
+        QString internalMarginRight;
+        QString internalMarginTop;
+        QString internalMarginBottom;
+
+        QString marginLeft;
+        QString marginTop;
+        QString marginRight;
+        QString marginBottom;
+
         bool fitTextToShape, fitShapeToText;
 
         // Parameters for group shape situation

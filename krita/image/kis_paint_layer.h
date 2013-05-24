@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -100,7 +100,8 @@ public:
     QRect exactBounds() const;
 
     bool accept(KisNodeVisitor &v);
-    
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+
     /**
      * set the channelflags for locking certain channels (used by painting tools)
      * for this layer to the specified bit array.
@@ -124,7 +125,6 @@ public:
 
     /**
      * Returns the original pixels before masks have been applied.
-     * This is the same as the paintDevice() OVER driedPaintDevice();
      */
     KisPaintDeviceSP original() const;
 
@@ -148,7 +148,7 @@ public slots:
 
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

@@ -1,10 +1,25 @@
 [Desktop Entry]
 Name=variable nonlinear part
+Name[bs]=varijabilni nelinearni dio
+Name[ca]=part variable no lineal
+Name[ca@valencia]=part variable no lineal
+Name[da]=variable nonlinear part
 Name[el]=μεταβλητό μη γραμμικό μέρος
+Name[es]=parte no lineal variable
+Name[et]=Muutuja mittelineaarne komponent
+Name[fr]=variable nonlinear part
+Name[gl]=Compoñente non linear variábel
+Name[it]=componente non lineare variabile
+Name[kk]=айным-сызықты емес-бөлшек
 Name[nb]=variabel ikke-lineær enhet
+Name[nl]=variabel niet-lineair deel
+Name[pl]=zmienny moduł nieliniowy
 Name[pt]=parte não-linear variável
 Name[pt_BR]=componente não-linear variável
+Name[ru]=Переменная нелинейная часть
+Name[sk]=premenná nelineárna časť
 Name[sv]=variabel icke-linjär komponent
 Name[uk]=Нелінійно змінна деталь
 Name[x-test]=xxvariable nonlinear partxx
+Name[zh_CN]=可变非线性部分
 Name[zh_TW]=variable nonlinear part

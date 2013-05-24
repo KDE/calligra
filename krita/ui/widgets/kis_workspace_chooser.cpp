@@ -37,6 +37,7 @@
 #include "kis_view2.h"
 #include <QGridLayout>
 #include <klineedit.h>
+#include <kis_canvas_resource_provider.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -61,9 +62,13 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
+        painter->setBrush(option.palette.highlightedText());
+    }
+    else {
+        painter->setBrush(option.palette.text());
     }
 
-    painter->setPen(Qt::black);
+
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, workspace->name());      
 
 }
@@ -88,7 +93,6 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisView2 * view, QWidget* parent): QWid
     m_nameEdit->setClearButtonShown(true);
     
     QGridLayout* layout = new QGridLayout(this);
-    layout->setMargin(0);
     layout->addWidget(m_itemChooser, 0, 0, 1, 2);
     layout->addWidget(m_nameEdit, 1, 0, 1, 1);
     layout->addWidget(saveButton, 1, 1, 1, 1);
@@ -108,6 +112,7 @@ void KisWorkspaceChooser::slotSave()
 
     KisWorkspaceResource* workspace = new KisWorkspaceResource("");
     workspace->setDockerState(m_view->shell()->saveState());
+    m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
     QString saveLocation = rserver->saveLocation();
     QString name = m_nameEdit->text();
@@ -137,5 +142,7 @@ void KisWorkspaceChooser::resourceSelected(KoResource* resource)
     if(!m_view->shell()) {
         return;
     }
-    m_view->shell()->restoreState(static_cast<KisWorkspaceResource*>(resource)->dockerState());
+    KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
+    m_view->shell()->restoreState(workspace->dockerState());
+    m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
 }

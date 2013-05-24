@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/error.h>
-#include <kexidb/utils.h>
+#include <db/error.h>
+#include <db/utils.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>

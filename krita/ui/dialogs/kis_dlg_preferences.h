@@ -37,6 +37,7 @@
 #include "ui_wdgfullscreensettings.h"
 
 class KoID;
+class KoConfigAuthorPage;
 
 /**
  *  "General"-tab for preferences dialog
@@ -69,6 +70,10 @@ public:
     int undoStackSize();
     bool showOutlineWhilePainting();
 
+ private slots:
+
+    void tagBackendChange(bool on);
+
 };
 
 //=======================
@@ -95,7 +100,8 @@ private slots:
 
     void refillMonitorProfiles(const KoID & s);
     void refillPrintProfiles(const KoID & s);
-
+    void selectOcioConfigPath();
+    void enableOcioConfigPath(bool);
 public:
     void setDefault();
     WdgColorSettings  *m_page;
@@ -271,6 +277,7 @@ protected:
     GridSettingsTab *m_gridSettings;
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
+    KoConfigAuthorPage *m_authorSettings;
 
 protected slots:
 

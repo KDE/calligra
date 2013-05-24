@@ -247,33 +247,33 @@ static const char* const buttonwinding[]={
 
 
 #include "StyleButtonBox.h"
+#include <KoIcon.h>
 
 #include <klocale.h>
-#include <kicon.h>
 
-#include <QtGui/QPixmap>
-#include <QtGui/QToolButton>
-#include <QtGui/QToolTip>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QGridLayout>
+#include <QPixmap>
+#include <QToolButton>
+#include <QToolTip>
+#include <QButtonGroup>
+#include <QGridLayout>
 
 class StyleButtonBox::Private
 {
 public:
-    Private()
+    Private(int rows, int columns)
     : group(0)
-    , rowCount(1)
-    , columnCount(6)
+    , rowCount(rows)
+    , columnCount(columns)
     {}
 
     QButtonGroup* group;
-    int rowCount;
-    int columnCount;
+    const int rowCount;
+    const int columnCount;
 };
 
-StyleButtonBox::StyleButtonBox(QWidget* parent)
+StyleButtonBox::StyleButtonBox(QWidget* parent, int rows, int columns)
 : QWidget(parent)
-, d(new Private())
+, d(new Private(rows, columns))
 {
     //setMinimumSize(45, 70);
     setContentsMargins(0, 0, 0, 0);
@@ -284,7 +284,7 @@ StyleButtonBox::StyleButtonBox(QWidget* parent)
     // The button for no fill
     QToolButton* button = new QToolButton(this);
     //button->setIcon(QPixmap((const char **) buttonnone));
-    button->setIcon(KIcon("edit-delete"));
+    button->setIcon(koIcon("edit-delete"));
     button->setToolTip(i18nc("No stroke or fill", "None"));
     d->group->addButton(button, None);
 

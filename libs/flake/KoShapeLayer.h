@@ -40,12 +40,12 @@ public:
      * Constructor with custom model
      * @param model the custom modem
      */
-    KoShapeLayer(KoShapeContainerModel *model);
+    explicit KoShapeLayer(KoShapeContainerModel *model);
 
     /**
      * Empty implementation, as the layer itself is not visible
      */
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual bool hitTest(const QPointF &position) const;
     virtual QRectF boundingRect() const;
     virtual void saveOdf(KoShapeSavingContext & context) const;

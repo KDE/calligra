@@ -1,10 +1,25 @@
 [Desktop Entry]
 Name=Wireless Location Appliance
+Name[bs]=Bežični Uređaj za Lokaciju
+Name[ca]=Aplicació d'ubicació sense fils
+Name[ca@valencia]=Aplicació d'ubicació sense fils
+Name[da]=Wireless Location Appliance
 Name[el]=Συσκευή ασύρματης θέσης
+Name[es]=Dispositivo de localización inalámbrico
+Name[et]=Wireless Location Appliance
+Name[fr]=Wireless Location Appliance
+Name[gl]=Dispositivo de localización sen fíos
+Name[it]=Wireless Location Appliance
+Name[kk]=Орнын анықтау сымсыз аппараты
 Name[nb]=Trådløst lokaliseringsutstyr
+Name[nl]=Appliance voor draadloze locatie
+Name[pl]=Zastosowanie bezprzewodowego położenia
 Name[pt]=Módulo Localização Sem-Fios
-Name[pt_BR]=Aplicação de localização sem fio
+Name[pt_BR]=Aplicação de localização da rede sem fio
+Name[ru]=Устройство беспроводного расположения
+Name[sk]=Prostriedok bezdrôtovej polohy
 Name[sv]=Trådlös lokaliseringsutrustning
 Name[uk]=Пристрій бездротового розташування
 Name[x-test]=xxWireless Location Appliancexx
+Name[zh_CN]=无线网络位置器械
 Name[zh_TW]=無線位置裝置

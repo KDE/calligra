@@ -18,6 +18,7 @@
  */
 
 #include "MsooXmlDrawingTableStyleReader.h"
+#include "MsooXmlThemesReader.h"
 
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
@@ -36,15 +37,12 @@
 
 #include <QString>
 
-#define MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-
 using namespace MSOOXML;
 
 MsooXmlDrawingTableStyleReader::MsooXmlDrawingTableStyleReader(KoOdfWriters* writers)
 : MsooXmlCommonReader(writers)
 , m_context(0)
 , m_currentStyle(0)
-, m_currentBorder()
 , m_currentTableStyleProperties()
 {
 }
@@ -81,7 +79,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read(MsooXmlReaderCon
     KoFilter::ConversionStatus result = read_tblStyleLst();
     Q_ASSERT(result == KoFilter::OK);
 
-    return KoFilter::OK;
+    return result;
 }
 
 #undef CURRENT_EL
@@ -98,10 +96,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tblStyle)
             ELSE_WRONG_FORMAT
         }
@@ -136,12 +134,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
 {
     READ_PROLOGUE
-
     m_currentStyle = new DrawingTableStyle;
 
     QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(styleId)
-
     while(!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -622,7 +618,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
     const QXmlStreamAttributes attrs(attributes());
 
     m_currentColor = QColor();
-    m_referredFontName = QString();
+    m_referredFontName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     while (!atEnd()) {
@@ -640,13 +636,13 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
         }
     }
 
-    TRY_READ_ATTR(b)
-    TRY_READ_ATTR(i)
+    TRY_READ_ATTR_WITHOUT_NS(b)
+    TRY_READ_ATTR_WITHOUT_NS(i)
     if (b == "on") {
-        m_currentTextStyle.addProperty("svg:font-weight", "bold");
+        m_currentTextStyle.addProperty("fo:font-weight", "bold");
     }
     if (i == "on") {
-        m_currentTextStyle.addProperty("svg:font-style", "italic");
+        m_currentTextStyle.addProperty("fo:font-style", "italic");
     }
     if (m_currentColor.isValid()) {
         m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
@@ -871,78 +867,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideH()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL ln
-KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
-{
-    READ_PROLOGUE2(Table_ln)
-
-    QXmlStreamAttributes attrs = attributes();
-
-    m_currentBorder = KoBorder::BorderData();
-
-    //compound line type
-    TRY_READ_ATTR_WITHOUT_NS(cmpd)
-    //double lines
-    if( cmpd.isEmpty() || cmpd == "sng" ) {
-        m_currentBorder.style = KoBorder::BorderSolid;
-    }
-    //single line
-    else if (cmpd == "dbl") {
-        m_currentBorder.style = KoBorder::BorderDouble;
-    }
-    //thick thin double lines
-    else if (cmpd == "thickThin") {
-        //FIXME it seem we don't support this properly. Use solid for now.
-        m_currentBorder.style = KoBorder::BorderDouble;
-    }
-    //thin thick double lines
-    else if (cmpd == "thinThick") {
-        //FIXME it doesn't seem we support this properly.
-        m_currentBorder.style = KoBorder::BorderDouble;
-    }
-    //thin thick thin triple lines
-    else if (cmpd == "tri") {
-        //NOTE: There is not triple in ODF
-        m_currentBorder.style = KoBorder::BorderSolid;
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(w) //width
-    m_currentBorder.width = EMU_TO_POINT(w.toDouble());
-
-    while(!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(solidFill)) {
-                TRY_READ(solidFill);
-                m_currentBorder.style = KoBorder::BorderSolid;
-                m_currentBorder.color = m_currentColor;
-            }
-            else if (QUALIFIED_NAME_IS(prstDash)) {
-                attrs = attributes();
-                //TODO find out how other colors are handled
-                m_currentBorder.color = Qt::black;
-                TRY_READ_ATTR_WITHOUT_NS(val)
-                //TODO support other dash types. Make it its own function.
-                if (val == "dash") {
-                    m_currentBorder.style = KoBorder::BorderDashed;
-                }
-                else if(val == "dashDot") {
-                    m_currentBorder.style = KoBorder::BorderDashDotPattern;
-                }
-                else if(val == "dot") {
-                    m_currentBorder.style = KoBorder::BorderDotted;
-                }
-            }
-            SKIP_UNKNOWN
-//             ELSE_WRONG_FORMAT
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
 #define CURRENT_EL fill
 /*
  Parent elements:
@@ -989,11 +913,5 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
     READ_EPILOGUE
 }
 
-#define blipFill_NS "a"
+#include "MsooXmlDrawingMLSharedImpl.h"
 
-#include <MsooXmlCommonReaderImpl.h>
-
-#define DRAWINGML_NS "a"
-#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
-
-#include <MsooXmlCommonReaderDrawingMLImpl.h>

@@ -40,8 +40,6 @@ struct KisGLTexturesInfo {
 
     GLint format;
     GLint type;
-
-    QRect imageRect;
 };
 
 inline QRect stretchRect(const QRect &rc, int delta)
@@ -52,12 +50,17 @@ inline QRect stretchRect(const QRect &rc, int delta)
 class KisTextureTile
 {
 public:
+    enum FilterMode {
+        NearestFilterMode,
+        BilinearFilterMode,
+        TrilinearFilterMode
+    };
+
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                   const GLvoid *fillData);
+                   const GLvoid *fillData, FilterMode mode);
     ~KisTextureTile();
 
     void update(const KisTextureTileUpdateInfo &updateInfo);
-    void drawPoints();
 
     inline QRect tileRectInImagePixels() {
         return m_tileRectInImagePixels;
@@ -70,7 +73,11 @@ public:
     inline QRect textureRectInImagePixels() {
         return m_textureRectInImagePixels;
     }
-
+    
+    inline QRectF tileRectInTexturePixels() {
+        return m_tileRectInTexturePixels;
+    }
+    
 private:
     void repeatStripes(const KisTextureTileUpdateInfo &updateInfo);
 
@@ -83,7 +90,7 @@ private:
 
     const KisGLTexturesInfo *m_texturesInfo;
 
-    Q_DISABLE_COPY(KisTextureTile);
+    Q_DISABLE_COPY(KisTextureTile)
 };
 
 

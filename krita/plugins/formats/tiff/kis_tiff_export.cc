@@ -28,6 +28,7 @@
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -63,7 +64,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     const KoColorSpace* cs = output->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
@@ -75,12 +76,13 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     if (cs->colorModelId() == CMYKAColorModelID) {
         kdb->optionswdg->alpha->setChecked(false);
+        kdb->optionswdg->alpha->setEnabled(false);
     }
-
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::UserCancelled;
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::UserCancelled;
+        }
     }
-
     KisTIFFOptions options = kdb->options();
 
     if ((type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2) { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
@@ -95,7 +97,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image;
+    KisImageSP image;
 
     if (options.flatten) {
         image = new KisImage(0, output->image()->width(), output->image()->height(), output->image()->colorSpace(), "");
@@ -103,7 +105,6 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
         KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*output->image()->projection()));
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), "projection", OPACITY_OPAQUE_U8, pd));
         image->addNode(KisNodeSP(l.data()), image->rootLayer().data());
-        l->setDirty();
     } else {
         image = output->image();
     }
@@ -111,12 +112,13 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     image->refreshGraph();
     image->lock();
 
-    KisTIFFConverter ktc(output, output->undoAdapter());
+    KisTIFFConverter ktc(output);
     /*    vKisAnnotationSP_it beginIt = image->beginAnnotations();
         vKisAnnotationSP_it endIt = image->endAnnotations();*/
     KisImageBuilder_Result res;
     if ((res = ktc.buildFile(url, image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
+        image->unlock();
         return KoFilter::OK;
     }
     image->unlock();

@@ -24,8 +24,8 @@
 #include <KoViewConverter.h>
 
 
-KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, const QCursor & cursor) :
-    KisToolShape(canvas, cursor), m_dragStart(0, 0), m_dragEnd(0, 0)
+KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor) :
+    KisToolShape(canvas, cursor), m_dragStart(0, 0), m_dragEnd(0, 0), m_type(type)
 {
 }
 
@@ -41,22 +41,29 @@ void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolRectangleBase::deactivate()
 {
     updateArea();
+    KisToolShape::deactivate();
 }
-
 
 void KisToolRectangleBase::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton,
+                          Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier)) {
 
-        if (nodePaintAbility() == NONE)
-            return;
-
+        if (m_type == PAINT) {
+            if (!nodeEditable() || nodePaintAbility() == NONE) {
+                return;
+            }
+        } else {
+            if (!selectionEditable()) {
+                return;
+            }
+        }
         setMode(KisTool::PAINT_MODE);
         m_dragStart = m_dragCenter = m_dragEnd = convertToPixelCoord(event);
     }
     else {
-        KisToolPaint::mousePressEvent(event);
+        KisToolShape::mousePressEvent(event);
     }
 }
 
@@ -97,7 +104,7 @@ void KisToolRectangleBase::mouseMoveEvent(KoPointerEvent *event)
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
     else {
-        KisToolPaint::mouseMoveEvent(event);
+        KisToolShape::mouseMoveEvent(event);
     }
 }
 
@@ -107,12 +114,10 @@ void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
         setMode(KisTool::HOVER_MODE);
 
         updateArea();
-        setCurrentNodeLocked(true);
         finishRect(QRectF(m_dragStart, m_dragEnd));
-        setCurrentNodeLocked(false);
     }
     else {
-        KisToolPaint::mouseReleaseEvent(event);
+        KisToolShape::mouseReleaseEvent(event);
     }
 }
 
@@ -122,7 +127,7 @@ void KisToolRectangleBase::paintRectangle(QPainter& gc, const QRect&)
     Q_ASSERT(canvas() && currentImage());
 
     QPainterPath path;
-    path.addRect(QRectF(pixelToView(m_dragStart), pixelToView(m_dragEnd)));
+    path.addRect(pixelToView(QRectF(m_dragStart, m_dragEnd).toRect()));
     paintToolOutline(&gc, path);
 }
 
@@ -130,7 +135,7 @@ void KisToolRectangleBase::updateArea() {
     QRectF bound;
     bound.setTopLeft(m_dragStart);
     bound.setBottomRight(m_dragEnd);
-    canvas()->updateCanvas(convertToPt(bound.normalized()));
+    canvas()->updateCanvas(convertToPt(bound.normalized()).adjusted(-100, -100, +200, +200));
 }
 
 #include "kis_tool_rectangle_base.moc"

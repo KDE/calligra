@@ -1,8 +1,25 @@
 [Desktop Entry]
 Name=Moving head
+Name[bs]=Pomjerajuća glava
+Name[ca]=Cap en moviment
+Name[ca@valencia]=Cap en moviment
+Name[cs]=Pohyblivá hlava
+Name[da]=Moving head
+Name[de]=Bewegter Kopf
+Name[el]=Κινούμενη κεφαλή
+Name[es]=Cabeza móvil
+Name[et]=Liikuvpea
+Name[fr]=Moving head
+Name[gl]=Foco en movemento
+Name[it]=Testa mobile
+Name[kk]=Жылжымалы бастиек
 Name[nb]=Bevegelig lys
+Name[nl]=Bewegende kop
+Name[pl]=Ruchoma głowica
 Name[pt]=Foco movimento
 Name[pt_BR]=Movendo a cabeça
+Name[ru]=Движение вперёд
+Name[sk]=Pohyblivá hlava
 Name[sv]=Rörligt ljus
 Name[uk]=Рухома голівка
 Name[x-test]=xxMoving headxx

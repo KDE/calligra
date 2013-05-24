@@ -1,11 +1,26 @@
 [Desktop Entry]
 Name=Small Extension Node
+Name[bg]=Малък разширителен възел
+Name[bs]=Mali čvor proširenja
+Name[ca]=Node petit d'extensió
+Name[ca@valencia]=Node petit d'extensió
+Name[da]=Small Extension Node
+Name[de]=Kleiner Erweiterungsknoten
 Name[el]=Κόμβος μικρής επέκτασης
+Name[es]=Nodo de pequeña extensión
 Name[et]=Väike laiendussõlm
+Name[fr]=Small Extension Node
+Name[gl]=Nodo de pequena extensión
+Name[hu]=Kis kiterjesztés csomópont
+Name[it]=Nodo di estensione piccolo
+Name[kk]=Шағын кеңейтілген түйін
 Name[nb]=Liten utvidelsesnode
 Name[nl]=Kleine uitbreiding geleding
+Name[pl]=Mały węzeł rozszerzenia
 Name[pt]=Nó Extensão Pequeno
 Name[pt_BR]=Nó de extensão pequeno
+Name[ru]=Узел малого расширения
+Name[sk]=Malý rozširujúci uzol
 Name[sv]=Liten utökningsnod
 Name[uk]=Малий розширений вузол
 Name[x-test]=xxSmall Extension Nodexx

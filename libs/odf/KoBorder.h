@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2009 Inge wallin <inge@lysator.liu.se>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,9 +27,12 @@
 #include "koodf_export.h"
 
 #include <QColor>
+#include <QPen>
 #include <QSharedData>
+#include <QMetaType>
 
 #include "KoXmlReaderForward.h"
+#include "KoGenStyle.h"
 
 class KoGenStyle;
 class KoBorderPrivate;
@@ -49,7 +53,22 @@ class KOODF_EXPORT KoBorder
 {
 public:
 
-    /// The type of border.  Note that some of the border types are legacies from the old Words format.
+    // Names of the border sides.
+    //
+    // The "rect" we refer to below is the rectangle around the object
+    // with the border. This could be a page, a cell, a paragraph, etc.
+    enum BorderSide {
+        TopBorder = 0, ///< References the border at the top of the rect
+        LeftBorder,    ///< References the border at the left side of the rect
+        BottomBorder,  ///< References the border at the bottom of the rect
+        RightBorder,   ///< References the border at the right side of the rect
+        TlbrBorder, ///< References the border from top left corner to bottom right corner of cell
+        BltrBorder  ///< References the border from bottom left corner to top right corner of cell
+    };
+
+    /// Names of the different types of borders.
+    //
+    // Note that some of the border types are legacies from the old Words format.
     enum BorderStyle {
         BorderNone, ///< no border. This value forces the computed value of 'border-width' to be '0'.
         BorderDotted,   ///< The border is a series of dots.
@@ -61,21 +80,28 @@ public:
         BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas. (old words type)
         BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas. (old words type)
 
+        BorderDashedLong,    ///< Dashed single border with long spaces
+        BorderTriple,    ///< Triple lined border
+        BorderSlash,    ///< slash border
+        BorderWave,    ///< wave border
+        BorderDoubleWave,    ///< double wave border
+
         // words legacy
-        BorderDashDotPattern,
-        BorderDashDotDotPattern
+        BorderDashDot,
+        BorderDashDotDot
     };
 
     /// Holds data about one border line.
     struct KOODF_EXPORT BorderData {
         BorderData();
         BorderStyle  style; ///< The border style. (see KoBorder::BorderStyle)
-        qreal width; ///< The thickness of the border, or 0 if there is no border
-        QColor color; ///< The border Color
-        /// In case of style being 'double' the thickness of the inner border line
-        qreal innerWidth;
-        /// In case of style being 'double' the space between the inner and outer border lines
         qreal spacing;
+
+        QPen innerPen;
+        QPen outerPen;
+
+        /// Compare the border data with another one
+        bool operator==(const BorderData &other) const;
     };
 
 
@@ -92,97 +118,45 @@ public:
     bool operator==(const KoBorder &other) const;
     bool operator!=(const KoBorder &other) const { return !operator==(other); }
 
-    void setLeftBorderStyle(BorderStyle style);
-    BorderStyle leftBorderStyle() const;
-    void setLeftBorderColor(const QColor &color);
-    QColor leftBorderColor() const;
-    void setLeftBorderWidth(qreal width);
-    qreal leftBorderWidth() const;
-    void setLeftInnerBorderWidth(qreal width);
-    qreal leftInnerBorderWidth() const;
-    void setLeftBorderSpacing(qreal width);
-    qreal leftBorderSpacing() const;
+    void setBorderStyle(BorderSide side, BorderStyle style);
+    BorderStyle borderStyle(BorderSide side) const;
+    void setBorderColor(BorderSide side, const QColor &color);
+    QColor borderColor(BorderSide side) const;
+    void setBorderWidth(BorderSide side, qreal width);
+    qreal borderWidth(BorderSide side) const;
+    void setInnerBorderWidth(BorderSide side, qreal width);
+    qreal innerBorderWidth(BorderSide side) const;
+    void setBorderSpacing(BorderSide side, qreal width);
+    qreal borderSpacing(BorderSide side) const;
 
-    void setTopBorderStyle(BorderStyle style);
-    BorderStyle topBorderStyle() const;
-    void setTopBorderColor(const QColor &color);
-    QColor topBorderColor() const;
-    void setTopBorderWidth(qreal width);
-    qreal topBorderWidth() const;
-    void setTopInnerBorderWidth(qreal width);
-    qreal topInnerBorderWidth() const;
-    void setTopBorderSpacing(qreal width);
-    qreal topBorderSpacing() const;
+    BorderData borderData(BorderSide side) const;
+    void setBorderData(BorderSide side, const BorderData &data);
 
-    void setRightBorderStyle(BorderStyle style);
-    BorderStyle rightBorderStyle() const;
-    void setRightBorderColor(const QColor &color);
-    QColor rightBorderColor() const;
-    void setRightBorderWidth(qreal width);
-    qreal rightBorderWidth() const;
-    void setRightInnerBorderWidth(qreal width);
-    qreal rightInnerBorderWidth() const;
-    void setRightBorderSpacing(qreal width);
-    qreal rightBorderSpacing() const;
-
-    void setBottomBorderStyle(BorderStyle style);
-    BorderStyle bottomBorderStyle() const;
-    void setBottomBorderColor(const QColor &color);
-    QColor bottomBorderColor() const;
-    void setBottomBorderWidth(qreal width);
-    qreal bottomBorderWidth() const;
-    void setBottomInnerBorderWidth(qreal width);
-    qreal bottomInnerBorderWidth() const;
-    void setBottomBorderSpacing(qreal width);
-    qreal bottomBorderSpacing() const;
-
-    void setTlbrBorderStyle(BorderStyle style);
-    BorderStyle tlbrBorderStyle() const;
-    void setTlbrBorderColor(const QColor &color);
-    QColor tlbrBorderColor() const;
-    void setTlbrBorderWidth(qreal width);
-    qreal tlbrBorderWidth() const;
-    void setTlbrInnerBorderWidth(qreal width);
-    qreal tlbrInnerBorderWidth() const;
-    void setTlbrBorderSpacing(qreal width);
-    qreal tlbrBorderSpacing() const;
-
-    void setTrblBorderStyle(BorderStyle style);
-    BorderStyle trblBorderStyle() const;
-    void setTrblBorderColor(const QColor &color);
-    QColor trblBorderColor() const;
-    void setTrblBorderWidth(qreal width);
-    qreal trblBorderWidth() const;
-    void setTrblInnerBorderWidth(qreal width);
-    qreal trblInnerBorderWidth() const;
-    void setTrblBorderSpacing(qreal width);
-    qreal trblBorderSpacing() const;
-
-    BorderData leftBorderData() const;
-    BorderData topBorderData() const;
-    BorderData rightBorderData() const;
-    BorderData bottomBorderData() const;
-    BorderData tlbrBorderData() const;
-    BorderData trblBorderData() const;
+    bool hasBorder() const;
+    bool hasBorder(BorderSide side) const;
 
     /**
      * Load the style from the element
      *
      * @param style  the element containing the style to read from
+     * @return true when border attributes were found
      */
-    void loadOdf(const KoXmlElement &style);
-
-    void saveOdf(KoGenStyle &style) const;
+    bool loadOdf(const KoXmlElement &style);
+    void saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type = KoGenStyle::DefaultType) const;
 
 
     // Some public functions used in other places where borders are handled.
     // Example: KoParagraphStyle
     // FIXME: These places should be made to use KoBorder instead.
-    static BorderStyle odfBorderStyle(const QString &borderstyle);
+    static BorderStyle odfBorderStyle(const QString &borderstyle, bool *converted = 0);
     static QString odfBorderStyleString(BorderStyle borderstyle);
+    static QString msoBorderStyleString(BorderStyle borderstyle);
 
 private:
     QSharedDataPointer<KoBorderPrivate> d;
 };
+
+Q_DECLARE_METATYPE(KoBorder)
+
 
 #endif

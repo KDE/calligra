@@ -38,13 +38,13 @@ namespace RtfReader
 	    if ( value == 30 ) {
 		m_propertyType = QVariant::String;
 	    } else if ( value == 3 ) {
-		m_propertyType == QVariant::Int;
+		m_propertyType = QVariant::Int;
 	    } else if ( value == 5 ) {
-		m_propertyType == QVariant::Double;
+		m_propertyType = QVariant::Double;
 	    } else if ( value == 64 ) {
-	      	m_propertyType == QVariant::Date;
+	      	m_propertyType = QVariant::Date;
 	    } else if ( value == 11 ) {
-		m_propertyType == QVariant::Bool;
+		m_propertyType = QVariant::Bool;
 	    } else {
 		qDebug() << "unhandled value type in UserPropsDestination:" << value;
 	    }

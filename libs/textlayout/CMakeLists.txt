@@ -4,15 +4,16 @@ add_subdirectory( tests )
 
 ########### next target ###############
 set(textlayout_LIB_SRCS
+    KoTextLayoutCellHelper.cpp
     KoTextLayoutArea.cpp
     KoTextLayoutArea_paint.cpp
     KoTextLayoutEndNotesArea.cpp
     KoTextLayoutTableArea.cpp
+    KoTextLayoutNoteArea.cpp
     KoTextLayoutRootArea.cpp
     KoTextLayoutRootAreaProvider.cpp
     KoTextDocumentLayout.cpp
     ListItemsHelper.cpp
-    KoStyleThumbnailer.cpp
     KoTextShapeContainerModel.cpp
     RunAroundHelper.cpp
     KoTextLayoutObstruction.cpp
@@ -24,7 +25,9 @@ set(textlayout_LIB_SRCS
     InlineAnchorStrategy.cpp
     AnchorStrategy.cpp
     ToCGenerator.cpp
-    ToCDocumentLayout.cpp
+    DummyDocumentLayout.cpp
+    IndexGeneratorManager.cpp
+    KoStyleThumbnailer.cpp
 )
 
 
@@ -45,11 +48,11 @@ install(TARGETS textlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(
     FILES
     KoTextDocumentLayout.h
-    KoStyleThumbnailer.h
     KoTextLayoutArea.h
     KoTextLayoutRootArea.h
     KoTextShapeData.h
     KoPointedAt.h
+    KoStyleThumbnailer.h
     textlayout_export.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

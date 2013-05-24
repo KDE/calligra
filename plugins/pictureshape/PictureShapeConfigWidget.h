@@ -22,10 +22,11 @@
 
 #include <KoShapeConfigWidgetBase.h>
 #include <kurl.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class PictureShape;
-class KoImageSelectionWidget;
+class KFileWidget;
+class KJob;
 
 class PictureShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -45,7 +46,20 @@ public:
 
 private:
     PictureShape *m_shape;
-    KoImageSelectionWidget *m_selectionWidget;
+    KFileWidget *m_fileWidget;
+};
+
+class LoadWaiter : public QObject
+{
+    Q_OBJECT
+public:
+    explicit LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
+
+public slots:
+    void setImageData(KJob *job);
+
+private:
+    PictureShape *m_pictureShape;
 };
 
 #endif //PICTURESHAPECONFIGWIDGET_H

@@ -34,10 +34,10 @@ class KRITAUI_EXPORT KisSelectionToolHelper
 {
 public:
 
-    KisSelectionToolHelper(KisCanvas2* canvas, KisNodeSP node, const QString& name);
+    KisSelectionToolHelper(KisCanvas2* canvas, const QString& name);
     virtual ~KisSelectionToolHelper();
 
-    void selectPixelSelection(KisPixelSelectionSP selection, selectionAction action);
+    void selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action);
     void addSelectionShape(KoShape* shape);
 
 private:

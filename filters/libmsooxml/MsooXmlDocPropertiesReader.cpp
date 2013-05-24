@@ -38,7 +38,7 @@ MsooXmlDocPropertiesReader::MsooXmlDocPropertiesReader(KoOdfWriters* writers) : 
 {
     elemMap.insert(QLatin1String("dc:creator"), QLatin1String("meta:initial-creator"));
     elemMap.insert(QLatin1String("cp:lastModifiedBy"), QLatin1String("dc:creator"));
-    elemMap.insert(QLatin1String("dc:description"), QLatin1String("meta:comments"));
+    elemMap.insert(QLatin1String("dc:description"), QLatin1String("dc:description"));
     elemMap.insert(QLatin1String("dc:subject"), QLatin1String("dc:subject"));
     elemMap.insert(QLatin1String("dc:title"), QLatin1String("dc:title"));
     elemMap.insert(QLatin1String("cp:keywords"), QLatin1String("meta:keyword"));

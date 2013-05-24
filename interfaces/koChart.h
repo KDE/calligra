@@ -19,12 +19,13 @@
 #ifndef __koChart_h__
 #define __koChart_h__
 
-#include <QtCore/QVariant>
-#include <QtCore/QVector>
-#include <QtCore/QRect>
-#include <QtCore/QtPlugin>
+#include <QVariant>
+#include <QVector>
+#include <QRect>
+#include <QtPlugin>
 
 #include <KoDocument.h>
+#include <KoPart.h>
 #include "kochart_export.h"
 #include "KoChartModel.h"
 
@@ -62,13 +63,11 @@ namespace KoChart
         WizardExtensionPrivate *d;
     };
 
-    class KOCHART_EXPORT Part : public KoDocument
+    class KOCHART_EXPORT Part : public KoPart
     {
         Q_OBJECT
     public:
-        Part( QWidget *parentWidget,
-              QObject *parent,
-              bool singleViewMode = false );
+        explicit Part(QObject *parent);
 
         virtual ~Part();
 

@@ -14,7 +14,7 @@
 
     <!-- Defintion of a Calligra version
         id: unique identifier of the version
-        calligrapath: path of the status directory on www.calligra-suite.org
+        calligrapath: path of the status directory on www.calligra.org
         stable: is this version stable or not?
         websvncheckout: URL for a WebSVN checkout
         svntag: name of the version's SVN tag (cannot be a branch)
@@ -126,7 +126,7 @@
         <description xml:lang="en_us">The status of this filter is unknown, as its development has been abandoned.</description>
     </status>
 
-    <version id="current" stable="no" calligrapath="http://www.calligra-suite.org/filters/1.5" websvncheckout="http://websvn.kde.org/*checkout*/trunk" svntag="">
+    <version id="current" stable="no" calligrapath="http://www.calligra.org/filters/1.5" websvncheckout="http://websvn.kde.org/*checkout*/trunk" svntag="">
         <title xml:lang="en_us">Calligra SVN</title>
         <description xml:lang="en_us">Calligra Development Version</description>
 

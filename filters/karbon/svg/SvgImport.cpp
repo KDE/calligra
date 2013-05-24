@@ -37,10 +37,10 @@
 #include <KoXmlReader.h>
 
 #include <kpluginfactory.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <kfilterdev.h>
 
-#include <QtCore/QFileInfo>
+#include <QFileInfo>
 
 K_PLUGIN_FACTORY(SvgImportFactory, registerPlugin<SvgImport>();)
 K_EXPORT_PLUGIN(SvgImportFactory("calligrafilters"))
@@ -107,11 +107,9 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
         return KoFilter::ParsingError;
     }
 
-    KarbonPart * part = dynamic_cast<KarbonPart*>(m_chain->outputDocument());
-    if (! part)
+    m_document = dynamic_cast<KarbonDocument*>(m_chain->outputDocument());
+    if (! m_document)
         return KoFilter::CreationError;
-
-    m_document = &part->document();
 
     // Do the conversion!
     convert(inputDoc.documentElement());

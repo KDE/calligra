@@ -17,7 +17,7 @@
 
 #include "Token.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 namespace RtfReader
 {

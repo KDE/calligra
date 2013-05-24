@@ -2,6 +2,7 @@
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -27,9 +28,8 @@
 #include <wv2/src/handlers.h>
 #include <QObject>
 #include <QString>
-#include <QList>
-#include <deque>
 #include <QRectF>
+#include <QList>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
@@ -39,11 +39,10 @@ class Document;
 namespace wvWare
 {
     namespace Word97 {
-        class TC;
-        class SHD;
+        struct TC;
+        struct SHD;
     }
 }
-class KoRect;
 
 namespace Words
 {
@@ -68,11 +67,12 @@ namespace Words
      * during text parsing and the final generation of table cells.
      */
     struct Table {
+        Table();
 
-	/**
-	 * Add cell edge position into the cache for a given table.  Keep them
-	 * sorted.
-	 */
+        /**
+         * Add cell edge position into the cache for a given table.  Keep them
+         * sorted.
+         */
         void cacheCellEdge(int cellEdge);
 
         /**
@@ -81,6 +81,7 @@ namespace Words
          */
         int columnNumber(int cellEdge) const;
 
+        bool floating;   // table inside of an absolutely positioned frame
         QString name;    // words's grpMgr attribute
         QList<Row> rows; // need to use QValueList to benefit from implicit sharing
         TAPptr tap;      // table properties
@@ -148,9 +149,6 @@ private:
 
     QString m_borderStyle[6];
     QString m_margin[6];
-
-    bool m_floatingTable; //true - table is floatin table; false - table is not floating table
-
     QString m_cellStyleName;
 };
 

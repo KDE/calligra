@@ -1,68 +1,85 @@
-
-
-
-
-
 ########### install files ###############
 
 install(FILES
-    3dgreen.pat 
-    Craters.pat 
-    Moonfoot.pat 
-    Stripes1px.pat 
-    Stripes2px.pat 
-    amethyst.pat 
-    bark.pat 
-    blue.pat 
-    bluegrid.pat 
-    bluesquares.pat 
-    blueweb.pat 
-    brick.pat 
-    burlap.pat 
-    burlwood.pat 
-    choc_swirl.pat 
-    corkboard.pat 
-    cracked.pat 
-    crinklepaper.pat 
-    electric.pat 
-    fibers.pat 
-    granite1.pat 
-    ground1.pat 
-    ice.pat 
-    java.pat 
-    leather.pat 
-    leaves.pat 
-    leopard.pat 
-    lightning.pat 
-    marble1.pat 
-    marble2.pat 
-    marble3.pat 
-    nops.pat 
-    paper.pat 
-    parque1.pat 
-    parque2.pat 
-    parque3.pat 
-    pastel.pat 
-    pine.pat 
-    pink_marble.pat 
-    pool.pat 
-    qube1.pat 
-    rain.pat 
-    recessed.pat 
-    redcube.pat 
-    rock.pat 
-    sky.pat 
-    slate.pat 
-    sm_squares.pat 
-    starfield.pat 
-    stone33.pat 
-    terra.pat 
-    walnut.pat 
-    warning.pat 
-    wood1.pat 
-    wood2.pat 
-    wood3.pat 
-    wood4.pat 
-    wood5.pat
+01_canvas.png
+02_rough-canvas.png
+02b_WoofTissue.png
+03_default-paper.png
+04_paper-C-grain.png
+05_paper-torchon.png
+06_hard-grain.png
+07_big-grain.png
+08_bump-relief.png
+09_drawed_crosshatched.png
+09b_drawed-CrossedLines.png
+10_drawed_dotted.png
+11_drawed_furry.png
+12_drawed_vertical.png
+13_drawed_swirl.png
+14_texture-rock.png
+15_texture-rockB.png
+16_texture-woody.png
+17_texture-melt.png
+18_texture-bark.png
+18b_WaveFlex.png
+19_texture-crackle.png
+20_texture-vegetal.png
+21_texture-chainmail.png
+22_texture-reptile.png
+23-dynamic-screentone-A.png
+24-dynamic-screentone-B.png
+25-dynamic-screentone-C.png
+Canvas_Hard.pat
+Canvas_covered.pat
+Canvas_small_01.pat
+Canvas_small_02.pat
+Cross01.pat
+Cross02.pat
+Cross03.pat
+Cross04.pat
+Cross05.pat
+Cross06.pat
+Cross07.pat
+Crumpled_Paper.pat
+Grid01.pat
+Grid02.pat
+Grid03.pat
+Grid04.pat
+Grid05.pat
+HR_PastelPaper_02.pat
+HR_Wall_Paper.pat
+Pattern01.pat
+Pattern02.pat
+Pattern03.pat
+Pattern04.pat
+Pattern05.pat
+Pattern06.pat
+Squares01.pat
+Squares02.pat
+Squares03.pat
+Squares04.pat
+Squares05.pat
+Squares06.pat
+Squares07.pat
+Squares08.pat
+Squares09.pat
+Squares10.pat
+Stripes02.pat
+Stripes03.pat
+Stripes04.pat
+Stripes05.pat
+Stripes06.pat
+Stripes07.pat
+Stripes08.pat
+Stripes09.pat
+Zigzag01.pat
+Zigzag02.pat
+Zigzag03.pat
+Zigzag04.pat
+fractal_pattern.pat
+generic_paper1.pat
+generic_paper2.pat
+granite.pat
+hexacolBW__2.pat
     DESTINATION ${DATA_INSTALL_DIR}/krita/patterns)
 

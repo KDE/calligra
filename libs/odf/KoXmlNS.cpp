@@ -45,8 +45,9 @@ const QString KoXmlNS::xlink("http://www.w3.org/1999/xlink");
 const QString KoXmlNS::VL("http://openoffice.org/2001/versions-list");
 const QString KoXmlNS::smil("urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
 const QString KoXmlNS::xhtml("http://www.w3.org/1999/xhtml");
+const QString KoXmlNS::xml("http://www.w3.org/XML/1998/namespace");
 
-const QString KoXmlNS::calligra = "http://www.calligra-suite.org/2005/";
+const QString KoXmlNS::calligra = "http://www.calligra.org/2005/";
 const QString KoXmlNS::officeooo = "http://openoffice.org/2009/office";
 const QString KoXmlNS::ooo = "http://openoffice.org/2004/office";
 
@@ -54,7 +55,7 @@ const QString KoXmlNS::delta("http://www.deltaxml.com/ns/track-changes/delta-nam
 const QString KoXmlNS::split("http://www.deltaxml.com/ns/track-changes/split-namespace");
 const QString KoXmlNS::ac("http://www.deltaxml.com/ns/track-changes/attribute-change-namespace");
 
-const char* KoXmlNS::nsURI2NS(const QString nsURI)
+const char* KoXmlNS::nsURI2NS(const QString &nsURI)
 {
     if (nsURI == KoXmlNS::office)
         return "office";
@@ -106,6 +107,8 @@ const char* KoXmlNS::nsURI2NS(const QString nsURI)
         return "calligra";
     else if (nsURI == KoXmlNS::officeooo)
         return "officeooo";
+    else if (nsURI == KoXmlNS::xml)
+        return "xml";
 
     // Shouldn't happen.
     return "";

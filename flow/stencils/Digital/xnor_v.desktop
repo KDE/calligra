@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=xnor v
+Name[bs]=ne xor v
+Name[ca]=xnor v
+Name[ca@valencia]=xnor v
+Name[cs]=xnor s
+Name[da]=xnor v
 Name[el]=xnor v
+Name[es]=XNOR vertical
+Name[et]=Vertikaalne välistav mitte-või
+Name[fr]=xnor v
+Name[gl]=Equivalencia (XNOR) vertical
+Name[it]=xnor v
+Name[kk]=сиысп-теріс-немесе тік
 Name[nb]=xnor loddr
 Name[nl]=xnor v
+Name[pl]=xnor v
 Name[pt]=xnor v
 Name[pt_BR]=xnor v
+Name[ru]=xnor v
+Name[sk]=xnor v
 Name[sv]=xnor v
 Name[uk]=Виключне запер. «АБО» (вертикально)
 Name[x-test]=xxxnor vxx

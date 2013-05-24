@@ -96,6 +96,8 @@ public:
         return m_currentMemento;
     }
 
+    KisMementoSP currentMemento();
+
     void setDefaultTileData(KisTileData *defaultTileData);
 
     void debugPrintInfo();
@@ -111,7 +113,6 @@ public:
 
 protected:
     qint32 findRevisionByMemento(KisMementoSP memento) const;
-    void resetIndex();
     void resetRevisionHistory(KisMementoItemList list);
 
 protected:

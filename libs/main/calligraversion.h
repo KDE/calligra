@@ -33,7 +33,7 @@
 * it contains the version at compile time. See Calligra::versionString() if you need
 * the Calligra version used at runtime.
 */
-#define CALLIGRA_VERSION_STRING "2.4 Alpha 2"
+#define CALLIGRA_VERSION_STRING "2.8 Pre-Alpha"
 
 /**
  * @def CALLIGRA_VERSION_MAJOR
@@ -43,18 +43,61 @@
 #define CALLIGRA_VERSION_MAJOR 2
 
 /**
- * @def CALLIGRA_VERSION_MINOR
+ * @def CALLIGRA_STABLE_VERSION_MINOR
  * @ingroup CalligraMacros
- * @brief Minor version of Calligra, at compile time
+ * @brief Minor version of stable Calligra, at compile time
+ * CALLIGRA_VERSION_MINOR is computed based on this value.
+ * Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
 */
-#define CALLIGRA_VERSION_MINOR 3
+#define CALLIGRA_STABLE_VERSION_MINOR 8
 
 /**
  * @def CALLIGRA_VERSION_RELEASE
  * @ingroup CalligraMacros
  * @brief Release version of Calligra, at compile time
+ */
+#define CALLIGRA_VERSION_RELEASE 89
+
+/**
+ * @def CALLIGRA_ALPHA
+ * @ingroup CalligraMacros
+ * @brief If defined (1..9), indicates at compile time that Calligra is in alpha stage
+ */
+#define CALLIGRA_ALPHA 1
+
+/**
+ * @def CALLIGRA_BETA
+ * @ingroup CalligraMacros
+ * @brief If defined (1..9), indicates at compile time that Calligra is in beta stage
+ */
+// #define CALLIGRA_BETA 1
+
+/**
+ * @def CALLIGRA_RC
+ * @ingroup CalligraMacros
+ * @brief If defined (1..9), indicates at compile time that Calligra is in "release candidate" stage
+ */
+// #define CALLIGRA_RC 1
+
+/**
+ * @def CALLIGRA_STABLE
+ * @ingroup CalligraMacros
+ * @brief If defined (>=0), indicates at compile time that Calligra is in stable stage
+ */
+// #define CALLIGRA_STABLE 0
+
+// -- WARNING: do not edit values below this line --
+
+/**
+ * @def CALLIGRA_VERSION_MINOR
+ * @ingroup CalligraMacros
+ * @brief Minor version of Calligra, at compile time
 */
-#define CALLIGRA_VERSION_RELEASE 72
+#ifdef CALLIGRA_STABLE
+# define CALLIGRA_VERSION_MINOR CALLIGRA_STABLE_VERSION_MINOR
+#else // Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
+# define CALLIGRA_VERSION_MINOR (CALLIGRA_STABLE_VERSION_MINOR - 1)
+#endif
 
 /**
  * @ingroup CalligraMacros
@@ -62,29 +105,8 @@
  *
  * This function can be used for preprocessing when CALLIGRA_IS_VERSION is not
  * appropriate.
- */ 
+ */
 #define CALLIGRA_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
-
-/**
- * @def CALLIGRA_ALPHA
- * @ingroup CalligraMacros
- * @brief If defined, indicates at compile time that Calligra is in alpha stage
- */
-#define CALLIGRA_ALPHA 1
-
-/**
- * @def CALLIGRA_BETA
- * @ingroup CalligraMacros
- * @brief If defined, indicates at compile time that Calligra is in beta stage
- */
-/* #define CALLIGRA_BETA 4 */
-
-/**
- * @def CALLIGRA_RC
- * @ingroup CalligraMacros
- * @brief If defined, indicates at compile time that Calligra is in "release candidate" stage
- */
-// #define CALLIGRA_RC 1
 
 /**
  * @ingroup CalligraMacros

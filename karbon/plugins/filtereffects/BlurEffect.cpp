@@ -23,9 +23,9 @@
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <KLocale>
-#include <QtCore/QRect>
-#include <QtGui/QPainter>
+#include <klocale.h>
+#include <QRect>
+#include <QPainter>
 
 // Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
 // fixed to handle alpha channel correctly by Zack Rusin

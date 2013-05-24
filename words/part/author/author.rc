@@ -1,0 +1,250 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Author" version="136">
+<MenuBar>
+ <Menu name="file"><text>&amp;File</text>
+  <Action name="extra_template"/>
+ </Menu>
+
+ <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_paste_text"/>
+  <Action name="edit_select_all"/>
+  <Action name="edit_selectallframes"/>
+  <Action name="edit_selectcurrentframe"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="edit_find"/>
+  <Action name="edit_findnext"/>
+  <Action name="edit_findprevious"/>
+  <Action name="edit_replace"/>
+  <Action name="select_bookmark"/>
+ </Menu>
+
+ <Menu name="view"><text>&amp;View</text>
+  <Action name="view_newview"/>
+  <!-- Menu name="view_displaymodes"><text>&amp;Display Mode</text>
+    <Action name="view_pagemode"/>
+    <Action name="view_previewmode"/>
+    <Action name="view_textmode"/>
+  </Menu -->
+  <Separator/>
+  <Action name="view_formattingchars"/>
+  <Action name="view_frameborders"/>
+  <Action name="view_tableborders"/>
+  <Separator/>
+  <Action name="view_toggledockers"/>
+  <Action name="show_docstruct"/>
+  <Separator/>
+  <Action name="show_ruler"/>
+  <Action name="view_show_guides"/>
+  <Action name="view_grid"/>
+  <Action name="view_snaptogrid"/>
+  <Separator/>
+  <Action name="zoom_out"/>
+  <Action name="zoom_in"/>
+  <Action name="view_zoom"/>
+  <Action name="view_fullscreen"/>
+  <Action name="view_distractionfreemode"/>
+ </Menu>
+ 
+  <Menu name="book"><text>Book</text>
+  <Action name="insert_coverimage"/>
+ </Menu>
+ 
+ <Menu name="semantic"><text>Semantics</text>
+  <Action name="insert_semanticobject_ref"/>
+  <Action name="insert_semanticobject_new"/>
+  <Action name="edit_semantic_stylesheets"/>
+ </Menu>
+ 
+ <!-- leftovers from insert menu - to be moved to texttool
+  <Action name="insert_link"/>
+  <Action name="add_bookmark"/>
+ -->
+ 
+ <Menu name="format"><text>S&amp;tyles</text>
+  <Action name="format_stylemenu"/>
+  <Action name="format_stylist"/>
+  <Action name="import_style"/>
+ </Menu>
+
+ <Menu name="settings"><text>&amp;Settings</text>
+  <Menu name="SpellCheck"><text>Spellcheck</text>
+      <Action name="tool_auto_spellcheck"/>
+      <Action name="tool_configure_spellcheck"/>
+  </Menu>
+  <Action name="enable_autocorrection"/>
+  <Action name="configure_autocorrection"/>
+  <Action name="showStatusBar" group="settings_show"/>
+  <Action name="configure_completion" group="settings_show"/>
+  <Action name="settings_active_author" group="settings_configure"/>
+  <Action name="configure" group="settings_configure"/>
+ </Menu>
+</MenuBar>
+
+<ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_find"/>
+  <!--
+  <Action name="edit_findprevious"/>
+  <Action name="edit_findnext"/>
+  <Action name="edit_replace"/>
+  <Action name="select_bookmark"/>
+  -->
+</ToolBar>
+<Menu name="text_popup">
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <ActionList name="datatools"/>
+ <ActionList name="tableactions"/>
+</Menu>
+<Menu name="text_popup_spell">
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <ActionList name="datatools"/>
+ <Action name="ignore_all"/>
+ <Action name="add_word_to_dictionary"/>
+ <ActionList name="tableactions"/>
+</Menu>
+<Menu name="text_popup_spell_with_result">
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <ActionList name="datatools"/>
+ <Action name="ignore_all"/>
+ <Action name="add_word_to_dictionary"/>
+ <ActionList name="tableactions"/>
+ <Separator/>
+ <Menu name="check_spell_list"><text>Spell Check Result</text>
+   <ActionList name="spell_result_action"/>
+ </Menu>
+</Menu>
+<Menu name="custom_var_popup">
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Action name="edit_customvars"/>
+ <!--<ActionList name="datatools"/> Spell check doesn't work for variables (yet?)-->
+</Menu>
+<Menu name="variable_popup">
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Menu name="variable_list"><text>Change Variable To</text>
+  <ActionList name="variable_action"/>
+ </Menu>
+ <!--<ActionList name="datatools"/> Spell check doesn't work on variables (yet?)-->
+</Menu>
+<Menu name="text_popup_link">
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Action name="open_link"/>
+ <Action name="change_link"/>
+ <Action name="copy_link"/>
+ <Action name="remove_link"/>
+ <Action name="add_to_bookmark"/>
+ <!--<ActionList name="datatools_link"/> Spell check doesn't work on links (yet?)-->
+</Menu>
+<Menu name="footnote_popup">
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Action name="edit_footendnote"/>
+ <Action name="change_footendtype"/>
+ <!--<ActionList name="datatools"/> Spell check doesn't work for variables (yet?)-->
+</Menu>
+<Menu name="comment_popup">
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Action name="edit_comment"/>
+ <Action name="remove_comment"/>
+ <Action name="copy_text_comment"/>
+ <ActionList name="datatools"/>
+ <ActionList name="spell_action"/>
+</Menu>
+<Menu name="action_popup">
+  <Action name="insert_table"/>
+  <Action name="insert_picture"/>
+  <Separator />
+  <Action name="tools_createtext"/>
+  <Action name="tools_formula"/>
+  <Action name="tools_part"/>
+  <Separator />
+  <Action name="delete_page"/>
+</Menu>
+<Menu name="frame_popup">
+ <Action name="edit_delframe"/>
+ <Separator/> 
+ <Action name="create_framestyle"/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <ActionList name="frameset_type_action"/> <!-- Used for frameset type (picture, part...) specific actions -->
+ <Action name="spelling_suggestions"/>
+ <Separator/>
+ <Action name="anchor"/>
+ <Action name="format_frameset"/>
+</Menu>
+</kpartgui>

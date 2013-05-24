@@ -13,10 +13,10 @@ kde4_add_plugin(keximigrate_txt ${keximigrate_txtmigrate_PART_SRCS})
 
 
 target_link_libraries(keximigrate_txt  
-    ${KDE4_KPARTS_LIBS} 
     keximigrate
     kexidb
     kexiutils
+    ${CALLIGRADB_LIBS}
 )
 
 install(TARGETS keximigrate_txt  DESTINATION ${PLUGIN_INSTALL_DIR})

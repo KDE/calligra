@@ -1,10 +1,23 @@
 [Desktop Entry]
 Name=vlamp
+Name[bs]=vlamp
+Name[ca]=vlamp
+Name[ca@valencia]=vlamp
+Name[da]=vlamp
+Name[de]=Lampe, senkrecht
 Name[el]=vlamp
+Name[es]=lámpara vertical
+Name[et]=Vertikaalne lamp
+Name[fr]=vlamp
+Name[gl]=Lámpada vertical
+Name[it]=vlamp
+Name[kk]=лампа тік
 Name[nb]=lampe loddr
 Name[nl]=vlamp
+Name[pl]=v_lampa
 Name[pt]=lâmpada-v
 Name[pt_BR]=lâmpada-v
+Name[sk]=vlamp
 Name[sv]=vertikal lampa
 Name[uk]=Лампа або світловий індикатор (вертикально)
 Name[x-test]=xxvlampxx

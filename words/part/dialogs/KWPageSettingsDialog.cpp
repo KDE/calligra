@@ -29,8 +29,8 @@
 
 #include <QPushButton>
 #include <QListWidget>
-#include <KInputDialog>
-#include <KDebug>
+#include <kinputdialog.h>
+#include <kdebug.h>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
         : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),
@@ -54,7 +54,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     m_pageStylesView = new QListWidget(this);
     pageStyleLayout->addWidget(m_pageStylesView, 1);
     connect(m_pageStylesView, SIGNAL(currentRowChanged(int)), this, SLOT(pageStyleCurrentRowChanged(int)));
-    QVBoxLayout *pageStyleLayout2 = new QVBoxLayout(pageStyleWidget);
+    QVBoxLayout *pageStyleLayout2 = new QVBoxLayout();
     pageStyleLayout->addLayout(pageStyleLayout2);
     m_clonePageStyleButton = new QPushButton(i18n("Clone"), pageStyleWidget);
     connect(m_clonePageStyleButton, SIGNAL(clicked()), this, SLOT(pageStyleCloneClicked()));
@@ -122,8 +122,9 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     setTextDirection(pageStyle.direction());
 #endif
 
-    distributeUnit(m_document->unit());
-    connect(this, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(distributeUnit(const KoUnit&)));
+    onDocumentUnitChange(m_document->unit());
+    connect(m_document, SIGNAL(unitChanged(KoUnit)), SLOT(onDocumentUnitChange(KoUnit)));
+    connect(this, SIGNAL(unitChanged(KoUnit)), SLOT(setDocumentUnit(KoUnit)));
 }
 
 KPageWidgetItem* KWPageSettingsDialog::pageItem(const QString &name) const
@@ -174,11 +175,15 @@ void KWPageSettingsDialog::slotApplyClicked()
     m_document->firePageSetupChanged();
 }
 
-void KWPageSettingsDialog::distributeUnit(const KoUnit &unit)
+void KWPageSettingsDialog::setDocumentUnit(const KoUnit &unit)
+{
+    m_document->setUnit(unit);
+}
+
+void KWPageSettingsDialog::onDocumentUnitChange(const KoUnit &unit)
 {
     setUnit(unit);
     m_columns->setUnit(unit);
-    m_document->setUnit(unit);
 }
 
 void KWPageSettingsDialog::reloadPageStyles()
@@ -210,7 +215,7 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
     if (name.isEmpty())
         return;
     pagestyle.detach(name);
-    m_document->pageManager()->addPageStyle(name);
+    m_document->pageManager()->addPageStyle(pagestyle);
     reloadPageStyles();
 }
 

@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_COLOR_CONVERSION_LINK_H_
-#define _KO_COLOR_CONVERSION_LINK_H_
+#ifndef _KO_COLOR_CONVERSION_TRANSFORMATION_FACTORY_H_
+#define _KO_COLOR_CONVERSION_TRANSFORMATION_FACTORY_H_
 
 class KoColorSpace;
 class KoColorConversionTransformation;
 
-#include <QtCore/QString>
+#include <QString>
 #include <KoColorConversionTransformationAbstractFactory.h>
 
 /**

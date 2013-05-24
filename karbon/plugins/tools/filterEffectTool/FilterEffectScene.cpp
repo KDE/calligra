@@ -23,11 +23,11 @@
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 
-#include <KDebug>
-#include <KComboBox>
+#include <kdebug.h>
+#include <kcombobox.h>
 
-#include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QPushButton>
+#include <QGraphicsProxyWidget>
+#include <QPushButton>
 
 const qreal ItemSpacing = 10.0;
 const qreal ConnectionDistance = 10.0;

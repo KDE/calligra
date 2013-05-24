@@ -22,8 +22,7 @@
 #define KEXIINPUTTABLEEDIT_H
 
 #include <klineedit.h>
-#include <qvariant.h>
-//Added by qt3to4:
+#include <QVariant>
 #include <QPaintEvent>
 
 #include "kexitableedit.h"
@@ -37,7 +36,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
     Q_OBJECT
 
 public:
-    KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
+    KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiInputTableEdit();
 
@@ -73,12 +72,12 @@ public:
      \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
     virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-    /*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit inside \a rect
-     for a given font metrics \a fm.
+    /*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit
+     inside \a rect for a given font metrics \a fm.
      \return true a normal tooltip should be displayed (using QToolTip,) and false if
      no tooltip should be displayed or a custom tooltip was displayed internally (not yet supported).
-     This implementation converts the value to text using valueToText() if \a calue is not string to see
-     whether it can fit inside the cell's \a rect.
+     This implementation converts the value to text using KexiTextFormatter::toString()
+     if \a value is not string to see whether it can fit inside the cell's \a rect.
      If the cell is currentl focused (selected), \a focused is true. */
     virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
                                      bool focused);
@@ -93,9 +92,13 @@ public slots:
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
+    //! Implemented for KexiDataItemInterface
+    virtual bool fixup();
+
 protected slots:
     void setRestrictedCompletion();
     void completed(const QString &);
+    void slotTextEdited(const QString&);
 
 protected:
     //! initializes this editor with \a add value
@@ -108,7 +111,6 @@ protected:
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
     QString m_decsym; //! decimal symbol
-    QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
     KLineEdit *m_lineedit;
 
 signals:

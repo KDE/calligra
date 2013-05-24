@@ -27,6 +27,10 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
+#include <SvgUtil.h>
+#include <SvgStyleWriter.h>
 
 RectangleShape::RectangleShape()
 : m_cornerRadiusX(0)
@@ -56,9 +60,9 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
     } else {
         QString cornerRadius = element.attributeNS(KoXmlNS::draw, "corner-radius", "");
         if (! cornerRadius.isEmpty()) {
-            float radius = KoUnit::parseValue(cornerRadius);
-            m_cornerRadiusX = radius / (0.5 * size().width()) * 100;
-            m_cornerRadiusY = radius / (0.5 * size().height()) * 100;
+            qreal radius = KoUnit::parseValue(cornerRadius);
+            m_cornerRadiusX = qMin<qreal>(radius / (0.5 * size().width()) * 100, qreal(100));
+            m_cornerRadiusY = qMin<qreal>(radius / (0.5 * size().height()) * 100, qreal(100));
         }
     }
 
@@ -293,4 +297,56 @@ void RectangleShape::setCornerRadiusY(qreal radius)
 QString RectangleShape::pathShapeId() const
 {
     return RectangleShapeId;
+}
+
+bool RectangleShape::saveSvg(SvgSavingContext &context)
+{
+    context.shapeWriter().startElement("rect");
+    context.shapeWriter().addAttribute("id", context.getID(this));
+    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+
+    SvgStyleWriter::saveSvgStyle(this, context);
+
+    const QSizeF size = this->size();
+    context.shapeWriter().addAttributePt("width", size.width());
+    context.shapeWriter().addAttributePt("height", size.height());
+
+    double rx = cornerRadiusX();
+    if (rx > 0.0)
+        context.shapeWriter().addAttributePt("rx", 0.01 * rx * 0.5 * size.width());
+    double ry = cornerRadiusY();
+    if (ry > 0.0)
+        context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
+
+    context.shapeWriter().endElement();
+
+    return true;
+}
+
+bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+{
+    const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
+    const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));
+    const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width"));
+    const qreal h = SvgUtil::parseUnitY(context.currentGC(), element.attribute("height"));
+    const QString rxStr = element.attribute("rx");
+    const QString ryStr = element.attribute("ry");
+    qreal rx = rxStr.isEmpty() ? 0.0 : SvgUtil::parseUnitX(context.currentGC(), rxStr);
+    qreal ry = ryStr.isEmpty() ? 0.0 : SvgUtil::parseUnitY(context.currentGC(), ryStr);
+    // if one radius is given but not the other, use the same value for both
+    if (!rxStr.isEmpty() && ryStr.isEmpty())
+        ry = rx;
+    if (rxStr.isEmpty() && !ryStr.isEmpty())
+        rx = ry;
+
+    setSize(QSizeF(w, h));
+    setPosition(QPointF(x, y));
+    if (rx >= 0.0)
+        setCornerRadiusX(qMin(qreal(100.0), qreal(rx / (0.5 * w) * 100.0)));
+    if (ry >= 0.0)
+        setCornerRadiusY(qMin(qreal(100.0), qreal(ry / (0.5 * h) * 100.0)));
+    if (w == 0.0 || h == 0.0)
+        setVisible(false);
+
+    return true;
 }

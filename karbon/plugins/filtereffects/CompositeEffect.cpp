@@ -23,10 +23,10 @@
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KLocale>
-#include <KDebug>
-#include <QtCore/QRect>
-#include <QtGui/QPainter>
+#include <klocale.h>
+#include <kdebug.h>
+#include <QRect>
+#include <QPainter>
 
 CompositeEffect::CompositeEffect()
         : KoFilterEffect(CompositeEffectId, i18n("Composite"))

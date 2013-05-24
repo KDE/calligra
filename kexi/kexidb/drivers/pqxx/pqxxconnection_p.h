@@ -20,7 +20,7 @@
 #ifndef PQXXSQLCONNECTIONINTERNAL_H
 #define PQXXSQLCONNECTIONINTERNAL_H
 
-#include <kexidb/connection_p.h>
+#include <db/connection_p.h>
 #include <pqxx/pqxx>
 
 /**

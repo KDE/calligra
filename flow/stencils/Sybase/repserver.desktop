@@ -1,11 +1,26 @@
 [Desktop Entry]
 Name=Replication Server
+Name[bg]=Репликиращ сървър
+Name[bs]=Server za odgovore
+Name[ca]=Servidor de rèplica
+Name[ca@valencia]=Servidor de rèplica
+Name[da]=Replication Server
+Name[de]=Replikations-Server
 Name[el]=Εξυπηρετητής αντιγράφων
-Name[es]=Servidor de replicación
+Name[es]=Servidor de replica
 Name[et]=Replikatsiooniserver
+Name[fr]=Serveur de réplication
+Name[gl]=Servidor de réplica
+Name[it]=Server di replica
+Name[kk]=Репликациялау сервері
 Name[nb]=Replikeringstjener
+Name[nds]=Replikatschoonserver
+Name[nl]=Replicatieserver
+Name[pl]=Serwer replikacji
 Name[pt]=Servidor Replicação
 Name[pt_BR]=Servidor de replicação
+Name[ru]=Сервер репликаций
+Name[sk]=Replikačný server
 Name[sv]=Replikeringsserver
 Name[uk]=Сервер реплікації
 Name[x-test]=xxReplication Serverxx

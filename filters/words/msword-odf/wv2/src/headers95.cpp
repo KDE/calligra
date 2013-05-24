@@ -21,8 +21,10 @@
 
 using namespace wvWare;
 
-Headers95::Headers95( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, U8 dop_grpfIhdt ) :
-    Headers( ccpHdd, fcPlcfhdd, lcbPlcfhdd, tableStream, Word67 ), ihddOffset( countOnes( dop_grpfIhdt, 0x40 ) )
+Headers95::Headers95( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd,  U32 fcPlcfsed, U32 lcbPlcfsed,
+                      OLEStreamReader* tableStream, U8 dop_grpfIhdt ) :
+    Headers( ccpHdd, fcPlcfhdd, lcbPlcfhdd, fcPlcfsed, lcbPlcfsed, tableStream, Word67 ),
+    ihddOffset( countOnes( dop_grpfIhdt, 0x40 ) )
 {
     m_headerCount.push_back( 0 );
 }

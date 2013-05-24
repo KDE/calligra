@@ -558,8 +558,6 @@ class VBAInfoContainer;
 void parseVBAInfoContainer(LEInputStream& in, VBAInfoContainer& _s);
 class NormalViewSetInfoAtom;
 void parseNormalViewSetInfoAtom(LEInputStream& in, NormalViewSetInfoAtom& _s);
-class TextContainer;
-void parseTextContainer(LEInputStream& in, TextContainer& _s);
 class TextContainerMeta;
 void parseTextContainerMeta(LEInputStream& in, TextContainerMeta& _s);
 class SlidePersistAtom;
@@ -774,6 +772,8 @@ class LineEndArrowLength;
 void parseLineEndArrowLength(LEInputStream& in, LineEndArrowLength& _s);
 class LineJoinStyle;
 void parseLineJoinStyle(LEInputStream& in, LineJoinStyle& _s);
+class LineEndCapStyle;
+void parseLineEndCapStyle(LEInputStream& in, LineEndCapStyle& _s);
 class LineStyleBooleanProperties;
 void parseLineStyleBooleanProperties(LEInputStream& in, LineStyleBooleanProperties& _s);
 class ShadowType;
@@ -836,6 +836,14 @@ class DxHeightHR;
 void parseDxHeightHR(LEInputStream& in, DxHeightHR& _s);
 class DxWidthHR;
 void parseDxWidthHR(LEInputStream& in, DxWidthHR& _s);
+class BorderTopColor;
+void parseBorderTopColor(LEInputStream& in, BorderTopColor& _s);
+class BorderLeftColor;
+void parseBorderLeftColor(LEInputStream& in, BorderLeftColor& _s);
+class BorderBottomColor;
+void parseBorderBottomColor(LEInputStream& in, BorderBottomColor& _s);
+class BorderRightColor;
+void parseBorderRightColor(LEInputStream& in, BorderRightColor& _s);
 class GroupShapeBooleanProperties;
 void parseGroupShapeBooleanProperties(LEInputStream& in, GroupShapeBooleanProperties& _s);
 class WzFillId;
@@ -898,12 +906,14 @@ class NormalViewSetInfoContainer;
 void parseNormalViewSetInfoContainer(LEInputStream& in, NormalViewSetInfoContainer& _s);
 class SlideListWithTextSubContainerOrAtom;
 void parseSlideListWithTextSubContainerOrAtom(LEInputStream& in, SlideListWithTextSubContainerOrAtom& _s);
+class OutlineAtom;
+void parseOutlineAtom(LEInputStream& in, OutlineAtom& _s);
+class TextContainer;
+void parseTextContainer(LEInputStream& in, TextContainer& _s);
 class MouseClickTextInfo;
 void parseMouseClickTextInfo(LEInputStream& in, MouseClickTextInfo& _s);
 class MouseOverTextInfo;
 void parseMouseOverTextInfo(LEInputStream& in, MouseOverTextInfo& _s);
-class TextClientDataSubContainerOrAtom;
-void parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDataSubContainerOrAtom& _s);
 class TextPFRun;
 void parseTextPFRun(LEInputStream& in, TextPFRun& _s);
 class TextCFRun;
@@ -954,6 +964,8 @@ class BlipEntityAtom;
 void parseBlipEntityAtom(LEInputStream& in, BlipEntityAtom& _s);
 class TextMasterStyle10Atom;
 void parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _s);
+class TextClientDataSubContainerOrAtom;
+void parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDataSubContainerOrAtom& _s);
 class TextContainerInteractiveInfo;
 void parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInteractiveInfo& _s);
 class DocumentTextInfoContainer;
@@ -3409,29 +3421,6 @@ public:
     quint8 reserved;
     NormalViewSetInfoAtom(void* /*dummy*/ = 0) {}
 };
-class TextContainer : public StreamOffset {
-public:
-    TextHeaderAtom textHeaderAtom;
-    class choice1060411409 : public QSharedPointer<StreamOffset> {
-    public:
-        choice1060411409() {}
-        explicit choice1060411409(TextCharsAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1060411409(TextBytesAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
-    };
-    choice1060411409 text;
-    QSharedPointer<StyleTextPropAtom> style;
-    QList<TextContainerMeta> meta;
-    QSharedPointer<MasterTextPropAtom> master;
-    QList<TextBookmarkAtom> bookmark;
-    QSharedPointer<UnknownTextContainerChild> unknown;
-    QSharedPointer<TextSpecialInfoAtom> specialinfo;
-    QList<TextContainerInteractiveInfo> interactive;
-    QSharedPointer<TextSpecialInfoAtom> specialinfo2;
-    TextContainer(void* /*dummy*/ = 0) {}
-};
 class TextContainerMeta : public StreamOffset {
 public:
     class choice242357012 : public QSharedPointer<StreamOffset> {
@@ -4336,6 +4325,12 @@ public:
     quint32 lineJoinStyle;
     LineJoinStyle(void* /*dummy*/ = 0) {}
 };
+class LineEndCapStyle : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    quint32 lineEndCapStyle;
+    LineEndCapStyle(void* /*dummy*/ = 0) {}
+};
 class LineStyleBooleanProperties : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
@@ -4589,6 +4584,30 @@ public:
     OfficeArtFOPTEOPID opid;
     qint32 dxWidthHR;
     DxWidthHR(void* /*dummy*/ = 0) {}
+};
+class BorderTopColor : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    OfficeArtCOLORREF borderTopColor;
+    BorderTopColor(void* /*dummy*/ = 0) {}
+};
+class BorderLeftColor : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    OfficeArtCOLORREF borderLeftColor;
+    BorderLeftColor(void* /*dummy*/ = 0) {}
+};
+class BorderBottomColor : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    OfficeArtCOLORREF borderBottomColor;
+    BorderBottomColor(void* /*dummy*/ = 0) {}
+};
+class BorderRightColor : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    OfficeArtCOLORREF borderRightColor;
+    BorderRightColor(void* /*dummy*/ = 0) {}
 };
 class GroupShapeBooleanProperties : public StreamOffset {
 public:
@@ -4933,6 +4952,37 @@ public:
     QList<TextContainer> atoms;
     SlideListWithTextSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
+class OutlineAtom : public StreamOffset {
+public:
+    OutlineTextRefAtom outlineTextRefAtom;
+    QSharedPointer<TextRulerAtom> textRulerAtom;
+    OutlineAtom(void* /*dummy*/ = 0) {}
+};
+class TextContainer : public StreamOffset {
+public:
+    TextHeaderAtom textHeaderAtom;
+    class choice1060411409 : public QSharedPointer<StreamOffset> {
+    public:
+        choice1060411409() {}
+        explicit choice1060411409(TextCharsAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1060411409(TextBytesAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice1060411409 text;
+    QSharedPointer<StyleTextPropAtom> style;
+    QList<TextContainerMeta> meta;
+    QSharedPointer<MasterTextPropAtom> master;
+    QList<TextBookmarkAtom> bookmark;
+    QSharedPointer<UnknownTextContainerChild> unknown;
+    QSharedPointer<TextSpecialInfoAtom> specialinfo;
+    QList<TextContainerInteractiveInfo> interactive;
+    QSharedPointer<TextSpecialInfoAtom> specialinfo2;
+    QSharedPointer<TextRulerAtom> textRulerAtom;
+    QList<TextContainerInteractiveInfo> interactive2;
+    TextContainer(void* /*dummy*/ = 0) {}
+};
 class MouseClickTextInfo : public StreamOffset {
 public:
     MouseClickInteractiveInfoContainer interactive;
@@ -4944,21 +4994,6 @@ public:
     MouseOverInteractiveInfoContainer interactive;
     MouseOverTextInteractiveInfoAtom text;
     MouseOverTextInfo(void* /*dummy*/ = 0) {}
-};
-class TextClientDataSubContainerOrAtom : public StreamOffset {
-public:
-    class choice948925432 : public QSharedPointer<StreamOffset> {
-    public:
-        choice948925432() {}
-        explicit choice948925432(OutlineTextRefAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice948925432(TextContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice948925432(TextRulerAtom* a) :QSharedPointer<StreamOffset>(a) {}
-        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
-        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
-        template <typename T> bool is() const { return get<T>(); }
-    };
-    choice948925432 anon;
-    TextClientDataSubContainerOrAtom(void* /*dummy*/ = 0) {}
 };
 class TextPFRun : public StreamOffset {
 public:
@@ -5073,142 +5108,147 @@ public:
     QSharedPointer<OfficeArtFOPT> drawingPrimaryOptions;
     QSharedPointer<OfficeArtTertiaryFOPT> drawingTertiaryOptions;
     QSharedPointer<OfficeArtColorMRUContainer> colorMRU;
-    OfficeArtSplitMenuColorContainer splitColors;
+    QSharedPointer<OfficeArtSplitMenuColorContainer> splitColors;
     QSharedPointer<OfficeArtBStoreContainer> blipStore2;
     QSharedPointer<OfficeArtTertiaryFOPT> unknown;
     OfficeArtDggContainer(void* /*dummy*/ = 0) {}
 };
 class OfficeArtFOPTEChoice : public StreamOffset {
 public:
-    class choice4134198502 : public QSharedPointer<StreamOffset> {
+    class choice3165202096 : public QSharedPointer<StreamOffset> {
     public:
-        choice4134198502() {}
-        explicit choice4134198502(Rotation* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ProtectionBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ITxid* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxTextLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DyTextTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxTextRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DyTextBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(WrapText* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(AnchorText* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(TxflTextFlow* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(CdirFont* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(HspNext* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Txdir* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(TextBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(CropFromTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(CropFromBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(CropFromLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(CropFromRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Pib* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PibName* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PibFlags* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PictureTransparent* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PictureContrast* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PictureBrightness* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(BlipBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(GeoLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(GeoTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(GeoRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(GeoBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ShapePath* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PVertices* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PSegmentInfo* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(AdjustValue* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Adjust2Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Adjust3Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Adjust4Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Adjust5Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Adjust6Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Adjust7Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Adjust8Value* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillType* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillBackColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillBackOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillCrMod* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillBlipName* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillBlipFlags* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillHeight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillAngle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillFocus* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillToLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillToTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillToRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillToBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillRectLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillRectTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillRectRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillRectBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillDztype* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillShadePreset* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillShadeColors* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillOriginX* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillOriginY* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillShapeOriginX* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillShapeOriginY* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillColorExt* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillBackColorExt* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineBackColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineFillBlip* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineDashing* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineStartArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineEndArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineStartArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineStartArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineEndArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineEndArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineJoinStyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LineStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ShadowType* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ShadowColor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ShadowOpacity* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ShadowOffsetX* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ShadowOffsetY* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ShadowStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(HspMaster* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Cxstyle* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(BWMode* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(ShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxyCalloutGap* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Spcoa* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(Spcod* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxyCalloutDropSpecified* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxyCalloutLengthSpecified* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(CalloutBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PWrapPolygonVertices* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxWrapDistLeft* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DyWrapDistTop* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxWrapDistRight* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DyWrapDistBottom* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(LidRegroup* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PosH* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PosRelH* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PosV* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PosRelV* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(PctHR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(AlignHR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxHeightHR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DxWidthHR* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(GroupShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(WzFillId* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(DiagramBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice4134198502(OfficeArtFOPTE* a) :QSharedPointer<StreamOffset>(a) {}
+        choice3165202096() {}
+        explicit choice3165202096(Rotation* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ProtectionBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ITxid* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxTextLeft* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DyTextTop* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxTextRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DyTextBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(WrapText* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(AnchorText* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(TxflTextFlow* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(CdirFont* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(HspNext* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Txdir* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(TextBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(CropFromTop* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(CropFromBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(CropFromLeft* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(CropFromRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Pib* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PibName* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PibFlags* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PictureTransparent* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PictureContrast* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PictureBrightness* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(BlipBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(GeoLeft* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(GeoTop* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(GeoRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(GeoBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ShapePath* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PVertices* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PSegmentInfo* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(AdjustValue* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Adjust2Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Adjust3Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Adjust4Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Adjust5Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Adjust6Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Adjust7Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Adjust8Value* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(GeometryBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillType* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillOpacity* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillBackColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillBackOpacity* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillCrMod* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillBlip* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillBlipName* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillBlipFlags* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillHeight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillAngle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillFocus* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillToLeft* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillToTop* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillToRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillToBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillRectLeft* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillRectTop* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillRectRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillRectBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillDztype* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillShadePreset* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillShadeColors* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillOriginX* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillOriginY* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillShapeOriginX* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillShapeOriginY* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillColorExt* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillBackColorExt* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(FillStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineOpacity* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineBackColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineFillBlip* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineStyle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineDashing* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineStartArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineEndArrowhead* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineStartArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineStartArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineEndArrowWidth* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineEndArrowLength* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineJoinStyle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineEndCapStyle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LineStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ShadowType* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ShadowColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ShadowOpacity* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ShadowOffsetX* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ShadowOffsetY* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ShadowStyleBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(HspMaster* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Cxstyle* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(BWMode* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(ShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxyCalloutGap* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Spcoa* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(Spcod* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxyCalloutDropSpecified* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxyCalloutLengthSpecified* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(CalloutBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PWrapPolygonVertices* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxWrapDistLeft* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DyWrapDistTop* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxWrapDistRight* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DyWrapDistBottom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(LidRegroup* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PosH* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PosRelH* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PosV* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PosRelV* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(PctHR* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(AlignHR* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxHeightHR* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DxWidthHR* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(BorderTopColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(BorderLeftColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(BorderBottomColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(BorderRightColor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(GroupShapeBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(WzFillId* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(DiagramBooleanProperties* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice3165202096(OfficeArtFOPTE* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice4134198502 anon;
+    choice3165202096 anon;
     OfficeArtFOPTEChoice(void* /*dummy*/ = 0) {}
 };
 class OfficeArtClientAnchor : public StreamOffset {
@@ -5376,6 +5416,20 @@ public:
     QSharedPointer<TextMasterStyle10Level> lstLvl5;
     TextMasterStyle10Atom(void* /*dummy*/ = 0) {}
 };
+class TextClientDataSubContainerOrAtom : public StreamOffset {
+public:
+    class choice2925155378 : public QSharedPointer<StreamOffset> {
+    public:
+        choice2925155378() {}
+        explicit choice2925155378(OutlineAtom* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2925155378(TextContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
+        template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
+        template <typename T> bool is() const { return get<T>(); }
+    };
+    choice2925155378 anon;
+    TextClientDataSubContainerOrAtom(void* /*dummy*/ = 0) {}
+};
 class TextContainerInteractiveInfo : public StreamOffset {
 public:
     class choice3752530176 : public QSharedPointer<StreamOffset> {
@@ -5528,6 +5582,7 @@ public:
     QSharedPointer<OfficeArtClientAnchor> clientAnchor;
     QSharedPointer<OfficeArtClientData> clientData;
     QSharedPointer<OfficeArtClientTextBox> clientTextbox;
+    QSharedPointer<OfficeArtFOPT> shapePrimaryOptions2;
     QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
     QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
     QSharedPointer<UnknownTextContainerChild> unknown;

@@ -90,6 +90,11 @@ public:
                  KoParagraphStyle::Property space, KoParagraphStyle::Property innerWidth);
 
     /**
+     * Set if this border should possibly be merged with the next.
+     */
+    void setMergeWithNext(bool merge);
+
+    /**
      * @return true if there has been at least one border set.
      */
     bool hasBorders() const;
@@ -101,8 +106,8 @@ public:
     qreal inset(Side side) const;
 
     /// returns true if the borders of param border are the same as this one.
-    bool operator==(const KoTextBlockBorderData &border);
-    bool equals(const KoTextBlockBorderData &border);
+    bool operator==(const KoTextBlockBorderData &border) const;
+    bool equals(const KoTextBlockBorderData &border) const;
 
     /**
      * Paint the borders.

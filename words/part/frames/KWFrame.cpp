@@ -25,7 +25,6 @@
 #include "KWTextFrameSet.h"
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
-#include "KoTextAnchor.h"
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
 #include <KoTextShapeData.h>
@@ -34,11 +33,10 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
-KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
+KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         : m_shape(shape),
         m_frameBehavior(Words::AutoExtendFrameBehavior),
         m_newFrameBehavior(Words::NoFollowupFrame),
-        m_anchoredPageNumber(pageNumber),
         m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
         m_minimumFrameHeight(0.0) // no minimum height per default
@@ -52,16 +50,29 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
     if (parentFrameSet) {
         if (Words::isHeaderFooter(parentFrameSet)) {
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+                // header and footer are always auto-grow-height independent of whatever
+                // was defined for them in the document.
                 data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
             }
         }
         if (parentFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+            /* NoResize should be default this days. Setting it here would overwrite any value
+              read in TextShape::loadStyle what is not what we want.
+
             if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
                 data->setResizeMethod(KoTextShapeDataBase::NoResize);
             }
+            */
         } else {
             shape->setGeometryProtected(true);
-            shape->setCollisionDetection(false);
+
+            // We need to keep collision detection on or we will not relayout when page anchored shapes are
+            // moved. For page anchored shapes (which are different from anchored shapes which are usually
+            // children of the shape they are anchored too and therefore the ShapeManager filters collision
+            // events for them out) the KoTextRootAreaProvider::relevantObstructions method is used to produce
+            // obstructions whereas for anchored shapes the KoTextDocumentLayout::registerAnchoredObstruction
+            // is used to explicit register the obstructions.
+            //shape->setCollisionDetection(false);
         }
     }
 
@@ -116,17 +127,20 @@ void KWFrame::cleanupShape(KoShape* shape)
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_frameSet);
     if (tfs) {
         KWRootAreaProvider *rootAreaProvider = tfs->rootAreaProvider();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
-        Q_ASSERT(lay);
-        QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
-        for(int i = 0; i < layoutRootAreas.count(); ++i) {
-            KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
-            if (rootArea->associatedShape() == shape) {
-                KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
-                rootAreaProvider->releaseAllAfter(prevRootArea);
-                lay->removeRootArea(prevRootArea);
-                rootArea->setAssociatedShape(0);
-                break;
+        // it is no longer set when document is destroyed
+        if (rootAreaProvider) {
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            Q_ASSERT(lay);
+            QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
+            for(int i = 0; i < layoutRootAreas.count(); ++i) {
+                KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
+                if (rootArea->associatedShape() == shape) {
+                    KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
+                    rootAreaProvider->releaseAllAfter(prevRootArea);
+                    lay->removeRootArea(prevRootArea);
+                    rootArea->setAssociatedShape(0);
+                    break;
+                }
             }
         }
     }
@@ -170,7 +184,7 @@ void KWFrame::copySettings(const KWFrame *frame)
     shape()->copySettings(frame->shape());
 }
 
-void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset) const
+void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int /*pageZIndexOffset*/) const
 {
     QString value;
     switch (frameBehavior()) {
@@ -202,14 +216,11 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     // shape properties
     const qreal pagePos = page.offsetInDocument();
 
-    const int effectiveZIndex = m_shape->zIndex() + pageZIndexOffset;
-    m_shape->setAdditionalAttribute("draw:z-index", QString::number(effectiveZIndex));
     m_shape->setAdditionalAttribute("text:anchor-type", "page");
     m_shape->setAdditionalAttribute("text:anchor-page-number", QString::number(page.pageNumber()));
     context.addShapeOffset(m_shape, QTransform(1, 0, 0 , 1, 0, -pagePos));
     m_shape->saveOdf(context);
     context.removeShapeOffset(m_shape);
-    m_shape->removeAdditionalAttribute("draw:z-index");
     m_shape->removeAdditionalAttribute("fo:min-height");
     m_shape->removeAdditionalAttribute("text:anchor-page-number");
     m_shape->removeAdditionalAttribute("text:anchor-page-number");

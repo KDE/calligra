@@ -32,7 +32,7 @@
 
 #include <klocale.h>
 
-#include <QtGui/QStackedWidget>
+#include <QStackedWidget>
 
 class ShapePropertiesDocker::Private {
 public:
@@ -169,7 +169,7 @@ void ShapePropertiesDocker::shapePropertyChanged()
 
 void ShapePropertiesDocker::resourceChanged(int key, const QVariant &variant)
 {
-    if (key == KoCanvasResource::Unit && d->currentPanel)
+    if (key == KoCanvasResourceManager::Unit && d->currentPanel)
         d->currentPanel->setUnit(variant.value<KoUnit>());
 }
 

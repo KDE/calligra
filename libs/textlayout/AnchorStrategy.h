@@ -20,22 +20,18 @@
 #ifndef ANCHORSTRATEGY_H_
 #define ANCHORSTRATEGY_H_
 
-#include "KoTextAnchor.h"
+#include "KoShapeAnchor.h"
 
 #include <QRectF>
 
 class KoTextShapeContainerModel;
-class KoTextShapeData;
 class KoTextLayoutRootArea;
-class KoShape;
-class QTextBlock;
-class QTextLayout;
 
 
-class AnchorStrategy  : public KoAnchorStrategy
+class AnchorStrategy  : public KoShapeAnchor::PlacementStrategy
 {
 public:
-    AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
+    AnchorStrategy(KoShapeAnchor *anchor, KoTextLayoutRootArea *rootArea);
     virtual ~AnchorStrategy();
 
     /**
@@ -47,7 +43,13 @@ public:
 
     virtual void detachFromModel();
 
-    virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position);
+    /**
+     * Reparent the anchored shape under the rootArea's container this AnchorStrategy acts for
+    .*
+     * If needed changes the parent KoShapeContainerModel and KoShapeContainer of the anchored shape.
+     * It is changed so the anchored shape is now under the rootArea
+     */
+    virtual void updateContainerModel();
 
     /// get page rectangle coordinates to which this text anchor is anchored (needed for HPage)
     QRectF pageRect();
@@ -61,7 +63,7 @@ public:
 
     /// set content rectangle coordinates to which this text anchor is anchored (needed for
     /// HPageContent)
-    void setPageContentRect(QRectF &marginRect);
+    void setPageContentRect(const QRectF &marginRect);
 
     /// get paragraph rectangle coordinates to which this text anchor is anchored (needed for
     /// HParagraphContent, HParagraphStartMargin, HParagraphEndMargin, VParagraph)
@@ -71,6 +73,20 @@ public:
     /// HParagraphStartMargin, HParagraphEndMargin, VParagraph)
     void setParagraphRect(const QRectF &paragraphRect);
 
+    /// get paragraph rectangle coordinates to which this text anchor is anchored (needed for
+    /// HParagraphContent, HParagraphStartMargin, HParagraphEndMargin)
+    QRectF paragraphContentRect();
+
+    /// set paragraph rectangle to which this text anchor is anchored (needed for HParagraphContent,
+    /// HParagraphStartMargin, HParagraphEndMargin)
+    void setParagraphContentRect(const QRectF &paragraphContentRect);
+
+    /// get layout environment rectangle @see odf attribute style:flow-with-text
+    QRectF layoutEnvironmentRect();
+
+     /// set layout environment rect @see odf attribute style:flow-with-text
+    void setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
+
     /// get number of page to which this text anchor is anchored (needed for HOutside, HInside,
     /// HFromInside)
     int pageNumber();
@@ -79,14 +95,18 @@ public:
     /// HFromInside)
     void setPageNumber(int pageNumber);
 
+protected:
+    KoShapeAnchor * const m_anchor;
+    KoTextLayoutRootArea *m_rootArea;
+
 private:
     KoTextShapeContainerModel *m_model;
-    KoTextAnchor * const m_anchor;
-    KoTextLayoutRootArea *m_rootArea;
     QRectF m_pageRect;
     QRectF m_pageContentRect;
     QRectF m_paragraphRect;
+    QRectF m_paragraphContentRect;
+    QRectF m_layoutEnvironmentRect;
     int m_pageNumber;
 };
 
-#endif /* INLINEANCHORSTRATEGY_H_ */
+#endif /* ANCHORSTRATEGY_H_ */

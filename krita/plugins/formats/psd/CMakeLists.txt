@@ -1,4 +1,4 @@
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 include_directories( ${KRITA_INCLUDES} )
 
@@ -16,7 +16,7 @@ set(LIB_PSD_SRCS
     psd_resource_block.cpp
     psd_layer_section.cpp
     psd_layer_record.cpp
-
+    psd_image_data.cpp
     compression.cpp
 )
 
@@ -42,7 +42,7 @@ kde4_add_plugin(kritapsdexport ${kritapsdexport_PART_SRCS})
 target_link_libraries(kritapsdexport kritaui )
 install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES  krita_psd_import.desktop 
+install( FILES krita_psd_import.desktop 
                krita_psd_export.desktop  
 DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

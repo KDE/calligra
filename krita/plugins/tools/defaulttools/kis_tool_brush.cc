@@ -19,106 +19,61 @@
  */
 
 #include "kis_tool_brush.h"
-#include <QEvent>
-#include <QLabel>
-#include <QLayout>
-#include <QWidget>
-#include <QTimer>
-#include <QPushButton>
-#include <QPainter>
-#include <QRect>
-#include <QCheckBox>
-#include <QGridLayout>
-#include <QComboBox>
-#include <QSizePolicy>
 
-#include <kis_debug.h>
+#include <QCheckBox>
+#include <QComboBox>
+
 #include <klocale.h>
 
-#include "KoPointerEvent.h"
-#include "KoCanvasBase.h"
-#include "kis_slider_spin_box.h"
-
-#include "kis_config.h"
-#include "kis_paintop_preset.h"
-#include "kis_paintop_registry.h"
 #include "kis_cursor.h"
-#include "kis_painter.h"
 #include "kis_slider_spin_box.h"
-#include "kis_paint_device.h"
-#include "kis_layer.h"
 
-#define MAXIMUM_SMOOTHNESS 1000
+#define MAXIMUM_SMOOTHNESS_QUALITY 100 // 0..100
+#define MAXIMUM_SMOOTHNESS_FACTOR 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
 
-const int MAXIMUM_RATE = 1000;  // 1 second for rate? Just quick test
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
-        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18n("Brush"))
+    : KisToolFreehand(canvas,
+                      KisCursor::load("tool_freehand_cursor.png", 5, 5),
+                      i18nc("(qtundo-format)", "Brush"))
 {
     setObjectName("tool_brush");
-
-    m_isAirbrushing = false;
-    m_rate = 100;
-    m_timer = new QTimer(this);
-    Q_CHECK_PTR(m_timer);
-
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 }
 
 KisToolBrush::~KisToolBrush()
 {
-    delete m_timer;
-    m_timer = 0;
 }
 
-void KisToolBrush::timeoutPaint()
+void KisToolBrush::slotSetSmoothingType(int index)
 {
-    Q_ASSERT(currentPaintOpPreset()->settings()->isAirbrushing());
-    if (currentImage() && m_painter) {
-        paintAt(m_previousPaintInformation);
-        currentNode()->setDirty(m_painter->takeDirtyRegion());
+    switch (index) {
+    case 0:
+        m_smoothingOptions.smoothingType = KisSmoothingOptions::NO_SMOOTHING;
+        m_sliderSmoothnessFactor->setEnabled(false);
+        m_sliderSmoothnessQuality->setEnabled(false);
+        break;
+    case 1:
+        m_smoothingOptions.smoothingType = KisSmoothingOptions::SIMPLE_SMOOTHING;
+        m_sliderSmoothnessFactor->setEnabled(false);
+        m_sliderSmoothnessQuality->setEnabled(false);
+        break;
+    case 2:
+    default:
+        m_smoothingOptions.smoothingType = KisSmoothingOptions::WEIGHTED_SMOOTHING;
+        m_sliderSmoothnessFactor->setEnabled(true);
+        m_sliderSmoothnessQuality->setEnabled(true);
     }
 }
 
-
-void KisToolBrush::initPaint(KoPointerEvent *e)
+void KisToolBrush::slotSetSmoothnessQuality(int quality)
 {
-    KisToolFreehand::initPaint(e);
-
-    m_rate = currentPaintOpPreset()->settings()->rate();
-    m_isAirbrushing = currentPaintOpPreset()->settings()->isAirbrushing();
-
-    if (!m_painter) {
-        warnKrita << "Didn't create a painter! Something is wrong!";
-        return;
-    }
-
-    if (m_isAirbrushing) {
-        m_timer->start(m_rate);
-    }
+    m_smoothingOptions.smoothnessQuality = quality;
 }
 
-
-void KisToolBrush::endPaint()
+void KisToolBrush::slotSetSmoothnessFactor(qreal factor)
 {
-    m_timer->stop();
-    KisToolFreehand::endPaint();
-}
-
-
-void KisToolBrush::mouseMoveEvent(KoPointerEvent *e)
-{
-    KisToolFreehand::mouseMoveEvent(e);
-    if (m_painter && m_painter->paintOp() && m_isAirbrushing) {
-        m_timer->start(m_rate);
-    }
-}
-
-
-void KisToolBrush::slotSetSmoothness(int smoothness)
-{
-    m_smoothness = smoothness / (double)MAXIMUM_SMOOTHNESS;
+    m_smoothingOptions.smoothnessFactor = factor;
 }
 
 void KisToolBrush::slotSetMagnetism(int magnetism)
@@ -128,23 +83,32 @@ void KisToolBrush::slotSetMagnetism(int magnetism)
 
 QWidget * KisToolBrush::createOptionWidget()
 {
-
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
     optionWidget->setObjectName(toolId() + "option widget");
 
-    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness:"), optionWidget);
-    m_chkSmooth->setObjectName("chkSmooth");
-    m_chkSmooth->setChecked(m_smooth);
-    connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
+    // Line smoothing configuration
+    m_cmbSmoothingType = new QComboBox(optionWidget);
+    m_cmbSmoothingType->addItems(QStringList() << i18n("No Smoothing") << i18n("Basic Smoothing") << i18n("Weighted Smoothing"));
+    m_cmbSmoothingType->setCurrentIndex(1);
+    connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
+    addOptionWidgetOption(m_cmbSmoothingType);
 
-    m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
-    m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS);
-    m_sliderSmoothness->setEnabled(true);
-    connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
-    connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
-    m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
+    m_sliderSmoothnessQuality = new KisSliderSpinBox(optionWidget);
+    m_sliderSmoothnessQuality->setRange(1, MAXIMUM_SMOOTHNESS_QUALITY);
+    m_sliderSmoothnessQuality->setEnabled(true);
+    connect(m_sliderSmoothnessQuality, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothnessQuality(int)));
+    m_sliderSmoothnessQuality->setValue(m_smoothingOptions.smoothnessQuality);
+    addOptionWidgetOption(m_sliderSmoothnessQuality, new QLabel(i18n("Quality:")));
 
-    addOptionWidgetOption(m_sliderSmoothness, m_chkSmooth);
+    m_sliderSmoothnessFactor = new KisDoubleSliderSpinBox(optionWidget);
+    m_sliderSmoothnessFactor->setRange(3.0, MAXIMUM_SMOOTHNESS_FACTOR, 1);
+    m_sliderSmoothnessFactor->setEnabled(true);
+    connect(m_sliderSmoothnessFactor, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessFactor(qreal)));
+    m_sliderSmoothnessFactor->setValue(m_smoothingOptions.smoothnessFactor);
+
+    addOptionWidgetOption(m_sliderSmoothnessFactor, new QLabel(i18n("Weight:")));
+
+    slotSetSmoothingType(1);
 
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
@@ -152,7 +116,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
-    m_sliderMagnetism->setRange(0, MAXIMUM_SMOOTHNESS);
+    m_sliderMagnetism->setRange(0, MAXIMUM_MAGNETISM);
     m_sliderMagnetism->setEnabled(false);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);

@@ -1,12 +1,30 @@
 project(kexi)
 
+INCLUDE(CheckFunctionExists)
+
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
 option(KEXI_MOBILE "compile a mobile Kexi" OFF)
 
+check_function_exists("uname" HAVE_UNAME)
+
 IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
   INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
+
+option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
+
+if(KEXI_AUTORISE_TABBED_TOOLBAR)
+    ADD_DEFINITIONS(-DKEXI_AUTORISE_TABBED_TOOLBAR)
+endif(KEXI_AUTORISE_TABBED_TOOLBAR)
+
+if(NOT KEXI_UNFINISHED)
+  ADD_DEFINITIONS(-DKEXI_NO_UNFINISHED)
+endif(NOT KEXI_UNFINISHED)
+
+if(KEXI_SHOW_UNIMPLEMENTED)
+  ADD_DEFINITIONS(-DKEXI_SHOW_UNIMPLEMENTED)
+endif(KEXI_SHOW_UNIMPLEMENTED)
 
 ADD_DEFINITIONS(
   -DKEXI_NO_CURSOR_PROPERTY 
@@ -14,7 +32,6 @@ ADD_DEFINITIONS(
   -DKEXI_NO_SUBFORM
   -DKEXI_DB_COMBOBOX_WIDGET
   -DDB_TEMPLATES
-  -DKEXI_NO_UNFINISHED
   -DKEXI_SCRIPTS_SUPPORT
   -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
 # temporary for 2.2:
@@ -32,6 +49,7 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${KOMAIN_INCLUDES}
   ${KOPROPERTY_INCLUDES}
+  ${CALLIGRADB_INCLUDES}
   ${CMAKE_SOURCE_DIR}/libs
 )
 
@@ -55,7 +73,7 @@ if(WITH_WEBFORMS)
     set(WITH_WEBFORMS TRUE CACHE STRING "Build with Kexi Web Forms support")
     add_definitions(-DKEXIWEBFORMS_SUPPORTED)
     message(STATUS "Kexi Web Forms support enabled.")
-    macro_optional_add_subdirectory(webforms)
+    add_subdirectory(webforms)
   else(GOOGLE_CTEMPLATE_FOUND AND Boost_FOUND AND PionNet_FOUND)
     set(WITH_WEBFORMS FALSE CACHE STRING "Build with Kexi Web Forms support")
     message(STATUS "Kexi Web Forms support DISABLED, one of the following libraries is missing:")
@@ -69,6 +87,34 @@ endif(WITH_WEBFORMS)
 endif(FALSE)
 
 add_subdirectory( kexiutils )
+
+macro_optional_find_package(MySQL)
+macro_log_feature(MYSQL_FOUND "libmysqlclient" "MySQL Client Library" "http://www.mysql.com" FALSE "" "Required by Kexi MySQL driver")
+
+INCLUDE (FindPostgreSQL)
+
+set (PQXX_MIN_VERSION "3.0.0")
+set (PQXX_MAX_VERSION "4.0.0")
+
+macro_optional_find_package(PostgreSQL)
+macro_log_feature(POSTGRESQL_FOUND "libpq" "C application programmer's interface to PostgreSQL" "http://www.postgresql.org" FALSE "" "Required by Kexi PostgreSQL driver")
+
+pkg_check_modules (PQXX libpqxx)
+
+IF (POSTGRESQL_FOUND AND PQXX_FOUND)
+   IF (PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
+      macro_log_feature(PQXX_FOUND "libpqxx" "Official C++ client API for PostgreSQL" "http://pqxx.org/development/libpqxx/" FALSE "" "Required by Kexi PostgreSQL driver")
+   ELSE (PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
+      macro_log_feature(FALSE "libpqxx" "Official C++ client API for PostgreSQL, version >= ${PQXX_MIN_VERSION} and older than ${PQXX_MAX_VERSION}" "http://pqxx.org/development/libpqxx/" FALSE "" "Required by Kexi PostgreSQL driver")
+   ENDIF (PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
+ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
+
+macro_optional_find_package(FreeTDS)
+macro_log_feature(FREETDS_FOUND "FreeTDS" "Open source implementation of the TDS (Tabular Data Stream) protocol" "http://www.freetds.org" FALSE "" "Required by Kexi Sybase driver")
+
+macro_optional_find_package(XBase)
+macro_log_feature(XBASE_FOUND "XBase" "XBase compatible C++ class library" "http://linux.techass.com/projects/xdb" FALSE "" "Required by Kexi XBase driver")
+
 add_subdirectory( kexidb )
 add_subdirectory( core )
 add_subdirectory( widget )
@@ -76,7 +122,6 @@ add_subdirectory( data )
 add_subdirectory( pics )
 add_subdirectory( plugins )
 add_subdirectory( tests )
-add_subdirectory( shapes )
 
 IF(KEXI_MOBILE)
 
@@ -89,14 +134,14 @@ ENDIF(KEXI_MOBILE)
 ########### next target ###############
 
 IF(KEXI_MOBILE)
-  #Add Kexi mobile application subdir here
+  add_subdirectory( mobile )
 ELSE(KEXI_MOBILE)
   set(kexi_SRCS main.cpp )
-  kde4_add_app_icon(kexi_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kexi.png")
+  kde4_add_app_icon(kexi_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakexi.png")
   kde4_add_executable(kexi ${kexi_SRCS})
   target_link_libraries(kexi 
     ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
-    kexidb
+    ${CALLIGRADB_LIBS}
     keximain
     kexicore
   )

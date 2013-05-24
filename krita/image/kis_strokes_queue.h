@@ -20,7 +20,8 @@
 #define __KIS_STROKES_QUEUE_H
 
 #include "krita_export.h"
-#include "kis_dab_processing_strategy.h"
+#include "kis_types.h"
+#include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"
 
 class KisUpdaterContext;
@@ -32,29 +33,28 @@ public:
     KisStrokesQueue();
     ~KisStrokesQueue();
 
-    void startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
+    void addJob(KisStrokeId id, KisStrokeJobData *data);
 
-    void endStroke();
-    void cancelStroke();
+    void endStroke(KisStrokeId id);
+    bool cancelStroke(KisStrokeId id);
 
-    void processQueue(KisUpdaterContext &updaterContext);
+    void processQueue(KisUpdaterContext &updaterContext, bool externalJobsPending);
     bool needsExclusiveAccess() const;
     bool isEmpty() const;
 
     qint32 sizeMetric() const;
+    QString currentStrokeName() const;
 
 private:
-    KisStroke* currentStroke();
-    bool sanityCheckCurrentStrokeFinished(bool finished);
-
-    bool processOneJob(KisUpdaterContext &updaterContext);
+    bool processOneJob(KisUpdaterContext &updaterContext, bool externalJobsPending);
     bool checkStrokeState(bool hasStrokeJobsRunning);
     bool checkExclusiveProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
     bool checkSequentialProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
-
+    bool checkBarrierProperty(qint32 numMergeJobs, qint32 numStrokeJobs,
+                              bool externalJobsPending);
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

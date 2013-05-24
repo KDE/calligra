@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +21,8 @@
 
 #include "FrameIterator.h"
 
+#include <KoShapeContainer.h>
+#include <KoTextShapeData.h>
 #include <KoTextPage.h>
 
 class KoTextLayoutRootArea::Private
@@ -59,6 +61,7 @@ bool KoTextLayoutRootArea::layoutRoot(FrameIterator *cursor)
     setVirginPage(true);
 
     bool retval = KoTextLayoutArea::layout(cursor);
+
     delete d->nextStartOfArea;
     d->nextStartOfArea = new FrameIterator(cursor);
     return retval;
@@ -69,7 +72,7 @@ void KoTextLayoutRootArea::setAssociatedShape(KoShape *shape)
     d->shape = shape;
 }
 
-KoShape *KoTextLayoutRootArea::associatedShape()
+KoShape *KoTextLayoutRootArea::associatedShape() const
 {
     return d->shape;
 }
@@ -82,9 +85,22 @@ void KoTextLayoutRootArea::setPage(KoTextPage *textpage)
 
 KoTextPage* KoTextLayoutRootArea::page() const
 {
-    return d->textpage;
+    if (d->textpage) {
+        return d->textpage;
+    }
+    // If this root area has no KoTextPage then walk up the shape-hierarchy and look if we
+    // have a textshape-parent that has a valid KoTextPage. This handles the in Words valid
+    // case that the associatedShape is nested in another shape.
+    KoTextPage *p = 0;
+    for(KoShape *shape = associatedShape() ? associatedShape()->parent() : 0; shape; shape = shape->parent()) {
+        if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+            if (KoTextLayoutRootArea *r = data->rootArea())
+                p = r->page();
+            break;
+        }
+    }
+    return p;
 }
-
 
 void KoTextLayoutRootArea::setDirty()
 {

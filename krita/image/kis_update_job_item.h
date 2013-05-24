@@ -100,6 +100,8 @@ public:
     }
 
     inline void setDone() {
+        m_walker = 0;
+        m_strokeJob = 0;
         m_type = EMPTY;
     }
 
@@ -132,6 +134,7 @@ private:
     friend class KisSimpleUpdateQueueTest;
     friend class KisStrokesQueueTest;
     friend class KisUpdateSchedulerTest;
+    friend class KisTestableUpdaterContext;
 
     inline KisBaseRectsWalkerSP walker() const {
         return m_walker;
@@ -139,6 +142,13 @@ private:
 
     inline KisStrokeJob* strokeJob() const {
         return m_strokeJob;
+    }
+
+    inline void testingSetDone() {
+        if(m_type == STROKE) {
+            delete m_strokeJob;
+        }
+        setDone();
     }
 
 private:

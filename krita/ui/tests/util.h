@@ -44,11 +44,11 @@
 #include "kis_shape_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include "kis_transformation_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
+#include "kis_default_bounds.h"
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
@@ -84,7 +84,9 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
 KisDoc2* createCompleteDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
-    KisDoc2* doc = new KisDoc2;
+
+    KisDoc2 *doc = new KisDoc2();
+
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
 
@@ -172,16 +174,6 @@ KisDoc2* createCompleteDocument()
     transparencyMask2->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(transparencyMask2, group2);
 
-    KisTransformationMaskSP transformationMask1 = new KisTransformationMask();
-    transformationMask1->setName("transformationMask1");
-    transformationMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
-    image->addNode(transformationMask1, cloneLayer1);
-
-    KisTransformationMaskSP transformationMask2 = new KisTransformationMask();
-    transformationMask2->setName("transformationMask2");
-    transformationMask2->setSelection(createPixelSelection(paintLayer1->paintDevice()));
-    image->addNode(transformationMask2, adjustmentLayer2);
-
     KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image);
     image->addNode(selectionMask1, paintLayer1);
     selectionMask1->setName("selectionMask1");
@@ -189,12 +181,23 @@ KisDoc2* createCompleteDocument()
 
     KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image);
     selectionMask2->setName("selectionMask2");
+    selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
 
     return doc;
 }
 
+KisDoc2* createEmptyDocument()
+{
+    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
+    KisDoc2 *doc = new KisDoc2();
+
+    doc->setCurrentImage(image);
+    doc->documentInfo()->setAboutInfo("title", image->objectName());
+
+    return doc;
+}
 
 
 #endif

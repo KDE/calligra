@@ -22,7 +22,7 @@
 #ifndef KEXIFORMPART_H
 #define KEXIFORMPART_H
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <kexi.h>
 #include <kexipart.h>
@@ -101,6 +101,7 @@ protected slots:
 private:
     class Private;
     Private* d;
+    const KexiWindow* window;
 };
 
 #endif

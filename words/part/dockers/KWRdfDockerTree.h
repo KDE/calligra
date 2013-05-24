@@ -24,7 +24,6 @@
 #include <KoCanvasObserverBase.h>
 
 class KoDocumentRdf;
-class KWView;
 class KoTextEditor;
 
 /**
@@ -49,7 +48,7 @@ class KWRdfDockerTree : public QTreeWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    KWRdfDockerTree(QWidget *parent = 0);
+    explicit KWRdfDockerTree(QWidget *parent = 0);
 
     void setDocumentRdf(KoDocumentRdf *rdf);
     /// reimplemented from KoCanvasObserver
@@ -71,8 +70,6 @@ protected:
 
     // for dragging
     void mouseMoveEvent(QMouseEvent *event);
-
-    KoTextEditor *editor();
 
 private:
     KoDocumentRdf *m_rdf;

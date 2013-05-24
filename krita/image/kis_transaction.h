@@ -26,10 +26,10 @@
 
 #include "kis_transaction_data.h"
 #include "kis_selection_transaction_data.h"
-#include "kis_selected_transaction_data.h"
 #include "kis_paint_device.h"
 
 #include "kis_undo_adapter.h"
+#include "kis_post_execution_undo_adapter.h"
 
 class KisTransaction
 {
@@ -53,6 +53,27 @@ public:
         m_transactionData->endTransaction();
         undoAdapter->addCommand(m_transactionData);
         m_transactionData = 0;
+    }
+
+    void commit(KisPostExecutionUndoAdapter* undoAdapter) {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
+                   "the transaction has been tried to be committed twice");
+
+        m_transactionData->endTransaction();
+        m_transactionData->redo();
+        undoAdapter->addCommand(KUndo2CommandSP(m_transactionData));
+        m_transactionData = 0;
+    }
+
+    KUndo2Command* endAndTake() {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
+                   "the transaction has been tried to be committed twice");
+
+        KisTransactionData *transactionData = m_transactionData;
+        m_transactionData = 0;
+
+        transactionData->endTransaction();
+        return transactionData;
     }
 
     void end() {
@@ -89,25 +110,16 @@ public:
     }
 
 protected:
-    KisTransaction() {}
+    KisTransaction() : m_transactionData(0) {}
     KisTransactionData* m_transactionData;
-};
-
-class KisSelectedTransaction : public KisTransaction
-{
-public:
-    KisSelectedTransaction(const QString& name, KisNodeSP node, KUndo2Command* parent = 0)
-    {
-        m_transactionData = new KisSelectedTransactionData(name, node, parent);
-    }
 };
 
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0)
+    KisSelectionTransaction(const QString& name, KisUndoAdapter *undoAdapter, KisSelectionSP selection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisSelectionTransactionData(name, image, selection, parent);
+        m_transactionData = new KisSelectionTransactionData(name, undoAdapter, selection, parent);
     }
 };
 

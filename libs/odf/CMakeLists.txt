@@ -31,34 +31,30 @@ set(koodf_LIB_SRCS
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
+    Ko3dScene.cpp
+    KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
+    KoColumns.cpp
     KoStore.cpp
     KoTarStore.cpp
     KoDirectoryStore.cpp
     KoZipStore.cpp
+    KoXmlStreamReader.cpp
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoEncryptedStore.cpp
     KoEncryptionChecker.cpp
-    KoProperties.cpp
     KoUnit.cpp
     KoOdfNotesConfiguration.cpp
+    KoOdfBibliographyConfiguration.cpp
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
-    KoCell.cpp
-    KoCellChild.cpp
-    KoCellValue.cpp
-    KoDummyCellValue.cpp
-    KoCellStyle.cpp
-    KoColumn.cpp
-    KoRawCellChild.cpp
-    KoRow.cpp
-    KoStyle.cpp
-    KoTable.cpp
-    KoColumnStyle.cpp
-    KoRowStyle.cpp
-    KoTblStyle.cpp
+    KoElementReference.cpp
+
+    styles/KoOdfStyle.cpp
+    styles/KoOdfStyleProperties.cpp
+    styles/KoOdfStyleManager.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
@@ -88,6 +84,7 @@ install( FILES
     KoOasisSettings.h
     KoOdfStylesReader.h
     KoOdfNotesConfiguration.h
+    KoOdfBibliographyConfiguration.h
     KoOdfNumberStyles.h
     KoOdfNumberDefinition.h
     KoOdfLineNumberingConfiguration.h
@@ -101,15 +98,19 @@ install( FILES
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
     KoBorder.h
+    Ko3dScene.h
+    KoShadowStyle.h
     KoPageLayout.h
     KoPageFormat.h
     KoColumns.h
     KoStore.h
     KoStoreDevice.h
+    KoXmlStreamReader.h
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h
-    KoProperties.h
     KoUnit.h
+    KoElementReference.h
+    KoTableTemplate.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

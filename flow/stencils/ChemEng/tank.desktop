@@ -1,9 +1,25 @@
 [Desktop Entry]
 Name=tank
+Name[bs]=spremnik
+Name[ca]=tanc
+Name[ca@valencia]=tanc
+Name[da]=tank
+Name[de]=Offener Tank
+Name[el]=tank
+Name[es]=tanque
+Name[et]=Paak
+Name[fr]=réservoir
+Name[gl]=Tanque
+Name[it]=tank
+Name[kk]=Бак
 Name[nb]=tank
 Name[nl]=tank
+Name[pl]=zbiornik
 Name[pt]=tanque
 Name[pt_BR]=tanque
+Name[ru]=Сосуд
+Name[sk]=tank
+Name[sl]=rezervoar
 Name[sv]=tank
 Name[uk]=Відкрита посудина
 Name[x-test]=xxtankxx

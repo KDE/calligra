@@ -19,13 +19,13 @@
 #ifndef __KIS_STROKE_JOB_H
 #define __KIS_STROKE_JOB_H
 
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job_strategy.h"
 
 class KisStrokeJob
 {
 public:
-    KisStrokeJob(KisDabProcessingStrategy *strategy,
-                 KisDabProcessingStrategy::DabProcessingData *data)
+    KisStrokeJob(KisStrokeJobStrategy *strategy,
+                 KisStrokeJobData *data)
         : m_dabStrategy(strategy),
           m_dabData(data)
     {
@@ -36,30 +36,43 @@ public:
     }
 
     void run() {
-        m_dabStrategy->processDab(m_dabData);
+        m_dabStrategy->run(m_dabData);
     }
 
     bool isSequential() const {
-        return m_dabStrategy->isSequential();
+        // Default value is 'SEQUENTIAL'
+        return m_dabData ? m_dabData->isSequential() : true;
+    }
+
+    bool isBarrier() const {
+        // Default value is simply 'SEQUENTIAL', *not* 'BARRIER'
+        return m_dabData ? m_dabData->isBarrier() : false;
     }
 
     bool isExclusive() const {
-        return m_dabStrategy->isExclusive();
+        // Default value is 'NORMAL'
+        return m_dabData ? m_dabData->isExclusive() : false;
     }
 
 private:
     // for testing use only, do not use in real code
     friend QString getJobName(KisStrokeJob *job);
-    KisDabProcessingStrategy* testingGetDabStrategy() {
+    friend QString getCommandName(KisStrokeJob *job);
+
+    KisStrokeJobStrategy* testingGetDabStrategy() {
         return m_dabStrategy;
+    }
+
+    KisStrokeJobData* testingGetDabData() {
+        return m_dabData;
     }
 
 private:
     // Shared between different jobs
-    KisDabProcessingStrategy *m_dabStrategy;
+    KisStrokeJobStrategy *m_dabStrategy;
 
     // Owned by the job
-    KisDabProcessingStrategy::DabProcessingData *m_dabData;
+    KisStrokeJobData *m_dabData;
 };
 
 #endif /* __KIS_STROKE_JOB_H */

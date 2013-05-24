@@ -1,5 +1,5 @@
 KEXI_SQL_KEYWORDS=../../kexidb/keywords.cpp
-MYSQL_KEYWORDS=../../kexidb/drivers/mySQL/mysqlkeywords.cpp
+MYSQL_KEYWORDS=../../kexidb/drivers/mysql/mysqlkeywords.cpp
 SQLITE3_KEYWORDS=../../kexidb/drivers/sqlite/sqlitekeywords.cpp
 PQXX_KEYWORDS=../../kexidb/drivers/pqxx/pqxxkeywords.cpp
 

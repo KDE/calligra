@@ -20,17 +20,17 @@
 #ifndef _SECTION_CONTAINER_H_
 #define _SECTION_CONTAINER_H_
 
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 
 #include <KoShapeContainer.h>
 
-class KoResourceManager;
+class KoDocumentResourceManager;
 class KoShapeLayer;
 class Section;
 class SectionShapeContainerModel;
 class RootSection;
 
-class SectionContainer : public KoShapeControllerBase
+class SectionContainer : public KoShapeBasedDocumentBase
 {
 public:
     SectionContainer(Section* , RootSection* _rootSection);

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,17 +22,38 @@
 #include <QApplication>
 #include <QFontMetrics>
 
-#include <KMenu>
-#include <KIconLoader>
-#include <KIconEffect>
+#include <kmenu.h>
+#include <kiconloader.h>
+#include <kiconeffect.h>
 
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
+
+#include <KoIcon.h>
+
 #include <formeditor/widgetlibrary.h>
 #include <kexiutils/utils.h>
 #include "../kexiformpart.h"
 #include "../kexiformmanager.h"
 #include <widget/utils/kexicontextmenuutils.h>
+
+
+class KexiDBWidgetContextMenuExtender::Private
+{
+public:
+    Private(KexiDataItemInterface* iface_)
+      : iface(iface_)
+      , contextMenuHasTitle(false)
+    {
+    }
+
+    KexiDataItemInterface* iface;
+    QPointer<QMenu> contextMenu;
+    QPointer<QAction> titleAction;
+    bool contextMenuHasTitle; //!< true if KPopupTitle has been added to the context menu.
+
+};
+
 
 //! Static data for kexi forms
 struct KexiFormStatics
@@ -51,10 +72,10 @@ struct KexiFormStatics
         if (!m_dataSourceTagIcon.isNull())
             return;
         QFontMetrics fm(QApplication::fontMetrics());
-        int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+        int size = IconSize(KIconLoader::Small);
         if (size < KIconLoader::SizeSmallMedium && fm.height() >= KIconLoader::SizeSmallMedium)
             size = KIconLoader::SizeSmallMedium;
-        m_dataSourceTagIcon = KIconLoader::global()->loadIcon(QLatin1String("data-source-tag"), KIconLoader::Small, size);
+        m_dataSourceTagIcon = SmallIcon(koIconName("data-source-tag"), size);
         KIconEffect::semiTransparent(m_dataSourceTagIcon);
         m_dataSourceRTLTagIcon = QPixmap::fromImage(m_dataSourceTagIcon.toImage().mirrored(true /*h*/, false /*v*/));
     }
@@ -89,8 +110,7 @@ QPixmap KexiFormUtils::dataSourceRTLTagIcon()
 
 KexiDBWidgetContextMenuExtender::KexiDBWidgetContextMenuExtender(QObject* parent, KexiDataItemInterface* iface)
         : QObject(parent)
-        , m_iface(iface)
-        , m_contextMenuHasTitle(false)
+        , d(new Private(iface))
 {
 }
 
@@ -98,51 +118,51 @@ KexiDBWidgetContextMenuExtender::~KexiDBWidgetContextMenuExtender()
 {
 }
 
-void KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu)
+void KexiDBWidgetContextMenuExtender::exec(QMenu *menu, const QPoint &globalPos)
+{
+    KMenu kmenu;
+    foreach(QAction* action, menu->actions()) {
+        kmenu.addAction(action);
+    }
+    createTitle(&kmenu);
+    kmenu.exec(globalPos);
+}
+
+void KexiDBWidgetContextMenuExtender::createTitle(KMenu *menu)
 {
     if (!menu)
         return;
-    m_contextMenu = menu;
-    KMenu *kmenu = dynamic_cast<KMenu*>(menu);
-#ifdef __GNUC__
-#warning TODO KexiDBWidgetContextMenuExtender::createTitle() what to do to insert title into KMenu?
-#else
-#pragma WARNING( TODO KexiDBWidgetContextMenuExtender::createTitle() what to do to insert title into KMenu? )
-#endif
-    if (!kmenu)
-        return;
-    m_titleAction = kmenu->addTitle(QString(), m_contextMenu->actions().first());
 
     QString icon;
-    if (dynamic_cast<QWidget*>(m_iface)) {
+    if (dynamic_cast<QWidget*>(d->iface)) {
         icon = KexiFormManager::self()->library()->iconName(
-                   dynamic_cast<QWidget*>(m_iface)->metaObject()->className());
+                   dynamic_cast<QWidget*>(d->iface)->metaObject()->className());
     }
-    m_contextMenuHasTitle = m_iface->columnInfo() ?
-                            KexiContextMenuUtils::updateTitle(kmenu,
-                                                              m_iface->columnInfo()->captionOrAliasOrName(),
-                                                              KexiDB::simplifiedTypeName(*m_iface->columnInfo()->field), icon)
-                            : false;
+    d->contextMenuHasTitle = d->iface->columnInfo() ?
+        KexiContextMenuUtils::updateTitle(
+            menu,
+            d->iface->columnInfo()->captionOrAliasOrName(),
+            KexiDB::simplifiedTypeName(*d->iface->columnInfo()->field), icon)
+        : false;
 
-    if (!m_contextMenuHasTitle)
-        kmenu->removeAction(m_titleAction);
-    updatePopupMenuActions();
+    updatePopupMenuActions(menu);
 }
 
-void KexiDBWidgetContextMenuExtender::updatePopupMenuActions()
+void KexiDBWidgetContextMenuExtender::updatePopupMenuActions(QMenu *menu)
 {
-    if (!m_contextMenu)
-        return;
-    const bool readOnly = m_iface->isReadOnly();
+    const bool readOnly = d->iface->isReadOnly();
 
-    foreach(QAction* action, m_contextMenu->actions()) {
+    foreach(QAction* action, menu->actions()) {
         const QString text(action->text());
-        if (text == QObject::tr("Cu&t")/*do not use i18n()!*/
-                || text == QObject::tr("&Copy")
-                || text == QObject::tr("&Paste")
-                || text == QObject::tr("Delete")) {
+        if (text.startsWith(QObject::tr("Cu&t")) /*do not use i18n()!*/
+            || text.startsWith(QObject::tr("C&lear"))
+            || text.startsWith(QObject::tr("&Paste"))
+            || text.startsWith(QObject::tr("Delete")))
+        {
             action->setEnabled(!readOnly);
-        } else if (text == QObject::tr("&Redo")) {
+        }
+        else if (text.startsWith(QObject::tr("&Redo")))
+        {
 //! @todo maybe redo will be enabled one day?
             action->setVisible(false);
         }

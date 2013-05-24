@@ -17,19 +17,15 @@
  */
 
 #include "kis_paintop_registry.h"
-#include <QPixmap>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kparts/plugin.h>
-#include <kservice.h>
-#include <kparts/componentfactory.h>
-#include <kservicetypetrader.h>
 
 #include <KoGenericRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 #include <KoID.h>
 
@@ -49,7 +45,7 @@ KisPaintOpRegistry::KisPaintOpRegistry()
 
 KisPaintOpRegistry::~KisPaintOpRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "Deleting KisPaintOpRegistry";
@@ -59,9 +55,23 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
     K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
     if (!s_instance.exists()) {
-        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 4)");
-        foreach(const QString id, s_instance->keys()) {
-            s_instance->get(id)->processAfterLoading();
+        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 28)");
+
+
+        KisImageSP img = new KisImage(0, 0, 0, 0, 0, KoColorSpaceRegistry::instance()->alpha8());
+        QStringList toBeRemoved;
+
+        foreach(const QString &id, s_instance->keys()) {
+            KisPaintOpFactory *factory = s_instance->get(id);
+            if (!factory->settings(img)) {
+                toBeRemoved << id;
+            }
+            else {
+                factory->processAfterLoading();
+            }
+        }
+        foreach(const QString &id, toBeRemoved) {
+            s_instance->remove(id);
         }
     }
     return s_instance;
@@ -103,7 +113,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
 
 KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, KisImageWSP image) const
 {
-    KisPaintOpFactory* f = value(id.id());
+    KisPaintOpFactory *f = value(id.id());
     Q_ASSERT(f);
     if (f) {
         KisPaintOpSettingsSP settings = f->settings(image);
@@ -119,6 +129,10 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, KisImageWSP
     preset->setName(i18n("default"));
 
     KisPaintOpSettingsSP s = settings(id, image);
+
+    if (s.isNull()) {
+        return 0;
+    }
 
     preset->setSettings(s);
     preset->setPaintOp(id);
@@ -154,7 +168,7 @@ QString KisPaintOpRegistry::pixmap(const KoID & id) const
 QList<KoID> KisPaintOpRegistry::listKeys() const
 {
     QList<KoID> answer;
-    foreach (const QString key, keys()) {
+    foreach (const QString &key, keys()) {
         answer.append(KoID(key, get(key)->name()));
     }
 

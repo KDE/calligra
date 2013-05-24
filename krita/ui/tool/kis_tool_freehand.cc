@@ -28,16 +28,17 @@
 #include <QThreadPool>
 
 #include <kaction.h>
+#include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
+#include <KoCanvasController.h>
 
 //pop up palette
 #include <kis_canvas_resource_provider.h>
 
 // Krita/image
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_path_paint_action.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
@@ -52,28 +53,26 @@
 #include <opengl/kis_opengl.h>
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
-#include <recorder/kis_node_query_path.h>
 #include <kis_view2.h>
 #include <kis_painting_assistants_manager.h>
 #include <kis_3d_object_model.h>
 
 #include "kis_update_time_monitor.h"
+#include "kis_painting_information_builder.h"
+#include "kis_tool_freehand_helper.h"
+#include "kis_recording_adapter.h"
 #include "strokes/freehand_stroke.h"
 
-#define ENABLE_RECORDING
+
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
-KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
+KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & /*transactionText*/)
     : KisToolPaint(canvas, cursor)
 {
     m_explicitShowOutline = false;
 
-    m_painter = 0;
-    m_smooth = true;
     m_assistant = false;
-    m_smoothness = 1.0;
     m_magnetism = 1.0;
-    m_pathPaintAction = 0;
 
     setSupportOutline(true);
 
@@ -84,25 +83,52 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_prevyTilt = 0.0;
 #endif
 
-    m_increaseBrushSize = new KAction(i18n("Increase Brush Size"), this);
-    m_increaseBrushSize->setShortcut(Qt::Key_Period);
-    connect(m_increaseBrushSize, SIGNAL(activated()), SLOT(increaseBrushSize()));
-    addAction("increase_brush_size", m_increaseBrushSize);
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
-    m_decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), this);
-    m_decreaseBrushSize->setShortcut(Qt::Key_Comma);
-    connect(m_decreaseBrushSize, SIGNAL(activated()), SLOT(decreaseBrushSize()));
-    addAction("decrease_brush_size", m_decreaseBrushSize);
+    if (!collection->action("increase_brush_size")) {
+        KAction *increaseBrushSize = new KAction(i18n("Increase Brush Size"), collection);
+        increaseBrushSize->setShortcut(Qt::Key_BracketRight);
+        collection->addAction("increase_brush_size", increaseBrushSize);
+    }
+
+    if (!collection->action("decrease_brush_size")) {
+        KAction *decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), collection);
+        decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
+        collection->addAction("decrease_brush_size", decreaseBrushSize);
+    }
+
+    addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
+    addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
 
     m_outlineTimer.setSingleShot(true);
     connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
 
-    m_strokeTimer.setSingleShot(true);
-    connect(&m_strokeTimer, SIGNAL(timeout()), this, SLOT(finishStroke()));
+    m_infoBuilder = new KisToolPaintingInformationBuilder(this);
+    m_recordingAdapter = new KisRecordingAdapter();
+    m_helper = new KisToolFreehandHelper(m_infoBuilder, m_recordingAdapter);
 }
 
 KisToolFreehand::~KisToolFreehand()
 {
+    delete m_helper;
+    delete m_recordingAdapter;
+    delete m_infoBuilder;
+}
+
+KisPaintingInformationBuilder* KisToolFreehand::paintingInformationBuilder() const
+{
+    return m_infoBuilder;
+}
+
+KisRecordingAdapter* KisToolFreehand::recordingAdapter() const
+{
+    return m_recordingAdapter;
+}
+
+void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)
+{
+    delete m_helper;
+    m_helper = helper;
 }
 
 int KisToolFreehand::flags() const
@@ -110,37 +136,50 @@ int KisToolFreehand::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
 }
 
+void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+{
+    KisToolPaint::activate(activation, shapes);
+    connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
+    connect(actions().value("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
+}
+
 void KisToolFreehand::deactivate()
 {
-    if(mode() == PAINT_MODE)
-    {
-        endPaint();
+    if (mode() == PAINT_MODE) {
+        endStroke();
         setMode(KisTool::HOVER_MODE);
     }
+    disconnect(actions().value("increase_brush_size"), 0, this, 0);
+    disconnect(actions().value("decrease_brush_size"), 0, this, 0);
     KisToolPaint::deactivate();
 }
 
-inline double norm(const QPointF& p)
+void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
-    return sqrt(p.x()*p.x() + p.y()*p.y());
+    setCurrentNodeLocked(true);
+
+    m_helper->setSmoothness(m_smoothingOptions);
+    m_helper->initPaint(event, canvas()->resourceManager(),
+                        image(),
+                        image().data(),
+                        image()->postExecutionUndoAdapter());
 }
 
-inline double angle(const QPointF& p1, const QPointF& p2)
+void KisToolFreehand::doStroke(KoPointerEvent *event)
 {
-    return atan2(p1.y(), p1.x()) - atan2(p2.y(), p2.x());
+    m_helper->paint(event);
+}
+
+void KisToolFreehand::endStroke()
+{
+    m_helper->endPaint();
+    setCurrentNodeLocked(false);
 }
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    if(mode() == KisTool::PAINT_MODE)
+    if (mode() == KisTool::PAINT_MODE)
         return;
-
-    m_outlineDocPoint = e->point;
-
-    KisConfig cfg;
-    if(cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-        updateOutlineRect();
-    }
 
     /**
      * FIXME: we need some better way to implement modifiers
@@ -154,11 +193,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             break;
         }
     }
-    bool ignoreEvent = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
-                                                         pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
-                                                         KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed()),e->modifiers());
-    if (!ignoreEvent){
+    bool eventIgnored = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
+                                                                                               pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
+                                                                                               KisVector2D::Zero(),
+                                                                                               e->rotation(), e->tangentialPressure(), perspective, 0),e->modifiers());
+    if (!eventIgnored){
         e->accept();
         return;
     }else{
@@ -166,32 +205,41 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     }
 
 
-    if(mode() == KisTool::HOVER_MODE &&
-       e->button() == Qt::LeftButton &&
-       e->modifiers() == Qt::NoModifier &&
-       !specialModifierActive()) {
+    if (mode() == KisTool::HOVER_MODE &&
+            e->button() == Qt::LeftButton &&
+            e->modifiers() == Qt::NoModifier &&
+            !specialModifierActive()) {
 
+        requestUpdateOutline(e->point);
+
+        if (currentNode() && currentNode()->inherits("KisShapeLayer")) {
+            KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+            canvas2->view()->showFloatingMessage(i18n("Can't paint on vector layer."), koIcon("draw-brush"));
+        }
 
         if (nodePaintAbility() != PAINT)
             return;
 
+        if (!nodeEditable()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
-        KisUpdateTimeMonitor::instance()->startStrokeMeasure(convertToPixelCoord(adjustPosition(e->point, e->point)));
-        initPaint(e);
+        KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+        if (canvas2)
+            canvas2->view()->disableControls();
 
-        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point, e->point)),
-                                                         pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
-                                                         KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed());
-        m_previousTangent = QPointF(0.0, 0.0);
-        m_haveTangent = false;
-        m_strokeBegin = e->point;
+
+        currentPaintOpPreset()->settings()->setCanvasRotation( static_cast<KisCanvas2*>(canvas())->rotationAngle() );
+        KisUpdateTimeMonitor::instance()->startStrokeMeasure(convertToPixelCoord(adjustPosition(e->point, e->point)));
+        initStroke(e);
 
         e->accept();
     }
     else {
         KisToolPaint::mousePressEvent(e);
+        requestUpdateOutline(e->point);
     }
 }
 
@@ -200,17 +248,11 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     /**
      * Update outline
      */
-    if(mode() == KisTool::HOVER_MODE ||
-       mode() == KisTool::PAINT_MODE) {
-        m_outlineDocPoint = e->point;
-
-        KisConfig cfg;
-        if(cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-            updateOutlineRect();
-        }
-
+    if (mode() == KisTool::HOVER_MODE ||
+            mode() == KisTool::PAINT_MODE) {
 #if defined(HAVE_OPENGL)
-        else if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
+        KisConfig cfg;
+        if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
             if (isCanvasOpenGL()) {
                 m_xTilt = e->xTilt();
                 m_yTilt = e->yTilt();
@@ -219,9 +261,10 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             }
         }
 #endif
+        requestUpdateOutline(e->point);
     }
 
-    if(mode() != KisTool::PAINT_MODE) {
+    if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::mouseMoveEvent(e);
         return;
     }
@@ -229,95 +272,48 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     /**
      * Actual painting
      */
-    QPointF adjusted = adjustPosition(e->point, m_strokeBegin);
-    QPointF pos = convertToPixelCoord(adjusted);
-    QPointF dragVec = pos - m_previousPaintInformation.pos();
 
+    QPointF pos = convertToPixelCoord(e->point);
     KisUpdateTimeMonitor::instance()->reportMouseMove(pos);
-
-    qreal perspective = 1.0;
-    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
-        if (grid->contains(adjusted)) {
-            perspective = grid->distance(adjusted);
-            break;
-        }
-    }
-
-    KisPaintInformation info =
-        KisPaintInformation(pos, pressureToCurve(e->pressure()),
-                            e->xTilt(), e->yTilt(), toKisVector2D(dragVec),
-                            e->rotation(), e->tangentialPressure(), perspective,
-                            m_strokeTimeMeasure.elapsed());
-
-    if (m_smooth) {
-        if (!m_haveTangent) {
-            m_haveTangent = true;
-            m_previousTangent = (info.pos() - m_previousPaintInformation.pos()) * m_smoothness /
-                                 (3.0 * (info.currentTime() - m_previousPaintInformation.currentTime()));
-        } else {
-            QPointF newTangent = (info.pos() - m_olderPaintInformation.pos()) * m_smoothness /
-                                  (3.0 * (info.currentTime() - m_olderPaintInformation.currentTime()));
-            qreal scaleFactor = (m_previousPaintInformation.currentTime() - m_olderPaintInformation.currentTime());
-            QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent * scaleFactor;
-            QPointF control2 = m_previousPaintInformation.pos() - newTangent * scaleFactor;
-            paintBezierCurve(m_olderPaintInformation,
-                            control1,
-                            control2,
-                            m_previousPaintInformation);
-            m_previousTangent = newTangent;
-        }
-        m_olderPaintInformation = m_previousPaintInformation;
-        m_strokeTimer.start(100);
-    } else {
-        paintLine(m_previousPaintInformation, info);
-    }
-
-    m_previousPaintInformation = info;
+    doStroke(e);
 }
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
-    if(mode() == KisTool::PAINT_MODE &&
-       e->button() == Qt::LeftButton) {
-
-        if (!m_hasPaintAtLeastOnce) {
-            paintAt(m_previousPaintInformation);
-        } else if (m_smooth && !m_previousTangent.isNull()) {
-            finishStroke();
+    if (mode() == KisTool::PAINT_MODE &&
+            e->button() == Qt::LeftButton) {
+        if (m_smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING) {
+            m_smoothingOptions.smoothingType = KisSmoothingOptions::SIMPLE_SMOOTHING;
+            m_helper->setSmoothness(m_smoothingOptions);
+            doStroke(e);
+            m_smoothingOptions.smoothingType =  KisSmoothingOptions::WEIGHTED_SMOOTHING;
         }
-        m_strokeTimer.stop();
+        endStroke();
 
-        endPaint();
+        if (m_assistant) {
+            static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->endStroke();
+        }
+
+        notifyModified();
+        KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+        if (canvas2) {
+            canvas2->view()->enableControls();
+        }
+
         setMode(KisTool::HOVER_MODE);
         e->accept();
     }
     else {
         KisToolPaint::mouseReleaseEvent(e);
+        requestUpdateOutline(e->point);
     }
-}
-
-void KisToolFreehand::finishStroke()
-{
-    if (mode() != KisTool::PAINT_MODE) {
-        // shouldn't happen
-        return;
-    }
-    QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * m_smoothness / 3.0;
-    qreal scaleFactor = (m_previousPaintInformation.currentTime() - m_olderPaintInformation.currentTime());
-    QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent * scaleFactor;
-    QPointF control2 = m_previousPaintInformation.pos() - newTangent;
-    paintBezierCurve(m_olderPaintInformation,
-                    control1,
-                    control2,
-                    m_previousPaintInformation);
-    m_previousTangent = QPointF(0.0, 0.0);
-    m_haveTangent = false;
 }
 
 void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 {
-    if(mode() != KisTool::PAINT_MODE) {
+    if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyPressEvent(event);
+        requestUpdateOutline(m_outlineDocPoint);
         return;
     }
 
@@ -326,125 +322,29 @@ void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 
 void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
 {
-    if(mode() != KisTool::PAINT_MODE) {
+    if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyReleaseEvent(event);
+        requestUpdateOutline(m_outlineDocPoint);
         return;
     }
 
     event->accept();
 }
 
+bool KisToolFreehand::isGestureSupported() const
+{
+    return true;
+}
+
 void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)
 {
     currentPaintOpPreset()->settings()->changePaintOpSize(offsetInDocPixels.x(), offsetInDocPixels.y());
-
-    m_outlineDocPoint = initialDocPoint;
-
-    updateOutlineRect();
-}
-
-void KisToolFreehand::initPaint(KoPointerEvent *)
-{
-    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-    if(canvas2)
-        canvas2->view()->disableControls();
-
-    setCurrentNodeLocked(true);
-
-    m_hasPaintAtLeastOnce = false;
-    m_haveTangent = false;
-    m_previousTangent = QPointF();
-    m_strokeTimeMeasure.start();
-
-    m_painter = new KisPainter();
-    m_resources =
-        new KisResourcesSnapshot(image(), canvas()->resourceManager());
-    bool indirectPainting = !currentPaintOpPreset()->settings()->paintIncremental();
-
-    KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(indirectPainting, m_resources, m_painter);
-
-    image()->startStroke(stroke);
-
-
-#ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
-    // distracted by the recording
-    m_pathPaintAction = new KisRecordedPathPaintAction(
-            KisNodeQueryPath::absolutePath(currentNode()),
-            currentPaintOpPreset()
-            );
-    m_pathPaintAction->setPaintIncremental(!indirectPainting);
-    setupPaintAction(m_pathPaintAction);
-#endif
-}
-
-void KisToolFreehand::endPaint()
-{
-    image()->endStroke();
-    m_painter = 0;
-
-    if (m_assistant) {
-        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->endStroke();
-    }
-
-    setCurrentNodeLocked(false);
-    notifyModified();
-    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-    if(canvas2) {
-        canvas2->view()->enableControls();
-    }
-
-#ifdef ENABLE_RECORDING
-    if (image() && m_pathPaintAction)
-        image()->actionRecorder()->addAction(*m_pathPaintAction);
-    delete m_pathPaintAction;
-    m_pathPaintAction = 0;
-#endif
-}
-
-void KisToolFreehand::paintAt(const KisPaintInformation &pi)
-{
-    m_hasPaintAtLeastOnce = true;
-
-    image()->addJob(
-        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
-                                            m_painter, pi,
-                                            m_dragDistance));
-}
-
-void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
-                                const KisPaintInformation &pi2)
-{
-    m_hasPaintAtLeastOnce = true;
-
-    image()->addJob(
-        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
-                                            m_painter, pi1, pi2,
-                                            m_dragDistance));
-}
-
-void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
-                                       const QPointF &control1,
-                                       const QPointF &control2,
-                                       const KisPaintInformation &pi2)
-{
-    m_hasPaintAtLeastOnce = true;
-
-    image()->addJob(
-        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
-                                            m_painter,
-                                            pi1, control1, control2, pi2,
-                                            m_dragDistance));
+    requestUpdateOutline(initialDocPoint);
 }
 
 bool KisToolFreehand::wantsAutoScroll() const
 {
     return false;
-}
-
-void KisToolFreehand::setSmooth(bool smooth)
-{
-    m_smooth = smooth;
 }
 
 void KisToolFreehand::setAssistant(bool assistant)
@@ -527,20 +427,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 #endif
 
     {
-        KisPaintOpSettings::OutlineMode outlineMode;
-        outlineMode = KisPaintOpSettings::CursorIsNotOutline;
-
-        if(m_explicitShowOutline ||
-           mode() == KisTool::GESTURE_MODE ||
-           (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
-            (mode() == HOVER_MODE ||
-             (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
-
-            outlineMode = KisPaintOpSettings::CursorIsOutline;
-        }
-
-        QPainterPath path = getOutlinePath(m_outlineDocPoint, outlineMode);
-        paintToolOutline(&gc,pixelToView(path));
+        paintToolOutline(&gc,pixelToView(m_currentOutline));
     }
 }
 
@@ -553,19 +440,37 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& str
     return point;
 }
 
+qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
+{
+    qreal perspective = 1.0;
+    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid->contains(documentPoint)) {
+            perspective = grid->distance(documentPoint);
+            break;
+        }
+    }
+    return perspective;
+}
+
 QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
     qreal scale = 1.0;
     qreal rotation = 0;
-    if (m_painter && m_painter->paintOp()){
-        scale = m_painter->paintOp()->currentScale();
-        rotation = m_painter->paintOp()->currentRotation();
+
+    const KisPaintOp *paintOp = m_helper->currentPaintOp();
+    if (paintOp){
+        scale = paintOp->currentScale();
+        rotation = paintOp->currentRotation();
+    }
+
+    if (mode() == KisTool::HOVER_MODE) {
+        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
     }
 
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = currentPaintOpPreset()->settings()->
-        brushOutline(imagePos, outlineMode, scale, rotation);
+            brushOutline(imagePos, outlineMode, scale, rotation);
 
     return path;
 }
@@ -574,7 +479,7 @@ void KisToolFreehand::increaseBrushSize()
 {
     int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
     int increment = 1;
-    if(paintopSize > 100) {
+    if (paintopSize > 100) {
         increment = 30;
     } else if (paintopSize > 10){
         increment = 10;
@@ -587,7 +492,7 @@ void KisToolFreehand::decreaseBrushSize()
 {
     int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
     int decrement = -1;
-    if(paintopSize > 100) {
+    if (paintopSize > 100) {
         decrement = -30;
     } else if (paintopSize > 20){
         decrement = -10;
@@ -596,14 +501,26 @@ void KisToolFreehand::decreaseBrushSize()
     showOutlineTemporary();
 }
 
-void KisToolFreehand::updateOutlineRect()
+void KisToolFreehand::requestUpdateOutline(const QPointF &outlineDocPoint)
 {
-    QRectF outlinePixelRect = getOutlinePath(m_outlineDocPoint, KisPaintOpSettings::CursorIsOutline).boundingRect();
-    QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
+    KisConfig cfg;
+    KisPaintOpSettings::OutlineMode outlineMode;
+    outlineMode = KisPaintOpSettings::CursorIsNotOutline;
 
-    if(!m_oldOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(m_oldOutlineRect);
+    if (m_explicitShowOutline ||
+        mode() == KisTool::GESTURE_MODE ||
+        (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
+         ((mode() == HOVER_MODE && !specialHoverModeActive()) ||
+          (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
+
+        outlineMode = KisPaintOpSettings::CursorIsOutline;
     }
+
+    m_outlineDocPoint = outlineDocPoint;
+    m_currentOutline = getOutlinePath(m_outlineDocPoint, outlineMode);
+
+    QRectF outlinePixelRect = m_currentOutline.boundingRect();
+    QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
     // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
     // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
@@ -613,22 +530,30 @@ void KisToolFreehand::updateOutlineRect()
     canvas()->viewConverter()->zoom(&zoomX, &zoomY);
     qreal xoffset = 2.0/zoomX;
     qreal yoffset = 2.0/zoomY;
-    m_oldOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
+    QRectF newOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
 
-    canvas()->updateCanvas(m_oldOutlineRect);
+    if (!m_oldOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(m_oldOutlineRect);
+    }
+
+    if (!newOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(newOutlineRect);
+    }
+
+    m_oldOutlineRect = newOutlineRect;
 }
 
 void KisToolFreehand::showOutlineTemporary()
 {
     m_explicitShowOutline = true;
     m_outlineTimer.start(HIDE_OUTLINE_TIMEOUT);
-    updateOutlineRect();
+    requestUpdateOutline(m_outlineDocPoint);
 }
 
 void KisToolFreehand::hideOutline()
 {
     m_explicitShowOutline = false;
-    updateOutlineRect();
+    requestUpdateOutline(m_outlineDocPoint);
 }
 
 #include "kis_tool_freehand.moc"

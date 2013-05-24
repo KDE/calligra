@@ -39,17 +39,17 @@ public:
     KisStatusBar(KisView2 * view);
     ~KisStatusBar();
 
+    KisProgressWidget *progress();
+
 public slots:
 
     void setZoom(int percentage);
     void documentMousePositionChanged(const QPointF &p);
-    void imageSizeChanged(qint32 w, qint32 h);
+    void imageSizeChanged();
     void setSelection(KisImageWSP image);
     void setProfile(KisImageWSP image);
     void setHelp(const QString &t);
     void updateStatusBarProfileLabel();
-
-    KisProgressWidget * progress();
 
 private:
 
@@ -65,7 +65,6 @@ private:
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;
-    KSqueezedTextLabel *m_statusBarHelpLabel;
 
 };
 

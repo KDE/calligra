@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 
 #include <QList>
 
@@ -28,7 +28,7 @@ class View;
 class ViewManager
 {
 public:
-    ViewManager(RootSection*);
+    explicit ViewManager(RootSection*);
     void addShape(Section* section, KoShape* shape);
     void removeShape(Section* section, KoShape* shape);
     void addView(View*);

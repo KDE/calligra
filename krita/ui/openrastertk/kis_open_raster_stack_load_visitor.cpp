@@ -43,6 +43,7 @@
 
 struct KisOpenRasterStackLoadVisitor::Private {
     KisImageWSP image;
+    vKisNodeSP activeNodes;
     KisDoc2* doc;
     KisOpenRasterLoadContext* loadContext;
 };
@@ -64,15 +65,35 @@ KisImageWSP KisOpenRasterStackLoadVisitor::image()
     return d->image;
 }
 
+vKisNodeSP KisOpenRasterStackLoadVisitor::activeNodes()
+{
+    return d->activeNodes;
+}
+
 void KisOpenRasterStackLoadVisitor::loadImage()
 {
-    d->image = new KisImage(d->doc->undoAdapter(), 0, 0, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
 
     QDomDocument doc = d->loadContext->loadStack();
 
-    d->image->lock();
+
     for (QDomNode node = doc.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "image") { // it's the image root
+            QDomElement subelem = node.toElement();
+
+            int width = 0;
+            if (!subelem.attribute("w").isNull()) {
+                width = subelem.attribute("w").toInt();
+            }
+
+            int height = 0;
+            if (!subelem.attribute("h").isNull()) {
+                height = subelem.attribute("h").toInt();
+            }
+
+            dbgFile << ppVar(width) << ppVar(height);
+
+            d->image = new KisImage(d->doc->createUndoStore(), width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
+
             for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
                 if (node2.isElement() && node2.nodeName() == "stack") { // it's the root layer !
                     QDomElement subelem2 = node2.toElement();
@@ -80,31 +101,26 @@ void KisOpenRasterStackLoadVisitor::loadImage()
                     break;
                 }
             }
-            QDomElement subelem = node.toElement();
-            int width = 0;
-            if (!subelem.attribute("w").isNull()) {
-                width = subelem.attribute("w").toInt();
-            }
-            int height = 0;
-            if (!subelem.attribute("h").isNull()) {
-                height = subelem.attribute("h").toInt();
-            }
-            dbgFile << ppVar(width) << ppVar(height);
-            d->image->resize(width, height);
         }
     }
-    if (d->image->width() == 0 && d->image->height() == 0) {
-        // TODO: when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
-    }
-    d->image->unlock();
-    d->image->rootLayer()->setDirty();
 }
 
-void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer)
+void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayerSP layer)
 {
     layer->setName(elem.attribute("name"));
     layer->setX(elem.attribute("x").toInt());
     layer->setY(elem.attribute("y").toInt());
+    if (elem.attribute("visibility") == "hidden") {
+        layer->setVisible(false);
+    } else {
+        layer->setVisible(true);
+    }
+    if (elem.hasAttribute("edit-locked")) {
+        layer->setUserLocked(elem.attribute("edit-locked") == "true");
+    }
+    if (elem.hasAttribute("selected") && elem.attribute("selected") == "true") {
+        d->activeNodes.append(layer);
+    }
 
     QString compop = elem.attribute("composite-op");
     if (compop.startsWith("svg:")) {
@@ -119,24 +135,31 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
         if (compop == "svg:color-burn") layer->setCompositeOp(COMPOSITE_BURN);
         if (compop == "svg:hard-light") layer->setCompositeOp(COMPOSITE_HARD_LIGHT);
-        if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT);
+        if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT_SVG);
         if (compop == "svg:difference") layer->setCompositeOp(COMPOSITE_DIFF);
+        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF); // to fix an old bug in krita's ora export
+        if (compop == "svg:color") layer->setCompositeOp(COMPOSITE_COLOR);
+        if (compop == "svg:luminosity") layer->setCompositeOp(COMPOSITE_LUMINIZE);
+        if (compop == "svg:hue") layer->setCompositeOp(COMPOSITE_HUE);
+        if (compop == "svg:saturation") layer->setCompositeOp(COMPOSITE_SATURATION);
+
     }
     else if (compop.startsWith("krita:")) {
         compop = compop.remove(0, 6);
         layer->setCompositeOp(compop);
     }
 
+
 }
 
 void KisOpenRasterStackLoadVisitor::loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
 {
-    loadLayerInfo(elem, aL.data());
+    loadLayerInfo(elem, aL);
 }
 
 void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
 {
-    loadLayerInfo(elem, pL.data());
+    loadLayerInfo(elem, pL);
 
     dbgFile << "Loading was unsuccessful";
 }
@@ -144,14 +167,19 @@ void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisP
 void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
 {
     dbgFile << "Loading group layer";
-    loadLayerInfo(elem, gL.data());
+    QLocale c(QLocale::German);
+    loadLayerInfo(elem, gL);
     for (QDomNode node = elem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             QDomElement subelem = node.toElement();
             if (node.nodeName() == "stack") {
                 double opacity = 1.0;
                 if (!subelem.attribute("opacity").isNull()) {
-                    opacity = subelem.attribute("opacity").toDouble();
+                    bool result;
+                    opacity = subelem.attribute("opacity", "1.0").toDouble(&result);
+                    if (!result) {
+                        opacity = c.toDouble(subelem.attribute("radius"));
+                    }
                 }
                 KisGroupLayerSP layer = new KisGroupLayer(d->image, "", opacity * 255);
                 d->image->addNode(layer.data(), gL.data(), 0);
@@ -160,8 +188,10 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 QString filename = subelem.attribute("src");
                 if (!filename.isNull()) {
                     double opacity = 1.0;
-                    if (!subelem.attribute("opacity").isNull()) {
-                        opacity = subelem.attribute("opacity").toDouble();
+                    bool result;
+                    opacity = subelem.attribute("opacity", "1.0").toDouble(&result);
+                    if (!result) {
+                        opacity = c.toDouble(subelem.attribute("radius"));
                     }
                     KisPaintDeviceSP device = d->loadContext->loadDeviceData(filename);
                     if (device) {

@@ -59,25 +59,32 @@ struct KisMask::Private {
         KisLocklessStack<KisPaintDeviceSP> m_stack;
     };
 
+    Private(KisMask *_q) : q(_q) {}
+
     mutable KisSelectionSP selection;
     CachedPaintDevice paintDeviceCache;
+    KisMask *q;
+
+    void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
 
 KisMask::KisMask(const QString & name)
         : KisNode()
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     setName(name);
 }
 
 KisMask::KisMask(const KisMask& rhs)
         : KisNode(rhs)
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     setName(rhs.name());
 
-    if (rhs.m_d->selection)
+    if (rhs.m_d->selection) {
         m_d->selection = new KisSelection(*rhs.m_d->selection.data());
+        m_d->selection->setParentNode(this);
+    }
 }
 
 KisMask::~KisMask()
@@ -110,50 +117,59 @@ const KoCompositeOp * KisMask::compositeOp() const
 
 void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
 {
+    m_d->initSelectionImpl(copyFrom, parentLayer, 0);
+}
+
+void KisMask::initSelection(KisPaintDeviceSP copyFromDevice, KisLayerSP parentLayer)
+{
+    m_d->initSelectionImpl(0, parentLayer, copyFromDevice);
+}
+
+void KisMask::initSelection(KisLayerSP parentLayer)
+{
+    m_d->initSelectionImpl(0, parentLayer, 0);
+}
+
+void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice)
+{
     Q_ASSERT(parentLayer);
 
     KisPaintDeviceSP parentPaintDevice = parentLayer->original();
 
-    if(copyFrom) {
+    if (copyFrom) {
         /**
          * We can't use setSelection as we may not have parent() yet
          */
-        m_d->selection = new KisSelection(*copyFrom);
-        m_d->selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
-    }
-    else {
-        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        selection = new KisSelection(*copyFrom);
+        selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        if (copyFrom->hasShapeSelection()) {
+            selection->flatten();
+        }
+    } else if (copyFromDevice) {
+        selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+
+        KisPainter gc(selection->getOrCreatePixelSelection());
+        gc.setCompositeOp(COMPOSITE_COPY);
+        QRect rc(copyFromDevice->extent());
+        gc.bitBlt(rc.topLeft(), copyFromDevice, rc);
+
+    } else {
+        selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
         quint8 newDefaultPixel = MAX_SELECTED;
-        m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
+        selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
     }
-    m_d->selection->updateProjection();
+    selection->setParentNode(q);
+    selection->updateProjection();
 }
 
 KisSelectionSP KisMask::selection() const
 {
-    #ifdef __GNUC__
-    #warning "Please remove lazyness from KisMask::selection() after release of 2.3"
-    #else
-    #pragma WARNING( "Please remove lazyness from KisMask::selection() after release of 2.3" )
-    #endif
-
-    if(!m_d->selection) {
-        KisLayer *parentLayer = dynamic_cast<KisLayer*>(parent().data());
-        if(parentLayer) {
-            KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
-            m_d->selection = new KisSelection(
-                new KisSelectionDefaultBounds(parentPaintDevice,
-                                              parentLayer->image()));
-
-            quint8 newDefaultPixel = MAX_SELECTED;
-            m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
-        }
-        else {
-            m_d->selection = new KisSelection();
-        }
-        m_d->selection->updateProjection();
-    }
+    /**
+     * The mask is created without any selection present.
+     * You must always init the selection with initSelection() method.
+     */
+    Q_ASSERT(m_d->selection);
 
     return m_d->selection;
 }
@@ -163,6 +179,16 @@ KisPaintDeviceSP KisMask::paintDevice() const
     return selection()->getOrCreatePixelSelection();
 }
 
+KisPaintDeviceSP KisMask::original() const
+{
+    return paintDevice();
+}
+
+KisPaintDeviceSP KisMask::projection() const
+{
+    return paintDevice();
+}
+
 void KisMask::setSelection(KisSelectionSP selection)
 {
     m_d->selection = selection;
@@ -170,6 +196,7 @@ void KisMask::setSelection(KisSelectionSP selection)
         const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
         m_d->selection->setDefaultBounds(new KisDefaultBounds(parentLayer->image()));
     }
+    m_d->selection->setParentNode(this);
 }
 
 void KisMask::select(const QRect & rc, quint8 selectedness)
@@ -280,24 +307,23 @@ void KisMask::setY(qint32 y)
         m_d->selection->setY(y);
 }
 
-void KisMask::setDirty(const QRect & rect)
-{
-    Q_ASSERT(parent());
-
-    const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
-    KisImageWSP image = parentLayer->image();
-    Q_ASSERT(image);
-
-    image->updateProjection(this, rect);
-}
-
 QImage KisMask::createThumbnail(qint32 w, qint32 h)
 {
     KisPaintDeviceSP originalDevice =
         selection() ? selection()->projection() : 0;
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
+}
+
+void KisMask::testingInitSelection(const QRect &rect)
+{
+    m_d->selection = new KisSelection();
+    m_d->selection->getOrCreatePixelSelection()->select(rect, OPACITY_OPAQUE_U8);
+    m_d->selection->updateProjection(rect);
+    m_d->selection->setParentNode(this);
 }
 
 #include "kis_mask.moc"

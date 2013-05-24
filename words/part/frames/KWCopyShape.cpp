@@ -25,7 +25,7 @@
 #include "KWTextFrameSet.h"
 #include "KWRootAreaProvider.h"
 
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoShapeLoadingContext.h>
 #include <KoViewConverter.h>
 #include <KoTextShapeData.h>
@@ -35,11 +35,12 @@
 
 #include <QPainter>
 #include <QPainterPath>
-#include <KDebug>
+#include <kdebug.h>
 
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
-        : m_original(original),
-        m_pageManager(pageManager)
+        : KoShape()
+        ,m_original(original)
+        ,m_pageManager(pageManager)
 {
     setSize(m_original->size());
     setSelectable(original->isSelectable());
@@ -56,7 +57,7 @@ KWCopyShape::~KWCopyShape()
     kDebug(32001) << "originalShape=" << m_original;
 }
 
-void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
+void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     Q_ASSERT(m_original);
 
@@ -82,7 +83,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
             }
             KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
             if (data == 0) {
-                shape->paint(painter, converter);
+                shape->paint(painter, converter, paintcontext);
             }
             else {
                 // Since the rootArea is shared between the copyShape and the originalShape we need to
@@ -90,41 +91,68 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
                 KWPage originalpage = m_pageManager->page(shape);
                 Q_ASSERT(originalpage.isValid());
                 KoTextLayoutRootArea *area = data->rootArea();
-                if (area)
+                bool wasBlockChanges = false;
+                if (area) {
+                    // We need to block documentChanged() signals emitted cause for example page-variables
+                    // may change there content to result in us marking root-areas dirty for relayout else
+                    // we could end in an infinite relayout ping-pong.
+                    wasBlockChanges = area->documentLayout()->changesBlocked();
+                    area->documentLayout()->setBlockChanges(true);
                     area->setPage(new KWPage(copypage));
-                shape->paint(painter, converter);
-                if (area)
+                }
+                shape->paint(painter, converter, paintcontext);
+                if (area) {
                     area->setPage(new KWPage(originalpage));
+                    area->documentLayout()->setBlockChanges(wasBlockChanges);
+                }
             }
             painter.restore();
-            if (shape->border()) {
+            if (shape->stroke()) {
                 painter.save();
                 painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-                shape->border()->paint(shape, painter, converter);
+                shape->stroke()->paint(shape, painter, converter);
                 painter.restore();
             }
         }
     } else {
         //paint the original shape
         painter.save();
-        m_original->paint(painter, converter);
+        m_original->paint(painter, converter, paintcontext);
         painter.restore();
-        if (m_original->border()) {
-            m_original->border()->paint(m_original, painter, converter);
+        if (m_original->stroke()) {
+            m_original->stroke()->paint(m_original, painter, converter);
         }
     }
-}
-
-void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
-{
-    Q_ASSERT(m_original);
-    m_original->paintDecorations(painter, converter, canvas);
 }
 
 QPainterPath KWCopyShape::outline() const
 {
     Q_ASSERT(m_original);
     return m_original->outline();
+}
+
+QRectF KWCopyShape::outlineRect() const
+{
+    return m_original->outlineRect();
+}
+
+QRectF KWCopyShape::boundingRect() const
+{
+    // Since we paint the originals children we also need to report the translated
+    // boundingRects of those children as part of our own boundingRect in order to
+    // make sure they are drawn if update rect intersects them but not the m_original
+    // itself.
+    QRectF bb = KoShape::boundingRect();
+    QPointF offset = bb.topLeft() - m_original->boundingRect().topLeft();
+
+    KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
+    if (container) {
+        foreach (KoShape *shape, container->shapes()) {
+            bb |= shape->boundingRect().translated(offset);
+        }
+    }
+
+    return bb;
 }
 
 void KWCopyShape::saveOdf(KoShapeSavingContext &context) const

@@ -49,18 +49,6 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    int pageNumber = -1;
-    if (shape->hasAdditionalAttribute("text:anchor-type")) {
-        QString anchorType = shape->additionalAttribute("text:anchor-type");
-        if (anchorType == "page" && shape->hasAdditionalAttribute("text:anchor-page-number")) {
-            pageNumber = shape->additionalAttribute("text:anchor-page-number").toInt();
-            if (pageNumber <= 0) {
-                pageNumber = -1;
-            }
-        }
-    }
-
-    //kDebug(32001) << "text:anchor-type =" << shape->additionalAttribute("text:anchor-type") << shape->additionalAttribute("text:anchor-page-number") << pageNumber;
     shape->removeAdditionalAttribute("text:anchor-type");
     const KoXmlElement *style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
@@ -81,7 +69,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
             m_loader->document()->addFrameSet(fs);
         }
 
-        KWFrame *frame = new KWFrame(shape, fs, pageNumber);
+        KWFrame *frame = new KWFrame(shape, fs);
         if (style) {
             if (! fillFrameProperties(frame, *style))
                 return; // done
@@ -111,7 +99,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
     } else {
         KWFrameSet *fs = new KWFrameSet();
         fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
-        KWFrame *frame = new KWFrame(shape, fs, pageNumber);
+        KWFrame *frame = new KWFrame(shape, fs);
         if (style)
             fillFrameProperties(frame, *style);
         m_loader->document()->addFrameSet(fs);

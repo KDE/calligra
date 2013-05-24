@@ -29,7 +29,7 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_paint_information.h>
-#include <kis_random_sub_accessor.h>
+#include <kis_cross_device_color_picker.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -55,11 +55,10 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
     m_ySpacing = m_properties.gridHeight * m_properties.scale;
     m_spacing = m_xSpacing;
 
-    m_dab = new KisPaintDevice( painter->device()->colorSpace() );
+    m_dab = source()->createCompositionSourceDevice();
     m_painter = new KisPainter(m_dab);
     m_painter->setPaintColor( painter->paintColor() );
     m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
-    m_pixelSize = settings->node()->paintDevice()->colorSpace()->pixelSize();
 #ifdef BENCHMARK
     m_count = m_total = 0;
 #endif
@@ -102,10 +101,9 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
     qreal yStep = gridHeight / (qreal)divide;
     qreal xStep = gridWidth / (qreal)divide;
 
-    KisRandomSubAccessorPixel acc = m_settings->node()->paintDevice()->createRandomSubAccessor();
-
     QRectF tile;
     KoColor color( painter()->paintColor() );
+    KisCrossDeviceColorPicker colorPicker(m_settings->node()->paintDevice(), color);
 
     qreal vertBorder = m_properties.vertBorder;
     qreal horzBorder = m_properties.horizBorder;
@@ -134,10 +132,7 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
             // do color transformation
             if (shouldColor){
                 if (m_colorProperties.sampleInputColor){
-                    acc.moveTo(tile.center().x(), tile.center().y());
-                    acc.sampledRawData( color.data() );
-                }else{
-                    memcpy(color.data(),painter()->paintColor().data(), m_pixelSize);
+                    colorPicker.pickOldColor(tile.center().x(), tile.center().y(), color.data());
                 }
 
                 // mix the color with background color
@@ -213,7 +208,6 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 }
                 default:
                 {
-                            kDebug() << " implement or exclude from GUI ";
                             break;
                 }
             }
@@ -236,12 +230,12 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
 void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)
 {
-    gridWidth = setting->getInt(GRID_WIDTH);
-    gridHeight = setting->getInt(GRID_HEIGHT);
-    divisionLevel = setting->getInt(GRID_DIVISION_LEVEL);
+    gridWidth = qMax(1, setting->getInt(GRID_WIDTH));
+    gridHeight = qMax(1, setting->getInt(GRID_HEIGHT));
+    divisionLevel = qMax(1, setting->getInt(GRID_DIVISION_LEVEL));
     pressureDivision =  setting->getBool(GRID_PRESSURE_DIVISION);
     randomBorder = setting->getBool(GRID_RANDOM_BORDER);
-    scale = setting->getDouble(GRID_SCALE);
+    scale = qMax(0.1, setting->getDouble(GRID_SCALE));
     vertBorder  = setting->getDouble(GRID_VERTICAL_BORDER);
     horizBorder = setting->getDouble(GRID_HORIZONTAL_BORDER);
 

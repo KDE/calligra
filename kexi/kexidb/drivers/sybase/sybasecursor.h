@@ -20,8 +20,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef _SYBASECURSOR_H_
 #define _SYBASECURSOR_H_
 
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
+#include <db/cursor.h>
+#include <db/connection.h>
 
 namespace KexiDB
 {

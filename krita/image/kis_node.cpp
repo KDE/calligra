@@ -1,19 +1,19 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kis_node.h"
@@ -25,13 +25,13 @@
 #include <QRect>
 
 #include <ksharedconfig.h>
-#include <kconfiggroup.h>
 
 #include <KoProperties.h>
 
 #include "kis_global.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
 
 #include "kis_safe_read_list.h"
@@ -39,9 +39,9 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 
 
 /**
- * The link between KisProjection ans KisImageUpdater
- * uses queued signals with an argument of KisNodeSP type,
- * so we should register it beforehand
+ *The link between KisProjection ans KisImageUpdater
+ *uses queued signals with an argument of KisNodeSP type,
+ *so we should register it beforehand
  */
 struct KisNodeSPStaticRegistrar {
     KisNodeSPStaticRegistrar() {
@@ -51,7 +51,7 @@ struct KisNodeSPStaticRegistrar {
 static KisNodeSPStaticRegistrar __registrar;
 
 
-class KisNode::Private
+struct KisNode::Private
 {
 public:
     Private()
@@ -60,9 +60,9 @@ public:
     }
 
     KisNodeWSP parent;
-    KisNodeGraphListener * graphListener;
+    KisNodeGraphListener *graphListener;
     KisSafeReadNodeList nodes;
-    KisNodeProgressProxy* nodeProgressProxy;
+    KisNodeProgressProxy *nodeProgressProxy;
 };
 
 KisNode::KisNode()
@@ -78,21 +78,20 @@ KisNode::KisNode(const KisNode & rhs)
         , m_d(new Private())
 {
     m_d->parent = 0;
-    m_d->graphListener = rhs.m_d->graphListener;
+    m_d->graphListener = 0;
 
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, rhs.m_d->nodes) {
-        KisNodeSP children = (*iter)->clone();
-        children->createNodeProgressProxy();
-        m_d->nodes.append(children);
-        children->setParent(this);
-        children->setGraphListener(m_d->graphListener);
+        KisNodeSP child = (*iter)->clone();
+        child->createNodeProgressProxy();
+        m_d->nodes.append(child);
+        child->setParent(this);
     }
 }
 
 KisNode::~KisNode()
 {
-    delete m_d->nodeProgressProxy;
+    m_d->nodeProgressProxy->deleteLater();
     m_d->nodes.clear();
     delete m_d;
 }
@@ -109,12 +108,10 @@ QRect KisNode::changeRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
-void KisNode::setSystemLocked(bool l, bool update)
+QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
 {
-    KisBaseNode::setSystemLocked(l, update);
-    if (!l && m_d->graphListener) {
-        m_d->graphListener->nodeChanged(this);
-    }
+    Q_UNUSED(pos);
+    return rect;
 }
 
 bool KisNode::accept(KisNodeVisitor &v)
@@ -122,14 +119,30 @@ bool KisNode::accept(KisNodeVisitor &v)
     return v.visit(this);
 }
 
-KisNodeGraphListener * KisNode::graphListener() const
+void KisNode::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
+}
+
+int KisNode::graphSequenceNumber() const
+{
+    return m_d->graphListener ? m_d->graphListener->graphSequenceNumber() : -1;
+}
+
+KisNodeGraphListener *KisNode::graphListener() const
 {
     return m_d->graphListener;
 }
 
-void KisNode::setGraphListener(KisNodeGraphListener * graphListener)
+void KisNode::setGraphListener(KisNodeGraphListener *graphListener)
 {
     m_d->graphListener = graphListener;
+
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, m_d->nodes) {
+        KisNodeSP child = (*iter);
+        child->setGraphListener(graphListener);
+    }
 }
 
 KisNodeSP KisNode::parent() const
@@ -145,6 +158,13 @@ KisNodeSP KisNode::parent() const
 KisBaseNodeSP KisNode::parentCallback() const
 {
     return parent();
+}
+
+void KisNode::baseNodeChangedCallback()
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->nodeChanged(this);
+    }
 }
 
 void KisNode::setParent(KisNodeWSP parent)
@@ -213,20 +233,22 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
 
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, m_d->nodes) {
-        if (properties.isEmpty() || (*iter)->check(properties)) {
-            bool rightType = true;
+        if (*iter) {
+            if (properties.isEmpty() || (*iter)->check(properties)) {
+                bool rightType = true;
 
-            if(!nodeTypes.isEmpty()) {
-                rightType = false;
-                foreach(const QString &nodeType,  nodeTypes) {
-                    if ((*iter)->inherits(nodeType.toAscii())) {
-                        rightType = true;
-                        break;
+                if(!nodeTypes.isEmpty()) {
+                    rightType = false;
+                    foreach(const QString &nodeType,  nodeTypes) {
+                        if ((*iter)->inherits(nodeType.toLatin1())) {
+                            rightType = true;
+                            break;
+                        }
                     }
                 }
-            }
-            if(rightType) {
-                nodes.append(*iter);
+                if(rightType) {
+                    nodes.append(*iter);
+                }
             }
         }
     }
@@ -332,6 +354,13 @@ void KisNode::setDirty(const QVector<QRect> &rects)
 void KisNode::setDirty(const QRegion &region)
 {
     setDirty(region.rects());
+}
+
+void KisNode::setDirty(const QRect & rect)
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->requestProjectionUpdate(this, rect);
+    }
 }
 
 #include "kis_node.moc"

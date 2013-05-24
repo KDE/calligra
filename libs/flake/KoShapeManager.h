@@ -35,6 +35,7 @@ class KoViewConverter;
 class KoCanvasBase;
 class KoPointerEvent;
 class KoShapeManagerPaintingStrategy;
+class KoShapePaintingContext;
 
 
 class QPainter;
@@ -90,13 +91,14 @@ public:
      */
     QList<KoShape*> topLevelShapes() const;
 
+public slots:
     /**
      * Add a KoShape to be displayed and managed by this manager.
      * This will trigger a repaint of the shape.
      * @param shape the shape to add
      * @param repaint if true it will trigger a repaint of the shape
      */
-    void addShape(KoShape *shape, Repaint repaint = PaintShapeOnAdd);
+    void addShape(KoShape *shape, KoShapeManager::Repaint repaint = PaintShapeOnAdd);
 
     /**
      * Add an additional shape to the manager.
@@ -118,6 +120,7 @@ public:
      */
     void removeAdditional(KoShape *shape);
 
+public:
     /// return the selection shapes for this shapeManager
     KoSelection *selection() const;
 
@@ -183,9 +186,8 @@ public:
      * @param shape the shape to paint
      * @param painter the painter to paint to.
      * @param converter to convert between document and view coordinates.
-     * @param forPrint if true, make sure only actual content is drawn and no decorations.
      */
-    void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool forPrint);
+    void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
     /**
      * Set the strategy of the KoShapeManager
@@ -201,6 +203,8 @@ signals:
     void selectionChanged();
     /// emitted when an object in the selection is changed (moved/rotated etc)
     void selectionContentChanged();
+    /// emitted when any object changed (moved/rotated etc)
+    void contentChanged();
 
 private:
 

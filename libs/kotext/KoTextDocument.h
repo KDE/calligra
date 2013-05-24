@@ -23,19 +23,28 @@
 #define KOTEXTDOCUMENT_H
 
 #include <QTextDocument>
+#include <QTextCharFormat>
+#include <QWeakPointer>
 #include <QAbstractTextDocumentLayout>
 #include <QUrl>
 
 #include "KoList.h"
-
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoTextShapeDataBase.h>
+#include <KoCanvasBase.h>
+#include <KoTextEditor.h>
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KUndo2Stack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
+class KoShapeController;
 
 /**
  * KoTextDocument provides an easy mechanism to set and access the
@@ -48,9 +57,11 @@ class KOTEXT_EXPORT KoTextDocument
 {
 public:
     /// Constructor
-    KoTextDocument(QTextDocument *document);
+    KoTextDocument(QTextDocument *document); // krazy:exclude=explicit
     /// Constructor
-    KoTextDocument(const QTextDocument *document);
+    KoTextDocument(const QTextDocument *document); // krazy:exclude=explicit
+    /// Constructor
+    KoTextDocument(QWeakPointer<QTextDocument> document); // krazy:exclude=explicit
 
     /// Destructor
     ~KoTextDocument();
@@ -76,13 +87,6 @@ public:
     ///Returns the change tracker of the document
     KoChangeTracker *changeTracker() const;
 
-    /// set the notes configuration of the document
-    void setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration);
-
-    /// @return the notes configuration
-    KoOdfNotesConfiguration *notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
-
-    /// set the notes configuration of the document
     void setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration);
 
     /// @return the notes configuration
@@ -140,9 +144,19 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
-    QTextFrame* footNotesFrame();
+    /// Returns the KoTextRangeManager
+    KoTextRangeManager *textRangeManager() const;
 
-    QTextFrame* endNotesFrame();
+    /// Set the KoTextRangeManager
+    void setTextRangeManager(KoTextRangeManager *manager);
+
+    /// Set the KoDocument's shapeController. This controller exists as long as KoDocument exists. It should only be used for deleting shapes.
+    void setShapeController(KoShapeController *controller);
+
+    /// Returns the shapeController
+    KoShapeController *shapeController() const;
+
+    QTextFrame* auxillaryFrame();
 
     /**
      * Specifies if tabs are relative to paragraph indent.
@@ -160,6 +174,41 @@ public:
      */
     bool relativeTabs() const;
 
+    void setParaTableSpacingAtStart(bool spacingAtStart);
+    bool paraTableSpacingAtStart() const;
+
+    /**
+     * Returns the character format for the frame of this document.
+     *
+     * @return the character format for the frame of this document.
+     * @see setFrameCharFormat
+     */
+    QTextCharFormat frameCharFormat() const;
+
+    /**
+     * Sets the character format for the frame of this document.
+     *
+     * @param format the character format for the frame of this document.
+     * @see frameCharFormat
+     */
+    void setFrameCharFormat(QTextCharFormat format);
+
+    /**
+     * Returns the block format for the frame of this document.
+     *
+     * @return the block format for the frame of this document.
+     * @see setFrameBlockFormat
+     */
+    QTextBlockFormat frameBlockFormat() const;
+
+    /**
+     * Sets the block format for the frame of this document.
+     *
+     * @param format the block format for the frame of this document.
+     * @see frameBlockFormat
+     */
+    void setFrameBlockFormat(QTextBlockFormat format);
+
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.
@@ -170,36 +219,41 @@ public:
     enum ResourceType {
         StyleManager = QTextDocument::UserResource,
         Lists,
+        TextRangeManager,
         InlineTextManager,
         ChangeTrackerResource,
         UndoStack,
         TextEditor,
-        FootNotesConfiguration,
-        EndNotesConfiguration,
         LineNumberingConfiguration,
-        EndNotesFrame,
-        FootNotesFrame,
         RelativeTabs,
         HeadingList,
         Selections,
-        LayoutTextPage /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
+        LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
+        ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
+        IndexGeneratorManager,
+        FrameCharFormat,
+        FrameBlockFormat,
+        ShapeController
     };
 
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
+    static const QUrl TextRangeManagerURL;
     static const QUrl InlineObjectTextManagerURL;
     static const QUrl ChangeTrackerURL;
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
-    static const QUrl FootNotesConfigurationURL;
-    static const QUrl EndNotesConfigurationURL;
     static const QUrl LineNumberingConfigurationURL;
-    static const QUrl EndNotesFrameURL;
-    static const QUrl FootNotesFrameURL;
+    static const QUrl BibliographyConfigurationURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;
     static const QUrl LayoutTextPageUrl;
+    static const QUrl ParaTableSpacingAtStartUrl;
+    static const QUrl IndexGeneratorManagerUrl;
+    static const QUrl FrameCharFormatUrl;
+    static const QUrl FrameBlockFormatUrl;
+    static const QUrl ShapeControllerUrl;
 
 private:
     QTextDocument *m_document;

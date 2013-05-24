@@ -69,6 +69,9 @@ public:
     virtual bool snapToGrid() const;
 
     /// reimplemented method from superclass
+    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
+
+    /// reimplemented method from superclass
     virtual QWidget *canvasWidget() {
         return this;
     }
@@ -103,6 +106,8 @@ protected: // QWidget
     virtual bool event(QEvent *);
     /// reimplemented method from superclass
     virtual void keyPressEvent(QKeyEvent *e);
+    /// reimplemented method from superclass
+    virtual void contextMenuEvent(QContextMenuEvent *e);
     /// reimplemented method from superclass
     virtual void mouseMoveEvent(QMouseEvent *e);
     /// reimplemented method from superclass

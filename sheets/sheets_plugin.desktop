@@ -1,0 +1,33 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=CalligraSheets/Plugin
+Comment=Plugin for Calligra Sheets
+Comment[bs]=Plugin za Calligra Tablice
+Comment[ca]=Connector per al Sheets del Calligra
+Comment[ca@valencia]=Connector per al Sheets del Calligra
+Comment[cs]=Modul pro Calligra Sheets
+Comment[da]=Plugin til Calligra Sheets
+Comment[de]=Modul für Calligra Sheets
+Comment[el]=Πρόσθετο για Calligra Sheets
+Comment[es]=Complemento para Calligra Sheets
+Comment[et]=Calligra Sheetsi plugin
+Comment[fi]=Calligra Sheetsin liitännäinen
+Comment[fr]=Module pour Calligra Tables
+Comment[gl]=Complemento para Calligra Sheets.
+Comment[hu]=Bővítmény a Calligra Sheetshez
+Comment[it]=Estensione per Calligra Sheets
+Comment[ja]=Calligra Sheets のプラグイン
+Comment[kk]=Calligra Sheets плагині
+Comment[mr]=कॅलिग्रा शीट्स करिता प्लगइन
+Comment[nb]=Programtillegg for Calligra Sheets
+Comment[nl]=Plug-in voor Calligra Sheets
+Comment[pl]=Wtyczka dla Arkuszy Calligra
+Comment[pt]='Plugin' para o Calligra Sheets
+Comment[pt_BR]=Plugin para o Calligra Sheets
+Comment[sk]=Plugin pre Calligra Sheets
+Comment[sl]=Vstavek za Calligra Sheets
+Comment[sv]=Insticksprogram för Calligra Sheets
+Comment[uk]=Додаток до Calligra Sheets
+Comment[x-test]=xxPlugin for Calligra Sheetsxx
+[PropertyDef::X-CalligraSheets-InterfaceVersion]
+Type=int

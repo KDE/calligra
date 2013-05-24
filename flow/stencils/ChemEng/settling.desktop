@@ -1,9 +1,26 @@
 [Desktop Entry]
 Name=settling
+Name[bs]=taloženje
+Name[ca]=assentant
+Name[ca@valencia]=assentant
+Name[da]=settling
+Name[de]=Absetzbecken
+Name[el]=settling
+Name[es]=asentamiento
+Name[et]=Settepaak
+Name[fr]=settling
+Name[gl]=Tanque de precipitación
+Name[it]=settling
+Name[kk]=Тұндырғыш
 Name[nb]=felling
+Name[nl]=bezinken
+Name[pl]=osadowy
 Name[pt]=depósito
 Name[pt_BR]=depósito
+Name[ru]=Осадок
+Name[sk]=settling
 Name[sv]=sedimentation
+Name[tr]=yerleşme
 Name[uk]=Очищувач або відстійник
 Name[x-test]=xxsettlingxx
 Name[zh_TW]=settling

@@ -21,10 +21,10 @@
 #ifndef KEXIPART_H
 #define KEXIPART_H
 
-#include <qobject.h>
-#include <qmap.h>
+#include <QObject>
+#include <QMap>
 
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 #include <kexiutils/InternalPropertyMap.h>
 #include "kexi.h"
 
@@ -118,7 +118,7 @@ public:
 
      Default implementation just removes object from kexi__* system structures
      at the database backend using KexiDB::Connection::removeObject(). */
-    virtual bool remove(KexiPart::Item & item);
+    virtual tristate remove(KexiPart::Item & item);
 
     /*! Renames stored data pointed by \a item to \a newName
      (example: table name is altered in the database).
@@ -145,7 +145,9 @@ public:
                                  KexiPart::Item &item, 
                                  Kexi::ViewMode viewMode = Kexi::DataViewMode, 
                                  QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
-
+    
+    //virtual void initTabs();
+    
     /*! @return i18n'd instance name usable for displaying in gui as object's name,
      e.g. "table".
      The name is valid identifier - contains latin-1 lowercase characters only. */

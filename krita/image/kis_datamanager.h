@@ -18,11 +18,11 @@
 #ifndef KIS_DATAMANAGER_H_
 #define KIS_DATAMANAGER_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 class QRect;
-class KoStore;
-
+class KisPaintDeviceWriter;
+class QIODevice;
 
 // Change the following line to switch (at compiletime) to different datamanager
 #include <config-tiles.h> // For the next define
@@ -121,15 +121,15 @@ public:
 public:
 
     /**
-     * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
+     * Reads and writes the tiles
      *
      */
-    inline bool write(KoStore *store) {
-        return ACTUAL_DATAMGR::write(store);
+    inline bool write(KisPaintDeviceWriter &writer) {
+        return ACTUAL_DATAMGR::write(writer);
     }
 
-    inline bool read(KoStore *store) {
-        return ACTUAL_DATAMGR::read(store);
+    inline bool read(QIODevice *io) {
+        return ACTUAL_DATAMGR::read(io);
     }
 
     inline void purge(const QRect& area) {
@@ -214,6 +214,13 @@ public:
     }
 
     /**
+     * The same as \ref bitBlt() but reads old data
+     */
+    inline void bitBltOldData(KisTiledDataManagerSP srcDM, const QRect &rect) {
+        ACTUAL_DATAMGR::bitBltOldData(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
+    }
+
+    /**
      * Clones rect from another datamanager in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * devices, that means it will copy a bigger area than was
@@ -222,6 +229,13 @@ public:
      */
     inline void bitBltRough(KisTiledDataManagerSP srcDM, const QRect &rect) {
         ACTUAL_DATAMGR::bitBltRough(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
+    }
+
+    /**
+     * The same as \ref bitBltRough() but reads old data
+     */
+    inline void bitBltRoughOldData(KisTiledDataManagerSP srcDM, const QRect &rect) {
+        ACTUAL_DATAMGR::bitBltRoughOldData(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
     }
 
 public:

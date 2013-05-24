@@ -23,16 +23,16 @@
 #include <sqltypes.h>
 
 //QT Includes
-#include <qfile.h>
-#include <qdir.h>
+#include <QFile>
+#include <QDir>
 
 //KDE Includes
-#include <KDebug>
+#include <kdebug.h>
 
 //Kexi Includes
-#include <kexidb/driver.h>
-#include <kexidb/cursor.h>
-#include <kexidb/error.h>
+#include <db/driver.h>
+#include <db/cursor.h>
+#include <db/error.h>
 
 //Local Includes
 #include "odbcconnection.h"

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-   Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2007 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -189,9 +189,10 @@ public slots:
 
     /**
      * Update the tabs
-     * @param tabs a list of tabs that is shown on the ruler the first selection border in points
+     * @param tabs a list of tabs that is shown on the ruler
+     * @param tabDistance the distncte between regular interval tabs
      */
-    void updateTabs(const QList<Tab> &tabs);
+    void updateTabs(const QList<Tab> &tabs, qreal tabDistance);
 
     /***
      * Return the list of tabs set on this ruler.

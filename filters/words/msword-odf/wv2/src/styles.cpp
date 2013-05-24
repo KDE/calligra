@@ -134,20 +134,20 @@ throw(InvalidFormatException)
     shifterU16 = stream->readU16();
     sgc = shifterU16;
 #ifdef WV2_DEBUG_STYLESHEET
-    wvlog << "##### sti: " << sti << endl;
+    wvlog << "##### sti: " << hex << "0x" << sti << dec << "(" << sti << ")" << endl;
     wvlog << "##### sgc: " << static_cast<int>( sgc ) << endl;
 #endif
     shifterU16 >>= 4;
     istdBase = shifterU16;
 #ifdef WV2_DEBUG_STYLESHEET
-    wvlog << "istdBase: " << hex << istdBase << dec << "(" << istdBase << ")" << endl;
+    wvlog << "istdBase: " << hex << "0x" << istdBase << dec << "(" << istdBase << ")" << endl;
 #endif
     shifterU16 = stream->readU16();
     cupx = shifterU16;
     shifterU16 >>= 4;
     istdNext = shifterU16;
 #ifdef WV2_DEBUG_STYLESHEET
-    wvlog << "istdNext: " << hex << istdNext << dec << "(" << istdNext << ")" << endl;
+    wvlog << "istdNext: " << hex << "0x" << istdNext << dec << "(" << istdNext << ")" << endl;
 #endif
     bchUpe = stream->readU16();
 #ifdef WV2_DEBUG_STYLESHEET
@@ -179,7 +179,7 @@ throw(InvalidFormatException)
 
     if (stdfSize == StdfPost2000) {
         wvlog << "Warning: StdfPost2000OrNone present - skipping";
-        stream->seek( 8, G_SEEK_CUR );
+        stream->seek( 8, WV2_SEEK_CUR );
     }
 
     // read the name of the style.
@@ -193,7 +193,7 @@ throw(InvalidFormatException)
     // next even address
     U16 stdfSize_new = stdfSize;
     stdfSize_new += ( stdfSize & 0x0001 ) ? 1 : 0;
-    stream->seek( startOffset + stdfSize, G_SEEK_SET );
+    stream->seek( startOffset + stdfSize, WV2_SEEK_SET );
 #ifdef WV2_DEBUG_STYLESHEET
     wvlog << "new position: " << stream->tell() << endl;
     wvlog << "new stdfSize: " << stdfSize_new << endl;
@@ -210,7 +210,7 @@ throw(InvalidFormatException)
 #ifdef WV2_DEBUG_STYLESHEET
         wvlog << "Adjusting the position... from " << stream->tell() - startOffset;
 #endif
-        stream->seek( 1, G_SEEK_CUR );
+        stream->seek( 1, WV2_SEEK_CUR );
 #ifdef WV2_DEBUG_STYLESHEET
         wvlog << " to " << stream->tell() - startOffset << endl;
 #endif
@@ -243,11 +243,16 @@ throw(InvalidFormatException)
     int offset = 0;
     for ( U8 i = 0; i < cupx; ++i) {
         U16 cbUPX = stream->readU16();  // size of the next UPX
-        stream->seek( -2, G_SEEK_CUR ); // rewind the "lookahead"
+        stream->seek( -2, WV2_SEEK_CUR ); // rewind the "lookahead"
         cbUPX += 2;                     // ...and correct the size
 #ifdef WV2_DEBUG_STYLESHEET
         wvlog << "cbUPX: " << cbUPX << endl;
 #endif
+        // do not overflow the allocated buffer grupx
+        if (offset + cbUPX > grupxLen) {
+            wvlog << "====> Error: grupx would overflow!" << endl;
+            return false;
+        }
         for ( U16 j = 0; j < cbUPX; ++j ) {
             grupx[ offset + j ] = stream->readU8();  // read the whole UPX
 #ifdef WV2_DEBUG_STYLESHEET
@@ -260,7 +265,7 @@ throw(InvalidFormatException)
 #ifdef WV2_DEBUG_STYLESHEET
             wvlog << "Adjusting the UPX position... from " << stream->tell() - startOffset;
 #endif
-            stream->seek( 1, G_SEEK_CUR );
+            stream->seek( 1, WV2_SEEK_CUR );
 #ifdef WV2_DEBUG_STYLESHEET
             wvlog << " to " << stream->tell() - startOffset << endl;
 #endif
@@ -343,8 +348,8 @@ void STD::clearInternal()
 bool STD::readStyleName( const U16 stdfSize, const U16 stdBytesLeft, OLEStreamReader* stream )
 {
 #ifdef WV2_DEBUG_STYLESHEET
-        wvlog << "stdfSize:" << stdfSize << endl;
-        wvlog << "stdBytesLeft:" << stdBytesLeft << endl;
+    wvlog << "stdfSize:" << hex << "0x" << stdfSize << dec << "(" << stdfSize << ")" << endl;
+    wvlog << "stdBytesLeft:" << stdBytesLeft << endl;
 #endif
 
     // Read the length of the string.  It seems that the spec is buggy and the
@@ -360,8 +365,8 @@ bool STD::readStyleName( const U16 stdfSize, const U16 stdBytesLeft, OLEStreamRe
         // chTerm (2 bytes): A null-terminating character.  This value MUST be
         // zero.
         //
-        // The Xst structure is a string.  The string is prepended by its length
-        // and is not null-terminated.
+        // The Xst structure is a string.  The string is prepended by its
+        // length and is not null-terminated.
         //
         // cch (2 bytes): An unsigned integer that specifies the number of
         // characters that are contained in the rgtchar array.
@@ -373,11 +378,7 @@ bool STD::readStyleName( const U16 stdfSize, const U16 stdBytesLeft, OLEStreamRe
 #ifdef WV2_DEBUG_STYLESHEET
         wvlog << "length: " << length << endl;
 #endif
-
-        //Each name, whether primary or alternate, MUST NOT be empty and MUST
-        //be unique within all names in the stylesheet.
-
-        if ( ((length * 2) > stdBytesLeft) || (length == 0) ) {
+        if ( ((length * 2) > stdBytesLeft) ) {
             wvlog << "xstzName length invalid";
             return false;
         }
@@ -530,7 +531,7 @@ Style::Style( const U16 stdfSize, OLEStreamReader* tableStream, U16* ftc )
     if ( tableStream->tell() != offset + cbStd ) {
         wvlog << "Warning: Found a \"hole\"" << endl;
         // correct the offset
-        tableStream->seek( cbStd, G_SEEK_CUR );
+        tableStream->seek( cbStd, WV2_SEEK_CUR );
     }
 
     switch (m_std->sgc) {
@@ -584,57 +585,71 @@ Style::~Style()
     delete m_upechpx;
 }
 
-bool Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<Style*>& styles)
+void Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<Style*>& styles, U16& uds_num)
 {
     if (m_isEmpty) {
-        return true;
+        return;
     }
     //Informs of any parsing error.
     if (m_invalid) {
-        return false;
+        return;
     }
 
 #ifdef WV2_DEBUG_STYLESHEET
-    wvlog << "istdBase: 0x" << hex << m_std->istdBase << endl;
+    wvlog << "istd: 0x" << istd << "istdBase: 0x" << hex << m_std->istdBase << endl;
 #endif
 
-    //TODO: check the m_std.stk
-
     m_invalid = true;
+
+    //TODO: check the m_std.stk
 
     if ((m_std->istdBase != 0x0fff) &&
         (m_std->istdBase >= rglpstd_cnt)) {
         wvlog << "istdBase - invalid index into rglpstd!" << endl;
-        return false;
+        return;
     }
     if (m_std->istdBase == istd) {
         wvlog << "istdBase MUST NOT be same as istd!" << endl;
-        return false;
+        return;
     }
     if ((m_std->istdBase != 0x0fff) &&
         styles[m_std->istdBase]->isEmpty()) {
         wvlog << "istdBase - style definition EMPTY!" << endl;
-        return false;
+        return;
     }
 
+    //The same repair approach is used by the MSWord2007 DOCX filter.
+    //Remember that stiNormal == istdNormal.
     if ((m_std->istdNext != 0x0fff) &&
         (m_std->istdNext >= rglpstd_cnt)) {
-        wvlog << "istdNext - invalid index into rglpstd!" << endl;
-        return false;
+
+#ifdef WV2_DEBUG_STYLESHEET
+        wvlog << "Warning: istdNext - invalid index into rglpstd, setting to stiNormal!";
+#endif
+        m_std->istdNext = stiNormal;
     }
-    //TODO: Why did I disable this one ???
-//     if (m_std->istdNext == istd) {
-//         wvlog << "istdNext MUST NOT be same as istd!" << endl;
-//         return false;
-//     }
     if ((m_std->istdNext != 0x0fff) &&
         styles[m_std->istdNext]->isEmpty()) {
         wvlog << "istdNext - style definition EMPTY!" << endl;
-        return false;
+        return;
     }
-    m_invalid = false;
+    //Each style name, whether primary or alternate, MUST NOT be empty
+    //and MUST be unique within all names in the stylesheet.
+    if (m_std->xstzName.isEmpty()) {
 
-    return true;
+#ifdef WV2_DEBUG_STYLESHEET
+        wvlog << "Warning: Empty xstzName detected, preparing a custom name!";
+#endif
+        //generate a name for a user define style
+        if (m_std->sti == 0x0ffe) {
+            m_std->xstzName = UString("User_Defined_");
+            m_std->xstzName.append(UString::from(++uds_num));
+        } else {
+            return;
+        }
+    }
+
+    m_invalid = false;
 }
 
 void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
@@ -781,8 +796,12 @@ const ParagraphProperties& Style::paragraphProperties() const
 const Word97::CHP& Style::chp() const
 {
     if ( !m_chp ) {
-        wvlog << "You requested the CHP of an unknown style type? Hmm..." << endl;
-        wvlog << "sti == " << m_std->sti << endl;
+        if ( !m_isEmpty ) {
+            wvlog << "You requested the CHP of an unknown style type? Hmm..." << endl;
+            wvlog << "sti == " << m_std->sti << endl;
+        } else {
+            wvlog << "You requested the CHP of an empty style slot? Hmm..." << endl;
+        }
         m_chp = new Word97::CHP(); // let's return a default CHP, better than crashing
     }
     return *m_chp;
@@ -925,11 +944,12 @@ void Style::mergeUpechpx( const Style* parentStyle, WordVersion version )
 
 
 StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf ) throw(InvalidFormatException)
+    : m_udsNum(0)
 {
     WordVersion version = Word8;
 
     tableStream->push();
-    tableStream->seek( fcStshf, G_SEEK_SET );
+    tableStream->seek( fcStshf, WV2_SEEK_SET );
 
     const U16 cbStshi = tableStream->readU16();
 
@@ -975,7 +995,7 @@ StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf 
     if ( tableStream->tell() != static_cast<int>( fcStshf + cbStshi + 2 ) ) {
         wvlog << "Warning: STSHI too big? New version?"
               << " Expected: " << cbStshi + 2 << " Read: " << tableStream->tell() - fcStshf << endl;
-        tableStream->seek( fcStshf + 2 + cbStshi, G_SEEK_SET );
+        tableStream->seek( fcStshf + 2 + cbStshi, WV2_SEEK_SET );
     }
     // ------------------------------------------------------------
     // STDs - read the array of LPStd structures containing STDs
@@ -996,22 +1016,20 @@ StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf 
         }
 #endif
     }
-    //fixed-index of style validation
-    if (!fixed_index_valid()) {
-        throw InvalidFormatException("INVALID fixed-index of styles detected!");
-    }
-
     //styles validation
     if (m_styles.size() != m_stsh.cstd) {
         wvlog << "Error: m_styles.size() != m_stsh.cstd";
     }
-
     for( U16 i = 0; i < m_stsh.cstd; ++i ) {
         Q_ASSERT(m_styles[i]);
-        m_styles[i]->validate(i, m_stsh.cstd, m_styles);
+        m_styles[i]->validate(i, m_stsh.cstd, m_styles, m_udsNum);
         if (m_styles[i]->isInvalid()) {
             throw InvalidFormatException("INVALID Style detected!");
         }
+    }
+    //Validation of "fixed-index" application define styles.
+    if (!fixed_index_valid()) {
+        throw InvalidFormatException("INVALID \"fixed-index\" application defined styles!");
     }
 
 #ifdef WV2_DEBUG_STYLESHEET
@@ -1095,21 +1113,18 @@ unsigned int StyleSheet::size() const
 
 const Style* StyleSheet::styleByIndex( U16 istd ) const
 {
-    const Style* ret = 0;
     if ( istd < m_styles.size() ) {
-        ret = m_styles[ istd ];
-        if (ret && ret->isInvalid()) {
-            ret = 0;
-        }
+        return m_styles[ istd ];
     }
-    return ret;
+    return 0;
 }
 
 const Style* StyleSheet::styleByID( U16 sti ) const
 {
     for ( std::vector<Style*>::const_iterator it = m_styles.begin(); it != m_styles.end(); ++it ) {
-        if ( (*it)->sti() == sti )
+        if ( (*it)->sti() == sti ) {
             return *it;
+        }
     }
     return 0;
 }

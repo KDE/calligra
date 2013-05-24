@@ -73,6 +73,10 @@ public:
     /// Destructor
     ~KoTableRowStyle();
 
+    void copyProperties(const KoTableRowStyle *style);
+
+    KoTableRowStyle *clone() const;
+
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat
     QBrush background() const;

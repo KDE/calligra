@@ -17,16 +17,16 @@
 
 #include "TextDocumentRtfOutput.h"
 
-#include <QtGui/QTextCursor>
-#include <QtGui/QTextDocument>
-#include <QtCore/QDebug>
-#include <QtCore/QUrl>
-#include <QtCore/QUuid>
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QDebug>
+#include <QUrl>
+#include <QUuid>
 
 namespace RtfReader
 {
     TextDocumentRtfOutput::TextDocumentRtfOutput( QTextDocument *document ) : AbstractRtfOutput(),
-      m_document( document ), m_haveSetFont( false )
+      m_haveSetFont( false ), m_document( document )
     {
 	m_cursor = new QTextCursor( m_document );
 	QTextCharFormat defaultCharFormat;

@@ -28,6 +28,7 @@ set(kexicore_LIB_SRCS
    kexipartitem.cpp 
    kexipart.cpp 
    kexiprojectdata.cpp 
+   KexiRecentProjects.cpp 
    kexiinternalpart.cpp 
    kexidragobjects.cpp 
    kexistartupdata.cpp 
@@ -40,8 +41,10 @@ set(kexicore_LIB_SRCS
    kexitabledesignerinterface.cpp
    kexisearchandreplaceiface.cpp
    kexitemplateloader.cpp
+   KexiRecordNavigatorHandler.cpp
+   KexiRecordNavigatorIface.cpp
+   KexiSearchableModel.cpp
 )
-
 
 kde4_add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
@@ -50,7 +53,9 @@ target_link_libraries(kexicore
   ${KDE4_KDEUI_LIBS}
   kexiutils
   kexidb
+  ${CALLIGRADB_LIBS}
   ${KOPROPERTY_LIBS}
+  kowidgetutils
 )
 target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils kexidb ${KOPROPERTY_LIBS})
 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -25,13 +25,14 @@
 #include "kis_node_visitor.h"
 #include "kis_image.h"
 
+class KisPaintDeviceWriter;
 class KoStore;
 
 class KisKraSaveVisitor : public KisNodeVisitor
 {
 public:
     KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
-
+    virtual ~KisKraSaveVisitor();
     using KisNodeVisitor::visit;
 
 public:
@@ -57,8 +58,6 @@ public:
 
     bool visit(KisTransparencyMask *mask);
 
-    bool visit(KisTransformationMask *mask);
-
     bool visit(KisSelectionMask *mask);
 
 private:
@@ -78,6 +77,8 @@ private:
     quint32 &m_count;
     QString m_name;
     QMap<const KisNode*, QString> m_nodeFileNames;
+    KisPaintDeviceWriter *m_writer;
+
 };
 
 #endif // KIS_KRA_SAVE_VISITOR_H_

@@ -36,7 +36,8 @@
 #include <KoGridData.h>
 
 // KDE + Qt includes
-#include <KDebug>
+#include <kdebug.h>
+#include <kstatusbar.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
@@ -80,8 +81,20 @@ bool KWCanvas::snapToGrid() const
     return m_view->snapToGrid();
 }
 
+QPointF KWCanvas::viewToDocument(const QPointF &viewPoint) const
+{
+    return m_viewMode->viewToDocument(viewPoint, m_viewConverter);
+}
+
+void KWCanvas::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
+    e->setAccepted(true);
+}
+
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
+    m_view->viewMouseMoveEvent(e);
     m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
@@ -90,8 +103,8 @@ void KWCanvas::mousePressEvent(QMouseEvent *e)
     m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     if (!e->isAccepted() && e->button() == Qt::RightButton) {
         m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
-        e->setAccepted(true);
     }
+    e->setAccepted(true);
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
@@ -121,11 +134,28 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
             focusNextPrevChild(false);
         else if (e->key() == Qt::Key_Tab)
             focusNextPrevChild(true);
-    }
+        else if (e->key() == Qt::Key_PageUp)
+            m_view->goToPreviousPage(e->modifiers());
+        else if (e->key() == Qt::Key_PageDown)
+            m_view->goToNextPage(e->modifiers());
+         }
+    if(e->key() == Qt::Key_Escape)
+        m_view->exitDistractioFreeMode();
+
 }
 
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        rect = m_viewMode->documentToView(viewConverter()->viewToDocument(rect), viewConverter());
+        QPointF scroll(canvasController()->scrollBarValue());
+        if (canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+            scroll.setX(-scroll.x());
+        }
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 

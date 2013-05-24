@@ -23,10 +23,10 @@
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <QtGui/QPainter>
-#include <QtGui/QFontMetrics>
+#include <QPainter>
+#include <QFontMetrics>
 
 ArtisticTextToolSelection::ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent)
     : KoToolSelection(parent), m_canvas(canvas), m_currentShape(0)

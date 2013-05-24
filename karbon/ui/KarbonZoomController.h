@@ -22,11 +22,12 @@
 #define KARBONZOOMCONTROLLER_H
 
 #include <KoZoomMode.h>
-#include <QtCore/QObject>
+#include <QObject>
 
 class KoCanvasController;
 class KActionCollection;
 class KoZoomAction;
+class QPointF;
 class QSizeF;
 
 class KarbonZoomController : public QObject
@@ -67,9 +68,25 @@ signals:
     void zoomedToAll();
 
 public slots:
+
     /**
-     * Set the zoom and the zoom mode for this zoom Controller.  Typically for use just after construction
-     * to restore the persistent data.
+     * Set the zoom and the zoom mode for this zoom Controller.
+     * Typically for use just after construction to restore the
+     * persistent data.
+     *
+     * @param mode new zoom mode for the canvas
+     * @param zoom (for ZOOM_CONSTANT zoom mode only) new zoom value for
+     *             the canvas
+     * @param stillPoint (for ZOOM_CONSTANT zoom mode only) the point
+     *                   which will not change its position in widget
+     *                   during the zooming. It is measured in view
+     *                   coordinate system *before* zoom.
+     */
+    void setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint);
+
+    /**
+     * Convenience function with @p center always set to the current
+     * center point of the canvas
      */
     void setZoom(KoZoomMode::Mode mode, qreal zoom);
 
@@ -85,10 +102,19 @@ private slots:
     void setAvailableSize();
 
     /// when the canvas controller wants us to change zoom
-    void requestZoomBy(const qreal factor);
+    void requestZoomRelative(const qreal factor, const QPointF &stillPoint);
 
     /// so we know when the page size changed
     void resourceChanged(int key, const QVariant & value);
+
+    /// zoom in relative to current zoom
+    void zoomInRelative();
+
+    /// zoom out relative to current zoom
+    void zoomOutRelative();
+
+private:
+    void requestZoomBy(const qreal factor);
 
 private:
     class Private;

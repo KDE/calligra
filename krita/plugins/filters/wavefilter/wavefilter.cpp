@@ -22,12 +22,11 @@
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kcombobox.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -38,7 +37,6 @@
 #include <KoUpdater.h>
 
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_layer.h>
@@ -88,14 +86,13 @@ public:
     virtual ~KisTriangleWaveCurve() {}
 
     virtual double valueAt(int x, int y) {
-        return y +  m_amplitude * pow(-1, (m_shift + x) / m_wavelength)  *(0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
+        return y +  m_amplitude * pow(-1.0, (m_shift + x) / m_wavelength)  *(0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
     }
 private:
     int m_amplitude, m_wavelength, m_shift;
 }; KritaWaveFilter::KritaWaveFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaWaveFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterWave());
 }
 
@@ -126,7 +123,7 @@ KisFilterConfiguration* KisFilterWave::factoryConfiguration(const KisPaintDevice
     return config;
 }
 
-KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
@@ -137,8 +134,6 @@ void KisFilterWave::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                            ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
-
     Q_ASSERT(device.data() != 0);
 
     int cost = (applyRect.width() * applyRect.height()) / 100;
@@ -166,22 +161,22 @@ void KisFilterWave::process(KisPaintDeviceSP device,
     else
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     
-    KisRandomSubAccessorPixel srcRSA = device->createRandomSubAccessor();
+    KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
     do {
         double xv = horizontalcurve->valueAt(dstIt->y(), dstIt->x());
         double yv = verticalcurve->valueAt(dstIt->x(), dstIt->y());
-        srcRSA.moveTo(QPointF(xv, yv));
-        srcRSA.sampledOldRawData(dstIt->rawData());
+        srcRSA->moveTo(QPointF(xv, yv));
+        srcRSA->sampledOldRawData(dstIt->rawData());
         if (progressUpdater) progressUpdater->setProgress((++count) / cost);
     }while (dstIt->nextPixel());
     delete horizontalcurve;
     delete verticalcurve;
 }
 
-int KisFilterWave::overlapMarginNeeded(const KisFilterConfiguration* config) const
+QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfiguration* config) const
 {
     QVariant value;
     int horizontalamplitude = (config && config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
-    return qMax(horizontalamplitude, verticalamplitude) ;
+    return rect.adjusted(-horizontalamplitude, -verticalamplitude, horizontalamplitude, verticalamplitude);
 }

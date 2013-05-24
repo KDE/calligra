@@ -22,8 +22,8 @@
 #ifndef KOSEGMENTGRADIENT_H
 #define KOSEGMENTGRADIENT_H
 
-#include <QtCore/QList>
-#include <QtGui/QColor>
+#include <QList>
+#include <QColor>
 
 #include <kio/job.h>
 
@@ -262,7 +262,7 @@ class PIGMENTCMS_EXPORT KoSegmentGradient : public KoAbstractGradient
 {
 
 public:
-    KoSegmentGradient(const QString& file);
+    explicit KoSegmentGradient(const QString &file);
     virtual ~KoSegmentGradient();
 
     /// reimplemented

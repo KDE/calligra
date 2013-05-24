@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KPlatoPluginScripting" library="krossmoduleplan" version="1">
+<MenuBar>
+    <Menu name="tools"><text>&amp;Tools</text>
+    <Separator/>
+    <Action name="executescriptfile"/>
+    <Action name="scripts"/>
+    <Action name="scriptmanager"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

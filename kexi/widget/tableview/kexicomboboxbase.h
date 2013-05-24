@@ -21,13 +21,15 @@
 #ifndef _KEXICOMBOBOXBASE_H_
 #define _KEXICOMBOBOXBASE_H_
 
-#include "kexidb/field.h"
+#include <db/field.h>
 #include "kexiinputtableedit.h"
-#include <kexidb/lookupfieldschema.h>
-#include <kexiutils/tristate.h>
+#include <db/lookupfieldschema.h>
+#include <db/tristate.h>
 
 class KexiComboBoxPopup;
-class KexiTableViewColumn;
+namespace KexiDB {
+class TableViewColumn;
+}
 
 /*! @short A base class for handling data-aware combo boxes.
  This class is used by KexiComboBoxTableEdit and KexiDBComboBox.
@@ -39,7 +41,7 @@ public:
     virtual ~KexiComboBoxBase();
 
     //! \return column related to this combo; for KexiComboBoxTableEdit 0 is returned here
-    virtual KexiTableViewColumn *column() const = 0;
+    virtual KexiDB::TableViewColumn *column() const = 0;
 
     //! \return database field related to this combo
     virtual KexiDB::Field *field() const = 0;
@@ -136,7 +138,7 @@ protected:
 
     virtual QVariant visibleValueForLookupField();
 
-    void updateTextForHighlightedRow();
+    void updateTextForHighlightedRecord();
 
     bool handleKeyPressForPopup(QKeyEvent *ke);
 

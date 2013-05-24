@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=column-reflux
+Name[bs]=refluks kolona
+Name[ca]=columna reflux
+Name[ca@valencia]=columna reflux
+Name[da]=destillationskolonne
 Name[el]=column-reflux
+Name[es]=reflujo de columna
+Name[et]=Tagasijooksukolonn
+Name[fr]=column-reflux
+Name[gl]=Columna de refluxo
+Name[hu]=oszlop-visszafolyás
+Name[it]=colonna-riflusso
+Name[kk]=Рефлюкс бағаны
 Name[nb]=kolonne-reflux
+Name[nl]=kolom-reflux
+Name[pl]=kolumna-zwrotna
 Name[pt]=refluxo-coluna
 Name[pt_BR]=refluxo da coluna
+Name[ru]=Колонка рефлюкса
+Name[sk]=column-reflux
 Name[sv]=återloppskolonn
+Name[tr]=sütun-reflü
 Name[uk]=Дистиляційна колона з рефлюксом
 Name[x-test]=xxcolumn-refluxxx
 Name[zh_TW]=column-reflux

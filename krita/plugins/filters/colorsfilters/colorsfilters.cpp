@@ -31,7 +31,6 @@
 #include <QColor>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -49,7 +48,6 @@
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
-#include <kis_iterators_pixel.h>
 #include <kis_selection.h>
 #include "kis_histogram.h"
 #include "kis_hsv_adjustment_filter.h"
@@ -69,8 +67,6 @@ K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
 ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ColorsFiltersFactory::componentData());
-
     KisFilterRegistry * manager = KisFilterRegistry::instance();
     manager->add(new KisBrightnessContrastFilter());
     manager->add(new KisAutoContrast());
@@ -106,7 +102,6 @@ void KisAutoContrast::process(KisPaintDeviceSP device,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device != 0);
     Q_UNUSED(config);
     // initialize
@@ -177,11 +172,9 @@ void KisAutoContrast::process(KisPaintDeviceSP device,
     if (totalCost == 0) totalCost = 1;
     qint32 pixelsProcessed = 0;
 
-    KoMixColorsOp * mixOp = device->colorSpace()->mixColorsOp();
     quint32 npix;
     do {
         npix = iter->nConseqPixels();
-        quint8 *firstPixel = iter->rawData();
         // adjust
         adj->transform(iter->oldRawData(), iter->rawData(), npix);
         pixelsProcessed += npix;

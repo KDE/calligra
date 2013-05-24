@@ -29,7 +29,6 @@
 
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
-#include <kis_iterators_pixel.h>
 
 #include "ui_wdg_lens_blur.h"
 
@@ -51,9 +50,8 @@ KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP image) const
+KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
-    Q_UNUSED(image)
     return new KisWdgLensBlur(parent);
 }
 

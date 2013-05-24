@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,12 +21,12 @@
 #include <widget/kexicharencodingcombobox.h>
 #include <kexiutils/utils.h>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtextcodec.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qgridlayout.h>
+#include <QLabel>
+#include <QLayout>
+#include <QTextCodec>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QGridLayout>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -72,6 +72,7 @@ KexiCSVImportOptions::KexiCSVImportOptions()
 
     trimmedInTextValuesChecked
     = importExportGroup.readEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
+    nullsImportedAsEmptyTextChecked = importExportGroup.readEntry("ImportNULLsAsEmptyText", true);
 }
 
 KexiCSVImportOptions::~KexiCSVImportOptions()
@@ -83,7 +84,8 @@ bool KexiCSVImportOptions::operator== (const KexiCSVImportOptions & opt) const
     return defaultEncodingExplicitySet == opt.defaultEncodingExplicitySet
            && trimmedInTextValuesChecked == opt.trimmedInTextValuesChecked
            && encoding == opt.encoding
-           && dateFormat == opt.dateFormat;
+           && dateFormat == opt.dateFormat
+           && nullsImportedAsEmptyTextChecked == opt.nullsImportedAsEmptyTextChecked;
 }
 
 bool KexiCSVImportOptions::operator!= (const KexiCSVImportOptions & opt) const
@@ -128,13 +130,13 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     m_comboDateFormat->setObjectName("m_comboDateFormat");
     m_comboDateFormat->addItem(i18nc("Date format: Auto", "Auto"));
     QString year(i18n("year")), month(i18n("month")), day(i18n("day"));
-    KLocalizedString mask(ki18nc("do not reorder placeholders, just translate e.g. and - to the separator used by dates in your language", "%1, %2, %3 (e.g. %4-%5-%6)"));
+    QString mask(i18nc("do not reorder placeholders, just translate e.g. and - to the separator used by dates in your language", "%1, %2, %3 (e.g. %4-%5-%6)"));
     m_comboDateFormat->addItem(
-        mask.subs(day).subs(month).subs(year).subs(30).subs(12).subs(2008).toString());
+        mask.arg(day).arg(month).arg(year).arg(30).arg(12).arg(2008));
     m_comboDateFormat->addItem(
-        mask.subs(year).subs(month).subs(day).subs(2008).subs(12).subs(30).toString());
+        mask.arg(year).arg(month).arg(day).arg(2008).arg(12).arg(30));
     m_comboDateFormat->addItem(
-        mask.subs(month).subs(day).subs(year).subs(12).subs(30).subs(2008).toString());
+        mask.arg(month).arg(day).arg(year).arg(12).arg(30).arg(2008));
     lyr->addWidget(m_comboDateFormat, 1, 1);
 
     QLabel* lblDateFormat = new QLabel(i18n("Date format:"), plainPage);
@@ -144,15 +146,19 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     m_chkStripWhiteSpaceInTextValues = new QCheckBox(
         i18n("Strip leading and trailing blanks off of text values"), plainPage);
     lyr->addWidget(m_chkStripWhiteSpaceInTextValues, 2, 0, 1, 2);
-    lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 3, 0);
 
+    m_chkImportNULLsAsEmptyText = new QCheckBox(
+                i18n("Import missing text values as empty texts"), plainPage);
+    lyr->addWidget(m_chkImportNULLsAsEmptyText, 3, 0, 1, 2);
+    lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 4, 0);
     //update widgets
+    m_encodingComboBox->setSelectedEncoding(options.encoding);
     if (options.defaultEncodingExplicitySet) {
-        m_encodingComboBox->setSelectedEncoding(options.encoding);
         m_chkAlwaysUseThisEncoding->setChecked(true);
     }
     m_comboDateFormat->setCurrentIndex((int)options.dateFormat);
     m_chkStripWhiteSpaceInTextValues->setChecked(options.trimmedInTextValuesChecked);
+    m_chkImportNULLsAsEmptyText->setChecked(options.nullsImportedAsEmptyTextChecked);
 
     adjustSize();
     m_encodingComboBox->setFocus();
@@ -167,6 +173,7 @@ KexiCSVImportOptions KexiCSVImportOptionsDialog::options() const
     KexiCSVImportOptions opt;
     opt.encoding = m_encodingComboBox->selectedEncoding();
     opt.trimmedInTextValuesChecked = m_chkStripWhiteSpaceInTextValues->isChecked();
+    opt.nullsImportedAsEmptyTextChecked = m_chkImportNULLsAsEmptyText->isChecked();
     return opt;
 }
 
@@ -188,6 +195,8 @@ void KexiCSVImportOptionsDialog::accept()
 
     importExportGroup.writeEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles",
                                  m_chkStripWhiteSpaceInTextValues->isChecked());
+    importExportGroup.writeEntry("ImportNULLsAsEmptyText",
+                                 m_chkImportNULLsAsEmptyText->isChecked());
 
     KDialog::accept();
 }

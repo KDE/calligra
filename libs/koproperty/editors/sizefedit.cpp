@@ -19,8 +19,8 @@
 
 #include "sizefedit.h"
 
-#include <KLocale>
-#include <QtCore/QSize>
+#include <klocale.h>
+#include <QSize>
 
 using namespace KoProperty;
 

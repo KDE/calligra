@@ -41,15 +41,6 @@ public:
      * version, corrupted file,...).
      */
     static SharedPtr<Parser> createParser( const std::string& fileName );
-    /**
-     * This method opens a storage on a buffer in memory, determines the nFib,
-     * and creates a proper parser for it.
-     * All you have to do with that parser is to call parse() on it
-     * and it will start firing callbacks.
-     * This method will return 0 if it wasn't successful (e.g unknown
-     * version, corrupted file,...).
-     */
-    static SharedPtr<Parser> createParser( const unsigned char* buffer, size_t buflen );
 };
 
 } // namespace wvWare

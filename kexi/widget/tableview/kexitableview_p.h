@@ -29,7 +29,7 @@
 
 #include "kexitableview.h"
 
-#include <kexidb/roweditbuffer.h>
+#include <db/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
 
 #include <QEvent>
@@ -41,9 +41,9 @@
 #include <QHash>
 #include <QRubberBand>
 
-#include <KPushButton>
-#include <KLineEdit>
-#include <KMenu>
+#include <kpushbutton.h>
+#include <klineedit.h>
+#include <kmenu.h>
 
 class KexiTableEdit;
 class QLabel;
@@ -74,8 +74,8 @@ public:
 
     KexiTableView *tv;
 
-    //! editors: one for each column (indexed by KexiTableViewColumn)
-    QHash<KexiTableViewColumn*, KexiTableEdit*> editors;
+    //! editors: one for each column (indexed by KexiDB::TableViewColumn)
+    QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
 
     int rowHeight;
 
@@ -141,8 +141,8 @@ public:
      At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
     int internal_bottomMargin;
 
-    /*! Helper for "highlighted row" effect. */
-    int highlightedRow;
+    /*! Helper for "highlighted record" effect. */
+    int highlightedRecord;
 
     /*! Id of context menu key (cached). */
     int contextMenuKey;

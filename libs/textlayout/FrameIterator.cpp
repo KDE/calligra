@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann, KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann, KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,14 +34,17 @@ FrameIterator::FrameIterator(QTextFrame *frame)
     currentTableIterator = 0;
     currentSubFrameIterator = 0;
     lineTextStart = -1;
+    endNoteIndex = 0;
 }
 
-FrameIterator::FrameIterator(QTextTableCell cell)
+FrameIterator::FrameIterator(const QTextTableCell &cell)
 {
+    Q_ASSERT(cell.isValid());
     it = cell.begin();
     currentTableIterator = 0;
     currentSubFrameIterator = 0;
     lineTextStart = -1;
+    endNoteIndex = 0;
 }
 
 FrameIterator::FrameIterator(FrameIterator *other)
@@ -50,6 +53,7 @@ FrameIterator::FrameIterator(FrameIterator *other)
     masterPageName = other->masterPageName;
     lineTextStart = other->lineTextStart;
     fragmentIterator = other->fragmentIterator;
+    endNoteIndex = other->endNoteIndex;
     if (other->currentTableIterator)
         currentTableIterator = new TableIterator(other->currentTableIterator);
     else
@@ -61,11 +65,18 @@ FrameIterator::FrameIterator(FrameIterator *other)
         currentSubFrameIterator = 0;
 }
 
-bool FrameIterator::operator ==(const FrameIterator &other)
+FrameIterator::~FrameIterator()
+{
+    delete currentTableIterator;
+    delete currentSubFrameIterator;
+}
+
+bool FrameIterator::operator ==(const FrameIterator &other) const
 {
     if (it != other.it)
         return false;
-
+    if (endNoteIndex != other.endNoteIndex)
+        return false;
     if (currentTableIterator || other.currentTableIterator) {
         if (!currentTableIterator || !other.currentTableIterator)
             return false;

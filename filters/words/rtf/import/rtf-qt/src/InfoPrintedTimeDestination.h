@@ -18,8 +18,8 @@
 #ifndef RTFREADER_INFOPRINTEDTIMEDESTINATION_H
 #define RTFREADER_INFOPRINTEDTIMEDESTINATION_H
 
-#include <QtCore/QString>
-#include <QtGui/QColor>
+#include <QString>
+#include <QColor>
 
 #include "InfoTimeDestination.h"
 #include "rtfreader_export.h"

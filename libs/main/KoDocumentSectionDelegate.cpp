@@ -82,11 +82,12 @@ void KoDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o
 {
     p->save();
     {
-        QStyleOptionViewItem option = getOptions(o, index);
-        p->setFont(option.font);
+      
+	QStyleOptionViewItemV4 option = getOptions(o, index);
+        QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+        style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, p, option.widget);
 
-        if (option.state & QStyle::State_Selected)
-            p->fillRect(option.rect, option.palette.highlight());
+        p->setFont(option.font);
 
         drawText(p, option, index);
         drawIcons(p, option, index);
@@ -263,9 +264,9 @@ bool KoDocumentSectionDelegate::eventFilter(QObject *object, QEvent *event)
 // PRIVATE
 
 
-QStyleOptionViewItem KoDocumentSectionDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
+QStyleOptionViewItemV4 KoDocumentSectionDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
 {
-    QStyleOptionViewItem option = o;
+    QStyleOptionViewItemV4 option = o;
     QVariant v = index.data(Qt::FontRole);
     if (v.isValid()) {
         option.font = v.value<QFont>();
@@ -279,7 +280,7 @@ QStyleOptionViewItem KoDocumentSectionDelegate::getOptions(const QStyleOptionVie
         option.palette.setColor(QPalette::Text, v.value<QColor>());
     v = index.data(Qt::BackgroundColorRole);
     if (v.isValid())
-        option.palette.setColor(QPalette::Background, v.value<QColor>());
+        option.palette.setColor(QPalette::Window, v.value<QColor>());
 
    return option;
 }

@@ -1,4 +1,3 @@
-
 /*  This file is part of the KDE project
 
     Copyright (c) 2000 Matthias Elter <elter@kde.org>
@@ -27,7 +26,6 @@
 #include <QImage>
 #include <QMap>
 #include <QFile>
-#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -48,7 +46,7 @@ quint32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' 
 }
 
 KoPattern::KoPattern(const QString& file)
-        : KoResource(file)
+    : KoResource(file)
 {
 }
 
@@ -74,6 +72,15 @@ bool KoPattern::load()
     } else {
         result = m_image.load(filename());
         setValid(result);
+
+        /**
+         * All our resources code expects the image() of the resource
+         * to be in ARGB32 format, so convert the image when its format
+         * differs
+         */
+        if (result && m_image.format() != QImage::Format_ARGB32) {
+            m_image = m_image.convertToFormat(QImage::Format_ARGB32);
+        }
     }
     return result;
 }
@@ -83,7 +90,6 @@ bool KoPattern::save()
     QFile file(filename());
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
 
-    QTextStream stream(&file);
     // Header: header_size (24+name length),version,width,height,colordepth of brush,magic,name
     // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA
     // magic = "GPAT", as a single uint32, the docs are wrong here!
@@ -117,8 +123,8 @@ bool KoPattern::save()
 
     int k = 0;
     bytes.resize(width() * height() * 4);
-    for (qint32 y = 0; y < height(); y++) {
-        for (qint32 x = 0; x < width(); x++) {
+    for (qint32 y = 0; y < height(); ++y) {
+        for (qint32 x = 0; x < width(); ++x) {
             // RGBA only
             QRgb pixel = m_image.pixel(x, y);
             bytes[k++] = static_cast<char>(qRed(pixel));
@@ -176,7 +182,8 @@ bool KoPattern::init(QByteArray& bytes)
         return false;
     }
 
-    setName(QString::fromAscii(name, size));
+    // size -1 so we don't add the end 0 to the QString...
+    setName(QString::fromLatin1(name, size -1));
     delete[] name;
 
     if (bh.width == 0 || bh.height == 0) {
@@ -192,34 +199,36 @@ bool KoPattern::init(QByteArray& bytes)
     }
 
     m_image = QImage(bh.width, bh.height, imageFormat);
-
     if (m_image.isNull()) {
         return false;
     }
-
     k = bh.header_size;
+
 
     if (bh.bytes == 1) {
         // Grayscale
         qint32 val;
+        for (quint32 y = 0; y < bh.height; ++y) {
+            QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
+            for (quint32 x = 0; x < bh.width; ++x, ++k) {
 
-        for (quint32 y = 0; y < bh.height; y++) {
-            for (quint32 x = 0; x < bh.width; x++, k++) {
+
                 if (k > dataSize) {
                     kWarning(30009) << "failed in gray";
                     return false;
                 }
 
                 val = data[k];
-                m_image.setPixel(x, y, qRgb(val, val, val));
+                pixels[x] = qRgb(val, val, val);
             }
         }
     } else if (bh.bytes == 2) {
         // Grayscale + A
         qint32 val;
         qint32 alpha;
-        for (quint32 y = 0; y < bh.height; y++) {
-            for (quint32 x = 0; x < bh.width; x++, k++) {
+        for (quint32 y = 0; y < bh.height; ++y) {
+            QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
+            for (quint32 x = 0; x < bh.width; ++x, ++k) {
                 if (k + 2 > dataSize) {
                     kWarning(30009) << "failed in grayA";
                     return false;
@@ -227,37 +236,38 @@ bool KoPattern::init(QByteArray& bytes)
 
                 val = data[k];
                 alpha = data[k++];
-                m_image.setPixel(x, y, qRgba(val, val, val, alpha));
+                pixels[x] = qRgba(val, val, val, alpha);
             }
         }
     } else if (bh.bytes == 3) {
         // RGB without alpha
-        for (quint32 y = 0; y < bh.height; y++) {
-            for (quint32 x = 0; x < bh.width; x++) {
+        for (quint32 y = 0; y < bh.height; ++y) {
+            QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
+            for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 3 > dataSize) {
                     kWarning(30009) << "failed in RGB";
                     return false;
                 }
-
-                m_image.setPixel(x, y, qRgb(data[k],
-                                            data[k + 1],
-                                            data[k + 2]));
+                pixels[x] = qRgb(data[k],
+                                 data[k + 1],
+                                 data[k + 2]);
                 k += 3;
             }
         }
     } else if (bh.bytes == 4) {
         // Has alpha
-        for (quint32 y = 0; y < bh.height; y++) {
-            for (quint32 x = 0; x < bh.width; x++) {
+        for (quint32 y = 0; y < bh.height; ++y) {
+            QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
+            for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 4 > dataSize) {
                     kWarning(30009) << "failed in RGBA";
                     return false;
                 }
 
-                m_image.setPixel(x, y, qRgba(data[k],
-                                             data[k + 1],
-                                             data[k + 2],
-                                             data[k + 3]));
+                pixels[x] = qRgba(data[k],
+                                  data[k + 1],
+                                  data[k + 2],
+                                  data[k + 3]);
                 k += 4;
             }
         }

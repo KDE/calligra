@@ -30,7 +30,6 @@
 #include <filter/kis_filter.h>
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
-#include <kis_image.h>
 
 // From krita/ui
 #include "kis_bookmarked_configurations_editor.h"
@@ -38,17 +37,26 @@
 #include "kis_filters_model.h"
 #include "kis_config.h"
 
+class ThumbnailBounds : public KisDefaultBounds {
+
+    QRect bounds() const
+    {
+        return QRect(0, 0, 100, 100);
+    }
+};
+
+
 struct KisFilterSelectorWidget::Private {
     QWidget* currentCentralWidget;
     KisConfigWidget* currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
-    KisImageWSP image;
     KisPaintDeviceSP paintDevice;
     Ui_FilterSelector uiFilterSelector;
     KisPaintDeviceSP thumb;
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
     KisFiltersModel* filtersModel;
     QGridLayout *widgetLayout;
+    KisView2 *view;
 };
 
 KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
@@ -60,6 +68,7 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     d->currentBookmarkedFilterConfigurationsModel = 0;
     d->currentFilter = 0;
     d->filtersModel = 0;
+    d->view = 0;
     d->uiFilterSelector.setupUi(this);
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
@@ -86,20 +95,21 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
     delete d;
 }
 
+void KisFilterSelectorWidget::setView(KisView2 *view)
+{
+    d->view = view;
+}
+
 void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
 {
     if (!_paintDevice) return;
 
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
+    d->thumb->setDefaultBounds(new ThumbnailBounds());
     d->filtersModel = new KisFiltersModel(d->thumb);
     d->uiFilterSelector.filtersSelector->setFilterModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
-}
-
-void KisFilterSelectorWidget::setImage(KisImageWSP _image)
-{
-    d->image = _image;
 }
 
 void KisFilterSelectorWidget::showFilterGallery(bool visible)
@@ -135,7 +145,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     }
 
     KisConfigWidget* widget =
-        d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image);
+        d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice);
 
     if (!widget) { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;
@@ -144,6 +154,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     } else {
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
+        d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
         d->currentFilterConfigurationWidget->setConfiguration(
             d->currentFilter->defaultConfiguration(d->paintDevice));

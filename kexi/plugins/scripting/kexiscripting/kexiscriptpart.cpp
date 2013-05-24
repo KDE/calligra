@@ -34,12 +34,13 @@
 
 #include <kexipart.h>
 #include <kexipartitem.h>
+#include <KoIcon.h>
 #include <kxmlguiclient.h>
 //#include <kexidialogbase.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <QMetaObject>
 #include <QMenu>
@@ -122,7 +123,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
         if (!exec && dontask != "no") {
             exec = KMessageBox::warningContinueCancel(0,
                     i18n("Do you want to execute the script \"%1\"?\n\nScripts obtained from unknown sources can contain dangerous code.").arg(scriptaction->text()),
-                    i18n("Execute Script?"), KGuiItem(i18n("Execute"), "system-run"),
+                    i18n("Execute Script?"), KGuiItem(i18n("Execute"), koIconName("system-run")),
                     dontAskAgainName, KMessageBox::Notify | KMessageBox::Dangerous
                                                      ) == KMessageBox::Continue;
         }
@@ -230,8 +231,8 @@ void KexiScriptPart::initPartActions()
 void KexiScriptPart::initInstanceActions()
 {
     kDebug();
-    //createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "media-playback-start", 0, "data_execute");
-    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", KShortcut(), "script_config_editor");
+    //createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), koIconName("media-playback-start"), 0, "data_execute");
+    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), koIconName("configure"), KShortcut(), "script_config_editor");
 }
 
 KexiView* KexiScriptPart::createView(QWidget *parent,

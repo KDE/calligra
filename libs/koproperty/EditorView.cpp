@@ -23,20 +23,21 @@
 #include "Set.h"
 #include "Factory.h"
 
-#include <QtCore/QPointer>
-#include <QtGui/QItemDelegate>
-#include <QtGui/QStandardItemEditorCreator>
-#include <QtGui/QPainter>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QToolTip>
-#include <QtGui/QApplication>
-#include <QtGui/QHeaderView>
+#include <KoIcon.h>
 
-#include <KLocale>
-#include <KIconLoader>
-#include <KIconEffect>
-#include <KDebug>
+#include <QPointer>
+#include <QItemDelegate>
+#include <QStandardItemEditorCreator>
+#include <QPainter>
+#include <QVBoxLayout>
+#include <QMouseEvent>
+#include <QToolTip>
+#include <QApplication>
+#include <QHeaderView>
+
+#include <klocale.h>
+#include <kiconeffect.h>
+#include <kdebug.h>
 
 using namespace KoProperty;
 
@@ -177,7 +178,7 @@ void ItemDelegate::paint(QPainter *painter,
         QBrush gradBrush(grad);
         painter->fillRect(x2 - iconSize * 2, y1, 
             iconSize * 2, y2 - y1 + 1, gradBrush);
-        QPixmap revertIcon( DesktopIcon("edit-undo", iconSize) );
+        QPixmap revertIcon(koIcon("edit-undo").pixmap(iconSize, iconSize));
 //        QPixmap alphaChannel(revertIcon.size());
 //        alphaChannel.fill(QColor(127, 127, 127));
 //        revertIcon.setAlphaChannel(alphaChannel);
@@ -395,7 +396,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
                 this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
         connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
                 this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
-//NEEDED?        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
+        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }
 
@@ -433,6 +434,11 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
 //   ensureItemVisible(item);
         }
     }
+}
+
+void EditorView::slotSetWillBeCleared()
+{
+    changeSet(0, QByteArray());
 }
 
 void EditorView::slotSetWillBeDeleted()

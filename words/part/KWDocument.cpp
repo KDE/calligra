@@ -5,7 +5,7 @@
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2010 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2010 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,24 +39,25 @@
 #include "frames/KWFrameLayout.h"
 #include "frames/KWOutlineShape.h"
 #include "dialogs/KWFrameDialog.h"
-#include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
 #include "commands/KWPageRemoveCommand.h"
-#include "changetracker/KoChangeTracker.h"
 #include "KWRootAreaProvider.h"
 
 // calligra libs includes
+#include <changetracker/KoChangeTracker.h>
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
+#include <KoShapeController.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoStyleManager.h>
-#include <KoResourceManager.h>
-#include <KoInteractionTool.h>
+#include <KoDocumentResourceManager.h>
+#include <KoCanvasResourceManager.h>
+#include <KoTextRangeManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
@@ -67,10 +68,10 @@
 #include <KoSelection.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
-
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoPart.h>
+#include <KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
+#include <KoDocumentRdf.h>
 #endif
 
 #include <KoProgressUpdater.h>
@@ -79,7 +80,6 @@
 // KDE + Qt includes
 #include <klocale.h>
 #include <kstandardaction.h>
-#include <kmessagebox.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <QIODevice>
@@ -89,16 +89,14 @@
 #include <QTextBlock>
 #include <QTime>
 
-KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode),
+KWDocument::KWDocument(KoPart *part)
+        : KoDocument(part),
+        m_isMasterDocument(false),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
 {
     m_frameLayout.setDocument(this);
     resourceManager()->setOdfDocument(this);
-
-    setComponentData(KWFactory::componentData(), false);
-    setTemplateType("words_template");
 
     connect(&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
     connect(&m_frameLayout, SIGNAL(removedFrameSet(KWFrameSet*)), this, SLOT(removeFrameSet(KWFrameSet*)));
@@ -111,13 +109,25 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     }
 
     resourceManager()->setUndoStack(undoStack());
-    if (documentRdfBase()) {
-        documentRdfBase()->linkToResourceManager(resourceManager());
+    if (documentRdf()) {
+        documentRdf()->linkToResourceManager(resourceManager());
     }
 
+#ifdef SHOULD_BUILD_RDF
+    {
+        KoDocumentRdf *rdf = new KoDocumentRdf(this);
+        setDocumentRdf(rdf);
+    }
+
+#endif
+
+
+/* TODO reenable after release
     QVariant variant;
     variant.setValue(new KoChangeTracker(resourceManager()));
     resourceManager()->setResource(KoText::ChangeTracker, variant);
+*/
+    m_shapeController = new KoShapeController(0, this);
 
     if (inlineTextObjectManager()) {
         connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
@@ -134,6 +144,18 @@ KWDocument::~KWDocument()
     saveConfig();
     qDeleteAll(m_frameSets);
 }
+
+bool KWDocument::isMasterDocument() const
+{
+    return m_isMasterDocument;
+}
+
+void KWDocument::setIsMasterDocument(bool isMasterDocument)
+{
+    m_isMasterDocument = isMasterDocument;
+}
+
+
 
 // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
 // will call addFrameSet.  Which will itself call addFrame()
@@ -157,16 +179,16 @@ void KWDocument::addShape(KoShape *shape)
     if (!m_frameSets.contains(frame->frameSet())) {
         addFrameSet(frame->frameSet());
     }
-    foreach (KoView *view, views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->shapeManager()->addShape(shape);
-    }
+
+    emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
+
+    shape->update();
 }
 
 void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
+    qDebug() << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
         Q_ASSERT(fs);
@@ -175,56 +197,48 @@ void KWDocument::removeShape(KoShape *shape)
         else
             fs->removeFrame(frame);
     } else { // not a frame, but we still have to remove it from views.
-        foreach (KoView *view, views()) {
-            KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-            canvas->shapeManager()->remove(shape);
+        emit shapeRemoved(shape);
+    }
+}
+
+void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command)
+{
+    QMap<KoTextEditor *, QList<KoShapeAnchor *> > anchors;
+    foreach (KoShape *shape, shapes) {
+        KoShapeAnchor *anchor = shape->anchor();
+        if (anchor && anchor->textLocation()) {
+            const QTextDocument *document = anchor->textLocation()->document();
+            if (document) {
+                KoTextEditor *editor = KoTextDocument(document).textEditor();
+                anchors[editor].append(anchor);
+            }
         }
     }
+    QMap<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator it(anchors.constBegin());
+    for (; it != anchors.constEnd(); ++it) {
+        it.key()->removeAnchors(it.value(), command);
+    }
+}
+
+QPixmap KWDocument::generatePreview(const QSize &size)
+{
+    // use first page as preview for all pages
+    KWPage firstPage = pageManager()->begin();
+    if (! firstPage.isValid()) {
+        // TODO: what to return for no page?
+        return QPixmap();
+    }
+
+    // use shape manager from canvasItem even for QWidget environments
+    // if using the shape manager from one of the views there is no guarantee
+    // that the view, its canvas and the shapemanager is not destroyed in between
+    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(documentPart()->canvasItem())->shapeManager();
+
+    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
 }
 
 void KWDocument::paintContent(QPainter &, const QRect &)
 {
-}
-
-KoView *KWDocument::createViewInstance(QWidget *parent)
-{
-    KWView *view = new KWView(m_viewMode, this, parent);
-    bool switchToolCalled = false;
-    foreach (KWFrameSet *fs, m_frameSets) {
-        if (fs->frameCount() == 0)
-            continue;
-        foreach (KWFrame *frame, fs->frames())
-            view->canvasBase()->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-        if (switchToolCalled)
-            continue;
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs && tfs->textFrameSetType() == Words::MainTextFrameSet) {
-            KoSelection *selection = view->canvasBase()->shapeManager()->selection();
-            selection->select(fs->frames().first()->shape());
-
-            KoToolManager::instance()->switchToolRequested(
-                KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
-            switchToolCalled = true;
-        }
-    }
-    if (!switchToolCalled)
-        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
-    return view;
-}
-
-QGraphicsItem *KWDocument::createCanvasItem()
-{
-    // caller owns the canvas item
-    KWCanvasItem *item = new KWCanvasItem(m_viewMode, this);
-    foreach (KWFrameSet *fs, m_frameSets) {
-        if (fs->frameCount() == 0) {
-            continue;
-        }
-        foreach (KWFrame *frame, fs->frames()) {
-            item->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-        }
-    }
-    return item;
 }
 
 KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName, bool addUndoRedoCommand)
@@ -278,10 +292,9 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     setModified(true);
     foreach (KWFrame *frame, fs->frames())
         removeFrame(frame);
-    foreach (KoView *view, views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
-    }
+
+    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
+
     disconnect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
@@ -412,26 +425,16 @@ void KWDocument::addFrame(KWFrame *frame)
 {
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     //firePageSetupChanged();
-    foreach (KoView *view, views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-        canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
-    }
-    if (viewCount() == 0) {
-        KoCanvasBase *canvas = dynamic_cast<KoCanvasBase *>(canvasItem(false));
-        if (canvas) {
-            canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
-            canvas->resourceManager()->setResource(Words::CurrentFrameSetCount, m_frameSets.count());
-        }
-    }
-    //frame->shape()->update();
+    emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
+    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
 {
     if (frame->shape() == 0) return;
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
-    removeFrameFromViews(frame);
+
+    emit shapeRemoved(frame->shape());
     KWPage page = pageManager()->page(frame->shape());
     if (!page.isValid()) return;
     if (!page.isAutoGenerated()) return;
@@ -471,6 +474,12 @@ KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
 {
     QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
     return var.value<KoInlineTextObjectManager*>();
+}
+
+KoTextRangeManager *KWDocument::textRangeManager() const
+{
+    QVariant var = resourceManager()->resource(KoText::TextRangeManager);
+    return var.value<KoTextRangeManager*>();
 }
 
 QString KWDocument::uniqueFrameSetName(const QString &suggestion)
@@ -529,24 +538,34 @@ void KWDocument::initEmpty()
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(styleManager);
     KoParagraphStyle *parag = new KoParagraphStyle();
+    parag->setName(i18n("Standard"));
+    parag->setFontPointSize(12);
+    parag->setFontWeight(QFont::Normal);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName(i18n("Document Title"));
+    parag->setFontPointSize(24);
+    parag->setFontWeight(QFont::Bold);
+    parag->setAlignment(Qt::AlignCenter);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
     parag->setName(i18n("Head 1"));
-    KoCharacterStyle *character = parag->characterStyle();
-    character->setFontPointSize(20);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(20);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();
     parag->setName(i18n("Head 2"));
-    character = parag->characterStyle();
-    character->setFontPointSize(16);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(16);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();
     parag->setName(i18n("Head 3"));
-    character = parag->characterStyle();
-    character->setFontPointSize(12);
-    character->setFontWeight(QFont::Bold);
+    parag->setFontPointSize(12);
+    parag->setFontWeight(QFont::Bold);
     styleManager->add(parag);
 
     parag = new KoParagraphStyle();
@@ -558,6 +577,7 @@ void KWDocument::initEmpty()
     parag->setListStyle(list);
     styleManager->add(parag);
 
+    setMimeTypeAfterLoading("application/vnd.oasis.opendocument.text");
     KoDocument::initEmpty();
     clearUndoHistory();
 }
@@ -622,96 +642,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         firstPageMasterName = block.blockFormat().stringProperty(KoParagraphStyle::MasterPageName);
     }
 
-    KWPage lastpage = pageManager()->last();
-    qreal docHeight = lastpage.isValid() ? (lastpage.offsetInDocument() + lastpage.height()) : 0.0;
-
-    // insert pages
-    qreal maxBottom = 0;
-    foreach (KWFrameSet *fs, m_frameSets) {
-        foreach (KWFrame *frame, fs->frames())
-        maxBottom = qMax(maxBottom, frame->shape()->boundingRect().bottom());
-    }
-
-    // Here we look at point 'b'. We add pages so at least all frames have a page.
-    // btw. the observent reader might notice that cases b and c are not mutually exclusive ;)
-    while (docHeight <= maxBottom) {
-        kDebug(32001) << "KWDocument::endOfLoading appends a page";
-        if (m_pageManager.pageCount() == 0) { // apply the firstPageMasterName only on the first page
-            //lastpage = m_pageManager.appendPage(m_pageManager.pageStyle(firstPageMasterName));
-            lastpage = appendPage(firstPageMasterName);
-        } else { // normally this shouldn't happen cause that loop is only run once...
-            //lastpage = m_pageManager.appendPage();
-            lastpage = appendPage();
-        }
-        docHeight += lastpage.height();
-    }
-
-#if 0
-    // do some sanity checking on document.
-    for (int i = frameSetCount() - 1; i > -1; i--) {
-        KWFrameSet *fs = frameSet(i);
-        if (!fs) {
-            kWarning(32001) << "frameset " << i << " is NULL!!";
-            m_lstFrameSet.remove(i);
-            continue;
-        }
-        if (fs->type() == FT_TABLE) {
-            static_cast<KWTableFrameSet *>(fs)->validate();
-        } else if (fs->type() == FT_TEXT) {
-            for (int f = fs->frameCount() - 1; f >= 0; f--) {
-                KWFrame *frame = fs->frame(f);
-                if (frame->left() < 0) {
-                    kWarning(32001) << fs->name() << " frame " << f << " pos.x is < 0, moving frame";
-                    frame->moveBy(0 - frame->left(), 0);
-                }
-                if (frame->right() > m_pageLayout.ptWidth) {
-                    kWarning(32001) << fs->name() << " frame " << f << " rightborder outside page ("
-                    << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking";
-                    frame->setRight(m_pageLayout.ptWidth);
-                }
-                if (fs->isProtectSize())
-                    continue; // don't make frames bigger of a protected frameset.
-                if (frame->height() < s_minFrameHeight) {
-                    kWarning(32001) << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
-                    << frame->height() << " is: " << s_minFrameHeight << ")";
-                    frame->setHeight(s_minFrameHeight);
-                }
-                if (frame->width() < s_minFrameWidth) {
-                    kWarning(32001) << fs->name() << " frame " << f << " width is so small no text will fit, adjusting (was: "
-                    << frame->width() << " is: " << s_minFrameWidth  << ")";
-                    frame->setWidth(s_minFrameWidth);
-                }
-            }
-            if (fs->frameCount() == 0) {
-                KWPage *page = pageManager()->page(startPage());
-                KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->topMargin(),
-                                             page->width() - page->leftMargin() - page->rightMargin(),
-                                             page->height() - page->topMargin() - page->bottomMargin());
-                //kDebug(32001) <<"KWDocument::loadXML main-KWFrame created" << *frame;
-                fs->addFrame(frame);
-            }
-        } else if (fs->frameCount() == 0) {
-            kWarning(32001) << "frameset " << i << " " << fs->name() << " has no frames";
-            removeFrameSet(fs);
-            if (fs->type() == FT_PART)
-                delete static_cast<KWPartFrameSet *>(fs)->getChild();
-            delete fs;
-            continue;
-        }
-        if (fs->frameCount() > 0) {
-            KWFrame *frame = fs->frame(0);
-            if (frame->isCopy()) {
-                kWarning(32001) << "First frame in a frameset[" << fs->name() << "] was set to be a copy; resetting";
-                frame->setCopy(false);
-            }
-        }
-    }
-
-    // Renumber footnotes
-    KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>(m_lstFrameSet.getFirst());
-    if (frameset)
-        frameset->renumberFootNotes(false /*no repaint*/);
-#endif
+    appendPage(firstPageMasterName);
 
     relayout();
 
@@ -729,14 +660,6 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
     return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
 }
 
-QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) const
-{
-    QStringList answer = KoDocument::extraNativeMimeTypes(importExportType);
-    if (importExportType == KoDocument::ForExport)
-        answer.removeAll("application/x-words"); // we can't save this, only load.
-    return answer;
-}
-
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
     kDebug(32001) << "pageStyleName=" << style.name();
@@ -747,7 +670,7 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
             framesets.append(tfs);
     }
     int pageNumber = -1;
-    foreach (KWPage page, pageManager()->pages()) {
+    foreach (const KWPage &page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
             pageNumber = page.pageNumber();
             break;
@@ -762,57 +685,87 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
     relayout(framesets);
 }
 
-void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
-{
-    // print error if kotext not available
-    if (KoShapeRegistry::instance()->value(TextShape_SHAPEID) == 0)
-        // need to wait 1 event since exiting here would not work.
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    else
-        KoDocument::showStartUpWidget(parent, alwaysShow);
-}
-
-void KWDocument::showErrorAndDie()
-{
-    KMessageBox::error(widget(),
-                       i18n("Can not find needed text component, Words will quit now"),
-                       i18n("Installation Error"));
-    QCoreApplication::exit(10);
-}
-
-void KWDocument::removeFrameFromViews(KWFrame *frame)
-{
-    Q_ASSERT(frame);
-    foreach (KoView *view, views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->shapeManager()->remove(frame->shape());
-    }
-}
-
-QList<KoDocument::CustomDocumentWidgetItem> KWDocument::createCustomDocumentWidgets(QWidget *parent)
-{
-    KoColumns columns;
-    columns.columns = 1;
-    columns.columnSpacing = m_config.defaultColumnSpacing();
-
-    QList<KoDocument::CustomDocumentWidgetItem> widgetList;
-    KoDocument::CustomDocumentWidgetItem item;
-    item.widget = new KWStartupWidget(parent, this, columns);
-    widgetList << item;
-    return widgetList;
-}
-
 void KWDocument::saveConfig()
 {
-    if (!isReadWrite())
-        return;
 //   KConfigGroup group(KoGlobal::calligraConfig(), "Spelling");
 //   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
-    if (isEmbedded())
-        return;
+
     m_config.save();
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");
     interface.writeEntry("ResolutionX", gridData().gridX());
     interface.writeEntry("ResolutionY", gridData().gridY());
+}
+
+KWFrame* KWDocument::findClosestFrame(KoShape* shape) const
+{
+    KWFrame *result = 0;
+    int      area   = 0;
+    QRectF   br     = shape->boundingRect();
+
+    // now find the frame that is closest to the frame we want to inline.
+    foreach (KWFrame *frame, mainFrameSet()->frames()) {
+        QRectF intersection  = br.intersected(frame->shape()->boundingRect());
+        int    intersectArea = qRound(intersection.width() * intersection.height());
+
+        if (intersectArea > area) {
+            result = frame;
+            area   = intersectArea;
+        } else if (result == 0) {
+            // TODO check distance between frames or something.
+        }
+    }
+
+    return result;
+}
+
+KoShapeAnchor* KWDocument::anchorOfShape(KoShape *shape) const
+{
+    Q_ASSERT(mainFrameSet());
+    Q_ASSERT(shape);
+
+    KoShapeAnchor *anchor = shape->anchor();
+
+    if (!anchor) {
+        anchor = new KoShapeAnchor(shape);
+        anchor->setAnchorType(KoShapeAnchor::AnchorPage);
+        anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
+        anchor->setVerticalPos(KoShapeAnchor::VFromTop);
+        shape->setAnchor(anchor);
+    }
+
+    return anchor;
+}
+
+
+KWFrame *KWDocument::frameOfShape(KoShape* shape) const
+{
+    while (shape) {
+        KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
+        if (answer)
+            return answer;
+        if (shape->parent() == 0)
+            break;
+        shape = shape->parent();
+    }
+
+    KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
+    if (answer == 0) { // this may be a clipping shape containing the frame-shape
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        if (container && container->shapeCount() == 1) {
+            answer = dynamic_cast<KWFrame*>(container->shapes()[0]->applicationData());
+        }
+    }
+
+    return answer;
+}
+
+void KWDocument::setCoverImage(QPair<QString, QByteArray> cover)
+{
+    m_coverImage = cover;
+}
+
+QPair<QString, QByteArray> KWDocument::coverImage()
+{
+    return m_coverImage;
 }

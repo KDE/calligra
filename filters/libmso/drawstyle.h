@@ -45,6 +45,16 @@ public:
                        const MSO::OfficeArtSpContainer* sp_ = 0)
             : d(d_), mastersp(mastersp_), sp(sp_) {}
 
+    /**
+     * @return the OfficeArtSpContainer record specifying the shape container.
+     */
+    const MSO::OfficeArtSpContainer* shapeContainer() const { return sp; };
+
+    /**
+     * @return the shape type that MUST be an MSOSPT enumeration value.
+     */
+    quint16 shapeType() const;
+
     // Shape property set
     quint32 hspMaster() const;
     quint32 cxstyle() const;
@@ -76,6 +86,10 @@ public:
     quint32 alignHR() const;
     qint32 dxHeightHR() const;
     qint32 dxWidthHR() const;
+    MSO::OfficeArtCOLORREF borderTopColor() const;
+    MSO::OfficeArtCOLORREF borderLeftColor() const;
+    MSO::OfficeArtCOLORREF borderBottomColor() const;
+    MSO::OfficeArtCOLORREF borderRightColor() const;
     // Group Shape Boolean Properties
     bool fPrint() const;
     bool fHidden() const;
@@ -186,6 +200,9 @@ public:
     quint32 lineEndArrowhead() const;
     quint32 lineStartArrowWidth() const;
     quint32 lineEndArrowWidth() const;
+    quint32 lineEndArrowLength() const;
+    quint32 lineJoinStyle() const;
+    quint32 lineEndCapStyle() const;
     // Line Style Boolean Properties
     bool fNoLineDrawDash() const;
     bool fLineFillShape() const;

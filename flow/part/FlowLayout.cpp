@@ -28,7 +28,7 @@
 #include <Utils.h>
 #include <QEvent>
 #include <QPainter>
-#include <qcoreapplication.h>
+#include <QCoreApplication>
 
 struct FlowLayout::Private : public KoShape {
   Private() : eventSent(false) {}

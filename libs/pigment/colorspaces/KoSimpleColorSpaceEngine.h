@@ -27,8 +27,12 @@ class KoSimpleColorSpaceEngine : public KoColorSpaceEngine
 public:
     KoSimpleColorSpaceEngine();
     virtual ~KoSimpleColorSpaceEngine();
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     virtual void addProfile(const QString &profile ) { Q_UNUSED(profile); }
+    virtual void removeProfile(const QString &profile ) { Q_UNUSED(profile); }
 };
 
 #endif

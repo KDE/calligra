@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=xor v
+Name[bs]=xor v
+Name[ca]=xor v
+Name[ca@valencia]=xor v
+Name[cs]=xor s
+Name[da]=xor v
 Name[el]=xor v
+Name[es]=XOR vertical
+Name[et]=Vertikaalne välistav või
+Name[fr]=xor v
+Name[gl]=OU-exclusivo (XOR) vertical
+Name[it]=xor v
+Name[kk]=лог-сиысп-немесе тік
 Name[nb]=xor loddr
 Name[nl]=xor v
+Name[pl]=xor v
 Name[pt]=xor v
 Name[pt_BR]=xor v
+Name[ru]=xor v
+Name[sk]=xor v
 Name[sv]=xor v
 Name[uk]=Виключне «АБО» (вертикально)
 Name[x-test]=xxxor vxx

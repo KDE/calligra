@@ -18,8 +18,8 @@
 #ifndef RTFREADER_SUBJECTPCDATADESTINATION_H
 #define RTFREADER_SUBJECTPCDATADESTINATION_H
 
-#include <QtCore/QString>
-#include <QtGui/QColor>
+#include <QString>
+#include <QColor>
 
 #include "PcdataDestination.h"
 #include "rtfreader_export.h"

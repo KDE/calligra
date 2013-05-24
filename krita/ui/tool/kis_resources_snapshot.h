@@ -23,25 +23,45 @@
 #include "kis_shared_ptr.h"
 #include "kis_types.h"
 #include "krita_export.h"
+#include "kis_painter.h"
 
 
-class KoResourceManager;
+class KoCanvasResourceManager;
 class KoCompositeOp;
 class KisPainter;
+class KisPostExecutionUndoAdapter;
+class KisRecordedPaintAction;
+class KisPattern;
 
 
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
-    KisResourcesSnapshot(KisImageWSP image, KoResourceManager *resourceManager);
+    KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager);
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
+    void KDE_DEPRECATED setupPaintAction(KisRecordedPaintAction *action);
 
-    KisImageWSP image() const;
+
+    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
+    void setCurrentNode(KisNodeSP node);
+    void setStrokeStyle(KisPainter::StrokeStyle strokeStyle);
+    void setFillStyle(KisPainter::FillStyle fillStyle);
+
     KisNodeSP currentNode() const;
+    KisImageWSP image() const;
+    bool needsIndirectPainting() const;
+
+    bool needsAirbrushing() const;
+    int airbrushingRate() const;
+
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;
+
+    KisPattern* currentPattern() const;
+    KoColor currentFgColor() const;
+    KoColor currentBgColor() const;
 
 private:
     struct Private;

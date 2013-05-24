@@ -1,23 +1,17 @@
 This is keximdb, the MDB file migration driver for Kexi.
 
 MDB files are the native database format of MS Access (and 
-also some other MS applications).  This driver can be used
+also some other MS applications). This driver can be used
 by Kexi's migration framework to convert simple Access 
-databases in to native Kexi databases.
+databases into native Kexi databases.
 
-If you have any problems, feel free to contact the author
-using the e-mail address below, or post your question to the
-calligra-devel list, or ask on the #kexi IRC channel...
+If you have any problems, improvement proposals or you wish
+to support this development, feel free to contact the authors:
+* using the e-mail address below
+* or using the Calligra forum http://forum.kde.org/viewforum.php?f=203
+* or ask on the #kexi IRC channel at irc.freenode.net.
 
-Please contact the Kexi developers if you intend to package
-this software for your distribution.  (Note that we already 
-have some packaging scripts for Debian and related distributions
-in the KDE subversion repository). 
+For more information visit:
+http://www.kexi-project.org/wiki/wikiview/index.php@MDBDriver.html
 
-More information about this package is available on Kexi's
-website at:
-http://www.kexi-project.org/wiki/wiki/?MDBDriver
-
-
-Martin Ellis
-martin.ellis@kdemail.net
+Contact: calligra-devel at kde.org

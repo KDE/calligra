@@ -23,7 +23,7 @@
 #include "kexidbform.h"
 #include "kexiformmanager.h"
 #include "kexiformview.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
 #include <formeditor/formIO.h>
@@ -31,7 +31,6 @@
 #include <formeditor/utils.h>
 #include <formeditor/container.h>
 //2.0 #include <formeditor/formmanager.h>
-//Added by qt3to4:
 #include <Q3Frame>
 #include <QSet>
 

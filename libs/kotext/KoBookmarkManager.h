@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,14 +46,16 @@ public:
     ~KoBookmarkManager();
 
     /// @return a bookmark with the specified name, or 0 if there is none
-    KoBookmark *retrieveBookmark(const QString &name);
+    KoBookmark *bookmark(const QString &name) const;
 
     /// @return a list of QString containing all bookmark names
-    QList<QString> bookmarkNameList();
+    QList<QString> bookmarkNameList() const;
 
 public slots:
     /**
-     * Insert a new bookmark to this manager
+     * Insert a new bookmark to this manager. The name of the bookmark
+     * will be set to @param name, no matter what name has been set on
+     * it.
      * @param name the name of the bookmark
      * @param bookmark the bookmark object to insert
      */

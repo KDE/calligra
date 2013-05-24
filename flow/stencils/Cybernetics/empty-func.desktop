@@ -1,10 +1,23 @@
 [Desktop Entry]
 Name=empty-func
+Name[bs]=Prazna funkcija
+Name[ca]=funció-buit
+Name[ca@valencia]=funció-buit
+Name[da]=empty-func
 Name[el]=empty-func
+Name[es]=función vacía
+Name[et]=Tühi funktsioon
+Name[fr]=fonction-vide
+Name[gl]=Función baleira
+Name[it]=funzione-vuota
+Name[kk]=бос-функция
 Name[nb]=tom funksj
 Name[nl]=empty-func
+Name[pl]=pusta-funkcja
 Name[pt]=função-vazia
 Name[pt_BR]=função vazia
+Name[ru]=Пустая функция
+Name[sk]=prázdna funkcia
 Name[sv]=tom-funktion
 Name[uk]=Шаблон для нетипових характеристик
 Name[x-test]=xxempty-funcxx

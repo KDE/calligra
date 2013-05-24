@@ -43,10 +43,10 @@
 #include <QFileInfo>
 
 #include <kdeversion.h>
-#include <KDebug>
-#include <KZip>
-#include <KMessageBox>
-#include <KTemporaryFile>
+#include <kdebug.h>
+#include <kzip.h>
+#include <kmessagebox.h>
+#include <ktemporaryfile.h>
 
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
@@ -79,6 +79,21 @@ MsooXmlImport::~MsooXmlImport()
 void MsooXmlImport::reportProgress(unsigned progress)
 {
     emit sigProgress(progress);
+}
+
+void MsooXmlImport::writeConfigurationSettings(KoXmlWriter* settings) const
+{
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "UseFormerLineSpacing");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false");
+    settings->endElement();
+
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "TabsRelativeToIndent");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false"); // ODF=true, MSOffice=false
+    settings->endElement();
 }
 
 KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
@@ -466,8 +481,8 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
                 it.append(i & 0xff).append((i >> 8) & 0xff).append((i >> 16) & 0xff).append((i >> 24) & 0xff);
                 hn = sha1sum(it + hn);
             }
-            const char blockKeyData1[] = {0xfe, 0xa7, 0xd2, 0x76, 0x3b, 0x4b, 0x9e, 0x79};
-            QByteArray blockKey1(blockKeyData1, sizeof(blockKeyData1));
+            const char blockKeyData1[] = "\xfe\xa7\xd2\x76\x3b\x4b\x9e\x79";
+            QByteArray blockKey1(blockKeyData1, sizeof(blockKeyData1) - 1);
             QCA::Cipher aes1 = createCipher(blockKey1, hn, salt);
 
             QByteArray verifierHashInput = aes1.update(encryptedVerifierHashInput.append(QByteArray(4, 0))).toByteArray();
@@ -478,8 +493,8 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             QByteArray hashedVerifierHashInput = sha1sum(verifierHashInput);
             kDebug() << "hashed verifier hash input:" << QCA::arrayToHex(hashedVerifierHashInput);
 
-            const char blockKeyData2[] = {0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e};
-            QByteArray blockKey2(blockKeyData2, sizeof(blockKeyData2));
+            const char blockKeyData2[] = "\xd7\xaa\x0f\x6d\x30\x61\x34\x4e";
+            QByteArray blockKey2(blockKeyData2, sizeof(blockKeyData2) - 1);
             QCA::Cipher aes2 = createCipher(blockKey2, hn, salt);
             QByteArray verifierHashValue = aes2.update(encryptedVerifierHashValue.append(QByteArray(12, 0))).toByteArray();
             verifierHashValue.append(aes2.final().toByteArray());
@@ -490,8 +505,8 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
                 continue;
             }
 
-            const char blockKeyData3[] = {0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0xd6};
-            QByteArray blockKey3(blockKeyData3, sizeof(blockKeyData3));
+            const char blockKeyData3[] = "\x14\x6e\x0b\xe7\xab\xac\xd0\xd6";
+            QByteArray blockKey3(blockKeyData3, sizeof(blockKeyData3) - 1);
             QCA::Cipher aes3 = createCipher(blockKey3, hn, salt);
             QByteArray keyValue = aes3.update(encryptedKeyValue.append(QByteArray(4, 0))).toByteArray();
             keyValue.append(aes3.final().toByteArray());
@@ -719,6 +734,20 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
     }
     KoFilter::ConversionStatus status = Utils::loadAndParseDocument(
                                             reader, m_zip, reader, errorMessage, path, context);
+    return status;
+}
+
+KoFilter::ConversionStatus MsooXmlImport::loadAndParseFromDevice(MsooXmlReader* reader, QIODevice* device,
+        MsooXmlReaderContext* context)
+{
+    KoFilter::ConversionStatus status;
+    reader->setDevice(device);
+    reader->setFileName("PreDefinedDrawingMLTables"); // for error reporting
+    status = reader->read(context);
+    if (status != KoFilter::OK) {
+        reader->raiseError(reader->errorString());
+        return status;
+    }
     return status;
 }
 

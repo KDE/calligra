@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,6 +53,10 @@ public:
     ///   - changing it's size
     ///   - do other things to other structures (eg resizing the textshape)
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) = 0;
+
+    /// Makes all canvases redraw the shapes maintained by this provider
+    ///    use with care - it eats a lot of processing for no real gain
+    virtual void updateAll() = 0;
 
     /// Returns a suggested a size for the root area
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea) = 0;

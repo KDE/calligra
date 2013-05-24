@@ -27,7 +27,6 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -45,8 +44,6 @@ K_EXPORT_PLUGIN(ToolCropFactory("krita"))
 ToolCrop::ToolCrop(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolCropFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolCropFactory(QStringList()));
 

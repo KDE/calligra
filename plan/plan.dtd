@@ -1,0 +1,317 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    This is the Document Type Definition for the Calligra Plan Project Planning and Management Tool.
+    Version 0.6.5
+    Dag Andersen <danders@get2net.dk>
+
+    Note: This document is designed to make it possible to generate
+          usable java classes for import/export.
+-->
+
+<!--
+    plan is used both as the top level element (holding a project)
+    and for other things below (holding shedule data etc)
+-->
+<!ELEMENT plan (project?|plan*|schedule*)>
+<!ATTLIST plan
+    author CDATA #IMPLIED
+    email  CDATA #IMPLIED
+    editor CDATA #IMPLIED
+    mime   CDATA "application/x-vnd.kde.plan"
+    version CDATA #IMPLIED
+
+    id CDATA #IMPLIED
+    name CDATA #IMPLIED
+    scheduling-direction CDATA "0"
+    recalculate-from CDATA #IMPLIED
+    check-external-appointments CDATA "1"
+    distribution CDATA "0"
+    baselined CDATA "0"
+    recalculate CDATA "0"
+    overbooking CDATA "0"
+    scheduler-plugin-id CDATA #IMPLIED>
+
+<!-- One project node -->
+<!ELEMENT project (wbs-definition|locale|accounts?|calendar*|standard-worktime|resource-group*|task*|relation*|schedules?|resource-teams?)>
+<!ATTLIST project	id CDATA #REQUIRED
+    name CDATA #IMPLIED
+    leader CDATA #IMPLIED
+    description CDATA #IMPLIED
+    scheduling (MustStartOn|MustFinishOn) "MustStartOn"
+    start-time CDATA #IMPLIED
+    end-time CDATA #IMPLIED
+    timezone CDATA #IMPLIED>
+
+<!-- WBS code generation format -->
+<!ELEMENT wbs-definition (default|levels)>
+<!ATTLIST wbs-definition
+    levels-enabled CDATA #IMPLIED
+    project-code  CDATA #IMPLIED
+    project-separator  CDATA #IMPLIED>
+
+<!-- WBS code generation deafault format -->
+<!ELEMENT default EMPTY>
+<!ATTLIST default
+    separator CDATA "."
+    code CDATA "Number">
+
+<!ELEMENT levels (level*)>
+<!ELEMENT level EMPTY>
+<!ATTLIST level
+    level CDATA #REQUIRED
+    separator CDATA "."
+    code CDATA "Number">
+
+<!-- The money used in this project -->
+<!ELEMENT locale EMPTY>
+<!ATTLIST locale
+    currency-symbol CDATA #IMPLIED
+    currency-digits  CDATA #IMPLIED
+    positive-prefix-currency-symbol CDATA #IMPLIED
+    negative-prefix-currency-symbol CDATA #IMPLIED
+    positive-monetary-sign-position CDATA #IMPLIED
+    negative-monetary-sign-position CDATA #IMPLIED>
+
+<!-- Cost accounts -->
+<!ELEMENT accounts (account*)>
+
+<!-- A cost account may have child accounts and costplaces -->
+<!ELEMENT account (account*|costplace*)>
+<!ATTLIST account
+   name CDATA #REQUIRED
+   description CDATA #IMPLIED>
+
+<!-- A cost place is info on where the cost is generated (object-id referes to a task or a resource) -->
+<!ELEMENT costplace EMPTY>
+<!ATTLIST costplace
+    object-id CDATA #REQUIRED
+    startup-cost CDATA "0"
+    shutdown-cost CDATA "0"
+    running-cost CDATA "0">
+
+<!-- A calendar defines working hours for resource(s) or modifies duration for task(s) -->
+<!ELEMENT calendar (calendar*|weekday*|day*)>
+<!ATTLIST calendar
+    id CDATA #REQUIRED
+    name CDATA #IMPLIED
+    default CDATA "0"
+    timezone  CDATA #IMPLIED>
+
+<!--
+    7 weekdays (0=monday - 6=sunday), state: 0=Undefined, 1=NonWorking, 2=Working.
+    If state=Working, there will (should) be one or more interval
+-->
+<!ELEMENT weekday (interval*)>
+<!ATTLIST weekday
+    day (0|1|2|3|4|5|6) "0"
+    state (0|1|2) "0">
+
+<!--
+    interval as used by calendar:
+        interval has a start time and a length (in ms)
+        start+length must not exceed midnight
+    interval as used by appointment:
+        has a start datetime, end datetime and a load
+-->
+<!ELEMENT interval EMPTY>
+<!ATTLIST interval
+    start CDATA #IMPLIED
+    length CDATA #IMPLIED
+
+    end CDATA #IMPLIED
+    load CDATA "0">
+
+<!--
+    A day has a date and state: 0=Undefined, 1=NonWorking, 2=Working.
+    If state=Working, there will (should) be one or more interval
+ -->
+<!ELEMENT day (interval*)>
+<!ATTLIST day
+    date CDATA #REQUIRED
+    state (0|1|2) "0">
+
+
+<!-- Standard worktime defines the numbers of hours resources are expected to work -->
+<!ELEMENT standard-worktime EMPTY>
+<!ATTLIST standard-worktime
+    day CDATA "8h0m"
+    week CDATA "40h0m"
+    month CDATA "176h0m"
+    year CDATA "1760h0m">
+
+<!-- Resource group -->
+<!ELEMENT resource-group (resource*)>
+<!ATTLIST resource-group id CDATA #REQUIRED
+    type (Work|Material) "Work"
+    name CDATA #IMPLIED>
+
+<!-- Resource, used by both resource-group and used effort -->
+<!ELEMENT resource (actual-effort*)>
+<!ATTLIST resource
+    id CDATA #REQUIRED
+    type (Work|Material|Team) "Work"
+    name CDATA #IMPLIED
+    email CDATA #IMPLIED
+    initials CDATA #IMPLIED
+    normal-rate CDATA #IMPLIED
+    overtime-rate CDATA #IMPLIED
+    units CDATA "100"
+    calendar-id CDATA #IMPLIED
+    account CDATA #IMPLIED>
+
+<!-- Task can be tasks, milestones (zero estimate) or summary tasks (have children) -->
+<!ELEMENT task (task*|estimate|documents?|resourcegroup-request*|schedules?|progress?)>
+<!ATTLIST task	id CDATA #REQUIRED
+    name CDATA #IMPLIED
+    leader CDATA #IMPLIED
+    description CDATA #IMPLIED
+    wbs CDATA #IMPLIED
+    scheduling (ASAP|ALAP|MustStartOn|MustFinishOn|StratNotEarlier|FinishNotLater) "ASAP"
+    constraint-starttime  CDATA #IMPLIED
+    constraint-endtime CDATA #IMPLIED
+    startup-cost CDATA #IMPLIED
+    shutdown-cost CDATA #IMPLIED>
+
+<!ELEMENT estimate EMPTY>
+<!ATTLIST estimate
+    type (Effort|Duration) "Effort"
+    risk (None|Low|High) "None"
+    expected CDATA "0"
+    optimistic CDATA "0"
+    pessimistic CDATA "0"
+    unit CDATA "h"
+    calendar-id CDATA #IMPLIED>
+
+<!-- Not used by import/export
+<!ELEMENT workpackage EMPTY>
+<!ATTLIST workpackage
+    owner CDATA #IMPLIED
+    owner-id CDATA #IMPLIED>
+-->
+
+<!ELEMENT progress (completion-entry*|used-effort)>
+<!ATTLIST progress
+    entrymode (FollowPlan|EnterCompleted|EnterEffortPerTask|EnterEffortPerResource) "EnterCompleted"
+    startTime CDATA #IMPLIED
+    finishTime CDATA #IMPLIED
+    started CDATA "0"
+    finished CDATA "0">
+
+<!ELEMENT completion-entry EMPTY>
+<!ATTLIST completion-entry
+    date CDATA #REQUIRED
+    performed-effort CDATA #IMPLIED
+    percent-finished CDATA "0"
+    remaining-effort CDATA #IMPLIED
+    note CDATA #IMPLIED>
+
+<!ELEMENT used-effort (resource*)>
+<!-- Resource defined above -->
+<!--
+<!ELEMENT ue-resource (actual-effort*)>
+<!ATTLIST ue-resource
+    id CDATA #REQUIRED>
+-->
+
+<!ELEMENT actual-effort EMPTY>
+<!ATTLIST actual-effort
+    date CDATA #REQUIRED
+    normal-effort CDATA #IMPLIED
+    overtime-effort CDATA #IMPLIED>
+
+<!-- schedules used by task and project -->
+<!ELEMENT schedules (plan*|schedule*)>
+
+<!-- plan faked above -->
+
+<!ELEMENT schedule (criticalpath-list?|appointment*)>
+<!ATTLIST schedule id CDATA #REQUIRED
+    name CDATA #IMPLIED
+    type CDATA "Expected"
+    start CDATA #IMPLIED
+    end CDATA #IMPLIED
+    duration CDATA #IMPLIED
+    earlystart CDATA #IMPLIED
+    earlyfinish CDATA #IMPLIED
+    latestart CDATA #IMPLIED
+    latefinish CDATA #IMPLIED
+    positive-float CDATA #IMPLIED
+    free-float CDATA #IMPLIED
+    negative-float CDATA #IMPLIED
+    in-critical-path CDATA "0"
+    not-scheduled CDATA "0"
+    scheduling-conflict CDATA "0"
+    scheduling-error CDATA "0"
+    resource-error CDATA "0"
+    resource-overbooked CDATA "0"
+    resource-not-available CDATA "0">
+
+<!-- A list of critical paths used by project -->
+<!ELEMENT criticalpath-list (criticalpath*)>
+<!ELEMENT criticalpath (node*)>
+<!ELEMENT node EMPTY>
+<!ATTLIST node
+    id CDATA #REQUIRED>
+
+<!-- Appointments between resources and tasks used by project -->
+<!ELEMENT appointment (interval*)>
+<!ATTLIST appointment
+    resource-id CDATA #REQUIRED
+    task-id CDATA #REQUIRED>
+<!-- Note interval is shared, fake definition above -->
+
+<!-- documents used by task -->
+<!ELEMENT documents (document*)>
+<!ELEMENT document EMPTY>
+<!ATTLIST document
+    name CDATA #IMPLIED
+    url CDATA #IMPLIED
+    type CDATA "0" 
+    sendas CDATA "0"
+    status CDATA #IMPLIED>
+
+
+<!-- FIXME non-essential, move to separate file?
+<!ELEMENT workpackage-log (wplog-entry*)>
+
+<!ELEMENT wplog-entry (progress)>
+<!ATTLIST wplog-entry
+    owner-id CDATA #IMPLIED
+    owner CDATA #IMPLIED
+    status (Send|Receive) "Send"
+    time CDATA #IMPLIED>
+-->
+
+<!--
+	Resource requests are made by tasks and referes to
+    the resources needed from a resource group
+-->
+<!ELEMENT resourcegroup-request (resource-request*)>
+<!ATTLIST resourcegroup-request
+    group-id CDATA #REQUIRED
+    units CDATA "0">
+
+<!ELEMENT resource-request EMPTY>
+<!ATTLIST resource-request
+	resource-id CDATA #REQUIRED
+    units CDATA "100">
+
+<!--
+	Relations are described by the two IDs and the type of constraint
+    The ids are references to tasks, so all tasks must have been loaded
+-->
+<!ELEMENT relation EMPTY>
+<!ATTLIST relation
+	parent-id CDATA #REQUIRED
+    child-id CDATA #REQUIRED
+    type (Finish-Start|Finish-Finish|Start-Start) "Start-Start"
+    lag CDATA #IMPLIED>
+
+
+<!-- resource teams (if any) -->
+<!ELEMENT resource-teams (team*)>
+<!ELEMENT team EMPTY>
+<!ATTLIST team
+    team-id CDATA #REQUIRED
+    member-id CDATA #REQUIRED>

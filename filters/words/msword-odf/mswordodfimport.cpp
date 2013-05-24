@@ -24,9 +24,9 @@
 #include <QFile>
 #include <QString>
 #include <QBuffer>
-//Added by qt3to4:
 #include <QByteArray>
 
+#include <kpluginfactory.h>
 #include <kdebug.h>
 
 #include <KoFilterChain.h>
@@ -125,6 +125,15 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         datastm = new LEInputStream(&buff3);
     }
 
+    //Summary Information Stream
+    LEInputStream* sistm = 0;
+    QBuffer buff4;
+    if (!readStream(storage, "/SummaryInformation", buff4)) {
+        kDebug(30513) << "Failed to open /SummaryInformation stream, no big deal (OPTIONAL).";
+    } else {
+        sistm = new LEInputStream(&buff4);
+    }
+
     /*
      * ************************************************
      *  Processing file
@@ -132,12 +141,16 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
      */
     struct Finalizer {
     public:
-        Finalizer(LEInputStream* s) : m_store(0), m_genStyles(0), m_document(0),
-                                      m_contentWriter(0), m_bodyWriter(0), m_datastm(s) { }
+        Finalizer(LEInputStream *ds, LEInputStream *sis) : m_store(0), m_genStyles(0), m_document(0),
+                                      m_contentWriter(0), m_bodyWriter(0),
+                                      m_datastm(ds), m_sistm(sis) { }
         ~Finalizer() {
             delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
             if (m_datastm) {
                 delete m_datastm;
+            }
+            if (m_sistm) {
+              delete m_sistm;
             }
         }
 
@@ -147,8 +160,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         KoXmlWriter *m_contentWriter;
         KoXmlWriter *m_bodyWriter;
         LEInputStream* m_datastm;
+        LEInputStream* m_sistm;
     };
-    Finalizer finalizer(datastm);
+    Finalizer finalizer(datastm, sistm);
 
     // Create output files
     KoStore *storeout;
@@ -205,7 +219,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         document = new Document(QFile::encodeName(inputFile).data(), this,
                                 bodyWriter, &metaWriter, &manifestWriter,
                                 storeout, mainStyles,
-                                wdstm, tblstm_pole, datastm);
+                                wdstm, tblstm_pole, datastm, sistm);
     } catch (const InvalidFormatException &_e) {
         kDebug(30513) << _e.msg;
         return KoFilter::InvalidFormat;
@@ -279,16 +293,38 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
+
     settingsWriter->startElement("config:config-item");
     settingsWriter->addAttribute("config:name", "UseFormerLineSpacing");
     settingsWriter->addAttribute("config:type", "boolean");
     settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
+
     settingsWriter->startElement("config:config-item");
     settingsWriter->addAttribute("config:name", "TabsRelativeToIndent");
     settingsWriter->addAttribute("config:type", "boolean");
     settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
+
+    // This config-item is used in KoTextLayoutArea::handleBordersAndSpacing
+    // during layouting.  The defined 'Above paragraph' and 'Below paragraph'
+    // paragraph spacing (which is written in the ODF as fo:margin-top for the
+    // KoParagraphStyle) are not applied to the first and the last paragraph if
+    // this value is true.
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("true");
+    settingsWriter->endElement();
+
+    // OOo requires this config item to display files produced by this filter
+    // correctly.  If true, then the fo:text-indent attribute will be ignored.
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "IgnoreFirstLineIndentInNumbering");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("false");
+    settingsWriter->endElement();
+
     settingsWriter->endElement(); // config-item-set
 
     settingsWriter->endElement(); // settings

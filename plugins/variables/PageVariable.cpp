@@ -70,7 +70,9 @@ void PageVariable::propertyChanged(Property property, const QVariant &value)
     switch (m_type) {
     case PageCount:
         if (property == KoInlineObject::PageCount) {
-            setValue(value.toString());
+            KoOdfNumberDefinition defaultDefinition; // FIXME Should fetch from pagestyle
+            QString newValue = value.toInt() >= 0 ? m_numberFormat.formattedNumber(value.toInt(), &defaultDefinition) : QString();
+            setValue(newValue);
         }
         break;
     case PageNumber:
@@ -96,7 +98,6 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
         }
 #endif
         page = document->resource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl).value<KoTextPage*>();
-        //qDebug() << __PRETTY_FUNCTION__ << lay << rootArea << page << page2;
     }
     int pagenumber = 0;
 
@@ -110,7 +111,8 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
             QString currentValue = value();
             if (currentValue.isEmpty() || ! m_fixed) {
                 pagenumber = page->visiblePageNumber(m_pageselect, m_pageadjust);
-                QString newValue = pagenumber >= 0 ? QString::number(pagenumber) : QString();
+                KoOdfNumberDefinition defaultDefinition; // FIXME Should fetch from pagestyle
+                QString newValue = pagenumber >= 0 ? m_numberFormat.formattedNumber(pagenumber, &defaultDefinition) : QString();
                 // only update value when changed
                 if (currentValue != newValue) {
                      setValue(newValue);
@@ -154,6 +156,8 @@ void PageVariable::saveOdf(KoShapeSavingContext & context)
         if (m_pageadjust != 0)
             writer->addAttribute("text:page-adjust", QString::number(m_pageadjust));
 
+        m_numberFormat.saveOdf(writer);
+
         if (m_fixed)
             writer->addAttribute("text:fixed", "true");
 
@@ -181,6 +185,8 @@ bool PageVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     const QString localName(element.localName());
     if (localName == "page-count") {
         m_type = PageCount;
+
+        m_numberFormat.loadOdf(element);
     } else if (localName == "page-number") {
         m_type = PageNumber;
 
@@ -198,6 +204,8 @@ bool PageVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         // of page numbers of following or preceding pages. The adjustment amount is specified using
         // the text:page-adjust attribute.
         m_pageadjust = element.attributeNS(KoXmlNS::text, "page-adjust", QString()).toInt();
+
+        m_numberFormat.loadOdf(element);
 
         // The text:fixed attribute specifies whether or not the value of a field element is fixed. If
         // the value of a field is fixed, the value of the field element to which this attribute is

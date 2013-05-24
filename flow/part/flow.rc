@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="flow" version="31">
+<kpartgui name="flow" version="33">
     <MenuBar>
         <Menu name="edit">
             <Text>&amp;Edit</Text>
@@ -23,9 +23,6 @@
         <Menu name="view">
             <Text>&amp;View</Text>
             <Action name="view_newview"/>
-            <ActionList name="view_closeallviews"/>
-            <Separator/>
-            <ActionList name="view_split"/>
             <Separator/>
             <Action name="zoom_out"/>
             <Action name="zoom_in"/>
@@ -44,6 +41,11 @@
             <Action name="insert_variable"/> <!-- menu -->
 	        <Action name="import_document" />
         </Menu>
+        <Menu name="format"><text>F&amp;ormat</text>
+            <Action name="format_masterpage"/>
+            <Separator/>
+            <Action name="format_pagelayout"/>
+        </Menu>
         <Menu name="page">
             <Text>&amp;Page</Text>
             <Action name="page_insertpage"/>
@@ -57,6 +59,7 @@
             <Action name="page_last"/>
         </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="settings_active_author" group="settings_configure"/>
             <Action name="configure" group="settings_configure"/>
         </Menu>
     </MenuBar>

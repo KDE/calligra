@@ -36,15 +36,16 @@
 #include <KoGenStyle.h>
 #include <kdebug.h>
 #include <kmimetype.h>
-#include <QtGui/QColor>
+#include <QColor>
 #include <QByteArray>
+
+//#define USE_OFFICEARTDGG_CONTAINER
+//#define DEBUG_GHANDLER
 
 using namespace wvWare;
 using namespace MSO;
 
 using Conversion::twipsToPt;
-
-//#define DEBUG_GHANDLER
 
 // Specifies the format of the picture data for the PICF structure.
 enum
@@ -207,17 +208,6 @@ void WordsGraphicsHandler::init()
     //create default GraphicStyle using information from OfficeArtDggContainer
     defineDefaultGraphicStyle(m_mainStyles);
 
-    //Provide the backgroud color information to the Document
-    DrawStyle ds = getBgDrawStyle();
-    if (ds.fFilled()) {
-        MSO::OfficeArtCOLORREF fc = ds.fillColor();
-        QColor color = QColor(fc.red, fc.green, fc.blue);
-        QString tmp = color.name();
-        if (tmp != m_document->currentBgColor()) {
-            m_document->updateBgColor(tmp);
-        }
-    }
-
     const OfficeArtBStoreContainer* blipStore = 0;
     blipStore = m_officeArtDggContainer.blipStore.data();
 
@@ -235,11 +225,6 @@ void WordsGraphicsHandler::init()
     }
 }
 
-void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
-{
-    emit textBoxFound(index, stylesxml);
-}
-
 DrawStyle WordsGraphicsHandler::getBgDrawStyle()
 {
     const OfficeArtSpContainer* shape = 0;
@@ -249,16 +234,23 @@ DrawStyle WordsGraphicsHandler::getBgDrawStyle()
     return DrawStyle(&m_officeArtDggContainer, 0, shape);
 }
 
-void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
+void WordsGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
+{
+    emit textBoxFound(index, stylesxml);
+}
+
+QString WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture)
 {
     //TODO: The globalCP might be required to obtain the SPA structure for
-    //inline MS-ODRAW shapes whith missing OfficeArtClientAnchor.
+    //inline MS-ODRAW shapes with missing OfficeArtClientAnchor.
 
     //TODO: It seems that both inline and floating objects have placement and
     //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
-    //the index into plcfSpa.
+    //the index into plcfSpa.  However the border information for inline
+    //msosptPictureFrame shapes is stored in the PICF struture.
 
     kDebug(30513) ;
+    QString ret;
     quint32 size = (data.picf->lcb - data.picf->cbHeader);
 
 #ifdef DEBUG_GHANDLER
@@ -270,22 +262,24 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
     //the picture is store in some external file
     if (data.picf->mfp.mm == MM_SHAPEFILE) {
-        DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
-        m_objectType = Inline;
-        m_picf = data.picf;
-        insertEmptyInlineFrame(out);
-        return;
+        if (!isBulletPicture) {
+            DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
+            m_objectType = Inline;
+            m_picf = data.picf;
+            insertEmptyInlineFrame(out);
+        }
+        return ret;
     }
 
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->dataStream();
     if (!in) {
         kDebug(30513) << "Data stream not provided, no access to inline shapes!";
-        return;
+        return ret;
     }
     if (data.fcPic > in->getSize()) {
         kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
-        return;
+        return ret;
     }
 
 #ifdef DEBUG_GHANDLER
@@ -304,11 +298,11 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     } catch (const IOException& e) {
         kDebug(30513) << e.msg;
         in->rewind(_zero);
-        return;
+        return ret;
     } catch (...) {
         kWarning(30513) << "Warning: Caught an unknown exception!";
         in->rewind(_zero);
-        return;
+        return ret;
     }
     in->rewind(_zero);
 
@@ -328,6 +322,7 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
             //check if this BLIP is already in hash table
             if (m_picNames.contains(fbse->rgbUid)) {
                 ref.uid = fbse->rgbUid;
+                ref.name = m_picNames[fbse->rgbUid];
                 continue;
             } else {
                 ref = savePicture(block, m_store);
@@ -342,6 +337,10 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     }
     m_store->leaveDirectory();
 
+    if (isBulletPicture) {
+        return ref.name;
+    }
+
     bool inStylesXml = m_document->writingHeader();
     DrawingWriter out(*m_currentWriter, *m_mainStyles, inStylesXml);
 
@@ -352,6 +351,8 @@ void WordsGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
     const OfficeArtSpContainer* o = &(co.shape);
     processDrawingObject(*o, out);
+
+    return ret;
 }
 
 void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
@@ -471,7 +472,7 @@ QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
         }
         PLCFIterator<wvWare::Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
         const wvWare::Word97::FSPA* spa = it.current();
-	Q_ASSERT(m_pSpa == spa);
+    Q_ASSERT(m_pSpa == spa);
         return QRect(spa->xaLeft, spa->yaTop, spa->xaRight - spa->xaLeft, spa->yaBottom - spa->yaTop);
     }
     else if (o.childAnchor) {
@@ -496,7 +497,7 @@ void WordsGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
             out.setRect(oldCoords);
             //process shape information for the group
             out.setGroupRectangle(*sp->shapeGroup);
-	}
+    }
     }
 
     //create graphic style for the group shape
@@ -541,7 +542,7 @@ void WordsGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     ODrawToOdf odrawtoodf(drawclient);
 
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "shapeType: " << hex << o.shapeProp.rh.recInstance;
+    kDebug(30513) << "shapeType: 0x" << hex << o.shapeProp.rh.recInstance;
     kDebug(30513) << "grupShape: " << o.shapeProp.fGroup;
     kDebug(30513) << "Selected properties: ";
     kDebug(30513) << "pib: " << ds.pib();
@@ -735,10 +736,10 @@ int WordsGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
     for (int i = 0; i < blipStore->rgfb.size(); i++) {
         OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
 
-	//Parse content of the Delay stream by using offsets from OfficeArtFBSE
-	//containers.  Not parsing Blip store because MD4 digests in
-	//OfficeArtFBSE happen to be out-dated, which complicates the pib to
-	//picture path association.
+    //Parse content of the Delay stream by using offsets from OfficeArtFBSE
+    //containers.  Not parsing Blip store because MD4 digests in
+    //OfficeArtFBSE happen to be out-dated, which complicates the pib to
+    //picture path association.
         if (block.anon.is<OfficeArtFBSE>()) {
             OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
             if (!fbse->embeddedBlip) {
@@ -827,6 +828,10 @@ void WordsGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, *styles);
     styles->insert(style);
+
+    MSO::OfficeArtCOLORREF fc = ds.fillColor();
+    QColor color = QColor(fc.red, fc.green, fc.blue);
+    m_document->updateBgColor(color.name());
 }
 
 void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds)
@@ -904,16 +909,6 @@ void WordsGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const Dra
             style.addProperty("style:run-through", "foreground", gt);
         }
     }
-
-    // margins are related to text wrapping
-    // fo:margin-bottom
-    // fo:margin-left
-    // fo:margin-right
-    // fo:margin-top
-    style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700., gt);
-    style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700., gt);
-    style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700., gt);
-    style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700., gt);
 }
 
 void WordsGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds)
@@ -962,7 +957,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1000,13 +1000,16 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
     out.xml.startElement("draw:text-box");
 
-    // Especially Word8 files with (nFib == Word8nFib2) do not provide an
-    // OfficeArtClientTextBox.
+    // Especially Word8 files with (nFib == Word8nFib2) do not provide
+    // an OfficeArtClientTextBox.
+    bool textIdValid = false;
     quint32 textId = 0;
+
     if (o.clientTextbox) {
         const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
         if (tb) {
             textId = tb->clientTextBox;
+            textIdValid = true;
         } else {
             kDebug(30513) << "DocOfficeArtClientTextBox missing!";
         }
@@ -1015,12 +1018,12 @@ void WordsGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
             kDebug(30513) << "lTxid property - negative text identifier!";
         } else {
             textId = (quint32)ds.iTxid();
+            textIdValid = true;
         }
     }
-    if (textId) {
+    if (textIdValid) {
         emit textBoxFound(((textId / 0x10000) - 1), out.stylesxml);
     }
-
     out.xml.endElement(); //draw:text-box
     out.xml.endElement(); //draw:frame
 }
@@ -1039,11 +1042,27 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
     definePositionAttributes(style, ds);
+
+    style.addProperty("fo:border-top", Conversion::setBorderAttributes(m_picf->brcTop));
+    style.addProperty("fo:border-left", Conversion::setBorderAttributes(m_picf->brcLeft));
+    style.addProperty("fo:border-bottom", Conversion::setBorderAttributes(m_picf->brcBottom));
+    style.addProperty("fo:border-right", Conversion::setBorderAttributes(m_picf->brcRight));
+
+    // NOTE: The default margin-left/margin-right values DO NOT make sense for
+    // inline pictures, also after conversion of test files to DOCX, both
+    // attributes were set to ZEROs.  Default margin-top/margin-bottom is ZERO.
+    style.addPropertyPt("fo:margin", 0);
+
     styleName = out.styles.insert(style);
 
     // A diagram drawing canvas placed inline with surrounding text.
@@ -1087,7 +1106,11 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     kDebug(30513) ;
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+    DrawStyle ds(dgg, 0, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib()) return;
@@ -1128,6 +1151,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.endElement(); //draw:image
 
     //check for user edited wrap points
+#if 0
     if (ds.fEditedWrap()) {
         QString points;
         IMsoArray _v = ds.pWrapPolygonVertices_complex();
@@ -1141,12 +1165,12 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
                 a = _v.data.mid(offset, _v.cbElem);
                 a2 = a.mid(0, _v.cbElem / 2);
                 p = (int*) a2.data();
-                points.append(QString::number(twipsToPt(*p)));
+                points.append(QString::number(twipsToPt(*p), 'f'));
                 points.append(",");
                 // y coordinate of this point
                 a2 = a.mid(_v.cbElem / 2, _v.cbElem / 2);
                 p = (int*) a2.data();
-                points.append(QString::number(twipsToPt(*p)));
+                points.append(QString::number(twipsToPt(*p), 'f'));
                 points.append(" ");
             }
             points.chop(1); //remove last space
@@ -1155,6 +1179,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
         out.xml.addAttribute("draw:points", points);
         out.xml.endElement(); //draw:contour-polygon
     }
+#endif
     out.xml.endElement(); //draw:frame
     return;
 }
@@ -1167,7 +1192,12 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+    const MSO::OfficeArtDggContainer *dgg = 0;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    dgg = &m_officeArtDggContainer;
+#endif
+
+    DrawStyle ds(dgg, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1179,7 +1209,7 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
 
     QString hrAlign;
     QString xPos = QString::number(0.0f).append("in");
-    const float base_width = 6.1378;
+    const float base_width = 6.1378f;
 
     switch (ds.alignHR()) {
     case hAlignLeft:
@@ -1188,11 +1218,11 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
         break;
     case hAlignCenter:
         hrAlign = QString("center");
-        xPos = QString::number((base_width / 2.0) - ((width * base_width) / 200.0)).append("in");
+        xPos = QString::number((base_width / 2.0) - ((width * base_width) / 200.0), 'f').append("in");
         break;
     case hAlignRight:
         hrAlign = QString("right");
-        xPos = QString::number(base_width - (width * base_width) / 100.0).append("in");
+        xPos = QString::number(base_width - (width * base_width) / 100.0, 'f').append("in");
         break;
     }
     //process the content of HR specific properties
@@ -1213,10 +1243,10 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
 
-    QString height = QString::number(ds.dxHeightHR() / 1440.0f).append("in");
+    QString height = QString::number(ds.dxHeightHR() / 1440.0f, 'f').append("in");
     out.xml.addAttribute("svg:height", height);
 
-    QString width_str = QString::number(width * base_width / 100.0f).append("in");
+    QString width_str = QString::number(width * base_width / 100.0f, 'f').append("in");
     out.xml.addAttribute("svg:width", width_str);
     out.xml.addAttribute("svg:x", xPos);
 

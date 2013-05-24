@@ -24,6 +24,7 @@
 #define KWFRAMELAYOUT_H
 
 #include "../Words.h"
+#include "../KWPageStyle.h"
 
 #include "../words_export.h"
 
@@ -34,7 +35,6 @@
 class KWPageManager;
 class KWFrameSet;
 class KWTextFrameSet;
-class KWPageStyle;
 class KWPage;
 class KWFrame;
 class KWDocument;
@@ -43,9 +43,14 @@ class KoShape;
 
 /**
  * This class is a controller class for frame layouting.
+ *
  * For automatically generated frames this class creates new frames and places them on a page.
  * For normal frames this class will be able to (re)move them on page resize/deletion or create
  * followup frames for new pages.
+ *
+ * NOTE This class only handles header, footer and the mainframes. It does NOT handle any
+ * other framesets (neither Words::OtherFrameSet nor Words::OtherTextFrameSet). This class
+ * doesn't even know about them.
  */
 class WORDS_TEST_EXPORT KWFrameLayout : public QObject
 {
@@ -73,6 +78,8 @@ public:
      * @param pageNumber the number of the page to re-layout.
      */
     void layoutFramesOnPage(int pageNumber);
+
+    static void proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page);
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) {

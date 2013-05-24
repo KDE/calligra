@@ -22,7 +22,8 @@
 
 #include <QRectF>
 #include <QBrush>
-#include <KoLineBorder.h>
+
+#include <KoShapeStroke.h>
 #include <KoGradientBackground.h>
 
 class QPainter;
@@ -53,7 +54,7 @@ public:
     /// selects handle at the given position
     bool hitHandle(const QPointF &mousePos, const KoViewConverter &converter, bool select);
 
-    /// selects the the gradient line at the given position
+    /// selects the gradient line at the given position
     bool hitLine(const QPointF &mousePos, const KoViewConverter &converter, bool select);
 
     /// selects the gradient stop at the given position
@@ -160,7 +161,7 @@ protected:
     QList<QPointF> m_handles;  ///< the list of handles
     QGradientStops m_stops;    ///< the gradient stops
     QTransform m_matrix;          ///< matrix to map handle into document coordinate system
-    KoLineBorder m_oldStroke;  ///< the old stroke
+    KoShapeStroke m_oldStroke;  ///< the old stroke
 private:
     typedef QPair<QPointF, QPointF> StopHandle;
     QColor invertedColor(const QColor &color);

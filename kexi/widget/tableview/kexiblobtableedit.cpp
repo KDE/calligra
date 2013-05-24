@@ -22,24 +22,23 @@
 
 #include <stdlib.h>
 
-#include <qdatastream.h>
-#include <qfile.h>
-#include <qlayout.h>
-#include <qstatusbar.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qbuffer.h>
+#include <QDataStream>
+#include <QFile>
+#include <QLayout>
+#include <QStatusBar>
+#include <QLabel>
+#include <QPixmap>
+#include <QImage>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
+#include <QBuffer>
 #include <QCache>
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <kservice.h>
-#include <karrowbutton.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kio/job.h>
@@ -78,13 +77,13 @@ public:
 
 //======================================================
 
-KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
         , d(new Private())
 {
 // m_proc = 0;
 // m_content = 0;
-    m_hasFocusableWidget = false;
+    KexiDataItemInterface::setHasFocusableWidget(false);
     d->button = new KexiDropDownButton(parentWidget() /*usually a viewport*/);
     d->button->hide();
     d->button->setToolTip(i18n("Click to show available actions for this cell"));
@@ -100,13 +99,13 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *paren
     //force edit requested to start editing... (this will call slotUpdateActionsAvailabilityRequested())
     //connect(d->menu, SIGNAL(aboutToShow()), this, SIGNAL(editRequested()));
 
-    connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)),
-            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
+    connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
+            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
 
-    connect(d->menu, SIGNAL(insertFromFileRequested(const KUrl&)),
-            this, SLOT(handleInsertFromFileAction(const KUrl&)));
-    connect(d->menu, SIGNAL(saveAsRequested(const QString&)),
-            this, SLOT(handleSaveAsAction(const QString&)));
+    connect(d->menu, SIGNAL(insertFromFileRequested(KUrl)),
+            this, SLOT(handleInsertFromFileAction(KUrl)));
+    connect(d->menu, SIGNAL(saveAsRequested(QString)),
+            this, SLOT(handleSaveAsAction(QString)));
     connect(d->menu, SIGNAL(cutRequested()),
             this, SLOT(handleCutAction()));
     connect(d->menu, SIGNAL(copyRequested()),
@@ -142,7 +141,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
     if (removeOld)
         d->value = add.toByteArray();
     else //do not add "m_origValue" to "add" as this is QByteArray
-        d->value = m_origValue.toByteArray();
+        d->value = KexiDataItemInterface::originalValue().toByteArray();
 
 #if 0 //todo?
     QByteArray val = m_origValue.toByteArray();
@@ -506,7 +505,7 @@ public:
     QCache<QString, QPixmap> pixmapCache;
 };
 
-KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiKIconTableEdit::KexiKIconTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
         , d(new Private())
 {
@@ -520,12 +519,12 @@ KexiKIconTableEdit::~KexiKIconTableEdit()
 
 void KexiKIconTableEdit::init()
 {
-    m_hasFocusableWidget = false;
+    KexiDataItemInterface::setHasFocusableWidget(false);
 }
 
 void KexiKIconTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
-    d->currentValue = m_origValue;
+    d->currentValue = KexiDataItemInterface::originalValue();
 }
 
 bool KexiKIconTableEdit::valueIsNull()

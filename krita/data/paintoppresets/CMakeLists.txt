@@ -1,14 +1,108 @@
 install( FILES
-    chalk.kpp
-    softbrush.kpp
-    pixelpencil.kpp
-    chrome.kpp  
-    Fur.kpp  
-    shaded.kpp  
-    Sketchy.kpp  
-    ColorSmudge\ -\ Brush.kpp  
-    ColorSmudge\ -\ Oil\ Paint.kpp  
-    ColorSmudge\ -\ Structure\ Brush.kpp  
-    ColorSmudge\ -\ Wet\ Paint.kpp  
-    ColorSmudge\ -\ Smudge\ Only.kpp
+Basic_Airbrush.kpp
+Basic_airbrush_noisy.kpp
+Basic_erase.kpp
+Basic_erase_soft.kpp
+Basic_ink_05.kpp
+Basic_ink_10.kpp
+Basic_ink_ballpen.kpp
+Basic_ink_brush_25.kpp
+Basic_ink_gpen_10.kpp
+Basic_ink_gpen_25.kpp
+Basic_ink_pen_03.kpp
+Basic_ink_tilt_10.kpp
+Basic_ink_tilt_20.kpp
+Basic_mix.kpp
+Basic_mix_dull.kpp
+Basic_mix_oil_over.kpp
+Basic_mix_over.kpp
+Basic_mix_over_dull.kpp
+Basic_mix_over_wet.kpp
+Basic_mix_over_wet_dull.kpp
+Basic_mix_soft.kpp
+Basic_paint_05.kpp
+Basic_paint_25.kpp
+Basic_paint_fill.kpp
+Basic_paint_shade.kpp
+Basic_smudge_detail.kpp
+Basic_smudge_hard.kpp
+Basic_smudge_hard_grain.kpp
+Basic_smudge_oil.kpp
+Basic_smudge_over.kpp
+Basic_smudge_soft.kpp
+Basic_tip_default.kpp
+Basic_tip_gaussian.kpp
+Basic_tip_soft.kpp
+Block_mix_tilt.kpp
+Block_paint.kpp
+Block_paint_dirty_square.kpp
+Block_paint_squary.kpp
+Block_paint_tilt.kpp
+Block_smudge_tilt.kpp
+Bristle_mix_over_dull_light.kpp
+Curve_curvy.kpp
+Curve_ink.kpp
+Curve_recurvy.kpp
+Curve_smooth.kpp
+FX-explode.kpp
+FX_color_HSY.kpp
+FX_decrease-saturation.kpp
+FX_deform_move.kpp
+FX_glow_add.kpp
+FX_glow_screen.kpp
+FX_overlay.kpp
+FX_splat_starfield.kpp
+Grid_square_25.kpp
+Hairy_clean.kpp
+Hairy_dirty.kpp
+Hairy_medium.kpp
+Hairy_thin_fat.kpp
+Hairy_thin_medium.kpp
+Hairy_thin_small.kpp
+Hatch_crispy.kpp
+Hatch_cross_regular.kpp
+Hatch_cross_small.kpp
+Hatch_diag_S.kpp
+Hatch_diag_fat.kpp
+Hatch_moire.kpp
+Hatch_noisy.kpp
+Pencil-tilt-sketch.kpp
+Pencil_2B.kpp
+Pencil_HB.kpp
+Pencil_chalk.kpp
+Pencil_draw_shade.kpp
+Pencil_shade_texture.kpp
+Pencil_shade_tilt.kpp
+pixel1.kpp
+Rake_paint_dry_bristle.kpp
+Rake_paint_texture.kpp
+Rake_smudge.kpp
+Rake_smudge_2.kpp
+Shape_fill.kpp
+Shape_smooth.kpp
+Sketch_2.kpp
+Sketch_chrome.kpp
+Sketch_detail.kpp
+Sketch_fur.kpp
+Sketch_ink_dirty.kpp
+Sketch_ink_dirty_xl.kpp
+Sketch_ink_line.kpp
+Sketch_ink_small.kpp
+Sketch_shade.kpp
+Sketch_shade_wash.kpp
+Sketch_speedpaint.kpp
+Sketch_speedpaint_shade.kpp
+Sketch_wires.kpp
+Splat_mix_cells.kpp
+Splat_paint_texture.kpp
+Splat_paint_texture_2.kpp
+Spray_splat.kpp
+Texture_dirty.kpp
+Texture_hair.kpp
+Texture_mix_over_structure.kpp
+Texture_paint_chalk.kpp
+Texture_paint_floor.kpp
+Texture_paint_noisy_big.kpp
+Texture_paint_noisy_cells.kpp
+Texture_paint_trees.kpp
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)

@@ -82,7 +82,7 @@ struct FFN {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -266,7 +266,7 @@ struct DTTM {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -354,7 +354,7 @@ struct DOPTYPOGRAPHY {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -443,7 +443,7 @@ struct PRM2 {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -500,7 +500,7 @@ struct PRM {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -537,7 +537,7 @@ bool operator!=(const PRM &lhs, const PRM &rhs);
 /**
  * Shading Descriptor (SHD)
  */
-struct SHD {
+struct WV2_EXPORT SHD {
     /**
      * Creates an empty SHD structure and sets the defaults
      */
@@ -580,7 +580,7 @@ struct SHD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -668,15 +668,15 @@ struct SHD {
     U16 ipat;
 
     /**
-     * returns if this is ShdAuto or ShdNill - specifies that no shading is applied
+     * return true if SHD content is interpreted as shdAuto.
      */
-    bool isShdAutoOrNill();
+    bool isShdAuto() const;
 
     /**
-     * true if ShdAuto, ShdNil or Shd80Nil is dected, no shading should be
-     * applied
+     * return true if SHD content is interpreted as shdNil.
      */
-    bool shdAutoOrNill;
+    bool isShdNil() const;
+
 }; // SHD
 
 bool operator==(const SHD &lhs, const SHD &rhs);
@@ -719,7 +719,7 @@ struct PHE {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -828,7 +828,7 @@ struct WV2_EXPORT BRC {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -953,7 +953,7 @@ struct TLP {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1109,7 +1109,7 @@ struct TC {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1258,7 +1258,7 @@ struct TAP : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1570,7 +1570,7 @@ bool operator!=(const TAP &lhs, const TAP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -1642,7 +1642,7 @@ struct ANLD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -1876,7 +1876,7 @@ struct ANLV {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2075,7 +2075,7 @@ struct ASUMY {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2118,7 +2118,7 @@ struct ASUMYI {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2201,7 +2201,7 @@ struct ATRD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2270,7 +2270,7 @@ struct BKD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2354,7 +2354,7 @@ struct BKF {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2425,7 +2425,7 @@ struct BKL {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2474,7 +2474,7 @@ struct BRC10 {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2544,7 +2544,7 @@ struct BTE {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2590,7 +2590,7 @@ struct CHP : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -2857,6 +2857,12 @@ struct CHP : public Shared {
      * color is cvAuto.
      */
     U32 cv;
+
+    /**
+     * A COLORREF value that specifies the color of the text underline.  The
+     * default underline color is cvAuto.
+     */
+    U32 cvUl;
 
     /**
      * LID language identification code (no longer stored here, see rglid
@@ -3179,6 +3185,27 @@ struct CHP : public Shared {
      * specifies if the text is scaled to fit the line
      */
     U16 fTNYCompress:1;
+
+
+    /**
+     * A CP value in the Bullet Pictures document that specifies which picture
+     * is used as a bullet character when rendering the bullet.  The CP value
+     * MUST be greater than or equal to zero.  The Bullet Pictures document is
+     * stored within the main document and marked by a hidden bookmark called
+     * "_PictureBullets."
+     */
+    U32 picBulletCP;
+
+    /**
+     * PbiGrfOperand - specifies whether a picture is used as a bullet
+     * character when rendering the bullet.  This value also specifies whether
+     * the size of the picture changes automatically to match the size of the
+     * text that follows the bullet.
+     */
+    U8 fPicBullet:1;
+    U8 fNoAutoSize:1;
+    U8 pbi_unused:6;
+
 }; // CHP
 
 bool operator==(const CHP &lhs, const CHP &rhs);
@@ -3224,7 +3251,7 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -3289,7 +3316,7 @@ bool operator!=(const CHP &lhs, const CHP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -3370,7 +3397,7 @@ struct DCS {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3438,7 +3465,7 @@ struct DOGRID {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -3521,7 +3548,7 @@ struct DOP {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -4372,7 +4399,7 @@ bool operator!=(const DOP &lhs, const DOP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -4486,7 +4513,7 @@ struct FIB {
     bool valid() const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5785,7 +5812,7 @@ struct FIBFCLCB {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5838,7 +5865,7 @@ bool operator!=(const FIBFCLCB &lhs, const FIBFCLCB &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -5908,7 +5935,7 @@ struct FRD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -5955,7 +5982,7 @@ struct FSPA {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6095,7 +6122,7 @@ struct FTXBXS {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6165,7 +6192,7 @@ struct LFO {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6231,7 +6258,7 @@ struct LFOLVL {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6253,7 +6280,7 @@ struct LFOLVL {
     U8 fStartAt:1;
 
     /**
-     * true if the formatting is overriden (in which case the LFOLVL should
+     * true if the formatting is overridden (in which case the LFOLVL should
      * contain a pointer to a LVL)
      */
     U8 fFormatting:1;
@@ -6301,7 +6328,7 @@ struct LSPD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6360,7 +6387,7 @@ struct LSTF {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6439,7 +6466,7 @@ struct LVLF {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6483,7 +6510,7 @@ struct LVLF {
 
     /**
      * true if this level was from a converted Word 6 document. If it is true,
-     * all of the Word 6 compability options become valid; otherwise they are
+     * all of the Word 6 compatibility options become valid; otherwise they are
      * ignored.
      */
     U8 fWord6:1;
@@ -6567,7 +6594,7 @@ struct METAFILEPICT {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6662,7 +6689,7 @@ struct NUMRM {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6753,7 +6780,7 @@ struct OBJHEADER {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6815,7 +6842,7 @@ struct OLST {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -6897,7 +6924,7 @@ struct PAP : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -7018,21 +7045,48 @@ struct PAP : public Shared {
     U8 unused9;
 
     /**
-     * when non-zero, list level for this paragraph (0-based index! Look at the sprmPIlvl docu (Werner))
+     * An unsigned 8-bit integer that specifies the list level of the
+     * paragraph.  This value MUST be ignored if this paragraph is not in a
+     * list (see sprmPIlfo).  This value MUST be one of the following:
+     *
+     * <0x0, 0x8> - The value specifies the zero-based level of the list that
+     * contains this paragraph.  For example, a value of 0x0 means that the
+     * paragraph is in the first level of the list.
+     *
+     * 0xC - The list skips this paragraph and does not include it in its
+     * numbering.
+     *
+     * By default, a paragraph is in the first level of the list.
      */
     U8 ilvl;
+
+    /**
+     * A 16-bit signed integer value that is used to determine which list
+     * contains the paragraph.  This value MUST be one of the following:
+     *
+     * 0x0000 - This paragraph is not in a list, and any list formatting on the
+     * paragraph is removed.
+     *
+     * <0x0001, 0x07FE> - The value is a 1-based index into PlfLfo.rgLfo.  The
+     * LFO at this index defines the list that this paragraph is in.
+     *
+     * 0xF801 - This paragraph is not in a list.
+     *
+     * <0xF802, 0xFFFF> - The value is the negation of a 1-based index into
+     * PlfLfo.rgLfo.  The LFO at this index defines the list that this
+     * paragraph is in.  The logical left indentation (see sprmPDxaLeft) and
+     * the logical left first line indentation (see sprmPDxaLeft1) of the
+     * paragraph MUST be preserved despite any list formatting.
+     *
+     * By default, a paragraph is not in a list.
+     */
+    S16 ilfo;
 
     /**
      * no line numbering for this paragraph. (makes this an exception to the
      * section property of line numbering)
      */
     U8 fNoLnn;
-
-    /**
-     * when non-zero, (1-based) index into the pllfo identifying the list
-     * to which the paragraph belongs
-     */
-    S16 ilfo;
 
     /**
      * no longer used
@@ -7364,8 +7418,17 @@ struct PAP : public Shared {
      */
     S8 lvl;
 
+    /**
+     * A Bool8 value that specifies whether the paragraph uses right-to- left
+     * layout.  By default, a paragraph does not use right-to-left layout.
+     */
     S8 fBiDi;
 
+    /**
+     * A Bool8 value that specifies whether a numbered list was applied to this
+     * paragraph after the previous revision.  By default, paragraphs do not
+     * have numbered lists applied.
+     */
     S8 fNumRMIns;
 
     /**
@@ -7447,7 +7510,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -7536,7 +7599,7 @@ bool operator!=(const PAP &lhs, const PAP &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -7622,7 +7685,7 @@ struct PCD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -7653,10 +7716,9 @@ struct PCD {
     U16 fn:8;
 
     /**
-     * file offset of beginning of piece. The size of the <b>ith</b> piece
-     * can be determined by subtracting rgcp[<b>i</b>] of the containing
-     * <b>plcfpcd</b>
-     * from its rgcp[<b>i+1</b>].
+     * file offset of beginning of piece. The size of the <b>ith</b> piece can
+     * be determined by subtracting rgcp[<b>i</b>] of the containing
+     * <b>plcfpcd</b> from its rgcp[<b>i+1</b>].
      */
     U32 fc;
 
@@ -7699,7 +7761,7 @@ struct PGD {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -7816,7 +7878,7 @@ struct PHE2 {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -7876,7 +7938,7 @@ struct PICF : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -8118,7 +8180,7 @@ bool operator!=(const PICF &lhs, const PICF &rhs);
 //    bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
 //    /**
-//     * Set all the fields to the inital value (default is 0)
+//     * Set all the fields to the initial value (default is 0)
 //     */
 //    void clear();
 
@@ -8172,7 +8234,7 @@ struct RR {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -8220,7 +8282,7 @@ struct RS {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -8307,7 +8369,7 @@ struct SED {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -8371,7 +8433,7 @@ struct SEP : public Shared {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -8801,7 +8863,7 @@ struct SEPX {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -8853,7 +8915,7 @@ struct STSHI {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 
@@ -8939,7 +9001,7 @@ struct WKB {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Set all the fields to the inital value (default is 0)
+     * Set all the fields to the initial value (default is 0)
      */
     void clear();
 

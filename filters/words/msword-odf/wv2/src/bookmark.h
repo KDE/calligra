@@ -56,7 +56,15 @@ namespace wvWare
              * found.  If @param ok is false no valid bookmark has been found
              * and the returned BookmarkData structure is invalid.
              */
-            BookmarkData bookmark( U32 globalCP, bool& ok );
+            BookmarkData bookmark( const U32 globalCP, bool& ok );
+
+            /**
+             * Get the BookmarkData for the Bookmark of @param name.  The
+             * @param ok flag is true if a bookmark has been found.  If @param
+             * ok is false no valid bookmark has been found and the returned
+             * BookmarkData structure is invalid.
+             */
+            BookmarkData bookmark( const UString& name, bool& ok ) const;
 
             /**
              * Returns the global CP of the next bookmark start,

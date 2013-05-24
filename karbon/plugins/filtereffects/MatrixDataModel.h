@@ -20,14 +20,14 @@
 #ifndef MATRIXDATAMODEL_H
 #define MATRIXDATAMODEL_H
 
-#include <QtCore/QAbstractTableModel>
-#include <QtCore/QVector>
+#include <QAbstractTableModel>
+#include <QVector>
 
 class MatrixDataModel : public QAbstractTableModel
 {
 public:
     /// Creates a new matrix data model
-    MatrixDataModel(QObject *parent = 0);
+    explicit MatrixDataModel(QObject *parent = 0);
 
     /// Sets the matrix data and rows/columns to use
     void setMatrix(const QVector<qreal> &matrix, int rows, int cols);

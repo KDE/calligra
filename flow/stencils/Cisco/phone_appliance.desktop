@@ -1,12 +1,27 @@
 [Desktop Entry]
 Name=Phone Appliance
+Name[bs]=Telefonski uređaji
+Name[ca]=Aplicació de telèfon
+Name[ca@valencia]=Aplicació de telèfon
+Name[da]=Phone Appliance
+Name[de]=Telefongerät
 Name[el]=Τηλεφωνική συσκευή
+Name[es]=Dispositivo telefónico
 Name[et]=Telefoniseade
+Name[fr]=Phone Appliance
+Name[gl]=Dispositivo telefónico
+Name[it]=Apparato telefonico
+Name[kk]=Телефон аппараты
+Name[lt]=Telefoninė įranga
 Name[nb]=Telefoniapparat
 Name[nl]=Telefoon appliance
+Name[pl]=Zastosowanie telefonu
 Name[pt]=Aplicação Telefónica
 Name[pt_BR]=Aparelho de telefone
+Name[ru]=Устройство телефона
+Name[sk]=Telefónny spotrebič
 Name[sv]=Telefonapparat
 Name[uk]=Прилад телефону
 Name[x-test]=xxPhone Appliancexx
+Name[zh_CN]=电话装置
 Name[zh_TW]=電話機具

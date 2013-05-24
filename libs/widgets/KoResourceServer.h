@@ -24,26 +24,28 @@
 #ifndef KORESOURCESERVER_H
 #define KORESOURCESERVER_H
 
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
-#include <QtCore/QFileInfo>
-
+#include <QMutex>
+#include <QMutexLocker>
+#include <QString>
+#include <QStringList>
+#include <QList>
+#include <QFileInfo>
+#include <QDir>
+#include <QMultiMap>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include  <QtCore/QXmlStreamReader>
-#include <qdom.h>
+#include <QXmlStreamReader>
+#include <QTemporaryFile>
+#include <QDomDocument>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
 #include "KoResourceTagging.h"
 
 #include "kowidgets_export.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KoResource;
 
@@ -79,6 +81,19 @@ public:
 
     void cancel() { m_cancelled = true; }
 
+    QStringList getFileNames()
+    {
+        QStringList extensionList = m_extensions.split(':');
+        QStringList fileNames;
+
+        foreach (const QString &extension, extensionList) {
+            fileNames += KGlobal::mainComponent().dirs()->findAllResources(type().toLatin1(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+
+        }
+        return fileNames;
+    }
+
+
 private:
     QString m_type;
     QString m_extensions;
@@ -101,7 +116,8 @@ public:
         : KoResourceServerBase(type, extensions)
         , m_deleteResource(deleteResource)
         {
-            blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
+            m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
+            m_blackListFileNames = readBlackListFile();
             m_tagObject = new KoResourceTagging(extensions);
         }
 
@@ -128,7 +144,6 @@ public:
 
             QString fname = QFileInfo(front).fileName();
 
-            //kDebug(30009) << "Loading " << fname << " of type " << type();
             // XXX: Don't load resources with the same filename. Actually, we should look inside
             //      the resource to find out whether they are really the same, but for now this
             //      will prevent the same brush etc. showing up twice.
@@ -139,15 +154,15 @@ public:
                 foreach(T* resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid()) {
-
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
-                        if ( resource->name().isNull() ) {
+                        if ( resource->name().isEmpty() ) {
                             resource->setName( fname );
                         }
+                        if (m_resourcesByName.contains(resource->name())) {
+                            resource->setName(resource->name() + "(" + resource->shortFilename() + ")");
+                        }
                         m_resourcesByName[resource->name()] = resource;
-                        m_resources.append(resource);
-
                         notifyResourceAdded(resource);
                     }
                     else {
@@ -157,16 +172,31 @@ public:
                 m_loadLock.unlock();
             }
         }
+
+        m_resources = sortedResources();
+
         kDebug(30009) << "done loading  resources for type " << type();
     }
 
 
     /// Adds an already loaded resource to the server
-    bool addResource(T* resource, bool save = true) {
+    bool addResource(T* resource, bool save = true, bool infront = false) {
         if (!resource->valid()) {
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
+        QFileInfo fileInfo(resource->filename());
+
+        if (fileInfo.exists()) {
+           QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
+           kDebug() << "fileName is " << filename;
+           QTemporaryFile file(filename);
+           if (file.open()) {
+               kDebug() << "now " << file.fileName();
+               resource->setFilename(file.fileName());
+           }
+        }
+
         if( save && ! resource->save()) {
             kWarning(30009) << "Could not save resource!";
             return false;
@@ -182,7 +212,12 @@ public:
 
         m_resourcesByFilename[resource->shortFilename()] = resource;
         m_resourcesByName[resource->name()] = resource;
-        m_resources.append(resource);
+        if (infront) {
+            m_resources.insert(0, resource);
+        }
+        else {
+            m_resources.append(resource);
+        }
 
         notifyResourceAdded(resource);
 
@@ -213,35 +248,17 @@ public:
             return false;
         }
 
-        bool removedFromDisk = true;
+       m_resourcesByName.remove(resource->name());
+       m_resourcesByFilename.remove(resource->shortFilename());
+       m_resources.removeAt(m_resources.indexOf(resource));
+       notifyRemovingResource(resource);
 
-        QFile file( resource->filename() );
-        if( ! file.remove() ) {
-
-            // Don't do anything, it's probably write protected. In
-            // //future, we should store in config which read-only
-            // //resources the user has removed and blacklist them on
-            // app-start. But if we cannot remove a resource from the
-            // disk, remove it from the chooser at least.
-
-            removedFromDisk = false;
-            kWarning(30009) << "Could not remove resource!";
-        }
-
-
-          m_resourcesByName.remove(resource->name());
-          m_resourcesByFilename.remove(resource->shortFilename());
-          m_resources.removeAt(m_resources.indexOf(resource));
-          notifyRemovingResource(resource);
-            if (m_deleteResource) {
-                delete resource;
-            }
-
-         if(!removedFromDisk) {
-            writeBlackListFile(resource->filename());
-        }
-
-        return true;
+       m_blackListFileNames.append(resource->filename());
+       writeBlackListFile();
+       if (m_deleteResource && resource) {
+          delete resource;
+       }
+       return true;
     }
 
     QList<T*> resources() {
@@ -256,11 +273,11 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     virtual QString saveLocation() {
-        return KGlobal::mainComponent().dirs()->saveLocation(type().toAscii());
+        return KGlobal::mainComponent().dirs()->saveLocation(type().toLatin1());
     }
 
     /**
-     * Creates a new resourcea from a given file and adds them to the resource server
+     * Creates a new resource from a given file and adds them to the resource server
      * The base implementation does only load one resource per file, override to implement collections
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
@@ -377,8 +394,19 @@ public:
 
     QStringList blackListedFiles()
     {
-        blackListFileNames = readBlackListFile();
-        return blackListFileNames;
+        return m_blackListFileNames;
+    }
+
+    void removeBlackListedFiles() {
+        QStringList remainingFiles; // Files that can't be removed e.g. no rights will stay blacklisted
+        foreach(QString filename, m_blackListFileNames) {
+            QFile file( filename );
+            if( ! file.remove() ) {
+                remainingFiles.append(filename);
+            }
+        }
+        m_blackListFileNames = remainingFiles;
+        writeBlackListFile();
     }
 
     /// the below functions helps to access tagObject functions
@@ -406,7 +434,23 @@ public:
     {
         return m_tagObject->searchTag(lineEditText);
     }
+    
+    KoResourceTagging * tagObject() 
+    {
+        return m_tagObject;
+    }
 
+
+#ifdef NEPOMUK
+    void updateNepomukXML(bool nepomukOn)
+    {
+        KoResourceTagging* tagObject = new KoResourceTagging(extensions());
+        tagObject->setNepomukBool(nepomukOn);
+        tagObject->updateNepomukXML(nepomukOn);
+        delete tagObject;
+        m_tagObject->setNepomukBool(nepomukOn);
+    }
+#endif
 protected:
 
     /**
@@ -422,6 +466,16 @@ protected:
     }
 
     virtual T* createResource( const QString & filename ) { return new T(filename); }
+
+    /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
+    virtual QList<T*> sortedResources()
+    {
+        QMap<QString, T*> sortedNames;
+        foreach(QString name, m_resourcesByName.keys()) {
+            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
+        }
+        return sortedNames.values();
+    }
 
     void notifyResourceAdded(T* resource)
     {
@@ -449,7 +503,7 @@ protected:
     {
         QStringList filenameList;
 
-        QFile f(blackListFile);
+        QFile f(m_blackListFile);
         if (!f.open(QIODevice::ReadOnly)) {
             return filenameList;
         }
@@ -472,7 +526,7 @@ protected:
               QDomNode n = file.firstChild();
               QDomElement e = n.toElement();
               if (e.tagName() == "name") {
-                  filenameList.append(e.text());
+                  filenameList.append((e.text()).replace(QString("~"),QDir::homePath()));
               }
              file = file.nextSiblingElement("file");
         }
@@ -480,39 +534,38 @@ protected:
     }
 
     /// write the blacklist file entries to an xml file
-    void writeBlackListFile(QString fileName)
+    void writeBlackListFile()
     {
-       QFile f(blackListFile);
-       if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            kWarning() << "Cannot write meta information to '" << blackListFile << "'." << endl;
+        QFile f(m_blackListFile);
+
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            kWarning() << "Cannot write meta information to '" << m_blackListFile << "'." << endl;
             return;
-       }
+        }
 
-       QDomDocument doc("blackListFile");
-       doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-       QDomElement root = doc.createElement("resourceFilesList");
-       doc.appendChild(root);
+        QDomDocument doc;
+        QDomElement root;
 
-       if(!blackListFileNames.contains(fileName)){
-           blackListFileNames.append(fileName);
-       }
+        QDomDocument docTemp("m_blackListFile");
+        doc = docTemp;
+        doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+        root = doc.createElement("resourceFilesList");
+        doc.appendChild(root);
 
-       foreach(QString file, blackListFileNames) {
-
-           QDomElement fileEl = doc.createElement("file");
-           QDomElement nameEl = doc.createElement("name");
-           QDomText nameText = doc.createTextNode(file);
-           nameEl.appendChild(nameText);
-           fileEl.appendChild(nameEl);
-           root.appendChild(fileEl);
-       }
-
-       QTextStream metastream(&f);
-       metastream << doc.toByteArray();
-
-       f.close();
-
+        foreach(QString filename, m_blackListFileNames) {
+            QDomElement fileEl = doc.createElement("file");
+            QDomElement nameEl = doc.createElement("name");
+            QDomText nameText = doc.createTextNode(filename.replace(QDir::homePath(),QString("~")));
+            nameEl.appendChild(nameText);
+            fileEl.appendChild(nameEl);
+            root.appendChild(fileEl);
+        }
+            
+        QTextStream metastream(&f);
+        metastream << doc.toByteArray();
+        f.close();
     }
+
 private:
 
     QHash<QString, T*> m_resourcesByName;
@@ -521,8 +574,8 @@ private:
     QList<T*> m_resources; ///< list of resources in order of addition
     QList<KoResourceServerObserver<T>*> m_observers;
     bool m_deleteResource;
-    QString blackListFile;
-    QStringList blackListFileNames;
+    QString m_blackListFile;
+    QStringList m_blackListFileNames;
     KoResourceTagging* m_tagObject;
 
 };

@@ -18,7 +18,7 @@
 #ifndef KOABSTRACTGRADIENT_H
 #define KOABSTRACTGRADIENT_H
 
-#include <QtGui/QGradient>
+#include <QGradient>
 
 #include "KoColor.h"
 #include "KoColorSpace.h"
@@ -32,7 +32,7 @@ class PIGMENTCMS_EXPORT KoAbstractGradient : public KoResource
 {
 
 public:
-    KoAbstractGradient(const QString& filename);
+    explicit KoAbstractGradient(const QString &filename);
     virtual ~KoAbstractGradient();
 
     virtual bool load() {

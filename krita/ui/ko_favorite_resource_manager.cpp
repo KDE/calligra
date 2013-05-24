@@ -26,7 +26,6 @@
 #include <KoToolManager.h>
 #include <kis_paintop_preset.h>
 #include <KoID.h>
-#include <ui_wdgpaintoppresets.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include "ko_favorite_resource_manager.h"
@@ -46,9 +45,8 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
         ,m_popupPalette(0)
         ,m_paintopBox(paintopBox)
         ,m_colorList(0)
+        ,m_blockUpdates(false)
 {
-
-    //connect(paintopBox, SIGNAL(signalPaintopChanged(KisPaintOpPresetSP)), this, SLOT(slotChangePaintopLabel(KisPaintOpPresetSP)));
 
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
@@ -99,7 +97,9 @@ QList<QImage> KoFavoriteResourceManager::favoritePresetImages()
         if(!resource) {
             removeFavoritePreset(name);
         }
-        images.append(resource->image());
+        else {
+            images.append(resource->image());
+        }
     }
     return images;
 }
@@ -112,8 +112,7 @@ void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
     KoResource* resource = rServer->getResourceByName(m_favoritePresetsList.at(pos));
     m_paintopBox->resourceSelected(resource);
 
-    if (m_popupPalette)
-    {
+    if (m_popupPalette) {
         m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
     }
 }
@@ -191,7 +190,7 @@ bool KoFavoriteResourceManager::isFavoritePresetsFull()
     return m_favoritePresetsList.size() == KoFavoriteResourceManager::MAX_FAVORITE_PRESETS;
 }
 
-int KoFavoriteResourceManager::favoritePresetsTotal()
+int KoFavoriteResourceManager::numFavoritePresets()
 {
     return m_favoritePresetsList.size();
 }
@@ -269,15 +268,23 @@ void KoFavoriteResourceManager::addRecentColor(const KoColor& color)
 
 void KoFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
 {
+    if(m_blockUpdates) {
+        return;
+    }
     removeFavoritePreset(resource->name());
 }
 
-void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* resource)
+void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
 {
 }
 
-void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* resource)
+void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
 {
+}
+
+void KoFavoriteResourceManager::setBlockUpdates(bool block)
+{
+    m_blockUpdates = block;
 }
 
 #include "ko_favorite_resource_manager.moc"

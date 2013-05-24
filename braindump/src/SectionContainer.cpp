@@ -37,11 +37,11 @@
 #include "SectionShapeContainerModel.h"
 #include "Utils.h"
 #include "Layout.h"
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include "RootSection.h"
 #include "ViewManager.h"
 
-SectionContainer::SectionContainer(Section* section, RootSection* _rootSection) : m_section(0), m_layer(0), m_rootSection(_rootSection)
+SectionContainer::SectionContainer(Section* section, RootSection* _rootSection) : m_section(0), m_layer(0), m_rootSection(0), m_sectionModel(0)
 {
     initContainer(section, _rootSection);
 }
@@ -71,7 +71,7 @@ private:
     Layout* m_layout;
 };
 
-SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section) : m_section(0), m_layer(0)
+SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section) : m_section(0), m_layer(0), m_rootSection(0), m_sectionModel(0)
 {
     initContainer(_section, _rhs.m_rootSection);
     KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->shapes());
@@ -90,6 +90,7 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
 
 void SectionContainer::initContainer(Section* _section, RootSection* _rootSection)
 {
+    m_rootSection = _rootSection;
     m_section = _section;
     m_sectionModel = new SectionShapeContainerModel(m_section);
     m_layer = new KoShapeLayer(m_sectionModel);

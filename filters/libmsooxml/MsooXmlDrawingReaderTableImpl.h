@@ -18,9 +18,12 @@
  */
 
 /**
-* This file deals with the tables designed for the DrawingML namespace
-* the table starts at tbl §21.1.3.13
-*/
+ * This file deals with the tables designed for the DrawingML namespace
+ * the table starts at tbl §21.1.3.13
+ */
+
+#include "MsooXmlTableStyle.h"
+using namespace MSOOXML;
 
 #undef CURRENT_EL
 #define CURRENT_EL tbl
@@ -38,7 +41,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
     m_tableStyle = 0;
 
-    if(!d->tableStyleList) {
+    if (!d->tableStyleList) {
         d->tableStyleList = new QMap<QString, MSOOXML::DrawingTableStyle*>;
 
         QString tableStylesFile;
@@ -89,17 +92,20 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
 {
     const int rowCount = m_table->rowCount();
     const int columnCount = m_table->columnCount();
+    QPair<int, int> spans;
 
     MSOOXML::DrawingTableStyleConverterProperties converterProperties;
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(m_localTableStyles);
-
+    // TODO: converterProperties.setLocalDefaulCelltStyle()
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, m_tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
-            KoCellStyle::Ptr style = styleConverter.style(row, column);
+            spans.first = m_table->cellAt(row, column)->rowSpan();
+            spans.second = m_table->cellAt(row, column)->columnSpan();
+            KoCellStyle::Ptr style = styleConverter.style(row, column, spans);
             m_table->cellAt(row, column)->setStyle(style);
         }
     }
@@ -271,24 +277,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if(qualifiedName() == "a:txBody") {
+            if (qualifiedName() == "a:txBody") {
                 QBuffer buffer;
 
                 KoXmlWriter* oldBody = body;
                 KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
                 body = &newBody;
 
-                TRY_READ(DrawingML_txBody);
+                TRY_READ_IN_CONTEXT(DrawingML_txBody);
 
                 KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
 
                 body = oldBody;
             }
-//             ELSE_TRY_READ_IF(extLst)
+            // ELSE_TRY_READ_IF(extLst)
             ELSE_TRY_READ_IF(tcPr)
             SKIP_UNKNOWN
-//             ELSE_WRONG_FORMAT
+            // ELSE_WRONG_FORMAT
         }
     }
 
@@ -305,6 +311,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     READ_PROLOGUE
 
     readNext();
+    QString id = text().toString();
+
+    QString predefinedTable = getPresetTable(id);
+    if (!predefinedTable.isEmpty()) {
+        predefinedTable.prepend("<a:tblStyleLst xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">");
+        predefinedTable.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+        predefinedTable.append("</a:tblStyleLst>");
+        QString tableStylesFile;
+        QString tableStylesPath;
+        QBuffer tempDevice;
+        tempDevice.setData(predefinedTable.toAscii());
+        tempDevice.open(QIODevice::ReadOnly);
+        MSOOXML::Utils::splitPathAndFile(m_context->tableStylesFilePath, &tableStylesPath, &tableStylesFile);
+        MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
+        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
+                                                                         tableStylesFile, &m_context->slideMasterProperties->theme,
+                                                                         d->tableStyleList, m_context->colorMap);
+        m_context->import->loadAndParseFromDevice(&tableStyleReader, &tempDevice, &tableStyleReaderContext);
+    }
+
     m_tableStyle = d->tableStyleList->value(text().toString());
     readNext();
 
@@ -332,12 +358,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 //             ELSE_TRY_READ_IF(gradFill)
 //             ELSE_TRY_READ_IF(grpFill)
 //             ELSE_TRY_READ_IF(lnBlToTr)
-//             ELSE_TRY_READ_IF(lnB)
-//             ELSE_TRY_READ_IF(lnR)
-//             ELSE_TRY_READ_IF(lnT)
 //             ELSE_TRY_READ_IF(lnTlToBr)
 //             ELSE_TRY_READ_IF(pattFill)
-            /*else */if(QUALIFIED_NAME_IS(solidFill)) {
+            if (QUALIFIED_NAME_IS(lnL)) {
+                TRY_READ(Table_lnL)
+                m_currentLocalStyleProperties->left = m_currentBorder;
+                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::LeftBorder;
+            }
+            else if (QUALIFIED_NAME_IS(lnR)) {
+                TRY_READ(Table_lnR)
+                m_currentLocalStyleProperties->right = m_currentBorder;
+                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::RightBorder;
+            }
+            else if (QUALIFIED_NAME_IS(lnT)) {
+                TRY_READ(Table_lnT)
+                m_currentLocalStyleProperties->top = m_currentBorder;
+                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::TopBorder;
+            }
+            else if (QUALIFIED_NAME_IS(lnB)) {
+                TRY_READ(Table_lnB)
+                m_currentLocalStyleProperties->bottom = m_currentBorder;
+                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::BottomBorder;
+            }
+            else if (QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill)
                 m_currentLocalStyleProperties->backgroundColor = m_currentColor;
                 m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;

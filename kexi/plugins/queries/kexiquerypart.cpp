@@ -20,17 +20,17 @@
 
 #include "kexiquerypart.h"
 
-#include <KDebug>
-#include <KToggleAction>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <ktoggleaction.h>
+#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 
-#include <kexidb/cursor.h>
-#include <kexidb/parser/parser.h>
+#include <db/cursor.h>
+#include <db/parser/parser.h>
 
 #include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"
@@ -59,8 +59,9 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 {
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
-    data->listenerInfoString = window->part()->info()->instanceCaption() + " \""
-                               + window->partItem()->name() + "\"";
+    data->listenerInfoString = i18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>")
+                               .arg(window->part()->info()->instanceCaption())
+                               .arg(window->partItem()->name());
     return data;
 }
 
@@ -83,10 +84,10 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
         KexiProject *prj = KexiMainWindowIface::global()->project();
         connect(prj, SIGNAL(newItemStored(KexiPart::Item&)),
                 view, SLOT(slotNewItemStored(KexiPart::Item&)));
-        connect(prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-                view, SLOT(slotItemRemoved(const KexiPart::Item&)));
-        connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)),
-                view, SLOT(slotItemRenamed(const KexiPart::Item&, const QString&)));
+        connect(prj, SIGNAL(itemRemoved(KexiPart::Item)),
+                view, SLOT(slotItemRemoved(KexiPart::Item)));
+        connect(prj, SIGNAL(itemRenamed(KexiPart::Item,QString)),
+                view, SLOT(slotItemRenamed(KexiPart::Item,QString)));
 
 //  connect(KexiMainWindowIface::global()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
 //   view, SLOT(slotTableCreated(KexiDB::TableSchema&)));
@@ -97,7 +98,7 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
     return view;
 }
 
-bool KexiQueryPart::remove(KexiPart::Item &item)
+tristate KexiQueryPart::remove(KexiPart::Item &item)
 {
     if (!KexiMainWindowIface::global()->project()
             || !KexiMainWindowIface::global()->project()->dbConnection())

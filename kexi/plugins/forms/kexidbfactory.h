@@ -21,17 +21,10 @@
 #ifndef KEXIDBFACTORY_H
 #define KEXIDBFACTORY_H
 
-#include <formeditor/widgetfactory.h>
-
-class KAction;
-
-namespace KFormDesigner
-{
-class Form;
-}
+#include "kexidbfactorybase.h"
 
 //! Kexi Factory (DB widgets + subform)
-class KexiDBFactory : public KFormDesigner::WidgetFactory
+class KexiDBFactory : public KexiDBFactoryBase
 {
     Q_OBJECT
 

@@ -29,7 +29,6 @@
 #include <kis_mask_generator.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
-#include <kis_iterators_pixel.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
@@ -48,7 +47,7 @@ KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), categoryEnhance(), i18n("
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     return new KisWdgUnsharp(parent);
 }
@@ -94,7 +93,7 @@ void KisUnsharpFilter::process(KisPaintDeviceSP device,
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 
     KisPaintDeviceSP interm = new KisPaintDevice(*device);
-    KoColorSpace * cs = interm->colorSpace();
+    const KoColorSpace * cs = interm->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
 
     KisConvolutionPainter painter(interm);   // TODO no need for a full copy and then a transaction

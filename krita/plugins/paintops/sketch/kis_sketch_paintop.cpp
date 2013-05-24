@@ -35,8 +35,10 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_paint_information.h>
+#include <kis_fixed_paint_device.h>
 
 #include <kis_pressure_opacity_option.h>
+#include <kis_dab_cache.h>
 
 /*
 * Based on Harmony project http://github.com/mrdoob/harmony/
@@ -57,7 +59,7 @@
 // shaded: probabity : paint always - 0.0 density
 
 KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
+    : KisPaintOp(painter)
 {
     Q_UNUSED(image);
     m_opacityOption.readOptionSetting(settings);
@@ -70,6 +72,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_offsetScaleOption.readOptionSetting(settings);
 
     m_brush = m_brushOption.brush();
+    m_dabCache = new KisDabCache(m_brush);
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
@@ -82,6 +85,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
 KisSketchPaintOp::~KisSketchPaintOp()
 {
     delete m_painter;
+    delete m_dabCache;
 }
 
 void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)
@@ -94,32 +98,26 @@ void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, 
 }
 
 void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation){
-    m_maskDab = cachedDab(m_dab->colorSpace());
-
-    if (m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
-        m_maskDab = m_brush->paintDevice(m_dab->colorSpace(), scale, rotation, info, 0.0, 0.0);
-    } else {
-        KoColor color = painter()->paintColor();
-        color.convertTo(m_maskDab->colorSpace());
-        m_brush->mask(m_maskDab, color, scale, scale, rotation, info, 0.0, 0.0);
-    }
+    m_maskDab = m_dabCache->fetchDab(m_dab->colorSpace(), painter()->paintColor(), scale, scale,
+                                     rotation, info);
 
     // update bounding box
     m_brushBoundingBox = m_maskDab->bounds();
-    m_hotSpot = m_brush->hotSpot(scale,scale,rotation);
+    m_hotSpot = m_brush->hotSpot(scale,scale,rotation,info);
     m_brushBoundingBox.translate(info.pos() - m_hotSpot);
 }
 
 KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
-    
+
     if (!m_brush || !painter())
         return KisDistanceInformation();
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = source()->createCompositionSourceDevice();
         m_painter = new KisPainter(m_dab);
+        m_painter->setPaintColor(painter()->paintColor());
     } else {
         m_dab->clear();
     }
@@ -133,6 +131,11 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     const double currentProbability = m_densityOption.apply(pi2, m_sketchProperties.probability);
     const double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
     const double currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
+
+    KisVector2D endVec = toKisVector2D(pi2.pos());
+    KisVector2D startVec = toKisVector2D(pi1.pos());
+    KisVector2D dragVec = endVec - startVec;
+    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return KisDistanceInformation(0, dragVec.norm());
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection){
@@ -180,7 +183,6 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     QPoint  positionInMask;
     QPointF diff;
 
-    m_painter->setPaintColor( painter()->paintColor() );
     int size = m_points.size();
     // MAIN LOOP
     for (int i = 0; i < size; i++) {
@@ -261,10 +263,6 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
 
     return KisDistanceInformation(0, dragVec.norm());
 }

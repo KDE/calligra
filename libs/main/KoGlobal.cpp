@@ -22,11 +22,11 @@
 
 #include <KoConfig.h>
 
-#include <QtGui/QPaintDevice>
-#include <QtGui/QFont>
-#include <QtGui/QFontInfo>
+#include <QPaintDevice>
+#include <QFont>
+#include <QFontInfo>
 #ifdef Q_WS_X11
-#include <QtGui/QX11Info>
+#include <QX11Info>
 #endif
 
 #include <kdebug.h>
@@ -53,11 +53,14 @@ KoGlobal::KoGlobal()
         KGlobal::locale()->insertCatalog("calligra");
     }
 
-    // When runnint unittests, there is not necessarily a main component
+    // When running unittests, there is not necessarily a main component
     if (KGlobal::hasMainComponent()) {
         // Tell KStandardDirs about the calligra prefix
         KGlobal::dirs()->addPrefix(CALLIGRAPREFIX);
     }
+
+    // Add calligra styles dir
+    KGlobal::dirs()->addResourceType("styles", "data", "calligra/styles/");
 }
 
 KoGlobal::~KoGlobal()

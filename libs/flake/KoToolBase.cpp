@@ -22,10 +22,12 @@
 #include "KoToolBase_p.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
+#include "KoCanvasResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
+#include "KoToolSelection.h"
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -35,25 +37,14 @@ KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
 {
     Q_D(KoToolBase);
-    if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
-        KoResourceManager * crp = d->canvas->resourceManager();
-        Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
-        if (crp)
-            connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(resourceChanged(int, const QVariant &)));
-
-        // can be 0 in the case of Tables
-        KoResourceManager *scrm = d->canvas->shapeController()->resourceManager();
-        if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(resourceChanged(int, const QVariant &)));
-        }
-    }
+    d->connectSignals();
 }
 
 KoToolBase::KoToolBase(KoToolBasePrivate &dd)
     : d_ptr(&dd)
 {
+    Q_D(KoToolBase);
+    d->connectSignals();
 }
 
 KoToolBase::~KoToolBase()
@@ -61,14 +52,14 @@ KoToolBase::~KoToolBase()
     delete d_ptr;
 }
 
-/// Ultimately only called from Tables
-void KoToolBase::updateShapeController(KoShapeControllerBase *shapeController)
+/// Ultimately only called from Calligra Sheets
+void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
 {
     if (shapeController) {
-        KoResourceManager *scrm = shapeController->resourceManager();
+        KoDocumentResourceManager *scrm = shapeController->resourceManager();
         if (scrm) {
             connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(resourceChanged(int, const QVariant &)));
+                    this, SLOT(documentResourceChanged(int, const QVariant &)));
         }
     }
 }
@@ -83,12 +74,23 @@ void KoToolBase::resourceChanged(int key, const QVariant & res)
     Q_UNUSED(res);
 }
 
+void KoToolBase::documentResourceChanged(int key, const QVariant &res)
+{
+    Q_UNUSED(key);
+    Q_UNUSED(res);
+}
+
 bool KoToolBase::wantsAutoScroll() const
 {
     return true;
 }
 
 void KoToolBase::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    event->ignore();
+}
+
+void KoToolBase::mouseTripleClickEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
@@ -194,7 +196,6 @@ QList<QWidget *>  KoToolBase::createOptionWidgets()
         if (widget->objectName().isEmpty()) {
             widget->setObjectName(toolId());
         }
-        widget->setWindowTitle(i18n("Tool Options"));
         ow.append(widget);
     }
     return ow;
@@ -254,13 +255,23 @@ void KoToolBase::setStatusText(const QString &statusText)
 uint KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
-    return d->canvas->shapeController()->resourceManager()->handleRadius();
+    if(d->canvas->shapeController()->resourceManager())
+    {
+        return d->canvas->shapeController()->resourceManager()->handleRadius();
+    } else {
+        return 3;
+    }
 }
 
 uint KoToolBase::grabSensitivity() const
 {
     Q_D(const KoToolBase);
-    return d->canvas->shapeController()->resourceManager()->grabSensitivity();
+    if(d->canvas->shapeController()->resourceManager())
+    {
+        return d->canvas->shapeController()->resourceManager()->grabSensitivity();
+    } else {
+        return 3;
+    }
 }
 
 QRectF KoToolBase::handleGrabRect(const QPointF &position) const
@@ -301,6 +312,29 @@ bool KoToolBase::paste()
 
 void KoToolBase::copy() const
 {
+}
+
+void KoToolBase::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
+}
+
+void KoToolBase::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KoToolBase::dropEvent(QDropEvent *event, const QPointF &point)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(point);
+}
+
+bool KoToolBase::hasSelection()
+{
+    KoToolSelection *sel = selection();
+    return (sel && sel->hasSelection());
 }
 
 KoToolSelection *KoToolBase::selection()

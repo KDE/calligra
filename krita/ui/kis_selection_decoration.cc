@@ -91,16 +91,13 @@ void KisSelectionDecoration::selectionChanged()
     if (m_mode == Ants) {
         m_outline.clear();
 
-        if (selection && !selection->isDeselected()) {
+        if (selection) {
             if (selection->hasPixelSelection() || selection->hasShapeSelection()) {
                 if (!m_timer->isActive())
                     m_timer->start(300);
             }
-            if (selection->hasPixelSelection()) {
-                KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
-                m_outline = getOrCreatePixelSelection->outline();
-                updateSimpleOutline();
-            }
+            m_outline = selection->outline();
+            updateSimpleOutline();
         } else {
             m_timer->stop();
         }
@@ -123,13 +120,12 @@ void KisSelectionDecoration::selectionTimerEvent()
             m_offset++;
             if (m_offset > 7) m_offset = 0;
 
-//            dbgKrita << "offset is: " << m_offset;
-            QRect bound = selection->selectedRect();
-            double xRes = view()->image()->xRes();
-            double yRes = view()->image()->yRes();
-            QRectF rect(int(bound.left()) / xRes, int(bound.top()) / yRes,
-                        int(1 + bound.right()) / xRes, int(1 + bound.bottom()) / yRes);
-            view()->canvasBase()->updateCanvas(rect);
+            QRect bounds = selection->selectedRect();
+            QRectF documentBounds =
+                view()->canvasBase()->
+                coordinatesConverter()->imageToDocument(bounds);
+
+            view()->canvasBase()->updateCanvas(documentBounds.adjusted(-1,-1,1,1));
         }
     }
 }
@@ -168,70 +164,44 @@ void KisSelectionDecoration::updateSimpleOutline()
     }
 }
 
-void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(updateRect);
 
     KisSelectionSP selection = view()->selection();
-    if (!selection || selection->isDeselected() || !selection->isVisible())
+    if (!selection || !selection->isVisible())
         return;
 
     if (m_mode == Mask) {
         Q_ASSERT_X(0, "KisSelectionDecoration.cc", "MASK MODE NOT SUPPORTED YET!");
     }
 
-    if (m_mode == Ants && selection->hasPixelSelection()) {
-
-        QTransform transform = converter->imageToWidgetTransform();
+    if (m_mode == Ants) {
 
         qreal scaleX, scaleY;
         converter->imageScale(&scaleX, &scaleY);
 
         gc.save();
-        gc.setTransform(transform);
+        gc.setTransform(QTransform(), false);
         gc.setRenderHints(0);
 
         QPen pen(m_brushes[m_offset], 0);
+        QTransform transform = converter->imageToWidgetTransform();
 
         int i = 0;
         gc.setPen(pen);
         if (0.5 * (scaleX + scaleY) < 3) {
             foreach(const QPolygon & polygon, m_simpleOutline) {
-                gc.drawPolygon(polygon);
+                gc.drawPolygon(transform.map(polygon));
                 i++;
             }
         } else {
             foreach(const QPolygon & polygon, m_outline) {
-                gc.drawPolygon(polygon);
+                gc.drawPolygon(transform.map(polygon));
                 i++;
             }
         }
 
-        gc.restore();
-    }
-
-    if (m_mode == Ants && selection->hasShapeSelection()) {
-        KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-
-        QVector<qreal> dashes;
-        dashes << 4 << 4;
-
-        QPen backgroundPen(Qt::white);
-        backgroundPen.setCosmetic(true);
-
-        QPainterPathStroker stroker;
-        stroker.setWidth(0);
-        stroker.setDashPattern(dashes);
-        stroker.setDashOffset(m_offset - 4);
-        QPainterPath stroke = stroker.createStroke(shapeSelection->selectionOutline());
-
-        QTransform transform = converter->documentToWidgetTransform();
-
-        gc.save();
-        gc.setTransform(transform);
-        gc.setRenderHint(QPainter::Antialiasing);
-        gc.strokePath(shapeSelection->selectionOutline(), backgroundPen);
-        gc.fillPath(stroke, Qt::black);
         gc.restore();
     }
 }

@@ -84,10 +84,9 @@ public:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     virtual void updateSize() = 0;
 
-
 protected:
 
-    void paint(QPainter &painter, const QRectF paintRect);
+    void paint(QPainter &painter, const QRectF &paintRect);
 
 private:
     class Private;

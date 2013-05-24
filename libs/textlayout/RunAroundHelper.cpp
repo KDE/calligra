@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010-2011 KO Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2010-2011 KO Gmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,17 +31,11 @@ RunAroundHelper::RunAroundHelper()
     m_updateValidObstructions = false;
     m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
     m_stayOnBaseline = false;
-    m_restartOnNextShape = false;
 }
 
-void RunAroundHelper::setLine(KoTextLayoutArea *area, QTextLine l) {
+void RunAroundHelper::setLine(KoTextLayoutArea *area, const QTextLine &l) {
     m_area = area;
     line = l;
-}
-
-void RunAroundHelper::setRestartOnNextShape(bool restartOnNextShape)
-{
-    m_restartOnNextShape = restartOnNextShape;
 }
 
 void RunAroundHelper::setObstructions(const QList<KoTextLayoutObstruction*> &obstructions)
@@ -62,7 +56,7 @@ void RunAroundHelper::updateObstruction(KoTextLayoutObstruction *obstruction)
     }
 }
 
-void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
+bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft, const QPointF &position)
 {
     Q_ASSERT(line.isValid());
     if (resetHorizontalPosition) {
@@ -84,7 +78,7 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
             line.setNumColumns(1);
 
         line.setPosition(position);
-        return;
+        return false;
     }
 
     // Too little width because of  wrapping is handled in the remainder of this method
@@ -93,18 +87,13 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
     const qreal maxNaturalTextWidth = line.naturalTextWidth();
     QRectF lineRect(position, QSizeF(maxLineWidth, maxLineHeight));
     QRectF lineRectPart;
-    qreal movedDown = 0;
-//FIXME    if (m_state->maxLineHeight() > 0) {
-//        movedDown = m_state->maxLineHeight();
-//    } else {
-        movedDown = 10;
-//    }
+    qreal movedDown = 10;
 
     while (!lineRectPart.isValid()) {
         // The line rect could be split into no further linerectpart, so we have
         // to move the lineRect down a bit and try again
         // No line rect part was enough big, to fit the line. Recreate line rect further down
-        // (and that is devided into new line parts). Line rect is at different position to
+        // (and that is divided into new line parts). Line rect is at different position to
         // obstructions, so new parts are completely different. if there are no obstructions, then we
         // have only one line part which is full line rect
 
@@ -116,9 +105,20 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
             movedDown += 10;
         }
     }
+
+    if (isRightToLeft && line.naturalTextWidth() > m_textWidth) {
+        // This can happen if spaces are added at the end of a line. Those spaces will not result in a
+        // line-break. On left-to-right everything is fine and the spaces at the end are just not visible
+        // but on right-to-left we need to adust the position cause spaces at the end are displayed at
+        // the beginning and we need to make sure that doesn't result in us cutting of text at the right side.
+        qreal diff = line.naturalTextWidth() - m_textWidth;
+        lineRectPart.setX(lineRectPart.x() - diff);
+    }
+
     line.setLineWidth(m_textWidth);
     line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
+    return true;
 }
 
 void RunAroundHelper::validateObstructions()
@@ -148,7 +148,7 @@ void RunAroundHelper::createLineParts()
         QRectF rightLineRect = m_lineRect;
         bool lastRightRectValid = false;
         qSort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
-        // Devide rect to parts, part can be invalid when obstructions are not disjunct.
+        // Divide rect to parts, part can be invalid when obstructions are not disjunct.
         foreach (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
             QRectF leftLineRect = validObstruction->getLeftLinePart(rightLineRect);
             lineParts.append(leftLineRect);
@@ -197,7 +197,7 @@ void RunAroundHelper::createLineParts()
             }
         }
         // Filter invalid parts.
-        foreach (QRectF rect, lineParts) {
+        foreach (const QRectF &rect, lineParts) {
             if (rect.isValid()) {
                 m_lineParts.append(rect);
             }
@@ -234,7 +234,7 @@ void RunAroundHelper::updateLineParts(const QRectF &lineRect)
 QRectF RunAroundHelper::getLineRectPart()
 {
     QRectF retVal;
-    foreach (QRectF lineRectPart, m_lineParts) {
+    foreach (const QRectF &lineRectPart, m_lineParts) {
         if (m_horizontalPosition <= lineRectPart.left() && m_textWidth <= lineRectPart.width()) {
             retVal = lineRectPart;
             break;
@@ -254,10 +254,11 @@ void RunAroundHelper::setMaxTextWidth(const QRectF &minLineRectPart, const qreal
 
     widthDiff /= 2;
     while (width <= maxWidth && width <= maxNaturalTextWidth && widthDiff > MIN_WIDTH) {
-        line.setLineWidth(width + widthDiff);
+        qreal linewidth = width + widthDiff;
+        line.setLineWidth(linewidth);
         height = line.height();
         if (height <= maxHeight) {
-            width = width + widthDiff;
+            width = linewidth;
             m_textWidth = width;
         }
         widthDiff /= 2;

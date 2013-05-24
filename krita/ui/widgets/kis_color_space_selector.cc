@@ -1,6 +1,7 @@
     /*
  *  Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
  *  Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +26,14 @@
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
 
+#include <KoConfig.h>
+#include <KoIcon.h>
+
+#ifdef GHNS
+#include <knewstuff3/downloaddialog.h>
+#include <knewstuff3/uploaddialog.h>
+#endif
+
 #include <QDesktopServices>
 
 #include <kcomponentdata.h>
@@ -39,6 +48,7 @@
 
 struct KisColorSpaceSelector::Private {
     Ui_WdgColorSpaceSelector* colorSpaceSelector;
+    QString knsrcFile;
 };
 
 KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -48,6 +58,25 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->setupUi(this);
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
+
+    d->colorSpaceSelector->bnInstallProfile->setIcon(koIcon("document-open"));
+    d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
+
+    d->colorSpaceSelector->bnDownloadProfile->setIcon(koIcon("download"));
+    d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
+    d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
+    d->colorSpaceSelector->bnDownloadProfile->hide();
+
+    d->colorSpaceSelector->bnUploadProfile->setIcon(koIcon("go-up"));
+    d->colorSpaceSelector->bnUploadProfile->setToolTip( i18n("Share Color Profile") );
+    d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
+    d->colorSpaceSelector->bnUploadProfile->hide();
+
+#ifdef GHNS
+    d->colorSpaceSelector->bnUploadProfile->show();
+    d->colorSpaceSelector->bnDownloadProfile->show();
+#endif
+
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
             this, SLOT(fillCmbDepths(const KoID &)));
     connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(const KoID &)),
@@ -56,7 +85,15 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
             this, SLOT(fillCmbProfiles()));
     connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(const QString &)),
             this, SLOT(colorSpaceChanged()));
+    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(buttonUpdate()));
+
+
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), this, SLOT(installProfile()));
+    connect(d->colorSpaceSelector->bnDownloadProfile, SIGNAL(clicked()), this, SLOT(downloadProfile()));
+    connect(d->colorSpaceSelector->bnUploadProfile, SIGNAL(clicked()), this, SLOT(uploadProfile()));
+
+    d->knsrcFile = "kritaiccprofiles.knsrc";
 
     fillCmbProfiles();
 }
@@ -87,8 +124,13 @@ void KisColorSpaceSelector::fillCmbProfiles()
 
 void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
 {
+    KoID activeDepth = d->colorSpaceSelector->cmbColorDepth->currentItem();
     d->colorSpaceSelector->cmbColorDepth->clear();
-    d->colorSpaceSelector->cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible));
+    QList<KoID> depths = KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible);
+    d->colorSpaceSelector->cmbColorDepth->setIDList(depths);
+    if (depths.contains(activeDepth)) {
+        d->colorSpaceSelector->cmbColorDepth->setCurrent(activeDepth);
+    }
 }
 
 const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
@@ -141,12 +183,63 @@ void KisColorSpaceSelector::installProfile()
 
     QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
 
-    foreach (QString profileName, profileNames) {
-        KIO::copy(KUrl(profileName), saveLocation);
-        iccEngine->addProfile(saveLocation + profileName);
+    foreach (const QString &profileName, profileNames) {
+        KUrl file(profileName);
+        if (!QFile::copy(profileName, saveLocation + file.fileName())) {
+            kWarning() << "Could not install profile!";
+            return;
+        }
+        iccEngine->addProfile(saveLocation + file.fileName());
+
     }
 
     fillCmbProfiles();
+}
+
+void KisColorSpaceSelector::downloadProfile()
+{
+#ifdef GHNS
+    KNS3::DownloadDialog dialog( "kritaiccprofiles.knsrc", this);
+    dialog.exec();
+    KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    Q_ASSERT(iccEngine);
+    foreach (const KNS3::Entry& e, dialog.changedEntries()) {
+        foreach(const QString &file, e.installedFiles()) {
+            QFileInfo fi(file);
+            iccEngine->addProfile( fi.absolutePath()+'/'+fi.fileName());
+        }
+        foreach(const QString &file, e.uninstalledFiles()) {
+            QFileInfo fi(file);
+            iccEngine->removeProfile( fi.absolutePath()+'/'+fi.fileName());
+        }
+    }
+    fillCmbProfiles();
+#endif
+}
+
+void KisColorSpaceSelector::uploadProfile()
+{
+#ifdef GHNS
+    KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
+    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
+    if(!profile)  return;
+    dialog.setUploadFile(KUrl::fromLocalFile(profile->fileName()));
+    dialog.setUploadName(profile->name());
+    dialog.exec();
+#endif
+}
+
+void KisColorSpaceSelector::buttonUpdate()
+{
+   const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
+   if(!profile)  return;
+
+   QFileInfo fileInfo(profile->fileName());
+   if(fileInfo.isWritable()) {
+       d->colorSpaceSelector->bnUploadProfile->setEnabled( true );
+       return;
+   }
+   d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
 }
 
 #include "kis_color_space_selector.moc"

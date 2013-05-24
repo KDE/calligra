@@ -27,7 +27,7 @@
 #include "flake_export.h"
 
 class KoTosContainerPrivate;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 
 /**
@@ -42,7 +42,7 @@ public:
     virtual ~KoTosContainer();
 
     // reimplemented
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     // reimplemented
     virtual bool loadText(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -89,7 +89,7 @@ public:
      * @param documentResources
      * @return The created text shape or 0 in case it failed
      */
-    KoShape *createTextShape(KoResourceManager *documentResources = 0);
+    KoShape *createTextShape(KoDocumentResourceManager *documentResources = 0);
 
     virtual void setRunThrough(short int runThrough);
 
@@ -97,8 +97,14 @@ protected:
     /// constructor
     KoTosContainer(KoTosContainerPrivate &);
 
+    //reimplemented
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    //reimplemented
+    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+
     /**
-     * Set the current prefered text rectangle. This rect contains the coordinates of
+     * Set the current preferred text rectangle. This rect contains the coordinates of
      * the embedded text shape relative to the content shape. This value is ignored if
      * resizeBehavior is not TextFollowsPreferredTextRect.
      * @param rect the new preferred text rectangle
@@ -106,7 +112,7 @@ protected:
     void setPreferredTextRect(const QRectF &rect);
 
     /**
-     * Returns the current prefered text rectangle.
+     * Returns the current preferred text rectangle.
      */
     QRectF preferredTextRect() const;
 

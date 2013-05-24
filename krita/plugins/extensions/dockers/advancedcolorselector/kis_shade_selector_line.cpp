@@ -21,13 +21,12 @@
 #include <QColor>
 #include <QMouseEvent>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KLocale>
-
-#include "KoResourceManager.h"
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <KoColor.h>
 #include "KoColorSpaceRegistry.h"
 
 #include "kis_canvas2.h"
@@ -198,7 +197,6 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
 
 void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
 {
-//    kDebug() << e->globalX() << "/" << e->globalY();
     KisMinimalShadeSelector* parent = dynamic_cast<KisMinimalShadeSelector*>(parentWidget());
     QColor color(m_pixelCache.pixel(e->pos()));
 

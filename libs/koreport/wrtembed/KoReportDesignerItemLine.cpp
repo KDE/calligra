@@ -21,7 +21,7 @@
 #include "KoReportDesignerItemBase.h"
 #include "KoReportDesigner.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QPainter>
 #include <kdebug.h>
 #include <klocalizedstring.h>
@@ -31,6 +31,7 @@
 #include <koproperty/EditorView.h>
 #include <KoGlobal.h>
 #include "reportscene.h"
+#include "krutils.h"
 
 //
 // class ReportEntityLine
@@ -112,21 +113,13 @@ void KoReportDesignerItemLine::buildXML(QDomDocument & doc, QDomElement & parent
 {
     QDomElement entity = doc.createElement("report:line");
 
-    qreal sx, sy, ex, ey;
-    QString unitname = KoUnit::unitName(m_start.unit());
-    
-    sx = m_start.toUnit().x();
-    sy = m_start.toUnit().y();
-    ex = m_end.toUnit().x();
-    ey = m_end.toUnit().y();
-
     // properties
     addPropertyAsAttribute(&entity, m_name);
     entity.setAttribute("report:z-index", zValue());
-    entity.setAttribute("svg:x1", QString::number(sx) + unitname);
-    entity.setAttribute("svg:y1", QString::number(sy) + unitname);
-    entity.setAttribute("svg:x2", QString::number(ex) + unitname);
-    entity.setAttribute("svg:y2", QString::number(ey) + unitname);
+    KRUtils::setAttribute(entity, "svg:x1", m_start.toPoint().x());
+    KRUtils::setAttribute(entity, "svg:y1", m_start.toPoint().y());
+    KRUtils::setAttribute(entity, "svg:x2", m_end.toPoint().x());
+    KRUtils::setAttribute(entity, "svg:y2", m_end.toPoint().y());
 
     buildXMLLineStyle(doc, entity, lineStyle());
 
@@ -217,10 +210,6 @@ void KoReportDesignerItemLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 int KoReportDesignerItemLine::grabHandle(QPointF pos)
 {
-    QRectF r = boundingRect();
-
-    QPointF center = r.center();
-
     if (QRectF(line().p1().x(), line().p1().y() - 2, 5, 5).contains(pos)) {
         // we are over point 1
         return 1;

@@ -20,7 +20,7 @@
 #ifndef KEXI_MIGRATE_MNGR_P_H
 #define KEXI_MIGRATE_MNGR_P_H
 
-#include <kexidb/object.h>
+#include <db/object.h>
 #include <QMap>
 
 namespace KexiMigration
@@ -72,8 +72,6 @@ protected:
     QString m_serverErrMsg;
     int m_serverResultNum;
     QString m_serverResultName;
-    //! result names for KParts::ComponentFactory::ComponentLoadingError
-    //QMap<int, QString> m_componentLoadingErrors;
 
     bool lookupDriversNeeded : 1;
 

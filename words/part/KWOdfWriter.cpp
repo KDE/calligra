@@ -30,6 +30,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
 
+#include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
@@ -37,24 +38,38 @@
 #include <KoShapeLayer.h>
 
 #include <KoGenChanges.h>
+#include <changetracker/KoChangeTracker.h>
 #include <KoTextSharedSavingData.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoVariableManager.h>
 
 #include <KoStoreDevice.h>
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
+
+#include "author/CoverImage.h"
 
 #include <QBuffer>
 #include <QTextCursor>
-#include <KDebug>
+#include <kdebug.h>
 #include <ktemporaryfile.h>
 
-QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges  &changes, KWTextFrameSet *fs)
+static const struct {
+    const char * tag;
+} headerFooterTag[] = {
+    { "style:header" },
+    { "style:header-left" },
+    { "style:footer" },
+    { "style:footer-left" }
+};
+
+QByteArray KWOdfWriter::serializeHeaderFooter(KoShapeSavingContext &context, KWTextFrameSet *fs)
 {
-    QByteArray tag;
+    const char * tag = 0;
     switch (fs->textFrameSetType()) {
-    case Words::OddPagesHeaderTextFrameSet:  tag = "style:header";       break;
-    case Words::EvenPagesHeaderTextFrameSet: tag = "style:header-left";  break;
-    case Words::OddPagesFooterTextFrameSet:  tag = "style:footer";       break;
-    case Words::EvenPagesFooterTextFrameSet: tag = "style:footer-left";  break;
+    case Words::OddPagesHeaderTextFrameSet:  tag = headerFooterTag[0].tag; break;
+    case Words::EvenPagesHeaderTextFrameSet: tag = headerFooterTag[1].tag; break;
+    case Words::OddPagesFooterTextFrameSet:  tag = headerFooterTag[2].tag; break;
+    case Words::EvenPagesFooterTextFrameSet: tag = headerFooterTag[3].tag; break;
     default: return QByteArray();
     }
 
@@ -63,27 +78,28 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedS
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buffer);
 
-    KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
-    
-    context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml);
+    KoXmlWriter &savedWriter = context.xmlWriter();
 
-    KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
-    sharedData->setGenChanges(changes);
-    context.addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
+    KoShapeSavingContext::ShapeSavingOptions options = context.options();
+    context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml | KoShapeSavingContext::ZIndex);
+    context.setXmlWriter(writer);
 
     Q_ASSERT(!fs->frames().isEmpty());
     KoTextShapeData *shapedata = qobject_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
     Q_ASSERT(shapedata);
 
     writer.startElement(tag);
-    shapedata->saveOdf(context, m_document->documentRdfBase());
+    shapedata->saveOdf(context, m_document->documentRdf());
     writer.endElement();
+
+    context.setOptions(options);
+    context.setXmlWriter(savedWriter);
 
     return content;
 }
 
 // rename to save pages ?
-void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges &changes)
+void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
 {
     //kDebug(32001)<< "START saveHeaderFooter ############################################";
     // first get all the framesets in a nice quick-to-access data structure
@@ -104,14 +120,16 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
     }
 
     // save page styles that don't have a header or footer which will be handled later
-    foreach (KWPageStyle pageStyle, m_document->pageManager()->pageStyles()) {
+    foreach (const KWPageStyle &pageStyle, m_document->pageManager()->pageStyles()) {
         if (data.contains(pageStyle))
             continue;
 
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
-        masterStyle.addProperty("style:page-layout-name", mainStyles.insert(layoutStyle, "pm"));
-        QString name = mainStyles.insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
+        if (!pageStyle.displayName().isEmpty() && pageStyle.displayName() != pageStyle.name())
+            masterStyle.addProperty("style:display-name", pageStyle.displayName());
+        masterStyle.addProperty("style:page-layout-name", context.mainStyles().insert(layoutStyle, "pm"));
+        QString name = context.mainStyles().insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
         m_masterPages.insert(pageStyle, name);
     }
 
@@ -122,11 +140,11 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
           << Words::OddPagesFooterTextFrameSet
           << Words::EvenPagesFooterTextFrameSet;
 
-    foreach (KWPageStyle pageStyle, data.keys()) {
+    foreach (const KWPageStyle &pageStyle, data.keys()) {
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         //masterStyle.setAutoStyleInStylesDotXml(true);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
-        masterStyle.addProperty("style:page-layout-name", mainStyles.insert(layoutStyle, "pm"));
+        masterStyle.addProperty("style:page-layout-name", context.mainStyles().insert(layoutStyle, "pm"));
 
         QHash<int, KWTextFrameSet*> headersAndFooters = data.value(pageStyle);
         int index = 0;
@@ -138,7 +156,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
             if (fs->frameCount() == 0) // don't save empty framesets
                 continue;
 
-            QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, changes, fs);
+            QByteArray content = serializeHeaderFooter(context, fs);
 
             if (content.isNull())
                 continue;
@@ -146,10 +164,8 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
             masterStyle.addChildElement(QString::number(++index), QString::fromUtf8(content));
         }
         // append the headerfooter-style to the main-style
-        if (! masterStyle.isEmpty()) {
-            QString name = mainStyles.insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
-            m_masterPages.insert(pageStyle, name);
-        }
+        QString name = context.mainStyles().insert(masterStyle, pageStyle.name(), KoGenStyles::DontAddNumberToName);
+        m_masterPages.insert(pageStyle, name);
     }
 
     //foreach (KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::ParagraphAutoStyle))
@@ -209,26 +225,35 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     KoGenChanges changes;
 
+    CoverImage coverImage;
+
+    KoChangeTracker *changeTracker = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+
+    KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
+    context.addOption(KoShapeSavingContext::ZIndex);
+
+    KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
+    sharedData->setGenChanges(changes);
+    context.addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
+
     // Save the named styles
-    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-    styleManager->saveOdf(mainStyles);
+    if (KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>()) {
+        styleManager->saveOdf(context);
+    }
 
     // TODO get the pagestyle for the first page and store that as 'style:default-page-layout'
 
     // Header and footers save their content into master-styles/master-page, and their
     // styles into the page-layout automatic-style.
-
-    saveHeaderFooter(embeddedSaver, mainStyles, changes);
+    saveHeaderFooter(context);
 
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
-
-    KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
-
-    KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
-    sharedData->setGenChanges(changes);
-    context.addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
+    if (m_document->isMasterDocument()) {
+        bodyWriter->addAttribute("text:global", "true");
+    }
+    // FIXME: text:use-soft-page-breaks
 
     calculateZindexOffsets();
 
@@ -242,10 +267,9 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         //     in ODF terms those frames are page-anchored.
 
         if (fs->frameCount() == 1) {
-            KoShape *shape = fs->frames().first()->shape();
             // may be a frame that is anchored to text, don't save those here.
-            // but first check since clipped shapes look similar, but are not anchored to text
-            if (shape->parent() && !shape->parent()->isClipped(shape))
+            KoShapeAnchor *anchor = fs->frames().first()->shape()->anchor();
+            if (anchor && anchor->anchorType() != KoShapeAnchor::AnchorPage)
                 continue;
         }
 
@@ -282,15 +306,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
             KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
-                KWPageManager *pm = m_document->pageManager();
-                if (pm->pageCount()) { // make the first page refer to our page master
-                    QTextCursor cursor(shapeData->document());
-                    QTextBlockFormat tbf;
-                    KWPageStyle style = pm->pages().first().pageStyle();
-                    tbf.setProperty(KoParagraphStyle::MasterPageName, m_masterPages.value(style));
-                    cursor.mergeBlockFormat(tbf);
-                }
-                shapeData->saveOdf(context, m_document->documentRdfBase());
+                shapeData->saveOdf(context, m_document->documentRdf());
             }
         }
     }
@@ -298,20 +314,33 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     //we save the changes before starting the page sequence element because odf validator insist on having <tracked-changes> right after the <office:text> tag
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
 
-    changes.saveOdfChanges(changeWriter);
+
+    if (!changeTracker || !changeTracker->recordChanges()) {
+        changes.saveOdfChanges(changeWriter, false);
+    }
+    else {
+        changes.saveOdfChanges(changeWriter, true);
+    }
+
 
     delete changeWriter;
     changeWriter = 0;
 
     tmpChangeFile.close();
+
     bodyWriter->addCompleteElement(&tmpChangeFile);
+
+    // Save user defined variable declarations
+    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
+        variableManager->saveOdf(bodyWriter);
+    }
 
     // Do not write out text:page-sequence, if there is a maintTextFrame
     // The ODF specification does not allow text:page-sequence in office:text
     // if there is e.g. text:p or text:h there
     if (!mainTextFrame) {
         bodyWriter->startElement("text:page-sequence");
-        foreach (KWPage page, m_document->pageManager()->pages()) {
+        foreach (const KWPage &page, m_document->pageManager()->pages()) {
             Q_ASSERT(m_masterPages.contains(page.pageStyle()));
             bodyWriter->startElement("text:page");
             bodyWriter->addAttribute("text:master-page-name",
@@ -337,7 +366,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     // update references to xml:id to be to new xml:id
     // in the external Rdf
-    if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
+    if (KoDocumentRdfBase *rdf = m_document->documentRdf()) {
         QMap<QString, QString> m = sharedData->getRdfIdMapping();
         rdf->updateXmlIdReferences(m);
     }
@@ -349,6 +378,10 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         return false;
     }
 
+    // save cover image in Author.
+    if (!coverImage.saveCoverImage(store, manifestWriter, m_document->coverImage())) {
+        return false;
+    }
     return true;
 }
 
@@ -376,6 +409,32 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
 
     settingsWriter->endElement(); // config:config-item-map-entry
     settingsWriter->endElement(); // config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
+    KoTextDocument doc(m_document->mainFrameSet()->document());
+
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "TabsRelativeToIndent");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan(doc.relativeTabs() ? "true" : "false");
+    settingsWriter->endElement();
+
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan(doc.paraTableSpacingAtStart() ? "true" : "false");
+    settingsWriter->endElement();
+
+    // OOo requires this config item to display files saved by wors correctly.
+    // If true, then the fo:text-indent attribute will be ignored.
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "IgnoreFirstLineIndentInNumbering");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("false");
+    settingsWriter->endElement();
+
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->endElement(); // office:settings

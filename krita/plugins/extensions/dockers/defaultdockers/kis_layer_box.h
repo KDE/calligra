@@ -43,11 +43,12 @@ class QModelIndex;
 
 typedef QList<QModelIndex> QModelIndexList;
 
+class QMenu;
+class QAbstractButton;
 class KMenu;
 class KoCompositeOp;
 class KisCanvas2;
 class KisNodeModel;
-class KisLayerManager;
 class Ui_WdgLayerBox;
 
 /**
@@ -66,10 +67,9 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas();
 private slots:
 
-    void setImage(KisImageWSP image);
     void notifyImageDeleted();
 
     void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);
@@ -93,22 +93,20 @@ private slots:
     void slotLeftClicked();
     void slotRightClicked();
     void slotPropertiesClicked();
-    void slotDuplicateClicked();
 
     void slotMergeLayer();
-    void slotNewPaintLayer();
-    void slotNewGroupLayer();
-    void slotNewAdjustmentLayer();
-    void slotNewGeneratorLayer();
-    void slotNewCloneLayer();
-    void slotNewShapeLayer();
-    void slotNewTransparencyMask();
-    void slotNewEffectMask();
-    void slotNewTransformationMask();
-    void slotNewSelectionMask();
     void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
     void slotOpacitySliderMoved(qreal opacity);
+
+    void slotCollapsed(const QModelIndex &index);
+    void slotExpanded(const QModelIndex &index);
+
+    void slotSelectOpaque();
+
+private:
+    inline void connectActionToButton(QAbstractButton *button, const QString &id);
+    inline void addActionToMenu(QMenu *menu, const QString &id);
 
 private:
 
@@ -122,15 +120,10 @@ private:
     QTimer m_delayTimer;
     int m_newOpacity;
 
-    KAction* m_newPainterLayerAction;
-    KAction* m_newGroupLayerAction;
-    KAction* m_newCloneLayerAction;
-    KAction* m_newShapeLayerAction;
-    KAction* m_newAdjustmentLayerAction;
-    KAction* m_newGeneratorLayerAction;
-    KAction* m_newTransparencyMaskAction;
-    KAction* m_newEffectMaskAction;
-    KAction* m_newSelectionMaskAction;
+    QVector<KisAction*> m_actions;
+    KisAction* m_removeAction;
+    KisAction* m_propertiesAction;
+    KisAction* m_selectOpaque;
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

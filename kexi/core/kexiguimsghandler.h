@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,15 +21,15 @@
 #define KEXIGUIMSGHANDLER_H
 
 #include <core/kexi.h>
-#include <kexidb/msghandler.h>
+#include <db/msghandler.h>
 
 class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
 {
 public:
-    KexiGUIMessageHandler(QWidget *parent = 0);
+    explicit KexiGUIMessageHandler(QWidget *parent = 0);
     virtual ~KexiGUIMessageHandler();
-    virtual void showErrorMessage(const QString &title, const QString &details = QString());
-    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString());
+
+    using KexiDB::MessageHandler::showErrorMessage;
 
     void showErrorMessage(const QString&, const QString&, KexiDB::Object *obj);
     void showErrorMessage(Kexi::ObjectStatus *status);
@@ -49,14 +49,20 @@ public:
     virtual void showWarningContinueMessage(const QString &title, const QString &details = QString(),
                                             const QString& dontShowAgainName = QString());
 
+protected:
+    using KexiDB::MessageHandler::showErrorMessageInternal;
+
+    virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
+    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString());
+
     /*! Interactively asks a question using KMessageBox.
-     See KexiDB::MessageHandler::askQuestion() for details. */
-    virtual int askQuestion(const QString& message,
-                            KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-                            const KGuiItem &buttonYes = KStandardGuiItem::yes(),
-                            const KGuiItem &buttonNo = KStandardGuiItem::no(),
-                            const QString &dontShowAskAgainName = QString(),
-                            KMessageBox::Options options = KMessageBox::Notify);
+     See KexiDB::MessageHandler::askQuestionInternal() for details. */
+    virtual int askQuestionInternal(const QString& message,
+                                    KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+                                    const KGuiItem &buttonYes = KStandardGuiItem::yes(),
+                                    const KGuiItem &buttonNo = KStandardGuiItem::no(),
+                                    const QString &dontShowAskAgainName = QString(),
+                                    KMessageBox::Options options = KMessageBox::Notify);
 };
 
 #endif

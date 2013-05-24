@@ -66,6 +66,7 @@ public:
     virtual ~KisAdjustmentLayer();
 
     bool accept(KisNodeVisitor &);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * clones this AdjustmentLayer into a KisNodeSP type.
@@ -95,21 +96,15 @@ public:
 public:
 
     /**
-     * gets a pointer to the AdjustmentLayer's filter configuration.
-     * @return a pointer to the AdjustmentLayer's filter configuration
-     */
-    KisFilterConfiguration *filter() const;
-
-    /**
-     * sets the AdjustmentLayer's filter configuration
-     * @param filterConfig a pointer to the filter configuration to set
-     * @return void
+     * \see KisNodeFilterInterface::setFilter()
      */
     void setFilter(KisFilterConfiguration *filterConfig);
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
+    void setChannelFlags(const QBitArray & channelFlags);
+    
 public slots:
     /**
      * gets this AdjustmentLayer. Overrides function in
@@ -119,10 +114,6 @@ public slots:
     KisLayer* layer() {
         return this;
     }
-
-private:
-    class Private;
-    Private * const m_d;
 };
 
 #endif // KIS_ADJUSTMENT_LAYER_H_

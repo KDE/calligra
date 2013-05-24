@@ -28,7 +28,7 @@
 #include <changetracker/KoChangeTrackerElement.h>
 #include <styles/KoCharacterStyle.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QPair>
 #include <QStack>
@@ -38,7 +38,7 @@
 #include <QTextDocument>
 #include <QTextFragment>
 
-RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command* parent) : TextCommandBase(parent),
+RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command* parent) : KoTextCommandBase(parent),
     m_first(true),
     m_changeId(changeId),
     m_changeRanges(changeRanges),
@@ -101,21 +101,16 @@ void RejectChangeCommand::redo()
                 QPair<int, int> range = deleteRanges.pop();
                 cursor.setPosition(range.first);
                 cursor.setPosition(range.second, QTextCursor::KeepAnchor);
-                if (dynamic_cast<KoDeleteChangeMarker*>(m_layout->inlineTextObjectManager()->inlineTextObject(cursor))) {
-                    cursor.deleteChar();
-                }
-                else {
-                    QTextCharFormat format = cursor.charFormat();
-                    format.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                    cursor.setCharFormat(format);
-                }
+		QTextCharFormat format = cursor.charFormat();
+		format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+		cursor.setCharFormat(format);
             }
         }
         m_changeTracker->acceptRejectChange(m_changeId, true);
     }
     else {
         m_changeTracker->acceptRejectChange(m_changeId, true);
-        TextCommandBase::redo();
+        KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
     }
     emit acceptRejectChange();}
@@ -123,7 +118,7 @@ void RejectChangeCommand::redo()
 void RejectChangeCommand::undo()
 {
     m_changeTracker->acceptRejectChange(m_changeId, false);
-    TextCommandBase::undo();
+    KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
     emit acceptRejectChange();
 }

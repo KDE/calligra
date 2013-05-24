@@ -46,12 +46,15 @@ class OROSection;
 // ORODocument
 // This object is a single document containing one or more OROPage elements
 //
-class KOREPORT_EXPORT ORODocument
+class KOREPORT_EXPORT ORODocument : public QObject
 {
+    Q_OBJECT
+    
     friend class OROPage;
     friend class OROSection;
+
 public:
-    ORODocument(const QString & = QString());
+    explicit ORODocument(const QString & = QString());
     ~ORODocument();
 
     QString title() const {
@@ -75,12 +78,17 @@ public:
     ReportPageOptions pageOptions() const {
         return m_pageOptions;
     };
+    
+    void notifyChange(int pageNo);
 
 protected:
     QString m_title;
     QList<OROPage*> m_pages;
     QList<OROSection*> m_sections;
     ReportPageOptions m_pageOptions;
+    
+signals:
+    void updated(int pageNo);
 };
 
 //
@@ -95,7 +103,7 @@ class KOREPORT_EXPORT OROPage
     friend class OROPrimitive;
 
 public:
-    OROPage(ORODocument * = 0);
+    explicit OROPage(ORODocument * = 0);
     ~OROPage();
 
     ORODocument* document() const {
@@ -107,7 +115,7 @@ public:
         return m_primitives.count();
     };
     OROPrimitive* primitive(int);
-    void addPrimitive(OROPrimitive*, bool = false);
+    void addPrimitive(OROPrimitive*, bool atBeginning = false, bool notify = false);
 
 protected:
     ORODocument * m_document;
@@ -130,7 +138,7 @@ public:
         SortZ
     };
 
-    OROSection(ORODocument * = 0);
+    explicit OROSection(ORODocument * = 0);
     ~OROSection();
 
     void setHeight(int);

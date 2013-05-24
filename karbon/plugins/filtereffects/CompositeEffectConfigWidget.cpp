@@ -21,13 +21,13 @@
 #include "CompositeEffect.h"
 #include "KoFilterEffect.h"
 
-#include <KNumInput>
-#include <KComboBox>
-#include <KLocale>
+#include <knuminput.h>
+#include <kcombobox.h>
+#include <klocale.h>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QStackedWidget>
+#include <QGridLayout>
+#include <QLabel>
+#include <QStackedWidget>
 
 CompositeEffectConfigWidget::CompositeEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

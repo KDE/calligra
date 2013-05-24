@@ -45,6 +45,9 @@ class MSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReader
 public:
     KoGenStyles* m_styles;
     Diagram::Context* m_context;
+
+    int shapeListSize() const;
+
     explicit MsooXmlDiagramReaderContext(KoGenStyles* styles);
     virtual ~MsooXmlDiagramReaderContext();
     void saveIndex(KoXmlWriter* xmlWriter, const QRect &rect);
@@ -53,9 +56,10 @@ public:
 class MSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    MsooXmlDiagramReader(KoOdfWriters *writers);
+    explicit MsooXmlDiagramReader(KoOdfWriters *writers);
     virtual ~MsooXmlDiagramReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+
 protected:
     //KoFilter::ConversionStatus read_layoutNode();
     //KoFilter::ConversionStatus read_choose();

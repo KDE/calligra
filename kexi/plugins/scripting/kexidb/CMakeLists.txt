@@ -14,5 +14,5 @@ set(krossmodulekexidb_PART_SRCS
 kde4_add_plugin(krossmodulekexidb ${krossmodulekexidb_PART_SRCS})
 
 ##target_link_libraries(krossmodulekexidb  ${KDE4_KDECORE_LIBS} kexidb kexidbparser )
-target_link_libraries(krossmodulekexidb ${KDE4_KDECORE_LIBS} kexidb)
+target_link_libraries(krossmodulekexidb ${KDE4_KDECORE_LIBS} ${CALLIGRADB_LIBS} kexidb)
 install(TARGETS krossmodulekexidb DESTINATION ${PLUGIN_INSTALL_DIR})

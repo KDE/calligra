@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=sigmoid
+Name[bs]=sigmoidnog
+Name[ca]=sigmoid
+Name[ca@valencia]=sigmoid
+Name[da]=sigmoid
+Name[de]=S-förmige Charakteristik
 Name[el]=σιγμοειδής
+Name[es]=sigmoide
+Name[et]=Sigmoid
+Name[fr]= 
+Name[gl]=Sigmoide
+Name[it]=sigmoide
+Name[kk]=сигмоид
 Name[nb]=sigmoid
 Name[nl]=sigmoid
+Name[pl]=sigmoid
 Name[pt]=sigmóide
 Name[pt_BR]=sigmoide
+Name[ru]=Сигмовидная
+Name[sk]=sigmoid
 Name[sv]=sigmoid
 Name[uk]=Сігмоїд-характеристика
 Name[x-test]=xxsigmoidxx

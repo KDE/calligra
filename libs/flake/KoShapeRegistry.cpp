@@ -31,6 +31,7 @@
 #include "KoShapeGroup.h"
 #include "KoShapeLayer.h"
 #include "KoUnavailShape.h"
+#include "SvgShapeFactory.h"
 
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
@@ -43,8 +44,8 @@
 #include <QMultiMap>
 #include <QPainter>
 
-#include <KDebug>
-#include <KGlobal>
+#include <kdebug.h>
+#include <kglobal.h>
 
 class KoShapeRegistry::Private
 {
@@ -53,7 +54,6 @@ public:
     void init(KoShapeRegistry *q);
 
     KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
-
 
     // Map namespace,tagname to priority:factory
     QHash<QPair<QString, QString>, QMultiMap<int, KoShapeFactoryBase*> > factoryMap;
@@ -78,17 +78,20 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     config.blacklist = "FlakePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
     config.whiteList = "ShapePlugins";
     config.blacklist = "ShapePluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Shape"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 
-    // Also add our hard-coded basic shape
+    // Also add our hard-coded basic shapes
     q->add(new KoPathShapeFactory(QStringList()));
     q->add(new KoConnectionShapeFactory());
+    // As long as there is no shape dealing with embedded svg images
+    // we add the svg shape factory here by default
+    q->add(new SvgShapeFactory);
 
     // Now all shape factories are registered with us, determine their
     // assocated odf tagname & priority and prepare ourselves for
@@ -156,48 +159,93 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
         // FIXME: we might want to have some code to determine which is
         //        the "best" of the creatable shapes.
 
-        KoXmlElement element;
-        forEachElement(element, e) {
-            // Check for draw:object
-            if (element.tagName() == "object" && element.namespaceURI() == KoXmlNS::draw && element.hasChildNodes()) {
-                // Loop through the elements and find the first one
-                // that is handled by any shape.
-                KoXmlNode n = element.firstChild();
-                for (; !n.isNull(); n = n.nextSibling()) {
-                    if (n.isElement()) {
-                        kDebug(30006) << "trying for element " << n.toElement().tagName();
-                        shape = d->createShapeInternal(e, context, n.toElement());
+        // The logic is thus:
+        // First attempt to check whether we can in fact load the first child,
+        // and only use a Shape if the first child is accepted. If this is not the case, then
+        // use the UnavailShape which ensures data integrity and that the fallback views are not
+        // edited and subsequently saved back (as they would then no longer be a true
+        // representation of the data they are supposed to be views of).
+        // The reason is that all subsequent children will be fallbacks, in order of preference.
+
+        if (e.hasChildNodes()) {
+            // if we don't ignore white spaces it can be that the first child is not a element so look for the first element
+            KoXmlNode node = e.firstChild();
+            KoXmlElement element;
+            while (!node.isNull() && element.isNull()) {
+                element = node.toElement();
+                node = node.nextSibling();
+            }
+
+            if (!element.isNull()) {
+                // Check for draw:object
+                if (element.tagName() == "object" && element.namespaceURI() == KoXmlNS::draw && element.hasChildNodes()) {
+                    // Loop through the elements and find the first one
+                    // that is handled by any shape.
+                    KoXmlNode n = element.firstChild();
+                    for (; !n.isNull(); n = n.nextSibling()) {
+                        if (n.isElement()) {
+                            kDebug(30006) << "trying for element " << n.toElement().tagName();
+                            shape = d->createShapeInternal(e, context, n.toElement());
+                            break;
+                        }
+                    }
+                    if (shape)
+                        kDebug(30006) << "Found a shape for draw:object";
+                    else
+                        kDebug(30006) << "Found NO shape shape for draw:object";
+                }
+                else {
+                    // If not draw:object, e.g draw:image or draw:plugin
+                    shape = d->createShapeInternal(e, context, element);
+                }
+            }
+
+            if (shape) {
+                kDebug(30006) << "A shape supporting the requested type was found.";
+            }
+            else {
+                // If none of the registered shapes could handle the frame
+                // contents, create an UnavailShape.  This should never fail.
+                kDebug(30006) << "No shape found; Creating an unavail shape";
+
+                KoUnavailShape *uShape = new KoUnavailShape();
+                uShape->setShapeId(KoUnavailShape_SHAPEID);
+                //FIXME: Add creating/setting the collection here(?)
+                uShape->loadOdf(e, context);
+
+                // Check whether we can load a shape to fit the current object.
+                KoXmlElement child;
+                KoShape *childShape = 0;
+                bool first = true;
+                forEachElement(child, e) {
+                    // no need to try to load the first element again as it was already tried before and we could not load it
+                    if (first) {
+                        first = false;
+                        continue;
+                    }
+                    kDebug(30006) << "--------------------------------------------------------";
+                    kDebug(30006) << "Attempting to check if we can fall back ability to the item"
+                                  << child.nodeName();
+                    childShape = d->createShapeInternal(e, context, child);
+                    if (childShape) {
+                        kDebug(30006) << "Shape was found! Adding as child of unavail shape and stopping search";
+                        uShape->addShape(childShape);
+                        childShape->setPosition(QPointF(qreal(0.0), qreal(0.0)));
+
+                        // The embedded shape is just there to show the preview image.
+                        // We don't want the user to be able to manipulate the picture
+                        // in any way, so we disable the tools of the shape. This can
+                        // be done in a hacky way (courtesy of Jaham) by setting its
+                        // shapeID to "".
+                        childShape->setShapeId("");
                         break;
                     }
                 }
-                if (shape)
-                    kDebug(30006) << "Found a shape for draw:object";
-                else
-                    kDebug(30006) << "Found NO shape shape for draw:object";
+                if (!childShape)
+                    kDebug(30006) << "Failed to find fallback for the unavail shape named "
+                                  << e.tagName();
+                shape = uShape;
             }
-            else {
-                // If not draw:object, e.g draw:image or draw:plugin
-                shape = d->createShapeInternal(e, context, element);
-            }
-
-            // If we found a shape that can handle the element in question, then break.
-            if (shape) {
-                break;
-            }
-        }
-
-        if (shape)
-            kDebug(30006) << "A shape was found.";
-
-        // If none of the registered shapes could handle the frame
-        // contents, create an UnavailShape.  This should never fail.
-        if (!shape) {
-            kDebug(30006) << "No shape found; Creating an unavail shape";
-            shape = new KoUnavailShape();
-            shape->setShapeId(KoUnavailShape_SHAPEID);
-            //FIXME: Add creating/setting the collection here
-
-            shape->loadOdf(e, context);
         }
     }
 
@@ -262,16 +310,8 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
     for (int i = factories.size() - 1; i >= 0; --i) {
         KoShapeFactoryBase * factory = factories[i];
         if (factory->supports(element, context)) {
-            KoShape *shape = factory->createDefaultShape(context.documentResourceManager());
-
-            if (shape->shapeId().isEmpty())
-                shape->setShapeId(factory->id());
-
-            context.odfLoadingContext().styleStack().save();
-            bool loaded = shape->loadOdf(fullElement, context);
-            context.odfLoadingContext().styleStack().restore();
-
-            if (loaded) {
+            KoShape *shape = factory->createShapeFromOdf(fullElement, context);
+            if (shape) {
                 kDebug(30006) << "Shape found for factory " << factory->id() << factory->name();
                 // we return the top-level most shape as thats the one that we'll have to
                 // add to the KoShapeManager for painting later (and also to avoid memory leaks)
@@ -282,12 +322,28 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
                 return shape;
             }
-
             // Maybe a shape with a lower priority can load our
             // element, but this attempt has failed.
-            delete shape;
+        }
+        else {
+            kDebug(30006) << "No support for" << p << "by" << factory->id();
         }
     }
 
     return 0;
+}
+
+QList<KoShapeFactoryBase*> KoShapeRegistry::factoriesForElement(const QString &nameSpace, const QString &elementName)
+{
+    // Pair of namespace, tagname
+    QPair<QString, QString> p = QPair<QString, QString>(nameSpace, elementName);
+
+    QMultiMap<int, KoShapeFactoryBase*> priorityMap = d->factoryMap.value(p);
+    QList<KoShapeFactoryBase*> shapeFactories;
+    // sort list by priority
+    foreach(KoShapeFactoryBase *f, priorityMap.values()) {
+        shapeFactories.prepend(f);
+    }
+
+    return shapeFactories;
 }

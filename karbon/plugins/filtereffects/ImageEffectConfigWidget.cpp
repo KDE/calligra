@@ -20,13 +20,13 @@
 #include "ImageEffectConfigWidget.h"
 #include "ImageEffect.h"
 #include "KoFilterEffect.h"
-#include <KNumInput>
-#include <KFileDialog>
-#include <KLocale>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QImageReader>
+#include <knuminput.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QImageReader>
 
 ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

@@ -87,6 +87,15 @@ const MSO::FixedPoint zero()
 //     tmp.msoshadeOneColor = 0;
 //     return tmp;
 // }
+} //namespace
+
+quint16 DrawStyle::shapeType() const
+{
+    if (!sp) {
+        return msosptNil;
+    } else {
+        return sp->shapeProp.rh.recInstance;
+    }
 }
 
 #define GETTER(TYPE, FOPT, NAME, DEFAULT) \
@@ -126,6 +135,10 @@ GETTER(quint32,                PctHR,                pctHR,                0x000
 GETTER(quint32,                AlignHR,              alignHR,              0)              // 2.3.4.24
 GETTER(qint32,                 DxHeightHR,           dxHeightHR,           0)              // 2.3.4.25
 GETTER(qint32,                 DxWidthHR,            dxWidthHR,            0)              // 2.3.4.26
+GETTER(MSO::OfficeArtCOLORREF, BorderTopColor,       borderTopColor,       white())        // 2.3.4.32
+GETTER(MSO::OfficeArtCOLORREF, BorderLeftColor,      borderLeftColor,      white())        // 2.3.4.33
+GETTER(MSO::OfficeArtCOLORREF, BorderBottomColor,    borderBottomColor,    white())        // 2.3.4.34
+GETTER(MSO::OfficeArtCOLORREF, BorderRightColor,     borderRightColor,     white())        // 2.3.4.35
 GETTER(qint32,                 GeoLeft,              geoLeft,              0)              // 2.3.6.1
 GETTER(qint32,                 GeoTop,               geoTop,               0)              // 2.3.6.2
 GETTER(qint32,                 GeoRight,             geoRight,             0x00005460)     // 2.3.6.3
@@ -178,6 +191,9 @@ GETTER(quint32,                LineStartArrowhead,   lineStartArrowhead,   0)   
 GETTER(quint32,                LineEndArrowhead,     lineEndArrowhead,     0)              // 2.3.8.21
 GETTER(quint32,                LineStartArrowWidth,  lineStartArrowWidth,  1)              // 2.3.8.22
 GETTER(quint32,                LineEndArrowWidth,    lineEndArrowWidth,    1)              // 2.3.8.24
+GETTER(quint32,                LineEndArrowLength,   lineEndArrowLength,   1)              // 2.3.8.25
+GETTER(quint32,                LineJoinStyle,        lineJoinStyle,        2)              // 2.3.8.26
+GETTER(quint32,                LineEndCapStyle,      lineEndCapStyle,      2)              // 2.3.8.27
 GETTER(quint32,                ShadowType,           shadowType,           0)              // 2.3.13.1
 GETTER(MSO::OfficeArtCOLORREF, ShadowColor,          shadowColor,          gray())         // 2.3.13.2
 GETTER(MSO::FixedPoint,        ShadowOpacity,        shadowOpacity,        one())          // 2.3.13.5

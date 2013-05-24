@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann Rasmussen <cbo@boemann.dk>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
    
    This library is free software; you can redistribute it and/or
@@ -288,6 +288,11 @@ Qt::Orientation KoPointerEvent::orientation() const
         return d->gsWheelEvent->orientation();
     else
         return Qt::Horizontal;
+}
+
+bool KoPointerEvent::isTabletEvent()
+{
+    return dynamic_cast<QTabletEvent*>(m_event) != 0;
 }
 
 void KoPointerEvent::setTabletButton(Qt::MouseButton button)

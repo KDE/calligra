@@ -27,7 +27,7 @@
 struct KisStrokesQueue::Private {
     Private() : needsExclusiveAccess(false) {}
 
-    QQueue<KisStroke*> strokesQueue;
+    QQueue<KisStrokeSP> strokesQueue;
     bool needsExclusiveAccess;
     QMutex mutex;
 };
@@ -40,50 +40,61 @@ KisStrokesQueue::KisStrokesQueue()
 
 KisStrokesQueue::~KisStrokesQueue()
 {
+    foreach(KisStrokeSP stroke, m_d->strokesQueue) {
+        stroke->cancelStroke();
+    }
+
     delete m_d;
 }
 
-void KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
+KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
 {
     QMutexLocker locker(&m_d->mutex);
 
-    Q_ASSERT(sanityCheckCurrentStrokeFinished(true));
-    m_d->strokesQueue.enqueue(new KisStroke(strokeStrategy));
+    KisStrokeSP stroke(new KisStroke(strokeStrategy));
+    KisStrokeId id(stroke);
+    strokeStrategy->setCancelStrokeId(id);
+    m_d->strokesQueue.enqueue(stroke);
+    return id;
 }
 
-void KisStrokesQueue::addJob(KisDabProcessingStrategy::DabProcessingData *data)
+void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
     QMutexLocker locker(&m_d->mutex);
 
-    Q_ASSERT(sanityCheckCurrentStrokeFinished(false));
-    currentStroke()->addJob(data);
+    KisStrokeSP stroke = id.toStrongRef();
+    Q_ASSERT(stroke);
+    stroke->addJob(data);
 }
 
-void KisStrokesQueue::endStroke()
+void KisStrokesQueue::endStroke(KisStrokeId id)
 {
     QMutexLocker locker(&m_d->mutex);
 
-    Q_ASSERT(sanityCheckCurrentStrokeFinished(false));
-    currentStroke()->endStroke();
+    KisStrokeSP stroke = id.toStrongRef();
+    Q_ASSERT(stroke);
+    stroke->endStroke();
 }
 
-void KisStrokesQueue::cancelStroke()
+bool KisStrokesQueue::cancelStroke(KisStrokeId id)
 {
     QMutexLocker locker(&m_d->mutex);
 
-    KisStroke *stroke = currentStroke();
+    KisStrokeSP stroke = id.toStrongRef();
     if(stroke) {
         stroke->cancelStroke();
     }
+    return stroke;
 }
 
-void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext)
+void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
+                                   bool externalJobsPending)
 {
     updaterContext.lock();
     m_d->mutex.lock();
 
     while(updaterContext.hasSpareThread() &&
-          processOneJob(updaterContext));
+          processOneJob(updaterContext, externalJobsPending));
 
     m_d->mutex.unlock();
     updaterContext.unlock();
@@ -109,7 +120,16 @@ qint32 KisStrokesQueue::sizeMetric() const
     return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();
 }
 
-bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext)
+QString KisStrokesQueue::currentStrokeName() const
+{
+    QMutexLocker locker(&m_d->mutex);
+    if(m_d->strokesQueue.isEmpty()) return QString();
+
+    return m_d->strokesQueue.head()->name();
+}
+
+bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
+                                    bool externalJobsPending)
 {
     if(m_d->strokesQueue.isEmpty()) return false;
     bool result = false;
@@ -120,9 +140,11 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext)
 
     if(checkStrokeState(numStrokeJobs) &&
        checkExclusiveProperty(numMergeJobs, numStrokeJobs) &&
-       checkSequentialProperty(numMergeJobs, numStrokeJobs)) {
+       checkSequentialProperty(numMergeJobs, numStrokeJobs) &&
+       checkBarrierProperty(numMergeJobs, numStrokeJobs,
+                            externalJobsPending)) {
 
-        KisStroke *stroke = m_d->strokesQueue.head();
+        KisStrokeSP stroke = m_d->strokesQueue.head();
         updaterContext.addStrokeJob(stroke->popOneJob());
         result = true;
     }
@@ -132,7 +154,7 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext)
 
 bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
 {
-    KisStroke *stroke = m_d->strokesQueue.head();
+    KisStrokeSP stroke = m_d->strokesQueue.head();
     bool result = false;
 
     if(!stroke->isInitialized()) {
@@ -143,7 +165,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
         result = true;
     }
     else if(stroke->isEnded() && !hasStrokeJobsRunning) {
-        delete m_d->strokesQueue.dequeue();
+        m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
 
         if(!m_d->strokesQueue.isEmpty()) {
@@ -158,7 +180,8 @@ bool KisStrokesQueue::checkExclusiveProperty(qint32 numMergeJobs,
                                              qint32 numStrokeJobs)
 {
     if(!m_d->strokesQueue.head()->isExclusive()) return true;
-
+    Q_UNUSED(numMergeJobs);
+    Q_UNUSED(numStrokeJobs);
     Q_ASSERT(!(numMergeJobs && numStrokeJobs));
     return numMergeJobs == 0;
 }
@@ -168,21 +191,19 @@ bool KisStrokesQueue::checkSequentialProperty(qint32 numMergeJobs,
 {
     Q_UNUSED(numMergeJobs);
 
-    KisStroke *stroke = m_d->strokesQueue.head();
+    KisStrokeSP stroke = m_d->strokesQueue.head();
     if(!stroke->prevJobSequential() && !stroke->nextJobSequential()) return true;
 
-    Q_ASSERT(numStrokeJobs <= 1);
+    Q_ASSERT(!stroke->prevJobSequential() || numStrokeJobs <= 1);
     return numStrokeJobs == 0;
 }
 
-KisStroke* KisStrokesQueue::currentStroke()
+bool KisStrokesQueue::checkBarrierProperty(qint32 numMergeJobs,
+                                           qint32 numStrokeJobs,
+                                           bool externalJobsPending)
 {
-    if(m_d->strokesQueue.isEmpty()) return 0;
-    return m_d->strokesQueue.last();
-}
+    KisStrokeSP stroke = m_d->strokesQueue.head();
+    if(!stroke->nextJobBarrier()) return true;
 
-bool KisStrokesQueue::sanityCheckCurrentStrokeFinished(bool finished)
-{
-    KisStroke *stroke = currentStroke();
-    return stroke ? stroke->isEnded() == finished : finished;
+    return !numMergeJobs && !numStrokeJobs && !externalJobsPending;
 }

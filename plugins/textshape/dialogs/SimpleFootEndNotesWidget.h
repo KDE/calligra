@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,27 +24,23 @@
 
 #include <QWidget>
 #include <QTextBlock>
+#include <KoInlineNote.h>
 
 class TextTool;
+class ReferencesTool;
 class KoStyleManager;
 
 class SimpleFootEndNotesWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleFootEndNotesWidget(QWidget *parent = 0);
-
-public slots:
-    void setStyleManager(KoStyleManager *sm);
+    explicit SimpleFootEndNotesWidget(TextTool *tool,QWidget *parent = 0);
+    Ui::SimpleFootEndNotesWidget widget;
 
 signals:
     void doneWithFocus();
-    
+
 private:
-    Ui::SimpleFootEndNotesWidget widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
     QTextBlock m_currentBlock;
     TextTool *m_tool;
 };

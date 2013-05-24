@@ -33,7 +33,7 @@ class KarbonCalligraphyOptionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KarbonCalligraphyOptionWidget();
+    explicit KarbonCalligraphyOptionWidget();
     ~KarbonCalligraphyOptionWidget();
 
     // emits all signals with the appropriate values

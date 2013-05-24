@@ -1,7 +1,7 @@
 /*
  * This file is part of Office 2007 Filters for Calligra
  *
- * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010-2011 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *
@@ -102,6 +102,30 @@
 //      </path>
 //    </pathLst>
 //  </upArrow>
+
+const QString license = "/*\n\
+ * This file is part of Office 2007 Filters for Calligra\n\
+ *\n\
+ * Copyright (C) 2010-2011 Nokia Corporation and/or its subsidiary(-ies).\n\
+ *\n\
+ * Contact: Suresh Chande suresh.chande@nokia.com\n\
+ *\n\
+ * This library is free software; you can redistribute it and/or\n\
+ * modify it under the terms of the GNU Lesser General Public License\n\
+ * version 2.1 as published by the Free Software Foundation.\n\
+ *\n\
+ * This library is distributed in the hope that it will be useful, but\n\
+ * WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU\n\
+ * Lesser General Public License for more details.\n\
+ *\n\
+ * You should have received a copy of the GNU Lesser General Public\n\
+ * License along with this library; if not, write to the Free Software\n\
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA\n\
+ * 02110-1301 USA\n\
+ *\n\
+ */\n";
+
 int main()
 {
     QFile inputFile("./presetShapeDefinitions.xml");
@@ -111,6 +135,8 @@ int main()
     outputFile.open(QIODevice::WriteOnly);
     QTextStream outStream(&outputFile);
 
+    outStream << license;
+
     QXmlStreamReader xml(&inputFile);
 
     enum ReadingState {Beginning, ShapeNameNext, InShapeName};
@@ -118,7 +144,7 @@ int main()
 
     QXmlStreamAttributes attrs;
 
-    QString currentShapeName, shapeDefinition, shapeAttributes, pathEquations;
+    QString currentShapeName, shapeDefinition, shapeAttributes, pathEquations, textareas;
 
     ComplexShapeHandler handler;
 
@@ -171,7 +197,9 @@ int main()
                 xml.skipCurrentElement();
             }
             else if (xml.isStartElement() && xml.name() == "rect") {
-                xml.skipCurrentElement();
+                // draw:text-areas
+                textareas = handler.handle_rect(&xml);
+                outStream << "textareas[\"" << currentShapeName << "\"]=\"" << textareas << "\";" << "\n";
             }
             else if (xml.isStartElement() && xml.name() == "cxnLst") {
                 xml.skipCurrentElement();

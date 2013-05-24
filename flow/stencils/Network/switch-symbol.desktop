@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=Switch Symbol
+Name[bg]=Символ за комутатор 
+Name[bs]=Prekidački simbol
+Name[ca]=Símbol de commutador
+Name[ca@valencia]=Símbol de commutador
+Name[da]=Switch-symbol
+Name[de]=Switch-Symbol
 Name[el]=Σύμβολο μεταγωγέα
+Name[es]=Símbolo de conmutador
 Name[et]=Kommutaatori sümbol
+Name[fr]=Switch Symbol
+Name[gl]=Conmutador
+Name[it]=Simbolo Switch
+Name[kk]=Қосқыш белгісі
 Name[nb]=Svitsj-symbol
+Name[nl]=Symbool voor switch
+Name[pl]=Symbol przełączenia
 Name[pt]=Símbolo Comutador
 Name[pt_BR]=Símbolo de comutador
+Name[ru]=Символ коммутатора
+Name[sk]=Switch Symbol
+Name[sl]=Simbol za stikalo
 Name[sv]=Växelsymbol
 Name[uk]=Символ комутатора
 Name[x-test]=xxSwitch Symbolxx

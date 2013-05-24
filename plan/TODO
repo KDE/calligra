@@ -1,0 +1,63 @@
+Some useful stuff:              
+You can search the source code for FIXME and TODO entries with:
+find . -name "*.c*" -o -name "*.h" | xargs grep -E "(###|TODO|FIXME|todo)"
+
+Using -A and -B with grep gives you some additional context around the particular comment:
+find . -name "*.c*" -o -name "*.h" | xargs grep -A 3 -B 3 -E "(###|TODO|FIXME|todo)"
+
+-----------------------------------------------------------------------------------------
+
+In no partivular order or priority:
+
+* Complete transition kplato -> plan
+	Executable name
+	Save to fileext .plan
+	Namespace
+	etc
+
+* Improving printing of gantt chart:
+	Proper task list
+	Selected tasks
+	Limited by dates
+
+* Adding printing to performance charts (and to the rest of the missing views)
+
+* Improving reports, it's very rudimentary
+	More flexible data access ('query' builder?)
+	Maybe drag-n-drop into Words?
+
+* Improve rcps scheduler
+
+* Import task data from spreadsheet (User request)
+
+* Improve the graphical dependency editor:
+    It is difficult to use when there are many tasks/dependencies.
+    Collapse/expand summary tasks
+    'Tree' indication to better indicate which subtasks belongs to which summary task
+    Info view/docker to (optionally) show more information
+
+* Add a 'calendar' view for the resources (ala korganizer) to show appointments
+
+* Add possibility to automatically schedule after changes to the project.
+
+* Improve report designer ui, it is not very user friendly (common with kexi. ref Adam Pigg)
+
+* Add filter / sort to (some) views
+
+* Improve gantt chart (note this is KDAB. so...)
+	Time now
+	Context menu on tasks in chart
+	When selected in list, show selection in chart and vs (?)
+	Remove the position diffrence of items in list and chart
+	Position correctly on start/end datetime (small offset now)
+
+* Add time period config to cost breakdown view
+
+* Improvements to rcps scheduler
+    Task splitting
+    Non-mandatory resources
+    Different types of schedule optimization: Cost, Resource leveling, etc
+
+* Fix d-n-d of vcards from kontact into resources
+
+* Use holidays file from kontact

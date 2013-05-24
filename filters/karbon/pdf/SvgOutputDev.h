@@ -23,7 +23,7 @@
 #include <poppler/Object.h>
 #include <poppler/OutputDev.h>
 
-#include <QtCore/QString>
+#include <QString>
 
 class GfxPath;
 class QColor;
@@ -37,7 +37,7 @@ class GooString;
 class SvgOutputDev : public OutputDev
 {
 public:
-    SvgOutputDev(const QString &fileName);
+    explicit SvgOutputDev(const QString &fileName);
     virtual ~SvgOutputDev();
 
     GBool isOk();

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,13 +20,15 @@
 #ifndef KEXIDB_ALTER_H
 #define KEXIDB_ALTER_H
 
-#include "connection.h"
+#include "kexidb_export.h"
+
+#include <db/connection.h>
+#include <db/autodeletedhash.h>
 
 #include <QList>
 #include <QHash>
 
-#include <KDebug>
-#include <kexiutils/utils.h>
+#include <kdebug.h>
 
 namespace KexiDB
 {
@@ -125,12 +127,12 @@ public:
          values to string after changing column type from integer to text. */
         DataConversionRequired = 2,
 
-        /* Changes to the main table schema (in kexi__fields) required,
+        /*! Changes to the main table schema (in kexi__fields) required,
          this does not require physical changes for the table;
          e.g. changing value of the "caption" or "description" property. */
         MainSchemaAlteringRequired = 4,
 
-        /* Only changes to extended table schema required,
+        /*! Only changes to extended table schema required,
          this does not require physical changes for the table;
          e.g. changing value of the "visibleDecimalPlaces" property
          or any of the custom properties. */
@@ -142,8 +144,8 @@ public:
 
     class ActionBase;
     //! For collecting actions related to a single field
-    typedef KexiUtils::AutodeletedHash<QByteArray, ActionBase*> ActionDict;
-    typedef KexiUtils::AutodeletedHash<int, ActionDict*> ActionDictDict; //!< for collecting groups of actions by field UID
+    typedef KexiDB::AutodeletedHash<QByteArray, ActionBase*> ActionDict;
+    typedef KexiDB::AutodeletedHash<int, ActionDict*> ActionDictDict; //!< for collecting groups of actions by field UID
     typedef QHash<QByteArray, ActionBase*>::Iterator ActionDictIterator;
     typedef QHash<QByteArray, ActionBase*>::ConstIterator ActionDictConstIterator;
     typedef QHash<int, ActionDict*>::Iterator ActionDictDictIterator;
@@ -286,7 +288,7 @@ public:
 
     /*! Defines an action for changing a single property value of a table field.
      Supported properties are currently:
-     "name", "type", "caption", "description", "unsigned", "length", "precision",
+     "name", "type", "caption", "description", "unsigned", "maxLength", "precision",
      "width", "defaultValue", "primaryKey", "unique", "notNull", "allowEmpty",
      "autoIncrement", "indexed", "visibleDecimalPlaces"
 
@@ -364,8 +366,8 @@ public:
         void setIndex(int index) {
             m_index = index;
         }
-        KexiDB::Field& field() const {
-            return *m_field;
+        const KexiDB::Field* field() const {
+            return m_field;
         }
         void setField(KexiDB::Field* field);
         virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());

@@ -2,7 +2,7 @@
  *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2009-2010 Casper Boemann <casper.boemann@kogmbh.com>
+ *  Copyright (C) 2009-2010 C. Boemann <cbo@kogmbh.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,14 +51,13 @@ void TestDocumentLayout::setupTest(const QString &initText)
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager();
+    m_styleManager = new KoStyleManager(0);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
     m_layout = new KoTextDocumentLayout(m_doc, provider);
     Q_ASSERT(m_layout);
     m_doc->setDocumentLayout(m_layout);
 
-    QTextBlock block = m_doc->begin();
     if (!initText.isEmpty()) {
         QTextCursor cursor(m_doc);
         cursor.insertText(initText);
@@ -128,6 +127,8 @@ void TestDocumentLayout::testHitTest()
     QCOMPARE(p->m_area->hitTest(QPointF(20, paragOffets[1]), Qt::FuzzyHit).position, 139);
     QVERIFY(p->m_area->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit).position >= 139);
     */
+    Q_UNUSED(lineHeight); // used in the above commented piece of code
+    Q_UNUSED(paragOffets); // used in the above commentted piece of code
 }
 
 void TestDocumentLayout::testRootAreaZeroWidth()

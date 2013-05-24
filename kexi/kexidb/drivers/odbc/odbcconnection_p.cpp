@@ -25,10 +25,10 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QFile>
 
 // KDE Includes
-#include <KDebug>
+#include <kdebug.h>
 
 // KexiDB includes
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <odbcconnection.h>
 
 using namespace NAMESPACE;

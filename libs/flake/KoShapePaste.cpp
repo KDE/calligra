@@ -33,15 +33,15 @@
 #include "KoShapeLayer.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeManager.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoShapeRegistry.h"
 #include "KoCanvasController.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
 #include "commands/KoShapeCreateCommand.h"
 
-#include <KGlobal>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class KoShapePaste::Private
 {
@@ -81,7 +81,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     }
     context.setZIndex(zIndex);
 
-    KoResourceManager *rm = d->canvas->shapeController()->resourceManager();
+    KoDocumentResourceManager *rm = d->canvas->shapeController()->resourceManager();
     Q_ASSERT(rm);
 
     QPointF pasteOffset(rm->pasteOffset(), rm->pasteOffset());

@@ -42,10 +42,10 @@
 #ifndef KUNDO2STACK_H
 #define KUNDO2STACK_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qlist.h>
-#include <QtGui/qaction.h>
+#include <QObject>
+#include <QString>
+#include <QList>
+#include <QAction>
 
 #include "kundo2_export.h"
 
@@ -78,9 +78,13 @@ public:
     int childCount() const;
     const KUndo2Command *child(int index) const;
 
+    bool hasParent();
+
 private:
     Q_DISABLE_COPY(KUndo2Command)
     friend class KUndo2QStack;
+
+    bool m_hasParent;
 };
 
 #endif // QT_NO_UNDOCOMMAND
@@ -96,7 +100,7 @@ class KUNDO2_EXPORT KUndo2QStack : public QObject
 
 public:
     explicit KUndo2QStack(QObject *parent = 0);
-    ~KUndo2QStack();
+    virtual ~KUndo2QStack();
     void clear();
 
     void push(KUndo2Command *cmd);
@@ -130,9 +134,9 @@ public:
 
 public Q_SLOTS:
     void setClean();
-    void setIndex(int idx);
-    void undo();
-    void redo();
+    virtual void setIndex(int idx);
+    virtual void undo();
+    virtual void redo();
     void setActive(bool active = true);
 
 Q_SIGNALS:

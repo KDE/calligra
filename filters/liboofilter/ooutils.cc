@@ -23,7 +23,7 @@
 #include <KoOdfReadStore.h>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QColor>
 #include <QImage>
 #include <KoUnit.h>
@@ -368,8 +368,8 @@ void OoUtils::importTextPosition(const QString& text_position, QString& value, Q
             kWarning(30519) << "Strange text position: " << text_position;
         bool super = textPos == "super";
         bool sub = textPos == "sub";
-        if (textPos.endsWith('%')) {
-            textPos.truncate(textPos.length() - 1);
+        if (textPos.endsWith(QLatin1Char('%'))) {
+            textPos.chop(1);
             // This is where we interpret the text position into kotext's simpler
             // "super" or "sub".
             double val = textPos.toDouble();
@@ -384,8 +384,8 @@ void OoUtils::importTextPosition(const QString& text_position, QString& value, Q
             value = "1";
         else
             value = "0";
-        if (!textSize.isEmpty() && textSize.endsWith('%')) {
-            textSize.truncate(textSize.length() - 1);
+        if (!textSize.isEmpty() && textSize.endsWith(QLatin1Char('%'))) {
+            textSize.chop(1);
             double textSizeValue = textSize.toDouble() / 100; // e.g. 0.58
             relativetextsize = QString::number(textSizeValue);
         }

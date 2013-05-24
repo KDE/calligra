@@ -1,5 +1,6 @@
 /* This file is part of the wvWare 2 project
    Copyright (C) 2001-2003 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2010-2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -204,6 +205,7 @@ typedef enum
     sprmCRgLid1 = 0x486E,
     sprmCRgLidUndocumented1 = 0x4873, // According to OOo it's equal to sprmCRgLid0
     sprmCUndocumented2 = 0x4874,
+    sprmCPbiGrf = 0x4888,
     sprmCIstd = 0x4A30,
     sprmCFtcDefault = 0x4A3D,
     sprmCLid = 0x4A41,
@@ -251,6 +253,8 @@ typedef enum
     sprmCDttmRMarkDel = 0x6864,
     sprmCBrc = 0x6865,
     sprmCCv = 0x6870,
+    sprmCCvUl = 0x6877,
+    sprmCPbiIBullet = 0x6887,
     sprmCPicLocation = 0x6A03,
     sprmCSymbol = 0x6A09,
     sprmPicBrcTop = 0x6C02,
@@ -681,36 +685,41 @@ void PAP::apply( const U8* grpprl, U16 count, const Style* style, const StyleShe
 // Helper methods for the more complex sprms
 namespace
 {
-    // Adds the tabs of the sprmPChgTabs* sprms. Pass a pointer to the
-    // itbdAddMax and the vector
-    // Returns the number of tabs added
+    /**
+     * Adds the tabs of the sprmPChgTabs* sprms.  Pass a pointer to the
+     * itbdAddMax and the vector.
+     *
+     * @return the number of tabs added
+     */
     typedef std::vector<Word97::TabDescriptor> TabDescVector;
     U8 addTabs( const U8* ptr, TabDescVector& rgdxaTab )
     {
-        //wvlog << "Before adding the tabs: " << (int)rgdxaTab.size() << endl;
+//         wvlog << "Before adding the tabs: " << (int)rgdxaTab.size() << endl;
         // Remember where the end was
         const TabDescVector::size_type oldSize = rgdxaTab.size();
-        // Now append the new ones, we'll then sort the vector using inplace_merge
+        // Now append the new ones, we'll then sort the vector using
+        // inplace_merge
         const U8 itbdAddMax = *ptr++;
         //wvlog << "                           itbdAddMax=" << (int)itbdAddMax << endl;
-        for ( U8 i = 0 ; i < itbdAddMax ; ++i )
-        {
-            // #### We should probably add a proper constructor to TabDescriptor (Werner)
+        for ( U8 i = 0 ; i < itbdAddMax ; ++i ) {
+            // #### We should probably add a proper constructor to
+            // #### TabDescriptor (Werner)
             TabDescriptor descr;
             descr.dxaTab = readS16( ptr + sizeof( S16 ) * i );
-            //wvlog << "                           dxaPos=" << descr.dxaTab << endl;
+//             wvlog << "                           dxaPos=" << descr.dxaTab << endl;
             descr.tbd = TBD( readU8( ptr + sizeof( S16 ) * itbdAddMax + i ) );
             rgdxaTab.push_back( descr );
         }
         if ( oldSize != 0 && itbdAddMax ) {
             TabDescVector::iterator middle = rgdxaTab.begin();
-            middle += oldSize + 1u;
+            middle += oldSize;
             std::inplace_merge( rgdxaTab.begin(), middle, rgdxaTab.end() );
         }
         TabDescVector::iterator uend = std::unique( rgdxaTab.begin(), rgdxaTab.end() );
-        if ( uend != rgdxaTab.end() )
+        if ( uend != rgdxaTab.end() ) {
             rgdxaTab.erase( uend, rgdxaTab.end() );
-        //wvlog << "After applying sprmPChgTabs(Papx) : " << (int)rgdxaTab.size() << endl;
+        }
+//         wvlog << "After applying sprmPChgTabs(Papx) : " << (int)rgdxaTab.size() << endl;
         return itbdAddMax;
     }
 
@@ -759,7 +768,7 @@ namespace
         else
             brc = toWord97( Word95::BRC( ptr ) );
     }
-}       
+} //anonymous namespace
 
 // Returns -1 if this wasn't a PAP sprm and it returns the length
 // of the applied sprm if it was successful
@@ -853,16 +862,21 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
                 if ( tabIt != rgdxaTab.end() )
                 {
                     tabIt = rgdxaTab.erase( tabIt );
-                    itbdMac--;
                 }
             }
             U8 itbdAddMax = addTabs( myPtr, rgdxaTab );
-            itbdMac += itbdAddMax;
+            itbdMac = rgdxaTab.size();
 
-            //wvlog << "After applying sprmPChgTabsPapx : " << (int)rgdxaTab.size() << endl;
-
-            if ( cch != 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax )
-                wvlog << "Offset problem in sprmPChgTabsPapx. cch=" << static_cast<int>( cch ) << " data size=" << 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax << endl;
+            if ( cch != 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax ) {
+                wvlog << "Offset problem in sprmPChgTabsPapx. cch=" << static_cast<int>( cch ) <<
+                         "data size=" << 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax << endl;
+            }
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "After applying sprmPChgTabsPapx : " << (int)rgdxaTab.size() << endl;
+            for (uint i = 0; i < rgdxaTab.size(); i++) {
+                wvlog << "rgdxaTab[" << i << "].dxaTab" << rgdxaTab[i].dxaTab;
+            }
+#endif
             break;
         }
         case SPRM::sprmPDxaRight:
@@ -872,6 +886,9 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPDxaLeft:
         case SPRM::sprmPDxaLeftFE: // asian version, according to OOo (fall-through intended)
             dxaLeft = readS16( ptr );
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "dxaLeft:" << dxaLeft;
+#endif
             break;
         case SPRM::sprmPNest:
             dxaLeft += readS16( ptr );
@@ -880,6 +897,9 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPDxaLeft1:
         case SPRM::sprmPDxaLeft1FE: // asian version, according to OOo (fall-through intended)
             dxaLeft1 = readS16( ptr );
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "dxaLeft1:" << dxaLeft1;
+#endif
             break;
         case SPRM::sprmPDyaLine:
             lspd.dyaLine = readS16( ptr );
@@ -898,19 +918,26 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             const U8 itbdDelMax = *myPtr++;
             // Remove the tabs within the deletion zones
             std::vector<TabDescriptor>::iterator newEnd = rgdxaTab.end();
-            for ( U8 i = 0; i < itbdDelMax; ++i )
-                newEnd = std::remove_if ( rgdxaTab.begin(), newEnd, std::bind2nd( InZone(), Zone( myPtr, i, itbdDelMax ) ) );
+            for ( U8 i = 0; i < itbdDelMax; ++i ) {
+                newEnd = std::remove_if ( rgdxaTab.begin(), newEnd,
+                                          std::bind2nd( InZone(), Zone( myPtr, i, itbdDelMax ) ) );
+            }
             rgdxaTab.erase( newEnd, rgdxaTab.end() ); // really get rid of them
+            myPtr += itbdDelMax * 4;
+
+            U8 itbdAddMax = addTabs( myPtr, rgdxaTab );
             itbdMac = rgdxaTab.size();
 
-            // Add the new tabs
-            myPtr += itbdDelMax * 4;
-            U8 itbdAddMax = addTabs( myPtr, rgdxaTab );
-            itbdMac += itbdAddMax;
-
-            if ( cch != 255 && cch != 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax )
-                wvlog << "Offset problem in sprmPChgTabs. cch=" << static_cast<int>( cch ) << " data size=" << 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax << endl;
-            //wvlog << "SPRM::sprmPChgTabs done ### " << rgdxaTab.size() << endl;
+            if ( cch != 255 && cch != 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax ) {
+                wvlog << "Offset problem in sprmPChgTabs. cch=" << static_cast<int>( cch ) <<
+                         "data size=" << 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax << endl;
+            }
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "After applying sprmPChgTabs : " << (int)rgdxaTab.size() << endl;
+            for (uint i = 0; i < rgdxaTab.size(); i++) {
+                wvlog << "rgdxaTab[" << i << "].dxaTab" << rgdxaTab[i].dxaTab;
+            }
+#endif
             break;
         }
         case SPRM::sprmPDxaAbs:
@@ -1061,7 +1088,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         {
             if ( dataStream ) {
                 dataStream->push();
-                dataStream->seek( readU32( ptr ), G_SEEK_SET );
+                dataStream->seek( readU32( ptr ), WV2_SEEK_SET );
                 const U16 count( dataStream->readU16() );
                 U8* grpprl = new U8[ count ];
                 dataStream->read( grpprl, count );
@@ -1211,11 +1238,12 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             chse = readU16( ptr + 1 );
             break;
         case SPRM::sprmCSymbol:
-            // First the length byte...
-            ftcSym = readS16( ptr + 1 );
             if ( version == Word8 ) {
-                xchSym = readS16( ptr + 3 );
+                ftcSym = readS16( ptr );
+                xchSym = readS16( ptr + 2 );
             } else {
+                // First the length byte...
+                ftcSym = readS16( ptr + 1 );
                 xchSym = *( ptr + 3 );
             }
 #ifdef WV2_DEBUG_SPRMS
@@ -1437,6 +1465,20 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             k=readU8(ptr);
             ptr+=sizeof(U8);
             cv=(k<<24)|(r<<16)|(g<<8)|(b);
+            break;
+        }
+        case SPRM::sprmCCvUl: {
+            U8 r,g,b,k;
+
+            r=readU8(ptr);
+            ptr+=sizeof(U8);
+            g=readU8(ptr);
+            ptr+=sizeof(U8);
+            b=readU8(ptr);
+            ptr+=sizeof(U8);
+            k=readU8(ptr);
+            ptr+=sizeof(U8);
+            cvUl=(k<<24)|(r<<16)|(g<<8)|(b);
             break;
         }
         case SPRM::sprmCHps:
@@ -1699,6 +1741,15 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             fTNYCompress = ufel;
             break;
         }
+        case SPRM::sprmCPbiIBullet:
+            picBulletCP = readU16( ptr );
+            wvlog << "=> picBulletCP:" << picBulletCP;
+            break;
+        case SPRM::sprmCPbiGrf:
+            fPicBullet = (*ptr & 0x01);
+            fNoAutoSize = (*ptr & 0x02) >> 1;
+            wvlog << "=> fPicBullet:" << fPicBullet << "| fNoAutoSize:" << fNoAutoSize << "| check:" << *ptr;
+            break;
         default:
             wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
             break;
@@ -2075,7 +2126,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
 //             rgdxaCenter[ 0 ] += dxaGapHalf - dxaGapHalfNew;
 //         }
 
-	dxaGapHalf = readS16( ptr );
+    dxaGapHalf = readS16( ptr );
 #ifdef WV2_DEBUG_SPRMS
         wvlog << "dxaGapHalf: " << dxaGapHalf << endl;
 #endif
@@ -2254,11 +2305,11 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     case SPRM::sprmTInsert:
     {
         //NOTE: don't process before sprmTDefTable
-	if ( itcMac == 0 ) {
+    if ( itcMac == 0 ) {
             wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
             break;
         }
-	// Sanity check
+    // Sanity check
         if ( static_cast<std::vector<S16>::size_type>( itcMac ) + 1 != rgdxaCenter.size() ) {
             wvlog << "Bug: Somehow itcMac and the rgdxaCenter.size() aren't in sync anymore!" << endl;
             itcMac = rgdxaCenter.size() - 1;
@@ -2329,7 +2380,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     case SPRM::sprmTDxaCol:
     {
         //NOTE: don't process before sprmTDefTable
-	if ( itcMac == 0 ) {
+    if ( itcMac == 0 ) {
             wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
             break;
         }
@@ -2439,7 +2490,8 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTSetBrc:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
         U8 itcFirst = *myPtr;
         U8 itcLim = *( myPtr + 1 );
         cropIndices( itcFirst, itcLim, rgtc.size() );
@@ -2471,32 +2523,36 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTBrcTopCv:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
+        for (uint i=0 ; i < 64 && i < rgtc.size(); ++i ) {
             rgtc[ i ].brcTop.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
         break;
     }
     case SPRM::sprmTBrcLeftCv:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
+        for (uint i=0 ; i < 64 && i < rgtc.size(); ++i ) {
             rgtc[ i ].brcLeft.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
         break;
     }
     case SPRM::sprmTBrcRightCv:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
+        for (uint i=0 ; i < 64 && i < rgtc.size(); ++i ) {
             rgtc[ i ].brcRight.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
         break;
     }
     case SPRM::sprmTBrcBottomCv:
     {
-        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
-        for (int i=0 ; i < 64 && i < rgtc.size(); ++i ) {
+        // variable size byte for Word 8!
+        const U8* myPtr( version == Word8 ? ptr + 1 : ptr );
+        for (uint i=0 ; i < 64 && i < rgtc.size(); ++i ) {
             rgtc[ i ].brcBottom.cv = ((*(myPtr + i*4))<<16)  | ((*(myPtr + 1 + i*4))<<8) | (*(myPtr + 2 + i*4)) ;
         }
         break;
@@ -2596,7 +2652,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         wvlog << "--> Parsing PrcData" << endl;
         if ( dataStream ) {
             dataStream->push();
-            dataStream->seek( readU32( ptr ), G_SEEK_SET );
+            dataStream->seek( readU32( ptr ), WV2_SEEK_SET );
 
             const U16 count( dataStream->readU16() );
             U8* grpprl = new U8[ count ];

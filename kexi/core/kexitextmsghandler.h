@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,9 +32,15 @@ public:
 
     using KexiGUIMessageHandler::showMessage;
 
-    virtual void showMessage(MessageType type, const QString &title, const QString &details);
+protected:
+    using KexiGUIMessageHandler::showErrorMessageInternal;
 
-    QString *m_messageTarget, *m_detailsTarget;
+    virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
+    virtual void showMessageInternal(MessageType type, const QString &title, const QString &details,
+                                     const QString& dontShowAgainName = QString());
+
+    class Private;
+    Private* const d;
 };
 
 #endif

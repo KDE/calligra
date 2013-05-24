@@ -23,9 +23,11 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_paint_layer.h"
+
 #include "kis_merge_walker.h"
 #include "kis_updater_context.h"
-
+#include "kis_image.h"
 
 void KisUpdaterContextTest::testJobInterference()
 {
@@ -63,25 +65,23 @@ void KisUpdaterContextTest::testJobInterference()
 #define NUM_CHECKS 10
 #define CHECK_DELAY 3 // ms
 
-class ExclusivenessCheckerStrategy : public KisDabProcessingStrategy
+class ExclusivenessCheckerStrategy : public KisStrokeJobStrategy
 {
 public:
     ExclusivenessCheckerStrategy(QAtomicInt &counter,
-                                 QAtomicInt &hadConcurrency,
-                                 bool exclusive)
-        : KisDabProcessingStrategy(exclusive),
-          m_counter(counter),
+                                 QAtomicInt &hadConcurrency)
+        : m_counter(counter),
           m_hadConcurrency(hadConcurrency)
     {
     }
 
-    void processDab(DabProcessingData *data) {
+    void run(KisStrokeJobData *data) {
         Q_UNUSED(data);
 
         m_counter.ref();
 
         for(int i = 0; i < NUM_CHECKS; i++) {
-            if(isExclusive()) {
+            if(data->isExclusive()) {
                 Q_ASSERT(m_counter == 1);
             }
             else if (m_counter > 1) {
@@ -106,10 +106,18 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
 
     for(int i = 0; i < NUM_JOBS; i++) {
         if(context.hasSpareThread()) {
-            context.addStrokeJob(new KisStrokeJob(
-                new ExclusivenessCheckerStrategy(counter, hadConcurrency,
-                                                 i % EXCLUSIVE_NTH == 0),
-                                                 0));
+            bool isExclusive = i % EXCLUSIVE_NTH == 0;
+
+            KisStrokeJobData *data =
+                new KisStrokeJobData(KisStrokeJobData::SEQUENTIAL,
+                                     isExclusive ?
+                                     KisStrokeJobData::EXCLUSIVE :
+                                     KisStrokeJobData::NORMAL);
+
+            KisStrokeJobStrategy *strategy =
+                new ExclusivenessCheckerStrategy(counter, hadConcurrency);
+
+            context.addStrokeJob(new KisStrokeJob(strategy, data));
         }
         else {
             QTest::qSleep(CHECK_DELAY);

@@ -20,11 +20,10 @@
 // based on the SVG exporter.  Not intended for public release
 // Microsoft WVG renamed to XAML Graphics.  Worry about that later.
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QFile>
 #include <QString>
 #include <QList>
-//Added by qt3to4:
 #include <QTextStream>
 
 #include <kpluginfactory.h>
@@ -130,7 +129,7 @@ XAMLExport::visitVDocument(KarbonDocument& document)
     // http://schemas.microsoft.com/2003/xaml
     // need to mention defs too Defenitions namespace xmlns:def="Definition"
     *m_defs <<
-    "<!-- Generator: Karbon14 WVG XAML Graphics export filter  $VERSION/$DATE.  -->" << endl;
+    "<!-- Generator: Calligra Karbon WVG XAML Graphics export filter  $VERSION/$DATE.  -->" << endl;
     *m_defs <<
     "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/avalon/2005\" Width=\"" << rect.width() <<
     "Height=\"" << rect.height() << "\">" << endl;

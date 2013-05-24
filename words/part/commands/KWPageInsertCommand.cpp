@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <KoTextShapeData.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 class KWPageInsertCommand::Private
 {

@@ -40,8 +40,10 @@ public:
     bool saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
 private:
-
-    class Private;
+    void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image);
+    bool saveAssistants(KoStore *store,QString uri, bool external);
+    bool saveAssistantsList(QDomDocument& doc, QDomElement& element);
+    struct Private;
     Private * const m_d;
 };
 

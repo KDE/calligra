@@ -1,11 +1,26 @@
 [Desktop Entry]
 Name=varicap
+Name[bs]=varikap dioda
+Name[ca]=varicap
+Name[ca@valencia]=varicap
+Name[da]=varicap
+Name[de]=Abstimmdiode
 Name[el]=varicap
+Name[es]=condensador variable
+Name[et]=Mahtuvusdiood
+Name[fr]=varicap
+Name[gl]=Díodo de capacidade variábel
+Name[it]=varicap
+Name[kk]=қарикап
 Name[nb]=varicap
 Name[nl]=varicap
+Name[pl]=dioda pojemnościowa
 Name[pt]=varicap
 Name[pt_BR]=varicap
+Name[ru]=Варикап
+Name[sk]=varikap
 Name[sv]=variabel kondensator
 Name[uk]=Варіконд
 Name[x-test]=xxvaricapxx
+Name[zh_CN]=变容
 Name[zh_TW]=varicap

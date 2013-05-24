@@ -25,6 +25,7 @@
 #include "ustring.h"
 #include "sharedptr.h"
 #include "wv2_export.h"
+#include <QString>
 
 namespace wvWare
 {
@@ -67,14 +68,21 @@ namespace wvWare
     class ListInfo
     {
     public:
-        ListInfo( Word97::PAP& pap, ListInfoProvider& listInfoProvider );
+        enum ListType {BulletType, NumberType, PictureType, DefaultType};
 
         /**
-         * The istd linked to the current list/level, istdNil (4095) if none (LSFT::rgistd)
+         * @param current paragraph's PAP
+         * @param paragraph mark's CHP
+         * @param ListInfoProvider
+         */
+        ListInfo( Word97::PAP& pap, Word97::CHP& chp, ListInfoProvider& listInfoProvider );
+
+        /**
+         * The istd linked to the current list/level, istdNil (4095) if none (LSTF::rgistd)
          */
         U16 linkedIstd() const { return m_linkedIstd; }
         /**
-         * Returns whether the list counter should be restarted in new sections. (LSFT::fRestartHdn)
+         * Returns whether the list counter should be restarted in new sections. (LSTF::fRestartHdn)
          */
         bool restartingCounter() const { return m_restartingCounter; }
 
@@ -118,22 +126,23 @@ namespace wvWare
         bool isWord6() const { return m_isWord6; }
 
         /**
-         * The most important method, returning the text template and the
-         * corresponding CHP.
+         * The most important method, returning the text template and
+         * the corresponding CHP.
          *
-         * The returned string contains place holders for the real list
-         * counter text. The place holders are the values 0...8, representing
-         * the corresponding list levels (pap->ilvl). To illustrate that,
-         * consider the following example (<0>, <1>,... represent the ASCII
-         * values 0, 1,...):
-         *     "<0>.<1>.<2>)"
-         * The <0> should be replaced with the current counter value of level 0,
-         * then we should display a '.', <1> should be the counter value of level 1,
-         * and so forth.
+         * The returned string contains place holders for the real
+         * list counter text.  The place holders are the values 0...8,
+         * representing the corresponding list levels (pap->ilvl).
+         * For example: (<0>, <1>,... represent the ASCII values 0,
+         * 1,...): "<0>.<1>.<2>)"
+
+         * The <0> should be replaced with the current counter value
+         * of level 0, then we should display a '.', <1> should be the
+         * counter value of level 1, and so forth.
          *
-         * The CHP provides the character formatting properties; information about
-         * the alignment and optional spaces/tabs after the counter text is
-         * also available here (alignment, followingChar,...)
+         * The CHP provides the character formatting properties for
+         * the list label.  Information about the alignment and
+         * optional spaces/tabs after the counter text is also
+         * available here (alignment, followingChar,...)
          */
         const ListText& text() const { return m_text; }
 
@@ -143,9 +152,9 @@ namespace wvWare
         U8 followingChar() const { return m_followingChar; }
 
         /**
-         * In order to help users to detect when a new list starts
-         * we also provide access to the (internal) unique ID of a list.
-         * Returns 0 if it hasn't been initailized.
+         * In order to help users to detect when a new list starts we also
+         * provide access to the (internal) unique ID of a list.
+         * @return 0 if it hasn't been initailized.
          */
         S32 lsid() const { return m_lsid; }
 
@@ -163,6 +172,27 @@ namespace wvWare
          * Debugging...
          */
         void dump() const;
+
+	/**
+	 * Set the name of the bullet picture.
+	 */
+        void setBulletPictureName(const QString& name ) { m_picName = name; };
+
+        /**
+         * @return bullet picture name.
+         */
+        QString bulletPictureName() const { return m_picName; };
+
+        /**
+         * @return whether the size of the picture changes automatically to
+         * match the size of the text that follows the bullet
+         */
+        bool isBulletPictureAutoSize() const { return m_picAutoSize; };
+
+	/**
+	 * @return list type.
+	 */
+        ListType type() const { return m_type; };
 
     private:
         ListInfo& operator=( const ListInfo& rhs );
@@ -182,6 +212,9 @@ namespace wvWare
         S32 m_lsid;
         U16 m_space;
         U16 m_indent;
+        QString m_picName;
+        bool m_picAutoSize;
+        ListType m_type;
     };
 
 
@@ -202,7 +235,7 @@ namespace wvWare
          * inside pap.anld. To make that work you have to set the ANLD structure
          * every time the PAP changes, using setWord6StylePAP()
          */
-        ListInfoProvider( const StyleSheet* styleSheet );
+        explicit ListInfoProvider( const StyleSheet* styleSheet );
         /**
          * This constructor reads the structures from the table stream of a
          * Word 97 document.
@@ -222,9 +255,9 @@ namespace wvWare
         /**
          * @internal
          * This function tries to get the list information (if any) from the
-         * given PAP. As the list info handling is completely different in Word6
-         * and in Word97 we have one additional level of indirection here (to
-         * keep the user of the library from fighting multiple versions).
+         * given PAP. As the list info handling is completely different in
+         * Word6 and in Word97 we have one additional level of indirection here
+         * (to keep the user of the library from fighting multiple versions).
          * In case there's no list information for that paragraph it returns
          * false.
          *
@@ -243,7 +276,7 @@ namespace wvWare
 
         const ListLevel* formattingListLevel() const;
         std::pair<S32, bool> startAt();
-        ListText text() const;
+        ListText text(const Word97::CHP& chp) const;
 
         std::vector<ListData*> m_listData;
         std::vector<ListFormatOverride*> m_listFormatOverride;
