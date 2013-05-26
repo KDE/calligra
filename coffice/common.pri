@@ -70,11 +70,13 @@ INCLUDEPATH = \
     $$CALLIGRALIBS_WIDGETSUTILS_DIR \
     $$CALLIGRALIBS_WIDGETS_DIR \
     $${TOP_BUILD_DIR} \
+    $${TOP_SOURCE_DIR} \
     $$INCLUDEPATH
 
 # Set the directories where our own libraries are located
 LIBS += -L$${TOP_BUILD_DIR}/lib
 
+# Hack to figure out if the build is for Mer SailfishOS
 load(sailfishsilicabackground)
 contains(LIBS,-lsailfishsilicabackground): {
     SAILFISH = 1
@@ -91,9 +93,11 @@ contains(LIBS,-lsailfishsilicabackground): {
 # "moc_filename.cpp". Since calligra uses cmake we work around
 # this mismatch by just creating moc wrapper files.
 defineTest( mocWrapper ) {
-    variable = $$1
-    moc_headers = $$eval($$variable)
-    for(hdr, moc_headers) {
+    maybe_moc_headers_variable = $$1
+    explicit_moc_headers_variable = $$2
+    maybe_moc_headers = $$eval($$maybe_moc_headers_variable)
+    explicit_moc_headers = $$eval($$explicit_moc_headers_variable)
+    for(hdr, maybe_moc_headers) {
         fdir=$$dirname(hdr)
         base=$$basename(hdr)
         fname=$$section(base, ".", 0, 0)
@@ -112,5 +116,13 @@ defineTest( mocWrapper ) {
 
             system(echo \"$$in\" > \"$$out\")
         }
+    }
+    for(hdr, explicit_moc_headers) {
+        base=$$basename(hdr)
+        fname=$$section(base, ".", 0, 0)
+        in=$${LITERAL_HASH}include <moc_$${fname}.cpp>
+        out=$${TOP_BUILD_DIR}/$${fname}.moc
+        system(echo \"Creating moc-wrapper $$out\")
+        system(echo \"$$in\" > \"$$out\")
     }
 }

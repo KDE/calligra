@@ -5,6 +5,7 @@
         <item>calligrafilters</item>
         <item>calligraplugins</item>
         <item>calligrawords</item>
+        <item>calligrasheets</item>
     </array>
     <array name="qt_libs">
         <item>QtCore</item>

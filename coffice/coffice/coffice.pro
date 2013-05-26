@@ -13,13 +13,18 @@ android:DESTDIR = $${TOP_BUILD_DIR}/coffice
 QT += core gui xml svg declarative
 
 CALLIGRAWORDS_DIR = $${TOP_SOURCE_DIR}/../words
+CALLIGRASHEETS_DIR = $${TOP_SOURCE_DIR}/../sheets
 
 INCLUDEPATH += \
      $${CALLIGRAWORDS_DIR} \
-     $${CALLIGRAWORDS_DIR}/part
+     $${CALLIGRAWORDS_DIR}/part \
+     $${CALLIGRASHEETS_DIR} \
+     $${CALLIGRASHEETS_DIR}/part
 
-#LIBS += -lcalligralibs -lcalligraplugins -lcalligrawords
-LIBS += -lcalligralibs -lcalligrawords
+LIBS += -lcalligralibs
+#LIBS += -lcalligraplugins
+LIBS += -lcalligrawords
+LIBS += -lcalligrasheets
 
 unix:!macx {
     # needed for XInitThreads hack
