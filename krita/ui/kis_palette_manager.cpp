@@ -210,12 +210,11 @@ void KisPaletteManager::showEvent(QShowEvent* e)
 void KisPaletteManager::updatePaletteView()
 {
     QStringList faves = m_resourceManager->favoritePresetList();
-    // this filters all the resources, making the view empty
-    // the palette view is a special case that basically uses all presets
-    // by virtue of using kis_preset_chooser even though it's only interested
-    // in up to ten of them. not sure if that warrants an 'empty' mode somewhere.
-    if (faves.isEmpty())faves.push_back("!!!!!!");
-    m_palettePresetsView->setFilteredNames(faves);
+    QStringList out;
+    foreach(const QString &fav, faves){
+        out.append(QString("\"%1\"").arg(fav));
+    }
+    m_palettePresetsView->filterPaletteFavorites(out);
 }
 
 void KisPaletteManager::slotThumbnailMode()

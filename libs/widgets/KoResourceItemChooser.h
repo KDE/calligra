@@ -46,13 +46,13 @@ class ContextMenuTagAction : public QAction
 public:
     explicit ContextMenuTagAction( KoResource * resource, QString tag, QObject* parent = 0);
     ~ContextMenuTagAction();
-    
+
 signals:
     void triggered(KoResource * resource, QString tag);
-    
+
 protected slots:
     void onTriggered();
-    
+
 private:
     KoResource * m_resource;
     QString m_tag;
@@ -101,7 +101,7 @@ public:
     void setCurrentItem(int row, int column);
 
     void showButtons( bool show );
-    
+
     void enableContextMenu(bool enable);
 
     /// shows the aside preview with the resource's image
@@ -146,13 +146,18 @@ private slots:
 
     void tagChooserIndexChanged(QString lineEditText);
     void tagChooserReturnPressed(QString lineEditText);
-    
+
     void contextMenuRequested(const QPoint &pos);
-    
+
     void contextRemoveTagFromResource(KoResource*,QString);
     void contextAddTagToResource(KoResource*,QString);
     void contextCreateNewResourceTag(KoResource*,QString);
-    
+
+    void syncTagBoxEntryRemoval(const QString& tag);
+    void syncTagBoxEntryAddition(const QString& tag);
+
+    void tagSaveButtonPressed();
+
 private:
     void updateButtonState();
     void updatePreview(KoResource *resource);

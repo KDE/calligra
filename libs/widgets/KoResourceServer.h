@@ -328,7 +328,7 @@ public:
 
         if (!removeResourceFromServer(resource))
             return;
-        }
+    }
 
 
     /**
@@ -434,8 +434,32 @@ public:
     {
         return m_tagObject->searchTag(lineEditText);
     }
-    
-    KoResourceTagging * tagObject() 
+
+    void tagCategoryAdded(const QString& tag)
+    {
+        m_tagObject->serializeTags();
+            foreach(KoResourceServerObserver<T>* observer, m_observers) {
+            observer->syncTagAddition(tag);
+        }
+    }
+
+    void tagCategoryRemoved(const QString& tag)
+    {
+        m_tagObject->serializeTags();
+            foreach(KoResourceServerObserver<T>* observer, m_observers) {
+            observer->syncTagRemoval(tag);
+        }
+    }
+
+    void tagCategoryMembersChanged()
+    {
+        m_tagObject->serializeTags();
+            foreach(KoResourceServerObserver<T>* observer, m_observers) {
+            observer->syncTaggedResourceView();
+        }
+    }
+
+    KoResourceTagging * tagObject()
     {
         return m_tagObject;
     }
@@ -560,7 +584,7 @@ protected:
             fileEl.appendChild(nameEl);
             root.appendChild(fileEl);
         }
-            
+
         QTextStream metastream(&f);
         metastream << doc.toByteArray();
         f.close();
