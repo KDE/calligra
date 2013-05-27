@@ -848,17 +848,19 @@ void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
                     this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
             menu.addAction(removeTagAction);
         }
-        removableTagsMenu = menu.addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
+        if (!removables.isEmpty()) {
+            removableTagsMenu = menu.addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
+            foreach (const QString &tag, removables) {
+                assignables.removeAll(tag);
+                ContextMenuTagAction * removeTagAction = new ContextMenuTagAction(resource, tag, this);
+
+                connect(removeTagAction, SIGNAL(triggered(KoResource*,QString)),
+                        this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
+                removableTagsMenu->addAction(removeTagAction);
+            }
+        }
     }
 
-    foreach (const QString &tag, removables) {
-        assignables.removeAll(tag);
-        ContextMenuTagAction * removeTagAction = new ContextMenuTagAction(resource, tag, this);
-
-        connect(removeTagAction, SIGNAL(triggered(KoResource*,QString)),
-                this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
-        removableTagsMenu->addAction(removeTagAction);
-    }
 
     foreach (const QString &tag, assignables) {
         ContextMenuTagAction * addTagAction = new ContextMenuTagAction(resource, tag, this);
