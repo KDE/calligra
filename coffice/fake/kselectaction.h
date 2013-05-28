@@ -76,6 +76,9 @@ public:
     bool isEditable() const { return m_isEditable; }
     void setEditable(bool e) { m_isEditable = e; }
 
+    int comboWidth() const { return 100; }
+    void setComboWidth( int width ) {}
+
     void setMaxComboViewCount(int) {}
 
 Q_SIGNALS:

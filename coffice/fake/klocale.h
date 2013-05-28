@@ -9,9 +9,15 @@
 #include <QTime>
 #include <QDateTime>
 #include <QLocale>
+#include <QCoreApplication>
+
+#include <kdatetime.h>
 
 #define I18N_NOOP(x) x
 #define I18N_NOOP2(comment,x) x
+
+class KLocale;
+class KCalendarSystem;
 
 /**
  * Wraps KLocale to pure Qt the quick and dirty way to make it
@@ -23,7 +29,7 @@ class KLocalizedString {
 public:
     KLocalizedString(const char *msg = "") : m_msg(msg) {
     }
-    QString toString() const {
+    QString toString(KLocale *locale = 0) const {
         QString s = QObject::tr(m_msg);
         for(int i = 0; i < m_args.count(); ++i)
             s = s.arg(m_args[i]);
@@ -761,12 +767,16 @@ inline QString i18ncp (const char *ctxt, const char *sing, const char *plur, con
 
 class KLocale {
 public:
-    KLocale() {}
-    ~KLocale() {}
+    KLocale(const QByteArray &name = QByteArray());
+    KLocale(KCalendarSystem *calendar, const QByteArray &name = QByteArray());
+    ~KLocale();
 
-    static QString formatNumber(double num, int precision = -1) {
-        return QString::number(num, 'f', precision);
-    }
+    //QString formatNumber(double num, int precision = -1) const { return m_locale.toString(num); }
+    //QString formatNumber(const QString &numStr, bool round = true, int precision = -1) const { return m_locale.toString(num); }
+    //QString formatLong(long num) const { return m_locale.toString(num); }
+    static QString formatNumber(double num, int precision = -1) { return QString::number(num, 'f', precision); }
+    QString formatNumber(const QString &numStr, bool round = true, int precision = -1) const { return formatNumber(numStr.toDouble(), precision); }
+    QString formatLong(long num) const { return QString::number(num); }
 
     double readNumber(const QString &numStr, bool * ok = 0) const
     {
@@ -787,6 +797,8 @@ public:
         return QLatin1String("$");
     }
 
+//    QString formatMoney(double num, const QString &currency = QString(), int precision = -1) const
+//        { return m_locale.toCurrencyString(num, currency); }
     QString formatMoney(double num, const QString &currency = QString(), int precision = -1) const
     {
         QString res = QString::number(num, 'f', precision);
@@ -1004,11 +1016,8 @@ public:
     * @return True on success.
     */
     bool setEncoding(int mibEnum);
+#endif
 
-    /**
-    * Various positions for where to place the positive or negative
-    * sign when they are related to a monetary value.
-    */
     enum SignPosition {
         /**
         * Put parantheses around the quantity, e.g. "$ (217)"
@@ -1032,11 +1041,6 @@ public:
         AfterMoney = 4
     };
 
-    /**
-    * @since 4.3
-    *
-    * The set of digit characters used to display and enter numbers.
-    */
     enum DigitSet {
         ArabicDigits,             /**< 0123456789 (European and some Asian
                                     languages and western Arabic dialects) */
@@ -1079,6 +1083,7 @@ public:
     //  VaiDigits,                /**< ꘠꘡꘢꘣꘤꘥꘦꘧꘨꘩ (Vai) */
     };
 
+#if 0
     /**
     * @since 4.3
     *
@@ -1132,102 +1137,23 @@ public:
     * @return The default Currency Code object used by locale.
     */
     KCurrencyCode *currency() const;
+#endif
 
-    /**
-    * Returns what a decimal point should look like ("." or "," etc.)
-    * for monetary values, according to the current locale or user
-    * settings.
-    *
-    * @return The monetary decimal symbol used by locale.
-    */
-    QString monetaryDecimalSymbol() const;
+    QString monetaryDecimalSymbol() const { return m_locale.decimalPoint(); }
+    QString monetaryThousandsSeparator() const { return m_locale.groupSeparator(); }
+    QString positiveSign() const { return m_locale.positiveSign(); }
+    QString negativeSign() const { return m_locale.negativeSign(); }
 
-    /**
-    * Returns what a thousands separator for monetary values should
-    * look like ("," or " " etc.) according to the current locale or
-    * user settings.
-    *
-    * @return The monetary thousands separator used by locale.
-    */
-    QString monetaryThousandsSeparator() const;
+    int fracDigits() const { return decimalPlaces(); }
+    int decimalPlaces() const { return 2; }
+    int monetaryDecimalPlaces() const { return 2; }
 
-    /**
-    * Returns what a positive sign should look like ("+", " ", etc.)
-    * according to the current locale or user settings.
-    *
-    * @return The positive sign used by locale.
-    */
-    QString positiveSign() const;
+    bool positivePrefixCurrencySymbol() const { return true; }
+    bool negativePrefixCurrencySymbol() const { return true; }
+    SignPosition positiveMonetarySignPosition() const { return BeforeMoney; }
+    SignPosition negativeMonetarySignPosition() const { return BeforeMoney; }
 
-    /**
-    * Returns what a negative sign should look like ("-", etc.)
-    * according to the current locale or user settings.
-    *
-    * @return The negative sign used by locale.
-    */
-    QString negativeSign() const;
-
-    /**
-    * @deprecated use decimalPlaces() or monetaryDecimalPlaces()
-    *
-    * The number of fractional digits to include in monetary values (usually 2).
-    *
-    * @return Default number of fractional digits used by locale.
-    */
-    KDE_DEPRECATED int fracDigits() const;
-
-    /**
-    * @since 4.4
-    *
-    * The number of decimal places to include in numeric values (usually 2).
-    *
-    * @return Default number of numeric decimal places used by locale.
-    */
-    int decimalPlaces() const;
-
-    /**
-    * @since 4.4
-    *
-    * The number of decimal places to include in monetary values (usually 2).
-    *
-    * @return Default number of monetary decimal places used by locale.
-    */
-    int monetaryDecimalPlaces() const;
-
-    /**
-    * If and only if the currency symbol precedes a positive value,
-    * this will be true.
-    *
-    * @return Where to print the currency symbol for positive numbers.
-    */
-    bool positivePrefixCurrencySymbol() const;
-
-    /**
-    * If and only if the currency symbol precedes a negative value,
-    * this will be true.
-    *
-    * @return True if the currency symbol precedes negative numbers.
-    */
-    bool negativePrefixCurrencySymbol() const;
-
-    /**
-    * Returns the position of a positive sign in relation to a
-    * monetary value.
-    *
-    * @return Where/how to print the positive sign.
-    * @see SignPosition
-    */
-    SignPosition positiveMonetarySignPosition() const;
-
-    /**
-    * Denotes where to place a negative sign in relation to a
-    * monetary value.
-    *
-    * @return Where/how to print the negative sign.
-    * @see SignPosition
-    */
-    SignPosition negativeMonetarySignPosition() const;
-
+#if 0
     /**
     * @since 4.3
     *
@@ -1238,70 +1164,6 @@ public:
     * @see digitSetToName
     */
     DigitSet monetaryDigitSet() const;
-
-    /**
-    * Given a double, converts that to a numeric string containing
-    * the localized monetary equivalent.
-    *
-    * e.g. given 123456, return "$ 123,456.00".
-    *
-    * If precision isn't specified or is < 0, then the default monetaryDecimalPlaces() is used.
-    *
-    * @param num The number we want to format
-    * @param currency The currency symbol you want.
-    * @param precision Number of decimal places displayed
-    *
-    * @return The number of money as a localized string
-    * @see monetaryDecimalPlaces()
-    */
-    QString formatMoney(double num, const QString &currency = QString(), int precision = -1) const;
-
-    /**
-    * Given a double, converts that to a numeric string containing
-    * the localized numeric equivalent.
-    *
-    * e.g. given 123456.78F, return "123,456.78" (for some European country).
-    *
-    * If precision isn't specified or is < 0, then the default decimalPlaces() is used.
-    *
-    * This function is a wrapper that is provided for convenience.
-    *
-    * @param num The number to convert
-    * @param precision Number of decimal places used.
-    *
-    * @return The number as a localized string
-    * @see formatNumber(const QString, bool, int)
-    * @see decimalPlaces()
-    */
-    QString formatNumber(double num, int precision = -1) const;
-
-    /**
-    * Given a string representing a number, converts that to a numeric
-    * string containing the localized numeric equivalent.
-    *
-    * e.g. given 123456.78F, return "123,456.78" (for some European country).
-    *
-    * If precision isn't specified or is < 0, then the default decimalPlaces() is used.
-    *
-    * @param numStr The number to format, as a string.
-    * @param round Round fractional digits. (default true)
-    * @param precision Number of fractional digits used for rounding. Unused if round=false.
-    *
-    * @return The number as a localized string
-    */
-    QString formatNumber(const QString &numStr, bool round = true, int precision = -1) const;
-
-    /**
-    * Given an integer, converts that to a numeric string containing
-    * the localized numeric equivalent.
-    *
-    * e.g. given 123456L, return "123,456" (for some European country).
-    *
-    * @param num The number to convert
-    *
-    * @return The number as a localized string
-    */
-    QString formatLong(long num) const;
 
     /**
     * These binary units are used in KDE by the formatByteSize()
@@ -1473,16 +1335,8 @@ public:
     * @return If nouns are declined
     */
     KDE_DEPRECATED bool nounDeclension() const;
+#endif
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * @since 4.6
-    *
-    * Available Calendar Systems
-    *
-    * @see setCalendarSystem()
-    * @see calendarSystem()
-    */
     enum CalendarSystem {
         QDateCalendar = 1, /**< KDE Default, hybrid of Gregorian and Julian as used by QDate */
         //BahaiCalendar = 2, /**< Baha'i Calendar */
@@ -1509,15 +1363,6 @@ public:
         ThaiCalendar = 23 /**< Thai Calendar, aka Buddhist or Thai Buddhist */
     };
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * @since 4.6
-    *
-    * System used for Week Numbers
-    *
-    * @see setWeekNumberSystem()
-    * @see weekNumberSystem()
-    */
     enum WeekNumberSystem {
         DefaultWeekNumber = -1, /**< The system locale default */
         IsoWeekNumber     =  0, /**< ISO Week Number */
@@ -1526,24 +1371,12 @@ public:
         SimpleWeek        =  3  /**< Week 1 starts Jan 1st ends after 7 days */
     };
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * @since 4.4
-    *
-    * Standard used for Date Time Format String
-    */
     enum DateTimeFormatStandard {
         KdeFormat,        /**< KDE Standard */
         PosixFormat,      /**< POSIX Standard */
         UnicodeFormat     /**< UNICODE Standard (Qt/Java/OSX/Windows) */
     };
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * @since 4.6
-    *
-    * Mode to use when parsing a Date Time input string
-    */
     enum DateTimeParseMode {
         LiberalParsing   /**< Parse Date/Time liberally.  So long as the
                             input string contains at least a reconizable
@@ -1556,18 +1389,6 @@ public:
         //StrictParsing    /**< Parse Date/Time strictly to the format. */
     };
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * @since 4.6
-    *
-    * The various Components that make up a Date / Time
-    * In the future the Components may be combined as flags for dynamic
-    * generation of Date Formats.
-    *
-    * @see KCalendarSystem
-    * @see KLocalizedDate
-    * @see DateTimeComponentFormat
-    */
     enum DateTimeComponent {
         Year          = 0x1,        /**< The Year portion of a date, may be number or name */
         YearName      = 0x2,        /**< The Year Name portion of a date */
@@ -1602,15 +1423,6 @@ public:
     };
     Q_DECLARE_FLAGS(DateTimeComponents, DateTimeComponent)
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * @since 4.6
-    *
-    * Format used for individual Date/Time Components when converted to/from a string
-    * Largely equivalent to the UNICODE CLDR format width definitions 1..5
-    *
-    * @see DateTimeComponentFormat
-    */
     enum DateTimeComponentFormat {
         DefaultComponentFormat = -1, /**< The system locale default for the componant */
         ShortNumber = 0,             /**< Number at its natural width, e.g. 2 for the 2nd*/
@@ -1621,8 +1433,6 @@ public:
         LongName                     /**< Long text format, e.g. Monday for Monday */
     };
 
-    //KDE5 move to KDateTime namespace
-#endif
     enum DateFormat {
         ShortDate,        /**< Locale Short date format, e.g. 08-04-2007 */
         LongDate,         /**< Locale Long date format, e.g. Sunday 08 April 2007 */
@@ -1651,6 +1461,47 @@ public:
         return date.toString(Qt::ISODate);
     }
 
+    QString formatDate(const QDate &date, const QString &format) const { return date.toString(format); }
+
+    QString formatDate(const QDate &date, DateTimeComponent component) const
+    {
+        switch (component) {
+            case Year: return QString::number(date.year());
+        case YearName: return QString::number(date.year());
+        case Month: return QString::number(date.month());
+        case MonthName: return QString::number(date.month());
+        case Day: return QString::number(date.day());
+        case DayName: return QString::number(date.day());
+        case JulianDay: return QString::number(date.toJulianDay());
+        case EraName:
+        case EraYear:
+        case YearInEra:
+            break;
+        case DayOfYear: return QString::number(date.dayOfYear());
+        case DayOfYearName: return QString::number(date.dayOfYear());
+        case DayOfWeek: return QString::number(date.dayOfWeek());
+        case DayOfWeekName: return QString::number(date.dayOfWeek());
+        case Week: return QString::number(date.weekNumber());
+        case WeekYear: return QString::number(date.weekNumber());
+        case MonthsInYear: return QString::number(12);
+        case WeeksInYear: return QString::number(53);
+        case DaysInYear: return QString::number(date.daysInYear());
+        case DaysInMonth: return QString::number(date.daysInMonth());
+        case DaysInWeek: return QString::number(7);
+        case Hour:
+        case Minute:
+        case Second:
+        case Millisecond:
+        case DayPeriod:
+        case DayPeriodHour:
+        case Timezone:
+        case TimezoneName:
+        case UnixTime:
+            break;
+        }
+        return QString();
+    }
+
     QString formatDateTime(const QDateTime &dateTime, DateFormat format = ShortDate, bool includeSecs = false) const
     {
         switch (format) {
@@ -1664,32 +1515,29 @@ public:
         }
         return dateTime.toString(Qt::ISODate);
     }
+    QString formatDateTime(const QDateTime &dateTime, const QString &format) const { return dateTime.toString(format); }
 
-#if 0
-    //KDE5 move to KDateTime namespace
-    /**
-    * Options for formatting date-time values.
-    */
     enum DateTimeFormatOption {
         TimeZone = 0x01,    /**< Include a time zone string */
         Seconds  = 0x02     /**< Include the seconds value */
     };
     Q_DECLARE_FLAGS(DateTimeFormatOptions, DateTimeFormatOption)
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * Returns a string formatted to the current locale's conventions
-    * regarding both date and time.
-    *
-    * @param dateTime the date and time to be formatted
-    * @param format category of date format to use
-    * @param options additional output options
-    *
-    * @return The date and time as a string
-    */
-    QString formatDateTime(const KDateTime &dateTime, DateFormat format = ShortDate,
-                        DateTimeFormatOptions options = 0) const;
+    QString formatDateTime(const KDateTime &dateTime, DateFormat format = ShortDate, DateTimeFormatOptions options = 0) const
+    {
+          switch (format) {
+          case FancyShortDate:
+          case ShortDate: return dateTime.toString(Qt::SystemLocaleShortDate);
+          case FancyLongDate:
+          case LongDate: return dateTime.toString(Qt::SystemLocaleLongDate);
+          case IsoWeekDate:
+          case IsoOrdinalDate:
+          case IsoDate: break;
+          }
+          return dateTime.toString(Qt::ISODate);
+    }
 
+#if 0
     /**
     * Use this to determine whether in dates a possessive form of month
     * name is preferred ("of January" rather than "January")
@@ -1697,64 +1545,18 @@ public:
     * @return If possessive form should be used
     */
     bool dateMonthNamePossessive() const;
+#endif
 
-    /**
-    * @deprecated replaced by formatLocaleTime()
-    *
-    * Returns a string formatted to the current locale's conventions
-    * regarding times.
-    *
-    * @param pTime The time to be formatted.
-    * @param includeSecs if true, seconds are included in the output,
-    *        otherwise only hours and minutes are formatted.
-    * @param isDuration if true, the given time is a duration, not a clock time.
-    * This means "am/pm" shouldn't be displayed.
-    *
-    * @return The time as a string
-    */
-    QString formatTime(const QTime &pTime, bool includeSecs = false, bool isDuration = false) const;
+    QString formatTime(const QTime &pTime, bool includeSecs = false, bool isDuration = false) const
+        { return m_locale.toString(pTime); }
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * @since 4.4
-    *
-    * Format flags for readLocaleTime() and formatLocaleTime()
-    */
-    enum TimeFormatOption {
-        TimeDefault        = 0x0,   ///< Default formatting using seconds and the format
-                                    ///< as specified by the locale.
-        TimeWithoutSeconds = 0x1,   ///< Exclude the seconds part of the time from display
-        TimeWithoutAmPm    = 0x2,   ///< Read/format time string without am/pm suffix but
-                                    ///< keep the 12/24h format as specified by locale time
-                                    ///< format, eg. "07.33.05" instead of "07.33.05 pm" for
-                                    ///< time format "%I.%M.%S %p".
-        TimeDuration       = 0x6,   ///< Read/format time string as duration. This will strip
-                                    ///< the am/pm suffix and read/format times with an hour
-                                    ///< value of 0-23 hours, eg. "19.33.05" instead of
-                                    ///< "07.33.05 pm" for time format "%I.%M.%S %p".
-                                    ///< This automatically implies @c TimeWithoutAmPm.
-        TimeFoldHours      = 0xE    ///< Read/format time string as duration. This will not
-                                    ///< not output the hours part of the duration but will
-                                    ///< add the hours (times sixty) to the number of minutes,
-                                    ///< eg. "70.23" instead of "01.10.23" for time format
-                                    ///< "%I.%M.%S %p".
-    };
+    enum TimeFormatOption { TimeDefault = 0x0, TimeWithoutSeconds = 0x1, TimeWithoutAmPm    = 0x2, TimeDuration       = 0x6,  TimeFoldHours      = 0xE };
     Q_DECLARE_FLAGS(TimeFormatOptions, TimeFormatOption)
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * @since 4.4
-    *
-    * Returns a string formatted to the current locale's conventions
-    * regarding times.
-    *
-    * @param pTime the time to be formatted
-    * @param options format option to use when formatting the time
-    * @return The time as a string
-    */
-    QString formatLocaleTime(const QTime &pTime,
-                            TimeFormatOptions options = KLocale::TimeDefault) const;
+    QString formatLocaleTime(const QTime &pTime, TimeFormatOptions options = KLocale::TimeDefault) const
+        { return m_locale.toString(pTime); }
 
+#if 0
     /**
     * @since 4.3
     *
@@ -1783,89 +1585,19 @@ public:
     * @return the Day Period for the given time
     */
     QString dayPeriodText(const QTime &time, DateTimeComponentFormat format = DefaultComponentFormat) const;
+#endif
 
-    /**
-    * Use this to determine which day is the first day of the week.
-    *
-    * @return an integer (Monday=1..Sunday=7)
-    */
-    int weekStartDay() const;
+    int weekStartDay() const { return m_locale.firstDayOfWeek(); }
+    int workingWeekStartDay() const { return Qt::Monday; }
+    int workingWeekEndDay() const { return Qt::Friday; }
+    int weekDayOfPray() const { return Qt::Sunday; }
 
-    /**
-    * Use this to determine which day is the first working day of the week.
-    *
-    * @since 4.2
-    * @return an integer (Monday=1..Sunday=7)
-    */
-    int workingWeekStartDay() const;
+    const KCalendarSystem* calendar() const { return m_calendar; }
 
-    /**
-    * Use this to determine which day is the last working day of the week.
-    *
-    * @since 4.2
-    * @return an integer (Monday=1..Sunday=7)
-    */
-    int workingWeekEndDay() const;
-
-    /**
-    * Use this to determine which day is reserved for religious observance
-    *
-    * @since 4.2
-    * @return day number (None = 0, Monday = 1, ..., Sunday = 7)
-    */
-    int weekDayOfPray() const;
-
-    /**
-    * Returns a pointer to the calendar system object.
-    *
-    * @return the current calendar system instance
-    */
-    const KCalendarSystem * calendar() const;
-
-    //KDE5 remove
-    /**
-    * @deprecated use calendarSystem() instead
-    *
-    * Returns the name of the calendar system that is currently being
-    * used by the system.
-    *
-    * @see calendarSystem()
-    * @return the name of the calendar system
-    */
-    KDE_DEPRECATED QString calendarType() const;
-
-    /**
-    * @since 4.6
-    *
-    * Returns the type of Calendar System used in this Locale
-    *
-    * @see KLocale::CalendarSystem
-    * @see KCalendarSystem
-    * @return the type of Calendar System
-    */
+#if 0
+    //KDE_DEPRECATED QString calendarType() const;
     KLocale::CalendarSystem calendarSystem() const;
-
-    //KDE5 remove
-    /**
-    * @deprecated use setCalendarSystem() instead
-    *
-    * Changes the current calendar system to the calendar specified.
-    * If the calendar system specified is not found, gregorian will be used.
-    *
-    * @see setCalendarSystem()
-    * @param calendarType the name of the calendar type
-    */
-    KDE_DEPRECATED void setCalendar(const QString & calendarType);
-
-    /**
-    * @since 4.6
-    *
-    * Sets the type of Calendar System to use in this Locale
-    *
-    * @see KLocale::CalendarSystem
-    * @see KCalendarSystem
-    * @param calendarSystem the Calendar System to use
-    */
+    //KDE_DEPRECATED void setCalendar(const QString & calendarType);
     void setCalendarSystem(KLocale::CalendarSystem calendarSystem);
 
     /**
@@ -1901,208 +1633,67 @@ public:
     * @returns the Week Number System used
     */
     KLocale::WeekNumberSystem weekNumberSystem() const;
+#endif
 
-    /**
-    * Converts a localized monetary string to a double.
-    *
-    * @param numStr the string we want to convert.
-    * @param ok the boolean that is set to false if it's not a number.
-    *           If @p ok is 0, it will be ignored
-    *
-    * @return The string converted to a double
-    */
-    double readMoney(const QString &numStr, bool * ok = 0) const;
+    double readMoney(const QString &numStr, bool * ok = 0) const
+    {
+        QString s = numStr;
+        s.remove(m_locale.currencySymbol());
+        //s.remove(m_locale.groupSeparator());
+        return s.toDouble(ok);
+    }
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * Converts a localized date string to a QDate.  This method will try all
-    * ReadDateFlag formats in preferred order to read a valid date.
-    *
-    * The bool pointed by ok will be invalid if the date entered was not valid.
-    *
-    * @param str the string we want to convert.
-    * @param ok the boolean that is set to false if it's not a valid date.
-    *           If @p ok is 0, it will be ignored
-    *
-    * @return The string converted to a QDate
-    * @see KCalendarSystem::readDate()
-    */
-    QDate readDate(const QString &str, bool* ok = 0) const;
+    QDate readDate(const QString &str, bool* ok = 0) const
+    {
+        QDate date = QDate::fromString(str);
+        if (ok) *ok = date.isValid();
+        return date;
+    }
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * Converts a localized date string to a QDate, using the specified format.
-    * You will usually not want to use this method.
-    * @see KCalendarSystem::readDate()
-    */
-    QDate readDate(const QString &intstr, const QString &fmt, bool* ok = 0) const;
+    QDate readDate(const QString &str, const QString &fmt, bool* ok = 0) const
+    {
+        QDate date = QDate::fromString(str, fmt);
+        if (ok) *ok = date.isValid();
+        return date;
+    }
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * Flags for readDate()
-    */
-    enum ReadDateFlags {
-        NormalFormat          =    1, /**< Only accept a date string in
-                                        the locale LongDate format */
-        ShortFormat           =    2, /**< Only accept a date string in
-                                        the locale ShortDate format */
-        IsoFormat             =    4, /**< Only accept a date string in
-                                        ISO date format (YYYY-MM-DD) */
-        IsoWeekFormat         =    8, /**< Only accept a date string in
-                                        ISO Week date format (YYYY-Www-D) */
-        IsoOrdinalFormat      =   16  /**< Only accept a date string in
-                                        ISO Week date format (YYYY-DDD) */
-    };
+    enum ReadDateFlags { NormalFormat = 1, ShortFormat = 2, IsoFormat = 4, IsoWeekFormat = 8, IsoOrdinalFormat = 16 };
+    QDate readDate(const QString &str, ReadDateFlags flags, bool *ok = 0) const
+    {
+        QDate date = QDate::fromString(str);
+        if (ok) *ok = date.isValid();
+        return date;
+    }
 
-    //KDE5 move to KDateTime namespace
-    /**
-    * Converts a localized date string to a QDate.
-    * This method is stricter than readDate(str,&ok): it will only accept
-    * a date in a specific format, depending on @p flags.
-    *
-    * @param str the string we want to convert.
-    * @param flags what format the the date string will be in
-    * @param ok the boolean that is set to false if it's not a valid date.
-    *           If @p ok is 0, it will be ignored
-    *
-    * @return The string converted to a QDate
-    * @see KCalendarSystem::readDate()
-    */
-    QDate readDate(const QString &str, ReadDateFlags flags, bool *ok = 0) const;
+    QTime readTime(const QString &str, bool* ok = 0) const
+    {
+        QTime time = QTime::fromString(str);
+        if (ok) *ok = time.isValid();
+        return time;
+    }
 
-    /**
-    * Converts a localized time string to a QTime.
-    * This method will try to parse it with seconds, then without seconds.
-    * The bool pointed to by @p ok will be set to false if the time entered was
-    * not valid.
-    *
-    * @param str the string we want to convert.
-    * @param ok the boolean that is set to false if it's not a valid time.
-    *           If @p ok is 0, it will be ignored
-    *
-    * @return The string converted to a QTime
-    */
-    QTime readTime(const QString &str, bool* ok = 0) const;
+    enum ReadTimeFlags { WithSeconds = 0, WithoutSeconds = 1 };
+    QTime readTime(const QString &str, ReadTimeFlags flags, bool *ok = 0) const
+    {
+        QTime time = QTime::fromString(str);
+        if (ok) *ok = time.isValid();
+        return time;
+    }
 
-    /**
-    * Flags for the old version of readTime()
-    *
-    * @deprecated replaced by TimeFormatOptions
-    */
-    enum ReadTimeFlags {
-        WithSeconds = 0,    ///< Only accept a time string with seconds. Default (no flag set)
-        WithoutSeconds = 1  ///< Only accept a time string without seconds.
-    }; // (maybe use this enum as a bitfield, if adding independent features?)
-
-    /**
-    * @deprecated replaced readLocaleTime()
-    *
-    * Converts a localized time string to a QTime.
-    * This method is stricter than readTime(str,&ok): it will either accept
-    * a time with seconds or a time without seconds.
-    * Use this method when the format is known by the application.
-    *
-    * @param str the string we want to convert.
-    * @param flags whether the time string is expected to contain seconds or not.
-    * @param ok the boolean that is set to false if it's not a valid time.
-    *           If @p ok is 0, it will be ignored
-    *
-    * @return The string converted to a QTime
-    */
-    QTime readTime(const QString &str, ReadTimeFlags flags, bool *ok = 0) const;
-
-    /**
-    * Additional processing options for readLocaleTime().
-    *
-    * @remarks This is currently used as an enum but declared as a flag
-    *          to be extensible
-    */
-    enum TimeProcessingOption {
-        ProcessStrict    = 0x1,    ///< Process time in a strict manner, ie.
-                                ///< a read time string has to exactly match
-                                ///< the defined time format.
-        ProcessNonStrict = 0x2     ///< Process time in a lax manner, ie.
-                                ///< allow spaces in the time-format to be
-                                ///< left out when entering a time string.
-    };
+    enum TimeProcessingOption { ProcessStrict = 0x1, ProcessNonStrict = 0x2 };
     Q_DECLARE_FLAGS(TimeProcessingOptions, TimeProcessingOption)
+    QTime readLocaleTime(const QString &str, bool *ok = 0, TimeFormatOptions options = KLocale::TimeDefault, TimeProcessingOptions processing = ProcessNonStrict) const
+    {
+        QTime time = QTime::fromString(str);
+        if (ok) *ok = time.isValid();
+        return time;
+    }
 
-    /**
-    * @since 4.4
-    *
-    * Converts a localized time string to a QTime.
-    * This method is stricter than readTime(str, &ok) in that it will either
-    * accept a time with seconds or a time without seconds.
-    *
-    * @param str the string we want to convert
-    * @param ok the boolean that is set to false if it's not a valid time.
-    *           If @p ok is 0, it will be ignored.
-    * @param options format option to apply when formatting the time
-    * @param processing if set to @c ProcessStrict, checking will be strict
-    *               and the read time string has to have the exact time format
-    *               specified. If set to @c ProcessNonStrict processing the time
-    *               is lax and spaces in the time string can be left out.
-    *
-    * @return The string converted to a QTime
-    */
-    QTime readLocaleTime(const QString &str, bool *ok = 0,
-                        TimeFormatOptions options = KLocale::TimeDefault,
-                        TimeProcessingOptions processing = ProcessNonStrict) const;
+    QString language() const { return QLocale::languageToString(m_locale.language()); }
+    QString country() const { return QLocale::countryToString(m_locale.country()); }
+    QString countryDivisionCode() const { return country(); }
 
-    /**
-    * Returns the language code used by this object. The domain AND the
-    * library translation must be available in this language.
-    * defaultLanguage() is returned by default, if no other available.
-    *
-    * Use languageCodeToName(language) to get human readable, localized
-    * language name.
-    *
-    * @return the currently used language code
-    *
-    * @see languageCodeToName
-    */
-    QString language() const;
-
-    /**
-    * Returns the country code of the country where the user lives.
-    *
-    * The returned code complies with the ISO 3166-1 alpha-2 standard,
-    * except by KDE convention it is returned in lowercase whereas the
-    * official standard is uppercase.
-    * See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for details.
-    *
-    * defaultCountry() is returned by default, if no other available,
-    * this will always be uppercase 'C'.
-    *
-    * Use countryCodeToName(country) to get human readable, localized
-    * country names.
-    *
-    * @return the country code for the user
-    *
-    * @see countryCodeToName
-    */
-    QString country() const;
-
-    /**
-    * @since 4.6
-    *
-    * Returns the Country Division Code of the Country where the user lives.
-    * When no value is set, then the Country Code will be returned.
-    *
-    * The returned code complies with the ISO 3166-2 standard.
-    * See http://en.wikipedia.org/wiki/ISO_3166-2 for details.
-    *
-    * Note that unlike country() this method will return the correct case,
-    * i.e. normally uppercase..
-    *
-    * In KDE 4.6 it is the apps responsibility to obtain a translation for the
-    * code, translation and other services will be priovided in KDE 4.7.
-    *
-    * @return the Country Division Code for the user
-    * @see setCountryDivisionCode
-    */
-    QString countryDivisionCode() const;
-
+#if 0
     /**
     * Returns the language codes selected by user, ordered by decreasing
     * priority.
@@ -2170,334 +1761,52 @@ public:
     * @see QFile::decodeName
     */
     int fileEncodingMib() const;
-
-    /**
-    * Changes the current date format.
-    *
-    * The format of the date is a string which contains variables that will
-    * be replaced:
-    * @li %Y with the whole year (e.g. "2004" for "2004")
-    * @li %y with the lower 2 digits of the year (e.g. "04" for "2004")
-    * @li %n with the month (January="1", December="12")
-    * @li %m with the month with two digits (January="01", December="12")
-    * @li %e with the day of the month (e.g. "1" on the first of march)
-    * @li %d with the day of the month with two digits (e.g. "01" on the first of march)
-    * @li %b with the short form of the month (e.g. "Jan" for January)
-    * @li %B with the long form of the month (e.g. "January")
-    * @li %a with the short form of the weekday (e.g. "Wed" for Wednesday)
-    * @li %A with the long form of the weekday (e.g. "Wednesday" for Wednesday)
-    *
-    * Everything else in the format string will be taken as is.
-    * For example, March 20th 1989 with the format "%y:%m:%d" results
-    * in "89:03:20".
-    *
-    * @param format The new date format
-    */
-    void setDateFormat(const QString & format);
-
-    /**
-    * Changes the current short date format.
-    *
-    * The format of the date is a string which contains variables that will
-    * be replaced:
-    * @li %Y with the whole year (e.g. "1984" for "1984")
-    * @li %y with the lower 2 digits of the year (e.g. "84" for "1984")
-    * @li %n with the month (January="1", December="12")
-    * @li %m with the month with two digits (January="01", December="12")
-    * @li %e with the day of the month (e.g. "1" on the first of march)
-    * @li %d with the day of the month with two digits(e.g. "01" on the first of march)
-    * @li %b with the short form of the month (e.g. "Jan" for January)
-    * @li %B with the long form of the month (e.g. "January")
-    * @li %a with the short form of the weekday (e.g. "Wed" for Wednesday)
-    * @li %A with the long form of the weekday (e.g. "Wednesday" for Wednesday)
-    *
-    * Everything else in the format string will be taken as is.
-    * For example, March 20th 1989 with the format "%y:%m:%d" results
-    * in "89:03:20".
-    *
-    * @param format The new short date format
-    */
-    void setDateFormatShort(const QString & format);
-
-    /**
-    * Changes the form of month name used in dates.
-    *
-    * @param possessive True if possessive forms should be used
-    */
-    void setDateMonthNamePossessive(bool possessive);
-
-    /**
-    * Changes the current time format.
-    *
-    * The format of the time is string a which contains variables that will
-    * be replaced:
-    * @li %H with the hour in 24h format and 2 digits (e.g. 5pm is "17", 5am is "05")
-    * @li %k with the hour in 24h format and one digits (e.g. 5pm is "17", 5am is "5")
-    * @li %I with the hour in 12h format and 2 digits (e.g. 5pm is "05", 5am is "05")
-    * @li %l with the hour in 12h format and one digits (e.g. 5pm is "5", 5am is "5")
-    * @li %M with the minute with 2 digits (e.g. the minute of 07:02:09 is "02")
-    * @li %S with the seconds with 2 digits  (e.g. the minute of 07:02:09 is "09")
-    * @li %p with pm or am (e.g. 17.00 is "pm", 05.00 is "am")
-    *
-    * Everything else in the format string will be taken as is.
-    * For example, 5.23pm with the format "%H:%M" results
-    * in "17:23".
-    *
-    * @param format The new time format
-    */
-    void setTimeFormat(const QString & format);
-
-    /**
-    * @since 4.3
-    *
-    * Set digit characters used to display dates and time.
-    *
-    * @param digitSet the digit set identifier
-    * @see DigitSet
-    */
-    void setDateTimeDigitSet(DigitSet digitSet);
-
-    /**
-    * Changes how KLocale defines the first day in week.
-    *
-    * @param day first day of the week (Monday=1..Sunday=7) as integer
-    */
-    void setWeekStartDay(int day);
-
-    /**
-    * Changes how KLocale defines the first working day in week.
-    *
-    * @since 4.2
-    * @param day first working day of the week (Monday=1..Sunday=7) as integer
-    */
-    void setWorkingWeekStartDay(int day);
-
-    /**
-    * Changes how KLocale defines the last working day in week.
-    *
-    * @since 4.2
-    * @param day last working day of the week (Monday=1..Sunday=7) as integer
-    */
-    void setWorkingWeekEndDay(int day);
-
-    /**
-    * Changes how KLocale defines the day reserved for religious observance.
-    *
-    * @since 4.2
-    * @param day day of the week for religious observance (None=0,Monday=1..Sunday=7) as integer
-    */
-    void setWeekDayOfPray(int day);
 #endif
 
     QString dateFormat() const { return m_locale.dateFormat(QLocale::LongFormat); }
     QString dateFormatShort() const { return m_locale.dateFormat(QLocale::ShortFormat); }
     QString timeFormat() const { return m_locale.timeFormat(); }
 
-#if 0
-    /**
-    * Changes the symbol used to identify the decimal pointer.
-    *
-    * @param symbol The new decimal symbol.
-    */
-    void setDecimalSymbol(const QString & symbol);
+    void setDateFormat(const QString & format) {}
+    void setDateFormatShort(const QString & format) {}
+    void setDateMonthNamePossessive(bool possessive) {}
+    void setTimeFormat(const QString & format) {}
+    void setDateTimeDigitSet(DigitSet digitSet) {}
+    void setWeekStartDay(int day) {}
+    void setWorkingWeekStartDay(int day) {}
+    void setWorkingWeekEndDay(int day) {}
+    void setWeekDayOfPray(int day) {}
+    void setDecimalSymbol(const QString & symbol) {}
+    void setThousandsSeparator(const QString & separator) {}
+    void setPositiveSign(const QString & sign) {}
+    void setNegativeSign(const QString & sign) {}
+    void setDigitSet(DigitSet digitSet) {}
+    void setPositiveMonetarySignPosition(SignPosition signpos) {}
+    void setNegativeMonetarySignPosition(SignPosition signpos) {}
+    void setPositivePrefixCurrencySymbol(bool prefix) {}
+    void setNegativePrefixCurrencySymbol(bool prefix) {}
+    //KDE_DEPRECATED void setFracDigits(int digits) {}
+    void setDecimalPlaces(int digits) {}
+    void setMonetaryDecimalPlaces(int digits) {}
+    void setMonetaryThousandsSeparator(const QString & separator) {}
+    void setMonetaryDecimalSymbol(const QString & symbol) {}
+    void setCurrencyCode(const QString &newCurrencyCode) {}
+    void setCurrencySymbol(const QString & symbol) {}
+    void setMonetaryDigitSet(DigitSet digitSet) {}
+    //int pageSize() const;
+    //void setPageSize(int paperFormat);
 
-    /**
-    * Changes the separator used to group digits when formating numbers.
-    *
-    * @param separator The new thousands separator.
-    */
-    void setThousandsSeparator(const QString & separator);
-
-    /**
-    * Changes the sign used to identify a positive number. Normally this is
-    * left blank.
-    *
-    * @param sign Sign used for positive numbers.
-    */
-    void setPositiveSign(const QString & sign);
-
-    /**
-    * Changes the sign used to identify a negative number.
-    *
-    * @param sign Sign used for negative numbers.
-    */
-    void setNegativeSign(const QString & sign);
-
-    /**
-    * @since 4.3
-    *
-    * Changes the set of digit characters used to display numbers.
-    *
-    * @param digitSet the digit set identifier
-    * @see DigitSet
-    */
-    void setDigitSet(DigitSet digitSet);
-
-    /**
-    * Changes the sign position used for positive monetary values.
-    *
-    * @param signpos The new sign position
-    */
-    void setPositiveMonetarySignPosition(SignPosition signpos);
-
-    /**
-    * Changes the sign position used for negative monetary values.
-    *
-    * @param signpos The new sign position
-    */
-    void setNegativeMonetarySignPosition(SignPosition signpos);
-
-    /**
-    * Changes the position where the currency symbol should be printed for
-    * positive monetary values.
-    *
-    * @param prefix True if the currency symbol should be prefixed instead of
-    * postfixed
-    */
-    void setPositivePrefixCurrencySymbol(bool prefix);
-
-    /**
-    * Changes the position where the currency symbol should be printed for
-    * negative monetary values.
-    *
-    * @param prefix True if the currency symbol should be prefixed instead of
-    * postfixed
-    */
-    void setNegativePrefixCurrencySymbol(bool prefix);
-
-    /**
-    * @deprecated use setDecimalPlaces() or setMonetaryDecimalPlaces()
-    *
-    * Changes the number of digits used when formating numbers.
-    *
-    * @param digits The default number of digits to use.
-    */
-    KDE_DEPRECATED void setFracDigits(int digits);
-
-    /**
-    * @since 4.4
-    *
-    * Changes the number of decimal places used when formating numbers.
-    *
-    * @param digits The default number of digits to use.
-    */
-    void setDecimalPlaces(int digits);
-
-    /**
-    * @since 4.4
-    *
-    * Changes the number of decimal places used when formating money.
-    *
-    * @param digits The default number of digits to use.
-    */
-    void setMonetaryDecimalPlaces(int digits);
-
-    /**
-    * Changes the separator used to group digits when formating monetary values.
-    *
-    * @param separator The new thousands separator.
-    */
-    void setMonetaryThousandsSeparator(const QString & separator);
-
-    /**
-    * Changes the symbol used to identify the decimal pointer for monetary
-    * values.
-    *
-    * @param symbol The new decimal symbol.
-    */
-    void setMonetaryDecimalSymbol(const QString & symbol);
-
-    /**
-    * @since 4.4
-    *
-    * Changes the current ISO Currency Code.
-    *
-    * @param newCurrencyCode The new Currency Code
-    */
-    void setCurrencyCode(const QString &newCurrencyCode);
-
-    /**
-    * Changes the current currency symbol.
-    *
-    * This symbol should be consistant with the selected Currency Code
-    *
-    * @param symbol The new currency symbol
-    * @see currencyCode, KCurrency::currencySymbols
-    */
-    void setCurrencySymbol(const QString & symbol);
-
-    /**
-    * @since 4.3
-    *
-    * Set digit characters used to display monetary values.
-    *
-    * @param digitSet the digit set identifier
-    * @see DigitSet
-    */
-    void setMonetaryDigitSet(DigitSet digitSet);
-
-    /**
-    * Returns the preferred page size for printing.
-    *
-    * @return The preferred page size, cast it to QPrinter::PageSize
-    */
-    int pageSize() const;
-
-    /**
-    * Changes the preferred page size when printing.
-    *
-    * @param paperFormat the new preferred page size in the format QPrinter::PageSize
-    */
-    void setPageSize(int paperFormat);
-#endif
-
-    enum MeasureSystem {
-        Metric,    ///< Metric system (used e.g. in Europe)
-        Imperial   ///< Imperial system (used e.g. in the United States)
-    };
+    enum MeasureSystem { Metric, Imperial };
     MeasureSystem measureSystem() const { return Metric; }
+    void setMeasureSystem(MeasureSystem value) {}
 
-#if 0
-    /**
-    * Changes the preferred measuring system.
-    *
-    * @return value The preferred measuring system
-    */
-    void setMeasureSystem(MeasureSystem value);
-
-    /**
-    * Adds another catalog to search for translation lookup.
-    * This function is useful for extern libraries and/or code,
-    * that provide their own messages.
-    *
-    * If the catalog does not exist for the chosen language,
-    * it will be ignored and en_US will be used.
-    *
-    * @param catalog The catalog to add.
-    */
-#endif
     void insertCatalog(const QString& catalog) {}
+    void removeCatalog(const QString &catalog) {}
+    void setActiveCatalog(const QString &catalog) {}
+
+    QString translateQt(const char *context, const char *sourceText, const char *comment) const { return QCoreApplication::translate(context, sourceText); }
+
 #if 0
-    /**
-    * Removes a catalog for translation lookup.
-    * @param catalog The catalog to remove.
-    * @see insertCatalog()
-    */
-    void removeCatalog(const QString &catalog);
-
-    /**
-    * Sets the active catalog for translation lookup.
-    * @param catalog The catalog to activate.
-    */
-    void setActiveCatalog(const QString &catalog);
-
-    /**
-    * Translates a message as a QTranslator is supposed to.
-    * The parameters are similar to i18n(), but the result
-    * value has other semantics (it can be QString())
-    */
-    QString translateQt(const char *context, const char *sourceText, const char *comment) const;
-
     /**
     * Provides list of all known language codes.
     *
@@ -2584,16 +1893,11 @@ public:
     static void splitLocale(const QString &locale, QString &language, QString &country,
                             QString &modifier, QString &charset);
 
-    /**
-    * Use this as main catalog for *all* KLocales, if not the appname
-    * will be used. This function is best to be the very first instruction
-    * in your program's main function as it only has an effect before the
-    * first KLocale object is created.
-    *
-    * @param catalog Catalog to override all other main Catalogs.
-    */
-    static void setMainCatalog(const char *catalog);
+#endif
 
+    static void setMainCatalog(const char *catalog) {}
+
+#if 0
     /**
     * @deprecated
     *
@@ -2726,31 +2030,11 @@ public:
     * @return true if one of the specified languages were used
     */
     bool setLanguage(const QStringList &languages);
+#endif
 
-    /**
-    * @since 4.1
-    *
-    * Tries to find a path to the localized file for the given original path.
-    * This is intended mainly for non-text resources (images, sounds, etc.),
-    * whereas text resources should be handled in more specific ways.
-    *
-    * The possible localized paths are checked in turn by priority of set
-    * languages, in form of dirname/l10n/ll/basename, where dirname and
-    * basename are those of the original path, and ll is the language code.
-    *
-    * KDE core classes which resolve paths internally (e.g. KStandardDirs)
-    * will usually perform this lookup behind the scene.
-    * In general, you should pipe resource paths through this method only
-    * on explicit translators' request, or when a resource is an obvious
-    * candidate for localization (e.g. a splash screen or a custom icon
-    * with some text drawn on it).
-    *
-    * @param filePath path to the original file
-    *
-    * @return path to the localized file if found, original path otherwise
-    */
-    QString localizedFilePath(const QString &filePath) const;
+    QString localizedFilePath(const QString &filePath) const { return filePath; }
 
+#if 0
     /**
     * @since 4.2
     *
@@ -2801,6 +2085,7 @@ public:
 
 private:
     QLocale m_locale;
+    KCalendarSystem *m_calendar;
 };
 
 #endif

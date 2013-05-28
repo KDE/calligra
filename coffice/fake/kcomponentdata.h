@@ -12,6 +12,7 @@
 
 #include <ksharedconfig.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kdecore_export.h>
@@ -60,7 +61,9 @@ namespace KGlobal {
         return true;
     }
 
-    static void setActiveComponent(KComponentData) {}
+    static KComponentData m_activeComponentData;
+    static KComponentData activeComponent() { return m_activeComponentData; }
+    static void setActiveComponent(KComponentData data) { m_activeComponentData = data; }
 
     KDECORE_EXPORT KSharedConfigPtr config();
     KDECORE_EXPORT KStandardDirs* dirs();

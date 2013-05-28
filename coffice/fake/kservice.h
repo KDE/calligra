@@ -15,10 +15,18 @@ public:
     typedef KSharedPtr<KService>Ptr;
     typedef QList<Ptr> List;
 
-    QString name() const { return QString(); }
     QVariant property(const QString &) const { return QVariant(); }
     QString library() const { return QString(); }
     QString entryPath() const { return QString(); }
+    QString path() const { return QString(); }
+    QString name() const { return QString(); }
+    QString icon() const { return QString(); }
+    QString comment() const { return QString(); }
+    QString genericName() const { return QString(); }
+    QString untranslatedGenericName() const { return QString(); }
+    QStringList keywords() const { return QStringList(); }
+    QStringList categories() const { return QStringList(); }
+    QStringList mimeTypes() const { return QStringList(); }
 
     static Ptr serviceByName( const QString& _name ) { return Ptr(); }
     static Ptr serviceByDesktopPath( const QString& _path ) { return Ptr(); }

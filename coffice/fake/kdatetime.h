@@ -26,6 +26,10 @@ public:
     {
         return QDateTime::toString( (Qt::DateFormat)tf );
     }
+    QString toString(Qt::DateFormat df) const
+    {
+        return QDateTime::toString(df);
+    }
 
     static KDateTime currentLocalDateTime()
     {

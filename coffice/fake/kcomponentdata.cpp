@@ -2,6 +2,7 @@
 
 #include <ksharedconfig.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
 
 using namespace KGlobal;
 

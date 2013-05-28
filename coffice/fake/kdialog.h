@@ -87,8 +87,8 @@ public:
     static void resizeLayout( QWidget *widget, int margin, int spacing ) {}
     static void resizeLayout( QLayout *lay, int margin, int spacing ) {}
     static void centerOnScreen( QWidget *widget, int screen = -1 ) {}
-    static bool avoidArea( QWidget *widget, const QRect& area, int screen = -1 ) {}
 #endif
+    static bool avoidArea( QWidget *widget, const QRect& area, int screen = -1 ) { return true; }
 
     void setMainWidget( QWidget *widget ) {}
     QWidget *mainWidget() { return 0; }
@@ -110,14 +110,12 @@ public Q_SLOTS:
     void enableButtonCancel( bool state ) {}
     void enableLinkedHelp( bool state ) {}
 
-#if 0
-    void setHelpLinkText( const QString &text );
-    void setHelp( const QString &anchor, const QString &appname = QString() );
-    bool isDetailsWidgetVisible() const;
-    void setDetailsWidgetVisible( bool visible );
-    void setDetailsWidget( QWidget *detailsWidget );
-    void delayedDestruct();
-#endif
+    void setHelpLinkText( const QString &text ) {}
+    void setHelp( const QString &anchor, const QString &appname = QString() ) {}
+    bool isDetailsWidgetVisible() const { return false; }
+    void setDetailsWidgetVisible( bool visible ) {}
+    void setDetailsWidget( QWidget *detailsWidget ) {}
+    //void delayedDestruct() { deleteLater(); }
 
 Q_SIGNALS:
 #if 0

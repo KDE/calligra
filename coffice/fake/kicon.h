@@ -3,6 +3,8 @@
 
 #include <QIcon>
 
+#define koIconWanted(x,y) KIcon()
+
 class KIcon : public QIcon
 {
 public:

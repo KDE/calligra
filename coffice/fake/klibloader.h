@@ -40,9 +40,10 @@ public:
 #endif
 };
 
-class KLibFactory
+class KLibFactory : public QObject
 {
 public:
+    KLibFactory(QObject *parent = 0) : QObject(parent) {}
     template<typename T> QObject* create(QObject *parent = 0) {
         qDebug() << Q_FUNC_INFO << "TODO";
         return 0;

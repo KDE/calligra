@@ -9,6 +9,7 @@
 #include <kpluginfactory.h>
 //#include <kexportplugin.h>
 #include <kglobal.h>
+#include <klibloader.h>
 
 namespace KParts { class Part; }
 
@@ -51,7 +52,7 @@ public:
     KPluginFactoryContainer(QObject *parent = 0) : QObject(parent) { setObjectName("KPluginFactoryContainer"); }
 };
 
-class KPluginFactory : public QObject
+class KPluginFactory : public KLibFactory
 {
     Q_OBJECT
 public:
@@ -135,8 +136,6 @@ protected:
 private:
     KComponentData m_componentData;
 };
-
-typedef KPluginFactory KLibFactory;
 
 template<typename T>
 inline T *KPluginFactory::create(QObject *parent, const QVariantList &args)
