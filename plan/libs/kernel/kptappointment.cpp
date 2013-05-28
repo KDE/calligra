@@ -426,7 +426,7 @@ void AppointmentIntervalList::add( const AppointmentInterval &ai )
             //if ( ! lst.last().isValid() ) { kDebug(planDbg())<<lst.last()<<ai; qFatal( "Add Invalid interval" ); }
         }
     }
-    foreach ( AppointmentInterval li, lst ) {
+    foreach ( const AppointmentInterval &li, lst ) {
         //if ( ! li.isValid() ) { kDebug(planDbg())<<li; qFatal( "Add Invalid interval" ); }
         date = li.startTime().date();
         if ( ! m_map.contains( date ) ) {
