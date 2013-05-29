@@ -17,7 +17,7 @@
  */
 
 #include "KoColumnStyle.h"
-#include "KoGenStyle.h"
+#include <KoGenStyle.h>
 
 namespace {
     class BreakStyleMap : public QMap<KoColumnStyle::BreakType, QString>

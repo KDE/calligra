@@ -19,11 +19,14 @@
 #ifndef KOSTYLE_H
 #define KOSTYLE_H
 
-#include "KoGenStyles.h"
-#include "KoGenStyle.h"
-
 #include <QString>
 #include <QSharedPointer>
+
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
+
+#include "koodf2_export.h"
+
 
 /**
  * A \class KoStyle is the base for all of the styles used in KoOdf.
@@ -32,7 +35,7 @@
  * As all the styles it can be shared
  **/
 
-class KOODF_EXPORT KoStyle
+class KOODF2_EXPORT KoStyle
 {
 public:
     KoStyle();

@@ -25,8 +25,7 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan
 
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
-    ${CMAKE_BINARY_DIR}/3rdparty/kdgantt
+    ${KDGANTT_INCLUDES}
     ${KDCHART_INCLUDES}
 
     ${KOMAIN_INCLUDES}

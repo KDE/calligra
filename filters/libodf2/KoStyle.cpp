@@ -17,7 +17,9 @@
  */
 
 #include "KoStyle.h"
-#include "KoGenStyles.h"
+
+#include <KoGenStyles.h>
+
 
 KoStyle::KoStyle()
 : m_autoStyle(false), m_autoStyleInStylesDotXml(false)

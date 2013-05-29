@@ -17,8 +17,8 @@
  */
 
 #include "KoCellStyle.h"
-#include "KoGenStyle.h"
-#include "KoGenStyles.h"
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 
 namespace {
     QString prefix = "cell";
