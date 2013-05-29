@@ -205,6 +205,13 @@ int CQTextDocumentCanvas::cameraY() const
     return d->currentPoint.y();
 }
 
+qreal CQTextDocumentCanvas::pagePosition(int page)
+{
+    KWPage page = d->document->pageManager()->page(page);
+    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(d->canvasBase);
+    return kwCanvasItem->viewMode()->documentToView(page.rect().topLeft()).y();
+}
+
 void CQTextDocumentCanvas::setCameraY(int cameraY)
 {
     d->currentPoint.setY (cameraY);
