@@ -65,7 +65,7 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
 
     createItemDelegates( m );
 
-    connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
+    connect( this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), SLOT(slotDropAllowed(QModelIndex,int,QDragMoveEvent*)) );
 
 }
 
@@ -154,15 +154,15 @@ ResourceEditor::ResourceEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     }
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
+    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex)) );
 
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
     
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
 }
 
@@ -279,23 +279,23 @@ void ResourceEditor::setupGui()
     actionAddGroup  = new KAction(koIcon("resource-group-new"), i18n("Add Resource Group"), this);
     actionCollection()->addAction("add_group", actionAddGroup );
     actionAddGroup->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
-    connect( actionAddGroup, SIGNAL( triggered( bool ) ), SLOT( slotAddGroup() ) );
+    connect( actionAddGroup, SIGNAL(triggered(bool)), SLOT(slotAddGroup()) );
     addAction( name, actionAddGroup );
     
     actionAddResource  = new KAction(koIcon("list-add-user"), i18n("Add Resource"), this);
     actionCollection()->addAction("add_resource", actionAddResource );
     actionAddResource->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
-    connect( actionAddResource, SIGNAL( triggered( bool ) ), SLOT( slotAddResource() ) );
+    connect( actionAddResource, SIGNAL(triggered(bool)), SLOT(slotAddResource()) );
     addAction( name, actionAddResource );
     
     actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
-    connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
+    connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );
     addAction( name, actionDeleteSelection );
     
     // Add the context menu actions for the view options
-    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
     
     createOptionAction();

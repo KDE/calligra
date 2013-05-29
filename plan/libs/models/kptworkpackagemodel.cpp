@@ -199,87 +199,87 @@ Qt::ItemFlags WorkPackageProxyModel::flags(const QModelIndex &index) const
 void WorkPackageProxyModel::setSourceModel( QAbstractItemModel *model )
 {
     if ( sourceModel() ) {
-        disconnect(sourceModel(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-                this, SLOT(sourceDataChanged(const QModelIndex&, const QModelIndex&)));
-/*        disconnect(sourceModel(), SIGNAL(headerDataChanged(Qt::Orientation, int, int )),
-                this, SLOT(sourceHeaderDataChanged(Qt::Orientation, int, int )));*/
+        disconnect(sourceModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                this, SLOT(sourceDataChanged(QModelIndex,QModelIndex)));
+/*        disconnect(sourceModel(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
+                this, SLOT(sourceHeaderDataChanged(Qt::Orientation,int,int)));*/
         disconnect(sourceModel(), SIGNAL(layoutChanged()),
                 this, SIGNAL(layoutChanged()));
         disconnect(sourceModel(), SIGNAL(layoutAboutToBeChanged()),
                 this, SIGNAL(layoutAboutToBeChanged()));
-        disconnect(sourceModel(), SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int )),
-                this, SLOT(sourceRowsAboutToBeInserted(const QModelIndex&, int, int )));
-        disconnect(sourceModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                this, SLOT(sourceRowsInserted(const QModelIndex&, int, int)));
-        disconnect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-                this, SLOT(sourceRowsAboutToBeRemoved(const QModelIndex&, int, int)));
-        disconnect(sourceModel(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(sourceRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+        disconnect(sourceModel(), SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
+                this, SLOT(sourceRowsAboutToBeInserted(QModelIndex,int,int)));
+        disconnect(sourceModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
+                this, SLOT(sourceRowsInserted(QModelIndex,int,int)));
+        disconnect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                this, SLOT(sourceRowsAboutToBeRemoved(QModelIndex,int,int)));
+        disconnect(sourceModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+                this, SLOT(sourceRowsAboutToBeRemoved(QModelIndex,int,int)));
 /*
-        disconnect(sourceModel(), SIGNAL(columnsAboutToBeInserted(const QModelIndex&, int, int)),
-                this, SLOT(sourceColumnsAboutToBeInserted(const QModelIndex&, int, int)));
-        disconnect(sourceModel(), SIGNAL(columnsInserted(const QModelIndex&, int, int)),
-                this, SLOT(sourceColumnsInserted(const QModelIndex&, int, int)));
+        disconnect(sourceModel(), SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)),
+                this, SLOT(sourceColumnsAboutToBeInserted(QModelIndex,int,int)));
+        disconnect(sourceModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
+                this, SLOT(sourceColumnsInserted(QModelIndex,int,int)));
 
-        disconnect(sourceModel(), SIGNAL(columnsAboutToBeRemoved(const QModelIndex&, int, int)),
-                this, SLOT(sourceColumnsAboutToBeRemoved(const QModelIndex&, int, int)));
-        disconnect(sourceModel(), SIGNAL(columnsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(sourceColumnsRemoved(const QModelIndex&, int, int)));
+        disconnect(sourceModel(), SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),
+                this, SLOT(sourceColumnsAboutToBeRemoved(QModelIndex,int,int)));
+        disconnect(sourceModel(), SIGNAL(columnsRemoved(QModelIndex,int,int)),
+                this, SLOT(sourceColumnsRemoved(QModelIndex,int,int)));
         */
         disconnect(sourceModel(), SIGNAL(modelAboutToBeReset()), this, SLOT(sourceModelAboutToBeReset()));
         disconnect(sourceModel(), SIGNAL(modelReset()), this, SLOT(sourceModelReset()));
 
-        disconnect(sourceModel(), SIGNAL(rowsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int )),
-                this, SLOT(sourceRowsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int )));
-        disconnect(sourceModel(), SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int )),
-                this, SLOT(sourceRowsMoved(const QModelIndex&, int, int, const QModelIndex&, int )));
+        disconnect(sourceModel(), SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
+                this, SLOT(sourceRowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
+        disconnect(sourceModel(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+                this, SLOT(sourceRowsMoved(QModelIndex,int,int,QModelIndex,int)));
 /*
-        disconnect(sourceModel(), SIGNAL(columnsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int )),
-                this, SLOT(sourceColumnsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int )));
-        disconnect(sourceModel(), SIGNAL(columnsMoved(const QModelIndex&parent, int, int, const QModelIndex&, int )),
-                this, SLOT(sourceColumnsMoved(const QModelIndex&parent, int, int, const QModelIndex&, int )));*/
+        disconnect(sourceModel(), SIGNAL(columnsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
+                this, SLOT(sourceColumnsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
+        disconnect(sourceModel(), SIGNAL(columnsMoved(QModelIndex&parent,int,int,QModelIndex,int)),
+                this, SLOT(sourceColumnsMoved(QModelIndex&parent,int,int,QModelIndex,int)));*/
     }
     QAbstractProxyModel::setSourceModel( model );
     if ( model ) {
-        connect(model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-                this, SLOT(sourceDataChanged(const QModelIndex&, const QModelIndex&)));
-/*        connect(model, SIGNAL(headerDataChanged(Qt::Orientation, int, int )),
-                this, SLOT(sourceHeaderDataChanged(Qt::Orientation, int, int )));*/
+        connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                this, SLOT(sourceDataChanged(QModelIndex,QModelIndex)));
+/*        connect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
+                this, SLOT(sourceHeaderDataChanged(Qt::Orientation,int,int)));*/
         connect(model, SIGNAL(layoutChanged()),
                 this, SIGNAL(layoutChanged()));
         connect(model, SIGNAL(layoutAboutToBeChanged()),
                 this, SIGNAL(layoutAboutToBeChanged()));
-        connect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int )),
-                this, SLOT(sourceRowsAboutToBeInserted(const QModelIndex&, int, int )));
-        connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                this, SLOT(sourceRowsInserted(const QModelIndex&, int, int)));
-        connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-                this, SLOT(sourceRowsAboutToBeRemoved(const QModelIndex&, int, int)));
-        connect(model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(sourceRowsRemoved(const QModelIndex&, int, int)));
+        connect(model, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
+                this, SLOT(sourceRowsAboutToBeInserted(QModelIndex,int,int)));
+        connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                this, SLOT(sourceRowsInserted(QModelIndex,int,int)));
+        connect(model, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                this, SLOT(sourceRowsAboutToBeRemoved(QModelIndex,int,int)));
+        connect(model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+                this, SLOT(sourceRowsRemoved(QModelIndex,int,int)));
 /*
-        connect(model, SIGNAL(columnsAboutToBeInserted(const QModelIndex&, int, int)),
-                this, SLOT(sourceColumnsAboutToBeInserted(const QModelIndex&, int, int)));
-        connect(model, SIGNAL(columnsInserted(const QModelIndex&, int, int)),
-                this, SLOT(sourceColumnsInserted(const QModelIndex&, int, int)));
+        connect(model, SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)),
+                this, SLOT(sourceColumnsAboutToBeInserted(QModelIndex,int,int)));
+        connect(model, SIGNAL(columnsInserted(QModelIndex,int,int)),
+                this, SLOT(sourceColumnsInserted(QModelIndex,int,int)));
 
-        connect(model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex&, int, int)),
-                this, SLOT(sourceColumnsAboutToBeRemoved(const QModelIndex&, int, int)));
-        connect(model, SIGNAL(columnsRemoved(const QModelIndex&, int, int)),
-                this, SLOT(sourceColumnsRemoved(const QModelIndex&, int, int)));
+        connect(model, SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),
+                this, SLOT(sourceColumnsAboutToBeRemoved(QModelIndex,int,int)));
+        connect(model, SIGNAL(columnsRemoved(QModelIndex,int,int)),
+                this, SLOT(sourceColumnsRemoved(QModelIndex,int,int)));
         */
         connect(model, SIGNAL(modelAboutToBeReset()), this, SLOT(sourceModelAboutToBeReset()));
         connect(model, SIGNAL(modelReset()), this, SLOT(sourceModelReset()));
 
-        connect(model, SIGNAL(rowsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int )),
-                this, SLOT(sourceRowsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int )));
-        connect(model, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int )),
-                this, SLOT(sourceRowsMoved(const QModelIndex&, int, int, const QModelIndex&, int )));
+        connect(model, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
+                this, SLOT(sourceRowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
+        connect(model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+                this, SLOT(sourceRowsMoved(QModelIndex,int,int,QModelIndex,int)));
 /*
-        connect(model, SIGNAL(columnsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int )),
-                this, SLOT(sourceColumnsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int )));
-        connect(model, SIGNAL(columnsMoved(const QModelIndex&parent, int, int, const QModelIndex&, int )),
-                this, SLOT(sourceColumnsMoved(const QModelIndex&parent, int, int, const QModelIndex&, int )));*/
+        connect(model, SIGNAL(columnsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
+                this, SLOT(sourceColumnsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
+        connect(model, SIGNAL(columnsMoved(QModelIndex&parent,int,int,QModelIndex,int)),
+                this, SLOT(sourceColumnsMoved(QModelIndex&parent,int,int,QModelIndex,int)));*/
     }
 }
 
@@ -498,9 +498,9 @@ NodeItemModel *WorkPackageProxyModel::baseModel() const
 void WorkPackageProxyModel::detachTasks( Task *task )
 {
     if ( task ) {
-        disconnect(task, SIGNAL(workPackageToBeAdded(Node*,int)), this, SLOT(workPackageToBeAdded(Node*, int)));
+        disconnect(task, SIGNAL(workPackageToBeAdded(Node*,int)), this, SLOT(workPackageToBeAdded(Node*,int)));
         disconnect(task, SIGNAL(workPackageAdded(Node*)), this, SLOT(workPackageAdded(Node*)));
-        disconnect(task, SIGNAL(workPackageToBeRemoved(Node*,int)), this, SLOT(workPackageToBeRemoved(Node*, int)));
+        disconnect(task, SIGNAL(workPackageToBeRemoved(Node*,int)), this, SLOT(workPackageToBeRemoved(Node*,int)));
         disconnect(task, SIGNAL(workPackageRemoved(Node*)), this, SLOT(workPackageRemoved(Node*)));
 //        kDebug(planDbg())<<task;
     } else {
@@ -516,9 +516,9 @@ void WorkPackageProxyModel::detachTasks( Task *task )
 void WorkPackageProxyModel::attachTasks( Task *task )
 {
     if ( task ) {
-        connect(task, SIGNAL(workPackageToBeAdded(Node*,int)), this, SLOT(workPackageToBeAdded(Node*, int)));
+        connect(task, SIGNAL(workPackageToBeAdded(Node*,int)), this, SLOT(workPackageToBeAdded(Node*,int)));
         connect(task, SIGNAL(workPackageAdded(Node*)), this, SLOT(workPackageAdded(Node*)));
-        connect(task, SIGNAL(workPackageToBeRemoved(Node*,int)), this, SLOT(workPackageToBeRemoved(Node*, int)));
+        connect(task, SIGNAL(workPackageToBeRemoved(Node*,int)), this, SLOT(workPackageToBeRemoved(Node*,int)));
         connect(task, SIGNAL(workPackageRemoved(Node*)), this, SLOT(workPackageRemoved(Node*)));
 //        kDebug(planDbg())<<task;
     } else {

@@ -222,11 +222,11 @@ TaskStatusView::TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
     l->addWidget( m_view );
     setupGui();
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 void TaskStatusView::updateReadWrite( bool rw )
@@ -306,7 +306,7 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 void TaskStatusView::setupGui()
 {
     // Add the context menu actions for the view options
-    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
     createOptionAction();
@@ -382,10 +382,10 @@ TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *vi
     }
     weekdays->setCurrentIndex( m_view->weekday() - 1 );
 
-    connect( period, SIGNAL( valueChanged( int ) ), SIGNAL( changed() ) );
-    connect( useWeekday, SIGNAL( toggled( bool ) ), SIGNAL( changed() ) );
-    connect( useCurrentDate, SIGNAL( toggled( bool ) ), SIGNAL( changed() ) );
-    connect( weekdays, SIGNAL( currentIndexChanged( int ) ), SIGNAL( changed() ) );
+    connect( period, SIGNAL(valueChanged(int)), SIGNAL(changed()) );
+    connect( useWeekday, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    connect( useCurrentDate, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    connect( weekdays, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
 }
 
 void TaskStatusViewSettingsPanel::slotOk()
@@ -420,10 +420,10 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( ViewBase *view, Task
     TaskStatusViewSettingsPanel *panel = new TaskStatusViewSettingsPanel( treeview );
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "General" ), i18n( "General Settings" ) );
     setCurrentPage( page );
-    //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
 }
 
 //-----------------------------------
@@ -439,7 +439,7 @@ ProjectStatusView::ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *par
 
     setupGui();
 
-    connect( m_view, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
 
 }
@@ -939,11 +939,11 @@ void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
 void PerformanceStatusBase::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLocaleChanged() ) );
+        disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLocaleChanged()) );
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLocaleChanged() ) );
+        connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLocaleChanged()) );
     }
     m_chartmodel.setProject( project );
     static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setProject( project );
@@ -1053,7 +1053,7 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     m_chart = new PerformanceStatusBase( this );
     addWidget( m_chart );
 
-    connect( m_tree->selectionModel(), SIGNAL( selectionChanged( const QItemSelection &, const QItemSelection & ) ), SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
+    connect( m_tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection,QItemSelection)) );
 
     QTimer::singleShot( 0, this, SLOT(resizeSplitters()) );
 }
@@ -1150,10 +1150,10 @@ PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWid
 
     setupGui();
 
-    connect( m_view->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
-    connect( m_view->chartView(), SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view->treeView(), SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+    connect( m_view->chartView(), SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
-    connect( m_view->treeView(), SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    connect( m_view->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 }
 
 void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
@@ -1363,10 +1363,10 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "Chart" ), i18n( "Chart Settings" ) );
     setCurrentPage( page );
     addPrintingOptions();
-    //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
 }
 
 //-----------------
@@ -1393,8 +1393,8 @@ ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
     connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 }
 

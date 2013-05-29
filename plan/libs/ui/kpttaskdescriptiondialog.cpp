@@ -122,7 +122,7 @@ TaskDescriptionPanelImpl::TaskDescriptionPanelImpl( Node &node, QWidget *p )
 
     setupUi(this);
 
-    connect( descriptionfield, SIGNAL( textChanged() ), SLOT( slotChanged() ) );
+    connect( descriptionfield, SIGNAL(textChanged()), SLOT(slotChanged()) );
 }
 
 void TaskDescriptionPanelImpl::slotChanged()
@@ -148,7 +148,7 @@ TaskDescriptionDialog::TaskDescriptionDialog( Task &task, QWidget *p, bool readO
 
     enableButtonOk(false);
 
-    connect( m_descriptionTab, SIGNAL( textChanged( bool ) ), this, SLOT( enableButtonOk(bool) ) );
+    connect( m_descriptionTab, SIGNAL(textChanged(bool)), this, SLOT(enableButtonOk(bool)) );
 }
 
 MacroCommand *TaskDescriptionDialog::buildCommand()

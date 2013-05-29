@@ -82,15 +82,15 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     enableWidgets();
     started->setFocus();
     
-    connect( weekNumber, SIGNAL( currentIndexChanged( int ) ), SLOT( slotWeekNumberChanged( int ) ) );
-    connect( addResource, SIGNAL( clicked() ), SLOT( slotAddResource() ) );
-    connect( addEntryBtn, SIGNAL( clicked() ), entryTable, SLOT( addEntry() ) );
-    connect( removeEntryBtn, SIGNAL( clicked() ), entryTable, SLOT( removeEntry() ) );
+    connect( weekNumber, SIGNAL(currentIndexChanged(int)), SLOT(slotWeekNumberChanged(int)) );
+    connect( addResource, SIGNAL(clicked()), SLOT(slotAddResource()) );
+    connect( addEntryBtn, SIGNAL(clicked()), entryTable, SLOT(addEntry()) );
+    connect( removeEntryBtn, SIGNAL(clicked()), entryTable, SLOT(removeEntry()) );
 
     entryTable->model()->setManager( sm );
     entryTable->model()->setTask( &task );
     entryTable->setCompletion( &m_completion );
-    connect( entryTable, SIGNAL( rowInserted( const QDate ) ), SLOT( slotEntryAdded( const QDate ) ) );
+    connect( entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotEntryAdded(QDate)) );
     
     resourceTable->setProject( static_cast<Project*>( task.projectNode() ) );
     resourceTable->setCompletion( &m_completion );
@@ -104,10 +104,10 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));
 
-    connect(startTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
-    connect(startTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotStartTimeChanged( const QDateTime& )));
-    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
-    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotFinishTimeChanged( const QDateTime& )));
+    connect(startTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotChanged()));
+    connect(startTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotStartTimeChanged(QDateTime)));
+    connect(finishTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotChanged()));
+    connect(finishTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotFinishTimeChanged(QDateTime)));
 }
 
 MacroCommand *TaskProgressPanel::buildCommand()
@@ -239,27 +239,27 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
     addEntryBtn->setIcon(koIcon("list-add"));
     removeEntryBtn->setIcon(koIcon("list-remove"));
 
-    connect(entryTable, SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
+    connect(entryTable, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection)) );
     removeEntryBtn->setEnabled( false );
 
     editmode->setCurrentIndex( m_original.entrymode() - 1 );
-    connect( editmode, SIGNAL( currentIndexChanged( int ) ), SLOT( slotEditmodeChanged( int ) ) );
-    connect( editmode, SIGNAL( activated( int ) ), SLOT( slotChanged() ) );
+    connect( editmode, SIGNAL(currentIndexChanged(int)), SLOT(slotEditmodeChanged(int)) );
+    connect( editmode, SIGNAL(activated(int)), SLOT(slotChanged()) );
     
-    connect(resourceTable, SIGNAL(changed() ), SLOT( slotChanged() ) );
-    connect(resourceTable, SIGNAL(resourceAdded() ), SLOT( slotChanged() ) );
+    connect(resourceTable, SIGNAL(changed()), SLOT(slotChanged()) );
+    connect(resourceTable, SIGNAL(resourceAdded()), SLOT(slotChanged()) );
     
-    connect(entryTable, SIGNAL(changed() ), SLOT( slotChanged() ) );
-    connect(entryTable, SIGNAL(rowInserted( const QDate ) ), SLOT( slotChanged() ) );
+    connect(entryTable, SIGNAL(changed()), SLOT(slotChanged()) );
+    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotChanged()) );
 
-    connect(entryTable, SIGNAL(changed() ), SLOT( slotEntryChanged() ) );
-    connect(entryTable, SIGNAL(rowInserted( const QDate ) ), SLOT( slotEntryChanged() ) );
-    connect(entryTable, SIGNAL(rowRemoved( const QDate ) ), SLOT( slotEntryChanged() ) );
+    connect(entryTable, SIGNAL(changed()), SLOT(slotEntryChanged()) );
+    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotEntryChanged()) );
+    connect(entryTable, SIGNAL(rowRemoved(QDate)), SLOT(slotEntryChanged()) );
 
-    connect( prevWeekBtn, SIGNAL( clicked( bool ) ), SLOT( slotPrevWeekBtnClicked() ) );
-    connect( nextWeekBtn, SIGNAL( clicked( bool ) ), SLOT( slotNextWeekBtnClicked() ) );
+    connect( prevWeekBtn, SIGNAL(clicked(bool)), SLOT(slotPrevWeekBtnClicked()) );
+    connect( nextWeekBtn, SIGNAL(clicked(bool)), SLOT(slotNextWeekBtnClicked()) );
     
-    connect ( ui_year, SIGNAL( valueChanged( int ) ), SLOT( slotFillWeekNumbers( int ) ) );
+    connect ( ui_year, SIGNAL(valueChanged(int)), SLOT(slotFillWeekNumbers(int)) );
 
     int y = 0;
     int wn = QDate::currentDate().weekNumber( &y );

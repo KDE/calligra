@@ -72,7 +72,7 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
 
     setItemDelegateForColumn( 1, new EnumDelegate( this ) ); // timezone
 
-    connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
+    connect( header(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(headerContextMenuRequested(QPoint)) );
 }
 
 void CalendarTreeView::headerContextMenuRequested( const QPoint &pos )
@@ -199,11 +199,11 @@ CalendarDayView::CalendarDayView( QWidget *parent )
     verticalHeader()->hide();
 
     actionSetWork = new KAction( i18n( "Work..." ), this );
-    connect( actionSetWork, SIGNAL( triggered( bool ) ), SLOT( slotSetWork() ) );
+    connect( actionSetWork, SIGNAL(triggered(bool)), SLOT(slotSetWork()) );
     actionSetVacation = new KAction( i18n( "Non-working" ), this );
-    connect( actionSetVacation, SIGNAL( triggered( bool ) ), SLOT( slotSetVacation() ) );
+    connect( actionSetVacation, SIGNAL(triggered(bool)), SLOT(slotSetVacation()) );
     actionSetUndefined = new KAction( i18n( "Undefined" ), this );
-    connect( actionSetUndefined, SIGNAL( triggered( bool ) ), SLOT( slotSetUndefined() ) );
+    connect( actionSetUndefined, SIGNAL(triggered(bool)), SLOT(slotSetUndefined()) );
 }
 
 QSize CalendarDayView::sizeHint() const
@@ -216,7 +216,7 @@ QSize CalendarDayView::sizeHint() const
 void CalendarDayView::slotSetWork()
 {
     kDebug(planDbg());
-    if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
+    if ( receivers( SIGNAL(executeCommand(KUndo2Command*)) ) == 0 ) {
         return;
     }
     Calendar *cal = model()->calendar();
@@ -263,7 +263,7 @@ void CalendarDayView::slotIntervalEditDialogFinished( int result )
 void CalendarDayView::slotSetVacation()
 {
     kDebug(planDbg());
-    if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
+    if ( receivers( SIGNAL(executeCommand(KUndo2Command*)) ) == 0 ) {
         return;
     }
     QModelIndexList lst = selectionModel()->selectedIndexes();
@@ -293,7 +293,7 @@ void CalendarDayView::slotSetVacation()
 void CalendarDayView::slotSetUndefined()
 {
     kDebug(planDbg());
-    if ( receivers( SIGNAL( executeCommand( KUndo2Command* ) ) ) == 0 ) {
+    if ( receivers( SIGNAL(executeCommand(KUndo2Command*)) ) == 0 ) {
         return;
     }
     QModelIndexList lst = selectionModel()->selectedIndexes();
@@ -439,8 +439,8 @@ CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
     m_calendarview->setAcceptDrops( true );
     m_calendarview->setAcceptDropsOnView( true );
 
-    connect( m_datePicker->dateTable(), SIGNAL( aboutToShowContextMenu( KMenu*, const QDate& ) ), SLOT( slotContextMenuDate( KMenu*, const QDate& ) ) );
-    connect( m_datePicker->dateTable(), SIGNAL( aboutToShowContextMenu( KMenu*, const QList<QDate>& ) ), SLOT( slotContextMenuDate( KMenu*, const QList<QDate>& ) ) );
+    connect( m_datePicker->dateTable(), SIGNAL(aboutToShowContextMenu(KMenu*,QDate)), SLOT(slotContextMenuDate(KMenu*,QDate)) );
+    connect( m_datePicker->dateTable(), SIGNAL(aboutToShowContextMenu(KMenu*,QList<QDate>)), SLOT(slotContextMenuDate(KMenu*,QList<QDate>)) );
 
 /*    const QDate date(2007,7,19);
     const QColor fgColor(Qt::darkGray);
@@ -458,22 +458,22 @@ CalendarEditor::CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent )
     m_calendarview->setDragEnabled ( true );
     m_calendarview->setAcceptDrops( true );
 
-    connect( m_calendarview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
-    connect( m_dayview->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
-    connect( m_dayview, SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_calendarview->model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
+    connect( m_dayview->model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
+    connect( m_dayview, SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_calendarview, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentCalendarChanged( QModelIndex ) ) );
-    connect( m_calendarview, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotCalendarSelectionChanged( const QModelIndexList ) ) );
-    connect( m_calendarview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuCalendar( QModelIndex, const QPoint& ) ) );
+    connect( m_calendarview, SIGNAL(currentChanged(QModelIndex)), this, SLOT(slotCurrentCalendarChanged(QModelIndex)) );
+    connect( m_calendarview, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotCalendarSelectionChanged(QModelIndexList)) );
+    connect( m_calendarview, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuCalendar(QModelIndex,QPoint)) );
 
-    connect( m_dayview, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentDayChanged( QModelIndex ) ) );
-    connect( m_dayview, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotDaySelectionChanged( const QModelIndexList ) ) );
-    connect( m_dayview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuDay( QModelIndex, const QPoint& ) ) );
+    connect( m_dayview, SIGNAL(currentChanged(QModelIndex)), this, SLOT(slotCurrentDayChanged(QModelIndex)) );
+    connect( m_dayview, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotDaySelectionChanged(QModelIndexList)) );
+    connect( m_dayview, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuDay(QModelIndex,QPoint)) );
 
-    connect( m_dayview->model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotEnableActions() ) );
+    connect( m_dayview->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotEnableActions()) );
 
-    connect( m_calendarview, SIGNAL( focusChanged() ), this, SLOT( slotEnableActions() ) );
-    connect( m_dayview, SIGNAL( focusChanged() ), this, SLOT( slotEnableActions() ) );
+    connect( m_calendarview, SIGNAL(focusChanged()), this, SLOT(slotEnableActions()) );
+    connect( m_dayview, SIGNAL(focusChanged()), this, SLOT(slotEnableActions()) );
 
 }
 
@@ -620,28 +620,28 @@ void CalendarEditor::setupGui()
     actionAddCalendar   = new KAction(koIcon("resource-calendar-insert"), i18n("Add Calendar"), this);
     coll->addAction("add_calendar", actionAddCalendar  );
     actionAddCalendar ->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
-    connect( actionAddCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddCalendar () ) );
+    connect( actionAddCalendar , SIGNAL(triggered(bool)), SLOT(slotAddCalendar()) );
 
     actionAddSubCalendar   = new KAction(koIcon("resource-calendar-child-insert"), i18n("Add Subcalendar"), this);
     coll->addAction("add_subcalendar", actionAddSubCalendar  );
     actionAddSubCalendar ->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
-    connect( actionAddSubCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddSubCalendar () ) );
+    connect( actionAddSubCalendar , SIGNAL(triggered(bool)), SLOT(slotAddSubCalendar()) );
 
     actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     coll->addAction("delete_calendar_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
-    connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteCalendar() ) );
+    connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteCalendar()) );
 
     addAction( name, actionAddCalendar  );
     addAction( name, actionAddSubCalendar  );
     addAction( name, actionDeleteSelection );
 
     actionSetWork = new KAction( i18n( "Work..." ), this );
-    connect( actionSetWork, SIGNAL( triggered( bool ) ), SLOT( slotSetWork() ) );
+    connect( actionSetWork, SIGNAL(triggered(bool)), SLOT(slotSetWork()) );
     actionSetVacation = new KAction( i18n( "Non-working" ), this );
-    connect( actionSetVacation, SIGNAL( triggered( bool ) ), SLOT( slotSetVacation() ) );
+    connect( actionSetVacation, SIGNAL(triggered(bool)), SLOT(slotSetVacation()) );
     actionSetUndefined = new KAction( i18n( "Undefined" ), this );
-    connect( actionSetUndefined, SIGNAL( triggered( bool ) ), SLOT( slotSetUndefined() ) );
+    connect( actionSetUndefined, SIGNAL(triggered(bool)), SLOT(slotSetUndefined()) );
 
 }
 

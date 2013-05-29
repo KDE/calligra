@@ -309,9 +309,9 @@ QWidget *PrintingDialog::createPageLayoutWidget() const
 {
     QWidget *w = ViewBase::createPageLayoutWidget( m_view );
     KoPageLayoutWidget *pw = w->findChild<KoPageLayoutWidget*>();
-    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
-    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), this, SLOT(setPrinterPageLayout(const KoPageLayout&)));
-    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), this, SIGNAL(changed()));
+    connect(pw, SIGNAL(layoutChanged(KoPageLayout)), m_view, SLOT(setPageLayout(KoPageLayout)));
+    connect(pw, SIGNAL(layoutChanged(KoPageLayout)), this, SLOT(setPrinterPageLayout(KoPageLayout)));
+    connect(pw, SIGNAL(layoutChanged(KoPageLayout)), this, SIGNAL(changed()));
     return w;
 }
 
@@ -319,7 +319,7 @@ QList<QWidget*> PrintingDialog::createOptionWidgets() const
 {
     //kDebug(planDbg());
     PrintingHeaderFooter *w = new PrintingHeaderFooter( printingOptions() );
-    connect(w, SIGNAL(changed(PrintingOptions)), this, SLOT(setPrintingOptions(const PrintingOptions&)));
+    connect(w, SIGNAL(changed(PrintingOptions)), this, SLOT(setPrintingOptions(PrintingOptions)));
     const_cast<PrintingDialog*>( this )->m_widget = w;
 
     return QList<QWidget*>() << w;
@@ -577,7 +577,7 @@ QWidget *ViewBase::createPageLayoutWidget( ViewBase *view )
     prev->setPageLayout( view->pageLayout() );
     lay->addWidget( prev, 1 );
 
-    connect (w, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
+    connect (w, SIGNAL(layoutChanged(KoPageLayout)), prev, SLOT(setPageLayout(KoPageLayout)));
 
     return widget;
 }
@@ -604,7 +604,7 @@ void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 void ViewBase::createOptionAction()
 {
     actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
 
@@ -874,7 +874,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
 
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
 
-    connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( header(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 void TreeViewBase::dropEvent( QDropEvent *e )
@@ -1347,11 +1347,11 @@ void TreeViewBase::slotCurrentChanged( const QModelIndex &current, const QModelI
 void TreeViewBase::setModel( QAbstractItemModel *model )
 {
     if ( selectionModel() ) {
-        disconnect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
+        disconnect( selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
     }
     QTreeView::setModel( model );
     if ( selectionModel() ) {
-        connect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
+        connect( selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
     }
     setReadWrite( m_readWrite );
 }
@@ -1359,11 +1359,11 @@ void TreeViewBase::setModel( QAbstractItemModel *model )
 void TreeViewBase::setSelectionModel( QItemSelectionModel *model )
 {
     if ( selectionModel() ) {
-        disconnect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
+        disconnect( selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
     }
     QTreeView::setSelectionModel( model );
     if ( selectionModel() ) {
-        connect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
+        connect( selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
     }
 }
 
@@ -1807,37 +1807,37 @@ void DoubleTreeViewBase::init()
     setStretchFactor( 1, 1 );
 
 
-    connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
-    connect( m_leftview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotLeftHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_leftview, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SIGNAL(contextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_leftview, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotLeftHeaderContextMenuRequested(QPoint)) );
 
-    connect( m_rightview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
-    connect( m_rightview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotRightHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_rightview, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SIGNAL(contextMenuRequested(QModelIndex,QPoint)) );
+    connect( m_rightview, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotRightHeaderContextMenuRequested(QPoint)) );
 
-    connect( m_leftview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_rightview->verticalScrollBar(), SLOT( setValue( int ) ) );
+    connect( m_leftview->verticalScrollBar(), SIGNAL(valueChanged(int)), m_rightview->verticalScrollBar(), SLOT(setValue(int)) );
 
-    connect( m_rightview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_leftview->verticalScrollBar(), SLOT( setValue( int ) ) );
+    connect( m_rightview->verticalScrollBar(), SIGNAL(valueChanged(int)), m_leftview->verticalScrollBar(), SLOT(setValue(int)) );
 
-    connect( m_leftview, SIGNAL( moveAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotToRightView( const QModelIndex & ) ) );
-    connect( m_rightview, SIGNAL( moveBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotToLeftView( const QModelIndex & ) ) );
+    connect( m_leftview, SIGNAL(moveAfterLastColumn(QModelIndex)), this, SLOT(slotToRightView(QModelIndex)) );
+    connect( m_rightview, SIGNAL(moveBeforeFirstColumn(QModelIndex)), this, SLOT(slotToLeftView(QModelIndex)) );
 
-    connect( m_leftview, SIGNAL( editAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotEditToRightView( const QModelIndex & ) ) );
-    connect( m_rightview, SIGNAL( editBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotEditToLeftView( const QModelIndex & ) ) );
+    connect( m_leftview, SIGNAL(editAfterLastColumn(QModelIndex)), this, SLOT(slotEditToRightView(QModelIndex)) );
+    connect( m_rightview, SIGNAL(editBeforeFirstColumn(QModelIndex)), this, SLOT(slotEditToLeftView(QModelIndex)) );
 
-    connect( m_leftview, SIGNAL( expanded( const QModelIndex & ) ), m_rightview, SLOT( expand( const QModelIndex & ) ) );
-    connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), m_rightview, SLOT( collapse( const QModelIndex & ) ) );
+    connect( m_leftview, SIGNAL(expanded(QModelIndex)), m_rightview, SLOT(expand(QModelIndex)) );
+    connect( m_leftview, SIGNAL(collapsed(QModelIndex)), m_rightview, SLOT(collapse(QModelIndex)) );
 
-    connect( m_rightview, SIGNAL( expanded( const QModelIndex & ) ), m_leftview, SLOT( expand( const QModelIndex & ) ) );
-    connect( m_rightview, SIGNAL( collapsed( const QModelIndex & ) ), m_leftview, SLOT( collapse( const QModelIndex & ) ) );
+    connect( m_rightview, SIGNAL(expanded(QModelIndex)), m_leftview, SLOT(expand(QModelIndex)) );
+    connect( m_rightview, SIGNAL(collapsed(QModelIndex)), m_leftview, SLOT(collapse(QModelIndex)) );
 
-    connect( m_leftview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
-    connect( m_rightview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
+    connect( m_leftview, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)) );
+    connect( m_rightview, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)) );
 
     m_actionSplitView = new KAction(koIcon("view-split-left-right"), QString(), this);
     setViewSplitMode( true );
 
-    connect( m_leftview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotLeftSortIndicatorChanged( int, Qt::SortOrder ) ) );
+    connect( m_leftview->header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), SLOT(slotLeftSortIndicatorChanged(int,Qt::SortOrder)) );
 
-    connect( m_rightview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotRightSortIndicatorChanged( int, Qt::SortOrder ) ) );
+    connect( m_rightview->header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), SLOT(slotRightSortIndicatorChanged(int,Qt::SortOrder)) );
 }
 
 void DoubleTreeViewBase::slotLeftSortIndicatorChanged( int logicalIndex, Qt::SortOrder /*order*/ )
@@ -1983,16 +1983,16 @@ void DoubleTreeViewBase::setModel( QAbstractItemModel *model )
     m_leftview->setModel( model );
     m_rightview->setModel( model );
     if ( m_selectionmodel ) {
-        disconnect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
+        disconnect( m_selectionmodel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(slotSelectionChanged(QItemSelection,QItemSelection)) );
 
-        disconnect( m_selectionmodel, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SIGNAL( currentChanged ( const QModelIndex &, const QModelIndex & ) ) );
+        disconnect( m_selectionmodel, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SIGNAL(currentChanged(QModelIndex,QModelIndex)) );
     }
     m_selectionmodel = m_leftview->selectionModel();
     m_rightview->setSelectionModel( m_selectionmodel );
 
-    connect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
+    connect( m_selectionmodel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(slotSelectionChanged(QItemSelection,QItemSelection)) );
 
-    connect( m_selectionmodel, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SIGNAL( currentChanged ( const QModelIndex &, const QModelIndex & ) ) );
+    connect( m_selectionmodel, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SIGNAL(currentChanged(QModelIndex,QModelIndex)) );
 
     setReadWrite( m_readWrite );
 }

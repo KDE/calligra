@@ -341,9 +341,9 @@ UsedEffortEditor::UsedEffortEditor( QWidget *parent )
     setItemDelegateForColumn ( 6, new DoubleSpinBoxDelegate( this ) );
     setItemDelegateForColumn ( 7, new DoubleSpinBoxDelegate( this ) );
 
-    connect ( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );
+    connect ( model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
 
-    connect ( m, SIGNAL( rowInserted( const QModelIndex& ) ), SIGNAL( resourceAdded() ) );
+    connect ( m, SIGNAL(rowInserted(QModelIndex)), SIGNAL(resourceAdded()) );
 }
 
 bool UsedEffortEditor::hasFreeResources() const
@@ -817,19 +817,19 @@ CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
 void CompletionEntryEditor::setCompletionModel( CompletionEntryItemModel *m )
 {
     if ( model() ) {
-        disconnect(model(), SIGNAL(rowInserted(const QDate)), this, SIGNAL(rowInserted(const QDate)));
-        disconnect(model(), SIGNAL(rowRemoved(const QDate)), this, SIGNAL(rowRemoved(const QDate)));
-        disconnect(model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SIGNAL(changed()));
+        disconnect(model(), SIGNAL(rowInserted(QDate)), this, SIGNAL(rowInserted(QDate)));
+        disconnect(model(), SIGNAL(rowRemoved(QDate)), this, SIGNAL(rowRemoved(QDate)));
+        disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(changed()));
         disconnect(model(), SIGNAL(changed()), this, SIGNAL(changed()));
-        disconnect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)));
+        disconnect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SIGNAL(selectionChanged(QItemSelection,QItemSelection)));
     }
     setModel( m );
     if ( model() ) {
-        connect(model(), SIGNAL(rowInserted(const QDate)), this, SIGNAL(rowInserted(const QDate)));
-        connect(model(), SIGNAL(rowRemoved(const QDate)), this, SIGNAL(rowRemoved(const QDate)));
-        connect(model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SIGNAL(changed()));
+        connect(model(), SIGNAL(rowInserted(QDate)), this, SIGNAL(rowInserted(QDate)));
+        connect(model(), SIGNAL(rowRemoved(QDate)), this, SIGNAL(rowRemoved(QDate)));
+        connect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(changed()));
         connect(model(), SIGNAL(changed()), this, SIGNAL(changed()));
-        connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)));
+        connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SIGNAL(selectionChanged(QItemSelection,QItemSelection)));
     }
 }
 

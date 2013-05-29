@@ -71,7 +71,7 @@ AccountsTreeView::AccountsTreeView( QWidget *parent )
     hideColumns( m_rightview, QList<int>() << 0 << 1 << 2 );
     slotModelReset();
     
-    connect( m, SIGNAL( modelReset() ), SLOT( slotModelReset() ) );
+    connect( m, SIGNAL(modelReset()), SLOT(slotModelReset()) );
 }
 
 void AccountsTreeView::slotModelReset()
@@ -167,9 +167,9 @@ AccountsView::AccountsView(KoPart *part, Project *project, KoDocument *doc, QWid
 
     setupGui();
     
-    connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
     
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 void AccountsView::setZoom( double zoom )
