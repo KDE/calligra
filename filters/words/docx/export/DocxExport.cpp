@@ -82,7 +82,7 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
 
     // Start the conversion
 
-    // Collects all the embedded files and writes the result at the end.
+    // Collects all the parts of the docx file and writes the result at the end.
     DocxFile docxFile;
 
 #if 1

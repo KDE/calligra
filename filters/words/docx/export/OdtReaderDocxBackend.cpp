@@ -51,6 +51,7 @@
 
 OdtReaderDocxBackend::OdtReaderDocxBackend(OdfReaderContext *context)
     : OdtReaderBackend(context)
+    , m_insideSpanLevel(0)
 {
 }
 
@@ -63,8 +64,7 @@ OdtReaderDocxBackend::~OdtReaderDocxBackend()
 // ODT document level functions
 
 
-
-void OdtReaderDocxBackend::elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdtReaderDocxBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
     OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
@@ -111,6 +111,7 @@ void OdtReaderDocxBackend::elementOfficeText(KoXmlStreamReader &reader, OdfReade
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
+
 void OdtReaderDocxBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
@@ -143,6 +144,7 @@ void OdtReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
+
 void OdtReaderDocxBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
@@ -151,15 +153,13 @@ void OdtReaderDocxBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderC
         return;
     }
 
-    KoXmlWriter  *writer = docxContext->m_documentWriter;
     if (reader.isStartElement()) {
-        startRun(writer, context);
-        // FIXME: This is wrong.  text:span can be inside each other so we need to keep track of level.
-        m_isInsideSpan = true;
+        startRun(docxContext);
+        ++m_insideSpanLevel;
     }
     else {
-        endRun(writer, context);
-        m_isInsideSpan = false;
+        endRun(docxContext);
+        --m_insideSpanLevel;
     }
 }
 
@@ -189,8 +189,6 @@ void OdtReaderDocxBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCont
 
 void OdtReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
-    Q_UNUSED(reader);
-
     DEBUG_BACKEND();
     OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
     if (!docxContext) {
@@ -202,16 +200,16 @@ void OdtReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReaderCon
     // created when a text:span is encountered in odf but text nodes
     // can exist also without a text:span surrounding it.
     KoXmlWriter  *writer = docxContext->m_documentWriter;
-    if (!m_isInsideSpan) {
-        startRun(writer, context);
+    if (m_insideSpanLevel == 0) {
+        startRun(docxContext);
     }
 
     writer->startElement("w:t");
     writer->addTextNode(reader.text().toString());
     writer->endElement(); // w:t
 
-    if (!m_isInsideSpan) {
-        endRun(writer, context);
+    if (m_insideSpanLevel == 0) {
+        endRun(docxContext);
     }
 }
 
@@ -220,20 +218,18 @@ void OdtReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReaderCon
 //                         Private functions
 
 
-void OdtReaderDocxBackend::startRun(KoXmlWriter *writer, OdfReaderContext *context)
+void OdtReaderDocxBackend::startRun(OdfReaderDocxContext *docxContext)
 {
-    Q_UNUSED(context);
-
+    KoXmlWriter  *writer = docxContext->m_documentWriter;
     writer->startElement("w:r");
     writer->startElement("w:rPr");
     // FIXME: Add run properties here
     writer->endElement(); // w:rPr
 }
 
-void OdtReaderDocxBackend::endRun(KoXmlWriter *writer, OdfReaderContext *context)
+void OdtReaderDocxBackend::endRun(OdfReaderDocxContext *docxContext)
 {
-    Q_UNUSED(context);
-
     // FIXME: More here?
+    KoXmlWriter  *writer = docxContext->m_documentWriter;
     writer->endElement(); // w:r
 }

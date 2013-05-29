@@ -33,7 +33,7 @@ class QSizeF;
 class QStringList;
 class KoStore;
 class OdfReaderContext;
-
+class OdfReaderDocxContext;
 
 class OdtReaderDocxBackend : public OdtReaderBackend
 {
@@ -49,8 +49,8 @@ class OdtReaderDocxBackend : public OdtReaderBackend
     // ----------------------------------------------------------------
     // ODT document level functions
 
-    //void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
+    //void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
@@ -67,11 +67,11 @@ class OdtReaderDocxBackend : public OdtReaderBackend
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 
  private:
-    void startRun(KoXmlWriter *writer, OdfReaderContext *context);
-    void endRun(KoXmlWriter *writer, OdfReaderContext *context);
+    void startRun(OdfReaderDocxContext *context);
+    void endRun(OdfReaderDocxContext *context);
 
  private:
-    bool  m_isInsideSpan;
+    int  m_insideSpanLevel;    // Number of nexted <text:span> levels.
 };
 
 
