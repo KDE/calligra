@@ -222,8 +222,8 @@ QStringList SplitterView::actionListNames() const
     }
     return lst;
 }
-    
-QList<QAction*> SplitterView::actionList( const QString name ) const
+
+QList<QAction*> SplitterView::actionList( const QString &name ) const
 {
     QList<QAction*> lst = ViewActionLists::actionList( name );
     if ( lst.isEmpty() ) {

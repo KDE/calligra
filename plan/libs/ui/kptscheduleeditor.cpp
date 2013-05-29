@@ -186,7 +186,7 @@ void ScheduleEditor::setGuiActive( bool activate )
     }
 }
 
-void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void ScheduleEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
@@ -203,7 +203,7 @@ void ScheduleEditor::slotCurrentChanged(  const QModelIndex & )
     //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 }
 
-void ScheduleEditor::slotSelectionChanged( const QModelIndexList /*list*/)
+void ScheduleEditor::slotSelectionChanged( const QModelIndexList &/*list*/)
 {
     //kDebug(planDbg())<<list.count();
     // Note: Don't use list as it includes all columns in a row
@@ -625,7 +625,7 @@ void ScheduleLogView::slotEdit()
     kWarning()<<"No object";
 }
 
-void ScheduleLogView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void ScheduleLogView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     if ( ! isReadWrite() || ! index.isValid() ) {
         return;
@@ -654,7 +654,7 @@ void ScheduleLogView::slotCurrentChanged(  const QModelIndex & )
     //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 }
 
-void ScheduleLogView::slotSelectionChanged( const QModelIndexList list)
+void ScheduleLogView::slotSelectionChanged( const QModelIndexList &list)
 {
     kDebug(planDbg())<<list.count();
 }
@@ -767,7 +767,7 @@ QStringList ScheduleHandlerView::actionListNames() const
     return lst;
 }
 
-QList<QAction*> ScheduleHandlerView::actionList( const QString name ) const
+QList<QAction*> ScheduleHandlerView::actionList( const QString &name ) const
 {
     //kDebug(planDbg())<<name;
     QList<QAction*> lst;

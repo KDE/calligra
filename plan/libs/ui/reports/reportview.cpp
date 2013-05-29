@@ -1110,7 +1110,7 @@ void ReportDesigner::setModified( bool on )
 }
 
 
-void ReportDesigner::setData( const QDomDocument doc )
+void ReportDesigner::setData( const QDomDocument &doc )
 {
     m_original = doc.cloneNode().toDocument();
     setData();

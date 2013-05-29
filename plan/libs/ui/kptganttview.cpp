@@ -753,7 +753,7 @@ Node *GanttView::currentNode() const
     return m_gantt->model()->node( m_gantt->sfModel()->mapToSource( idx ) );
 }
 
-void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+void GanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
     kDebug(planDbg());
     QString name;
@@ -1017,7 +1017,7 @@ void MilestoneGanttView::setupGui()
     createOptionAction();
 }
 
-void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+void MilestoneGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
     kDebug(planDbg());
     QString name;
@@ -1173,7 +1173,7 @@ Node *ResourceAppointmentsGanttView::currentNode() const
     return m_model->node( idx );
 }
 
-void ResourceAppointmentsGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+void ResourceAppointmentsGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
     kDebug(planDbg());
     QString name;

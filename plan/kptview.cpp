@@ -648,7 +648,7 @@ void View::slotUpdateViewInfo( ViewListItem *itm )
     }
 }
 
-ViewInfo View::defaultViewInfo( const QString type ) const
+ViewInfo View::defaultViewInfo( const QString &type ) const
 {
     ViewInfo vi;
     if ( type == "CalendarEditor" ) {
@@ -715,7 +715,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
     return vi;
 }
 
-ViewInfo View::defaultCategoryInfo( const QString type ) const
+ViewInfo View::defaultCategoryInfo( const QString &type ) const
 {
     ViewInfo vi;
     if ( type == "Editors" ) {
@@ -760,7 +760,7 @@ ViewBase *View::createWelcomeView()
     return v;
 }
 
-ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ResourceAppointmentsGanttView *v = new ResourceAppointmentsGanttView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -790,7 +790,7 @@ ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QS
 }
 
 
-ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ResourceAppointmentsView *v = new ResourceAppointmentsView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -818,7 +818,7 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
     return v;
 }
 
-ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ResourceEditor *resourceeditor = new ResourceEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( resourceeditor );
@@ -844,7 +844,7 @@ ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, cons
     return resourceeditor;
 }
 
-ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createTaskEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     TaskEditor *taskeditor = new TaskEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( taskeditor );
@@ -888,7 +888,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     return taskeditor;
 }
 
-ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     AccountsEditor *ae = new AccountsEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( ae );
@@ -911,7 +911,7 @@ ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, cons
     return ae;
 }
 
-ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     CalendarEditor *calendareditor = new CalendarEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( calendareditor );
@@ -936,7 +936,7 @@ ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, cons
     return calendareditor;
 }
 
-ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ScheduleHandlerView *handler = new ScheduleHandlerView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( handler );
@@ -990,7 +990,7 @@ ScheduleEditor *View::createScheduleEditor( QWidget *parent )
     return scheduleeditor;
 }
 
-ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ScheduleEditor *scheduleeditor = new ScheduleEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( scheduleeditor );
@@ -1023,7 +1023,7 @@ ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, cons
 }
 
 
-ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     DependencyEditor *editor = new DependencyEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( editor );
@@ -1062,7 +1062,7 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
     return editor;
 }
 
-ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createPertEditor( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     PertEditor *perteditor = new PertEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( perteditor );
@@ -1086,7 +1086,7 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
     return perteditor;
 }
 
-ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ProjectStatusView *v = new ProjectStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1112,7 +1112,7 @@ ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, c
     return v;
 }
 
-ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     PerformanceStatusView *v = new PerformanceStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1141,7 +1141,7 @@ ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString ta
 }
 
 
-ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     TaskStatusView *taskstatusview = new TaskStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( taskstatusview );
@@ -1169,7 +1169,7 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
     return taskstatusview;
 }
 
-ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createTaskView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     TaskView *v = new TaskView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1197,7 +1197,7 @@ ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QStr
     return v;
 }
 
-ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     TaskWorkPackageView *v = new TaskWorkPackageView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -1223,14 +1223,14 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag,
     connect( v, SIGNAL(requestPopupMenu(QString,QPoint)), this, SLOT(slotPopupMenu(QString,QPoint)) );
 
     connect( v, SIGNAL(mailWorkpackage(Node*,Resource*)), SLOT(slotMailWorkpackage(Node*,Resource*)) );
-    connect( v, SIGNAL(mailWorkpackages(QList<Node*>&,Resource*)), SLOT(slotMailWorkpackages(QList<Node*>&,Resource*)) );
+    connect( v, SIGNAL(mailWorkpackages(QList<Node*>,Resource*)), SLOT(slotMailWorkpackages(QList<Node*>,Resource*)) );
 
     connect(v, SIGNAL(checkForWorkPackages()), getPart(), SLOT(checkForWorkPackages()));
     v->updateReadWrite( m_readWrite );
     return v;
 }
 
-ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
@@ -1264,7 +1264,7 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
     return ganttview;
 }
 
-ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
@@ -1293,7 +1293,7 @@ ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, 
 }
 
 
-ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createAccountsView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     AccountsView *accountsview = new AccountsView(getKoPart(), &getProject(), getPart(), m_tab );
     m_tab->addWidget( accountsview );
@@ -1318,7 +1318,7 @@ ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const 
     return accountsview;
 }
 
-ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ResourceAssignmentView *resourceAssignmentView = new ResourceAssignmentView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( resourceAssignmentView );
@@ -1344,7 +1344,7 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString t
     return resourceAssignmentView;
 }
 
-ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createReportView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
     ReportView *v = new ReportView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
@@ -2962,7 +2962,7 @@ void View::slotMailWorkpackage( Node *node, Resource *resource )
     KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
 }
 
-void View::slotMailWorkpackages( QList<Node*> &nodes, Resource *resource )
+void View::slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource )
 {
     kDebug(planDbg());
     if ( resource == 0 ) {

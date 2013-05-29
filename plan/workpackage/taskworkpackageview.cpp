@@ -179,7 +179,7 @@ void TaskWorkPackageTreeView::setProject( Project *project )
     itemModel()->setProject( project );
 }
 
-void TaskWorkPackageTreeView::slotActivated( const QModelIndex index )
+void TaskWorkPackageTreeView::slotActivated( const QModelIndex &index )
 {
     kDebug(planworkDbg())<<index.column();
 }
@@ -360,7 +360,7 @@ void TaskWorkPackageView::updateReadWrite( bool rw )
     m_view->setReadWrite( rw );
 }
 
-void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList /*lst*/ )
+void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList &/*lst*/ )
 {
     emit selectionChanged();
 }
@@ -754,7 +754,7 @@ GanttView::~GanttView()
     delete m_rowController;
 }
 
-void GanttView::slotSelectionChanged( QItemSelection selected, QItemSelection )
+void GanttView::slotSelectionChanged( const QItemSelection &selected, const QItemSelection& )
 {
     emit selectionChanged( selected.indexes() );
 }
@@ -870,7 +870,7 @@ TaskWPGanttView::TaskWPGanttView( Part *part, QWidget *parent )
     connect(m_view, SIGNAL(sectionsMoved()), SLOT(sectionsMoved()));
 }
 
-void TaskWPGanttView::slotSelectionChanged( const QModelIndexList /*lst*/ )
+void TaskWPGanttView::slotSelectionChanged( const QModelIndexList& /*lst*/ )
 {
     emit selectionChanged();
 }

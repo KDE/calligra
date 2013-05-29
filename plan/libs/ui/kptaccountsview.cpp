@@ -191,7 +191,7 @@ void AccountsView::setupGui()
     createOptionAction();
 }
 
-void AccountsView::slotContextMenuRequested( QModelIndex, const QPoint &pos )
+void AccountsView::slotContextMenuRequested( const QModelIndex&, const QPoint &pos )
 {
     kDebug(planDbg());
     slotHeaderContextMenuRequested( pos );

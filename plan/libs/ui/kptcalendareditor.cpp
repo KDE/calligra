@@ -527,7 +527,7 @@ void CalendarEditor::slotContextMenuDate( KMenu *menu, const QDate &date )
     menu->addAction( actionSetUndefined );
 }
 
-void CalendarEditor::slotContextMenuCalendar( QModelIndex /*index*/, const QPoint& pos )
+void CalendarEditor::slotContextMenuCalendar( const QModelIndex &/*index*/, const QPoint& pos )
 {
     if ( ! isReadWrite() ) {
         return;
@@ -547,7 +547,7 @@ void CalendarEditor::slotContextMenuCalendar( QModelIndex /*index*/, const QPoin
     emit requestPopupMenu( name, pos );
 }
 
-void CalendarEditor::slotContextMenuDay( QModelIndex index, const QPoint& pos )
+void CalendarEditor::slotContextMenuDay( const QModelIndex &index, const QPoint& pos )
 {
     if ( ! isReadWrite() ) {
         return;
@@ -580,7 +580,7 @@ void CalendarEditor::slotCurrentCalendarChanged(  const QModelIndex & )
     }
 }
 
-void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList /*list */)
+void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList& /*list */)
 {
     //kDebug(planDbg())<<list.count();
     updateActionsEnabled( true );
@@ -591,7 +591,7 @@ void CalendarEditor::slotCurrentDayChanged(  const QModelIndex & )
     //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 }
 
-void CalendarEditor::slotDaySelectionChanged( const QModelIndexList )
+void CalendarEditor::slotDaySelectionChanged( const QModelIndexList& )
 {
     //kDebug(planDbg())<<list.count();
     updateActionsEnabled( true );

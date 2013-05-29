@@ -3806,7 +3806,7 @@ QList<Node*> NodeItemModel::nodeList( QDataStream &stream )
     return lst;
 }
 
-QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
+QList<Node*> NodeItemModel::removeChildNodes( const QList<Node*> &nodes )
 {
     QList<Node*> lst;
     foreach ( Node *node, nodes ) {
@@ -4721,7 +4721,7 @@ QList<Node*> MilestoneItemModel::nodeList( QDataStream &stream )
     return lst;
 }
 
-QList<Node*> MilestoneItemModel::removeChildNodes( QList<Node*> nodes )
+QList<Node*> MilestoneItemModel::removeChildNodes( const QList<Node*> &nodes )
 {
     QList<Node*> lst;
     foreach ( Node *node, nodes ) {

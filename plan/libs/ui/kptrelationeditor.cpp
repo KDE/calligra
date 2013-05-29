@@ -120,7 +120,7 @@ void RelationEditor::slotCurrentChanged(  const QModelIndex &/*curr*/, const QMo
     slotEnableActions();
 }
 
-void RelationEditor::slotSelectionChanged( const QModelIndexList /*list*/)
+void RelationEditor::slotSelectionChanged( const QModelIndexList& /*list*/)
 {
     //kDebug(planDbg())<<list.count();
     slotEnableActions();

@@ -208,7 +208,7 @@ void AccountsEditor::setGuiActive( bool activate )
     }
 }
 
-void AccountsEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void AccountsEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     slotHeaderContextMenuRequested( pos );
@@ -234,7 +234,7 @@ void AccountsEditor::slotCurrentChanged(  const QModelIndex &curr )
     //slotEnableActions( curr.isValid() );
 }
 
-void AccountsEditor::slotSelectionChanged( const QModelIndexList list)
+void AccountsEditor::slotSelectionChanged( const QModelIndexList& list)
 {
     kDebug(planDbg())<<list.count();
     updateActionsEnabled( true );

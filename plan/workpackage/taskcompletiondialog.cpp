@@ -297,7 +297,7 @@ void TaskCompletionPanel::slotCalculateEffort()
 {
 }
 
-void TaskCompletionPanel::slotEntryAdded( const QDate date )
+void TaskCompletionPanel::slotEntryAdded( const QDate& date )
 {
     kDebug(planworkDbg())<<date;
 }

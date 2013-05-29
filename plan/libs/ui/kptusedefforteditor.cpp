@@ -757,7 +757,7 @@ QModelIndex CompletionEntryItemModel::addRow()
     return createIndex( row, 0 );
 }
 
-void CompletionEntryItemModel::removeEntry( const QDate date )
+void CompletionEntryItemModel::removeEntry( const QDate& date )
 {
     removeRow( m_datelist.indexOf( date ) );
 }
@@ -778,7 +778,7 @@ void CompletionEntryItemModel::removeRow( int row )
     emit changed();
 }
 
-void CompletionEntryItemModel::addEntry( const QDate date )
+void CompletionEntryItemModel::addEntry( const QDate& date )
 {
     kDebug(planDbg())<<date<<endl;
     Completion::Entry *e = new Completion::Entry();

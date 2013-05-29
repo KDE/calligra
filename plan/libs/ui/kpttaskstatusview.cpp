@@ -1031,7 +1031,7 @@ KoPrintJob *PerformanceStatusBase::createPrintJob( ViewBase *parent )
     return dia;
 }
 
-void PerformanceStatusBase::setNodes( const QList<Node *> nodes )
+void PerformanceStatusBase::setNodes( const QList<Node *> &nodes )
 {
     m_chartmodel.setNodes( nodes );
     static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setNodes( nodes );

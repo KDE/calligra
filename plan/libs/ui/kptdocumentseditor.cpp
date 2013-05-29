@@ -154,7 +154,7 @@ void DocumentsEditor::setGuiActive( bool activate )
     }
 }
 
-void DocumentsEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void DocumentsEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
@@ -187,7 +187,7 @@ void DocumentsEditor::slotCurrentChanged(  const QModelIndex & )
 //    slotEnableActions();
 }
 
-void DocumentsEditor::slotSelectionChanged( const QModelIndexList list )
+void DocumentsEditor::slotSelectionChanged( const QModelIndexList &list )
 {
     kDebug(planDbg())<<list.count();
     updateActionsEnabled( true );

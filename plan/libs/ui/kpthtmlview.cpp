@@ -79,7 +79,7 @@ void HtmlView::setGuiActive( bool activate )
     kDebug(planDbg())<<activate;
 }
 
-void HtmlView::slotContextMenuRequested( QModelIndex /*index*/, const QPoint& /*pos */)
+void HtmlView::slotContextMenuRequested( const QModelIndex &/*index*/, const QPoint& /*pos */)
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
 }

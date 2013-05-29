@@ -188,7 +188,7 @@ void ResourceEditor::setGuiActive( bool activate )
     }
 }
 
-void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void ResourceEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
@@ -227,7 +227,7 @@ void ResourceEditor::slotCurrentChanged(  const QModelIndex & )
 //    slotEnableActions();
 }
 
-void ResourceEditor::slotSelectionChanged( const QModelIndexList )
+void ResourceEditor::slotSelectionChanged( const QModelIndexList& )
 {
     //kDebug(planDbg())<<list.count();
     updateActionsEnabled();

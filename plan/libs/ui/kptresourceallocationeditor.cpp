@@ -121,7 +121,7 @@ void ResourceAllocationEditor::setGuiActive( bool activate )
     }
 }
 
-void ResourceAllocationEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void ResourceAllocationEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
@@ -160,7 +160,7 @@ void ResourceAllocationEditor::slotCurrentChanged(  const QModelIndex & )
 //    slotEnableActions();
 }
 
-void ResourceAllocationEditor::slotSelectionChanged( const QModelIndexList )
+void ResourceAllocationEditor::slotSelectionChanged( const QModelIndexList& )
 {
     //kDebug(planDbg())<<list.count();
     updateActionsEnabled();

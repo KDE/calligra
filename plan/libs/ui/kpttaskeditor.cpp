@@ -469,7 +469,7 @@ void TaskEditor::slotCurrentChanged( const QModelIndex &curr, const QModelIndex 
     slotEnableActions();
 }
 
-void TaskEditor::slotSelectionChanged( const QModelIndexList list)
+void TaskEditor::slotSelectionChanged( const QModelIndexList &list)
 {
     kDebug(planDbg())<<list.count();
     slotEnableActions();
@@ -1091,7 +1091,7 @@ void TaskView::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex &
     slotEnableActions();
 }
 
-void TaskView::slotSelectionChanged( const QModelIndexList list)
+void TaskView::slotSelectionChanged( const QModelIndexList &list)
 {
     kDebug(planDbg())<<list.count();
     slotEnableActions();
@@ -1388,7 +1388,7 @@ void TaskWorkPackageView::slotCurrentChanged(  const QModelIndex &curr, const QM
     slotEnableActions();
 }
 
-void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList list)
+void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList &list)
 {
     kDebug(planDbg())<<list.count();
     slotEnableActions();
@@ -1501,9 +1501,9 @@ void TaskWorkPackageView::slotMailWorkpackage()
         // TODO find a better way to log to avoid undo/redo
         m_cmd = new MacroCommand( i18nc( "(qtundo-format)", "Log Send Workpackage" ) );
         QPointer<WorkPackageSendDialog> dlg = new WorkPackageSendDialog( lst, scheduleManager(), this );
-        connect ( dlg->panel(), SIGNAL(sendWorkpackages(QList<Node*>&,Resource*)), this, SIGNAL(mailWorkpackages(QList<Node*>&,Resource*)) );
+        connect ( dlg->panel(), SIGNAL(sendWorkpackages(QList<Node*>,Resource*)), this, SIGNAL(mailWorkpackages(QList<Node*>,Resource*)) );
 
-        connect ( dlg->panel(), SIGNAL(sendWorkpackages(QList<Node*>&,Resource*)), this, SLOT(slotWorkPackageSent(QList<Node*>&,Resource*)) );
+        connect ( dlg->panel(), SIGNAL(sendWorkpackages(QList<Node*>,Resource*)), this, SLOT(slotWorkPackageSent(QList<Node*>,Resource*)) );
         dlg->exec();
         delete dlg;
         if ( ! m_cmd->isEmpty() ) {
@@ -1515,7 +1515,7 @@ void TaskWorkPackageView::slotMailWorkpackage()
     }
 }
 
-void TaskWorkPackageView::slotWorkPackageSent( QList<Node*> &nodes, Resource *resource )
+void TaskWorkPackageView::slotWorkPackageSent( const QList<Node*> &nodes, Resource *resource )
 {
     foreach ( Node *n, nodes ) {
         WorkPackage *wp = new WorkPackage( static_cast<Task*>( n )->workPackage() );

@@ -2603,7 +2603,7 @@ bool Project::isScheduleManager( void *ptr ) const
     return false;
 }
 
-ScheduleManager *Project::createScheduleManager( const QString name )
+ScheduleManager *Project::createScheduleManager( const QString &name )
 {
     //kDebug(planDbg())<<name;
     ScheduleManager *sm = new ScheduleManager( *this, name );

@@ -2101,7 +2101,7 @@ void DependencyEditor::slotCurrentChanged(  const QModelIndex &, const QModelInd
     slotEnableActions();
 }
 
-void DependencyEditor::slotSelectionChanged(  QList<QGraphicsItem*> )
+void DependencyEditor::slotSelectionChanged(  const QList<QGraphicsItem*>& )
 {
     //kDebug(planDependencyEditorDbg())<<lst.count();
     slotEnableActions();

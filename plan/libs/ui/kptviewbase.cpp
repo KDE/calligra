@@ -1869,7 +1869,7 @@ void DoubleTreeViewBase::slotRightSortIndicatorChanged( int logicalIndex, Qt::So
 }
 
 
-QList<int> DoubleTreeViewBase::expandColumnList( const QList<int> lst ) const
+QList<int> DoubleTreeViewBase::expandColumnList( const QList<int> &lst ) const
 {
     QList<int> mlst = lst;
     if ( ! mlst.isEmpty() ) {

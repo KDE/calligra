@@ -233,7 +233,7 @@ void ResourceAppointmentsView::setGuiActive( bool activate )
     }
 }
 
-void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void ResourceAppointmentsView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     kDebug(planDbg())<<index<<pos;
     QString name;
@@ -273,7 +273,7 @@ void ResourceAppointmentsView::slotCurrentChanged(  const QModelIndex & )
 //    slotEnableActions();
 }
 
-void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList )
+void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList& )
 {
     //kDebug(planDbg())<<list.count();
     updateActionsEnabled();

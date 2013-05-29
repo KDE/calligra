@@ -218,7 +218,7 @@ void TaskProgressPanel::slotAddResource()
     addResource->setEnabled( resourceTable->hasFreeResources() );
 }
 
-void TaskProgressPanel::slotEntryAdded( const QDate date )
+void TaskProgressPanel::slotEntryAdded( const QDate &date )
 {
     kDebug(planDbg())<<date;
 }
