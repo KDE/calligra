@@ -67,6 +67,8 @@ public:
 
     QObjectList linkTargets() const;
 
+    Q_INVOKABLE qreal pagePosition( int page );
+
 signals:
     void searchTermChanged();
     void documentModelChanged();
