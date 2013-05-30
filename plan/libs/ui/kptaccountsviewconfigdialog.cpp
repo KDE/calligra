@@ -94,8 +94,8 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTree
 
     connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 
-    connect(m_panel, SIGNAL(changed(bool)), SLOT( enableButtonOk(bool)));
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
 }
 
 
@@ -131,8 +131,8 @@ AccountsviewConfigPanel::AccountsviewConfigPanel(QWidget *parent)
     : AccountsviewConfigurePanelBase(parent)
 {
 
-    connect(ui_startdate, SIGNAL(dateChanged(const QDate&)), SLOT(slotChanged()));
-    connect(ui_enddate, SIGNAL(dateChanged(const QDate&)), SLOT(slotChanged()));
+    connect(ui_startdate, SIGNAL(dateChanged(QDate)), SLOT(slotChanged()));
+    connect(ui_enddate, SIGNAL(dateChanged(QDate)), SLOT(slotChanged()));
     connect(ui_periodBox, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(ui_cumulative, SIGNAL(clicked()), SLOT(slotChanged()));
 
