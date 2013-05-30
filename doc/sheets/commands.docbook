@@ -853,6 +853,7 @@ Validity Checking</link> for more details.
 </para></listitem>
 </varlistentry>
 
+<!-- Not in Calligra 2.7
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
@@ -862,6 +863,7 @@ Validity Checking</link> for more details.
 <link linkend="pivottable">Pivot Table</link> for details.
 </para></listitem>
 </varlistentry>
+-->
 
 </variablelist></para>
 </sect1>

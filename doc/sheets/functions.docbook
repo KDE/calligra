@@ -854,6 +854,7 @@ all changes will be overwritten on the next script run
 </variablelist>
 </sect3>
 
+<!-- Not in Calligra 2.7
 <sect3 id="GETPIVOTDATA">
 <title>GETPIVOTDATA</title>
 <para>Fetches summary data from a pivot table.</para>
@@ -870,6 +871,7 @@ all changes will be overwritten on the next script run
 </varlistentry>
 </variablelist>
 </sect3>
+-->
 
 </sect2><sect2 id="Date---Time">
 <title>Date &amp; Time</title>

@@ -257,7 +257,7 @@ calculation. When it finishes and if it has found a solution press the
 <guibutton>Cancel</guibutton> to keep the original value.
 </para>
 </sect1>
-
+<!-- Not in Calligra 2.7
  <sect1 id="pivottable">
    <title>Pivot Tables</title>
    <para>
@@ -332,6 +332,7 @@ calculation. When it finishes and if it has found a solution press the
        <guilabel>Total Rows</guilabel> and <guilabel>Total Columns</guilabel>: checking these allow automatic totalling of corresponding rows and columns in the pivot table.
      </para>
    </sect1>
+-->
 
 <sect1 id="worksheets">
 <title>Using more than one Worksheet</title>
