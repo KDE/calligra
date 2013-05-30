@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_FACTORY_H
-#define KPLATO_FACTORY_H
+#ifndef KPTFACTORY_H
+#define KPTFACTORY_H
 
 #include "kplato_export.h"
 

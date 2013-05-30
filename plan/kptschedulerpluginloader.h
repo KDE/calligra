@@ -35,7 +35,7 @@ class SchedulerPluginLoader : public QObject
 {
     Q_OBJECT
 public:
-    SchedulerPluginLoader(QObject * parent);
+    explicit SchedulerPluginLoader(QObject * parent);
     virtual ~SchedulerPluginLoader();
 
     void loadAllPlugins();

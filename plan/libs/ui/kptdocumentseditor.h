@@ -39,7 +39,7 @@ class KPLATOUI_EXPORT DocumentTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    DocumentTreeView( QWidget *parent );
+    explicit DocumentTreeView(QWidget *parent);
 
     DocumentItemModel *model() const { return static_cast<DocumentItemModel*>( TreeViewBase::model() ); }
 
@@ -85,7 +85,7 @@ public:
     
 signals:
     void addDocument();
-    void deleteDocumentList( QList<Document*> );
+    void deleteDocumentList( const QList<Document*>& );
     void editDocument( Document *doc );
     void viewDocument( Document *doc );
     
@@ -100,10 +100,10 @@ protected:
     void updateActionsEnabled(  bool on = true );
 
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotHeaderContextMenuRequested( const QPoint &pos );
     
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void slotEnableActions( bool on );
 

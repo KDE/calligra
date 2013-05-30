@@ -65,7 +65,7 @@ class KPLATOKERNEL_EXPORT SchedulerPlugin : public QObject
 {
     Q_OBJECT
 public:
-    SchedulerPlugin(QObject *parent);
+    explicit SchedulerPlugin(QObject *parent);
     virtual ~SchedulerPlugin();
 
     /// Localized name

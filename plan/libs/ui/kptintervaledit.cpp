@@ -76,8 +76,8 @@ IntervalEditImpl::IntervalEditImpl(QWidget *parent)
     connect(bRemoveInterval, SIGNAL(clicked()), SLOT(slotRemoveIntervalClicked()));
     connect(intervalList, SIGNAL(itemSelectionChanged()), SLOT(slotIntervalSelectionChanged()));
     
-    connect( startTime, SIGNAL( timeChanged( const QTime& ) ), SLOT( enableButtons() ) );
-    connect( length, SIGNAL( valueChanged( double ) ), SLOT( enableButtons() ) );
+    connect( startTime, SIGNAL(timeChanged(QTime)), SLOT(enableButtons()) );
+    connect( length, SIGNAL(valueChanged(double)), SLOT(enableButtons()) );
     
 }
 
@@ -176,8 +176,8 @@ IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<Calendar
     setMainWidget( m_panel );
     enableButtonOk( false );
 
-    connect( m_panel, SIGNAL( changed() ), SLOT( slotChanged() ) );
-    connect( calendar->project(), SIGNAL( calendarRemoved( const Calendar* ) ), SLOT( slotCalendarRemoved( const Calendar* ) ) );
+    connect( m_panel, SIGNAL(changed()), SLOT(slotChanged()) );
+    connect( calendar->project(), SIGNAL(calendarRemoved(const Calendar*)), SLOT(slotCalendarRemoved(const Calendar*)) );
 }
 
 IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<QDate> &dates, QWidget *parent)
@@ -201,8 +201,8 @@ IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<QDate> &
     setMainWidget( m_panel );
     enableButtonOk( false );
 
-    connect( m_panel, SIGNAL( changed() ), SLOT( slotChanged() ) );
-    connect( calendar->project(), SIGNAL( calendarRemoved( const Calendar* ) ), SLOT( slotCalendarRemoved( const Calendar* ) ) );
+    connect( m_panel, SIGNAL(changed()), SLOT(slotChanged()) );
+    connect( calendar->project(), SIGNAL(calendarRemoved(const Calendar*)), SLOT(slotCalendarRemoved(const Calendar*)) );
 }
 
 void IntervalEditDialog::slotCalendarRemoved( const Calendar *cal )

@@ -232,7 +232,7 @@ void KisLayerTest::testHasEffectMasks()
     KisFilterMaskSP mask = new KisFilterMask();
     layer->setPreviewMask(mask);
     QVERIFY(layer->hasEffectMasks());
-    layer->removePreviewMask();
+    layer->setPreviewMask(0);
     QVERIFY(layer->hasEffectMasks() == false);
 }
 
@@ -309,7 +309,7 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
     paintLayer->paintDevice()->fill(image->bounds(), KoColor(Qt::black, colorSpace));
 
     KisTransparencyMaskSP transpMask = new KisTransparencyMask();
-    transpMask->initSelection(0, paintLayer);
+    transpMask->initSelection(paintLayer);
     image->addNode(transpMask, paintLayer);
 
     for(int i = 0; i < 100; i++) {

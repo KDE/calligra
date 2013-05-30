@@ -222,11 +222,11 @@ TaskStatusView::TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
     l->addWidget( m_view );
     setupGui();
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 void TaskStatusView::updateReadWrite( bool rw )
@@ -306,7 +306,7 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 void TaskStatusView::setupGui()
 {
     // Add the context menu actions for the view options
-    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
     createOptionAction();
@@ -382,10 +382,10 @@ TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *vi
     }
     weekdays->setCurrentIndex( m_view->weekday() - 1 );
 
-    connect( period, SIGNAL( valueChanged( int ) ), SIGNAL( changed() ) );
-    connect( useWeekday, SIGNAL( toggled( bool ) ), SIGNAL( changed() ) );
-    connect( useCurrentDate, SIGNAL( toggled( bool ) ), SIGNAL( changed() ) );
-    connect( weekdays, SIGNAL( currentIndexChanged( int ) ), SIGNAL( changed() ) );
+    connect( period, SIGNAL(valueChanged(int)), SIGNAL(changed()) );
+    connect( useWeekday, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    connect( useCurrentDate, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    connect( weekdays, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
 }
 
 void TaskStatusViewSettingsPanel::slotOk()
@@ -420,10 +420,10 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( ViewBase *view, Task
     TaskStatusViewSettingsPanel *panel = new TaskStatusViewSettingsPanel( treeview );
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "General" ), i18n( "General Settings" ) );
     setCurrentPage( page );
-    //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
 }
 
 //-----------------------------------
@@ -439,7 +439,7 @@ ProjectStatusView::ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *par
 
     setupGui();
 
-    connect( m_view, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
 
 }
@@ -603,7 +603,7 @@ void PerformanceStatusBase::setChartInfo( const PerformanceChartInfo &info )
 
 void PerformanceStatusBase::refreshChart()
 {
-    valuesFrame->resize( QSize() );
+    ui_performancetable->resize( QSize() );
 
     // NOTE: Force grid/axis recalculation, couldn't find a better way :(
     QResizeEvent event( ui_chart->size(), QSize() );
@@ -659,7 +659,7 @@ void PerformanceStatusBase::createBarChart()
     m_barchart.costdiagram = costdiagram;
 
     m_barchart.piplane = new CartesianCoordinatePlane( ui_chart );
-    m_barchart.piplane->setObjectName( "Performance Indeces" );
+    m_barchart.piplane->setObjectName( "Performance Indices" );
     BarDiagram *pidiagram = new BarDiagram( ui_chart, m_barchart.piplane );
     pidiagram->setObjectName( "PI diagram" );
     m_barchart.piaxis = new CartesianAxis( pidiagram );
@@ -720,7 +720,7 @@ void PerformanceStatusBase::createLineChart()
     m_linechart.costdiagram = costdiagram;
 
     m_linechart.piplane = new CartesianCoordinatePlane( ui_chart );
-    m_linechart.piplane->setObjectName( "Performance Indeces" );
+    m_linechart.piplane->setObjectName( "Performance Indices" );
     m_linechart.piplane->setRubberBandZoomingEnabled( true );
     LineDiagram *pidiagram = new LineDiagram( ui_chart, m_linechart.piplane );
     pidiagram->setObjectName( "PI diagram" );
@@ -765,10 +765,10 @@ void PerformanceStatusBase::setupChart()
     m_legend->setDatasetHidden( 4, ! ( m_chartinfo.showBaseValues && m_chartinfo.showEffort && m_chartinfo.showBCWPEffort ) );
     m_legend->setDatasetHidden( 5, ! ( m_chartinfo.showBaseValues && m_chartinfo.showEffort && m_chartinfo.showACWPEffort ) );
     // spi/cpi
-    m_legend->setDatasetHidden( 6, ! ( m_chartinfo.showIndeces && m_chartinfo.showSpiCost ) );
-    m_legend->setDatasetHidden( 7, ! ( m_chartinfo.showIndeces && m_chartinfo.showCpiCost ) );
-    m_legend->setDatasetHidden( 8, ! ( m_chartinfo.showIndeces && m_chartinfo.showSpiEffort ) );
-    m_legend->setDatasetHidden( 9, ! ( m_chartinfo.showIndeces && m_chartinfo.showCpiEffort ) );
+    m_legend->setDatasetHidden( 6, ! ( m_chartinfo.showIndices && m_chartinfo.showSpiCost ) );
+    m_legend->setDatasetHidden( 7, ! ( m_chartinfo.showIndices && m_chartinfo.showCpiCost ) );
+    m_legend->setDatasetHidden( 8, ! ( m_chartinfo.showIndices && m_chartinfo.showSpiEffort ) );
+    m_legend->setDatasetHidden( 9, ! ( m_chartinfo.showIndices && m_chartinfo.showCpiEffort ) );
 
     setEffortValuesVisible( m_chartinfo.effortShown() );
     setCostValuesVisible( m_chartinfo.costShown() );
@@ -862,7 +862,7 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
             cc.costproxy.setZeroColumns( czc );
             cc.costproxy.setRejectColumns( crc );
         }
-    } else if ( info.showIndeces ) {
+    } else if ( info.showIndices ) {
         cc.piaxis->setPosition( CartesianAxis::Left );
         ui_chart->addCoordinatePlane( cc.piplane );
         static_cast<AbstractCartesianDiagram*>( cc.piplane->diagram() )->addAxis( cc.dateaxis );
@@ -939,11 +939,11 @@ void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
 void PerformanceStatusBase::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLocaleChanged() ) );
+        disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLocaleChanged()) );
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLocaleChanged() ) );
+        connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLocaleChanged()) );
     }
     m_chartmodel.setProject( project );
     static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setProject( project );
@@ -976,7 +976,7 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
     m_chartinfo.showTableView = context.attribute( "show-table-view", "0" ).toInt();
 
     m_chartinfo.showBaseValues = context.attribute( "show-base-values", "1" ).toInt();
-    m_chartinfo.showIndeces = context.attribute( "show-indeces", "0" ).toInt();
+    m_chartinfo.showIndices = context.attribute( "show-indeces", "0" ).toInt();
 
     m_chartinfo.showCost = context.attribute( "show-cost", "1" ).toInt();
     m_chartinfo.showBCWSCost = context.attribute( "show-bcws-cost", "1" ).toInt();
@@ -1006,7 +1006,7 @@ void PerformanceStatusBase::saveContext( QDomElement &context ) const
     context.setAttribute( "show-table-view", m_chartinfo.showTableView );
 
     context.setAttribute( "show-base-values", m_chartinfo.showBaseValues );
-    context.setAttribute( "show-indeces", m_chartinfo.showIndeces );
+    context.setAttribute( "show-indeces", m_chartinfo.showIndices );
 
     context.setAttribute( "show-cost", m_chartinfo.showCost );
     context.setAttribute( "show-bcws-cost", m_chartinfo.showBCWSCost );
@@ -1031,7 +1031,7 @@ KoPrintJob *PerformanceStatusBase::createPrintJob( ViewBase *parent )
     return dia;
 }
 
-void PerformanceStatusBase::setNodes( const QList<Node *> nodes )
+void PerformanceStatusBase::setNodes( const QList<Node *> &nodes )
 {
     m_chartmodel.setNodes( nodes );
     static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setNodes( nodes );
@@ -1053,7 +1053,7 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     m_chart = new PerformanceStatusBase( this );
     addWidget( m_chart );
 
-    connect( m_tree->selectionModel(), SIGNAL( selectionChanged( const QItemSelection &, const QItemSelection & ) ), SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
+    connect( m_tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection,QItemSelection)) );
 
     QTimer::singleShot( 0, this, SLOT(resizeSplitters()) );
 }
@@ -1150,10 +1150,10 @@ PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWid
 
     setupGui();
 
-    connect( m_view->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
-    connect( m_view->chartView(), SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view->treeView(), SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+    connect( m_view->chartView(), SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
-    connect( m_view->treeView(), SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    connect( m_view->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 }
 
 void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
@@ -1281,7 +1281,7 @@ PerformanceStatusViewSettingsPanel::PerformanceStatusViewSettingsPanel( Performa
     ui_effort->setChecked( info.showEffort );
 
     ui_showbasevalues->setChecked( info.showBaseValues );
-    ui_showindeces->setChecked( info.showIndeces );
+    ui_showindices->setChecked( info.showIndices );
 
     ui_spicost->setCheckState( info.showSpiCost ? Qt::Checked : Qt::Unchecked );
     ui_cpicost->setCheckState( info.showCpiCost ? Qt::Checked : Qt::Unchecked );
@@ -1289,7 +1289,7 @@ PerformanceStatusViewSettingsPanel::PerformanceStatusViewSettingsPanel( Performa
     ui_cpieffort->setCheckState( info.showCpiEffort ? Qt::Checked : Qt::Unchecked );
 
     connect(ui_showbasevalues, SIGNAL(toggled(bool)), SLOT(switchStackWidget()));
-    connect(ui_showindeces, SIGNAL(toggled(bool)), SLOT(switchStackWidget()));
+    connect(ui_showindices, SIGNAL(toggled(bool)), SLOT(switchStackWidget()));
 
     switchStackWidget();
 }
@@ -1302,7 +1302,7 @@ void PerformanceStatusViewSettingsPanel::slotOk()
     info.showTableView = ui_table->isChecked();
 
     info.showBaseValues = ui_showbasevalues->isChecked();
-    info.showIndeces = ui_showindeces->isChecked();
+    info.showIndices = ui_showindices->isChecked();
 
     info.showBCWSCost = ui_bcwsCost->checkState() == Qt::Unchecked ? false : true;
     info.showBCWPCost = ui_bcwpCost->checkState() == Qt::Unchecked ? false : true;
@@ -1337,7 +1337,7 @@ void PerformanceStatusViewSettingsPanel::setDefault()
     ui_effort->setChecked( Qt::Unchecked );
 
     ui_showbasevalues->setChecked( true );
-    ui_showindeces->setChecked( false );
+    ui_showindices->setChecked( false );
 
     ui_spicost->setCheckState( Qt::Checked );
     ui_cpicost->setCheckState( Qt::Checked );
@@ -1349,7 +1349,7 @@ void PerformanceStatusViewSettingsPanel::switchStackWidget()
 {
     if ( ui_showbasevalues->isChecked() ) {
         ui_stackWidget->setCurrentIndex( 0 );
-    } else if ( ui_showindeces->isChecked() ) {
+    } else if ( ui_showindices->isChecked() ) {
         ui_stackWidget->setCurrentIndex( 1 );
     }
     //kDebug(planDbg())<<sender()<<ui_stackWidget->currentIndex();
@@ -1363,10 +1363,10 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "Chart" ), i18n( "Chart Settings" ) );
     setCurrentPage( page );
     addPrintingOptions();
-    //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
 }
 
 //-----------------
@@ -1393,8 +1393,8 @@ ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base
     page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
     connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 }
 

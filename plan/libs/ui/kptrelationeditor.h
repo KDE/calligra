@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_RELATIONEDTIOR_H
-#define KPLATO_RELATIONEDTIOR_H
+#ifndef KPTRELATIONEDITOR_H
+#define KPTRELATIONEDITOR_H
 
 #include "kplatoui_export.h"
 
@@ -56,7 +56,7 @@ public:
     void setNode( Node *node ) { model()->setNode( node ); }
     Relation *currentRelation() const { return model()->relation( selectionModel()->currentIndex() ); }
 signals:
-    void currentColumnChanged( QModelIndex, QModelIndex );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
     
 protected slots:
     void slotCurrentChanged(const QModelIndex &curr, const QModelIndex& );
@@ -103,7 +103,7 @@ protected:
     void updateActionsEnabled( bool on );
 
 private slots:
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     

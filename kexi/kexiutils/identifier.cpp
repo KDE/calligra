@@ -22,6 +22,8 @@
 #include "transliteration_table.h"
 #include <db/utils.h>
 
+#include <KLocale>
+
 using namespace KexiUtils;
 
 inline QString char2Identifier(const QChar& c)
@@ -83,7 +85,7 @@ public:
 };
 
 IdentifierValidator::IdentifierValidator(QObject * parent)
-: Validator(parent), d(new Private)
+ : KexiDB::Validator(parent), d(new Private)
 {
 }
 
@@ -109,7 +111,7 @@ QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
     return input.isEmpty() ? QValidator::Intermediate : Acceptable;
 }
 
-Validator::Result IdentifierValidator::internalCheck(
+KexiDB::Validator::Result IdentifierValidator::internalCheck(
     const QString &valueName, const QVariant& v,
     QString &message, QString & /*details*/)
 {

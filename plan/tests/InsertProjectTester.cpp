@@ -16,7 +16,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <qtest_kde.h>
 
 #include "InsertProjectTester.h"
 
@@ -27,6 +26,8 @@
 #include "kptresource.h"
 #include "kpttask.h"
 #include "kptaccount.h"
+
+#include <qtest_kde.h>
 
 namespace KPlato
 {

@@ -29,6 +29,7 @@
 
 #include <QWidget>
 #include <QFileDialog>
+#include <ktoggleaction.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 
@@ -47,6 +48,7 @@ void CAuView::setupActions()
     actionCollection()->addAction("insert_coverimage", action);
     action->setToolTip(i18n("Set cover for your ebook"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectCoverImage()));
+
 }
 
 void CAuView::selectCoverImage()

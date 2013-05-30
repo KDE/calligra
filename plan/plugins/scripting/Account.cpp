@@ -17,10 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QObject>
-#include <QVariant>
-
 #include "Account.h"
+
 #include "Project.h"
 
 #include <kptaccount.h>

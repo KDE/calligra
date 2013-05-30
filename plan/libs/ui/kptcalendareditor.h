@@ -51,7 +51,7 @@ class KPLATOUI_EXPORT CalendarTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    CalendarTreeView( QWidget *parent );
+    explicit CalendarTreeView(QWidget *parent);
 
     CalendarItemModel *model() const { return static_cast<CalendarItemModel*>( TreeViewBase::model() ); }
 
@@ -61,15 +61,15 @@ public:
     Calendar *currentCalendar() const;
     Calendar *selectedCalendar() const;
     QList<Calendar*> selectedCalendars() const;
-    
+
 signals:
     void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void selectionChanged( const QModelIndexList& );
 
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    void contextMenuRequested( const QModelIndex&, const QPoint& );
     void focusChanged();
-    
+
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
@@ -87,7 +87,7 @@ class KPLATOUI_EXPORT CalendarDayView : public QTableView
 {
     Q_OBJECT
 public:
-    CalendarDayView( QWidget *parent );
+    explicit CalendarDayView(QWidget *parent);
 
     CalendarDayItemModel *model() const { return m_model; }
 
@@ -104,10 +104,10 @@ public:
 
 signals:
     void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void selectionChanged( const QModelIndexList& );
 
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    void contextMenuRequested( const QModelIndex&, const QPoint& );
     void focusChanged();
     
     void executeCommand( KUndo2Command *cmd );
@@ -158,7 +158,7 @@ public:
     
 signals:
     void addCalendar( Calendar *calendar );
-    void deleteCalendar( QList<Calendar*> );
+    void deleteCalendar( const QList<Calendar*>& );
     
 public slots:
     /// Activate/deactivate the gui
@@ -172,15 +172,15 @@ protected slots:
     void slotIntervalEditDialogFinished( int result );
 
 private slots:
-    void slotContextMenuCalendar( QModelIndex index, const QPoint& pos );
-    void slotContextMenuDay( QModelIndex index, const QPoint& pos );
+    void slotContextMenuCalendar( const QModelIndex& index, const QPoint& pos );
+    void slotContextMenuDay( const QModelIndex& index, const QPoint& pos );
     void slotContextMenuDate( KMenu*, const QDate& );
     void slotContextMenuDate( KMenu*, const QList<QDate>& );
     
-    void slotCalendarSelectionChanged( const QModelIndexList );
+    void slotCalendarSelectionChanged( const QModelIndexList& );
     void slotCurrentCalendarChanged( const QModelIndex& );
     
-    void slotDaySelectionChanged( const QModelIndexList );
+    void slotDaySelectionChanged( const QModelIndexList& );
     void slotCurrentDayChanged( const QModelIndex& );
     
     void slotEnableActions();

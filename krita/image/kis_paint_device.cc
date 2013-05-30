@@ -650,7 +650,9 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
         quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
                 ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
-                ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+                ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(),
+                                  KoColorConversionTransformation::InternalRenderingIntent,
+                                  KoColorConversionTransformation::InternalConversionFlags);
 
         writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
         delete[] dstData;
@@ -1054,6 +1056,25 @@ const KoColorSpace* KisPaintDevice::colorSpace() const
 KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice() const
 {
     return new KisPaintDevice(compositionSourceColorSpace());
+}
+
+KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP cloneSource) const
+{
+    KisPaintDeviceSP clone = new KisPaintDevice(*cloneSource);
+    clone->convertTo(compositionSourceColorSpace(),
+                     KoColorConversionTransformation::InternalRenderingIntent,
+                     KoColorConversionTransformation::InternalConversionFlags);
+    return clone;
+}
+
+KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP cloneSource, const QRect roughRect) const
+{
+    KisPaintDeviceSP clone = new KisPaintDevice(colorSpace());
+    clone->makeCloneFromRough(cloneSource, roughRect);
+    clone->convertTo(compositionSourceColorSpace(),
+                     KoColorConversionTransformation::InternalRenderingIntent,
+                     KoColorConversionTransformation::InternalConversionFlags);
+    return clone;
 }
 
 KisFixedPaintDeviceSP KisPaintDevice::createCompositionSourceDeviceFixed() const
