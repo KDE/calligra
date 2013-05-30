@@ -63,6 +63,7 @@ public:
     bool zooming;
     qreal minimumZoom;
     qreal maximumZoom;
+    QPointF zoomCenter;
 
     QPixmap *placeholder;
 };
@@ -209,11 +210,18 @@ void CQCanvasControllerItem::endZoomGesture()
     if(!d->zooming)
         return;
 
-    qreal change = 1.0 + d->zoomChange / d->zoom;
-    setZoom(d->zoom + d->zoomChange);
+    qreal newZoom = d->zoom + d->zoomChange;
 
-    d->flickable->setProperty("contentX", d->flickable->property("contentX").toReal() * change + d->placeholderTarget.x());
-    d->flickable->setProperty("contentY", d->flickable->property("contentY").toReal() * change + d->placeholderTarget.y());
+    qreal oldX = d->flickable->property("contentX").toReal();
+    qreal oldY = d->flickable->property("contentY").toReal();
+
+    qreal xoff = (d->zoomCenter.x() + oldX) * newZoom / d->zoom;
+    d->flickable->setProperty("contentX", xoff - d->zoomCenter.x());
+
+    qreal yoff = (d->zoomCenter.y() + oldY ) * newZoom / d->zoom;
+    d->flickable->setProperty("contentY", yoff - d->zoomCenter.y());
+
+    setZoom(d->zoom + d->zoomChange);
 
     delete d->placeholder;
     d->placeholder = 0;
@@ -237,6 +245,8 @@ void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
 
         d->placeholderTarget.moveLeft(d->placeholderTarget.x() + (center.x() * d->placeholderTarget.width() / oldWidth) - center.x());
         d->placeholderTarget.moveTop(d->placeholderTarget.y() + (center.y() * d->placeholderTarget.height() / oldHeight) - center.y());
+
+        d->zoomCenter = center;
 
         update();
     }
