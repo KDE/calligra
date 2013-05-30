@@ -249,20 +249,33 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
 
     writer.endElement(); // spine
 
-    // ==== Guide ====
-    writer.startElement("guide");
+    bool atLeastOneInfo = false;
 
-    //if there is a cover
     foreach (FileInfo *file, files()) {
+        // Here we coul expend the filter with cover | toc | index, etc..
+        // For now, be simple
         if ( file->m_id == "cover") {
-        writer.startElement("reference");
-        writer.addAttribute("href", "cover.xhtml");
-        writer.addAttribute("type", "cover");
-        writer.endElement(); // reference
+            atLeastOneInfo = true;
         }
     }
 
-    writer.endElement(); // guide
+    // If we have something interesting to point out, write <guide> element
+    if (atLeastOneInfo) {
+        // ==== Guide ====
+        writer.startElement("guide");
+
+        //if there is a cover
+        foreach (FileInfo *file, files()) {
+            if ( file->m_id == "cover") {
+                writer.startElement("reference");
+                writer.addAttribute("href", "cover.xhtml");
+                writer.addAttribute("type", "cover");
+                writer.endElement(); // reference
+            }
+        }
+
+        writer.endElement(); // guide
+    }
 
     writer.endElement(); // package
 
