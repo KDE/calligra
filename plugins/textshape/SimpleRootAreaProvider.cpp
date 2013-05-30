@@ -71,6 +71,11 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
         if (height > newSize.height()) {
             newSize.setHeight(rootArea->bottom() - rootArea->top());
         }
+        if (m_textShape->shapeId() == "AnnotationTextShapeID") {
+            if (height < newSize.height()) {
+                newSize.setHeight(rootArea->bottom() - rootArea->top());
+            }
+        }
     }
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {

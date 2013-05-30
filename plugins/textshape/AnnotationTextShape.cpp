@@ -85,6 +85,7 @@ void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShape)
     m_textShapeData->setTopPadding(25);
     m_textShapeData->setLeftPadding(4);
     m_textShapeData->setRightPadding(4);
+    m_textShapeData->setResizeMethod(KoTextShapeData::AutoGrowHeight);
 }
 
 void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
