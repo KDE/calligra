@@ -50,13 +50,13 @@ class CQTextDocumentCanvas::Private
 {
 public:
     Private()
-        : canvasBase(0),
+        : canvas(0),
           findText(0),
           documentModel(0),
           document(0)
     {}
 
-    KoCanvasBase *canvasBase;
+    KWCanvasItem *canvas;
     QString searchTerm;
     KoFindText *findText;
     CQTextDocumentModel *documentModel;
@@ -71,10 +71,10 @@ public:
         qDeleteAll(linkTargets);
         linkTargets.clear();
 
-        KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(canvasBase);
-        if(!kwCanvasItem)
+        if(!canvas)
             return;
-        foreach(const KoShape* shape, kwCanvasItem->shapeManager()->shapes()) {
+
+        foreach(const KoShape* shape, canvas->shapeManager()->shapes()) {
             if(!shape->hyperLink().isEmpty()) {
                 QObject * obj = new QObject(documentModel);
                 obj->setProperty("linkRect", shape->boundingRect());
@@ -98,7 +98,7 @@ public:
                             QRectF rect = getFragmentPosition(block, fragment);
                             KWPage page = document->pageManager()->page(rect.left());
                             rect.translate(page.topMargin(), page.rightMargin());
-                            rect = canvasBase->viewConverter()->documentToView(rect);
+                            rect = canvas->viewMode()->documentToView(rect, canvas->viewConverter());
                             rect.moveLeft(rect.left() - (page.pageNumber() * 8) + 28);
                             obj->setProperty("linkRect", rect);
                             obj->setProperty("linkTarget", QUrl(format.anchorHref()));
@@ -160,12 +160,12 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     document->setCheckAutoSaveFile(false);
     document->openUrl(KUrl(uri));
 
-    d->canvasBase = dynamic_cast<KoCanvasBase*> (part->canvasItem());
-    createAndSetCanvasControllerOn(d->canvasBase);
-    createAndSetZoomController(d->canvasBase);
+    d->canvas = dynamic_cast<KWCanvasItem*> (part->canvasItem());
+    createAndSetCanvasControllerOn(d->canvas);
+    createAndSetZoomController(d->canvas);
     updateZoomControllerAccordingToDocument(document);
 
-    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
+    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvas);
     graphicsWidget->setParentItem(this);
     graphicsWidget->installEventFilter(this);
     graphicsWidget->setVisible(true);
@@ -175,13 +175,12 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
       gotoPage(d->pageNumber, document);
     }
 
-    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(d->canvasBase);
     QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(kwCanvasItem ->shapeManager()->shapes(), texts);
+    KoFindText::findTextInShapes(d->canvas->shapeManager()->shapes(), texts);
     d->findText->setDocuments(texts);
 
     d->document = static_cast<KWDocument*>(document);
-    d->documentModel = new CQTextDocumentModel(this, d->document, kwCanvasItem->shapeManager());
+    d->documentModel = new CQTextDocumentModel(this, d->document, d->canvas->shapeManager());
     emit documentModelChanged();
 
     d->updateLinkTargets();
@@ -194,8 +193,8 @@ void CQTextDocumentCanvas::gotoPage(int pageNumber, KoDocument *document)
     const KWDocument *kwDoc = static_cast<const KWDocument*>(document);
     KWPage currentTextDocPage = kwDoc->pageManager()->page(pageNumber);
 
-    QRectF rect = d->canvasBase->viewConverter()->documentToView(currentTextDocPage.rect());
-    canvasController()->pan(rect.topLeft().toPoint() - d->canvasBase->viewConverter()->documentToView(canvasController()->documentOffset()).toPoint());
+    QRectF rect = d->canvas->viewConverter()->documentToView(currentTextDocPage.rect());
+    canvasController()->pan(rect.topLeft().toPoint() - d->canvas->viewConverter()->documentToView(canvasController()->documentOffset()).toPoint());
     alignTopWith(rect.top());
     updateCanvas();
 }
@@ -205,11 +204,10 @@ int CQTextDocumentCanvas::cameraY() const
     return d->currentPoint.y();
 }
 
-qreal CQTextDocumentCanvas::pagePosition(int page)
+qreal CQTextDocumentCanvas::pagePosition(int pageIndex)
 {
-    KWPage realPage = d->document->pageManager()->page(page);
-    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem*>(d->canvasBase);
-    return kwCanvasItem->viewMode()->documentToView(realPage.rect().topLeft(), kwCanvasItem->viewConverter()).y();
+    KWPage page = d->document->pageManager()->page(pageIndex);
+    return d->canvas->viewMode()->documentToView(page.rect().topLeft(), d->canvas->viewConverter()).y();
 }
 
 void CQTextDocumentCanvas::setCameraY(int cameraY)
@@ -244,13 +242,13 @@ void CQTextDocumentCanvas::render(QPainter* painter, const QRectF& target)
     QStyleOptionGraphicsItem option;
     option.exposedRect = target;
     option.rect = target.toAlignedRect();
-    d->canvasBase->canvasItem()->paint(painter, &option);
+    d->canvas->canvasItem()->paint(painter, &option);
 }
 
 void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    if (d->canvasBase) {
-        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
+    if (d->canvas) {
+        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(d->canvas);
         if (widget) {
             widget->setGeometry(newGeometry);
         }
@@ -302,10 +300,10 @@ void CQTextDocumentCanvas::setSearchTerm(const QString& term)
 void CQTextDocumentCanvas::findMatchFound(const KoFindMatch &match)
 {
     QTextCursor cursor = match.location().value<QTextCursor>();
-    d->canvasBase->canvasItem()->update();
+    d->canvas->canvasItem()->update();
 
-    d->canvasBase->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
-    d->canvasBase->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
+    d->canvas->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
+    d->canvas->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
 }
 
 void CQTextDocumentCanvas::findNoMatchFound()
@@ -315,7 +313,7 @@ void CQTextDocumentCanvas::findNoMatchFound()
 
 void CQTextDocumentCanvas::updateCanvas()
 {
-    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (d->canvasBase);
+    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (d->canvas);
     kwCanvasItem->update();
 }
 
