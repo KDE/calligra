@@ -99,7 +99,7 @@ public:
                             KWPage page = document->pageManager()->page(rect.left());
                             rect.translate(page.topMargin(), page.rightMargin());
                             rect = canvas->viewMode()->documentToView(rect, canvas->viewConverter());
-                            rect.moveLeft(rect.left() - (page.pageNumber() * 8) + 28);
+                            rect.translate(page.pageNumber() * (page.topMargin() + page.bottomMargin()) + 20, 0);
                             obj->setProperty("linkRect", rect);
                             obj->setProperty("linkTarget", QUrl(format.anchorHref()));
                             linkTargets.append(obj);
