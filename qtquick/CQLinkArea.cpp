@@ -27,6 +27,10 @@ public:
     bool clickInProgress;
     QPointF clickLocation;
     int wiggleFactor;
+
+    QSizeF sourceSize;
+
+    QColor linkColor;
 };
 
 CQLinkArea::CQLinkArea(QDeclarativeItem* parent)
@@ -46,12 +50,15 @@ CQLinkArea::~CQLinkArea()
 void CQLinkArea::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
     painter->save();
-    QColor thing(Qt::black);
-    thing.setAlpha(100);
-    painter->setPen(thing);
+    painter->setPen(Qt::transparent);
+    painter->setBrush(QBrush(d->linkColor));
     foreach(const LinkLayerLink& link, d->realLinks) {
-        QRectF inverted(link.linkRect.y(), link.linkRect.x(), link.linkRect.height(), link.linkRect.width());
-        painter->drawRect(inverted);
+        QRectF target(
+            (link.linkRect.y() / d->sourceSize.height()) * height(),
+            (link.linkRect.x() / d->sourceSize.width()) * width(),
+            (link.linkRect.height() / d->sourceSize.height()) * height(),
+            (link.linkRect.width() / d->sourceSize.width()) * width());
+        painter->drawRect(target);
     }
     painter->restore();
 }
@@ -80,6 +87,35 @@ void CQLinkArea::setLinks(const QVariantList& newLinks)
     emit linksChanged();
 }
 
+QSizeF CQLinkArea::sourceSize() const
+{
+    return d->sourceSize;
+}
+
+void CQLinkArea::setSourceSize(const QSizeF& size)
+{
+    if(size != d->sourceSize) {
+        d->sourceSize = size;
+        emit sourceSizeChanged();
+        update();
+    }
+}
+
+QColor CQLinkArea::linkColor() const
+{
+    return d->linkColor;
+}
+
+void CQLinkArea::setLinkColor(const QColor& color)
+{
+    if(color != d->linkColor) {
+        d->linkColor = color;
+        d->linkColor.setAlphaF( 0.25 );
+        emit linkColorChanged();
+        update();
+    }
+}
+
 void CQLinkArea::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     d->clickInProgress = true;
@@ -97,7 +133,13 @@ void CQLinkArea::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     QUrl url;
     QPointF inverted(event->pos().y(), event->pos().x());
     foreach(const LinkLayerLink& link, d->realLinks) {
-        if(link.linkRect.contains(inverted)) {
+        QRectF scaledTarget(
+            (link.linkRect.x() / d->sourceSize.width()) * width(),
+            (link.linkRect.y() / d->sourceSize.height()) * height(),
+            (link.linkRect.width() / d->sourceSize.width()) * width(),
+            (link.linkRect.height() / d->sourceSize.height()) * height() );
+
+        if(scaledTarget.contains(inverted)) {
             url = link.linkTarget;
             break;
         }
