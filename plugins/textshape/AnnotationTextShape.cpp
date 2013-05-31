@@ -105,31 +105,32 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
         painter.setPen(pen);
         QColor color(137, 176, 213);
         painter.setBrush(color);
-        painter.drawRoundedRect(rect, 10.0, 15.0, Qt::RelativeSize);
+//        painter.drawRoundedRect(rect, 10.0, 15.0, Qt::RelativeSize);
+        painter.drawRect(rect);
 
-        int left = rect.left();
-        int top = rect.top();
-        QColor buttonColor(47, 150, 217);
-        // Draw delete annotation button.
-        painter.setBrush(buttonColor);
-        painter.drawEllipse(QPoint((left + 140), (top + 7)), 5, 5);
+//        int left = rect.left();
+//        int top = rect.top();
+//        QColor buttonColor(47, 150, 217);
+//        // Draw delete annotation button.
+//        painter.setBrush(buttonColor);
+//        painter.drawEllipse(QPoint((left + 140), (top + 7)), 5, 5);
 
-        //Draw option button.
-        painter.setBrush(buttonColor);
-        painter.drawEllipse(QPoint((left + 128), (top + 7)), 5, 5);
+//        //Draw option button.
+//        painter.setBrush(buttonColor);
+//        painter.drawEllipse(QPoint((left + 128), (top + 7)), 5, 5);
 
-        //Draw 'x' and 'v' in buttons.
-        QPen p(QColor(210, 210, 210));
-        p.setWidth(1);
-        painter.setPen(p);
+//        //Draw 'x' and 'v' in buttons.
+//        QPen p(QColor(210, 210, 210));
+//        p.setWidth(1);
+//        painter.setPen(p);
 
-        //Draw 'x' in remove button.
-        painter.drawLine(QPointF((left + 139), (top + 6)), QPointF((left + 141), (top + 8)));
-        painter.drawLine(QPointF((left + 141), (top + 6)), QPointF((left + 139), (top + 8)));
+//        //Draw 'x' in remove button.
+//        painter.drawLine(QPointF((left + 139), (top + 6)), QPointF((left + 141), (top + 8)));
+//        painter.drawLine(QPointF((left + 141), (top + 6)), QPointF((left + 139), (top + 8)));
 
-        //Draw 'v' in option button.
-        painter.drawLine(QPointF((left + 127), (top + 7)), QPointF((left + 128), (top + 8)));
-        painter.drawLine(QPointF((left + 129), (top + 7)), QPointF((left + 128), (top + 8)));
+//        //Draw 'v' in option button.
+//        painter.drawLine(QPointF((left + 127), (top + 7)), QPointF((left + 128), (top + 8)));
+//        painter.drawLine(QPointF((left + 129), (top + 7)), QPointF((left + 128), (top + 8)));
 
         // Set Author and date.
         QPen peninfo (Qt::darkBlue);
