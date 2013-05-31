@@ -78,7 +78,6 @@ public:
     QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
     
     NodeMap nodeList( QDataStream &stream );
-    static NodeMap removeChildNodes( const NodeMap nodes );
     using ItemModelBase::dropAllowed;
     bool dropAllowed( Node *on, const QMimeData *data );
     

@@ -61,15 +61,15 @@ public:
     Calendar *currentCalendar() const;
     Calendar *selectedCalendar() const;
     QList<Calendar*> selectedCalendars() const;
-    
+
 signals:
     void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void selectionChanged( const QModelIndexList& );
 
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    void contextMenuRequested( const QModelIndex&, const QPoint& );
     void focusChanged();
-    
+
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
@@ -104,10 +104,10 @@ public:
 
 signals:
     void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void selectionChanged( const QModelIndexList& );
 
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    void contextMenuRequested( const QModelIndex&, const QPoint& );
     void focusChanged();
     
     void executeCommand( KUndo2Command *cmd );
@@ -158,7 +158,7 @@ public:
     
 signals:
     void addCalendar( Calendar *calendar );
-    void deleteCalendar( QList<Calendar*> );
+    void deleteCalendar( const QList<Calendar*>& );
     
 public slots:
     /// Activate/deactivate the gui
@@ -172,15 +172,15 @@ protected slots:
     void slotIntervalEditDialogFinished( int result );
 
 private slots:
-    void slotContextMenuCalendar( QModelIndex index, const QPoint& pos );
-    void slotContextMenuDay( QModelIndex index, const QPoint& pos );
+    void slotContextMenuCalendar( const QModelIndex& index, const QPoint& pos );
+    void slotContextMenuDay( const QModelIndex& index, const QPoint& pos );
     void slotContextMenuDate( KMenu*, const QDate& );
     void slotContextMenuDate( KMenu*, const QList<QDate>& );
     
-    void slotCalendarSelectionChanged( const QModelIndexList );
+    void slotCalendarSelectionChanged( const QModelIndexList& );
     void slotCurrentCalendarChanged( const QModelIndex& );
     
-    void slotDaySelectionChanged( const QModelIndexList );
+    void slotDaySelectionChanged( const QModelIndexList& );
     void slotCurrentDayChanged( const QModelIndex& );
     
     void slotEnableActions();

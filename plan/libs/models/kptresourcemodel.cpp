@@ -603,51 +603,51 @@ void ResourceItemModel::slotLayoutChanged()
 void ResourceItemModel::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
-        disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
+        disconnect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
+        disconnect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        disconnect( m_project, SIGNAL(resourceToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceToBeInserted(const ResourceGroup*,int)) );
 
-        disconnect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceToBeRemoved(const Resource*)), this, SLOT(slotResourceToBeRemoved(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupAdded(const ResourceGroup*)), this, SLOT(slotResourceGroupInserted(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupRemoved(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotResourceInserted(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
+        disconnect( m_project, SIGNAL(defaultCalendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
-        connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
+        connect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
+        connect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        connect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
-        connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        connect( m_project, SIGNAL(resourceToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceToBeInserted(const ResourceGroup*,int)) );
 
-        connect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceToBeRemoved(const Resource*)), this, SLOT(slotResourceToBeRemoved(const Resource*)) );
 
-        connect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupAdded(const ResourceGroup*)), this, SLOT(slotResourceGroupInserted(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupRemoved(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotResourceInserted(const Resource*)) );
 
-        connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)) );
 
-        connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
+        connect( m_project, SIGNAL(defaultCalendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
     }
     m_model.setProject( m_project );
     reset();
@@ -1255,7 +1255,7 @@ void ResourceItemModel::slotJobFinished( KJob *job )
         m_dropDataMap.remove( job );
     }
     disconnect(job, SIGNAL(result(KJob*)), this, SLOT(slotJobFinished(KJob*)));
-    disconnect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(slotDataArrived(KIO::Job*, const QByteArray&)));
+    disconnect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(slotDataArrived(KIO::Job*,QByteArray)));
 }
 
 bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray &data )
@@ -1368,7 +1368,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
                 continue;
             }
             KIO::TransferJob *job = KIO::get( url, KIO::NoReload, KIO::HideProgressInfo );
-            bool res = connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)), this, SLOT(slotDataArrived(KIO::Job*, const QByteArray&)));
+            bool res = connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(slotDataArrived(KIO::Job*,QByteArray)));
             Q_ASSERT( res );
 	    Q_UNUSED( res );
             res = connect(job, SIGNAL(result(KJob*)), this, SLOT(slotJobFinished(KJob*)));
