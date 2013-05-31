@@ -42,7 +42,7 @@ TreeComboBox::TreeComboBox( QWidget *parent )
 
     updateView();
 
-    connect( this, SIGNAL( activated( int ) ), SLOT( slotSelectionChanged() ) );
+    connect( this, SIGNAL(activated(int)), SLOT(slotSelectionChanged()) );
 }
 
 void TreeComboBox::updateView()

@@ -65,12 +65,12 @@ PlanTJScheduler::PlanTJScheduler( Project *project, ScheduleManager *sm, ulong g
     m_granularity( granularity )
 {
     TJ::TJMH.reset();
-    connect(&TJ::TJMH, SIGNAL(message(int, const QString&, TJ::CoreAttributes*)), this, SLOT(slotMessage(int, const QString&, TJ::CoreAttributes*)));
+    connect(&TJ::TJMH, SIGNAL(message(int,QString,TJ::CoreAttributes*)), this, SLOT(slotMessage(int,QString,TJ::CoreAttributes*)));
 
-    connect(this, SIGNAL(sigCalculationStarted( Project*, ScheduleManager*)), project, SIGNAL(sigCalculationStarted( Project*, ScheduleManager*)));
+    connect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), project, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
     emit sigCalculationStarted( project, sm );
 
-    connect( this, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ) );
+    connect( this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), project, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)) );
 }
 
 PlanTJScheduler::~PlanTJScheduler()
@@ -166,7 +166,7 @@ void PlanTJScheduler::run()
         return;
     }
     setMaxProgress( PROGRESS_MAX_VALUE );
-    connect(m_tjProject, SIGNAL(updateProgressBar(int, int)), this, SLOT(setProgress(int)));
+    connect(m_tjProject, SIGNAL(updateProgressBar(int,int)), this, SLOT(setProgress(int)));
 
     m_schedule->setPhaseName( 1, i18nc( "@info/plain" , "Schedule" ) );
     logInfo( m_project, 0, "Start scheduling", 1 );

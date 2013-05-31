@@ -634,12 +634,7 @@ KoResourceItemView *KoResourceItemChooser::itemView()
     return d->view;
 }
 
-QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
-{
-    return QStringList();
-}
-
-void KoResourceItemChooser::tagSearchLineEditActivated(QString lineEditText)
+void KoResourceItemChooser::tagSearchLineEditActivated(const QString& lineEditText)
 {
     QList<KoResource*> newResources = d->model->currentlyVisibleResources();
     foreach(KoResource * oldRes, d->originalResources) {
@@ -656,7 +651,7 @@ void KoResourceItemChooser::tagSearchLineEditActivated(QString lineEditText)
     d->tagSearchSaveButton->setEnabled(false);
 }
 
-void KoResourceItemChooser::tagSearchLineEditTextChanged(QString lineEditText)
+void KoResourceItemChooser::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
     d->model->searchTextChanged(lineEditText);
     d->model->updateServer();
@@ -666,7 +661,7 @@ void KoResourceItemChooser::tagSearchLineEditTextChanged(QString lineEditText)
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 }
 
-void KoResourceItemChooser::tagChooserIndexChanged(QString lineEditText)
+void KoResourceItemChooser::tagChooserIndexChanged(const QString& lineEditText)
 {
     int index = d->tagOpComboBox->currentIndex();
 
@@ -722,7 +717,7 @@ QString KoResourceItemChooser::renameTag(QString oldName, QString newName)
     return oldName;
 }
 
-void KoResourceItemChooser::tagChooserReturnPressed(QString lineEditText)
+void KoResourceItemChooser::tagChooserReturnPressed(const QString& lineEditText)
 {
     int index = d->tagOpComboBox->currentIndex();
     QString oldTagname = d->tagOpComboBox->itemText(index);
@@ -732,18 +727,6 @@ void KoResourceItemChooser::tagChooserReturnPressed(QString lineEditText)
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
     d->tagOpComboBox->setCompleter(d->tagCompleter);
 
-}
-
-void KoResourceItemChooser::addTagToComboBox(QString tagName, bool followEntry)
-{
-    int pos = d->tagOpComboBox->findText(tagName);
-    if (pos == -1) {
-        d->tagOpComboBox->addItem(tagName);
-        if (followEntry) {
-            d->tagOpComboBox->setCurrentIndex(d->tagOpComboBox->findText(tagName));
-            d->currentTag = tagName;
-        }
-    }
 }
 
 void KoResourceItemChooser::removeTagFromComboBox()
@@ -761,7 +744,6 @@ void KoResourceItemChooser::removeTagFromComboBox()
             d->tagOpComboBox->removeItem(index);
             d->model->tagCategoryRemoved(tag);
         }
-
     }
 }
 
@@ -774,7 +756,6 @@ void KoResourceItemChooser::slotTagButtonClicked( int button )
                 i18n("tag name:"), QLineEdit::Normal, QString(), &ok);
 
         if (ok) {
-            addTagToComboBox(tagName, true);
             d->model->tagCategoryAdded(tagName);
             d->tagOpComboBox->setCurrentIndex(d->tagOpComboBox->findText(tagName));
         }
@@ -784,7 +765,7 @@ void KoResourceItemChooser::slotTagButtonClicked( int button )
     }
 }
 
-void KoResourceItemChooser::addResourceTag(KoResource * resource, QString tagName)
+void KoResourceItemChooser::addResourceTag(KoResource * resource, const QString& tagName)
 {
     QStringList tagsList = d->model->getAssignedTagsList(resource);
     if (tagsList.isEmpty()) {
@@ -799,7 +780,7 @@ void KoResourceItemChooser::addResourceTag(KoResource * resource, QString tagNam
     }
 }
 
-void KoResourceItemChooser::removeResourceTag(KoResource * resource, QString tagName)
+void KoResourceItemChooser::removeResourceTag(KoResource * resource, const QString& tagName)
 {
     QStringList tagsList = d->model->getAssignedTagsList(resource);
 
@@ -828,7 +809,12 @@ void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
     QMenu * assignableTagsMenu;
 
     QStringList removables = d->model->getAssignedTagsList(resource);
-    QStringList assignables = d->model->getTagNamesList();
+
+    QStringList assignables;
+        for (int i = 1; i < d->tagOpComboBox->count(); ++i) {
+        assignables.append(d->tagOpComboBox->itemText(i));
+    }
+
     removables.sort();
     assignables.sort();
 
@@ -882,28 +868,26 @@ void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
     }
 }
 
-void KoResourceItemChooser::contextAddTagToResource(KoResource* resource, QString tag )
+void KoResourceItemChooser::contextAddTagToResource(KoResource* resource, const QString& tag )
 {
     addResourceTag(resource, tag);
     d->model->tagCategoryMembersChanged();
     updateTaggedResourceView();
 }
 
-void KoResourceItemChooser::contextRemoveTagFromResource(KoResource* resource, QString tag )
+void KoResourceItemChooser::contextRemoveTagFromResource(KoResource* resource, const QString& tag )
 {
     removeResourceTag(resource, tag);
     d->model->tagCategoryMembersChanged();
     updateTaggedResourceView();
 }
 
-void KoResourceItemChooser::contextCreateNewResourceTag(KoResource* resource , QString tag)
+void KoResourceItemChooser::contextCreateNewResourceTag(KoResource* resource , const QString& tag)
 {
     bool ok;
     const QString tagName = QInputDialog::getText(this, i18n("Enter name for new tag"),
             i18n("tag name:"), QLineEdit::Normal, QString(), &ok);
     if (ok) {
-
-        addTagToComboBox(tagName, false);
         addResourceTag(resource, tagName);
         d->model->tagCategoryAdded(tagName);
     }
@@ -924,13 +908,17 @@ void KoResourceItemChooser::syncTagBoxEntryRemoval(const QString& tag)
 
 void KoResourceItemChooser::syncTagBoxEntryAddition(const QString& tag)
 {
-    QAbstractItemModel * model = d->tagOpComboBox->model();
-    model->removeRow(0);
-    if (d->tagOpComboBox->findText(tag) == -1) {
-        d->tagOpComboBox->addItem(tag);
+    QStringList tags;
+    tags.append(tag);
+    for (int i = 1; i < d->tagOpComboBox->count(); ++i) {
+        tags.append(d->tagOpComboBox->itemText(i));
     }
-    model->sort(0);
-    d->tagOpComboBox->insertItem(0, i18n("Unfiltered View"));
+    tags.sort();
+    tags.prepend(i18n("Unfiltered View"));
+    int index = tags.indexOf(tag);
+    if (d->tagOpComboBox->findText(tag) == -1) {
+        d->tagOpComboBox->insertItem(index,tag);
+    }
 }
 
 void KoResourceItemChooser::tagSaveButtonPressed()
