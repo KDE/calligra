@@ -24,9 +24,26 @@
 
 #include <KDebug>
 #include <KGlobal>
+#include <KStandardDirs>
+
+#ifndef SHEETS_NO_PLUGINMODULES
 #include <KPluginInfo>
 #include <KServiceTypeTrader>
-#include <KStandardDirs>
+#else
+#include "functions/BitOpsModule.h"
+#include "functions/ConversionModule.h"
+#include "functions/DatabaseModule.h"
+#include "functions/DateTimeModule.h"
+#include "functions/EngineeringModule.h"
+#include "functions/FinancialModule.h"
+#include "functions/InformationModule.h"
+#include "functions/LogicModule.h"
+#include "functions/MathModule.h"
+#include "functions/ReferenceModule.h"
+#include "functions/StatisticalModule.h"
+#include "functions/TextModule.h"
+#include "functions/TrigonometryModule.h"
+#endif
 
 using namespace Calligra::Sheets;
 
@@ -88,6 +105,7 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 
 void FunctionModuleRegistry::loadFunctionModules()
 {
+#ifndef SHEETS_NO_PLUGINMODULES
     const quint32 minKSpreadVersion = CALLIGRA_MAKE_VERSION(2, 1, 0);
     const QString serviceType = QLatin1String("CalligraSheets/Plugin");
     const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
@@ -146,6 +164,29 @@ void FunctionModuleRegistry::loadFunctionModules()
             }
         }
     }
+#else
+    QList<FunctionModule*> modules;
+    QObject *parent = 0;
+
+    modules << new BitOpsModule(parent);
+    modules << new ConversionModule(parent);
+    modules << new DatabaseModule(parent);
+    modules << new DateTimeModule(parent);
+    modules << new EngineeringModule(parent);
+    modules << new FinancialModule(parent);
+    modules << new InformationModule(parent);
+    modules << new LogicModule(parent);
+    modules << new MathModule(parent);
+    modules << new ReferenceModule(parent);
+    modules << new StatisticalModule(parent);
+    modules << new TextModule(parent);
+    modules << new TrigonometryModule(parent);
+
+    Q_FOREACH(FunctionModule* module, modules) {
+        add(module->id(), module);
+        d->registerFunctionModule(module);
+    }
+#endif
 }
 
 void FunctionModuleRegistry::registerFunctions()
