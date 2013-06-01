@@ -284,7 +284,7 @@ public:
     bool isModified() const;
     void setModified( bool on );
     QDomDocument document() const;
-    void setData( const QDomDocument doc );
+    void setData( const QDomDocument &doc );
 
     /// Loads context info into this view.
     virtual bool loadContext( const KoXmlElement &context );

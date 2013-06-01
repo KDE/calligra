@@ -143,7 +143,7 @@ ScriptingDataQueryView::ScriptingDataQueryView(Scripting::Module* module, QWidge
     setupUi( this );
     setup();
 
-    connect( ui_objectType, SIGNAL( currentIndexChanged( int ) ), SLOT( slotObjectTypeChanged( int  ) ) );
+    connect( ui_objectType, SIGNAL(currentIndexChanged(int)), SLOT(slotObjectTypeChanged(int)) );
 }
 
 ScriptingDataQueryView::~ScriptingDataQueryView()

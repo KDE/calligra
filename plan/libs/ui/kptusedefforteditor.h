@@ -160,8 +160,8 @@ protected:
     virtual QVariant actualEffort ( int row, int role ) const;
     QVariant plannedEffort ( int row, int role ) const;
 
-    void removeEntry( const QDate date );
-    void addEntry( const QDate date );
+    void removeEntry( const QDate& date );
+    void addEntry( const QDate& date );
     void refresh();
 
     QList<qint64> scales() const;
@@ -189,8 +189,8 @@ public:
 
 signals:
     void changed();
-    void rowInserted( const QDate );
-    void rowRemoved( const QDate );
+    void rowInserted( const QDate& );
+    void rowRemoved( const QDate& );
     void selectionChanged( const QItemSelection&, const QItemSelection& );
 
 public slots:

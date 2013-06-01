@@ -95,8 +95,8 @@ public:
 protected slots:
     void slotWeekNumberChanged( int );
     void slotAddResource();
-    void slotEntryAdded( const QDate date);
-    
+    void slotEntryAdded( const QDate &date);
+
 protected:
     void setEstimateScales( int day );
     
