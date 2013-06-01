@@ -19,6 +19,7 @@ install(TARGETS planmpxjimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES
     plan_msproject_import.desktop
+    plan_msprojectexchange_import.desktop
     plan_planner_import.desktop
   DESTINATION ${SERVICES_INSTALL_DIR})
 
