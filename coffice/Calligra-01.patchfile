@@ -786,6 +786,23 @@ index b99243f..bafee04 100644
      KoShapeRegistry::instance()->add(new TextShapeFactory());
  }
  
+diff --git a/sheets/ui/CellToolBase.cpp b/sheets/ui/CellToolBase.cpp
+index 788e7f9..ad95be7 100644
+--- a/sheets/ui/CellToolBase.cpp
++++ b/sheets/ui/CellToolBase.cpp
+@@ -3402,10 +3402,12 @@ void CellToolBase::spellCheck()
+ void CellToolBase::inspector()
+ {
+     // useful to inspect objects
++#if 0
+     Cell cell(selection()->activeSheet(), selection()->marker());
+     QPointer<Calligra::Sheets::Inspector> ins = new Calligra::Sheets::Inspector(cell);
+     ins->exec();
+     delete ins;
++#endif
+ }
+ 
+ void CellToolBase::qTableView()
 diff --git a/words/part/KWDocument.cpp b/words/part/KWDocument.cpp
 index 54cccdc..e062600 100644
 --- a/words/part/KWDocument.cpp
