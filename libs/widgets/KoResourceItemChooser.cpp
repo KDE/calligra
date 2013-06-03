@@ -302,6 +302,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->tagCompleter = new QCompleter(getTagNamesList(QString()),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 
+    enableContextMenu(false);
     updateButtonState();
     activated(d->model->index(0, 0));
 }
@@ -404,6 +405,7 @@ void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
     showSearchBar ? d->tagSearchLineEdit->show() : d->tagSearchLineEdit->hide();
     showOpBar ? d->tagOpComboBox->show() : d->tagOpComboBox->hide();
+    enableContextMenu(showOpBar);
 
     foreach( QAbstractButton * button, d->tagButtonGroup->buttons() )
         showOpBar ? button->show() : button->hide();
