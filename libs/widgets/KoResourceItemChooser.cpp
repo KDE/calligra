@@ -127,8 +127,9 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
             "<icode>[Tagname]</icode> or <icode>![Tagname]</icode>.</para>"
             "<para>Case sensitive and full name matching in-/exclusion:<br>"
             "<icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</icode>.</para>"
-            "Filter results cannot be saved in <interface>Unfiltered View</interface>.<br>"
-            "Create and/or switch to a different tag to enable saving.</qt>"
+            "Filter results cannot be saved for the <interface>All Presets</interface> view.<br>"
+            "In this view, pressing <interface>Enter</interface> or clearing the filter box will restore all items.<br>"
+            "Create and/or switch to a different tag if you want to save filtered resources into named sets.</qt>"
             );
 
     d->tagSearchBarTooltip_enabled = i18n (
@@ -142,7 +143,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
             "Pressing <interface>Enter</interface> or clicking the <interface>Save</interface> button will save the changes.</qt>"
             );
 
-    d->unfilteredView = i18n("Unfiltered View");
+    d->unfilteredView = i18n("All Presets");
 
 
     d->splitter = new QSplitter(this);
