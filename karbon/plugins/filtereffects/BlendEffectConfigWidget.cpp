@@ -21,8 +21,8 @@
 #include "BlendEffect.h"
 #include "KoFilterEffect.h"
 
-#include <KComboBox>
-#include <KLocale>
+#include <kcombobox.h>
+#include <klocale.h>
 
 #include <QGridLayout>
 #include <QLabel>

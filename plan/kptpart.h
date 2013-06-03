@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_PARTPART_H
-#define KPLATO_PARTPART_H
+#ifndef KPTPART_H
+#define KPTPART_H
 
 #include <KoPart.h>
 
@@ -37,7 +37,7 @@ class KPLATO_EXPORT Part : public KoPart
     Q_OBJECT
 
 public:
-    Part(QObject *parent);
+    explicit Part(QObject *parent);
 
     virtual ~Part();
 

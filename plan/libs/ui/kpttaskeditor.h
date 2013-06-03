@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TASKEDTIOR_H
-#define TASKEDTIOR_H
+#ifndef KPTTASKEDITOR_H
+#define KPTTASKEDITOR_H
 
 #include "kplatoui_export.h"
 
@@ -67,8 +67,8 @@ class KPLATOUI_EXPORT TaskEditorTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    TaskEditorTreeView( QWidget *parent );
-    
+    explicit TaskEditorTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
@@ -78,8 +78,8 @@ public:
     void setProject( Project *project ) { baseModel()->setProject( project ); }
     
 signals:
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+
 protected slots:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
@@ -88,8 +88,8 @@ class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    NodeTreeView( QWidget *parent );
-    
+    explicit NodeTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
@@ -99,8 +99,8 @@ public:
     void setProject( Project *project ) { baseModel()->setProject( project ); }
     
 signals:
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+
 protected slots:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
@@ -142,7 +142,7 @@ signals:
     void addMilestone();
     void addSubtask();
     void addSubMilestone();
-    void deleteTaskList( QList<Node*> );
+    void deleteTaskList( const QList<Node*>& );
     void moveTaskUp();
     void moveTaskDown();
     void indentTask();
@@ -167,10 +167,10 @@ protected slots:
     virtual void slotOptions();
 
 private slots:
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    
+
     void slotEnableActions();
 
     void slotAddTask();
@@ -251,7 +251,7 @@ protected slots:
     virtual void slotOptions();
 
 private slots:
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
 
@@ -270,7 +270,7 @@ class WorkPackageTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    WorkPackageTreeView( QWidget *parent );
+    explicit WorkPackageTreeView(QWidget *parent);
 
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
@@ -283,7 +283,7 @@ public:
     ScheduleManager *scheduleManager() const { return baseModel()->manager(); }
 
 signals:
-    void currentColumnChanged( QModelIndex, QModelIndex );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
 
 protected slots:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
@@ -319,7 +319,7 @@ public:
     
 signals:
     void mailWorkpackage( Node *n, Resource *r = 0 );
-    void mailWorkpackages( QList<Node*> &nodes, Resource *r );
+    void mailWorkpackages( const QList<Node*> &nodes, Resource *r );
     void checkForWorkPackages();
 
 public slots:
@@ -335,10 +335,10 @@ protected:
 protected slots:
     virtual void slotOptions();
     void slotMailWorkpackage();
-    void slotWorkPackageSent( QList<Node*> &nodes, Resource *resource );
+    void slotWorkPackageSent( const QList<Node*> &nodes, Resource *resource );
 
 private slots:
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
 

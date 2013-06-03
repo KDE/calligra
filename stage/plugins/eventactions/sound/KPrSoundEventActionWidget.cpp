@@ -21,7 +21,7 @@
 
 #include <QComboBox>
 #include <QVBoxLayout>
-#include <KFileDialog>
+#include <kfiledialog.h>
 #include <klocale.h>
 
 

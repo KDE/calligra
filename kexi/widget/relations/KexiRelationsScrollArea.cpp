@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QStringList>
 #include <QLayout>

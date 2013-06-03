@@ -24,7 +24,7 @@
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <db/cursor.h>
 #include <db/connection.h>

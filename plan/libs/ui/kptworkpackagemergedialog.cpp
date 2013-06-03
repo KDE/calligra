@@ -22,8 +22,8 @@
 #include "kptproject.h"
 #include "kpttask.h"
 
-#include <KMessageBox>
-#include <KExtendableItemDelegate>
+#include <kmessagebox.h>
+#include <kextendableitemdelegate.h>
 
 #include <QTreeView>
 #include <QSortFilterProxyModel>
@@ -147,8 +147,8 @@ WorkPackageMergeDialog::WorkPackageMergeDialog( const QString &text, const QMap<
 
     slotChanged();
 
-    connect(panel.ui_view->model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), SLOT(slotChanged()));
-    connect(panel.ui_view, SIGNAL(activated(const QModelIndex&)), SLOT(slotActivated(const QModelIndex&)));
+    connect(panel.ui_view->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(slotChanged()));
+    connect(panel.ui_view, SIGNAL(activated(QModelIndex)), SLOT(slotActivated(QModelIndex)));
 }
 
 WorkPackageMergeDialog::~WorkPackageMergeDialog()

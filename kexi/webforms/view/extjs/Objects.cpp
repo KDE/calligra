@@ -20,7 +20,7 @@
 
 #include <QString>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <core/kexipartinfo.h>
 #include <core/kexipartitem.h>

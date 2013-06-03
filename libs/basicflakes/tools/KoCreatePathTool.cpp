@@ -33,8 +33,8 @@
 #include "KoStrokeConfigWidget.h"
 #include "KoShapeStroke.h"
 
-#include <KNumInput>
-#include <KLocale>
+#include <knuminput.h>
+#include <klocale.h>
 
 #include <QPainter>
 #include <QLabel>

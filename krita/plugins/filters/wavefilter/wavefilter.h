@@ -45,10 +45,10 @@ public:
 
     using KisFilter::process;
 
-    void process(KisPaintDeviceSP device,
-                const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater) const;
     static inline KoID id() {
         return KoID("wave", i18n("Wave"));
     }
@@ -57,7 +57,7 @@ public:
 public:
     virtual QRect neededRect(const QRect& rect, const KisFilterConfiguration* config = 0) const;
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };
 
 #endif

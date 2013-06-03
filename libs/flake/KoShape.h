@@ -673,7 +673,7 @@ public:
     enum ChildZOrderPolicy {
         ChildZDefault,
         ChildZParentChild = ChildZDefault, ///< normal parent/child ordering
-        ChildZPassThrough ///< children are considered equal to this shape
+        ChildZInterleave ///< as ChildZParentChild, but other shapes can interleave with the children
     };
 
    /**
@@ -682,11 +682,17 @@ public:
     * the place of its childrens values, so you get a parent/child relationship.
     * The children are naturally still ordered relatively to their z values
     *
-    * But for special cases (like Calligra's TextShape) it can be overloaded to return
-    * ChildZPassThrough which means the children keep their own z values
+    * But for special cases (like Calligra's TextShape) it can be return
+    * ChildZInterleave
     * @returns the z order policy of this shape
     */
-    virtual ChildZOrderPolicy childZOrderPolicy();
+    ChildZOrderPolicy childZOrderPolicy() const;
+
+   /**
+    * Set the kind of policy used during compareShapeZIndex()
+    * @returns the z order policy of this shape
+    */
+    void setChildZOrderPolicy(ChildZOrderPolicy policy);
 
     /**
      * This is a method used to sort a list using the STL sorting methods.

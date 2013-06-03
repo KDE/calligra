@@ -65,7 +65,7 @@ class WorkPackage : public QObject
 {
     Q_OBJECT
 public:
-    WorkPackage( bool fromProjectStore );
+    explicit WorkPackage(bool fromProjectStore);
     WorkPackage( Project *project, bool fromProjectStore );
     ~WorkPackage();
 
@@ -104,7 +104,7 @@ public:
     bool removeDocument( Part *part, Document *doc );
 
     /// Set the file path to this package
-    void setFilePath( const QString name ) { m_filePath = name; }
+    void setFilePath( const QString &name ) { m_filePath = name; }
     /// Return the file path to this package
     QString filePath() const { return m_filePath; }
 

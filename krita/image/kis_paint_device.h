@@ -409,8 +409,8 @@ public:
      * @return a command that can be used to undo the conversion.
      */
     KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
-                             KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                             KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
+                             KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                             KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given
@@ -436,8 +436,8 @@ public:
      * like sRGB).
      */
     virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty) const;
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -448,8 +448,8 @@ public:
      * like sRGB).
      */
     virtual QImage convertToQImage(const KoColorProfile *  dstProfile,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty) const;
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining
@@ -474,15 +474,15 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      */
     virtual QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
     virtual QImage createThumbnail(qint32 maxw, qint32 maxh,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
 
     /**
      * Fill c and opacity with the values found at x and y.
@@ -527,7 +527,91 @@ public:
     /**
      * @return the colorspace of the pixels in this paint device
      */
-    const KoColorSpace *colorSpace() const;
+    const KoColorSpace* colorSpace() const;
+
+    /**
+     * There is quite a common technique in Krita. It is used in
+     * cases, when we want to paint something over a paint device
+     * using the composition, opacity or selection. E.g. painting a
+     * dab in a paint op, filling the selection in the Fill Tool.
+     * Such work is usually done in the following way:
+     *
+     * 1) Create a paint device
+     *
+     * 2) Fill it with the desired color or data
+     *
+     * 3) Create a KisPainter and set all the properties of the
+     *    trasaction: selection, compositeOp, opacity and etc.
+     *
+     * 4) Paint a newly created paint device over the destination
+     *    device.
+     *
+     * The following two methods (createCompositionSourceDevice() or
+     * createCompositionSourceDeviceFixed())should be used for the
+     * accomplishing the step 1). The point is that the desired color
+     * space of the temporary device may not coincide with the color
+     * space of the destination. That is the case, for example, for
+     * the alpha8() colorspace used in the selections. So for such
+     * devices the temporary target would have a different (grayscale)
+     * color space.
+     *
+     * So there are two rules of thumb:
+     *
+     * 1) If you need a temporary device which you are going to fill
+     *    with some data and then paint over the paint device, create
+     *    it with either createCompositionSourceDevice() or
+     *    createCompositionSourceDeviceFixed().
+     *
+     * 2) Do *not* expect that the color spaces of the destination and
+     *    the temporary device would coincide. If you need to copy a
+     *    single pixel from one device to another, you can use
+     *    KisCrossDeviceColorPicker class, that will handle all the
+     *    necessary conversions for you.
+     *
+     * \see createCompositionSourceDeviceFixed()
+     * \see compositionSourceColorSpace()
+     * \see KisCrossDeviceColorPicker
+     * \see KisCrossDeviceColorPickerInt
+     */
+    KisPaintDeviceSP createCompositionSourceDevice() const;
+
+    /**
+     * The same as createCompositionSourceDevice(), but initializes the
+     * newly created device with the content of \p cloneSource
+     *
+     * \see createCompositionSourceDevice()
+     */
+    KisPaintDeviceSP createCompositionSourceDevice(KisPaintDeviceSP cloneSource) const;
+
+    /**
+     * The same as createCompositionSourceDevice(), but initializes
+     * the newly created device with the *rough* \p roughRect of
+     * \p cloneSource.
+     *
+     * "Rough rect" means that it may copy a bit more than
+     * requested. It is expected that the caller will not use the area
+     * outside \p roughRect.
+     *
+     * \see createCompositionSourceDevice()
+     */
+    KisPaintDeviceSP createCompositionSourceDevice(KisPaintDeviceSP cloneSource, const QRect roughRect) const;
+
+    /**
+     * This is a convenience method for createCompositionSourceDevice()
+     *
+     * \see createCompositionSourceDevice()
+     */
+    KisFixedPaintDeviceSP createCompositionSourceDeviceFixed() const;
+
+    /**
+     * This is a lowlevel method for the principle used in
+     * createCompositionSourceDevice(). In most of the cases the paint
+     * device creation methods should be used instead of this function.
+     *
+     * \see createCompositionSourceDevice()
+     * \see createCompositionSourceDeviceFixed()
+     */
+    virtual const KoColorSpace* compositionSourceColorSpace() const;
 
     /**
      * @return the internal datamanager that keeps the pixels.

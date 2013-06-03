@@ -21,11 +21,11 @@
 
 #include <QSet>
 #include <QHash>
-#include <KGlobal>
+#include <kglobal.h>
 
 #include <db/indexschema.h>
 #include <db/tableschema.h>
-#include <widget/dataviewcommon/kexitableviewdata.h>
+#include <db/tableviewdata.h>
 #include "kexidatetableedit.h"
 #include "kexitimetableedit.h"
 #include "kexidatetimetableedit.h"
@@ -113,7 +113,7 @@ void KexiCellEditorFactory::registerItem(KexiCellEditorFactoryItem& item, uint t
     KexiCellEditorFactory_static->registerItem(item, type, subType);
 }
 
-static bool hasEnumType(const KexiTableViewColumn &column)
+static bool hasEnumType(const KexiDB::TableViewColumn &column)
 {
     /*not db-aware case*/
     if (column.relatedData())
@@ -129,7 +129,7 @@ static bool hasEnumType(const KexiTableViewColumn &column)
     return true;
 }
 
-KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QWidget* parent)
+KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &column, QWidget* parent)
 {
     KexiDB::Field *realField;
     if (column.visibleLookupColumnInfo()) {

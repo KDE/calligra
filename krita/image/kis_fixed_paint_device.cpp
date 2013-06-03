@@ -127,11 +127,13 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
     } else {
         KoColorSpaceRegistry::instance()
         ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
-        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(),
+                          KoColorConversionTransformation::InternalRenderingIntent,
+                          KoColorConversionTransformation::InternalConversionFlags);
     }
 }
 
-QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     qint32 x1;
     qint32 y1;
@@ -146,7 +148,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
     return convertToQImage(dstProfile, x1, y1, w, h, intent, conversionFlags);
 }
 
-QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT( m_bounds.contains(QRect(x1,y1,w,h)) );
 

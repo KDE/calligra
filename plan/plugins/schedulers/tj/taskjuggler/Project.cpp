@@ -21,8 +21,8 @@
 #include <QString>
 #include <QStringList>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "TjMessageHandler.h"
 #include "Scenario.h"

@@ -47,7 +47,7 @@ KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), categoryEnhance(), i18n("
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     return new KisWdgUnsharp(parent);
 }
@@ -61,11 +61,11 @@ KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDev
     return config;
 }
 
-void KisUnsharpFilter::process(KisPaintDeviceSP device,
-                              const QRect& applyRect,
-                              const KisFilterConfiguration* config,
-                              KoUpdater* progressUpdater
-                              ) const
+void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
+                                   const QRect& applyRect,
+                                   const KisFilterConfiguration* config,
+                                   KoUpdater* progressUpdater
+                                   ) const
 {
 
     QPointer<KoUpdater> filterUpdater = 0;

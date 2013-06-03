@@ -32,7 +32,7 @@
 #include <KoOdfGraphicStyles.h>
 #include "KoParagraphStyle.h"
 
-#include <KDebug>
+#include <kdebug.h>
 #include <KoTextDebug.h>
 
 #include <QTextTable>
@@ -128,6 +128,7 @@ KoTableCellStyle& KoTableCellStyle::operator=(const KoTableCellStyle &other)
 
 KoTableCellStyle::~KoTableCellStyle()
 {
+    delete d_ptr;
 }
 
 KoTableCellStyle *KoTableCellStyle::fromTableCell(const QTextTableCell &tableCell, QObject *parent)

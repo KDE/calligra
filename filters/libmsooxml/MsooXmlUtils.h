@@ -33,7 +33,7 @@
 #include <QBuffer>
 #include <KoFilterChain.h>
 #include <KoXmlReader.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 

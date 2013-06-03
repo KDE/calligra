@@ -50,9 +50,8 @@ KisMotionBlurFilter::KisMotionBlurFilter() : KisFilter(id(), categoryBlur(), i18
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP image) const
+KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
-    Q_UNUSED(image)
     return new KisWdgMotionBlur(parent);
 }
 
@@ -65,11 +64,11 @@ KisFilterConfiguration* KisMotionBlurFilter::factoryConfiguration(const KisPaint
     return config;
 }
 
-void KisMotionBlurFilter::process(KisPaintDeviceSP device,
-                            const QRect& rect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                           ) const
+void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
+                                      const QRect& rect,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                      ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 

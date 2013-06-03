@@ -60,11 +60,11 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
     setSupportsThreading(false);
 }
 
-void KisSmallTilesFilter::process(KisPaintDeviceSP device,
-                                  const QRect& /*applyRect*/,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater
-                                 ) const
+void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
+                                      const QRect& /*applyRect*/,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                      ) const
 {
     Q_ASSERT(!device.isNull());
 
@@ -95,7 +95,7 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP device,
     gc.end();
 }
 
-KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 5, 1, i18n("Number of tiles"), "numberOfTiles"));

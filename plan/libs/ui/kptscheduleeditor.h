@@ -50,7 +50,7 @@ class KPLATOUI_EXPORT ScheduleTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    ScheduleTreeView( QWidget *parent );
+    explicit ScheduleTreeView(QWidget *parent);
 
     ScheduleItemModel *model() const { return static_cast<ScheduleItemModel*>( TreeViewBase::model() ); }
 
@@ -65,8 +65,8 @@ public:
 
 signals:
     void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void selectionChanged( const QModelIndexList& );
 
 protected slots:
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
@@ -119,9 +119,9 @@ protected slots:
     virtual void slotOptions();
 
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
-    
-    void slotSelectionChanged( const QModelIndexList );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void updateActionsEnabled( const QModelIndex &index );
     void slotEnableActions();
@@ -150,7 +150,7 @@ class KPLATOUI_EXPORT ScheduleLogTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    ScheduleLogTreeView( QWidget *parent );
+    explicit ScheduleLogTreeView(QWidget *parent);
 
     Project *project() const { return logModel()->project(); }
     void setProject( Project *project ) { logModel()->setProject( project ); }
@@ -165,10 +165,10 @@ public:
 
 signals:
     void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void selectionChanged( const QModelIndexList& );
 
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    void contextMenuRequested( const QModelIndex&, const QPoint& );
 
 public slots:
     void slotEditCopy();
@@ -222,10 +222,10 @@ protected slots:
     virtual void slotOptions();
 
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotScheduleSelectionChanged( ScheduleManager *sm );
 
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void updateActionsEnabled( const QModelIndex &index );
     void slotEnableActions( const ScheduleManager *sm );
@@ -248,7 +248,7 @@ public:
     /// Returns a list of actionlist names for all shown views
     QStringList actionListNames() const;
     /// Returns the list of actions associated with the action list @p name
-    virtual QList<QAction*> actionList( const QString name ) const;
+    virtual QList<QAction*> actionList( const QString &name ) const;
     /// Always returns this (if we are called, we are hit)
     virtual ViewBase *hitView( const QPoint &glpos );
 

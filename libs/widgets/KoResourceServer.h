@@ -45,7 +45,7 @@
 
 #include "kowidgets_export.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KoResource;
 
@@ -433,6 +433,11 @@ public:
     QStringList searchTag(const QString& lineEditText)
     {
         return m_tagObject->searchTag(lineEditText);
+    }
+    
+    KoResourceTagging * tagObject() 
+    {
+        return m_tagObject;
     }
 
 

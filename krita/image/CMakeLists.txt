@@ -47,8 +47,7 @@ if(NOT WIN32)
 endif(NOT WIN32)
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
-include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
-                     ${CMAKE_SOURCE_DIR}/krita/image/metadata
+include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
 )
 
@@ -183,7 +182,6 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp
    kis_selection_transaction_data.cpp

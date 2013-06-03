@@ -46,8 +46,9 @@ public:
 
     QString encoding;
     DateFormat dateFormat;
-    bool defaultEncodingExplicitySet : 1;
-    bool trimmedInTextValuesChecked : 1;
+    bool defaultEncodingExplicitySet;
+    bool trimmedInTextValuesChecked;
+    bool nullsImportedAsEmptyTextChecked;
 };
 
 //! @short CSV Options dialog
@@ -67,6 +68,7 @@ protected:
     KexiCharacterEncodingComboBox *m_encodingComboBox;
     QCheckBox *m_chkAlwaysUseThisEncoding;
     QCheckBox *m_chkStripWhiteSpaceInTextValues;
+    QCheckBox *m_chkImportNULLsAsEmptyText;
     QComboBox *m_comboDateFormat;
 };
 

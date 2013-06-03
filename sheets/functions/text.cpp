@@ -36,7 +36,7 @@
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 using namespace Calligra::Sheets;
 

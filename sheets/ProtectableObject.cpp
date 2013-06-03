@@ -23,12 +23,12 @@
 
 #include <KoXmlNS.h>
 
-#include <KCodecs>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <kcodecs.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <knewpassworddialog.h>
-#include <KPasswordDialog>
+#include <kpassworddialog.h>
 
 #include <QPointer>
 

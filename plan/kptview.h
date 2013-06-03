@@ -18,8 +18,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_VIEW
-#define KPLATO_VIEW
+#ifndef KPTVIEW_H
+#define KPTVIEW_H
 
 #include "kplato_export.h"
 
@@ -35,7 +35,7 @@
 #include <QPointer>
 #include <QPrintDialog>
 
-#include <KConfigDialog>
+#include <kconfigdialog.h>
 
 class QStackedWidget;
 class QSplitter;
@@ -170,32 +170,32 @@ public:
     void setActiveSchedule( long id );
 
     /// Returns the default view information like standard name and tooltip for view type @p type
-    ViewInfo defaultViewInfo( const QString type ) const;
+    ViewInfo defaultViewInfo( const QString &type ) const;
     /// Returns the default category information like standard name and tooltip for category type @p type
-    ViewInfo defaultCategoryInfo( const QString type ) const;
+    ViewInfo defaultCategoryInfo( const QString &type ) const;
 
-    ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createResourceEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createTaskEditor( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createResourceEditor( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createAccountsEditor( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createCalendarEditor( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createScheduleHandler( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ScheduleEditor *createScheduleEditor( QWidget *parent );
-    ViewBase *createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createPertEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createProjectStatusView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createPerformanceStatusView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createTaskView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createTaskWorkPackageView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createGanttView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createResourceAppointmentsGanttView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createAccountsView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createChartView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createReportView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createScheduleEditor( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createDependencyEditor( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createPertEditor( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createProjectStatusView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createPerformanceStatusView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createTaskStatusView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createTaskView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createTaskWorkPackageView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createGanttView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createMilestoneGanttView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createResourceAppointmentsView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createResourceAppointmentsGanttView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createAccountsView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createResourceAssignmentView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createChartView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createReportView( ViewListItem *cat, const QString &tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
 
     KoPrintJob * createPrintJob();
     QPrintDialog* createPrintDialog(KoPrintJob*, QWidget*);
@@ -289,7 +289,7 @@ protected slots:
 
     void slotWorkPackageLoaded();
     void slotMailWorkpackage( Node *node, Resource *resource = 0 );
-    void slotMailWorkpackages( QList<Node*> &nodes, Resource *resource = 0 );
+    void slotMailWorkpackages( const QList<Node*> &nodes, Resource *resource = 0 );
 
     void slotOpenUrlRequest( HtmlView *v, const KUrl &url );
 

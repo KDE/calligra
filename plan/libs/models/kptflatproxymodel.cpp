@@ -21,7 +21,7 @@
 
 #include "kptglobal.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <QModelIndex>
 #include <QPersistentModelIndex>
@@ -171,9 +171,9 @@ void FlatProxyModel::setSourceModel(QAbstractItemModel *model)
 
         disconnect(sourceModel(), SIGNAL(modelReset()), this, SLOT(sourceReset()));
 
-        connect(sourceModel(), SIGNAL(rowsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int)),
+        connect(sourceModel(), SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
                 this, SLOT(sourceRowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
-        connect(sourceModel(), SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)),
+        connect(sourceModel(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
                 this, SLOT(sourceRowsMoved(QModelIndex,int,int,QModelIndex,int)));
     }
     QAbstractProxyModel::setSourceModel(model);
@@ -203,9 +203,9 @@ void FlatProxyModel::setSourceModel(QAbstractItemModel *model)
 
     connect(sourceModel(), SIGNAL(modelReset()), this, SLOT(sourceReset()));
 
-    connect(sourceModel(), SIGNAL(rowsAboutToBeMoved(const QModelIndex&, int, int, const QModelIndex&, int)),
+    connect(sourceModel(), SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(sourceRowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
-    connect(sourceModel(), SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)),
+    connect(sourceModel(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(sourceRowsMoved(QModelIndex,int,int,QModelIndex,int)));
 
     beginResetModel();

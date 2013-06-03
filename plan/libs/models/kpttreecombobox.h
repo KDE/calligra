@@ -22,7 +22,7 @@
 
 #include "kplatomodels_export.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 
 #include <QAbstractItemView>
 #include <QEvent>
@@ -40,12 +40,12 @@ class KPLATOMODELS_EXPORT TreeComboBox : public KComboBox
 {
     Q_OBJECT
 public:
-    TreeComboBox( QWidget *parent = 0 );
-    
+    explicit TreeComboBox(QWidget *parent = 0);
+
     QTreeView *view() const;
     void setModel( QAbstractItemModel *model );
     QAbstractItemModel *model() const;
-    
+
     QList<QPersistentModelIndex> currentIndexes() const { return m_currentIndexes; }
 
     void setSelectionMode( QAbstractItemView::SelectionMode mode );
@@ -54,7 +54,7 @@ public:
 
 signals:
     void changed();
-    
+
 public slots:
     void setCurrentIndexes( const QModelIndexList &lst );
     void setCurrentIndexes( const QList<QPersistentModelIndex> &lst );

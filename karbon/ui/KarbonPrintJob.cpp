@@ -22,7 +22,7 @@
 #include "KarbonView.h"
 #include "KarbonCanvas.h"
 #include "KarbonPart.h"
-#include "KarbonKoDocument.h"
+#include "KarbonDocument.h"
 #include "KarbonDocument.h"
 
 #include <KoShapeManager.h>
@@ -36,7 +36,7 @@ KarbonPrintJob::KarbonPrintJob(KarbonView *view, PrintMode printMode)
     setShapeManager(m_view->canvasWidget()->shapeManager());
     printer().setFromTo(1, 1);
 
-    QSizeF pageSize = m_view->part()->document().pageSize();
+    QSizeF pageSize = m_view->part()->pageSize();
     if (pageSize.width() > pageSize.height())
         printer().setOrientation(QPrinter::Landscape);
     else
@@ -52,7 +52,7 @@ QRectF KarbonPrintJob::preparePage(int)
 {
     // if we have any custom tabs, here is where can can read them out and do our thing.
 
-    const QSizeF contentSize = m_view->part()->document().pageSize();
+    const QSizeF contentSize = m_view->part()->pageSize();
     const QRectF pageRectPt = printer().pageRect(QPrinter::Point);
     const double scale = POINT_TO_INCH(printer().resolution());
 

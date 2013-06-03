@@ -72,21 +72,19 @@ class KPLATOUI_EXPORT TaskStatusTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    TaskStatusTreeView( QWidget *parent );
-    
-    
+    explicit TaskStatusTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     TaskStatusItemModel *model() const;
-    
+
     Project *project() const;
     void setProject( Project *project );
-    
-    
+
     int defaultWeekday() const { return Qt::Friday; }
     int weekday() const;
     void setWeekday( int day );
-    
+
     int defaultPeriod() const { return 7; }
     int period() const;
     void setPeriod( int days );
@@ -186,7 +184,7 @@ struct PerformanceChartInfo
     bool showTableView;
 
     bool showBaseValues;
-    bool showIndeces;
+    bool showIndices;
 
     bool showCost;
     bool showBCWSCost;
@@ -204,10 +202,10 @@ struct PerformanceChartInfo
     bool showCpiEffort;
 
     bool effortShown() const {
-        return ( showBaseValues && showEffort ) || ( showIndeces && ( showSpiEffort || showCpiEffort ) );
+        return ( showBaseValues && showEffort ) || ( showIndices && ( showSpiEffort || showCpiEffort ) );
     }
     bool costShown() const {
-        return ( showBaseValues && showCost ) || ( showIndeces && ( showSpiCost || showCpiCost ) );
+        return ( showBaseValues && showCost ) || ( showIndices && ( showSpiCost || showCpiCost ) );
     }
     bool bcwsCost() const { return showBaseValues && showCost && showBCWSCost; }
     bool bcwpCost() const { return showBaseValues && showCost && showBCWPCost; }
@@ -216,14 +214,14 @@ struct PerformanceChartInfo
     bool bcwpEffort() const { return showBaseValues && showEffort && showBCWPEffort; }
     bool acwpEffort() const { return showBaseValues && showEffort && showACWPEffort; }
 
-    bool spiCost() const { return showIndeces && showSpiCost; }
-    bool cpiCost() const { return showIndeces && showCpiCost; }
-    bool spiEffort() const { return showIndeces && showSpiEffort; }
-    bool cpiEffort() const { return showIndeces && showCpiEffort; }
+    bool spiCost() const { return showIndices && showSpiCost; }
+    bool cpiCost() const { return showIndices && showCpiCost; }
+    bool spiEffort() const { return showIndices && showSpiEffort; }
+    bool cpiEffort() const { return showIndices && showCpiEffort; }
 
     PerformanceChartInfo() {
         showBarChart = false; showLineChart = true; showTableView = false;
-        showBaseValues = true; showIndeces = false;
+        showBaseValues = true; showIndices = false;
         showCost = showBCWSCost = showBCWPCost = showACWPCost = true;
         showEffort = showBCWSEffort = showBCWPEffort = showACWPEffort = true;
         showSpiCost = showCost = showSpiEffort = showCpiEffort = true;
@@ -231,7 +229,7 @@ struct PerformanceChartInfo
     bool operator!=( const PerformanceChartInfo &o ) const { return ! operator==( o ); }
     bool operator==( const PerformanceChartInfo &o ) const {
         return showBarChart == o.showBarChart && showLineChart == o.showLineChart &&
-                showBaseValues == o.showBaseValues && showIndeces == o.showIndeces &&
+                showBaseValues == o.showBaseValues && showIndices == o.showIndices &&
                 showCost == o.showCost && 
                 showBCWSCost == o.showBCWSCost &&
                 showBCWPCost == o.showBCWPCost &&
@@ -289,7 +287,7 @@ public:
     /// Create a print job dialog
     KoPrintJob *createPrintJob( ViewBase *parent );
 
-    void setNodes( const QList<Node*> nodes );
+    void setNodes( const QList<Node*> &nodes );
 
 public slots:
     void refreshChart();

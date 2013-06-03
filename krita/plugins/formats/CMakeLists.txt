@@ -14,10 +14,7 @@ macro_optional_find_package(TIFF)
 macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.remotesensing.org/libtiff" FALSE "" "Required by the Krita TIFF filter")
 
 macro_optional_find_package(JPEG)
-macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression" "http://www.ijg.org" FALSE "" "Required by the Krita JPEG filter")
-
-macro_optional_find_package(Poppler)
-macro_log_feature( POPPLER_FOUND "poppler-qt4" "The Poppler Qt4 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter")
+macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression. Note: libjpeg8 is NOT supported." "http://www.libjpeg-turbo.org" FALSE "" "Required by the Krita JPEG filter")
 
 macro_optional_find_package(Kdcraw)
 macro_log_feature( KDCRAW_FOUND "kdcraw" "The KDCraw library" "http://www.digikam.org/" FALSE "" "Required by the Krita RAW filter")

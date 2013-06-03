@@ -24,6 +24,7 @@
 #define KWFRAMELAYOUT_H
 
 #include "../Words.h"
+#include "../KWPageStyle.h"
 
 #include "../words_export.h"
 
@@ -34,7 +35,6 @@
 class KWPageManager;
 class KWFrameSet;
 class KWTextFrameSet;
-class KWPageStyle;
 class KWPage;
 class KWFrame;
 class KWDocument;

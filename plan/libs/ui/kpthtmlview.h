@@ -24,8 +24,8 @@
 
 #include "kptviewbase.h"
 
-#include <KHTMLPart>
-#include <KUrl>
+#include "khtml_part.h"
+#include <kurl.h>
 
 class KoDocument;
 
@@ -66,7 +66,7 @@ protected:
     void updateActionsEnabled(  bool on = true );
 
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     
     void slotEnableActions( bool on );
 

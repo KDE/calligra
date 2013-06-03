@@ -193,7 +193,8 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     m_d->canvas->shapeManager()->selection()->disconnect(this);
 
     connect(m_d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
-    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)), this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+            this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(this, SIGNAL(sigMoveShapes(const QPointF&)), SLOT(slotMoveShapes(const QPointF&)));
 }
@@ -296,9 +297,9 @@ bool KisShapeLayer::visible(bool recursive) const
     return KisExternalLayer::visible(recursive);
 }
 
-void KisShapeLayer::setVisible(bool visible)
+void KisShapeLayer::setVisible(bool visible, bool isLoading)
 {
-    KisExternalLayer::setVisible(visible);
+    KisExternalLayer::setVisible(visible, isLoading);
 }
 
 bool KisShapeLayer::saveLayer(KoStore * store) const

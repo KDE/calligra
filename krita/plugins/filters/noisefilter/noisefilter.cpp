@@ -83,18 +83,17 @@ KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDevic
     return config;
 }
 
-KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterNoise::process(KisPaintDeviceSP device,
-                            const QRect& applyRect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                            ) const
+void KisFilterNoise::processImpl(KisPaintDeviceSP device,
+                                 const QRect& applyRect,
+                                 const KisFilterConfiguration* config,
+                                 KoUpdater* progressUpdater
+                                 ) const
 {
     Q_ASSERT(!device.isNull());
 

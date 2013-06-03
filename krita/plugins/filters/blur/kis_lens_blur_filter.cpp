@@ -50,9 +50,8 @@ KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP image) const
+KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
-    Q_UNUSED(image)
     return new KisWdgLensBlur(parent);
 }
 
@@ -66,11 +65,11 @@ KisFilterConfiguration* KisLensBlurFilter::factoryConfiguration(const KisPaintDe
     return config;
 }
 
-void KisLensBlurFilter::process(KisPaintDeviceSP device,
-                            const QRect& rect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                           ) const
+void KisLensBlurFilter::processImpl(KisPaintDeviceSP device,
+                                    const QRect& rect,
+                                    const KisFilterConfiguration* config,
+                                    KoUpdater* progressUpdater
+                                    ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 

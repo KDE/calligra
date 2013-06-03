@@ -23,13 +23,12 @@
 #include "kptproject.h"
 #include "kptdebug.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <klocale.h>
 
 #include <QComboBox>
 #include <QCheckBox>
 #include <QPushButton>
-#include <QComboBox>
 #include <QTableWidget>
 #include <QStringList>
 #include <kundo2command.h>
@@ -117,12 +116,12 @@ WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QW
     //levelsTable->setColumnStretchable(0, true);
     slotLevelChanged(level->value());
     
-    connect(projectCode, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
-    connect(projectSeparator, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(projectCode, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
+    connect(projectSeparator, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
     connect(defaultCode, SIGNAL(activated(int)), SLOT(slotChanged()));
-    connect(defaultSeparator, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(defaultSeparator, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
     connect(levelsGroup, SIGNAL(toggled(bool)), SLOT(slotLevelsGroupToggled(bool)));
-    connect(levelsTable, SIGNAL(cellChanged(int, int)), SLOT(slotChanged()));
+    connect(levelsTable, SIGNAL(cellChanged(int,int)), SLOT(slotChanged()));
     connect(levelsTable, SIGNAL(itemSelectionChanged()), SLOT(slotSelectionChanged()));
     connect(level, SIGNAL(valueChanged(int)), SLOT(slotLevelChanged(int)));
     connect(removeBtn, SIGNAL(clicked(bool)), SLOT(slotRemoveBtnClicked()));

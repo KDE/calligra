@@ -24,8 +24,8 @@
 
 #include "ui_kptworkpackagemergepanel.h"
 
-#include <KDialog>
-#include <KDateTime>
+#include <kdialog.h>
+#include <kdatetime.h>
 
 #include <QMap>
 #include <QFrame>
@@ -58,7 +58,7 @@ class WorkPackageMergePanel : public QWidget, public Ui::WorkPackageMergePanel
 {
     Q_OBJECT
 public:
-    WorkPackageMergePanel( QWidget *parent = 0 );
+    explicit WorkPackageMergePanel(QWidget *parent = 0);
 };
 
 class KPLATOUI_EXPORT WorkPackageMergeDialog : public KDialog

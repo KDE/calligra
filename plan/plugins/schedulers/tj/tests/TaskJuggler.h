@@ -21,7 +21,7 @@
 #define KPlato_TaskJuggler_h
 
 #include <QtTest>
-#include <KTempDir>
+#include <ktempdir.h>
 
 namespace TJ {
     class Project;

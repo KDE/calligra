@@ -48,7 +48,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
-#include <kactionmenu.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
@@ -212,7 +211,7 @@ TaskEditorTreeView::TaskEditorTreeView( QWidget *parent )
     createItemDelegates( m );
     setItemDelegateForColumn( NodeModel::NodeType, new EnumDelegate( this ) );
 
-    connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
+    connect( this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), SLOT(slotDropAllowed(QModelIndex,int,QDragMoveEvent*)) );
 }
 
 NodeItemModel *TaskEditorTreeView::baseModel() const
@@ -249,7 +248,7 @@ NodeTreeView::NodeTreeView( QWidget *parent )
 
     createItemDelegates( m );
 
-    connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
+    connect( this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), SLOT(slotDropAllowed(QModelIndex,int,QDragMoveEvent*)) );
 }
 
 NodeItemModel *NodeTreeView::baseModel() const
@@ -332,18 +331,18 @@ TaskEditor::TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     m_view->masterView()->setDefaultColumns( QList<int>() << NodeModel::NodeName );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
+    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
 
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
     connect(baseModel(), SIGNAL(projectShownChanged(bool)), SLOT(slotProjectShown(bool)));
-    connect(model(), SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), this, SLOT(slotEnableActions()));
+    connect(model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(slotEnableActions()));
 }
 
 void TaskEditor::slotProjectShown( bool on )
@@ -442,9 +441,9 @@ void TaskEditor::createDockers()
         e->setAcceptDrops( true );
         e->setDragEnabled ( true );
         ds->setWidget( e );
-        connect(this, SIGNAL(loadTaskModules(const QStringList&)), m, SLOT(loadTaskModules(const QStringList&)));
-        connect(m, SIGNAL(saveTaskModule(const KUrl&, Project*)), this, SIGNAL(saveTaskModule(const KUrl&, Project*)));
-        connect(m, SIGNAL(removeTaskModule(const KUrl&)), this, SIGNAL(removeTaskModule(const KUrl&)));
+        connect(this, SIGNAL(loadTaskModules(QStringList)), m, SLOT(loadTaskModules(QStringList)));
+        connect(m, SIGNAL(saveTaskModule(KUrl,Project*)), this, SIGNAL(saveTaskModule(KUrl,Project*)));
+        connect(m, SIGNAL(removeTaskModule(KUrl)), this, SIGNAL(removeTaskModule(KUrl)));
         addDocker( ds );
     }
 }
@@ -470,7 +469,7 @@ void TaskEditor::slotCurrentChanged( const QModelIndex &curr, const QModelIndex 
     slotEnableActions();
 }
 
-void TaskEditor::slotSelectionChanged( const QModelIndexList list)
+void TaskEditor::slotSelectionChanged( const QModelIndexList &list)
 {
     kDebug(planDbg())<<list.count();
     slotEnableActions();
@@ -697,69 +696,69 @@ void TaskEditor::setupGui()
 
     menuAddTask = new KActionMenu(koIcon("view-task-add"), i18n("Add Task"), this);
     actionCollection()->addAction("add_task", menuAddTask );
-    connect( menuAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
+    connect( menuAddTask, SIGNAL(triggered(bool)), SLOT(slotAddTask()) );
     addAction( name, menuAddTask );
 
     actionAddTask  = new KAction( i18n( "Add Task" ), this);
     actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
-    connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
+    connect( actionAddTask, SIGNAL(triggered(bool)), SLOT(slotAddTask()) );
     menuAddTask->addAction( actionAddTask );
 
     actionAddMilestone  = new KAction( i18n( "Add Milestone" ), this );
     actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
-    connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
+    connect( actionAddMilestone, SIGNAL(triggered(bool)), SLOT(slotAddMilestone()) );
     menuAddTask->addAction( actionAddMilestone );
 
 
     menuAddSubTask = new KActionMenu(koIcon("view-task-child-add"), i18n("Add Sub-Task"), this);
     actionCollection()->addAction("add_subtask", menuAddTask );
-    connect( menuAddSubTask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
+    connect( menuAddSubTask, SIGNAL(triggered(bool)), SLOT(slotAddSubtask()) );
     addAction( name, menuAddSubTask );
 
     actionAddSubtask  = new KAction( i18n( "Add Sub-Task" ), this );
     actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
-    connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
+    connect( actionAddSubtask, SIGNAL(triggered(bool)), SLOT(slotAddSubtask()) );
     menuAddSubTask->addAction( actionAddSubtask );
 
     actionAddSubMilestone = new KAction( i18n( "Add Sub-Milestone" ), this );
     actionAddSubMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I ) );
-    connect( actionAddSubMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddSubMilestone() ) );
+    connect( actionAddSubMilestone, SIGNAL(triggered(bool)), SLOT(slotAddSubMilestone()) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
     actionDeleteTask  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
     actionCollection()->addAction("delete_task", actionDeleteTask );
-    connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
+    connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );
     addAction( name, actionDeleteTask );
 
 
     name = "taskeditor_move_list";
     actionIndentTask  = new KAction(koIcon("format-indent-more"), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
-    connect(actionIndentTask, SIGNAL(triggered(bool) ), SLOT(slotIndentTask()));
+    connect(actionIndentTask, SIGNAL(triggered(bool)), SLOT(slotIndentTask()));
     addAction( name, actionIndentTask );
 
     actionUnindentTask  = new KAction(koIcon("format-indent-less"), i18n("Unindent Task"), this);
     actionCollection()->addAction("unindent_task", actionUnindentTask );
-    connect(actionUnindentTask, SIGNAL(triggered(bool) ), SLOT(slotUnindentTask()));
+    connect(actionUnindentTask, SIGNAL(triggered(bool)), SLOT(slotUnindentTask()));
     addAction( name, actionUnindentTask );
 
     actionMoveTaskUp  = new KAction(koIcon("arrow-up"), i18n("Move Up"), this);
     actionCollection()->addAction("move_task_up", actionMoveTaskUp );
-    connect(actionMoveTaskUp, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskUp()));
+    connect(actionMoveTaskUp, SIGNAL(triggered(bool)), SLOT(slotMoveTaskUp()));
     addAction( name, actionMoveTaskUp );
 
     actionMoveTaskDown  = new KAction(koIcon("arrow-down"), i18n("Move Down"), this);
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
-    connect(actionMoveTaskDown, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskDown()));
+    connect(actionMoveTaskDown, SIGNAL(triggered(bool)), SLOT(slotMoveTaskDown()));
     addAction( name, actionMoveTaskDown );
 
     // Add the context menu actions for the view options
     actionShowProject = new KToggleAction( i18n( "Show Project" ), this );
-    connect(actionShowProject, SIGNAL(triggered(bool) ), baseModel(), SLOT(setShowProject(bool)));
+    connect(actionShowProject, SIGNAL(triggered(bool)), baseModel(), SLOT(setShowProject(bool)));
     addContextAction( actionShowProject );
 
-    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
     createOptionAction();
@@ -1050,15 +1049,15 @@ TaskView::TaskView(KoPart *part, KoDocument *doc, QWidget *parent)
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( m_view->baseModel(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_view->baseModel(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
+    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
 
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 void TaskView::updateReadWrite( bool rw )
@@ -1092,7 +1091,7 @@ void TaskView::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex &
     slotEnableActions();
 }
 
-void TaskView::slotSelectionChanged( const QModelIndexList list)
+void TaskView::slotSelectionChanged( const QModelIndexList &list)
 {
     kDebug(planDbg())<<list.count();
     slotEnableActions();
@@ -1185,10 +1184,10 @@ void TaskView::setupGui()
 
     // Add the context menu actions for the view options
     actionShowProject = new KToggleAction( i18n( "Show Project" ), this );
-    connect(actionShowProject, SIGNAL(triggered(bool) ), baseModel(), SLOT(setShowProject(bool)));
+    connect(actionShowProject, SIGNAL(triggered(bool)), baseModel(), SLOT(setShowProject(bool)));
     addContextAction( actionShowProject );
 
-    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
     createOptionAction();
@@ -1249,7 +1248,7 @@ WorkPackageTreeView::WorkPackageTreeView( QWidget *parent )
     setSortingEnabled( true );
     sortByColumn( NodeModel::NodeWBSCode, Qt::AscendingOrder );
 
-    connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
+    connect( this, SIGNAL(dropAllowed(QModelIndex,int,QDragMoveEvent*)), SLOT(slotDropAllowed(QModelIndex,int,QDragMoveEvent*)) );
 }
 
 NodeItemModel *WorkPackageTreeView::baseModel() const
@@ -1336,15 +1335,15 @@ TaskWorkPackageView::TaskWorkPackageView(KoPart *part, KoDocument *doc, QWidget 
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( m_view->baseModel(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_view->baseModel(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
+    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
 
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 Project *TaskWorkPackageView::project() const
@@ -1389,7 +1388,7 @@ void TaskWorkPackageView::slotCurrentChanged(  const QModelIndex &curr, const QM
     slotEnableActions();
 }
 
-void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList list)
+void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList &list)
 {
     kDebug(planDbg())<<list.count();
     slotEnableActions();
@@ -1485,11 +1484,11 @@ void TaskWorkPackageView::setupGui()
     actionMailWorkpackage  = new KAction(koIcon("mail-send"), i18n("Send..."), this);
     actionMailWorkpackage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_M ) );
     actionCollection()->addAction("send_workpackage", actionMailWorkpackage );
-    connect( actionMailWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotMailWorkpackage() ) );
+    connect( actionMailWorkpackage, SIGNAL(triggered(bool)), SLOT(slotMailWorkpackage()) );
     addAction( name, actionMailWorkpackage );
 
     // Add the context menu actions for the view options
-    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
     createOptionAction();
@@ -1502,9 +1501,9 @@ void TaskWorkPackageView::slotMailWorkpackage()
         // TODO find a better way to log to avoid undo/redo
         m_cmd = new MacroCommand( i18nc( "(qtundo-format)", "Log Send Workpackage" ) );
         QPointer<WorkPackageSendDialog> dlg = new WorkPackageSendDialog( lst, scheduleManager(), this );
-        connect ( dlg->panel(), SIGNAL( sendWorkpackages( QList<Node*>&, Resource* ) ), this, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ) );
+        connect ( dlg->panel(), SIGNAL(sendWorkpackages(QList<Node*>,Resource*)), this, SIGNAL(mailWorkpackages(QList<Node*>,Resource*)) );
 
-        connect ( dlg->panel(), SIGNAL( sendWorkpackages( QList<Node*>&, Resource* ) ), this, SLOT( slotWorkPackageSent( QList<Node*>&, Resource* ) ) );
+        connect ( dlg->panel(), SIGNAL(sendWorkpackages(QList<Node*>,Resource*)), this, SLOT(slotWorkPackageSent(QList<Node*>,Resource*)) );
         dlg->exec();
         delete dlg;
         if ( ! m_cmd->isEmpty() ) {
@@ -1516,7 +1515,7 @@ void TaskWorkPackageView::slotMailWorkpackage()
     }
 }
 
-void TaskWorkPackageView::slotWorkPackageSent( QList<Node*> &nodes, Resource *resource )
+void TaskWorkPackageView::slotWorkPackageSent( const QList<Node*> &nodes, Resource *resource )
 {
     foreach ( Node *n, nodes ) {
         WorkPackage *wp = new WorkPackage( static_cast<Task*>( n )->workPackage() );

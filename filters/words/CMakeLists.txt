@@ -48,29 +48,28 @@ ENDIF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
 
 include_directories(${KOMAIN_INCLUDES} )
 
-macro_optional_find_package(WPD)
-macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
-macro_optional_find_package(WPG)
-macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
-macro_optional_find_package(LibWPS)
-macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
+if(SHOULD_BUILD_FILTER_APPLIXWORD_TO_ODT)
+    add_subdirectory( applixword )
+endif(SHOULD_BUILD_FILTER_APPLIXWORD_TO_ODT)
 
-add_subdirectory( applixword )
-if(WPD_FOUND AND LIBWPG_FOUND)
-    add_subdirectory( wordperfect )
-endif(WPD_FOUND AND LIBWPG_FOUND)
-if(WPD_FOUND AND LIBWPS_FOUND)
-    add_subdirectory( works )
-endif(WPD_FOUND AND LIBWPS_FOUND)
+add_subdirectory( wordperfect )
+
+add_subdirectory( works )
 
 add_subdirectory( ascii )
+
 add_subdirectory( rtf )
 
 add_subdirectory( epub )
-add_subdirectory( mobi )
 
-add_subdirectory(msword-odf)
+if(SHOULD_BUILD_FILTER_ODT_TO_MOBI)
+    add_subdirectory( mobi )
+endif(SHOULD_BUILD_FILTER_ODT_TO_MOBI)
 
-if(SHOULD_BUILD_OOXML_FILTERS)
+if(SHOULD_BUILD_FILTER_DOC_TO_ODT)
+    add_subdirectory(msword-odf)
+endif(SHOULD_BUILD_FILTER_DOC_TO_ODT)
+
+if(SHOULD_BUILD_FILTER_DOCX_TO_ODT)
     add_subdirectory( docx )
-endif(SHOULD_BUILD_OOXML_FILTERS)
+endif(SHOULD_BUILD_FILTER_DOCX_TO_ODT)

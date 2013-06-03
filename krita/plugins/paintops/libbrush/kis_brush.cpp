@@ -538,7 +538,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
     if (angle != 0.0)
     {
-        outputImage = outputImage.transformed(QTransform().rotate(-angle * 180 / M_PI));
+        outputImage = outputImage.transformed(QTransform().rotate(-angle * 180 / M_PI), Qt::SmoothTransformation);
     }
 
     int outputWidth = outputImage.width();
@@ -587,7 +587,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
         dab2->initialize();
         dabPointer = dab->data();
         quint8* dabPointer2 = dab2->data();
-        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        KoColorSpaceRegistry::instance()->rgb8()->convertPixelsTo(dabPointer, dabPointer2, colorSpace, outputWidth * outputHeight, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
         dab = dab2;
     }
     return dab;

@@ -22,7 +22,7 @@
 #include "KexiMainWindowIface.h"
 
 #include <db/global.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 
 using namespace KexiPart;
 

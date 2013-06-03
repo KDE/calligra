@@ -62,7 +62,7 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
-#include <KServiceTypeTrader>
+#include <kservicetypetrader.h>
 
 #include "KoOdf.h"
 #include "KoShapeGroup.h"
@@ -87,6 +87,7 @@ View::View(RootSection *document, MainWindow* parent)
     , m_cutController(0)
     , m_copyController(0)
 {
+    setXMLFile("braindumpview.rc");
 
     m_doc->viewManager()->addView(this);
 
@@ -102,8 +103,6 @@ View::View(RootSection *document, MainWindow* parent)
     } else {
         setActiveSection(0);
     }
-
-    setXMLFile("braindumpview.rc");
 
     m_doc->viewManager()->viewHasFocus(this);
 }
@@ -214,7 +213,7 @@ void View::loadExtensions()
 {
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Braindump/Extensions"),
                             QString::fromLatin1("(Type == 'Service') && "
-                                    "([X-Braindump-Version] == 27)"));
+                                    "([X-Braindump-Version] == 28)"));
     KService::List::ConstIterator iter;
     for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 

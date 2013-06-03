@@ -31,10 +31,10 @@
 #include <QPainter>
 #include <QStyleOptionFrameV2>
 
-#include <KLocale>
-#include <KLineEdit>
-#include <KGuiItem>
-#include <KDebug>
+#include <klocale.h>
+#include <klineedit.h>
+#include <kguiitem.h>
+#include <kdebug.h>
 
 #include "kexirecordnavigator.h"
 #include "kexirecordmarker.h"
@@ -386,6 +386,33 @@ void KexiRecordNavigator::setButtonToolTipText(KexiRecordNavigator::Button btn, 
         d->navBtnNew->setToolTip(txt);
         break;
     }
+}
+
+void KexiRecordNavigator::setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& txt)
+{
+    switch (btn) {
+    case KexiRecordNavigator::ButtonFirst:
+        d->navBtnFirst->setWhatsThis(txt);
+        break;
+    case KexiRecordNavigator::ButtonPrevious:
+        d->navBtnPrev->setWhatsThis(txt);
+        break;
+    case KexiRecordNavigator::ButtonNext:
+        d->navBtnNext->setWhatsThis(txt);
+        break;
+    case KexiRecordNavigator::ButtonLast:
+        d->navBtnLast->setWhatsThis(txt);
+        break;
+    case KexiRecordNavigator::ButtonNew:
+        d->navBtnNew->setWhatsThis(txt);
+        break;
+    }
+}
+
+void KexiRecordNavigator::setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip)
+{
+    d->navRecordNumber->setToolTip(numberTooltip);
+    d->navRecordCount->setToolTip(countTooltip);
 }
 
 void KexiRecordNavigator::setInsertingButtonVisible(bool set)

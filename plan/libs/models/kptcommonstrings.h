@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_COMMONSTRINGS_H
-#define KPLATO_COMMONSTRINGS_H
+#ifndef KPTCOMMONSTRINGS_H
+#define KPTCOMMONSTRINGS_H
 
 #include "kplatomodels_export.h"
 

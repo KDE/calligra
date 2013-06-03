@@ -48,18 +48,17 @@ ShivaFilter::~ShivaFilter()
 {
 }
 
-KisConfigWidget* ShivaFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget* ShivaFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new ShivaGeneratorConfigWidget(m_source, parent);
 }
 
-void ShivaFilter::process(KisPaintDeviceSP dev,
-                          const QRect& size,
-                          const KisFilterConfiguration* config,
-                          KoUpdater* progressUpdater
-                         ) const
+void ShivaFilter::processImpl(KisPaintDeviceSP dev,
+                              const QRect& size,
+                              const KisFilterConfiguration* config,
+                              KoUpdater* progressUpdater
+                              ) const
 {
     Q_UNUSED(progressUpdater);
     QPoint dstTopLeft = size.topLeft();

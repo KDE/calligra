@@ -29,7 +29,7 @@ class PerformanceTableWidget : public QTableWidget
 {
     Q_OBJECT
 public:
-    PerformanceTableWidget( QWidget *parent );
+    explicit PerformanceTableWidget(QWidget *parent);
 
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
@@ -39,7 +39,7 @@ class PerformanceTableView : public QTableView
 {
     Q_OBJECT
 public:
-    PerformanceTableView( QWidget *parent );
+    explicit PerformanceTableView(QWidget *parent);
 
     QSize sizeHint() const;
     QSize minimumSizeHint() const;

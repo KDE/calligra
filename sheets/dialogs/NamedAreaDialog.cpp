@@ -40,8 +40,8 @@
 #include <klineedit.h>
 #include <klistwidget.h>
 #include <kmessagebox.h>
-#include <KStandardGuiItem>
-#include <KPushButton>
+#include <kstandardguiitem.h>
+#include <kpushbutton.h>
 
 #include <KoCanvasBase.h>
 

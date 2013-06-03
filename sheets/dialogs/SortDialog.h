@@ -28,7 +28,7 @@
 #ifndef CALLIGRA_SHEETS_SORT_DIALOG
 #define CALLIGRA_SHEETS_SORT_DIALOG
 
-#include <KDialog>
+#include <kdialog.h>
 
 class QTableWidgetItem;
 

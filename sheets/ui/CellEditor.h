@@ -22,8 +22,8 @@
 #ifndef CALLIGRA_SHEETS_CELL_EDITOR
 #define CALLIGRA_SHEETS_CELL_EDITOR
 
-#include <KGlobalSettings>
-#include <KTextEdit>
+#include <kglobalsettings.h>
+#include <ktextedit.h>
 
 #include "calligra_sheets_export.h"
 #include "CellEditorBase.h"

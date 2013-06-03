@@ -23,10 +23,10 @@
 #include <KexiMainWindowIface.h>
 
 #include <KIO/Job>
-#include <KLocale>
-#include <KDebug>
-#include <KConfigGroup>
-#include <KAboutData>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kconfiggroup.h>
+#include <kaboutdata.h>
 
 #include <QApplication>
 #include <QDesktopWidget>

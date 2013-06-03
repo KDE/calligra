@@ -69,8 +69,8 @@ SummaryTaskGeneralPanel::SummaryTaskGeneralPanel(Task &task, QWidget *p, const c
 
     setStartValues(task);
     
-    connect(namefield, SIGNAL(textChanged(const QString&)), SLOT(slotObligatedFieldsFilled()));
-    connect(leaderfield, SIGNAL(textChanged(const QString&)), SLOT(slotObligatedFieldsFilled()));
+    connect(namefield, SIGNAL(textChanged(QString)), SLOT(slotObligatedFieldsFilled()));
+    connect(leaderfield, SIGNAL(textChanged(QString)), SLOT(slotObligatedFieldsFilled()));
     connect(m_description, SIGNAL(textChanged(bool)), SLOT(slotObligatedFieldsFilled()));
     
     connect(chooseLeader, SIGNAL(clicked()), SLOT(slotChooseResponsible()));
@@ -140,7 +140,7 @@ void SummaryTaskGeneralPanel::slotChooseResponsible()
                 }
                 s += selection.email();
                 if ( ! selection.name().isEmpty() ) {
-                    s += ">";
+                    s += '>';
                 }
                 if ( ! s.isEmpty() ) {
                     names << s;

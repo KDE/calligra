@@ -32,17 +32,17 @@ public:
 
     using KisFilter::process;
 
-    void process(KisPaintDeviceSP device,
-                const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater ) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater ) const;
     static inline KoID id() {
         return KoID("oilpaint", i18n("Oilpaint"));
     }
 
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
 private:
     void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h,

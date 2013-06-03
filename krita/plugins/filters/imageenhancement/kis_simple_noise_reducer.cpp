@@ -47,10 +47,9 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(0, 255, 15, i18n("Threshold"), "threshold"));
     param.push_back(KisIntegerWidgetParam(0, 10, 1, i18n("Window size"), "windowsize"));
@@ -71,11 +70,11 @@ inline int ABS(int v)
     return v;
 }
 
-void KisSimpleNoiseReducer::process(KisPaintDeviceSP device,
-                                    const QRect& applyRect,
-                                    const KisFilterConfiguration* config,
-                                    KoUpdater* progressUpdater
-                                   ) const
+void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
+                                        const QRect& applyRect,
+                                        const KisFilterConfiguration* config,
+                                        KoUpdater* progressUpdater
+                                        ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);

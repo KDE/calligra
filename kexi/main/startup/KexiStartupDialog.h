@@ -20,7 +20,7 @@
 #ifndef KexiStartupDialog_h
 #define KexiStartupDialog_h
 
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 #include <db/connectiondata.h>
 #include <core/kexiprojectdata.h>

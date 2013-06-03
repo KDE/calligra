@@ -35,11 +35,11 @@
 #include <QToolButton>
 #include <QLabel>
 #include <QPainter>
-#include <KUrl>
-#include <KFileDialog>
+#include <kurl.h>
+#include <kfiledialog.h>
 #include <KIO/Job>
 #include <kdebug.h>
-#include <KComboBox>
+#include <kcombobox.h>
 
 KexiRelationDesignTool::KexiRelationDesignTool(KoCanvasBase *canvas) : KoToolBase(canvas)
 {

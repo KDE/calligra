@@ -72,6 +72,7 @@ KexiCSVImportOptions::KexiCSVImportOptions()
 
     trimmedInTextValuesChecked
     = importExportGroup.readEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
+    nullsImportedAsEmptyTextChecked = importExportGroup.readEntry("ImportNULLsAsEmptyText", true);
 }
 
 KexiCSVImportOptions::~KexiCSVImportOptions()
@@ -83,7 +84,8 @@ bool KexiCSVImportOptions::operator== (const KexiCSVImportOptions & opt) const
     return defaultEncodingExplicitySet == opt.defaultEncodingExplicitySet
            && trimmedInTextValuesChecked == opt.trimmedInTextValuesChecked
            && encoding == opt.encoding
-           && dateFormat == opt.dateFormat;
+           && dateFormat == opt.dateFormat
+           && nullsImportedAsEmptyTextChecked == opt.nullsImportedAsEmptyTextChecked;
 }
 
 bool KexiCSVImportOptions::operator!= (const KexiCSVImportOptions & opt) const
@@ -144,8 +146,11 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     m_chkStripWhiteSpaceInTextValues = new QCheckBox(
         i18n("Strip leading and trailing blanks off of text values"), plainPage);
     lyr->addWidget(m_chkStripWhiteSpaceInTextValues, 2, 0, 1, 2);
-    lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 3, 0);
 
+    m_chkImportNULLsAsEmptyText = new QCheckBox(
+                i18n("Import missing text values as empty texts"), plainPage);
+    lyr->addWidget(m_chkImportNULLsAsEmptyText, 3, 0, 1, 2);
+    lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 4, 0);
     //update widgets
     m_encodingComboBox->setSelectedEncoding(options.encoding);
     if (options.defaultEncodingExplicitySet) {
@@ -153,6 +158,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     }
     m_comboDateFormat->setCurrentIndex((int)options.dateFormat);
     m_chkStripWhiteSpaceInTextValues->setChecked(options.trimmedInTextValuesChecked);
+    m_chkImportNULLsAsEmptyText->setChecked(options.nullsImportedAsEmptyTextChecked);
 
     adjustSize();
     m_encodingComboBox->setFocus();
@@ -167,6 +173,7 @@ KexiCSVImportOptions KexiCSVImportOptionsDialog::options() const
     KexiCSVImportOptions opt;
     opt.encoding = m_encodingComboBox->selectedEncoding();
     opt.trimmedInTextValuesChecked = m_chkStripWhiteSpaceInTextValues->isChecked();
+    opt.nullsImportedAsEmptyTextChecked = m_chkImportNULLsAsEmptyText->isChecked();
     return opt;
 }
 
@@ -188,6 +195,8 @@ void KexiCSVImportOptionsDialog::accept()
 
     importExportGroup.writeEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles",
                                  m_chkStripWhiteSpaceInTextValues->isChecked());
+    importExportGroup.writeEntry("ImportNULLsAsEmptyText",
+                                 m_chkImportNULLsAsEmptyText->isChecked());
 
     KDialog::accept();
 }

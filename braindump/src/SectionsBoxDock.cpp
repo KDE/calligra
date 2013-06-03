@@ -21,7 +21,7 @@
 
 #include <KoIcon.h>
 
-#include <KMenu>
+#include <kmenu.h>
 
 #include "DocumentModel.h"
 #include "Section.h"

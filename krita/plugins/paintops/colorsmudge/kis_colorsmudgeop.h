@@ -34,7 +34,7 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
-#include "kis_random_accessor_ng.h"
+#include <kis_cross_device_color_picker.h>
 
 class QPointF;
 class KoAbstractGradient;
@@ -48,15 +48,18 @@ public:
     virtual ~KisColorSmudgeOp();
 
     qreal paintAt(const KisPaintInformation& info);
-    
+
 private:
     void updateMask(const KisPaintInformation& info, double scale, double rotation);
+    inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
 private:
     bool                      m_firstRun;
-    KisPaintDeviceSP          m_tempDev;
     KisImageWSP               m_image;
-    KisPainter*               m_tempPainter;
+    KisPaintDeviceSP          m_tempDev;
+    KisPainter*               m_backgroundPainter;
+    KisPainter*               m_smudgePainter;
+    KisPainter*               m_colorRatePainter;
     const KoAbstractGradient* m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
@@ -69,7 +72,8 @@ private:
     KisPressureGradientOption m_gradientOption;
     QRect                     m_maskBounds;
     KisFixedPaintDeviceSP     m_maskDab;
-    KisRandomAccessorSP       m_smudgeAccessor;
+    KisCrossDeviceColorPickerInt m_colorPicker;
+    QPointF                   m_lastPaintPos;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

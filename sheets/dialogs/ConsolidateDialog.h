@@ -29,7 +29,7 @@
 #ifndef CALLIGRA_SHEETS_CONSOLIDATE_DIALOG
 #define CALLIGRA_SHEETS_CONSOLIDATE_DIALOG
 
-#include <KDialog>
+#include <kdialog.h>
 
 namespace Calligra
 {

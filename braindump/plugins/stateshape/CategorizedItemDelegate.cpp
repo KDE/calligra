@@ -18,8 +18,8 @@
 
 #include "CategorizedItemDelegate.h"
 
-#include <KCategoryDrawer>
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorydrawer.h>
+#include <kcategorizedsortfilterproxymodel.h>
 #include <QPainter>
 
 struct CategorizedItemDelegate::Private {
