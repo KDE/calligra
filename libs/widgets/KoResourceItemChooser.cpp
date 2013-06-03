@@ -4,6 +4,7 @@
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+   Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -271,6 +272,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->tagSearchSaveButton->setIcon(koIcon("media-floppy"));
     d->tagSearchSaveButton->setToolTip(i18n("<qt>Save the currently filtered set as the new members of the current tag.</qt>"));
     d->tagSearchSaveButton->setEnabled(false);
+    d->tagSearchSaveButton->hide();
 
     filterBarLayout->addWidget(d->tagSearchSaveButton, 0, 1);
 
@@ -391,6 +393,8 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
     showSearchBar ? d->tagSearchLineEdit->show() : d->tagSearchLineEdit->hide();
+    showSearchBar ? d->tagSearchSaveButton->show() : d->tagSearchSaveButton->hide();
+
     showOpBar ? d->tagOpComboBox->show() : d->tagOpComboBox->hide();
 
     foreach( QAbstractButton * button, d->tagButtonGroup->buttons() )
