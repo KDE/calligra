@@ -775,7 +775,7 @@ void KoResourceItemChooser::slotTagButtonClicked( int button )
         const QString tagName = QInputDialog::getText(this, i18n("Enter name for new tag"),
                 i18n("tag name:"), QLineEdit::Normal, QString(), &ok);
 
-        if (ok) {
+        if (ok && !tagName.isEmpty()) {
             d->model->tagCategoryAdded(tagName);
             d->tagOpComboBox->setCurrentIndex(d->tagOpComboBox->findText(tagName));
         }
@@ -907,7 +907,7 @@ void KoResourceItemChooser::contextCreateNewResourceTag(KoResource* resource , c
     bool ok;
     const QString tagName = QInputDialog::getText(this, i18n("Enter name for new tag"),
             i18n("tag name:"), QLineEdit::Normal, QString(), &ok);
-    if (ok) {
+    if (ok && !tagName.isEmpty()) {
         addResourceTag(resource, tagName);
         d->model->tagCategoryAdded(tagName);
     }
