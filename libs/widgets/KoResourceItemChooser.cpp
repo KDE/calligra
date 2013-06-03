@@ -109,6 +109,7 @@ public:
     QString currentTag;
     QString tagSearchBarTooltip_disabled;
     QString tagSearchBarTooltip_enabled;
+    QString unfilteredView;
     QList<KoResource*> originalResources;
 
 };
@@ -119,9 +120,15 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     Q_ASSERT(resourceAdapter);
 
     d->tagSearchBarTooltip_disabled = i18n (
-            "<qt>You are currently in the Unfiltered View.<br>"
-            "This view does not allow resource filtering.<br>"
-            "Please create and/or switch to a different tag.</qt>"
+            "<qt>Entering search terms here will add to, or remove resources from the current tag view."
+            "<para>To filter based on the partial, case insensitive name of a resource:<br>"
+            "<icode>partialname</icode> or <icode>!partialname</icode>.</para>"
+            "<para>In-/exclusion of other tag sets:<br>"
+            "<icode>[Tagname]</icode> or <icode>![Tagname]</icode>.</para>"
+            "<para>Case sensitive and full name matching in-/exclusion:<br>"
+            "<icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</icode>.</para>"
+            "Filter results cannot be saved in <interface>Unfiltered View</interface>.<br>"
+            "Create and/or switch to a different tag to enable saving.</qt>"
             );
 
     d->tagSearchBarTooltip_enabled = i18n (
@@ -134,6 +141,8 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
             "<icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</icode>.</para>"
             "Pressing <interface>Enter</interface> or clicking the <interface>Save</interface> button will save the changes.</qt>"
             );
+
+    d->unfilteredView = i18n("Unfiltered View");
 
 
     d->splitter = new QSplitter(this);
@@ -175,7 +184,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->tagOpComboBox->clear();
     QStringList tagNames = d->model->getTagNamesList();
     tagNames.sort();
-    tagNames.prepend(i18n("Unfiltered View"));
+    tagNames.prepend(d->unfilteredView);
     d->tagOpComboBox->addItems(tagNames);
 
 
@@ -258,9 +267,9 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     d->tagSearchLineEdit = new KLineEdit(this);
     d->tagSearchLineEdit->setClearButtonShown(true);
-    d->tagSearchLineEdit->setClickMessage(i18n("This view does not support filters"));
+    d->tagSearchLineEdit->setClickMessage(i18n("Enter resource filters here"));
     d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_disabled);
-    d->tagSearchLineEdit->setEnabled(false);
+    d->tagSearchLineEdit->setEnabled(true);
     d->tagSearchLineEdit->hide();
 
     filterBarLayout->setSpacing(0);
@@ -393,8 +402,6 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
     showSearchBar ? d->tagSearchLineEdit->show() : d->tagSearchLineEdit->hide();
-    showSearchBar ? d->tagSearchSaveButton->show() : d->tagSearchSaveButton->hide();
-
     showOpBar ? d->tagOpComboBox->show() : d->tagOpComboBox->hide();
 
     foreach( QAbstractButton * button, d->tagButtonGroup->buttons() )
@@ -640,6 +647,7 @@ KoResourceItemView *KoResourceItemChooser::itemView()
 
 void KoResourceItemChooser::tagSearchLineEditActivated(const QString& lineEditText)
 {
+    if (!d->currentTag.isEmpty()) {
     QList<KoResource*> newResources = d->model->currentlyVisibleResources();
     foreach(KoResource * oldRes, d->originalResources) {
         if (!newResources.contains(oldRes))
@@ -650,6 +658,7 @@ void KoResourceItemChooser::tagSearchLineEditActivated(const QString& lineEditTe
             addResourceTag(newRes, d->currentTag);
     }
     d->model->tagCategoryMembersChanged();
+    }
     updateTaggedResourceView();
     d->tagSearchLineEdit->clear();
     d->tagSearchSaveButton->setEnabled(false);
@@ -663,6 +672,12 @@ void KoResourceItemChooser::tagSearchLineEditTextChanged(const QString& lineEdit
     d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+    if (d->currentTag.isEmpty()) {
+        d->model->enableResourceFiltering(!lineEditText.isEmpty());
+    }
+    else {
+        d->model->enableResourceFiltering(true);
+    }
 }
 
 void KoResourceItemChooser::tagChooserIndexChanged(const QString& lineEditText)
@@ -671,16 +686,14 @@ void KoResourceItemChooser::tagChooserIndexChanged(const QString& lineEditText)
 
     if ( index > 0) {
         d->currentTag = lineEditText;
+        d->tagSearchSaveButton->show();
         d->model->enableResourceFiltering(true);
-        d->tagSearchLineEdit->setClickMessage(i18n("Enter resource filters here"));
         d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_enabled);
-        d->tagSearchLineEdit->setEnabled(true);
     }
     else {
         d->model->enableResourceFiltering(false);
+        d->tagSearchSaveButton->hide();
         d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_disabled);
-        d->tagSearchLineEdit->setClickMessage(i18n("This view does not support filtering"));
-        d->tagSearchLineEdit->setEnabled(false);
         d->currentTag.clear();
     }
 
@@ -918,7 +931,7 @@ void KoResourceItemChooser::syncTagBoxEntryAddition(const QString& tag)
         tags.append(d->tagOpComboBox->itemText(i));
     }
     tags.sort();
-    tags.prepend(i18n("Unfiltered View"));
+    tags.prepend(d->unfilteredView);
     int index = tags.indexOf(tag);
     if (d->tagOpComboBox->findText(tag) == -1) {
         d->tagOpComboBox->insertItem(index,tag);
