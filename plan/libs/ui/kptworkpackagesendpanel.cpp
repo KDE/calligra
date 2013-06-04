@@ -58,7 +58,7 @@ WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks,  Schedule
         le->setReadOnly( true );
         formLayout->addRow( pb, le );
 
-        connect( pb, SIGNAL( clicked(bool) ), SLOT( slotSendClicked() ) );
+        connect( pb, SIGNAL(clicked(bool)), SLOT(slotSendClicked()) );
         m_pbMap[ pb ] = it.key();
     }
 

@@ -87,14 +87,14 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     namefield->setFocus();
 
     // signals and slots connections
-    connect( m_description, SIGNAL( textChanged(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( endDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( endTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( startDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( startTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( namefield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( leaderfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( chooseLeader, SIGNAL( clicked() ), this, SLOT( slotChooseLeader() ) );
+    connect( m_description, SIGNAL(textChanged(bool)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( endDate, SIGNAL(dateChanged(QDate)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( endTime, SIGNAL(timeChanged(QTime)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( startDate, SIGNAL(dateChanged(QDate)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( startTime, SIGNAL(timeChanged(QTime)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( namefield, SIGNAL(textChanged(QString)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( leaderfield, SIGNAL(textChanged(QString)), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect( chooseLeader, SIGNAL(clicked()), this, SLOT(slotChooseLeader()) );
 }
 
 
