@@ -35,12 +35,10 @@
 #include <KoFilterChain.h>
 
 // Filter libraries
-#include "OdtTraverser.h"
+#include "OdtReader.h"
 
 // This filter
 #include "DocxFile.h"
-#include "OdtTraverserDocxContext.h"
-#include "OdtTraverserDocxBackend.h"
 #include "OdfReaderDocxContext.h"
 #include "OdtReaderDocxBackend.h"
 
@@ -85,24 +83,10 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     // Collects all the parts of the docx file and writes the result at the end.
     DocxFile docxFile;
 
-#if 1
     OdfReaderDocxContext  docxBackendContext(odfStore, &docxFile);
     OdtReaderDocxBackend  docxBackend(&docxBackendContext);
-
-    OdtReader  odtReader;
+    OdtReader             odtReader;
     odtReader.readContent(&docxBackend, &docxBackendContext);
-
-#else
-
-    OdtTraverserDocxContext  docxBackendContext(odfStore, &docxFile);
-    OdtTraverserDocxBackend  docxBackend(&docxBackendContext);
-
-    // Traverse the ODT and create the output in the meantime. The
-    // output is collected into the DocxFile instance inside the docx
-    // backend context.
-    OdtTraverser  odtTraverser;
-    odtTraverser.traverseContent(&docxBackend, &docxBackendContext);
-#endif
 
     // Add the newly converted document contents to the docx file.
     docxFile.addContentFile("", "word/document.xml",
