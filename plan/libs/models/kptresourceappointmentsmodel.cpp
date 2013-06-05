@@ -78,11 +78,11 @@ void ResourceAppointmentsItemModel::slotResourceInserted( const Resource *r )
     endInsertRows();
     m_group = 0;
     refresh();
-    connect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
-    connect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
-    connect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
-    connect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
-    connect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+    connect( r, SIGNAL(externalAppointmentToBeAdded(Resource*,int)), this, SLOT(slotAppointmentToBeInserted(Resource*,int)) );
+    connect( r, SIGNAL(externalAppointmentAdded(Resource*,Appointment*)), this, SLOT(slotAppointmentInserted(Resource*,Appointment*)) );
+    connect( r, SIGNAL(externalAppointmentToBeRemoved(Resource*,int)), this, SLOT(slotAppointmentToBeRemoved(Resource*,int)) );
+    connect( r, SIGNAL(externalAppointmentRemoved()), this, SLOT(slotAppointmentRemoved()) );
+    connect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
 }
 
 void ResourceAppointmentsItemModel::slotResourceToBeRemoved( const Resource *r )
@@ -90,11 +90,11 @@ void ResourceAppointmentsItemModel::slotResourceToBeRemoved( const Resource *r )
     kDebug(planDbg())<<r->name();
     int row = r->parentGroup()->indexOf( r );
     beginRemoveRows( index( r->parentGroup() ), row, row );
-    disconnect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
-    disconnect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
-    disconnect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
-    disconnect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
-    disconnect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+    disconnect( r, SIGNAL(externalAppointmentToBeAdded(Resource*,int)), this, SLOT(slotAppointmentToBeInserted(Resource*,int)) );
+    disconnect( r, SIGNAL(externalAppointmentAdded(Resource*,Appointment*)), this, SLOT(slotAppointmentInserted(Resource*,Appointment*)) );
+    disconnect( r, SIGNAL(externalAppointmentToBeRemoved(Resource*,int)), this, SLOT(slotAppointmentToBeRemoved(Resource*,int)) );
+    disconnect( r, SIGNAL(externalAppointmentRemoved()), this, SLOT(slotAppointmentRemoved()) );
+    disconnect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
 
 }
 
@@ -223,72 +223,72 @@ void ResourceAppointmentsItemModel::setProject( Project *project )
 {
     kDebug(planDbg());
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
+        disconnect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        disconnect( m_project, SIGNAL(resourceToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceToBeInserted(const ResourceGroup*,int)) );
 
-        disconnect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceToBeRemoved(const Resource*)), this, SLOT(slotResourceToBeRemoved(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupAdded(const ResourceGroup*)), this, SLOT(slotResourceGroupInserted(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupRemoved(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotResourceInserted(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
+        disconnect( m_project, SIGNAL(defaultCalendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
 
-        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
 
-        disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT(  slotProjectCalculated( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
 
         foreach ( Resource *r, m_project->resourceList() ) {
-            disconnect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
-            disconnect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
-            disconnect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
-            disconnect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
-            disconnect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+            disconnect( r, SIGNAL(externalAppointmentToBeAdded(Resource*,int)), this, SLOT(slotAppointmentToBeInserted(Resource*,int)) );
+            disconnect( r, SIGNAL(externalAppointmentAdded(Resource*,Appointment*)), this, SLOT(slotAppointmentInserted(Resource*,Appointment*)) );
+            disconnect( r, SIGNAL(externalAppointmentToBeRemoved(Resource*,int)), this, SLOT(slotAppointmentToBeRemoved(Resource*,int)) );
+            disconnect( r, SIGNAL(externalAppointmentRemoved()), this, SLOT(slotAppointmentRemoved()) );
+            disconnect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
         }
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
+        connect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        connect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
-        connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        connect( m_project, SIGNAL(resourceToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceToBeInserted(const ResourceGroup*,int)) );
 
-        connect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceToBeRemoved(const Resource*)), this, SLOT(slotResourceToBeRemoved(const Resource*)) );
 
-        connect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupAdded(const ResourceGroup*)), this, SLOT(slotResourceGroupInserted(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupRemoved(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotResourceInserted(const Resource*)) );
 
-        connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)) );
 
-        connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
+        connect( m_project, SIGNAL(defaultCalendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
 
-        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
 
-        connect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL(scheduleManagerChanged(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
 
         foreach ( Resource *r, m_project->resourceList() ) {
-            connect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
-            connect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
-            connect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
-            connect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
-            connect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+            connect( r, SIGNAL(externalAppointmentToBeAdded(Resource*,int)), this, SLOT(slotAppointmentToBeInserted(Resource*,int)) );
+            connect( r, SIGNAL(externalAppointmentAdded(Resource*,Appointment*)), this, SLOT(slotAppointmentInserted(Resource*,Appointment*)) );
+            connect( r, SIGNAL(externalAppointmentToBeRemoved(Resource*,int)), this, SLOT(slotAppointmentToBeRemoved(Resource*,int)) );
+            connect( r, SIGNAL(externalAppointmentRemoved()), this, SLOT(slotAppointmentRemoved()) );
+            connect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
         }
     }
     refreshData();
@@ -1354,58 +1354,58 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
 {
     //kDebug(planDbg())<<project;
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        disconnect( m_project, SIGNAL(resourceToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceToBeInserted(const ResourceGroup*,int)) );
 
-        disconnect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceToBeRemoved(const Resource*)), this, SLOT(slotResourceToBeRemoved(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupAdded(const ResourceGroup*)), this, SLOT(slotResourceGroupInserted(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupRemoved(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotResourceInserted(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
 
         foreach ( Resource *r, m_project->resourceList() ) {
-            disconnect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
-            disconnect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
-            disconnect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
-            disconnect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
-            disconnect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+            disconnect( r, SIGNAL(externalAppointmentToBeAdded(Resource*,int)), this, SLOT(slotAppointmentToBeInserted(Resource*,int)) );
+            disconnect( r, SIGNAL(externalAppointmentAdded(Resource*,Appointment*)), this, SLOT(slotAppointmentInserted(Resource*,Appointment*)) );
+            disconnect( r, SIGNAL(externalAppointmentToBeRemoved(Resource*,int)), this, SLOT(slotAppointmentToBeRemoved(Resource*,int)) );
+            disconnect( r, SIGNAL(externalAppointmentRemoved()), this, SLOT(slotAppointmentRemoved()) );
+            disconnect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
         }
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        connect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
-        connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        connect( m_project, SIGNAL(resourceToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceToBeInserted(const ResourceGroup*,int)) );
 
-        connect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceToBeRemoved(const Resource*)), this, SLOT(slotResourceToBeRemoved(const Resource*)) );
 
-        connect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupAdded(const ResourceGroup*)), this, SLOT(slotResourceGroupInserted(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupRemoved(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotResourceInserted(const Resource*)) );
 
-        connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)) );
 
-        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
 
         foreach ( Resource *r, m_project->resourceList() ) {
-            connect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
-            connect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
-            connect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
-            connect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
-            connect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+            connect( r, SIGNAL(externalAppointmentToBeAdded(Resource*,int)), this, SLOT(slotAppointmentToBeInserted(Resource*,int)) );
+            connect( r, SIGNAL(externalAppointmentAdded(Resource*,Appointment*)), this, SLOT(slotAppointmentInserted(Resource*,Appointment*)) );
+            connect( r, SIGNAL(externalAppointmentToBeRemoved(Resource*,int)), this, SLOT(slotAppointmentToBeRemoved(Resource*,int)) );
+            connect( r, SIGNAL(externalAppointmentRemoved()), this, SLOT(slotAppointmentRemoved()) );
+            connect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
         }
     }
     reset();
@@ -1698,11 +1698,11 @@ void ResourceAppointmentsRowModel::slotResourceInserted( const Resource *r )
     kDebug(planDbg())<<r->name();
     endInsertRows();
 
-    connect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
-    connect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
-    connect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
-    connect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
-    connect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+    connect( r, SIGNAL(externalAppointmentToBeAdded(Resource*,int)), this, SLOT(slotAppointmentToBeInserted(Resource*,int)) );
+    connect( r, SIGNAL(externalAppointmentAdded(Resource*,Appointment*)), this, SLOT(slotAppointmentInserted(Resource*,Appointment*)) );
+    connect( r, SIGNAL(externalAppointmentToBeRemoved(Resource*,int)), this, SLOT(slotAppointmentToBeRemoved(Resource*,int)) );
+    connect( r, SIGNAL(externalAppointmentRemoved()), this, SLOT(slotAppointmentRemoved()) );
+    connect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
 }
 
 void ResourceAppointmentsRowModel::slotResourceToBeRemoved( const Resource *r )
@@ -1711,11 +1711,11 @@ void ResourceAppointmentsRowModel::slotResourceToBeRemoved( const Resource *r )
     int row = r->parentGroup()->indexOf( r );
 
     beginRemoveRows( index( r->parentGroup() ), row, row );
-    disconnect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
-    disconnect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
-    disconnect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
-    disconnect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
-    disconnect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+    disconnect( r, SIGNAL(externalAppointmentToBeAdded(Resource*,int)), this, SLOT(slotAppointmentToBeInserted(Resource*,int)) );
+    disconnect( r, SIGNAL(externalAppointmentAdded(Resource*,Appointment*)), this, SLOT(slotAppointmentInserted(Resource*,Appointment*)) );
+    disconnect( r, SIGNAL(externalAppointmentToBeRemoved(Resource*,int)), this, SLOT(slotAppointmentToBeRemoved(Resource*,int)) );
+    disconnect( r, SIGNAL(externalAppointmentRemoved()), this, SLOT(slotAppointmentRemoved()) );
+    disconnect( r, SIGNAL(externalAppointmentChanged(Resource*,Appointment*)), this, SLOT(slotAppointmentChanged(Resource*,Appointment*)) );
 
     Private *p = 0;
     foreach ( Appointment *a, r->appointments( id() ) ) {

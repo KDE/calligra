@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_THREADED_APPLICATOR_TEST_H
-#define KIS_THREADED_APPLICATOR_TEST_H
+#ifndef __KIS_SIGNAL_COMPRESSOR_H
+#define __KIS_SIGNAL_COMPRESSOR_H
 
-#include <QtTest>
-#include <threadweaver/Job.h>
+#include <QObject>
+#include "krita_export.h"
 
-class KisThreadedApplicatorTest : public QObject
+class QTimer;
+
+class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
 {
     Q_OBJECT
 
-private slots:
+public:
+    KisSignalCompressor(int delay, bool deadline = true, QObject *parent = 0);
 
-    void testApplication();
+public slots:
+    void start();
+    void stop();
 
+signals:
+    void timeout();
+
+private:
+    QTimer *m_timer;
+    bool m_deadline;
 };
 
-#endif
-
+#endif /* __KIS_SIGNAL_COMPRESSOR_H */

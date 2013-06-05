@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,48 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILTER_HANDLER_H_
-#define _KIS_FILTER_HANDLER_H_
+#ifndef __KIS_UPDATE_OUTLINE_JOB_H
+#define __KIS_UPDATE_OUTLINE_JOB_H
 
-#include <QObject>
+#include "kis_spontaneous_job.h"
+#include "kis_selection.h"
 
-#include <kis_types.h>
-
-class KisFilterConfiguration;
-class KisFilterManager;
-class KisLayer;
-class KisView2;
-class QRect;
-
-/**
- * XXX: this class is way too confusing.
- */
-class KisFilterHandler : public QObject
+class KRITAIMAGE_EXPORT KisUpdateOutlineJob : public KisSpontaneousJob
 {
-
-    Q_OBJECT
-
 public:
+    KisUpdateOutlineJob(KisSelectionSP selection);
 
-    KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view);
-    ~KisFilterHandler();
-
-    const KisFilterSP filter() const;
-
-public slots:
-
-    void showDialog();
-    void reapply();
-    void apply(KisNodeSP, KisFilterConfiguration*);
-
-private slots:
-
-    void areaDone(const QRect & rc);
-    void filterDone(bool interrupted);
+    bool overrides(const KisSpontaneousJob *otherJob);
+    void run();
 
 private:
-    struct Private;
-    Private* const m_d;
+    KisSelectionSP m_selection;
 };
 
-#endif
+#endif /* __KIS_UPDATE_OUTLINE_JOB_H */

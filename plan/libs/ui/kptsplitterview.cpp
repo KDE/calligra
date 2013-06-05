@@ -47,7 +47,7 @@ KTabWidget *SplitterView::addTabWidget(  )
 {
     KTabWidget *w = new KTabWidget( m_splitter );
     m_splitter->addWidget( w );
-    connect( w, SIGNAL( currentChanged( int ) ), SLOT( currentTabChanged( int ) ) );
+    connect( w, SIGNAL(currentChanged(int)), SLOT(currentTabChanged(int)) );
     return w;
 }
 
@@ -65,16 +65,16 @@ void SplitterView::currentTabChanged( int )
 void SplitterView::addView( ViewBase *view )
 {
     m_splitter->addWidget( view );
-    connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    connect( view, SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ), SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ) );
+    connect( view, SIGNAL(guiActivated(ViewBase*,bool)), this, SLOT(slotGuiActivated(ViewBase*,bool)) );
+    connect( view, SIGNAL(requestPopupMenu(QString,QPoint)), SIGNAL(requestPopupMenu(QString,QPoint)) );
     connect(view, SIGNAL(optionsModified()), SIGNAL(optionsModified()));
 }
 
 void SplitterView::addView( ViewBase *view, QTabWidget *tab, const QString &label )
 {
     tab->addTab( view, label );
-    connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    connect( view, SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ), SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ) );
+    connect( view, SIGNAL(guiActivated(ViewBase*,bool)), this, SLOT(slotGuiActivated(ViewBase*,bool)) );
+    connect( view, SIGNAL(requestPopupMenu(QString,QPoint)), SIGNAL(requestPopupMenu(QString,QPoint)) );
     connect(view, SIGNAL(optionsModified()), SIGNAL(optionsModified()));
 }
 
@@ -222,8 +222,8 @@ QStringList SplitterView::actionListNames() const
     }
     return lst;
 }
-    
-QList<QAction*> SplitterView::actionList( const QString name ) const
+
+QList<QAction*> SplitterView::actionList( const QString &name ) const
 {
     QList<QAction*> lst = ViewActionLists::actionList( name );
     if ( lst.isEmpty() ) {

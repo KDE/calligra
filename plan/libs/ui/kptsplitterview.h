@@ -78,7 +78,7 @@ public:
     /// Returns the list of action lists that shall be plugged/unplugged
     virtual QStringList actionListNames() const;
     /// Returns the list of actions associated with the action list name
-    virtual QList<QAction*> actionList( const QString name ) const;
+    virtual QList<QAction*> actionList( const QString &name ) const;
     /// Returns the list of context menu actions for the active view
     virtual QList<QAction*> contextActionList() const;
 
