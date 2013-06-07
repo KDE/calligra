@@ -27,10 +27,6 @@ if(SHOULD_BUILD_LIB_WRITERPERFECT)
     add_subdirectory( writerperfect )
 endif(SHOULD_BUILD_LIB_WRITERPERFECT)
 
-if(SHOULD_BUILD_LIB_ODFTRAVERSE)
-    add_subdirectory(libodftraverse)
-endif(SHOULD_BUILD_LIB_ODFTRAVERSE)
-
 if(SHOULD_BUILD_LIB_ODFREADER)
     add_subdirectory(libodfreader)
 endif(SHOULD_BUILD_LIB_ODFREADER)

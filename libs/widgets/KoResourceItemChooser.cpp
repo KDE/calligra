@@ -54,30 +54,12 @@
 
 #include <KoIcon.h>
 
+#include "KoResourceItemChooserContextMenu.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
 #include "KoResourceItemDelegate.h"
 #include "KoResourceModel.h"
 #include "KoResource.h"
-
-ContextMenuTagAction::ContextMenuTagAction(KoResource* resource, QString tag, QObject* parent)
-: QAction(parent)
-, m_resource(resource)
-, m_tag(tag)
-{
-    setText(tag);
-    connect (this, SIGNAL(triggered()),
-             this, SLOT(onTriggered()));
-}
-
-ContextMenuTagAction::~ContextMenuTagAction()
-{
-}
-
-void ContextMenuTagAction::onTriggered()
-{
-    emit triggered(m_resource,m_tag);
-}
 
 class KoResourceItemChooser::Private
 {
@@ -846,7 +828,7 @@ void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
         if (removables.contains(curTag)) {
             assignables.removeAll(curTag);
             removables.removeAll(curTag);
-            ContextMenuTagAction * removeTagAction = new ContextMenuTagAction(resource, curTag, this);
+            ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, curTag, &menu);
             removeTagAction->setText(i18n("Remove from this tag"));
             removeTagAction->setIcon(koIcon("list-remove"));
 
@@ -858,7 +840,7 @@ void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
             removableTagsMenu = menu.addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
             foreach (const QString &tag, removables) {
                 assignables.removeAll(tag);
-                ContextMenuTagAction * removeTagAction = new ContextMenuTagAction(resource, tag, this);
+                ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, tag, &menu);
 
                 connect(removeTagAction, SIGNAL(triggered(KoResource*,QString)),
                         this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
@@ -869,7 +851,7 @@ void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
 
 
     foreach (const QString &tag, assignables) {
-        ContextMenuTagAction * addTagAction = new ContextMenuTagAction(resource, tag, this);
+        ContextMenuExistingTagAction * addTagAction = new ContextMenuExistingTagAction(resource, tag, &menu);
 
         connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),
                 this, SLOT(contextAddTagToResource(KoResource*,QString)));
@@ -877,11 +859,11 @@ void KoResourceItemChooser::contextMenuRequested ( const QPoint& pos )
     }
     assignableTagsMenu->addSeparator();
 
-    ContextMenuTagAction * addTagAction = new ContextMenuTagAction(resource, i18n("New tag."), this);
-    addTagAction->setIcon(koIcon("document-new"));
+    ContextMenuNewTagAction * addTagAction = new ContextMenuNewTagAction(resource, &menu);
     connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),
             this, SLOT(contextCreateNewResourceTag(KoResource*,QString)));
     assignableTagsMenu->addAction(addTagAction);
+
 
     if (!menu.isEmpty()) {
         menu.exec(pos);
@@ -904,12 +886,10 @@ void KoResourceItemChooser::contextRemoveTagFromResource(KoResource* resource, c
 
 void KoResourceItemChooser::contextCreateNewResourceTag(KoResource* resource , const QString& tag)
 {
-    bool ok;
-    const QString tagName = QInputDialog::getText(this, i18n("Enter name for new tag"),
-            i18n("tag name:"), QLineEdit::Normal, QString(), &ok);
-    if (ok && !tagName.isEmpty()) {
-        addResourceTag(resource, tagName);
-        d->model->tagCategoryAdded(tagName);
+
+    if (!tag.isEmpty()) {
+        addResourceTag(resource, tag);
+        d->model->tagCategoryAdded(tag);
     }
 }
 

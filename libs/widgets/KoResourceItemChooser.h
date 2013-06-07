@@ -41,24 +41,6 @@ class KoAbstractResourceServerAdapter;
 class KoResourceItemView;
 class KoResource;
 
-class ContextMenuTagAction : public QAction
-{
-    Q_OBJECT
-public:
-    explicit ContextMenuTagAction( KoResource * resource, QString tag, QObject* parent = 0);
-    ~ContextMenuTagAction();
-
-signals:
-    void triggered(KoResource * resource, QString tag);
-
-protected slots:
-    void onTriggered();
-
-private:
-    KoResource * m_resource;
-    QString m_tag;
-};
-
 /**
  * A widget that contains a KoResourceChooser as well
  * as an import/export button
