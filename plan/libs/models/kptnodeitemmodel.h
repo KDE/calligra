@@ -316,7 +316,7 @@ public:
     
     QList<Node*> nodeList( QDataStream &stream );
     QList<Resource*> resourceList( QDataStream &stream );
-    static QList<Node*> removeChildNodes( const QList<Node*> nodes );
+    static QList<Node*> removeChildNodes( const QList<Node*> &nodes );
     bool dropAllowed( Node *on, const QMimeData *data );
     
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
@@ -431,7 +431,7 @@ public:
     QModelIndex insertSubtask( Node *node, Node *parent );
 
     QList<Node*> nodeList( QDataStream &stream );
-    static QList<Node*> removeChildNodes( const QList<Node*> nodes );
+    static QList<Node*> removeChildNodes( const QList<Node*> &nodes );
     bool dropAllowed( Node *on, const QMimeData *data );
 
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );

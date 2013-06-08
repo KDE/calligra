@@ -65,8 +65,8 @@ TaskStatusItemModel::TaskStatusItemModel( QObject *parent )
     m_topTips << i18n( "Tasks that are scheduled to start next period" );
     m_top.append(&m_upcoming );
     
-/*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
-    connect( this, SIGNAL( modelReset() ), SLOT( slotReset() ) );*/
+/*    connect( this, SIGNAL(modelAboutToBeReset()), SLOT(slotAboutToBeReset()) );
+    connect( this, SIGNAL(modelReset()), SLOT(slotReset()) );*/
 }
 
 TaskStatusItemModel::~TaskStatusItemModel()
@@ -128,29 +128,29 @@ void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
-        disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
+        disconnect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
+        disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        disconnect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        disconnect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
         disconnect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
     
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        disconnect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        disconnect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
         disconnect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
     }
     m_project = project;
     m_nodemodel.setProject( project );
     if ( project ) {
-        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
-        connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
+        connect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
+        connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        connect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        connect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
         connect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
 
-        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
         connect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
     }

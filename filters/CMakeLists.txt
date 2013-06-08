@@ -19,13 +19,17 @@ set(liboofilter_SRCS
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
+if(SHOULD_BUILD_LIB_ODF2)
+    add_subdirectory( libodf2 )
+endif(SHOULD_BUILD_LIB_ODF2)
+
 if(SHOULD_BUILD_LIB_WRITERPERFECT)
     add_subdirectory( writerperfect )
 endif(SHOULD_BUILD_LIB_WRITERPERFECT)
 
-if(SHOULD_BUILD_LIB_ODFTRAVERSE)
-    add_subdirectory(libodftraverse)
-endif(SHOULD_BUILD_LIB_ODFTRAVERSE)
+if(SHOULD_BUILD_LIB_ODFREADER)
+    add_subdirectory(libodfreader)
+endif(SHOULD_BUILD_LIB_ODFREADER)
 
 if(SHOULD_BUILD_LIB_MSO)
     add_subdirectory(libmso)

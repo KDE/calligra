@@ -85,8 +85,8 @@ public:
     
 signals:
     void addResource( ResourceGroup* );
-    void deleteObjectList( QObjectList );
-    
+    void deleteObjectList( const QObjectList& );
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -98,10 +98,10 @@ protected:
     void updateActionsEnabled(  bool on = true );
 
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotSplitView();
     
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void slotEnableActions( bool on );
 

@@ -47,7 +47,10 @@ MpxjImport::MpxjImport(QObject* parent, const QVariantList &)
 
 QStringList MpxjImport::mimeTypes()
 {
-    return QStringList() << "application/vnd.ms-project" << "application/x-planner";
+    return QStringList()
+        << QLatin1String("application/vnd.ms-project")
+        << QLatin1String("application/x-project")
+        << QLatin1String("application/x-planner");
 }
 
 KoFilter::ConversionStatus MpxjImport::convert(const QByteArray& from, const QByteArray& to)

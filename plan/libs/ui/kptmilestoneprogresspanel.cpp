@@ -84,7 +84,7 @@ MilestoneProgressPanelImpl::MilestoneProgressPanelImpl(QWidget *parent, const ch
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));
 
-    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
+    connect(finishTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotChanged()));
     
 }
 
