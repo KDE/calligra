@@ -85,6 +85,7 @@ class ODFREADER_EXPORT OdtReaderBackend
 
     virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.

@@ -6,10 +6,13 @@ include_directories(
 ########### libodfreader ###############
 
 set(odfreader_LIB_SRCS
-    OdtReader.cpp
     OdfReaderContext.cpp
-    OdtReaderBackend.cpp
     OdfParser.cpp
+    OdtReader.cpp
+    OdtReaderBackend.cpp
+
+    OdfTextReader.cpp
+    OdfTextReaderBackend.cpp
 )
 
 kde4_add_library(odfreader SHARED ${odfreader_LIB_SRCS})
@@ -24,12 +27,14 @@ install(TARGETS odfreader ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 #install( FILES
-         # odfreader_export.h
-         # OdfReaderContext.h
-         # OdtReaderBackend.h
-         # OdfTextReaderBackend.h
-         # OdtReader.h
-         # OdfTextReader.h
-         # KoTableTemplate.h
+     # odfreader_export.h
+     # OdfReaderContext.h
+     # OdtParser.h
+     # OdtReader.h
+     # OdtReaderBackend.h
+
+     # OdfTextReader.h
+     # OdfTextReaderBackend.h
+     # KoTableTemplate.h
 #DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

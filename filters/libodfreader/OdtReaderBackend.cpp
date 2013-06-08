@@ -112,6 +112,13 @@ void OdtReaderBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext 
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
+
+void OdtReaderBackend::elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
 void OdtReaderBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
