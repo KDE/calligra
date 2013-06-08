@@ -45,12 +45,11 @@ PSDImageData::~PSDImageData() {
 }
 
 bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
-    qDebug()<<"PSD DATA IMAGE CALLED";
     psdread(io, &m_compression);
     quint64 start = io->pos();
     m_channelSize = m_header->channelDepth/8;
     m_channelDataLength = m_header->height * m_header->width * m_channelSize;
-    qDebug()<<m_compression;
+
     switch (m_compression) {
 
     case 0: // Uncompressed
