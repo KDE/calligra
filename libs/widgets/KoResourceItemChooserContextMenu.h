@@ -44,14 +44,15 @@ private:
     QString m_tag;
 };
 
-class ContextMenuNewTagAction : public QWidgetAction {
+class ContextMenuNewTagAction : public QWidgetAction
+{
     Q_OBJECT
 public:
     explicit ContextMenuNewTagAction (KoResource* resource, QObject* parent);
     ~ContextMenuNewTagAction();
 
     signals:
-    void triggered(KoResource * resource, QString tag);
+    void triggered(KoResource * resource, const QString &tag);
 
 protected slots:
     void onTriggered(const QString& tagName);
@@ -62,9 +63,31 @@ private:
     KLineEdit * m_editBox;
 };
 
-class KoResourceItemChooserContextMenu :  QMenu
+class KoResourceItemChooserContextMenu :  public QMenu
 {
+    Q_OBJECT
+public:
     explicit KoResourceItemChooserContextMenu(QWidget* parent = 0);
+    virtual ~KoResourceItemChooserContextMenu();
+    void resource(KoResource* resource);
+    void activeTag(const QString& tag);
+    void resourceTags(const QStringList& resourceTags);
+    void allTags(const QStringList& allTags);
+    virtual QAction * exec(const QPoint& p, QAction* action = 0);
+
+signals:
+    void addTagToResource(KoResource* resource, const QString& tag);
+    void removeTagFromResource(KoResource* resource, const QString& tag);
+    void createNewResourceTag(KoResource* resource , const QString& tag);
+
+protected slots:
+    void onAddTagToResource(KoResource* resource, const QString& tag);
+    void onRemoveTagFromResource(KoResource* resource, const QString& tag);
+    void onCreateNewResourceTag(KoResource* resource , const QString& tag);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KORESOURCEITEMCHOOSERCONTEXTMENU_H
