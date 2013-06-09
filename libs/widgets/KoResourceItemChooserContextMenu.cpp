@@ -25,6 +25,7 @@
 #include <klocale.h>
 
 #include "KoResourceItemChooserContextMenu.h"
+#include "KoResource.h"
 
 ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource, QString tag, QObject* parent)
 : QAction(parent)
@@ -80,9 +81,124 @@ void ContextMenuNewTagAction::onTriggered(const QString & tagName)
     }
 }
 
+class KoResourceItemChooserContextMenu::Private
+{
+public:
+    KoResource * resource;
+    QStringList resourceTags;
+    QStringList allTags;
+    QString activeTag;
+};
+
 KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(QWidget* parent)
 : QMenu(parent)
+, d(new Private())
 {
 
 }
 
+KoResourceItemChooserContextMenu::~KoResourceItemChooserContextMenu()
+{
+    delete d;
+}
+
+void KoResourceItemChooserContextMenu::resource(KoResource* resource)
+{
+    d->resource = resource;
+}
+
+void KoResourceItemChooserContextMenu::allTags(const QStringList& allTags)
+{
+    d->allTags = allTags;
+}
+
+void KoResourceItemChooserContextMenu::resourceTags(const QStringList& resourceTags)
+{
+    d->resourceTags = resourceTags;
+}
+
+void KoResourceItemChooserContextMenu::activeTag(const QString& tag)
+{
+    d->activeTag = tag;
+}
+
+void KoResourceItemChooserContextMenu::onAddTagToResource(KoResource* resource, const QString& tag)
+{
+    emit addTagToResource(resource, tag);
+}
+
+void KoResourceItemChooserContextMenu::onCreateNewResourceTag(KoResource* resource, const QString& tag)
+{
+    emit createNewResourceTag(resource, tag);
+}
+
+void KoResourceItemChooserContextMenu::onRemoveTagFromResource(KoResource* resource, const QString& tag)
+{
+    emit removeTagFromResource(resource, tag);
+}
+
+QAction* KoResourceItemChooserContextMenu::exec(const QPoint& p, QAction* action)
+{
+    QImage image = d->resource->image();
+    QIcon icon(QPixmap::fromImage(image));
+    QAction * label = new QAction(d->resource->name(), this);
+    label->setIcon(icon);
+
+    addAction(label);
+
+    QMenu * removableTagsMenu;
+    QMenu * assignableTagsMenu;
+
+    QStringList removables = d->resourceTags;
+    QStringList assignables = d->allTags;
+
+    removables.sort();
+    assignables.sort();
+
+    assignableTagsMenu = addMenu(koIcon("list-add"),i18n("Assign to tag:"));
+
+    if (!removables.isEmpty()) {
+        addSeparator();
+        QString curTag = d->activeTag;
+        if (removables.contains(curTag)) {
+            assignables.removeAll(curTag);
+            removables.removeAll(curTag);
+            ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(d->resource, curTag, this);
+            removeTagAction->setText(i18n("Remove from this tag"));
+            removeTagAction->setIcon(koIcon("list-remove"));
+
+            connect(removeTagAction, SIGNAL(triggered(KoResource*,QString)),
+                    this, SLOT(onRemoveTagFromResource(KoResource*,QString)));
+            addAction(removeTagAction);
+        }
+        if (!removables.isEmpty()) {
+            removableTagsMenu = addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
+            foreach (const QString &tag, removables) {
+                assignables.removeAll(tag);
+                ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(d->resource, tag, this);
+
+                connect(removeTagAction, SIGNAL(triggered(KoResource*,QString)),
+                        this, SLOT(onRemoveTagFromResource(KoResource*,QString)));
+                removableTagsMenu->addAction(removeTagAction);
+            }
+        }
+    }
+
+
+    foreach (const QString &tag, assignables) {
+        ContextMenuExistingTagAction * addTagAction = new ContextMenuExistingTagAction(d->resource, tag, this);
+
+        connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),
+                this, SLOT(onAddTagToResource(KoResource*,QString)));
+        assignableTagsMenu->addAction(addTagAction);
+    }
+    assignableTagsMenu->addSeparator();
+
+    ContextMenuNewTagAction * addTagAction = new ContextMenuNewTagAction(d->resource, this);
+    connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),
+            this, SLOT(onCreateNewResourceTag(KoResource*,QString)));
+    assignableTagsMenu->addAction(addTagAction);
+
+
+    return QMenu::exec(p, action);
+}
