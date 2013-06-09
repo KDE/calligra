@@ -28,7 +28,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KoGenStyle.h>
+#include <KoStyleStack.h>
 
 
 class KoBorderPrivate : public QSharedData
@@ -375,7 +375,14 @@ bool KoBorder::hasBorder(KoBorder::BorderSide side) const
     return d->data.contains(side);
 }
 
-void parseOdfBorder (const QString &border, QColor *color, KoBorder::BorderStyle *borderStyle, bool *hasBorderStyle, qreal *borderWidth, bool *hasBorderWidth)
+
+// ----------------------------------------------------------------
+//                         static functions
+
+
+void parseOdfBorder(const QString &border, QColor *color,
+                    KoBorder::BorderStyle *borderStyle, bool *hasBorderStyle,
+                    qreal *borderWidth, bool *hasBorderWidth)
 {
     *hasBorderStyle = false;
     *hasBorderWidth = false;
@@ -413,167 +420,66 @@ void parseOdfBorder (const QString &border, QColor *color, KoBorder::BorderStyle
 bool KoBorder::loadOdf(const KoXmlElement &style)
 {
     bool result = false;
+
+    QString borderString;
+    bool hasSpecialBorder;
+    QString specialBorderString;
     if (style.hasAttributeNS(KoXmlNS::fo, "border")) {
         result = true;
-        QString border = style.attributeNS(KoXmlNS::fo, "border");
-
-        //kDebug() << "*** *** Found border: " << border;
-        QColor allBordersColor;
-        KoBorder::BorderStyle allBordersStyle;
-        qreal allBordersWidth;
-        bool foundStyle, foundWidth;
-        parseOdfBorder(border, &allBordersColor, &allBordersStyle, &foundStyle, &allBordersWidth, &foundWidth);
-        if (allBordersColor.isValid()) {
-            setBorderColor(LeftBorder, allBordersColor);
-            setBorderColor(TopBorder, allBordersColor);
-            setBorderColor(RightBorder, allBordersColor);
-            setBorderColor(BottomBorder, allBordersColor);
+        borderString = style.attributeNS(KoXmlNS::fo, "border");
+        if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder"))) {
+            specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder");
         }
-        if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder")) {
-            allBordersStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder"), &foundStyle);
-        }
-        if (foundStyle) {
-            setBorderStyle(LeftBorder, allBordersStyle);
-            setBorderStyle(TopBorder, allBordersStyle);
-            setBorderStyle(RightBorder, allBordersStyle);
-            setBorderStyle(BottomBorder, allBordersStyle);
-        }
-        if (foundWidth) {
-            setBorderWidth(LeftBorder, allBordersWidth);
-            setBorderWidth(TopBorder, allBordersWidth);
-            setBorderWidth(RightBorder, allBordersWidth);
-            setBorderWidth(BottomBorder, allBordersWidth);
-        }
+        parseAndSetBorder(borderString, hasSpecialBorder, specialBorderString);
     }
     else {
         // No common border attributes, check for the individual ones.
         if (style.hasAttributeNS(KoXmlNS::fo, "border-left")) {
-            result = true;
-            QString border = style.attributeNS(KoXmlNS::fo, "border-left");
-            QColor borderColor;
-            KoBorder::BorderStyle borderStyle;
-            qreal borderWidth;
-            bool foundStyle, foundWidth;
-            parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-            if (borderColor.isValid()) {
-                setBorderColor(LeftBorder, borderColor);
+            borderString = style.attributeNS(KoXmlNS::fo, "border-left");
+            if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-left"))) {
+                specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-left");
             }
-            if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-left")) {
-                borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-left"), &foundStyle);
-            }
-            if (foundStyle) {
-                setBorderStyle(LeftBorder, borderStyle);
-            }
-            if (foundWidth) {
-                setBorderWidth(LeftBorder, borderWidth);
-            }
+            parseAndSetBorder(LeftBorder, borderString, hasSpecialBorder, specialBorderString);
         }
         if (style.hasAttributeNS(KoXmlNS::fo, "border-top")) {
-            result = true;
-            QString border = style.attributeNS(KoXmlNS::fo, "border-top");
-            QColor borderColor;
-            KoBorder::BorderStyle borderStyle;
-            qreal borderWidth;
-            bool foundStyle, foundWidth;
-            parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-            if (borderColor.isValid()) {
-                setBorderColor(TopBorder, borderColor);
+            borderString = style.attributeNS(KoXmlNS::fo, "border-top");
+            if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-top"))) {
+                specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-top");
             }
-            if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-top")) {
-                borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-top"), &foundStyle);
-            }
-            if (foundStyle) {
-                setBorderStyle(TopBorder, borderStyle);
-            }
-            if (foundWidth) {
-                setBorderWidth(TopBorder, borderWidth);
-            }
+            parseAndSetBorder(TopBorder, borderString, hasSpecialBorder, specialBorderString);
         }
         if (style.hasAttributeNS(KoXmlNS::fo, "border-right")) {
-            result = true;
-            QString border = style.attributeNS(KoXmlNS::fo, "border-right");
-            QColor borderColor;
-            KoBorder::BorderStyle borderStyle;
-            qreal borderWidth;
-            bool foundStyle, foundWidth;
-            parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-            if (borderColor.isValid()) {
-                setBorderColor(RightBorder, borderColor);
+            borderString = style.attributeNS(KoXmlNS::fo, "border-right");
+            if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-right"))) {
+                specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-right");
             }
-            if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-right")) {
-                borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-right"), &foundStyle);
-            }
-            if (foundStyle) {
-                setBorderStyle(RightBorder, borderStyle);
-            }
-            if (foundWidth) {
-                setBorderWidth(RightBorder, borderWidth);
-            }
+            parseAndSetBorder(RightBorder, borderString, hasSpecialBorder, specialBorderString);
         }
         if (style.hasAttributeNS(KoXmlNS::fo, "border-bottom")) {
-            result = true;
-            QString border = style.attributeNS(KoXmlNS::fo, "border-bottom");
-            QColor borderColor;
-            KoBorder::BorderStyle borderStyle;
-            qreal borderWidth;
-            bool foundStyle, foundWidth;
-            parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-            if (borderColor.isValid()) {
-                setBorderColor(BottomBorder, borderColor);
+            borderString = style.attributeNS(KoXmlNS::fo, "border-bottom");
+            if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-bottom"))) {
+                specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-bottom");
             }
-            if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-bottom")) {
-                borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-bottom"), &foundStyle);
-            }
-            if (foundStyle) {
-                setBorderStyle(BottomBorder, borderStyle);
-            }
-            if (foundWidth) {
-                setBorderWidth(BottomBorder, borderWidth);
-            }
+            parseAndSetBorder(BottomBorder, borderString, hasSpecialBorder, specialBorderString);
         }
     }
 
+    // Diagonals are treated individually and are NOT part of <style:border>.
     if (style.hasAttributeNS(KoXmlNS::style, "diagonal-tl-br")) {
         result = true;
-        QString border = style.attributeNS(KoXmlNS::style, "diagonal-tl-br");
-        QColor borderColor;
-        KoBorder::BorderStyle borderStyle;
-        qreal borderWidth;
-        bool foundStyle, foundWidth;
-        parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-        if (borderColor.isValid()) {
-            setBorderColor(TlbrBorder, borderColor);
+        borderString = style.attributeNS(KoXmlNS::fo, "border-tl-br");
+        if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-tl-br"))) {
+            specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-tl-br");
         }
-        if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-tl-br")) {
-            borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-tl-br"), &foundStyle);
-        }
-        if (foundStyle) {
-            setBorderStyle(TlbrBorder, borderStyle);
-        }
-        if (foundWidth) {
-            setBorderWidth(TlbrBorder, borderWidth);
-        }
+        parseAndSetBorder(TlbrBorder, borderString, hasSpecialBorder, specialBorderString);
     }
     if (style.hasAttributeNS(KoXmlNS::style, "diagonal-bl-tr")) {
         result = true;
-        QString border = style.attributeNS(KoXmlNS::style, "diagonal-bl-tr");
-        QColor borderColor;
-        KoBorder::BorderStyle borderStyle;
-        qreal borderWidth;
-        bool foundStyle, foundWidth;
-        parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-        if (borderColor.isValid()) {
-            setBorderColor(BltrBorder, borderColor);
+        borderString = style.attributeNS(KoXmlNS::fo, "border-bl-tr");
+        if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-bl-tr"))) {
+            specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-bl-tr");
         }
-        if (style.hasAttributeNS(KoXmlNS::calligra, "specialborder-bl-tr")) {
-            borderStyle = KoBorder::odfBorderStyle(style.attributeNS(KoXmlNS::calligra, "specialborder-bl-tr"), &foundStyle);
-        }
-        if (foundStyle) {
-            setBorderStyle(BltrBorder, borderStyle);
-        }
-        if (foundWidth) {
-            setBorderWidth(BltrBorder, borderWidth);
-        }
+        parseAndSetBorder(BltrBorder, borderString, hasSpecialBorder, specialBorderString);
     }
 
     // Handle double borders.
@@ -663,6 +569,230 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
         }
     }
     return result;
+}
+
+bool KoBorder::loadOdf(const KoStyleStack &styleStack)
+{
+    bool result = false;
+
+    QString borderString;
+    bool hasSpecialBorder;
+    QString specialBorderString;
+    if (styleStack.hasProperty(KoXmlNS::fo, "border")) {
+        result = true;
+        borderString = styleStack.property(KoXmlNS::fo, "border");
+        if ((hasSpecialBorder = styleStack.hasProperty(KoXmlNS::calligra, "specialborder"))) {
+            specialBorderString = styleStack.property(KoXmlNS::calligra, "specialborder");
+        }
+        parseAndSetBorder(borderString, hasSpecialBorder, specialBorderString);
+    }
+    else {
+        // No common border attributes, check for the individual ones.
+        if (styleStack.hasProperty(KoXmlNS::fo, "border-left")) {
+            result = true;
+            borderString = styleStack.property(KoXmlNS::fo, "border-left");
+            if ((hasSpecialBorder = styleStack.hasProperty(KoXmlNS::calligra, "specialborder-left"))) {
+                specialBorderString = styleStack.property(KoXmlNS::calligra, "specialborder-left");
+            }
+            parseAndSetBorder(LeftBorder, borderString, hasSpecialBorder, specialBorderString);
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "border-top")) {
+            result = true;
+            borderString = styleStack.property(KoXmlNS::fo, "border-top");
+            if ((hasSpecialBorder = styleStack.hasProperty(KoXmlNS::calligra, "specialborder-top"))) {
+                specialBorderString = styleStack.property(KoXmlNS::calligra, "specialborder-top");
+            }
+            parseAndSetBorder(TopBorder, borderString, hasSpecialBorder, specialBorderString);
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "border-right")) {
+            result = true;
+            borderString = styleStack.property(KoXmlNS::fo, "border-right");
+            if ((hasSpecialBorder = styleStack.hasProperty(KoXmlNS::calligra, "specialborder-right"))) {
+                specialBorderString = styleStack.property(KoXmlNS::calligra, "specialborder-right");
+            }
+            parseAndSetBorder(RightBorder, borderString, hasSpecialBorder, specialBorderString);
+
+        }
+        if (styleStack.hasProperty(KoXmlNS::fo, "border-bottom")) {
+            result = true;
+            borderString = styleStack.property(KoXmlNS::fo, "border-bottom");
+            if ((hasSpecialBorder = styleStack.hasProperty(KoXmlNS::calligra, "specialborder-bottom"))) {
+                specialBorderString = styleStack.property(KoXmlNS::calligra, "specialborder-bottom");
+            }
+            parseAndSetBorder(BottomBorder, borderString, hasSpecialBorder, specialBorderString);
+        }
+    }
+
+    // Diagonals are treated individually and are NOT part of <style:border>.
+    if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
+        result = true;
+        borderString = styleStack.property(KoXmlNS::fo, "border-tl-br");
+        if ((hasSpecialBorder = styleStack.hasProperty(KoXmlNS::calligra, "specialborder-tl-br"))) {
+            specialBorderString = styleStack.property(KoXmlNS::calligra, "specialborder-tl-br");
+        }
+        parseAndSetBorder(TlbrBorder, borderString, hasSpecialBorder, specialBorderString);
+    }
+    if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
+        result = true;
+        borderString = styleStack.property(KoXmlNS::fo, "border-bl-tr");
+        if ((hasSpecialBorder = styleStack.hasProperty(KoXmlNS::calligra, "specialborder-bl-tr"))) {
+            specialBorderString = styleStack.property(KoXmlNS::calligra, "specialborder-bl-tr");
+        }
+        parseAndSetBorder(BltrBorder, borderString, hasSpecialBorder, specialBorderString);
+    }
+
+    // Handle double borders.
+    if (styleStack.hasProperty(KoXmlNS::style, "border-line-width")) {
+        result = true;
+        QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setInnerBorderWidth(LeftBorder, KoUnit::parseValue(blw[0], 0.1));
+            setBorderSpacing(LeftBorder, KoUnit::parseValue(blw[1], 1.0));
+            setBorderWidth(LeftBorder, KoUnit::parseValue(blw[2], 0.1));
+
+            setInnerBorderWidth(TopBorder, KoUnit::parseValue(blw[0], 0.1));
+            setBorderSpacing(TopBorder, KoUnit::parseValue(blw[1], 1.0));
+            setBorderWidth(TopBorder, KoUnit::parseValue(blw[2], 0.1));
+
+            setInnerBorderWidth(RightBorder, KoUnit::parseValue(blw[0], 0.1));
+            setBorderSpacing(RightBorder, KoUnit::parseValue(blw[1], 1.0));
+            setBorderWidth(RightBorder, KoUnit::parseValue(blw[2], 0.1));
+
+            setInnerBorderWidth(BottomBorder, KoUnit::parseValue(blw[0], 0.1));
+            setBorderSpacing(BottomBorder, KoUnit::parseValue(blw[1], 1.0));
+            setBorderWidth(BottomBorder, KoUnit::parseValue(blw[2], 0.1));
+        }
+    }
+    else {
+        if (styleStack.hasProperty(KoXmlNS::style, "border-line-width-left")) {
+            result = true;
+            QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width-left");
+            if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+                QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+                setInnerBorderWidth(LeftBorder, KoUnit::parseValue(blw[0], 0.1));
+                setBorderSpacing(LeftBorder, KoUnit::parseValue(blw[1], 1.0));
+                setBorderWidth(LeftBorder, KoUnit::parseValue(blw[2], 0.1));
+            }
+        }
+        if (styleStack.hasProperty(KoXmlNS::style, "border-line-width-top")) {
+            result = true;
+            QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width-top");
+            if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+                QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+                setInnerBorderWidth(TopBorder, KoUnit::parseValue(blw[0], 0.1));
+                setBorderSpacing(TopBorder, KoUnit::parseValue(blw[1], 1.0));
+                setBorderWidth(TopBorder, KoUnit::parseValue(blw[2], 0.1));
+            }
+        }
+        if (styleStack.hasProperty(KoXmlNS::style, "border-line-width-right")) {
+            result = true;
+            QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width-right");
+            if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+                QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+                setInnerBorderWidth(RightBorder, KoUnit::parseValue(blw[0], 0.1));
+                setBorderSpacing(RightBorder, KoUnit::parseValue(blw[1], 1.0));
+                setBorderWidth(RightBorder, KoUnit::parseValue(blw[2], 0.1));
+            }
+        }
+        if (styleStack.hasProperty(KoXmlNS::style, "border-line-width-bottom")) {
+            result = true;
+            QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width-bottom");
+            if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+                QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+                setInnerBorderWidth(BottomBorder, KoUnit::parseValue(blw[0], 0.1));
+                setBorderSpacing(BottomBorder, KoUnit::parseValue(blw[1], 1.0));
+                setBorderWidth(BottomBorder, KoUnit::parseValue(blw[2], 0.1));
+            }
+        }
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br-widths")) {
+        result = true;
+        QString borderLineWidth = styleStack.property(KoXmlNS::style, "diagonal-tl-br-widths");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setInnerBorderWidth(TlbrBorder, KoUnit::parseValue(blw[0], 0.1));
+            setBorderSpacing(TlbrBorder, KoUnit::parseValue(blw[1], 1.0));
+            setBorderWidth(TlbrBorder, KoUnit::parseValue(blw[2], 0.1));
+        }
+    }
+    if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr-widths")) {
+        result = true;
+        QString borderLineWidth = styleStack.property(KoXmlNS::style, "diagonal-bl-tr-widths");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setInnerBorderWidth(BltrBorder, KoUnit::parseValue(blw[0], 0.1));
+            setBorderSpacing(BltrBorder, KoUnit::parseValue(blw[1], 1.0));
+            setBorderWidth(BltrBorder, KoUnit::parseValue(blw[2], 0.1));
+        }
+    }
+
+    return result;
+}
+
+
+// Private
+void KoBorder::parseAndSetBorder(const QString &borderString,
+                                 bool hasSpecialBorder, const QString &specialBorderString)
+{
+    //kDebug() << "*** *** Found border: " << border;
+    QColor bordersColor;
+    BorderStyle bordersStyle;
+    qreal bordersWidth;
+    bool foundStyle;
+    bool foundWidth;
+    parseOdfBorder(borderString, &bordersColor, &bordersStyle, &foundStyle,
+                   &bordersWidth, &foundWidth);
+    if (bordersColor.isValid()) {
+        setBorderColor(LeftBorder, bordersColor);
+        setBorderColor(TopBorder, bordersColor);
+        setBorderColor(RightBorder, bordersColor);
+        setBorderColor(BottomBorder, bordersColor);
+    }
+    if (hasSpecialBorder) {
+        bordersStyle = KoBorder::odfBorderStyle(specialBorderString, &foundStyle);
+    }
+
+    if (foundStyle) {
+        setBorderStyle(LeftBorder, bordersStyle);
+        setBorderStyle(TopBorder, bordersStyle);
+        setBorderStyle(RightBorder, bordersStyle);
+        setBorderStyle(BottomBorder, bordersStyle);
+    }
+    if (foundWidth) {
+        setBorderWidth(LeftBorder, bordersWidth);
+        setBorderWidth(TopBorder, bordersWidth);
+        setBorderWidth(RightBorder, bordersWidth);
+        setBorderWidth(BottomBorder, bordersWidth);
+    }
+}
+
+// Private
+void KoBorder::parseAndSetBorder(const BorderSide borderSide, const QString &borderString,
+                                 bool hasSpecialBorder, const QString &specialBorderString)
+{
+    QColor borderColor;
+    BorderStyle borderStyle;
+    qreal borderWidth;
+    bool foundStyle;
+    bool foundWidth;
+
+    parseOdfBorder(borderString, &borderColor, &borderStyle, &foundStyle,
+                   &borderWidth, &foundWidth);
+    if (borderColor.isValid()) {
+        setBorderColor(borderSide, borderColor);
+    }
+    if (hasSpecialBorder) {
+        borderStyle = KoBorder::odfBorderStyle(specialBorderString, &foundStyle);
+    }
+
+    if (foundStyle) {
+        setBorderStyle( borderSide, borderStyle);
+    }
+    if (foundWidth) {
+        setBorderWidth( borderSide, borderWidth);
+    }
 }
 
 void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const

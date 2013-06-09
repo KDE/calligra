@@ -34,7 +34,7 @@
 #include "KoXmlReaderForward.h"
 #include "KoGenStyle.h"
 
-class KoGenStyle;
+class KoStyleStack;
 class KoBorderPrivate;
 
 
@@ -142,6 +142,7 @@ public:
      * @return true when border attributes were found
      */
     bool loadOdf(const KoXmlElement &style);
+    bool loadOdf(const KoStyleStack &styleStack);
     void saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type = KoGenStyle::DefaultType) const;
 
 
@@ -151,6 +152,12 @@ public:
     static BorderStyle odfBorderStyle(const QString &borderstyle, bool *converted = 0);
     static QString odfBorderStyleString(BorderStyle borderstyle);
     static QString msoBorderStyleString(BorderStyle borderstyle);
+
+ private:
+    void parseAndSetBorder(const QString &border,
+                           bool hasSpecialBorder, const QString &specialBorderString);
+    void parseAndSetBorder(const BorderSide borderSide, const QString &border,
+                           bool hasSpecialBorder, const QString &specialBorderString);
 
 private:
     QSharedDataPointer<KoBorderPrivate> d;
