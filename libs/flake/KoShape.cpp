@@ -1286,9 +1286,9 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 {
     Q_D(const KoShape);
     // and fill the style
-    KoShapeStrokeModel *b = stroke();
-    if (b) {
-        b->fillStyle(style, context);
+    KoShapeStrokeModel *sm = stroke();
+    if (sm) {
+        sm->fillStyle(style, context);
     }
     else {
         style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
@@ -1303,6 +1303,11 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     }
     else {
         style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
+    }
+
+    KoBorder *b = border();
+    if (b) {
+        b->saveOdf(style);
     }
 
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
