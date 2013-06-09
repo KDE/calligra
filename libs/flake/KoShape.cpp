@@ -86,6 +86,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       stroke(0),
       fill(0),
       shadow(0),
+      border(0),
       clipPath(0),
       filterEffectStack(0),
       transparency(0.0),
