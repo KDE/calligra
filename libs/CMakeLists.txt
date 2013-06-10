@@ -10,6 +10,7 @@ if (SHOULD_BUILD_CALLIGRA_LIBS)
     add_subdirectory( pigment )
     add_subdirectory( main )
     add_subdirectory( kundo2 )
+    add_subdirectory( komvc )
 endif (SHOULD_BUILD_CALLIGRA_LIBS)
 
 if (SHOULD_BUILD_SCRIPTING)
