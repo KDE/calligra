@@ -29,6 +29,9 @@ Item {
     property alias textAlign: dialogText.horizontalAlignment;
     property int progress: -1;
 
+    property int defaultButton: 0;
+    property int currentButton: defaultButton;
+
     signal buttonClicked(int button);
     signal canceled();
 
@@ -44,6 +47,7 @@ Item {
             base.message = message;
         }
         base.opacity = 0;
+        base.currentButton = base.defaultButton; 
     }
 
     anchors.fill: parent;
@@ -79,6 +83,25 @@ Item {
 
         anchors.fill: parent;
         color: "#80000000";
+
+        Keys.enabled: base.visible && base.opacity === 1;
+        Keys.onEscapePressed: {
+                // Don't allow people to escape from a progress bar...
+                // horrible things could happen if they do so (inconsistent states and what not)
+                if(progress !== -1)
+                    return;
+                base.canceled();
+                base.hide();
+            }
+        Keys.onEnterPressed: { base.buttonClicked(base.currentButton); base.hide(); }
+        Keys.onReturnPressed: { base.buttonClicked(base.currentButton); base.hide(); }
+        focus: Keys.enabled;
+        Keys.onTabPressed: {
+            base.currentButton += 1;
+            if(base.currentButton >= base.buttons.length) {
+                base.currentButton = 0;
+            }
+        }
     }
 
     Rectangle {
@@ -209,6 +232,7 @@ Item {
                     textColor: "white";
 
                     onClicked: { base.buttonClicked(index); base.hide(); }
+                    hasFocus: index === base.currentButton;
                 }
             }
         }
