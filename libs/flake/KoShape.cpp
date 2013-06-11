@@ -1282,6 +1282,21 @@ bool KoShape::isEditable() const
     return true;
 }
 
+// painting
+void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter,
+                          KoShapePaintingContext &paintcontext)
+{
+    KoBorder *bd = border();
+    if (bd) {
+        QRectF borderRect = QRectF(QPointF(0, 0), size());
+        qreal zoomX;
+        qreal zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        bd->paint(painter, borderRect, zoomX, zoomY);
+    }
+}
+
+
 // loading & saving methods
 QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {

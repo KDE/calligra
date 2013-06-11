@@ -34,6 +34,7 @@
 #include "KoXmlReaderForward.h"
 #include "KoGenStyle.h"
 
+class QPainter;
 class KoStyleStack;
 class KoBorderPrivate;
 
@@ -135,6 +136,8 @@ public:
     bool hasBorder() const;
     bool hasBorder(BorderSide side) const;
 
+    void paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, qreal zoomY) const;
+
     /**
      * Load the style from the element
      *
@@ -154,6 +157,9 @@ public:
     static QString msoBorderStyleString(BorderStyle borderstyle);
 
  private:
+    void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
+                         const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
+                         int inwardsX, int inwardsY) const;
     void parseAndSetBorder(const QString &border,
                            bool hasSpecialBorder, const QString &specialBorderString);
     void parseAndSetBorder(const BorderSide borderSide, const QString &border,

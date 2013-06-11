@@ -22,6 +22,8 @@
 
 #include "KoBorder.h"
 
+#include <QPainter>
+
 #include <kdebug.h>
 
 #include <KoUnit.h>
@@ -373,6 +375,100 @@ bool KoBorder::hasBorder() const
 bool KoBorder::hasBorder(KoBorder::BorderSide side) const
 {
     return d->data.contains(side);
+}
+
+
+// ----------------------------------------------------------------
+//                         painting
+
+
+void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, qreal zoomY) const
+{
+    painter.save();
+    KoBorder::BorderData borderSide = borderData(KoBorder::LeftBorder);
+    paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.bottomLeft(),
+                    zoomX, 1, 0);
+    painter.restore();
+
+    painter.save();
+    borderSide = borderData(KoBorder::TopBorder);
+    paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.topRight(),
+                    zoomY, 0, 1);
+    painter.restore();
+
+    painter.save();
+    borderSide = borderData(KoBorder::RightBorder);
+    paintBorderSide(painter, borderSide, borderRect.topRight(), borderRect.bottomRight(),
+                    zoomX, -1, 0);
+    painter.restore();
+
+    painter.save();
+    borderSide = borderData(KoBorder::BottomBorder);
+    paintBorderSide(painter, borderSide, borderRect.bottomLeft(), borderRect.bottomRight(),
+                    zoomY, 0, -1);
+    painter.restore();
+
+    // FIXME: Diagonal borders
+}
+
+void KoBorder::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
+                               const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
+                               int inwardsX, int inwardsY) const
+{
+
+    // Return if nothing to paint
+    if (borderData.style == KoBorder::BorderNone)
+        return;
+
+    // Set up the painter and inner and outer pens.
+    QPen pen = painter.pen();
+    // Line color
+    pen.setColor(borderData.outerPen.color());
+
+    // Line style
+    switch (borderData.style) {
+    case KoBorder::BorderNone: break; // No line
+    case KoBorder::BorderDotted: pen.setStyle(Qt::DotLine); break;
+    case KoBorder::BorderDashed: pen.setStyle(Qt::DashLine); break;
+    case KoBorder::BorderSolid: pen.setStyle(Qt::SolidLine); break;
+    case KoBorder::BorderDouble: pen.setStyle(Qt::SolidLine); break; // Handled separately
+    case KoBorder::BorderGroove: pen.setStyle(Qt::SolidLine); break; // FIXME
+    case KoBorder::BorderRidge: pen.setStyle(Qt::SolidLine); break; // FIXME
+    case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
+    case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
+    case KoBorder::BorderDashDot: pen.setStyle(Qt::DashDotLine); break;
+    case KoBorder::BorderDashDotDot: pen.setStyle(Qt::DashDotDotLine); break;
+    default:
+        pen.setStyle(Qt::SolidLine);
+    }
+
+    if (borderData.style == KoBorder::BorderDouble) {
+        // outerWidth is the width of the outer line.  The offsets
+        // are the distances from the center line of the whole
+        // border to the centerlines of the outer and inner
+        // borders respectively.
+        qreal outerWidth = borderData.outerPen.widthF() - borderData.innerPen.widthF() - borderData.spacing;
+        qreal outerOffset = borderData.outerPen.widthF() / 2.0 + outerWidth / 2.0;
+        qreal innerOffset = borderData.outerPen.widthF() / 2.0 - borderData.innerPen.widthF() / 2.0;
+
+        QPointF outerOffset2D(-inwardsX * outerOffset, -inwardsY * outerOffset);
+        QPointF innerOffset2D(inwardsX * innerOffset, inwardsY * innerOffset);
+
+        // Draw the outer line.
+        pen.setWidthF(zoom * outerWidth);
+        painter.setPen(pen);
+        painter.drawLine(lineStart + outerOffset2D, lineEnd + outerOffset2D);
+
+        // Draw the inner line
+        pen.setWidthF(zoom * borderData.innerPen.widthF());
+        painter.setPen(pen);
+        painter.drawLine(lineStart + innerOffset2D, lineEnd + innerOffset2D);
+    }
+    else {
+        pen.setWidthF(zoom * borderData.outerPen.widthF());
+        painter.setPen(pen);
+        painter.drawLine(lineStart, lineEnd);
+    }
 }
 
 

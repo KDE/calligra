@@ -192,6 +192,16 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
 
     /**
+     * @brief Paint the shape's border
+     * This is a helper function that could be called from the paint() method of all shapes. 
+     * @param painter used for painting the shape
+     * @param converter to convert between internal and view coordinates.
+     * @see applyConversion()
+     * @param paintcontext the painting context.
+     */
+    virtual void paintBorder(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+
+    /**
      * Load a shape from odf
      *
      * @param context the KoShapeLoadingContext used for loading

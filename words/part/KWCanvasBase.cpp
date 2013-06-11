@@ -189,7 +189,14 @@ void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
     QRectF borderRect = QRectF(topLeftCorner, bottomRightCorner);
 
     // Actually paint the border
-    doPaintBorder(painter, pageLayout.border, borderRect);
+#if 1
+    qreal zoomX;
+    qreal zoomY;
+    viewConverter()->zoom(&zoomX, &zoomY);
+    pageLayout.border.paint(painter, borderRect, zoomX, zoomY);
+#else
+    doPaintBorder(painter, pageLayout.border, borderRect, zoomX, zoomY);
+#endif
 
     painter.restore();
 }
