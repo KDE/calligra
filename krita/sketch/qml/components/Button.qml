@@ -42,6 +42,8 @@ Item {
     property bool highlight: false;
     property color highlightColor: "transparent";
 
+    property bool hasFocus: false;
+
     width: Constants.GridWidth;
     height: Constants.GridHeight;
 
@@ -51,6 +53,20 @@ Item {
         anchors.margins: 0;
         color: base.highlight && mouse.pressed && base.enabled ? base.highlightColor : "transparent";
         visible: true
+
+        Rectangle {
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+                margins: fill.radius / 2;
+            }
+            height: fill.radius / 2;
+            radius: fill.radius / 4;
+            color: base.textColor;
+            visible: base.hasFocus;
+            opacity: 0.3
+        }
 
         Image {
             id: icon;
