@@ -354,8 +354,9 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 
 bool KisConfig::useOpenGL() const
 {
-    QString canvasState = m_cfg.readEntry("canvasState");
-    return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+    return true;
+//    QString canvasState = m_cfg.readEntry("canvasState", true);
+//    return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
 }
 
 void KisConfig::setUseOpenGL(bool useOpenGL) const

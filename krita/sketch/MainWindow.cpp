@@ -129,6 +129,8 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     d->view = new SketchDeclarativeView();
     d->view->setViewport(KisOpenGL::sharedContextWidget());
+    qDebug() << d->view->viewport()->objectName();
+
     d->view->setAttribute(Qt::WA_AcceptTouchEvents);
     d->view->setAttribute(Qt::WA_OpaquePaintEvent);
     d->view->setAttribute(Qt::WA_NoSystemBackground);
