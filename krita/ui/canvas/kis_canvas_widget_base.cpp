@@ -37,7 +37,6 @@
 #include "kis_canvas_decoration.h"
 #include "../kis_config.h"
 #include "kis_canvas2.h"
-#include "kis_update_info.h"
 #include "../kis_view2.h"
 #include "../kis_selection_manager.h"
 
@@ -233,61 +232,4 @@ QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query
 void KisCanvasWidgetBase::processInputMethodEvent(QInputMethodEvent *event)
 {
     m_d->toolProxy->inputMethodEvent(event);
-}
-
-void KisCanvasWidgetBase::imageSizeChanged(int w, int h)
-{
-    Q_UNUSED(w)
-    Q_UNUSED(h)
-}
-
-void KisCanvasWidgetBase::notifyZoomChanged()
-{
-}
-
-void KisCanvasWidgetBase::preScale()
-{
-}
-
-void KisCanvasWidgetBase::recalculateCache(KisUpdateInfoSP info)
-{
-    Q_UNUSED(info)
-}
-
-void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilter* filter)
-{
-    Q_UNUSED(filter)
-}
-
-void KisCanvasWidgetBase::setImage(KisImageWSP image)
-{
-    Q_UNUSED(image)
-}
-
-void KisCanvasWidgetBase::setMonitorProfile(KoColorProfile* profile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags flags)
-{
-    Q_UNUSED(profile)
-    Q_UNUSED(intent)
-    Q_UNUSED(flags)
-}
-
-QSize KisCanvasWidgetBase::size()
-{
-    return widget()->size();
-}
-
-void KisCanvasWidgetBase::update(const QRect& area)
-{
-    widget()->update(area);
-}
-
-KisUpdateInfoSP KisCanvasWidgetBase::updateCache(const QRect& rect)
-{
-    Q_UNUSED(rect)
-    return KisUpdateInfoSP(new KisUpdateInfo());
-}
-
-void KisCanvasWidgetBase::viewportMoved(const QPointF& offset)
-{
-    Q_UNUSED(offset);
 }

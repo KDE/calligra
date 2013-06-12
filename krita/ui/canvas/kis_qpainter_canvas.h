@@ -21,8 +21,6 @@
 
 #include <QWidget>
 
-#include "krita_export.h"
-
 #include "kis_canvas_widget_base.h"
 #include "kis_prescaled_projection.h"
 
@@ -44,7 +42,7 @@ class KoToolProxy;
  *
  * @author Boudewijn Rempt <boud@valdyas.org>
 */
-class KRITAUI_EXPORT KisQPainterCanvas : public QWidget, public KisCanvasWidgetBase
+class KisQPainterCanvas : public QWidget, public KisCanvasWidgetBase
 {
 
     Q_OBJECT
@@ -55,7 +53,7 @@ public:
 
     virtual ~KisQPainterCanvas();
 
-//     void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
+    void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
 
     void setSmoothingEnabled(bool smooth);
 
@@ -73,19 +71,7 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    virtual void setImage(KisImageWSP image);
-    virtual void setDisplayFilter(KisDisplayFilter* filter);
-    virtual void setMonitorProfile(KoColorProfile* profile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags flags);
-
-    virtual void imageSizeChanged(int w, int h);
-    virtual void preScale();
-    virtual void viewportMoved(const QPointF& offset);
-    virtual void notifyZoomChanged();
-
-    virtual KisUpdateInfoSP updateCache(const QRect& rect);
-    virtual void recalculateCache(KisUpdateInfoSP info);
-
-    virtual QSize size();
+public: // KisAbstractCanvasWidget
 
     QWidget * widget() {
         return this;
@@ -94,10 +80,6 @@ public: // QWidget
 protected: // KisCanvasWidgetBase
 
     virtual bool callFocusNextPrevChild(bool next);
-
-signals:
-    void needAdjustOrigin();
-    void updated();
 
 private slots:
     void slotConfigChanged();

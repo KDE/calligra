@@ -21,14 +21,9 @@
 
 #include <QList>
 #include <Qt>
-#include <QRect>
 
-#include <kis_types.h>
-#include <kis_ui_types.h>
-#include <krita_export.h>
-#include <KoColorConversionTransformation.h>
+#include <kis_abstract_canvas_widget.h>
 
-class KisDisplayFilter;
 class QColor;
 class QImage;
 class QSize;
@@ -40,31 +35,19 @@ class QTabletEvent;
 class QWheelEvent;
 class QInputMethodEvent;
 class QVariant;
-class QWidget;
-class QRect;
-class QPoint;
-class QPainter;
 
-class KoToolProxy;
 class KoViewConverter;
-class KoColorProfile;
 class KisCoordinatesConverter;
 class KisDisplayFilter;
 
-class KisCanvas2;
-class KisCanvasDecoration;
-
-
-class KRITAUI_EXPORT KisCanvasWidgetBase
+class KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {
 public:
     KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter);
 
     virtual ~KisCanvasWidgetBase();
 
-public:
-
-    virtual QWidget * widget() = 0;
+public: // KisAbstractCanvasWidget
 
     virtual KoToolProxy * toolProxy();
 
@@ -82,23 +65,6 @@ public:
 
     virtual void setDecorations(const QList<KisCanvasDecoration*> &);
     virtual QList<KisCanvasDecoration*> decorations();
-
-    virtual void setImage(KisImageWSP image);
-    virtual void setMonitorProfile(KoColorProfile *profile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags flags);
-    virtual void setDisplayFilter(KisDisplayFilter *filter);
-
-    virtual void imageSizeChanged(int w, int h);
-
-    virtual KisUpdateInfoSP updateCache(const QRect &rect);
-    virtual void recalculateCache(KisUpdateInfoSP info);
-
-    virtual void update(const QRect &area = QRect());
-
-    virtual void notifyZoomChanged();
-    virtual void preScale();
-    virtual void viewportMoved(const QPointF &offset);
-
-    virtual QSize size();
 
     /**
      * Returns the color of the border, i.e. the part of the canvas

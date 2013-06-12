@@ -34,8 +34,6 @@
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
 
-class KisAbstractCanvasWidgetFactory;
-class KisInputManager;
 class KoToolProxy;
 class KoColorProfile;
 
@@ -52,7 +50,6 @@ enum KisCanvasType {
 
 class KisCoordinatesConverter;
 class KoViewConverter;
-class KisCanvasWidgetBase;
 
 /**
  * KisCanvas2 is not an actual widget class, but rather an adapter for
@@ -77,7 +74,7 @@ public:
 
     virtual ~KisCanvas2();
 
-    void setCanvasWidget(KisCanvasWidgetBase * widget);
+    void setCanvasWidget(QWidget * widget);
 
     void notifyZoomChanged();
 
@@ -123,12 +120,6 @@ public: // KoCanvasBase implementation
 
     virtual const QWidget* canvasWidget() const;
 
-    void setCanvasItem(QGraphicsObject *canvasItem);
-
-    virtual QGraphicsObject *canvasItem();
-
-    virtual const QGraphicsObject *canvasItem() const;
-
     virtual KoUnit unit() const;
 
     virtual KoToolProxy* toolProxy() const;
@@ -156,10 +147,6 @@ public: // KisCanvas2 methods
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 
-    KisInputManager *inputManager() const;
-
-    static void setCanvasWidgetFactory(KisAbstractCanvasWidgetFactory *factory);
-
 signals:
     void imageChanged(KisImageWSP image);
 
@@ -168,12 +155,10 @@ signals:
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
     void sigContinueResizeImage(qint32 w, qint32 h);
 
-    void updateCanvasRequested(const QRect& area);
     void documentOffsetUpdateFinished();
 
 public slots:
 
-public slots:
     /// Update the entire canvas area
     void updateCanvas();
 
@@ -237,8 +222,8 @@ private:
 
     void pan(QPoint shift);
     void createCanvas(bool useOpenGL);
-//     void createQPainterCanvas();
-//     void createOpenGLCanvas();
+    void createQPainterCanvas();
+    void createOpenGLCanvas();
 
 private:
 
