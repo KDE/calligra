@@ -436,7 +436,6 @@ void KisSketchView::Private::imageUpdated(const QRect &updated)
 
 void KisSketchView::Private::documentOffsetMoved()
 {
-    qDebug() << "documentOffsetMoved";
     viewportMoved = true;
 
     if (q->scene()) {
