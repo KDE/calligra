@@ -179,7 +179,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 void KisOpenGLCanvas2::paintGL()//Event(QPaintEvent *event)
 {
     makeCurrent();
-    paintGLPart();
+    renderCanvas();
     QPainter gc(this);
     renderDecorations(&gc);
     gc.end();
@@ -399,15 +399,6 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
-void KisOpenGLCanvas2::renderToFBO(QGLFramebufferObject *fbo)
-{
-    fbo->bind();
-    initializeCheckerShader();
-    initializeDisplayShader();
-    paintGLPart();
-    fbo->release();
-}
-
 void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
 {
     QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
@@ -419,7 +410,7 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
     return focusNextPrevChild(next);
 }
 
-void KisOpenGLCanvas2::paintGLPart()
+void KisOpenGLCanvas2::renderCanvas()
 {
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();

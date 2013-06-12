@@ -20,7 +20,6 @@
 
 #include <QDeclarativeView>
 
-class QGLFramebufferObject;
 class KisOpenGLCanvas2;
 
 /**
@@ -47,14 +46,13 @@ signals:
     void drawCanvasChanged();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
 
     void drawBackground(QPainter *painter, const QRectF &rect);
 private:
 
     bool m_drawCanvas;
     KisOpenGLCanvas2 *m_canvasWidget;
-    QGLFramebufferObject *m_fbo;
+    bool m_GLInitialized;
 
 };
 

@@ -28,8 +28,7 @@
 SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     : QDeclarativeView(parent)
     , m_canvasWidget(0)
-    , m_fbo(0)
-
+    , m_GLInitialized(false)
 {
     setCacheMode(QGraphicsView::CacheNone);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -38,7 +37,7 @@ SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
 SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
     : QDeclarativeView(url, parent)
     , m_canvasWidget(0)
-    , m_fbo(0)
+    , m_GLInitialized(false)
 {
     setCacheMode(QGraphicsView::CacheNone);
 }
@@ -77,25 +76,16 @@ void SketchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect
     }
 
     if (m_drawCanvas && m_canvasWidget) {
-        m_canvasWidget->renderToFBO(m_fbo);
-
-        QGLWidget *w  = qobject_cast<QGLWidget*>(viewport());
-        if (w) {
-            w->drawTexture(QPointF(), m_fbo->texture());
+        if (!m_GLInitialized) {
+            m_canvasWidget->initializeCheckerShader();
+            m_canvasWidget->initializeDisplayShader();
+            m_GLInitialized = true;
         }
+        m_canvasWidget->renderCanvas();
         m_canvasWidget->renderDecorations(painter);
     }
     else {
         QDeclarativeView::drawBackground(painter, rect);
     }
 
-}
-
-
-void SketchDeclarativeView::resizeEvent(QResizeEvent *event)
-{
-    delete m_fbo;
-    m_fbo = new QGLFramebufferObject(event->size());
-
-    QDeclarativeView::resizeEvent(event);
 }

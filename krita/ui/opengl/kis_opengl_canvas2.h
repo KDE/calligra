@@ -66,9 +66,14 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    void renderToFBO(QGLFramebufferObject *fbo);
+    /// renders the opengl part of the canvas
+    void renderCanvas();
 
+    /// renders the qpainter part of the canvas
     void renderDecorations(QPainter *painter);
+
+    void initializeCheckerShader();
+    void initializeDisplayShader();
 
 private slots:
     void slotConfigChanged();
@@ -91,7 +96,6 @@ protected: // KisCanvasWidgetBase
 
 private:
 
-    void paintGLPart();
 
 
     struct Private;
@@ -100,8 +104,6 @@ private:
     void drawImage();
     void drawCheckers();
 
-    void initializeCheckerShader();
-    void initializeDisplayShader();
 };
 
 #endif // HAVE_OPENGL
