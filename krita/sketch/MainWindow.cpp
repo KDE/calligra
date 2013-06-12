@@ -20,6 +20,8 @@
 
 #include "MainWindow.h"
 
+#include "opengl/kis_opengl.h"
+
 #include <QApplication>
 #include <QResizeEvent>
 #include <QDeclarativeView>
@@ -29,6 +31,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QFileInfo>
+#include <QGLWidget>
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
@@ -95,6 +98,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     KisConfig cfg;
     cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+    cfg.setUseOpenGL(true);
 
     d->constants = new Constants( this );
     d->settings = new Settings( this );
@@ -124,6 +128,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
     d->view = new SketchDeclarativeView();
+    d->view->setViewport(KisOpenGL::sharedContextWidget());
     d->view->setAttribute(Qt::WA_AcceptTouchEvents);
     d->view->setAttribute(Qt::WA_OpaquePaintEvent);
     d->view->setAttribute(Qt::WA_NoSystemBackground);
@@ -170,7 +175,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     //         }
     //     }
 
-    setCentralWidget( d->view );
+    setCentralWidget(d->view);
 }
 
 bool MainWindow::allowClose() const

@@ -41,7 +41,13 @@ void SketchDeclarativeView::setDrawCanvas(bool drawCanvas)
 
 void SketchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect)
 {
+    painter->save();
+    painter->fillRect(rect, Qt::red);
+    painter->restore();
+
+
     if (m_drawCanvas && m_canvasWidget) {
+        m_canvasWidget->resize(rect.size().toSize());
         m_canvasWidget->render(painter);
     }
     QDeclarativeView::drawBackground(painter, rect);

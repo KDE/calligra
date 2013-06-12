@@ -79,6 +79,8 @@ int main( int argc, char** argv )
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
+    app.setGraphicsSystem("opengl");
+
 #ifdef Q_OS_WIN
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
@@ -110,9 +112,6 @@ int main( int argc, char** argv )
 #endif
 
     QApplication::setAttribute(Qt::AA_X11InitThreads);
-
-
-//    QApplication::setStyle("plastique");
 
     QStringList fonts = KGlobal::dirs()->findAllResources( "appdata", "fonts/*.otf" );
     foreach( const QString &font, fonts ) {

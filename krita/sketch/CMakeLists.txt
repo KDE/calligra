@@ -96,6 +96,8 @@ endif (WIN32)
 kde4_add_executable(kritasketch ${kritasketch_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 
+
+
 target_link_libraries(kritasketch
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
@@ -103,6 +105,7 @@ target_link_libraries(kritasketch
     kritaui
     kowidgets
     ${KDE4_KFILE_LIBRARY}
+    ${GLEW_LIBRARIES}
 )
 
 install(TARGETS kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})

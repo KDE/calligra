@@ -135,8 +135,6 @@ public:
     QAction* undoAction;
     QAction* redoAction;
 
-    KisPrescaledProjectionSP prescaledProjection;
-
     QColor backgroundColor;
     QBrush checkers;
 
@@ -337,6 +335,7 @@ void KisSketchView::documentChanged()
     KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
     d->canvasWidget = d->canvas->canvasWidget();
+
     connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(imageUpdated(QRect)));
     connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
     connect(d->view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(zoomChanged()));
@@ -419,16 +418,13 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
     if (d->canvasWidget && !newGeometry.isEmpty()) {
         d->view->canvasControllerWidget()->setGeometry(newGeometry.toRect());
         const_cast<KisCoordinatesConverter*>(d->canvas->coordinatesConverter())->setCanvasWidgetSize(newGeometry.size().toSize());
-        d->prescaledProjection->notifyCanvasSizeChanged(newGeometry.size().toSize());
         d->timer->start(100);
     }
 }
 
 void KisSketchView::Private::imageUpdated(const QRect &updated)
 {
-    if(prescaledProjection && !viewportMoved && !zoomLevelChanged) {
-        prescaledProjection->recalculateCache(prescaledProjection->updateCache(updated));
-
+    if(!viewportMoved && !zoomLevelChanged) {
         if(q->scene())
             q->scene()->invalidate( 0, 0, q->width(), q->height() );
     }
@@ -436,12 +432,11 @@ void KisSketchView::Private::imageUpdated(const QRect &updated)
 
 void KisSketchView::Private::documentOffsetMoved()
 {
-    if(prescaledProjection) {
-        viewportMoved = true;
+    viewportMoved = true;
 
-        if(q->scene())
-            q->scene()->invalidate( 0, 0, q->width(), q->height() );
-    }
+    if(q->scene())
+        q->scene()->invalidate( 0, 0, q->width(), q->height() );
+
 }
 
 void KisSketchView::Private::resetDocumentPosition()
