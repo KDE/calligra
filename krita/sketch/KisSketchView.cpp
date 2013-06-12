@@ -188,6 +188,14 @@ KisSketchView::~KisSketchView()
     if(d->doc) {
         DocumentManager::instance()->closeDocument();
     }
+    if (d->canvasWidget) {
+        SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+        if (v) {
+            v->setCanvasWidget(0);
+            v->setDrawCanvas(false);
+        }
+    }
+
     delete d;
 }
 
@@ -416,8 +424,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*oldGeometry*/)
 {
     if (d->canvasWidget && !newGeometry.isEmpty()) {
-        d->view->canvasControllerWidget()->setGeometry(newGeometry.toRect());
-        const_cast<KisCoordinatesConverter*>(d->canvas->coordinatesConverter())->setCanvasWidgetSize(newGeometry.size().toSize());
+        d->view->resize(newGeometry.toRect().size());
         d->timer->start(100);
     }
 }
