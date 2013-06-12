@@ -799,24 +799,22 @@ void KoResourceItemChooser::contextMenuRequested (const QPoint& pos)
     if (!resource || !d->showContextMenu)
         return;
 
-    KoResourceItemChooserContextMenu * menu = new KoResourceItemChooserContextMenu(this);
+    KoResourceItemChooserContextMenu menu(
+        resource,
+        d->model->assignedTagsList(resource),
+        d->currentTag,
+        availableTags());
 
-    menu->activeTag(d->currentTag);
-    menu->allTags(availableTags());
-    menu->resource(resource);
-    menu->resourceTags(d->model->assignedTagsList(resource));
-
-    connect(menu, SIGNAL(addTagToResource(KoResource*,QString)),
+    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResource*,QString)),
             this, SLOT(contextAddTagToResource(KoResource*,QString)));
 
-    connect(menu, SIGNAL(removeTagFromResource(KoResource*,QString)),
+    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResource*,QString)),
             this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
 
-    connect(menu, SIGNAL(createNewResourceTag(KoResource*,QString)),
+    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)),
             this, SLOT(contextCreateNewResourceTag(KoResource*,QString)));
 
-    menu->exec(pos);
-    delete menu;
+    menu.exec(pos);
 }
 
 void KoResourceItemChooser::contextAddTagToResource(KoResource* resource, const QString& tag)
@@ -856,11 +854,8 @@ void KoResourceItemChooser::syncTagBoxEntryRemoval(const QString& tag)
 
 void KoResourceItemChooser::syncTagBoxEntryAddition(const QString& tag)
 {
-    QStringList tags;
+    QStringList tags = availableTags();
     tags.append(tag);
-    for (int i = 1; i < d->tagOpComboBox->count(); ++i) {
-        tags.append(d->tagOpComboBox->itemText(i));
-    }
     tags.sort();
     tags.prepend(d->unfilteredView);
     int index = tags.indexOf(tag);
@@ -878,7 +873,9 @@ QStringList KoResourceItemChooser::availableTags() const
 {
     int count = d->tagOpComboBox->count();
     QStringList out;
-    for (int i=1; i < count; ++i) {
+//      Skip the first item of the combo box since it is the `All Presets' view
+//      and thus is not a real tag.
+    for (int i = 1; i < count; ++i) {
         out.append(d->tagOpComboBox->itemText(i));
     }
 

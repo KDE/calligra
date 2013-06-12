@@ -67,27 +67,23 @@ class KoResourceItemChooserContextMenu :  public QMenu
 {
     Q_OBJECT
 public:
-    explicit KoResourceItemChooserContextMenu(QWidget* parent = 0);
+    explicit KoResourceItemChooserContextMenu
+    (
+        KoResource* resource,
+        const QStringList& resourceTags,
+        const QString& currentlySelectedTag,
+        const QStringList& allTags
+    );
     virtual ~KoResourceItemChooserContextMenu();
-    void resource(KoResource* resource);
-    void activeTag(const QString& tag);
-    void resourceTags(const QStringList& resourceTags);
-    void allTags(const QStringList& allTags);
-    virtual QAction * exec(const QPoint& p, QAction* action = 0);
 
 signals:
-    void addTagToResource(KoResource* resource, const QString& tag);
-    void removeTagFromResource(KoResource* resource, const QString& tag);
-    void createNewResourceTag(KoResource* resource , const QString& tag);
+    /// Emitted when a resource should be added to an existing tag.
+    void resourceTagAdditionRequested(KoResource* resource, const QString& tag);
+    /// Emitted when a resource should be removed from an existing tag.
+    void resourceTagRemovalRequested(KoResource* resource, const QString& tag);
+    /// Emitted when a resource should be added to a new tag, which will need to be created.
+    void resourceAssignmentToNewTagRequested(KoResource* resource , const QString& tag);
 
-protected slots:
-    void onAddTagToResource(KoResource* resource, const QString& tag);
-    void onRemoveTagFromResource(KoResource* resource, const QString& tag);
-    void onCreateNewResourceTag(KoResource* resource , const QString& tag);
-
-private:
-    class Private;
-    Private * const d;
 };
 
 #endif // KORESOURCEITEMCHOOSERCONTEXTMENU_H
