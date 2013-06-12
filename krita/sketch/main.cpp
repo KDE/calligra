@@ -79,8 +79,6 @@ int main( int argc, char** argv )
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
-    //app.setGraphicsSystem("opengl");
-
 #ifdef Q_OS_WIN
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
