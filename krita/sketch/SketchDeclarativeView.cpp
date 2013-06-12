@@ -1,19 +1,19 @@
 #include "SketchDeclarativeView.h"
 #include <QWidget>
-
+#include <QDebug>
 
 SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     : QDeclarativeView(parent)
     , m_canvasWidget(0)
 {
-
+    setCacheMode(QGraphicsView::CacheNone);
 }
 
 SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
     : QDeclarativeView(url, parent)
     , m_canvasWidget(0)
 {
-
+    setCacheMode(QGraphicsView::CacheNone);
 }
 
 SketchDeclarativeView::~SketchDeclarativeView()

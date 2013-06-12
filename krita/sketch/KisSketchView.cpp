@@ -358,9 +358,6 @@ void KisSketchView::documentChanged()
 
     d->imageUpdated(d->canvas->image()->bounds());
 
-    //    emit progress(100);
-    //    emit completed();
-
     static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
     d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
     d->view->canvasControllerWidget()->setScrollBarValue(QPoint(0, 0));
@@ -431,19 +428,21 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
 
 void KisSketchView::Private::imageUpdated(const QRect &updated)
 {
-    if(!viewportMoved && !zoomLevelChanged) {
-        if(q->scene())
-            q->scene()->invalidate( 0, 0, q->width(), q->height() );
+    if (q->scene()) {
+        q->scene()->views().at(0)->update(updated);
+        q->scene()->invalidate( 0, 0, q->width(), q->height() );
     }
 }
 
 void KisSketchView::Private::documentOffsetMoved()
 {
+    qDebug() << "documentOffsetMoved";
     viewportMoved = true;
 
-    if(q->scene())
+    if (q->scene()) {
+        q->scene()->views().at(0)->update();
         q->scene()->invalidate( 0, 0, q->width(), q->height() );
-
+    }
 }
 
 void KisSketchView::Private::resetDocumentPosition()
@@ -489,6 +488,11 @@ void KisSketchView::Private::removeNodeAsync(KisNodeSP removedNode)
 void KisSketchView::Private::zoomChanged()
 {
     zoomLevelChanged = true;
+
+    if (q->scene()) {
+        q->scene()->views().at(0)->update();
+        q->scene()->invalidate( 0, 0, q->width(), q->height() );
+    }
 }
 
 #include "KisSketchView.moc"

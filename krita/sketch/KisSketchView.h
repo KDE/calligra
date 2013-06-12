@@ -90,7 +90,6 @@ private:
     Private * const d;
 
     Q_PRIVATE_SLOT(d, void imageUpdated(const QRect &updated))
-    Q_PRIVATE_SLOT(d, void documentOffsetMoved())
     Q_PRIVATE_SLOT(d, void zoomChanged())
     Q_PRIVATE_SLOT(d, void resetDocumentPosition())
     Q_PRIVATE_SLOT(d, void removeNodeAsync(KisNodeSP removedNode))
