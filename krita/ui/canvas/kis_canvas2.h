@@ -161,6 +161,9 @@ signals:
 
     void documentOffsetUpdateFinished();
 
+    // emitted whenever the canvas widget thinks sketch should update
+    void updateCanvasRequested(const QRect &rc);
+
 public slots:
 
     /// Update the entire canvas area
