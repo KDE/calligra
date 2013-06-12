@@ -78,7 +78,7 @@ Item {
         }
         border {
             width: 3;
-            color: "black";
+            color: "silver";
         }
         color: "transparent";
         opacity: 0;
@@ -98,7 +98,7 @@ Item {
         }
         border {
             width: 3;
-            color: "black";
+            color: "silver";
         }
         color: "transparent";
         opacity: 0.5;
