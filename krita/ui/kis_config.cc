@@ -363,34 +363,35 @@ void KisConfig::setUseOpenGL(bool useOpenGL) const
     m_cfg.writeEntry("useOpenGL", useOpenGL);
 }
 
-bool KisConfig::useOpenGLShaders() const
-{
-    return m_cfg.readEntry("useOpenGLShaders", false);
-}
-
-void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders) const
-{
-    m_cfg.writeEntry("useOpenGLShaders", useOpenGLShaders);
-}
-
 bool KisConfig::useOpenGLToolOutlineWorkaround() const
 {
-    return m_cfg.readEntry("useOpenGLToolOutlineWorkaround", false);
+    return m_cfg.readEntry("useOpenGLToolOutlineWorkaround", true);
 }
 
-void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround) const
+void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
 {
     m_cfg.writeEntry("useOpenGLToolOutlineWorkaround", useWorkaround);
 }
 
-bool KisConfig::useOpenGLTrilinearFiltering() const
+int KisConfig::openGLFilteringMode() const
 {
-    return m_cfg.readEntry("useOpenGLTrilinearFiltering", true);
+    return m_cfg.readEntry("OpenGLFilterMode", 1);
 }
 
-void KisConfig::setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering) const
+void KisConfig::setOpenGLFilteringMode(int filteringMode)
 {
-    m_cfg.writeEntry("useOpenGLTrilinearFiltering", useTrilinearFiltering);
+    m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
+}
+
+
+bool KisConfig::useOpenGLDoubleBuffering() const
+{
+    return m_cfg.readEntry("useOpenGLDoubleBuffering", false);
+}
+
+void KisConfig::setOpenGLDoubleBuffering(bool doubleBuffering)
+{
+    m_cfg.writeEntry("useOpenGLDoubleBuffering", doubleBuffering);
 }
 
 qint32 KisConfig::maxNumberOfThreads() const
@@ -734,17 +735,6 @@ int KisConfig::presetChooserViewMode() const
 void KisConfig::setPresetChooserViewMode(const int mode) const
 {
     m_cfg.writeEntry("presetChooserViewMode", mode);
-}
-
-
-bool KisConfig::presetShowAllMode() const
-{
-    return m_cfg.readEntry("presetChooserShowAllPresets", true);
-}
-
-void KisConfig::setPresetShowAllMode(bool showAll) const
-{
-    m_cfg.writeEntry("presetChooserShowAllPresets", showAll);
 }
 
 bool KisConfig::firstRun() const

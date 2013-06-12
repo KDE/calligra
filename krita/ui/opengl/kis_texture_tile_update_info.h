@@ -18,6 +18,8 @@
 #ifndef KIS_TEXTURE_TILE_UPDATE_INFO_H_
 #define KIS_TEXTURE_TILE_UPDATE_INFO_H_
 
+#include "opengl/kis_opengl.h"
+
 #ifdef HAVE_OPENGL
 
 #include <KoColorSpace.h>
@@ -34,17 +36,19 @@ typedef QVector<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoList;
 class KisTextureTileUpdateInfo
 {
 public:
-    KisTextureTileUpdateInfo() {
-        m_patchPixels = 0;
+    KisTextureTileUpdateInfo()
+        : m_patchPixels(0)
+    {
     }
 
-    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect) {
+    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect)
+        : m_patchPixels(0)
+    {
         m_tileCol = col;
         m_tileRow = row;
         m_tileRect = tileRect;
         m_patchRect = m_tileRect & updateRect;
         m_currentImageRect = currentImageRect;
-        m_patchPixels = 0;
     }
 
     ~KisTextureTileUpdateInfo() {
@@ -54,7 +58,8 @@ public:
         delete[] m_patchPixels;
     }
 
-    void retrieveData(KisImageWSP image) {
+    void retrieveData(KisImageWSP image)
+    {
         m_patchColorSpace = image->projection()->colorSpace();
         m_patchPixels = m_patchColorSpace->allocPixelBuffer(m_patchRect.width() * m_patchRect.height());
         image->projection()->readBytes(m_patchPixels,
@@ -64,16 +69,18 @@ public:
 
     void convertTo(const KoColorSpace* dstCS,
                    KoColorConversionTransformation::Intent renderingIntent,
-                   KoColorConversionTransformation::ConversionFlags conversionFlags) {
+                   KoColorConversionTransformation::ConversionFlags conversionFlags)
+    {
+
         const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-        /**
-         * FIXME: is it possible to do an in-place conversion?
-         */
         quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
+
         // FIXME: rendering intent
         Q_ASSERT(dstBuffer && m_patchPixels);
         m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels, renderingIntent, conversionFlags);
+
         delete[] m_patchPixels;
+
         m_patchColorSpace = dstCS;
         m_patchPixels = dstBuffer;
     }

@@ -28,10 +28,13 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QDesktopServices>
+#include <QMessageBox>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
 #include <ksplashscreen.h>
+#include <ksycoca.h>
+#include <kstandarddirs.h>
 
 #include <KoApplication.h>
 
@@ -39,10 +42,27 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "image/brushengine/kis_paintop_registry.h"
+
+#include <Vc/global.h>
+#include <Vc/support.h>
 
 #ifdef Q_OS_WIN
 #include "stdlib.h"
 #endif
+
+static void fatalError(const QString &message) {
+    qCritical() << "Fatal Error:" << message;
+
+    if (QMessageBox::critical(0, "Configuration Issue",
+                QString("Configuration for Krita has issues.\n"
+                "(Details: %1)\n"
+                "Shall we continue anyways?").arg(message),
+                QMessageBox::Yes|QMessageBox::No)
+            == QMessageBox::No) {
+        qFatal("aborting due to configuration issues");
+    }
+}
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
@@ -57,6 +77,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KCmdLineOptions options;
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
+    options.add( "hwinfo", ki18n( "Show some information about the hardware" ));
     KCmdLineArgs::addCmdLineOptions(options);
 
     QCoreApplication::setAttribute(Qt::AA_X11InitThreads);
@@ -64,12 +85,15 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // first create the application so we can create a  pixmap
     KoApplication app;
 
+#ifdef Q_WS_X11
+    app.setAttribute(Qt::AA_X11InitThreads, true);
+#endif
+
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
     QSplashScreen *splash = new KSplashScreen(QPixmap(splash_screen_xpm));
     app.setSplashScreen(splash);
-
 
     if (!app.start()) {
         return 1;

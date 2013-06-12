@@ -387,9 +387,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
-    show();
-
-
+  
     loadPlugins();
 
     // Wait for the async image to have loaded
@@ -407,8 +405,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         collection->setConfigGroup("krita/shortcuts");
         collection->readSettings(&group);
     }
-
-
+	
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
@@ -970,7 +967,7 @@ void KisView2::loadPlugins()
     // Load all plugins
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
                                                               QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 27)"));
+                                                                                  "([X-Krita-Version] == 28)"));
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;

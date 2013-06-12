@@ -99,7 +99,7 @@ def doNormalize(contents):
     for line in contents:
         #print "input: ", line
 
-        # replace signal/slot signatures with the normalized equivalent
+        # Replace signal/slot signatures with the normalized equivalent.
         signalSlotMacros = topRegex.findall(line)
         for macro in signalSlotMacros:
             # Parameters to SIGNAL or SLOT
@@ -125,8 +125,11 @@ def doNormalize(contents):
                 if s[:5] == "const" and s[-1:] == "&":
                     # Remove const-&
                     outParamList.append(s[5:-1].replace(" ", ""))
+                elif s[:5] == "const" and s[-1:] == "*":
+                    # Do NOT remove const for pointers. Just remove spaces.
+                    outParamList.append("const " + s[6:].replace(" ", ""))
                 elif s[:5] == "const":
-                    # Remove const without &
+                    # Remove const without & or *
                     outParamList.append(s[5:].replace(" ", ""))
                 elif s[-1:] == "&":
                     # Keep & without const but remove spaces

@@ -213,7 +213,7 @@ void View::loadExtensions()
 {
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Braindump/Extensions"),
                             QString::fromLatin1("(Type == 'Service') && "
-                                    "([X-Braindump-Version] == 27)"));
+                                    "([X-Braindump-Version] == 28)"));
     KService::List::ConstIterator iter;
     for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 

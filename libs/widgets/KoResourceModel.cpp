@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,12 +30,18 @@ KoResourceModel::KoResourceModel( KoAbstractResourceServerAdapter * resourceAdap
 {
     Q_ASSERT( m_resourceAdapter );
     m_resourceAdapter->connectToResourceServer();
-    connect(m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)), 
+    connect(m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
             this, SLOT(resourceAdded(KoResource*)));
-    connect(m_resourceAdapter, SIGNAL(removingResource(KoResource*)), 
+    connect(m_resourceAdapter, SIGNAL(removingResource(KoResource*)),
             this, SLOT(resourceRemoved(KoResource*)));
-    connect(m_resourceAdapter, SIGNAL(resourceChanged(KoResource*)), 
+    connect(m_resourceAdapter, SIGNAL(resourceChanged(KoResource*)),
             this, SLOT(resourceChanged(KoResource*)));
+    connect(m_resourceAdapter, SIGNAL(tagsWereChanged()),
+            this, SLOT(tagBoxEntryWasModified()));
+    connect(m_resourceAdapter, SIGNAL(tagCategoryWasAdded(QString)),
+            this, SLOT(tagBoxEntryWasAdded(QString)));
+    connect(m_resourceAdapter, SIGNAL(tagCategoryWasRemoved(QString)),
+            this, SLOT(tagBoxEntryWasRemoved(QString)));
 }
 
 int KoResourceModel::rowCount( const QModelIndex &/*parent*/ ) const
@@ -63,8 +70,14 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
             KoResource * resource = static_cast<KoResource*>(index.internalPointer());
             if( ! resource )
                 return QVariant();
+            QString resName = i18n( resource->name().toUtf8().data());
 
-            return QVariant( i18n( resource->name().toUtf8().data() ) );
+            if (m_resourceAdapter->assignedTagsList(resource).count()) {
+                QString taglist = m_resourceAdapter->assignedTagsList(resource).join("] , [");
+                QString tagListToolTip = QString(" - %1: [%2]").arg(i18n("Tags"), taglist);
+                return QVariant( resName + tagListToolTip );
+            }
+            return QVariant( resName );
         }
         case Qt::DecorationRole:
         {
@@ -144,19 +157,35 @@ void KoResourceModel::resourceChanged(KoResource* resource)
     if (!modelIndex.isValid()) {
         return;
     }
-    
+
     emit dataChanged(modelIndex, modelIndex);
 }
 
-QModelIndex KoResourceModel::indexFromResource(KoResource* resource)
+void KoResourceModel::tagBoxEntryWasModified()
+{
+    m_resourceAdapter->updateServer();
+    emit tagBoxEntryModified();
+}
+
+void KoResourceModel::tagBoxEntryWasAdded(const QString& tag)
+{
+    emit tagBoxEntryAdded(tag);
+}
+
+void KoResourceModel::tagBoxEntryWasRemoved(const QString& tag)
+{
+    emit tagBoxEntryRemoved(tag);
+}
+
+QModelIndex KoResourceModel::indexFromResource(KoResource* resource) const
 {
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
     int row = resourceIndex / columnCount();
     int column = resourceIndex % columnCount();
-    return index(row, column);    
+    return index(row, column);
 }
 
-QString KoResourceModel::extensions()
+QString KoResourceModel::extensions() const
 {
     return m_resourceAdapter->extensions();
 }
@@ -181,9 +210,9 @@ void KoResourceModel::removeResourceFile(const QString &filename)
     m_resourceAdapter->removeResourceFile(filename);
 }
 
-QStringList KoResourceModel::getAssignedTagsList(KoResource *resource)
+QStringList KoResourceModel::assignedTagsList(KoResource *resource) const
 {
-    return m_resourceAdapter->getAssignedTagsList(resource);
+    return m_resourceAdapter->assignedTagsList(resource);
 }
 
 void KoResourceModel::addTag(KoResource* resource,const QString& tag)
@@ -196,9 +225,9 @@ void KoResourceModel::deleteTag(KoResource *resource, const QString &tag)
     m_resourceAdapter->deleteTag(resource, tag);
 }
 
-QStringList KoResourceModel::getTagNamesList()
+QStringList KoResourceModel::tagNamesList() const
 {
-    return m_resourceAdapter->getTagNamesList();
+    return m_resourceAdapter->tagNamesList();
 }
 
 QStringList KoResourceModel::searchTag(const QString& lineEditText)
@@ -206,14 +235,19 @@ QStringList KoResourceModel::searchTag(const QString& lineEditText)
     return m_resourceAdapter->searchTag(lineEditText);
 }
 
-void KoResourceModel::setTagSearch(bool tagSearch)
+void KoResourceModel::searchTextChanged(const QString& searchString)
 {
-    m_resourceAdapter->setTagSearch(tagSearch);
+    m_resourceAdapter->searchTextChanged(searchString);
 }
 
-void KoResourceModel::setTaggedResourceFileNames(const QStringList& resourceFileNames)
+void KoResourceModel::enableResourceFiltering(bool enable)
 {
-    m_resourceAdapter->setTaggedResourceFileNames(resourceFileNames);
+    m_resourceAdapter->enableResourceFiltering(enable);
+}
+
+void KoResourceModel::setCurrentTag(const QString& currentTag)
+{
+    m_resourceAdapter->setCurrentTag(currentTag);
 }
 
 void KoResourceModel::updateServer()
@@ -221,10 +255,30 @@ void KoResourceModel::updateServer()
     m_resourceAdapter->updateServer();
 }
 
-
 int KoResourceModel::resourcesCount() const
 {
     return m_resourceAdapter->resources().count();
 }
+
+QList<KoResource *> KoResourceModel::currentlyVisibleResources() const
+{
+  return m_resourceAdapter->resources();
+}
+
+void KoResourceModel::tagCategoryMembersChanged()
+{
+    m_resourceAdapter->tagCategoryMembersChanged();
+}
+
+void KoResourceModel::tagCategoryAdded(const QString& tag)
+{
+    m_resourceAdapter->tagCategoryAdded(tag);
+}
+
+void KoResourceModel::tagCategoryRemoved(const QString& tag)
+{
+    m_resourceAdapter->tagCategoryRemoved(tag);
+}
+
 
 #include <KoResourceModel.moc>

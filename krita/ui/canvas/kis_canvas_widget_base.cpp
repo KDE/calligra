@@ -141,7 +141,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     // ask the decorations to paint themselves
     foreach(KisCanvasDecoration* deco, m_d->decorations) {
-        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter);
+        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
 
     gc.restore();
@@ -172,7 +172,7 @@ QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations()
     return m_d->decorations;
 }
 
-QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
+QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 {
     KisConfig cfg;
 
@@ -215,6 +215,10 @@ KisCoordinatesConverter* KisCanvasWidgetBase::coordinatesConverter()
 KoToolProxy *KisCanvasWidgetBase::toolProxy()
 {
     return m_d->toolProxy;
+}
+
+void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilter */*displayFilter*/)
+{
 }
 
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const

@@ -110,7 +110,6 @@ public:
     bool allowLCMSOptimization() const;
     void setAllowLCMSOptimization(bool allowLCMSOptimization);
 
-
     bool showRulers() const;
     void setShowRulers(bool rulers) const;
 
@@ -123,14 +122,14 @@ public:
     bool useOpenGL() const;
     void setUseOpenGL(bool useOpenGL) const;
 
-    bool useOpenGLShaders() const;
-    void setUseOpenGLShaders(bool useOpenGLShaders) const;
-
     bool useOpenGLToolOutlineWorkaround() const;
     void setUseOpenGLToolOutlineWorkaround(bool useWorkaround) const;
 
-    bool useOpenGLTrilinearFiltering() const;
-    void setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering) const;
+    int openGLFilteringMode() const;
+    void setOpenGLFilteringMode(int filteringMode);
+
+    bool useOpenGLDoubleBuffering() const;
+    void setOpenGLDoubleBuffering(bool doubleBuffering);
 
     qint32 maxNumberOfThreads() const;
     void setMaxNumberOfThreads(qint32 numberOfThreads) const;
@@ -229,9 +228,6 @@ public:
 
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode) const;
-
-    bool presetShowAllMode() const;
-    void setPresetShowAllMode(bool showAll) const;
 
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;

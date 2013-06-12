@@ -1,6 +1,6 @@
-if (NOT WIN32)
+if (NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
-endif (NOT WIN32)
+endif (NOT WIN32 AND NOT APPLE)
 
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
@@ -27,12 +27,6 @@ kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
 kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
 
 target_link_libraries(kritadefaulttools kritaui basicflakes)
-if (HAVE_OPENGL)
-  target_link_libraries(kritadefaulttools ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} )
-endif (HAVE_OPENGL)
-if (HAVE_GLEW)
-  target_link_libraries(kritadefaulttools ${GLEW_LIBRARIES} )
-endif (HAVE_GLEW)
 
 install(TARGETS kritadefaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
 

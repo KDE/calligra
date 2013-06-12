@@ -143,7 +143,7 @@ public:
     PrintingOptions options() const;
 
 signals:
-    void changed(PrintingOptions);
+    void changed(const PrintingOptions&);
 
 protected slots:
     void slotChanged();
@@ -202,13 +202,13 @@ public:
     /// Returns the list of action lists that shall be plugged/unplugged
     virtual QStringList actionListNames() const { return m_actionListMap.keys(); }
     /// Returns the list of actions associated with the action list name
-    virtual QList<QAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
+    virtual QList<QAction*> actionList( const QString &name ) const { return m_actionListMap[name]; }
     /// Add an action to the specified action list
-    void addAction( const QString list, QAction *action ) { m_actionListMap[list].append( action ); }
+    void addAction( const QString &list, QAction *action ) { m_actionListMap[list].append( action ); }
 
     virtual QList<QAction*> viewlistActionList() const { return m_viewlistActionList; }
     void addViewlistAction( QAction *action ) { m_viewlistActionList.append( action ); }
-    
+
     QList<QAction*> contextActionList() const { return m_contextActionList; }
     void addContextAction( QAction *action ) { m_contextActionList.append( action ); }
 
@@ -286,7 +286,7 @@ public:
     PrintingOptions printingOptions() const { return m_printingOptions; }
     static QWidget *createPageLayoutWidget( ViewBase *view );
     static PrintingHeaderFooter *createHeaderFooterWidget( ViewBase *view );
-    void addAction( const QString list, QAction *action ) { ViewActionLists::addAction( list, action );  }
+    void addAction( const QString &list, QAction *action ) { ViewActionLists::addAction( list, action );  }
 
     virtual void createDockers() {}
     void addDocker( DockWidget *ds );
@@ -416,19 +416,19 @@ public:
       be expanded to ensure that the model item is visible.
     */
     void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible);
-    
-    void setDefaultColumns( const QList<int> lst ) { m_defaultColumns = lst; }
+
+    void setDefaultColumns( const QList<int> &lst ) { m_defaultColumns = lst; }
     QList<int> defaultColumns() const { return m_defaultColumns; }
-    
+
     KoPrintJob *createPrintJob( ViewBase *parent );
-    
+
     QModelIndex firstVisibleIndex( const QModelIndex &idx ) const;
 
     ItemModelBase *itemModel() const;
 
 signals:
     /// Context menu requested from viewport at global position @p pos
-    void contextMenuRequested( QModelIndex, const QPoint &pos );
+    void contextMenuRequested( const QModelIndex&, const QPoint &pos );
     /// Context menu requested from header at global position @p pos
     void headerContextMenuRequested( const QPoint &pos );
 
@@ -601,7 +601,7 @@ public:
     }
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
-    void contextMenuRequested( QModelIndex index, const QPoint& pos );
+    void contextMenuRequested( const QModelIndex &index, const QPoint& pos );
     /// Context menu requested from master- or slave header at global position @p pos
     void headerContextMenuRequested( const QPoint &pos );
     /// Context menu requested from master header at global position @p pos
@@ -610,7 +610,7 @@ signals:
     void slaveHeaderContextMenuRequested( const QPoint &pos );
 
     void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
-    void selectionChanged( const QModelIndexList );
+    void selectionChanged( const QModelIndexList& );
 
     void dropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 
@@ -633,7 +633,7 @@ protected slots:
 
 protected:
     void init();
-    QList<int> expandColumnList( const QList<int> lst ) const;
+    QList<int> expandColumnList( const QList<int> &lst ) const;
 
 protected:
     TreeViewBase *m_leftview;

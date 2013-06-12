@@ -27,14 +27,14 @@
 
 #include <kis_transaction.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_registry.h>
-#include <filter/kis_filter.h>
 #include <commands/kis_node_commands.h>
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
 #include "kis_doc2.h"
 #include "kis_view2.h"
 #include <kis_layer.h>
+#include <kis_clone_layer.h>
+#include <kis_group_layer.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
@@ -64,13 +64,7 @@ KisMaskManager::KisMaskManager(KisView2 * view)
 
 void KisMaskManager::setup(KActionCollection * actionCollection)
 {
-    m_maskToSelection  = new KAction(i18n("Mask To Selection"), this);
-    actionCollection->addAction("create_selection_from_mask", m_maskToSelection);
-    connect(m_maskToSelection, SIGNAL(triggered()), this, SLOT(maskToSelection()));
-
-    m_maskToLayer = new KAction(i18n("Create Layer from Mask"), this);
-    actionCollection->addAction("create_layer_from_mask", m_maskToLayer);
-    connect(m_maskToLayer, SIGNAL(triggered()), this, SLOT(maskToLayer()));
+    Q_UNUSED(actionCollection);
 }
 
 void KisMaskManager::updateGUI()
@@ -91,7 +85,7 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
 
     KisSelectionSP selection;
     return m_activeMask && (selection = m_activeMask->selection()) ?
-           selection->getOrCreatePixelSelection() : 0;
+           selection->pixelSelection() : 0;
 }
 
 void KisMaskManager::activateMask(KisMaskSP mask)
@@ -104,159 +98,120 @@ void KisMaskManager::masksUpdated()
     m_view->updateGUI();
 }
 
-void KisMaskManager::createTransparencyMask()
+void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bool avoidActiveNode, KisNodeSP &parent, KisNodeSP &above)
 {
-    KisLayerSP layer = m_view->activeLayer();
+    Q_ASSERT(node);
+    Q_ASSERT(activeNode);
 
-    if (layer) {
-        KisNodeSP above = m_activeMask ?
-                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
-        createTransparencyMask(layer, above);
+    if (!avoidActiveNode && activeNode->allowAsChild(node)) {
+        parent = activeNode;
+        above = activeNode->lastChild();
+    } else if (activeNode->parent() && activeNode->parent()->allowAsChild(node)) {
+        parent = activeNode->parent();
+        above = activeNode;
+    } else {
+        KisNodeSP t = activeNode;
+        while ((t = t->nextSibling())) {
+            if (t->allowAsChild(node)) {
+                parent = t;
+                above = t->lastChild();
+                break;
+            }
+        }
+
+        if (!t) {
+            t = activeNode;
+            while ((t = t->prevSibling())) {
+                if (t->allowAsChild(node)) {
+                    parent = t;
+                    above = t->lastChild();
+                    break;
+                }
+            }
+        }
+
+        if (!t && activeNode->parent()) {
+            adjustMaskPosition(node, activeNode->parent(), true, parent, above);
+        } else if (!t) {
+            KisImageWSP image = m_view->image();
+            KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+            m_commandsAdapter->addNode(layer, activeNode, 0);
+
+            parent = layer;
+            above = 0;
+        }
     }
 }
 
-void KisMaskManager::createFilterMask()
+void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const QString &macroName, const QString &nodeType, const QString &nodeName)
 {
-    KisLayerSP layer = m_view->activeLayer();
+    m_commandsAdapter->beginMacro(macroName);
 
-    if (layer) {
-        KisNodeSP above = m_activeMask ?
-                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
-        createFilterMask(layer, above);
-    }
-}
+    KisNodeSP parent;
+    KisNodeSP above;
+    adjustMaskPosition(mask, activeNode, !!copyFrom, parent, above);
 
-void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
-{
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
-    if (!parentLayer) return;
+    Q_ASSERT(parentLayer);
 
-    KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
-    mask->initSelection(m_view->selection(), parentLayer);
+    if (copyFrom) {
+        mask->initSelection(copyFrom, parentLayer);
+    } else {
+        mask->initSelection(m_view->selection(), parentLayer);
+    }
 
     //counting number of KisSelectionMask
-    QList<KisNodeSP> selectionMasks = parentLayer->childNodes(QStringList("KisSelectionMask"),KoProperties());
-    int number = selectionMasks.count()+1;
-    mask->setName(i18n("Selection <numid>%1</numid>", number));
+    QList<KisNodeSP> masks = parentLayer->childNodes(QStringList(nodeType),KoProperties());
+    int number = masks.count() + 1;
+    mask->setName(nodeName + QString(" ") + QString::number(number));
+
     m_commandsAdapter->addNode(mask, parentLayer, above);
+    m_commandsAdapter->endMacro();
 
+    masksUpdated();
+}
+
+void KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom)
+{
+    KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
+    createMaskCommon(mask, activeNode, copyFrom, i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"));
     mask->setActive(true);
-    masksUpdated();
 }
 
-void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
+void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom)
 {
-    KisLayer *layer = dynamic_cast<KisLayer*>(parent.data());
-    KisMask *mask = new KisTransparencyMask();
-    mask->initSelection(m_view->selection(), layer);
-
-    QList<KisNodeSP> transparencyMasks = layer->childNodes(QStringList("KisTransparencyMask"),KoProperties());
-    mask->setName(i18n("Transparency Mask")+QString::number(transparencyMasks.count()+1));
-    m_commandsAdapter->addNode(mask, parent, above);
-    masksUpdated();
+    KisMaskSP mask = new KisTransparencyMask();
+    createMaskCommon(mask, activeNode, copyFrom, i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"));
 }
 
-void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above, bool quiet)
+void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom)
 {
-    KisLayer *layer = dynamic_cast<KisLayer*>(parent.data());
-    KisFilterMask *mask = new KisFilterMask();
-    mask->initSelection(m_view->selection(), layer);
-
-    mask->setName(i18n("New filter mask"));
-    m_commandsAdapter->addNode(mask, parent, above);
+    KisFilterMaskSP mask = new KisFilterMask();
+    createMaskCommon(mask, activeNode, copyFrom, i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"));
 
     /**
      * FIXME: We'll use layer's original for creation of a thumbnail.
      * Actually, we can't use it's projection as newly created mask
      * may be going to be inserted in the middle of the masks stack
      */
-    KisPaintDeviceSP originalDevice = layer->original();
+    KisPaintDeviceSP originalDevice = mask->parent()->original();
 
 
-    if (quiet) {
-        if(KisFilterRegistry::instance()->count() > 0) {
-            KisFilterConfiguration *filter = KisFilterRegistry::instance()->values().at(0)->defaultConfiguration(activeDevice());
-            if (filter) {
-                QString name = i18n("New Filter Layer");
-                mask->setFilter(filter);
-                mask->setName(name);
-                activateMask(mask);
-            } else {
-                m_commandsAdapter->undoLastCommand();
-            }
-        } else {
-            m_commandsAdapter->undoLastCommand();
-        }
-    } else {
-        KisDlgAdjustmentLayer dialog(mask, mask, originalDevice,
+    KisDlgAdjustmentLayer dialog(mask, mask.data(), originalDevice,
                                  mask->name(), i18n("New Filter Mask"),
                                  m_view);
 
-        if (dialog.exec() == QDialog::Accepted) {
-            KisFilterConfiguration *filter = dialog.filterConfiguration();
-            if (filter) {
-                QString name = dialog.layerName();
-                mask->setFilter(filter);
-                mask->setName(name);
-            } else {
-                m_commandsAdapter->undoLastCommand();
-            }
+    if (dialog.exec() == QDialog::Accepted) {
+        KisFilterConfiguration *filter = dialog.filterConfiguration();
+        if (filter) {
+            QString name = dialog.layerName();
+            mask->setFilter(filter);
+            mask->setName(name);
         }
+
+    } else {
+        m_commandsAdapter->undoLastCommand();
     }
-    masksUpdated();
-}
-
-void KisMaskManager::maskToSelection()
-{
-    if (!m_activeMask) return;
-    KisImageWSP image = m_view->image();
-    if (!image) return;
-    m_commandsAdapter->beginMacro(i18n("Mask to Selection"));
-    KUndo2Command* cmd = new KisSetGlobalSelectionCommand(image, m_activeMask->selection());
-    image->undoAdapter()->addCommand(cmd);
-    m_commandsAdapter->removeNode(m_activeMask);
-    m_commandsAdapter->endMacro();
-    masksUpdated();
-}
-
-void KisMaskManager::maskToLayer()
-{
-    // XXX: Should we also be able to create other layertypes than paint layer from masks?
-    // XXX: Right now, I create black pixels with the alpha channel set to the selection,
-    //      should we create grayscale pixels?
-    if (!m_activeMask) return;
-    KisImageWSP image = m_view->image();
-    if (!image) return;
-    KisLayerSP activeLayer = m_view->activeLayer();
-    if (!activeLayer) return;
-
-    KisSelectionSP selection = m_activeMask->selection();
-    selection->updateProjection();
-    KisPaintLayerSP layer =
-        new KisPaintLayer(image, m_activeMask->name(), OPACITY_OPAQUE_U8);
-
-    const KoColorSpace * cs = layer->colorSpace();
-    QRect rc = selection->selectedExactRect();
-    KoColor color(Qt::black, cs);
-    int pixelsize = cs->pixelSize();
-
-    KisHLineIteratorSP dstIter = layer->paintDevice()->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
-    KisHLineConstIteratorSP selIter = selection->projection()->createHLineConstIteratorNG(rc.x(), rc.y(), rc.width());
-
-    for (int row = 0; row < rc.height(); ++row) {
-        do {
-            cs->setOpacity(color.data(), *selIter->oldRawData(), 1);
-            memcpy(dstIter->rawData(), color.data(), pixelsize);
-        } while (dstIter->nextPixel() && selIter->nextPixel());
-        dstIter->nextRow();
-        selIter->nextRow();
-    }
-
-    m_commandsAdapter->beginMacro(i18n("Layer from Mask"));
-    m_commandsAdapter->removeNode(m_activeMask);
-    m_commandsAdapter->addNode(layer, activeLayer->parent(), activeLayer);
-    m_commandsAdapter->endMacro();
-    masksUpdated();
 }
 
 void KisMaskManager::duplicateMask()
@@ -294,13 +249,17 @@ void KisMaskManager::maskProperties()
         if (! layer)
             return;
 
-        KisPaintDeviceSP dev = layer->paintDevice();
+
+        KisPaintDeviceSP dev = layer->original();
+        if (!dev) {
+            return;
+        }
+
         KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
 
         KisSafeFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
-
 
         if (dlg.exec() == QDialog::Accepted) {
 

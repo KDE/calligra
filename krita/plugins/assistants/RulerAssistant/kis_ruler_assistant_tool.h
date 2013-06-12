@@ -34,6 +34,12 @@ class KJob;
 class KisRulerAssistantTool : public KisTool
 {
     Q_OBJECT
+    enum PerspectiveAssistantEditionMode {
+        MODE_CREATION, // This is the mode when there is not yet a perspective grid
+        MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
+        MODE_DRAGGING_NODE, // In this mode one node is translated
+        MODE_DRAGGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
+    };
 public:
     KisRulerAssistantTool(KoCanvasBase * canvas);
     virtual ~KisRulerAssistantTool();
@@ -49,6 +55,8 @@ public:
 private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistant *assistant);
+    bool mouseNear(const QPointF& mousep, const QPointF& point);
+    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
@@ -66,7 +74,7 @@ protected:
 
 protected:
     KisCanvas2* m_canvas;
-    QList<KisPaintingAssistantHandleSP> m_handles;
+    QList<KisPaintingAssistantHandleSP> m_handles, m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
     KisPaintingAssistant* m_assistantDrag;
@@ -74,6 +82,12 @@ protected:
     QPointF m_mousePosition;
     Ui::AssistantsToolOptions m_options;
     QWidget* m_optionsWidget;
+    QPointF m_dragEnd;
+
+private:
+    PerspectiveAssistantEditionMode m_internalMode;
+    qint32 m_handleSize, m_handleHalfSize;
+    KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
 };
 
 

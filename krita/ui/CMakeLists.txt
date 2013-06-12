@@ -1,12 +1,14 @@
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
-	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
-	${CMAKE_SOURCE_DIR}/krita/image/metadata
-	${EXIV2_INCLUDE_DIR} )
+    ${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
+    ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${EXIV2_INCLUDE_DIR} )
 
 add_subdirectory( tests )
 
@@ -55,6 +57,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     iccjpeg.c
+    flake/kis_take_all_shapes_command.cpp
     kis_autogradient.cc
     kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
@@ -78,7 +81,6 @@ set(kritaui_LIB_SRCS
     kis_part2.cpp
     kis_factory2.cc
     kis_file_layer.cpp
-    kis_filter_handler.cc
     kis_filter_manager.cc
     kis_filters_model.cc
     kis_flipbook.cpp
@@ -162,6 +164,7 @@ set(kritaui_LIB_SRCS
     tool/kis_smoothing_options.cpp
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
+    tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/KisFlipbookSelector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
@@ -202,8 +205,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
-#    widgets/kis_light_source.cpp
-#    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
@@ -225,36 +226,11 @@ set(kritaui_LIB_SRCS
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
     input/kis_touch_shortcut.cpp
-    kis_filter_job.cpp
-    kis_threaded_applicator.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
 )
 
-if(HAVE_OPENGL)
-    if(HAVE_GLEW)
-        set(kritaui_LIB_SRCS
-            ${kritaui_LIB_SRCS}
-            opengl/kis_opengl_shader.cpp
-            opengl/kis_opengl_fragment_shader.cpp
-            opengl/kis_opengl_vertex_shader.cpp
-            opengl/kis_opengl_program.cpp
-            opengl/kis_opengl_gradient_program.cpp
-
-            opengl2/kis_gl2_canvas.cpp
-            opengl2/kis_gl2_renderthread.cpp
-            opengl2/kis_gl2_texture_updater.cpp
-            opengl2/kis_gl2_canvas_widget_factory.cpp
-            )
-    endif(HAVE_GLEW)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        kis_3d_object_model.cpp
-        )
-endif(HAVE_OPENGL)
-
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-
 
 kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfullscreensettings.ui
@@ -301,17 +277,18 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB})
 
+target_link_libraries(kritaui ${GLEW_LIBRARIES})
+
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
 
     # activate workaround for the VSync disable
-    # TODO: port this to Glew when Glew 1.7 will become a mandatory dep
     if(NOT WIN32)
       target_link_libraries(kritaui ${CMAKE_DL_LIBS})
     endif(NOT WIN32)
@@ -320,6 +297,7 @@ if(HAVE_OPENGL)
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
     endif(HAVE_GLEW)
+
 endif(HAVE_OPENGL)
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )

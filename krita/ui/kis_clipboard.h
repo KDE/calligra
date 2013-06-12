@@ -63,7 +63,7 @@ public:
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip(const QRect &imageBounds);
+    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup);
 
     bool hasClip() const;
 
@@ -72,6 +72,7 @@ public:
 signals:
 
     void clipCreated();
+
 
 private slots:
 
@@ -86,6 +87,9 @@ private:
     bool m_hasClip;
 
     bool m_pushedClipboard;
+
+signals:
+    void clipChanged();
 };
 
 #endif // __KIS_CLIPBOARD_H_

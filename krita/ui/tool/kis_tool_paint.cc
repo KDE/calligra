@@ -50,7 +50,6 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
-#include <opengl/kis_opengl.h>
 #include <kis_types.h>
 #include <kis_global.h>
 #include <kis_image.h>
@@ -307,7 +306,10 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionWidgetLayout->setSpacing(1);
     m_optionWidgetLayout->setMargin(0);
 
-    verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    QWidget *w = new QWidget();
+    w->setObjectName("SpecialSpacer");
+
+    verticalLayout->addWidget(w);
 
     if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
@@ -340,7 +342,8 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
         }
         m_optionWidgetLayout->addWidget(label, m_optionWidgetLayout->rowCount(), 0);
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount() - 1, 1);
-    } else {
+    }
+    else {
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
     }
 }
@@ -382,23 +385,6 @@ void KisToolPaint::resetCursorStyle()
             useCursor(cursor());
         }
     }
-
-#if defined(HAVE_OPENGL)
-    // TODO: maybe m_support 3D outline would be cooler. So far just freehand tool support 3D_MODEL cursor style
-    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
-        if(isCanvasOpenGL()) {
-            if (m_supportOutline) {
-                useCursor(KisCursor::blankCursor());
-            } else {
-                useCursor(cursor());
-            }
-        } else {
-            useCursor(KisCursor::arrowCursor());
-        }
-    }
-#endif
-
-
 }
 
 void KisToolPaint::updateTabletPressureSamples()

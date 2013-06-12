@@ -38,14 +38,54 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
     return QRectF(x, y, w, h);
 }
 
+void setTextureParameters(KisTextureTile::FilterMode filter)
+{
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, 1000);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 3);
+
+    switch(filter) {
+    case KisTextureTile::NearestFilterMode:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        break;
+    case KisTextureTile::BilinearFilterMode:
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        break;
+    case KisTextureTile::TrilinearFilterMode:
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        break;
+    case KisTextureTile::nearest_mipmap_linear:
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+        break;
+    case KisTextureTile::nearest_mipmap_nearest:
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+        break;
+    case KisTextureTile::linear_mipmap_nearest:
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+        break;
+    }
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+}
 
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                                const GLvoid *fillData, FilterMode filter)
 
-    : m_tileRectInImagePixels(imageRect), m_texturesInfo(texturesInfo)
+    : m_textureId(0)
+    , m_tileRectInImagePixels(imageRect)
+    , m_filter(filter)
+    , m_texturesInfo(texturesInfo)
 {
     m_textureRectInImagePixels =
-        stretchRect(m_tileRectInImagePixels, texturesInfo->border);
+            stretchRect(m_tileRectInImagePixels, texturesInfo->border);
 
     m_tileRectInTexturePixels = relativeRect(m_textureRectInImagePixels,
                                              m_tileRectInImagePixels,
@@ -53,37 +93,30 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
 
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    switch(filter) {
-        case NearestFilterMode:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            break;
-        case BilinearFilterMode:
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            break;
-        case TrilinearFilterMode:
-            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            break;
-    }
+    setTextureParameters(m_filter);
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0,
                  m_texturesInfo->format,
                  m_texturesInfo->width,
                  m_texturesInfo->height, 0,
-                 GL_BGRA, GL_UNSIGNED_BYTE, fillData);
+                 GL_BGRA, m_texturesInfo->type, fillData);
+#ifdef Q_OS_WIN
+    glGenerateMipmap(GL_TEXTURE_2D);
+#endif
 }
 
-KisTextureTile::~KisTextureTile() {
+KisTextureTile::~KisTextureTile()
+{
     glDeleteTextures(1, &m_textureId);
 }
 
-void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo) {
+void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
+{
     glBindTexture(GL_TEXTURE_2D, m_textureId);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    setTextureParameters(m_filter);
+
 
     if (updateInfo.isEntireTileUpdated()) {
 
@@ -93,7 +126,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo) {
                      m_texturesInfo->height, 0,
                      GL_BGRA, m_texturesInfo->type,
                      updateInfo.data());
-    } else {
+    }
+    else {
         QPoint patchOffset = updateInfo.patchOffset();
         QSize patchSize = updateInfo.patchSize();
 
@@ -109,12 +143,9 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo) {
      * So we just repeat the bounding pixels of the image to make
      * bilinear interpolator happy.
      */
-    repeatStripes(updateInfo);
-}
 
-inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &updateInfo) {
     /**
-     * WARN: This function can repeat stripes of 1px width only!
+     * WARN: This can repeat stripes of 1px width only!
      */
 
     const int pixelSize = updateInfo.pixelSize();
@@ -131,12 +162,11 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
                         patchSize.width(), 1,
                         GL_BGRA, m_texturesInfo->type,
                         updateInfo.data());
-
     }
 
-    if(imageRect.bottom() == patchRect.bottom()) {
+    if (imageRect.bottom() == patchRect.bottom()) {
         int shift = patchSize.width() * (patchSize.height() - 1) *
-            pixelSize;
+                pixelSize;
 
         glTexSubImage2D(GL_TEXTURE_2D, 0,
                         patchOffset.x(), patchOffset.y() + patchSize.height(),
@@ -146,7 +176,8 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
 
     }
 
-    if(imageRect.left() == patchRect.left()) {
+    if (imageRect.left() == patchRect.left()) {
+
         QByteArray columnBuffer(patchSize.height() * pixelSize, 0);
 
         quint8 *srcPtr = updateInfo.data();
@@ -163,9 +194,11 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
                         1, patchSize.height(),
                         GL_BGRA, m_texturesInfo->type,
                         columnBuffer.constData());
+
     }
 
-    if(imageRect.right() == patchRect.right()) {
+    if (imageRect.right() == patchRect.right()) {
+
         QByteArray columnBuffer(patchSize.height() * pixelSize, 0);
 
         quint8 *srcPtr = updateInfo.data() + (patchSize.width() - 1) * pixelSize;
@@ -184,43 +217,10 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
                         columnBuffer.constData());
     }
 
+#ifdef Q_OS_WIN
+        glGenerateMipmap(GL_TEXTURE_2D);
+#endif
 }
-
-void KisTextureTile::drawPoints() {
-    /**
-     * We create a float rect here to workaround Qt's
-     * "history reasons" in calculation of right()
-     * and bottom() coordinates of integer rects.
-     */
-    QRectF imageRect(m_tileRectInImagePixels);
-    QPointF ipt;
-    QPointF tpt;
-
-    glBegin(GL_QUADS);
-
-    ipt = imageRect.topLeft();
-    tpt = m_tileRectInTexturePixels.topLeft();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.topRight();
-    tpt = m_tileRectInTexturePixels.topRight();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.bottomRight();
-    tpt = m_tileRectInTexturePixels.bottomRight();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    ipt = imageRect.bottomLeft();
-    tpt = m_tileRectInTexturePixels.bottomLeft();
-    glTexCoord2f(tpt.x(), tpt.y());
-    glVertex2f(ipt.x(), ipt.y());
-
-    glEnd();
-}
-
 
 #endif /* HAVE_OPENGL */
 

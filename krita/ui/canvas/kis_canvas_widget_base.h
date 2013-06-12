@@ -49,6 +49,7 @@ class KoToolProxy;
 class KoViewConverter;
 class KoColorProfile;
 class KisCoordinatesConverter;
+class KisDisplayFilter;
 
 class KisCanvas2;
 class KisCanvasDecoration;
@@ -66,6 +67,10 @@ public:
     virtual QWidget * widget() = 0;
 
     virtual KoToolProxy * toolProxy();
+
+
+    /// set the specified display filter on the canvas
+    virtual void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Draw the specified decorations on the view.
@@ -105,7 +110,7 @@ public:
     /**
      * Returns one check of the background checkerboard pattern.
      */
-    static QImage checkImage(qint32 checkSize = -1);
+    static QImage createCheckersImage(qint32 checkSize = -1);
 
 protected:
     KisCanvas2 *canvas() const;

@@ -244,13 +244,13 @@ public:
     QString typeToString( bool trans = false ) const;
     static QStringList typeToStringList( bool trans = false );
 
-    void setName( const QString n );
+    void setName( const QString &n );
     const QString &name() const { return m_name;}
 
-    void setInitials( const QString initials );
+    void setInitials( const QString &initials );
     const QString &initials() const { return m_initials;}
 
-    void setEmail( const QString email );
+    void setEmail( const QString &email );
     const QString &email() const { return m_email;}
 
     /// Returns true if this resource will be allocated by default to new tasks
@@ -277,9 +277,9 @@ public:
     const DateTime &availableUntil() const { return m_availableUntil;}
 
     DateTime firstAvailableAfter( const DateTime &time, const DateTime &limit ) const;
-    
-    DateTime getBestAvailableTime( Duration duration );
-    DateTime getBestAvailableTime( const DateTime after, const Duration duration );
+
+    DateTime getBestAvailableTime( const Duration &duration );
+    DateTime getBestAvailableTime( const DateTime &after, const Duration &duration );
 
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;

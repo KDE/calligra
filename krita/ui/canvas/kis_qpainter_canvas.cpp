@@ -203,7 +203,7 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
 void KisQPainterCanvas::slotConfigChanged()
 {
-    m_d->checkBrush = QBrush(checkImage());
+    m_d->checkBrush = QBrush(createCheckersImage());
     notifyConfigChanged();
 }
 

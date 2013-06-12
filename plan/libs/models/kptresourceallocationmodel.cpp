@@ -432,46 +432,46 @@ void ResourceAllocationItemModel::slotResourceGroupRemoved( const ResourceGroup 
 void ResourceAllocationItemModel::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
+        disconnect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        disconnect( m_project, SIGNAL(resourceToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceToBeInserted(const ResourceGroup*,int)) );
 
-        disconnect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceToBeRemoved(const Resource*)), this, SLOT(slotResourceToBeRemoved(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupAdded(const ResourceGroup*)), this, SLOT(slotResourceGroupInserted(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        disconnect( m_project, SIGNAL(resourceGroupRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupRemoved(const ResourceGroup*)) );
 
-        disconnect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotResourceInserted(const Resource*)) );
 
-        disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        disconnect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)) );
 
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
-        connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotResourceChanged(Resource*)) );
+        connect( m_project, SIGNAL(resourceGroupChanged(ResourceGroup*)), this, SLOT(slotResourceGroupChanged(ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        connect( m_project, SIGNAL(resourceGroupToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceGroupToBeInserted(const ResourceGroup*,int)) );
 
-        connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupToBeRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupToBeRemoved(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        connect( m_project, SIGNAL(resourceToBeAdded(const ResourceGroup*,int)), this, SLOT(slotResourceToBeInserted(const ResourceGroup*,int)) );
 
-        connect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceToBeRemoved(const Resource*)), this, SLOT(slotResourceToBeRemoved(const Resource*)) );
 
-        connect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupAdded(const ResourceGroup*)), this, SLOT(slotResourceGroupInserted(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        connect( m_project, SIGNAL(resourceGroupRemoved(const ResourceGroup*)), this, SLOT(slotResourceGroupRemoved(const ResourceGroup*)) );
 
-        connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotResourceInserted(const Resource*)) );
 
-        connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        connect( m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)) );
 
     }
     m_model.setProject( m_project );
