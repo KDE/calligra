@@ -280,9 +280,9 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS}  ${LCMS2_LIBRARIES} )
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${LCMS2_LIBRARIES} )
 endif (GHNS)
 
 if(HAVE_OPENGL)

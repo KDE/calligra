@@ -628,7 +628,7 @@ void LayerModel::addLayer(int layerType)
             d->nodeManager->createNode("KisGroupLayer");
             break;
         case 2:
-            d->nodeManager->createNode("KisFilterMask", true);
+            d->nodeManager->createNode("KisFilterMask");
             break;
         default:
             break;

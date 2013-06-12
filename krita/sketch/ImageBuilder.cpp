@@ -51,7 +51,7 @@ QString ImageBuilder::createBlankImage(int width, int height, int resolution)
 QString ImageBuilder::createImageFromClipboard()
 {
     QSize sz = KisClipboard::instance()->clipSize();
-    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()));
+    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()), false);
 
     if (clipDevice) {
         connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(createImageFromClipboardDelayed()));
@@ -72,7 +72,7 @@ void ImageBuilder::createImageFromClipboardDelayed()
     cfg.setPasteBehaviour(PASTE_ASSUME_MONITOR);
 
     QSize sz = KisClipboard::instance()->clipSize();
-    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()));
+    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()), false);
     KisImageWSP image = DocumentManager::instance()->document()->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());

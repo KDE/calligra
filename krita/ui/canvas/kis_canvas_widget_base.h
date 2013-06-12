@@ -39,6 +39,7 @@ class QVariant;
 class KoViewConverter;
 class KisCoordinatesConverter;
 class KisDisplayFilter;
+class KisInputManager;
 
 class KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {
@@ -77,6 +78,7 @@ public: // KisAbstractCanvasWidget
      * Returns one check of the background checkerboard pattern.
      */
     static QImage createCheckersImage(qint32 checkSize = -1);
+
 
 protected:
     KisCanvas2 *canvas() const;

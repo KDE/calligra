@@ -79,15 +79,7 @@
 #include "Settings.h"
 #include "cpuid.h"
 #include "DocumentManager.h"
-
-#ifdef HAVE_OPENGL
-#include <GL/glew.h>
-#include <opengl2/kis_gl2_canvas.h>
-#include "KisSketchCanvasFactory.h"
-#include "KisSketchCanvas.h"
-#include <QGLShaderProgram>
-#include <QGLBuffer>
-#endif
+#include "SketchDeclarativeView.h"
 
 class KisSketchView::Private
 {
@@ -101,7 +93,6 @@ public:
         , selectionExtras(0)
         , undoAction(0)
         , redoAction(0)
-        , useOpenGL(false)
         , viewportMoved(false)
         , zoomLevelChanged(false)
     { }
@@ -127,12 +118,6 @@ public:
 
     QString file;
 
-#ifdef HAVE_OPENGL
-    QGLShaderProgram *shader;
-    QGLBuffer *vertexBuffer;
-    QGLBuffer *indexBuffer;
-#endif
-
     KisSelectionExtras *selectionExtras;
 
     int modelMatrixLocation;
@@ -149,7 +134,6 @@ public:
     QTimer *savedTimer;
     QAction* undoAction;
     QAction* redoAction;
-    bool useOpenGL;
 
     KisPrescaledProjectionSP prescaledProjection;
 
@@ -165,7 +149,8 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     : QDeclarativeItem(parent)
     , d(new Private(this))
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    // this is just an interaction overlay, the contents are painted on the sceneview background
+    setFlag(QGraphicsItem::ItemHasNoContents, true);
     setAcceptTouchEvents(true);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
 
@@ -174,12 +159,6 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
 
     KoZoomMode::setMinimumZoom(0.1);
     KoZoomMode::setMaximumZoom(16.0);
-
-    if (d->useOpenGL) {
-#ifdef HAVE_OPENGL
-        KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
-#endif
-    }
 
     d->configChanged();
 
@@ -209,12 +188,6 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
 KisSketchView::~KisSketchView()
 {
     if(d->doc) {
-        if (d->useOpenGL) {
-#ifdef HAVE_OPENGL
-            qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
-#endif
-        }
-
         DocumentManager::instance()->closeDocument();
     }
     delete d;
@@ -273,167 +246,8 @@ void KisSketchView::setFile(const QString& file)
     }
 }
 
-void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    if(!d->canvasWidget) {
-        return;
-    }
-
-    if (d->useOpenGL) {
-#ifdef HAVE_OPENGL
-        qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
-
-        d->shader->bind();
-        d->vertexBuffer->bind();
-        d->indexBuffer->bind();
-
-        QMatrix4x4 model;
-        model.scale(1.0f, -1.0f);
-        d->shader->setUniformValue(d->modelMatrixLocation, model);
-
-        QMatrix4x4 view;
-        d->shader->setUniformValue(d->viewMatrixLocation, view);
-
-        QMatrix4x4 projection;
-        projection.ortho(0, 1, 0, 1, -1, 1);
-        d->shader->setUniformValue(d->projectionMatrixLocation, projection.transposed());
-
-        glBindTexture(GL_TEXTURE_2D, qobject_cast<KisSketchCanvas*>(d->canvasWidget)->texture());
-        d->shader->setUniformValue(d->texture0Location, 0);
-
-        d->shader->setUniformValue(d->textureScaleLocation, QVector2D(1.0f, 1.0f));
-
-        d->shader->setAttributeBuffer(d->vertexAttributeLocation, GL_FLOAT, 0, 3);
-        d->shader->enableAttributeArray(d->vertexAttributeLocation);
-        d->shader->setAttributeBuffer(d->uv0AttributeLocation, GL_FLOAT, 12 * sizeof(float), 2);
-        d->shader->enableAttributeArray(d->uv0AttributeLocation);
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        d->shader->disableAttributeArray(d->uv0AttributeLocation);
-        d->shader->disableAttributeArray(d->vertexAttributeLocation);
-
-        d->indexBuffer->release();
-        d->vertexBuffer->release();
-        d->shader->release();
-#endif
-    }
-    else {
-        if(d->zoomLevelChanged) {
-            d->zoomLevelChanged = false;
-            d->viewportMoved = false;
-            d->prescaledProjection->notifyZoomChanged();
-            d->canvasOffset = QPoint();
-        } else if(d->viewportMoved) {
-            d->viewportMoved = false;
-
-            QPoint newOffset = d->canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
-
-            if(!d->canvasOffset.isNull()) {
-                QPoint moveOffset = newOffset - d->canvasOffset;
-                d->prescaledProjection->viewportMoved(moveOffset);
-            } else {
-                d->prescaledProjection->preScale();
-            }
-
-            d->canvasOffset = newOffset;
-        }
-
-        const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
-        QRectF geometry(x(), y(), width(), height());
-
-        painter->save();
-
-        painter->setCompositionMode(QPainter::CompositionMode_Source);
-        painter->fillRect(geometry, d->backgroundColor);
-
-        QTransform checkersTransform;
-        QPointF brushOrigin;
-        QPolygonF polygon;
-
-        painter->setClipRect(geometry);
-
-        converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(d->checkers);
-        painter->setBrushOrigin(brushOrigin);
-        painter->setTransform(checkersTransform);
-        painter->drawPolygon(polygon);
-
-        painter->setTransform(converter->viewportToWidgetTransform());
-
-        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
-        painter->drawImage(geometry, d->prescaledProjection->prescaledQImage(), geometry);
-
-        painter->setTransform(converter->flakeToWidgetTransform());
-        d->canvas->globalShapeManager()->paint(*painter, *converter, false);
-
-        d->canvas->toolProxy()->paint(*painter, *converter);
-
-        KisQPainterCanvas *qc = qobject_cast<KisQPainterCanvas*>(d->canvasWidget);
-        Q_FOREACH(KisCanvasDecoration* deco, qc->decorations()) {
-            deco->paint(*painter, converter->widgetToDocument(geometry), converter);
-        }
-
-        painter->restore();
-    }
-}
-
 void KisSketchView::componentComplete()
 {
-    if (d->useOpenGL) {
-#ifdef HAVE_OPENGL
-        qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
-
-        d->shader = new QGLShaderProgram(this);
-        d->shader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
-        d->shader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.frag"));
-        d->shader->link();
-
-        d->modelMatrixLocation = d->shader->uniformLocation("modelMatrix");
-        d->viewMatrixLocation = d->shader->uniformLocation("viewMatrix");
-        d->projectionMatrixLocation = d->shader->uniformLocation("projectionMatrix");
-        d->texture0Location = d->shader->uniformLocation("texture0");
-        d->textureScaleLocation = d->shader->uniformLocation("textureScale");
-        d->vertexAttributeLocation = d->shader->attributeLocation("vertex");
-        d->uv0AttributeLocation = d->shader->attributeLocation("uv0");
-
-        d->vertexBuffer = new QGLBuffer(QGLBuffer::VertexBuffer);
-        d->vertexBuffer->create();
-        d->vertexBuffer->bind();
-
-        QVector<float> vertices;
-        vertices << 0.0f <<  0.0f << 0.0f;
-        vertices << 1.0f <<  0.0f << 0.0f;
-        vertices << 1.0f << -1.0f << 0.0f;
-        vertices << 0.0f << -1.0f << 0.0f;
-        int vertSize = sizeof(float) * vertices.count();
-
-        QVector<float> uvs;
-        uvs << 0.f << 0.f;
-        uvs << 1.f << 0.f;
-        uvs << 1.f << 1.f;
-        uvs << 0.f << 1.f;
-        int uvSize = sizeof(float) * uvs.count();
-
-        d->vertexBuffer->allocate(vertSize + uvSize);
-        d->vertexBuffer->write(0, reinterpret_cast<void*>(vertices.data()), vertSize);
-        d->vertexBuffer->write(vertSize, reinterpret_cast<void*>(uvs.data()), uvSize);
-        d->vertexBuffer->release();
-
-        d->indexBuffer = new QGLBuffer(QGLBuffer::IndexBuffer);
-        d->indexBuffer->create();
-        d->indexBuffer->bind();
-
-        QVector<uint> indices;
-        indices << 0 << 1 << 2 << 0 << 2 << 3;
-        d->indexBuffer->allocate(reinterpret_cast<void*>(indices.data()), indices.size() * sizeof(uint));
-        d->indexBuffer->release();
-#endif
-    }
 }
 
 bool KisSketchView::canUndo() const
@@ -482,12 +296,6 @@ void KisSketchView::saveAs(const QString& fileName, const QString& mimeType)
 
 void KisSketchView::documentAboutToBeDeleted()
 {
-    if (d->useOpenGL) {
-#ifdef HAVE_OPENGL
-        qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
-#endif
-    }
-
     if(d->undoAction)
         d->undoAction->disconnect(this);
 
@@ -514,6 +322,7 @@ void KisSketchView::documentChanged()
     d->view = qobject_cast<KisView2*>(DocumentManager::instance()->part()->createView(QApplication::activeWindow()));
     connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     emit viewChanged();
+
     d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
     d->view->hide();
     d->canvas = d->view->canvasBase();
@@ -527,28 +336,18 @@ void KisSketchView::documentChanged()
 
     KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
-    if (d->useOpenGL) {
-#ifdef HAVE_OPENGL
-        d->canvasWidget = d->canvas->canvasWidget();
-        qobject_cast<KisSketchCanvas*>(d->canvasWidget)->initialize();
-        connect(qobject_cast<KisSketchCanvas*>(d->canvasWidget), SIGNAL(renderFinished()), SLOT(update()));
-#endif
-    }
-    else {
-        d->canvasWidget = d->canvas->canvasWidget();
-        connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(imageUpdated(QRect)));
-        connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
-        connect(d->view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(zoomChanged()));
-        connect(d->canvas, SIGNAL(updateCanvasRequested(QRect)), SLOT(imageUpdated(QRect)));
-        connect(d->doc->image()->signalRouter(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(removeNodeAsync(KisNodeSP)));
-    }
+    d->canvasWidget = d->canvas->canvasWidget();
+    connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(imageUpdated(QRect)));
+    connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
+    connect(d->view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(zoomChanged()));
+    connect(d->canvas, SIGNAL(updateCanvasRequested(QRect)), SLOT(imageUpdated(QRect)));
+    connect(d->doc->image()->signalRouter(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(removeNodeAsync(KisNodeSP)));
 
-    if(!d->prescaledProjection)
-        d->prescaledProjection = new KisPrescaledProjection();
-
-    d->prescaledProjection->setCoordinatesConverter(const_cast<KisCoordinatesConverter*>(d->canvas->coordinatesConverter()));
-    d->prescaledProjection->setMonitorProfile(d->canvas->monitorProfile(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
-    d->prescaledProjection->setImage(d->canvas->image());
+    SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+    if (v) {
+        v->setCanvasWidget(d->canvasWidget);
+        v->setDrawCanvas(true);
+    }
 
     d->imageUpdated(d->canvas->image()->bounds());
 
@@ -619,10 +418,6 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
 {
     if (d->canvasWidget && !newGeometry.isEmpty()) {
         d->view->canvasControllerWidget()->setGeometry(newGeometry.toRect());
-        if (d->useOpenGL) {
-            d->canvasWidget->setGeometry(newGeometry.toRect());
-            d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
-        }
         const_cast<KisCoordinatesConverter*>(d->canvas->coordinatesConverter())->setCanvasWidgetSize(newGeometry.size().toSize());
         d->prescaledProjection->notifyCanvasSizeChanged(newGeometry.size().toSize());
         d->timer->start(100);

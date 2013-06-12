@@ -45,7 +45,6 @@ public:
     QString fileTitle() const;
     bool isModified() const;
 
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual void componentComplete();
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
 

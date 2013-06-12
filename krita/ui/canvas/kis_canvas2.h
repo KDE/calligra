@@ -42,6 +42,7 @@ class KisView2;
 class KisPaintopBox;
 class KoFavoriteResourceManager;
 class KisDisplayFilter;
+class KisInputManager;
 
 enum KisCanvasType {
     QPAINTER,
@@ -137,6 +138,9 @@ public: // KoCanvasBase implementation
     // resource provider, or use this, which gets them from the
     // current shape selection.
     KisImageWSP currentImage();
+
+
+    KisInputManager *inputManager() const;
 
 public: // KisCanvas2 methods
 

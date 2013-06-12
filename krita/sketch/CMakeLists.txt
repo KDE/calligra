@@ -42,15 +42,8 @@ set(kritasketch_SRCS
     VirtualKeyboardController.cpp
     DocumentManager.cpp
     SharingManager.cpp
+    SketchDeclarativeView.cpp
 )
-
-if(HAVE_OPENGL)
-    set(kritasketch_SRCS
-        ${kritasketch_SRCS}
-        KisSketchCanvas.cpp
-        KisSketchCanvasFactory.cpp
-    )
-endif(HAVE_OPENGL)
 
 set(kritasketch_kritaintegrationmodels_SRCS
     models/KeyboardModel.cpp
@@ -111,11 +104,6 @@ target_link_libraries(kritasketch
     kowidgets
     ${KDE4_KFILE_LIBRARY}
 )
-if(HAVE_OPENGL)
-    target_link_libraries(kritasketch
-        ${GLEW_LIBRARY}
-    )
-endif(HAVE_OPENGL)
 
 install(TARGETS kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS  kritasketch.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

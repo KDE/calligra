@@ -20,11 +20,6 @@
 
 #include "MainWindow.h"
 
-#ifdef HAVE_OPENGL
-#include <opengl2/kis_gl2_canvas.h>
-#include <QGLWidget>
-#endif
-
 #include <QApplication>
 #include <QResizeEvent>
 #include <QDeclarativeView>
@@ -76,6 +71,7 @@
 #include "cpuid.h"
 #include "DocumentManager.h"
 #include "SharingManager.h"
+#include "SketchDeclarativeView.h"
 
 class MainWindow::Private
 {
@@ -127,7 +123,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
-    d->view = new QDeclarativeView();
+    d->view = new SketchDeclarativeView();
     d->view->setAttribute(Qt::WA_AcceptTouchEvents);
     d->view->setAttribute(Qt::WA_OpaquePaintEvent);
     d->view->setAttribute(Qt::WA_NoSystemBackground);
@@ -146,21 +142,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->rootContext()->setContextProperty("RecentFileManager", d->recentFileManager);
     d->view->rootContext()->setContextProperty("KisClipBoard", KisClipboard::instance());
     d->view->rootContext()->setContextProperty("QMLEngine", d->view->engine());
+    d->view->rootContext()->setContextProperty("View", d->view);
 
     Welcome::MultiFeedRssModel *rssModel = new Welcome::MultiFeedRssModel(this);
     rssModel->addFeed(QLatin1String("http://feeds.feedburner.com/krita/news"));
     d->view->rootContext()->setContextProperty("aggregatedFeedsModel", rssModel);
-
-
-    // This is needed because OpenGL viewport doesn't support partial updates.
-//    if (isUltraBook()) {
-//        d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-//        QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
-//        d->view->setViewport(glWidget);
-//    }
-
-    d->view->viewport()->grabGesture(Qt::PanGesture);
-//    d->view->viewport()->grabGesture(Qt::PinchGesture);
 
     QDir appdir(qApp->applicationDirPath());
     // for now, the app in bin/ and we still use the env.bat script

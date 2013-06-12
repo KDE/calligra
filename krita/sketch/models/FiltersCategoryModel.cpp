@@ -249,21 +249,21 @@ void FiltersCategoryModel::setPreviewEnabled(bool enabled)
     {
         d->previewEnabled = enabled;
         emit previewEnabledChanged();
-        if(enabled)
-        {
-            d->node = d->view->nodeManager()->activeLayer();
-            d->mask = new KisFilterMask();
-            d->mask->initSelection(d->view->selection(), qobject_cast<KisLayer*>(d->node.data()));
-            qobject_cast<KisLayer*>(d->node.data())->setPreviewMask(d->mask);
-            d->node->setDirty(d->node->extent());
-            filterConfigurationChanged(d->previewFilterID, d->categories[d->currentCategory]);
-        }
-        else
-        {
-            qobject_cast<KisLayer*>(d->node.data())->removePreviewMask();
-            d->node->setDirty(d->node->extent());
-            d->node.clear();
-        }
+//        if(enabled)
+//        {
+//            d->node = d->view->nodeManager()->activeLayer();
+//            d->mask = new KisFilterMask();
+//            d->mask->initSelection(d->view->selection(), qobject_cast<KisLayer*>(d->node.data()));
+//            qobject_cast<KisLayer*>(d->node.data())->setPreviewMask(d->mask);
+//            d->node->setDirty(d->node->extent());
+//            filterConfigurationChanged(d->previewFilterID, d->categories[d->currentCategory]);
+//        }
+//        else
+//        {
+//            qobject_cast<KisLayer*>(d->node.data())->removePreviewMask();
+//            d->node->setDirty(d->node->extent());
+//            d->node.clear();
+//        }
     }
 }
 

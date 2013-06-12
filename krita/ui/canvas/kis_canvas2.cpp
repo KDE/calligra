@@ -646,6 +646,11 @@ KisImageWSP KisCanvas2::currentImage()
     return m_d->view->image();
 }
 
+KisInputManager *KisCanvas2::inputManager() const
+{
+    return m_d->inputManager;
+}
+
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 {
     QPointF offsetBefore = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();

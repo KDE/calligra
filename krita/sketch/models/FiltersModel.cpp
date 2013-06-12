@@ -20,7 +20,7 @@
 #include <PropertyContainer.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
-#include <kis_filter_handler.h>
+//#include <kis_filter_handler.h>
 #include <kis_view2.h>
 
 class FiltersModel::Private
@@ -31,7 +31,7 @@ public:
     {};
     KisView2* view;
     QList<KisFilterSP> filters;
-    QList<KisFilterHandler*> handlers;
+//    QList<KisFilterHandler*> handlers;
     QList<KisFilterConfiguration*> configurations;
 };
 
@@ -97,11 +97,11 @@ void FiltersModel::activateFilter(int index)
     {
         if(d->configurations[index])
         {
-            d->handlers[index]->apply(d->view->activeNode(), d->configurations[index]);
+//            d->handlers[index]->apply(d->view->activeNode(), d->configurations[index]);
         }
         else
         {
-            d->handlers[index]->apply(d->view->activeNode(), d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
+//            d->handlers[index]->apply(d->view->activeNode(), d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
         }
         emit filterActivated(index);
     }
@@ -126,7 +126,7 @@ void FiltersModel::addFilter(KisFilterSP filter)
         KisFilterManager* man = 0;
         if(d->view)
             man = d->view->filterManager();
-        d->handlers << new KisFilterHandler(man, filter, d->view);
+//        d->handlers << new KisFilterHandler(man, filter, d->view);
         d->configurations << 0;
         endInsertRows();
     }
@@ -140,10 +140,10 @@ QObject* FiltersModel::view() const
 void FiltersModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisView2*>( newView );
-    foreach(KisFilterHandler* handler, d->handlers)
-    {
-        handler->setView(d->view);
-    }
+//    foreach(KisFilterHandler* handler, d->handlers)
+//    {
+//        handler->setView(d->view);
+//    }
     emit viewChanged();
 }
 

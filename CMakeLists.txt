@@ -954,7 +954,7 @@ if(SHOULD_BUILD_KRITA_APP)
 endif(SHOULD_BUILD_KRITA_APP)
 
 if(SHOULD_BUILD_KARBON_APP)
-	#add_subdirectory(karbon)
+  add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON_APP)
 
 if(SHOULD_BUILD_BRAINDUMP_APP)
