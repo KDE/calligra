@@ -23,13 +23,12 @@ import org.krita.sketch 1.0
 Item {
     id: base;
     anchors.fill: parent;
-    property QtObject layersModel: null;
     property bool isInitialised: false;
     property bool isShown: false;
     onIsShownChanged: {
         if(!isShown)
             return;
-        var filterConfig = layersModel.activeFilterConfig;
+        var filterConfig = layerModel.activeFilterConfig;
         if(filterConfig !== null) {
             var categoryIndex = filtersCategoryModel.categoryIndexForConfig(filterConfig);
             var filterIndex = filtersCategoryModel.filterIndexForConfig(categoryIndex, filterConfig);
@@ -39,7 +38,7 @@ Item {
                 configLoader.item.configuration = filterConfig;
             }
         }
-        base.isInitialised = (layersModel !== null);
+        base.isInitialised = (layerModel !== null);
     }
     // tile goes here
 
@@ -57,9 +56,9 @@ Item {
             margins: Constants.DefaultMargin;
         }
         placeholder: "Name";
-        text: layersModel ? layersModel.activeName : "";
-        onAccepted: if(layersModel) layersModel.activeName = text;
-        onFocusLost: if(layersModel) layersModel.activeName = text;
+        text: layerModel ? layerModel.activeName : "";
+        onAccepted: if(layerModel) layerModel.activeName = text;
+        onFocusLost: if(layerModel) layerModel.activeName = text;
     }
     ExpandingListView {
         id: compositeOpList;
@@ -69,11 +68,11 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        visible: layersModel ? (layersModel.activeType === "KisPaintLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisPaintLayer") : false;
         height: visible ? Constants.GridHeight / 2 : 0;
         model: compositeOpModel; // composite ops list
-        currentIndex: layersModel ? layersModel.activeCompositeOp : 0;
-        onNewIndex: if(layersModel) layersModel.activeCompositeOp = currentIndex;
+        currentIndex: layerModel ? layerModel.activeCompositeOp : 0;
+        onNewIndex: if(layerModel) layerModel.activeCompositeOp = currentIndex;
     }
 
     FiltersCategoryModel {
@@ -88,7 +87,7 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisFilterMask" || layerModel.activeType === "KisAdjustmentLayer") : false;
         height: visible ? Constants.GridHeight / 2 : 0;
         model: filtersCategoryModel;
         onModelChanged: currentIndex = 0;
@@ -107,20 +106,20 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisFilterMask" || layerModel.activeType === "KisAdjustmentLayer") : false;
         height: visible ? Constants.GridHeight / 2 : 0;
         model: filtersCategoryModel.filterModel;
         function applyConfiguration(configuration) {
             if(base.isInitialised) {
-                layersModel.activeFilterConfig = configuration;
+                layerModel.activeFilterConfig = configuration;
             }
         }
         onCurrentIndexChanged: {
-            if(layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") {
+            if(layerModel.activeType === "KisFilterMask" || layerModel.activeType === "KisAdjustmentLayer") {
                 filtersCategoryModel.filterSelected(currentIndex);
                 if(base.isInitialised) {
                     console.debug("Setting new configuration...");
-                    layersModel.activeFilterConfig = model.configuration(currentIndex);
+                    layerModel.activeFilterConfig = model.configuration(currentIndex);
                 }
                 if(model.filterRequiresConfiguration(currentIndex)) {
                     noConfigNeeded.visible = false;
@@ -144,8 +143,9 @@ Item {
         }
         placeholder: "Opacity"
         min: 0; max: 255; decimals: 0;
-        value: layersModel ? layersModel.activeOpacity : 0;
-        onValueChanged: if(layersModel) layersModel.activeOpacity = value;
+        value: layerModel.activeOpacity;
+        Connections { target: base; onIsShownChanged: opacitySlider.value = layerModel.activeOpacity; }
+        onValueChanged: if(layerModel) layerModel.activeOpacity = value;
     }
     Row {
         id: visibleAndLockRow;
@@ -161,22 +161,22 @@ Item {
             width: height;
             height: Constants.GridHeight
             color: "transparent";
-            image: (layersModel && layersModel.activeVisible) ? "../images/svg/icon-visible_on-black.svg" : "../images/svg/icon-visible_off-black.svg";
+            image: (layerModel && layerModel.activeVisible) ? "../images/svg/icon-visible_on-black.svg" : "../images/svg/icon-visible_off-black.svg";
             textColor: "white";
             shadow: false;
             highlight: false;
-            onClicked: if(layersModel) layersModel.activeVisible = !layersModel.activeVisible;
+            onClicked: if(layerModel) layerModel.activeVisible = !layerModel.activeVisible;
         }
         Button {
             id: lockstateButton
             width: height;
             height: Constants.GridHeight
             color: "transparent";
-            image: (layersModel && layersModel.activeLocked) ? "../images/svg/icon-locked_on-black.svg" : "../images/svg/icon-locked_off-black.svg";
+            image: (layerModel && layerModel.activeLocked) ? "../images/svg/icon-locked_on-black.svg" : "../images/svg/icon-locked_off-black.svg";
             textColor: "white";
             shadow: false;
             highlight: false;
-            onClicked: if(layersModel) layersModel.activeLocked = !layersModel.activeLocked;
+            onClicked: if(layerModel) layerModel.activeLocked = !layerModel.activeLocked;
         }
     }
     Label {
@@ -187,7 +187,7 @@ Item {
             left: parent.left;
             leftMargin: Constants.DefaultMargin;
         }
-        visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisPaintLayer" || layerModel.activeType === "KisGroupLayer") : false;
         horizontalAlignment: Text.AlignLeft;
         font.pixelSize: Constants.DefaultFontSize;
         font.bold: true;
@@ -201,7 +201,7 @@ Item {
             horizontalCenter: parent.horizontalCenter;
             margins: Constants.DefaultMargin;
         }
-        visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisPaintLayer" || layerModel.activeType === "KisGroupLayer") : false;
         height: visible ? childrenRect.height : 0;
         width: childrenRect.width;
         spacing: Constants.DefaultMargin;
@@ -214,8 +214,8 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeRChannelActive) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeRChannelActive = !layersModel.activeRChannelActive;
+            color: (layerModel && layerModel.activeRChannelActive) ? "#EAEAEA" : "transparent";
+            onClicked: if(layerModel) layerModel.activeRChannelActive = !layerModel.activeRChannelActive;
         }
         Button {
             id: greenChannel
@@ -226,8 +226,8 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeGChannelActive) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeGChannelActive = !layersModel.activeGChannelActive;
+            color: (layerModel && layerModel.activeGChannelActive) ? "#EAEAEA" : "transparent";
+            onClicked: if(layerModel) layerModel.activeGChannelActive = !layerModel.activeGChannelActive;
         }
         Button {
             id: blueChannel
@@ -238,8 +238,8 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeBChannelActive) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeBChannelActive = !layersModel.activeBChannelActive;
+            color: (layerModel && layerModel.activeBChannelActive) ? "#EAEAEA" : "transparent";
+            onClicked: if(layerModel) layerModel.activeBChannelActive = !layerModel.activeBChannelActive;
         }
         Button {
             id: alphaChannel
@@ -250,8 +250,8 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeAChannelActive) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeAChannelActive = !layersModel.activeAChannelActive;
+            color: (layerModel && layerModel.activeAChannelActive) ? "#EAEAEA" : "transparent";
+            onClicked: if(layerModel) layerModel.activeAChannelActive = !layerModel.activeAChannelActive;
         }
     }
     Label {
@@ -262,7 +262,7 @@ Item {
             left: parent.left;
             leftMargin: Constants.DefaultMargin;
         }
-        visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisPaintLayer" || layerModel.activeType === "KisGroupLayer") : false;
         horizontalAlignment: Text.AlignLeft;
         font.pixelSize: Constants.DefaultFontSize;
         font.bold: true;
@@ -276,7 +276,7 @@ Item {
             horizontalCenter: parent.horizontalCenter;
             margins: Constants.DefaultMargin;
         }
-        visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisPaintLayer" || layerModel.activeType === "KisGroupLayer") : false;
         height: visible ? childrenRect.height : 0;
         width: childrenRect.width;
         spacing: Constants.DefaultMargin;
@@ -289,8 +289,8 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeRChannelLocked) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeRChannelLocked = !layersModel.activeRChannelLocked;
+            color: (layerModel && layerModel.activeRChannelLocked) ? "#EAEAEA" : "transparent";
+            onClicked: if(layerModel) layerModel.activeRChannelLocked = !layerModel.activeRChannelLocked;
         }
         Button {
             id: greenLockedChannel
@@ -301,8 +301,8 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeGChannelLocked) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeGChannelLocked = !layersModel.activeGChannelLocked;
+            color: (layerModel && layerModel.activeGChannelLocked) ? "#EAEAEA" : "transparent";
+            onClicked: if(layerModel) layerModel.activeGChannelLocked = !layerModel.activeGChannelLocked;
         }
         Button {
             id: blueLockedChannel
@@ -313,8 +313,8 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeBChannelLocked) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeBChannelLocked = !layersModel.activeBChannelLocked;
+            color: (layerModel && layerModel.activeBChannelLocked) ? "#EAEAEA" : "transparent";
+            onClicked: if(layerModel) layerModel.activeBChannelLocked = !layerModel.activeBChannelLocked;
         }
         Button {
             id: alphaLockedChannel
@@ -325,13 +325,13 @@ Item {
             bold: true;
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeAChannelLocked) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeAChannelLocked = !layersModel.activeAChannelLocked;
+            color: (layerModel && layerModel.activeAChannelLocked) ? "#EAEAEA" : "transparent";
+            onClicked: if(layerModel) layerModel.activeAChannelLocked = !layerModel.activeAChannelLocked;
         }
     }
     Item {
         id: noConfigNeeded;
-        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisFilterMask" || layerModel.activeType === "KisAdjustmentLayer") : false;
         anchors {
            top: lockedChannelsRow.bottom;
            left: parent.left;
@@ -372,7 +372,7 @@ Item {
     }
     Flickable {
         id: configNeeded;
-        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
+        visible: layerModel ? (layerModel.activeType === "KisFilterMask" || layerModel.activeType === "KisAdjustmentLayer") : false;
         anchors {
            top: lockedChannelsRow.bottom;
            left: parent.left;
@@ -390,7 +390,7 @@ Item {
             height: item ? item.height : 1;
             onItemChanged: {
                 if(item && typeof(item.configuration) !== 'undefined') {
-                    item.configuration = layersModel.activeFilterConfig;
+                    item.configuration = layerModel.activeFilterConfig;
                 }
             }
         }
