@@ -1293,10 +1293,19 @@ void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter,
         qreal zoomY;
         converter.zoom(&zoomX, &zoomY);
 
+        // Make the border rect scale to the actual size.
         borderRect.setRight(borderRect.right() * zoomX);
         borderRect.setBottom(borderRect.bottom() * zoomY);
         kDebug() << "PAINTING BORDER" << size() << painter.transform()
                  << borderRect << zoomX << zoomY;
+
+        // The whole border must fit *inside* the available rect.
+        borderRect.setLeft(borderRect.left() + bd->borderWidth(KoBorder::LeftBorder) / qreal(2.0));
+        borderRect.setRight(borderRect.right() - bd->borderWidth(KoBorder::RightBorder) / qreal(2.0));
+        borderRect.setTop(borderRect.top() + bd->borderWidth(KoBorder::TopBorder) / qreal(2.0));
+        borderRect.setBottom(borderRect.bottom() - bd->borderWidth(KoBorder::BottomBorder) / qreal(2.0));
+
+        // Actually paint the border.
         bd->paint(painter, borderRect, zoomX, zoomY);
     }
 }

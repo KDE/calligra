@@ -95,14 +95,14 @@ public:
     /// Holds data about one border line.
     struct KOODF_EXPORT BorderData {
         BorderData();
-        BorderStyle  style; ///< The border style. (see KoBorder::BorderStyle)
-        qreal spacing;
-
-        QPen innerPen;
-        QPen outerPen;
 
         /// Compare the border data with another one
         bool operator==(const BorderData &other) const;
+
+        BorderStyle  style; ///< The border style. (see KoBorder::BorderStyle)
+        QPen outerPen;      ///< Holds the outer line when borderstyle is double and the whole line otherwise
+        QPen innerPen;      ///< Holds the inner line when borderstyle is double
+        qreal spacing;      ///< Holds the spacing between the outer and inner lines.
     };
 
 
@@ -115,7 +115,8 @@ public:
 
     /// Assignment
     KoBorder &operator=(const KoBorder &other);
-    /// Compare the border with the other one
+
+    /// Compare the border with another one
     bool operator==(const KoBorder &other) const;
     bool operator!=(const KoBorder &other) const { return !operator==(other); }
 
@@ -124,6 +125,7 @@ public:
     void setBorderColor(BorderSide side, const QColor &color);
     QColor borderColor(BorderSide side) const;
     void setBorderWidth(BorderSide side, qreal width);
+    qreal outerBorderWidth(BorderSide side) const;
     qreal borderWidth(BorderSide side) const;
     void setInnerBorderWidth(BorderSide side, qreal width);
     qreal innerBorderWidth(BorderSide side) const;

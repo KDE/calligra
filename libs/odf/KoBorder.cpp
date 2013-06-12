@@ -51,10 +51,10 @@ KoBorderPrivate::~KoBorderPrivate()
 }
 
 KoBorder::BorderData::BorderData()
-    : style(KoBorder::BorderNone),
-    spacing(0),
-    innerPen(QPen()),
-    outerPen(QPen())
+    : style(KoBorder::BorderNone)
+    , outerPen(QPen())
+    , innerPen(QPen())
+    , spacing(0)
 {
 }
 
@@ -293,6 +293,19 @@ void KoBorder::setBorderWidth(BorderSide side, qreal width)
 }
 
 qreal KoBorder::borderWidth(BorderSide side) const
+{
+    if (!d->data.contains(side)) {
+        return 0;
+    } else {
+        if (d->data[side].style == BorderDouble)
+            return (d->data[side].outerPen.widthF() + d->data[side].innerPen.widthF()
+                    + d->data[side].spacing);
+        else
+            return d->data[side].outerPen.widthF();
+    }
+}
+
+qreal KoBorder::outerBorderWidth(BorderSide side) const
 {
     if (!d->data.contains(side)) {
         return 0;
