@@ -443,19 +443,25 @@ void KoBorder::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
     }
 
     if (borderData.style == KoBorder::BorderDouble) {
-        // outerWidth is the width of the outer line.  The offsets
-        // are the distances from the center line of the whole
-        // border to the centerlines of the outer and inner
+        // The offsets are the distances from the center line of the
+        // whole border to the centerlines of the outer and inner
         // borders respectively.
-        qreal outerWidth = borderData.outerPen.widthF() - borderData.innerPen.widthF() - borderData.spacing;
-        qreal outerOffset = borderData.outerPen.widthF() / 2.0 + outerWidth / 2.0;
-        qreal innerOffset = borderData.outerPen.widthF() / 2.0 - borderData.innerPen.widthF() / 2.0;
+        qreal totalWidth = (borderData.innerPen.widthF() + borderData.outerPen.widthF()
+                            + borderData.spacing);
+        qreal outerOffset = (totalWidth - borderData.outerPen.widthF()) / 2.0;
+        qreal innerOffset = (totalWidth - borderData.innerPen.widthF()) / 2.0;
+
+        kDebug() << "outer width = " << borderData.outerPen.widthF() 
+                 << "inner width = " << borderData.innerPen.widthF()
+                 << "spacing = " << borderData.spacing;
+        kDebug() << "totalWidth, outerOffset, innerOffset = "
+                 << totalWidth << outerOffset << innerOffset;
 
         QPointF outerOffset2D(-inwardsX * outerOffset, -inwardsY * outerOffset);
-        QPointF innerOffset2D(inwardsX * innerOffset, inwardsY * innerOffset);
+        QPointF innerOffset2D( inwardsX * innerOffset,  inwardsY * innerOffset);
 
         // Draw the outer line.
-        pen.setWidthF(zoom * outerWidth);
+        pen.setWidthF(zoom * borderData.outerPen.widthF());
         painter.setPen(pen);
         painter.drawLine(lineStart + outerOffset2D, lineEnd + outerOffset2D);
 

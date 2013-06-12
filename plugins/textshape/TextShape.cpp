@@ -94,7 +94,12 @@ TextShape::~TextShape()
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    if (paintContext.showTextShapeOutlines) {
+    if (border()) {
+        kDebug() << "PAINTING BORDER" << size() << painter.transform();
+        paintBorder(painter, converter, paintContext);
+    }
+    else if (paintContext.showTextShapeOutlines) {
+        // No need to paint the outlines if there is a real border.
         painter.save();
         applyConversion(painter, converter);
         if (qAbs(rotation()) > 1)

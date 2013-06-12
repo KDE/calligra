@@ -1292,6 +1292,11 @@ void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter,
         qreal zoomX;
         qreal zoomY;
         converter.zoom(&zoomX, &zoomY);
+
+        borderRect.setRight(borderRect.right() * zoomX);
+        borderRect.setBottom(borderRect.bottom() * zoomY);
+        kDebug() << "PAINTING BORDER" << size() << painter.transform()
+                 << borderRect << zoomX << zoomY;
         bd->paint(painter, borderRect, zoomX, zoomY);
     }
 }
