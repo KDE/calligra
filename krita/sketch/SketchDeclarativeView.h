@@ -46,6 +46,7 @@ signals:
     void drawCanvasChanged();
 
 protected:
+    void resizeEvent(QResizeEvent *event);
 
     void drawBackground(QPainter *painter, const QRectF &rect);
 private:

@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <QResizeEvent>
 #include <opengl/kis_opengl_canvas2.h>
+#include <kis_coordinates_converter.h>
 
 SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     : QDeclarativeView(parent)
@@ -37,7 +38,6 @@ SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
 SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
     : QDeclarativeView(url, parent)
     , m_canvasWidget(0)
-    , m_GLInitialized(false)
 {
     setCacheMode(QGraphicsView::CacheNone);
 }
@@ -88,4 +88,14 @@ void SketchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect
         QDeclarativeView::drawBackground(painter, rect);
     }
 
+}
+
+
+void SketchDeclarativeView::resizeEvent(QResizeEvent *event)
+{
+    if (m_canvasWidget) {
+        m_canvasWidget->coordinatesConverter()->setCanvasWidgetSize(event->size());
+    }
+
+    QDeclarativeView::resizeEvent(event);
 }
