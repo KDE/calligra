@@ -15,16 +15,13 @@ QT += core gui xml svg declarative
 CALLIGRAWORDS_DIR = $${TOP_SOURCE_DIR}/../words
 CALLIGRASHEETS_DIR = $${TOP_SOURCE_DIR}/../sheets
 
-INCLUDEPATH += \
-     $${CALLIGRAWORDS_DIR} \
-     $${CALLIGRAWORDS_DIR}/part \
-     $${CALLIGRASHEETS_DIR} \
-     $${CALLIGRASHEETS_DIR}/part
+INCLUDEPATH += $${CALLIGRAWORDS_DIR} $${CALLIGRAWORDS_DIR}/part
+#INCLUDEPATH += $${CALLIGRASHEETS_DIR} $${CALLIGRASHEETS_DIR}/part
 
 LIBS += -lcalligralibs
 #LIBS += -lcalligraplugins
 LIBS += -lcalligrawords
-LIBS += -lcalligrasheets
+#LIBS += -lcalligrasheets
 
 unix:!macx {
     # needed for XInitThreads hack

@@ -15,7 +15,7 @@ SUBDIRS += calligralibs
 SUBDIRS += calligrafilters
 SUBDIRS += calligraplugins
 SUBDIRS += calligrawords
-SUBDIRS += calligrasheets
+#SUBDIRS += calligrasheets
 SUBDIRS += coffice
 
 android:OTHER_FILES += \
