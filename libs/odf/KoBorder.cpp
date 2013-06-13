@@ -428,7 +428,6 @@ void KoBorder::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
                                const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
                                int inwardsX, int inwardsY) const
 {
-
     // Return if nothing to paint
     if (borderData.style == KoBorder::BorderNone)
         return;
@@ -460,9 +459,9 @@ void KoBorder::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
         // whole border to the centerlines of the outer and inner
         // borders respectively.
         qreal totalWidth = (borderData.innerPen.widthF() + borderData.outerPen.widthF()
-                            + borderData.spacing);
-        qreal outerOffset = (totalWidth - borderData.outerPen.widthF()) / 2.0;
-        qreal innerOffset = (totalWidth - borderData.innerPen.widthF()) / 2.0;
+                            + borderData.spacing) * zoom;
+        qreal outerOffset = (totalWidth - borderData.outerPen.widthF() * zoom) / 2.0;
+        qreal innerOffset = (totalWidth - borderData.innerPen.widthF() * zoom) / 2.0;
 
         kDebug() << "outer width = " << borderData.outerPen.widthF() 
                  << "inner width = " << borderData.innerPen.widthF()
