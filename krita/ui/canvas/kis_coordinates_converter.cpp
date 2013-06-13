@@ -337,7 +337,6 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
 {
     KisConfig cfg;
     QRectF viewportRect = imageRectInViewportPixels();
-
     if(cfg.scrollCheckers()) {
         *textureTransform = QTransform();
         *textureRect = QRectF(0, 0, viewportRect.width(),viewportRect.height());
