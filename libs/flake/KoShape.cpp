@@ -1283,8 +1283,7 @@ bool KoShape::isEditable() const
 }
 
 // painting
-void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter,
-                          KoShapePaintingContext &paintcontext)
+void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter)
 {
     KoBorder *bd = border();
     if (!bd) {

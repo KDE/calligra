@@ -273,7 +273,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
         return;
     }
 
-    paintBorder(painter, converter, paintContext);
+    paintBorder(painter, converter);
 
     QSize pixmapSize = calcOptimalPixmapSize(viewRect.size(), imageData()->image().size());
 

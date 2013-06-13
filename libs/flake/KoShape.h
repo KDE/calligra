@@ -197,9 +197,8 @@ public:
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
-     * @param paintcontext the painting context.
      */
-    virtual void paintBorder(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    virtual void paintBorder(QPainter &painter, const KoViewConverter &converter);
 
     /**
      * Load a shape from odf

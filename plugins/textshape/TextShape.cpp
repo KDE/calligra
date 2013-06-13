@@ -96,7 +96,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 {
     if (border()) {
         kDebug() << "PAINTING BORDER" << size() << painter.transform();
-        paintBorder(painter, converter, paintContext);
+        paintBorder(painter, converter);
     }
     else if (paintContext.showTextShapeOutlines) {
         // No need to paint the outlines if there is a real border.
