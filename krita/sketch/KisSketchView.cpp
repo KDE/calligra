@@ -93,8 +93,6 @@ public:
         , selectionExtras(0)
         , undoAction(0)
         , redoAction(0)
-        , viewportMoved(false)
-        , zoomLevelChanged(false)
     { }
     ~Private() {
         delete selectionExtras;
@@ -104,7 +102,6 @@ public:
     void documentOffsetMoved();
     void zoomChanged();
     void resetDocumentPosition();
-    void configChanged();
     void removeNodeAsync(KisNodeSP removedNode);
 
     KisSketchView* q;
@@ -120,27 +117,12 @@ public:
 
     KisSelectionExtras *selectionExtras;
 
-    int modelMatrixLocation;
-    int viewMatrixLocation;
-    int projectionMatrixLocation;
-    int texture0Location;
-    int textureScaleLocation;
-    int vertexAttributeLocation;
-    int uv0AttributeLocation;
-
     QTimer *timer;
 
     QTimer *loadedTimer;
     QTimer *savedTimer;
     QAction* undoAction;
     QAction* redoAction;
-
-    QColor backgroundColor;
-    QBrush checkers;
-
-    QPoint canvasOffset;
-    bool viewportMoved;
-    bool zoomLevelChanged;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -157,8 +139,6 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
 
     KoZoomMode::setMinimumZoom(0.1);
     KoZoomMode::setMaximumZoom(16.0);
-
-    d->configChanged();
 
     d->timer = new QTimer(this);
     d->timer->setSingleShot(true);
@@ -436,9 +416,8 @@ void KisSketchView::Private::imageUpdated(const QRect &updated)
 
 void KisSketchView::Private::documentOffsetMoved()
 {
-    viewportMoved = true;
-
     if (q->scene()) {
+        qDebug() << "canvasOffset";
         q->scene()->views().at(0)->update();
         q->scene()->invalidate( 0, 0, q->width(), q->height() );
     }
@@ -457,25 +436,8 @@ void KisSketchView::Private::resetDocumentPosition()
     pos.ry() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
 
     view->canvasControllerWidget()->setScrollBarValue(pos);
-
-    canvasOffset = QPoint();
 }
 
-void KisSketchView::Private::configChanged()
-{
-    KisConfig config;
-    backgroundColor = config.canvasBorderColor();
-
-    int checkSize = config.checkSize();
-    QImage tile(checkSize * 2, checkSize * 2, QImage::Format_RGB32);
-    QPainter pt(&tile);
-    pt.fillRect(tile.rect(), Qt::white);
-    pt.fillRect(0, 0, checkSize, checkSize, config.checkersColor());
-    pt.fillRect(checkSize, checkSize, checkSize, checkSize, config.checkersColor());
-    pt.end();
-
-    checkers = QBrush(tile);
-}
 
 void KisSketchView::Private::removeNodeAsync(KisNodeSP removedNode)
 {
@@ -486,8 +448,6 @@ void KisSketchView::Private::removeNodeAsync(KisNodeSP removedNode)
 
 void KisSketchView::Private::zoomChanged()
 {
-    zoomLevelChanged = true;
-
     if (q->scene()) {
         q->scene()->views().at(0)->update();
         q->scene()->invalidate( 0, 0, q->width(), q->height() );
