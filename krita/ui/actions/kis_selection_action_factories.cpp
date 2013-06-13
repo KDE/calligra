@@ -25,6 +25,8 @@
 #include <KoDocumentEntry.h>
 #include <KoServiceProvider.h>
 #include <KoPart.h>
+#include <KoPathShape.h>
+#include <KoShapeController.h>
 
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
@@ -44,6 +46,7 @@
 #include "kis_selection_manager.h"
 #include "kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
+#include "kis_shape_selection.h"
 
 namespace ActionHelper {
 
@@ -108,8 +111,8 @@ void KisSelectAllActionFactory::run(KisView2 *view)
         KisImageSP m_image;
         KUndo2Command* paint() {
             KisSelectionSP selection = m_image->globalSelection();
-            KisSelectionTransaction transaction(QString(), m_image->undoAdapter(), selection);
-            selection->getOrCreatePixelSelection()->select(m_image->bounds());
+            KisSelectionTransaction transaction(QString(), selection->pixelSelection());
+            selection->pixelSelection()->select(m_image->bounds());
             return transaction.endAndTake();
         }
     };
@@ -301,33 +304,9 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
 void KisPasteActionFactory::run(KisView2 *view)
 {
     KisImageWSP image = view->image();
-
-    //figure out where to position the clip
-    // XXX: Fix this for internal points & zoom! (BSAR)
-    QWidget * w = view->canvas();
-    QPoint center = QPoint(w->width() / 2, w->height() / 2);
-    QPoint bottomright = QPoint(w->width(), w->height());
-    if (bottomright.x() > image->width())
-        center.setX(image->width() / 2);
-    if (bottomright.y() > image->height())
-        center.setY(image->height() / 2);
-
-    const KoCanvasBase* canvasBase = view->canvasBase();
-    const KoViewConverter* viewConverter = view->canvasBase()->viewConverter();
-
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(
-        QPoint(
-            viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX()) + center.x(),
-            viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY()) + center.y()));
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
 
     if (clip) {
-        // Pasted layer content could be outside image bounds and invisible, if that is the case move content into the bounds
-        QRect exactBounds = clip->exactBounds();
-        if (!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
-            clip->setX(clip->x() - exactBounds.x());
-            clip->setY(clip->y() - exactBounds.y());
-        }
-
         KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
@@ -349,7 +328,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
 {
     Q_UNUSED(view);
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QPoint());
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
     if (!clip) return;
 
     QRect rect = clip->exactBounds();
@@ -384,4 +363,36 @@ void KisInvertSelectionOperaton::runFromXML(KisView2* view, const KisOperationCo
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
     runFilter(filter, view, config);
+}
+
+void KisSelectionToVectorActionFactory::run(KisView2 *view)
+{
+    KisSelectionSP selection = view->selection();
+
+    if (selection->hasShapeSelection() ||
+        !selection->outlineCacheValid()) {
+
+        return;
+    }
+
+    QPainterPath selectionOutline = selection->outlineCache();
+    QTransform transform = view->canvasBase()->coordinatesConverter()->imageToDocumentTransform();
+
+    KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(selectionOutline));
+    shape->setShapeId(KoPathShapeId);
+
+    /**
+     * Mark a shape that it belongs to a shape selection
+     */
+    if(!shape->userData()) {
+        shape->setUserData(new KisShapeSelectionMarker);
+    }
+
+    KisProcessingApplicator *ap = beginAction(view, i18n("Convert to Vector Selection"));
+
+    ap->applyCommand(view->canvasBase()->shapeController()->addShape(shape),
+                     KisStrokeJobData::SEQUENTIAL,
+                     KisStrokeJobData::EXCLUSIVE);
+
+    endAction(ap, KisOperationConfiguration(id()).toXML());
 }

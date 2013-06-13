@@ -54,16 +54,24 @@ public:
     KisDoc2* doc;
     KisView2* view;
     KUrl url;
+    bool importAsLayer;
 
+    QString prettyLayerName() const;
     void importAsPaintLayer(KisPaintDeviceSP device);
     void importAsTransparencyMask(KisPaintDeviceSP device);
 };
+
+QString KisImportCatcher::Private::prettyLayerName() const
+{
+    QString name = url.fileName();
+    return !name.isEmpty() ? name : url.prettyUrl();
+}
 
 void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
 {
     KisLayerSP newLayer =
         new KisPaintLayer(view->image(),
-                          url.prettyUrl(),
+                          prettyLayerName(),
                           OPACITY_OPAQUE_U8,
                           device);
 
@@ -82,6 +90,7 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
     adapter.addNode(newLayer, parent, currentActiveLayer);
 }
 
+// NOTE: Unused currently
 void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device)
 {
     KisLayerSP currentActiveLayer = view->activeLayer();
@@ -99,7 +108,7 @@ void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device
 
     KisTransparencyMaskSP mask = new KisTransparencyMask();
     mask->setSelection(new KisSelection(new KisDefaultBounds(currentActiveLayer->image())));
-    mask->setName(url.prettyUrl());
+    mask->setName(prettyLayerName());
 
     QRect rc(device->exactBounds());
     KisPainter painter(mask->paintDevice());
@@ -120,18 +129,33 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool impor
     m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
-    m_d->doc->openUrl(url);
+    m_d->importAsLayer = importAsLayer;
+    connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    bool result = m_d->doc->openUrl(url);
 
+    if (!result) {
+        deleteMyself();
+    }
+}
+
+void KisImportCatcher::slotLoadingFinished()
+{
     KisImageWSP importedImage = m_d->doc->image();
+    importedImage->waitForDone();
 
     if (importedImage && importedImage->projection()->exactBounds().isValid()) {
-        if (importAsLayer) {
+        if (m_d->importAsLayer) {
             m_d->importAsPaintLayer(importedImage->projection());
         } else {
             m_d->importAsTransparencyMask(importedImage->projection());
         }
     }
 
+    deleteMyself();
+}
+
+void KisImportCatcher::deleteMyself()
+{
     m_d->doc->deleteLater();
     deleteLater();
 }

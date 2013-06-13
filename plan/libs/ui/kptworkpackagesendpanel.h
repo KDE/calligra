@@ -44,7 +44,7 @@ public:
     explicit WorkPackageSendPanel( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *parent=0 );
 
 signals:
-    void sendWorkpackages( QList<Node*>&, Resource* );
+    void sendWorkpackages( const QList<Node*>&, Resource* );
 
 protected slots:
     void slotSendClicked();

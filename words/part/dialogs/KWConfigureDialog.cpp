@@ -65,6 +65,7 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()) );
+    connect(this, SIGNAL(changed()), parent, SLOT(slotUpdateAuthorProfileActions()));
 }
 
 void KWConfigureDialog::slotApply()
@@ -73,6 +74,8 @@ void KWConfigureDialog::slotApply()
     m_miscPage->apply();
     m_docPage->apply();
     m_authorPage->apply();
+
+    emit changed();
 }
 
 void KWConfigureDialog::slotDefault()
