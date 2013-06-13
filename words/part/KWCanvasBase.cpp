@@ -180,6 +180,17 @@ void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
     const KoPageLayout pageLayout = viewMap.page.pageStyle().pageLayout();
 
     // Get the coordinates of the border rect in view coordinates.
+
+    // FIXME: Is this correct? Here we compute the center lines of the
+    //        border which makes a thick border intrude on the area
+    //        defined by the margin. But the XSL model of borders,
+    //        which ODF follows, states that the border should be
+    //        drawn totally inside the margin.
+    //
+    //        Or maybe it is correct but KoBorder::paint() should
+    //        paint the border inside the defined rectangle instead of
+    //        using it as the center lines for the border lines as it
+    //        does now.
     QPointF topLeftCorner = viewConverter()->documentToView(pageRect.topLeft()
                                                             + QPointF(pageLayout.leftMargin,
                                                                       pageLayout.topMargin));
@@ -189,108 +200,12 @@ void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
     QRectF borderRect = QRectF(topLeftCorner, bottomRightCorner);
 
     // Actually paint the border
-#if 1
     qreal zoomX;
     qreal zoomY;
     viewConverter()->zoom(&zoomX, &zoomY);
     pageLayout.border.paint(painter, borderRect, zoomX, zoomY);
-#else
-    doPaintBorder(painter, pageLayout.border, borderRect, zoomX, zoomY);
-#endif
 
     painter.restore();
-}
-
-void KWCanvasBase::doPaintBorder(QPainter &painter, const KoBorder &border,
-                                 const QRectF &borderRect) const
-{
-    // Get the zoom.
-    qreal zoomX;
-    qreal zoomY;
-    viewConverter()->zoom(&zoomX, &zoomY);
-
-    KoBorder::BorderData borderSide = border.borderData(KoBorder::LeftBorder);
-    painter.save();
-    paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.bottomLeft(),
-                    zoomX, 1, 0);
-    borderSide = border.borderData(KoBorder::TopBorder);
-    painter.restore();
-    painter.save();
-    paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.topRight(),
-                    zoomY, 0, 1);
-
-    borderSide = border.borderData(KoBorder::RightBorder);
-    painter.restore();
-    painter.save();
-    paintBorderSide(painter, borderSide, borderRect.topRight(), borderRect.bottomRight(),
-                    zoomX, -1, 0);
-
-    borderSide = border.borderData(KoBorder::BottomBorder);
-    painter.restore();
-    painter.save();
-    paintBorderSide(painter, borderSide, borderRect.bottomLeft(), borderRect.bottomRight(),
-                    zoomY, 0, -1);
-    painter.restore();
-}
-
-void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
-                                   const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
-                                   int inwardsX, int inwardsY) const
-{
-
-    // Return if nothing to paint
-    if (borderData.style == KoBorder::BorderNone)
-        return;
-
-    // Set up the painter and inner and outer pens.
-    QPen pen = painter.pen();
-    // Line color
-    pen.setColor(borderData.outerPen.color());
-
-    // Line style
-    switch (borderData.style) {
-    case KoBorder::BorderNone: break; // No line
-    case KoBorder::BorderDotted: pen.setStyle(Qt::DotLine); break;
-    case KoBorder::BorderDashed: pen.setStyle(Qt::DashLine); break;
-    case KoBorder::BorderSolid: pen.setStyle(Qt::SolidLine); break;
-    case KoBorder::BorderDouble: pen.setStyle(Qt::SolidLine); break; // Handled separately
-    case KoBorder::BorderGroove: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderRidge: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderDashDot: pen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDot: pen.setStyle(Qt::DashDotDotLine); break;
-    default:
-        pen.setStyle(Qt::SolidLine);
-    }
-
-    if (borderData.style == KoBorder::BorderDouble) {
-        // outerWidth is the width of the outer line.  The offsets
-        // are the distances from the center line of the whole
-        // border to the centerlines of the outer and inner
-        // borders respectively.
-        qreal outerWidth = borderData.outerPen.widthF() - borderData.innerPen.widthF() - borderData.spacing;
-        qreal outerOffset = borderData.outerPen.widthF() / 2.0 + outerWidth / 2.0;
-        qreal innerOffset = borderData.outerPen.widthF() / 2.0 - borderData.innerPen.widthF() / 2.0;
-
-        QPointF outerOffset2D(-inwardsX * outerOffset, -inwardsY * outerOffset);
-        QPointF innerOffset2D(inwardsX * innerOffset, inwardsY * innerOffset);
-
-        // Draw the outer line.
-        pen.setWidthF(zoom * outerWidth);
-        painter.setPen(pen);
-        painter.drawLine(lineStart + outerOffset2D, lineEnd + outerOffset2D);
-
-        // Draw the inner line
-        pen.setWidthF(zoom * borderData.innerPen.widthF());
-        painter.setPen(pen);
-        painter.drawLine(lineStart + innerOffset2D, lineEnd + innerOffset2D);
-    }
-    else {
-        pen.setWidthF(zoom * borderData.outerPen.widthF());
-        painter.setPen(pen);
-        painter.drawLine(lineStart, lineEnd);
-    }
 }
 
 void KWCanvasBase::paintGrid(QPainter &painter, KWViewMode::ViewMap &vm)
