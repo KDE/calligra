@@ -32,18 +32,20 @@ class StepStepBase : public QObject
     //Basic Properties of a step, allows for usage in QML
     Q_PROPERTY(bool Foreign READ Foreign WRITE setForeign)
     Q_PROPERTY(int Position READ Position WRITE setPosition)
-    Q_PROPERTY(QString Step READ Step);
+    Q_PROPERTY(QString Step READ Step)
+    Q_PROPERTY(QString Type READ Type)
     
-    StepStepBase();
-    StepStepBase(const StepStepBase& other);
-    virtual ~StepStepBase();
-    virtual StepStepBase& operator=(const StepStepBase& other);
-    virtual bool operator==(const StepStepBase& other) const;
+    StepStepBase()=0;
+    StepStepBase(const StepStepBase& other)=0;
+    
+    virtual ~StepStepBase() =0;
+    virtual StepStepBase& operator=(const StepStepBase& other)=0;
+    virtual bool operator==(const StepStepBase& other) const=0;
     
     //String Representation of a Step
-    virtual QString toString();
+    virtual QString toString()=0;
     //XML Representation of a Step for use in serialization
-    virtual QString toXML();
+    virtual QString toXML()=0;
     
     //The Foreign Property gives indication whether the step came
     //from a source besides the user, say for instance if the user
@@ -62,11 +64,15 @@ class StepStepBase : public QObject
     //Dog and I make it Dogs, Step would hold an "s"
     QString Step();    
     
+    //The Type Property Returns the Type of Operation that the step is as a QString
+    //mostly useful for equality testing and serialization/deserialization
+    QString Type();
     
 private:
   bool _isForeign;
   int _position;
-  QString _Step;
+  QString _step;
+  const QString _type;
   
 };
 
