@@ -138,7 +138,12 @@ public:
     bool hasBorder() const;
     bool hasBorder(BorderSide side) const;
 
-    void paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, qreal zoomY) const;
+    enum BorderPaintArea {
+        PaintOnLine,
+        PaintInsideLine
+    };
+    void paint(QPainter &painter, QRectF borderRect, qreal zoomX, qreal zoomY,
+               BorderPaintArea whereToPaint = PaintInsideLine) const;
 
     /**
      * Load the style from the element

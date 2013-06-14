@@ -180,17 +180,6 @@ void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
     const KoPageLayout pageLayout = viewMap.page.pageStyle().pageLayout();
 
     // Get the coordinates of the border rect in view coordinates.
-
-    // FIXME: Is this correct? Here we compute the center lines of the
-    //        border which makes a thick border intrude on the area
-    //        defined by the margin. But the XSL model of borders,
-    //        which ODF follows, states that the border should be
-    //        drawn totally inside the margin.
-    //
-    //        Or maybe it is correct but KoBorder::paint() should
-    //        paint the border inside the defined rectangle instead of
-    //        using it as the center lines for the border lines as it
-    //        does now.
     QPointF topLeftCorner = viewConverter()->documentToView(pageRect.topLeft()
                                                             + QPointF(pageLayout.leftMargin,
                                                                       pageLayout.topMargin));

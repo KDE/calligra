@@ -395,8 +395,18 @@ bool KoBorder::hasBorder(KoBorder::BorderSide side) const
 //                         painting
 
 
-void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, qreal zoomY) const
+void KoBorder::paint(QPainter &painter, QRectF borderRect, qreal zoomX, qreal zoomY,
+                     BorderPaintArea whereToPaint) const
 {
+    // The XSL area model says that all borders must fit inside the area left by the margin.
+    // In this case, we must shrink the border rect to fit inside the given rect.
+    if (whereToPaint == PaintInsideLine) {
+        borderRect.setLeft(borderRect.left() + borderWidth(LeftBorder) * zoomX / qreal(2.0));
+        borderRect.setRight(borderRect.right() - borderWidth(RightBorder) * zoomX / qreal(2.0));
+        borderRect.setTop(borderRect.top() + borderWidth(TopBorder) * zoomY / qreal(2.0));
+        borderRect.setBottom(borderRect.bottom() - borderWidth(BottomBorder) * zoomY / qreal(2.0));
+    }
+
     painter.save();
     KoBorder::BorderData borderSide = borderData(KoBorder::LeftBorder);
     paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.bottomLeft(),
@@ -478,7 +488,7 @@ void KoBorder::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
         painter.drawLine(lineStart + outerOffset2D, lineEnd + outerOffset2D);
 
         // Draw the inner line
-        pen.setWidthF(zoom * borderData.innerPen.widthF());
+        pen.setWidthF(zoom * borderData.innerPen.widthF() * qreal(5.0));
         painter.setPen(pen);
         painter.drawLine(lineStart + innerOffset2D, lineEnd + innerOffset2D);
     }
