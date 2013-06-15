@@ -2,6 +2,7 @@
 Type=Service
 Name=MS Project Exchange Import Filter
 Name[cs]=Importní filtr Microsoft Project Exchange
+Name[it]=Filtro di importazione MS Project Exchange
 Name[nl]=Importfilter voor MS Project Exchange
 Name[pt]=Filtro de Importação de Exchange para o MS Project
 Name[pt_BR]=Filtro de importação de Exchange para MS Project
