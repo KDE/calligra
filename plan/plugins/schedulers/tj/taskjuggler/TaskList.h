@@ -68,7 +68,7 @@ protected:
 class KPLATOTJ_EXPORT TaskListIterator : public virtual CoreAttributesListIterator
 {
 public:
-    TaskListIterator(const CoreAttributesList& l) :
+    explicit TaskListIterator(const CoreAttributesList& l) :
         CoreAttributesListIterator(l) { }
     virtual ~TaskListIterator() { }
     Task* operator*();
