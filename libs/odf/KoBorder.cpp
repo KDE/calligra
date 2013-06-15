@@ -535,7 +535,7 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
                 lineEnd.setY(lineEnd.y() - displacement);
             }
             else {
-                lineStart.setX(lineStart.x() - displacement);
+                lineEnd.setX(lineEnd.x() - displacement);
             }
         }
 
