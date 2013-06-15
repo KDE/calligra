@@ -442,7 +442,7 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, q
         paintBorderSide(painter, start, end, &topEdge, false,
                         hasBorder(LeftBorder) ? &leftEdge : 0,
                         hasBorder(RightBorder) ? &rightEdge : 0,
-                        zoomX, zoomY, 1);
+                        zoomY, zoomX, 1);
     }
 
     // Bottom border
@@ -452,7 +452,7 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, q
         paintBorderSide(painter, start, end, &bottomEdge, false,
                         hasBorder(LeftBorder) ? &leftEdge : 0,
                         hasBorder(RightBorder) ? &rightEdge : 0,
-                        zoomX, zoomY, -1);
+                        zoomY, zoomX, -1);
     }
 
     // FIXME: Diagonal borders
