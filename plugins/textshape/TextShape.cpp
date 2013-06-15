@@ -95,7 +95,6 @@ TextShape::~TextShape()
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     if (border()) {
-        kDebug() << "PAINTING BORDER" << size() << painter.transform();
         paintBorder(painter, converter);
     }
     else if (paintContext.showTextShapeOutlines) {
