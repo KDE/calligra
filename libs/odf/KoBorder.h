@@ -142,7 +142,7 @@ public:
         PaintOnLine,
         PaintInsideLine
     };
-    void paint(QPainter &painter, QRectF borderRect, qreal zoomX, qreal zoomY,
+    void paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, qreal zoomY,
                BorderPaintArea whereToPaint = PaintInsideLine) const;
 
     /**
@@ -164,9 +164,13 @@ public:
     static QString msoBorderStyleString(BorderStyle borderstyle);
 
  private:
+    void paintBorderLine(QPainter &painter, const QPointF &top, const QPointF &bottom,
+                         BorderStyle borderStyle, const QPen &borderPen,
+                         qreal zoom, int inwardsX, int inwardsY) const;
     void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
                          const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
                          int inwardsX, int inwardsY) const;
+
     void parseAndSetBorder(const QString &border,
                            bool hasSpecialBorder, const QString &specialBorderString);
     void parseAndSetBorder(const BorderSide borderSide, const QString &border,
