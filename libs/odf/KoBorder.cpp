@@ -419,151 +419,59 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, q
     if (hasBorder(LeftBorder)) {
         start = borderRect.topLeft();
         end   = borderRect.bottomLeft();
-
-        // Adjust for linewidth
-        start.setX(start.x() + zoomX * leftEdge.outerPen.widthF() / qreal(2.0));
-        end.setX(end.x() + zoomX * leftEdge.outerPen.widthF() / qreal(2.0));
-        paintBorderLine(painter, start, end, leftEdge.style, leftEdge.outerPen, zoomX, 1, 0);
-
-        if (leftEdge.style == BorderDouble) {
-            // Adjust for linewidth and spacing.
-            start.setX(start.x() + zoomX * (leftEdge.outerPen.widthF() / qreal(2.0)
-                                            + leftEdge.spacing
-                                            + leftEdge.innerPen.widthF() / qreal(2.0)));
-            end.setX(end.x() + zoomX * (leftEdge.outerPen.widthF() / qreal(2.0)
-                                        + leftEdge.spacing
-                                        + leftEdge.innerPen.widthF() / qreal(2.0)));
-
-            // Adjust for neigboring inner lines.
-            if (hasBorder(TopBorder) && topEdge.style == BorderDouble) {
-                start.setY(start.y() + zoomY * (topEdge.outerPen.widthF()
-                                                + topEdge.spacing
-                                                + topEdge.innerPen.widthF() / qreal(2.0)));
-            }
-            if (hasBorder(BottomBorder) && bottomEdge.style == BorderDouble) {
-                end.setY(end.y() - zoomY * (bottomEdge.outerPen.widthF()
-                                            + bottomEdge.spacing
-                                            + bottomEdge.innerPen.widthF() / qreal(2.0)));
-            }
-
-            paintBorderLine(painter, start, end, leftEdge.style, leftEdge.innerPen, zoomX, 1, 0);
-        }
+        paintBorderSide(painter, start, end, &leftEdge, true,
+                        hasBorder(TopBorder) ? &topEdge : 0,
+                        hasBorder(BottomBorder) ? &bottomEdge : 0,
+                        zoomX, zoomY, 1);
     }
 
     // Right border
     if (hasBorder(RightBorder)) {
         start = borderRect.topRight();
         end   = borderRect.bottomRight();
-
-        // Adjust for linewidth
-        start.setX(start.x() - zoomX * rightEdge.outerPen.widthF() / qreal(2.0));
-        end.setX(end.x() - zoomX * rightEdge.outerPen.widthF() / qreal(2.0));
-        paintBorderLine(painter, start, end, rightEdge.style, rightEdge.outerPen, zoomX, 1, 0);
-
-        if (rightEdge.style == BorderDouble) {
-            // Adjust for linewidth and spacing.
-            start.setX(start.x() - zoomX * (rightEdge.outerPen.widthF() / qreal(2.0)
-                                            + rightEdge.spacing
-                                            + rightEdge.innerPen.widthF() / qreal(2.0)));
-            end.setX(end.x() - zoomX * (rightEdge.outerPen.widthF() / qreal(2.0)
-                                        + rightEdge.spacing
-                                        + rightEdge.innerPen.widthF() / qreal(2.0)));
-
-            // Adjust for neigboring inner lines.
-            if (hasBorder(TopBorder) && topEdge.style == BorderDouble) {
-                start.setY(start.y() + zoomY * (topEdge.outerPen.widthF()
-                                                + topEdge.spacing
-                                                + topEdge.innerPen.widthF() / qreal(2.0)));
-            }
-            if (hasBorder(BottomBorder) && bottomEdge.style == BorderDouble) {
-                end.setY(end.y() - zoomY * (bottomEdge.outerPen.widthF()
-                                            + bottomEdge.spacing
-                                            + bottomEdge.innerPen.widthF() / qreal(2.0)));
-            }
-
-            paintBorderLine(painter, start, end, rightEdge.style, leftEdge.innerPen, zoomX, 1, 0);
-        }
+        paintBorderSide(painter, start, end, &rightEdge, true,
+                        hasBorder(TopBorder) ? &topEdge : 0,
+                        hasBorder(BottomBorder) ? &bottomEdge : 0,
+                        zoomX, zoomY, -1);
     }
 
     // Top border
     if (hasBorder(TopBorder)) {
         start = borderRect.topLeft();
         end   = borderRect.topRight();
-        start.setY(start.y() + zoomY * topEdge.outerPen.widthF() / qreal(2.0));
-        end.setY(end.y() + zoomY * topEdge.outerPen.widthF() / qreal(2.0));
-        paintBorderLine(painter, start, end, topEdge.style, topEdge.outerPen, zoomY, 1, 0);
-
-        if (topEdge.style == BorderDouble) {
-            start.setY(start.y() + zoomY * (topEdge.outerPen.widthF() / qreal(2.0)
-                                            + topEdge.spacing
-                                            + topEdge.innerPen.widthF() / qreal(2.0)));
-            end.setY(end.y() + zoomY * (topEdge.outerPen.widthF() / qreal(2.0)
-                                        + topEdge.spacing
-                                        + topEdge.innerPen.widthF() / qreal(2.0)));
-
-            // Adjust for neigboring inner lines.
-            if (hasBorder(LeftBorder) && leftEdge.style == BorderDouble) {
-                start.setX(start.x() + zoomX * (leftEdge.outerPen.widthF()
-                                                + leftEdge.spacing
-                                                + leftEdge.innerPen.widthF() / qreal(2.0)));
-            }
-            if (hasBorder(RightBorder) && rightEdge.style == BorderDouble) {
-                end.setX(end.x() - zoomX * (rightEdge.outerPen.widthF()
-                                            + rightEdge.spacing
-                                            + rightEdge.innerPen.widthF() / qreal(2.0)));
-            }
-
-            paintBorderLine(painter, start, end, topEdge.style, topEdge.innerPen, zoomY, 1, 0);
-        }
+        paintBorderSide(painter, start, end, &topEdge, false,
+                        hasBorder(LeftBorder) ? &leftEdge : 0,
+                        hasBorder(RightBorder) ? &rightEdge : 0,
+                        zoomX, zoomY, 1);
     }
 
     // Bottom border
     if (hasBorder(BottomBorder)) {
         start = borderRect.bottomLeft();
         end   = borderRect.bottomRight();
-        start.setY(start.y() - zoomY * bottomEdge.outerPen.widthF() / qreal(2.0));
-        end.setY(end.y() - zoomY * bottomEdge.outerPen.widthF() / qreal(2.0));
-        paintBorderLine(painter, start, end, bottomEdge.style, bottomEdge.outerPen, zoomY, 1, 0);
-
-        if (bottomEdge.style == BorderDouble) {
-            start.setY(start.y() - zoomY * (bottomEdge.outerPen.widthF() / qreal(2.0)
-                                            + bottomEdge.spacing
-                                            + bottomEdge.innerPen.widthF() / qreal(2.0)));
-            end.setY(end.y() - zoomY * (bottomEdge.outerPen.widthF() / qreal(2.0)
-                                        + bottomEdge.spacing
-                                        + bottomEdge.innerPen.widthF() / qreal(2.0)));
-
-            // Adjust for neigboring inner lines.
-            if (hasBorder(LeftBorder) && leftEdge.style == BorderDouble) {
-                start.setX(start.x() + zoomX * (leftEdge.outerPen.widthF()
-                                                + leftEdge.spacing
-                                                + leftEdge.innerPen.widthF() / qreal(2.0)));
-            }
-            if (hasBorder(RightBorder) && rightEdge.style == BorderDouble) {
-                end.setX(end.x() - zoomX * (rightEdge.outerPen.widthF()
-                                            + rightEdge.spacing
-                                            + rightEdge.innerPen.widthF() / qreal(2.0)));
-            }
-
-            paintBorderLine(painter, start, end, bottomEdge.style, bottomEdge.innerPen, zoomY, 1, 0);
-        }
+        paintBorderSide(painter, start, end, &bottomEdge, false,
+                        hasBorder(LeftBorder) ? &leftEdge : 0,
+                        hasBorder(RightBorder) ? &rightEdge : 0,
+                        zoomX, zoomY, -1);
     }
 
     // FIXME: Diagonal borders
 }
 
-void KoBorder::paintBorderLine(QPainter &painter, const QPointF &lineStart, const QPointF &lineEnd,
-                               BorderStyle borderStyle, const QPen &borderPen,
-                               qreal zoom, int inwardsX, int inwardsY) const
+// zoomAcross is the zoom across the edge and zoomAlong is the zoom along the edge.
+void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lineEnd,
+                               BorderData *borderData, bool isVertical,
+                               BorderData *neighbour1, BorderData *neighbour2,
+                               qreal zoomAcross, qreal zoomAlong, int inwardsAcross) const
 {
     // Set up the painter and inner and outer pens.
     QPen pen = painter.pen();
 
     // Line color
-    pen.setColor(borderPen.color());
+    pen.setColor(borderData->outerPen.color());
 
     // Line style
-    switch (borderStyle) {
+    switch (borderData->style) {
     case KoBorder::BorderNone: break; // No line
     case KoBorder::BorderDotted: pen.setStyle(Qt::DotLine); break;
     case KoBorder::BorderDashed: pen.setStyle(Qt::DashLine); break;
@@ -579,10 +487,63 @@ void KoBorder::paintBorderLine(QPainter &painter, const QPointF &lineStart, cons
         pen.setStyle(Qt::SolidLine);
     }
 
-    // Draw the line.
-    pen.setWidthF(zoom * borderPen.widthF());
+    // Adjust the outer line so that it is inside the boundary.
+    qreal displacement = zoomAcross * borderData->outerPen.widthF() / qreal(2.0);
+    if (isVertical) {
+        lineStart.setX(lineStart.x() + inwardsAcross * displacement);
+        lineEnd.setX(lineEnd.x() + inwardsAcross * displacement);
+    }
+    else {
+        lineStart.setY(lineStart.y() + inwardsAcross * displacement);
+        lineEnd.setY(lineEnd.y() + inwardsAcross * displacement);
+    }
+
+    pen.setWidthF(zoomAcross * borderData->outerPen.widthF());
     painter.setPen(pen);
     painter.drawLine(lineStart, lineEnd);
+
+    if (borderData->style == BorderDouble) {
+        displacement = zoomAcross * (borderData->outerPen.widthF() / qreal(2.0)
+                                     + borderData->spacing
+                                     + borderData->innerPen.widthF() / qreal(2.0));
+        if (isVertical) {
+            lineStart.setX(lineStart.x() + inwardsAcross * displacement);
+            lineEnd.setX(lineEnd.x() + inwardsAcross * displacement);
+        }
+        else {
+            lineStart.setY(lineStart.y() + inwardsAcross * displacement);
+            lineEnd.setY(lineEnd.y() + inwardsAcross * displacement);
+        }
+
+        // Adjust for neigboring inner lines.
+        if (neighbour1 && neighbour1->style == BorderDouble) {
+            displacement = zoomAlong * (neighbour1->outerPen.widthF()
+                                        + neighbour1->spacing
+                                        + neighbour1->innerPen.widthF() / qreal(2.0));
+            if (isVertical) {
+                lineStart.setY(lineStart.y() + displacement);
+            }
+            else {
+                lineStart.setX(lineStart.x() + displacement);
+            }
+        }
+        if (neighbour2 && neighbour2->style == BorderDouble) {
+            displacement = zoomAlong * (neighbour2->outerPen.widthF()
+                                        + neighbour2->spacing
+                                        + neighbour2->innerPen.widthF() / qreal(2.0));
+            if (isVertical) {
+                lineEnd.setY(lineEnd.y() - displacement);
+            }
+            else {
+                lineStart.setX(lineStart.x() - displacement);
+            }
+        }
+
+        // Draw the inner line.
+        pen.setWidthF(zoomAcross * borderData->innerPen.widthF());
+        painter.setPen(pen);
+        painter.drawLine(lineStart, lineEnd);
+    }
 }
 
 

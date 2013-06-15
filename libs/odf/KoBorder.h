@@ -164,12 +164,10 @@ public:
     static QString msoBorderStyleString(BorderStyle borderstyle);
 
  private:
-    void paintBorderLine(QPainter &painter, const QPointF &top, const QPointF &bottom,
-                         BorderStyle borderStyle, const QPen &borderPen,
-                         qreal zoom, int inwardsX, int inwardsY) const;
-    void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
-                         const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
-                         int inwardsX, int inwardsY) const;
+    void paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lineEnd,
+                         BorderData *borderData, bool isVertical,
+                         BorderData *neighbour1, BorderData *neighbor2,
+                         qreal zoomAcross, qreal zoomAlong, int inwardsAcross) const;
 
     void parseAndSetBorder(const QString &border,
                            bool hasSpecialBorder, const QString &specialBorderString);
