@@ -104,7 +104,7 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu
     removables.sort();
     assignables.sort();
 
-    assignableTagsMenu = addMenu(koIcon("list-add"),i18n("Assign to tag:"));
+    assignableTagsMenu = addMenu(koIcon("list-add"),i18n("Assign to tag"));
 
     if (!removables.isEmpty()) {
         addSeparator();

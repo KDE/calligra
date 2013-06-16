@@ -860,7 +860,7 @@ void KoResourceItemChooser::syncTagBoxEntryAddition(const QString& tag)
     tags.prepend(d->unfilteredView);
     int index = tags.indexOf(tag);
     if (d->tagOpComboBox->findText(tag) == -1) {
-        d->tagOpComboBox->insertItem(index,tag);
+        d->tagOpComboBox->insertItem(index, tag);
     }
 }
 
@@ -871,7 +871,7 @@ void KoResourceItemChooser::tagSaveButtonPressed()
 
 QStringList KoResourceItemChooser::availableTags() const
 {
-    int count = d->tagOpComboBox->count();
+    const int count = d->tagOpComboBox->count();
     QStringList out;
 //      Skip the first item of the combo box since it is the `All Presets' view
 //      and thus is not a real tag.

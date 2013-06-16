@@ -82,7 +82,7 @@ signals:
     /// Emitted when a resource should be removed from an existing tag.
     void resourceTagRemovalRequested(KoResource* resource, const QString& tag);
     /// Emitted when a resource should be added to a new tag, which will need to be created.
-    void resourceAssignmentToNewTagRequested(KoResource* resource , const QString& tag);
+    void resourceAssignmentToNewTagRequested(KoResource* resource, const QString& tag);
 
 };
 
