@@ -179,7 +179,7 @@ void exitUtility()
 bool
 setTimezone(const char* tZone)
 {
-    UtilityError = "";
+    UtilityError.clear();
 
     if (setenv("TZ", tZone, 1) < 0)
         qFatal("Ran out of space in environment section while "
@@ -803,7 +803,7 @@ addTimeToDate(time_t day, time_t hour)
 time_t
 date2time(const QString& date)
 {
-    UtilityError = "";
+    UtilityError.clear();
 
     int y, m, d, hour, min, sec;
     char tZone[64] = "";
