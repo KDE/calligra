@@ -102,8 +102,10 @@ calligra_define_product(LIB_ODFTRAVERSE "libodftraverse"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(SCRIPTING "") # TODO
+# plugins
+calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
 # apps
-calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS)
+calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS PLUGIN_TEXTSHAPE)
 calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(STAGE_PART "Stage engine"  NEEDS CALLIGRA_LIBS LIB_KOPAGEAPP)
 calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  NEEDS STAGE_PART)
@@ -122,7 +124,7 @@ calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dia
 calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the KDE filemanager adding a \"Print\" action")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
-# plugins
+# more plugins
 calligra_define_product(PLUGIN_COLORENGINES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_MUSICSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_SPACENAVIGATOR ""  NEEDS CALLIGRA_LIBS)
@@ -135,7 +137,6 @@ calligra_define_product(PLUGIN_PATHSHAPES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VARIABLES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_CHARTSHAPE "" NEEDS CALLIGRA_LIBS LIB_KDCHART)
 calligra_define_product(PLUGIN_PICTURESHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_PLUGINSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_FORMULASHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra"  NEEDS CALLIGRA_LIBS)
