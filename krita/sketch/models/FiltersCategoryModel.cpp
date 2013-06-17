@@ -29,6 +29,7 @@
 #include <kis_node_manager.h>
 #include <kis_selection_manager.h>
 #include <kis_canvas2.h>
+#include <kis_filter_manager.h>
 
 bool categoryLessThan(const FiltersModel* s1, const FiltersModel* s2)
 {
@@ -96,7 +97,7 @@ public:
     KisFilterMaskSP mask;
     KisNodeSP node;
     int previewFilterID;
-    KisFilterConfiguration* newConfig;
+    KisSafeFilterConfigurationSP newConfig;
 };
 
 FiltersCategoryModel::FiltersCategoryModel(QObject* parent)
@@ -205,7 +206,7 @@ void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* m
             qDebug() << "How is the model null now?! Oh, someone forgot to send it along";
             return;
         }
-        KisFilterConfiguration* config = KisFilterRegistry::instance()->cloneConfiguration(model->filter(index)->defaultConfiguration(d->view->activeNode()->original()));
+        KisSafeFilterConfigurationSP config(KisFilterRegistry::instance()->cloneConfiguration(model->filter(index)->defaultConfiguration(d->view->activeNode()->original())));
         QObject* configuration = d->categories[d->currentCategory]->configuration(index);
         foreach(const QByteArray& propName, configuration->dynamicPropertyNames())
         {
@@ -219,18 +220,7 @@ void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* m
 
 void FiltersCategoryModel::updatePreview()
 {
-    if(d->mask->filter() == d->newConfig)
-        return;
-    d->mask->setFilter(d->newConfig);
-
-    if (!d->previewFilterID < 0)
-            return;
-
-    if(d->previewEnabled)
-    {
-        d->mask->setDirty();
-        d->node->setDirty(d->node->extent());
-    }
+    d->view->filterManager()->apply(d->newConfig);
 }
 
 bool FiltersCategoryModel::previewEnabled() const
@@ -240,7 +230,8 @@ bool FiltersCategoryModel::previewEnabled() const
 
 void FiltersCategoryModel::filterSelected(int index)
 {
-    filterConfigurationChanged(index, d->categories[d->currentCategory]);
+    if(d->previewEnabled)
+        filterConfigurationChanged(index, d->categories[d->currentCategory]);
 }
 
 void FiltersCategoryModel::setPreviewEnabled(bool enabled)
@@ -249,21 +240,11 @@ void FiltersCategoryModel::setPreviewEnabled(bool enabled)
     {
         d->previewEnabled = enabled;
         emit previewEnabledChanged();
-//        if(enabled)
-//        {
-//            d->node = d->view->nodeManager()->activeLayer();
-//            d->mask = new KisFilterMask();
-//            d->mask->initSelection(d->view->selection(), qobject_cast<KisLayer*>(d->node.data()));
-//            qobject_cast<KisLayer*>(d->node.data())->setPreviewMask(d->mask);
-//            d->node->setDirty(d->node->extent());
-//            filterConfigurationChanged(d->previewFilterID, d->categories[d->currentCategory]);
-//        }
-//        else
-//        {
-//            qobject_cast<KisLayer*>(d->node.data())->removePreviewMask();
-//            d->node->setDirty(d->node->extent());
-//            d->node.clear();
-//        }
+
+        if(enabled)
+            filterConfigurationChanged(d->previewFilterID, d->categories[d->currentCategory]);
+        else
+            d->view->filterManager()->cancel();
     }
 }
 

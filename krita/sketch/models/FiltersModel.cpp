@@ -20,8 +20,8 @@
 #include <PropertyContainer.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
-//#include <kis_filter_handler.h>
 #include <kis_view2.h>
+#include <kis_filter_manager.h>
 
 class FiltersModel::Private
 {
@@ -31,8 +31,7 @@ public:
     {};
     KisView2* view;
     QList<KisFilterSP> filters;
-//    QList<KisFilterHandler*> handlers;
-    QList<KisFilterConfiguration*> configurations;
+    QList<KisSafeFilterConfigurationSP> configurations;
 };
 
 FiltersModel::FiltersModel(QObject* parent)
@@ -97,12 +96,13 @@ void FiltersModel::activateFilter(int index)
     {
         if(d->configurations[index])
         {
-//            d->handlers[index]->apply(d->view->activeNode(), d->configurations[index]);
+            d->view->filterManager()->apply(d->configurations[index]);
         }
         else
         {
-//            d->handlers[index]->apply(d->view->activeNode(), d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
+            d->view->filterManager()->apply(KisSafeFilterConfigurationSP(d->filters[index]->defaultConfiguration(d->view->activeNode()->original())));
         }
+        d->view->filterManager()->finish();
         emit filterActivated(index);
     }
 }
@@ -123,11 +123,7 @@ void FiltersModel::addFilter(KisFilterSP filter)
         int newRow = d->filters.count();
         beginInsertRows(QModelIndex(), newRow, newRow);
         d->filters << filter;
-        KisFilterManager* man = 0;
-        if(d->view)
-            man = d->view->filterManager();
-//        d->handlers << new KisFilterHandler(man, filter, d->view);
-        d->configurations << 0;
+        d->configurations << KisSafeFilterConfigurationSP(filter->defaultConfiguration(d->view->activeNode()->original()));
         endInsertRows();
     }
 }
@@ -140,10 +136,6 @@ QObject* FiltersModel::view() const
 void FiltersModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisView2*>( newView );
-//    foreach(KisFilterHandler* handler, d->handlers)
-//    {
-//        handler->setView(d->view);
-//    }
     emit viewChanged();
 }
 
@@ -155,7 +147,7 @@ QObject* FiltersModel::configuration(int index)
     QObject* config = new PropertyContainer(d->filters[index]->id(), this);
     // If we've not got one already, assign the default configuration to the cache
     if(!d->configurations[index])
-        d->configurations[index] = d->filters[index]->defaultConfiguration(d->view->activeNode()->original());
+        d->configurations[index] = KisSafeFilterConfigurationSP(d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
     QMap<QString, QVariant> props = d->configurations[index]->getProperties();
     QMap<QString, QVariant>::const_iterator i;
     for(i = props.constBegin(); i != props.constEnd(); ++i)
@@ -169,7 +161,7 @@ void FiltersModel::setConfiguration(int index, QObject* configuration)
 {
     if(configuration && index > -1 && index < d->configurations.count() - 1)
     {
-        KisFilterConfiguration* config = d->configurations[index];
+        KisSafeFilterConfigurationSP config = d->configurations[index];
         foreach(const QByteArray& propName, configuration->dynamicPropertyNames())
         {
             config->setProperty(QString(propName), configuration->property(propName));
