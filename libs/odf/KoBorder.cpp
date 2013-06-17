@@ -395,7 +395,7 @@ bool KoBorder::hasBorder(KoBorder::BorderSide side) const
 //                         painting
 
 
-void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, qreal zoomY,
+void KoBorder::paint(QPainter &painter, const QRectF &borderRect,
                      BorderPaintArea whereToPaint) const
 {
     // In tables it is apparently best practice to paint the
@@ -422,7 +422,7 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, q
         paintBorderSide(painter, start, end, &leftEdge, true,
                         hasBorder(TopBorder) ? &topEdge : 0,
                         hasBorder(BottomBorder) ? &bottomEdge : 0,
-                        zoomX, zoomY, 1);
+                        1);
     }
 
     // Right border
@@ -432,7 +432,7 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, q
         paintBorderSide(painter, start, end, &rightEdge, true,
                         hasBorder(TopBorder) ? &topEdge : 0,
                         hasBorder(BottomBorder) ? &bottomEdge : 0,
-                        zoomX, zoomY, -1);
+                        -1);
     }
 
     // Top border
@@ -442,7 +442,7 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, q
         paintBorderSide(painter, start, end, &topEdge, false,
                         hasBorder(LeftBorder) ? &leftEdge : 0,
                         hasBorder(RightBorder) ? &rightEdge : 0,
-                        zoomY, zoomX, 1);
+                        1);
     }
 
     // Bottom border
@@ -452,17 +452,16 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, q
         paintBorderSide(painter, start, end, &bottomEdge, false,
                         hasBorder(LeftBorder) ? &leftEdge : 0,
                         hasBorder(RightBorder) ? &rightEdge : 0,
-                        zoomY, zoomX, -1);
+                        -1);
     }
 
     // FIXME: Diagonal borders
 }
 
-// zoomAcross is the zoom across the edge and zoomAlong is the zoom along the edge.
 void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lineEnd,
                                BorderData *borderData, bool isVertical,
                                BorderData *neighbour1, BorderData *neighbour2,
-                               qreal zoomAcross, qreal zoomAlong, int inwardsAcross) const
+                               int inwardsAcross) const
 {
     // Set up the painter and inner and outer pens.
     QPen pen = painter.pen();

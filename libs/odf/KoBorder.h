@@ -142,7 +142,7 @@ public:
         PaintOnLine,
         PaintInsideLine
     };
-    void paint(QPainter &painter, const QRectF &borderRect, qreal zoomX, qreal zoomY,
+    void paint(QPainter &painter, const QRectF &borderRect,
                BorderPaintArea whereToPaint = PaintInsideLine) const;
 
     /**
@@ -167,7 +167,7 @@ public:
     void paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lineEnd,
                          BorderData *borderData, bool isVertical,
                          BorderData *neighbour1, BorderData *neighbor2,
-                         qreal zoomAcross, qreal zoomAlong, int inwardsAcross) const;
+                         int inwardsAcross) const;
 
     void parseAndSetBorder(const QString &border,
                            bool hasSpecialBorder, const QString &specialBorderString);

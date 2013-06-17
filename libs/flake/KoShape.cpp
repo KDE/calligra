@@ -1297,7 +1297,7 @@ void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter)
     painter.scale(zoomX, zoomY);
 
     // Paint the border.
-    bd->paint(painter, borderRect, zoomX, zoomY, KoBorder::PaintInsideLine);
+    bd->paint(painter, borderRect, KoBorder::PaintInsideLine);
 }
 
 
