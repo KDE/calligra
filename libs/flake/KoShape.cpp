@@ -1294,10 +1294,7 @@ void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter)
     qreal zoomX;
     qreal zoomY;
     converter.zoom(&zoomX, &zoomY);
-
-    // Make the border rect scale to the actual size.
-    borderRect.setRight(borderRect.right() * zoomX);
-    borderRect.setBottom(borderRect.bottom() * zoomY);
+    painter.scale(zoomX, zoomY);
 
     // Paint the border.
     bd->paint(painter, borderRect, zoomX, zoomY, KoBorder::PaintInsideLine);
