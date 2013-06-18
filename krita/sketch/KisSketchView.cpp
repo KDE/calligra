@@ -347,6 +347,9 @@ void KisSketchView::documentChanged()
     geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
 
     d->loadedTimer->start(100);
+
+    d->view->actionCollection()->action("zoom_to_100pct")->trigger();
+    d->resetDocumentPosition();
 }
 
 bool KisSketchView::sceneEvent(QEvent* event)
@@ -417,7 +420,6 @@ void KisSketchView::Private::imageUpdated(const QRect &updated)
 void KisSketchView::Private::documentOffsetMoved()
 {
     if (q->scene()) {
-        qDebug() << "canvasOffset";
         q->scene()->views().at(0)->update();
         q->scene()->invalidate( 0, 0, q->width(), q->height() );
     }
