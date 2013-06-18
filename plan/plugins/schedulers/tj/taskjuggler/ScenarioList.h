@@ -49,7 +49,7 @@ public:
 class ScenarioListIterator : public virtual CoreAttributesListIterator
 {
 public:
-    ScenarioListIterator(const CoreAttributesList& l) :
+    explicit ScenarioListIterator(const CoreAttributesList& l) :
         CoreAttributesListIterator(l)
     { }
 

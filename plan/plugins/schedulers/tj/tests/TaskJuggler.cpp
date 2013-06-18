@@ -23,7 +23,6 @@
 #include "Task.h"
 #include "Resource.h"
 #include "CoreAttributesList.h"
-#include "Interval.h"
 #include "Utility.h"
 #include "UsageLimits.h"
 #include "debug.h"
@@ -37,7 +36,6 @@
 #include "kptschedule.h"
 
 #include <cstdlib>
-#include <qtest_kde.h>
 #include <QDir>
 #include <kglobal.h>
 #include <klocale.h>
