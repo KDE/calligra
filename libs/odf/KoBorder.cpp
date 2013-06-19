@@ -591,8 +591,14 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
     bool hasSpecialBorder;
     QString specialBorderString;
     if (style.hasAttributeNS(KoXmlNS::fo, "border")) {
-        result = true;
         borderString = style.attributeNS(KoXmlNS::fo, "border");
+        if (borderString == "none") {
+            // We use the "false" to indicate that there is no border
+            // rather than that the parsing has failed.
+            return false;
+        }
+
+        result = true;
         if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder"))) {
             specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder");
         }
@@ -905,6 +911,9 @@ bool KoBorder::loadOdf(const KoStyleStack &styleStack)
 void KoBorder::parseAndSetBorder(const QString &borderString,
                                  bool hasSpecialBorder, const QString &specialBorderString)
 {
+    if (borderString == "none")
+        return;
+
     //kDebug() << "*** *** Found border: " << border;
     QColor bordersColor;
     BorderStyle bordersStyle;
