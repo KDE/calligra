@@ -18,35 +18,14 @@
  *
  */
 
-#include "StepStepStack.h"
 #include "StepStepStack_p.h"
 
-
-StepStepStack::StepStepStack():QObject()
+StepStepStack_p::StepStepStack_p()
 {
 
 }
 
-StepStepStack::StepStepStack(const StepStepStack& other): QObject()
+StepStepStack_p::~StepStepStack_p()
 {
-
-}
-
-StepStepStack::~StepStepStack()
-{
-    
-}
-
-StepStepStack& StepStepStack::operator=(const StepStepStack& other)
-{
-  //temporary
-  return *this;
-
-}
-
-bool StepStepStack::operator==(const StepStepStack& other)
-{
-  //temporary
-  return true;
 
 }

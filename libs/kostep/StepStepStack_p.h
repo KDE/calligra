@@ -18,35 +18,17 @@
  *
  */
 
-#include "StepStepStack.h"
-#include "StepStepStack_p.h"
+#ifndef STEPSTEPSTACK_P_H
+#define STEPSTEPSTACK_P_H
 
+#include <QtCore/QObject>
 
-StepStepStack::StepStepStack():QObject()
+class StepStepStack_p :  QObject
 {
+public:
+    StepStepStack_p();
+    ~StepStepStack_p();
 
-}
+};
 
-StepStepStack::StepStepStack(const StepStepStack& other): QObject()
-{
-
-}
-
-StepStepStack::~StepStepStack()
-{
-    
-}
-
-StepStepStack& StepStepStack::operator=(const StepStepStack& other)
-{
-  //temporary
-  return *this;
-
-}
-
-bool StepStepStack::operator==(const StepStepStack& other)
-{
-  //temporary
-  return true;
-
-}
+#endif // STEPSTEPSTACK_P_H

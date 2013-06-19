@@ -35,17 +35,17 @@ class StepStepBase : public QObject
     Q_PROPERTY(QString Step READ Step)
     Q_PROPERTY(QString Type READ Type)
     
-    StepStepBase()=0;
-    StepStepBase(const StepStepBase& other)=0;
+    StepStepBase();
+    StepStepBase(const StepStepBase& other);
     
-    virtual ~StepStepBase() =0;
-    virtual StepStepBase& operator=(const StepStepBase& other)=0;
-    virtual bool operator==(const StepStepBase& other) const=0;
+    virtual ~StepStepBase();
+    virtual StepStepBase& operator=(const StepStepBase& other);
+    virtual bool operator==(const StepStepBase& other) const;
     
     //String Representation of a Step
-    virtual QString toString()=0;
+    virtual QString toString();
     //XML Representation of a Step for use in serialization
-    virtual QString toXML()=0;
+    virtual QString toXML();
     
     //The Foreign Property gives indication whether the step came
     //from a source besides the user, say for instance if the user

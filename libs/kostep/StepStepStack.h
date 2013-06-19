@@ -25,9 +25,10 @@
 #include <QtCore/QStack>
 
 class StepStepBase;
-
+class StepStepStack_p;
 class StepStepStack :  QObject
 {
+  
   Q_OBJECT
 public:
     StepStepStack();
@@ -49,7 +50,7 @@ public:
     void push(StepStepBase* step); 
 
 private:
-    QStack stack;
+    //StepStepStack_p d;
 };
 
 #endif // STEPSTEPSTACK_H

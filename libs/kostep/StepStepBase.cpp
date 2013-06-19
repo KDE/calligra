@@ -43,5 +43,6 @@ StepStepBase& StepStepBase::operator=(const StepStepBase& other)
 bool StepStepBase::operator==(const StepStepBase& other) const
 {
 ///TODO: return ...;
+  return true;
 }
 
