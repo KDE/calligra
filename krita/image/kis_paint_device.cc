@@ -380,6 +380,7 @@ QRect KisPaintDevice::extent() const
     extent = QRect(x, y, w, h);
 
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
+
     if (defaultOpacity != OPACITY_TRANSPARENT_U8)
         extent |= m_d->defaultBounds->bounds();
 
@@ -1061,6 +1062,16 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice() const
 KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP cloneSource) const
 {
     KisPaintDeviceSP clone = new KisPaintDevice(*cloneSource);
+    clone->convertTo(compositionSourceColorSpace(),
+                     KoColorConversionTransformation::InternalRenderingIntent,
+                     KoColorConversionTransformation::InternalConversionFlags);
+    return clone;
+}
+
+KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP cloneSource, const QRect roughRect) const
+{
+    KisPaintDeviceSP clone = new KisPaintDevice(colorSpace());
+    clone->makeCloneFromRough(cloneSource, roughRect);
     clone->convertTo(compositionSourceColorSpace(),
                      KoColorConversionTransformation::InternalRenderingIntent,
                      KoColorConversionTransformation::InternalConversionFlags);

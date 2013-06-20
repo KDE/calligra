@@ -287,7 +287,7 @@ public:
     /// Create a print job dialog
     KoPrintJob *createPrintJob( ViewBase *parent );
 
-    void setNodes( const QList<Node*> nodes );
+    void setNodes( const QList<Node*> &nodes );
 
 public slots:
     void refreshChart();

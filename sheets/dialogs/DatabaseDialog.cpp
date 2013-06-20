@@ -22,6 +22,8 @@
 // Local
 #include "DatabaseDialog.h"
 
+#ifndef QT_NO_SQL
+
 #include "Cell.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
@@ -59,8 +61,6 @@
 #include <QTreeWidget>
 
 using namespace Calligra::Sheets;
-
-#ifndef QT_NO_SQL
 
 /********************************************************
  *                 Database Assistant                   *
