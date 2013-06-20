@@ -58,7 +58,7 @@ private slots:
     void showSemanticViewContextMenu(const QPoint &);
     void semanticObjectAdded(hKoRdfSemanticItem item);
     void semanticObjectUpdated(hKoRdfSemanticItem item);
-    void resourceChanged(int key, const QVariant &value);
+    void canvasResourceChanged(int key, const QVariant &value);
 
 private:
     KoCanvasBase *m_canvas;
