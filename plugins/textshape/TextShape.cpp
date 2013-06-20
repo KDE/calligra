@@ -97,8 +97,10 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 {
     painter.save();
     applyConversion(painter, converter);
-    if (border()) {
-        paintBorder(painter, converter);
+    KoBorder *border = this->border();
+
+    if (border) {
+       paintBorder(painter, converter);
     }
     else if (paintContext.showTextShapeOutlines) {
         // No need to paint the outlines if there is a real border.
@@ -175,7 +177,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
-    painter.translate(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
     m_textShapeData->rootArea()->paint(&painter, pc); // only need to draw ourselves
     painter.restore();
 
