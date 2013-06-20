@@ -80,8 +80,8 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)),
             d->canvas, SLOT(setDocumentOffset(QPoint)));
 
-    connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int,QVariant)),
-            this, SLOT(resourceChanged(int,QVariant)));
+    connect(d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(canvasResourceChanged(int,QVariant)));
 }
 
 KarbonZoomController::~KarbonZoomController()
@@ -195,7 +195,7 @@ void KarbonZoomController::setPageSize(const QSizeF &pageSize)
         setZoom(KoZoomMode::ZOOM_PAGE, -1);
 }
 
-void KarbonZoomController::resourceChanged(int key, const QVariant &value)
+void KarbonZoomController::canvasResourceChanged(int key, const QVariant &value)
 {
     if (key == KoCanvasResourceManager::PageSize) {
         setPageSize(value.toSizeF());
