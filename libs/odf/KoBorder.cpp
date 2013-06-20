@@ -243,6 +243,10 @@ QString KoBorder::msoBorderStyleString(BorderStyle borderstyle)
 
 void KoBorder::setBorderStyle(BorderSide side, BorderStyle style)
 {
+    if (d->data[side].style == style) {
+        return;
+    }
+
     if (!d->data.contains(side)) {
         BorderData data;
         data.style = style;
@@ -250,6 +254,72 @@ void KoBorder::setBorderStyle(BorderSide side, BorderStyle style)
     } else {
         d->data[side].style = style;
     }
+
+    // Make a best effort to create the best possible dash pattern for the chosen style.
+    // FIXME: KoTableCellStyle::setEdge() should call this function.
+    BorderData &edge = d->data[side];
+    qreal width = edge.outerPen.widthF();
+    qreal innerWidth = 0;
+    qreal middleWidth = 0;
+    qreal space = 0;
+    QVector<qreal> dashes;
+    switch (style) {
+    case KoBorder::BorderNone:
+        width = 0.0;
+        break;
+    case KoBorder::BorderDouble:
+        innerWidth = space = edge.outerPen.width() / 3; //some nice default look
+        width -= (space + innerWidth);
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    case KoBorder::BorderDotted:
+        dashes << 1 << 1;
+        edge.outerPen.setDashPattern(dashes);
+        break;
+    case KoBorder::BorderDashed:
+        dashes << 4 << 1;
+        edge.outerPen.setDashPattern(dashes);
+        break;
+    case KoBorder::BorderDashedLong: {
+        dashes << 4 << 4;
+        edge.outerPen.setDashPattern(dashes);
+        break;
+    }
+    case KoBorder::BorderTriple:
+        innerWidth = middleWidth = space = width/6;
+        width -= (space + innerWidth);
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    case KoBorder::BorderDashDot:
+        dashes << 3 << 3<< 7 << 3;
+        edge.outerPen.setDashPattern(dashes);
+        break;
+    case KoBorder::BorderDashDotDot:
+        dashes << 2 << 2<< 6 << 2 << 2 << 2;
+        edge.outerPen.setDashPattern(dashes);
+        break;
+    case KoBorder::BorderWave:
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    case KoBorder::BorderSlash:
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    case KoBorder::BorderDoubleWave:
+        innerWidth = space = width/3; //some nice default look
+        width -= (space + innerWidth);
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    default:
+        edge.outerPen.setStyle(Qt::SolidLine);
+        break;
+    }
+    edge.outerPen.setJoinStyle(Qt::MiterJoin);
+    edge.outerPen.setCapStyle(Qt::FlatCap);
+    edge.outerPen.setWidthF(width);
+
+    edge.spacing = space;
+    edge.innerPen = edge.outerPen;
+    edge.innerPen.setWidthF(innerWidth);
 }
 
 KoBorder::BorderStyle KoBorder::borderStyle(BorderSide side) const
@@ -405,10 +475,6 @@ void KoBorder::paint(QPainter &painter, const QRectF &borderRect,
     QPointF start;
     QPointF end;
 
-    QPen pen = painter.pen();
-    pen.setCapStyle(Qt::FlatCap);
-    painter.setPen(pen);
-
     // FIXME: Make KoBorder store pointers to BorderData instead.  This is very inefficient.
     BorderData leftEdge = borderData(KoBorder::LeftBorder);
     BorderData rightEdge = borderData(KoBorder::RightBorder);
@@ -463,29 +529,6 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
                                BorderData *neighbour1, BorderData *neighbour2,
                                int inwardsAcross) const
 {
-    // Set up the painter and inner and outer pens.
-    QPen pen = painter.pen();
-
-    // Line color
-    pen.setColor(borderData->outerPen.color());
-
-    // Line style
-    switch (borderData->style) {
-    case KoBorder::BorderNone: break; // No line
-    case KoBorder::BorderDotted: pen.setStyle(Qt::DotLine); break;
-    case KoBorder::BorderDashed: pen.setStyle(Qt::DashLine); break;
-    case KoBorder::BorderSolid: pen.setStyle(Qt::SolidLine); break;
-    case KoBorder::BorderDouble: pen.setStyle(Qt::SolidLine); break; // Handled separately
-    case KoBorder::BorderGroove: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderRidge: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderDashDot: pen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDot: pen.setStyle(Qt::DashDotDotLine); break;
-    default:
-        pen.setStyle(Qt::SolidLine);
-    }
-
     // Adjust the outer line so that it is inside the boundary.
     qreal displacement = borderData->outerPen.widthF() / qreal(2.0);
     if (isVertical) {
@@ -497,8 +540,7 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
         lineEnd.setY(lineEnd.y() + inwardsAcross * displacement);
     }
 
-    pen.setWidthF(borderData->outerPen.widthF());
-    painter.setPen(pen);
+    painter.setPen(borderData->outerPen);
     painter.drawLine(lineStart, lineEnd);
 
     if (borderData->style == BorderDouble) {
@@ -535,8 +577,7 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
         }
 
         // Draw the inner line.
-        pen.setWidthF(borderData->innerPen.widthF());
-        painter.setPen(pen);
+        painter.setPen(borderData->innerPen);
         painter.drawLine(lineStart, lineEnd);
     }
 }
