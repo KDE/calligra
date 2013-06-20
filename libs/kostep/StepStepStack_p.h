@@ -25,6 +25,7 @@
 
 class StepStepStack_p :  QObject
 {
+  Q_OBJECT
 public:
     StepStepStack_p();
     ~StepStepStack_p();

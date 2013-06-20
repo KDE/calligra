@@ -37,9 +37,9 @@ public:
     StepStepStack& operator=(const StepStepStack& other);
     bool operator==(const StepStepStack& other);
     
-    StepStepBase& at(int i);
-    StepStepBase& pop();
-    StepStepBase& top();
+    StepStepBase at(int i);
+    StepStepBase pop();
+    StepStepBase top();
     
     void serialize(QString Filename);
     void deserialize(QString Filename);
@@ -50,7 +50,7 @@ public:
     void push(StepStepBase* step); 
 
 private:
-    //StepStepStack_p d;
+    StepStepStack_p* d;
 };
 
 #endif // STEPSTEPSTACK_H

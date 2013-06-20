@@ -20,14 +20,15 @@
 
 #include "StepStepStack.h"
 #include "StepStepStack_p.h"
+#include "StepStepBase.h"
+#include <QtCore/QString>
 
-
-StepStepStack::StepStepStack():QObject()
+StepStepStack::StepStepStack()
 {
 
 }
 
-StepStepStack::StepStepStack(const StepStepStack& other): QObject()
+StepStepStack::StepStepStack(const StepStepStack& other)
 {
 
 }
@@ -48,5 +49,43 @@ bool StepStepStack::operator==(const StepStepStack& other)
 {
   //temporary
   return true;
+
+}
+
+StepStepBase StepStepStack::at(int i)
+{
+  return StepStepBase();
+}
+
+StepStepBase StepStepStack::pop()
+{
+  return StepStepBase();
+}
+StepStepBase StepStepStack::top()
+{
+  return StepStepBase();
+
+}
+
+
+void StepStepStack::deserialize(QString Filename)
+{
+
+}
+void StepStepStack::insertAt(int i, StepStepBase step)
+{
+
+}
+
+void StepStepStack::push(StepStepBase* step)
+{
+
+}
+void StepStepStack::removeAt(int i)
+{
+
+}
+void StepStepStack::serialize(QString Filename)
+{
 
 }

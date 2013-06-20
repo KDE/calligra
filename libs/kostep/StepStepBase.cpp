@@ -46,3 +46,42 @@ bool StepStepBase::operator==(const StepStepBase& other) const
   return true;
 }
 
+bool StepStepBase::Foreign()
+{
+  return false;
+}
+int StepStepBase::Position()
+{
+  return 0;
+}
+void StepStepBase::setForeign(bool foreign)
+{
+
+}
+void StepStepBase::setPosition(int position)
+{
+
+}
+QString StepStepBase::Step()
+{
+  QString string = (QString)"";
+  return string;
+}
+QString StepStepBase::toString()
+{
+  QString string = (QString)"";
+  return string;
+}
+QString StepStepBase::toXML()
+{
+  QString string = (QString)"";
+  return string;
+}
+QString StepStepBase::Type()
+{
+  QString string = (QString)"";
+  return string;
+
+}
+
+

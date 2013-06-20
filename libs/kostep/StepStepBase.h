@@ -20,13 +20,12 @@
 
 #ifndef STEPSTEPBASE_H
 #define STEPSTEPBASE_H
-#include <QtCore/qobject.h>
+#include <QtCore/QObject>
 #include <QtCore/QString>
 
 
 class StepStepBase : public QObject
 {
-  public:
     Q_OBJECT
     
     //Basic Properties of a step, allows for usage in QML
@@ -35,6 +34,7 @@ class StepStepBase : public QObject
     Q_PROPERTY(QString Step READ Step)
     Q_PROPERTY(QString Type READ Type)
     
+public:
     StepStepBase();
     StepStepBase(const StepStepBase& other);
     
@@ -51,7 +51,7 @@ class StepStepBase : public QObject
     //from a source besides the user, say for instance if the user
     //is collaboratively editing with another user and thus receiving
     //steps from them
-    bool Foreign();
+    virtual bool Foreign();
     virtual void setForeign(bool foreign);
     
     //The Position Property gives the position in characters from the
@@ -62,11 +62,11 @@ class StepStepBase : public QObject
     
     //The Step Property holds the text of the change so say I've got the word
     //Dog and I make it Dogs, Step would hold an "s"
-    QString Step();    
+    virtual QString Step();    
     
     //The Type Property Returns the Type of Operation that the step is as a QString
     //mostly useful for equality testing and serialization/deserialization
-    QString Type();
+    virtual QString Type();
     
 private:
   bool _isForeign;
