@@ -26,7 +26,8 @@
 #include <ktempdir.h>
 #include <kdebug.h>
 
-#include <jni.h>
+// JNI not used ATM, see "NOTE:" below
+// #include <jni.h>
 
 #include "mpxjconfig.h"
 #include <kmessagebox.h>
