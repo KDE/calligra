@@ -761,7 +761,7 @@ void KoResourceItemChooser::renameCurrentlySelectedTag(const QString& newName)
             contextCreateNewTag(0,newName);
             d->model->tagCategoryRemoved(oldName);
             d->model->tagCategoryAdded(newName);
-
+            d->tagOpComboBox->setCurrentIndex(d->tagOpComboBox->findText(newName));
     }
 }
 
