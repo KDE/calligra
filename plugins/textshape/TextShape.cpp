@@ -92,15 +92,16 @@ TextShape::~TextShape()
 {
 }
 
-void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
+                               KoShapePaintingContext &paintContext)
 {
+    painter.save();
+    applyConversion(painter, converter);
     if (border()) {
         paintBorder(painter, converter);
     }
     else if (paintContext.showTextShapeOutlines) {
         // No need to paint the outlines if there is a real border.
-        painter.save();
-        applyConversion(painter, converter);
         if (qAbs(rotation()) > 1)
             painter.setRenderHint(QPainter::Antialiasing);
 
@@ -109,8 +110,8 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
         painter.setPen(pen);
         painter.drawRect(rect);
-        painter.restore();
     }
+    painter.restore();
 
     if (m_textShapeData->isDirty()) { // not layouted yet.
         return;

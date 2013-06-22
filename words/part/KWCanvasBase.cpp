@@ -179,13 +179,14 @@ void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
     const QRectF       pageRect = viewMap.page.rect();
     const KoPageLayout pageLayout = viewMap.page.pageStyle().pageLayout();
 
-    // Get the coordinates of the border rect in view coordinates.
-    QPointF topLeftCorner = viewConverter()->documentToView(pageRect.topLeft()
-                                                            + QPointF(pageLayout.leftMargin,
-                                                                      pageLayout.topMargin));
-    QPointF bottomRightCorner = viewConverter()->documentToView(pageRect.bottomRight()
-                                                                + QPointF(-pageLayout.rightMargin,
-                                                                          -pageLayout.bottomMargin));
+    qreal zoomX, zoomY;
+    viewConverter()->zoom(&zoomX, &zoomY);
+    painter.scale(zoomX, zoomY);
+
+    QPointF topLeftCorner = QPointF(pageRect.topLeft() + QPointF(pageLayout.leftMargin,
+                                                                 pageLayout.topMargin));
+    QPointF bottomRightCorner = QPointF(pageRect.bottomRight() + QPointF(-pageLayout.rightMargin,
+                                                                         -pageLayout.bottomMargin));
     QRectF borderRect = QRectF(topLeftCorner, bottomRightCorner);
     pageLayout.border.paint(painter, borderRect);
 

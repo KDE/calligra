@@ -265,7 +265,8 @@ QPainterPath PictureShape::shadowOutline() const
     return outline();
 }
 
-void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void PictureShape::paint(QPainter &painter, const KoViewConverter &converter,
+                         KoShapePaintingContext &paintContext)
 {
     QRectF viewRect = converter.documentToView(QRectF(QPointF(0,0), size()));
     if (imageData() == 0) {
@@ -273,7 +274,10 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
         return;
     }
 
+    painter.save();
+    applyConversion(painter, converter);
     paintBorder(painter, converter);
+    painter.restore();
 
     QSize pixmapSize = calcOptimalPixmapSize(viewRect.size(), imageData()->image().size());
 
