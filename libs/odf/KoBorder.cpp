@@ -78,14 +78,15 @@ bool KoBorder::BorderData::operator==(const KoBorder::BorderData& other) const
             return false;
         
         // If the border style == BorderDouble, then compare a couple
-            // of other values too.
-            if (style == BorderDouble) {
-                if (innerPen != other.innerPen)
-                    return false;
-                if (spacing != other.spacing)
-                    return false;
-            }
+        // of other values too.
+        if (style == BorderDouble) {
+            if (innerPen != other.innerPen)
+                return false;
+            if (spacing != other.spacing)
+                return false;
+        }
     }
+
     return true;
 }
 
