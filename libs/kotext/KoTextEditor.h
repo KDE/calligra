@@ -48,6 +48,7 @@ class KoShapeController;
 class KoShapeAnchor;
 class KoBookmark;
 class KoAnnotation;
+class KoTextRangeManager;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -251,6 +252,8 @@ public slots:
 
     /// add an annotation on current cursor loactaion or current selection.
     KoAnnotation *addAnnotation();
+
+    KoTextRangeManager *textRangeManager();
 
     /**
      * Insert a frame break at the cursor position, moving the rest of the text to the next frame.

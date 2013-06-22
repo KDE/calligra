@@ -112,8 +112,8 @@ KoShape *KoAnnotation::annotationShape()
 bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     kDebug(32500) << "****** Start Load odf ******";
-    KoTextLoader textLoader(context);
-    QTextCursor cursor(d->textFrame);
+    //KoTextLoader textLoader(context);
+    //QTextCursor cursor(d->textFrame);
 
     QString annotationName = element.attribute("name");
 
@@ -156,10 +156,10 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                     // FIXME: What to do here?
                 }
             }
-            textLoader.loadBody(element, cursor);
+            //textLoader.loadBody(element, cursor);
 
             kDebug(32500) << "****** End Load ******";
-            kDebug(32500) << "loaded Annotation: " << d->creator << d->date;
+          //  kDebug(32500) << "loaded Annotation: " << d->creator << d->date;
         }
         else {
             // something pretty weird going on...

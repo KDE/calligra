@@ -71,7 +71,7 @@ private:
     TextShape *m_textShape;
     KAction *m_insertAnnotationAction;
     KAction *m_removeAnnotationAction;
-    KoShape *m_currentShape;
+    KoShape *m_currentAnnotationShape;
 };
 
 #endif // REVIEWTOOL_H
