@@ -1291,7 +1291,15 @@ void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter)
     }
 
     QRectF borderRect = QRectF(QPointF(0, 0), size());
+    qreal zoomX;
+    qreal zoomY;
+    converter.zoom(&zoomX, &zoomY);
+    painter.save();
+    painter.scale(zoomX, zoomY);
+
+    // Paint the border.
     bd->paint(painter, borderRect, KoBorder::PaintInsideLine);
+    painter.restore();
 }
 
 
