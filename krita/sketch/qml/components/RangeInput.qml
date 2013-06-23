@@ -29,7 +29,7 @@ Item {
     property int decimals: 2;
     property alias useExponentialValue: valueSlider.useExponentialValue;
 
-    height: childrenRect.height;
+    height: textField.height + valueSlider.height;
 
     onMinChanged: d.fixHandle();
     onMaxChanged: d.fixHandle();
