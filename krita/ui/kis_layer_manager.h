@@ -57,9 +57,9 @@ signals:
     void sigLayerActivated(KisLayerSP layer);
 
 private:
-    
+
     friend class KisNodeManager;
-    
+
     /**
      * Activate the specified layer. The layer may be 0.
      */
@@ -67,21 +67,21 @@ private:
 
     KisLayerSP activeLayer();
     KisPaintDeviceSP activeDevice();
-    
-    
+
+
     void setup(KActionCollection * collection);
 
     void updateGUI();
-    
+
 
     void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
-    
+
 private slots:
 
     void mergeLayer();
-    
+
     void imageResizeToActiveLayer();
 
     void actLayerVisChanged(int show);
@@ -94,7 +94,7 @@ private slots:
     void layerBack();
 
     void flattenImage();
-    
+
     void flattenLayer();
     void rasterizeLayer();
 
@@ -123,7 +123,7 @@ private slots:
 
     void addFileLayer();
     void addFileLayer(KisNodeSP parent, KisNodeSP above);
-    void addFileLayer(KisNodeSP parent, KisNodeSP above, const QString & name, const QString &fileName, bool scaleToImageResolution);
+    void addFileLayer(KisNodeSP parent, KisNodeSP above, const QString & name, const QString &basePath, const QString &fileName, bool scaleToImageResolution);
 
 private:
 

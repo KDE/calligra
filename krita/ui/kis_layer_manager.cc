@@ -925,10 +925,17 @@ void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above)
 {
     Q_ASSERT(parent);
 
+    QString basePath;
+    KUrl url = m_view->document()->url();
+    qDebug() << "url" << url << url.isEmpty();
+    if (url.isLocalFile()) {
+        basePath = QFileInfo(url.toLocalFile()).absolutePath();
+    }
+
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisDlgFileLayer dlg(image->nextLayerName(), m_view);
+    KisDlgFileLayer dlg(basePath, image->nextLayerName(), m_view);
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {
@@ -942,12 +949,12 @@ void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above)
 
         bool scaleToImageResolution = dlg.scaleToImageResolution();
 
-        addFileLayer(parent, above, name, fileName, scaleToImageResolution);
+        addFileLayer(parent, above, name, basePath, fileName, scaleToImageResolution);
     }
 
 }
 
-void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above, const QString &name, const QString &fileName, bool scaleToImageResolution)
+void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above, const QString &name, const QString &basePath, const QString &fileName, bool scaleToImageResolution)
 {
     Q_ASSERT(parent);
     Q_ASSERT(!fileName.isEmpty());
@@ -955,7 +962,7 @@ void KisLayerManager::addFileLayer(KisNodeSP parent, KisNodeSP above, const QStr
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisLayerSP layer = new KisFileLayer(image, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8);
+    KisLayerSP layer = new KisFileLayer(image, basePath, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8);
     if (layer) {
         layer->setCompositeOp(COMPOSITE_OVER);
         m_commandsAdapter->addNode(layer.data(), parent, above.data());
