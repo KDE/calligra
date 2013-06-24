@@ -45,11 +45,12 @@
 
 using namespace KRA;
 
-KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, const QString &url)
+KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, const QString &url, bool root)
     : KisNodeVisitor()
     , m_doc(doc)
     , m_count(count)
     , m_url(url)
+    , m_root(root)
 {
     Q_ASSERT(!element.isNull());
     m_elem = element;
@@ -112,6 +113,13 @@ bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 {
     QDomElement layerElement;
+    if (m_root) // if this is the root we fake so not to save it
+        layerElement = m_elem;
+    else {
+        layerElement = m_doc.createElement(LAYER);
+        saveLayer(layerElement, GROUP_LAYER, layer);
+        m_elem.appendChild(layerElement);
+    }
 
     layerElement = m_elem;
 
