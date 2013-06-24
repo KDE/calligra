@@ -628,7 +628,7 @@ void LayerModel::addLayer(int layerType)
             d->nodeManager->createNode("KisGroupLayer");
             break;
         case 2:
-            d->nodeManager->createNode("KisFilterMask");
+            d->nodeManager->createNode("KisFilterMask", true);
             break;
         default:
             break;
@@ -1017,7 +1017,7 @@ QObject* LayerModel::activeFilterConfig() const
     for(i = props.constBegin(); i != props.constEnd(); ++i)
     {
         config->setProperty(i.key().toAscii(), i.value());
-        qDebug() << "Getting active config..." << i.key() << i.value();
+        //qDebug() << "Getting active config..." << i.key() << i.value();
     }
     return config;
 }
@@ -1030,12 +1030,13 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
     if(!config)
         return;
 
+    //qDebug() << "Attempting to set new config" << config->name();
     KisFilterConfiguration* realConfig = d->filters.value(config->name())->factoryConfiguration(d->activeNode->original());
     QMap<QString, QVariant>::const_iterator i;
     for(i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i)
     {
         realConfig->setProperty(QString(i.key()), config->property(i.key().toAscii()));
-        qDebug() << "Creating config..." << i.key() << i.value();
+        //qDebug() << "Creating config..." << i.key() << i.value();
     }
 // The following code causes sporadic crashes, and disabling causes leaks. So, leaks it must be, for now.
 // The cause is the lack of a smart pointer interface for passing filter configs around
@@ -1043,19 +1044,22 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
 //    if(d->newConfig)
 //        delete(d->newConfig);
     d->newConfig = realConfig;
-    d->updateActiveLayerWithNewFilterConfigTimer->start();
+    //d->updateActiveLayerWithNewFilterConfigTimer->start();
+    updateActiveLayerWithNewFilterConfig();
 }
 
 void LayerModel::updateActiveLayerWithNewFilterConfig()
 {
     if(!d->newConfig)
         return;
-    qDebug() << "Setting new config..." << d->newConfig;
+    //qDebug() << "Setting new config..." << d->newConfig->name();
     KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
     if(filterMask)
     {
+        //qDebug() << "Filter mask";
         if(filterMask->filter() == d->newConfig)
             return;
+        //qDebug() << "Setting filter mask";
         filterMask->setFilter(d->newConfig);
     }
     else
@@ -1063,9 +1067,15 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
         KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
         if(adjustmentLayer)
         {
+            //qDebug() << "Adjustment layer";
             if(adjustmentLayer->filter() == d->newConfig)
                 return;
+            //qDebug() << "Setting filter on adjustment layer";
             adjustmentLayer->setFilter(d->newConfig);
+        }
+        else
+        {
+            //qDebug() << "UNKNOWN, BAIL OUT!";
         }
     }
     d->newConfig = 0;
