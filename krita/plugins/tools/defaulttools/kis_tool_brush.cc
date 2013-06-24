@@ -51,17 +51,20 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_smoothingOptions.smoothingType = KisSmoothingOptions::NO_SMOOTHING;
         m_sliderSmoothnessDistance->setEnabled(false);
         m_sliderTailAggressiveness->setEnabled(false);
+        m_chkSmoothPressure->setEnabled(false);
         break;
     case 1:
         m_smoothingOptions.smoothingType = KisSmoothingOptions::SIMPLE_SMOOTHING;
         m_sliderSmoothnessDistance->setEnabled(false);
         m_sliderTailAggressiveness->setEnabled(false);
+        m_chkSmoothPressure->setEnabled(false);
         break;
     case 2:
     default:
         m_smoothingOptions.smoothingType = KisSmoothingOptions::WEIGHTED_SMOOTHING;
         m_sliderSmoothnessDistance->setEnabled(true);
         m_sliderTailAggressiveness->setEnabled(true);
+        m_chkSmoothPressure->setEnabled(true);
     }
 }
 
@@ -74,6 +77,12 @@ void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
 {
     m_smoothingOptions.tailAggressiveness = argh_rhhrr;
 }
+
+void KisToolBrush::setSmoothPressure(bool value)
+{
+    m_smoothingOptions.smoothPressure = value;
+}
+
 void KisToolBrush::slotSetMagnetism(int magnetism)
 {
     m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM) / expf(1.0);
@@ -96,14 +105,19 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(m_smoothingOptions.smoothnessDistance);
-    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Weight:")));
+    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Distance:")));
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
     m_sliderTailAggressiveness->setEnabled(true);
     connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
     m_sliderTailAggressiveness->setValue(m_smoothingOptions.tailAggressiveness);
-    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Tail Aggressiveness:")));
+    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:")));
+
+    m_chkSmoothPressure = new QCheckBox("", optionWidget);
+    m_chkSmoothPressure->setChecked(m_smoothingOptions.smoothPressure);
+    connect(m_chkSmoothPressure, SIGNAL(toggled(bool)), this, SLOT(setSmoothPressure(bool)));
+    addOptionWidgetOption(m_chkSmoothPressure, new QLabel(i18n("Smooth Pressure")));
 
     slotSetSmoothingType(1);
 
