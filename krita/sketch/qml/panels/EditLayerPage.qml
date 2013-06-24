@@ -26,6 +26,7 @@ Item {
     property QtObject layersModel: null;
     property bool isInitialised: false;
     property bool isShown: false;
+    property bool isChangingConfig: false;
     onIsShownChanged: {
         if(!isShown)
             return;
@@ -111,16 +112,23 @@ Item {
         height: visible ? Constants.GridHeight / 2 : 0;
         model: filtersCategoryModel.filterModel;
         function applyConfiguration(configuration) {
+            if(base.isChangingConfig === true) {
+                return;
+            }
+            base.isChangingConfig = true;
             if(base.isInitialised) {
                 layersModel.activeFilterConfig = configuration;
             }
+            base.isChangingConfig = false;
         }
         onCurrentIndexChanged: {
             if(layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") {
                 filtersCategoryModel.filterSelected(currentIndex);
                 if(base.isInitialised) {
-                    console.debug("Setting new configuration...");
+                    //console.debug("Setting new configuration...");
+                    base.isChangingConfig = true;
                     layersModel.activeFilterConfig = model.configuration(currentIndex);
+                    base.isChangingConfig = false;
                 }
                 if(model.filterRequiresConfiguration(currentIndex)) {
                     noConfigNeeded.visible = false;
@@ -391,6 +399,23 @@ Item {
             onItemChanged: {
                 if(item && typeof(item.configuration) !== 'undefined') {
                     item.configuration = layersModel.activeFilterConfig;
+                }
+            }
+            Connections {
+                target: layersModel;
+                onActiveFilterConfigChanged: {
+                    if(base.isChangingConfig === false && typeof(configLoader.item.configuration) !== 'undefined') {
+                        base.isChangingConfig = true;
+                        var filterConfig = layersModel.activeFilterConfig;
+                        configLoader.item.configuration = filterConfig;
+                        if(filterConfig.name !== fullFilters.model.filterID(fullFilters.currentIndex)) {
+                            var categoryIndex = filtersCategoryModel.categoryIndexForConfig(filterConfig);
+                            var filterIndex = filtersCategoryModel.filterIndexForConfig(categoryIndex, filterConfig);
+                            filtersCategoryList.currentIndex = categoryIndex;
+                            fullFilters.currentIndex = filterIndex;
+                        }
+                        base.isChangingConfig = false;
+                    }
                 }
             }
         }
