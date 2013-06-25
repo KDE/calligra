@@ -19,8 +19,8 @@
 #define SKETCHDECLARATIVEVIEW_H
 
 #include <QDeclarativeView>
-
-class KisOpenGLCanvas2;
+#include <QPointer>
+#include <opengl/kis_opengl_canvas2.h>
 
 /**
  * @brief The SketchDeclarativeView class overrides QGraphicsView's drawBackground
@@ -52,9 +52,9 @@ protected:
 private:
 
     bool m_drawCanvas;
-    KisOpenGLCanvas2 *m_canvasWidget;
+    QPointer<KisOpenGLCanvas2> m_canvasWidget;
     bool m_GLInitialized;
-
+    Q_SLOT void resetInitialized();
 };
 
 #endif // SKETCHDECLARATIVEVIEW_H

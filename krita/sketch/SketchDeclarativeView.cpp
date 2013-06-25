@@ -23,7 +23,6 @@
 #include <QGLFramebufferObject>
 #include <QDebug>
 #include <QResizeEvent>
-#include <opengl/kis_opengl_canvas2.h>
 #include <kis_coordinates_converter.h>
 
 SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
@@ -50,6 +49,12 @@ SketchDeclarativeView::~SketchDeclarativeView()
 void SketchDeclarativeView::setCanvasWidget(QWidget *canvasWidget)
 {
     m_canvasWidget = qobject_cast<KisOpenGLCanvas2*>(canvasWidget);
+    connect(m_canvasWidget, SIGNAL(destroyed(QObject*)), this, SLOT(resetInitialized()));
+}
+
+void SketchDeclarativeView::resetInitialized()
+{
+    m_GLInitialized = false;
 }
 
 bool SketchDeclarativeView::drawCanvas() const
