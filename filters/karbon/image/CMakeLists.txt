@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${KDE4_INCLUDES} )
 
 set(karbon2image_PART_SRCS ImageExport.cpp ImageExportOptionsWidget.cpp )
 
-kde4_add_ui_files( calligra_filter_karbon2image ImageExportOptionsWidget.ui )
+kde4_add_ui_files( karbon2image_PART_SRCS ImageExportOptionsWidget.ui )
 
 kde4_add_plugin(calligra_filter_karbon2image ${karbon2image_PART_SRCS})
 
