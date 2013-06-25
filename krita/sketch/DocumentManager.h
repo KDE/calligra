@@ -31,7 +31,7 @@ class DocumentManager : public QObject
 Q_OBJECT
 public:
     KisDoc2* document() const;
-    KisSketchPart* part() const;
+    KisSketchPart* part();
     ProgressProxy* progressProxy() const;
     Settings* settingsManager() const;
     void setSettingsManager(Settings* newManager);

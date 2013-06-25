@@ -38,8 +38,8 @@ public:
         , recentFileManager(0)
     { }
     ProgressProxy* proxy;
-    KisDoc2 *document;
-    KisSketchPart *part;
+    QPointer<KisDoc2> document;
+    QPointer<KisSketchPart> part;
     Settings* settingsManager;
     RecentFileManager* recentFileManager;
 
@@ -55,8 +55,10 @@ KisDoc2* DocumentManager::document() const
     return d->document;
 }
 
-KisSketchPart* DocumentManager::part() const
+KisSketchPart* DocumentManager::part()
 {
+    if(!d->part)
+        d->part = new KisSketchPart(this);
     return d->part;
 }
 
@@ -92,10 +94,10 @@ void DocumentManager::newDocument(int width, int height, float resolution)
 
 void DocumentManager::delayedNewDocument()
 {
-    d->document = new KisDoc2(d->part);
+    d->document = new KisDoc2(part());
     d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
-    d->part->setDocument(d->document);
+    part()->setDocument(d->document);
     d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
     d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
 
@@ -111,10 +113,10 @@ void DocumentManager::openDocument(const QString& document)
 
 void DocumentManager::delayedOpenDocument()
 {
-    d->document = new KisDoc2(d->part);
+    d->document = new KisDoc2(part());
     d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
-    d->part->setDocument(d->document);
+    part()->setDocument(d->document);
 
     d->document->setModified(false);
     d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
@@ -126,7 +128,7 @@ void DocumentManager::closeDocument()
 {
     if(d->document) {
         emit aboutToDeleteDocument();
-        d->part->closeUrl(false);
+        part()->closeUrl(false);
         d->document->deleteLater();
         d->document = 0;
     }
@@ -134,7 +136,7 @@ void DocumentManager::closeDocument()
 
 void DocumentManager::save()
 {
-    d->part->save();
+    part()->save();
     d->recentFileManager->addRecent(d->document->url().toLocalFile());
     emit documentSaved();
 }
@@ -152,7 +154,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 
 void DocumentManager::delayedSaveAs()
 {
-    d->part->saveAs(d->saveAsFilename);
+    part()->saveAs(d->saveAsFilename);
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     emit documentSaved();
 }
