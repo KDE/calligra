@@ -171,7 +171,6 @@ DocumentManager* DocumentManager::instance()
 DocumentManager::DocumentManager(QObject* parent)
     : QObject(parent), d(new Private)
 {
-    d->part = new KisSketchPart(this);
     d->proxy = new ProgressProxy(this);
     d->recentFileManager = new RecentFileManager(this);
 }
