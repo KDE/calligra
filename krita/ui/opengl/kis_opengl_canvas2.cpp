@@ -184,6 +184,9 @@ void KisOpenGLCanvas2::paintGL()//Event(QPaintEvent *event)
 
 void KisOpenGLCanvas2::drawCheckers()
 {
+    if(!d->checkerShader)
+        return;
+
     KisCoordinatesConverter *converter = coordinatesConverter();
 
     QTransform textureTransform;
@@ -250,6 +253,9 @@ void KisOpenGLCanvas2::drawCheckers()
 
 void KisOpenGLCanvas2::drawImage()
 {
+    if(!d->displayShader)
+        return;
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
