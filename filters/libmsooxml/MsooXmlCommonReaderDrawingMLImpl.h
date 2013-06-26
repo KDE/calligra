@@ -257,7 +257,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(spPr)
-                else if (qualifiedName() == QLatin1String("p:blipFill")) {
+                else if (name() == QLatin1String("blipFill")) {
                     TRY_READ_IN_CONTEXT(blipFill)
                     if (!m_xlinkHref.isEmpty()) {
                         //spPr may also set m_xlinkHref
@@ -1763,7 +1763,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
             }
-            else if (!m_ignoreLinkHref && qualifiedName() == QLatin1String("a:blipFill")) {
+            else if (!m_ignoreLinkHref && name() == QLatin1String("blipFill")) {
                 TRY_READ_IN_CONTEXT(blipFill)
                 if (!m_xlinkHref.isEmpty()) {
                     KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
@@ -2611,8 +2611,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // refers to the corresponding margin of a parent style.  Let's convert
     // the percentage value into points to keep it simple.
     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
-    if (spcBef.contains("%")) {
-        spcBef.remove("%");
+    if (spcBef.contains('%')) {
+        spcBef.remove('%');
         qreal percentage = spcBef.toDouble();
         qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -2623,8 +2623,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
     }
     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
-    if (spcAft.contains("%")) {
-        spcAft.remove("%");
+    if (spcAft.contains('%')) {
+        spcAft.remove('%');
         qreal percentage = spcAft.toDouble();
         qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP

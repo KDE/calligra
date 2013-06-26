@@ -2,7 +2,7 @@ include_directories(${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
-set(kspreadlatexexport_PART_SRCS 
+set(kspread2tex_PART_SRCS
    cell.cc 
    column.cc 
    config.cc 
@@ -19,15 +19,15 @@ set(kspreadlatexexport_PART_SRCS
    table.cc 
    xmlparser.cc )
 
-kde4_add_ui_files(kspreadlatexexport_PART_SRCS latexexportwidget.ui )
+kde4_add_ui_files(kspread2tex_PART_SRCS latexexportwidget.ui )
 
-kde4_add_plugin(kspreadlatexexport ${kspreadlatexexport_PART_SRCS})
+kde4_add_plugin(calligra_filter_kspread2tex ${kspread2tex_PART_SRCS})
 
 
 
-target_link_libraries(kspreadlatexexport komain)
+target_link_libraries(calligra_filter_kspread2tex komain)
 
-install(TARGETS kspreadlatexexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_kspread2tex  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
