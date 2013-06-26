@@ -23,7 +23,7 @@
 #include "StepStepBase.h"
 #include <QtCore/QString>
 
-StepStepStack::StepStepStack()
+StepStepStack::StepStepStack():d()
 {
 
 }
@@ -35,7 +35,7 @@ StepStepStack::StepStepStack(const StepStepStack& other)
 
 StepStepStack::~StepStepStack()
 {
-    
+
 }
 
 StepStepStack& StepStepStack::operator=(const StepStepStack& other)
@@ -54,17 +54,16 @@ bool StepStepStack::operator==(const StepStepStack& other)
 
 StepStepBase StepStepStack::at(int i)
 {
-  return StepStepBase();
+  return d->at(i);
 }
 
 StepStepBase StepStepStack::pop()
 {
-  return StepStepBase();
+  return d->pop();
 }
 StepStepBase StepStepStack::top()
 {
-  return StepStepBase();
-
+  return d->top();
 }
 
 
@@ -79,6 +78,7 @@ void StepStepStack::insertAt(int i, StepStepBase step)
 
 void StepStepStack::push(StepStepBase* step)
 {
+    d->push(step);
 
 }
 void StepStepStack::removeAt(int i)

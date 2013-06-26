@@ -28,7 +28,7 @@ class StepStepBase;
 class StepStepStack_p;
 class StepStepStack :  QObject
 {
-  
+
   Q_OBJECT
 public:
     StepStepStack();
@@ -36,18 +36,18 @@ public:
     ~StepStepStack();
     StepStepStack& operator=(const StepStepStack& other);
     bool operator==(const StepStepStack& other);
-    
+
     StepStepBase at(int i);
     StepStepBase pop();
     StepStepBase top();
-    
+
     void serialize(QString Filename);
     void deserialize(QString Filename);
-    
+
     void insertAt(int i, StepStepBase step);
     void removeAt(int i);
-    
-    void push(StepStepBase* step); 
+
+    void push(StepStepBase* step);
 
 private:
     StepStepStack_p* d;

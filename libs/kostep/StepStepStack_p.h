@@ -22,14 +22,26 @@
 #define STEPSTEPSTACK_P_H
 
 #include <QtCore/QObject>
+#include <QtCore/QStack>
 
+class StepStepBase;
 class StepStepStack_p :  QObject
 {
   Q_OBJECT
 public:
     StepStepStack_p();
     ~StepStepStack_p();
+    StepStepBase at(int i);
+    StepStepBase pop();
+    StepStepBase top();
+    void push(StepStepBase step);
+    void serialize();
+    void deserialize();
+    void insertAt(int i);
+    void removeAt(int i);
 
+private:
+    QStack<StepStepBase> stack;
 };
 
 #endif // STEPSTEPSTACK_P_H

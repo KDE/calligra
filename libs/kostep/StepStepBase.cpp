@@ -25,47 +25,55 @@ StepStepBase::StepStepBase()
 
 }
 
-StepStepBase::StepStepBase(const StepStepBase& other)
-{
-
-}
-
 StepStepBase::~StepStepBase()
 {
 
 }
+StepStepBase::StepStepBase(const StepStepBase& other): QObject()
+{
 
+}
 StepStepBase& StepStepBase::operator=(const StepStepBase& other)
 {
-    return *this;
-}
+  return *this;
 
+}
 bool StepStepBase::operator==(const StepStepBase& other) const
 {
-///TODO: return ...;
-  return true;
+  if (other._isForeign == this->_isForeign &&
+      other._position == this->_position &&
+      other._step == this->_step &&
+      other._type == this->_type
+  ) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
+
 
 bool StepStepBase::Foreign()
 {
-  return false;
+  return _isForeign;
 }
 int StepStepBase::Position()
 {
-  return 0;
+  return _position;
 }
 void StepStepBase::setForeign(bool foreign)
 {
+  _isForeign = foreign;
 
 }
 void StepStepBase::setPosition(int position)
 {
+  _position = position;
 
 }
 QString StepStepBase::Step()
 {
-  QString string = (QString)"";
-  return string;
+  return _step;
 }
 QString StepStepBase::toString()
 {
@@ -79,8 +87,7 @@ QString StepStepBase::toXML()
 }
 QString StepStepBase::Type()
 {
-  QString string = (QString)"";
-  return string;
+  return _type;
 
 }
 

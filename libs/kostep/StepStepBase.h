@@ -27,53 +27,53 @@
 class StepStepBase : public QObject
 {
     Q_OBJECT
-    
+
     //Basic Properties of a step, allows for usage in QML
     Q_PROPERTY(bool Foreign READ Foreign WRITE setForeign)
     Q_PROPERTY(int Position READ Position WRITE setPosition)
     Q_PROPERTY(QString Step READ Step)
     Q_PROPERTY(QString Type READ Type)
-    
+
 public:
     StepStepBase();
     StepStepBase(const StepStepBase& other);
-    
+
     virtual ~StepStepBase();
     virtual StepStepBase& operator=(const StepStepBase& other);
     virtual bool operator==(const StepStepBase& other) const;
-    
+
     //String Representation of a Step
     virtual QString toString();
     //XML Representation of a Step for use in serialization
     virtual QString toXML();
-    
+
     //The Foreign Property gives indication whether the step came
     //from a source besides the user, say for instance if the user
     //is collaboratively editing with another user and thus receiving
     //steps from them
     virtual bool Foreign();
     virtual void setForeign(bool foreign);
-    
+
     //The Position Property gives the position in characters from the
     //beginning of the text  which is then used when doing Operational
     //Transformation to allow derivative operations
     int Position();
     virtual void setPosition(int position);
-    
+
     //The Step Property holds the text of the change so say I've got the word
     //Dog and I make it Dogs, Step would hold an "s"
-    virtual QString Step();    
-    
+    virtual QString Step();
+
     //The Type Property Returns the Type of Operation that the step is as a QString
     //mostly useful for equality testing and serialization/deserialization
     virtual QString Type();
-    
+
 private:
   bool _isForeign;
   int _position;
   QString _step;
   const QString _type;
-  
+
 };
 
 #endif // STEPSTEPBASE_H

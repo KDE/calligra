@@ -19,6 +19,7 @@
  */
 
 #include "StepStepStack_p.h"
+#include "StepStepBase.h"
 
 StepStepStack_p::StepStepStack_p()
 {
@@ -26,6 +27,69 @@ StepStepStack_p::StepStepStack_p()
 }
 
 StepStepStack_p::~StepStepStack_p()
+{
+
+}
+
+StepStepBase StepStepStack_p::at(int i)
+{
+    if(!stack.empty() && stack.count() >= i+1)
+    {
+        return stack.at(i);
+    }
+    else
+    {
+        return StepStepBase();
+    }
+
+}
+
+StepStepBase StepStepStack_p::pop()
+{
+    //temporary behavior for the time being
+    if(!stack.empty())
+    {
+        return stack.pop();
+    }
+    else
+    {
+        return StepStepBase();
+    }
+
+}
+
+StepStepBase StepStepStack_p::top()
+{
+    if(!stack.empty())
+    {
+        return  stack.top();
+    }
+    else
+    {
+        return StepStepBase();
+    }
+
+}
+
+void StepStepStack_p::push(StepStepBase step)
+{
+    stack.push(step);
+
+}
+
+void StepStepStack_p::serialize()
+{
+
+}
+void StepStepStack_p::deserialize()
+{
+
+}
+void StepStepStack_p::insertAt(int i)
+{
+
+}
+void StepStepStack_p::removeAt(int i)
 {
 
 }
