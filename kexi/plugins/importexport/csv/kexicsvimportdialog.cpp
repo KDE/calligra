@@ -609,7 +609,7 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
                 suggestedName = KUrl(m_fname).fileName();
                 //remove extension
                 if (!suggestedName.isEmpty()) {
-                    const int idx = suggestedName.lastIndexOf(".");
+                    const int idx = suggestedName.lastIndexOf('.');
                     if (idx != -1) {
                          suggestedName = suggestedName.mid(0, idx).simplified();
                     }

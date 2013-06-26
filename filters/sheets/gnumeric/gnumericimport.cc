@@ -188,8 +188,8 @@ void  convert_string_to_qcolor(QString color_string, QColor * color)
 
     bool number_ok;
 
-    first_col_pos  = color_string.indexOf(":", 0);
-    second_col_pos = color_string.indexOf(":", first_col_pos + 1);
+    first_col_pos  = color_string.indexOf(':', 0);
+    second_col_pos = color_string.indexOf(':', first_col_pos + 1);
 
     /* Fore="0:0:FF00" */
     /* If GNUmeric kicks out some invalid colors, we could crash. */

@@ -397,7 +397,7 @@ QDateTime KexiDateTimeFormatter::fromString(
     const KexiTimeFormatter& timeFormatter, const QString& str)
 {
     QString s(str.trimmed());
-    const int timepos = s.indexOf(" ");
+    const int timepos = s.indexOf(' ');
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(s.mid(timepos + 1)); //.remove(':').trimmed().isEmpty();
     if (emptyTime)
         s = s.left(timepos);
@@ -428,7 +428,7 @@ bool KexiDateTimeFormatter::isEmpty(const KexiDateFormatter& dateFormatter,
                                     const KexiTimeFormatter& timeFormatter,
                                     const QString& str)
 {
-    int timepos = str.indexOf(" ");
+    int timepos = str.indexOf(' ');
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1)); //s.mid(timepos+1).remove(':').trimmed().isEmpty();
     return (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) //s.left(timepos).remove(d->dateFormatter.separator()).trimmed().isEmpty()
             && emptyTime);
@@ -437,7 +437,7 @@ bool KexiDateTimeFormatter::isEmpty(const KexiDateFormatter& dateFormatter,
 bool KexiDateTimeFormatter::isValid(const KexiDateFormatter& dateFormatter,
                                     const KexiTimeFormatter& timeFormatter, const QString& str)
 {
-    int timepos = str.indexOf(" ");
+    int timepos = str.indexOf(' ');
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1)); //s.mid(timepos+1).remove(':').trimmed().isEmpty();
     if (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) // s.left(timepos).remove(d->dateFormatter.separator()).trimmed().isEmpty()
             && emptyTime)

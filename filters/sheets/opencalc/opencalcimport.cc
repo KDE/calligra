@@ -729,13 +729,13 @@ void OpenCalcImport::loadOasisCondition(QString &valExpression, Conditional &new
         //add Differentto attribute
         value = valExpression.remove(0, 2);
         newCondition.cond = Conditional::DifferentTo;
-    } else if (valExpression.indexOf("<") == 0) {
+    } else if (valExpression.indexOf('<') == 0) {
         value = valExpression.remove(0, 1);
         newCondition.cond = Conditional::Inferior;
-    } else if (valExpression.indexOf(">") == 0) {
+    } else if (valExpression.indexOf('>') == 0) {
         value = valExpression.remove(0, 1);
         newCondition.cond = Conditional::Superior;
-    } else if (valExpression.indexOf("=") == 0) {
+    } else if (valExpression.indexOf('=') == 0) {
         value = valExpression.remove(0, 1);
         newCondition.cond = Conditional::Equal;
     } else

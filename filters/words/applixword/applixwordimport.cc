@@ -232,7 +232,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                 } else {
                     if (mystr.startsWith("<color ")) {
                         mystr.remove(0, 8);
-                        pos = mystr.indexOf("\"");
+                        pos = mystr.indexOf('"');
                         coltxt = mystr.left(pos);
                         mystr.remove(0, pos + 1);
                         int c, m, y, k;
