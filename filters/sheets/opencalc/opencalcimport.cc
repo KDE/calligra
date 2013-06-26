@@ -219,7 +219,7 @@ void OpenCalcImport::checkForNamedAreas(QString & formula) const
         }
         if (word.length() > 0) {
             if (m_namedAreas.contains(word)) {
-                formula = formula.replace(start, word.length(), '\'' + word + '\'');
+                formula.replace(start, word.length(), '\'' + word + '\'');
                 l = formula.length();
                 ++i;
                 kDebug(30518) << "Formula:" << formula << ", L:" << l << ", i:" << i + 1;
@@ -232,7 +232,7 @@ void OpenCalcImport::checkForNamedAreas(QString & formula) const
     }
     if (word.length() > 0) {
         if (m_namedAreas.contains(word)) {
-            formula = formula.replace(start, word.length(), '\'' + word + '\'');
+            formula.replace(start, word.length(), '\'' + word + '\'');
             l = formula.length();
             ++i;
             kDebug(30518) << "Formula:" << formula << ", L:" << l << ", i:" << i + 1;
@@ -694,8 +694,8 @@ void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Cond
     //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
     //for the moment we support just int/double value, not text/date/time :(
     if (val.contains("cell-content-is-between(")) {
-        val = val.remove("cell-content-is-between(");
-        val = val.remove(')');
+        val.remove("cell-content-is-between(");
+        val.remove(')');
         QStringList listVal = val.split(',');
         kDebug(30518) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
         newCondition.value1 = parser->parse(listVal[0]);
@@ -703,8 +703,8 @@ void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Cond
         newCondition.cond = Conditional::Between;
     }
     if (val.contains("cell-content-is-not-between(")) {
-        val = val.remove("cell-content-is-not-between(");
-        val = val.remove(')');
+        val.remove("cell-content-is-not-between(");
+        val.remove(')');
         QStringList listVal = val.split(',');
         kDebug(30518) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
         newCondition.value1 = parser->parse(listVal[0]);
@@ -954,7 +954,7 @@ void replaceMacro(QString & text, QString const & old, QString const & newS)
 {
     int n = text.indexOf(old);
     if (n != -1)
-        text = text.replace(n, old.length(), newS);
+        text.replace(n, old.length(), newS);
 }
 
 QString getPart(KoXmlNode const & part)
@@ -2085,7 +2085,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
         //ExtendedTrueCondition
         if (valExpression.contains("cell-content-text-length()")) {
             //"cell-content-text-length()>45"
-            valExpression = valExpression.remove("cell-content-text-length()");
+            valExpression.remove("cell-content-text-length()");
             kDebug(30518) << " valExpression = :" << valExpression;
             validity.setRestriction(Validity::TextLength);
 
@@ -2095,17 +2095,17 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
         else if (valExpression.contains("cell-content-text-length-is-between")) {
             validity.setRestriction(Validity::TextLength);
             validity.setCondition(Conditional::Between);
-            valExpression = valExpression.remove("cell-content-text-length-is-between(");
+            valExpression.remove("cell-content-text-length-is-between(");
             kDebug(30518) << " valExpression :" << valExpression;
-            valExpression = valExpression.remove(')');
+            valExpression.remove(')');
             QStringList listVal = valExpression.split(',');
             loadOasisValidationValue(validity, listVal, parser);
         } else if (valExpression.contains("cell-content-text-length-is-not-between")) {
             validity.setRestriction(Validity::TextLength);
             validity.setCondition(Conditional::Different);
-            valExpression = valExpression.remove("cell-content-text-length-is-not-between(");
+            valExpression.remove("cell-content-text-length-is-not-between(");
             kDebug(30518) << " valExpression :" << valExpression;
-            valExpression = valExpression.remove(')');
+            valExpression.remove(')');
             kDebug(30518) << " valExpression :" << valExpression;
             QStringList listVal = valExpression.split(',');
             loadOasisValidationValue(validity, listVal, parser);
@@ -2115,36 +2115,36 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
         else {
             if (valExpression.contains("cell-content-is-whole-number()")) {
                 validity.setRestriction(Validity::Number);
-                valExpression = valExpression.remove("cell-content-is-whole-number() and ");
+                valExpression.remove("cell-content-is-whole-number() and ");
             } else if (valExpression.contains("cell-content-is-decimal-number()")) {
                 validity.setRestriction(Validity::Integer);
-                valExpression = valExpression.remove("cell-content-is-decimal-number() and ");
+                valExpression.remove("cell-content-is-decimal-number() and ");
             } else if (valExpression.contains("cell-content-is-date()")) {
                 validity.setRestriction(Validity::Date);
-                valExpression = valExpression.remove("cell-content-is-date() and ");
+                valExpression.remove("cell-content-is-date() and ");
             } else if (valExpression.contains("cell-content-is-time()")) {
                 validity.setRestriction(Validity::Time);
-                valExpression = valExpression.remove("cell-content-is-time() and ");
+                valExpression.remove("cell-content-is-time() and ");
             }
             kDebug(30518) << "valExpression :" << valExpression;
 
             if (valExpression.contains("cell-content()")) {
-                valExpression = valExpression.remove("cell-content()");
+                valExpression.remove("cell-content()");
                 loadOasisValidationCondition(validity, valExpression, parser);
             }
             //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
             //for the moment we support just int/double value, not text/date/time :(
             if (valExpression.contains("cell-content-is-between(")) {
-                valExpression = valExpression.remove("cell-content-is-between(");
-                valExpression = valExpression.remove(')');
+                valExpression.remove("cell-content-is-between(");
+                valExpression.remove(')');
                 QStringList listVal = valExpression.split(',');
                 loadOasisValidationValue(validity, listVal, parser);
 
                 validity.setCondition(Conditional::Between);
             }
             if (valExpression.contains("cell-content-is-not-between(")) {
-                valExpression = valExpression.remove("cell-content-is-not-between(");
-                valExpression = valExpression.remove(')');
+                valExpression.remove("cell-content-is-not-between(");
+                valExpression.remove(')');
                 QStringList listVal = valExpression.split(',');
                 loadOasisValidationValue(validity, listVal, parser);
                 validity.setCondition(Conditional::Different);

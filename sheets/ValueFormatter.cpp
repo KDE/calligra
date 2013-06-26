@@ -330,7 +330,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         const QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
         localizedNumber = QString::number(val, 'E', p);
         if ((pos = localizedNumber.indexOf('.')) != -1)
-            localizedNumber = localizedNumber.replace(pos, 1, decimalSymbol);
+            localizedNumber.replace(pos, 1, decimalSymbol);
         break;
     }
     default :
