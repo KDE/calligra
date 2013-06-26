@@ -2818,14 +2818,14 @@ void MSOOXML_CURRENT_CLASS::handlePathValues(const QXmlStreamAttributes& attrs)
         QString tempModifiers = adj;
         doPrependCheck(tempModifiers);
         tempModifiers.replace(",,", ",0,");
-        tempModifiers.replace(',', " ");
+        tempModifiers.replace(',', ' ');
         m_currentVMLProperties.modifiers = tempModifiers;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(coordsize)
     if (!coordsize.isEmpty()) {
         QString tempViewBox = "0 0 " + coordsize;
-        tempViewBox.replace(',', " ");
+        tempViewBox.replace(',', ' ');
         m_currentVMLProperties.viewBox = tempViewBox;
     }
 

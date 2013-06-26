@@ -1031,7 +1031,7 @@ void GNUMERICFilter::convertFormula(QString & formula) const
         else if (formula[i] == '"')
             inQuote2 = !inQuote2;
         else if (formula[i] == ',' && !inQuote1 && !inQuote2)
-            formula = formula.replace(i, 1, ";");
+            formula = formula.replace(i, 1, ';');
     }
 }
 

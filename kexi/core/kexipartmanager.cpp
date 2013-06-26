@@ -206,7 +206,7 @@ static QString realPartClass(const QString &className)
     else {
         // not like "org.kexi-project.table" - construct
         return QString::fromLatin1("org.kexi-project.")
-            + QString(className).replace("kexi/", QString());
+            + QString(className).remove("kexi/");
     }
 }
 

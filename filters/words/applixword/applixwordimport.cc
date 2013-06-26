@@ -688,7 +688,7 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 
         // Is it a textquote ?
         if ((pos > -1) && (textstr[pos-1] == '\\')) {
-            textstr.replace(pos - 1, 2, "\"");
+            textstr.replace(pos - 1, 2, '"');
         } else {
             ok = false;
         }
