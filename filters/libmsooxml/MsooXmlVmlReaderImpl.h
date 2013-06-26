@@ -37,8 +37,8 @@
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
 {
     m_currentVMLProperties.vmlStyle.clear();
-    foreach( const QString& pair, style.split(";", QString::SkipEmptyParts)) {
-        const int splitIndex = pair.indexOf(":");
+    foreach( const QString& pair, style.split(';', QString::SkipEmptyParts)) {
+        const int splitIndex = pair.indexOf(':');
         if (splitIndex < 1) {
             continue;
         }

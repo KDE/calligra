@@ -419,7 +419,7 @@ void KexiStartupFileDialogBase::setFilter(const QString& filter)
     // interpret as a MIME filter.
 
     if (pos > 0 && filter[pos - 1] != '\\') {
-        QStringList filters = d->kde_filters.split(" ");
+        QStringList filters = d->kde_filters.split(' ');
         setMimeFilter(filters);
         return;
     }
@@ -440,7 +440,7 @@ void KexiStartupFileDialogBase::setMimeFilter(const QStringList& mimeTypes,
     d->mimetypes = mimeTypes;
 //(js)    filterWidget->setMimeFilter( mimeTypes, defaultType );
 
-//(js)    QStringList types = QStringList::split(" ", filterWidget->currentFilter());
+//(js)    QStringList types = QStringList::split(' ', filterWidget->currentFilter());
 //(js)    types.append( QString::fromLatin1( "inode/directory" ));
 //(js)    ops->clearFilter();
 //(js)    ops->setMimeFilter( types );

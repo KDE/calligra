@@ -359,7 +359,7 @@ QString ChartExport::genPlotAreaStyle( KoGenStyles& styles, KoGenStyles& mainSty
 
 QString replaceSheet( const QString &originalString, const QString &replacementSheet )
 {
-    QStringList split = originalString.split( QString::fromLatin1( "!" ) );
+    QStringList split = originalString.split( QLatin1Char('!') );
     split[0] = replacementSheet;
     return split.join( QString::fromLatin1( "!" ) );
 }

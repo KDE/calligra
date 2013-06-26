@@ -106,7 +106,7 @@ bool Manager::lookup()
                        KGlobal::mainComponent().aboutData()->programName(), QLatin1String("Parts/Order")));
         return false;
     }
-    const QStringList sl_order = cg.readEntry("Order").split(",");  //we'll set parts in defined order
+    const QStringList sl_order = cg.readEntry("Order").split(',');  //we'll set parts in defined order
     QVector<KService::Ptr> ordered(sl_order.count());
 
     //compute order

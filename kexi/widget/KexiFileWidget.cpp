@@ -313,7 +313,7 @@ QString KexiFileWidget::selectedFile() const
 
   if (!currentFilter().isEmpty()) {
     if (d->mode & SavingFileBasedDB) {
-      const QStringList filters( currentFilter().split(" ") );
+      const QStringList filters( currentFilter().split(' ') );
       kDebug()<< " filter == " << filters;
       QString ext( QFileInfo(path).suffix() );
       bool hasExtension = false;
@@ -370,7 +370,7 @@ bool KexiFileWidget::checkSelectedFile()
 
     if (!currentFilter().isEmpty()) {
         if (d->mode & SavingFileBasedDB) {
-            const QStringList filters( currentFilter().split(" ") );
+            const QStringList filters( currentFilter().split(' ') );
             QString path = highlightedFile();
             kDebug()<< "filter:" << filters << "path:" << path;
             QString ext( QFileInfo(path).suffix() );

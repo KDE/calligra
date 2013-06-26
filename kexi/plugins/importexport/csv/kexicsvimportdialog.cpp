@@ -1478,7 +1478,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
             if (row == 1 || type == KexiDB::Field::InvalidType) {
                 bool detected = text.isEmpty();
                 if (!detected) {
-                    const QStringList dateTimeList(text.split(" "));
+                    const QStringList dateTimeList(text.split(' '));
                     bool ok = dateTimeList.count() >= 2;
 //! @todo also support ISODateTime's "T" separator?
 //! @todo also support timezones?
@@ -1637,9 +1637,9 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
             else
                 m_tmpValues << QVariant();
         } else if (detectedType == KexiDB::Field::DateTime) {
-            QStringList dateTimeList(text.split(" "));
+            QStringList dateTimeList(text.split(' '));
             if (dateTimeList.count() < 2)
-                dateTimeList = text.split("T"); //also support ISODateTime's "T" separator
+                dateTimeList = text.split('T'); //also support ISODateTime's "T" separator
 //! @todo also support timezones?
             if (dateTimeList.count() >= 2) {
                 //try all combinations
