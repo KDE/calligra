@@ -2218,13 +2218,13 @@ void OpenCalcImport::loadOasisValidationCondition(Validity validity, QString &va
         //add Differentto attribute
         value = valExpression.remove("!=");
         validity.setCondition(Conditional::DifferentTo);
-    } else if (valExpression.contains("<")) {
+    } else if (valExpression.contains('<')) {
         value = valExpression.remove('<');
         validity.setCondition(Conditional::Inferior);
-    } else if (valExpression.contains(">")) {
+    } else if (valExpression.contains('>')) {
         value = valExpression.remove('>');
         validity.setCondition(Conditional::Superior);
-    } else if (valExpression.contains("=")) {
+    } else if (valExpression.contains('=')) {
         value = valExpression.remove('=');
         validity.setCondition(Conditional::Equal);
     } else

@@ -200,7 +200,7 @@ Part* Manager::part(Info *i)
 
 static QString realPartClass(const QString &className)
 {
-    if (className.contains(".")) {
+    if (className.contains('.')) {
         return className;
     }
     else {

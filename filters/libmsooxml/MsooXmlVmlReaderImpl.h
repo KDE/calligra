@@ -259,12 +259,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2));
         QString x1 = x_pos_string;
         QString y2 = QString("%1%2").arg(y_position + heightValue).arg(heightString.right(2));
-        if (flip.contains("x")) {
+        if (flip.contains('x')) {
             QString temp = y2;
             y2 = y1;
             y1 = temp;
         }
-        if (flip.contains("y")) {
+        if (flip.contains('y')) {
             QString temp = x2;
             x2 = x1;
             x1 = temp;
@@ -2556,10 +2556,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
             QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
-            if (flip.contains("x")) {
+            if (flip.contains('x')) {
                 m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
             }
-            if (flip.contains("y")) {
+            if (flip.contains('y')) {
                 m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
             }
             m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").

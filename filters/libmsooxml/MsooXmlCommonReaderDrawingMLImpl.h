@@ -2611,7 +2611,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // refers to the corresponding margin of a parent style.  Let's convert
     // the percentage value into points to keep it simple.
     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
-    if (spcBef.contains("%")) {
+    if (spcBef.contains('%')) {
         spcBef.remove('%');
         qreal percentage = spcBef.toDouble();
         qreal margin = 0;
@@ -2623,7 +2623,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
     }
     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
-    if (spcAft.contains("%")) {
+    if (spcAft.contains('%')) {
         spcAft.remove('%');
         qreal percentage = spcAft.toDouble();
         qreal margin = 0;

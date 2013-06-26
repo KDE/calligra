@@ -566,7 +566,7 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, c
 QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtType, const QString& formatString )
 {
     if( !formatString.isEmpty() ) {
-        if (formatString.contains("X")) {               // if we have the special extra-short month in the format string
+        if (formatString.contains('X')) {               // if we have the special extra-short month in the format string
             int monthPos = formatString.indexOf("X");
             QString before = formatString.left(monthPos);                               // get string before and after the extra-short month sign
             QString after = formatString.right(formatString.size() - monthPos - 1);
