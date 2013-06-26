@@ -101,7 +101,7 @@ KexiFileWidget::KexiFileWidget(
 
     /* Qt4
     #ifdef Q_WS_WIN
-      if (startDirOrVariable.startsWith(":"))
+      if (startDirOrVariable.startsWith(':'))
         m_lastVisitedPathsVariable = startDirOrVariable; //store for later use
     #else*/
 // toggleSpeedbar(false);
@@ -290,7 +290,7 @@ QString KexiFileWidget::selectedFile() const
   //js @todo
 // kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text();
   QString path = dir()->absolutePath();
-  if (!path.endsWith("/") && !path.endsWith("\\"))
+  if (!path.endsWith('/') && !path.endsWith("\\"))
     path.append("/");
   path += m_lineEdit->text();
 // QString path = QFileInfo(selectedFile()).dirPath(true) + "/" + m_lineEdit->text();

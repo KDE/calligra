@@ -228,7 +228,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             width = "0in";
         }
         //TODO: Add support for auto and percentage values.
-        if (!(width == "auto" || width.endsWith("%"))) {
+        if (!(width == "auto" || width.endsWith('%'))) {
             widthValue = width.left(width.length() - 2).toDouble();
             widthString = width;
         }
@@ -246,7 +246,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             height = "0in";
         }
         //TODO: Add support for auto and percentage values.
-        if (!(height == "auto" || height.endsWith("%"))) {
+        if (!(height == "auto" || height.endsWith('%'))) {
             heightValue = height.left(height.length() - 2).toDouble();
             heightString = height;
         }
@@ -647,7 +647,7 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
     }
 
     QString newColor;
-    if (color.startsWith("#")) {
+    if (color.startsWith('#')) {
         QColor c(color); // use QColor parser to validate and/or correct color
         newColor = c.name();
     }

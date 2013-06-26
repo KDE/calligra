@@ -453,7 +453,7 @@ void KexiStartupFileDialogBase::setMimeFilter(const QStringList& mimeTypes,
 
 QString KexiStartupFileDialogBase::realStartDir(const QString& startDir)
 {
-    if (!startDir.startsWith(":"))
+    if (!startDir.startsWith(':'))
         return startDir;
     QString recentDir; //dummy
     QString path(KFileDialog::getStartURL(startDir, recentDir).path());
