@@ -4,7 +4,7 @@ include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
 
 ########### next target ###############
 
-set(xlsximport_PART_SRCS
+set(xlsx2ods_PART_SRCS
     XlsxImport.cpp
     XlsxXmlCommonReader.cpp
     XlsxXmlDocumentReader.cpp
@@ -20,17 +20,17 @@ set(xlsximport_PART_SRCS
     FormulaParser.cpp
 )
 
-kde4_add_plugin(xlsximport ${xlsximport_PART_SRCS})
+kde4_add_plugin(calligra_filter_xlsx2ods ${xlsx2ods_PART_SRCS})
 
 target_link_libraries(
-    xlsximport
+    calligra_filter_xlsx2ods
     msooxml
     koodf
     komain
     calligrasheetscommon
 )
 
-install(TARGETS xlsximport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

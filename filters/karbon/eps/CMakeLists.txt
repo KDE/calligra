@@ -4,13 +4,13 @@ macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit with svg plugin" "Translat
 
 if (PSTOEDIT_SVG_PLUGIN_FOUND)
 
-set(karbonepsimport_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
+set(eps2svgai_PART_SRCS EpsImport.cpp PsCommentLexer.cpp )
 
-kde4_add_plugin(karbonepsimport ${karbonepsimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_eps2svgai ${eps2svgai_PART_SRCS})
 
-target_link_libraries(karbonepsimport komain)
+target_link_libraries(calligra_filter_eps2svgai komain)
 
-install(TARGETS karbonepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_eps2svgai  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES
     karbon_eps_import.desktop

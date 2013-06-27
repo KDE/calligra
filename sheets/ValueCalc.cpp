@@ -2435,25 +2435,25 @@ void ValueCalc::getCond(Condition &cond, Value val)
 
     if (text.startsWith(QLatin1String("<="))) {
         cond.comp = lessEqual;
-        text = text.remove(0, 2);
+        text.remove(0, 2);
     } else if (text.startsWith(QLatin1String(">="))) {
         cond.comp = greaterEqual;
-        text = text.remove(0, 2);
+        text.remove(0, 2);
     } else if (text.startsWith(QLatin1String("!=")) || text.startsWith(QLatin1String("<>"))) {
         cond.comp = notEqual;
-        text = text.remove(0, 2);
+        text.remove(0, 2);
     } else if (text.startsWith(QLatin1String("=="))) {
         cond.comp = isEqual;
-        text = text.remove(0, 2);
+        text.remove(0, 2);
     } else if (text.startsWith(QLatin1Char('<'))) {
         cond.comp = isLess;
-        text = text.remove(0, 1);
+        text.remove(0, 1);
     } else if (text.startsWith(QLatin1Char('>'))) {
         cond.comp = isGreater;
-        text = text.remove(0, 1);
+        text.remove(0, 1);
     } else if (text.startsWith(QLatin1Char('='))) {
         cond.comp = isEqual;
-        text = text.remove(0, 1);
+        text.remove(0, 1);
     }
 
     text = text.trimmed();
