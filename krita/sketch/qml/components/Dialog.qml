@@ -175,7 +175,7 @@ Item {
 
         Rectangle {
             id: progressBase;
-            opacity: (progress > -1) ? 1 : 0;
+            opacity: (progress > 0 && progressBar.width > 0) ? 1 : 0;
             Behavior on opacity { NumberAnimation { duration: 500; } }
             anchors {
                 top: dialogText.bottom;
@@ -203,6 +203,13 @@ Item {
                 Behavior on width { PropertyAnimation { duration: 100; } }
                 color: "gray";
             }
+        }
+        BusyIndicator {
+            id: busy;
+            anchors.fill: progressBase;
+            opacity: progressBase.opacity === 0 ? 1 : 0;
+            running: opacity === 1;
+            Behavior on opacity { PropertyAnimation { duration: 100; } }
         }
 
         Row {
