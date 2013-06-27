@@ -2944,7 +2944,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         if (!additionalMessage.isEmpty())
             additionalMessageString = additionalMessage.toString();
 
-        if (additionalMessageString.startsWith(":"))
+        if (additionalMessageString.startsWith(':'))
             additionalMessageString.clear();
         if (!additionalMessageString.isEmpty())
             additionalMessageString = "<p>" + additionalMessageString + "</p>";

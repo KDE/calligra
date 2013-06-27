@@ -41,7 +41,7 @@ int rangeStringToInt(const QString &string)
 // splits a given cellrange like Sheet1.D2:Sheet1.F2, Sheet1.D2:F2, D2:F2 or D2 into its parts
 QPair<QString,QRect> splitCellRange(QString range)
 {
-    range.remove( "$" ); // remove "fixed" character
+    range.remove( '$' ); // remove "fixed" character
     // remove []
     if(range.startsWith(QLatin1Char('[')) && range.endsWith(QLatin1Char(']'))) {
         range.remove(0, 1).chop(1);

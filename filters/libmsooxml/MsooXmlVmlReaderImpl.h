@@ -37,8 +37,8 @@
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
 {
     m_currentVMLProperties.vmlStyle.clear();
-    foreach( const QString& pair, style.split(";", QString::SkipEmptyParts)) {
-        const int splitIndex = pair.indexOf(":");
+    foreach( const QString& pair, style.split(';', QString::SkipEmptyParts)) {
+        const int splitIndex = pair.indexOf(':');
         if (splitIndex < 1) {
             continue;
         }
@@ -228,7 +228,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             width = "0in";
         }
         //TODO: Add support for auto and percentage values.
-        if (!(width == "auto" || width.endsWith("%"))) {
+        if (!(width == "auto" || width.endsWith('%'))) {
             widthValue = width.left(width.length() - 2).toDouble();
             widthString = width;
         }
@@ -246,7 +246,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             height = "0in";
         }
         //TODO: Add support for auto and percentage values.
-        if (!(height == "auto" || height.endsWith("%"))) {
+        if (!(height == "auto" || height.endsWith('%'))) {
             heightValue = height.left(height.length() - 2).toDouble();
             heightString = height;
         }
@@ -259,12 +259,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2));
         QString x1 = x_pos_string;
         QString y2 = QString("%1%2").arg(y_position + heightValue).arg(heightString.right(2));
-        if (flip.contains("x")) {
+        if (flip.contains('x')) {
             QString temp = y2;
             y2 = y1;
             y1 = temp;
         }
-        if (flip.contains("y")) {
+        if (flip.contains('y')) {
             QString temp = x2;
             x2 = x1;
             x1 = temp;
@@ -647,7 +647,7 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
     }
 
     QString newColor;
-    if (color.startsWith("#")) {
+    if (color.startsWith('#')) {
         QColor c(color); // use QColor parser to validate and/or correct color
         newColor = c.name();
     }
@@ -2556,10 +2556,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
             QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
-            if (flip.contains("x")) {
+            if (flip.contains('x')) {
                 m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
             }
-            if (flip.contains("y")) {
+            if (flip.contains('y')) {
                 m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
             }
             m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
@@ -2818,14 +2818,14 @@ void MSOOXML_CURRENT_CLASS::handlePathValues(const QXmlStreamAttributes& attrs)
         QString tempModifiers = adj;
         doPrependCheck(tempModifiers);
         tempModifiers.replace(",,", ",0,");
-        tempModifiers.replace(',', " ");
+        tempModifiers.replace(',', ' ');
         m_currentVMLProperties.modifiers = tempModifiers;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(coordsize)
     if (!coordsize.isEmpty()) {
         QString tempViewBox = "0 0 " + coordsize;
-        tempViewBox.replace(',', " ");
+        tempViewBox.replace(',', ' ');
         m_currentVMLProperties.viewBox = tempViewBox;
     }
 
