@@ -1,13 +1,13 @@
 ########### next target ###############
 include_directories(${KDE4_INCLUDES} ${KOMAIN_INCLUDES})
 
-set(applixspreadimport_PART_SRCS applixspreadimport.cc )
+set(applixspread2kspread_PART_SRCS applixspreadimport.cc )
 
-kde4_add_plugin(applixspreadimport ${applixspreadimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_applixspread2kspread ${applixspread2kspread_PART_SRCS})
 
-target_link_libraries(applixspreadimport komain calligrasheetscommon)
+target_link_libraries(calligra_filter_applixspread2kspread komain calligrasheetscommon)
 
-install(TARGETS applixspreadimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_applixspread2kspread  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

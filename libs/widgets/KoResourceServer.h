@@ -71,18 +71,18 @@ public:
     virtual ~KoResourceServerBase() {}
 
     virtual void loadResources(QStringList filenames) = 0;
-    virtual QStringList blackListedFiles() = 0;
-    QString type() { return m_type; }
+    virtual QStringList blackListedFiles() const = 0;
+    QString type() const { return m_type; }
 
     /**
     * File extensions for resources of the server
     * @returns the file extensions separated by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
-    QString extensions() { return m_extensions; }
+    QString extensions() const { return m_extensions; }
 
     void cancel() { m_cancelled = true; }
 
-    QStringList getFileNames()
+    QStringList fileNames() const
     {
         QStringList extensionList = m_extensions.split(':');
         QStringList fileNames;
@@ -119,7 +119,7 @@ public:
         {
             m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
             m_blackListFileNames = readBlackListFile();
-            m_tagObject = new KoResourceTagging(extensions);
+            m_tagObject = new KoResourceTagging(type, extensions);
         }
 
     virtual ~KoResourceServer()
@@ -321,7 +321,7 @@ public:
     {
         QFileInfo fi(filename);
 
-        T* resource = getResourceByFilename(fi.fileName());
+        T* resource = resourceByFilename(fi.fileName());
         if (!resource) {
             kWarning(30009) << "Resource file do not exist ";
             return;
@@ -365,23 +365,15 @@ public:
         m_observers.removeAt( index );
     }
 
-    T* getResourceByFilename( const QString& filename )
+    T* resourceByFilename( const QString& filename ) const
     {
-        if ( !m_resourcesByFilename.contains( filename ) ) {
-            return 0;
-        }
-
-        return m_resourcesByFilename[filename];
+        return m_resourcesByFilename.value(filename);
     }
 
 
-    T* getResourceByName( const QString& name )
+    T* resourceByName( const QString& name ) const
     {
-        if ( !m_resourcesByName.contains( name ) ) {
-            return 0;
-        }
-
-        return m_resourcesByName[name];
+        return m_resourcesByName.value(name);
     }
 
     /**
@@ -393,7 +385,7 @@ public:
         notifyResourceChanged(resource);
     }
 
-    QStringList blackListedFiles()
+    QStringList blackListedFiles() const
     {
         return m_blackListFileNames;
     }
@@ -411,14 +403,14 @@ public:
     }
 
     /// the below functions helps to access tagObject functions
-    QStringList getAssignedTagsList( KoResource* resource )
+    QStringList assignedTagsList( KoResource* resource ) const
     {
-        return m_tagObject->getAssignedTagsList(resource);
+        return m_tagObject->assignedTagsList(resource);
     }
 
-    QStringList getTagNamesList()
+    QStringList tagNamesList() const
     {
-        return m_tagObject->getTagNamesList();
+        return m_tagObject->tagNamesList();
     }
 
     void addTag( KoResource* resource,const QString& tag)
@@ -460,7 +452,7 @@ public:
         }
     }
 
-    KoResourceTagging * tagObject()
+    KoResourceTagging * tagObject() const
     {
         return m_tagObject;
     }
@@ -469,7 +461,7 @@ public:
 #ifdef NEPOMUK
     void updateNepomukXML(bool nepomukOn)
     {
-        KoResourceTagging* tagObject = new KoResourceTagging(extensions());
+        KoResourceTagging* tagObject = new KoResourceTagging(type(),extensions());
         tagObject->setNepomukBool(nepomukOn);
         tagObject->updateNepomukXML(nepomukOn);
         delete tagObject;

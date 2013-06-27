@@ -92,9 +92,12 @@ calligra_define_product(LIB_ODF2 "libodf2"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_ODFREADER "libodfreader"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
-calligra_define_product(SCRIPTING "") # TODO
+calligra_define_product(SCRIPTING "Scripting feature") # TODO
+calligra_define_product(RDF "RDF feature")
+# plugins
+calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
 # apps
-calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS)
+calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS PLUGIN_TEXTSHAPE)
 calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(STAGE_PART "Stage engine"  NEEDS CALLIGRA_LIBS LIB_KOPAGEAPP)
 calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  NEEDS STAGE_PART)
@@ -115,7 +118,7 @@ calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action")
 calligra_define_product(EXTRA_FILEMANAGER_TEMPLATES "File templates for filemanager")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
-# plugins
+# more plugins
 calligra_define_product(PLUGIN_COLORENGINES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_MUSICSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_SPACENAVIGATOR ""  NEEDS CALLIGRA_LIBS)
@@ -128,7 +131,6 @@ calligra_define_product(PLUGIN_PATHSHAPES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VARIABLES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_CHARTSHAPE "" NEEDS CALLIGRA_LIBS LIB_KDCHART)
 calligra_define_product(PLUGIN_PICTURESHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_PLUGINSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_FORMULASHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra"  NEEDS CALLIGRA_LIBS)
@@ -393,11 +395,7 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 macro_optional_find_package(Soprano)
 macro_log_feature(Soprano_FOUND "Soprano" "KDE4 RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
 if(NOT Soprano_FOUND)
-    set(SHOULD_BUILD_RDF FALSE)
     set(SOPRANO_INCLUDE_DIR "")
-else(NOT Soprano_FOUND)
-    set(SHOULD_BUILD_RDF TRUE)
-   add_definitions( -DSHOULD_BUILD_RDF )
 endif(NOT Soprano_FOUND)
 
 
@@ -759,14 +757,9 @@ set(KOREPORT_INCLUDES
 set(KOREPORT_LIBS koreport)
 
 # calligradb
-# TODO: remove when Predicate lib arrives
-if (HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
-   set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-   set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
-                           ${CMAKE_BINARY_DIR}/libs/db)
-else (HAVE_ICU AND HAVE_SQLITE)
-   set(SHOULD_BUILD_LIB_CALLIGRADB FALSE)
-endif (HAVE_ICU AND HAVE_SQLITE)
+set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
+set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                        ${CMAKE_BINARY_DIR}/libs/db)
 
 #############################################
 ####          3rd party libraries        ####
@@ -811,6 +804,10 @@ if(NOT SHARED_MIME_INFO_FOUND)
     calligra_disable_product(LIB_MSOOXML "SharedMimeInfo not found (needed to install mimetypes)")
 endif(NOT SHARED_MIME_INFO_FOUND)
 
+if(NOT Soprano_FOUND)
+    calligra_disable_product(RDF "Soprano not found")
+endif(NOT Soprano_FOUND)
+
 if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
@@ -826,6 +823,11 @@ endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 if (NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
     calligra_disable_product(ACTIVE "QtDeclarative|KDeclarative not found")
 endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
+
+# TODO: remove when Predicate lib arrives
+if (NOT HAVE_ICU OR NOT HAVE_SQLITE)
+    calligra_disable_product(LIB_CALLIGRADB "ICU|sqlite devel not found")
+endif (NOT HAVE_ICU OR NOT HAVE_SQLITE)
 
 if (NOT QT3SUPPORT)
     calligra_disable_product(KEXI_APP "Qt3Support not found")
@@ -909,6 +911,15 @@ calligra_drop_products_on_old_flag(words  WORDS_PART WORDS_APP)
 #############################################
 
 calligra_drop_unbuildable_products()
+
+
+#############################################
+####     Setup product-depending vars    ####
+#############################################
+
+if(SHOULD_BUILD_RDF)
+   add_definitions( -DSHOULD_BUILD_RDF )
+endif(SHOULD_BUILD_RDF)
 
 
  ###################
