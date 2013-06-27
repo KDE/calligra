@@ -164,7 +164,7 @@ Page {
         title: "Loading";
         message: "Please wait...";
         textAlign: Text.AlignHCenter;
-
+        progress: 0;
         modalBackgroundColor: "#ffffff";
     }
 

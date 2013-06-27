@@ -73,12 +73,13 @@ Item {
         textAlign: Text.AlignHCenter;
         modalBackgroundColor: "#ffffff";
         opacity: 1;
+        progress: 0;
         visible: false;
         function hideMe() { timer.start(); }
         Timer {
             id: timer;
             interval: 500; running: false; repeat: false;
-            onTriggered: parent.visible = false;
+            onTriggered: { parent.visible = false; baseLoadingDialog.progress = -1; }
         }
     }
 

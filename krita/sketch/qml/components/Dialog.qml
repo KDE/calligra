@@ -207,7 +207,7 @@ Item {
         BusyIndicator {
             id: busy;
             anchors.fill: progressBase;
-            opacity: progressBase.opacity === 0 ? 1 : 0;
+            opacity: (progress > -1 && progressBase.opacity === 0) ? 1 : 0;
             running: opacity === 1;
             Behavior on opacity { PropertyAnimation { duration: 100; } }
         }
