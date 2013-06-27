@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,42 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILTER_HANDLER_H_
-#define _KIS_FILTER_HANDLER_H_
+#ifndef __KIS_SIGNAL_COMPRESSOR_H
+#define __KIS_SIGNAL_COMPRESSOR_H
 
 #include <QObject>
+#include "krita_export.h"
 
-#include <kis_types.h>
+class QTimer;
 
-class KisFilterConfiguration;
-class KisFilterManager;
-class KisLayer;
-class KisView2;
-class QRect;
-
-/**
- * XXX: this class is way too confusing.
- */
-class KisFilterHandler : public QObject
+class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
 {
-
     Q_OBJECT
 
 public:
-
-    KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view);
-    ~KisFilterHandler();
-
-    const QString filterName() const;
+    KisSignalCompressor(int delay, bool deadline = true, QObject *parent = 0);
 
 public slots:
-    void showDialog();
-    void reapply();
-    void apply(KisSafeFilterConfigurationSP filterConfig);
+    void start();
+    void stop();
+
+signals:
+    void timeout();
 
 private:
-    struct Private;
-    Private* const m_d;
+    QTimer *m_timer;
+    bool m_deadline;
 };
 
-#endif
+#endif /* __KIS_SIGNAL_COMPRESSOR_H */

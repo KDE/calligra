@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_OPEN_RASTER_LOAD_CONTEXT_H_
-#define _KIS_OPEN_RASTER_LOAD_CONTEXT_H_
+#ifndef __KIS_RUNNABLE_H
+#define __KIS_RUNNABLE_H
 
-class QString;
-class QDomDocument;
+#include "krita_export.h"
 
-#include <kis_types.h>
-
-class KisOpenRasterLoadContext
+class KRITAIMAGE_EXPORT KisRunnable
 {
 public:
-    virtual ~KisOpenRasterLoadContext() {}
-    virtual KisPaintDeviceSP loadDeviceData(const QString & fileName) = 0;
-    virtual QDomDocument loadStack() = 0;
+    virtual ~KisRunnable() {};
+    virtual void run() = 0;
 };
 
-
-#endif
+#endif /* __KIS_RUNNABLE_H */

@@ -6,7 +6,7 @@ include_directories( ${KOTEXT_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
+	${CMAKE_CURRENT_SOURCE_DIR}/ora
 	${CMAKE_SOURCE_DIR}/krita/image/metadata
 	${EXIV2_INCLUDE_DIR} )
 
@@ -55,6 +55,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection.cpp
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
+    flake/kis_take_all_shapes_command.cpp
     kis_autogradient.cc
     kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
@@ -75,7 +76,6 @@ set(kritaui_LIB_SRCS
     kis_part2.cpp
     kis_factory2.cc
     kis_file_layer.cpp
-    kis_filter_handler.cc
     kis_filter_manager.cc
     kis_filters_model.cc
     kis_flipbook.cpp
@@ -127,8 +127,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
-    openrastertk/kis_open_raster_stack_load_visitor.cpp
-    openrastertk/kis_open_raster_stack_save_visitor.cpp
+    ora/kis_open_raster_stack_load_visitor.cpp
+    ora/kis_open_raster_stack_save_visitor.cpp
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc
@@ -200,8 +200,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
-#    widgets/kis_light_source.cpp
-#    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp

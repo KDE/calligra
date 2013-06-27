@@ -1,5 +1,5 @@
 
-set (PLANCONVERT_INSTALL_DIR ${PLUGIN_INSTALL_DIR}/planconvert)
+set (PLANCONVERT_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/planconvert)
 
 configure_file (
   "${CMAKE_SOURCE_DIR}/filters/plan/mpxj/planconvert/mpxjconfig.h.in"
