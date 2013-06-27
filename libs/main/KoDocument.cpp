@@ -50,7 +50,6 @@
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
-#include <kparts/partmanager.h>
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
 #include <kdebug.h>

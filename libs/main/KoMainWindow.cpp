@@ -57,7 +57,6 @@
 #include <kedittoolbar.h>
 #include <ktemporaryfile.h>
 #include <krecentdocument.h>
-#include <kparts/partmanager.h>
 #include <kparts/plugin.h>
 #include <kparts/event.h>
 #include <klocale.h>
@@ -95,22 +94,6 @@
 
 #include "calligraversion.h"
 
-class KoPartManager : public KParts::PartManager
-{
-public:
-    KoPartManager(QWidget * parent)
-            : KParts::PartManager(parent) {
-        setSelectionPolicy(KParts::PartManager::TriState);
-        setAllowNestedParts(false);
-        setIgnoreScrollBars(true);
-    }
-    virtual bool eventFilter(QObject *obj, QEvent *ev) {
-        if (!obj || !ev || !obj->isWidgetType())
-            return false;
-        return KParts::PartManager::eventFilter(obj, ev);
-    }
-};
-
 class KoMainWindowPrivate
 {
 public:
@@ -119,7 +102,6 @@ public:
         rootDocument = 0;
         rootPart = 0;
         partToOpen = 0;
-        manager = 0;
         mainWindowGuiIsBuilt = false;
         forQuit = false;
         activePart = 0;
@@ -185,7 +167,6 @@ public:
     KoPart *rootPart;
     KoPart *partToOpen;
     QList<KoView*> rootViews;
-    KParts::PartManager *manager;
 
     KParts::Part *activePart;
     KoView *activeView;
@@ -254,11 +235,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
-
-    d->manager = new KoPartManager(this);
-
-    connect(d->manager, SIGNAL(activePartChanged(KParts::Part *)),
-            this, SLOT(slotActivePartChanged(KParts::Part *)));
 
     if (componentData.isValid()) {
         setComponentData(componentData, false);   // don't load plugins! we don't want
@@ -428,9 +404,6 @@ KoMainWindow::~KoMainWindow()
         delete d->partToOpen;
     }
 
-    // safety first ;)
-    d->manager->setActivePart(0);
-
     if (d->rootViews.indexOf(d->activeView) == -1) {
         delete d->activeView;
         d->activeView = 0;
@@ -446,7 +419,6 @@ KoMainWindow::~KoMainWindow()
         delete d->rootDocument;
     }
 
-    delete d->manager;
     delete d;
 }
 
@@ -496,11 +468,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
 
     if (doc) {
         d->dockWidgetMenu->setVisible(true);
-        //d->manager->addPart( doc, false ); // done by KoView::setPartManager
         KoView *view = d->rootPart->createView(this);
         setCentralWidget(view);
         d->rootViews.append(view);
-        view->setPartManager(d->manager);
         view->show();
         view->setFocus();
 
@@ -523,10 +493,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
     d->closeFile->setEnabled(enable);
     updateCaption();
 
-    d->manager->setActivePart(d->rootPart, doc ? d->rootViews.first() : 0);
     emit restoringDone();
 
-    while(!oldRootViews.isEmpty()) {
+    while (!oldRootViews.isEmpty()) {
         delete oldRootViews.takeFirst();
     }
     if (oldRootPart && oldRootPart->viewCount() == 0) {
@@ -1671,90 +1640,6 @@ void KoMainWindow::slotProgress(int value)
     }
     d->progress->setValue(value);
     qApp->processEvents();
-}
-
-
-void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
-{
-
-    // This looks very much like KParts::MainWindow::createGUI, but we have
-    // to reimplement it because it works with an active part, whereas we work
-    // with an active view _and_ an active part, depending for what.
-    // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
-    //kDebug(30003) <<"KoMainWindow::slotActivePartChanged( Part * newPart) newPart =" << newPart;
-    //kDebug(30003) <<"current active part is" << d->activePart;
-
-    if (d->activePart && d->activePart == newPart) {
-        //kDebug(30003) <<"no need to change the GUI";
-        return;
-    }
-
-
-    KXMLGUIFactory *factory = guiFactory();
-
-// ###  setUpdatesEnabled( false );
-
-    if (d->activeView) {
-        KParts::GUIActivateEvent ev(false);
-        QApplication::sendEvent(d->activePart, &ev);
-        QApplication::sendEvent(d->activeView, &ev);
-
-
-        factory->removeClient(d->activeView);
-
-        unplugActionList("toolbarlist");
-        qDeleteAll(d->toolbarList);
-        d->toolbarList.clear();
-    }
-
-    if (!d->mainWindowGuiIsBuilt) {
-        // Load mainwindow plugins
-        KParts::Plugin::loadPlugins(this, this, componentData(), true);
-        createShellGUI();
-    }
-
-    if (newPart && d->manager->activeWidget() && d->manager->activeWidget()->inherits("KoView")) {
-        d->activeView = (KoView *)d->manager->activeWidget();
-        d->activePart = newPart;
-        //kDebug(30003) <<"new active part is" << d->activePart;
-
-        factory->addClient(d->activeView);
-
-        // Position and show toolbars according to user's preference
-        setAutoSaveSettings(newPart->componentData().componentName(), false);
-
-        foreach (QDockWidget *wdg, d->dockWidgets) {
-            if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
-                wdg->setVisible(true);
-            }
-        }
-
-        // Create and plug toolbar list for Settings menu
-        //QPtrListIterator<KToolBar> it = toolBarIterator();
-        foreach(QWidget* it, factory->containers("ToolBar")) {
-            KToolBar * tb = ::qobject_cast<KToolBar *>(it);
-            if (tb) {
-                KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", tb->windowTitle()), this);
-                actionCollection()->addAction(tb->objectName().toUtf8(), act);
-                act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", tb->windowTitle())));
-                connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
-                act->setChecked(!tb->isHidden());
-                d->toolbarList.append(act);
-            } else
-                kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
-        }
-        plugActionList("toolbarlist", d->toolbarList);
-
-        // Send the GUIActivateEvent only now, since it might show/hide toolbars too
-        // (and this has priority over applyMainWindowSettings)
-        KParts::GUIActivateEvent ev(true);
-        QApplication::sendEvent(d->activePart, &ev);
-        QApplication::sendEvent(d->activeView, &ev);
-    } else {
-        d->activeView = 0;
-        d->activePart = 0;
-    }
-// ###  setUpdatesEnabled( true );
 }
 
 QLabel * KoMainWindow::statusBarLabel()

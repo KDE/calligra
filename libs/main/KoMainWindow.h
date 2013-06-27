@@ -378,10 +378,6 @@ private:
 
     KRecentFilesAction *recentAction() const;
 
-protected slots:
-
-    void slotActivePartChanged(KParts::Part *newPart);
-
 private slots:
     /**
      * Save the list of recent files.
