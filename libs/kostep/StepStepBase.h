@@ -62,6 +62,8 @@ public:
 
     //The Step Property holds the text of the change so say I've got the word
     //Dog and I make it Dogs, Step would hold an "s"
+    //NOTE: May be later moved out into a StepTextStep class which textual changes
+    //will derive from
     virtual QString Step();
 
     //The Type Property Returns the Type of Operation that the step is as a QString

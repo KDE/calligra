@@ -69,23 +69,34 @@ StepStepBase StepStepStack::top()
 
 void StepStepStack::deserialize(QString Filename)
 {
-
+    d->deserialize(Filename);
 }
 void StepStepStack::insertAt(int i, StepStepBase step)
 {
-
+    d->insertAt(i,step);
 }
 
-void StepStepStack::push(StepStepBase* step)
+void StepStepStack::push(StepStepBase step)
 {
     d->push(step);
 
 }
 void StepStepStack::removeAt(int i)
 {
-
+    d->removeAt(i);
 }
 void StepStepStack::serialize(QString Filename)
 {
+    d->serialize(Filename);
+}
 
+int StepStepStack::rowCount(const QModelIndex &parent) const
+{
+    return d->rowcount();
+}
+
+QVariant StepStepStack::data(const QModelIndex &index, int role) const
+{
+    int i = index.row();
+    return d->data(i);
 }

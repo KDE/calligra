@@ -20,6 +20,8 @@
 
 #include "StepStepStack_p.h"
 #include "StepStepBase.h"
+#include <QtCore/QFile>
+#include <QtCore/QVariant>
 
 StepStepStack_p::StepStepStack_p()
 {
@@ -77,19 +79,50 @@ void StepStepStack_p::push(StepStepBase step)
 
 }
 
-void StepStepStack_p::serialize()
+void StepStepStack_p::serialize(QString Filename)
+{
+    QFile file(Filename);
+    file.open(QIODevice::WriteOnly|QIODevice::Text);
+
+    QString steps = "";
+    foreach(StepStepBase ptr, stack)
+    {
+        steps += ptr.toXML();
+    }
+    file.write(steps.toLatin1());
+
+
+}
+void StepStepStack_p::deserialize(QString Filename)
 {
 
 }
-void StepStepStack_p::deserialize()
+void StepStepStack_p::insertAt(int i, StepStepBase step)
 {
-
-}
-void StepStepStack_p::insertAt(int i)
-{
+    //stub method for now will need to implement Operational Transformation Methods to
+    //roll a change forward
 
 }
 void StepStepStack_p::removeAt(int i)
 {
+    //stub method for now will need to implement Operational Transformation Methods to
+    //roll a change forward
 
+}
+int StepStepStack_p::rowcount()
+{
+    return stack.count();
+}
+QVariant StepStepStack_p::data(int i)
+{
+    if (stack.count() >= i)
+    {
+        //temporary measure
+        StepStepBase step = stack.at(i);
+        return step.toString();
+    }
+    else
+    {
+        return QVariant();
+    }
 }

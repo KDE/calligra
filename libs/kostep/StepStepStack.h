@@ -23,10 +23,12 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStack>
+#include <QtCore/QAbstractListModel>
+#include <QtCore/QVariant>
 
 class StepStepBase;
 class StepStepStack_p;
-class StepStepStack :  QObject
+class StepStepStack :  public QAbstractListModel
 {
 
   Q_OBJECT
@@ -47,7 +49,9 @@ public:
     void insertAt(int i, StepStepBase step);
     void removeAt(int i);
 
-    void push(StepStepBase* step);
+    void push(StepStepBase step);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
 
 private:
     StepStepStack_p* d;
