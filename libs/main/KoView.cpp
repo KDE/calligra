@@ -175,11 +175,8 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif
 
-    //kDebug(30003) <<"KoView::KoView" << this;
     d->document = document;
     d->part = part;
-
-    KParts::PartBase::setPartObject(this);
 
     setFocusPolicy(Qt::StrongFocus);
 
@@ -210,7 +207,6 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
 KoView::~KoView()
 {
-    kDebug(30003) << "KoView::~KoView" << this;
     delete d->scrollTimer;
     if (!d->documentDeleted) {
         if (d->document) {
