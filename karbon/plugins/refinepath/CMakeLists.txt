@@ -14,3 +14,5 @@ install(TARGETS karbon_refinepathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES RefinePathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
+install( FILES  karbonrefinepath.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
