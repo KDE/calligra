@@ -1,0 +1,20 @@
+Things left to do for the annotations branch
+
+
+Features
+--------
+
+ * connect the annotated text with the annotation shapeb
+
+Bugs
+----
+
+ * Place the annotation shape correctly in the annotation area.
+
+ * Fix cursor movement and placement within the annotation shape.
+
+ * Fix saving bug that writes <text:annotation-end> but not <text:annotation>
+
+
+---------------- Milestone 1: merge with master ----------------
+
