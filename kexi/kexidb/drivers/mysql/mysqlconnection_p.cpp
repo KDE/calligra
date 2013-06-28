@@ -161,7 +161,7 @@ bool MySqlConnectionInternal::executeSQL(const QString& statement)
 
 QString MySqlConnectionInternal::escapeIdentifier(const QString& str) const
 {
-    return QString(str).remove('`');
+    return QString(str).replace('`', '\'');
 }
 
 //--------------------------------------
