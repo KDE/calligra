@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Karbon Refine Path plugin
+X-KDE-ServiceTypes=Karbon/ViewPlugin
+Type=Service
+X-KDE-Library=karbon_refinepathplugin
+X-Karbon-Version=28

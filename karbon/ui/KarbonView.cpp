@@ -130,6 +130,7 @@
 #include <kparts/partmanager.h>
 #include <ktoggleaction.h>
 #include <kdebug.h>
+#include <kservicetypetrader.h>
 
 // qt header
 #include <QIcon>
@@ -259,6 +260,27 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
 
     initActions();
+
+    // Load all plugins
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Karbon/ViewPlugin"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Karbon-Version] == 28)"));
+    KService::List::ConstIterator iter;
+    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+
+        KService::Ptr service = *iter;
+
+        QString error;
+
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if (plugin) {
+            insertChildClient(plugin);
+        } else {
+            kWarning() << "Fail to create an instance for " << service->name() << " " << error;
+        }
+    }
+
 
     unsigned int max = part()->maxRecentFiles();
     setNumberOfRecentFiles(max);
