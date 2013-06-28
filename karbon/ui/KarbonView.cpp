@@ -127,7 +127,6 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstandardaction.h>
-#include <kparts/partmanager.h>
 #include <ktoggleaction.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>
