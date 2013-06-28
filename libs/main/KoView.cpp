@@ -45,7 +45,6 @@
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kparts/partmanager.h>
 #include <kparts/event.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
@@ -80,9 +79,7 @@ class KoViewPrivate
 {
 public:
     KoViewPrivate() {
-        manager = 0;
         tempActiveWidget = 0;
-        registered = false;
         documentDeleted = false;
         viewBar = 0;
         actionAuthor = 0;
@@ -92,9 +89,7 @@ public:
 
     QPointer<KoDocument> document; // our KoDocument
     QPointer<KoPart> part; // our part
-    QPointer<KParts::PartManager> manager;
     QWidget *tempActiveWidget;
-    bool registered;  // are we registered at the part manager?
     bool documentDeleted; // true when document gets deleted [can't use document==0
     // since this only happens in ~QObject, and views
     // get deleted by ~KoDocument].
@@ -219,8 +214,6 @@ KoView::~KoView()
     delete d->scrollTimer;
     if (!d->documentDeleted) {
         if (d->document) {
-            if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
-                d->manager->removePart(d->part);
             d->part->removeView(this);
         }
     }
@@ -299,21 +292,6 @@ void KoView::setDocumentDeleted()
 bool KoView::documentDeleted() const
 {
     return d->documentDeleted;
-}
-
-void KoView::setPartManager(KParts::PartManager *manager)
-{
-    d->manager = manager;
-    if (!manager->parts().contains(d->part)) {  // is there another view registered?
-        d->registered = true; // no, so we have to register now and ungregister again in the DTOR
-        manager->addPart(d->part, false);
-    } else
-        d->registered = false;  // There is already another view registered for that part...
-}
-
-KParts::PartManager *KoView::partManager() const
-{
-    return d->manager;
 }
 
 QAction *KoView::action(const QDomElement &element) const
