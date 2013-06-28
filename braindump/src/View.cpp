@@ -60,6 +60,7 @@
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <kparts/event.h>
+#include <kparts/partmanager.h>
 #include <kparts/plugin.h>
 #include <kservicetypetrader.h>
 

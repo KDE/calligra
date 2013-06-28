@@ -113,6 +113,9 @@ public:
      */
     bool documentDeleted() const;
 
+    virtual void setPartManager(KParts::PartManager *manager);
+    virtual KParts::PartManager *partManager() const;
+
     /**
      * Returns the action described action object. In fact only the "name" attribute
      * of @p element is of interest here. The method searches in the
