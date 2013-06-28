@@ -13,7 +13,11 @@ Bugs
 
  * Fix cursor movement and placement within the annotation shape.
 
+ * Fix update of the annotation shape when the user is editing the annotation.
+
  * Fix saving bug that writes <text:annotation-end> but not <text:annotation>
+
+ * Check why Words never quits. This could be a bug not related to annotations.
 
 
 ---------------- Milestone 1: merge with master ----------------
