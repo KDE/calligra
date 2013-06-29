@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Sheets Scripting Plugin
+X-KDE-ServiceTypes=Sheets/ViewPlugin
+Type=Service
+X-KDE-Library=krossmodulesheets
+X-Sheets-Version=28
