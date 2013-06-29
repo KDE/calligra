@@ -459,7 +459,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
     }
     KoGenStyles::InsertionFlags insertionFlags = KoGenStyles::DontAddNumberToName;
     if (styleName.isEmpty()) {
-        styleName = m_name;
+        styleName = m_name.replace(" ", "_");
         if (styleName.isEmpty()) {
             // allow for numbering for generated style names
             styleName = odfType;
@@ -629,7 +629,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_name()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_INTO(val, m_name)
-    m_name.replace(" ", "_");
     readNext();
     READ_EPILOGUE
 }
