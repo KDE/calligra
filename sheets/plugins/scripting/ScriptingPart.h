@@ -24,7 +24,7 @@
 #define SCRIPTINGPART_H
 
 #include <KoScriptingPart.h>
-
+#include <QVariantList>
 /**
 * The ScriptingPart class implements a KPart component
 * to integrate scripting into KSpread.
