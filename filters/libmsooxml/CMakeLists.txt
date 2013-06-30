@@ -39,15 +39,15 @@ set(msooxml_LIB_SRCS
     KoOdfExporter.cpp
 )
 
-kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
+kde4_add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
 
-target_link_libraries(msooxml koodf2 koodf komain)
+target_link_libraries(komsooxml koodf2 koodf komain)
 if(QCA2_FOUND)
-   target_link_libraries(msooxml ${QCA2_LIBRARIES})
+   target_link_libraries(komsooxml ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
 
-set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS msooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+install(TARGETS komsooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES msooxml-all.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
 update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

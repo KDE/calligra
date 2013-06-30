@@ -11,7 +11,7 @@ set(wmf2svg_PART_SRCS
 
 kde4_add_plugin(calligra_filter_wmf2svg ${wmf2svg_PART_SRCS})
 
-target_link_libraries(calligra_filter_wmf2svg vectorimage komain koodf)
+target_link_libraries(calligra_filter_wmf2svg kovectorimage komain koodf)
 
 install(TARGETS calligra_filter_wmf2svg
         DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -34,7 +34,7 @@ kde4_add_plugin(calligra_filter_karbon2wmf ${karbon2wmf_PART_SRCS})
 
 target_link_libraries(
     calligra_filter_karbon2wmf
-    vectorimage
+    kovectorimage
     karboncommon
     karbonui
 )

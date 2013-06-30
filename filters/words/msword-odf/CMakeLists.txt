@@ -23,9 +23,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 kde4_add_plugin(calligra_filter_doc2odt ${doc2odt_PART_SRCS})
 
-#TODO cause of NumberFormatParser we depend on msooxml. Fix that!
+#TODO cause of NumberFormatParser we depend on komsooxml. Fix that!
 #target_link_libraries(calligra_filter_doc2odt kowv2 komain mso ${ZLIB_LIBRARIES})
-target_link_libraries(calligra_filter_doc2odt kowv2 komain mso msooxml ${ZLIB_LIBRARIES})
+target_link_libraries(calligra_filter_doc2odt kowv2 komain mso komsooxml ${ZLIB_LIBRARIES})
 
 install(TARGETS calligra_filter_doc2odt  DESTINATION ${PLUGIN_INSTALL_DIR})
 

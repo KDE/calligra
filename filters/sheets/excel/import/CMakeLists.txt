@@ -47,13 +47,13 @@ set(excelimport_PART_SRCS excelimporttoods.cc ImportUtils.cpp ODrawClient.cpp ${
 kde4_add_plugin(excelimport ${excelimport_PART_SRCS})
 
 
-target_link_libraries(excelimport calligrasheetsodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
+target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
 
 #install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(xls2ods_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 kde4_add_plugin(calligra_filter_xls2ods ${xls2ods_SRCS})
-target_link_libraries(calligra_filter_xls2ods calligrasheetsodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
+target_link_libraries(calligra_filter_xls2ods calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
 
 install(TARGETS calligra_filter_xls2ods DESTINATION ${PLUGIN_INSTALL_DIR})
 
