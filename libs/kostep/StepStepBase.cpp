@@ -19,9 +19,9 @@
 
 
 #include "StepStepBase.h"
-
+#include "StepStepBase_p.h"
 StepStepBase::StepStepBase(QObject *parent):
-    QObject(parent)
+    QObject(parent),d(new StepStepBase_p())
 {
 
 }
@@ -39,57 +39,47 @@ StepStepBase& StepStepBase::operator=(const StepStepBase& other)
   return *this;
 
 }
-bool StepStepBase::operator==(const StepStepBase& other) const
+bool StepStepBase::operator==( StepStepBase& other)
 {
-  if (other._isForeign == this->_isForeign &&
-      other._position == this->_position &&
-      other._step == this->_step &&
-      other._type == this->_type
-  ) {
+  if (d->operator==(other.d)) {
     return true;
   }
-  else {
-    return false;
-  }
+  return false;
 }
 
 
 bool StepStepBase::Foreign()
 {
-  return _isForeign;
+  return d->Foreign();
 }
 int StepStepBase::Position()
 {
-  return _position;
+  return d->Position();
 }
 void StepStepBase::setForeign(bool foreign)
 {
-  _isForeign = foreign;
+  d->setForeign(foreign);
 
 }
 void StepStepBase::setPosition(int position)
 {
-  _position = position;
+  d->setPosition(position);
 
 }
 QString StepStepBase::Step()
 {
-  return _step;
+  return d->Step();
 }
 QString StepStepBase::toString()
 {
-  QString string = (QString)"";
-  return string;
+  return d->toString();
 }
 QString StepStepBase::toXML()
 {
-  QString string = (QString)"";
-  return string;
+   return d->toXML();
 }
 QString StepStepBase::Type()
 {
-  return _type;
+  return d->Type();
 
 }
-
-

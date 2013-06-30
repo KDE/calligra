@@ -6,9 +6,11 @@ include_directories( ${KOSTEP_INCLUDES} ${QT_INCLUDES} )
 
 set(kostep_LIB_SRCS
         StepStepBase.cpp
+        StepStepBase_p.cpp
         StepStepStack.cpp
         StepStepStack_p.cpp
         StepStepLocation.cpp
+        StepStepLocation_p.cpp
 )
 
 kde4_add_library(kostep SHARED ${kostep_LIB_SRCS})
@@ -23,8 +25,10 @@ install(TARGETS kostep ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES
         StepStepBase.h
+        StepStepBase_p.h
         StepStepStack.h
         StepStepStack_p.h
         StepStepLocation.h
+        StepStepLocation_p.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

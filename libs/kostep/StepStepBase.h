@@ -23,6 +23,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
+class StepStepBase_p;
+class StepStepLocation;
 
 class StepStepBase : public QObject
 {
@@ -40,7 +42,7 @@ public:
 
     virtual ~StepStepBase();
     virtual StepStepBase& operator=(const StepStepBase& other);
-    virtual bool operator==(const StepStepBase& other) const;
+    virtual bool operator==(StepStepBase& other);
 
     //String Representation of a Step
     virtual QString toString();
@@ -78,11 +80,8 @@ public:
     virtual QString Type();
 
 private:
-  bool _isForeign;
-  int _position;
-  QString _step;
-  const QString _type;
-  StepStepLocation _location;
+
+  StepStepBase_p *d;
 
 };
 

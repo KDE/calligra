@@ -13,11 +13,10 @@ public:
     StepStepLocation(QTextCursor cursor, QObject *parent =0);
     operator QTextCursor();
 signals:
-    
+
 public slots:
 private:
-    QQueue<int> location;
-    
+
 };
 
 #endif // STEPSTEPLOCATION_H
