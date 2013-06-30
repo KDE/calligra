@@ -69,17 +69,17 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <KRun>
-#include <KStandardShortcut>
-#include <KFontChooser>
-#include <KFontAction>
-#include <KAction>
-#include <KActionMenu>
-#include <KMenu>
-#include <KLocale>
-#include <KStandardAction>
-#include <KMimeType>
-#include <KMessageBox>
+#include <krun.h>
+#include <kstandardshortcut.h>
+#include <kfontchooser.h>
+#include <kfontaction.h>
+#include <kaction.h>
+#include <kactionmenu.h>
+#include <kmenu.h>
+#include <klocale.h>
+#include <kstandardaction.h>
+#include <kmimetype.h>
+#include <kmessagebox.h>
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>
@@ -1042,7 +1042,7 @@ QMimeData *TextTool::generateMimeData() const
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
-#if SHOULD_BUILD_RDF
+#ifdef SHOULD_BUILD_RDF
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
         KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
@@ -2514,7 +2514,7 @@ void TextTool::startTextEditingPlugin(const QString &pluginId)
     }
 }
 
-void TextTool::resourceChanged(int key, const QVariant &var)
+void TextTool::canvasResourceChanged(int key, const QVariant &var)
 {
     if (m_textEditor.isNull())
         return;

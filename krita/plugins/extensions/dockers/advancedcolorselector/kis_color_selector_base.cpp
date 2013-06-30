@@ -24,10 +24,10 @@
 #include <QCursor>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -171,8 +171,8 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
     }
     m_canvas = canvas;
     if (m_canvas) {
-        connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this, SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+            this, SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
     }
 
     update();
@@ -441,7 +441,7 @@ void KisColorSelectorBase::updateColorPreview(const QColor& color)
     m_colorPreviewPopup->setColor(color);
 }
 
-void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
+void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
 {
     if (key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
         QColor c = findGeneratingColor(v.value<KoColor>());

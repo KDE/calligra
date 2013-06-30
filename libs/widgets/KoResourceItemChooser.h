@@ -5,6 +5,7 @@
    Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+   Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
+#include <QAction>
 #include <QModelIndex>
 #include <QCompleter>
 
@@ -48,7 +50,7 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
   Q_OBJECT
 public:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
-    
+
     explicit KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
@@ -57,19 +59,19 @@ public:
 
     /// Sets number of rows in the view and causes the number of columns to be calculated accordingly
     void setRowCount( int rowCount );
-    
+
     /// Sets the height of the view rows
     void setRowHeight( int rowHeight );
 
     /// Sets the width of the view columns
     void setColumnWidth( int columnWidth );
-    
+
     /// Sets a custom delegate for the view
     void setItemDelegate( QAbstractItemDelegate * delegate );
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource *currentResource();
+    KoResource *currentResource() const;
 
     /// Sets the item representing the resource as selected
     void setCurrentResource(KoResource* resource);
@@ -82,6 +84,8 @@ public:
     void setCurrentItem(int row, int column);
 
     void showButtons( bool show );
+
+    void enableContextMenu(bool enable);
 
     /// shows the aside preview with the resource's image
     void showPreview(bool show);
@@ -101,13 +105,11 @@ public:
     void setProxyModel( QAbstractProxyModel* proxyModel );
 
     void setKnsrcFile(const QString& knsrcFileArg);
-    QSize viewSize();
-    /// Gets the tagged resource names from tagObject in resource Server
-    QStringList getTaggedResourceFileNames(QString lineEditText);
+    QSize viewSize() const;
     /// Gets the tag Names from tag Object for setting the Completer Object
-    QStringList getTagNamesList(QString lineEditText);
-
-    KoResourceItemView *itemView();
+    QStringList tagNamesList(const QString &lineEditText) const;
+    QStringList availableTags() const;
+    KoResourceItemView *itemView() const;
 
 signals:
     /// Emitted when a resource was selected
@@ -115,25 +117,40 @@ signals:
     void splitterMoved();
 public slots:
     void slotButtonClicked( int button );
-    
+    void slotTagButtonClicked( int button );
+
 private slots:
     void activated ( const QModelIndex & index );
 
-    void setTagOpLineEdit(QStringList assignedTagsList);
+    void tagSearchLineEditActivated(const QString& lineEditText);
+    void tagSearchLineEditTextChanged(const QString& lineEditText);
 
-    void tagOpLineEditActivated(QString lineEditText);
-    void tagOpLineEditTextChanged(QString lineEditText);
+    void tagChooserIndexChanged(const QString& lineEditText);
+    void tagChooserReturnPressed(const QString& lineEditText);
 
-    void tagSearchLineEditActivated(QString lineEditText);
-    void tagSearchLineEditTextChanged(QString lineEditText);
+    void contextMenuRequested(const QPoint &pos);
+
+    void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
+    void contextAddTagToResource(KoResource* resource, const QString& tag);
+    void contextCreateNewResourceTag(KoResource* resource, const QString& tag);
+
+    void syncTagBoxEntryRemoval(const QString& tag);
+    void syncTagBoxEntryAddition(const QString& tag);
+
+    void tagSaveButtonPressed();
 
 private:
     void updateButtonState();
     void updatePreview(KoResource *resource);
+    void updateTaggedResourceView();
+    QString renameTag(const QString &oldName, const QString &newName);
+    void removeTagFromComboBox();
+    void addResourceTag(KoResource* resource, const QString& tagName);
+    void removeResourceTag(KoResource* resource, const QString& tagName);
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid
-    KoResource* resourceFromModelIndex(const QModelIndex & index );
+    KoResource* resourceFromModelIndex(const QModelIndex & index ) const;
 
     class Private;
     Private * const d;

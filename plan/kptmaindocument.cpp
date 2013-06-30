@@ -61,7 +61,7 @@
 #include <kstandarddirs.h>
 #include <kparts/partmanager.h>
 #include <kmimetype.h>
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 #include <KoGlobal.h>
 #include <kio/global.h>
 #include <kio/jobclasses.h>
@@ -100,7 +100,7 @@ MainDocument::MainDocument(KoPart *part)
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project ); // register myself
 
-    QTimer::singleShot ( 5000, this, SLOT( autoCheckForWorkPackages() ) );
+    QTimer::singleShot ( 5000, this, SLOT(autoCheckForWorkPackages()) );
 }
 
 
@@ -127,7 +127,7 @@ void MainDocument::loadSchedulerPlugins()
 
     // Add all real scheduler plugins
     SchedulerPluginLoader *loader = new SchedulerPluginLoader(this);
-    connect(loader, SIGNAL(pluginLoaded(const QString&, SchedulerPlugin*)), this, SLOT(addSchedulerPlugin(const QString&, SchedulerPlugin*)));
+    connect(loader, SIGNAL(pluginLoaded(QString,SchedulerPlugin*)), this, SLOT(addSchedulerPlugin(QString,SchedulerPlugin*)));
     loader->loadAllPlugins();
 }
 
@@ -145,12 +145,12 @@ void MainDocument::configChanged()
 void MainDocument::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( projectChanged() ), this, SIGNAL( changed() ) );
+        disconnect( m_project, SIGNAL(projectChanged()), this, SIGNAL(changed()) );
         delete m_project;
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( projectChanged() ), this, SIGNAL( changed() ) );
+        connect( m_project, SIGNAL(projectChanged()), this, SIGNAL(changed()) );
 //        m_project->setConfig( config() );
         m_project->setSchedulerPlugins( m_schedulerPlugins );
     }
@@ -628,7 +628,7 @@ void MainDocument::autoCheckForWorkPackages()
     if ( m_config.checkForWorkPackages() ) {
         checkForWorkPackages( true );
     }
-    QTimer::singleShot ( 10000, this, SLOT( autoCheckForWorkPackages() ) );
+    QTimer::singleShot ( 10000, this, SLOT(autoCheckForWorkPackages()) );
 }
 
 void MainDocument::checkForWorkPackages( bool keep )
@@ -652,7 +652,7 @@ void MainDocument::checkForWorkPackage()
     if ( ! m_infoList.isEmpty() ) {
         loadWorkPackage( *m_project, KUrl( m_infoList.takeLast().absoluteFilePath() ) );
         if ( ! m_infoList.isEmpty() ) {
-            QTimer::singleShot ( 0, this, SLOT( checkForWorkPackage() ) );
+            QTimer::singleShot ( 0, this, SLOT(checkForWorkPackage()) );
             return;
         }
         // all files read
@@ -961,7 +961,7 @@ void MainDocument::insertFile( const QString &filename, Node *parent, Node *afte
     doc->m_insertFileInfo.parent = parent;
     doc->m_insertFileInfo.after = after;
     connect(part, SIGNAL(completed()), SLOT(insertFileCompleted()));
-    connect(part, SIGNAL(canceled(const QString&)), SLOT(insertFileCancelled(const QString&)));
+    connect(part, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
     connect(part, SIGNAL(started(KIO::Job*)), part, SLOT(slotStarted(KIO::Job*)));
 
     part->openUrl( KUrl( filename ) );

@@ -31,7 +31,7 @@
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 
-#include <KDialog>
+#include <kdialog.h>
 
 #include <QPointer>
 #include <QPainter>
@@ -137,5 +137,5 @@ void VideoTool::play()
 {
     VideoData *videoData = qobject_cast<VideoData*>(m_videoShape->userData());
     Q_ASSERT(videoData);
-    FullScreenPlayer *m_player = new FullScreenPlayer(videoData->playableUrl());
+    new FullScreenPlayer(videoData->playableUrl());
 }

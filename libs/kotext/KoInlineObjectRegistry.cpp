@@ -26,8 +26,8 @@
 #include <KoXmlReader.h>
 #include <KoPluginLoader.h>
 
-#include <KDebug>
-#include <KGlobal>
+#include <kdebug.h>
+#include <kglobal.h>
 
 class KoInlineObjectRegistry::Private
 {
@@ -47,7 +47,21 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
     config.blacklist = "TextInlinePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-InlineObject"),
-                                     QString::fromLatin1("[X-KoText-PluginVersion] == 27"), config);
+                                     QString::fromLatin1("[X-KoText-PluginVersion] == 28"), config);
+
+    foreach (KoInlineObjectFactoryBase *factory, q->values()) {
+        QString nameSpace = factory->odfNameSpace();
+        if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
+            kDebug(32500) << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
+        } else {
+            foreach (const QString &elementName, factory->odfElementNames()) {
+                factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
+
+                kDebug(32500) << "Inserting variable factory" << factory->id() << " for"
+                    << nameSpace << ":" << elementName;
+            }
+        }
+    }
 }
 
 KoInlineObjectRegistry* KoInlineObjectRegistry::instance()

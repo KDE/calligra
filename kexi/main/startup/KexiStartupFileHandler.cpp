@@ -33,17 +33,17 @@
 #include <QEventLoop>
 #include <QApplication>
 
-#include <KMessageBox>
+#include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kfile.h>
 #include <kurlcombobox.h>
-#include <KToolBar>
-#include <KActionCollection>
-#include <KFileDialog>
-#include <KUrlRequester>
-#include <KUrl>
+#include <ktoolbar.h>
+#include <kactioncollection.h>
+#include <kfiledialog.h>
+#include <kurlrequester.h>
+#include <kurl.h>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
@@ -326,7 +326,7 @@ QString KexiStartupFileDialog::selectedFile() const
   //js @todo
 // kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text();
   QString path = dir()->absolutePath();
-  if (!path.endsWith("/") && !path.endsWith("\\"))
+  if (!path.endsWith('/') && !path.endsWith("\\"))
     path.append("/");
   path += m_lineEdit->text();
 // QString path = QFileInfo(selectedFile()).dirPath(true) + "/" + m_lineEdit->text();
@@ -349,7 +349,7 @@ QString KexiStartupFileDialog::selectedFile() const
 
   if (!currentFilter().isEmpty()) {
     if (d->mode & SavingFileBasedDB) {
-      const QStringList filters( currentFilter().split(" ") );
+      const QStringList filters( currentFilter().split(' ') );
       kDebug()<< " filter == " << filters;
       QString ext( QFileInfo(path).suffix() );
       bool hasExtension = false;
@@ -415,7 +415,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
 
     if (!d->dialog->currentFilter().isEmpty()) {
         if (d->mode & SavingFileBasedDB) {
-            const QStringList filters( d->dialog->currentFilter().split(" ") );
+            const QStringList filters( d->dialog->currentFilter().split(' ') );
             QString path = url.toLocalFile();
             kDebug()<< "filter:" << filters << "path:" << path;
             QString ext( QFileInfo(path).suffix() );

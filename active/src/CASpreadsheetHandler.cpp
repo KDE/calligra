@@ -38,8 +38,8 @@
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
 
-#include <KMimeType>
-#include <KMimeTypeTrader>
+#include <kmimetype.h>
+#include <kmimetypetrader.h>
 
 #include <QColor>
 

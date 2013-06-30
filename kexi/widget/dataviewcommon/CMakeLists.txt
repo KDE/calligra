@@ -10,8 +10,6 @@ set(kexidataviewcommon_LIB_SRCS
    kexidataawarepropertyset.cpp
    kexidataawareview.cpp
    kexidataprovider.cpp
-   kexitableviewdata.cpp
-   KexiTableViewColumn.cpp
    kexiformdataiteminterface.cpp
 )
 

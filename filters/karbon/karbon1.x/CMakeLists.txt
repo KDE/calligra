@@ -6,14 +6,14 @@ include_directories(
 
 ########### next target ###############
 
-set(karbon1ximport_PART_SRCS Karbon1xImport.cpp)
+set(karbon1x2karbon_PART_SRCS Karbon1xImport.cpp)
 
 
-kde4_add_plugin(karbon1ximport ${karbon1ximport_PART_SRCS})
+kde4_add_plugin(calligra_filter_karbon1x2karbon ${karbon1x2karbon_PART_SRCS})
 
-target_link_libraries(karbon1ximport karboncommon)
+target_link_libraries(calligra_filter_karbon1x2karbon karboncommon)
 
-install(TARGETS karbon1ximport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

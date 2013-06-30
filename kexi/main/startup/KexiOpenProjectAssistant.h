@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -21,10 +21,10 @@
 #ifndef KEXIOPENPROJECTASSISTANT_H
 #define KEXIOPENPROJECTASSISTANT_H
 
-#include "kexidbconnectionset.h"
-#include "ui_KexiProjectStorageTypeSelectionPage.h"
+#include "KexiAssistantMessageHandler.h"
+
+#include <core/kexidbconnectionset.h>
 #include <db/connectiondata.h>
-#include <db/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
@@ -77,29 +77,28 @@ private:
 };
 
 class KexiOpenProjectAssistant : public KexiAssistantWidget,
-                                 public KexiDB::MessageHandler
+                                 public KexiAssistantMessageHandler
 {
     Q_OBJECT
 public:
     explicit KexiOpenProjectAssistant(QWidget* parent = 0);
     ~KexiOpenProjectAssistant();
 
-    //! Implementation for KexiDB::MessageHandler.
-     virtual void showErrorMessage(const QString &title,
-                                   const QString &details = QString());
-
-    //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString());
-
 public slots:
-    virtual void previousPageRequested(KexiAssistantPage* page);
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
-    void slotOpenProject(KexiProjectData* data);
+    void tryAgainActionTriggered();
+    void cancelActionTriggered();
 
 signals:
     void openProject(const KexiProjectData& data);
     void openProject(const QString& fileName);
+
+private slots:
+    void slotOpenProject(KexiProjectData* data);
+
+protected:
+    virtual QWidget* calloutWidget() const;
 
 private:
     class Private;

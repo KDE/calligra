@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <KIntNumInput>
+#include "knuminput.h"
 
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
@@ -185,7 +185,7 @@ void KisToolSelectBrush::slotSetBrushSize(int size)
     m_brushRadius = ((qreal) size)/2.0;
 }
 
-void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
+void KisToolSelectBrush::applyToSelection(QPainterPath selection) {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     if (!kisCanvas)
@@ -205,7 +205,9 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
+        selection.closeSubpath();
         painter.fillPainterPath(selection);
+        tmpSel->setOutlineCache(selection);
 
         helper.selectPixelSelection(tmpSel, selectionAction());
 

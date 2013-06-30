@@ -561,7 +561,7 @@ void KisConfig::setScrollingCheckers(bool sc)
 
 QColor KisConfig::canvasBorderColor()
 {
-    QColor color(QColor(38,38,40));
+    QColor color(QColor(128,128,128));
     return m_cfg.readEntry("canvasBorderColor", color);
 }
 
@@ -734,17 +734,6 @@ int KisConfig::presetChooserViewMode() const
 void KisConfig::setPresetChooserViewMode(const int mode)
 {
     m_cfg.writeEntry("presetChooserViewMode", mode);
-}
-
-
-bool KisConfig::presetShowAllMode() const
-{
-    return m_cfg.readEntry("presetChooserShowAllPresets", true);
-}
-
-void KisConfig::setPresetShowAllMode(bool showAll)
-{
-    m_cfg.writeEntry("presetChooserShowAllPresets", showAll);
 }
 
 bool KisConfig::firstRun() const

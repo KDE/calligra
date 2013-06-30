@@ -14,7 +14,7 @@
 
 #include "Task.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <stdlib.h>
 #include <math.h>
@@ -798,9 +798,9 @@ Task::bookResources(int sc, time_t date, time_t slotDuration)
         if (limits)
         {
             QList<Resource*> resources = a->getCandidates();
-            QString resStr = "";
+            QString resStr;
             foreach (Resource *r, resources) {
-                resStr += r->getId() + " ";
+                resStr += r->getId() + QLatin1Char(' ');
             }
             if (limits->getDailyUnits() > 0) {
                 uint bookedSlots = 0;
@@ -2190,7 +2190,7 @@ Task::resolveId(QString relId)
         t = t->getParent();
     }
     if (t)
-        return t->id + "." + relId.right(relId.length() - i);
+        return t->id + QLatin1Char('.') + relId.right(relId.length() - i);
     else
         return relId.right(relId.length() - i);
 }

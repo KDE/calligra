@@ -33,10 +33,10 @@
 #include <QtGlobal>
 #include <QTimer>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -246,7 +246,7 @@ void KisMyPaintShadeSelector::setColor(const QColor &c) {
     m_updateTimer->start();
 }
 
-void KisMyPaintShadeSelector::resourceChanged(int key, const QVariant &v)
+void KisMyPaintShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 {
     if(m_colorUpdateAllowed==false)
         return;

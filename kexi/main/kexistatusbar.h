@@ -26,7 +26,7 @@
 //temporary
 #define KexiStatusBar_KTEXTEDITOR_USED 0
 
-#include <KStatusBar>
+#include <kstatusbar.h>
 
 class KMenu;
 class QCheckBox;

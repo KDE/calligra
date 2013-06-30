@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef DEPENDENCYEDTIOR_H
-#define DEPENDENCYEDTIOR_H
+#ifndef KPTDEPENDENCYEDITOR_H
+#define KPTDEPENDENCYEDITOR_H
 
 #include "kplatoui_export.h"
 
@@ -39,7 +39,7 @@
 
 #include "KoView.h"
 
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 class KoPageLayoutWidget;
 
@@ -327,9 +327,9 @@ class KPLATOUI_EXPORT DependencyScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    DependencyScene( QWidget *parent = 0 );
+    explicit DependencyScene(QWidget *parent = 0);
     ~DependencyScene();
-    
+
     void setProject( Project *p ) { m_project = p; }
     Project *project() const { return m_project; }
 
@@ -426,17 +426,17 @@ class KPLATOUI_EXPORT DependencyView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    DependencyView( QWidget *parent );
-    
+    explicit DependencyView(QWidget *parent);
+
     void setProject( Project *project );
     Project *project() const { return m_project; }
-    
+
     void setItemExpanded( int x, bool mode );
     DependencyNodeItem *createItem( Node *node );
     void createItems( Node *node );
     void createItems();
     void createLinks();
-    
+
     DependencyLinkItem *findItem( const Relation *rel ) const;
     DependencyNodeItem *findItem( const Node *node ) const;
 
@@ -448,7 +448,7 @@ public:
 signals:
     void selectionChanged();
     void selectionChanged( QGraphicsItem * );
-    void selectionChanged( QList<QGraphicsItem*> );
+    void selectionChanged( const QList<QGraphicsItem*>& );
     void makeConnection( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void contextMenuRequested( QGraphicsItem*, const QPoint& );
 
@@ -534,7 +534,7 @@ signals:
     void addMilestone();
     void addSubtask();
     void addSubMilestone();
-    void deleteTaskList( QList<Node*> );
+    void deleteTaskList( const QList<Node*>& );
 
     void addRelation( Node*, Node*, int );
     void modifyRelation( Relation*, int );
@@ -556,7 +556,7 @@ protected:
 private slots:
     void slotItemDoubleClicked( QGraphicsItem *item );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
-    void slotSelectionChanged(  QList<QGraphicsItem*> lst );
+    void slotSelectionChanged( const QList<QGraphicsItem*> &lst );
     void slotContextMenuRequested( QGraphicsItem *item, const QPoint& pos );
     
     void slotEnableActions();

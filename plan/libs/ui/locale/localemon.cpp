@@ -34,9 +34,9 @@
 
 
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KStandardDirs>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kstandarddirs.h>
 
 
 namespace KPlato {
@@ -61,32 +61,32 @@ LocaleConfigMoney::LocaleConfigMoney(KLocale *locale,
   m_labMonNegMonSignPos->setObjectName( I18N_NOOP("Sign position:") );
 //  m_labMonDigSet->setObjectName( I18N_NOOP("Digit set:") );
 
-  connect( m_edMonCurSym, SIGNAL( textChanged(const QString &) ),
-           SLOT( slotMonCurSymChanged(const QString &) ) );
+  connect( m_edMonCurSym, SIGNAL(textChanged(QString)),
+           SLOT(slotMonCurSymChanged(QString)) );
 
-//   connect( m_edMonDecSym, SIGNAL( textChanged(const QString &) ),
-//            SLOT( slotMonDecSymChanged(const QString &) ) );
+//   connect( m_edMonDecSym, SIGNAL(textChanged(QString)),
+//            SLOT(slotMonDecSymChanged(QString)) );
 //
-//   connect( m_edMonThoSep, SIGNAL( textChanged(const QString &) ),
-//            SLOT( slotMonThoSepChanged(const QString &) ) );
+//   connect( m_edMonThoSep, SIGNAL(textChanged(QString)),
+//            SLOT(slotMonThoSepChanged(QString)) );
 //
-   connect( m_inMonFraDig, SIGNAL( valueChanged(int) ),
-            SLOT( slotMonFraDigChanged(int) ) );
+   connect( m_inMonFraDig, SIGNAL(valueChanged(int)),
+            SLOT(slotMonFraDigChanged(int)) );
 
-  connect( m_chMonPosPreCurSym, SIGNAL( clicked() ),
-           SLOT( slotMonPosPreCurSymChanged() ) );
+  connect( m_chMonPosPreCurSym, SIGNAL(clicked()),
+           SLOT(slotMonPosPreCurSymChanged()) );
 
-  connect( m_cmbMonPosMonSignPos, SIGNAL( activated(int) ),
-           SLOT( slotMonPosMonSignPosChanged(int) ) );
+  connect( m_cmbMonPosMonSignPos, SIGNAL(activated(int)),
+           SLOT(slotMonPosMonSignPosChanged(int)) );
 
-  connect( m_chMonNegPreCurSym, SIGNAL( clicked() ),
-           SLOT( slotMonNegPreCurSymChanged() ) );
+  connect( m_chMonNegPreCurSym, SIGNAL(clicked()),
+           SLOT(slotMonNegPreCurSymChanged()) );
 
-  connect( m_cmbMonNegMonSignPos, SIGNAL( activated(int) ),
-           SLOT( slotMonNegMonSignPosChanged(int) ) );
+  connect( m_cmbMonNegMonSignPos, SIGNAL(activated(int)),
+           SLOT(slotMonNegMonSignPosChanged(int)) );
 
-//   connect( m_cmbMonDigSet, SIGNAL( activated(int) ),
-//            SLOT( slotMonDigSetChanged(int) ) );
+//   connect( m_cmbMonDigSet, SIGNAL(activated(int)),
+//            SLOT(slotMonDigSetChanged(int)) );
 
   m_inMonFraDig->setRange(0, 10, 1);
   m_inMonFraDig->setSliderEnabled(false);

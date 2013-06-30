@@ -22,13 +22,13 @@
 #include "Function.h"
 #include "FunctionRepository.h"
 
-#include <KDebug>
-#include <KGlobal>
-#include <KStandardDirs>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 #ifndef SHEETS_NO_PLUGINMODULES
-#include <KPluginInfo>
-#include <KServiceTypeTrader>
+#include <kplugininfo.h>
+#include <kservicetypetrader.h>
 #else
 #include "functions/BitOpsModule.h"
 #include "functions/ConversionModule.h"

@@ -18,7 +18,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 
 #include "txtmigrate.h"
-#include <KDebug>
+#include <kdebug.h>
 #include <QDir>
 
 namespace KexiMigration
@@ -93,7 +93,7 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
          return false;
 
   m_LastLine = m_DataFile->readLine();
-  m_FieldNames = m_LastLine.split("\t");
+  m_FieldNames = m_LastLine.split('\t');
 
   return true;
 }
@@ -111,7 +111,7 @@ bool TxtMigrate::drv_moveNext()
       return false;
 
     m_LastLine = m_DataFile->readLine();
-    m_FieldValues.push_back(m_LastLine.split("\t"));
+    m_FieldValues.push_back(m_LastLine.split('\t'));
     m_Row++;
     m_FileRow++;
   }

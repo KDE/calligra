@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@
 #include "KexiAssistantPage.h"
 #include "KexiLinkWidget.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KexiContextMessage::Private
 {
@@ -115,39 +115,73 @@ QWidget* KexiContextMessage::contentsWidget() const
 
 // ----
 
+struct Palette {
+    Palette() {}
+    QPalette palette;
+    QSet<KexiContextMessageWidget*> set;
+};
+
+class PaletteForPages : public QHash<QWidget*, Palette*>
+{
+public:
+    PaletteForPages() {}
+    ~PaletteForPages() {
+        qDeleteAll(*this);
+    }
+};
+
+K_GLOBAL_STATIC(PaletteForPages, origPagesPalettes);
+
 class KexiContextMessageWidget::Private
 {
 public:
-    Private()
-     : resizeTrackingPolicy(0)
+    Private(KexiContextMessageWidget *_q)
+     : q(_q)
+     , resizeTrackingPolicy(0)
      , hasActions(false)
      , eventBlocking(true)
     {
     }
-    ~Private() {}
+    ~Private() {
+    }
 
     void setDisabledColorsForPage()
     {
-        origPagePalette = page->palette();
-        QPalette pal(page->palette());
-        for (int i = 0; i < QPalette::NColorRoles; i++) {
-            pal.setBrush(QPalette::Active, static_cast<QPalette::ColorRole>(i),
-                        pal.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
-            pal.setBrush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i),
-                        pal.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
+        Palette *p = origPagesPalettes->value(page);
+#warning TODO: remove p in page dtor
+        if (!p) {
+            p = new Palette;
+            p->palette = page->palette();
+            origPagesPalettes->insert(page, p);
+            QPalette pal(page->palette());
+            for (int i = 0; i < QPalette::NColorRoles; i++) {
+                pal.setBrush(QPalette::Active, static_cast<QPalette::ColorRole>(i),
+                            pal.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
+                pal.setBrush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i),
+                            pal.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
+            }
+            page->setPalette(pal);
         }
-        page->setPalette(pal);
+        p->set.insert(q);
     }
 
     void setEnabledColorsForPage()
     {
-        if (page && (hasActions || contentsWidget))
-            page->setPalette(origPagePalette);
+        Palette *p = origPagesPalettes->value(page);
+        if (page && (hasActions || contentsWidget) && p) {
+            p->set.remove(q);
+            if (p->set.isEmpty()) {
+                page->setPalette(p->palette);
+                origPagesPalettes->remove(page);
+                delete p;
+            }
+        }
     }
 
+    KexiContextMessageWidget *q;
     QPointer<QWidget> page;
     QList< QPointer<QWidget> > enabledLinks;
-    QPalette origPagePalette;
+    //QPalette origPagePalette;
     QPointer<QWidget> context;
     QPointer<QWidget> nextFocusWidget;
     QPointer<QWidget> contentsWidget;
@@ -168,7 +202,7 @@ KexiContextMessageWidget::KexiContextMessageWidget(
     QWidget *page, QFormLayout* layout,
     QWidget *context, const KexiContextMessage& message)
  : KMessageWidget(message.contentsWidget(), 0)
- , d(new Private)
+ , d(new Private(this))
 {
     init(page, layout, context, message);
 }
@@ -177,7 +211,7 @@ KexiContextMessageWidget::KexiContextMessageWidget(
    QFormLayout* layout,
    QWidget *context, const KexiContextMessage& message)
  : KMessageWidget()
- , d(new Private)
+ , d(new Private(this))
 {
     init(0, layout, context, message);
 }
@@ -185,7 +219,7 @@ KexiContextMessageWidget::KexiContextMessageWidget(
 KexiContextMessageWidget::KexiContextMessageWidget(
     QFormLayout* layout, QWidget *context, const QString& message)
  : KMessageWidget()
- , d(new Private)
+ , d(new Private(this))
 {
     KexiContextMessage contextMessage(message);
     init(0, layout, context, contextMessage);
@@ -261,8 +295,12 @@ KexiContextMessageWidget::~KexiContextMessageWidget()
             w->unsetCursor();
         }
     }
-    if (d->nextFocusWidget)
+    repaint();
+    if (d->nextFocusWidget) {
+        // kDebug() << d->nextFocusWidget << d->nextFocusWidget->focusProxy();
+        setFocus(); // a hack to force focus update
         d->nextFocusWidget->setFocus();
+    }
     else if (d->context)
         d->context->setFocus();
     delete d;
@@ -270,9 +308,21 @@ KexiContextMessageWidget::~KexiContextMessageWidget()
 
 void KexiContextMessageWidget::actionTriggered()
 {
+    d->eventBlocking = false;
+    d->setEnabledColorsForPage();
+    foreach (QPointer<QWidget> w, d->enabledLinks) {
+        if (w) {
+            w->setEnabled(true);
+            w->unsetCursor();
+        }
+    }
+    repaint();
+
     if (d->page) {
         d->page->setEnabled(true);
+        d->page->repaint();
     }
+
     animatedHide();
 }
 

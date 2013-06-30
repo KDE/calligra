@@ -22,8 +22,8 @@
 
 #include <kexi_global.h>
 #include <db/queryschema.h>
-#include <KMenu>
-#include <KUrl>
+#include <kmenu.h>
+#include <kurl.h>
 
 class KActionCollection;
 

@@ -122,6 +122,9 @@ Group: ImportExport
 # Default text quote character used for exporting CSV (Comma-Separated Value) files.
 -DefaultTextQuoteForExportingCSVFiles [string] (default is ")
 
+# Import missing text values in CSV files as empty text ('' not NULL). 
+ImportNULLsAsEmptyText [boolean] (default: true)
+
 # Default character encoding for exporting CSV (Comma-Separated Value) files.
 # If not provided, system default will be is assumed.
 # Only used when StoreOptionsForCSVExportDialog option is true.

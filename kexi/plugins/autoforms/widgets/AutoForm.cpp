@@ -201,11 +201,11 @@ QScrollBar* AutoForm::verticalScrollBar() const
 
 void AutoForm::buildForm()
 {
-    KexiTableViewColumn::List col_list = KexiDataAwareObjectInterface::data()->columns();
+    KexiDB::TableViewColumn::List col_list = KexiDataAwareObjectInterface::data()->columns();
 
     int column = 0;
     
-    foreach(KexiTableViewColumn *col, col_list) {
+    foreach(KexiDB::TableViewColumn *col, col_list) {
         kDebug() << col->captionAliasOrName();
         AutoWidget* widget = new AutoLineEdit(this);
         widget->setDataSource(col->field()->name());

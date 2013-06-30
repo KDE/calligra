@@ -54,7 +54,7 @@ public:
      * @param iconName or name of the icon displayed on the button
      * @return a QToolButton, so it could be connected to a slot.
      */
-    QToolButton *addContextButton(QString text, QString iconName);
+    QToolButton *addContextButton(const QString &text, const QString &iconName);
     //Returns the index of the item under the mouse cursor
     QModelIndex currentIndex();
 
@@ -84,6 +84,8 @@ private slots:
     void updateToggleSelectionButton();
     /** Update Bar */
     void update();
+    /** Called when model resets */
+    void slotModelReset();
 
 private:
     QAbstractItemView *m_view;

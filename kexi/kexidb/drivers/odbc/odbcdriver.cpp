@@ -34,7 +34,7 @@
 #include <sql.h>
 #include <sqltypes.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 using namespace KexiDB;
 
@@ -409,7 +409,7 @@ bool ODBCDriver::populateGeneralInfo(ODBCConnection* connection)
         ODBCConnection::extractError( connection, connection->d->connectionHandle, SQL_HANDLE_DBC );
         return false;
     }
-    QStringList keywordList = QString::fromLatin1( ( const char* )sqlKeywords ).split( "," );
+    QStringList keywordList = QString::fromLatin1( ( const char* )sqlKeywords ).split( ',' );
 
     // Get the Keywords
     char** keywords;

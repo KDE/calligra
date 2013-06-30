@@ -22,10 +22,10 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoCanvasResourceManager.h"
 
@@ -135,7 +135,7 @@ void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
     KisColorSelectorBase::mouseReleaseEvent(e);
 }
 
-void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
+void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 {
     if(m_colorUpdateAllowed==false)
         return;

@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include "calligra_sheets_export.h"
 

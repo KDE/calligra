@@ -40,5 +40,5 @@ Name[zh_TW]=KSpread 的 HTML 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=text/html
 X-KDE-Weight=50
-X-KDE-Library=kspreadhtmlimport
+X-KDE-Library=calligra_filter_html2ods
 X-KDE-ServiceTypes=Calligra/Filter

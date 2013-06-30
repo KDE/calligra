@@ -25,7 +25,7 @@
 #include <kexiproject.h>
 #include <db/utils.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KexiProjectModelItem.h"
 

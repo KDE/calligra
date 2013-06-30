@@ -242,6 +242,9 @@
          <property name="text">
           <string comment="@label:chooser">Normal:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
          <property name="buddy">
           <cstring>kcfg_TaskNormalColor</cstring>
          </property>
@@ -270,6 +273,9 @@
          </property>
          <property name="text">
           <string comment="@label:chooser">Critical:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskCriticalColor</cstring>
@@ -300,6 +306,9 @@
          <property name="text">
           <string comment="@label:chooser">Finished:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
          <property name="buddy">
           <cstring>kcfg_TaskFinishedColor</cstring>
          </property>
@@ -328,6 +337,9 @@
          </property>
          <property name="text">
           <string comment="@label:chooser">Error:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskErrorColor</cstring>
@@ -372,6 +384,9 @@
          <property name="text">
           <string comment="@label:chooser">Normal:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
          <property name="buddy">
           <cstring>kcfg_MilestoneNormalColor</cstring>
          </property>
@@ -400,6 +415,9 @@
          </property>
          <property name="text">
           <string comment="@label:chooser">Critical:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskCriticalColor</cstring>
@@ -430,6 +448,9 @@
          <property name="text">
           <string comment="@label:chooser">Finished:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
          <property name="buddy">
           <cstring>kcfg_TaskFinishedColor</cstring>
          </property>
@@ -458,6 +479,9 @@
          </property>
          <property name="text">
           <string comment="@label:chooser">Error:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>kcfg_TaskErrorColor</cstring>

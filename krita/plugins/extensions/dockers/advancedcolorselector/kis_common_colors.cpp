@@ -24,10 +24,10 @@
 #include <QThreadPool>
 #include <QApplication>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include <KoIcon.h>
 #include "KoColor.h"
@@ -138,7 +138,7 @@ void KisCommonColors::recalculate()
 
     KisImageWSP kisImage = m_canvas->image();
 
-    QImage image = kisImage->projection()->createThumbnail(1024, 1024, kisImage->bounds(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    QImage image = kisImage->projection()->createThumbnail(1024, 1024, kisImage->bounds(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 
     KisCommonColorsRecalculationRunner* runner = new KisCommonColorsRecalculationRunner(image, patchCount(), this);
     QThreadPool::globalInstance()->start(runner);

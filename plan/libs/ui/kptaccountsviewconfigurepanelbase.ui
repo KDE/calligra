@@ -164,7 +164,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
   <includes>
   <include location="local" >kdatewidget.h</include>
  </includes>

@@ -30,11 +30,12 @@ namespace KexiDB
 {
 class ResultInfo;
 class RecordData;
+class TableViewData;
 }
 
 class QLabel;
 class KexiTableView;
-class KexiTableViewData;
+
 
 namespace KFormDesigner
 {

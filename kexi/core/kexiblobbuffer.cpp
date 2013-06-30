@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kimageio.h>
 #include <kglobal.h>
-#include <KMimeType>
+#include <kmimetype.h>
 
 #include <db/connection.h>
 
@@ -243,7 +243,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
         return KexiBLOBBuffer::Handle();
     }
     QFileInfo fi(url.fileName());
-    QString caption(fi.baseName().replace('_', " ").simplified());
+    QString caption(fi.baseName().replace('_', ' ').simplified());
     const KMimeType::Ptr mimeType(KMimeType::findByNameAndContent(fileName, data));
 
     item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType->name());

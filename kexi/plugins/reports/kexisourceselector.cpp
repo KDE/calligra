@@ -19,8 +19,8 @@
 #include "kexisourceselector.h"
 
 #include <QLabel>
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <QDomElement>
 #include "InternalSourceSelector.h"
 

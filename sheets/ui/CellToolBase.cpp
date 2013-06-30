@@ -122,17 +122,17 @@
 #include <KoIcon.h>
 
 // KDE
-#include <KAction>
-#include <KFind>
-#include <KFontAction>
-#include <KFontSizeAction>
-#include <KInputDialog>
-#include <KLocale>
-#include <KMessageBox>
-#include <KReplace>
-#include <KStandardAction>
-#include <KStandardDirs>
-#include <KToggleAction>
+#include <kaction.h>
+#include <kfind.h>
+#include <kfontaction.h>
+#include <kfontsizeaction.h>
+#include <kinputdialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kreplace.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
+#include <ktoggleaction.h>
 #include <kdeversion.h>
 
 // Qt

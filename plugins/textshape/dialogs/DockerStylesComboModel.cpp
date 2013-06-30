@@ -23,10 +23,10 @@
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 
-#include <KLocale>
-#include <KStringHandler>
+#include <klocale.h>
+#include <kstringhandler.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
     StylesFilteredModelBase(parent),
@@ -153,6 +153,12 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
 
 void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
 {
+    if (style == m_styleManager->defaultCharacterStyle() ||
+        style == m_styleManager->defaultParagraphStyle()) {
+        // Ignore the default styles. They're never present in the source model.
+        return;
+    }
+
     if (!m_usedStylesId.contains(style->styleId())) {
         m_usedStylesId.append(style->styleId());
         if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {

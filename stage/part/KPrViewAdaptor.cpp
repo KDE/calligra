@@ -26,7 +26,7 @@
 #include "KPrPage.h"
 #include <KoTextShapeData.h>
 
-#include <KUrl>
+#include <kurl.h>
 
 #include <QTextDocument>
 

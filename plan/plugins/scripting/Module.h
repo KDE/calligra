@@ -57,7 +57,7 @@ namespace Scripting {
     * print Plan.project().name()
     * \endcode
     */
-    class KPLATOSCRIPTING_TEST_EXPORT Module : public KoScriptingModule
+    class KPLATOSCRIPTING_EXPORT Module : public KoScriptingModule
     {
             Q_OBJECT
         public:
@@ -73,7 +73,7 @@ namespace Scripting {
             /// Open Plan document in this module
             void openUrl( const QString &url );
             /// Open another Plan document in a sub-module with name @p tag
-            QObject *openDocument( const QString tag, const QString &url );
+            QObject *openDocument( const QString &tag, const QString &url );
             /// Start a command with @p name
             void beginCommand( const QString &name );
             /// End a command started with beginCommand()

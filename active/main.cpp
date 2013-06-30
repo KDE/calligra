@@ -22,9 +22,9 @@
  */
 
 #include "src/MainWindow.h"
-#include <KApplication>
-#include <KAboutData>
-#include <KCmdLineArgs>
+#include <kapplication.h>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
 
 int main(int argc, char *argv[])
 {

@@ -33,11 +33,11 @@
 
 #include <widgetutils/KoGroupButton.h>
 
-#include <KDebug>
-#include <KDialog>
-#include <KActionCollection>
-#include <KMenu>
-#include <KGlobalSettings>
+#include <kdebug.h>
+#include <kdialog.h>
+#include <kactioncollection.h>
+#include <kmenu.h>
+#include <kglobalsettings.h>
 #include <QEvent>
 #include <QCloseEvent>
 #include <QApplication>
@@ -256,7 +256,7 @@ KexiView::KexiView(QWidget *parent)
     }
     setObjectName(
         QString("%1_for_%2_object")
-        .arg(Kexi::nameForViewMode(d->viewMode).replace(" ", "_"))
+        .arg(Kexi::nameForViewMode(d->viewMode).replace(' ', '_'))
         .arg(d->window ? d->window->partItem()->name() : QString("??")));
 
     installEventFilter(this);

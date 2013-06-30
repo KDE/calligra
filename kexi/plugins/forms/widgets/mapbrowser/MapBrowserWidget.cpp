@@ -20,7 +20,7 @@
 
 #include "MapBrowserWidget.h"
 #include <QPointF>
-#include <KDebug>
+#include <kdebug.h>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),
@@ -121,7 +121,7 @@ void MapBrowserWidget::deserializeData(const QVariant& serialized)
     kDebug() << "seting new data";
     QString serializedData = serialized.toString();
     kDebug() << "serializedData:" << serializedData << ";" << serialized;
-    QStringList dataList = serializedData.split(";");
+    QStringList dataList = serializedData.split(';');
     kDebug() << "splited:" << dataList;
     if (dataList.length()>=3) {
         setCenterLatitude(dataList[0].toDouble());

@@ -44,10 +44,9 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kstandarddirs.h>
 #include <kurl.h>
 #include <kmimetype.h>
-#include <KDateTime>
+#include <kdatetime.h>
 
 #include <QDomDocument>
 
@@ -82,7 +81,7 @@ WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
         // should be only one manager
         project->setCurrentSchedule( m_project->scheduleManagers().first()->scheduleId() );
     }
-    connect( project, SIGNAL( projectChanged() ), this, SLOT( projectChanged() ) );
+    connect( project, SIGNAL(projectChanged()), this, SLOT(projectChanged()) );
 
 }
 
@@ -128,7 +127,7 @@ bool WorkPackage::addChild( Part */*part*/, const Document *doc )
     }
     if ( ! m_childdocs.contains( ch ) ) {
         m_childdocs.append( ch );
-        connect( ch, SIGNAL( fileModified( bool ) ), this, SLOT( slotChildModified( bool ) ) );
+        connect( ch, SIGNAL(fileModified(bool)), this, SLOT(slotChildModified(bool)) );
     }
     return true;
 }
@@ -142,7 +141,7 @@ void WorkPackage::slotChildModified( bool mod )
 
 void WorkPackage::removeChild( DocumentChild *child )
 {
-    disconnect( child, SIGNAL( fileModified( bool ) ), this, SLOT( slotChildModified( bool ) ) );
+    disconnect( child, SIGNAL(fileModified(bool)), this, SLOT(slotChildModified(bool)) );
 
     int i = m_childdocs.indexOf( child );
     if ( i != -1 ) {

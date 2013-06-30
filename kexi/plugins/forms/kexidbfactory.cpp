@@ -22,11 +22,11 @@
 #include <QPainter>
 #include <QStyle>
 
-#include <KLocale>
-#include <KDebug>
-#include <KActionCollection>
-#include <KStandardAction>
-#include <KPluginFactory>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kactioncollection.h>
+#include <kstandardaction.h>
+#include <kpluginfactory.h>
 
 #include <KoIcon.h>
 

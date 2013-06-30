@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,7 +46,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaction.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
 #include <klocale.h>
@@ -68,9 +68,9 @@
 #include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
-#include <KMenu>
-#include <KXMLGUIFactory>
-#include <KMultiTabBar>
+#include <kmenu.h>
+#include <kxmlguifactory.h>
+#include <kmultitabbar.h>
 
 #include <db/connection.h>
 #include <db/utils.h>
@@ -1300,21 +1300,20 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
     createKexiProject(projectData);
-    if (!d->prj->data()->connectionData()->savePassword
-            && d->prj->data()->connectionData()->password.isEmpty()
-            && d->prj->data()->connectionData()->fileName().isEmpty() //! @todo temp.: change this if there are file-based drivers requiring a password
-       ) {
-        //ask for password
-        KexiDBPasswordDialog pwdDlg(this, *d->prj->data()->connectionData(),
-                                    false /*!showDetailsButton*/);
-        if (QDialog::Accepted != pwdDlg.exec()) {
-            delete d->prj;
-            d->prj = 0;
-            return cancelled;
-        }
+    if (!KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
+        delete d->prj;
+        d->prj = 0;
+        return cancelled;
     }
     bool incompatibleWithKexi;
     tristate res = d->prj->open(incompatibleWithKexi);
+
+    if (d->prj->data()->connectionData()->passwordNeeded()) {
+        // password was supplied in this session, and shouldn't be stored or reused afterwards,
+        // so let's remove it
+        d->prj->data()->connectionData()->password.clear();
+    }
+
     if (~res) {
         delete d->prj;
         d->prj = 0;
@@ -1346,6 +1345,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
         }
         return false;
     }
+
     setupProjectNavigator();
     d->prj->data()->setLastOpened(QDateTime::currentDateTime());
     Kexi::recentProjects()->addProjectData(new KexiProjectData(*d->prj->data()));
@@ -2515,7 +2515,7 @@ void KexiMainWindow::slotProjectWelcome()
         return;
     d->tabbedToolBar->showMainMenu("project_welcome");
     KexiWelcomeAssistant* assistant = new KexiWelcomeAssistant(
-        Kexi::recentProjects());
+        Kexi::recentProjects(), this);
     connect(assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)), 
             this, SLOT(openProject(KexiProjectData,QString,bool*)));
     d->tabbedToolBar->setMainMenuContent(assistant);
@@ -2944,7 +2944,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         if (!additionalMessage.isEmpty())
             additionalMessageString = additionalMessage.toString();
 
-        if (additionalMessageString.startsWith(":"))
+        if (additionalMessageString.startsWith(':'))
             additionalMessageString.clear();
         if (!additionalMessageString.isEmpty())
             additionalMessageString = "<p>" + additionalMessageString + "</p>";

@@ -22,7 +22,7 @@
 
 #include "kexiutils_export.h"
 
-#include <KPushButton>
+#include <kpushbutton.h>
 
 //! A flat icon-based button without background that behaves like a link
 class KEXIUTILS_EXPORT KexiLinkButton : public KPushButton

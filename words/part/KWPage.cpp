@@ -26,7 +26,7 @@
 #include <KoShape.h>
 #include <QPainter>
 
-#include <KDebug>
+#include <kdebug.h>
 
 void KWPage::setVisiblePageNumber(int pageNumber)
 {

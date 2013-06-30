@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTINSERTFILEDIALOG_H
-#define KPTINSERTFILEDIALOG_H
+#ifndef KPTINSERTFILEDLG_H
+#define KPTINSERTFILEDLG_H
 
 #include "ui_kptinsertfilepanel.h"
 

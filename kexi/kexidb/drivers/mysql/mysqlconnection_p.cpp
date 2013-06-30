@@ -23,7 +23,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QStringList>
 #include <QFile>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "mysqlconnection_p.h"
 
@@ -161,7 +161,7 @@ bool MySqlConnectionInternal::executeSQL(const QString& statement)
 
 QString MySqlConnectionInternal::escapeIdentifier(const QString& str) const
 {
-    return QString(str).replace('`', "'");
+    return QString(str).replace('`', '\'');
 }
 
 //--------------------------------------

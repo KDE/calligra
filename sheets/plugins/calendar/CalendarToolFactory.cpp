@@ -22,8 +22,8 @@
 
 #include "CalendarTool.h"
 
-#include <KPluginFactory>
-#include <KLocale>
+#include <kpluginfactory.h>
+#include <klocale.h>
 
 using namespace Calligra::Sheets;
 

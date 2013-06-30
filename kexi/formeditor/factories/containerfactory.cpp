@@ -32,14 +32,14 @@
 #include <QPaintEvent>
 #include <QFileInfo>
 
-#include <KPluginFactory>
-#include <KTextEdit>
-#include <KLineEdit>
-#include <KLocale>
-#include <KDebug>
+#include <kpluginfactory.h>
+#include <ktextedit.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kdebug.h>
 
-#include <KInputDialog>
-#include <KAction>
+#include <kinputdialog.h>
+#include <kaction.h>
 
 #include "containerfactory.h"
 #include "container.h"

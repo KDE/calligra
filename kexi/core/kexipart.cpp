@@ -420,7 +420,7 @@ KexiWindowData* Part::createWindowData(KexiWindow* window)
 KLocalizedString Part::i18nMessage(const QString& englishMessage, KexiWindow* window) const
 {
     Q_UNUSED(window);
-    if (QString(englishMessage).startsWith(":"))
+    if (QString(englishMessage).startsWith(':'))
         return KLocalizedString();
     return ki18n(englishMessage.toLatin1());
 }

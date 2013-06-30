@@ -3,7 +3,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/sheets ${CMAKE_CURRENT_SOURCE_DIR}/libq
 
 ########### next target ###############
 
-set(qproimport_PART_SRCS
+set(qpro2sheets_PART_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/libqpro/src/formula.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/libqpro/src/record.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/libqpro/src/record_factory.cc
@@ -12,13 +12,13 @@ set(qproimport_PART_SRCS
 	qproimport.cc
 	qproformula.cc )
 
-kde4_add_plugin(qproimport ${qproimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_qpro2sheets ${qpro2sheets_PART_SRCS})
 
 
 
-target_link_libraries(qproimport calligrasheetscommon)
+target_link_libraries(calligra_filter_qpro2sheets calligrasheetscommon)
 
-install(TARGETS qproimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

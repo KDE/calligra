@@ -218,7 +218,7 @@ class KPLATOUI_EXPORT ReportNavigator : public QWidget, public Ui::ReportNavigat
 {
     Q_OBJECT
 public:
-    ReportNavigator( QWidget *parent = 0 );
+    explicit ReportNavigator(QWidget *parent = 0);
     void setCurrentPage( int page );
     
 public slots:
@@ -284,7 +284,7 @@ public:
     bool isModified() const;
     void setModified( bool on );
     QDomDocument document() const;
-    void setData( const QDomDocument doc );
+    void setData( const QDomDocument &doc );
 
     /// Loads context info into this view.
     virtual bool loadContext( const KoXmlElement &context );

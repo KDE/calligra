@@ -119,7 +119,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
         if (m_store->open(location)) {
 
             KisSelectionSP selection = KisSelectionSP(new KisSelection());
-            KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+            KisPixelSelectionSP pixelSelection = selection->pixelSelection();
             if (!pixelSelection->read(m_store->device())) {
                 pixelSelection->disconnect();
             } else {
@@ -152,7 +152,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
     if (m_syntaxVersion == 1) {
         QString location = getLocation(layer, ".selection");
         KisSelectionSP selection = new KisSelection();
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         loadPaintDevice(pixelSelection, getLocation(layer, ".selection"));
         layer->setInternalSelection(selection);
     } else if (m_syntaxVersion == 2) {
@@ -202,6 +202,12 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
         return false;
     }
 
+    // the layer might have already been lazily initialized
+    // from the mask loading code
+    if (layer->copyFrom()) {
+        return true;
+    }
+
     KisNodeSP srcNode = layer->copyFromInfo().findNode(m_image->rootLayer());
     KisLayerSP srcLayer = dynamic_cast<KisLayer*>(srcNode.data());
     Q_ASSERT(srcLayer);
@@ -213,8 +219,25 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
     return result;
 }
 
+void KisKraLoadVisitor::initSelectionForMask(KisMask *mask)
+{
+    KisLayer *cloneLayer = dynamic_cast<KisCloneLayer*>(mask->parent().data());
+    if (cloneLayer) {
+        // the clone layers should be initialized out of order
+        // and lazily, because their original() is still not
+        // initialized
+        cloneLayer->accept(*this);
+    }
+
+    KisLayer *parentLayer = dynamic_cast<KisLayer*>(mask->parent().data());
+    // the KisKraLoader must have already set the parent for us
+    Q_ASSERT(parentLayer);
+    mask->initSelection(parentLayer);
+}
+
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
+    initSelectionForMask(mask);
     loadSelection(getLocation(mask), mask->selection());
     loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
     return true;
@@ -222,12 +245,14 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
+    initSelectionForMask(mask);
     loadSelection(getLocation(mask), mask->selection());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
+    initSelectionForMask(mask);
     loadSelection(getLocation(mask), mask->selection());
     return true;
 }
@@ -346,7 +371,7 @@ void KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
     // Pixel selection
     QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
     if (m_store->hasFile(pixelSelectionLocation)) {
-        KisPixelSelectionSP pixelSelection = dstSelection->getOrCreatePixelSelection();
+        KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
         loadPaintDevice(pixelSelection, pixelSelectionLocation);
     }
 

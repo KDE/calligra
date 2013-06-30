@@ -19,7 +19,7 @@
 #ifndef KIS_ACTION_H
 #define KIS_ACTION_H
 
-#include <KAction>
+#include <kaction.h>
 #include <krita_export.h>
 #include <kdebug.h>
 
@@ -62,6 +62,9 @@ public:
     void setActivationConditions(ActivationConditions conditions);
     ActivationConditions activationConditions();
 
+    void setExcludedNodeTypes(const QStringList &nodeTypes);
+    const QStringList& excludedNodeTypes() const;
+
     virtual void setActionEnabled(bool enabled);
 
    /**
@@ -74,8 +77,12 @@ public:
     */
     void setOperationID(const QString& id);
 
+signals:
+    void sigEnableSlaves(bool value);
+
 private slots:
     void slotTriggered();
+    void slotChanged();
 
 private:
     class Private;

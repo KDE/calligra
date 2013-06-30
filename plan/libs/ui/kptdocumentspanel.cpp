@@ -46,6 +46,7 @@ DocumentsPanel::DocumentsPanel( Node &node, QWidget *parent )
     widget.setupUi( this );
     QVBoxLayout *l = new QVBoxLayout( widget.itemViewHolder );
     m_view = new DocumentTreeView( widget.itemViewHolder );
+    l->setMargin(0);
     l->addWidget( m_view );
     m_view->setDocuments( &m_docs );
     m_view->setReadWrite( true );
@@ -56,14 +57,14 @@ DocumentsPanel::DocumentsPanel( Node &node, QWidget *parent )
         m_orgurl.insert( doc, doc->url() );
     }
 
-    connect( widget.pbAdd, SIGNAL( clicked() ), SLOT( slotAddUrl() ) );
-    connect( widget.pbChange, SIGNAL( clicked() ), SLOT( slotChangeUrl() ) );
-    connect( widget.pbRemove, SIGNAL( clicked() ), SLOT( slotRemoveUrl() ) );
-    connect( widget.pbView, SIGNAL( clicked() ), SLOT( slotViewUrl() ) );
+    connect( widget.pbAdd, SIGNAL(clicked()), SLOT(slotAddUrl()) );
+    connect( widget.pbChange, SIGNAL(clicked()), SLOT(slotChangeUrl()) );
+    connect( widget.pbRemove, SIGNAL(clicked()), SLOT(slotRemoveUrl()) );
+    connect( widget.pbView, SIGNAL(clicked()), SLOT(slotViewUrl()) );
     
-    connect( m_view->model(), SIGNAL( dataChanged ( const QModelIndex&, const QModelIndex& ) ), SLOT( dataChanged( const QModelIndex& ) ) );
+    connect( m_view->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(dataChanged(QModelIndex)) );
     
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList& ) ), SLOT( slotSelectionChanged( const QModelIndexList& ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), SLOT(slotSelectionChanged(QModelIndexList)) );
 }
 
 DocumentItemModel *DocumentsPanel::model() const

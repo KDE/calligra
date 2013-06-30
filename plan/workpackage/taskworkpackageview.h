@@ -77,7 +77,7 @@ signals:
     void sectionsMoved();
 
 protected slots:
-    void slotActivated( const QModelIndex index );
+    void slotActivated( const QModelIndex &index );
     void setSortOrder( int col, Qt::SortOrder order );
 
 protected:
@@ -159,7 +159,7 @@ protected slots:
     void slotSplitView();
 
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    void slotSelectionChanged( const QModelIndexList lst );
+    void slotSelectionChanged( const QModelIndexList &lst );
 
 protected:
     void updateActionsEnabled( bool on );
@@ -176,7 +176,7 @@ class GanttItemDelegate : public KPlato::GanttItemDelegate
 public:
     enum Brushes { Brush_Normal, Brush_Late, Brush_NotScheduled, Brush_Finished, Brush_NotReadyToStart, Brush_ReadyToStart };
 
-    GanttItemDelegate( QObject *parent = 0 );
+    explicit GanttItemDelegate(QObject *parent = 0);
 
     void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
     QString toolTip( const QModelIndex &idx ) const;
@@ -210,11 +210,11 @@ public:
 signals:
     void headerContextMenuRequested( const QPoint& );
     void contextMenuRequested( const QModelIndex&, const QPoint& );
-    void selectionChanged( const QModelIndexList );
+    void selectionChanged( const QModelIndexList& );
     void sectionsMoved();
 
 protected slots:
-    void slotSelectionChanged( QItemSelection selected, QItemSelection deselelected );
+    void slotSelectionChanged( const QItemSelection &selected, const QItemSelection &deselelected );
     void slotRowsInserted( const QModelIndex &parent, int start, int end );
     void slotRowsRemoved( const QModelIndex &parent, int start, int end );
 
@@ -250,7 +250,7 @@ public:
 
 protected slots:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    void slotSelectionChanged( const QModelIndexList lst );
+    void slotSelectionChanged( const QModelIndexList &lst );
     void slotOptions();
 
 private:

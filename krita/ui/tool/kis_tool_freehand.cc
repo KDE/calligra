@@ -244,8 +244,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
-    requestUpdateOutline(e->point);
-
     /**
      * Update outline
      */
@@ -262,6 +260,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             }
         }
 #endif
+        requestUpdateOutline(e->point);
     }
 
     if (mode() != KisTool::PAINT_MODE) {
@@ -279,12 +278,6 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
     if (mode() == KisTool::PAINT_MODE &&
             e->button() == Qt::LeftButton) {
-        if (m_smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING) {
-            m_smoothingOptions.smoothingType = KisSmoothingOptions::SIMPLE_SMOOTHING;
-            m_helper->setSmoothness(m_smoothingOptions);
-            doStroke(e);
-            m_smoothingOptions.smoothingType =  KisSmoothingOptions::WEIGHTED_SMOOTHING;
-        }
         endStroke();
 
         if (m_assistant) {
@@ -326,6 +319,11 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
     }
 
     event->accept();
+}
+
+bool KisToolFreehand::isGestureSupported() const
+{
+    return true;
 }
 
 void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)

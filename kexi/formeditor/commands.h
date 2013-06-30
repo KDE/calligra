@@ -25,7 +25,7 @@
 #include <QVariant>
 #include <kundo2command.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include "utils.h"
 #include "form.h"
 

@@ -32,8 +32,8 @@
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
 
-#include <KDebug>
-#include <KIconLoader>
+#include <kdebug.h>
+#include <kiconloader.h>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
@@ -302,7 +302,7 @@ void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
     
     kDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
     
-    if (!srcField.trimmed().startsWith("*") && !f.startsWith("*"))
+    if (!srcField.trimmed().startsWith('*') && !f.startsWith('*'))
         event->acceptProposedAction();
 }
 

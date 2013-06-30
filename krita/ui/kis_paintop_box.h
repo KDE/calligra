@@ -126,7 +126,9 @@ private slots:
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
     void slotSwitchToPreviousPreset();
-    
+    void slotUnsetEraseMode();
+    void slotToggleAlphaLockMode(bool);
+
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
     QHBoxLayout*                         m_layout;
@@ -137,6 +139,7 @@ private:
     KisPopupButton*                      m_brushChooser;
     KisCompositeOpComboBox*              m_cmbCompositeOp;
     QToolButton*                         m_eraseModeButton;
+    QToolButton*                         m_alphaLockButton;
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
     KisView2*                            m_view;
@@ -150,7 +153,7 @@ private:
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeSP           m_previousNode;
-    
+
     struct TabletToolID
     {
         TabletToolID(const KoInputDevice& dev) {
