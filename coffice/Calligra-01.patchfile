@@ -1,5 +1,5 @@
 diff --git a/filters/libmsooxml/MsooXmlImport.cpp b/filters/libmsooxml/MsooXmlImport.cpp
-index acb0bc6..1624b69 100644
+index 5cb25a2..9ff7f82 100644
 --- a/filters/libmsooxml/MsooXmlImport.cpp
 +++ b/filters/libmsooxml/MsooXmlImport.cpp
 @@ -759,6 +759,15 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
@@ -182,7 +182,7 @@ index e701ba0..f2c24c2 100644
  
  U16 TextConverter::fixLID( U16 nLocale )
 diff --git a/libs/flake/KoImageData.cpp b/libs/flake/KoImageData.cpp
-index 7930e5f..7f3ec93 100644
+index 2b909e6..81cda27 100644
 --- a/libs/flake/KoImageData.cpp
 +++ b/libs/flake/KoImageData.cpp
 @@ -65,9 +65,9 @@ KoImageData::~KoImageData()
@@ -245,7 +245,7 @@ index 3556100..888422c 100644
      /// returns true only if pixmap() would return immediately with a cached pixmap
      bool hasCachedPixmap() const;
 diff --git a/libs/flake/KoImageData_p.cpp b/libs/flake/KoImageData_p.cpp
-index 540c0e2..3009cfa 100644
+index 5a1901b..7705255 100644
 --- a/libs/flake/KoImageData_p.cpp
 +++ b/libs/flake/KoImageData_p.cpp
 @@ -154,7 +154,7 @@ void KoImageDataPrivate::clear()
@@ -271,7 +271,7 @@ index 46480d0..419ac21 100644
      KTemporaryFile *temporaryFile;
  };
 diff --git a/libs/flake/KoPatternBackground.cpp b/libs/flake/KoPatternBackground.cpp
-index 17fef9c..b0339b4 100644
+index 09ada1f..80b8cce 100644
 --- a/libs/flake/KoPatternBackground.cpp
 +++ b/libs/flake/KoPatternBackground.cpp
 @@ -310,13 +310,12 @@ void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &conver
@@ -299,7 +299,7 @@ index 17fef9c..b0339b4 100644
  
      painter.restore();
 diff --git a/libs/flake/KoUnavailShape.cpp b/libs/flake/KoUnavailShape.cpp
-index ecc771f..0ead6cf 100644
+index 008b669..4279763 100644
 --- a/libs/flake/KoUnavailShape.cpp
 +++ b/libs/flake/KoUnavailShape.cpp
 @@ -607,7 +607,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
@@ -312,10 +312,10 @@ index ecc771f..0ead6cf 100644
      if (fileName.endsWith('/')) {
          FileEntry *entry = new FileEntry;
 diff --git a/libs/main/KoDocument.cpp b/libs/main/KoDocument.cpp
-index 37f64b6..cf4be76 100644
+index c5605bd..5545fc4 100644
 --- a/libs/main/KoDocument.cpp
 +++ b/libs/main/KoDocument.cpp
-@@ -1216,71 +1216,7 @@ bool KoDocument::openFile()
+@@ -1219,71 +1219,7 @@ bool KoDocument::openFile()
          importedFile = d->filterManager->importDocument(d->parentPart->localFilePath(), typeName, status);
          if (status != KoFilter::OK) {
              QApplication::restoreOverrideCursor();
@@ -388,7 +388,7 @@ index 37f64b6..cf4be76 100644
              if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
  #ifndef Q_OS_WIN
                  QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
-@@ -1289,7 +1225,6 @@ bool KoDocument::openFile()
+@@ -1292,7 +1228,6 @@ bool KoDocument::openFile()
                  QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
                  KMessageBox::error(0, errorMsg);
  #endif
@@ -396,7 +396,7 @@ index 37f64b6..cf4be76 100644
              }
  
              d->isLoading = false;
-@@ -1906,6 +1841,7 @@ KService::Ptr KoDocument::nativeService()
+@@ -1910,6 +1845,7 @@ KService::Ptr KoDocument::nativeService()
  
  QByteArray KoDocument::nativeFormatMimeType() const
  {
@@ -404,7 +404,7 @@ index 37f64b6..cf4be76 100644
      KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
      if (!service) {
          kWarning(30003) << "No native service defined to read NativeMimeType from desktop file!";
-@@ -1924,6 +1860,9 @@ QByteArray KoDocument::nativeFormatMimeType() const
+@@ -1928,6 +1864,9 @@ QByteArray KoDocument::nativeFormatMimeType() const
      }
  #endif
      return nativeMimeType;
@@ -415,7 +415,7 @@ index 37f64b6..cf4be76 100644
  
  QByteArray KoDocument::nativeOasisMimeType() const
 diff --git a/libs/main/KoDocument.h b/libs/main/KoDocument.h
-index 4841d58..ed4ce8d 100644
+index 3372060..6653b30 100644
 --- a/libs/main/KoDocument.h
 +++ b/libs/main/KoDocument.h
 @@ -145,7 +145,7 @@ public:
@@ -437,10 +437,10 @@ index 4841d58..ed4ce8d 100644
      enum ImportExportType {
          ForExport,
 diff --git a/libs/main/KoDocumentSectionView.cpp b/libs/main/KoDocumentSectionView.cpp
-index 154e4a8..0dd1334 100644
+index 29467ea..48a4ef4 100644
 --- a/libs/main/KoDocumentSectionView.cpp
 +++ b/libs/main/KoDocumentSectionView.cpp
-@@ -395,5 +395,5 @@ void KoDocumentSectionView::setDraggingFlag(bool flag)
+@@ -439,5 +439,5 @@ void KoDocumentSectionView::setDraggingFlag(bool flag)
      m_draggingFlag = flag;
  }
  
@@ -504,7 +504,7 @@ index a37c8b1..b4c0a8c 100644
      void prependChainLink(KoFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
  
 diff --git a/libs/main/KoFilterManager.cpp b/libs/main/KoFilterManager.cpp
-index d3304ee..3f10bce 100644
+index 2648885..2ce9320 100644
 --- a/libs/main/KoFilterManager.cpp
 +++ b/libs/main/KoFilterManager.cpp
 @@ -170,7 +170,6 @@ QString KoFilterManager::importDocument(const QString& url,
@@ -607,10 +607,10 @@ index 3fbef5c..774df84 100644
      // === API for KoFilterChains === (internal)
      // The friend methods are private in KoFilterChain and
 diff --git a/libs/main/KoView.cpp b/libs/main/KoView.cpp
-index efd39ec..e5cc661 100644
+index 1b4a722..7f0a9a2 100644
 --- a/libs/main/KoView.cpp
 +++ b/libs/main/KoView.cpp
-@@ -631,5 +631,5 @@ QList<QAction*> KoView::createChangeUnitActions()
+@@ -647,5 +647,5 @@ QList<QAction*> KoView::createChangeUnitActions()
      return unitActions->actions();
  }
  
@@ -618,7 +618,7 @@ index efd39ec..e5cc661 100644
 +//#include <KoView_p.moc>
  #include <KoView.moc>
 diff --git a/libs/textlayout/KoTextLayoutArea_paint.cpp b/libs/textlayout/KoTextLayoutArea_paint.cpp
-index 50fd17d..0b8c185 100644
+index e94cc71..806da57 100644
 --- a/libs/textlayout/KoTextLayoutArea_paint.cpp
 +++ b/libs/textlayout/KoTextLayoutArea_paint.cpp
 @@ -477,7 +477,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
@@ -631,7 +631,7 @@ index 50fd17d..0b8c185 100644
          }
      }
 diff --git a/plugins/pictureshape/PictureShape.cpp b/plugins/pictureshape/PictureShape.cpp
-index 7b1036a..ff2f6dc 100644
+index 976fadd..287c620 100644
 --- a/plugins/pictureshape/PictureShape.cpp
 +++ b/plugins/pictureshape/PictureShape.cpp
 @@ -52,10 +52,13 @@
@@ -787,7 +787,7 @@ index b99243f..bafee04 100644
  }
  
 diff --git a/sheets/ui/CellToolBase.cpp b/sheets/ui/CellToolBase.cpp
-index 788e7f9..ad95be7 100644
+index 55c499e..3cfafbc 100644
 --- a/sheets/ui/CellToolBase.cpp
 +++ b/sheets/ui/CellToolBase.cpp
 @@ -3402,10 +3402,12 @@ void CellToolBase::spellCheck()
@@ -804,7 +804,7 @@ index 788e7f9..ad95be7 100644
  
  void CellToolBase::qTableView()
 diff --git a/words/part/KWDocument.cpp b/words/part/KWDocument.cpp
-index 54cccdc..e062600 100644
+index 57aba26..47f54d3 100644
 --- a/words/part/KWDocument.cpp
 +++ b/words/part/KWDocument.cpp
 @@ -353,9 +353,9 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
