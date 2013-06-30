@@ -54,7 +54,7 @@ update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
 
 if (FALSE) # these headers are private for now
 install( FILES
-    msooxml_export.h
+    komsooxml_export.h
     MsooXmlContentTypes.h
     MsooXmlReader.h
     MsooXmlReader_p.h

@@ -24,7 +24,7 @@ install(TARGETS koodfreader ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 #install( FILES
-         # odfreader_export.h
+         # koodfreader_export.h
          # OdfReaderContext.h
          # OdtReaderBackend.h
          # OdfTextReaderBackend.h
