@@ -33,7 +33,7 @@ class StepStepStack :  public QAbstractListModel
 
   Q_OBJECT
 public:
-    StepStepStack();
+    StepStepStack(QObject* parent);
     StepStepStack(const StepStepStack& other);
     ~StepStepStack();
     StepStepStack& operator=(const StepStepStack& other);

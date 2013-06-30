@@ -20,7 +20,8 @@
 
 #include "StepStepBase.h"
 
-StepStepBase::StepStepBase()
+StepStepBase::StepStepBase(QObject *parent):
+    QObject(parent)
 {
 
 }

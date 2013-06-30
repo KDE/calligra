@@ -23,12 +23,13 @@
 #include "StepStepBase.h"
 #include <QtCore/QString>
 
-StepStepStack::StepStepStack():d()
+StepStepStack::StepStepStack(QObject *parent):
+    d()
 {
 
 }
 
-StepStepStack::StepStepStack(const StepStepStack& other)
+StepStepStack::StepStepStack(const StepStepStack& other):QAbstractListModel(0)
 {
 
 }

@@ -35,7 +35,7 @@ class StepStepBase : public QObject
     Q_PROPERTY(QString Type READ Type)
 
 public:
-    StepStepBase();
+    explicit StepStepBase(QObject *parent =0);
     StepStepBase(const StepStepBase& other);
 
     virtual ~StepStepBase();
@@ -60,6 +60,13 @@ public:
     int Position();
     virtual void setPosition(int position);
 
+    //The Location Property gives a structured location within the
+    //document that can be translated to and from a QTextCursor
+    //Potentially deprecates Position()
+    //StepStepLocation Location();
+    //virtual void setLocation(StepStepLocation location);
+
+
     //The Step Property holds the text of the change so say I've got the word
     //Dog and I make it Dogs, Step would hold an "s"
     //NOTE: May be later moved out into a StepTextStep class which textual changes
@@ -75,6 +82,7 @@ private:
   int _position;
   QString _step;
   const QString _type;
+  StepStepLocation _location;
 
 };
 

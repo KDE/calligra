@@ -115,7 +115,7 @@ int StepStepStack_p::rowcount()
 }
 QVariant StepStepStack_p::data(int i)
 {
-    if (stack.count() >= i)
+    if (!stack.empty() && stack.count() >= i+1)
     {
         //temporary measure
         StepStepBase step = stack.at(i);
