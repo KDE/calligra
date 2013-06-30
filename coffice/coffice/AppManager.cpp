@@ -23,6 +23,7 @@
 #include <kpluginfactory.h>
 #include <kmimetype.h>
 
+#ifndef NO_CALLIGRA_WORDS
 #include <KWPart.h>
 #include <KWView.h>
 #include <KWDocument.h>
@@ -30,6 +31,12 @@
 #include <KWCanvasItem.h>
 #include <KWPage.h>
 #include <KWPageManager.h>
+#endif
+
+#ifndef NO_CALLIGRA_SHEETS
+//#include <part/Part.h>
+//#include <part/Doc.h>
+#endif
 
 /**************************************************************************
  * PartFactory
@@ -48,24 +55,61 @@ public:
         qDeleteAll(m_filterPlugins);
     }
 
-    KWPart* createPart()
+    KoPart* createPart(const QString &file)
     {
-        //TODO reuse the KWPart-factory plugin rather then create manually
+        //TODO reuse the KoPart-factory plugin rather then create manually
 
-        KWPart *part = new KWPart(this);
-        KWDocument *document = new KWDocument(part);
-        document->setCheckAutoSaveFile(false);
-        document->setAutoErrorHandlingEnabled(false);
-        document->resourceManager()->setResource(KoText::StyleManager, QVariant::fromValue<KoStyleManager*>(new KoStyleManager(0)));
-        part->setDocument(document);
+        KoPart *part = 0;
+        //KWPart *part = 0;
+
+        KMimeType::Ptr mime = KMimeType::findByUrl(KUrl(file));
+        Q_ASSERT(mime);
+
+#ifndef NO_CALLIGRA_WORDS
+        /*
+        if (mime->name().startsWith("application/vnd.oasis.opendocument.text") ||
+            mime->name().startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+            mime->name().startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.template") ||
+            mime->name().startsWith("application/vnd.ms-word.document.macroEnabled.12") ||
+            mime->name().startsWith("application/vnd.ms-word.template.macroEnabled.12") ||
+            mime->name().startsWith("application/msword") )
+        {
+        */
+            // Calligra Words
+            KWPart *kwpart = new KWPart(this);
+            part = kwpart;
+            KWDocument *document = new KWDocument(kwpart);
+            document->setCheckAutoSaveFile(false);
+            document->setAutoErrorHandlingEnabled(false);
+            document->resourceManager()->setResource(KoText::StyleManager, QVariant::fromValue<KoStyleManager*>(new KoStyleManager(0)));
+            kwpart->setDocument(document);
+        /*
+        }
+         */
+#endif
+        /*
+#ifndef NO_CALLIGRA_SHEETS
+        if (mime->name().startsWith("application/vnd.oasis.opendocument.spreadsheet")) {
+            // Calligra Sheets
+            Calligra *shpart = new Calligra::Sheets::Part(this);
+            part = shpart;
+            Calligra::Sheets::Doc *document = new Calligra::Sheets::Doc(shpart);
+            document->setCheckAutoSaveFile(false);
+            document->setAutoErrorHandlingEnabled(false);
+            document->resourceManager()->setResource(KoText::StyleManager, QVariant::fromValue<KoStyleManager*>(new KoStyleManager(0)));
+            shpart->setDocument(document);
+        }
+#endif
+        */
+        if (!part)
+            qWarning() << Q_FUNC_INFO << "Unsupported mime type=" << mime->name() << "for file=" << file;
         return part;
     }
 
     QPair<QString, KoFilter*> filterForFile(const QString &file)
     {
         KMimeType::Ptr mime = KMimeType::findByUrl(KUrl(file));
-        if (!mime || mime->name().isEmpty())
-            return QPair<QString, KoFilter*>(); // unknown/unsupported file format
+        Q_ASSERT(mime);
         if (mime->name().startsWith("application/vnd.oasis.opendocument."))
             return QPair<QString, KoFilter*>(); // ODF, native buildin file format
         Q_FOREACH(KoFilter *f, m_filterPlugins) {
@@ -165,16 +209,18 @@ public:
         delete m_doc->d->m_kopart;
         m_doc->d->m_kopart = 0;
 
-        KoPart *kopart = s_partFactory()->createPart();
+        KoPart *kopart = s_partFactory()->createPart(m_file);
         if (!kopart) {
             qWarning() << Q_FUNC_INFO << "Failed to create KoPart";
-            QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, QObject::tr("Unsupported Mimetype")));
+            QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, QObject::tr("Unsupported file type %1").arg(m_file)));
             return;
         }
 
         m_doc->d->m_progressProxy->setValue(0);
         kopart->document()->setProgressProxy(m_doc->d->m_progressProxy);
 
+//TODO
+//QObject::connect(kopart->document(), SIGNAL(updateView()), m_doc->d, SLOT(slotPageSetupChanged()), Qt::DirectConnection);
         QObject::connect(kopart->document(), SIGNAL(pageSetupChanged()), m_doc->d, SLOT(slotPageSetupChanged()), Qt::DirectConnection);
         QObject::connect(kopart->document(), SIGNAL(layoutFinished()), m_doc->d, SLOT(slotLayoutFinished()), Qt::DirectConnection);
         m_doc->d->m_kopart = kopart;
@@ -191,7 +237,7 @@ public:
                 if (outputTempFile)
                     outputTempFile->remove();
                 if (error.isEmpty())
-                    error = QObject::tr("Cannot import file");
+                    error = QObject::tr("Cannot import file %1").arg(m_file);
                 qWarning() << Q_FUNC_INFO << inputFile << error;
                 QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, error));
                 return;
@@ -209,7 +255,7 @@ public:
             m_doc->d->m_kopart = 0;
             QString error = kopart->document()->errorMessage();
             if (error.isEmpty())
-                error = QObject::tr("Cannot load file");
+                error = QObject::tr("Cannot load file %1").arg(m_file);
             qWarning() << Q_FUNC_INFO << inputFile << error;
             QMetaObject::invokeMethod(m_doc->d, "slotOpenFileFailed", Qt::QueuedConnection, Q_ARG(QString, error));
             return;
@@ -286,7 +332,7 @@ public:
     virtual void run()
     {
         qDebug() << Q_FUNC_INFO << "Starting updating page" << m_page->pageNumber() << "document=" << m_doc->file();
-
+#ifndef NO_CALLIGRA_WORDS
         m_page->setUpdating(false);
 
         KoPart *kopart = m_doc->d->m_kopart;
@@ -299,7 +345,8 @@ public:
         KWPage kwpage = kwPageManager->page(m_page->pageNumber());
         Q_ASSERT_X(kwpage.isValid(), __FUNCTION__, qPrintable(QString("No such page number %1 (valid are 1-%2) in document %3").arg(m_page->pageNumber()).arg(kwPageManager->pageCount()).arg(kopart->url().toString())));
 
-        KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(kwdoc->documentPart()->canvasItem());
+        Q_ASSERT(kwdoc->documentPart());
+        KWCanvasItem *canvasItem = dynamic_cast<KWCanvasItem*>(kwdoc->documentPart()->canvasItem());
         Q_ASSERT(canvasItem);
 
         KoShapeManager *shapeManager = canvasItem->shapeManager();
@@ -320,6 +367,7 @@ public:
 
         qDebug() << Q_FUNC_INFO << "Finished updating page" << m_page.data();
         QMetaObject::invokeMethod(m_doc->d, "slotThumbnailFinished", Qt::QueuedConnection, Q_ARG(int, m_page->pageNumber()), Q_ARG(QImage, thumbnail));
+#endif
     }
 };
 

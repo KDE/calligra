@@ -6,6 +6,9 @@ DEFINES += QT_FATAL_ASSERT
 DEFINES += QT_NO_DBUS
 #DEFINES += QT_NO_PRINTER
 
+!contains(BUILD_WORDS,1):DEFINES += NO_CALLIGRA_WORDS
+!contains(BUILD_SHEETS,1):DEFINES += NO_CALLIGRA_SHEETS
+
 # Be less verbose
 *-g++*|*-clang*|*-llvm* {
     QMAKE_CXXFLAGS += -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-function
@@ -70,6 +73,7 @@ INCLUDEPATH = \
     $$CALLIGRALIBS_WIDGETSUTILS_DIR \
     $$CALLIGRALIBS_WIDGETS_DIR \
     $${TOP_BUILD_DIR} \
+    $${TOP_BUILD_DIR}/$${TARGET} \
     $${TOP_SOURCE_DIR} \
     $$INCLUDEPATH
 
@@ -104,8 +108,9 @@ defineTest( mocWrapper ) {
         in=$${LITERAL_HASH}include <moc_$${fname}.cpp>
 
         #out=$${OUT_PWD}/$${fname}.moc
-        out=$${TOP_BUILD_DIR}/$${fname}.moc
 
+        outdir=$${TOP_BUILD_DIR}/$${TARGET}
+        out=$${outdir}/$${fname}.moc
         exists( $${fdir}/$${fname}.cpp ) {
             system(echo \"Creating moc-wrapper $$out\")
 
@@ -114,6 +119,7 @@ defineTest( mocWrapper ) {
             #system(moc -E \"$$hdr\" | grep \"class\")
             #system(cat \"$$hdr\" | grep \"Q_OBJECT\")
 
+            !exists($$outdir):system($$QMAKE_MKDIR \"$$outdir\")
             system(echo \"$$in\" > \"$$out\")
         }
     }
@@ -121,8 +127,10 @@ defineTest( mocWrapper ) {
         base=$$basename(hdr)
         fname=$$section(base, ".", 0, 0)
         in=$${LITERAL_HASH}include <moc_$${fname}.cpp>
-        out=$${TOP_BUILD_DIR}/$${fname}.moc
+        outdir=$${TOP_BUILD_DIR}/$${TARGET}
+        out=$${outdir}/$${fname}.moc
         system(echo \"Creating moc-wrapper $$out\")
+        !exists($$outdir):system($$QMAKE_MKDIR \"$$outdir\")
         system(echo \"$$in\" > \"$$out\")
     }
 }

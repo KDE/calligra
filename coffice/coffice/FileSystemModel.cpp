@@ -41,10 +41,15 @@ FileSystemModel::FileSystemModel(QObject *parent)
     //setFilter(QDir::AllDirs | QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot);
 
     setNameFilters(QStringList()
-       << "*.odt" // OpenDocument ODF
+#ifndef NO_CALLIGRA_WORDS
+       << "*.odt" // OpenDocument Text ODT
        << "*.doc" << "*.dot" // Microsoft Word binary
        << "*.docx" << "*.dotx" // Microsoft Word OOXML
        << "*.docm" << "*.dotm" // Microsoft Word macroEnabled
+#endif
+#ifndef NO_CALLIGRA_SHEETS
+       << "*.ods" // OpenDocument Spreadsheet ODS
+#endif
     );
     setNameFilterDisables(false);
 

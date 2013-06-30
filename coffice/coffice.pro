@@ -1,11 +1,18 @@
 TEMPLATE = subdirs
 
+#FIXME
 CONFIG += ordered
+
+BUILD_WORDS = 1
+BUILD_SHEETS = 1
 
 QMAKE_CACHE = "$${OUT_PWD}/.qmake.cache"
 TOP_SOURCE_DIR = $${IN_PWD}
 TOP_BUILD_DIR = $${OUT_PWD}
+
 system('echo \"\" > $${QMAKE_CACHE}')
+system('echo BUILD_WORDS=$${BUILD_WORDS} >> $${QMAKE_CACHE}')
+system('echo BUILD_SHEETS=$${BUILD_SHEETS} >> $${QMAKE_CACHE}')
 system('echo TOP_SOURCE_DIR=$${TOP_SOURCE_DIR} >> $${QMAKE_CACHE}')
 system('echo TOP_BUILD_DIR=$${TOP_BUILD_DIR} >> $${QMAKE_CACHE}')
 
@@ -14,8 +21,8 @@ include(common.pri)
 SUBDIRS += calligralibs
 SUBDIRS += calligrafilters
 SUBDIRS += calligraplugins
-SUBDIRS += calligrawords
-#SUBDIRS += calligrasheets
+contains(BUILD_WORDS,1):SUBDIRS += calligrawords
+contains(BUILD_SHEETS,1):SUBDIRS += calligrasheets
 SUBDIRS += coffice
 
 android:OTHER_FILES += \
