@@ -380,7 +380,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
         }
         case QEvent::GraphicsSceneWheel: {
             QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
-            QWheelEvent wevent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
+            QWheelEvent wevent(gswevent->pos().toPoint(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
             QApplication::sendEvent(d->canvasWidget, &wevent);
             emit interactionStarted();
             return true;
