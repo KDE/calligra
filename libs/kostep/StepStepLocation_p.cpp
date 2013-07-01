@@ -17,8 +17,70 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "StepStepLocation_p.h"
+#include <QtGui/QTextBlock>
+#include <QtGui/QTextDocument>
+#include <QtCore/QQueue>
 
 StepStepLocation_p::StepStepLocation_p(QObject *parent) :
     QObject(parent)
 {
 }
+
+void StepStepLocation_p::constructor(QTextCursor cursor)
+{
+  QTextFrame* frame = cursor.currentFrame();
+  getParentFrame(frame);
+  QTextBlock Temp= cursor.block();
+  QTextBlock* block = &Temp;
+  int i=0;
+  foreach(QObject* ptr, frame->children())
+  {
+    if(ptr == block)
+    {
+      location.push(i);
+      break;
+    }
+    i++;
+  }
+  location.push(cursor.positionInBlock());
+
+}
+QTextCursor StepStepLocation_p::convertToQTextCursor()
+{
+  QList<int> locationq = location.toList();
+  //temporary
+  return QTextCursor();
+}
+
+QString StepStepLocation_p::ToString()
+{
+  QString returnValue = "s=";
+  foreach(int ptr, location)
+  {
+    returnValue +="/" + ptr;
+  }
+  return returnValue;
+
+}
+int StepStepLocation_p::getParentFrame(QTextFrame* frame)
+{
+  QTextFrame* parentFrame = frame->parentFrame();
+  if(parentFrame != parentFrame->document()->rootFrame())  {
+    getParentFrame(frame->parentFrame());
+  }
+  else  {
+    QList<QObject*> children = parentFrame->children();
+    int i=0;
+    foreach(QObject* ptr, children)
+    {
+      if(ptr == dynamic_cast<QObject*>(frame)){
+	location.push(i);
+	return i;
+      }
+      i++;
+    }
+  }
+  //shouldn't happen
+  return 0;
+}
+

@@ -21,7 +21,9 @@
 #define STEPSTEPLOCATION_P_H
 
 #include <QtCore/QObject>
-#include <QtCore/QQueue>
+#include <QtCore/QString>
+#include <QtCore/QStack>
+#include <QtGui/QTextCursor>
 
 class StepStepLocation_p : public QObject
 {
@@ -29,11 +31,17 @@ class StepStepLocation_p : public QObject
 public:
     explicit StepStepLocation_p(QObject *parent = 0);
 
+    void constructor(QTextCursor cursor);
+    QTextCursor convertToQTextCursor();
+    QString ToString();
+
+
 signals:
 
 public slots:
 private:
-  QQueue<int> location;
+  QStack<int> location;
+  int getParentFrame(QTextFrame* frame);
 
 };
 

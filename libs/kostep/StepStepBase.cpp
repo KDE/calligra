@@ -1,5 +1,5 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
+    kostep -- handles changetracking using operational transformation for calligra
     Copyright (C) 2013  Luke Wolf <Lukewolf101010@gmail.com>
 
     This library is free software; you can redistribute it and/or

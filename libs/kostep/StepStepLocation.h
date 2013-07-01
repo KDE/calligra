@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QtCore/QQueue>
 
+class StepStepLocation_p;
 class QTextCursor;
 class StepStepLocation : public QObject
 {
@@ -34,7 +35,7 @@ signals:
 
 public slots:
 private:
-
+  StepStepLocation_p* d;
 };
 
 #endif // STEPSTEPLOCATION_H

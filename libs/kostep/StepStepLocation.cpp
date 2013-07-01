@@ -18,18 +18,20 @@
 */
 
 #include "StepStepLocation.h"
+#include "StepStepLocation_p.h"
 #include <QtGui/QTextCursor>
 StepStepLocation::StepStepLocation(QObject *parent) :
-    QObject(parent)
+    QObject(parent), d(new StepStepLocation_p())
 {
 }
 StepStepLocation::StepStepLocation(QTextCursor cursor, QObject *parent):
-    QObject(parent)
+    QObject(parent), d(new StepStepLocation_p())
 {
+  d->constructor(cursor);
 
 }
 
 StepStepLocation::operator QTextCursor()
 {
-    return QTextCursor();
+    return d->convertToQTextCursor();
 }
