@@ -128,8 +128,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
     d->view = new SketchDeclarativeView();
-    d->view->setViewport(KisOpenGL::sharedContextWidget());
-    qDebug() << d->view->viewport()->objectName();
+    d->view->setViewport(new QGLWidget(d->view, KisOpenGL::sharedContextWidget()));
 
     d->view->setAttribute(Qt::WA_AcceptTouchEvents);
     d->view->setAttribute(Qt::WA_OpaquePaintEvent);
