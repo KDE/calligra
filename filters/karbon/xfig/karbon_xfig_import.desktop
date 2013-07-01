@@ -61,5 +61,5 @@ Name[zh_TW]=Karbon XFig 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/x-xfig
 X-KDE-Weight=1
-X-KDE-Library=karbonxfigimport
+X-KDE-Library=calligra_filter_xfig2odg
 X-KDE-ServiceTypes=Calligra/Filter

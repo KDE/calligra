@@ -48,6 +48,26 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 include(CalligraProductSetMacros)
 
+if(NOT DEFINED RELEASE_BUILD)
+    # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
+    string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
+    set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
+    list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
+    if (INDEX EQUAL -1)
+        set(RELEASE_BUILD FALSE)
+    else(INDEX EQUAL -1)
+        set(RELEASE_BUILD TRUE)
+    endif(INDEX EQUAL -1)
+endif(NOT DEFINED RELEASE_BUILD)
+message(STATUS "Release build: ${RELEASE_BUILD}")
+
+if (RELEASE_BUILD)
+    set(CALLIGRA_SHOULD_BUILD_STAGING FALSE)
+else (RELEASE_BUILD)
+    set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
+endif (RELEASE_BUILD)
+
+
 option(GHNS "support Get Hot New Stuff" OFF)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
@@ -81,20 +101,23 @@ calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
 calligra_define_product(LIB_WRITERPERFECT "libwriterperfect")
 # Calligra-independent utility libs
-calligra_define_product(LIB_VECTORIMAGE "libvectorimage")
+calligra_define_product(LIB_VECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
 calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
 # calligra libs
 calligra_define_product(CALLIGRA_LIBS "Calligra core libs")
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_ODF2 "libodf2"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_ODFREADER "libodfreader"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_ODF2 "libkoodf2"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_ODFREADER "libkoodfreader"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_MSOOXML "libmsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
-calligra_define_product(SCRIPTING "") # TODO
+calligra_define_product(LIB_MSOOXML "libkomsooxml"  NEEDS LIB_ODF2 CALLIGRA_LIBS)
+calligra_define_product(SCRIPTING "Scripting feature") # TODO
+calligra_define_product(RDF "RDF feature")
+# plugins
+calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
 # apps
-calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS)
+calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS PLUGIN_TEXTSHAPE)
 calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(STAGE_PART "Stage engine"  NEEDS CALLIGRA_LIBS LIB_KOPAGEAPP)
 calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  NEEDS STAGE_PART)
@@ -115,7 +138,7 @@ calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action")
 calligra_define_product(EXTRA_FILEMANAGER_TEMPLATES "File templates for filemanager")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
-# plugins
+# more plugins
 calligra_define_product(PLUGIN_COLORENGINES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_MUSICSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_SPACENAVIGATOR ""  NEEDS CALLIGRA_LIBS)
@@ -128,7 +151,6 @@ calligra_define_product(PLUGIN_PATHSHAPES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VARIABLES ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_CHARTSHAPE "" NEEDS CALLIGRA_LIBS LIB_KDCHART)
 calligra_define_product(PLUGIN_PICTURESHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_PLUGINSHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_FORMULASHAPE ""  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra"  NEEDS CALLIGRA_LIBS)
@@ -404,11 +426,7 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http:/
 macro_optional_find_package(Soprano)
 macro_log_feature(Soprano_FOUND "Soprano" "KDE4 RDF handling library" "http://soprano.sourceforge.net/" FALSE "" "Required to handle RDF metadata in ODF")
 if(NOT Soprano_FOUND)
-    set(SHOULD_BUILD_RDF FALSE)
     set(SOPRANO_INCLUDE_DIR "")
-else(NOT Soprano_FOUND)
-    set(SHOULD_BUILD_RDF TRUE)
-   add_definitions( -DSHOULD_BUILD_RDF )
 endif(NOT Soprano_FOUND)
 
 
@@ -814,6 +832,10 @@ if(NOT SHARED_MIME_INFO_FOUND)
     calligra_disable_product(LIB_MSOOXML "SharedMimeInfo not found (needed to install mimetypes)")
 endif(NOT SHARED_MIME_INFO_FOUND)
 
+if(NOT Soprano_FOUND)
+    calligra_disable_product(RDF "Soprano not found")
+endif(NOT Soprano_FOUND)
+
 if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
@@ -923,6 +945,15 @@ calligra_drop_products_on_old_flag(words  WORDS_PART WORDS_APP)
 #############################################
 
 calligra_drop_unbuildable_products()
+
+
+#############################################
+####     Setup product-depending vars    ####
+#############################################
+
+if(SHOULD_BUILD_RDF)
+   add_definitions( -DSHOULD_BUILD_RDF )
+endif(SHOULD_BUILD_RDF)
 
 
  ###################

@@ -60,5 +60,5 @@ Name[zh_TW]=KSpread dBASE 匯入過濾程式
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-dbf
 X-KDE-Weight=1
-X-KDE-Library=dbaseimport
+X-KDE-Library=calligra_filter_dbase2kspread
 X-KDE-ServiceTypes=Calligra/Filter

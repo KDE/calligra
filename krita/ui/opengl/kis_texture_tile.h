@@ -28,16 +28,26 @@
 #include <QRectF>
 #include <opengl/kis_opengl.h>
 
+#if QT_VERSION >= 0x040700 && !defined(QT_OPENGL_ES)
+#define USE_PIXEL_BUFFERS
+#include <QGLBuffer>
+#endif
+
 
 struct KisGLTexturesInfo {
+
+    // real width and height
     int width;
     int height;
 
+    // width and height minus border padding?
     int effectiveWidth;
     int effectiveHeight;
 
+    // size of the border padding
     int border;
 
+    GLint internalFormat;
     GLint format;
     GLint type;
 };
@@ -60,7 +70,7 @@ public:
     };
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                   const GLvoid *fillData, FilterMode mode);
+                   const QByteArray &fillData, FilterMode mode);
     ~KisTextureTile();
 
     void update(const KisTextureTileUpdateInfo &updateInfo);
@@ -83,6 +93,9 @@ public:
 
 private:
     GLuint m_textureId;
+#ifdef USE_PIXEL_BUFFERS
+    QGLBuffer *m_glBuffer;
+#endif
 
     QRect m_tileRectInImagePixels;
     QRectF m_tileRectInTexturePixels;

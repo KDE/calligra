@@ -160,7 +160,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
             KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
-                                                      emptyTileData.constData(),
+                                                      emptyTileData,
                                                       mode);
             m_textureTiles.append(tile);
         }
@@ -232,7 +232,6 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
     KisOpenGL::makeContextCurrent();
     KIS_OPENGL_CLEAR_ERROR();
-
 
     KisTextureTileUpdateInfo tileInfo;
     foreach(tileInfo, glInfo->tileList) {
@@ -313,7 +312,7 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
     // TODO: make configurable
-    const GLint preferredTextureSize = 256;
+    const GLint preferredTextureSize = 1024;
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
@@ -329,9 +328,9 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 
 void KisOpenGLImageTextures::updateTextureFormat()
 {
-    m_texturesInfo.format = GL_RGBA8;
+    m_texturesInfo.internalFormat = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
-
+    m_texturesInfo.format = GL_BGRA;
 #ifdef HAVE_GLEW
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
@@ -343,11 +342,11 @@ void KisOpenGLImageTextures::updateTextureFormat()
         if (colorDepthId == Float16BitsColorDepthID) {
 
             if (GLEW_ARB_texture_float) {
-                m_texturesInfo.format = GL_RGBA16F_ARB;
+                m_texturesInfo.internalFormat = GL_RGBA16F_ARB;
                 dbgUI << "Using ARB half";
             }
             else if (GLEW_ATI_texture_float){
-                m_texturesInfo.format = GL_RGBA_FLOAT16_ATI;
+                m_texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
                 dbgUI << "Using ATI half";
             }
             else if (GLEW_ARB_half_float_pixel) {
@@ -357,23 +356,25 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 dbgUI << "Pixel type float";
                 m_texturesInfo.type = GL_FLOAT;
             }
+            m_texturesInfo.format = GL_RGBA;
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
 
             if (GLEW_ARB_texture_float) {
-                m_texturesInfo.format = GL_RGBA32F_ARB;
+                m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
                 m_texturesInfo.type = GL_FLOAT;
             }
             else if (GLEW_ATI_texture_float) {
-                m_texturesInfo.format = GL_RGBA_FLOAT32_ATI;
+                m_texturesInfo.internalFormat = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
                 m_texturesInfo.type = GL_FLOAT;
             }
+            m_texturesInfo.format = GL_RGBA;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
             dbgUI << "Using 16 bits rgba";
-            m_texturesInfo.format = GL_RGBA16;
+            m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
         }
     }
@@ -381,7 +382,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
         if (colorDepthId == Integer16BitsColorDepthID) {
             dbgUI << "Using conversion to 16 bits rgba";
-            m_texturesInfo.format = GL_RGBA16;
+            m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
         }
     }

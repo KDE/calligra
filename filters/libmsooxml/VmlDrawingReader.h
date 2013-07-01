@@ -27,7 +27,7 @@
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlImport.h>
 
-class MSOOXML_EXPORT VmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
+class KOMSOOXML_EXPORT VmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     //! Creates the context object.
@@ -40,7 +40,7 @@ public:
 };
 
 //! A class reading headers
-class MSOOXML_EXPORT VmlDrawingReader : public MSOOXML::MsooXmlCommonReader
+class KOMSOOXML_EXPORT VmlDrawingReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     explicit VmlDrawingReader(KoOdfWriters *writers);

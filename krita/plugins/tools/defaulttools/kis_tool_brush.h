@@ -37,8 +37,8 @@ class KisDoubleSliderSpinBox;
 class KisToolBrush : public KisToolFreehand
 {
     Q_OBJECT
-    Q_PROPERTY(int smoothnessQuality READ smoothnessQuality WRITE slotSetSmoothnessQuality NOTIFY smoothnessQualityChanged)
-    Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetSmoothnessFactor NOTIFY smoothnessFactorChanged)
+    Q_PROPERTY(int smoothnessQuality READ smoothnessQuality WRITE slotSetSmoothnessDistance NOTIFY smoothnessQualityChanged)
+    Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetTailAgressiveness NOTIFY smoothnessFactorChanged)
     Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
 
 public:
@@ -52,10 +52,11 @@ public:
     int smoothingType() const;
 
 public slots:
-    void slotSetSmoothnessQuality(int quality);
-    void slotSetSmoothnessFactor(qreal factor);
+    void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
+    void slotSetTailAgressiveness(qreal argh_rhhrr);
+    void setSmoothPressure(bool value);
 
 Q_SIGNALS:
     void smoothnessQualityChanged();
@@ -68,8 +69,9 @@ private:
 
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
-    KisDoubleSliderSpinBox *m_sliderSmoothnessFactor;
-    KisSliderSpinBox *m_sliderSmoothnessQuality;
+    KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
+    KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
+    QCheckBox *m_chkSmoothPressure;
 };
 
 

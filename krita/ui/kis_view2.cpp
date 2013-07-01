@@ -287,7 +287,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
 
-    if (koDocument()->localFilePath().isNull()) {
+    if (m_d->doc->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
         m_d->saveIncrementalBackup->setEnabled(false);
     }
@@ -1039,8 +1039,7 @@ void KisView2::slotDocumentSaved()
 
 void KisView2::slotSaveIncremental()
 {
-    KoDocument* pDoc = koDocument();
-    if (!pDoc) return;
+    if (!m_d->doc) return;
 
     bool foundVersion;
     bool fileAlreadyExists;
@@ -1048,7 +1047,7 @@ void KisView2::slotSaveIncremental()
     QString version = "000";
     QString newVersion;
     QString letter;
-    QString fileName = pDoc->localFilePath();
+    QString fileName = m_d->doc->localFilePath();
 
     // Find current version filenames
     // v v Regexp to find incremental versions in the filename, taking our backup scheme into account as well
@@ -1123,9 +1122,9 @@ void KisView2::slotSaveIncremental()
         KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental version");
         return;
     }
-    pDoc->setSaveInBatchMode(true);
+    m_d->doc->setSaveInBatchMode(true);
     m_d->doc->documentPart()->saveAs(fileName);
-    pDoc->setSaveInBatchMode(false);
+    m_d->doc->setSaveInBatchMode(false);
 
     if (shell()) {
         shell()->updateCaption();
@@ -1134,15 +1133,14 @@ void KisView2::slotSaveIncremental()
 
 void KisView2::slotSaveIncrementalBackup()
 {
-    KoDocument* pDoc = koDocument();
-    if (!pDoc) return;
+    if (!m_d->doc) return;
 
     bool workingOnBackup;
     bool fileAlreadyExists;
     QString version = "000";
     QString newVersion;
     QString letter;
-    QString fileName = pDoc->localFilePath();
+    QString fileName = m_d->doc->localFilePath();
 
     // First, discover if working on a backup file, or a normal file
     QRegExp regex("~\\d{1,4}[.]|~\\d{1,4}[a-z][.]");
@@ -1203,7 +1201,7 @@ void KisView2::slotSaveIncrementalBackup()
         // Navigate directory searching for latest backup version, ignore letters
         const quint8 HARDCODED_DIGIT_COUNT = 3;
         QString baseNewVersion = "000";
-        QString backupFileName = pDoc->localFilePath();
+        QString backupFileName = m_d->doc->localFilePath();
         QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
         regex2.indexIn(backupFileName);
         QStringList matches2 = regex2.capturedTexts();
@@ -1231,10 +1229,9 @@ void KisView2::slotSaveIncrementalBackup()
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow
-        pDoc->setSaveInBatchMode(true);
+        m_d->doc->setSaveInBatchMode(true);
         m_d->doc->documentPart()->saveAs(backupFileName);
-        m_d->doc->documentPart()->saveAs(fileName);
-        pDoc->setSaveInBatchMode(false);
+        m_d->doc->setSaveInBatchMode(false);
 
         if (shell()) {
             shell()->updateCaption();

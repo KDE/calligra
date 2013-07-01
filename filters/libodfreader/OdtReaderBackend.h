@@ -26,7 +26,7 @@
 #include <KoFilter.h>
 
 // this library
-#include "odfreader_export.h"
+#include "koodfreader_export.h"
 #include "OdtReader.h"
 
 
@@ -67,7 +67,7 @@ class OdfReaderContext;
  * inherit this class and only reimplement those functions that are
  * actually needed.
  */
-class ODFREADER_EXPORT OdtReaderBackend
+class KOODFREADER_EXPORT OdtReaderBackend
 {
  public:
     explicit OdtReaderBackend(OdfReaderContext *context);

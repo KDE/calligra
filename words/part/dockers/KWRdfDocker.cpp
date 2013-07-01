@@ -92,8 +92,8 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
                 this, SLOT(semanticObjectUpdated(hKoRdfSemanticItem)));
     }
     widgetDocker.semanticView->setCanvas(m_canvas);
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int,const QVariant&)),
-            this, SLOT(resourceChanged(int,const QVariant&)));
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,const QVariant&)),
+            this, SLOT(canvasResourceChanged(int,const QVariant&)));
 }
 
 void KWRdfDocker::unsetCanvas()
@@ -184,7 +184,7 @@ void KWRdfDocker::updateData()
     }
 }
 
-void KWRdfDocker::resourceChanged(int key, const QVariant &value)
+void KWRdfDocker::canvasResourceChanged(int key, const QVariant &value)
 {
     if (key == KoText::CurrentTextDocument) {
         m_textDocument = static_cast<QTextDocument*>(value.value<void*>());

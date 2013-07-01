@@ -672,7 +672,6 @@ ViewInfo View::defaultViewInfo( const QString &type ) const
     } else if ( type == "ScheduleEditor" ) {
         // This view is not used stand-alone atm
         vi.name = i18n( "Schedules" );
-        vi.tip = "";
     } else if ( type == "ScheduleHandlerView" ) {
         vi.name = i18n( "Schedules" );
         vi.tip = i18nc( "@info:tooltip", "Calculate and analyze project schedules" );

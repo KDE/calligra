@@ -38,5 +38,5 @@ Name[zh_TW]=KSpread Microsoft Excel 匯出過濾程式
 X-KDE-Import=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Export=application/vnd.ms-excel
 X-KDE-Weight=1
-X-KDE-Library=excelexport
+X-KDE-Library=calligra_filter_sheets2xls
 X-KDE-ServiceTypes=Calligra/Filter

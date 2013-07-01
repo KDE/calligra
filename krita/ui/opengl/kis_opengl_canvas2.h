@@ -1,4 +1,4 @@
-/*
+    /*
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -66,10 +66,7 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    /// renders the opengl part of the canvas
-    void renderCanvas();
-
-    /// renders the qpainter part of the canvas
+    void renderCanvasGL() const;
     void renderDecorations(QPainter *painter);
 
     void initializeCheckerShader();
@@ -83,11 +80,11 @@ public:
 
     void resizeGL(int width, int height);
     void initializeGL();
-    void paintGL();//Event(QPaintEvent *);
+    void paintGL();
 
 public:
 
-    QWidget * widget() {
+    QWidget *widget() {
         return this;
     }
 
@@ -101,8 +98,8 @@ private:
     struct Private;
     Private * const d;
 
-    void drawImage();
-    void drawCheckers();
+    void drawImage() const;
+    void drawCheckers() const;
 
 };
 

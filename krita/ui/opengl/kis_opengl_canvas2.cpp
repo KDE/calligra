@@ -81,12 +81,16 @@ public:
         : displayShader(0)
         , checkerShader(0)
         , displayFilter(0)
+        , checkerVertexBuffer(0)
+        , tileVertexBuffer(0)
     {
     }
 
     ~Private() {
         delete displayShader;
         delete checkerShader;
+        delete checkerVertexBuffer;
+        delete tileVertexBuffer;
     }
 
     KisOpenGLImageTexturesSP openGLImageTextures;
@@ -95,6 +99,9 @@ public:
     QGLShaderProgram *checkerShader;
 
     KisDisplayFilter *displayFilter;
+
+    QGLBuffer *checkerVertexBuffer;
+    QGLBuffer *tileVertexBuffer;
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
@@ -139,7 +146,6 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 void KisOpenGLCanvas2::initializeGL()
 {
     glEnable(GL_MULTISAMPLE);
-    KisConfig cfg;
 #ifndef Q_WS_WIN
     if (!VSyncWorkaround::tryDisableVSync(this)) {
         qWarning();
@@ -153,7 +159,7 @@ void KisOpenGLCanvas2::initializeGL()
         qWarning() << "WARNING: affect the quality of the final image, though.";
         qWarning();
 #endif
-        if (doubleBuffer() && !cfg.useOpenGLDoubleBuffering()) {
+        if (doubleBuffer()) {
             qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
             qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
             qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
@@ -173,16 +179,17 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
     coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
 }
 
-void KisOpenGLCanvas2::paintGL()//Event(QPaintEvent *event)
+void KisOpenGLCanvas2::paintGL()
 {
     makeCurrent();
-    renderCanvas();
+    renderCanvasGL();
+
     QPainter gc(this);
     renderDecorations(&gc);
     gc.end();
 }
 
-void KisOpenGLCanvas2::drawCheckers()
+void KisOpenGLCanvas2::drawCheckers() const
 {
     if(!d->checkerShader)
         return;
@@ -251,7 +258,7 @@ void KisOpenGLCanvas2::drawCheckers()
     d->checkerShader->release();
 }
 
-void KisOpenGLCanvas2::drawImage()
+void KisOpenGLCanvas2::drawImage() const
 {
     if(!d->displayShader)
         return;
@@ -402,18 +409,7 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
-bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
-{
-    return focusNextPrevChild(next);
-}
-
-void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
-{
-    QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-    drawDecorations(*painter, boundingRect);
-}
-
-void KisOpenGLCanvas2::renderCanvas()
+void KisOpenGLCanvas2::renderCanvasGL() const
 {
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();
@@ -422,6 +418,17 @@ void KisOpenGLCanvas2::renderCanvas()
 
     drawCheckers();
     drawImage();
+}
+
+void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
+{
+    QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
+    drawDecorations(*painter, boundingRect);
+}
+
+bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
+{
+    return focusNextPrevChild(next);
 }
 
 #include "kis_opengl_canvas2.moc"

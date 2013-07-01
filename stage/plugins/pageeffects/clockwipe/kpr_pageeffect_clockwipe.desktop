@@ -65,6 +65,7 @@ Comment[uk]=Ефект витирання по колу
 Comment[wa]=Efets d' pådje schover l' ôrlodje evoye
 Comment[x-test]=xxClock wipe Page Effectsxx
 Comment[zh_TW]=時鐘掃描頁面效果
+X-KDE-PluginInfo-Name=kpr_pageeffect_clockwipe
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_clockwipe

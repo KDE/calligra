@@ -128,11 +128,8 @@ public:
     int openGLFilteringMode() const;
     void setOpenGLFilteringMode(int filteringMode);
 
-    bool useOpenGLDoubleBuffering() const;
-    void setOpenGLDoubleBuffering(bool doubleBuffering);
-
-    qint32 maxNumberOfThreads() const;
-    void setMaxNumberOfThreads(qint32 numberOfThreads) const;
+    qint32 maxNumberOfThreads();
+    void setMaxNumberOfThreads(qint32 numberOfThreads);
 
     /// Maximum tiles in memory (this is a guideline, not absolute)
     qint32 maxTilesInMem() const;

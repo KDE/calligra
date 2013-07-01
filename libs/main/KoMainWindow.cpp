@@ -1452,7 +1452,7 @@ private:
     KoPageLayoutWidget *m_pageLayoutWidget;
 };
 
-KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
+KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
 {
     if (!rootView())
         return 0;

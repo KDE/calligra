@@ -119,7 +119,7 @@ public:
         {
             m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
             m_blackListFileNames = readBlackListFile();
-            m_tagObject = new KoResourceTagging(extensions);
+            m_tagObject = new KoResourceTagging(type, extensions);
         }
 
     virtual ~KoResourceServer()
@@ -392,7 +392,7 @@ public:
 
     void removeBlackListedFiles() {
         QStringList remainingFiles; // Files that can't be removed e.g. no rights will stay blacklisted
-        foreach(QString filename, m_blackListFileNames) {
+        foreach(const QString &filename, m_blackListFileNames) {
             QFile file( filename );
             if( ! file.remove() ) {
                 remainingFiles.append(filename);
@@ -461,7 +461,7 @@ public:
 #ifdef NEPOMUK
     void updateNepomukXML(bool nepomukOn)
     {
-        KoResourceTagging* tagObject = new KoResourceTagging(extensions());
+        KoResourceTagging* tagObject = new KoResourceTagging(type(),extensions());
         tagObject->setNepomukBool(nepomukOn);
         tagObject->updateNepomukXML(nepomukOn);
         delete tagObject;
@@ -488,7 +488,7 @@ protected:
     virtual QList<T*> sortedResources()
     {
         QMap<QString, T*> sortedNames;
-        foreach(QString name, m_resourcesByName.keys()) {
+        foreach(const QString &name, m_resourcesByName.keys()) {
             sortedNames.insert(name.toLower(), m_resourcesByName[name]);
         }
         return sortedNames.values();
