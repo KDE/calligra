@@ -28,7 +28,7 @@
 #include <KoFilter.h>
 
 // this library
-#include "odfreader_export.h"
+#include "koodfreader_export.h"
 
 
 class QByteArray;
@@ -67,7 +67,7 @@ class KoStore;
  * @see OdtReaderBackend
  */
 
-class ODFREADER_EXPORT OdfReaderContext 
+class KOODFREADER_EXPORT OdfReaderContext
 {
  public: 
     OdfReaderContext(KoStore *store);

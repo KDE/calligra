@@ -4,13 +4,13 @@ include_directories(
     ${LIBWPG_INCLUDE_DIR}
 )
 
-set(wpdimport_PART_SRCS WPDImport.cpp )
+set(wpd2odt_PART_SRCS WPDImport.cpp )
 
-kde4_add_plugin(wpdimport ${wpdimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_wpd2odt ${wpd2odt_PART_SRCS})
 
-target_link_libraries(wpdimport komain writerperfect)
+target_link_libraries(calligra_filter_wpd2odt komain writerperfect)
 
-install(TARGETS wpdimport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_wpd2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES words_wpd_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 

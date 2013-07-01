@@ -76,19 +76,19 @@ inline QString cmString(qreal cm)
     "0" and "" is converted to "0cm".
     @return empty string on error. */
 //! CASE #P505
-MSOOXML_EXPORT QString EMU_to_ODF(const QString& emuValue);
+KOMSOOXML_EXPORT QString EMU_to_ODF(const QString& emuValue);
 
 //! Converts TWIP Unit of Measurement to cm.
 /*! Converts value expressed in TWIPs  to ODF-compliant "0.000cm" unit.
     "0" and "" is converted to "0cm".
     @return empty string on error. */
-MSOOXML_EXPORT QString TWIP_to_ODF(const QString& twipValue);
+KOMSOOXML_EXPORT QString TWIP_to_ODF(const QString& twipValue);
 
 //! ECMA-376, 17.18.23 ST_EighthPointMeasure (Measurement in Eighths of a Point), p. 1540
 /*! Converts eighths of a point (equivalent to 1/576th of an inch) to point
     to ODF-compliant "0.000pt" unit.
     @return empty string on failure. */
-MSOOXML_EXPORT QString ST_EighthPointMeasure_to_ODF(const QString& value);
+KOMSOOXML_EXPORT QString ST_EighthPointMeasure_to_ODF(const QString& value);
 
 //! ECMA-376, 22.9.2.14 ST_TwipsMeasure (Measurement in Twentieths of a Point), p. 4339
 /*! Converts:
@@ -97,10 +97,10 @@ MSOOXML_EXPORT QString ST_EighthPointMeasure_to_ODF(const QString& value);
     The conversion's target is ODF-compliant "0.000xx" unit, where xx is "mm", "cm", "pt", etc.
     For case 1 it is always "pt".
     @return empty string on error. */
-MSOOXML_EXPORT QString ST_TwipsMeasure_to_pt(const QString& value);
+KOMSOOXML_EXPORT QString ST_TwipsMeasure_to_pt(const QString& value);
 
 //! Like ST_TwipsMeasure_to_pt() but for case 1 always converts to "cm".
-MSOOXML_EXPORT QString ST_TwipsMeasure_to_cm(const QString& value);
+KOMSOOXML_EXPORT QString ST_TwipsMeasure_to_cm(const QString& value);
 
 //! ECMA-376, 22.9.2.12 ST_PositiveUniversalMeasure (Positive Universal Measurement), p. 4340
 /*! Converts number+unit of measurement into ODF-compliant number+unit.
@@ -108,10 +108,10 @@ MSOOXML_EXPORT QString ST_TwipsMeasure_to_cm(const QString& value);
     Values with units mm, cm, in, pt, pi are just copied.
     Values with "pc" (another name for Pica) are replaced with "pi".
     @return empty string on error. */
-MSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_ODF(const QString& value);
+KOMSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_ODF(const QString& value);
 
 //! Like ST_PositiveUniversalMeasure_to_ODF(const QString&) but always converts to cm.
-MSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_cm(const QString& value);
+KOMSOOXML_EXPORT QString ST_PositiveUniversalMeasure_to_cm(const QString& value);
 
 } // Utils
 } // MSOOXML

@@ -1,12 +1,12 @@
 include_directories(${KOMAIN_INCLUDES})
 
-set(dbaseimport_PART_SRCS dbaseimport.cc dbase.cpp )
+set(dbase2kspread_PART_SRCS dbaseimport.cc dbase.cpp )
 
-kde4_add_plugin(dbaseimport ${dbaseimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_dbase2kspread ${dbase2kspread_PART_SRCS})
 
-target_link_libraries(dbaseimport komain)
+target_link_libraries(calligra_filter_dbase2kspread komain)
 
-install(TARGETS dbaseimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_dbase2kspread  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kspread_dbase_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

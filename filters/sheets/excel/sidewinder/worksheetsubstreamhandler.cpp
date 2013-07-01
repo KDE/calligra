@@ -738,7 +738,7 @@ void WorksheetSubStreamHandler::handleTxO(TxORecord* record)
     if (d->sharedObjects.rbegin() != d->sharedObjects.rend()) {
         NoteObject* no = dynamic_cast<NoteObject*>(d->sharedObjects.rbegin()->second);
         if (no) {
-            no->setNote(record->m_text);
+            no->setNote(record->text());
         }
     }
     if (d->lastOfficeArtObject) {
