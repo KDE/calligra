@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Plan/ViewPlugin
+Comment=GUI functionality for Plan
+[PropertyDef::X-Plan-Version]
+Type=int
