@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Plan Scripting Plugin
+X-KDE-ServiceTypes=Plan/ViewPlugin
+Type=Service
+X-KDE-Library=krossmoduleplan
+X-Plan-Version=28
