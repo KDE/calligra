@@ -117,10 +117,35 @@ Panel {
 
             color: (model.index === peekViewGrid.currentIndex) ? "#D7D7D7" : "transparent";
             shadow: false
-            textSize: 10;
-            image: model.image;
+            //textSize: 10;
+            //image: model.image;
+            //text: model.text;
 
             highlightColor: Constants.Theme.HighlightColor;
+
+            Image {
+                anchors {
+                    bottom: peekLabel.top
+                    top: parent.top;
+                    horizontalCenter: parent.horizontalCenter;
+                    margins: 2
+                }
+                source: model.image
+                fillMode: Image.PreserveAspectFit;
+            }
+            Label {
+                    id: peekLabel
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        bottom: parent.bottom
+                        margins: 2
+                    }
+                    elide: Text.ElideMiddle;
+                    text: model.text;
+                    font.pixelSize: 10
+                    horizontalAlignment: Text.AlignHCenter
+            }
 
             onClicked: {
                 presetsModel.activatePreset(index);
