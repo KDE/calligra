@@ -21,24 +21,24 @@
  *
  */
 
-#ifndef MSOOXML_EXPORT_H
-#define MSOOXML_EXPORT_H
+#ifndef KOMSOOXML_EXPORT_H
+#define KOMSOOXML_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-#ifndef MSOOXML_EXPORT
-# if defined(MAKE_MSOOXML_LIB)
+#ifndef KOMSOOXML_EXPORT
+# if defined(MAKE_KOMSOOXML_LIB)
 /* We are building this library */
-#  define MSOOXML_EXPORT KDE_EXPORT
+#  define KOMSOOXML_EXPORT KDE_EXPORT
 # else
 /* We are using this library */
-#  define MSOOXML_EXPORT KDE_IMPORT
+#  define KOMSOOXML_EXPORT KDE_IMPORT
 # endif
 #endif
 
-# ifndef MSOOXML_EXPORT_DEPRECATED
-#  define MSOOXML_EXPORT_DEPRECATED KDE_DEPRECATED MSOOXML_EXPORT
+# ifndef KOMSOOXML_EXPORT_DEPRECATED
+#  define KOMSOOXML_EXPORT_DEPRECATED KDE_DEPRECATED KOMSOOXML_EXPORT
 # endif
 
 #endif

@@ -30,7 +30,7 @@ kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
 
 target_link_libraries(
     calligra_filter_docx2odt
-    msooxml
+    komsooxml
     koodf2
     koodf
     komain
@@ -51,7 +51,7 @@ kde4_add_plugin(docxexport ${docxexport_PART_SRCS})
 
 target_link_libraries(
     docxexport
-    msooxml
+    komsooxml
     komain
     koodf
 )

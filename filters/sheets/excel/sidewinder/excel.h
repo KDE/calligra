@@ -796,15 +796,12 @@ public:
         VDistributed = 7
     };
 
-    QString m_text;
-    QSharedPointer<QTextDocument> m_doc; // NULL if plainText else it defines the richText
-
-    HorizontalAlignment halign;
-    VerticalAlignment valign;
-
     static const unsigned id;
     explicit TxORecord(Workbook *book=0);
+    // allowing copies for the hack for text support in shapes
+    TxORecord(const TxORecord&);
     virtual ~TxORecord();
+    TxORecord& operator=(const TxORecord&);
     virtual unsigned rtti() const {
         return this->id;
     }
@@ -813,6 +810,13 @@ public:
     }
     virtual void dump(std::ostream&) const;
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    const QString &text() const;
+    TxORecord::HorizontalAlignment hAlign() const;
+    TxORecord::VerticalAlignment vAlign() const;
+    const QTextDocument *richText() const;
+private:
+    class Private;
+    Private *d;
 };
 
 class MsoDrawingRecord : public Record

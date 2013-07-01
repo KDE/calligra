@@ -4007,7 +4007,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
     TRY_READ_ATTR_WITHOUT_NS(l)
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(t)
-//MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+//KOMSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
     if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
         // TODO: One way to approach this would be to first scale the image to the size of the slide
