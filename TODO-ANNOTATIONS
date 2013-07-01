@@ -4,6 +4,8 @@ Things left to do for the annotations branch
 Features
 --------
 
+ * Turn annotations on and off.  (In View menu)
+
  * connect the annotated text with the annotation shapeb
 
 Bugs
@@ -22,3 +24,5 @@ Bugs
 
 ---------------- Milestone 1: merge with master ----------------
 
+ * Save state of view_showNotes in the words rc file under .kde
+   (or before the merge?)
