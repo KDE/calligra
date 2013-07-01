@@ -26,6 +26,8 @@
 #include <KoResourceServerAdapter.h>
 #include <KoColorSet.h>
 
+class KisWorkspaceResource;
+class ColorSetChooser;
 class PaletteModel;
 class KisCanvas2;
 class Ui_WdgPaletteDock;
@@ -34,24 +36,26 @@ class PaletteDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     PaletteDockerDock();
+    virtual ~PaletteDockerDock();
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
 
 private slots:
+    void addColorForeground();
     void addColor();
     void removeColor();
     void entrySelected(QModelIndex index);
-    void activatedColorSet(int index);
-
-private:
     void setColorSet(KoColorSet* colorSet);
-    
+
+    void saveToWorkspace(KisWorkspaceResource* workspace);
+    void loadFromWorkspace(KisWorkspaceResource* workspace);
+private:    
     KisCanvas2 *m_canvas;
     Ui_WdgPaletteDock* m_wdgPaletteDock;
     PaletteModel *m_model;
     KoResourceServerAdapter<KoColorSet>* m_serverAdapter;
-    QString m_defaultPalette;
     KoColorSet* m_currentColorSet;
+    ColorSetChooser* m_colorSetChooser;
 };
 
 

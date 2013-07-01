@@ -24,7 +24,7 @@ kde4_add_plugin(calligra_filter_pptx2odp ${pptx2odp_PART_SRCS})
 
 target_link_libraries(
     calligra_filter_pptx2odp
-    msooxml
+    komsooxml
     koodf2
     koodf
     komain

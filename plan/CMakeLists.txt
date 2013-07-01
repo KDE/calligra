@@ -115,6 +115,10 @@ install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### KPlato executable ###############
 
+if(NOT RELEASE_BUILD)
+    add_definitions(-DMAINTANER_WANTED_SPLASH)
+endif(NOT RELEASE_BUILD)
+
 set(calligraplan_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligraplan.png")

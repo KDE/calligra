@@ -29,7 +29,7 @@
 #include <KoXmlStreamReader.h>
 
 // this library
-#include "odfreader_export.h"
+#include "koodfreader_export.h"
 
 
 class QSizeF;
@@ -62,7 +62,7 @@ class OdfReaderContext;
  * processing such as internal links, lists of embedded data such as
  * pictures.
  */
-class ODFREADER_EXPORT OdtReader
+class KOODFREADER_EXPORT OdtReader
 {
  public:
     OdtReader();
