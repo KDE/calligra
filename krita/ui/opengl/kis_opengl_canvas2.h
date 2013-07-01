@@ -66,7 +66,7 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    void renderCanvasGL() const;
+    void renderCanvas() const;
     void renderDecorations(QPainter *painter);
 
     void initializeCheckerShader();

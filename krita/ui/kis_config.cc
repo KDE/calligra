@@ -389,7 +389,7 @@ qint32 KisConfig::maxNumberOfThreads()
     return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());
 }
 
-void KisConfig::setMaxNumberOfThreads(qint32 maxThreads) const
+void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
 {
     m_cfg.writeEntry("maxthreads", maxThreads);
 }
