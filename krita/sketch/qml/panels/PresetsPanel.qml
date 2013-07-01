@@ -143,7 +143,7 @@ Panel {
                     }
                     elide: Text.ElideMiddle;
                     text: model.text;
-                    font.pixelSize: 10
+                    font.pixelSize: Constants.SmallFontSize
                     horizontalAlignment: Text.AlignHCenter
             }
 
