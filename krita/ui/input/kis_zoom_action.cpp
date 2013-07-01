@@ -20,7 +20,11 @@
 
 #include <QApplication>
 
+#include <limits>
+#include <cmath>
+
 #include <kis_canvas2.h>
+#include <kis_canvas_controller.h>
 
 #include "kis_cursor.h"
 #include <KoCanvasControllerWidget.h>
@@ -32,13 +36,36 @@
 class KisZoomAction::Private
 {
 public:
-    Private(KisZoomAction *qq) : q(qq), distance(0) {}
+    Private(KisZoomAction *qq) : q(qq), distance(0), lastDistance(0) {}
+
+    QPointF centerPoint(QTouchEvent* event);
+
     KisZoomAction *q;
     int distance;
     Shortcuts mode;
+    float lastDistance;
 
     void zoomTo(bool zoomIn, QEvent *event);
 };
+
+QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
+{
+    QPointF result;
+    int count = 0;
+
+    foreach (QTouchEvent::TouchPoint point, event->touchPoints()) {
+        if (point.state() != Qt::TouchPointReleased) {
+            result += point.screenPos();
+            count++;
+        }
+    }
+
+    if (count > 0) {
+        return result / count;
+    } else {
+        return QPointF();
+    }
+}
 
 void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
 {
@@ -111,6 +138,8 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
 
+    d->lastDistance = std::numeric_limits<float>::quiet_NaN();
+
     switch(shortcut) {
         case ZoomToggleShortcut:
             d->mode = (Shortcuts)shortcut;
@@ -135,6 +164,49 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
             inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
             break;
     }
+}
+
+void KisZoomAction::inputEvent( QEvent* event )
+{
+    qDebug() << Q_FUNC_INFO << "BEGIN";
+    switch (event->type()) {
+        case QEvent::TouchUpdate: {
+            qDebug() << "    We have a touch update event";
+
+            QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+
+            QPointF center = d->centerPoint(tevent);
+
+            qDebug() << "    Center is" << center;
+
+            int count = 0;
+            float dist = 0.0f;
+            foreach(const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
+                if (point.state() != Qt::TouchPointReleased) {
+                    count++;
+
+                    dist += (point.screenPos() - center).manhattanLength();
+                }
+            }
+
+            dist /= count;
+
+            qDebug() << "    Average distance from center is" << dist;
+
+            float delta = std::isnan(d->lastDistance) ? 0.f : dist - d->lastDistance;
+
+            qDebug() << "    Change in distance is" << delta;
+
+            qreal zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
+            static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), (zoom + delta) / zoom);
+            d->lastDistance = delta;
+        }
+        default:
+            break;
+    }
+
+    KisAbstractInputAction::inputEvent(event);
+    qDebug() << Q_FUNC_INFO << "END";
 }
 
 void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
