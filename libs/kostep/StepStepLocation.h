@@ -30,6 +30,7 @@ class StepStepLocation : public QObject
 public:
     explicit StepStepLocation(QObject *parent = 0);
     StepStepLocation(QTextCursor cursor, QObject *parent =0);
+    virtual ~StepStepLocation();
     operator QTextCursor();
 signals:
 

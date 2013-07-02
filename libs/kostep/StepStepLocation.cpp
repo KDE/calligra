@@ -30,8 +30,13 @@ StepStepLocation::StepStepLocation(QTextCursor cursor, QObject *parent):
   d->constructor(cursor);
 
 }
+StepStepLocation::~StepStepLocation()
+{
+  delete d;
+}
 
 StepStepLocation::operator QTextCursor()
 {
     return d->convertToQTextCursor();
 }
+

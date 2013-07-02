@@ -35,6 +35,7 @@ StepStepStack::StepStepStack(const StepStepStack& other):QAbstractListModel(0)
 
 StepStepStack::~StepStepStack()
 {
+  delete d;
 
 }
 

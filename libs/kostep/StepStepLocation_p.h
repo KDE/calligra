@@ -41,7 +41,7 @@ signals:
 public slots:
 private:
   QStack<int> location;
-  int getParentFrame(QTextFrame* frame);
+  int ParentFrame(QTextFrame* frame);
 
 };
 

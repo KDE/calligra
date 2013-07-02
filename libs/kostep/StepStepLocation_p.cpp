@@ -19,6 +19,7 @@
 #include "StepStepLocation_p.h"
 #include <QtGui/QTextBlock>
 #include <QtGui/QTextDocument>
+#include <QTextTable>
 #include <QtCore/QQueue>
 
 StepStepLocation_p::StepStepLocation_p(QObject *parent) :
@@ -29,15 +30,25 @@ StepStepLocation_p::StepStepLocation_p(QObject *parent) :
 void StepStepLocation_p::constructor(QTextCursor cursor)
 {
   QTextFrame* frame = cursor.currentFrame();
-  getParentFrame(frame);
+  ParentFrame(frame);
   QTextBlock Temp= cursor.block();
   QTextBlock* block = &Temp;
   int i=0;
-  foreach(QObject* ptr, frame->children())
+
+  QTextFrame::iterator itr;
+  for(itr = cursor.currentFrame()->begin(); itr != cursor.currentFrame()->end(); itr++)
   {
-    if(ptr == block)
+    if (cursor.block() == itr.currentBlock())
     {
       location.push(i);
+      if (cursor.currentTable())
+      {
+	
+
+      }
+      if(cursor.currentList())
+      {
+      }
       break;
     }
     i++;
@@ -62,22 +73,22 @@ QString StepStepLocation_p::ToString()
   return returnValue;
 
 }
-int StepStepLocation_p::getParentFrame(QTextFrame* frame)
+int StepStepLocation_p::ParentFrame(QTextFrame* frame)
 {
   QTextFrame* parentFrame = frame->parentFrame();
   if(parentFrame != parentFrame->document()->rootFrame())  {
-    getParentFrame(frame->parentFrame());
+    ParentFrame(frame->parentFrame());
   }
   else  {
-    QList<QObject*> children = parentFrame->children();
+    QTextFrame::iterator itr;
     int i=0;
-    foreach(QObject* ptr, children)
+    for(itr = parentFrame->begin(); itr != parentFrame->end(); itr++)
     {
-      if(ptr == dynamic_cast<QObject*>(frame)){
+      if(itr.currentFrame() == frame)
+      {
 	location.push(i);
-	return i;
+	break;
       }
-      i++;
     }
   }
   //shouldn't happen
