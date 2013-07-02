@@ -190,7 +190,7 @@ void CompositeOpModel::setView(QObject* newView)
     d->view = qobject_cast<KisView2*>( newView );
     if(d->view)
     {
-        connect(d->view->canvasBase()->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+        connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
         connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
                 this, SLOT(currentNodeChanged(KisLayerSP)));
