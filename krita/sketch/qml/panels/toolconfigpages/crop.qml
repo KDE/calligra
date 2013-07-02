@@ -44,9 +44,34 @@ Item {
             }
         }
     }
-    Column {
+    ExpandingListView {
+        id: cropDecorationList;
         anchors {
             top: cropTypeList.bottom;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        currentIndex: toolManager.currentTool.decoration !== undefined ? toolManager.currentTool.decoration : 0;
+        onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.decoration !== undefined) toolManager.currentTool.decoration = currentIndex;
+        model: ListModel {
+            ListElement {
+                text: "No decoration";
+            }
+            ListElement {
+                text: "Thirds";
+            }
+            ListElement {
+                text: "Fifths";
+            }
+            ListElement {
+                text: "Passport photo";
+            }
+        }
+    }
+    Column {
+        anchors {
+            top: cropDecorationList.bottom;
             left: parent.left;
             right: parent.right;
             margins: Constants.DefaultMargin;
