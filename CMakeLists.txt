@@ -1010,7 +1010,7 @@ add_subdirectory(plugins)
 add_subdirectory(servicetypes)
 add_subdirectory(devtools)
 add_subdirectory(extras)
-add_subdirectory(filters)
+#add_subdirectory(filters)
 add_subdirectory(data)
 
 macro_display_feature_log()
