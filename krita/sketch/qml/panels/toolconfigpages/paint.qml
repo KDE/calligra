@@ -159,7 +159,7 @@ Item {
                 Behavior on height { NumberAnimation { duration: 150; } }
                 width: parent.width;
                 text: "Smooth Pressure";
-                checked: toolManager.currentTool.smoothPressure
+                checked: toolManager.currentTool ? toolManager.currentTool.smoothPressure : false;
                 onCheckedChanged: if(toolManager.currentTool && toolManager.currentTool.smoothPressure !== undefined && toolManager.currentTool.smoothPressure !== checked) toolManager.currentTool.smoothPressure = checked;
             }
             Component.onCompleted: {
