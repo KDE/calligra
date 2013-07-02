@@ -49,12 +49,17 @@ int KisToolBrush::smoothingType() const
     return m_smoothingOptions.smoothingType;
 }
 
+bool KisToolBrush::smoothPressure() const
+{
+    return m_smoothingOptions.smoothPressure;
+}
+
 int KisToolBrush::smoothnessQuality() const
 {
     return m_smoothingOptions.smoothnessDistance;
 }
 
-int KisToolBrush::smoothnessFactor() const
+qreal KisToolBrush::smoothnessFactor() const
 {
     return m_smoothingOptions.tailAggressiveness;
 }

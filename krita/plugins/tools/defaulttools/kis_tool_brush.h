@@ -39,6 +39,7 @@ class KisToolBrush : public KisToolFreehand
     Q_OBJECT
     Q_PROPERTY(int smoothnessQuality READ smoothnessQuality WRITE slotSetSmoothnessDistance NOTIFY smoothnessQualityChanged)
     Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetTailAgressiveness NOTIFY smoothnessFactorChanged)
+    Q_PROPERTY(bool smoothPressure READ smoothPressure WRITE setSmoothPressure NOTIFY smoothPressureChanged)
     Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
 
 public:
@@ -48,7 +49,8 @@ public:
     QWidget * createOptionWidget();
 
     int smoothnessQuality() const;
-    int smoothnessFactor() const;
+    qreal smoothnessFactor() const;
+    bool smoothPressure() const;
     int smoothingType() const;
 
 public slots:
@@ -61,6 +63,7 @@ public slots:
 Q_SIGNALS:
     void smoothnessQualityChanged();
     void smoothnessFactorChanged();
+    void smoothPressureChanged();
     void smoothingTypeChanged();
 
 private:
