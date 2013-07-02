@@ -106,7 +106,7 @@ Item {
 
         Column {
             visible: fullView && toolManager.currentTool !== null && toolManager.currentTool.smoothingType !== undefined;
-            height: !visible ? 0 : (smoothnessTypeList.currentIndex < 2 ? smoothingLabel.height + smoothnessTypeList.height : smoothingLabel.height + smoothnessTypeList.height + smoothnessQualitySlider.height + smoothnessFactorSlider.height)
+            height: !visible ? 0 : (smoothnessTypeList.currentIndex < 2 ? smoothingLabel.height + smoothnessTypeList.height : smoothingLabel.height + smoothnessTypeList.height + smoothnessQualitySlider.height + smoothnessFactorSlider.height + smoothPressureCheck.height)
             width: parent.width;
             Label {
                 id: smoothingLabel
@@ -134,8 +134,9 @@ Item {
                 height: visible ? childrenRect.height : 0;
                 Behavior on height { NumberAnimation { duration: 150; } }
                 width: parent.width;
-                placeholder: "Quality";
-                min: 1; max: 100; decimals: 0;
+                placeholder: "Distance";
+                min: 3; max: 1000; decimals: 1;
+                useExponentialValue: true;
                 value: toolManager.currentTool.smoothnessQuality;
                 onValueChanged: if(toolManager.currentTool && toolManager.currentTool.smoothnessQuality !== undefined && toolManager.currentTool.smoothnessQuality !== value) toolManager.currentTool.smoothnessQuality = value;
             }
@@ -145,17 +146,28 @@ Item {
                 height: visible ? childrenRect.height : 0;
                 Behavior on height { NumberAnimation { duration: 150; } }
                 width: parent.width;
-                placeholder: "Weight"
+                placeholder: "Stroke Ending"
                 useExponentialValue: true;
-                min: 3; max: 1000; decimals: 1;
+                min: 0; max: 1; decimals: 2;
                 value: toolManager.currentTool.smoothnessFactor;
                 onValueChanged: if(toolManager.currentTool && toolManager.currentTool.smoothnessFactor !== undefined && toolManager.currentTool.smoothnessFactor !== value) toolManager.currentTool.smoothnessFactor = value;
+            }
+            CheckBox {
+                id: smoothPressureCheck;
+                visible: smoothnessTypeList.currentIndex === 2
+                height: visible ? Constants.DefaultFontSize + Constants.DefaultMargin * 4 : 0;
+                Behavior on height { NumberAnimation { duration: 150; } }
+                width: parent.width;
+                text: "Smooth Pressure";
+                checked: toolManager.currentTool.smoothPressure
+                onCheckedChanged: if(toolManager.currentTool && toolManager.currentTool.smoothPressure !== undefined && toolManager.currentTool.smoothPressure !== checked) toolManager.currentTool.smoothPressure = checked;
             }
             Component.onCompleted: {
                 if(toolManager.currentTool === null)
                     return;
                 smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
                 smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
+                smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
             }
             Connections {
                 target: toolManager;
@@ -164,6 +176,7 @@ Item {
                         return;
                     smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
                     smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
+                    smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
                 }
             }
         }
