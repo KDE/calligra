@@ -197,7 +197,7 @@ void KisZoomAction::inputEvent( QEvent* event )
 
             qDebug() << "    New zoom is" << zoom * delta;
 
-            static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), zoom * delta);
+            static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
             d->lastDistance = dist;
         }
         default:
