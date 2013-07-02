@@ -40,6 +40,7 @@ Q_SIGNALS:
     void forceHeightCHanged(bool newForce);
     void ratioChanged(double newRatio);
     void forceRatioChanged(bool newForce);
+    void decorationChanged(int newDecoration);
     
 public Q_SLOTS:
     void cropTypeChanged();
@@ -52,6 +53,7 @@ public Q_SLOTS:
     void forceHeightCHanged();
     void ratioChanged();
     void forceRatioChanged();
+    void decorationChanged();
 
 private:
     KisToolCrop* m_cropTool;

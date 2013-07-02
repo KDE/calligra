@@ -40,6 +40,7 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     connect(boolWidth, SIGNAL(toggled(bool)), SIGNAL(forceWidthChanged(bool)));
     connect(boolRatio, SIGNAL(toggled(bool)), SIGNAL(forceRatioChanged(bool)));
     connect(doubleRatio, SIGNAL(valueChanged(double)), SIGNAL(ratioChanged(double)));
+    connect(cmbDecor, SIGNAL(currentIndexChanged(int)), SIGNAL(decorationChanged(int)));
 
     connect(cropTool, SIGNAL(cropHeightChanged()), SLOT(cropHeightChanged()));
     connect(cropTool, SIGNAL(cropTypeChanged()), SLOT(cropTypeChanged()));
@@ -51,6 +52,7 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     connect(cropTool, SIGNAL(forceRatioChanged()), SLOT(forceRatioChanged()));
     connect(cropTool, SIGNAL(forceWidthChanged()), SLOT(forceWidthChanged()));
     connect(cropTool, SIGNAL(ratioChanged()), SLOT(ratioChanged()));
+    connect(cropTool, SIGNAL(decorationChanged()), SLOT(decorationChanged()));
 }
 
 void KisToolCropConfigWidget::cropHeightChanged()
@@ -119,4 +121,11 @@ void KisToolCropConfigWidget::ratioChanged()
     doubleRatio->blockSignals(true);
     doubleRatio->setValue(m_cropTool->ratio());
     doubleRatio->blockSignals(false);
+}
+
+void KisToolCropConfigWidget::decorationChanged()
+{
+    cmbDecor->blockSignals(true);
+    cmbDecor->setCurrentIndex(m_cropTool->decoration());
+    cmbDecor->blockSignals(false);
 }
