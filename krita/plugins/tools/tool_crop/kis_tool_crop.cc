@@ -116,6 +116,7 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     m_forceHeight = false;
     m_ratio = 0;
     m_forceRatio = false;
+    m_decoration = 1;
 }
 
 KisToolCrop::~KisToolCrop()
@@ -433,9 +434,8 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
         gc.setClipRect(borderRect, Qt::IntersectClip);
 
-        int d = 1; //TODO: Expose decoration option
-        if (d > 0) {
-            for (int i = decorsIndex[d-1]; i<decorsIndex[d]; i++) {
+        if (m_decoration > 0) {
+            for (int i = decorsIndex[m_decoration-1]; i<decorsIndex[m_decoration]; i++) {
                 drawDecorationLine(&gc, &(decors[i]), borderRect);
             }
         }
@@ -524,8 +524,18 @@ bool KisToolCrop::cropTypeSelectable() const
     return m_cropTypeSelectable;
 }
 
-void KisToolCrop::setDecoration(int /*i*/)
+int KisToolCrop::decoration() const
 {
+    return m_decoration;
+}
+
+void KisToolCrop::setDecoration(int i)
+{
+    // This shouldn't happen, but safety first
+    if(i < 0 || i > m_decorations.count()) 
+        return;
+    m_decoration = i;
+    emit decorationChanged();
     updateCanvasViewRect(boundingRect());
 }
 
@@ -767,7 +777,7 @@ QWidget* KisToolCrop::createOptionWidget()
     connect(optWidget, SIGNAL(forceWidthChanged(bool)), this, SLOT(setForceWidth(bool)));
     connect(optWidget, SIGNAL(ratioChanged(double)), this, SLOT(setRatio(double)));
     connect(optWidget, SIGNAL(forceRatioChanged(bool)), this, SLOT(setForceRatio(bool)));
-    connect(optWidget->cmbDecor, SIGNAL(currentIndexChanged(int)), this, SLOT(setDecoration(int)));
+    connect(optWidget, SIGNAL(decorationChanged(int)), this, SLOT(setDecoration(int)));
     optWidget->setFixedHeight(optWidget->sizeHint().height());
 
     return optWidget;

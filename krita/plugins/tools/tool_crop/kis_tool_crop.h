@@ -71,6 +71,7 @@ class KisToolCrop : public KisTool
     Q_PROPERTY(bool forceHeight READ forceHeight WRITE setForceHeight NOTIFY forceHeightCHanged);
     Q_PROPERTY(double ratio READ ratio WRITE setRatio NOTIFY ratioChanged);
     Q_PROPERTY(bool forceRatio READ forceRatio WRITE setForceRatio NOTIFY forceRatioChanged);
+    Q_PROPERTY(int decoration READ decoration WRITE setDecoration NOTIFY decorationChanged);
 
 public:
     enum CropToolType {
@@ -101,6 +102,7 @@ public:
     bool forceHeight() const;
     double ratio() const;
     bool forceRatio() const;
+    int decoration() const;
 
 signals:
     void cropTypeChanged();
@@ -113,6 +115,7 @@ signals:
     void forceHeightCHanged();
     void ratioChanged();
     void forceRatioChanged();
+    void decorationChanged();
 
 public slots:
 
@@ -132,6 +135,7 @@ public slots:
     void setForceHeight(bool force);
     void setRatio(double ratio, bool updateOthers = true);
     void setForceRatio(bool force);
+    void setDecoration(int i);
 
 private:
     QRectF boundingRect();
@@ -152,9 +156,6 @@ private:
     QRectF leftHandleRect(QRectF cropBorderRect);
     void drawDecorationLine(QPainter *p, DecorationLine *decorLine, QRectF rect);
 
-private slots:
-    void setDecoration(int i);
-
 private:
     QRect m_rectCrop; // Is the coordinate of the region to crop.
     QPoint m_dragStart;
@@ -173,6 +174,7 @@ private:
     bool m_forceHeight;
     double m_ratio;
     bool m_forceRatio;
+    int m_decoration;
 
     enum handleType {
         None = 0,
