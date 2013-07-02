@@ -20,9 +20,6 @@
 
 #include <QApplication>
 
-#include <limits>
-#include <cmath>
-
 #include <kis_canvas2.h>
 #include <kis_canvas_controller.h>
 
@@ -32,11 +29,10 @@
 #include <kis_view2.h>
 #include "kis_input_manager.h"
 
-
 class KisZoomAction::Private
 {
 public:
-    Private(KisZoomAction *qq) : q(qq), distance(0), lastDistance(0) {}
+    Private(KisZoomAction *qq) : q(qq), distance(0), lastDistance(0.f) {}
 
     QPointF centerPoint(QTouchEvent* event);
 
@@ -138,7 +134,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
 
-    d->lastDistance = std::numeric_limits<float>::quiet_NaN();
+    d->lastDistance = 0.f;
 
     switch(shortcut) {
         case ZoomToggleShortcut:
@@ -193,13 +189,16 @@ void KisZoomAction::inputEvent( QEvent* event )
 
             qDebug() << "    Average distance from center is" << dist;
 
-            float delta = std::isnan(d->lastDistance) ? 0.f : dist - d->lastDistance;
+            float delta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
 
-            qDebug() << "    Change in distance is" << delta;
+            qDebug() << "    Delta is" << delta;
 
             qreal zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
-            static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), (zoom + delta) / zoom);
-            d->lastDistance = delta;
+
+            qDebug() << "    New zoom is" << zoom * delta;
+
+            static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), zoom * delta);
+            d->lastDistance = dist;
         }
         default:
             break;
