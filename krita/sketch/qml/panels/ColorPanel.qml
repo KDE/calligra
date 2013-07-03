@@ -30,6 +30,11 @@ Panel {
             id: swatch;
             height: parent.height;
             width: height;
+            onChooseBGChanged: {
+                if(toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+                    toolManager.currentTool.toForeground = !swatch.chooseBG;
+                }
+            }
         },
         Button {
             id: colorPicker;
@@ -61,6 +66,14 @@ Panel {
             onClicked: colorSelectorPeek.visible = !colorSelectorPeek.visible;
         }
     ]
+    Connections {
+        target: toolManager;
+        onToolChanged: {
+            if(toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+                toolManager.currentTool.toForeground = !swatch.chooseBG;
+            }
+        }
+    }
 
     PaletteColorsModel {
         id: paletteColorsModel;
