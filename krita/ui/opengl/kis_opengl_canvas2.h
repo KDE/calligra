@@ -66,11 +66,10 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    void renderCanvas() const;
-    void renderDecorations(QPainter *painter);
-
     void initializeCheckerShader();
     void initializeDisplayShader();
+    void renderCanvasGL() const;
+    void renderDecorations(QPainter *painter);
 
 private slots:
     void slotConfigChanged();

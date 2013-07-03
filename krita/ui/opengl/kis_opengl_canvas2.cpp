@@ -182,8 +182,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 void KisOpenGLCanvas2::paintGL()
 {
     makeCurrent();
-    renderCanvas();
-
+    renderCanvasGL();
     QPainter gc(this);
     renderDecorations(&gc);
     gc.end();
@@ -409,7 +408,7 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
-void KisOpenGLCanvas2::renderCanvas() const
+void KisOpenGLCanvas2::renderCanvasGL() const
 {
     // Draw the border (that is, clear the whole widget to the border color)
     QColor widgetBackgroundColor = borderColor();

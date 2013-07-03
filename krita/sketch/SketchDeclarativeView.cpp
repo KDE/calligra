@@ -86,7 +86,7 @@ void SketchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect
             m_canvasWidget->initializeDisplayShader();
             m_GLInitialized = true;
         }
-        m_canvasWidget->renderCanvas();
+        m_canvasWidget->renderCanvasGL();
         m_canvasWidget->renderDecorations(painter);
     }
     else {
