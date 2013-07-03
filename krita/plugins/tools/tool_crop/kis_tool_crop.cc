@@ -97,7 +97,8 @@ DecorationLine decors[18] =
     {QPointF(0.35/0.45, 0.0),QPointF(0.35/0.45, 1.0), DecorationLine::Height, DecorationLine::Height, DecorationLine::Height, DecorationLine::Height}
 };
 
-int decorsIndex[4] = {0,4,12,18};
+#define DECORATION_COUNT 4
+int decorsIndex[DECORATION_COUNT] = {0,4,12,18};
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
@@ -532,7 +533,7 @@ int KisToolCrop::decoration() const
 void KisToolCrop::setDecoration(int i)
 {
     // This shouldn't happen, but safety first
-    if(i < 0 || i > m_decorations.count()) 
+    if(i < 0 || i > DECORATION_COUNT)
         return;
     m_decoration = i;
     emit decorationChanged();
