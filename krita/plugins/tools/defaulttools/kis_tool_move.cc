@@ -235,7 +235,7 @@ QWidget* KisToolMove::createOptionWidget()
     connect(m_optionsWidget->radioGroup, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
 
-    connect(m_optionsWidget, SIGNAL(sigConfigurationChanged()), SLOT(endStroke()));
+    //connect(m_optionsWidget, SIGNAL(sigConfigurationChanged()), SLOT(endStroke()));
 
     return m_optionsWidget;
 }
