@@ -79,13 +79,13 @@ public slots:
     void cutToNewLayer();
     void selectAll();
     void deselect();
+    void invert();
     void clear();
     void fillForegroundColor();
     void fillBackgroundColor();
     void fillPattern();
     void reselect();
     void convertToVectorSelection();
-    void invert();
 
     void copySelectionToNewLayer();
     void toggleDisplaySelection();
