@@ -389,6 +389,12 @@ void KisSelectionManager::deselect()
     factory.run(m_view);
 }
 
+void KisSelectionManager::invert()
+{
+    if(m_invert)
+        m_invert->trigger();
+}
+
 void KisSelectionManager::reselect()
 {
     KisReselectActionFactory factory;
