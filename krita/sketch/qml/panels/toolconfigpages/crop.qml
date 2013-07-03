@@ -53,7 +53,7 @@ Item {
             margins: Constants.DefaultMargin;
         }
         currentIndex: toolManager.currentTool.decoration !== undefined ? toolManager.currentTool.decoration : 0;
-        onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.decoration !== undefined) toolManager.currentTool.decoration = currentIndex;
+        onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.decoration !== undefined && toolManager.currentTool.decoration !== currentIndex) toolManager.currentTool.decoration = currentIndex;
         model: ListModel {
             ListElement {
                 text: "No decoration";
@@ -82,42 +82,49 @@ Item {
             id: widthInput;
             width: parent.width;
             placeholder: "Width";
-            //min: 0; max: sketchView.doc.image.width(); decimals: 0;
-            min: 0; max: 100000; decimals: 0;
+            min: 0; max: sketchView.imageWidth; decimals: 0;
             value: toolManager.currentTool.cropWidth !== undefined ? toolManager.currentTool.cropWidth : 0;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.cropWidth = value;
+            onValueChanged: if(toolManager.currentTool.cropWidth !== value) toolManager.currentTool.cropWidth = value;
         }
         RangeInput {
             id: heightInput;
             width: parent.width;
             placeholder: "Height";
-            //min: 0; max: sketchView.doc.image.width(); decimals: 0;
-            min: 0; max: 100000; decimals: 0;
+            min: 0; max: sketchView.imageHeight; decimals: 0;
             value: toolManager.currentTool.cropHeight !== undefined ? toolManager.currentTool.cropHeight : 0;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.cropHeight = value;
+            onValueChanged: if(toolManager.currentTool.cropHeight !== value) toolManager.currentTool.cropHeight = value;
         }
-        RangeInput {
+        /*RangeInput {
+            id: ratioInput;
             width: parent.width;
             placeholder: "Ratio";
-            min: 0; max: 9999; decimals: 2;
+            min: 0; max: 2000; decimals: 2;
             value: toolManager.currentTool.ratio !== undefined ? toolManager.currentTool.ratio : 0;
             onValueChanged: if(toolManager.currentTool) toolManager.currentTool.ratio = value;
-        }
+        }*/
         RangeInput {
+            id: xInput;
             width: parent.width;
             placeholder: "X";
-            //min: 0; max: sketchView.doc.image.width(); decimals: 0;
-            min: 0; max: 100000; decimals: 0;
+            min: 0; max: sketchView.imageWidth; decimals: 0;
             value: toolManager.currentTool.cropX !== undefined ? toolManager.currentTool.cropX : 0;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.cropX = value;
+            onValueChanged: if(toolManager.currentTool.cropX !== value) toolManager.currentTool.cropX = value;
         }
         RangeInput {
+            id: yInput;
             width: parent.width;
             placeholder: "Y";
-            //min: 0; max: sketchView.doc.image.width(); decimals: 0;
-            min: 0; max: 100000; decimals: 0;
+            min: 0; max: sketchView.imageHeight; decimals: 0;
             value: toolManager.currentTool.cropY !== undefined ? toolManager.currentTool.cropY : 0;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.cropY = value;
+            onValueChanged: if(toolManager.currentTool.cropY !== value) toolManager.currentTool.cropY = value;
         }
+    }
+    Connections {
+        target: toolManager.currentTool;
+        onCropWidthChanged: if(widthInput.value !== toolManager.currentTool.cropWidth) widthInput.value = toolManager.currentTool.cropWidth;
+        onCropHeightChanged: if(heightInput.value !== toolManager.currentTool.cropHeight) heightInput.value = toolManager.currentTool.cropHeight;
+        //onRatioChanged: if(ratioInput.value !== toolManager.currentTool.ratio) ratioInput.value = toolManager.currentTool.ratio;
+        onCropXChanged: if(xInput.value !== toolManager.currentTool.cropX) xInput.value = toolManager.currentTool.cropX;
+        onCropYChanged: if(yInput.value !== toolManager.currentTool.cropY) yInput.value = toolManager.currentTool.cropY;
     }
 }
