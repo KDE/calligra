@@ -33,6 +33,9 @@ class KisSketchView : public QDeclarativeItem
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged);
     Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged);
 
+    Q_PROPERTY(int imageHeight READ imageHeight NOTIFY imageSizeChanged)
+    Q_PROPERTY(int imageWidth READ imageWidth NOTIFY imageSizeChanged)
+
 public:
     KisSketchView(QDeclarativeItem* parent = 0);
     virtual ~KisSketchView();
@@ -54,6 +57,9 @@ public:
 
     bool canUndo() const;
     bool canRedo() const;
+
+    int imageHeight() const;
+    int imageWidth() const;
 public Q_SLOTS:
     void undo();
     void redo();
@@ -81,6 +87,7 @@ Q_SIGNALS:
     void savingFinished();
     void canUndoChanged();
     void canRedoChanged();
+    void imageSizeChanged();
 
 protected:
     virtual bool sceneEvent(QEvent* event);

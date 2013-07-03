@@ -250,6 +250,20 @@ bool KisSketchView::canRedo() const
     return false;
 }
 
+int KisSketchView::imageHeight() const
+{
+    if(d->doc)
+        return d->doc->image()->height();
+    return 0;
+}
+
+int KisSketchView::imageWidth() const
+{
+    if(d->doc)
+        return d->doc->image()->width();
+    return 0;
+}
+
 void KisSketchView::undo()
 {
     d->undoAction->trigger();
@@ -329,6 +343,7 @@ void KisSketchView::documentChanged()
     connect(d->view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(zoomChanged()));
     connect(d->canvas, SIGNAL(updateCanvasRequested(QRect)), SLOT(imageUpdated(QRect)));
     connect(d->doc->image()->signalRouter(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(removeNodeAsync(KisNodeSP)));
+    connect(d->doc->image()->signalRouter(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SIGNAL(imageSizeChanged()));
 
     SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
     if (v) {
