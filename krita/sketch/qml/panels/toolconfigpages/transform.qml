@@ -29,12 +29,16 @@ Column {
         toolManager.currentTool.applyTransform();
     }
 
-    anchors.fill: parent;
+    height: buttonRow.height + freeModeOptions.height + Constants.DefaultMargin * 5
     anchors.margins: Constants.DefaultMargin;
     spacing: Constants.DefaultMargin;
 
+    Item {
+        height: Constants.DefaultMargin;
+        width: parent.width;
+    }
     Row {
-        height: childrenRect.height;
+        id: buttonRow;
         anchors.horizontalCenter: parent.horizontalCenter;
         spacing: Constants.DefaultMargin;
 
@@ -102,7 +106,7 @@ Column {
 
     Item {
         width: parent.width;
-        height: childrenRect.height;
+        height: freeModeOptions.height;
 
         Column {
             id: freeModeOptions;
@@ -112,12 +116,12 @@ Column {
             opacity: freeModeButton.checked ? 1.0 : 0.0;
             Behavior on opacity { NumberAnimation { } }
 
-            Label { text: "Translation" }
+            Label { height: font.pixelSize + Constants.DefaultMargin; text: "Translation" }
 
             PanelTextField { id: translateX; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "X" }
             PanelTextField { id: translateY; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Y" }
 
-            Label { text: "Rotation" }
+            Label { height: font.pixelSize + Constants.DefaultMargin; text: "Rotation" }
 
 //             ExpandingListView {
 //                 width: parent.width;
@@ -139,12 +143,12 @@ Column {
             PanelTextField { id: rotateY; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Y" }
             PanelTextField { id: rotateZ; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Z" }
 
-            Label { text: "Scaling" }
+            Label { height: font.pixelSize + Constants.DefaultMargin; text: "Scaling" }
 
             PanelTextField { id: scaleX; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "X" }
             PanelTextField { id: scaleY; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Y" }
 
-            Label { text: "Shear" }
+            Label { height: font.pixelSize + Constants.DefaultMargin; text: "Shear" }
 
             PanelTextField { id: shearX; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "X" }
             PanelTextField { id: shearY; onTextChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; } placeholder: "Y" }
@@ -230,6 +234,7 @@ Column {
                 id: warpTypeCombo;
 
                 width: parent.width;
+                expandedHeight: Constants.GridHeight * 2
 
                 onCurrentIndexChanged: { parent.preventUpdateText = true; parent.updateTransform(); parent.preventUpdateText = false; }
 
