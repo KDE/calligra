@@ -75,7 +75,7 @@ Item {
             anchors.fill: parent;
             anchors.margins: 2;
             color: "white";
-            radius: base.height / 2 - 1;
+            radius: base.height === base.width ? base.height / 2 - 1 : base.radius;
         }
 
         Image {
