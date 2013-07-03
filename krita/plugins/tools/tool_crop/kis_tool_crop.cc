@@ -133,8 +133,12 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
         sel->updateProjection();
         m_rectCrop = sel->selectedExactRect();
         validateSelection();
-        updateCanvasPixelRect(image()->bounds());
+    } else {
+        QRect bounds = image()->bounds();
+        m_rectCrop = QRect(bounds.width() / 4, bounds.height() / 4, bounds.width() / 2, bounds.height() / 2);
+        validateSelection();
     }
+    updateCanvasPixelRect(image()->bounds());
 
     //pixel layer
     if(currentNode() && currentNode()->paintDevice()) {
