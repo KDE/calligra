@@ -68,6 +68,16 @@ Item {
             opacity: 0.3
         }
 
+        Rectangle {
+            id: checkedVisualiser;
+            opacity: base.checked ? 0.7 : 0;
+            Behavior on opacity { NumberAnimation { duration: 150; } }
+            anchors.fill: parent;
+            anchors.margins: 2;
+            color: "white";
+            radius: base.height / 2 - 1;
+        }
+
         Image {
             id: icon;
             anchors.fill: parent;
@@ -75,6 +85,7 @@ Item {
             fillMode: Image.PreserveAspectFit;
             smooth: true;
             opacity: base.enabled ? 1 : 0.7;
+            Behavior on opacity { NumberAnimation { duration: 150; } }
 
             sourceSize.width: width > height ? height : width;
             sourceSize.height: width > height ? height : width;
@@ -124,12 +135,6 @@ Item {
     states: State {
         name: "pressed";
         when: (mouse.pressed || base.checked) && enabled;
-
-
-        PropertyChanges {
-            target: icon
-            opacity: 0.600
-        }
 
         PropertyChanges {
             target: mouse
