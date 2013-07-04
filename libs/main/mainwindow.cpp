@@ -62,13 +62,6 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags f )
 {
 }
 
-#ifndef KDE_NO_DEPRECATED
-MainWindow::MainWindow( QWidget* parent, const char *name, Qt::WindowFlags f )
-  : KXmlGuiWindow( parent, f ),d(new MainWindowPrivate())
-{
-  setObjectName( name );
-}
-#endif
 
 MainWindow::~MainWindow()
 {
