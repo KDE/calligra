@@ -43,7 +43,7 @@ class MainWindowPrivate;
  * KMainWindow as host: the builder and servant interface (for menu
  * merging).
  */
-class KOMAIN_EXPORT MainWindow : public KXmlGuiWindow, virtual public PartBase
+class KOMAIN_EXPORT MainWindow : public KXmlGuiWindow
 {
   Q_OBJECT
  public:

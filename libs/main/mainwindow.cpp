@@ -60,7 +60,6 @@ public:
 MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags f )
     : KXmlGuiWindow( parent, f ), d(new MainWindowPrivate())
 {
-  PartBase::setPartObject( this );
 }
 
 #ifndef KDE_NO_DEPRECATED
@@ -68,7 +67,6 @@ MainWindow::MainWindow( QWidget* parent, const char *name, Qt::WindowFlags f )
   : KXmlGuiWindow( parent, f ),d(new MainWindowPrivate())
 {
   setObjectName( name );
-  PartBase::setPartObject( this );
 }
 #endif
 

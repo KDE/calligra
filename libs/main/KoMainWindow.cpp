@@ -244,7 +244,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
             this, SLOT(slotActivePartChanged(KoParts::Part *)));
 
     if (componentData.isValid()) {
-        setComponentData(componentData, false);   // don't load plugins! we don't want
+        setComponentData(componentData);   // don't load plugins! we don't want
         // the part's plugins with this shell, even though we are using the
         // part's componentData! (Simon)
         KGlobal::setActiveComponent(componentData);
