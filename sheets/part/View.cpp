@@ -74,7 +74,6 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <ktoolinvocation.h>
-#include <event.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <knotifyconfigwidget.h>
@@ -710,7 +709,6 @@ void View::initView()
 
     // Setup the map model.
     d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas, this);
-    installEventFilter(d->mapViewModel); // listen to KoParts::GUIActivateEvent
     connect(d->mapViewModel, SIGNAL(addCommandRequested(KUndo2Command*)),
             doc(), SLOT(addCommand(KUndo2Command*)));
     connect(d->mapViewModel, SIGNAL(activeSheetChanged(Sheet*)),
@@ -1940,24 +1938,6 @@ void View::menuCalc(bool)
 QWidget* View::canvas() const
 {
     return d->canvas;
-}
-
-void View::guiActivateEvent(KoParts::GUIActivateEvent *ev)
-{
-    // We need a width/height > 0 for setting the initial position properly.
-    // This is not always the case from the beginning of the View's lifetime.
-    if (ev->activated()) {
-        initialPosition();
-    }
-
-    if (d->activeSheet) {
-        if (ev->activated()) {
-            if (d->calcLabel)
-                calcStatusBarOp();
-        }
-    }
-
-    KoView::guiActivateEvent(ev);
 }
 
 void View::popupTabBarMenu(const QPoint & _point)

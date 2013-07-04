@@ -20,7 +20,6 @@
 
 #include "part.h"
 #include <kprotocolinfo.h>
-#include "event.h"
 #include "partmanager.h"
 
 #include <QtGui/QApplication>
@@ -216,28 +215,6 @@ bool Part::isSelectable() const
     Q_D(const Part);
 
     return d->m_bSelectable;
-}
-
-void Part::customEvent( QEvent *ev )
-{
-    if ( GUIActivateEvent::test( ev ) )  {
-        guiActivateEvent( static_cast<GUIActivateEvent *>(ev) );
-        return;
-    }
-
-    QObject::customEvent( ev );
-}
-
-void Part::partActivateEvent( PartActivateEvent * )
-{
-}
-
-void Part::partSelectEvent( PartSelectEvent * )
-{
-}
-
-void Part::guiActivateEvent( GUIActivateEvent * )
-{
 }
 
 QWidget *Part::hostContainer( const QString &containerName )
@@ -606,20 +583,6 @@ void ReadOnlyPartPrivate::_k_slotGotMimeType(KIO::Job *job, const QString &mime)
             if (m_mimeType.isEmpty()) {
         m_mimeType = mime;
         m_bAutoDetectedMime = true;
-    }
-}
-
-void ReadOnlyPart::guiActivateEvent( GUIActivateEvent * event )
-{
-    Q_D(ReadOnlyPart);
-
-    if (event->activated())
-    {
-        if (!d->m_url.isEmpty())
-        {
-            kDebug(1000) << d->m_url;
-            emit setWindowCaption( d->m_url.prettyUrl() );
-        } else emit setWindowCaption( "" );
     }
 }
 

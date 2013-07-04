@@ -91,7 +91,6 @@
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
-#include <event.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 

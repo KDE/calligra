@@ -57,13 +57,6 @@ public Q_SLOTS:
      */
     void setActiveSheet(Sheet* sheet);
 
-protected:
-    /**
-     * Plugs the action lists in, if a KoParts::GUIActivateEvent is received.
-     * \return always \c false
-     */
-    bool eventFilter(QObject *object, QEvent *event);
-
 private Q_SLOTS:
     /**
      * Adds \p sheet to the goto sheet actions.

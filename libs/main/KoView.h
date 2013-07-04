@@ -24,7 +24,6 @@
 #include <QWidget>
 #include <kxmlguiclient.h>
 #include "komain_export.h"
-#include <event.h>
 
 class KoPart;
 class KoDocument;
@@ -319,17 +318,6 @@ public slots:
     void slotUpdateAuthorProfileActions();
 
 protected:
-    /**
-     * This method handles three events: KoParts::PartActivateEvent, KoParts::PartSelectEvent
-     * and KoParts::GUIActivateEvent.
-     * The respective handlers are called if such an event is found.
-     */
-    virtual void customEvent(QEvent *ev);
-
-    /**
-     * Handles the event KoParts::GUIActivateEvent.
-     */
-    virtual void guiActivateEvent(KoParts::GUIActivateEvent *);
 
     /**
        Generate a name for this view.

@@ -19,13 +19,13 @@
 */
 
 #include "partmanager.h"
-#include "event.h"
 #include "part.h"
 #include <kglobal.h>
 #include <kdebug.h>
 
-#include <QtGui/QApplication>
-#include <QtGui/QScrollBar>
+#include <QApplication>
+#include <QScrollBar>
+#include <QMouseEvent>
 #include <kcomponentdata.h>
 
 //#define DEBUG_PARTMANAGER

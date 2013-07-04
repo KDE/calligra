@@ -52,9 +52,6 @@ namespace KoParts
 
 class PartManager;
 class PartPrivate;
-class PartActivateEvent;
-class PartSelectEvent;
-class GUIActivateEvent;
 class PartBasePrivate;
 
 /**
@@ -201,34 +198,6 @@ protected:
     virtual void setWidget( QWidget * widget );
 
     /**
-     * @internal
-     */
-    virtual void customEvent( QEvent *event );
-
-    /**
-     * Convenience method which is called when the Part received a PartActivateEvent .
-     * Reimplement this if you don't want to reimplement event and test for the event yourself
-     * or even install an event filter.
-     */
-    virtual void partActivateEvent( PartActivateEvent *event );
-
-    /**
-     * Convenience method which is called when the Part received a
-     * PartSelectEvent .
-     * Reimplement this if you don't want to reimplement event and
-     * test for the event yourself or even install an event filter.
-     */
-    virtual void partSelectEvent( PartSelectEvent *event );
-
-    /**
-     * Convenience method which is called when the Part received a
-     * GUIActivateEvent .
-     * Reimplement this if you don't want to reimplement event and
-     * test for the event yourself or even install an event filter.
-     */
-    virtual void guiActivateEvent( GUIActivateEvent *event );
-
-    /**
      * Convenience method for KXMLGUIFactory::container.
      * @return a container widget owned by the Part's GUI.
      */
@@ -279,8 +248,7 @@ class OpenUrlArgumentsPrivate;
  *
  * ReadOnlyPart handles the window caption by setting it to the current URL
  * (set in openUrl(), and each time the part is activated).
- * If you want another caption, set it in openFile() and
- * (if the part might ever be used with a part manager) in guiActivateEvent()
+ * If you want another caption, set it in openFile()
  */
 class KOMAIN_EXPORT ReadOnlyPart : public Part
 {
@@ -406,18 +374,6 @@ protected:
      * @internal
      */
     void abortLoad();
-
-    /**
-     * Reimplemented from Part, so that the window caption is set to
-     * the current url (decoded) when the part is activated
-     * This is the usual behavior in 99% of the apps
-     * Reimplement if you don't like it - test for event->activated() !
-     *
-     * Technical note : this is done with GUIActivateEvent and not with
-     * PartActivateEvent because it's handled by the mainwindow
-     * (which gets the even after the PartActivateEvent events have been sent)
-     */
-    virtual void guiActivateEvent( GUIActivateEvent *event );
 
     /**
      * @internal

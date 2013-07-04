@@ -353,7 +353,6 @@ protected: // reimplementations
     virtual void keyPressEvent(QKeyEvent * _ev);
     // KoView interface
     virtual void updateReadWrite(bool readwrite);
-    virtual void guiActivateEvent(KoParts::GUIActivateEvent *ev);
     virtual KoPrintJob * createPrintJob();
 public:
     virtual KoZoomController *zoomController() const;

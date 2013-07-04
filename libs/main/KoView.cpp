@@ -45,7 +45,6 @@
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <event.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
@@ -362,32 +361,6 @@ int KoView::canvasXOffset() const
 int KoView::canvasYOffset() const
 {
     return 0;
-}
-
-void KoView::customEvent(QEvent *ev)
-{
-    if (KoParts::GUIActivateEvent::test(ev)) {
-        guiActivateEvent((KoParts::GUIActivateEvent*)ev);
-    }
-}
-
-
-void KoView::guiActivateEvent(KoParts::GUIActivateEvent * ev)
-{
-    qDebug() << "guiActivateEvent";
-
-    KStatusBar * sb = statusBar();
-    if (!sb)
-        return;
-    int itemCount = d->statusBarItems.count();
-    for (int i = 0; i < itemCount; ++i) {
-        KoViewPrivate::StatusBarItem &sbItem = d->statusBarItems[i];
-        if (ev->activated()) {
-            sbItem.ensureItemShown(sb);
-        } else {
-            sbItem.ensureItemHidden(sb);
-        }
-    }
 }
 
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)

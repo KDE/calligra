@@ -40,7 +40,6 @@
 #include "KoDockerManager.h"
 #include "KoServiceProvider.h"
 #include "KoPart.h"
-#include "event.h"
 #include "part.h"
 
 #include <KoPageLayoutWidget.h>
@@ -62,7 +61,6 @@
 #include <ktemporaryfile.h>
 #include <krecentdocument.h>
 #include <partmanager.h>
-#include <event.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
@@ -93,6 +91,7 @@
 #include <QPrintDialog>
 #include <QDesktopWidget>
 #include <QPrintPreviewDialog>
+#include <QCloseEvent>
 
 #include "thememanager.h"
 
@@ -1690,10 +1689,6 @@ void KoMainWindow::slotActivePartChanged(KXMLGUIClient *_newPart)
 // ###  setUpdatesEnabled( false );
 
     if (d->activeView) {
-        KoParts::GUIActivateEvent ev(false);
-        QApplication::sendEvent(d->activePart, &ev);
-        QApplication::sendEvent(d->activeView, &ev);
-
 
         factory->removeClient(d->activeView);
 
@@ -1738,12 +1733,8 @@ void KoMainWindow::slotActivePartChanged(KXMLGUIClient *_newPart)
         }
         plugActionList("toolbarlist", d->toolbarList);
 
-        // Send the GUIActivateEvent only now, since it might show/hide toolbars too
-        // (and this has priority over applyMainWindowSettings)
-        KoParts::GUIActivateEvent ev(true);
-        QApplication::sendEvent(d->activePart, &ev);
-        QApplication::sendEvent(d->activeView, &ev);
-    } else {
+    }
+    else {
         d->activeView = 0;
         d->activePart = 0;
     }
@@ -2071,9 +2062,6 @@ void KoMainWindow::createShellGUI()
         QString auto_file( componentData().componentName() + "ui.rc" );
         setXMLFile( auto_file, true );
     }
-
-    KoParts::GUIActivateEvent ev( true );
-    QApplication::sendEvent( this, &ev );
 
     guiFactory()->addClient( this );
 
