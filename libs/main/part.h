@@ -31,8 +31,8 @@
 #include "komain_export.h"
 
 #define KPARTS_DECLARE_PRIVATE(Class) \
-    inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(PartBase::d_ptr); } \
-    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(PartBase::d_ptr); } \
+    inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(Part::d_ptr); } \
+    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(Part::d_ptr); } \
     friend class Class##Private;
 
 class KIconLoader;
@@ -57,51 +57,6 @@ class PartSelectEvent;
 class GUIActivateEvent;
 class PartBasePrivate;
 
-/**
- *  @short Base class for all parts.
- */
-class KOMAIN_EXPORT PartBase : virtual public KXMLGUIClient
-{
-    KPARTS_DECLARE_PRIVATE(PartBase)
-
-public:
-
-  /**
-   *  Constructor.
-   */
-  PartBase();
-
-  /**
-   *  Destructor.
-   */
-  virtual ~PartBase();
-
-  /**
-   *  Internal method. Called by KoParts::Part to specify the parent object for plugin objects.
-   *
-   * @internal
-   */
-  void setPartObject( QObject *object );
-  QObject *partObject() const;
-
-protected:
-  /**
-   * Set the componentData(KComponentData) for this part.
-   *
-   * Call this *first* in the inherited class constructor,
-   * because it loads the i18n catalogs.
-   */
-  virtual void setComponentData(const KComponentData &componentData);
-
-
-protected:
-  PartBase(PartBasePrivate &dd);
-
-  PartBasePrivate *d_ptr;
-
-private:
-  Q_DISABLE_COPY(PartBase)
-};
 
 /**
  * Base class for parts.
@@ -128,7 +83,7 @@ private:
  * framework for a "viewer" part and for an "editor"-like part.
  * Use Part directly only if your part doesn't fit into those.
  */
-class KOMAIN_EXPORT Part : public QObject, public PartBase
+class KOMAIN_EXPORT Part : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -287,7 +242,17 @@ protected Q_SLOTS:
     void slotWidgetDestroyed();
 
 protected:
+    /**
+     * Set the componentData(KComponentData) for this part.
+     *
+     * Call this *first* in the inherited class constructor,
+     * because it loads the i18n catalogs.
+     */
+    virtual void setComponentData(const KComponentData &componentData);
+
+
     Part(PartPrivate &dd, QObject *parent);
+    PartPrivate *d_ptr;
 
 private:
     Q_DISABLE_COPY(Part)

@@ -51,29 +51,13 @@ using namespace KoParts;
 namespace KoParts
 {
 
-class PartBasePrivate
-{
-public:
-    Q_DECLARE_PUBLIC(PartBase)
-
-    PartBasePrivate(PartBase *q): q_ptr(q)
-    {
-    }
-
-    virtual ~PartBasePrivate()
-    {
-    }
-
-    PartBase *q_ptr;
-};
-
-class PartPrivate: public PartBasePrivate
+class PartPrivate
 {
 public:
     Q_DECLARE_PUBLIC(Part)
 
     PartPrivate(Part *q)
-        : PartBasePrivate(q),
+        : q_ptr(q),
           m_iconLoader(0),
           m_bSelectable(true),
           m_autoDeleteWidget(true),
@@ -86,6 +70,7 @@ public:
     {
     }
 
+    Part *q_ptr;
     KIconLoader* m_iconLoader;
     bool m_bSelectable;
     bool m_autoDeleteWidget;
@@ -96,22 +81,7 @@ public:
 
 }
 
-PartBase::PartBase()
-    : d_ptr(new PartBasePrivate(this))
-{
-}
-
-PartBase::PartBase(PartBasePrivate &dd)
-    : d_ptr(&dd)
-{
-}
-
-PartBase::~PartBase()
-{
-    delete d_ptr;
-}
-
-void PartBase::setComponentData(const KComponentData &componentData)
+void Part::setComponentData(const KComponentData &componentData)
 {
     KXMLGUIClient::setComponentData(componentData);
     KGlobal::locale()->insertCatalog(componentData.catalogName());
@@ -122,12 +92,14 @@ void PartBase::setComponentData(const KComponentData &componentData)
 
 
 Part::Part( QObject *parent )
-    : QObject( parent ), PartBase( *new PartPrivate(this) )
+    : QObject( parent )
+    , d_ptr( new PartPrivate(this) )
 {
 }
 
 Part::Part(PartPrivate &dd, QObject *parent)
-    : QObject( parent ), PartBase( dd )
+    : QObject( parent )
+    , d_ptr(&dd)
 {
 }
 
@@ -154,6 +126,8 @@ Part::~Part()
     }
 
     delete d->m_iconLoader;
+
+    delete d_ptr;
 }
 
 void Part::embed( QWidget * parentWidget )
