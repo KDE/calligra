@@ -52,10 +52,10 @@ Panel {
             text: "Move"
             name: "move"
         }
-        ListElement {
-            text: "Transform"
-            name: "transform"
-        }
+//         ListElement {
+//             text: "Transform"
+//             name: "transform"
+//         }
         ListElement {
             text: "Crop"
             name: "crop"
