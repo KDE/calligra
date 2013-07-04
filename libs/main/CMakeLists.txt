@@ -87,7 +87,6 @@ set(komain_LIB_SRCS
     thememanager.cpp
 
     event.cpp
-    mainwindow.cpp
     part.cpp
     partmanager.cpp
 )
@@ -182,7 +181,6 @@ install( FILES
     komain_export.h
     
     event.h
-    mainwindow.h
     part.h
     partmanager.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

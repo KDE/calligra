@@ -21,7 +21,6 @@
 #include "part.h"
 #include <kprotocolinfo.h>
 #include "event.h"
-#include "mainwindow.h"
 #include "partmanager.h"
 
 #include <QtGui/QApplication>

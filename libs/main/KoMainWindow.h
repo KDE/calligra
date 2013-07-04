@@ -23,8 +23,9 @@
 
 #include "komain_export.h"
 
-#include <mainwindow.h>
-
+#include <kxmlguiwindow.h>
+#include <kurl.h>
+#include "part.h"
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
@@ -52,7 +53,7 @@ class KoDockerManager;
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KOMAIN_EXPORT KoMainWindow : public KoParts::MainWindow, public KoCanvasSupervisor
+class KOMAIN_EXPORT KoMainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:
@@ -187,6 +188,7 @@ signals:
     /// In this case, the signal means there is no link between the window
     /// and the document anymore.
     void loadCompleted();
+
 public slots:
 
     /**
@@ -394,7 +396,17 @@ private slots:
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
 
+    /**
+     * Called when the active part wants to change the statusbar message
+     * Reimplement if your mainwindow has a complex statusbar
+     * (with several items)
+     */
+    virtual void slotSetStatusBarText(const QString &);
+
 private:
+
+    void createShellGUI();
+
     /**
      * Asks the user if they really want to save the document.
      * Called only if outputFormat != nativeFormat.

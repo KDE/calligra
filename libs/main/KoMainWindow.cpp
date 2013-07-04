@@ -40,6 +40,9 @@
 #include "KoDockerManager.h"
 #include "KoServiceProvider.h"
 #include "KoPart.h"
+#include "event.h"
+
+
 #include <KoPageLayoutWidget.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
@@ -48,6 +51,7 @@
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
 #endif
+#include <khelpmenu.h>
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
@@ -134,6 +138,8 @@ public:
         activityResource = 0;
 #endif
         themeManager = 0;
+        m_bShellGUIActivated = false;
+        m_helpMenu = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -170,7 +176,7 @@ public:
     QList<KoView*> rootViews;
     KoParts::PartManager *manager;
 
-    KoParts::Part *activePart;
+    QPointer<KoParts::Part> activePart;
     KoView *activeView;
 
     QLabel * statusBarLabel;
@@ -221,11 +227,15 @@ public:
 
     Digikam::ThemeManager *themeManager;
 
+    bool m_bShellGUIActivated;
+    KHelpMenu *m_helpMenu;
+
+
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
-        : KoParts::MainWindow()
-        , d(new KoMainWindowPrivate(this))
+    : KXmlGuiWindow()
+    , d(new KoMainWindowPrivate(this))
 {
 #ifdef __APPLE__
     //setUnifiedTitleAndToolBarOnMac(true);
@@ -788,7 +798,7 @@ void KoMainWindow::slotSaveCompleted()
                this, SLOT(slotSaveCanceled(const QString &)));
 
     if (d->deferredClosingEvent) {
-        KoParts::MainWindow::closeEvent(d->deferredClosingEvent);
+        KXmlGuiWindow::closeEvent(d->deferredClosingEvent);
     }
 }
 
@@ -1165,7 +1175,7 @@ void KoMainWindow::saveWindowSettings()
 void KoMainWindow::resizeEvent(QResizeEvent * e)
 {
     d->windowSizeDirty = true;
-    KoParts::MainWindow::resizeEvent(e);
+    KXmlGuiWindow::resizeEvent(e);
 }
 
 bool KoMainWindow::queryClose()
@@ -2035,6 +2045,36 @@ KoView* KoMainWindow::currentView() const
         return d->rootViews.first();
     }
     return 0;
+}
+
+void KoMainWindow::slotSetStatusBarText( const QString & text )
+{
+    statusBar()->showMessage( text );
+}
+
+void KoMainWindow::createShellGUI()
+{
+    Q_ASSERT(!d->m_bShellGUIActivated);
+
+    d->m_bShellGUIActivated = true;
+    if ( isHelpMenuEnabled() && !d->m_helpMenu )
+        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), true, actionCollection() );
+
+    QString f = xmlFile();
+    setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );
+    if ( !f.isEmpty() )
+        setXMLFile( f, true );
+    else
+    {
+        QString auto_file( componentData().componentName() + "ui.rc" );
+        setXMLFile( auto_file, true );
+    }
+
+    KoParts::GUIActivateEvent ev( true );
+    QApplication::sendEvent( this, &ev );
+
+    guiFactory()->addClient( this );
+
 }
 
 #include <KoMainWindow.moc>
