@@ -60,9 +60,6 @@ class KOMAIN_EXPORT MainWindow : public KXmlGuiWindow
    */
   virtual ~MainWindow();
 
-public Q_SLOTS:
-  virtual void configureToolbars();
-
 protected Q_SLOTS:
 
   /**

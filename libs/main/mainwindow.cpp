@@ -77,22 +77,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::createGUI( Part * part )
 {
-#if 0
+
   kDebug(1000) << "part=" << part
                 << ( part ? part->metaObject()->className() : "" )
                 << ( part ? part->objectName() : "" );
-#endif
+
   KXMLGUIFactory *factory = guiFactory();
 
   assert( factory );
 
   if ( d->m_activePart )
   {
-#if 0
     kDebug(1000) << "deactivating GUI for" << d->m_activePart
                   << d->m_activePart->metaObject()->className()
                   << d->m_activePart->objectName();
-#endif
 
     GUIActivateEvent ev( false );
     QApplication::sendEvent( d->m_activePart, &ev );
@@ -173,10 +171,5 @@ void KoParts::MainWindow::saveNewToolbarConfig()
     applyMainWindowSettings(cg);
 }
 
-void KoParts::MainWindow::configureToolbars()
-{
-    // No difference with base class anymore.
-    KXmlGuiWindow::configureToolbars();
-}
 
 #include "mainwindow.moc"
