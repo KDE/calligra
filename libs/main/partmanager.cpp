@@ -218,8 +218,10 @@ void PartManager::removePart( Part *part )
 
     if ( part == d->m_activePart )
         setActivePart( 0 );
-    if ( part == d->m_selectedPart )
-        setSelectedPart( 0 );
+    if ( part == d->m_selectedPart ) {
+        d->m_selectedPart = 0;
+        d->m_selectedWidget = 0;
+    }
 }
 
 void PartManager::setActivePart( Part *part, QWidget *widget )
@@ -256,7 +258,8 @@ void PartManager::setActivePart( Part *part, QWidget *widget )
     KoParts::Part *oldActivePart = d->m_activePart;
     QWidget *oldActiveWidget = d->m_activeWidget;
 
-    setSelectedPart( 0 );
+    d->m_selectedPart = 0;
+    d->m_selectedWidget = 0;
 
     d->m_activePart = part;
     d->m_activeWidget = widget;
@@ -294,19 +297,6 @@ void PartManager::setActivePart( Part *part, QWidget *widget )
 QWidget *PartManager::activeWidget() const
 {
     return  d->m_activeWidget;
-}
-
-void PartManager::setSelectedPart( Part *part, QWidget *widget )
-{
-    if ( part == d->m_selectedPart && widget == d->m_selectedWidget )
-        return;
-
-    d->m_selectedPart = part;
-    d->m_selectedWidget = widget;
-
-    if ( part && !widget )
-        d->m_selectedWidget = part->widget();
-
 }
 
 void PartManager::slotObjectDestroyed()

@@ -125,18 +125,6 @@ private Q_SLOTS:
 private:
     Part * findPartFromWidget( QWidget * widget, const QPoint &pos );
     Part * findPartFromWidget( QWidget * widget );
-
-    /**
-     * Sets the selected part.
-     *
-     * The selected part receives selection events.
-     *
-     * @p widget can be used to specify which widget was responsible for the selection.
-     * This is important if you have multiple views for a document/part , like in KOffice .
-     */
-    virtual void setSelectedPart( Part *part, QWidget *widget = 0 );
-
-
 private:
     PartManagerPrivate* const d;
 };
