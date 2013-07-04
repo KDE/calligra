@@ -79,36 +79,6 @@ public:
     QPointer<QWidget> m_widget;
 };
 
-/**
- * OpenUrlArguments is the set of arguments that specify
- * how a URL should be opened by KoParts::ReadOnlyPart::openUrl().
- *
- * For instance reload() indicates that the url should be loaded
- * from the network even if it matches the current url of the part.
- *
- * All setter methods in this class are for the class that calls openUrl
- * (usually the hosting application), all the getter methods are for the part.
- */
-class OpenUrlArguments
-{
-public:
-    OpenUrlArguments();
-    OpenUrlArguments(const OpenUrlArguments &other);
-    OpenUrlArguments &operator=( const OpenUrlArguments &other);
-    ~OpenUrlArguments();
-
-    /**
-     * The mimetype to use when opening the url, when known by the calling application.
-     */
-    QString mimeType() const;
-    void setMimeType(const QString& mime);
-
-private:
-    QSharedDataPointer<OpenUrlArgumentsPrivate> d;
-};
-
-
-
 }
 
 void Part::setComponentData(const KComponentData &componentData)
@@ -363,7 +333,7 @@ public:
      */
     QString m_file;
 
-    OpenUrlArguments m_arguments;
+    QString m_mimeType;
 };
 
 class ReadWritePartPrivate: public ReadOnlyPartPrivate
@@ -482,13 +452,13 @@ bool ReadOnlyPart::openUrl( const KUrl &url )
     if ( !url.isValid() )
         return false;
     if (d->m_bAutoDetectedMime) {
-        d->m_arguments.setMimeType(QString());
+        d->m_mimeType = QString();
         d->m_bAutoDetectedMime = false;
     }
-    OpenUrlArguments args = d->m_arguments;
+    QString mimetype = d->m_mimeType;
     if ( !closeUrl() )
         return false;
-    d->m_arguments = args;
+    d->m_mimeType = mimetype;
     setUrl(url);
 
     d->m_file.clear();
@@ -522,12 +492,12 @@ bool ReadOnlyPartPrivate::openLocalFile()
     emit q->started( 0 );
     m_bTemp = false;
     // set the mimetype only if it was not already set (for example, by the host application)
-    if (m_arguments.mimeType().isEmpty()) {
+    if (m_mimeType.isEmpty()) {
         // get the mimetype of the file
         // using findByUrl() to avoid another string -> url conversion
         KMimeType::Ptr mime = KMimeType::findByUrl(m_url, 0, true /* local file*/);
         if (mime) {
-            m_arguments.setMimeType(mime->name());
+            m_mimeType = mime->name();
             m_bAutoDetectedMime = true;
         }
     }
@@ -592,7 +562,7 @@ bool ReadOnlyPart::closeUrl()
 
     abortLoad(); //just in case
 
-    d->m_arguments = KoParts::OpenUrlArguments();
+    d->m_mimeType = QString();
 
     if ( d->m_bTemp )
     {
@@ -646,8 +616,8 @@ void ReadOnlyPartPrivate::_k_slotGotMimeType(KIO::Job *job, const QString &mime)
     kDebug(1000) << mime;
     Q_ASSERT(job == m_job); Q_UNUSED(job)
             // set the mimetype only if it was not already set (for example, by the host application)
-            if (m_arguments.mimeType().isEmpty()) {
-        m_arguments.setMimeType(mime);
+            if (m_mimeType.isEmpty()) {
+        m_mimeType = mime;
         m_bAutoDetectedMime = true;
     }
 }
@@ -670,10 +640,11 @@ bool ReadOnlyPart::openStream( const QString& mimeType, const KUrl& url )
 {
     Q_D(ReadOnlyPart);
 
-    OpenUrlArguments args = d->m_arguments;
+    QString tmpMimeType = d->m_mimeType;
+    // closeUrl resets the mimetype
     if ( !closeUrl() )
         return false;
-    d->m_arguments = args;
+    d->m_mimeType = tmpMimeType;
     setUrl( url );
     return doOpenStream( mimeType );
 }
@@ -691,7 +662,7 @@ bool ReadOnlyPart::closeStream()
 QString KoParts::ReadOnlyPart::mimeType() const
 {
     Q_D(const ReadOnlyPart);
-    return d->m_arguments.mimeType();
+    return d->m_mimeType;
 }
 
 //////////////////////////////////////////////////
@@ -977,47 +948,5 @@ bool ReadWritePart::waitSaveComplete()
 
     return d->m_saveOk;
 }
-
-////
-
-class KoParts::OpenUrlArgumentsPrivate : public QSharedData
-{
-public:
-    OpenUrlArgumentsPrivate()
-        : mimeType()
-    {}
-    QString mimeType;
-};
-
-KoParts::OpenUrlArguments::OpenUrlArguments()
-    : d(new OpenUrlArgumentsPrivate)
-{
-}
-
-KoParts::OpenUrlArguments::OpenUrlArguments(const OpenUrlArguments &other)
-    : d(other.d)
-{
-}
-
-KoParts::OpenUrlArguments & KoParts::OpenUrlArguments::operator=( const OpenUrlArguments &other)
-{
-    d = other.d;
-    return *this;
-}
-
-KoParts::OpenUrlArguments::~OpenUrlArguments()
-{
-}
-
-QString KoParts::OpenUrlArguments::mimeType() const
-{
-    return d->mimeType;
-}
-
-void KoParts::OpenUrlArguments::setMimeType(const QString& mime)
-{
-    d->mimeType = mime;
-}
-
 
 #include "part.moc"

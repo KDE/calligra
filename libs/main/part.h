@@ -56,8 +56,6 @@ class PartActivateEvent;
 class PartSelectEvent;
 class GUIActivateEvent;
 class PartBasePrivate;
-class OpenUrlArguments;
-
 
 /**
  * Base class for parts.
