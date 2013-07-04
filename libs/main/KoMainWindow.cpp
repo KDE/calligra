@@ -41,7 +41,7 @@
 #include "KoServiceProvider.h"
 #include "KoPart.h"
 #include "event.h"
-
+#include "part.h"
 
 #include <KoPageLayoutWidget.h>
 #include <KoIcon.h>
@@ -176,7 +176,7 @@ public:
     QList<KoView*> rootViews;
     KoParts::PartManager *manager;
 
-    QPointer<KoParts::Part> activePart;
+    QPointer<KoPart> activePart;
     KoView *activeView;
 
     QLabel * statusBarLabel;
@@ -250,8 +250,8 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     d->manager = new KoParts::PartManager(this);
 
-    connect(d->manager, SIGNAL(activePartChanged(KoParts::Part *)),
-            this, SLOT(slotActivePartChanged(KoParts::Part *)));
+    connect(d->manager, SIGNAL(activePartChanged(KXMLGUIClient *)),
+            this, SLOT(slotActivePartChanged(KXMLGUIClient *)));
 
     if (componentData.isValid()) {
         setComponentData(componentData);   // don't load plugins! we don't want
@@ -1667,7 +1667,7 @@ void KoMainWindow::slotProgress(int value)
 }
 
 
-void KoMainWindow::slotActivePartChanged(KoParts::Part *newPart)
+void KoMainWindow::slotActivePartChanged(KXMLGUIClient *_newPart)
 {
 
     // This looks very much like KoParts::MainWindow::createGUI, but we have
@@ -1676,6 +1676,8 @@ void KoMainWindow::slotActivePartChanged(KoParts::Part *newPart)
     // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
     //kDebug(30003) <<"KoMainWindow::slotActivePartChanged( Part * newPart) newPart =" << newPart;
     //kDebug(30003) <<"current active part is" << d->activePart;
+
+    KoPart *newPart = static_cast<KoPart*>(_newPart);
 
     if (d->activePart && d->activePart == newPart) {
         //kDebug(30003) <<"no need to change the GUI";

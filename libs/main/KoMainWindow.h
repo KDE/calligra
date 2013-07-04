@@ -25,7 +25,6 @@
 
 #include <kxmlguiwindow.h>
 #include <kurl.h>
-#include "part.h"
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
@@ -382,7 +381,7 @@ private:
 
 protected slots:
 
-    void slotActivePartChanged(KoParts::Part *newPart);
+    void slotActivePartChanged(KXMLGUIClient *newPart);
 
 private slots:
     /**

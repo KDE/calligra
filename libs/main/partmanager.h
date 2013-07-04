@@ -25,6 +25,7 @@
 #include <komain_export.h>
 
 class KComponentData;
+class KXMLGUIClient;
 
 namespace KoParts
 {
@@ -231,17 +232,17 @@ Q_SIGNALS:
      * Emitted when a new part has been added.
      * @see addPart()
      **/
-    void partAdded( KoParts::Part *part );
+    void partAdded( KXMLGUIClient *part );
     /**
      * Emitted when a part has been removed.
      * @see removePart()
      **/
-    void partRemoved( KoParts::Part *part );
+    void partRemoved( KXMLGUIClient *part );
     /**
      * Emitted when the active part has changed.
      * @see setActivePart()
      **/
-    void activePartChanged( KoParts::Part *newPart );
+    void activePartChanged( KXMLGUIClient *newPart );
 
 protected:
     /**
