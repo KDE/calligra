@@ -129,13 +129,6 @@ QObject *PartBase::partObject() const
 
 void PartBase::setComponentData(const KComponentData &componentData)
 {
-    setComponentData(componentData, true);
-}
-
-void PartBase::setComponentData(const KComponentData &componentData, bool bLoadPlugins)
-{
-    Q_D(PartBase);
-
     KXMLGUIClient::setComponentData(componentData);
     KGlobal::locale()->insertCatalog(componentData.catalogName());
     // install 'instancename'data resource type
@@ -143,20 +136,6 @@ void PartBase::setComponentData(const KComponentData &componentData, bool bLoadP
                                      "data", componentData.componentName());
 }
 
-void PartBase::loadPlugins(QObject *parent, KXMLGUIClient *parentGUIClient, const KComponentData &instance)
-{
-    Q_D(PartBase);
-}
-
-void PartBase::setPluginLoadingMode( PluginLoadingMode loadingMode )
-{
-    Q_D(PartBase);
-}
-
-void KoParts::PartBase::setPluginInterfaceVersion( int version )
-{
-    Q_D(PartBase);
-}
 
 Part::Part( QObject *parent )
     : QObject( parent ), PartBase( *new PartPrivate(this) )
@@ -335,10 +314,6 @@ void Part::slotWidgetDestroyed()
         kDebug(1000) << "deleting part" << objectName();
         delete this; // ouch, this should probably be deleteLater()
     }
-}
-
-void Part::loadPlugins()
-{
 }
 
 //////////////////////////////////////////////////

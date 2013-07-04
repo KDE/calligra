@@ -39,7 +39,7 @@ KPrPart::KPrPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("stage_template");
-    setComponentData(KPrFactory::componentData(), false);
+    setComponentData(KPrFactory::componentData());
 }
 
 KPrPart::~KPrPart()

@@ -37,7 +37,7 @@ FlowPart::FlowPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("flow_template");
-    setComponentData(FlowFactory::componentData(), false);
+    setComponentData(FlowFactory::componentData());
 }
 
 FlowPart::~FlowPart()

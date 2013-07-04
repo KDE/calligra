@@ -51,7 +51,6 @@ namespace KoParts
 {
 
 class PartManager;
-class Plugin;
 class PartPrivate;
 class PartActivateEvent;
 class PartSelectEvent;
@@ -94,89 +93,6 @@ protected:
    */
   virtual void setComponentData(const KComponentData &componentData);
 
-  /**
-   * Set the componentData(KComponentData) for this part.
-   *
-   * Call this *first* in the inherited class constructor,
-   * because it loads the i18n catalogs.
-   *
-   * It is recommended to call setComponentData with loadPlugins set to false,
-   * and to load plugins at the end of your part constructor (in the case of
-   * KoParts::MainWindow, plugins are automatically loaded in createGUI anyway,
-   * so set loadPlugins to false for KoParts::MainWindow as well).
-   */
-  virtual void setComponentData(const KComponentData &componentData, bool loadPlugins);
-  // TODO KDE5: merge the above two methods, using loadPlugins=true. Or better, remove loadPlugins
-  // altogether and change plugins to call loadPlugins() manually at the end of their ctor.
-    // In the case of KoParts MainWindows, plugins are automatically loaded in createGUI anyway,
-    // so setComponentData() should really not load the plugins.
-
-  /**
-   * We have three different policies, whether to load new plugins or not. The
-   * value in the KConfig object of the KComponentData object always overrides
-   * LoadPlugins and LoadPluginsIfEnabled.
-   */
-  enum PluginLoadingMode {
-    /**
-     * Don't load any plugins at all.
-     */
-    DoNotLoadPlugins = 0,
-    /**
-     * Load new plugins automatically. Can be
-     * overridden by the plugin if it sets
-     * EnabledByDefault=false in the corresponding
-     * .desktop file.
-     */
-    LoadPlugins = 1,
-    /**
-     * New plugins are disabled by default. Can be
-     * overridden by the plugin if it sets
-     * EnabledByDefault=true in the corresponding
-     * .desktop file.
-     */
-    LoadPluginsIfEnabled = 2
-  };
-
-  /**
-   * Load the Plugins honoring the PluginLoadingMode.
-   *
-   * If you call this method in an already constructed GUI (like when the user
-   * has changed which plugins are enabled) you need to add the new plugins to
-   * the KXMLGUIFactory:
-   * \code
-   * if( factory() )
-   * {
-   *   QList<KoParts::Plugin *> plugins = KoParts::Plugin::pluginObjects( this );
-   *   for(int i = 0; i != plugins.size(); ++i) {
-   *      factory()->addClient( plugins[i] );
-   *   }
-   * }
-   * \endcode
-   */
-  void loadPlugins(QObject *parent, KXMLGUIClient *parentGUIClient, const KComponentData &componentData);
-
-  /**
-   * Set how plugins should be loaded
-   * @param loadingMode see PluginLoadingMode
-   *
-   * For a KoParts::Part: call this before setComponentData.
-   * For a KoParts::MainWindow: call this before createGUI.
-   */
-  void setPluginLoadingMode( PluginLoadingMode loadingMode );
-
-  /**
-   * If you change the binary interface offered by your part, you can avoid crashes
-   * from old plugins lying around by setting X-KDE-InterfaceVersion=2 in the
-   * .desktop files of the plugins, and calling setPluginInterfaceVersion( 2 ), so that
-   * the old plugins are not loaded. Increase both numbers every time a
-   * binary incompatible change in the application's plugin interface is made.
-   *
-   * @param version the interface version that plugins must have in order to be loaded.
-   *
-   * For a KoParts::Part: call this before setComponentData.
-   * For a KoParts::MainWindow: call this before createGUI.
-   */
-  void setPluginInterfaceVersion( int version );
 
 protected:
   PartBase(PartBasePrivate &dd);
@@ -363,15 +279,6 @@ protected:
      * @return a container widget owned by the Part's GUI.
      */
     QWidget *hostContainer( const QString &containerName );
-
-    /**
-     * Load this part's plugins now.
-     * Normally you want to call this at the end of the part constructor,
-     * if you used setComponentData(componentData, false)
-     * @since 4.1
-     */
-    void loadPlugins();
-    using PartBase::loadPlugins;
 
 protected Q_SLOTS:
     /**

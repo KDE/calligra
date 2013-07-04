@@ -43,7 +43,7 @@ using namespace Calligra::Sheets;
 Part::Part(QObject *parent)
     : KoPart(parent)
 {
-    setComponentData(Factory::global(), false);
+    setComponentData(Factory::global());
     setTemplateType("sheets_template");
 }
 

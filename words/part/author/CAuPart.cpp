@@ -31,7 +31,7 @@
 CAuPart::CAuPart(QObject *parent)
     : KWPart(parent)
 {
-    setComponentData(CAuFactory::componentData(), false);
+    setComponentData(CAuFactory::componentData());
     setTemplateType("words_template");
 }
 

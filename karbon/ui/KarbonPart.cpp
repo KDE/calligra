@@ -63,7 +63,7 @@ KarbonPart::KarbonPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("karbon_template");
-    setComponentData(KarbonFactory::componentData(), false);
+    setComponentData(KarbonFactory::componentData());
 }
 
 KarbonPart::~KarbonPart()
