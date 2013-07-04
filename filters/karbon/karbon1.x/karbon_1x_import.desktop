@@ -48,5 +48,5 @@ Name[zh_TW]=Karbon 1.x 匯入過濾器
 X-KDE-Export=image/svg+xml
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1
-X-KDE-Library=karbon1ximport
+X-KDE-Library=calligra_filter_karbon1x2karbon
 X-KDE-ServiceTypes=Calligra/Filter

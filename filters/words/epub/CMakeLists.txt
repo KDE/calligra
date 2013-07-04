@@ -7,7 +7,7 @@ include_directories(
 
 if(SHOULD_BUILD_FILTER_ODT_TO_EPUB2)
 
-set(exportepub2_PART_SRCS
+set(odt2epub2_PART_SRCS
     exportepub2.cpp
     OdfParser.cpp
     OdtHtmlConverter.cpp
@@ -16,11 +16,11 @@ set(exportepub2_PART_SRCS
     FileCollector.cpp
 )
 
-kde4_add_plugin(exportepub2 ${exportepub2_PART_SRCS})
+kde4_add_plugin(calligra_filter_odt2epub2 ${odt2epub2_PART_SRCS})
 
-target_link_libraries(exportepub2 vectorimage komain)
+target_link_libraries(calligra_filter_odt2epub2 kovectorimage komain)
 
-install(TARGETS exportepub2  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_odt2epub2  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  words_epub2_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif(SHOULD_BUILD_FILTER_ODT_TO_EPUB2)
@@ -28,7 +28,7 @@ endif(SHOULD_BUILD_FILTER_ODT_TO_EPUB2)
 
 if(SHOULD_BUILD_FILTER_ODT_TO_HTML)
 
-set(exporthtml_PART_SRCS
+set(odt2html_PART_SRCS
     exporthtml.cpp
     OdfParser.cpp
     OdtHtmlConverter.cpp
@@ -37,11 +37,11 @@ set(exporthtml_PART_SRCS
     FileCollector.cpp
 )
 
-kde4_add_plugin(exporthtml ${exporthtml_PART_SRCS})
+kde4_add_plugin(calligra_filter_odt2html ${odt2html_PART_SRCS})
 
-target_link_libraries(exporthtml vectorimage komain)
+target_link_libraries(calligra_filter_odt2html kovectorimage komain)
 
-install(TARGETS exporthtml  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_odt2html  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  words_html_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif(SHOULD_BUILD_FILTER_ODT_TO_HTML)

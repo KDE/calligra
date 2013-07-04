@@ -827,13 +827,13 @@ QString DatabaseDialog::exchangeWildcards(QString const & value)
     QString str(value);
     int p = str.indexOf('*');
     while (p > -1) {
-        str = str.replace(p, 1, '%');
+        str.replace(p, 1, '%');
         p = str.indexOf('*');
     }
 
     p = str.indexOf('?');
     while (p > -1) {
-        str = str.replace(p, 1, '_');
+        str.replace(p, 1, '_');
         p = str.indexOf('?');
     }
     return str;

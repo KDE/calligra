@@ -63,5 +63,5 @@ Name[zh_TW]=KSpread 的 CSV 匯入過濾程式
 X-KDE-Export=application/x-kspread
 X-KDE-Import=text/csv,text/plain
 X-KDE-Weight=50
-X-KDE-Library=csvimport
+X-KDE-Library=calligra_filter_csv2sheets
 X-KDE-ServiceTypes=Calligra/Filter

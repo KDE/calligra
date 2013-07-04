@@ -921,7 +921,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
                 // We will return a string list here with hope that names will
                 // be resolved and translated into an integer value later when subwidget is created,
                 // e.g. near KexiFormView::updateValuesForSubproperties()
-                return text.split("|");
+                return text.split('|');
             }
         }
     }

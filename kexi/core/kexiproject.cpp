@@ -62,7 +62,7 @@ static QString realPartClass(const QString &partClass, const QString &partMime)
         // for compatibility with Kexi 1.x
         // part mime was used at the time
         return QLatin1String("org.kexi-project.")
-               + QString(partMime).replace("kexi/", QString());
+               + QString(partMime).remove("kexi/");
     }
     return partClass;
 }

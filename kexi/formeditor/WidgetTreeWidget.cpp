@@ -119,7 +119,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                             itemName = i18n("Page %1", tabIndex + 1);
                     }
                     else {
-                        itemName.replace('&', "");
+                        itemName.remove('&');
                     }
                 }
                 else

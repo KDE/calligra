@@ -265,21 +265,21 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     QPushButton *button = new QPushButton(this);
     button->setIcon(koIcon("document-open"));
-    button->setToolTip(i18n("Import Resource"));
+    button->setToolTip(i18nc("@info:tooltip", "Import resource"));
     button->setEnabled(true);
     d->buttonGroup->addButton(button, Button_Import);
     buttonLayout->addWidget(button, 0, 0);
 
     button = new QPushButton(this);
     button->setIcon(koIcon("trash-empty"));
-    button->setToolTip(i18n("Delete Resource"));
+    button->setToolTip(i18nc("@info:tooltip", "Delete resource"));
     button->setEnabled(false);
     d->buttonGroup->addButton(button, Button_Remove);
     buttonLayout->addWidget(button, 0, 1);
 
     button = new QPushButton(this);
     button->setIcon(koIcon("download"));
-    button->setToolTip(i18n("Download Resource"));
+    button->setToolTip(i18nc("@info:tooltip", "Download resource"));
     button->setEnabled(true);
     button->hide();
     d->buttonGroup->addButton(button, Button_GhnsDownload);
@@ -350,7 +350,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
     if( button == Button_Import ) {
         QString extensions = d->model->extensions();
         QString filter = extensions.replace(QString(":"), QString(" "));
-        QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose File to Add" ) );
+        QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18nc("@title:window", "Choose File to Add"));
 
         d->model->importResourceFile(filename);
     }

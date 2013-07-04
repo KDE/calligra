@@ -41,5 +41,5 @@ X-KDE-Weight=1
 ImportDescription=RTF
 X-KDE-Export=application/vnd.oasis.opendocument.text
 ExportDescription=Words
-X-KDE-Library=rtfimport
+X-KDE-Library=calligra_filter_rtf2odt
 X-KDE-ServiceTypes=Calligra/Filter
