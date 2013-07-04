@@ -961,7 +961,7 @@ if(SHOULD_BUILD_KEXI_APP)
 endif(SHOULD_BUILD_KEXI_APP)
 
 if(SHOULD_BUILD_PLAN_APP)
-    add_subdirectory(plan)
+#    add_subdirectory(plan)
 endif(SHOULD_BUILD_PLAN_APP)
 
 add_subdirectory(sheets)
