@@ -56,6 +56,7 @@ class PartActivateEvent;
 class PartSelectEvent;
 class GUIActivateEvent;
 class PartBasePrivate;
+class OpenUrlArguments;
 
 
 /**
@@ -262,79 +263,6 @@ class ReadWritePart;
 class ReadOnlyPartPrivate;
 class OpenUrlArgumentsPrivate;
 
-/**
- * OpenUrlArguments is the set of arguments that specify
- * how a URL should be opened by KoParts::ReadOnlyPart::openUrl().
- *
- * For instance reload() indicates that the url should be loaded
- * from the network even if it matches the current url of the part.
- *
- * All setter methods in this class are for the class that calls openUrl
- * (usually the hosting application), all the getter methods are for the part.
- */
-class KOMAIN_EXPORT OpenUrlArguments
-{
-public:
-    OpenUrlArguments();
-    OpenUrlArguments(const OpenUrlArguments &other);
-    OpenUrlArguments &operator=( const OpenUrlArguments &other);
-    ~OpenUrlArguments();
-
-    /**
-     * @return true to indicate that the part should reload the URL,
-     * i.e. the cache shouldn't be used (forced reload).
-     */
-    bool reload() const;
-    /**
-     * Indicates that the url should be loaded
-     * from the network even if it matches the current url of the part.
-     */
-    void setReload(bool b);
-
-    /**
-     * xOffset is the horizontal scrolling of the part's widget
-     * (in case it's a scrollview). This is saved into the history
-     * and restored when going back in the history.
-     */
-    int xOffset() const;
-    void setXOffset(int x);
-
-    /**
-     * yOffset is the horizontal scrolling of the part's widget
-     * (in case it's a scrollview). This is saved into the history
-     * and restored when going back in the history.
-     */
-    int yOffset() const;
-    void setYOffset(int y);
-
-    /**
-     * The mimetype to use when opening the url, when known by the calling application.
-     */
-    QString mimeType() const;
-    void setMimeType(const QString& mime);
-
-    /**
-     * True if the user requested that the URL be opened.
-     * False if the URL should be opened due to an external event, like javascript popups
-     * or automatic redirections.
-     * This is true by default
-     * @since 4.1
-     */
-    bool actionRequestedByUser() const;
-    void setActionRequestedByUser(bool userRequested);
-
-    /**
-     * Meta-data to associate with the KIO operation that will be used to open the URL.
-     * This method can be used to add or retrieve metadata.
-     * @see KIO::TransferJob etc.
-     */
-    QMap<QString, QString> &metaData();
-    const QMap<QString, QString> &metaData() const;
-
-private:
-    QSharedDataPointer<OpenUrlArgumentsPrivate> d;
-};
-
 
 /**
  * Base class for any "viewer" part.
@@ -425,18 +353,9 @@ public:
     virtual bool closeUrl();
 
     /**
-     * Sets the arguments to use for the next openUrl call.
+     * @return the mimetype of the arguments that were used to open this URL.
      */
-    void setArguments(const OpenUrlArguments& arguments);
-    // TODO to avoid problems with the case where the loading fails, this could also be a openUrl() argument (heavy porting!).
-    // However we need to have setArguments in any case for updated made by the part, see e.g. KHTMLPart::openUrl.
-    // Well, maybe we should have setArguments (affects next openurl call) and updateArguments?
-
-
-    /**
-     * @return the arguments that were used to open this URL.
-     */
-    OpenUrlArguments arguments() const;
+    QString mimeType() const;
 
 public:
     /**

@@ -1094,7 +1094,7 @@ bool KoDocument::openFile()
     QByteArray _native_format = nativeFormatMimeType();
 
     KUrl u(d->parentPart->localFilePath());
-    QString typeName = d->parentPart->arguments().mimeType();
+    QString typeName = d->parentPart->mimeType();
 
     if (typeName.isEmpty()) {
         typeName = KMimeType::findByUrl(u, 0, true)->name();

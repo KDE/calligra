@@ -79,6 +79,81 @@ public:
     QPointer<QWidget> m_widget;
 };
 
+/**
+ * OpenUrlArguments is the set of arguments that specify
+ * how a URL should be opened by KoParts::ReadOnlyPart::openUrl().
+ *
+ * For instance reload() indicates that the url should be loaded
+ * from the network even if it matches the current url of the part.
+ *
+ * All setter methods in this class are for the class that calls openUrl
+ * (usually the hosting application), all the getter methods are for the part.
+ */
+class OpenUrlArguments
+{
+public:
+    OpenUrlArguments();
+    OpenUrlArguments(const OpenUrlArguments &other);
+    OpenUrlArguments &operator=( const OpenUrlArguments &other);
+    ~OpenUrlArguments();
+
+    /**
+     * @return true to indicate that the part should reload the URL,
+     * i.e. the cache shouldn't be used (forced reload).
+     */
+    bool reload() const;
+    /**
+     * Indicates that the url should be loaded
+     * from the network even if it matches the current url of the part.
+     */
+    void setReload(bool b);
+
+    /**
+     * xOffset is the horizontal scrolling of the part's widget
+     * (in case it's a scrollview). This is saved into the history
+     * and restored when going back in the history.
+     */
+    int xOffset() const;
+    void setXOffset(int x);
+
+    /**
+     * yOffset is the horizontal scrolling of the part's widget
+     * (in case it's a scrollview). This is saved into the history
+     * and restored when going back in the history.
+     */
+    int yOffset() const;
+    void setYOffset(int y);
+
+    /**
+     * The mimetype to use when opening the url, when known by the calling application.
+     */
+    QString mimeType() const;
+    void setMimeType(const QString& mime);
+
+    /**
+     * True if the user requested that the URL be opened.
+     * False if the URL should be opened due to an external event, like javascript popups
+     * or automatic redirections.
+     * This is true by default
+     * @since 4.1
+     */
+    bool actionRequestedByUser() const;
+    void setActionRequestedByUser(bool userRequested);
+
+    /**
+     * Meta-data to associate with the KIO operation that will be used to open the URL.
+     * This method can be used to add or retrieve metadata.
+     * @see KIO::TransferJob etc.
+     */
+    QMap<QString, QString> &metaData();
+    const QMap<QString, QString> &metaData() const;
+
+private:
+    QSharedDataPointer<OpenUrlArgumentsPrivate> d;
+};
+
+
+
 }
 
 void Part::setComponentData(const KComponentData &componentData)
@@ -615,8 +690,8 @@ void ReadOnlyPartPrivate::_k_slotGotMimeType(KIO::Job *job, const QString &mime)
 {
     kDebug(1000) << mime;
     Q_ASSERT(job == m_job); Q_UNUSED(job)
-    // set the mimetype only if it was not already set (for example, by the host application)
-    if (m_arguments.mimeType().isEmpty()) {
+            // set the mimetype only if it was not already set (for example, by the host application)
+            if (m_arguments.mimeType().isEmpty()) {
         m_arguments.setMimeType(mime);
         m_bAutoDetectedMime = true;
     }
@@ -658,17 +733,10 @@ bool ReadOnlyPart::closeStream()
     return doCloseStream();
 }
 
-void KoParts::ReadOnlyPart::setArguments(const OpenUrlArguments& arguments)
-{
-    Q_D(ReadOnlyPart);
-    d->m_arguments = arguments;
-    d->m_bAutoDetectedMime = arguments.mimeType().isEmpty();
-}
-
-OpenUrlArguments KoParts::ReadOnlyPart::arguments() const
+QString KoParts::ReadOnlyPart::mimeType() const
 {
     Q_D(const ReadOnlyPart);
-    return d->m_arguments;
+    return d->m_arguments.mimeType();
 }
 
 //////////////////////////////////////////////////
