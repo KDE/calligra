@@ -98,55 +98,10 @@ public:
     ~OpenUrlArguments();
 
     /**
-     * @return true to indicate that the part should reload the URL,
-     * i.e. the cache shouldn't be used (forced reload).
-     */
-    bool reload() const;
-    /**
-     * Indicates that the url should be loaded
-     * from the network even if it matches the current url of the part.
-     */
-    void setReload(bool b);
-
-    /**
-     * xOffset is the horizontal scrolling of the part's widget
-     * (in case it's a scrollview). This is saved into the history
-     * and restored when going back in the history.
-     */
-    int xOffset() const;
-    void setXOffset(int x);
-
-    /**
-     * yOffset is the horizontal scrolling of the part's widget
-     * (in case it's a scrollview). This is saved into the history
-     * and restored when going back in the history.
-     */
-    int yOffset() const;
-    void setYOffset(int y);
-
-    /**
      * The mimetype to use when opening the url, when known by the calling application.
      */
     QString mimeType() const;
     void setMimeType(const QString& mime);
-
-    /**
-     * True if the user requested that the URL be opened.
-     * False if the URL should be opened due to an external event, like javascript popups
-     * or automatic redirections.
-     * This is true by default
-     * @since 4.1
-     */
-    bool actionRequestedByUser() const;
-    void setActionRequestedByUser(bool userRequested);
-
-    /**
-     * Meta-data to associate with the KIO operation that will be used to open the URL.
-     * This method can be used to add or retrieve metadata.
-     * @see KIO::TransferJob etc.
-     */
-    QMap<QString, QString> &metaData();
-    const QMap<QString, QString> &metaData() const;
 
 private:
     QSharedDataPointer<OpenUrlArgumentsPrivate> d;
@@ -1029,19 +984,9 @@ class KoParts::OpenUrlArgumentsPrivate : public QSharedData
 {
 public:
     OpenUrlArgumentsPrivate()
-        : reload(false),
-          actionRequestedByUser(true),
-          xOffset(0),
-          yOffset(0),
-          mimeType(),
-          metaData()
+        : mimeType()
     {}
-    bool reload;
-    bool actionRequestedByUser;
-    int xOffset;
-    int yOffset;
     QString mimeType;
-    QMap<QString, QString> metaData;
 };
 
 KoParts::OpenUrlArguments::OpenUrlArguments()
@@ -1064,36 +1009,6 @@ KoParts::OpenUrlArguments::~OpenUrlArguments()
 {
 }
 
-bool KoParts::OpenUrlArguments::reload() const
-{
-    return d->reload;
-}
-
-void KoParts::OpenUrlArguments::setReload(bool b)
-{
-    d->reload = b;
-}
-
-int KoParts::OpenUrlArguments::xOffset() const
-{
-    return d->xOffset;
-}
-
-void KoParts::OpenUrlArguments::setXOffset(int x)
-{
-    d->xOffset = x;
-}
-
-int KoParts::OpenUrlArguments::yOffset() const
-{
-    return d->yOffset;
-}
-
-void KoParts::OpenUrlArguments::setYOffset(int y)
-{
-    d->yOffset = y;
-}
-
 QString KoParts::OpenUrlArguments::mimeType() const
 {
     return d->mimeType;
@@ -1104,24 +1019,5 @@ void KoParts::OpenUrlArguments::setMimeType(const QString& mime)
     d->mimeType = mime;
 }
 
-QMap<QString, QString> & KoParts::OpenUrlArguments::metaData()
-{
-    return d->metaData;
-}
-
-const QMap<QString, QString> & KoParts::OpenUrlArguments::metaData() const
-{
-    return d->metaData;
-}
-
-bool KoParts::OpenUrlArguments::actionRequestedByUser() const
-{
-    return d->actionRequestedByUser;
-}
-
-void KoParts::OpenUrlArguments::setActionRequestedByUser(bool userRequested)
-{
-    d->actionRequestedByUser = userRequested;
-}
 
 #include "part.moc"
