@@ -489,7 +489,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
 
     if (doc) {
         d->dockWidgetMenu->setVisible(true);
-        d->manager->addPart(d->rootPart, false);
+        d->manager->addPart(d->rootPart);
         KoView *view = d->rootPart->createView(this);
         setCentralWidget(view);
         d->rootViews.append(view);

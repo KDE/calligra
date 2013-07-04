@@ -43,43 +43,9 @@ public:
         m_activePart = 0;
         m_selectedPart = 0;
         m_selectedWidget = 0;
-        m_bAllowNestedParts = false;
-        m_bIgnoreScrollBars = false;
-        m_activationButtonMask = Qt::LeftButton | Qt::MidButton | Qt::RightButton;
-        m_reason = PartManager::NoReason;
-        m_bIgnoreExplicitFocusRequest = false;
     }
     ~PartManagerPrivate()
     {
-    }
-    void setReason( QEvent* ev ) {
-        switch( ev->type() ) {
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonDblClick: {
-            QMouseEvent* mev = static_cast<QMouseEvent *>( ev );
-            m_reason = mev->button() == Qt::LeftButton
-                       ? PartManager::ReasonLeftClick
-                       : ( mev->button() == Qt::MidButton
-                           ? PartManager::ReasonMidClick
-                           : PartManager::ReasonRightClick );
-            break;
-        }
-        case QEvent::FocusIn:
-            m_reason = static_cast<QFocusEvent *>( ev )->reason();
-            break;
-        default:
-            kWarning(1000) << "PartManagerPrivate::setReason got unexpected ev type " << ev->type();
-            break;
-        }
-    }
-
-    bool allowExplicitFocusEvent(QEvent* ev) const
-    {
-        if (ev->type() == QEvent::FocusIn) {
-            QFocusEvent* fev = static_cast<QFocusEvent*>(ev);
-            return (!m_bIgnoreExplicitFocusRequest || fev->reason() != Qt::OtherFocusReason);
-        }
-        return true;
     }
 
     Part * m_activePart;
@@ -87,41 +53,31 @@ public:
 
     QList<Part *> m_parts;
 
-    PartManager::SelectionPolicy m_policy;
-
     Part *m_selectedPart;
     QWidget *m_selectedWidget;
 
     QList<const QWidget *> m_managedTopLevelWidgets;
-    short int m_activationButtonMask;
-    bool m_bIgnoreScrollBars;
-    bool m_bAllowNestedParts;
-    int m_reason;
-    bool m_bIgnoreExplicitFocusRequest;
 };
 
 }
 
 PartManager::PartManager( QWidget * parent )
- : QObject( parent ),d(new PartManagerPrivate)
+    : QObject( parent )
+    , d(new PartManagerPrivate)
 {
 
   qApp->installEventFilter( this );
 
-  d->m_policy = Direct;
 
-  addManagedTopLevelWidget( parent );
-}
+  if ( !parent->isTopLevel() )
+      return;
 
-PartManager::PartManager( QWidget *topLevel, QObject *parent )
-    : QObject( parent ),d(new PartManagerPrivate)
-{
+  if ( d->m_managedTopLevelWidgets.contains( parent ) )
+      return;
 
-    qApp->installEventFilter( this );
-
-    d->m_policy = Direct;
-
-    addManagedTopLevelWidget( topLevel );
+  d->m_managedTopLevelWidgets.append( parent );
+  connect( parent, SIGNAL(destroyed()),
+           this, SLOT(slotManagedTopLevelWidgetDestroyed()) );
 }
 
 PartManager::~PartManager()
@@ -142,46 +98,6 @@ PartManager::~PartManager()
     delete d;
 }
 
-void PartManager::setSelectionPolicy( SelectionPolicy policy )
-{
-    d->m_policy = policy;
-}
-
-PartManager::SelectionPolicy PartManager::selectionPolicy() const
-{
-    return d->m_policy;
-}
-
-void PartManager::setAllowNestedParts( bool allow )
-{
-    d->m_bAllowNestedParts = allow;
-}
-
-bool PartManager::allowNestedParts() const
-{
-    return d->m_bAllowNestedParts;
-}
-
-void PartManager::setIgnoreScrollBars( bool ignore )
-{
-    d->m_bIgnoreScrollBars = ignore;
-}
-
-bool PartManager::ignoreScrollBars() const
-{
-    return d->m_bIgnoreScrollBars;
-}
-
-void PartManager::setActivationButtonMask( short int buttonMask )
-{
-    d->m_activationButtonMask = buttonMask;
-}
-
-short int PartManager::activationButtonMask() const
-{
-    return d->m_activationButtonMask;
-}
-
 bool PartManager::eventFilter( QObject *obj, QEvent *ev )
 {
 
@@ -200,25 +116,12 @@ bool PartManager::eventFilter( QObject *obj, QEvent *ev )
         return false;
 
     QMouseEvent* mev = 0;
-    if ( ev->type() == QEvent::MouseButtonPress || ev->type() == QEvent::MouseButtonDblClick )
-    {
-        mev = static_cast<QMouseEvent *>( ev );
-#ifdef DEBUG_PARTMANAGER
-        kDebug(1000) << "PartManager::eventFilter button: " << mev->button() << " " << "d->m_activationButtonMask=" << d->m_activationButtonMask;
-#endif
-        if ( ( mev->button() & d->m_activationButtonMask ) == 0 )
-            return false; // ignore this button
-    }
-
     Part * part;
     while ( w )
     {
         QPoint pos;
 
         if ( !d->m_managedTopLevelWidgets.contains( w->topLevelWidget() ) )
-            return false;
-
-        if ( d->m_bIgnoreScrollBars && ::qobject_cast<QScrollBar *>(w) )
             return false;
 
         if ( mev ) // mouse press or mouse double-click event
@@ -235,63 +138,12 @@ bool PartManager::eventFilter( QObject *obj, QEvent *ev )
 #endif
         if ( part ) // We found a part whose widget is w
         {
-            if ( d->m_policy == PartManager::TriState )
-            {
-                if ( ev->type() == QEvent::MouseButtonDblClick )
-                {
-                    if ( part == d->m_activePart && w == d->m_activeWidget )
-                        return false;
-
-#ifdef DEBUG_PARTMANAGER
-                    kDebug(1000) << "PartManager::eventFilter dblclick -> setActivePart" << part;
-#endif
-                    d->setReason( ev );
-                    setActivePart( part, w );
-                    d->m_reason = NoReason;
-                    return true;
-                }
-
-                if ( ( d->m_selectedWidget != w || d->m_selectedPart != part ) &&
-                     ( d->m_activeWidget != w || d->m_activePart != part ) )
-                {
-                    if ( part->isSelectable() )
-                        setSelectedPart( part, w );
-                    else {
-#ifdef DEBUG_PARTMANAGER
-                        kDebug(1000) << "Part " << part << " (non-selectable) made active because " << w->metaObject()->className() << " got event" << " " << evType;
-#endif
-                        d->setReason( ev );
-                        setActivePart( part, w );
-                        d->m_reason = NoReason;
-                    }
-                    return true;
-                }
-                else if ( d->m_selectedWidget == w && d->m_selectedPart == part )
-                {
-#ifdef DEBUG_PARTMANAGER
-                    kDebug(1000) << "Part " << part << " made active (from selected) because " << w->metaObject()->className() << " got event" << " " << evType;
-#endif
-                    d->setReason( ev );
-                    setActivePart( part, w );
-                    d->m_reason = NoReason;
-                    return true;
-                }
-                else if ( d->m_activeWidget == w && d->m_activePart == part )
-                {
-                    setSelectedPart( 0 );
-                    return false;
-                }
-
-                return false;
-            }
-            else if ( part != d->m_activePart && d->allowExplicitFocusEvent(ev) )
+            if ( part != d->m_activePart )
             {
 #ifdef DEBUG_PARTMANAGER
                 kDebug(1000) << "Part " << part << " made active because " << w->metaObject()->className() << " got event" << " " << evType;
 #endif
-                d->setReason( ev );
                 setActivePart( part, w );
-                d->m_reason = NoReason;
             }
 
             return false;
@@ -337,7 +189,7 @@ Part * PartManager::findPartFromWidget( QWidget * widget )
     return 0;
 }
 
-void PartManager::addPart( Part *part, bool setActive )
+void PartManager::addPart(Part *part)
 {
     Q_ASSERT( part );
 
@@ -350,29 +202,7 @@ void PartManager::addPart( Part *part, bool setActive )
     }
 
     d->m_parts.append( part );
-
     part->setManager( this );
-
-    if ( setActive ) {
-        setActivePart( part );
-
-        if ( QWidget *w = part->widget() ) {
-            // Prevent focus problems
-            if ( w->focusPolicy() == Qt::NoFocus ) {
-                kWarning(1000) << "Part '" << part->objectName() << "' has a widget "
-                               << w->objectName() << " with a focus policy of NoFocus. It should have at least a"
-                               << "ClickFocus policy, for part activation to work well." << endl;
-            }
-            if ( part->widget() && part->widget()->focusPolicy() == Qt::TabFocus ) {
-                kWarning(1000) << "Part '" << part->objectName() << "' has a widget "
-                               << w->objectName() << " with a focus policy of TabFocus. It should have at least a"
-                               << "ClickFocus policy, for part activation to work well." << endl;
-            }
-            w->setFocus();
-            w->show();
-        }
-    }
-    emit partAdded( part );
 }
 
 void PartManager::removePart( Part *part )
@@ -386,30 +216,10 @@ void PartManager::removePart( Part *part )
     Q_UNUSED(nb); // no warning in release mode
     part->setManager(0);
 
-    emit partRemoved( part );
-
     if ( part == d->m_activePart )
         setActivePart( 0 );
     if ( part == d->m_selectedPart )
         setSelectedPart( 0 );
-}
-
-void PartManager::replacePart( Part * oldPart, Part * newPart, bool setActive )
-{
-    //kDebug(1000) << "replacePart " << oldPart->name() << "-> " << newPart->name() << " setActive=" << setActive;
-    // This methods does exactly removePart + addPart but without calling setActivePart(0) in between
-    if ( !d->m_parts.contains( oldPart ) )
-    {
-        kFatal(1000) << QString("Can't remove part %1, not in KPartManager's list.").arg(oldPart->objectName());
-        return;
-    }
-
-    d->m_parts.removeAll( oldPart );
-    oldPart->setManager(0);
-
-    emit partRemoved( oldPart );
-
-    addPart( newPart, setActive );
 }
 
 void PartManager::setActivePart( Part *part, QWidget *widget )
@@ -422,7 +232,7 @@ void PartManager::setActivePart( Part *part, QWidget *widget )
 
     //check whether nested parts are disallowed and activate the top parent part then, by traversing the
     //tree recursively (Simon)
-    if ( part && !d->m_bAllowNestedParts )
+    if ( part )
     {
         QObject *parentPart = part->parent(); // ### this relies on people using KoParts::Factory!
         KoParts::Part *parPart = ::qobject_cast<KoParts::Part *>( parentPart );
@@ -484,23 +294,12 @@ void PartManager::setActivePart( Part *part, QWidget *widget )
         }
     }
     // Set the new active instance in KGlobal
-    setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
+    KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
 
 #ifdef DEBUG_PARTMANAGER
     kDebug(1000) << this << " emitting activePartChanged " << d->m_activePart;
 #endif
     emit activePartChanged( d->m_activePart );
-}
-
-void PartManager::setActiveComponent(const KComponentData &instance)
-{
-    // It's a separate method to allow redefining this behavior
-    KGlobal::setActiveComponent(instance);
-}
-
-Part *PartManager::activePart() const
-{
-    return d->m_activePart;
 }
 
 QWidget *PartManager::activeWidget() const
@@ -537,16 +336,6 @@ void PartManager::setSelectedPart( Part *part, QWidget *widget )
     }
 }
 
-Part *PartManager::selectedPart() const
-{
-    return d->m_selectedPart;
-}
-
-QWidget *PartManager::selectedWidget() const
-{
-    return d->m_selectedWidget;
-}
-
 void PartManager::slotObjectDestroyed()
 {
     kDebug(1000);
@@ -561,46 +350,15 @@ void PartManager::slotWidgetDestroyed()
     //part will delete itself anyway, invoking removePart() in its destructor
 }
 
-const QList<Part *> PartManager::parts() const
+void PartManager::slotManagedTopLevelWidgetDestroyed()
 {
-    return d->m_parts;
-}
+    const QWidget *topLevel = static_cast<const QWidget *>( sender() );
 
-void PartManager::addManagedTopLevelWidget( const QWidget *topLevel )
-{
-    if ( !topLevel->isTopLevel() )
-        return;
-
-    if ( d->m_managedTopLevelWidgets.contains( topLevel ) )
-        return;
-
-    d->m_managedTopLevelWidgets.append( topLevel );
-    connect( topLevel, SIGNAL(destroyed()),
-             this, SLOT(slotManagedTopLevelWidgetDestroyed()) );
-}
-
-void PartManager::removeManagedTopLevelWidget( const QWidget *topLevel )
-{
     if ( !topLevel->isTopLevel() )
         return;
 
     d->m_managedTopLevelWidgets.removeAll( topLevel );
 }
 
-void PartManager::slotManagedTopLevelWidgetDestroyed()
-{
-    const QWidget *widget = static_cast<const QWidget *>( sender() );
-    removeManagedTopLevelWidget( widget );
-}
-
-int PartManager::reason() const
-{
-    return d->m_reason;
-}
-
-void PartManager::setIgnoreExplictFocusRequests(bool ignore)
-{
-    d->m_bIgnoreExplicitFocusRequest = ignore;
-}
 
 #include "partmanager.moc"
