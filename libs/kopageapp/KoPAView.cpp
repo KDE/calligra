@@ -428,6 +428,10 @@ void KoPAView::initActions()
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
 
     d->find = new KoFind( this, d->canvas->resourceManager(), actionCollection() );
+    connect( d->find, SIGNAL( findDocumentSetNext( QTextDocument * ) ),
+             this,    SLOT( findDocumentSetNext( QTextDocument * ) ) );
+    connect( d->find, SIGNAL( findDocumentSetPrevious( QTextDocument * ) ),
+             this,    SLOT( findDocumentSetPrevious( QTextDocument * ) ) );
 
     actionCollection()->action( "object_group" )->setShortcut( QKeySequence( "Ctrl+G" ) );
     actionCollection()->action( "object_ungroup" )->setShortcut( QKeySequence( "Ctrl+Shift+G" ) );
@@ -1018,24 +1022,6 @@ void KoPAView::clipboardDataChanged()
     }
 
     d->editPaste->setEnabled(paste);
-}
-
-void KoPAView::partActivateEvent(KoParts::PartActivateEvent* event)
-{
-    if ( event->widget() == this ) {
-        if ( event->activated() ) {
-            clipboardDataChanged();
-            connect( d->find, SIGNAL( findDocumentSetNext( QTextDocument * ) ),
-                     this,    SLOT( findDocumentSetNext( QTextDocument * ) ) );
-            connect( d->find, SIGNAL( findDocumentSetPrevious( QTextDocument * ) ),
-                     this,    SLOT( findDocumentSetPrevious( QTextDocument * ) ) );
-        }
-        else {
-            disconnect( d->find, 0, 0, 0 );
-        }
-    }
-
-    KoView::partActivateEvent(event);
 }
 
 void KoPAView::goToPreviousPage()

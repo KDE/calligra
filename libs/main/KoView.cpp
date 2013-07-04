@@ -366,38 +366,23 @@ int KoView::canvasYOffset() const
 
 void KoView::customEvent(QEvent *ev)
 {
-    if (KoParts::PartActivateEvent::test(ev))
-        partActivateEvent((KoParts::PartActivateEvent *)ev);
-    else if (KoParts::PartSelectEvent::test(ev))
-        partSelectEvent((KoParts::PartSelectEvent *)ev);
-    else if (KoParts::GUIActivateEvent::test(ev))
+    if (KoParts::GUIActivateEvent::test(ev)) {
         guiActivateEvent((KoParts::GUIActivateEvent*)ev);
+    }
 }
 
-void KoView::partActivateEvent(KoParts::PartActivateEvent *event)
-{
-    emit activated(event->activated());
-}
-
-void KoView::partSelectEvent(KoParts::PartSelectEvent *event)
-{
-    emit selected(event->selected());
-}
 
 void KoView::guiActivateEvent(KoParts::GUIActivateEvent * ev)
 {
-    showAllStatusBarItems(ev->activated());
-}
+    qDebug() << "guiActivateEvent";
 
-void KoView::showAllStatusBarItems(bool show)
-{
     KStatusBar * sb = statusBar();
     if (!sb)
         return;
     int itemCount = d->statusBarItems.count();
     for (int i = 0; i < itemCount; ++i) {
         KoViewPrivate::StatusBarItem &sbItem = d->statusBarItems[i];
-        if (show) {
+        if (ev->activated()) {
             sbItem.ensureItemShown(sb);
         } else {
             sbItem.ensureItemHidden(sb);

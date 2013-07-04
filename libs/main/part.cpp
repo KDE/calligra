@@ -220,20 +220,7 @@ bool Part::isSelectable() const
 
 void Part::customEvent( QEvent *ev )
 {
-    if ( PartActivateEvent::test( ev ) )
-    {
-        partActivateEvent( static_cast<PartActivateEvent *>(ev) );
-        return;
-    }
-
-    if ( PartSelectEvent::test( ev ) )
-    {
-        partSelectEvent( static_cast<PartSelectEvent *>(ev) );
-        return;
-    }
-
-    if ( GUIActivateEvent::test( ev ) )
-    {
+    if ( GUIActivateEvent::test( ev ) )  {
         guiActivateEvent( static_cast<GUIActivateEvent *>(ev) );
         return;
     }

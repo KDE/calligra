@@ -277,11 +277,6 @@ public:
     void removeStatusBarItem(QWidget * widget);
 
     /**
-     * Show or hide all statusbar items. Used by KoMainWindow during saving.
-     */
-    void showAllStatusBarItems(bool show);
-
-    /**
      * You have to implement this method and disable/enable certain functionality (actions for example) in
      * your view to allow/disallow editing of the document.
      */
@@ -332,18 +327,9 @@ protected:
     virtual void customEvent(QEvent *ev);
 
     /**
-     * Handles the event KoParts::PartActivateEvent.
-     */
-    virtual void partActivateEvent(KoParts::PartActivateEvent *event);
-    /**
-     * Handles the event KoParts::PartSelectEvent.
-     */
-    virtual void partSelectEvent(KoParts::PartSelectEvent *event);
-    /**
      * Handles the event KoParts::GUIActivateEvent.
      */
     virtual void guiActivateEvent(KoParts::GUIActivateEvent *);
-
 
     /**
        Generate a name for this view.
@@ -351,9 +337,6 @@ protected:
     QString newObjectName();
 
 signals:
-    void activated(bool active);
-    void selected(bool select);
-
     void autoScroll(const QPoint &scrollDistance);
 
     void regionInvalidated(const QRegion &region, bool erase);

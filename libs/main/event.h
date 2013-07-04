@@ -70,52 +70,6 @@ private:
   GUIActivateEventPrivate * const d;
 };
 
-class PartActivateEventPrivate;
-/**
- * This event is sent by the part manager when the active part changes.
- * Each time the active part changes, it will send first a PartActivateEvent
- * with activated=false, part=oldActivePart, widget=oldActiveWidget
- * and then another PartActivateEvent
- * with activated=true, part=newPart, widget=newWidget.
- * @see KoParts::Part::partActivateEvent
- */
-class KOMAIN_EXPORT PartActivateEvent : public Event
-{
-public:
-  PartActivateEvent( bool activated, Part *part, QWidget *widget );
-  virtual ~PartActivateEvent();
-  bool activated() const;
-
-  Part *part() const;
-  QWidget *widget() const;
-
-  static bool test( const QEvent *event );
-
-private:
-  PartActivateEventPrivate * const d;
-};
-
-class PartSelectEventPrivate;
-/**
- * This event is sent when a part is selected or deselected.
- * @see KoParts::PartManager::setSelectionPolicy
- */
-class KOMAIN_EXPORT PartSelectEvent : public Event
-{
-public:
-  PartSelectEvent( bool selected, Part *part, QWidget *widget );
-  virtual ~PartSelectEvent();
-  bool selected() const;
-
-  Part *part() const;
-  QWidget *widget() const;
-
-  static bool test( const QEvent *event );
-
-private:
-  PartSelectEventPrivate * const d;
-};
-
 } // namespace
 
 #endif

@@ -266,31 +266,20 @@ void PartManager::setActivePart( Part *part, QWidget *widget )
         KoParts::Part *savedActivePart = part;
         QWidget *savedActiveWidget = widget;
 
-        PartActivateEvent ev( false, oldActivePart, oldActiveWidget );
-        QApplication::sendEvent( oldActivePart, &ev );
-        if ( oldActiveWidget )
-        {
-            disconnect( oldActiveWidget, SIGNAL(destroyed()),
-                        this, SLOT(slotWidgetDestroyed()) );
-            QApplication::sendEvent( oldActiveWidget, &ev );
+        if ( oldActiveWidget ) {
+            disconnect( oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
         }
 
         d->m_activePart = savedActivePart;
         d->m_activeWidget = savedActiveWidget;
     }
 
-    if ( d->m_activePart )
-    {
+    if ( d->m_activePart ) {
         if ( !widget )
             d->m_activeWidget = part->widget();
 
-        PartActivateEvent ev( true, d->m_activePart, d->m_activeWidget );
-        QApplication::sendEvent( d->m_activePart, &ev );
-        if ( d->m_activeWidget )
-        {
-            connect( d->m_activeWidget, SIGNAL(destroyed()),
-                     this, SLOT(slotWidgetDestroyed()) );
-            QApplication::sendEvent( d->m_activeWidget, &ev );
+        if ( d->m_activeWidget ) {
+            connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
         }
     }
     // Set the new active instance in KGlobal
@@ -312,28 +301,12 @@ void PartManager::setSelectedPart( Part *part, QWidget *widget )
     if ( part == d->m_selectedPart && widget == d->m_selectedWidget )
         return;
 
-    Part *oldPart = d->m_selectedPart;
-    QWidget *oldWidget = d->m_selectedWidget;
-
     d->m_selectedPart = part;
     d->m_selectedWidget = widget;
 
     if ( part && !widget )
         d->m_selectedWidget = part->widget();
 
-    if ( oldPart )
-    {
-        PartSelectEvent ev( false, oldPart, oldWidget );
-        QApplication::sendEvent( oldPart, &ev );
-        QApplication::sendEvent( oldWidget, &ev );
-    }
-
-    if ( d->m_selectedPart )
-    {
-        PartSelectEvent ev( true, d->m_selectedPart, d->m_selectedWidget );
-        QApplication::sendEvent( d->m_selectedPart, &ev );
-        QApplication::sendEvent( d->m_selectedWidget, &ev );
-    }
 }
 
 void PartManager::slotObjectDestroyed()
