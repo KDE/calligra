@@ -434,7 +434,7 @@ KoMainWindow::~KoMainWindow()
     delete d;
 }
 
-void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
+void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
 {
     if (d->rootDocument == doc)
         return;
@@ -471,11 +471,11 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
 
     d->rootDocument = doc;
     // XXX remove this after the splitting
-    if (!rootPart && doc) {
+    if (!part && doc) {
         d->rootPart = doc->documentPart();
     }
     else {
-        d->rootPart = rootPart;
+        d->rootPart = part;
     }
 
     if (doc) {

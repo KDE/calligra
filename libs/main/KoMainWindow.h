@@ -73,7 +73,7 @@ public:
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    void setRootDocument(KoDocument *doc, KoPart *rootPart = 0);
+    void setRootDocument(KoDocument *doc, KoPart *part = 0);
 
     /**
      * This is used to handle the document used at start up before it actually
