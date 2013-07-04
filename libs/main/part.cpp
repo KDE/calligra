@@ -636,29 +636,6 @@ void ReadOnlyPart::guiActivateEvent( GUIActivateEvent * event )
     }
 }
 
-bool ReadOnlyPart::openStream( const QString& mimeType, const KUrl& url )
-{
-    Q_D(ReadOnlyPart);
-
-    QString tmpMimeType = d->m_mimeType;
-    // closeUrl resets the mimetype
-    if ( !closeUrl() )
-        return false;
-    d->m_mimeType = tmpMimeType;
-    setUrl( url );
-    return doOpenStream( mimeType );
-}
-
-bool ReadOnlyPart::writeStream( const QByteArray& data )
-{
-    return doWriteStream( data );
-}
-
-bool ReadOnlyPart::closeStream()
-{
-    return doCloseStream();
-}
-
 QString KoParts::ReadOnlyPart::mimeType() const
 {
     Q_D(const ReadOnlyPart);

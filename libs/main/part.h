@@ -355,55 +355,6 @@ public:
      */
     QString mimeType() const;
 
-public:
-    /**
-     * Initiate sending data to this part.
-     * This is an alternative to openUrl, which allows the user of the part
-     * to load the data itself, and send it progressively to the part.
-     *
-     * @param mimeType the type of data that is going to be sent to this part.
-     * @param url the URL representing this data. Although not directly used,
-     * every ReadOnlyPart has a URL (see url()), so this simply sets it.
-     * @return true if the part supports progressive loading and accepts data, false otherwise.
-     */
-    bool openStream( const QString& mimeType, const KUrl& url );
-
-    /**
-     * Send some data to the part. openStream must have been called previously,
-     * and must have returned true.
-     * @return true if the data was accepted by the part. If false is returned,
-     * the application should stop sending data, and doesn't have to call closeStream.
-     */
-    bool writeStream( const QByteArray& data );
-
-    /**
-     * Terminate the sending of data to the part.
-     * With some data types (text, html...) closeStream might never actually be called,
-     * in the case of continuous streams, for instance plain text or HTML data.
-     */
-    bool closeStream();
-
-private: // Makes no sense for inherited classes to call those. But make it protected there.
-
-    /**
-     * Called by openStream to initiate sending of data.
-     * Parts which implement progress loading should check the @p mimeType
-     * parameter, and return true if they can accept a data stream of that type.
-     */
-    virtual bool doOpenStream( const QString& /*mimeType*/ ) { return false; }
-    /**
-     * Receive some data from the hosting application.
-     * In this method the part should attempt to display the data progressively.
-     * With some data types (text, html...) closeStream might never actually be called,
-     * in the case of continuous streams. This can't happen with e.g. images.
-     */
-    virtual bool doWriteStream( const QByteArray& /*data*/ ) { return false; }
-    /**
-     * This is called by closeStream(), to indicate that all the data has been sent.
-     * Parts should ensure that all of the data is displayed at this point.
-     * @return whether the data could be displayed correctly.
-     */
-    virtual bool doCloseStream() { return false; }
 
 Q_SIGNALS:
     /**
