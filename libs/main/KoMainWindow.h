@@ -23,7 +23,7 @@
 
 #include "komain_export.h"
 
-#include <kparts/mainwindow.h>
+#include <mainwindow.h>
 
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
@@ -52,7 +52,7 @@ class KoDockerManager;
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KOMAIN_EXPORT KoMainWindow : public KParts::MainWindow, public KoCanvasSupervisor
+class KOMAIN_EXPORT KoMainWindow : public KoParts::MainWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:
@@ -380,7 +380,7 @@ private:
 
 protected slots:
 
-    void slotActivePartChanged(KParts::Part *newPart);
+    void slotActivePartChanged(KoParts::Part *newPart);
 
 private slots:
     /**

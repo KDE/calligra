@@ -25,7 +25,7 @@
 
 #include <QList>
 
-#include <kparts/part.h>
+#include <part.h>
 #include <kservice.h>
 #include <kcomponentdata.h>
 
@@ -45,7 +45,7 @@ class QGraphicsItem;
  * Override this class in your application. It's the main entry point that
  * should provide the document to the calligra system.
  */
-class KOMAIN_EXPORT KoPart : public KParts::ReadWritePart
+class KOMAIN_EXPORT KoPart : public KoParts::ReadWritePart
 {
     Q_OBJECT
 
@@ -97,7 +97,7 @@ public:
     void showLoadingErrorDialog();
 
 
-    // ---------- KParts::ReadWritePart overloads -----------
+    // ---------- KoParts::ReadWritePart overloads -----------
 
     void setReadWrite(bool readwrite);
 

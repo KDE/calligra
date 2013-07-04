@@ -45,7 +45,7 @@
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kparts/event.h>
+#include <event.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
@@ -366,25 +366,25 @@ int KoView::canvasYOffset() const
 
 void KoView::customEvent(QEvent *ev)
 {
-    if (KParts::PartActivateEvent::test(ev))
-        partActivateEvent((KParts::PartActivateEvent *)ev);
-    else if (KParts::PartSelectEvent::test(ev))
-        partSelectEvent((KParts::PartSelectEvent *)ev);
-    else if (KParts::GUIActivateEvent::test(ev))
-        guiActivateEvent((KParts::GUIActivateEvent*)ev);
+    if (KoParts::PartActivateEvent::test(ev))
+        partActivateEvent((KoParts::PartActivateEvent *)ev);
+    else if (KoParts::PartSelectEvent::test(ev))
+        partSelectEvent((KoParts::PartSelectEvent *)ev);
+    else if (KoParts::GUIActivateEvent::test(ev))
+        guiActivateEvent((KoParts::GUIActivateEvent*)ev);
 }
 
-void KoView::partActivateEvent(KParts::PartActivateEvent *event)
+void KoView::partActivateEvent(KoParts::PartActivateEvent *event)
 {
     emit activated(event->activated());
 }
 
-void KoView::partSelectEvent(KParts::PartSelectEvent *event)
+void KoView::partSelectEvent(KoParts::PartSelectEvent *event)
 {
     emit selected(event->selected());
 }
 
-void KoView::guiActivateEvent(KParts::GUIActivateEvent * ev)
+void KoView::guiActivateEvent(KoParts::GUIActivateEvent * ev)
 {
     showAllStatusBarItems(ev->activated());
 }

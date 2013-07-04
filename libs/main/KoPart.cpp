@@ -120,7 +120,7 @@ public:
 
 
 KoPart::KoPart(QObject *parent)
-        : KParts::ReadWritePart(parent)
+        : KoParts::ReadWritePart(parent)
         , d(new Private)
 {
     // we're not a part in a part, so we cannot be selected, we're always top-level
@@ -170,7 +170,7 @@ KoDocument *KoPart::document() const
 
 void KoPart::setReadWrite(bool readwrite)
 {
-    KParts::ReadWritePart::setReadWrite(readwrite);
+    KoParts::ReadWritePart::setReadWrite(readwrite);
 
     foreach(KoView *view, d->views) {
         view->updateReadWrite(readwrite);

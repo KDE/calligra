@@ -69,7 +69,7 @@ SET (KOMAIN_LIBS
     ${KOMAIN_LIBRARY}
     ${KOTEXT_LIBS}
     ${KOWIDGETS_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    
 )
 
 # legacy;

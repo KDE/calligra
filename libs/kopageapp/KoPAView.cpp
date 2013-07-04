@@ -91,7 +91,7 @@
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
-#include <kparts/event.h>
+#include <event.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 
@@ -1020,7 +1020,7 @@ void KoPAView::clipboardDataChanged()
     d->editPaste->setEnabled(paste);
 }
 
-void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
+void KoPAView::partActivateEvent(KoParts::PartActivateEvent* event)
 {
     if ( event->widget() == this ) {
         if ( event->activated() ) {

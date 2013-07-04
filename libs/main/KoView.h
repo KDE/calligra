@@ -24,7 +24,7 @@
 #include <QWidget>
 #include <kxmlguiclient.h>
 #include "komain_export.h"
-#include <kparts/event.h>
+#include <event.h>
 
 class KoPart;
 class KoDocument;
@@ -325,24 +325,24 @@ public slots:
 
 protected:
     /**
-     * This method handles three events: KParts::PartActivateEvent, KParts::PartSelectEvent
-     * and KParts::GUIActivateEvent.
+     * This method handles three events: KoParts::PartActivateEvent, KoParts::PartSelectEvent
+     * and KoParts::GUIActivateEvent.
      * The respective handlers are called if such an event is found.
      */
     virtual void customEvent(QEvent *ev);
 
     /**
-     * Handles the event KParts::PartActivateEvent.
+     * Handles the event KoParts::PartActivateEvent.
      */
-    virtual void partActivateEvent(KParts::PartActivateEvent *event);
+    virtual void partActivateEvent(KoParts::PartActivateEvent *event);
     /**
-     * Handles the event KParts::PartSelectEvent.
+     * Handles the event KoParts::PartSelectEvent.
      */
-    virtual void partSelectEvent(KParts::PartSelectEvent *event);
+    virtual void partSelectEvent(KoParts::PartSelectEvent *event);
     /**
-     * Handles the event KParts::GUIActivateEvent.
+     * Handles the event KoParts::GUIActivateEvent.
      */
-    virtual void guiActivateEvent(KParts::GUIActivateEvent *);
+    virtual void guiActivateEvent(KoParts::GUIActivateEvent *);
 
 
     /**

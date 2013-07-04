@@ -32,7 +32,7 @@
 #include <KoIcon.h>
 
 #include <kaction.h>
-#include <kparts/event.h>
+#include <event.h>
 #include <kxmlguiclient.h>
 
 using namespace Calligra::Sheets;
@@ -175,8 +175,8 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
 bool MapViewModel::eventFilter(QObject *object, QEvent *event)
 {
     Q_UNUSED(object)
-    if (KParts::GUIActivateEvent::test(event)) {
-        if (static_cast<KParts::GUIActivateEvent*>(event)->activated()) {
+    if (KoParts::GUIActivateEvent::test(event)) {
+        if (static_cast<KoParts::GUIActivateEvent*>(event)->activated()) {
             const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
             d->xmlGuiClient->plugActionList("go_goto_sheet_actionlist", actions);
         }

@@ -201,7 +201,7 @@ protected:
     KoPADocumentStructureDocker* documentStructureDocker() const;
 
     /// Called when receiving a PartActivateEvent
-    virtual void partActivateEvent(KParts::PartActivateEvent* event);
+    virtual void partActivateEvent(KoParts::PartActivateEvent* event);
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();

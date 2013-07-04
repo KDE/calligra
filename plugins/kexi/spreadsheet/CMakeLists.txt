@@ -13,7 +13,7 @@ kde4_add_plugin(keximigrate_spreadsheet ${keximigrate_spreadsheet_PART_SRCS})
 
 
 target_link_libraries(keximigrate_spreadsheet
-    ${KDE4_KPARTS_LIBS}
+    
     keximigrate
     kexidb
     kexiutils

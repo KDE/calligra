@@ -24,8 +24,6 @@
 #include "KoDocument.h"
 #include "KoFilter.h"
 
-#include <kparts/factory.h>
-
 #include <kservicetype.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>

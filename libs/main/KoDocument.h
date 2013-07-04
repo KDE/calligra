@@ -27,7 +27,7 @@
 #include <QTransform>
 #include <QList>
 
-#include <kparts/part.h>
+#include <part.h>
 #include <kservice.h>
 #include <kcomponentdata.h>
 
@@ -101,7 +101,7 @@ public:
     KoPart *documentPart() const;
 
     /**
-     * Reimplemented from KParts::ReadWritePart for internal reasons
+     * Reimplemented from KoParts::ReadWritePart for internal reasons
      * (for the autosave functionality)
      */
     virtual bool openUrl(const KUrl & url);
@@ -121,7 +121,7 @@ public:
     /**
      * Saves the document as @p url without changing the state of the
      * KoDocument (URL, modified flag etc.). Call this instead of
-     * KParts::ReadWritePart::saveAs() to implement KoMainWindow's
+     * KoParts::ReadWritePart::saveAs() to implement KoMainWindow's
      * File --> Export feature.
      *
      * @note This will call KoDocument::saveAs(). To differentiate this

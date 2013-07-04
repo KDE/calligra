@@ -59,7 +59,7 @@ public Q_SLOTS:
 
 protected:
     /**
-     * Plugs the action lists in, if a KParts::GUIActivateEvent is received.
+     * Plugs the action lists in, if a KoParts::GUIActivateEvent is received.
      * \return always \c false
      */
     bool eventFilter(QObject *object, QEvent *event);

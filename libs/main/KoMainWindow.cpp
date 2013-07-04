@@ -57,9 +57,8 @@
 #include <kedittoolbar.h>
 #include <ktemporaryfile.h>
 #include <krecentdocument.h>
-#include <kparts/partmanager.h>
-#include <kparts/plugin.h>
-#include <kparts/event.h>
+#include <partmanager.h>
+#include <event.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
@@ -169,9 +168,9 @@ public:
     KoPart *rootPart;
     KoPart *partToOpen;
     QList<KoView*> rootViews;
-    KParts::PartManager *manager;
+    KoParts::PartManager *manager;
 
-    KParts::Part *activePart;
+    KoParts::Part *activePart;
     KoView *activeView;
 
     QLabel * statusBarLabel;
@@ -225,7 +224,7 @@ public:
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
-        : KParts::MainWindow()
+        : KoParts::MainWindow()
         , d(new KoMainWindowPrivate(this))
 {
 #ifdef __APPLE__
@@ -239,10 +238,10 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
-    d->manager = new KParts::PartManager(this);
+    d->manager = new KoParts::PartManager(this);
 
-    connect(d->manager, SIGNAL(activePartChanged(KParts::Part *)),
-            this, SLOT(slotActivePartChanged(KParts::Part *)));
+    connect(d->manager, SIGNAL(activePartChanged(KoParts::Part *)),
+            this, SLOT(slotActivePartChanged(KoParts::Part *)));
 
     if (componentData.isValid()) {
         setComponentData(componentData, false);   // don't load plugins! we don't want
@@ -789,7 +788,7 @@ void KoMainWindow::slotSaveCompleted()
                this, SLOT(slotSaveCanceled(const QString &)));
 
     if (d->deferredClosingEvent) {
-        KParts::MainWindow::closeEvent(d->deferredClosingEvent);
+        KoParts::MainWindow::closeEvent(d->deferredClosingEvent);
     }
 }
 
@@ -1166,7 +1165,7 @@ void KoMainWindow::saveWindowSettings()
 void KoMainWindow::resizeEvent(QResizeEvent * e)
 {
     d->windowSizeDirty = true;
-    KParts::MainWindow::resizeEvent(e);
+    KoParts::MainWindow::resizeEvent(e);
 }
 
 bool KoMainWindow::queryClose()
@@ -1658,10 +1657,10 @@ void KoMainWindow::slotProgress(int value)
 }
 
 
-void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
+void KoMainWindow::slotActivePartChanged(KoParts::Part *newPart)
 {
 
-    // This looks very much like KParts::MainWindow::createGUI, but we have
+    // This looks very much like KoParts::MainWindow::createGUI, but we have
     // to reimplement it because it works with an active part, whereas we work
     // with an active view _and_ an active part, depending for what.
     // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
@@ -1679,7 +1678,7 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
 // ###  setUpdatesEnabled( false );
 
     if (d->activeView) {
-        KParts::GUIActivateEvent ev(false);
+        KoParts::GUIActivateEvent ev(false);
         QApplication::sendEvent(d->activePart, &ev);
         QApplication::sendEvent(d->activeView, &ev);
 
@@ -1692,8 +1691,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
     }
 
     if (!d->mainWindowGuiIsBuilt) {
-        // Load mainwindow plugins
-        KParts::Plugin::loadPlugins(this, this, componentData(), true);
         createShellGUI();
     }
 
@@ -1731,7 +1728,7 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
 
         // Send the GUIActivateEvent only now, since it might show/hide toolbars too
         // (and this has priority over applyMainWindowSettings)
-        KParts::GUIActivateEvent ev(true);
+        KoParts::GUIActivateEvent ev(true);
         QApplication::sendEvent(d->activePart, &ev);
         QApplication::sendEvent(d->activeView, &ev);
     } else {

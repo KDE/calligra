@@ -50,7 +50,6 @@
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
-#include <kparts/partmanager.h>
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
 #include <kdebug.h>
@@ -930,7 +929,7 @@ bool KoDocument::importDocument(const KUrl & _url)
     // open...
     ret = openUrl(_url);
 
-    // reset url & m_file (kindly? set by KParts::openUrl()) to simulate a
+    // reset url & m_file (kindly? set by KoParts::openUrl()) to simulate a
     // File --> Import
     if (ret) {
         kDebug(30003) << "success, resetting url";
@@ -1774,7 +1773,7 @@ void KoDocument::setModified(bool mod)
         return;
 
     //kDebug(30003)<<" url:" << url.path();
-    //kDebug(30003)<<" mod="<<mod<<" MParts mod="<<KParts::ReadWritePart::isModified()<<" isModified="<<isModified();
+    //kDebug(30003)<<" mod="<<mod<<" MParts mod="<<KoParts::ReadWritePart::isModified()<<" isModified="<<isModified();
 
     if (mod && !d->modifiedAfterAutosave) {
         // First change since last autosave -> start the autosave timer
