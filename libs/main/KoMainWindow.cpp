@@ -1875,7 +1875,7 @@ bool KoMainWindow::isExporting() const
     return d->isExporting;
 }
 
-void KoMainWindow::setDocToOpen(KoPart *part)
+void KoMainWindow::setPartToOpen(KoPart *part)
 {
     d->partToOpen = part;
 }

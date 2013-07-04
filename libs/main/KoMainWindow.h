@@ -79,7 +79,7 @@ public:
      * This is used to handle the document used at start up before it actually
      * added as root document.
      */
-    void setDocToOpen(KoPart *part);
+    void setPartToOpen(KoPart *part);
 
     /**
      * Update caption from document info - call when document info

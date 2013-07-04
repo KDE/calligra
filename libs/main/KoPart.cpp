@@ -462,7 +462,7 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
         mainWindow->setCentralWidget(d->startUpWidget);
     }
 
-    mainWindow->setDocToOpen(this);
+    mainWindow->setPartToOpen(this);
 }
 
 void KoPart::deleteOpenPane(bool closing)
