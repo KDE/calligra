@@ -41,8 +41,6 @@ public:
     {
         m_activeWidget = 0;
         m_activePart = 0;
-        m_selectedPart = 0;
-        m_selectedWidget = 0;
     }
     ~PartManagerPrivate()
     {
@@ -52,10 +50,6 @@ public:
     QWidget *m_activeWidget;
 
     QList<Part *> m_parts;
-
-    Part *m_selectedPart;
-    QWidget *m_selectedWidget;
-
     QList<const QWidget *> m_managedTopLevelWidgets;
 };
 
@@ -218,10 +212,6 @@ void PartManager::removePart( Part *part )
 
     if ( part == d->m_activePart )
         setActivePart( 0 );
-    if ( part == d->m_selectedPart ) {
-        d->m_selectedPart = 0;
-        d->m_selectedWidget = 0;
-    }
 }
 
 void PartManager::setActivePart( Part *part, QWidget *widget )
@@ -257,9 +247,6 @@ void PartManager::setActivePart( Part *part, QWidget *widget )
 
     KoParts::Part *oldActivePart = d->m_activePart;
     QWidget *oldActiveWidget = d->m_activeWidget;
-
-    d->m_selectedPart = 0;
-    d->m_selectedWidget = 0;
 
     d->m_activePart = part;
     d->m_activeWidget = widget;
