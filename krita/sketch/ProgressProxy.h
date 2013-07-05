@@ -22,7 +22,9 @@
 #include <QtCore/QObject>
 #include <KoProgressProxy.h>
 
-class ProgressProxy : public QObject, public KoProgressProxy
+#include "image/krita_export.h"
+
+class KRITAUI_EXPORT ProgressProxy : public QObject, public KoProgressProxy
 {
     Q_OBJECT
     Q_PROPERTY(QString taskName READ taskName NOTIFY taskNameChanged)

@@ -83,8 +83,8 @@ public:
     qreal hugeFontSize() const;
     bool isLandscape() const;
 
-    void setGridWidth( qreal width );
-    void setGridHeight( qreal height );
+    Q_INVOKABLE void setGridWidth( qreal width );
+    Q_INVOKABLE void setGridHeight( qreal height );
 
 Q_SIGNALS:
     void gridSizeChanged();

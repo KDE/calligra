@@ -29,6 +29,7 @@ class KritaNamespace::Private
 public:
     QObject *imageBuilder;
     QObject *mouseTracker;
+    QObject* window;
 };
 
 KritaNamespace::KritaNamespace(QObject* parent)
@@ -36,6 +37,7 @@ KritaNamespace::KritaNamespace(QObject* parent)
 {
     d->imageBuilder = new ImageBuilder(this);
     d->mouseTracker = new MouseTracker(this);
+    d->window = 0;
 }
 
 KritaNamespace::~KritaNamespace()
@@ -55,7 +57,13 @@ QObject* KritaNamespace::mouseTracker() const
 
 QObject* KritaNamespace::window() const
 {
-    return parent();
+    return d->window;
+}
+
+void KritaNamespace::setWindow(QObject* window)
+{
+    d->window = window;
+    emit windowChanged();
 }
 
 QObject* KritaNamespace::virtualKeyboardController() const

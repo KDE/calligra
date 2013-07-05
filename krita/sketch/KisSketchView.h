@@ -21,7 +21,9 @@
 
 #include <QDeclarativeItem>
 
-class KisSketchView : public QDeclarativeItem
+#include "image/krita_export.h"
+
+class KRITAUI_EXPORT KisSketchView : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QObject* selectionManager READ selectionManager NOTIFY viewChanged)

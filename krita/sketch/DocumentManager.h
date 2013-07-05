@@ -21,12 +21,14 @@
 
 #include <QObject>
 
+#include "image/krita_export.h"
+
 class RecentFileManager;
 class Settings;
 class ProgressProxy;
 class KisDoc2;
 class KisSketchPart;
-class DocumentManager : public QObject
+class KRITAUI_EXPORT DocumentManager : public QObject
 {
 Q_OBJECT
 public:

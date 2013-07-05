@@ -32,13 +32,31 @@ SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
 {
     setCacheMode(QGraphicsView::CacheNone);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+    setViewport(new QGLWidget(this, KisOpenGL::sharedContextWidget()));
+
+    setAttribute(Qt::WA_AcceptTouchEvents);
+    setAttribute(Qt::WA_OpaquePaintEvent);
+    setAttribute(Qt::WA_NoSystemBackground);
+    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    viewport()->setAttribute(Qt::WA_NoSystemBackground);
 }
 
 SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
     : QDeclarativeView(url, parent)
     , m_canvasWidget(0)
+    , m_GLInitialized(false)
 {
     setCacheMode(QGraphicsView::CacheNone);
+    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+    setViewport(new QGLWidget(this, KisOpenGL::sharedContextWidget()));
+
+    setAttribute(Qt::WA_AcceptTouchEvents);
+    setAttribute(Qt::WA_OpaquePaintEvent);
+    setAttribute(Qt::WA_NoSystemBackground);
+    viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    viewport()->setAttribute(Qt::WA_NoSystemBackground);
 }
 
 SketchDeclarativeView::~SketchDeclarativeView()

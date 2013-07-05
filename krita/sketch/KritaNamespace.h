@@ -27,7 +27,7 @@ class KritaNamespace : public QObject
 Q_OBJECT
 
 Q_PROPERTY(QObject* ImageBuilder READ imageBuilder CONSTANT)
-Q_PROPERTY(QObject* Window READ window CONSTANT)
+Q_PROPERTY(QObject* Window READ window WRITE setWindow NOTIFY windowChanged)
 Q_PROPERTY(QObject* MouseTracker READ mouseTracker CONSTANT)
 Q_PROPERTY(QObject* VirtualKeyboardController READ virtualKeyboardController CONSTANT)
 Q_PROPERTY(QObject* ProgressProxy READ progressProxy CONSTANT)
@@ -38,6 +38,8 @@ public:
 
     QObject *imageBuilder() const;
     QObject *window() const;
+    void setWindow(QObject* window);
+    Q_SIGNAL void windowChanged();
     QObject *mouseTracker() const;
     QObject *virtualKeyboardController() const;
     QObject *progressProxy() const;

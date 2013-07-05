@@ -68,7 +68,7 @@ Panel {
     ]
     Connections {
         target: toolManager;
-        onToolChanged: {
+        onCurrentToolChanged: {
             if(toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
                 toolManager.currentTool.toForeground = !swatch.chooseBG;
             }

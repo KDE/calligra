@@ -16,31 +16,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef VIRTUALKEYBOARDCONTROLLER_H
-#define VIRTUALKEYBOARDCONTROLLER_H
+import QtQuick 1.1
+import org.krita.sketch 1.0
 
-#include <QObject>
-
-#include "image/krita_export.h"
-
-class KRITAUI_EXPORT VirtualKeyboardController : public QObject
-{
-Q_OBJECT
-public:
-    Q_INVOKABLE void requestShowKeyboard();
-    Q_INVOKABLE void requestHideKeyboard();
-
-    static VirtualKeyboardController* instance();
-
-Q_SIGNALS:
-    void showKeyboard();
-    void hideKeyboard();
-
-private:
-    explicit VirtualKeyboardController(QObject* parent = 0);
-    virtual ~VirtualKeyboardController();
-
-    static VirtualKeyboardController* sm_instance;
-};
-
-#endif // VIRTUALKEYBOARDCONTROLLER_H
+KritaSketchBase {
+    width: 1280;
+    height: 768;
+    onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
+    onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
+    window: mainWindow;
+}

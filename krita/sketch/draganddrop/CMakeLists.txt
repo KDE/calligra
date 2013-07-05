@@ -18,6 +18,6 @@ qt4_automoc(${declarativedragdrop_SRCS})
 kde4_add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
 target_link_libraries(draganddropplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
 
-install(TARGETS draganddropplugin DESTINATION ${DATA_INSTALL_DIR}/kritasketch/qml/org/krita/draganddrop)
+install(TARGETS draganddropplugin DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/krita/draganddrop)
 
-install(FILES qmldir DESTINATION ${DATA_INSTALL_DIR}/kritasketch/qml/org/krita/draganddrop)
+install(FILES qmldir DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/krita/draganddrop)
