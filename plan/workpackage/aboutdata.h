@@ -28,8 +28,8 @@
 namespace KPlatoWork
 {
 
-static const char* PLANWORK_DESCRIPTION=I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
-static const char* PLANWORK_VERSION=CALLIGRA_VERSION_STRING;
+static const char PLANWORK_DESCRIPTION[] = I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
+static const char PLANWORK_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {

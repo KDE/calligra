@@ -26,7 +26,7 @@
 #include <KoIcon.h>
 #include <klocale.h>
 
-static const char *description =
+static const char description[] =
     I18N_NOOP("Database creation for everyone\n\n"
               "This application is a part of the Calligra Suite.");
 
