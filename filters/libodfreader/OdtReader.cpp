@@ -445,7 +445,7 @@ void OdtReader::readParagraphContents(KoXmlStreamReader &reader)
         DEBUG_READING("loop-start");
 
         if (reader.isCharacters()) {
-            kDebug(30503) << "Found character data";
+            //kDebug(30503) << "Found character data";
             m_backend->characterData(reader, m_context);
             reader.readNext();
             continue;

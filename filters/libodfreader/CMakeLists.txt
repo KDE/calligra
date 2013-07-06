@@ -15,24 +15,24 @@ set(odfreader_LIB_SRCS
     OdfTextReaderBackend.cpp
 )
 
-kde4_add_library(odfreader SHARED ${odfreader_LIB_SRCS})
+kde4_add_library(koodfreader SHARED ${odfreader_LIB_SRCS})
 
-target_link_libraries(odfreader koodf ${QT_QTXML_LIBRARY})
+target_link_libraries(koodfreader koodf ${QT_QTXML_LIBRARY})
 
-set_target_properties(odfreader PROPERTIES
+set_target_properties(koodfreader PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION}
     SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS odfreader ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS koodfreader ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 #install( FILES
-     # odfreader_export.h
+     # koodfreader_export.h
      # OdfReaderContext.h
-     # OdtParser.h
+     # OdtReaderBackend.h
+     # OdfParser.h
      # OdtReader.h
      # OdtReaderBackend.h
-
      # OdfTextReader.h
      # OdfTextReaderBackend.h
      # KoTableTemplate.h

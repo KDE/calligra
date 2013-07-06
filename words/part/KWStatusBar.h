@@ -69,7 +69,7 @@ private slots:
     void updateCursorPosition();
     void gotoLine();
     void updateMousePosition(const QPoint&);
-    void resourceChanged(int, const QVariant&);
+    void canvasResourceChanged(int, const QVariant&);
     void updateCurrentTool(KoCanvasController*);
     void createZoomWidget();
     void showPage(bool visible);

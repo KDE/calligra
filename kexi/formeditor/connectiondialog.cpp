@@ -317,7 +317,7 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
         return;
 
     QString signalArg(signal);
-    signalArg = signalArg.remove(QRegExp(".*[(]|[)]"));
+    signalArg.remove(QRegExp(".*[(]|[)]"));
 
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
@@ -325,7 +325,7 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
     foreach(const QMetaMethod &method, list) {
         // we add the slot only if it is compatible with the signal
         QString slotArg(method.signature());
-        slotArg = slotArg.remove(QRegExp(".*[(]|[)]"));
+        slotArg.remove(QRegExp(".*[(]|[)]"));
         if (!signalArg.startsWith(slotArg, Qt::CaseSensitive) && (!signal.isEmpty())) // args not compatible
             continue;
 
@@ -369,9 +369,9 @@ ConnectionDialog::checkConnection(KexiDB::RecordData *record)
 
     // Then we check if signal/slot args are compatible
     QString signal = (*record)[2].toString();
-    signal = signal.remove(QRegExp(".*[(]|[)]"));   // just keep the args list
+    signal.remove(QRegExp(".*[(]|[)]"));   // just keep the args list
     QString slot = (*record)[4].toString();
-    slot = slot.remove(QRegExp(".*[(]|[)]"));
+    slot.remove(QRegExp(".*[(]|[)]"));
 
     if (!signal.startsWith(slot, Qt::CaseSensitive)) {
         setStatusError(i18n("The signal/slot arguments are not compatible."), record);

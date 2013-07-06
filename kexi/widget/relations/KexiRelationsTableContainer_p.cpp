@@ -302,7 +302,7 @@ void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
     
     kDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
     
-    if (!srcField.trimmed().startsWith("*") && !f.startsWith("*"))
+    if (!srcField.trimmed().startsWith('*') && !f.startsWith('*'))
         event->acceptProposedAction();
 }
 

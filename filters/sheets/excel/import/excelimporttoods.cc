@@ -1112,7 +1112,7 @@ QString extractConditional(const QString &_text)
     }
 #else
     if (text.startsWith('_')) {
-        return text.split(";").first();
+        return text.split(';').first();
     }
 #endif
     return text;

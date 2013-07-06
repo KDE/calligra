@@ -137,7 +137,7 @@ public:
 
 static bool isAsterisk(const QString& tableName, const QString& fieldName)
 {
-    return tableName == "*" || fieldName.endsWith("*");
+    return tableName == "*" || fieldName.endsWith('*');
 }
 
 //! @internal \return true if sorting is allowed for \a fieldName and \a tableName
@@ -1318,9 +1318,9 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 
     if (token != 0)
         len = 2;
-    else if (str.startsWith(QLatin1String("=")) //1-char-long tokens
-             || str.startsWith(QLatin1String("<"))
-             || str.startsWith(QLatin1String(">"))) {
+    else if (str.startsWith(QLatin1Char('=')) //1-char-long tokens
+             || str.startsWith(QLatin1Char('<'))
+             || str.startsWith(QLatin1Char('>'))) {
         token = str[0].toLatin1();
         len = 1;
     } else {
@@ -1341,11 +1341,11 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
     QRegExp re;
     if (str.length() >= 2 &&
             (
-                (str.startsWith(QLatin1String("\"")) && str.endsWith(QLatin1String("\"")))
-                || (str.startsWith(QLatin1String("'")) && str.endsWith(QLatin1String("'"))))
+                (str.startsWith(QLatin1Char('"')) && str.endsWith(QLatin1Char('"')))
+                || (str.startsWith(QLatin1Char('\'')) && str.endsWith(QLatin1Char('\''))))
        ) {
         valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1, str.length() - 2));
-    } else if (str.startsWith(QLatin1String("[")) && str.endsWith(QLatin1String("]"))) {
+    } else if (str.startsWith(QLatin1Char('[')) && str.endsWith(QLatin1Char(']'))) {
         valueExpr = new KexiDB::QueryParameterExpr(str.mid(1, str.length() - 2));
     } else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch(str)) {
         valueExpr = new KexiDB::ConstExpr(DATE_CONST, QDate::fromString(

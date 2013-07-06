@@ -267,25 +267,25 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
         else if (valExpression.contains("cell-content-text-length-is-between")) {
             setRestriction(Validity::TextLength);
             setCondition(Conditional::Between);
-            valExpression = valExpression.remove("oooc:cell-content-text-length-is-between(");
+            valExpression.remove("oooc:cell-content-text-length-is-between(");
             kDebug(36003) << " valExpression :" << valExpression;
-            valExpression = valExpression.remove(')');
+            valExpression.remove(')');
             QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
             loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
         } else if (valExpression.contains("cell-content-text-length-is-not-between")) {
             setRestriction(Validity::TextLength);
             setCondition(Conditional::Different);
-            valExpression = valExpression.remove("oooc:cell-content-text-length-is-not-between(");
+            valExpression.remove("oooc:cell-content-text-length-is-not-between(");
             kDebug(36003) << " valExpression :" << valExpression;
-            valExpression = valExpression.remove(')');
+            valExpression.remove(')');
             kDebug(36003) << " valExpression :" << valExpression;
             QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
             loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
         } else if (valExpression.contains("cell-content-is-in-list(")) {
             setRestriction(Validity::List);
-            valExpression = valExpression.remove("oooc:cell-content-is-in-list(");
+            valExpression.remove("oooc:cell-content-is-in-list(");
             kDebug(36003) << " valExpression :" << valExpression;
-            valExpression = valExpression.remove(')');
+            valExpression.remove(')');
             setValidityList(valExpression.split(';',  QString::SkipEmptyParts));
 
         }
@@ -293,35 +293,35 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
         else {
             if (valExpression.contains("cell-content-is-whole-number()")) {
                 setRestriction(Validity::Number);
-                valExpression = valExpression.remove("oooc:cell-content-is-whole-number() and ");
+                valExpression.remove("oooc:cell-content-is-whole-number() and ");
             } else if (valExpression.contains("cell-content-is-decimal-number()")) {
                 setRestriction(Validity::Integer);
-                valExpression = valExpression.remove("oooc:cell-content-is-decimal-number() and ");
+                valExpression.remove("oooc:cell-content-is-decimal-number() and ");
             } else if (valExpression.contains("cell-content-is-date()")) {
                 setRestriction(Validity::Date);
-                valExpression = valExpression.remove("oooc:cell-content-is-date() and ");
+                valExpression.remove("oooc:cell-content-is-date() and ");
             } else if (valExpression.contains("cell-content-is-time()")) {
                 setRestriction(Validity::Time);
-                valExpression = valExpression.remove("oooc:cell-content-is-time() and ");
+                valExpression.remove("oooc:cell-content-is-time() and ");
             }
             kDebug(36003) << "valExpression :" << valExpression;
 
             if (valExpression.contains("cell-content()")) {
-                valExpression = valExpression.remove("cell-content()");
+                valExpression.remove("cell-content()");
                 loadOdfValidationCondition(valExpression, cell->sheet()->map()->parser());
             }
             //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
             //for the moment we support just int/double value, not text/date/time :(
             if (valExpression.contains("cell-content-is-between(")) {
-                valExpression = valExpression.remove("cell-content-is-between(");
-                valExpression = valExpression.remove(')');
+                valExpression.remove("cell-content-is-between(");
+                valExpression.remove(')');
                 QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
                 loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
                 setCondition(Conditional::Between);
             }
             if (valExpression.contains("cell-content-is-not-between(")) {
-                valExpression = valExpression.remove("cell-content-is-not-between(");
-                valExpression = valExpression.remove(')');
+                valExpression.remove("cell-content-is-not-between(");
+                valExpression.remove(')');
                 QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
                 loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
                 setCondition(Conditional::Different);
