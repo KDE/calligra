@@ -27,6 +27,9 @@ Table Of Contents
 5.1. Calligra default database driver: SQLite
 6. WARNING against qt 4.8.0 and 4.8.1
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
+8. Plan
+8.1. Runtime dependency of Plan's import filters
+
 
 1. Kexi
 =======
@@ -314,3 +317,22 @@ and is *portable* among all the CPU architectures. Use this type of
 build for building distributable packages.
 
 [1] - http://code.compeng.uni-frankfurt.de/projects/vc
+
+
+8. Plan
+=======
+
+8.1. Runtime dependency of Plan's import filters
+------------------------------------------------
+The two current import filters, for project files from MS Project and Planner,
+both are based on mpxj (http://mpxj.sourceforge.net/, in Java) and Apache
+POI.
+Thus java needs to know how to locate the mpxj and Apache POI jar files:
+if not installed in the normal place where Java finds them, the location will
+have to be given by the PLAN_CLASSPATH environment variable, e.g:
+$ PLAN_CLASSPATH=/path/to/mpxj/mpxj.jar:/path/to/poi/poi.jar calligraplan&
+
+If your distribution is not yet able to provide those dependencies, please
+disable the Plan import filters by patching the toplevel CMakeLists.txt
+in the line before calligra_drop_unbuildable_products() with
+calligra_disable_product(FILTER_MPXJ_IMPORT "missing runtime deps")

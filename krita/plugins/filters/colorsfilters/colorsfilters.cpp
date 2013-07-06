@@ -97,10 +97,10 @@ bool KisAutoContrast::workWith(const KoColorSpace* cs) const
     return (cs->profile() != 0);
 }
 
-void KisAutoContrast::process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater) const
+void KisAutoContrast::processImpl(KisPaintDeviceSP device,
+                                  const QRect& applyRect,
+                                  const KisFilterConfiguration* config,
+                                  KoUpdater* progressUpdater) const
 {
     Q_ASSERT(device != 0);
     Q_UNUSED(config);
@@ -160,9 +160,6 @@ void KisAutoContrast::process(KisPaintDeviceSP device,
         for (int i = maxvalue; i < 256; i++)
             transfer[i] = 0xFFFF;
     }
-
-    KisSelectionSP dstSel;
-
     // apply
     KoColorTransformation *adj = device->colorSpace()->createBrightnessContrastAdjustment(transfer);
 

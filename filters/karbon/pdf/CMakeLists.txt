@@ -4,19 +4,19 @@ include_directories( ${POPPLER_INCLUDE_DIR} )
 macro_optional_find_package(OpenJPEG)
 macro_optional_find_package(JPEG)
 
-set(karbonpdfimport_PART_SRCS PdfImport.cpp SvgOutputDev.cpp )
+set(pdf2svg_PART_SRCS PdfImport.cpp SvgOutputDev.cpp )
 
-kde4_add_plugin(karbonpdfimport ${karbonpdfimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_pdf2svg ${pdf2svg_PART_SRCS})
 
-target_link_libraries(karbonpdfimport komain ${POPPLER_LIBRARY} ${POPPLER_CORE_LIBRARY})
+target_link_libraries(calligra_filter_pdf2svg komain ${POPPLER_LIBRARY} ${POPPLER_CORE_LIBRARY})
 if(JPEG_FOUND)
-    target_link_libraries(karbonpdfimport jpeg)
+    target_link_libraries(calligra_filter_pdf2svg jpeg)
 endif(JPEG_FOUND)
 if(OPENJPEG_FOUND)
-    target_link_libraries(karbonpdfimport ${OPENJPEG_LIBRARIES})
+    target_link_libraries(calligra_filter_pdf2svg ${OPENJPEG_LIBRARIES})
 endif(OPENJPEG_FOUND)
 
-install(TARGETS karbonpdfimport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_pdf2svg DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

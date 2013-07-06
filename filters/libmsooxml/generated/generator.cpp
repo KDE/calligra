@@ -167,8 +167,8 @@ int main()
             if (xml.isEndElement() && xml.name() == currentShapeName) {
                 state = ShapeNameNext;
                 QString defaults = handler.defaultEquations().replace('"', "\\\"");
-                pathEquations = pathEquations.replace('"', "\\\"");
-                shapeDefinition = shapeDefinition.replace('"', "\\\"");
+                pathEquations.replace('"', "\\\"");
+                shapeDefinition.replace('"', "\\\"");
                 QString output = "equations[\"" + currentShapeName + "\"]=\"" + defaults + shapeDefinition + pathEquations + "\";" + "\n";
                 // Cutting the output to sequence of 1000 chars
                 int index = 1000;
@@ -179,7 +179,7 @@ int main()
                 outStream << output;
                 shapeDefinition = "";
                 pathEquations = "";
-                shapeAttributes = shapeAttributes.replace('"', "\\\"");
+                shapeAttributes.replace('"', "\\\"");
                 outStream << "attributes[\"" << currentShapeName << "\"]=\"" << shapeAttributes << "\";" << "\n";
                 shapeAttributes = "";
             }

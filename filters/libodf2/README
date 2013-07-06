@@ -1,0 +1,17 @@
+This library contains classes that are related to ODF but which are
+not used by any application or by any library in libs/. Most of the
+time this means that the classes are used by the filters, which is the
+reason why this library is placed here.
+
+The classes are so far comprised of the following categories:
+ - Text contents objects: KoTable, KoRow, KoColumn, KoCell, ...
+ - style objects: Kostyle, Ko*Style.
+
+The reason why the applications are not using them is often that these
+classes are pure storage classes and the applications have more
+advanced implementations that allow editing with good performance.
+Examples of such classes are style classes and objects that are part
+of text contents.
+
+If a class is interesting to use in an application it should be moved
+to libs/odf.

@@ -676,10 +676,10 @@ static void replaceFormulaReference(int referencedRow, int referencedColumn, int
             c += thisColumn - referencedColumn;
         if (rx.cap(2) != "$") // absolute or relative row?
             r += thisRow - referencedRow;
-        result = result.replace(cellReferenceStart,
-                                cellReferenceLength,
-                                rx.cap(1) + Calligra::Sheets::Util::encodeColumnLabelText(c) +
-                                rx.cap(2) + QString::number(r) );
+        result.replace(cellReferenceStart,
+                       cellReferenceLength,
+                       rx.cap(1) + Calligra::Sheets::Util::encodeColumnLabelText(c) +
+                       rx.cap(2) + QString::number(r) );
     }
 }
 

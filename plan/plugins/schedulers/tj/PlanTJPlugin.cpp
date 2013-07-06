@@ -88,8 +88,8 @@ void PlanTJPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager 
 
     project.changed( sm );
 
-//     connect(this, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), &project, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)));
-//     connect(this, SIGNAL( sigCalculationFinished(Project*, ScheduleManager*)), &project, SIGNAL(sigCalculationFinished(Project*, ScheduleManager* )));
+//     connect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
+//     connect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
     connect(job, SIGNAL(maxProgressChanged(int)), sm, SLOT(setMaxProgress(int)));
     connect(job, SIGNAL(progressChanged(int)), sm, SLOT(setProgress(int)));
@@ -112,7 +112,7 @@ void PlanTJPlugin::stopCalculation( SchedulerThread *sch )
 {
     if ( sch ) {
          //FIXME: this should just call stopScheduling() and let the job finish "normally"
-        disconnect( sch, SIGNAL( jobFinished( PlanTJScheduler* ) ), this, SLOT( slotFinished( PlanTJScheduler* ) ) );
+        disconnect( sch, SIGNAL(jobFinished(PlanTJScheduler*)), this, SLOT(slotFinished(PlanTJScheduler*)) );
         sch->stopScheduling();
         // wait max 20 seconds.
         sch->mainManager()->setCalculationResult( ScheduleManager::CalculationStopped );
@@ -157,8 +157,8 @@ void PlanTJPlugin::slotFinished( SchedulerThread *j )
     }
     emit sigCalculationFinished( mp, sm );
 
-    disconnect(this, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), mp, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)));
-    disconnect(this, SIGNAL(sigCalculationFinished(Project*, ScheduleManager*)), mp, SIGNAL(sigCalculationFinished(Project*, ScheduleManager* )));
+    disconnect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
+    disconnect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
     job->deleteLater();
 }

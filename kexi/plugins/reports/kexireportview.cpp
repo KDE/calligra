@@ -72,6 +72,15 @@ KexiReportView::KexiReportView(QWidget *parent)
     m_pageSelector->setRecordCount(0);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setLabelText(i18n("Page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonFirst, i18n("Go to first page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonFirst, i18n("Goes to first page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonPrevious, i18n("Go to previous page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonPrevious, i18n("Goes to previous page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonNext, i18n("Go to next page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonNext, i18n("Goes to next page"));
+    m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonLast, i18n("Go to last page"));
+    m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonLast, i18n("Goes to last page"));
+    m_pageSelector->setNumberFieldToolTips(i18n("Current page number"), i18n("Number of pages"));
     m_pageSelector->setRecordHandler(this);
 #endif
 
