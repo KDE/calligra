@@ -133,9 +133,9 @@ int KisToolPaint::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP;
 }
 
-void KisToolPaint::resourceChanged(int key, const QVariant& v)
+void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 {
-    KisTool::resourceChanged(key, v);
+    KisTool::canvasResourceChanged(key, v);
 
     switch(key){
     case(KisCanvasResourceProvider::Opacity):
@@ -307,7 +307,10 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionWidgetLayout->setSpacing(1);
     m_optionWidgetLayout->setMargin(0);
 
-    verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    QWidget *w = new QWidget();
+    w->setObjectName("SpecialSpacer");
+
+    verticalLayout->addWidget(w);
 
     if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
@@ -340,7 +343,8 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
         }
         m_optionWidgetLayout->addWidget(label, m_optionWidgetLayout->rowCount(), 0);
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount() - 1, 1);
-    } else {
+    }
+    else {
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
     }
 }

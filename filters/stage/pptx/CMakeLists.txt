@@ -1,6 +1,7 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30528)
 
 include_directories(
+    ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx
     ${KOMAIN_INCLUDES}
@@ -8,7 +9,7 @@ include_directories(
 
 ########### next target ###############
 
-set(pptximport_PART_SRCS
+set(pptx2odp_PART_SRCS
     PptxImport.cpp
     PptxXmlDocumentReader.cpp
     PptxXmlSlideReader.cpp
@@ -19,16 +20,17 @@ set(pptximport_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )
 
-kde4_add_plugin(pptximport ${pptximport_PART_SRCS})
+kde4_add_plugin(calligra_filter_pptx2odp ${pptx2odp_PART_SRCS})
 
 target_link_libraries(
-    pptximport
-    msooxml
+    calligra_filter_pptx2odp
+    komsooxml
+    koodf2
     koodf
     komain
 )
 
-install(TARGETS pptximport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_pptx2odp DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

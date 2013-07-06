@@ -147,7 +147,7 @@ bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
 {
     Q_UNUSED(o);
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    return !m_shapeText.m_text.isEmpty();
+    return !m_shapeText.text().isEmpty();
 }
 
 void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
@@ -155,8 +155,8 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
 {
     Q_UNUSED(ct);
     Q_UNUSED(o);
-    if (m_shapeText.m_doc) { // rich-text
-        KoTextDocument doc(m_shapeText.m_doc);
+    if (m_shapeText.richText()) { // rich-text
+        KoTextDocument doc(m_shapeText.richText());
         Q_ASSERT(!doc.styleManager());
         Q_ASSERT(m_styleManager);
         doc.setStyleManager(m_styleManager);
@@ -164,11 +164,11 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
         KoEmbeddedDocumentSaver embeddedSaver;
         KoShapeSavingContext context(out.xml, out.styles, embeddedSaver);
         KoTextWriter textWriter(context);
-        textWriter.write(m_shapeText.m_doc.data(), 0);
+        textWriter.write(m_shapeText.richText(), 0);
 
         doc.setStyleManager(0);
     } else { // plain-text
-        QStringList lines = m_shapeText.m_text.split(QRegExp("[\n\r]"));
+        QStringList lines = m_shapeText.text().split(QRegExp("[\n\r]"));
         foreach (const QString& line, lines) {
             out.xml.startElement("text:p", false);
             int pos = 0;
@@ -209,8 +209,8 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
     Q_UNUSED(cd);
     Q_UNUSED(ds);
     KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
-    if (!m_shapeText.m_text.isEmpty()) {
-        switch (m_shapeText.halign) {
+    if (!m_shapeText.text().isEmpty()) {
+        switch (m_shapeText.hAlign()) {
         case Swinder::TxORecord::Left:
             style.addProperty("draw:textarea-horizontal-align", "left");
             break;
@@ -221,7 +221,7 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
             style.addProperty("draw:textarea-horizontal-align", "right");
             break;
         }
-        switch (m_shapeText.valign) {
+        switch (m_shapeText.vAlign()) {
         case Swinder::TxORecord::Top:
             style.addProperty("draw:textarea-vertical-align", "top");
             break;

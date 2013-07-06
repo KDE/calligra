@@ -128,7 +128,7 @@ QStringList KexiFieldListView::selectedFieldNames() const
 
     foreach (const QModelIndex &idx, idxlist) {
         QString field = model()->data(idx).toString();
-        if (field.startsWith("*")) {
+        if (field.startsWith('*')) {
             selectedFields.append("*");
         }
         else {

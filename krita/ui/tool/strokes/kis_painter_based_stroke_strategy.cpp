@@ -71,6 +71,16 @@ void KisPainterBasedStrokeStrategy::init()
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
 }
 
+KisPaintDeviceSP KisPainterBasedStrokeStrategy::targetDevice()
+{
+    return m_targetDevice;
+}
+
+KisSelectionSP KisPainterBasedStrokeStrategy::activeSelection()
+{
+    return m_activeSelection;
+}
+
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
                                                  KisSelectionSP selection,
                                                  bool hasIndirectPainting)
@@ -116,9 +126,9 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             indirect->setTemporaryCompositeOp(m_resources->compositeOp());
             indirect->setTemporaryOpacity(m_resources->opacity());
 
-            KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer*>(node.data());
-            if(paintLayer) {
-                indirect->setTemporaryChannelFlags(paintLayer->channelLockFlags());
+            QBitArray channelLockFlags = m_resources->channelLockFlags();
+            if (channelLockFlags.size() > 0) {
+                indirect->setTemporaryChannelFlags(channelLockFlags);
             }
         }
         else {
@@ -137,6 +147,9 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     m_transaction = new KisTransaction(name(), targetDevice);
 
     initPainters(targetDevice, selection, hasIndirectPainting);
+
+    m_targetDevice = targetDevice;
+    m_activeSelection = selection;
 }
 
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()

@@ -1,10 +1,12 @@
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
+	${CMAKE_CURRENT_SOURCE_DIR}/ora
 	${CMAKE_SOURCE_DIR}/krita/image/metadata
 	${EXIV2_INCLUDE_DIR} )
 
@@ -53,6 +55,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection.cpp
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
+    flake/kis_take_all_shapes_command.cpp
     kis_autogradient.cc
     kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
@@ -73,7 +76,6 @@ set(kritaui_LIB_SRCS
     kis_part2.cpp
     kis_factory2.cc
     kis_file_layer.cpp
-    kis_filter_handler.cc
     kis_filter_manager.cc
     kis_filters_model.cc
     kis_flipbook.cpp
@@ -125,8 +127,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
-    openrastertk/kis_open_raster_stack_load_visitor.cpp
-    openrastertk/kis_open_raster_stack_save_visitor.cpp
+    ora/kis_open_raster_stack_load_visitor.cpp
+    ora/kis_open_raster_stack_save_visitor.cpp
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc
@@ -157,6 +159,7 @@ set(kritaui_LIB_SRCS
     tool/kis_smoothing_options.cpp
     tool/strokes/freehand_stroke.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
+    tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/KisFlipbookSelector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
@@ -165,6 +168,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_space_selector.cc
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc
+    widgets/kis_image_from_clipboard_widget.cpp
     widgets/kis_double_widget.cc
     widgets/kis_filter_selector_widget.cc
     widgets/kis_gradient_chooser.cc
@@ -196,8 +200,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
-#    widgets/kis_light_source.cpp
-#    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
@@ -218,8 +220,6 @@ set(kritaui_LIB_SRCS
     operations/kis_operation_ui_widget.cpp
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
-    kis_filter_job.cpp
-    kis_threaded_applicator.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
 )
@@ -288,10 +288,12 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
 target_link_libraries(kritaui ${X11_X11_LIB})
 
+target_link_libraries(kritaui ${GLEW_LIBRARIES})
+
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -355,4 +357,4 @@ install( FILES
 #    kis_tool_types.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
-   DESTINATION ${INCLUDE_INSTALL_DIR})
+   DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

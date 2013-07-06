@@ -285,7 +285,7 @@ public slots:
     void setShowAppointments( bool on );
 
 protected slots:
-    void slotContextMenuRequested( QModelIndex, const QPoint &pos );
+    void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
     virtual void slotOptions();
     virtual void slotOptionsFinished( int result );
 
@@ -373,7 +373,7 @@ public slots:
     void setShowNoInformation( bool on ) { m_showNoInformation = on; }
 
 protected slots:
-    void slotContextMenuRequested( QModelIndex, const QPoint &pos );
+    void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
     virtual void slotOptions();
 
 private:
@@ -428,7 +428,7 @@ public slots:
     void setScheduleManager( ScheduleManager *sm );
 
 protected slots:
-    void slotContextMenuRequested( QModelIndex, const QPoint &pos );
+    void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
     virtual void slotOptions();
 
 private:

@@ -52,7 +52,9 @@
 #include <QResizeEvent>
 #include <QTimer>
 #include <QToolButton>
+#ifndef QT_NO_SQL
 #include <QSqlDatabase>
+#endif
 #include <QSizePolicy>
 #include <QScrollBar>
 

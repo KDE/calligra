@@ -20,7 +20,7 @@
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
 #define MSOOXMLDRAWINGTABLESTYLEREADER_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include "MsooXmlDrawingTableStyle.h"
 #include "MsooXmlCommonReader.h"
@@ -40,7 +40,7 @@ namespace MSOOXML
 class DrawingMLTheme;
 class MsooXmlImport;
 
-class MSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
+class KOMSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path,
@@ -59,7 +59,7 @@ public:
     QMap<QString, QString> colorMap;
 };
 
-class MSOOXML_EXPORT MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader
+class KOMSOOXML_EXPORT MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader
 {
 public:
     explicit MsooXmlDrawingTableStyleReader(KoOdfWriters *writers);

@@ -30,5 +30,5 @@ Name[zh_CN]=Planner 导入过滤器
 X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/x-planner
 X-KDE-Weight=1
-X-KDE-Library=planmpxjimport
+X-KDE-Library=calligra_filter_mpxj2plan
 X-KDE-ServiceTypes=Calligra/Filter

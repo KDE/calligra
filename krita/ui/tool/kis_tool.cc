@@ -199,7 +199,7 @@ void KisTool::requestStrokeEnd()
 {
 }
 
-void KisTool::resourceChanged(int key, const QVariant & v)
+void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
 
     switch (key) {
@@ -602,7 +602,7 @@ void KisTool::setupPaintAction(KisRecordedPaintAction* action)
 QWidget* KisTool::createOptionWidget()
 {
     d->optionWidget = new QLabel(i18n("No options"));
-    d->optionWidget->setObjectName(toolId() + " Option Widget");
+    d->optionWidget->setObjectName("SpecialSpacer");
     return d->optionWidget;
 }
 
