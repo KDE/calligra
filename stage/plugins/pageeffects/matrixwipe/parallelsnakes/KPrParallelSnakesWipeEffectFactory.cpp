@@ -56,7 +56,7 @@ KPrParallelSnakesWipeEffectFactory::~KPrParallelSnakesWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Vertical Top Same In" ),
     I18N_NOOP( "Vertical Top Same Out" ),
     I18N_NOOP( "Vertical Bottom Same In" ),

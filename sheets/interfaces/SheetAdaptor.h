@@ -119,7 +119,7 @@ public Q_SLOTS: // METHODS
     //virtual bool showColumnNumber() const;
     //virtual bool hideZero() const;
     //virtual bool firstLetterUpper() const;
-    //virtual void setShowPageBorders( bool b );
+    //virtual void setShowPageOutline( bool b );
 
     /** Return the height the paper of the printer has. */
     virtual float paperHeight() const;

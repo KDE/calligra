@@ -525,7 +525,7 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
         settingsWriter->addConfigItem("FirstLetterUpper", false);
         settingsWriter->addConfigItem("ShowFormulaIndicator", false);
         settingsWriter->addConfigItem("ShowCommentIndicator", true);
-        settingsWriter->addConfigItem("ShowPageBorders", sheet->isPageBreakViewEnabled()); // best match kspread provides
+        settingsWriter->addConfigItem("ShowPageOutline", sheet->isPageBreakViewEnabled()); // best match kspread provides
         settingsWriter->addConfigItem("lcmode", false);
         settingsWriter->addConfigItem("autoCalc", sheet->autoCalc());
         settingsWriter->addConfigItem("ShowColumnNumber", false);
