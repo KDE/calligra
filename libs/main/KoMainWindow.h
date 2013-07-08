@@ -409,11 +409,6 @@ private slots:
 private:
 
     /**
-     * @internal
-     */
-    virtual bool eventFilter( QObject *obj, QEvent *ev );
-
-    /**
      * Adds a part to the manager.
      *
      * Sets it to the active part automatically if @p setActive is true (default ).
@@ -471,10 +466,6 @@ private slots:
      */
     void slotManagedTopLevelWidgetDestroyed();
 
-private:
-
-    KoParts::Part * findPartFromWidget( QWidget * widget, const QPoint &pos );
-    KoParts::Part * findPartFromWidget( QWidget * widget );
 
 // ---------------------  PartManager
 

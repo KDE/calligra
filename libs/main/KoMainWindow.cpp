@@ -256,7 +256,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
     // PartManager
-    qApp->installEventFilter( this );
     d->m_managedTopLevelWidgets.append(this);
     connect( this, SIGNAL(destroyed()),
              this, SLOT(slotManagedTopLevelWidgetDestroyed()));
@@ -460,9 +459,6 @@ KoMainWindow::~KoMainWindow()
             it->setManager( 0 );
         }
     }
-
-    // core dumps ... setActivePart( 0 );
-    qApp->removeEventFilter( this );
 
     delete d;
 }
@@ -2093,82 +2089,6 @@ void KoMainWindow::createShellGUI()
 }
 
 // PartManager
-
-bool KoMainWindow::eventFilter( QObject *obj, QEvent *ev )
-{
-
-    if ( ev->type() != QEvent::MouseButtonPress &&
-         ev->type() != QEvent::MouseButtonDblClick &&
-         ev->type() != QEvent::FocusIn )
-        return false;
-
-    if ( !obj->isWidgetType() )
-        return false;
-
-    QWidget *w = static_cast<QWidget *>( obj );
-
-    if ( ( ( w->windowFlags().testFlag(Qt::Dialog) ) && w->isModal() ) ||
-         ( w->windowFlags().testFlag(Qt::Popup) ) || ( w->windowFlags().testFlag(Qt::Tool) ) )
-        return false;
-
-    QMouseEvent* mev = 0;
-    KoParts::Part * part;
-    while ( w )
-    {
-        QPoint pos;
-
-        if ( !d->m_managedTopLevelWidgets.contains( w->topLevelWidget() ) )
-            return false;
-
-        if ( mev ) // mouse press or mouse double-click event
-        {
-            pos = mev->globalPos();
-            part = findPartFromWidget( w, pos );
-        } else
-            part = findPartFromWidget( w );
-
-        if ( part ) // We found a part whose widget is w
-        {
-            if ( part != d->m_activePart )
-            {
-                setActivePart( part, w );
-            }
-
-            return false;
-        }
-
-        w = w->parentWidget();
-
-        if ( w && ( ( ( w->windowFlags() & Qt::Dialog ) && w->isModal() ) ||
-                    ( w->windowFlags() & Qt::Popup ) || ( w->windowFlags() & Qt::Tool ) ) )
-        {
-            return false;
-        }
-
-    }
-    return false;
-}
-
-KoParts::Part * KoMainWindow::findPartFromWidget( QWidget * widget, const QPoint &pos )
-{
-    for ( QList<QPointer<KoParts::Part> >::iterator it = d->m_parts.begin(), end = d->m_parts.end() ; it != end ; ++it )
-    {
-        QPointer<KoParts::Part> part = (*it)->hitTest( widget, pos );
-        if ( part && d->m_parts.contains( part ) )
-            return part;
-    }
-    return 0;
-}
-
-KoParts::Part * KoMainWindow::findPartFromWidget( QWidget * widget )
-{
-    for ( QList<QPointer<KoParts::Part> >::iterator it = d->m_parts.begin(), end = d->m_parts.end() ; it != end ; ++it )
-    {
-        if ( *it && widget == (*it)->widget() )
-            return (*it);
-    }
-    return 0;
-}
 
 void KoMainWindow::addPart(KoParts::Part *part)
 {
