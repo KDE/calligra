@@ -39,5 +39,5 @@ Name[zh_TW]=Words ASCII 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=text/plain
 X-KDE-Weight=1
-X-KDE-Library=asciiimport
+X-KDE-Library=calligra_filter_ascii2words
 X-KDE-ServiceTypes=Calligra/Filter

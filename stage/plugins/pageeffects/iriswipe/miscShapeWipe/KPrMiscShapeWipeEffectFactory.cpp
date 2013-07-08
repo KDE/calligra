@@ -58,7 +58,7 @@ KPrMiscShapeWipeEffectFactory::~KPrMiscShapeWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Heart" ),
     I18N_NOOP( "Heart Reverse" ),
     I18N_NOOP( "Keyhole" ),

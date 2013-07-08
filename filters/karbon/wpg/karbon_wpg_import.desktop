@@ -50,5 +50,5 @@ Name[zh_TW]=Karbon WPG 匯入過濾程式
 X-KDE-Export=image/svg+xml
 X-KDE-Import=application/x-wpg
 X-KDE-Weight=1
-X-KDE-Library=wpgimport
+X-KDE-Library=calligra_filter_wpg2svg
 X-KDE-ServiceTypes=Calligra/Filter

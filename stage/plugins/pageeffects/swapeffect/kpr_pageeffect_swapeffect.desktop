@@ -58,6 +58,7 @@ Comment[uk]=Ефект перегортання сторінки
 Comment[wa]=Efet di pådje di discandjaedje
 Comment[x-test]=xxSwap Page Effectxx
 Comment[zh_TW]=變換頁面效果
+X-KDE-PluginInfo-Name=kpr_pageeffect_swapeffect
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_swapeffect

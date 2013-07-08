@@ -1481,7 +1481,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         int levels = 0;
 
         if (rx.indexIn(*inst) >= 0) {
-            QStringList levels_lst = rx.cap(1).split("-");
+            QStringList levels_lst = rx.cap(1).split('-');
             levels = levels_lst.last().toInt();
         }
 

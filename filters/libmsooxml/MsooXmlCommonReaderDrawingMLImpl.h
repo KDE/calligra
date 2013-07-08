@@ -2611,8 +2611,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // refers to the corresponding margin of a parent style.  Let's convert
     // the percentage value into points to keep it simple.
     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
-    if (spcBef.contains("%")) {
-        spcBef.remove("%");
+    if (spcBef.contains('%')) {
+        spcBef.remove('%');
         qreal percentage = spcBef.toDouble();
         qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -2623,8 +2623,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin);
     }
     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
-    if (spcAft.contains("%")) {
-        spcAft.remove("%");
+    if (spcAft.contains('%')) {
+        spcAft.remove('%');
         qreal percentage = spcAft.toDouble();
         qreal margin = 0;
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -4007,7 +4007,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
     TRY_READ_ATTR_WITHOUT_NS(l)
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(t)
-//MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+//KOMSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
     if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
         // TODO: One way to approach this would be to first scale the image to the size of the slide

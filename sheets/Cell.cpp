@@ -1758,7 +1758,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
                 lineCount = 0;
                 // The value will be set later in loadOdf().
                 if ((!link.isEmpty()) && (link[0] == '#'))
-                    link = link.remove(0, 1);
+                    link.remove(0, 1);
                 setLink(link);
                 // Abort here cause we can handle only either a link in a cell or (rich-)text but not both.
                 break;

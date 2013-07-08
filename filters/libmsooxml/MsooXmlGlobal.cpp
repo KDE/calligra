@@ -25,12 +25,12 @@
 
 #include "MsooXmlGlobal.h"
 
-MSOOXML_EXPORT uint MSOOXML::maximumSpreadsheetColumns()
+KOMSOOXML_EXPORT uint MSOOXML::maximumSpreadsheetColumns()
 {
     return 0x7FFF;
 }
 
-MSOOXML_EXPORT uint MSOOXML::maximumSpreadsheetRows()
+KOMSOOXML_EXPORT uint MSOOXML::maximumSpreadsheetRows()
 {
     return 0xFFFFF;
 }

@@ -9,7 +9,7 @@ include_directories(
 
 ########### next target ###############
 
-set(docximport_PART_SRCS
+set(docx2odt_PART_SRCS
     DocxXmlStylesReader.cpp
     DocxXmlFontTableReader.cpp
     DocxXmlCommentsReader.cpp
@@ -26,17 +26,17 @@ set(docximport_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )
 
-kde4_add_plugin(docximport ${docximport_PART_SRCS})
+kde4_add_plugin(calligra_filter_docx2odt ${docx2odt_PART_SRCS})
 
 target_link_libraries(
-    docximport
-    msooxml
+    calligra_filter_docx2odt
+    komsooxml
     koodf2
     koodf
     komain
 )
 
-install(TARGETS docximport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -51,7 +51,7 @@ kde4_add_plugin(docxexport ${docxexport_PART_SRCS})
 
 target_link_libraries(
     docxexport
-    msooxml
+    komsooxml
     komain
     koodf
 )
