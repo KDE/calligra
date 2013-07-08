@@ -8,7 +8,7 @@
  <Menu name="view"><text>&amp;View</text>
   <Separator/>
   <Action name="gotoCell"/>
-  <Action name="showPageBorders"/>
+  <Action name="showPageOutline"/>
   <Separator/>
   <Action name="view_zoom"/>
  </Menu>

@@ -266,18 +266,18 @@ public:
     /**
      * @return a flag that indicates whether the sheet should paint the page breaks.
      *
-     * @see setShowPageBorders
-     * @see Sheet::Private::showPageBorders
+     * @see setShowPageOutline
+     * @see Sheet::Private::showPageOutline
      */
-    bool isShowPageBorders() const;
+    bool isShowPageOutline() const;
 
     /**
      * Turns the page break lines on or off.
      *
-     * @see isShowPageBorders
-     * @see Sheet::Private::showPageBorders
+     * @see isShowPageOutline
+     * @see Sheet::Private::showPageOutline
      */
-    void setShowPageBorders(bool _b);
+    void setShowPageOutline(bool _b);
 
     struct BackgroundImageProperties {
         BackgroundImageProperties()

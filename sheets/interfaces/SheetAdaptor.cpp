@@ -347,9 +347,9 @@ bool SheetAdaptor::firstLetterUpper() const
     return m_sheet->getFirstLetterUpper();
 }
 
-void SheetAdaptor::setShowPageBorders(bool b)
+void SheetAdaptor::setShowPageOutline(bool b)
 {
-    m_sheet->setShowPageBorders(b);
+    m_sheet->setShowPageOutline(b);
     m_sheet->doc()->updateBorderButton();
 }
 #endif

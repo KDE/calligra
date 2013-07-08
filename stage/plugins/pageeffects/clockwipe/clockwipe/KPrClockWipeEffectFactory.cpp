@@ -41,7 +41,7 @@ KPrClockWipeEffectFactory::~KPrClockWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "From Twelve Clockwise" ),
     I18N_NOOP( "From Three Clockwise" ),
     I18N_NOOP( "From Six Clockwise" ),
