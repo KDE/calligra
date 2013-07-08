@@ -236,7 +236,6 @@ public:
     QWidget *m_activeWidget;
 
     QList<QPointer<KoParts::Part> > m_parts;
-    QList<const QWidget *> m_managedTopLevelWidgets;
 
 };
 
@@ -256,9 +255,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
     // PartManager
-    d->m_managedTopLevelWidgets.append(this);
-    connect( this, SIGNAL(destroyed()),
-             this, SLOT(slotManagedTopLevelWidgetDestroyed()));
     connect(this, SIGNAL(activePartChanged(KXMLGUIClient *)),
             this, SLOT(slotActivePartChanged(KXMLGUIClient *)));
     // End
@@ -438,7 +434,7 @@ KoMainWindow::~KoMainWindow()
         delete d->activeView;
         d->activeView = 0;
     }
-    while(!d->rootViews.isEmpty()) {
+    while (!d->rootViews.isEmpty()) {
         delete d->rootViews.takeFirst();
     }
 
@@ -447,11 +443,6 @@ KoMainWindow::~KoMainWindow()
     if (d->rootPart && d->rootPart->viewCount() == 0) {
         //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
         delete d->rootDocument;
-    }
-
-    foreach( const QWidget* w, d->m_managedTopLevelWidgets ) {
-        disconnect( w, SIGNAL(destroyed()),
-                    this, SLOT(slotManagedTopLevelWidgetDestroyed()) );
     }
 
     foreach( QPointer<KoParts::Part> it, d->m_parts ) {
@@ -2196,16 +2187,6 @@ void KoMainWindow::slotWidgetDestroyed()
     if ( static_cast<const QWidget *>( sender() ) == d->m_activeWidget )
         setActivePart( 0 ); //do not remove the part because if the part's widget dies, then the
     //part will delete itself anyway, invoking removePart() in its destructor
-}
-
-void KoMainWindow::slotManagedTopLevelWidgetDestroyed()
-{
-    const QWidget *topLevel = static_cast<const QWidget *>( sender() );
-
-    if ( !topLevel->isTopLevel() )
-        return;
-
-    d->m_managedTopLevelWidgets.removeAll( topLevel );
 }
 
 

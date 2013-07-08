@@ -461,11 +461,6 @@ private slots:
      */
     void slotWidgetDestroyed();
 
-    /**
-     * @internal
-     */
-    void slotManagedTopLevelWidgetDestroyed();
-
 
 // ---------------------  PartManager
 
