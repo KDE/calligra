@@ -47,10 +47,11 @@ namespace KIO {
   class Job;
 }
 
+class KoMainWindow;
+
 namespace KoParts
 {
 
-class PartManager;
 class PartPrivate;
 class PartBasePrivate;
 
@@ -121,12 +122,12 @@ public:
      * @internal
      * Used by the part manager.
      */
-    virtual void setManager( PartManager * manager );
+    virtual void setManager( KoMainWindow * manager );
 
     /**
      * Returns the part manager handling this part, if any (0L otherwise).
      */
-    PartManager * manager() const;
+    KoMainWindow * manager() const;
 
     /**
      * By default, the widget is deleted by the part when the part is deleted.

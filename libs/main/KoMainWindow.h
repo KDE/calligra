@@ -43,6 +43,8 @@ struct KoPageLayout;
 // Calligra class but not in main module
 class KoDockerManager;
 
+#include "part.h"
+
 /**
  * @brief Main window for a Calligra application
  *
@@ -401,6 +403,80 @@ private slots:
      * (with several items)
      */
     virtual void slotSetStatusBarText(const QString &);
+
+
+// ---------------------  PartManager
+private:
+
+    /**
+     * @internal
+     */
+    virtual bool eventFilter( QObject *obj, QEvent *ev );
+
+    /**
+     * Adds a part to the manager.
+     *
+     * Sets it to the active part automatically if @p setActive is true (default ).
+     * Behavior fix in KDE3.4: the part's widget is shown only if setActive is true,
+     * it used to be shown in all cases before.
+     */
+    virtual void addPart( KoParts::Part *part);
+
+
+    friend class KoParts::Part;
+    /**
+     * Removes a part from the manager (this does not delete the object) .
+     *
+     * Sets the active part to 0 if @p part is the activePart() .
+     */
+    virtual void removePart( KoParts::Part *part );
+
+    /**
+     * Sets the active part.
+     *
+     * The active part receives activation events.
+     *
+     * @p widget can be used to specify which widget was responsible for the activation.
+     * This is important if you have multiple views for a document/part , like in KOffice .
+     */
+    virtual void setActivePart( KoParts::Part *part, QWidget *widget = 0 );
+
+    /**
+     * Returns the active widget of the current active part (see activePart ).
+     */
+    virtual QWidget *activeWidget() const;
+
+signals:
+
+    /**
+     * Emitted when the active part has changed.
+     * @see setActivePart()
+     **/
+    void activePartChanged( KXMLGUIClient *newPart );
+
+private slots:
+
+    /**
+     * Removes a part when it is destroyed.
+     **/
+    void slotObjectDestroyed();
+
+    /**
+     * @internal
+     */
+    void slotWidgetDestroyed();
+
+    /**
+     * @internal
+     */
+    void slotManagedTopLevelWidgetDestroyed();
+
+private:
+
+    KoParts::Part * findPartFromWidget( QWidget * widget, const QPoint &pos );
+    KoParts::Part * findPartFromWidget( QWidget * widget );
+
+// ---------------------  PartManager
 
 private:
 

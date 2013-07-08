@@ -136,7 +136,6 @@ KoPart::KoPart(QObject *parent)
 
 KoPart::~KoPart()
 {
-
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
     foreach(KoView *view, views()) {

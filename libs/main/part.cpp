@@ -20,7 +20,7 @@
 
 #include "part.h"
 #include <kprotocolinfo.h>
-#include "partmanager.h"
+#include "KoMainWindow.h"
 
 #include <QtGui/QApplication>
 #include <QtCore/QFile>
@@ -44,6 +44,8 @@
 #include <assert.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+
+#include <KoMainWindow.h>
 
 using namespace KoParts;
 
@@ -74,7 +76,7 @@ public:
     bool m_bSelectable;
     bool m_autoDeleteWidget;
     bool m_autoDeletePart;
-    PartManager * m_manager;
+    KoMainWindow * m_manager;
     QPointer<QWidget> m_widget;
 };
 
@@ -171,14 +173,14 @@ KIconLoader* Part::iconLoader()
     return d->m_iconLoader;
 }
 
-void Part::setManager( PartManager *manager )
+void Part::setManager( KoMainWindow *manager )
 {
     Q_D(Part);
 
     d->m_manager = manager;
 }
 
-PartManager *Part::manager() const
+KoMainWindow *Part::manager() const
 {
     Q_D(const Part);
 

@@ -60,7 +60,6 @@
 #include <kedittoolbar.h>
 #include <ktemporaryfile.h>
 #include <krecentdocument.h>
-#include <partmanager.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
@@ -92,6 +91,7 @@
 #include <QDesktopWidget>
 #include <QPrintPreviewDialog>
 #include <QCloseEvent>
+#include <QPointer>
 
 #include "thememanager.h"
 
@@ -105,7 +105,6 @@ public:
         rootDocument = 0;
         rootPart = 0;
         partToOpen = 0;
-        manager = 0;
         mainWindowGuiIsBuilt = false;
         forQuit = false;
         activePart = 0;
@@ -139,6 +138,10 @@ public:
         themeManager = 0;
         m_bShellGUIActivated = false;
         m_helpMenu = 0;
+
+        // PartManger
+        m_activeWidget = 0;
+        m_activePart = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -170,10 +173,9 @@ public:
 
     KoMainWindow *parent;
     KoDocument *rootDocument;
-    KoPart *rootPart;
-    KoPart *partToOpen;
+    QPointer<KoPart> rootPart;
+    QPointer<KoPart> partToOpen;
     QList<KoView*> rootViews;
-    KoParts::PartManager *manager;
 
     QPointer<KoPart> activePart;
     KoView *activeView;
@@ -229,6 +231,12 @@ public:
     bool m_bShellGUIActivated;
     KHelpMenu *m_helpMenu;
 
+    // PartManager
+    QPointer<KoParts::Part> m_activePart;
+    QWidget *m_activeWidget;
+
+    QList<QPointer<KoParts::Part> > m_parts;
+    QList<const QWidget *> m_managedTopLevelWidgets;
 
 };
 
@@ -247,10 +255,15 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
-    d->manager = new KoParts::PartManager(this);
-
-    connect(d->manager, SIGNAL(activePartChanged(KXMLGUIClient *)),
+    // PartManager
+    qApp->installEventFilter( this );
+    d->m_managedTopLevelWidgets.append(this);
+    connect( this, SIGNAL(destroyed()),
+             this, SLOT(slotManagedTopLevelWidgetDestroyed()));
+    connect(this, SIGNAL(activePartChanged(KXMLGUIClient *)),
             this, SLOT(slotActivePartChanged(KXMLGUIClient *)));
+    // End
+
 
     if (componentData.isValid()) {
         setComponentData(componentData);   // don't load plugins! we don't want
@@ -407,7 +420,6 @@ KoMainWindow::~KoMainWindow()
     }
 
 
-
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
     d->dockerManager = 0;
@@ -421,7 +433,7 @@ KoMainWindow::~KoMainWindow()
     }
 
     // safety first ;)
-    d->manager->setActivePart(0);
+    setActivePart(0);
 
     if (d->rootViews.indexOf(d->activeView) == -1) {
         delete d->activeView;
@@ -438,7 +450,20 @@ KoMainWindow::~KoMainWindow()
         delete d->rootDocument;
     }
 
-    delete d->manager;
+    foreach( const QWidget* w, d->m_managedTopLevelWidgets ) {
+        disconnect( w, SIGNAL(destroyed()),
+                    this, SLOT(slotManagedTopLevelWidgetDestroyed()) );
+    }
+
+    foreach( QPointer<KoParts::Part> it, d->m_parts ) {
+        if (it) {
+            it->setManager( 0 );
+        }
+    }
+
+    // core dumps ... setActivePart( 0 );
+    qApp->removeEventFilter( this );
+
     delete d;
 }
 
@@ -488,7 +513,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
 
     if (doc) {
         d->dockWidgetMenu->setVisible(true);
-        d->manager->addPart(d->rootPart);
+        addPart(d->rootPart);
         KoView *view = d->rootPart->createView(this);
         setCentralWidget(view);
         d->rootViews.append(view);
@@ -515,7 +540,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
     d->closeFile->setEnabled(enable);
     updateCaption();
 
-    d->manager->setActivePart(d->rootPart, doc ? d->rootViews.first() : 0);
+    setActivePart(d->rootPart, doc ? d->rootViews.first() : 0);
     emit restoringDone();
 
     while(!oldRootViews.isEmpty()) {
@@ -1701,8 +1726,8 @@ void KoMainWindow::slotActivePartChanged(KXMLGUIClient *_newPart)
         createShellGUI();
     }
 
-    if (newPart && d->manager->activeWidget() && d->manager->activeWidget()->inherits("KoView")) {
-        d->activeView = (KoView *)d->manager->activeWidget();
+    if (newPart && activeWidget() && activeWidget()->inherits("KoView")) {
+        d->activeView = qobject_cast<KoView *>(activeWidget());
         d->activePart = newPart;
         //kDebug(30003) <<"new active part is" << d->activePart;
 
@@ -2066,5 +2091,203 @@ void KoMainWindow::createShellGUI()
     guiFactory()->addClient( this );
 
 }
+
+// PartManager
+
+bool KoMainWindow::eventFilter( QObject *obj, QEvent *ev )
+{
+
+    if ( ev->type() != QEvent::MouseButtonPress &&
+         ev->type() != QEvent::MouseButtonDblClick &&
+         ev->type() != QEvent::FocusIn )
+        return false;
+
+    if ( !obj->isWidgetType() )
+        return false;
+
+    QWidget *w = static_cast<QWidget *>( obj );
+
+    if ( ( ( w->windowFlags().testFlag(Qt::Dialog) ) && w->isModal() ) ||
+         ( w->windowFlags().testFlag(Qt::Popup) ) || ( w->windowFlags().testFlag(Qt::Tool) ) )
+        return false;
+
+    QMouseEvent* mev = 0;
+    KoParts::Part * part;
+    while ( w )
+    {
+        QPoint pos;
+
+        if ( !d->m_managedTopLevelWidgets.contains( w->topLevelWidget() ) )
+            return false;
+
+        if ( mev ) // mouse press or mouse double-click event
+        {
+            pos = mev->globalPos();
+            part = findPartFromWidget( w, pos );
+        } else
+            part = findPartFromWidget( w );
+
+        if ( part ) // We found a part whose widget is w
+        {
+            if ( part != d->m_activePart )
+            {
+                setActivePart( part, w );
+            }
+
+            return false;
+        }
+
+        w = w->parentWidget();
+
+        if ( w && ( ( ( w->windowFlags() & Qt::Dialog ) && w->isModal() ) ||
+                    ( w->windowFlags() & Qt::Popup ) || ( w->windowFlags() & Qt::Tool ) ) )
+        {
+            return false;
+        }
+
+    }
+    return false;
+}
+
+KoParts::Part * KoMainWindow::findPartFromWidget( QWidget * widget, const QPoint &pos )
+{
+    for ( QList<QPointer<KoParts::Part> >::iterator it = d->m_parts.begin(), end = d->m_parts.end() ; it != end ; ++it )
+    {
+        QPointer<KoParts::Part> part = (*it)->hitTest( widget, pos );
+        if ( part && d->m_parts.contains( part ) )
+            return part;
+    }
+    return 0;
+}
+
+KoParts::Part * KoMainWindow::findPartFromWidget( QWidget * widget )
+{
+    for ( QList<QPointer<KoParts::Part> >::iterator it = d->m_parts.begin(), end = d->m_parts.end() ; it != end ; ++it )
+    {
+        if ( *it && widget == (*it)->widget() )
+            return (*it);
+    }
+    return 0;
+}
+
+void KoMainWindow::addPart(KoParts::Part *part)
+{
+    Q_ASSERT( part );
+
+    // don't add parts more than once :)
+    if ( d->m_parts.contains( part ) ) {
+#ifdef DEBUG_PARTMANAGER
+        kWarning(1000) << part << " already added" << kBacktrace(5);
+#endif
+        return;
+    }
+
+    d->m_parts.append( part );
+}
+
+void KoMainWindow::removePart( KoParts::Part *part )
+{
+    if (!d->m_parts.contains(part)) {
+        return;
+    }
+
+    const int nb = d->m_parts.removeAll(part);
+    Q_ASSERT(nb == 1);
+    Q_UNUSED(nb); // no warning in release mode
+    part->setManager(0);
+
+    if ( part == d->m_activePart )
+        setActivePart( 0 );
+}
+
+void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
+{
+    if ( part && !d->m_parts.contains( part ) )
+    {
+        kWarning(1000) << "trying to activate a non-registered part!" << part->objectName();
+        return; // don't allow someone call setActivePart with a part we don't know about
+    }
+
+    //check whether nested parts are disallowed and activate the top parent part then, by traversing the
+    //tree recursively (Simon)
+    if ( part )
+    {
+        QObject *parentPart = part->parent(); // ### this relies on people using KoParts::Factory!
+        KoParts::Part *parPart = ::qobject_cast<KoParts::Part *>( parentPart );
+        if ( parPart )
+        {
+            setActivePart( parPart, parPart->widget() );
+            return;
+        }
+    }
+
+    // don't activate twice
+    if ( d->m_activePart && part && d->m_activePart == part &&
+         (!widget || d->m_activeWidget == widget) )
+        return;
+
+    KoParts::Part *oldActivePart = d->m_activePart;
+    QWidget *oldActiveWidget = d->m_activeWidget;
+
+    d->m_activePart = part;
+    d->m_activeWidget = widget;
+
+    if ( oldActivePart )
+    {
+        KoParts::Part *savedActivePart = part;
+        QWidget *savedActiveWidget = widget;
+
+        if ( oldActiveWidget ) {
+            disconnect( oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
+        }
+
+        d->m_activePart = savedActivePart;
+        d->m_activeWidget = savedActiveWidget;
+    }
+
+    if ( d->m_activePart ) {
+        if ( !widget )
+            d->m_activeWidget = part->widget();
+
+        if ( d->m_activeWidget ) {
+            connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
+        }
+    }
+    // Set the new active instance in KGlobal
+    KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
+
+    emit activePartChanged( d->m_activePart );
+}
+
+QWidget *KoMainWindow::activeWidget() const
+{
+    return  d->m_activeWidget;
+}
+
+void KoMainWindow::slotObjectDestroyed()
+{
+    kDebug(1000);
+    removePart( const_cast<KoParts::Part *>( static_cast<const KoParts::Part *>( sender() ) ) );
+}
+
+void KoMainWindow::slotWidgetDestroyed()
+{
+    kDebug(1000);
+    if ( static_cast<const QWidget *>( sender() ) == d->m_activeWidget )
+        setActivePart( 0 ); //do not remove the part because if the part's widget dies, then the
+    //part will delete itself anyway, invoking removePart() in its destructor
+}
+
+void KoMainWindow::slotManagedTopLevelWidgetDestroyed()
+{
+    const QWidget *topLevel = static_cast<const QWidget *>( sender() );
+
+    if ( !topLevel->isTopLevel() )
+        return;
+
+    d->m_managedTopLevelWidgets.removeAll( topLevel );
+}
+
+
 
 #include <KoMainWindow.moc>

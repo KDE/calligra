@@ -87,7 +87,6 @@ set(komain_LIB_SRCS
     thememanager.cpp
 
     part.cpp
-    partmanager.cpp
 )
 
 if( QT_QTDBUS_FOUND )
@@ -180,7 +179,6 @@ install( FILES
     komain_export.h
     
     part.h
-    partmanager.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
 if( QT_QTDBUS_FOUND )
