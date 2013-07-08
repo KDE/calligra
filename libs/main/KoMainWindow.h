@@ -381,10 +381,6 @@ private:
 
     KRecentFilesAction *recentAction() const;
 
-protected slots:
-
-    void slotActivePartChanged(KXMLGUIClient *newPart);
-
 private slots:
     /**
      * Save the list of recent files.
@@ -434,21 +430,12 @@ private:
      * @p widget can be used to specify which widget was responsible for the activation.
      * This is important if you have multiple views for a document/part , like in KOffice .
      */
-    virtual void setActivePart( KoParts::Part *part, QWidget *widget = 0 );
+    virtual void setActivePart(KoParts::Part *part, QWidget *widget);
 
     /**
      * Returns the active widget of the current active part (see activePart ).
      */
     virtual QWidget *activeWidget() const;
-
-signals:
-
-    /**
-     * Emitted when the active part has changed.
-     * @see setActivePart()
-     **/
-    void activePartChanged( KXMLGUIClient *newPart );
-
 private slots:
 
     /**

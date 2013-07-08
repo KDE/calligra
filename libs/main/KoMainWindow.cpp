@@ -255,8 +255,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
     // PartManager
-    connect(this, SIGNAL(activePartChanged(KXMLGUIClient *)),
-            this, SLOT(slotActivePartChanged(KXMLGUIClient *)));
     // End
 
 
@@ -428,7 +426,7 @@ KoMainWindow::~KoMainWindow()
     }
 
     // safety first ;)
-    setActivePart(0);
+    setActivePart(0, 0);
 
     if (d->rootViews.indexOf(d->activeView) == -1) {
         delete d->activeView;
@@ -1678,80 +1676,6 @@ void KoMainWindow::slotProgress(int value)
 }
 
 
-void KoMainWindow::slotActivePartChanged(KXMLGUIClient *_newPart)
-{
-
-    // This looks very much like KoParts::MainWindow::createGUI, but we have
-    // to reimplement it because it works with an active part, whereas we work
-    // with an active view _and_ an active part, depending for what.
-    // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
-    //kDebug(30003) <<"KoMainWindow::slotActivePartChanged( Part * newPart) newPart =" << newPart;
-    //kDebug(30003) <<"current active part is" << d->activePart;
-
-    KoPart *newPart = static_cast<KoPart*>(_newPart);
-
-    if (d->activePart && d->activePart == newPart) {
-        //kDebug(30003) <<"no need to change the GUI";
-        return;
-    }
-
-
-    KXMLGUIFactory *factory = guiFactory();
-
-// ###  setUpdatesEnabled( false );
-
-    if (d->activeView) {
-
-        factory->removeClient(d->activeView);
-
-        unplugActionList("toolbarlist");
-        qDeleteAll(d->toolbarList);
-        d->toolbarList.clear();
-    }
-
-    if (!d->mainWindowGuiIsBuilt) {
-        createShellGUI();
-    }
-
-    if (newPart && activeWidget() && activeWidget()->inherits("KoView")) {
-        d->activeView = qobject_cast<KoView *>(activeWidget());
-        d->activePart = newPart;
-        //kDebug(30003) <<"new active part is" << d->activePart;
-
-        factory->addClient(d->activeView);
-
-        // Position and show toolbars according to user's preference
-        setAutoSaveSettings(newPart->componentData().componentName(), false);
-
-        foreach (QDockWidget *wdg, d->dockWidgets) {
-            if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
-                wdg->setVisible(true);
-            }
-        }
-
-        // Create and plug toolbar list for Settings menu
-        //QPtrListIterator<KToolBar> it = toolBarIterator();
-        foreach(QWidget* it, factory->containers("ToolBar")) {
-            KToolBar * tb = ::qobject_cast<KToolBar *>(it);
-            if (tb) {
-                KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", tb->windowTitle()), this);
-                actionCollection()->addAction(tb->objectName().toUtf8(), act);
-                act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", tb->windowTitle())));
-                connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
-                act->setChecked(!tb->isHidden());
-                d->toolbarList.append(act);
-            } else
-                kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
-        }
-        plugActionList("toolbarlist", d->toolbarList);
-
-    }
-    else {
-        d->activeView = 0;
-        d->activePart = 0;
-    }
-// ###  setUpdatesEnabled( true );
-}
 
 QLabel * KoMainWindow::statusBarLabel()
 {
@@ -2108,26 +2032,23 @@ void KoMainWindow::removePart( KoParts::Part *part )
     part->setManager(0);
 
     if ( part == d->m_activePart )
-        setActivePart( 0 );
+        setActivePart(0, 0);
 }
 
 void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
 {
-    if ( part && !d->m_parts.contains( part ) )
-    {
+    if (part && !d->m_parts.contains(part)) {
         kWarning(1000) << "trying to activate a non-registered part!" << part->objectName();
         return; // don't allow someone call setActivePart with a part we don't know about
     }
 
     //check whether nested parts are disallowed and activate the top parent part then, by traversing the
     //tree recursively (Simon)
-    if ( part )
-    {
+    if ( part ) {
         QObject *parentPart = part->parent(); // ### this relies on people using KoParts::Factory!
         KoParts::Part *parPart = ::qobject_cast<KoParts::Part *>( parentPart );
-        if ( parPart )
-        {
-            setActivePart( parPart, parPart->widget() );
+        if ( parPart ) {
+            setActivePart(parPart, parPart->widget());
             return;
         }
     }
@@ -2143,8 +2064,7 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
     d->m_activePart = part;
     d->m_activeWidget = widget;
 
-    if ( oldActivePart )
-    {
+    if (oldActivePart) {
         KoParts::Part *savedActivePart = part;
         QWidget *savedActiveWidget = widget;
 
@@ -2156,10 +2076,10 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
         d->m_activeWidget = savedActiveWidget;
     }
 
-    if ( d->m_activePart ) {
-        if ( !widget )
+    if (d->m_activePart) {
+        if (!widget) {
             d->m_activeWidget = part->widget();
-
+        }
         if ( d->m_activeWidget ) {
             connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
         }
@@ -2167,7 +2087,65 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
     // Set the new active instance in KGlobal
     KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
 
-    emit activePartChanged( d->m_activePart );
+    // old slot called from part manager
+    KoPart *newPart = static_cast<KoPart*>(d->m_activePart.data());
+
+    if (d->activePart && d->activePart == newPart) {
+        //kDebug(30003) <<"no need to change the GUI";
+        return;
+    }
+
+    KXMLGUIFactory *factory = guiFactory();
+
+    if (d->activeView) {
+
+        factory->removeClient(d->activeView);
+
+        unplugActionList("toolbarlist");
+        qDeleteAll(d->toolbarList);
+        d->toolbarList.clear();
+    }
+
+    if (!d->mainWindowGuiIsBuilt) {
+        createShellGUI();
+    }
+
+    if (newPart && activeWidget() && activeWidget()->inherits("KoView")) {
+        d->activeView = qobject_cast<KoView *>(activeWidget());
+        d->activePart = newPart;
+        //kDebug(30003) <<"new active part is" << d->activePart;
+
+        factory->addClient(d->activeView);
+
+        // Position and show toolbars according to user's preference
+        setAutoSaveSettings(newPart->componentData().componentName(), false);
+
+        foreach (QDockWidget *wdg, d->dockWidgets) {
+            if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
+                wdg->setVisible(true);
+            }
+        }
+
+        // Create and plug toolbar list for Settings menu
+        foreach(QWidget* it, factory->containers("ToolBar")) {
+            KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+            if (toolBar) {
+                KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
+                actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
+                act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
+                connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
+                act->setChecked(!toolBar->isHidden());
+                d->toolbarList.append(act);
+            } else
+                kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+        }
+        plugActionList("toolbarlist", d->toolbarList);
+
+    }
+    else {
+        d->activeView = 0;
+        d->activePart = 0;
+    }
 }
 
 QWidget *KoMainWindow::activeWidget() const
@@ -2185,7 +2163,7 @@ void KoMainWindow::slotWidgetDestroyed()
 {
     kDebug(1000);
     if ( static_cast<const QWidget *>( sender() ) == d->m_activeWidget )
-        setActivePart( 0 ); //do not remove the part because if the part's widget dies, then the
+        setActivePart(0, 0); //do not remove the part because if the part's widget dies, then the
     //part will delete itself anyway, invoking removePart() in its destructor
 }
 
