@@ -24,6 +24,7 @@
 
 class StepStepLocation_p;
 class QTextCursor;
+class QTextDocument;
 class StepStepLocation : public QObject
 {
     Q_OBJECT
@@ -31,7 +32,7 @@ public:
     explicit StepStepLocation(QObject *parent = 0);
     StepStepLocation(QTextCursor cursor, QObject *parent =0);
     virtual ~StepStepLocation();
-    operator QTextCursor();
+    QTextCursor toQTextCursor(QTextDocument* ptr);
 signals:
 
 public slots:

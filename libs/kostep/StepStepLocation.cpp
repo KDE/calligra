@@ -35,8 +35,8 @@ StepStepLocation::~StepStepLocation()
   delete d;
 }
 
-StepStepLocation::operator QTextCursor()
+QTextCursor StepStepLocation::toQTextCursor(QTextDocument* ptr)
 {
-    return d->convertToQTextCursor();
+    return d->convertToQTextCursor(ptr);
 }
 

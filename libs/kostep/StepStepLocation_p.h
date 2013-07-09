@@ -32,7 +32,7 @@ public:
     explicit StepStepLocation_p(QObject *parent = 0);
 
     void constructor(QTextCursor cursor);
-    QTextCursor convertToQTextCursor();
+    QTextCursor convertToQTextCursor(QTextDocument* ptr);
     QString ToString();
 
 

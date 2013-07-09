@@ -19,6 +19,7 @@
 #include "StepStepLocation_p.h"
 #include <QtGui/QTextBlock>
 #include <QtGui/QTextDocument>
+#include <QtGui/QTextCursor>
 #include <QTextTable>
 #include <QtCore/QQueue>
 
@@ -43,7 +44,10 @@ void StepStepLocation_p::constructor(QTextCursor cursor)
       location.push(i);
       if (cursor.currentTable())
       {
-	
+	//QTextTable table = cursor.currentTable();
+	//QTextTable::iterator t_itr;
+
+	//cursor.movePosition();
 
       }
       if(cursor.currentList())
@@ -56,9 +60,36 @@ void StepStepLocation_p::constructor(QTextCursor cursor)
   location.push(cursor.positionInBlock());
 
 }
-QTextCursor StepStepLocation_p::convertToQTextCursor()
+QTextCursor StepStepLocation_p::convertToQTextCursor(QTextDocument* ptr)
 {
-  QList<int> locationq = location.toList();
+  //flip the stack
+  QStack<int> Stack1 = location;
+  QStack<int> Stack2;
+  for(int i=0; i<location.count(); i++)
+  {
+    Stack2.push(Stack1.pop());
+  }
+  QTextFrame::iterator itr= ptr->rootFrame()->begin();
+
+  while(!Stack2.isEmpty())
+  {
+    int i = Stack2.pop();
+    for(int x=0; x<=i; x++)
+    {
+      itr++;
+    }
+
+    if(Stack2.isEmpty())
+    {
+      QTextCursor textCursor(itr.currentBlock());
+      return textCursor;
+    }
+    else
+    {
+      itr = itr.currentFrame()->begin();
+    }
+  }
+
   //temporary
   return QTextCursor();
 }
