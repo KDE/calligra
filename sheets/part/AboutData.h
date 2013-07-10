@@ -29,10 +29,10 @@ namespace Calligra
 namespace Sheets
 {
 
-static const char* description = I18N_NOOP("Calligra Spreadsheet Application");
+static const char description[] = I18N_NOOP("Calligra Spreadsheet Application");
 
 // Always the same as the Calligra version
-static const char* version = CALLIGRA_VERSION_STRING;
+static const char version[] = CALLIGRA_VERSION_STRING;
 
 static KAboutData * newAboutData()
 {

@@ -219,20 +219,20 @@ const char* TextConverter::LID2lang( U16 lid )
 
 const char* TextConverter::LID2Codepage( U16 lid )
 {
-    static const char *cp874 = "CP874";
-    static const char *cp932 = "CP932";
-    static const char *cp936 = "CP936";
-    static const char *cp949 = "CP949";
-    static const char *cp950 = "CP950";
-    static const char *cp1250 = "CP1250";
-    static const char *cp1251 = "CP1251";
-    static const char *cp1252 = "CP1252";
-    static const char *cp1253 = "CP1253";
-    static const char *cp1254 = "CP1254";
-    static const char *cp1255 = "CP1255";
-    static const char *cp1256 = "CP1256";
-    static const char *cp1257 = "CP1257";
-    static const char *unknown = "not known";
+    static const char cp874[] = "CP874";
+    static const char cp932[] = "CP932";
+    static const char cp936[] = "CP936";
+    static const char cp949[] = "CP949";
+    static const char cp950[] = "CP950";
+    static const char cp1250[] = "CP1250";
+    static const char cp1251[] = "CP1251";
+    static const char cp1252[] = "CP1252";
+    static const char cp1253[] = "CP1253";
+    static const char cp1254[] = "CP1254";
+    static const char cp1255[] = "CP1255";
+    static const char cp1256[] = "CP1256";
+    static const char cp1257[] = "CP1257";
+    static const char unknown[] = "not known";
 
     // Work around spec bugs. Thomas Zander's documents had very
     // weird lid codes. Mac Word?
