@@ -42,7 +42,7 @@ QString KexiUtils::string2Identifier(const QString &s)
     if (id.isEmpty())
         return QString();
     r.reserve(id.length());
-    id.replace(' ', "_");
+    id.replace(' ', '_');
     QChar c = id[0];
     QString add;
     bool wasUnderscore = false;

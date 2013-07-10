@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PLANTJPSCHEDULER_H
-#define PLANTJPSCHEDULER_H
+#ifndef PLANTJSCHEDULER_H
+#define PLANTJSCHEDULER_H
 
 #include "kplatotj_export.h"
 
@@ -138,4 +138,4 @@ private:
     ulong m_granularity;
 };
 
-#endif // PLANTJPSCHEDULER_H
+#endif // PLANTJSCHEDULER_H

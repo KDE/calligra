@@ -32,7 +32,7 @@
 namespace MSOOXML
 {
 
-class MSOOXML_EXPORT MsooXmlDocPropertiesReader : public MsooXmlReader
+class KOMSOOXML_EXPORT MsooXmlDocPropertiesReader : public MsooXmlReader
 {
 public:
     explicit MsooXmlDocPropertiesReader(KoOdfWriters* writers);

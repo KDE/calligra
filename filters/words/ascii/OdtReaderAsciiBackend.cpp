@@ -136,7 +136,7 @@ void OdtReaderAsciiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCo
     if (!asciiContext) {
         return;
     }
-    kDebug(30503) << reader.text().toString();
+    //kDebug(30503) << reader.text().toString();
 
     asciiContext->outStream << reader.text().toString();
 }

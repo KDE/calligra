@@ -62,5 +62,5 @@ Name[zh_TW]=KSpread 的 HTML 匯出過濾程式
 X-KDE-Export=text/html
 X-KDE-Import=application/x-kspread
 X-KDE-Weight=50
-X-KDE-Library=kspreadhtmlexport
+X-KDE-Library=calligra_filter_sheets2html
 X-KDE-ServiceTypes=Calligra/Filter

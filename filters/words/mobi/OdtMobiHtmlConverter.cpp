@@ -663,8 +663,8 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
     QString mark = m_linksInfo.value(reference); // refrence without # at its begining.
     if (!mark.isEmpty() /*&& !m_options->stylesInCssFile*/) {
 //        // This is internal link.
-//        reference = reference.remove("|");
-//        reference = reference.remove(" ");// remove spaces
+//        reference.remove('|');
+//        reference.remove(' ');// remove spaces
 //        reference = chapter+reference;
 //        htmlWriter->addAttribute("href", reference);
         m_refrencesList.insert(htmlWriter->device()->pos(), mark);
@@ -721,8 +721,8 @@ void OdtMobiHtmlConverter::handleTagBookMark(KoXmlElement &nodeElement, KoXmlWri
     QString anchor = nodeElement.attribute("name");
     // This is haed codevalidator gets error for characters "|" and spaces
     // FIXME : we should handle ids better after move file to class
-//    anchor = anchor.remove("|");
-//    anchor = anchor.remove(" ");//remove spaces
+//    anchor.remove('|');
+//    anchor.remove(' ');//remove spaces
 //    htmlWriter->startElement("a", m_doIndent);
 //    htmlWriter->addAttribute("id", anchor);
     m_bookMarksList.insert(anchor, htmlWriter->device()->pos());
