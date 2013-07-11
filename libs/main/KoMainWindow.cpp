@@ -2032,17 +2032,6 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
         return; // don't allow someone call setActivePart with a part we don't know about
     }
 
-    //check whether nested parts are disallowed and activate the top parent part then, by traversing the
-    //tree recursively (Simon)
-    if ( part ) {
-        QObject *parentPart = part->parent(); // ### this relies on people using KoParts::Factory!
-        KoParts::Part *parPart = ::qobject_cast<KoParts::Part *>( parentPart );
-        if ( parPart ) {
-            setActivePart(parPart, parPart->widget());
-            return;
-        }
-    }
-
     // don't activate twice
     if ( d->m_activePart && part && d->m_activePart == part &&
          (!widget || d->m_activeWidget == widget) )
