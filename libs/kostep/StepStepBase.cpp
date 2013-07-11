@@ -20,6 +20,7 @@
 
 #include "StepStepBase.h"
 #include "StepStepBase_p.h"
+#include "StepStepLocation.h"
 StepStepBase::StepStepBase(QObject *parent):
     QObject(parent),d(new StepStepBase_p())
 {
@@ -81,5 +82,15 @@ QString StepStepBase::toXML()
 QString StepStepBase::Type()
 {
   return d->Type();
+
+}
+
+StepStepLocation StepStepBase::Location()
+{
+  return d->Location();
+}
+void StepStepBase::setLocation(StepStepLocation location)
+{
+  d->setLocation(location);
 
 }

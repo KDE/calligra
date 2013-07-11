@@ -31,7 +31,9 @@ class StepStepLocation : public QObject
 public:
     explicit StepStepLocation(QObject *parent = 0);
     StepStepLocation(QTextCursor cursor, QObject *parent =0);
+    StepStepLocation(const StepStepLocation& locate);
     virtual ~StepStepLocation();
+    StepStepLocation* operator=(StepStepLocation location);
     QTextCursor toQTextCursor(QTextDocument* ptr);
 signals:
 

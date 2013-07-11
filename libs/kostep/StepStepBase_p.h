@@ -34,10 +34,11 @@ public:
     void setForeign(bool foreign);
     int Position();
     void setPosition(int position);
-    //StepStepLocation Location();
-    //virtual void setLocation(StepStepLocation location);
+    StepStepLocation Location();
+    virtual void setLocation(StepStepLocation location);
     QString Step();
     QString Type();
+
 
 signals:
 

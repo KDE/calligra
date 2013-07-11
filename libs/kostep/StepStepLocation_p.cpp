@@ -126,3 +126,20 @@ int StepStepLocation_p::ParentFrame(QTextFrame* frame)
   return 0;
 }
 
+StepStepLocation_p* StepStepLocation_p::operator=(StepStepLocation_p location)
+{
+  setLocation(location.location);
+  return this;
+
+}
+QStack< int > StepStepLocation_p::Location()
+{
+  return location;
+}
+
+void StepStepLocation_p::setLocation(QStack< int > other)
+{
+  location = other;
+
+}
+

@@ -40,3 +40,16 @@ QTextCursor StepStepLocation::toQTextCursor(QTextDocument* ptr)
     return d->convertToQTextCursor(ptr);
 }
 
+StepStepLocation* StepStepLocation::operator=(StepStepLocation location)
+{
+  d->setLocation(location.d->Location());
+  return this;
+
+}
+StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject()
+{
+  d->setLocation(locate.d->Location());
+
+}
+
+

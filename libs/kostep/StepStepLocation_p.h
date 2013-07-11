@@ -30,10 +30,14 @@ class StepStepLocation_p : public QObject
     Q_OBJECT
 public:
     explicit StepStepLocation_p(QObject *parent = 0);
+    StepStepLocation_p* operator=(StepStepLocation_p location);
+
 
     void constructor(QTextCursor cursor);
     QTextCursor convertToQTextCursor(QTextDocument* ptr);
     QString ToString();
+    QStack<int> Location();
+    void setLocation(QStack<int> other);
 
 
 signals:

@@ -74,3 +74,13 @@ QString StepStepBase_p::Type()
   return m_type;
 
 }
+StepStepLocation StepStepBase_p::Location()
+{
+  return m_location;
+
+}
+void StepStepBase_p::setLocation(StepStepLocation location)
+{
+  m_location = location;
+
+}
