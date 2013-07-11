@@ -25,27 +25,22 @@
 #include <QtCore/QStack>
 #include <QtGui/QTextCursor>
 
-class StepStepLocation_p : public QObject
+class StepStepLocationPrivate
 {
-    Q_OBJECT
 public:
-    explicit StepStepLocation_p(QObject *parent = 0);
-    StepStepLocation_p* operator=(StepStepLocation_p location);
-
-
+    explicit StepStepLocationPrivate();
+    StepStepLocationPrivate* operator=(StepStepLocationPrivate location);
     void constructor(QTextCursor cursor);
     QTextCursor convertToQTextCursor(QTextDocument* ptr);
     QString ToString();
-    QStack<int> Location();
-    void setLocation(QStack<int> other);
-
+    QStack<int> location;
+    int ParentFrame(QTextFrame* frame);
 
 signals:
 
 public slots:
 private:
-  QStack<int> location;
-  int ParentFrame(QTextFrame* frame);
+
 
 };
 

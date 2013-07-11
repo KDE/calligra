@@ -22,7 +22,7 @@
 #include "StepStepBase_p.h"
 #include "StepStepLocation.h"
 StepStepBase::StepStepBase(QObject *parent):
-    QObject(parent),d(new StepStepBase_p())
+    QObject(parent),d(new StepStepBasePrivate())
 {
 
 }
@@ -51,25 +51,25 @@ bool StepStepBase::operator==( StepStepBase& other)
 
 bool StepStepBase::Foreign()
 {
-  return d->Foreign();
+  return d->isForeign;
 }
 int StepStepBase::Position()
 {
-  return d->Position();
+  return d->position;
 }
 void StepStepBase::setForeign(bool foreign)
 {
-  d->setForeign(foreign);
+  d->isForeign = foreign;
 
 }
 void StepStepBase::setPosition(int position)
 {
-  d->setPosition(position);
+  d->position = position;
 
 }
 QString StepStepBase::Step()
 {
-  return d->Step();
+  return d->step;
 }
 QString StepStepBase::toString()
 {
@@ -81,16 +81,16 @@ QString StepStepBase::toXML()
 }
 QString StepStepBase::Type()
 {
-  return d->Type();
+  return d->type;
 
 }
 
 StepStepLocation StepStepBase::Location()
 {
-  return d->Location();
+  return d->location;
 }
 void StepStepBase::setLocation(StepStepLocation location)
 {
-  d->setLocation(location);
+  d->location = location;
 
 }

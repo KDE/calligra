@@ -21,11 +21,11 @@
 #include "StepStepLocation_p.h"
 #include <QtGui/QTextCursor>
 StepStepLocation::StepStepLocation(QObject *parent) :
-    QObject(parent), d(new StepStepLocation_p())
+    QObject(parent), d(new StepStepLocationPrivate())
 {
 }
 StepStepLocation::StepStepLocation(QTextCursor cursor, QObject *parent):
-    QObject(parent), d(new StepStepLocation_p())
+    QObject(parent), d(new StepStepLocationPrivate())
 {
   d->constructor(cursor);
 
@@ -42,13 +42,13 @@ QTextCursor StepStepLocation::toQTextCursor(QTextDocument* ptr)
 
 StepStepLocation* StepStepLocation::operator=(StepStepLocation location)
 {
-  d->setLocation(location.d->Location());
+  d->location = location.d->location;
   return this;
 
 }
 StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject()
 {
-  d->setLocation(locate.d->Location());
+  d->location = locate.d->location;
 
 }
 

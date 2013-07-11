@@ -22,17 +22,17 @@
 #include <QtCore/QFile>
 #include <QtCore/QVariant>
 
-StepStepStack_p::StepStepStack_p()
+StepStepStackPrivate::StepStepStackPrivate()
 {
 
 }
 
-StepStepStack_p::~StepStepStack_p()
+StepStepStackPrivate::~StepStepStackPrivate()
 {
 
 }
 
-StepStepBase StepStepStack_p::at(int i)
+StepStepBase StepStepStackPrivate::at(int i)
 {
     if(!stack.empty() && stack.count() >= i+1)
     {
@@ -45,7 +45,7 @@ StepStepBase StepStepStack_p::at(int i)
 
 }
 
-StepStepBase StepStepStack_p::pop()
+StepStepBase StepStepStackPrivate::pop()
 {
     //temporary behavior for the time being
     if(!stack.empty())
@@ -59,7 +59,7 @@ StepStepBase StepStepStack_p::pop()
 
 }
 
-StepStepBase StepStepStack_p::top()
+StepStepBase StepStepStackPrivate::top()
 {
     if(!stack.empty())
     {
@@ -72,13 +72,13 @@ StepStepBase StepStepStack_p::top()
 
 }
 
-void StepStepStack_p::push(StepStepBase step)
+void StepStepStackPrivate::push(StepStepBase step)
 {
     stack.push(step);
 
 }
 
-void StepStepStack_p::serialize(QString Filename)
+void StepStepStackPrivate::serialize(QString Filename)
 {
     QFile file(Filename);
     file.open(QIODevice::WriteOnly|QIODevice::Text);
@@ -92,27 +92,27 @@ void StepStepStack_p::serialize(QString Filename)
 
 
 }
-void StepStepStack_p::deserialize(QString Filename)
+void StepStepStackPrivate::deserialize(QString Filename)
 {
 
 }
-void StepStepStack_p::insertAt(int i, StepStepBase step)
-{
-    //stub method for now will need to implement Operational Transformation Methods to
-    //roll a change forward
-
-}
-void StepStepStack_p::removeAt(int i)
+void StepStepStackPrivate::insertAt(int i, StepStepBase step)
 {
     //stub method for now will need to implement Operational Transformation Methods to
     //roll a change forward
 
 }
-int StepStepStack_p::rowcount()
+void StepStepStackPrivate::removeAt(int i)
+{
+    //stub method for now will need to implement Operational Transformation Methods to
+    //roll a change forward
+
+}
+int StepStepStackPrivate::rowcount()
 {
     return stack.count();
 }
-QVariant StepStepStack_p::data(int i)
+QVariant StepStepStackPrivate::data(int i)
 {
     if (!stack.empty() && stack.count() >= i+1)
     {

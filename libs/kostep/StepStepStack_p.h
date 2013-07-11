@@ -24,12 +24,11 @@
 #include <QtCore/QStack>
 
 class StepStepBase;
-class StepStepStack_p :  QObject
+class StepStepStackPrivate
 {
-  Q_OBJECT
 public:
-    StepStepStack_p();
-    ~StepStepStack_p();
+    StepStepStackPrivate();
+    ~StepStepStackPrivate();
     StepStepBase at(int i);
     StepStepBase pop();
     StepStepBase top();

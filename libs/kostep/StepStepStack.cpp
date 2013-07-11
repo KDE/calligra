@@ -23,7 +23,7 @@
 #include <QtCore/QString>
 
 StepStepStack::StepStepStack(QObject *parent):
-    d(new StepStepStack_p())
+    d(new StepStepStackPrivate())
 {
 
 }

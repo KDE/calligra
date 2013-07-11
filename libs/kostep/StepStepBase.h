@@ -23,7 +23,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
-class StepStepBase_p;
+class StepStepBasePrivate;
 class StepStepLocation;
 
 class StepStepBase : public QObject
@@ -82,7 +82,7 @@ public:
 
 private:
 
-  StepStepBase_p *d;
+  StepStepBasePrivate *d;
 
 };
 

@@ -20,16 +20,15 @@
 #include "StepStepBase_p.h"
 #include "StepStepLocation.h"
 
-StepStepBase_p::StepStepBase_p(QObject *parent) :
-    QObject(parent)
+StepStepBasePrivate::StepStepBasePrivate()
 {
 }
-bool StepStepBase_p::operator==(StepStepBase_p* other)
+bool StepStepBasePrivate::operator==(StepStepBasePrivate* other)
 {
-  if (other->Foreign() == Foreign() &&
-      other->Position() == Position() &&
-      other->Step() == Step() &&
-      other->Type() == Type()
+  if (other->isForeign == isForeign &&
+      other->position == position &&
+      other->step == step &&
+      other->type == type
   ) {
     return true;
   }
@@ -37,50 +36,14 @@ bool StepStepBase_p::operator==(StepStepBase_p* other)
     return false;
   }
 }
-bool StepStepBase_p::Foreign()
-{
-  return m_isForeign;
-}
-int StepStepBase_p::Position()
-{
-  return m_position;
-}
-void StepStepBase_p::setForeign(bool foreign)
-{
-  m_isForeign = foreign;
 
-}
-void StepStepBase_p::setPosition(int position)
-{
-  m_position = position;
-
-}
-QString StepStepBase_p::Step()
-{
-  return m_step;
-}
-QString StepStepBase_p::toString()
+QString StepStepBasePrivate::toString()
 {
   QString string = (QString)"";
   return string;
 }
-QString StepStepBase_p::toXML()
+QString StepStepBasePrivate::toXML()
 {
   QString string = (QString)"";
   return string;
-}
-QString StepStepBase_p::Type()
-{
-  return m_type;
-
-}
-StepStepLocation StepStepBase_p::Location()
-{
-  return m_location;
-
-}
-void StepStepBase_p::setLocation(StepStepLocation location)
-{
-  m_location = location;
-
 }

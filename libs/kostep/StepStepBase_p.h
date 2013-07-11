@@ -21,35 +21,22 @@
 
 #include <QObject>
 #include "StepStepLocation.h"
-class StepStepBase_p : public QObject
+class StepStepBasePrivate
 {
-    Q_OBJECT
 public:
-    explicit StepStepBase_p(QObject *parent = 0);
+    explicit StepStepBasePrivate();
 
-    bool operator==(StepStepBase_p* other);
+    bool operator==(StepStepBasePrivate* other);
     QString toString();
     QString toXML();
-    bool Foreign();
-    void setForeign(bool foreign);
-    int Position();
-    void setPosition(int position);
-    StepStepLocation Location();
-    virtual void setLocation(StepStepLocation location);
-    QString Step();
-    QString Type();
-
-
-signals:
-
-public slots:
+    bool isForeign;
+    int position;
+    QString step;
+    const QString type;
+    StepStepLocation location;
 
 private:
-  bool m_isForeign;
-  int m_position;
-  QString m_step;
-  const QString m_type;
-  StepStepLocation m_location;
+
 };
 
 #endif // STEPSTEPBASE_P_H

@@ -23,12 +23,11 @@
 #include <QTextTable>
 #include <QtCore/QQueue>
 
-StepStepLocation_p::StepStepLocation_p(QObject *parent) :
-    QObject(parent)
+StepStepLocationPrivate::StepStepLocationPrivate()
 {
 }
 
-void StepStepLocation_p::constructor(QTextCursor cursor)
+void StepStepLocationPrivate::constructor(QTextCursor cursor)
 {
   QTextFrame* frame = cursor.currentFrame();
   ParentFrame(frame);
@@ -60,7 +59,7 @@ void StepStepLocation_p::constructor(QTextCursor cursor)
   location.push(cursor.positionInBlock());
 
 }
-QTextCursor StepStepLocation_p::convertToQTextCursor(QTextDocument* ptr)
+QTextCursor StepStepLocationPrivate::convertToQTextCursor(QTextDocument* ptr)
 {
   //flip the stack
   QStack<int> Stack1 = location;
@@ -94,7 +93,7 @@ QTextCursor StepStepLocation_p::convertToQTextCursor(QTextDocument* ptr)
   return QTextCursor();
 }
 
-QString StepStepLocation_p::ToString()
+QString StepStepLocationPrivate::ToString()
 {
   QString returnValue = "s=";
   foreach(int ptr, location)
@@ -104,7 +103,7 @@ QString StepStepLocation_p::ToString()
   return returnValue;
 
 }
-int StepStepLocation_p::ParentFrame(QTextFrame* frame)
+int StepStepLocationPrivate::ParentFrame(QTextFrame* frame)
 {
   QTextFrame* parentFrame = frame->parentFrame();
   if(parentFrame != parentFrame->document()->rootFrame())  {
@@ -126,20 +125,10 @@ int StepStepLocation_p::ParentFrame(QTextFrame* frame)
   return 0;
 }
 
-StepStepLocation_p* StepStepLocation_p::operator=(StepStepLocation_p location)
+StepStepLocationPrivate* StepStepLocationPrivate::operator=(StepStepLocationPrivate location)
 {
-  setLocation(location.location);
+  this->location = location.location;
   return this;
-
-}
-QStack< int > StepStepLocation_p::Location()
-{
-  return location;
-}
-
-void StepStepLocation_p::setLocation(QStack< int > other)
-{
-  location = other;
 
 }
 

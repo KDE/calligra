@@ -26,7 +26,7 @@
 #include <QtCore/QVariant>
 
 class StepStepBase;
-class StepStepStack_p;
+class StepStepStackPrivate;
 class StepStepStack :  public QAbstractListModel
 {
 
@@ -55,7 +55,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
 
 private:
-    StepStepStack_p* d;
+    StepStepStackPrivate* d;
 };
 
 #endif // STEPSTEPSTACK_H
