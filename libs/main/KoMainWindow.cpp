@@ -2100,8 +2100,8 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
         createShellGUI();
     }
 
-    if (newPart && activeWidget() && activeWidget()->inherits("KoView")) {
-        d->activeView = qobject_cast<KoView *>(activeWidget());
+    if (newPart && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
+        d->activeView = qobject_cast<KoView *>(d->m_activeWidget);
         d->activePart = newPart;
         //kDebug(30003) <<"new active part is" << d->activePart;
 
@@ -2136,11 +2136,6 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
         d->activeView = 0;
         d->activePart = 0;
     }
-}
-
-QWidget *KoMainWindow::activeWidget() const
-{
-    return  d->m_activeWidget;
 }
 
 void KoMainWindow::slotObjectDestroyed()

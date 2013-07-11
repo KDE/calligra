@@ -404,8 +404,6 @@ private slots:
 // ---------------------  PartManager
 private:
 
-
-
     friend class KoParts::Part;
     /**
      * Removes a part from the manager (this does not delete the object) .
@@ -424,10 +422,6 @@ private:
      */
     virtual void setActivePart(KoParts::Part *part, QWidget *widget);
 
-    /**
-     * Returns the active widget of the current active part (see activePart ).
-     */
-    virtual QWidget *activeWidget() const;
 private slots:
 
     /**
