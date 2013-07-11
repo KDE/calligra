@@ -425,11 +425,6 @@ private:
 private slots:
 
     /**
-     * Removes a part when it is destroyed.
-     **/
-    void slotObjectDestroyed();
-
-    /**
      * @internal
      */
     void slotWidgetDestroyed();

@@ -2127,12 +2127,6 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
     }
 }
 
-void KoMainWindow::slotObjectDestroyed()
-{
-    kDebug(1000);
-    removePart( const_cast<KoParts::Part *>( static_cast<const KoParts::Part *>( sender() ) ) );
-}
-
 void KoMainWindow::slotWidgetDestroyed()
 {
     kDebug(1000);
