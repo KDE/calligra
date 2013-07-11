@@ -498,7 +498,12 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
 
     if (doc) {
         d->dockWidgetMenu->setVisible(true);
-        addPart(d->rootPart);
+
+        // don't add parts more than once :)
+        if ( !d->m_parts.contains( d->rootPart.data() ) ) {
+            d->m_parts.append( d->rootPart.data() );
+        }
+
         KoView *view = d->rootPart->createView(this);
         setCentralWidget(view);
         d->rootViews.append(view);
@@ -2004,21 +2009,6 @@ void KoMainWindow::createShellGUI()
 }
 
 // PartManager
-
-void KoMainWindow::addPart(KoParts::Part *part)
-{
-    Q_ASSERT( part );
-
-    // don't add parts more than once :)
-    if ( d->m_parts.contains( part ) ) {
-#ifdef DEBUG_PARTMANAGER
-        kWarning(1000) << part << " already added" << kBacktrace(5);
-#endif
-        return;
-    }
-
-    d->m_parts.append( part );
-}
 
 void KoMainWindow::removePart( KoParts::Part *part )
 {

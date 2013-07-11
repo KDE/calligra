@@ -404,14 +404,6 @@ private slots:
 // ---------------------  PartManager
 private:
 
-    /**
-     * Adds a part to the manager.
-     *
-     * Sets it to the active part automatically if @p setActive is true (default ).
-     * Behavior fix in KDE3.4: the part's widget is shown only if setActive is true,
-     * it used to be shown in all cases before.
-     */
-    virtual void addPart( KoParts::Part *part);
 
 
     friend class KoParts::Part;
