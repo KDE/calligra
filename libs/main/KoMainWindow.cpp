@@ -235,7 +235,7 @@ public:
     QPointer<KoParts::Part> m_activePart;
     QWidget *m_activeWidget;
 
-    QList<QPointer<KoParts::Part> > m_parts;
+    QPointer<KoParts::Part> m_registeredPart;
 
 };
 
@@ -443,10 +443,8 @@ KoMainWindow::~KoMainWindow()
         delete d->rootDocument;
     }
 
-    foreach( QPointer<KoParts::Part> it, d->m_parts ) {
-        if (it) {
-            it->setManager( 0 );
-        }
+    if (d->m_registeredPart ) {
+            d->m_registeredPart->setManager( 0 );
     }
 
     delete d;
@@ -500,9 +498,8 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
         d->dockWidgetMenu->setVisible(true);
 
         // don't add parts more than once :)
-        if ( !d->m_parts.contains( d->rootPart.data() ) ) {
-            d->m_parts.append( d->rootPart.data() );
-        }
+        Q_ASSERT(d->m_registeredPart.isNull());
+        d->m_registeredPart = d->rootPart.data();
 
         KoView *view = d->rootPart->createView(this);
         setCentralWidget(view);
@@ -2012,22 +2009,19 @@ void KoMainWindow::createShellGUI()
 
 void KoMainWindow::removePart( KoParts::Part *part )
 {
-    if (!d->m_parts.contains(part)) {
+    if (d->m_registeredPart.data() != part) {
         return;
     }
-
-    const int nb = d->m_parts.removeAll(part);
-    Q_ASSERT(nb == 1);
-    Q_UNUSED(nb); // no warning in release mode
+    d->m_registeredPart = 0;
     part->setManager(0);
-
-    if ( part == d->m_activePart )
+    if ( part == d->m_activePart ) {
         setActivePart(0, 0);
+    }
 }
 
 void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
 {
-    if (part && !d->m_parts.contains(part)) {
+    if (part && d->m_registeredPart.data() != part) {
         kWarning(1000) << "trying to activate a non-registered part!" << part->objectName();
         return; // don't allow someone call setActivePart with a part we don't know about
     }
