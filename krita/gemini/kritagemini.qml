@@ -25,13 +25,14 @@ KritaSketchBase {
     onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     window: mainWindow;
-    Rectangle {
+    Image {
+        source: "/usr/share/icons/oxygen/64x64/actions/system-reboot.png"
         anchors {
             top: parent.top
             right: parent.right
         }
-        height: 50
-        width: 50
+        height: 64
+        width: 64
         MouseArea {
             anchors.fill: parent;
             onClicked: switchToDesktopAction.trigger();
