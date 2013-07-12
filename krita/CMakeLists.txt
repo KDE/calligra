@@ -172,3 +172,4 @@ install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 
 add_subdirectory(sketch)
 
+add_subdirectory(gemini)
