@@ -36,6 +36,7 @@
 #include <kcmdlineargs.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
+#include <kactioncollection.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -113,33 +114,40 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     d->initSketchView(this);
     d->initDesktopView();
+
+    KAction* toDesktop = new KAction(this);
+    toDesktop->setText(tr("Switch to Desktop"));
+    connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), SLOT(switchToDesktop()));
+    d->sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
+
+    KAction* toSketch = new KAction(this);
+    toSketch->setText(tr("Switch to Sketch"));
+    connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), SLOT(switchToSketch()));
+    d->desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
+
     // Set the initial view to sketch... because reasons.
     switchToSketch();
 }
 
 void MainWindow::switchToSketch()
 {
-    d->desktopView->hide();
+//    d->desktopView->hide();
     d->desktopView->setParent(0);
     setCentralWidget(d->sketchView);
-    d->sketchView->show();
-    qDebug() << "Switched to sketch view";
+//    d->sketchView->show();
 }
 
 void MainWindow::switchToDesktop()
 {
-    d->sketchView->hide();
+//    d->sketchView->hide();
     d->sketchView->setParent(0);
     setCentralWidget(d->desktopView);
-    d->desktopView->show();
-    qDebug() << "Switched to desktop view";
+//    d->desktopView->show();
 }
 
 void MainWindow::documentChanged()
 {
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part());
-    QTimer::singleShot(5000, this, SLOT(switchToDesktop()));
-    QTimer::singleShot(15000, this, SLOT(switchToSketch()));
 }
 
 bool MainWindow::allowClose() const

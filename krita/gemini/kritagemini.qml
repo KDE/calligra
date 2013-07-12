@@ -25,4 +25,16 @@ KritaSketchBase {
     onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     window: mainWindow;
+    Rectangle {
+        anchors {
+            top: parent.top
+            right: parent.right
+        }
+        height: 50
+        width: 50
+        MouseArea {
+            anchors.fill: parent;
+            onClicked: switchToDesktopAction.trigger();
+        }
+    }
 }
