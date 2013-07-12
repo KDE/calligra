@@ -131,18 +131,22 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::switchToSketch()
 {
-//    d->desktopView->hide();
+    QTime timer;
+    timer.start();
     d->desktopView->setParent(0);
     setCentralWidget(d->sketchView);
-//    d->sketchView->show();
+    qApp->processEvents();
+    qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 }
 
 void MainWindow::switchToDesktop()
 {
-//    d->sketchView->hide();
+    QTime timer;
+    timer.start();
     d->sketchView->setParent(0);
     setCentralWidget(d->desktopView);
-//    d->desktopView->show();
+    qApp->processEvents();
+    qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 
 void MainWindow::documentChanged()
