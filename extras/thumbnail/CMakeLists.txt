@@ -27,6 +27,7 @@ endif( SHOULD_BUILD_FLOW OR SHOULD_BUILD_KARBON )
 
 if( SHOULD_BUILD_KRITA )
     set( THUMBNAIL_SERVICES ${THUMBNAIL_SERVICES} krita_kra_thumbnail.desktop )
+    set( THUMBNAIL_SERVICES ${THUMBNAIL_SERVICES} kritaanimation_kranim_thumbnail.desktop )
 endif( SHOULD_BUILD_KRITA )
 
 if( SHOULD_BUILD_SHEETS_PART )
