@@ -99,7 +99,7 @@ protected:
 class CoreAttributesListIterator : public QListIterator<CoreAttributes*>
 {
 public:
-    CoreAttributesListIterator(const CoreAttributesList& l) :
+    explicit CoreAttributesListIterator(const CoreAttributesList& l) :
         QListIterator<CoreAttributes*>(l) { }
     virtual ~CoreAttributesListIterator() { }
     void operator++() { if (hasNext()) next(); }

@@ -57,7 +57,7 @@ namespace MSOOXML
 
 /// Reading and storage
 
-class MSOOXML_EXPORT DrawingTableStyle : public TableStyle
+class KOMSOOXML_EXPORT DrawingTableStyle : public TableStyle
 {
 public:
     enum Type {
@@ -92,7 +92,7 @@ private:
     //TODO: handle the table background stored in the element TblBg
 };
 
-class MSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
+class KOMSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
 {
 public:
     DrawingTableStyleConverterProperties();
@@ -120,7 +120,7 @@ private:
     Roles m_role;
 };
 
-class MSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
+class KOMSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
     explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);

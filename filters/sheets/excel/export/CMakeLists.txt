@@ -42,17 +42,17 @@ set(sidewinder_SRCS
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
-set(excelexport_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
+set(sheets2xls_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 
-kde4_add_plugin(excelexport ${excelexport_SRCS})
+kde4_add_plugin(calligra_filter_sheets2xls ${sheets2xls_SRCS})
 
 
-target_link_libraries(excelexport msooxml komain mso koodf ${ZLIB_LIBRARIES} calligrasheetscommon)
+target_link_libraries(calligra_filter_sheets2xls komsooxml komain mso koodf ${ZLIB_LIBRARIES} calligrasheetscommon)
 
 set(INSTALL_XLS_EXPORT_FILTER OFF CACHE BOOL "Install the very experimental xls export filter, which might eat your data and provides no guarentees")
 
 if(INSTALL_XLS_EXPORT_FILTER)
-  install(TARGETS excelexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+  install(TARGETS calligra_filter_sheets2xls  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

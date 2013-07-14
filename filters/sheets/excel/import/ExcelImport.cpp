@@ -530,7 +530,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Sheets::Sheet* os)
     os->map()->loadingInfo()->setCursorPosition(os, is->firstVisibleCell() + QPoint(1, 1));
     os->setShowFormulaIndicator(false);
     os->setShowCommentIndicator(true);
-    os->setShowPageBorders(is->isPageBreakViewEnabled());
+    os->setShowPageOutline(is->isPageBreakViewEnabled());
     os->setLcMode(false);
     os->setShowColumnNumber(false);
     os->setLayoutDirection(is->isRightToLeft() ? Qt::RightToLeft : Qt::LeftToRight);

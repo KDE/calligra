@@ -60,11 +60,11 @@ target_link_libraries(TestClipToPage wordsprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-if( Soprano_FOUND )
+if( SHOULD_BUILD_RDF )
 #  set(TestRdf_SRCS TestRdf.cpp )
 #  kde4_add_unit_test(TestRdf TESTNAME words-part-TestRdf ${TestRdf_SRCS})
 #  target_link_libraries(TestRdf wordsprivate ${QT_QTTEST_LIBRARY})
-endif( Soprano_FOUND )
+endif( SHOULD_BUILD_RDF )
 
 ########### next target ###############
 

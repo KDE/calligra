@@ -33,5 +33,5 @@ Name[zh_CN]=Visio 流程图导入过滤器
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/vnd.ms-works
 X-KDE-Weight=1
-X-KDE-Library=wpsimport
+X-KDE-Library=calligra_filter_wps2odt
 X-KDE-ServiceTypes=Calligra/Filter

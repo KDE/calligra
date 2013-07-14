@@ -24,8 +24,8 @@
 #include <KoIcon.h>
 #include <calligraversion.h>
 
-static const char* description = I18N_NOOP("A Vector Graphics Drawing Application.");
-static const char* version = CALLIGRA_VERSION_STRING;
+static const char description[] = I18N_NOOP("A Vector Graphics Drawing Application.");
+static const char version[] = CALLIGRA_VERSION_STRING;
 
 // This is all implemented here so that the executable and the part can share it
 // without sharing an object file.

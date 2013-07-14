@@ -30,7 +30,6 @@
 #include "kptxmlloaderobject.h"
 
 #include <cstdlib>
-#include <qtest_kde.h>
 #include <QDir>
 #include <kglobal.h>
 #include <klocale.h>
