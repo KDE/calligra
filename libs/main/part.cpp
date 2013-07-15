@@ -319,9 +319,6 @@ bool ReadOnlyPartPrivate::openLocalFile()
         }
     }
     const bool ret = q->openFile();
-    if (ret) {
-        emit q->completed();
-    }
     return ret;
 }
 
@@ -414,12 +411,6 @@ void ReadOnlyPartPrivate::_k_slotJobFinished( KJob * job )
 
     assert( job == m_job );
     m_job = 0;
-    if (!job->error())
-    {
-        if ( q->openFile() ) {
-            emit q->completed();
-        }
-    }
 }
 
 void ReadOnlyPartPrivate::_k_slotGotMimeType(KIO::Job *job, const QString &mime)
@@ -616,7 +607,6 @@ bool ReadWritePart::saveToUrl()
     if ( d->m_url.isLocalFile() )
     {
         setModified( false );
-        emit completed();
         // if m_url is a local file there won't be a temp file -> nothing to remove
         assert( !d->m_bTemp );
         d->m_saveOk = true;
@@ -674,7 +664,6 @@ void ReadWritePartPrivate::_k_slotUploadFinished( KJob * )
 
         m_uploadJob = 0;
         q->setModified( false );
-        emit q->completed();
         m_saveOk = true;
     }
     m_duringSaveAs = false;

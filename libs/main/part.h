@@ -209,26 +209,6 @@ Q_SIGNALS:
      **/
     void started( KIO::Job * );
 
-    /**
-     * Emit this when you have completed loading data.
-     * Hosting apps will want to know when the process of loading the data
-     * is finished, so that they can access the data when everything is loaded.
-     **/
-    void completed();
-
-    /**
-     * Same as the above signal except it indicates whether there is
-     * a pending action to be executed on a delay timer. An example of
-     * this is the meta-refresh tags on web pages used to reload/redirect
-     * after a certain period of time. This signal is useful if you want
-     * to give the user the ability to cancel such pending actions.
-     *
-     * @p pendingAction true if a pending action exists, false otherwise.
-     */
-    void completed( bool pendingAction );
-
-
-
 protected:
     /**
      * If the part uses the standard implementation of openUrl(),
