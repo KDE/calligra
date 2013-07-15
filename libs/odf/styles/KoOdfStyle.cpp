@@ -158,6 +158,21 @@ KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
     return d->properties.value(name, 0);
 }
 
+KoOdfParagraphProperties *KoOdfStyle::paragraphProperties() const
+{
+    return d->properties.value("paragraph-properties", 0);
+}
+
+KoOdfTextProperties *KoOdfStyle::textProperties() const
+{
+    return d->properties.value("text-properties", 0);
+}
+
+KoOdfParagraphProperties *KoOdfStyle::graphicProperies() const
+{
+    return d->properties.value("paragraph-properties", 0);
+}
+
 QString KoOdfStyle::property(QString &propertySet, QString &property) const
 {
     KoOdfStyleProperties *props = d->properties.value(propertySet, 0);

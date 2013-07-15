@@ -29,6 +29,9 @@
 class QString;
 class KoXmlStreamReader;
 class KoOdfStyleProperties;
+class KoOdfTextProperties;
+class KoOdfParagraphProperties;
+class KoOdfGraphicProperties;
 class KoXmlWriter;
 
 
@@ -59,6 +62,10 @@ class KOODF_EXPORT KoOdfStyle
      * @param name name of the property set.  Example: "text-properties" or "paragraph-properties"
      */
     KoOdfStyleProperties *properties(QString &name) const;
+
+    KoOdfParagraphProperties *paragraphProperties() const;
+    KoOdfTextProperties *textProperties() const;
+    KoOdfParagraphProperties *graphicProperies() const;
 
     QString property(QString &propertySet, QString &property) const;
     void    setProperty(QString &propertySet, QString &property, QString &value);
