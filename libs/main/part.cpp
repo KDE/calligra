@@ -321,8 +321,6 @@ bool ReadOnlyPartPrivate::openLocalFile()
     const bool ret = q->openFile();
     if (ret) {
         emit q->completed();
-    } else {
-        emit q->canceled(QString());
     }
     return ret;
 }
@@ -416,13 +414,11 @@ void ReadOnlyPartPrivate::_k_slotJobFinished( KJob * job )
 
     assert( job == m_job );
     m_job = 0;
-    if (job->error())
-        emit q->canceled( job->errorString() );
-    else
+    if (!job->error())
     {
         if ( q->openFile() ) {
             emit q->completed();
-        } else emit q->canceled(QString());
+        }
     }
 }
 
@@ -556,8 +552,6 @@ bool ReadWritePart::save()
         d->prepareSaving();
     if( saveFile() )
         return saveToUrl();
-    else
-        emit canceled(QString());
     return false;
 }
 
@@ -671,7 +665,6 @@ void ReadWritePartPrivate::_k_slotUploadFinished( KJob * )
             q->setUrl(m_originalURL);
             m_file = m_originalFilePath;
         }
-        emit q->canceled( error );
     }
     else
     {

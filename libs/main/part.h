@@ -227,11 +227,6 @@ Q_SIGNALS:
      */
     void completed( bool pendingAction );
 
-    /**
-     * Emit this if loading is canceled by the user or by an error.
-     * @param errMsg the error message, empty if the user canceled the loading voluntarily.
-     */
-    void canceled( const QString &errMsg );
 
 
 protected:
