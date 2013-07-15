@@ -120,12 +120,6 @@ protected:
      */
     virtual void setWidget( QWidget * widget );
 
-    /**
-     * Convenience method for KXMLGUIFactory::container.
-     * @return a container widget owned by the Part's GUI.
-     */
-    QWidget *hostContainer( const QString &containerName );
-
 protected Q_SLOTS:
     /**
      * @internal

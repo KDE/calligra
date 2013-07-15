@@ -148,14 +148,6 @@ void Part::setWidget( QWidget *widget )
              this, SLOT(slotWidgetDestroyed()), Qt::UniqueConnection );
 }
 
-QWidget *Part::hostContainer( const QString &containerName )
-{
-    if ( !factory() )
-        return 0;
-
-    return factory()->container( containerName, this );
-}
-
 void Part::slotWidgetDestroyed()
 {
     Q_D(Part);
