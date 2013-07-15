@@ -61,8 +61,6 @@ public:
         : q_ptr(q),
           m_iconLoader(0),
           m_bSelectable(true),
-          m_autoDeleteWidget(true),
-          m_autoDeletePart(true),
           m_manager(0)
     {
     }
@@ -74,8 +72,6 @@ public:
     Part *q_ptr;
     KIconLoader* m_iconLoader;
     bool m_bSelectable;
-    bool m_autoDeleteWidget;
-    bool m_autoDeletePart;
     KoMainWindow * m_manager;
     QPointer<QWidget> m_widget;
 };
@@ -120,7 +116,7 @@ Part::~Part()
     if ( d->m_manager )
         d->m_manager->removePart(this);
 
-    if ( d->m_widget && d->m_autoDeleteWidget )
+    if ( d->m_widget )
     {
         kDebug(1000) << "deleting widget" << d->m_widget << d->m_widget->objectName();
         delete static_cast<QWidget*>(d->m_widget);
@@ -137,20 +133,6 @@ QWidget *Part::widget()
 
     return d->m_widget;
 }
-
-void Part::setAutoDeleteWidget(bool autoDeleteWidget)
-{
-    Q_D(Part);
-    d->m_autoDeleteWidget = autoDeleteWidget;
-}
-
-void Part::setAutoDeletePart(bool autoDeletePart)
-{
-    Q_D(Part);
-    d->m_autoDeletePart = autoDeletePart;
-}
-
-
 
 KIconLoader* Part::iconLoader()
 {
@@ -170,12 +152,6 @@ void Part::setManager( KoMainWindow *manager )
     d->m_manager = manager;
 }
 
-KoMainWindow *Part::manager() const
-{
-    Q_D(const Part);
-
-    return d->m_manager;
-}
 
 Part *Part::hitTest( QWidget *widget, const QPoint & )
 {
@@ -222,10 +198,9 @@ void Part::slotWidgetDestroyed()
     Q_D(Part);
 
     d->m_widget = 0;
-    if (d->m_autoDeletePart) {
-        kDebug(1000) << "deleting part" << objectName();
-        delete this; // ouch, this should probably be deleteLater()
-    }
+    kDebug(1000) << "deleting part" << objectName();
+    delete this; // ouch, this should probably be deleteLater()
+
 }
 
 //////////////////////////////////////////////////

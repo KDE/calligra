@@ -112,31 +112,6 @@ public:
     virtual void setManager( KoMainWindow * manager );
 
     /**
-     * Returns the part manager handling this part, if any (0L otherwise).
-     */
-    KoMainWindow * manager() const;
-
-    /**
-     * By default, the widget is deleted by the part when the part is deleted.
-     * The hosting application can call setAutoDeleteWidget(false) to
-     * disable this behavior, given that the widget is usually deleted by
-     * its parent widget anyway.
-     * This is a method for the hosting application only, Part subclasses
-     * should never call this.
-     */
-    void setAutoDeleteWidget(bool autoDeleteWidget);
-
-    /**
-     * By default, the part deletes itself when its widget is deleted.
-     * The hosting application can call setAutoDeletePart(false) to
-     * disable this behavior, to be able to delete the widget and then the part,
-     * independently.
-     * This is a method for the hosting application only, Part subclasses
-     * should never call this.
-     */
-    void setAutoDeletePart(bool autoDeletePart);
-
-    /**
      * Returns the part (this, or a child part) at the given global position.
      * This is called by the part manager to ask whether a part should be activated
      * when clicking somewhere. In most cases the default implementation is enough.
