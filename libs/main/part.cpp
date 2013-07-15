@@ -59,7 +59,6 @@ public:
 
     PartPrivate(Part *q)
         : q_ptr(q),
-          m_iconLoader(0),
           m_manager(0)
     {
     }
@@ -69,7 +68,6 @@ public:
     }
 
     Part *q_ptr;
-    KIconLoader* m_iconLoader;
     KoMainWindow * m_manager;
 };
 
@@ -105,8 +103,6 @@ Part::~Part()
 
     if ( d->m_manager )
         d->m_manager->removePart(this);
-
-    delete d->m_iconLoader;
 
     delete d_ptr;
 }
