@@ -112,26 +112,6 @@ public:
     virtual void setManager( KoMainWindow * manager );
 
     /**
-     * Returns the part (this, or a child part) at the given global position.
-     * This is called by the part manager to ask whether a part should be activated
-     * when clicking somewhere. In most cases the default implementation is enough.
-     * Reimplement this if your part has child parts in some areas (like in khtml or koffice)
-     * @param widget the part widget being clicked - usually the same as widget(), except in koffice.
-     * @param globalPos the mouse coordinates in global coordinates
-     */
-    virtual Part *hitTest( QWidget *widget, const QPoint &globalPos );
-
-    /**
-     *  @param selectable Indicates whether the part is selectable or not.
-     */
-    virtual void setSelectable( bool selectable );
-
-    /**
-     *  Returns whether the part is selectable or not.
-     */
-    bool isSelectable() const;
-
-    /**
      * Use this icon loader to load any icons that are specific to this part,
      * i.e. icons installed into this part's own directories as opposed to standard
      * kde icons. Use KIcon("myicon", iconLoader()).

@@ -60,7 +60,6 @@ public:
     PartPrivate(Part *q)
         : q_ptr(q),
           m_iconLoader(0),
-          m_bSelectable(true),
           m_manager(0)
     {
     }
@@ -71,7 +70,6 @@ public:
 
     Part *q_ptr;
     KIconLoader* m_iconLoader;
-    bool m_bSelectable;
     KoMainWindow * m_manager;
     QPointer<QWidget> m_widget;
 };
@@ -153,36 +151,12 @@ void Part::setManager( KoMainWindow *manager )
 }
 
 
-Part *Part::hitTest( QWidget *widget, const QPoint & )
-{
-    Q_D(Part);
-
-    if ( (QWidget *)d->m_widget != widget )
-        return 0;
-
-    return this;
-}
-
 void Part::setWidget( QWidget *widget )
 {
     Q_D(Part);
     d->m_widget = widget;
     connect( d->m_widget, SIGNAL(destroyed()),
              this, SLOT(slotWidgetDestroyed()), Qt::UniqueConnection );
-}
-
-void Part::setSelectable( bool selectable )
-{
-    Q_D(Part);
-
-    d->m_bSelectable = selectable;
-}
-
-bool Part::isSelectable() const
-{
-    Q_D(const Part);
-
-    return d->m_bSelectable;
 }
 
 QWidget *Part::hostContainer( const QString &containerName )
