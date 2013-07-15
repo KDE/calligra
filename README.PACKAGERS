@@ -336,3 +336,5 @@ If your distribution is not yet able to provide those dependencies, please
 disable the Plan import filters by patching the toplevel CMakeLists.txt
 in the line before calligra_drop_unbuildable_products() with
 calligra_disable_product(FILTER_MPXJ_IMPORT "missing runtime deps")
+
+The required version of MPXJ is 4.2
