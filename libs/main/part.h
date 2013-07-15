@@ -347,14 +347,6 @@ public:
      */
     virtual void setModified( bool modified );
 
-Q_SIGNALS:
-    /**
-     * set handled to true, if you don't want the default handling
-     * set abortClosing to true, if you handled the request,
-     * but for any reason don't  want to allow closing the document
-     */
-    void sigQueryClose(bool *handled, bool* abortClosing);
-
 public Q_SLOTS:
     /**
      * Call setModified() whenever the contents get modified.

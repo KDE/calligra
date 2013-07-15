@@ -476,7 +476,6 @@ bool ReadWritePart::queryClose()
 
     switch(res) {
     case KMessageBox::Yes :
-        sigQueryClose(&handled,&abortClose);
         if (!handled)
         {
             if (d->m_url.isEmpty())
