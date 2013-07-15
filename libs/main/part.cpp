@@ -71,7 +71,6 @@ public:
     Part *q_ptr;
     KIconLoader* m_iconLoader;
     KoMainWindow * m_manager;
-    QPointer<QWidget> m_widget;
 };
 
 }
@@ -104,32 +103,12 @@ Part::~Part()
 
     //kDebug(1000) << this;
 
-    if ( d->m_widget )
-    {
-        // We need to disconnect first, to avoid calling it !
-        disconnect( d->m_widget, SIGNAL(destroyed()),
-                    this, SLOT(slotWidgetDestroyed()) );
-    }
-
     if ( d->m_manager )
         d->m_manager->removePart(this);
-
-    if ( d->m_widget )
-    {
-        kDebug(1000) << "deleting widget" << d->m_widget << d->m_widget->objectName();
-        delete static_cast<QWidget*>(d->m_widget);
-    }
 
     delete d->m_iconLoader;
 
     delete d_ptr;
-}
-
-QWidget *Part::widget()
-{
-    Q_D(Part);
-
-    return d->m_widget;
 }
 
 void Part::setManager( KoMainWindow *manager )
@@ -139,24 +118,6 @@ void Part::setManager( KoMainWindow *manager )
     d->m_manager = manager;
 }
 
-
-void Part::setWidget( QWidget *widget )
-{
-    Q_D(Part);
-    d->m_widget = widget;
-    connect( d->m_widget, SIGNAL(destroyed()),
-             this, SLOT(slotWidgetDestroyed()), Qt::UniqueConnection );
-}
-
-void Part::slotWidgetDestroyed()
-{
-    Q_D(Part);
-
-    d->m_widget = 0;
-    kDebug(1000) << "deleting part" << objectName();
-    delete this; // ouch, this should probably be deleteLater()
-
-}
 
 //////////////////////////////////////////////////
 
@@ -356,7 +317,7 @@ bool ReadOnlyPart::openUrl( const KUrl &url )
         // Maybe we can use a "local path", to avoid a temp copy?
         KIO::JobFlags flags = d->m_showProgressInfo ? KIO::DefaultFlags : KIO::HideProgressInfo;
         d->m_statJob = KIO::mostLocalUrl(d->m_url, flags);
-        d->m_statJob->ui()->setWindow( widget() ? widget()->topLevelWidget() : 0 );
+        d->m_statJob->ui()->setWindow( 0 );
         connect(d->m_statJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotStatJobFinished(KJob*)));
         return true;
     } else {
@@ -418,7 +379,7 @@ void ReadOnlyPartPrivate::openRemoteFile()
     KIO::JobFlags flags = m_showProgressInfo ? KIO::DefaultFlags : KIO::HideProgressInfo;
     flags |= KIO::Overwrite;
     m_job = KIO::file_copy(m_url, destURL, 0600, flags);
-    m_job->ui()->setWindow(q->widget() ? q->widget()->topLevelWidget() : 0);
+    m_job->ui()->setWindow(0);
     emit q->started(m_job);
     QObject::connect(m_job, SIGNAL(result(KJob*)), q, SLOT(_k_slotJobFinished(KJob*)));
     QObject::connect(m_job, SIGNAL(mimetype(KIO::Job*,QString)),
@@ -564,10 +525,8 @@ bool ReadWritePart::queryClose()
     QString docName = url().fileName();
     if (docName.isEmpty()) docName = i18n( "Untitled" );
 
-    QWidget *parentWidget=widget();
-    if(!parentWidget) parentWidget=QApplication::activeWindow();
 
-    int res = KMessageBox::warningYesNoCancel( parentWidget,
+    int res = KMessageBox::warningYesNoCancel( 0,
                                                i18n( "The document \"%1\" has been modified.\n"
                                                      "Do you want to save your changes or discard them?" ,  docName ),
                                                i18n( "Close Document" ), KStandardGuiItem::save(), KStandardGuiItem::discard() );
@@ -582,7 +541,7 @@ bool ReadWritePart::queryClose()
         {
             if (d->m_url.isEmpty())
             {
-                KUrl url = KFileDialog::getSaveUrl(KUrl(), QString(), parentWidget);
+                KUrl url = KFileDialog::getSaveUrl(KUrl(), QString(), 0);
                 if (url.isEmpty())
                     return false;
 
@@ -725,7 +684,7 @@ bool ReadWritePart::saveToUrl()
             return false;
         }
         d->m_uploadJob = KIO::file_move( uploadUrl, d->m_url, -1, KIO::Overwrite );
-        d->m_uploadJob->ui()->setWindow( widget() ? widget()->topLevelWidget() : 0 );
+        d->m_uploadJob->ui()->setWindow( 0 );
         connect( d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)) );
         return true;
     }

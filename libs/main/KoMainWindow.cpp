@@ -2049,13 +2049,8 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
         d->m_activeWidget = savedActiveWidget;
     }
 
-    if (d->m_activePart) {
-        if (!widget) {
-            d->m_activeWidget = part->widget();
-        }
-        if ( d->m_activeWidget ) {
+    if (d->m_activePart && d->m_activeWidget ) {
             connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
-        }
     }
     // Set the new active instance in KGlobal
     KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());

@@ -37,7 +37,6 @@
 
 class KIconLoader;
 class KComponentData;
-class QWidget;
 class QEvent;
 class QPoint;
 struct QUnknownInterface;
@@ -101,30 +100,10 @@ public:
     virtual ~Part();
 
     /**
-     * @return The widget defined by this part, set by setWidget().
-     */
-    virtual QWidget *widget();
-
-    /**
      * @internal
      * Used by the part manager.
      */
     virtual void setManager( KoMainWindow * manager );
-
-
-protected:
-    /**
-     * Set the main widget.
-     *
-     * Call this in the Part-inherited class constructor.
-     */
-    virtual void setWidget( QWidget * widget );
-
-protected Q_SLOTS:
-    /**
-     * @internal
-     */
-    void slotWidgetDestroyed();
 
 protected:
     /**

@@ -159,7 +159,7 @@ void KisPart2::setFlipbook(KisFlipbook *flipbook)
 
 void KisPart2::showErrorAndDie()
 {
-    KMessageBox::error(widget(),
+    KMessageBox::error(0,
                        m_errorMessage,
                        i18n("Installation error"));
     if (m_dieOnError) {
