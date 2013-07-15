@@ -132,17 +132,6 @@ QWidget *Part::widget()
     return d->m_widget;
 }
 
-KIconLoader* Part::iconLoader()
-{
-    Q_D(Part);
-
-    if (!d->m_iconLoader) {
-        Q_ASSERT(componentData().isValid());
-        d->m_iconLoader = new KIconLoader( componentData() );
-    }
-    return d->m_iconLoader;
-}
-
 void Part::setManager( KoMainWindow *manager )
 {
     Q_D(Part);

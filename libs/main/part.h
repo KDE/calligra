@@ -111,15 +111,6 @@ public:
      */
     virtual void setManager( KoMainWindow * manager );
 
-    /**
-     * Use this icon loader to load any icons that are specific to this part,
-     * i.e. icons installed into this part's own directories as opposed to standard
-     * kde icons. Use KIcon("myicon", iconLoader()).
-     *
-     * Make sure to call setComponentData before calling iconLoader.
-     */
-    KIconLoader* iconLoader();
-
 Q_SIGNALS:
     /**
      * Emitted by the part, to set the caption of the window(s)
