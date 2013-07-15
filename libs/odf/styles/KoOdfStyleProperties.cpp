@@ -28,6 +28,7 @@
 // odflib
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
+#include <KoUnit.h>
 
 
 // ----------------------------------------------------------------
@@ -68,6 +69,17 @@ void KoOdfStyleProperties::setAttribute(QString &property, QString &value)
     d->attributes[property] = value;
 }
 
+qreal KoOdfStyleProperties::attributeAsFloat(QString &property)
+{
+    KoUnit unit;
+    return unit.parseValue(d->attributes.value(property, QString()));
+}
+
+int KoOdfStyleProperties::attributeAsInt(QString &property)
+{
+    KoUnit unit;
+    return qIntCast(unit.parseValue(d->attributes.value(property, QString())));
+}
 
 void KoOdfStyleProperties::clear()
 {

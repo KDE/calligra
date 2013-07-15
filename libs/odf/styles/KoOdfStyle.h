@@ -65,7 +65,7 @@ class KOODF_EXPORT KoOdfStyle
 
     KoOdfParagraphProperties *paragraphProperties() const;
     KoOdfTextProperties *textProperties() const;
-    KoOdfParagraphProperties *graphicProperies() const;
+    KoOdfGraphicProperties *graphicProperies() const;
 
     QString property(QString &propertySet, QString &property) const;
     void    setProperty(QString &propertySet, QString &property, QString &value);

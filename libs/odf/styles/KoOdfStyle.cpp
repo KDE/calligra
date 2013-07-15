@@ -160,17 +160,17 @@ KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
 
 KoOdfParagraphProperties *KoOdfStyle::paragraphProperties() const
 {
-    return d->properties.value("paragraph-properties", 0);
+    return dynamic_cast<KoOdfParagraphProperties*>(d->properties.value("paragraph-properties", 0));
 }
 
 KoOdfTextProperties *KoOdfStyle::textProperties() const
 {
-    return d->properties.value("text-properties", 0);
+    return dynamic_cast<KoOdfTextProperties*>(d->properties.value("text-properties", 0));
 }
 
-KoOdfParagraphProperties *KoOdfStyle::graphicProperies() const
+KoOdfGraphicProperties *KoOdfStyle::graphicProperies() const
 {
-    return d->properties.value("paragraph-properties", 0);
+    return dynamic_cast<KoOdfGraphicProperties*>(d->properties.value("graphic-properties", 0));
 }
 
 QString KoOdfStyle::property(QString &propertySet, QString &property) const
