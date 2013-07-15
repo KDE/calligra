@@ -397,7 +397,6 @@ bool ReadOnlyPartPrivate::openLocalFile()
     }
     const bool ret = q->openFile();
     if (ret) {
-        emit q->setWindowCaption(m_url.prettyUrl());
         emit q->completed();
     } else {
         emit q->canceled(QString());
@@ -499,7 +498,6 @@ void ReadOnlyPartPrivate::_k_slotJobFinished( KJob * job )
     else
     {
         if ( q->openFile() ) {
-            emit q->setWindowCaption( m_url.prettyUrl() );
             emit q->completed();
         } else emit q->canceled(QString());
     }
@@ -659,7 +657,6 @@ bool ReadWritePart::saveAs( const KUrl & kurl )
     bool result = save(); // Save local file and upload local file
     if (result) {
         emit urlChanged( d->m_url );
-        emit setWindowCaption( d->m_url.prettyUrl() );
     } else {
         d->m_url = d->m_originalURL;
         d->m_file = d->m_originalFilePath;

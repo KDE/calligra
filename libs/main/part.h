@@ -111,17 +111,6 @@ public:
      */
     virtual void setManager( KoMainWindow * manager );
 
-Q_SIGNALS:
-    /**
-     * Emitted by the part, to set the caption of the window(s)
-     * hosting this part
-     */
-    void setWindowCaption( const QString & caption );
-    /**
-     * Emitted by the part, to set a text in the statusbar of the window(s)
-     * hosting this part
-     */
-    void setStatusBarText( const QString & text );
 
 protected:
     /**
