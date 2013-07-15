@@ -130,7 +130,6 @@ public:
         m_job = 0;
         m_statJob = 0;
         m_uploadJob = 0;
-        m_showProgressInfo = true;
         m_saveOk = false;
         m_waitForSave = false;
         m_duringSaveAs = false;
@@ -153,7 +152,6 @@ public:
     KIO::FileCopyJob * m_uploadJob;
     KUrl m_originalURL; // for saveAs
     QString m_originalFilePath; // for saveAs
-    bool m_showProgressInfo : 1;
     bool m_saveOk : 1;
     bool m_waitForSave : 1;
     bool m_duringSaveAs : 1;
@@ -265,29 +263,6 @@ void ReadOnlyPart::setLocalFileTemporary( bool temp )
 }
 #endif
 
-void ReadOnlyPart::setProgressInfoEnabled( bool show )
-{
-    Q_D(ReadOnlyPart);
-
-    d->m_showProgressInfo = show;
-}
-
-bool ReadOnlyPart::isProgressInfoEnabled() const
-{
-    Q_D(const ReadOnlyPart);
-
-    return d->m_showProgressInfo;
-}
-
-#ifndef KDE_NO_COMPAT
-void ReadOnlyPart::showProgressInfo( bool show )
-{
-    Q_D(ReadOnlyPart);
-
-    d->m_showProgressInfo = show;
-}
-#endif
-
 bool ReadOnlyPart::openUrl( const KUrl &url )
 {
     Q_D(ReadOnlyPart);
@@ -311,7 +286,7 @@ bool ReadOnlyPart::openUrl( const KUrl &url )
         return d->openLocalFile();
     } else if (KProtocolInfo::protocolClass(url.protocol()) == ":local") {
         // Maybe we can use a "local path", to avoid a temp copy?
-        KIO::JobFlags flags = d->m_showProgressInfo ? KIO::DefaultFlags : KIO::HideProgressInfo;
+        KIO::JobFlags flags = KIO::DefaultFlags;
         d->m_statJob = KIO::mostLocalUrl(d->m_url, flags);
         d->m_statJob->ui()->setWindow( 0 );
         connect(d->m_statJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotStatJobFinished(KJob*)));
@@ -372,7 +347,7 @@ void ReadOnlyPartPrivate::openRemoteFile()
 
     KUrl destURL;
     destURL.setPath( m_file );
-    KIO::JobFlags flags = m_showProgressInfo ? KIO::DefaultFlags : KIO::HideProgressInfo;
+    KIO::JobFlags flags = KIO::DefaultFlags;
     flags |= KIO::Overwrite;
     m_job = KIO::file_copy(m_url, destURL, 0600, flags);
     m_job->ui()->setWindow(0);

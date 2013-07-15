@@ -166,25 +166,6 @@ public:
      */
     virtual ~ReadOnlyPart();
 
-    /**
-     * Call this to turn off the progress info dialog used by
-     * the internal KIO job. Use this if you provide another way
-     * of displaying progress info (e.g. a statusbar), using the
-     * signals emitted by this class, and/or those emitted by
-     * the Job given by started.
-     */
-    void setProgressInfoEnabled( bool show );
-
-    /**
-     * Returns whether the part shows the progress info dialog used by internal
-     * KIO job.
-     */
-    bool isProgressInfoEnabled() const;
-
-#ifndef KDE_NO_COMPAT
-    void showProgressInfo( bool show );
-#endif
-
 public Q_SLOTS:
     /**
      * Only reimplement openUrl if you don't want the network transparency support
