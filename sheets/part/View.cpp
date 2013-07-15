@@ -633,6 +633,8 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     new ViewAdaptor(this);
 #endif
 
+    initialPosition();
+
     d->canvas->setFocus();
 }
 
