@@ -228,7 +228,6 @@ void ReadOnlyPart::setUrl(const KUrl &url)
     Q_D(ReadOnlyPart);
 
     d->m_url = url;
-    emit urlChanged( url );
 }
 
 QString ReadOnlyPart::localFilePath() const
@@ -577,9 +576,7 @@ bool ReadWritePart::saveAs( const KUrl & kurl )
     d->m_url = kurl; // Store where to upload in saveToURL
     d->prepareSaving();
     bool result = save(); // Save local file and upload local file
-    if (result) {
-        emit urlChanged( d->m_url );
-    } else {
+    if (!result) {
         d->m_url = d->m_originalURL;
         d->m_file = d->m_originalFilePath;
         d->m_duringSaveAs = false;
