@@ -131,16 +131,6 @@ Part::~Part()
     delete d_ptr;
 }
 
-void Part::embed( QWidget * parentWidget )
-{
-    if ( widget() )
-    {
-        widget()->setParent( parentWidget, 0 );
-        widget()->setGeometry( 0, 0, widget()->width(), widget()->height() );
-        widget()->show();
-    }
-}
-
 QWidget *Part::widget()
 {
     Q_D(Part);

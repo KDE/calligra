@@ -101,19 +101,6 @@ public:
     virtual ~Part();
 
     /**
-     * Embed this part into a host widget.
-     *
-     * You don't need to do this if you created the widget with the
-     * correct parent widget - this is just a QWidget::reparent().
-     * Note that the Part is still the holder
-     * of the QWidget, meaning that if you delete the Part,
-     * then the widget gets destroyed as well, and vice-versa.
-     * This method is not recommended since creating the widget with the correct
-     * parent is simpler anyway.
-     */
-    virtual void embed( QWidget * parentWidget );
-
-    /**
      * @return The widget defined by this part, set by setWidget().
      */
     virtual QWidget *widget();
