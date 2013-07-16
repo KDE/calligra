@@ -2619,19 +2619,19 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
     }
 }
 
-void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
-{
-    KoView::guiActivateEvent( ev );
-    if ( ev->activated() ) {
-        // plug my own actionlists, they may be gone
-        slotPlugScheduleActions();
-    }
-    // propagate to sub-view
-    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
-    if ( v ) {
-        v->setGuiActive( ev->activated() );
-    }
-}
+//void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
+//{
+//    KParts::Part::guiActivateEvent( ev );
+//    if ( ev->activated() ) {
+//        // plug my own actionlists, they may be gone
+//        slotPlugScheduleActions();
+//    }
+//    // propagate to sub-view
+//    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+//    if ( v ) {
+//        v->setGuiActive( ev->activated() );
+//    }
+//}
 
 void View::slotViewListItemRemoved( ViewListItem *item )
 {
@@ -2788,11 +2788,11 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
     if ( item && item->type() == ViewListItem::ItemType_SubView ) {
         //kDebug(planDbg())<<"Activate:"<<item;
         m_tab->setCurrentWidget( item->view() );
-        if (  prev && prev->type() != ViewListItem::ItemType_SubView ) {
-            // Put back my own gui (removed when (if) viewing different doc)
-            if (getKoPart()->manager() )
-                getKoPart()->manager()->setActivePart(getKoPart(), this );
-        }
+//        if (  prev && prev->type() != ViewListItem::ItemType_SubView ) {
+//            // Put back my own gui (removed when (if) viewing different doc)
+//            if (getKoPart()->manager() )
+//                getKoPart()->manager()->setActivePart(getKoPart(), this );
+//        }
         // Add sub-view specific gui
         ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
         if ( v ) {

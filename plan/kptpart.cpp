@@ -28,7 +28,7 @@
 Part::Part(QObject *parent)
     : KoPart(parent)
 {
-    setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
+    setComponentData( Factory::global()); // Do not load plugins now (the view will load them)
     setTemplateType( "plan_template" );
 }
 
