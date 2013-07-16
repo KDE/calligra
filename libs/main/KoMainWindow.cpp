@@ -40,7 +40,6 @@
 #include "KoDockerManager.h"
 #include "KoServiceProvider.h"
 #include "KoPart.h"
-#include "part.h"
 
 #include <KoPageLayoutWidget.h>
 #include <KoIcon.h>
@@ -232,10 +231,10 @@ public:
     KHelpMenu *m_helpMenu;
 
     // PartManager
-    QPointer<KoParts::Part> m_activePart;
+    QPointer<KoPart> m_activePart;
     QWidget *m_activeWidget;
 
-    QPointer<KoParts::Part> m_registeredPart;
+    QPointer<KoPart> m_registeredPart;
 
 };
 
@@ -2007,7 +2006,7 @@ void KoMainWindow::createShellGUI()
 
 // PartManager
 
-void KoMainWindow::removePart( KoParts::Part *part )
+void KoMainWindow::removePart( KoPart *part )
 {
     if (d->m_registeredPart.data() != part) {
         return;
@@ -2019,7 +2018,7 @@ void KoMainWindow::removePart( KoParts::Part *part )
     }
 }
 
-void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
+void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
 {
     if (part && d->m_registeredPart.data() != part) {
         kWarning(1000) << "trying to activate a non-registered part!" << part->objectName();
@@ -2031,14 +2030,14 @@ void KoMainWindow::setActivePart( KoParts::Part *part, QWidget *widget )
          (!widget || d->m_activeWidget == widget) )
         return;
 
-    KoParts::Part *oldActivePart = d->m_activePart;
+    KoPart *oldActivePart = d->m_activePart;
     QWidget *oldActiveWidget = d->m_activeWidget;
 
     d->m_activePart = part;
     d->m_activeWidget = widget;
 
     if (oldActivePart) {
-        KoParts::Part *savedActivePart = part;
+        KoPart *savedActivePart = part;
         QWidget *savedActiveWidget = widget;
 
         if ( oldActiveWidget ) {

@@ -2187,7 +2187,7 @@ void KoDocument::setupOpenFileSubProgress() {}
 
 void KoDocument::setModified() {
     d->modified = true;
-    d->parentPart->setModified();
+    d->parentPart->setModified(true);
 }
 
 

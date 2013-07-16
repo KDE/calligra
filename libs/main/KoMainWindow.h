@@ -43,8 +43,6 @@ struct KoPageLayout;
 // Calligra class but not in main module
 class KoDockerManager;
 
-#include "part.h"
-
 /**
  * @brief Main window for a Calligra application
  *
@@ -404,13 +402,13 @@ private slots:
 // ---------------------  PartManager
 private:
 
-    friend class KoParts::Part;
+    friend class KoPart;
     /**
      * Removes a part from the manager (this does not delete the object) .
      *
      * Sets the active part to 0 if @p part is the activePart() .
      */
-    virtual void removePart( KoParts::Part *part );
+    virtual void removePart( KoPart *part );
 
     /**
      * Sets the active part.
@@ -420,7 +418,7 @@ private:
      * @p widget can be used to specify which widget was responsible for the activation.
      * This is important if you have multiple views for a document/part , like in KOffice .
      */
-    virtual void setActivePart(KoParts::Part *part, QWidget *widget);
+    virtual void setActivePart(KoPart *part, QWidget *widget);
 
 private slots:
 

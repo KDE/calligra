@@ -25,11 +25,17 @@
 
 #include <QList>
 
-#include <part.h>
 #include <kservice.h>
 #include <kcomponentdata.h>
+#include <kurl.h>
+#include <kxmlguiclient.h>
 
 #include "komain_export.h"
+
+class KJob;
+namespace KIO {
+  class Job;
+}
 
 class KoMainWindow;
 class KoDocument;
@@ -45,16 +51,11 @@ class QGraphicsItem;
  * Override this class in your application. It's the main entry point that
  * should provide the document to the calligra system.
  */
-class KOMAIN_EXPORT KoPart : public KoParts::ReadWritePart
+class KOMAIN_EXPORT KoPart : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 
 public:
-
-    using ReadWritePart::setUrl;
-    using ReadWritePart::localFilePath;
-    using ReadWritePart::setLocalFilePath;
-
     /**
      * Constructor.
      *
@@ -98,8 +99,6 @@ public:
 
 
     // ---------- KoParts::ReadWritePart overloads -----------
-
-    void setReadWrite(bool readwrite);
 
     virtual bool openFile(); ///reimplemented
     virtual bool saveFile(); ///reimplemented
@@ -265,9 +264,6 @@ protected:
     KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
                                const QString& templateType = QString());
 
-
-
-
     virtual KoView *createViewInstance(QWidget *parent) = 0;
 
     /**
@@ -277,10 +273,60 @@ protected:
     virtual QGraphicsItem *createCanvasItem();
 
 
+public: // Part stuff
+
+    virtual void setManager( KoMainWindow * manager );
+
+    KUrl url() const;
+    void setUrl(const KUrl &url);
+
+    bool isModified() const;
+    virtual void setModified( bool modified );
+
+    QString localFilePath() const;
+    void setLocalFilePath( const QString &localFilePath );
+
+    bool isReadWrite() const;
+    void setReadWrite(bool readwrite);
+
+    virtual bool closeUrl();
+    QString mimeType() const;
+
+    virtual bool saveAs( const KUrl &url );
+
+
+
+signals:
+
+    void started( KIO::Job * );
+
+public slots:
+
+    virtual bool openUrl( const KUrl &url );
+    virtual bool save();
+    bool waitSaveComplete();
+
+protected:
+
+    virtual void setComponentData(const KComponentData &componentData);
+    void abortLoad();
+
 private:
+
+    bool queryClose();
+    bool saveToUrl();
+
+    Q_DISABLE_COPY(KoPart)
 
     class Private;
     Private *const d;
+
+    Q_PRIVATE_SLOT(d, void _k_slotJobFinished( KJob * job ))
+    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KJob*))
+    Q_PRIVATE_SLOT(d, void _k_slotGotMimeType(KIO::Job *job, const QString &mime))
+    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished( KJob * job ))
+
+
 };
 
 class MockPart : public KoPart

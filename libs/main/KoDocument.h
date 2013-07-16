@@ -27,7 +27,6 @@
 #include <QTransform>
 #include <QList>
 
-#include <part.h>
 #include <kservice.h>
 #include <kcomponentdata.h>
 
