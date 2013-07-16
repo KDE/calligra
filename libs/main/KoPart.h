@@ -294,8 +294,6 @@ public: // Part stuff
 
     virtual bool saveAs( const KUrl &url );
 
-
-
 signals:
 
     void started( KIO::Job * );

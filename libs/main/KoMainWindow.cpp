@@ -172,12 +172,17 @@ public:
 
     KoMainWindow *parent;
     KoDocument *rootDocument;
-    QPointer<KoPart> rootPart;
-    QPointer<KoPart> partToOpen;
     QList<KoView*> rootViews;
 
+    // PartManager
+    QPointer<KoPart> rootPart;
+    QPointer<KoPart> partToOpen;
     QPointer<KoPart> activePart;
+    QPointer<KoPart> m_activePart;
+    QPointer<KoPart> m_registeredPart;
+
     KoView *activeView;
+    QWidget *m_activeWidget;
 
     QLabel * statusBarLabel;
     QProgressBar *progress;
@@ -230,11 +235,6 @@ public:
     bool m_bShellGUIActivated;
     KHelpMenu *m_helpMenu;
 
-    // PartManager
-    QPointer<KoPart> m_activePart;
-    QWidget *m_activeWidget;
-
-    QPointer<KoPart> m_registeredPart;
 
 };
 
