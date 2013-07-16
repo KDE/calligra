@@ -1,5 +1,6 @@
 include_directories(
     ${KOODF_INCLUDES}
+    ${KOODF2_INCLUDES}
     ${KOMAIN_INCLUDES}  # For KoFilter
  )
 
@@ -14,7 +15,7 @@ set(odfreader_LIB_SRCS
 
 kde4_add_library(koodfreader SHARED ${odfreader_LIB_SRCS})
 
-target_link_libraries(koodfreader koodf ${QT_QTXML_LIBRARY})
+target_link_libraries(koodfreader koodf koodf2 ${QT_QTXML_LIBRARY})
 
 set_target_properties(koodfreader PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION}
