@@ -25,7 +25,8 @@
 // Calligra
 #include <KoXmlReader.h>
 #include <KoOdfStyleManager.h>
-
+#include <KoOdfStyleProperties.h>
+#include <KoOdfStyle.h>
 
 
 
@@ -43,3 +44,18 @@ OdfReaderWikiContext::~OdfReaderWikiContext()
 {
 }
 
+KoOdfStyle *OdfReaderWikiContext::currentStyleProperties(KoXmlStreamReader &reader) const
+{
+    QString stylename = reader.attributes().value("style-name").toString();
+    KoOdfStyle *style = styleManager()->style(stylename);
+    return style;
+}
+void OdfReaderWikiContext::pushStyle(KoOdfStyle *style)
+{
+    styleStack.push(style);
+}
+
+KoOdfStyle *OdfReaderWikiContext::popStyle()
+{
+    return styleStack.pop();
+}

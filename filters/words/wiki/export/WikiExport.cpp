@@ -58,7 +58,7 @@ WikiExport::~WikiExport()
 KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QByteArray& to)
 {
     // Check for types
-    if (from != "application/vnd.oasis.opendocument.text" || to != "text/plain") {
+    if (from != "application/vnd.oasis.opendocument.text" || to != "text/wiki") {
         return KoFilter::NotImplemented;
     }
 

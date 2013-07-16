@@ -9,6 +9,13 @@ set(odt2wiki_PART_SRCS
     WikiExport.cpp
     OdtReaderWikiBackend.cpp
     OdfReaderWikiContext.cpp
+    
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/KoOdfStyleManager.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/KoOdfStyleProperties.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/KoOdfStyle.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/KoOdfTextProperties.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/KoOdfParagraphProperties.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/KoOdfGraphicProperties.cpp
 )
 kde4_add_plugin(calligra_filter_odt2wiki ${odt2wiki_PART_SRCS})
 target_link_libraries(calligra_filter_odt2wiki koodfreader komain koodf)

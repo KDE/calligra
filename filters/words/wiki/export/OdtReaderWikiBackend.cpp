@@ -36,7 +36,7 @@
 #include "OdfReaderWikiContext.h"
 
 
-#if 0
+#if 1
 #define DEBUG_BACKEND() \
     kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
     << reader.qualifiedName().toString()
@@ -79,8 +79,35 @@ void OdtReaderWikiBackend::elementOfficeText(KoXmlStreamReader &reader, OdfReade
 void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    if (!wikiContext) {
+        return;
+    }
+
+    if (reader.isStartElement()) {
+        QString stylename = reader.attributes().value("text:style-name").toString();
+        KoOdfStyle *style = wikiContext->styleManager()->style(stylename);
+        // Check out-line-level
+        if (style->parent() == "Head_202") {
+            wikiContext->outStream << "==";
+        } else if (style->parent() == "Head_203") {
+            wikiContext->outStream << "===";
+        }
+
+        //Push style to stack.
+        wikiContext->pushStyle(style);
+    }
+    else {
+        KoOdfStyle *style = wikiContext->popStyle();
+        // Check out-line-level
+        if (style->parent() == "Head_202") {
+            wikiContext->outStream << "==";
+        } else if (style->parent() == "Head_203") {
+            wikiContext->outStream << "===";
+        }
+        // FIXME: Should do sth for level 1 .
+        wikiContext->outStream << "\n";
+    }
 }
 
 void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
@@ -90,8 +117,12 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
     if (!wikiContext) {
         return;
     }
-    // At the end of a paragraph, output two newlines.
-    wikiContext->outStream << "\n\n";
+    if (reader.isStartElement()) {
+        // FIXME: No style handleing yet.
+    } else {
+        // At the end of a paragraph, output two newlines.
+        wikiContext->outStream << "\n";
+    }
 }
 
 
@@ -101,8 +132,43 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
 void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    if (!wikiContext) {
+        return;
+    }
+    if (reader.isStartElement()) {
+        QString stylename = reader.attributes().value("text:style-name").toString();
+        KoOdfStyle *style = wikiContext->styleManager()->style(stylename);
+        // Check font weight and style
+        KoOdfStyleProperties *stylePropertis = style->properties().value("style:text-properties");
+        QString weightProperty = "fo:font-weight";
+        QString styleProperty = "fo:font-style";
+        if ((stylePropertis->attribute(weightProperty) == "bold") &&
+                (stylePropertis->attribute(styleProperty) == "italic")) {
+            wikiContext->outStream << "'''''";
+        } else if (stylePropertis->attribute(weightProperty) == "bold") {
+            wikiContext->outStream << "'''";
+        } else if (stylePropertis->attribute(styleProperty) == "italic") {
+            wikiContext->outStream << "''";
+        }
+        //Push style to stack
+        wikiContext->pushStyle(style);
+    }
+    else {
+        KoOdfStyle *style = wikiContext->popStyle();
+        // Check font weight and style
+        KoOdfStyleProperties *stylePropertis = style->properties().value("style:text-properties");
+        QString weightProperty = "fo:font-weight";
+        QString styleProperty = "fo:font-style";
+        if ((stylePropertis->attribute(weightProperty) == "bold") &&
+                (stylePropertis->attribute(styleProperty) == "italic")) {
+            wikiContext->outStream << "'''''";
+        } else if (stylePropertis->attribute(weightProperty) == "bold") {
+            wikiContext->outStream << "'''";
+        } else if (stylePropertis->attribute(styleProperty) == "italic") {
+            wikiContext->outStream << "''";
+        }
+    }
 }
 
 void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)

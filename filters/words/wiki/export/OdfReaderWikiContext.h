@@ -24,9 +24,11 @@
 // Qt
 #include <QHash>
 #include <QTextStream>
+#include <QStack>
 
 // Calligra
 #include <KoFilter.h>
+#include <KoXmlStreamReader.h>
 
 // libodfreader
 #include "OdfReaderContext.h"
@@ -37,8 +39,8 @@ class QSizeF;
 class QFile;
 class QStringList;
 class KoStore;
-
-
+class KoOdfStyleProperties;
+class KoOdfStyle;
 
 class OdfReaderWikiContext : public OdfReaderContext 
 {
@@ -46,7 +48,17 @@ class OdfReaderWikiContext : public OdfReaderContext
     OdfReaderWikiContext(KoStore *store, QFile &file);
     virtual ~OdfReaderWikiContext();
 
+    /**
+     * @brief Return the list of properties in the selected property set.
+     * @param name name of the property set.  Example: "text-properties" or "paragraph-properties"
+     */
+    KoOdfStyle *currentStyleProperties(KoXmlStreamReader &reader) const;
+
+    void pushStyle(KoOdfStyle*);
+    KoOdfStyle* popStyle();
+
     QTextStream  outStream;
+    QStack<KoOdfStyle*> styleStack;
 };
 
 
