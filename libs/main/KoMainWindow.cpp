@@ -641,8 +641,9 @@ void KoMainWindow::updateCaption()
     }
     else {
         QString caption( d->rootDocument->caption() );
-        if (d->readOnly)
+        if (d->readOnly) {
             caption += ' ' + i18n("(write protected)");
+        }
 
         updateCaption(caption, d->rootDocument->isModified());
         if (!rootDocument()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty())
