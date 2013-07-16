@@ -24,7 +24,7 @@
 
 #include "KoOdfStyleProperties.h"
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 
 class QString;
@@ -43,7 +43,7 @@ struct KoOdfStyleTabStop
 };
 
 
-class KOODF_EXPORT KoOdfParagraphProperties : public KoOdfStyleProperties
+class KOODF2_EXPORT KoOdfParagraphProperties : public KoOdfStyleProperties
 {
  public:
     KoOdfParagraphProperties();
