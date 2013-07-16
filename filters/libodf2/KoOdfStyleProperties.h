@@ -27,7 +27,7 @@
 #include <QHash>
 
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 #include "KoXmlStreamReader.h"
 
 
@@ -38,7 +38,7 @@ class KoXmlWriter;
 typedef  QHash<QString, QString>  AttributeSet;  // name, value
 
 
-class KOODF_EXPORT KoOdfStyleProperties
+class KOODF2_EXPORT KoOdfStyleProperties
 {
  public:
     KoOdfStyleProperties();
