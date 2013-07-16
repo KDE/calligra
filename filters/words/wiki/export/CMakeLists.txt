@@ -2,6 +2,7 @@
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/filters/libodfreader
+    ${CMAKE_SOURCE_DIR}/filters/libodf2
 )
 
 set(odt2wiki_PART_SRCS

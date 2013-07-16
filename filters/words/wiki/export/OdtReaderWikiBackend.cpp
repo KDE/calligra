@@ -28,6 +28,10 @@
 // Calligra
 #include <KoXmlReader.h>
 
+#include <KoOdfStyleManager.h>
+#include <KoOdfStyle.h>
+#include <KoOdfStyleProperties.h>
+
 // This filter
 #include "OdfReaderWikiContext.h"
 
@@ -82,14 +86,10 @@ void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderCont
 void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    if (!reader.isEndElement())
-        return;
-
     OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
     if (!wikiContext) {
         return;
     }
-
     // At the end of a paragraph, output two newlines.
     wikiContext->outStream << "\n\n";
 }
@@ -108,9 +108,6 @@ void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderC
 void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    if (!reader.isStartElement())
-        return;
-
     OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
     if (!wikiContext) {
         return;
