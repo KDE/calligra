@@ -135,7 +135,6 @@ public:
         activityResource = 0;
 #endif
         themeManager = 0;
-        m_bShellGUIActivated = false;
         m_helpMenu = 0;
 
         // PartManger
@@ -232,7 +231,6 @@ public:
 
     Digikam::ThemeManager *themeManager;
 
-    bool m_bShellGUIActivated;
     KHelpMenu *m_helpMenu;
 
 
@@ -1984,9 +1982,6 @@ void KoMainWindow::slotSetStatusBarText( const QString & text )
 
 void KoMainWindow::createShellGUI()
 {
-    Q_ASSERT(!d->m_bShellGUIActivated);
-
-    d->m_bShellGUIActivated = true;
     if ( isHelpMenuEnabled() && !d->m_helpMenu )
         d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), true, actionCollection() );
 
