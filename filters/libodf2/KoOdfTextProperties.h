@@ -24,7 +24,7 @@
 
 #include "KoOdfStyleProperties.h"
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 
 class QString;
@@ -32,7 +32,7 @@ class KoXmlStreamReader;
 class KoXmlWriter;
 
 
-class KOODF_EXPORT KoOdfTextProperties : public KoOdfStyleProperties
+class KOODF2_EXPORT KoOdfTextProperties : public KoOdfStyleProperties
 {
  public:
     KoOdfTextProperties();
