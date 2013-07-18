@@ -22,7 +22,7 @@
 #ifndef KOODF_STYLE_MANAGER_H
 #define KOODF_STYLE_MANAGER_H
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 
 class QString;
@@ -32,7 +32,7 @@ class KoXmlStreamReader;
 class KoXmlWriter;
 
 
-class KOODF_EXPORT KoOdfStyleManager
+class KOODF2_EXPORT KoOdfStyleManager
 {
  public:
     KoOdfStyleManager();

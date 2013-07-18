@@ -197,7 +197,7 @@ void ListDialog::init()
         } else if (it != other.begin()) {
             tmp = tmp.left(tmp.length() - 2);
             lst.append(tmp);
-            tmp = "";
+            tmp.clear();
         }
     }
     d->list->addItems(lst);

@@ -164,7 +164,7 @@ void FunctionRepository::loadFunctionDescriptions(const QString& filename)
     doc.setContent(&file);
     file.close();
 
-    QString group = "";
+    QString group;
 
     QDomNode n = doc.documentElement().firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
@@ -191,7 +191,7 @@ void FunctionRepository::loadFunctionDescriptions(const QString& filename)
                     }
                 }
             }
-            group = "";
+            group.clear();
         }
     }
 }

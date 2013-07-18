@@ -254,7 +254,7 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
                 return Value::errorVALUE();
             else {
                 ++num;
-                ref = "";
+                ref.clear();
             }
         } else
             ref += s[i];

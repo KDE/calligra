@@ -1345,7 +1345,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
                     index = it->first;
 
                     if (it->second == cell->format().font())
-                        style = "";
+                        style.clear();
                     else {
                         style = fontStyles.value(it->second);
                     }

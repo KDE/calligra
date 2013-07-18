@@ -22,7 +22,7 @@
 #ifndef KOODF_STYLE_H
 #define KOODF_STYLE_H
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 #include <QHash>
 
@@ -32,7 +32,7 @@ class KoOdfStyleProperties;
 class KoXmlWriter;
 
 
-class KOODF_EXPORT KoOdfStyle
+class KOODF2_EXPORT KoOdfStyle
 {
  public:
     KoOdfStyle();
