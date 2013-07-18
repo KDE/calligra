@@ -174,7 +174,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     // Write the beginning of the output.
     beginHtmlFile(metaData);
 
-    QString currentChapterTitle = "";
+    QString currentChapterTitle;
 
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {
@@ -222,7 +222,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
                 if (nodeElement.localName() == "h") {
                     currentChapterTitle = nodeElement.text();
                 } else {
-                    currentChapterTitle = "";
+                    currentChapterTitle.clear();
                 }
 
                 // And begin a new chapter.

@@ -177,7 +177,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
     // Write the beginning of the output.
     beginHtmlFile(metaData);
 
-    QString currentChapterTitle = "";
+    QString currentChapterTitle;
 
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {

@@ -2454,8 +2454,8 @@ void Sheet::convertPart(const QString & part, KoXmlWriter & xmlWriter) const
                     addText(text, xmlWriter);
                 }
 
-                text = "";
-                var  = "";
+                text.clear();
+                var.clear();
             }
         } else {
             text += part[i];
