@@ -45,6 +45,11 @@ Page {
             savingDialog.progress = value;
         }
     }
+    Connections {
+        target: window;
+        onSwitchedToSketch: sketchView.activate();
+    }
+
 
     ToolManager {
         id: toolManager;
