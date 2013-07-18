@@ -86,6 +86,7 @@ class KOODFREADER_EXPORT OdtReader
 
     void readElementTextH(KoXmlStreamReader &reader);
     void readElementTextP(KoXmlStreamReader &reader);
+    void readElementTextA(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
