@@ -11,6 +11,11 @@ set(odfreader_LIB_SRCS
     OdfParser.cpp
     OdtReader.cpp
     OdtReaderBackend.cpp
+    #OdsReader.cpp
+    #OdsReaderBackend.cpp
+
+    OdfTextReader.cpp
+    OdfTextReaderBackend.cpp
 )
 
 kde4_add_library(koodfreader SHARED ${odfreader_LIB_SRCS})
