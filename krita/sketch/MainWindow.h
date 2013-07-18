@@ -43,6 +43,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void closeRequested();
+    void switchedToSketch();
 
 private:
     class Private;
