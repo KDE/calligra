@@ -51,10 +51,6 @@ set(koodf_LIB_SRCS
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
     KoElementReference.cpp
-
-    styles/KoOdfStyle.cpp
-    styles/KoOdfStyleProperties.cpp
-    styles/KoOdfStyleManager.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
@@ -112,5 +108,4 @@ install( FILES
     KoUnit.h
     KoElementReference.h
     KoTableTemplate.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

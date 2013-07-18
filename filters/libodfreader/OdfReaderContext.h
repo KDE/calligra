@@ -28,13 +28,14 @@
 #include <KoFilter.h>
 
 // this library
-#include "odfreader_export.h"
+#include "koodfreader_export.h"
 
 
 class QByteArray;
 class QSizeF;
 class QStringList;
 class KoStore;
+class KoOdfStyleManager;
 
 
 /** @brief The OdfReaderContext contains data that is usable while reading an ODF file.
@@ -67,7 +68,7 @@ class KoStore;
  * @see OdtReaderBackend
  */
 
-class ODFREADER_EXPORT OdfReaderContext 
+class KOODFREADER_EXPORT OdfReaderContext
 {
  public: 
     OdfReaderContext(KoStore *store);
@@ -82,6 +83,10 @@ class ODFREADER_EXPORT OdfReaderContext
     /** Return the store that is used during the parsing.
      */
     KoStore *odfStore() const;
+
+    /** Return the styles of the ODF file.
+      */
+    KoOdfStyleManager *styleManager() const;
 
     /** Return the metadata of an ODF file.
      *

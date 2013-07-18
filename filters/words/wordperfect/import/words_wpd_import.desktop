@@ -38,5 +38,5 @@ Name[zh_TW]=Words WordPerfect 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/vnd.wordperfect
 X-KDE-Weight=1
-X-KDE-Library=wpdimport
+X-KDE-Library=calligra_filter_wpd2odt
 X-KDE-ServiceTypes=Calligra/Filter

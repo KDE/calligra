@@ -65,6 +65,7 @@ Comment[uk]=Ефект витирання сторінки з країв
 Comment[wa]=Efets d' pådje schover l' boird evoye
 Comment[x-test]=xxEdge Wipe Page Effectsxx
 Comment[zh_TW]=邊緣掃描頁面效果
+X-KDE-PluginInfo-Name=kpr_pageeffect_edgewipe
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_edgewipe

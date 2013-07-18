@@ -973,7 +973,7 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
 
                     sscanf((*it).toLatin1(), "%c:%d", &ccolumn, &colwidth);
                     int len = (*it).length();
-                    int pos = (*it).indexOf(":");
+                    int pos = (*it).indexOf(':');
                     (*it).remove(pos, len - pos);
 
                     printf("     >%s<- -<%c><%d>  \n", (*it).toLatin1().data(), ccolumn, colwidth);
