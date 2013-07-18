@@ -1454,12 +1454,12 @@ KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*
             continue;
 
         // The style name
-        head = QString("." + styleName).toUtf8();
+        head = QString('.' + styleName).toUtf8();
         cssContent.append(head);
         cssContent.append(begin);
 
         foreach (const QString &propName, styleInfo->attributes.keys()) {
-            attributeList += (propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
+            attributeList += QString(propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
         }
 
         cssContent.append(attributeList);
