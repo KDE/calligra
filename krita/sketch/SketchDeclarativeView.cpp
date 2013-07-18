@@ -27,6 +27,7 @@
 
 SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     : QDeclarativeView(parent)
+    , m_drawCanvas(false)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
 {
@@ -44,6 +45,7 @@ SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
 
 SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
     : QDeclarativeView(url, parent)
+    , m_drawCanvas(false)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
 {
