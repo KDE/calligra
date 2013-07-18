@@ -70,7 +70,7 @@ class OdfReaderContext;
 class KOODFREADER_EXPORT OdtReaderBackend
 {
  public:
-    explicit OdtReaderBackend(OdfReaderContext *context);
+    explicit OdtReaderBackend();
     virtual ~OdtReaderBackend();
 
     // ----------------------------------------------------------------

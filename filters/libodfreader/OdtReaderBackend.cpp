@@ -57,10 +57,9 @@ OdtReaderBackend::Private::~Private()
 //                 class OdtReaderBackend
 
 
-OdtReaderBackend::OdtReaderBackend(OdfReaderContext *context)
+OdtReaderBackend::OdtReaderBackend()
     : d(new OdtReaderBackend::Private)
 {
-    Q_UNUSED(context)
 }
 
 OdtReaderBackend::~OdtReaderBackend()

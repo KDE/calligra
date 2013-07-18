@@ -89,10 +89,10 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
     // The actual conversion
     OdfReaderAsciiContext  asciiContext(odfStore, outfile);
 
-    OdtReaderBackend       odtBackend(&asciiContext);  // Use the default backend for document level
-    OdtReaderAsciiBackend  asciiTextBackend;           // Special backend for this filter for text
+    OdtReaderBackend       odtBackend;        // Use generic backend for document level
+    OdtReaderAsciiBackend  asciiTextBackend;  // Special backend for this filter for text level
 
-    // Create an OdtReader and a OdfTextReader.
+    // Create all necessary readers
     OdtReader              odtReader;
     OdfTextReader          odfTextReader;
     odfTextReader.setBackend(&asciiTextBackend);
