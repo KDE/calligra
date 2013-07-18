@@ -37,6 +37,7 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
+#include <kaboutdata.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -62,7 +63,7 @@ public:
         , currentView(0)
     { }
     bool allowClose;
-    QDeclarativeView* sketchView;
+    SketchDeclarativeView* sketchView;
     KoMainWindow* desktopView;
     QObject* currentView;
 
@@ -122,6 +123,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     KAction* toSketch = new KAction(this);
     toSketch->setText(tr("Switch to Sketch"));
+    toSketch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), SLOT(switchToSketch()));
     d->desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
 
@@ -135,6 +137,7 @@ void MainWindow::switchToSketch()
     timer.start();
     d->desktopView->setParent(0);
     setCentralWidget(d->sketchView);
+    emit switchedToSketch();
     qApp->processEvents();
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 }

@@ -45,6 +45,7 @@ public Q_SLOTS:
     void documentChanged();
 Q_SIGNALS:
     void closeRequested();
+    void switchedToSketch();
 
 private:
     class Private;
