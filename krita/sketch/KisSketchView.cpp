@@ -471,4 +471,10 @@ void KisSketchView::Private::zoomChanged()
     }
 }
 
+void KisSketchView::activate()
+{
+    d->canvasWidget->setFocus();
+    d->view->canvasControllerWidget()->activate();
+}
+
 #include "KisSketchView.moc"

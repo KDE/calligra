@@ -75,6 +75,8 @@ public Q_SLOTS:
     void documentAboutToBeDeleted();
     void documentChanged();
 
+    void activate();
+
 Q_SIGNALS:
     // This is directly forwarded from the document, which means that
     // value 0-100 means in progress
