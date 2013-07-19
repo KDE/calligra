@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ODTREADERBACKEND_H
-#define ODTREADERBACKEND_H
+#ifndef ODFTEXTREADERBACKEND_H
+#define ODFTEXTREADERBACKEND_H
 
 // Calligra
 #include <KoXmlStreamReader.h>
@@ -27,7 +27,7 @@
 
 // this library
 #include "koodfreader_export.h"
-#include "OdtReader.h"
+#include "OdfTextReader.h"
 
 
 class QByteArray;
@@ -37,10 +37,10 @@ class KoStore;
 class OdfReaderContext;
 
 
-/** @brief A default backend for the OdtReader class.
+/** @brief A default backend for the OdfTextReader class.
  *
  * This class defines an interface and the default behaviour for the
- * backend to the ODT reader (@see OdtReader). When the
+ * backend to the ODF text reader (@see OdfTextReader). When the
  * reader is called upon to traverse a certain XML tree, there will
  * be two parameters to the root traverse function: a pointer to a
  * backend object and a pointer to a context object.
@@ -53,43 +53,24 @@ class OdfReaderContext;
  * callback function will be called twice: once when the tag is first
  * encountered anc once when the tag is closed.  This means that an
  * element with no child elements will be called twice in succession.
- *
- * The callback function receives as parameter a reference to the XML
- * stream reader. From this parameter it can be deduced if the call is
- * for a start element or an end element and also access the
- * attributes of the element.
- *
- * This class defines a virtual function for every supported
- * element. It also implements a default behaviour for every element
- * which is to ignore the parameters and do nothing.
- *
- * When this class is used e.g. in a filter it is recommended to
- * inherit this class and only reimplement those functions that are
- * actually needed.
  */
-class KOODFREADER_EXPORT OdtReaderBackend
+class KOODFREADER_EXPORT OdfTextReaderBackend
 {
  public:
-    explicit OdtReaderBackend();
-    virtual ~OdtReaderBackend();
-
-    // ----------------------------------------------------------------
-    // ODT document level functions
-
-    virtual void elementOfficeDocumentcontent(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
+    explicit OdfTextReaderBackend();
+    virtual ~OdfTextReaderBackend();
 
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
     virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
-    // Paragraph level functions: spans, annotations, notes, text content itself, etc.
+    // Paragraph level functions: spans, annotations, notes, etc.
+    // This includes text content itself.
 
+    virtual void elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
 
@@ -101,4 +82,4 @@ class KOODFREADER_EXPORT OdtReaderBackend
 };
 
 
-#endif // ODTREADERBACKEND_H
+#endif // ODFTEXTREADERBACKEND_H

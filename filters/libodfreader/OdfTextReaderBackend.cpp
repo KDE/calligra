@@ -20,7 +20,7 @@
 
 
 // Own
-#include "OdtReaderBackend.h"
+#include "OdfTextReaderBackend.h"
 
 // Calligra
 #include <KoXmlReader.h>
@@ -30,10 +30,10 @@
 
 
 // ================================================================
-//             class OdtReaderBackend::Private
+//             class OdfTextReaderBackend::Private
 
 
-class OdtReaderBackend::Private
+class OdfTextReaderBackend::Private
 {
  public:
     Private();
@@ -44,64 +44,41 @@ class OdtReaderBackend::Private
                                 // needed for forward binary compatibility.
 };
 
-OdtReaderBackend::Private::Private()
+OdfTextReaderBackend::Private::Private()
 {
 }
 
-OdtReaderBackend::Private::~Private()
+OdfTextReaderBackend::Private::~Private()
 {
 }
 
 
 // ================================================================
-//                 class OdtReaderBackend
+//                 class OdfTextReaderBackend
 
 
-OdtReaderBackend::OdtReaderBackend()
-    : d(new OdtReaderBackend::Private)
+OdfTextReaderBackend::OdfTextReaderBackend()
+    : d(new OdfTextReaderBackend::Private)
 {
+    //Q_UNUSED(context)
 }
 
-OdtReaderBackend::~OdtReaderBackend()
+OdfTextReaderBackend::~OdfTextReaderBackend()
 {
     delete d;
 }
 
 
 // ----------------------------------------------------------------
-//                 ODT document level functions
-
-
-void OdtReaderBackend::elementOfficeDocumentcontent(KoXmlStreamReader &reader,
-                                                    OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdtReaderBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdtReaderBackend::elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-
-// ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
-void OdtReaderBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdfTextReaderBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
 
-void OdtReaderBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdfTextReaderBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
@@ -112,26 +89,26 @@ void OdtReaderBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext 
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
 
-void OdtReaderBackend::elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdfTextReaderBackend::elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
 
-void OdtReaderBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdfTextReaderBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
 
-void OdtReaderBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdfTextReaderBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
 
 
-void OdtReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdfTextReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
