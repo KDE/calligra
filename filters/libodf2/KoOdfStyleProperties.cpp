@@ -22,10 +22,6 @@
 // Own
 #include "KoOdfStyleProperties.h"
 
-// Qt
-#include <QString>
-#include <QHash>
-
 // KDE
 #include <kdebug.h>
 
@@ -34,8 +30,8 @@
 #include <KoXmlWriter.h>
 
 
-// ================================================================
-//                 class KoOdfStyleProperties
+// ----------------------------------------------------------------
+//                         private class
 
 
 class KoOdfStyleProperties::Private
@@ -44,7 +40,7 @@ public:
     Private() {};
     ~Private() {};
 
-    QHash<QString, QString> attributes;  // name, value
+    AttributeSet attributes;  // name, value
 };
 
 
@@ -91,10 +87,8 @@ bool KoOdfStyleProperties::readOdf(KoXmlStreamReader &reader)
 
 bool KoOdfStyleProperties::saveOdf(const QString &propertySet, KoXmlWriter *writer)
 {
-    writer->startElement(propertySet.toLatin1()); // e.g. text-properties
-    foreach(const QString &property, d->attributes.keys()) {
-        writer->addAttribute(property.toLatin1(), d->attributes[property]);
-    }
+    writer->startElement(propertySet.toLatin1()); // e.g. style:text-properties
+    saveAttributes(writer);
     writer->endElement(); // propertySet
 
     return true;
@@ -107,13 +101,37 @@ bool KoOdfStyleProperties::saveOdf(const QString &propertySet, KoXmlWriter *writ
 
 bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
 {
-    KoXmlStreamAttributes attrs = reader.attributes();
-    foreach (const KoXmlStreamAttribute &attr, attrs) {
-        d->attributes.insert(attr.qualifiedName().toString(), attr.value().toString());
-    }
+    copyAttributes(reader, d->attributes);
 
     //kDebug() << "read attributes: " << d->attributes;
 
     return true;
 }
 
+bool KoOdfStyleProperties::saveAttributes(KoXmlWriter *writer)
+{
+    foreach(const QString &property, d->attributes.keys()) {
+        writer->addAttribute(property.toLatin1(), d->attributes[property]);
+    }
+
+    return true;
+}
+
+
+// ----------------------------------------------------------------
+
+
+void copyAttributes(KoXmlStreamReader &reader, AttributeSet &attributes)
+{
+    KoXmlStreamAttributes attrs = reader.attributes();
+    foreach (const KoXmlStreamAttribute &attr, attrs) {
+        attributes.insert(attr.qualifiedName().toString(), attr.value().toString());
+    }
+}
+
+void saveAttributes(AttributeSet &attributes, KoXmlWriter *writer)
+{
+    foreach(const QString &property, attributes.keys()) {
+        writer->addAttribute(property.toLatin1(), attributes[property]);
+    }
+}

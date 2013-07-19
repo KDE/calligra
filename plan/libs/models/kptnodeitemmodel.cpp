@@ -797,11 +797,11 @@ QVariant NodeModel::duration( const Node *node, int role ) const
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
                 double v = node->duration( id() ).toDouble( unit );
-                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
+                return QVariant(KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
             } else if ( node->type() == Node::Type_Project ) {
                 Duration::Unit unit = Duration::Unit_d;
                 double v = node->duration( id() ).toDouble( unit );
-                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
+                return QVariant(KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
             }
             break;
         case Qt::ToolTipRole:
@@ -900,7 +900,7 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
                 //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-            return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
+            return QVariant(KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
             break;
         }
         case Qt::EditRole: {
@@ -939,7 +939,7 @@ QVariant NodeModel::optimisticEstimate( const Estimate *est, int role ) const
                 return QVariant();
             }
             Duration::Unit unit = est->unit();
-            return KGlobal::locale()->formatNumber( est->optimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true );
+            return QVariant(KGlobal::locale()->formatNumber( est->optimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true ));
             break;
         }
         case Qt::EditRole: {
@@ -972,7 +972,7 @@ QVariant NodeModel::pertExpected( const Estimate *est, int role ) const
             }
             Duration::Unit unit = est->unit();
             double v = Estimate::scale( est->pertExpected(), unit, est->scales() );
-            return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
+            return QVariant(KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
         }
         case Qt::EditRole: {
             if ( est == 0 ) {
@@ -1007,7 +1007,7 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
             //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-            return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
+            return QVariant(KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ));
             break;
         }
         case Qt::EditRole: {
@@ -1045,7 +1045,7 @@ QVariant NodeModel::pessimisticEstimate( const Estimate *est, int role ) const
                 return QVariant();
             }
             Duration::Unit unit = est->unit();
-            return KGlobal::locale()->formatNumber( est->pessimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true );
+            return QVariant(KGlobal::locale()->formatNumber( est->pessimisticEstimate(), m_prec ) +  Duration::unitToString( unit, true ));
             break;
         }
         case Qt::EditRole: {

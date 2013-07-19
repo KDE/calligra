@@ -612,7 +612,7 @@ QString ComplexShapeHandler::handle_pathLst(QXmlStreamReader* reader)
     QString returnString;
 
     pathEquationIndex = 0;
-    pathEquations = "";
+    pathEquations.clear();
 
     while (!reader->atEnd()) {
         reader->readNext();
