@@ -49,8 +49,8 @@
 //                 class OdtReaderDocxBackend
 
 
-OdtReaderDocxBackend::OdtReaderDocxBackend(OdfReaderContext *context)
-    : OdtReaderBackend(context)
+OdtReaderDocxBackend::OdtReaderDocxBackend()
+    : OdtReaderBackend()
     , m_insideSpanLevel(0)
 {
 }

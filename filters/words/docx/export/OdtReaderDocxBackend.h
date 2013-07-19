@@ -38,7 +38,7 @@ class OdfReaderDocxContext;
 class OdtReaderDocxBackend : public OdtReaderBackend
 {
  public:
-    explicit OdtReaderDocxBackend(OdfReaderContext *context);
+    explicit OdtReaderDocxBackend();
     virtual ~OdtReaderDocxBackend();
 
     // Called before and after the actual traversal.

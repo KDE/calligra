@@ -84,7 +84,7 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     DocxFile docxFile;
 
     OdfReaderDocxContext  docxBackendContext(odfStore, &docxFile);
-    OdtReaderDocxBackend  docxBackend(&docxBackendContext);
+    OdtReaderDocxBackend  docxBackend;
     OdtReader             odtReader;
     odtReader.readContent(&docxBackend, &docxBackendContext);
 
