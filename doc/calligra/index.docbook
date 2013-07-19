@@ -283,7 +283,7 @@ absolutely free desktop environment for unix-like operating systems.
 &calligra; makes use of the &kde; libraries.
 </para></listitem>
 <listitem>
-<para><ulink url="http://qt.nokia.com/">&Qt; page</ulink>. The creators
+<para><ulink url="http://qt-project.org/">&Qt; page</ulink>. The creators
 of the C++-toolkit &Qt;. &kde; and &calligra; make use of &Qt;.
 </para></listitem>
 </itemizedlist>
