@@ -9,6 +9,7 @@ set(DocxExport_PART_SRCS
     DocxExport.cpp
     OdfReaderDocxContext.cpp
     OdtReaderDocxBackend.cpp
+    OdfTextReaderDocxBackend.cpp
     FileCollector.cpp
     DocxFile.cpp
 

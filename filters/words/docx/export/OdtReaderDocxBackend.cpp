@@ -51,7 +51,7 @@
 
 OdtReaderDocxBackend::OdtReaderDocxBackend()
     : OdtReaderBackend()
-    , m_insideSpanLevel(0)
+      //    , m_insideSpanLevel(0)
 {
 }
 
@@ -107,7 +107,7 @@ void OdtReaderDocxBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReade
     }
 }
 
-
+#if 0
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
@@ -233,3 +233,4 @@ void OdtReaderDocxBackend::endRun(OdfReaderDocxContext *docxContext)
     KoXmlWriter  *writer = docxContext->m_documentWriter;
     writer->endElement(); // w:r
 }
+#endif

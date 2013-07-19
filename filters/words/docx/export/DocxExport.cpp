@@ -41,6 +41,7 @@
 #include "DocxFile.h"
 #include "OdfReaderDocxContext.h"
 #include "OdtReaderDocxBackend.h"
+#include "OdfTextReaderDocxBackend.h"
 
 
 K_PLUGIN_FACTORY(DocxExportFactory, registerPlugin<DocxExport>();)
@@ -83,9 +84,18 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     // Collects all the parts of the docx file and writes the result at the end.
     DocxFile docxFile;
 
-    OdfReaderDocxContext  docxBackendContext(odfStore, &docxFile);
-    OdtReaderDocxBackend  docxBackend;
-    OdtReader             odtReader;
+    OdfReaderDocxContext      docxBackendContext(odfStore, &docxFile);
+
+    // The backends
+    OdtReaderDocxBackend      docxBackend;
+    OdfTextReaderDocxBackend  docxTextBackend;
+
+    // The readers
+    OdtReader                 odtReader;
+    OdfTextReader             odfTextReader;
+    odfTextReader.setBackend(&docxTextBackend);
+    odtReader.setTextReader(&odfTextReader);
+
     odtReader.readContent(&docxBackend, &docxBackendContext);
 
     // Add the newly converted document contents to the docx file.

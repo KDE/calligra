@@ -51,7 +51,7 @@ class OdtReaderDocxBackend : public OdtReaderBackend
 
     void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
     //void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
-
+#if 0
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
@@ -65,13 +65,13 @@ class OdtReaderDocxBackend : public OdtReaderBackend
     void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
-
  private:
     void startRun(OdfReaderDocxContext *context);
     void endRun(OdfReaderDocxContext *context);
 
  private:
     int  m_insideSpanLevel;    // Number of nexted <text:span> levels.
+#endif
 };
 
 
