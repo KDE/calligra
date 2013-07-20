@@ -51,27 +51,6 @@ class OdtReaderDocxBackend : public OdtReaderBackend
 
     void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
     //void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
-#if 0
-    // ----------------------------------------------------------------
-    // Text level functions: paragraphs, headings, sections, frames, objects, etc
-
-    void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    // ----------------------------------------------------------------
-    // Paragraph level functions: spans, annotations, notes, text content itself, etc.
-
-    void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
- private:
-    void startRun(OdfReaderDocxContext *context);
-    void endRun(OdfReaderDocxContext *context);
-
- private:
-    int  m_insideSpanLevel;    // Number of nexted <text:span> levels.
-#endif
 };
 
 
