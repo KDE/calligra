@@ -130,15 +130,15 @@ void WmfExport::paintShape(KoShape * shape)
         mWmf->drawPolyline(polygons.first());
     else {
         QBrush fill(Qt::NoBrush);
-        KoColorBackground * cbg = dynamic_cast<KoColorBackground*>(shape->background());
+        QPointer<KoColorBackground>  cbg = dynamic_cast<KoColorBackground*>(shape->background().data());
         if (cbg)
             fill = QBrush(cbg->color(), cbg->style());
-        KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
+        QPointer<KoGradientBackground>  gbg = dynamic_cast<KoGradientBackground*>(shape->background().data());
         if (gbg) {
             fill = QBrush(*gbg->gradient());
             fill.setTransform(gbg->transform());
         }
-        KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
+        QPointer<KoPatternBackground>  pbg = dynamic_cast<KoPatternBackground*>(shape->background().data());
         if (pbg) {
             fill.setTextureImage(pbg->pattern());
             fill.setTransform(pbg->transform());
