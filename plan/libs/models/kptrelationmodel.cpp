@@ -107,7 +107,7 @@ QVariant RelationModel::lag( const Relation *r, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             Duration::Unit unit = Duration::Unit_h;
-            return KGlobal::locale()->formatNumber( r->lag().toDouble( unit ), 1 ) +  Duration::unitToString( unit, true );
+            return QVariant(KGlobal::locale()->formatNumber( r->lag().toDouble( unit ), 1 ) +  Duration::unitToString( unit, true ));
         }
         case Qt::EditRole:
             return r->lag().toDouble( Duration::Unit_h );

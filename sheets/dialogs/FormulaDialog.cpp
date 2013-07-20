@@ -630,7 +630,7 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
         m_rightText = result->text().right(old_length - result->cursorPosition());
         m_leftText = result->text().left(result->cursorPosition());
     } else {
-        m_rightText = "";
+        m_rightText.clear();
         m_leftText = result->text();
     }
 

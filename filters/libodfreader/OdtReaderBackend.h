@@ -70,16 +70,13 @@ class OdfReaderContext;
 class KOODFREADER_EXPORT OdtReaderBackend
 {
  public:
-    explicit OdtReaderBackend(OdfReaderContext *context);
+    explicit OdtReaderBackend();
     virtual ~OdtReaderBackend();
-
-    // Called before and after the actual traversal.
-    // FIXME: NYI
-
-    // Called when there is a document level element with children.
 
     // ----------------------------------------------------------------
     // ODT document level functions
+
+    virtual void elementOfficeDocumentcontent(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 
@@ -88,6 +85,7 @@ class KOODFREADER_EXPORT OdtReaderBackend
 
     virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.

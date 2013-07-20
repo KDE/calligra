@@ -57,10 +57,9 @@ OdtReaderBackend::Private::~Private()
 //                 class OdtReaderBackend
 
 
-OdtReaderBackend::OdtReaderBackend(OdfReaderContext *context)
+OdtReaderBackend::OdtReaderBackend()
     : d(new OdtReaderBackend::Private)
 {
-    Q_UNUSED(context)
 }
 
 OdtReaderBackend::~OdtReaderBackend()
@@ -71,6 +70,14 @@ OdtReaderBackend::~OdtReaderBackend()
 
 // ----------------------------------------------------------------
 //                 ODT document level functions
+
+
+void OdtReaderBackend::elementOfficeDocumentcontent(KoXmlStreamReader &reader,
+                                                    OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
 
 void OdtReaderBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
@@ -103,6 +110,13 @@ void OdtReaderBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext 
 
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
+
+
+void OdtReaderBackend::elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
 
 void OdtReaderBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
