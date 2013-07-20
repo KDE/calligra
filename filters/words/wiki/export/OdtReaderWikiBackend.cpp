@@ -50,8 +50,8 @@
 //                 class OdtReaderWikiBackend
 
 
-OdtReaderWikiBackend::OdtReaderWikiBackend(OdfReaderContext *context)
-    : OdtReaderBackend(context)
+OdtReaderWikiBackend::OdtReaderWikiBackend()
+    : OdfTextReaderBackend()
 {
 }
 
@@ -61,20 +61,8 @@ OdtReaderWikiBackend::~OdtReaderWikiBackend()
 
 
 // ----------------------------------------------------------------
-// ODT document level functions
-
-
-
-void OdtReaderWikiBackend::elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    DEBUG_BACKEND();
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-
-// ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
+
 
 void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {

@@ -36,6 +36,8 @@
 
 // Filter libraries
 #include "OdtReader.h"
+#include "OdtReaderBackend.h"
+#include "OdfTextReader.h"
 
 // This filter
 #include "OdtReaderWikiBackend.h"
@@ -85,10 +87,18 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
     }
 
     // The actual conversion
-    OdfReaderWikiContext  wikiBackendContext(odfStore, outfile);
-    OdtReaderWikiBackend  wikiBackend(&wikiBackendContext);
+    OdfReaderWikiContext  wikiContext(odfStore, outfile);
+
+    OdtReaderBackend      odtBackend;
+    OdtReaderWikiBackend  wikiTextBackend;
+
     OdtReader             odtReader;
-    odtReader.readContent(&wikiBackend, &wikiBackendContext);
+    OdfTextReader         odfTextReader;
+    odfTextReader.setBackend(&wikiTextBackend);
+    odtReader.setTextReader(&odfTextReader);
+
+    odtReader.readContent(&odtBackend, &wikiContext);
+
     outfile.close();
 
     return KoFilter::OK;
