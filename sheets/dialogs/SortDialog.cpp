@@ -389,7 +389,7 @@ void SortDialog::init()
         else if (it != other.begin()) {
             tmp = tmp.left(tmp.length() - 2);
             lst.append(tmp);
-            tmp = "";
+            tmp.clear();
         }
     }
     d->detailsWidget.m_customList->insertItems(0, lst);
@@ -497,7 +497,7 @@ void SortDialog::accept()
         for (int i = 0; i < l; ++i) {
             if (list[i] == ',') {
                 clist.append(tmp.trimmed());
-                tmp = "";
+                tmp.clear();
             } else
                 tmp += list[i];
         }

@@ -292,7 +292,7 @@ void OpenCalcImport::convertFormula(QString & text, QString const & f) const
 
             isPar = false;
             parameter += translatePar(par);
-            par = "";
+            par.clear();
         } else if (isPar) {
             par += f[p];
         } else if (f[p] == '=') { // TODO: check if StarCalc has a '==' sometimes
@@ -581,7 +581,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
 
                     kDebug(30518) << "Num:" << num;
 
-                    num = "";
+                    num.clear();
                     if (!ok)
                         break;
                 }

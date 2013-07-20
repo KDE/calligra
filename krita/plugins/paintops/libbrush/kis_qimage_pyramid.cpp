@@ -73,11 +73,17 @@ KisQImagePyramid::~KisQImagePyramid()
 
 int KisQImagePyramid::findNearestLevel(qreal scale, qreal *baseScale)
 {
+    const qreal scale_epsilon = 1e-6;
+
     qreal levelScale = m_baseScale;
     int level = 0;
     int lastLevel = m_levels.size() - 1;
 
-    while (0.5 * levelScale > scale && level < lastLevel) {
+
+    while ((0.5 * levelScale > scale ||
+            qAbs(0.5 * levelScale - scale) < scale_epsilon) &&
+            level < lastLevel) {
+
         levelScale *= 0.5;
         level++;
     }
@@ -178,7 +184,9 @@ QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
                     baseScale, srcImage.size(),
                     &transform, &dstSize);
 
-    if (transform.isIdentity()) {
+    if (transform.isIdentity() &&
+        srcImage.format() == QImage::Format_ARGB32) {
+
         return srcImage;
     }
 
