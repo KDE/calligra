@@ -36,6 +36,7 @@
 #include <KoXmlWriter.h>
 
 #include "KoOdfStyle.h"
+#include "KoOdfListStyle.h"
 
 
 // ================================================================
@@ -49,6 +50,7 @@ public:
 
     QHash<QString, KoOdfStyle*> styles;         // name, style
     QHash<QString, KoOdfStyle*> defaultStyles;  // family, style
+    QHash<QString, KoOdfListStyle*> listStyles; // list-style styles
 };
 
 
@@ -76,6 +78,15 @@ void KoOdfStyleManager::setStyle(QString &name, KoOdfStyle *style)
     d->styles.insert(name, style);
 }
 
+KoOdfListStyle *KoOdfStyleManager::listStyle(QString &name) const
+{
+    return d->listStyles.value(name, 0);
+}
+
+void KoOdfStyleManager::setListStyle(QString &name, KoOdfListStyle *style)
+{
+    d->listStyles.insert(name, style);
+}
 
 KoOdfStyle *KoOdfStyleManager::defaultStyle(QString &family) const
 {
@@ -171,10 +182,10 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
     while (reader.readNextStartElement()) {
         kDebug() << "---------------- style element:" << reader.qualifiedName().toString();
 
-        // For now: handle style:style and style:default-style
+        // For now: handle style:style and style:default-style and text:list-style
         // and only the text, paragraph and graphic families.
         QString tagName = reader.qualifiedName().toString();
-        if (tagName != "style:style" && tagName != "style:default-style") {
+        if (tagName != "style:style" && tagName != "style:default-style" && tagName != "text:list-style") {
             reader.skipCurrentElement();
             continue;
         }
@@ -188,29 +199,45 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
         }
 #endif
 
-        QString family = attrs.value("style:family").toString();
-        if (family == "text" || family == "paragraph" || family == "graphic") {
-            // FIXME: In the future, create style per type (family).
-            KoOdfStyle *style = new KoOdfStyle;
+        if ( tagName == "style:style") {
+            QString family = attrs.value("style:family").toString();
+            if (family == "text" || family == "paragraph" || family == "graphic") {
+                // FIXME: In the future, create style per type (family).
+                KoOdfStyle *style = new KoOdfStyle;
 
-            kDebug() << "This style should be loaded:" << family;
+                kDebug() << "This style should be loaded:" << tagName << "Family:" <<family;
 
-            style->setIsDefaultStyle(tagName == "style:default-style");
-            style->readOdf(reader);
+                style->setIsDefaultStyle(tagName == "style:default-style");
+                style->readOdf(reader);
 #if 0 // debug
-            kDebug(30503) << "==" << styleName << ":\t"
-                          << style->family()
-                          << style->parent()
-                          << style->isDefaultStyle;
+                kDebug(30503) << "==" << styleName << ":\t"
+                              << style->family()
+                              << style->parent()
+                              << style->isDefaultStyle;
 #endif
-            if (style->isDefaultStyle()) {
-                QString family = style->family();
-                setDefaultStyle(family, style);
+                if (style->isDefaultStyle()) {
+                    QString family = style->family();
+                    setDefaultStyle(family, style);
+                }
+                else {
+                    QString styleName = style->name();
+                    setStyle(styleName, style);
+                }
             }
-            else {
-                QString styleName = style->name();
-                setStyle(styleName, style);
-            }
+        }
+        else if (tagName == "text:list-style"){
+            KoOdfListStyle *listStyle = new KoOdfListStyle;
+
+            kDebug() << "This style should be loaded:" << tagName;
+
+            // FIXME: Should check for default-style for list-style.
+            listStyle->setIsDefaultStyle(tagName == "style:default-style");
+            listStyle->readOdf(reader);
+
+            kDebug() << "This style name:" << listStyle->name();
+
+            QString styleName = listStyle->name();
+            setListStyle(styleName, listStyle);
         }
         else {
             reader.skipCurrentElement();

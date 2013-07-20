@@ -21,9 +21,11 @@ set(koodf2_LIB_SRCS
     KoCellStyle.cpp
 
     KoOdfStyle.cpp
+    KoOdfListStyle.cpp
     KoOdfStyleProperties.cpp
     KoOdfTextProperties.cpp
     KoOdfParagraphProperties.cpp
+    KoOdfListLevelProperties.cpp
     KoOdfGraphicProperties.cpp
     KoOdfStyleManager.cpp
 )
