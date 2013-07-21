@@ -84,6 +84,11 @@ void OdfTextReaderBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
     Q_UNUSED(context);
 }
 
+void OdfTextReaderBackend::elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
 
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
@@ -109,6 +114,21 @@ void OdfTextReaderBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCont
 
 
 void OdfTextReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+// ----------------------------------------------------------------
+// List level functions: lit-header and list-item.
+
+void OdfTextReaderBackend::elementTextListHeader(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);

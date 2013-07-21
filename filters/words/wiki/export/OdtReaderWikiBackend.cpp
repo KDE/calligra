@@ -113,7 +113,6 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
     }
 }
 
-
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
@@ -178,7 +177,6 @@ void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCont
     wikiContext->outStream << "\n\n";
 #endif
 }
-
 
 void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
 {

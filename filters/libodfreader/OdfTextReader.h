@@ -73,6 +73,7 @@ class KOODFREADER_EXPORT OdfTextReader
 
     void readElementTextH(KoXmlStreamReader &reader);
     void readElementTextP(KoXmlStreamReader &reader);
+    void readElementTextList(KoXmlStreamReader &reader);
     void readElementTextA(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
@@ -82,6 +83,14 @@ class KOODFREADER_EXPORT OdfTextReader
 
     void readElementTextSpan(KoXmlStreamReader &reader);
     void readElementTextS(KoXmlStreamReader &reader);
+
+    // ----------------------------------------------------------------
+    // List level functions: list-item and list header.
+
+    void readListContent(KoXmlStreamReader &reader);
+
+    void readElementTextListItem(KoXmlStreamReader &reader);
+    void readElementTextListHeader(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
     // Other functions

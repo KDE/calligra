@@ -65,6 +65,7 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
 
     virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, etc.
@@ -73,6 +74,12 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     virtual void elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
+
+    // ----------------------------------------------------------------
+    // List level functions: list-header and list-item.
+
+    virtual void elementTextListHeader(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 
