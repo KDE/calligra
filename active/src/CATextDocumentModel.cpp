@@ -28,7 +28,7 @@
 #include <KWDocument.h>
 #include <kdebug.h>
 
-CATextDocumentModel::CATextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager)
+CATextDocumentModel::CATextDocumentModel(QObject* /*parent*/, KWDocument* document, KoShapeManager *shapemanager)
     : kw_document(document), kw_shapemanager(shapemanager)
 {
 }
