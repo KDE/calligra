@@ -41,6 +41,7 @@ class QStringList;
 class KoStore;
 class KoOdfStyleProperties;
 class KoOdfStyle;
+class KoOdfListStyle;
 
 class OdfReaderWikiContext : public OdfReaderContext 
 {
@@ -56,9 +57,14 @@ class OdfReaderWikiContext : public OdfReaderContext
 
     void pushStyle(KoOdfStyle*);
     KoOdfStyle* popStyle();
+    void pushListStyle(KoOdfListStyle*);
+    KoOdfListStyle* popListStyle();
 
     QTextStream  outStream;
     QStack<KoOdfStyle*> styleStack;
+    QStack<KoOdfListStyle*> listStyleStack;
+
+    int listLevelCounter;
 };
 
 

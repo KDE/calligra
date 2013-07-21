@@ -248,9 +248,9 @@ void OdfTextReader::readElementTextList(KoXmlStreamReader &reader)
     m_backend->elementTextList(reader, m_context);
     //FIXME: setIsInsideParagraph now should be more public like IsInsideElement.
 
-    m_context->setIsInsideParagraph(true);
+    //m_context->setIsInsideParagraph(true);
     readListContent(reader);
-    m_context->setIsInsideParagraph(false);
+    //m_context->setIsInsideParagraph(false);
 
     m_backend->elementTextList(reader, m_context);
     DEBUGEND();
@@ -501,13 +501,8 @@ void OdfTextReader::readListContent(KoXmlStreamReader &reader)
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
 
-        if (reader.isCharacters()) {
-            //kDebug(30503) << "Found character data";
-            m_backend->characterData(reader, m_context);
-            continue;
-        }
-
         QString tagName = reader.qualifiedName().toString();
+        kDebug() << "list child:" << tagName;
         if (tagName == "text:list-item") {
             readElementTextListItem(reader);
         }
@@ -517,9 +512,6 @@ void OdfTextReader::readListContent(KoXmlStreamReader &reader)
         else {
             readUnknownElement(reader);
         }
-
-        // Read past the end tag of the just parsed element.
-        reader.readNext();
         DEBUG_READING("loop-end");
     }
 
@@ -529,7 +521,6 @@ void OdfTextReader::readListContent(KoXmlStreamReader &reader)
 void OdfTextReader::readElementTextListHeader(KoXmlStreamReader &reader)
 {
      DEBUGSTART();
-     m_backend->elementTextListHeader(reader, m_context);
      //List header has child elements:
      // <text:h> 5.1.2
      // <text:p> 5.1.3
@@ -540,35 +531,33 @@ void OdfTextReader::readElementTextListHeader(KoXmlStreamReader &reader)
      while(reader.readNextStartElement()) {
          DEBUG_READING("loop-start");
 
-         if (reader.isCharacters()) {
-             //kDebug(30503) << "Found character data";
-             m_backend->characterData(reader, m_context);
-             continue;
-         }
-
          QString tagName = reader.qualifiedName().toString();
          if (tagName == "text:h") {
+             m_backend->elementTextListItem(reader, m_context);
+             reader.readNext();
              readParagraphContents(reader);
+             m_backend->elementTextListItem(reader, m_context);
          }
          else if (tagName == "text:p") {
+             m_backend->elementTextListItem(reader, m_context);
+             reader.readNext();
              readParagraphContents(reader);
+             m_backend->elementTextListItem(reader, m_context);
          }
          else if (tagName == "text:list") {
-             readListContent(reader);
+             readElementTextList(reader);
          }
          else {
              readUnknownElement(reader);
          }
          DEBUG_READING("loop-end");
      }
-     m_backend->elementTextListHeader(reader, m_context);
      DEBUGEND();
 }
 
 void OdfTextReader::readElementTextListItem(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
-    m_backend->elementTextListItem(reader, m_context);
     //List item has child elements:
     // <text:h> 5.1.2
     // <text:p> 5.1.3
@@ -579,28 +568,32 @@ void OdfTextReader::readElementTextListItem(KoXmlStreamReader &reader)
     while(reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
 
-        if (reader.isCharacters()) {
-            //kDebug(30503) << "Found character data";
-            m_backend->characterData(reader, m_context);
-            continue;
-        }
-
         QString tagName = reader.qualifiedName().toString();
+        kDebug() <<tagName;
         if (tagName == "text:h") {
+            m_backend->elementTextListItem(reader, m_context);
+            reader.readNext();
             readParagraphContents(reader);
+            m_backend->elementTextListItem(reader, m_context);
         }
         else if (tagName == "text:p") {
+            m_backend->elementTextListItem(reader, m_context);
+            reader.readNext();
             readParagraphContents(reader);
+            m_backend->elementTextListItem(reader, m_context);
         }
         else if (tagName == "text:list") {
-            readListContent(reader);
+            readElementTextList(reader);
+        }
+        else if (tagName == "text:number") {
+            //FIXME
+            reader.skipCurrentElement();
         }
         else {
             readUnknownElement(reader);
         }
-        DEBUG_READING("loop-end");
+    DEBUG_READING("loop-end");
     }
-    m_backend->elementTextListItem(reader, m_context);
     DEBUGEND();
 }
 

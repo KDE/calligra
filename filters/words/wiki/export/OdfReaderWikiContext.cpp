@@ -37,6 +37,7 @@
 OdfReaderWikiContext::OdfReaderWikiContext(KoStore *store, QFile &file)
     : OdfReaderContext(store)
     , outStream(&file)
+    , listLevelCounter(0)
 {
 }
 
@@ -59,3 +60,14 @@ KoOdfStyle *OdfReaderWikiContext::popStyle()
 {
     return styleStack.pop();
 }
+
+void OdfReaderWikiContext::pushListStyle(KoOdfListStyle *style)
+{
+    listStyleStack.push(style);
+}
+
+KoOdfListStyle *OdfReaderWikiContext::popListStyle()
+{
+    return listStyleStack.pop();
+}
+

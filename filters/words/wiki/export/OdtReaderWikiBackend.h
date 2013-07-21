@@ -45,12 +45,15 @@ class OdtReaderWikiBackend : public OdfTextReaderBackend
 
     void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
     void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
     void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
+
+    void elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 };

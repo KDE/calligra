@@ -30,6 +30,7 @@
 
 #include <KoOdfStyleManager.h>
 #include <KoOdfStyle.h>
+#include <KoOdfListStyle.h>
 #include <KoOdfStyleProperties.h>
 
 // This filter
@@ -158,6 +159,31 @@ void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderC
     }
 }
 
+void OdtReaderWikiBackend::elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    DEBUG_BACKEND();
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    if (!wikiContext) {
+        return;
+    }
+
+    if (reader.isStartElement()) {
+        QString stylename = reader.attributes().value("text:style-name").toString();
+        KoOdfListStyle *listStyle = wikiContext->styleManager()->listStyle(stylename);
+        if (listStyle) {
+            kDebug() << "List style name:" << stylename <<"List style level type :" <<listStyle->listLevelStyleType();
+            wikiContext->pushListStyle(listStyle);
+        }
+            wikiContext->listLevelCounter++;
+            kDebug() << "List level counter:" << wikiContext->listLevelCounter;
+    }
+    else {
+        wikiContext->listLevelCounter--;
+        kDebug() << "List level counter:" << wikiContext->listLevelCounter;
+        wikiContext->popListStyle();
+    }
+}
+
 void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
@@ -176,6 +202,35 @@ void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCont
     // At the end of a paragraph, output two newlines.
     wikiContext->outStream << "\n\n";
 #endif
+}
+
+void OdtReaderWikiBackend::elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    DEBUG_BACKEND();
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    if (!wikiContext) {
+        return;
+    }
+    if (reader.isStartElement()) {
+        KoOdfListStyle *listStyle = wikiContext->popListStyle();
+        QString symbol;
+        if (listStyle->listLevelStyleType() == "text:list-level-style-bullet") {
+            symbol = "*";
+        }
+        else if (listStyle->listLevelStyleType() == "text:list-level-style-number") {
+            symbol = "#";
+        }
+        wikiContext->pushListStyle(listStyle);
+
+        for (int level = 0; level < wikiContext->listLevelCounter; level++) {
+            wikiContext->outStream << symbol.toUtf8();
+        }
+        wikiContext->outStream << " ";
+    }
+    else {
+        wikiContext->outStream <<"\n";
+    }
+
 }
 
 void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
