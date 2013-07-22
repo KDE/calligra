@@ -35,7 +35,8 @@
 typedef KGenericFactory<BraindumpQuickStatesPlugin> BraindumpQuickStatesPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFactory("braindump"))
 
-BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject */*parent*/, const QStringList &)
+BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QStringList &)
+    : QObject(parent)
 {
     setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
 

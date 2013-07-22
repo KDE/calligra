@@ -477,7 +477,7 @@ QGraphicsItem *KoPart::createCanvasItem()
 void KoPart::addShell(KoMainWindow *shell)
 {
     if (d->shells.indexOf(shell) == -1) {
-        //kDebug(30003) <<"shell" << (void*)shell <<"added to doc" << this;
+        kDebug(30003) <<"shell" << (void*)shell <<"added to doc" << this;
         d->shells.append(shell);
         // XXX!!!
         //connect(shell, SIGNAL(documentSaved()), d->undoStack, SLOT(setClean()));
@@ -486,7 +486,7 @@ void KoPart::addShell(KoMainWindow *shell)
 
 void KoPart::removeShell(KoMainWindow *shell)
 {
-    //kDebug(30003) <<"shell" << (void*)shell <<"removed from doc" << this;
+    kDebug(30003) <<"shell" << (void*)shell <<"removed from doc" << this;
     if (shell) {
         disconnect(shell, SIGNAL(documentSaved()), d->document->undoStack(), SLOT(setClean()));
         d->shells.removeAll(shell);

@@ -111,7 +111,6 @@ kde4_add_ui_files( komain_LIB_SRCS
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
 target_link_libraries(komain ${extra_libs}
-    
     ${KDE4_KFILE_LIBRARY}
     kowidgets
     kotextlayout
@@ -175,7 +174,6 @@ install( FILES
     calligraversion.h
     KoStandardAction.h
     komain_export.h
-    
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
 if( QT_QTDBUS_FOUND )

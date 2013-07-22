@@ -20,7 +20,7 @@ install(TARGETS karbon_flattenpathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  FlattenPathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/karbonplugins)
-install( FILES  karbonflattenpath.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  karbonflattenpathplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

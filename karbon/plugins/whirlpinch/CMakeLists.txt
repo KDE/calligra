@@ -14,5 +14,5 @@ install(TARGETS karbon_whirlpinchplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  WhirlPinchPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/karbonplugins)
-install( FILES  karbonwhirlpinch.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  karbonwhirlpinchplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
