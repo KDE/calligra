@@ -264,15 +264,16 @@ void OdtReaderWikiBackend::checkTextIndention(OdfReaderWikiContext *wikiContext)
     KoOdfStyleProperties *styleProperies = style->properties().value("style:paragraph-properties");
     QString property = "fo:margin-left";
     if (!styleProperies->attribute(property).isEmpty()) {
+        // FIXME: a BIG fixme i am not SURE that here i have done the right work.
         int indention = KoUnit::parseValue(styleProperies->attribute(property));
-        //FIXME: we just support three level indent.
-        if (indention > 25) {
-            wikiContext->outStream << ":::";
+        if ((indention % 10) > 5) {
+            indention = (indention / 10) + 1;
         }
-        else if (indention > 15) {
-            wikiContext->outStream << "::";
+        else {
+            indention = indention / 10;
         }
-        else if (indention > 5) {
+        kDebug() << "Indention:" << indention << KoUnit::parseValue(styleProperies->attribute(property));
+        for(int indent = 0; indent < indention; indent++) {
             wikiContext->outStream << ":";
         }
     }
