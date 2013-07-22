@@ -65,6 +65,7 @@ class OdfReaderWikiContext : public OdfReaderContext
     QStack<KoOdfListStyle*> listStyleStack;
 
     int listLevelCounter;
+    int outlineLevel;
 };
 
 

@@ -75,27 +75,11 @@ void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderCont
     }
 
     if (reader.isStartElement()) {
-        QString stylename = reader.attributes().value("text:style-name").toString();
-        KoOdfStyle *style = wikiContext->styleManager()->style(stylename);
-        // Check out-line-level
-        if (style->parent() == "Head_202") {
-            wikiContext->outStream << "==";
-        } else if (style->parent() == "Head_203") {
-            wikiContext->outStream << "===";
-        }
-
-        //Push style to stack.
-        wikiContext->pushStyle(style);
+        wikiContext->outlineLevel = reader.attributes().value("text:outline-level").toString().toInt();
+        checkheadingLevel(wikiContext);
     }
     else {
-        KoOdfStyle *style = wikiContext->popStyle();
-        // Check out-line-level
-        if (style->parent() == "Head_202") {
-            wikiContext->outStream << "==";
-        } else if (style->parent() == "Head_203") {
-            wikiContext->outStream << "===";
-        }
-        // FIXME: Should do sth for level 1 .
+        checkheadingLevel(wikiContext);
         wikiContext->outStream << "\n";
     }
 }
@@ -257,6 +241,20 @@ void OdtReaderWikiBackend::checkFontStyle(OdfReaderWikiContext *wikiContext)
     }
 
     wikiContext->pushStyle(style);
+}
+
+void OdtReaderWikiBackend::checkheadingLevel(OdfReaderWikiContext *wikiContext)
+{
+    int level = wikiContext->outlineLevel;
+    if (level == 1) {
+        wikiContext->outStream << "==";
+    }
+    else if (level == 2) {
+        wikiContext->outStream << "===";
+    }
+    else if (level == 3) {
+        wikiContext->outStream  << "====";
+    }
 }
 
 void OdtReaderWikiBackend::checkTextIndention(OdfReaderWikiContext *wikiContext)

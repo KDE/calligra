@@ -60,8 +60,9 @@ class OdtReaderWikiBackend : public OdfTextReaderBackend
 
 private:
     void checkFontStyle(OdfReaderWikiContext *wikiContext);
-    //void checkheadingLevel();
+    void checkheadingLevel(OdfReaderWikiContext *wikiContext);
     void checkTextIndention(OdfReaderWikiContext *wikiContext);
+
 
 };
 
