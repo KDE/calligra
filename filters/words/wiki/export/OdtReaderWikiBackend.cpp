@@ -27,6 +27,7 @@
 
 // Calligra
 #include <KoXmlReader.h>
+#include <KoUnit.h>
 
 #include <KoOdfStyleManager.h>
 #include <KoOdfStyle.h>
@@ -107,8 +108,16 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
         return;
     }
     if (reader.isStartElement()) {
-        // FIXME: No style handleing yet.
+        QString stylename = reader.attributes().value("text:style-name").toString();
+        KoOdfStyle *style = wikiContext->styleManager()->style(stylename);
+        //Push style to stack
+        wikiContext->pushStyle(style);
+
+        checkTextIndention(wikiContext);
+        checkFontStyle(wikiContext);
     } else {
+        checkFontStyle(wikiContext);
+        wikiContext->popStyle();
         // At the end of a paragraph, output two newlines.
         wikiContext->outStream << "\n";
     }
@@ -127,35 +136,14 @@ void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderC
     if (reader.isStartElement()) {
         QString stylename = reader.attributes().value("text:style-name").toString();
         KoOdfStyle *style = wikiContext->styleManager()->style(stylename);
-        // Check font weight and style
-        KoOdfStyleProperties *stylePropertis = style->properties().value("style:text-properties");
-        QString weightProperty = "fo:font-weight";
-        QString styleProperty = "fo:font-style";
-        if ((stylePropertis->attribute(weightProperty) == "bold") &&
-                (stylePropertis->attribute(styleProperty) == "italic")) {
-            wikiContext->outStream << "'''''";
-        } else if (stylePropertis->attribute(weightProperty) == "bold") {
-            wikiContext->outStream << "'''";
-        } else if (stylePropertis->attribute(styleProperty) == "italic") {
-            wikiContext->outStream << "''";
-        }
         //Push style to stack
         wikiContext->pushStyle(style);
+
+        checkFontStyle(wikiContext);
     }
     else {
-        KoOdfStyle *style = wikiContext->popStyle();
-        // Check font weight and style
-        KoOdfStyleProperties *stylePropertis = style->properties().value("style:text-properties");
-        QString weightProperty = "fo:font-weight";
-        QString styleProperty = "fo:font-style";
-        if ((stylePropertis->attribute(weightProperty) == "bold") &&
-                (stylePropertis->attribute(styleProperty) == "italic")) {
-            wikiContext->outStream << "'''''";
-        } else if (stylePropertis->attribute(weightProperty) == "bold") {
-            wikiContext->outStream << "'''";
-        } else if (stylePropertis->attribute(styleProperty) == "italic") {
-            wikiContext->outStream << "''";
-        }
+        checkFontStyle(wikiContext);
+        wikiContext->popStyle();
     }
 }
 
@@ -178,9 +166,11 @@ void OdtReaderWikiBackend::elementTextList(KoXmlStreamReader &reader, OdfReaderC
             kDebug() << "List level counter:" << wikiContext->listLevelCounter;
     }
     else {
+        if (wikiContext->listLevelCounter == wikiContext->listStyleStack.count()) {
+                    wikiContext->popListStyle();
+        }
         wikiContext->listLevelCounter--;
         kDebug() << "List level counter:" << wikiContext->listLevelCounter;
-        wikiContext->popListStyle();
     }
 }
 
@@ -243,4 +233,50 @@ void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCon
     //kDebug(30503) << reader.text().toString();
 
     wikiContext->outStream << reader.text().toString();
+}
+
+void OdtReaderWikiBackend::checkFontStyle(OdfReaderWikiContext *wikiContext)
+{
+    KoOdfStyle *style = wikiContext->popStyle();
+    // Check font weight and style
+    KoOdfStyleProperties *stylePropertis = style->properties().value("style:text-properties");
+    if (!stylePropertis) {
+        wikiContext->pushStyle(style);
+        return;
+    }
+
+    QString weightProperty = "fo:font-weight";
+    QString styleProperty = "fo:font-style";
+    if ((stylePropertis->attribute(weightProperty) == "bold") &&
+            (stylePropertis->attribute(styleProperty) == "italic")) {
+        wikiContext->outStream << "'''''";
+    } else if (stylePropertis->attribute(weightProperty) == "bold") {
+        wikiContext->outStream << "'''";
+    } else if (stylePropertis->attribute(styleProperty) == "italic") {
+        wikiContext->outStream << "''";
+    }
+
+    wikiContext->pushStyle(style);
+}
+
+void OdtReaderWikiBackend::checkTextIndention(OdfReaderWikiContext *wikiContext)
+{
+    KoOdfStyle *style = wikiContext->popStyle();
+    // Check indenting text.
+    KoOdfStyleProperties *styleProperies = style->properties().value("style:paragraph-properties");
+    QString property = "fo:margin-left";
+    if (!styleProperies->attribute(property).isEmpty()) {
+        int indention = KoUnit::parseValue(styleProperies->attribute(property));
+        //FIXME: we just support three level indent.
+        if (indention > 25) {
+            wikiContext->outStream << ":::";
+        }
+        else if (indention > 15) {
+            wikiContext->outStream << "::";
+        }
+        else if (indention > 5) {
+            wikiContext->outStream << ":";
+        }
+    }
+    wikiContext->pushStyle(style);
 }

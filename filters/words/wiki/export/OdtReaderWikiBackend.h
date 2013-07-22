@@ -32,6 +32,7 @@ class QSizeF;
 class QStringList;
 class KoStore;
 class OdfReaderContext;
+class OdfReaderWikiContext;
 
 
 class OdtReaderWikiBackend : public OdfTextReaderBackend
@@ -56,6 +57,12 @@ class OdtReaderWikiBackend : public OdfTextReaderBackend
     void elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
+
+private:
+    void checkFontStyle(OdfReaderWikiContext *wikiContext);
+    //void checkheadingLevel();
+    void checkTextIndention(OdfReaderWikiContext *wikiContext);
+
 };
 
 
