@@ -176,7 +176,7 @@ public:
         QVariant value = QStandardItemModel::headerData(section, orientation, role);
         if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
             if (section == 0) {
-                return i18nc("@title:row", "Column name") + "  ";
+                return QString(i18nc("@title:row", "Column name") + "  ");
             } else {
                 return QString::number(section);
             }
@@ -1401,7 +1401,7 @@ void KexiCSVImportDialog::updateColumnText(int col)
     }
 
     m_table->setHeaderData(col, Qt::Horizontal,
-        i18n("Column %1", col + 1) + "  \n(" + kexiCSVImportStatic->typeNames[detectedType].toLower() + ")  ");
+        QString(i18n("Column %1", col + 1) + "  \n(" + kexiCSVImportStatic->typeNames[detectedType].toLower() + ")  "));
     m_tableView->horizontalHeader()->adjustSize();
 
     //check uniqueness
