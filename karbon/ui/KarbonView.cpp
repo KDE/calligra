@@ -434,7 +434,7 @@ void KarbonView::dropEvent(QDropEvent *e)
             }
             d->canvas->addCommand(new KoShapeStrokeCommand(selectedShapes, strokes, 0));
         } else {
-            KoColorBackground * fill = new KoColorBackground(color);
+            QPointer<KoShapeBackground>  fill = new KoColorBackground(color);
             d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, 0));
         }
     }
@@ -1532,7 +1532,7 @@ void KarbonView::applyPaletteColor(const KoColor &color)
         d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), newStrokes));
         d->canvas->resourceManager()->setForegroundColor(color);
     } else {
-        KoShapeBackground *fill = new KoColorBackground(color.toQColor());
+        QPointer<KoShapeBackground> fill = new KoColorBackground(color.toQColor());
         d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill));
         d->canvas->resourceManager()->setBackgroundColor(color);
     }

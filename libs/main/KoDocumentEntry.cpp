@@ -93,9 +93,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
     QList<KoDocumentEntry> lst;
     QString constr;
     if (!_constr.isEmpty()) {
-        constr = '(';
-        constr += _constr;
-        constr += ") and ";
+        constr = '(' + _constr + ") and ";
     }
     constr += " exist Library";
 

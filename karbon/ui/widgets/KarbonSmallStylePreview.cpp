@@ -59,19 +59,10 @@ public:
     }
 
     virtual ~KarbonFillStyleWidget() {
-        if (m_fill && !m_fill->deref())
-            delete m_fill;
     }
 
-    void setFill(KoShapeBackground * fill) {
-        if (fill != m_fill) {
-            if (m_fill && !m_fill->deref())
-                delete m_fill;
-            m_fill = fill;
-            if (m_fill)
-                m_fill->ref();
-        }
-
+    void setFill(QPointer<KoShapeBackground>  fill) {
+        m_fill = fill;
         update();
     }
 protected:
@@ -82,7 +73,7 @@ protected:
         if (m_fill) {
             m_checkerPainter.paint(painter, rect());
 
-            KoGradientBackground * gradientFill = dynamic_cast<KoGradientBackground*>(m_fill);
+            QPointer<KoGradientBackground>  gradientFill = dynamic_cast<KoGradientBackground*>(m_fill.data());
             if (gradientFill) {
                 const QGradient * gradient = gradientFill->gradient();
                 QGradient * defGradient = KarbonGradientHelper::defaultGradient(gradient->type(), gradient->spread(), gradient->stops());
@@ -113,7 +104,7 @@ protected:
     }
 
 private:
-    KoShapeBackground * m_fill; ///< the fill to preview
+    QPointer<KoShapeBackground>  m_fill; ///< the fill to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
