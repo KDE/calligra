@@ -32,7 +32,9 @@
 #include "KoXmlStreamReader.h"
 #include "KoXmlWriter.h"
 #include "KoOdfStyleProperties.h"
-
+#include "KoOdfTextProperties.h"
+#include "KoOdfParagraphProperties.h"
+#include "KoOdfGraphicProperties.h"
 
 // ================================================================
 //                         class KoOdfStyle
@@ -194,16 +196,27 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
     // Load child elements: property sets and other children.
     while (reader.readNextStartElement()) {
 
-        // So far we only have support for text-, paragaph- and graphic-properties
+        // So far we only have support for text-, paragraph- and graphic-properties
         QString propertiesType = reader.qualifiedName().toString();
         if (propertiesType == "style:text-properties"
             || propertiesType == "style:paragraph-properties"
             || propertiesType == "style:graphic-properties")
         {
-            kDebug() << "properties type: " << propertiesType;
+            //kDebug() << "properties type: " << propertiesType;
 
-            // FIXME: In the future, create per type.
-            KoOdfStyleProperties *properties = new KoOdfStyleProperties();
+            // Create a new propertyset variable depending on the type of properties.
+            KoOdfStyleProperties *properties;
+            if (propertiesType == "style:text-properties") {
+                properties = new KoOdfTextProperties();
+            }
+            else if (propertiesType == "style:paragraph-properties") {
+                properties = new KoOdfParagraphProperties();
+            }
+            else if (propertiesType == "style:graphic-properties") {
+                properties = new KoOdfGraphicProperties();
+            }
+
+
             if (!properties->readOdf(reader)) {
                 return false;
             }

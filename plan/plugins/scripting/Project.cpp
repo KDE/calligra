@@ -344,7 +344,7 @@ QVariant Scripting::Project::setNodeData( KPlato::Node *node, const QString &pro
     }
     int datarole = stringToRole( role, Qt::EditRole );
     if ( datarole < 0 ) {
-        return "Invalid role: " + role;
+        return QVariant("Invalid role: " + role);
     }
     if ( nodeData( node, property, datarole == Qt::EditRole ? "ProgramRole" : role ) == data ) {
         return "Success";
@@ -463,7 +463,7 @@ QVariant Scripting::Project::setResourceGroupData( KPlato::ResourceGroup *resour
     }
     int datarole = stringToRole( role, Qt::EditRole );
     if ( datarole < 0 ) {
-        return "Invalid role: " + role;
+        return QVariant("Invalid role: " + role);
     }
     if ( resourceGroupData( resource, property, datarole == Qt::EditRole ? "ProgramRole" : role ) == data ) {
         return "Success";
@@ -560,7 +560,7 @@ QVariant Scripting::Project::setResourceData( KPlato::Resource *resource, const 
     }
     int datarole = stringToRole( role, Qt::EditRole );
     if ( datarole < 0 ) {
-        return "Invalid role: " + role;
+        return QVariant("Invalid role: " + role);
     }
     if ( resourceData( resource, property, datarole == Qt::EditRole ? "ProgramRole" : role ) == data ) {
         return "Success";
@@ -765,7 +765,7 @@ QVariant Scripting::Project::setCalendarData( KPlato::Calendar *calendar, const 
     }
     int datarole = stringToRole( role, Qt::EditRole );
     if ( datarole < 0 ) {
-        return "Invalid role: " + role;
+        return QString("Invalid role: " + role);
     }
     if ( calendarData( calendar, property, datarole == Qt::EditRole ? "ProgramRole" : role ) == data ) {
         return "Success";
@@ -867,7 +867,7 @@ QVariant Scripting::Project::setAccountData( KPlato::Account *account, const QSt
     }
     int datarole = stringToRole( role, Qt::EditRole );
     if ( datarole < 0 ) {
-        return "Invalid role: " + role;
+        return QString("Invalid role: " + role);
     }
     if ( accountData( account, property, datarole == Qt::EditRole ? "ProgramRole" : role ) == data ) {
         return "Success";

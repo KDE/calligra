@@ -286,7 +286,7 @@ void SectionsIO::save()
 
     // Last remove unused sections
     foreach(SaveContext * saveContext, contextToRemove) {
-        KIO::NetAccess::del(m_directory + saveContext->filename, 0);
+        KIO::NetAccess::del(KUrl(m_directory + saveContext->filename), 0);
         m_contextes.remove(saveContext->section);
         delete saveContext;
     }

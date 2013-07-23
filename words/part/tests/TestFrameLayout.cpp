@@ -157,7 +157,7 @@ void TestFrameLayout::testShouldHaveHeaderOrFooter()
     helper.pageManager->appendPage();
     QVERIFY(helper.pageManager->page(1).pageStyle() == helper.pageManager->page(2).pageStyle());
 
-    // append the theird page with another pagesettings
+    // append the third page with another pagesettings
     KWPageStyle pagesettings3("Page3PageStyle");
     helper.pageManager->addPageStyle(pagesettings3);
     helper.pageManager->appendPage(pagesettings3);
