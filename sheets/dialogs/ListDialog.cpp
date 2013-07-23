@@ -139,53 +139,55 @@ void ListDialog::slotCurrentRowChanged(int row)
 
 void ListDialog::init()
 {
-    QString month;
-    month += i18n("January") + ", ";
-    month += i18n("February") + ", ";
-    month += i18n("March") + ", ";
-    month += i18n("April") + ", ";
-    month += i18n("May") + ", ";
-    month += i18n("June") + ", ";
-    month += i18n("July") + ", ";
-    month += i18n("August") + ", ";
-    month += i18n("September") + ", ";
-    month += i18n("October") + ", ";
-    month += i18n("November") + ", ";
-    month += i18n("December");
+    QString month =
+        i18n("January") + ", " +
+        i18n("February") + ", " +
+        i18n("March") + ", " +
+        i18n("April") + ", " +
+        i18n("May") + ", " +
+        i18n("June") + ", " +
+        i18n("July") + ", " +
+        i18n("August") + ", " +
+        i18n("September") + ", " +
+        i18n("October") + ", " +
+        i18n("November") + ", " +
+        i18n("December");
     QStringList lst;
     lst.append(month);
 
-    QString smonth;
-    smonth += i18n("Jan") + ", ";
-    smonth += i18n("Feb") + ", ";
-    smonth += i18n("Mar") + ", ";
-    smonth += i18n("Apr") + ", ";
-    smonth += i18n("May") + ", ";
-    smonth += i18n("Jun") + ", ";
-    smonth += i18n("Jul") + ", ";
-    smonth += i18n("Aug") + ", ";
-    smonth += i18n("Sep") + ", ";
-    smonth += i18n("Oct") + ", ";
-    smonth += i18n("Nov") + ", ";
-    smonth += i18n("Dec");
+    QString smonth =
+        i18n("Jan") + ", " +
+        i18n("Feb") + ", " +
+        i18n("Mar") + ", " +
+        i18n("Apr") + ", " +
+        i18n("May") + ", " +
+        i18n("Jun") + ", " +
+        i18n("Jul") + ", " +
+        i18n("Aug") + ", " +
+        i18n("Sep") + ", " +
+        i18n("Oct") + ", " +
+        i18n("Nov") + ", ";
+        i18n("Dec");
     lst.append(smonth);
 
-    QString day = i18n("Monday") + ", ";
-    day += i18n("Tuesday") + ", ";
-    day += i18n("Wednesday") + ", ";
-    day += i18n("Thursday") + ", ";
-    day += i18n("Friday") + ", ";
-    day += i18n("Saturday") + ", ";
-    day += i18n("Sunday");
+    QString day =
+        i18n("Monday") + ", " +
+        i18n("Tuesday") + ", " +
+        i18n("Wednesday") + ", " +
+        i18n("Thursday") + ", " +
+        i18n("Friday") + ", " +
+        i18n("Saturday") + ", "+ 
+        i18n("Sunday");
     lst.append(day);
 
-    QString sday = i18n("Mon") + ", ";
-    sday += i18n("Tue") + ", ";
-    sday += i18n("Wed") + ", ";
-    sday += i18n("Thu") + ", ";
-    sday += i18n("Fri") + ", ";
-    sday += i18n("Sat") + ", ";
-    sday += i18n("Sun");
+    QString sday =
+        i18n("Mon") + ", " +
+        i18n("Tue") + ", " +
+        i18n("Wed") + ", " +
+        i18n("Thu") + ", " +
+        i18n("Fri") + ", " +
+        i18n("Sat") + ", " +
+        i18n("Sun");
     lst.append(sday);
 
     d->config = KGlobal::activeComponent().config();

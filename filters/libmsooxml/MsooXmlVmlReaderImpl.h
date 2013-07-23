@@ -2113,18 +2113,18 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
                 fifth = getArgument(parsedString, false, argumentMove);
                 sixth = getArgument(parsedString, false, argumentMove);
                 seventh = QString("?extraFormula%1").arg(extraFormulaIndex);
-                extraShapeFormulas += "\n<draw:equation ";
-                extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
-                extraShapeFormulas += QString("%1 / 65536").arg(fifth);
-                extraShapeFormulas += "\" ";
-                extraShapeFormulas += "/>";
+                extraShapeFormulas += "\n<draw:equation " +
+                                      QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex) +
+                                      QString("%1 / 65536").arg(fifth) +
+                                      "\" "
+                                      "/>";
                 ++extraFormulaIndex;
                 eighth = QString("?extraFormula%1").arg(extraFormulaIndex);
-                extraShapeFormulas += "\n<draw:equation ";
-                extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
-                extraShapeFormulas += QString("%1 / 65536").arg(sixth);
-                extraShapeFormulas += "\" ";
-                extraShapeFormulas += "/>";
+                extraShapeFormulas += "\n<draw:equation " +
+                                      QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex) +
+                                      QString("%1 / 65536").arg(sixth) +
+                                      "\" "
+                                      "/>";
                 ++extraFormulaIndex;
                 currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
                 currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
@@ -2142,18 +2142,18 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
                     fifth = getArgument(parsedString, false, argumentMove);
                     sixth = getArgument(parsedString, false, argumentMove);
                     seventh = QString("?extraFormula%1").arg(extraFormulaIndex);
-                    extraShapeFormulas += "\n<draw:equation ";
-                    extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
-                    extraShapeFormulas += QString("%1 / 65536").arg(fifth);
-                    extraShapeFormulas += "\" ";
-                    extraShapeFormulas += "/>";
+                    extraShapeFormulas += "\n<draw:equation " +
+                                          QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex) +
+                                          QString("%1 / 65536").arg(fifth) +
+                                          "\" "
+                                          "/>";
                     ++extraFormulaIndex;
                     eighth = QString("?extraFormula%1").arg(extraFormulaIndex);
-                    extraShapeFormulas += "\n<draw:equation ";
-                    extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
-                    extraShapeFormulas += QString("%1 / 65536").arg(sixth);
-                    extraShapeFormulas += "\" ";
-                    extraShapeFormulas += "/>";
+                    extraShapeFormulas += "\n<draw:equation " +
+                                          QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex) +
+                                          QString("%1 / 65536").arg(sixth) +
+                                          "\" "
+                                          "/>";
                     ++extraFormulaIndex;
                     currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
                     currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
@@ -2293,8 +2293,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(eqn)
-    m_currentVMLProperties.normalFormulas += "\n<draw:equation ";
-    m_currentVMLProperties.normalFormulas += QString("draw:name=\"f%1\" draw:formula=\"").arg(m_currentVMLProperties.formulaIndex);
+    m_currentVMLProperties.normalFormulas += "\n<draw:equation " +
+                                             QString("draw:name=\"f%1\" draw:formula=\"").arg(m_currentVMLProperties.formulaIndex);
 
     if (!eqn.isEmpty()) {
         eqn = eqn.trimmed();
@@ -2379,8 +2379,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
         }
     }
 
-    m_currentVMLProperties.normalFormulas += "\" ";
-    m_currentVMLProperties.normalFormulas += "/>";
+    m_currentVMLProperties.normalFormulas += "\" "
+                                             "/>";
 
     ++m_currentVMLProperties.formulaIndex;
     readNext();
@@ -2562,16 +2562,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             if (flip.contains('y')) {
                 m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
             }
-            m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
-                arg(m_currentVMLProperties.modifiers);
-            m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").
-                arg(m_currentVMLProperties.viewBox);
-            m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
-                arg(m_currentVMLProperties.shapePath);
-            m_currentVMLProperties.shapeTypeString += ">";
-            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
-            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.normalFormulas;
-            m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
+            m_currentVMLProperties.shapeTypeString +=
+                QString("draw:modifiers=\"%1\" ").arg(m_currentVMLProperties.modifiers) +
+                QString("svg:viewBox=\"%1\" ").arg(m_currentVMLProperties.viewBox) +
+                QString("draw:enhanced-path=\"%1\" ").arg(m_currentVMLProperties.shapePath) +
+                QLatin1Char('>') +
+                m_currentVMLProperties.extraShapeFormulas +
+                m_currentVMLProperties.normalFormulas +
+                "</draw:enhanced-geometry>";
 
             body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
         }

@@ -272,11 +272,14 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
                 }
             }
             // prepare string for line numbering configuration
-            QString lineNumberingConfig("<text:linenumbering-configuration text:style-name=\"%1\" "
-                                        "style:num-format=\"1\" text:number-position=\"left\" text:increment=\"1\"/>");
+            QString cfg("<text:linenumbering-configuration text:style-name=\"%1\" "
+                        "style:num-format=\"1\" text:number-position=\"left\" text:increment=\"1\"/>");
+            if (!sep->lnc) {
+                cfg.insert(cfg.length() - 2, " text:restart-on-page=\"true\"");
+            }
 
             m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
-                                             lineNumberingConfig.arg(lineNumbersStyleName).toLatin1());
+                                             cfg.arg(lineNumbersStyleName).toLatin1());
 
             KoGenStyle *normalStyle = m_mainStyles->styleForModification(QString("Normal"), "paragraph");
 
