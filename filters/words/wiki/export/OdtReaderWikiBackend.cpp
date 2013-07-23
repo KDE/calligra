@@ -240,25 +240,32 @@ void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWi
         wikiContext->outStream << "''";
     }
 
-    // Check sub and super script.
     QString textPositionProperty = "style:text-position";
-    if (stylePropertis->attribute(textPositionProperty) == "sub") {
-        if (reader.isStartElement()) {
-            wikiContext->outStream << "<sub>";
+    QString textLineThroughProperty = "style:text-line-through-style";
+    if (reader.isStartElement()) {
+        // Check strike text.
+        if (stylePropertis->attribute(textLineThroughProperty) == "solid") {
+            wikiContext->outStream << "<s>";
         }
-        else {
-            wikiContext->outStream << "</sub>";
+        // Check sub and super script.
+        if (stylePropertis->attribute(textPositionProperty) == "sub") {
+           wikiContext->outStream << "<sub>";
         }
-    }
-    else if (stylePropertis->attribute(textPositionProperty) == "super") {
-        if (reader.isStartElement()) {
+        else if (stylePropertis->attribute(textPositionProperty) == "super") {
             wikiContext->outStream << "<sup>";
         }
-        else {
+    }
+    else {
+        if (stylePropertis->attribute(textLineThroughProperty)== "solid") {
+            wikiContext->outStream << "</s>";
+        }
+        if (stylePropertis->attribute(textPositionProperty) == "sub") {
+           wikiContext->outStream << "</sub>";
+        }
+        else if (stylePropertis->attribute(textPositionProperty) == "super") {
             wikiContext->outStream << "</sup>";
         }
     }
-
     wikiContext->pushStyle(style);
 }
 
