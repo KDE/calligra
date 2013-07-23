@@ -46,7 +46,6 @@
 #include "KarbonFactory.h"
 #include "KarbonView.h"
 #include <KarbonCanvas.h>
-#include <KarbonDocument.h>
 
 #include <KoApplication.h>
 #include <KoImageCollection.h>
