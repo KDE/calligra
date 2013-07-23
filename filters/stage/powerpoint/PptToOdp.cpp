@@ -30,6 +30,8 @@
 #include "msodraw.h"
 #include "msppt.h"
 #include "msoleps.h"
+#include "writeodf/writeodftext.h"
+#include "writeodf/writeodfpresentation.h"
 
 #include <kdebug.h>
 #include <KoOdf.h>
@@ -2358,9 +2360,9 @@ const TextPFRun *findTextPFRun(const StyleTextPropAtom& style, unsigned int pos)
     }
     return 0;
 }
-
+using namespace writeodf;
 void
-writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
+writeMeta(const TextContainerMeta& m, bool master, text_meta& meta)
 {
     const SlideNumberMCAtom* a = m.meta.get<SlideNumberMCAtom>();
     const DateTimeMCAtom* b = m.meta.get<DateTimeMCAtom>();
@@ -2369,30 +2371,25 @@ writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
     const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
     const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
     if (a) {
-        out.startElement("text:page-number");
-        out.endElement();
+        meta.add_text_page_number();
     }
     if (b) {
         // TODO: datetime format
-        out.startElement("text:time");
-        out.endElement();
+        meta.add_text_time();
     }
     if (c) {
         // TODO: datetime format
         if (master) {
-            out.startElement("presentation:date-time");
+            meta.add_presentation_date_time();
         } else {
-            out.startElement("text:date");
+            meta.add_text_date();
         }
-        out.endElement();
     }
     if (d) {
-        out.startElement("presentation:header");
-        out.endElement();
+        meta.add_presentation_header();
     }
     if (e) {
-        out.startElement("presentation:footer");
-        out.endElement();
+        meta.add_presentation_footer();
     }
     if (f) {
         // TODO
@@ -2470,6 +2467,99 @@ void PptToOdp::addListElement(KoXmlWriter& out, const QString& listStyle,
         out.startElement("text:list-item");
         levels.push("");
     }
+}
+
+template <typename T>
+void
+addTab(T& e, int ref) {
+    text_tab tab = e.add_text_tab();
+    if (ref >= 0)
+        tab.set_text_tab_ref(ref);
+}
+
+void addTextSpan(group_paragraph_content& a, const QString& text, const QMap<int, int>& tabCache)
+{
+    int len = text.length();
+    int nrSpaces = 0; // number of consecutive spaces
+    bool leadingSpace = false;
+    QString str;
+    str.reserve(len);
+
+    // Accumulate chars either in str or in nrSpaces (for spaces).
+    // Flush str when writing a subelement (for spaces or for another reason)
+    // Flush nrSpaces when encountering two or more consecutive spaces
+    for (int i = 0; i < len ; ++i) {
+        QChar ch = text[i];
+        ushort unicode = ch.unicode();
+        if (unicode == ' ') {
+            if (i == 0)
+                leadingSpace = true;
+            ++nrSpaces;
+        } else {
+            if (nrSpaces > 0) {
+                // For the first space we use ' '.
+                // "it is good practice to use (text:s) for the second and all following SPACE
+                // characters in a sequence." (per the ODF spec)
+                // however, per the HTML spec, "authors should not rely on user agents to render
+                // white space immediately after a start tag or immediately before an end tag"
+                // (and both we and OO.o ignore leading spaces in <text:p> or <text:h> elements...)
+                if (!leadingSpace) {
+                    str += ' ';
+                    --nrSpaces;
+                }
+                if (nrSpaces > 0) {   // there are more spaces
+                    if (!str.isEmpty())
+                        a.addTextNode(str);
+                    str.clear();
+                    text_s s = a.add_text_s();
+                    if (nrSpaces > 1)   // it's 1 by default
+                        s.set_text_c(nrSpaces);
+                }
+            }
+            nrSpaces = 0;
+            leadingSpace = false;
+
+            switch (unicode) {
+            case '\t':
+                if (!str.isEmpty())
+                    a.addTextNode(str);
+                str.clear();
+                addTab(a, tabCache.contains(i) ?tabCache[i] + 1 :-1);
+                break;
+            // gracefully handle \f form feed in text input.
+            // otherwise the xml will not be valid.
+            // \f can be added e.g. in ascii import filter.
+            case '\f':
+            case '\n':
+            case QChar::LineSeparator:
+                if (!str.isEmpty())
+                    a.addTextNode(str);
+                str.clear();
+                a.add_text_line_break();
+                break;
+            default:
+                // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
+                if (ch.unicode() >= 0x20) {
+                    str += text[i];
+                }
+                break;
+            }
+        }
+    }
+    // either we still have text in str or we have spaces in nrSpaces
+    if (!str.isEmpty()) {
+        a.addTextNode(str);
+    }
+    if (nrSpaces > 0) {   // there are more spaces
+        text_s s = a.add_text_s();
+        if (nrSpaces > 1)   // it's 1 by default
+            s.set_text_c(nrSpaces);
+    }
+}
+void addTextSpan(group_paragraph_content& e, const QString& text)
+{
+    QMap<int, int> tabCache;
+    addTextSpan(e, text, tabCache);
 }
 
 int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
@@ -2611,8 +2701,8 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineTextProperties(style, cf, 0, 0, si, isSymbol);
-    out.xml.startElement("text:span", false);
-    out.xml.addAttribute("text:style-name", out.styles.insert(style));
+    text_span span(&out.xml);
+    span.set_text_style_name(out.styles.insert(style));
 
     // [MS-PPT]: exHyperlinkIdRef must be ignored unless action is in
     // {II_JumpAction, II_HyperlinkAction, II_CustomShowAction (0x7)}
@@ -2631,27 +2721,22 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         }
     }
 
+    QString href;
     if (mouseclick) {
-        out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
             mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
-            out.xml.addAttribute("xlink:href", link.second);
-            out.xml.addAttribute("xlink:type", "simple");
+            href = link.second;
         } else if (!link.first.isEmpty()) {
-            out.xml.addAttribute("xlink:href", link.first);
-            out.xml.addAttribute("xlink:type", "simple");
+            href = link.first;
         }
     } else if (mouseover) {
-        out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
             mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
-            out.xml.addAttribute("xlink:href", link.second);
-            out.xml.addAttribute("xlink:type", "simple");
+            href = link.second;
         } else if (!link.first.isEmpty()) {
-            out.xml.addAttribute("xlink:href", link.first);
-            out.xml.addAttribute("xlink:type", "simple");
+            href = link.first;
         }
     } else {
         // count - specifies the number of characters of the
@@ -2666,18 +2751,25 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     }
 
     if (meta) {
-        writeMeta(*meta, m_processingMasters, out.xml);
+        if (!href.isNull()) {
+            text_a a(span.add_text_a(href));
+            text_meta m(a.add_text_meta());
+            writeMeta(*meta, m_processingMasters, m);
+        } else {
+            text_meta m(span.add_text_meta());
+            writeMeta(*meta, m_processingMasters, m);
+        }
     } else {
         int len = end - start;
         const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
-        out.xml.addTextSpan(txt);
+        if (!href.isNull()) {
+            text_a a(span.add_text_a(href));
+            addTextSpan(a, txt);
+        } else {
+            addTextSpan(span, txt);
+        }
     }
 
-    if (mouseclick || mouseover) {
-        out.xml.endElement(); //text:a
-    }
-
-    out.xml.endElement(); //text:span
     return end;
 } //end processTextSpan()
 
