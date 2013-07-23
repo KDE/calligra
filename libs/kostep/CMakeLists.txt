@@ -5,6 +5,10 @@ include_directories( ${KOSTEP_INCLUDES} ${QT_INCLUDES} )
 ########### libkostep ###############
 
 set(kostep_LIB_SRCS
+	StepDeleteTextBlockStep.cpp
+	StepDeleteTextStep.cpp
+	StepAddTextBlockStep.cpp
+	StepAddTextStep.cpp
         StepStepBase.cpp
         StepStepBase_p.cpp
         StepStepStack.cpp
@@ -30,5 +34,13 @@ install( FILES
         StepStepStack_p.h
         StepStepLocation.h
         StepStepLocation_p.h
+        StepAddTextStep.h
+        StepAddTextStep_p.h
+        StepAddTextBlockStep.h
+        StepAddTextBlockStep_p.h
+        StepDeleteTextStep.h
+        StepDeleteTextStep_p.h
+	StepDeleteTextBlockStep.h
+	StepDeleteTextBlockStep_p.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
