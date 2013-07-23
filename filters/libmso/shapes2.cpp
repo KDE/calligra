@@ -2131,9 +2131,9 @@ void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer
     const AdjustValue* val1 = get<AdjustValue>(o);
     const Adjust2Value* val2 = get<Adjust2Value>(o);
     const Adjust3Value* val3 = get<Adjust3Value>(o);
-    QString modifiers = QString::number(val1 ? val1->adjustvalue >> 16 : 180);
-    modifiers += QString(" %1").arg(val2 ? val2->adjust2value >> 16 : 0);
-    modifiers += QString(" %1").arg(val3 ? val3->adjust3value : 5500);
+    QString modifiers = QString::number(val1 ? val1->adjustvalue >> 16 : 180) +
+            QString(" %1").arg(val2 ? val2->adjust2value >> 16 : 0) +
+            QString(" %1").arg(val3 ? val3->adjust3value : 5500);
     out.xml.addAttribute("draw:modifiers", modifiers);
 
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
