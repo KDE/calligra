@@ -1019,6 +1019,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 
     m_fld = new fld_State((fldType)fld->flt);
     m_fld->m_insideField = true;
+    m_fldStart++;
 
     switch (m_fld->m_type) {
     case EQ:
@@ -1049,6 +1050,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kWarning(30513) << "Warning: ignoring field result!";
         break;
     case AUTHOR:
+    case AUTOTEXTLIST:
     case EDITTIME:
     case FILENAME:
     case MERGEFIELD:
@@ -1077,8 +1079,6 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     default:
         break;
     }
-
-    m_fldStart++;
 }//end fieldStart()
 
 void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
@@ -1771,6 +1771,7 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                 }
                 break;
             case AUTHOR:
+            case AUTOTEXTLIST:
             case EDITTIME:
             case FILENAME:
             case MERGEFIELD:
