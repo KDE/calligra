@@ -156,7 +156,6 @@ signals:
 private slots:
 
     void setTitleModified(const QString &caption, bool mod);
-    void slotStarted(KIO::Job*);
     void startCustomDocument();
 
 
@@ -293,10 +292,6 @@ public: // Part stuff
     QString mimeType() const;
 
     virtual bool saveAs( const KUrl &url );
-
-signals:
-
-    void started( KIO::Job * );
 
 public slots:
 

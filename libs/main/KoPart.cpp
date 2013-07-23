@@ -162,7 +162,6 @@ public:
 
     bool openLocalFile()
     {
-        emit parent->started( 0 );
         m_bTemp = false;
         // set the mimetype only if it was not already set (for example, by the host application)
         if (m_mimeType.isEmpty()) {
@@ -200,7 +199,9 @@ public:
         flags |= KIO::Overwrite;
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
         m_job->ui()->setWindow(0);
-        emit parent->started(m_job);
+        if (m_job->ui()) {
+            m_job->ui()->setWindow(parent->currentShell());
+        }
         QObject::connect(m_job, SIGNAL(result(KJob*)), parent, SLOT(_k_slotJobFinished(KJob*)));
         QObject::connect(m_job, SIGNAL(mimetype(KIO::Job*,QString)),
                          parent, SLOT(_k_slotGotMimeType(KIO::Job*,QString)));
@@ -246,7 +247,6 @@ public:
         Q_ASSERT(job == m_statJob);
         m_statJob = 0;
 
-        // We could emit canceled on error, but we haven't even emitted started yet,
         // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
         // and error again. Well, maybe this even helps with wrong stat results.
         if (!job->error()) {
@@ -314,8 +314,6 @@ KoPart::KoPart(QObject *parent)
     new KoPartAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif
-
-    connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }
 
 KoPart::~KoPart()
@@ -589,13 +587,6 @@ void KoPart::setTitleModified(const QString &caption, bool mod)
         mainWindow->updateCaption(caption, mod);
         mainWindow->updateReloadFileAction(d->document);
         mainWindow->updateVersionsFileAction(d->document);
-    }
-}
-
-void KoPart::slotStarted(KIO::Job *job)
-{
-    if (job && job->ui()) {
-        job->ui()->setWindow(currentShell());
     }
 }
 
