@@ -60,7 +60,7 @@ public:
     QString property(QString &propertySet, QString &property) const;
     void    setProperty(QString &propertySet, QString &property, QString &value);
 
-    bool readListLevelProperties(KoXmlStreamReader &reader);
+    bool readProperties(KoXmlStreamReader &reader);
 
     bool readOdf(KoXmlStreamReader &reader);
     bool saveOdf(KoXmlWriter *writer);

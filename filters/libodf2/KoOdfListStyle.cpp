@@ -153,7 +153,7 @@ void KoOdfListStyle::setProperty(QString &propertySet, QString &property, QStrin
     props->setAttribute(property, value);
 }
 
-bool KoOdfListStyle::readListLevelProperties(KoXmlStreamReader &reader)
+bool KoOdfListStyle::readProperties(KoXmlStreamReader &reader)
 {
     // Load child elements: property sets and other children.
     while (reader.readNextStartElement()) {
@@ -175,7 +175,9 @@ bool KoOdfListStyle::readListLevelProperties(KoXmlStreamReader &reader)
                 properties = new KoOdfListLevelProperties();
             }
             else if (propertiesType == "office:binary-data") {
-                // FIXME: Not support for now
+                // FIXME: Not support for now.
+                reader.skipCurrentElement();
+                continue;
             }
 
             if (!properties->readOdf(reader)) {
@@ -213,7 +215,7 @@ bool KoOdfListStyle::readOdf(KoXmlStreamReader &reader)
                 || listLevelType == "text:list-level-style-image")
         {
             kDebug() << "List Level style type" << listLevelType;
-            if (!readListLevelProperties(reader)) {
+            if (!readProperties(reader)) {
                 return false;
             }
         }
