@@ -76,10 +76,10 @@ void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderCont
 
     if (reader.isStartElement()) {
         wikiContext->outlineLevel = reader.attributes().value("text:outline-level").toString().toInt();
-        checkheadingLevel(wikiContext);
+        checkheadingLevel(reader, wikiContext);
     }
     else {
-        checkheadingLevel(wikiContext);
+        checkheadingLevel(reader, wikiContext);
         wikiContext->outStream << "\n";
     }
 }
@@ -97,10 +97,10 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
         //Push style to stack
         wikiContext->pushStyle(style);
 
-        checkTextIndention(wikiContext);
-        checkFontStyle(wikiContext);
+        checkTextIndention(reader, wikiContext);
+        checkTextStyle(reader, wikiContext);
     } else {
-        checkFontStyle(wikiContext);
+        checkTextStyle(reader, wikiContext);
         wikiContext->popStyle();
         // At the end of a paragraph, output two newlines.
         wikiContext->outStream << "\n";
@@ -123,10 +123,10 @@ void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderC
         //Push style to stack
         wikiContext->pushStyle(style);
 
-        checkFontStyle(wikiContext);
+        checkTextStyle(reader, wikiContext);
     }
     else {
-        checkFontStyle(wikiContext);
+        checkTextStyle(reader, wikiContext);
         wikiContext->popStyle();
     }
 }
@@ -219,32 +219,52 @@ void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCon
     wikiContext->outStream << reader.text().toString();
 }
 
-void OdtReaderWikiBackend::checkFontStyle(OdfReaderWikiContext *wikiContext)
+void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext)
 {
     KoOdfStyle *style = wikiContext->popStyle();
-    // Check font weight and style
     KoOdfStyleProperties *stylePropertis = style->properties().value("style:text-properties");
     if (!stylePropertis) {
         wikiContext->pushStyle(style);
         return;
     }
 
-    QString weightProperty = "fo:font-weight";
-    QString styleProperty = "fo:font-style";
-    if ((stylePropertis->attribute(weightProperty) == "bold") &&
-            (stylePropertis->attribute(styleProperty) == "italic")) {
+    // Check italic and bold.
+    QString fontWeightProperty = "fo:font-weight";
+    QString fontStyleProperty = "fo:font-style";
+    if ((stylePropertis->attribute(fontWeightProperty) == "bold") &&
+            (stylePropertis->attribute(fontStyleProperty) == "italic")) {
         wikiContext->outStream << "'''''";
-    } else if (stylePropertis->attribute(weightProperty) == "bold") {
+    } else if (stylePropertis->attribute(fontWeightProperty) == "bold") {
         wikiContext->outStream << "'''";
-    } else if (stylePropertis->attribute(styleProperty) == "italic") {
+    } else if (stylePropertis->attribute(fontStyleProperty) == "italic") {
         wikiContext->outStream << "''";
+    }
+
+    // Check sub and super script.
+    QString textPositionProperty = "style:text-position";
+    if (stylePropertis->attribute(textPositionProperty) == "sub") {
+        if (reader.isStartElement()) {
+            wikiContext->outStream << "<sub>";
+        }
+        else {
+            wikiContext->outStream << "</sub>";
+        }
+    }
+    else if (stylePropertis->attribute(textPositionProperty) == "super") {
+        if (reader.isStartElement()) {
+            wikiContext->outStream << "<sup>";
+        }
+        else {
+            wikiContext->outStream << "</sup>";
+        }
     }
 
     wikiContext->pushStyle(style);
 }
 
-void OdtReaderWikiBackend::checkheadingLevel(OdfReaderWikiContext *wikiContext)
+void OdtReaderWikiBackend::checkheadingLevel(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext)
 {
+     Q_UNUSED(reader);
     int level = wikiContext->outlineLevel;
     if (level == 1) {
         wikiContext->outStream << "==";
@@ -257,8 +277,9 @@ void OdtReaderWikiBackend::checkheadingLevel(OdfReaderWikiContext *wikiContext)
     }
 }
 
-void OdtReaderWikiBackend::checkTextIndention(OdfReaderWikiContext *wikiContext)
+void OdtReaderWikiBackend::checkTextIndention(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext)
 {
+    Q_UNUSED(reader);
     KoOdfStyle *style = wikiContext->popStyle();
     // Check indenting text.
     KoOdfStyleProperties *styleProperies = style->properties().value("style:paragraph-properties");
