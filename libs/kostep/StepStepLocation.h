@@ -21,11 +21,12 @@
 
 #include <QObject>
 #include <QtCore/QQueue>
+#include "kostep_export.h"
 
 class StepStepLocationPrivate;
 class QTextCursor;
 class QTextDocument;
-class StepStepLocation : public QObject
+class KOSTEP_EXPORT StepStepLocation : public QObject
 {
     Q_OBJECT
 public:

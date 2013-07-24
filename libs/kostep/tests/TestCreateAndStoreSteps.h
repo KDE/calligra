@@ -17,22 +17,30 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef STEPADDTEXTBLOCKSTEP_H
-#define STEPADDTEXTBLOCKSTEP_H
+#ifndef TESTCREATEANDSTORESTEPS_H
+#define TESTCREATEANDSTORESTEPS_H
 
-#include "StepStepBase.h"
-#include "kostep_export.h"
+#include <QtCore/QObject>
+#include "../StepStepStack.h"
 
-class KOSTEP_EXPORT StepAddTextBlockStep : public StepStepBase
+
+class TestCreateAndStoreSteps:public QObject
 {
-public:
-  StepAddTextBlockStep ();
-  ~StepAddTextBlockStep ();
-  virtual QString toString ();
-  virtual QString toXML ();
+  Q_OBJECT
+  private slots:void initTestCase ();
+  void cleanupTestCase ();
 
+  void init ();
+  void cleanup ();
+
+  void CreateSteps ();
+  void PushStack ();
+  void PopStack ();
+  void CreateStack ();
 private:
-    class StepAddTextBlockStepPrivate * const d;
+  StepStepStack* stack;
+  StepStepBase* step;
+
 };
 
-#endif // STEPADDTEXTBLOCKSTEP_H
+#endif // TESTCREATEANDSTORESTEPS_H

@@ -27,6 +27,12 @@ StepStepLocationPrivate::StepStepLocationPrivate()
 {
 }
 
+StepStepLocationPrivate::~StepStepLocationPrivate ()
+{
+
+}
+
+
 void StepStepLocationPrivate::constructor(QTextCursor cursor)
 {
   QTextFrame* frame = cursor.currentFrame();

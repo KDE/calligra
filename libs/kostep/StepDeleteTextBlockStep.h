@@ -21,8 +21,9 @@
 #define STEPDELETETEXTBLOCKSTEP_H
 
 #include "StepStepBase.h"
+#include "kostep_export.h"
 
-class StepDeleteTextBlockStep:public StepStepBase
+class KOSTEP_EXPORT StepDeleteTextBlockStep:public StepStepBase
 {
 public:
   StepDeleteTextBlockStep ();

@@ -19,12 +19,12 @@
 #ifndef STEPSTEPBASE_P_H
 #define STEPSTEPBASE_P_H
 
-#include <QObject>
 #include "StepStepLocation.h"
 class StepStepBasePrivate
 {
 public:
     explicit StepStepBasePrivate();
+    ~StepStepBasePrivate();
 
     bool operator==(StepStepBasePrivate* other);
     QString toString();

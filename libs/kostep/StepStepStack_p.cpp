@@ -24,19 +24,21 @@
 
 StepStepStackPrivate::StepStepStackPrivate()
 {
+  stack = new QStack<StepStepBase*>();
 
 }
 
 StepStepStackPrivate::~StepStepStackPrivate()
 {
+  delete stack;
 
 }
 
 StepStepBase StepStepStackPrivate::at(int i)
 {
-    if(!stack.empty() && stack.count() >= i+1)
+    if(!stack->empty() && stack->count() >= i+1)
     {
-        return stack.at(i);
+        return stack->at(i);
     }
     else
     {
@@ -45,25 +47,29 @@ StepStepBase StepStepStackPrivate::at(int i)
 
 }
 
-StepStepBase StepStepStackPrivate::pop()
+const StepStepBase & StepStepStackPrivate::pop()
 {
     //temporary behavior for the time being
-    if(!stack.empty())
+    if(!stack->empty())
     {
-        return stack.pop();
+	StepStepBase* step = stack->pop();
+        return *step;
     }
     else
     {
-        return StepStepBase();
+#if DEBUG
+      qDebug("Stack popped when Empty");
+#endif
+        return new StepStepBase();
     }
 
 }
 
 StepStepBase StepStepStackPrivate::top()
 {
-    if(!stack.empty())
+    if(!stack->empty())
     {
-        return  stack.top();
+        return  stack->top();
     }
     else
     {
@@ -72,9 +78,16 @@ StepStepBase StepStepStackPrivate::top()
 
 }
 
-void StepStepStackPrivate::push(StepStepBase step)
+void StepStepStackPrivate::push(StepStepBase & step)
 {
-    stack.push(step);
+#if DEBUG
+    qDebug("Pushing onto actual stack");
+#endif
+    StepStepBase* ptr = &step;
+    stack->push(ptr);
+#if DEBUG
+    qDebug("Pushed");
+#endif
 
 }
 
@@ -84,7 +97,7 @@ void StepStepStackPrivate::serialize(QString Filename)
     file.open(QIODevice::WriteOnly|QIODevice::Text);
 
     QString steps = "";
-    foreach(StepStepBase ptr, stack)
+    foreach(StepStepBase ptr, *stack)
     {
         steps += ptr.toXML();
     }
@@ -110,14 +123,14 @@ void StepStepStackPrivate::removeAt(int i)
 }
 int StepStepStackPrivate::rowcount()
 {
-    return stack.count();
+    return stack->count();
 }
 QVariant StepStepStackPrivate::data(int i)
 {
-    if (!stack.empty() && stack.count() >= i+1)
+    if (!stack->empty() && stack->count() >= i+1)
     {
         //temporary measure
-        StepStepBase step = stack.at(i);
+        StepStepBase step = stack->at(i);
         return step.toString();
     }
     else

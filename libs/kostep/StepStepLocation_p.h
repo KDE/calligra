@@ -29,6 +29,7 @@ class StepStepLocationPrivate
 {
 public:
     explicit StepStepLocationPrivate();
+    ~StepStepLocationPrivate();
     StepStepLocationPrivate* operator=(StepStepLocationPrivate location);
     void constructor(QTextCursor cursor);
     QTextCursor convertToQTextCursor(QTextDocument* ptr);

@@ -32,7 +32,10 @@ StepStepLocation::StepStepLocation(QTextCursor cursor, QObject *parent):
 }
 StepStepLocation::~StepStepLocation()
 {
-  delete d;
+  if(!d==0)
+  {
+    delete d;
+  }
 }
 
 QTextCursor StepStepLocation::toQTextCursor(QTextDocument* ptr)

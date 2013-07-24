@@ -22,11 +22,12 @@
 #define STEPSTEPBASE_H
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include "kostep_export.h"
 
 class StepStepBasePrivate;
 class StepStepLocation;
 
-class StepStepBase : public QObject
+class KOSTEP_EXPORT StepStepBase : public QObject
 {
     Q_OBJECT
 
@@ -38,7 +39,7 @@ class StepStepBase : public QObject
     Q_PROPERTY(StepStepLocation Location READ Location)
 
 public:
-    explicit StepStepBase(QObject *parent =0);
+    StepStepBase(QObject *parent =0);
     StepStepBase(const StepStepBase& other);
 
     virtual ~StepStepBase();

@@ -29,7 +29,10 @@ StepStepBase::StepStepBase(QObject *parent):
 
 StepStepBase::~StepStepBase()
 {
-  delete d;
+  if (!d==0)
+  {
+    delete d;
+  }
 }
 StepStepBase::StepStepBase(const StepStepBase& other): QObject()
 {

@@ -23,6 +23,12 @@
 StepStepBasePrivate::StepStepBasePrivate()
 {
 }
+
+StepStepBasePrivate::~StepStepBasePrivate ()
+{
+
+}
+
 bool StepStepBasePrivate::operator==(StepStepBasePrivate* other)
 {
   if (other->isForeign == isForeign &&
@@ -39,7 +45,7 @@ bool StepStepBasePrivate::operator==(StepStepBasePrivate* other)
 
 QString StepStepBasePrivate::toString()
 {
-  QString string = (QString)"";
+  QString string = type + " " + step + " " + string.number(position);
   return string;
 }
 QString StepStepBasePrivate::toXML()

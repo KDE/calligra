@@ -58,7 +58,7 @@ StepStepBase StepStepStack::at(int i)
   return d->at(i);
 }
 
-StepStepBase StepStepStack::pop()
+const StepStepBase & StepStepStack::pop()
 {
   return d->pop();
 }
@@ -77,9 +77,15 @@ void StepStepStack::insertAt(int i, StepStepBase step)
     d->insertAt(i,step);
 }
 
-void StepStepStack::push(StepStepBase step)
+void StepStepStack::push(StepStepBase & step)
 {
+#if DEBUG
+    qDebug("Pushing Step to D-Pointer");
+#endif
     d->push(step);
+#if DEBUG
+    qDebug("Finished");
+#endif
 
 }
 void StepStepStack::removeAt(int i)

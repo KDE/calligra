@@ -17,20 +17,22 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef STEPADDTEXTSTEP_H
-#define STEPADDTEXTSTEP_H
-#include <../../home/luke/kde4/src/calligra/libs/kostep/StepStepBase.h>
-#include "kostep_export.h"
-class KOSTEP_EXPORT StepAddTextStep: public StepStepBase
-{
-public:
-  explicit StepAddTextStep (QObject * parent = 0);
-  virtual QString toString ();
-  virtual QString toXML ();
-  virtual QString Type ();
+#ifndef KOSTEP_EXPORT_H
+#define KOSTEP_EXPORT_H
 
-private:
-  class StepAddTextStepPrivate * const d;
-};
+#include <kde4/kdemacros.h>
 
-#endif // STEPADDTEXTSTEP_H
+#ifndef KOSTEP_EXPORT
+# if defined(MAKE_KOSTEP_LIB)
+#   define KOSTEP_EXPORT KDE_EXPORT
+# else
+
+#   define KOSTEP_EXPORT KDE_IMPORT
+# endif
+#endif
+
+# ifndef KOSTEP_EXPORT_DEPRECATED
+#  define KOODF_EXPORT_DEPRECATED KDE_DEPRECATED KOSTEP_EXPORT
+# endif
+
+#endif

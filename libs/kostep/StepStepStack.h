@@ -24,22 +24,23 @@
 #include <QtCore/QStack>
 #include <QtCore/QAbstractListModel>
 #include <QtCore/QVariant>
+#include "kostep_export.h"
 
 class StepStepBase;
 class StepStepStackPrivate;
-class StepStepStack :  public QAbstractListModel
+class KOSTEP_EXPORT StepStepStack :  public QAbstractListModel
 {
 
   Q_OBJECT
 public:
-    StepStepStack(QObject* parent);
+    StepStepStack(QObject* parent=0);
     StepStepStack(const StepStepStack& other);
     ~StepStepStack();
     StepStepStack& operator=(const StepStepStack& other);
     bool operator==(const StepStepStack& other);
 
     StepStepBase at(int i);
-    StepStepBase pop();
+    const StepStepBase& pop();
     StepStepBase top();
 
     void serialize(QString Filename);
@@ -48,7 +49,7 @@ public:
     void insertAt(int i, StepStepBase step);
     void removeAt(int i);
 
-    void push(StepStepBase step);
+    void push(StepStepBase& step);
 
     //QAbstractListModel Required Member Functions
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
