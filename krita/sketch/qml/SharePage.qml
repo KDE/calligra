@@ -53,7 +53,7 @@ Page {
             color: Constants.Theme.PositiveColor;
             textColor: "white";
             text: "Upload";
-            enabled: (switcher.currentPage !== undefined && switcher.currentPage.canShare)
+            //enabled: (switcher.currentPage !== undefined && switcher.currentPage.canShare)
             onClicked: {
                 switcher.currentPage.submitArt();
                 pageStack.pop();
@@ -69,18 +69,18 @@ Page {
         z: 5;
     }
 
-    CategorySwitcher {
+    /*CategorySwitcher {
         id: switcher;
         anchors.bottom: parent.bottom;
         height: Constants.GridHeight * (Constants.GridRows - 2) - Constants.DefaultMargin;
         onCurrentPageChanged: currentPage.sharingHandler = sharingManager.sharingHandler(currentPage.pluginName);
 
-        categories: [ { name: "DeviantArt Sta.sh", page: contentPage }/*, { name: "MediaGoblin", page: contentPage }*/ ];
+        categories: [ { name: "DeviantArt Sta.sh", page: contentPage }, { name: "MediaGoblin", page: contentPage } ];
 
         Component {
             id: contentPage;
             DeviantArt {
             }
         }
-    }
+    }*/
 }
