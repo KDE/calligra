@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * Copyright (C) 2013 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
     Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
+	Q_PROPERTY(bool slateMode READ slateMode NOTIFY slateModeChanged)
 
 public:
     explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = 0);
@@ -33,6 +35,8 @@ public:
 
     bool allowClose() const;
     void setAllowClose(bool allow);
+
+	bool slateMode() const;
 
     virtual void closeEvent(QCloseEvent* event);
 
@@ -46,10 +50,13 @@ public Q_SLOTS:
 Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();
+	void slateModeChanged();
 
 private:
     class Private;
     Private * const d;
+
+    bool winEvent ( MSG * message, long * result );
 };
 
 #endif // MAINWINDOW_H

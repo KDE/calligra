@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  * Copyright (C) 2012 KO GmbH. Contact: Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2013 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,19 +53,33 @@
 #include "sketch/DocumentManager.h"
 #include <sketch/KisSketchPart.h>
 
+// Slate mode/docked detection stuff
+#include <shellapi.h>
+#define SM_CONVERTIBLESLATEMODE 0x2003
+#define SM_SYSTEMDOCKED         0x2004
+
 class MainWindow::Private
 {
 public:
-    Private() 
-        : allowClose(true)
+    Private(MainWindow* qq) 
+        : q(qq)
+		, allowClose(true)
         , sketchView(0)
         , desktopView(0)
         , currentView(0)
-    { }
+		, slateMode(false)
+		, docked(false)
+    {
+		slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+	}
+	MainWindow* q;
     bool allowClose;
     SketchDeclarativeView* sketchView;
     KoMainWindow* desktopView;
     QObject* currentView;
+	
+	bool slateMode;
+	bool docked;
 
     void initSketchView(QObject* parent)
     {
@@ -93,10 +108,13 @@ public:
     {
         desktopView = new KoMainWindow(KisFactory2::componentData());
     }
+
+	void notifySlateModeChange();
+	void notifyDockingModeChange();
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
-    : QMainWindow( parent, flags ), d( new Private )
+    : QMainWindow( parent, flags ), d( new Private(this) )
 {
     qApp->setActiveWindow( this );
 
@@ -166,6 +184,11 @@ void MainWindow::setAllowClose(bool allow)
     d->allowClose = allow;
 }
 
+bool MainWindow::slateMode() const
+{
+	return d->slateMode;
+}
+
 void MainWindow::minimize()
 {
     setWindowState(windowState() ^ Qt::WindowMinimized);
@@ -192,6 +215,47 @@ void MainWindow::closeEvent(QCloseEvent* event)
 MainWindow::~MainWindow()
 {
     delete d;
+}
+
+bool MainWindow::winEvent( MSG * message, long * result )
+{
+	if(message->message == WM_SETTINGCHANGE)
+	{
+		if(wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *) message->lParam) == 0)
+			d->notifySlateModeChange();
+		else if(wcscmp(TEXT("SystemDockMode"), (TCHAR *) message->lParam) == 0)
+			d->notifyDockingModeChange();
+		*result = 0;
+		return true;
+	}
+	return false;
+}
+
+void MainWindow::Private::notifySlateModeChange()
+{
+	bool bSlateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+	
+	if (slateMode != bSlateMode)
+	{
+		slateMode = bSlateMode;
+		emit q->slateModeChanged();
+		if(slateMode)
+			q->switchToSketch();
+		else
+			q->switchToDesktop();
+		qDebug() << "Slate mode is now" << slateMode;
+	} 
+}
+
+void MainWindow::Private::notifyDockingModeChange()
+{
+	bool bDocked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+
+	if (docked != bDocked)
+	{
+		docked = bDocked;
+		qDebug() << "Docking mode is now" << docked;
+	} 
 }
 
 #include "MainWindow.moc"
