@@ -38,7 +38,7 @@ set(kritasketch_SRCS
 
 set(kritasketchplugin_SRCS
     kritasketchplugin.cpp
-    cpuid.cpp
+    # cpuid.cpp
     ColorSelectorItem.cpp
     Constants.cpp
     ToolManager.cpp
@@ -117,7 +117,9 @@ target_link_libraries(kritasketchlib
     ${GLEW_LIBRARIES}
 )
 
-install(TARGETS   kritasketchlib DESTINATION ${LIB_INSTALL_DIR})
+include(GNUInstallDirs)
+
+install(TARGETS   kritasketchlib DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # Krita Sketch application
 # =============================================================================
@@ -158,7 +160,7 @@ target_link_libraries(kritasketchplugin
     kritasketchlib
 )
 
-install(TARGETS   kritasketchplugin DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/krita/sketch)
+install(TARGETS   kritasketchplugin DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
 install(FILES
                   qmldir
                   qml/HelpPage.qml
@@ -169,8 +171,8 @@ install(FILES
                   qml/SettingsPage.qml
                   qml/SharePage.qml
                   qml/WelcomePage.qml
-                                    DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/krita/sketch)
-install(DIRECTORY qml/components    DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY qml/images        DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY qml/panels        DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+                                    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
+install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
+install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY fonts             DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
