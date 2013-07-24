@@ -28,7 +28,7 @@ class Settings;
 class ProgressProxy;
 class KisDoc2;
 class KisSketchPart;
-class KRITAUI_EXPORT DocumentManager : public QObject
+class KRITASKETCH_EXPORT DocumentManager : public QObject
 {
 Q_OBJECT
 public:

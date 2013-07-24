@@ -21,10 +21,8 @@
 
 #include <QObject>
 
-#include "image/krita_export.h"
-
 class KisDoc2;
-class KRITAUI_EXPORT ImageBuilder : public QObject
+class ImageBuilder : public QObject
 {
 Q_OBJECT
 public:

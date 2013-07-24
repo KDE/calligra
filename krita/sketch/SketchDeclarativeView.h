@@ -27,7 +27,7 @@
 /**
  * @brief The SketchDeclarativeView class overrides QGraphicsView's drawBackground
  */
-class KRITAUI_EXPORT SketchDeclarativeView : public QDeclarativeView
+class KRITASKETCH_EXPORT SketchDeclarativeView : public QDeclarativeView
 {
     Q_OBJECT
 

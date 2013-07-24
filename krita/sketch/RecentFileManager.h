@@ -25,7 +25,7 @@
 /**
  * @brief The RecentFileManager class keeps track of recent files
  */
-class KRITAUI_EXPORT RecentFileManager : public QObject
+class KRITASKETCH_EXPORT RecentFileManager : public QObject
 {
     Q_OBJECT
 public:
