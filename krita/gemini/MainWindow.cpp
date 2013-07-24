@@ -47,7 +47,6 @@
 #include <kis_factory2.h>
 #include <kis_doc2.h>
 
-#include "cpuid.h"
 #include "sketch/SketchDeclarativeView.h"
 #include "sketch/RecentFileManager.h"
 #include "sketch/DocumentManager.h"
