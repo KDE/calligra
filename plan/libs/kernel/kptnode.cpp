@@ -1239,6 +1239,7 @@ void Node::changed(Node *node, int property) {
         case CompletionPercentage:
         case CompletionRemainingEffort:
         case CompletionActualEffort:
+        case CompletionUsedEffort:
             foreach ( Schedule *s, m_schedules ) {
                 s->clearPerformanceCache();
             }
