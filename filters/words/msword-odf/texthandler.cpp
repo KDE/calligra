@@ -3,7 +3,7 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
-   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
+   Copyright (C) 2010, 2011, 2013 Matus Uzak <matus.uzak@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -20,7 +20,6 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-
 */
 
 #include "texthandler.h"
@@ -147,7 +146,8 @@ KoXmlWriter* WordsTextHandler::currentWriter() const
     }
     else if (m_insideAnnotation) {
         writer = m_annotationWriter;
-    } else {
+    }
+    else {
         writer = m_bodyWriter;
     }
     return writer;
@@ -935,13 +935,16 @@ void WordsTextHandler::paragraphEnd()
     KoXmlWriter* writer = currentWriter();
 
     //add nested field snippets to this paragraph
-    if (m_fld->m_insideField && !m_fld_snippets.isEmpty()) {
-        QList<QString>* flds = &m_fld_snippets;
-        while (!flds->isEmpty()) {
-            //add writer content to m_paragraph as a runOfText with text style
-            m_paragraph->addRunOfText(flds->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
+    if (m_fld->m_insideField) {
+
+        // text:p allowed as child element of text:index-body
+        if ( !m_fld_snippets.isEmpty() || m_fld->m_type == TOC ) {
+            writer = m_fld->m_writer;
         }
-        writer = m_fld->m_writer;
+        while (!m_fld_snippets.isEmpty()) {
+            m_paragraph->addRunOfText(m_fld_snippets.takeFirst(), m_fldChp, QString(""),
+                                      m_parser->styleSheet(), true);
+        }
     }
 
     bool openTextBox = false;
@@ -962,7 +965,6 @@ void WordsTextHandler::paragraphEnd()
             openTextBox = true;
         }
     }
-
 
     //write paragraph content, reuse text/paragraph style name if applicable
     QString styleName = m_paragraph->writeToFile(writer, openTextBox, &m_fld->m_tabLeader);
@@ -1017,6 +1019,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 
     m_fld = new fld_State((fldType)fld->flt);
     m_fld->m_insideField = true;
+    m_fldStart++;
 
     switch (m_fld->m_type) {
     case EQ:
@@ -1047,6 +1050,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kWarning(30513) << "Warning: ignoring field result!";
         break;
     case AUTHOR:
+    case AUTOTEXTLIST:
     case EDITTIME:
     case FILENAME:
     case MERGEFIELD:
@@ -1075,8 +1079,6 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     default:
         break;
     }
-
-    m_fldStart++;
 }//end fieldStart()
 
 void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
@@ -1677,14 +1679,17 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
     default:
         break;
     }
+
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
     if (!contents.isEmpty()) {
         //nested field
         if (!m_fldStates.empty()) {
             m_fld_snippets.prepend(contents);
-        } else {
+        }
+        else {
             //add writer content to m_paragraph as a runOfText with text style
-            m_paragraph->addRunOfText(contents, m_fldChp, QString(""), m_parser->styleSheet(), true);
+            m_paragraph->addRunOfText(contents, m_fldChp, QString(""),
+                                      m_parser->styleSheet(), true);
         }
     }
 
@@ -1695,12 +1700,14 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
     //nested field
     if (!m_fldStates.empty()) {
         fld_restoreState();
-    } else {
+    }
+    else {
         m_fld = new fld_State();
         QList<QString>* list = &m_fld_snippets;
         while (!list->isEmpty()) {
             //add writer content to m_paragraph as a runOfText with text style
-            m_paragraph->addRunOfText(list->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
+            m_paragraph->addRunOfText(list->takeFirst(), m_fldChp, QString(""),
+                                      m_parser->styleSheet(), true);
         }
         m_fldChp = 0;
     }
@@ -1718,7 +1725,6 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     QString newText(Conversion::string(text));
     kDebug(30513) << newText;
 
-    //we don't want to do anything with an empty string
     if (newText.isEmpty()) {
         return;
     }
@@ -1765,6 +1771,7 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                 }
                 break;
             case AUTHOR:
+            case AUTOTEXTLIST:
             case EDITTIME:
             case FILENAME:
             case MERGEFIELD:
