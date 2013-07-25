@@ -36,6 +36,10 @@ namespace Sheets
 
 /**
  * Extends the map model by active sheet tracking.
+ *
+ * KPART_TODO: fix the actions in a document with multiple sheets, we used to call
+ *             d->xmlGuiClient->plugActionList("go_goto_sheet_actionlist", actions);
+ *             in the eventFilter.
  */
 class MapViewModel : public MapModel
 {
