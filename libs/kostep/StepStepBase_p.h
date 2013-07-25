@@ -24,6 +24,7 @@ class StepStepBasePrivate
 {
 public:
     explicit StepStepBasePrivate();
+    explicit StepStepBasePrivate(QString Type, int Position, bool isForeign);
     ~StepStepBasePrivate();
 
     bool operator==(StepStepBasePrivate* other);

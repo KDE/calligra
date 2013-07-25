@@ -41,6 +41,7 @@ class KOSTEP_EXPORT StepStepBase : public QObject
 public:
     StepStepBase(QObject *parent =0);
     StepStepBase(const StepStepBase& other);
+    StepStepBase(QString type, QObject *parent =0, int position =0, bool isForeign= false);
 
     virtual ~StepStepBase();
     virtual StepStepBase& operator=(const StepStepBase& other);
@@ -76,6 +77,7 @@ public:
     //NOTE: May be later moved out into a StepTextStep class which textual changes
     //will derive from
     virtual QString Step();
+    virtual void setStep(QString text);
 
     //The Type Property Returns the Type of Operation that the step is as a QString
     //mostly useful for equality testing and serialization/deserialization

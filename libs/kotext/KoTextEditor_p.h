@@ -36,6 +36,8 @@
 #include <QTextDocument>
 #include <QTimer>
 
+#include "../libs/kostep/StepStepStack.h"
+
 class KUndo2Command;
 
 class KoTextEditor::Private
@@ -74,6 +76,7 @@ public:
 
     bool editProtected;
     bool editProtectionCached;
+    StepStepStack changeStack;
 };
 
 class KoTextVisitor

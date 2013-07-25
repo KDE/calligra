@@ -18,13 +18,12 @@
 */
 #ifndef STEPADDTEXTSTEPPRIVATE_H
 #define STEPADDTEXTSTEPPRIVATE_H
-  class StepAddTextStepPrivate
+class StepAddTextStepPrivate
 {
 public:
   StepAddTextStepPrivate ();
   virtual ~ StepAddTextStepPrivate ();
 
-private:
 };
 
 #endif // STEPADDTEXTSTEPPRIVATE_H

@@ -125,6 +125,7 @@ endif( SHOULD_BUILD_RDF )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
+target_link_libraries(kotext kostep)
 target_link_libraries(kotext flake)
 if( SHOULD_BUILD_RDF )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})

@@ -25,7 +25,7 @@ class KOSTEP_EXPORT StepAddTextStep: public StepStepBase
 {
 public:
   explicit StepAddTextStep (QObject * parent = 0);
-  virtual QString toString ();
+  StepAddTextStep (QString text, QObject * parent = 0);
   virtual QString toXML ();
   virtual QString Type ();
 

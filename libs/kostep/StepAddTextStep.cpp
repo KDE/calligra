@@ -24,6 +24,13 @@ StepAddTextStep::StepAddTextStep (QObject * parent):StepStepBase (parent), d(new
 
 }
 
+StepAddTextStep::StepAddTextStep (QString text, QObject * parent):StepStepBase
+  ("Add Text",parent), d(new StepAddTextStepPrivate())
+{
+  setStep(text);
+}
+
+
 StepAddTextStepPrivate::StepAddTextStepPrivate ()
 {
 
@@ -31,12 +38,6 @@ StepAddTextStepPrivate::StepAddTextStepPrivate ()
 
 StepAddTextStepPrivate::~StepAddTextStepPrivate ()
 {
-
-}
-
-QString StepAddTextStep::toString ()
-{
-  return "";
 
 }
 

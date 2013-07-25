@@ -20,7 +20,7 @@
 #include "StepStepBase_p.h"
 #include "StepStepLocation.h"
 
-StepStepBasePrivate::StepStepBasePrivate()
+StepStepBasePrivate::StepStepBasePrivate():type("Base"),position(0),isForeign(false)
 {
 }
 
@@ -28,6 +28,13 @@ StepStepBasePrivate::~StepStepBasePrivate ()
 {
 
 }
+
+StepStepBasePrivate::StepStepBasePrivate (QString Type, int Position,
+					  bool isForeign): type(Type), position(Position), isForeign(isForeign)
+{
+
+}
+
 
 bool StepStepBasePrivate::operator==(StepStepBasePrivate* other)
 {

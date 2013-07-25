@@ -38,6 +38,14 @@ StepStepBase::StepStepBase(const StepStepBase& other): QObject()
 {
 
 }
+
+StepStepBase::StepStepBase (QString type, QObject * parent, int position,
+			    bool isForeign):
+QObject (parent), d(new StepStepBasePrivate(type,position,isForeign))
+{
+
+}
+
 StepStepBase& StepStepBase::operator=(const StepStepBase& other)
 {
   return *this;
@@ -74,6 +82,12 @@ QString StepStepBase::Step()
 {
   return d->step;
 }
+
+void StepStepBase::setStep (QString text)
+{
+  d->step = text;
+}
+
 QString StepStepBase::toString()
 {
   return d->toString();

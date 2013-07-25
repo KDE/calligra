@@ -91,6 +91,9 @@
 
 #include <KoDocumentRdfBase.h>
 
+#include "../libs/kostep/StepAddTextStep.h"
+#include "../libs/kostep/StepStepLocation.h"
+
 Q_DECLARE_METATYPE(QTextFrame*)
 
 /*Private*/
@@ -1417,6 +1420,17 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
     if (isEditProtected()) {
         return;
     }
+
+    //Change Tracking Code, Generates a step, and then converts the current location
+    //via d->caret into a StepStepLocation and then assigns that location to the step
+    //and pushes it onto the stack in the d->pointer. location and step pointers are then
+    //set to 0 to insure that they can't accidentally be deleted
+    StepAddTextStep* step = new StepAddTextStep(text,parent);
+    StepStepLocation* location = new StepStepLocation(d->caret);
+    step->setLocation(*location);
+    d->changeStack.push(*step);
+    location =0;
+    step = 0;
 
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
