@@ -50,6 +50,7 @@ public:
     void removeAt(int i);
 
     void push(StepStepBase& step);
+    bool isEmpty();
 
     //QAbstractListModel Required Member Functions
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

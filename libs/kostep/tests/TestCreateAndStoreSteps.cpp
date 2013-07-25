@@ -23,6 +23,9 @@
 #include <QtCore/QDebug>
 #include "../StepStepStack.h"
 #include "../StepAddTextStep.h"
+#include "../StepAddTextBlockStep.h"
+#include "../StepDeleteTextBlockStep.h"
+#include "../StepDeleteTextStep.h"
 #include "../StepStepBase.h"
 
 QTEST_MAIN(TestCreateAndStoreSteps)
@@ -48,40 +51,53 @@ void TestCreateAndStoreSteps::init ()
 void TestCreateAndStoreSteps::cleanup ()
 {
   // Called after every testfunction
+  if(!step == 0)
+  {
+    delete step;
+  }
+  while(!stack->isEmpty())
+  {
+    stack->pop();
+  }
+  if(!stack == 0)
+  {
+    delete stack;
+  }
+
 }
 
 void TestCreateAndStoreSteps::CreateSteps ()
 {
+  qDebug() << "Creating Add Text step";
+  step = new StepAddTextStep();
+  delete step;
+  qDebug() << "Creating Add TextBlock step";
+  step = new StepAddTextBlockStep();
+  delete step;
+  qDebug() << "Creating Delete TextBlock step";
+  step = new StepDeleteTextBlockStep();
+  delete step;
+  qDebug() << "Create Delete Text step";
+  step = new StepDeleteTextStep();
+  delete step;
 
 }
 
-void TestCreateAndStoreSteps::PushStack ()
+void TestCreateAndStoreSteps::TestStack ()
 {
   if(step==0)
   {
+    qDebug() << "Creating Step";
     step = new StepStepBase();
   }
-  qDebug() << "Creating Step";
-  StepStepBase step2;// = new StepAddTextStep();
+
   qDebug() << "pushing onto stack";
-  //StepAddTextStep step2 = step*;
+
   stack->push(*step);
   qDebug() << "in Test";
   stack->pop();
   qDebug() << "stack popped";
 
-}
-
-void TestCreateAndStoreSteps::PopStack ()
-{
-  stack->pop();
-
-}
-
-void TestCreateAndStoreSteps::CreateStack ()
-{
-  StepStepStack* stack2 = new StepStepStack();
-  delete stack2;
 }
 
 #include "TestCreateAndStoreSteps.moc"

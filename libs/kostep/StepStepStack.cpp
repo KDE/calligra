@@ -88,6 +88,12 @@ void StepStepStack::push(StepStepBase & step)
 #endif
 
 }
+
+bool StepStepStack::isEmpty ()
+{
+  return d->stack->isEmpty();
+}
+
 void StepStepStack::removeAt(int i)
 {
     d->removeAt(i);

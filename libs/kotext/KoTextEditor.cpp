@@ -1425,7 +1425,7 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
     //via d->caret into a StepStepLocation and then assigns that location to the step
     //and pushes it onto the stack in the d->pointer. location and step pointers are then
     //set to 0 to insure that they can't accidentally be deleted
-    StepAddTextStep* step = new StepAddTextStep(text,parent);
+    StepAddTextStep* step = new StepAddTextStep(text);
     StepStepLocation* location = new StepStepLocation(d->caret);
     step->setLocation(*location);
     d->changeStack.push(*step);

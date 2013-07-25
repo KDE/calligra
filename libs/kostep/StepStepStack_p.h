@@ -39,7 +39,6 @@ public:
     void removeAt(int i);
     int rowcount();
     QVariant data(int i);
-private:
     QStack<StepStepBase*>* stack;
 };
 

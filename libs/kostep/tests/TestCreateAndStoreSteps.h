@@ -34,9 +34,7 @@ class TestCreateAndStoreSteps:public QObject
   void cleanup ();
 
   void CreateSteps ();
-  void PushStack ();
-  void PopStack ();
-  void CreateStack ();
+  void TestStack ();
 private:
   StepStepStack* stack;
   StepStepBase* step;
