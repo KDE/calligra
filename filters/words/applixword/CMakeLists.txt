@@ -1,15 +1,15 @@
 ########### next target ###############
 
-set(applixwordimport_PART_SRCS applixwordimport.cc )
+set(applixword2odt_PART_SRCS applixwordimport.cc )
 
 
-kde4_add_plugin(applixwordimport ${applixwordimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_applixword2odt ${applixword2odt_PART_SRCS})
 
 
 
-target_link_libraries(applixwordimport komain)
+target_link_libraries(calligra_filter_applixword2odt komain)
 
-install(TARGETS applixwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_applixword2odt  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

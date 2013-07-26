@@ -73,7 +73,7 @@ void WorkInfoCacheTester::initTestCase()
     KConfig config("ktimezonedrc");
     KConfigGroup group(&config, "TimeZones");
     group.writeEntry("ZoneinfoDir", dataDir);
-    group.writeEntry("Zonetab", dataDir + QString::fromLatin1("/zone.tab"));
+    group.writeEntry("Zonetab", QString(dataDir + QString::fromLatin1("/zone.tab")));
     group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
     config.sync();
 }

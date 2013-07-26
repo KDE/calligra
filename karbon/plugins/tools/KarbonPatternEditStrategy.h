@@ -22,6 +22,7 @@
 
 #include <KoPatternBackground.h>
 #include <QBrush>
+#include <QPointer>
 
 class KoShape;
 class KoViewConverter;
@@ -67,7 +68,7 @@ public:
     virtual QRectF boundingRect() const = 0;
 
     /// returns the actual background brush
-    virtual KoPatternBackground updatedBackground() = 0;
+    virtual QPointer<KoPatternBackground> updatedBackground() = 0;
 
     /// Returns the shape we are working on
     KoShape * shape() const;
@@ -113,8 +114,8 @@ protected:
 
     QList<QPointF> m_handles;  ///< the list of handles
     int m_selectedHandle;      ///< index of currently deleted handle or -1 if none selected
-    KoPatternBackground m_oldFill;
-    KoPatternBackground m_newFill;
+    QPointer<KoPatternBackground> m_oldFill;
+    QPointer<KoPatternBackground> m_newFill;
     QTransform m_matrix;          ///< matrix to map handle into document coordinate system
 
 private:
@@ -137,7 +138,7 @@ public:
     virtual bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter);
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QRectF boundingRect() const;
-    virtual KoPatternBackground updatedBackground();
+    virtual QPointer<KoPatternBackground> updatedBackground();
 
 private:
 
@@ -157,13 +158,13 @@ public:
     virtual bool selectHandle(const QPointF &mousePos, const KoViewConverter &converter);
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QRectF boundingRect() const;
-    virtual KoPatternBackground updatedBackground();
+    virtual QPointer<KoPatternBackground> updatedBackground();
     virtual void updateHandles();
 private:
 
     enum Handles { origin, size };
 
-    void updateHandles(KoPatternBackground * fill);
+    void updateHandles(QPointer<KoPatternBackground>  fill);
 };
 
 #endif // _KARBONPATTERNEDITSTRATEGY_H_

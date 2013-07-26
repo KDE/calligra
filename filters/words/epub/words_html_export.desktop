@@ -30,6 +30,6 @@ Name[zh_CN]=ODT 到 HTML 导出过滤器
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/html
 X-KDE-Weight=1
-X-KDE-Library=exporthtml
+X-KDE-Library=calligra_filter_odt2html
 X-KDE-ServiceTypes=Calligra/Filter
 

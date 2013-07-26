@@ -63,5 +63,5 @@ Name[zh_TW]=Karbon WMF 匯入過濾程式
 X-KDE-Export=image/svg+xml
 X-KDE-Import=image/x-wmf
 X-KDE-Weight=1
-X-KDE-Library=wmfimport
+X-KDE-Library=calligra_filter_wmf2svg
 X-KDE-ServiceTypes=Calligra/Filter

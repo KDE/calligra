@@ -453,7 +453,7 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
             AppointmentInterval ai = fromTJInterval( tji );
             double load = res->type() == Resource::Type_Material ? res->units() : ai.load() * r->getEfficiency();
             res->addAppointment( cs, ai.startTime(), ai.endTime(), load );
-            logDebug( task, 0, "'" + res->name() + "' added appointment: " +  ai.startTime().toString( Qt::ISODate ) + " - " + ai.endTime().toString( Qt::ISODate ) );
+            logDebug( task, 0, '\'' + res->name() + "' added appointment: " +  ai.startTime().toString( Qt::ISODate ) + " - " + ai.endTime().toString( Qt::ISODate ) );
         }
     }
     cs->setScheduled( true );

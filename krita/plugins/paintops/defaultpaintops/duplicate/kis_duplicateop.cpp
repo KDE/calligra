@@ -64,7 +64,6 @@
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
-#include <kis_fixed_paint_device.h>
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(settings, painter)
@@ -156,8 +155,8 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
                           static_cast<qint32>(settings->position().y() - hotSpot.y()));
     }
 
-    qint32 sw = brush->maskWidth(scale, 0.0, info);
-    qint32 sh = brush->maskHeight(scale, 0.0, info);
+    qint32 sw = brush->maskWidth(scale, 0.0, xFraction, yFraction, info);
+    qint32 sh = brush->maskHeight(scale, 0.0, xFraction, yFraction, info);
 
     if (srcPoint.x() < 0)
         srcPoint.setX(0);

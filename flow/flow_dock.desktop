@@ -33,3 +33,5 @@ Comment[uk]=Бічна панель Flow
 Comment[x-test]=xxDocker for Flowxx
 Comment[zh_CN]=Flow 停靠栏
 Comment[zh_TW]=Flow 的嵌入器
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

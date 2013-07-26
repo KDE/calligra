@@ -54,6 +54,7 @@ class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
 class KisLayerComposition;
+class KisSpontaneousJob;
 
 namespace KisMetaData
 {
@@ -88,6 +89,7 @@ public: // KisNodeGraphListener implementation
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
     void nodeChanged(KisNode * node);
+    void notifySelectionChanged();
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
 
 public: // KisProjectionUpdateListener implementation
@@ -511,7 +513,7 @@ signals:
 
     /**
      * The signal is emitted when the size of the image is changed.
-     * \p oldStillPoint and \p newStillPoint give the reciever the
+     * \p oldStillPoint and \p newStillPoint give the receiver the
      * hint about how the new and old rect of the image correspond to
      * each other. They specify the point of the image around which
      * the conversion was done. This point will stay still on the
@@ -615,7 +617,7 @@ signals:
     /**
      * Emitted when the isolated mode status has changed.
      *
-     * Can be used by the recievers to catch a fact of forcefully
+     * Can be used by the receivers to catch a fact of forcefully
      * stopping the isolated mode by the image when some complex
      * action was requested
      */
@@ -678,6 +680,15 @@ public slots:
     void refreshGraph(KisNodeSP root = 0);
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void initialRefreshGraph();
+
+    /**
+     * Adds a spontaneous job to the updates queue.
+     *
+     * A spontaneous job may do some trivial tasks in the background,
+     * like updating the outline of selection or purging unused tiles
+     * from the existing paint devices.
+     */
+    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     /**
      * This method is called by the UI (*not* by the creator of the

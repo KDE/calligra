@@ -137,7 +137,7 @@ public:
 
 static bool isAsterisk(const QString& tableName, const QString& fieldName)
 {
-    return tableName == "*" || fieldName.endsWith("*");
+    return tableName == "*" || fieldName.endsWith('*');
 }
 
 //! @internal \return true if sorting is allowed for \a fieldName and \a tableName
@@ -343,15 +343,15 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
         d->tablesColumnData->append(record);
         //fields
         record = d->fieldColumnData->createItem();
-        (*record)[COLUMN_ID_COLUMN] = table->name() + ".*";
+        (*record)[COLUMN_ID_COLUMN] = QString(table->name() + ".*");
         (*record)[COLUMN_ID_TABLE] = (*record)[COLUMN_ID_COLUMN];
         d->fieldColumnData->append(record);
         d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
 //  for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
         foreach(KexiDB::Field *field, *table->fields()) {
             record = d->fieldColumnData->createItem();
-            (*record)[COLUMN_ID_COLUMN] = table->name() + "." + field->name();
-            (*record)[COLUMN_ID_TABLE] = QString("  ") + field->name();
+            (*record)[COLUMN_ID_COLUMN] = QString(table->name() + '.' + field->name());
+            (*record)[COLUMN_ID_TABLE] = QString("  " + field->name());
             d->fieldColumnData->append(record);
             d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
         }
@@ -1318,9 +1318,9 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 
     if (token != 0)
         len = 2;
-    else if (str.startsWith(QLatin1String("=")) //1-char-long tokens
-             || str.startsWith(QLatin1String("<"))
-             || str.startsWith(QLatin1String(">"))) {
+    else if (str.startsWith(QLatin1Char('=')) //1-char-long tokens
+             || str.startsWith(QLatin1Char('<'))
+             || str.startsWith(QLatin1Char('>'))) {
         token = str[0].toLatin1();
         len = 1;
     } else {
@@ -1341,11 +1341,11 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
     QRegExp re;
     if (str.length() >= 2 &&
             (
-                (str.startsWith(QLatin1String("\"")) && str.endsWith(QLatin1String("\"")))
-                || (str.startsWith(QLatin1String("'")) && str.endsWith(QLatin1String("'"))))
+                (str.startsWith(QLatin1Char('"')) && str.endsWith(QLatin1Char('"')))
+                || (str.startsWith(QLatin1Char('\'')) && str.endsWith(QLatin1Char('\''))))
        ) {
         valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1, str.length() - 2));
-    } else if (str.startsWith(QLatin1String("[")) && str.endsWith(QLatin1String("]"))) {
+    } else if (str.startsWith(QLatin1Char('[')) && str.endsWith(QLatin1Char(']'))) {
         valueExpr = new KexiDB::QueryParameterExpr(str.mid(1, str.length() - 2));
     } else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch(str)) {
         valueExpr = new KexiDB::ConstExpr(DATE_CONST, QDate::fromString(
@@ -1533,7 +1533,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData 
     if (!alias.isEmpty()) {
         (*set)["alias"].setValue(alias, saveOldValue);
         //pretty printed "alias: expr"
-        newValue = QString(alias) + ": " + fieldName;
+        newValue = QString(QString(alias) + ": " + fieldName);
     }
     (*set)["caption"].setValue(QString(), saveOldValue);
     (*set)["table"].setValue(tableName, saveOldValue);
@@ -1675,7 +1675,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KexiDB::RecordDat
                 tokenStr = be.tokenToString() + " ";
             }
             if (set) {
-                (*set)["criteria"] = tokenStr + e->toString(); //print it prettier
+                (*set)["criteria"] = QString(tokenStr + e->toString()); //print it prettier
             }
             //this is just checking: destroy expr. object
             delete e;

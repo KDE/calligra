@@ -35,11 +35,11 @@
 #include <KoFilterChain.h>
 
 // Filter libraries
-#include "OdtTraverser.h"
 #include "OdtReader.h"
+#include "OdtReaderBackend.h"
+#include "OdfTextReader.h"
 
 // This filter
-#include "OdtTraverserAsciiBackend.h"
 #include "OdtReaderAsciiBackend.h"
 #include "OdfReaderAsciiContext.h"
 
@@ -78,8 +78,6 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
     }
     odfStore->close();
 
-    // Start the conversion
-
     // Create output file.
     QFile outfile(m_chain->outputFile());
     if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
@@ -88,19 +86,20 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
         return KoFilter::FileNotFound;
     }
 
-#if 1
-    OdfReaderAsciiContext  asciiBackendContext(odfStore, outfile);
-    OdtReaderAsciiBackend  asciiBackend(&asciiBackendContext);
+    // The actual conversion
+    OdfReaderAsciiContext  asciiContext(odfStore, outfile);
 
+    OdtReaderBackend       odtBackend;        // Use generic backend for document level
+    OdtReaderAsciiBackend  asciiTextBackend;  // Special backend for this filter for text level
+
+    // Create all necessary readers
     OdtReader              odtReader;
-    odtReader.readContent(&asciiBackend, &asciiBackendContext);
-#else
-    OdtTraverserAsciiContext  asciiBackendContext(odfStore, outfile);
-    OdtTraverserAsciiBackend  asciiBackend(&asciiBackendContext);
+    OdfTextReader          odfTextReader;
+    odfTextReader.setBackend(&asciiTextBackend);
+    odtReader.setTextReader(&odfTextReader);
 
-    OdtTraverser              odtTraverser;
-    odtTraverser.traverseContent(&asciiBackend, &asciiBackendContext);
-#endif
+    odtReader.readContent(&odtBackend, &asciiContext);
+
     outfile.close();
 
     return KoFilter::OK;

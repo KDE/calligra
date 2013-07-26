@@ -170,7 +170,7 @@ void KarbonPatternTool::initialize()
         }
 
         // does the shape has no fill pattern anymore ?
-        KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>(strategy->shape()->background());
+        QPointer<KoPatternBackground>  fill = dynamic_cast<KoPatternBackground*>(strategy->shape()->background().data());
         if (! fill) {
             // delete the gradient
             m_strategies.remove(strategy->shape());
@@ -195,7 +195,7 @@ void KarbonPatternTool::initialize()
         if (m_strategies.contains(shape))
             continue;
 
-        if (dynamic_cast<KoPatternBackground*>(shape->background())) {
+        if (dynamic_cast<KoPatternBackground*>(shape->background().data())) {
             KarbonPatternEditStrategyBase * s = new KarbonOdfPatternEditStrategy(shape, imageCollection);
             m_strategies.insert(shape, s);
             s->repaint();
@@ -300,9 +300,9 @@ void KarbonPatternTool::patternSelected(KoResource * resource)
     KoImageCollection *imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
         QList<KoShape*> selectedShapes = canvas()->shapeManager()->selection()->selectedShapes();
-        KoPatternBackground * newFill = new KoPatternBackground(imageCollection);
+        QPointer<KoPatternBackground>  newFill = new KoPatternBackground(imageCollection);
         newFill->setPattern(currentPattern->image());
-        canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, newFill));
+        canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, newFill.data()));
         initialize();
     }
 }
@@ -310,7 +310,7 @@ void KarbonPatternTool::patternSelected(KoResource * resource)
 void KarbonPatternTool::updateOptionsWidget()
 {
     if (m_optionsWidget && m_currentStrategy) {
-        KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>(m_currentStrategy->shape()->background());
+        QPointer<KoPatternBackground>  fill = dynamic_cast<KoPatternBackground*>(m_currentStrategy->shape()->background().data());
         if (fill) {
             m_optionsWidget->setRepeat(fill->repeat());
             m_optionsWidget->setReferencePoint(fill->referencePoint());
@@ -325,13 +325,13 @@ void KarbonPatternTool::patternChanged()
 {
     if (m_currentStrategy) {
         KoShape * shape = m_currentStrategy->shape();
-        KoPatternBackground * oldFill = dynamic_cast<KoPatternBackground*>(shape->background());
+        QPointer<KoPatternBackground>  oldFill = dynamic_cast<KoPatternBackground*>(shape->background().data());
         if (! oldFill)
             return;
         KoImageCollection *imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
         if (! imageCollection)
             return;
-        KoPatternBackground * newFill = new KoPatternBackground(imageCollection);
+        QPointer<KoPatternBackground>  newFill = new KoPatternBackground(imageCollection);
         if (! newFill)
             return;
         *newFill = *oldFill;
@@ -340,7 +340,7 @@ void KarbonPatternTool::patternChanged()
         newFill->setReferencePointOffset(m_optionsWidget->referencePointOffset());
         newFill->setTileRepeatOffset(m_optionsWidget->tileRepeatOffset());
         newFill->setPatternDisplaySize(m_optionsWidget->patternSize());
-        canvas()->addCommand(new KoShapeBackgroundCommand(shape, newFill));
+        canvas()->addCommand(new KoShapeBackgroundCommand(shape, newFill.data()));
     }
 }
 

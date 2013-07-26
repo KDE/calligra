@@ -38,5 +38,5 @@ Name[zh_TW]=Words Applixword 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-applix-word
 X-KDE-Weight=1
-X-KDE-Library=applixwordimport
+X-KDE-Library=calligra_filter_applixword2odt
 X-KDE-ServiceTypes=Calligra/Filter

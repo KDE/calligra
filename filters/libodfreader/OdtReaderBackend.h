@@ -26,7 +26,7 @@
 #include <KoFilter.h>
 
 // this library
-#include "odfreader_export.h"
+#include "koodfreader_export.h"
 #include "OdtReader.h"
 
 
@@ -67,35 +67,18 @@ class OdfReaderContext;
  * inherit this class and only reimplement those functions that are
  * actually needed.
  */
-class ODFREADER_EXPORT OdtReaderBackend
+class KOODFREADER_EXPORT OdtReaderBackend
 {
  public:
-    explicit OdtReaderBackend(OdfReaderContext *context);
+    explicit OdtReaderBackend();
     virtual ~OdtReaderBackend();
-
-    // Called before and after the actual traversal.
-    // FIXME: NYI
-
-    // Called when there is a document level element with children.
 
     // ----------------------------------------------------------------
     // ODT document level functions
+
+    virtual void elementOfficeDocumentcontent(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    // ----------------------------------------------------------------
-    // Text level functions: paragraphs, headings, sections, frames, objects, etc
-
-    virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    // ----------------------------------------------------------------
-    // Paragraph level functions: spans, annotations, notes, text content itself, etc.
-
-    virtual void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 
  private:
     class Private;

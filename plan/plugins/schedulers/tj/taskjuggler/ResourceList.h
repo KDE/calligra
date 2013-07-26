@@ -50,7 +50,7 @@ public:
 class ResourceListIterator : public virtual CoreAttributesListIterator
 {
 public:
-    ResourceListIterator(const CoreAttributesList& l) :
+    explicit ResourceListIterator(const CoreAttributesList& l) :
         CoreAttributesListIterator(l)
     { }
 

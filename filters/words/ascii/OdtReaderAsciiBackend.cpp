@@ -46,26 +46,13 @@
 //                 class OdtReaderAsciiBackend
 
 
-OdtReaderAsciiBackend::OdtReaderAsciiBackend(OdfReaderContext *context)
-    : OdtReaderBackend(context)
+OdtReaderAsciiBackend::OdtReaderAsciiBackend()
+    : OdfTextReaderBackend()
 {
 }
 
 OdtReaderAsciiBackend::~OdtReaderAsciiBackend()
 {
-}
-
-
-// ----------------------------------------------------------------
-// ODT document level functions
-
-
-
-void OdtReaderAsciiBackend::elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    DEBUG_BACKEND();
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
 }
 
 
@@ -136,7 +123,7 @@ void OdtReaderAsciiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCo
     if (!asciiContext) {
         return;
     }
-    kDebug(30503) << reader.text().toString();
+    //kDebug(30503) << reader.text().toString();
 
     asciiContext->outStream << reader.text().toString();
 }
