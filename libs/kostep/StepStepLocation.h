@@ -34,8 +34,9 @@ public:
     StepStepLocation(QTextCursor cursor, QObject *parent =0);
     StepStepLocation(const StepStepLocation& locate);
     virtual ~StepStepLocation();
-    StepStepLocation* operator=(StepStepLocation location);
+    StepStepLocation* operator=(const StepStepLocation & location);
     QTextCursor toQTextCursor(QTextDocument* ptr);
+    QString toString();
 signals:
 
 public slots:

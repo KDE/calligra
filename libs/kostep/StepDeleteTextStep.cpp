@@ -19,6 +19,7 @@
 
 #include "StepDeleteTextStep.h"
 #include "StepDeleteTextStep_p.h"
+#include "StepStepLocation.h"
 
 StepDeleteTextStepPrivate::StepDeleteTextStepPrivate (StepDeleteTextStep * q):q (q)
 {
@@ -28,9 +29,17 @@ StepDeleteTextStepPrivate::~StepDeleteTextStepPrivate ()
 {
 }
 
-StepDeleteTextStep::StepDeleteTextStep ():d (new
-   StepDeleteTextStepPrivate (this))
+StepDeleteTextStep::StepDeleteTextStep (QObject * parent):StepStepBase ("Delete Text",parent),
+  d(new StepDeleteTextStepPrivate(this))
 {
+
+}
+
+
+StepDeleteTextStep::StepDeleteTextStep (QString Text, QObject * parent):d (new
+   StepDeleteTextStepPrivate (this)), StepStepBase("Delete Text",parent)
+{
+  setStep(Text);
 
 }
 
@@ -46,13 +55,11 @@ StepDeleteTextStep::~StepDeleteTextStep ()
 
 }
 
-QString StepDeleteTextStep::toString ()
-{
-  return "";
-
-}
 
 QString StepDeleteTextStep::toXML ()
 {
-  return "";
+  QString end = Location().toString().remove(1,Location().toString().length()-1);
+  int length = Step().length();
+  end += length;
+  return "<del "+Location().toString() + " " + end + " />" ;
 }

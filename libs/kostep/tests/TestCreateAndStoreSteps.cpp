@@ -45,24 +45,13 @@ void TestCreateAndStoreSteps::cleanupTestCase ()
 void TestCreateAndStoreSteps::init ()
 {
   // Called before each testfunction is executed
-
+  step = new StepStepBase();
+  stack = new StepStepStack();
 }
 
 void TestCreateAndStoreSteps::cleanup ()
 {
   // Called after every testfunction
-  if(!step == 0)
-  {
-    delete step;
-  }
-  while(!stack->isEmpty())
-  {
-    stack->pop();
-  }
-  if(!stack == 0)
-  {
-    delete stack;
-  }
 
 }
 
@@ -80,6 +69,8 @@ void TestCreateAndStoreSteps::CreateSteps ()
   qDebug() << "Create Delete Text step";
   step = new StepDeleteTextStep();
   delete step;
+  qDebug() << "Created and Deleted All Steps Successfully";
+  step =0;
 
 }
 

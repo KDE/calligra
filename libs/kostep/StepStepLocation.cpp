@@ -27,8 +27,9 @@ StepStepLocation::StepStepLocation(QObject *parent) :
 StepStepLocation::StepStepLocation(QTextCursor cursor, QObject *parent):
     QObject(parent), d(new StepStepLocationPrivate())
 {
+  qDebug("entering Constructor");
   d->constructor(cursor);
-
+  qDebug("Leaving constructor");
 }
 StepStepLocation::~StepStepLocation()
 {
@@ -43,7 +44,7 @@ QTextCursor StepStepLocation::toQTextCursor(QTextDocument* ptr)
     return d->convertToQTextCursor(ptr);
 }
 
-StepStepLocation* StepStepLocation::operator=(StepStepLocation location)
+StepStepLocation* StepStepLocation::operator=(const StepStepLocation& location)
 {
   d->location = location.d->location;
   return this;
@@ -55,4 +56,8 @@ StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject()
 
 }
 
+QString StepStepLocation::toString ()
+{
+  return d->ToString();
 
+}

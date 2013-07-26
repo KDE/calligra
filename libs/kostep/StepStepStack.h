@@ -43,8 +43,8 @@ public:
     const StepStepBase& pop();
     StepStepBase top();
 
-    void serialize(QString Filename);
-    void deserialize(QString Filename);
+    void serialize(QString Filename="changes.xml");
+    void deserialize(QString Filename="changes.xml");
 
     void insertAt(int i, StepStepBase step);
     void removeAt(int i);
@@ -55,6 +55,8 @@ public:
     //QAbstractListModel Required Member Functions
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
+
+    QString toString();
 
 private:
     StepStepStackPrivate* d;

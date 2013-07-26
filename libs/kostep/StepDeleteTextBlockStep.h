@@ -22,14 +22,15 @@
 
 #include "StepStepBase.h"
 #include "kostep_export.h"
+#include <QTextBlock>
 
 class KOSTEP_EXPORT StepDeleteTextBlockStep:public StepStepBase
 {
 public:
-  StepDeleteTextBlockStep ();
+  StepDeleteTextBlockStep (QObject* parent=0);
+  StepDeleteTextBlockStep(QTextBlock* block, QObject* parent=0);
   StepDeleteTextBlockStep (const StepDeleteTextBlockStep & other);
    ~StepDeleteTextBlockStep ();
-  virtual QString toString ();
   virtual QString toXML ();
 
 private:

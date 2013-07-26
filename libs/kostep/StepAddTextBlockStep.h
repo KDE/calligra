@@ -22,13 +22,14 @@
 
 #include "StepStepBase.h"
 #include "kostep_export.h"
+#include <QtGui/QTextBlock>
 
 class KOSTEP_EXPORT StepAddTextBlockStep : public StepStepBase
 {
 public:
-  StepAddTextBlockStep ();
+  StepAddTextBlockStep (QObject* parent =0);
+  StepAddTextBlockStep (QTextBlock* textBlock, QObject* parent =0);
   ~StepAddTextBlockStep ();
-  virtual QString toString ();
   virtual QString toXML ();
 
 private:

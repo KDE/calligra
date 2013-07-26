@@ -106,7 +106,7 @@ StepStepLocation StepStepBase::Location()
 {
   return d->location;
 }
-void StepStepBase::setLocation(StepStepLocation location)
+void StepStepBase::setLocation(StepStepLocation& location)
 {
   d->location = location;
 

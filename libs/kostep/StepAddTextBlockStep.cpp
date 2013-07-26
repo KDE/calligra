@@ -19,6 +19,7 @@
 
 #include "StepAddTextBlockStep.h"
 #include "StepAddTextBlockStep_p.h"
+#include "StepStepLocation.h"
 
 StepAddTextBlockStepPrivate::StepAddTextBlockStepPrivate (StepAddTextBlockStep * q):q (q)
 {
@@ -26,14 +27,21 @@ StepAddTextBlockStepPrivate::StepAddTextBlockStepPrivate (StepAddTextBlockStep *
 
 StepAddTextBlockStepPrivate::~StepAddTextBlockStepPrivate ()
 {
+
 }
 
-StepAddTextBlockStep::StepAddTextBlockStep ():d (new
-   StepAddTextBlockStepPrivate
-   (this))
+StepAddTextBlockStep::StepAddTextBlockStep (QObject * parent):d (new
+   StepAddTextBlockStepPrivate(this)), StepStepBase("Add TextBlock", parent)
 {
 
 }
+
+StepAddTextBlockStep::StepAddTextBlockStep (QTextBlock * textBlock, QObject * parent):StepStepBase
+  ("Add TextBlock", parent), d(new StepAddTextBlockStepPrivate(this))
+{
+
+}
+
 
 StepAddTextBlockStep::~StepAddTextBlockStep ()
 {
@@ -41,15 +49,8 @@ StepAddTextBlockStep::~StepAddTextBlockStep ()
 
 }
 
-QString
-StepAddTextBlockStep::toString ()
+QString StepAddTextBlockStep::toXML ()
 {
-  return "";
-}
-
-QString
-StepAddTextBlockStep::toXML ()
-{
-  return "";
+  return "<add type=\"Paragraph\""+ Location().toString() + "/>";
 
 }

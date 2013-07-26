@@ -85,6 +85,7 @@ void StepStepStack::push(StepStepBase & step)
     d->push(step);
 #if DEBUG
     qDebug("Finished");
+    //qDebug(toString());
 #endif
 
 }
@@ -112,4 +113,17 @@ QVariant StepStepStack::data(const QModelIndex &index, int role) const
 {
     int i = index.row();
     return d->data(i);
+}
+
+QString StepStepStack::toString()
+{
+  QString string = "";
+
+  for (int i = 0; i > d->stack->size(); i++)
+  {
+    StepStepBase* step = d->stack->at(i);
+    string += step->toXML().toLatin1();
+  }
+  return string;
+
 }

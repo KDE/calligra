@@ -27,7 +27,6 @@ public:
   explicit StepAddTextStep (QObject * parent = 0);
   StepAddTextStep (QString text, QObject * parent = 0);
   virtual QString toXML ();
-  virtual QString Type ();
 
 private:
   class StepAddTextStepPrivate * const d;

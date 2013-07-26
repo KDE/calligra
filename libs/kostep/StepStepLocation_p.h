@@ -31,11 +31,11 @@ public:
     explicit StepStepLocationPrivate();
     ~StepStepLocationPrivate();
     StepStepLocationPrivate* operator=(StepStepLocationPrivate location);
-    void constructor(QTextCursor cursor);
+    void constructor(QTextCursor& cursor);
     QTextCursor convertToQTextCursor(QTextDocument* ptr);
     QString ToString();
     QStack<int> location;
-    int ParentFrame(QTextFrame* frame);
+    int ParentFrame(QTextFrame * frame, QTextFrame * rootFrame);
 
 signals:
 

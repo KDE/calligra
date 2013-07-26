@@ -33,12 +33,16 @@ StepStepLocationPrivate::~StepStepLocationPrivate ()
 }
 
 
-void StepStepLocationPrivate::constructor(QTextCursor cursor)
+void StepStepLocationPrivate::constructor(QTextCursor & cursor)
 {
   QTextFrame* frame = cursor.currentFrame();
-  ParentFrame(frame);
+  QTextFrame* rootFrame = cursor.document()->rootFrame();
+
+  ParentFrame(frame, rootFrame);
+
   QTextBlock Temp= cursor.block();
   QTextBlock* block = &Temp;
+
   int i=0;
 
   QTextFrame::iterator itr;
@@ -63,7 +67,6 @@ void StepStepLocationPrivate::constructor(QTextCursor cursor)
     i++;
   }
   location.push(cursor.positionInBlock());
-
 }
 QTextCursor StepStepLocationPrivate::convertToQTextCursor(QTextDocument* ptr)
 {
@@ -101,21 +104,79 @@ QTextCursor StepStepLocationPrivate::convertToQTextCursor(QTextDocument* ptr)
 
 QString StepStepLocationPrivate::ToString()
 {
-  QString returnValue = "s=";
+  QString returnValue = "s=\"";
   foreach(int ptr, location)
   {
     returnValue +="/" + ptr;
   }
+  returnValue+="\"";
   return returnValue;
 
 }
-int StepStepLocationPrivate::ParentFrame(QTextFrame* frame)
+int StepStepLocationPrivate::ParentFrame(QTextFrame* frame, QTextFrame* rootFrame)
 {
-  QTextFrame* parentFrame = frame->parentFrame();
-  if(parentFrame != parentFrame->document()->rootFrame())  {
+  qDebug("in ParentFrame()");
+  QStack<QTextFrame*> frameStack;
+
+  if(frame != rootFrame)
+  {
+    frameStack.push(frame);
+  }
+  else
+  {
+    location.push(0);
+    return 0;
+  }
+
+  QTextFrame* frame2 = frame;
+  while (frame2->parentFrame() != 0)
+  {
+    frame2 = frame2->parentFrame();
+    frameStack.push(frame2);
+  }
+
+
+  qDebug("Find first frame below the root frame that is a parent of the current frame");
+  QTextFrame::iterator itr;
+  int i =0;
+  for(itr = rootFrame->begin(); itr != rootFrame->end(); itr++)
+  {
+    if(itr.currentFrame() == frame2)
+    {
+      qDebug("Found first frame");
+      location.push(i);
+      frameStack.pop();
+      break;
+    }
+    i++;
+  }
+  qDebug("finding other frames");
+
+  while(!frameStack.isEmpty())
+  {
+    i=0;
+    for( itr= frame2->begin(); itr != frame2->end(); itr++)
+    {
+      QTextFrame* ptr = frameStack.top();
+      if(itr.currentFrame() == ptr)
+      {
+	qDebug("found frame");
+	location.push(i);
+	frame2 = frameStack.pop();
+	break;
+      }
+      i++;
+    }
+  }
+
+  /*
+  QTextFrame* parentFrame = (frame->parentFrame()!=0)? frame: frame->parentFrame();
+  if(frame->parentFrame()!= 0)  {
+    qDebug(".5.1");
     ParentFrame(frame->parentFrame());
   }
   else  {
+    qDebug(".5.2");
     QTextFrame::iterator itr;
     int i=0;
     for(itr = parentFrame->begin(); itr != parentFrame->end(); itr++)
@@ -123,10 +184,10 @@ int StepStepLocationPrivate::ParentFrame(QTextFrame* frame)
       if(itr.currentFrame() == frame)
       {
 	location.push(i);
-	break;
+	return i;
       }
     }
-  }
+  }*/
   //shouldn't happen
   return 0;
 }

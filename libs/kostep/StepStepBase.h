@@ -69,7 +69,7 @@ public:
     //document that can be translated to and from a QTextCursor
     //Potentially deprecates Position()
     StepStepLocation Location();
-    virtual void setLocation(StepStepLocation location);
+    virtual void setLocation(StepStepLocation & location);
 
 
     //The Step Property holds the text of the change so say I've got the word
