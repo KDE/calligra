@@ -788,6 +788,7 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_currentMaster(0),
   m_currentSlide(0),
   m_processingMasters(false),
+  m_firstChunkFontSize(12),
   m_firstChunkSymbolAtStart(false),
   m_isList(false),
   m_previousListLevel(0)
