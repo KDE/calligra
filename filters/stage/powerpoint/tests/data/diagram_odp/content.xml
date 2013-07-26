@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" office:version="1.2">
+ <office:automatic-styles>
+  <style:style style:name="T4" style:family="text">
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="44pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="T5" style:family="text">
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="32pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="T6" style:family="text">
+   <style:text-properties fo:color="#800000" fo:font-family="Arial" fo:font-size="44pt" fo:font-style="italic" fo:font-weight="bold" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="single"/>
+  </style:style>
+  <style:style style:name="T7" style:family="text">
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="bold" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="single"/>
+  </style:style>
+  <style:style style:name="T8" style:family="text">
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="P5" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="center" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="44pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="P6" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="8pt" fo:text-align="center" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="32pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="P7" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="center" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+  </style:style>
+  <style:style style:name="P8" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+  </style:style>
+  <style:style style:name="P9" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="A3" style:family="graphic">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="100%" draw:shadow="hidden" draw:stroke="solid" draw:stroke-linejoin="round" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding="0.000000000000000pt" style:flow-with-text="true" svg:stroke-color="#000000" svg:stroke-linecap="butt" svg:stroke-opacity="100%" svg:stroke-width="0.75pt"/>
+  </style:style>
+  <style:style style:name="A4" style:family="graphic">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="100%" draw:shadow="hidden" draw:stroke="solid" draw:stroke-linejoin="round" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true" svg:stroke-color="#000000" svg:stroke-linecap="butt" svg:stroke-opacity="100%" svg:stroke-width="0.75pt"/>
+  </style:style>
+  <style:style style:name="A5" style:family="graphic">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="none" draw:marker-end="msArrowEnd_20_5" draw:marker-end-center="false" draw:marker-end-width="2.500000000000000pt" draw:shadow="hidden" draw:stroke="solid" draw:stroke-linejoin="round" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true" svg:stroke-color="#000000" svg:stroke-linecap="butt" svg:stroke-opacity="100%" svg:stroke-width="0.75pt"/>
+  </style:style>
+  <style:style style:name="A6" style:family="graphic">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="none" draw:marker-end="msArrowEnd_20_5" draw:marker-end-center="false" draw:marker-end-width="2.500000000000000pt" draw:marker-start="msArrowEnd_20_5" draw:marker-start-center="false" draw:marker-start-width="2.500000000000000pt" draw:shadow="hidden" draw:stroke="solid" draw:stroke-linejoin="round" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true" svg:stroke-color="#000000" svg:stroke-linecap="butt" svg:stroke-opacity="100%" svg:stroke-width="0.75pt"/>
+  </style:style>
+  <style:style style:name="A7" style:family="graphic">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="none" draw:shadow="hidden" draw:stroke="solid" draw:stroke-linejoin="round" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true" svg:stroke-color="#000000" svg:stroke-linecap="butt" svg:stroke-opacity="100%" svg:stroke-width="0.75pt"/>
+  </style:style>
+  <style:style style:name="A8" style:family="graphic">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="none" draw:shadow="hidden" draw:stroke="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true"/>
+  </style:style>
+  <style:style style:name="A6" style:parent-style-name="A1" style:family="presentation">
+   <style:graphic-properties/>
+  </style:style>
+  <style:style style:name="A7" style:parent-style-name="A2" style:family="presentation">
+   <style:graphic-properties/>
+  </style:style>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties presentation:background-objects-visible="true" presentation:background-visible="true" presentation:display-date-time="false" presentation:display-footer="false" presentation:display-header="false" presentation:display-page-number="false"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:master-page-name="M1" draw:name="page1" draw:style-name="dp1">
+ <draw:frame presentation:style-name="A6" presentation:placeholder="true" presentation:class="title" draw:layer="layout" svg:x="19.05mm" svg:y="59.178472mm" svg:height="40.834028mm" svg:width="215.9mm">
+  <draw:text-box>
+   <text:p text:style-name="P5">
+    <text:span text:style-name="T4"/>
+   </text:p>
+  </draw:text-box>
+ </draw:frame>
+ <draw:frame presentation:style-name="A7" presentation:placeholder="true" presentation:class="subtitle" draw:layer="layout" svg:x="38.1mm" svg:y="107.95mm" svg:height="48.683333mm" svg:width="177.8mm">
+  <draw:text-box>
+   <text:p text:style-name="P6">
+    <text:span text:style-name="T5"/>
+   </text:p>
+  </draw:text-box>
+ </draw:frame>
+</draw:page><draw:page draw:master-page-name="M1" draw:name="STRATEGIC PLANNING" draw:style-name="dp1">
+ <draw:frame presentation:style-name="A6" presentation:placeholder="false" draw:layer="layout" svg:x="12.7mm" svg:y="7.628819mm" svg:height="31.75mm" svg:width="228.6mm">
+  <draw:text-box>
+   <text:p text:style-name="P7">
+    <text:span text:style-name="T6">STRATEGIC PLANNING</text:span>
+   </text:p>
+  </draw:text-box>
+ </draw:frame>
+ <draw:g>
+  <draw:custom-shape draw:style-name="A3" draw:layer="layout" svg:x="189.441667mm" svg:y="53.973684mm" svg:height="41.269296mm" svg:width="9.525mm">
+   <draw:enhanced-geometry draw:glue-points="0 0 0 21600 21600 10800" draw:modifiers="1800 10800" svg:viewBox="0 0 21600 21600" draw:enhanced-path="M 0 0 C 5400 0 10800 ?f0 10800 ?f1 L 10800 ?f2 C 10800 ?f3 16200 ?f4 21600 ?f4 16200 ?f4 10800 ?f5 10800 ?f6 L 10800 ?f7 C 10800 ?f8 5400 21600 0 21600 N" draw:type="right-brace" draw:text-areas="0 ?f9 7800 ?f10">
+    <draw:equation draw:name="f0" draw:formula="$0 /2"/>
+    <draw:equation draw:name="f1" draw:formula="$0 "/>
+    <draw:equation draw:name="f2" draw:formula="?f4 -$0 "/>
+    <draw:equation draw:name="f3" draw:formula="?f4 -?f0 "/>
+    <draw:equation draw:name="f4" draw:formula="$1 "/>
+    <draw:equation draw:name="f5" draw:formula="?f4 +?f0 "/>
+    <draw:equation draw:name="f6" draw:formula="?f4 +$0 "/>
+    <draw:equation draw:name="f7" draw:formula="21600-$0 "/>
+    <draw:equation draw:name="f8" draw:formula="21600-?f0 "/>
+    <draw:equation draw:name="f9" draw:formula="$0 *10000/31953"/>
+    <draw:equation draw:name="f10" draw:formula="21600-?f9 "/>
+    <draw:handle draw:handle-position="10800 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="5400"/>
+    <draw:handle draw:handle-position="right $1" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="21600"/>
+   </draw:enhanced-geometry>
+  </draw:custom-shape>
+  <draw:frame draw:style-name="A4" draw:layer="layout" svg:x="46.566667mm" svg:y="44.45mm" svg:height="60.316663mm" svg:width="38.1mm">
+   <draw:text-box>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T7">INPUTS</text:span>
+    </text:p>
+    <text:p text:style-name="P9">
+     <text:span text:style-name="T8"/>
+    </text:p>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">PEOPLE</text:span>
+    </text:p>
+    <text:p text:style-name="P9">
+     <text:span text:style-name="T8"/>
+    </text:p>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">CAPITAL</text:span>
+    </text:p>
+    <text:p text:style-name="P9">
+     <text:span text:style-name="T8"/>
+    </text:p>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">MANAGERIAL SKILLS</text:span>
+    </text:p>
+    <text:p text:style-name="P9">
+     <text:span text:style-name="T8"/>
+    </text:p>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">TECHNICAL SKILLS</text:span>
+    </text:p>
+   </draw:text-box>
+  </draw:frame>
+  <draw:frame draw:style-name="A4" draw:layer="layout" svg:x="94.191667mm" svg:y="47.624561mm" svg:height="19.047367mm" svg:width="41.275mm">
+   <draw:text-box>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">TOP MANAGEMENT ORIENTATION</text:span>
+    </text:p>
+   </draw:text-box>
+  </draw:frame>
+  <draw:frame draw:style-name="A4" draw:layer="layout" svg:x="148.166667mm" svg:y="47.624561mm" svg:height="19.047367mm" svg:width="41.275mm">
+   <draw:text-box>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">EXTERNAL</text:span><text:span text:style-name="T8"><text:s/></text:span><text:span text:style-name="T8">ENVIRONMENT</text:span>
+    </text:p>
+   </draw:text-box>
+  </draw:frame>
+  <draw:frame draw:style-name="A4" draw:layer="layout" svg:x="97.013889mm" svg:y="81.133819mm" svg:height="19.047367mm" svg:width="44.802778mm">
+   <draw:text-box>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">ENTERPRISE PROFILE</text:span>
+    </text:p>
+   </draw:text-box>
+  </draw:frame>
+  <draw:frame draw:style-name="A4" draw:layer="layout" svg:x="97.366667mm" svg:y="120.639469mm" svg:height="19.047367mm" svg:width="41.275mm">
+   <draw:text-box>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">PURPOSE AND OBJECTIVES</text:span>
+    </text:p>
+   </draw:text-box>
+  </draw:frame>
+  <draw:frame draw:style-name="A4" draw:layer="layout" svg:x="148.166667mm" svg:y="79.370173mm" svg:height="22.221929mm" svg:width="41.275mm">
+   <draw:text-box>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">FORECAST OF FUTURE ENVIRONMENT</text:span>
+    </text:p>
+   </draw:text-box>
+  </draw:frame>
+  <draw:frame draw:style-name="A4" draw:layer="layout" svg:x="148.166667mm" svg:y="120.639469mm" svg:height="19.047367mm" svg:width="41.275mm">
+   <draw:text-box>
+    <text:p text:style-name="P8">
+     <text:span text:style-name="T8">RESOURCE AUDIT</text:span>
+    </text:p>
+   </draw:text-box>
+  </draw:frame>
+  <draw:line svg:y1="73.021051mm" svg:y2="73.021051mm" svg:x1="84.666667mm" svg:x2="106.891667mm" draw:style-name="A5" draw:layer="layout"/>
+  <draw:line svg:y1="88.893857mm" svg:y2="88.893857mm" svg:x1="84.666667mm" svg:x2="97.366667mm" draw:style-name="A5" draw:layer="layout"/>
+  <draw:line svg:y1="73.021051mm" svg:y2="66.671929mm" svg:x1="106.891667mm" svg:x2="106.891667mm" draw:style-name="A5" draw:layer="layout"/>
+  <draw:line svg:y1="66.671929mm" svg:y2="82.544735mm" svg:x1="116.416667mm" svg:x2="116.416667mm" draw:style-name="A6" draw:layer="layout"/>
+  <draw:line svg:y1="99.122999mm" svg:y2="121.344927mm" svg:x1="116.416667mm" svg:x2="116.416667mm" draw:style-name="A6" draw:layer="layout"/>
+  <draw:line svg:y1="57.148245mm" svg:y2="57.148245mm" svg:x1="135.466667mm" svg:x2="135.466667mm" draw:style-name="A5" draw:layer="layout"/>
+  <draw:line svg:y1="130.163153mm" svg:y2="130.163153mm" svg:x1="138.641667mm" svg:x2="148.166667mm" draw:style-name="A5" draw:layer="layout"/>
+  <draw:line svg:y1="66.671929mm" svg:y2="79.370173mm" svg:x1="167.216667mm" svg:x2="167.216667mm" draw:style-name="A6" draw:layer="layout"/>
+  <draw:line svg:y1="80.78109mm" svg:y2="58.559161mm" svg:x1="139.7mm" svg:x2="139.7mm" draw:style-name="A7" draw:layer="layout"/>
+  <draw:line svg:y1="58.559161mm" svg:y2="58.559161mm" svg:x1="138.994444mm" svg:x2="148.519444mm" draw:style-name="A5" draw:layer="layout"/>
+  <draw:line svg:y1="130.163153mm" svg:y2="130.163153mm" svg:x1="189.441667mm" svg:x2="195.791667mm" draw:style-name="A5" draw:layer="layout"/>
+  <draw:line svg:y1="160.427303mm" svg:y2="103.285201mm" svg:x1="60.325mm" svg:x2="60.325mm" draw:style-name="A5" draw:layer="layout"/>
+  <draw:line svg:y1="160.427303mm" svg:y2="160.427303mm" svg:x1="60.677778mm" svg:x2="184.502778mm" draw:style-name="A7" draw:layer="layout"/>
+  <draw:frame draw:style-name="A8" draw:layer="layout" svg:x="103.716667mm" svg:y="162.543677mm" svg:height="9.523684mm" svg:width="25.4mm">
+   <draw:text-box>
+    <text:p text:style-name="P7">
+     <text:span text:style-name="T8">Feed Back</text:span>
+    </text:p>
+   </draw:text-box>
+  </draw:frame>
+ </draw:g>
+</draw:page>
+  </office:presentation>
+ </office:body>
+</office:document-content>

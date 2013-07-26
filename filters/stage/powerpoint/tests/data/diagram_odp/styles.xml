@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:calligra="http://www.calligra.org/2005/" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:delta="http://www.deltaxml.com/ns/track-changes/delta-namespace" xmlns:split="http://www.deltaxml.com/ns/track-changes/split-namespace" xmlns:ac="http://www.deltaxml.com/ns/track-changes/attribute-change-namespace" office:version="1.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <office:styles>
+  <style:default-style style:family="section"/>
+  <style:default-style style:family="ruby"/>
+  <style:default-style style:family="table"/>
+  <style:default-style style:family="table-column"/>
+  <style:default-style style:family="table-row"/>
+  <style:default-style style:family="table-cell">
+   <style:paragraph-properties fo:line-height="0%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#ffffff" fo:font-family="Arial" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:default-style>
+  <style:default-style style:family="presentation">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="solid" draw:fill-color="#000000" draw:opacity="100%" draw:shadow="hidden" draw:stroke="solid" draw:stroke-linejoin="round" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true" svg:stroke-color="#000000" svg:stroke-linecap="butt" svg:stroke-opacity="100%" svg:stroke-width="0.75pt"/>
+   <style:paragraph-properties fo:line-height="0%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#ffffff" fo:font-family="Arial" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:default-style>
+  <style:default-style style:family="chart">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="solid" draw:fill-color="#000000" draw:opacity="100%" draw:shadow="hidden" draw:stroke="solid" draw:stroke-linejoin="round" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true" svg:stroke-color="#000000" svg:stroke-linecap="butt" svg:stroke-opacity="100%" svg:stroke-width="0.75pt"/>
+   <style:paragraph-properties fo:line-height="0%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#ffffff" fo:font-family="Arial" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:default-style>
+  <style:style style:name="A1" style:family="presentation">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="none" draw:shadow="hidden" draw:stroke="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true"/>
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="center" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="44pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="A2" style:family="presentation">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="none" draw:shadow="hidden" draw:stroke="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding-bottom="3.600000000000000pt" fo:padding-left="7.200000000000000pt" fo:padding-right="7.200000000000000pt" fo:padding-top="3.600000000000000pt" style:flow-with-text="true"/>
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0.9525cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="-0.9525cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="32pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="A3" style:parent-style-name="A2" style:family="presentation">
+   <style:graphic-properties/>
+   <style:paragraph-properties fo:margin-left="0cm" fo:text-indent="0cm"/>
+   <style:text-properties fo:font-size="18pt"/>
+  </style:style>
+  <style:style style:name="A4" style:parent-style-name="A3" style:family="presentation">
+   <style:graphic-properties/>
+   <style:paragraph-properties fo:text-align="center"/>
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="A5" style:parent-style-name="A4" style:family="presentation">
+   <style:graphic-properties/>
+   <style:paragraph-properties fo:text-align="right"/>
+   <style:text-properties/>
+  </style:style>
+  <text:list-style style:name="standardListStyle">
+   <text:list-level-style-number style:num-format="" text:level="1">
+ <style:list-level-properties text:min-label-width="0cm" text:space-before="0cm"/>
+ <style:text-properties fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:text-underline-style="none"/>
+</text:list-level-style-number>
+  </text:list-style>
+  <text:list-style style:name="A1">
+   <text:list-level-style-bullet text:bullet-char="•" text:level="2">
+ <style:list-level-properties text:min-label-width="0.9525cm" text:space-before="0cm"/>
+ <style:text-properties fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:text-underline-style="none"/>
+</text:list-level-style-bullet>
+   <text:list-level-style-number style:num-format="" text:level="2">
+ <style:list-level-properties text:min-label-width="0.635cm" text:space-before="5.08cm"/>
+ <style:text-properties fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:text-underline-style="none"/>
+</text:list-level-style-number>
+  </text:list-style>
+  <draw:marker draw:name="msArrowEnd_20_5" draw:display-name="msArrowEnd 5" svg:d="m159 0 159 318h-318z" svg:viewBox="0 0 318 318"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="44pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="32pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="T3" style:family="text">
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="14pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="center" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="8pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+  </style:style>
+  <style:style style:name="P3" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+  </style:style>
+  <style:style style:name="P4" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="right" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+  </style:style>
+  <style:style style:name="A1" style:family="graphic">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="none" draw:shadow="hidden" draw:stroke="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding="0.000000000000000pt" style:flow-with-text="true"/>
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="18pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="A2" style:family="graphic">
+   <style:graphic-properties draw:auto-grow-height="false" draw:auto-grow-width="false" draw:fill="none" draw:shadow="hidden" draw:stroke="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" fo:margin-bottom="0.000000000000000pt" fo:margin-left="9.000000000000000pt" fo:margin-right="9.000000000000000pt" fo:margin-top="0.000000000000000pt" fo:padding="0.000000000000000pt" style:flow-with-text="true"/>
+   <style:paragraph-properties fo:line-height="100%" fo:margin-bottom="0pt" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0pt" fo:text-align="left" fo:text-indent="0cm" style:font-independent-line-spacing="true"/>
+   <style:text-properties fo:color="#000000" fo:font-family="Arial" fo:font-size="18pt" fo:font-style="normal" fo:font-weight="normal" fo:text-shadow="none" style:font-relief="none" style:text-position="0%" style:text-underline-type="none"/>
+  </style:style>
+  <style:style style:name="Mdp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="border" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="100%" presentation:background-objects-visible="true" presentation:background-visible="true"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:margin-bottom="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:page-height="190.5mm" fo:page-width="254mm" style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:margin-bottom="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:page-height="254mm" fo:page-width="190.5mm" style:print-orientation="landscape"/>
+  </style:page-layout>
+  <text:list-style style:name="L1">
+   <text:list-level-style-bullet text:bullet-char="•" text:level="1">
+ <style:list-level-properties text:min-label-width="0.9525cm" text:space-before="0cm"/>
+ <style:text-properties fo:font-size="32pt" fo:font-style="normal" fo:font-weight="normal" style:text-underline-style="none"/>
+</text:list-level-style-bullet>
+  </text:list-style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="M1" draw:style-name="Mdp1" style:page-layout-name="pm1">
+   <draw:frame presentation:style-name="A1" presentation:placeholder="true" presentation:class="title" draw:layer="layout" svg:x="12.7mm" svg:y="7.628819mm" svg:height="31.75mm" svg:width="228.6mm">
+ <draw:text-box>
+  <text:p text:style-name="P1">
+   <text:span text:style-name="T1">Click to edit Master title style</text:span>
+  </text:p>
+ </draw:text-box>
+</draw:frame><draw:frame presentation:style-name="A2" presentation:placeholder="true" presentation:class="outline" draw:layer="layout" svg:x="12.7mm" svg:y="44.45mm" svg:height="125.721181mm" svg:width="228.6mm">
+ <draw:text-box>
+  <text:list text:style-name="L1">
+   <text:list-item>
+    <text:p text:style-name="P2">
+     <text:span text:style-name="T2">Click to edit Master text styles</text:span>
+    </text:p>
+   </text:list-item>
+   <text:list-item>
+    <text:p text:style-name="P2">
+     <text:span text:style-name="T2">Second level</text:span>
+    </text:p>
+   </text:list-item>
+   <text:list-item>
+    <text:p text:style-name="P2">
+     <text:span text:style-name="T2">Third level</text:span>
+    </text:p>
+   </text:list-item>
+   <text:list-item>
+    <text:p text:style-name="P2">
+     <text:span text:style-name="T2">Fourth level</text:span>
+    </text:p>
+   </text:list-item>
+   <text:list-item>
+    <text:p text:style-name="P2">
+     <text:span text:style-name="T2">Fifth level</text:span>
+    </text:p>
+   </text:list-item>
+  </text:list>
+ </draw:text-box>
+</draw:frame><draw:frame presentation:style-name="A3" presentation:placeholder="true" presentation:class="date-time" draw:layer="layout" svg:x="12.7mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="59.266667mm">
+ <draw:text-box>
+  <text:p text:style-name="P3">
+   <text:span text:style-name="T3"><presentation:date-time/></text:span>
+  </text:p>
+ </draw:text-box>
+</draw:frame><draw:frame presentation:style-name="A4" presentation:placeholder="true" presentation:class="footer" draw:layer="layout" svg:x="86.783333mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="80.433333mm">
+ <draw:text-box>
+  <text:p text:style-name="P1">
+   <text:span text:style-name="T3"><presentation:footer/></text:span>
+  </text:p>
+ </draw:text-box>
+</draw:frame><draw:frame presentation:style-name="A5" presentation:placeholder="true" presentation:class="page-number" draw:layer="layout" svg:x="182.033333mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="59.266667mm">
+ <draw:text-box>
+  <text:p text:style-name="P4">
+   <text:span text:style-name="T3"><text:page-number/></text:span>
+  </text:p>
+ </draw:text-box>
+</draw:frame>
+  </style:master-page>
+ </office:master-styles>
+</office:document-styles>
