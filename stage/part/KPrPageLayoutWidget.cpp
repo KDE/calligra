@@ -21,7 +21,7 @@
 
 #include <QListWidget>
 #include <QSize>
-#include <QVBoxLayout>
+#include <QGridLayout>
 
 #include <klocale.h>
 
@@ -46,18 +46,19 @@ KPrPageLayoutWidget::KPrPageLayoutWidget( QWidget* parent)
     setWindowTitle(i18n( "Layout"));
     setObjectName("Slide Layouts");
 
-    m_layoutsView = new QListWidget( this );
-    m_layoutsView->setIconSize( QSize( 80, 60 ) );
-    m_layoutsView->setGridSize( QSize( 80, 60 ) );
-    m_layoutsView->setViewMode( QListView::IconMode );
-    m_layoutsView->setResizeMode( QListView::Adjust );
-    m_layoutsView->setMovement( QListView::Static );
+    m_layoutsView = new QListWidget();
+    m_layoutsView->setIconSize(QSize( 80, 60));
+    m_layoutsView->setGridSize(QSize( 80, 60));
+    m_layoutsView->setViewMode(QListView::IconMode);
+    m_layoutsView->setResizeMode(QListView::Adjust);
+    m_layoutsView->setMovement(QListView::Static);
     m_layoutsView->setSelectionRectVisible(false);
 
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget( m_layoutsView );
+    QGridLayout* layout = new QGridLayout;
+    layout->addWidget(m_layoutsView);
     layout->setMargin(0);
-    setLayout( layout );
+
+    setLayout(layout);
 }
 
 void KPrPageLayoutWidget::setView( KPrView* view )
