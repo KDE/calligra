@@ -471,17 +471,13 @@ QString Currency::chooseString(int type, bool & ok)
     if (type < 29) {
         QString ret(i18n(gMoneyList[type].name));
         if (gMoneyList[type].country[0]) {
-            ret += " (";
-            ret += i18n(gMoneyList[type].country);
-            ret += ')';
+            ret += " (" + i18n(gMoneyList[type].country) + ')';
         }
         return ret;
     } else {
         QString ret(i18n(gMoneyList[type].country));
         if (gMoneyList[type].name[0]) {
-            ret += " (";
-            ret += i18n(gMoneyList[type].name);
-            ret += ')';
+            ret += " (" + i18n(gMoneyList[type].name) + ')';
         }
         return ret;
     }

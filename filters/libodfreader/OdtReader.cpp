@@ -40,6 +40,7 @@
 // Reader library
 #include "OdtReaderBackend.h"
 #include "OdfReaderContext.h"
+#include "OdfTextReader.h"
 
 
 static void prepareForOdfInternal(KoXmlStreamReader &reader);
@@ -68,12 +69,22 @@ static int debugIndent = 0;
 
 
 OdtReader::OdtReader()
+    : m_backend(0)
+    , m_context(0)
+    , m_textReader(0)
 {
 }
 
 OdtReader::~OdtReader()
 {
 }
+
+
+void OdtReader::setTextReader(OdfTextReader *textReader)
+{
+    m_textReader = textReader;
+}
+
 
 
 bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context)
@@ -83,6 +94,11 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
     m_backend = backend;
     m_context = context;
 
+    if (m_textReader) {
+        m_textReader->setContext(context);
+    }
+
+    // Extract styles, manifest, settings, etc
     if (context->analyzeOdfFile() != KoFilter::OK) {
         return false;
     }
@@ -116,7 +132,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
         kError(30503) << "Couldn't find the content in content.xml" << endl;
     }
 
-    // FIXME: Call backend function for starting the document here.
+    m_backend->elementOfficeDocumentcontent(reader, m_context);
 
     // <office:document-content> has the following children in ODF 1.2:
     //   <office:automatic-styles> 3.15.3
@@ -147,7 +163,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
         }
     }
 
-    // FIXME: Call backend function for ending the document here.
+    m_backend->elementOfficeDocumentcontent(reader, m_context);
     odfStore->close();
 
     return true;
@@ -301,207 +317,17 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
             reader.skipCurrentElement();
         }
         else {
-            readTextLevelElement(reader);
+            if (m_textReader) {
+                m_textReader->readTextLevelElement(reader);
+            }
+            else {
+                reader.skipCurrentElement();
+            }
         }
         DEBUG_READING("loop-end");
     }
 
     m_backend->elementOfficeText(reader, m_context);
-    DEBUGEND();
-}
-
-
-// ----------------------------------------------------------------
-//                         Text level functions
-
-
-// This function is a bit special since it doesn't handle a specific
-// element.  Instead it handles the common child elements between a
-// number of text-level elements.
-//
-void OdtReader::readTextLevelElement(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-
-    // We should not call any backend functions here.  That is already
-    // done in the functions that call this one.
-
-    // We define the common elements on the text level as the
-    // following list.  They are the basic text level contents that
-    // can be found in a text box (<draw:text-box>) but also in many
-    // other places like <table:table-cell>, <text:section>,
-    // <office:text>, etc.
-    //
-    // The ones that are not text boxes can also have other children
-    // but these are the ones we have found to be the common ones.
-    //
-    //   <dr3d:scene> 10.5.2
-    //   <draw:a> 10.4.12
-    //   <draw:caption> 10.3.11
-    //   <draw:circle> 10.3.8
-    //   <draw:connector> 10.3.10
-    //   <draw:control> 10.3.13
-    //   <draw:custom-shape> 10.6.1
-    //   <draw:ellipse> 10.3.9
-    //   <draw:frame> 10.4.2
-    //   <draw:g> 10.3.15
-    //   <draw:line> 10.3.3
-    //   <draw:measure> 10.3.12
-    //   <draw:page-thumbnail> 10.3.14
-    //   <draw:path> 10.3.7
-    //   <draw:polygon> 10.3.5
-    //   <draw:polyline> 10.3.4
-    //   <draw:rect> 10.3.2
-    //   <draw:regular-polygon> 10.3.6
-    //   <table:table> 9.1.2
-    //   <text:alphabetical-index> 8.8
-    //   <text:bibliography> 8.9
-    //   <text:change> 5.5.7.4
-    //   <text:change-end> 5.5.7.3
-    //   <text:change-start> 5.5.7.2
-    //   <text:h> 5.1.2
-    //   <text:illustration-index> 8.4
-    //   <text:list> 5.3.1
-    //   <text:numbered-paragraph> 5.3.6
-    //   <text:object-index> 8.6
-    //   <text:p> 5.1.3
-    //   <text:section> 5.4
-    //   <text:soft-page-break> 5.6
-    //   <text:table-index> 8.5
-    //   <text:table-of-content> 8.3
-    //   <text:user-index> 8.7
-
-    QString tagName = reader.qualifiedName().toString();
-        
-    // FIXME: Only paragraphs are handled right now.
-    if (tagName == "text:h") {
-        readElementTextH(reader);
-    }
-    else if (tagName == "text:p") {
-        readElementTextP(reader);
-    }
-    else {
-        readUnknownElement(reader);
-    }
-
-    DEBUGEND();
-}
-
-
-void OdtReader::readElementTextH(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementTextH(reader, m_context);
-
-    // readParagraphContents expect to have the reader point to the
-    // contents of the paragraph so we have to read past the text:h
-    // start tag here.
-    reader.readNext();
-    m_context->setIsInsideParagraph(true);
-    readParagraphContents(reader);
-    m_context->setIsInsideParagraph(false);
-
-    m_backend->elementTextH(reader, m_context);
-    DEBUGEND();
-}
-
-void OdtReader::readElementTextP(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementTextP(reader, m_context);
-
-    // readParagraphContents expect to have the reader point to the
-    // contents of the paragraph so we have to read past the text:p
-    // start tag here.
-    reader.readNext();
-    m_context->setIsInsideParagraph(true);
-    readParagraphContents(reader);
-    m_context->setIsInsideParagraph(false);
-
-    m_backend->elementTextP(reader, m_context);
-    DEBUGEND();
-    DEBUG_READING("----------------------------------------------------------------");
-}
-
-
-// ----------------------------------------------------------------
-//                     Paragraph level functions
-
-
-// This function is a bit special since it doesn't handle a specific
-// element.  Instead it handles the common child elements between a
-// number of paragraph-level elements.
-//
-void OdtReader::readParagraphContents(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-
-    // We enter this function with the reader pointing to the first
-    // element *inside* the paragraph.
-    //
-    // We should not call any backend functions here.  That is already
-    // done in the functions that call this one.
-
-    while (!reader.atEnd() && !reader.isEndElement()) {
-        DEBUG_READING("loop-start");
-
-        if (reader.isCharacters()) {
-            //kDebug(30503) << "Found character data";
-            m_backend->characterData(reader, m_context);
-            reader.readNext();
-            continue;
-        }
-
-        if (!reader.isStartElement())
-            continue;
-
-        // We define the common elements on the paragraph level as the
-        // following list.  They are the basic paragraph level contents that
-        // can be found in a paragraph (text:p), heading (text:h), etc
-        //
-        // FIXME: Add a list of paragraph level elements here
-        
-        // FIXME: Only very few tags are handled right now.
-        QString tagName = reader.qualifiedName().toString();
-        if (tagName == "text:span") {
-            readElementTextSpan(reader);
-        }
-        else if (tagName == "text:s") {
-            readElementTextS(reader);
-        }
-        else {
-            readUnknownElement(reader);
-        }
-
-        // Read past the end tag of the just parsed element.
-        reader.readNext();
-        DEBUG_READING("loop-end");
-    }
-
-    DEBUGEND();
-}
-
-
-void OdtReader::readElementTextS(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementTextS(reader, m_context);
-
-    // This element has no child elements.
-    reader.skipCurrentElement();
-    m_backend->elementTextS(reader, m_context);
-    DEBUGEND();
-}
-
-void OdtReader::readElementTextSpan(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementTextSpan(reader, m_context);
-
-    reader.readNext();
-    readParagraphContents(reader);
-
-    m_backend->elementTextSpan(reader, m_context);
     DEBUGEND();
 }
 
@@ -514,6 +340,10 @@ void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
 
+#if 1
+    // FIXME: We need to handle this.
+    reader.skipCurrentElement();
+#else
     if (m_context->isInsideParagraph()) {
         // readParagraphContents expect to have the reader point to the
         // contents of the paragraph so we have to read past the text:p
@@ -526,6 +356,7 @@ void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
             readTextLevelElement(reader);
         }
     }
+#endif
 
     DEBUGEND();
 }

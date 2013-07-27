@@ -48,8 +48,7 @@ QString KexiUtils::string2Identifier(const QString &s)
     bool wasUnderscore = false;
 
     if (c >= '0' && c <= '9') {
-        r += '_';
-        r += c;
+        r += '_' + c;
     } else {
         add = char2Identifier(c);
         r += add;
