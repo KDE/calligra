@@ -2369,6 +2369,7 @@ writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
     const HeaderMCAtom* d = m.meta.get<HeaderMCAtom>();
     const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
     const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
+    out.startElement("text:meta");
     if (a) {
         out.startElement("text:page-number");
         out.endElement();
@@ -2398,6 +2399,7 @@ writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
     if (f) {
         // TODO
     }
+    out.endElement();
 }
 
 template <class T>
