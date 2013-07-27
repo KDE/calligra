@@ -47,7 +47,7 @@ public:
 
     // See parag 16.2 for all the ODF features.
     KoText::Direction direction;
-    QPointer<KoShapeBackground> fullPageBackground;
+    KoShapeBackground *fullPageBackground;
     QString nextStyleName;
 
     // called from the command
