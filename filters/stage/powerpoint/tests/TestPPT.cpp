@@ -46,7 +46,8 @@ public:
 void
 TestRun::convert(QBuffer& buffer, KoStore::Backend backend) {
     KoStore* output = KoStore::createStore(&buffer, KoStore::Write,
-                                           KoOdf::mimeType(KoOdf::Presentation), backend);
+                                           KoOdf::mimeType(KoOdf::Presentation),
+                                           backend);
     POLE::Storage storage(inputFilePath.toAscii());
     QVERIFY(storage.open());
     PptToOdp ppttoodp(0, 0);
@@ -77,9 +78,10 @@ TestRun::compareFiles(KoStore* input, const QString& path) {
     QTextStream b(created, QIODevice::ReadOnly);
     b.setCodec("UTF-8");
     while (!a.atEnd()) {
-        const QString lineA = a.readLine();
-        const QString lineB = b.readLine();
-        QVERIFY2(lineA == lineB, QString("In file " + path + ": " + lineA + " != " + lineB).toAscii());
+        const QString oldLine = a.readLine();
+        const QString newLine = b.readLine();
+        QVERIFY2(oldLine == newLine, QString("In file " + path + ": " + oldLine
+                                             + " != " + newLine).toAscii());
     }
     QVERIFY(b.atEnd());
     QVERIFY(reference.size() == created.size());
@@ -96,7 +98,8 @@ TestRun::test() {
     buffer.close();
     qDebug() << buffer.size();
     KoStore* input = KoStore::createStore(&buffer, KoStore::Read,
-                                          KoOdf::mimeType(KoOdf::Presentation), backend);
+                                          KoOdf::mimeType(KoOdf::Presentation),
+                                          backend);
     compareFiles(input, "content.xml");
     compareFiles(input, "styles.xml");
     compareFiles(input, "meta.xml");
