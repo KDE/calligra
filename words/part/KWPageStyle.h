@@ -187,10 +187,10 @@ public:
     void setDirection(KoText::Direction direction);
 
     /// Get the background.
-    QPointer<KoShapeBackground> background() const;
+    KoShapeBackground *background() const;
 
     /// set the background/
-    void setBackground(QPointer<KoShapeBackground> background);
+    void setBackground(KoShapeBackground *background);
 
     /// get the next page master style/
     QString nextStyleName() const;
