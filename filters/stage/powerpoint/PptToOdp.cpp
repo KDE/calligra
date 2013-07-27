@@ -2371,6 +2371,7 @@ writeMeta(const TextContainerMeta& m, bool master, text_meta& meta)
     const HeaderMCAtom* d = m.meta.get<HeaderMCAtom>();
     const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
     const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
+    out.startElement("text:meta");
     if (a) {
         meta.add_text_page_number();
     }
@@ -2395,6 +2396,7 @@ writeMeta(const TextContainerMeta& m, bool master, text_meta& meta)
     if (f) {
         // TODO
     }
+    out.endElement();
 }
 
 template <class T>
