@@ -175,7 +175,7 @@ public:
         }
 
         KoGradientBackground *newGradient = 0;
-        KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
+        KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background().data());
         if (oldGradient) {
             // just copy the gradient and set the new stops
             QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
@@ -421,7 +421,7 @@ void KoFillConfigWidget::gradientChanged(QPointer<KoShapeBackground>  background
 
 void KoFillConfigWidget::patternChanged(QPointer<KoShapeBackground>  background)
 {
-    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(background);
+    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(background.data());
     if (! patternBackground) {
         return;
     }
