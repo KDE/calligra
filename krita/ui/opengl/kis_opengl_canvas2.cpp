@@ -272,6 +272,7 @@ void KisOpenGLCanvas2::drawImage()
     QRect wr = widgetRectInImagePixels.toAlignedRect() &
         m_d->openGLImageTextures->storedImageBounds();
 
+    m_d->openGLImageTextures->activateHDRExposureProgram();
 
     makeCurrent();
 
@@ -286,9 +287,6 @@ void KisOpenGLCanvas2::drawImage()
             KisTextureTile *tile =
                 m_d->openGLImageTextures->getTextureTileCR(col, row);
 
-            m_d->openGLImageTextures->activateHDRExposureProgram();
-
-            glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
             if(scaleX > 2.0) {

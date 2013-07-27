@@ -44,8 +44,7 @@ public:
     void filter(quint8 *src, quint8 *dst, quint32 numPixels);
 
 #ifdef HAVE_OPENGL
-    virtual GLuint program() const;
-    virtual GLuint lut3dTexID() const { return m_lut3dTexID; }
+    virtual GLuint program();
 #endif
 
     void updateProcessor();
