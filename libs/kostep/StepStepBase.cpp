@@ -21,6 +21,11 @@
 #include "StepStepBase.h"
 #include "StepStepBase_p.h"
 #include "StepStepLocation.h"
+void
+StepStepBase::temp ()
+{
+
+}
 StepStepBase::StepStepBase(QObject *parent):
     QObject(parent),d(new StepStepBasePrivate())
 {
@@ -34,7 +39,8 @@ StepStepBase::~StepStepBase()
     delete d;
   }
 }
-StepStepBase::StepStepBase(const StepStepBase& other): QObject()
+StepStepBase::StepStepBase(const StepStepBase& other): QObject(),
+d(new StepStepBasePrivate(other.d->type, other.d->position,other.d->isForeign))
 {
 
 }
@@ -78,12 +84,12 @@ void StepStepBase::setPosition(int position)
   d->position = position;
 
 }
-QString StepStepBase::Step()
+QString StepStepBase::stepText()
 {
   return d->step;
 }
 
-void StepStepBase::setStep (QString text)
+void StepStepBase::setStepText (QString text)
 {
   d->step = text;
 }
@@ -102,7 +108,7 @@ QString StepStepBase::Type()
 
 }
 
-StepStepLocation StepStepBase::Location()
+StepStepLocation StepStepBase::location()
 {
   return d->location;
 }
@@ -111,3 +117,5 @@ void StepStepBase::setLocation(StepStepLocation& location)
   d->location = location;
 
 }
+
+

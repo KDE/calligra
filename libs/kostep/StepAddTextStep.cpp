@@ -28,7 +28,7 @@ StepAddTextStep::StepAddTextStep (QObject * parent):StepStepBase (parent), d(new
 StepAddTextStep::StepAddTextStep (QString text, QObject * parent):StepStepBase
   ("Add Text",parent), d(new StepAddTextStepPrivate())
 {
-  setStep(text);
+  setStepText(text);
 }
 
 
@@ -44,11 +44,11 @@ StepAddTextStepPrivate::~StepAddTextStepPrivate ()
 
 QString StepAddTextStep::toXML ()
 {
-  Step();
+  stepText();
   qDebug("2.5");
-  Location().toString();
+  location().toString();
   qDebug("2.4.5");
-  QString string ="<add type=\"text\" " + Location().toString()+" >" + Step() + " </add>";
+  QString string ="<add type=\"text\" " + location().toString()+" >" + stepText() + " </add>";
   qDebug("2.5.5");
   return string;
 

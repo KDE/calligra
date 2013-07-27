@@ -32,17 +32,17 @@ class KOSTEP_EXPORT StepStepBase : public QObject
     Q_OBJECT
 
     //Basic Properties of a step, allows for usage in QML
-    Q_PROPERTY(bool Foreign READ Foreign WRITE setForeign)
+    /*Q_PROPERTY(bool Foreign READ Foreign WRITE setForeign)
     Q_PROPERTY(int Position READ Position WRITE setPosition)
-    Q_PROPERTY(QString Step READ Step)
+    Q_PROPERTY(QString StepText READ stepText)
     Q_PROPERTY(QString Type READ Type)
-    Q_PROPERTY(StepStepLocation Location READ Location)
+    Q_PROPERTY(StepStepLocation Location READ location)*/
 
 public:
     StepStepBase(QObject *parent =0);
     StepStepBase(const StepStepBase& other);
     StepStepBase(QString type, QObject *parent =0, int position =0, bool isForeign= false);
-
+void temp();
     virtual ~StepStepBase();
     virtual StepStepBase& operator=(const StepStepBase& other);
     virtual bool operator==(StepStepBase& other);
@@ -68,20 +68,21 @@ public:
     //The Location Property gives a structured location within the
     //document that can be translated to and from a QTextCursor
     //Potentially deprecates Position()
-    StepStepLocation Location();
+    StepStepLocation location();
     virtual void setLocation(StepStepLocation & location);
 
 
-    //The Step Property holds the text of the change so say I've got the word
+    //The stepText Property holds the text of the change so say I've got the word
     //Dog and I make it Dogs, Step would hold an "s"
     //NOTE: May be later moved out into a StepTextStep class which textual changes
     //will derive from
-    virtual QString Step();
-    virtual void setStep(QString text);
+    virtual QString stepText();
+    virtual void setStepText(QString text);
 
     //The Type Property Returns the Type of Operation that the step is as a QString
     //mostly useful for equality testing and serialization/deserialization
     virtual QString Type();
+
 
 private:
 

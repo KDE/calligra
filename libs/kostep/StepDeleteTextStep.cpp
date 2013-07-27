@@ -39,7 +39,7 @@ StepDeleteTextStep::StepDeleteTextStep (QObject * parent):StepStepBase ("Delete 
 StepDeleteTextStep::StepDeleteTextStep (QString Text, QObject * parent):d (new
    StepDeleteTextStepPrivate (this)), StepStepBase("Delete Text",parent)
 {
-  setStep(Text);
+  setStepText(Text);
 
 }
 
@@ -58,8 +58,8 @@ StepDeleteTextStep::~StepDeleteTextStep ()
 
 QString StepDeleteTextStep::toXML ()
 {
-  QString end = Location().toString().remove(1,Location().toString().length()-1);
-  int length = Step().length();
+  QString end = location().toString().remove(1,location().toString().length()-1);
+  int length = stepText().length();
   end += length;
-  return "<del "+Location().toString() + " " + end + " />" ;
+  return "<del "+location().toString() + " " + end + " />" ;
 }

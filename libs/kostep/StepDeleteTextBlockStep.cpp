@@ -56,6 +56,6 @@ StepDeleteTextBlockStep::~StepDeleteTextBlockStep ()
 
 QString StepDeleteTextBlockStep::toXML ()
 {
-  return "<del type=\"paragraph\" " + Location().toString() + " />";
+  return "<del type=\"paragraph\" " + location().toString() + " />";
 
 }

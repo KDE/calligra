@@ -48,7 +48,7 @@ StepStepLocation* StepStepLocation::operator=(const StepStepLocation& location)
   return this;
 
 }
-StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject()
+StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject(),d(new StepStepLocationPrivate())
 {
   d->location = locate.d->location;
 
