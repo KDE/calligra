@@ -26,6 +26,9 @@
 #include <KoAnnotation.h>
 #include <KoShapeController.h>
 #include "KoShapeBasedDocumentBase.h"
+#include <KoCanvasResourceManager.h>
+#include <KoTextRangeManager.h>
+#include <KoAnnotationManager.h>
 
 #include <dialogs/SimpleSpellCheckingWidget.h>
 #include <dialogs/SimpleAnnotationWidget.h>
@@ -79,14 +82,32 @@ void ReviewTool::mouseMoveEvent(KoPointerEvent* event)
 }
 void ReviewTool::mousePressEvent(KoPointerEvent* event)
 {
-    KoShape *annotation = canvas()->shapeManager()->shapeAt(event->point);
-    if (annotation) {
-        if (annotation->shapeId() == AnnotationShape_SHAPEID) {
-            m_currentShape = annotation;
+    KoShape *annotationShape = canvas()->shapeManager()->shapeAt(event->point);
+    if (annotationShape) {
+        if (annotationShape->shapeId() == AnnotationShape_SHAPEID) {
+            KoCanvasResourceManager *rm = canvas()->resourceManager();
+            const KoAnnotationManager *annotationManager = textEditor()->textRangeManager()->annotationManager();
+            m_currentAnnotationShape = annotationShape;
+            foreach (QString name, annotationManager->annotationNameList()) {
+                KoAnnotation *annotation = annotationManager->annotation(name);
+                if(annotation->annotationShape() == m_currentAnnotationShape) {
+                    if ((annotation->positionOnlyMode() == false) && annotation->hasRange()) {
+                        rm->clearResource(KoText::SelectedTextPosition);
+                        rm->clearResource(KoText::SelectedTextAnchor);
+                    }
+                    if (annotation->positionOnlyMode()) {
+                        rm->setResource(KoText::CurrentTextPosition, annotation->rangeStart());
+                        rm->setResource(KoText::CurrentTextAnchor, annotation->rangeStart());
+                    } else {
+                        rm->setResource(KoText::CurrentTextPosition, annotation->rangeStart());
+                        rm->setResource(KoText::CurrentTextAnchor, annotation->rangeEnd());
+                    }
+                    break;
+                }
+            }
             return;
         }
     }
-
     TextTool::mousePressEvent(event);
 }
 void ReviewTool::keyPressEvent(QKeyEvent* event)
@@ -127,8 +148,8 @@ void ReviewTool::insertAnnotation()
 
 void ReviewTool::removeAnnotation()
 {
-    if (m_currentShape) {
-        m_canvas->shapeManager()->remove(m_currentShape);
-        m_currentShape = 0;
+    if (m_currentAnnotationShape) {
+        m_canvas->shapeManager()->remove(m_currentAnnotationShape);
+        m_currentAnnotationShape = 0;
     }
 }

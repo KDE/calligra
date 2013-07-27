@@ -484,6 +484,10 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
 
     return bookmark;
 }
+KoTextRangeManager *KoTextEditor::textRangeManager()
+{
+    return KoTextDocument(d->document).textRangeManager();
+}
 
 KoAnnotation *KoTextEditor::addAnnotation()
 {
@@ -492,6 +496,10 @@ KoAnnotation *KoTextEditor::addAnnotation()
     KoAnnotation *annotation = new KoAnnotation(d->caret);
     KoTextRangeManager *textRangeManager = KoTextDocument(d->document).textRangeManager();
     annotation->setManager(textRangeManager);
+    //FIXME: I need the name, a unique name, we can set selected text as annotation name or use createUniqueAnnotationName function
+    // to do it for us.
+    QString name = annotation->createUniqueAnnotationName(textRangeManager->annotationManager(), "", false);
+    annotation->setName(name);
     addCommand(new AddTextRangeCommand(annotation, topCommand));
 
     endEditBlock();
