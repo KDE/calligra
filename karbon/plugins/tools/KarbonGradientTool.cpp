@@ -147,10 +147,10 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
 
         if (target == KarbonGradientEditWidget::FillGradient) {
             // target is fill so check the background style
-            if (! dynamic_cast<KoGradientBackground*>(shape->background().data())) {
-                QPointer<KoGradientBackground>  fill = new KoGradientBackground(*m_gradient);
-                m_currentCmd = new KoShapeBackgroundCommand(shape, fill.data());
-                shape->setBackground(fill.data());
+            if (! dynamic_cast<KoGradientBackground*>(shape->background())) {
+                KoGradientBackground * fill = new KoGradientBackground(*m_gradient);
+                m_currentCmd = new KoShapeBackgroundCommand(shape, fill);
+                shape->setBackground(fill);
                 newStrategy = createStrategy(shape, m_gradient, GradientStrategy::Fill);
             }
         } else {
@@ -356,7 +356,7 @@ void KarbonGradientTool::initialize()
         }
         // is the gradient a fill gradient but shape has no fill gradient anymore ?
         if (strategy->target() == GradientStrategy::Fill) {
-            QPointer<KoGradientBackground>  fill = dynamic_cast<KoGradientBackground*>(strategy->shape()->background().data());
+            KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(strategy->shape()->background());
             if (! fill || ! fill->gradient() || fill->gradient()->type() != strategy->type()) {
                 // delete the gradient
                 m_strategies.remove(strategy->shape(), strategy);
@@ -400,7 +400,7 @@ void KarbonGradientTool::initialize()
         }
 
         if (! fillExists) {
-            QPointer<KoGradientBackground>  fill = dynamic_cast<KoGradientBackground*>(shape->background().data());
+            KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(shape->background());
             if (fill) {
                 GradientStrategy * fillStrategy = createStrategy(shape, fill->gradient(), GradientStrategy::Fill);
                 if (fillStrategy) {
@@ -537,10 +537,10 @@ void KarbonGradientTool::gradientChanged()
     QGradientStops stops = m_gradientWidget->stops();
 
     if (m_gradientWidget->target() == KarbonGradientEditWidget::FillGradient) {
-        QList<QPointer<KoShapeBackground> > newFills;
+        QList<KoShapeBackground*> newFills;
         foreach(KoShape * shape, selectedShapes) {
-            QPointer<KoGradientBackground>  newFill = 0;
-            QPointer<KoGradientBackground>  oldFill = dynamic_cast<KoGradientBackground*>(shape->background().data());
+            KoGradientBackground * newFill = 0;
+            KoGradientBackground * oldFill = dynamic_cast<KoGradientBackground*>(shape->background());
             if (oldFill) {
                 QGradient * g = KarbonGradientHelper::convertGradient(oldFill->gradient(), type);
                 g->setSpread(spread);
@@ -551,7 +551,7 @@ void KarbonGradientTool::gradientChanged()
                 QGradient * g = KarbonGradientHelper::defaultGradient(type, spread, stops);
                 newFill = new KoGradientBackground(g);
             }
-            newFills.append(newFill.data());
+            newFills.append(newFill);
         }
         canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, newFills));
     } else {

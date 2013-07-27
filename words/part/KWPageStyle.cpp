@@ -36,6 +36,9 @@
 
 KWPageStylePrivate::~KWPageStylePrivate()
 {
+    if (fullPageBackground && !fullPageBackground->deref()) {
+        delete fullPageBackground;
+    }
 }
 
 void KWPageStylePrivate::clear()
@@ -52,6 +55,10 @@ void KWPageStylePrivate::clear()
     direction = KoText::AutoDirection;
     headerDynamicSpacing = false;
     footerDynamicSpacing = false;
+
+    if (fullPageBackground && !fullPageBackground->deref()) {
+        delete fullPageBackground;
+    }
     fullPageBackground = 0;
     nextStyleName.clear();
 }
@@ -216,14 +223,20 @@ QString KWPageStyle::displayName() const
     return d->displayName;
 }
 
-QPointer<KoShapeBackground> KWPageStyle::background() const
+KoShapeBackground *KWPageStyle::background() const
 {
     return d->fullPageBackground;
 }
 
-void KWPageStyle::setBackground(QPointer<KoShapeBackground> background)
+void KWPageStyle::setBackground(KoShapeBackground *background)
 {
+    if (d->fullPageBackground) {
+        if (!d->fullPageBackground->deref())
+            delete d->fullPageBackground;
+    }
     d->fullPageBackground = background;
+    if (d->fullPageBackground)
+        d->fullPageBackground->ref();
 }
 
 KoGenStyle KWPageStyle::saveOdf() const
@@ -337,8 +350,9 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     if (!propBackgroundImage.isNull()) {
         const QString href = propBackgroundImage.attributeNS(KoXmlNS::xlink, "href", QString());
         if (!href.isEmpty()) {
-            QPointer<KoPatternBackground> background = new KoPatternBackground(documentResources->imageCollection());
+            KoPatternBackground *background = new KoPatternBackground(documentResources->imageCollection());
             d->fullPageBackground = background;
+            d->fullPageBackground->ref();
 
             KoImageCollection *imageCollection = documentResources->imageCollection();
             if (imageCollection != 0) {
@@ -358,6 +372,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
         }
         else {
             d->fullPageBackground = new KoColorBackground(QColor(backgroundColor));
+            d->fullPageBackground->ref();
         }
     }
 
@@ -418,6 +433,8 @@ uint qHash(const KWPageStyle &style)
 
 void KWPageStyle::detach(const QString &newName, const QString &displayName)
 {
+    if (d->fullPageBackground)
+        d->fullPageBackground->ref();
     d.detach();
     d->name = newName;
     d->displayName = displayName;
