@@ -459,14 +459,17 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
     // need to unstretch row/column that have previously been stretched
     layout->setRowStretch(layout->rowCount()-1, 0);
     layout->setRowStretch(layout->columnCount()-1, 0);
-    layout->setColumnStretch(0, 1);
-    layout->setColumnStretch(2, 1);
-    layout->setRowStretch(1, 1);
-    layout->setRowStretch(3, 1);
+    layout->setColumnStretch(0, 0);
+    layout->setColumnStretch(1, 0);
+    layout->setColumnStretch(2, 0);
+    layout->setRowStretch(0, 0);
+    layout->setRowStretch(1, 0);
+    layout->setRowStretch(2, 0);
 
     if (d->horizontalMode) {
-        layout->setColumnStretch(1, 1);
+        layout->setRowStretch(0, 1);
         layout->setRowStretch(1, 2);
+        layout->setRowStretch(2, 1);
         layout->setHorizontalSpacing(2);
         layout->setVerticalSpacing(0);
         foreach(QWidget *widget, optionWidgetList) {
@@ -488,8 +491,9 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
             layout->setColumnStretch(cnt, 100);
         }
     } else {
+        layout->setColumnStretch(0, 1);
         layout->setColumnStretch(1, 2);
-        layout->setRowStretch(1, 1);
+        layout->setColumnStretch(2, 1);
         layout->setHorizontalSpacing(0);
         layout->setVerticalSpacing(2);
         int specialCount = 0;
