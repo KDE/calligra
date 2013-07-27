@@ -152,19 +152,19 @@
 </draw:frame><draw:frame presentation:style-name="A3" presentation:placeholder="true" presentation:class="date-time" draw:layer="layout" svg:x="12.7mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="59.266667mm">
  <draw:text-box>
   <text:p text:style-name="P3">
-   <text:span text:style-name="T3"><presentation:date-time/></text:span>
+   <text:span text:style-name="T3"><text:meta><presentation:date-time/></text:meta></text:span>
   </text:p>
  </draw:text-box>
 </draw:frame><draw:frame presentation:style-name="A4" presentation:placeholder="true" presentation:class="footer" draw:layer="layout" svg:x="86.783333mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="80.433333mm">
  <draw:text-box>
   <text:p text:style-name="P1">
-   <text:span text:style-name="T3"><presentation:footer/></text:span>
+   <text:span text:style-name="T3"><text:meta><presentation:footer/></text:meta></text:span>
   </text:p>
  </draw:text-box>
 </draw:frame><draw:frame presentation:style-name="A5" presentation:placeholder="true" presentation:class="page-number" draw:layer="layout" svg:x="182.033333mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="59.266667mm">
  <draw:text-box>
   <text:p text:style-name="P4">
-   <text:span text:style-name="T3"><text:page-number/></text:span>
+   <text:span text:style-name="T3"><text:meta><text:page-number/></text:meta></text:span>
   </text:p>
  </draw:text-box>
 </draw:frame>
