@@ -87,6 +87,7 @@ void StepStepStack::push(StepStepBase & step)
     qDebug("Finished");
     //qDebug(toString());
 #endif
+    d->serialize(step, "changes.xml");
 
 }
 

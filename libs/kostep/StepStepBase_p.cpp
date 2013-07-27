@@ -57,6 +57,7 @@ QString StepStepBasePrivate::toString()
 }
 QString StepStepBasePrivate::toXML()
 {
+  qDebug("Not supposed to be here");
   QString string = (QString)"";
   return string;
 }

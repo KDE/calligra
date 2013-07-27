@@ -27,9 +27,7 @@ StepStepLocation::StepStepLocation(QObject *parent) :
 StepStepLocation::StepStepLocation(QTextCursor cursor, QObject *parent):
     QObject(parent), d(new StepStepLocationPrivate())
 {
-  qDebug("entering Constructor");
   d->constructor(cursor);
-  qDebug("Leaving constructor");
 }
 StepStepLocation::~StepStepLocation()
 {
@@ -58,6 +56,9 @@ StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject()
 
 QString StepStepLocation::toString ()
 {
-  return d->ToString();
+  QString* string = new QString(d->ToString());
+  qDebug("2.5.4");
+  qDebug(string->toLatin1());
+  return *string;
 
 }

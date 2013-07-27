@@ -21,6 +21,8 @@
 #include "StepStepBase.h"
 #include <QtCore/QFile>
 #include <QtCore/QVariant>
+#include <QDir>
+#include <QDebug>
 
 StepStepStackPrivate::StepStepStackPrivate()
 {
@@ -102,9 +104,26 @@ void StepStepStackPrivate::serialize(QString Filename)
         steps += ptr.toXML();
     }
     file.write(steps.toLatin1());
-
-
+    file.close();
 }
+
+void StepStepStackPrivate::serialize (StepStepBase & step, QString Filename)
+{
+  qDebug("1");
+  QDir directory;
+
+  QString Location = directory.homePath() +"/" + Filename;
+  QFile file(Filename);
+  file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text);
+  qDebug("2");
+  step.toXML();
+  qDebug("2.6");
+
+  file.write(step.toXML().toAscii());
+  qDebug("3");
+  file.close();
+}
+
 void StepStepStackPrivate::deserialize(QString Filename)
 {
 

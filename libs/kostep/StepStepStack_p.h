@@ -34,6 +34,7 @@ public:
     StepStepBase top();
     void push(StepStepBase& step);
     void serialize(QString Filename);
+    void serialize(StepStepBase& step, QString Filename);
     void deserialize(QString Filename);
     void insertAt(int i, StepStepBase step);
     void removeAt(int i);
