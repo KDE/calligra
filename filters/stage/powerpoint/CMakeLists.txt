@@ -17,10 +17,10 @@ target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
 kde4_add_executable(ppttoodp ppttoodpmain.cpp)
 target_link_libraries(ppttoodp ppttoodplib)
 
-kde4_add_plugin(powerpointimport PowerPointImport.cpp)
-target_link_libraries(powerpointimport ppttoodplib komain)
+kde4_add_plugin(calligra_filter_ppt2odp PowerPointImport.cpp)
+target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 
-install(TARGETS powerpointimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_ppt2odp  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kpresenter_powerpoint_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)

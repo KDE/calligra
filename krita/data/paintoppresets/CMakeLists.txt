@@ -6,6 +6,10 @@ Basic_erase_soft.kpp
 Basic_ink_05.kpp
 Basic_ink_10.kpp
 Basic_ink_ballpen.kpp
+Basic_ink_brush_25.kpp
+Basic_ink_gpen_10.kpp
+Basic_ink_gpen_25.kpp
+Basic_ink_pen_03.kpp
 Basic_ink_tilt_10.kpp
 Basic_ink_tilt_20.kpp
 Basic_mix.kpp
@@ -32,6 +36,7 @@ Basic_tip_soft.kpp
 Block_mix_tilt.kpp
 Block_paint.kpp
 Block_paint_dirty_square.kpp
+Block_paint_fuzzy.kpp
 Block_paint_squary.kpp
 Block_paint_tilt.kpp
 Block_smudge_tilt.kpp
@@ -94,10 +99,14 @@ Splat_paint_texture.kpp
 Splat_paint_texture_2.kpp
 Spray_splat.kpp
 Texture_dirty.kpp
+Texture_fuzzy.kpp
 Texture_hair.kpp
+Texture_leaves_fuzzy.kpp
 Texture_mix_over_structure.kpp
 Texture_paint_chalk.kpp
+Texture_paint_dirty.kpp
 Texture_paint_floor.kpp
+Texture_paint_fuzzy.kpp
 Texture_paint_noisy_big.kpp
 Texture_paint_noisy_cells.kpp
 Texture_paint_trees.kpp

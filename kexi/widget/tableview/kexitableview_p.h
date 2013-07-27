@@ -74,8 +74,8 @@ public:
 
     KexiTableView *tv;
 
-    //! editors: one for each column (indexed by KexiTableViewColumn)
-    QHash<KexiTableViewColumn*, KexiTableEdit*> editors;
+    //! editors: one for each column (indexed by KexiDB::TableViewColumn)
+    QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
 
     int rowHeight;
 

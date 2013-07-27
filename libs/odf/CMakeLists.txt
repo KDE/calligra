@@ -50,24 +50,7 @@ set(koodf_LIB_SRCS
     KoOdfBibliographyConfiguration.cpp
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
-    KoCell.cpp
-    KoCellChild.cpp
-    KoCellValue.cpp
-    KoDummyCellValue.cpp
-    KoCellStyle.cpp
-    KoColumn.cpp
-    KoRawCellChild.cpp
-    KoRow.cpp
-    KoStyle.cpp
-    KoTable.cpp
-    KoColumnStyle.cpp
-    KoRowStyle.cpp
-    KoTblStyle.cpp
     KoElementReference.cpp
-
-    styles/KoOdfStyle.cpp
-    styles/KoOdfStyleProperties.cpp
-    styles/KoOdfStyleManager.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
@@ -125,5 +108,4 @@ install( FILES
     KoUnit.h
     KoElementReference.h
     KoTableTemplate.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

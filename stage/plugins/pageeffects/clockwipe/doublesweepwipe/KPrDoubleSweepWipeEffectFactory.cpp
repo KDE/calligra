@@ -45,7 +45,7 @@ KPrDoubleSweepWipeEffectFactory::~KPrDoubleSweepWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Parallel Vertical" ),
     I18N_NOOP( "Parallel Diagonal" ),
     I18N_NOOP( "Opposite Vertical" ),

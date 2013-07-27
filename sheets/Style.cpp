@@ -215,10 +215,13 @@ void Style::loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& el
     // NOTE Stefan: Do not fill the style stack with the parent styles!
     KoStyleStack styleStack;
     styleStack.push(element);
+
     styleStack.setTypeProperties("table-cell");
     loadOdfTableCellProperties(stylesReader, styleStack);
+
     styleStack.setTypeProperties("text");
     loadOdfTextProperties(stylesReader, styleStack);
+
     styleStack.setTypeProperties("paragraph");
     loadOdfParagraphProperties(stylesReader, styleStack);
 
@@ -372,6 +375,11 @@ void Style::loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const Ko
             setHAlign(Style::HAlignUndefined);
         kDebug(36003) << "\t\t text-align:" << str;
     }
+
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin-left")) {
+        //todo fix me
+        setIndentation(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"), 0.0));
+    }
 }
 
 void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack)
@@ -446,10 +454,6 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
         if (a != 0) {
             setAngle(-a);
         }
-    }
-    if (styleStack.hasProperty(KoXmlNS::fo, "margin-left")) {
-        //todo fix me
-        setIndentation(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"), 0.0));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border")) {
         str = styleStack.property(KoXmlNS::fo, "border");

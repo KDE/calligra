@@ -2,6 +2,7 @@
    Copyright 2009 Vera Lukman <shicmap@gmail.com>
    Copyright 2011 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+   Copyright 2013 Sascha Suelzer <s_suelzer@lavabit.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,12 +40,10 @@
 #include <KoID.h>
 #include <kglobal.h>
 #include "kis_paintop_box.h"
-#include "KoID.h"
 #include "KoInputDevice.h"
 #include "kis_image.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_registry.h"
-#include "kis_paintop_settings_widget.h"
 #include "kis_shared_ptr.h"
 #include "ko_favorite_resource_manager.h"
 #include "KoResourceModel.h"
@@ -67,14 +66,12 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     m_allPresetsView = new KisPresetChooser(this);
     m_allPresetsView->showButtons(false);
     m_allPresetsView->showTaggingBar(false,false);
-    m_allPresetsView->setPresetFilter(KoID("dummy",""));
-    m_allPresetsView->setShowAll(true);
+    m_allPresetsView->enableContextMenu(false);
 
     m_palettePresetsView = new KisPresetChooser(this);
     m_palettePresetsView->showButtons(false);
     m_palettePresetsView->showTaggingBar(false,false);
-    m_palettePresetsView->setPresetFilter(KoID("dummy",""));
-    m_palettePresetsView->setShowAll(true);
+    m_palettePresetsView->enableContextMenu(false);
 
     /*LEFT COMPONENTS*/
     QFrame *HSeparator = new QFrame();
@@ -211,7 +208,12 @@ void KisPaletteManager::showEvent(QShowEvent* e)
 
 void KisPaletteManager::updatePaletteView()
 {
-    m_palettePresetsView->setFilteredNames(m_resourceManager->favoritePresetList());
+    QStringList faves = m_resourceManager->favoritePresetList();
+    QStringList out;
+    foreach(const QString &fav, faves){
+        out.append(QString("\"%1\"").arg(fav));
+    }
+    m_palettePresetsView->filterPaletteFavorites(out);
 }
 
 void KisPaletteManager::slotThumbnailMode()

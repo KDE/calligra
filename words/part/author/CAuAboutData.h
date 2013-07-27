@@ -25,8 +25,8 @@
 #include <klocale.h>
 #include <calligraversion.h>
 
-static const char* AUTHOR_DESCRIPTION = I18N_NOOP("Author tool");
-static const char* AUTHOR_VERSION = CALLIGRA_VERSION_STRING;
+static const char AUTHOR_DESCRIPTION[] = I18N_NOOP("Author tool");
+static const char AUTHOR_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newAuthorAboutData()
 {

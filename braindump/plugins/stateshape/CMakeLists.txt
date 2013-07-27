@@ -18,15 +18,15 @@ kde4_add_ui_files( stateshape_LIB_SRCS
     StateShapeConfigWidget.ui
 )
 
-kde4_add_plugin(stateshape ${stateshape_LIB_SRCS})
+kde4_add_plugin(braindump_shape_state ${stateshape_LIB_SRCS})
 
 target_link_libraries(
-    stateshape
+    braindump_shape_state
     flake
     ${QT_QTCORE_LIBRARY}
     braindumpcore
     )
-install(TARGETS stateshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS braindump_shape_state DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

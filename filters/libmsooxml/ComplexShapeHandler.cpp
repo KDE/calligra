@@ -27,30 +27,31 @@
 
 QString ComplexShapeHandler::defaultEquations()
 {
-    QString eqs = "<draw:equation draw:name=\"width\" draw:formula=\"width\"/>";
-    eqs += "<draw:equation draw:name=\"height\" draw:formula=\"height\"/>";
-    eqs += "<draw:equation draw:name=\"vc\" draw:formula=\"height/2\"/>";
-    eqs += "<draw:equation draw:name=\"hc\" draw:formula=\"width/2\"/>";
-    eqs += "<draw:equation draw:name=\"hd2\" draw:formula=\"height/2\"/>";
+    QString eqs = QLatin1String(
+            "<draw:equation draw:name=\"width\" draw:formula=\"width\"/>"
+            "<draw:equation draw:name=\"height\" draw:formula=\"height\"/>"
+            "<draw:equation draw:name=\"vc\" draw:formula=\"height/2\"/>"
+            "<draw:equation draw:name=\"hc\" draw:formula=\"width/2\"/>"
+            "<draw:equation draw:name=\"hd2\" draw:formula=\"height/2\"/>"
     // Note, this is not defined, but is used
-    eqs += "<draw:equation draw:name=\"hd3\" draw:formula=\"height/3\"/>";
-    eqs += "<draw:equation draw:name=\"hd4\" draw:formula=\"height/4\"/>";
-    eqs += "<draw:equation draw:name=\"hd5\" draw:formula=\"height/5\"/>";
-    eqs += "<draw:equation draw:name=\"hd6\" draw:formula=\"height/6\"/>";
-    eqs += "<draw:equation draw:name=\"hd8\" draw:formula=\"height/8\"/>";
-    eqs += "<draw:equation draw:name=\"ss\" draw:formula=\"min(width,height)\"/>";
-    eqs += "<draw:equation draw:name=\"wd2\" draw:formula=\"width/2\"/>";
-    eqs += "<draw:equation draw:name=\"wd3\" draw:formula=\"width/3\"/>";
-    eqs += "<draw:equation draw:name=\"wd4\" draw:formula=\"width/4\"/>";
-    eqs += "<draw:equation draw:name=\"wd5\" draw:formula=\"width/5\"/>";
-    eqs += "<draw:equation draw:name=\"wd6\" draw:formula=\"width/6\"/>";
-    eqs += "<draw:equation draw:name=\"wd8\" draw:formula=\"width/8\"/>";
-    eqs += "<draw:equation draw:name=\"wd10\" draw:formula=\"width/10\"/>";
-    eqs += "<draw:equation draw:name=\"ls\" draw:formula=\"max(width,height)\"/>";
-    eqs += "<draw:equation draw:name=\"ssd2\" draw:formula=\"?ss/2\"/>";
-    eqs += "<draw:equation draw:name=\"ssd4\" draw:formula=\"?ss/4\"/>";
-    eqs += "<draw:equation draw:name=\"ssd6\" draw:formula=\"?ss/6\"/>";
-    eqs += "<draw:equation draw:name=\"ssd8\" draw:formula=\"?ss/8\"/>";
+            "<draw:equation draw:name=\"hd3\" draw:formula=\"height/3\"/>"
+            "<draw:equation draw:name=\"hd4\" draw:formula=\"height/4\"/>"
+            "<draw:equation draw:name=\"hd5\" draw:formula=\"height/5\"/>"
+            "<draw:equation draw:name=\"hd6\" draw:formula=\"height/6\"/>"
+            "<draw:equation draw:name=\"hd8\" draw:formula=\"height/8\"/>"
+            "<draw:equation draw:name=\"ss\" draw:formula=\"min(width,height)\"/>"
+            "<draw:equation draw:name=\"wd2\" draw:formula=\"width/2\"/>"
+            "<draw:equation draw:name=\"wd3\" draw:formula=\"width/3\"/>"
+            "<draw:equation draw:name=\"wd4\" draw:formula=\"width/4\"/>"
+            "<draw:equation draw:name=\"wd5\" draw:formula=\"width/5\"/>"
+            "<draw:equation draw:name=\"wd6\" draw:formula=\"width/6\"/>"
+            "<draw:equation draw:name=\"wd8\" draw:formula=\"width/8\"/>"
+            "<draw:equation draw:name=\"wd10\" draw:formula=\"width/10\"/>"
+            "<draw:equation draw:name=\"ls\" draw:formula=\"max(width,height)\"/>"
+            "<draw:equation draw:name=\"ssd2\" draw:formula=\"?ss/2\"/>"
+            "<draw:equation draw:name=\"ssd4\" draw:formula=\"?ss/4\"/>"
+            "<draw:equation draw:name=\"ssd6\" draw:formula=\"?ss/6\"/>"
+            "<draw:equation draw:name=\"ssd8\" draw:formula=\"?ss/8\"/>");
 
     return eqs;
 }
@@ -612,7 +613,7 @@ QString ComplexShapeHandler::handle_pathLst(QXmlStreamReader* reader)
     QString returnString;
 
     pathEquationIndex = 0;
-    pathEquations = "";
+    pathEquations.clear();
 
     while (!reader->atEnd()) {
         reader->readNext();

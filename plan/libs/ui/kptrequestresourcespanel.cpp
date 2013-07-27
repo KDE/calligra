@@ -49,7 +49,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Project &project, 
     m_view->expandAll();
     m_view->masterView()->header()->resizeSections( QHeaderView::ResizeToContents );
 
-    connect( m_view, SIGNAL( dataChanged() ), SIGNAL( changed() ) );
+    connect( m_view, SIGNAL(dataChanged()), SIGNAL(changed()) );
 }
 
 bool RequestResourcesPanel::ok()

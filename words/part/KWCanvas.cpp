@@ -40,6 +40,7 @@
 
 // KDE + Qt includes
 #include <kdebug.h>
+#include <kstatusbar.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
@@ -96,6 +97,7 @@ void KWCanvas::contextMenuEvent(QContextMenuEvent *e)
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
+    m_view->viewMouseMoveEvent(e);
     m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
@@ -139,7 +141,10 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
             m_view->goToPreviousPage(e->modifiers());
         else if (e->key() == Qt::Key_PageDown)
             m_view->goToNextPage(e->modifiers());
-    }
+         }
+    if(e->key() == Qt::Key_Escape)
+        m_view->exitDistractioFreeMode();
+
 }
 
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const

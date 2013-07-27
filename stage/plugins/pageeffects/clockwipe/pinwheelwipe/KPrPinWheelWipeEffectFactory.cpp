@@ -39,7 +39,7 @@ KPrPinWheelWipeEffectFactory::~KPrPinWheelWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Two Blades Vertical Clockwise" ),
     I18N_NOOP( "Two Blades Horizontal Clockwise" ),
     I18N_NOOP( "Four Blades Horizontal Clockwise" ),

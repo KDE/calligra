@@ -89,7 +89,6 @@
 #include "kis_factory2.h"
 #include "kis_view2.h"
 #include "kis_clipboard.h"
-#include "kis_config.h"
 #include "widgets/kis_custom_image_widget.h"
 #include "canvas/kis_canvas2.h"
 #include "flake/kis_shape_controller.h"
@@ -102,7 +101,7 @@
 #include "kis_node_manager.h"
 #include "kis_part2.h"
 
-static const char *CURRENT_DTD_VERSION = "2.0";
+static const char CURRENT_DTD_VERSION[] = "2.0";
 
 /**
  * Mime type for this app - not same as file type, but file types
@@ -141,18 +140,15 @@ public:
 
     QList<KisPaintingAssistant*> assistants;
 
-    KisPart2 *part; // XXX: we shouldn't know about the part here!
-
     QString flipbook;
 };
 
 
-KisDoc2::KisDoc2(KoPart *parent)
-    : KoDocument(parent, new UndoStack(this))
+KisDoc2::KisDoc2()
+    : KoDocument(new KisPart2, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
-    m_d->part = qobject_cast<KisPart2*>(parent);
-
+    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
 
@@ -373,7 +369,7 @@ bool KisDoc2::newImage(const QString& name,
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     if (name != i18n("unnamed") && !name.isEmpty()) {
-        setUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + "/" + name + ".kra");
+        setUrl(KUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("comments", description);
 
@@ -429,7 +425,7 @@ KoShapeLayer* KisDoc2::shapeForNode(KisNodeSP layer) const
 vKisNodeSP KisDoc2::activeNodes() const
 {
     vKisNodeSP nodes;
-    foreach(KoView *v, m_d->part->views()) {
+    foreach(KoView *v, documentPart()->views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisNodeSP activeNode = view->activeNode();
@@ -447,7 +443,7 @@ vKisNodeSP KisDoc2::activeNodes() const
 QList<KisPaintingAssistant*> KisDoc2::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KoView *v, m_d->part->views()) {
+    foreach(KoView *v, documentPart()->views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
             KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();

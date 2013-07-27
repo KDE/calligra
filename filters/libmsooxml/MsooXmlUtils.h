@@ -26,7 +26,7 @@
 #ifndef MSOOXML_UTILS_H
 #define MSOOXML_UTILS_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <QSize>
 #include <QColor>
@@ -71,7 +71,7 @@ enum MSOOXMLFilter {
     DocxFilter, PptxFilter, XlsxFilter
 };
 
-class MSOOXML_EXPORT ParagraphBulletProperties
+class KOMSOOXML_EXPORT ParagraphBulletProperties
 {
 public:
 
@@ -244,38 +244,38 @@ private:
 
 //! Decodes boolean attribute @a value. If unspecified returns @a defaultValue.
 //! @return true unless @a value is equal to "false", "off" or "0".
-MSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue = false);
+KOMSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue = false);
 
 //! Loads content types from "[Content_Types].xml"
 /*! Based on information from ECMA-376, Part 1: "11.2 Package Structure".
  @return status: KoFilter::OK on success or KoFilter::WrongFormat when any unexpected and critical incompatibility occurs.
 */
 //! @todo create whole class keeping the data
-MSOOXML_EXPORT KoFilter::ConversionStatus loadContentTypes(const KoXmlDocument& contentTypesXML,
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadContentTypes(const KoXmlDocument& contentTypesXML,
         QMultiHash<QByteArray, QByteArray>& contentTypes);
 
 //! Loads content types from "docProps/app.xml"
-MSOOXML_EXPORT KoFilter::ConversionStatus loadDocumentProperties(const KoXmlDocument& appXML, QMap<QString, QVariant>& properties);
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadDocumentProperties(const KoXmlDocument& appXML, QMap<QString, QVariant>& properties);
 
 //! @return device for file @a fileName of @a zip archive. Status @a status is written on error.
 //! The device is already opened for reading and should be deleted after use.
-MSOOXML_EXPORT QIODevice* openDeviceForFile(const KZip* zip,
+KOMSOOXML_EXPORT QIODevice* openDeviceForFile(const KZip* zip,
         QString& errorMessage,
         const QString& fileName,
         KoFilter::ConversionStatus& status);
 
 //! QXmlStreamReader-based generic loading/parsing into @a doc KoXmlDocument
-MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParse(QIODevice* io, KoXmlDocument& doc,
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadAndParse(QIODevice* io, KoXmlDocument& doc,
         QString& errorMessage, const QString & fileName);
 
 //! @see KoOdfReadStore::loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName)
-MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParse(KoXmlDocument& doc,
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadAndParse(KoXmlDocument& doc,
         const KZip* zip,
         QString& errorMessage,
         const QString& fileName);
 
 //! QXmlStreamReader-based loading/parsing for document.xml
-MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader* reader,
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader* reader,
         const KZip* zip,
         KoOdfWriters* writers,
         QString& errorMessage,
@@ -306,7 +306,7 @@ KoFilter::ConversionStatus imageSize(const KZip* zip, QString& errorMessage,
 /*! @return conversion status
     @todo Thumbnails are apparently used only by PowerPoint or templates for now.
           Implement it, for now this feature is not needed for docx. */
-MSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip* zip);
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip* zip);
 
 // -- conversions ---
 
@@ -314,7 +314,7 @@ MSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip*
 /*! The value specifies that its contents contains a language identifier as defined by RFC 4646/BCP 47.
     Sets up @a language and @a country based on @a value that is of format {langugage}-{country}
     @return true on success. */
-MSOOXML_EXPORT bool ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country);
+KOMSOOXML_EXPORT bool ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country);
 
 //! @return QColor value for ST_HexColorRGB (Hexadecimal Color Value) (SharedML, 22.9.2.5)
 //!         or invalid QColor if @a color is not in the expected format.
@@ -333,34 +333,34 @@ inline QColor ST_HexColorRGB_to_QColor(const QString& color)
 //! The brush is built out of solid color.
 //! If colorName is not supported by the standard, QBrush() is returned.
 //! @par colorName named text highlight color like "black", "blue" (17.18.40)
-MSOOXML_EXPORT QBrush ST_HighlightColor_to_QColor(const QString& colorName);
+KOMSOOXML_EXPORT QBrush ST_HighlightColor_to_QColor(const QString& colorName);
 
 //! @return QColor value for DefaultIndexColor
-MSOOXML_EXPORT QColor defaultIndexedColor( int index );
+KOMSOOXML_EXPORT QColor defaultIndexedColor( int index );
 
 //! @return QLocale for the give language id
-MSOOXML_EXPORT QLocale localeForLangId( int langid );
+KOMSOOXML_EXPORT QLocale localeForLangId( int langid );
 
 //! Converts value for 22.9.2.9 ST_Percentage (Percentage Value with Sign) from string
 //! Sets @arg ok to true on success.
-MSOOXML_EXPORT qreal ST_Percentage_to_double(const QString& val, bool& ok);
+KOMSOOXML_EXPORT qreal ST_Percentage_to_double(const QString& val, bool& ok);
 
 //! Converts value for 22.9.2.9 ST_Percentage (Percentage Value with Sign) from string
 //! If "%" suffix is not present (MSOOXML violation of OOXML), the format is expected to be int({ST_Percentage}*1000).
 //! Sets @arg ok to true on success.
-MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+KOMSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
-struct MSOOXML_EXPORT DoubleModifier {
+struct KOMSOOXML_EXPORT DoubleModifier {
     DoubleModifier(qreal v) : value(v), valid(true) {}
     DoubleModifier() : value(0.0), valid(false) {}
     qreal value;
     bool valid;
 };
 
-MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
+KOMSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     const DoubleModifier& modulation, const DoubleModifier& offset);
 
-MSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod);
+KOMSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod);
 
 //! Converts shape types from ECMA-376 to ODF.
 /*! @return "Common Presentation Shape Attribute" value (ODF 1.1., 9.6.1)
@@ -373,27 +373,27 @@ MSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal sa
 */
 //! @todo or "object"?  ST_PlaceholderType docs day the default is "obj".
 //! CASE #P500
-MSOOXML_EXPORT QString ST_PlaceholderType_to_ODF(const QString& ecmaType);
+KOMSOOXML_EXPORT QString ST_PlaceholderType_to_ODF(const QString& ecmaType);
 
 //! Sets up @a textStyleProperties with underline style matching MSOOXML name @a msooxmlName.
 //! Based on 17.18.99 ST_Underline (Underline Patterns), WML ECMA-376 p.1681
 //! and on 20.1.10.82 ST_TextUnderlineType (Text Underline Types), DrawingML ECMA-376 p.3450 (merged)
-MSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties);
+KOMSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties);
 
 //! @return the symbolic name of column @a column (counted from 0)
 //! This is similar to the notation of spreadsheet's column, e.g. 0th column is "A", 1st is "B", 26th is "AA".
-MSOOXML_EXPORT QString columnName(uint column);
+KOMSOOXML_EXPORT QString columnName(uint column);
 
 //! Splits @a pathAndFile into path and file parts. Path does not end with '/'.
-MSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
+KOMSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
 
 //! Returns calculated angle and xDiff, yDiff, caller has to apply these to style
-MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff);
+KOMSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff);
 
 //! Marker related utils
-MSOOXML_EXPORT QString defineMarkerStyle(KoGenStyles& mainStyles, const QString& markerType);
+KOMSOOXML_EXPORT QString defineMarkerStyle(KoGenStyles& mainStyles, const QString& markerType);
 
-MSOOXML_EXPORT qreal defineMarkerWidth(const QString &markerWidth, const qreal lineWidth);
+KOMSOOXML_EXPORT qreal defineMarkerWidth(const QString &markerWidth, const qreal lineWidth);
 
 //! A helper allowing to buffer xml streams and writing them back later
 /*! This class is useful when information that has to be written in advance is
@@ -425,7 +425,7 @@ MSOOXML_EXPORT qreal defineMarkerWidth(const QString &markerWidth, const qreal l
 
      body = buf.releaseWriter();
      @endcode */
-class MSOOXML_EXPORT XmlWriteBuffer
+class KOMSOOXML_EXPORT XmlWriteBuffer
 {
 public:
     //! Constructor; no writer is set initially.

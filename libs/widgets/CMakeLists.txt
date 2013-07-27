@@ -13,6 +13,7 @@ if(NEPOMUK)
 endif(NEPOMUK)
 
 set(kowidgets_LIB_SRCS
+    KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
     KoCsvImportDialog.cpp
     KoImageResource.cpp
@@ -66,6 +67,7 @@ set(kowidgets_LIB_SRCS
     KoDockWidgetTitleBarButton.cpp
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
+    KoResourceFiltering.cpp
 
 )
 
@@ -98,6 +100,7 @@ set_target_properties(kowidgets PROPERTIES
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
+    KoResourceItemChooserContextMenu.h
     KoGenericRegistryModel.h
     KoPageLayoutDialog.h
     KoPageLayoutWidget.h
@@ -134,5 +137,5 @@ install( FILES
     KoDockWidgetTitleBarButton.h
 
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}
+    ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)

@@ -198,12 +198,12 @@ QByteArray MySqlDriver::escapeString(const QByteArray& str) const
  */
 QString MySqlDriver::drv_escapeIdentifier(const QString& str) const
 {
-    return QString(str).replace('`', "'");
+    return QString(str).replace('`', '\'');
 }
 
 QByteArray MySqlDriver::drv_escapeIdentifier(const QByteArray& str) const
 {
-    return QByteArray(str).replace('`', "'");
+    return QByteArray(str).replace('`', '\'');
 }
 
 #include "mysqldriver.moc"

@@ -280,12 +280,12 @@ QString Calligra::Sheets::Odf::convertRefToBase(const QString & sheet, const QRe
 {
     QPoint bottomRight(rect.bottomRight());
 
-    QString s('$');
-    s += sheet;
-    s += ".$";
-    s += Cell::columnName(bottomRight.x());
-    s += '$';
-    s += QString::number(bottomRight.y());
+    QString s = '$' +
+        sheet +
+        ".$" +
+        Cell::columnName(bottomRight.x()) +
+        '$' +
+        QString::number(bottomRight.y());
 
     return s;
 }
@@ -298,16 +298,16 @@ QString Calligra::Sheets::Odf::convertRefToRange(const QString & sheet, const QR
     if (topLeft == bottomRight)
         return Odf::convertRefToBase(sheet, rect);
 
-    QString s('$');
-    s += sheet;
-    s += ".$";
-    s += /*Util::encodeColumnLabelText*/Cell::columnName(topLeft.x());
-    s += '$';
-    s += QString::number(topLeft.y());
-    s += ":.$";
-    s += /*Util::encodeColumnLabelText*/Cell::columnName(bottomRight.x());
-    s += '$';
-    s += QString::number(bottomRight.y());
+    QString s = '$' +
+        sheet +
+        ".$" +
+        /*Util::encodeColumnLabelText*/Cell::columnName(topLeft.x()) +
+        '$' +
+        QString::number(topLeft.y()) +
+        ":.$" +
+        /*Util::encodeColumnLabelText*/Cell::columnName(bottomRight.x()) +
+        '$' +
+        QString::number(bottomRight.y());
 
     return s;
 }
@@ -349,8 +349,7 @@ QString Calligra::Sheets::Odf::encodePen(const QPen & pen)
     }
     //kDebug() << " encodePen :" << s;
     if (pen.color().isValid()) {
-        s += ' ';
-        s += Style::colorName(pen.color());
+        s += ' ' + Style::colorName(pen.color());
     }
     return s;
 }
@@ -676,10 +675,10 @@ static void replaceFormulaReference(int referencedRow, int referencedColumn, int
             c += thisColumn - referencedColumn;
         if (rx.cap(2) != "$") // absolute or relative row?
             r += thisRow - referencedRow;
-        result = result.replace(cellReferenceStart,
-                                cellReferenceLength,
-                                rx.cap(1) + Calligra::Sheets::Util::encodeColumnLabelText(c) +
-                                rx.cap(2) + QString::number(r) );
+        result.replace(cellReferenceStart,
+                       cellReferenceLength,
+                       rx.cap(1) + Calligra::Sheets::Util::encodeColumnLabelText(c) +
+                       rx.cap(2) + QString::number(r) );
     }
 }
 

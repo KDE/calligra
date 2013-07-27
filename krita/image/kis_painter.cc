@@ -151,8 +151,8 @@ void KisPainter::init()
     d->mirrorVerticaly = false;
     d->paramInfo.opacity = 1.0f;
     d->paramInfo.flow = 1.0f;
-    d->renderingIntent = KoColorConversionTransformation::IntentPerceptual;
-    d->conversionFlags = KoColorConversionTransformation::Empty;
+    d->renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
+    d->conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
 }
 
 KisPainter::~KisPainter()
@@ -1319,8 +1319,8 @@ inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
     d->paramInfo.cols = 1;
 
     d->colorSpace->bitBlt(color.colorSpace(), d->paramInfo, d->compositeOp,
-                          KoColorConversionTransformation::IntentPerceptual,
-                          KoColorConversionTransformation::Empty);
+                          d->renderingIntent,
+                          d->conversionFlags);
 }
 
 /**/
@@ -2453,31 +2453,6 @@ void KisPainter::setMaskImageSize(qint32 width, qint32 height)
     d->maskImageHeight = qBound(1, height, 256);
     d->fillPainter = 0;
     d->polygonMaskImage = QImage();
-}
-
-void KisPainter::setLockAlpha(bool protect)
-{
-    if(d->paramInfo.channelFlags.isEmpty()) {
-        d->paramInfo.channelFlags = d->colorSpace->channelFlags(true, true);
-    }
-
-    QBitArray switcher =
-        d->colorSpace->channelFlags(protect, !protect);
-
-    if(protect) {
-        d->paramInfo.channelFlags &= switcher;
-    }
-    else {
-        d->paramInfo.channelFlags |= switcher;
-    }
-
-    Q_ASSERT(quint32(d->paramInfo.channelFlags.size()) == d->colorSpace->channelCount());
-}
-
-bool KisPainter::alphaLocked() const
-{
-    QBitArray switcher = d->colorSpace->channelFlags(false, true);
-    return !(d->paramInfo.channelFlags & switcher).count(true);
 }
 
 void KisPainter::setRenderingIntent(KoColorConversionTransformation::Intent intent)

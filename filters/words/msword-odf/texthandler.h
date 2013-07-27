@@ -384,7 +384,7 @@ private:
         //DOCPROPERTY = 0x55,
         //CONTROL = 0x57,
         HYPERLINK = 0x58,
-        //AUTOTEXTLIST = 0x59,
+        AUTOTEXTLIST = 0x59,
         //LISTNUM = 0x5a,
         //HTMLCONTROL = 0x5b,
         //BIDIOUTLINE = 0x5c,
@@ -469,6 +469,9 @@ private:
 
     //character properties applied to the bunch of nested fields
     wvWare::SharedPtr<const wvWare::Word97::CHP> m_fldChp;
+
+    int m_textBoxX;
+    int m_textBoxY;
 
     // ************************************************
     //  Obsolete

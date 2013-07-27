@@ -40,13 +40,15 @@ public:
     void setFocusWidget(QWidget* widget);
     KexiLinkWidget* backButton();
     KexiLinkWidget* nextButton();
+    QString title() const;
+    QString description() const;
 public slots:
     void setDescription(const QString& text);
     void setBackButtonVisible(bool set);
     void setNextButtonVisible(bool set);
     void back();
     void next();
-signals:    
+signals:
     void back(KexiAssistantPage* page);
     void next(KexiAssistantPage* page);
     void cancelled(KexiAssistantPage* page);
