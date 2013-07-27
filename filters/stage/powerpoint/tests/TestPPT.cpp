@@ -80,8 +80,11 @@ TestRun::compareFiles(KoStore* input, const QString& path) {
     while (!a.atEnd()) {
         const QString oldLine = a.readLine();
         const QString newLine = b.readLine();
-        QVERIFY2(oldLine == newLine, QString("In file " + path + ": " + oldLine
-                                             + " != " + newLine).toAscii());
+        if (oldLine != newLine) {
+            qDebug() << "old: " << oldLine;
+            qDebug() << "new: " << newLine;
+        }
+        QVERIFY(oldLine == newLine);
     }
     QVERIFY(b.atEnd());
     QVERIFY(reference.size() == created.size());
