@@ -376,6 +376,17 @@ qreal KoBorder::borderWidth(BorderSide side) const
     }
 }
 
+void KoBorder::setOuterBorderWidth(BorderSide side, qreal width)
+{
+    if (!d->data.contains(side)) {
+        BorderData data;
+        data.outerPen.setWidthF(width);
+        d->data[side] = data;
+    } else {
+        d->data[side].outerPen.setWidthF(width);
+    }
+}
+
 qreal KoBorder::outerBorderWidth(BorderSide side) const
 {
     if (!d->data.contains(side)) {

@@ -125,8 +125,9 @@ public:
     void setBorderColor(BorderSide side, const QColor &color);
     QColor borderColor(BorderSide side) const;
     void setBorderWidth(BorderSide side, qreal width);
-    qreal outerBorderWidth(BorderSide side) const;
     qreal borderWidth(BorderSide side) const;
+    void setOuterBorderWidth(BorderSide side, qreal width);
+    qreal outerBorderWidth(BorderSide side) const;
     void setInnerBorderWidth(BorderSide side, qreal width);
     qreal innerBorderWidth(BorderSide side) const;
     void setBorderSpacing(BorderSide side, qreal width);
