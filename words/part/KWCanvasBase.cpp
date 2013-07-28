@@ -181,7 +181,6 @@ void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &view
     QRect annotationRect(m_viewMode->contentsSize().width(), 0,
                          KWView::AnnotationAreaWidth, m_viewMode->contentsSize().height());
     QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
-    qDebug() << "annotation rect " << annotationRect << "view rect " << viewRect;
     painter.fillRect(viewRect, QBrush(color));
 }
 
@@ -339,7 +338,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 // FIXME: The viewmap must also take into account the annotation area
                 painter.translate(vm.distance.x(), vm.distance.y());
                 vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
-                //painter.setClipRect(vm.clipRect);
+                painter.setClipRect(vm.clipRect);
 
                 // Paint the background of the page.  This includes
                 // the annotation area if that should be shown.
