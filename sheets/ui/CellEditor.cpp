@@ -31,6 +31,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
+#include "ui/textedit.h"
 
 // Calligra
 #include <KoDpi.h>
@@ -52,7 +53,7 @@ class CellEditor::Private
 public:
     CellToolBase*             cellTool;
     Selection*                selection;
-    KTextEdit*                textEdit;
+    TextEdit*                textEdit;
     FormulaEditorHighlighter* highlighter;
     FunctionCompletion*       functionCompletion;
     QTimer*                   functionCompletionTimer;
@@ -233,7 +234,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
 
 
 CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
-        : KTextEdit(parent)
+        : TextEdit(parent)
         , d(new Private)
 {
     d->cellTool = cellTool;
@@ -265,7 +266,7 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
     const bool wrapText = cell.style().wrapText();
     d->textEdit->setWordWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::NoWrap);
 
-#if 0 // FIXME Implement a completion aware KTextEdit.
+#if 0 // FIXME Implement a completion aware TextEdit.
     setCompletionMode(selection()->view()->doc()->completionMode());
     setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
 #endif
@@ -376,8 +377,8 @@ void CellEditor::slotCursorPositionChanged()
     if (!selection()->referenceSelection()) {
         return;
     }
-    // NOTE On text changes KTextEdit::cursorPositionChanged() is triggered
-    // before KTextEdit::textChanged(). The text is already up-to-date.
+    // NOTE On text changes TextEdit::cursorPositionChanged() is triggered
+    // before TextEdit::textChanged(). The text is already up-to-date.
 
     // Save the global position for the function auto-completion popup.
     d->globalCursorPos = mapToGlobal(cursorRect().bottomLeft());
@@ -464,8 +465,8 @@ void CellEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completi
 
 void CellEditor::slotTextChanged()
 {
-    // NOTE On text changes KTextEdit::cursorPositionChanged() is triggered
-    // before KTextEdit::textChanged().
+    // NOTE On text changes TextEdit::cursorPositionChanged() is triggered
+    // before TextEdit::textChanged().
 
     // Fix the position.
     verticalScrollBar()->setValue(1);
@@ -622,7 +623,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // in this editor leaves editing mode, unless this editor has been
         // set to capture arrow key events.
         if (d->captureAllKeyEvents) {
-            break; // pass to KTextEdit
+            break; // pass to TextEdit
         }
         event->ignore(); // pass to parent
         return;
@@ -637,12 +638,12 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Enter:
         // Shift + Return: manual line wrap
         if (event->modifiers() & Qt::ShiftModifier) {
-            break; // pass to KTextEdit
+            break; // pass to TextEdit
         }
         event->ignore(); // pass to parent
         return;
     }
-    KTextEdit::keyPressEvent(event);
+    TextEdit::keyPressEvent(event);
 }
 
 void CellEditor::focusInEvent(QFocusEvent *event)
@@ -652,12 +653,12 @@ void CellEditor::focusInEvent(QFocusEvent *event)
         kDebug() << "induced by user";
         d->cellTool->setLastEditorWithFocus(CellToolBase::EmbeddedEditor);
     }
-    KTextEdit::focusInEvent(event);
+    TextEdit::focusInEvent(event);
 }
 
 void CellEditor::focusOutEvent(QFocusEvent *event)
 {
-    KTextEdit::focusOutEvent(event);
+    TextEdit::focusOutEvent(event);
 }
 
 void CellEditor::setText(const QString& text, int cursorPos)

@@ -24,6 +24,7 @@
 
 #include <kglobalsettings.h>
 #include <ktextedit.h>
+#include "ui/textedit.h"
 
 #include "calligra_sheets_export.h"
 #include "CellEditorBase.h"
@@ -39,7 +40,7 @@ class Selection;
 /**
  * class CellEditor
  */
-class CellEditor : public KTextEdit, public CellEditorBase
+class CellEditor : public TextEdit, public CellEditorBase
 {
     Q_OBJECT
 public:
@@ -74,10 +75,10 @@ public:
 
     // CellEditorBase interface
     virtual QWidget* widget() { return this; }
-    virtual void cut() { KTextEdit::cut(); }
-    virtual void copy() { KTextEdit::copy(); }
-    virtual void paste() { KTextEdit::paste(); }
-    virtual QString toPlainText() const { return KTextEdit::toPlainText(); }
+    virtual void cut() { TextEdit::cut(); }
+    virtual void copy() { TextEdit::copy(); }
+    virtual void paste() { TextEdit::paste(); }
+    virtual QString toPlainText() const { return TextEdit::toPlainText(); }
 Q_SIGNALS:
     void textChanged(const QString &text);
 
