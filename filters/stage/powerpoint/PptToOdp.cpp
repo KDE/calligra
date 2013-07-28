@@ -30,6 +30,12 @@
 #include "msodraw.h"
 #include "msppt.h"
 #include "msoleps.h"
+#include "writeodf/writeodftext.h"
+#include "writeodf/writeodfstyle.h"
+#include "writeodf/writeodfpresentation.h"
+#include "writeodf/writeodfofficemeta.h"
+#include "writeodf/writeodfofficedc.h"
+#include "writeodf/writeodfdraw.h"
 
 #include <kdebug.h>
 #include <KoOdf.h>
@@ -47,6 +53,25 @@
 #define FONTSIZE_MAX 4000 //according to MS-PPT
 
 using namespace MSO;
+using namespace writeodf;
+
+class PptToOdp::List {
+public:
+    QString style;
+    QSharedPointer<text_list> list;
+    QSharedPointer<text_list_item> item;
+    List() {}
+    List(const QString& style_, KoXmlWriter& out) :style(style_),
+        list(new text_list(&out)) {
+    }
+    List(const QString& style_, text_list_item& item) :style(style_),
+        list(new text_list(item.add_text_list())) {
+    }
+    text_list_item& add_text_list_item() {
+        item = QSharedPointer<text_list_item>(new text_list_item(list->add_text_list_item()));
+        return *item;
+    }
+};
 
 namespace
 {
@@ -1640,6 +1665,95 @@ QString bulletSizeToSizeString(qint16 value)
     return ret;
 }
 } //namespace
+void PptToOdp::defineListStyleProperties(KoXmlWriter& out, bool imageBullet, const QString& bulletSize,
+                               const PptTextPFRun& pf) {
+    style_list_level_properties list_level_properties(&out);
+
+    if (imageBullet) {
+        QString pictureSize = bulletSize;
+        if (pictureSize.endsWith(QLatin1Char('%'))) {
+            pictureSize.chop(1);
+            bool ok = false;
+            qreal size = pictureSize.toDouble(&ok);
+            if (!ok) {
+                qDebug() << "defineBulletStyle: error converting" << pictureSize << "to double";
+            }
+            size = m_firstChunkFontSize * size / 100.0;
+            pictureSize = pt(size);
+        }
+
+        // fo:text-align
+        // fo:height
+        list_level_properties.set_fo_height(pictureSize);
+        // fo:width
+        list_level_properties.set_fo_width(pictureSize);
+        // style:font-name
+        // style:vertical-pos
+        list_level_properties.set_style_vertical_pos("middle");
+        // style:vertical-rel
+        list_level_properties.set_style_vertical_pos("line");
+        // svg:x
+        // svg:y
+    }
+    quint16 indent = pf.indent();
+    // text:min-label-distance
+    // text:min-label-width
+    list_level_properties.set_text_min_label_width(pptMasterUnitToCm(pf.leftMargin() - indent));
+    // text:space-before
+    list_level_properties.set_text_space_before(pptMasterUnitToCm(indent));
+}
+
+void PptToOdp::defineListStyleTextProperties(KoXmlWriter& out, const QString& bulletSize,
+                                             const PptTextPFRun& pf) {
+
+    //---------------------------------------------
+    // text-properties
+    //---------------------------------------------
+
+    KoGenStyle ts(KoGenStyle::TextStyle);
+    const KoGenStyle::PropertyType text = KoGenStyle::TextType;
+
+    //bulletSize already processed
+    ts.addProperty("fo:font-size", bulletSize, text);
+
+    //default value doesn't make sense
+    QColor color;
+    if (pf.fBulletHasColor()) {
+        color = toQColor(pf.bulletColor());
+        if (color.isValid()) {
+            ts.addProperty("fo:color", color.name(), text);
+        }
+    }
+
+    const MSO::FontEntityAtom* font = 0;
+
+    //MSPowerPoint: UI does NOT enable to change font of a
+    //numbered lists label.
+    if (pf.fBulletHasFont() && !pf.fBulletHasAutoNumber()) {
+        font = getFont(pf.bulletFontRef());
+    }
+
+    //A list label should NOT inherit a symbol font.
+    if (!font && m_firstChunkSymbolAtStart) {
+        font = getFont(m_firstChunkFontRef);
+    }
+
+    if (font) {
+        QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
+        ts.addProperty("fo:font-family", family, text);
+    }
+
+    //MSPowerPoint: A label does NOT inherit Underline from
+    //text-properties of the 1st text chunk.  A bullet does NOT
+    //inherit properties in {Italics, Bold}.
+    if (!pf.fBulletHasAutoNumber()) {
+        ts.addProperty("fo:font-style", "normal");
+        ts.addProperty("fo:font-weight", "normal");
+    }
+    ts.addProperty("style:text-underline-style", "none");
+
+    ts.writeStyleProperties(&out, text);
+}
 
 void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
                                const ListStyleInput& i)
@@ -1661,9 +1775,10 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
 
     if (imageBullet) {
         elementName = "text:list-level-style-image";
-        out.startElement("text:list-level-style-image");
-        out.addAttribute("xlink:href", bulletPictureNames.value(i.pf.bulletBlipRef()));
-        out.addAttribute("xlink:type", "simple");
+        text_list_level_style_image image(&out, depth + 1);
+        image.set_xlink_href(bulletPictureNames.value(i.pf.bulletBlipRef()));
+        image.set_xlink_type("simple");
+        defineListStyleProperties(out, imageBullet, bulletSize, i.pf);
     }
     else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
 
@@ -1674,119 +1789,38 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
         // we assume it's a numbered list
         if (i.pf.fBulletHasAutoNumber() || i.pf.bulletChar() == 0) {
             elementName = "text:list-level-style-number";
-            out.startElement("text:list-level-style-number");
+            text_list_level_style_number number(&out, depth + 1);
             if (!numFormat.isNull()) {
-                out.addAttribute("style:num-format", numFormat);
+                number.set_style_num_format(numFormat);
             }
             // style:display-levels
-            out.addAttribute("text:start-value", i.pf.startNum());
+            number.set_text_start_value(i.pf.startNum());
 
             if (!numPrefix.isNull()) {
-                out.addAttribute("style:num-prefix", numPrefix);
+                number.set_style_num_prefix(numPrefix);
             }
             if (!numSuffix.isNull()) {
-                out.addAttribute("style:num-suffix", numSuffix);
+                number.set_style_num_suffix(numSuffix);
             }
+            defineListStyleProperties(out, imageBullet, bulletSize, i.pf);
+            defineListStyleTextProperties(out, bulletSize, i.pf);
         } else {
             elementName = "text:list-level-style-bullet";
-            out.startElement("text:list-level-style-bullet");
-            out.addAttribute("text:bullet-char", getBulletChar(i.pf));
+            text_list_level_style_bullet bullet(&out, getBulletChar(i.pf), depth + 1);
+            defineListStyleProperties(out, imageBullet, bulletSize, i.pf);
+            defineListStyleTextProperties(out, bulletSize, i.pf);
             // text:bullet-relative-size
         }
     }
     //no bullet exists (i.pf.fHasBullet() == false)
     else {
         elementName = "text:list-level-style-number";
-        out.startElement("text:list-level-style-number");
-        out.addAttribute("style:num-format", "");
+        text_list_level_style_number number(&out, depth + 1);
+        number.set_style_num_format("");
+        defineListStyleProperties(out, imageBullet, bulletSize, i.pf);
+        defineListStyleTextProperties(out, bulletSize, i.pf);
     }
-    out.addAttribute("text:level", depth + 1);
-    out.startElement("style:list-level-properties");
 
-    if (imageBullet) {
-        QString pictureSize = bulletSize;
-        if (pictureSize.endsWith(QLatin1Char('%'))) {
-            pictureSize.chop(1);
-            bool ok = false;
-            qreal size = pictureSize.toDouble(&ok);
-            if (!ok) {
-                qDebug() << "defineBulletStyle: error converting" << pictureSize << "to double";
-            }
-            size = m_firstChunkFontSize * size / 100.0;
-            pictureSize = pt(size);
-        }
-
-        // fo:text-align
-        // fo:height
-        out.addAttribute("fo:height", pictureSize);
-        // fo:width
-        out.addAttribute("fo:width", pictureSize);
-        // style:font-name
-        // style:vertical-pos
-        out.addAttribute("style:vertical-pos", "middle");
-        // style:vertical-rel
-        out.addAttribute("style:vertical-rel", "line");
-        // svg:x
-        // svg:y
-    }
-    quint16 indent = i.pf.indent();
-    // text:min-label-distance
-    // text:min-label-width
-    out.addAttribute("text:min-label-width", pptMasterUnitToCm(i.pf.leftMargin() - indent));
-    // text:space-before
-    out.addAttribute("text:space-before", pptMasterUnitToCm(indent));
-    out.endElement(); // style:list-level-properties
-
-    //---------------------------------------------
-    // text-properties
-    //---------------------------------------------
-
-    if (!imageBullet) {
-        KoGenStyle ts(KoGenStyle::TextStyle);
-        const KoGenStyle::PropertyType text = KoGenStyle::TextType;
-
-        //bulletSize already processed
-        ts.addProperty("fo:font-size", bulletSize, text);
-
-        //default value doesn't make sense
-        QColor color;
-        if (i.pf.fBulletHasColor()) {
-            color = toQColor(i.pf.bulletColor());
-            if (color.isValid()) {
-                ts.addProperty("fo:color", color.name(), text);
-            }
-        }
-
-        const MSO::FontEntityAtom* font = 0;
-
-        //MSPowerPoint: UI does NOT enable to change font of a
-        //numbered lists label.
-        if (i.pf.fBulletHasFont() && !i.pf.fBulletHasAutoNumber()) {
-            font = getFont(i.pf.bulletFontRef());
-        }
-
-        //A list label should NOT inherit a symbol font.
-        if (!font && m_firstChunkSymbolAtStart) {
-            font = getFont(m_firstChunkFontRef);
-        }
-
-        if (font) {
-            QString family = QString::fromUtf16(font->lfFaceName.data(), font->lfFaceName.size());
-            ts.addProperty("fo:font-family", family, text);
-        }
-
-        //MSPowerPoint: A label does NOT inherit Underline from
-        //text-properties of the 1st text chunk.  A bullet does NOT
-        //inherit properties in {Italics, Bold}.
-        if (!i.pf.fBulletHasAutoNumber()) {
-            ts.addProperty("fo:font-style", "normal");
-            ts.addProperty("fo:font-weight", "normal");
-        }
-        ts.addProperty("style:text-underline-style", "none");
-
-        ts.writeStyleProperties(&out, text);
-    }
-    out.endElement();  // text:list-level-style-*
     // serialize the text:list-style element into the properties
     QString contents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     style.addChildElement(elementName, contents);
@@ -2133,10 +2167,9 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoXmlWriter writer(&notesBuffer);
         Writer out(writer, styles, true);
 
-        writer.startElement("presentation:notes");
-        writer.addAttribute("style:page-layout-name", notesPageLayoutName);
-        writer.addAttribute("draw:style-name",
-                            drawingPageStyles[p->notesMaster]);
+        presentation_notes notes(&out.xml);
+        notes.set_style_page_layout_name(notesPageLayoutName);
+        notes.set_draw_style_name(drawingPageStyles[p->notesMaster]);
         m_currentMaster = 0;
 
         if (p->notesMaster->drawing.OfficeArtDg.groupShape) {
@@ -2144,7 +2177,6 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
             drawclient.setDrawClientData(0, 0, p->notesMaster, 0);
             odrawtoodf.processGroupShape(spgr, out);
         }
-        writer.endElement();
     }
     m_processingMasters = true;
 
@@ -2224,27 +2256,24 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     KoXmlWriter contentWriter(&contentBuffer);
 
     contentWriter.startDocument("office:document-content");
-    contentWriter.startElement("office:document-content");
-    contentWriter.addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
-    contentWriter.addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
-    contentWriter.addAttribute("xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");
-    contentWriter.addAttribute("xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
-    contentWriter.addAttribute("xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
-    contentWriter.addAttribute("xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
-    contentWriter.addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-    contentWriter.addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    contentWriter.addAttribute("office:version", "1.2");
+    {
+    office_document_content content(&contentWriter);
+    content.addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+    content.addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+    content.addAttribute("xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");
+    content.addAttribute("xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+    content.addAttribute("xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
+    content.addAttribute("xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
+    content.addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+    content.addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 
     // office:automatic-styles
     styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &contentWriter);
 
-    // office:body
-    contentWriter.startElement("office:body");
-    contentWriter.startElement("office:presentation");
-    contentWriter.addCompleteElement(&presentationBuffer);
-    contentWriter.endElement();  // office:presentation
-    contentWriter.endElement();  // office:body
-    contentWriter.endElement();  // office:document-content
+    office_body body(content.add_office_body());
+    office_presentation presentation(body.add_office_presentation());
+    presentation.addCompleteElement(&presentationBuffer);
+    }
     contentWriter.endDocument();
     return contentData;
 }
@@ -2257,52 +2286,44 @@ QByteArray PptToOdp::createMeta()
     KoXmlWriter metaWriter(&buff);
 
     metaWriter.startDocument("office:document-meta");
-    metaWriter.startElement("office:document-meta");
-    metaWriter.addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
-    metaWriter.addAttribute("xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
-    metaWriter.addAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-    metaWriter.addAttribute("office:version", "1.2");
-    metaWriter.startElement("office:meta");
+    {
+    office_document_meta document_meta(&metaWriter);
+    document_meta.addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+    document_meta.addAttribute("xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+    document_meta.addAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+    office_meta meta(document_meta.add_office_meta());
 
-    const char *p_str = 0;
     const MSO::PropertySet &ps = p->summaryInfo.propertySet.propertySet1;
 
     for (uint i = 0; i < ps.numProperties; i++) {
-        switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
-        case PIDSI_TITLE:
-            p_str = "dc:title";
-            break;
-        case PIDSI_SUBJECT:
-            p_str = "dc:subject";
-            break;
-        case PIDSI_AUTHOR:
-            p_str = "meta:initial-creator";
-            break;
-        case PIDSI_KEYWORDS:
-            p_str = "meta:keyword";
-            break;
-        case PIDSI_COMMENTS:
-            p_str = "dc:description";
-            break;
-        case PIDSI_LASTAUTHOR:
-            p_str = "dc:creator";
-            break;
-        default:
-            break;
-        }
-        if (p_str) {
-            if (ps.property.at(i).vt_lpstr) {
-                metaWriter.startElement(p_str);
-                metaWriter.addTextNode(ps.property.at(i).vt_lpstr->characters);
-                metaWriter.endElement();
+        const QSharedPointer<CodePageString>& vt_lpstr = ps.property.at(i).vt_lpstr;
+        if (vt_lpstr) {
+            switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
+            case PIDSI_TITLE:
+                meta.add_dc_title().addTextNode(vt_lpstr->characters);
+                break;
+            case PIDSI_SUBJECT:
+                meta.add_dc_subject().addTextNode(vt_lpstr->characters);
+                break;
+            case PIDSI_AUTHOR:
+                meta.add_meta_initial_creator().addTextNode(vt_lpstr->characters);
+                break;
+            case PIDSI_KEYWORDS:
+                meta.add_meta_keyword().addTextNode(vt_lpstr->characters);
+                break;
+            case PIDSI_COMMENTS:
+                meta.add_dc_description().addTextNode(vt_lpstr->characters);
+                break;
+            case PIDSI_LASTAUTHOR:
+                meta.add_dc_creator().addTextNode(vt_lpstr->characters);
+                break;
+            default:
+                break;
             }
-            p_str = 0;
         }
     }
-
-    metaWriter.endElement();  // office:meta
-    metaWriter.endElement();  // office:document-meta
-
+    }
+    metaWriter.endDocument();
     return metaData;
 }
 
@@ -2361,7 +2382,7 @@ const TextPFRun *findTextPFRun(const StyleTextPropAtom& style, unsigned int pos)
 }
 
 void
-writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
+writeMeta(const TextContainerMeta& m, bool master, text_meta& meta)
 {
     const SlideNumberMCAtom* a = m.meta.get<SlideNumberMCAtom>();
     const DateTimeMCAtom* b = m.meta.get<DateTimeMCAtom>();
@@ -2369,37 +2390,30 @@ writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
     const HeaderMCAtom* d = m.meta.get<HeaderMCAtom>();
     const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
     const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
-    out.startElement("text:meta");
     if (a) {
-        out.startElement("text:page-number");
-        out.endElement();
+        meta.add_text_page_number();
     }
     if (b) {
         // TODO: datetime format
-        out.startElement("text:time");
-        out.endElement();
+        meta.add_text_time();
     }
     if (c) {
         // TODO: datetime format
         if (master) {
-            out.startElement("presentation:date-time");
+            meta.add_presentation_date_time();
         } else {
-            out.startElement("text:date");
+            meta.add_text_date();
         }
-        out.endElement();
     }
     if (d) {
-        out.startElement("presentation:header");
-        out.endElement();
+        meta.add_presentation_header();
     }
     if (e) {
-        out.startElement("presentation:footer");
-        out.endElement();
+        meta.add_presentation_footer();
     }
     if (f) {
         // TODO
     }
-    out.endElement();
 }
 
 template <class T>
@@ -2417,62 +2431,136 @@ int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
     return end;
 }
 
-/**
-* @brief Write text deindentations the specified amount. Actually it just
-* closes elements.
-*
-* @param xmlWriter XML writer to write closing tags
-* @param count how many lists and list items to leave open
-* @param levels the list of levels to remove from
-*/
-void writeTextObjectDeIndent(KoXmlWriter& xmlWriter, const int count,
-                             QStack<QString>& levels)
-{
-    while (levels.size() > count) {
-        xmlWriter.endElement(); //text:list-item
-        xmlWriter.endElement(); //text:list
-        levels.pop();
-    }
-}
-
 void PptToOdp::addListElement(KoXmlWriter& out, const QString& listStyle,
-                    QStack<QString>& levels, quint16 level,
+                    ListStack& levels, quint16 level,
                     const PptTextPFRun &pf)
 {
-    levels.push(listStyle);
-    out.startElement("text:list");
+    levels.push(List(listStyle, out));
+    text_list& list = *levels.last().list;
     if (!listStyle.isEmpty()) {
-        out.addAttribute("text:style-name", listStyle);
+        list.set_text_style_name(listStyle);
     } else {
         qDebug() << "Warning: list style name not provided!";
     }
     if (pf.fBulletHasAutoNumber()) {
         QString xmlId = QString("lvl%1").arg(level);
         xmlId.append(QString("_%1").arg(qrand()));
-        out.addAttribute("xml:id", xmlId);
+        list.set_xml_id(xmlId);
 
         if (m_continueListNumbering.contains(level) &&
-            m_continueListNumbering[level]) {
-            out.addAttribute("text:continue-list", m_lvlXmlIdMap[level]);
+                m_continueListNumbering[level]) {
+            list.set_text_continue_list(m_lvlXmlIdMap[level]);
         }
         m_lvlXmlIdMap[level] = xmlId;
     }
-    out.startElement("text:list-item");
+
+    text_list_item& item = levels.last().add_text_list_item();
 
     if (pf.fBulletHasAutoNumber()) {
         if (m_continueListNumbering.contains(level) &&
             (m_continueListNumbering[level] == false)) {
-            out.addAttribute("text:start-value", pf.startNum());
+            item.set_text_start_value(pf.startNum());
         }
         m_continueListNumbering[level] = true;
     }
 
     // add styleless levels to get the right level of indentation
     while (levels.size() < level) {
-        out.startElement("text:list");
-        out.startElement("text:list-item");
-        levels.push("");
+        levels.push(List("", *levels.last().item));
+        levels.last().add_text_list_item();
     }
+}
+template <typename T>
+void
+addTab(T& e, int ref) {
+    text_tab tab = e.add_text_tab();
+    if (ref >= 0)
+        tab.set_text_tab_ref(ref);
+}
+
+void addTextSpan(group_paragraph_content& content, const QString& text, const QMap<int, int>& tabCache)
+{
+    int len = text.length();
+    int nrSpaces = 0; // number of consecutive spaces
+    bool leadingSpace = false;
+    QString str;
+    str.reserve(len);
+
+    // Accumulate chars either in str or in nrSpaces (for spaces).
+    // Flush str when writing a subelement (for spaces or for another reason)
+    // Flush nrSpaces when encountering two or more consecutive spaces
+    for (int i = 0; i < len ; ++i) {
+        QChar ch = text[i];
+        ushort unicode = ch.unicode();
+        if (unicode == ' ') {
+            if (i == 0)
+                leadingSpace = true;
+            ++nrSpaces;
+        } else {
+            if (nrSpaces > 0) {
+                // For the first space we use ' '.
+                // "it is good practice to use (text:s) for the second and all following SPACE
+                // characters in a sequence." (per the ODF spec)
+                // however, per the HTML spec, "authors should not rely on user agents to render
+                // white space immediately after a start tag or immediately before an end tag"
+                // (and both we and OO.o ignore leading spaces in <text:p> or <text:h> elements...)
+                if (!leadingSpace) {
+                    str += ' ';
+                    --nrSpaces;
+                }
+                if (nrSpaces > 0) {   // there are more spaces
+                    if (!str.isEmpty())
+                        content.addTextNode(str);
+                    str.clear();
+                    text_s s = content.add_text_s();
+                    if (nrSpaces > 1)   // it's 1 by default
+                        s.set_text_c(nrSpaces);
+                }
+            }
+            nrSpaces = 0;
+            leadingSpace = false;
+
+            switch (unicode) {
+            case '\t':
+                if (!str.isEmpty())
+                    content.addTextNode(str);
+                str.clear();
+                addTab(content, tabCache.contains(i) ?tabCache[i] + 1 :-1);
+                break;
+            // gracefully handle \f form feed in text input.
+            // otherwise the xml will not be valid.
+            // \f can be added e.g. in ascii import filter.
+            case '\f':
+            case '\n':
+            case QChar::LineSeparator:
+                if (!str.isEmpty())
+                    content.addTextNode(str);
+                str.clear();
+                content.add_text_line_break();
+                break;
+            default:
+                // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
+                if (ch.unicode() >= 0x20) {
+                    str += text[i];
+                }
+                break;
+            }
+        }
+    }
+    // either we still have text in str or we have spaces in nrSpaces
+    if (!str.isEmpty()) {
+        content.addTextNode(str);
+    }
+    if (nrSpaces > 0) {   // there are more spaces
+        text_s s = content.add_text_s();
+        if (nrSpaces > 1)   // it's 1 by default
+            s.set_text_c(nrSpaces);
+    }
+}
+void addTextSpan(group_paragraph_content& e, const QString& text)
+{
+    QMap<int, int> tabCache;
+    addTextSpan(e, text, tabCache);
 }
 
 int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
@@ -2614,8 +2702,8 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineTextProperties(style, cf, 0, 0, si, isSymbol);
-    out.xml.startElement("text:span", false);
-    out.xml.addAttribute("text:style-name", out.styles.insert(style));
+    text_span span(&out.xml);
+    span.set_text_style_name(out.styles.insert(style));
 
     // [MS-PPT]: exHyperlinkIdRef must be ignored unless action is in
     // {II_JumpAction, II_HyperlinkAction, II_CustomShowAction (0x7)}
@@ -2634,27 +2722,22 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         }
     }
 
+    QString href;
     if (mouseclick) {
-        out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
             mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
-            out.xml.addAttribute("xlink:href", link.second);
-            out.xml.addAttribute("xlink:type", "simple");
+            href = link.second;
         } else if (!link.first.isEmpty()) {
-            out.xml.addAttribute("xlink:href", link.first);
-            out.xml.addAttribute("xlink:type", "simple");
+            href = link.first;
         }
     } else if (mouseover) {
-        out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
             mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
-            out.xml.addAttribute("xlink:href", link.second);
-            out.xml.addAttribute("xlink:type", "simple");
+            href = link.second;
         } else if (!link.first.isEmpty()) {
-            out.xml.addAttribute("xlink:href", link.first);
-            out.xml.addAttribute("xlink:type", "simple");
+            href = link.first;
         }
     } else {
         // count - specifies the number of characters of the
@@ -2669,18 +2752,25 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     }
 
     if (meta) {
-        writeMeta(*meta, m_processingMasters, out.xml);
+        if (!href.isNull()) {
+            text_a a(span.add_text_a(href));
+            text_meta m(a.add_text_meta());
+            writeMeta(*meta, m_processingMasters, m);
+        } else {
+            text_meta m(span.add_text_meta());
+            writeMeta(*meta, m_processingMasters, m);
+        }
     } else {
         int len = end - start;
         const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
-        out.xml.addTextSpan(txt);
+        if (!href.isNull()) {
+            text_a a(span.add_text_a(href));
+            addTextSpan(a, txt);
+        } else {
+            addTextSpan(span, txt);
+        }
     }
 
-    if (mouseclick || mouseover) {
-        out.xml.endElement(); //text:a
-    }
-
-    out.xml.endElement(); //text:span
     return end;
 } //end processTextSpan()
 
@@ -2718,7 +2808,7 @@ QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf, const
 
 void
 PptToOdp::processParagraph(Writer& out,
-                           QStack<QString>& levels,
+                           ListStack& levels,
                            const MSO::OfficeArtClientData* clientData,
                            const MSO::TextContainer* tc,
                            const MSO::TextRuler* tr,
@@ -2794,10 +2884,10 @@ PptToOdp::processParagraph(Writer& out,
         }
 
         QString listStyle = defineAutoListStyle(out, pf, cf);
-	//check if we have the corresponding style for this level, if not then
-	//close the list and create a new one (K.I.S.S.)
-	if (!levels.isEmpty() && (levels.first() != listStyle)) {
-            writeTextObjectDeIndent(out.xml, 0, levels);
+        //check if we have the corresponding style for this level, if not then
+        //close the list and create a new one (K.I.S.S.)
+        if (!levels.isEmpty() && (levels.first().style != listStyle)) {
+            levels.clear();
         }
         if (!pf.fBulletHasAutoNumber()) {
             QList<quint16> levels = m_continueListNumbering.keys();
@@ -2819,18 +2909,16 @@ PptToOdp::processParagraph(Writer& out,
         if (levels.isEmpty()) {
             addListElement(out.xml, listStyle, levels, depth, pf);
         } else {
-            out.xml.endElement(); //text:list-item
-            out.xml.startElement("text:list-item");
+            levels.last().add_text_list_item();
         }
         m_previousListLevel = depth;
     } else {
-        writeTextObjectDeIndent(out.xml, 0, levels);
+        levels.clear();
         m_continueListNumbering.clear();
         m_lvlXmlIdMap.clear();
         m_previousListLevel = 0;
     }
 
-    out.xml.startElement("text:p");
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineParagraphProperties(style, pf, min_fontsize);
@@ -2838,9 +2926,15 @@ PptToOdp::processParagraph(Writer& out,
     if (start == end) {
         defineTextProperties(style, cf, 0, 0, 0);
     }
-    out.xml.addAttribute("text:style-name", out.styles.insert(style));
-    out.xml.addCompleteElement(&spans_buf);
-    out.xml.endElement(); //text:p
+    if (levels.isEmpty()) {
+        text_p p(&out.xml);
+        p.set_text_style_name(out.styles.insert(style));
+        p.addCompleteElement(&spans_buf);
+    } else {
+        text_p p(levels.last().item->add_text_p());
+        p.set_text_style_name(out.styles.insert(style));
+        p.addCompleteElement(&spans_buf);
+    }
 } //end processParagraph()
 
 int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* clientData,
@@ -2914,7 +3008,7 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     static const QRegExp lineend("[\v\r]");
     qint32 pos = 0, end = 0;
 
-    QStack<QString> levels;
+    ListStack levels;
     levels.reserve(5);
 
     // loop over all the '\r' delimited lines
@@ -2926,8 +3020,6 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
         pos = end + 1;
     }
 
-    // close all open text:list elements
-    writeTextObjectDeIndent(out.xml, 0, levels);
     return 0;
 } //end processTextForBody()
 
@@ -2962,17 +3054,17 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     nameStr.remove('\r');
     nameStr.remove('\v');
 
-    out.xml.startElement("draw:page");
     QString value = masterNames.value(master);
-    if (!value.isEmpty()) {
-        out.xml.addAttribute("draw:master-page-name", value);
+    if (value.isEmpty()) {
+        value = "unknown";
     }
-    out.xml.addAttribute("draw:name", nameStr);
+    draw_page page(&out.xml, value);
+    page.set_draw_name(nameStr);
     value = drawingPageStyles[slide];
     if (!value.isEmpty()) {
-        out.xml.addAttribute("draw:style-name", value);
+        page.set_draw_style_name(value);
     }
-    //xmlWriter.addAttribute("presentation:presentation-page-layout-name", "AL1T0");
+    //page.set_presentation_presentation_page_layout_name("AL1T0");
 
     const HeadersFootersAtom* headerFooterAtom = 0;
     if (master->anon.is<MainMasterContainer>()) {
@@ -2990,16 +3082,16 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
         headerFooterAtom = &getSlideHF()->hfAtom;
     }
     if (!usedDateTimeDeclaration.value(slideNo).isEmpty()) {
-        out.xml.addAttribute("presentation:use-date-time-name",
-                               usedDateTimeDeclaration[slideNo]);
+        page.set_presentation_use_date_time_name(
+                    usedDateTimeDeclaration[slideNo]);
     }
     if (!usedHeaderDeclaration.value(slideNo).isEmpty()) {
         if (!usedHeaderDeclaration[slideNo].isEmpty())
-            out.xml.addAttribute("presentation:use-header-name", usedHeaderDeclaration[slideNo]);
+            page.set_presentation_use_header_name(usedHeaderDeclaration[slideNo]);
     }
     if (!usedFooterDeclaration.value(slideNo).isEmpty()) {
         if (!usedFooterDeclaration[slideNo].isEmpty())
-            out.xml.addAttribute("presentation:use-footer-name", usedFooterDeclaration[slideNo]);
+            page.set_presentation_use_footer_name(usedFooterDeclaration[slideNo]);
     }
 
     m_currentSlideTexts = &p->documentContainer->slideList->rgChildRec[slideNo];
@@ -3028,18 +3120,15 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     const NotesContainer* nc = p->notes[slideNo];
     if (nc && nc->drawing.OfficeArtDg.groupShape) {
         m_currentSlideTexts = 0;
-        out.xml.startElement("presentation:notes");
+        presentation_notes notes(page.add_presentation_notes());
         value = drawingPageStyles[nc];
         if (!value.isEmpty()) {
-            out.xml.addAttribute("draw:style-name", value);
+            notes.set_draw_style_name(value);
         }
         const OfficeArtSpgrContainer& spgr = *(nc->drawing.OfficeArtDg.groupShape).data();
         drawclient.setDrawClientData(0, 0, p->notesMaster, nc, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
-        out.xml.endElement();
     }
-
-    out.xml.endElement(); // draw:page
 } //end processSlideForBody()
 
 QString PptToOdp::processParaSpacing(const int value,
@@ -3505,42 +3594,32 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
            QList<QPair<QString, QString> >items = declaration.values(DateTime);
            for( int i = items.size()-1; i >= 0; --i) {
                 QPair<QString, QString > item = items.at(i);
-                xmlWriter->startElement("presentation:date-time-decl");
-                xmlWriter->addAttribute("presentation:name", item.first);
-                xmlWriter->addAttribute("presentation:source", "current-date");
+                presentation_date_time_decl(xmlWriter, item.first, "current-date");
                 //xmlWrite->addAttribute("style:data-style-name", "Dt1");
-                xmlWriter->endElement();  // presentation:date-time-decl
             }
         } else if (slideHF->hfAtom.fHasUserDate) {
             QList<QPair<QString, QString> >items = declaration.values(DateTime);
             for( int i = 0; i < items.size(); ++i) {
                 QPair<QString, QString > item = items.at(i);
-                xmlWriter->startElement("presentation:date-time-decl");
-                xmlWriter->addAttribute("presentation:name", item.first);
-                xmlWriter->addAttribute("presentation:source", "fixed");
-                xmlWriter->addTextNode(item.second);
+                presentation_date_time_decl d(xmlWriter, item.first, "fixed");
+                d.addTextNode(item.second);
                 //Future - Add Fixed date data here
-                xmlWriter->endElement();  //presentation:date-time-decl
             }
         }
         if (headerAtom && slideHF->hfAtom.fHasHeader) {
             QList< QPair < QString, QString > > items = declaration.values(Header);
             for( int i = items.size()-1; i >= 0; --i) {
                 QPair<QString, QString > item = items.value(i);
-                xmlWriter->startElement("presentation:header-decl");
-                xmlWriter->addAttribute("presentation:name", item.first);
-                xmlWriter->addTextNode(item.second);
-                xmlWriter->endElement();  //presentation:header-decl
+                presentation_header_decl hd(xmlWriter, item.first);
+                hd.addTextNode(item.second);
             }
         }
         if (footerAtom && slideHF->hfAtom.fHasFooter) {
             QList< QPair < QString, QString > > items = declaration.values(Footer);
             for( int i = items.size()-1 ; i >= 0; --i) {
                 QPair<QString, QString > item = items.at(i);
-                xmlWriter->startElement("presentation:footer-decl");
-                xmlWriter->addAttribute("presentation:name", item.first);
-                xmlWriter->addTextNode(item.second);
-                xmlWriter->endElement();  //presentation:footer-decl
+                presentation_footer_decl fd(xmlWriter, item.first);
+                fd.addTextNode(item.second);
             }
         }
     }
