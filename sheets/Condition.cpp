@@ -331,26 +331,26 @@ QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueCon
         value = "cell-content()<=" + converter->asString(condition.value1).asString();
         break;
     case Conditional::Between:
-        value = "cell-content-is-between(";
-        value += converter->asString(condition.value1).asString();
-        value += ',';
-        value += converter->asString(condition.value2).asString();
-        value += ')';
+        value = "cell-content-is-between(" +
+                converter->asString(condition.value1).asString() +
+                ',' +
+                converter->asString(condition.value2).asString() +
+                ')';
         break;
     case Conditional::DifferentTo:
         value = "cell-content()!=" + converter->asString(condition.value1).asString();
         break;
     case Conditional::Different:
-        value = "cell-content-is-not-between(";
-        value += converter->asString(condition.value1).asString();
-        value += ',';
-        value += converter->asString(condition.value2).asString();
-        value += ')';
+        value = "cell-content-is-not-between(" +
+                converter->asString(condition.value1).asString() +
+                ',' +
+                converter->asString(condition.value2).asString() +
+                ')';
         break;
     case Conditional::IsTrueFormula:
-        value = "is-true-formula(";
-        value += Odf::encodeFormula(condition.value1.asString());
-        value += ')';
+        value = "is-true-formula(" +
+                Odf::encodeFormula(condition.value1.asString()) +
+                ')';
     }
     return value;
 }

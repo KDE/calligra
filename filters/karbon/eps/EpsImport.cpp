@@ -58,10 +58,9 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
         QString input = m_chain->inputFile();
         QString output = m_chain->outputFile();
 
-        QString command("pstoedit -f plot-svg ");
-        command += KShell::quoteArg(input);
-        command += ' ';
-        command += KShell::quoteArg(output);
+        QString command = QLatin1String("pstoedit -f plot-svg ") +
+                KShell::quoteArg(input) + QLatin1Char(' ') +
+                KShell::quoteArg(output);
 
         kDebug() << "command to execute is (%s)" << QFile::encodeName(command).data() ;
 
@@ -97,13 +96,13 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
                             arg(llx).arg(lly).arg(urx).arg(ury);
 
         // Build ghostscript call to convert ps/eps -> ai:
-        QString command(
-            "gs -q -P- -dBATCH -dNOPAUSE -dSAFER -dPARANOIDSAFER -dNODISPLAY ps2ai.ps ");
-        command += KShell::quoteArg(input);
-        command += " | ";
-        command += sedFilter;
-        command += " > ";
-        command += KShell::quoteArg(m_chain->outputFile());
+        QString command  = QLatin1String(
+            "gs -q -P- -dBATCH -dNOPAUSE -dSAFER -dPARANOIDSAFER -dNODISPLAY ps2ai.ps ") +
+            KShell::quoteArg(input) +
+            " | " +
+            sedFilter +
+            " > " +
+            KShell::quoteArg(m_chain->outputFile());
 
         qDebug("command to execute is (%s)", QFile::encodeName(command).data());
 
