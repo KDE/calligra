@@ -48,10 +48,6 @@ public:
 
     void setAnnotaionTextData(KoTextShapeData *textShape);
 
-    /// reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter,
-                        KoShapePaintingContext &paintcontext);
-
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
      *
@@ -74,11 +70,6 @@ public:
 
 private:
     KoTextShapeData *m_textShapeData;
-    QRegion m_paintRegion;
-    KoParagraphStyle * m_paragraphStyle;
-    bool m_clip;
-    KoTextDocumentLayout *m_layout;
-    KoImageCollection *m_imageCollection;
 
     QString m_creator;
     QString m_date;

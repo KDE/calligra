@@ -69,7 +69,6 @@
 AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
                                          KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
-    , m_imageCollection(0)
 {
     KoShapeBackground *fill = new KoColorBackground(Qt::yellow);
     setBackground(fill);
@@ -79,140 +78,13 @@ AnnotationTextShape::~AnnotationTextShape()
 {
 }
 
-void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShape)
+void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
 {
-    m_textShapeData = textShape;
+    m_textShapeData = textShapeData;
     m_textShapeData->setTopPadding(25);
     m_textShapeData->setLeftPadding(4);
     m_textShapeData->setRightPadding(4);
     m_textShapeData->setResizeMethod(KoTextShapeData::AutoGrowHeight);
-}
-
-void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
-                                         KoShapePaintingContext &paintcontext)
-{
-    if (paintcontext.showTextShapeOutlines) {
-        painter.save();
-        applyConversion(painter, converter);
-        if (qAbs(rotation()) > 1)
-            painter.setRenderHint(QPainter::Antialiasing);
-
-        QPen pen(QColor(210, 210, 210)); // use cosmetic pen
-        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
-        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
-        //painter.setPen(pen);
-
-        painter.setPen(pen);
-        QColor color(137, 176, 213);
-        painter.setBrush(color);
-//        painter.drawRoundedRect(rect, 10.0, 15.0, Qt::RelativeSize);
-        painter.drawRect(rect);
-
-//        int left = rect.left();
-//        int top = rect.top();
-//        QColor buttonColor(47, 150, 217);
-//        // Draw delete annotation button.
-//        painter.setBrush(buttonColor);
-//        painter.drawEllipse(QPoint((left + 140), (top + 7)), 5, 5);
-
-//        //Draw option button.
-//        painter.setBrush(buttonColor);
-//        painter.drawEllipse(QPoint((left + 128), (top + 7)), 5, 5);
-
-//        //Draw 'x' and 'v' in buttons.
-//        QPen p(QColor(210, 210, 210));
-//        p.setWidth(1);
-//        painter.setPen(p);
-
-//        //Draw 'x' in remove button.
-//        painter.drawLine(QPointF((left + 139), (top + 6)), QPointF((left + 141), (top + 8)));
-//        painter.drawLine(QPointF((left + 141), (top + 6)), QPointF((left + 139), (top + 8)));
-
-//        //Draw 'v' in option button.
-//        painter.drawLine(QPointF((left + 127), (top + 7)), QPointF((left + 128), (top + 8)));
-//        painter.drawLine(QPointF((left + 129), (top + 7)), QPointF((left + 128), (top + 8)));
-
-        // Set Author and date.
-        QPen peninfo (Qt::darkBlue);
-        QFont serifFont("Times", 6, QFont::Bold);
-        painter.setPen(peninfo);
-        painter.setFont(serifFont);
-        QString info = "  " + m_creator + "\n  " + m_date;
-        painter.drawText(rect, Qt::AlignTop, info);
-
-        painter.restore();
-    }
-
-    if (m_textShapeData->isDirty()) { // not layouted yet.
-        return;
-    }
-
-    QTextDocument *doc = m_textShapeData->document();
-    Q_ASSERT(doc);
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
-    Q_ASSERT(lay);
-    lay->showInlineObjectVisualization(paintcontext.showInlineObjectVisualization);
-
-    applyConversion(painter, converter);
-
-//    if (background()) {
-//        QPainterPath p;
-//        p.addRect(QRectF(QPointF(), size()));
-//        background()->paint(painter, converter, paintcontext, p);
-//    }
-
-    // this enables to use the same shapes on different pages showing different page numbers
-//    if (m_pageProvider) {
-//        KoTextPage *page = m_pageProvider->page(this);
-//        if (page) {
-//            // this is used to not trigger repaints if layout during the painting is done
-//            m_paintRegion = painter.clipRegion();
-//            if (!m_textShapeData->rootArea()->page() || page->pageNumber() != m_textShapeData->rootArea()->page()->pageNumber()) {
-//                m_textShapeData->rootArea()->setPage(page); // takes over ownership of the page
-//            } else {
-//                delete page;
-//            }
-//        }
-//    }
-
-    KoTextDocumentLayout::PaintContext pc;
-
-    QAbstractTextDocumentLayout::Selection selection;
-    KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
-
-    // FIXME: It gets error that textEditor->cursor(), cursor is private ????
-
-    //selection.cursor = *(textEditor->cursor());
-    QPalette palette = pc.textContext.palette;
-    selection.format.setBackground(palette.brush(QPalette::Highlight));
-    selection.format.setForeground(palette.brush(QPalette::HighlightedText));
-    pc.textContext.selections.append(selection);
-
-    pc.textContext.selections += KoTextDocument(doc).selections();
-    pc.viewConverter = &converter;
-    pc.imageCollection = m_imageCollection;
-    pc.showFormattingCharacters = paintcontext.showFormattingCharacters;
-    pc.showTableBorders = paintcontext.showTableBorders;
-    pc.showSpellChecking = paintcontext.showSpellChecking;
-    pc.showSelections = paintcontext.showSelections;
-
-    // When clipping the painter we need to make sure not to cutoff cosmetic pens which
-    // may used to draw e.g. table-borders for user convenience when on screen (but not
-    // on e.g. printing). Such cosmetic pens are special cause they will always have the
-    // same pen-width (1 pixel) independent of zoom-factor or painter transformations and
-    // are not taken into account in any border-calculations.
-    QRectF clipRect = outlineRect();
-    qreal cosmeticPenX = 1 * 72. / painter.device()->logicalDpiX();
-    qreal cosmeticPenY = 1 * 72. / painter.device()->logicalDpiY();
-    painter.setClipRect(clipRect.adjusted(-cosmeticPenX, -cosmeticPenY, cosmeticPenX, cosmeticPenY), Qt::IntersectClip);
-
-    painter.save();
-    painter.translate(0, -m_textShapeData->documentOffset());
-    painter.translate(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
-    m_textShapeData->rootArea()->paint(&painter, pc); // only need to draw ourselves
-    painter.restore();
-
-    m_paintRegion = QRegion();
 }
 
 bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
