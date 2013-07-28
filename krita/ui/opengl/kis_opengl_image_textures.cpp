@@ -321,7 +321,14 @@ void KisOpenGLImageTextures::activateHDRExposureProgram()
 {
 #ifdef HAVE_GLEW
     if (m_displayFilter && m_displayFilter->program()) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_3D, m_displayFilter->lut3dTexID());
+
         glUseProgram(m_displayFilter->program());
+
+        glUniform1i(glGetUniformLocation(m_displayFilter->program(), "tex1"), 0);
+        glUniform1i(glGetUniformLocation(m_displayFilter->program(), "tex2"), 1);
+
     }
 #endif
 }
