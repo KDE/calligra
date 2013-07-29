@@ -57,7 +57,7 @@ Value DateParser::parse(const QString& _v) const
     } else if (_v.length() <= 19) {
         return Value(QDateTime::fromString(_v, "yyyy-MM-ddThh:mm:ss"));
     } else {
-        return Value(KDateTime::fromString(_v).toUTC().dateTime());
+        return Value(KDateTime::fromString(_v).toUTC());
     }
 }
 
