@@ -363,7 +363,6 @@ private:
     bool m_closeHyperlink; // should read_r close hyperlink
     bool m_listFound; // was there numPr element in ppr
     bool m_insideParagraph;
-    bool m_isRightToLeftText;
 
     QString m_currentNumId;
 
