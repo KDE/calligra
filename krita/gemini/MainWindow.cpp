@@ -53,10 +53,12 @@
 #include "sketch/DocumentManager.h"
 #include <sketch/KisSketchPart.h>
 
+#ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
 #include <shellapi.h>
 #define SM_CONVERTIBLESLATEMODE 0x2003
 #define SM_SYSTEMDOCKED         0x2004
+#endif
 
 class MainWindow::Private
 {
@@ -70,7 +72,9 @@ public:
 		, slateMode(false)
 		, docked(false)
     {
+#ifdef Q_OS_WIN
 		slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+#endif
 	}
 	MainWindow* q;
     bool allowClose;
@@ -217,6 +221,7 @@ MainWindow::~MainWindow()
     delete d;
 }
 
+#ifdef Q_OS_WIN
 bool MainWindow::winEvent( MSG * message, long * result )
 {
 	if(message->message == WM_SETTINGCHANGE)
@@ -230,9 +235,11 @@ bool MainWindow::winEvent( MSG * message, long * result )
 	}
 	return false;
 }
+#endif
 
 void MainWindow::Private::notifySlateModeChange()
 {
+#ifdef Q_OS_WIN
 	bool bSlateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
 	
 	if (slateMode != bSlateMode)
@@ -245,17 +252,20 @@ void MainWindow::Private::notifySlateModeChange()
 			q->switchToDesktop();
 		qDebug() << "Slate mode is now" << slateMode;
 	} 
+#endif
 }
 
 void MainWindow::Private::notifyDockingModeChange()
 {
+#ifdef Q_OS_WIN
 	bool bDocked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 
 	if (docked != bDocked)
 	{
 		docked = bDocked;
 		qDebug() << "Docking mode is now" << docked;
-	} 
+	}
+#endif
 }
 
 #include "MainWindow.moc"

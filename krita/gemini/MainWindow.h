@@ -56,7 +56,9 @@ private:
     class Private;
     Private * const d;
 
+#ifdef Q_OS_WIN
     bool winEvent ( MSG * message, long * result );
+#endif
 };
 
 #endif // MAINWINDOW_H
