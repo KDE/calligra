@@ -33,8 +33,8 @@
 
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
-#include <KoDocumentResourceManager.h>
 #include <KoShapeBackground.h>
+#include <KoDocumentResourceManager.h>
 
 #include <QTextLayout>
 #include <QTextDocument>
