@@ -896,6 +896,7 @@ PptToOdp::doConversion(KoStore* storeout)
     bulletPictureNames = createBulletPictures(getPP<PP9DocBinaryTagExtension>(
             p->documentContainer), storeout, manifest);
     storeout->leaveDirectory();
+    storeout->setCompressionEnabled(true);
 
     KoGenStyles styles;
 

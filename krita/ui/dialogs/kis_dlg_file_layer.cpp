@@ -25,10 +25,10 @@
 #include <QLineEdit>
 #include <klocale.h>
 
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KFileDialog>
-#include <KUrl>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
+#include <kurl.h>
 
 #include <KoFilterManager.h>
 #include <KoServiceProvider.h>
