@@ -149,8 +149,6 @@ public slots:
     /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
     void exitDistractioFreeMode();
 
-    /// Add an annotation, add it to KoAnnotationLayoutManager and to KoAnnotationManager.
-    void annotationShapeAdded(KoShape *);
     /// Remove an annotation shape.
     void annotationShapeRemoved(KoShape *);
 

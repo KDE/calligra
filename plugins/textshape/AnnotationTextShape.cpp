@@ -72,6 +72,7 @@ AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextOb
 {
     KoShapeBackground *fill = new KoColorBackground(Qt::yellow);
     setBackground(fill);
+    setGeometryProtected(true);
 }
 
 AnnotationTextShape::~AnnotationTextShape()

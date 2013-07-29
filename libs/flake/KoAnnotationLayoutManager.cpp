@@ -23,11 +23,20 @@
 #include <QList>
 #include <QHash>
 #include <QMap>
+#include <QtAlgorithms>
+
 #include <kdebug.h>
 
 #define default_shapeHeight 100.0
 #define shapeWidth 150.0
 
+int compare(const QPair < QPointF, KoShape * > &a, const QPair < QPointF, KoShape * > &b)
+{
+    if (a.first.y() == b.first.y()) {
+        return a.first.x() < b.first.x();
+    }
+    return a.first.y() < b.first.y();
+}
 
 class KoAnnotationLayoutManager::Private
 {
@@ -37,7 +46,7 @@ public:
     {}
 
     qreal x;
-    QMultiMap<qreal,KoShape *> annotationShapePositions;
+    QList< QPair < QPointF, KoShape * > > annotationShapePositions;
 };
 
 KoAnnotationLayoutManager::KoAnnotationLayoutManager(qreal annotationX, QObject *parent)
@@ -51,17 +60,25 @@ KoAnnotationLayoutManager::~KoAnnotationLayoutManager()
 }
 
 void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotationShape, QPointF pos) {
-    if (!d->annotationShapePositions.values().contains(annotationShape)) {
-        d->annotationShapePositions.insert(pos.y(), annotationShape);
+    QList< QPair < QPointF, KoShape * > >::iterator i = d->annotationShapePositions.begin();
+    while (i != d->annotationShapePositions.end()) {
+        KoShape *shape = i->second;
+        if (shape == annotationShape) {
+            d->annotationShapePositions.erase(i);
+            break;
+        }
     }
+    d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
+
     layoutAnnotationShapes();
 }
 
 void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape) {
-    QMap<qreal, KoShape*>::const_iterator i = d->annotationShapePositions.constBegin();
+    QList< QPair < QPointF, KoShape * > >::iterator i = d->annotationShapePositions.begin();
     while (i != d->annotationShapePositions.constEnd()) {
-        if (i.value() == annotationShape) {
-            d->annotationShapePositions.remove(i.key(), i.value());
+        if (i->second == annotationShape) {
+            d->annotationShapePositions.erase(i);
+            break;
         }
         i++;
     }
@@ -71,16 +88,20 @@ void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape) 
 void KoAnnotationLayoutManager::layoutAnnotationShapes()
 {
     qreal currentY = 0.0;
-    QMap<qreal, KoShape*>::const_iterator i = d->annotationShapePositions.constBegin();
-    while (i != d->annotationShapePositions.constEnd()) {
-        KoShape *shape = i.value();
-        qreal refPosition = i.key();
+    qStableSort(d->annotationShapePositions.begin(), d->annotationShapePositions.end(), compare);
+
+    QList< QPair < QPointF, KoShape * > >::const_iterator i = d->annotationShapePositions.constBegin();
+    while (i != d->annotationShapePositions.end()) {
+        KoShape *shape = i->second;
+        qreal refPosition = i->first.y();
         if (refPosition > currentY) {
             currentY = refPosition;
         }
+        shape->update();
         shape->setSize(QSize(shapeWidth, shape->size().height()));
         shape->setPosition(QPointF(d->x, currentY));
-        currentY += shape->size().height() + 20.0;
+        shape->update();
+        currentY += shape->size().height() + 10.0;
 
         i++;
     }

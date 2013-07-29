@@ -132,7 +132,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     m_currentPage = m_document->pageManager()->begin();
 
-    connect (m_canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(annotationShapeRemoved(KoShape*)));
+    connect(m_document, SIGNAL(annotationShapeRemoved(KoShape *)), this, SLOT(annotationShapeRemoved(KoShape *)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -1202,17 +1202,6 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         selection->select(shape);
         m_canvas->addCommand(cmd);
     }
-}
-
-void KWView::annotationShapeAdded(KoShape *shape)
-{
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    Q_ASSERT(editor);
-
-    const KoAnnotationManager *manager = m_document->textRangeManager()->annotationManager();
-
-    KoAnnotation *annotation = editor->addAnnotation();
-    annotation->setAnnotationShape(shape);
 }
 
 void KWView::annotationShapeRemoved(KoShape *shape)
