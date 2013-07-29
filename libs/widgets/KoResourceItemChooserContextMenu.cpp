@@ -34,7 +34,7 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     QWidget* pWidget = new QWidget (NULL);
     QHBoxLayout* pLayout = new QHBoxLayout();
     m_label = new QLabel(NULL);
-    m_editBox = new KLineEdit(NULL);
+    m_editBox = new QLineEdit(NULL);
     pLayout->addWidget(m_label);
     pLayout->addWidget(m_editBox);
     pWidget->setLayout(pLayout);
@@ -80,7 +80,9 @@ void KoLineEditAction::onTriggered(const QString& text)
 
 void KoLineEditAction::setClickMessage(const QString& clickMessage)
 {
-    m_editBox->setClickMessage(clickMessage);
+// QT5
+// error: ‘class QLineEdit’ has no member named ‘setClickMessage’
+//    m_editBox->setClickMessage(clickMessage);
 }
 
 void KoLineEditAction::setText(const QString& text)

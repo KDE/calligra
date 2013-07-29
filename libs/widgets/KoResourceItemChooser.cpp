@@ -38,12 +38,12 @@
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
+#include <QLineEdit>
 
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <QLineEdit>
-
+#include <kcombobox.h>
 
 #ifdef GHNS
 #include <attica/version.h>
@@ -91,6 +91,7 @@ public:
     QLineEdit *tagSearchLineEdit;
     QPushButton *tagSearchSaveButton;
     QToolButton *tagToolButton;
+    QLineEdit *tagOpLineEdit;
     QComboBox *tagOpComboBox;
     QString knsrcFile;
     QCompleter *tagCompleter;
@@ -302,9 +303,10 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->setSpacing(0);
     buttonLayout->setMargin(0);
 
-    d->tagSearchLineEdit = new KLineEdit(this);
-    d->tagSearchLineEdit->setClearButtonShown(true);
-    d->tagSearchLineEdit->setClickMessage(i18n("Enter resource filters here"));
+    d->tagSearchLineEdit = new QLineEdit(this);
+    // QT5_PORT
+    //d->tagSearchLineEdit->setClearButtonShown(true);
+    //d->tagSearchLineEdit->setClickMessage(i18n("Enter resource filters here"));
     d->tagSearchLineEdit->setToolTip(d->tagSearchBarTooltip_disabled);
     d->tagSearchLineEdit->setEnabled(true);
     d->tagSearchLineEdit->hide();

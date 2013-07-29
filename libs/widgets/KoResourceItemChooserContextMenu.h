@@ -23,7 +23,7 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <KLineEdit>
+#include <QLineEdit>
 #include <QLabel>
 class KoResource;
 
@@ -70,7 +70,7 @@ protected slots:
 private:
     bool m_closeParentOnTrigger;
     QLabel * m_label;
-    KLineEdit * m_editBox;
+    QLineEdit * m_editBox;
 };
 class NewTagAction : public KoLineEditAction
 {

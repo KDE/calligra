@@ -22,7 +22,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 
 #include <KGlobal>

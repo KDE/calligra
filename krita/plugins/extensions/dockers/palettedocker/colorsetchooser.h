@@ -24,7 +24,7 @@
 #include <QWidget>
 
 class KoColorSet;
-class KLineEdit;
+class QLineEdit;
 class KoResourceItemChooser;
 class KisView2;
 class KoResource;

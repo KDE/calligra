@@ -38,7 +38,7 @@
 #include "kis_workspace_resource.h"
 #include "kis_view2.h"
 #include <QGridLayout>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kis_canvas_resource_provider.h>
 
 class ColorSetDelegate : public QAbstractItemDelegate

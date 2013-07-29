@@ -25,7 +25,7 @@
 class QLabel;
 class QGroupBox;
 class KisConfigWidget;
-class KLineEdit;
+class QLineEdit;
 
 #include "ui_wdgdlgfilelayer.h"
 

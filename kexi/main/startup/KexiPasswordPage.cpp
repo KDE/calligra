@@ -22,7 +22,7 @@
 #include <db/connectiondata.h>
 
 #include <KLocale>
-#include <KLineEdit>
+#include <QLineEdit>
 
 #include <QVBoxLayout>
 #include <QFontMetrics>
@@ -54,7 +54,7 @@ void KexiPasswordPage::init()
     d->widget = new KexiPasswordWidget(0,
         KexiPasswordWidget::ShowUsernameLine | KexiPasswordWidget::ShowDomainLine
         | KexiPasswordWidget::UsernameReadOnly | KexiPasswordWidget::DomainReadOnly);
-    KLineEdit *passEdit = d->widget->findChild<KLineEdit*>("passEdit");
+    QLineEdit *passEdit = d->widget->findChild<QLineEdit*>("passEdit");
     Q_ASSERT(passEdit);
     passEdit->setMaximumWidth(passEdit->fontMetrics().width("W")*24);
     lyr->addWidget(d->widget);

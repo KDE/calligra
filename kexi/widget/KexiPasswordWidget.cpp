@@ -31,7 +31,7 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kiconloader.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <klocale.h>
 #include <khbox.h>
 #include <kdebug.h>
@@ -78,7 +78,7 @@ KexiPasswordWidget::~KexiPasswordWidget()
     delete d;
 }
 
-static void setLineEditReadOnly(KLineEdit *edit, bool readOnly)
+static void setLineEditReadOnly(QLineEdit *edit, bool readOnly)
 {
     QPalette p(edit->parentWidget()->palette());
     p.setColor(QPalette::Base, Qt::transparent);
@@ -398,7 +398,7 @@ void KexiPasswordWidget::setKnownLogins( const QMap<QString, QString>& knownLogi
         d->ui.formLayout->removeWidget(d->ui.userEdit);
         delete d->ui.userEdit;
         d->userEditCombo = new KComboBox(true, this);
-        d->ui.userEdit = qobject_cast<KLineEdit*>(d->userEditCombo->lineEdit());
+        d->ui.userEdit = qobject_cast<QLineEdit*>(d->userEditCombo->lineEdit());
 //        QSize s = d->userEditCombo->sizeHint();
 //        d->ui.userEditCombo->setFixedHeight( s.height() );
 //        d->ui.userEditCombo->setMinimumWidth( s.width() );

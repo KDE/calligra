@@ -22,3 +22,5 @@ Qt Porting todo
       #endif
       
    in CellEditor.cpp	
+* KoResourceItemChooserContextMenu.cpp
+  commented out KLineEdit specific stuff
