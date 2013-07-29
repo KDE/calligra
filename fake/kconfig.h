@@ -301,6 +301,7 @@ public:
     /// @reimp
     QStringList groupList() const;
 
+#endif
     /**
      * Returns a map (tree) of entries in a particular group.
      *
@@ -312,8 +313,7 @@ public:
      *         The returned map may be empty if the group is empty, or not found.
      * @see   QMap
      */
-    QMap<QString, QString> entryMap(const QString &aGroup=QString()) const;
-#endif
+    QMap<QString, QString> entryMap(const QString &aGroup=QString()) const { return QMap<QString, QString>();}
     
 };
 

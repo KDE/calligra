@@ -348,6 +348,8 @@ public:
     /** Overload for writePathEntry(const QString&, const QStringList&, WriteConfigFlags) */
     void writePathEntry(const char *pKey, const QStringList &value,
                         WriteConfigFlags pFlags = Normal);
+#endif
+
 
     /**
      * Deletes the entry specified by @p pKey in the current group
@@ -359,9 +361,9 @@ public:
      *
      * @see deleteGroup(), readEntry(), writeEntry()
      */
-    void deleteEntry(const QString &pKey, WriteConfigFlags pFlags = Normal);
+    void deleteEntry(const QString &pKey, WriteConfigFlags pFlags = Normal) { Q_UNUSED(pKey); Q_UNUSED(pFlags); };
     /** Overload for deleteEntry(const QString&, WriteConfigFlags) */
-    void deleteEntry(const char *pKey, WriteConfigFlags pFlags = Normal);
+    void deleteEntry(const char *pKey, WriteConfigFlags pFlags = Normal){ Q_UNUSED(pKey); Q_UNUSED(pFlags); };
 
     /**
      * Checks whether the key has an entry in this group
@@ -378,8 +380,6 @@ public:
      *
      * @see readEntry()
      */
-#endif
-
     bool hasKey(const QString &key) const
     {
         qWarning() << Q_FUNC_INFO << "TODO" << key;
