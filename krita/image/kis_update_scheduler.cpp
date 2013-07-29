@@ -306,7 +306,7 @@ void KisUpdateScheduler::unblockUpdates()
 
 void KisUpdateScheduler::wakeUpWaitingThreads()
 {
-    if(m_d->updatesLockCounter.loadAcquire() && !haveUpdatesRunning()) {
+    if(m_d->updatesLockCounter.load() && !haveUpdatesRunning()) {
         m_d->updatesFinishedCondition.wakeAll();
     }
 }
@@ -314,7 +314,7 @@ void KisUpdateScheduler::wakeUpWaitingThreads()
 void KisUpdateScheduler::tryProcessUpdatesQueue()
 {
     QReadLocker locker(&m_d->updatesStartLock);
-    if(m_d->updatesLockCounter.loadAcquire()) return;
+    if(m_d->updatesLockCounter.load()) return;
 
     m_d->updatesQueue->processQueue(*m_d->updaterContext);
 }

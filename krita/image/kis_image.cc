@@ -1502,21 +1502,21 @@ void KisImage::enableUIUpdates()
 
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
-    if (!m_d->disableUIUpdateSignals.loadAcquire()) {
+    if (!m_d->disableUIUpdateSignals.load()) {
         emit sigImageUpdated(rc);
     }
 }
 
 void KisImage::notifySelectionChanged()
 {
-    if (!m_d->disableUIUpdateSignals.loadAcquire()) {
+    if (!m_d->disableUIUpdateSignals.load()) {
         m_d->legacyUndoAdapter->emitSelectionChanged();
     }
 }
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
-    if (m_d->disableDirtyRequests.loadAcquire()) return;
+    if (m_d->disableDirtyRequests.load()) return;
 
     KisNodeGraphListener::requestProjectionUpdate(node, rect);
 
