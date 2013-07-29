@@ -36,7 +36,6 @@ public:
     class KRITAIMAGE_EXPORT Reason
     {
         friend class Validator;
-        friend class QMap<QString, Reason>;
     public:
         enum Type {
             UNKNOWN_REASON,
@@ -44,11 +43,9 @@ public:
             INVALID_TYPE,
             INVALID_VALUE
         };
-    private:
         Reason(Type type = UNKNOWN_REASON);
         Reason(const Reason&);
         Reason& operator=(const Reason&);
-    public:
         ~Reason();
         Type type() const;
     private:
