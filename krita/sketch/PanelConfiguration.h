@@ -30,6 +30,7 @@ class PanelConfiguration : public QObject, public QDeclarativeParserStatus
 Q_OBJECT
 Q_PROPERTY(QDeclarativeListProperty<QDeclarativeItem> panels READ panels)
 Q_PROPERTY(QDeclarativeListProperty<QDeclarativeItem> panelAreas READ panelAreas)
+Q_INTERFACES(QDeclarativeParserStatus)
 
 public:
     explicit PanelConfiguration(QObject* parent = 0);
