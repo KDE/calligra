@@ -148,10 +148,10 @@ void KWPageTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
 
 void KWPageTool::mousePressEvent(KoPointerEvent *event)
 {    
-    int leftMargin   = marginInPx(MLEFT);
-    int rightMargin  = marginInPx(MRIGHT);
-    int topMargin    = marginInPx(MTOP);
-    int bottomMargin = marginInPx(MBOTTOM);
+    int leftMargin   = marginInPx(MARGIN_LEFT);
+    int rightMargin  = marginInPx(MARGIN_RIGHT);
+    int topMargin    = marginInPx(MARGIN_TOP);
+    int bottomMargin = marginInPx(MARGIN_BOTTOM);
 
     KWPageStyle style = pageUnderMouse().pageStyle();
     KoPageLayout layout = style.pageLayout();
@@ -166,68 +166,81 @@ void KWPageTool::mousePressEvent(KoPointerEvent *event)
 
     //For the page resizing
     if (xMouse < SELECT_SPACE ) {
-        m_selection = BLEFT;
+        m_selection = BORDER_LEFT;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
         m_resizeTimer->start(3);
     }
     else if (xMouse > layout.width - SELECT_SPACE ) {
-        m_selection = BRIGHT;
+        m_selection = BORDER_RIGHT;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
         m_resizeTimer->start(3);
     }
     else if (yMouse < SELECT_SPACE ) {
-        m_selection = BTOP;
+        m_selection = BORDER_TOP;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
         m_resizeTimer->start(3);
     }
     else if (yMouse > layout.height - SELECT_SPACE && yMouse < layout.height + SELECT_SPACE) {
-        m_selection = BBOTTOM;
+        m_selection = BORDER_BOTTOM;
         m_mousePosTmp = new QPoint(QCursor::pos().x(),QCursor::pos().y());
         m_resizeTimer->start(3);
     }
     //For the margin resizing
     else if (xMouse > leftMargin - SELECT_SPACE && xMouse < leftMargin + SELECT_SPACE) {
-        m_selection = MLEFT;
+        m_selection = MARGIN_LEFT;
     }
     else if (xMouse > rightMargin - SELECT_SPACE && xMouse < rightMargin + SELECT_SPACE) {
-        m_selection = MRIGHT;
+        m_selection = MARGIN_RIGHT;
     }
     else if (yMouse > topMargin - SELECT_SPACE && yMouse < topMargin + SELECT_SPACE) {
-        m_selection = MTOP;
+        m_selection = MARGIN_TOP;
     }
     else if (yMouse > bottomMargin - SELECT_SPACE && yMouse < bottomMargin + SELECT_SPACE) {
-        m_selection = MBOTTOM;
+        m_selection = MARGIN_BOTTOM;
     }
 }
 
 void KWPageTool::mouseDoubleClickEvent(KoPointerEvent *event) {
     //For the creation of header
     event->accept();
-    KWPageStyle style = pageUnderMouse().pageStyle();
+    KWPage currentPage = pageUnderMouse();
+    KWPageStyle style = currentPage.pageStyle();
     KoPageLayout layout = style.pageLayout();
 
     int yMouse = yMouseInPage();
-    if (yMouse < layout.height /2 && pageUnderMouse().pageStyle().headerPolicy() == Words::HFTypeNone){
-        enableHeader();
+    if (yMouse <= layout.height / 2){
+        if(currentPage.pageStyle().headerPolicy() == Words::HFTypeNone) {
+            enableHeader();
+        }
+        else {
+            disableHeader();
+        }
     }
-    else if(yMouse > layout.height / 2 && pageUnderMouse().pageStyle().footerPolicy() == Words::HFTypeNone){
-        enableFooter();
+    else {
+        if(currentPage.pageStyle().footerPolicy() == Words::HFTypeNone) {
+            enableFooter();
+        }
+        else {
+            disableFooter();
+        }
     }
 }
 
 void KWPageTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_selection == MLEFT
-     || m_selection == MRIGHT
-     || m_selection == MBOTTOM
-     || m_selection == MTOP) {
-        setMarginInPx(m_selection, event->x(), event->y());
+    //actions on margins
+    if (m_selection == MARGIN_LEFT
+     || m_selection == MARGIN_RIGHT
+     || m_selection == MARGIN_BOTTOM
+     || m_selection == MARGIN_TOP) {
+        setMarginInPx(m_selection);
     }
+    //actions on page's borders
     else {
-        int leftMargin   = marginInPx(MLEFT);
-        int rightMargin  = marginInPx(MRIGHT);
-        int topMargin    = marginInPx(MTOP);
-        int bottomMargin = marginInPx(MBOTTOM);
+        int leftMargin   = marginInPx(MARGIN_LEFT);
+        int rightMargin  = marginInPx(MARGIN_RIGHT);
+        int topMargin    = marginInPx(MARGIN_TOP);
+        int bottomMargin = marginInPx(MARGIN_BOTTOM);
         KWPageStyle style = pageUnderMouse().pageStyle();
         KoPageLayout layout = style.pageLayout();
 
@@ -310,16 +323,16 @@ int KWPageTool::marginInPx(Selection selection)
     int bottomMargin = layout.height - layout.bottomMargin;
 
     switch (selection) {
-    case MLEFT:
+    case MARGIN_LEFT:
         return leftMargin;
         break;
-    case MRIGHT:
+    case MARGIN_RIGHT:
         return rightMargin;
         break;
-    case MTOP:
+    case MARGIN_TOP:
         return topMargin;
         break;
-    case MBOTTOM:
+    case MARGIN_BOTTOM:
         return bottomMargin;
         break;
     default:
@@ -329,36 +342,36 @@ int KWPageTool::marginInPx(Selection selection)
     return -1;
 }
 
-void KWPageTool::setMarginInPx(Selection selection, int positionX, int positionY)
+void KWPageTool::setMarginInPx(Selection selection)
 {
     KWPageStyle style = pageUnderMouse().pageStyle();
     KoPageLayout layout = style.pageLayout();
 
-    int leftMargin   = marginInPx(MLEFT);
-    int rightMargin  = marginInPx(MRIGHT);
-    int topMargin    = marginInPx(MTOP);
-    int bottomMargin = marginInPx(MBOTTOM);
+    int leftMargin   = marginInPx(MARGIN_LEFT);
+    int rightMargin  = marginInPx(MARGIN_RIGHT);
+    int topMargin    = marginInPx(MARGIN_TOP);
+    int bottomMargin = marginInPx(MARGIN_BOTTOM);
 
     int xMouse = xMouseInPage();
     int yMouse = yMouseInPage();
 
     switch (selection) {
-    case MLEFT:
+    case MARGIN_LEFT:
         if (xMouse > SELECT_SPACE && xMouse < rightMargin - SELECT_SPACE) {
             layout.leftMargin = xMouse;
         }
         break;
-    case MRIGHT:
+    case MARGIN_RIGHT:
         if (xMouse < layout.width - SELECT_SPACE && xMouse > leftMargin + SELECT_SPACE) {
             layout.rightMargin = layout.width - xMouse;
         }
         break;
-    case MTOP:
+    case MARGIN_TOP:
         if (yMouse > SELECT_SPACE && yMouse < bottomMargin - SELECT_SPACE) {
             layout.topMargin = yMouse;
         }
         break;
-    case MBOTTOM:
+    case MARGIN_BOTTOM:
         if (yMouse < layout.height - SELECT_SPACE && yMouse > topMargin + SELECT_SPACE) {
             layout.bottomMargin = layout.height - yMouse;
         }
@@ -367,7 +380,7 @@ void KWPageTool::setMarginInPx(Selection selection, int positionX, int positionY
         qDebug() << "Unexcepted case PageTool::setMarginPx";
         break;
     }
-
+    //refresh
     changeLayoutInStyle(layout, style);
 }
 
@@ -386,16 +399,16 @@ void KWPageTool::resizePage()
     float heightOld = layout.height;
     //Apply the resize
     switch(m_selection) {
-    case BLEFT:
+    case BORDER_LEFT:
         layout.width += widthResize*2;
         break;
-    case BRIGHT:
+    case BORDER_RIGHT:
         layout.width -= widthResize*2;
         break;
-    case BTOP:
+    case BORDER_TOP:
         layout.height += heightResize*2;
         break;
-    case BBOTTOM:
+    case BORDER_BOTTOM:
         layout.height -= heightResize*2;
         break;
     default:
@@ -403,13 +416,12 @@ void KWPageTool::resizePage()
     }
     layout.width =
            std::max(layout.width
-           , qreal(marginInPx(MLEFT) + (layout.width - marginInPx(MRIGHT)) + SELECT_SPACE));
+           , qreal(marginInPx(MARGIN_LEFT) + (layout.width - marginInPx(MARGIN_RIGHT)) + SELECT_SPACE));
     layout.height =
            std::max(layout.height
-           , qreal(marginInPx(MTOP) + (layout.height - marginInPx(MBOTTOM)) + SELECT_SPACE));
+           , qreal(marginInPx(MARGIN_TOP) + (layout.height - marginInPx(MARGIN_BOTTOM)) + SELECT_SPACE));
     //We follow the page
     float heightNew = layout.height;
-
     int numberPageModified = 0;
     for(int i = 1; i <= m_numberPageClicked; i++) {
         if(m_document->pageManager()->page(i).pageStyle().name() == style.name()) {
@@ -418,10 +430,13 @@ void KWPageTool::resizePage()
     }
     float ratio = ((heightNew / heightOld) * numberPageModified
                 + (m_numberPageClicked - numberPageModified)) / m_numberPageClicked;
-    qDebug() << "RATIO " << ratio;
+
+    //qDebug() << "RATIO " << ratio;
+
     m_canvas->canvasController()->setPreferredCenter(
                 QPointF(m_canvas->canvasController()->preferredCenter().x()
                        ,m_canvas->canvasController()->preferredCenter().y()*ratio));
+
     //Changethe orientation of the page if needed + change size format to custom
     layout.format = KoPageFormat::CustomSize;
     if (layout.width > layout.height) {
@@ -459,7 +474,11 @@ KWPage KWPageTool::pageUnderMouse()
     int yMouse = int(yMouseInDocument());
     for(int i = 1; i <= m_document->pageCount(); i++) {
         if(yPosition > yMouse) {
-            return m_document->pageManager()->page(i-1);
+            //To avoid crash on first page
+            if(i > 1)
+                return m_document->pageManager()->page(i-1);
+            else
+                return m_document->pageManager()->page(i);
         }
         yPosition += m_document->pageManager()->page(i).pageStyle().pageLayout().height + 21;
     }
@@ -507,6 +526,29 @@ void KWPageTool::enableFooter()
     Q_ASSERT(m_currentPage.pageStyle().isValid());
     m_currentPage.pageStyle().setFooterPolicy(Words::HFTypeUniform);
     m_canvas->view()->actionCollection()->action("insert_footer")->setEnabled(false);
+    refreshCanvas();
+}
+
+void KWPageTool::disableHeader()
+{
+    KWPage m_currentPage = pageUnderMouse();
+    if (!m_currentPage.isValid())
+        return;
+    Q_ASSERT(m_currentPage.pageStyle().isValid());
+    m_currentPage.pageStyle().setHeaderPolicy(Words::HFTypeNone);
+    m_canvas->view()->actionCollection()->action("insert_header")->setEnabled(true);
+    refreshCanvas();
+}
+
+
+void KWPageTool::disableFooter()
+{
+    KWPage m_currentPage = pageUnderMouse();
+    if (!m_currentPage.isValid())
+        return;
+    Q_ASSERT(m_currentPage.pageStyle().isValid());
+    m_currentPage.pageStyle().setFooterPolicy(Words::HFTypeNone);
+    m_canvas->view()->actionCollection()->action("insert_footer")->setEnabled(true);
     refreshCanvas();
 }
 

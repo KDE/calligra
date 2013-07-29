@@ -31,7 +31,7 @@ class KWDocument;
 class KWPage;
 class KoPageLayout;
 class KWPageStyle;
-enum Selection{NONE,MTOP,MBOTTOM,MLEFT,MRIGHT,HEADER,FOOTER,BLEFT,BRIGHT,BTOP,BBOTTOM};
+enum Selection{NONE,MARGIN_TOP,MARGIN_BOTTOM,MARGIN_LEFT,MARGIN_RIGHT,HEADER,FOOTER,BORDER_LEFT,BORDER_RIGHT,BORDER_TOP,BORDER_BOTTOM};
 
 class KWPageTool : public KoToolBase
 {
@@ -62,6 +62,8 @@ public: // Events
 public slots:
     void enableHeader();
     void enableFooter();
+    void disableHeader();
+    void disableFooter();
 
 private slots:
     ///Force the remaining content on the page to next page.
@@ -74,7 +76,7 @@ private:
     //Return or set the position x or y of the margin
     int marginInPx(Selection selection);
     //Set position of margin in px
-    void setMarginInPx(Selection selection, int postionX, int positionY);
+    void setMarginInPx(Selection selection);
     //Get the position of the mouse
     int xMouseInPage();
     int yMouseInPage();
