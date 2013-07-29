@@ -313,7 +313,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
  - docPartBody (§17.12.6)
 
  Chils elements:
- - bidi (Right to Left Section Layout) §17.6.1
+ - [done] bidi (Right to Left Section Layout) §17.6.1
  - [done] cols (Column Definitions) §17.6.4
  - docGrid (Document Grid) §17.6.5
  - [done] endnotePr (Section-Wide Endnote Properties) §17.11.5
@@ -381,6 +381,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(footnotePr)
             ELSE_TRY_READ_IF(endnotePr)
             ELSE_TRY_READ_IF(lnNumType)
+            else if (name() == "bidi") {
+                m_currentPageStyle.addProperty("style:writing-mode", "rl-tb");
+            }
             SKIP_UNKNOWN
         }
     }
@@ -2281,7 +2284,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     }
 
     //---------------------------------------------
-    // Prepare for the List Style
+    // Prepare for List Style
     //---------------------------------------------
     if (m_listFound && m_currentBulletList.size() > m_currentListLevel) {
         m_currentBulletProperties = m_currentBulletList.at(m_currentListLevel);
@@ -2338,6 +2341,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
     }
 
+    //---------------------------------------------
+    // Process Paragraph Content
+    //---------------------------------------------
     if (oldWasCaption || (isHidden && textPBuf.isEmpty())) {
         //nothing
         body = textPBuf.originalWriter();
@@ -2361,8 +2367,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 if (m_listFound) {
 
                     // update the size of a bullet picture
-                    if ((m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::PictureType)
-                        && (m_currentBulletProperties.bulletSizePt() == "UNUSED")) {
+                    if ((m_currentBulletProperties.m_type ==
+                         MSOOXML::Utils::ParagraphBulletProperties::PictureType) &&
+                        (m_currentBulletProperties.bulletSizePt() == "UNUSED")) {
+
                         int percent = 100;
                         if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
                             STRING_TO_INT(m_currentBulletProperties.bulletRelativeSize(), percent,
@@ -3865,7 +3873,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
     }
     else if ((val == "start") || (val == "left")) {
         if (caller == jc_pPr) {
-            m_currentParagraphStyle.addProperty("fo:text-align", val);
+            m_currentParagraphStyle.addProperty("fo:text-align", "start");
         }
         else {
             m_tableMainStyle->setHorizontalAlign(KoTblStyle::LeftAlign);
@@ -3873,7 +3881,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
     }
     else if ((val == "right") || (val == "end")) {
         if (caller == jc_pPr) {
-            m_currentParagraphStyle.addProperty("fo:text-align", val);
+            m_currentParagraphStyle.addProperty("fo:text-align", "end");
         }
         else {
             m_tableMainStyle->setHorizontalAlign(KoTblStyle::RightAlign);
