@@ -27,7 +27,6 @@
 
 #include <KoPart.h>
 #include <KoDockRegistry.h>
-#include <KStatusBar>
 
 #include <QWidget>
 #include <QFileDialog>
