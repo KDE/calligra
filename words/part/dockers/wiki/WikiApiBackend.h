@@ -3,17 +3,35 @@
 
 #include <QObject>
 
+class QNetworkReply;
+class KoXmlStreamReader;
+
 class WikiApiBackend : public QObject
 {
     Q_OBJECT
 public:
+    enum ActionType {
+        LogIn
+    };
     explicit WikiApiBackend();
     
-    bool login(QString &username, QString &password);
+    void login(const QString &username, const QString &password);
+
+private:
+    void setActionType(WikiApiBackend::ActionType type);
+    WikiApiBackend::ActionType actioType();
+
+private slots:
+    void handleNetworkResponse(QNetworkReply *networkReply);
+    void handleLoginResponse(KoXmlStreamReader &reader);
+    void automaticLogin();
+
 signals:
-    
-public slots:
-    
+    void requestFinished(QString message);
+
+private:
+    class Private;
+    Private *const d;
 };
 
 #endif // WIKIAPIBACKEND_H

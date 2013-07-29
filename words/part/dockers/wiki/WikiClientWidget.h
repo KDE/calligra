@@ -23,6 +23,8 @@ public:
 
 private slots:
     void clientLogin();
+    void handleRequestResult(QString message);
+    void updateLoginStatus();
 
     
 private:
