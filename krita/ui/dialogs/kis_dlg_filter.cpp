@@ -173,7 +173,8 @@ void KisFilterDialog::previewCheckBoxChange(int state)
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
-    group.config()->sync();
+    // QT5_PORT
+    // group.config()->sync();
 }
 
 void KisFilterDialog::resizeEvent(QResizeEvent* event)
