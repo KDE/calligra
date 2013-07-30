@@ -24,10 +24,13 @@
 
 #include <kglobalsettings.h>
 #include <ktextedit.h>
-#include "ui/textedit.h"
+
 
 #include "calligra_sheets_export.h"
 #include "CellEditorBase.h"
+
+#include <QCompleter>
+#include <QAbstractItemModel>
 class KoViewConverter;
 
 namespace Calligra
@@ -40,7 +43,7 @@ class Selection;
 /**
  * class CellEditor
  */
-class CellEditor : public TextEdit, public CellEditorBase
+class CellEditor : public KTextEdit, public CellEditorBase
 {
     Q_OBJECT
 public:
@@ -60,6 +63,7 @@ public:
     void setCursorPosition(int pos);
 
     QPoint globalCursorPosition() const;
+    QAbstractItemModel *getModel();
 
     /**
      * Replaces the current formula token(/reference) with the name of the
@@ -75,10 +79,10 @@ public:
 
     // CellEditorBase interface
     virtual QWidget* widget() { return this; }
-    virtual void cut() { TextEdit::cut(); }
-    virtual void copy() { TextEdit::copy(); }
-    virtual void paste() { TextEdit::paste(); }
-    virtual QString toPlainText() const { return TextEdit::toPlainText(); }
+    virtual void cut() { KTextEdit::cut(); }
+    virtual void copy() { KTextEdit::copy(); }
+    virtual void paste() { KTextEdit::paste(); }
+    virtual QString toPlainText() const { return KTextEdit::toPlainText(); }
 Q_SIGNALS:
     void textChanged(const QString &text);
 
@@ -90,27 +94,27 @@ public slots:
      * is placed. It is only active, if a formula is edited.
      */
     void permuteFixation();
+    void setCompleter(QCompleter *c);
+    QCompleter *completer() const;
 
 private slots:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
     void  slotCursorPositionChanged();
+    void insertCompletion(const QString &completion);
 
 protected: // reimplementations
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void focusInEvent(QFocusEvent *event);
     virtual void focusOutEvent(QFocusEvent *event);
 
-protected slots:
-    void checkFunctionAutoComplete();
-    void triggerFunctionAutoComplete();
-    void functionAutoComplete(const QString& item);
-
 private:
     Q_DISABLE_COPY(CellEditor)
+    QString textUnderCursor() const;
 
     class Private;
     Private * const d;
+    QCompleter *c;
 };
 
 } // namespace Sheets

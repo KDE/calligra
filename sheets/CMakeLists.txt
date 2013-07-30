@@ -184,7 +184,6 @@ SET (ui_DIR_SRCS
     ui/Selection.cpp
     ui/SelectionStrategy.cpp
     ui/SheetView.cpp
-    ui/textedit.cpp
 )
 
 SET (calligrasheetscommon_LIB_SRCS
@@ -364,7 +363,6 @@ install( FILES
     ui/CellEditorBase.h
     ui/Selection.h
     ui/SheetView.h
-    ui/textedit.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/ui COMPONENT Devel)
 install( FILES
     database/Database.h

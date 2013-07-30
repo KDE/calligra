@@ -31,7 +31,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
-#include "ui/textedit.h"
+
 
 // Calligra
 #include <KoDpi.h>
@@ -39,13 +39,21 @@
 
 // KDE
 #include <kdebug.h>
+#include <ktextedit.h>
 
 // Qt
+#include <QtGui>
 #include <QFocusEvent>
 #include <QKeyEvent>
 #include <QScrollBar>
 #include <QTimer>
-
+#include <QCompleter>
+#include <QAbstractItemView>
+#include <QtDebug>
+#include <QApplication>
+#include <QModelIndex>
+#include <QAbstractItemModel>
+#include <QScrollBar>
 using namespace Calligra::Sheets;
 
 class CellEditor::Private
@@ -53,7 +61,7 @@ class CellEditor::Private
 public:
     CellToolBase*             cellTool;
     Selection*                selection;
-    TextEdit*                textEdit;
+    KTextEdit*                textEdit;
     FormulaEditorHighlighter* highlighter;
     FunctionCompletion*       functionCompletion;
     QTimer*                   functionCompletionTimer;
@@ -234,8 +242,9 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
 
 
 CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
-        : TextEdit(parent)
+        : KTextEdit(parent)
         , d(new Private)
+	,c(0)
 {
     d->cellTool = cellTool;
     d->selection = cellTool->selection();
@@ -256,24 +265,26 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
 
     d->functionCompletion = new FunctionCompletion(this);
     d->functionCompletionTimer = new QTimer(this);
-    connect(d->functionCompletion, SIGNAL(selectedCompletion(QString)),
-            SLOT(functionAutoComplete(QString)));
-    connect(this, SIGNAL(textChanged()), SLOT(checkFunctionAutoComplete()));
-    connect(d->functionCompletionTimer, SIGNAL(timeout()),
-            SLOT(triggerFunctionAutoComplete()));
 
     const Cell cell(d->selection->activeSheet(), d->selection->marker());
     const bool wrapText = cell.style().wrapText();
     d->textEdit->setWordWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::NoWrap);
 
-#if 0 // FIXME Implement a completion aware TextEdit.
+#if 0 // FIXME Implement a completion aware KTextEdit.
     setCompletionMode(selection()->view()->doc()->completionMode());
     setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
 #endif
-
+    
+    //AutoCompletion Code
+    c = new QCompleter(this);
+    c->setModel(getModel());
+    //completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+    c->setCaseSensitivity(Qt::CaseInsensitive);
+    c->setWrapAround(false);
+    this->setCompleter(c);
+    
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-// connect( this, SIGNAL(completionModeChanged(KGlobalSettings::Completion)),this,SLOT(slotCompletionModeChanged(KGlobalSettings::Completion)));
 }
 
 CellEditor::~CellEditor()
@@ -294,81 +305,55 @@ QPoint CellEditor::globalCursorPosition() const
     return d->globalCursorPos;
 }
 
-void CellEditor::checkFunctionAutoComplete()
-{
-    // Nothing to do, if no focus or not in reference selection mode.
-    if (!hasFocus() || !selection()->referenceSelection()) {
-        return;
-    }
+//AutoCompletion Functions
 
-    d->functionCompletionTimer->stop();
-    d->functionCompletionTimer->setSingleShot(true);
-    d->functionCompletionTimer->start(2000);
+QAbstractItemModel *CellEditor::getModel()
+{
+  QStringList words;
+  words<<"Test"<<"Testing"<<"Test Again";
+  return new QStringListModel(words,c);  
 }
 
-void CellEditor::triggerFunctionAutoComplete()
+void CellEditor::setCompleter(QCompleter *completer)
 {
-    // tokenize the expression (don't worry, this is very fast)
-    int curPos = textCursor().position();
-    QString subtext = toPlainText().left(curPos);
+     if (c)
+         QObject::disconnect(c, 0, this, 0);
 
-    Calligra::Sheets::Formula f;
-    Calligra::Sheets::Tokens tokens = f.scan(subtext);
-    if (!tokens.valid()) return;
-    if (tokens.count() < 1) return;
+     c = completer;
 
-    Calligra::Sheets::Token lastToken = tokens[ tokens.count()-1 ];
+     if (!c)
+         return;
 
-    // last token must be an identifier
-    if (!lastToken.isIdentifier()) return;
-    QString id = lastToken.text();
-    if (id.length() < 1) return;
-
-    // find matches in function names
-    QStringList fnames = Calligra::Sheets::FunctionRepository::self()->functionNames();
-    QStringList choices;
-    for (int i = 0; i < fnames.count(); i++)
-        if (fnames[i].startsWith(id, Qt::CaseInsensitive))
-            choices.append(fnames[i]);
-    choices.sort();
-
-    // no match, don't bother with completion
-    if (!choices.count()) return;
-
-    // single perfect match, no need to give choices
-    if (choices.count() == 1)
-        if (choices[0].toLower() == id.toLower())
-            return;
-
-    // present the user with completion choices
-    d->functionCompletion->showCompletion(choices);
+     c->setWidget(this);
+     c->setCompletionMode(QCompleter::PopupCompletion);
+     c->setCaseSensitivity(Qt::CaseInsensitive);
+     QObject::connect(c, SIGNAL(activated(QString)),
+                      this, SLOT(insertCompletion(QString)));
 }
 
-void CellEditor::functionAutoComplete(const QString& item)
+QCompleter *CellEditor::completer() const
 {
-    if (item.isEmpty()) return;
+     return c;
+}
 
-    QTextCursor textCursor = this->textCursor();
-    int curPos = textCursor.position();
-    QString subtext = toPlainText().left(curPos);
+ void CellEditor::insertCompletion(const QString& completion)
+{
+     if (c->widget() != this)
+         return;
+     QTextCursor tc = textCursor();
+     int extra = completion.length() - c->completionPrefix().length();
+     tc.movePosition(QTextCursor::Left);
+     tc.movePosition(QTextCursor::EndOfWord);
+     tc.insertText(completion.right(extra));
+     setTextCursor(tc);
+}
 
-    Calligra::Sheets::Formula f;
-    Calligra::Sheets::Tokens tokens = f.scan(subtext);
-    if (!tokens.valid()) return;
-    if (tokens.count() < 1) return;
-
-    Calligra::Sheets::Token lastToken = tokens[ tokens.count()-1 ];
-    if (!lastToken.isIdentifier()) return;
-
-    blockSignals(true);
-    // Select the incomplete function name in order to replace it.
-    textCursor.setPosition(lastToken.pos() + 1);
-    textCursor.setPosition(lastToken.pos() + lastToken.text().length() + 1,
-                           QTextCursor::KeepAnchor);
-    setTextCursor(textCursor);
-    blockSignals(false);
-    // Replace the incomplete function name with the selected one.
-    insertPlainText(item);
+QString CellEditor::textUnderCursor() const
+{
+     QTextCursor tc = textCursor();
+     tc.select(QTextCursor::WordUnderCursor);
+     qDebug()<<"st:"<<tc.selectedText();
+     return tc.selectedText();
 }
 
 void CellEditor::slotCursorPositionChanged()
@@ -611,7 +596,7 @@ void CellEditor::selectionChanged()
 }
 
 void CellEditor::keyPressEvent(QKeyEvent *event)
-{
+ { 
     switch (event->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
@@ -643,22 +628,69 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         event->ignore(); // pass to parent
         return;
     }
-    TextEdit::keyPressEvent(event);
+    
+    if (c && c->popup()->isVisible()) {
+         // The following keys are forwarded by the completer to the widget
+        switch (event->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        case Qt::Key_Escape:
+        case Qt::Key_Tab:
+        case Qt::Key_Backtab:
+             event->ignore();
+             return; // let the completer do default behavior
+        default:
+            break;
+        }
+     }
+
+
+     bool isShortcut = ((event->modifiers() & Qt::ControlModifier) && event->key() == Qt::Key_E); // CTRL+E
+     if (!c || !isShortcut) // do not process the shortcut when we have a completer
+         QTextEdit::keyPressEvent(event);
+
+     const bool ctrlOrShift = event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+     if (!c || (ctrlOrShift && event->text().isEmpty()))
+         return;
+
+     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+     bool hasModifier = (event->modifiers() != Qt::NoModifier) && !ctrlOrShift;
+     QString completionPrefix = textUnderCursor();
+     //qDebug()<<"cp:"<<completionPrefix;
+
+     if (!isShortcut && (hasModifier || event->text().isEmpty()|| completionPrefix.length() < 3||eow.contains(event->text().right(1)))) {
+         c->popup()->hide();
+         return;
+     }
+     if (completionPrefix != c->completionPrefix()) {
+         c->setCompletionPrefix(completionPrefix);
+         c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+    }
+     QRect cr = cursorRect();
+     cr.setWidth(c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width());
+     qDebug()<<c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width();
+     //qDebug()<<"cp:"<<c->completionPrefix();
+     qDebug()<<"cc:"<<c->currentCompletion();
+     c->complete(); // popup it up!
+    
 }
 
 void CellEditor::focusInEvent(QFocusEvent *event)
 {
+    if (c)
+         c->setWidget(this);
+     KTextEdit::focusInEvent(event);
     // If the focussing is user induced.
     if (event->reason() != Qt::OtherFocusReason) {
         kDebug() << "induced by user";
         d->cellTool->setLastEditorWithFocus(CellToolBase::EmbeddedEditor);
     }
-    TextEdit::focusInEvent(event);
+    KTextEdit::focusInEvent(event);
 }
 
 void CellEditor::focusOutEvent(QFocusEvent *event)
 {
-    TextEdit::focusOutEvent(event);
+    KTextEdit::focusOutEvent(event);
 }
 
 void CellEditor::setText(const QString& text, int cursorPos)
