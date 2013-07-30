@@ -109,6 +109,7 @@ public:
         , canvasItem(0)
         , startUpWidget(0)
         , m_manager(0)
+        , m_componentData(KGlobal::mainComponent())
     {
         m_job = 0;
         m_statJob = 0;
@@ -122,7 +123,6 @@ public:
         m_bModified = false;
         m_bReadWrite = true;
         m_bClosing = false;
-
     }
 
     ~Private()
@@ -159,6 +159,8 @@ public:
     bool m_bReadWrite;
     bool m_bClosing;
     QEventLoop m_eventLoop;
+
+    KComponentData m_componentData;
 
     bool openLocalFile()
     {
@@ -350,6 +352,11 @@ KoPart::~KoPart()
 
 
     delete d;
+}
+
+KComponentData KoPart::componentData() const
+{
+    return d->m_componentData;
 }
 
 void KoPart::setDocument(KoDocument *document)
@@ -858,7 +865,8 @@ bool KoPart::waitSaveComplete()
 
 void KoPart::setComponentData(const KComponentData &componentData)
 {
-    KXMLGUIClient::setComponentData(componentData);
+    d->m_componentData = componentData;
+
     KGlobal::locale()->insertCatalog(componentData.catalogName());
     // install 'instancename'data resource type
     KGlobal::dirs()->addResourceType(QString(componentData.componentName() + "data").toUtf8(),

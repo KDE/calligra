@@ -49,9 +49,12 @@ class QGraphicsItem;
 
 /**
  * Override this class in your application. It's the main entry point that
- * should provide the document to the calligra system.
+ * should provide the document, the view and the component data to the calligra
+ * system.
+ *
+ * It hasn't got much to do with kparts anymore.
  */
-class KOMAIN_EXPORT KoPart : public QObject, public KXMLGUIClient
+class KOMAIN_EXPORT KoPart : public QObject
 {
     Q_OBJECT
 
@@ -71,6 +74,12 @@ public:
      * delete the attached widget as returned by widget().
      */
     virtual ~KoPart();
+
+    /**
+     * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
+     * in your subclass: setComponentData(AppFactory::componentData()); in the constructor
+     */
+    KComponentData componentData() const;
 
     /**
      * @param document the document this part manages
@@ -203,12 +212,6 @@ public:
     // ------- startup/openpane etc ---------------
 
     /**
-     * Set the template type used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    void setTemplateType(const QString& _templateType);
-
-    /**
      * Template type used. This is used by the start up widget to show
      * the correct templates.
      */
@@ -228,6 +231,12 @@ public:
     void deleteOpenPane(bool closing = false);
 
 protected:
+
+    /**
+     * Set the template type used. This is used by the start up widget to show
+     * the correct templates.
+     */
+    void setTemplateType(const QString& _templateType);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()
@@ -306,6 +315,7 @@ signals:
 
 protected:
 
+    /// Call in the constructor of the subclass: setComponentData(AppFactory::componentData());
     virtual void setComponentData(const KComponentData &componentData);
     void abortLoad();
 
