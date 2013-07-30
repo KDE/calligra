@@ -172,8 +172,13 @@ void KoPageLayoutWidget::setPageLayout(const KoPageLayout &layout)
 
     d->widget.topMargin->changeValue(layout.topMargin);
     d->widget.bottomMargin->changeValue(layout.bottomMargin);
+    d->widget.sizes->setCurrentIndex(layout.format);
+    d->widget.width->changeValue(layout.width);
+    d->widget.height->changeValue(layout.height);
     d->allowSignals = true;
-    d->widget.sizes->setCurrentIndex(layout.format); // calls sizeChanged()
+    optionsChanged();
+    sizeChanged(layout.format);
+    // calls sizeChanged()
 }
 
 void KoPageLayoutWidget::facingPagesChanged()

@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -17,33 +17,40 @@
  *  Boston, MA 02110-1301, USA.
 */
 
-#ifndef SIMPLEHEADERFOOTERWIDGET_H
-#define SIMPLEHEADERFOOTERWIDGET_H
+#ifndef SIMPLEPAGESTYLEWIDGET_H
+#define SIMPLEPAGESTYLEWIDGET_H
 
 #include <QWidget>
 
-#include "ui_SimpleHeaderFooterWidget.h"
-
 class KWView;
 class KWPageTool;
+namespace Ui {
+class SimplePageStyleWidget;
+}
 
-class SimpleHeaderFooterWidget : public QWidget
+class SimplePageStyleWidget : public QWidget
 {
     Q_OBJECT
+    
 public:
-
-    explicit SimpleHeaderFooterWidget(KWView *view, KWPageTool *pageTool, QWidget *parent = 0);
-    ~SimpleHeaderFooterWidget();
-
+    explicit SimplePageStyleWidget(KWView* view, KWPageTool* pageTool, QWidget *parent = 0);
+    ~SimplePageStyleWidget();
+    
 private slots:
-    void on_insertHeader_clicked();
+    void refreshInformations();
 
-    void on_insertFooter_clicked();
+    void on_spinTo_valueChanged(int arg1);
+
+    void on_spinFrom_valueChanged(int arg1);
+
+    void on_buttonApply_clicked();
+
+    void on_list_clicked(const int &index);
 
 private:
-    KWView* m_view;
     KWPageTool* m_pageTool;
-    Ui::SimpleHeaderFooterWidget widget;
+    KWView* m_view;
+    Ui::SimplePageStyleWidget *ui;
 };
 
-#endif // SIMPLEHEADERFOOTERWIDGET_H
+#endif // SIMPLEPAGESTYLEWIDGET_H

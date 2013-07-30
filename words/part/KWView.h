@@ -170,10 +170,6 @@ private slots:
     void selectBookmark();
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
-    /// enable document headers
-    void enableHeader();
-    /// enable document footers
-    void enableFooter();
     /// snap to grid
     void toggleSnapToGrid();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets

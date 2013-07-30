@@ -26,8 +26,6 @@
 #include "KWDocument.h"
 
 #include <KoPart.h>
-#include <KoDockRegistry.h>
-#include <KStatusBar>
 
 #include <QWidget>
 #include <QFileDialog>
@@ -40,7 +38,6 @@ CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
 {
         setComponentData(CAuFactory::componentData());
         setXMLFile("author.rc");
-
         setupActions();
 }
 

@@ -406,14 +406,11 @@ void KWView::setupActions()
     actionCollection()->addAction("insert_header", m_actionViewHeader);
     if (m_currentPage.isValid())
         m_actionViewHeader->setEnabled(m_currentPage.pageStyle().headerPolicy() == Words::HFTypeNone);
-    connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(enableHeader()));
 
     m_actionViewFooter = new KAction(i18n("Create Footer"), this);
     actionCollection()->addAction("insert_footer", m_actionViewFooter);
     if (m_currentPage.isValid())
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
-    connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
-
 
     // -------- Statistics in the status bar
     KToggleAction *tActionBis = new KToggleAction(i18n("Word Count"), this);
@@ -456,7 +453,8 @@ void KWView::setupActions()
     m_actionConfigureCompletion->setWhatsThis(i18n("Add words or change the options for autocompletion."));
 
     new KAction(i18n("Completion"), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT(slotCompletion()), actionCollection(), "completion");
-    */
+*/
+
 }
 
 QList<KWFrame*> KWView::selectedFrames() const
@@ -634,25 +632,6 @@ void KWView::deleteBookmark(const QString &name)
 #endif
 }
 
-void KWView::enableHeader()
-{
-    if (!m_currentPage.isValid())
-        return;
-    Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setHeaderPolicy(Words::HFTypeUniform);
-    m_actionViewHeader->setEnabled(false);
-    m_document->relayout();
-}
-
-void KWView::enableFooter()
-{
-    if (!m_currentPage.isValid())
-        return;
-    Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setFooterPolicy(Words::HFTypeUniform);
-    m_actionViewFooter->setEnabled(false);
-    m_document->relayout();
-}
 
 void KWView::toggleSnapToGrid()
 {
