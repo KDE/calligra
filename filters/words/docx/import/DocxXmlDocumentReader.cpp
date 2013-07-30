@@ -154,7 +154,6 @@ void DocxXmlDocumentReader::init()
     m_closeHyperlink = false;
     m_listFound = false;
     m_insideParagraph = false;
-    m_isRightToLeftText = false;
     m_createSectionStyle = false;
     m_createSectionToNext = false;
     m_currentVMLProperties.insideGroup = false;
@@ -314,7 +313,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
  - docPartBody (§17.12.6)
 
  Chils elements:
- - bidi (Right to Left Section Layout) §17.6.1
+ - [done] bidi (Right to Left Section Layout) §17.6.1
  - [done] cols (Column Definitions) §17.6.4
  - docGrid (Document Grid) §17.6.5
  - [done] endnotePr (Section-Wide Endnote Properties) §17.11.5
@@ -382,6 +381,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(footnotePr)
             ELSE_TRY_READ_IF(endnotePr)
             ELSE_TRY_READ_IF(lnNumType)
+            else if (name() == "bidi") {
+                m_currentPageStyle.addProperty("style:writing-mode", "rl-tb");
+            }
             SKIP_UNKNOWN
         }
     }
@@ -2339,16 +2341,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         m_currentParagraphStyle.removeAllProperties(KoGenStyle::TextType);
     }
 
-    if (m_isRightToLeftText) {
-        QString align = m_currentParagraphStyle.property("fo:text-align");
-        if (align == "left") {
-            m_currentParagraphStyle.addProperty("fo:text-align", "start");
-        }
-        else if (align == "right") {
-            m_currentParagraphStyle.addProperty("fo:text-align", "end");
-        }
-    }
-
     //---------------------------------------------
     // Process Paragraph Content
     //---------------------------------------------
@@ -2924,7 +2916,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [done] rFonts (Run Fonts) §17.3.2.26
  - rPrChange (Revision Information for Run Properties on the Paragraph Mark) §17.13.5.30
  - [done] rStyle (Referenced Character Style) §17.3.2.29
- - [done] rtl (Right To Left Text) §17.3.2.30
+ - rtl (Right To Left Text) §17.3.2.30
  - shadow (Shadow) §17.3.2.31
  - [done] shd (Run Shading) §17.3.2.32
  - [done] smallCaps (Small Caps) §17.3.2.33
@@ -2976,9 +2968,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
             ELSE_TRY_READ_IF(webHidden)
             ELSE_TRY_READ_IF(bdr)
             ELSE_TRY_READ_IF(vanish)
-            else if (name() == "rtl") {
-                m_isRightToLeftText = true;
-            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -3884,7 +3873,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
     }
     else if ((val == "start") || (val == "left")) {
         if (caller == jc_pPr) {
-            m_currentParagraphStyle.addProperty("fo:text-align", val);
+            m_currentParagraphStyle.addProperty("fo:text-align", "start");
         }
         else {
             m_tableMainStyle->setHorizontalAlign(KoTblStyle::LeftAlign);
@@ -3892,7 +3881,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc(jcCaller caller)
     }
     else if ((val == "right") || (val == "end")) {
         if (caller == jc_pPr) {
-            m_currentParagraphStyle.addProperty("fo:text-align", val);
+            m_currentParagraphStyle.addProperty("fo:text-align", "end");
         }
         else {
             m_tableMainStyle->setHorizontalAlign(KoTblStyle::RightAlign);
