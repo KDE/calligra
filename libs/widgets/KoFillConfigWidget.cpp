@@ -169,14 +169,14 @@ public:
     {
     }
     /// Apply the gradient stops using the shape background
-    KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
+    QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
     {
         if (! shape || ! stops.count()) {
-            return 0;
+            return QSharedPointer<KoShapeBackground>();
         }
 
         KoGradientBackground *newGradient = 0;
-        KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background().data());
+        QSharedPointer<KoGradientBackground> oldGradient = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
         if (oldGradient) {
             // just copy the gradient and set the new stops
             QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
@@ -191,7 +191,7 @@ public:
             g->setStops(stops);
             newGradient = new KoGradientBackground(g);
         }
-        return newGradient;
+        return QSharedPointer<KoGradientBackground>(newGradient);
     }
 
     KoColorPopupButton *colorButton;
@@ -375,7 +375,7 @@ void KoFillConfigWidget::colorChanged()
         return;
     }
 
-    QSharedPointer<KoShapeBackground> fill(new KoColorBackground(d->colorAction->currentColor());
+    QSharedPointer<KoShapeBackground> fill(new KoColorBackground(d->colorAction->currentColor()));
     KUndo2Command *firstCommand = 0;
     foreach (KoShape *shape, selectedShapes) {
         if (! firstCommand) {
@@ -422,7 +422,7 @@ void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  back
 
 void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  background)
 {
-    QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<cast<KoPatternBackground*>(background.data());
+    QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
     if (! patternBackground) {
         return;
     }
