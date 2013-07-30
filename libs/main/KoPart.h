@@ -299,6 +299,11 @@ public slots:
     virtual bool save();
     bool waitSaveComplete();
 
+signals:
+
+    void completed();
+    void canceled(const QString &);
+
 protected:
 
     virtual void setComponentData(const KComponentData &componentData);

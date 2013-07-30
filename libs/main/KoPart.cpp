@@ -174,6 +174,11 @@ public:
             }
         }
         const bool ret = parent->openFile();
+        if (ret) {
+            emit parent->completed();
+        } else {
+            emit parent->canceled(QString());
+        }
         return ret;
     }
 
@@ -240,6 +245,16 @@ public:
     {
         Q_ASSERT( job == m_job );
         m_job = 0;
+        if (job->error())
+            emit parent->canceled( job->errorString() );
+        else {
+            if ( parent->openFile() ) {
+                emit parent->completed();
+            }
+            else {
+                emit parent->canceled(QString());
+            }
+        }
     }
 
     void _k_slotStatJobFinished(KJob * job)
@@ -291,6 +306,7 @@ public:
 
             m_uploadJob = 0;
             parent->setModified( false );
+            emit parent->completed();
             m_saveOk = true;
         }
         m_duringSaveAs = false;
@@ -815,8 +831,12 @@ bool KoPart::save()
     d->m_saveOk = false;
     if ( d->m_file.isEmpty() ) // document was created empty
         d->prepareSaving();
-    if (saveFile())
+    if (saveFile()) {
         return saveToUrl();
+    }
+    else {
+        emit canceled(QString());
+    }
     return false;
 }
 
@@ -924,6 +944,7 @@ bool KoPart::saveToUrl()
 {
     if ( d->m_url.isLocalFile() ) {
         setModified( false );
+        emit completed();
         // if m_url is a local file there won't be a temp file -> nothing to remove
         Q_ASSERT( !d->m_bTemp );
         d->m_saveOk = true;
