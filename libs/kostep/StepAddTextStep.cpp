@@ -21,15 +21,15 @@
 #include "StepAddTextStep_p.h"
 #include "StepStepLocation.h"
 #include <QDebug>
-StepAddTextStep::StepAddTextStep (QObject * parent):StepStepBase (parent), d(new StepAddTextStepPrivate())
+StepAddTextStep::StepAddTextStep (QObject *parent):StepStepBase (parent), d(new StepAddTextStepPrivate())
 {
 
 }
 
-StepAddTextStep::StepAddTextStep (QString text, QObject * parent):StepStepBase
+StepAddTextStep::StepAddTextStep (QString text, QObject *parent):StepStepBase
   ("Add Text",parent), d(new StepAddTextStepPrivate())
 {
-  setStepText(text);
+  setStepText (text);
 }
 
 

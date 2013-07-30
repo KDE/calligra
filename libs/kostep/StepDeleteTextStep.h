@@ -26,11 +26,11 @@
 class KOSTEP_EXPORT StepDeleteTextStep:public StepStepBase
 {
 public:
-  StepDeleteTextStep (QObject* parent =0);
-  StepDeleteTextStep (QString Text, QObject* parent =0);
-  StepDeleteTextStep (const StepDeleteTextStep & other);
-  ~StepDeleteTextStep ();
-  virtual QString toXML ();
+    StepDeleteTextStep (QObject *parent =0);
+    StepDeleteTextStep (QString Text, QObject *parent =0);
+    StepDeleteTextStep (const StepDeleteTextStep &other);
+    ~StepDeleteTextStep ();
+    virtual QString toXML ();
 
 private:
     class StepDeleteTextStepPrivate * const d;

@@ -28,7 +28,7 @@ StepStepStack::StepStepStack(QObject *parent):
 
 }
 
-StepStepStack::StepStepStack(const StepStepStack& other):QAbstractListModel(0)
+StepStepStack::StepStepStack(const StepStepStack &other):QAbstractListModel(0)
 {
 
 }
@@ -39,14 +39,14 @@ StepStepStack::~StepStepStack()
 
 }
 
-StepStepStack& StepStepStack::operator=(const StepStepStack& other)
+StepStepStack& StepStepStack::operator=(const StepStepStack &other)
 {
   //temporary
   return *this;
 
 }
 
-bool StepStepStack::operator==(const StepStepStack& other)
+bool StepStepStack::operator==(const StepStepStack &other)
 {
   //temporary
   return true;
@@ -77,7 +77,7 @@ void StepStepStack::insertAt(int i, StepStepBase step)
     d->insertAt(i,step);
 }
 
-void StepStepStack::push(StepStepBase & step)
+void StepStepStack::push(StepStepBase &step)
 {
 #if DEBUG
     qDebug("Pushing Step to D-Pointer");
@@ -93,7 +93,7 @@ void StepStepStack::push(StepStepBase & step)
 
 bool StepStepStack::isEmpty ()
 {
-  return d->stack->isEmpty();
+  return d->stack.isEmpty();
 }
 
 void StepStepStack::removeAt(int i)
@@ -120,9 +120,8 @@ QString StepStepStack::toString()
 {
   QString string = "";
 
-  for (int i = 0; i > d->stack->size(); i++)
-  {
-    StepStepBase* step = d->stack->at(i);
+  for (int i = 0; i > d->stack.size(); i++) {
+    StepStepBase* step = d->stack.at(i);
     string += step->toXML().toLatin1();
   }
   return string;

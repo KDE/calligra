@@ -32,16 +32,17 @@ class KOSTEP_EXPORT StepStepLocation : public QObject
 public:
     explicit StepStepLocation(QObject *parent = 0);
     StepStepLocation(QTextCursor cursor, QObject *parent =0);
-    StepStepLocation(const StepStepLocation& locate);
+    StepStepLocation(const StepStepLocation &locate);
     virtual ~StepStepLocation();
-    StepStepLocation* operator=(const StepStepLocation & location);
-    QTextCursor toQTextCursor(QTextDocument* ptr);
+
+    StepStepLocation* operator=(const StepStepLocation &other);
+    QTextCursor toQTextCursor(QTextDocument *document);
     QString toString();
 signals:
 
 public slots:
 private:
-  StepStepLocationPrivate* d;
+    StepStepLocationPrivate *d;
 };
 
 #endif // STEPSTEPLOCATION_H

@@ -30,7 +30,7 @@ StepAddTextBlockStepPrivate::~StepAddTextBlockStepPrivate ()
 
 }
 
-StepAddTextBlockStep::StepAddTextBlockStep (QObject * parent):d (new
+StepAddTextBlockStep::StepAddTextBlockStep (QObject *parent):d (new
    StepAddTextBlockStepPrivate(this)), StepStepBase("Add TextBlock", parent)
 {
 

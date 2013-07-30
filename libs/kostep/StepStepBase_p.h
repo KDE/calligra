@@ -24,10 +24,10 @@ class StepStepBasePrivate
 {
 public:
     explicit StepStepBasePrivate();
-    explicit StepStepBasePrivate(QString Type, int Position, bool isForeign);
+    explicit StepStepBasePrivate(QString type, int position, bool isForeign);
     ~StepStepBasePrivate();
 
-    bool operator==(StepStepBasePrivate* other);
+    bool operator==(StepStepBasePrivate *other);
     QString toString();
     QString toXML();
     bool isForeign;

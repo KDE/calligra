@@ -30,19 +30,14 @@ class StepStepLocationPrivate
 public:
     explicit StepStepLocationPrivate();
     ~StepStepLocationPrivate();
-    StepStepLocationPrivate* operator=(StepStepLocationPrivate location);
-    void constructor(QTextCursor& cursor);
-    QTextCursor convertToQTextCursor(QTextDocument* ptr);
-    QString ToString();
+
+    StepStepLocationPrivate *operator=(const StepStepLocationPrivate &other);
+    void constructor(const QTextCursor &cursor);
+    QTextCursor convertToQTextCursor(QTextDocument *ptr);
+    QString toString();
+    void parentFrame(QTextFrame *frame, QTextFrame *rootFrame);
+
     QStack<int> location;
-    int ParentFrame(QTextFrame * frame, QTextFrame * rootFrame);
-
-signals:
-
-public slots:
-private:
-
-
 };
 
 #endif // STEPSTEPLOCATION_P_H

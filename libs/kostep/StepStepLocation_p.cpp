@@ -22,6 +22,7 @@
 #include <QtGui/QTextCursor>
 #include <QTextTable>
 #include <QtCore/QQueue>
+#include <QDebug>
 
 StepStepLocationPrivate::StepStepLocationPrivate()
 {
@@ -32,147 +33,126 @@ StepStepLocationPrivate::~StepStepLocationPrivate ()
 
 }
 
-
-void StepStepLocationPrivate::constructor(QTextCursor & cursor)
+void StepStepLocationPrivate::constructor(const QTextCursor &cursor)
 {
-  QTextFrame* frame = cursor.currentFrame();
-  QTextFrame* rootFrame = cursor.document()->rootFrame();
+    QTextFrame *frame = cursor.currentFrame();
+    QTextFrame *rootFrame = cursor.document()->rootFrame();
 
-  ParentFrame(frame, rootFrame);
+    parentFrame(frame, rootFrame);
 
-  QTextBlock Temp= cursor.block();
-  QTextBlock* block = &Temp;
+    qDebug() << "After Frames: \n" << toString() << "\n-----------------";
+    int i=0;
 
-  int i=0;
+    QTextFrame::iterator itr;
+    for (itr = cursor.currentFrame()->begin(); itr != cursor.currentFrame()->end(); itr++) {
+        if (cursor.block() == itr.currentBlock()) {
+            location.push(i);
+            if (cursor.currentTable()) {
+                //QTextTable table = cursor.currentTable();
+                //QTextTable::iterator itr;
 
-  QTextFrame::iterator itr;
-  for(itr = cursor.currentFrame()->begin(); itr != cursor.currentFrame()->end(); itr++)
-  {
-    if (cursor.block() == itr.currentBlock())
-    {
-      location.push(i);
-      if (cursor.currentTable())
-      {
-	//QTextTable table = cursor.currentTable();
-	//QTextTable::iterator t_itr;
+                //cursor.movePosition();
 
-	//cursor.movePosition();
-
-      }
-      if(cursor.currentList())
-      {
-      }
-      break;
+            }
+            if(cursor.currentList()) {
+            }
+            qDebug() << "After Block: \n"<< toString() << "\n-----------------";
+            break;
+        }
+        i++;
     }
-    i++;
-  }
-  location.push(cursor.positionInBlock());
-}
-QTextCursor StepStepLocationPrivate::convertToQTextCursor(QTextDocument* ptr)
-{
-  //flip the stack
-  QStack<int> Stack1 = location;
-  QStack<int> Stack2;
-  for(int i=0; i<location.count(); i++)
-  {
-    Stack2.push(Stack1.pop());
-  }
-  QTextFrame::iterator itr= ptr->rootFrame()->begin();
-
-  while(!Stack2.isEmpty())
-  {
-    int i = Stack2.pop();
-    for(int x=0; x<=i; x++)
-    {
-      itr++;
-    }
-
-    if(Stack2.isEmpty())
-    {
-      QTextCursor textCursor(itr.currentBlock());
-      return textCursor;
-    }
-    else
-    {
-      itr = itr.currentFrame()->begin();
-    }
-  }
-
-  //temporary
-  return QTextCursor();
+    location.push(cursor.positionInBlock());
+    qDebug() << "After Position" << toString() << "\n----------------- \n\n";
 }
 
-QString StepStepLocationPrivate::ToString()
+QTextCursor StepStepLocationPrivate::convertToQTextCursor(QTextDocument *document)
 {
-  QString returnValue = "s=\"";
-  foreach(int ptr, location)
-  {
-    returnValue +="/" + ptr;
-  }
-  returnValue+="\"";
-  return returnValue;
+    //flip the stack
+    QStack<int> stack1 = location;
+    QStack<int> stack2;
+    for(int i=0; i<location.count(); i++) {
+      stack2.push(stack1.pop());
+    }
+    QTextFrame::iterator itr= document->rootFrame()->begin();
 
+    while(!stack2.isEmpty()) {
+        int i = stack2.pop();
+        for(int x=0; x<=i; x++) {
+            itr++;
+        }
+
+        if(stack2.isEmpty()) {
+          QTextCursor textCursor(itr.currentBlock());
+          return textCursor;
+        } else {
+            itr = itr.currentFrame()->begin();
+        }
+    }
+
+    //temporary
+    return QTextCursor();
 }
-int StepStepLocationPrivate::ParentFrame(QTextFrame* frame, QTextFrame* rootFrame)
+
+QString StepStepLocationPrivate::toString()
 {
-  QStack<QTextFrame*> frameStack;
-
-  if(frame != rootFrame)
-  {
-    frameStack.push(frame);
-  }
-  else
-  {
-    location.push(0);
-    return 0;
-  }
-
-  QTextFrame* frame2 = frame;
-  while (frame2->parentFrame() != 0)
-  {
-    frame2 = frame2->parentFrame();
-    frameStack.push(frame2);
-  }
-
-
-
-  QTextFrame::iterator itr;
-  int i =0;
-  for(itr = rootFrame->begin(); itr != rootFrame->end(); itr++)
-  {
-    if(itr.currentFrame() == frame2)
-    {
-      location.push(i);
-      frameStack.pop();
-      break;
+    QString returnValue = "s=\"";
+    QVector<int>::const_iterator itr;
+    for (itr = location.constBegin(); itr != location.constEnd(); itr++) {
+        returnValue +="/" + *itr;
     }
-    i++;
-  }
 
+    returnValue+="\"";
+    return returnValue;
+}
 
-  while(!frameStack.isEmpty())
-  {
-    i=0;
-    for( itr= frame2->begin(); itr != frame2->end(); itr++)
-    {
-      QTextFrame* ptr = frameStack.top();
-      if(itr.currentFrame() == ptr)
-      {
-	location.push(i);
-	frame2 = frameStack.pop();
-	break;
-      }
-      i++;
+void StepStepLocationPrivate::parentFrame(QTextFrame *frame, QTextFrame *rootFrame)
+{
+    QStack<QTextFrame*> frameStack;
+
+    if(frame != rootFrame) {
+        frameStack.push(frame);
+    } else {
+        return;
     }
-  }
 
-  /*
-  QTextFrame* parentFrame = (frame->parentFrame()!=0)? frame: frame->parentFrame();
-  if(frame->parentFrame()!= 0)  {
+    QTextFrame *frame2 = frame;
+    while (frame2->parentFrame() != 0) {
+        frame2 = frame2->parentFrame();
+        frameStack.push(frame2);
+    }
+
+    QTextFrame::iterator itr;
+    int i =0;
+    for (itr = rootFrame->begin(); itr != rootFrame->end(); itr++) {
+        if (itr.currentFrame() == frame2) {
+            qDebug() << "i = "<< i;
+            location.push(i);
+            frameStack.pop();
+            break;
+        }
+        i++;
+    }
+
+    while (!frameStack.isEmpty()) {
+        i=0;
+        for ( itr= frame2->begin(); itr != frame2->end(); itr++) {
+            if(itr.currentFrame() == frameStack.top()) {
+                qDebug() << "i = "<< i;
+                location.push(i);
+                frame2 = frameStack.pop();
+                break;
+            }
+            i++;
+        }
+    }
+
+    /*
+    QTextFrame* parentFrame = (frame->parentFrame()!=0)? frame: frame->parentFrame();
+    if(frame->parentFrame()!= 0)  {
     qDebug(".5.1");
     ParentFrame(frame->parentFrame());
-  }
-  else  {
+    }
+    else  {
     qDebug(".5.2");
     QTextFrame::iterator itr;
     int i=0;
@@ -180,19 +160,18 @@ int StepStepLocationPrivate::ParentFrame(QTextFrame* frame, QTextFrame* rootFram
     {
       if(itr.currentFrame() == frame)
       {
-	location.push(i);
-	return i;
+    location.push(i);
+    return i;
       }
     }
-  }*/
-  //shouldn't happen
-  return 0;
+    }*/
+    //shouldn't happen
+    return;
 }
 
-StepStepLocationPrivate* StepStepLocationPrivate::operator=(StepStepLocationPrivate location)
+StepStepLocationPrivate* StepStepLocationPrivate::operator=(const StepStepLocationPrivate &other)
 {
-  this->location = location.location;
-  return this;
+    location = other.location;
+    return this;
 
 }
-

@@ -27,13 +27,13 @@
 class KOSTEP_EXPORT StepAddTextBlockStep : public StepStepBase
 {
 public:
-  StepAddTextBlockStep (QObject* parent =0);
-  StepAddTextBlockStep (QTextBlock* textBlock, QObject* parent =0);
+  StepAddTextBlockStep (QObject *parent =0);
+  StepAddTextBlockStep (QTextBlock *textBlock, QObject *parent =0);
   ~StepAddTextBlockStep ();
   virtual QString toXML ();
 
 private:
-    class StepAddTextBlockStepPrivate * const d;
+    class StepAddTextBlockStepPrivate  const *d;
 };
 
 #endif // STEPADDTEXTBLOCKSTEP_H

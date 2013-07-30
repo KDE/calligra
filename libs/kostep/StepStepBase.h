@@ -40,12 +40,12 @@ class KOSTEP_EXPORT StepStepBase : public QObject
 
 public:
     StepStepBase(QObject *parent =0);
-    StepStepBase(const StepStepBase& other);
+    StepStepBase(const StepStepBase &other);
     StepStepBase(QString type, QObject *parent =0, int position =0, bool isForeign= false);
 void temp();
     virtual ~StepStepBase();
     virtual StepStepBase& operator=(const StepStepBase& other);
-    virtual bool operator==(StepStepBase& other);
+    virtual bool operator==(StepStepBase &other);
 
     //String Representation of a Step
     virtual QString toString();
@@ -69,7 +69,7 @@ void temp();
     //document that can be translated to and from a QTextCursor
     //Potentially deprecates Position()
     StepStepLocation location();
-    virtual void setLocation(StepStepLocation & location);
+    virtual void setLocation(StepStepLocation &location);
 
 
     //The stepText Property holds the text of the change so say I've got the word
@@ -86,7 +86,7 @@ void temp();
 
 private:
 
-  StepStepBasePrivate *d;
+    StepStepBasePrivate *d;
 
 };
 

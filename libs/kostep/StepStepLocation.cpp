@@ -28,38 +28,31 @@ StepStepLocation::StepStepLocation(QObject *parent) :
 StepStepLocation::StepStepLocation(QTextCursor cursor, QObject *parent):
     QObject(parent), d(new StepStepLocationPrivate())
 {
-  d->constructor(cursor);
+    d->constructor(cursor);
 }
 StepStepLocation::~StepStepLocation()
 {
-  if(!d==0)
-  {
     delete d;
-  }
 }
 
-QTextCursor StepStepLocation::toQTextCursor(QTextDocument* ptr)
+QTextCursor StepStepLocation::toQTextCursor(QTextDocument *document)
 {
-    return d->convertToQTextCursor(ptr);
+    return d->convertToQTextCursor(document);
 }
 
-StepStepLocation* StepStepLocation::operator=(const StepStepLocation& location)
+StepStepLocation* StepStepLocation::operator=(const StepStepLocation &other)
 {
-  d->location = location.d->location;
-  return this;
+    d->location = other.d->location;
+    return this;
 
 }
 StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject(),d(new StepStepLocationPrivate())
 {
-  d->location = locate.d->location;
+    d->location = locate.d->location;
 
 }
 
 QString StepStepLocation::toString ()
 {
-  QString string = d->ToString();
-  qDebug()<< string.toLatin1();
-
-  return string;
-
+    return d->toString();
 }

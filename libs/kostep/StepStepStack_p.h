@@ -32,15 +32,15 @@ public:
     StepStepBase at(int i);
     const StepStepBase& pop();
     StepStepBase top();
-    void push(StepStepBase& step);
+    void push(StepStepBase &step);
     void serialize(QString Filename);
-    void serialize(StepStepBase& step, QString Filename);
+    void serialize(StepStepBase &step, QString Filename);
     void deserialize(QString Filename);
     void insertAt(int i, StepStepBase step);
     void removeAt(int i);
     int rowcount();
     QVariant data(int i);
-    QStack<StepStepBase*>* stack;
+    QStack<StepStepBase*> stack;
 };
 
 #endif // STEPSTEPSTACK_P_H

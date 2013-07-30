@@ -19,17 +19,17 @@
 
 #ifndef STEPADDTEXTSTEP_H
 #define STEPADDTEXTSTEP_H
-#include <../../home/luke/kde4/src/calligra/libs/kostep/StepStepBase.h>
+#include "StepStepBase.h"
 #include "kostep_export.h"
 class KOSTEP_EXPORT StepAddTextStep: public StepStepBase
 {
 public:
-  explicit StepAddTextStep (QObject * parent = 0);
-  StepAddTextStep (QString text, QObject * parent = 0);
-  virtual QString toXML ();
+    explicit StepAddTextStep (QObject *parent = 0);
+    StepAddTextStep (QString text, QObject *parent = 0);
+    virtual QString toXML ();
 
 private:
-  class StepAddTextStepPrivate * const d;
+    class StepAddTextStepPrivate * const d;
 };
 
 #endif // STEPADDTEXTSTEP_H

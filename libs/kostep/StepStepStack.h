@@ -33,33 +33,33 @@ class KOSTEP_EXPORT StepStepStack :  public QAbstractListModel
 
   Q_OBJECT
 public:
-    StepStepStack(QObject* parent=0);
-    StepStepStack(const StepStepStack& other);
-    ~StepStepStack();
-    StepStepStack& operator=(const StepStepStack& other);
-    bool operator==(const StepStepStack& other);
+    StepStepStack (QObject *parent=0);
+    StepStepStack (const StepStepStack &other);
+    ~StepStepStack ();
+    StepStepStack& operator= (const StepStepStack &other);
+    bool operator== (const StepStepStack &other);
 
     StepStepBase at(int i);
     const StepStepBase& pop();
     StepStepBase top();
 
-    void serialize(QString Filename="changes.xml");
-    void deserialize(QString Filename="changes.xml");
+    void serialize (QString Filename="changes.xml");
+    void deserialize (QString Filename="changes.xml");
 
-    void insertAt(int i, StepStepBase step);
-    void removeAt(int i);
+    void insertAt (int i, StepStepBase step);
+    void removeAt (int i);
 
-    void push(StepStepBase& step);
-    bool isEmpty();
+    void push (StepStepBase &step);
+    bool isEmpty ();
 
     //QAbstractListModel Required Member Functions
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
+    int rowCount (const QModelIndex &parent = QModelIndex()) const;
+    QVariant data (const QModelIndex &index, int role) const;
 
-    QString toString();
+    QString toString ();
 
 private:
-    StepStepStackPrivate* d;
+    StepStepStackPrivate *d;
 };
 
 #endif // STEPSTEPSTACK_H

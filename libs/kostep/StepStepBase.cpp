@@ -39,64 +39,64 @@ StepStepBase::~StepStepBase()
     delete d;
   }
 }
-StepStepBase::StepStepBase(const StepStepBase& other): QObject(),
+StepStepBase::StepStepBase(const StepStepBase &other): QObject(),
 d(new StepStepBasePrivate(other.d->type, other.d->position,other.d->isForeign))
 {
 
 }
 
-StepStepBase::StepStepBase (QString type, QObject * parent, int position,
-			    bool isForeign):
+StepStepBase::StepStepBase (QString type, QObject *parent, int position,
+                bool isForeign):
 QObject (parent), d(new StepStepBasePrivate(type,position,isForeign))
 {
 
 }
 
-StepStepBase& StepStepBase::operator=(const StepStepBase& other)
+StepStepBase& StepStepBase::operator=(const StepStepBase &other)
 {
-  return *this;
+    return *this;
 
 }
-bool StepStepBase::operator==( StepStepBase& other)
+bool StepStepBase::operator==( StepStepBase &other)
 {
-  if (d->operator==(other.d)) {
-    return true;
-  }
-  return false;
+    if (d->operator==(other.d)) {
+       return true;
+    }
+    return false;
 }
 
 
 bool StepStepBase::Foreign()
 {
-  return d->isForeign;
+    return d->isForeign;
 }
 int StepStepBase::Position()
 {
-  return d->position;
+    return d->position;
 }
 void StepStepBase::setForeign(bool foreign)
 {
-  d->isForeign = foreign;
+    d->isForeign = foreign;
 
 }
 void StepStepBase::setPosition(int position)
 {
-  d->position = position;
+    d->position = position;
 
 }
 QString StepStepBase::stepText()
 {
-  return d->step;
+    return d->step;
 }
 
 void StepStepBase::setStepText (QString text)
 {
-  d->step = text;
+    d->step = text;
 }
 
 QString StepStepBase::toString()
 {
-  return d->toString();
+    return d->toString();
 }
 QString StepStepBase::toXML()
 {
@@ -104,18 +104,16 @@ QString StepStepBase::toXML()
 }
 QString StepStepBase::Type()
 {
-  return d->type;
+   return d->type;
 
 }
 
 StepStepLocation StepStepBase::location()
 {
-  return d->location;
+   return d->location;
 }
-void StepStepBase::setLocation(StepStepLocation& location)
+void StepStepBase::setLocation(StepStepLocation &location)
 {
-  d->location = location;
+   d->location = location;
 
 }
-
-

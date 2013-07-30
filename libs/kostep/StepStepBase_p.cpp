@@ -29,35 +29,36 @@ StepStepBasePrivate::~StepStepBasePrivate ()
 
 }
 
-StepStepBasePrivate::StepStepBasePrivate (QString Type, int Position,
-					  bool isForeign): type(Type), position(Position), isForeign(isForeign)
+StepStepBasePrivate::StepStepBasePrivate (QString type, int position, bool isForeign):
+    type(type), position(position), isForeign(isForeign)
 {
 
 }
 
 
-bool StepStepBasePrivate::operator==(StepStepBasePrivate* other)
+bool StepStepBasePrivate::operator==(StepStepBasePrivate *other)
 {
-  if (other->isForeign == isForeign &&
+    if (other->isForeign == isForeign &&
       other->position == position &&
       other->step == step &&
       other->type == type
-  ) {
+    ) {
     return true;
-  }
-  else {
+    }
+    else {
     return false;
-  }
+    }
 }
 
 QString StepStepBasePrivate::toString()
 {
-  QString string = type + " " + step + " " + string.number(position);
-  return string;
+    QString string = type + " " + step + " " + string.number(position);
+    return string;
 }
+
 QString StepStepBasePrivate::toXML()
 {
-  qDebug("Not supposed to be here");
-  QString string = (QString)"";
-  return string;
+    qDebug("Not supposed to be here");
+    QString string = "";
+    return string;
 }

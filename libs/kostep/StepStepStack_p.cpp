@@ -28,24 +28,17 @@
 
 StepStepStackPrivate::StepStepStackPrivate()
 {
-  stack = new QStack<StepStepBase*>();
-
 }
 
 StepStepStackPrivate::~StepStepStackPrivate()
 {
-  delete stack;
-
 }
 
 StepStepBase StepStepStackPrivate::at(int i)
 {
-    if(!stack->empty() && stack->count() >= i+1)
-    {
-        return stack->at(i);
-    }
-    else
-    {
+    if(!stack.empty() && (stack.count() >= i+1)) {
+        return stack.at(i);
+    } else {
         return StepStepBase();
     }
 
@@ -54,13 +47,10 @@ StepStepBase StepStepStackPrivate::at(int i)
 const StepStepBase & StepStepStackPrivate::pop()
 {
     //temporary behavior for the time being
-    if(!stack->empty())
-    {
-	StepStepBase* step = stack->pop();
+    if(!stack.empty()) {
+    StepStepBase* step = stack.pop();
         return *step;
-    }
-    else
-    {
+    } else {
 #if DEBUG
       qDebug("Stack popped when Empty");
 #endif
@@ -71,12 +61,9 @@ const StepStepBase & StepStepStackPrivate::pop()
 
 StepStepBase StepStepStackPrivate::top()
 {
-    if(!stack->empty())
-    {
-        return  stack->top();
-    }
-    else
-    {
+    if(!stack.empty()) {
+        return  stack.top();
+    } else {
         return StepStepBase();
     }
 
@@ -88,11 +75,11 @@ void StepStepStackPrivate::push(StepStepBase & step)
     qDebug("Pushing onto actual stack");
 #endif
     StepStepBase* ptr = &step;
-    stack->push(ptr);
+    stack.push(ptr);
 #if DEBUG
     qDebug("Pushed");
 #endif
-    serialize(step, "changes.xml");
+    //serialize(step, "changes.xml");
 
 }
 
@@ -102,8 +89,7 @@ void StepStepStackPrivate::serialize(QString Filename)
     file.open(QIODevice::WriteOnly|QIODevice::Text);
 
     QString steps = "";
-    foreach(StepStepBase ptr, *stack)
-    {
+    foreach(StepStepBase ptr, stack) {
         steps += ptr.toXML();
     }
     file.write(steps.toLatin1());
@@ -112,15 +98,15 @@ void StepStepStackPrivate::serialize(QString Filename)
 
 void StepStepStackPrivate::serialize (StepStepBase & step, QString Filename)
 {
-  QDir directory;
-  QString Location = directory.homePath() +"/" + Filename;
-  QFile file(Filename);
-  file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text);
-  QTextStream out(&file);
-  out << step.toXML();
-  out << endl;
-  file.flush();
-  file.close();
+    QDir directory;
+    QString Location = directory.homePath() +"/" + Filename;
+    QFile file(Filename);
+    file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text);
+    QTextStream out(&file);
+    out << step.toXML();
+    out << endl;
+    file.flush();
+    file.close();
 }
 
 void StepStepStackPrivate::deserialize(QString Filename)
@@ -141,18 +127,15 @@ void StepStepStackPrivate::removeAt(int i)
 }
 int StepStepStackPrivate::rowcount()
 {
-    return stack->count();
+    return stack.count();
 }
 QVariant StepStepStackPrivate::data(int i)
 {
-    if (!stack->empty() && stack->count() >= i+1)
-    {
+    if (!stack.empty() && stack.count() >= i+1) {
         //temporary measure
-        StepStepBase step = stack->at(i);
+        StepStepBase step = stack.at(i);
         return step.toString();
-    }
-    else
-    {
+    } else {
         return QVariant();
     }
 }

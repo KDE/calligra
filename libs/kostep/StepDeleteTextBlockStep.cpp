@@ -21,7 +21,7 @@
 #include "StepDeleteTextBlockStep_p.h"
 #include "StepStepLocation.h"
 
-StepDeleteTextBlockStepPrivate::StepDeleteTextBlockStepPrivate (StepDeleteTextBlockStep * q):q (q)
+StepDeleteTextBlockStepPrivate::StepDeleteTextBlockStepPrivate (StepDeleteTextBlockStep *q):q (q)
 {
 }
 
@@ -29,13 +29,13 @@ StepDeleteTextBlockStepPrivate::~StepDeleteTextBlockStepPrivate ()
 {
 }
 
-StepDeleteTextBlockStep::StepDeleteTextBlockStep (QObject * parent):d (new
+StepDeleteTextBlockStep::StepDeleteTextBlockStep (QObject *parent):d (new
    StepDeleteTextBlockStepPrivate(this)), StepStepBase("Delete TextBlock",parent)
 {
 
 }
 
-StepDeleteTextBlockStep::StepDeleteTextBlockStep (QTextBlock * block, QObject* parent):StepStepBase
+StepDeleteTextBlockStep::StepDeleteTextBlockStep (QTextBlock *block, QObject *parent):StepStepBase
   ("Delete TextBlock",parent), d(new StepDeleteTextBlockStepPrivate(this))
 {
 
@@ -50,12 +50,12 @@ d (new StepDeleteTextBlockStepPrivate (this))
 
 StepDeleteTextBlockStep::~StepDeleteTextBlockStep ()
 {
-  delete d;
+    delete d;
 
 }
 
 QString StepDeleteTextBlockStep::toXML ()
 {
-  return "<del type=\"paragraph\" " + location().toString() + " />";
+    return "<del type=\"paragraph\" " + location().toString() + " />";
 
 }
