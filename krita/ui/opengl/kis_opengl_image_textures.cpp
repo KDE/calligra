@@ -217,9 +217,14 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
                                               tileTextureRect,
                                               updateRect,
                                               m_image->bounds());
-
-            tileInfo.retrieveData(m_image);
-            info->tileList.append(tileInfo);
+            // Don't update empty tiles
+            if (tileInfo.valid()) {
+                tileInfo.retrieveData(m_image);
+                info->tileList.append(tileInfo);
+            }
+            else {
+                kWarning() << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << m_image->bounds();
+            }
         }
     }
     return info;
@@ -349,7 +354,8 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
                 dbgUI << "Using ATI half";
             }
-            else if (GLEW_ARB_half_float_pixel) {
+
+            if (GLEW_ARB_half_float_pixel) {
                 dbgUI << "Pixel type half";
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
             } else {

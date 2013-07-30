@@ -81,11 +81,11 @@
 #include "kis_factory2.h"
 #include "KoID.h"
 
-#include "KoColorProfile.h"
-
 // for the performance update
 #include <kis_cubic_curve.h>
 #include <config-ocio.h>
+
+#include "input/config/kis_input_configuration_page.h"
 
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
@@ -401,11 +401,14 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
         cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
+        chkUseTextureBuffer->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
         cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
         cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
+        chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
+        chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
     }
@@ -434,6 +437,8 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGL->setChecked(true);
     cbUseOpenGLToolOutlineWorkaround->setChecked(false);
     cbUseOpenGLToolOutlineWorkaround->setEnabled(true);
+    chkUseTextureBuffer->setChecked(false);
+    chkUseTextureBuffer->setEnabled(true);
     cmbFilterMode->setEnabled(true);
     cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
@@ -446,6 +451,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
     cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
+    chkUseTextureBuffer->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
@@ -653,6 +659,14 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setHeader(i18n("Author"));
     page->setIcon(koIcon("user-identity"));
 
+    m_inputConfiguration = new KisInputConfigurationPage();
+    page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
+    page->setHeader(i18n("Canvas Input"));
+    page->setIcon(koIcon("input-tablet"));
+    connect(this, SIGNAL(okClicked()), m_inputConfiguration, SLOT(saveChanges()));
+    connect(this, SIGNAL(applyClicked()), m_inputConfiguration, SLOT(saveChanges()));
+    connect(this, SIGNAL(cancelClicked()), m_inputConfiguration, SLOT(revertChanges()));
+    connect(this, SIGNAL(defaultClicked()), m_inputConfiguration, SLOT(setDefaults()));
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
@@ -757,9 +771,11 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
+        cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
 #else
         cfg.setUseOpenGLToolOutlineWorkaround(false);
+        cfg.chkUseTextureBuffer(false);
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());

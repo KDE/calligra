@@ -89,7 +89,6 @@
 #include "kis_factory2.h"
 #include "kis_view2.h"
 #include "kis_clipboard.h"
-#include "kis_config.h"
 #include "widgets/kis_custom_image_widget.h"
 #include "canvas/kis_canvas2.h"
 #include "flake/kis_shape_controller.h"
@@ -102,7 +101,7 @@
 #include "kis_node_manager.h"
 #include "kis_part2.h"
 
-static const char *CURRENT_DTD_VERSION = "2.0";
+static const char CURRENT_DTD_VERSION[] = "2.0";
 
 /**
  * Mime type for this app - not same as file type, but file types
@@ -387,7 +386,7 @@ bool KisDoc2::newImage(const QString& name,
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
     if (name != i18n("unnamed") && !name.isEmpty()) {
-        setUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + "/" + name + ".kra");
+        setUrl(KUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
     }
     documentInfo()->setAboutInfo("comments", description);
 

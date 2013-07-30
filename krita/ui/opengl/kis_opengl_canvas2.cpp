@@ -36,6 +36,7 @@
 #include <QGLBuffer>
 #include <QGLFramebufferObject>
 #include <QGLContext>
+#include <QTransform>
 
 #include <kstandarddirs.h>
 
@@ -194,7 +195,6 @@ void KisOpenGLCanvas2::drawCheckers() const
         return;
 
     KisCoordinatesConverter *converter = coordinatesConverter();
-
     QTransform textureTransform;
     QTransform modelTransform;
     QRectF textureRect;
@@ -268,10 +268,6 @@ void KisOpenGLCanvas2::drawImage() const
     KisCoordinatesConverter *converter = coordinatesConverter();
 
     d->displayShader->bind();
-    if (d->displayFilter) {
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
-    }
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
@@ -338,6 +334,13 @@ void KisOpenGLCanvas2::drawImage() const
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, tile->textureId());
+            d->displayShader->setUniformValue("texture0", 0);
+
+            if (d->displayFilter) {
+                glActiveTexture(GL_TEXTURE0 + 1);
+                glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
+                d->displayShader->setUniformValue("texture1", 1);
+            }
 
             if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

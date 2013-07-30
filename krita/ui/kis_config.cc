@@ -48,7 +48,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
 
-#include "config-ocio.h"
+#include <config-ocio.h>
 
 
 namespace
@@ -382,6 +382,16 @@ int KisConfig::openGLFilteringMode() const
 void KisConfig::setOpenGLFilteringMode(int filteringMode)
 {
     m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
+}
+
+bool KisConfig::useOpenGLTextureBuffer() const
+{
+    return m_cfg.readEntry("useOpenGLTextureBuffer", false);
+}
+
+void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
+{
+    m_cfg.writeEntry("useOpenGLTextureBuffer", useBuffer);
 }
 
 qint32 KisConfig::maxNumberOfThreads()
@@ -920,6 +930,15 @@ void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
 }
 
+QString KisConfig::currentInputProfile() const
+{
+    return m_cfg.readEntry("currentInputProfile", QString());
+}
+
+void KisConfig::setCurrentInputProfile(const QString& name)
+{
+    m_cfg.writeEntry("currentInputProfile", name);
+}
 
 bool KisConfig::useSystemMonitorProfile() const
 {
