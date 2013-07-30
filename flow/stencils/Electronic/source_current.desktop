@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=source current
+Name[bs]=struja izvora
 Name[ca]=font actual
 Name[ca@valencia]=font actual
+Name[cs]=zdroj proudu
+Name[da]=strømkilde
 Name[el]=ένταση πηγής
 Name[es]=fuente de corriente
 Name[et]=Vooluallikas
@@ -19,4 +22,5 @@ Name[sk]=zdroj prúdu
 Name[sv]=källa ström
 Name[uk]=Джерело струму
 Name[x-test]=xxsource currentxx
+Name[zh_CN]=电流源
 Name[zh_TW]=source current

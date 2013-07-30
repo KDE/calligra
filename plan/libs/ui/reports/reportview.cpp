@@ -20,8 +20,9 @@
 */
 
 #include "reportview.h"
-#include "report.h"
 #include "reportview_p.h"
+
+#include "report.h"
 #include "reportdata.h"
 #include "reportsourceeditor.h"
 #include "reportscripts.h"
@@ -56,19 +57,18 @@
 #include "KoDocument.h"
 #include "KoIcon.h"
 
-#include <KTabWidget>
-#include <KAction>
-#include <KActionCollection>
-#include <KStandardAction>
-#include <KStandardGuiItem>
-#include <KGuiItem>
-#include <KMessageBox>
-#include <kfiledialog.h>
+#include <ktabwidget.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <kstandardaction.h>
+#include <kstandardguiitem.h>
+#include <kguiitem.h>
+#include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kdebug.h>
-#include <KToolBar>
-#include <KFileDialog>
-#include <KPushButton>
+#include <ktoolbar.h>
+#include <kfiledialog.h>
+#include <kpushbutton.h>
 
 #include <QPainter>
 #include <QPrintDialog>
@@ -167,18 +167,19 @@ ReportView::ReportView(KoPart *part, KoDocument *doc, QWidget *parent )
     setObjectName("ReportView");
 
     QLayout *l = new QHBoxLayout( this );
+    l->setMargin(0);
     m_stack = new QStackedWidget( this );
     l->addWidget( m_stack );
 
     ReportWidget *v = new ReportWidget(part, doc, m_stack);
     m_stack->addWidget( v );
     connect(v, SIGNAL(editReportDesign()),SLOT(slotEditReport()));
-    connect(v, SIGNAL(guiActivated(ViewBase*, bool)), SIGNAL(guiActivated(ViewBase*, bool)));
+    connect(v, SIGNAL(guiActivated(ViewBase*,bool)), SIGNAL(guiActivated(ViewBase*,bool)));
 
     ReportDesigner *d = new ReportDesigner(part, doc, m_stack);
     m_stack->addWidget( d );
     connect(d, SIGNAL(viewReport()), SLOT(slotViewReport()));
-    connect(d, SIGNAL(guiActivated(ViewBase*, bool)), SIGNAL(guiActivated(ViewBase*, bool)));
+    connect(d, SIGNAL(guiActivated(ViewBase*,bool)), SIGNAL(guiActivated(ViewBase*,bool)));
     connect(d, SIGNAL(optionsModified()), SIGNAL(optionsModified()));
 
     m_stack->setCurrentIndex( 0 );
@@ -293,6 +294,7 @@ ReportWidget::ReportWidget(KoPart *part, KoDocument *doc, QWidget *parent )
     m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
 
     QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
     l->addWidget( m_reportView );
     m_pageSelector = new ReportNavigator( this );
     l->addWidget( m_pageSelector );
@@ -591,10 +593,10 @@ ReportNavigator::ReportNavigator( QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
-    ui_first->setIcon(koIcon("go-first-view-page"));
-    ui_last->setIcon(koIcon("go-last-view-page"));
-    ui_prev->setIcon(koIcon("go-previous-view-page"));
-    ui_next->setIcon(koIcon("go-next-view-page"));
+    ui_first->setIcon(koIcon("go-first-view"));
+    ui_last->setIcon(koIcon("go-last-view"));
+    ui_prev->setIcon(koIcon("go-previous-view"));
+    ui_next->setIcon(koIcon("go-next-view"));
 
     connect( ui_max, SIGNAL(valueChanged(int)), SLOT(slotMaxChanged(int)));
 
@@ -658,8 +660,8 @@ ReportDesignDialog::ReportDesignDialog( const QDomElement &element, const QList<
 
     setMainWidget( m_panel );
 
-    connect( this, SIGNAL( user1Clicked() ), SLOT( slotSaveToView() ) );
-    connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
+    connect( this, SIGNAL(user1Clicked()), SLOT(slotSaveToView()) );
+    connect( this, SIGNAL(user2Clicked()), SLOT(slotSaveToFile()) );
 }
 
 void ReportDesignDialog::closeEvent ( QCloseEvent * e )
@@ -794,13 +796,13 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
     slotPropertySetChanged();
 
-    connect( m_sourceeditor, SIGNAL( selectFromChanged( const QString& ) ), SLOT( setReportData( const QString& ) ) );
+    connect( m_sourceeditor, SIGNAL(selectFromChanged(QString)), SLOT(setReportData(QString)) );
 
-    connect( this, SIGNAL( insertItem( const QString& ) ), m_designer, SLOT( slotItem( const QString& ) ) );
+    connect( this, SIGNAL(insertItem(QString)), m_designer, SLOT(slotItem(QString)) );
 
-    connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
-    connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
-    connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
+    connect( m_designer, SIGNAL(propertySetChanged()), SLOT(slotPropertySetChanged()) );
+    connect( m_designer, SIGNAL(dirty()), SLOT(setModified()) );
+    connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT(slotItemInserted(QString)));
 
     populateToolbar( tb );
 }
@@ -846,13 +848,13 @@ ReportDesignPanel::ReportDesignPanel( const QDomElement &element, const QList<Re
     m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
     slotPropertySetChanged();
 
-    connect( m_sourceeditor, SIGNAL( selectFromChanged( const QString& ) ), SLOT( setReportData( const QString& ) ) );
+    connect( m_sourceeditor, SIGNAL(selectFromChanged(QString)), SLOT(setReportData(QString)) );
 
-    connect( this, SIGNAL( insertItem( const QString& ) ), m_designer, SLOT( slotItem( const QString& ) ) );
+    connect( this, SIGNAL(insertItem(QString)), m_designer, SLOT(slotItem(QString)) );
 
-    connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
-    connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
-    connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
+    connect( m_designer, SIGNAL(propertySetChanged()), SLOT(slotPropertySetChanged()) );
+    connect( m_designer, SIGNAL(dirty()), SLOT(setModified()) );
+    connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT(slotItemInserted(QString)));
 
     populateToolbar( tb );
 }
@@ -915,7 +917,7 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
             continue;
         }
         tb->addAction( a );
-        connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
+        connect( a, SIGNAL(triggered(bool)), SLOT(slotInsertAction()) );
     }
 }
 
@@ -1027,6 +1029,7 @@ ReportDesigner::ReportDesigner(KoPart *part, KoDocument *doc, QWidget *parent)
     m_groupsectioneditor( new GroupSectionEditor( this ) )
 {
     QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
     m_scrollarea = new QScrollArea( this );
     l->addWidget( m_scrollarea );
 
@@ -1107,7 +1110,7 @@ void ReportDesigner::setModified( bool on )
 }
 
 
-void ReportDesigner::setData( const QDomDocument doc )
+void ReportDesigner::setData( const QDomDocument &doc )
 {
     m_original = doc.cloneNode().toDocument();
     setData();
@@ -1131,8 +1134,8 @@ void ReportDesigner::setData()
     slotPropertySetChanged();
 
     connect(m_designer, SIGNAL(dirty()), SLOT(slotModified()));
-    connect(m_designer, SIGNAL(propertySetChanged()), SLOT( slotPropertySetChanged()));
-    connect(m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
+    connect(m_designer, SIGNAL(propertySetChanged()), SLOT(slotPropertySetChanged()));
+    connect(m_designer, SIGNAL(itemInserted(QString)), this, SLOT(slotItemInserted(QString)));
 
     connect(this, SIGNAL(cutActivated()), m_designer, SLOT(slotEditCut()));
     connect(this, SIGNAL(copyActivated()), m_designer, SLOT(slotEditCopy()));
@@ -1208,7 +1211,7 @@ void ReportDesigner::createDockers()
 
     m_sourceeditor = tw.sourceEditor;
     m_sourceeditor->setModel( createSourceModel( m_sourceeditor ) );
-    connect(m_sourceeditor, SIGNAL(selectFromChanged(const QString&)), SLOT(setReportData(const QString&)));
+    connect(m_sourceeditor, SIGNAL(selectFromChanged(QString)), SLOT(setReportData(QString)));
 
     m_propertyeditor = tw.propertyEditor;
 
@@ -1383,7 +1386,7 @@ void GroupSectionEditor::setupUi( QWidget *widget )
     gsw.btnMoveUp->setEnabled( false );
     gsw.btnMoveDown->setEnabled( false );
 
-    connect(gsw.view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), SLOT(slotSelectionChanged(const QItemSelection&)));
+    connect(gsw.view->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection)));
     connect(gsw.btnAdd, SIGNAL(clicked(bool)), SLOT(slotAddRow()));
     connect(gsw.btnRemove, SIGNAL(clicked(bool)), SLOT(slotRemoveRows()));
     connect(gsw.btnMoveUp, SIGNAL(clicked(bool)), SLOT(slotMoveRowUp()));
@@ -1448,7 +1451,7 @@ void GroupSectionEditor::slotAddRow()
     }
     ReportSectionDetailGroup * g = new ReportSectionDetailGroup( reportdata->fieldKeys().value( 0 ), sd, sd );
 
-    sd->insertSection( sd->groupSectionCount(), g );
+    sd->insertGroupSection( sd->groupSectionCount(), g );
 
     ColumnItem *ci = new ColumnItem( g );
     ci->names = reportdata->fieldNames();
@@ -1476,7 +1479,7 @@ void GroupSectionEditor::slotRemoveRows()
     for (int i = rows.count() - 1; i >= 0; --i ) {
         int row = rows.at( i );
         QList<QStandardItem*> items = model.takeRow( row );
-        sd->removeSection( row, true );
+        sd->removeGroupSection( row, true );
         qDeleteAll( items );
     }
 }
@@ -1500,8 +1503,8 @@ void GroupSectionEditor::slotMoveRowUp()
         ReportSectionDetailGroup *g = sd->groupSection( row );
         bool showgh = g->groupHeaderVisible();
         bool showgf = g->groupFooterVisible();
-        sd->removeSection( row );
-        sd->insertSection( row - 1, g );
+        sd->removeGroupSection( row );
+        sd->insertGroupSection( row - 1, g );
         g->setGroupHeaderVisible( showgh );
         g->setGroupFooterVisible( showgf );
         model.insertRow( row - 1, items );
@@ -1533,8 +1536,8 @@ void GroupSectionEditor::slotMoveRowDown()
         ReportSectionDetailGroup *g = sd->groupSection( row );
         bool showgh = g->groupHeaderVisible();
         bool showgf = g->groupFooterVisible();
-        sd->removeSection( row );
-        sd->insertSection( row + 1, g );
+        sd->removeGroupSection( row );
+        sd->insertGroupSection( row + 1, g );
         g->setGroupHeaderVisible( showgh );
         g->setGroupFooterVisible( showgf );
         model.insertRow( row + 1, items );

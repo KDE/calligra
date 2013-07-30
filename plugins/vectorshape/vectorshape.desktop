@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Static Vector Shape
+Name[bs]=Statični Vektorov Oblik
 Name[ca]=Forma de vector estàtic
 Name[ca@valencia]=Forma de vector estàtic
 Name[da]=Statisk vektor-form
@@ -32,6 +33,6 @@ Name[zh_TW]=靜態向量元件
 X-KDE-PluginInfo-Name=vectorshape
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
-X-KDE-Library=vectorshape
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-KDE-Library=calligra_shape_vector
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28

@@ -50,6 +50,7 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& p
     d->min = min;
     d->max = max;
 
+    // xgettext: no-c-format
     QString activeColorMsg = i18n("(50% is active color)");
     QString br("<br />");
     QString fullPercent = i18n("100%");
@@ -57,19 +58,19 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& p
 
     if (parameterName == "h")
     {
-        setMaximumLabel(fullPercent + br + i18n("CW hue"));
-        setMinimumLabel(zeroPercent + br +i18n("CCW hue") + br + activeColorMsg);
+        setMaximumLabel(QString(fullPercent + br + i18n("CW hue")));
+        setMinimumLabel(QString(zeroPercent + br +i18n("CCW hue") + br + activeColorMsg));
     }
     else if (parameterName == "s")
     {
-        setMaximumLabel(fullPercent + br + i18n("More saturation"));
-        setMinimumLabel(zeroPercent + br +i18n("Less saturation ") + br + activeColorMsg);
+        setMaximumLabel(QString(fullPercent + br + i18n("More saturation")));
+        setMinimumLabel(QString(zeroPercent + br +i18n("Less saturation ") + br + activeColorMsg));
 
     }
     else if (parameterName == "v")
     {
-        setMaximumLabel(fullPercent + br + i18n("Higher value"));
-        setMinimumLabel(zeroPercent + br + i18n("Lower value ") + br + activeColorMsg);
+        setMaximumLabel(QString(fullPercent + br + i18n("Higher value")));
+        setMinimumLabel(QString(zeroPercent + br + i18n("Lower value ") + br + activeColorMsg));
     }
     else
     {

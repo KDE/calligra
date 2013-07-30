@@ -20,9 +20,9 @@
 
 #include "kexiquerypart.h"
 
-#include <KDebug>
-#include <KToggleAction>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <ktoggleaction.h>
+#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
@@ -84,10 +84,10 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
         KexiProject *prj = KexiMainWindowIface::global()->project();
         connect(prj, SIGNAL(newItemStored(KexiPart::Item&)),
                 view, SLOT(slotNewItemStored(KexiPart::Item&)));
-        connect(prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-                view, SLOT(slotItemRemoved(const KexiPart::Item&)));
-        connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)),
-                view, SLOT(slotItemRenamed(const KexiPart::Item&, const QString&)));
+        connect(prj, SIGNAL(itemRemoved(KexiPart::Item)),
+                view, SLOT(slotItemRemoved(KexiPart::Item)));
+        connect(prj, SIGNAL(itemRenamed(KexiPart::Item,QString)),
+                view, SLOT(slotItemRenamed(KexiPart::Item,QString)));
 
 //  connect(KexiMainWindowIface::global()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
 //   view, SLOT(slotTableCreated(KexiDB::TableSchema&)));

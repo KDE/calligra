@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=Content Switch
 Name[bg]=Комутатор на съдържание
+Name[bs]=sadržaj prekidača
 Name[ca]=Content Switch
 Name[ca@valencia]=Content Switch
+Name[cs]=Content Switch
+Name[da]=Content Switch
 Name[de]=Content-Switch
 Name[el]=Content Switch
 Name[es]=Conmutador de contenidos
@@ -11,6 +14,7 @@ Name[fr]=Content Switch
 Name[gl]=Conmutador de contidos
 Name[it]=Content Switch
 Name[kk]=Мазмұн қосқышы
+Name[lt]=Turinio perjungiklis
 Name[nb]=Innholdssvitsj
 Name[nl]=Content Switch
 Name[pl]=Przełącznik treści

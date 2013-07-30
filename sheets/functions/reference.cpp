@@ -35,7 +35,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 using namespace Calligra::Sheets;
 
@@ -254,7 +254,7 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
                 return Value::errorVALUE();
             else {
                 ++num;
-                ref = "";
+                ref.clear();
             }
         } else
             ref += s[i];

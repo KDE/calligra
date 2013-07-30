@@ -32,8 +32,8 @@
 #include <QTimer>
 #include <QMutexLocker>
 
-#include <KGlobal>
-#include <KLocale>
+#include <kglobal.h>
+#include <klocale.h>
 
 #include <iostream>
 
@@ -81,10 +81,10 @@ KPlatoRCPSScheduler::KPlatoRCPSScheduler( Project *project, ScheduleManager *sm,
     m_offsetFromTime_t( 0 ),
     m_progressinfo( new ProgressInfo() )
 {
-    connect(this, SIGNAL(sigCalculationStarted( Project*, ScheduleManager*)), project, SIGNAL(sigCalculationStarted( Project*, ScheduleManager*)));
+    connect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), project, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
     emit sigCalculationStarted( project, sm );
 
-    connect( this, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ) );
+    connect( this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), project, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)) );
 }
 
 KPlatoRCPSScheduler::~KPlatoRCPSScheduler()

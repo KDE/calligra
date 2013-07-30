@@ -28,7 +28,7 @@
 #include <QClipboard>
 
 #include <kdebug.h>
-#include <KAboutData>
+#include <kaboutdata.h>
 
 #include <main/KexiMainWindow.h>
 #include <core/KexiWindow.h>

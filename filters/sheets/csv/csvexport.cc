@@ -22,7 +22,6 @@
 
 #include <QFile>
 #include <QTextCodec>
-//Added by qt3to4:
 #include <QTextStream>
 #include <QByteArray>
 
@@ -285,9 +284,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
                 if (pos != -1) {
                     name.replace(pos, tname.length(), sheet->sheetName());
                 }
-                str += name;
-                str += m_eol;
-                str += m_eol;
+                str += name + m_eol + m_eol;
             }
 
             first = false;

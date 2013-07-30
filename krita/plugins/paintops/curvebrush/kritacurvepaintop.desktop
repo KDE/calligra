@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Curve brush
+Name[bs]=Krivuljasta četka
 Name[ca]=Pinzell de corba
 Name[ca@valencia]=Pinzell de corba
 Name[da]=Kurvepensel
@@ -16,6 +17,7 @@ Name[it]=Pennello a curva
 Name[ja]=曲線ブラシ
 Name[kk]=Қисық қылқаламы
 Name[lv]=Līklīnijas ota
+Name[mr]=वलय कुंचला
 Name[nb]=Kurvepensel
 Name[nds]=Bagenpinsel
 Name[nl]=Kromme-penseel
@@ -33,4 +35,4 @@ Name[zh_TW]=曲線筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacurvepaintop
-X-Krita-Version=27
+X-Krita-Version=28

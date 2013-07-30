@@ -98,10 +98,10 @@ RowHeaderItem::RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
     //setMouseTracking(true);
     setAcceptHoverEvents(true);
 
-    //connect(m_pView, SIGNAL(autoScroll(const QPoint &)),
-            //this, SLOT(slotAutoScroll(const QPoint &)));
-    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
-            this, SLOT(toolChanged(const QString&)));
+    //connect(m_pView, SIGNAL(autoScroll(QPoint)),
+            //this, SLOT(slotAutoScroll(QPoint)));
+    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(QString)),
+            this, SLOT(toolChanged(QString)));
 
     setFlag(ItemClipsToShape, true);
 }
@@ -260,10 +260,10 @@ ColumnHeaderItem::ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
     //setMouseTracking(true);
     setAcceptHoverEvents(true);
 
-    //connect(_view, SIGNAL(autoScroll(const QPoint &)),
-            //this, SLOT(slotAutoScroll(const QPoint &)));
-    connect(_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
-            this, SLOT(toolChanged(const QString&)));
+    //connect(_view, SIGNAL(autoScroll(QPoint)),
+            //this, SLOT(slotAutoScroll(QPoint)));
+    connect(_canvas->toolProxy(), SIGNAL(toolChanged(QString)),
+            this, SLOT(toolChanged(QString)));
 
     setFlag(ItemClipsToShape, true);
 }
@@ -440,8 +440,8 @@ SelectAllButtonItem::SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase* can
         : QGraphicsWidget(_parent)
         , SelectAllButton(canvasBase)
 {
-    connect(canvasBase->toolProxy(), SIGNAL(toolChanged(const QString&)),
-            this, SLOT(toolChanged(const QString&)));
+    connect(canvasBase->toolProxy(), SIGNAL(toolChanged(QString)),
+            this, SLOT(toolChanged(QString)));
 }
 
 SelectAllButtonItem::~SelectAllButtonItem()

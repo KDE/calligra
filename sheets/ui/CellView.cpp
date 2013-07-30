@@ -58,7 +58,7 @@
 #endif
 
 // KDE
-#include <KColorUtils>
+#include <kcolorutils.h>
 
 // Calligra
 #include <KoPostscriptPaintDevice.h>
@@ -1258,7 +1258,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
     if (dynamic_cast<QPrinter*>(painter.device()))
         return;
 
-    if (! cell.sheet()->isShowPageBorders())
+    if (! cell.sheet()->isShowPageOutline())
         return;
 
     SheetPrint* const print = cell.sheet()->print();
@@ -1274,7 +1274,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
             && cell.row() <= printRange.bottom() + 1) {
         if (print->isColumnOnNewPage(cell.column())
                 && cell.row() <= printRange.bottom()) {
-            painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
+            painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
 
             if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
                 line = QLineF(coordinate.x() + d->width, coordinate.y(),
@@ -1287,7 +1287,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 
         if (print->isRowOnNewPage(cell.row()) &&
                 (cell.column() <= printRange.right())) {
-            painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
+            painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
             line = QLineF(coordinate.x(),  coordinate.y(),
                           coordinate.x() + d->width, coordinate.y());
             painter.drawLine(line);
@@ -1296,7 +1296,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         if (paintBorder & RightBorder) {
             if (print->isColumnOnNewPage(cell.column() + 1)
                     && cell.row() <= printRange.bottom()) {
-                painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
+                painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
 
                 if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
                     line = QLineF(coordinate.x(), coordinate.y(),
@@ -1311,7 +1311,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         if (paintBorder & BottomBorder) {
             if (print->isRowOnNewPage(cell.row() + 1)
                     && cell.column() <= printRange.right()) {
-                painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
+                painter.setPen(cell.sheet()->map()->settings()->pageOutlineColor());
                 line = QLineF(coordinate.x(),  coordinate.y() + d->height,
                               coordinate.x() + d->width, coordinate.y() + d->height);
                 painter.drawLine(line);

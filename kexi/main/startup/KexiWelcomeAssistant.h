@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,8 +20,9 @@
 #ifndef KEXIWELCOMEASSISTANT_H
 #define KEXIWELCOMEASSISTANT_H
 
+#include "KexiAssistantMessageHandler.h"
+
 #include <db/connectiondata.h>
-#include <db/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
@@ -35,6 +36,7 @@ class KCategorizedView;
 class KexiWelcomeAssistant;
 class KexiRecentProjectsProxyModel;
 class KexiWelcomeStatusBar;
+class KexiMainWindow;
 
 class KexiMainWelcomePage : public KexiAssistantPage
 {
@@ -46,6 +48,8 @@ public:
     QString selectedTemplate;
     QString selectedCategory;
     
+    void updateRecentProjects();
+
 signals:
     void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
 
@@ -63,42 +67,39 @@ class KexiProjectData;
 class KexiRecentProjects;
 
 class KexiWelcomeAssistant : public KexiAssistantWidget,
-                             public KexiDB::MessageHandler
+                             public KexiAssistantMessageHandler
 {
     Q_OBJECT
 public:
-    explicit KexiWelcomeAssistant(KexiRecentProjects* projects, QWidget* parent = 0);
+    explicit KexiWelcomeAssistant(KexiRecentProjects* projects, KexiMainWindow* parent = 0);
     ~KexiWelcomeAssistant();
-
-    //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessage(const QString &title,
-                                  const QString &details = QString());
-
-    //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString());
 
     KexiRecentProjects* projects();
     
 public slots:
-    virtual void previousPageRequested(KexiAssistantPage* page);
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
     void tryAgainActionTriggered();
+    void cancelActionTriggered();
 
 signals:
     /*! Emitted if project @a data was selected to open.
      @a shortcutPath can be non empty to indicate .kexis filename useful for opening new
      instance of Kexi. Receiver should set value pointed by @a opened to true if the
      database has been opened successfully. */
-    void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
-    
-// protected:
-//     virtual void mousePressEvent(QMouseEvent* e);
+    void openProject(const KexiProjectData &data, const QString &shortcutPath, bool *opened);
+
+protected:
+    void openProjectOrShowPasswordPage(KexiProjectData *data);
+    void emitOpenProject(KexiProjectData *data);
+    virtual QWidget* calloutWidget() const;
 
 private:
     void createProject(
         const KexiDB::ConnectionData& cdata, const QString& databaseName,
         const QString& caption);
+
+    friend class KexiMainWelcomePage;
 
     class Private;
     Private* const d;

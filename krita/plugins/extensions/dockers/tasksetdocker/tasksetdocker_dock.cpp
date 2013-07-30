@@ -27,7 +27,7 @@
 #include <QAction>
 
 #include <klocale.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 
 #include <KoIcon.h>
 
@@ -214,7 +214,7 @@ void TasksetDockerDock::saveClicked()
     }
     taskset->setFilename(fileInfo.filePath());
     if(newName) {
-        name = i18n("Taskset %1").arg(i);
+        name = i18n("Taskset %1", i);
     }
     taskset->setName(name);
     m_rserver->addResource(taskset);

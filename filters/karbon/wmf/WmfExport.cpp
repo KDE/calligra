@@ -22,7 +22,6 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
-#include <KarbonKoDocument.h>
 
 #include <kdebug.h>
 #include <kpluginfactory.h>
@@ -60,7 +59,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
     if (! doc)
         return KoFilter::ParsingError;
 
-    KarbonKoDocument * karbonPart = dynamic_cast<KarbonKoDocument*>(doc);
+    KarbonDocument * karbonPart = dynamic_cast<KarbonDocument*>(doc);
     if (! karbonPart)
         return KoFilter::WrongFormat;
 
@@ -71,7 +70,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
         return KoFilter::WrongFormat;
     }
 
-    paintDocument(karbonPart->document());
+    paintDocument(karbonPart);
 
     mWmf->end();
 
@@ -80,13 +79,13 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
-void WmfExport::paintDocument(KarbonDocument& document)
+void WmfExport::paintDocument(KarbonDocument* document)
 {
 
     // resolution
     mDpi = 1000;
 
-    QSizeF pageSize = document.pageSize();
+    QSizeF pageSize = document->pageSize();
     int width = static_cast<int>(POINT_TO_INCH(pageSize.width()) * mDpi);
     int height = static_cast<int>(POINT_TO_INCH(pageSize.height()) * mDpi);
 
@@ -98,7 +97,7 @@ void WmfExport::paintDocument(KarbonDocument& document)
         mScaleY = static_cast<double>(height) / pageSize.height();
     }
 
-    QList<KoShape*> shapes = document.shapes();
+    QList<KoShape*> shapes = document->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     // Export layers.
@@ -131,15 +130,15 @@ void WmfExport::paintShape(KoShape * shape)
         mWmf->drawPolyline(polygons.first());
     else {
         QBrush fill(Qt::NoBrush);
-        KoColorBackground * cbg = dynamic_cast<KoColorBackground*>(shape->background());
+        QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
         if (cbg)
             fill = QBrush(cbg->color(), cbg->style());
-        KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
+        QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
         if (gbg) {
             fill = QBrush(*gbg->gradient());
             fill.setTransform(gbg->transform());
         }
-        KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
+        QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
         if (pbg) {
             fill.setTextureImage(pbg->pattern());
             fill.setTransform(pbg->transform());

@@ -1,0 +1,19 @@
+Lots of extra stuff that uses the Calligra libs/modules/programs:
+
+* calligra - utility to start the matching Calligra program for a given file
+
+* converter - commandline tool for conversion between any file formats for which
+              there is a chain of Calligra import/export filters
+
+* okularodpgenerator - plugin for Okular supporting files in the formats ODP
+                       and MS PPT/PPTX
+
+* properties - plugin for the Dolphin file properties dialog, displaying the
+               metadata of files in the ODF formats
+
+* quickprint - plugins adding a "Print" action for several formats to the
+               filemanager context menu and calling the related Calligra programs
+
+* thumbnail - plugin for the thumbnail system, creating thumbnails for files in
+              ODF formats and those formats with good Calligra import filters
+              (related desktop files are installed with the import filters)

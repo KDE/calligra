@@ -40,9 +40,9 @@
 #include <kmimetype.h>
 #include <kfile.h>
 #include <kurlcombobox.h>
-#include <KToolBar>
-#include <KActionCollection>
-#include <KFileDialog>
+#include <ktoolbar.h>
+#include <kactioncollection.h>
+#include <kfiledialog.h>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
@@ -101,15 +101,15 @@ KexiFileWidget::KexiFileWidget(
 
     /* Qt4
     #ifdef Q_WS_WIN
-      if (startDirOrVariable.startsWith(":"))
+      if (startDirOrVariable.startsWith(':'))
         m_lastVisitedPathsVariable = startDirOrVariable; //store for later use
     #else*/
 // toggleSpeedbar(false);
     setFocusProxy(locationEdit());
 //#endif
 
-    connect(this, SIGNAL(fileHighlighted(const QString&)),
-            this, SLOT(slotExistingFileHighlighted(const QString&)));
+    connect(this, SIGNAL(fileHighlighted(QString)),
+            this, SLOT(slotExistingFileHighlighted(QString)));
 }
 
 KexiFileWidget::~KexiFileWidget()
@@ -290,7 +290,7 @@ QString KexiFileWidget::selectedFile() const
   //js @todo
 // kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text();
   QString path = dir()->absolutePath();
-  if (!path.endsWith("/") && !path.endsWith("\\"))
+  if (!path.endsWith('/') && !path.endsWith("\\"))
     path.append("/");
   path += m_lineEdit->text();
 // QString path = QFileInfo(selectedFile()).dirPath(true) + "/" + m_lineEdit->text();
@@ -313,7 +313,7 @@ QString KexiFileWidget::selectedFile() const
 
   if (!currentFilter().isEmpty()) {
     if (d->mode & SavingFileBasedDB) {
-      const QStringList filters( currentFilter().split(" ") );
+      const QStringList filters( currentFilter().split(' ') );
       kDebug()<< " filter == " << filters;
       QString ext( QFileInfo(path).suffix() );
       bool hasExtension = false;
@@ -370,7 +370,7 @@ bool KexiFileWidget::checkSelectedFile()
 
     if (!currentFilter().isEmpty()) {
         if (d->mode & SavingFileBasedDB) {
-            const QStringList filters( currentFilter().split(" ") );
+            const QStringList filters( currentFilter().split(' ') );
             QString path = highlightedFile();
             kDebug()<< "filter:" << filters << "path:" << path;
             QString ext( QFileInfo(path).suffix() );

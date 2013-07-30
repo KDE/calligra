@@ -23,7 +23,7 @@
 
 
 #include <core/kexipartinfo.h>
-#include <KIcon>
+#include <kicon.h>
 #include <QtAlgorithms>
 #include <kdebug.h>
 
@@ -136,7 +136,11 @@ QVariant KexiProjectModelItem::data(int column) const
 #ifdef KEXI_MOBILE
         return d->item->captionOrName();
 #else
-        return d->item->name() + (d->dirty ? "*" : "");
+        QString result = d->item->name();
+        if (d->dirty) {
+            result.append(QLatin1Char('*'));
+        }
+        return result;
 #endif
     } else if (d->info) {
         return d->info->groupName();

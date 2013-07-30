@@ -103,7 +103,9 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
             QApplication::restoreOverrideCursor();
             return;
         }
-        KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Contiguous Area Selection"));
+
+        selection->pixelSelection()->invalidateOutlineCache();
+        KisSelectionToolHelper helper(kisCanvas, i18n("Contiguous Area Selection"));
         helper.selectPixelSelection(selection->pixelSelection(), selectionAction());
 
         QApplication::restoreOverrideCursor();

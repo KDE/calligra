@@ -20,16 +20,15 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "KoFilterManager.h"
 #include "KoFilterManager_p.h"
 
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QListWidgetItem>
 
-#include <KLocale>
-#include <KSqueezedTextLabel>
-#include <KMimeType>
+#include <klocale.h>
+#include <ksqueezedtextlabel.h>
+#include <kmimetype.h>
 
 #include <unistd.h>
 

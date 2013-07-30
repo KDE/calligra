@@ -17,10 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "PsCommentLexer.h"
+
 #include <stdlib.h>
 #include <ctype.h>
 #include <QStringList>
-#include "PsCommentLexer.h"
 
 #define CATEGORY_WHITESPACE -1
 #define CATEGORY_ALPHA -2
@@ -329,8 +330,8 @@ bool BoundingBoxExtractor::getRectangle(const char* input, int &llx, int &lly, i
     QString s(input);
     if (s.contains("(atend)")) return false;
 
-    QString s2 = s.remove("%BoundingBox:");
-    QStringList values = s2.split(' ');
+    s.remove("%BoundingBox:");
+    QStringList values = s.split(' ');
     qDebug("size is %d", values.size());
 //  if (values.size() < 5) return false;
     llx = values[0].toInt();

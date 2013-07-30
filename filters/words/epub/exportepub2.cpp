@@ -476,10 +476,17 @@ void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
     QBuffer *buff = new QBuffer(&coverHtmlContent);
     KoXmlWriter * writer = new KoXmlWriter(buff);
 
+    writer->startDocument(NULL,NULL,NULL); //xml version, etc...
     writer->startElement("html");
     writer->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+    writer->addAttribute("xml:lang", "en");
 
     writer->startElement("head");
+
+    writer->startElement("meta");
+    writer->addAttribute("http-equiv", "Content-Type");
+    writer->addAttribute("content", "text/html; charset=UTF-8");
+    writer->endElement();
 
     writer->startElement("title");
     writer->addTextNode("Cover");
@@ -487,8 +494,14 @@ void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
 
     writer->startElement("style");
     writer->addAttribute("type", "text/css");
-    writer->addTextNode("img { max-width: 100%; }");
-    writer->endElement();
+    writer->addAttribute("title", "override_css");
+
+    writer->addTextNode("\n");
+    writer->addTextNode("   @page { padding:Opt; margin:Opt } \n");
+    writer->addTextNode("   body { text-align:center; padding:Opt; margin:Opt } \n");
+    writer->addTextNode("   img { padding:Opt; margin:Opt; max-height: 100% ; max-width: 100% } \n");
+
+    writer->endElement(); //style
 
     writer->endElement(); // head
 
@@ -500,7 +513,6 @@ void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
     writer->startElement("img");
     writer->addAttribute("src", coverPath);
     writer->addAttribute("alt", "Cover Image");
-
     writer->endElement();
 
     writer->endElement(); // div
@@ -511,5 +523,5 @@ void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
 
     // Add cover html to content
     epubFile->addContentFile(QString("cover"), QString(epubFile->pathPrefix() + "cover.xhtml")
-                             , "application/xhtml+xml", coverHtmlContent, QString("Cover"));
+                            , "application/xhtml+xml", coverHtmlContent, QString("Cover"));
 }

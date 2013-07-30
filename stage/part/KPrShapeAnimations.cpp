@@ -48,8 +48,8 @@
 
 //KDE Headers
 #include <KoIcon.h>
-#include <KIconLoader>
-#include <KLocale>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 const int COLUMN_COUNT = 10;
@@ -951,7 +951,7 @@ QPixmap KPrShapeAnimations::getAnimationShapeThumbnail(KPrShapeAnimation *animat
 {
     if (animation) {
         //TODO: Draw image file to load when shape thumbnail can't be created
-       QPixmap thumbnail = koIcon("stage").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+       QPixmap thumbnail = koIcon("calligrastage").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
 
         if (
 #if QT_VERSION >= 0x040700

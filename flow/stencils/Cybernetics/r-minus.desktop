@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=r-minus
+Name[bs]=r-minus
 Name[ca]=r-minus
 Name[ca@valencia]=r-minus
+Name[da]=r-minus
 Name[el]=r-minus
 Name[es]=sustracción de la entrada derecha
 Name[et]=Parem miinus
@@ -19,4 +21,5 @@ Name[sk]=r-minus
 Name[sv]=h-minus
 Name[uk]=Суматор (віднімання входу праворуч)
 Name[x-test]=xxr-minusxx
+Name[zh_CN]=R-减
 Name[zh_TW]=r-minus

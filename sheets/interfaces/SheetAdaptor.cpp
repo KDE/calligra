@@ -52,8 +52,8 @@ SheetAdaptor::SheetAdaptor(Sheet* t)
 {
     setAutoRelaySignals(false);
     m_sheet = t;
-    connect(m_sheet->map(), SIGNAL(damagesFlushed(const QList<Damage*> &)),
-            this, SLOT(handleDamages(const QList<Damage*> &)));
+    connect(m_sheet->map(), SIGNAL(damagesFlushed(QList<Damage*>)),
+            this, SLOT(handleDamages(QList<Damage*>)));
 }
 
 SheetAdaptor::~SheetAdaptor()
@@ -347,9 +347,9 @@ bool SheetAdaptor::firstLetterUpper() const
     return m_sheet->getFirstLetterUpper();
 }
 
-void SheetAdaptor::setShowPageBorders(bool b)
+void SheetAdaptor::setShowPageOutline(bool b)
 {
-    m_sheet->setShowPageBorders(b);
+    m_sheet->setShowPageOutline(b);
     m_sheet->doc()->updateBorderButton();
 }
 #endif

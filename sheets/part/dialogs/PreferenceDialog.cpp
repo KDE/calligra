@@ -45,11 +45,11 @@
 #include <KoConfigAuthorPage.h>
 
 #include <kcolorbutton.h>
-#include <KPluginInfo>
-#include <KPluginSelector>
-#include <KServiceTypeTrader>
+#include <kplugininfo.h>
+#include <kpluginselector.h>
+#include <kservicetypetrader.h>
 #include <ksharedconfig.h>
-#include <KStandardDirs>
+#include <kstandarddirs.h>
 #include <sonnet/configwidget.h>
 
 #include "ApplicationSettings.h"
@@ -84,7 +84,7 @@ public:
     double oldIndentationStep;
     bool oldCaptureAllArrowKeys;
     QColor oldGridColor;
-    QColor oldPageBorderColor;
+    QColor oldPageOutlineColor;
 
     // Open/Save Options
     Ui::FileOptionsWidget fileOptions;
@@ -170,11 +170,11 @@ void PreferenceDialog::Private::applyInterfaceOptions()
         oldGridColor = gridColor;
     }
 
-    const QColor pageBorderColor = interfaceOptions.m_pageBorderColor->color();
-    if (pageBorderColor != view->doc()->map()->settings()->pageBorderColor()) {
-        view->doc()->map()->settings()->changePageBorderColor(pageBorderColor);
-        config->group("KSpread Color").writeEntry("PageBorderColor", pageBorderColor);
-        oldPageBorderColor = pageBorderColor;
+    const QColor pageOutlineColor = interfaceOptions.m_pageOutlineColor->color();
+    if (pageOutlineColor != view->doc()->map()->settings()->pageOutlineColor()) {
+        view->doc()->map()->settings()->changePageOutlineColor(pageOutlineColor);
+        config->group("KSpread Color").writeEntry("PageOutlineColor", pageOutlineColor);
+        oldPageOutlineColor = pageOutlineColor;
     }
 
 #if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
@@ -213,7 +213,7 @@ void PreferenceDialog::Private::defaultInterfaceOptions()
     interfaceOptions.m_indentationStep->changeValue(10.0);
     interfaceOptions.m_captureAllArrowKeys->setChecked(true);
     interfaceOptions.m_gridColor->setColor(Qt::lightGray);
-    interfaceOptions.m_pageBorderColor->setColor(Qt::red);
+    interfaceOptions.m_pageOutlineColor->setColor(Qt::red);
 #if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
     typeCompletion->setCurrentIndex(3);
 #endif
@@ -232,7 +232,7 @@ void PreferenceDialog::Private::resetInterfaceOptions()
 
     const KConfigGroup colorGroup = config->group("KSpread Color");
     oldGridColor = colorGroup.readEntry("GridColor", QColor(Qt::lightGray));
-    oldPageBorderColor = colorGroup.readEntry("PageBorderColor", QColor(Qt::red));
+    oldPageOutlineColor = colorGroup.readEntry("PageOutlineColor", QColor(Qt::red));
 
     const int moveToIndex = interfaceOptions.m_cursorMovement->findData(oldCursorMovement);
     interfaceOptions.m_cursorMovement->setCurrentIndex(moveToIndex);
@@ -242,7 +242,7 @@ void PreferenceDialog::Private::resetInterfaceOptions()
     interfaceOptions.m_indentationStep->changeValue(oldIndentationStep);
     interfaceOptions.m_captureAllArrowKeys->setChecked(oldCaptureAllArrowKeys);
     interfaceOptions.m_gridColor->setColor(oldGridColor);
-    interfaceOptions.m_pageBorderColor->setColor(oldPageBorderColor);
+    interfaceOptions.m_pageOutlineColor->setColor(oldPageOutlineColor);
 }
 
 void PreferenceDialog::Private::applyOpenSaveOptions()
@@ -473,7 +473,7 @@ listType += i18n("Semi-Automatic");
 typeCompletion->insertItems(0, listType);
 typeCompletion->setCurrentIndex(0);
 comboChanged = false;
-connect(typeCompletion, SIGNAL(activated(const QString &)), this, SLOT(slotTextComboChanged(const QString &)));
+connect(typeCompletion, SIGNAL(activated(QString)), this, SLOT(slotTextComboChanged(QString)));
 #endif
 
 #include "PreferenceDialog.moc"

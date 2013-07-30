@@ -20,7 +20,7 @@
 #ifndef KSPREADAPPLICATIONSETTINGS
 #define KSPREADAPPLICATIONSETTINGS
 
-#include <KGlobalSettings>
+#include <kglobalsettings.h>
 
 #include <QColor>
 #include <QObject>
@@ -166,8 +166,8 @@ public:
     void setTypeOfCalc(MethodOfCalc calc);
     MethodOfCalc getTypeOfCalc() const;
 
-    QColor pageBorderColor() const;
-    void changePageBorderColor(const QColor& color);
+    QColor pageOutlineColor() const;
+    void changePageOutlineColor(const QColor& color);
 
     void setCaptureAllArrowKeys(bool capture);
     bool captureAllArrowKeys() const;

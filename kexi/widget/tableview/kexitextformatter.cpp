@@ -22,7 +22,7 @@
 #include <widget/utils/kexidatetimeformatter.h>
 #include <db/utils.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 //! @internal
 class KexiTextFormatter::Private

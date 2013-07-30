@@ -24,10 +24,10 @@
 #include <QCursor>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
@@ -128,7 +128,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popup(0),
     m_parent(0),
     m_colorUpdateAllowed(true),
-    m_hideDistance(250),
+    m_hideDistance(20),
     m_hideTimer(new QTimer(this)),
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
@@ -171,8 +171,8 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
     }
     m_canvas = canvas;
     if (m_canvas) {
-        connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this, SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+            this, SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
     }
 
     update();
@@ -278,7 +278,7 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
         }
 
         m_popup->move(x, y);
-        m_popup->setHidingDistanceAndTime(50, 500);
+        m_popup->setHidingDistanceAndTime(20, 400);
         showPopup(DontMove);
         e->accept();
         return;
@@ -441,7 +441,7 @@ void KisColorSelectorBase::updateColorPreview(const QColor& color)
     m_colorPreviewPopup->setColor(color);
 }
 
-void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
+void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
 {
     if (key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
         QColor c = findGeneratingColor(v.value<KoColor>());
@@ -461,7 +461,9 @@ const KoColorSpace* KisColorSelectorBase::colorSpace() const
         KisNodeSP currentNode = m_canvas->resourceManager()->
                                 resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
         if (currentNode) {
-            m_colorSpace=currentNode->colorSpace();
+            m_colorSpace = currentNode->paintDevice() ?
+                currentNode->paintDevice()->compositionSourceColorSpace() :
+                currentNode->colorSpace();
         } else {
             m_colorSpace=m_canvas->view()->image()->colorSpace();
         }

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Gateway
+Name[bs]=Gateway
 Name[ca]=Passarel·la
 Name[ca@valencia]=Passarel·la
 Name[cs]=Brána
@@ -13,6 +14,8 @@ Name[hu]=Átjáró
 Name[ia]=Gateway
 Name[it]=Gateway
 Name[kk]=Шлюз
+Name[lt]=Šliuzas
+Name[mr]=गेटवे
 Name[nb]=Portner
 Name[nds]=Döörreekner
 Name[nl]=Gateway
@@ -23,6 +26,7 @@ Name[ru]=Оператор
 Name[sk]=Brána
 Name[sl]=Prehod
 Name[sv]=Port
+Name[tr]=Geçit
 Name[ug]=تور ئۆتكىلى
 Name[uk]=Шлюз
 Name[x-test]=xxGatewayxx

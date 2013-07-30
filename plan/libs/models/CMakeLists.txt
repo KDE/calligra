@@ -5,7 +5,7 @@ include_directories(
     ../kernel 
     ${KOMAIN_INCLUDES}
     ${KUNDO2_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+    ${KDGANTT_INCLUDES}
     ${KDCHART_INCLUDES}
     ${KDE4_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
@@ -44,7 +44,7 @@ set(kplatomodels_LIB_SRCS
 
 kde4_add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
 
-target_link_libraries(kplatomodels kplatokernel koodf kdchart calligrakdgantt ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KABC_LIBS})
+target_link_libraries(kplatomodels kplatokernel koodf ${KDCHART_LIBS} calligrakdgantt ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KABC_LIBS})
 target_link_libraries(kplatomodels kundo2)
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

@@ -46,8 +46,9 @@ void KisToolRectangleBase::deactivate()
 
 void KisToolRectangleBase::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton,
+                          Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier)) {
 
         if (m_type == PAINT) {
             if (!nodeEditable() || nodePaintAbility() == NONE) {
@@ -113,9 +114,7 @@ void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
         setMode(KisTool::HOVER_MODE);
 
         updateArea();
-        if (currentNode()->isEditable()) {
-            finishRect(QRectF(m_dragStart, m_dragEnd));
-        }
+        finishRect(QRectF(m_dragStart, m_dragEnd));
     }
     else {
         KisToolShape::mouseReleaseEvent(event);

@@ -32,9 +32,9 @@
 #include <QMenu>
 
 // KDE
-#include <KLocale>
-#include <KDebug>
-#include <KMessageBox>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
 
 // Calligra
 #include <interfaces/KoChartModel.h>
@@ -494,10 +494,10 @@ ChartConfigWidget::ChartConfigWidget()
             this,             SIGNAL(showLegendChanged(bool)));
 
     // "Datasets" tab
-    connect(d->ui.datasetBrush, SIGNAL(changed(const QColor&)),
-            this, SLOT(datasetBrushSelected(const QColor&)));
-    connect(d->ui.datasetPen, SIGNAL(changed(const QColor&)),
-            this, SLOT(datasetPenSelected(const QColor&)));
+    connect(d->ui.datasetBrush, SIGNAL(changed(QColor)),
+            this, SLOT(datasetBrushSelected(QColor)));
+    connect(d->ui.datasetPen, SIGNAL(changed(QColor)),
+            this, SLOT(datasetPenSelected(QColor)));
     connect(d->ui.datasetShowCategory, SIGNAL(toggled(bool)),
             this, SLOT(ui_datasetShowCategoryChanged(bool)));
     connect(d->ui.datasetShowErrorBar, SIGNAL(toggled(bool)),
@@ -516,8 +516,8 @@ ChartConfigWidget::ChartConfigWidget()
             this, SLOT(ui_dataSetPieExplodeFactorChanged(int)));
 
     // "Legend" tab
-    connect(d->ui.legendTitle, SIGNAL(textChanged(const QString&)),
-            this, SIGNAL(legendTitleChanged(const QString&)));
+    connect(d->ui.legendTitle, SIGNAL(textChanged(QString)),
+            this, SIGNAL(legendTitleChanged(QString)));
     connect(d->ui.legendShowFrame, SIGNAL(toggled(bool)),
             this, SIGNAL(legendShowFrameChanged(bool)));
     connect(d->ui.legendOrientationIsVertical, SIGNAL(toggled(bool)),
@@ -528,8 +528,8 @@ ChartConfigWidget::ChartConfigWidget()
     d->ui.addAxis->setIcon(koIcon("list-add"));
     d->ui.removeAxis->setIcon(koIcon("list-remove"));
 
-    connect(d->ui.axisTitle, SIGNAL(textChanged(const QString&)),
-            this, SLOT(ui_axisTitleChanged(const QString&)));
+    connect(d->ui.axisTitle, SIGNAL(textChanged(QString)),
+            this, SLOT(ui_axisTitleChanged(QString)));
     connect(d->ui.axisShowTitle, SIGNAL(toggled(bool)),
             this, SLOT(ui_axisShowTitleChanged(bool)));
     connect(d->ui.axisShowGridLines, SIGNAL(toggled(bool)),
@@ -637,8 +637,8 @@ void ChartConfigWidget::open(KoShape* shape)
                 this, SLOT(ui_dataSetYDataRegionChanged()));
         connect(d->cellRegionDialog.labelDataRegion, SIGNAL(editingFinished()),
                 this, SLOT(ui_dataSetLabelDataRegionChanged()));
-        //connect(d->cellRegionDialog.customDataRegion, SIGNAL(textEdited(const QString&)),
-        //        this, SLOT(ui_dataSetCustomDataRegionChanged(const QString&)));
+        //connect(d->cellRegionDialog.customDataRegion, SIGNAL(textEdited(QString)),
+        //        this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
         connect(d->cellRegionDialog.categoryDataRegion, SIGNAL(editingFinished()),
                 this, SLOT(ui_dataSetCategoryDataRegionChanged()));
         connect(d->cellRegionDialog.dataSets, SIGNAL(currentIndexChanged(int)),
@@ -1152,9 +1152,13 @@ void ChartConfigWidget::update()
     d->ui.gapBetweenBars->setValue(d->shape->plotArea()->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(d->shape->plotArea()->gapBetweenSets());
 
+    // This is used in a couple of places.
+    QList<DataSet*> newDataSets = d->shape->plotArea()->dataSets();
+
     // Update "Pie Properties" in "Data Sets" tab
-    d->ui.pieExplodeFactor->setValue(
-                (int)(d->shape->plotArea()->dataSets().at(0)->pieAttributes().explodeFactor()*100));
+    if (newDataSets.size() > 0) {
+        d->ui.pieExplodeFactor->setValue((int)(newDataSets.at(0)->pieAttributes().explodeFactor()*100));
+    }
 
     if (   d->type    != d->shape->chartType()
         || d->subtype != d->shape->chartSubType())
@@ -1217,8 +1221,8 @@ void ChartConfigWidget::update()
     }
 
     // If the datasets have changed, set up the new ones.
-    if (d->shape->plotArea()->dataSets() != d->dataSets) {
-        d->dataSets = d->shape->plotArea()->dataSets();
+    if (newDataSets != d->dataSets) {
+        d->dataSets = newDataSets;
         d->ui.dataSets->clear();
         d->cellRegionDialog.dataSets->clear();
         foreach (DataSet *dataSet, d->dataSets) {

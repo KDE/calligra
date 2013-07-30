@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Diamond
 Name[bg]=Диамант
+Name[bs]=Dijamant
 Name[ca]=Diamant
 Name[ca@valencia]=Diamant
 Name[cs]=Diamant
@@ -15,6 +16,8 @@ Name[gl]=Diamante
 Name[hu]=Gyémánt
 Name[it]=Diamante
 Name[kk]=Ромб
+Name[lt]=Rombas
+Name[mr]=हिरा
 Name[nb]=Rombe
 Name[nds]=Ruut
 Name[nl]=Diamant
@@ -25,6 +28,7 @@ Name[ru]=Ромб
 Name[sk]=Diamant
 Name[sl]=Diamant
 Name[sv]=Ruter
+Name[tr]=Elmas
 Name[ug]=رومبا
 Name[uk]=Бубни
 Name[x-test]=xxDiamondxx

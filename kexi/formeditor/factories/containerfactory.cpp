@@ -32,14 +32,14 @@
 #include <QPaintEvent>
 #include <QFileInfo>
 
-#include <KPluginFactory>
-#include <KTextEdit>
-#include <KLineEdit>
-#include <KLocale>
-#include <KDebug>
+#include <kpluginfactory.h>
+#include <ktextedit.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kdebug.h>
 
-#include <KInputDialog>
-#include <KAction>
+#include <kinputdialog.h>
+#include <kaction.h>
 
 #include "containerfactory.h"
 #include "container.h"
@@ -652,7 +652,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = tab;
 #if defined(USE_KTabWidget)
         tab->setTabReorderingEnabled(true);
-        connect(tab, SIGNAL(movedTab(int, int)), this, SLOT(reorderTabs(int, int)));
+        connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
 #endif
         kDebug() << "Creating ObjectTreeItem:";
         container->form()->objectTree()->addItem(container->objectTree(),

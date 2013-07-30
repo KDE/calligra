@@ -4,7 +4,7 @@ include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
 
 ########### next target ###############
 
-set(xlsximport_PART_SRCS
+set(xlsx2ods_PART_SRCS
     XlsxImport.cpp
     XlsxXmlCommonReader.cpp
     XlsxXmlDocumentReader.cpp
@@ -20,17 +20,17 @@ set(xlsximport_PART_SRCS
     FormulaParser.cpp
 )
 
-kde4_add_plugin(xlsximport ${xlsximport_PART_SRCS})
+kde4_add_plugin(calligra_filter_xlsx2ods ${xlsx2ods_PART_SRCS})
 
 target_link_libraries(
-    xlsximport
-    msooxml
+    calligra_filter_xlsx2ods
+    komsooxml
     koodf
     komain
     calligrasheetscommon
 )
 
-install(TARGETS xlsximport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
@@ -40,7 +40,9 @@ install( FILES
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
 
-install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
 
 ########## unit tests ###################
 
@@ -50,4 +52,4 @@ set(TestFormulaParser_SRCS
 )
 
 kde4_add_unit_test(TestFormulaParser TESTNAME sheets-xlsx-FormulaParser ${TestFormulaParser_SRCS})
-target_link_libraries(TestFormulaParser msooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestFormulaParser komsooxml calligrasheetscommon ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})

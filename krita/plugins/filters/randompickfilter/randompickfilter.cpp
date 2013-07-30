@@ -51,7 +51,6 @@
 #include "kis_wdg_random_pick.h"
 #include "ui_wdgrandompickoptions.h"
 #include <kis_iterator_ng.h>
-#include <kis_random_accessor_ng.h>
 
 K_PLUGIN_FACTORY(KritaRandomPickFilterFactory, registerPlugin<KritaRandomPickFilter>();)
 K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
@@ -74,11 +73,11 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), categoryOther(), i1
 }
 
 
-void KisFilterRandomPick::process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                                 ) const
+void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
+                                      const QRect& applyRect,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                      ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(!device.isNull());
@@ -131,9 +130,8 @@ void KisFilterRandomPick::process(KisPaintDeviceSP device,
 
 }
 
-KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
-    Q_UNUSED(image);
     Q_UNUSED(dev);
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
 }

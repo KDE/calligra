@@ -29,7 +29,9 @@
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
 #include "kis_view2.h"
-#include "kis_part2.h"
+#include <KoDocument.h>
+#include <KoPart.h>
+#include <kis_action_manager.h>
 #include "KoMainWindow.h"
 
 
@@ -45,21 +47,19 @@ public:
         undoStore = new KisSurrogateUndoStore();
         image = createImage(undoStore);
 
-        part = new KisPart2(0);
-        doc = new KisDoc2(part);
-        part->setDocument(doc);
+        doc = new KisDoc2();
         doc->setCurrentImage(image);
 
         if(useSelection) addGlobalSelection(image);
         if(useShapeLayer) addShapeLayer(doc, image);
         image->initialRefreshGraph();
 
-        QVERIFY(checkLayers("initial"));
+        QVERIFY(checkLayersInitial());
 
-        shell = new KoMainWindow(part->componentData());
-        view = new KisView2(part, doc, shell);
+        shell = new KoMainWindow(doc->documentPart()->componentData());
+        view = new KisView2(doc->documentPart(), doc, shell);
 
-        KisPattern *newPattern = new KisPattern(QString(FILES_DATA_DIR) + QDir::separator() + "HR_SketchPaper_01.pat");
+        KisPattern *newPattern = new KisPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
         Q_ASSERT(newPattern->valid());
         view->resourceProvider()->slotPatternActivated(newPattern);
@@ -74,6 +74,7 @@ public:
 
         view->nodeManager()->slotNonUiActivatedNode(paint1);
         selectionManager = view->selectionManager();
+        actionManager = view->actionManager();
     }
 
     ~UiManagerTest() {
@@ -89,7 +90,6 @@ public:
 
         delete shell;
         delete doc;
-        delete part;
 
         /**
          * The event queue may have up to 200k events
@@ -103,14 +103,14 @@ public:
     void checkUndo() {
         undoStore->undo();
         image->waitForDone();
-        QVERIFY(checkLayers("initial"));
+        QVERIFY(checkLayersInitial());
     }
 
     void checkDoubleUndo() {
         undoStore->undo();
         undoStore->undo();
         image->waitForDone();
-        QVERIFY(checkLayers("initial"));
+        QVERIFY(checkLayersInitial());
     }
 
     void startConcurrentTask() {
@@ -129,6 +129,12 @@ public:
         return checkLayers(image, name);
     }
 
+    using QImageBasedTest::checkLayersInitial;
+
+    bool checkLayersInitial() {
+        return checkLayersInitial(image);
+    }
+
     bool checkLayersFuzzy(const QString &name) {
         return checkLayers(image, name, 1);
     }
@@ -145,12 +151,12 @@ public:
 
     KisImageSP image;
     KisSelectionManager *selectionManager;
+    KisActionManager *actionManager;
     KisSurrogateUndoStore *undoStore;
 
 protected:
     KisView2 *view;
     KisDoc2 *doc;
-    KisPart2 *part;
     KoMainWindow *shell;
 };
 

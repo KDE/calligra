@@ -26,12 +26,13 @@
 #include <db/field.h>
 #include <db/lookupfieldschema.h>
 
-//Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 
 class KexiComboBoxPopup;
-class KexiTableViewColumn;
+namespace KexiDB {
+class TableViewColumn;
+}
 
 /*! @short Drop-down cell editor.
 */
@@ -40,11 +41,11 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, virtual public KexiComb
     Q_OBJECT
 
 public:
-    KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
+    KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiComboBoxTableEdit();
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiTableViewColumn *column() const {
+    virtual KexiDB::TableViewColumn *column() const {
         return m_column;
     }
 

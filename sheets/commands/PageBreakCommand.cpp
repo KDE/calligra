@@ -65,7 +65,7 @@ bool PageBreakCommand::postProcessing()
     } else if (m_mode == BreakBeforeRow && range.top() > 1) {
         m_sheet->print()->updateVerticalPageParameters(range.top() - 1);
     }
-    if (m_sheet->isShowPageBorders()) {
+    if (m_sheet->isShowPageOutline()) {
         m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
     }
     return AbstractRegionCommand::postProcessing();

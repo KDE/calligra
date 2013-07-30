@@ -27,8 +27,8 @@
 #include "StylesDelegate.h"
 #include <KoStyleThumbnailer.h>
 
-#include <KAction>
-#include <KSelectAction>
+#include <kaction.h>
+#include <kselectaction.h>
 #include <KoTextBlockData.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
@@ -37,7 +37,7 @@
 #include <KoZoomHandler.h>
 #include <KoStyleManager.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextLayout>
 #include <QComboBox>
@@ -167,7 +167,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
         }
         disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
          //TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which does not get applied on the text, but can be used in the ui
-        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?1:m_sortedStylesModel->indexForCharacterStyle(*style).row());
+        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?1:m_sortedStylesModel->indexOf(*style).row());
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
         widget.characterStyleCombo->slotUpdatePreview();
         connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));

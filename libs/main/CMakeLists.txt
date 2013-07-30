@@ -2,11 +2,6 @@ add_subdirectory( tests )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-if (KdepimLibs_FOUND)
-   include_directories(${KDEPIMLIBS_INCLUDE_DIR})
-   add_definitions(-DKDEPIMLIBS_FOUND)
-endif (KdepimLibs_FOUND)
-
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
 endif (APPLE)
@@ -43,7 +38,7 @@ set(komain_LIB_SRCS
     KoToolBox.cpp
     KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp
-    KoToolDocker.cpp
+    KoToolDocker_p.cpp
     KoVersionDialog.cpp
     KoView.cpp
     calligraversion.cpp
@@ -68,11 +63,6 @@ set(komain_LIB_SRCS
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
     KoDocumentSectionView.cpp
-
-    KoProgressBar.cpp
-    KoProgressUpdater.cpp
-    KoUpdater.cpp
-    KoUpdaterPrivate_p.cpp
 
     KoDetailsPane.cpp
     KoExistingDocumentPane.cpp
@@ -123,12 +113,9 @@ kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
 target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
-    ${KDE4_KABC_LIBS}
     ${KDE4_KFILE_LIBRARY}
-    ${KDE4_KCAL_LIBS}
     kowidgets
-    textlayout
-    
+    kotextlayout
 )
 
 if( KActivities_FOUND )
@@ -152,6 +139,11 @@ install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
+
+if (APPLE)
+    install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
+endif (APPLE)
+
 install( FILES
     KoApplication.h
     KoDocument.h
@@ -180,22 +172,16 @@ install( FILES
     KoServiceProvider.h
     KoPart.h
     KoPrintJob.h
-    KoProgressUpdater.h
-    KoProgressProxy.h
     KoVersionDialog.h
     KoView.h
     calligraversion.h
-    KoProgressUpdater.h
-    KoProgressBar.h
-    KoUpdater.h
     KoStandardAction.h
     komain_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
 if( QT_QTDBUS_FOUND )
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 endif( QT_QTDBUS_FOUND )
-

@@ -27,12 +27,12 @@
 #include <KoIcon.h>
 
 #include <QToolButton>
-#include <KAction>
-#include <KToggleAction>
-#include <KActionCollection>
-#include <KPageDialog>
-#include <KTextEdit>
-#include <KToolBar>
+#include <kaction.h>
+#include <ktoggleaction.h>
+#include <kactioncollection.h>
+#include <kpagedialog.h>
+#include <ktextedit.h>
+#include <ktoolbar.h>
 
 //2.0 #include <formeditor/formmanager.h>
 //2.0 #include <formeditor/widgetpropertyset.h>
@@ -49,6 +49,7 @@
 #include <widget/properties/KexiCustomPropertyFactory.h>
 #include <core/KexiMainWindowIface.h>
 #include <kexiutils/SmallToolButton.h>
+#include <kexiutils/utils.h>
 
 class KexiFormManagerPrivate {
 public:
@@ -109,8 +110,8 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
 
     connect(d->lib, SIGNAL(widgetCreated(QWidget*)),
             this, SLOT(slotWidgetCreatedByFormsLibrary(QWidget*)));
-    connect(d->lib, SIGNAL(widgetActionToggled(const QByteArray&)),
-        this, SLOT(slotWidgetActionToggled(const QByteArray&)));
+    connect(d->lib, SIGNAL(widgetActionToggled(QByteArray)),
+        this, SLOT(slotWidgetActionToggled(QByteArray)));
 
     d->part = part;
     KActionCollection *col = /*tmp*/ new KActionCollection(this); // 2.0 d->part->actionCollectionForMode(Kexi::DesignViewMode);
@@ -135,8 +136,8 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
 #else
 #pragma WARNING( Port code related to KFormDesigner::FormManager::m_treeview here )
 #endif
-//todo        connect(m_propSet, SIGNAL(widgetNameChanged(const QByteArray&, const QByteArray&)),
-//todo                m_treeview, SLOT(renameItem(const QByteArray&, const QByteArray&)));
+//todo        connect(m_propSet, SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
+//todo                m_treeview, SLOT(renameItem(QByteArray,QByteArray)));
     }
 }
 
@@ -155,7 +156,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     d->lib->createWidgetActions(d->widgetActionGroup);
 //! @todo insertWidget() slot?
 //2.0    d->lib->createWidgetActions(client, d->collection,
-//2.0                                this, SLOT(insertWidget(const QByteArray &)));
+//2.0                                this, SLOT(insertWidget(QByteArray)));
 
 #ifdef KFD_SIGSLOTS
     if (d->features & KFormDesigner::Form::EnableConnections) {

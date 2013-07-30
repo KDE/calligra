@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=crystal
 Name[bg]=кристал
+Name[bs]=kristal
 Name[ca]=cristall
-Name[ca@valencia]=cristal
+Name[ca@valencia]=cristall
 Name[cs]=krystal
+Name[da]=krystal
 Name[el]=crystal
 Name[es]=cristal
 Name[et]=Kristall
@@ -13,6 +15,7 @@ Name[hu]=kristály
 Name[it]=cristallo
 Name[ja]=クリスタル
 Name[kk]=кристалл
+Name[mr]=क्रिस्टल
 Name[nb]=krystall
 Name[nl]=kristal
 Name[pl]=kryształ
@@ -23,4 +26,5 @@ Name[sk]=kryštál
 Name[sv]=kristall
 Name[uk]=Кристал
 Name[x-test]=xxcrystalxx
+Name[zh_CN]=晶体
 Name[zh_TW]=crystal

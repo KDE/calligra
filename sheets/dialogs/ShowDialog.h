@@ -25,7 +25,7 @@
 #ifndef CALLIGRA_SHEETS_SHOW_DIALOG
 #define CALLIGRA_SHEETS_SHOW_DIALOG
 
-#include <KDialog>
+#include <kdialog.h>
 
 class QListWidget;
 

@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=tyristor triode
+Name[bs]=tiristor trioda
 Name[ca]=triode tiristor
 Name[ca@valencia]=triode tiristor
+Name[cs]=tyristorová trioda
+Name[da]=tyristortriode
 Name[de]=Tyristor-Triode
 Name[el]=τρίοδος θυρίστορ
 Name[es]=triodo tíristor
@@ -20,4 +23,5 @@ Name[sk]=tyristor trióda
 Name[sv]=tyristortriod
 Name[uk]=Тиристорний тріод
 Name[x-test]=xxtyristor triodexx
+Name[zh_CN]=可控硅三极管
 Name[zh_TW]=tyristor triode

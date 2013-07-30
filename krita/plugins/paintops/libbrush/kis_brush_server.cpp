@@ -18,6 +18,7 @@
 #include "kis_brush_server.h"
 
 #include <QDir>
+#include <QApplication>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -73,6 +74,12 @@ public:
     virtual void resourceChanged(KisBrush* resource) {
         Q_UNUSED(resource);
     }
+
+    virtual void syncTaggedResourceView(){}
+
+    virtual void syncTagAddition(const QString& tag){}
+
+    virtual void syncTagRemoval(const QString& tag){}
 
     ///Reimplemented
     virtual void importResourceFile(const QString& filename, bool fileCreation = true)
@@ -145,6 +152,10 @@ KisBrushServer::KisBrushServer()
     m_brushServer = new BrushResourceServer();
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
+
+    if (qApp->applicationName().toLower().contains("test")) {
+        m_brushThread->wait();
+    }
 
     connect(KisResourceServerProvider::instance(), SIGNAL(notifyBrushBlacklistCleanup()),
             this, SLOT(slotRemoveBlacklistedResources()));

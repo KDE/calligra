@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Vertical Zener Diode
 Name[bg]=Вертикален ценеров диод
+Name[bs]=Vertikalna Zener dioda
 Name[ca]=Diode Zener vertical
 Name[ca@valencia]=Diode Zener vertical
+Name[da]=Lodret zenerdiode
 Name[de]=Senkrechte Zener-Diode
 Name[el]=Κάθετη δίοδος Zener
 Name[es]=Diodo Zener vertical
@@ -20,6 +22,7 @@ Name[pt]=Díodo de Zener Vertical
 Name[pt_BR]=Diodo de Zener vertical
 Name[ru]=Вертикальный зенеровский диод
 Name[sk]=Zvislá Zenerova dióda
+Name[sl]=Navpična zenerjeva dioda
 Name[sv]=Vertikal Zener-diod
 Name[uk]=Стабілітрон (вертикально)
 Name[x-test]=xxVertical Zener Diodexx

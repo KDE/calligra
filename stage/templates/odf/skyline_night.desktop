@@ -1,8 +1,10 @@
 [Desktop Entry]
 Icon=skyline_night
 Name=Skyline Night
+Name[bs]=Noćno nebo
 Name[ca]=Horitzó nocturn
 Name[ca@valencia]=Horitzó nocturn
+Name[cs]=Panorama noční
 Name[da]=Skyline Night
 Name[de]=Horizont bei Nacht
 Name[el]=Γραμμή ορίζοντα νύχτα
@@ -28,8 +30,10 @@ Name[wa]=Roye do cir al nute
 Name[x-test]=xxSkyline Nightxx
 Name[zh_TW]=Skyline Night
 Comment=Skyline Night
+Comment[bs]=Noćno nebo
 Comment[ca]=Horitzó nocturn
 Comment[ca@valencia]=Horitzó nocturn
+Comment[cs]=Panorama noční
 Comment[da]=Skyline Night
 Comment[de]=Horizont bei Nacht
 Comment[el]=Γραμμή ορίζοντα νύχτα

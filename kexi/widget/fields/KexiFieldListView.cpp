@@ -27,7 +27,6 @@
 #include <QApplication>
 #include <QBitmap>
 #include <QStyle>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <kdebug.h>
@@ -85,8 +84,8 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions optio
 // header()->hide();
     setSorting(-1, true); // disable sorting
 */
-    connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-            this, SLOT(slotDoubleClicked(const QModelIndex&)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(slotDoubleClicked(QModelIndex)));
 }
 
 KexiFieldListView::~KexiFieldListView()
@@ -129,7 +128,7 @@ QStringList KexiFieldListView::selectedFieldNames() const
 
     foreach (const QModelIndex &idx, idxlist) {
         QString field = model()->data(idx).toString();
-        if (field.startsWith("*")) {
+        if (field.startsWith('*')) {
             selectedFields.append("*");
         }
         else {

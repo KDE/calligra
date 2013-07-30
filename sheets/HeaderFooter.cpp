@@ -26,9 +26,9 @@
 #include "Sheet.h"
 #include "SheetPrint.h"
 
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 #include <KoDocumentInfo.h>
 
@@ -162,8 +162,10 @@ QString HeaderFooter::completeHeading(const QString &_data, int _page, const QSt
     p = getpwuid(getuid());
     gethostname(hostname, sizeof(hostname));
 
+#ifndef Q_OS_ANDROID
     if (full_name.isEmpty())
         full_name = p->pw_gecos;
+#endif
 
     if (email_addr.isEmpty())
         email_addr = QString("%1@%2").arg(p->pw_name).arg(hostname);

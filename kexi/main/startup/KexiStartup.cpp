@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -159,14 +159,15 @@ KexiDBPasswordDialog::Private::~Private()
 {
 
 }
+#include <kexiutils/utils.h>
 
 KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton)
-        : KPasswordDialog(parent, KPasswordDialog::NoFlags,
+        : KPasswordDialog(parent, ShowUsernameLine | ShowDomainLine,
                           showDetailsButton ? KDialog::User1 : KDialog::None)
         , d(new Private(cdata, showDetailsButton))
 {
-    QString msg = "<H2>" + i18n("Opening database") + "</H2><p>"
-                  + i18n("Please enter the password.") + "</p>";
+    setCaption(i18nc("@title:window", "Opening Database"));
+    setPrompt(i18nc("@info", "Supply a password below."));
     /*  msg += cdata.userName.isEmpty() ?
           "<p>"+i18n("Please enter the password.")
           : "<p>"+i18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
@@ -175,17 +176,20 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
     if (srv.isEmpty() || srv.toLower() == "localhost")
         srv = i18n("local database server");
 
-    msg += ("</p><p>" + i18n("Database server: %1", QString("<nobr>") + srv + "</nobr>") + "</p>");
+    QLabel *domainLabel = KexiUtils::findFirstChild<QLabel*>(this, 0, "domainLabel");
+    if (domainLabel) {
+        domainLabel->setText(i18n("Database server:"));
+    }
+    setDomain(srv);
 
     QString usr;
     if (cdata.userName.isEmpty())
         usr = i18nc("unspecified user", "(unspecified)");
     else
         usr = cdata.userName;
+    setUsernameReadOnly(true);
+    setUsername(usr);
 
-    msg += ("<p>" + i18n("Username: %1", usr) + "</p>");
-
-    setPrompt(msg);
     if (showDetailsButton) {
         connect(this, SIGNAL(user1Clicked()),
                 this, SLOT(slotShowConnectionDetails()));
@@ -210,6 +214,9 @@ void KexiDBPasswordDialog::done(int r)
     if (r == QDialog::Accepted) {
         d->cdata->password = password();
     }
+    else {
+        d->cdata->password.clear();
+    }
     KPasswordDialog::done(r);
 }
 
@@ -218,6 +225,20 @@ void KexiDBPasswordDialog::slotShowConnectionDetails()
     d->showConnectionDetailsRequested = true;
     close();
 }
+
+//static
+bool KexiDBPasswordDialog::getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent)
+{
+    if (data->passwordNeeded() && data->password.isNull() /* null means missing password */) {
+        //ask for password
+        KexiDBPasswordDialog pwdDlg(parent, *data, false /*!showDetailsButton*/);
+        if (QDialog::Accepted != pwdDlg.exec()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 //---------------------------------
 KexiStartupHandler::KexiStartupHandler()
@@ -377,7 +398,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         createDB = true;
     const bool dropDB = args->isSet("dropdb");
     const bool openExisting = !createDB && !dropDB;
-    const bool readOnly = args->isSet("readonly");
+    bool readOnly = args->isSet("readonly");
     const QString couldnotMsg = QString::fromLatin1("\n")
                                 + i18n("Could not start Kexi application this way.");
 
@@ -468,13 +489,20 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
                 if (dropDB)
                     detectOptions |= DontConvert;
+                if (readOnly)
+                    detectOptions |= OpenReadOnly;
 
                 QString detectedDriverName;
                 KexiStartupData::Import importData = KexiStartupData::importActionData();
+                bool forceReadOnly;
                 const tristate res = detectActionForFile(&importData, &detectedDriverName,
-                                     cdata.driverName, cdata.fileName(), 0, detectOptions);
+                                     cdata.driverName, cdata.fileName(), 0, detectOptions,
+                                     &forceReadOnly);
                 if (true != res)
                     return res;
+                if (forceReadOnly) {
+                    readOnly = true;
+                }
                 KexiStartupData::setImportActionData(importData);
                 if (KexiStartupData::importActionData()) { //importing action
                     KexiStartupData::setAction(ImportProject);
@@ -742,21 +770,52 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     return true;
 }
 
-tristate KexiStartupHandler::detectActionForFile(KexiStartupData::Import* detectedImportAction, QString *detectedDriverName,
-    const QString& _suggestedDriverName, const QString &dbFileName, QWidget *parent, int options)
+tristate KexiStartupHandler::detectActionForFile(
+        KexiStartupData::Import* detectedImportAction, QString *detectedDriverName,
+        const QString& _suggestedDriverName, const QString &dbFileName, QWidget *parent,
+        int options, bool *forceReadOnly)
 {
     *detectedImportAction = KexiStartupData::Import(); //clear
+    if (forceReadOnly) {
+        *forceReadOnly = false;
+    }
     QString suggestedDriverName(_suggestedDriverName); //safe
     detectedDriverName->clear();
     QFileInfo finfo(dbFileName);
-    if (dbFileName.isEmpty() || !finfo.isReadable()) {
-        if (!(options & SkipMessages))
-            KMessageBox::sorry(parent, i18n("<p>Could not open project.</p>")
-                               + i18n("<p>The file <nobr>\"%1\"</nobr> does not exist or is not readable.</p>",
-                                      QDir::convertSeparators(dbFileName))
-                               + i18n("Check the file's permissions and whether it is already opened "
-                                      "and locked by another application."));
+    if (dbFileName.isEmpty()) {
+        if (!(options & SkipMessages)) {
+            KMessageBox::sorry(parent, i18nc("@info", "Could not open file. Missing filename."),
+                               i18nc("@title:window", "Could Not Open File"));
+        }
         return false;
+    }
+    if (!finfo.exists()) {
+        if (!(options & SkipMessages)) {
+            KMessageBox::sorry(parent, i18nc("@info", "Could not open file. "
+                                             "The file <filename>%1</filename> does not exist.",
+                                             QDir::convertSeparators(dbFileName)),
+                                       i18nc("@title:window", "Could Not Open File" ));
+        }
+        return false;
+    }
+    if (!finfo.isReadable()) {
+        if (!(options & SkipMessages)) {
+            KMessageBox::sorry(parent, i18nc("@info",
+                                             "Could not open file <filename>%1</filename> for reading. "
+                                             "<note>Check the file's permissions and whether it is "
+                                             "already opened and locked by another application.</note>",
+                                             QDir::convertSeparators(dbFileName)),
+                                       i18nc("@title:window", "Could Not Open File" ));
+        }
+        return false;
+    }
+    if (!(options & OpenReadOnly) && !finfo.isWritable()) {
+        if (!KexiProject::askForOpeningNonWritableFileAsReadOnly(parent, finfo)) {
+            return false;
+        }
+        if (forceReadOnly) {
+            *forceReadOnly = true;
+        }
     }
 
     KMimeType::Ptr ptr;

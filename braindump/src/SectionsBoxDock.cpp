@@ -21,7 +21,7 @@
 
 #include <KoIcon.h>
 
-#include <KMenu>
+#include <kmenu.h>
 
 #include "DocumentModel.h"
 #include "Section.h"
@@ -42,7 +42,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     m_wdgSectionsBox.setupUi(mainWidget);
 
     // Setup list sections
-    connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(const QModelIndex&)), SLOT(slotSectionActivated(const QModelIndex&)));
+    connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(QModelIndex)), SLOT(slotSectionActivated(QModelIndex)));
     m_wdgSectionsBox.listSections->setModel(m_proxy);
 
     // Setup the view mode button
@@ -121,8 +121,8 @@ void SectionsBoxDock::setup(RootSection* document, View* view)
     m_model = model;
 
     connect(m_model, SIGNAL(activeSectionChanged(Section*)), SLOT(slotSectionActivated(Section*)));
-    connect(m_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(insertedSection(QModelIndex, int)));
-    connect(m_model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(removedSection()));
+    connect(m_model, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(insertedSection(QModelIndex,int)));
+    connect(m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(removedSection()));
 
     updateGUI();
 }

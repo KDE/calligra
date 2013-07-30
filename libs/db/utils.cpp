@@ -48,8 +48,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <KMimeType>
-#include <KStandardDirs>
+#include <kmimetype.h>
+#include <kstandarddirs.h>
 
 #include <memory>
 
@@ -763,7 +763,11 @@ void KexiDB::getFieldProperties(const Field &field, QMap<QByteArray, QVariant> *
     values->insert("maxLengthIsDefault", field.maxLengthStrategy() & Field::DefaultMaxLength);
     values->insert("precision", field.precision());
     values->insert("defaultValue", field.defaultValue());
+#ifdef __GNUC__
 #warning TODO    values->insert("defaultWidth", field.defaultWidth());
+#else
+#pragma WARNING(TODO    values->insert("defaultWidth", field.defaultWidth());)
+#endif
     if (KexiDB::supportsVisibleDecimalPlacesProperty(field.type())) {
         values->insert("visibleDecimalPlaces", field.defaultValue());
     }
@@ -844,7 +848,11 @@ bool KexiDB::setFieldProperties(Field& field, const QMap<QByteArray, QVariant>& 
         return false;
     if ((it = values.find("defaultValue")) != values.constEnd())
         field.setDefaultValue(*it);
+#ifdef __GNUC__
 #warning TODO defaultWidth
+#else
+#pragma WARNING(TODO defaultWidth)
+#endif
 #if 0
     if ((it = values.find("defaultWidth")) != values.constEnd())
         field.setDefaultWidth((*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok));
@@ -1026,7 +1034,11 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
             field.setDefaultValue(value);
             return true;
         }
+#ifdef __GNUC__
 #warning TODO defaultWidth
+#else
+#pragma WARNING(TODO defaultWidth)
+#endif
 #if 0
         if ("defaultWidth" == propertyName)
             GET_INT(setDefaultWidth);
@@ -1345,7 +1357,7 @@ QList<int> KexiDB::stringListToIntList(const QStringList &list, bool *ok)
 // Based on KConfigGroupPrivate::serializeList() from kconfiggroup.cpp (kdelibs 4)
 QString KexiDB::serializeList(const QStringList &list)
 {
-    QString value = "";
+    QString value;
 
     if (!list.isEmpty()) {
         QStringList::ConstIterator it = list.constBegin();
@@ -1358,8 +1370,7 @@ QString KexiDB::serializeList(const QStringList &list)
             // Doing it repeatedly is a pretty cheap operation.
             value.reserve(4096);
 
-            value += ',';
-            value += QString(*it).replace('\\', "\\\\").replace(',', "\\,");
+            value += ',' + QString(*it).replace('\\', "\\\\").replace(',', "\\,");
         }
 
         // To be able to distinguish an empty list from a list with one empty element.
@@ -1599,9 +1610,9 @@ bool KexiDB::isIdentifier(const QString& s)
 QString KexiDB::string2FileName(const QString &s)
 {
     QString fn = s.simplified();
-    fn.replace(' ', "_"); fn.replace('$', "_");
-    fn.replace('\\', "-"); fn.replace('/', "-");
-    fn.replace(':', "-"); fn.replace('*', "-");
+    fn.replace(' ',  '_').replace('$', '_').
+       replace('\\', '-').replace('/', '-').
+       replace(':',  '-').replace('*', '-');
     return fn;
 }
 

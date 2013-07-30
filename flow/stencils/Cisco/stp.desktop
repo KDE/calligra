@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=STP
 Name[bg]=STP
+Name[bs]=STP
 Name[ca]=STP
 Name[ca@valencia]=STP
+Name[cs]=STP
+Name[da]=STP
 Name[de]=STP
 Name[el]=STP
 Name[es]=STP
@@ -12,6 +15,7 @@ Name[gl]=STP
 Name[hu]=STP
 Name[it]=STP
 Name[kk]=STP
+Name[lt]=STP
 Name[nb]=STP
 Name[nds]=STP
 Name[nl]=STP
@@ -20,6 +24,7 @@ Name[pt]=STP
 Name[pt_BR]=STP
 Name[ru]=STP
 Name[sk]=STP
+Name[sl]=STP
 Name[sv]=Signalöverföringspunkt
 Name[uk]=STP
 Name[x-test]=xxSTPxx

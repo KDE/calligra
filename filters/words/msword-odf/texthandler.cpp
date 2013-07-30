@@ -3,7 +3,7 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
-   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
+   Copyright (C) 2010, 2011, 2013 Matus Uzak <matus.uzak@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -20,7 +20,6 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-
 */
 
 #include "texthandler.h"
@@ -91,6 +90,8 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_fldStart(0)
     , m_fldEnd(0)
     , m_fldChp(0)
+    , m_textBoxX(0)
+    , m_textBoxY(0)
 //     , m_index(0)
 {
     //set the pointer to bodyWriter for writing to content.xml in office:text
@@ -145,7 +146,8 @@ KoXmlWriter* WordsTextHandler::currentWriter() const
     }
     else if (m_insideAnnotation) {
         writer = m_annotationWriter;
-    } else {
+    }
+    else {
         writer = m_bodyWriter;
     }
     return writer;
@@ -270,13 +272,16 @@ void WordsTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
                 }
             }
             // prepare string for line numbering configuration
-            QString lineNumberingConfig("<text:linenumbering-configuration text:style-name=\"%1\" "
-                                        "style:num-format=\"1\" text:number-position=\"left\" text:increment=\"1\"/>");
+            QString cfg("<text:linenumbering-configuration text:style-name=\"%1\" "
+                        "style:num-format=\"1\" text:number-position=\"left\" text:increment=\"1\"/>");
+            if (!sep->lnc) {
+                cfg.insert(cfg.length() - 2, " text:restart-on-page=\"true\"");
+            }
 
             m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
-                                             lineNumberingConfig.arg(lineNumbersStyleName).toLatin1());
+                                             cfg.arg(lineNumbersStyleName).toLatin1());
 
-            KoGenStyle *normalStyle = m_mainStyles->styleForModification(QString("Normal"));
+            KoGenStyle *normalStyle = m_mainStyles->styleForModification(QString("Normal"), "paragraph");
 
             // if got Normal style, insert line numbering configuration in it
             if (normalStyle) {
@@ -930,17 +935,39 @@ void WordsTextHandler::paragraphEnd()
     KoXmlWriter* writer = currentWriter();
 
     //add nested field snippets to this paragraph
-    if (m_fld->m_insideField && !m_fld_snippets.isEmpty()) {
-        QList<QString>* flds = &m_fld_snippets;
-        while (!flds->isEmpty()) {
-            //add writer content to m_paragraph as a runOfText with text style
-            m_paragraph->addRunOfText(flds->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
+    if (m_fld->m_insideField) {
+
+        // text:p allowed as child element of text:index-body
+        if ( !m_fld_snippets.isEmpty() || m_fld->m_type == TOC ) {
+            writer = m_fld->m_writer;
         }
-        writer = m_fld->m_writer;
+        while (!m_fld_snippets.isEmpty()) {
+            m_paragraph->addRunOfText(m_fld_snippets.takeFirst(), m_fldChp, QString(""),
+                                      m_parser->styleSheet(), true);
+        }
+    }
+
+    bool openTextBox = false;
+    if (m_currentPPs->pap().dxaAbs !=  m_textBoxX || m_currentPPs->pap().dyaAbs != m_textBoxY) {
+        if ((m_textBoxX || m_textBoxY)) {
+            m_textBoxX = 0;
+            m_textBoxY = 0;
+            // close the previous text box before writing a new one
+            writer->endElement(); //draw:text-box
+            writer->endElement(); //draw:frame
+            writer->endElement(); //text:p
+        }
+
+        if (!m_currentPPs->pap().fInTable &&
+            (m_currentPPs->pap().dxaAbs != 0 || m_currentPPs->pap().dyaAbs != 0)) {
+            m_textBoxX = m_currentPPs->pap().dxaAbs;
+            m_textBoxY = m_currentPPs->pap().dyaAbs;
+            openTextBox = true;
+        }
     }
 
     //write paragraph content, reuse text/paragraph style name if applicable
-    QString styleName = m_paragraph->writeToFile(writer, &m_fld->m_tabLeader);
+    QString styleName = m_paragraph->writeToFile(writer, openTextBox, &m_fld->m_tabLeader);
 
     //provide the styleName to the current field
     m_fld->m_styleName = styleName;
@@ -992,6 +1019,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 
     m_fld = new fld_State((fldType)fld->flt);
     m_fld->m_insideField = true;
+    m_fldStart++;
 
     switch (m_fld->m_type) {
     case EQ:
@@ -1022,6 +1050,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kWarning(30513) << "Warning: ignoring field result!";
         break;
     case AUTHOR:
+    case AUTOTEXTLIST:
     case EDITTIME:
     case FILENAME:
     case MERGEFIELD:
@@ -1050,8 +1079,6 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     default:
         break;
     }
-
-    m_fldStart++;
 }//end fieldStart()
 
 void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
@@ -1435,7 +1462,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         // Hyperlink style info is not provided by the TOC field, reusing the
         // text style of text:index-body content.
         if (m_fld->m_styleName.contains('T')) {
-            hlinkStyleName = m_mainStyles->style(m_fld->m_styleName)->parentName();
+            hlinkStyleName = m_mainStyles->style(m_fld->m_styleName, "text")->parentName();
         } else {
             kDebug(30513) << "TOC: Missing text style to format the hyperlink!";
         }
@@ -1459,7 +1486,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         int levels = 0;
 
         if (rx.indexIn(*inst) >= 0) {
-            QStringList levels_lst = rx.cap(1).split("-");
+            QStringList levels_lst = rx.cap(1).split('-');
             levels = levels_lst.last().toInt();
         }
 
@@ -1652,14 +1679,17 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
     default:
         break;
     }
+
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
     if (!contents.isEmpty()) {
         //nested field
         if (!m_fldStates.empty()) {
             m_fld_snippets.prepend(contents);
-        } else {
+        }
+        else {
             //add writer content to m_paragraph as a runOfText with text style
-            m_paragraph->addRunOfText(contents, m_fldChp, QString(""), m_parser->styleSheet(), true);
+            m_paragraph->addRunOfText(contents, m_fldChp, QString(""),
+                                      m_parser->styleSheet(), true);
         }
     }
 
@@ -1670,12 +1700,14 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
     //nested field
     if (!m_fldStates.empty()) {
         fld_restoreState();
-    } else {
+    }
+    else {
         m_fld = new fld_State();
         QList<QString>* list = &m_fld_snippets;
         while (!list->isEmpty()) {
             //add writer content to m_paragraph as a runOfText with text style
-            m_paragraph->addRunOfText(list->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
+            m_paragraph->addRunOfText(list->takeFirst(), m_fldChp, QString(""),
+                                      m_parser->styleSheet(), true);
         }
         m_fldChp = 0;
     }
@@ -1693,7 +1725,6 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     QString newText(Conversion::string(text));
     kDebug(30513) << newText;
 
-    //we don't want to do anything with an empty string
     if (newText.isEmpty()) {
         return;
     }
@@ -1740,6 +1771,7 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                 }
                 break;
             case AUTHOR:
+            case AUTOTEXTLIST:
             case EDITTIME:
             case FILENAME:
             case MERGEFIELD:

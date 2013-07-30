@@ -108,7 +108,7 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const QString& transactionName = "");
+    void beginTransaction(const QString& transactionName = QString());
 
     /// Return the transaction's text message
     QString transactionText();
@@ -368,7 +368,7 @@ public:
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
 
     /**
-     * Convinience method for renderMirrorMask(), allows to choose whether
+     * Convenience method for renderMirrorMask(), allows to choose whether
      * we need to preserve out dab or do the transformations in-place.
      *
      * @param rc rectangle area covered by dab
@@ -379,7 +379,7 @@ public:
     void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab);
 
     /**
-     * Convinience method for renderMirrorMask(), allows to choose whether
+     * Convenience method for renderMirrorMask(), allows to choose whether
      * we need to preserve our fixed mask or do the transformations in-place.
      *
      * @param rc rectangle area covered by dab
@@ -492,7 +492,7 @@ public:
     void paintPolygon(const vQPointF& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
-    qreal paintAt(const KisPaintInformation &pos);
+    KisSpacingInformation paintAt(const KisPaintInformation &pos);
 
     /**
      * Stroke the given QPainterPath.
@@ -631,12 +631,6 @@ public:
     /// Returns the current background color
     const KoColor &backgroundColor() const;
 
-    /// Set the current fill color
-    void setFillColor(const KoColor& color);
-
-    /// Returns the current fill color
-    const KoColor &fillColor() const;
-
     /// Set the current generator (a generator can be used to fill an area
     void setGenerator(const KisFilterConfiguration * generator);
 
@@ -730,14 +724,6 @@ public:
     void setMaskImageSize(qint32 width, qint32 height);
 
     /**
-     * If the alpha channel is locked, the alpha values of the paint device we are painting on
-     * will not change.
-     */
-    void setLockAlpha(bool protect);
-    bool alphaLocked() const;
-
-
-    /**
      * set the rendering intent in case pixels need to be converted before painting
      */
     void setRenderingIntent(KoColorConversionTransformation::Intent intent);
@@ -778,6 +764,8 @@ private:
                         const KisPaintDeviceSP srcDev,
                         qint32 srcX, qint32 srcY,
                         qint32 srcWidth, qint32 srcHeight);
+
+    inline void compositeOnePixel(quint8 *dst, const KoColor &color);
 
 private:
 

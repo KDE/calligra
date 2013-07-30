@@ -25,17 +25,13 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan
 
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
-    ${CMAKE_BINARY_DIR}/3rdparty/kdgantt
+    ${KDGANTT_INCLUDES}
     ${KDCHART_INCLUDES}
 
-    ${KOMAIN_INCLUDES}    
+    ${KOMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
 
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
+    ${KOREPORT_INCLUDES}
 )
 
 add_subdirectory( libs )
@@ -118,6 +114,10 @@ install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### KPlato executable ###############
+
+if(NOT RELEASE_BUILD)
+    add_definitions(-DMAINTANER_WANTED_SPLASH)
+endif(NOT RELEASE_BUILD)
 
 set(calligraplan_KDEINIT_SRCS main.cpp )
 

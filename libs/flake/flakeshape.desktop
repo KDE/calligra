@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Shape definition
+Name[bs]=Definicija oblika
 Name[ca]=Definició de forma
 Name[ca@valencia]=Definició de forma
+Name[cs]=Definice tvaru
 Name[da]=Form-definition
 Name[de]=Objektdefinition
 Name[el]=Ορισμός σχήματος
@@ -40,6 +42,7 @@ Name[zh_TW]=元件定義
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Shape
 Comment=Definition of a flake shape object
+Comment[bs]=Definicija objekta pahuljastog oblika
 Comment[ca]=Definició d'un objecte amb forma de floc
 Comment[ca@valencia]=Definició d'un objecte amb forma de floc
 Comment[da]=Definition af et flake-form-objekt

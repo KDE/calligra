@@ -71,8 +71,7 @@ public:
      * Copy the selection. The selection components are copied, too.
      */
     KisSelection(const KisSelection& rhs);
-
-    KisSelection &operator=(const KisSelection &rhs);
+    KisSelection& operator=(const KisSelection &rhs);
 
     /**
      * Delete the selection. The shape selection component is deleted, the
@@ -87,16 +86,26 @@ public:
      * should set the parent manually if he wants to get the
      * signals
      */
-    void setParentNode(KisNodeWSP node);
+    void setParentNode(KisNodeSP node);
 
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
 
-    QVector<QPolygon> outline() const;
+    bool outlineCacheValid() const;
+    QPainterPath outlineCache() const;
+    void recalculateOutlineCache();
 
     /**
-     * return the pixel selection component of this selection or zero
-     * if hasPixelSelection() returns false.
+     * return the pixel selection component of this selection. Pixel
+     * selection component is always present in the selection. In case
+     * the user wants a vector selection, pixel selection will store
+     * the pixelated version of it.
+     *
+     * NOTE: use pixelSelection() for changing the selection only. For
+     * reading the selection and passing the data to bitBlt function use
+     * projection(). Although projection() and pixelSelection() currently
+     * point ot the same paint device, this behavior may change in the
+     * future.
      */
     KisPixelSelectionSP pixelSelection() const;
 
@@ -106,15 +115,7 @@ public:
      */
     KisSelectionComponent* shapeSelection() const;
 
-    void setPixelSelection(KisPixelSelectionSP pixelSelection);
     void setShapeSelection(KisSelectionComponent* shapeSelection);
-
-    /**
-     * Return the pixel selection associated with this selection or
-     * create a new one if there is currently no pixel selection
-     * component in this selection.
-     */
-    KisPixelSelectionSP getOrCreatePixelSelection();
 
     /**
      * Returns the projection of the selection. It may be the same
@@ -141,6 +142,15 @@ public:
     bool isTotallyUnselected(const QRect & r) const;
 
     QRect selectedRect() const;
+
+    /**
+     * @brief Slow, but exact way of determining the rectangle
+     * that encloses the selection.
+     *
+     * Default pixel of the selection device may vary and you would get wrong bounds.
+     * selectedExactRect() handles all these cases.
+     *
+     */
     QRect selectedExactRect() const;
 
     void setX(qint32 x);
@@ -158,16 +168,19 @@ public:
      * and throws away the shape selection. This has no effect if there is no
      * shape selection.
      */
-    void flatten();
+    KUndo2Command* flatten();
+
+    void notifySelectionChanged();
 
     KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
-    KDE_DEPRECATED void setDirty(const QRect &rc = QRect());
 
 private:
     friend class KisSelectionTest;
     friend class KisMaskTest;
     friend class KisAdjustmentLayerTest;
-    KisNodeWSP parentNode() const;
+    KisNodeSP parentNode() const;
+
+    void copyFrom(const KisSelection &rhs);
 
 private:
 

@@ -18,21 +18,25 @@
 
 #include "kis_change_primary_setting_action.h"
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include "kis_input_manager.h"
 #include <KoToolProxy.h>
 
-KisChangePrimarySettingAction::KisChangePrimarySettingAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager)
+KisChangePrimarySettingAction::KisChangePrimarySettingAction()
 {
-    setName(i18n("Change Tool Primary Setting"));
-    setDescription(i18n("Changes a tool's \"Primary Setting\", for example the brush size for the brush tool."));
+    setName(i18n("Change Primary Setting"));
+    setDescription(i18n("The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting\", for example the brush size for the brush tool."));
 }
 
 KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 {
 
+}
+
+int KisChangePrimarySettingAction::priority() const
+{
+    return 8;
 }
 
 void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)

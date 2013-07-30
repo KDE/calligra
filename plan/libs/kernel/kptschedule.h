@@ -77,7 +77,7 @@ public:
               };
 
     Schedule();
-    Schedule( Schedule *parent );
+    explicit Schedule(Schedule *parent);
     Schedule( const QString& name, Type type, long id );
     virtual ~Schedule();
 

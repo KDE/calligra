@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Spreadsheet Shape
+Name[bs]=Oblik tablice
 Name[ca]=Forma de full de càlcul
 Name[ca@valencia]=Forma de full de càlcul
 Name[cs]=Tvar sešitu
@@ -19,6 +20,7 @@ Name[it]=Forma di foglio di calcolo
 Name[ja]=スプレッドシートシェイプ
 Name[kk]=Электрондық кесте қалыпы
 Name[lv]=Tabullapas figūra
+Name[mr]=स्प्रेडशीट आकार
 Name[nb]=Regnearkform
 Name[nds]=Form »Tabellenutreken«
 Name[nl]=Rekenblad-vorm
@@ -37,7 +39,7 @@ Name[zh_CN]=电子表格形状
 Name[zh_TW]=資料表元件
 X-KDE-ServiceTypes=Calligra/Deferred
 Type=Service
-X-KDE-Library=spreadsheetshape-deferred
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-KDE-Library=calligra_shape_spreadsheet-deferred
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28
 X-DeferredID=spreadsheetshape-deferred

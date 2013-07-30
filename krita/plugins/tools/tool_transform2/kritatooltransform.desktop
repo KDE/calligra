@@ -2,6 +2,7 @@
 Name=Transform Tool
 Name[bg]=Инструмент за преобразуване
 Name[br]=Ostilh treuzfurmiñ
+Name[bs]=Alat za transformaciju
 Name[ca]=Eina de transformació
 Name[ca@valencia]=Eina de transformació
 Name[cy]=Erfyn Trawsffurfio
@@ -49,4 +50,4 @@ Name[zh_TW]=變形工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooltransform
-X-Krita-Version=27
+X-Krita-Version=28

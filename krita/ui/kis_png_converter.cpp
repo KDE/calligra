@@ -60,7 +60,6 @@
 #include <kis_meta_data_io_backend.h>
 #include <kis_meta_data_store.h>
 #include <KoColorModelStandardIds.h>
-#include "kis_iterator_ng.h"
 
 namespace
 {
@@ -546,7 +545,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     // Create the cmsTransform if needed
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     }
 
     // Creating the KisImageWSP

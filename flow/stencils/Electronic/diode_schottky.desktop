@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=diode schottky
+Name[bs]=Schottky-eva dioda
 Name[ca]=diode schottky
 Name[ca@valencia]=diode schottky
+Name[cs]=Schottkyho dioda
+Name[da]=schottkydiode
 Name[de]=Schottky-Diode
 Name[el]=δίοδος schottky
 Name[es]=diodo schottky
@@ -21,4 +24,5 @@ Name[sk]=Schottkyho dióda
 Name[sv]=diod Schottky
 Name[uk]=Діод Шоткі
 Name[x-test]=xxdiode schottkyxx
+Name[zh_CN]=肖特基二极管
 Name[zh_TW]=diode schottky

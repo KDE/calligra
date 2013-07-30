@@ -36,7 +36,6 @@
 
 #include <QDomDocument>
 #include <QBrush>
-//Added by qt3to4:
 #include <QList>
 
 
@@ -1147,7 +1146,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                 m_durationForward = duration(cs->earlyStart, use, false);
                 m_earlyFinish = cs->earlyStart + m_durationForward;
 #ifndef PLAN_NLOGDEBUG
-                cs->logDebug("ASAP/ALAP: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + m_earlyFinish.toString() );
+                cs->logDebug("ASAP/ALAP: " + cs->earlyStart.toString() + '+' + m_durationForward.toString() + '=' + m_earlyFinish.toString() );
 #endif
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = cs->earlyStart;
@@ -1160,7 +1159,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                     m_durationForward = duration(cs->earlyStart, use, false);
                     cs->setAllowOverbookingState( obs );
 #ifndef PLAN_NLOGDEBUG
-                    cs->logDebug("ASAP/ALAP earliest possible: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + (cs->earlyStart+m_durationForward).toString() );
+                    cs->logDebug("ASAP/ALAP earliest possible: " + cs->earlyStart.toString() + '+' + m_durationForward.toString() + '=' + (cs->earlyStart+m_durationForward).toString() );
 #endif
                 }
                 break;
@@ -1223,7 +1222,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                     cs->setAllowOverbookingState( obs );
                     m_earlyFinish = cs->earlyStart + m_durationForward;
 #ifndef PLAN_NLOGDEBUG
-                    cs->logDebug("MSO/SNE earliest possible: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + (cs->earlyStart+m_durationForward).toString() );
+                    cs->logDebug("MSO/SNE earliest possible: " + cs->earlyStart.toString() + '+' + m_durationForward.toString() + '=' + (cs->earlyStart+m_durationForward).toString() );
 #endif
                 }
                 break;
@@ -1412,7 +1411,7 @@ DateTime Task::calculateLateStart(int use) {
                 m_durationBackward = duration(cs->lateFinish, use, true);
                 cs->lateStart = cs->lateFinish - m_durationBackward;
 #ifndef PLAN_NLOGDEBUG
-                cs->logDebug("ASAP/ALAP: " + cs->lateFinish.toString() + "-" + m_durationBackward.toString() + "=" + cs->lateStart.toString() );
+                cs->logDebug("ASAP/ALAP: " + cs->lateFinish.toString() + '-' + m_durationBackward.toString() + '=' + cs->lateStart.toString() );
 #endif
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = cs->lateStart;
@@ -1425,7 +1424,7 @@ DateTime Task::calculateLateStart(int use) {
                     m_durationBackward = duration(cs->lateFinish, use, true);
                     cs->setAllowOverbookingState( obs );
 #ifndef PLAN_NLOGDEBUG
-                    cs->logDebug("ASAP/ALAP latest start possible: " + cs->lateFinish.toString() + "-" + m_durationBackward.toString() + "=" + (cs->lateFinish-m_durationBackward).toString() );
+                    cs->logDebug("ASAP/ALAP latest start possible: " + cs->lateFinish.toString() + '-' + m_durationBackward.toString() + '=' + (cs->lateFinish-m_durationBackward).toString() );
 #endif
                 }
                 break;
@@ -3276,7 +3275,7 @@ void Completion::addUsedEffort( const Resource *resource, Completion::UsedEffort
     } else {
         m_usedEffort.insert( resource, v );
     }
-    changed();
+    changed(Node::CompletionUsedEffort);
 }
 
 QString Completion::note() const

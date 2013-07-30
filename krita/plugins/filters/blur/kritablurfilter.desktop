@@ -2,6 +2,7 @@
 Icon=
 Name=Convolution Filters (Extension)
 Name[bg]=Изкривяващи филтри (разширения)
+Name[bs]=Skup Filtera (ekstenzija)
 Name[ca]=Filtres d'enrotllament (Extensió)
 Name[ca@valencia]=Filtres d'enrotllament (Extensió)
 Name[da]=Foldningsfiltre (Udvidelse)
@@ -42,4 +43,4 @@ Name[zh_TW]=皺褶過濾器（延伸）
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritablurfilter
-X-Krita-Version=27
+X-Krita-Version=28

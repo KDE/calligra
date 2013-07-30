@@ -96,7 +96,7 @@ public:
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
-    virtual void resourceChanged(int key, const QVariant & res);
+    virtual void canvasResourceChanged(int key, const QVariant & res);
 
 protected:
     virtual void mousePressEvent(KoPointerEvent *event);
@@ -156,6 +156,7 @@ protected:
 
 protected:
     bool specialModifierActive();
+    virtual bool isGestureSupported() const;
     virtual void gesture(const QPointF &offsetInDocPixels,
                          const QPointF &initialDocPoint);
 
@@ -252,6 +253,7 @@ protected slots:
 private slots:
     void slotToggleFgBg();
     void slotResetFgBg();
+    void slotDelayedGesture();
 
 private:
     void initPan(const QPointF &docPoint);

@@ -41,7 +41,7 @@ public:
      * Create a new KisPixelSelection. This selection will not have a
      * parent paint device.
      */
-    KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds = 0);
+    KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds = 0, KisSelectionSP parentSelection = 0);
 
     /**
      * Copy the selection
@@ -52,7 +52,7 @@ public:
 
     KisSelectionComponent* clone(KisSelection*);
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect) const;
+    const KoColorSpace* compositionSourceColorSpace() const;
 
     /**
      * Fill the specified rect with the specified selectedness.
@@ -102,6 +102,17 @@ public:
      * @return a vector of polygons that can be used to draw the outline
      */
     QVector<QPolygon> outline() const;
+
+    bool isEmpty() const;
+    QPainterPath outlineCache() const;
+    bool outlineCacheValid() const;
+    void recalculateOutlineCache();
+
+    void setOutlineCache(const QPainterPath &cache);
+    void invalidateOutlineCache();
+
+    void setParentSelection(KisSelectionSP selection);
+    KisSelectionSP parentSelection() const;
 
     virtual void renderToProjection(KisPaintDeviceSP projection);
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);

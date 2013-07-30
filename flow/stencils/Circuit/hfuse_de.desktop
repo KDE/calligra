@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Horizontal Fuse (European)
 Name[bg]=Хоризонтален предпазител (европейски)
+Name[bs]=Horizontalni osigurač
 Name[ca]=Fusible horitzontal (europeu)
 Name[ca@valencia]=Fusible horitzontal (europeu)
+Name[da]=Vandret sikring (europæisk)
 Name[de]=Waagerechte Sicherung (europäisch)
 Name[el]=Οριζόντια ασφάλεια (Ευρώπη)
 Name[es]=Fusible horizontal (europeo)
@@ -20,6 +22,7 @@ Name[pt]=Fusível Horizontal (Europeu)
 Name[pt_BR]=Fusível horizontal (Europeu)
 Name[ru]=Горизонтальный предохранитель (Европейский)
 Name[sk]=Vodorovná poistka (európska)
+Name[sl]=Vodoravna varovalka (evropska)
 Name[sv]=Horisontell säkring (europeisk)
 Name[uk]=Плавкий запобіжник (горизонтально)
 Name[x-test]=xxHorizontal Fuse (European)xx

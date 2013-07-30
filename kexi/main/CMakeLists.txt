@@ -34,6 +34,8 @@ startup/KexiStartup.cpp
 startup/KexiStartupDialogTemplatesPage.cpp
 startup/KexiTemplatesModel.cpp
 startup/KexiRecentProjectsModel.cpp
+startup/KexiAssistantMessageHandler.cpp
+startup/KexiPasswordPage.cpp
 
 #todo printing/kexisimpleprintingengine.cpp
 #todo printing/kexisimpleprintingpagesetup.cpp

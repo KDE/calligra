@@ -62,9 +62,8 @@ void KisToolSelectRectangular::keyPressEvent(QKeyEvent *event)
 
 void KisToolSelectRectangular::finishRect(const QRectF& rect)
 {
-    QRect rc(rect.toRect());
+    QRect rc(rect.normalized().toRect());
     rc = rc.intersected(currentImage()->bounds());
-    rc = rc.normalized();
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
@@ -76,18 +75,21 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
         return;
     }
 
-    KisSystemLocker locker(currentNode());
-
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Rectangular Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Rectangular Selection"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         if (rc.isValid()) {
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
             tmpSel->select(rc);
+
+            QPainterPath cache;
+            cache.addRect(rc);
+            tmpSel->setOutlineCache(cache);
+
             helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
         }
     } else {
-        QRectF documentRect = convertToPt(rect);
+        QRectF documentRect = convertToPt(rc);
         helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
     }
 }

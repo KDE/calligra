@@ -37,8 +37,8 @@
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
 {
     m_currentVMLProperties.vmlStyle.clear();
-    foreach( const QString& pair, style.split(";", QString::SkipEmptyParts)) {
-        const int splitIndex = pair.indexOf(":");
+    foreach( const QString& pair, style.split(';', QString::SkipEmptyParts)) {
+        const int splitIndex = pair.indexOf(':');
         if (splitIndex < 1) {
             continue;
         }
@@ -154,12 +154,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //horizontal position
     if (m_currentVMLProperties.insideGroup) {
         if (!x_mar.isEmpty()) {
-            x_position = (x_mar.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+            x_position = (x_mar.toDouble() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
                          m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
             x_pos_string = QString("%1pt").arg(x_position);
         }
         else if (!leftPos.isEmpty()) {
-            x_position = (leftPos.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+            x_position = (leftPos.toDouble() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
                          m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
             x_pos_string = QString("%1pt").arg(x_position);
         } else {
@@ -187,12 +187,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //vertical position
     if (m_currentVMLProperties.insideGroup) {
         if (!y_mar.isEmpty()) {
-            y_position = (y_mar.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+            y_position = (y_mar.toDouble() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
                 m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
             y_pos_string = QString("%1pt").arg(y_position);
         }
         else if (!topPos.isEmpty()) {
-            y_position = (topPos.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+            y_position = (topPos.toDouble() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
                 m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
             y_pos_string = QString("%1pt").arg(y_position);
         } else {
@@ -219,7 +219,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //width
     if (m_currentVMLProperties.insideGroup) {
         if (!width.isEmpty()) {
-            widthValue = width.toInt() * m_currentVMLProperties.real_groupWidth /
+            widthValue = width.toDouble() * m_currentVMLProperties.real_groupWidth /
                          m_currentVMLProperties.groupWidth;
             widthString = QString("%1pt").arg(widthValue);
         }
@@ -228,7 +228,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             width = "0in";
         }
         //TODO: Add support for auto and percentage values.
-        if (!(width == "auto" || width.endsWith("%"))) {
+        if (!(width == "auto" || width.endsWith('%'))) {
             widthValue = width.left(width.length() - 2).toDouble();
             widthString = width;
         }
@@ -237,7 +237,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     //height
     if (m_currentVMLProperties.insideGroup) {
         if (!height.isEmpty()) {
-            heightValue = height.toInt() * m_currentVMLProperties.real_groupHeight /
+            heightValue = height.toDouble() * m_currentVMLProperties.real_groupHeight /
                           m_currentVMLProperties.groupHeight;
             heightString = QString("%1pt").arg(heightValue);
         }
@@ -246,7 +246,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             height = "0in";
         }
         //TODO: Add support for auto and percentage values.
-        if (!(height == "auto" || height.endsWith("%"))) {
+        if (!(height == "auto" || height.endsWith('%'))) {
             heightValue = height.left(height.length() - 2).toDouble();
             heightString = height;
         }
@@ -259,12 +259,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2));
         QString x1 = x_pos_string;
         QString y2 = QString("%1%2").arg(y_position + heightValue).arg(heightString.right(2));
-        if (flip.contains("x")) {
+        if (flip.contains('x')) {
             QString temp = y2;
             y2 = y1;
             y1 = temp;
         }
-        if (flip.contains("y")) {
+        if (flip.contains('y')) {
             QString temp = x2;
             x2 = x1;
             x1 = temp;
@@ -647,7 +647,7 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
     }
 
     QString newColor;
-    if (color.startsWith("#")) {
+    if (color.startsWith('#')) {
         QColor c(color); // use QColor parser to validate and/or correct color
         newColor = c.name();
     }
@@ -885,14 +885,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
     if (temp == "0") {
         temp = "0pt";
     }
-    int fromX = temp.left(2).toInt();
+    qreal fromX = temp.left(temp.size() - 2).toDouble();
     m_currentVMLProperties.vmlStyle["left"] = temp;
     temp = from.mid(index + 1);
     doPrependCheck(temp);
     if (temp == "0") {
         temp = "0pt";
     }
-    int fromY = temp.left(2).toInt();
+    qreal fromY = temp.left(temp.size() - 2).toDouble();
     m_currentVMLProperties.vmlStyle["top"] = temp;
     index = to.indexOf(',');
     temp = to.left(index);
@@ -901,7 +901,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
         temp = "0pt";
     }
     QString unit = temp.right(2);
-    int toX = temp.left(temp.size() - 2).toInt() - fromX;
+    qreal toX = temp.left(temp.size() - 2).toDouble() - fromX;
     m_currentVMLProperties.vmlStyle["width"] = QString("%1%2").arg(toX).arg(unit);
     temp = to.mid(index + 1);
     doPrependCheck(temp);
@@ -909,7 +909,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
         temp = "0pt";
     }
     unit = temp.right(2);
-    int toY = temp.left(temp.size() - 2).toInt() - fromY;
+    qreal toY = temp.left(temp.size() - 2).toDouble() - fromY;
     m_currentVMLProperties.vmlStyle["height"] = QString("%1%2").arg(toY).arg(unit);
 
     while (!atEnd()) {
@@ -1311,12 +1311,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         QString x_mar(m_currentVMLProperties.vmlStyle.value("left"));
         QString y_mar(m_currentVMLProperties.vmlStyle.value("top"));
 
-        m_currentVMLProperties.groupXOffset = (x_mar.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+        m_currentVMLProperties.groupXOffset = (x_mar.toDouble() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
             m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
-        m_currentVMLProperties.groupYOffset = (y_mar.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+        m_currentVMLProperties.groupYOffset = (y_mar.toDouble() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
             m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
-        m_currentVMLProperties.real_groupWidth = width.toInt() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
-        m_currentVMLProperties.real_groupHeight = height.toInt() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
+        m_currentVMLProperties.real_groupWidth = width.toDouble() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
+        m_currentVMLProperties.real_groupHeight = height.toDouble() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
     }
 
     m_currentVMLProperties.groupX = 0;
@@ -2113,18 +2113,18 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
                 fifth = getArgument(parsedString, false, argumentMove);
                 sixth = getArgument(parsedString, false, argumentMove);
                 seventh = QString("?extraFormula%1").arg(extraFormulaIndex);
-                extraShapeFormulas += "\n<draw:equation ";
-                extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
-                extraShapeFormulas += QString("%1 / 65536").arg(fifth);
-                extraShapeFormulas += "\" ";
-                extraShapeFormulas += "/>";
+                extraShapeFormulas += "\n<draw:equation " +
+                                      QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex) +
+                                      QString("%1 / 65536").arg(fifth) +
+                                      "\" "
+                                      "/>";
                 ++extraFormulaIndex;
                 eighth = QString("?extraFormula%1").arg(extraFormulaIndex);
-                extraShapeFormulas += "\n<draw:equation ";
-                extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
-                extraShapeFormulas += QString("%1 / 65536").arg(sixth);
-                extraShapeFormulas += "\" ";
-                extraShapeFormulas += "/>";
+                extraShapeFormulas += "\n<draw:equation " +
+                                      QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex) +
+                                      QString("%1 / 65536").arg(sixth) +
+                                      "\" "
+                                      "/>";
                 ++extraFormulaIndex;
                 currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
                 currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
@@ -2142,18 +2142,18 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
                     fifth = getArgument(parsedString, false, argumentMove);
                     sixth = getArgument(parsedString, false, argumentMove);
                     seventh = QString("?extraFormula%1").arg(extraFormulaIndex);
-                    extraShapeFormulas += "\n<draw:equation ";
-                    extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
-                    extraShapeFormulas += QString("%1 / 65536").arg(fifth);
-                    extraShapeFormulas += "\" ";
-                    extraShapeFormulas += "/>";
+                    extraShapeFormulas += "\n<draw:equation " +
+                                          QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex) +
+                                          QString("%1 / 65536").arg(fifth) +
+                                          "\" "
+                                          "/>";
                     ++extraFormulaIndex;
                     eighth = QString("?extraFormula%1").arg(extraFormulaIndex);
-                    extraShapeFormulas += "\n<draw:equation ";
-                    extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
-                    extraShapeFormulas += QString("%1 / 65536").arg(sixth);
-                    extraShapeFormulas += "\" ";
-                    extraShapeFormulas += "/>";
+                    extraShapeFormulas += "\n<draw:equation " +
+                                          QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex) +
+                                          QString("%1 / 65536").arg(sixth) +
+                                          "\" "
+                                          "/>";
                     ++extraFormulaIndex;
                     currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
                     currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
@@ -2293,8 +2293,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(eqn)
-    m_currentVMLProperties.normalFormulas += "\n<draw:equation ";
-    m_currentVMLProperties.normalFormulas += QString("draw:name=\"f%1\" draw:formula=\"").arg(m_currentVMLProperties.formulaIndex);
+    m_currentVMLProperties.normalFormulas += "\n<draw:equation " +
+                                             QString("draw:name=\"f%1\" draw:formula=\"").arg(m_currentVMLProperties.formulaIndex);
 
     if (!eqn.isEmpty()) {
         eqn = eqn.trimmed();
@@ -2379,8 +2379,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
         }
     }
 
-    m_currentVMLProperties.normalFormulas += "\" ";
-    m_currentVMLProperties.normalFormulas += "/>";
+    m_currentVMLProperties.normalFormulas += "\" "
+                                             "/>";
 
     ++m_currentVMLProperties.formulaIndex;
     readNext();
@@ -2556,22 +2556,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
             QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
-            if (flip.contains("x")) {
+            if (flip.contains('x')) {
                 m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
             }
-            if (flip.contains("y")) {
+            if (flip.contains('y')) {
                 m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
             }
-            m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
-                arg(m_currentVMLProperties.modifiers);
-            m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").
-                arg(m_currentVMLProperties.viewBox);
-            m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
-                arg(m_currentVMLProperties.shapePath);
-            m_currentVMLProperties.shapeTypeString += ">";
-            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
-            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.normalFormulas;
-            m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
+            m_currentVMLProperties.shapeTypeString +=
+                QString("draw:modifiers=\"%1\" ").arg(m_currentVMLProperties.modifiers) +
+                QString("svg:viewBox=\"%1\" ").arg(m_currentVMLProperties.viewBox) +
+                QString("draw:enhanced-path=\"%1\" ").arg(m_currentVMLProperties.shapePath) +
+                QLatin1Char('>') +
+                m_currentVMLProperties.extraShapeFormulas +
+                m_currentVMLProperties.normalFormulas +
+                "</draw:enhanced-geometry>";
 
             body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
         }
@@ -2818,14 +2816,14 @@ void MSOOXML_CURRENT_CLASS::handlePathValues(const QXmlStreamAttributes& attrs)
         QString tempModifiers = adj;
         doPrependCheck(tempModifiers);
         tempModifiers.replace(",,", ",0,");
-        tempModifiers.replace(',', " ");
+        tempModifiers.replace(',', ' ');
         m_currentVMLProperties.modifiers = tempModifiers;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(coordsize)
     if (!coordsize.isEmpty()) {
         QString tempViewBox = "0 0 " + coordsize;
-        tempViewBox.replace(',', " ");
+        tempViewBox.replace(',', ' ');
         m_currentVMLProperties.viewBox = tempViewBox;
     }
 

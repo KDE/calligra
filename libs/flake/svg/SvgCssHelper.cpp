@@ -19,7 +19,7 @@
 
 #include "SvgCssHelper.h"
 #include <KoXmlReader.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <QPair>
 #include <QStack>
 
@@ -397,8 +397,8 @@ public:
         int selectorCount = m_selectors.count();
         if (selectorCount) {
             for(int i = 0; i < selectorCount-1; ++i) {
-                str += m_selectors[i]->toString();
-                str += m_combinators[i];
+                str += m_selectors[i]->toString() +
+                       m_combinators[i];
             }
             str += m_selectors.last()->toString();
         }

@@ -69,7 +69,7 @@
 
 #include <KoShapeCreateCommand.h>
 
-#include <KLocale>
+#include <klocale.h>
 #include <kundo2stack.h>
 
 #include <QApplication>
@@ -117,7 +117,7 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     // Handle if this is the special block before a table
     bool hiddenTableHandling = caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
     if (hiddenTableHandling) {
-        // Easy solution is to go back the the end of previous block and do the insertion from there.
+        // Easy solution is to go back to the end of previous block and do the insertion from there.
         // However if there is no block before we have a problem. This may be the case if there is
         // a table before or we are at the beginning of a cell or a document.
         // So here is a better approach
@@ -695,11 +695,11 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
     KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
 
     // Find out if we should track changes or not
-    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
-    bool trackChanges = false;
-    if (changeTracker && changeTracker->recordChanges()) {
-        trackChanges = true;
-    }
+//    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+//    bool trackChanges = false;
+//    if (changeTracker && changeTracker->recordChanges()) {
+//        trackChanges = true;
+//    }
 
     if (previous) {
         if (d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
@@ -720,27 +720,14 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
         }
     }
 
-    if (trackChanges) {
-        if (previous) {
-            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
-                                                      d->document,
-                                                      shapeController, parent));
-        } else {
-            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar,
-                                                      d->document,
-                                                      shapeController, parent));
-        }
-    }
-    else {
-        if (previous) {
-            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
-                                         d->document,
-                                         shapeController, parent));
-        } else {
-            addCommand(new DeleteCommand(DeleteCommand::NextChar,
-                                         d->document,
-                                         shapeController, parent));
-        }
+    if (previous) {
+        addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+                                        d->document,
+                                        shapeController, parent));
+    } else {
+        addCommand(new DeleteCommand(DeleteCommand::NextChar,
+                                        d->document,
+                                        shapeController, parent));
     }
 }
 
@@ -1024,10 +1011,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoBorder::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::TopBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::LeftBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::BottomBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::RightBorder, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);
@@ -1221,7 +1208,7 @@ void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight
 }
 
 void KoTextEditor::setTableBorderData(QTextTable *table, int row, int column,
-         KoBorder::Side cellSide, const KoBorder::BorderData &data)
+         KoBorder::BorderSide cellSide, const KoBorder::BorderData &data)
 {
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Change Border Formatting"));
     d->caret.beginEditBlock();
@@ -1425,7 +1412,7 @@ KoInlineCite *KoTextEditor::insertCitation()
     return cite;
 }
 
-void KoTextEditor::insertText(const QString &text)
+void KoTextEditor::insertText(const QString &text, const QString &hRef)
 {
     if (isEditProtected()) {
         return;
@@ -1455,7 +1442,18 @@ void KoTextEditor::insertText(const QString &text)
     if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
+    static QRegExp urlScanner("\\S+://\\S+");
+    if (!hRef.isEmpty()) {
+        format.setAnchor(true);
+        format.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
+        if ((urlScanner.indexIn(hRef)) == 0) {//web url
+            format.setAnchorHref(hRef);
+        } else {
+            format.setAnchorHref("#"+hRef);
+        }
+    }
     d->caret.insertText(text, format);
+
     int endPosition = d->caret.position();
 
     //Mark the inserted text
@@ -1470,7 +1468,12 @@ void KoTextEditor::insertText(const QString &text)
         d->caret.endEditBlock();
         endEditBlock();
     }
-
+    if (!hRef.isEmpty()) {
+        format.setAnchor(false);
+        format.clearProperty(KoCharacterStyle::Anchor);
+        format.clearProperty(KoCharacterStyle::AnchorType);
+        d->caret.setCharFormat(format);
+    }
     emit cursorPositionChanged();
 }
 

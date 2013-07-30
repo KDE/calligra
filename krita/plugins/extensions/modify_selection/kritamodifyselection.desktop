@@ -2,6 +2,7 @@
 Name=Modify Selection
 Name[bg]=Промяна на избраното
 Name[br]=Kemmañ an dibab
+Name[bs]=Podesi selekciju
 Name[ca]=Selecció de modificació
 Name[ca@valencia]=Selecció de modificació
 Name[da]=Ændr markering
@@ -44,4 +45,4 @@ Name[zh_TW]=變更選取
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritamodifyselection
-X-Krita-Version=27
+X-Krita-Version=28

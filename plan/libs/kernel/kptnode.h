@@ -96,10 +96,11 @@ public:
         CompletionFinishTime,
         CompletionPercentage,
         CompletionRemainingEffort,
-        CompletionActualEffort
+        CompletionActualEffort,
+        CompletionUsedEffort
     };
 
-    Node(Node *parent = 0);
+    explicit Node(Node *parent = 0);
     Node(const Node &node, Node *parent = 0);
 
 

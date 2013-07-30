@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Text Shape
 Name[bg]=Текстова форма
+Name[bs]=Oblik teksta
 Name[ca]=Forma de text
 Name[ca@valencia]=Forma de text
 Name[cs]=Tvar textu
@@ -22,6 +23,7 @@ Name[it]=Forma di testo
 Name[ja]=テキストシェイプ
 Name[kk]=Мәтін қалыпы
 Name[lv]=Teksta figūra
+Name[mr]=पाठ्य आकार
 Name[nb]=Tekstform
 Name[nds]=Form »Text«
 Name[ne]=पाठ आकार
@@ -43,6 +45,6 @@ Name[zh_TW]=文字元件
 X-KDE-PluginInfo-Name=textshape
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
-X-KDE-Library=textshape
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-KDE-Library=calligra_shape_text
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28

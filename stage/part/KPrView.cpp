@@ -256,23 +256,23 @@ void KPrView::initActions()
 
     m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
-    connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
+    connect( m_actionCreateAnimation, SIGNAL(activated()), this, SLOT(createAnimation()) );
 
     m_actionEditCustomSlideShows = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
     actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
-    connect( m_actionEditCustomSlideShows, SIGNAL( activated() ), this, SLOT( editCustomSlideShows() ) );
+    connect( m_actionEditCustomSlideShows, SIGNAL(activated()), this, SLOT(editCustomSlideShows()) );
 
     m_actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
-    connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+    connect( m_actionStartPresentation, SIGNAL(activated()), this, SLOT(startPresentation()) );
     KAction* action = new KAction( i18n( "From Current Slide" ), this );
     action->setShortcut(QKeySequence("Shift+F5"));
     m_actionStartPresentation->addAction( action );
-    connect( action, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+    connect( action, SIGNAL(activated()), this, SLOT(startPresentation()) );
     action = new KAction( i18n( "From First Slide" ), this );
     action->setShortcut(QKeySequence("F5"));
     m_actionStartPresentation->addAction( action );
-    connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
+    connect( action, SIGNAL(activated()), this, SLOT(startPresentationFromBeginning()) );
 
     KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
     showStatusbarAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
@@ -287,31 +287,31 @@ void KPrView::initActions()
 
     action = new KAction( i18n( "Configure Slide Show..." ), this );
     actionCollection()->addAction( "slideshow_configure", action );
-    connect( action, SIGNAL( activated() ), this, SLOT( configureSlideShow() ) );
+    connect( action, SIGNAL(activated()), this, SLOT(configureSlideShow()) );
 
     action = new KAction( i18n( "Configure Presenter View..." ), this );
     actionCollection()->addAction( "slideshow_presenterview", action );
-    connect( action, SIGNAL( activated() ), this, SLOT( configurePresenterView() ) );
+    connect( action, SIGNAL(activated()), this, SLOT(configurePresenterView()) );
 
     m_actionDrawOnPresentation = new KAction( i18n( "Draw on the presentation..." ), this );
     m_actionDrawOnPresentation->setShortcut(Qt::Key_P);
     m_actionDrawOnPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "draw_on_presentation", m_actionDrawOnPresentation );
-    connect( m_actionDrawOnPresentation, SIGNAL( activated() ), this, SLOT( drawOnPresentation() ) );
+    connect( m_actionDrawOnPresentation, SIGNAL(activated()), this, SLOT(drawOnPresentation()) );
     m_actionDrawOnPresentation->setEnabled(false);
 
     m_actionHighlightPresentation = new KAction( i18n( "Highlight the presentation..." ), this );
     m_actionHighlightPresentation->setShortcut(Qt::Key_H);
     m_actionHighlightPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "highlight_presentation", m_actionHighlightPresentation );
-    connect( m_actionHighlightPresentation, SIGNAL( activated() ), this, SLOT( highlightPresentation() ) );
+    connect( m_actionHighlightPresentation, SIGNAL(activated()), this, SLOT(highlightPresentation()) );
     m_actionHighlightPresentation->setEnabled(false);
 
     m_actionBlackPresentation = new KAction( i18n( "Blackscreen on the presentation..." ), this );
     m_actionBlackPresentation->setShortcut(Qt::Key_B);
     m_actionBlackPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "black_presentation", m_actionBlackPresentation );
-    connect( m_actionBlackPresentation, SIGNAL( activated() ), this, SLOT( blackPresentation() ) );
+    connect( m_actionBlackPresentation, SIGNAL(activated()), this, SLOT(blackPresentation()) );
     m_actionBlackPresentation->setEnabled(false);
 
     connect(tabBar(), SIGNAL(currentChanged(int)), this, SLOT(changeViewByIndex(int)));

@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=Wind Turbine
 Name[bg]=Вятърна турбина
+Name[bs]=Zračna turbina
 Name[ca]=Turbina de vent
 Name[ca@valencia]=Turbina de vent
+Name[cs]=Větrná turbína
+Name[da]=Vindmølle
 Name[de]=Windturbine
 Name[el]=Ανεμογεννήτρια
 Name[es]=Turbina eólica
@@ -19,6 +22,7 @@ Name[pt]=Turbina Eólica
 Name[pt_BR]=Turbina eólica
 Name[ru]=Ветровая турбина
 Name[sk]=Veterná turbína
+Name[sl]=Vetrna turbina
 Name[sv]=Vindturbin
 Name[uk]=Вітрова турбіна
 Name[x-test]=xxWind Turbinexx

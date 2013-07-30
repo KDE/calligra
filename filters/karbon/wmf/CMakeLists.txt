@@ -1,38 +1,48 @@
 
 include_directories( ${VECTORIMAGE_INCLUDES} )
 
-########### next target ###############
 
-set(wmfimport_PART_SRCS 
-    WmfImport.cpp 
+if(SHOULD_BUILD_FILTER_WMF_TO_SVG)
+
+set(wmf2svg_PART_SRCS
+    WmfImport.cpp
     WmfImportParser.cpp
 )
 
-kde4_add_plugin(wmfimport ${wmfimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_wmf2svg ${wmf2svg_PART_SRCS})
 
-target_link_libraries(wmfimport vectorimage komain koodf)
+target_link_libraries(calligra_filter_wmf2svg kovectorimage komain koodf)
 
-install(TARGETS wmfimport
+install(TARGETS calligra_filter_wmf2svg
         DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### next target ###############
+install(FILES  karbon_wmf_import.desktop
+        DESTINATION ${SERVICES_INSTALL_DIR})
 
-set(wmfexport_PART_SRCS WmfExport.cpp)
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install(FILES  karbon_wmf_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
 
-kde4_add_plugin(wmfexport ${wmfexport_PART_SRCS})
+endif(SHOULD_BUILD_FILTER_WMF_TO_SVG)
+
+
+if(SHOULD_BUILD_FILTER_KARBON_TO_WMF)
+
+set(karbon2wmf_PART_SRCS WmfExport.cpp)
+
+kde4_add_plugin(calligra_filter_karbon2wmf ${karbon2wmf_PART_SRCS})
 
 target_link_libraries(
-    wmfexport
-    vectorimage
+    calligra_filter_karbon2wmf
+    kovectorimage
     karboncommon
     karbonui
 )
 
-install(TARGETS wmfexport
+install(TARGETS calligra_filter_karbon2wmf
         DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### install files ###############
-
-install(FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop karbon_wmf_thumbnail.desktop
+install(FILES  karbon_wmf_export.desktop
         DESTINATION ${SERVICES_INSTALL_DIR})
 
+endif(SHOULD_BUILD_FILTER_KARBON_TO_WMF)

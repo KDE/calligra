@@ -24,7 +24,6 @@
 
 #include <QFile>
 #include <QTextCodec>
-//Added by qt3to4:
 #include <QTextStream>
 #include <QByteArray>
 
@@ -178,37 +177,37 @@ void HTMLExport::openPage(Sheet *sheet, KoDocument *document, QString &str)
     title += sheet->sheetName();
 
     // header
-    str = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" ";
-    str += " \"http://www.w3.org/TR/html4/loose.dtd\"> \n";
-    str += "<html>\n";
-    str += "<head>\n";
-    str += "<meta http-equiv=\"Content-Type\" ";
-    str += QString("content=\"text/html; charset=%1\">\n").arg(QString(m_dialog->encoding()->name()));
-    str += "<meta name=\"Generator\" ";
-    str += "content=\"KSpread HTML Export Filter Version = ";
-    str += CALLIGRA_VERSION_STRING;
-    str += "\">\n";
+    str = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
+          " \"http://www.w3.org/TR/html4/loose.dtd\"> \n"
+          "<html>\n"
+          "<head>\n"
+          "<meta http-equiv=\"Content-Type\" " +
+          QString("content=\"text/html; charset=%1\">\n").arg(QString(m_dialog->encoding()->name())) +
+          "<meta name=\"Generator\" "
+          "content=\"KSpread HTML Export Filter Version = "
+          CALLIGRA_VERSION_STRING
+          "\">\n";
 
     // Insert stylesheet
     if (!m_dialog->customStyleURL().isEmpty()) {
-        str += "<link ref=\"stylesheet\" type=\"text/css\" href=\"";
-        str += m_dialog->customStyleURL().url();
-        str += "\" title=\"Style\" >\n";
+        str += "<link ref=\"stylesheet\" type=\"text/css\" href=\"" +
+               m_dialog->customStyleURL().url() +
+               "\" title=\"Style\" >\n";
     }
 
-    str += "<title>" + title + "</title>\n";
-    str += "</head>\n";
-    str += QString("<body bgcolor=\"#FFFFFF\" dir=\"%1\">\n").arg(
-               (sheet->layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr");
+    str += "<title>" + title + "</title>\n"
+           "</head>\n" +
+           QString("<body bgcolor=\"#FFFFFF\" dir=\"%1\">\n").arg(
+               (sheet->layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr") +
 
-    str += "<a name=\"__top\">\n";
+           "<a name=\"__top\">\n";
 }
 
 void HTMLExport::closePage(QString &str)
 {
-    str += "<p align=\"" + html_center + "\"><a href=\"#__top\">" + i18n("Top") + "</a></p>\n";
-    str += "</body>\n";
-    str += "</html>\n\n";
+    str += "<p align=\"" + html_center + "\"><a href=\"#__top\">" + i18n("Top") + "</a></p>\n"
+           "</body>\n"
+           "</html>\n\n";
 }
 
 void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int iMaxUsedColumn)
@@ -357,8 +356,8 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                 text.insert(0, "<font color=\"" + textColor.name() + "\">");
                 text.append("</font>");
             }
-            line += ' ' + text;
-            line += "\n  </" + html_cell_tag + ">\n";
+            line += ' ' + text +
+                    "\n  </" + html_cell_tag + ">\n";
         }
 
         if (nonempty_cells == 0 && nonempty_cells_prev == 0) {
@@ -367,10 +366,10 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
             continue;
         } else {
             nonempty_cells_prev = nonempty_cells;
-            str += emptyLines;
-            str += '<' + html_row_tag + html_row_options + ">\n";
-            str += line;
-            str += "</" + html_row_tag + '>';
+            str += emptyLines +
+                   '<' + html_row_tag + html_row_options + ">\n" +
+                   line +
+                   "</" + html_row_tag + '>';
             emptyLines.clear();
             // Append a CR, but in a temp string -> if no other real line,
             // then those will be dropped
@@ -382,8 +381,8 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
 
 void HTMLExport::createSheetSeparator(QString &str)
 {
-    str += ("<p align=\"" + html_center + "\"><a href=\"#__top\">" + i18n("Top") + "</a></p>\n");
-    str += "<hr width=\"80%\">\n";
+    str += "<p align=\"" + html_center + "\"><a href=\"#__top\">" + i18n("Top") + "</a></p>\n"
+           "<hr width=\"80%\">\n";
 }
 
 void HTMLExport::writeTOC(const QStringList &sheets, const QString &base, QString &str)

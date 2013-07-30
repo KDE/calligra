@@ -159,14 +159,16 @@ void DeleteCommand::doDelete()
 
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
 
-    m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
+    m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->document(), textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
 
     foreach (KoTextRange *range, m_rangesToRemove) {
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
         if (anchorRange) {
             KoShape *shape = anchorRange->anchor()->shape();
-            KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
-            shapeDeleteCommand->redo();
+            if (m_shapeController) {
+                KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
+                shapeDeleteCommand->redo();
+            }
             // via m_shapeController->removeShape a DeleteAnchorsCommand should be created that
             // also calls rangeManager->remove(range), so we shouldn't do that here aswell
         } else {

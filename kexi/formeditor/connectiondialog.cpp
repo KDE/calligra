@@ -32,12 +32,12 @@
 
 #include <KoIcon.h>
 #include "kexitableview.h"
-#include "kexitableviewdata.h"
 
 #include "events.h"
 #include "form.h"
 #include "objecttree.h"
 
+#include <db/tableviewdata.h>
 
 using namespace KFormDesigner;
 
@@ -50,8 +50,8 @@ public:
     Form *form;
     ConnectionBuffer *buffer;
     KexiTableView  *table;
-    KexiTableViewData  *data;
-    KexiTableViewData *widgetsColumnData,
+    KexiDB::TableViewData  *data;
+    KexiDB::TableViewData *widgetsColumnData,
     *slotsColumnData, *signalsColumnData;
     QLabel  *pixmapLabel, *textLabel;
     KPushButton *addButton, *removeButton;
@@ -103,7 +103,7 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
     //setStatusOk();
 
     // And the KexiTableView ////////
-    d->data = new KexiTableViewData();
+    d->data = new KexiDB::TableViewData();
     d->table = new KexiTableView(0, frame, "connections_tableview");
     d->table->setSpreadSheetMode();
     d->table->setInsertingEnabled(true);
@@ -112,10 +112,10 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
     d->table->adjustColumnWidthToContents(0);
     layout->addWidget(d->table);
 
-    connect(d->table, SIGNAL(cellSelected(int, int)),
-            this, SLOT(slotCellSelected(int, int)));
-    connect(d->table->data(), SIGNAL(rowInserted(KexiDB::RecordData*, bool)),
-            this, SLOT(slotRowInserted(KexiDB::RecordData*, bool)));
+    connect(d->table, SIGNAL(cellSelected(int,int)),
+            this, SLOT(slotCellSelected(int,int)));
+    connect(d->table->data(), SIGNAL(rowInserted(KexiDB::RecordData*,bool)),
+            this, SLOT(slotRowInserted(KexiDB::RecordData*,bool)));
 
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(layout);
@@ -143,28 +143,28 @@ ConnectionDialog::~ConnectionDialog()
 void
 ConnectionDialog::initTable()
 {
-    KexiTableViewColumn *col0 = new KexiTableViewColumn(i18n("OK?"), KexiDB::Field::Text);
+    KexiDB::TableViewColumn *col0 = new KexiDB::TableViewColumn(i18n("OK?"), KexiDB::Field::Text);
     col0->field()->setSubType("KIcon");
     col0->setReadOnly(true);
     col0->field()->setDescription(i18n("Connection correctness"));
     d->data->addColumn(col0);
 
-    KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Sender"), KexiDB::Field::Enum);
-    d->widgetsColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KexiDB::TableViewColumn *col1 = new KexiDB::TableViewColumn(i18n("Sender"), KexiDB::Field::Enum);
+    d->widgetsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
     col1->setRelatedData(d->widgetsColumnData);
     d->data->addColumn(col1);
 
-    KexiTableViewColumn *col2 = new KexiTableViewColumn(i18n("Signal"), KexiDB::Field::Enum);
-    d->signalsColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KexiDB::TableViewColumn *col2 = new KexiDB::TableViewColumn(i18n("Signal"), KexiDB::Field::Enum);
+    d->signalsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
     col2->setRelatedData(d->signalsColumnData);
     d->data->addColumn(col2);
 
-    KexiTableViewColumn *col3 = new KexiTableViewColumn(i18n("Receiver"), KexiDB::Field::Enum);
+    KexiDB::TableViewColumn *col3 = new KexiDB::TableViewColumn(i18n("Receiver"), KexiDB::Field::Enum);
     col3->setRelatedData(d->widgetsColumnData);
     d->data->addColumn(col3);
 
-    KexiTableViewColumn *col4 = new KexiTableViewColumn(i18n("Slot"), KexiDB::Field::Enum);
-    d->slotsColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
+    KexiDB::TableViewColumn *col4 = new KexiDB::TableViewColumn(i18n("Slot"), KexiDB::Field::Enum);
+    d->slotsColumnData = new KexiDB::TableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
     col4->setRelatedData(d->slotsColumnData);
     d->data->addColumn(col4);
 
@@ -173,8 +173,8 @@ ConnectionDialog::initTable()
     d->table->maximizeColumnsWidth(c);
     d->table->setColumnStretchEnabled(true, 4);
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)),
-            this, SLOT(slotCellChanged(KexiDB::RecordData*, int, QVariant, KexiDB::ResultInfo*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
+            this, SLOT(slotCellChanged(KexiDB::RecordData*,int,QVariant,KexiDB::ResultInfo*)));
     connect(d->data, SIGNAL(rowUpdated(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
     connect(d->table, SIGNAL(itemSelected(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
 }
@@ -317,7 +317,7 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
         return;
 
     QString signalArg(signal);
-    signalArg = signalArg.remove(QRegExp(".*[(]|[)]"));
+    signalArg.remove(QRegExp(".*[(]|[)]"));
 
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
@@ -325,7 +325,7 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
     foreach(const QMetaMethod &method, list) {
         // we add the slot only if it is compatible with the signal
         QString slotArg(method.signature());
-        slotArg = slotArg.remove(QRegExp(".*[(]|[)]"));
+        slotArg.remove(QRegExp(".*[(]|[)]"));
         if (!signalArg.startsWith(slotArg, Qt::CaseSensitive) && (!signal.isEmpty())) // args not compatible
             continue;
 
@@ -369,9 +369,9 @@ ConnectionDialog::checkConnection(KexiDB::RecordData *record)
 
     // Then we check if signal/slot args are compatible
     QString signal = (*record)[2].toString();
-    signal = signal.remove(QRegExp(".*[(]|[)]"));   // just keep the args list
+    signal.remove(QRegExp(".*[(]|[)]"));   // just keep the args list
     QString slot = (*record)[4].toString();
-    slot = slot.remove(QRegExp(".*[(]|[)]"));
+    slot.remove(QRegExp(".*[(]|[)]"));
 
     if (!signal.startsWith(slot, Qt::CaseSensitive)) {
         setStatusError(i18n("The signal/slot arguments are not compatible."), record);
@@ -394,8 +394,8 @@ ConnectionDialog::newItemByDragnDrop()
     d->form->enterConnectingState();
     connect(d->form, SIGNAL(connectionAborted(KFormDesigner::Form*)),
         this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
-    connect(d->form, SIGNAL(connectionCreated(KFormDesigner::Form*, Connection&)),
-        this, SLOT(slotConnectionCreated(KFormDesigner::Form*, Connection&)));
+    connect(d->form, SIGNAL(connectionCreated(KFormDesigner::Form*,Connection&)),
+        this, SLOT(slotConnectionCreated(KFormDesigner::Form*,Connection&)));
 
     hide();
 }

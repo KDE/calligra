@@ -37,7 +37,6 @@
 #include <qpro/stream.h>
 #include <qpro/record_factory.h>
 #include <QFile>
-//Added by qt3to4:
 #include <QByteArray>
 
 using namespace Calligra::Sheets;
@@ -148,7 +147,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     QpRecPageName*          lRecPageName = 0;
 
     do {
-        field = "";
+        field.clear();
         lRec  = lFactory.nextRecord();
 
         switch (lRec->type()) {

@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Calligra/ColorSpaceExtension
 Comment=A module implementing an extension to a colorspace of the Pigment Color Manipulation System
 Comment[bg]=Модул, реализиращ пълна цветова гама за употреба с Pigment Color Manipulation System
+Comment[bs]=Modul koji implementuje proširenje na prostor boja u Manipulacionom Sistemu Pigmentnih Boja
 Comment[ca]=Un mòdul que implementa una extensió a un espai de colors del Sistema de Manipulació Pigment Color
 Comment[ca@valencia]=Un mòdul que implementa una extensió a un espai de colors del Sistema de Manipulació Pigment Color
 Comment[da]=Et modul som implementerer et udvidelse til et farveområde til Pigment Color Manipulation System
@@ -36,3 +37,5 @@ Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的�
 Type=int
 [PropertyDef::X-Pigment-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

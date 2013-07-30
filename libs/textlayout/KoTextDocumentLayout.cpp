@@ -555,7 +555,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 }
 
 // This method is called by KoTextLauoutArea every time it encounters a KoAnchorTextRange
-void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length)
+void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const QTextDocument *effectiveDocument)
 {
     if (!d->allowPositionInlineObject)
         return;
@@ -563,11 +563,11 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length)
     if (!textRangeManager()) {
         return;
     }
-    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(pos, pos+length, pos, pos+length);
+    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, pos, pos+length, pos, pos+length);
 
     foreach(KoTextRange *range, ranges.values()) {
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
-        if (anchorRange && document() == range->document()) {
+        if (anchorRange) {
             // We need some special treatment for anchors as they need to position their object during
             // layout and not this early
             KoShapeAnchor *anchor = anchorRange->anchor();

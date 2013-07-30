@@ -68,7 +68,7 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     m_listWidget->addItems(tabsList);
     if (!m_listWidget->count())
         enableButtonOk(false);
-    connect(m_listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+    connect(m_listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
             this, SLOT(accept()));
     resize(200, 150);
     setFocus();

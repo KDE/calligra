@@ -25,7 +25,7 @@
 #include "KoReportPluginManager.h"
 #include "KoReportDesignerItemRectBase.h"
 #include "KoReportDesignerItemLine.h"
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include "reportscene.h"
 #include "reportsceneview.h"
@@ -41,12 +41,12 @@
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <koproperty/EditorView.h>
-#include <KColorScheme>
+#include <kcolorscheme.h>
 #include <QBitmap>
 
 #include <kdebug.h>
 
-static const char *arrow_xpm[] = {
+static const char * const arrow_xpm[] = {
     /* width height num_colors chars_per_pixel */
     "    11    12       2            1",
     /* colors */

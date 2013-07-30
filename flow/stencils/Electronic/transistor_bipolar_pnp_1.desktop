@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=transistor bipolar pnp 1
+Name[bs]=bipolarni pnp tranzistor 1
 Name[ca]=transistor bipolar pnp 1
 Name[ca@valencia]=transistor bipolar pnp 1
+Name[cs]=bipolární tranzistor pnp 1
+Name[da]=transistor bipolar pnp 1
 Name[el]=διπολικό τρανζίστορ pnp 1
 Name[es]=transistor bipolar PNP 1
 Name[et]=Bipolaartransistor pnp 1
@@ -19,4 +22,5 @@ Name[sk]=tranzistor bipolárny pnp 1
 Name[sv]=transistor bipolär PNP 1
 Name[uk]=Біполярний транзистор PNP 1
 Name[x-test]=xxtransistor bipolar pnp 1xx
+Name[zh_CN]=晶体管双极 PNP 1
 Name[zh_TW]=transistor bipolar pnp 1

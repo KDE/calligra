@@ -46,7 +46,7 @@ LocationComboBox::LocationComboBox(QWidget *_parent)
     setCompletionObject(&completionList, true);
     setCompletionMode(KGlobalSettings::CompletionAuto);
 
-    connect(this, SIGNAL(activated(const QString &)),
+    connect(this, SIGNAL(activated(QString)),
             this, SLOT(slotActivateItem()));
 }
 

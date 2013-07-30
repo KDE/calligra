@@ -20,8 +20,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_PART_H
-#define KPLATO_PART_H
+#ifndef KPTMAINDOCUMENT_H
+#define KPTMAINDOCUMENT_H
 
 #include "kplato_export.h"
 
@@ -35,7 +35,7 @@
 
 #include <QFileInfo>
 
-#include <KDialog>
+#include <kdialog.h>
 
 class KoView;
 

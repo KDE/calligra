@@ -21,7 +21,7 @@
 #include "FlowLayout.h"
 #include "kexiutils_global.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #ifdef __GNUC__
 #warning vertical KexiFlowLayout ported to Qt4 but not tested

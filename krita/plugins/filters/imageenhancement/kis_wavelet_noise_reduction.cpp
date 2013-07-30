@@ -46,7 +46,7 @@ KisWaveletNoiseReduction::~KisWaveletNoiseReduction()
 {
 }
 
-KisConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisDoubleWidgetParam param;
     param.push_back(KisDoubleWidgetParam(0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold"), "threshold"));
@@ -60,11 +60,11 @@ KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const Kis
     return config;
 }
 
-void KisWaveletNoiseReduction::process(KisPaintDeviceSP device,
-                                      const QRect& applyRect,
-                                      const KisFilterConfiguration* config,
-                                      KoUpdater* progressUpdater
-                                      ) const
+void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
+                                           const QRect& applyRect,
+                                           const KisFilterConfiguration* config,
+                                           KoUpdater* progressUpdater
+                                           ) const
 {
     Q_ASSERT(device);
     // TODO take selections into account

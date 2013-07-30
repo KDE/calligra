@@ -1,13 +1,39 @@
-include_directories( ${CMAKE_SOURCE_DIR}/words/part )
+if(SHOULD_BUILD_FILTER_ASCII_TO_WORDS)
 
-# ########### next target ###############
+include_directories(
+    ${CMAKE_SOURCE_DIR}/words/part
+)
 
-set(AsciiImport_PART_SRCS AsciiImport.cpp ImportDialog.cc )
-kde4_add_ui_files(AsciiImport_PART_SRCS ImportDialogUI.ui )
-kde4_add_plugin(asciiimport ${AsciiImport_PART_SRCS})
-target_link_libraries(asciiimport komain textlayout wordsprivate)
-install(TARGETS asciiimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### install files ###############
+set(ascii2words_PART_SRCS
+    AsciiImport.cpp
+    ImportDialog.cc
+)
+kde4_add_ui_files(ascii2words_PART_SRCS ImportDialogUI.ui )
+kde4_add_plugin(calligra_filter_ascii2words ${ascii2words_PART_SRCS})
+target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate)
+install(TARGETS calligra_filter_ascii2words DESTINATION ${PLUGIN_INSTALL_DIR})
+install( FILES words_ascii_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-install( FILES  words_ascii_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_FILTER_ASCII_TO_WORDS)
+
+
+if(SHOULD_BUILD_FILTER_ODT_TO_ASCII)
+
+include_directories(
+    ${CMAKE_SOURCE_DIR}/filters/libodfreader
+    ${KOODF2_INCLUDES}
+)
+
+set(odt2ascii_PART_SRCS
+    AsciiExport.cpp
+    OdtReaderAsciiBackend.cpp
+    OdfReaderAsciiContext.cpp
+)
+kde4_add_plugin(calligra_filter_odt2ascii ${odt2ascii_PART_SRCS})
+target_link_libraries(calligra_filter_odt2ascii koodfreader komain koodf koodf2)
+install(TARGETS calligra_filter_odt2ascii DESTINATION ${PLUGIN_INSTALL_DIR})
+
+install( FILES words_ascii_export.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
+endif(SHOULD_BUILD_FILTER_ODT_TO_ASCII)

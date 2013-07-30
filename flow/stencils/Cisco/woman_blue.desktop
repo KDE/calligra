@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=Woman blue
+Name[bs]=Plava žena
 Name[ca]=Dona blava
 Name[ca@valencia]=Dona blava
+Name[cs]=Žena - modrá
+Name[da]=Kvinde blå
+Name[de]=Frau, blau
 Name[el]=Γυναίκα μπλε
 Name[es]=Mujer azul
 Name[et]=Sinine naine
@@ -11,6 +15,7 @@ Name[gl]=Muller azul
 Name[hu]=Kék nő
 Name[it]=Donna blu
 Name[kk]=Көк әйел
+Name[lt]=Moteris (mėlyna)
 Name[nb]=Kvinne blå
 Name[nl]=Vrouw blauw
 Name[pl]=Kobieta niebieska
@@ -18,6 +23,7 @@ Name[pt]=Mulher azul
 Name[pt_BR]=Mulher azul
 Name[ru]=Женщина синяя
 Name[sk]=Žena modrá
+Name[sl]=Modra ženska
 Name[sv]=Kvinna blå
 Name[uk]=Жінка (синім)
 Name[x-test]=xxWoman bluexx

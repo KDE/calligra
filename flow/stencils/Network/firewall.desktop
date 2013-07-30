@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=Firewall
 Name[bg]=Защитна стена
+Name[bs]=Firewall
 Name[ca]=Tallafocs
 Name[ca@valencia]=Tallafocs
+Name[cs]=Firewall
+Name[da]=Firewall
 Name[de]=Firewall
 Name[el]=Τείχος προστασίας
 Name[es]=Cortafuegos
@@ -13,6 +16,7 @@ Name[gl]=Devasa
 Name[hu]=Tűzfal
 Name[it]=Firewall
 Name[kk]=Желіаралық қалқан
+Name[lt]=Ugniasienė
 Name[nb]=Brannmur
 Name[nds]=Nettdiek
 Name[nl]=Firewall
@@ -21,6 +25,7 @@ Name[pt]='Firewall'
 Name[pt_BR]=Firewall
 Name[ru]=Сетевой защитный экран
 Name[sk]=Firewall
+Name[sl]=Požarni zid
 Name[sv]=Brandvägg
 Name[ug]=مۇداپىئە تېمى
 Name[uk]=Брандмауер

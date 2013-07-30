@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Separate Channels Plugin
 Name[bg]=Приставка за отделни канали
+Name[bs]=Plugin za Razdvojene Kanale
 Name[ca]=Connector de canals separats
 Name[ca@valencia]=Connector de canals separats
 Name[da]=Plugin for separate kanaler
@@ -46,4 +47,4 @@ Name[zh_TW]=分離色頻外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaseparatechannels
-X-Krita-Version=27
+X-Krita-Version=28

@@ -18,9 +18,9 @@
 */
 
 //pagetool includes
+#include "KWPageTool.h"
 #include "SimpleHeaderFooterWidget.h"
 #include "SimpleSetupWidget.h"
-#include "KWPageTool.h"
 #include "frames/KWTextFrameSet.h"
 
 //words includes
@@ -30,16 +30,12 @@
 
 //Qt includes
 #include <QList>
-#include <QPainter>
 
 //calligra includes
 #include <KoTextEditor.h>
-#include <KoTextEditor.h>
 #include <KoPointerEvent.h>
-#include <KoViewConverter.h>
 #include <KoTextDocument.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
 
 KWPageTool::KWPageTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Plugin Shape
+Name[bs]=Oblik dodatka
 Name[ca]=Forma de connector
 Name[ca@valencia]=Forma de connector
 Name[cs]=Tvar modulu
@@ -25,6 +26,7 @@ Name[pt]=Forma de 'Plugin'
 Name[pt_BR]=Forma do plugin
 Name[ru]=Модуль фигуры
 Name[sk]=Tvar pluginu
+Name[sl]=Oblika za vstavke
 Name[sv]=Insticksform
 Name[uk]=Форма додатка
 Name[wa]=Fôme Tchôke-divins
@@ -34,6 +36,6 @@ Name[zh_TW]=外掛程式元件
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-PluginInfo-Name=pluginshape
-X-KDE-Library=pluginshape
-X-Flake-MinVersion=27
-X-Flake-PluginVersion=27
+X-KDE-Library=calligra_shape_plugin
+X-Flake-MinVersion=28
+X-Flake-PluginVersion=28

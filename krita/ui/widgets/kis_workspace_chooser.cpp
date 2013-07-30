@@ -93,7 +93,6 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisView2 * view, QWidget* parent): QWid
     m_nameEdit->setClearButtonShown(true);
     
     QGridLayout* layout = new QGridLayout(this);
-    layout->setMargin(0);
     layout->addWidget(m_itemChooser, 0, 0, 1, 2);
     layout->addWidget(m_nameEdit, 1, 0, 1, 1);
     layout->addWidget(saveButton, 1, 1, 1, 1);
@@ -132,7 +131,7 @@ void KisWorkspaceChooser::slotSave()
     }
     workspace->setFilename(fileInfo.filePath());
     if(newName) {
-        name = i18n("Workspace %1").arg(i);
+        name = i18n("Workspace %1", i);
     }
     workspace->setName(name);
     rserver->addResource(workspace);

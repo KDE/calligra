@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Calligra Scalable Graphics Component
 Name[bg]=Компонент за векторна графика в Calligra
+Name[bs]=Komponenta Calligra-e za grafiku koja se moze skalirati
 Name[ca]=Component de gràfics escalables del Calligra
 Name[ca@valencia]=Component de gràfics escalables del Calligra
 Name[cs]=SVG komponenta pro Calligra Office
@@ -35,13 +36,14 @@ MimeType=application/x-karbon;image/x-eps;application/postscript;application/vnd
 # kghostview has 6 for application/postscript, we need to be under that...
 InitialPreference=5
 Type=Service
-X-KDE-ServiceTypes=CalligraPart
+X-KDE-ServiceTypes=Calligra/Part
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template
 GenericName=Scalable Graphics
 GenericName[af]=Skaal veranderbare Grafieka
 GenericName[bg]=Векторна графика
+GenericName[bs]=Grafika koja se može skalirati
 GenericName[ca]=Gràfics escalables
 GenericName[ca@valencia]=Gràfics escalables
 GenericName[cs]=Škálovatelná grafika
@@ -70,6 +72,7 @@ GenericName[ja]=スケーラブルグラフィックス
 GenericName[kk]=Масштабтауға келетін суреттер
 GenericName[lt]=Kintamo dydžio grafika
 GenericName[lv]=Mērogojama Grafika
+GenericName[mr]=स्केलेबल ग्राफिक्स
 GenericName[ms]=Grafik Boleh-skala
 GenericName[nb]=Skalerbar grafikk
 GenericName[nds]=Vektorgrafik

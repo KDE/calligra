@@ -1,8 +1,10 @@
 [Desktop Entry]
 Icon=flood_light
 Name=Flood Light
+Name[bs]=Poplavno svjetlo
 Name[ca]=Inundació lleugera
 Name[ca@valencia]=Inundació lleugera
+Name[cs]=Záplava světla
 Name[da]=Flood Light
 Name[de]=Flutlicht
 Name[el]=Φωτισμός προβολέα
@@ -27,8 +29,10 @@ Name[wa]=Loumire d' enaiwaedje
 Name[x-test]=xxFlood Lightxx
 Name[zh_TW]=Flood Light
 Comment=Flood Light
+Comment[bs]=Poplavno svjetlo
 Comment[ca]=Inundació lleugera
 Comment[ca@valencia]=Inundació lleugera
+Comment[cs]=Záplava světla
 Comment[da]=Flood Light
 Comment[de]=Flutlicht
 Comment[el]=Φωτισμός προβολέα

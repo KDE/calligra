@@ -2,9 +2,10 @@
 Type=ServiceType
 X-KDE-ServiceType=Flow/Dock
 Comment=Docker for Flow
+Comment[bs]=Docker za protok
 Comment[ca]=Acoblador per al Flow
-Comment[ca@valencia]=Amarrador per al Flow
-Comment[cs]=Dok pro Proud
+Comment[ca@valencia]=Acoblador per al Flow
+Comment[cs]=Dok pro Flow
 Comment[da]=Dokker til Flow
 Comment[de]=Docker für Flow
 Comment[el]=Προσάρτηση για το Flow
@@ -25,8 +26,12 @@ Comment[pt]=Acoplador para o Flow
 Comment[pt_BR]=Acoplador para o Flow
 Comment[ru]=Панель для Flow
 Comment[sk]=Docker pre Flow
+Comment[sl]=Sidrišče za Flow
 Comment[sv]=Dockningsfönster för Flow
+Comment[tr]=Flow için Docker
 Comment[uk]=Бічна панель Flow
 Comment[x-test]=xxDocker for Flowxx
 Comment[zh_CN]=Flow 停靠栏
 Comment[zh_TW]=Flow 的嵌入器
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

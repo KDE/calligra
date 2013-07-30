@@ -40,7 +40,7 @@ class DrawingMLColorSchemeItem;
 class DrawingMLColorSchemeSystemItem;
 
 //! @todo add other classes inheriting DrawingMLColorSchemeItemBase
-class MSOOXML_EXPORT DrawingMLColorSchemeItemBase
+class KOMSOOXML_EXPORT DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeItemBase();
@@ -51,7 +51,7 @@ public:
     virtual DrawingMLColorSchemeItemBase* clone() const = 0;
 };
 
-class MSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase
+class KOMSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeItem();
@@ -60,7 +60,7 @@ public:
     DrawingMLColorSchemeItem* clone() const { return new DrawingMLColorSchemeItem(*this); }
 };
 
-class MSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
+class KOMSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeSystemItem();
@@ -74,7 +74,7 @@ public:
 typedef QHash<QString, DrawingMLColorSchemeItemBase*> DrawingMLColorSchemeItemHash;
 
 //! Implements color scheme, based on hash. All items are owned by this object.
-class MSOOXML_EXPORT DrawingMLColorScheme : public DrawingMLColorSchemeItemHash
+class KOMSOOXML_EXPORT DrawingMLColorScheme : public DrawingMLColorSchemeItemHash
 {
 public:
     DrawingMLColorScheme();
@@ -97,7 +97,7 @@ public:
 
 //! Font set for majorFont and minorFont.
 //! @todo add more support for latin, ea and cs: charser, panose, pitchfamily attributes (21.1.2.3.3)
-class MSOOXML_EXPORT DrawingMLFontSet
+class KOMSOOXML_EXPORT DrawingMLFontSet
 {
 public:
     DrawingMLFontSet();
@@ -117,7 +117,7 @@ public:
 
 //! Defines the font scheme within the theme
 //! The font scheme consists of a pair of major and minor fonts for which to use in a document.s
-class MSOOXML_EXPORT DrawingMLFontScheme
+class KOMSOOXML_EXPORT DrawingMLFontScheme
 {
 public:
     DrawingMLFontScheme();
@@ -127,7 +127,7 @@ public:
 };
 
 
-class MSOOXML_EXPORT DrawingMLFillBase
+class KOMSOOXML_EXPORT DrawingMLFillBase
 {
 public:
     virtual ~DrawingMLFillBase();
@@ -139,7 +139,7 @@ public:
     virtual DrawingMLFillBase* clone() const = 0;
 };
 
-class MSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
+class KOMSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
 {
 public:
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
@@ -147,7 +147,7 @@ public:
     DrawingMLSolidFill* clone() const { return new DrawingMLSolidFill(*this); }
 };
 
-class MSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
+class KOMSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 {
 public:
     explicit DrawingMLBlipFill(const QString &filePath);
@@ -159,7 +159,7 @@ private:
     QString m_filePath;
 };
 
-class MSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
+class KOMSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
     // Simplified gradient constructor
@@ -178,7 +178,7 @@ private:
     QString m_gradAngle;
 };
 
-class MSOOXML_EXPORT DrawingMLFormatScheme
+class KOMSOOXML_EXPORT DrawingMLFormatScheme
 {
 public:
 
@@ -197,7 +197,7 @@ public:
 
 //! Defines a single DrawingML theme.
 //! @todo support objectDefaults and extraClrSchemeLst
-class MSOOXML_EXPORT DrawingMLTheme
+class KOMSOOXML_EXPORT DrawingMLTheme
 {
 public:
     DrawingMLTheme();
@@ -208,7 +208,7 @@ public:
 };
 
 //! Context for MsooXmlThemesReader::read()
-class MSOOXML_EXPORT MsooXmlThemesReaderContext : public MsooXmlReaderContext
+class KOMSOOXML_EXPORT MsooXmlThemesReaderContext : public MsooXmlReaderContext
 {
 public:
     MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXML::MsooXmlRelationships* rel, MSOOXML::MsooXmlImport* imp,
@@ -223,7 +223,7 @@ public:
 //! A class reading MSOOXML themes markup - theme/theme1.xml.
 /*! @todo generalize for other MSOOXML subformats.
  */
-class MSOOXML_EXPORT MsooXmlThemesReader : public MSOOXML::MsooXmlCommonReader
+class KOMSOOXML_EXPORT MsooXmlThemesReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     //! Creates MsooXmlThemesReader object.

@@ -27,7 +27,7 @@
 #include <QAction>
 #include <QWidget>
 #include <QApplication>
-#include <KLocale>
+#include <klocale.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
 

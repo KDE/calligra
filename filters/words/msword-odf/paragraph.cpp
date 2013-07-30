@@ -125,7 +125,7 @@ void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::Paragraph
     }
     //Check the background-color of the named paragraph style.
     else {
-        const KoGenStyle *pStyle = m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()));
+        const KoGenStyle *pStyle = m_mainStyles->style(Conversion::styleName2QString(m_paragraphStyle->name()), m_paragraphStyle->type() == sgcPara ? "paragraph" : "text");
         if (pStyle) {
             color = pStyle->property("fo:background-color", KoGenStyle::ParagraphType);
             if (color.isEmpty() || color == "transparent") {
@@ -253,7 +253,7 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     m_textStyles.push_back(textStyle);
 }
 
-QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
+QString Paragraph::writeToFile(KoXmlWriter* writer, bool openTextBox, QChar* tabLeader)
 {
     kDebug(30513);
 
@@ -335,9 +335,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
     textStyleName = m_mainStyles->insert(*m_odfParagraphStyle, textStyleName);
 
     //check if the paragraph is inside of an absolutely positioned frame
-    if ( !m_paragraphProperties->pap().fInTable &&
-         (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs) )
-    {
+    if (openTextBox) {
         KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "graphic");
         const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
         QString drawStyleName;
@@ -371,6 +369,16 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
         if (!anchor.isEmpty()) {
             gs.addProperty("style:horizontal-rel", anchor, gt);
         }
+
+        if (pap.dxaWidth == 0) {
+            gs.addProperty("draw:auto-grow-width", "true");
+        }
+        if (pap.dyaHeight == 0) {
+            gs.addProperty("draw:auto-grow-height", "true");
+        }
+
+        // as fas as can be determined
+        gs.addProperty("style:flow-with-text", "false");
 
         // In case a header/footer is processed, save the style into styles.xml
         if (m_inStylesDotXml) {
@@ -477,14 +485,6 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
     //close the <text:p> or <text:h> tag we opened
     writer->endElement();
 
-    //check if the paragraph is inside of an absolutely positioned frame
-    if ( !m_paragraphProperties->pap().fInTable &&
-         (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs) )
-    {
-        writer->endElement(); //draw:text-box
-        writer->endElement(); //draw:frame
-        writer->endElement(); //close the <text:p>
-    }
     return textStyleName;
 }
 

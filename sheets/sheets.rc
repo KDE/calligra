@@ -50,7 +50,7 @@
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<   View Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
-  <Action name="showPageBorders"/>
+  <Action name="showPageOutline"/>
 <!--   <Action name="showCommentIndicator"/> -->
   <Separator/>
   <Action name="zoom_out"/>
@@ -376,6 +376,7 @@
     <Action name="namedAreaDialog"/><!--FIXME also jumps to named area-->
     <Action name="consolidate"/>
     <Action name="subtotals"/>
+    <Action name="pivot"/>
     <Action name="validity"/>
     <Action name="goalSeek"/>
     <!-- Tools Menu Actions -->

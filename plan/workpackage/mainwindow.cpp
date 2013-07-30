@@ -40,9 +40,7 @@
 #include <KoDocument.h>
 #include <KoGlobal.h>
 
-#include <kcomponentdata.h>
 #include <kmimetypetrader.h>
-
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
@@ -67,12 +65,10 @@
 #include <kxmlguifactory.h>
 #include <kcomponentdata.h>
 #include <ktoolinvocation.h>
-#include <kservice.h>
 #include <kio/netaccess.h>
 #include <kxmlguiwindow.h>
 
 #include <KoDocumentInfo.h>
-#include <KoDocument.h>
 #include <KoView.h>
 #include <KoFilterManager.h>
 
@@ -93,17 +89,17 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
 
     QAction *a = KStandardAction::undo(m_part->undoStack(), SLOT(undo()), actionCollection());
     a->setEnabled( false );
-    connect( m_part->undoStack(), SIGNAL( canUndoChanged( bool ) ), a, SLOT( setEnabled( bool ) ) );
+    connect( m_part->undoStack(), SIGNAL(canUndoChanged(bool)), a, SLOT(setEnabled(bool)) );
 
     a = KStandardAction::redo(m_part->undoStack(), SLOT(redo()), actionCollection());
     a->setEnabled( false );
-    connect( m_part->undoStack(), SIGNAL( canRedoChanged( bool ) ), a, SLOT( setEnabled( bool ) ) );
+    connect( m_part->undoStack(), SIGNAL(canRedoChanged(bool)), a, SLOT(setEnabled(bool)) );
     
     setupGUI( KXmlGuiWindow::Default, "planwork_mainwindow.rc" );
 
     setCentralWidget( m_part->widget() );
     createGUI( m_part );
-    connect( m_part, SIGNAL( captionChanged( const QString&, bool ) ), SLOT( setCaption( const QString&, bool ) ) );
+    connect( m_part, SIGNAL(captionChanged(QString,bool)), SLOT(setCaption(QString,bool)) );
 }
 
 

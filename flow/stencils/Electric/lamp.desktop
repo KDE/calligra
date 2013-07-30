@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=lamp
+Name[bs]=svjetiljka
 Name[ca]=làmpada
 Name[ca@valencia]=làmpada
+Name[cs]=žárovka
+Name[da]=lamp
 Name[de]=Lampe
 Name[el]=lamp
 Name[es]=lámpara
@@ -12,6 +15,7 @@ Name[hu]=lámpa
 Name[it]=lamp
 Name[ja]=ランプ
 Name[kk]=лампа
+Name[lt]=šviestuvas
 Name[nb]=lampe
 Name[nl]=lamp
 Name[pl]=lampa

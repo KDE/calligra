@@ -19,14 +19,15 @@
 #ifndef KIS_ACTION_H
 #define KIS_ACTION_H
 
-#include <KAction>
+#include <kaction.h>
 #include <krita_export.h>
 #include <kdebug.h>
 
+class KisActionManager;
 
 class KRITAUI_EXPORT KisAction : public KAction
 {
-
+    Q_OBJECT
 public:
     enum ActivationFlag {
         NONE = 0,
@@ -60,6 +61,28 @@ public:
 
     void setActivationConditions(ActivationConditions conditions);
     ActivationConditions activationConditions();
+
+    void setExcludedNodeTypes(const QStringList &nodeTypes);
+    const QStringList& excludedNodeTypes() const;
+
+    virtual void setActionEnabled(bool enabled);
+
+   /**
+    * Set the action manager. Only used by KisActionManager
+    */
+    void setActionManager(KisActionManager* actionManager);
+
+   /**
+    * Set operation id. This will used to run an operation in the KisActionManager
+    */
+    void setOperationID(const QString& id);
+
+signals:
+    void sigEnableSlaves(bool value);
+
+private slots:
+    void slotTriggered();
+    void slotChanged();
 
 private:
     class Private;

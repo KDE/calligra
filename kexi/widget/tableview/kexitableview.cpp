@@ -36,7 +36,7 @@
 #include <QLabel>
 #include <QToolTip>
 #include <Q3WhatsThis>
-#include <KColorScheme>
+#include <kcolorscheme.h>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QFocusEvent>
@@ -56,7 +56,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <KAction>
+#include <kaction.h>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>
@@ -67,7 +67,6 @@
 #include "kexitableview.h"
 #include <kexi_global.h>
 #include <kexiutils/utils.h>
-#include <kexiutils/validator.h>
 
 #include "kexicelleditorfactory.h"
 #include "kexitableviewheader.h"
@@ -75,6 +74,7 @@
 #include <widget/utils/kexirecordmarker.h>
 #include <widget/utils/kexidisplayutils.h>
 #include <db/cursor.h>
+#include <db/validator.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
         : alternateBackgroundColor(
@@ -172,7 +172,7 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
       int align = SingleLine | AlignVCenter;
       QString txtValue;
       QVariant cellValue;
-      KexiTableViewColumn *tvcol = m_tableView->column(col);
+      KexiDB::TableViewColumn *tvcol = m_tableView->column(col);
       if (!m_tableView->getVisibleLookupValue(cellValue, editor, record, tvcol))
         cellValue = insertRowSelected ? editor->displayedField()->defaultValue() : record->at(col); //display default value if available
       const bool focused = m_tableView->selectedItem() == record && col == m_tableView->currentColumn();
@@ -197,7 +197,7 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 
 //-----------------------------------------
 
-KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const char* name)
+KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const char* name)
         : Q3ScrollView(parent, name /*Qt::WRepaintNoErase | */ /*| Qt::WResizeNoErase*/)
         , KexiRecordNavigatorHandler()
         , KexiSharedActionClient()
@@ -207,7 +207,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     setAttribute(Qt::WA_StaticContents, true);
 //not needed KexiTableView::initCellEditorFactories();
 
-    m_data = new KexiTableViewData(); //to prevent crash because m_data==0
+    m_data = new KexiDB::TableViewData(); //to prevent crash because m_data==0
     m_owner = true;                   //-this will be deleted if needed
 
     setResizePolicy(Manual);
@@ -274,8 +274,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     m_horizontalHeader->setOrientation(Qt::Horizontal);
     m_horizontalHeader->setTracking(false);
     m_horizontalHeader->setMovingEnabled(false);
-    connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)),
-        this, SLOT(slotTopHeaderSizeChange(int, int, int)));
+    connect(m_horizontalHeader, SIGNAL(sizeChange(int,int,int)),
+        this, SLOT(slotTopHeaderSizeChange(int,int,int)));
 
     m_verticalHeader = new KexiRecordMarker(this);
     m_verticalHeader->setObjectName("m_verticalHeader");
@@ -315,7 +315,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     // Connect header, table and scrollbars
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), m_horizontalHeader, SLOT(setOffset(int)));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), m_verticalHeader, SLOT(setOffset(int)));
-    connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnWidthChanged(int, int, int)));
+    connect(m_horizontalHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotColumnWidthChanged(int,int,int)));
     connect(m_horizontalHeader, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotSectionHandleDoubleClicked(int)));
     connect(m_horizontalHeader, SIGNAL(clicked(int)), this, SLOT(sortColumnInternal(int)));
 
@@ -346,7 +346,7 @@ KexiTableView::~KexiTableView()
 {
     cancelRowEdit();
 
-    KexiTableViewData *data = m_data;
+    KexiDB::TableViewData *data = m_data;
     m_data = 0;
     if (m_owner) {
         if (data)
@@ -779,7 +779,7 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 bool KexiTableView::isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant* value)
 {
     const bool cursorAtInsertRowOrEditingNewRow = (record == m_insertItem || (m_newRowEditing && m_currentItem == record));
-    KexiTableViewColumn *tvcol;
+    KexiDB::TableViewColumn *tvcol;
     if (cursorAtInsertRowOrEditingNewRow
             && (tvcol = m_data->column(col))
             && hasDefaultValueAt(*tvcol)
@@ -837,7 +837,7 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
         //kDebug() << "we're at INSERT row...";
     }
 
-    KexiTableViewColumn *tvcol = m_data->column(col);
+    KexiDB::TableViewColumn *tvcol = m_data->column(col);
 
     QVariant cellValue;
     if (col < (int)record->count()) {
@@ -1091,7 +1091,7 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
     }
 // d->contentsMousePressEvent_ev = *e;
 // d->contentsMousePressEvent_enabled = true;
-// QTimer::singleShot(2000, this, SLOT( contentsMousePressEvent_Internal() ));
+// QTimer::singleShot(2000, this, SLOT(contentsMousePressEvent_Internal()));
 // d->contentsMousePressEvent_timer.start(100,true);
 
 // if (!d->contentsMousePressEvent_enabled)
@@ -1497,7 +1497,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     }
     //finally: we've printable char:
     if (printable && !ro) {
-        KexiTableViewColumn *tvcol = m_data->column(curCol);
+        KexiDB::TableViewColumn *tvcol = m_data->column(curCol);
         if (tvcol->acceptsFirstChar(e->text()[0])) {
             kDebug() << "ev pressed: acceptsFirstChar()==true";
             //   if (e->text()[0].isPrint())
@@ -1533,7 +1533,7 @@ KexiDataItemInterface *KexiTableView::editor(int col, bool ignoreMissingEditor)
 {
     if (!m_data || col < 0 || col >= columns())
         return 0;
-    KexiTableViewColumn *tvcol = m_data->column(col);
+    KexiDB::TableViewColumn *tvcol = m_data->column(col);
 // int t = tvcol->field->type();
 
     //find the editor for this column
@@ -2085,7 +2085,7 @@ void KexiTableView::updateAfterAcceptRowEdit()
 }
 
 bool KexiTableView::getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
-        KexiDB::RecordData *record, KexiTableViewColumn *tvcol) const
+        KexiDB::RecordData *record, KexiDB::TableViewColumn *tvcol) const
 {
     if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue() != -1
             && edit->columnInfo()->indexForVisibleLookupValue() < (int)record->count()) {

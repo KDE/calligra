@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=PC Software
+Name[bs]=softver za PC
 Name[ca]=Programari per a PC
 Name[ca@valencia]=Programari per a PC
+Name[cs]=PC Software
+Name[da]=PC-software
 Name[de]=PC-Software
 Name[el]=PC Software
 Name[es]=Software PC
@@ -11,6 +14,7 @@ Name[gl]=Software de PC
 Name[hu]=PC szoftver
 Name[it]=PC Software
 Name[kk]=ДК бағдарламалық құралы
+Name[lt]=PK programa
 Name[nb]=PC programvare
 Name[nds]=Programmen
 Name[nl]=PC software

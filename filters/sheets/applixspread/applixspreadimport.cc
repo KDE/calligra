@@ -17,13 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "applixspreadimport.h"
+
 #include <QMessageBox>
 #include <QStringList>
 #include <QRegExp>
 #include <QList>
 #include <QTextStream>
 #include <QByteArray>
-#include <applixspreadimport.h>
 #include <kdebug.h>
 #include <math.h>
 #include <KoFilterChain.h>
@@ -96,16 +97,16 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
     QString str;
     QList<t_mycolor*> mcol;
 
-    str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    str += "<!DOCTYPE spreadsheet>\n";
-    str += "<spreadsheet mime=\"application/x-kspread\" editor=\"KSpread\" >\n";
-    str += " <paper format=\"A4\" orientation=\"Portrait\" >\n";
-    str += "  <borders right=\"20\" left=\"20\" bottom=\"20\" top=\"20\" />\n";
-    str += "  <head/>\n";
-    str += "  <foot/>\n";
-    str += " </paper>\n";
+    str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+           "<!DOCTYPE spreadsheet>\n"
+           "<spreadsheet mime=\"application/x-kspread\" editor=\"KSpread\" >\n"
+           " <paper format=\"A4\" orientation=\"Portrait\" >\n"
+           "  <borders right=\"20\" left=\"20\" bottom=\"20\" top=\"20\" />\n"
+           "  <head/>\n"
+           "  <foot/>\n"
+           " </paper>\n"
 //    str += " <locale positivePrefixCurrencySymbol=\"True\" negativeMonetarySignPosition=\"1\" negativePrefixCurrencySymbol=\"True\" fracDigits=\"2\" thousandsSeparator=\" \" dateFormat=\"%A, %e. %B %Y\" timeFormat=\"%H:%M:%S\" monetaryDecimalSymbol=\",\" weekStartsMonday=\"True\" currencySymbol=\"DM\" negativeSign=\"-\" positiveSign=\"\" positiveMonetarySignPosition=\"1\" decimalSymbol=\",\" monetaryThousandsSeparator=\" \" dateFormatShort=\"%d.%m.%Y\" />\n";
-    str += " <map markerColumn=\"1\" activeTable=\"Table1\" markerRow=\"1\" >\n";
+           " <map markerColumn=\"1\" activeTable=\"Table1\" markerRow=\"1\" >\n";
 //      str += "  <table columnnumber=\"0\" borders=\"0\" hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\" formular=\"0\" lcmode=\"0\" name=\"Tabelle1\" >\n";
 
 
@@ -296,9 +297,9 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 // is it not the first table
                 if (!(tabctr.isNull()))  str += "  </table>\n";
 
-                str += "  <table columnnumber=\"0\" borders=\"0\" hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\" formular=\"0\" lcmode=\"0\" name=\"";
-                str += tabnostr;
-                str += "\" >\n";
+                str += "  <table columnnumber=\"0\" borders=\"0\" hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\" formular=\"0\" lcmode=\"0\" name=\"" +
+                       tabnostr +
+                       "\" >\n";
 
                 tabctr = tabnostr;
 
@@ -483,8 +484,8 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             QString col;
 
             // create kspread fileformat output
-            str += "   <cell row=\"" + QString::number(irow) + "\"";
-            str += " column=\""      + QString::number(icol) + "\">\n";
+            str += "   <cell row=\"" + QString::number(irow) + "\""
+                   " column=\""      + QString::number(icol) + "\">\n";
             if (bold == 1  || italic == 1 || underline == 1 ||
                     align != 0 || valign != 0 ||
                     topPenStyle  != 0  || bottomPenStyle != 0 ||
@@ -492,26 +493,26 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                     fontsize != 12 || brushstyle != 0 || fontnr != -1) {
                 str += "    <format";
                 if (brushstyle != 0) {
-                    str += " brushstyle=\""  + QString::number(brushstyle) + "\" ";
-                    str += " brushcolor=\"";
-                    str += writeColor(mcol.at(brushcolor));
-                    str += "\"";
+                    str += " brushstyle=\""  + QString::number(brushstyle) + "\" "
+                           " brushcolor=\"" +
+                           writeColor(mcol.at(brushcolor)) +
+                           "\"";
                 }
 
                 if (align   != 0)  str += " align=\""  + QString::number(align) + "\" ";
                 if (valign  != 0)  str += " alignY=\"" + QString::number(valign) + "\" ";
                 if (fg_bg != -1) {
-                    str += " bgcolor=\"";
-                    str += writeColor(mcol.at(fg_bg));
-                    str += "\" ";
+                    str += " bgcolor=\"" +
+                           writeColor(mcol.at(fg_bg)) +
+                           "\" ";
                 }
                 str += ">\n";
 
                 // Font color
                 if (fg != -1) {
-                    str += "    <pen width=\"0\" style=\"1\" color=\"";
-                    str += writeColor(mcol.at(fg));
-                    str += "\" />\n";
+                    str += "    <pen width=\"0\" style=\"1\" color=\"" +
+                           writeColor(mcol.at(fg)) +
+                           "\" />\n";
                 }
 
                 // Left border
@@ -551,15 +552,15 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                     str += "     <font ";
                     // Fontsize
                     if (fontsize != 12) {
-                        str += "size=\"";
-                        str += QString::number(fontsize);
-                        str += "\" ";
+                        str += "size=\"" +
+                               QString::number(fontsize) +
+                               "\" ";
                     }
                     // Fontfamily
                     if (fontnr != -1) {
-                        str += "family=\"";
-                        str += typefacetab[fontnr].toLatin1();
-                        str += "\" ";
+                        str += "family=\"" +
+                               typefacetab[fontnr].toLatin1() +
+                               "\" ";
                     }
                     str += "weight=\"0\"";
 
@@ -571,16 +572,16 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 }
                 str += "    </format>\n";
             }
-            str += "    <text>" + mystr + "</text>\n";
-            str += "   </cell>\n";
+            str += "    <text>" + mystr + "</text>\n"
+                   "   </cell>\n";
         }
 
     }
     emit sigProgress(100);
 
-    str += "  </table>\n";
-    str += " </map>\n";
-    str += "</spreadsheet>\n";
+    str += "  </table>\n"
+           " </map>\n"
+           "</spreadsheet>\n";
 //  str += "</DOC>\n";
 
     kDebug() << "Text" << str;
@@ -790,19 +791,19 @@ APPLIXSPREADImport::specCharfind(QChar a, QChar b)
 void
 APPLIXSPREADImport::writePen(QString &str, int penwidth, int penstyle, QString framecolor)
 {
-    str += "     <pen width=\"";
+    str += "     <pen width=\"" +
 
     // width of the pen
-    str += QString::number(penwidth);
-    str += "\" style=\"";
+           QString::number(penwidth) +
+           "\" style=\"" +
 
     // style of the pen
-    str += QString::number(penstyle);
-    str += "\" color=\"";
+           QString::number(penstyle) +
+           "\" color=\"" +
 
     // color of the pen
-    str += framecolor;
-    str += "\" />\n";
+           framecolor +
+           "\" />\n";
 
 }
 
@@ -972,7 +973,7 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
 
                     sscanf((*it).toLatin1(), "%c:%d", &ccolumn, &colwidth);
                     int len = (*it).length();
-                    int pos = (*it).indexOf(":");
+                    int pos = (*it).indexOf(':');
                     (*it).remove(pos, len - pos);
 
                     printf("     >%s<- -<%c><%d>  \n", (*it).toLatin1().data(), ccolumn, colwidth);
@@ -985,13 +986,13 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
                     icolumn = icolumn * 5;
 
 
-                    rowcolstr += "  <column width=\"";
-                    rowcolstr += QString::number(colwidth);
-                    rowcolstr += "\" column=\"";
-                    rowcolstr += QString::number(icolumn);
-                    rowcolstr += "\" >\n";
-                    rowcolstr += "   <format/>\n";
-                    rowcolstr += "  </column>\n";
+                    rowcolstr += "  <column width=\"" +
+                                 QString::number(colwidth) +
+                                 "\" column=\"" +
+                                 QString::number(icolumn) +
+                                 "\" >\n"
+                                 "   <format/>\n"
+                                 "  </column>\n";
                 }
             }
 
@@ -1013,13 +1014,13 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
                     printf("   row: %2d   height: %2d\n", irow, rowheight);
                     if (rowheight > 32768) rowheight -= 32768;
                     printf("              height: %2d\n", rowheight);
-                    rowcolstr += "  <row row=\"";
-                    rowcolstr += QString::number(irow);
-                    rowcolstr += "\" height=\"";
-                    rowcolstr += QString::number(rowheight);
-                    rowcolstr += "\" >\n";
-                    rowcolstr += "   <format/>\n";
-                    rowcolstr += "  </row>\n";
+                    rowcolstr += "  <row row=\"" +
+                                 QString::number(irow) +
+                                 "\" height=\"" +
+                                 QString::number(rowheight) +
+                                 "\" >\n"
+                                 "   <format/>\n"
+                                 "  </row>\n";
                 }
 
 

@@ -27,8 +27,8 @@
 #include <KoUnit.h>
 #include <SvgUtil.h>
 
-#include <KDebug>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <kpluginfactory.h>
 
 #include <QBuffer>
 #include <QImage>
@@ -499,8 +499,8 @@ QString KarbonImport::loadStroke(const KoXmlElement &element)
     }
 
     QString lineWidth = element.attribute("lineWidth", "1.0");
-    strokeStyle += QString("stroke-width:%1;").arg(lineWidth);
-    strokeStyle += QString("stroke-miterlimit:%1;").arg(element.attribute("miterLimit", "10.0"));
+    strokeStyle += QString("stroke-width:%1;").arg(lineWidth) +
+                   QString("stroke-miterlimit:%1;").arg(element.attribute("miterLimit", "10.0"));
 
     QString strokePaint;
 
@@ -644,19 +644,19 @@ void KarbonImport::loadEllipse(const KoXmlElement &element)
     QString data;
 
     if (element.attribute("kind") == "cut") {
-        data += QString("M%1,%2 ").arg(p1.x()).arg(p1.y());
-        data += QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
-        data += QString("L%1,%2").arg(p1.x()).arg(p1.y());
+        data += QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
+                QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
+                QString("L%1,%2").arg(p1.x()).arg(p1.y());
     }
     else if (element.attribute("kind") == "section") {
-        data += QString("M%1,%2 ").arg(center.x()).arg(center.y());
-        data += QString("L%1,%2 ").arg(p1.x()).arg(p1.y());
-        data += QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
-        data += QString("L%1,%2").arg(center.x()).arg(center.y());
+        data += QString("M%1,%2 ").arg(center.x()).arg(center.y()) +
+                QString("L%1,%2 ").arg(p1.x()).arg(p1.y()) +
+                QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
+                QString("L%1,%2").arg(center.x()).arg(center.y());
     }
     else if (element.attribute("kind") == "arc") {
-        data += QString("M%1,%2 ").arg(p1.x()).arg(p1.y());
-        data += QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
+        data += QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
+                QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
     } else {
         const QString style = loadStyle(element);
 

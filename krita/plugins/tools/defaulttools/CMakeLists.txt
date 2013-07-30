@@ -1,6 +1,6 @@
-if (NOT WIN32)
+if (NOT WIN32 AND NOT APPLE)
     add_subdirectory(tests)
-endif (NOT WIN32)
+endif (NOT WIN32 AND NOT APPLE)
 
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
@@ -16,6 +16,7 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_move.cc
     strokes/move_stroke_strategy.cpp
     strokes/move_selection_stroke_strategy.cpp
+    processings/fill_processing_visitor.cpp
     kis_tool_multihand.cpp
     kis_tool_pencil.cc
     )

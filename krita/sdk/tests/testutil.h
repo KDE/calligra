@@ -43,6 +43,29 @@
 namespace TestUtil
 {
 
+inline QString fetchDataFileLazy(const QString relativeFileName)
+{
+    QString filename  =
+        QString(FILES_DATA_DIR) +
+        QDir::separator() +
+        relativeFileName;
+
+    if (QFileInfo(filename).exists()) {
+        return filename;
+    }
+
+    filename  =
+        QString(FILES_DEFAULT_DATA_DIR) +
+        QDir::separator() +
+        relativeFileName;
+
+    if (QFileInfo(filename).exists()) {
+        return filename;
+    }
+
+    return QString();
+}
+
 inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
     qDebug() << node->name();
@@ -325,6 +348,56 @@ struct MaskParent
     const QRect imageRect;
     KisImageSP image;
     KisPaintLayerSP layer;
+};
+
+}
+
+namespace TestUtil {
+
+class MeasureAvgPortion
+{
+public:
+    MeasureAvgPortion(int period)
+        : m_period(period),
+        m_val(0),
+        m_total(0),
+        m_cycles(0)
+    {
+    }
+
+    ~MeasureAvgPortion() {
+        printValues(true);
+    }
+
+    void addVal(int x) {
+        m_val += x;
+    }
+
+    void addTotal(int x) {
+        m_total += x;
+        m_cycles++;
+        printValues();
+    }
+
+private:
+    void printValues(bool force = false) {
+        if (m_cycles > m_period || force) {
+            qDebug() << "Val / Total:" << qreal(m_val) / qreal(m_total);
+            qDebug() << "Avg. Val:   " << qreal(m_val) / m_cycles;
+            qDebug() << "Avg. Total: " << qreal(m_total) / m_cycles;
+            qDebug() << ppVar(m_val) << ppVar(m_total) << ppVar(m_cycles);
+
+            m_val = 0;
+            m_total = 0;
+            m_cycles = 0;
+        }
+    }
+
+private:
+    int m_period;
+    qint64 m_val;
+    qint64 m_total;
+    qint64 m_cycles;
 };
 
 }

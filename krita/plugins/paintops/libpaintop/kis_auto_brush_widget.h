@@ -54,13 +54,18 @@ public:
     QSizeF brushSize() const;
 
 private slots:
-
     void paramChanged();
     void setStackedWidget(int);
     void spinBoxHorizontalChanged(qreal);
     void spinBoxVerticalChanged(qreal);
     void linkFadeToggled(bool);
-
+    void spinBoxRatioChanged(qreal);
+    void spinBoxRandomnessChanged(qreal);
+    void spinBoxRadiusChanged(qreal);
+    void spinBoxSpikesChanged(int);
+    void spinBoxSpacingChanged(qreal);
+    void spinBoxAngleChanged(int);
+    void spinBoxDensityChanged(qreal);
 
 signals:
 

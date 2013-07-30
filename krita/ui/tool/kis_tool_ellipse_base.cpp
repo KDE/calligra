@@ -55,8 +55,9 @@ void KisToolEllipseBase::deactivate()
 
 void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton,
+                          Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier)) {
 
         if (m_type == PAINT) {
             if (!nodeEditable() || nodePaintAbility() == NONE) {
@@ -125,9 +126,7 @@ void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
 
         updateArea();
 
-        if (currentNode()->isEditable()) {
-            finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
-        }
+        finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
         event->accept();
     }
     else {

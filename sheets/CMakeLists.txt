@@ -1,5 +1,14 @@
 project(calligra-sheets)
 
+include_directories( ${CMAKE_SOURCE_DIR}/interfaces
+                    ${KOMAIN_INCLUDES}
+                    ${KOTEXT_INCLUDES}
+                    ${TEXTLAYOUT_INCLUDES}
+                    ${Boost_INCLUDE_DIR}
+                    ${EIGEN2_INCLUDE_DIR} )
+
+if (SHOULD_BUILD_SHEETS_PART)
+
 add_subdirectory( data )
 add_subdirectory( shape )
 add_subdirectory( tests )
@@ -8,13 +17,6 @@ add_subdirectory( dtd )
 add_subdirectory( functions )
 
 #add_definitions(-DCALLIGRA_SHEETS_MT)
-
-include_directories( ${CMAKE_SOURCE_DIR}/interfaces
-                    ${KOMAIN_INCLUDES}
-                    ${KOTEXT_INCLUDES}
-                    ${TEXTLAYOUT_INCLUDES}
-                    ${Boost_INCLUDE_DIR}
-                    ${EIGEN2_INCLUDE_DIR} )
 
 ########### next target ###############
 SET (chart_DIR_SRCS
@@ -305,34 +307,11 @@ target_link_libraries(calligrasheetspart calligrasheetscommon )
 
 install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-
-########### next target ###############
-
-SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
-
-kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-calligrasheets.png")
-
-kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
-
-if (Q_WS_MAC)
-set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.sheets")
-set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Sheets 2")
-endif (Q_WS_MAC)
-
-target_link_libraries(kdeinit_calligrasheets komain )
-
-install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-target_link_libraries( calligrasheets kdeinit_calligrasheets )
-install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 ########### install files ###############
 
 install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
@@ -394,3 +373,32 @@ install( FILES
     commands/DataManipulators.h
     commands/SortManipulator.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/commands COMPONENT Devel)
+
+endif (SHOULD_BUILD_SHEETS_PART)
+
+########### APP ###############
+
+if (SHOULD_BUILD_SHEETS_APP)
+
+SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
+
+kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-calligrasheets.png")
+
+kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
+
+if (Q_WS_MAC)
+set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.sheets")
+set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Sheets 2")
+endif (Q_WS_MAC)
+
+target_link_libraries(kdeinit_calligrasheets komain )
+
+install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+target_link_libraries( calligrasheets kdeinit_calligrasheets )
+install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+endif (SHOULD_BUILD_SHEETS_APP)

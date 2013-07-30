@@ -17,6 +17,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_curve_option.cpp
     kis_curve_option_widget.cpp
     kis_custom_brush_widget.cpp
+    kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
     kis_dab_cache.cpp
     kis_filter_option.cpp
@@ -46,6 +47,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_gradient_option.cpp
     kis_pressure_flow_opacity_option.cpp
     kis_pressure_flow_opacity_option_widget.cpp
+    kis_pressure_spacing_option_widget.cpp
     kis_sensor_selector.cc
     kis_text_brush_chooser.cpp
     kis_brush_based_paintop_options_widget.cpp
@@ -66,6 +68,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     forms/wdgBrushSizeOptions.ui
     forms/wdgcurveoption.ui
     forms/wdgcustombrush.ui
+    forms/wdgclipboardbrush.ui
     forms/wdgtextbrush.ui
     forms/wdgincremental.ui
     forms/wdgmultisensorsselector.ui

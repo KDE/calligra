@@ -28,8 +28,8 @@
 
 #include <KoCanvasBase.h>
 
-#include <KCalendarSystem>
-#include <KMessageBox>
+#include <kcalendarsystem.h>
+#include <kmessagebox.h>
 
 using namespace Calligra::Sheets;
 
@@ -116,7 +116,9 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
     int row = marker.y();
     int col = marker.x();
     int colstart = col; //this is where we get back after each week
-    setText(sheet, row, colstart, i18n("Calendar from %1 to %2", start.toString(), end.toString()));
+    setText(sheet, row, colstart, i18n("Calendar from %1 to %2",
+                                       KGlobal::locale()->formatDate(start),
+                                       KGlobal::locale()->formatDate(end)));
 
     QDate current(start);
 //   QDate previous(current);
@@ -197,8 +199,8 @@ QWidget* CalendarTool::createOptionWidget()
     CellTool::createOptionWidget();
 
     CalendarToolWidget* widget =  new CalendarToolWidget(canvas()->canvasWidget());
-    connect(widget, SIGNAL(insertCalendar(const QDate&, const QDate&)),
-            this, SLOT(insertCalendar(const QDate&, const QDate&)));
+    connect(widget, SIGNAL(insertCalendar(QDate,QDate)),
+            this, SLOT(insertCalendar(QDate,QDate)));
     return widget;
 }
 

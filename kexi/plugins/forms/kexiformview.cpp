@@ -48,7 +48,7 @@
 #include <db/cursor.h>
 #include <db/utils.h>
 #include <db/preparedstatement.h>
-#include <dataviewcommon/kexitableviewdata.h>
+#include <db/tableviewdata.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>
@@ -135,11 +135,11 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
     initForm();
 
     if (viewMode() == Kexi::DesignViewMode) {
-//        connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QByteArray&)),
-//                this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool, const QByteArray&)));
+//        connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*,bool,QByteArray)),
+//                this, SLOT(slotPropertySetSwitched(KoProperty::Set*,bool,QByteArray)));
         connect(form(), SIGNAL(propertySetSwitched()), this, SLOT(slotPropertySetSwitched()));
-//        connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
-//                this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
+//        connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form*,bool)),
+//                this, SLOT(slotDirty(KFormDesigner::Form*,bool)));
         connect(form(), SIGNAL(modified()), this, SLOT(slotModified()));
 
         connect(d->dbform, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
@@ -389,16 +389,16 @@ void KexiFormView::initForm()
 //2.0    if (d->treeview)
 //2.0       d->treeview->setForm(form);
 //2.0    d->active = form;
-//2.0    connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
-//2.0            d->propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*, bool, bool)));
+//2.0    connect(form, SIGNAL(selectionChanged(QWidget*,bool,bool)),
+//2.0            d->propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*,bool,bool)));
 /*2.0    if (d->treeview) {
-        connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
-                d->treeview, SLOT(setSelectedWidget(QWidget*, bool)));
+        connect(form, SIGNAL(selectionChanged(QWidget*,bool,bool)),
+                d->treeview, SLOT(setSelectedWidget(QWidget*,bool)));
         connect(form, SIGNAL(childAdded(ObjectTreeItem*)), d->treeview, SLOT(addItem(ObjectTreeItem*)));
         connect(form, SIGNAL(childRemoved(ObjectTreeItem*)), d->treeview, SLOT(removeItem(ObjectTreeItem*)));
     }*/
-        connect(form(), SIGNAL(widgetNameChanged(const QByteArray&,const QByteArray&)),
-                this, SLOT(slotWidgetNameChanged(const QByteArray&,const QByteArray&)));
+        connect(form(), SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
+                this, SLOT(slotWidgetNameChanged(QByteArray,QByteArray)));
         connect(form(), SIGNAL(selectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)),
                 this, SLOT(slotWidgetSelectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)));
 
@@ -876,8 +876,8 @@ void KexiFormView::initDataSource()
 
     if (ok) {
 //! @todo PRIMITIVE!! data setting:
-//! @todo KexiTableViewData is not great name for data class here... rename/move?
-        KexiTableViewData* data = new KexiTableViewData(d->cursor);
+//! @todo KexiDB::TableViewData is not great name for data class here... rename/move?
+        KexiDB::TableViewData* data = new KexiDB::TableViewData(d->cursor);
         if (forceReadOnlyDataSource)
             data->setReadOnly(true);
         data->preloadAllRows();
@@ -966,7 +966,7 @@ KexiFormView::storeData(bool dontAsk)
 
             QString originalFileName(h.originalFileName());
             QFileInfo fi(originalFileName);
-            QString caption(fi.baseName().replace('_', " ").simplified());
+            QString caption(fi.baseName().replace('_', ' ').simplified());
 
             if (st) {
                 *st /* << NO, (pgsql doesn't support this):QVariant()*/ /*id*/

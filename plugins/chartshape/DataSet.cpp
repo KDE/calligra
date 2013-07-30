@@ -34,7 +34,7 @@
 #include <QPainter>
 
 // KDE
-#include <KLocale>
+#include <klocale.h>
 
 // KDChart
 #include <KDChartDataValueAttributes>
@@ -1736,7 +1736,7 @@ void DataSet::saveOdf(KoShapeSavingContext &context) const
         style.addProperty("chart:data-label-symbol", "true");
 
     if (d->symbolsActivated) {
-        QString symbolName = "";
+        QString symbolName;
         QString symbolType = "named-symbol";
 
         if (!d->markerIsAutoSet) {

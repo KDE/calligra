@@ -79,8 +79,6 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
 {
     KisNodeSP currentNode =
         canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    if (!currentNode)
-        return;
 
     pathShape->normalize();
     pathShape->close();
@@ -91,7 +89,7 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
 
     KisImageWSP image = kisCanvas->image();
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode, i18n("Path Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Path Selection"));
 
     if (m_selectionTool->selectionMode() == PIXEL_SELECTION) {
 
@@ -106,7 +104,10 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
         QTransform matrix;
         matrix.scale(image->xRes(), image->yRes());
         matrix.translate(pathShape->position().x(), pathShape->position().y());
-        painter.fillPainterPath(matrix.map(pathShape->outline()));
+
+        QPainterPath path = matrix.map(pathShape->outline());
+        painter.fillPainterPath(path);
+        tmpSel->setOutlineCache(path);
 
         helper.selectPixelSelection(tmpSel, m_selectionTool->selectionAction());
 

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Heptagon
 Name[bg]=Седмоъгълник
+Name[bs]=Sedmougao
 Name[ca]=Heptàgon
 Name[ca@valencia]=Heptàgon
 Name[cs]=Pětistěn
@@ -15,6 +16,8 @@ Name[gl]=Heptágono
 Name[hu]=Hétszög
 Name[it]=Ettagono
 Name[kk]=Жетібұрыш
+Name[lt]=Septyniakampis
+Name[mr]=सप्तकोन
 Name[nb]=Sjukant
 Name[nds]=Söveneck
 Name[nl]=Zevenhoek
@@ -23,7 +26,9 @@ Name[pt]=Heptágono
 Name[pt_BR]=Heptágono
 Name[ru]=Семиугольник
 Name[sk]=Sedemuholník
+Name[sl]=Sedemkotnik
 Name[sv]=Sjuhörning
+Name[tr]=Yedigen
 Name[uk]=Семикутник
 Name[x-test]=xxHeptagonxx
 Name[zh_CN]=七角形

@@ -30,13 +30,13 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <KAction>
-#include <KToggleAction>
-#include <KMenu>
+#include <kaction.h>
+#include <ktoggleaction.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kiconeffect.h>
 #include <kundo2command.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
 #include <KoIcon.h>
 
 #include <koproperty/Set.h>
@@ -120,12 +120,12 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     d->view = dynamic_cast<KexiTableView*>(mainWidget());
 
-    d->data = new KexiTableViewData();
+    d->data = new KexiDB::TableViewData();
     if (conn->isReadOnly())
         d->data->setReadOnly(true);
     d->data->setInsertingEnabled(false);
 
-    KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, QString(),
+    KexiDB::TableViewColumn *col = new KexiDB::TableViewColumn("pk", KexiDB::Field::Text, QString(),
             i18n("Additional information about the field"));
     col->setIcon(KexiUtils::colorizeIconToTextColor(koSmallIcon("help-about"), d->view->palette()));
     col->setHeaderTextVisible(false);
@@ -133,15 +133,15 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     col->setReadOnly(true);
     d->data->addColumn(col);
 
-// col = new KexiTableViewColumn("name", KexiDB::Field::Text, i18n("Field Name"),
-    col = new KexiTableViewColumn("caption", KexiDB::Field::Text, i18n("Field Caption"),
+// col = new KexiDB::TableViewColumn("name", KexiDB::Field::Text, i18n("Field Name"),
+    col = new KexiDB::TableViewColumn("caption", KexiDB::Field::Text, i18n("Field Caption"),
                                   i18n("Describes caption for the field"));
-// KexiUtils::Validator *vd = new KexiUtils::IdentifierValidator();
+// KexiDB::Validator *vd = new KexiUtils::IdentifierValidator();
 // vd->setAcceptsEmptyValue(true);
 // col->setValidator( vd );
     d->data->addColumn(col);
 
-    col = new KexiTableViewColumn("type", KexiDB::Field::Enum, i18n("Data Type"),
+    col = new KexiDB::TableViewColumn("type", KexiDB::Field::Enum, i18n("Data Type"),
                                   i18n("Describes data type for the field"));
     d->data->addColumn(col);
 
@@ -159,19 +159,19 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     }
     col->field()->setEnumHints(types);
 
-    d->data->addColumn(col = new KexiTableViewColumn("comments", KexiDB::Field::Text,
+    d->data->addColumn(col = new KexiDB::TableViewColumn("comments", KexiDB::Field::Text,
             i18n("Comments"), i18n("Describes additional comments for the field")));
 
     d->view->setSpreadSheetMode();
 
-    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)),
-            this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*, int, QVariant&, KexiDB::ResultInfo*)));
+    connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
+            this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)));
     connect(d->data, SIGNAL(rowUpdated(KexiDB::RecordData*)),
             this, SLOT(slotRowUpdated(KexiDB::RecordData*)));
     //connect(d->data, SIGNAL(aboutToInsertRow(KexiDB::RecordData*,KexiDB::ResultInfo*,bool)),
     // this, SLOT(slotAboutToInsertRow(KexiDB::RecordData*,KexiDB::ResultInfo*,bool)));
-    connect(d->data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)),
-            this, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&, KexiDB::ResultInfo*, bool)));
+    connect(d->data, SIGNAL(aboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)),
+            this, SLOT(slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)));
 
     setMinimumSize(d->view->minimumSizeHint().width(), d->view->minimumSizeHint().height());
     d->view->setFocus();
@@ -479,8 +479,8 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
     //----
     d->updatePropertiesVisibility(field.type(), *set);
 
-    connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     d->sets->set(row, set, newOne);
     return set;

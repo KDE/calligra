@@ -45,6 +45,7 @@
 
 KWPart::KWPart(QObject *parent)
     : KoPart(parent)
+    , m_document(0)
 {
     setComponentData(KWFactory::componentData(), false);
 

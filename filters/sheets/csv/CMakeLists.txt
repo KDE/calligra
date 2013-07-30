@@ -1,27 +1,35 @@
-include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES})
+include_directories(
+    ${CMAKE_SOURCE_DIR}/sheets
+    ${KOMAIN_INCLUDES}
+)
 
-########### next target ###############
+if(SHOULD_BUILD_FILTER_CSV_TO_SHEETS)
 
-set(csvimport_PART_SRCS csvimport.cc)
+set(csv2sheets_PART_SRCS csvimport.cc)
 
-kde4_add_plugin(csvimport ${csvimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_csv2sheets ${csv2sheets_PART_SRCS})
 
-target_link_libraries(csvimport calligrasheetscommon kowidgets)
+target_link_libraries(calligra_filter_csv2sheets calligrasheetscommon kowidgets)
 
-install(TARGETS csvimport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_csv2sheets DESTINATION ${PLUGIN_INSTALL_DIR})
 
-########### next target ###############
+install( FILES  kspread_csv_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-set(csvexport_PART_SRCS csvexport.cc csvexportdialog.cpp )
+endif(SHOULD_BUILD_FILTER_CSV_TO_SHEETS)
 
-kde4_add_ui_files(csvexport_PART_SRCS exportdialogui.ui )
 
-kde4_add_plugin(csvexport ${csvexport_PART_SRCS})
+if(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)
 
-target_link_libraries(csvexport calligrasheetscommon)
+set(sheets2csv_PART_SRCS csvexport.cc csvexportdialog.cpp )
 
-install(TARGETS csvexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+kde4_add_ui_files(sheets2csv_PART_SRCS exportdialogui.ui )
 
-########### install files ###############
+kde4_add_plugin(calligra_filter_sheets2csv ${sheets2csv_PART_SRCS})
 
-install( FILES  kspread_csv_import.desktop kspread_csv_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+target_link_libraries(calligra_filter_sheets2csv calligrasheetscommon)
+
+install(TARGETS calligra_filter_sheets2csv  DESTINATION ${PLUGIN_INSTALL_DIR})
+
+install( FILES  kspread_csv_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
+endif(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)

@@ -23,6 +23,17 @@
 
 class KisImageBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
+
+/*
+   pre and post are split because:
+
+21:12:20 < dmitryK> boud: i guess it was somehow related to the fact that the maskWidth/maskHeight should
+                    correspond to the size of the mask returned by paintDevice()
+21:13:33 < dmitryK> boud: the random stuff is called once per brush->paintDevice() call, after the device is
+                    returned to the paint op, that is "preparing the randomness for the next call"
+21:14:16 < dmitryK> boud: and brushesPipe->currentBrush() always returning the same brush for any particular
+                    paintInfo.
+*/
 protected:
     static int selectPre(KisParasite::SelectionMode mode,
                          int index, int rank,
@@ -48,6 +59,12 @@ protected:
                 angle -= 2.0 * M_PI;
             index = static_cast<int>(angle / (2.0 * M_PI) * rank);
             break;
+        case KisParasite::TiltX:
+            index = qRound(info.xTilt() / 2.0 * rank) + rank / 2;
+            break;
+        case KisParasite::TiltY:
+            index = qRound(info.yTilt() / 2.0 * rank) + rank / 2;
+            break;
         default:
             warnImage << "Parasite" << mode << "is not implemented";
             index = 0;
@@ -69,6 +86,9 @@ protected:
             break;
         case KisParasite::Pressure:
         case KisParasite::Angular:
+            break;
+        case KisParasite::TiltX:
+        case KisParasite::TiltY:
             break;
         default:
             warnImage << "Parasite" << mode << "is not implemented";
@@ -375,14 +395,14 @@ quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
     return m_d->brushesPipe.brushIndex(info);
 }
 
-qint32 KisImagePipeBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
+qint32 KisImagePipeBrush::maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.maskWidth(scale, angle, info);
+    return m_d->brushesPipe.maskWidth(scale, angle, subPixelX, subPixelY, info);
 }
 
-qint32 KisImagePipeBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
+qint32 KisImagePipeBrush::maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
 {
-    return m_d->brushesPipe.maskHeight(scale, angle, info);
+    return m_d->brushesPipe.maskHeight(scale, angle, subPixelX, subPixelY, info);
 }
 
 void KisImagePipeBrush::setAngle(qreal _angle)

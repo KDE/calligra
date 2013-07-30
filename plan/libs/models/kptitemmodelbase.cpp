@@ -39,7 +39,7 @@
 #include <QHeaderView>
 #include <QStylePainter>
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <klineedit.h>
 
 

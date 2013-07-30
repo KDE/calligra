@@ -58,6 +58,12 @@ target_link_libraries(kordf ${extra_libs} komain )
 target_link_libraries(kordf ${SOPRANO_LIBRARIES})
 target_link_libraries(kordf LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
 
+if (KdepimLibs_FOUND)
+   include_directories(${KDEPIMLIBS_INCLUDE_DIR})
+   add_definitions(-DKDEPIMLIBS_FOUND)
+    target_link_libraries(kordf ${KDE4_KABC_LIBS} ${KDE4_KCAL_LIBS})
+endif (KdepimLibs_FOUND)
+
 if( MARBLE_FOUND )
 include_directories(${MARBLE_INCLUDE_DIR})
 target_link_libraries(kordf ${MARBLE_LIBRARIES})
@@ -70,8 +76,6 @@ set_target_properties(kordf PROPERTIES
 VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kordf ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
-########### install files ###############
 
 install( FILES
     kordf_export.h
@@ -97,5 +101,4 @@ install( FILES
     InsertSemanticObjectCreateAction.h
     InsertSemanticObjectReferenceAction.h
     KoSemanticStylesheetsEditor.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

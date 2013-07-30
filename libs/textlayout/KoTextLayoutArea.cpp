@@ -62,7 +62,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoBibliographyInfo.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextFrame>
 #include <QTextTable>
@@ -436,6 +436,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     d->startOfArea = new FrameIterator(cursor);
     d->endOfArea = 0;
     d->y = top();
+    d->neededWidth = 0;
     setBottom(top());
     d->bottomSpacing = 0;
     d->footNoteAutoCount = 0;
@@ -639,11 +640,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         d->blockRects.last().setBottom(d->y);
     }
     if (d->maximumAllowedWidth>0) {
-        d->left = d->boundingRect.left();
-        d->right = d->boundingRect.right();
+        d->right += d->neededWidth - d->width;
         d->maximumAllowedWidth = 0;
         setVirginPage(true);
-
         KoTextLayoutArea::layout(new FrameIterator(d->startOfArea));
     }
     return true; // we have layouted till the end of the frame
@@ -1213,7 +1212,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
         runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ d->isRtl, QPointF(x(), d->y));
 
-        documentLayout()->positionAnchorTextRanges(block.position()+line.textStart(), line.textLength());
+        documentLayout()->positionAnchorTextRanges(block.position()+line.textStart(), line.textLength(), block.document());
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;
@@ -1295,6 +1294,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         confirmFootNotes();
         anyLineAdded = true;
         maxLineHeight = qMax(maxLineHeight, addLine(line, cursor, blockData));
+
+        d->neededWidth = qMax(d->neededWidth, line.naturalTextWidth() + d->indent);
 
         if (!runAroundHelper.stayOnBaseline() && !(block.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)
          && block.length() <= 1)) {
@@ -1531,7 +1532,12 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 
         bool lineBreak = false;
         int lastCharPos = block.position() + line.textStart() + line.textLength() - 1;
-        if (block.text().at(line.textStart() + line.textLength() - 1) == QChar(0x2028)) {
+        int blockLastCharWithoutPreedit = line.textStart() + line.textLength() - 1;
+        if (block.layout()->preeditAreaPosition() >= block.position() + line.textStart() &&
+                block.layout()->preeditAreaPosition() <= lastCharPos) {
+            blockLastCharWithoutPreedit -= block.layout()->preeditAreaText().length();
+        }
+        if (block.text().at(blockLastCharWithoutPreedit) == QChar(0x2028)) {
             // Was a line with line-break
             if (line.textLength() != 1) { //unless empty line we should ignore the format of it
                 --lastCharPos;

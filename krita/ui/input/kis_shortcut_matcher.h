@@ -27,6 +27,7 @@
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
+class QTabletEvent;
 
 class KisStrokeShortcut;
 class KisAbstractInputAction;
@@ -155,6 +156,17 @@ public:
     bool mouseMoved(QMouseEvent *event);
 
     /**
+     * Handles the High Resolution tablet events
+     * (used on Windows only)
+     *
+     * \param event the event that caused this call
+     *
+     * \return whether the event has been handled successfully and
+     * should be eaten by the events filter
+     */
+    bool tabletMoved(QTabletEvent *event);
+
+    /**
      * Resets the internal state of the matcher
      *
      * This should be done when the window has lost the focus for
@@ -170,6 +182,11 @@ public:
      * when the mouse button will be released.
      */
     void suppressAllActions(bool value);
+
+    /**
+     * Remove all shortcuts that have been registered.
+     */
+    void clearShortcuts();
 
 private:
     friend class KisInputManagerTest;

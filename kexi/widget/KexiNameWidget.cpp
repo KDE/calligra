@@ -26,8 +26,9 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include <kexiutils/validator.h>
+#include <db/validator.h>
 #include <kexiutils/identifier.h>
+#include <kexiutils/multivalidator.h>
 #include <core/kexi.h>
 
 using namespace KexiUtils;
@@ -130,10 +131,10 @@ void KexiNameWidget::init(
     d->nameWarning = i18n("Please enter the name.");
     d->captionWarning = i18n("Please enter the caption.");
 
-    connect(d->le_caption, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotCaptionTxtChanged(const QString&)));
-    connect(d->le_name, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotNameTxtChanged(const QString&)));
+    connect(d->le_caption, SIGNAL(textChanged(QString)),
+            this, SLOT(slotCaptionTxtChanged(QString)));
+    connect(d->le_name, SIGNAL(textChanged(QString)),
+            this, SLOT(slotNameTxtChanged(QString)));
     connect(d->le_caption, SIGNAL(returnPressed()),
             this, SIGNAL(returnPressed()));
     connect(d->le_name, SIGNAL(returnPressed()),
@@ -293,7 +294,8 @@ bool KexiNameWidget::checkValidity()
     }
     QString dummy, message, details;
     if (d->validator->check(dummy, d->le_name->text(), message, details)
-            == Validator::Error) {
+            == KexiDB::Validator::Error)
+    {
         KMessageBox::detailedSorry(0, message, details);
         d->le_name->setFocus();
         return false;
@@ -301,12 +303,12 @@ bool KexiNameWidget::checkValidity()
     return true;
 }
 
-Validator *KexiNameWidget::nameValidator() const
+KexiDB::Validator *KexiNameWidget::nameValidator() const
 {
     return d->validator;
 }
 
-void KexiNameWidget::addNameSubvalidator(Validator* validator, bool owned)
+void KexiNameWidget::addNameSubvalidator(KexiDB::Validator* validator, bool owned)
 {
     d->validator->addSubvalidator(validator, owned);
 }

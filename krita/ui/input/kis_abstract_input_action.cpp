@@ -20,23 +20,24 @@
 
 #include <QPointF>
 #include <QMouseEvent>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 class KisAbstractInputAction::Private
 {
 public:
-    KisInputManager* inputManager;
-
     QString name;
     QString description;
     QHash<QString, int> indexes;
 
     QPointF lastMousePosition;
+
+    static KisInputManager* inputManager;
 };
 
-KisAbstractInputAction::KisAbstractInputAction(KisInputManager* manager) : d(new Private)
+KisInputManager *KisAbstractInputAction::Private::inputManager = 0;
+
+KisAbstractInputAction::KisAbstractInputAction() : d(new Private)
 {
-    d->inputManager = manager;
     d->indexes.insert(i18n("Activate"), 0);
 }
 
@@ -85,9 +86,14 @@ void KisAbstractInputAction::mouseMoved(const QPointF &lastPos, const QPointF &p
     Q_UNUSED(pos);
 }
 
+bool KisAbstractInputAction::supportsHiResInputEvents() const
+{
+    return false;
+}
+
 KisInputManager* KisAbstractInputAction::inputManager() const
 {
-    return d->inputManager;
+    return Private::inputManager;
 }
 
 QString KisAbstractInputAction::name() const
@@ -98,6 +104,11 @@ QString KisAbstractInputAction::name() const
 QString KisAbstractInputAction::description() const
 {
     return d->description;
+}
+
+int KisAbstractInputAction::priority() const
+{
+    return 0;
 }
 
 QHash< QString, int > KisAbstractInputAction::shortcutIndexes() const
@@ -118,4 +129,9 @@ void KisAbstractInputAction::setDescription(const QString& description)
 void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int >& indexes)
 {
     d->indexes = indexes;
+}
+
+void KisAbstractInputAction::setInputManager(KisInputManager *manager)
+{
+    Private::inputManager = manager;
 }

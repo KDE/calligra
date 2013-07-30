@@ -43,7 +43,7 @@
 #include <kis_fixed_paint_device.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-    : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
+    : KisBrushBasedPaintOp(settings, painter), m_opacityOption(settings->node()), m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -97,7 +97,7 @@ KisBrushOp::~KisBrushOp()
     delete m_hsvTransformation;
 }
 
-qreal KisBrushOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return 1.0;
 
@@ -110,7 +110,8 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         return 1.0;
 
     qreal scale = m_sizeOption.apply(info);
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
+
 
     KisPaintDeviceSP device = painter()->device();
 
@@ -148,13 +149,13 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
-    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->colorSpace(),
-                                                    m_colorSource,
-                                                    scale, scale,
-                                                    rotation,
-                                                    info,
-                                                    xFraction, yFraction,
-                                                    m_softnessOption.apply(info));
+    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
+                                                     m_colorSource,
+                                                     scale, scale,
+                                                     rotation,
+                                                     info,
+                                                     xFraction, yFraction,
+                                                     m_softnessOption.apply(info));
 
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
 
@@ -164,30 +165,29 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(origOpacity);
     painter()->setFlow(origFlow);
 
-    if (m_spacingOption.isChecked())
-        return spacing(m_spacingOption.apply(info));
-
-    return spacing(scale);
+    return effectiveSpacing(dab->bounds().width(),
+                            dab->bounds().height(),
+                            m_spacingOption, info);
 }
 
 KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
     if(m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
-        if (!m_dab) {
-            m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        if (!m_lineCacheDevice) {
+            m_lineCacheDevice = source()->createCompositionSourceDevice();
         } else {
-            m_dab->clear();
+            m_lineCacheDevice->clear();
         }
 
-        KisPainter p(m_dab);
+        KisPainter p(m_lineCacheDevice);
         p.setPaintColor(painter()->paintColor());
         p.drawDDALine(pi1.pos(), pi2.pos());
 
-        QRect rc = m_dab->extent();
-        painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+        QRect rc = m_lineCacheDevice->extent();
+        painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
 
-        return KisDistanceInformation(0.0, 0.0);
+        return KisDistanceInformation();
     }
     return KisPaintOp::paintLine(pi1, pi2, savedDist);
 }

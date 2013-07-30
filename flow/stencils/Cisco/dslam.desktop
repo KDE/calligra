@@ -1,8 +1,11 @@
 [Desktop Entry]
 Name=DSLAM
 Name[bg]=DSLAM
+Name[bs]=DSLAM
 Name[ca]=DSLAM
 Name[ca@valencia]=DSLAM
+Name[cs]=DSLAM
+Name[da]=DSLAM
 Name[de]=DSLAM
 Name[el]=DSLAM
 Name[es]=DSLAM
@@ -12,6 +15,7 @@ Name[gl]=DSLAM
 Name[hu]=DSLAM
 Name[it]=DSLAM
 Name[kk]=DSLAM
+Name[lt]=DSLAM
 Name[nb]=DSLAM
 Name[nds]=DSLAM
 Name[nl]=DSLAM
@@ -20,6 +24,7 @@ Name[pt]=DSLAM
 Name[pt_BR]=DSLAM
 Name[ru]=DSLAM
 Name[sk]=DSLAM
+Name[sl]=DSLAM
 Name[sv]=Åtkomstmultiplexer för digital abonnentlinje
 Name[uk]=DSLAM
 Name[x-test]=xxDSLAMxx

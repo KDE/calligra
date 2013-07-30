@@ -1630,23 +1630,58 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
 // ========== TxO ==========
 
+class TxORecord::Private
+{
+public:
+    QString text;
+    QSharedPointer<QTextDocument> richText; // NULL if plainText else it defines the richText
+
+    TxORecord::HorizontalAlignment hAlign;
+    TxORecord::VerticalAlignment vAlign;
+};
+
+
 const unsigned TxORecord::id = 0x1B6;
 
-TxORecord::TxORecord(Workbook *book) : Record(book) {}
-TxORecord::~TxORecord() {}
+TxORecord::TxORecord(Workbook *book)
+  : Record(book)
+{
+    d = new TxORecord::Private();
+}
+
+TxORecord::TxORecord(const TxORecord& other)
+ : Record(other)
+{
+    d = new TxORecord::Private();
+    operator=(other);
+}
+
+TxORecord::~TxORecord()
+{
+    delete d;
+}
+
+TxORecord& TxORecord::operator=(const TxORecord &other)
+{
+    d->text =     other.d->text;
+    d->richText = other.d->richText;
+    d->hAlign =   other.d->hAlign;
+    d->vAlign =   other.d->vAlign;
+    return *this;
+}
 
 void TxORecord::dump(std::ostream& out) const
 {
     out << "TxO" << std::endl;
-    out << "   " << m_text << " " << halign << " " << valign;
+    out << "   " << d->text << " " << d->hAlign << " " << d->vAlign;
 }
 
 void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
     const unsigned long opts1 = readU16(data);
     //const bool reserved1 = opts1 & 0x01;
-    halign = static_cast<HorizontalAlignment>((opts1 & 0x000e) >> 1); // 3 bits
-    valign = static_cast<VerticalAlignment>((opts1 & 0x0070) >> 4); // 3 bits
+    d->hAlign = static_cast<HorizontalAlignment>((opts1 & 0x000e) >> 1); // 3 bits
+    d->vAlign = static_cast<VerticalAlignment>((opts1 & 0x0070) >> 4); // 3 bits
     //const unsigned long rot = readU16(data + 2);
     // 4 bytes reserved
 
@@ -1676,31 +1711,31 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     //Q_ASSERT((opts << 1) == 0x0);
 
     // XLUnicodeStringNoCch
-    m_text.clear();
+    d->text.clear();
     unsigned k = 1;
     if(fHighByte) {
         for (; startPict + k + 1 < endPict; k += 2) {
             unsigned zc = readU16(startPict + k);
             if (!zc) break;
             if (!QChar(zc).isPrint() && zc != 10) {
-                m_text.clear();
+                d->text.clear();
                 break;
             }
-            m_text.append(QChar(zc));
+            d->text.append(QChar(zc));
         }
     } else {
         for (; startPict + k < endPict; k += 1) {
             unsigned char uc = readU8(startPict + k) + 0x0*256;
             if (!uc) break;
             if (!QChar(uc).isPrint() && uc != 10) {
-                m_text.clear();
+                d->text.clear();
                 break;
             }
-            m_text.append(QChar(uc));
+            d->text.append(QChar(uc));
         }
     }
 
-    m_doc.clear();
+    d->richText.clear();
 
     // Now look for TxORun structures that specify the formatting run information for the TxO record.
     int ToXRunsPositionIndex = 0;
@@ -1716,11 +1751,11 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         ++ToXRunsPositionIndex;
     } while(true);
     if (ToXRunsPositionIndex > 0) {
-        m_doc = QSharedPointer<QTextDocument>(new QTextDocument());
+        d->richText = QSharedPointer<QTextDocument>(new QTextDocument());
         // also add a textrangemanager, as KoTextWriter assumes one
-        KoTextDocument(m_doc).setTextRangeManager(new KoTextRangeManager);
-        m_doc->setPlainText(m_text);
-        QTextCursor cursor(m_doc.data());
+        KoTextDocument(d->richText).setTextRangeManager(new KoTextRangeManager);
+        d->richText->setPlainText(d->text);
+        QTextCursor cursor(d->richText.data());
         //cursor.setVisualNavigation(true);
         QTextCharFormat format;
         unsigned pos = continuePositions[ToXRunsPositionIndex];
@@ -1734,7 +1769,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
                 cursor.setPosition(ich, QTextCursor::MoveAnchor);
             }
 
-            if (ich >= unsigned(m_text.length())) {
+            if (ich >= unsigned(d->text.length())) {
                 break;
             }
 
@@ -1752,8 +1787,26 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         }
     }
 
-    std::cout << "TxORecord::setData size=" << size << " text=" << qPrintable(m_text) << std::endl;
+    std::cout << "TxORecord::setData size=" << size << " text=" << qPrintable(d->text) << std::endl;
 }
+
+const QString& TxORecord::text() const
+{
+    return d->text;
+}
+TxORecord::HorizontalAlignment TxORecord::hAlign() const
+{
+    return d->hAlign;
+}
+TxORecord::VerticalAlignment TxORecord::vAlign() const
+{
+    return d->vAlign;
+}
+const QTextDocument* TxORecord::richText() const
+{
+    return d->richText.data();
+}
+
 
 // ========== MsoDrawing ==========
 
@@ -2668,7 +2721,6 @@ void ExcelReader::handleEOF(EOFRecord* record)
 
 #ifdef SWINDER_XLS2RAW
 
-#include <iostream>
 #include <QApplication>
 
 int main(int argc, char ** argv)

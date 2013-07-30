@@ -60,7 +60,7 @@ KexiDataTableView::init()
 // m_records = 0;
 // m_first = false;
 
-// connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotMoving(int)));
+// connect(this, SIGNAL(contentsMoving(int,int)), this, SLOT(slotMoving(int)));
 // connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
 
@@ -104,7 +104,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
         return false;
     }
 
-    KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
+    KexiDB::TableViewData *tv_data = new KexiDB::TableViewData(m_cursor);
     KexiDataTable* dataTable = qobject_cast<KexiDataTable*>(parentWidget());
     if (dataTable) {
         dataTable->loadTableViewSettings(tv_data);

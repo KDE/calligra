@@ -312,6 +312,7 @@ int m_rot; //! set by read_xfrm()
 QVector<GroupProp> m_svgProp; //! value of the parent
 
 QString m_xlinkHref; //!< set by read_blip()
+bool m_ignoreLinkHref; //!< to ignore picture with a style which has picture fill
 QString m_cNvPrId; //!< set by read_cNvPr()
 QString m_cNvPrName; //!< set by read_cNvPr()
 QString m_cNvPrDescr; //!< set by read_cNvPr()

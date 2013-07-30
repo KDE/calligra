@@ -18,31 +18,30 @@
 */
 
 #include "KoPAPageBase.h"
+
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
 #include "KoPAPixmapCache.h"
 #include "KoPAPageContainerModel.h"
-#include "KoPASavingContext.h"
 #include "KoPAUtil.h"
-
-#include <QPainter>
-
-#include <kdebug.h>
 
 #include <KoXmlNS.h>
 #include <KoPageLayout.h>
-#include <KoShapeSavingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLayer.h>
-#include <KoShapeRegistry.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoXmlWriter.h>
+#include <KoOdfLoadingContext.h>
 #include <KoViewConverter.h>
+#include <KoShapeLayer.h>
+#include <KoShapeRegistry.h>
 #include <KoShapeBackground.h>
 #include <KoZoomHandler.h>
+
+#include <kdebug.h>
+
+#include <QPainter>
 
 
 KoPAPageBase::KoPAPageBase()
@@ -136,7 +135,7 @@ QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 
 void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
 {
-    KoShapeBackground * bg = background();
+    QSharedPointer<KoShapeBackground>  bg = background();
     if( bg )
         bg->fillStyle( style, paContext );
 }

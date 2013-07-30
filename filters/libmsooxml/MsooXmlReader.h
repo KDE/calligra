@@ -24,14 +24,14 @@
 #ifndef MSOOXMLREADER_H
 #define MSOOXMLREADER_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <QXmlStreamReader>
 #include <QStack>
 #include <QUrl>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <KoXmlReader.h>
 #include <KoFilter.h>
 #include <KoOdfExporter.h>
@@ -44,7 +44,7 @@ namespace MSOOXML
 class MsooXmlRelationships;
 
 //! Context for MsooXmlReader::read()
-class MSOOXML_EXPORT MsooXmlReaderContext
+class KOMSOOXML_EXPORT MsooXmlReaderContext
 {
 protected:
     MsooXmlReaderContext(MsooXmlRelationships* _relationships = 0);
@@ -63,7 +63,7 @@ private:
 };
 
 //! A base class reading MSOOXML parts like document.xml or styles.xml.
-class MSOOXML_EXPORT MsooXmlReader : public QXmlStreamReader, public KoOdfWriters
+class KOMSOOXML_EXPORT MsooXmlReader : public QXmlStreamReader, public KoOdfWriters
 {
 public:
     explicit MsooXmlReader(KoOdfWriters *writers);
@@ -154,6 +154,6 @@ private:
 
 //! kDebug() stream operator. Writes this reader to the debug output in a nicely formatted way.
 //! @todo add the same for QXmlStreamWriter
-MSOOXML_EXPORT QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader);
+KOMSOOXML_EXPORT QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader);
 
 #endif //MSOOXMLREADER_H

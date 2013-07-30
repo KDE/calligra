@@ -56,7 +56,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     KisBrushOption brushOption;
     brushOption.readOptionSetting(settings);
     KisBrushSP brush = brushOption.brush();
-    KisFixedPaintDeviceSP dab = cachedDab(source()->colorSpace());
+    KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(source()->colorSpace(), 1.0, 0.0, KisPaintInformation());
     } else {
@@ -106,7 +106,7 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 }
 
 
-qreal KisHairyPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 0.5;
@@ -121,7 +121,7 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     if (!painter()) return KisDistanceInformation();
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = source()->createCompositionSourceDevice();
     } else {
         m_dab->clear();
     }
@@ -143,9 +143,5 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
-
-    return KisDistanceInformation(0, dragVec.norm());
+    return KisDistanceInformation();
 }

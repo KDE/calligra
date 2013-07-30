@@ -20,9 +20,14 @@
 
 #include <klocale.h>
 #include <kundo2command.h>
+
 #include <KoMainWindow.h>
 #include <KoDocumentEntry.h>
 #include <KoServiceProvider.h>
+#include <KoPart.h>
+#include <KoPathShape.h>
+#include <KoShapeController.h>
+
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_clipboard.h"
@@ -39,27 +44,11 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_selection_manager.h"
-#include "kis_selection_manager_p.h"
-
+#include "kis_transaction_based_command.h"
+#include "kis_selection_filters.h"
+#include "kis_shape_selection.h"
 
 namespace ActionHelper {
-    KisProcessingApplicator* beginAction(KisView2 *view, const QString &actionName) {
-        KisImageSP image = view->image();
-        Q_ASSERT(image);
-
-        KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
-
-        return new KisProcessingApplicator(image, 0,
-                                           KisProcessingApplicator::NONE,
-                                           emitSignals, actionName);
-    }
-
-    void endAction(KisProcessingApplicator *applicator, const QString &xmlData) {
-        Q_UNUSED(xmlData);
-        applicator->end();
-        delete applicator;
-    }
 
     void copyFromDevice(KisView2 *view, KisPaintDeviceSP device) {
         KisImageWSP image = view->image();
@@ -104,41 +93,11 @@ namespace ActionHelper {
         KisClipboard::instance()->setClip(clip, rc.topLeft());
     }
 
-    class KisTransactionBasedCommand : public KUndo2Command
-    {
-    public:
-        KisTransactionBasedCommand(const QString &text = "",
-                                   KUndo2Command *parent = 0)
-            : KUndo2Command(text, parent),
-              m_firstRedo(true),
-              m_transactionData(0) {}
-
-        ~KisTransactionBasedCommand() {
-            delete m_transactionData;
-        }
-
-        void redo() {
-            if (m_firstRedo) {
-                m_transactionData = paint();
-            }
-            m_transactionData->redo();
-        }
-        void undo() {
-            m_transactionData->undo();
-        }
-
-    protected:
-        virtual KUndo2Command* paint() = 0;
-    private:
-        bool m_firstRedo;
-        KUndo2Command *m_transactionData;
-    };
-
 }
 
 void KisSelectAllActionFactory::run(KisView2 *view)
 {
-    KisProcessingApplicator *ap = ActionHelper::beginAction(view, i18n("Select All"));
+    KisProcessingApplicator *ap = beginAction(view, i18n("Select All"));
 
     KisImageWSP image = view->image();
     if (!image->globalSelection()) {
@@ -147,13 +106,13 @@ void KisSelectAllActionFactory::run(KisView2 *view)
                          KisStrokeJobData::EXCLUSIVE);
     }
 
-    struct SelectAll : public ActionHelper::KisTransactionBasedCommand {
+    struct SelectAll : public KisTransactionBasedCommand {
         SelectAll(KisImageSP image) : m_image(image) {}
         KisImageSP m_image;
         KUndo2Command* paint() {
             KisSelectionSP selection = m_image->globalSelection();
-            KisSelectionTransaction transaction(QString(), m_image->undoAdapter(), selection);
-            selection->getOrCreatePixelSelection()->select(m_image->bounds());
+            KisSelectionTransaction transaction(QString(), selection->pixelSelection());
+            selection->pixelSelection()->select(m_image->bounds());
             return transaction.endAndTake();
         }
     };
@@ -162,25 +121,25 @@ void KisSelectAllActionFactory::run(KisView2 *view)
                      KisStrokeJobData::SEQUENTIAL,
                      KisStrokeJobData::EXCLUSIVE);
 
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisDeselectActionFactory::run(KisView2 *view)
 {
     KUndo2Command *cmd = new KisDeselectGlobalSelectionCommand(view->image());
 
-    KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
+    KisProcessingApplicator *ap = beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisReselectActionFactory::run(KisView2 *view)
 {
     KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(view->image());
 
-    KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
+    KisProcessingApplicator *ap = beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
@@ -191,7 +150,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
         selection->selectedRect() : view->image()->bounds();
-    KisPaintDeviceSP filled = new KisPaintDevice(node->paintDevice()->colorSpace());
+    KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
 
     QString actionName;
 
@@ -203,14 +162,18 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
         painter.end();
         actionName = i18n("Fill with Pattern");
     } else if (fillSource == "bg") {
-        filled->setDefaultPixel(view->resourceProvider()->bgColor().data());
+        KoColor color(filled->colorSpace());
+        color.fromKoColor(view->resourceProvider()->bgColor());
+        filled->setDefaultPixel(color.data());
         actionName = i18n("Fill with Background Color");
     } else if (fillSource == "fg") {
-        filled->setDefaultPixel(view->resourceProvider()->fgColor().data());
+        KoColor color(filled->colorSpace());
+        color.fromKoColor(view->resourceProvider()->fgColor());
+        filled->setDefaultPixel(color.data());
         actionName = i18n("Fill with Foreground Color");
     }
 
-    struct BitBlt : public ActionHelper::KisTransactionBasedCommand {
+    struct BitBlt : public KisTransactionBasedCommand {
         BitBlt(KisPaintDeviceSP src, KisPaintDeviceSP dst,
                KisSelectionSP sel, const QRect &rc)
             : m_src(src), m_dst(dst), m_sel(sel), m_rc(rc){}
@@ -231,14 +194,14 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
         }
     };
 
-    KisProcessingApplicator *ap = ActionHelper::beginAction(view, actionName);
+    KisProcessingApplicator *ap = beginAction(view, actionName);
     ap->applyCommand(new BitBlt(filled, view->activeDevice()/*node->paintDevice()*/, selection, selectedRect),
                      KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
 
-    KisUiActionConfiguration config(id());
+    KisOperationConfiguration config(id());
     config.setProperty("fill-source", fillSource);
 
-    ActionHelper::endAction(ap, config.toXML());
+    endAction(ap, config.toXML());
 }
 
 void KisClearActionFactory::run(KisView2 *view)
@@ -251,64 +214,6 @@ void KisClearActionFactory::run(KisView2 *view)
     if (!node || !node->isEditable()) return;
 
     view->canvasBase()->toolProxy()->deleteSelection();
-}
-
-void KisApplySelectionFilterActionFactory::runFromXML(KisView2 *view, const KisUiActionConfiguration &config)
-{
-    QString filterName = config.getString("filter-name", "no-filter");
-
-    KisSelectionFilter *filter = 0;
-
-    int radius = config.getInt("radius", 1);
-    int xRadius = config.getInt("x-radius", 1);
-    int yRadius = config.getInt("y-radius", 1);
-    bool edgeLock = config.getBool("edge-lock", false);
-
-    if (filterName == "invert") {
-        filter = new KisInvertSelectionFilter();
-    } else if (filterName == "grow") {
-        filter = new KisGrowSelectionFilter(xRadius, yRadius);
-    } else if (filterName == "shrink") {
-        filter = new KisShrinkSelectionFilter(xRadius, yRadius, edgeLock);
-    } else if (filterName == "smooth") {
-        filter = new KisSmoothSelectionFilter();
-    } else if (filterName == "erode") {
-        filter = new KisErodeSelectionFilter();
-    } else if (filterName == "dilate") {
-        filter = new KisDilateSelectionFilter();
-    } else if (filterName == "border") {
-        filter = new KisBorderSelectionFilter(xRadius, yRadius);
-    } else if (filterName == "feather") {
-        filter = new KisFeatherSelectionFilter(radius);
-    }
-
-    if (!filter) return;
-
-    KisSelectionSP selection = view->selection();
-    if (!selection) return;
-
-    struct FilterSelection : public ActionHelper::KisTransactionBasedCommand {
-        FilterSelection(KisImageSP image, KisSelectionSP sel, KisSelectionFilter *filter)
-            : m_image(image), m_sel(sel), m_filter(filter) {}
-        ~FilterSelection() { delete m_filter;}
-        KisImageSP m_image;
-        KisSelectionSP m_sel;
-        KisSelectionFilter *m_filter;
-
-        KUndo2Command* paint() {
-            KisSelectionTransaction transaction("", m_image->undoAdapter(), m_sel);
-            KisPixelSelectionSP mergedSelection = m_sel->getOrCreatePixelSelection();
-            QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect());
-            m_filter->process(mergedSelection, processingRect);
-            m_sel->setDirty(processingRect); // check if really needed
-            return transaction.endAndTake();
-        }
-    };
-
-    KisProcessingApplicator *ap = ActionHelper::beginAction(view, filter->name());
-    ap->applyCommand(new FilterSelection(view->image(), selection, filter),
-                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-    ActionHelper::endAction(ap, config.toXML());
 }
 
 void KisImageResizeToSelectionActionFactory::run(KisView2 *view)
@@ -351,14 +256,14 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
         KUndo2Command *command = 0;
 
         if (willCut && node->isEditable()) {
-            struct ClearSelection : public ActionHelper::KisTransactionBasedCommand {
+            struct ClearSelection : public KisTransactionBasedCommand {
                 ClearSelection(KisNodeSP node, KisSelectionSP sel)
                     : m_node(node), m_sel(sel) {}
                 KisNodeSP m_node;
                 KisSelectionSP m_sel;
 
                 KUndo2Command* paint() {
-                    KisSelectedTransaction transaction("", m_node);
+                    KisTransaction transaction("", m_node->paintDevice());
                     m_node->paintDevice()->clearSelection(m_sel);
                     m_node->setDirty(m_sel->selectedRect());
                     return transaction.endAndTake();
@@ -369,7 +274,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
         }
 
         QString actionName = willCut ? i18n("Cut") : i18n("Copy");
-        KisProcessingApplicator *ap = ActionHelper::beginAction(view, actionName);
+        KisProcessingApplicator *ap = beginAction(view, actionName);
 
         if (command) {
             ap->applyCommand(command,
@@ -377,9 +282,9 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
                              KisStrokeJobData::NORMAL);
         }
 
-        KisUiActionConfiguration config(id());
+        KisOperationConfiguration config(id());
         config.setProperty("will-cut", willCut);
-        ActionHelper::endAction(ap, config.toXML());
+        endAction(ap, config.toXML());
     }
 }
 
@@ -392,48 +297,24 @@ void KisCopyMergedActionFactory::run(KisView2 *view)
     ActionHelper::copyFromDevice(view, dev);
     image->unlock();
 
-    KisProcessingApplicator *ap = ActionHelper::beginAction(view, i18n("Copy Merged"));
-    ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+    KisProcessingApplicator *ap = beginAction(view, i18n("Copy Merged"));
+    endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
 void KisPasteActionFactory::run(KisView2 *view)
 {
     KisImageWSP image = view->image();
-
-    //figure out where to position the clip
-    // XXX: Fix this for internal points & zoom! (BSAR)
-    QWidget * w = view->canvas();
-    QPoint center = QPoint(w->width() / 2, w->height() / 2);
-    QPoint bottomright = QPoint(w->width(), w->height());
-    if (bottomright.x() > image->width())
-        center.setX(image->width() / 2);
-    if (bottomright.y() > image->height())
-        center.setY(image->height() / 2);
-
-    const KoCanvasBase* canvasBase = view->canvasBase();
-    const KoViewConverter* viewConverter = view->canvasBase()->viewConverter();
-
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(
-        QPoint(
-            viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX()) + center.x(),
-            viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY()) + center.y()));
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true);
 
     if (clip) {
-        // Pasted layer content could be outside image bounds and invisible, if that is the case move content into the bounds
-        QRect exactBounds = clip->exactBounds();
-        if (!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
-            clip->setX(clip->x() - exactBounds.x());
-            clip->setY(clip->y() - exactBounds.y());
-        }
-
         KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
 
         KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
-        KisProcessingApplicator *ap = ActionHelper::beginAction(view, cmd->text());
+        KisProcessingApplicator *ap = beginAction(view, cmd->text());
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-        ActionHelper::endAction(ap, KisUiActionConfiguration(id()).toXML());
+        endAction(ap, KisOperationConfiguration(id()).toXML());
     } else {
 #ifdef __GNUC__
 #warning "Add saving of XML data for Paste of shapes"
@@ -447,21 +328,14 @@ void KisPasteNewActionFactory::run(KisView2 *view)
 {
     Q_UNUSED(view);
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QPoint());
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
     if (!clip) return;
 
     QRect rect = clip->exactBounds();
     if (rect.isEmpty()) return;
 
-    const QByteArray mimetype = KoServiceProvider::readNativeFormatMimeType();
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
-
-    QString error;
-    KisPart2* part = dynamic_cast<KisPart2*>(entry.createKoPart(&error));
-    if (!part) return;
-    KisDoc2 *doc = new KisDoc2(part);
+    KisDoc2 *doc = new KisDoc2();
     if (!doc) return;
-    part->setDocument(doc);
 
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
@@ -480,7 +354,45 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = new KoMainWindow(part->componentData());
+    KoMainWindow *win = new KoMainWindow(doc->documentPart()->componentData());
     win->show();
     win->setRootDocument(doc);
+}
+
+void KisInvertSelectionOperaton::runFromXML(KisView2* view, const KisOperationConfiguration& config)
+{
+    KisSelectionFilter* filter = new KisInvertSelectionFilter();
+    runFilter(filter, view, config);
+}
+
+void KisSelectionToVectorActionFactory::run(KisView2 *view)
+{
+    KisSelectionSP selection = view->selection();
+
+    if (selection->hasShapeSelection() ||
+        !selection->outlineCacheValid()) {
+
+        return;
+    }
+
+    QPainterPath selectionOutline = selection->outlineCache();
+    QTransform transform = view->canvasBase()->coordinatesConverter()->imageToDocumentTransform();
+
+    KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(selectionOutline));
+    shape->setShapeId(KoPathShapeId);
+
+    /**
+     * Mark a shape that it belongs to a shape selection
+     */
+    if(!shape->userData()) {
+        shape->setUserData(new KisShapeSelectionMarker);
+    }
+
+    KisProcessingApplicator *ap = beginAction(view, i18n("Convert to Vector Selection"));
+
+    ap->applyCommand(view->canvasBase()->shapeController()->addShape(shape),
+                     KisStrokeJobData::SEQUENTIAL,
+                     KisStrokeJobData::EXCLUSIVE);
+
+    endAction(ap, KisOperationConfiguration(id()).toXML());
 }

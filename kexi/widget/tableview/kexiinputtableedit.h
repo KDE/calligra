@@ -23,7 +23,6 @@
 
 #include <klineedit.h>
 #include <QVariant>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 #include "kexitableedit.h"
@@ -37,7 +36,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
     Q_OBJECT
 
 public:
-    KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
+    KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiInputTableEdit();
 

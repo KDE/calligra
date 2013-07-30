@@ -19,6 +19,7 @@
 */
 
 #include "KoDockWidgetTitleBar.h"
+#include "KoDockWidgetTitleBar_p.h"
 #include "KoDockWidgetTitleBarButton.h"
 
 #include <KoIcon.h>
@@ -44,36 +45,6 @@ static inline QDockWidget *parentDock(QWidget *w)
     }
     return qobject_cast<QDockWidget*>(w);
 }
-
-class KoDockWidgetTitleBar::Private
-{
-public:
-    Private(KoDockWidgetTitleBar* thePublic)
-        : thePublic(thePublic),
-            openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
-            closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)),
-            textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
-            preCollapsedWidth(-1)
-    {
-        if (openIcon.isNull())
-            openIcon = koIcon("arrow-down");
-        if (closeIcon.isNull())
-            closeIcon = koIcon("arrow-right");
-    }
-    KoDockWidgetTitleBar* thePublic;
-    KIcon openIcon, closeIcon;
-    QAbstractButton* closeButton;
-    QAbstractButton* floatButton;
-    QAbstractButton* collapseButton;
-
-    KoDockWidgetTitleBar::TextVisibilityMode textVisibilityMode;
-
-    int preCollapsedWidth;
-
-    void toggleFloating();
-    void toggleCollapsed();
-    void featuresChanged(QDockWidget::DockWidgetFeatures features);
-};
 
 KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
         : QWidget(dockWidget), d(new Private(this))
@@ -173,8 +144,8 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     if (d->collapseButton->isVisible()) {
         collapseButtonSize = d->collapseButton->size();
     }
-    titleOpt.rect = QRect(QPoint(fw + mw + collapseButtonSize.width(), fw),
-                        QSize(geometry().width() - (fw * 2) -  mw - collapseButtonSize.width(), geometry().height() - (fw * 2)));
+    titleOpt.rect = QRect(QPoint(fw + mw + collapseButtonSize.width(), 0),
+                          QSize(geometry().width() - (fw * 2) -  mw - collapseButtonSize.width(), geometry().height()));
     titleOpt.title = q->windowTitle();
     titleOpt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
     titleOpt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);

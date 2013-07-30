@@ -63,9 +63,9 @@
 #include <QRegExp>
 #include <QtXml>
 
-#include <KGlobal>
-#include <KDebug>
-#include <KZip>
+#include <kglobal.h>
+#include <kdebug.h>
+#include <kzip.h>
 
 #include <memory>
 
@@ -929,7 +929,7 @@ QColor Utils::colorForLuminance(const QColor& color, const DoubleModifier& modul
     return color;
 }
 
-MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
+KOMSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
 {
     int red = color.red();
     int green = color.green();
@@ -1197,7 +1197,7 @@ QString Utils::defineMarkerStyle(KoGenStyles& mainStyles, const QString& type)
 
     const QString name(markerStyles[id]);
 
-    if (mainStyles.style(name)) {
+    if (mainStyles.style(name, "")) {
         return name;
     }
 
@@ -1437,7 +1437,7 @@ qreal twipToPt(qreal v)
     return TWIP_TO_POINT(v);
 }
 
-MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_pt(const QString& value)
+KOMSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_pt(const QString& value)
 {
     return ST_TwipsMeasure_to_ODF_with_unit(value, twipToPt, "pt");
 }
@@ -1447,12 +1447,12 @@ qreal twipToCm(qreal v)
     return TWIP_TO_CM(v);
 }
 
-MSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString& value)
+KOMSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString& value)
 {
     return ST_TwipsMeasure_to_ODF_with_unit(value, twipToCm, "cm");
 }
 
-MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)
+KOMSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)
 {
     // a positive decimal number immediately following by a unit identifier.
     qreal number(0.0);
@@ -1470,7 +1470,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& 
     return value; // the original is OK
 }
 
-MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& value)
+KOMSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& value)
 {
     QString v(ST_PositiveUniversalMeasure_to_ODF(value));
     if (v.isEmpty())

@@ -37,17 +37,17 @@
 #include <QDateEdit>
 #include <QDateTimeEdit>
 
-#include <KPluginFactory>
-#include <KPushButton>
-#include <KNumInput>
-#include <KComboBox>
-#include <KTextEdit>
-#include <KLineEdit>
-#include <KLocale>
-#include <KDebug>
+#include <kpluginfactory.h>
+#include <kpushbutton.h>
+#include <knuminput.h>
+#include <kcombobox.h>
+#include <ktextedit.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kdebug.h>
 
-#include <KInputDialog>
-#include <KAction>
+#include <kinputdialog.h>
+#include <kaction.h>
 
 #include <KoIcon.h>
 

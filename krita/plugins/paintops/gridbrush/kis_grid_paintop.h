@@ -56,9 +56,9 @@ class KisGridPaintOp : public KisPaintOp
 public:
 
     KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisGridPaintOp();
+    ~KisGridPaintOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
     const KisGridPaintOpSettings* m_settings;
@@ -68,7 +68,6 @@ private:
     qreal              m_xSpacing;
     qreal              m_ySpacing;
     qreal              m_spacing;
-    int                 m_pixelSize;
     KisGridProperties   m_properties;
     KisColorProperties  m_colorProperties;
 

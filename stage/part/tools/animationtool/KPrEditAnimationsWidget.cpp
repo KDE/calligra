@@ -45,10 +45,10 @@
 
 //KDE Headers
 #include <KoIcon.h>
-#include <KLocale>
-#include <KIconLoader>
-#include <KAction>
-#include <KDebug>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kaction.h>
+#include <kdebug.h>
 
 //Calligra Headers
 #include <KoToolManager.h>

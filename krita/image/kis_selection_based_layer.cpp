@@ -39,7 +39,6 @@
 struct KisSelectionBasedLayer::Private
 {
 public:
-    bool showSelection;
     KisSelectionSP selection;
     KisPaintDeviceSP paintDevice;
 };
@@ -57,9 +56,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
     if (!selection)
         initSelection();
     else
-        setSelection(selection);
-
-    setShowSelection(true);
+        setInternalSelection(selection);
 
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
@@ -70,8 +67,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs
         , KisNodeFilterInterface(rhs)
         , m_d(new Private())
 {
-    setSelection(rhs.m_d->selection);
-    setShowSelection(rhs.m_d->showSelection);
+    setInternalSelection(rhs.m_d->selection);
 
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
 }
@@ -85,7 +81,7 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = new KisSelection();
-    m_d->selection->getOrCreatePixelSelection()->select(image()->bounds());
+    m_d->selection->pixelSelection()->select(image()->bounds());
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
@@ -108,7 +104,7 @@ KisPaintDeviceSP KisSelectionBasedLayer::original() const
 }
 KisPaintDeviceSP KisSelectionBasedLayer::paintDevice() const
 {
-    return m_d->selection->getOrCreatePixelSelection();
+    return m_d->selection->pixelSelection();
 }
 
 
@@ -135,7 +131,7 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
              */
             tempSelection = new KisSelection(*tempSelection);
 
-            KisPainter gc2(tempSelection->getOrCreatePixelSelection());
+            KisPainter gc2(tempSelection->pixelSelection());
             gc2.setOpacity(temporaryOpacity());
             gc2.setCompositeOp(temporaryCompositeOp());
             gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);
@@ -184,12 +180,12 @@ void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
     }
 }
 
-KisSelectionSP KisSelectionBasedLayer::selection() const
+KisSelectionSP KisSelectionBasedLayer::internalSelection() const
 {
     return m_d->selection;
 }
 
-void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
+void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
 {
     if (selection) {
         m_d->selection = new KisSelection(*selection.data());
@@ -197,15 +193,6 @@ void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
         m_d->selection->updateProjection();
     } else
         m_d->selection = 0;
-}
-
-bool KisSelectionBasedLayer::showSelection() const
-{
-    return m_d->showSelection;
-}
-void KisSelectionBasedLayer::setShowSelection(bool b)
-{
-    m_d->showSelection = b;
 }
 
 qint32 KisSelectionBasedLayer::x() const
@@ -264,11 +251,13 @@ QRect KisSelectionBasedLayer::exactBounds() const
 
 QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
 {
-    KisSelectionSP originalSelection = selection();
+    KisSelectionSP originalSelection = internalSelection();
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice && originalSelection ?
-           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) :
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) :
            QImage();
 }
 

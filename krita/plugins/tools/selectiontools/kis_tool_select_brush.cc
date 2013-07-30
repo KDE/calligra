@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <KIntNumInput>
+#include "knuminput.h"
 
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
@@ -110,10 +110,6 @@ void KisToolSelectBrush::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        if (!currentNode()) {
-            return;
-        }
-
         if (!selectionEditable()) {
             return;
         }
@@ -189,13 +185,13 @@ void KisToolSelectBrush::slotSetBrushSize(int size)
     m_brushRadius = ((qreal) size)/2.0;
 }
 
-void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
+void KisToolSelectBrush::applyToSelection(QPainterPath selection) {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Brush Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Brush Selection"));
 
     if (selectionMode() == PIXEL_SELECTION) {
 
@@ -209,7 +205,9 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
+        selection.closeSubpath();
         painter.fillPainterPath(selection);
+        tmpSel->setOutlineCache(selection);
 
         helper.selectPixelSelection(tmpSel, selectionAction());
 

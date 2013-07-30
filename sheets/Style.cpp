@@ -215,10 +215,13 @@ void Style::loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& el
     // NOTE Stefan: Do not fill the style stack with the parent styles!
     KoStyleStack styleStack;
     styleStack.push(element);
+
     styleStack.setTypeProperties("table-cell");
     loadOdfTableCellProperties(stylesReader, styleStack);
+
     styleStack.setTypeProperties("text");
     loadOdfTextProperties(stylesReader, styleStack);
+
     styleStack.setTypeProperties("paragraph");
     loadOdfParagraphProperties(stylesReader, styleStack);
 
@@ -372,6 +375,11 @@ void Style::loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const Ko
             setHAlign(Style::HAlignUndefined);
         kDebug(36003) << "\t\t text-align:" << str;
     }
+
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin-left")) {
+        //todo fix me
+        setIndentation(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"), 0.0));
+    }
 }
 
 void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack)
@@ -446,10 +454,6 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
         if (a != 0) {
             setAngle(-a);
         }
-    }
-    if (styleStack.hasProperty(KoXmlNS::fo, "margin-left")) {
-        //todo fix me
-        setIndentation(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"), 0.0));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border")) {
         str = styleStack.property(KoXmlNS::fo, "border");
@@ -1644,7 +1648,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         HAlign a = (HAlign) format.attribute(type() == AUTO ? "align" : "alignX").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 4) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 4) {
             setHAlign(a);
         }
     }
@@ -1652,7 +1656,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         VAlign a = (VAlign) format.attribute("alignY").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a < 4) {
+        if ((unsigned int) a >= 1 && (unsigned int) a < 4) {
             setVAlign(a);
         }
     }
@@ -1692,7 +1696,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
         FloatFormat a = (FloatFormat)format.attribute("float").toInt(&ok);
         if (!ok)
             return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 3) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 3) {
             setFloatFormat(a);
         }
     }
@@ -1700,7 +1704,7 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
     if (format.hasAttribute("floatcolor")) {
         FloatColor a = (FloatColor) format.attribute("floatcolor").toInt(&ok);
         if (!ok) return false;
-        if ((unsigned int) a >= 1 || (unsigned int) a <= 2) {
+        if ((unsigned int) a >= 1 && (unsigned int) a <= 2) {
             setFloatColor(a);
         }
     }

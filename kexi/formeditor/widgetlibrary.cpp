@@ -30,7 +30,7 @@
 #include <kservicetypetrader.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-//2.0 #include <KXMLGUIClient>
+//2.0 #include <kxmlguiclient.h>
 
 #include <KoIcon.h>
 #include "WidgetInfo.h"
@@ -271,7 +271,7 @@ void WidgetLibrary::createWidgetActions(ActionGroup *group)
 
     foreach (WidgetInfo *winfo, d->widgets) {
         LibActionWidget *a = new LibActionWidget(group, winfo);
-        connect(a, SIGNAL(toggled(const QByteArray &)), this, SIGNAL(widgetActionToggled(const QByteArray &)));
+        connect(a, SIGNAL(toggled(QByteArray)), this, SIGNAL(widgetActionToggled(QByteArray)));
     }
 }
 

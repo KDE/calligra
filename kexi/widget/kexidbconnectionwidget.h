@@ -25,8 +25,8 @@
 
 #include <kexiprojectdata.h>
 
-#include <KTabWidget>
-#include <KDialog>
+#include <ktabwidget.h>
+#include <kdialog.h>
 
 class KPushButton;
 class KexiDBDriverComboBox;

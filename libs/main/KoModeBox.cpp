@@ -28,11 +28,11 @@
 #include <KoShapeLayer.h>
 #include <KoInteractionTool.h>
 
-#include <KDebug>
-#include <KGlobalSettings>
-#include <KConfigGroup>
-#include <KLocale>
-#include <KSelectAction>
+#include <kdebug.h>
+#include <kglobalsettings.h>
+#include <kconfiggroup.h>
+#include <klocale.h>
+#include <kselectaction.h>
 
 #include <QMap>
 #include <QList>
@@ -49,6 +49,7 @@
 #include <QPainter>
 #include <QTextLayout>
 #include <QMenu>
+#include <QScrollArea>
 
 class KoModeBox::Private
 {
@@ -79,21 +80,28 @@ QString KoModeBox::applicationName;
 
 static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 {
-    if (b1.section == b2.section) {
+    int b1Level;
+    int b2Level;
+    if (b1.section.contains(KoModeBox::applicationName)) {
+        b1Level = 0;
+    } else if (b1.section.contains("main")) {
+        b1Level = 1;
+    } else {
+        b1Level = 2;
+    }
+
+    if (b2.section.contains(KoModeBox::applicationName)) {
+        b2Level = 0;
+    } else if (b2.section.contains("main")) {
+        b2Level = 1;
+    } else {
+        b2Level = 2;
+    }
+
+    if (b1Level == b2Level) {
         return b1.priority < b2.priority;
     } else {
-        if (b1.section.contains(KoModeBox::applicationName)) {
-            return true;
-        } else if (b2.section.contains(KoModeBox::applicationName)) {
-            return false;
-        }
-
-        if (b1.section == "main") {
-            return true;
-        } else if (b2.section == "main") {
-            return false;
-        }
-        return b1.section < b2.section;
+        return b1Level < b2Level;
     }
 }
 
@@ -111,7 +119,11 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->tabBar = new QTabBar();
     d->tabBar->setShape(QTabBar::RoundedWest);
     d->tabBar->setExpanding(false);
-    d->tabBar->setIconSize(QSize(32,64));
+    if (d->iconMode == IconAndText) {
+        d->tabBar->setIconSize(QSize(32,64));
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
     d->tabBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     layout->addWidget(d->tabBar, 0, 0);
 
@@ -165,7 +177,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     if (canvas->canvas() == d->canvas) {
         d->activeId = id;
-        blockSignals(true);
+        d->tabBar->blockSignals(true);
         int i = 0;
         foreach (const KoToolButton &button, d->addedButtons) {
             if (button.buttonGroupId == d->activeId) {
@@ -175,7 +187,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
             }
             ++i;
         }
-        blockSignals(false);
+        d->tabBar->blockSignals(false);
         return;
     }
 }
@@ -263,6 +275,7 @@ void KoModeBox::addItem(const KoToolButton button)
     widget = new QWidget();
     widget->setLayout(layout);
     layout->setContentsMargins(0,0,0,0);
+    layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->addedWidgets[button.buttonGroupId] = widget;
 
     // Create a rotated icon with text
@@ -274,7 +287,13 @@ void KoModeBox::addItem(const KoToolButton button)
         d->tabBar->setTabToolTip(index, button.button->toolTip());
     }
     d->tabBar->blockSignals(false);
-    d->stack->addWidget(widget);
+    QScrollArea *sa = new QScrollArea();
+    sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    sa->setWidgetResizable(true);
+    sa->setContentsMargins(0,0,0,0);
+    sa->setWidget(widget);
+    sa->setFrameShape(QFrame::NoFrame);
+    d->stack->addWidget(sa);
     d->addedButtons.append(button);
 }
 
@@ -289,7 +308,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     }
     d->iconTextFitted = true;
 
-    blockSignals(true);
+    d->tabBar->blockSignals(true);
 
     while (d->tabBar->count()) {
         d->tabBar->removeTab(0);
@@ -298,11 +317,6 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 
     d->addedButtons.clear();
 
-    if (d->iconMode == IconAndText) {
-        d->tabBar->setIconSize(QSize(32,64));
-    } else {
-        d->tabBar->setIconSize(QSize(22,22));
-    }
     int newIndex = -1;
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
@@ -336,7 +350,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     if (newIndex != -1) {
         d->tabBar->setCurrentIndex(newIndex);
     }
-    blockSignals(false);
+    d->tabBar->blockSignals(false);
 
     if (!d->iconTextFitted &&  d->fittingIterations++ < 8) {
         updateShownTools(canvas, codes);
@@ -359,6 +373,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 
     int cnt = 0;
     QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
+
     // need to unstretch row that have previously been stretched
     layout->setRowStretch(layout->rowCount()-1, 0);
     layout->setColumnMinimumWidth(0, 0); // used to be indent
@@ -462,8 +477,14 @@ void KoModeBox::slotContextMenuRequested(const QPoint &pos)
 void KoModeBox::switchIconMode(int mode)
 {
     d->iconMode = static_cast<IconMode>(mode);
+    if (d->iconMode == IconAndText) {
+        d->tabBar->setIconSize(QSize(32,64));
+    } else {
+        d->tabBar->setIconSize(QSize(22,22));
+    }
     updateShownTools(d->canvas->canvasController(), QList<QString>());
 
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
+
 }

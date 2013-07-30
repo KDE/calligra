@@ -32,8 +32,8 @@
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
 
-#include <KDebug>
-#include <KIconLoader>
+#include <kdebug.h>
+#include <kiconloader.h>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
@@ -165,10 +165,10 @@ KexiRelationsTableFieldList::KexiRelationsTableFieldList(
     setSchema(tableOrQuerySchema);
     setAcceptDrops(true);
 
-//    connect(this, SIGNAL(dropped(QDropEvent *, Q3ListViewItem *)),
-//            this, SLOT(slotDropped(QDropEvent *)));
-    connect(this, SIGNAL(contentsMoving(int, int)),
-            this, SLOT(slotContentsMoving(int, int)));
+//    connect(this, SIGNAL(dropped(QDropEvent*,Q3ListViewItem*)),
+//            this, SLOT(slotDropped(QDropEvent*)));
+    connect(this, SIGNAL(contentsMoving(int,int)),
+            this, SLOT(slotContentsMoving(int,int)));
 
     horizontalScrollBar()->installEventFilter(this);
     verticalScrollBar()->installEventFilter(this);
@@ -302,7 +302,7 @@ void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
     
     kDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
     
-    if (!srcField.trimmed().startsWith("*") && !f.startsWith("*"))
+    if (!srcField.trimmed().startsWith('*') && !f.startsWith('*'))
         event->acceptProposedAction();
 }
 

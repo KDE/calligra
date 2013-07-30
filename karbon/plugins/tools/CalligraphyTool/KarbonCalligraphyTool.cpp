@@ -36,9 +36,9 @@
 #include <KoShapePaintingContext.h>
 #include <KoFillConfigWidget.h>
 
-#include <KAction>
-#include <KDebug>
-#include <KLocale>
+#include <kaction.h>
+#include <kdebug.h>
+#include <klocale.h>
 #include <QPainter>
 
 #include <cmath>
@@ -101,7 +101,7 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_isDrawing = true;
     m_pointCount = 0;
     m_shape = new KarbonCalligraphicShape(m_caps);
-    m_shape->setBackground(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor()));
+    m_shape->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor())));
     //addPoint( event );
 }
 

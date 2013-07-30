@@ -47,7 +47,7 @@
 #include <kdebug.h>
 #include <ksavefile.h>
 #include <kglobal.h>
-#include <KDialog>
+#include <kdialog.h>
 
 KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         QWidget * parent)
@@ -122,8 +122,8 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
             KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()));
         m_fileSavePage = new KPageWidgetItem(m_fileSaveWidget, i18n("Enter Name of File You Want to Save Data To"));
         addPage(m_fileSavePage);
-        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)),
-                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*, KPageWidgetItem*)));
+        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
+                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
     }
 
     /* 2. Export options

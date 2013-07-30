@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,6 +44,10 @@ public:
 
     bool showConnectionDetailsRequested() const;
 
+    //! Asks the user for password and sets it to data.
+    //! @return true is user provided the password.
+    static bool getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent = 0);
+
 protected slots:
     virtual void done(int r);
     void slotShowConnectionDetails();
@@ -77,15 +81,16 @@ public:
         KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent);
 #endif
 
-    /*! Options for detectDriverForFile() */
-    enum DetectDriverForFileOptions {
-        DontConvert = 1, //!< skip asking for conversion (used e.g. when dropdb is called)
-        ThisIsAProjectFile = 2, //!< a hint, forces detection of the file as a project file
-        ThisIsAShortcutToAProjectFile = 4, //!< a hint, forces detection of the file
-        //!< as a shortcut to a project file
-        ThisIsAShortcutToAConnectionData = 8, //!< a hint, forces detection of the file
-        //!< as a shortcut to a connection data
-        SkipMessages = 16 //!< do not display error or warning messages
+    /*! Options for detectActionForFile() */
+    enum DetectActionForFileOptions {
+        DontConvert = 1, //!< Skip asking for conversion (used e.g. when dropdb is called).
+        ThisIsAProjectFile = 2, //!< A hint, forces detection of the file as a project file.
+        ThisIsAShortcutToAProjectFile = 4,    //!< A hint, forces detection of the file
+                                              //!< as a shortcut to a project file.
+        ThisIsAShortcutToAConnectionData = 8, //!< A hint, forces detection of the file
+                                              //!< as a shortcut to a connection data.
+        SkipMessages = 0x10, //!< Do not display error or warning messages.
+        OpenReadOnly = 0x20  //!< Open in readonly mode.
     };
 
     /*! Used for opening existing file-based projects.
@@ -101,11 +106,13 @@ public:
 
      \a parent is passed as a parent for potential error message boxes.
      \a driverName is a preferred driver name.
-     \a options should be a combination of DetectDriverForFileOptions enum values. */
+     \a options should be a combination of DetectActionForFileOptions enum values.
+     \a forceReadOnly points to a flag that will be set to true if it was detected
+        that the file cannot be written. */
     static tristate detectActionForFile(
         KexiStartupData::Import* detectedImportAction, QString* detectedDriverName,
         const QString& _suggestedDriverName,
-        const QString &dbFileName, QWidget *parent = 0, int options = 0);
+        const QString &dbFileName, QWidget *parent = 0, int options = 0, bool *forceReadOnly = 0);
 
     /*! Allows user to select a project with KexiProjectSelectorDialog.
       \return selected project's data

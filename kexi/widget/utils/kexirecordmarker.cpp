@@ -33,7 +33,7 @@
 #include <QStyle>
 #include <QStyleOptionHeader>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <kexiutils/utils.h>
 #include <kexi_global.h>

@@ -26,9 +26,7 @@
 #include <kglobal.h>
 #include <kaction.h>
 #include <klocale.h>
-#include <kparts/plugin.h>
 #include <kservice.h>
-#include <kparts/componentfactory.h>
 
 #include <KoPluginLoader.h>
 
@@ -57,7 +55,7 @@ KisGeneratorRegistry* KisGeneratorRegistry::instance()
     KisGeneratorRegistry *reg = qApp->findChild<KisGeneratorRegistry *>("");
     if (!reg) {
         reg = new KisGeneratorRegistry(qApp);
-        KoPluginLoader::instance()->load("Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 27)");
+        KoPluginLoader::instance()->load("Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 28)");
     }
     return reg;
 }

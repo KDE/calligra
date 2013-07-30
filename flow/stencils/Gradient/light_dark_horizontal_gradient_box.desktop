@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=Light-dark horizontal gradient box
-Name[ca]=caixa gradient horitzontal clar-fosc
-Name[ca@valencia]=caixa gradient horitzontal clar-fosc
+Name[bs]=svijetlotamna horizontalna gradijent kutija
+Name[ca]=Quadre degradat horitzontal clar-fosc
+Name[ca@valencia]=Quadre degradat horitzontal clar-fosc
+Name[da]=Lys-mørk vandret gradient-boks
+Name[de]=Waagerechter Verlauf Hell-Dunkel
 Name[el]=Πλαίσιο οριζόντιας διαβάθμισης φωτεινό-σκούρο
 Name[es]=Caja de gradiente horizontal claro-oscuro
 Name[et]=Hele-tume rõhtne üleminek raamis
@@ -20,4 +23,5 @@ Name[sk]=Vodorovný prechod svetlý-tmavý
 Name[sv]=Ljus-mörk horisontellt tonad ruta
 Name[uk]=Панель зі світло-темним горизонтальним градієнтом
 Name[x-test]=xxLight-dark horizontal gradient boxxx
+Name[zh_CN]=亮-暗水平渐变框
 Name[zh_TW]=亮到暗水平漸層盒

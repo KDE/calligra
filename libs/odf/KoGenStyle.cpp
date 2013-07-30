@@ -128,7 +128,7 @@ static KoGenStyle::PropertyType s_propertyTypes[] = {
     KoGenStyle::TextType,
 };
 
-static const char* s_propertyNames[] = {
+static const char* const s_propertyNames[] = {
     0,
     "style:section-properties",
     "style:ruby-properties",
@@ -196,7 +196,8 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
         else
             writer->addAttribute("draw:name", name);
         if (!m_parentName.isEmpty()) {
-            parentStyle = styles.style(m_parentName);
+            Q_ASSERT(!m_familyName.isEmpty());
+            parentStyle = styles.style(m_parentName, m_familyName);
             if (parentStyle && m_familyName.isEmpty()) {
                 // get family from parent style, just in case
                 // Note: this is saving code, don't convert to attributeNS!

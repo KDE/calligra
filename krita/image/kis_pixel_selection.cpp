@@ -23,11 +23,13 @@
 #include <QImage>
 #include <QVector>
 
+#include <QMutex>
 #include <QPoint>
 #include <QPolygon>
 
-#include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoIntegerMaths.h>
 #include <KoCompositeOp.h>
 
@@ -40,12 +42,19 @@
 #include <kis_iterator_ng.h>
 
 struct KisPixelSelection::Private {
+    KisSelectionSP parentSelection;
+
+    QPainterPath outlineCache;
+    bool outlineCacheValid;
+    QMutex outlineCacheMutex;
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSelectionSP parentSelection)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
+    m_d->outlineCacheValid = true;
+    m_d->parentSelection = parentSelection;
 }
 
 KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
@@ -53,6 +62,9 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
         , KisSelectionComponent(rhs)
         , m_d(new Private)
 {
+    // parent selection is not supposed to be shared
+    m_d->outlineCache = rhs.m_d->outlineCache;
+    m_d->outlineCacheValid = rhs.m_d->outlineCacheValid;
 }
 
 KisSelectionComponent* KisPixelSelection::clone(KisSelection*)
@@ -65,30 +77,32 @@ KisPixelSelection::~KisPixelSelection()
     delete m_d;
 }
 
-KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, QRect rect) const
+const KoColorSpace *KisPixelSelection::compositionSourceColorSpace() const
 {
-    KisPaintDeviceSP dev =
-        KisPaintDevice::createThumbnailDevice(w, h, rect);
-
-    QRect bounds = dev->exactBounds();
-    KisHLineIteratorSP it = dev->createHLineIteratorNG(bounds.x(), bounds.y(), bounds.width());
-
-    for (int y2 = bounds.y(); y2 < bounds.height() + bounds.y(); ++y2) {
-        do {
-            *(it->rawData()) = MAX_SELECTED - *(it->rawData());
-        } while (it->nextPixel());
-        it->nextRow();
-    }
-    return dev;
+    return KoColorSpaceRegistry::instance()->
+        colorSpace(GrayAColorModelID.id(),
+                   Integer8BitsColorDepthID.id(),
+                   QString());
 }
 
 void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
 {
     QRect r = rc.normalized();
-    if (r.width() > 0 && r.height() > 0) {
-        KisFillPainter painter(KisPaintDeviceSP(this));
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-        painter.fillRect(r, KoColor(Qt::white, cs), selectedness);
+    if (r.isEmpty()) return;
+
+    KisFillPainter painter(KisPaintDeviceSP(this));
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    painter.fillRect(r, KoColor(Qt::white, cs), selectedness);
+
+    if (m_d->outlineCacheValid) {
+        QPainterPath path;
+        path.addRect(r);
+
+        if (selectedness != MIN_SELECTED) {
+            m_d->outlineCache += path;
+        } else {
+            m_d->outlineCache -= path;
+        }
     }
 }
 
@@ -116,6 +130,8 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionA
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
+    if (r.isEmpty()) return;
+
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
@@ -129,11 +145,20 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
         dst->nextRow();
         src->nextRow();
     }
+
+    m_d->outlineCacheValid &= selection->outlineCacheValid();
+
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache += selection->outlineCache();
+    }
 }
 
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
+    if (r.isEmpty()) return;
+
+
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
@@ -147,11 +172,18 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
         dst->nextRow();
         src->nextRow();
     }
+
+    m_d->outlineCacheValid &= selection->outlineCacheValid();
+
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache -= selection->outlineCache();
+    }
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect().united(selectedRect());
+    if (r.isEmpty()) return;
 
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
@@ -161,6 +193,12 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
         }  while (src->nextPixel() && dst->nextPixel());
         dst->nextRow();
         src->nextRow();
+    }
+
+    m_d->outlineCacheValid &= selection->outlineCacheValid();
+
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache &= selection->outlineCache();
     }
 }
 
@@ -173,6 +211,13 @@ void KisPixelSelection::clear(const QRect & r)
     } else {
         KisPaintDevice::clear(r);
     }
+
+    if (m_d->outlineCacheValid) {
+        QPainterPath path;
+        path.addRect(r);
+
+        m_d->outlineCache -= path;
+    }
 }
 
 void KisPixelSelection::clear()
@@ -180,6 +225,9 @@ void KisPixelSelection::clear()
     quint8 defPixel = MIN_SELECTED;
     setDefaultPixel(&defPixel);
     KisPaintDevice::clear();
+
+    m_d->outlineCacheValid = true;
+    m_d->outlineCache = QPainterPath();
 }
 
 void KisPixelSelection::invert()
@@ -189,25 +237,20 @@ void KisPixelSelection::invert()
     QRect rc = region().boundingRect();
 
     if (!rc.isEmpty()) {
-#if 0
-        quint8 *bytes = new quint8[rc.width()];
-        for(int row = rc.y(); row < rc.height(); ++row) {
-            readBytes(bytes, rc.x(), row, rc.width(), 1);
-            for (int i = 0; i < rc.width(); ++i) {
-                bytes[i] = MAX_SELECTED - bytes[i];
-            }
-            writeBytes(bytes, rc.x(), row, rc.width(), 1);
-        }
-        delete []bytes;
-#else
         KisRectIteratorSP it = createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
         do {
             *(it->rawData()) = MAX_SELECTED - *(it->rawData());
         } while (it->nextPixel());
-#endif
     }
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);
+
+    if (m_d->outlineCacheValid) {
+        QPainterPath path;
+        path.addRect(defaultBounds()->bounds());
+
+        m_d->outlineCache = path - m_d->outlineCache;
+    }
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
@@ -248,6 +291,59 @@ QVector<QPolygon> KisPixelSelection::outline() const
         return paths;
     }
     return generator.outline(this, xOffset, yOffset, width, height);
+}
+
+bool KisPixelSelection::isEmpty() const
+{
+    return *defaultPixel() == MIN_SELECTED && selectedRect().isEmpty();
+}
+
+QPainterPath KisPixelSelection::outlineCache() const
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+    return m_d->outlineCache;
+}
+
+void KisPixelSelection::setOutlineCache(const QPainterPath &cache)
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+    m_d->outlineCache = cache;
+    m_d->outlineCacheValid = true;
+}
+
+bool KisPixelSelection::outlineCacheValid() const
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+    return m_d->outlineCacheValid;
+}
+
+void KisPixelSelection::invalidateOutlineCache()
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+    m_d->outlineCacheValid = false;
+}
+
+void KisPixelSelection::recalculateOutlineCache()
+{
+    QMutexLocker locker(&m_d->outlineCacheMutex);
+
+    m_d->outlineCache = QPainterPath();
+
+    foreach (const QPolygon &polygon, outline()) {
+        m_d->outlineCache.addPolygon(polygon);
+    }
+
+    m_d->outlineCacheValid = true;
+}
+
+void KisPixelSelection::setParentSelection(KisSelectionSP selection)
+{
+    m_d->parentSelection = selection;
+}
+
+KisSelectionSP KisPixelSelection::parentSelection() const
+{
+    return m_d->parentSelection;
 }
 
 void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection)

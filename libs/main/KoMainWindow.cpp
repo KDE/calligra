@@ -45,7 +45,9 @@
 #include <KoConfig.h>
 
 #include <kdeversion.h>
+#if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
+#endif
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
@@ -243,7 +245,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         , d(new KoMainWindowPrivate(this))
 {
 #ifdef __APPLE__
-    setUnifiedTitleAndToolBarOnMac(true);
+    //setUnifiedTitleAndToolBarOnMac(true);
     MacSupport::addFullscreen(this);
 #endif
     setStandardToolBarMenuEnabled(true);
@@ -341,7 +343,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
 
-    d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
@@ -443,7 +444,6 @@ KoMainWindow::~KoMainWindow()
     if (d->rootPart && d->rootPart->viewCount() == 0) {
         //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
         delete d->rootDocument;
-        delete d->rootPart;
     }
 
     delete d->manager;
@@ -580,7 +580,9 @@ void KoMainWindow::addRecentURL(const KUrl& url)
                     ok = false; // it's in the tmp resource
             if (ok) {
                 KRecentDocument::add(path);
+#if KDE_IS_VERSION(4,6,0)
                 KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
+#endif
             }
         } else {
             KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
@@ -768,6 +770,7 @@ void KoMainWindow::slotLoadCompleted()
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    emit loadCompleted();
 }
 
 void KoMainWindow::slotLoadCanceled(const QString & errMsg)
@@ -1447,7 +1450,7 @@ private:
     KoPageLayoutWidget *m_pageLayoutWidget;
 };
 
-KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
+KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
 {
     if (!rootView())
         return 0;

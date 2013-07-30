@@ -26,9 +26,9 @@
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <KGlobal>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 class KoPluginLoader::Private
 {
@@ -118,7 +118,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
 
     QList<QString> whiteList;
     foreach(KSharedPtr<KService> service, serviceNames) {
-        QString error = 0;
+        QString error;
         QObject * plugin = service->createInstance<QObject>(this, QVariantList(), &error);
         if (plugin) {
             whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name")).toString();

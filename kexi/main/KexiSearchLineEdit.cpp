@@ -21,8 +21,8 @@
 #include "KexiSearchLineEdit.h"
 #include <KexiSearchableModel.h>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <kexiutils/completer/KexiCompleter.h>
 #include <kexiutils/KexiTester.h>

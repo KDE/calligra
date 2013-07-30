@@ -42,7 +42,7 @@
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>
 
-#include <KAction>
+#include <kaction.h>
 
 #include <QTextLayout>
 #include <QFlags>
@@ -50,7 +50,7 @@
 #include <QWidgetAction>
 #include <QSignalMapper>
 
-#include <KDebug>
+#include <kdebug.h>
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent)
@@ -288,7 +288,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
         //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
         disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
         m_sortedStylesModel->styleApplied(style);
-        widget.paragraphStyleCombo->setCurrentIndex(m_sortedStylesModel->indexForParagraphStyle(*style).row());
+        widget.paragraphStyleCombo->setCurrentIndex(m_sortedStylesModel->indexOf(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
         m_stylesModel->setCurrentParagraphStyle(id);
         widget.paragraphStyleCombo->slotUpdatePreview();

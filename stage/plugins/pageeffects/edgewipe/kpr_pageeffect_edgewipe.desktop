@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Edge wipe
+Name[bs]=Brisanje ivice
 Name[ca]=Esborrat de vora
 Name[ca@valencia]=Esborrat de vora
 Name[da]=Kantvisker
@@ -32,6 +33,7 @@ Name[wa]=Schover l' boird evoye
 Name[x-test]=xxEdge wipexx
 Name[zh_TW]=邊緣掃描
 Comment=Edge Wipe Page Effects
+Comment[bs]=Efekat Brisanja Ivice Stranice
 Comment[ca]=Efectes d'esborrat de vora de la pàgina
 Comment[ca@valencia]=Efectes d'esborrat de vora de la pàgina
 Comment[da]=Kantvisker-sideeffekter
@@ -63,7 +65,8 @@ Comment[uk]=Ефект витирання сторінки з країв
 Comment[wa]=Efets d' pådje schover l' boird evoye
 Comment[x-test]=xxEdge Wipe Page Effectsxx
 Comment[zh_TW]=邊緣掃描頁面效果
+X-KDE-PluginInfo-Name=kpr_pageeffect_edgewipe
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_edgewipe
-X-KPresenter-Version=27
+X-KPresenter-Version=28

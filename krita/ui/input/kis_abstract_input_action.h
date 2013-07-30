@@ -59,7 +59,7 @@ public:
      *
      * \param manager The InputManager this action belongs to.
      */
-    explicit KisAbstractInputAction(KisInputManager *manager);
+    explicit KisAbstractInputAction();
     /**
      * Destructor.
      */
@@ -108,6 +108,15 @@ public:
     virtual void inputEvent(QEvent* event);
 
     /**
+     * On some platforms (Windows in particular), tablet and mouse
+     * events generate different flows of messages. The amount of
+     * tablet events may be hard to process for some actions, so it is
+     * false by default. On Linux platform the flows are exactly the
+     * same so there is no difference between tablet and mouse events.
+     */
+    virtual bool supportsHiResInputEvents() const;
+
+    /**
      * The indexes of shortcut behaviours available.
      */
     virtual QHash<QString, int> shortcutIndexes() const;
@@ -119,6 +128,14 @@ public:
      * A short description of this action.
      */
     virtual QString description() const;
+
+    /**
+     * The priority for this action.
+     *
+     * Priority determines how "important" the action is and is used
+     * to resolve conflicts when multiple actions can be activated.
+     */
+    virtual int priority() const;
 
 protected:
     /**
@@ -151,6 +168,9 @@ protected:
     virtual void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
 private:
+    friend class KisInputManager;
+    static void setInputManager(KisInputManager *manager);
+
     class Private;
     Private * const d;
 };

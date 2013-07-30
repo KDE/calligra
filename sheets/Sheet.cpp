@@ -170,7 +170,7 @@ public:
 
     // Indicates whether the sheet should paint the page breaks.
     // Doing so costs some time, so by default it should be turned off.
-    bool showPageBorders;
+    bool showPageOutline;
 
     // Max range of canvas in x and y direction.
     //  Depends on KS_colMax/KS_rowMax and the width/height of all columns/rows
@@ -213,7 +213,7 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->showFormula = false;
     d->showFormulaIndicator = false;
     d->showCommentIndicator = true;
-    d->showPageBorders = false;
+    d->showPageOutline = false;
 
     d->lcMode = false;
     d->showColumnNumber = false;
@@ -223,12 +223,12 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->print = new SheetPrint(this);
 
     // document size changes always trigger a visible size change
-    connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
+    connect(this, SIGNAL(documentSizeChanged(QSizeF)), SIGNAL(visibleSizeChanged()));
     // CellStorage connections
-    connect(d->cellStorage, SIGNAL(insertNamedArea(const Region&, const QString&)),
-            d->workbook->namedAreaManager(), SLOT(insert(const Region&, const QString&)));
-    connect(d->cellStorage, SIGNAL(namedAreaRemoved(const QString&)),
-            d->workbook->namedAreaManager(), SLOT(remove(const QString&)));
+    connect(d->cellStorage, SIGNAL(insertNamedArea(Region,QString)),
+            d->workbook->namedAreaManager(), SLOT(insert(Region,QString)));
+    connect(d->cellStorage, SIGNAL(namedAreaRemoved(QString)),
+            d->workbook->namedAreaManager(), SLOT(remove(QString)));
 }
 
 Sheet::Sheet(const Sheet &other)
@@ -280,7 +280,7 @@ Sheet::Sheet(const Sheet &other)
 
     d->print = new SheetPrint(this); // FIXME = new SheetPrint(*other.d->print);
 
-    d->showPageBorders = other.d->showPageBorders;
+    d->showPageOutline = other.d->showPageOutline;
     d->documentSize = other.d->documentSize;
 }
 
@@ -474,9 +474,9 @@ void Sheet::setFirstLetterUpper(bool _firstUpper)
     d->firstLetterUpper = _firstUpper;
 }
 
-bool Sheet::isShowPageBorders() const
+bool Sheet::isShowPageOutline() const
 {
-    return d->showPageBorders;
+    return d->showPageOutline;
 }
 
 const ColumnFormat* Sheet::columnFormat(int _column) const
@@ -547,7 +547,7 @@ void Sheet::setPrintSettings(const PrintSettings &settings)
 {
     d->print->setSettings(settings);
     // Repaint, if page borders are shown and this is the active sheet.
-    if (isShowPageBorders()) {
+    if (isShowPageOutline()) {
         // Just repaint everything visible; no need to invalidate the visual cache.
         map()->addDamage(new SheetDamage(this, SheetDamage::ContentChanged));
     }
@@ -1116,7 +1116,7 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
     //Laurent: for oasis format I think that we must use style:direction...
     sheet.setAttribute("layoutDirection", (layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr");
     sheet.setAttribute("columnnumber", (int)getShowColumnNumber());
-    sheet.setAttribute("borders", (int)isShowPageBorders());
+    sheet.setAttribute("borders", (int)isShowPageOutline());
     sheet.setAttribute("hide", (int)isHidden());
     sheet.setAttribute("hidezero", (int)getHideZero());
     sheet.setAttribute("firstletterupper", (int)getFirstLetterUpper());
@@ -2454,8 +2454,8 @@ void Sheet::convertPart(const QString & part, KoXmlWriter & xmlWriter) const
                     addText(text, xmlWriter);
                 }
 
-                text = "";
-                var  = "";
+                text.clear();
+                var.clear();
             }
         } else {
             text += part[i];
@@ -2542,7 +2542,7 @@ void Sheet::loadOdfSettings(const KoOasisSettings::NamedMap &settings)
 
     setShowFormulaIndicator(items.parseConfigItemBool("ShowFormulaIndicator"));
     setShowCommentIndicator(items.parseConfigItemBool("ShowCommentIndicator"));
-    setShowPageBorders(items.parseConfigItemBool("ShowPageBorders"));
+    setShowPageOutline(items.parseConfigItemBool("ShowPageOutline"));
     setLcMode(items.parseConfigItemBool("lcmode"));
     setAutoCalculationEnabled(items.parseConfigItemBool("autoCalc"));
     setShowColumnNumber(items.parseConfigItemBool("ShowColumnNumber"));
@@ -2557,7 +2557,7 @@ void Sheet::saveOdfSettings(KoXmlWriter &settingsWriter) const
     settingsWriter.addConfigItem("FirstLetterUpper", getFirstLetterUpper());
     settingsWriter.addConfigItem("ShowFormulaIndicator", getShowFormulaIndicator());
     settingsWriter.addConfigItem("ShowCommentIndicator", getShowCommentIndicator());
-    settingsWriter.addConfigItem("ShowPageBorders", isShowPageBorders());
+    settingsWriter.addConfigItem("ShowPageOutline", isShowPageOutline());
     settingsWriter.addConfigItem("lcmode", getLcMode());
     settingsWriter.addConfigItem("autoCalc", isAutoCalculationEnabled());
     settingsWriter.addConfigItem("ShowColumnNumber", getShowColumnNumber());
@@ -3068,7 +3068,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
         // we just ignore 'ok' - if it didn't work, go on
     }
     if (sheet.hasAttribute("borders")) {
-        setShowPageBorders((bool)sheet.attribute("borders").toInt(&ok));
+        setShowPageOutline((bool)sheet.attribute("borders").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if (sheet.hasAttribute("lcmode")) {
@@ -3273,12 +3273,12 @@ bool Sheet::loadChildren(KoStore* _store)
 }
 
 
-void Sheet::setShowPageBorders(bool b)
+void Sheet::setShowPageOutline(bool b)
 {
-    if (b == d->showPageBorders)
+    if (b == d->showPageOutline)
         return;
 
-    d->showPageBorders = b;
+    d->showPageOutline = b;
     // Just repaint everything visible; no need to invalidate the visual cache.
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::ContentChanged));
@@ -3500,18 +3500,18 @@ void Sheet::printDebug()
         for (int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++) {
             cell = Cell(this, currentcolumn, currentrow);
             if (!cell.isEmpty()) {
-                QString cellDescr = Cell::name(currentcolumn, currentrow).rightJustified(4);
+                QString cellDescr = Cell::name(currentcolumn, currentrow).rightJustified(4) +
                 //QString cellDescr = "Cell ";
                 //cellDescr += QString::number(currentrow).rightJustified(3,'0') + ',';
                 //cellDescr += QString::number(currentcolumn).rightJustified(3,'0') + ' ';
-                cellDescr += " | ";
+                    " | ";
                 QString valueType;
                 QTextStream stream(&valueType);
                 stream << cell.value().type();
-                cellDescr += valueType.rightJustified(7);
-                cellDescr += " | ";
-                cellDescr += map()->converter()->asString(cell.value()).asString().rightJustified(5);
-                cellDescr += QString("  [%1]").arg(cell.userInput());
+                cellDescr += valueType.rightJustified(7) +
+                             " | " +
+                             map()->converter()->asString(cell.value()).asString().rightJustified(5) +
+                             QString("  [%1]").arg(cell.userInput());
                 kDebug(36001) << cellDescr;
             }
         }

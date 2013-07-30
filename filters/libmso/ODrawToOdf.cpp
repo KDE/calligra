@@ -176,7 +176,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:auto-grow-height
     style.addProperty("draw:auto-grow-height", ds.fFitShapeToText(), gt);
     // draw:auto-grow-width
-    style.addProperty("draw:auto-grow-width", ds.fFitShapeToText(), gt);
+    style.addProperty("draw:auto-grow-width", ds.fFitShapeToText() && ds.wrapText()==msowrapNone, gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
@@ -506,7 +506,7 @@ QString ODrawToOdf::defineMarkerStyle(KoGenStyles& styles, const quint32 arrowTy
 
     const QString name(markerStyles[arrowType]);
 
-    if (styles.style(name)) {
+    if (styles.style(name, "")) {
         return name;
     }
 

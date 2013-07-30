@@ -1,5 +1,5 @@
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/ui/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata)
+include_directories( ${CMAKE_SOURCE_DIR}/krita/ui/ora ${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
 set(libkritaconverter_LIB_SRCS
     ora_converter.cc
@@ -35,8 +35,13 @@ install(TARGETS kritaoraexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita_ora_import.desktop krita_ora_export.desktop krita_ora_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_ora_import.desktop krita_ora_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS  krita_ora.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES  krita_ora_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+
 
 install(FILES krita_ora.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
 update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

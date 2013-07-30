@@ -26,7 +26,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <KPushButton>
+#include <kpushbutton.h>
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -98,9 +98,9 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
             this, SLOT(slotEdit()));
     connect(m_deleteButton, SIGNAL(clicked(bool)),
             this, SLOT(slotRemove()));
-    connect(m_styleList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+    connect(m_styleList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotEdit()));
-    connect(m_styleList, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+    connect(m_styleList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
             this, SLOT(selectionChanged(QTreeWidgetItem*)));
 }
 

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Icon=simple_waves
 Name=Simple Waves
+Name[bs]=Prosti valovi
 Name[ca]=Ones simples
 Name[ca@valencia]=Ones simples
+Name[cs]=Jednoduché vlny
 Name[da]=Simple Waves
 Name[de]=Einfache Wellen
 Name[el]=Simple Waves
@@ -32,13 +34,15 @@ Name[wa]=Simpès waches
 Name[x-test]=xxSimple Wavesxx
 Name[zh_TW]=簡單波浪
 Comment=Simple Waves
+Comment[bs]=Prosti valovi
 Comment[ca]=Ones simples
 Comment[ca@valencia]=Ones simples
+Comment[cs]=Jednoduché vlny
 Comment[da]=Simple bølger
 Comment[de]=Einfache Wellen
 Comment[el]=Απλά κύματα
 Comment[en_GB]=Simple Waves
-Comment[es]=Ondas simples
+Comment[es]=Ondas sencillas
 Comment[et]=Lihtsad lained
 Comment[fi]=Yksinkertaiset aallot
 Comment[fr]=Vagues simples

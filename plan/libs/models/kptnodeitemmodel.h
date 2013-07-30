@@ -316,7 +316,7 @@ public:
     
     QList<Node*> nodeList( QDataStream &stream );
     QList<Resource*> resourceList( QDataStream &stream );
-    static QList<Node*> removeChildNodes( const QList<Node*> nodes );
+    static QList<Node*> removeChildNodes( const QList<Node*> &nodes );
     bool dropAllowed( Node *on, const QMimeData *data );
     
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
@@ -373,9 +373,9 @@ class KPLATOMODELS_EXPORT GanttItemModel : public NodeItemModel
 public:
     enum GanttModelRoles { SpecialItemTypeRole = Qt::UserRole + 123 }; //FIXME
 
-    GanttItemModel( QObject *parent = 0 );
+    explicit GanttItemModel(QObject *parent = 0);
     ~GanttItemModel();
-    
+
     virtual int rowCount( const QModelIndex &parent ) const;
     using NodeItemModel::index;
     virtual QModelIndex index( int row, int column, const QModelIndex &parent ) const;
@@ -431,7 +431,7 @@ public:
     QModelIndex insertSubtask( Node *node, Node *parent );
 
     QList<Node*> nodeList( QDataStream &stream );
-    static QList<Node*> removeChildNodes( const QList<Node*> nodes );
+    static QList<Node*> removeChildNodes( const QList<Node*> &nodes );
     bool dropAllowed( Node *on, const QMimeData *data );
 
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
@@ -485,7 +485,7 @@ class KPLATOMODELS_EXPORT TaskModuleModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    TaskModuleModel( QObject *parent = 0 );
+    explicit TaskModuleModel(QObject *parent = 0);
 
     void addTaskModule( Project *project );
 

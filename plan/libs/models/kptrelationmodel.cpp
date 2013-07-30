@@ -107,7 +107,7 @@ QVariant RelationModel::lag( const Relation *r, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             Duration::Unit unit = Duration::Unit_h;
-            return KGlobal::locale()->formatNumber( r->lag().toDouble( unit ), 1 ) +  Duration::unitToString( unit, true );
+            return QVariant(KGlobal::locale()->formatNumber( r->lag().toDouble( unit ), 1 ) +  Duration::unitToString( unit, true ));
         }
         case Qt::EditRole:
             return r->lag().toDouble( Duration::Unit_h );
@@ -249,29 +249,29 @@ void RelationItemModel::slotLayoutChanged()
 void RelationItemModel::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        disconnect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
 
-        disconnect( m_project, SIGNAL( relationToBeAdded( Relation*, int, int ) ), this, SLOT( slotRelationToBeAdded( Relation*, int, int ) ) );
-        disconnect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( slotRelationAdded( Relation* ) ) );
+        disconnect( m_project, SIGNAL(relationToBeAdded(Relation*,int,int)), this, SLOT(slotRelationToBeAdded(Relation*,int,int)) );
+        disconnect( m_project, SIGNAL(relationAdded(Relation*)), this, SLOT(slotRelationAdded(Relation*)) );
 
-        disconnect( m_project, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( slotRelationToBeRemoved( Relation* ) ) );
-        disconnect( m_project, SIGNAL( relationRemoved( Relation* ) ), this, SLOT( slotRelationRemoved( Relation* ) ) );
+        disconnect( m_project, SIGNAL(relationToBeRemoved(Relation*)), this, SLOT(slotRelationToBeRemoved(Relation*)) );
+        disconnect( m_project, SIGNAL(relationRemoved(Relation*)), this, SLOT(slotRelationRemoved(Relation*)) );
 
-        disconnect( m_project, SIGNAL( relationModified( Relation* ) ), this, SLOT( slotRelationModified( Relation* ) ) );
+        disconnect( m_project, SIGNAL(relationModified(Relation*)), this, SLOT(slotRelationModified(Relation*)) );
     }
     m_project = project;
     if ( project ) {
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        connect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
 
-        connect( m_project, SIGNAL( relationToBeAdded( Relation*, int, int ) ), this, SLOT( slotRelationToBeAdded( Relation*, int, int ) ) );
-        connect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( slotRelationAdded( Relation* ) ) );
+        connect( m_project, SIGNAL(relationToBeAdded(Relation*,int,int)), this, SLOT(slotRelationToBeAdded(Relation*,int,int)) );
+        connect( m_project, SIGNAL(relationAdded(Relation*)), this, SLOT(slotRelationAdded(Relation*)) );
 
-        connect( m_project, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( slotRelationToBeRemoved( Relation* ) ) );
-        connect( m_project, SIGNAL( relationRemoved( Relation* ) ), this, SLOT( slotRelationRemoved( Relation* ) ) );
+        connect( m_project, SIGNAL(relationToBeRemoved(Relation*)), this, SLOT(slotRelationToBeRemoved(Relation*)) );
+        connect( m_project, SIGNAL(relationRemoved(Relation*)), this, SLOT(slotRelationRemoved(Relation*)) );
 
-        connect( m_project, SIGNAL( relationModified( Relation* ) ), this, SLOT( slotRelationModified( Relation* ) ) );
+        connect( m_project, SIGNAL(relationModified(Relation*)), this, SLOT(slotRelationModified(Relation*)) );
     }
     reset();
 }
@@ -373,7 +373,7 @@ QVariant RelationItemModel::data( const QModelIndex &index, int role ) const
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
-            result = " ";
+            result = ' ';
         }
         return result;
     }

@@ -47,20 +47,21 @@ set(excelimport_PART_SRCS excelimporttoods.cc ImportUtils.cpp ODrawClient.cpp ${
 kde4_add_plugin(excelimport ${excelimport_PART_SRCS})
 
 
-target_link_libraries(excelimport calligrasheetsodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
+target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
 
 #install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(excelimport_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
-kde4_add_plugin(excelimporttodoc ${excelimport_SRCS})
-target_link_libraries(excelimporttodoc calligrasheetsodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
+set(xls2ods_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
+kde4_add_plugin(calligra_filter_xls2ods ${xls2ods_SRCS})
+target_link_libraries(calligra_filter_xls2ods calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
 
-install(TARGETS excelimporttodoc DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_xls2ods DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
 install( FILES  kspread_excel_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-install( FILES sheets_excel_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES sheets_excel_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
 

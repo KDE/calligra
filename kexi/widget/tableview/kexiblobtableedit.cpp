@@ -77,7 +77,7 @@ public:
 
 //======================================================
 
-KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
         , d(new Private())
 {
@@ -99,13 +99,13 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *paren
     //force edit requested to start editing... (this will call slotUpdateActionsAvailabilityRequested())
     //connect(d->menu, SIGNAL(aboutToShow()), this, SIGNAL(editRequested()));
 
-    connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)),
-            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
+    connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
+            this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
 
-    connect(d->menu, SIGNAL(insertFromFileRequested(const KUrl&)),
-            this, SLOT(handleInsertFromFileAction(const KUrl&)));
-    connect(d->menu, SIGNAL(saveAsRequested(const QString&)),
-            this, SLOT(handleSaveAsAction(const QString&)));
+    connect(d->menu, SIGNAL(insertFromFileRequested(KUrl)),
+            this, SLOT(handleInsertFromFileAction(KUrl)));
+    connect(d->menu, SIGNAL(saveAsRequested(QString)),
+            this, SLOT(handleSaveAsAction(QString)));
     connect(d->menu, SIGNAL(cutRequested()),
             this, SLOT(handleCutAction()));
     connect(d->menu, SIGNAL(copyRequested()),
@@ -505,7 +505,7 @@ public:
     QCache<QString, QPixmap> pixmapCache;
 };
 
-KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiKIconTableEdit::KexiKIconTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
         , d(new Private())
 {

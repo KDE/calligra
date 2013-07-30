@@ -57,7 +57,7 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0), undoStack(0), changeCommand(0), usingDefaultSet(false)
+    Private() : defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0), undoStack(0), changeCommand(0)
     {
     }
     ~Private() {
@@ -91,8 +91,6 @@ public:
     KoOdfBibliographyConfiguration *bibliographyConfiguration;
     KUndo2Stack *undoStack;
     ChangeStylesMacroCommand *changeCommand;
-
-    bool usingDefaultSet;
 
     QVector<int> m_usedCharacterStyles;
     QVector<int> m_usedParagraphStyles;
@@ -134,7 +132,21 @@ KoStyleManager::KoStyleManager(QObject *parent)
     }
 
     //default styles for ToCs
-    createTOCStyles();
+    int maxOutLineLevel = 10;
+    for (int outlineLevel = 1; outlineLevel <= maxOutLineLevel; outlineLevel++) {
+        KoParagraphStyle *style = new KoParagraphStyle();
+        style->setName("Contents " + QString::number(outlineLevel));
+        style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
+        add(style);
+        d->defaultToCEntriesStyleId.append(style->styleId());
+    }
+
+    for (int typeIndex = 0; typeIndex < KoOdfBibliographyConfiguration::bibTypes.size(); typeIndex++) {
+        KoParagraphStyle *style = new KoParagraphStyle();
+        style->setName("Bibliography " + KoOdfBibliographyConfiguration::bibTypes.at(typeIndex));
+        add(style);
+        d->defaultBibEntriesStyleId.append(style->styleId());
+    }
 
     d->footNotesConfiguration = 0;
     d->endNotesConfiguration = 0;
@@ -181,7 +193,7 @@ void KoStyleManager::saveReferredStylesToOdf(KoShapeSavingContext &context)
     QSet<KoParagraphStyle *> savedParaStyles;
     QList<KoGenStyles::NamedStyle>  namedStyles = context.mainStyles().styles(KoGenStyle::ParagraphAutoStyle);
     namedStyles += context.mainStyles().styles(KoGenStyle::ParagraphStyle);
-   foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
+    foreach(const KoGenStyles::NamedStyle &namedStyle, namedStyles) {
         KoParagraphStyle *paraStyle = 0;
         // first find the parent style
         foreach(KoParagraphStyle *p, d->paragStyles) {
@@ -401,7 +413,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
     }
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->charStyles.insert(d->s_stylesNumber++, style);
+    d->charStyles.insert(d->s_stylesNumber, style);
 
     if (style != defaultCharacterStyle()) { //defaultStyle should not be user visible
         if (style->isApplied() && !d->m_usedCharacterStyles.contains(d->s_stylesNumber)) {
@@ -410,6 +422,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
         connect(style, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotAppliedStyle(const KoCharacterStyle*)));
     }
 
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -423,7 +436,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
     }
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->paragStyles.insert(d->s_stylesNumber++, style);
+    d->paragStyles.insert(d->s_stylesNumber, style);
 
     if (style->listStyle() && style->listStyle()->styleId() == 0)
         add(style->listStyle());
@@ -440,6 +453,8 @@ void KoStyleManager::add(KoParagraphStyle *style)
         }
         connect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotAppliedStyle(const KoParagraphStyle*)));
     }
+
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -449,7 +464,9 @@ void KoStyleManager::add(KoListStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->listStyles.insert(d->s_stylesNumber++, style);
+    d->listStyles.insert(d->s_stylesNumber, style);
+
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -458,7 +475,8 @@ void KoStyleManager::addAutomaticListStyle(KoListStyle *style)
     if (d->automaticListStyles.key(style, -1) != -1)
         return;
     style->setStyleId(d->s_stylesNumber);
-    d->automaticListStyles.insert(d->s_stylesNumber++, style);
+    d->automaticListStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
 }
 
 void KoStyleManager::add(KoTableStyle *style)
@@ -467,7 +485,8 @@ void KoStyleManager::add(KoTableStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->tableStyles.insert(d->s_stylesNumber++, style);
+    d->tableStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -476,7 +495,8 @@ void KoStyleManager::add(KoTableColumnStyle *style)
     if (d->tableColumnStyles.key(style, -1) != -1)
         return;
     style->setStyleId(d->s_stylesNumber);
-    d->tableColumnStyles.insert(d->s_stylesNumber++, style);
+    d->tableColumnStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -485,7 +505,8 @@ void KoStyleManager::add(KoTableRowStyle *style)
     if (d->tableRowStyles.key(style, -1) != -1)
         return;
     style->setStyleId(d->s_stylesNumber);
-    d->tableRowStyles.insert(d->s_stylesNumber++, style);
+    d->tableRowStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -495,7 +516,8 @@ void KoStyleManager::add(KoTableCellStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->tableCellStyles.insert(d->s_stylesNumber++, style);
+    d->tableCellStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -505,7 +527,8 @@ void KoStyleManager::add(KoSectionStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->sectionStyles.insert(d->s_stylesNumber++, style);
+    d->sectionStyles.insert(d->s_stylesNumber, style);
+    ++d->s_stylesNumber;
     emit styleAdded(style);
 }
 
@@ -518,7 +541,8 @@ void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
     tableTemplate->setParent(this);
     tableTemplate->setStyleId(d->s_stylesNumber);
 
-    d->tableTemplates.insert(d->s_stylesNumber++, tableTemplate);
+    d->tableTemplates.insert(d->s_stylesNumber, tableTemplate);
+    ++d->s_stylesNumber;
 }
 
 void KoStyleManager::slotAppliedStyle(const KoParagraphStyle *style)
@@ -1000,7 +1024,8 @@ KoListStyle *KoStyleManager::defaultOutlineStyle() const
             llp.setTextIndent(0);
             d->defaultOutlineStyle->setLevelProperties(llp);
         }
-        d->defaultOutlineStyle->setStyleId(d->s_stylesNumber++);
+        d->defaultOutlineStyle->setStyleId(d->s_stylesNumber);
+        ++d->s_stylesNumber;
     }
 
     return d->defaultOutlineStyle;
@@ -1070,7 +1095,7 @@ KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle()
     return defaultParagraphStyle();
 }
 
-KoParagraphStyle *KoStyleManager::defaultBibliographyEntryStyle(QString bibType)
+KoParagraphStyle *KoStyleManager::defaultBibliographyEntryStyle(const QString &bibType)
 {
     KoParagraphStyle *style = paragraphStyle(d->defaultBibEntriesStyleId
                                              .at(KoOdfBibliographyConfiguration::bibTypes.indexOf(bibType)));
@@ -1091,7 +1116,7 @@ void KoStyleManager::addUnusedStyle(KoParagraphStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
-    d->unusedParagraphStyles.insert(d->s_stylesNumber++, style);
+    d->unusedParagraphStyles.insert(d->s_stylesNumber, style);
 
     KoParagraphStyle *root = style;
     while (root->parentStyle()) {
@@ -1101,6 +1126,7 @@ void KoStyleManager::addUnusedStyle(KoParagraphStyle *style)
     }
     if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
         root->setParentStyle(d->defaultParagraphStyle);
+    ++d->s_stylesNumber;
 }
 
 void KoStyleManager::moveToUsedStyles(int id)
@@ -1155,79 +1181,6 @@ KoTextTableTemplate *KoStyleManager::tableTemplate(const QString &name) const
 KoTextTableTemplate *KoStyleManager::tableTemplate(int id) const
 {
     return d->tableTemplates.value(id, 0);
-}
-
-void KoStyleManager::createDefaultSet()
-{
-    d->paragStyles.clear();
-    d->usingDefaultSet = true;
-
-    KoParagraphStyle *paragStyle = new KoParagraphStyle();
-    paragStyle->setName(i18n("Standard"));
-    paragStyle->setFontPointSize(12);
-    add(paragStyle);
-    d->defaultParagraphStyle = paragStyle;
-
-    paragStyle = new KoParagraphStyle();
-    paragStyle->setName(i18n("Document title"));
-    paragStyle->setFontPointSize(26);
-    paragStyle->setFontWeight(75);
-    paragStyle->setAlignment(Qt::AlignHCenter);
-    paragStyle->setNextStyle(d->defaultParagraphStyle->styleId());
-    add(paragStyle);
-
-    paragStyle = new KoParagraphStyle();
-    paragStyle->setName(i18n("Head 1"));
-    paragStyle->setFontPointSize(20);
-    paragStyle->setFontWeight(75);
-    paragStyle->setNextStyle(d->defaultParagraphStyle->styleId());
-    add(paragStyle);
-
-    paragStyle = new KoParagraphStyle();
-    paragStyle->setName(i18n("Head 2"));
-    paragStyle->setFontPointSize(16);
-    paragStyle->setFontWeight(75);
-    paragStyle->setNextStyle(d->defaultParagraphStyle->styleId());
-    add(paragStyle);
-}
-
-bool KoStyleManager::isUsingDefaultSet()
-{
-    return d->usingDefaultSet;
-}
-
-void KoStyleManager::useLoadedStyles()
-{
-    KoParagraphStyle *style;
-    foreach(style, d->paragStyles.values()) {
-        disconnect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotAppliedStyle(const KoParagraphStyle*)));
-    }
-
-    d->paragStyles.clear();
-    d->usingDefaultSet = false;
-
-    add(d->defaultParagraphStyle);
-
-    createTOCStyles();
-}
-
-void KoStyleManager::createTOCStyles()
-{
-    int maxOutLineLevel = 10;
-    for (int outlineLevel = 1; outlineLevel <= maxOutLineLevel; outlineLevel++) {
-        KoParagraphStyle *style = new KoParagraphStyle();
-        style->setName("Contents " + QString::number(outlineLevel));
-        style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
-        add(style);
-        d->defaultToCEntriesStyleId.append(style->styleId());
-    }
-
-    for (int typeIndex = 0; typeIndex < KoOdfBibliographyConfiguration::bibTypes.size(); typeIndex++) {
-        KoParagraphStyle *style = new KoParagraphStyle();
-        style->setName("Bibliography " + KoOdfBibliographyConfiguration::bibTypes.at(typeIndex));
-        add(style);
-        d->defaultBibEntriesStyleId.append(style->styleId());
-    }
 }
 
 #include <KoStyleManager.moc>

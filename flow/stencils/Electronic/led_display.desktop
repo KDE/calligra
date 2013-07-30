@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=led display
+Name[bs]=led displej
 Name[ca]=led display
 Name[ca@valencia]=led display
+Name[cs]=led display
+Name[da]=led display
 Name[de]=LED-Anzeige
 Name[el]=λαμπάκι led
 Name[es]=pantalla LED
@@ -18,6 +21,7 @@ Name[pt]=ecrã LED
 Name[pt_BR]=tela de Led
 Name[ru]=Светодиодное табло
 Name[sk]=led displej
+Name[sl]=prikazovalnik led
 Name[sv]=lysdiodskärm
 Name[uk]=Рідкокристалічний дисплей
 Name[x-test]=xxled displayxx

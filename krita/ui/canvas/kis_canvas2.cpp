@@ -55,6 +55,7 @@
 #include "kis_selection_component.h"
 #include "flake/kis_shape_selection.h"
 #include "kis_image_config.h"
+#include "kis_infinity_manager.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -128,9 +129,9 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     createCanvas(cfg.useOpenGL());
 
-    connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
+    connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
+    connect(this, SIGNAL(canvasDestroyed(QWidget*)), this, SLOT(slotCanvasDestroyed(QWidget*)));
 
     /**
      * We switch the shape manager every time vector layer or
@@ -168,6 +169,11 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     if(m_d->canvasWidget!=0)
         tmp->setDecorations(m_d->canvasWidget->decorations());
     m_d->canvasWidget = tmp;
+
+    if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
+        KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);
+        m_d->canvasWidget->addDecoration(manager);
+    }
 
     widget->setAutoFillBackground(false);
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
@@ -240,9 +246,12 @@ KoShapeManager* KisCanvas2::shapeManager() const
         if (shapeLayer) {
             return shapeLayer->shapeManager();
         }
-        if (activeLayer->selection() && activeLayer->selection()->hasShapeSelection()) {
-            KoShapeManager* m = static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
-            return m;
+        KisSelectionSP selection = activeLayer->selection();
+        if (selection && !selection.isNull()) {
+            if (selection->hasShapeSelection()) {
+                KoShapeManager* m = dynamic_cast<KisShapeSelection*>(selection->shapeSelection())->shapeManager();
+                return m;
+            }
 
         }
     }
@@ -363,19 +372,19 @@ void KisCanvas2::connectCurrentImage()
         m_d->prescaledProjection->setImage(image);
     }
 
-    connect(image, SIGNAL(sigImageUpdated(const QRect &)),
-            SLOT(startUpdateCanvasProjection(const QRect &)),
+    connect(image, SIGNAL(sigImageUpdated(QRect)),
+            SLOT(startUpdateCanvasProjection(QRect)),
             Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
             this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
 
-    connect(image, SIGNAL(sigSizeChanged(qint32, qint32)),
-            SLOT(startResizingImage(qint32, qint32)),
+    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+            SLOT(startResizingImage()),
             Qt::DirectConnection);
-    connect(this, SIGNAL(sigContinueResizeImage(qint32, qint32)),
-            this, SLOT(finishResizingImage(qint32, qint32)));
+    connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)),
+            this, SLOT(finishResizingImage(qint32,qint32)));
 
-    startResizingImage(image->width(), image->height());
+    startResizingImage();
 
     emit imageChanged(image);
 }
@@ -497,8 +506,12 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 
 }
 
-void KisCanvas2::startResizingImage(qint32 w, qint32 h)
+void KisCanvas2::startResizingImage()
 {
+    KisImageWSP image = this->image();
+    qint32 w = image->width();
+    qint32 h = image->height();
+
     emit sigContinueResizeImage(w, h);
 
     QRect imageBounds(0, 0, w, h);
@@ -644,6 +657,8 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
     if (!m_d->currentCanvasIsOpenGL)
         m_d->prescaledProjection->viewportMoved(moveOffset);
 
+    emit documentOffsetUpdateFinished();
+
     updateCanvas();
 }
 
@@ -705,7 +720,7 @@ QPoint KisCanvas2::documentOffset() const
 void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
 {
     m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopbox, canvasWidget());
-    connect(this, SIGNAL(favoritePaletteCalled(const QPoint&)), favoriteResourceManager(), SLOT(slotShowPopupPalette(const QPoint&)));
+    connect(this, SIGNAL(favoritePaletteCalled(QPoint)), favoriteResourceManager(), SLOT(slotShowPopupPalette(QPoint)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
     connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), view()->resourceProvider(), SLOT(slotSetFGColor(KoColor)));

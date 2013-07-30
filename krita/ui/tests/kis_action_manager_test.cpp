@@ -20,8 +20,10 @@
 #include "kis_action_manager_test.h"
 #include <kdebug.h>
 
+#include <KoPart.h>
 #include <KoMainWindow.h>
 #include <kis_doc2.h>
+#include <kis_part2.h>
 #include <kis_view2.h>
 #include <util.h>
 #include <kis_action.h>
@@ -90,5 +92,21 @@ void KisActionManagerTest::testCondition()
     view->actionManager()->updateGUI();
     QVERIFY(action->isEnabled());
 }
+
+void KisActionManagerTest::testTakeAction()
+{
+    KisDoc2* doc = createEmptyDocument();
+    KoMainWindow* shell = new KoMainWindow(doc->documentPart()->componentData());
+    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), shell);
+    doc->documentPart()->addView(view);
+
+    KisAction* action = new KisAction("dummy", this);
+    view->actionManager()->addAction("dummy", action, view->actionCollection());
+    QVERIFY(view->actionManager()->actionByName("dummy") != 0);
+
+    view->actionManager()->takeAction(action);
+    QVERIFY(view->actionManager()->actionByName("dummy") == 0);
+}
+
 
 QTEST_KDEMAIN(KisActionManagerTest, GUI)

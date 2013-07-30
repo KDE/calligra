@@ -24,9 +24,9 @@
 #include <QHeaderView>
 #include <QContextMenuEvent>
 
-#include <KDebug>
-#include <KIconEffect>
-#include <KLocale>
+#include <kdebug.h>
+#include <kiconeffect.h>
+#include <klocale.h>
 
 #include <KoIcon.h>
 
@@ -119,7 +119,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                             itemName = i18n("Page %1", tabIndex + 1);
                     }
                     else {
-                        itemName.replace('&', "");
+                        itemName.remove('&');
                     }
                 }
                 else
@@ -464,8 +464,8 @@ void WidgetTreeWidget::setForm(Form *form)
             this, SLOT(removeItem(KFormDesigner::ObjectTreeItem*)));
         disconnect(d->form, SIGNAL(childAdded(KFormDesigner::ObjectTreeItem*)),
             this, SLOT(addItem(KFormDesigner::ObjectTreeItem*)));
-        disconnect(d->form, SIGNAL(widgetNameChanged(const QByteArray&, const QByteArray&)),
-            this, SLOT(renameItem(const QByteArray&, const QByteArray&)));
+        disconnect(d->form, SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
+            this, SLOT(renameItem(QByteArray,QByteArray)));
 
     }
     d->form = form;
@@ -481,8 +481,8 @@ void WidgetTreeWidget::setForm(Form *form)
         this, SLOT(removeItem(KFormDesigner::ObjectTreeItem*)));
     connect(d->form, SIGNAL(childAdded(KFormDesigner::ObjectTreeItem*)),
         this, SLOT(addItem(KFormDesigner::ObjectTreeItem*)));
-    connect(d->form, SIGNAL(widgetNameChanged(const QByteArray&, const QByteArray&)),
-        this, SLOT(renameItem(const QByteArray&, const QByteArray&)));
+    connect(d->form, SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
+        this, SLOT(renameItem(QByteArray,QByteArray)));
 
     ObjectTree *tree = d->form->objectTree();
     QTreeWidgetItem *root = invisibleRootItem();

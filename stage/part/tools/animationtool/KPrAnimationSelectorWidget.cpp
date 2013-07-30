@@ -36,12 +36,12 @@
 #include <QToolButton>
 
 //KDE Headers
-#include <KLocale>
-#include <KIconLoader>
-#include <KIcon>
-#include <KConfigGroup>
-#include <KGlobalSettings>
-#include <KDebug>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kicon.h>
+#include <kconfiggroup.h>
+#include <kglobalsettings.h>
+#include <kdebug.h>
 
 //Calligra Headers
 #include <KoXmlReader.h>
@@ -83,8 +83,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_collectionChooser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionChooser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionChooser->setFont(viewWidgetFont);
-    connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(activateShapeCollection(QListWidgetItem *)));
+    connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(activateShapeCollection(QListWidgetItem*)));
 
     m_collectionView = new QListView;
     m_collectionView->setViewMode(QListView::IconMode);
@@ -96,8 +96,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_collectionView->setWordWrap(true);
     m_collectionView->viewport()->setMouseTracking(true);
     m_collectionView->setFont(viewWidgetFont);
-    connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(setAnimation(const QModelIndex&)));
+    connect(m_collectionView, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(setAnimation(QModelIndex)));
 
     m_subTypeView = new QListView;
     m_subTypeView->setViewMode(QListView::IconMode);
@@ -111,8 +111,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_subTypeView->viewport()->setMouseTracking(true);
     m_subTypeView->hide();
     m_subTypeView->setFont(viewWidgetFont);
-    connect(m_subTypeView, SIGNAL(clicked(const QModelIndex&)),
-            this, SLOT(setAnimation(const QModelIndex&)));
+    connect(m_subTypeView, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(setAnimation(QModelIndex)));
 
     containerLayout->addWidget(m_collectionChooser, 0, 0,2,1);
     containerLayout->addWidget(m_collectionView, 0, 1, 1, 1);

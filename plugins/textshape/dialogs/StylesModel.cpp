@@ -30,9 +30,9 @@
 #include <QSharedPointer>
 #include <QSignalMapper>
 
-#include <KStringHandler>
-#include <KLocale>
-#include <KDebug>
+#include <kstringhandler.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type modelType, QObject *parent)
     : AbstractStylesModel(parent),
@@ -177,18 +177,7 @@ void StylesModel::setProvideStyleNone(bool provide)
     }
 }
 
-QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
-{
-    if (&style) {
-        QModelIndex index = createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
-        return index;
-    }
-    else {
-        return QModelIndex();
-    }
-}
-
-QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) const
+QModelIndex StylesModel::indexOf(const KoCharacterStyle &style) const
 {
     if (&style) {
         return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
@@ -353,7 +342,7 @@ void StylesModel::updateParagraphStyles()
     qSort(styles.begin(), styles.end(), sortParagraphStyleByName);
 
     foreach(KoParagraphStyle *style, styles) {
-        if (style != m_styleManager->defaultParagraphStyle() || m_styleManager->isUsingDefaultSet()) { //If we are not using the default set (for applications like Krita), the default paragraph style is not user selectable. It only provides individual property defaults and is not a style per say.
+        if (style != m_styleManager->defaultParagraphStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
             connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));

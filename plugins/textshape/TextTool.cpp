@@ -69,17 +69,17 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <KRun>
-#include <KStandardShortcut>
-#include <KFontChooser>
-#include <KFontAction>
-#include <KAction>
-#include <KActionMenu>
-#include <KMenu>
-#include <KLocale>
-#include <KStandardAction>
-#include <KMimeType>
-#include <KMessageBox>
+#include <krun.h>
+#include <kstandardshortcut.h>
+#include <kfontchooser.h>
+#include <kfontaction.h>
+#include <kaction.h>
+#include <kactionmenu.h>
+#include <kmenu.h>
+#include <klocale.h>
+#include <kstandardaction.h>
+#include <kmimetype.h>
+#include <kmessagebox.h>
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>
@@ -647,6 +647,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
     shapeMatrix.scale(zoomX, zoomY);
     shapeMatrix.translate(0, -m_textShapeData->documentOffset());
+    shapeMatrix.translate(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
 
     // Possibly draw table dragging visual cues
     const qreal boxHeight = 20;
@@ -910,23 +911,23 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
                 if (pointedAt.tableColumnDivider < pointedAt.table->columns()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
-                        KoBorder::Left, m_tablePenBorderData);
+                        KoBorder::LeftBorder, m_tablePenBorderData);
                 }
                 if (pointedAt.tableColumnDivider > 0) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider - 1,
-                        KoBorder::Right, m_tablePenBorderData);
+                        KoBorder::RightBorder, m_tablePenBorderData);
                 }
             } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
                 if (pointedAt.tableRowDivider < pointedAt.table->rows()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider, pointedAt.tableColumnDivider,
-                        KoBorder::Top, m_tablePenBorderData);
+                        KoBorder::TopBorder, m_tablePenBorderData);
                 }
                 if (pointedAt.tableRowDivider > 0) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
                         pointedAt.tableRowDivider-1, pointedAt.tableColumnDivider,
-                        KoBorder::Bottom, m_tablePenBorderData);
+                        KoBorder::BottomBorder, m_tablePenBorderData);
                 }
             }
             m_textEditor.data()->endEditBlock();
@@ -1042,7 +1043,7 @@ QMimeData *TextTool::generateMimeData() const
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
-#if SHOULD_BUILD_RDF
+#ifdef SHOULD_BUILD_RDF
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
         KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
@@ -1212,6 +1213,7 @@ KoPointedAt TextTool::hitTest(const QPointF & point) const
     }
     QPointF p = m_textShape->convertScreenPos(point);
     KoTextLayoutRootArea *rootArea = m_textShapeData->rootArea();
+    p -= QPointF(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
     return rootArea ? rootArea->hitTest(p, Qt::FuzzyHit) : KoPointedAt();
 }
 
@@ -1688,7 +1690,8 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->cursor());
-        rect.moveTop(rect.top() - m_textShapeData->documentOffset());
+        rect.moveTop(rect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
+        rect.moveLeft(rect.left() + m_textShapeData->leftPadding());
         QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
@@ -1738,7 +1741,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         QTextLayout *layout = block.layout();
         Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
-        const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
+        const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), event->preeditString().length());
     }
     event->accept();
 }
@@ -1775,7 +1778,8 @@ void TextTool::ensureCursorVisible(bool moveView)
         m_delayedEnsureVisible = true;
         return; // we shouldn't move to an obsolete position
     }
-    cRect.moveTop(cRect.top() - m_textShapeData->documentOffset());
+    cRect.moveTop(cRect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
+    cRect.moveLeft(cRect.left() + m_textShapeData->leftPadding());
     canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cRect));
 }
 
@@ -1976,7 +1980,8 @@ void TextTool::repaintCaret()
 
     bool upToDate;
     QRectF repaintRect = caretRect(textEditor->cursor(), &upToDate);
-    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
+    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
+    repaintRect.moveLeft(repaintRect.left() + m_textShapeData->leftPadding());
     if (repaintRect.isValid()) {
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
 
@@ -2072,7 +2077,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
 
-/* We do not use these for now. Let's see if they become usefull at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
+/* We do not use these for now. Let's see if they become useful at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
     if (m_textShapeData && KoTextDocument(m_textShapeData->document()).styleManager()) {
         scw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
         spw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());
@@ -2514,7 +2519,7 @@ void TextTool::startTextEditingPlugin(const QString &pluginId)
     }
 }
 
-void TextTool::resourceChanged(int key, const QVariant &var)
+void TextTool::canvasResourceChanged(int key, const QVariant &var)
 {
     if (m_textEditor.isNull())
         return;

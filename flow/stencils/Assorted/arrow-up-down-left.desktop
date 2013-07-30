@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Up-Down-Left Arrow
 Name[bg]=Стрелка нагоре-надолу-наляво
+Name[bs]=Strelica gore-dole-lijevo
 Name[ca]=Fletxa dalt-baix-esquerra
 Name[ca@valencia]=Fletxa dalt-baix-esquerra
+Name[cs]=Šipka nahoru-dolů-doleva
 Name[da]=Pil til op-ned-venstre
 Name[de]=Pfeil nach oben, unten und links
 Name[el]=Πάνω-κάτω-αριστερά βέλος
@@ -23,6 +25,7 @@ Name[pt_BR]=Seta cima-baixo-esquerda
 Name[ru]=Стрелка вверх, вниз и влево
 Name[sk]=Šípka hore-dolu-vľavo
 Name[sv]=Uppåt-neråt-vänsterpil
+Name[tr]=Yukarı-Aşağı-Sola Ok
 Name[uk]=Стрілки вгору, вниз і ліворуч
 Name[x-test]=xxUp-Down-Left Arrowxx
 Name[zh_CN]=上下左箭头

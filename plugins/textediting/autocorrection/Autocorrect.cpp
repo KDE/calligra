@@ -21,15 +21,15 @@
 #include "AutocorrectConfigDialog.h"
 
 #include <QTextBlock>
-#include <KAction>
+#include <kaction.h>
 #include <QFile>
 #include <QDomDocument>
 
-#include <KLocale>
-#include <KConfigGroup>
-#include <KCalendarSystem>
-#include <KStandardDirs>
-#include <KDebug>
+#include <klocale.h>
+#include <kconfiggroup.h>
+#include <kcalendarsystem.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
 #include <KoGlobal.h>
 
@@ -747,7 +747,7 @@ void Autocorrect::readAutocorrectXmlEntries()
         if (m_autocorrectLang != "all_languages") {
             if (fname.isEmpty() && !kdelang.isEmpty())
                 fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
-            if (fname.isEmpty() && kdelang.contains("_")) {
+            if (fname.isEmpty() && kdelang.contains('_')) {
                 kdelang.remove( QRegExp( "_.*" ) );
                 fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
             }

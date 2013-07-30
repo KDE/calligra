@@ -21,8 +21,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "PowerPointImport.h"
 #include "PptToOdp.h"
+
+#include "PowerPointImport.h"
 #include "globalobjectcollectors.h"
 #include "pictures.h"
 #include "ODrawToOdf.h"
@@ -787,6 +788,7 @@ PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgres
   m_currentMaster(0),
   m_currentSlide(0),
   m_processingMasters(false),
+  m_firstChunkFontSize(12),
   m_firstChunkSymbolAtStart(false),
   m_isList(false),
   m_previousListLevel(0)
@@ -894,6 +896,7 @@ PptToOdp::doConversion(KoStore* storeout)
     bulletPictureNames = createBulletPictures(getPP<PP9DocBinaryTagExtension>(
             p->documentContainer), storeout, manifest);
     storeout->leaveDirectory();
+    storeout->setCompressionEnabled(true);
 
     KoGenStyles styles;
 
@@ -2367,6 +2370,7 @@ writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
     const HeaderMCAtom* d = m.meta.get<HeaderMCAtom>();
     const FooterMCAtom* e = m.meta.get<FooterMCAtom>();
     const RTFDateTimeMCAtom* f = m.meta.get<RTFDateTimeMCAtom>();
+    out.startElement("text:meta");
     if (a) {
         out.startElement("text:page-number");
         out.endElement();
@@ -2396,6 +2400,7 @@ writeMeta(const TextContainerMeta& m, bool master, KoXmlWriter& out)
     if (f) {
         // TODO
     }
+    out.endElement();
 }
 
 template <class T>

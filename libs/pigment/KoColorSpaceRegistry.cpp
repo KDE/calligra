@@ -101,13 +101,13 @@ void KoColorSpaceRegistry::init()
     config.whiteList = "ColorSpacePlugins";
     config.blacklist = "ColorSpacePluginsDisabled";
     config.group = "calligra";
-    KoPluginLoader::instance()->load("Calligra/ColorSpace", "[X-Pigment-PluginVersion] == 27", config);
+    KoPluginLoader::instance()->load("Calligra/ColorSpace", "[X-Pigment-PluginVersion] == 28", config);
 
     KoPluginLoader::PluginsConfig configExtensions;
     configExtensions.whiteList = "ColorSpaceExtensionsPlugins";
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
     configExtensions.group = "calligra";
-    KoPluginLoader::instance()->load("Calligra/ColorSpaceExtension", "[X-Pigment-PluginVersion] == 27", configExtensions);
+    KoPluginLoader::instance()->load("Calligra/ColorSpaceExtension", "[X-Pigment-PluginVersion] == 28", configExtensions);
 
 
     dbgPigment << "Loaded the following colorspaces:";
@@ -360,7 +360,9 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
 const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const KoColorProfile *profile)
 {
-    Q_ASSERT(!csID.isEmpty());
+    if (csID.isEmpty()) {
+        return 0;
+    }
     if (profile) {
         const KoColorSpace *cs = 0;
         if (isCached(csID, profile->name())) {
@@ -380,7 +382,6 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 dbgPigmentCSRegistry << "Unknown color space type :" << csf;
                 return 0;
             }
-            Q_ASSERT(csf->profileIsCompatible(profile));
             if (!csf->profileIsCompatible(profile ) ) {
                 return 0;
             }

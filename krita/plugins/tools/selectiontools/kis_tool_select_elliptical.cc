@@ -67,9 +67,7 @@ void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
         return;
     }
 
-    KisSystemLocker locker(currentNode());
-
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Elliptical Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Elliptical Selection"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
@@ -83,6 +81,10 @@ void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
         painter.paintEllipse(rect);
+
+        QPainterPath cache;
+        cache.addEllipse(rect);
+        tmpSel->setOutlineCache(cache);
 
         helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
     } else {
