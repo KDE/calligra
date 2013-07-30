@@ -202,14 +202,14 @@ void KarbonPaletteBarWidget::updateDocumentColors()
     QMap<uint, QColor> colors;
 
     foreach(KoShape *shape, canvas->shapeManager()->shapes()) {
-        QPointer<KoShapeBackground> fill = shape->background();
+        QSharedPointer<KoShapeBackground> fill = shape->background();
         if (fill) {
-            QPointer<KoColorBackground> cbg = dynamic_cast<KoColorBackground*>(shape->background().data());
+            QSharedPointer<KoColorBackground> cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
             if (cbg) {
                 //colors.insert(cbg->color());
                 colors.insert(qHash(cbg->color()), cbg->color());
             }
-            QPointer<KoGradientBackground> gbg = dynamic_cast<KoGradientBackground*>(shape->background().data());
+            QSharedPointer<KoGradientBackground> gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
             if (gbg) {
                 foreach(const QGradientStop &stop, gbg->gradient()->stops()) {
                      colors.insert(qHash(stop.second), stop.second);

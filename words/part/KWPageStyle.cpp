@@ -52,7 +52,7 @@ void KWPageStylePrivate::clear()
     direction = KoText::AutoDirection;
     headerDynamicSpacing = false;
     footerDynamicSpacing = false;
-    fullPageBackground = 0;
+    fullPageBackground.clear();
     nextStyleName.clear();
 }
 
@@ -216,12 +216,12 @@ QString KWPageStyle::displayName() const
     return d->displayName;
 }
 
-QPointer<KoShapeBackground> KWPageStyle::background() const
+QSharedPointer<KoShapeBackground> KWPageStyle::background() const
 {
     return d->fullPageBackground;
 }
 
-void KWPageStyle::setBackground(QPointer<KoShapeBackground> background)
+void KWPageStyle::setBackground(QSharedPointer<KoShapeBackground> background)
 {
     d->fullPageBackground = background;
 }
@@ -337,7 +337,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     if (!propBackgroundImage.isNull()) {
         const QString href = propBackgroundImage.attributeNS(KoXmlNS::xlink, "href", QString());
         if (!href.isEmpty()) {
-            QPointer<KoPatternBackground> background = new KoPatternBackground(documentResources->imageCollection());
+            QSharedPointer<KoPatternBackground> background =  QSharedPointer<KoPatternBackground>(new KoPatternBackground(documentResources->imageCollection()));
             d->fullPageBackground = background;
 
             KoImageCollection *imageCollection = documentResources->imageCollection();
@@ -354,10 +354,10 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     if (!backgroundColor.isNull() && d->fullPageBackground == 0) {
 
         if (backgroundColor == "transparent") {
-            d->fullPageBackground = 0;
+            d->fullPageBackground.clear();
         }
         else {
-            d->fullPageBackground = new KoColorBackground(QColor(backgroundColor));
+            d->fullPageBackground = QSharedPointer<KoShapeBackground>(new KoColorBackground(QColor(backgroundColor)));
         }
     }
 
@@ -418,6 +418,7 @@ uint qHash(const KWPageStyle &style)
 
 void KWPageStyle::detach(const QString &newName, const QString &displayName)
 {
+    d->fullPageBackground.clear();
     d.detach();
     d->name = newName;
     d->displayName = displayName;

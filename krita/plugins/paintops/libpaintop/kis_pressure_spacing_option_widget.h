@@ -1,6 +1,5 @@
-/* This file is part of the KDE project
- *
- * Copyright (C) 2007      Inge Wallin <inge@lysator.liu.se>
+/* 
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,24 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHARTTOOLFACTORY_H
-#define CHARTTOOLFACTORY_H
+#ifndef KIS_PRESSURE_SPACING_OPTION_WIDGET_H
+#define KIS_PRESSURE_SPACING_OPTION_WIDGET_H
 
-#include <KoToolFactoryBase.h>
+#include "kis_curve_option_widget.h"
 
-namespace KChart
+class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
+
+
+class PAINTOP_EXPORT KisPressureSpacingOptionWidget : public KisCurveOptionWidget
 {
+    Q_OBJECT
 
-class ChartToolFactory : public KoToolFactoryBase
-{
 public:
-    ChartToolFactory();
-    ~ChartToolFactory();
+    KisPressureSpacingOptionWidget();
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+private slots:
+    void setIsotropicSpacing(int isotropic);
 };
 
-} // namespace KChart
-
-
-#endif
+#endif // KIS_PRESSURE_SPACING_OPTION_WIDGET_H
