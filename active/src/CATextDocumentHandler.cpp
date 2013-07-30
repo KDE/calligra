@@ -52,12 +52,14 @@ public:
         document = 0;
         findText = 0;
         taTextDocumentModel = 0;
+        copyAction = 0;
     }
     KWDocument* document;
     KWPage currentTextDocPage;
     QString searchString;
     KoFindText* findText;
     CATextDocumentModel *taTextDocumentModel;
+    QAction *copyAction;
 };
 
 CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentController)
@@ -152,8 +154,8 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
     KoFindText::findTextInShapes(kwCanvasItem->shapeManager()->shapes(), texts);
     d->findText->setDocuments(texts);
 
-    KAction *action = part->actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
-    new KoCopyController(canvas(), action);
+    d->copyAction = new QAction(i18n("Copy"), this);
+    new KoCopyController(canvas(), d->copyAction);
 
     d->taTextDocumentModel = new CATextDocumentModel(this, d->document, canvas()->shapeManager());
 
@@ -259,7 +261,7 @@ CATextDocumentModel* CATextDocumentHandler::paTextDocumentModel() const {
 
 void CATextDocumentHandler::copy()
 {
-    document()->documentPart()->actionCollection()->action("edit_copy")->activate(QAction::Trigger);
+    d->copyAction->activate(QAction::Trigger);
 }
 
 CAAbstractDocumentHandler::FlickModes CATextDocumentHandler::flickMode() const

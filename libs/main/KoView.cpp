@@ -296,9 +296,6 @@ QAction *KoView::action(const QDomElement &element) const
 
     QAction *act = KXMLGUIClient::action(name.toUtf8());
 
-    if (!act)
-        act = d->part->KXMLGUIClient::action(name.toUtf8());
-
     // last resort, try to get action from the main window if there is one
     if (!act && shell())
         act = shell()->actionCollection()->action(name);
@@ -309,9 +306,6 @@ QAction *KoView::action(const QDomElement &element) const
 QAction *KoView::action(const char* name) const
 {
     QAction *act = KXMLGUIClient::action(name);
-
-    if (!act)
-        act = d->part->KXMLGUIClient::action(name);
 
     // last resort, try to get action from the main window if there is one
     if (!act && shell())

@@ -27,8 +27,6 @@
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoView.h"
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 
 
@@ -76,17 +74,6 @@ QString KoPartAdaptor::view(int idx)
         return QString();
 
     return v->objectName();
-}
-
-QStringList KoPartAdaptor::actions()
-{
-    QStringList tmp_actions;
-    QList<QAction*> lst = m_pDoc->actionCollection()->actions();
-    foreach(QAction* it, lst) {
-        if (it->isEnabled())
-            tmp_actions.append(it->objectName());
-    }
-    return tmp_actions;
 }
 
 void KoPartAdaptor::save()
