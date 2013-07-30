@@ -447,6 +447,16 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
     return true;
 }
 
+bool KWOdfWriter::saveSteps (KoStore * store)
+{
+
+  KoStoreDevice stepDevice(store);
+  return true;
+
+
+}
+
+
 void KWOdfWriter::calculateZindexOffsets()
 {
     Q_ASSERT(m_zIndexOffsets.isEmpty()); // call this method only once, please.

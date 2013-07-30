@@ -20,8 +20,10 @@
 #include "StepStepStack_p.h"
 #include "StepStepBase.h"
 #include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include <QtCore/QVariant>
 #include <QDir>
+
 #include <QDebug>
 
 StepStepStackPrivate::StepStepStackPrivate()
@@ -90,6 +92,7 @@ void StepStepStackPrivate::push(StepStepBase & step)
 #if DEBUG
     qDebug("Pushed");
 #endif
+    serialize(step, "changes.xml");
 
 }
 
@@ -109,18 +112,14 @@ void StepStepStackPrivate::serialize(QString Filename)
 
 void StepStepStackPrivate::serialize (StepStepBase & step, QString Filename)
 {
-  qDebug("1");
   QDir directory;
-
   QString Location = directory.homePath() +"/" + Filename;
   QFile file(Filename);
   file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text);
-  qDebug("2");
-  step.toXML();
-  qDebug("2.6");
-
-  file.write(step.toXML().toAscii());
-  qDebug("3");
+  QTextStream out(&file);
+  out << step.toXML();
+  out << endl;
+  file.flush();
   file.close();
 }
 

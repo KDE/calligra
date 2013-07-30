@@ -20,6 +20,7 @@
 #include "StepAddTextStep.h"
 #include "StepAddTextStep_p.h"
 #include "StepStepLocation.h"
+#include <QDebug>
 StepAddTextStep::StepAddTextStep (QObject * parent):StepStepBase (parent), d(new StepAddTextStepPrivate())
 {
 
@@ -44,12 +45,7 @@ StepAddTextStepPrivate::~StepAddTextStepPrivate ()
 
 QString StepAddTextStep::toXML ()
 {
-  stepText();
-  qDebug("2.5");
-  location().toString();
-  qDebug("2.4.5");
   QString string ="<add type=\"text\" " + location().toString()+" >" + stepText() + " </add>";
-  qDebug("2.5.5");
   return string;
 
 }

@@ -20,6 +20,7 @@
 #include "StepStepLocation.h"
 #include "StepStepLocation_p.h"
 #include <QtGui/QTextCursor>
+#include <QDebug>
 StepStepLocation::StepStepLocation(QObject *parent) :
     QObject(parent), d(new StepStepLocationPrivate())
 {
@@ -56,9 +57,9 @@ StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject(),d(
 
 QString StepStepLocation::toString ()
 {
-  QString* string = new QString(d->ToString());
-  qDebug("2.5.4");
-  qDebug(string->toLatin1());
-  return *string;
+  QString string = d->ToString();
+  qDebug()<< string.toLatin1();
+
+  return string;
 
 }

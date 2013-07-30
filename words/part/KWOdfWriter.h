@@ -71,6 +71,7 @@ private:
     void addShapeToTree(KoShape *shape);
 
     bool saveOdfSettings(KoStore *store);
+    bool saveSteps(KoStore *store);
 
     /// The Words document.
     KWDocument *m_document;

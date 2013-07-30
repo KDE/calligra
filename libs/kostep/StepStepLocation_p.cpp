@@ -105,14 +105,11 @@ QTextCursor StepStepLocationPrivate::convertToQTextCursor(QTextDocument* ptr)
 QString StepStepLocationPrivate::ToString()
 {
   QString returnValue = "s=\"";
-  qDebug("2.5.1");
   foreach(int ptr, location)
   {
     returnValue +="/" + ptr;
   }
-  qDebug("2.5.2");
   returnValue+="\"";
-  qDebug("2.5.3");
   return returnValue;
 
 }
@@ -145,7 +142,6 @@ int StepStepLocationPrivate::ParentFrame(QTextFrame* frame, QTextFrame* rootFram
   {
     if(itr.currentFrame() == frame2)
     {
-      qDebug("Found first frame");
       location.push(i);
       frameStack.pop();
       break;
@@ -162,7 +158,6 @@ int StepStepLocationPrivate::ParentFrame(QTextFrame* frame, QTextFrame* rootFram
       QTextFrame* ptr = frameStack.top();
       if(itr.currentFrame() == ptr)
       {
-	qDebug("found frame");
 	location.push(i);
 	frame2 = frameStack.pop();
 	break;
