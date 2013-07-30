@@ -441,24 +441,24 @@ void KoBorder::setBorderData(BorderSide side, const BorderData &data)
 
 bool KoBorder::hasBorder() const
 {
-    if (d->data.contains(LeftBorder) && borderWidth(LeftBorder) > 0.0)
+    if (borderStyle(LeftBorder) != BorderNone && borderWidth(LeftBorder) > 0.0)
         return true;
-    if (d->data.contains(RightBorder) && borderWidth(RightBorder) > 0.0)
+    if (borderStyle(RightBorder) != BorderNone && borderWidth(RightBorder) > 0.0)
         return true;
-    if (d->data.contains(TopBorder) && borderWidth(TopBorder) > 0.0)
+    if (borderStyle(TopBorder) != BorderNone && borderWidth(TopBorder) > 0.0)
         return true;
-    if (d->data.contains(BottomBorder) && borderWidth(BottomBorder) > 0.0)
+    if (borderStyle(BottomBorder) != BorderNone && borderWidth(BottomBorder) > 0.0)
         return true;
-    if (d->data.contains(TlbrBorder) && borderWidth(TlbrBorder) > 0.0)
+    if (borderStyle(TlbrBorder) != BorderNone && borderWidth(TlbrBorder) > 0.0)
         return true;
-    if (d->data.contains(BltrBorder) && borderWidth(BltrBorder) > 0.0)
+    if (borderStyle(BltrBorder) != BorderNone && borderWidth(BltrBorder) > 0.0)
         return true;
     return false;
 }
 
 bool KoBorder::hasBorder(KoBorder::BorderSide side) const
 {
-    return d->data.contains(side);
+    return borderStyle(side) != BorderNone && borderWidth(side) > 0.0;
 }
 
 
@@ -649,6 +649,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
     else {
         // No common border attributes, check for the individual ones.
         if (style.hasAttributeNS(KoXmlNS::fo, "border-left")) {
+            result = true;
             borderString = style.attributeNS(KoXmlNS::fo, "border-left");
             if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-left"))) {
                 specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-left");
@@ -656,6 +657,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             parseAndSetBorder(LeftBorder, borderString, hasSpecialBorder, specialBorderString);
         }
         if (style.hasAttributeNS(KoXmlNS::fo, "border-top")) {
+            result = true;
             borderString = style.attributeNS(KoXmlNS::fo, "border-top");
             if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-top"))) {
                 specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-top");
@@ -663,6 +665,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             parseAndSetBorder(TopBorder, borderString, hasSpecialBorder, specialBorderString);
         }
         if (style.hasAttributeNS(KoXmlNS::fo, "border-right")) {
+            result = true;
             borderString = style.attributeNS(KoXmlNS::fo, "border-right");
             if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-right"))) {
                 specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-right");
@@ -670,6 +673,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             parseAndSetBorder(RightBorder, borderString, hasSpecialBorder, specialBorderString);
         }
         if (style.hasAttributeNS(KoXmlNS::fo, "border-bottom")) {
+            result = true;
             borderString = style.attributeNS(KoXmlNS::fo, "border-bottom");
             if ((hasSpecialBorder = style.hasAttributeNS(KoXmlNS::calligra, "specialborder-bottom"))) {
                 specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder-bottom");
@@ -953,8 +957,9 @@ bool KoBorder::loadOdf(const KoStyleStack &styleStack)
 void KoBorder::parseAndSetBorder(const QString &borderString,
                                  bool hasSpecialBorder, const QString &specialBorderString)
 {
-    if (borderString == "none")
+    if (borderString == "none") {
         return;
+    }
 
     //kDebug() << "*** *** Found border: " << border;
     QColor bordersColor;
