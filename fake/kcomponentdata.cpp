@@ -2,12 +2,13 @@
 
 #include <ksharedconfig.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
 
 using namespace KGlobal;
 
 KSharedConfigPtr KComponentData::config() const
 {
-    return m_sharedConfig;
+    return KGlobal::config();
 }
 
 KStandardDirs* KComponentData::dirs() const
