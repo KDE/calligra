@@ -31,6 +31,8 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
+#include "Cell.h"
+#include "ValueConverter.h"
 
 
 // Calligra
@@ -54,6 +56,7 @@
 #include <QModelIndex>
 #include <QAbstractItemModel>
 #include <QScrollBar>
+#include <QList>
 using namespace Calligra::Sheets;
 
 class CellEditor::Private
@@ -309,8 +312,18 @@ QPoint CellEditor::globalCursorPosition() const
 
 QAbstractItemModel *CellEditor::getModel()
 {
-  QStringList words;
-  words<<"Test"<<"Testing"<<"Test Again";
+  ValueConverter *conv;
+  QList<QString> words;
+  const Cell cell(d->selection->activeSheet(), d->selection->marker());
+  int col=cell.column();
+  for(int i=0;i<50;i++)
+  {
+    QString val=conv->toString(Value(Cell(d->selection->activeSheet(),col,i).value()));
+    if(val!="" && !words.contains(val))
+      words.append(val);
+  }
+  
+  //words<<"Test"<<"Testing"<<"Test Again";
   return new QStringListModel(words,c);  
 }
 
@@ -352,7 +365,6 @@ QString CellEditor::textUnderCursor() const
 {
      QTextCursor tc = textCursor();
      tc.select(QTextCursor::WordUnderCursor);
-     qDebug()<<"st:"<<tc.selectedText();
      return tc.selectedText();
 }
 
@@ -656,7 +668,6 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
      static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
      bool hasModifier = (event->modifiers() != Qt::NoModifier) && !ctrlOrShift;
      QString completionPrefix = textUnderCursor();
-     //qDebug()<<"cp:"<<completionPrefix;
 
      if (!isShortcut && (hasModifier || event->text().isEmpty()|| completionPrefix.length() < 3||eow.contains(event->text().right(1)))) {
          c->popup()->hide();
@@ -668,9 +679,6 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
     }
      QRect cr = cursorRect();
      cr.setWidth(c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width());
-     qDebug()<<c->popup()->sizeHintForColumn(0) + c->popup()->verticalScrollBar()->sizeHint().width();
-     //qDebug()<<"cp:"<<c->completionPrefix();
-     qDebug()<<"cc:"<<c->currentCompletion();
      c->complete(); // popup it up!
     
 }
