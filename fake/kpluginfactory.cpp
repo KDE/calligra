@@ -1,13 +1,13 @@
 #include "kpluginfactory.h"
 
 KPluginFactory::KPluginFactory(const char *componentName, const char *catalogName, QObject *parent)
-    : QObject(parent)
+    : KLibFactory(parent)
 {
     setObjectName(componentName);
 }
 
 KPluginFactory::KPluginFactory(const KAboutData &aboutData, QObject *parent)
-    : QObject(parent)
+    : KLibFactory(parent)
 {
 }
 
