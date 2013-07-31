@@ -22,125 +22,178 @@ set(kofake_LIB_SRCS
     kdialog.cpp
     kocursor.cpp
     krun.cpp
+    klocale.cpp
+    kcalendarsystem.cpp
+)
+
+set(kofake_HEADERS_ONLY 
+    kcolorbutton.h
+    kstatusbar.h
+    kcombobox.h
+    kurlrequester.h
+    kuser.h
+    kpluginloader.h
+    kicon.h
+    kreplacedialog.h
+    kfind.h
+    kxmlguiwindow.h
+    kmessagebox.h
+    krecentdocument.h
+    kfilewidget.h
+    kparts/componentfactory.h
+    kparts/browserextension.h
+    kparts/browserinterface.h
+    kparts/factory.h
+    kparts/mainwindow.h
+    kparts/part.h
+    kparts/partmanager.h
+    kparts/plugin.h
+    kparts/event.h
+    kfontsizeaction.h
+    klimitediodevice_p.h
+    kplugininfo.h
+    kselectaction.h
+    kpagewidget.h
+    config.h
+    knuminput.h
+    kstandarddirs.h
+    ktoggleaction.h
+    kapplication.h
+    kstandardguiitem.h
+    kshortcut.h
+    kpagedialog.h
+    kmenu.h
+    kactionmenu.h
+    kcolormimedata.h
+    kmimetype.h
+    kemailsettings.h
+    klineedit.h
+    kxmlguifactory.h
+    kcompletion.h
+    kcmdlineargs.h
+    kinputdialog.h
+    kpluginselector.h
+    kofake_export.h
+    kxmlguiclient.h
+    klistwidget.h
+    kio/global.h
+    kio/udsentry.h
+    kio/previewjob.h
+    kio/jobuidelegate.h
+    kio/renamedialog.h
+    kio/kfileitem.h
+    kio/netaccess.h
+    kio/copyjob.h
+    kio/kjob.h
+    kdiroperator.h
+    kcolordialog.h
+    kdesktopfile.h
+    kassistantdialog.h
+    knotifyconfigwidget.h
+    knewpassworddialog.h
+    kwordwrap.h
+    klocalizedstring.h
+    ktoolbar.h
+    kpagewidgetitem.h
+    sonnet/dialog.h
+    sonnet/speller.h
+    sonnet/configwidget.h
+    sonnet/backgroundchecker.h
+    kfile.h
+    kservicetypetrader.h
+    kdatetime.h
+    kde_file.h
+    kstringhandler.h
+    kpushbutton.h
+    kwindowsystem.h
+    kmainwindow.h
+    kcolorscheme.h
+    kselector.h
+    kglobalsettings.h
+    ksharedconfig.h
+    kdeprintdialog.h
+    kaboutdata.h
+    kurlcombobox.h
+    kimageio.h
+    kpassworddialog.h
+    kcolorutils.h
+    kactioncollection.h
+    ktextedit.h
+    kfinddialog.h
+    kurlcompletion.h
+    kfontaction.h
+    kcodecs.h
+    krecentfilesaction.h
+    kstandardaction.h
+    kiconloader.h
+    ktabwidget.h
+    kcolorcombo.h
+    kfilefiltercombo.h
+    soprano/soprano.h
+    kicondialog.h
+    ksavefile.h
+    kreplace.h
+    krecentdirs.h
+    kstandardshortcut.h
+    khistorycombobox.h
+    knotification.h
+    kcharsets.h
+    kcharselect.h
+    kpagewidgetmodel.h
+    kglobal.h
+    kpassivepopup.h
+    kfiledialog.h
+    kfontchooser.h
+    kconfig.h
+    ksharedptr.h
+    kfileitem.h
+    klibloader.h
+    kpropertiesdialog.h
+    kurl.h
+    kdemacros.h
+    kdebug.h
+    kvbox.h
+    kmenubar.h
+    kservice.h
+    ktoolinvocation.h
+    kedittoolbar.h
+    ksqueezedtextlabel.h
+    kservicetype.h
+    knumvalidator.h
+    ktemporaryfile.h
+    ktextbrowser.h
+    kconfiggroup.h
+    config-compression.h
+    kjob.h
+    kwidgetitemdelegate.h
+    kxyselector.h
+    kdeversion.h
+    kfontdialog.h
+    kguiitem.h
 )
 
 set(kofake_HEADERS 
-config-compression.h
-config.h
-kaboutdata.h
-kactioncollection.h
-kactionmenu.h
-kapplication.h
-kofake_export.h
-karchive.h
-kcharsets.h
-kcmdlineargs.h
-kcolorbutton.h
-kcolordialog.h
-kcolormimedata.h
-kcolorscheme.h
-kcolorutils.h
-kcombobox.h
-kcomponentdata.h
-kconfigbase.h
-kconfiggroup.h
-kconfig.h
-kdatetime.h
-kdebug.h
-kofake_export.h
-kde_file.h
-kdemacros.h
-kdeprintdialog.h
-kdesktopfile.h
-kdeversion.h
-kdiroperator.h
-kedittoolbar.h
-kemailsettings.h
-kfiledialog.h
-kfilefiltercombo.h
-kfile.h
-kfileitem.h
-kfilewidget.h
-kfilterbase.h
-kfilterdev.h
-kfinddialog.h
-kfind.h
-kglobal.h
-kglobalsettings.h
-kguiitem.h
-kgzipfilter.h
-khistorycombobox.h
-kicondialog.h
-kicon.h
-kiconloader.h
-kimageio.h
-kinputdialog.h
-klibloader.h
-klimitediodevice_p.h
-klocale.h
-klocalizedstring.h
-kmainwindow.h
-kmessagebox.h
-kmimetype.h
-knotification.h
-knuminput.h
-kpagedialog.h
-kpagewidget.h
-kpagewidgetitem.h
-kpagewidgetmodel.h
-kpluginloader.h
-kpropertiesdialog.h
-kpushbutton.h
-krecentdirs.h
-krecentdocument.h
-krecentfilesaction.h
-kreplacedialog.h
-kselectaction.h
-kselector.h
-kservice.h
-kservicetype.h
-kservicetypetrader.h
-ksharedconfig.h
-ksharedptr.h
-kshortcut.h
-ksqueezedtextlabel.h
-kstandardaction.h
-kstandarddirs.h
-kstandardshortcut.h
-kstatusbar.h
-kstringhandler.h
-ktar.h
-ktemporaryfile.h
-ktextbrowser.h
-ktoggleaction.h
-ktoolbar.h
-ktoolinvocation.h
-kurlcombobox.h
-kurl.h
-kuser.h
-kvbox.h
-kwidgetitemdelegate.h
-kwindowsystem.h
-kxmlguiclient.h
-kxmlguifactory.h
-kxmlguiwindow.h
-kxyselector.h
-kzip.h
-kparts/browserextension.h
-kparts/browserinterface.h
-kparts/componentfactory.h
-kparts/event.h
-kparts/factory.h
-kparts/mainwindow.h
-kparts/part.h
-kparts/partmanager.h
-kparts/plugin.h
-kio/renamedialog.h
-kpassworddialog.h
-knewpassworddialog.h
+    ${kofake_HEADERS_ONLY}
+    karchive.h
+    kcomponentdata.h
+    kconfigbase.h
+    kfilterbase.h
+    kfilterdev.h
+    kgzipfilter.h
+    kpluginfactory.h
+    ktar.h
+    kzip.h
+    kio/job.h
+    kaction.h
+    kdialog.h
+    kocursor.h
+    krun.h
+    klocale.h
+    kcalendarsystem.h
+    kocursor_p.h
 )
 
-QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS})
+QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS_ONLY})
 
 kde4_add_library(kofake SHARED ${kofake_LIB_SRCS} ${kofake_HEADERS_MOC})
 
