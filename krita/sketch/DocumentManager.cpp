@@ -129,7 +129,7 @@ void DocumentManager::closeDocument()
     if(d->document) {
         emit aboutToDeleteDocument();
         part()->closeUrl(false);
-        d->document->deleteLater();
+        //d->document->deleteLater();
         d->document = 0;
     }
 }
