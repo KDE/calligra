@@ -47,22 +47,13 @@ void StepStepLocationPrivate::constructor(const QTextCursor &cursor)
     for (itr = cursor.currentFrame()->begin(); itr != cursor.currentFrame()->end(); itr++) {
         if (cursor.block() == itr.currentBlock()) {
             location.push(i);
-            if (cursor.currentTable()) {
-                //QTextTable table = cursor.currentTable();
-                //QTextTable::iterator itr;
-
-                //cursor.movePosition();
-
-            }
-            if(cursor.currentList()) {
-            }
             qDebug() << "After Block: \n"<< toString() << "\n-----------------";
             break;
         }
         i++;
     }
     location.push(cursor.positionInBlock());
-    qDebug() << "After Position" << toString() << "\n----------------- \n\n";
+    qDebug() << "After Position: \n" << toString() << "\n----------------- \n\n";
 }
 
 QTextCursor StepStepLocationPrivate::convertToQTextCursor(QTextDocument *document)
@@ -95,10 +86,16 @@ QTextCursor StepStepLocationPrivate::convertToQTextCursor(QTextDocument *documen
 
 QString StepStepLocationPrivate::toString()
 {
+    //create a temporary stack and flip it
+    QStack <int> tempStack = location;
+    QStack <int> tempStack2;
+    while(!tempStack.isEmpty()) {
+        tempStack2.push(tempStack.pop());
+    }
+
     QString returnValue = "s=\"";
-    QVector<int>::const_iterator itr;
-    for (itr = location.constBegin(); itr != location.constEnd(); itr++) {
-        returnValue +="/" + *itr;
+    while (!tempStack2.isEmpty()) {
+        returnValue +="/" + QString::number(tempStack2.pop());
     }
 
     returnValue+="\"";
