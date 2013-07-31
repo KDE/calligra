@@ -57,14 +57,7 @@ public:
         SwitchApplicationLanguage
     };
 
-    static QString name(StandardAction a)
-    {
-        KStandardAction sa;
-        int idx = sa.metaObject()->indexOfEnumerator("StandardAction");
-        Q_ASSERT(idx >= 0);
-        QMetaEnum e = sa.metaObject()->enumerator(idx);
-        return QString::fromLatin1(e.valueToKey(int(a)));
-    }
+    KOFAKE_EXPORT static QString name(StandardAction a);
 
 #if 0
     /**
@@ -113,89 +106,74 @@ public:
     static KStandardShortcut::StandardShortcut shortcutForActionId(StandardAction id);
 #endif
 
-    static KAction *openNew(const QObject *recvr, const char *slot, QObject *parent)
-    {
-        return new KAction(parent);
-    }
-
-    static KAction *open(const QObject *recvr, const char *slot, QObject *parent)
-    {
-        return new KAction(parent);
-    }
-
-    static KRecentFilesAction *openRecent(const QObject *recvr, const char *slot, QObject *parent)
-    {
-        KRecentFilesAction *a = new KRecentFilesAction(i18n("Open recent"), parent);
-        connect(a, SIGNAL(triggered(bool)), recvr, slot);
-        return a;
-    }
-
-    static KAction *save(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *saveAs(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *revert(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *close(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *print(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *printPreview(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *mail(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *quit(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *undo(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *redo(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *cut(QObject *parent) { return new KAction(parent); }
-    static KAction *copy(QObject *parent) { return new KAction(parent); }
-    static KAction *paste(QObject *parent) { return new KAction(parent); }
-    static KAction *clear(QObject *parent) { return new KAction(parent); }
-    static KAction *selectAll(QObject *parent) { return new KAction(parent); }
-    static KAction *cut(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *copy(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *paste(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *pasteText(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *clear(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *selectAll(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *deselect(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *find(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *findNext(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *findPrev(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *replace(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *actualSize(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *fitToPage(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *fitToWidth(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *fitToHeight(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *zoomIn(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *zoomOut(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *zoom(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *redisplay(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *up(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *back(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *forward(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *home(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *prior(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *next(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *goTo(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *gotoPage(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *gotoLine(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *firstPage(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *lastPage(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *documentBack(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *documentForward(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *addBookmark(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *editBookmarks(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *spelling(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KToggleAction *showMenubar(const QObject *recvr, const char *slot, QObject *parent) { return new KToggleAction(parent); }
-    static KToggleAction *showStatusbar(const QObject *recvr, const char *slot, QObject *parent) { return new KToggleAction(parent); }
-    //static KToggleFullScreenAction *fullScreen(const QObject *recvr, const char *slot, QWidget *window, QObject *parent) { return new KToggleFullScreenAction(parent); }
-
-    static KAction *saveOptions(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *keyBindings(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *preferences(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *configureToolbars(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *configureNotifications(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *help(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *helpContents(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *whatsThis(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *tipOfDay(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *reportBug(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *aboutApp(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-    static KAction *aboutKDE(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
+    KOFAKE_EXPORT static KAction *openNew(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *open(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KRecentFilesAction *openRecent(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *save(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *saveAs(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *revert(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *close(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *print(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *printPreview(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *mail(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *quit(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *undo(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *redo(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *cut(QObject *parent);
+    KOFAKE_EXPORT static KAction *copy(QObject *parent);
+    KOFAKE_EXPORT static KAction *paste(QObject *parent);
+    KOFAKE_EXPORT static KAction *clear(QObject *parent);
+    KOFAKE_EXPORT static KAction *selectAll(QObject *parent);
+    KOFAKE_EXPORT static KAction *cut(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *copy(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *paste(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *pasteText(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *clear(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *selectAll(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *deselect(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *find(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *findNext(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *findPrev(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *replace(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *actualSize(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *fitToPage(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *fitToWidth(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *fitToHeight(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *zoomIn(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *zoomOut(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *zoom(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *redisplay(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *up(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *back(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *forward(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *home(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *prior(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *next(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *goTo(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *gotoPage(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *gotoLine(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *firstPage(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *lastPage(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *documentBack(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *documentForward(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *addBookmark(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *editBookmarks(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *spelling(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KToggleAction *showMenubar(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KToggleAction *showStatusbar(const QObject *recvr, const char *slot, QObject *parent);
+    //KOFAKE_EXPORT static KToggleFullScreenAction *fullScreen(const QObject *recvr, const char *slot, QWidget *window, QObject *parent) { return new KToggleFullScreenAction(parent); }
+    KOFAKE_EXPORT static KAction *saveOptions(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *keyBindings(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *preferences(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *configureToolbars(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *configureNotifications(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *help(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *helpContents(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *whatsThis(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *tipOfDay(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *reportBug(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *aboutApp(const QObject *recvr, const char *slot, QObject *parent);
+    KOFAKE_EXPORT static KAction *aboutKDE(const QObject *recvr, const char *slot, QObject *parent);
 
 };
 

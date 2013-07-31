@@ -24,6 +24,7 @@ set(kofake_LIB_SRCS
     krun.cpp
     klocale.cpp
     kcalendarsystem.cpp
+    kstandardaction.cpp
 )
 
 set(kofake_HEADERS_ONLY 
@@ -124,7 +125,6 @@ set(kofake_HEADERS_ONLY
     kfontaction.h
     kcodecs.h
     krecentfilesaction.h
-    kstandardaction.h
     kiconloader.h
     ktabwidget.h
     kcolorcombo.h
@@ -191,6 +191,7 @@ set(kofake_HEADERS
     klocale.h
     kcalendarsystem.h
     kocursor_p.h
+    kstandardaction.h
 )
 
 QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS_ONLY})
