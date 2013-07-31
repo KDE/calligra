@@ -24,7 +24,7 @@
 // Calligra
 #include <KoXmlStreamReader.h>
 #include <KoFilter.h>
-#include <OdtReaderBackend.h>
+#include <OdfTextReaderBackend.h>
 
 
 
@@ -35,22 +35,16 @@ class KoStore;
 class OdfReaderContext;
 
 
-class OdtReaderAsciiBackend : public OdtReaderBackend
+class OdtReaderAsciiBackend : public OdfTextReaderBackend
 {
  public:
-    explicit OdtReaderAsciiBackend(OdfReaderContext *context);
+    explicit OdtReaderAsciiBackend();
     virtual ~OdtReaderAsciiBackend();
 
     // Called before and after the actual traversal.
     // FIXME: NYI
 
     // Called when there is a document level element with children.
-
-    // ----------------------------------------------------------------
-    // ODT document level functions
-
-    //void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc

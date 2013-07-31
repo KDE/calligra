@@ -98,8 +98,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
             QString n = pdata->caption().trimmed();
             if (n.isEmpty())
                 n = pdata->constConnectionData()->dbFileName();
-            return n
-                   + opened;
+            return QString(n + opened);
         }
         else {
             QString n = pdata->captionOrName();
@@ -114,7 +113,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
             else {
                 serverInfo = i18n("on \"%1\" server", serverInfo);
             }
-            return n + serverInfo + opened;
+            return QString(n + serverInfo + opened);
         }
     }
     case Qt::ToolTipRole:

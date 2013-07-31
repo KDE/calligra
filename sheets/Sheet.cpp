@@ -2454,8 +2454,8 @@ void Sheet::convertPart(const QString & part, KoXmlWriter & xmlWriter) const
                     addText(text, xmlWriter);
                 }
 
-                text = "";
-                var  = "";
+                text.clear();
+                var.clear();
             }
         } else {
             text += part[i];
@@ -3500,18 +3500,18 @@ void Sheet::printDebug()
         for (int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++) {
             cell = Cell(this, currentcolumn, currentrow);
             if (!cell.isEmpty()) {
-                QString cellDescr = Cell::name(currentcolumn, currentrow).rightJustified(4);
+                QString cellDescr = Cell::name(currentcolumn, currentrow).rightJustified(4) +
                 //QString cellDescr = "Cell ";
                 //cellDescr += QString::number(currentrow).rightJustified(3,'0') + ',';
                 //cellDescr += QString::number(currentcolumn).rightJustified(3,'0') + ' ';
-                cellDescr += " | ";
+                    " | ";
                 QString valueType;
                 QTextStream stream(&valueType);
                 stream << cell.value().type();
-                cellDescr += valueType.rightJustified(7);
-                cellDescr += " | ";
-                cellDescr += map()->converter()->asString(cell.value()).asString().rightJustified(5);
-                cellDescr += QString("  [%1]").arg(cell.userInput());
+                cellDescr += valueType.rightJustified(7) +
+                             " | " +
+                             map()->converter()->asString(cell.value()).asString().rightJustified(5) +
+                             QString("  [%1]").arg(cell.userInput());
                 kDebug(36001) << cellDescr;
             }
         }
