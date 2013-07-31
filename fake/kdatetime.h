@@ -8,7 +8,6 @@
 
 #include "kofake_export.h"
 
-
 class KDateTime : public QDateTime
 {
 public:
@@ -28,6 +27,10 @@ public:
     QString toString(TimeFormat tf = ISODate) const
     {
         return QDateTime::toString( (Qt::DateFormat)tf );
+    }
+    QString toString(Qt::DateFormat df) const
+    {
+        return QDateTime::toString(df);
     }
 
     static KDateTime currentLocalDateTime()
