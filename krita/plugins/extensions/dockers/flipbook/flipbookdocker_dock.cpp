@@ -163,7 +163,7 @@ void FlipbookDockerDock::saveFlipbook()
         m_flipbook->setName(txtName->text());
         m_flipbook->save(filename);
     }
-    m_canvas->view()->document()->documentPart()->addRecentURLToAllShells(filename);
+    m_canvas->view()->document()->documentPart()->addRecentURLToAllMainWindows(filename);
 }
 
 
@@ -336,12 +336,12 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
             m_canvas->view()->document()->setModified(false);
         }
         m_canvas->view()->document()->setUrl(item->filename());
-        m_canvas->view()->shell()->updateCaption();
+        m_canvas->view()->mainWindow()->updateCaption();
         m_canvas->view()->document()->setCurrentImage(item->document()->image());
         m_canvas->view()->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
         // Update all dockers, except us
-        QList<KoCanvasObserverBase*> canvasObservers = m_canvas->view()->shell()->canvasObservers();
+        QList<KoCanvasObserverBase*> canvasObservers = m_canvas->view()->mainWindow()->canvasObservers();
         foreach (KoCanvasObserverBase *canvasObserver, canvasObservers) {
             if (canvasObserver != this) {
                 canvasObserver->unsetObservedCanvas();
@@ -356,7 +356,7 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 void FlipbookDockerDock::toggleAnimation()
 {
 //    if (!m_animationWidget) {
-//        m_animationWidget = new SequenceViewer(m_canvas->view()->shell());
+//        m_animationWidget = new SequenceViewer(m_canvas->view()->mainWindow());
 //        m_animationWidget->hide();
 //    }
 

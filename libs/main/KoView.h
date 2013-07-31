@@ -242,15 +242,9 @@ public:
      * WARNING: this could be 0, if the main window isn't a calligra main window.
      * (e.g. it can be any KParts application).
      */
-    KoMainWindow * shell() const;
+    KoMainWindow * mainWindow() const;
 
-    /**
-     * @return the KXmlGuiWindow in which this view is currently.
-     * This one should never return 0, in a KDE app.
-     */
-    KXmlGuiWindow* mainWindow() const;
-
-    /**
+   /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
      * WARNING: this could be 0, if the main window isn't a calligra main window.
      * (e.g. it can be any KParts application).

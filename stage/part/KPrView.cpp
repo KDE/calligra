@@ -187,9 +187,9 @@ void KPrView::showStatusBar(bool toggled)
 void KPrView::initGUI()
 {
     // add page effect docker to the main window
-    if (shell()) {
+    if (mainWindow()) {
         KPrPageLayoutDockerFactory pageLayoutFactory;
-        KPrPageLayoutDocker *pageLayoutDocker = qobject_cast<KPrPageLayoutDocker*>( shell()->createDockWidget( &pageLayoutFactory ) );
+        KPrPageLayoutDocker *pageLayoutDocker = qobject_cast<KPrPageLayoutDocker*>( mainWindow()->createDockWidget( &pageLayoutFactory ) );
         pageLayoutDocker->setView( this );
     }
 

@@ -60,7 +60,7 @@ public:
     /**
      * Call this to start the application.
      *
-     * Parses command line arguments and creates the initial shells and docs
+     * Parses command line arguments and creates the initial main windowss and docs
      * from them (or an empty doc if no cmd-line argument is specified ).
      *
      * You must call this method directly before calling QApplication::exec.

@@ -105,13 +105,13 @@ KisWorkspaceChooser::~KisWorkspaceChooser()
 
 void KisWorkspaceChooser::slotSave()
 {
-    if(!m_view->shell()) {
+    if(!m_view->mainWindow()) {
         return;
     }
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
 
     KisWorkspaceResource* workspace = new KisWorkspaceResource("");
-    workspace->setDockerState(m_view->shell()->saveState());
+    workspace->setDockerState(m_view->mainWindow()->saveState());
     m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
     QString saveLocation = rserver->saveLocation();
@@ -139,10 +139,10 @@ void KisWorkspaceChooser::slotSave()
 
 void KisWorkspaceChooser::resourceSelected(KoResource* resource)
 {
-    if(!m_view->shell()) {
+    if(!m_view->mainWindow()) {
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
-    m_view->shell()->restoreState(workspace->dockerState());
+    m_view->mainWindow()->restoreState(workspace->dockerState());
     m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
 }

@@ -192,7 +192,7 @@ bool KoApplication::start()
     KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
     if (entry.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
-        kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
+        kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;
         kError(30003) << "Check your installation (did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
         return false;
     }
@@ -241,12 +241,12 @@ bool KoApplication::start()
         // XXX: the document should be separate plugin
         KoDocument *doc = part->document();
 
-        KoMainWindow *shell = new KoMainWindow(part->componentData());
-        shell->show();
-        QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+        KoMainWindow *mainWindow = new KoMainWindow(part->componentData());
+        mainWindow->show();
+        QObject::connect(doc, SIGNAL(sigProgress(int)), mainWindow, SLOT(slotProgress(int)));
         // for initDoc to fill in the recent docs list
         // and for KoDocument::slotStarted
-        part->addShell(shell);
+        part->addMainWindow(mainWindow);
 
         // Check for autosave files from a previous run. There can be several, and
         // we want to offer a restore for every one. Including a nice thumbnail!
@@ -326,7 +326,7 @@ bool KoApplication::start()
             KUrl url;
             // bah, we need to re-use the document that was already created
             url.setPath(QDir::homePath() + "/" + autoSaveFiles.takeFirst());
-            if (shell->openDocument(part, url)) {
+            if (mainWindow->openDocument(part, url)) {
                 doc->resetURL();
                 doc->setModified(true);
                 QFile::remove(url.toLocalFile());
@@ -342,9 +342,9 @@ bool KoApplication::start()
                 if (part) {
                     url.setPath(QDir::homePath() + "/" + autoSaveFile);
 
-                    KoMainWindow *shell = new KoMainWindow(part->componentData());
-                    shell->show();
-                    if (shell->openDocument(part, url)) {
+                    KoMainWindow *mainWindow = new KoMainWindow(part->componentData());
+                    mainWindow->show();
+                    if (mainWindow->openDocument(part, url)) {
                         doc->resetURL();
                         doc->setModified(true);
                         QFile::remove(url.toLocalFile());
@@ -355,7 +355,7 @@ bool KoApplication::start()
             return (numberOfOpenDocuments > 0);
         }
         else {
-            part->showStartUpWidget(shell);
+            part->showStartUpWidget(mainWindow);
         }
 
     }
@@ -368,8 +368,8 @@ bool KoApplication::start()
         const bool benchmarkLoading = koargs->isSet("benchmark-loading")
                 || koargs->isSet("benchmark-loading-show-window")
                 || !roundtripFileName.isEmpty();
-        // only show the shell when no command-line mode option is passed
-        const bool showShell =
+        // only show the mainWindow when no command-line mode option is passed
+        const bool showmainWindow =
                 koargs->isSet("benchmark-loading-show-window") || (
                     !koargs->isSet("export-pdf")
                     && !koargs->isSet("benchmark-loading")
@@ -395,10 +395,10 @@ bool KoApplication::start()
             KoPart *part = entry.createKoPart(&errorMsg);
             if (part) {
                 KoDocument *doc = part->document();
-                // show a shell asap
-                KoMainWindow *shell = new KoMainWindow(part->componentData());
-                if (showShell) {
-                    shell->show();
+                // show a mainWindow asap
+                KoMainWindow *mainWindow = new KoMainWindow(part->componentData());
+                if (showmainWindow) {
+                    mainWindow->show();
                 }
                 if (benchmarkLoading) {
                     doc->setReadWrite(false);
@@ -429,10 +429,10 @@ bool KoApplication::start()
                         }
                         if (paths.isEmpty()) {
                             KMessageBox::error(0, i18n("No template found for: %1", desktopName));
-                            delete shell;
+                            delete mainWindow;
                         } else if (paths.count() > 1) {
                             KMessageBox::error(0, i18n("Too many templates found for: %1", desktopName));
-                            delete shell;
+                            delete mainWindow;
                         }
                     }
 
@@ -444,7 +444,7 @@ bool KoApplication::start()
                         QString templateName = templateInfo.readUrl();
                         KUrl templateURL;
                         templateURL.setPath(templateBase.directory() + '/' + templateName);
-                        if (shell->openDocument(part, templateURL)) {
+                        if (mainWindow->openDocument(part, templateURL)) {
                             doc->resetURL();
                             doc->setEmpty();
                             doc->setTitleModified();
@@ -452,12 +452,12 @@ bool KoApplication::start()
                             numberOfOpenDocuments++;
                         } else {
                             KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.prettyUrl()));
-                            delete shell;
+                            delete mainWindow;
                         }
                     }
                     // now try to load
                 }
-                else if (shell->openDocument(part, args->url(argNumber))) {
+                else if (mainWindow->openDocument(part, args->url(argNumber))) {
                     if (benchmarkLoading) {
                         if (profileoutput.device()) {
                             profileoutput << "KoApplication::start\t"
@@ -468,17 +468,17 @@ bool KoApplication::start()
                             part->saveAs(KUrl("file:"+roundtripFileName));
                         }
                         // close the document
-                        shell->slotFileQuit();
+                        mainWindow->slotFileQuit();
                         return true; // only load one document!
                     }
                     else if (print) {
-                        shell->slotFilePrint();
-                        // delete shell; done by ~KoDocument
+                        mainWindow->slotFilePrint();
+                        // delete mainWindow; done by ~KoDocument
                         nPrinted++;
                     } else if (exportAsPdf) {
-                        KoPrintJob *job = shell->exportToPdf(pdfFileName);
+                        KoPrintJob *job = mainWindow->exportToPdf(pdfFileName);
                         if (job)
-                            connect (job, SIGNAL(destroyed(QObject*)), shell,
+                            connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
                                      SLOT(slotFileQuit()), Qt::QueuedConnection);
                         nPrinted++;
                     } else {
@@ -488,7 +488,7 @@ bool KoApplication::start()
                 } else {
                     // .... if failed
                     // delete doc; done by openDocument
-                    // delete shell; done by ~KoDocument
+                    // delete mainWindow; done by ~KoDocument
                 }
 
                 if (profileoutput.device()) {

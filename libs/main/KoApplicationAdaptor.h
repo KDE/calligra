@@ -47,7 +47,7 @@ public:
 public slots: // METHODS
     /**
      * Creates a new document for the given native mimetype
-     * Use it to create a shell and to load an existing file, if any
+     * Use it to create a main window and to load an existing file, if any
      */
     Q_SCRIPTABLE QString createDocument(const QString &nativeFormat);
 

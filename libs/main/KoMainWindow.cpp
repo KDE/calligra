@@ -257,7 +257,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     if (componentData.isValid()) {
         setComponentData(componentData);   // don't load plugins! we don't want
-        // the part's plugins with this shell, even though we are using the
+        // the part's plugins with this main window, even though we are using the
         // part's componentData! (Simon)
         KGlobal::setActiveComponent(componentData);
     }
@@ -350,7 +350,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
 
-    createShellGUI();
+    createMainwindowGUI();
     d->mainWindowGuiIsBuilt = true;
 
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
@@ -415,10 +415,10 @@ KoMainWindow::~KoMainWindow()
     d->dockerManager = 0;
     // The doc and view might still exist (this is the case when closing the window)
     if (d->rootPart)
-        d->rootPart->removeShell(this);
+        d->rootPart->removeMainWindow(this);
 
     if (d->partToOpen) {
-        d->partToOpen->removeShell(this);
+        d->partToOpen->removeMainWindow(this);
         delete d->partToOpen;
     }
 
@@ -453,7 +453,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
         return;
 
     if (d->partToOpen && d->partToOpen->document() != doc) {
-        d->partToOpen->removeShell(this);
+        d->partToOpen->removeMainWindow(this);
         delete d->partToOpen;
     }
     d->partToOpen = 0;
@@ -465,7 +465,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
     KoPart *oldRootPart = d->rootPart;
 
     if (oldRootDoc) {
-        oldRootPart->removeShell(this);
+        oldRootPart->removeMainWindow(this);
 
         if (dockerManager()) {
             dockerManager()->resetToolDockerWidgets();
@@ -505,9 +505,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
         view->show();
         view->setFocus();
 
-        // The addShell has been done already if using openUrl
-        if (!d->rootPart->shells().contains(this)) {
-            d->rootPart->addShell(this);
+        // The addMainWindow has been done already if using openUrl
+        if (!d->rootPart->mainWindows().contains(this)) {
+            d->rootPart->addMainWindow(this);
         }
     }
 
@@ -730,10 +730,10 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
-    newpart->addShell(this);   // used by openUrl
+    newpart->addMainWindow(this);   // used by openUrl
     bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
-        newpart->removeShell(this);
+        newpart->removeMainWindow(this);
         delete newdoc;
         delete newpart;
         return false;
@@ -758,12 +758,12 @@ void KoMainWindow::slotLoadCompleted()
         // Replace current empty document
         setRootDocument(newdoc);
     } else if (d->rootDocument && !d->rootDocument->isEmpty()) {
-        // Open in a new shell
-        // (Note : could create the shell first and the doc next for this
+        // Open in a new main window
+        // (Note : could create the main window first and the doc next for this
         // particular case, that would give a better user feedback...)
         KoMainWindow *s = new KoMainWindow(newpart->componentData());
         s->show();
-        newpart->removeShell(this);
+        newpart->removeMainWindow(this);
         s->setRootDocument(newdoc, newpart);
     } else {
         // We had no document, set the new one
@@ -1192,8 +1192,8 @@ bool KoMainWindow::queryClose()
     if (rootDocument() == 0)
         return true;
     //kDebug(30003) <<"KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
-    //               << " shellcount=" << rootDocument()->shellCount() << endl;
-    if (!d->forQuit && d->rootPart->shellCount() > 1)
+    //               << " mainWindowCount=" << rootDocument()->mainWindowCount() << endl;
+    if (!d->forQuit && d->rootPart->mainwindowCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
         return true;
 
@@ -1249,7 +1249,7 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
     if ((!doc && initDocFlags == InitDocFileNew) || (doc && !doc->isEmpty())) {
         KoMainWindow *s = new KoMainWindow(newpart->componentData());
         s->show();
-        newpart->addShell(s);
+        newpart->addMainWindow(s);
         newpart->showStartUpWidget(s, true /*Always show widget*/);
         return;
     }
@@ -1262,7 +1262,7 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
         d->rootDocument = 0;
     }
 
-    newpart->addShell(this);
+    newpart->addMainWindow(this);
     newpart->showStartUpWidget(this, true /*Always show widget*/);
 }
 
@@ -1351,7 +1351,7 @@ void KoMainWindow::slotFileClose()
 {
     if (queryClose()) {
         saveWindowSettings();
-        setRootDocument(0);   // don't delete this shell when deleting the document
+        setRootDocument(0);   // don't delete this main window when deleting the document
         if(d->rootDocument)
             d->rootDocument->clearUndoHistory();
         delete d->rootDocument;
@@ -1772,7 +1772,7 @@ void KoMainWindow::slotReloadFile()
 
     KUrl url = pDoc->url();
     if (!pDoc->isEmpty()) {
-        setRootDocument(0);   // don't delete this shell when deleting the document
+        setRootDocument(0);   // don't delete this main window when deleting the document
         if(d->rootDocument)
             d->rootDocument->clearUndoHistory();
         delete d->rootDocument;
@@ -1981,7 +1981,7 @@ void KoMainWindow::slotSetStatusBarText( const QString & text )
     statusBar()->showMessage( text );
 }
 
-void KoMainWindow::createShellGUI()
+void KoMainWindow::createMainwindowGUI()
 {
     if ( isHelpMenuEnabled() && !d->m_helpMenu )
         d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), true, actionCollection() );
@@ -2070,7 +2070,7 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
     }
 
     if (!d->mainWindowGuiIsBuilt) {
-        createShellGUI();
+        createMainwindowGUI();
     }
 
     if (newPart && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {

@@ -52,6 +52,9 @@ class QGraphicsItem;
  * should provide the document, the view and the component data to the calligra
  * system.
  *
+ * There is/will be a single KoPart instance for an application that will manage
+ * the list of documents, views and mainwindows.
+ *
  * It hasn't got much to do with kparts anymore.
  */
 class KOMAIN_EXPORT KoPart : public QObject
@@ -112,35 +115,34 @@ public:
     virtual bool openFile(); ///reimplemented
     virtual bool saveFile(); ///reimplemented
 
-    // ----------------- shell management -----------------
+    // ----------------- mainwindow management -----------------
     /**
-     * Appends the shell to the list of shells which show this
+     * Appends the mainwindow to the list of mainwindows which show this
      * document as their root document.
      *
      * This method is automatically called from KoMainWindow::setRootDocument,
      * so you do not need to call it.
      */
-    virtual void addShell(KoMainWindow *shell);
+    virtual void addMainWindow(KoMainWindow *mainWindow);
 
     /**
-     * Removes the shell from the list. That happens automatically if the shell changes its
-     * root document. Usually you do not need to call this method.
+     * Removes the mainwindow from the list.
      */
-    virtual void removeShell(KoMainWindow *shell);
+    virtual void removeMainWindow(KoMainWindow *mainWindow);
 
     /**
      * @return the list of shells for the main window
      */
-    const QList<KoMainWindow*>& shells() const;
+    const QList<KoMainWindow*>& mainWindows() const;
 
     /**
      * @return the number of shells for the main window
      */
-    int shellCount() const;
+    int mainwindowCount() const;
 
-    void addRecentURLToAllShells(KUrl url);
+    void addRecentURLToAllMainWindows(KUrl url);
 
-    KoMainWindow *currentShell() const;
+    KoMainWindow *currentMainwindow() const;
 
     virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 

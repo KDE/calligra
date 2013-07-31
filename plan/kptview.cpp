@@ -236,7 +236,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     layout->addWidget( m_sp );
 
     ViewListDocker *docker = 0;
-    if ( shell() == 0 ) {
+    if ( mainWindow() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget(doc, m_sp);
         m_viewlist->setProject( &( getProject() ) );
@@ -245,7 +245,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         connect( m_viewlist, SIGNAL(updateViewInfo(ViewListItem*)), SLOT(slotUpdateViewInfo(ViewListItem*)) );
     } else {
         ViewListDockerFactory vl(this);
-        docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
+        docker = dynamic_cast<ViewListDocker *>(mainWindow()->createDockWidget(&vl));
         if (docker->view() != this) {
             docker->setView(this);
         }
@@ -424,10 +424,10 @@ View::~View()
 // hackish way to get rid of unused dockers, but as long as no official way exists...
 void View::hideToolDocker()
 {
-    if ( shell() ) {
+    if ( mainWindow() ) {
         QStringList lst; lst << "KPlatoViewList" << "Scripting";
         QStringList names;
-        foreach ( QDockWidget *w, shell()->dockWidgets() ) {
+        foreach ( QDockWidget *w, mainWindow()->dockWidgets() ) {
             if ( ! lst.contains( w->objectName() ) ) {
                 names << w->windowTitle();
                 w->setFeatures( QDockWidget::DockWidgetClosable );
@@ -2608,13 +2608,13 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
         }
         foreach ( DockWidget *ds, view->dockers() ) {
             m_dockers.append( ds );
-            ds->activate( shell() );
+            ds->activate( mainWindow() );
         }
         kDebug(planDbg())<<"Added dockers:"<<view<<m_dockers;
     } else {
         kDebug(planDbg())<<"Remove dockers:"<<view<<m_dockers;
         while ( ! m_dockers.isEmpty() ) {
-            m_dockers.takeLast()->deactivate( shell() );
+            m_dockers.takeLast()->deactivate( mainWindow() );
         }
     }
 }

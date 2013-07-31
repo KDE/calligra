@@ -314,7 +314,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
     connect(part(), SIGNAL(shapeCountChanged()), d->colorBar, SLOT(updateDocumentColors()));
 
-    if (shell()) {
+    if (mainWindow()) {
         // set the first layer active
         d->canvasController->canvas()->shapeManager()->selection()->setActiveLayer(part()->layers().first());
 
@@ -323,10 +323,10 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
 
         // set one whitespace as title to allow a one column toolbox
         KoToolBoxFactory toolBoxFactory(d->canvasController);
-        shell()->createDockWidget(&toolBoxFactory);
+        mainWindow()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -1043,7 +1043,7 @@ void KarbonView::initActions()
     connect(d->showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
 
     // No need for the other actions in read-only (embedded) mode
-    if (!shell())
+    if (!mainWindow())
         return;
 
     // edit ----->
@@ -1262,13 +1262,13 @@ void KarbonView::reorganizeGUI()
 
 void KarbonView::setNumberOfRecentFiles(unsigned int number)
 {
-    if (shell())     // 0L when embedded into konq !
-        shell()->setMaxRecentItems(number);
+    if (mainWindow())     // 0L when embedded into konq !
+        mainWindow()->setMaxRecentItems(number);
 }
 
 void KarbonView::showRuler()
 {
-    if(!shell())
+    if(!mainWindow())
         return;
 
     const bool showRuler = d->showRulerAction->isChecked();
@@ -1323,7 +1323,7 @@ void KarbonView::snapToGrid()
 
 void KarbonView::showPalette()
 {
-    if(!shell())
+    if(!mainWindow())
         return;
 
     const bool showPalette = d->showPaletteAction->isChecked();
@@ -1364,7 +1364,7 @@ void KarbonView::configurePageLayout()
 
 void KarbonView::selectionChanged()
 {
-    if (!shell())
+    if (!mainWindow())
         return;
     KoSelection *selection = d->canvas->shapeManager()->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::FullSelection);
@@ -1434,10 +1434,10 @@ void KarbonView::setCursor(const QCursor &c)
 
 void KarbonView::createLayersTabDock()
 {
-    if (shell())
+    if (mainWindow())
     {
         KarbonLayerDockerFactory layerFactory;
-        KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(shell()->createDockWidget(&layerFactory));
+        KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(mainWindow()->createDockWidget(&layerFactory));
         layerDocker->setCanvas(d->canvas);
         connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
                 layerDocker, SLOT(updateView()));

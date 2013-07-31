@@ -739,18 +739,18 @@ void View::initView()
     // Load the KSpread Tools
     ToolRegistry::instance()->loadTools();
 
-    if (shell())
+    if (mainWindow())
     {
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
-        shell()->dockerManager()->removeToolOptionsDocker();
+        QDockWidget* modeBox = mainWindow()->createDockWidget(&modeBoxFactory);
+        mainWindow()->dockerManager()->removeToolOptionsDocker();
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
         //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-        //        shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -1002,8 +1002,8 @@ void View::initConfig()
 
 void View::changeNbOfRecentFiles(int _nb)
 {
-    if (shell())
-        shell()->setMaxRecentItems(_nb);
+    if (mainWindow())
+        mainWindow()->setMaxRecentItems(_nb);
 }
 
 void View::initCalcMenu()
@@ -1155,7 +1155,7 @@ void View::finishLoading()
     setHeaderMinima();
 
     // Activate the cell tool.
-    if (shell())
+    if (mainWindow())
         KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
 }
 

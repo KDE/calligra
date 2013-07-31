@@ -195,8 +195,8 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        if (shell())
-            shell()->createDockWidget(factory);
+        if (mainWindow())
+            mainWindow()->createDockWidget(factory);
     }
 
     actionCollection()->addAssociatedWidget(this);
@@ -297,8 +297,8 @@ QAction *KoView::action(const QDomElement &element) const
     QAction *act = KXMLGUIClient::action(name.toUtf8());
 
     // last resort, try to get action from the main window if there is one
-    if (!act && shell())
-        act = shell()->actionCollection()->action(name);
+    if (!act && mainWindow())
+        act = mainWindow()->actionCollection()->action(name);
 
     return act;
 }
@@ -308,8 +308,8 @@ QAction *KoView::action(const char* name) const
     QAction *act = KXMLGUIClient::action(name);
 
     // last resort, try to get action from the main window if there is one
-    if (!act && shell())
-        act = shell()->actionCollection()->action(name);
+    if (!act && mainWindow())
+        act = mainWindow()->actionCollection()->action(name);
 
     return act;
 }
@@ -481,9 +481,9 @@ void KoView::newView()
     Q_ASSERT((d != 0 && d->document && d->part));
 
     KoDocument *thisDocument = d->document;
-    KoMainWindow *shell = new KoMainWindow(d->part->componentData());
-    shell->setRootDocument(thisDocument, d->part);
-    shell->show();
+    KoMainWindow *mainWindow = new KoMainWindow(d->part->componentData());
+    mainWindow->setRootDocument(thisDocument, d->part);
+    mainWindow->show();
 }
 
 void KoView::changeAuthorProfile(const QString &profileName)
@@ -500,19 +500,14 @@ void KoView::changeAuthorProfile(const QString &profileName)
     d->document->documentInfo()->updateParameters();
 }
 
-KoMainWindow * KoView::shell() const
+KoMainWindow * KoView::mainWindow() const
 {
     return dynamic_cast<KoMainWindow *>(window());
 }
 
-KXmlGuiWindow * KoView::mainWindow() const
-{
-    return dynamic_cast<KXmlGuiWindow *>(window());
-}
-
 KStatusBar * KoView::statusBar() const
 {
-    KoMainWindow *mw = shell();
+    KoMainWindow *mw = mainWindow();
     return mw ? mw->statusBar() : 0;
 }
 

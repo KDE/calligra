@@ -202,7 +202,7 @@ public slots:
      *  Slot for opening a new document.
      *
      *  If the current document is empty, the new document replaces it.
-     *  If not, a new shell will be opened for showing the document.
+     *  If not, a new mainwindow will be opened for showing the document.
      */
     void slotFileNew();
 
@@ -210,7 +210,7 @@ public slots:
      *  Slot for opening a saved file.
      *
      *  If the current document is empty, the opened document replaces it.
-     *  If not a new shell will be opened for showing the opened file.
+     *  If not a new mainwindow will be opened for showing the opened file.
      */
     void slotFileOpen();
 
@@ -218,7 +218,7 @@ public slots:
      *  Slot for opening a file among the recently opened files.
      *
      *  If the current document is empty, the opened document replaces it.
-     *  If not a new shell will be opened for showing the opened file.
+     *  If not a new mainwindow will be opened for showing the opened file.
      */
     void slotFileOpenRecent(const KUrl &);
 
@@ -252,7 +252,7 @@ public slots:
     void slotFileClose();
 
     /**
-     *  Closes the shell.
+     *  Closes the mainwindow.
      */
     void slotFileQuit();
 
@@ -432,7 +432,7 @@ private slots:
 
 private:
 
-    void createShellGUI();
+    void createMainwindowGUI();
 
     /**
      * Asks the user if they really want to save the document.

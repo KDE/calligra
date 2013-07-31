@@ -241,10 +241,10 @@ void KoPAView::initGUI()
     d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
 
-    if (shell()) {
+    if (mainWindow()) {
         // this needs to be done before KoCanvasControllerWidget::setCanvas is called
         KoPADocumentStructureDockerFactory structureDockerFactory(KoDocumentSectionView::ThumbnailMode, d->doc->pageType());
-        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>(shell()->createDockWidget(&structureDockerFactory));
+        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>(mainWindow()->createDockWidget(&structureDockerFactory));
         connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
         connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
     }
@@ -315,11 +315,11 @@ void KoPAView::initGUI()
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
     KoToolBoxFactory toolBoxFactory(d->canvasController);
-    if (shell())
+    if (mainWindow())
     {
-        shell()->createDockWidget( &toolBoxFactory );
+        mainWindow()->createDockWidget( &toolBoxFactory );
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-             shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+             mainWindow()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -331,7 +331,7 @@ void KoPAView::initGUI()
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
 
-    if (shell()) {
+    if (mainWindow()) {
         KoToolManager::instance()->requestToolActivation( d->canvasController );
     }
 }
@@ -683,7 +683,7 @@ void KoPAView::configure()
 void KoPAView::setMasterMode( bool master )
 {
     viewMode()->setMasterMode( master );
-    if (shell()) {
+    if (mainWindow()) {
         d->documentStructureDocker->setMasterMode(master);
     }
     d->actionMasterPage->setEnabled(!master);
@@ -705,7 +705,7 @@ KoShapeManager* KoPAView::masterShapeManager() const
 
 void KoPAView::reinitDocumentDocker()
 {
-    if (shell()) {
+    if (mainWindow()) {
         d->documentStructureDocker->setActivePage( d->activePage );
     }
 }
@@ -810,7 +810,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
         masterShapeManager()->setShapes( QList<KoShape*>() );
     }
 
-    if ( shell() && pageChanged ) {
+    if ( mainWindow() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
         proxyObject->emitActivePageChanged();
     }

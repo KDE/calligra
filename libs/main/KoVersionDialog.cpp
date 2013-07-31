@@ -200,7 +200,7 @@ void KoVersionDialog::slotOpen()
     tmp.setPermissions(QFile::ReadUser);
     tmp.flush();
 
-    if (!m_doc->documentPart()->shells().isEmpty()) { //open the version in a new window if possible
+    if (!m_doc->documentPart()->mainWindows().isEmpty()) { //open the version in a new window if possible
         KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
         QString errorMsg;
         KoPart *part= entry.createKoPart(&errorMsg);
@@ -209,9 +209,9 @@ void KoVersionDialog::slotOpen()
                 KMessageBox::error(0, errorMsg);
             return;
         }
-        KoMainWindow *shell = new KoMainWindow(part->componentData());
-        shell->openDocument(tmp.fileName());
-        shell->show();
+        KoMainWindow *mainWindow = new KoMainWindow(part->componentData());
+        mainWindow ->openDocument(tmp.fileName());
+        mainWindow ->show();
     } else {
         m_doc->openUrl(tmp.fileName());
     }

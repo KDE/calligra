@@ -305,7 +305,7 @@ bool KoDocument::saveFile()
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(d->parentPart->url(),
                                      entry,
-                                     d->parentPart->currentShell())) {     // this file exists => backup
+                                     d->parentPart->currentMainwindow())) {     // this file exists => backup
                 emit statusBarMessage(i18n("Making backup..."));
                 KUrl backup;
                 if (d->backupPath.isEmpty())
@@ -473,7 +473,7 @@ void KoDocument::slotAutoSave()
             // That advice should also fix this error from occurring again
             emit statusBarMessage(i18n("The password of this encrypted document is not known. Autosave aborted! Please save your work manually."));
         } else {
-            connect(this, SIGNAL(sigProgress(int)), d->parentPart->currentShell(), SLOT(slotProgress(int)));
+            connect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
             emit statusBarMessage(i18n("Autosaving..."));
             d->autosaving = true;
             bool ret = saveNativeFormat(autoSaveFile(d->parentPart->localFilePath()));
@@ -484,7 +484,7 @@ void KoDocument::slotAutoSave()
             }
             d->autosaving = false;
             emit clearStatusBarMessage();
-            disconnect(this, SIGNAL(sigProgress(int)), d->parentPart->currentShell(), SLOT(slotProgress(int)));
+            disconnect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
             if (!ret) {
                 emit statusBarMessage(i18n("Error during autosave! Partition full?"));
             }
@@ -990,7 +990,7 @@ bool KoDocument::openUrl(const KUrl & _url)
         QFile::remove(url.toLocalFile()); // and remove the autosave file
     }
     else {
-        d->parentPart->addRecentURLToAllShells(_url);
+        d->parentPart->addRecentURLToAllMainWindows(_url);
 
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
