@@ -28,7 +28,12 @@ public:
     void *resolveSymbol(const char */*name*/) { return 0; /*return resolve(name);*/ }
 
     void_function_ptr resolveFunction(const char *name) {
-        void *psym = resolve(name);
+#if QT_VERSION < 0x050000
+        void*
+#else
+        QFunctionPointer
+#endif
+            psym = resolve(name);
         if (!psym) return 0;
         ptrdiff_t tmp = reinterpret_cast<ptrdiff_t>(psym);
         return reinterpret_cast<void_function_ptr>(tmp);
