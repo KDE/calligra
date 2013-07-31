@@ -106,11 +106,22 @@ public:
 
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+
+        KAction* toDesktop = new KAction(q);
+        toDesktop->setText(tr("Switch to Desktop"));
+        connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
+        sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
     }
 
     void initDesktopView()
     {
         desktopView = new KoMainWindow(KisFactory2::componentData());
+
+        KAction* toSketch = new KAction(q);
+        toSketch->setText(tr("Switch to Sketch"));
+        toSketch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+        connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToSketch()));
+        desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
     }
 
 	void notifySlateModeChange();
@@ -135,18 +146,6 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
 
     d->initSketchView(this);
-    d->initDesktopView();
-
-    KAction* toDesktop = new KAction(this);
-    toDesktop->setText(tr("Switch to Desktop"));
-    connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), SLOT(switchToDesktop()));
-    d->sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
-
-    KAction* toSketch = new KAction(this);
-    toSketch->setText(tr("Switch to Sketch"));
-    toSketch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), SLOT(switchToSketch()));
-    d->desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
 
     // Set the initial view to sketch... because reasons.
     switchToSketch();
@@ -156,7 +155,9 @@ void MainWindow::switchToSketch()
 {
     QTime timer;
     timer.start();
-    d->desktopView->setParent(0);
+    if(d->desktopView) {
+        d->desktopView->setParent(0);
+    }
     setCentralWidget(d->sketchView);
     emit switchedToSketch();
     qApp->processEvents();
@@ -175,7 +176,13 @@ void MainWindow::switchToDesktop()
 
 void MainWindow::documentChanged()
 {
-    d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part());
+    if(d->desktopView) {
+        d->desktopView->setNoCleanup(true);
+        d->desktopView->deleteLater();
+        d->desktopView = 0;
+    }
+    d->initDesktopView();
+    d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
 }
 
 bool MainWindow::allowClose() const
@@ -202,17 +209,20 @@ void MainWindow::closeWindow()
 {
     //For some reason, close() does not work even if setAllowClose(true) was called just before this method.
     //So instead just completely quit the application, since we are using a single window anyway.
-    QApplication::exit();
+    DocumentManager::instance()->closeDocument();
+    DocumentManager::instance()->part()->deleteLater();
+    qApp->processEvents();
+    QApplication::instance()->quit();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    if(!d->allowClose) {
-        event->ignore();
-        emit closeRequested();
-    } else {
+    if(d->allowClose) {
         event->accept();
         d->desktopView->close();
+    } else {
+        event->ignore();
+        emit closeRequested();
     }
 }
 
