@@ -6,12 +6,11 @@
 #include <QDebug>
 
 #include <kmainwindow.h>
-#include <QMenu>
-#include <QMenuBar>
+#include <kmenu.h>
+#include <kmenubar.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kglobal.h>
-#include <kconfiggroup.h>
 
 #include "kofake_export.h"
 
@@ -22,13 +21,13 @@ public:
     KMainWindow(QWidget* parent = 0, Qt::WindowFlags f = 0) : QMainWindow(parent) {
         FAKE_KMAINWINDOW_CTOR
     }
-    QMenu* helpMenu( const QString &aboutAppText = QString(), bool showWhatsThis = true ) { return 0; }
-    QMenu* customHelpMenu( bool showWhatsThis = true ) { return 0; }
+    KMenu* helpMenu( const QString &aboutAppText = QString(), bool showWhatsThis = true ) { return 0; }
+    KMenu* customHelpMenu( bool showWhatsThis = true ) { return 0; }
     static bool canBeRestored( int number ) { return false; }
     static const QString classNameOfToplevel( int number );
     bool restore( int number, bool show = true ) { return false; }
     bool hasMenuBar() { return false; }
-    QMenuBar *menuBar() { return 0; }
+    KMenuBar *menuBar() { return 0; }
     KStatusBar *statusBar()  {
         QStatusBar *bar = QMainWindow::statusBar();
         return bar ? new KStatusBar(bar) : 0;
