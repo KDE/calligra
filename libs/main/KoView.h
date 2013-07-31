@@ -239,15 +239,11 @@ public:
 
     /**
      * @return the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a calligra main window.
-     * (e.g. it can be any KParts application).
      */
     KoMainWindow * mainWindow() const;
 
    /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a calligra main window.
-     * (e.g. it can be any KParts application).
      */
     KStatusBar * statusBar() const;
 
@@ -289,10 +285,6 @@ public:
     QList<QAction*> createChangeUnitActions();
 
 public slots:
-    /**
-     * Slot to create a new view around the contained @ref #koDocument.
-     */
-    virtual void newView();
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())

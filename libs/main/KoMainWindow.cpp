@@ -302,6 +302,11 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     actionCollection()->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
+    KAction *actionNewView  = new KAction(koIcon("window-new"), i18n("&New View"), this);
+    actionCollection()->addAction("view_newview", actionNewView);
+    connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
+
+
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
     d->showDocumentInfo  = new KAction(koIcon("document-properties"), i18n("Document Information"), this);
@@ -1979,6 +1984,15 @@ KoView* KoMainWindow::currentView() const
 void KoMainWindow::slotSetStatusBarText( const QString & text )
 {
     statusBar()->showMessage( text );
+}
+
+void KoMainWindow::newView()
+{
+    Q_ASSERT((d != 0 && d->activeView && d->activePart && d->activeView->koDocument()));
+
+    KoMainWindow *mainWindow = d->activePart->createMainWindow();
+    mainWindow->setRootDocument(d->activeView->koDocument(), d->activePart);
+    mainWindow->show();
 }
 
 void KoMainWindow::createMainwindowGUI()

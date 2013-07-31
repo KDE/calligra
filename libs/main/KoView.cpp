@@ -462,10 +462,6 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 
 void KoView::setupGlobalActions()
 {
-    KAction *actionNewView  = new KAction(koIcon("window-new"), i18n("&New View"), this);
-    actionCollection()->addAction("view_newview", actionNewView);
-    connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
-
     actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
     actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 
@@ -474,16 +470,6 @@ void KoView::setupGlobalActions()
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
 
     slotUpdateAuthorProfileActions();
-}
-
-void KoView::newView()
-{
-    Q_ASSERT((d != 0 && d->document && d->part));
-
-    KoDocument *thisDocument = d->document;
-    KoMainWindow *mainWindow = d->part->createMainWindow();
-    mainWindow->setRootDocument(thisDocument, d->part);
-    mainWindow->show();
 }
 
 void KoView::changeAuthorProfile(const QString &profileName)

@@ -398,6 +398,11 @@ private slots:
      */
     virtual void slotSetStatusBarText(const QString &);
 
+    /**
+     * Slot to create a new view for the currently activate @ref #koDocument.
+     */
+    virtual void newView();
+
 
 // ---------------------  PartManager
 private:
