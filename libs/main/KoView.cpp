@@ -314,12 +314,6 @@ QAction *KoView::action(const char* name) const
     return act;
 }
 
-KoDocument *KoView::hitTest(const QPoint &viewPos)
-{
-    Q_UNUSED(viewPos);
-    return d->document; // we no longer have child documents
-}
-
 int KoView::leftBorder() const
 {
     return 0;
