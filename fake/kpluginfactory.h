@@ -9,6 +9,8 @@
 #include <kpluginfactory.h>
 //#include <kexportplugin.h>
 #include <kglobal.h>
+#include <klibloader.h>
+
 #include "kofake_export.h"
 
 namespace KParts { class Part; }
@@ -34,6 +36,7 @@ namespace KParts { class Part; }
                 return factory; \
             } \
             RegisterPluginFactory() { \
+                qRegisterStaticPluginInstanceFunction( (QtPluginInstanceFunction) createPluginInstance ); \
             } \
         }; \
         RegisterPluginFactory registerPluginFactory; \
@@ -51,7 +54,7 @@ public:
     KPluginFactoryContainer(QObject *parent = 0) : QObject(parent) { setObjectName("KPluginFactoryContainer"); }
 };
 
-class KOFAKE_EXPORT KPluginFactory : public QObject
+class KOFAKE_EXPORT KPluginFactory : public KLibFactory
 {
     Q_OBJECT
 public:
@@ -136,8 +139,6 @@ protected:
 private:
     KComponentData m_componentData;
 };
-
-typedef KPluginFactory KLibFactory;
 
 template<typename T>
 inline T *KPluginFactory::create(QObject *parent, const QVariantList &args)
