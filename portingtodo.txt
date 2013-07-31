@@ -24,3 +24,4 @@ Qt Porting todo
    in CellEditor.cpp	
 * KoResourceItemChooserContextMenu.cpp
   commented out KLineEdit specific stuff
+* kis_dlg_filter: commented out configgroup->config
