@@ -391,6 +391,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         if (d->tryHidePopupPalette() || d->trySetMirrorMode(widgetToPixel(mouseEvent->posF()))) {
             retval = true;
         } else {
+            //Make sure the input actions know we are active.
+            KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.buttonPressed(mouseEvent->button(), mouseEvent);
         }
         d->resetSavedTabletEvent(event->type());
