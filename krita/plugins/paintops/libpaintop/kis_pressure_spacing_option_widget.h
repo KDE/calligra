@@ -1,5 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+/* 
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,36 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeBackground.h"
+#ifndef KIS_PRESSURE_SPACING_OPTION_WIDGET_H
+#define KIS_PRESSURE_SPACING_OPTION_WIDGET_H
 
-#include "KoShapeBackground_p.h"
+#include "kis_curve_option_widget.h"
 
-KoShapeBackgroundPrivate::KoShapeBackgroundPrivate()
+class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
+
+
+class PAINTOP_EXPORT KisPressureSpacingOptionWidget : public KisCurveOptionWidget
 {
-}
+    Q_OBJECT
 
-KoShapeBackgroundPrivate::~KoShapeBackgroundPrivate()
-{
-}
+public:
+    KisPressureSpacingOptionWidget();
 
-KoShapeBackground::KoShapeBackground(KoShapeBackgroundPrivate &dd)
-    :d_ptr(&dd)
-{
-}
+private slots:
+    void setIsotropicSpacing(int isotropic);
+};
 
-
-
-KoShapeBackground::KoShapeBackground()
-    : d_ptr(new KoShapeBackgroundPrivate())
-{
-}
-
-KoShapeBackground::~KoShapeBackground()
-{
-    delete d_ptr;
-}
-
-bool KoShapeBackground::hasTransparency() const
-{
-    return false;
-}
+#endif // KIS_PRESSURE_SPACING_OPTION_WIDGET_H
