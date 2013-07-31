@@ -927,9 +927,9 @@ if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     calligra_disable_product(ACTIVE "Qt version <= 4.7.0")
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 
-if (NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
+if (NOT Qt5Declarative_FOUND OR NOT KDECLARATIVE_FOUND)
     calligra_disable_product(ACTIVE "QtDeclarative|KDeclarative not found")
-endif(NOT QT_QTDECLARATIVE_FOUND OR NOT KDECLARATIVE_FOUND)
+endif(NOT Qt5Declarative_FOUND OR NOT KDECLARATIVE_FOUND)
 
 # TODO: remove when Predicate lib arrives
 if (NOT HAVE_ICU OR NOT HAVE_SQLITE)
