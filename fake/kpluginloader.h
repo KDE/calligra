@@ -5,10 +5,7 @@
 #include <QObject>
 #include <QDebug>
 #include <klibloader.h>
-
-class KPluginFactory : public KLibFactory
-{
-};
+#include <kpluginfactory.h>
 
 class KPluginLoader : public QPluginLoader
 {
