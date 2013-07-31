@@ -12,6 +12,7 @@
 
 #include <ksharedconfig.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kofake_export.h>
@@ -24,14 +25,14 @@ class KStandardDirs;
 class KOFAKE_EXPORT KComponentData
 {
 public:
-    KComponentData(KAboutData *about = 0) { if(about) m_about = *about; }
+    KComponentData(const QByteArray &name = QByteArray()) {}
+    KComponentData(KAboutData *about) { m_about = *about; }
     KSharedConfigPtr config() const;
     KStandardDirs* dirs() const;
     bool isValid() const;
     QString componentName() const { return  qApp->applicationName(); }
     const KAboutData* aboutData() const { return &m_about; }
 private:
-    KSharedConfigPtr m_sharedConfig;
     KAboutData m_about;
 };
 
@@ -60,8 +61,9 @@ namespace KGlobal {
         return true;
     }
 
-    static void setActiveComponent(KComponentData) {}
-    static KComponentData activeComponent() { return mainComponent(); }
+    static KComponentData m_activeComponentData;
+    static KComponentData activeComponent() { return m_activeComponentData; }
+    static void setActiveComponent(KComponentData data) { m_activeComponentData = data; }
 
     KOFAKE_EXPORT KSharedConfigPtr config();
     KOFAKE_EXPORT KStandardDirs* dirs();
