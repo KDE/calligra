@@ -68,12 +68,13 @@ public:
      *  Destructor.
      */
     virtual ~KoMainWindow();
+    void setNoCleanup(bool noCleanup);
 
     /**
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    void setRootDocument(KoDocument *doc, KoPart *rootPart = 0);
+    void setRootDocument(KoDocument *doc, KoPart *rootPart = 0, bool deletePrevious = true);
 
     /**
      * This is used to handle the document used at start up before it actually

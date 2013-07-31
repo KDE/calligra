@@ -151,6 +151,7 @@ public:
         activityResource = 0;
 #endif
         themeManager = 0;
+        noCleanup = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -237,6 +238,8 @@ public:
 #endif
 
     Digikam::ThemeManager *themeManager;
+
+    bool noCleanup;
 
 };
 
@@ -404,6 +407,11 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->dockerManager = new KoDockerManager(this);
 }
 
+void KoMainWindow::setNoCleanup(bool noCleanup)
+{
+    d->noCleanup = noCleanup;
+}
+
 KoMainWindow::~KoMainWindow()
 {
     KConfigGroup cfg(KGlobal::config(), "MainWindow");
@@ -422,6 +430,7 @@ KoMainWindow::~KoMainWindow()
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
     d->dockerManager = 0;
+
     // The doc and view might still exist (this is the case when closing the window)
     if (d->rootPart)
         d->rootPart->removeShell(this);
@@ -442,6 +451,8 @@ KoMainWindow::~KoMainWindow()
         delete d->rootViews.takeFirst();
     }
 
+    if(d->noCleanup)
+        return;
     // We have to check if this was a root document.
     // This has to be checked from queryClose, too :)
     if (d->rootPart && d->rootPart->viewCount() == 0) {
@@ -453,14 +464,15 @@ KoMainWindow::~KoMainWindow()
     delete d;
 }
 
-void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
+void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart, bool deletePrevious)
 {
     if (d->rootDocument == doc)
         return;
 
     if (d->partToOpen && d->partToOpen->document() != doc) {
         d->partToOpen->removeShell(this);
-        delete d->partToOpen;
+        if(deletePrevious)
+            delete d->partToOpen;
     }
     d->partToOpen = 0;
 
@@ -535,7 +547,8 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
     if (oldRootPart && oldRootPart->viewCount() == 0) {
         //kDebug(30003) <<"No more views, deleting old doc" << oldRootDoc;
         oldRootDoc->clearUndoHistory();
-        delete oldRootDoc;
+        if(deletePrevious)
+            delete oldRootDoc;
     }
 
     if (doc && !d->dockWidgetVisibilityMap.isEmpty()) {
