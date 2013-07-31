@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QWidget>
 #include <kguiitem.h>
+#include <kstandardguiitem.h>
 
 class KMessageBox
 {
