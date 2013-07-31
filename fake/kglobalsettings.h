@@ -18,8 +18,6 @@ public:
         return s_instance;
     }
 
-    static QFont generalFont() { return QFont(); }
-    static QFont smallestReadableFont() { return QFont(); }
     enum GraphicEffect {
         NoEffects = 0x0000,
         GradientEffects         = 0x0001,
@@ -59,8 +57,8 @@ public:
             CompletionPopup,
             CompletionPopupAuto
         };
+        static Completion completionMode() { return CompletionAuto; }
 #if 0
-        static Completion completionMode();
         struct KMouseSettings
         {
             enum { RightHanded = 0, LeftHanded = 1 };
@@ -82,14 +80,20 @@ public:
         static qreal contrastF(const KSharedConfigPtr &config = KSharedConfigPtr());
         static bool shadeSortColumn();
         static bool allowDefaultBackgroundImages();
-        static QFont generalFont();
-        static QFont fixedFont();
-        static QFont toolBarFont();
-        static QFont menuFont();
-        static QFont windowTitleFont();
-        static QFont taskbarFont();
-        static QFont largeFont(const QString &text = QString());
-        static QFont smallestReadableFont();
+#endif
+        static QFont generalFont() { return QFont(); }
+        static QFont fixedFont() {
+            QFont f;
+            f.setStyleHint(QFont::TypeWriter);
+            return f;
+        }
+        static QFont toolBarFont() { return QFont(); }
+        static QFont menuFont() { return QFont(); }
+        static QFont windowTitleFont() { return QFont(); }
+        static QFont taskbarFont() { return QFont(); }
+        static QFont largeFont(const QString &text = QString()) { return QFont(); }
+        static QFont smallestReadableFont() { return QFont(); }
+#if 0
         static bool isMultiHead();
         static bool wheelMouseZooms();
         static QRect splashScreenDesktopGeometry();
