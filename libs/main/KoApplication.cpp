@@ -241,7 +241,7 @@ bool KoApplication::start()
         // XXX: the document should be separate plugin
         KoDocument *doc = part->document();
 
-        KoMainWindow *mainWindow = new KoMainWindow(part->componentData());
+        KoMainWindow *mainWindow = part->createMainWindow();
         mainWindow->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), mainWindow, SLOT(slotProgress(int)));
         // for initDoc to fill in the recent docs list
@@ -342,7 +342,7 @@ bool KoApplication::start()
                 if (part) {
                     url.setPath(QDir::homePath() + "/" + autoSaveFile);
 
-                    KoMainWindow *mainWindow = new KoMainWindow(part->componentData());
+                    KoMainWindow *mainWindow = part->createMainWindow();
                     mainWindow->show();
                     if (mainWindow->openDocument(part, url)) {
                         doc->resetURL();
@@ -396,7 +396,7 @@ bool KoApplication::start()
             if (part) {
                 KoDocument *doc = part->document();
                 // show a mainWindow asap
-                KoMainWindow *mainWindow = new KoMainWindow(part->componentData());
+                KoMainWindow *mainWindow = part->createMainWindow();
                 if (showmainWindow) {
                     mainWindow->show();
                 }

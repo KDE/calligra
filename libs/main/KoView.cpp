@@ -481,7 +481,7 @@ void KoView::newView()
     Q_ASSERT((d != 0 && d->document && d->part));
 
     KoDocument *thisDocument = d->document;
-    KoMainWindow *mainWindow = new KoMainWindow(d->part->componentData());
+    KoMainWindow *mainWindow = d->part->createMainWindow();
     mainWindow->setRootDocument(thisDocument, d->part);
     mainWindow->show();
 }

@@ -32,7 +32,7 @@
 void KisActionManagerTest::testUpdateGUI()
 {
     KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = new KoMainWindow(doc->documentPart()->componentData());
+    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
     KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
     doc->documentPart()->addView(view);
 
@@ -59,7 +59,7 @@ void KisActionManagerTest::testUpdateGUI()
 void KisActionManagerTest::testCondition()
 {
     KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = new KoMainWindow(doc->documentPart()->componentData());
+    KoMainWindow* mainWindow =  doc->documentPart()->createMainWindow();
     KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
     doc->documentPart()->addView(view);
 
@@ -96,7 +96,7 @@ void KisActionManagerTest::testCondition()
 void KisActionManagerTest::testTakeAction()
 {
     KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = new KoMainWindow(doc->documentPart()->componentData());
+    KoMainWindow* mainWindow =  doc->documentPart()->createMainWindow();
     KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
     doc->documentPart()->addView(view);
 

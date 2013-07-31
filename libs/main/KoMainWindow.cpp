@@ -761,7 +761,7 @@ void KoMainWindow::slotLoadCompleted()
         // Open in a new main window
         // (Note : could create the main window first and the doc next for this
         // particular case, that would give a better user feedback...)
-        KoMainWindow *s = new KoMainWindow(newpart->componentData());
+        KoMainWindow *s = newpart->createMainWindow();
         s->show();
         newpart->removeMainWindow(this);
         s->setRootDocument(newdoc, newpart);
@@ -1247,7 +1247,7 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     if ((!doc && initDocFlags == InitDocFileNew) || (doc && !doc->isEmpty())) {
-        KoMainWindow *s = new KoMainWindow(newpart->componentData());
+        KoMainWindow *s = newpart->createMainWindow();
         s->show();
         newpart->addMainWindow(s);
         newpart->showStartUpWidget(s, true /*Always show widget*/);

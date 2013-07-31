@@ -209,7 +209,7 @@ void KoVersionDialog::slotOpen()
                 KMessageBox::error(0, errorMsg);
             return;
         }
-        KoMainWindow *mainWindow = new KoMainWindow(part->componentData());
+        KoMainWindow *mainWindow = part->createMainWindow();
         mainWindow ->openDocument(tmp.fileName());
         mainWindow ->show();
     } else {

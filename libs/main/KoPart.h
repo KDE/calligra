@@ -116,6 +116,12 @@ public:
     virtual bool saveFile(); ///reimplemented
 
     // ----------------- mainwindow management -----------------
+
+    /**
+     * Create a new main window, but does not add it to the current set of managed main windows.
+     */
+    virtual KoMainWindow *createMainWindow();
+
     /**
      * Appends the mainwindow to the list of mainwindows which show this
      * document as their root document.

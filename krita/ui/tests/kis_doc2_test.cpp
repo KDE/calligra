@@ -50,7 +50,7 @@ void KisDoc2Test::testOpenImageTwiceInSameDoc()
 void KisDoc2Test::testActiveNodes()
 {
     KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = new KoMainWindow(doc->documentPart()->componentData());
+    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
     KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
     doc->documentPart()->addView(view);
     vKisNodeSP nodes = doc->activeNodes();

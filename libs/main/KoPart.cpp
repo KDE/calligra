@@ -433,6 +433,11 @@ bool KoPart::saveFile()
     return ok;
 }
 
+KoMainWindow *KoPart::createMainWindow()
+{
+    return new KoMainWindow(d->m_componentData);
+}
+
 KoView *KoPart::createView(QWidget *parent)
 {
     KoView *view = createViewInstance(parent);

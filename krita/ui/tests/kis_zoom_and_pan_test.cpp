@@ -57,7 +57,7 @@ public:
 
         m_doc->setCurrentImage(m_image);
 
-        m_mainWindow = new KoMainWindow(m_part->componentData());
+        m_mainWindow = m_doc->documentPart()->createMainWindow();
         m_view = new KisView2(m_part, m_doc, m_mainWindow);
 
         m_image->refreshGraph();
