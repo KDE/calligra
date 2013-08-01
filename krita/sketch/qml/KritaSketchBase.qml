@@ -42,6 +42,7 @@ Item {
             width: base.width;
             height: base.height;
 
+            onCurrentPageChanged: window.currentSketchPage = currentPage.pageName;
             initialPage: welcomePage;
 
             transitionDuration: 500;
