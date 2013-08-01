@@ -85,6 +85,7 @@ public:
 	
 	bool slateMode;
 	bool docked;
+    QString currentSketchPage;
 
     void initSketchView(QObject* parent)
     {
@@ -199,6 +200,17 @@ void MainWindow::setAllowClose(bool allow)
 bool MainWindow::slateMode() const
 {
 	return d->slateMode;
+}
+
+QString MainWindow::currentSketchPage() const
+{
+    return d->currentSketchPage;
+}
+
+void MainWindow::setCurrentSketchPage(QString newPage)
+{
+    d->currentSketchPage = newPage;
+    emit currentSketchPageChanged();
 }
 
 void MainWindow::minimize()

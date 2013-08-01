@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
 	Q_PROPERTY(bool slateMode READ slateMode NOTIFY slateModeChanged)
+    Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
 
 public:
     explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = 0);
@@ -37,6 +38,9 @@ public:
     void setAllowClose(bool allow);
 
 	bool slateMode() const;
+
+    QString currentSketchPage() const;
+    void setCurrentSketchPage(QString newPage);
 
     virtual void closeEvent(QCloseEvent* event);
 
@@ -51,6 +55,7 @@ Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();
 	void slateModeChanged();
+    void currentSketchPageChanged();
 
 private:
     class Private;
