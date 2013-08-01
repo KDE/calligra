@@ -42,7 +42,7 @@ Item {
             width: base.width;
             height: base.height;
 
-            onCurrentPageChanged: window.currentSketchPage = currentPage.pageName;
+            onCurrentPageChanged: window.currentSketchPage = (currentPage.pageName !== undefined) ? currentPage.pageName : currentPage.toString();
             initialPage: welcomePage;
 
             transitionDuration: 500;
