@@ -162,6 +162,8 @@ void MainWindow::switchToSketch()
         d->desktopView->setParent(0);
     }
     setCentralWidget(d->sketchView);
+    if(d->slateMode)
+        showFullScreen();
     emit switchedToSketch();
     qApp->processEvents();
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
@@ -173,6 +175,7 @@ void MainWindow::switchToDesktop()
     timer.start();
     d->sketchView->setParent(0);
     setCentralWidget(d->desktopView);
+    showNormal();
     qApp->processEvents();
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }

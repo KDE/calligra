@@ -123,11 +123,12 @@ int main( int argc, char** argv )
         app.setInputContext(new SketchInputContext(&app));
     }
 
-#ifdef Q_OS_WIN
-    window.showFullScreen();
-#else
+// #ifdef Q_OS_WIN
+//     window.showFullScreen();
+// #else
+//     window.show();
+// #endif
     window.show();
-#endif
 
     return app.exec();
 }
