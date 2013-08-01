@@ -74,6 +74,7 @@ public:
     {
 #ifdef Q_OS_WIN
 		slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+		docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
 	}
 	MainWindow* q;
