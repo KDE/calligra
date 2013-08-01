@@ -5,7 +5,9 @@
 #include <QInputDialog>
 #include <QIntValidator>
 
-class KInputDialog : public QInputDialog
+#include <kofake_export.h>
+
+class KOFAKE_EXPORT KInputDialog : public QInputDialog
 {
 public:
     KInputDialog(QWidget *widget = 0) : QInputDialog(widget) {}
