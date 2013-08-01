@@ -203,6 +203,8 @@ void MainWindow::documentChanged()
     }
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
+    if(!d->slateMode)
+        switchToDesktop();
 }
 
 bool MainWindow::allowClose() const
