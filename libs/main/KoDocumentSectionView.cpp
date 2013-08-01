@@ -221,9 +221,15 @@ void KoDocumentSectionView::currentChanged(const QModelIndex &current, const QMo
     }
 }
 
+#if QT_VERSION < 0x050000
 void KoDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     QTreeView::dataChanged(topLeft, bottomRight);
+#else
+void KoDocumentSectionView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
+{
+    QTreeView::dataChanged(topLeft, bottomRight, roles);
+#endif
     for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
         for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {
             if (topLeft.sibling(x, y).data(Model::ActiveRole).toBool()) {

@@ -136,7 +136,11 @@ protected:
 
 protected slots:
     virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+#if QT_VERSION < 0x050000
     virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+#else
+    virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>());
+#endif
 
 private slots:
     void slotActionToggled(bool on, const QPersistentModelIndex &index, int property);
