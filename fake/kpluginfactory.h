@@ -36,7 +36,10 @@ namespace KParts { class Part; }
                 return factory; \
             } \
             RegisterPluginFactory() { \
-                qRegisterStaticPluginInstanceFunction( (QtPluginInstanceFunction) createPluginInstance ); \
+                qDebug()<<"qRegisterStaticPluginFunction"; \
+                QStaticPlugin p; \
+                p.instance = (QtPluginInstanceFunction) createPluginInstance(); \
+                qRegisterStaticPluginFunction(p); \
             } \
         }; \
         RegisterPluginFactory registerPluginFactory; \
