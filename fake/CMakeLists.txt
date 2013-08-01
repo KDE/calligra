@@ -24,10 +24,7 @@ set(kofake_LIB_SRCS
     krun.cpp
     klocale.cpp
     kcalendarsystem.cpp
-<<<<<<< HEAD
     kstandardaction.cpp
-=======
->>>>>>> origin/calligra-qt5-sebsauer
 )
 
 set(kofake_HEADERS_ONLY 
@@ -128,10 +125,7 @@ set(kofake_HEADERS_ONLY
     kfontaction.h
     kcodecs.h
     krecentfilesaction.h
-<<<<<<< HEAD
-=======
     kstandardaction.h
->>>>>>> origin/calligra-qt5-sebsauer
     kiconloader.h
     ktabwidget.h
     kcolorcombo.h
