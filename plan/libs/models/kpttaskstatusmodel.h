@@ -113,9 +113,20 @@ protected slots:
     void slotLayoutChanged();
 
 protected:
+
+    // keep in sync with order in m_top
+    enum TaskStatus {
+        TaskUnknownStatus = -1,
+        TaskNotStarted = 0,
+        TaskRunning = 1,
+        TaskFinished = 2,
+        TaskUpcoming = 3
+    };
+
     QVariant alignment( int column ) const;
-    
+
     QVariant name( int row, int role ) const;
+    TaskStatusItemModel::TaskStatus taskStatus(const Task *task, const QDate &begin, const QDate &end);
 
     bool setCompletion( Node *node, const QVariant &value, int role );
     bool setRemainingEffort( Node *node, const QVariant &value, int role );
