@@ -40,7 +40,7 @@ public:
     enum ButtonPopupMode { InstantPopup = 0, DelayedPopup = 1 };
     Q_DECLARE_FLAGS(ButtonPopupModes, ButtonPopupMode)
 
-    KDialog(QWidget *p = 0, Qt::WFlags flags = 0) : QDialog(p) {}
+    KDialog(QWidget *p = 0, Qt::WindowFlags flags = 0);
 
     void setButtons(ButtonCodes buttonMask) {}
     void setButtons(int) {}
@@ -103,8 +103,8 @@ public:
 
 public Q_SLOTS:
     virtual void setCaption( const QString &caption ) { setWindowTitle(caption); }
-    virtual void setCaption( const QString &caption, bool modified ) { setCaption(caption); }
-    virtual void setPlainCaption( const QString &caption ) { setCaption(caption); }
+    void setCaption( const QString &caption, bool modified ) { setCaption(caption); }
+    void setPlainCaption( const QString &caption ) { setCaption(caption); }
 
     void enableButton( ButtonCode id, bool state ) {}
     void enableButtonOk( bool state ) {}
