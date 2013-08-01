@@ -137,7 +137,7 @@ public:
     virtual void removeMainWindow(KoMainWindow *mainWindow);
 
     /**
-     * @return the list of shells for the main window
+     * @return the list of main windows.
      */
     const QList<KoMainWindow*>& mainWindows() const;
 

@@ -81,6 +81,8 @@ public:
      */
     void setPartToOpen(KoPart *part);
 
+
+
     /**
      * Update caption from document info - call when document info
      * (title in the about page) changes.
