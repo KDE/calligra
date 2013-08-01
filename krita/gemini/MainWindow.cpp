@@ -173,8 +173,11 @@ void MainWindow::switchToDesktop()
 {
     QTime timer;
     timer.start();
-    d->sketchView->setParent(0);
-    setCentralWidget(d->desktopView);
+    if(d->currentSketchPage == "MainPage")
+    {
+        d->sketchView->setParent(0);
+        setCentralWidget(d->desktopView);
+    }
     showNormal();
     qApp->processEvents();
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
