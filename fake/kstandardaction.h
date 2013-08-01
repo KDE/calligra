@@ -57,6 +57,7 @@ public:
         SwitchApplicationLanguage
     };
 
+
     KOFAKE_EXPORT static QString name(StandardAction a);
 
 #if 0

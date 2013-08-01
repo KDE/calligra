@@ -50,8 +50,11 @@ public:
             setDecimals(precision);
         setValue(value);
     }
+<<<<<<< HEAD
     QString label() const { return QString(); }
     void setLabel(const QString &label, QFlags<Qt::AlignmentFlag> = Qt::AlignLeft) {}
+=======
+>>>>>>> origin/calligra-qt5-sebsauer
 };
 
 #endif
