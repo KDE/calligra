@@ -110,11 +110,6 @@ public:
     void showLoadingErrorDialog();
 
 
-    // ---------- KoParts::ReadWritePart overloads -----------
-
-    virtual bool openFile(); ///reimplemented
-    virtual bool saveFile(); ///reimplemented
-
     // ----------------- mainwindow management -----------------
 
     /**

@@ -162,6 +162,28 @@ public:
 
     KComponentData m_componentData;
 
+    bool openFile()
+    {
+        DocumentProgressProxy *progressProxy = 0;
+        if (!document->progressProxy()) {
+            KoMainWindow *mainWindow = 0;
+            if (mainWindows.count() > 0) {
+                mainWindow = mainWindows[0];
+            }
+            progressProxy = new DocumentProgressProxy(mainWindow);
+            document->setProgressProxy(progressProxy);
+        }
+        document->setUrl(m_url);
+
+        bool ok = document->openFile();
+
+        if (progressProxy) {
+            document->setProgressProxy(0);
+            delete progressProxy;
+        }
+        return ok;
+    }
+
     bool openLocalFile()
     {
         m_bTemp = false;
@@ -175,7 +197,7 @@ public:
                 m_bAutoDetectedMime = true;
             }
         }
-        const bool ret = parent->openFile();
+        const bool ret = openFile();
         if (ret) {
             emit parent->completed();
         } else {
@@ -250,7 +272,7 @@ public:
         if (job->error())
             emit parent->canceled( job->errorString() );
         else {
-            if ( parent->openFile() ) {
+            if ( openFile() ) {
                 emit parent->completed();
             }
             else {
@@ -346,10 +368,8 @@ KoPart::~KoPart()
         delete d->mainWindows.takeFirst();
     }
 
-
     delete d->startUpWidget;
     d->startUpWidget = 0;
-
 
     delete d;
 }
@@ -385,53 +405,6 @@ void KoPart::setReadWrite(bool readwrite)
     }
 }
 
-bool KoPart::openFile()
-{
-    DocumentProgressProxy *progressProxy = 0;
-    if (!d->document->progressProxy()) {
-        KoMainWindow *mainWindow = 0;
-        if (mainwindowCount() > 0) {
-            mainWindow = mainWindows()[0];
-        }
-        progressProxy = new DocumentProgressProxy(mainWindow);
-        d->document->setProgressProxy(progressProxy);
-    }
-    d->document->setUrl(url());
-
-    // THIS IS WRONG! KoDocument::openFile should move here, and whoever subclassed KoDocument to
-    // reimplement openFile shold now subclass KoPart.
-    bool ok = d->document->openFile();
-
-    if (progressProxy) {
-        d->document->setProgressProxy(0);
-        delete progressProxy;
-    }
-    return ok;
-}
-
-bool KoPart::saveFile()
-{
-    DocumentProgressProxy *progressProxy = 0;
-    if (!d->document->progressProxy()) {
-        KoMainWindow *mainWindow = 0;
-        if (mainwindowCount() > 0) {
-            mainWindow = mainWindows()[0];
-        }
-        progressProxy = new DocumentProgressProxy(mainWindow);
-        d->document->setProgressProxy(progressProxy);
-    }
-    d->document->setUrl(url());
-
-    // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
-    // reimplement saveFile shold now subclass KoPart.
-    bool ok = d->document->saveFile();
-
-    if (progressProxy) {
-        d->document->setProgressProxy(0);
-        delete progressProxy;
-    }
-    return ok;
-}
 
 KoMainWindow *KoPart::createMainWindow()
 {
@@ -843,7 +816,28 @@ bool KoPart::save()
     d->m_saveOk = false;
     if ( d->m_file.isEmpty() ) // document was created empty
         d->prepareSaving();
-    if (saveFile()) {
+
+    DocumentProgressProxy *progressProxy = 0;
+    if (!d->document->progressProxy()) {
+        KoMainWindow *mainWindow = 0;
+        if (mainwindowCount() > 0) {
+            mainWindow = mainWindows()[0];
+        }
+        progressProxy = new DocumentProgressProxy(mainWindow);
+        d->document->setProgressProxy(progressProxy);
+    }
+    d->document->setUrl(url());
+
+    // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
+    // reimplement saveFile shold now subclass KoPart.
+    bool ok = d->document->saveFile();
+
+    if (progressProxy) {
+        d->document->setProgressProxy(0);
+        delete progressProxy;
+    }
+
+    if (ok) {
         return saveToUrl();
     }
     else {
