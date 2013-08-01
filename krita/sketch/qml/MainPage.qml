@@ -22,6 +22,7 @@ import "components"
 import "panels"
 
 Page {
+    property string pageName: "MainPage";
     SketchView {
         id: sketchView;
         width: parent.width;
