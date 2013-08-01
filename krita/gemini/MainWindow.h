@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
 	Q_PROPERTY(bool slateMode READ slateMode NOTIFY slateModeChanged)
+    Q_PROPERTY(QString applicationName READ applicationName CONSTANT)
     Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
 
 public:
@@ -37,7 +38,9 @@ public:
     bool allowClose() const;
     void setAllowClose(bool allow);
 
-	bool slateMode() const;
+    bool slateMode() const;
+
+    QString applicationName() const { return QLatin1String("KRITA GEMINI"); };
 
     QString currentSketchPage() const;
     void setCurrentSketchPage(QString newPage);
@@ -54,7 +57,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();
-	void slateModeChanged();
+    void slateModeChanged();
     void currentSketchPageChanged();
 
 private:

@@ -150,6 +150,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->initSketchView(this);
 
     // Set the initial view to sketch... because reasons.
+    // Really, this allows us to show the pleasant welcome screen from Sketch
     switchToSketch();
 }
 
@@ -211,6 +212,14 @@ void MainWindow::setCurrentSketchPage(QString newPage)
 {
     d->currentSketchPage = newPage;
     emit currentSketchPageChanged();
+
+    if(newPage == "MainPage")
+    {
+        if(!d->slateMode)
+        {
+            QTimer::singleShot(1000, this, SLOT(switchToDesktop()));
+        }
+    }
 }
 
 void MainWindow::minimize()
