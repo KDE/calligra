@@ -13,7 +13,6 @@ public:
     KPageDialog(QWidget *parent = 0) : KDialog(parent) { m_tabWidget = new QTabWidget(this); }
     virtual ~KPageDialog() { qDeleteAll(m_items); }
 
-    void setCaption(const QString &caption) { setWindowTitle(caption); }
     void setFaceType(FaceType) {}
 
     KPageWidgetItem* addPage(QWidget *page, const QString &title) { return addPage(new KPageWidgetItem(page, title)); }
