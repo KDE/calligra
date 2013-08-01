@@ -21,6 +21,7 @@ import "components"
 import "panels"
 
 Page {
+    property string pageName: "WelcomePage"
     Header {
         id: header;
 
@@ -30,7 +31,7 @@ Page {
             right: parent.right;
         }
 
-        text: "KRITA SKETCH";
+        text: (window.applicationName !== undefined) ? window.applicationName : "KRITA SKETCH";
 
         leftArea: Image {
             width: Constants.GridWidth * 0.5;
