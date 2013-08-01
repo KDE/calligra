@@ -52,6 +52,7 @@ class MainWindow::Private
 public:
     Private() : allowClose(true) { }
     bool allowClose;
+    QString currentSketchPage;
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
@@ -107,6 +108,17 @@ bool MainWindow::allowClose() const
 void MainWindow::setAllowClose(bool allow)
 {
     d->allowClose = allow;
+}
+
+QString MainWindow::currentSketchPage() const
+{
+    return d->currentSketchPage;
+}
+
+void MainWindow::setCurrentSketchPage(QString newPage)
+{
+    d->currentSketchPage = newPage;
+    emit currentSketchPageChanged();
 }
 
 void MainWindow::minimize()

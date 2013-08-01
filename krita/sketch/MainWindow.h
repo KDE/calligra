@@ -27,12 +27,16 @@ class MainWindow : public QMainWindow
 Q_OBJECT
 
 Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
+Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
 public:
     explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = 0);
     virtual ~MainWindow();
 
     bool allowClose() const;
     void setAllowClose(bool allow);
+
+    QString currentSketchPage() const;
+    void setCurrentSketchPage(QString newPage);
 
     virtual void resizeEvent( QResizeEvent* event );
     virtual void closeEvent(QCloseEvent* event);
@@ -44,6 +48,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();
+    void currentSketchPageChanged();
 
 private:
     class Private;
