@@ -43,6 +43,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoMainWindow.h>
+#include <KoGlobal.h>
 
 #include "kis_config.h"
 #include <kis_factory2.h>
@@ -117,7 +118,17 @@ public:
 
     void initDesktopView()
     {
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
+        // Initialize all Calligra directories etc.
+        KoGlobal::initialize();
+
         desktopView = new KoMainWindow(KisFactory2::componentData());
+        if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
+            // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
+            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
+            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+        }
 
         KAction* toSketch = new KAction(q);
         toSketch->setText(tr("Switch to Sketch"));
