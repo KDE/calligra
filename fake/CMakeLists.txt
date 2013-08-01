@@ -125,7 +125,6 @@ set(kofake_HEADERS_ONLY
     kfontaction.h
     kcodecs.h
     krecentfilesaction.h
-    kstandardaction.h
     kiconloader.h
     ktabwidget.h
     kcolorcombo.h

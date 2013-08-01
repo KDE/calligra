@@ -69,8 +69,8 @@ KAction* KStandardAction::documentForward(const QObject *recvr, const char *slot
 KAction* KStandardAction::addBookmark(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
 KAction* KStandardAction::editBookmarks(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
 KAction* KStandardAction::spelling(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
-static KToggleAction *showMenubar(const QObject *recvr, const char *slot, QObject *parent) { return new KToggleAction(parent); }
-static KToggleAction *showStatusbar(const QObject *recvr, const char *slot, QObject *parent) { return new KToggleAction(parent); }
+KToggleAction *KStandardAction::showMenubar(const QObject *recvr, const char *slot, QObject *parent) { return new KToggleAction(parent); }
+KToggleAction *KStandardAction::showStatusbar(const QObject *recvr, const char *slot, QObject *parent) { return new KToggleAction(parent); }
 KAction* KStandardAction::saveOptions(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
 KAction* KStandardAction::keyBindings(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
 KAction* KStandardAction::preferences(const QObject *recvr, const char *slot, QObject *parent) { return new KAction(parent); }
