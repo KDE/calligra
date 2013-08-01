@@ -84,7 +84,6 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       userData(0),
       appData(0),
       stroke(0),
-      fill(0),
       shadow(0),
       border(0),
       clipPath(0),
@@ -130,8 +129,6 @@ KoShapePrivate::~KoShapePrivate()
         delete stroke;
     if (shadow && !shadow->deref())
         delete shadow;
-    if (fill && !fill->deref())
-        delete fill;
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
     delete clipPath;
@@ -1008,19 +1005,15 @@ KoShapeAnchor *KoShape::anchor() const
     return d->anchor;
 }
 
-void KoShape::setBackground(KoShapeBackground *fill)
+void KoShape::setBackground(QSharedPointer<KoShapeBackground> fill)
 {
     Q_D(KoShape);
-    if (d->fill)
-        d->fill->deref();
     d->fill = fill;
-    if (d->fill)
-        d->fill->ref();
     d->shapeChanged(BackgroundChanged);
     notifyChanged();
 }
 
-KoShapeBackground *KoShape::background() const
+QSharedPointer<KoShapeBackground> KoShape::background() const
 {
     Q_D(const KoShape);
     return d->fill;
@@ -1312,7 +1305,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     if (s)
         s->fillStyle(style, context);
 
-    KoShapeBackground *bg = background();
+    QSharedPointer<KoShapeBackground> bg = background();
     if (bg) {
         bg->fillStyle(style, context);
     }
@@ -1424,10 +1417,7 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
 
-    if (d->fill && !d->fill->deref()) {
-        delete d->fill;
-        d->fill = 0;
-    }
+    d->fill.clear();
     if (d->stroke && !d->stroke->deref()) {
         delete d->stroke;
         d->stroke = 0;
@@ -1611,15 +1601,15 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     return true;
 }
 
-KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
+QSharedPointer<KoShapeBackground> KoShape::loadOdfFill(KoShapeLoadingContext &context) const
 {
     QString fill = KoShapePrivate::getStyleProperty("fill", context);
-    KoShapeBackground *bg = 0;
+    QSharedPointer<KoShapeBackground> bg;
     if (fill == "solid") {
-        bg = new KoColorBackground();
+        bg = QSharedPointer<KoShapeBackground>(new KoColorBackground());
     }
     else if (fill == "hatch") {
-        bg = new KoHatchBackground();
+        bg = QSharedPointer<KoShapeBackground>(new KoHatchBackground());
     }
     else if (fill == "gradient") {
         QString styleName = KoShapePrivate::getStyleProperty("fill-gradient-name", context);
@@ -1629,26 +1619,25 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
             style = e->attributeNS(KoXmlNS::draw, "style", QString());
         }
         if ((style == "rectangular") || (style == "square")) {
-            bg = new KoOdfGradientBackground();
+            bg = QSharedPointer<KoShapeBackground>(new KoOdfGradientBackground());
         } else {
             QGradient *gradient = new QLinearGradient();
             gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-            bg = new KoGradientBackground(gradient);
+            bg = QSharedPointer<KoShapeBackground>(new KoGradientBackground(gradient));
         }
     } else if (fill == "bitmap") {
-        bg = new KoPatternBackground(context.imageCollection());
+        bg = QSharedPointer<KoShapeBackground>(new KoPatternBackground(context.imageCollection()));
 #ifndef NWORKAROUND_ODF_BUGS
     } else if (fill.isEmpty()) {
-        bg = KoOdfWorkaround::fixBackgroundColor(this, context);
+        bg = QSharedPointer<KoShapeBackground>(KoOdfWorkaround::fixBackgroundColor(this, context));
         return bg;
 #endif
     } else {
-        return 0;
+        return QSharedPointer<KoShapeBackground>(0);
     }
 
     if (!bg->loadStyle(context.odfLoadingContext(), size())) {
-        delete bg;
-        return 0;
+        return QSharedPointer<KoShapeBackground>(0);
     }
 
     return bg;
