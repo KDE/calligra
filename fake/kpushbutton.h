@@ -6,8 +6,11 @@
 
 #include <kguiitem.h>
 
-class KPushButton : public QPushButton
+#include "kofake_export.h"
+
+class KOFAKE_EXPORT KPushButton : public QPushButton
 {
+    Q_OBJECT
 public:
     KPushButton(QWidget *parent = 0) : QPushButton(parent) {}
     KPushButton(const QString &text, QWidget *parent = 0) : QPushButton(text, parent) {}
