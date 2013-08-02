@@ -44,7 +44,7 @@
 
 int main( int argc, char** argv )
 {
-    KAboutData aboutData("kritagemini",
+    KAboutData aboutData("krita",
                          0,
                          ki18n("Krita Gemini"),
                          "0.1",
