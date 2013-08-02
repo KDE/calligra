@@ -25,6 +25,7 @@
 #define PREDEFINEDSHAPEHELPER_H
 
 #include <QHash>
+#include <QString>
 
 // This class can be used to to get draw information of
 // predefined shapes in ooxml
