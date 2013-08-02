@@ -175,7 +175,7 @@ bool KoOdfListStyle::readProperties(KoXmlStreamReader &reader)
                 properties = new KoOdfListLevelProperties();
             }
             else if (propertiesType == "office:binary-data") {
-                // FIXME: Not support for now.
+                // FIXME: Not supported for now.
                 reader.skipCurrentElement();
                 continue;
             }

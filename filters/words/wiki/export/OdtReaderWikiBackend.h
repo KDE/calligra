@@ -61,7 +61,7 @@ class OdtReaderWikiBackend : public OdfTextReaderBackend
 private:
     void checkTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
     void checkheadingLevel(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
-    void checkTextIndention(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
+    void checkTextIndentation(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
 };
 
 

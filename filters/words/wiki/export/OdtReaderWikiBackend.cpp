@@ -97,7 +97,7 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
         //Push style to stack
         wikiContext->pushStyle(style);
 
-        checkTextIndention(reader, wikiContext);
+        checkTextIndentation(reader, wikiContext);
         checkTextStyle(reader, wikiContext);
     } else {
         checkTextStyle(reader, wikiContext);
@@ -222,8 +222,8 @@ void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCon
 void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext)
 {
     KoOdfStyle *style = wikiContext->popStyle();
-    KoOdfStyleProperties *stylePropertis = style->properties().value("style:text-properties");
-    if (!stylePropertis) {
+    KoOdfStyleProperties *stylePropertise = style->properties().value("style:text-properties");
+    if (!stylePropertise) {
         wikiContext->pushStyle(style);
         return;
     }
@@ -231,12 +231,12 @@ void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWi
     // Check italic and bold.
     QString fontWeightProperty = "fo:font-weight";
     QString fontStyleProperty = "fo:font-style";
-    if ((stylePropertis->attribute(fontWeightProperty) == "bold") &&
-            (stylePropertis->attribute(fontStyleProperty) == "italic")) {
+    if ((stylePropertise->attribute(fontWeightProperty) == "bold") &&
+            (stylePropertise->attribute(fontStyleProperty) == "italic")) {
         wikiContext->outStream << "'''''";
-    } else if (stylePropertis->attribute(fontWeightProperty) == "bold") {
+    } else if (stylePropertise->attribute(fontWeightProperty) == "bold") {
         wikiContext->outStream << "'''";
-    } else if (stylePropertis->attribute(fontStyleProperty) == "italic") {
+    } else if (stylePropertise->attribute(fontStyleProperty) == "italic") {
         wikiContext->outStream << "''";
     }
 
@@ -244,25 +244,25 @@ void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWi
     QString textLineThroughProperty = "style:text-line-through-style";
     if (reader.isStartElement()) {
         // Check strike text.
-        if (stylePropertis->attribute(textLineThroughProperty) == "solid") {
+        if (stylePropertise->attribute(textLineThroughProperty) == "solid") {
             wikiContext->outStream << "<s>";
         }
         // Check sub and super script.
-        if (stylePropertis->attribute(textPositionProperty) == "sub") {
+        if (stylePropertise->attribute(textPositionProperty) == "sub") {
            wikiContext->outStream << "<sub>";
         }
-        else if (stylePropertis->attribute(textPositionProperty) == "super") {
+        else if (stylePropertise->attribute(textPositionProperty) == "super") {
             wikiContext->outStream << "<sup>";
         }
     }
     else {
-        if (stylePropertis->attribute(textLineThroughProperty)== "solid") {
+        if (stylePropertise->attribute(textLineThroughProperty)== "solid") {
             wikiContext->outStream << "</s>";
         }
-        if (stylePropertis->attribute(textPositionProperty) == "sub") {
+        if (stylePropertise->attribute(textPositionProperty) == "sub") {
            wikiContext->outStream << "</sub>";
         }
-        else if (stylePropertis->attribute(textPositionProperty) == "super") {
+        else if (stylePropertise->attribute(textPositionProperty) == "super") {
             wikiContext->outStream << "</sup>";
         }
     }
@@ -284,7 +284,7 @@ void OdtReaderWikiBackend::checkheadingLevel(KoXmlStreamReader &reader, OdfReade
     }
 }
 
-void OdtReaderWikiBackend::checkTextIndention(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext)
+void OdtReaderWikiBackend::checkTextIndentation(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext)
 {
     Q_UNUSED(reader);
     KoOdfStyle *style = wikiContext->popStyle();
@@ -293,15 +293,15 @@ void OdtReaderWikiBackend::checkTextIndention(KoXmlStreamReader &reader, OdfRead
     QString property = "fo:margin-left";
     if (!styleProperies->attribute(property).isEmpty()) {
         // FIXME: a BIG fixme i am not SURE that here i have done the right work.
-        int indention = KoUnit::parseValue(styleProperies->attribute(property));
-        if ((indention % 10) > 5) {
-            indention = (indention / 10) + 1;
+        int indentation = KoUnit::parseValue(styleProperies->attribute(property));
+        if ((indentation % 10) > 5) {
+            indentation = (indentation / 10) + 1;
         }
         else {
-            indention = indention / 10;
+            indentation = indentation / 10;
         }
-        kDebug() << "Indention:" << indention << KoUnit::parseValue(styleProperies->attribute(property));
-        for(int indent = 0; indent < indention; indent++) {
+        kDebug() << "indentation:" << indentation << KoUnit::parseValue(styleProperies->attribute(property));
+        for(int indent = 0; indent < indentation; indent++) {
             wikiContext->outStream << ":";
         }
     }
