@@ -24,7 +24,7 @@
 #include <ui_ManageBookmark.h>
 
 #include <QWidget>
-#include <KDialog>
+#include <kdialog.h>
 
 class ManageBookmark : public QWidget
 {

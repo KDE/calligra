@@ -13,7 +13,7 @@ public:
     KSpinBox(int value, QWidget *parent) : QSpinBox(parent) { setValue(value); }
     QString label() const { return QString(); }
     void setLabel(const QString &label, QFlags<Qt::AlignmentFlag> = Qt::AlignLeft) {}
-    void setRange(int min, int max, int step) { setMinimum(min); setMaximum(max); setSingleStep(step); }
+    void setRange(int min, int max, int step = 1) { setMinimum(min); setMaximum(max); setSingleStep(step); }
     bool sliderEnabled() const { return true; }
     void setSliderEnabled(bool) {}
 };

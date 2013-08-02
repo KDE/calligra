@@ -180,6 +180,7 @@ install( FILES
     KoView.h
     calligraversion.h
     KoStandardAction.h
+    KoDetailsPane.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 

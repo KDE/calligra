@@ -45,6 +45,11 @@ bool KRun::isExecutableFile(const QUrl& url, const QString &mimetype)
     return false;
 }
 
+bool KRun::isExecutableFile(const QString& url, const QString &mimetype)
+{
+    return isExecutableFile(QUrl(url), mimetype);
+}
+
 bool KRun::isExecutable(const QString& serviceType)
 {
     return (serviceType == "application/x-desktop" ||

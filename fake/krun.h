@@ -76,6 +76,7 @@ public:
 
     static bool isExecutable(const QString& serviceType);
     static bool isExecutableFile(const QUrl& url, const QString &mimetype);
+    static bool isExecutableFile(const QString& url, const QString &mimetype);
 
     static bool checkStartupNotify(const QString& binName, const KService* service, bool* silent_arg, QByteArray* wmclass_arg)
     {

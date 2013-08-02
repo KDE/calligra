@@ -1696,7 +1696,6 @@ public:
     QString country() const { return QLocale::countryToString(m_locale.country()); }
     QString countryDivisionCode() const { return country(); }
 
-#if 0
     /**
     * Returns the language codes selected by user, ordered by decreasing
     * priority.
@@ -1708,7 +1707,7 @@ public:
     *
     * @see languageCodeToName
     */
-    QStringList languageList() const;
+    QStringList languageList() const { return QStringList() << QLocale::languageToString(m_locale.language()); }
 
     /**
     * @since 4.4
@@ -1723,8 +1722,9 @@ public:
     *
     * @see currencyCodeToName
     */
-    QStringList currencyCodeList() const;
+    QStringList currencyCodeList() const { return QStringList() << m_locale.currencySymbol(QLocale::CurrencyIsoCode); }
 
+#if 0
     /**
     * Returns the user's preferred encoding.
     *

@@ -399,7 +399,7 @@ void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 {
     // slotSetReplaceTerm(term);
     if (term.startsWith("http://")) {
-        QDesktopServices::openUrl(term);
+        QDesktopServices::openUrl(QUrl(term));
     }
     else {
         if (addToHistory && m_edit->itemText(0) != term) {

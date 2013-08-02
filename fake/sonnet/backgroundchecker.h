@@ -3,12 +3,14 @@
 
 #include "speller.h"
 #include <QObject>
+#include <kofake_export.h>
 
 namespace Sonnet
 {
 
-class BackgroundChecker : public QObject
+class KOFAKE_EXPORT BackgroundChecker : public QObject
 {
+    Q_OBJECT
 public:
     BackgroundChecker(QObject *parent =0) : QObject(parent) {}
     BackgroundChecker(const Speller &speller, QObject *parent =0) : QObject(parent) {}
@@ -21,12 +23,14 @@ public:
     QStringList suggest(const QString &word) const { return QStringList(); }
     bool addWordToPersonal(const QString &word) { return false; }
     void restore(KConfig *config) {}
-//public Q_SLOTS:
+public Q_SLOTS:
     virtual void start() {}
     virtual void stop() {}
     void replace(int start, const QString &oldText, const QString &newText) {}
     void changeLanguage(const QString &lang) {}
     virtual void continueChecking() {}
+Q_SIGNALS:
+    void done();
 private:
     Speller m_speller;
 };

@@ -67,7 +67,9 @@ namespace KGlobal {
 
     KOFAKE_EXPORT KSharedConfigPtr config();
     KOFAKE_EXPORT KStandardDirs* dirs();
+
     KOFAKE_EXPORT KLocale* locale();
+    KOFAKE_EXPORT void setLocale(KLocale* locale);
 
     KOFAKE_EXPORT QString staticQString(const QByteArray &b);
 }

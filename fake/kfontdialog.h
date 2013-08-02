@@ -2,6 +2,7 @@
 #define FAKE_KFONTDIALOG_H
 
 #include <kdialog.h>
+#include <kfontchooser.h>
 
 class KFontDialog : public KDialog
 {

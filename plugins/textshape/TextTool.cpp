@@ -2731,7 +2731,7 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
 
     event->accept();
 
-    QDesktopServices::openUrl(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void TextTool::debugTextDocument()

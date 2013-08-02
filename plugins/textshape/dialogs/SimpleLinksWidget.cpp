@@ -22,7 +22,7 @@
 #include <QWidget>
 #include "SimpleLinksWidget.h"
 #include "ReferencesTool.h"
-#include <KAction>
+#include <kaction.h>
 #include <KoBookmarkManager.h>
 #include "ManageBookmarkDialog.h"
 #include <KoTextDocument.h>
