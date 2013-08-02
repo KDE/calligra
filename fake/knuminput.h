@@ -2,7 +2,7 @@
 #define FAKE_KNUMINPUT_H
 
 #include <QSpinBox>
-
+#include <QDoubleSpinBox>
 #include <QGridLayout>
 #include <klocale.h>
 
@@ -11,7 +11,11 @@ class KSpinBox : public QSpinBox
 public:
     KSpinBox(QWidget *parent = 0) : QSpinBox(parent) {}
     KSpinBox(int value, QWidget *parent) : QSpinBox(parent) { setValue(value); }
+    QString label() const { return QString(); }
+    void setLabel(const QString &label, QFlags<Qt::AlignmentFlag> = Qt::AlignLeft) {}
     void setRange(int min, int max, int step) { setMinimum(min); setMaximum(max); setSingleStep(step); }
+    bool sliderEnabled() const { return true; }
+    void setSliderEnabled(bool) {}
 };
 
 class KIntSpinBox : public KSpinBox
@@ -32,19 +36,22 @@ class KIntNumInput : public KNumInput
 {
 public:
     KIntNumInput(QWidget *parent = 0) : KNumInput(parent) {}
-    KIntNumInput(int value, QWidget *parent) : KNumInput(parent) { setValue(value); }
+    KIntNumInput(int value, QWidget *parent=0, int base = 10) : KNumInput(value, parent) {}
 };
 
-class KDoubleNumInput : public KNumInput
+class KDoubleNumInput : public QDoubleSpinBox
 {
 public:
-    KDoubleNumInput(QWidget *parent = 0) : KNumInput(parent) {}
-    KDoubleNumInput(double lower, double upper, double value, QWidget *parent=0,double singleStep=0.01,
-                    int precision=2) : KNumInput(parent) {setValue(value);}
-    virtual void setLabel(const QString & label, Qt::Alignment a = Qt::AlignLeft | Qt::AlignTop) {}
-
-
+    KDoubleNumInput(QWidget *parent = 0) : QDoubleSpinBox(parent) {}
+    KDoubleNumInput(double lower, double upper, double value, QWidget *parent=0, double singleStep=0.01, int precision=2) : QDoubleSpinBox(parent) {
+        setRange(lower, upper);
+        setSingleStep(singleStep);
+        if (precision >= 0)
+            setDecimals(precision);
+        setValue(value);
+    }
+    QString label() const { return QString(); }
+    void setLabel(const QString &label, QFlags<Qt::AlignmentFlag> = Qt::AlignLeft) {}
 };
-
 
 #endif

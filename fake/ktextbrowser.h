@@ -3,8 +3,11 @@
 
 #include <QTextBrowser>
 
-class KTextBrowser : public QTextBrowser
+#include "kofake_export.h"
+
+class KOFAKE_EXPORT KTextBrowser : public QTextBrowser
 {
+    Q_OBJECT
 public:
     KTextBrowser(QWidget *parent=0 , bool = false) : QTextBrowser(parent) {}
 };

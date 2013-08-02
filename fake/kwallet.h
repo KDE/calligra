@@ -48,12 +48,12 @@ class KDEUI_EXPORT Wallet : public QObject
 		 *  @param handle The handle for the wallet.
 		 *  @param name The name of the wallet.
 		 */
-		Wallet(int handle, const QString& name) {}
+		Wallet(int handle, const QString& name) : QObject() {}
 		/**
 		 *  Copy a KWallet object.
 		 *  @internal
 		 */
-		Wallet(const Wallet&) {}
+		Wallet(const Wallet&) : QObject() {}
 
 	public:
 		enum OpenType { Synchronous=0, Asynchronous, Path, OpenTypeUnused=0xff };

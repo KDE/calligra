@@ -40,7 +40,7 @@ public:
     enum ButtonPopupMode { InstantPopup = 0, DelayedPopup = 1 };
     Q_DECLARE_FLAGS(ButtonPopupModes, ButtonPopupMode)
 
-    KDialog(QWidget *p = 0, Qt::WFlags flags = 0) : QDialog(p) {}
+    KDialog(QWidget *p = 0, Qt::WindowFlags flags = 0);
 
     void setButtons(ButtonCodes buttonMask) {}
     void setButtons(int) {}
@@ -89,8 +89,8 @@ public:
     static void resizeLayout( QWidget *widget, int margin, int spacing ) {}
     static void resizeLayout( QLayout *lay, int margin, int spacing ) {}
     static void centerOnScreen( QWidget *widget, int screen = -1 ) {}
-    static bool avoidArea( QWidget *widget, const QRect& area, int screen = -1 ) {}
 #endif
+    static bool avoidArea( QWidget *widget, const QRect& area, int screen = -1 ) { return true; }
 
     void setMainWidget( QWidget *widget ) {}
     QWidget *mainWidget() { return 0; }
@@ -103,8 +103,8 @@ public:
 
 public Q_SLOTS:
     virtual void setCaption( const QString &caption ) { setWindowTitle(caption); }
-    virtual void setCaption( const QString &caption, bool modified ) { setCaption(caption); }
-    virtual void setPlainCaption( const QString &caption ) { setCaption(caption); }
+    void setCaption( const QString &caption, bool modified ) { setCaption(caption); }
+    void setPlainCaption( const QString &caption ) { setCaption(caption); }
 
     void enableButton( ButtonCode id, bool state ) {}
     void enableButtonOk( bool state ) {}
@@ -112,14 +112,12 @@ public Q_SLOTS:
     void enableButtonCancel( bool state ) {}
     void enableLinkedHelp( bool state ) {}
 
-#if 0
-    void setHelpLinkText( const QString &text );
-    void setHelp( const QString &anchor, const QString &appname = QString() );
-    bool isDetailsWidgetVisible() const;
-    void setDetailsWidgetVisible( bool visible );
-    void setDetailsWidget( QWidget *detailsWidget );
-    void delayedDestruct();
-#endif
+    void setHelpLinkText( const QString &text ) {}
+    void setHelp( const QString &anchor, const QString &appname = QString() ) {}
+    bool isDetailsWidgetVisible() const { return false; }
+    void setDetailsWidgetVisible( bool visible ) {}
+    void setDetailsWidget( QWidget *detailsWidget ) {}
+    //void delayedDestruct() { deleteLater(); }
 
 Q_SIGNALS:
 #if 0

@@ -24,12 +24,14 @@
 #include <QTableView>
 #include <KoIconToolTip.h>
 
+#include "kowidgets_export.h"
+
 class QEvent;
 class KoResourceModel;
 class QModelIndex;
 
 /// The resource view
-class KoResourceItemView : public QTableView
+class KOWIDGETS_EXPORT KoResourceItemView : public QTableView
 {
     Q_OBJECT
 
@@ -53,11 +55,16 @@ public:
 
     void setViewMode(ViewMode mode);
 
-signals:
+Q_SIGNALS:
 
     void currentResourceChanged(const QModelIndex &);
     void contextMenuRequested(const QPoint &);
 
+protected Q_SLOTS:
+    virtual void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
+    {
+//         QAbstractItemView::dataChanged(topLeft, bottomRight);
+    }
 protected:
     virtual void contextMenuEvent( QContextMenuEvent * event);
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);

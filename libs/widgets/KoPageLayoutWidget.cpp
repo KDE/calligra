@@ -48,8 +48,8 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     d->orientationGroup->addButton(d->widget.landscape, KoPageFormat::Landscape);
 
     QButtonGroup *group2 = new QButtonGroup(this);
-    group2->addButton(d->widget.singleSided);
-    group2->addButton(d->widget.facingPages);
+    group2->addButton(d->widget.singleSided, 0);
+    group2->addButton(d->widget.facingPages, 1);
     // the two sets of labels we use might have different lengths; make sure this does not create a 'jumping' ui
     d->widget.facingPages->setChecked(true);
     facingPagesChanged();

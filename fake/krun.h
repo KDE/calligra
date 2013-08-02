@@ -1,70 +1,94 @@
-// -*- mode: c++; c-basic-offset: 2 -*-
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2006 David Faure <faure@kde.org>
+#ifndef FAKE_KRUN_H
+#define FAKE_KRUN_H
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+#include <QObject>
+#include <QWidget>
+#include <kurl.h>
+#include <kservice.h>
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
-
-#ifndef KRUN_H
-#define KRUN_H
-
-#include <QtCore/QString>
-#include <QtCore/QUrl>
-
-/**
- * To open files with their associated applications in KDE, use KRun.
- *
- * It can execute any desktop entry, as well as any file, using
- * the default application or another application "bound" to the file type
- * (or URL protocol).
- *
- * In that example, the mimetype of the file is not known by the application,
- * so a KRun instance must be created. It will determine the mimetype by itself.
- * If the mimetype is known, or if you even know the service (application) to
- * use for this file, use one of the static methods.
- *
- * By default KRun uses auto deletion. It causes the KRun instance to delete
- * itself when the it finished its task. If you allocate the KRun
- * object on the stack you must disable auto deletion, otherwise it will crash.
- *
- * @short Opens files with their associated applications in KDE
- */
-namespace KRun 
+class KRun : public QObject
 {
-    /**
-     * Returns whether @p serviceType refers to an executable program instead
-     * of a data file.
-     */
-    static bool isExecutable(const QString& serviceType);
+public:
+    KRun(const KUrl& url, QWidget* window, mode_t mode = 0,
+         bool isLocalFile = false, bool showProgressInfo = true,
+         const QByteArray& asn = QByteArray()) : QObject(window) {}
+    virtual ~KRun() {}
+    void abort() {}
+    bool hasError() const { return false; }
+    bool hasFinished() const { return true; }
+    bool autoDelete() const  { return false; }
+    void setAutoDelete(bool b) {}
+    void setPreferredService(const QString& desktopEntryName) {}
+    void setRunExecutables(bool b) {}
+    void setEnableExternalBrowser(bool b) {}
+    void setSuggestedFileName(const QString& fileName) {}
+    QString suggestedFileName() const { return QString(); }
+    static bool run(const KService& service, const KUrl::List& urls, QWidget* window, bool tempFiles = false, const QString& suggestedFileName = QString(), const QByteArray& asn = QByteArray())
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return true;
+    }
+    static bool run(const QString& exec, const KUrl::List& urls, QWidget* window, const QString& name = QString(), const QString& icon = QString(), const QByteArray& asn = QByteArray())
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return true;
+    }
+    static bool runUrl(const KUrl& url, const QString& mimetype, QWidget* window, bool tempFile = false , bool runExecutables = true, const QString& suggestedFileName = QString(), const QByteArray& asn = QByteArray())
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return true;
+    }
+    static bool runCommand(const QString &cmd, QWidget* window)
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return true;
+    }
+    static bool runCommand(const QString &cmd, QWidget* window, const QString& workingDirectory)
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return true;
+    }
+    static bool runCommand(const QString& cmd, const QString & execName, const QString & icon, QWidget* window, const QByteArray& asn = QByteArray())
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return true;
+    }
+    static bool runCommand(const QString& cmd, const QString & execName, const QString & icon, QWidget* window, const QByteArray& asn, const QString& workingDirectory)
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return true;
+    }
+    static bool displayOpenWithDialog(const KUrl::List& lst, QWidget* window, bool tempFiles = false, const QString& suggestedFileName = QString(), const QByteArray& asn = QByteArray())
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return false;
+    }
+    static QStringList processDesktopExec(const KService &_service, const KUrl::List &_urls, bool tempFiles = false, const QString& suggestedFileName = QString())
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return QStringList();
+    }
+    static QString binaryName(const QString & execLine, bool removePath)
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return QString();
+    }
 
-    /**
-     * Returns whether the @p url of @p mimetype is executable.
-     * To be executable the file must pass the following rules:
-     * -# Must reside on the local filesystem.
-     * -# Must be marked as executable for the user by the filesystem.
-     * -# The mime type must inherit application/x-executable or application/x-executable-script.
-     * To allow a script to run when the above rules are satisfied add the entry
-     * @code
-     * X-KDE-IsAlso=application/x-executable-script
-     * @endcode
-     * to the mimetype's desktop file.
-     */
+    static bool isExecutable(const QString& serviceType);
     static bool isExecutableFile(const QUrl& url, const QString &mimetype);
 
+    static bool checkStartupNotify(const QString& binName, const KService* service, bool* silent_arg, QByteArray* wmclass_arg)
+    {
+        qDebug() << Q_FUNC_INFO << "TODO";
+        return false;
+    }
+
+#if 0
+Q_SIGNALS:
+    void finished();
+    void error();
+#endif
 };
 
 #endif
+ 
