@@ -131,7 +131,6 @@ set(kofake_HEADERS_ONLY
     kfilefiltercombo.h
     soprano/soprano.h
     kicondialog.h
-    ksavefile.h
     kreplace.h
     krecentdirs.h
     kstandardshortcut.h
