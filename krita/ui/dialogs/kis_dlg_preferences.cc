@@ -212,8 +212,8 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbPrintingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
 
-    refillMonitorProfiles(KoID("RGBA", ""));
-    refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
+    refillMonitorProfiles(KoID("RGBA", QString::null));
+    refillPrintProfiles(KoID(cfg.printerColorSpace(), QString::null));
 
     //hide printing settings
     m_page->groupBox2->hide();
@@ -273,9 +273,9 @@ void ColorSettingsTab::setDefault()
     m_page->cmbWorkingColorSpace->setCurrent("RGBA");
 
     m_page->cmbPrintingColorSpace->setCurrent("CMYK");
-    refillPrintProfiles(KoID("CMYK", ""));
+    refillPrintProfiles(KoID("CMYK", QString::null));
 
-    refillMonitorProfiles(KoID("RGBA", ""));
+    refillMonitorProfiles(KoID("RGBA", QString::null));
 
     m_page->chkBlackpoint->setChecked(false);
     m_page->chkAllowLCMSOptimization->setChecked(true);
