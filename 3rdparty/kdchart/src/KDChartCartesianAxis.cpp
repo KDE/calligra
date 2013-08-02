@@ -749,7 +749,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
             : 0;
         const QFontMetricsF met(
             drawLabels
-            ? labelItem->realFont()
+            ? QFontMetrics(labelItem->realFont())
             : QFontMetricsF( QApplication::font(), GlobalMeasureScaling::paintDevice() ) );
         const qreal halfFontHeight = rulerAttr.labelMargin() >= 0 ? rulerAttr.labelMargin() : met.height() * 0.5;
         const qreal halfFontWidth = rulerAttr.labelMargin() >= 0 ? rulerAttr.labelMargin() : met.averageCharWidth() * 0.5;
