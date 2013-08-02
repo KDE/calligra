@@ -280,7 +280,7 @@ include(MacroLibrary)
 include(MacroAdditionalCleanFiles)
 include(MacroAddFileDependencies)
 
-set (QT_MIN_VERSION "5.0.0")
+set (QT_MIN_VERSION "5.1.0")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
