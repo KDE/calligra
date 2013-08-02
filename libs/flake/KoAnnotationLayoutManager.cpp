@@ -67,8 +67,10 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
             d->annotationShapePositions.erase(i);
             break;
         }
+        i++;
     }
     d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
+    kDebug() << "An annotation shape inserted to list: " << d->annotationShapePositions.count();
 
     layoutAnnotationShapes();
 }
