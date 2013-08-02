@@ -39,6 +39,7 @@
 
 #include <QTransform>
 #include <QBuffer>
+#include <QUrl>
 
 #include <cmath>
 
@@ -418,7 +419,7 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
         return;
     }
     draw_image image(frame.add_draw_image());
-    image.set_xlink_href(url);
+    image.set_xlink_href(QUrl(url));
     image.set_xlink_type("simple");
     image.set_xlink_show("embed");
     image.set_xlink_actuate("onLoad");
