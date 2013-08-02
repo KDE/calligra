@@ -45,6 +45,7 @@
   <Action name="view_grid"/>
   <Action name="view_snaptogrid"/>
   <Separator/>
+  <Action name="view_notes"/>
   <Action name="view_wordCount"/>
   <Separator/>
   <Action name="zoom_out"/>

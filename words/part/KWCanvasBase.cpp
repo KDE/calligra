@@ -60,6 +60,7 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
       m_toolProxy(0),
       m_viewMode(0),
       m_viewConverter(0),
+      m_showAnnotations(false),
       m_cacheEnabled(false),
       m_currentZoom(0.0),
       m_maxZoom(2.0),
@@ -165,10 +166,19 @@ void KWCanvasBase::ensureVisible(const QRectF &rect)
     canvasController()->ensureVisible(viewRect);
 }
 
+bool KWCanvasBase::showAnnotations() const
+{
+    return m_showAnnotations;
+}
+
+void KWCanvasBase::setShowAnnotations(bool doShow)
+{
+    m_showAnnotations = doShow;
+}
+
 void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
-    // We have no page shadows yet, but the annotations area will go
-    // here in the annotations branch.
+    // Paint the page.
     Q_UNUSED(viewMap);
 
     QColor color = Qt::white;
@@ -177,11 +187,15 @@ void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &view
 #endif
     painter.fillRect(viewMap.clipRect, QBrush(color));
 
-    color = Qt::cyan;
-    QRect annotationRect(m_viewMode->contentsSize().width(), 0,
-                         KWView::AnnotationAreaWidth, m_viewMode->contentsSize().height());
-    QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
-    painter.fillRect(viewRect, QBrush(color));
+    // Paint the annotation area if that is turned on.
+    if (m_showAnnotations) {
+        color = Qt::cyan;
+        QRect annotationRect(m_viewMode->contentsSize().width(), 0,
+                             KWView::AnnotationAreaWidth, m_viewMode->contentsSize().height());
+        QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
+        qDebug() << "annotation rect " << annotationRect << "view rect " << viewRect;
+        painter.fillRect(viewRect, QBrush(color));
+    }
 }
 
 void KWCanvasBase::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)

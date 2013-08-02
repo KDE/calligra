@@ -103,6 +103,12 @@ public: // KoCanvasBase interface methods.
      */
     virtual void setCacheEnabled(bool enabled, int cacheSize = 50, qreal maxZoom = 2.0);
 
+    /**
+     * return whether annotatins are shown in the canvas.
+     */
+    bool showAnnotations() const;
+    void setShowAnnotations(bool doShow);
+
     /// @return the offset of the document in this canvas
     QPoint documentOffset() const;
 
@@ -138,6 +144,7 @@ protected:
     KWViewMode *m_viewMode;
     QPoint m_documentOffset;
     KoViewConverter *m_viewConverter;
+    bool  m_showAnnotations;   //< true if annotations should be shown in the canvas
 
     bool m_cacheEnabled;
     qreal m_currentZoom;

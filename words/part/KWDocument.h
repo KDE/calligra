@@ -239,7 +239,7 @@ signals:
     void shapeAdded(KoShape *, KoShapeManager::Repaint);
 
     /// emitted whenever an annotation shape is added.
-    void annotationShapeAdded(KoShape *);
+    void annotationShapeAdded(bool);
 
     /// emitted whenever an annotation shape is removed
     void annotationShapeRemoved(KoShape *);

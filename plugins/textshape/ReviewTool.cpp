@@ -143,7 +143,7 @@ void ReviewTool::insertAnnotation()
     KoShape *shape = KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(m_canvas->shapeController()->resourceManager());
     m_canvas->shapeController()->documentBase()->addShape(shape);
     KoAnnotation *annotation = textEditor()->addAnnotation();
-    annotation->setAnnotationShape(shape);
+    annotation->setAnnotationShape(shape);  
 }
 
 void ReviewTool::removeAnnotation()

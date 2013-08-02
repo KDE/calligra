@@ -132,6 +132,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     m_currentPage = m_document->pageManager()->begin();
 
+    connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
     connect(m_document, SIGNAL(annotationShapeRemoved(KoShape *)), this, SLOT(annotationShapeRemoved(KoShape *)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
@@ -162,7 +163,11 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     // the zoom controller needs to be initialized after the status bar gets initialized as
     // that resulted in bug 180759
-    m_zoomController->setPageSize(m_currentPage.rect().size() + QSize(AnnotationAreaWidth, 0.0));
+    QSizeF pageSize = m_currentPage.rect().size();
+    if (m_canvas->showAnnotations()) {
+        pageSize += QSize(AnnotationAreaWidth, 0.0);
+    }
+    m_zoomController->setPageSize(pageSize);
     m_zoomController->setTextMinMax(m_currentPage.contentRect().left(), m_currentPage.contentRect().right());
     KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_TEXT;
     if (m_canvas->viewMode()->hasPages())
@@ -420,6 +425,12 @@ void KWView::setupActions()
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
 
+    // -------- Show annotations (called Notes in the UI)
+    tAction = new KToggleAction(i18n("Show Notes"), this);
+    tAction->setToolTip(i18n("Shows notes in the document"));
+    tAction->setChecked(m_canvas && m_canvas->showAnnotations());
+    actionCollection()->addAction("view_notes", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showNotes(bool)));
 
     // -------- Statistics in the status bar
     KToggleAction *tActionBis = new KToggleAction(i18n("Word Count"), this);
@@ -502,10 +513,21 @@ void KWView::pasteRequested()
     }
 }
 
-void KWView::showWordCountInStatusBar(bool toggled)
+void KWView::showNotes(bool doShow)
 {
-    kwdocument()->config().setStatusBarShowWordCount(toggled);
-    wordCount->setVisible(toggled);
+    kDebug(30015) << "doShow:" << doShow;
+
+    m_canvas->setShowAnnotations(doShow);
+    m_canvas->updateSize();
+
+    KToggleAction *action = (KToggleAction*) actionCollection()->action("view_notes");
+    action->setChecked(doShow);
+}
+
+void KWView::showWordCountInStatusBar(bool doShow)
+{
+    kwdocument()->config().setStatusBarShowWordCount(doShow);
+    wordCount->setVisible(doShow);
 }
 
 void KWView::editFrameProperties()
@@ -1087,7 +1109,11 @@ void KWView::offsetInDocumentMoved(int yOffset)
 
     if (maxPageSize != m_pageSize) {
         m_pageSize = maxPageSize;
-        m_zoomController->setPageSize(m_pageSize + QSize(AnnotationAreaWidth, 0.0));
+        QSizeF pageSize = m_pageSize;
+        if (m_canvas->showAnnotations()) {
+            pageSize += QSize(AnnotationAreaWidth, 0.0);
+        }
+        m_zoomController->setPageSize(pageSize);
     }
     if (minTextX != m_textMinX || maxTextX != m_textMaxX) {
         m_textMinX = minTextX;
