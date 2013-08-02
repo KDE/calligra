@@ -31,7 +31,7 @@ LoginWindow::LoginWindow(OnlineDocument::DocumentType type, QWidget *parent)
 	: QDialog(parent),
           m_type(type),
           m_authDialog(new Ui_Dialog)
-//  ,     m_wallet(0)
+//  ,I     m_wallet(0)
 {
     m_authDialog->setupUi(this);
 
