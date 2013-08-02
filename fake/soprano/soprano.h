@@ -5,9 +5,11 @@
 #include <QList>
 #include <QUrl>
 #include <QDebug>
+#include <QStringList>
 
 #include "kofake_export.h"
 
+class QDateTime;
 
 namespace Soprano {
     enum RdfSerialization {
@@ -40,6 +42,17 @@ namespace Soprano {
         };
     }
 
+
+    class LiteralValue
+    {
+    public:
+        LiteralValue(const QString &) {}
+        LiteralValue(const QUrl &) {}
+        LiteralValue(const QDateTime &) {}
+        LiteralValue(double) {}
+        bool isDouble() const {return false;}
+    };
+
     class Node
     {
     public:
@@ -50,11 +63,17 @@ namespace Soprano {
             BlankNode    = 3  /**< A blank node has an identifier string */
         };
         Node() {}
-        Node(QUrl) {}
+        Node(const QUrl &) {}
+        Node(const QString &) {}
+        Node(const LiteralValue &) {}
+        Type type() const {return EmptyNode;}
+        QUrl dataType() const { return QUrl();}
+        bool isLiteral() const {return false;}
         bool isValid() const {return false;}
         QString toString() const {return "stub node";}
-        static Node createResourceNode( const QUrl& uri ) {return Node();}
-        static Node createLiteralNode( const QString value ) {return Node();}
+        static Node createResourceNode( const LiteralValue& uri ) {return Node();}
+        static Node createLiteralNode( const LiteralValue value ) {return Node();}
+        static Node createEmptyNode() {return Node();}
     };
 
     class Statement
@@ -64,31 +83,47 @@ namespace Soprano {
 
         Statement( const Node &subject, const Node &predicate, const Node &object, const Node &context = Node() ) {}
 
+        bool isValid() const {return false;}
+
         /**
          * \return The subject.
          */
         Node subject() const {return Node();}
+        void setSubject(const Node &) {}
 
         /**
          * \return The predicate.
          */
         Node predicate() const {return Node();}
+        void setPredicate(const Node &) {}
 
         /**
          * \return The object.
          */
         Node object() const {return Node();}
+        void setObject(const Node &) {}
 
         /**
          * \return The Context node.
          */
         Node context() const {return Node();}
+        void setContext(const Node &) {}
     };
 
     class StatementIterator
     {
     public:
         QList<Statement>  allElements() {return QList<Statement>();}
+        bool next() {return false;}
+        bool isValid() const {return false;}
+        Statement operator*() const { return Statement(); }
+    };
+
+    class BindingSet
+    {
+    public:
+        QStringList bindingNames() {return QStringList();}
+        Node operator[]( int offset ) const {return Node();}
     };
 
     class QueryResultIterator
@@ -96,6 +131,8 @@ namespace Soprano {
     public:
         Node binding( const QString &name ) const {return Node();}
         bool next() {return false;}
+        bool isValid() const {return false;}
+        QList<BindingSet> allBindings() {return QList<BindingSet>();};
     };
 
     class Query
@@ -104,7 +141,7 @@ namespace Soprano {
         enum QueryLanguage { QueryLanguageSparql };
     };
 
-    class Model
+    class Model : public QObject
     {
     public:
         int statementCount() { return 0; }
@@ -114,12 +151,30 @@ namespace Soprano {
         StatementIterator listStatements() {return StatementIterator();}
         StatementIterator listStatements( const Node& subject, const Node& predicate, const Node& object, const Node& context = Node() ) const {return StatementIterator();}
         Error::ErrorCode removeStatement( const Statement &statement ) {return Error::ErrorNone;}
+        Error::ErrorCode removeStatement( const Node& subject, const Node& predicate, const Node& object, const Node& context = Node() ) {return Error::ErrorNone;}
+        Error::ErrorCode removeStatements( const QList<Statement> &statements ) {return Error::ErrorNone;}
         Error::ErrorCode removeAllStatements( const Statement &statement ) {return Error::ErrorNone;}
         Error::ErrorCode removeAllStatements( const Node& subject, const Node& predicate, const Node& object, const Node& context = Node() ) {return Error::ErrorNone;}
         Node createBlankNode() {return Node();}
         QueryResultIterator executeQuery( const QString& query, Query::QueryLanguage language, const QString& userQueryLanguage = QString() ) {return QueryResultIterator();}
     };
     static Model* createModel() { return 0; }
+
+    class BackendSettings
+    {
+    };
+
+    class Backend
+    {
+    public:
+        Model *createModel() { return 0; }
+    };
+    static void setUsedBackend(Backend *) {}
+
+    class StorageModel : public Model
+    {
+    public:
+    };
 
     class Serializer
     {

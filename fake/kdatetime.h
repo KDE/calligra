@@ -25,6 +25,11 @@ public:
 
     KDateTime(const QDateTime &dt) : QDateTime(dt) {}
 
+    QDateTime dateTime() const {return *this;}
+
+    class  Spec {
+    };
+
     QString toString(TimeFormat tf = ISODate) const
     {
         return QDateTime::toString( (Qt::DateFormat)tf );
