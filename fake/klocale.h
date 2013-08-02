@@ -25,7 +25,7 @@ class KCalendarSystem;
  * versions working (what is especially interesting for
  * translations).
  */
-class KLocalizedString {
+class Q_DECL_EXPORT KLocalizedString {
 public:
     KLocalizedString(const char *msg = "") : m_msg(msg) {
     }
@@ -766,7 +766,7 @@ inline QString i18ncp (const char *ctxt, const char *sing, const char *plur, con
 }
 // <<<<< End of context-plural calls
 
-class KLocale {
+class Q_DECL_EXPORT KLocale {
 public:
     KLocale(const QByteArray &name = QByteArray());
     KLocale(KCalendarSystem *calendar, const QByteArray &name = QByteArray());

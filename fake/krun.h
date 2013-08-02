@@ -6,7 +6,9 @@
 #include <kurl.h>
 #include <kservice.h>
 
-class KRun : public QObject
+#include <kofake_export.h>
+
+class KOFAKE_EXPORT KRun : public QObject
 {
 public:
     KRun(const KUrl& url, QWidget* window, mode_t mode = 0,

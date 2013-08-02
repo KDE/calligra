@@ -25,7 +25,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QObject>
 
-#include <kdeui_export.h>
+#include <kofake_export.h>
 
 namespace KWallet {
 
@@ -38,7 +38,7 @@ namespace KWallet {
  * @author George Staikos <staikos@kde.org>
  * @short KDE Wallet Class
  */
-class KDEUI_EXPORT Wallet : public QObject
+class KOFAKE_EXPORT Wallet : public QObject
 {
 	Q_OBJECT
 	protected:
