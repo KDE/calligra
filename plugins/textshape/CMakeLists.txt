@@ -31,7 +31,6 @@ SET ( textshape_SRCS
     ShrinkToFitShapeContainer.cpp
     SimpleRootAreaProvider.cpp
 
-    ChangeTracker.cpp
     ReviewTool.cpp
     ReviewToolFactory.cpp
     TextChanges.cpp
@@ -140,7 +139,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui
-    dialogs/ParagraphDecorations.ui
+    dialogs/WdgParagraphDecorations.ui
     dialogs/ParagraphBulletsNumbers.ui
     dialogs/ParagraphDropCaps.ui
     dialogs/StyleManager.ui
