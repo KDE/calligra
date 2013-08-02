@@ -7,5 +7,5 @@ if (SHOULD_BUILD_PLUGIN_THREEDSHAPE)
 endif (SHOULD_BUILD_PLUGIN_THREEDSHAPE)
 
 if(SHOULD_BUILD_PLUGIN_SHEETS_PIVOTTABLES)
-    add_subdirectory(pivottables)
+#    add_subdirectory(pivottables)
 endif(SHOULD_BUILD_PLUGIN_SHEETS_PIVOTTABLES)
