@@ -220,6 +220,7 @@ set (calligrasheetsodf_LIB_SRCS
     part/Digest.cpp
     ApplicationSettings.cpp
     Binding.cpp
+    BindingModel.cpp
     BindingManager.cpp
     CalculationSettings.cpp
     Cell.cpp
