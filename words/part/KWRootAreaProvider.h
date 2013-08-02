@@ -58,7 +58,7 @@ public:
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
     virtual void updateAll();
-    virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
+    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 private:
     KWTextFrameSet *m_textFrameSet;
