@@ -5,6 +5,7 @@ include_directories( ${KOODF_INCLUDES} ${KOODF2_INCLUDES} )
 ########### libkoodf2 ###############
 
 set(koodf2_LIB_SRCS
+    KoXmlStreamReader.cpp
     KoTable.cpp
     KoRow.cpp
     KoColumn.cpp
