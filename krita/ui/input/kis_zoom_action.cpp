@@ -170,16 +170,10 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
 
 void KisZoomAction::inputEvent( QEvent* event )
 {
-    qDebug() << Q_FUNC_INFO << "BEGIN";
     switch (event->type()) {
         case QEvent::TouchUpdate: {
-            qDebug() << "    We have a touch update event";
-
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-
             QPointF center = d->centerPoint(tevent);
-
-            qDebug() << "    Center is" << center;
 
             int count = 0;
             float dist = 0.0f;
@@ -192,17 +186,8 @@ void KisZoomAction::inputEvent( QEvent* event )
             }
 
             dist /= count;
-
-            qDebug() << "    Average distance from center is" << dist;
-
             float delta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
-
-            qDebug() << "    Delta is" << delta;
-
             qreal zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
-
-            qDebug() << "    New zoom is" << zoom * delta;
-
             static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
             d->lastDistance = dist;
         }
@@ -211,7 +196,6 @@ void KisZoomAction::inputEvent( QEvent* event )
     }
 
     KisAbstractInputAction::inputEvent(event);
-    qDebug() << Q_FUNC_INFO << "END";
 }
 
 void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
