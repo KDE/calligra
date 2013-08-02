@@ -73,7 +73,7 @@ public:
     void resetSavedTabletEvent(QEvent::Type type);
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
     void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
-    void addTouchShortcut( KisAbstractInputAction* action, int index, int minTouchCount, int maxTouchCount );
+    void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
     void addWheelShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, KisShortcutConfiguration::MouseWheelMovement wheelAction);
     bool processUnhandledEvent(QEvent *event);
     Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
@@ -185,11 +185,21 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     matcher.addShortcut(keyShortcut);
 }
 
-void KisInputManager::Private::addTouchShortcut( KisAbstractInputAction* action, int index, int minTouchCount, int maxTouchCount )
+void KisInputManager::Private::addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
 {
     KisTouchShortcut *shortcut = new KisTouchShortcut(action, index);
-    shortcut->setMinimumTouchPoints(minTouchCount);
-    shortcut->setMaximumTouchPoints(maxTouchCount);
+    switch(gesture) {
+        case KisShortcutConfiguration::PinchGesture:
+            shortcut->setMinimumTouchPoints(2);
+            shortcut->setMaximumTouchPoints(2);
+            break;
+        case KisShortcutConfiguration::PanGesture:
+            shortcut->setMinimumTouchPoints(3);
+            shortcut->setMaximumTouchPoints(10);
+            break;
+        default:
+            break;
+    }
     matcher.addShortcut(shortcut);
 }
 
@@ -590,6 +600,9 @@ void KisInputManager::profileChanged()
                 break;
             case KisShortcutConfiguration::MouseWheelType:
                 d->addWheelShortcut(shortcut->action(), shortcut->mode(), shortcut->keys(), shortcut->wheel());
+                break;
+            case KisShortcutConfiguration::GestureType:
+                d->addTouchShortcut(shortcut->action(), shortcut->mode(), shortcut->gesture());
                 break;
             default:
                 break;
