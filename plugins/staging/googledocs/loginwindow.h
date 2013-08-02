@@ -46,16 +46,16 @@ private slots:
     void serviceSelected(int index);
     void authenticated(bool success, QString errorString);
     void updateProgress(QString msg);
-    void closeWallet();
+//    void closeWallet();
 
 private:
     OnlineDocument::DocumentType m_type;
     Ui_Dialog *m_authDialog;
     GoogleDocumentService *gdoc;
-    KWallet::Wallet *m_wallet;
+//    KWallet::Wallet *m_wallet;
 
     void saveUserDetails();
-    KWallet::Wallet *wallet();
+//    KWallet::Wallet *wallet();
 };
 
 #endif // LOGINWINDOW_H

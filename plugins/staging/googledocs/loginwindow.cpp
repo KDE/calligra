@@ -22,7 +22,7 @@
 
 #include <KoGlobal.h>
 
-#include <kwallet.h>
+//#include <kwallet.h>
 
 #include <QMessageBox>
 
@@ -30,8 +30,8 @@
 LoginWindow::LoginWindow(OnlineDocument::DocumentType type, QWidget *parent)
 	: QDialog(parent),
           m_type(type),
-          m_authDialog(new Ui_Dialog),
-          m_wallet(0)
+          m_authDialog(new Ui_Dialog)
+//  ,     m_wallet(0)
 {
     m_authDialog->setupUi(this);
 
@@ -51,9 +51,9 @@ LoginWindow::LoginWindow(OnlineDocument::DocumentType type, QWidget *parent)
             m_authDialog->userEdit->setText(userName);
 
             QString password;
-            if (wallet()) {
-                wallet()->readPassword(QString("%1-%2").arg(settingsGroup).arg(userName), password);
-            }
+//            if (wallet()) {
+//                wallet()->readPassword(QString("%1-%2").arg(settingsGroup).arg(userName), password);
+//            }
 
             if (!password.isEmpty()) {
                 m_authDialog->passwordEdit->setText(password);
@@ -70,7 +70,7 @@ LoginWindow::LoginWindow(OnlineDocument::DocumentType type, QWidget *parent)
 LoginWindow::~LoginWindow()
 {
     delete m_authDialog;
-    delete m_wallet;
+//    delete m_wallet;
 }
 
 void LoginWindow::loginService()
@@ -96,10 +96,10 @@ void LoginWindow::saveUserDetails()
     KConfigGroup interface = KoGlobal::calligraConfig()->group(settingsGroup);
     interface.writeEntry("userEmailId", m_authDialog->userEdit->text());
 
-    if (wallet()) {
-        wallet()->writePassword(QString("%1-%2").arg(settingsGroup).arg(m_authDialog->userEdit->text()),
-                               m_authDialog->passwordEdit->text());
-    }
+//    if (wallet()) {
+//        wallet()->writePassword(QString("%1-%2").arg(settingsGroup).arg(m_authDialog->userEdit->text()),
+//                               m_authDialog->passwordEdit->text());
+//    }
 }
 
 void LoginWindow::serviceSelected(int index)
@@ -142,17 +142,17 @@ void LoginWindow::updateProgress(QString msg)
     m_authDialog->headerLabel->setText(msg);
 }
 
-KWallet::Wallet *LoginWindow::wallet()
-{
-    if (!m_wallet) {
-        m_wallet = KWallet::Wallet::openWallet(KWallet::Wallet::NetworkWallet(), winId());
-        connect(m_wallet, SIGNAL(walletClosed()), this, SLOT(closeWallet()));
-    }
-    return m_wallet;
-}
+//KWallet::Wallet *LoginWindow::wallet()
+//{
+//    if (!m_wallet) {
+//        m_wallet = KWallet::Wallet::openWallet(KWallet::Wallet::NetworkWallet(), winId());
+//        connect(m_wallet, SIGNAL(walletClosed()), this, SLOT(closeWallet()));
+//    }
+//    return m_wallet;
+//}
 
-void LoginWindow::closeWallet()
-{
-    delete m_wallet;
-    m_wallet = 0;
-}
+//void LoginWindow::closeWallet()
+//{
+//    delete m_wallet;
+//    m_wallet = 0;
+//}
