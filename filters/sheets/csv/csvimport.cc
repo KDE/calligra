@@ -25,7 +25,7 @@
 #include <QRegExp>
 #include <QVector>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>

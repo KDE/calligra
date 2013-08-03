@@ -78,8 +78,8 @@ public:
     QList<KoPart *> partList;
 };
 
-KoApplication::KoApplication()
-    : KApplication(initHack())
+KoApplication::KoApplication(int argc, char** argv)
+    : QApplication(argc, argv)
     , d(new KoApplicationPrivate)
 {
     // Tell the iconloader about share/apps/calligra/icons
@@ -116,8 +116,8 @@ KoApplication::KoApplication()
 
 }
 
-// This gets called before entering KApplication::KApplication
-bool KoApplication::initHack()
+// This gets called before entering QApplication::QApplication
+void KoApplication::addCommonCommandLineOptions()
 {
     KCmdLineOptions options;
     options.add("print", ki18n("Only print and exit"));
@@ -130,7 +130,6 @@ bool KoApplication::initHack()
     options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
     options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
     KCmdLineArgs::addCmdLineOptions(options, ki18n("Calligra"), "calligra", "kde");
-    return true;
 }
 
 // Small helper for start() so that we don't forget to reset m_starting before a return
@@ -188,7 +187,7 @@ bool KoApplication::start()
     ResetStarting resetStarting(d->splashScreen); // reset m_starting to false when we're done
     Q_UNUSED(resetStarting);
 
-    // Find the *.desktop file corresponding to the kapp instance name
+    // Find the *.desktop file corresponding to the qApp instance name
     KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
     if (entry.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
@@ -270,7 +269,7 @@ bool KoApplication::start()
 
         QStringList pids;
         QString ourPid;
-        ourPid.setNum(kapp->applicationPid());
+        ourPid.setNum(qApp->applicationPid());
 
 #ifndef CALLIGRA_DISABLE_DBUS
         // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason

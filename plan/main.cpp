@@ -49,8 +49,8 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions( options );
-
-    KoApplication app;
+    KoApplication::addCommonCommandLineOptions();
+    KoApplication app(argc, argv);
 
 #ifdef MAINTANER_WANTED_SPLASH
     // After creating the KApplication then create the pixmap from an xpm: we cannot get the

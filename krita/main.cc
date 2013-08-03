@@ -57,9 +57,9 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     KCmdLineOptions options;
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
     KCmdLineArgs::addCmdLineOptions(options);
-
+    KoApplication::addCommonCommandLineOptions();
     // first create the application so we can create a  pixmap
-    KoApplication app;
+    KoApplication app(argc, argv);
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

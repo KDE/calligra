@@ -91,7 +91,6 @@ set(kofake_HEADERS_ONLY
     knuminput.h
     kstandarddirs.h
     ktoggleaction.h
-    kapplication.h
     kstandardguiitem.h
     kshortcut.h
     kpagedialog.h

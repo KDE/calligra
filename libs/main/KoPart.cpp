@@ -248,7 +248,7 @@ void KoPart::addView(KoView *view)
     view->updateReadWrite(isReadWrite());
 
     if (d->views.size() == 1) {
-        KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
+        KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if (0 != app) {
             emit app->documentOpened('/'+objectName());
         }
@@ -260,7 +260,7 @@ void KoPart::removeView(KoView *view)
     d->views.removeAll(view);
 
     if (d->views.isEmpty()) {
-        KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
+        KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if (0 != app) {
             emit app->documentClosed('/'+objectName());
         }
