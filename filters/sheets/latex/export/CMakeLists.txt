@@ -11,13 +11,18 @@ set(kspread2tex_PART_SRCS
    format.cc 
    latexexportdialog.cc
    latexexport.cc 
-   latexexportAdaptor.cc 
    map.cc 
    pen.cc 
    row.cc 
    spreadsheet.cc 
    table.cc 
    xmlparser.cc )
+
+if( QT_QTDBUS_FOUND )
+set(kspread2tex_PART_SRCS ${kspread_latex_export}
+       latexexportAdaptor.cc 
+)
+endif( QT_QTDBUS_FOUND )    
 
 kde4_add_ui_files(kspread2tex_PART_SRCS latexexportwidget.ui )
 

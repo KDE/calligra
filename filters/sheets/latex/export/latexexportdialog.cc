@@ -75,10 +75,10 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
          i = 10;*/
         i = i + 1;
     }
-
+#ifndef CALLIGRA_DISABLE_DBUS
     new LatexExportAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/filter/latex", this);
-
+#endif
 
     /* All these items inserted must not be translated so they are inserted here
      * without i18n() method. */

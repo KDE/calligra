@@ -22,6 +22,9 @@
 #define __LATEXEXPORTADAPTOR_H__
 
 #include <QObject>
+
+#include "KoConfig.h"
+#ifndef CALLIGRA_DISABLE_DBUS
 #include <QtDBus>
 
 class LatexExportDialog;
@@ -44,3 +47,4 @@ private:
 };
 
 #endif /* __LATEXEXPORTADAPTOR_H__ */
+#endif
