@@ -785,7 +785,10 @@ include(MacroCalligraBuildTest)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
 # for the fake kde headers during transition
-include_directories(${CMAKE_SOURCE_DIR}/fake)
+include_directories(${CMAKE_SOURCE_DIR}/fake
+                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/plugin
+                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/services
+)
 
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
