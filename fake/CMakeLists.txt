@@ -111,6 +111,7 @@ set(kofake_HEADERS_ONLY
     kcolorscheme.h
     kselector.h
     kglobalsettings.h
+    kseparator.h
     ksharedconfig.h
     kdeprintdialog.h
     kaboutdata.h
