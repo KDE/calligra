@@ -176,7 +176,7 @@ set(kofake_HEADERS_ONLY
     #kconfig.h
     ksharedptr.h
     kfileitem.h
-    klibloader.h
+    #klibloader.h
     kpropertiesdialog.h
     kurl.h
     kdemacros.h
