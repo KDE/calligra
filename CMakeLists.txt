@@ -298,6 +298,7 @@ find_package(Qt5Svg REQUIRED NO_MODULE)
 find_package(Qt5PrintSupport REQUIRED NO_MODULE)
 #find_package(Qt5Webkit REQUIRED NO_MODULE)
 find_package(Qt5Concurrent REQUIRED NO_MODULE)
+find_package(Qt5Sql REQUIRED NO_MODULE)
 
 if (Qt5_POSITION_INDEPENDENT_CODE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -311,6 +312,7 @@ set(QT_QTGUI_LIBRARIES
   ${Qt5Svg_LIBRARIES}
   ${Qt5Xml_LIBRARIES}
   ${Qt5Concurrent_LIBRARIES}
+  ${Qt5Sql_LIBRARIES}
 )
 
 set(QT_QTXML_LIBRARY ${Qt5Xml_LIBRARIES})
