@@ -24,6 +24,7 @@
 #include <excelimporttoods.h>
 #include <excelimporttoods.moc>
 
+#include <QUrl>
 #include <QString>
 #include <QDate>
 #include <QBuffer>
@@ -1297,7 +1298,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
         }
 
         if (!cellValue.linkName.isEmpty()) {
-            text_a a(p.add_text_a(cellValue.linkLocation));
+            text_a a(p.add_text_a(QUrl(cellValue.linkLocation)));
             const QString targetFrameName = cellValue.link.targetFrameName;
             if (! targetFrameName.isEmpty())
                 a.set_office_target_frame_name(targetFrameName);
@@ -1755,7 +1756,7 @@ void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& styl
 
     //TODO add the manifest entry
     style_background_image bg(&writer);
-    bg.set_xlink_href(sheet->backgroundImage());
+    bg.set_xlink_href(QUrl(sheet->backgroundImage()));
     bg.set_xlink_type("simple");
     bg.set_xlink_show("embed");
     bg.set_xlink_actuate("onLoad");
