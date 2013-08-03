@@ -27,8 +27,8 @@ public:
 
     enum OperationMode { Other = 0, Opening, Saving };
 
-//     enum Option { ConfirmOverwrite  = 0x01, ShowInlinePreview = 0x02 };
-//     Q_DECLARE_FLAGS(Options, Option)
+    enum Option { ConfirmOverwrite  = 0x01, ShowInlinePreview = 0x02 };
+    Q_DECLARE_FLAGS(Options, Option)
 
     KUrl selectedUrl() const
     {
@@ -253,9 +253,12 @@ public:
         return QFileDialog::getSaveFileName(parent, caption, startDir.url(), filter);
     }
 
-#if 0
-    static QString getSaveFileName( const KUrl& startDir, const QString& filter, QWidget *parent, const QString& caption, Options options );
+    static QString getSaveFileName( const KUrl& startDir, const QString& filter, QWidget *parent, const QString& caption, Options options )
+    {
+        return QFileDialog::getSaveFileName(parent, caption, startDir.url(), filter);
+    }
 
+#if 0
     /**
      * This function accepts the window id of the parent window, instead
      * of QWidget*. It should be used only when necessary.
