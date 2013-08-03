@@ -4,7 +4,7 @@
 #include <QColor>
 #include <QPalette>
 #include <QDebug>
-
+#include <ksharedconfig.h>
 #include "kofake_export.h"
 
 
@@ -56,7 +56,7 @@ public:
     };
 
     KColorScheme() {}
-    KColorScheme(QPalette::ColorGroup, ColorSet = View/*, KSharedConfigPtr = KSharedConfigPtr()*/) {}
+    KColorScheme(QPalette::ColorGroup, ColorSet = View, KSharedConfigPtr = KSharedConfigPtr()) {}
 
     QBrush background(BackgroundRole = NormalBackground) const { return QPalette().brush(QPalette::Background); }
     QBrush foreground(ForegroundRole = NormalText) const { return QPalette().brush(QPalette::Foreground); }
@@ -65,8 +65,8 @@ public:
 
     static QColor shade(const QColor&, ShadeRole) { return KColorScheme().background().color(); }
     static QColor shade(const QColor&, ShadeRole, qreal contrast, qreal chromaAdjust = 0.0) { return KColorScheme().background().color(); }
-    static void adjustBackground(QPalette &, BackgroundRole newRole = NormalBackground /*, QPalette::ColorRole color = QPalette::Base, ColorSet set = View, KSharedConfigPtr = KSharedConfigPtr()*/) {}
-    //static void adjustForeground(QPalette &, ForegroundRole newRole = NormalText, QPalette::ColorRole color = QPalette::Text, ColorSet set = View, KSharedConfigPtr = KSharedConfigPtr()) {}
+    static void adjustBackground(QPalette &, BackgroundRole newRole = NormalBackground, QPalette::ColorRole color = QPalette::Base, ColorSet set = View, KSharedConfigPtr = KSharedConfigPtr()) {}
+    static void adjustForeground(QPalette &, ForegroundRole newRole = NormalText, QPalette::ColorRole color = QPalette::Text, ColorSet set = View, KSharedConfigPtr = KSharedConfigPtr()) {}
 
 };
 
