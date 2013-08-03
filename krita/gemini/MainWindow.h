@@ -60,6 +60,10 @@ Q_SIGNALS:
     void slateModeChanged();
     void currentSketchPageChanged();
 
+private Q_SLOTS:
+    void switchDesktopForced();
+    void switchSketchForced();
+
 private:
     class Private;
     Private * const d;

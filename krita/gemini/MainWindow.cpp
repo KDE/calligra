@@ -39,6 +39,7 @@
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kaboutdata.h>
+#include <ktoolbar.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -64,29 +65,36 @@
 class MainWindow::Private
 {
 public:
-    Private(MainWindow* qq) 
+    Private(MainWindow* qq)
         : q(qq)
-		, allowClose(true)
+        , allowClose(true)
         , sketchView(0)
         , desktopView(0)
         , currentView(0)
-		, slateMode(false)
-		, docked(false)
+        , slateMode(false)
+        , docked(false)
+        , forceDesktop(false)
+        , forceSketch(false)
+        , wasMaximized(false)
     {
 #ifdef Q_OS_WIN
-		slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
-		docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+        slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+        docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
-	}
-	MainWindow* q;
+}
+    MainWindow* q;
     bool allowClose;
     SketchDeclarativeView* sketchView;
     KoMainWindow* desktopView;
     QObject* currentView;
-	
-	bool slateMode;
-	bool docked;
+
+    bool slateMode;
+    bool docked;
     QString currentSketchPage;
+
+    bool forceDesktop;
+    bool forceSketch;
+    bool wasMaximized;
 
     void initSketchView(QObject* parent)
     {
@@ -112,6 +120,7 @@ public:
 
         KAction* toDesktop = new KAction(q);
         toDesktop->setText(tr("Switch to Desktop"));
+        connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
         connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
         sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
     }
@@ -130,15 +139,18 @@ public:
             qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
         }
 
-        KAction* toSketch = new KAction(q);
+        KAction* toSketch = new KAction(desktopView);
         toSketch->setText(tr("Switch to Sketch"));
+        toSketch->setIcon(QIcon::fromTheme("system-reboot"));
         toSketch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+        connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchSketchForced()));
         connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToSketch()));
         desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
+        desktopView->toolBar()->addActions(QList<QAction*>() << toSketch);
     }
 
-	void notifySlateModeChange();
-	void notifyDockingModeChange();
+    void notifySlateModeChange();
+    void notifyDockingModeChange();
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
@@ -165,10 +177,25 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     switchToSketch();
 }
 
+void MainWindow::switchDesktopForced()
+{
+    if(d->slateMode)
+        d->forceDesktop = true;
+    d->forceSketch = false;
+}
+
+void MainWindow::switchSketchForced()
+{
+    if(!d->slateMode)
+        d->forceSketch = true;
+    d->forceDesktop = false;
+}
+
 void MainWindow::switchToSketch()
 {
     QTime timer;
     timer.start();
+    d->wasMaximized = isMaximized();
     if(d->desktopView) {
         d->desktopView->setParent(0);
     }
@@ -189,7 +216,10 @@ void MainWindow::switchToDesktop()
         d->sketchView->setParent(0);
         setCentralWidget(d->desktopView);
     }
-    showNormal();
+    if(d->wasMaximized)
+        showMaximized();
+    else
+        showNormal();
     qApp->processEvents();
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
@@ -203,7 +233,7 @@ void MainWindow::documentChanged()
     }
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
-    if(!d->slateMode)
+    if(!d->forceSketch && !d->slateMode)
         switchToDesktop();
 }
 
@@ -219,7 +249,7 @@ void MainWindow::setAllowClose(bool allow)
 
 bool MainWindow::slateMode() const
 {
-	return d->slateMode;
+    return d->slateMode;
 }
 
 QString MainWindow::currentSketchPage() const
@@ -234,9 +264,9 @@ void MainWindow::setCurrentSketchPage(QString newPage)
 
     if(newPage == "MainPage")
     {
-        if(!d->slateMode)
+        if(!d->forceSketch && !d->slateMode)
         {
-            QTimer::singleShot(1000, this, SLOT(switchToDesktop()));
+            QTimer::singleShot(0, this, SLOT(switchToDesktop()));
         }
     }
 }
@@ -275,47 +305,47 @@ MainWindow::~MainWindow()
 #ifdef Q_OS_WIN
 bool MainWindow::winEvent( MSG * message, long * result )
 {
-	if(message->message == WM_SETTINGCHANGE)
-	{
-		if(wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *) message->lParam) == 0)
-			d->notifySlateModeChange();
-		else if(wcscmp(TEXT("SystemDockMode"), (TCHAR *) message->lParam) == 0)
-			d->notifyDockingModeChange();
-		*result = 0;
-		return true;
-	}
-	return false;
+    if(message->message == WM_SETTINGCHANGE)
+    {
+        if(wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *) message->lParam) == 0)
+            d->notifySlateModeChange();
+        else if(wcscmp(TEXT("SystemDockMode"), (TCHAR *) message->lParam) == 0)
+            d->notifyDockingModeChange();
+        *result = 0;
+        return true;
+    }
+    return false;
 }
 #endif
 
 void MainWindow::Private::notifySlateModeChange()
 {
 #ifdef Q_OS_WIN
-	bool bSlateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
-	
-	if (slateMode != bSlateMode)
-	{
-		slateMode = bSlateMode;
-		emit q->slateModeChanged();
-		if(slateMode)
-			q->switchToSketch();
-		else
-			q->switchToDesktop();
-		qDebug() << "Slate mode is now" << slateMode;
-	} 
+    bool bSlateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+
+    if (slateMode != bSlateMode)
+    {
+        slateMode = bSlateMode;
+        emit q->slateModeChanged();
+        if(forceSketch || (slateMode && !forceDesktop))
+            q->switchToSketch();
+        else
+            q->switchToDesktop();
+        qDebug() << "Slate mode is now" << slateMode;
+    } 
 #endif
 }
 
 void MainWindow::Private::notifyDockingModeChange()
 {
 #ifdef Q_OS_WIN
-	bool bDocked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+    bool bDocked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 
-	if (docked != bDocked)
-	{
-		docked = bDocked;
-		qDebug() << "Docking mode is now" << docked;
-	}
+    if (docked != bDocked)
+    {
+        docked = bDocked;
+        qDebug() << "Docking mode is now" << docked;
+    }
 #endif
 }
 
