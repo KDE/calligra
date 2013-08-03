@@ -47,7 +47,7 @@
 #include <KoConfigAuthorPage.h>
 #include <KoPart.h>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>

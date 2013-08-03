@@ -29,7 +29,7 @@ Calligra in general:
 =======================
 - koTemplateChooseDia:
   - Restart with last presentation (suggesting it in initial "open" dialog)
-    (using kapp->getConfig)
+    (using qApp->getConfig)
 
 
 KPresenter after calligra 1.3

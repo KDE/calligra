@@ -47,7 +47,7 @@ private:
 
 int main(int argc, char** argv)
 {
-    //KApplication::disableAutoDcopRegistration();
+    //QApplication::disableAutoDcopRegistration();
     KCmdLineArgs::init(argc, argv, "storedroptest", 0, KLocalizedString(), 0, KLocalizedString());
     QApplication app;
 

@@ -23,7 +23,7 @@
 
 #include <QFile>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>

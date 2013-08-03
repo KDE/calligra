@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 #include <kaboutdata.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kcmdlineargs.h>
 #include <kuniqueapplication.h>
 

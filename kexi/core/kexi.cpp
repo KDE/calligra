@@ -35,7 +35,7 @@
 
 #include <kdebug.h>
 #include <QCursor>
-#include <kapplication.h>
+#include <QApplication>
 #include <ksharedptr.h>
 #include <kglobalsettings.h>
 

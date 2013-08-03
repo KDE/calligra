@@ -35,7 +35,7 @@
 #include <QBuffer>
 #include <QFile>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kio/netaccess.h>

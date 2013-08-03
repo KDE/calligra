@@ -173,12 +173,12 @@ KEXIUTILS_EXPORT QList<QMetaProperty> propertiesForMetaObjectWithInherited(
 KEXIUTILS_EXPORT QStringList enumKeysForProperty(const QMetaProperty& metaProperty);
 
 /*! Sets "wait" cursor with 1 second delay (or 0 seconds if noDelay is true).
- Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
+ Does nothing if the application has no GUI enabled. (see QApplication::guiEnabled()) */
 KEXIUTILS_EXPORT void setWaitCursor(bool noDelay = false);
 
 /*! Remove "wait" cursor previously set with \a setWaitCursor(),
  even if it's not yet visible.
- Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
+ Does nothing if the application has no GUI enabled. (see QApplication::guiEnabled()) */
 KEXIUTILS_EXPORT void removeWaitCursor();
 
 /*! Helper class. Allocate it in your code block as follows:
@@ -187,7 +187,7 @@ KEXIUTILS_EXPORT void removeWaitCursor();
  </code>
  .. and wait cursor will be visible (with one second delay) until you're in this block, without
  a need to call removeWaitCursor() before exiting the block.
- Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
+ Does nothing if the application has no GUI enabled. (see QApplication::guiEnabled()) */
 class KEXIUTILS_EXPORT WaitCursor
 {
 public:
@@ -202,7 +202,7 @@ public:
  .. and the wait cursor will be hidden unless you leave this block, without
  a need to call setWaitCursor() before exiting the block. After leaving the codee block,
  the cursor will be visible again, if it was visible before creating the WaitCursorRemover object.
- Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
+ Does nothing if the application has no GUI enabled. (see QApplication::guiEnabled()) */
 class KEXIUTILS_EXPORT WaitCursorRemover
 {
 public:

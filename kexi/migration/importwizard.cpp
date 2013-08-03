@@ -665,7 +665,7 @@ bool ImportWizard::fileBasedDstSelected() const
 void ImportWizard::progressUpdated(int percent)
 {
     d->progressBar->setValue(percent);
-    KApplication::kApplication()->processEvents();
+    qApp->processEvents();
 }
 
 //===========================================================

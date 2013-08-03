@@ -35,7 +35,7 @@
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>

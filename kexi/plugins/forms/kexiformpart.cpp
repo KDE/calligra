@@ -25,7 +25,7 @@
 #include <kdialog.h>
 #include <ktabwidget.h>
 #include <kcombobox.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kconfig.h>
 #include <kaction.h>
 #include <kactionmenu.h>

@@ -114,7 +114,7 @@ QString MapAdaptor::insertSheet(const QString& name)
 //     replyType = "DCOPRef";
 //     QDataStream out( &replyData,QIODevice::WriteOnly );
 //     out.setVersion(QDataStream::Qt_3_1);
-//     out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
+//     out << DCOPRef( qApp->dcopClient()->appId(), t->dcopObject()->objId() );
 //     return true;
 // }
 

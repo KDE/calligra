@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <QLineEdit>
 
 #include <QtTest/QtTest>
@@ -128,7 +128,7 @@ void TestGlobalSearch::testGlobalSearch()
     QCOMPARE(selectedPartItem->partClass(), QLatin1String("org.kexi-project.form"));
 
     if (m_goToEventLoop) {
-        result = kapp->exec();
+        result = qApp->exec();
         QCOMPARE(result, 0);
     }
 }

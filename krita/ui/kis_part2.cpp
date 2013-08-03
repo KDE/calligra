@@ -39,7 +39,7 @@
 #include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kglobal.h>
 #include <kmessagebox.h>
 

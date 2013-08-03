@@ -27,7 +27,7 @@
 #include <ImfInputFile.h>
 #include <ImfOutputFile.h>
 
-#include <kapplication.h>
+#include <QApplication>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>

@@ -25,7 +25,7 @@
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 
 #include <KoColorProfile.h>
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
     options.add("+preset", ki18n("preset to load"));
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KApplication app;
+    QApplication app;
 
     KisScratchPad *scratchpad = new KisScratchPad();
 

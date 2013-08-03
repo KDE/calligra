@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 #include <kcmdlineargs.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kcomponentdata.h>
 #include <kiconloader.h>
 #include <kaboutdata.h>
@@ -54,7 +54,7 @@ bool db_name_required = true;
 QPointer<KexiProject> project;
 QPointer<KexiDB::Connection> conn;
 QPointer<KexiDB::Driver> driver;
-KApplication *app = 0;
+QApplication *app = 0;
 KComponentData *instance = 0;
 
 #include "dbcreation_test.h"
@@ -162,7 +162,7 @@ int main(int argc, char** argv)
     }
 
     if (gui) {
-        app = new KApplication(true);
+        app = new QApplication(true);
         app->setWindowIcon(koIcon("table"));
         instance = new KComponentData(KGlobal::mainComponent());
         KIconLoader::global()->addAppDir("kexi");

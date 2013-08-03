@@ -19,7 +19,7 @@
 
 #include <QFileInfo>
 #include <QDir>
-#include <kapplication.h>
+#include <QApplication>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>

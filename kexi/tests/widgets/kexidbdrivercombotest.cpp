@@ -27,7 +27,7 @@
 #include <Q3VBoxLayout>
 #include <kdebug.h>
 #include <kcmdlineargs.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kcomponentdata.h>
 
 #include <db/drivermanager.h>
@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 {
     // Initialise the program
     KCmdLineArgs::init(argc, argv, "kexidbcomboboxtest", 0, KLocalizedString(), "", KLocalizedString(), true);
-    KApplication* app = new KApplication(true, true);
+    QApplication* app = new QApplication(true, true);
 
     // Look for installed database drivers
     KexiDB::DriverManager manager;

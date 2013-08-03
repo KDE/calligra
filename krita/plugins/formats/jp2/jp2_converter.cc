@@ -22,7 +22,7 @@
 
 #include <QFileInfo>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kmessagebox.h>
 
 #include <kio/netaccess.h>

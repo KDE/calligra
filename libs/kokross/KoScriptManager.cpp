@@ -186,7 +186,7 @@ void KoScriptManagerView::slotUninstall() {
                 break;
 }
 void KoScriptManagerView::slotNewScripts() {
-    const QString appname = KApplication::kApplication()->objectName();
+    const QString appname = qApp->objectName();
     const QString type = QString("%1/script").arg(appname);
     krossdebug( QString("ScriptManagerView::slotNewScripts %1").arg(type) );
     if(! d->newstuff) {

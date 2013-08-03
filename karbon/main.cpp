@@ -63,7 +63,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
     KoApplication app(argc, argv, KarbonFactory::aboutData());
 
 #ifdef MAINTANER_WANTED_SPLASH
-    // After creating the KApplication then create the pixmap from an xpm: we cannot get the
+    // After creating the QApplication then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));

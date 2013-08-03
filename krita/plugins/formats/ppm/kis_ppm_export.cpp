@@ -19,7 +19,7 @@
 #include "kis_ppm_export.h"
 
 #include <kpluginfactory.h>
-#include <kapplication.h>
+#include <QApplication>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
@@ -161,7 +161,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     optionsPPM.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     QString filterConfig = KisConfig().exportConfiguration("PPM");
     KisPropertiesConfiguration cfg;

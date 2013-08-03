@@ -23,7 +23,7 @@
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
 #include <kassistantdialog.h>
-#include <kapplication.h>
+#include <QApplication>
 
 #include <db/tristate.h>
 #include "migratemanager.h"

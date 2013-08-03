@@ -24,7 +24,7 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
-#include <kapplication.h>
+#include <QApplication>
 
 #include "flow_imageexportwidget.h"
 
@@ -34,7 +34,7 @@ namespace Flow
 ImageExportDialog::ImageExportDialog(QWidget* parent, const char* name)
         : KDialogBase(parent, name, false, i18n("Export to Image"), Ok | Cancel)
 {
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
     m_mainWidget = new ImageExportWidget(this);
     setMainWidget(m_mainWidget);
 }

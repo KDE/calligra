@@ -36,7 +36,7 @@ public:
     /**
      * @brief Used by KoApplication, and by KoMainWindow, when no document exists yet.
      *
-     * With the help of @p instance or KApplication::componentData() this
+     * With the help of @p instance or QApplication::componentData() this
      * method figures out which .desktop file matches this application. In this
      * file it searches for the "X-KDE-NativeMimeType" entry and returns it.
      *
@@ -48,7 +48,7 @@ public:
     /**
      * Used by KoMainWindow, when no document exists yet.
      *
-     * With the help of @p instance or KApplication::componentData() this
+     * With the help of @p instance or QApplication::componentData() this
      * method figures out which .desktop file matches this application. In this
      * file it searches for the "X-KDE-ExtraNativeMimeTypes" entry and returns it.
      *
@@ -58,7 +58,7 @@ public:
     static QStringList readExtraNativeMimeTypes(const KComponentData &instance = KComponentData());
 
     /**
-     * With the help of @p instance or KApplication::componentData() this
+     * With the help of @p instance or QApplication::componentData() this
      * method figures out which .desktop file matches this application,
      * and returns the KService instance for it.
      */

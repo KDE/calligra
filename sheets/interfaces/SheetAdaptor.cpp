@@ -263,7 +263,7 @@ int SheetAdaptor::lastRow() const
 //     replyType = "DCOPRef";
 //     QDataStream out( &replyData,QIODevice::WriteOnly );
 //     out.setVersion(QDataStream::Qt_3_1);
-//     out << DCOPRef( kapp->dcopClient()->appId(), str );
+//     out << DCOPRef( qApp->dcopClient()->appId(), str );
 //     return true;
 // }
 

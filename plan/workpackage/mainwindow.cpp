@@ -40,7 +40,7 @@
 #include <KoDocument.h>
 #include <KoGlobal.h>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <ktemporaryfile.h>

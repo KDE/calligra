@@ -22,7 +22,7 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>

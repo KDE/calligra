@@ -25,7 +25,7 @@
 #include <core/kexi.h>
 #include <KoIcon.h>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
