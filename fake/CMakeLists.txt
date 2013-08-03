@@ -98,6 +98,7 @@ set(kofake_HEADERS_ONLY
     sonnet/dialog.h
     sonnet/speller.h
     sonnet/configwidget.h
+    sonnet/configdialog.h
     sonnet/backgroundchecker.h
     kfile.h
     kservicetypetrader.h
