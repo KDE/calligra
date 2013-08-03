@@ -31,7 +31,7 @@ KComponentData* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
 
 KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
-    : KPluginFactory( *aboutData(), parent )
+    : KPluginFactory( aboutData()->appName().toUtf8(), parent )
 {
     (void)componentData();
 }
