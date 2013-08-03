@@ -5,6 +5,7 @@
 #include <QLibrary>
 #include <QDebug>
 #include <kcomponentdata.h>
+#include <kservice.h>
 
 class KLibrary : public QLibrary
 {
