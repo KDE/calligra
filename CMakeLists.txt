@@ -1075,19 +1075,19 @@ endif(SHOULD_BUILD_PLAN_APP)
 add_subdirectory(sheets)
 
 if(SHOULD_BUILD_KRITA_APP)
-  add_subdirectory(krita)
+#  add_subdirectory(krita)
 endif(SHOULD_BUILD_KRITA_APP)
 
 if(SHOULD_BUILD_KARBON_APP)
-  add_subdirectory(karbon)
+#  add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON_APP)
 
 if(SHOULD_BUILD_BRAINDUMP_APP)
-  add_subdirectory(braindump)
+#  add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP_APP)
 
 if(SHOULD_BUILD_ACTIVE)
-  add_subdirectory(active)
+#  add_subdirectory(active)
 endif(SHOULD_BUILD_ACTIVE)
 
 if(SHOULD_BUILD_DOC)
