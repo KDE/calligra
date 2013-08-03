@@ -1064,6 +1064,7 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
             return;
         break;
 
+    case Qt::Key_Backspace:
     case Qt::Key_Delete:
 	clearContents();
 	break;
