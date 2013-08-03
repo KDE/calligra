@@ -36,3 +36,4 @@ Plugin::Plugin(QObject *parent, const QVariantList&)
 
     //KoShapeRegistry::instance()->add(new StencilShapeFactory());
 }
+#include "Plugin.moc"
