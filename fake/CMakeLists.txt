@@ -7,6 +7,7 @@ set_package_properties(ZLIB PROPERTIES DESCRIPTION "Support for gzip compressed 
 
 set(kofake_LIB_SRCS
     karchive.cpp
+    kdatewidget.cpp
     kbuttongroup.cpp
     kcomponentdata.cpp
     kconfigbase.cpp
