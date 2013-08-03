@@ -26,6 +26,10 @@
 #ifndef CALLIGRA_SHEETS_VIEW_ADAPTOR
 #define CALLIGRA_SHEETS_VIEW_ADAPTOR
 
+#include "KoConfig.h"
+
+#ifndef CALLIGRA_DISABLE_DBUS
+
 #include <QColor>
 #include <QRect>
 #include <QString>
@@ -261,3 +265,4 @@ private:
 } // namespace Calligra
 
 #endif // CALLIGRA_SHEETS_VIEW_ADAPTOR
+#endif

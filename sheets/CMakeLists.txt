@@ -134,11 +134,15 @@ SET (functions_DIR_SRCS
     functions/trig.cpp
     )
 
+SET (interfaces_DIR_SRC )
+if( QT_QTDBUS_FOUND )
 SET (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
     interfaces/SheetAdaptor.cpp
     interfaces/ViewAdaptor.cpp
     )
+endif( QT_QTDBUS_FOUND )
+
 
 SET (part_DIR_SRCS
     part/CanvasBase.cpp

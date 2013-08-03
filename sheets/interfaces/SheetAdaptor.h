@@ -26,6 +26,9 @@
 
 #ifndef CALLIGRA_SHEETS_SHEET_ADAPTOR
 #define CALLIGRA_SHEETS_SHEET_ADAPTOR
+#include "KoConfig.h"
+
+#ifndef CALLIGRA_DISABLE_DBUS
 
 #include <QtDBus>
 #include "calligra_sheets_export.h"
@@ -191,3 +194,4 @@ private:
 } // namespace Calligra
 
 #endif // CALLIGRA_SHEETS_SHEET_ADAPTOR
+#endif
