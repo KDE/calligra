@@ -1,0 +1,106 @@
+If you add a major new feature, suggest using it in
+http://techbase.kde.org/Development/Tutorials/KConfig
+
+kconfigdata.h contains definitions of the data formats used by kconfig.
+
+Configuration entries are stored as "KEntry". They are indexed with "KEntryKey".
+The primary store is a "KEntryMap" which is defined as a QMap from "KEntryKey"
+to "KEntry"
+
+KEntry's are stored in order in the KEntryMap. The most significant sort 
+criteria is mGroup. This means that all entries who belong in the same group,
+are grouped in the QMap as well. 
+
+The start of a group is indicated with a KEntryKey with an empty mKey and a 
+dummy KEntry. This allows us to search for the start of the group and then to 
+iterate until we end up in another group. That way we will find all entries
+of a certain group.
+
+Entries that are localised with the _current_ locale are stored with bLocal 
+set to true. Entries that are localised with another locale are either not
+stored at all (default), or with the localization as part of the key and bRaw
+set to true (when reading a file in order to merge it).
+
+Entries that are being read from a location other than the location to
+which is written back are marked as "default" and will be added both as
+normal entry as well as an entry with the key marked as default.
+
+When the configuration is synced to disk, the current on-disk state is re-read
+into a temporary map, updated with dirty (modified) entries from the 
+current config object's entry map and then written back.
+
+
+Note that there is a subtle difference between revertToDefault() and deleteEntry().
+revertToDefault() will change the entry to the default value set by the system 
+administrator (Via e.g. $KDEDIR/share/config) or, if no such default was set,
+non-existant.
+deleteEntry() will make the entry non-existant. If if the system administrator
+has specified a default value, the local entry is marked with [$d].
+
+Entries are marked "immutable" if the key is followed by [$i]. This means
+that a user can not override these entries.
+
+
+------------------------------------------------------------------------------
+
+KConfig XT
+==========
+
+My buzzword picker offered KConfig XT ("eXtended Technology") and KConfig NG 
+("Next Generation").  Since the planned changes are ment to be evolutionary 
+rather than revolutionary, KConfig NG was dropped.
+
+Goals
+=====
+
+* Have the default value for config entries defined in 1 place. Currently it is
+not uncommon to have them defined in three places:
+  1) In the application that reads the setting in order to use it
+  2) In the settings dialog when reading the setting
+  3) In the settings dialog when selecting "Use defaults".
+
+* Provide type-information about config entries to facilate "KConfEdit" like 
+tools. Ideally type-information also includes range-information; this is even
+mandatory if enums become an explicit type.
+
+* Facilitate the documentation of config entries.
+
+KCoreConfigSkeleton
+         |
+         v
+  KConfigSkeleton           /--< myapp.kcfg
+         |                 /
+         |*---------------<
+         |kconfig_compiler \
+         |                  \--< myconfig.kcfgc
+         v
+     MyConfig <-----KConfigDialogManager----> MyConfigWidget *---< myconfigwidget.ui
+                                                             uic
+
+KCoreConfigSkeleton/ base class for deriving classes that store application
+KConfigSkeleton:     specific options providing type-safety and single-point
+                     defaults.
+
+MyConfig: An application specific class that offers configuration options
+          to the applications via variables or accessor functions and that
+          handles type-safety and defaults. MyConfig is just an example
+          name, the application developer choses the actual name.
+
+myapp.kcfg: File describing the configuration options used by a specific
+            application. myapp.kcfg is just an example name, the application
+            developer choses the actual name.
+
+myconfig.kcfgc: Implementation specific code generation instructions
+                for the MyConfig class. myconfig.kcfgc is
+                just an example name, the application developer
+                choses the actual name.
+
+KConfigDialogManager: Class that links widgets in a dialog up with their
+                      corresponding confguration options in a configuration
+                      object derived from KConfigSkeleton.
+
+MyConfigWidget: Dialog generated from a .ui description file. Widget names
+                in the dialog that start with "kcfg_" refer to configuration
+                options.
+
+See http://techbase.kde.org/Development/Tutorials/Using_KConfig_XT

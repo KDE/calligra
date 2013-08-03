@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  kcfg XSD v1.0 -->
+<xsd:schema
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns="http://www.kde.org/standards/kcfg/1.0"
+             xmlns:kcfg="http://www.kde.org/standards/kcfg/1.0"
+        targetNamespace="http://www.kde.org/standards/kcfg/1.0"
+        version="1.0"
+        elementFormDefault="qualified" >
+
+    <xsd:annotation>
+        <xsd:documentation>
+
+            Copyright (c) 2003 Cornelius Schumacher &lt;schumacher@kde.org&gt;
+            Copyright (c) 2003 Waldo Bastian &lt;bastian@kde.org&gt;
+            Copyright (c) 2003 Zack Rusin &lt;zack@kde.org&gt;
+            Copyright (c) 2004 Frans Englich &lt;frans.englich@telia.com&gt;
+            Copyright (c) 2006 Michaël Larouche &lt;michael.larouche@kdemail.net&gt;
+
+            Permission to use, copy, modify and distribute this DTD
+            and its accompanying documentation for any purpose and without fee
+            is hereby granted in perpetuity, provided that the above copyright
+            notice and this paragraph appear in all copies.  The copyright
+            holders make no representation about the suitability of the DTD for
+            any purpose. It is provided "as is" without expressed or implied
+            warranty.
+
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:annotation>
+        <xsd:documentation>
+
+            A Schema for KDE's KConfigXT XML format. It is similar to the DTD
+            found at:
+
+            http://www.kde.org/standards/kcfg/1.0/kcfg.dtd
+
+            Documents valid against the Schema version are backwards compatible
+            to the DTD. Validating against the Schema instead of the DTD is
+            recommended, since the former provides better validation.
+
+            A document instance of this Schema should have a declaration
+            looking like this:
+
+            <![CDATA[
+
+                <?xml version="1.0" encoding="UTF-8" ?>
+                <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+                <!-- the content -->
+                </kcfg>
+
+            ]]>
+
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="kcfg">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="include" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
+                <xsd:element name="kcfgfile" >
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="parameter" type="kcfg:parameter" minOccurs="0" maxOccurs="unbounded" />
+                            <!-- FIXME: Are really unbounded occurances of parameter allowed? -->
+                        </xsd:sequence>
+                        <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                        <xsd:attribute name="arg" type="xsd:boolean" use="optional"/>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="signal" type="kcfg:signal" minOccurs="0" maxOccurs="unbounded" />
+                <xsd:element name="group" maxOccurs="unbounded" >
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="entry" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:choice maxOccurs="unbounded">
+                                        <xsd:element name="parameter" minOccurs="0" type="kcfg:parameter"/>
+                                        <xsd:element name="label" minOccurs="0" type="kcfg:translatableString"/>
+                                        <xsd:element name="whatsthis" minOccurs="0" type="kcfg:translatableString"/>
+                                        <xsd:element name="tooltip" minOccurs="0" type="kcfg:translatableString"/>
+                                        <xsd:element name="choices" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="choice" maxOccurs="unbounded">
+                                                        <xsd:complexType>
+                                                            <xsd:all>
+                                                                <xsd:element minOccurs="0" name="label" type="kcfg:translatableString"/>
+                                                                <xsd:element minOccurs="0" name="whatsthis" type="kcfg:translatableString"/>
+                                                                <xsd:element minOccurs="0" name="tooltip" type="kcfg:translatableString"/>
+                                                            </xsd:all>
+                                                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                                                        </xsd:complexType>
+                                                    </xsd:element>
+                                                </xsd:sequence>
+                                                <xsd:attribute name="name" use="optional" type="xsd:string"/>
+                                                <xsd:attribute name="prefix" use="optional" type="xsd:string"/>
+
+                                            </xsd:complexType>
+                                        </xsd:element>
+
+                                        <xsd:element name="code" minOccurs="0" type="kcfg:code"/>
+
+                                        <xsd:element name="default" maxOccurs="unbounded" minOccurs="0" >
+                                            <xsd:complexType>
+                                                <xsd:simpleContent>
+                                                    <xsd:extension base="xsd:string">
+                                                        <xsd:attribute use="optional" name="code" type="xsd:boolean"/>
+                                                        <xsd:attribute use="optional" name="param" type="xsd:string"/>
+                                                    </xsd:extension>
+                                                </xsd:simpleContent>
+                                            </xsd:complexType>
+                                        </xsd:element>
+
+                                        <xsd:element name="min" minOccurs="0" >
+                                            <xsd:complexType>
+                                                <xsd:simpleContent>
+                                                    <xsd:extension base="xsd:string">
+                                                        <xsd:attribute name="code" type="xsd:boolean"/>
+                                                    </xsd:extension>
+                                                </xsd:simpleContent>
+                                            </xsd:complexType>
+                                        </xsd:element>
+
+                                        <xsd:element name="max" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:simpleContent>
+                                                    <xsd:extension base="xsd:string">
+                                                        <xsd:attribute name="code" type="xsd:boolean"/>
+                                                    </xsd:extension>
+                                                </xsd:simpleContent>
+                                            </xsd:complexType>
+                                        </xsd:element>
+
+                                        <xsd:element name="emit" minOccurs="0">
+                                            <xsd:complexType>
+                                                <xsd:simpleContent>
+                                                    <xsd:extension base="xsd:string">
+                                                        <xsd:attribute name="signal" use="required" type="xsd:string"/>
+                                                    </xsd:extension>
+                                                </xsd:simpleContent>
+                                            </xsd:complexType>
+                                        </xsd:element>
+
+                                    </xsd:choice>
+                                    <xsd:attribute name="name" use="optional" type="xsd:string"/>
+                                    <xsd:attribute name="key" use="optional" type="xsd:string"/>
+                                    <xsd:attribute name="hidden" use="optional" type="xsd:boolean"/>
+                                    <xsd:attribute name="type"  type="kcfg:datatype"/>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:attribute name="name" use="required" type="xsd:string"/>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:simpleType name="datatype">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="String"/>
+            <xsd:enumeration value="StringList"/>
+            <xsd:enumeration value="Font"/>
+            <xsd:enumeration value="Rect"/>
+            <xsd:enumeration value="Size"/>
+            <xsd:enumeration value="Color"/>
+            <xsd:enumeration value="Point"/>
+            <xsd:enumeration value="Int"/>
+            <xsd:enumeration value="UInt"/>
+            <xsd:enumeration value="Bool"/>
+            <xsd:enumeration value="Double"/>
+            <xsd:enumeration value="DateTime"/>
+            <xsd:enumeration value="LongLong"/>
+            <xsd:enumeration value="ULongLong"/>
+            <xsd:enumeration value="IntList"/>
+            <xsd:enumeration value="Enum"/>
+            <xsd:enumeration value="Path"/>
+            <xsd:enumeration value="PathList"/>
+            <xsd:enumeration value="Password"/>
+            <xsd:enumeration value="Url"/>
+            <xsd:enumeration value="UrlList"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="parameter">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="values">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="value" maxOccurs="unbounded" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="name" use="required" type="xsd:string"/>
+        <xsd:attribute name="type" use="optional" type="kcfg:datatype" />
+        <xsd:attribute name="max" use="optional" type="xsd:positiveInteger"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="code">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="signal">
+        <xsd:sequence>
+            <xsd:element name="label" minOccurs="0" type="xsd:string"/>
+            <xsd:element name="argument" maxOccurs="unbounded" minOccurs="0" >
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute use="required" name="type" type="kcfg:datatype"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="name" use="required" type="xsd:string" />
+    </xsd:complexType>
+
+    <xsd:complexType name="translatableString">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute use="optional" name="context" type="xsd:string"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+</xsd:schema>
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Author: Michaël Larouche-->
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+	<kcfgfile name="kconfig_compiler_test_rc"/>
+
+	<signal name="emoticonSettingsChanged" />
+	
+    <signal name="styleChanged">
+		<label>Tell when a complete style change.</label>
+		<argument type="String">stylePath</argument>
+        <argument type="String">StyleCSSVariant</argument>
+	</signal>
+
+	<group name="Appearance">
+		<!-- Emoticon config -->
+		<entry key="emoticonTheme" type="String">
+			<label>Current emoticon theme.</label>
+			<default>Default</default>
+			<emit signal="emoticonSettingsChanged" />
+		</entry>
+		<entry key="useEmoticon" type="Bool"> 
+			<label>Enable emoticon support in Kopete.</label>
+			<default>true</default>
+			<emit signal="emoticonSettingsChanged" />
+		</entry>
+		<entry key="emoticonRequireSpace" type="Bool">
+			<label>Use strict mode in emoticon parsing.</label>
+			<default>true</default>
+			<emit signal="emoticonSettingsChanged" />
+		</entry>
+		
+		<!-- Chat Window Style preferences -->
+		<entry key="stylePath" type="String">
+			<label>Absolute path to a directory containing a Adium/Kopete chat window style.</label>
+			<emit signal="styleChanged" />
+		</entry>
+
+		<entry key="styleVariant" type="String" name="StyleCSSVariant">
+			<label>Relative path to a CSS variant for the current style.</label>
+		</entry>
+	</group>
+</kcfg>

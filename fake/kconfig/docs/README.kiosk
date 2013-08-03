@@ -1,0 +1,817 @@
+In KDE-3 a kiosk-framework has been introduced.
+
+One of the driving forces behind KDE is to put the user in control and
+give him or her a large amount of possibilities to adjust KDE to his or her
+liking. However, in some situations it is required to reduce the possibilities
+of KDE, e.g. because the system is to be used for one or more specific
+dedicated tasks only.
+
+The kiosk-framework provides an easy way to disable certain features within
+KDE to create a more controlled environment.
+
+KDE's kiosk-framework builds on KDE's configuration framework and adds a
+simple application API that applications can query to get authorisation
+for certain operations.
+
+The KDE kiosk-framework should be used IN ADDITION to the standard UNIX
+security measures.
+
+The configuration framework in KDE
+==================================
+
+Since the very beginning KDE makes use of file-hierarchy to store resources
+for its applications. Resources range from icons, wallpapers, fonts to
+sounds, menu-descriptions and configuration files.
+
+In KDE1 there were two locations were resources could be located: The
+resources provided by the system were located under $KDEDIR and user-
+specific resources were located under $HOME/.kde.
+
+In KDE2 resource management has been largely abstracted by the introduction
+of the KStandardDirs class and has become much more flexible. The user /
+administrator can now specify a variable number of locations where resources
+can be found. A list of locations can either be specified via $KDEDIRS
+(notice the extra 'S'), via /etc/kde4rc and even via the kdeglobals config
+file. The location where user-specific resources can be found can be
+set with $KDEHOME (The default is $HOME/.kde). Changes made by the user
+are always written back to $KDEHOME.
+
+Both KDE1 and KDE2 feature so called "cascading configuration files": There
+can be multiple configuration files with the same name in the various
+locations for (config) resources, when that is the case, the information of
+all these configuration files is combined on a key by key basis. If the same
+key (within a certain group) is defined in more than one place, the value
+of the key for the config file that was read last will override any previously
+read values. Configuration files under $KDEHOME are always read last. This
+ensures that after a configuration entry is written, the same value wil be
+read back.
+
+In KDE3 two important changes have been made:
+
+* Default values are no longer written.
+When a configuration file in a location other than $KDEHOME defines a value
+for a key and the application subsequently writes out a new configuration file
+to $KDEHOME, that configuration file will only contain an entry for the key
+if its value differs from the value read from the other file.
+
+This counters the problem that changing default configuration files under
+$KDEDIR would not take effect for users, since these users would most likely
+have their own copy of these settings under $KDEHOME. KDE will make sure
+not to copy these settings so changes made under $KDEDIR will affect all users
+that haven't explicitly changed the affected settings to something else.
+
+* Configuration entries can be marked "immutable".
+Starting with KDE-3, configuration entries can be marked "immutable". When a
+configuration entry is immutable it means that configuration files that are
+read later will not be able to override its value. Immutable entries cannot
+be changed via KConfig and if the entry is present under $KDEHOME it will
+be ignored.
+
+Entries can be marked immutable on 4 different levels:
+
+- On an entry by entry basis by appending "[$i]" after the key.
+
+Example:
+[MyGroup]
+someKey[$i]=42
+
+- On a group by group basis by appending "[$i]" after the group. All entries
+specified in the group will be marked immutable and no new entries can be
+added to the group.
+
+Example:
+[MyGroup][$i]
+someKey=42
+
+- On a file by file basis by starting the file with [$i].
+
+Example:
+[$i]
+[MyGroup]
+someKey=42
+[MyOtherGroup]
+someOtherKey=11
+
+- On a directory basis. [Not yet implemented]
+
+- The filesystem can also be used to mark files immutable. If KDE does not
+have write-access to the user's version of a configuration file, the file
+will be automatically considered immutable.
+
+To make the configuration file of Dolphin immutable one could for
+example use the commands below.
+
+Example:
+chown root.root /home/user/.kde/share/config/dolphinrc
+chmod 644 /home/user/.kde/share/config/dolphinrc
+
+If you do this, the user will be warned that the configuration file is not
+writable. Since you will normally not want that, you can add the following
+two lines to the application's configuration file (or to kdeglobals to
+disable the warning for all applications):
+
+[KDE Action Restrictions]
+warn_unwritable_config=true
+
+Note that the above example is not fool-proof, the user can potentially still
+rename either the root-owned dolphinrc file or any of the directories in
+the path to another name and create a new dolphinrc _with_ write-access.
+
+KDE Action Restrictions
+=======================
+
+Most functionality within KDE is coupled to so called actions. For example when a user
+selects the File->Open option in the menubar of a KDE application, the "file_open"
+action is activated. Likewise, toolbar icons are usually also coupled to actions. KDE
+makes it possible to disable functionality by restricting specific actions. By restricting the
+"file_open" action for example, the corresponding entry in the menubar and the corresponding icon on
+the toolbar, if any, will disappear.
+
+To restrict access to function the kdeglobals file should contain the
+group "[KDE Action Restrictions]", each action can then be restricted by
+adding "<action>=false". E.g. to disable the action "shell_access" one
+would add:
+[KDE Action Restrictions][$i]
+shell_access=false
+
+Actions that refer to menu and toolbar actions are prefixed with 'action/'.
+The following standard actions are defined:
+
+action/file_new
+action/file_open
+action/file_open_recent
+action/file_save
+action/file_save_as
+action/file_revert
+action/file_close
+action/file_print
+action/file_print_preview
+action/file_mail
+action/file_quit
+action/edit_undo
+action/edit_redo
+action/edit_cut
+action/edit_copy
+action/edit_paste
+action/edit_select_all
+action/edit_deselect
+action/edit_find
+action/edit_find_next
+action/edit_find_last
+action/edit_replace
+action/view_actual_size
+action/view_fit_to_page
+action/view_fit_to_width
+action/view_fit_to_height
+action/view_zoom_in
+action/view_zoom_out
+action/view_zoom
+action/view_redisplay
+action/go_up
+action/go_back
+action/go_forward
+action/go_home
+action/go_previous
+action/go_next
+action/go_goto
+action/go_goto_page
+action/go_goto_line
+action/go_first
+action/go_last
+action/bookmarks // See note below
+action/bookmark_add
+action/bookmark_edit
+action/tools_spelling
+action/options_show_menubar
+action/options_show_toolbar  // See note below
+action/options_show_statusbar
+action/options_save_options
+action/options_configure
+action/options_configure_keybinding
+action/options_configure_toolbars
+action/options_configure_notifications
+action/help // See note below
+action/help_contents
+action/help_whats_this
+action/help_report_bug
+action/help_about_app
+action/help_about_kde
+action/fullscreen
+
+Actions in the KDE File Dialog:
+action/home		// Go to home directory
+action/up		// Go to parent directory
+action/back		// Go to previous directory
+action/forward		// Go to next directory
+action/reload		// Reload directory
+action/mkdir		// Create new directory
+action/toggleSpeedbar	// Show/hide sidebar
+action/sorting menu	// Sorting options
+action/short view	// Select short view
+action/detailed view	// Select detailed view
+action/show hidden	// Show/hide hidden files
+action/preview		// Show/hide preview
+action/separate dirs	// Show/hide separate directories
+
+
+Konqueror & KDesktop related:
+action/editfiletype
+action/properties
+action/openwith
+action/openintab
+action/kdesktop_rmb // RMB menu, see note below
+action/iconview_preview
+action/sharefile // File sharing, see note below
+action/sendURL // Send Link Address
+action/sendPage // Send File
+action/devnew // Create New -> Device
+action/incIconSize // Increase icon size
+action/decIconSize // Decrease icon size
+action/go // Entire go menu
+action/configdesktop // Configure desktop in RMB menu, see also Control Module Restrictions
+action/executeshellcommand // In Konqueror Tools menu, see also shell_access
+action/show_dot // Show Hidden Files, see note below
+
+
+Kicker related:
+action/kicker_rmb // RMB menu
+action/menuedit
+
+
+KWin related:
+action/kwin_rmb // RMB window context menu
+
+Konsole related:
+action/konsole_rmb // RMB context menu
+
+action/settings // Entire settings menu
+action/show_menubar
+action/show_toolbar
+action/scrollbar
+action/fullscreen
+action/bell
+action/font
+action/keyboard
+action/schema
+action/size
+action/history
+action/save_default
+action/save_sessions_profile
+action/options_configure_notifications
+action/options_configure_keybinding
+action/options_configure
+
+action/send_signal
+action/bookmarks
+action/add_bookmark
+action/edit_bookmarks
+action/clear_terminal
+action/reset_clear_terminal
+action/find_history
+action/find_next
+action/find_previous
+action/save_history
+action/clear_history
+action/clear_all_histories
+action/detach_session
+action/rename_session
+action/zmodem_upload
+action/monitor_activity
+action/monitor_silence
+action/send_input_to_all_sessions
+action/close_session
+action/new_session
+action/activate_menu
+action/list_sessions
+action/move_session_left
+action/move_session_right
+action/previous_session
+action/next_session
+action/switch_to_session_1
+action/switch_to_session_2
+action/switch_to_session_3
+action/switch_to_session_4
+action/switch_to_session_5
+action/switch_to_session_6
+action/switch_to_session_7
+action/switch_to_session_8
+action/switch_to_session_9
+action/switch_to_session_10
+action/switch_to_session_11
+action/switch_to_session_12
+action/bigger_font
+action/smaller_font
+action/toggle_bidi
+
+
+
+Notes:
+* action/options_show_toolbar will also disable the "Toolbars" submenu
+  if present.
+* action/bookmarks also disables action/bookmark_add and action/bookmark_edit
+* action/help is not yet fully implemented
+* action/kdesktop_rmb disables the RMB menu but some actions may still be accesible
+  via keyboard shortcuts: cut/copy/rename/trash/delete
+* action/iconview_preview disables the option to toggle previews on or off
+  in icon mode but the actual preview settings remains unaffected.
+  To disable previews you also need to add the following lines to
+  konqiconviewrc:
+	[Settings]
+	PreviewsEnabled[$i]=false
+* action/show_dot disables the option to toggle showing hidden files, the actual
+  setting remains unaffected.
+  To disable showing hidden files, add the following lines to konqiconviewrc:
+	[Settings]
+	ShowDotFiles[$i]=false
+* action/sharefile disables file sharing from the UI, but you may also want
+  to disable filesharing altogether.
+
+
+Applications may use additional actions that they defined themselves.
+You can get a list of the actions used by a certain applications by using the
+following qdbus command:
+
+qdbus org.kde.myapp-id | grep actions | cut -d '/' -f 4,5
+
+Actions that refer to applications that need to be run as a different user
+are prefixed by user/ and identified by the username. For example:
+
+user/root=false
+
+will disable all application entries that require root access.
+
+
+Printing related action restrictions:
+
+print/system
+        - disables the option to select the printing system (backend). It is
+          recommended to  disable this option once the correct printing
+          system has been configured.
+
+print/properties
+        - disables the button to change printer properties or to add a new printer.
+
+print/options
+        - disables the button to select additional print options.
+
+print/copies
+        - disables the panel that allows users to make more than one copy.
+
+print/selection
+        - disables the options that allows selecting a (pseudo) printer or
+          change any of the printer properties. Make sure that a proper
+          default printer has been selected before disabling this option.
+          Disabling this option also disables print/system, print/options
+          and print/properties.
+
+print/dialog
+        - disables the complete print dialog. Selecting the print option will
+          immediately print the selected document using default settings.
+          Make sure that a system wide default printer has been selected.
+          No application specific settings are honored.
+
+Other defined actions:
+
+shell_access
+        - defines whether a shell suitable for entering random commands
+          may be started. This also determines whether the "Run Command"
+          option (Alt-F2) can be used to run shell-commands and arbitrary
+          executables. Likewise, executables placed in the user's
+          Autostart folder will no longer be executed. Applications can
+          still be autostarted by placing .desktop files in the $KDEHOME/Autostart
+          or $KDEDIR/share/autostart directory.
+          See also run_desktop_files.
+
+custom_config
+        - defines whether the --config command line option should be honored.
+          The --config command line option can be used to circumvent
+          locked-down configuration files.
+
+logout
+        - defines whether the user will be able to logout from KDE.
+
+lock_screen
+        - defines whether the user will be able to lock the screen.
+
+run_command
+        - defines whether the "Run Command" (Alt-F2) option is available.
+
+movable_toolbars
+        - define whether toolbars may be moved around by the user.
+          See also action/options_show_toolbar.
+
+editable_desktop_icons
+        - define whether icons on the desktop can be moved, renamed,
+          deleted or added. You might want to set the path for
+          the Desktop to some read-only directory as well.
+          (Instead of $HOME/Desktop)
+
+run_desktop_files
+        - defines whether users may execute desktop files that are not
+          part of the default desktop, KDE menu, registered services and
+          autostarting services.
+          * The default desktop includes the files under
+            $KDEDIR/share/kdesktop/Desktop but _NOT_ the files under
+            $HOME/Desktop.
+          * The KDE menu includes all files under $KDEDIR/share/applnk and
+            $XDGDIR/applications
+          * Registered services includes all files under $KDEDIR/share/services.
+          * Autostarting services include all files under $KDEDIR/share/autostart
+            but _NOT_ the files under $KDEHOME/Autostart
+
+          You probably also want to activate the following resource
+          restictions:
+          "appdata_kdesktop" - To restrict the default desktop.
+          "apps" - To restrict the KDE menu.
+          "xdgdata-apps" - To restrict the KDE menu.
+          "services" - To restrict registered services.
+          "autostart" - To restrict autostarting services.
+          Otherwise users can still execute .desktop files by placing them
+          in e.g. $KDEHOME/share/kdesktop/Desktop
+
+lineedit_text_completion
+        - defines whether input lines should have the potential to remember
+          any previously entered data and make suggestions based on this
+          when typing. When a single account is shared by multiple people you
+          may wish to disable this out of privacy concerns.
+
+start_new_session
+	- defines whether the user may start a second X session.
+          See also the kdm configuration.
+
+switch_user
+        - defines whether user switching via kdm is allowed
+
+skip_drm
+	- defines if the user may omit DRM checking.
+          Currently only used by kpdf
+
+Screensaver related:
+opengl_screensavers
+	- defines whether OpenGL screensavers are allowed to be used.
+
+manipulatescreen_screensavers
+	- defines whether screensavers that manipulate an image of the screen
+	  (e.g. moving chunks of the screen around) are allowed to be used.
+
+When configuration files are marked immutable in whole or in part the user will no
+longer be able to make permanent changes to the settings that have been marked
+immutable. Ideally the application will recognize this and will no longer offer the
+user the possibility to change these settings. Unfortunately not all applications
+support this at the moment. It's therefor possible that the user will still be
+presented with an option in the user interface to change a setting that is
+immutable, changes made this way will not be saved though. In some cases the
+user may be able to use the changed setting till the application terminates, in
+other cases the changed setting will simply be ignored and the application will
+continue to work with the immutable setting.
+
+The following applications currently detect when their configuration files have been
+marked immutable and adjust their user interface accordingly:
+
+* kicker - By marking the kickerrc config file as immutable, the panel will be
+"locked down" and it will not be possible to make any changes to it.
+
+* kdesktop - By marking the kdesktoprc config file as immutable, the desktop
+will be "locked down" and it will no longer be possible to select
+"Configure Desktop" from its menus.
+
+* kcalc - By marking the kcalcrc config file as immutable, the "Configure" button
+will not be shown
+
+Application .desktop files can have an additional field "X-KDE-AuthorizeAction".
+If this field is present the .desktop file is only considered if the action(s)
+mentioned in this field has been authorized. If multiple actions are listed
+they should be separated by commas (','). So if the .desktop file of an application
+lists one or more actions this way and the user has no authorization for one
+of these actions then the application will not appear in the KDE menu and will not
+be used by KDE for opening files.
+
+IMPORTANT NOTE:
+Changing restrictions may influence the data that is cached in the ksycoca
+database. Since changes to .../share/config/kdeglobals do not trigger an
+automatic ksycoca update you need to force an update manually.
+To force an update of the ksycoca database touch the file
+.../share/services/update_ksycoca. This will force a user's sycoca database
+to be rebuild the next time the user logs in.
+
+KDE URL Restrictions
+====================
+
+It is also possible to restrict URL related actions. The restriction framework
+can disable URL actions based on the action, the URL in question and in some cases
+the referring URL. URLs can be matched based on protocol, host and path.
+
+The syntax for adding URL action restrictions to kdeglobals is as follows:
+
+[KDE URL Restrictions]
+rule_count=<N>
+rule_1=<action>,<referingURL_protocol>,<referingURL_host>,<referingURL_path>,<URL_protocol>,<URL_host>,<URL_path>,<enabled>
+...
+rule_N=<action>,<referingURL_protocol>,<referingURL_host>,<referingURL_path>,<URL_protocol>,<URL_host>,<URL_path>,<enabled>
+
+The following actions are supported:
+redirect - e.g. a html-page obtained via HTTP could redirect itself to file:/path/some-file. This
+           is disabled by default but could be explicitly enabled for a specific HTTP host.
+           This also applies to links contained in html documents.
+           Example: rule_1=redirect,http,myhost.acme.com,,file,,,true
+
+list     - This controls which directories can be browsed with KDE's file-dialogs. If a user
+           should only be able to browse files under home directory one could use:
+              rule_1=list,,,,file,,,false
+              rule_2=list,,,,file,,$HOME,true
+           The first rule disables browing any directories on the local filesystem. The second rule
+           then enables browsing the users home directory.
+
+open     - This controls which files can be opened by the user in applications. It also
+           affects where users can save files. To only allow a user to open the files
+           in his own home directory one could use:
+              rule_1=open,,,,file,,,false
+              rule_2=open,,,,file,,$HOME,true
+              rule_3=open,,,,file,,$TMP,true
+           Note that with the above, users would still be able to open files from
+           the internet. Note that the user is also given access to $TMP in order to
+           ensure correct operation of KDE applications. $TMP is replaced with the
+           temporary directory that KDE uses for this user.
+
+Some remarks:
+* empty entries match everything
+* host names may start with a wildcard, e.g. "*.acme.com"
+* a protocol also matches similar protocols that start with the same name,
+  e.g. "http" matches both http and https. You can use "http!" if you only want to
+  match http (and not https)
+* specifying a path matches all URLs that start with the same path. For better results
+  you should not include a trailing slash. If you want to specify one specific path, you can
+  add an exclamation mark. E.g. "/srv" matches both "/srv" and "/srv/www" but "/srv!" only
+  matches "/srv" and not "/srv/www".
+
+
+KDE Resource Restrictions
+==========================
+Most KDE applications make use of additional resource files that are typically
+located in directories under $KDEDIR/share. By default KDE allows users to
+override any of these resources by placing files in the same location
+under $KDEHOME/share. For example, Konsole stores profiles under
+$KDEDIR/share/konsole and users can add additional profiles by
+installing files in $KDEHOME/share/konsole.
+
+KDE Resource Restrictions make it possible to restrict the lookup of files
+to directories outside of $KDEHOME only.
+
+The following resources are defined:
+
+autostart - share/autostart
+data - share
+html - share/doc/HTML
+icon - share/icon
+config - share/config
+pixmap - share/pixmaps
+apps - share/applnk
+xdgdata-apps - share/applications
+sound - share/sounds
+locale - share/locale
+services - share/services
+servicetypes - share/servicetypes
+mime - share/mimelnk
+wallpaper - share/wallpapers
+templates - share/templates
+exe - bin
+lib - lib
+
+See http://api.kde.org/4.x-api/kdelibs-apidocs/kdecore/html/classKStandardDirs.html
+for a more up-to-date list of resources.
+
+For the purpose of resource restrictions there are two special resources:
+all - covers all resources
+data_<appname> - covers the sub section for <appname> in the data resource.
+
+To restrict resources the kdeglobals file should contain the
+group "[KDE Resource Restrictions]", each resource can then be restricted by
+adding "<resource>=false". E.g. to restrict the "wallpaper" resource to
+$KDEDIR/share/wallpapers one would add:
+[KDE Resource Restrictions][$i]
+wallpaper=false
+
+And to prevent a user from adding additional konsole profiles, one would add:
+[KDE Resource Restrictions][$i]
+data_konsole=false
+
+
+Control Module Restrictions
+===========================
+
+It is possible to restrict access to particular control modules.
+Although it is possible to remove control modules from the Control
+Center by editing the menu structure, such modules will then still
+be available to applications. A better way is to use the control
+module restrictions offered by KIOSK:
+
+[KDE Control Module Restrictions][$i]
+<menu-id>=false
+
+Some example menu-ids are:
+
+kde-display.desktop
+kde-proxy.desktop
+kde-screensaver.desktop
+
+See also kcmshell --list for a list of all the base names.
+
+Expansion of environment variables in KDE config files.
+=======================================================
+
+Since KDE-3.1, arbitrary entries in configuration files can contain environment
+variables. In order to use this the entry must be marked with [$e].
+
+Example:
+Name[$e]=$USER
+
+When the "Name" entry is read $USER will be replaced with the value of the
+$USER environment variable. Note that the application will replace $USER
+with the value of the environment variable after saving. To prevent this
+combine the $e option with $i (immmutable) option.
+
+Example:
+Name[$ei]=$USER
+
+The above will make that the "Name" entry will always return the value of
+the $USER environment variable. The user will not be able to change this entry.
+
+The following syntax is also supported:
+Name[$ei]=${USER}
+
+
+Shell Commands in KDE config files.
+===================================
+
+Since KDE-3.1 arbitrary entries in configuration files can contain shell
+commands. This way the value of a configuration entry can be determined
+dynamically at runtime. In order to use this the entry must be marked
+with [$e].
+
+Example:
+Host[$e]=$(hostname)
+
+
+KDE Kiosk Application API
+==========================
+
+Three new methods have been added to KApplication:
+
+- bool authorize(QString action); // Generic actions
+- bool authorizeKAction(QString action); // For KActions exclusively
+- bool authorizeURLAction(QString, referringURL, destinationURL) // URL Handling
+
+Automatic Logout
+================
+
+Since KDE 3.4 it is possible to automatically logout users that have been idle
+for a certain period of time.
+
+WARNING: Be careful with this option, logging out a user may result in dataloss!
+
+In kdesktoprc you can use the following entry to enable automatic logout:
+
+[ScreenSaver]
+AutoLogout=true
+AutoLogoutTimeout=600
+
+The AutoLogoutTimeout is the time in seconds that the user has to be idle before
+his session is logged out.
+
+
+Users can be associated with Profile(s)
+=======================================
+
+A user can be associated with one or more profiles. A profile indicates a
+configuration set that applies to a group of users. Each profile has a name
+to identify it. If a user is associated with more than one profile then the
+order of the two profiles is important. Settings associated with one profile
+could override the settings in the other profile, depending on the order.
+
+
+Mapping profiles to users
+=========================
+
+A mapping file determines which profile(s) should be used for which user.
+The mapping file can be configured in /etc/kde4rc in the [Directories] group:
+
+	[Directories]
+	userProfileMapFile=/etc/kde-user-profile
+
+Profiles can be mapped to individual users based on username, or profiles can
+be mapped to groups of users based on the UNIX group(s) the users are part of.
+(See man 1 groups)
+
+
+Mapping profiles to individual users
+====================================
+
+The mapping file can contain a [Users] section for mapping profiles to
+an individual user. The [Users] section contains the user's account name
+followed by one or more profiles as follow:
+
+	[Users]
+	bastian=developer
+	adrians=developer,packager
+
+The above example assigns to user "bastian" the profile "developer". To user
+"adrians" it assigns the two profiles "developer" and "packager". The order
+in which the profiles are listed makes a difference, settings in earlier
+profiles overrule settings in profiles that are listed after it. In the above
+case of user "adrians", wherever the "developer" and "packager" profiles contain
+conflicting settings, the settings of the "developer" profile will take precedent.
+
+If a user has an entry under the [Users] section, this entry will determine all
+profiles that are applicable to the user. The user will not be assigned any
+additional profiles based on the groups the user is part of.
+
+Mapping profiles to user groups
+===============================
+
+If a user has no entry under the [Users] section in the mapping file, the profiles
+that are applicable to the user will be based on the UNIX group(s) the user is
+part of.
+
+The groups and the order in which the groups are considered is determined by
+the following entry in the [General] section of the mapping file:
+
+	[General]
+	groups=pkgs,devel,bofh
+
+Each of these groups should have an entry under the [Groups] section that defines
+which profile(s) belongs to that group. This looks as follows:
+
+	[Groups]
+	pkgs=packager
+	devel=developer
+	bofh=admin,packager,developer
+
+For each group that a user is part of, the corresponding profile(s) are used. The
+order in which the groups are listed in the "groups" entry, determines the resulting
+order of all the applicable profiles. If multiple profiles are applicable to a
+particular user and a profile contains settings that conflict with settings in
+another profile then the settings in the earlier listed profile take precedent.
+
+So if, based on the example above, a user is part of the "pkgs" group then the
+"packager" profile will be used for that user. If the user is part of the "devel"
+group then the "developer" profile will be used. Users that are part of the "bofh"
+group will use the "admin", "packager" as well as the "developer" profile. In case
+of conflict, settings in the "admin" profile will take precedent over settings
+in the "packager" or "developer" profiles.
+
+If the user is part of both the "pkgs" and "devel" groups, then both the "packager"
+and "developer" profiles will be used. In case of conflicting settings between the
+two profiles, the "packager" profile will take precedent because the "pkgs" group
+associated with the profile was listed before the "devel" group.
+
+The "groups" command can be used to see to which groups a user belongs:
+
+	> groups coolo
+        coolo : users uucp dialout audio video cdrecording devel
+
+Note that in general only a few groups will have profiles associated with them.
+In the example above only the "devel" group has a profile associated with it,
+the other groups do not and will be ignored.
+
+If there is no profile defined for any of the groups that the user is in, the
+user will be assigned the "default" profile.
+
+
+The Profile determines the directory prefixes
+=============================================
+
+The global KDE configuration file (e.g. kdeglobals or /etc/kde4rc) can
+contain config-groups that are associated with a certain user profile.
+Such a config-group is treated similar as the [Directories] config-group.
+
+The name of a such config-group is [Directories-<ProfileName>]
+
+
+Integration with KIOSK Admin Tool
+=================================
+
+The KIOSK Admin Tool uses /etc/kde4rc as source for all its profile
+information. For this it uses the following keys in the
+[Directories-<ProfileName>] config-group:
+
+	# Short text describing this profile
+	ProfileDescription=
+
+	# Files will be installed with the uid of this user
+	ProfileInstallUser=
+
+The KIOSK Admin Tool uses the first directory from the prefixes= entry
+as default installation directory for this profile.
+
+
+Default setting as example
+==========================
+
+The following snipped could be added to /etc/kde4rc to define a "default" profile:
+
+	[Directories-default]
+	ProfileDescription=Default profile
+	ProfileDescription[de]=Defaultprofiel
+	ProfileInstallUser=root
+	prefixes=/var/run/kde-profile/default
+

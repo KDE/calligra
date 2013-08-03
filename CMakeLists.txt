@@ -792,6 +792,9 @@ include_directories(${CMAKE_SOURCE_DIR}/fake
                     ${CMAKE_SOURCE_DIR}/fake/kservice/src/sycoca
                     ${CMAKE_BINARY_DIR}/fake/kservice/src
                     ${CMAKE_BINARY_DIR}/fake/kservice/
+                    ${CMAKE_SOURCE_DIR}/fake/kconfig/src/core/
+                    ${CMAKE_BINARY_DIR}/fake/kconfig/src/core
+                    ${CMAKE_BINARY_DIR}/fake/kconfig
 )
 
 # koplugin is at the bottom of the stack

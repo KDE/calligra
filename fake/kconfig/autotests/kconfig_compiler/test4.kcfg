@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="test4rc"/>
+
+  <group name="Foo">
+    <entry name="Color$(Number)" type="Color" key="color #$(Number)">
+      <parameter name="Number" type="Int" max="3"/>
+      <label>Block colors.</label>
+      <code>QColor defaultColor[4] = { Qt::red, Qt::blue, Qt::green, Qt::black };</code>
+      <default code="true">defaultColor[$(Number)]</default>
+    </entry>
+    <entry name="MouseAction$(Button)" type="Enum" key="$(Button)_mouse_action">
+      <parameter name="Button" type="Enum">
+        <values>
+          <value>right</value>
+          <value>mid</value>
+          <value>left</value>
+        </values>
+      </parameter>
+      <label>Mouse actions.</label>
+      <choices>
+        <choice name="Encrypt"/>
+        <choice name="Decrypt"/>
+        <choice name="CrashNBurn"/>
+        <choice name="PumpNDump"/>
+      </choices>
+      <default param="right">Decrypt</default>
+      <default param="mid">Encrypt</default>
+      <default param="left">PumpNDump</default>
+    </entry>
+    <entry name="GrayColor$(Number)" type="Color" key="gray color #$(Number)">
+      <parameter name="Number" type="Int" max="10"/>
+      <label>Gray colors.</label>
+      <default code="true">
+      QColor::fromRgbF($(Number) / 10.0, $(Number) / 10.0, $(Number) / 10.0)
+      </default>
+    </entry>
+    <entry name="ColorString$(Number)" type="String" key="color string #$(Number)">
+      <parameter name="Number" type="Int" max="10"/>
+      <label>Gray colors as string.</label>
+      <default code="true">
+      QString::number($(Number))
+      </default>
+    </entry>
+    <entry name="FooBar" key="foo bar" type="String"/>
+    <entry name="Age" type="Int">
+      <default>35</default>
+      <min>8</min>
+      <max>88</max>
+    </entry>
+  </group>
+
+</kcfg>

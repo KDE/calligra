@@ -1,0 +1,18 @@
+# Code generation options for kconfig_compiler
+ClassName=Test1
+#
+# Singleton=false
+#
+# Inherits=KConfigSkeleton
+#
+# IncludeFiles=libkdepim/kpimprefs.h
+#
+# MemberVariables=public
+#
+### The following line includes the file exampleprefs_base_addon.h
+### It can be used to add extra functions and variables to the
+### class.
+# CustomAdditions=true
+#
+### Provide setFooBar(int) style functions
+Mutators=true

@@ -1,0 +1,6 @@
+File=test8b.kcfg
+ClassName=Test8b
+Mutators=true
+Singleton=true
+IncludeFiles=test8a.h
+Inherits=Test8a

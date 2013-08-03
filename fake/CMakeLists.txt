@@ -10,7 +10,7 @@ set(kofake_LIB_SRCS
     kdatewidget.cpp
     kbuttongroup.cpp
     kcomponentdata.cpp
-    kconfigbase.cpp
+    #kconfigbase.cpp
     kencodingprober.cpp
     kfilterbase.cpp
     kfilterdev.cpp
@@ -141,7 +141,7 @@ set(kofake_HEADERS_ONLY
     kselector.h
     kglobalsettings.h
     kseparator.h
-    ksharedconfig.h
+    #ksharedconfig.h
     kdeprintdialog.h
     kaboutdata.h
     kurlcombobox.h
@@ -173,7 +173,7 @@ set(kofake_HEADERS_ONLY
     kpassivepopup.h
     kfiledialog.h
     kfontchooser.h
-    kconfig.h
+    #kconfig.h
     ksharedptr.h
     kfileitem.h
     klibloader.h
@@ -191,7 +191,7 @@ set(kofake_HEADERS_ONLY
     knumvalidator.h
     ktemporaryfile.h
     ktextbrowser.h
-    kconfiggroup.h
+    #kconfiggroup.h
     config-compression.h
     kjob.h
     kwidgetitemdelegate.h
@@ -206,7 +206,7 @@ set(kofake_HEADERS
     karchive.h
     kbuttongroup.h
     kcomponentdata.h
-    kconfigbase.h
+    #kconfigbase.h
     kfilterbase.h
     kfilterdev.h
     kgzipfilter.h
@@ -225,13 +225,14 @@ set(kofake_HEADERS
 )
 
 add_subdirectory(kservice)
+add_subdirectory(kconfig)
 
 QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS_ONLY})
 
 kde4_add_library(kofake SHARED ${kofake_LIB_SRCS} ${kofake_HEADERS_MOC})
 
-target_link_libraries(kofake Qt5::Widgets Qt5::Xml ${ZLIB_LIBRARIES})
-target_link_libraries(kofake LINK_INTERFACE_LIBRARIES Qt5::Widgets Qt5::Xml)
+target_link_libraries(kofake Qt5::Widgets Qt5::Xml ${ZLIB_LIBRARIES} KService KConfigCore)
+target_link_libraries(kofake LINK_INTERFACE_LIBRARIES Qt5::Widgets Qt5::Xml KService)
 
 set_target_properties(kofake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

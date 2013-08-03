@@ -1,0 +1,7 @@
+File=test_signal.kcfg
+ClassName=TestSignal
+Singleton=true
+Mutators=true
+MemberVariables=private
+GlobalEnums=false
+ItemAccessors=false
