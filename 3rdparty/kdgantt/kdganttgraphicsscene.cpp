@@ -546,7 +546,7 @@ void GraphicsScene::slotGridChanged()
 void GraphicsScene::helpEvent( QGraphicsSceneHelpEvent *helpEvent )
 {
 #ifndef QT_NO_TOOLTIP
-    QGraphicsItem *item = itemAt( helpEvent->scenePos() );
+    QGraphicsItem *item = itemAt( helpEvent->scenePos(), QTransform() );
     if ( GraphicsItem* gitem = qgraphicsitem_cast<GraphicsItem*>( item ) ) {
         QToolTip::showText(helpEvent->screenPos(), gitem->ganttToolTip());
     } else if ( ConstraintGraphicsItem* citem = qgraphicsitem_cast<ConstraintGraphicsItem*>( item ) ) {
@@ -613,7 +613,8 @@ QRectF GraphicsScene::printRect( bool drawRowLabels, GraphicsView *view )
             }
             const Span rg = rowController()->rowGeometry( sidx );
             const QString txt = item->index().data( Qt::DisplayRole ).toString();
-            QGraphicsTextItem* ti = new QGraphicsTextItem( txt, 0, this );
+            QGraphicsTextItem* ti = new QGraphicsTextItem( txt );
+            this->addItem( ti );
             ti->setPos( 0, rg.start() );
             ti->document()->size().setWidth( ti->document()->size().width() + KDGANTT_LIST_CHART_GAP );
             int indent = indentation * ( level( item->index() ) + ( indentRoot ? 1 : 0 ) );

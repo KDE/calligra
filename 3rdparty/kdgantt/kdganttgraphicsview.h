@@ -24,6 +24,7 @@
 #define KDGANTTGRAPHICSVIEW_H
 
 #include <QGraphicsView>
+#include <QPrinter>
 
 #include "kdganttglobal.h"
 

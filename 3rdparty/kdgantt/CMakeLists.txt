@@ -29,7 +29,9 @@ set( kdgantt_LIB_SRCS
     kdgantttimescalezoomdialog.cpp
 )
 
-kde4_add_library(calligrakdgantt SHARED ${kdgantt_LIB_SRCS})
+QT5_WRAP_CPP(calligrakdgantt_HEADERS_MOC kdganttview_p.h)
+
+kde4_add_library(calligrakdgantt SHARED ${kdgantt_LIB_SRCS} ${calligrakdgantt_HEADERS_MOC})
 
 target_link_libraries(calligrakdgantt ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
 target_link_libraries(calligrakdgantt LINK_INTERFACE_LIBRARIES ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
