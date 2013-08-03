@@ -70,8 +70,8 @@ AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextOb
                                          KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
 {
-    KoShapeBackground *fill = new KoColorBackground(Qt::yellow);
-    setBackground(fill);
+   // KoShapeBackground *fill = new KoColorBackground(Qt::yellow);
+    setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::yellow)));
     setGeometryProtected(true);
 }
 
