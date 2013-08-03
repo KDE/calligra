@@ -1883,6 +1883,8 @@ public:
     */
     QString countryCodeToName(const QString &country) const;
 
+#endif
+
     /**
     * Parses locale string into distinct parts.
     * The format of locale is language_COUNTRY@modifier.CHARSET
@@ -1896,7 +1898,7 @@ public:
     static void splitLocale(const QString &locale, QString &language, QString &country,
                             QString &modifier, QString &charset);
 
-#endif
+
 
     static void setMainCatalog(const char *catalog) {}
 
