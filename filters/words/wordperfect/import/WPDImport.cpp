@@ -225,3 +225,5 @@ KoFilter::ConversionStatus WPDImport::convert(const QByteArray& from, const QByt
 
     return KoFilter::OK;
 }
+
+#include "WPDImport.moc"

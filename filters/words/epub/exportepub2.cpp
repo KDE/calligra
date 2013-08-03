@@ -525,3 +525,5 @@ void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
     epubFile->addContentFile(QString("cover"), QString(epubFile->pathPrefix() + "cover.xhtml")
                             , "application/xhtml+xml", coverHtmlContent, QString("Cover"));
 }
+
+#include "exportepub2.moc"

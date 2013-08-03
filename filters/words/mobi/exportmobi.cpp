@@ -181,3 +181,4 @@ KoFilter::ConversionStatus ExportMobi::extractImages(KoStore *odfStore, MobiFile
     }
     return KoFilter::OK;
 }
+#include "exportmobi.moc"

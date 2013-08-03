@@ -341,3 +341,5 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     return KoFilter::OK;
 }
+
+#include "AsciiImport.moc"

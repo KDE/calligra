@@ -195,3 +195,4 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
+#include "WPSImport.moc"

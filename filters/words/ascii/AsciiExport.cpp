@@ -104,3 +104,4 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
 
     return KoFilter::OK;
 }
+#include "AsciiExport.moc"

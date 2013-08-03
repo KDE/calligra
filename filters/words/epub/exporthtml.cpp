@@ -411,3 +411,5 @@ bool ExportHtml::isWmf(QByteArray &content)
 }
 
 #endif
+
+#include "exporthtml.moc"
