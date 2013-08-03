@@ -11,6 +11,7 @@ public:
     void setCompletedItems(QStringList) {}
     void setHistoryItems(QStringList) {}
     void addToHistory(QString) {}
+    void setTrapReturnKey(bool) {}
 };
 
 #endif
