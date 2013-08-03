@@ -374,7 +374,7 @@ protected:
      */
     KMimeType( KMimeTypePrivate &dd, const QString& name, const QString& comment );
 #else
-    KMimeType(const QString& name = QString(), const QStringList &patterns = QStringList()) : KServiceType(), m_name(name), m_patterns(patterns) {}
+    KMimeType(const QString& name = QString(), const QStringList &patterns = QStringList()) : KServiceType(0), m_name(name), m_patterns(patterns) {}
 #endif
 
 private:
