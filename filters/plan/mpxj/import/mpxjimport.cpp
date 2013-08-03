@@ -45,7 +45,7 @@ int planMpxjDbg() {
 }
 
 K_PLUGIN_FACTORY(MpxjImportFactory, registerPlugin<MpxjImport>();)
-K_EXPORT_PLUGIN(MpxjImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(MpxjImportFactory("calligrafilters"))
 
 MpxjImport::MpxjImport(QObject* parent, const QVariantList &)
     : KoFilter(parent)

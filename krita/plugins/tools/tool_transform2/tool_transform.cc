@@ -37,7 +37,7 @@
 #include "kis_tool_transform.h"
 
 K_PLUGIN_FACTORY(ToolTransformFactory, registerPlugin<ToolTransform>();)
-K_EXPORT_PLUGIN(ToolTransformFactory("krita"))
+//K_EXPORT_PLUGIN(ToolTransformFactory("krita"))
 
 
 ToolTransform::ToolTransform(QObject *parent, const QVariantList &)

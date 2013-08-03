@@ -28,7 +28,7 @@
 #include "waterfallwipe/KPrWaterfallWipeEffectFactory.h"
 
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("KPrPageEffect"))
+//K_EXPORT_PLUGIN(PluginFactory("KPrPageEffect"))
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)

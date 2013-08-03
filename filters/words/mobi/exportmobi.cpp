@@ -39,7 +39,7 @@
 
 
 K_PLUGIN_FACTORY(ExportMobiFactory, registerPlugin<ExportMobi>();)
-K_EXPORT_PLUGIN(ExportMobiFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(ExportMobiFactory("calligrafilters"))
 
 ExportMobi::ExportMobi(QObject *parent, const QVariantList &) :
     KoFilter(parent)

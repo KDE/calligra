@@ -28,7 +28,7 @@
 #include <KoInlineObjectRegistry.h>
 
 K_PLUGIN_FACTORY(VariablesPluginFactory, registerPlugin<VariablesPlugin>();)
-K_EXPORT_PLUGIN(VariablesPluginFactory("VariablesPlugin"))
+//K_EXPORT_PLUGIN(VariablesPluginFactory("VariablesPlugin"))
 
 VariablesPlugin::VariablesPlugin(QObject *parent, const QVariantList&)
         : QObject(parent)

@@ -33,7 +33,7 @@
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(SketchPaintOpPluginFactory, registerPlugin<SketchPaintOpPlugin>();)
-K_EXPORT_PLUGIN(SketchPaintOpPluginFactory("krita"))
+//K_EXPORT_PLUGIN(SketchPaintOpPluginFactory("krita"))
 
 
 SketchPaintOpPlugin::SketchPaintOpPlugin(QObject *parent, const QVariantList &)

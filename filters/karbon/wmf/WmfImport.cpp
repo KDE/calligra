@@ -31,7 +31,7 @@ DESCRIPTION
 #include <QFile>
 
 K_PLUGIN_FACTORY(WMFImportFactory, registerPlugin<WMFImport>();)
-K_EXPORT_PLUGIN(WMFImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(WMFImportFactory("calligrafilters"))
 
 
 WMFImport::WMFImport(QObject *parent, const QVariantList&) :

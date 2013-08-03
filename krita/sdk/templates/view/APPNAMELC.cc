@@ -16,7 +16,7 @@
 #include "kis_view2.h"
 
 K_PLUGIN_FACTORY(%{APPNAME}PluginFactory, registerPlugin<%{APPNAME}Plugin>();)
-K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
+//K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
 
 %{APPNAME}Plugin::%{APPNAME}Plugin(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)

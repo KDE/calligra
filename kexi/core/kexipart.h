@@ -347,7 +347,7 @@ KEXICORE_EXPORT QString fullCaptionForItem(KexiPart::Item& item, KexiPart::Part 
 //! Implementation of plugin's entry point
 #define K_EXPORT_KEXI_PLUGIN( class_name, internal_name ) \
     K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("kexihandler_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KEXI_PART_VERSION, 0, 0))
+    //K_EXPORT_PLUGIN(factory("kexihandler_" # internal_name)) \
+    //K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KEXI_PART_VERSION, 0, 0))
 
 #endif

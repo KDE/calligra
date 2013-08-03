@@ -87,7 +87,7 @@
 //#define OUTPUT_AS_ODS_FILE
 
 K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
-K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
 
 static const qreal SIDEWINDERPROGRESS = 40.0;
 static const qreal ODFPROGRESS = 40.0;

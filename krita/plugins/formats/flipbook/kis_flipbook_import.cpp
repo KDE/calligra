@@ -45,7 +45,7 @@
 #include <kis_flipbook_item.h>
 
 K_PLUGIN_FACTORY(KisFlipbookImportFactory, registerPlugin<KisFlipbookImport>();)
-K_EXPORT_PLUGIN(KisFlipbookImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(KisFlipbookImportFactory("calligrafilters"))
 
 KisFlipbookImport::KisFlipbookImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)

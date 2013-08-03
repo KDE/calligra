@@ -48,7 +48,7 @@
 #include <CFBWriter.h>
 
 K_PLUGIN_FACTORY(ExcelExportFactory, registerPlugin<ExcelExport>();)
-K_EXPORT_PLUGIN(ExcelExportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(ExcelExportFactory("calligrafilters"))
 
 static uint qHash(const QFont& f)
 {

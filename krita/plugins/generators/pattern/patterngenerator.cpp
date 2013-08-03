@@ -52,7 +52,7 @@
 #include "ui_wdgpatternoptions.h"
 
 K_PLUGIN_FACTORY(KritaPatternGeneratorFactory, registerPlugin<KritaPatternGenerator>();)
-K_EXPORT_PLUGIN(KritaPatternGeneratorFactory("krita"))
+//K_EXPORT_PLUGIN(KritaPatternGeneratorFactory("krita"))
 
 KritaPatternGenerator::KritaPatternGenerator(QObject *parent, const QVariantList &)
         : QObject(parent)

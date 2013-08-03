@@ -19,5 +19,5 @@
 
 #include <KarbonFactory.h>
 
-K_EXPORT_PLUGIN(KarbonFactory)
+//K_EXPORT_PLUGIN(KarbonFactory)
 

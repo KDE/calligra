@@ -42,7 +42,7 @@
 #include <kis_iterator_ng.h>
 
 K_PLUGIN_FACTORY(KritaFastColorTransferFactory, registerPlugin<FastColorTransferPlugin>();)
-K_EXPORT_PLUGIN(KritaFastColorTransferFactory("krita"))
+//K_EXPORT_PLUGIN(KritaFastColorTransferFactory("krita"))
 
 
 FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QVariantList &)

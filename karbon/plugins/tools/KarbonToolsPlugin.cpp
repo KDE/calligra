@@ -31,7 +31,7 @@
 #include <kpluginloader.h>
 
 K_PLUGIN_FACTORY(KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>();)
-K_EXPORT_PLUGIN(KarbonToolsPluginFactory("KarbonTools"))
+//K_EXPORT_PLUGIN(KarbonToolsPluginFactory("KarbonTools"))
 
 KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList&)
         : QObject(parent)

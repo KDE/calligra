@@ -53,7 +53,7 @@
 #include <kis_iterator_ng.h>
 
 K_PLUGIN_FACTORY(KritaRandomPickFilterFactory, registerPlugin<KritaRandomPickFilter>();)
-K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
+//K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
 
 KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QVariantList &)
         : QObject(parent)

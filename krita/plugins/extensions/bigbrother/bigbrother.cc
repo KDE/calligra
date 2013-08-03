@@ -53,7 +53,7 @@
 #include <QApplication>
 
 K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
-K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
+//K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
 
 class RecordedActionSaveContext : public KisRecordedActionSaveContext {
     public:

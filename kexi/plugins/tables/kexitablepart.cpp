@@ -315,7 +315,7 @@ AboutData( const char *programName,
   static KexiPart::AboutData * libname ## updateAD(KexiPart::AboutData *ad) \
   { ad->setAppName( #libname ); return ad; } \
    K_PLUGIN_FACTORY( libname ## Factory, registerPlugin<partClass>(); )
-   K_EXPORT_PLUGIN( libname ## Factory )
+   //K_EXPORT_PLUGIN( libname ## Factory )
 */
 
 K_EXPORT_KEXI_PLUGIN( KexiTablePart, table )

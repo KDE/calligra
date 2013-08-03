@@ -60,7 +60,7 @@ private:
 };
 
 K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<VSDXImport>();)
-K_EXPORT_PLUGIN(VSDXImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(VSDXImportFactory("calligrafilters"))
 
 VSDXImport::VSDXImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)

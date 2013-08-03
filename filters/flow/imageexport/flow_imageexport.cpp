@@ -43,7 +43,7 @@
 #include "flow_imageexportdialog.h"
 
 K_PLUGIN_FACTORY(FlowImageExportFactory, registerPlugin<Flow::ImageExport>();)
-K_EXPORT_PLUGIN(FlowImageExportFactory("FlowImageExport"))
+//K_EXPORT_PLUGIN(FlowImageExportFactory("FlowImageExport"))
 
 namespace Flow
 {

@@ -28,7 +28,7 @@
 #include "filter/kis_filter_registry.h"
 
 K_PLUGIN_FACTORY(BlurFilterPluginFactory, registerPlugin<BlurFilterPlugin>();)
-K_EXPORT_PLUGIN(BlurFilterPluginFactory("krita"))
+//K_EXPORT_PLUGIN(BlurFilterPluginFactory("krita"))
 
 BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)

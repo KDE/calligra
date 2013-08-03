@@ -37,7 +37,7 @@
 using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(TableShapePluginFactory, registerPlugin<TableShapePlugin>();)
-K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))
+//K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))
 
 TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
 {

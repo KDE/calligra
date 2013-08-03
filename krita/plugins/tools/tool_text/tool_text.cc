@@ -38,7 +38,7 @@
 #include <KoToolRegistry.h>
 
 K_PLUGIN_FACTORY(ToolTextFactory, registerPlugin<ToolText>();)
-K_EXPORT_PLUGIN(ToolTextFactory("krita"))
+//K_EXPORT_PLUGIN(ToolTextFactory("krita"))
 
 
 ToolText::ToolText(QObject *parent, const QVariantList &)

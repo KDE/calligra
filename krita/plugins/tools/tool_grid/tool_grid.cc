@@ -35,7 +35,7 @@
 #include <KoToolRegistry.h>
 
 K_PLUGIN_FACTORY(GridFactory, registerPlugin<GridPlugin>();)
-K_EXPORT_PLUGIN(GridFactory("krita"))
+//K_EXPORT_PLUGIN(GridFactory("krita"))
 
 
 GridPlugin::GridPlugin(QObject *parent, const QVariantList &)

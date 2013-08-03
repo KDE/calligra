@@ -50,7 +50,7 @@
 //using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(HTMLImportFactory, registerPlugin<HTMLImport>();)
-K_EXPORT_PLUGIN(HTMLImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(HTMLImportFactory("calligrafilters"))
 
 HTMLImport::HTMLImport(QObject* parent, const QVariantList&)
     : KoFilter(parent)

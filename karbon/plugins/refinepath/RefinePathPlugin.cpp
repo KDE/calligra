@@ -50,7 +50,7 @@
 #include <QHBoxLayout>
 
 K_PLUGIN_FACTORY(RefinePathPluginFactory, registerPlugin<RefinePathPlugin>();)
-K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))
+//K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))
 
 RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &) : Plugin(parent)
 {

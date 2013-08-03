@@ -27,7 +27,7 @@
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("calligra-basicflakes"))
+//K_EXPORT_PLUGIN(PluginFactory("calligra-basicflakes"))
 
 Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)

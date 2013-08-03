@@ -49,7 +49,7 @@
 using namespace KPlato;
 
 K_PLUGIN_FACTORY(ICalendarExportFactory, registerPlugin<ICalendarExport>();)
-K_EXPORT_PLUGIN(ICalendarExportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(ICalendarExportFactory("calligrafilters"))
 
 ICalendarExport::ICalendarExport(QObject* parent, const QVariantList &)
         : KoFilter(parent)

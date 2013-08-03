@@ -44,7 +44,7 @@
 #include "kis_iterator_ng.h"
 
 K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
-K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
+//K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
 
 KisPPMExport::KisPPMExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

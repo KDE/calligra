@@ -22,6 +22,7 @@
 #define KPRFACTORY_H
 
 #include <kpluginfactory.h>
+#include <kcomponentdata.h>
 #include "stage_export.h"
 
 class KAboutData;

@@ -45,7 +45,7 @@
 class KisExternalLayer;
 
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<exrExport>();)
-K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
 exrExport::exrExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

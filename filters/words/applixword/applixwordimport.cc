@@ -35,7 +35,7 @@
 #include <KoXmlWriter.h>
 
 K_PLUGIN_FACTORY(APPLIXWORDImportFactory, registerPlugin<APPLIXWORDImport>();)
-K_EXPORT_PLUGIN(APPLIXWORDImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(APPLIXWORDImportFactory("calligrafilters"))
 
 
 /******************************************************************************

@@ -19,5 +19,5 @@
 
 #include "Factory.h"
 
-K_EXPORT_PLUGIN(Calligra::Sheets::Factory)
+//K_EXPORT_PLUGIN(Calligra::Sheets::Factory)
 

@@ -44,7 +44,7 @@
 #include "dlg_separate.h"
 
 K_PLUGIN_FACTORY(KisSeparateChannelsPluginFactory, registerPlugin<KisSeparateChannelsPlugin>();)
-K_EXPORT_PLUGIN(KisSeparateChannelsPluginFactory("krita"))
+//K_EXPORT_PLUGIN(KisSeparateChannelsPluginFactory("krita"))
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/imageseparate.rc")

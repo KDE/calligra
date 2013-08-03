@@ -22,7 +22,7 @@
 #include "%{APPNAMELC}_dock.h"
 
 K_PLUGIN_FACTORY(%{APPNAME}PluginFactory, registerPlugin<%{APPNAME}Plugin>();)
-K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
+//K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
 
 class %{APPNAME}DockFactory : public KoDockFactoryBase {
 public:

@@ -26,7 +26,7 @@
 #include <filter/kis_filter_registry.h>
 
 K_PLUGIN_FACTORY(KritaExtensionsColorsFactory, registerPlugin<KritaExtensionsColors>();)
-K_EXPORT_PLUGIN(KritaExtensionsColorsFactory("krita"))
+//K_EXPORT_PLUGIN(KritaExtensionsColorsFactory("krita"))
 
 KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QVariantList &)
         : QObject(parent)

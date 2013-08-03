@@ -39,7 +39,7 @@
 #include <kis_global.h>
 
 K_PLUGIN_FACTORY(KritaExampleFactory, registerPlugin<KritaExample>();)
-K_EXPORT_PLUGIN(KritaExampleFactory("krita"))
+//K_EXPORT_PLUGIN(KritaExampleFactory("krita"))
 
 KritaExample::KritaExample(QObject *parent, const QVariantList &)
         : QObject(parent)

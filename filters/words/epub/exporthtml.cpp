@@ -56,7 +56,7 @@
 
 
 K_PLUGIN_FACTORY(ExportHtmlFactory, registerPlugin<ExportHtml>();)
-K_EXPORT_PLUGIN(ExportHtmlFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(ExportHtmlFactory("calligrafilters"))
 
 
 ExportHtml::ExportHtml(QObject *parent, const QVariantList&)

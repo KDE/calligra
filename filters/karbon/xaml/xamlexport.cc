@@ -51,7 +51,7 @@
 
 
 K_PLUGIN_FACTORY(XAMLExportFactory, registerPlugin<XAMLExport>();)
-K_EXPORT_PLUGIN(XAMLExportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(XAMLExportFactory("calligrafilters"))
 
 
 XAMLExport::XAMLExport(KoFilter*, const char*, const QVariantList&)

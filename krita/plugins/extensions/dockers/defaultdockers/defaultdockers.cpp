@@ -28,7 +28,7 @@
 #include "kis_palette_docker.h"
 
 K_PLUGIN_FACTORY(KritaDefaultDockersPluginFactory, registerPlugin<KritaDefaultDockersPlugin>();)
-K_EXPORT_PLUGIN(KritaDefaultDockersPluginFactory("krita"))
+//K_EXPORT_PLUGIN(KritaDefaultDockersPluginFactory("krita"))
 
 KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)

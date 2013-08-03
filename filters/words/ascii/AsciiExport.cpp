@@ -45,7 +45,7 @@
 
 
 K_PLUGIN_FACTORY(AsciiExportFactory, registerPlugin<AsciiExport>();)
-K_EXPORT_PLUGIN(AsciiExportFactory("wordsasciiexportng", "calligrafilters"))
+//K_EXPORT_PLUGIN(AsciiExportFactory("wordsasciiexportng", "calligrafilters"))
 
 
 AsciiExport::AsciiExport(QObject *parent, const QVariantList &)

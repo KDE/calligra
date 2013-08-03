@@ -383,8 +383,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetFactory::CreateWidgetOptions)
 //! Implementation of a form designer-compatible widget factory
 #define K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN( class_name, internal_name ) \
     K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("kformdesigner_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KFORMDESIGNER_VERSION, 0, 0))
+    //K_EXPORT_PLUGIN(factory("kformdesigner_" # internal_name)) \
+    //K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KFORMDESIGNER_VERSION, 0, 0))
 
 }
 #endif

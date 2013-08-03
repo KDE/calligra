@@ -60,7 +60,7 @@
 #include "writeodf/helpers.h"
 
 K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
-K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
 
 #define UNICODE_EUR 0x20AC
 #define UNICODE_GBP 0x00A3

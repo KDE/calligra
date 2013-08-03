@@ -51,7 +51,7 @@ public:
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(MyPluginFactory, registerPlugin<MyPlugin>();)
-K_EXPORT_PLUGIN(MyPluginFactory("DaPlugin"))
+//K_EXPORT_PLUGIN(MyPluginFactory("DaPlugin"))
 
 MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {
     // do stuff like creating a factory and adding it to the

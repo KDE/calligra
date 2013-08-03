@@ -50,7 +50,7 @@
 OIIO_NAMESPACE_USING
 
 K_PLUGIN_FACTORY(KisOiioImportFactory, registerPlugin<KisOiioImport>();)
-K_EXPORT_PLUGIN(KisOiioImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(KisOiioImportFactory("calligrafilters"))
 
 KisOiioImport::KisOiioImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

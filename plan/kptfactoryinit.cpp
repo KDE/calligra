@@ -21,4 +21,4 @@
 
 #include <kexportplugin.h>
 
-K_EXPORT_PLUGIN( KPlato::Factory )
+//K_EXPORT_PLUGIN( KPlato::Factory )

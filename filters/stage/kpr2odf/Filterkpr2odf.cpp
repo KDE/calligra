@@ -56,7 +56,7 @@ using std::cos;
 #endif
 
 K_PLUGIN_FACTORY(Filterkpr2odfFactory, registerPlugin<Filterkpr2odf>();)
-K_EXPORT_PLUGIN(Filterkpr2odfFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(Filterkpr2odfFactory("calligrafilters"))
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent, const QVariantList&)
         : KoFilter(parent)

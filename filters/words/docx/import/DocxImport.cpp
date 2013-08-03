@@ -61,7 +61,7 @@
 #include <KoXmlWriter.h>
 
 K_PLUGIN_FACTORY(DocxImportFactory, registerPlugin<DocxImport>();)
-K_EXPORT_PLUGIN(DocxImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(DocxImportFactory("calligrafilters"))
 
 enum DocxDocumentType {
     DocxDocument,

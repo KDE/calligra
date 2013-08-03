@@ -25,8 +25,8 @@
 //! Implementation of driver's static version information and plugin entry point.
 #define K_EXPORT_KEXIMIGRATE_DRIVER( class_name, internal_name ) \
     K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("keximigrate_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR, 0))
+    //K_EXPORT_PLUGIN(factory("keximigrate_" # internal_name)) \
+    //K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR, 0))
 
 /*! Driver's static version information, automatically implemented for KexiDB drivers.
  Put this into migration driver class declaration just like Q_OBJECT macro. */

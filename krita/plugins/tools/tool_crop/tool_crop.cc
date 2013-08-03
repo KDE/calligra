@@ -38,7 +38,7 @@
 #include <KoToolRegistry.h>
 
 K_PLUGIN_FACTORY(ToolCropFactory, registerPlugin<ToolCrop>();)
-K_EXPORT_PLUGIN(ToolCropFactory("krita"))
+//K_EXPORT_PLUGIN(ToolCropFactory("krita"))
 
 
 ToolCrop::ToolCrop(QObject *parent, const QVariantList &)

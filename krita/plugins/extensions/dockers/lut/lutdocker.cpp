@@ -43,7 +43,7 @@ namespace OCIO = OCIO_NAMESPACE;
 
 
 K_PLUGIN_FACTORY(LutDockerPluginFactory, registerPlugin<LutDockerPlugin>();)
-K_EXPORT_PLUGIN(LutDockerPluginFactory( "krita" ) )
+//K_EXPORT_PLUGIN(LutDockerPluginFactory( "krita" ) )
 
 class LutDockerDockFactory : public KoDockFactoryBase {
 public:

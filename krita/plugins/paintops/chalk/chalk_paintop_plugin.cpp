@@ -33,7 +33,7 @@
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(ChalkPaintOpPluginFactory, registerPlugin<ChalkPaintOpPlugin>();)
-K_EXPORT_PLUGIN(ChalkPaintOpPluginFactory("krita"))
+//K_EXPORT_PLUGIN(ChalkPaintOpPluginFactory("krita"))
 
 
 ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QVariantList &)

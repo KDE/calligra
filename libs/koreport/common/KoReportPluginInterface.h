@@ -57,7 +57,7 @@ class KOREPORT_EXPORT KoReportPluginInterface : public QObject
     
 #define K_EXPORT_KOREPORT_ITEMPLUGIN( class_name, internal_name ) \
     K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("koreport_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(0, 0, 1))
+    //K_EXPORT_PLUGIN(factory("koreport_" # internal_name)) \
+    //K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(0, 0, 1))
 
 #endif // KOREPORTPLUGININTERFACE_H

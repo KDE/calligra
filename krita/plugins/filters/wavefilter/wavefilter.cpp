@@ -51,7 +51,7 @@
 #include <kis_iterator_ng.h>
 
 K_PLUGIN_FACTORY(KritaWaveFilterFactory, registerPlugin<KritaWaveFilter>();)
-K_EXPORT_PLUGIN(KritaWaveFilterFactory("krita"))
+//K_EXPORT_PLUGIN(KritaWaveFilterFactory("krita"))
 
 class KisWaveCurve
 {

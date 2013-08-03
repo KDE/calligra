@@ -24,7 +24,7 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(ImageDockerPluginFactory, registerPlugin<ImageDockerPlugin>();)
-K_EXPORT_PLUGIN(ImageDockerPluginFactory("krita"))
+//K_EXPORT_PLUGIN(ImageDockerPluginFactory("krita"))
 
 class ImageDockerDockFactory: public KoDockFactoryBase {
 public:

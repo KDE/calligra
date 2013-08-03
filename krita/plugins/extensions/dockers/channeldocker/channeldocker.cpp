@@ -40,7 +40,7 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(ChannelDockerPluginFactory, registerPlugin<ChannelDockerPlugin>();)
-K_EXPORT_PLUGIN(ChannelDockerPluginFactory( "krita" ) )
+//K_EXPORT_PLUGIN(ChannelDockerPluginFactory( "krita" ) )
 
 class ChannelDockerDockFactory : public KoDockFactoryBase {
 public:

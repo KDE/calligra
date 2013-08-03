@@ -65,7 +65,7 @@ private:
 };
 
 K_PLUGIN_FACTORY(WPSImportFactory, registerPlugin<WPSImport>();)
-K_EXPORT_PLUGIN(WPSImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(WPSImportFactory("calligrafilters"))
 
 WPSImport::WPSImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)

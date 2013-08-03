@@ -35,7 +35,7 @@
 
 
 K_PLUGIN_FACTORY(TemplateShapePluginFactory, registerPlugin<TemplateShapePlugin>();)
-K_EXPORT_PLUGIN(TemplateShapePluginFactory("TemplateShape"))
+//K_EXPORT_PLUGIN(TemplateShapePluginFactory("TemplateShape"))
 
 TemplateShapePlugin::TemplateShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

@@ -40,7 +40,7 @@
 using namespace KDcrawIface;
 
 K_PLUGIN_FACTORY(KisRawImportFactory, registerPlugin<KisRawImport>();)
-K_EXPORT_PLUGIN(KisRawImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(KisRawImportFactory("calligrafilters"))
 
 KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
         : KoFilter(parent)

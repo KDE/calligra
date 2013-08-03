@@ -24,7 +24,7 @@
 #include "PptToOdp.h"
 
 K_PLUGIN_FACTORY(PowerPointImportFactory, registerPlugin<PowerPointImport>();)
-K_EXPORT_PLUGIN(PowerPointImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(PowerPointImportFactory("calligrafilters"))
 
 KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, const QByteArray& to)
 {

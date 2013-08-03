@@ -40,7 +40,7 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(DigitalMixerPluginFactory, registerPlugin<DigitalMixerPlugin>();)
-K_EXPORT_PLUGIN(DigitalMixerPluginFactory( "krita" ) )
+//K_EXPORT_PLUGIN(DigitalMixerPluginFactory( "krita" ) )
 
 class DigitalMixerDockFactory : public KoDockFactoryBase {
 public:

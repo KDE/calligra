@@ -27,7 +27,7 @@
 //#include "mesh_assistant.h"
 
 K_PLUGIN_FACTORY(RulerAssistantToolFactory, registerPlugin<RulerAssistantToolPlugin>();)
-K_EXPORT_PLUGIN(RulerAssistantToolFactory("krita"))
+//K_EXPORT_PLUGIN(RulerAssistantToolFactory("krita"))
 
 
 RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVariantList &)

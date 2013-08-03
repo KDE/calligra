@@ -57,7 +57,7 @@
 #include "kis_pdf_import_widget.h"
 
 K_PLUGIN_FACTORY(PDFImportFactory, registerPlugin<KisPDFImport>();)
-K_EXPORT_PLUGIN(PDFImportFactory("krita"))
+//K_EXPORT_PLUGIN(PDFImportFactory("krita"))
 
 KisPDFImport::KisPDFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

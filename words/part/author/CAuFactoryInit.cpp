@@ -19,5 +19,5 @@
 
 #include "CAuFactory.h"
 
-K_EXPORT_PLUGIN(CAuFactory)
+//K_EXPORT_PLUGIN(CAuFactory)
 

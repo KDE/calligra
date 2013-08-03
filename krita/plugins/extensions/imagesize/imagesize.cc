@@ -48,7 +48,7 @@
 #include "kis_action.h"
 
 K_PLUGIN_FACTORY(ImageSizeFactory, registerPlugin<ImageSize>();)
-K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
+//K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
 
 ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/imagesize.rc")

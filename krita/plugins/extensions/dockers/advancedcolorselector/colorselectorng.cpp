@@ -29,7 +29,7 @@
 #include "kis_preference_set_registry.h"
 
 K_PLUGIN_FACTORY(ColorSelectorNgPluginFactory, registerPlugin<ColorSelectorNgPlugin>();)
-K_EXPORT_PLUGIN(ColorSelectorNgPluginFactory("krita"))
+//K_EXPORT_PLUGIN(ColorSelectorNgPluginFactory("krita"))
 
 class ColorSelectorNgDockFactory : public KoDockFactoryBase
 {

@@ -26,7 +26,7 @@
 #include <filter/kis_filter_registry.h>
 
 K_PLUGIN_FACTORY(UnsharpPluginFactory, registerPlugin<UnsharpPlugin>();)
-K_EXPORT_PLUGIN(UnsharpPluginFactory("krita"))
+//K_EXPORT_PLUGIN(UnsharpPluginFactory("krita"))
 
 UnsharpPlugin::UnsharpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)

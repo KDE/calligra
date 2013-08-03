@@ -40,7 +40,7 @@
 //#include "kis_tool_select_magnetic.h"
 
 K_PLUGIN_FACTORY(SelectionToolsFactory, registerPlugin<SelectionTools>();)
-K_EXPORT_PLUGIN(SelectionToolsFactory("krita"))
+//K_EXPORT_PLUGIN(SelectionToolsFactory("krita"))
 
 
 SelectionTools::SelectionTools(QObject *parent, const QVariantList &)

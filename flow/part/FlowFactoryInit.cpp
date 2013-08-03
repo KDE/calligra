@@ -19,4 +19,4 @@
 
 #include "FlowFactory.h"
 
-K_EXPORT_PLUGIN(FlowFactory)
+//K_EXPORT_PLUGIN(FlowFactory)

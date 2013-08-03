@@ -33,7 +33,7 @@
 #include "kis_color_balance_adjustment.h"
 
 K_PLUGIN_FACTORY(ExtensionsPluginFactory, registerPlugin<ExtensionsPlugin>();)
-K_EXPORT_PLUGIN(ExtensionsPluginFactory("krita"))
+//K_EXPORT_PLUGIN(ExtensionsPluginFactory("krita"))
 
 ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QVariantList &)
 {

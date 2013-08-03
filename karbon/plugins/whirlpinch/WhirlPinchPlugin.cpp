@@ -54,7 +54,7 @@
 
 
 K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)
-K_EXPORT_PLUGIN(WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
+//K_EXPORT_PLUGIN(WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
 
 WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
         : Plugin(parent)

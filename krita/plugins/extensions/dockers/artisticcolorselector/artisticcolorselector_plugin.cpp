@@ -24,7 +24,7 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(PaletteDockPluginFactory, registerPlugin<ArtisticColorSelectorPlugin>();)
-K_EXPORT_PLUGIN(PaletteDockPluginFactory("krita"))
+//K_EXPORT_PLUGIN(PaletteDockPluginFactory("krita"))
 
 class ArtisticColorSelectorDockFactory: public KoDockFactoryBase
 {

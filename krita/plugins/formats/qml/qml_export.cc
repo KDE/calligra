@@ -33,7 +33,7 @@
 #include "qml_converter.h"
 
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<QMLExport>();)
-K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
 QMLExport::QMLExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

@@ -97,7 +97,7 @@ private:
 };
 
 K_PLUGIN_FACTORY(WPDImportFactory, registerPlugin<WPDImport>();)
-K_EXPORT_PLUGIN(WPDImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(WPDImportFactory("calligrafilters"))
 
 WPDImport::WPDImport(QObject* parent, const QVariantList&)
     : KoFilter(parent)

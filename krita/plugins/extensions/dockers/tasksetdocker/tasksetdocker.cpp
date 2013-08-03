@@ -40,7 +40,7 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(TasksetDockerPluginFactory, registerPlugin<TasksetDockerPlugin>();)
-K_EXPORT_PLUGIN(TasksetDockerPluginFactory( "krita" ) )
+//K_EXPORT_PLUGIN(TasksetDockerPluginFactory( "krita" ) )
 
 class TasksetDockerDockFactory : public KoDockFactoryBase {
 public:

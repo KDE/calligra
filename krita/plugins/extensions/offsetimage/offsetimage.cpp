@@ -40,7 +40,7 @@
 #include "kis_offset_processing_visitor.h"
 
 K_PLUGIN_FACTORY(OffsetImageFactory, registerPlugin<OffsetImage>();)
-K_EXPORT_PLUGIN(OffsetImageFactory("krita"))
+//K_EXPORT_PLUGIN(OffsetImageFactory("krita"))
 
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/offsetimage.rc")

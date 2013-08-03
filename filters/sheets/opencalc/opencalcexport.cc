@@ -63,7 +63,7 @@ using namespace Calligra::Sheets;
 typedef QList<QString> AreaList;
 
 K_PLUGIN_FACTORY(OpenCalcExportFactory, registerPlugin<OpenCalcExport>();)
-K_EXPORT_PLUGIN(OpenCalcExportFactory("kspreadopencalcexport", "calligrafilters"))
+//K_EXPORT_PLUGIN(OpenCalcExportFactory("kspreadopencalcexport", "calligrafilters"))
 
 #define STOPEXPORT \
     do \

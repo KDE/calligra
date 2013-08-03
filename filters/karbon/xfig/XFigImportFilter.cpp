@@ -35,7 +35,7 @@
 
 
 K_PLUGIN_FACTORY(CdrImportFactory, registerPlugin<XFigImportFilter>();)
-K_EXPORT_PLUGIN(CdrImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(CdrImportFactory("calligrafilters"))
 
 
 XFigImportFilter::XFigImportFilter( QObject* parent, const QVariantList& )

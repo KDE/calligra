@@ -45,7 +45,7 @@ int planScriptingDebugArea() {
     return s_area;
 }
 
-K_EXPORT_PLUGIN( KPlatoScriptingFactory )
+//K_EXPORT_PLUGIN( KPlatoScriptingFactory )
 
 KPlatoScriptingFactory::KPlatoScriptingFactory(const char *componentName, const char *catalogName, QObject *parent )
     : KPluginFactory( componentName, catalogName, parent )

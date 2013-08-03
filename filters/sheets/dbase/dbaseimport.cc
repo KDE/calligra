@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 
 K_PLUGIN_FACTORY(DBaseImportFactory, registerPlugin<DBaseImport>();)
-K_EXPORT_PLUGIN(DBaseImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(DBaseImportFactory("calligrafilters"))
 
 
 DBaseImport::DBaseImport(QObject* parent, const QVariantList&)

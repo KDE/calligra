@@ -32,7 +32,7 @@
 #include "dlg_shearimage.h"
 
 K_PLUGIN_FACTORY(ShearImageFactory, registerPlugin<ShearImage>();)
-K_EXPORT_PLUGIN(ShearImageFactory("krita"))
+//K_EXPORT_PLUGIN(ShearImageFactory("krita"))
 
 ShearImage::ShearImage(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/shearimage.rc")

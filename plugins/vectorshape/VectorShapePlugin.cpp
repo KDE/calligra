@@ -35,7 +35,7 @@
 
 
 K_PLUGIN_FACTORY(VectorShapePluginFactory, registerPlugin<VectorShapePlugin>();)
-K_EXPORT_PLUGIN(VectorShapePluginFactory("VectorShape"))
+//K_EXPORT_PLUGIN(VectorShapePluginFactory("VectorShape"))
 
 VectorShapePlugin::VectorShapePlugin(QObject * parent, const QVariantList &)
     : QObject(parent)

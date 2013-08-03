@@ -26,6 +26,6 @@
  
 #define KPLATO_SCHEDULERPLUGIN_EXPORT( c ) \
   K_PLUGIN_FACTORY( SchedulerFactory, registerPlugin< c >(); ) \
-  K_EXPORT_PLUGIN( SchedulerFactory("c") )
+  //K_EXPORT_PLUGIN( SchedulerFactory("c") )
 
 #endif

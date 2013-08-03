@@ -27,7 +27,7 @@
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(KisSobelFilterPluginFactory, registerPlugin<KisSobelFilterPlugin>();)
-K_EXPORT_PLUGIN(KisSobelFilterPluginFactory("krita"))
+//K_EXPORT_PLUGIN(KisSobelFilterPluginFactory("krita"))
 
 KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)

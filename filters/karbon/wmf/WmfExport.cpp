@@ -38,7 +38,7 @@ TODO: bs.wmf stroke in red with MSword and in brown with Words ??
 */
 
 K_PLUGIN_FACTORY(WmfExportFactory, registerPlugin<WmfExport>();)
-K_EXPORT_PLUGIN(WmfExportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(WmfExportFactory("calligrafilters"))
 
 
 WmfExport::WmfExport(QObject*parent, const QVariantList&) :

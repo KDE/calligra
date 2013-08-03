@@ -40,7 +40,7 @@
 #include <kfilterdev.h>
 
 K_PLUGIN_FACTORY(XAMLImportFactory, registerPlugin<XAMLImport>();)
-K_EXPORT_PLUGIN(XAMLImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(XAMLImportFactory("calligrafilters"))
 
 XAMLImport::XAMLImport(KoFilter *, const char *, const QVariantList&) :
         KoFilter(parent),

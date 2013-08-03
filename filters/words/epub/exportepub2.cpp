@@ -57,7 +57,7 @@
 
 
 K_PLUGIN_FACTORY(ExportEpub2Factory, registerPlugin<ExportEpub2>();)
-K_EXPORT_PLUGIN(ExportEpub2Factory("calligrafilters"))
+//K_EXPORT_PLUGIN(ExportEpub2Factory("calligrafilters"))
 
 
 ExportEpub2::ExportEpub2(QObject *parent, const QVariantList&)

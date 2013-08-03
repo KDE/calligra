@@ -49,7 +49,7 @@
 
 
 K_PLUGIN_FACTORY(FlattenPathPluginFactory, registerPlugin<FlattenPathPlugin>();)
-K_EXPORT_PLUGIN(FlattenPathPluginFactory("karbonflattenpathplugin"))
+//K_EXPORT_PLUGIN(FlattenPathPluginFactory("karbonflattenpathplugin"))
 
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
         : Plugin(parent/*, name*/)

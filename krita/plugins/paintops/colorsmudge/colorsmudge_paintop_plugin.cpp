@@ -34,7 +34,7 @@
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(ColorSmudgePaintOpPluginFactory, registerPlugin<ColorSmudgePaintOpPlugin>();)
-K_EXPORT_PLUGIN(ColorSmudgePaintOpPluginFactory("krita"))
+//K_EXPORT_PLUGIN(ColorSmudgePaintOpPluginFactory("krita"))
 
 
 ColorSmudgePaintOpPlugin::ColorSmudgePaintOpPlugin(QObject* parent, const QVariantList&):

@@ -41,7 +41,7 @@
 #include <KoColorSpace.h>
 
 K_PLUGIN_FACTORY(ColorRangeFactory, registerPlugin<ColorRange>();)
-K_EXPORT_PLUGIN(ColorRangeFactory("krita"))
+//K_EXPORT_PLUGIN(ColorRangeFactory("krita"))
 
 ColorRange::ColorRange(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/colorrange.rc")

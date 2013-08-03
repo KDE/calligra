@@ -59,7 +59,7 @@
 #include <KoXmlWriter.h>
 
 K_PLUGIN_FACTORY(XlsxImportFactory, registerPlugin<XlsxImport>();)
-K_EXPORT_PLUGIN(XlsxImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(XlsxImportFactory("calligrafilters"))
 
 enum XlsxDocumentType {
     XlsxDocument,

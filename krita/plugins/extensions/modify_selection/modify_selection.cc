@@ -34,7 +34,7 @@
 #include "modify_selection_operations.h"
 
 K_PLUGIN_FACTORY(ModifySelectionFactory, registerPlugin<ModifySelection>();)
-K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
+//K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
 
 ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/modify_selection.rc")

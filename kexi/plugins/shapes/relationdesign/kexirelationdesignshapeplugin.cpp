@@ -24,7 +24,7 @@
 #include <KoToolRegistry.h>
 
 K_PLUGIN_FACTORY(KexiRelationDesignShapePluginFactory, registerPlugin<KexiRelationDesignShapePlugin>();)
-K_EXPORT_PLUGIN(KexiRelationDesignShapePluginFactory("KexiRelationDesignShapePlugin"))
+//K_EXPORT_PLUGIN(KexiRelationDesignShapePluginFactory("KexiRelationDesignShapePlugin"))
 
 KexiRelationDesignShapePlugin::KexiRelationDesignShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

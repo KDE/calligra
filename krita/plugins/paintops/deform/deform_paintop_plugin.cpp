@@ -30,7 +30,7 @@
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(DeformPaintOpPluginFactory, registerPlugin<DeformPaintOpPlugin>();)
-K_EXPORT_PLUGIN(DeformPaintOpPluginFactory("krita"))
+//K_EXPORT_PLUGIN(DeformPaintOpPluginFactory("krita"))
 
 
 DeformPaintOpPlugin::DeformPaintOpPlugin(QObject *parent, const QVariantList &)

@@ -50,7 +50,7 @@
 #include "dlg_colorspaceconversion.h"
 
 K_PLUGIN_FACTORY(ColorSpaceConversionFactory, registerPlugin<ColorSpaceConversion>();)
-K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
+//K_EXPORT_PLUGIN(ColorSpaceConversionFactory("krita"))
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)

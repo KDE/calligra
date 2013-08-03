@@ -41,7 +41,7 @@ K_PLUGIN_FACTORY(TextPluginFactory,
                  registerPlugin<TextPlugin>();
 )
 #endif
-K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
+//K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
 
 TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
         : QObject(parent)

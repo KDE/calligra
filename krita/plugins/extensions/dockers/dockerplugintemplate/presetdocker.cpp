@@ -40,7 +40,7 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(PresetDockerPluginFactory, registerPlugin<PresetDockerPlugin>();)
-K_EXPORT_PLUGIN(PresetDockerPluginFactory( "krita" ) )
+//K_EXPORT_PLUGIN(PresetDockerPluginFactory( "krita" ) )
 
 class PresetDockerDockFactory : public KoDockFactoryBase {
 public:

@@ -31,7 +31,7 @@
 #include "kis_global.h"
 
 K_PLUGIN_FACTORY(SprayPaintOpPluginFactory, registerPlugin<SprayPaintOpPlugin>();)
-K_EXPORT_PLUGIN(SprayPaintOpPluginFactory("krita"))
+//K_EXPORT_PLUGIN(SprayPaintOpPluginFactory("krita"))
 
 
 SprayPaintOpPlugin::SprayPaintOpPlugin(QObject *parent, const QVariantList &)

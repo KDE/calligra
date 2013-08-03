@@ -32,7 +32,7 @@
 #include <sheets/Util.h>
 
 K_PLUGIN_FACTORY(APPLIXSPREADImportFactory, registerPlugin<APPLIXSPREADImport>();)
-K_EXPORT_PLUGIN(APPLIXSPREADImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(APPLIXSPREADImportFactory("calligrafilters"))
 
 
 APPLIXSPREADImport::APPLIXSPREADImport(QObject *parent, const QVariantList&)

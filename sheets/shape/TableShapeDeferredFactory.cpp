@@ -40,7 +40,7 @@
 using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY(TableShapePluginFactory, registerPlugin<TableDeferredShapeFactory>();)
-K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))
+//K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))
 
 TableDeferredShapeFactory::TableDeferredShapeFactory(QObject *parent, const QVariantList&)
         : KoDeferredShapeFactoryBase(parent)

@@ -46,7 +46,7 @@ public:
     KoToolBase *createTool(KoCanvasBase *canvas);
 };
 K_PLUGIN_FACTORY(MyToolFactoryFactory, registerPlugin<MyToolFactory>();)
-K_EXPORT_PLUGIN(MyToolFactoryFactory("MyTool"))
+//K_EXPORT_PLUGIN(MyToolFactoryFactory("MyTool"))
 </pre>
 
  */

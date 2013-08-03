@@ -37,7 +37,7 @@
 #include "kis_brush_server.h"
 
 K_PLUGIN_FACTORY(DefaultPaintOpsPluginFactory, registerPlugin<DefaultPaintOpsPlugin>();)
-K_EXPORT_PLUGIN(DefaultPaintOpsPluginFactory("krita"))
+//K_EXPORT_PLUGIN(DefaultPaintOpsPluginFactory("krita"))
 
 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList &)

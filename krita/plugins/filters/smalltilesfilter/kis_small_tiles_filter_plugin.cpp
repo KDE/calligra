@@ -27,7 +27,7 @@
 #include "filter/kis_filter_registry.h"
 
 K_PLUGIN_FACTORY(KisSmallTilesFilterPluginFactory, registerPlugin<KisSmallTilesFilterPlugin>();)
-K_EXPORT_PLUGIN(KisSmallTilesFilterPluginFactory("krita"))
+//K_EXPORT_PLUGIN(KisSmallTilesFilterPluginFactory("krita"))
 
 KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)

@@ -44,7 +44,7 @@
 bool readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer);
 
 K_PLUGIN_FACTORY(MSWordOdfImportFactory, registerPlugin<MSWordOdfImport>();)
-K_EXPORT_PLUGIN(MSWordOdfImportFactory("calligrafilters"))
+//K_EXPORT_PLUGIN(MSWordOdfImportFactory("calligrafilters"))
 
 
 MSWordOdfImport::MSWordOdfImport(QObject *parent, const QVariantList&)

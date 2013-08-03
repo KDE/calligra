@@ -57,7 +57,7 @@ class DriverPrivate;
     where:
     - class_name is actual driver's class name, e.g. MySqlDriver
     - "internal_name" is driver name's most significant part (without quotation marks), e.g. "mysql"
-    Above information uses K_PLUGIN_FACTORY and K_EXPORT_PLUGIN macros and KPluginFactory class.
+    Above information uses K_PLUGIN_FACTORY and //K_EXPORT_PLUGIN macros and KPluginFactory class.
     For example, this line declares kexidb_mysqldriver.so module's entry point:
     \code
     K_EXPORT_KEXIDB_DRIVER( MySqlDriver, "mysql" );

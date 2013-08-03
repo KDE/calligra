@@ -35,7 +35,7 @@
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(KarbonFilterEffectsPluginFacory, registerPlugin<KarbonFilterEffectsPlugin>();)
-K_EXPORT_PLUGIN(KarbonFilterEffectsPluginFacory("FilterEffects"))
+//K_EXPORT_PLUGIN(KarbonFilterEffectsPluginFacory("FilterEffects"))
 
 KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin(QObject *parent, const QList<QVariant>&)
         : QObject(parent)

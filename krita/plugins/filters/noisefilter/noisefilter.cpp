@@ -51,7 +51,7 @@
 #include <kis_iterator_ng.h>
 
 K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
-K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
+//K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)
         : QObject(parent)

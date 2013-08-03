@@ -38,7 +38,7 @@
 #include "kis_tool_perspectivegrid.h"
 
 K_PLUGIN_FACTORY(ToolPerspectiveGridFactory, registerPlugin<ToolPerspectiveGrid>();)
-K_EXPORT_PLUGIN(ToolPerspectiveGridFactory("krita"))
+//K_EXPORT_PLUGIN(ToolPerspectiveGridFactory("krita"))
 
 
 ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QVariantList &)
