@@ -23,6 +23,7 @@
 
 #include "calligra_sheets_export.h"
 #include "Cell.h"
+#include "Sheet.h"
 
 #include <KoFindBase.h>
 
