@@ -10,6 +10,7 @@
 #include <klineedit.h>
 #include <knuminput.h>
 #include <kurlcompletion.h>
+#include <kcombobox.h>
 //#include <keditlistwidget.h>
 
 class KUrlRequester : public QWidget
