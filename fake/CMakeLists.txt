@@ -133,7 +133,7 @@ set(kofake_HEADERS_ONLY
     sonnet/configdialog.h
     sonnet/backgroundchecker.h
     kfile.h
-    kservicetypetrader.h
+    #kservicetypetrader.h
     kdatetime.h
     kde_file.h
     kstringhandler.h
@@ -186,11 +186,11 @@ set(kofake_HEADERS_ONLY
     kdebug.h
     kvbox.h
     kmenubar.h
-    kservice.h
+    #kservice.h
     ktoolinvocation.h
     kedittoolbar.h
     ksqueezedtextlabel.h
-    kservicetype.h
+    #kservicetype.h
     knumvalidator.h
     ktemporaryfile.h
     ktextbrowser.h
