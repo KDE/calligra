@@ -20,7 +20,7 @@
 #include <PowerPointImport.h>
 #include <KoFilterChain.h>
 #include <KoOdf.h>
-
+#include <kpluginfactory.h>
 #include "PptToOdp.h"
 
 K_PLUGIN_FACTORY(PowerPointImportFactory, registerPlugin<PowerPointImport>();)
