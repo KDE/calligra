@@ -27,12 +27,12 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmimetype.h>
-#include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
 
+#include <KoDocumentEntry.h>
 #include <KoDocument.h>
 #include <KoPart.h>
 #include <KoFilterManager.h>
@@ -46,8 +46,9 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
     Q_UNUSED(outputFormat);
 
     QString error;
-    KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
-                    inputFormat, QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
+
+    KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(inputFormat);
+    KoPart *part = documentEntry.createKoPart();
     if (!part) {
         return false;
     }
