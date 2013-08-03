@@ -2,9 +2,8 @@ find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES DESCRIPTION "Support for gzip compressed files and data streams"
                        URL "http://www.zlib.net"
                        TYPE REQUIRED
-                       PURPOSE "Required by the core KDE libraries and some critical kioslaves"
+                       PURPOSE "Required by core Calligra kofake-library to read/write compressed zip archive files"
                       )
-
 
 set(kofake_LIB_SRCS
     karchive.cpp
@@ -186,6 +185,7 @@ set(kofake_HEADERS
     kaction.h
     kdialog.h
     kocursor.h
+    kprocess.h
     krun.h
     klocale.h
     kcalendarsystem.h
