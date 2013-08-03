@@ -7,6 +7,7 @@ set_package_properties(ZLIB PROPERTIES DESCRIPTION "Support for gzip compressed 
 
 set(kofake_LIB_SRCS
     karchive.cpp
+    kbuttongroup.cpp
     kcomponentdata.cpp
     kconfigbase.cpp
     kencodingprober.cpp
@@ -206,6 +207,7 @@ set(kofake_HEADERS_ONLY
 set(kofake_HEADERS 
     ${kofake_HEADERS_ONLY}
     karchive.h
+    kbuttongroup.h
     kcomponentdata.h
     kconfigbase.h
     kfilterbase.h
