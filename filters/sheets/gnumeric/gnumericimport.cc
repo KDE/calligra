@@ -137,8 +137,50 @@ void GNUMERICFilter::dateInit()
 
 uint GNUMERICFilter::GnumericDate::greg2jul(int y, int m, int d)
 {
-    return QDate::gregorianToJulian(y, m, d);
+    QDate date(y, m, d);
+    return date.toJulianDay();
 }
+
+static void getDateFromJulianDay(uint julianDay, int *year, int *month, int *day)
+{
+    int y, m, d;
+
+    if (julianDay >= 2299161) {
+        // Gregorian calendar starting from October 15, 1582
+        // This algorithm is from Henry F. Fliegel and Thomas C. Van Flandern
+        qulonglong ell, n, i, j;
+        ell = qulonglong(julianDay) + 68569;
+        n = (4 * ell) / 146097;
+        ell = ell - (146097 * n + 3) / 4;
+        i = (4000 * (ell + 1)) / 1461001;
+        ell = ell - (1461 * i) / 4 + 31;
+        j = (80 * ell) / 2447;
+        d = ell - (2447 * j) / 80;
+        ell = j / 11;
+        m = j + 2 - (12 * ell);
+        y = 100 * (n - 49) + i + ell;
+    } else {
+        // Julian calendar until October 4, 1582
+        // Algorithm from Frequently Asked Questions about Calendars by Claus Toendering
+        julianDay += 32082;
+        int dd = (4 * julianDay + 3) / 1461;
+        int ee = julianDay - (1461 * dd) / 4;
+        int mm = ((5 * ee) + 2) / 153;
+        d = ee - (153 * mm + 2) / 5 + 1;
+        m = mm + 3 - 12 * (mm / 10);
+        y = dd - 4800 + (mm / 10);
+        if (y <= 0)
+            --y;
+    }
+    if (year)
+        *year = y;
+    if (month)
+        *month = m;
+    if (day)
+        *day = d;
+}
+
+
 
 void GNUMERICFilter::GnumericDate::jul2greg(double num, int & y, int & m, int & d)
 {
@@ -150,7 +192,7 @@ void GNUMERICFilter::GnumericDate::jul2greg(double num, int & y, int & m, int & 
 
     kDebug(30521) << "***** Num:" << num << ", i:" << i;
 
-    QDate::julianToGregorian(i + g_dateOrigin, y, m, d);
+    getDateFromJulianDay(i + g_dateOrigin, &y, &m, &d);
     kDebug(30521) << "y:" << y << ", m:" << m << ", d:" << d;
 }
 
