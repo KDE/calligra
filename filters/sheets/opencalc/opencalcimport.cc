@@ -1330,7 +1330,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
             QString p = b.attributeNS(ooNS::table, "protection-key", QString());
             QByteArray str(p.toLatin1());
             kDebug(30518) << "Decoding password:" << str;
-            passwd = str.fromBase64();
+            passwd = QByteArray::fromBase64(str);
         }
         kDebug(30518) << "Password hash: '" << passwd << "'";
 
