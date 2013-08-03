@@ -92,7 +92,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     QGridLayout *grid1 = new QGridLayout(page);
 
     searchFunct = new QLineEdit(page);
-    searchFunct->setClearButtonShown(true);
+    //searchFunct->setClearButtonShown(true);
     searchFunct->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
     grid1->addWidget(searchFunct, 0, 0);
@@ -273,8 +273,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     }
 
     // Add auto completion.
-    searchFunct->setCompletionMode(KGlobalSettings::CompletionAuto);
-    searchFunct->setCompletionObject(&listFunct, true);
+    //searchFunct->setCompletionMode(KGlobalSettings::CompletionAuto);
+    //searchFunct->setCompletionObject(&listFunct, true);
 
     if (functions->currentIndex().isValid())
         selectFunction->setEnabled(false);
