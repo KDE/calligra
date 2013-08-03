@@ -5,6 +5,7 @@ include_directories(
 )
 
 
+set(SHOULD_BUILD_FILTER_HTML_TO_ODS FALSE)
 if(SHOULD_BUILD_FILTER_HTML_TO_ODS)
 
 set(html2ods_PART_SRCS htmlimport.cc )
