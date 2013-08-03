@@ -16,7 +16,6 @@ set(kofake_LIB_SRCS
     kfilterdev.cpp
     kgzipfilter.cpp
     klimitediodevice.cpp
-    kpluginfactory.cpp
     ktar.cpp
     kzip.cpp
     kio/job.cpp
@@ -64,7 +63,6 @@ set(kofake_HEADERS_ONLY
     kcombobox.h
     kurlrequester.h
     kuser.h
-    kpluginloader.h
     kicon.h
     kreplacedialog.h
     kfind.h
@@ -84,7 +82,6 @@ set(kofake_HEADERS_ONLY
     kfontsizeaction.h
     klimitediodevice_p.h
     klistwidgetsearchline.h
-    kplugininfo.h
     kselectaction.h
     kpagewidget.h
     config.h
@@ -213,7 +210,6 @@ set(kofake_HEADERS
     kfilterbase.h
     kfilterdev.h
     kgzipfilter.h
-    kpluginfactory.h
     ktar.h
     kzip.h
     kio/job.h
