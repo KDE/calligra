@@ -343,15 +343,15 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
         d->tablesColumnData->append(record);
         //fields
         record = d->fieldColumnData->createItem();
-        (*record)[COLUMN_ID_COLUMN] = table->name() + ".*";
+        (*record)[COLUMN_ID_COLUMN] = QString(table->name() + ".*");
         (*record)[COLUMN_ID_TABLE] = (*record)[COLUMN_ID_COLUMN];
         d->fieldColumnData->append(record);
         d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
 //  for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
         foreach(KexiDB::Field *field, *table->fields()) {
             record = d->fieldColumnData->createItem();
-            (*record)[COLUMN_ID_COLUMN] = table->name() + "." + field->name();
-            (*record)[COLUMN_ID_TABLE] = QString("  ") + field->name();
+            (*record)[COLUMN_ID_COLUMN] = QString(table->name() + '.' + field->name());
+            (*record)[COLUMN_ID_TABLE] = QString("  " + field->name());
             d->fieldColumnData->append(record);
             d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
         }
@@ -1533,7 +1533,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData 
     if (!alias.isEmpty()) {
         (*set)["alias"].setValue(alias, saveOldValue);
         //pretty printed "alias: expr"
-        newValue = QString(alias) + ": " + fieldName;
+        newValue = QString(QString(alias) + ": " + fieldName);
     }
     (*set)["caption"].setValue(QString(), saveOldValue);
     (*set)["table"].setValue(tableName, saveOldValue);
@@ -1675,7 +1675,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KexiDB::RecordDat
                 tokenStr = be.tokenToString() + " ";
             }
             if (set) {
-                (*set)["criteria"] = tokenStr + e->toString(); //print it prettier
+                (*set)["criteria"] = QString(tokenStr + e->toString()); //print it prettier
             }
             //this is just checking: destroy expr. object
             delete e;

@@ -214,10 +214,13 @@ template<class T> void saveDecompressedPicture(PictureReference& ref, const T* a
 PictureReference savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
 {
     PictureReference ref;
+    store->setCompressionEnabled(true);
     // only one of these calls will actually save a picture
     saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipEMF>(), store);
     saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipWMF>(), store);
     saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipPICT>(), store);
+    // formats below are typically not very compressible
+    store->setCompressionEnabled(false);
     savePicture(ref, a.anon.get<MSO::OfficeArtBlipJPEG>(), store);
     savePicture(ref, a.anon.get<MSO::OfficeArtBlipPNG>(), store);
     savePicture(ref, a.anon.get<MSO::OfficeArtBlipDIB>(), store);

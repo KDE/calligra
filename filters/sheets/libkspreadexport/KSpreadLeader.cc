@@ -239,7 +239,7 @@ KoFilter::ConversionStatus Leader::doSpreadSheet(KSpreadSheet *spreadSheet)
     docSpreadSheetProperty["hidezero"] = (spreadSheet->getHideZero() == 0 ? "false" : "true");
     docSpreadSheetProperty["firstletterupper"] = (spreadSheet->getFirstLetterUpper() == 0 ? "false" : "true");
     docSpreadSheetProperty["ishidden"] = (spreadSheet->isHidden() == 0 ? "false" : "true");
-    docSpreadSheetProperty["showpageborders"] = (spreadSheet->isShowPageBorders() == 0 ? "false" : "true");
+    docSpreadSheetProperty["showpageborders"] = (spreadSheet->isShowPageOutline() == 0 ? "false" : "true");
     docSpreadSheetProperty["printablewidth"] = QString::number(spreadSheet->printableWidth());
     docSpreadSheetProperty["printableheight"] = QString::number(spreadSheet->printableHeight());
     docSpreadSheetProperty["paperwidth"] = QString::number(spreadSheet->paperWidth());

@@ -144,7 +144,7 @@ public slots:
         m_style->setFontWeight(bold ? 75 : 50);
     }
 
-    /** Return true if the there is a underline. */
+    /** Return true if there is an underline. */
     bool underline() const {
         return m_style->underlineStyle() != KoCharacterStyle::NoLineStyle;
     }

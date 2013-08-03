@@ -57,7 +57,7 @@ KPrEyeWipeEffectFactory::~KPrEyeWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Vertical" ),
     I18N_NOOP( "Vertical Reverse" ),
     I18N_NOOP( "Horizontal" ),

@@ -22,6 +22,9 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
 
 #include <KoColorConversions.h>
 #include <KoColorModelStandardIds.h>
@@ -30,14 +33,14 @@
 #include <KoColorTransformation.h>
 #include <KoID.h>
 
-template<typename _channel_type_>
+template<typename _channel_type_, typename traits>
 class KisBurnMidtonesAdjustment : public KoColorTransformation
 {
-    typedef KoBgrTraits<_channel_type_> RGBTrait;
+    typedef traits RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
- 	KisBurnMidtonesAdjustment(){};
+    KisBurnMidtonesAdjustment(){}
 
  	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
  	{
@@ -46,9 +49,9 @@ public:
         float value_red, value_green, value_blue;
         while(nPixels > 0) {
 
-            value_red = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red), (1.0 + exposure * (0.333333)));
-            value_green = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green), (1.0 + exposure * (0.333333)));
-            value_blue = pow(KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue), (1.0 + exposure * (0.333333)));
+            value_red = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red), (float)(1.0 + exposure * (0.333333)));
+            value_green = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green), (float)(1.0 + exposure * (0.333333)));
+            value_blue = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue), (float)(1.0 + exposure * (0.333333)));
             
             dst->red = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_red);
             dst->green = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_green);
@@ -101,6 +104,7 @@ QList< QPair< KoID, KoID > > KisBurnMidtonesAdjustmentFactory::supportedModels()
     QList< QPair< KoID, KoID > > l;
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
     return l;
 }
@@ -113,11 +117,17 @@ KoColorTransformation* KisBurnMidtonesAdjustmentFactory::createTransformation(co
         return 0;
     }
     if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
-        adj = new KisBurnMidtonesAdjustment< float >();
-    } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
-        adj = new KisBurnMidtonesAdjustment< quint16 >();
+        adj = new KisBurnMidtonesAdjustment< float, KoRgbTraits < float > >();
+    }
+#ifdef HAVE_OPENEXR
+    else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
+        adj = new KisBurnMidtonesAdjustment< half, KoRgbTraits < half > >();
+    }
+#endif
+    else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
+        adj = new KisBurnMidtonesAdjustment< quint16, KoBgrTraits < quint16 > >();
     } else if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
-        adj = new KisBurnMidtonesAdjustment< quint8 >();
+        adj = new KisBurnMidtonesAdjustment< quint8, KoBgrTraits < quint8 > >();
     } else {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisBurnMidtonesAdjustment::createTransformation";
         return 0;

@@ -123,12 +123,11 @@
 
 #include <QDebug>
 #include <QPoint>
-#include "kis_paintop_box.h"
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_action_manager.h"
-#include "kis_paintop_box.h"
+#include "input/kis_input_profile_manager.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -406,6 +405,8 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         collection->setConfigGroup("krita/shortcuts");
         collection->readSettings(&group);
     }
+
+    KisInputProfileManager::instance()->loadProfiles();
 
 
 #if 0
@@ -1110,7 +1111,7 @@ void KisView2::slotSaveIncremental()
                 ++letterCh;
                 letter = QString(QChar(letterCh));
             } else {
-                letter = "a";
+                letter = 'a';
             }
         }
     } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
@@ -1177,7 +1178,7 @@ void KisView2::slotSaveIncrementalBackup()
                     ++letterCh;
                     letter = QString(QChar(letterCh));
                 } else {
-                    letter = "a";
+                    letter = 'a';
                 }
             }
         } while (fileAlreadyExists && letter != "{");  // x, y, z, {...

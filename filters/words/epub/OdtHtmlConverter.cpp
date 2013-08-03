@@ -174,7 +174,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     // Write the beginning of the output.
     beginHtmlFile(metaData);
 
-    QString currentChapterTitle = "";
+    QString currentChapterTitle;
 
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {
@@ -222,7 +222,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
                 if (nodeElement.localName() == "h") {
                     currentChapterTitle = nodeElement.text();
                 } else {
-                    currentChapterTitle = "";
+                    currentChapterTitle.clear();
                 }
 
                 // And begin a new chapter.
@@ -1454,12 +1454,12 @@ KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*
             continue;
 
         // The style name
-        head = QString("." + styleName).toUtf8();
+        head = QString('.' + styleName).toUtf8();
         cssContent.append(head);
         cssContent.append(begin);
 
         foreach (const QString &propName, styleInfo->attributes.keys()) {
-            attributeList += (propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
+            attributeList += QString(propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
         }
 
         cssContent.append(attributeList);

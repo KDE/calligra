@@ -28,7 +28,6 @@
 #include <kis_paint_information.h>
 
 #include "kis_imagepipe_brush.h"
-#include "kis_qimage_mask.h"
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 
@@ -54,8 +53,6 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
      */
     QCOMPARE(brush->width(), firstBrush->width());
     QCOMPARE(brush->height(), firstBrush->height());
-    QCOMPARE(brush->xSpacing(scale), firstBrush->xSpacing(scale));
-    QCOMPARE(brush->ySpacing(scale), firstBrush->ySpacing(scale));
     QCOMPARE(brush->boundary(), firstBrush->boundary());
 
     /**
@@ -82,10 +79,12 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
 
     int maskWidth = brush->maskWidth(realScale, realAngle, info);
     int maskHeight = brush->maskHeight(realScale, realAngle, info);
-    KisQImagemaskSP outputMask = brush->testingGetCurrentBrush(info)->createMask(realScale, subPixelX, subPixelY);
 
-    QCOMPARE(maskWidth, outputMask->width());
-    QCOMPARE(maskHeight, outputMask->height());
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisFixedPaintDeviceSP dev = brush->testingGetCurrentBrush(info)->paintDevice(cs, realScale, realAngle, info, subPixelX, subPixelY);
+
+    QCOMPARE(maskWidth, dev->bounds().width());
+    QCOMPARE(maskHeight, dev->bounds().height());
 
     KisBrush *newBrush = brush->testingGetCurrentBrush(info);
     QCOMPARE(oldBrush, newBrush);

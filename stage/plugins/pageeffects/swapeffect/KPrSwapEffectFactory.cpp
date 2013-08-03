@@ -35,7 +35,7 @@ KPrSwapEffectFactory::~KPrSwapEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP("Horizontal")
 };
 

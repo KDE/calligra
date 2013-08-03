@@ -121,7 +121,7 @@ public:
 };
 
 // built-in pixmap for scroll-first button
-static const char * arrow_leftmost_xpm[] = {
+static const char * const arrow_leftmost_xpm[] = {
     "10 10 2 1",
     "  c None",
     ". c #000000",
@@ -138,7 +138,7 @@ static const char * arrow_leftmost_xpm[] = {
 };
 
 // built-in pixmap for scroll-last button
-static const char * arrow_rightmost_xpm[] = {
+static const char * const arrow_rightmost_xpm[] = {
     "10 10 2 1",
     "  c None",
     ". c #000000",
@@ -155,7 +155,7 @@ static const char * arrow_rightmost_xpm[] = {
 };
 
 // built-in pixmap for scroll-left button
-static const char * arrow_left_xpm[] = {
+static const char * const arrow_left_xpm[] = {
     "10 10 2 1",
     "  c None",
     ". c #000000",
@@ -172,7 +172,7 @@ static const char * arrow_left_xpm[] = {
 };
 
 // built-in pixmap for scroll-right button
-static const char * arrow_right_xpm[] = {
+static const char * const arrow_right_xpm[] = {
     "10 10 2 1",
     "  c None",
     ". c #000000",

@@ -5,6 +5,7 @@ include_directories( ${KOODF_INCLUDES} ${KOODF2_INCLUDES} )
 ########### libkoodf2 ###############
 
 set(koodf2_LIB_SRCS
+    KoXmlStreamReader.cpp
     KoTable.cpp
     KoRow.cpp
     KoColumn.cpp
@@ -19,6 +20,13 @@ set(koodf2_LIB_SRCS
     KoRowStyle.cpp
     KoColumnStyle.cpp
     KoCellStyle.cpp
+
+    KoOdfStyle.cpp
+    KoOdfStyleProperties.cpp
+    KoOdfTextProperties.cpp
+    KoOdfParagraphProperties.cpp
+    KoOdfGraphicProperties.cpp
+    KoOdfStyleManager.cpp
 )
 
 kde4_add_library(koodf2 SHARED ${koodf2_LIB_SRCS})
