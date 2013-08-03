@@ -3,11 +3,12 @@
 
 #include "speller.h"
 #include <QObject>
+#include <kofake_export.h>
 
 namespace Sonnet
 {
 
-class BackgroundChecker : public QObject
+class KOFAKE_EXPORT BackgroundChecker : public QObject
 {
     Q_OBJECT
 public:
