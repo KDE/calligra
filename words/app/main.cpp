@@ -23,26 +23,24 @@
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData = newWordsAboutData();
+    QScopedPointer<KAboutData> about(newWordsAboutData());
 
 #if HAVE_X11
     // the "raster" graphicssystem is way faster then the "native" graphicssystem on x11 with Calligra Words
     qApp->setGraphicsSystem( QLatin1String("raster") );
 #endif
 
-    KCmdLineArgs::init(argc, argv, aboutData);
+    KCmdLineArgs::init(argc, argv, about.data());
 
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions(options);
     KoApplication::addCommonCommandLineOptions();
-    KoApplication app(argc, argv);
+    KoApplication app(argc, argv, about.data());
 
     if (!app.start())
         return 1;
     app.exec();
-
-    delete(aboutData);
 
     return 0;
 }

@@ -59,8 +59,6 @@ KarbonFactory::~KarbonFactory()
 {
     delete s_instance;
     s_instance = 0L;
-    delete s_aboutData;
-    s_aboutData = 0L;
 }
 
 QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)

@@ -27,6 +27,7 @@ class KoPart;
 
 class KoApplicationPrivate;
 class QSplashScreen;
+class KAboutData;
 
 /**
  *  @brief Base class for all %Calligra apps
@@ -53,7 +54,7 @@ public:
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
      */
-    KoApplication(int argc, char **argv);
+    KoApplication(int argc, char **argv, KAboutData *aboutData);
 
     /**
      *  Destructor.

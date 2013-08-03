@@ -46,6 +46,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <kaboutdata.h>
 
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
@@ -78,7 +79,7 @@ public:
     QList<KoPart *> partList;
 };
 
-KoApplication::KoApplication(int argc, char** argv)
+KoApplication::KoApplication(int argc, char** argv, KAboutData *aboutData)
     : QApplication(argc, argv)
     , d(new KoApplicationPrivate)
 {
@@ -113,6 +114,11 @@ KoApplication::KoApplication(int argc, char** argv)
         setStyle("Plastique");
         setStyle("Oxygen");
     }
+
+    setApplicationName(aboutData->appName());
+    setApplicationVersion(aboutData->version());
+    setOrganizationDomain(aboutData->organizationDomain());
+    setApplicationDisplayName(aboutData->programName());
 
 }
 

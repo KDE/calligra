@@ -50,16 +50,16 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
-    KAboutData *aboutData = newKritaAboutData();
+    QScopedPointer<KAboutData> about(newKritaAboutData());
 
-    KCmdLineArgs::init(argc, argv, aboutData);
+    KCmdLineArgs::init(argc, argv, about.data());
 
     KCmdLineOptions options;
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
     KCmdLineArgs::addCmdLineOptions(options);
     KoApplication::addCommonCommandLineOptions();
     // first create the application so we can create a  pixmap
-    KoApplication app(argc, argv);
+    KoApplication app(argc, argv, about.data());
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

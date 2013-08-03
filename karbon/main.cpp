@@ -53,13 +53,14 @@ public:
 
 extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
 {
-    KCmdLineArgs::init( argc, argv, KarbonFactory::aboutData() );
+    QScopedPointer<KAboutData> about(KarbonFactory::aboutData());
+    KCmdLineArgs::init( argc, argv, about.data() );
 
     KCmdLineOptions options;
     options.add("+[file]", ki18n( "File to open" ));
     KCmdLineArgs::addCmdLineOptions( options );
     KoApplication::addCommonCommandLineOptions();
-    KoApplication app(argc, argv);
+    KoApplication app(argc, argv, KarbonFactory::aboutData());
 
 #ifdef MAINTANER_WANTED_SPLASH
     // After creating the KApplication then create the pixmap from an xpm: we cannot get the

@@ -38,7 +38,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions(options);
     KoApplication::addCommonCommandLineOptions();
-    KoApplication app(argc, argv);
+    KoApplication app(argc, argv, aboutData.data());
 
     if (!app.start())
         return 1;

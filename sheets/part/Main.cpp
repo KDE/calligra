@@ -27,22 +27,20 @@ using namespace Calligra::Sheets;
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData = newAboutData();
+    QScopedPointer<KAboutData> about(newAboutData());
 
-    KCmdLineArgs::init(argc, argv, aboutData);
+    KCmdLineArgs::init(argc, argv, about.data());
 
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
     KCmdLineArgs::addCmdLineOptions(options);
     KoApplication::addCommonCommandLineOptions();
-    KoApplication app(argc, argv);
+    KoApplication app(argc, argv, about.data());
 
     if (!app.start())
         return 1;
     app.exec();
-
-    delete(aboutData);
 
     return 0;
 }
