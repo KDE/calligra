@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Excel 2007 Spreadsheets
+Name[bs]=Microsoft Excel 2007 tabele
 Name[ca]=Fulls de càlcul del Microsoft Excel 2007
 Name[da]=Microsoft Excel 2007-regneark
 Name[de]=Microsoft Excel 2007 Tabellenkalkulation
@@ -9,7 +10,7 @@ Name[es]=Hojas de cálculo Microsoft Excel 2007
 Name[et]=Microsoft Excel 2007 arvutustabelid
 Name[fr]=Tableurs Microsoft Excel 2007
 Name[gl]=Follas de cálculo Microsoft Excel 2007
-Name[hu]=Microsoft Excel 2007 táblázatok
+Name[hu]=Microsoft Excel 2007 munkafüzetek
 Name[it]=Fogli di calcolo Microsoft Excel 2007
 Name[kk]=Microsoft Excel 2007 эл.кестелері
 Name[lt]=„Microsoft Excel“ skaičiuoklės dokumentai

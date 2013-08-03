@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Works Document
+Name[bs]=Microsoft Works dokument:
 Name[ca]=Document Works de Microsoft
 Name[da]=Microsoft Works-dokument
 Name[de]=Microsoft Works Dokument
@@ -12,6 +13,7 @@ Name[fr]=Document Microsoft Works
 Name[gl]=Documento de Microsoft Works
 Name[hu]=Microsoft Works dokumentumok
 Name[it]=Documenti Microsoft Works
+Name[ja]=Microsoft Works 文書
 Name[kk]=Microsoft Works құжаты
 Name[lt]=Microsoft Works dokumentas
 Name[nb]=Microsoft Works-dokument:

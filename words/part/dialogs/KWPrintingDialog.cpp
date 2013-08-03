@@ -36,9 +36,10 @@
 #include <QTextLayout>
 #include <QTextDocument>
 
-KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, QWidget *parent)
-        : KoPrintingDialog(parent),
-        m_document(document)
+KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, KWView *view)
+    : KoPrintingDialog(view)
+    , m_document(document)
+    , m_view(view)
 {
     setShapeManager(shapeManager);
 
@@ -48,21 +49,6 @@ KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeMa
             break;
     }
     printer().setFromTo(documentFirstPage(), documentLastPage());
-
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs) {
-            QTextDocument *doc = tfs->document();
-            // TODO check if I can group changes into one undo-command and then redo it after printing.
-            QTextBlock block = doc->begin();
-            while (block.isValid()) {
-                QTextLayout *layout = block.layout();
-                if (layout)
-                    layout->clearAdditionalFormats();
-                block = block.next();
-            }
-        }
-    }
 }
 
 KWPrintingDialog::~KWPrintingDialog()
@@ -121,12 +107,19 @@ int KWPrintingDialog::documentLastPage() const
     return lastPage.pageNumber();
 }
 
+int KWPrintingDialog::documentCurrentPage() const
+{
+    return m_view->currentPage().pageNumber();
+}
+
 QAbstractPrintDialog::PrintDialogOptions KWPrintingDialog::printDialogOptions() const
 {
     return QAbstractPrintDialog::PrintToFile |
            QAbstractPrintDialog::PrintPageRange |
+           QAbstractPrintDialog::PrintCurrentPage |
            QAbstractPrintDialog::PrintCollateCopies |
-           QAbstractPrintDialog::DontUseSheet;
+           QAbstractPrintDialog::DontUseSheet |
+           QAbstractPrintDialog::PrintShowPageSize;
 }
 
 // options;

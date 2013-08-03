@@ -22,7 +22,7 @@
  */
 
 #ifndef DOCXXMLFOOTERREADER_H
-#define DOCXXMLFOOTERRREADER_H
+#define DOCXXMLFOOTERREADER_H
 
 #include <DocxXmlDocumentReader.h>
 
