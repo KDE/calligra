@@ -148,6 +148,8 @@ Page {
                     sketchView.zoomIn();
                 case "zoomOut":
                     sketchView.zoomOut();
+                case "switchToDesktop":
+                    switchToDesktopAction.trigger();
             }
         }
     }

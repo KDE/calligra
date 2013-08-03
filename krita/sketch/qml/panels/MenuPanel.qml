@@ -153,6 +153,17 @@ Item {
                 height: Constants.GridHeight;
             }
             Button {
+                id: switchButton;
+                width: visible ? Constants.GridWidth : 0;
+                height: Constants.GridHeight;
+                visible: switchToDesktopAction !== undefined;
+                color: "#000000"
+                shadow: false
+                image: "../images/svg/icon-switch.svg"
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: base.buttonClicked( "switchToDesktop" );
+            }
+            Button {
                 id: minimizeButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
