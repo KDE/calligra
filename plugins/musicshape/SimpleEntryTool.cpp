@@ -769,7 +769,7 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    QString file = KFileDialog::getSaveFileName(0, i18n("Export Sheet"),
+    QString file = QFileDialog::getSaveFileName(0, i18n("Export Sheet"),
                                                 QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                 "xml|MusicXML files (*.xml)");
     if (file.isEmpty() || file.isNull()) return;
