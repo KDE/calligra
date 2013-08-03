@@ -18,13 +18,13 @@
 
 #include "CategorizedItemDelegate.h"
 
-#include <kcategorydrawer.h>
-#include <kcategorizedsortfilterproxymodel.h>
+//#include <kcategorydrawer.h>
+//#include <kcategorizedsortfilterproxymodel.h>
 #include <QPainter>
 
 struct CategorizedItemDelegate::Private {
     QAbstractItemDelegate* fallback;
-    KCategoryDrawer* categoryDrawer;
+    //KCategoryDrawer* categoryDrawer;
     bool isFirstOfCategory(const QModelIndex& index);
 };
 
@@ -41,7 +41,7 @@ CategorizedItemDelegate::CategorizedItemDelegate(QAbstractItemDelegate* _fallbac
 {
     _fallback->setParent(this);
     d->fallback = _fallback;
-    d->categoryDrawer = new KCategoryDrawer;
+    //d->categoryDrawer = new KCategoryDrawer;
 }
 CategorizedItemDelegate::~CategorizedItemDelegate()
 {
@@ -74,7 +74,7 @@ void CategorizedItemDelegate::paint(QPainter * painter, const QStyleOptionViewIt
     // If it's a first category then we need to draw it
     if(d->isFirstOfCategory(index)) {
         // Prepare the rectangle for drawing the category
-        int h = d->categoryDrawer->categoryHeight(index, *option);
+        //int h = d->categoryDrawer->categoryHeight(index, *option);
         QRect rect = option->rect;
 
         // Make sure the categroy isn't drawned as selected
@@ -87,7 +87,7 @@ void CategorizedItemDelegate::paint(QPainter * painter, const QStyleOptionViewIt
         option->rect.setHeight(h);
 
         // draw the cateogry
-        d->categoryDrawer->drawCategory(index, 0, *option, painter);
+        //d->categoryDrawer->drawCategory(index, 0, *option, painter);
 
         // Prepare the rectangle for the item
         option->rect = rect;
@@ -114,7 +114,7 @@ QSize CategorizedItemDelegate::sizeHint(const QStyleOptionViewItem & option, con
     QSize size = d->fallback->sizeHint(option, index);
     // If is first of a category, then add the space needed to paint the category
     if(d->isFirstOfCategory(index)) {
-        size.setHeight(d->categoryDrawer->categoryHeight(index, option) + size.height());
+        //size.setHeight(d->categoryDrawer->categoryHeight(index, option) + size.height());
     }
     return size;
 }
@@ -125,7 +125,7 @@ void CategorizedItemDelegate::updateEditorGeometry(QWidget * editor, const QStyl
 
     // If it's the first category, then the editor need to be moved
     if(d->isFirstOfCategory(index)) {
-        int h = d->categoryDrawer->categoryHeight(index, option);
+        //int h = d->categoryDrawer->categoryHeight(index, option);
         editor->move(editor->x(), editor->y() + h);
         editor->resize(editor->width(), editor->height() - h);
     }
