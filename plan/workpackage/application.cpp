@@ -55,7 +55,6 @@
 #include <klocale.h>
 #include <QMenu>
 #include <kmessagebox.h>
-#include <kmimetypetrader.h>
 #include <kparts/partmanager.h>
 #include <krecentdocument.h>
 #include <kservice.h>

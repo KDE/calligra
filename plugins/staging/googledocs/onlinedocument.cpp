@@ -101,3 +101,4 @@ void OnlineDocument::receivedOnlineDocument(QString  path)
     url.setPath(path);
     view->shell()->openDocument(url);
 }
+#include <onlinedocument.moc>
