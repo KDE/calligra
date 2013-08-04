@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIWEBFORMS_CONTROLLER_H
-#define KEXIWEBFORMS_CONTROLLER_H
+#ifndef KEXIWEBFORMS_EXTJS_CONTROLLER_H
+#define KEXIWEBFORMS_EXTJS_CONTROLLER_H
 
 namespace KexiWebForms {
 namespace View {
@@ -47,4 +47,4 @@ private:
 
 }
 
-#endif /* KEXIWEBFORMS_CONTROLLER_H */
+#endif

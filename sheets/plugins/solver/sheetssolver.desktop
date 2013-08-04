@@ -1,5 +1,11 @@
 [Desktop Entry]
 Name=Sheets Solver Plugin
+Name[hu]=Sheets megoldó bővítmény
+Name[pt]='Plugin' de Resolução do Sheets
+Name[pt_BR]=Plugin de resolução do Sheets
+Name[sk]=Plugin riešiteľa Sheets
+Name[uk]=Додаток розв’язання задач для Sheets
+Name[x-test]=xxSheets Solver Pluginxx
 X-KDE-ServiceTypes=Sheets/ViewPlugin
 Type=Service
 X-KDE-Library=sheetssolver
