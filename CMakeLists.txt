@@ -304,6 +304,7 @@ endif()
 set(QT_QTGUI_LIBRARIES
   ${Qt5Gui_LIBRARIES}
   ${Qt5Widgets_LIBRARIES}
+  ${Qt5Network_LIBRARIES}
   ${Qt5PrintSupport_LIBRARIES}
   ${Qt5Svg_LIBRARIES}
   ${Qt5Xml_LIBRARIES}
@@ -323,6 +324,7 @@ set(QT_QTEST_LIBRARY ${Qt5QTest_LIBRARIES})
 set(QT_INCLUDES
     ${Qt5Gui_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt5Network_INCLUDE_DIRS}
     ${Qt5PrintSupport_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
     ${Qt5Xml_INCLUDE_DIRS}
