@@ -46,17 +46,17 @@
    <style:text-properties/>
   </style:style>
   <text:list-style style:name="standardListStyle">
-   <text:list-level-style-number style:num-format="" text:level="1">
+   <text:list-level-style-number text:level="1" style:num-format="">
  <style:list-level-properties text:min-label-width="0cm" text:space-before="0cm"/>
  <style:text-properties fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:text-underline-style="none"/>
 </text:list-level-style-number>
   </text:list-style>
   <text:list-style style:name="A1">
-   <text:list-level-style-bullet text:bullet-char="•" text:level="2">
+   <text:list-level-style-bullet text:level="2" text:bullet-char="•">
  <style:list-level-properties text:min-label-width="0.9525cm" text:space-before="0cm"/>
  <style:text-properties fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:text-underline-style="none"/>
 </text:list-level-style-bullet>
-   <text:list-level-style-number style:num-format="" text:level="2">
+   <text:list-level-style-number text:level="2" style:num-format="">
  <style:list-level-properties text:min-label-width="0.635cm" text:space-before="5.08cm"/>
  <style:text-properties fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:text-underline-style="none"/>
 </text:list-level-style-number>
@@ -105,7 +105,7 @@
    <style:page-layout-properties fo:margin-bottom="0pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="0pt" fo:page-height="254mm" fo:page-width="190.5mm" style:print-orientation="landscape"/>
   </style:page-layout>
   <text:list-style style:name="L1">
-   <text:list-level-style-bullet text:bullet-char="•" text:level="1">
+   <text:list-level-style-bullet text:level="1" text:bullet-char="•">
  <style:list-level-properties text:min-label-width="0.9525cm" text:space-before="0cm"/>
  <style:text-properties fo:font-size="32pt" fo:font-style="normal" fo:font-weight="normal" style:text-underline-style="none"/>
 </text:list-level-style-bullet>
@@ -115,57 +115,39 @@
   <style:master-page style:name="M1" draw:style-name="Mdp1" style:page-layout-name="pm1">
    <draw:frame presentation:style-name="A1" presentation:placeholder="true" presentation:class="title" draw:layer="layout" svg:x="12.7mm" svg:y="7.628819mm" svg:height="31.75mm" svg:width="228.6mm">
  <draw:text-box>
-  <text:p text:style-name="P1">
-   <text:span text:style-name="T1">Click to edit Master title style</text:span>
-  </text:p>
+  <text:p text:style-name="P1"><text:span text:style-name="T1">Click to edit Master title style</text:span></text:p>
  </draw:text-box>
 </draw:frame><draw:frame presentation:style-name="A2" presentation:placeholder="true" presentation:class="outline" draw:layer="layout" svg:x="12.7mm" svg:y="44.45mm" svg:height="125.721181mm" svg:width="228.6mm">
  <draw:text-box>
   <text:list text:style-name="L1">
    <text:list-item>
-    <text:p text:style-name="P2">
-     <text:span text:style-name="T2">Click to edit Master text styles</text:span>
-    </text:p>
+    <text:p text:style-name="P2"><text:span text:style-name="T2">Click to edit Master text styles</text:span></text:p>
    </text:list-item>
    <text:list-item>
-    <text:p text:style-name="P2">
-     <text:span text:style-name="T2">Second level</text:span>
-    </text:p>
+    <text:p text:style-name="P2"><text:span text:style-name="T2">Second level</text:span></text:p>
    </text:list-item>
    <text:list-item>
-    <text:p text:style-name="P2">
-     <text:span text:style-name="T2">Third level</text:span>
-    </text:p>
+    <text:p text:style-name="P2"><text:span text:style-name="T2">Third level</text:span></text:p>
    </text:list-item>
    <text:list-item>
-    <text:p text:style-name="P2">
-     <text:span text:style-name="T2">Fourth level</text:span>
-    </text:p>
+    <text:p text:style-name="P2"><text:span text:style-name="T2">Fourth level</text:span></text:p>
    </text:list-item>
    <text:list-item>
-    <text:p text:style-name="P2">
-     <text:span text:style-name="T2">Fifth level</text:span>
-    </text:p>
+    <text:p text:style-name="P2"><text:span text:style-name="T2">Fifth level</text:span></text:p>
    </text:list-item>
   </text:list>
  </draw:text-box>
 </draw:frame><draw:frame presentation:style-name="A3" presentation:placeholder="true" presentation:class="date-time" draw:layer="layout" svg:x="12.7mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="59.266667mm">
  <draw:text-box>
-  <text:p text:style-name="P3">
-   <text:span text:style-name="T3"><text:meta><presentation:date-time/></text:meta></text:span>
-  </text:p>
+  <text:p text:style-name="P3"><text:span text:style-name="T3"><text:meta><presentation:date-time/></text:meta></text:span></text:p>
  </draw:text-box>
 </draw:frame><draw:frame presentation:style-name="A4" presentation:placeholder="true" presentation:class="footer" draw:layer="layout" svg:x="86.783333mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="80.433333mm">
  <draw:text-box>
-  <text:p text:style-name="P1">
-   <text:span text:style-name="T3"><text:meta><presentation:footer/></text:meta></text:span>
-  </text:p>
+  <text:p text:style-name="P1"><text:span text:style-name="T3"><text:meta><presentation:footer/></text:meta></text:span></text:p>
  </draw:text-box>
 </draw:frame><draw:frame presentation:style-name="A5" presentation:placeholder="true" presentation:class="page-number" draw:layer="layout" svg:x="182.033333mm" svg:y="173.478472mm" svg:height="13.229167mm" svg:width="59.266667mm">
  <draw:text-box>
-  <text:p text:style-name="P4">
-   <text:span text:style-name="T3"><text:meta><text:page-number/></text:meta></text:span>
-  </text:p>
+  <text:p text:style-name="P4"><text:span text:style-name="T3"><text:meta><text:page-number/></text:meta></text:span></text:p>
  </draw:text-box>
 </draw:frame>
   </style:master-page>
