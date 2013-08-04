@@ -189,7 +189,6 @@ public:
     bool isDefine() const
     {
         bool isdefine = m_type == Define || m_type == Start;
-        assert(!isdefine || defineName.length(), elementName + " " + attributeName);
         return isdefine;
     }
     /**
@@ -1105,9 +1104,11 @@ void defineElement(QTextStream& out, const RNGItemPtr& item)
         QString name = makeCppName(i);
         if (i->isAttribute() && !item->requiredItems.contains(i) && !doneA.contains(name)) {
             QString type = i->singleType();
-            type = (type.isNull()) ?"const QString&" :type;
-            out << "    template<class T>\n";
-            out << "    void set_" << name << "(const T& value) {\n";
+            if (type.isNull()) {
+                out << "    template<class T>\n";
+                type = "const T&";
+            }
+            out << "    void set_" << name << "(" + type + " value) {\n";
             out << "        addAttribute(\"" + i->name() + "\", value);\n";
             out << "    }\n";
             doneA.insert(name);
@@ -1171,12 +1172,13 @@ void defineGroup(QTextStream& out, const RNGItemPtr& item)
         QString name = makeCppName(i);
         // also allow setting of required elements, because the might need to be
         // set in elements where the group is optional
-        // && !item->requiredItems.contains(i)
         if (i->isAttribute() && !done.contains(name)) {
             QString type = i->singleType();
-            type = (type.isNull()) ?"const QString&" :type;
-            out << "    template<class T>\n";
-            out << "    void set_" << name << "(const T& value) {\n";
+            if (type.isNull()) {
+                out << "    template<class T>\n";
+                type = "const T&";
+            }
+            out << "    void set_" << name << "(" << type << " value) {\n";
             out << "        xml.addAttribute(\"" + i->name() + "\", value);\n";
             out << "    }\n";
             done.insert(name);
