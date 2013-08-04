@@ -50,7 +50,7 @@
 #include <QHBoxLayout>
 
 
-K_PLUGIN_FACTORY(FlattenPathPluginFactory, registerPlugin<FlattenPathPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(FlattenPathPluginFactory, "karbonflattenpath.json", registerPlugin<FlattenPathPlugin>();)
 //K_EXPORT_PLUGIN(FlattenPathPluginFactory("karbonflattenpathplugin"))
 
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)

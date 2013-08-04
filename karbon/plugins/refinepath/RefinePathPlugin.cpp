@@ -51,7 +51,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-K_PLUGIN_FACTORY(RefinePathPluginFactory, registerPlugin<RefinePathPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(RefinePathPluginFactory, "karbonrefinepath.json", registerPlugin<RefinePathPlugin>();)
 //K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))
 
 RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &)

@@ -30,7 +30,7 @@
 #include "kis_simple_paintop_factory.h"
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(DynaPaintOpPluginFactory, registerPlugin<DynaPaintOpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(DynaPaintOpPluginFactory, "kritadynapaintop.json", registerPlugin<DynaPaintOpPlugin>();)
 //K_EXPORT_PLUGIN(DynaPaintOpPluginFactory("krita"))
 
 

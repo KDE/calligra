@@ -30,7 +30,7 @@ DESCRIPTION
 
 #include <QFile>
 
-K_PLUGIN_FACTORY(WMFImportFactory, registerPlugin<WMFImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(WMFImportFactory, "calligra_filter_wmf2svg.json", registerPlugin<WMFImport>();)
 //K_EXPORT_PLUGIN(WMFImportFactory("calligrafilters"))
 
 

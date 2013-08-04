@@ -39,7 +39,7 @@
 #include "dlg_offsetimage.h"
 #include "kis_offset_processing_visitor.h"
 
-K_PLUGIN_FACTORY(OffsetImageFactory, registerPlugin<OffsetImage>();)
+K_PLUGIN_FACTORY_WITH_JSON(OffsetImageFactory, "kritaoffsetimage.json", registerPlugin<OffsetImage>();)
 //K_EXPORT_PLUGIN(OffsetImageFactory("krita"))
 
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)

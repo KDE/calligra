@@ -32,7 +32,7 @@
 #include "kis_simple_paintop_factory.h"
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(CurvePaintOpPluginFactory, registerPlugin<CurvePaintOpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(CurvePaintOpPluginFactory, "kritacurvepaintop.json", registerPlugin<CurvePaintOpPlugin>();)
 //K_EXPORT_PLUGIN(CurvePaintOpPluginFactory("krita"))
 
 

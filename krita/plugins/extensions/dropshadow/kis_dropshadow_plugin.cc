@@ -37,7 +37,7 @@
 #include "kis_dropshadow.h"
 #include "dlg_dropshadow.h"
 
-K_PLUGIN_FACTORY(KisDropshadowPluginFactory, registerPlugin<KisDropshadowPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisDropshadowPluginFactory, "kritadropshadow.json", registerPlugin<KisDropshadowPlugin>();)
 //K_EXPORT_PLUGIN(KisDropshadowPluginFactory("krita"))
 
 KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QVariantList &)

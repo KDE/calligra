@@ -50,7 +50,7 @@ public:
 #include "MyPlugin.h"
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(MyPluginFactory, registerPlugin<MyPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(MyPluginFactory, MyPlugin.jsonregisterPlugin<MyPlugin>();)
 //K_EXPORT_PLUGIN(MyPluginFactory("DaPlugin"))
 
 MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {

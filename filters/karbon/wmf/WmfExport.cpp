@@ -37,7 +37,7 @@
 TODO: bs.wmf stroke in red with MSword and in brown with Words ??
 */
 
-K_PLUGIN_FACTORY(WmfExportFactory, registerPlugin<WmfExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(WmfExportFactory, "calligra_filter_karbon2wmf.json", registerPlugin<WmfExport>();)
 //K_EXPORT_PLUGIN(WmfExportFactory("calligrafilters"))
 
 

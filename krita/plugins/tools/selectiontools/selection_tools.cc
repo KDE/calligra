@@ -39,7 +39,7 @@
 #include "kis_tool_select_brush.h"
 //#include "kis_tool_select_magnetic.h"
 
-K_PLUGIN_FACTORY(SelectionToolsFactory, registerPlugin<SelectionTools>();)
+K_PLUGIN_FACTORY_WITH_JSON(SelectionToolsFactory, "kritaselectiontools.json", registerPlugin<SelectionTools>();)
 //K_EXPORT_PLUGIN(SelectionToolsFactory("krita"))
 
 

@@ -39,7 +39,7 @@
 #include "overviewdocker_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(OverviewDockerPluginFactory, registerPlugin<OverviewDockerPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(OverviewDockerPluginFactory, "krita_overviewdocker.json", registerPlugin<OverviewDockerPlugin>();)
 //K_EXPORT_PLUGIN(OverviewDockerPluginFactory( "krita" ) )
 
 class OverviewDockerDockFactory : public KoDockFactoryBase {

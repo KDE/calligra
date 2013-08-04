@@ -32,7 +32,7 @@
 
 #include "qml_converter.h"
 
-K_PLUGIN_FACTORY(ExportFactory, registerPlugin<QMLExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_qml_export.json", registerPlugin<QMLExport>();)
 //K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
 QMLExport::QMLExport(QObject *parent, const QVariantList &) : KoFilter(parent)

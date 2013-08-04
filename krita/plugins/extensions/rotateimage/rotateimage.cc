@@ -37,7 +37,7 @@
 
 #include "dlg_rotateimage.h"
 
-K_PLUGIN_FACTORY(RotateImageFactory, registerPlugin<RotateImage>();)
+K_PLUGIN_FACTORY_WITH_JSON(RotateImageFactory, "kritarotateimage.json", registerPlugin<RotateImage>();)
 //K_EXPORT_PLUGIN(RotateImageFactory("krita"))
 
 RotateImage::RotateImage(QObject *parent, const QVariantList &)

@@ -26,7 +26,7 @@
 // Qt
 #include <QByteArray>
 
-K_PLUGIN_FACTORY(LATEXExportFactory, registerPlugin<LATEXExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(LATEXExportFactory, "calligra_filter_kspread2tex.json", registerPlugin<LATEXExport>();)
 //K_EXPORT_PLUGIN(LATEXExportFactory("calligrafilters"))
 
 

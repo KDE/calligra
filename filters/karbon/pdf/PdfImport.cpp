@@ -32,7 +32,7 @@
 #include <poppler/PDFDoc.h>
 #include <poppler/GlobalParams.h>
 
-K_PLUGIN_FACTORY(PdfImportFactory, registerPlugin<PdfImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(PdfImportFactory, "calligra_filter_pdf2svg.json", registerPlugin<PdfImport>();)
 //K_EXPORT_PLUGIN(PdfImportFactory("calligrafilters"))
 
 PdfImport::PdfImport(QObject*parent, const QVariantList&)

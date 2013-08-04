@@ -34,7 +34,7 @@
 #include <QFile>
 
 
-K_PLUGIN_FACTORY(CdrImportFactory, registerPlugin<XFigImportFilter>();)
+K_PLUGIN_FACTORY_WITH_JSON(CdrImportFactory, "calligra_filter_xfig2odg.json", registerPlugin<XFigImportFilter>();)
 //K_EXPORT_PLUGIN(CdrImportFactory("calligrafilters"))
 
 

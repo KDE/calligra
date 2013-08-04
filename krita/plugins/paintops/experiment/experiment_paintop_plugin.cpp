@@ -31,7 +31,7 @@
 
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(ExperimentPaintOpPluginFactory, registerPlugin<ExperimentPaintOpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExperimentPaintOpPluginFactory, "kritaexperimentpaintop.json", registerPlugin<ExperimentPaintOpPlugin>();)
 //K_EXPORT_PLUGIN(ExperimentPaintOpPluginFactory("krita"))
 
 

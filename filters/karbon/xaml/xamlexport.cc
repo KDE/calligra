@@ -50,7 +50,7 @@
 #include <kdebug.h>
 
 
-K_PLUGIN_FACTORY(XAMLExportFactory, registerPlugin<XAMLExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(XAMLExportFactory, "karbon_xaml_export.json", registerPlugin<XAMLExport>();)
 //K_EXPORT_PLUGIN(XAMLExportFactory("calligrafilters"))
 
 

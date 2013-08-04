@@ -45,7 +45,7 @@
 #include "kis_entry_editor.h"
 #include "kis_meta_data_editor.h"
 
-K_PLUGIN_FACTORY(metadataeditorPluginFactory, registerPlugin<metadataeditorPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(metadataeditorPluginFactory, "kritametadataeditor.json", registerPlugin<metadataeditorPlugin>();)
 //K_EXPORT_PLUGIN(metadataeditorPluginFactory("krita"))
 
 metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &)

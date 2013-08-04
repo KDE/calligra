@@ -42,7 +42,7 @@
 
 #include "flow_imageexportdialog.h"
 
-K_PLUGIN_FACTORY(FlowImageExportFactory, registerPlugin<Flow::ImageExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(FlowImageExportFactory, "flow_image_export.json", registerPlugin<Flow::ImageExport>();)
 //K_EXPORT_PLUGIN(FlowImageExportFactory("FlowImageExport"))
 
 namespace Flow

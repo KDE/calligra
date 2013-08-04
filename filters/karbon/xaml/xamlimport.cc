@@ -39,7 +39,7 @@
 #include <QList>
 #include <kfilterdev.h>
 
-K_PLUGIN_FACTORY(XAMLImportFactory, registerPlugin<XAMLImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(XAMLImportFactory, "karbon_xaml_import.json", registerPlugin<XAMLImport>();)
 //K_EXPORT_PLUGIN(XAMLImportFactory("calligrafilters"))
 
 XAMLImport::XAMLImport(KoFilter *, const char *, const QVariantList&) :

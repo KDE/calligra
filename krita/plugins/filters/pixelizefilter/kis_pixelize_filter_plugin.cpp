@@ -29,7 +29,7 @@
 
 #include "kis_pixelize_filter.h"
 
-K_PLUGIN_FACTORY(KisPixelizeFilterPluginFactory, registerPlugin<KisPixelizeFilterPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisPixelizeFilterPluginFactory, "kritapixelizefilter.json", registerPlugin<KisPixelizeFilterPlugin>();)
 //K_EXPORT_PLUGIN(KisPixelizeFilterPluginFactory("krita"))
 
 KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QVariantList &)

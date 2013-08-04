@@ -58,7 +58,7 @@
 #include "writeodf/writeodfnumber.h"
 #include "writeodf/helpers.h"
 
-K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExcelImportFactory, "calligra_filter_xls2ods.json", registerPlugin<ExcelImport>();)
 //K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
 
 #define UNICODE_EUR 0x20AC

@@ -41,7 +41,7 @@
 #include "kis_dlg_options_tiff.h"
 #include "ui_kis_wdg_options_tiff.h"
 
-K_PLUGIN_FACTORY(KisTIFFExportFactory, registerPlugin<KisTIFFExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisTIFFExportFactory, "krita_tiff_export.json", registerPlugin<KisTIFFExport>();)
 //K_EXPORT_PLUGIN(KisTIFFExportFactory("calligrafilters"))
 
 KisTIFFExport::KisTIFFExport(QObject *parent, const QVariantList &) : KoFilter(parent)

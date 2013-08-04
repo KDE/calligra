@@ -44,7 +44,7 @@
 #include <kis_flipbook.h>
 #include <kis_flipbook_item.h>
 
-K_PLUGIN_FACTORY(KisFlipbookImportFactory, registerPlugin<KisFlipbookImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisFlipbookImportFactory, "krita_flipbook_import.json", registerPlugin<KisFlipbookImport>();)
 //K_EXPORT_PLUGIN(KisFlipbookImportFactory("calligrafilters"))
 
 KisFlipbookImport::KisFlipbookImport(QObject *parent, const QVariantList &)

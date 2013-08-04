@@ -47,7 +47,7 @@
 #include "kis_wdg_color.h"
 #include "ui_wdgcoloroptions.h"
 
-K_PLUGIN_FACTORY(KritaColorGeneratorFactory, registerPlugin<KritaColorGenerator>();)
+K_PLUGIN_FACTORY_WITH_JSON(KritaColorGeneratorFactory, "kritacolorgenerator.json", egisterPlugin<KritaColorGenerator>();)
 //K_EXPORT_PLUGIN(KritaColorGeneratorFactory("krita"))
 
 KritaColorGenerator::KritaColorGenerator(QObject *parent, const QVariantList &)

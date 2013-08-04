@@ -25,7 +25,7 @@
 
 #include <filter/kis_filter_registry.h>
 
-K_PLUGIN_FACTORY(UnsharpPluginFactory, registerPlugin<UnsharpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(UnsharpPluginFactory, "kritaunsharpfilter.json", registerPlugin<UnsharpPlugin>();)
 //K_EXPORT_PLUGIN(UnsharpPluginFactory("krita"))
 
 UnsharpPlugin::UnsharpPlugin(QObject *parent, const QVariantList &)

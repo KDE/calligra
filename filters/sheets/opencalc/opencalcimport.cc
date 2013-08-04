@@ -64,7 +64,7 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(OpenCalcImportFactory, registerPlugin<OpenCalcImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(OpenCalcImportFactory, "calligra_filter_opencalc2sheets.json", registerPlugin<OpenCalcImport>();)
 //K_EXPORT_PLUGIN(OpenCalcImportFactory("kspreadopencalcimport","calligrafilters"))
 
 OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)

@@ -29,7 +29,7 @@
 
 #include "HistoryDock.h"
 
-K_PLUGIN_FACTORY(HistoryPluginFactory, registerPlugin<HistoryPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(HistoryPluginFactory, "kritahistorydocker.json", registerPlugin<HistoryPlugin>();)
 //K_EXPORT_PLUGIN(HistoryPluginFactory( "krita" ) )
 
 class HistoryDockFactory : public KoDockFactoryBase

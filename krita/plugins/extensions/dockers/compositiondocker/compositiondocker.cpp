@@ -39,7 +39,7 @@
 #include "compositiondocker_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(CompositionDockerPluginFactory, registerPlugin<CompositionDockerPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(CompositionDockerPluginFactory, "krita_compositiondocker.json", registerPlugin<CompositionDockerPlugin>();)
 //K_EXPORT_PLUGIN(CompositionDockerPluginFactory( "krita" ) )
 
 class CompositionDockerDockFactory : public KoDockFactoryBase {

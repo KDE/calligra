@@ -52,7 +52,7 @@
 #include "ui_wdgrandompickoptions.h"
 #include <kis_iterator_ng.h>
 
-K_PLUGIN_FACTORY(KritaRandomPickFilterFactory, registerPlugin<KritaRandomPickFilter>();)
+K_PLUGIN_FACTORY_WITH_JSON(KritaRandomPickFilterFactory, "kritarandompickfilter.json", registerPlugin<KritaRandomPickFilter>();)
 //K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
 
 KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QVariantList &)

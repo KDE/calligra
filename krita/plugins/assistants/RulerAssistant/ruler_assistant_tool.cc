@@ -26,7 +26,7 @@
 #include "PerspectiveAssistant.h"
 //#include "mesh_assistant.h"
 
-K_PLUGIN_FACTORY(RulerAssistantToolFactory, registerPlugin<RulerAssistantToolPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(RulerAssistantToolFactory, "kritarulerassistanttool.json", registerPlugin<RulerAssistantToolPlugin>();)
 //K_EXPORT_PLUGIN(RulerAssistantToolFactory("krita"))
 
 

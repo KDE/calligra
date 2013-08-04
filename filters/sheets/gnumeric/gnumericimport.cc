@@ -215,7 +215,7 @@ QTime GNUMERICFilter::GnumericDate::getTime(double num)
     return time;
 }
 
-K_PLUGIN_FACTORY(GNUMERICFilterFactory, registerPlugin<GNUMERICFilter>();)
+K_PLUGIN_FACTORY_WITH_JSON(GNUMERICFilterFactory, "calligra_filter_gnumeric2sheets.json", registerPlugin<GNUMERICFilter>();)
 //K_EXPORT_PLUGIN(GNUMERICFilterFactory("calligrafilters"))
 
 GNUMERICFilter::GNUMERICFilter(QObject* parent, const QVariantList &)

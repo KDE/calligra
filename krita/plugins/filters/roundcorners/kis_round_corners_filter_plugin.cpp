@@ -26,7 +26,7 @@
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
 
-K_PLUGIN_FACTORY(KisRoundCornersFilterPluginFactory, registerPlugin<KisRoundCornersFilterPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisRoundCornersFilterPluginFactory, "kritaroundcornersfilter.json", registerPlugin<KisRoundCornersFilterPlugin>();)
 //K_EXPORT_PLUGIN(KisRoundCornersFilterPluginFactory("krita"))
 
 KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const QVariantList &)

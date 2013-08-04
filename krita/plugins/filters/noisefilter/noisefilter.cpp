@@ -50,7 +50,7 @@
 #include "ui_wdgnoiseoptions.h"
 #include <kis_iterator_ng.h>
 
-K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
+K_PLUGIN_FACTORY_WITH_JSON(KritaNoiseFilterFactory, "kritanoisefilter.json", registerPlugin<KritaNoiseFilter>();)
 //K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)

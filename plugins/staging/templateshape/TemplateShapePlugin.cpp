@@ -34,7 +34,7 @@
 #include "TemplateToolFactory.h"
 
 
-K_PLUGIN_FACTORY(TemplateShapePluginFactory, registerPlugin<TemplateShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(TemplateShapePluginFactory, "calligra_shape_template.json", registerPlugin<TemplateShapePlugin>();)
 //K_EXPORT_PLUGIN(TemplateShapePluginFactory("TemplateShape"))
 
 TemplateShapePlugin::TemplateShapePlugin(QObject *parent, const QVariantList &)

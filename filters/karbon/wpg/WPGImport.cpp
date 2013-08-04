@@ -42,7 +42,7 @@
 
 #include <iostream>
 
-K_PLUGIN_FACTORY(WPGImportFactory, registerPlugin<WPGImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(WPGImportFactory, "calligra_filter_wpg2svg.json", registerPlugin<WPGImport>();)
 //K_EXPORT_PLUGIN(WPGImportFactory("calligrafilters"))
 
 WPGImport::WPGImport(QObject* parent, const QVariantList&)

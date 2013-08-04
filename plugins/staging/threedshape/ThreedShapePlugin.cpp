@@ -34,7 +34,7 @@
 //#include "ThreedToolFactory.h"
 
 
-K_PLUGIN_FACTORY(ThreedShapePluginFactory, registerPlugin<ThreedShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ThreedShapePluginFactory, "calligra_shape_threed.json", registerPlugin<ThreedShapePlugin>();)
 //K_EXPORT_PLUGIN(ThreedShapePluginFactory("ThreedShape"))
 
 ThreedShapePlugin::ThreedShapePlugin(QObject *parent, const QVariantList &)

@@ -47,7 +47,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_action.h"
 
-K_PLUGIN_FACTORY(ImageSizeFactory, registerPlugin<ImageSize>();)
+K_PLUGIN_FACTORY_WITH_JSON(ImageSizeFactory, "kritaimagesize.json", registerPlugin<ImageSize>();)
 //K_EXPORT_PLUGIN(ImageSizeFactory("krita"))
 
 ImageSize::ImageSize(QObject *parent, const QVariantList &)

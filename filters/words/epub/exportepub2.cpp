@@ -56,7 +56,7 @@
 #include "SvmPainterBackend.h"
 
 
-K_PLUGIN_FACTORY(ExportEpub2Factory, registerPlugin<ExportEpub2>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExportEpub2Factory, "calligra_filter_odt2epub2.json", registerPlugin<ExportEpub2>();)
 //K_EXPORT_PLUGIN(ExportEpub2Factory("calligrafilters"))
 
 

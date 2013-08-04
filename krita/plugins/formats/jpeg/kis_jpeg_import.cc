@@ -30,7 +30,7 @@
 
 #include "kis_jpeg_converter.h"
 
-K_PLUGIN_FACTORY(JPEGImportFactory, registerPlugin<KisJPEGImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(JPEGImportFactory, "krita_jpeg_import.json", registerPlugin<KisJPEGImport>();)
 //K_EXPORT_PLUGIN(JPEGImportFactory("calligrafilters"))
 
 KisJPEGImport::KisJPEGImport(QObject *parent, const QVariantList &) : KoFilter(parent)

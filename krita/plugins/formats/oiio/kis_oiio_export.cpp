@@ -34,7 +34,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 
-K_PLUGIN_FACTORY(KisOiioExportFactory, registerPlugin<KisOiioExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisOiioExportFactory, "krita_oiio_export.json", registerPlugin<KisOiioExport>();)
 //K_EXPORT_PLUGIN(KisOiioExportFactory("calligrafilters"))
 
 KisOiioExport::KisOiioExport(QObject *parent, const QVariantList &) : KoFilter(parent)

@@ -32,7 +32,7 @@
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
 
-K_PLUGIN_FACTORY(DBaseImportFactory, registerPlugin<DBaseImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(DBaseImportFactory, "calligra_filter_dbase2kspread.json", registerPlugin<DBaseImport>();)
 //K_EXPORT_PLUGIN(DBaseImportFactory("calligrafilters"))
 
 

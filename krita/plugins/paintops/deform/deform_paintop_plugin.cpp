@@ -29,7 +29,7 @@
 #include "kis_deform_paintop_factory.h"
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(DeformPaintOpPluginFactory, registerPlugin<DeformPaintOpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(DeformPaintOpPluginFactory, "kritadeformpaintop.json", registerPlugin<DeformPaintOpPlugin>();)
 //K_EXPORT_PLUGIN(DeformPaintOpPluginFactory("krita"))
 
 

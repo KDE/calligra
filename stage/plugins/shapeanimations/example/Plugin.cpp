@@ -21,7 +21,7 @@
 #include <kpluginfactory.h>
 
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_shapeanimation_example.json", registerPlugin<Plugin>();)
 //K_EXPORT_PLUGIN(PluginFactory("KPrShapeAnimation"))
 
 Plugin::Plugin(QObject *parent, const QVariantList &)

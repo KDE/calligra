@@ -25,7 +25,7 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "flowdockersplugin.json", registerPlugin<Plugin>();)
 //K_EXPORT_PLUGIN(PluginFactory("flowdockersplugin"))
 
 Plugin::Plugin(QObject *parent, const QVariantList&)

@@ -45,7 +45,7 @@ public:
     ~MyToolFactory() {}
     KoToolBase *createTool(KoCanvasBase *canvas);
 };
-K_PLUGIN_FACTORY(MyToolFactoryFactory, registerPlugin<MyToolFactory>();)
+K_PLUGIN_FACTORY_WITH_JSON(MyToolFactoryFactory, MyTool.json, registerPlugin<MyToolFactory>();)
 //K_EXPORT_PLUGIN(MyToolFactoryFactory("MyTool"))
 </pre>
 

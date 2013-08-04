@@ -31,5 +31,5 @@ static QObject* createDocInfoPropsPage(QWidget* w, QObject* parent, const QVaria
     return new KoDocumentInfoPropsPage(props, args);
 }
 
-K_PLUGIN_FACTORY(PropsDlgFactory, registerPlugin<KoDocumentInfoPropsPage>(QString(), createDocInfoPropsPage);)
+K_PLUGIN_FACTORY_WITH_JSON(PropsDlgFactory, "calligradocinfopropspage.json", registerPlugin<KoDocumentInfoPropsPage>(QString(), createDocInfoPropsPage);)
 //K_EXPORT_PLUGIN(PropsDlgFactory("calligra"))

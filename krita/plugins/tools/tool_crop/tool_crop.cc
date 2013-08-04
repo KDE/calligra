@@ -37,7 +37,7 @@
 #include <kis_types.h>
 #include <KoToolRegistry.h>
 
-K_PLUGIN_FACTORY(ToolCropFactory, registerPlugin<ToolCrop>();)
+K_PLUGIN_FACTORY_WITH_JSON(ToolCropFactory, "kritatoolcrop.json", registerPlugin<ToolCrop>();)
 //K_EXPORT_PLUGIN(ToolCropFactory("krita"))
 
 

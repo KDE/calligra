@@ -26,7 +26,7 @@
 #include "WebShapeFactory.h"
 #include "WebToolFactory.h"
 
-K_PLUGIN_FACTORY(WebShapePluginFactory, registerPlugin<WebShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(WebShapePluginFactory, "braindump_shape_web.json", registerPlugin<WebShapePlugin>();)
 //K_EXPORT_PLUGIN(WebShapePluginFactory("WebShapePlugin"))
 
 WebShapePlugin::WebShapePlugin(QObject *parent, const QVariantList&)

@@ -49,7 +49,7 @@
 
 OIIO_NAMESPACE_USING
 
-K_PLUGIN_FACTORY(KisOiioImportFactory, registerPlugin<KisOiioImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisOiioImportFactory, "krita_oiio_import.json", registerPlugin<KisOiioImport>();)
 //K_EXPORT_PLUGIN(KisOiioImportFactory("calligrafilters"))
 
 KisOiioImport::KisOiioImport(QObject *parent, const QVariantList &) : KoFilter(parent)

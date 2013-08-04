@@ -38,7 +38,7 @@
 
 #include "kis_tool_polyline.h"
 
-K_PLUGIN_FACTORY(ToolPolylineFactory, registerPlugin<ToolPolyline>();)
+K_PLUGIN_FACTORY_WITH_JSON(ToolPolylineFactory, "kritatoolpolyline.json", registerPlugin<ToolPolyline>();)
 //K_EXPORT_PLUGIN(ToolPolylineFactory("krita"))
 
 

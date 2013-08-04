@@ -32,7 +32,7 @@
 
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(ChalkPaintOpPluginFactory, registerPlugin<ChalkPaintOpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ChalkPaintOpPluginFactory, "kritachalkpaintop.json", registerPlugin<ChalkPaintOpPlugin>();)
 //K_EXPORT_PLUGIN(ChalkPaintOpPluginFactory("krita"))
 
 

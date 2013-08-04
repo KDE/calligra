@@ -33,7 +33,7 @@
 #include "dlg_feather_selection.h"
 #include "modify_selection_operations.h"
 
-K_PLUGIN_FACTORY(ModifySelectionFactory, registerPlugin<ModifySelection>();)
+K_PLUGIN_FACTORY_WITH_JSON(ModifySelectionFactory, "kritamodifyselection.json", registerPlugin<ModifySelection>();)
 //K_EXPORT_PLUGIN(ModifySelectionFactory("krita"))
 
 ModifySelection::ModifySelection(QObject *parent, const QVariantList &)

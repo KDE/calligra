@@ -41,7 +41,7 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(QPROImportFactory, registerPlugin<QpImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(QPROImportFactory, "calligra_filter_qpro2sheets.json", registerPlugin<QpImport>();)
 //K_EXPORT_PLUGIN(QPROImportFactory("calligrafilters"))
 
 // ---------------------------------------------------------------

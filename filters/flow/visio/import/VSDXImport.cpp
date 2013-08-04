@@ -59,7 +59,7 @@ private:
     }
 };
 
-K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<VSDXImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(VSDXImportFactory, "calligra_filter_vsdx2odg.json", registerPlugin<VSDXImport>();)
 //K_EXPORT_PLUGIN(VSDXImportFactory("calligrafilters"))
 
 VSDXImport::VSDXImport(QObject* parent, const QVariantList&)

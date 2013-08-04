@@ -46,7 +46,7 @@
 #include "kis_png_converter.h"
 #include <kis_iterator_ng.h>
 
-K_PLUGIN_FACTORY(KisPNGExportFactory, registerPlugin<KisPNGExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisPNGExportFactory, "krita_png_export.json", registerPlugin<KisPNGExport>();)
 //K_EXPORT_PLUGIN(KisPNGExportFactory("calligrafilters"))
 
 KisPNGExport::KisPNGExport(QObject *parent, const QVariantList &) : KoFilter(parent)

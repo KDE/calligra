@@ -26,7 +26,7 @@
 #include <QTextDocument>
 #include <QTextDocumentWriter>
 
-K_PLUGIN_FACTORY(RTFImportFactory, registerPlugin<RTFImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(RTFImportFactory, "calligra_filter_rtf2odt.json", registerPlugin<RTFImport>();)
 //K_EXPORT_PLUGIN(RTFImportFactory("calligrafilters"))
 
 RTFImport::RTFImport(QObject* parent, const QVariantList&)

@@ -43,7 +43,7 @@
 #include "kis_tool_pan.h"
 #include "kis_tool_pencil.h"
 
-K_PLUGIN_FACTORY(DefaultToolsFactory, registerPlugin<DefaultTools>();)
+K_PLUGIN_FACTORY_WITH_JSON(DefaultToolsFactory, "kritadefaulttools.json", registerPlugin<DefaultTools>();)
 //K_EXPORT_PLUGIN(DefaultToolsFactory("krita"))
 
 

@@ -26,7 +26,7 @@
 #include "StateShapeFactory.h"
 #include "StateToolFactory.h"
 
-K_PLUGIN_FACTORY(StateShapePluginFactory, registerPlugin<StateShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(StateShapePluginFactory, "braindump_shape_state.json", registerPlugin<StateShapePlugin>();)
 //K_EXPORT_PLUGIN(StateShapePluginFactory( "StateShapePlugin" ) )
 
 

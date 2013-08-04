@@ -39,7 +39,7 @@
 
 class KisExternalLayer;
 
-K_PLUGIN_FACTORY(ExportFactory, registerPlugin<psdExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_psd_export.json", registerPlugin<psdExport>();)
 //K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
 psdExport::psdExport(QObject *parent, const QVariantList &) : KoFilter(parent)

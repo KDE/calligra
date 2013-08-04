@@ -32,7 +32,7 @@
 
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(ParticlePaintOpPluginFactory, registerPlugin<ParticlePaintOpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ParticlePaintOpPluginFactory, "kritaparticlepaintop.json", registerPlugin<ParticlePaintOpPlugin>();)
 //K_EXPORT_PLUGIN(ParticlePaintOpPluginFactory("krita"))
 
 ParticlePaintOpPlugin::ParticlePaintOpPlugin(QObject *parent, const QVariantList &)

@@ -30,7 +30,7 @@
 
 #include "kis_tiff_converter.h"
 
-K_PLUGIN_FACTORY(TIFFImportFactory, registerPlugin<KisTIFFImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(TIFFImportFactory, "krita_tiff_import.json", registerPlugin<KisTIFFImport>();)
 //K_EXPORT_PLUGIN(TIFFImportFactory("calligrafilters"))
 
 KisTIFFImport::KisTIFFImport(QObject *parent, const QVariantList &) : KoFilter(parent)

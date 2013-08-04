@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-K_PLUGIN_FACTORY(WordsScriptingFactory, registerPlugin<KWScriptingPart>();)
+K_PLUGIN_FACTORY_WITH_JSON(WordsScriptingFactory, "krossmodulewords.json", registerPlugin<KWScriptingPart>();)
 //K_EXPORT_PLUGIN(WordsScriptingFactory("krossmodulewords"))
 
 KWScriptingPart::KWScriptingPart(QObject* parent, const QVariantList& args)

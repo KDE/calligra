@@ -39,7 +39,7 @@
 #include "flipbookdocker_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(FlipbookDockerPluginFactory, registerPlugin<FlipbookDockerPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(FlipbookDockerPluginFactory, "krita_flipbookdocker.json", registerPlugin<FlipbookDockerPlugin>();)
 //K_EXPORT_PLUGIN(FlipbookDockerPluginFactory( "krita" ) )
 
 class FlipbookDockerDockFactory : public KoDockFactoryBase {

@@ -32,7 +32,7 @@
 #include "zigzagwipe/ZigZagWipeEffectFactory.h"
 #include "barnzigzagwipe/BarnZigZagWipeEffectFactory.h"
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kpr_pageeffect_edgewipe.json", registerPlugin<Plugin>();)
 //K_EXPORT_PLUGIN(PluginFactory("KPrPageEffect"))
 
 Plugin::Plugin(QObject *parent, const QVariantList &)

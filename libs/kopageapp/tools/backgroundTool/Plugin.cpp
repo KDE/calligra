@@ -25,7 +25,7 @@
 
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kopabackgroundtool.json", registerPlugin<Plugin>();)
 //K_EXPORT_PLUGIN(PluginFactory("kopageapplication-backgroundtool"))
 
 Plugin::Plugin( QObject* parent, const QVariantList& )

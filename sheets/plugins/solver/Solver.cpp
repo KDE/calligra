@@ -39,7 +39,7 @@
 using namespace Calligra::Sheets::Plugins;
 
 // make the plugin available
-K_PLUGIN_FACTORY(SolverFactory, registerPlugin<Calligra::Sheets::Plugins::Solver>();)
+K_PLUGIN_FACTORY_WITH_JSON(SolverFactory, "sheetssolver.json", registerPlugin<Calligra::Sheets::Plugins::Solver>();)
 //K_EXPORT_PLUGIN(SolverFactory("sheetssolver"))
 
 Calligra::Sheets::View* s_view = 0;

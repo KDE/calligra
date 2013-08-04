@@ -38,7 +38,7 @@
 // Kross
 #include <kross/core/manager.h>
 
-K_PLUGIN_FACTORY(KSpreadScriptingFactory, registerPlugin< ScriptingPart >();)
+K_PLUGIN_FACTORY_WITH_JSON(KSpreadScriptingFactory, "krossmodulesheets.json", registerPlugin< ScriptingPart >();)
 //K_EXPORT_PLUGIN(KSpreadScriptingFactory("krossmodulesheets"))
 
 /// \internal d-pointer class.

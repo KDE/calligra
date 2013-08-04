@@ -31,7 +31,7 @@
 #include "kis_filterop_settings.h"
 #include "kis_filterop_settings_widget.h"
 
-K_PLUGIN_FACTORY(FilterOpFactory, registerPlugin<FilterOp>();)
+K_PLUGIN_FACTORY_WITH_JSON(FilterOpFactory, "kritafilterop.json", registerPlugin<FilterOp>();)
 //K_EXPORT_PLUGIN(FilterOpFactory("krita"))
 
 FilterOp::FilterOp(QObject *parent, const QVariantList &)

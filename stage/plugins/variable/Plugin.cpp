@@ -27,7 +27,7 @@
 #include "PresentationVariableFactory.h"
 
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kprvariables.json", registerPlugin<Plugin>();)
 //K_EXPORT_PLUGIN(PluginFactory("kprvariables"))
 
 Plugin::Plugin(QObject *parent, const QVariantList &)

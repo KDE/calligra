@@ -35,7 +35,7 @@
 
 #include "MusicShapeFactory.h"
 
-K_PLUGIN_FACTORY(MusicShapePluginFactory, registerPlugin<MusicShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(MusicShapePluginFactory, "calligra_shape_music.json", registerPlugin<MusicShapePlugin>();)
 //K_EXPORT_PLUGIN(MusicShapePluginFactory( "MusicShape" ))
 
 MusicShapePlugin::MusicShapePlugin( QObject *,  const QVariantList& )

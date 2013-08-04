@@ -38,7 +38,7 @@
 
 #include <math.h>
 
-K_PLUGIN_FACTORY(KarbonImportFactory, registerPlugin<KarbonImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KarbonImportFactory, "calligra_filter_karbon1x2karbon.json", registerPlugin<KarbonImport>();)
 //K_EXPORT_PLUGIN(KarbonImportFactory("calligrafilters"))
 
 KarbonImport::KarbonImport(QObject*parent, const QVariantList&)

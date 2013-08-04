@@ -44,7 +44,7 @@ int planMpxjDbg() {
     return s_area;
 }
 
-K_PLUGIN_FACTORY(MpxjImportFactory, registerPlugin<MpxjImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(MpxjImportFactory, "calligra_filter_mpp2plan.json", registerPlugin<MpxjImport>();)
 //K_EXPORT_PLUGIN(MpxjImportFactory("calligrafilters"))
 
 MpxjImport::MpxjImport(QObject* parent, const QVariantList &)

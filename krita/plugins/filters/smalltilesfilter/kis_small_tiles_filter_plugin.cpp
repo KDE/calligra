@@ -26,7 +26,7 @@
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
 
-K_PLUGIN_FACTORY(KisSmallTilesFilterPluginFactory, registerPlugin<KisSmallTilesFilterPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisSmallTilesFilterPluginFactory, "kritasmalltilesfilter.json", registerPlugin<KisSmallTilesFilterPlugin>();)
 //K_EXPORT_PLUGIN(KisSmallTilesFilterPluginFactory("krita"))
 
 KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QVariantList &)

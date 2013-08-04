@@ -39,7 +39,7 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(TableShapePluginFactory, registerPlugin<TableDeferredShapeFactory>();)
+K_PLUGIN_FACTORY_WITH_JSON(TableShapePluginFactory, "calligra_shape_spreadsheet-deferred.json", registerPlugin<TableDeferredShapeFactory>();)
 //K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))
 
 TableDeferredShapeFactory::TableDeferredShapeFactory(QObject *parent, const QVariantList&)

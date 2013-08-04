@@ -28,7 +28,7 @@
 #include "mypaint_paintop_factory.h"
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(MyPaintPluginFactory, registerPlugin<MyPaintPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(MyPaintPluginFactory, "kritamypaintpaintop.json", registerPlugin<MyPaintPlugin>();)
 //K_EXPORT_PLUGIN(MyPaintPluginFactory("krita"))
 
 

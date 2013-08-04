@@ -57,7 +57,7 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(GNUMERICExportFactory, registerPlugin<GNUMERICExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(GNUMERICExportFactory, "calligra_filter_sheets2gnumeric.json", registerPlugin<GNUMERICExport>();)
 //K_EXPORT_PLUGIN(GNUMERICExportFactory("calligrafilters"))
 
 GNUMERICExport::GNUMERICExport(QObject* parent, const QVariantList&)

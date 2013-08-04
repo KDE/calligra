@@ -55,7 +55,7 @@ using std::cos;
 #define M_PI 3.14159265358979323846
 #endif
 
-K_PLUGIN_FACTORY(Filterkpr2odfFactory, registerPlugin<Filterkpr2odf>();)
+K_PLUGIN_FACTORY_WITH_JSON(Filterkpr2odfFactory, "calligra_filter_kpr2odp.json", registerPlugin<Filterkpr2odf>();)
 //K_EXPORT_PLUGIN(Filterkpr2odfFactory("calligrafilters"))
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent, const QVariantList&)

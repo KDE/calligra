@@ -42,7 +42,7 @@
 
 #include <QFileInfo>
 
-K_PLUGIN_FACTORY(SvgImportFactory, registerPlugin<SvgImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(SvgImportFactory, "calligra_filter_svg2karbon.json", registerPlugin<SvgImport>();)
 //K_EXPORT_PLUGIN(SvgImportFactory("calligrafilters"))
 
 

@@ -32,7 +32,7 @@
 #include "kis_burnshadows_adjustment.h"
 #include "kis_color_balance_adjustment.h"
 
-K_PLUGIN_FACTORY(ExtensionsPluginFactory, registerPlugin<ExtensionsPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExtensionsPluginFactory, "krita_colorspaces_extensions_plugin.json", registerPlugin<ExtensionsPlugin>();)
 //K_EXPORT_PLUGIN(ExtensionsPluginFactory("krita"))
 
 ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QVariantList &)

@@ -26,7 +26,7 @@
 
 #include "ora_converter.h"
 
-K_PLUGIN_FACTORY(ImportFactory, registerPlugin<OraImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_ora_import.json", registerPlugin<OraImport>();)
 //K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
 OraImport::OraImport(QObject *parent, const QVariantList &) : KoFilter(parent)

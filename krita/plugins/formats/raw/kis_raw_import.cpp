@@ -39,7 +39,7 @@
 
 using namespace KDcrawIface;
 
-K_PLUGIN_FACTORY(KisRawImportFactory, registerPlugin<KisRawImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisRawImportFactory, "krita_raw_import.json", registerPlugin<KisRawImport>();)
 //K_EXPORT_PLUGIN(KisRawImportFactory("calligrafilters"))
 
 KisRawImport::KisRawImport(QObject *parent, const QVariantList &)

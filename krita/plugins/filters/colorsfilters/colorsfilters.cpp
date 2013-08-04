@@ -62,7 +62,7 @@
 #include <KoCompositeOp.h>
 #include <kis_iterator_ng.h>
 
-K_PLUGIN_FACTORY(ColorsFiltersFactory, registerPlugin<ColorsFilters>();)
+K_PLUGIN_FACTORY_WITH_JSON(ColorsFiltersFactory, "kritacolorsfilter.json", registerPlugin<ColorsFilters>();)
 //K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
 
 ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)

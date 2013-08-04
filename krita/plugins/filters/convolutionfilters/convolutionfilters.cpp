@@ -39,7 +39,7 @@
 
 using namespace Eigen;
 
-K_PLUGIN_FACTORY(KritaConvolutionFiltersFactory, registerPlugin<KritaConvolutionFilters>();)
+K_PLUGIN_FACTORY_WITH_JSON(KritaConvolutionFiltersFactory, "kritaconvolutionfilters.json", registerPlugin<KritaConvolutionFilters>();)
 //K_EXPORT_PLUGIN(KritaConvolutionFiltersFactory("krita"))
 
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QVariantList &)

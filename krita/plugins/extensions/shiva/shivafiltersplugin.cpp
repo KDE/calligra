@@ -34,7 +34,7 @@
 
 QMutex* shivaMutex;
 
-K_PLUGIN_FACTORY(ShivaPluginFactory, registerPlugin<ShivaPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ShivaPluginFactory, "kritashivagenerators.json", registerPlugin<ShivaPlugin>();)
 //K_EXPORT_PLUGIN(ShivaPluginFactory("krita"))
 
 ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)

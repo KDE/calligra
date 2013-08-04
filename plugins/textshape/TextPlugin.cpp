@@ -32,12 +32,12 @@
 #include <kpluginfactory.h>
 
 #ifdef CREATE_TEXTDOCUMENT_INSPECTOR
-K_PLUGIN_FACTORY(TextPluginFactory,
+K_PLUGIN_FACTORY_WITH_JSON(TextPluginFactory, "calligra_shape_text.json",
                  registerPlugin<TextPlugin>();
                  registerPlugin<TextDocumentInspectionPlugin>(QLatin1String("TextDocumentInspection"));
 )
 #else
-K_PLUGIN_FACTORY(TextPluginFactory,
+K_PLUGIN_FACTORY_WITH_JSON(TextPluginFactory, "calligra_shape_text.json",
                  registerPlugin<TextPlugin>();
 )
 #endif

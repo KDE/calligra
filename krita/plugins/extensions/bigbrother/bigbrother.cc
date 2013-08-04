@@ -52,7 +52,7 @@
 #include <recorder/kis_macro_player.h>
 #include <QApplication>
 
-K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(BigBrotherPluginFactory, "kritabigbrother.json", registerPlugin<BigBrotherPlugin>();)
 //K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
 
 class RecordedActionSaveContext : public KisRecordedActionSaveContext {

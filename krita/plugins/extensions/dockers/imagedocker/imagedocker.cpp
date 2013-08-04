@@ -23,7 +23,7 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY(ImageDockerPluginFactory, registerPlugin<ImageDockerPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ImageDockerPluginFactory, "kritaimagedocker.json", registerPlugin<ImageDockerPlugin>();)
 //K_EXPORT_PLUGIN(ImageDockerPluginFactory("krita"))
 
 class ImageDockerDockFactory: public KoDockFactoryBase {

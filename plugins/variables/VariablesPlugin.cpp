@@ -27,7 +27,7 @@
 
 #include <KoInlineObjectRegistry.h>
 
-K_PLUGIN_FACTORY(VariablesPluginFactory, registerPlugin<VariablesPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(VariablesPluginFactory, "calligra_textinlineobject_variables.json", registerPlugin<VariablesPlugin>();)
 //K_EXPORT_PLUGIN(VariablesPluginFactory("VariablesPlugin"))
 
 VariablesPlugin::VariablesPlugin(QObject *parent, const QVariantList&)

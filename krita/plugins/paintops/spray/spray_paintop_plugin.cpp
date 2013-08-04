@@ -30,7 +30,7 @@
 
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(SprayPaintOpPluginFactory, registerPlugin<SprayPaintOpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(SprayPaintOpPluginFactory, "kritaspraypaintop.json", registerPlugin<SprayPaintOpPlugin>();)
 //K_EXPORT_PLUGIN(SprayPaintOpPluginFactory("krita"))
 
 

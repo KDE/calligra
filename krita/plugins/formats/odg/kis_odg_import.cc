@@ -41,7 +41,7 @@
 #include <KoShapeBasedDocumentBase.h>
 #include <KoColorSpaceRegistry.h>
 
-K_PLUGIN_FACTORY(ODGImportFactory, registerPlugin<KisODGImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ODGImportFactory, "krita_odg_import.json", registerPlugin<KisODGImport>();)
 //K_EXPORT_PLUGIN(ODGImportFactory("calligrafilters"))
 
 KisODGImport::KisODGImport(QObject *parent, const QVariantList &) : KoFilter(parent)

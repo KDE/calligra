@@ -51,7 +51,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-K_PLUGIN_FACTORY(RoundCornersPluginFactory, registerPlugin<RoundCornersPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(RoundCornersPluginFactory, "karbonroundcorners.json", registerPlugin<RoundCornersPlugin>();)
 //K_EXPORT_PLUGIN(RoundCornersPluginFactory("karbonroundcornersplugin"))
 
 RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)

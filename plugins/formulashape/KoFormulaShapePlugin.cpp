@@ -29,7 +29,7 @@
 #include "KoM2MMLForumulaTool.h"
 #endif
 
-K_PLUGIN_FACTORY(KoFormulaShapePluginFactory, registerPlugin<KoFormulaShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KoFormulaShapePluginFactory, "calligra_shape_formular.json", registerPlugin<KoFormulaShapePlugin>();)
 //K_EXPORT_PLUGIN(KoFormulaShapePluginFactory("FormulaShape"))
 
 KoFormulaShapePlugin::KoFormulaShapePlugin( QObject* parent, const QVariantList& )

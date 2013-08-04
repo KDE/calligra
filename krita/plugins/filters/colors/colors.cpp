@@ -25,7 +25,7 @@
 #include "kis_color_to_alpha.h"
 #include <filter/kis_filter_registry.h>
 
-K_PLUGIN_FACTORY(KritaExtensionsColorsFactory, registerPlugin<KritaExtensionsColors>();)
+K_PLUGIN_FACTORY_WITH_JSON(KritaExtensionsColorsFactory, "kritaextensioncolorsfilters.json", registerPlugin<KritaExtensionsColors>();)
 //K_EXPORT_PLUGIN(KritaExtensionsColorsFactory("krita"))
 
 KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QVariantList &)

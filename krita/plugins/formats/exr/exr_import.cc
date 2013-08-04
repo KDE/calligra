@@ -28,7 +28,7 @@
 
 #include "exr_converter.h"
 
-K_PLUGIN_FACTORY(ImportFactory, registerPlugin<exrImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_exr_import.json", registerPlugin<exrImport>();)
 //K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
 exrImport::exrImport(QObject *parent, const QVariantList &) : KoFilter(parent)

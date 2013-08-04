@@ -50,7 +50,7 @@
 
 using namespace KChart;
 
-K_PLUGIN_FACTORY(ChartShapePluginFactory, registerPlugin<ChartShapePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(ChartShapePluginFactory, "calligra_shape_chart.json", registerPlugin<ChartShapePlugin>();)
 //K_EXPORT_PLUGIN(ChartShapePluginFactory("ChartShape"))
 
 ChartShapePlugin::ChartShapePlugin(QObject * parent, const QVariantList&)

@@ -37,7 +37,7 @@
 
 #include "kis_tool_perspectivegrid.h"
 
-K_PLUGIN_FACTORY(ToolPerspectiveGridFactory, registerPlugin<ToolPerspectiveGrid>();)
+K_PLUGIN_FACTORY_WITH_JSON(ToolPerspectiveGridFactory, "kritatoolperspectivegrid.json", registerPlugin<ToolPerspectiveGrid>();)
 //K_EXPORT_PLUGIN(ToolPerspectiveGridFactory("krita"))
 
 

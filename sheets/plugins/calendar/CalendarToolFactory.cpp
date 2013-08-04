@@ -27,9 +27,7 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(CalendarToolPluginFactory,
-                 registerPlugin<CalendarToolFactory>();
-                )
+K_PLUGIN_FACTORY_WITH_JSON(CalendarToolPluginFactory, "kspread_plugin_tool_calendar.json", registerPlugin<CalendarToolFactory>();)
 //K_EXPORT_PLUGIN(CalendarToolPluginFactory("CalendarTool"))
 
 

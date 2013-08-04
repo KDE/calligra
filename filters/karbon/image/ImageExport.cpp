@@ -43,7 +43,8 @@
 #include <kdialog.h>
 #include <QImage>
 
-K_PLUGIN_FACTORY(PngExportFactory, registerPlugin<ImageExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(PngExportFactory, "calligra_filter_karbon2jpg.json", registerPlugin<ImageExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(PngExportFactory, "calligra_filter_karbon2png.json", registerPlugin<ImageExport>();)
 //K_EXPORT_PLUGIN(PngExportFactory("calligrafilters"))
 
 

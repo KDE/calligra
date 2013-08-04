@@ -44,7 +44,7 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(CSVExportFactory, registerPlugin<CSVExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(CSVExportFactory, "calligra_filter_sheets2csv.json", registerPlugin<CSVExport>();)
 //K_EXPORT_PLUGIN(CSVExportFactory("calligrafilters"))
 
 class Cell

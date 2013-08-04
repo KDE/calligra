@@ -42,7 +42,7 @@
 #include <kis_paint_device.h>
 #include "dlg_imagesplit.h"
 
-K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)
+K_PLUGIN_FACTORY_WITH_JSON(ImagesplitFactory, "kritaimagesplit.json", registerPlugin<Imagesplit>();)
 //K_EXPORT_PLUGIN(ImagesplitFactory("krita"))
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)

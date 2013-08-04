@@ -30,7 +30,7 @@
 
 #include "kis_global.h"
 
-K_PLUGIN_FACTORY(GridPaintOpPluginFactory, registerPlugin<GridPaintOpPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(GridPaintOpPluginFactory, "kritagridpaintop.json", registerPlugin<GridPaintOpPlugin>();)
 //K_EXPORT_PLUGIN(GridPaintOpPluginFactory("krita"))
 
 
