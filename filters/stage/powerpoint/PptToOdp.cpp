@@ -2486,8 +2486,9 @@ template <typename T>
 void
 addTab(T& e, int ref) {
     text_tab tab = e.add_text_tab();
-    if (ref >= 0)
+    if (ref >= 0) {
         tab.set_text_tab_ref(ref);
+    }
 }
 
 void addTextSpan(group_paragraph_content& content, const QString& text, const QMap<int, int>& tabCache)
@@ -2502,11 +2503,12 @@ void addTextSpan(group_paragraph_content& content, const QString& text, const QM
     // Flush str when writing a subelement (for spaces or for another reason)
     // Flush nrSpaces when encountering two or more consecutive spaces
     for (int i = 0; i < len ; ++i) {
-        QChar ch = text[i];
+        const QChar ch = text[i];
         ushort unicode = ch.unicode();
         if (unicode == ' ') {
-            if (i == 0)
+            if (i == 0) {
                 leadingSpace = true;
+            }
             ++nrSpaces;
         } else {
             if (nrSpaces > 0) {
@@ -2521,12 +2523,14 @@ void addTextSpan(group_paragraph_content& content, const QString& text, const QM
                     --nrSpaces;
                 }
                 if (nrSpaces > 0) {   // there are more spaces
-                    if (!str.isEmpty())
+                    if (!str.isEmpty()) {
                         content.addTextNode(str);
+                    }
                     str.clear();
                     text_s s = content.add_text_s();
-                    if (nrSpaces > 1)   // it's 1 by default
+                    if (nrSpaces > 1) {  // it's 1 by default
                         s.set_text_c(nrSpaces);
+                    }
                 }
             }
             nrSpaces = 0;
@@ -2534,8 +2538,9 @@ void addTextSpan(group_paragraph_content& content, const QString& text, const QM
 
             switch (unicode) {
             case '\t':
-                if (!str.isEmpty())
+                if (!str.isEmpty()) {
                     content.addTextNode(str);
+                }
                 str.clear();
                 addTab(content, tabCache.contains(i) ?tabCache[i] + 1 :-1);
                 break;
@@ -2545,15 +2550,16 @@ void addTextSpan(group_paragraph_content& content, const QString& text, const QM
             case '\f':
             case '\n':
             case QChar::LineSeparator:
-                if (!str.isEmpty())
+                if (!str.isEmpty()) {
                     content.addTextNode(str);
+                }
                 str.clear();
                 content.add_text_line_break();
                 break;
             default:
                 // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
                 if (ch.unicode() >= 0x20) {
-                    str += text[i];
+                    str += ch;
                 }
                 break;
             }
@@ -2565,8 +2571,9 @@ void addTextSpan(group_paragraph_content& content, const QString& text, const QM
     }
     if (nrSpaces > 0) {   // there are more spaces
         text_s s = content.add_text_s();
-        if (nrSpaces > 1)   // it's 1 by default
+        if (nrSpaces > 1) {  // it's 1 by default
             s.set_text_c(nrSpaces);
+        }
     }
 }
 void addTextSpan(group_paragraph_content& e, const QString& text)

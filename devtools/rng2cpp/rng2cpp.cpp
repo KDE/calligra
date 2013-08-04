@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 #include <QFile>
 #include <QDebug>
@@ -24,7 +24,7 @@
 #include <QSharedPointer>
 #include <QStringList>
 
-#define assert(cond, what) (Q_ASSERT_X(cond,"",(const char*)QString(what).toAscii()))
+#define assert(cond, what) (Q_ASSERT_X(cond, "", qPrintable(what)))
 
 static const QString ns = "writeodf";
 
@@ -45,7 +45,7 @@ public:
     fatal() {}
     ~fatal()
     {
-        qFatal("%s", (const char*)msg.toAscii());
+        qFatal("%s", qPrintable(msg));
     }
     template<class T>
     fatal& operator<<(T s)
@@ -74,7 +74,15 @@ public:
     bool operator!=(const Datatype& a) const {
         return !(*this == a);
     }
+    /**
+     * The data type is a constant string, this string may be "".
+     * To check if this value has been set, call constant.isNull().
+     */
     QString constant;
+    /**
+     * The data type name, this string may be "".
+     * To check if this value has been set, call constant.isNull().
+     */
     QString type;
 };
 
@@ -426,12 +434,12 @@ QString mapType(const QString& type)
 /**
  * see below
  */
-void parseContent(QDomElement content, RNGItem& item, bool required);
+void parseContent(const QDomElement& content, RNGItem& item, bool required);
 
 /**
  * Get a list of names for the attribute or element.
  */
-QStringList getNames(QDomElement e)
+QStringList getNames(const QDomElement& e)
 {
     QStringList names;
     QString name = e.attribute("name");
@@ -459,7 +467,7 @@ QStringList getNames(QDomElement e)
 /**
  * Parse an <element/> element.
  */
-void parseElement(QDomElement e, RNGItem& parent, bool required)
+void parseElement(const QDomElement& e, RNGItem& parent, bool required)
 {
     QStringList names = getNames(e);
     foreach (const QString& name, names) {
@@ -475,7 +483,7 @@ void parseElement(QDomElement e, RNGItem& parent, bool required)
 /**
  * Parse an <attribute/> element.
  */
-void parseAttribute(QDomElement e, RNGItem& parent, bool required)
+void parseAttribute(const QDomElement& e, RNGItem& parent, bool required)
 {
     QStringList names = getNames(e);
     foreach (const QString& name, names) {
@@ -491,7 +499,7 @@ void parseAttribute(QDomElement e, RNGItem& parent, bool required)
 /**
  * Parse the contents of any Relax NG element.
  */
-void parseContent(QDomElement content, RNGItem& item, bool required)
+void parseContent(const QDomElement& content, RNGItem& item, bool required)
 {
     QDomElement e = content.firstChildElement();
     while (!e.isNull()) {
@@ -537,7 +545,7 @@ void parseContent(QDomElement content, RNGItem& item, bool required)
 /**
  * Parse the contents of a <define/> or <start/> element.
  */
-RNGItemPtr parseDefine(QDomElement defineElement, RNGItems& items, bool isstart)
+RNGItemPtr parseDefine(const QDomElement& defineElement, RNGItems& items, bool isstart)
 {
     RNGItemPtr item;
     if (isstart) {
@@ -574,7 +582,7 @@ RNGItemPtr getDefines(QDomElement e, RNGItems& items)
 /**
  * Load an XML from disk into a DOMDocument instance.
  */
-QDomDocument loadDOM(QString url)
+QDomDocument loadDOM(const QString& url)
 {
     QFile f(url);
     f.open(QIODevice::ReadOnly);
@@ -584,7 +592,7 @@ QDomDocument loadDOM(QString url)
     QDomDocument dom;
     QString err;
     if (!dom.setContent(data, true, &err)) {
-        qFatal("%s", err.ascii());
+        fatal() << err;
     }
     return dom;
 }
@@ -972,7 +980,7 @@ RequiredArgsList makeRequiredArgsList(const RNGItemPtr& item)
             ++r.length;
         }
     }
-    r.args = r.args.left(r.args.length() - 2);
+    r.args.chop(2);
     return r;
 }
 
@@ -1016,7 +1024,7 @@ RequiredArgsList makeFullRequiredArgsList(const RNGItemPtr& item)
         r.vals += ", " + name;
         ++r.length;
     }
-    r.args = r.args.left(r.args.length() - 2);
+    r.args.chop(2);
     return r;
 }
 
@@ -1244,6 +1252,7 @@ void writeAdderDefinitions(const RNGItemList& items, Files& files)
 
 /**
  * Retrieve the namespace prefix from the tag name.
+ * @param tag string with a tag, may be null.
  */
 QString getPrefix(const QString& tag)
 {

@@ -1294,10 +1294,11 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
         if(!cellValue.str.isEmpty()) {
             if (cell->format().font().subscript() || cell->format().font().superscript()) {
                 text_span span(p.add_text_span());
-                if (cell->format().font().subscript())
+                if (cell->format().font().subscript()) {
                     span.set_text_style_name(subScriptStyle);
-                else
+                } else {
                     span.set_text_style_name(superScriptStyle);
+                }
                 processCellText(cell, span, cellValue);
             } else {
                 processCellText(cell, p, cellValue);
