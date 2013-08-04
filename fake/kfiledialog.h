@@ -278,30 +278,14 @@ public:
                                        const QString& caption,
                                        Options options );
 
-    /**
-     * Creates a modal file dialog and returns the selected
-     * filename or an empty string if none was chosen.
-     *
-     * Note that with this
-     * method the user need not select an existing filename.
-     *
-     * @param startDir Starting directory or @c kfiledialog:/// URL.
-     *                 Refer to the KFileWidget documentation for more information
-     *                 on this parameter.
-     * @param filter A shell glob or a mimetype filter that specifies which files to display.
-     *    The preferred option is to set a list of mimetype names, see setMimeFilter() for details.
-     *    Otherwise you can set the text to be displayed for the each glob, and
-     *    provide multiple globs, see setFilter() for details.
-     * @param parent The widget the dialog will be centered on initially.
-     * @param caption The name of the dialog widget.
-     *
-     * @see KFileWidget::KFileWidget()
-     */
-    static KUrl getSaveUrl( const KUrl& startDir = KUrl(),
-                            const QString& filter = QString(),
-                            QWidget *parent = 0,
-                            const QString& caption = QString() );
+#endif
 
+    static KUrl getSaveUrl( const KUrl& startDir = KUrl(), const QString& filter = QString(), QWidget *parent = 0, const QString& caption = QString() )
+    {
+        return KUrl(QFileDialog::getSaveFileName(parent, caption, startDir.url(), filter));
+    }
+
+#if 0
     /**
      * Creates a modal file dialog and returns the selected
      * filename or an empty string if none was chosen.
