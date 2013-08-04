@@ -34,6 +34,9 @@ class KAboutData;
 class WORDS_EXPORT CAuFactory : public KPluginFactory
 {
     Q_OBJECT
+//    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "authorpart.json")
+//    Q_INTERFACES(KPluginFactory)
+
 public:
     /**
      * Constructor

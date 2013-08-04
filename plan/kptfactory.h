@@ -32,6 +32,8 @@ namespace KPlato
 class KPLATO_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "planpart.json")
+    Q_INTERFACES(KPluginFactory)
 public:
     explicit Factory( QObject* parent = 0 );
     ~Factory();

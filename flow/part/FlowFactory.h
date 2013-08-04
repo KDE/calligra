@@ -28,9 +28,11 @@ class KAboutData;
 
 class FLOW_EXPORT FlowFactory : public KPluginFactory
 {
-  Q_OBJECT
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "flowpart.json")
+    Q_INTERFACES(KPluginFactory)
 
-  public:
+public:
     explicit FlowFactory(QObject *parent = 0);
     ~FlowFactory();
 
@@ -42,7 +44,7 @@ class FLOW_EXPORT FlowFactory : public KPluginFactory
     /// Creates a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
-  private:
+private:
     static KComponentData* s_instance;
     static KAboutData* s_aboutData;
 };

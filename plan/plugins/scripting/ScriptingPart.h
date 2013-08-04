@@ -28,6 +28,10 @@
 
 class KPlatoScriptingFactory : public KPluginFactory
 {
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "krossmoduleplan.json")
+    Q_INTERFACES(KPluginFactory)
+
 public:
     explicit KPlatoScriptingFactory(const char *componentName = 0, const char *catalogName = 0, QObject *parent = 0);
 

@@ -37,7 +37,8 @@ class KComponentData;
 class KARBONUI_EXPORT KarbonFactory : public KPluginFactory
 {
     Q_OBJECT
-
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "flowpart.json")
+    Q_INTERFACES(KPluginFactory)
 public:
     explicit KarbonFactory(QObject* parent = 0);
     ~KarbonFactory();
