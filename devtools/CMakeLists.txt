@@ -7,3 +7,4 @@ if (SHOULD_BUILD_DEVTOOLS)
     add_subdirectory(scripts)
 endif (SHOULD_BUILD_DEVTOOLS)
 
+add_subdirectory(rng2cpp)
