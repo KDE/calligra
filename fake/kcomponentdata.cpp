@@ -37,12 +37,19 @@ KStandardDirs* KGlobal::dirs()
     return componentsDirs;
 }
 
+static KLocale *s_locale = 0;
+
 KLocale* KGlobal::locale()
 {
-    static KLocale *s_locale = 0;
     if (!s_locale)
         s_locale = new KLocale();
     return s_locale;
+}
+
+void KGlobal::setLocale(KLocale* locale)
+{
+    delete s_locale;
+    s_locale = locale;
 }
 
 QString KGlobal::staticQString(const QByteArray &b)
