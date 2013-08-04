@@ -51,6 +51,7 @@ set(kofake_HEADERS_ONLY
     kparts/event.h
     kfontsizeaction.h
     klimitediodevice_p.h
+    klistwidgetsearchline.h
     kplugininfo.h
     kselectaction.h
     kpagewidget.h
