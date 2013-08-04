@@ -23,6 +23,9 @@
 
 #include <QObject>
 #include <QPointF>
+#include <KoViewConverter.h>
+
+class QPainter;
 
 class KoShape;
 
@@ -32,6 +35,8 @@ class FLAKE_EXPORT KoAnnotationLayoutManager: public QObject
 public:
     KoAnnotationLayoutManager(qreal annotationX, QObject *parent = 0);
     virtual ~KoAnnotationLayoutManager();
+
+    void paintConnections(QPainter &painter, KoViewConverter *viewConverter);
 
 public slots:
     /// register the position of an annotation shape.

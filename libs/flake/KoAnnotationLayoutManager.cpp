@@ -24,6 +24,9 @@
 #include <QHash>
 #include <QMap>
 #include <QtAlgorithms>
+#include <QPainter>
+#include <QLine>
+#include <QLineF>
 
 #include <kdebug.h>
 
@@ -105,6 +108,22 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
         shape->update();
         currentY += shape->size().height() + 10.0;
 
+        i++;
+    }
+}
+
+void KoAnnotationLayoutManager::paintConnections(QPainter &painter, KoViewConverter *viewConverter)
+{
+    QPen pen(QColor(Qt::red));
+    painter.setPen(pen);
+
+    QList< QPair < QPointF, KoShape * > >::const_iterator i = d->annotationShapePositions.constBegin();
+    while (i != d->annotationShapePositions.end() && !d->annotationShapePositions.isEmpty()) {
+        KoShape *shape = i->second;
+        kDebug() << "Shape Position:" << shape->position() << "text Position:" << i->first;
+        QPointF point1(viewConverter->documentToView(shape->position()));
+        QPointF point2(viewConverter->documentToView(i->first));
+        painter.drawLine(point1, point2);
         i++;
     }
 }

@@ -41,6 +41,8 @@
 #include <KoShape.h>
 #include <KoViewConverter.h>
 
+#include <KoAnnotationLayoutManager.h>
+
 // KDE + Qt includes
 #include <kdebug.h>
 #include <QBrush>
@@ -195,6 +197,10 @@ void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &view
         QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
         qDebug() << "annotation rect " << annotationRect << "view rect " << viewRect;
         painter.fillRect(viewRect, QBrush(color));
+
+
+        if (m_document->annotationLayoutManager())
+            m_document->annotationLayoutManager()->paintConnections(painter, m_viewConverter);
     }
 }
 
