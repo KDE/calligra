@@ -30,6 +30,7 @@
 
 #ifndef CALLIGRA_DISABLE_DBUS
 
+#ifndef QT_NO_DBUS
 #include <QtDBus>
 #include "calligra_sheets_export.h"
 #include <QString>
@@ -192,6 +193,7 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
+#endif
 
 #endif // CALLIGRA_SHEETS_SHEET_ADAPTOR
 #endif
