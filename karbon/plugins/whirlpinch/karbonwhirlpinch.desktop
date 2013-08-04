@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Karbon Whirl Pinch plugin
+X-KDE-ServiceTypes=Karbon/ViewPlugin
+Type=Service
+X-KDE-Library=karbon_whirlpinchplugin
+X-Karbon-Version=28

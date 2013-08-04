@@ -17,7 +17,7 @@ install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${PLUGIN_INSTALL_DIR
 
 ########### install files ###############
 
-install( FILES karbon_1x_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_filter_karbon1x2karbon.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
     install( FILES karbon_karbon1x_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})

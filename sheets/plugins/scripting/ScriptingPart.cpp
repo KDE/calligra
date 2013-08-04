@@ -52,8 +52,8 @@ ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
         , d(new Private())
 {
     Q_UNUSED(argList);
-    setComponentData(ScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data", "sheets/kpartplugins/scripting.rc"), true);
+    //setComponentData(ScriptingPart::componentData());
+    setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/scripting.rc"), true);
     kDebug() << "Scripting plugin. Class:" << metaObject()->className() << ", Parent:" << parent->metaObject()->className();
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

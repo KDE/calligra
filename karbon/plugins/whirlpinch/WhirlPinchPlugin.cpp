@@ -47,6 +47,8 @@
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
+#include <kaction.h>
 
 #include <QGroupBox>
 #include <QLabel>
@@ -57,8 +59,8 @@ K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)
 //K_EXPORT_PLUGIN(WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
 
 WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
-        : Plugin(parent)
 {
+    setXMLFile(KStandardDirs::locate("data", "karbon/karbonplugins/WhirlPinchPlugin.rc"), true);
     QAction *a = new KAction(koIcon("effect_whirl"), i18n("&Whirl/Pinch..."), this);
     actionCollection()->addAction("path_whirlpinch", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));

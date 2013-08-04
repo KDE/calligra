@@ -44,6 +44,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kactioncollection.h>
+#include <kaction.h>
+#include <kstandarddirs.h>
 
 #include <QGroupBox>
 #include <QLabel>
@@ -53,8 +55,9 @@ K_PLUGIN_FACTORY(RoundCornersPluginFactory, registerPlugin<RoundCornersPlugin>()
 //K_EXPORT_PLUGIN(RoundCornersPluginFactory("karbonroundcornersplugin"))
 
 RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
-        : Plugin(parent)
 {
+    setXMLFile(KStandardDirs::locate("data", "karbon/karbonplugins/RoundCornersPlugin.rc"));
+
     KAction *actionRoundCorners  = new KAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
     actionCollection()->addAction("path_round_corners", actionRoundCorners);
     connect(actionRoundCorners, SIGNAL(triggered()), this, SLOT(slotRoundCorners()));
