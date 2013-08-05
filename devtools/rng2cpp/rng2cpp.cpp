@@ -24,7 +24,11 @@
 #include <QSharedPointer>
 #include <QStringList>
 
-#define assert(cond, what) (Q_ASSERT_X(cond, "", qPrintable(what)))
+#if QT_VERSION < 0x040800
+#   define assert(cond, what) (Q_ASSERT_X(cond, "", qPrintable(QString(what))))
+#else
+#   define assert(cond, what) (Q_ASSERT_X(cond, "", qPrintable(what)))
+#endif
 
 static const QString ns = "writeodf";
 
