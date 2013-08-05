@@ -46,14 +46,16 @@
 #include <KoMainWindow.h>
 #include <KoGlobal.h>
 
-#include "kis_config.h"
+#include <kis_config.h>
 #include <kis_factory2.h>
 #include <kis_doc2.h>
+#include <kis_view2.h>
+#include <kis_canvas_controller.h>
 
 #include "sketch/SketchDeclarativeView.h"
 #include "sketch/RecentFileManager.h"
 #include "sketch/DocumentManager.h"
-#include <sketch/KisSketchPart.h>
+#include "sketch/KisSketchPart.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -221,6 +223,14 @@ void MainWindow::switchToDesktop()
     //else
     //    showNormal();
     qApp->processEvents();
+    if(d->desktopView && qobject_cast<KisView2*>(d->desktopView->rootView()))
+    {
+        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        QPoint center = view->canvasBase()->coordinatesConverter()->widgetCenterPoint().toPoint();
+        view->canvasController()->zoomIn(center);
+        view->canvasController()->zoomOut(center);
+        view->canvasControllerWidget()->setPreferredCenter(view->canvasBase()->viewConverter()->documentToView(view->image()->bounds()).center());
+    }
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 
@@ -233,6 +243,7 @@ void MainWindow::documentChanged()
     }
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
+    qApp->processEvents();
     if(!d->forceSketch && !d->slateMode)
         switchToDesktop();
 }
@@ -266,7 +277,7 @@ void MainWindow::setCurrentSketchPage(QString newPage)
     {
         if(!d->forceSketch && !d->slateMode)
         {
-            QTimer::singleShot(0, this, SLOT(switchToDesktop()));
+            QTimer::singleShot(2000, this, SLOT(switchToDesktop()));
         }
     }
 }
