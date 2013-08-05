@@ -216,10 +216,10 @@ void MainWindow::switchToDesktop()
         d->sketchView->setParent(0);
         setCentralWidget(d->desktopView);
     }
-    if(d->wasMaximized)
+    //if(d->wasMaximized)
         showMaximized();
-    else
-        showNormal();
+    //else
+    //    showNormal();
     qApp->processEvents();
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
