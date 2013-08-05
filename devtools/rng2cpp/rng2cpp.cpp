@@ -854,6 +854,31 @@ void makeCppNames(RNGItemList& items)
 }
 
 /**
+ * Check if an element or attribute is defined below this item.
+ */
+bool hasElementOrAttribute(const RNGItemPtr& item, RNGItems& items)
+{
+    if (items.contains(item)) {
+        return false;
+    }
+    foreach (const RNGItemPtr& i, item->allowedItems) {
+        if (!i->isDefine() || hasElementOrAttribute(i, items)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Check if an element or attribute is defined below this item.
+ */
+bool hasElementOrAttribute(const RNGItemPtr& item)
+{
+    RNGItems items;
+    return hasElementOrAttribute(item, items);
+}
+
+/**
  * Find all the items that are used in this item but are not element or
  * attributes.
  * These items will be base classes to a class that corresponds to an element.
@@ -863,7 +888,7 @@ RNGItemList getBasesList(RNGItemPtr item)
     RNGItems list;
     RNGItems antilist;
     foreach (RNGItemPtr i, item->allowedItems) {
-        if (i->isDefine()) {
+        if (i->isDefine() && hasElementOrAttribute(i)) {
             list.insert(i);
             foreach (RNGItemPtr j, i->allowedItems) {
                 if (j->isDefine() && j != i) {
@@ -1132,6 +1157,9 @@ void defineElement(QTextStream& out, const RNGItemPtr& item)
  */
 void defineGroup(QTextStream& out, const RNGItemPtr& item)
 {
+    if (!hasElementOrAttribute(item)) {
+        return;
+    }
     RNGItemList bases = getBasesList(item);
     out << "class " << item->cppName;
     if (bases.size()) {
@@ -1340,7 +1368,7 @@ void write(const RNGItemList& items, QString outdir)
     addInOrder(undefined, defined);
     // declare all classes
     foreach (RNGItemPtr item, defined) {
-        if (!item->isAttribute()) {
+        if (item->isElement() || (item->isDefine() && hasElementOrAttribute(item))) {
             out << "class " << item->cppName << ";\n";
         }
     }
