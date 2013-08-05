@@ -29,6 +29,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 
 #include <float.h>
 #include <math.h>
