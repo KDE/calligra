@@ -31,8 +31,8 @@
 
 #include <kdebug.h>
 
-#define default_shapeHeight 100.0
-#define shapeWidth 150.0
+#define default_shapeHeight 150.0
+#define shapeWidth 200.0
 
 int compare(const QPair < QPointF, KoShape * > &a, const QPair < QPointF, KoShape * > &b)
 {

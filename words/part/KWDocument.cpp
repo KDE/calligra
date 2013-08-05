@@ -124,7 +124,7 @@ KWDocument::KWDocument(KoPart *part)
 #endif
 
     // FIXME: This (400.0) is just for now i know i know. :)
-    m_annotationManager = new KoAnnotationLayoutManager(620.0);
+    m_annotationManager = new KoAnnotationLayoutManager(612.0);
 
 /* TODO reenable after release
     QVariant variant;
