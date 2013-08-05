@@ -25,6 +25,7 @@
 #include <QMap>
 #include <QtAlgorithms>
 #include <QPainter>
+#include <QPen>
 #include <QLine>
 #include <QLineF>
 
@@ -114,16 +115,33 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
 
 void KoAnnotationLayoutManager::paintConnections(QPainter &painter, KoViewConverter *viewConverter)
 {
-    QPen pen(QColor(Qt::red));
+    QPen pen(QColor(230, 216, 87));
+    pen.setStyle(Qt::DashLine);
+    pen.setWidth(2);
+    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setCapStyle(Qt::RoundCap);
+
     painter.setPen(pen);
 
     QList< QPair < QPointF, KoShape * > >::const_iterator i = d->annotationShapePositions.constBegin();
     while (i != d->annotationShapePositions.end() && !d->annotationShapePositions.isEmpty()) {
         KoShape *shape = i->second;
+
         kDebug() << "Shape Position:" << shape->position() << "text Position:" << i->first;
-        QPointF point1(viewConverter->documentToView(shape->position()));
-        QPointF point2(viewConverter->documentToView(i->first));
-        painter.drawLine(point1, point2);
+
+        QPointF shapePosition(viewConverter->documentToView(QPointF(shape->position().x(), (shape->position().y() + 25))));
+        QPointF refTextPosition(viewConverter->documentToView(QPointF(i->first.x(), (i->first.y()))));
+        QPointF connectionPoint(viewConverter->documentToView(QPointF((shape->position().x() - 50), (i->first.y()))));
+        QPointF pointLine(viewConverter->documentToView(QPointF(i->first.x(), (i->first.y() + 5))));
+
+
+        //draw first line, from shape to connectionPint.
+        painter.drawLine(shapePosition, connectionPoint);
+        // draw second line, from connectio point to reftext position.
+        painter.drawLine(connectionPoint, refTextPosition);
+        // draw pointer.
+        painter.drawLine(refTextPosition, pointLine);
+
         i++;
     }
 }
