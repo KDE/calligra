@@ -400,7 +400,7 @@ QMap<QString, QString> createTypeMap()
     map.insert("date", "const QDate&");
     map.insert("time", "const QTime&");
     map.insert("dateTime", "const QDateTime&");
-    map.insert("duration", "qint64");
+    map.insert("duration", "Duration");
     map.insert("integer", "qint64");
     map.insert("nonNegativeInteger", "quint64");
     map.insert("positiveInteger", "quint64");

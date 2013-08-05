@@ -1092,8 +1092,9 @@ static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0,
 bool ExcelImport::Private::isDateFormat(const QString& valueFormat)
 {
     KoGenStyle& style = valueFormatCache[valueFormat];
-    if (style.isEmpty())
+    if (style.isEmpty()) {
         style = NumberFormatParser::parse( valueFormat );
+    }
     return style.type() == KoGenStyle::NumericDateStyle;
 }
 
@@ -1121,24 +1122,16 @@ static QString convertDate(double serialNo, const QString& valueFormat)
     return dt.toString("yyyy-MM-ddThh:mm:ss");
 }
 
-static QString convertTime(double serialNo, const QString& valueFormat)
+static QTime convertToTime(double serialNo)
 {
-    QString vf = valueFormat;
-    QString locale = extractLocale(vf);
-    Q_UNUSED(locale);   //TODO http://msdn.microsoft.com/en-us/goglobal/bb964664.aspx
-    Q_UNUSED(vf);   //TODO
+    //QString locale = extractLocale(vf);
+    //Q_UNUSED(locale);   //TODO http://msdn.microsoft.com/en-us/goglobal/bb964664.aspx
 
     // reference is midnight 30 Dec 1899
     QTime tt;
     tt = tt.addMSecs(qRound((serialNo - (int)serialNo) * 86400 * 1000));
     qDebug() << tt;
-    return tt.toString("'PT'hh'H'mm'M'ss'S'");
-}
-
-static QByteArray convertFraction(double serialNo, const QString& valueFormat)
-{
-    Q_UNUSED(valueFormat);
-    return QByteArray::number(serialNo, 'g', 15);
+    return tt;
 }
 
 QString cellFormula(Cell* cell)
@@ -1216,13 +1209,11 @@ void ExcelImport::Private::processCellAttributesForBody(Cell* cell, group_table_
             c.set_office_value_type("date");
             c.set_office_date_value(dateValue);
         } else if (value.asFloat() < 1.0 && isTimeFormat(valueFormat)) {
-            const QString timeValue = convertTime(value.asFloat(), valueFormat);
             c.set_office_value_type("time");
-            c.set_office_time_value(timeValue);
+            c.set_office_time_value(Duration(convertToTime(value.asInteger())));
         } else if (isFractionFormat(valueFormat)) {
-            const QString fractionValue = convertFraction(value.asFloat(), valueFormat);
             c.set_office_value_type("float");
-            c.set_office_value(fractionValue);
+            c.set_office_value(value.asFloat());
         } else { // fallback is the generic float format
             c.set_office_value_type("float");
             c.set_office_value(value.asFloat());

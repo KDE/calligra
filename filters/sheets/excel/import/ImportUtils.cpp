@@ -63,9 +63,9 @@ QString extractLocale(QString &time)
 
 bool isPercentageFormat(const QString& valueFormat)
 {
-    if (valueFormat.isEmpty()) return false;
-    if (valueFormat.length() < 1) return false;
-    return valueFormat[valueFormat.length()-1] == QChar('%');
+    int length = valueFormat.length();
+    if (length < 1) return false;
+    return valueFormat[length - 1] == QChar('%');
 }
 
 bool isTimeFormat(const QString& valueFormat)
