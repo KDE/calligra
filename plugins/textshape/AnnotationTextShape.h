@@ -48,6 +48,8 @@ public:
 
     void setAnnotaionTextData(KoTextShapeData *textShape);
 
+    // reimplemented
+        void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
      *
@@ -67,6 +69,9 @@ public:
      * @param context the KoShapeSavingContext used for saving.
      */
     virtual void saveOdf(KoShapeSavingContext &context) const;
+
+    void setCreator(QString creator);
+    QString creator();
 
 private:
     KoTextShapeData *m_textShapeData;

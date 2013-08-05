@@ -70,7 +70,6 @@ AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextOb
                                          KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
 {
-   // KoShapeBackground *fill = new KoColorBackground(Qt::yellow);
     setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::yellow)));
     setGeometryProtected(true);
 }
@@ -86,6 +85,21 @@ void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
     m_textShapeData->setLeftPadding(4);
     m_textShapeData->setRightPadding(4);
     m_textShapeData->setResizeMethod(KoTextShapeData::AutoGrowHeight);
+}
+
+void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+{
+    TextShape::paintComponent(painter, converter, paintcontext);
+    QRectF clipRect = outlineRect();
+    // Paint annotation shape creator.
+    // Set Author and date.
+    QPen peninfo (Qt::darkYellow);
+    QFont serifFont("Times", 6, QFont::Bold);
+    painter.setPen(peninfo);
+    painter.setFont(serifFont);
+    // FIXME: I am not sure about date format
+    QString info = "  " + m_creator + "\n  " + QDate::currentDate().toString("ddd MMMM d yy");
+    painter.drawText(clipRect, Qt::AlignTop, info);
 }
 
 bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -107,7 +121,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
             if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
                 m_creator = el.text();
                 if (m_creator.isEmpty()) {
-                    m_creator = "Unknown Author";
+                    m_creator = "Anonymous";
                 }
             }
             else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
@@ -142,4 +156,14 @@ void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
     // I am not sure that this line is right or no?
     kDebug(31000) << m_textShapeData->document()->toPlainText();
     m_textShapeData->saveOdf(context, 0, 0, -1);
+}
+
+void AnnotationTextShape::setCreator(QString creator)
+{
+    m_creator = creator;
+}
+
+QString AnnotationTextShape::creator()
+{
+    return m_creator;
 }

@@ -29,6 +29,10 @@
 #include <KoCanvasResourceManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
+#include <KoShapeUserData.h>
+#include <KoTextShapeData.h>
+#include <KoGlobal.h>
+#include <AnnotationTextShape.h>
 
 #include <dialogs/SimpleSpellCheckingWidget.h>
 #include <dialogs/SimpleAnnotationWidget.h>
@@ -36,6 +40,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kuser.h>
+
 
 //#include "TextShape.h"
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"
@@ -140,10 +148,32 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
 
 void ReviewTool::insertAnnotation()
 {
-    KoShape *shape = KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(m_canvas->shapeController()->resourceManager());
+    AnnotationTextShape *shape = (AnnotationTextShape*)KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(m_canvas->shapeController()->resourceManager());
     m_canvas->shapeController()->documentBase()->addShape(shape);
     KoAnnotation *annotation = textEditor()->addAnnotation();
-    annotation->setAnnotationShape(shape);  
+    annotation->setAnnotationShape(shape);
+
+    // Set annotation creator.
+    KConfig *config = KoGlobal::calligraConfig();
+    config->reparseConfiguration();
+    KConfigGroup authorGroup(config, "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    KGlobal::config()->reparseConfiguration();
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profile = appAuthorGroup.readEntry("active-profile", "");
+    KConfigGroup cgs(&authorGroup, "Author-" + profile);
+
+    if (profiles.contains(profile)) {
+        KConfigGroup cgs(&authorGroup, "Author-" + profile);
+        shape->setCreator(cgs.readEntry("creator"));
+    } else {
+        if (profile == "anonymous") {
+            shape->setCreator("Anonymous");
+        } else {
+            KUser user(KUser::UseRealUserID);
+            shape->setCreator(user.property(KUser::FullName).toString());
+        }
+    }
 }
 
 void ReviewTool::removeAnnotation()
