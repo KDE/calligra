@@ -40,7 +40,6 @@ public:
     KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed);
 
     KisPaintInformation continueStroke(KoPointerEvent *event,
-                                       const QPointF &prevImagePoint,
                                        int timeElapsed);
 protected slots:
     void updateSettings();
@@ -53,7 +52,6 @@ protected:
 private:
 
     KisPaintInformation createPaintingInformation(KoPointerEvent *event,
-                                                  const QPointF &dragVector,
                                                   int timeElapsed);
 
     /**
