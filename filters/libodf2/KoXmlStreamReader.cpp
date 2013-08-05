@@ -397,7 +397,14 @@ void KoXmlStreamAttribute::Private::generateQName()
 {
     qName = reader->d->prefixes.value(qAttr->namespaceUri().toString());
     prefixLen = qName.size();
-    qName += ':' + qAttr->name();
+
+#if QT_VERSION >= 0x040800
+    qName += QLatin1Char(':') + qAttr->name();
+#else
+    // no operator+(QChar, QStringRef), so just doing two steps
+    qName += ':';
+    qName += qAttr->name();
+#endif
 }
 
 
