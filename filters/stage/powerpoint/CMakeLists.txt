@@ -1,3 +1,5 @@
+add_subdirectory( tests )
+
 include_directories(
     ${ZLIB_INCLUDE_DIR}
     ../../libmso
