@@ -16,7 +16,6 @@ add_subdirectory( shape )
 add_subdirectory( tests )
 add_subdirectory( plugins )
 add_subdirectory( dtd )
-add_subdirectory( functions )
 
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
