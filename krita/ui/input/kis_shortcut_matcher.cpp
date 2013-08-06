@@ -203,7 +203,6 @@ bool KisShortcutMatcher::mouseMoved(QMouseEvent *event)
 bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 {
     Q_UNUSED(event)
-    m_d->usingTouch = true;
     return true;
 }
 
@@ -427,10 +426,19 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
     }
 
     if( goodCandidate ) {
+        if( m_d->runningShortcut ) {
+            QMouseEvent mouseEvent(QEvent::MouseButtonRelease,
+                                   event->touchPoints().at(0).pos().toPoint(),
+                                   Qt::LeftButton,
+                                   Qt::LeftButton,
+                                   event->modifiers());
+            tryEndRunningShortcut(Qt::LeftButton, &mouseEvent);
+        }
         goodCandidate->action()->activate();
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
 
         m_d->touchShortcut = goodCandidate;
+        m_d->usingTouch = true;
     }
 
     return goodCandidate;
