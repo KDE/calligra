@@ -38,7 +38,7 @@ class SheetSelectWidget;
  * to select the sheets that should be printed and in which order
  * they should be printed.
  */
-class SheetSelectPage : public QWidget, public Ui::SheetSelectWidget
+class SheetSelectPage : public QWidget
 {
     Q_OBJECT
 public:
@@ -103,6 +103,9 @@ protected slots:
     void moveUp();
     void moveDown();
     void moveBottom();
+
+public:
+    Ui::SheetSelectWidget *m_widget;
 };
 
 } // namespace Sheets

@@ -84,14 +84,14 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
     pageManagers.clear();
     if (printer.printRange() == QPrinter::Selection)
         pageManagers.insert(view->activeSheet(), view->activeSheet()->print());
-    else if (sheetSelectPage->allSheetsButton->isChecked()) {
+    else if (sheetSelectPage->m_widget->allSheetsButton->isChecked()) {
         const QList<Sheet *> sheets = view->doc()->map()->sheetList();
         for (int i = 0; i < sheets.count(); ++i) {
             pageManagers.insert(sheets[i], sheets[i]->print());
         }
-    } else if (sheetSelectPage->activeSheetButton->isChecked()) {
+    } else if (sheetSelectPage->m_widget->activeSheetButton->isChecked()) {
         pageManagers.insert(view->activeSheet(), view->activeSheet()->print());
-    } else if (sheetSelectPage->selectedSheetsButton->isChecked()) {
+    } else if (sheetSelectPage->m_widget->selectedSheetsButton->isChecked()) {
         const QStringList sheetNames = sheetSelectPage->selectedSheets();
         for (int i = 0; i < sheetNames.count(); ++i) {
             Sheet* sheet = view->doc()->map()->findSheet(sheetNames[i]);
