@@ -97,8 +97,7 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
     QFont serifFont("Times", 6, QFont::Bold);
     painter.setPen(peninfo);
     painter.setFont(serifFont);
-    // FIXME: I am not sure about date format
-    m_date = QDate::currentDate().toString(Qt::LocalDate);
+
     QString info = "  " + m_creator + "\n  " + m_date;
     painter.drawText(clipRect, Qt::AlignTop, info);
 }
@@ -159,7 +158,7 @@ void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
     m_textShapeData->saveOdf(context, 0, 0, -1);
 }
 
-void AnnotationTextShape::setCreator(QString creator)
+void AnnotationTextShape::setCreator(const QString creator)
 {
     m_creator = creator;
 }
@@ -167,4 +166,14 @@ void AnnotationTextShape::setCreator(QString creator)
 QString AnnotationTextShape::creator()
 {
     return m_creator;
+}
+
+void AnnotationTextShape::setDate(QString date)
+{
+    m_date = date;
+}
+
+QString AnnotationTextShape::date()
+{
+    return m_date;
 }

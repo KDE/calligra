@@ -72,6 +72,8 @@ public:
 
     void setCreator(QString creator);
     QString creator();
+    void setDate(QString date);
+    QString date();
 
 private:
     KoTextShapeData *m_textShapeData;

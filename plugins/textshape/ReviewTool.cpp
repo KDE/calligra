@@ -44,6 +44,8 @@
 #include <kconfiggroup.h>
 #include <kuser.h>
 
+#include <QDate>
+
 
 //#include "TextShape.h"
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"
@@ -174,6 +176,9 @@ void ReviewTool::insertAnnotation()
             shape->setCreator(user.property(KUser::FullName).toString());
         }
     }
+    // Set Annotation creation date.
+    // FIXME: I am not sure about date format
+    shape->setDate(QDate::currentDate().toString(Qt::LocalDate));
 }
 
 void ReviewTool::removeAnnotation()
