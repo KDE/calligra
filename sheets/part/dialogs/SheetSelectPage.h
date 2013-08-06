@@ -105,7 +105,7 @@ protected slots:
     void moveBottom();
 
 public:
-    Ui::SheetSelectWidget *m_widget;
+    ::Ui::SheetSelectWidget *m_widget;
 };
 
 } // namespace Sheets
