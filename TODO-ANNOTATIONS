@@ -4,22 +4,16 @@ Things left to do for the annotations branch
 Features
 --------
 
- * Turn annotations on and off.  (In View menu)
-
- * connect the annotated text with the annotation shapeb
-
 Bugs
 ----
 
- * Place the annotation shape correctly in the annotation area.
-
  * Fix cursor movement and placement within the annotation shape.
-
- * Fix update of the annotation shape when the user is editing the annotation.
+ 
+ * Fix right position of refrence text.
+ 
+ * Fix expanding problem, expanded shape doesn't move down other shapes.
 
  * Fix saving bug that writes <text:annotation-end> but not <text:annotation>
-
- * Check why Words never quits. This could be a bug not related to annotations.
 
 
 ---------------- Milestone 1: merge with master ----------------
