@@ -18,6 +18,6 @@
 */
 
 #include "moc_BindingStorage.cpp"
-//#include "moc_ConditionStorage.cpp"
+#include "moc_ConditionsStorage.cpp"
 #include "moc_RectStorage.cpp"
 #include "moc_ValidityStorage.cpp"

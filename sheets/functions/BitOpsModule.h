@@ -24,12 +24,14 @@
 
 #include <QVariantList>
 
+#include "calligra_sheets_export.h"
+
 namespace Calligra
 {
 namespace Sheets
 {
 
-class BitOpsModule : public FunctionModule
+class CALLIGRA_SHEETS_ODF_EXPORT BitOpsModule : public FunctionModule
 {
     Q_OBJECT
 public:

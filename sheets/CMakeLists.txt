@@ -210,7 +210,6 @@ SET (calligrasheetscommon_LIB_SRCS
     ${commands_DIR_SRCS}
     ${database_DIR_SRCS}
     ${dialogs_DIR_SRCS}
-    ${functions_DIR_SRCS}
     ${interfaces_DIR_SRCS}
     ${part_DIR_SRCS}
     ${ui_DIR_SRCS}
@@ -267,6 +266,7 @@ set (calligrasheetsodf_LIB_SRCS
     database/Filter.cpp
 
     # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligrasheetsodf
+    ${functions_DIR_SRCS}
     Function.cpp
     FunctionDescription.cpp
     FunctionModule.cpp

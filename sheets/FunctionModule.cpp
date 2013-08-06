@@ -23,6 +23,20 @@
 
 #include <QList>
 
+#include "functions/moc_BitOpsModule.cpp"
+#include "functions/moc_DatabaseModule.cpp"
+#include "functions/moc_LogicModule.cpp"
+#include "functions/moc_TextModule.cpp"
+#include "functions/moc_DateTimeModule.cpp"
+#include "functions/moc_FinancialModule.cpp"
+#include "functions/moc_EngineeringModule.cpp"
+#include "functions/moc_ConversionModule.cpp"
+#include "functions/moc_MathModule.cpp"
+#include "functions/moc_ReferenceModule.cpp"
+#include "functions/moc_StatisticalModule.cpp"
+#include "functions/moc_TrigonometryModule.cpp"
+#include "functions/moc_InformationModule.cpp"
+
 using namespace Calligra::Sheets;
 
 class FunctionModule::Private
