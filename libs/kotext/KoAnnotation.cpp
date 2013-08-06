@@ -45,20 +45,15 @@
 class KoAnnotation::Private
 {
 public:
-    Private(const QTextDocument *doc)
-        : document(doc),
-          posInDocument(0) { }
+    Private(const QTextDocument *doc):
+        document(doc),
+        posInDocument(0) { }
     const QTextDocument *document;
     int posInDocument;
-    QTextFrame *textFrame;
 
     // Name of this annotation. It is used to tie together the annotation and annotation-end tags
     QString name;
 
-    // The actual contents of the annotation
-    QString creator;
-    QString date;
-    QTextDocument contents;
     KoShape *shape;
 };
 
@@ -84,21 +79,6 @@ QString KoAnnotation::name() const
     return d->name;
 }
 
-QTextFrame *KoAnnotation::textFrame() const
-{
-    return d->textFrame;
-}
-
-
-void KoAnnotation::setMotherFrame(QTextFrame *frame)
-{
-    QTextCursor cursor(frame->lastCursorPosition());
-    QTextFrameFormat format;
-    format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
-    d->textFrame = cursor.insertFrame(format);
-    d->document = frame->document();
-}
-
 void KoAnnotation::setAnnotationShape(KoShape *shape)
 {
     d->shape = shape;
@@ -111,12 +91,10 @@ KoShape *KoAnnotation::annotationShape()
 
 bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(context);
+
     kDebug(32500) << "****** Start Load odf ******";
-    //KoTextLoader textLoader(context);
-    //QTextCursor cursor(d->textFrame);
-
     QString annotationName = element.attribute("name");
-
     const QString localName(element.localName());
 
     if (manager()) {
@@ -140,26 +118,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                     inlineRdf = 0;
                 }
             }
-
-            // FIXME: Load more attributes here
-
-            // Load the metadata (author, date) and contents here.
-            KoXmlElement el;
-            forEachElement(el, element) {
-                if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
-                    d->creator = el.text();
-                }
-                else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
-                    d->date = el.text();
-                }
-                else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
-                    // FIXME: What to do here?
-                }
-            }
-            //textLoader.loadBody(element, cursor);
-
             kDebug(32500) << "****** End Load ******";
-          //  kDebug(32500) << "loaded Annotation: " << d->creator << d->date;
         }
         else {
             // something pretty weird going on...
@@ -189,7 +148,8 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();
     }
-    // else nothing
+        // else nothing
+
 }
 
 QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
@@ -214,18 +174,3 @@ QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
     }
     return ret;
 }
-
-QString KoAnnotation::creator() const
-{
-    // FIXME: I don't know but it was the result crash
-    //return d->creator;
-    return "creator";
-}
-
-QString KoAnnotation::date() const
-{
-    // FIXME: I don't know but it was the result crash
-    //return d->date;
-    return "data";
-}
-
