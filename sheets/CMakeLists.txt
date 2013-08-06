@@ -9,6 +9,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
 
 if (SHOULD_BUILD_SHEETS_PART)
 
+add_definitions(-DSHEETS_NO_PLUGINMODULES)
+
 add_subdirectory( data )
 add_subdirectory( shape )
 add_subdirectory( tests )
@@ -117,6 +119,19 @@ kde4_add_ui_files(dialogs_DIR_SRCS
 
 SET (functions_DIR_SRCS
     functions/helper.cpp
+    functions/bitops.cpp
+    functions/database.cpp
+    functions/engineering.cpp
+    functions/logic.cpp
+    functions/reference.cpp
+    functions/text.cpp
+    functions/conversion.cpp
+    functions/datetime.cpp
+    functions/financial.cpp
+    functions/information.cpp
+    functions/math.cpp
+    functions/statistical.cpp
+    functions/trig.cpp
     )
 
 SET (interfaces_DIR_SRCS

@@ -17,4 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "moc_BindingStorage.cpp"
+//#include "moc_ConditionStorage.cpp"
 #include "moc_RectStorage.cpp"
+#include "moc_ValidityStorage.cpp"
