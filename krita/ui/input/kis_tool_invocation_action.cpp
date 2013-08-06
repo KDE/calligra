@@ -105,12 +105,16 @@ void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
         QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
-        QTouchEvent *touchEvent = inputManager()->lastTouchEvent();
+        QTouchEvent *touchEvent = dynamic_cast<QTouchEvent*>(event);
         QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
         } else if(touchEvent) {
+            if(touchEvent->type() != QEvent::TouchEnd) {
+                //Fake a touch end if we are "upgrading" a single-touch gesture to a multi-touch gesture.
+                touchEvent = new QTouchEvent(QEvent::TouchEnd, touchEvent->deviceType(), touchEvent->modifiers(), touchEvent->touchPointStates(), touchEvent->touchPoints());
+            }
             inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
         } else if (mouseEvent) {
             inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
