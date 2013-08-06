@@ -20,6 +20,8 @@
 
 #include "kis_dlg_filter.h"
 
+#include <kstandardguiitem.h>
+
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_filter_mask.h>
@@ -31,6 +33,8 @@
 #include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_filter_manager.h"
+
+
 #include "ui_wdgfilterdialog.h"
 
 

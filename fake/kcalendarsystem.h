@@ -10,7 +10,9 @@ class KCalendarSystemPrivate;
 class KCalendarEra;
 class KLocale;
 
-class KCalendarSystem
+#include "kofake_export.h"
+
+class KOFAKE_EXPORT KCalendarSystem
 {
 public:
     enum StringFormat { ShortFormat, LongFormat };

@@ -17,6 +17,7 @@ public:
     QColor color() const { return QColor(); }
     void setColor(QColor) const {}
     QColor defaultColor() const { return QColor(); }
+    void setDefaultColor(QColor) {}
 };
 
 #endif

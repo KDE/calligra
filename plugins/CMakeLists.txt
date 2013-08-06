@@ -82,7 +82,7 @@ endif (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
 
 # only build the reporting plugins if building koreport
 if(SHOULD_BUILD_PLUGIN_REPORTING)
-    add_subdirectory( reporting )
+#    add_subdirectory( reporting )
 endif(SHOULD_BUILD_PLUGIN_REPORTING)
 
 #add_subdirectory( videoshape )

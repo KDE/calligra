@@ -19,16 +19,22 @@
 */
 
 #include "ParagraphDecorations.h"
-
+#include <KoParagraphStyle.h>
 #include <kdebug.h>
 
 ParagraphDecorations::ParagraphDecorations(QWidget* parent)
         : QWidget(parent)
+        , widget(new Ui::ParagraphDecorations())
 {
-    widget.setupUi(this);
+    widget->setupUi(this);
 
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(slotBackgroundColorChanged()));
-    connect(widget.resetBackgroundColor, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
+    connect(widget->backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(slotBackgroundColorChanged()));
+    connect(widget->resetBackgroundColor, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
+}
+
+ParagraphDecorations::~ParagraphDecorations()
+{
+    delete widget;
 }
 
 void ParagraphDecorations::slotBackgroundColorChanged()
@@ -44,7 +50,7 @@ void ParagraphDecorations::setDisplay(KoParagraphStyle *style)
     if (m_backgroundColorReset) {
         clearBackgroundColor();
     } else {
-        widget.backgroundColor->setColor(style->background().color());
+        widget->backgroundColor->setColor(style->background().color());
     }
 }
 
@@ -56,14 +62,12 @@ void ParagraphDecorations::save(KoParagraphStyle *style) const
         // so we'll set it to a Qt::NoBrush brush instead
         style->setBackground(QBrush(Qt::NoBrush));
     else if (m_backgroundColorChanged)
-        style->setBackground(QBrush(widget.backgroundColor->color()));
+        style->setBackground(QBrush(widget->backgroundColor->color()));
 }
 
 void ParagraphDecorations::clearBackgroundColor()
 {
-    widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
+    widget->backgroundColor->setColor(widget->backgroundColor->defaultColor());
     m_backgroundColorReset = true;
     emit parStyleChanged();
 }
-
-#include <ParagraphDecorations.moc>

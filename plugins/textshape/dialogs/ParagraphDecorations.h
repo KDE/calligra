@@ -18,12 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef FONTDECORATIONS_H
-#define FONTDECORATIONS_H
+#ifndef PARAGRAPHDECORATIONS_H
+#define PARAGRAPHDECORATIONS_H
+
+#include <QWidget>
+
+class KoParagraphStyle;
 
 #include <ui_ParagraphDecorations.h>
-
-#include <KoParagraphStyle.h>
 
 class ParagraphDecorations : public QWidget
 {
@@ -31,20 +33,20 @@ class ParagraphDecorations : public QWidget
 
 public:
     explicit ParagraphDecorations(QWidget* parent = 0);
-    ~ParagraphDecorations() {}
+    virtual ~ParagraphDecorations();
 
     void setDisplay(KoParagraphStyle *style);
     void save(KoParagraphStyle *style) const;
 
-signals:
+Q_SIGNALS:
     void parStyleChanged();
 
-private slots:
+private Q_SLOTS:
     void clearBackgroundColor();
     void slotBackgroundColorChanged();
 
 private:
-    Ui::ParagraphDecorations widget;
+    Ui::ParagraphDecorations *widget;
 
     bool m_backgroundColorChanged, m_backgroundColorReset;
 };
