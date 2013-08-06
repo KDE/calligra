@@ -98,7 +98,8 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
     painter.setPen(peninfo);
     painter.setFont(serifFont);
     // FIXME: I am not sure about date format
-    QString info = "  " + m_creator + "\n  " + QDate::currentDate().toString(Qt::LocalDate);
+    m_date = QDate::currentDate().toString(Qt::LocalDate);
+    QString info = "  " + m_creator + "\n  " + m_date;
     painter.drawText(clipRect, Qt::AlignTop, info);
 }
 
