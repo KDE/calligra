@@ -343,7 +343,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
 
-    d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
@@ -1451,7 +1450,7 @@ private:
     KoPageLayoutWidget *m_pageLayoutWidget;
 };
 
-KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
+KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
 {
     if (!rootView())
         return 0;

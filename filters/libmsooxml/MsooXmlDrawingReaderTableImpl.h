@@ -321,7 +321,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
         QString tableStylesFile;
         QString tableStylesPath;
         QBuffer tempDevice;
-        tempDevice.setData(predefinedTable.toAscii());
+        tempDevice.setData(predefinedTable.toLatin1());
         tempDevice.open(QIODevice::ReadOnly);
         MSOOXML::Utils::splitPathAndFile(m_context->tableStylesFilePath, &tableStylesPath, &tableStylesFile);
         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);

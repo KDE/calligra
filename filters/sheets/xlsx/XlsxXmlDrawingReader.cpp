@@ -49,10 +49,7 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
-#include <MsooXmlUtils.h>
 #include <MsooXmlContentTypes.h>
-#include <MsooXmlRelationships.h>
-#include <KoXmlWriter.h>
 
 // calculates the column width in pixels
 int columnWidth2(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43) {

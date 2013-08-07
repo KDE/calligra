@@ -230,9 +230,6 @@ public:
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode);
 
-    bool presetShowAllMode() const;
-    void setPresetShowAllMode(bool showAll);
-
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;
 
@@ -289,6 +286,9 @@ public:
 
     QString toolbarSlider(int sliderNumber);
     void setToolbarSlider(int sliderNumber, const QString &slider);
+
+    QString currentInputProfile() const;
+    void setCurrentInputProfile(const QString& name);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

@@ -42,5 +42,5 @@ Name[zh_TW]=將 KPR 檔匯出成 ODP 檔的過濾器
 X-KDE-Weight=1
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/x-kpresenter
-X-KDE-Library=Filterkpr2odf
+X-KDE-Library=calligra_filter_kpr2odp
 X-KDE-ServiceTypes=Calligra/Filter

@@ -23,6 +23,17 @@
 
 class KisImageBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
+
+/*
+   pre and post are split because:
+
+21:12:20 < dmitryK> boud: i guess it was somehow related to the fact that the maskWidth/maskHeight should
+                    correspond to the size of the mask returned by paintDevice()
+21:13:33 < dmitryK> boud: the random stuff is called once per brush->paintDevice() call, after the device is
+                    returned to the paint op, that is "preparing the randomness for the next call"
+21:14:16 < dmitryK> boud: and brushesPipe->currentBrush() always returning the same brush for any particular
+                    paintInfo.
+*/
 protected:
     static int selectPre(KisParasite::SelectionMode mode,
                          int index, int rank,
@@ -40,13 +51,16 @@ protected:
             break;
         case KisParasite::Angular:
             // + m_d->PI_2 to be compatible with the gimp
-            angle = info.angle() + M_PI_2;
-            // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
-            if (angle < 0)
-                angle += 2.0 * M_PI;
-            else if (angle > 2.0 * M_PI)
-                angle -= 2.0 * M_PI;
+            angle = info.drawingAngle() + M_PI_2;
+            angle = normalizeAngle(angle);
+
             index = static_cast<int>(angle / (2.0 * M_PI) * rank);
+            break;
+        case KisParasite::TiltX:
+            index = qRound(info.xTilt() / 2.0 * rank) + rank / 2;
+            break;
+        case KisParasite::TiltY:
+            index = qRound(info.yTilt() / 2.0 * rank) + rank / 2;
             break;
         default:
             warnImage << "Parasite" << mode << "is not implemented";
@@ -69,6 +83,9 @@ protected:
             break;
         case KisParasite::Pressure:
         case KisParasite::Angular:
+            break;
+        case KisParasite::TiltX:
+        case KisParasite::TiltY:
             break;
         default:
             warnImage << "Parasite" << mode << "is not implemented";
@@ -353,11 +370,8 @@ const KisBoundary* KisImagePipeBrush::boundary() const
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)
 {
-    if (info.movement().isMuchSmallerThan(1) // FIXME the 1 here is completely arbitrary.
-            // What is the correct order of magnitude?
-            && m_d->brushesPipe.parasite().needsMovement)
-        return false;
-    return true;
+    return !m_d->brushesPipe.parasite().needsMovement ||
+        info.drawingDistance() >= 0.5;
 }
 
 KisImagePipeBrush* KisImagePipeBrush::clone() const

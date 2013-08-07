@@ -63,5 +63,5 @@ Name[zh_TW]=KSpread Applix 電子表單匯入過濾程式
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-applix-spreadsheet
 X-KDE-Weight=1
-X-KDE-Library=applixspreadimport
+X-KDE-Library=calligra_filter_applixspread2kspread
 X-KDE-ServiceTypes=Calligra/Filter

@@ -3,6 +3,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
+    ${KOODF_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx
     ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
@@ -47,15 +48,15 @@ set(excelimport_PART_SRCS excelimporttoods.cc ImportUtils.cpp ODrawClient.cpp ${
 kde4_add_plugin(excelimport ${excelimport_PART_SRCS})
 
 
-target_link_libraries(excelimport calligrasheetsodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
+target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
 
 #install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(excelimport_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
-kde4_add_plugin(excelimporttodoc ${excelimport_SRCS})
-target_link_libraries(excelimporttodoc calligrasheetsodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
+set(xls2ods_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
+kde4_add_plugin(calligra_filter_xls2ods ${xls2ods_SRCS})
+target_link_libraries(calligra_filter_xls2ods calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
 
-install(TARGETS excelimporttodoc DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_xls2ods DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

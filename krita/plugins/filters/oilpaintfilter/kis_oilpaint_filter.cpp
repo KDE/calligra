@@ -51,7 +51,6 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
-#include <kis_iterator_ng.h>
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 
@@ -61,11 +60,11 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArti
     setSupportsThreading(false);
 }
 
-void KisOilPaintFilter::process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                               ) const
+void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
+                                    const QRect& applyRect,
+                                    const KisFilterConfiguration* config,
+                                    KoUpdater* progressUpdater
+                                    ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());

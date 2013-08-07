@@ -78,7 +78,6 @@ public:
     QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
     
     NodeMap nodeList( QDataStream &stream );
-    static NodeMap removeChildNodes( const NodeMap nodes );
     using ItemModelBase::dropAllowed;
     bool dropAllowed( Node *on, const QMimeData *data );
     
@@ -113,9 +112,20 @@ protected slots:
     void slotLayoutChanged();
 
 protected:
+
+    // keep in sync with order in m_top
+    enum TaskStatus {
+        TaskUnknownStatus = -1,
+        TaskNotStarted = 0,
+        TaskRunning = 1,
+        TaskFinished = 2,
+        TaskUpcoming = 3
+    };
+
     QVariant alignment( int column ) const;
-    
+
     QVariant name( int row, int role ) const;
+    TaskStatusItemModel::TaskStatus taskStatus(const Task *task, const QDate &begin, const QDate &end);
 
     bool setCompletion( Node *node, const QVariant &value, int role );
     bool setRemainingEffort( Node *node, const QVariant &value, int role );

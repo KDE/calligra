@@ -65,8 +65,8 @@ TaskStatusItemModel::TaskStatusItemModel( QObject *parent )
     m_topTips << i18n( "Tasks that are scheduled to start next period" );
     m_top.append(&m_upcoming );
     
-/*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
-    connect( this, SIGNAL( modelReset() ), SLOT( slotReset() ) );*/
+/*    connect( this, SIGNAL(modelAboutToBeReset()), SLOT(slotAboutToBeReset()) );
+    connect( this, SIGNAL(modelReset()), SLOT(slotReset()) );*/
 }
 
 TaskStatusItemModel::~TaskStatusItemModel()
@@ -128,29 +128,29 @@ void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
-        disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
+        disconnect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
+        disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        disconnect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        disconnect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
         disconnect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
     
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        disconnect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        disconnect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
         disconnect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
     }
     m_project = project;
     m_nodemodel.setProject( project );
     if ( project ) {
-        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
-        connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
+        connect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
+        connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        connect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        connect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
         connect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
 
-        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
         connect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
     }
@@ -216,27 +216,17 @@ void TaskStatusItemModel::refresh()
         return;
     }
     setNow();
-    QDate begin = m_nodemodel.now().addDays( -m_period );
-    QDate end = m_nodemodel.now().addDays( m_period );
-    
+    const QDate begin = m_nodemodel.now().addDays( -m_period );
+    const QDate end = m_nodemodel.now().addDays( m_period );
+
     foreach( Node* n, m_project->allNodes() ) {
         if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
             continue;
         }
-        Task *t = static_cast<Task*>( n );
-        const Completion &c = t->completion();
-        if ( c.isFinished() ) {
-            if ( c.finishTime().date() > begin ) {
-                m_finished.insert( t->wbsCode(), t );
-            }
-        } else if ( c.isStarted() ) {
-            m_running.insert( t->wbsCode(), t );
-        } else if ( t->startTime( m_id ).date() < m_nodemodel.now() ) {
-            // should have been started
-            m_notstarted.insert( t->wbsCode(), t );
-        } else if ( t->startTime( m_id ).date() <= end ) {
-            // start next period
-            m_upcoming.insert( t->wbsCode(), t );
+        Task *task = static_cast<Task*>( n );
+        const TaskStatus status = taskStatus(task, begin, end);
+        if (status != TaskUnknownStatus) {
+            m_top.at(status)->insert(task->wbsCode(), task);
         }
     }
     foreach ( NodeMap *l, m_top ) {
@@ -701,25 +691,59 @@ Node *TaskStatusItemModel::node( const QModelIndex &index ) const
     return 0;
 }
 
+TaskStatusItemModel::TaskStatus TaskStatusItemModel::taskStatus(const Task *task,
+                                                                const QDate &begin, const QDate &end)
+{
+    TaskStatus result = TaskUnknownStatus;
+
+    const Completion &completion = task->completion();
+    if (completion.isFinished()) {
+        if (completion.finishTime().date() > begin) {
+            result = TaskFinished;
+        }
+    } else if (completion.isStarted()) {
+        result = TaskRunning;
+    } else if (task->startTime(m_id).date() < m_nodemodel.now()) {
+        // should have been started
+        result = TaskNotStarted;
+    } else if (task->startTime(m_id).date() <= end) {
+        // start next period
+        result = TaskUpcoming;
+    }
+    return result;
+}
+
 void TaskStatusItemModel::slotNodeChanged( Node *node )
 {
     kDebug(planDbg());
-    if ( node == 0 || node->type() == Node::Type_Project ) {
+    if (node == 0 || node->type() == Node::Type_Project ||
+        (node->type() != Node::Type_Task && node->type() != Node::Type_Milestone)) {
         return;
     }
-    QString wbs = node->wbsCode();
+
+    Task *task = static_cast<Task*>(node);
+
+    const QDate begin = m_nodemodel.now().addDays( -m_period );
+    const QDate end = m_nodemodel.now().addDays( m_period );
+
+    const TaskStatus status = taskStatus(task, begin, end);
+
     int row = -1;
-    if ( m_notstarted.value( wbs ) == node ) {
-        row = m_notstarted.keys().indexOf( wbs );
-    } else if ( m_running.value( wbs ) == node ) {
-        row = m_running.keys().indexOf( wbs );
-    } else if ( m_finished.value( wbs ) == node ) {
-        row = m_finished.keys().indexOf( wbs );
-    } else if ( m_upcoming.value( wbs ) == node ) {
-        row = m_upcoming.keys().indexOf( wbs );
+    if (status != TaskUnknownStatus) {
+        // find the row of the task
+        const QString wbs = node->wbsCode();
+        // TODO: not enough to just check the result of indexOf? wbs not unique?
+        if (m_top.at(status)->value(wbs) == node ) {
+            row = m_top.at(status)->keys().indexOf(wbs);
+        }
     }
-    if ( row >= 0 ) {
-        emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount() -1, node ) );
+
+    if (row >= 0) {
+        // task in old group, just changed values
+        emit dataChanged(createIndex(row, 0, node), createIndex(row, columnCount() - 1, node));
+    } else {
+        // task is new or changed groups
+        refresh();
     }
 }
 

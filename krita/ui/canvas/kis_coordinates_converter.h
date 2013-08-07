@@ -26,6 +26,13 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
+#define EPSILON 1e-6
+
+#define SCALE_LESS_THAN(scX, scY, value)                        \
+    (scX < (value) - EPSILON && scY < (value) - EPSILON)
+#define SCALE_MORE_OR_EQUAL_TO(scX, scY, value)                 \
+    (scX > (value) - EPSILON && scY > (value) - EPSILON)
+
 namespace _Private
 {
     template<class T> struct Traits
@@ -61,6 +68,8 @@ public:
     
     QPoint rotate(QPointF center, qreal angle);
     QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
+    bool xAxisMirrored() const;
+    bool yAxisMirrored() const;
     QPoint resetRotation(QPointF center);
     
     virtual void setZoom(qreal zoom);

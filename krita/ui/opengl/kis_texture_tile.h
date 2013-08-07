@@ -26,7 +26,6 @@
 
 #include <QRect>
 #include <QRectF>
-#include <opengl/kis_opengl.h>
 
 
 struct KisGLTexturesInfo {
@@ -38,6 +37,7 @@ struct KisGLTexturesInfo {
 
     int border;
 
+    GLint internalFormat;
     GLint format;
     GLint type;
 };
@@ -61,7 +61,6 @@ public:
     ~KisTextureTile();
 
     void update(const KisTextureTileUpdateInfo &updateInfo);
-    void drawPoints();
 
     inline QRect tileRectInImagePixels() {
         return m_tileRectInImagePixels;
@@ -74,7 +73,11 @@ public:
     inline QRect textureRectInImagePixels() {
         return m_textureRectInImagePixels;
     }
-
+    
+    inline QRectF tileRectInTexturePixels() {
+        return m_tileRectInTexturePixels;
+    }
+    
 private:
     void repeatStripes(const KisTextureTileUpdateInfo &updateInfo);
 

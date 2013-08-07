@@ -25,9 +25,14 @@
 #define MSOOXML_CURRENT_CLASS PptxCommentsReader
 
 #include <KoXmlWriter.h>
+#include <writeodf/writeodfoffice.h>
+#include <writeodf/writeodfdc.h>
+#include <writeodf/helpers.h>
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
+
+using namespace writeodf;
 
 class PptxXmlCommentsReader::Private
 {
@@ -76,28 +81,20 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
 void PptxXmlCommentsReader::saveOdfComments()
 {
     for(int i = 0; i < d->currentComment; ++i) {
-        body->startElement("office:annotation");
+        office_annotation annotation(body);
 
         QPoint position = d->positions.value(i);
         //FIXME according to the documentation these measurements are EMUs
         //but I still get wrong values and that's why I multiply by 1500
         const int fixmeFactor = 1500;
-        body->addAttribute("svg:x", EMU_TO_CM_STRING(position.x()*fixmeFactor));
-        body->addAttribute("svg:y", EMU_TO_CM_STRING(position.y()*fixmeFactor));
+        annotation.set_svg_x(EMU_TO_CM_STRING(position.x()*fixmeFactor));
+        annotation.set_svg_y(EMU_TO_CM_STRING(position.y()*fixmeFactor));
 
-        body->startElement("dc:creator");
-        body->addTextSpan(d->authors.value(i));
-        body->endElement();//dc:creator
+        annotation.add_dc_creator().addTextNode(d->authors.value(i));
+        annotation.add_dc_date().addTextNode(d->dates.value(i));
 
-        body->startElement("dc:date");
-        body->addTextSpan(d->dates.value(i));
-        body->endElement();//dc:date
-
-        body->startElement("text:p");
-        body->addTextSpan(d->texts.value(i));
-        body->endElement();//text:p
-
-        body->endElement();//office:annotation
+        text_p p(annotation.add_text_p());
+        addTextSpan(p, d->texts.value(i));
     }
 }
 

@@ -6,18 +6,24 @@ include_directories(
     ${JNI_INCLUDE_DIRS}
 )
 
-set(mpxjimport_PART_SRCS
+set(mpxj2plan_PART_SRCS
    mpxjimport.cpp
 )
 
 
-kde4_add_plugin(planmpxjimport ${mpxjimport_PART_SRCS})
+kde4_add_plugin(calligra_filter_mpxj2plan ${mpxj2plan_PART_SRCS})
 
-target_link_libraries(planmpxjimport komain ${JNI_LIBRARIES})
+target_link_libraries(calligra_filter_mpxj2plan komain)
+# Note: no need to link to ${JNI_LIBRARIES} currently, JNI not used,
+# cmp. "NOTE:" in mpxjimport.cpp
 
-install(TARGETS planmpxjimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_filter_mpxj2plan  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES
     plan_msproject_import.desktop
+    plan_msprojectexchange_import.desktop
     plan_planner_import.desktop
   DESTINATION ${SERVICES_INSTALL_DIR})
+
+install(FILES calligra_planner_mpp.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
+update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

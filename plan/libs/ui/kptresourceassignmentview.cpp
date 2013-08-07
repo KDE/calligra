@@ -45,7 +45,7 @@ ResourcesList::ResourcesList( QWidget * parent )
         : QTreeWidget( parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
-    //connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotContextMenuRequested( const QPoint& ) ) );
+    //connect( this, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequested(QPoint)) );
 }
 
 void ResourceAssignmentView::slotRequestPopupMenu( const QPoint &p )
@@ -134,8 +134,8 @@ ResourceAssignmentView::ResourceAssignmentView(KoPart *part, KoDocument *doc, QW
     m_part = doc;
     m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
 
-    connect( m_resList, SIGNAL( itemSelectionChanged() ), SLOT( resSelectionChanged() ) );
-    connect( m_taskList, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotRequestPopupMenu( const QPoint& ) ) );
+    connect( m_resList, SIGNAL(itemSelectionChanged()), SLOT(resSelectionChanged()) );
+    connect( m_taskList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotRequestPopupMenu(QPoint)) );
 }
 
 /*Store the selected item*/

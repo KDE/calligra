@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=MS Project Exchange Import Filter
+X-KDE-Export=application/x-vnd.kde.plan
+X-KDE-Import=application/x-project
+X-KDE-Weight=1
+X-KDE-Library=calligra_filter_mpxj2plan
+X-KDE-ServiceTypes=Calligra/Filter

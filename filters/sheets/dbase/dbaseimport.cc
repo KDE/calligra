@@ -62,30 +62,31 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
         return KoFilter::StupidError;
     }
 
-    QString root, documentInfo;
+    QString documentInfo;
 
-    root = "<!DOCTYPE spreadsheet >\n";
-    root += "<spreadsheet mime=\"application/x-kspread\" editor=\"KSpread\" >\n";
-    root += "<paper format=\"A4\" orientation=\"Portrait\" >\n";
-    root += "<borders right=\"20\" left=\"20\" bottom=\"20\" top=\"20\" />\n";
-    root += "<head/>\n";
-    root += "<foot/>\n";
-    root += "</paper>\n";
-    root += "<map activeTable=\"Table1\" >\n";
+    QString root = QLatin1String(
+        "<!DOCTYPE spreadsheet >\n"
+        "<spreadsheet mime=\"application/x-kspread\" editor=\"KSpread\" >\n"
+        "<paper format=\"A4\" orientation=\"Portrait\" >\n"
+        "<borders right=\"20\" left=\"20\" bottom=\"20\" top=\"20\" />\n"
+        "<head/>\n"
+        "<foot/>\n"
+        "</paper>\n"
+        "<map activeTable=\"Table1\" >\n"
 
-    root += "<locale positivePrefixCurrencySymbol=\"True\"";
-    root += "  negativeMonetarySignPosition=\"0\"";
-    root += "  negativePrefixCurrencySymbol=\"True\" fracDigits=\"2\"";
-    root += "  thousandsSeparator=\",\" dateFormat=\"%A %d %B %Y\"";
-    root += "  timeFormat=\"%H:%M:%S\" monetaryDecimalSymbol=\".\"";
-    root += "  weekStartsMonday=\"True\" currencySymbol=\"$\"";
-    root += "  negativeSign=\"-\" positiveSign=\"\"";
-    root += "  positiveMonetarySignPosition=\"1\" decimalSymbol=\".\"";
-    root += "  monetaryThousandsSeparator=\",\" dateFormatShort=\"%Y-%m-%d\" />\n";
+        "<locale positivePrefixCurrencySymbol=\"True\""
+        "  negativeMonetarySignPosition=\"0\""
+        "  negativePrefixCurrencySymbol=\"True\" fracDigits=\"2\""
+        "  thousandsSeparator=\",\" dateFormat=\"%A %d %B %Y\""
+        "  timeFormat=\"%H:%M:%S\" monetaryDecimalSymbol=\".\""
+        "  weekStartsMonday=\"True\" currencySymbol=\"$\""
+        "  negativeSign=\"-\" positiveSign=\"\""
+        "  positiveMonetarySignPosition=\"1\" decimalSymbol=\".\""
+        "  monetaryThousandsSeparator=\",\" dateFormatShort=\"%Y-%m-%d\" />\n"
 
-    root += "<table name=\"Table1\" columnnumber=\"0\" borders=\"0\"";
-    root += "  hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\"";
-    root += "  formular=\"0\" lcmode=\"0\" >\n";
+        "<table name=\"Table1\" columnnumber=\"0\" borders=\"0\""
+        "  hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\""
+        "  formular=\"0\" lcmode=\"0\" >\n");
 
     // Calligra default font
     QFont font = KoGlobal::defaultFont();
@@ -102,19 +103,19 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
     // define rows
     double h = POINT_TO_MM(5 + fm.height() + fm.leading());
     for (unsigned j = 0; j < dbase.recordCount(); j++) {
-        root += "<row row=\"" + QString::number(j + 1) + "\"";
-        root += " height=\"" + QString::number(h) + "\" ><format/></row>\n";
+        root += "<row row=\"" + QString::number(j + 1) + "\""
+                " height=\"" + QString::number(h) + "\" ><format/></row>\n";
     }
 
     // field names come as first row
     for (int i = 0; i < dbase.fields.count(); i++) {
-        root += "<cell row=\"1\" column=\"" + QString::number(i + 1) + "\" >\n";
-        root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
-        root += "<font family=\"" + font.family() + "\"" +
+        root += "<cell row=\"1\" column=\"" + QString::number(i + 1) + "\" >\n"
+                "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />"
+                "<font family=\"" + font.family() + "\"" +
                 " size=\"" + QString::number(font.pointSizeF()) + "\"" +
-                " weight=\"50\" />";
-        root += "</format>\n";
-        root += "<text>" + dbase.fields.at(i)->name + "</text></cell>\n";
+                " weight=\"50\" />"
+                "</format>\n"
+                "<text>" + dbase.fields.at(i)->name + "</text></cell>\n";
     }
 
     // process all records
@@ -124,23 +125,23 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
         if (rec.count()) {
             row++;
             for (int i = 0; i < rec.count(); i++) {
-                root += "<cell row=\"" + QString::number(row) + "\"" +
-                        "column=\"" + QString::number(i + 1) + "\" >\n";
-                root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
-                root += "<font family=\"" + font.family() + "\"" +
-                        " size=\"" + QString::number(font.pointSizeF()) + "\"" +
-                        " weight=\"50\" />";
-                root += "</format>\n";
-                root += "<text>" + rec[i] + "</text></cell>\n";
+                root += "<cell row=\"" + QString::number(row) + "\""
+                        "column=\"" + QString::number(i + 1) + "\" >\n"
+                        "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />"
+                        "<font family=\"" + font.family() + "\""
+                        " size=\"" + QString::number(font.pointSizeF()) + "\""
+                        " weight=\"50\" />"
+                        "</format>\n"
+                        "<text>" + rec[i] + "</text></cell>\n";
             }
         }
     }
 
     dbase.close();
 
-    root += "</table>\n";
-    root += "</map>\n";
-    root += "</spreadsheet>";
+    root += "</table>\n"
+            "</map>\n"
+            "</spreadsheet>";
 
     // prepare storage
     KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);

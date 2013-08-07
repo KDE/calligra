@@ -105,7 +105,7 @@ void KexiDateTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
 
 bool KexiDateTableEdit::valueIsNull()
 {
-// if (m_lineedit->text().replace(m_formatter.separator(),"").trimmed().isEmpty())
+// if (m_lineedit->text().remove(m_formatter.separator()).trimmed().isEmpty())
     if (m_formatter.isEmpty(m_lineedit->text())) //empty date is null
         return true;
     return dateValue().isNull();

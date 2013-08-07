@@ -185,7 +185,7 @@ bool OracleConnectionInternal::executeSQL(const QString& statement) {
     }
 }
 QString OracleConnectionInternal::escapeIdentifier(const QString& str) const {
-	return QString(str).replace('`', "'").toUpper();
+	return QString(str).replace('`', '\'').toUpper();
 }
 QString OracleConnectionInternal::getServerVersion()
 {

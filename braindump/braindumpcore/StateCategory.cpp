@@ -18,11 +18,11 @@
  */
 
 #include "StateCategory.h"
+#include "StateCategory_p.h"
 
 #include <kdebug.h>
 
 #include "State.h"
-#include "StateCategory_p.h"
 
 StateCategory::StateCategory(const QString& _id, const QString& _name, int _priority) : d(new Private)
 {

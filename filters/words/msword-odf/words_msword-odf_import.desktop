@@ -39,5 +39,5 @@ Name[zh_TW]=Words MS Word-ODF 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/msword
 X-KDE-Weight=1
-X-KDE-Library=mswordodf_import
+X-KDE-Library=calligra_filter_doc2odt
 X-KDE-ServiceTypes=Calligra/Filter

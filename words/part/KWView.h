@@ -23,6 +23,8 @@
 
 #include "words_export.h"
 #include "KWPage.h"
+#include "./dockers/KWStatisticsWidget.h"
+#include "./dockers/KWStatisticsDocker.h"
 
 #include <KoView.h>
 #include <KoViewConverter.h>
@@ -42,6 +44,7 @@ class KoZoomController;
 class KoFindText;
 class KoFindStyle;
 
+class QPushButton;
 #ifdef SHOULD_BUILD_RDF
 class KoRdfSemanticItem;
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
@@ -116,6 +119,9 @@ public:
     int minPageNumber() const { return m_minPageNum; }
     int maxPageNumber() const { return m_maxPageNum; }
 
+    void viewMouseMoveEvent(QMouseEvent *e);
+
+
 signals:
     void shownPagesChanged();
 
@@ -137,6 +143,8 @@ public slots:
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
     void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+    /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
+    void exitDistractioFreeMode();
 
 protected:
     /// reimplemented method from superclass
@@ -200,6 +208,17 @@ private slots:
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard
     void pasteRequested();
+    /// Call when the user want to show/hide the WordsCount in the statusbar
+    void showWordCountInStatusBar(bool toggled);
+    /**
+     * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
+     * and set view into  full screen mode.
+     */
+    void setDistractionFreeMode(bool);
+    /// Call after 4 seconds, user doesn't move cursor.
+    void hideCursor();
+    /// Hide status bar and scroll bars after seconds in Distraction-Free mode.
+    void hideUI();
 
 private:
     KWGui *m_gui;
@@ -236,6 +255,16 @@ private:
     qreal m_textMaxX; // The max x value where text can appear we currently show. Prevents endless loop
     int m_minPageNum;
     int m_maxPageNum;
+
+    //Word count stuff for display in status bar
+    void buildAssociatedWidget();
+    KWStatisticsWidget *wordCount;
+
+    bool m_isDistractionFreeMode;
+    QTimer *m_hideCursorTimer;
+    // The button will add to staus bar in distraction-free mode to let user come
+    // back to standard view.
+    QPushButton *m_dfmExitButton;
 };
 
 #endif

@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_select_brush.h"
+
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -41,7 +43,6 @@ USING_PART_OF_NAMESPACE_EIGEN
 #include "kis_pixel_selection.h"
 #include "kis_image.h"
 #include "kis_selection_options.h"
-#include "kis_tool_select_brush.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_paintop_preset.h"
 
@@ -185,7 +186,7 @@ void KisToolSelectBrush::slotSetBrushSize(int size)
     m_brushRadius = ((qreal) size)/2.0;
 }
 
-void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
+void KisToolSelectBrush::applyToSelection(QPainterPath selection) {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     if (!kisCanvas)
@@ -205,7 +206,9 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
+        selection.closeSubpath();
         painter.fillPainterPath(selection);
+        tmpSel->setOutlineCache(selection);
 
         helper.selectPixelSelection(tmpSel, selectionAction());
 
