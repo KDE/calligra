@@ -106,12 +106,7 @@ public:
      * Tells this view that its document has got deleted (called internally)
      */
     void setDocumentDeleted();
-    /**
-     * @return true if the document has already got deleted.
-     * This can be useful for the view destructor to know if it can
-     * access the document or not.
-     */
-    bool documentDeleted() const;
+
 
     /**
      * Returns the action described action object. In fact only the "name" attribute

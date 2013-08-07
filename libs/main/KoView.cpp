@@ -284,10 +284,6 @@ void KoView::setDocumentDeleted()
     d->documentDeleted = true;
 }
 
-bool KoView::documentDeleted() const
-{
-    return d->documentDeleted;
-}
 
 QAction *KoView::action(const QDomElement &element) const
 {
