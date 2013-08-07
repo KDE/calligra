@@ -40,7 +40,7 @@ public:
 
     bool slateMode() const;
 
-    QString applicationName() const { return QLatin1String("KRITA GEMINI"); };
+    QString applicationName() const { return QLatin1String("KRITA GEMINI"); }
 
     QString currentSketchPage() const;
     void setCurrentSketchPage(QString newPage);
