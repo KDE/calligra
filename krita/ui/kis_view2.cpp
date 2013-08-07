@@ -349,7 +349,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     if (shell()) {
 
         connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
-
         action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
         if (action) {
             action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
