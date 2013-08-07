@@ -65,9 +65,8 @@ Solver::Solver(QObject* parent, const QVariantList& args)
         return;
     }
 
-    QAction* solver = actionCollection()->addAction("sheetssolver");
+    QAction* solver = actionCollection()->addAction("sheetssolver", this, SLOT(showDialog()));
     solver->setText(i18n("Function Optimizer..."));
-    connect(solver, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
 
 Solver::~Solver()

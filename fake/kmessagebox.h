@@ -23,6 +23,12 @@ public:
         m.exec();
     }
 
+    static void errorList(QWidget *parent, const QString &text, const QStringList &strlist, const QString &caption = QString(), Options options = Notify)
+    {
+        QMessageBox m(QMessageBox::Critical, caption, text, QMessageBox::Ok, parent);
+        m.exec();
+    }
+
     static void sorry(QWidget *parent, const QString &text, const QString &caption = QString(), Options options = Notify)
     {
         QMessageBox m(QMessageBox::Warning, caption, text, QMessageBox::Ok, parent);

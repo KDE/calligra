@@ -10,16 +10,15 @@ class KOFAKE_EXPORT KDateWidget : public QWidget
 {
     Q_OBJECT
 public:
-    enum OperationMode { Other = 0, Opening, Saving };
-
     KDateWidget(QWidget *parent)
         : QWidget(parent)
+        , m_date(QDate())
     {
     }
 
     const QDate& date() const {return m_date;}
 
-    bool setDate(const QDate &date) {return true;}
+    bool setDate(const QDate &date) {m_date=date; return true;}
 
 private:
     QDate m_date;

@@ -38,6 +38,13 @@ public:
         m_actions.append(a);
         return a;
     }
+    KAction* addAction(const QString &name, QObject *receiver, const char *slot) {
+        KAction *a = new KAction(name, this);
+        connect(a, SIGNAL(triggered(bool)), receiver, slot);
+        m_actionNames.append(name);
+        m_actions.append(a);
+        return a;
+    }
     void takeAction(QAction *action) {
         do {
             int index = m_actions.indexOf(action);
