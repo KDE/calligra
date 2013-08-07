@@ -478,8 +478,6 @@ void KoPart::addMainWindow(KoMainWindow *mainWindow)
     if (d->mainWindows.indexOf(mainWindow) == -1) {
         kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
         d->mainWindows.append(mainWindow);
-        // XXX!!!
-        //connect(mainWindow, SIGNAL(documentSaved()), d->undoStack, SLOT(setClean()));
     }
 }
 
