@@ -139,8 +139,7 @@ int main( int argc, char** argv )
 // #else
 //     window.show();
 // #endif
-    window.show();
-    splash.finish(&window);
+    window.showMaximized();
 
     return app.exec();
 }
