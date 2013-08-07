@@ -19,7 +19,6 @@ public:
     enum MonthNameFormat { ShortName, LongName, ShortNamePossessive, LongNamePossessive, NarrowName };
     enum WeekDayNameFormat { ShortDayName, LongDayName, NarrowDayName };
 
-#if 0
     //KDE5 add default value to calendarSystem
     /**
      * @since 4.6
@@ -31,9 +30,9 @@ public:
      * @return a KCalendarSystem object
      */
     static KCalendarSystem *create(KLocale::CalendarSystem calendarSystem,
-                                   const KLocale *locale = 0);
+                                   const KLocale *locale = 0) {return 0;}
 
-    /**
+#if 0    /**
      * @since 4.6
      *
      * Creates a KCalendarSystem object for the required Calendar System
@@ -323,14 +322,14 @@ public:
      * @return year, 0 if input date is invalid
      */
     virtual int year(const QDate &date) const;
-
+#endif
     /**
      * Returns the month portion of a given date in the current calendar system
      *
      * @param date date to return month for
      * @return month of year, 0 if input date is invalid
      */
-    virtual int month(const QDate &date) const;
+    int month(const QDate &date) const {return 0;}
 
     /**
      * Returns the day portion of a given date in the current calendar system
@@ -338,8 +337,8 @@ public:
      * @param date date to return day for
      * @return day of the month, 0 if input date is invalid
      */
-    virtual int day(const QDate &date) const;
-
+     int day(const QDate &date) const {return 0;}
+#if 0
     //KDE5 make virtual?
     /**
      * @since 4.5
@@ -570,6 +569,7 @@ public:
      * @return day of year number, -1 if input date not valid
      */
     virtual int dayOfYear(const QDate &date) const;
+#endif
 
     /**
      * Returns the weekday number for the given date
@@ -581,24 +581,7 @@ public:
      * @param date the date to obtain day from
      * @return day of week number, -1 if input date not valid
      */
-    virtual int dayOfWeek(const QDate &date) const;
-
-    /**
-     * @deprecated use week() instead
-     *
-     * Returns the ISO week number for the given date.
-     *
-     * ISO 8601 defines the first week of the year as the week containing the first Thursday.
-     * See http://en.wikipedia.org/wiki/ISO_8601 and http://en.wikipedia.org/wiki/ISO_week_date
-     *
-     * If the date falls in the last week of the previous year or the first week of the following
-     * year, then the yearNum returned will be set to the appropriate year.
-     *
-     * @param date the date to obtain week from
-     * @param yearNum returns the year the date belongs to
-     * @return ISO week number, -1 if input date invalid
-     */
-    KDE_DEPRECATED virtual int weekNumber(const QDate &date, int *yearNum = 0) const;
+    int dayOfWeek(const QDate &date) const {return 0;}
 
     //KDE5 Make virtual?
     /**
@@ -618,8 +601,9 @@ public:
      * @param yearNum returns the year the date belongs to
      * @return localized week number, -1 if input date invalid
      */
-    int week(const QDate &date, int *yearNum = 0) const;
+    int week(const QDate &date, int *yearNum = 0) const {return 0;}
 
+#if 0
     //KDE5 Make virtual?
     /**
      * Returns the Week Number for the date in the required Week Number System.
