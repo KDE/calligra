@@ -24,6 +24,8 @@
 #ifndef CALLIGRA_SHEETS_CALENDAR_TOOL_WIDGET
 #define CALLIGRA_SHEETS_CALENDAR_TOOL_WIDGET
 
+#include <QDialog>
+
 #include <ui_CalendarToolWidget.h>
 
 

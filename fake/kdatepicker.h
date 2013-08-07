@@ -11,7 +11,15 @@
 class KDatePicker : public QWidget
 {
 public:
-    KDatePicker(QWidget *parent) : QWidget(parent) {}
+    KDatePicker(QWidget *parent=0) : QWidget(parent) {}
+
+    const QDate& date() const {return m_date;}
+
+    bool setDate(const QDate &date) {return true;}
+
+private:
+    QDate m_date;
+
 };
 
 #endif
