@@ -45,6 +45,7 @@ Page {
             loadingDialog.progress = value;
             savingDialog.progress = value;
         }
+        onViewChanged: if(window.sketchKisView !== undefined) { window.sketchKisView = view; }
     }
     Connections {
         target: window;

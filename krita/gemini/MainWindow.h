@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow
 	Q_PROPERTY(bool slateMode READ slateMode NOTIFY slateModeChanged)
     Q_PROPERTY(QString applicationName READ applicationName CONSTANT)
     Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
+    Q_PROPERTY(QObject* sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
 
 public:
     explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = 0);
@@ -45,6 +46,9 @@ public:
     QString currentSketchPage() const;
     void setCurrentSketchPage(QString newPage);
 
+    QObject* sketchKisView() const;
+    void setSketchKisView(QObject* newView);
+
     virtual void closeEvent(QCloseEvent* event);
 
 public Q_SLOTS:
@@ -59,6 +63,7 @@ Q_SIGNALS:
     void switchedToSketch();
     void slateModeChanged();
     void currentSketchPageChanged();
+    void sketchKisViewChanged();
 
 private Q_SLOTS:
     void switchDesktopForced();

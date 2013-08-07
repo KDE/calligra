@@ -20,6 +20,7 @@
  */
 
 #include "MainWindow.h"
+#include "desktopviewproxy.h"
 
 #include "opengl/kis_opengl.h"
 
@@ -75,9 +76,10 @@ public:
         , currentView(0)
         , slateMode(false)
         , docked(false)
+        , sketchKisView(0)
         , forceDesktop(false)
         , forceSketch(false)
-        , wasMaximized(false)
+        , wasMaximized(true)
     {
 #ifdef Q_OS_WIN
         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
@@ -93,6 +95,7 @@ public:
     bool slateMode;
     bool docked;
     QString currentSketchPage;
+    KisView2* sketchKisView;
 
     bool forceDesktop;
     bool forceSketch;
@@ -149,6 +152,10 @@ public:
         connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToSketch()));
         desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
         desktopView->toolBar()->addActions(QList<QAction*>() << toSketch);
+
+        // DesktopViewProxy connects itself up to everything appropriate on construction,
+        // and destroys itself again when the view is removed
+        new DesktopViewProxy(q, desktopView);
     }
 
     void notifySlateModeChange();
@@ -221,15 +228,15 @@ void MainWindow::switchToDesktop()
     //if(d->wasMaximized)
         showMaximized();
     //else
-    //    showNormal();
+        //showNormal();
     qApp->processEvents();
     if(d->desktopView && qobject_cast<KisView2*>(d->desktopView->rootView()))
     {
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
-        QPoint center = view->canvasBase()->coordinatesConverter()->widgetCenterPoint().toPoint();
+        QPoint center = view->rect().center();//->canvasBase()->coordinatesConverter()->widgetCenterPoint().toPoint();
         view->canvasController()->zoomIn(center);
         view->canvasController()->zoomOut(center);
-        view->canvasControllerWidget()->setPreferredCenter(view->canvasBase()->viewConverter()->documentToView(view->image()->bounds()).center());
+        view->canvasControllerWidget()->setPreferredCenter(view->image()->bounds().center());
     }
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
@@ -279,6 +286,20 @@ void MainWindow::setCurrentSketchPage(QString newPage)
         {
             QTimer::singleShot(2000, this, SLOT(switchToDesktop()));
         }
+    }
+}
+
+QObject* MainWindow::sketchKisView() const
+{
+    return d->sketchKisView;
+}
+
+void MainWindow::setSketchKisView(QObject* newView)
+{
+    if(d->sketchKisView != newView)
+    {
+        d->sketchKisView = qobject_cast<KisView2*>(newView);
+        emit sketchKisViewChanged();
     }
 }
 

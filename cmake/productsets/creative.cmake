@@ -1,7 +1,7 @@
 #defines the set of products commonly wanted by Creationists ;)
 
 set( CALLIGRA_SHOULD_BUILD_PRODUCTS
-    KARBON
+#    KARBON
     KRITA
     CONVERTER
 # extras
