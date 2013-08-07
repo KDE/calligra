@@ -26,6 +26,7 @@
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QMessageBox>
+#include <QSplashScreen>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -33,7 +34,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
-
+#include "data/splash/splash_screen.xpm"
 #include "MainWindow.h"
 
 #include "sketch/SketchInputContext.h"
@@ -74,6 +75,16 @@ int main( int argc, char** argv )
     }
 
     KApplication app;
+
+    // then create the pixmap from an xpm: we cannot get the
+    // location of our datadir before we've started our components,
+    // so use an xpm.
+    QPixmap pm(splash_screen_xpm);
+    QSplashScreen splash(pm);
+    splash.show();
+    splash.showMessage(".");
+    app.processEvents();
+
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
@@ -129,6 +140,7 @@ int main( int argc, char** argv )
 //     window.show();
 // #endif
     window.show();
+    splash.finish(&window);
 
     return app.exec();
 }
