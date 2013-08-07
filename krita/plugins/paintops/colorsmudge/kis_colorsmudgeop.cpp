@@ -140,13 +140,15 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // Save the hot spot point for the next iteration
     m_lastPaintPos = scatteredPos;
 
-    qreal coveredDistance = m_spacingOption.isChecked() ?
-        spacing(m_spacingOption.apply(info)) : spacing(scale);
+    KisSpacingInformation spacingInfo =
+        effectiveSpacing(m_maskBounds.width(), m_maskBounds.height(),
+                         m_spacingOption, info);
 
     if (m_firstRun) {
         m_firstRun = false;
-        return coveredDistance;
+        return spacingInfo;
     }
+
 
     // save the old opacity value and composite mode
     quint8               oldOpacity = painter()->opacity();
@@ -224,6 +226,6 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldModeId);
-   
+
     return spacingInfo;
 }
