@@ -24,7 +24,7 @@
 #include <QImage>
 #include <QPainter>
 
-
+#include <KoDocumentEntry.h>
 #include <KoPart.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
@@ -74,9 +74,8 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
     const QString mimetype = KMimeType::findByPath(fileName)->name();
 
     QString error;
-    KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
-                               mimetype, QLatin1String("Calligra/Part"), 0, QString(),
-                               QVariantList(), &error );
+    KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
+    KoPart *part = documentEntry.createKoPart(&error);
 
     if (!error.isEmpty()) {
         qWarning() << "Error creating document" << mimetype << error;
