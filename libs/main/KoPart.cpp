@@ -524,15 +524,6 @@ KoDocumentInfoDlg *KoPart::createDocumentInfoDialog(QWidget *parent, KoDocumentI
     return new KoDocumentInfoDlg(parent, docInfo);
 }
 
-void KoPart::showLoadingErrorDialog()
-{
-    if (d->document->errorMessage().isEmpty()) {
-        KMessageBox::error(0, i18n("Could not open\n%1", localFilePath()));
-    } else if (d->document->errorMessage() != "USER_CANCELED") {
-        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", localFilePath(), d->document->errorMessage()));
-    }
-}
-
 void KoPart::openExistingFile(const KUrl& url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
@@ -557,7 +548,7 @@ void KoPart::openTemplate(const KUrl& url)
         d->document->resetURL();
         d->document->setEmpty();
     } else {
-        showLoadingErrorDialog();
+        d->document->showLoadingErrorDialog();
         d->document->initEmpty();
     }
     qApp->restoreOverrideCursor();

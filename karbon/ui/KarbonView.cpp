@@ -581,7 +581,7 @@ void KarbonView::fileImportGraphic()
         // directly load the native format
         success = importDocument.loadNativeFormat(fname);
         if (!success) {
-            importPart.showLoadingErrorDialog();
+            importDocument.showLoadingErrorDialog();
         }
     } else {
         // use import filters to load the file
@@ -589,12 +589,12 @@ void KarbonView::fileImportGraphic()
         KoFilter::ConversionStatus status = KoFilter::OK;
         QString importedFile = man.importDocument(fname, QString(), status);
         if (status != KoFilter::OK) {
-            importPart.showLoadingErrorDialog();
+            importDocument.showLoadingErrorDialog();
             success = false;
         } else if (!importedFile.isEmpty()) {
             success = importDocument.loadNativeFormat(importedFile);
             if (!success) {
-                importPart.showLoadingErrorDialog();
+                importDocument.showLoadingErrorDialog();
             }
             // remove the temporary file created during format conversion
             unlink(QFile::encodeName(importedFile));

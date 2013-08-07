@@ -1317,7 +1317,7 @@ bool KoDocument::openFile()
         if (!loadNativeFormat(importedFile)) {
             ok = false;
             if (d->autoErrorHandlingEnabled) {
-                d->parentPart->showLoadingErrorDialog();
+                showLoadingErrorDialog();
             }
         }
     }
@@ -1986,6 +1986,16 @@ void KoDocument::setErrorMessage(const QString& errMsg)
 QString KoDocument::errorMessage() const
 {
     return d->lastErrorMessage;
+}
+
+void KoDocument::showLoadingErrorDialog()
+{
+    if (errorMessage().isEmpty()) {
+        KMessageBox::error(0, i18n("Could not open\n%1", d->parentPart->localFilePath()));
+    }
+    else if (errorMessage() != "USER_CANCELED") {
+        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", d->parentPart->localFilePath(), errorMessage()));
+    }
 }
 
 bool KoDocument::isAutosaving() const

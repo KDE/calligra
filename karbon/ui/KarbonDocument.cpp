@@ -441,7 +441,7 @@ bool KarbonDocument::mergeNativeFormat(const QString &file)
     d->merge = true;
     bool result = loadNativeFormat(file);
     if (!result)
-        documentPart()->showLoadingErrorDialog();
+        showLoadingErrorDialog();
     d->merge = false;
     return result;
 }

@@ -94,15 +94,6 @@ public:
      */
     KoDocument *document() const;
 
-    /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a loading problem.
-     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
-     * so this is often called after loadNativeFormat returned false.
-     */
-    void showLoadingErrorDialog();
-
-
     // ----------------- mainwindow management -----------------
 
     /**
