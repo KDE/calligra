@@ -74,6 +74,8 @@ bool PSDLayerSection::read(QIODevice* io)
     }
 
     dbgFile << "reading layer info block. Bytes left" << io->bytesAvailable() << "position" << io->pos();
+
+    layerInfoSize = 0;
     if (m_header.version == 1) {
         quint32 _layerInfoSize;
         if (!psdread(io, &_layerInfoSize) || _layerInfoSize > (quint64)io->bytesAvailable()) {
@@ -214,8 +216,9 @@ bool PSDLayerSection::read(QIODevice* io)
         }
     }
 
-    quint32 globalMaskBlockLength; 
-    if (!psdread(io, &globalMaskBlockLength)) {
+    quint32 globalMaskBlockLength;
+
+    if (!psdread(io, &globalMaskBlockLength) || globalMaskBlockLength > (quint64)io->bytesAvailable()) {
         error = "Could not read global mask info block";
         return false;
     }
