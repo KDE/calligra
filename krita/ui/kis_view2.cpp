@@ -343,15 +343,15 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
     }
 
-    //Workaround, by default has the same shortcut as hide/show dockers
-    action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
-    if (action) {
-        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-    }
-
     if (mainWindow())
     {
+        //Workaround, by default has the same shortcut as hide/show dockers
+        action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
+        if (action) {
+            action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+            action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+        }
+
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         mainWindow()->createDockWidget(&toolBoxFactory);
 
