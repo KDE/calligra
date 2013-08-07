@@ -350,7 +350,12 @@ bool KoDocument::saveFile()
     QApplication::restoreOverrideCursor();
     if (!ret) {
         if (!suppressErrorDialog) {
-            d->parentPart->showSavingErrorDialog();
+            if (errorMessage().isEmpty()) {
+                KMessageBox::error(0, i18n("Could not save\n%1", d->parentPart->localFilePath()));
+            } else if (errorMessage() != "USER_CANCELED") {
+                KMessageBox::error(0, i18n("Could not save %1\nReason: %2", d->parentPart->localFilePath(), errorMessage()));
+            }
+
         }
 
         // couldn't save file so this new URL is invalid

@@ -524,15 +524,6 @@ KoDocumentInfoDlg *KoPart::createDocumentInfoDialog(QWidget *parent, KoDocumentI
     return new KoDocumentInfoDlg(parent, docInfo);
 }
 
-void KoPart::showSavingErrorDialog()
-{
-    if (d->document->errorMessage().isEmpty()) {
-        KMessageBox::error(0, i18n("Could not save\n%1", localFilePath()));
-    } else if (d->document->errorMessage() != "USER_CANCELED") {
-        KMessageBox::error(0, i18n("Could not save %1\nReason: %2", localFilePath(), d->document->errorMessage()));
-    }
-}
-
 void KoPart::showLoadingErrorDialog()
 {
     if (d->document->errorMessage().isEmpty()) {
