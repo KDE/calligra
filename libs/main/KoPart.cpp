@@ -383,7 +383,7 @@ void KoPart::setDocument(KoDocument *document)
 {
     Q_ASSERT(document);
     d->document = document;
-    connect(d->document, SIGNAL(titleModified(QString,bool)), SLOT(setTitleModified(QString,bool)));
+
 }
 
 KoDocument *KoPart::document() const
@@ -562,17 +562,6 @@ void KoPart::addRecentURLToAllMainWindows(KUrl url)
     }
 
 }
-
-void KoPart::setTitleModified(const QString &caption, bool mod)
-{
-    // we must be root doc so update caption in all related windows
-    foreach(KoMainWindow *mainWindow, d->mainWindows) {
-        mainWindow->updateCaption(caption, mod);
-        mainWindow->updateReloadFileAction(d->document);
-        mainWindow->updateVersionsFileAction(d->document);
-    }
-}
-
 
 void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
 {

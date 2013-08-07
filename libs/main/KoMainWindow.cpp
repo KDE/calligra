@@ -470,6 +470,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
     KoPart *oldRootPart = d->rootPart;
 
     if (oldRootDoc) {
+        oldRootDoc->disconnect(this);
         oldRootPart->removeMainWindow(this);
 
         if (dockerManager()) {
@@ -550,6 +551,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
     if (!d->rootDocument) {
         statusBar()->setVisible(false);
     }
+    connect(d->rootDocument, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
 }
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)
@@ -2132,6 +2134,16 @@ void KoMainWindow::slotWidgetDestroyed()
         setActivePart(0, 0); //do not remove the part because if the part's widget dies, then the
     //part will delete itself anyway, invoking removePart() in its destructor
 }
+
+void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
+{
+    updateCaption(caption, mod);
+    updateReloadFileAction(d->rootDocument);
+    updateVersionsFileAction(d->rootDocument);
+
+}
+
+
 
 
 

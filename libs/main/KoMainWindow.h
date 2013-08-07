@@ -433,7 +433,7 @@ private slots:
      * @internal
      */
     void slotWidgetDestroyed();
-
+    void slotDocumentTitleModified(const QString &caption, bool mod);
 
 // ---------------------  PartManager
 

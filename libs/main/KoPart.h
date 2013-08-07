@@ -151,7 +151,6 @@ signals:
 
 private slots:
 
-    void setTitleModified(const QString &caption, bool mod);
     void startCustomDocument();
 
 
