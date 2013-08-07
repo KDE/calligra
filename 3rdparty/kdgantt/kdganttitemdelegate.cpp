@@ -501,7 +501,7 @@ void ItemDelegate::paintFinishFinishConstraint( QPainter* painter, const QStyleO
 
     // data() pen
     if( qVariantCanConvert< QPen >( dataPen ) )
-        pen = qVariantValue< QPen >( dataPen );
+        pen = dataPen.value< QPen >();
 
     painter->setPen( pen );
     painter->setBrush( pen.color() );
