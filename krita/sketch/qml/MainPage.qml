@@ -257,6 +257,7 @@ Page {
                 d.loadNewFile();
             }
         }
+        onTemporaryFileChanged: if(window.temporaryFile !== undefined) window.temporaryFile = Settings.temporaryFile;
     }
 
     onStatusChanged: {
