@@ -163,6 +163,14 @@ void DocumentManager::delayedSaveAs()
     emit documentSaved();
 }
 
+void DocumentManager::reload()
+{
+    KUrl url = part()->url();
+    closeDocument();
+    d->openDocumentFilename = url.toLocalFile();
+    QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));
+}
+
 DocumentManager* DocumentManager::instance()
 {
     if(!sm_instance) {

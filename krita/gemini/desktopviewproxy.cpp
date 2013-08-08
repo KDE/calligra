@@ -67,6 +67,9 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     QAction* saveasAction = d->desktopView->actionCollection()->action("file_save_as");
     saveasAction->disconnect(d->desktopView);
     connect(saveasAction, SIGNAL(triggered(bool)), this, SLOT(fileSaveAs()));
+    QAction* reloadAction = d->desktopView->actionCollection()->action("file_reload_file");
+    reloadAction->disconnect(d->desktopView);
+    connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload(bool)));
 }
 
 DesktopViewProxy::~DesktopViewProxy()
@@ -76,13 +79,11 @@ DesktopViewProxy::~DesktopViewProxy()
 
 void DesktopViewProxy::fileNew()
 {
-    qDebug() << Q_FUNC_INFO;
     QProcess::startDetached(qApp->applicationFilePath(), QStringList(), QDir::currentPath());
 }
 
 void DesktopViewProxy::fileOpen()
 {
-    qDebug() << Q_FUNC_INFO;
 #ifdef Q_WS_WIN
     // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
     // TODO provide support for "last visited" directory
@@ -113,14 +114,17 @@ void DesktopViewProxy::fileOpen()
 
 void DesktopViewProxy::fileSave()
 {
-    qDebug() << Q_FUNC_INFO;
     DocumentManager::instance()->save();
 }
 
 bool DesktopViewProxy::fileSaveAs()
 {
-    qDebug() << Q_FUNC_INFO;
     return d->desktopView->saveDocument(true);
+}
+
+void DesktopViewProxy::reload()
+{
+    DocumentManager::instance()->reload();
 }
 
 #include "desktopviewproxy.moc"

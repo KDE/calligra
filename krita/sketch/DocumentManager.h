@@ -45,6 +45,7 @@ public Q_SLOTS:
     void closeDocument();
     bool save();
     void saveAs(const QString &filename, const QString &mimetype);
+    void reload();
 
     static DocumentManager* instance();
 
