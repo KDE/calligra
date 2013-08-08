@@ -32,6 +32,7 @@
 #include <QDir>
 #include <QFile>
 #include <QMessageBox>
+#include <QToolButton>
 #include <QFileInfo>
 #include <QGLWidget>
 
@@ -42,6 +43,7 @@
 #include <kaboutdata.h>
 #include <ktoolbar.h>
 #include <kmessagebox.h>
+#include <kmenubar.h>
 
 #include <KoCanvasBase.h>
 #include <KoColorSpaceRegistry.h>
@@ -162,7 +164,13 @@ public:
         connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchSketchForced()));
         connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToSketch()));
         desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
-        desktopView->toolBar()->addActions(QList<QAction*>() << toSketch);
+        QToolButton* switcher = new QToolButton();
+        switcher->setText(tr("Switch to Sketch"));
+        switcher->setIcon(QIcon::fromTheme("system-reboot"));
+        switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
+        connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToSketch()));
+        desktopView->menuBar()->setCornerWidget(switcher);
 
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
