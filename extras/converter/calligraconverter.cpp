@@ -27,7 +27,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmimetype.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
@@ -38,6 +37,8 @@
 #include <KoFilterManager.h>
 #include <KoPrintJob.h>
 #include <KoView.h>
+
+#include <QApplication>
 
 #include <calligraversion.h>
 
@@ -143,6 +144,8 @@ bool convert(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, cons
 
 int main(int argc, char **argv)
 {
+    QApplication app(argc, argv);
+
     KAboutData aboutData("calligraconverter", 0, ki18n("CalligraConverter"), CALLIGRA_VERSION_STRING,
                          ki18n("Calligra Document Converter"),
                          KAboutData::License_GPL,
@@ -167,13 +170,13 @@ int main(int argc, char **argv)
 
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KApplication app;
 
     // Install the libcalligra* translations
     KGlobal::locale()->insertCatalog("calligra");
 
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+#if 0
     if (args->count() != 2) {
         KCmdLineArgs::usageError(i18n("Two arguments required"));
         return 3;
@@ -181,7 +184,13 @@ int main(int argc, char **argv)
 
     KUrl urlIn = args->url(0);
     KUrl urlOut = args->url(1);
-
+#else
+    if (argc != 3) {
+        return 3;
+    }
+    KUrl urlIn = KUrl::fromLocalFile(argv[1]);
+    KUrl urlOut = KUrl::fromLocalFile(argv[2]);
+#endif
     // Are we in batch mode or in interactive mode.
     bool batch = args->isSet("batch");
     if (args->isSet("interactive")) {
