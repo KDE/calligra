@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow
 	Q_PROPERTY(bool slateMode READ slateMode NOTIFY slateModeChanged)
     Q_PROPERTY(QString applicationName READ applicationName CONSTANT)
     Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
+    Q_PROPERTY(bool temporaryFile READ temporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
     Q_PROPERTY(QObject* sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
 
 public:
@@ -45,6 +46,9 @@ public:
 
     QString currentSketchPage() const;
     void setCurrentSketchPage(QString newPage);
+
+    bool temporaryFile() const;
+    void setTemporaryFile(bool newValue);
 
     QObject* sketchKisView() const;
     void setSketchKisView(QObject* newView);
@@ -63,6 +67,7 @@ Q_SIGNALS:
     void switchedToSketch();
     void slateModeChanged();
     void currentSketchPageChanged();
+    void temporaryFileChanged();
     void sketchKisViewChanged();
 
 private Q_SLOTS:

@@ -41,11 +41,13 @@
 #include <kactioncollection.h>
 #include <kaboutdata.h>
 #include <ktoolbar.h>
+#include <kmessagebox.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoMainWindow.h>
 #include <KoGlobal.h>
+#include <KoDocumentInfo.h>
 
 #include <kis_config.h>
 #include <kis_factory2.h>
@@ -77,9 +79,11 @@ public:
         , slateMode(false)
         , docked(false)
         , sketchKisView(0)
+        , desktopViewProxy(0)
         , forceDesktop(false)
         , forceSketch(false)
         , wasMaximized(true)
+        , temporaryFile(false)
     {
 #ifdef Q_OS_WIN
         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
@@ -96,10 +100,12 @@ public:
     bool docked;
     QString currentSketchPage;
     KisView2* sketchKisView;
+    DesktopViewProxy* desktopViewProxy;
 
     bool forceDesktop;
     bool forceSketch;
     bool wasMaximized;
+    bool temporaryFile;
 
     void initSketchView(QObject* parent)
     {
@@ -155,11 +161,12 @@ public:
 
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
-        new DesktopViewProxy(q, desktopView);
+        desktopViewProxy = new DesktopViewProxy(q, desktopView);
     }
 
     void notifySlateModeChange();
     void notifyDockingModeChange();
+    bool queryClose();
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
@@ -170,7 +177,6 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     setWindowTitle(i18n("Krita Gemini"));
 
     KisConfig cfg;
-    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
@@ -204,6 +210,8 @@ void MainWindow::switchToSketch()
 {
     QTime timer;
     timer.start();
+    KisConfig cfg;
+    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     d->wasMaximized = isMaximized();
     if(d->desktopView) {
         d->desktopView->setParent(0);
@@ -220,6 +228,8 @@ void MainWindow::switchToDesktop()
 {
     QTime timer;
     timer.start();
+    KisConfig cfg;
+    cfg.setCursorStyle(CURSOR_STYLE_OUTLINE);
     if(d->currentSketchPage == "MainPage")
     {
         d->sketchView->setParent(0);
@@ -289,6 +299,17 @@ void MainWindow::setCurrentSketchPage(QString newPage)
     }
 }
 
+bool MainWindow::temporaryFile() const
+{
+    return d->temporaryFile;
+}
+
+void MainWindow::setTemporaryFile(bool newValue)
+{
+    d->temporaryFile = newValue;
+    emit temporaryFileChanged();
+}
+
 QObject* MainWindow::sketchKisView() const
 {
     return d->sketchKisView;
@@ -318,12 +339,68 @@ void MainWindow::closeWindow()
     QApplication::instance()->quit();
 }
 
+bool MainWindow::Private::queryClose()
+{
+    if (DocumentManager::instance()->document() == 0)
+        return true;
+
+    // main doc + internally stored child documents
+    if (DocumentManager::instance()->document()->isModified()) {
+        QString name;
+        if (DocumentManager::instance()->document()->documentInfo()) {
+            name = DocumentManager::instance()->document()->documentInfo()->aboutInfo("title");
+        }
+        if (name.isEmpty())
+            name = DocumentManager::instance()->document()->url().fileName();
+
+        if (name.isEmpty())
+            name = i18n("Untitled");
+
+        int res = KMessageBox::warningYesNoCancel(q,
+                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                  QString(),
+                  KStandardGuiItem::save(),
+                  KStandardGuiItem::discard());
+
+        switch (res) {
+        case KMessageBox::Yes : {
+            if (temporaryFile && !desktopViewProxy->fileSaveAs())
+                return false;
+            if (!DocumentManager::instance()->save())
+                return false;
+            break;
+        }
+        case KMessageBox::No :
+            DocumentManager::instance()->document()->removeAutoSaveFiles();
+            DocumentManager::instance()->document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
+            break;
+        default : // case KMessageBox::Cancel :
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    if(d->allowClose) {
-        event->accept();
+    if(centralWidget() == d->desktopView)
+    {
+        if(DocumentManager::instance()->document()->isLoading()) {
+            event->ignore();
+            return;
+        }
+        d->allowClose = d->queryClose();
+    }
+
+    if(d->allowClose)
+    {
+        d->desktopView->setNoCleanup(true);
         d->desktopView->close();
-    } else {
+        event->accept();
+    }
+    else
+    {
         event->ignore();
         emit closeRequested();
     }
