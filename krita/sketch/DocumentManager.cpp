@@ -134,11 +134,15 @@ void DocumentManager::closeDocument()
     }
 }
 
-void DocumentManager::save()
+bool DocumentManager::save()
 {
-    part()->save();
-    d->recentFileManager->addRecent(d->document->url().toLocalFile());
-    emit documentSaved();
+    if(part()->save())
+    {
+        d->recentFileManager->addRecent(d->document->url().toLocalFile());
+        emit documentSaved();
+        return true;
+    }
+    return false;
 }
 
 void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
