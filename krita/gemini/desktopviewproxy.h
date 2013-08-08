@@ -38,7 +38,7 @@ public Q_SLOTS:
     void fileNew();
     void fileOpen();
     void fileSave();
-    void fileSaveAs();
+    bool fileSaveAs();
 
 private:
     class Private;

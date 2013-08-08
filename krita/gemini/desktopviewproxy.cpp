@@ -114,13 +114,13 @@ void DesktopViewProxy::fileOpen()
 void DesktopViewProxy::fileSave()
 {
     qDebug() << Q_FUNC_INFO;
-
+    DocumentManager::instance()->save();
 }
 
-void DesktopViewProxy::fileSaveAs()
+bool DesktopViewProxy::fileSaveAs()
 {
     qDebug() << Q_FUNC_INFO;
-
+    return d->desktopView->saveDocument(true);
 }
 
 #include "desktopviewproxy.moc"
