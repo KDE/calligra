@@ -1147,6 +1147,8 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         menuBar()->setVisible(true);
 
         saveWindowSettings();
+        if(d->noCleanup)
+            return;
         setRootDocument(0);
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
             foreach(QDockWidget* dockWidget, d->dockWidgetsMap)

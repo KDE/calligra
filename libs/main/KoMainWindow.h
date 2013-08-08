@@ -345,7 +345,7 @@ private:
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(bool saveas = false, bool silent = false);
+    public: bool saveDocument(bool saveas = false, bool silent = false); private:
 
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
