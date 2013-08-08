@@ -406,8 +406,11 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
     if(d->allowClose)
     {
-        d->desktopView->setNoCleanup(true);
-        d->desktopView->close();
+        if(d->desktopView)
+        {
+            d->desktopView->setNoCleanup(true);
+            d->desktopView->close();
+        }
         event->accept();
     }
     else
