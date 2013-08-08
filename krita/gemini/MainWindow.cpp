@@ -221,7 +221,8 @@ void MainWindow::switchToSketch()
     if(d->desktopView) {
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         d->desktopView->setParent(0);
-        cloneResources(view->resourceProvider(), d->sketchKisView->resourceProvider());
+        if(d->sketchKisView && view)
+            cloneResources(view->resourceProvider(), d->sketchKisView->resourceProvider());
     }
     setCentralWidget(d->sketchView);
     if(d->slateMode)
@@ -255,7 +256,8 @@ void MainWindow::switchToDesktop()
         view->canvasController()->zoomOut(center);
         view->canvasControllerWidget()->setPreferredCenter(view->image()->bounds().center());
 
-        cloneResources(d->sketchKisView->resourceProvider(), view->resourceProvider());
+        if(d->sketchKisView && view)
+            cloneResources(d->sketchKisView->resourceProvider(), view->resourceProvider());
     }
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
