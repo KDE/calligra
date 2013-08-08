@@ -23,6 +23,8 @@
 
 #include <QMainWindow>
 
+class KisCanvasResourceProvider;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -75,6 +77,7 @@ private Q_SLOTS:
     void switchSketchForced();
 
 private:
+    void cloneResources(KisCanvasResourceProvider *from, KisCanvasResourceProvider *to);
     class Private;
     Private * const d;
 

@@ -43,16 +43,21 @@
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 
+#include <KoCanvasBase.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoMainWindow.h>
 #include <KoGlobal.h>
 #include <KoDocumentInfo.h>
+#include <KoAbstractGradient.h>
 
+#include <kis_paintop_preset.h>
+#include <kis_pattern.h>
 #include <kis_config.h>
 #include <kis_factory2.h>
 #include <kis_doc2.h>
 #include <kis_view2.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_canvas_controller.h>
 
 #include "sketch/SketchDeclarativeView.h"
@@ -214,7 +219,9 @@ void MainWindow::switchToSketch()
     cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     d->wasMaximized = isMaximized();
     if(d->desktopView) {
+        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         d->desktopView->setParent(0);
+        cloneResources(view->resourceProvider(), d->sketchKisView->resourceProvider());
     }
     setCentralWidget(d->sketchView);
     if(d->slateMode)
@@ -247,6 +254,8 @@ void MainWindow::switchToDesktop()
         view->canvasController()->zoomIn(center);
         view->canvasController()->zoomOut(center);
         view->canvasControllerWidget()->setPreferredCenter(view->image()->bounds().center());
+
+        cloneResources(d->sketchKisView->resourceProvider(), view->resourceProvider());
     }
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
@@ -456,6 +465,22 @@ void MainWindow::Private::notifyDockingModeChange()
         qDebug() << "Docking mode is now" << docked;
     }
 #endif
+}
+
+void MainWindow::cloneResources(KisCanvasResourceProvider *from, KisCanvasResourceProvider *to)
+{
+    to->setBGColor(from->bgColor());
+    to->setFGColor(from->fgColor());
+    to->setHDRExposure(from->HDRExposure());
+    to->setHDRGamma(from->HDRGamma());
+    to->setCurrentCompositeOp(from->currentCompositeOp());
+    to->slotPatternActivated(from->currentPattern());
+    to->slotGradientActivated(from->currentGradient());
+    to->slotNodeActivated(from->currentNode());
+    to->setPaintOpPreset(from->currentPreset());
+    to->setOpacity(from->opacity());
+    to->setGlobalAlphaLock(from->globalAlphaLock());
+
 }
 
 #include "MainWindow.moc"
