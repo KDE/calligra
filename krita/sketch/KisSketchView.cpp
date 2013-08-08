@@ -369,7 +369,7 @@ void KisSketchView::documentChanged()
 
 bool KisSketchView::sceneEvent(QEvent* event)
 {
-    if (d->canvas) {
+    if (d->canvas && d->canvasWidget) {
         switch(event->type()) {
         case QEvent::GraphicsSceneMousePress: {
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
