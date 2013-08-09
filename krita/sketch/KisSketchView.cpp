@@ -420,6 +420,10 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
 {
     if (d->canvasWidget && !newGeometry.isEmpty()) {
         d->view->resize(newGeometry.toRect().size());
+        // If we don't ask for this event to be sent, the view does not actually handle
+        // the resize, and we're stuck with a very oddly sized viewport
+        QResizeEvent *event = new QResizeEvent(newGeometry.toRect().size(), d->view->size());
+        QApplication::sendEvent(d->view, event);
         d->timer->start(100);
     }
 }
