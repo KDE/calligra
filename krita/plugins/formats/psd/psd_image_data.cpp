@@ -633,7 +633,7 @@ bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev){
 
             if (m_channelSize == 1) {
 
-                quint8 Gray = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
+                quint8 Gray = channelBytes[0].constData()[col];
                 KoGrayU8Traits::setGray(it->rawData(), Gray);
 
             }
@@ -647,7 +647,7 @@ bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev){
 
             else if (m_channelSize == 4) {
 
-                quint32 Gray = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
+                quint32 Gray = ntohl(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
                 KoGrayTraits<quint32>::setGray(it->rawData(), Gray);
 
             }
