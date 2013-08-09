@@ -17,7 +17,7 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kcmdlineargs.h>
 #include <KoStore.h>
 #include <QStringList>
@@ -47,9 +47,9 @@ private:
 
 int main(int argc, char** argv)
 {
-    //KApplication::disableAutoDcopRegistration();
+    //QApplication::disableAutoDcopRegistration();
     KCmdLineArgs::init(argc, argv, "storedroptest", 0, KLocalizedString(), 0, KLocalizedString());
-    KApplication app;
+    QApplication app;
 
     StoreDropTest* window = new StoreDropTest(0);
     window->resize(500, 500);

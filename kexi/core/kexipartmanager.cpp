@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kglobal.h>
-#include <kapplication.h>
+#include <QApplication>
 
 #include "kexipartmanager.h"
 #include "kexipart.h"

@@ -7,15 +7,15 @@ set_package_properties(ZLIB PROPERTIES DESCRIPTION "Support for gzip compressed 
 
 set(kofake_LIB_SRCS
     karchive.cpp
+    kdatewidget.cpp
     kbuttongroup.cpp
     kcomponentdata.cpp
-    kconfigbase.cpp
+    #kconfigbase.cpp
     kencodingprober.cpp
     kfilterbase.cpp
     kfilterdev.cpp
     kgzipfilter.cpp
     klimitediodevice.cpp
-    kpluginfactory.cpp
     ktar.cpp
     kzip.cpp
     kio/job.cpp
@@ -63,7 +63,6 @@ set(kofake_HEADERS_ONLY
     kcombobox.h
     kurlrequester.h
     kuser.h
-    kpluginloader.h
     kicon.h
     kreplacedialog.h
     kfind.h
@@ -83,14 +82,12 @@ set(kofake_HEADERS_ONLY
     kfontsizeaction.h
     klimitediodevice_p.h
     klistwidgetsearchline.h
-    kplugininfo.h
     kselectaction.h
     kpagewidget.h
     config.h
     knuminput.h
     kstandarddirs.h
     ktoggleaction.h
-    kapplication.h
     kstandardguiitem.h
     kshortcut.h
     kpagedialog.h
@@ -119,7 +116,7 @@ set(kofake_HEADERS_ONLY
     kio/kjob.h
     kdiroperator.h
     kcolordialog.h
-    kdesktopfile.h
+    #kdesktopfile.h
     kassistantdialog.h
     knotifyconfigwidget.h
     knewpassworddialog.h
@@ -133,7 +130,7 @@ set(kofake_HEADERS_ONLY
     sonnet/configdialog.h
     sonnet/backgroundchecker.h
     kfile.h
-    kservicetypetrader.h
+    #kservicetypetrader.h
     kdatetime.h
     kdatewidget.h
     kde_file.h
@@ -145,7 +142,7 @@ set(kofake_HEADERS_ONLY
     kselector.h
     kglobalsettings.h
     kseparator.h
-    ksharedconfig.h
+    #ksharedconfig.h
     kdeprintdialog.h
     kaboutdata.h
     kurlcombobox.h
@@ -177,7 +174,7 @@ set(kofake_HEADERS_ONLY
     kpassivepopup.h
     kfiledialog.h
     kfontchooser.h
-    kconfig.h
+    #kconfig.h
     ksharedptr.h
     kfileitem.h
     klibloader.h
@@ -187,15 +184,15 @@ set(kofake_HEADERS_ONLY
     kdebug.h
     kvbox.h
     kmenubar.h
-    kservice.h
+    #kservice.h
     ktoolinvocation.h
     kedittoolbar.h
     ksqueezedtextlabel.h
-    kservicetype.h
+    #kservicetype.h
     knumvalidator.h
     ktemporaryfile.h
     ktextbrowser.h
-    kconfiggroup.h
+    #kconfiggroup.h
     config-compression.h
     kjob.h
     kwidgetitemdelegate.h
@@ -210,11 +207,10 @@ set(kofake_HEADERS
     karchive.h
     kbuttongroup.h
     kcomponentdata.h
-    kconfigbase.h
+    #kconfigbase.h
     kfilterbase.h
     kfilterdev.h
     kgzipfilter.h
-    kpluginfactory.h
     ktar.h
     kzip.h
     kio/job.h
@@ -229,12 +225,15 @@ set(kofake_HEADERS
     kstandardaction.h
 )
 
+add_subdirectory(kservice)
+add_subdirectory(kconfig)
+
 QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS_ONLY})
 
 kde4_add_library(kofake SHARED ${kofake_LIB_SRCS} ${kofake_HEADERS_MOC})
 
-target_link_libraries(kofake Qt5::Widgets Qt5::Xml ${ZLIB_LIBRARIES})
-target_link_libraries(kofake LINK_INTERFACE_LIBRARIES Qt5::Widgets Qt5::Xml)
+target_link_libraries(kofake Qt5::Widgets Qt5::Xml ${ZLIB_LIBRARIES} KService KConfigCore)
+target_link_libraries(kofake LINK_INTERFACE_LIBRARIES Qt5::Widgets Qt5::Xml KService)
 
 set_target_properties(kofake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

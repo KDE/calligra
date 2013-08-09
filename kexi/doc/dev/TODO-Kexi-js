@@ -903,7 +903,7 @@ XML Export TODO:
   (templates/XSLT could be also supported)
 
 General TODO:
-- handle KApplication::shutDown()
+- handle QApplication::shutDown()
 
 TODO:
 - on opening detect whether a table exists (empty table view should not be displayed)
@@ -1125,7 +1125,7 @@ TODO: report crash in QDockWidgetPrivate::nonClientAreaMouseEvent() when draggin
  	QtGuid4.dll!QDockWidget::event(QEvent * event=0x00d9c474)  Line 1353	C++
  	QtGuid4.dll!QApplicationPrivate::notify_helper(QObject * receiver=0x049d1cb0, QEvent * e=0x00d9c474)  Line 3558	C++
  	QtGuid4.dll!QApplication::notify(QObject * receiver=0x049d1cb0, QEvent * e=0x00d9c474)  Line 3499	C++
- 	kdeui.dll!KApplication::notify(QObject * receiver=0x049d1cb0, QEvent * event=0x00d9c474)  Line 300	C++
+ 	kdeui.dll!QApplication::notify(QObject * receiver=0x049d1cb0, QEvent * event=0x00d9c474)  Line 300	C++
  	QtCored4.dll!QCoreApplication::notifyInternal(QObject * receiver=0x049d1cb0, QEvent * event=0x00d9c474)  Line 533	C++
  	QtCored4.dll!QCoreApplication::sendSpontaneousEvent(QObject * receiver=0x049d1cb0, QEvent * event=0x00d9c474)  Line 205	C++
  	QtGuid4.dll!QETWidget::translateMouseEvent(const tagMSG & msg={...})  Line 2774	C++

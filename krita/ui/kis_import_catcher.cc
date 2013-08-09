@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmimetype.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>

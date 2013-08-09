@@ -18,7 +18,7 @@
 */
 
 #include <kdebug.h>
-#include <kapplication.h>
+#include <QApplication>
 
 //#include <tableview/kexitableview.h>
 /*#include <db/drivermanager.h>
@@ -33,7 +33,7 @@
 
 int main(int argc, char* argv[])
 {
-    KApplication app(argc, argv, "startup");
+    QApplication app(argc, argv, "startup");
 
 // Widget w;
 // app.setMainWidget(&w);

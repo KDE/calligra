@@ -300,6 +300,10 @@ find_package(Qt5PrintSupport REQUIRED NO_MODULE)
 find_package(Qt5Concurrent REQUIRED NO_MODULE)
 find_package(Qt5Sql REQUIRED NO_MODULE)
 
+if (UNIX)
+    #find_package(Qt5X11Extras REQUIRED NO_MODULE)
+endif (UNIX)
+
 if (Qt5_POSITION_INDEPENDENT_CODE)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
@@ -313,6 +317,7 @@ set(QT_QTGUI_LIBRARIES
   ${Qt5Xml_LIBRARIES}
   ${Qt5Concurrent_LIBRARIES}
   ${Qt5Sql_LIBRARIES}
+  ${Qt5X11Extras_LIBRARIES}
 )
 
 set(QT_QTXML_LIBRARY ${Qt5Xml_LIBRARIES})
@@ -335,6 +340,7 @@ set(QT_INCLUDES
     ${Qt5Xml_INCLUDE_DIRS}
     ${Qt5OpenGL_INCLUDE_DIRS}
     ${Qt5Concurrent_INCLUDE_DIRS}
+    ${Qt5X11Extras_INCLUDE_DIRS}
 )
 
 # The Qt5Widgets_INCLUDES also includes the include directories for
@@ -779,7 +785,17 @@ include(MacroCalligraBuildTest)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
 
 # for the fake kde headers during transition
-include_directories(${CMAKE_SOURCE_DIR}/fake)
+include_directories(${CMAKE_SOURCE_DIR}/fake
+                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/plugin
+                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/services
+                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/kdeinit
+                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/sycoca
+                    ${CMAKE_BINARY_DIR}/fake/kservice/src
+                    ${CMAKE_BINARY_DIR}/fake/kservice/
+                    ${CMAKE_SOURCE_DIR}/fake/kconfig/src/core/
+                    ${CMAKE_BINARY_DIR}/fake/kconfig/src/core
+                    ${CMAKE_BINARY_DIR}/fake/kconfig
+)
 
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
@@ -1069,19 +1085,19 @@ endif(SHOULD_BUILD_PLAN_APP)
 add_subdirectory(sheets)
 
 if(SHOULD_BUILD_KRITA_APP)
-  add_subdirectory(krita)
+#  add_subdirectory(krita)
 endif(SHOULD_BUILD_KRITA_APP)
 
 if(SHOULD_BUILD_KARBON_APP)
-  add_subdirectory(karbon)
+#  add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON_APP)
 
 if(SHOULD_BUILD_BRAINDUMP_APP)
-  add_subdirectory(braindump)
+#  add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP_APP)
 
 if(SHOULD_BUILD_ACTIVE)
-  add_subdirectory(active)
+#  add_subdirectory(active)
 endif(SHOULD_BUILD_ACTIVE)
 
 if(SHOULD_BUILD_DOC)

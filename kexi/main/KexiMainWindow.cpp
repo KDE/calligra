@@ -43,7 +43,7 @@
 #include <QMenuBar>
 #include <QShortcut>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kcmdlineargs.h>
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -238,7 +238,7 @@ int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
     bool GUIenabled = true;
 //! @todo switch GUIenabled off when needed
     bool kappExisted = kapp;
-    KApplication* app = kapp ? kapp : new KApplication(GUIenabled);
+    QApplication* app = kapp ? kapp : new QApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
@@ -3561,7 +3561,7 @@ void KexiMainWindow::slotStartFeedbackAgent()
 {
 #ifndef KEXI_NO_FEEDBACK_AGENT
 #ifdef FEEDBACK_CLASS
-    const KAboutData* about = KApplication::kApplication()->aboutData();
+    const KAboutData* about = qApp->aboutData();
     FEEDBACK_CLASS* wizard = new FEEDBACK_CLASS(about->programName(),
             about->version(), 0, 0, 0, FEEDBACK_CLASS::AllPages);
 

@@ -196,8 +196,8 @@ public:
     enum AdjustPathOption { RemoveTrailingSlash, LeaveTrailingSlash, AddTrailingSlash };
 
     KUrl() : QUrl() {}
-    KUrl(const QString &urlOrPath) : QUrl(urlOrPath) {}
-    KUrl(const QByteArray& urlOrPath) : QUrl(urlOrPath) {}
+    KUrl(const QString &urlOrPath) : QUrl(QUrl::fromLocalFile(urlOrPath)) {}
+    KUrl(const QByteArray& urlOrPath) : QUrl(QUrl::fromLocalFile(urlOrPath)) {}
     KUrl(const char* urlOrPath) : QUrl(urlOrPath) {}
     KUrl(const QUrl &u) : QUrl(u) {}
     KUrl(const KUrl &u) : QUrl(u.toString()) {}
@@ -231,14 +231,7 @@ public:
             urlWithoutHost.setHost(QString());
             return trailingSlash(trailing, urlWithoutHost.toLocalFile());
         }
-//#ifdef __GNUC__
-//#warning FIXME: Remove #ifdef below once upstream bug, QTBUG-20322, is fixed. Also see BR# 194746.
-//#endif
-#ifndef Q_WS_WIN
-        if (isLocalFile()) {
-            return trailingSlash(trailing, QUrl::path());
-        }
-#endif
+
         return trailingSlash(trailing, QUrl::toLocalFile());
     }
 

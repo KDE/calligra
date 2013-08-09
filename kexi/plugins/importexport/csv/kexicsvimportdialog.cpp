@@ -56,7 +56,7 @@
 #include <QSplitter>
 #include <QTreeView>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kfiledialog.h>

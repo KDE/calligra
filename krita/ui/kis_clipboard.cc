@@ -69,7 +69,8 @@ KisClipboard::~KisClipboard()
 KisClipboard* KisClipboard::instance()
 {
     K_GLOBAL_STATIC(KisClipboard, s_instance);
-    qAddPostRoutine(s_instance.destroy); // make sure we get destroyed first.
+    // XXX: QT5_TODO
+    //qAddPostRoutine(s_instance.destroy); // make sure we get destroyed first.
     return s_instance;
 }
 

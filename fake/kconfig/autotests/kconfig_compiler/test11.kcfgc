@@ -1,0 +1,13 @@
+# Code generation options for kconfig_compiler
+File=test11.kcfg
+ClassName=Test11
+Singleton=false
+Mutators=true
+Inherits=MyPrefs
+IncludeFiles=myprefs.h
+MemberVariables=public
+GlobalEnums=false
+ItemAccessors=true
+SetUserTexts=true
+UseEnumTypes=true
+DefaultValueGetters=true

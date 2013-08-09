@@ -1,0 +1,11 @@
+@PACKAGE_INIT@
+
+# Any changes in this file will be overwritten by CMake.
+
+set(KService_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+set_and_check(KService_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+include("${CMAKE_CURRENT_LIST_DIR}/KServiceTargets.cmake")
+
+set(KService_LIBRARIES KF5::KService)
+set(KService_INCLUDE_DIRS ${KService_INCLUDE_DIR} )

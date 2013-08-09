@@ -51,7 +51,7 @@
 #include <kglobalsettings.h>
 #include <ktextedit.h>
 #include <kmessagebox.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kmimetype.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>

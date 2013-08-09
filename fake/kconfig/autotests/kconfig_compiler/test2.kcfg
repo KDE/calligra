@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="korganizerrc"/>
+
+  <group name="General">
+    <entry type="Bool" key="Auto Save">
+      <label>Enable automatic saving of calendar</label>
+      <whatsthis>WhatsThis text for AutoSave option</whatsthis>
+      <default>false</default>
+    </entry>
+    <entry type="Int" key="Auto Save Interval">
+      <default>10</default>
+    </entry>
+    <entry type="Bool" key="Confirm Deletes" name="Confirm">
+      <label>Confirm deletes</label>
+      <default>true</default>
+    </entry>
+    <entry type="String" key="Archive File">
+    </entry>
+    <entry type="Enum" key="Destination" name="Destination">
+      <label>New Events/Todos Should</label>
+      <choices>
+        <choice name="standardDestination">
+        </choice>
+        <choice name="askDestination">
+        </choice>
+        <choice name="argl1">
+          <label>Argl1 Label</label>
+        </choice>
+        <choice name="argl2">
+          <whatsthis>Argl2 Whatsthis</whatsthis>
+        </choice>
+        <choice name="argl3">
+          <label>Argl3 Label</label>
+          <whatsthis>Argl3 Whatsthis</whatsthis>
+        </choice>
+      </choices>
+      <default>standardDestination</default>
+    </entry>
+  </group>
+
+  <group name="Views">
+    <entry type="Int" key="Hour Size">
+      <default>10</default>
+    </entry>
+    <entry type="Bool" name="SelectionStartsEditor">
+      <label>Time range selection in agenda view starts event editor</label>
+      <default>false</default>
+    </entry>
+  </group>
+
+  <group name="KOrganizer Plugins">
+    <entry type="StringList" name="SelectedPlugins">
+      <default>holidays,webexport</default>
+    </entry>
+  </group>
+
+  <group name="Colors">
+    <entry type="Color" key="Highlight Color">
+      <label>Highlight color</label>
+      <default>100, 100, 255</default>
+    </entry>
+    <entry type="Color" key="Agenda Background Color" name="AgendaBgColor">
+      <label>Agenda view background color</label>
+      <default>255, 255, 255</default>
+    </entry>
+  </group>
+
+  <group name="Fonts">
+    <entry type="Font" key="TimeBar Font">
+      <label>Time bar</label>
+    </entry>
+  </group>
+
+</kcfg>

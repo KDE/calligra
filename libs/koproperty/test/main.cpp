@@ -19,7 +19,7 @@
 
 #include <QFont>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
         ki18n("Set all properties as read-only:\n"
               "(useful for testing read-only mode)"));
     KCmdLineArgs::addCmdLineOptions(options);
-    KApplication app;
+    QApplication app;
 
     TestWindow test;
     bool ok;

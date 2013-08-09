@@ -29,7 +29,7 @@
 #include <QRadioButton>
 
 // KDE's headers
-#include <kapplication.h>
+#include <QApplication>
 #include <kis_debug.h>
 #include <kis_paint_device.h>
 #include <kdialog.h>
@@ -115,7 +115,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc, kdb);
     kdb->setMainWidget(wdg);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
     if (kdb->exec() == QDialog::Rejected) {
         delete pdoc;
         delete kdb;

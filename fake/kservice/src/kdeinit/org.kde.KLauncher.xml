@@ -1,0 +1,117 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.kde.KLauncher">
+    <signal name="autoStart0Done">
+    </signal>
+    <signal name="autoStart1Done">
+    </signal>
+    <signal name="autoStart2Done">
+    </signal>
+    <method name="autoStart">
+      <arg name="phase" type="i" direction="in"/>
+    </method>
+    <method name="autoStart">
+    </method>
+    <method name="exec_blind">
+      <arg name="name" type="s" direction="in"/>
+      <arg name="arg_list" type="as" direction="in"/>
+    </method>
+    <method name="exec_blind">
+      <arg name="name" type="s" direction="in"/>
+      <arg name="arg_list" type="as" direction="in"/>
+      <arg name="envs" type="as" direction="in"/>
+      <arg name="startup_id" type="s" direction="in"/>
+    </method>
+    <method name="kdeinit_exec">
+      <arg type="i" direction="out"/>
+      <arg name="app" type="s" direction="in"/>
+      <arg name="args" type="as" direction="in"/>
+      <arg name="env" type="as" direction="in"/>
+      <arg name="startup_id" type="s" direction="in"/>
+      <arg name="dbusServiceName" type="s" direction="out"/>
+      <arg name="error" type="s" direction="out"/>
+      <arg name="pid" type="i" direction="out"/>
+    </method>
+    <method name="kdeinit_exec_wait">
+      <arg type="i" direction="out"/>
+      <arg name="app" type="s" direction="in"/>
+      <arg name="args" type="as" direction="in"/>
+      <arg name="env" type="as" direction="in"/>
+      <arg name="startup_id" type="s" direction="in"/>
+      <arg name="dbusServiceName" type="s" direction="out"/>
+      <arg name="error" type="s" direction="out"/>
+      <arg name="pid" type="i" direction="out"/>
+    </method>
+    <method name="kdeinit_exec_with_workdir">
+      <arg type="i" direction="out"/>
+      <arg name="app" type="s" direction="in"/>
+      <arg name="args" type="as" direction="in"/>
+      <arg name="workdir" type="s" direction="in"/>
+      <arg name="env" type="as" direction="in"/>
+      <arg name="startup_id" type="s" direction="in"/>
+      <arg name="dbusServiceName" type="s" direction="out"/>
+      <arg name="error" type="s" direction="out"/>
+      <arg name="pid" type="i" direction="out"/>
+    </method>
+    <method name="reparseConfiguration">
+    </method>
+    <method name="requestHoldSlave">
+      <arg type="i" direction="out"/>
+      <arg name="url" type="s" direction="in"/>
+      <arg name="app_socket" type="s" direction="in"/>
+    </method>
+    <method name="requestSlave">
+      <arg type="i" direction="out"/>
+      <arg name="protocol" type="s" direction="in"/>
+      <arg name="host" type="s" direction="in"/>
+      <arg name="app_socket" type="s" direction="in"/>
+      <arg name="error" type="s" direction="out"/>
+    </method>
+    <method name="checkForHeldSlave">
+      <arg type="b" direction="out"/>
+      <arg name="url" type="s" direction="in"/>
+    </method>
+    <method name="setLaunchEnv">
+      <arg name="name" type="s" direction="in"/>
+      <arg name="value" type="s" direction="in"/>
+    </method>
+    <method name="start_service_by_desktop_name">
+      <arg type="i" direction="out"/>
+      <arg name="serviceName" type="s" direction="in"/>
+      <arg name="urls" type="as" direction="in"/>
+      <arg name="envs" type="as" direction="in"/>
+      <arg name="startup_id" type="s" direction="in"/>
+      <arg name="blind" type="b" direction="in"/>
+      <arg name="dbusServiceName" type="s" direction="out"/>
+      <arg name="error" type="s" direction="out"/>
+      <arg name="pid" type="i" direction="out"/>
+    </method>
+    <method name="start_service_by_desktop_path">
+      <arg type="i" direction="out"/>
+      <arg name="serviceName" type="s" direction="in"/>
+      <arg name="urls" type="as" direction="in"/>
+      <arg name="envs" type="as" direction="in"/>
+      <arg name="startup_id" type="s" direction="in"/>
+      <arg name="blind" type="b" direction="in"/>
+      <arg name="dbusServiceName" type="s" direction="out"/>
+      <arg name="error" type="s" direction="out"/>
+      <arg name="pid" type="i" direction="out"/>
+    </method>
+    <method name="start_service_by_name">
+      <arg type="i" direction="out"/>
+      <arg name="serviceName" type="s" direction="in"/>
+      <arg name="urls" type="as" direction="in"/>
+      <arg name="envs" type="as" direction="in"/>
+      <arg name="startup_id" type="s" direction="in"/>
+      <arg name="blind" type="b" direction="in"/>
+      <arg name="dbusServiceName" type="s" direction="out"/>
+      <arg name="error" type="s" direction="out"/>
+      <arg name="pid" type="i" direction="out"/>
+    </method>
+    <method name="waitForSlave">
+      <arg name="pid" type="i" direction="in"/>
+    </method>
+    <method name="terminate_kdeinit">
+    </method>
+  </interface>
+</node>

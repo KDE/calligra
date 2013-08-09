@@ -18,7 +18,7 @@
 */
 
 #include <kdebug.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kglobal.h>
 
 #include <tableview/kexitableview.h>
@@ -30,7 +30,7 @@
 
 int main(int argc, char* argv[])
 {
-    KApplication app(argc, argv, "tv_test");
+    QApplication app(argc, argv, "tv_test");
     KGlobal::iconLoader()->addAppDir("kexi");
 
     KexiTableView tv;

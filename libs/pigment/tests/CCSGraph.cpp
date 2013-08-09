@@ -23,7 +23,7 @@
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 
 
@@ -71,7 +71,7 @@ int main(int argc, char** argv)
     }
     QString outputFileName = args->arg(0);
     // Generate the graph
-    KApplication app;
+    QApplication app(argc, argv);
     QString dot;
     if (graphType == "full") {
         dot = KoColorSpaceRegistry::instance()->colorConversionSystem()->toDot();

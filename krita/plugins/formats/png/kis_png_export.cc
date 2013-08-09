@@ -22,7 +22,7 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
@@ -159,7 +159,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
 
         kdb->setMainWidget(wdg);
-        kapp->restoreOverrideCursor();
+        qApp->restoreOverrideCursor();
         if (hasVisibleWidgets()) {
             if (!m_chain->manager()->getBatchMode()) {
                 if (kdb->exec() == QDialog::Rejected) {

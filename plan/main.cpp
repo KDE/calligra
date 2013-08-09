@@ -43,17 +43,17 @@ public:
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
-    KAboutData * aboutData=KPlato::newAboutData();
+    QScopedPointer<KAboutData> about(KPlato::newAboutData());
 
-    KCmdLineArgs::init( argc, argv, aboutData);
+    KCmdLineArgs::init( argc, argv, about.data());
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions( options );
-
-    KoApplication app;
+    KoApplication::addCommonCommandLineOptions();
+    KoApplication app(argc, argv, about.data());
 
 #ifdef MAINTANER_WANTED_SPLASH
-    // After creating the KApplication then create the pixmap from an xpm: we cannot get the
+    // After creating the QApplication then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));

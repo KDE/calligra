@@ -22,7 +22,7 @@
  */
 
 #include "src/MainWindow.h"
-#include <kapplication.h>
+#include <QApplication>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
 
 
-    KApplication app;
+    QApplication app;
     MainWindow mw;
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

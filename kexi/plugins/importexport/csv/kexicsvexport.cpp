@@ -33,10 +33,10 @@
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QClipboard>
-#include <kapplication.h>
+#include <QApplication>
 #include <klocale.h>
 #include <kpushbutton.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 #include <QSaveFile>
 
@@ -262,7 +262,7 @@ kDebug() << 1;
     }
 
     if (copyToClipboard)
-        kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
+        qApp->clipboard()->setText(buffer, QClipboard::Clipboard);
 
     delete [] isText;
     delete [] isDateTime;

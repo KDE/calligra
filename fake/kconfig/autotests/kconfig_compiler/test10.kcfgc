@@ -1,0 +1,4 @@
+# Code generation options for kconfig_compiler
+File=test10.kcfg
+ClassName=Test10
+Singleton=true

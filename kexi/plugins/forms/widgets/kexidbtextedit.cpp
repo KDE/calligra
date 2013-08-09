@@ -23,7 +23,7 @@
 #include <db/queryschema.h>
 #include <kexiutils/utils.h>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kstdaccel.h>
 #include <kdebug.h>
 
@@ -189,7 +189,7 @@ void KexiDBTextEdit::setReadOnly(bool readOnly)
 #if 0//TODO
     QPalette p = palette();
     QColor c(readOnly
-             ? KexiFormUtils::lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
+             ? KexiFormUtils::lighterGrayBackgroundColor(qApp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
     setPaper(c);
     p.setColor(QColorGroup::Base, c);
     p.setColor(QColorGroup::Background, c);

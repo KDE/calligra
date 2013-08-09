@@ -44,7 +44,7 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <QLineEdit>
-#include <kapplication.h>
+#include <QApplication>
 #include <kcmdlineargs.h>
 
 #ifdef GHNS

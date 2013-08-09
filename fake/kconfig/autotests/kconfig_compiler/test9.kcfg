@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <include>qdir.h</include>
+  <kcfgfile name="examplerc">
+    <parameter name="transport" />
+    <parameter name="folder" />
+  </kcfgfile>
+  <group name="MyOptionsXX">
+    <entry name="MyStringList" type="StringList">
+      <default>up,down</default>
+    </entry>
+    <entry name="MyPathList" type="PathList">
+      <label>This is a list of paths</label>
+      <default>/home,~</default>
+    </entry>
+    <entry name="MyPathsList2" type="PathList">
+      <label>This is an additional test for PathList</label>
+      <default code="true">QStringList(QString::fromLatin1("/usr/bin")) &lt;&lt; QDir::homePath()</default>
+    </entry>
+  </group>
+</kcfg>

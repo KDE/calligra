@@ -1,0 +1,11 @@
+# Code generation options for kconfig_compiler
+File=test_dpointer.kcfg
+ClassName=TestDPointer
+Singleton=true
+Mutators=true
+#Inherits=MyPrefs
+#IncludeFiles=myprefs.h
+MemberVariables=dpointer
+#GlobalEnums=true
+ItemAccessors=true
+SetUserTexts=true

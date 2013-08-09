@@ -197,7 +197,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     styleAction->setEditable(false);
 
 //js: unused? KGlobalGroup cg = KGlobal::config()->group("General");
-    QString currentStyle(kapp->style()->objectName().toLower());
+    QString currentStyle(qApp->style()->objectName().toLower());
     const QStringList styles = QStyleFactory::keys();
     styleAction->setItems(styles);
     styleAction->setCurrentItem(0);

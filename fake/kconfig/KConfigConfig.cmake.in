@@ -1,0 +1,19 @@
+@PACKAGE_INIT@
+
+# Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
+
+set(KConfig_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+set_and_check(KConfig_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+include("${CMAKE_CURRENT_LIST_DIR}/KConfigTargets.cmake")
+
+set(KConfig_CORE_LIBRARY KF5::KConfigCore)
+set(KConfig_GUI_LIBRARY KF5::KConfigGui)
+set(KConfig_LIBRARIES KF5::KConfigCore KF5::KConfigGui)
+set(KConfig_INCLUDE_DIRS ${KConfig_INCLUDE_DIR})
+
+get_target_property(KConfig_KCFGC_EXECUTABLE  KF5::kconfig_compiler  LOCATION)
+
+
+unset( _KDE4_KCONFIG_COMPILER_DEP)
+include("${CMAKE_CURRENT_LIST_DIR}/KConfigMacros.cmake")

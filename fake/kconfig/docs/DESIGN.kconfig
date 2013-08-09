@@ -1,0 +1,224 @@
+kconfigdata.h contains definitions of the data formats used by kconfig.
+
+Configuration entries are stored as "KEntry". They are indexed with "KEntryKey".
+The primary store is a "KEntryMap" which is defined as a QMap from "KEntryKey"
+to "KEntry"
+
+KEntry's are stored in order in the KEntryMap. The most significant sort 
+criteria is mGroup. This means that all entries who belong in the same group,
+are grouped in the QMap as well. 
+
+The start of a group is indicated with a KEntryKey with an empty mKey and a 
+dummy KEntry. This allows us to search for the start of the group and then to 
+iterate until we end up in another group. That way we will find all entries
+of a certain group.
+
+Entries that are localised with the _current_ locale are stored with bLocal 
+set to true. Entries that are localised with another locale are either not
+stored at all (default), or with the localization as part of the key (when
+reading a file in order to merge it). 
+[WABA: Does it make sense to keep both localized and non-localised around?
+Can't we just let the localised version override the non-localised version?]
+
+Currently the localization bit is the least significant sort criteria, that 
+means that the localised version always follows the non-localised version
+immediately.
+
+<Changed for KDE 3.0>
+Entries that are being read from a location other than the location to
+which is written back are marked as "default" and will be added both as
+normal entry as well as an entry with the key marked as default.
+
+When entries are written to disk, it is checked whether the entry to write 
+is equal to the default, if so the entry will not be written. The default
+entry always follows directly after the normal entry, due to the sorting.
+(After that the localised version follows)
+
+When entries are written to disk, it is checked whether the entry to write 
+is equal to the default, if so the entry will not be written.
+</Changed>
+
+Open question:
+Should unmodified entries that are written back be compared with the default
+too? This seems to be mostly a transition issue.
+
+<Changed during KDE 3.0 / 3.2>
+Extra functions:
+
+bool isEntryImmutable(key); // Can entry be modified?
+bool hasDefault(key); // Is there a system wide default set for the entry?
+void revertToDefault(key); // Restore to default
+void deleteEntry(key); // Remove entry
+
+Note that there is a subtle difference between revertToDefault() and deleteEntry().
+revertToDefault() will change the entry to the default value set by the system 
+administrator (Via e.g. $KDEDIR/share/config) or, if no such default was set,
+non-existant.
+deleteEntry() will make the entry non-existant.
+
+Entries are marked "immutable" if the key is followed by [$i]. This means
+that a user can not override these entries.
+
+Entries can be marked as deleted if they are followed by [$d]. This
+is needed if the system administrator has specified a default value but the
+entry was deleted (made 'non-existant'). In that case we can't just leave 
+the entry out since that would mean we get the default from the system 
+administrator back the next time we read the file.
+</changed>
+
+When an entry is read with readEntry(key, defaultValue), non-existing
+entries will return "defaultValue" while hasKey(key) will return "false"
+for such entries.
+
+Currently all entries are stored in memory. When KConfig is "sync()'ed"
+it reads the file that it is about to overwrite (for the second time), it 
+then merges in the entries it has in memory and writes the result back to 
+the file. It does NOT update its map of entries in memory with the entries
+(re)read from disk. It only updates the entries in memory when 
+"reparseConfiguration()" is called.
+
+
+Open Question: The standard writeEntry() function returns the original value,
+is this needed? Nobody seems to use it. 
+
+Open Question: The bPersistent flag doesn't seem to be used... could it be removed?
+
+Open Question: Is the bNLS flag needed? Localised entries seem to be mostly
+useful for default files, are they ever created by the user itself?
+
+Open Question: Would it be worthwhile to lock a user option that is equal to the 
+default so that it doesn't change when the default changes?
+
+
+KDE3.0 Changes
+==============
+
+*) writeEntry now returns void instead of QString.
+*) deleteEntry functions added
+
+
+------------------------------------------------------------------------------
+
+KConfig XT
+==========
+
+My buzzword picker offered KConfig XT ("eXtended Technology") and KConfig NG 
+("Next Generation").  Since the planned changes are ment to be evolutionary 
+rather than revolutionary, KConfig NG was dropped.
+
+Goals
+=====
+
+* Have the default value for config entries defined in 1 place. Currently it is
+not uncommon to have them defined in three places:
+  1) In the application that reads the setting in order to use it
+  2) In the settings dialog when reading the setting
+  3) In the settings dialog when selecting "Use defaults".
+
+* Provide type-information about config entries to facilate "KConfEdit" like 
+tools. Ideally type-information also includes range-information; this is even
+mandatory if enums become an explicit type.
+
+* Facilitate the documentation of config entries.
+
+
+Instead of relying on the defaults that are hard-coded in the application, 
+rely on default configuration files being installed in $KDEDIR. The technical
+changes required for this are very minimal, it is mostly a change in policy.
+
+Type information can be provide by preceding every entry with a formalized 
+comment.
+
+Work to be done:
+* KConfig needs to be extended to provide access to the default values provided 
+by the default config files. KConfig already stores this information internally.
+(DONE)
+* A formal comment structure needs to be designed that can convey type-information.
+Preferably in such a way that it is easily parsable by both machine and user.
+* KConfig needs to be extended, or another class created, that is able to parse
+the formalized comments.
+* A tool needs to be developed that can assist developers with the generation
+and verification of default configuration files including type-information.
+
+Drawbacks:
+* We rely on default configuration files being properly installed. 
+* The user can break applications by making improper modifications to these 
+files.
+* It is not possible to store defaults settings in a config file that are 
+of a dynamic nature. Examples are settings derived from other settings, 
+e.g. a color setting could be derived from the current color theme, or
+e.g. the default high score user name which is determined by the user
+currently logged in.
+
+
+Some random ideas:
+* The format of the entries would be something like this:
+
+[Mail Settings]
+#!Type=string
+#!Description=SMTP server to use for sending mail
+#!Description[nl]=SMTP server voor het versturen van mail
+Host=wantelbos.zogje.fr
+
+- the type could be subclassed more, e.g. strings can be "email", "hostname",
+  "url", etc.
+
+- having translations in these files is very arguable. external po's would be
+  better.
+
+
+
+Class overview
+
+                       KConfigBase
+                            |
+                            v
+ KConfigBackend  <-----> KConfig <------> KConfigSkeleton           /--< myapp.kcfg
+       |                    |                    |                 /
+       v                    v                    |*---------------<
+KConfigINIBackend      KSimpleConfig             |kconfig_compiler \
+                                                 |                  \--< myconfig.kcfg-codegen
+                                                 v                                                    
+                                             MyConfig <-----KConfigDialogManager----> MyConfigWidget *---< myconfigwidget.ui
+                                                                                                      uic
+
+KConfigBase: defines API for generic config class
+
+KConfig: functional generic config class that supports merging of cascaded
+         configuration files
+
+KSimpleConfig: functional generic config class without support for cascading
+               configuration files.
+
+KConfigBackend: defines API for config backend, t.i. the actual handling
+                of the storage method and storage format.
+
+KConfigINIBackend: the standard (and only one so far) class that implements
+                   the config backend using the file-based .INI format
+                   for configuration files
+
+KConfigSkeleton: base class for deriving classes that store application
+                 specific options providing type-safety and single-point
+                 defaults.
+
+MyConfig: An application specific class that offers configuration options
+          to the applications via variables or accessor functions and that
+          handles type-safety and defaults. MyConfig is just an example
+          name, the application developer choses the actual name.
+
+myapp.kcfg: File describing the configuration options used by a specific
+            application. myapp.kcfg is just an example name, the application
+            developer choses the actual name.
+
+myconfig.kcfg-codegen: Implementation specific code generation instructions
+                       for the MyConfig class. myconfig.kcfg-codegen is
+                       just an example name, the application developer
+                       choses the actual name.
+
+KConfigDialogManager: Class that links widgets in a dialog up with their
+                      corresponding confguration options in a configuration
+                      object derived from KConfigSkeleton.
+
+MyConfigWidget: Dialog generated from a .ui description file. Widget names
+                in the dialog that start with "kcfg_" refer to configuration
+                options.

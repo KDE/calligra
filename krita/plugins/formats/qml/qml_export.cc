@@ -20,7 +20,7 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>

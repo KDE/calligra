@@ -23,7 +23,8 @@
 #include <KoPart.h>
 #include <KoStore.h>
 #include <KoDocument.h>
-#include <kmimetypetrader.h>
+#include <KoDocumentEntry.h>
+
 #include <kmimetype.h>
 // Qt
 #include <QPainter>
@@ -83,7 +84,10 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
     // load document and render the thumbnail ourselves
     const QString mimetype = KMimeType::findByPath(path)->name();
-    m_part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(mimetype, QLatin1String("Calligra/Part"));
+    QString error;
+    KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
+    m_part = documentEntry.createKoPart(&error);
+
 
     if (!m_part) return false;
 

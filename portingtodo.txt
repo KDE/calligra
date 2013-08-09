@@ -25,3 +25,4 @@ Qt Porting todo
 * KoResourceItemChooserContextMenu.cpp
   commented out KLineEdit specific stuff
 * kis_dlg_filter: commented out configgroup->config
+* kis_clipboard: commented out qAddPostRoutine(s_instance.destroy); // make sure we get destroyed first.

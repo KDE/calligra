@@ -2,14 +2,14 @@
 #include <migration/keximigrate.h>
 #include <kdebug.h>
 #include <kaboutdata.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kcmdlineargs.h>
 
 int main(int argc, char *argv[])
 {
     KAboutData aboutData("keximigratetest", 0, ki18n("Kexi Migrate Test"), "2.0");
     KCmdLineArgs::init(argc, argv, &aboutData);
-    KApplication app;
+    QApplication app;
 
     KexiMigration::MigrateManager mm;
 

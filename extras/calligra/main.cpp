@@ -26,7 +26,7 @@
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
 #include <kmimetypetrader.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 #include <ktoolinvocation.h>
 #include <kmessagebox.h>
@@ -174,7 +174,7 @@ int main( int argc, char **argv )
     options.add("+FILES", ki18n("Files to open"));
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KApplication app;
+    QApplication app;
     KGlobal::locale()->insertCatalog("calligra");
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

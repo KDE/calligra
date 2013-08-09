@@ -34,7 +34,7 @@
 
 #include <kdebug.h>
 #include <QCursor>
-#include <kapplication.h>
+#include <QApplication>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
 #include <kaction.h>

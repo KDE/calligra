@@ -37,7 +37,7 @@ extern "C" {
 #include <QFile>
 #include <QBuffer>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kde_file.h>

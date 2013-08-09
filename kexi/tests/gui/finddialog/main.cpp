@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kapplication.h>
+#include <QApplication>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
 {
     KAboutData aboutData("test", 0, ki18n("KFind"), "0", KLocalizedString(), KAboutData::License_LGPL);
     KCmdLineArgs::init(argc, argv, &aboutData);
-    KApplication app;
+    QApplication app;
 
     KexiFindDialog dlg(true, 0, "dialog");
 

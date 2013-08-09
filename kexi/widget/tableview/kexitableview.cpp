@@ -54,7 +54,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kmessagebox.h>
 #include <kaction.h>
 

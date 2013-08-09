@@ -27,7 +27,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kapplication.h>
+#include <QApplication>
 
 #include <QDir>
 
@@ -61,7 +61,7 @@ void KexiTemplateCategoryInfo::addTemplate(const KexiTemplateInfo& t)
 KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
 {
     KexiTemplateInfoList list;
-// const QString subdir = QString(kapp->instanceName()) + "/templates";
+// const QString subdir = QString(qApp->instanceName()) + "/templates";
 #ifdef __GNUC
 #ifdef __GNUC__
 #warning KexiTemplateLoader::loadListInfo() -- OK? KGlobal::mainComponent().componentName()

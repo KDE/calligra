@@ -1,0 +1,12 @@
+# Code generation options for kconfig_compiler
+File=test3.kcfg
+NameSpace=TestNameSpace
+ClassName=Test3
+#Singleton=false
+Mutators=true
+#Inherits=MyPrefs
+#IncludeFiles=myprefs.h
+#MemberVariables=public
+GlobalEnums=true
+ItemAccessors=true
+#SetUserTexts=true

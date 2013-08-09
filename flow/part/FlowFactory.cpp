@@ -26,7 +26,7 @@
 #include <KoPluginLoader.h>
 
 #include <kcomponentdata.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 

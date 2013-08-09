@@ -19,7 +19,7 @@ public:
 };
 
 class KCmdLineArgsList;
-class KApplication;
+class QApplication;
 class KAboutData;
 
 class KCmdLineArgs

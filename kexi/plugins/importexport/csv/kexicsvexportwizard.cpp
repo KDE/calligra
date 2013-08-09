@@ -40,10 +40,10 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
-#include <kapplication.h>
+#include <QApplication>
 #include <klocale.h>
 #include <kpushbutton.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kdialog.h>
@@ -114,7 +114,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
             KexiFileWidget::Custom | KexiFileWidget::SavingFileBasedDB,
             this);
         m_fileSaveWidget->setObjectName("m_fileSavePage");
-        //m_fileSavePage->setMinimumHeight(kapp->desktop()->availableGeometry().height() / 2);
+        //m_fileSavePage->setMinimumHeight(qApp->desktop()->availableGeometry().height() / 2);
         m_fileSaveWidget->setAdditionalFilters(csvMimeTypes().toSet());
         m_fileSaveWidget->setDefaultExtension("csv");
         m_fileSaveWidget->setLocationText(

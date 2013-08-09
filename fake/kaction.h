@@ -13,6 +13,19 @@ class KOFAKE_EXPORT KAction : public QWidgetAction
 {
     Q_OBJECT
 public:
+
+    /**
+     * An enumeration about the two types of shortcuts in a KAction
+     */
+    enum ShortcutType {
+      /// The shortcut will immediately become active but may be reset to "default".
+      ActiveShortcut = 0x1,
+      /// The shortcut is a default shortcut - it becomes active when somebody decides to
+      /// reset shortcuts to default.
+      DefaultShortcut = 0x2
+    };
+    Q_DECLARE_FLAGS(ShortcutTypes, ShortcutType)
+
     KAction(QObject *parent = 0)
         : QWidgetAction(parent) {}
     virtual ~KAction() {}

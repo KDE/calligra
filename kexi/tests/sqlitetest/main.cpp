@@ -1,6 +1,6 @@
 #include <kdebug.h>
 #include <kaboutdata.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kcmdlineargs.h>
 
 #include <db/connection.h>
@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 {
     KAboutData aboutData("kexicrash", 0, ki18n("kexicrash"), "0.1");
     KCmdLineArgs::init(argc, argv, &aboutData);
-    KApplication app;
+    QApplication app;
 
     KexiDB::DriverManager manager;
     KexiDB::Driver* driver = manager.driver("sqlite3");

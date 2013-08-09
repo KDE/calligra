@@ -1,0 +1,175 @@
+bugs
+====
+
+- make expandString stuff consistent
+- KConfigGroup::exists() should return true only if the group contains
+  any non-deleted entries (?)
+- immutable groups with no entries are not written out and thus lose
+  their immutability.
+- "C" & "en_US" should be detected early and converted to a null string
+  (but also save the original string, so locale() semantics don't change
+  at that point).
+
+wishes
+======
+
+- use lazy loading
+  - load as soon as the first KConfigGroup is instanciated
+  - lazy parsing of values is interesting, too - see kconfig_take2 branch
+- add $\\VAR and $\\(cmd) escapes to list-quote expanded string
+- possibly:
+  - preserve unchanged parts of the config literally. problem: comments
+    might become stale. so if a comment is already there, add an additional
+    comment that indicates that the value was changed (include old value?).
+  - api to actively add comments to files, groups and keys
+    - option to start these comments with ## as a sign that they should not
+      trigger the above change indicator logic.
+  - guaranteeing that write order of new keys is preserved
+  - detect commented out entries and put actual entries with the same key
+    right behind them
+- possibly: selective multi-level master diversion
+  - this is to support roaming profiles that have machine/user/etc. specific
+    settings
+  - files, groups and keys can have [$m] and [$s] markers; these cascade
+    within each file only. the least significant object (farthest away from
+    the master) with an effective $m mode becomes the master (i.e., is
+    written to and not read past).
+    default is $m for the master file and $s for the default files.
+  - the CascadeConfig flag being unset doesn't make things exactly simpler
+  - can kdeglobals be handled by this?
+  - does this really make sense? promoting an object to profile wide status
+    is a conscious decision - which probably needs to be repeated every time
+    the value changes.
+
+internals
+=========
+
+- clear up bDeleted vs. isNull in entrymap
+- make entrymap truly hierarchical
+  - an entry map contains its flags, a map of keys and a map of submaps.
+    it does NOT contain its name and has no parent pointer.
+  - when creating a kconfiggroup, ask parent for the respective submap
+    and link it if it is present. if it is not, create one at write op,
+    link it and tell parent to add it to its entry map. both query and
+    creation are recursive, obviously.
+    a kconfiggroup DOES contain its name and has a parent pointer.
+  - 3)
+- 4)
+
+3)
+> We wouldn't have to worry about the KEntryGroup being removed out from
+> under us, because the only way that should happen is if the config
+> object is destroyed or reparsed, and in those cases you shouldn't be
+> using a KConfigGroup from prior to that.
+>
+i don't think "this is stupid and will not happen" works; [...]
+given that cascaded parsing includes writing to existing maps, i think
+the simplest approach is clearing the existing structure from keymaps
+and resetting the attributes, but leaving the subgroup maps populated,
+thus keeping any group refs valid.
+the question is about the type of reference held to the entry map.
+originally i had thought of pointers. a map would be linked only if it
+really existed, otherwise the pointer would be null (thus indicating
+reads to return the default immediately and writes to ask the parent to
+create a submap). however, keeping that consistent with deletions would
+be a nightmare, and with the rescan changing the groups underneath
+impossible without each map having a list of referring configgroups.
+therefore it might make more sense to always create a corresponding tree
+of empty maps when a configroup for a non-existing group is instanciated
+- these groups won't be written out (they have no entries and cannot be
+immutable) and access to non-existing groups (esp. without an subsequent
+write that would actually create it) is rare, so the performance and
+memory overhead of this "eager" approach is likely to be negligible. as
+a middle way one could use a pointer and lazily populate it on first
+access whithout putting semantics into the pointer being already set,
+but i don't think the added complexity will pay off.
+
+4)
+> > > > hmm, wait. maybe it would be better if the map did not do actual
+> > > > permission checking. the frontent is peppered with asserts already
+> > >
+> > > that's the group doing permission checking, if this group is immutable
+> > > then the entry can't be changed. plus, now that KEntryKey doesn't know
+> > > what group it belongs to KEntryMap can't check if the group is
+> > > immutable.
+> > >
+> > > > (need to consider how to handle release builds). in the backend, the
+> > > > ugly immutableGroups hack would be unnecessary.
+> > >
+> > > no, immutableGroups would still be necessary unless i remove all
+> > > checking from KGroupEntry and KEntryMap. but, then checks for
+> > > immutable would have to be used everywhere that an entry might be
+> > > changed.
+> > >
+> > yes - and the frontend already handles it and the backend *should*
+> > handle it (issue warnings for trying to overwrite $i settings).
+>
+> i don't know, i think most handling of the immutability of a group
+> can/should be handled by the KGroupEntry itself. this way we can keep
+> all the data about a group in one place and let KGroupEntry keep
+> itself in a consistent/valid state.
+>
+dunno, either. the use cases are:
+- backend: writing immutable objects is fine, as long as the
+  immutability does not come from a pre-existing default.
+  given that there will be multiple backends, it sounds like
+  centralizing the check and warning reporting might make sense. otoh,
+  such a low-level function might not have enough context to make a
+  useful message.
+- frontend: obviously, writing immutable objects is not permitted. this
+  is already checked everywhere through asserts. in non-debug builds
+  these asserts have no effect, but if a write gets that far it means
+  that the app already permitted changing the option in the first place
+  due to failure to check for immutability. i don't see much point in
+  preventing the illegitimate change from being saved, as it can be
+  repeated anyway (i'm not really convinced of security through
+  exhaustion/boredom of the attacker :).
+i'm not sure whether that means that the two use cases need separate
+mutators or whether the mutator should not apply any immutability
+semantics at all.
+
+
+overwriting semantics
+=====================
+
+generally:
+- localized entries cannot exist without an unlocalized "primary" entry,
+  so writing a localized key when no corresponding unlocalized key
+  exists should print a warning and copy the value to the unlocalized
+  key.
+- a primary entry in the user config overshadows not only the immediate
+  default, but also any localizations of the default. applies also to a
+  [$d] marker, obviously.
+  a localized entry in the user config overshadows only that
+  localization from the default.
+
+write ops:
+> > - writing an entry with the localization flag changes really only that
+> >   key.
+> >   trying to change the globality of the key prints a warning and does
+> >   nothing.
+- key exists in local config => overwritten
+- key does not exist => created
+yes, that's the trivial case.
+
+> > - writing an entry without the localization flag deletes all
+> >   localizations.
+> >   in this case, changing the globality of the key poses no problem.
+- the key itself is handled trivially
+- if localizations exist in the local config, they are actively purged
+- localizations in the default config don't matter, as they will be
+  overshadowed by the unlocalized key in the local config
+
+> > - deleting an entry also deletes all localizations.
+- if default exists, write [$d] entry
+- if no default exists, delete entry
+- if localizations exist in the local config, they are actively purged
+- localizations in the default config don't matter, as they will be
+  overshadowed by the unlocalized key in the local config (as
+  localizations cannot exist without a primary key, a deletion marker
+  key will be present).
+
+> > - reverting a key to default also restores all localizations.
+- any local entries are actively purged
+
+

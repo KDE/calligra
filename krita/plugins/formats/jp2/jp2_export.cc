@@ -21,7 +21,7 @@
 #include <QCheckBox>
 #include <QSlider>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kdialog.h>
 #include <kpluginfactory.h>
 
@@ -87,7 +87,7 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
     
     kdb->setMainWidget(wdg);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {

@@ -20,13 +20,14 @@
 #ifndef __ko_app_h__
 #define __ko_app_h__
 
-#include <kapplication.h>
+#include <QApplication>
 #include "komain_export.h"
 
 class KoPart;
 
 class KoApplicationPrivate;
 class QSplashScreen;
+class KAboutData;
 
 /**
  *  @brief Base class for all %Calligra apps
@@ -40,16 +41,20 @@ class QSplashScreen;
  *  If the last mainwindow becomes closed, KoApplication automatically
  *  calls QApplication::quit.
  */
-class KOMAIN_EXPORT KoApplication : public KApplication
+class KOMAIN_EXPORT KoApplication : public QApplication
 {
     Q_OBJECT
 
 public:
+
+    /// Add commandline options common to all Calligra apps. Call before constructing KoApplication
+    static void addCommonCommandLineOptions();
+
     /**
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
      */
-    KoApplication();
+    KoApplication(int argc, char **argv, KAboutData *aboutData);
 
     /**
      *  Destructor.
@@ -111,8 +116,10 @@ signals:
      */
     void documentClosed(const QString &ref);
 
+
+
 private:
-    bool initHack();
+
     KoApplicationPrivate * const d;
     static bool m_starting ; ///< is the application starting or not
     class ResetStarting;

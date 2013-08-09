@@ -35,7 +35,7 @@
 #include <QEvent>
 
 #include <kglobalsettings.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 #include <klocale.h>
 #include <QMenu>

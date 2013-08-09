@@ -2,7 +2,7 @@
 #define FAKE_KDATEWIDGET_H
 
 #include <QWidget>
-
+#include <QDate>
 #include "kofake_export.h"
 
 
@@ -10,11 +10,7 @@ class KOFAKE_EXPORT KDateWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KDateWidget(QWidget *parent)
-        : QWidget(parent)
-        , m_date(QDate())
-    {
-    }
+    KDateWidget(QWidget *parent);
 
     const QDate& date() const {return m_date;}
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="test3arc"/>
+
+  <group name="General">
+    <entry type="Bool" key="Auto Save">
+      <label>Enable automatic saving of calendar</label>
+      <whatsthis>WhatsThis text for AutoSave option</whatsthis>
+      <default>false</default>
+    </entry>
+  </group>
+
+  <group name="Blah">
+    <entry type="Int" name="Blubb">
+      <default>10</default>
+    </entry>
+    <entry type="String" name="BlahBlah">
+      <default>a string</default>
+    </entry>
+    <entry type="Password" name="MyPassword"/>
+  </group>
+
+</kcfg>

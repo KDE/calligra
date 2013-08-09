@@ -26,14 +26,14 @@
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
-  std::auto_ptr<KAboutData> about( newFlowAboutData() );
-  KCmdLineArgs::init( argc, argv, about.get() );
+  QScopedPointer<KAboutData> about(newFlowAboutData());
+  KCmdLineArgs::init( argc, argv, about.data() );
 
   KCmdLineOptions options;
   options.add("+[file]", ki18n("File to open"));
   KCmdLineArgs::addCmdLineOptions( options );
-
-  KoApplication app;
+  KoApplication::addCommonCommandLineOptions();
+  KoApplication app(argc, argv, about.data());
 
   if (!app.start())
       return 1;

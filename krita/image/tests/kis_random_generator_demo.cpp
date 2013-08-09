@@ -1,4 +1,4 @@
-#include <kapplication.h>
+#include <QApplication>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
                      KAboutData::License_GPL, ki18n("Copyright 2009 Matthew Woehlke"));
     about.addAuthor( ki18n("Matthew Woehlke"), KLocalizedString(), "mw_triad@users.sourceforge.net" );
     KCmdLineArgs::init(argc, argv, &about);
-    KApplication app;
+    QApplication app;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     Q_UNUSED(args);
 

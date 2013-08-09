@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="test4rc">
+      <parameter name="Number" type="String"/>
+  </kcfgfile>
+
+  <group name="Foo">
+    <entry name="Color" type="Color" key="color #$(Number)">
+      <label>Block colors.</label>
+      <default>red</default>
+    </entry>
+  </group>
+  <group name="Bar$(Number)">
+    <entry name="FooBar" key="foo bar" type="String"/>
+    <entry name="Age" type="Int">
+      <default>35</default>
+      <min>8</min>
+      <max>88</max>
+    </entry>
+  </group>
+
+</kcfg>
