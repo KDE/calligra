@@ -474,6 +474,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             }
         }
 
+        //Make sure the input actions know we are active.
+        KisAbstractInputAction::setInputManager(this);
         retval = d->matcher.wheelEvent(action, wheelEvent);
         break;
     }
