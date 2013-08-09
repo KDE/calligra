@@ -17,9 +17,6 @@
 #include <klocale.h>
 #include <kofake_export.h>
 
-#define FAKE_KAPPLICATION_CTOR Q_ASSERT(false);
-#define FAKE_KMAINWINDOW_CTOR Q_ASSERT(false);
-
 class KStandardDirs;
 
 class KOFAKE_EXPORT KComponentData

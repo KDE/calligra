@@ -13,10 +13,8 @@ class KApplication : public QApplication
 {
 public:
     KApplication(bool isGui = true) : QApplication(KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv()) {
-        FAKE_KAPPLICATION_CTOR
     }
     KApplication(int &argc, char **argv) : QApplication(argc, argv) {
-        FAKE_KAPPLICATION_CTOR
     }
 
     static QApplication* kApplication() { return qApp; }
