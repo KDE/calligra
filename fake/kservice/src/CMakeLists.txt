@@ -35,12 +35,12 @@ set(kservice_SRCS
 )
 if (WIN32)
    LIST(APPEND kservice_SRCS
-      kdeinit/ktoolinvocation_win.cpp
+      #kdeinit/ktoolinvocation_win.cpp
    )
 endif()
 if (UNIX)
    LIST(APPEND kservice_SRCS
-      kdeinit/ktoolinvocation_x11.cpp
+      #kdeinit/ktoolinvocation_x11.cpp
    )
 endif()
 
@@ -58,11 +58,12 @@ target_include_directories(KService PUBLIC "$<BUILD_INTERFACE:${kservice_include
 target_link_libraries(KService
   LINK_PUBLIC
     KConfigCore
-    KCoreAddons
+#    KCoreAddons
   LINK_PRIVATE
-    KI18n
-    KDBusAddons   # KDEInitInterface
-    Qt5::DBus
+#    KI18n
+#    KDBusAddons   # KDEInitInterface
+#    Qt5::DBus
+     Qt5::Core
 )
 
 set_target_properties(KService PROPERTIES VERSION ${KSERVICE_VERSION_STRING}
