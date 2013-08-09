@@ -132,7 +132,6 @@ set(kofake_HEADERS_ONLY
     kfile.h
     #kservicetypetrader.h
     kdatetime.h
-    kdatewidget.h
     kde_file.h
     kstringhandler.h
     kpushbutton.h
@@ -208,6 +207,7 @@ set(kofake_HEADERS
     kbuttongroup.h
     kcomponentdata.h
     #kconfigbase.h
+    kdatewidget.h
     kfilterbase.h
     kfilterdev.h
     kgzipfilter.h
