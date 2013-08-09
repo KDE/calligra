@@ -136,67 +136,149 @@ Item {
         state: "full";
     }
 
-    Row {
-        id: panelTopRow;
-        x: Constants.GridWidth * 2 + 4;
+//     Row {
+//         id: panelTopRow;
+//         spacing: Constants.IsLandscape ? -Constants.GridWidth * 2 : 0;
 
         PanelDropArea {
             id: centerTopArea1;
             objectName: "centerTop1"
 
+            x: Constants.GridWidth * 2 + 4;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
+        Rectangle {
+            opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
+            x: centerTopArea1.x; y: centerTopArea1.y
+            width: Constants.GridWidth; height: Constants.GridHeight / 2;
+            color: "transparent";
+            border.color: "white"; border.width: 2;
+        }
+
         PanelDropArea {
             id: centerTopArea2;
             objectName: "centerTop2"
 
+            anchors.left: centerTopArea1.right;
+            y: Constants.IsLandscape ? Constants.GridHeight / 2 : 0;
+            anchors.leftMargin: Constants.IsLandscape ? -Constants.GridWidth / 2 : 0;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
+        Rectangle {
+            opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
+            x: centerTopArea2.x; y: centerTopArea2.y
+            width: Constants.GridWidth; height: Constants.GridHeight / 2;
+            color: "transparent";
+            border.color: "white"; border.width: 2;
+        }
+
         PanelDropArea {
             id: centerTopArea3;
             objectName: "centerTop3"
 
+            anchors.left: centerTopArea2.right;
+            anchors.leftMargin: Constants.IsLandscape ? -Constants.GridWidth / 2 : 0;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
+        Rectangle {
+            opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
+            x: centerTopArea3.x; y: centerTopArea3.y
+            width: Constants.GridWidth; height: Constants.GridHeight / 2;
+            color: "transparent";
+            border.color: "white"; border.width: 2;
+        }
+
         PanelDropArea {
             id: centerTopArea4;
             objectName: "centerTop4"
 
+            anchors.left: centerTopArea3.right;
+            y: Constants.IsLandscape ? Constants.GridHeight / 2 : 0;
+            anchors.leftMargin: Constants.IsLandscape ? -Constants.GridWidth / 2 : 0;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
+        Rectangle {
+            opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
+            x: centerTopArea4.x; y: centerTopArea4.y
+            width: Constants.GridWidth; height: Constants.GridHeight / 2;
+            color: "transparent";
+            border.color: "white"; border.width: 2;
+        }
+
         PanelDropArea {
             id: centerTopArea5;
             objectName: "centerTop5"
 
+            anchors.left: centerTopArea4.right;
+            anchors.leftMargin: Constants.IsLandscape ? -Constants.GridWidth / 2 : 0;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
+        Rectangle {
+            opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
+            x: centerTopArea5.x; y: centerTopArea5.y
+            width: Constants.GridWidth; height: Constants.GridHeight / 2;
+            color: "transparent";
+            border.color: "white"; border.width: 2;
+        }
+
         PanelDropArea {
             id: centerTopArea6;
             objectName: "centerTop6"
 
+            anchors.left: centerTopArea5.right;
+            y: Constants.IsLandscape ? Constants.GridHeight / 2 : 0;
+            anchors.leftMargin: Constants.IsLandscape ? -Constants.GridWidth / 2 : 0;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
+        Rectangle {
+            opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
+            x: centerTopArea6.x; y: centerTopArea6.y
+            width: Constants.GridWidth; height: Constants.GridHeight / 2;
+            color: "transparent";
+            border.color: "white"; border.width: 2;
+        }
+
         PanelDropArea {
             id: centerTopArea7;
             objectName: "centerTop7"
 
+            anchors.left: centerTopArea6.right;
+            anchors.leftMargin: Constants.IsLandscape ? -Constants.GridWidth / 2: 0;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
+        Rectangle {
+            opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
+            x: centerTopArea7.x; y: centerTopArea7.y
+            width: Constants.GridWidth; height: Constants.GridHeight / 2;
+            color: "transparent";
+            border.color: "white"; border.width: 2;
+        }
+
         PanelDropArea {
             id: centerTopArea8;
             objectName: "centerTop8"
 
+            anchors.left: centerTopArea7.right;
+            y: Constants.IsLandscape ? Constants.GridHeight / 2 : 0;
+            anchors.leftMargin: Constants.IsLandscape ? -Constants.GridWidth / 2 : 0;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
-    }
+        Rectangle {
+            opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
+            x: centerTopArea8.x; y: centerTopArea8.y
+            width: Constants.GridWidth; height: Constants.GridHeight / 2;
+            color: "transparent";
+            border.color: "white"; border.width: 2;
+        }
+    //}
 
     Item {
         id: dropOverlay;
@@ -217,24 +299,16 @@ Item {
             border.width: 2;
         }
 
-        Row {
-            x: panelTopRow.x;
-            y: panelTopRow.y;
-            width: panelTopRow.width;
-            Repeater {
-                model: 8;
-
-                delegate: Rectangle {
-                    width: Constants.GridWidth;
-                    height: Constants.GridHeight / 2;
-
-                    color: "transparent";
-
-                    border.color: "white";
-                    border.width: 2;
-                }
-            }
-        }
+//         Row {
+//             x: panelTopRow.x;
+//             y: panelTopRow.y;
+//             width: panelTopRow.width;
+//             Repeater {
+//                 model: 8;
+// 
+//                 delegate: 
+//             }
+//         }
 
         Rectangle {
             id: rightOverlay;
@@ -332,7 +406,7 @@ Item {
     states: [
         State {
             name: "portrait";
-            PropertyChanges { target: panelTopRow; x: Constants.GridWidth * 4 + 4; }
+            PropertyChanges { target: centerTopArea1; x: Constants.GridWidth * 4 + 4; }
             PropertyChanges { target: leftArea; width: Constants.GridWidth * 4; }
             PropertyChanges { target: rightArea; width: Constants.GridWidth * 4; }
             AnchorChanges { target: leftArea; anchors.bottom: parent.verticalCenter; }

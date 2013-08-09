@@ -24,6 +24,17 @@ DnD.DropArea {
 
     property string state: "collapsed";
 
+    onYChanged: {
+        if(children.length > 0) {
+            if(Constants.IsLandscape && y > 0) {
+                children[0].roundTop = true;
+            }
+            else {
+                children[0].roundTop = false;
+            }
+        }
+    }
+
     onDragEnter: {
         event.accept(Qt.MoveAction);
     }

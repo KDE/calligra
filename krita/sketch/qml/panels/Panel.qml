@@ -24,6 +24,7 @@ import "../components"
 Item {
     id: base;
 
+    property bool roundTop: false;
     property color panelColor: Constants.Theme.MainColor;
     property color textColor: "white";
     property string name;
@@ -289,19 +290,21 @@ Item {
         }
 
         Rectangle {
+            visible: (base.state === "collapsed") ? !base.roundTop : true;
             anchors {
                 bottom: parent.top;
-                left: parent.horizontalCenter;
-                leftMargin: -handle.anchors.leftMargin;
+                left: handleBackground.left;//parent.horizontalCenter;
+                //leftMargin: -handle.anchors.leftMargin;
             }
             color: base.panelColor;
             radius: 0
 
-            width: handle.anchors.leftMargin * 2;
+            width: handleBackground.width //handle.anchors.leftMargin * 2;
             height: handle.anchors.topMargin + 1
         }
 
         Rectangle {
+            id: handleBackground
             anchors {
                 top: parent.top;
                 topMargin: -handle.anchors.topMargin;
@@ -309,7 +312,7 @@ Item {
                 leftMargin: -handle.anchors.leftMargin;
             }
 
-            width: handle.anchors.leftMargin * 2;
+            width: handle.anchors.leftMargin * 2
             height: handle.anchors.topMargin * 2
             color: base.panelColor
             radius: 8
@@ -368,7 +371,7 @@ Item {
         State {
             name: "peek";
 
-            PropertyChanges { target: base; width: Constants.GridWidth * 2; }
+            PropertyChanges { target: base; width: Constants.IsLandscape ? Constants.GridWidth * 4 : Constants.GridWidth * 2; }
             PropertyChanges { target: fill; height: Constants.GridHeight * 3.75; }
             PropertyChanges { target: handle; opacity: 1; anchors.leftMargin: Constants.GridWidth / 2 - 4; }
             PropertyChanges { target: peek; opacity: 1; }
