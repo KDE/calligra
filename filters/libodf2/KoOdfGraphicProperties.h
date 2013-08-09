@@ -44,11 +44,6 @@ class KOODF2_EXPORT KoOdfGraphicProperties : public KoOdfStyleProperties
     virtual bool readOdf(KoXmlStreamReader &reader);
     virtual bool saveOdf(const QString &propertySet, KoXmlWriter *writer);
 
- protected:
-    /// Read all attributes from the XML element.
-    /// This function is normally called from readOdf().
-    bool readAttributes(KoXmlStreamReader &reader);
-
  private:
     class Private;
     Private * const d;

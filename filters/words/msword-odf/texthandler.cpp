@@ -966,26 +966,6 @@ void WordsTextHandler::paragraphEnd()
         }
     }
 
-    bool openTextBox = false;
-    if (m_currentPPs->pap().dxaAbs !=  m_textBoxX || m_currentPPs->pap().dyaAbs != m_textBoxY) {
-        if ((m_textBoxX || m_textBoxY)) {
-            m_textBoxX = 0;
-            m_textBoxY = 0;
-            // close the previous text box before writing a new one
-            writer->endElement(); //draw:text-box
-            writer->endElement(); //draw:frame
-            writer->endElement(); //text:p
-        }
-
-        if (!m_currentPPs->pap().fInTable &&
-            (m_currentPPs->pap().dxaAbs != 0 || m_currentPPs->pap().dyaAbs != 0)) {
-            m_textBoxX = m_currentPPs->pap().dxaAbs;
-            m_textBoxY = m_currentPPs->pap().dyaAbs;
-            openTextBox = true;
-        }
-    }
-
-
     //write paragraph content, reuse text/paragraph style name if applicable
     QString styleName = m_paragraph->writeToFile(writer, openTextBox, &m_fld->m_tabLeader);
 

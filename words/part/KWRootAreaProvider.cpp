@@ -623,10 +623,6 @@ QRectF KWRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
         || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         rootArea->setNoWrap(1E6);
     }
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
-        rootArea->setNoWrap(1E6);
-    }
 
     return rect;
 }

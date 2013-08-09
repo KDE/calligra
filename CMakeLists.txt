@@ -903,11 +903,11 @@ if(WIN32 OR QT_MAC_USE_COCOA)
 endif(WIN32 OR QT_MAC_USE_COCOA)
 
 if(NOT SHARED_MIME_INFO_FOUND)
-        calligra_disable_product(FILTER_MPXJ_IMPORT "SharedMimeInfo not found (needed to install mimetypes)")
+    calligra_disable_product(FILTER_MPXJ_IMPORT "SharedMimeInfo not found (needed to install mimetypes)")
 endif(NOT SHARED_MIME_INFO_FOUND)
 
 if(WIN32)
-    set(SHOULD_BUILD_BRAINDUMP_APP FALSE)
+    calligra_disable_product(BRAINDUMP_APP "unmaintained on Windows")
 endif()
 
 #############################################
@@ -931,9 +931,9 @@ calligra_drop_products_on_old_flag(words  WORDS_PART WORDS_APP)
 #############################################
 
 # If a product does not build due to some temporary brokeness disable it here,
-# by setting the related SHOULD_BUILD_$X to FALSE
-#eg:
-#set(SHOULD_BUILD_KEXI FALSE) # kexi isn't buildable at the moment
+# by calling calligra_disable_product with the product id and the reason,
+# e.g.:
+# calligra_disable_product(KEXI_APP "isn't buildable at the moment")
 
 #############################################
 ####     Calculate buildable products    ####
