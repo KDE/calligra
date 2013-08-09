@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QStandardPaths>
 #include <QDebug>
 
 class KStandardDirs
@@ -19,9 +20,24 @@ public:
                         IgnoreExecBit = 4 };
     Q_DECLARE_FLAGS( SearchOptions, SearchOption )
 
-#if 0
-    KStandardDirs();
-#endif
+    static QList<QStandardPaths::StandardLocation> locations(const QByteArray &type) {
+        QList<QStandardPaths::StandardLocation> r;
+        if (type == "data") {
+            r << QStandardPaths::DataLocation;
+            r << QStandardPaths::GenericDataLocation;
+        } else if (type == "apps"|| type == "xdgdata-apps") {
+            r << QStandardPaths::ApplicationsLocation;
+        } else if (type == "config") {
+            r << QStandardPaths::ConfigLocation;
+        } else if (type == "pixmap" || type == "xdgdata-pixmap" || type == "xdgdata-icon") {
+            r << QStandardPaths::PicturesLocation;
+        } else if (type == "data") {
+            r << QStandardPaths::DataLocation;
+        }
+        return r;
+    }
+
+    KStandardDirs() {}
 
     void addPrefix( const QString& dir ) {}
 
@@ -143,8 +159,16 @@ public:
 
     QString findResource( const char *type, const QString& filename ) const
     {
-        qDebug() << Q_FUNC_INFO << "TODO" << type << filename;
-        return QString();
+        QString r;
+        Q_FOREACH(QStandardPaths::StandardLocation l, locations(type)) {
+            Q_FOREACH(const QString &dir, QStandardPaths::standardLocations(l)) {
+                QFileInfo fi(dir, filename);
+                if (r.isEmpty() && fi.isFile() && fi.exists())
+                    r = fi.absoluteFilePath();
+            }
+        }
+        qDebug() << Q_FUNC_INFO << "type=" << type << "filename=" << filename << "result=" << r;
+        return r;
     }
 
 #if 0
@@ -181,6 +205,7 @@ public:
     quint32 calcResourceHash( const char *type,
                               const QString& filename,
                               SearchOptions options = NoSearchOptions) const;
+#endif
 
     /**
      * Tries to find all directories whose names consist of the
@@ -200,9 +225,21 @@ public:
      * @return A list of matching directories, or an empty
      *         list if the resource specified is not found.
      */
-    QStringList findDirs( const char *type,
-                          const QString& reldir ) const;
+    QStringList findDirs( const char *type, const QString& reldir = QString() ) const
+    {
+        QStringList r;
+        Q_FOREACH(QStandardPaths::StandardLocation l, locations(type)) {
+            Q_FOREACH(const QString &dir, QStandardPaths::standardLocations(l)) {
+                QFileInfo fi(dir, reldir);
+                if (fi.isDir())
+                    r.append(fi.absolutePath());
+            }
+        }
+        qDebug() << Q_FUNC_INFO << "type=" << type << "reldir=" << reldir << "result=" << r;
+        return r;
+    }
 
+#if 0
     /**
      * Tries to find the directory the file is in.
      * It works the same as findResource(), but it doesn't
@@ -229,20 +266,19 @@ public:
 
     QStringList findAllResources( const char *type, const QString& filter = QString(), SearchOptions options = NoSearchOptions ) const
     {
-        qDebug() << Q_FUNC_INFO << type << filter << options;
-        //Q_ASSERT(false);
-        return QStringList();
+        return findDirs(type);
     }
 
     QStringList findAllResources( const char *type, const QString& filter, int options ) const {
-        return findAllResources(type, filter, (SearchOptions)options );
+        return findDirs(type);
     }
 
     QStringList findAllResources( const char *type, const QString& filter, SearchOptions options, QStringList &relPaths) const
     {
-        qDebug() << Q_FUNC_INFO << type << filter << options;
-        //Q_ASSERT(false);
-        return QStringList();
+        QStringList r;
+        Q_FOREACH(const QString &relPath, relPaths)
+            r << findDirs(type, relPath);
+        return r;
     }
 
 #if 0
@@ -331,6 +367,7 @@ public:
     {
         QDir dir = QDir::home();
         dir.cd(qApp->applicationName());
+        qDebug() << Q_FUNC_INFO << "type=" << type << "result=" << dir.absolutePath();
         return QStringList() << dir.absolutePath();
     }
 
@@ -348,6 +385,7 @@ public:
     {
         QDir dir = QDir::home();
         bool exists = dir.cd(qApp->applicationName());
+        qDebug() << Q_FUNC_INFO << "type=" << type << "exists=" << exists << "result=" << dir.absolutePath();
         if (create && !exists)
             if (!dir.mkpath(dir.absolutePath()))
                 qWarning() << Q_FUNC_INFO << "Failed to create directory=" << dir.absolutePath();
@@ -552,24 +590,6 @@ public:
      * @return Whether the access is allowed, true = Access allowed
      */
     static bool checkAccess(const QString& pathname, int mode);
-
-private:
-    // Disallow assignment and copy-construction
-    KStandardDirs( const KStandardDirs& );
-    KStandardDirs& operator= ( const KStandardDirs& );
-
-    class KStandardDirsPrivate;
-    KStandardDirsPrivate* const d;
-
-    // Like their public counter parts but with an extra priority argument
-    // If priority is true, the directory is added directly after
-    // $KDEHOME/$XDG_DATA_HOME/$XDG_CONFIG_HOME
-    void addPrefix( const QString& dir, bool priority );
-    void addXdgConfigPrefix( const QString& dir, bool priority );
-    void addXdgDataPrefix( const QString& dir, bool priority );
-    void addKDEDefaults();
-
-    void addResourcesFrom_krcdirs();
 #endif
 };
 
