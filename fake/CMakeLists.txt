@@ -116,7 +116,7 @@ set(kofake_HEADERS_ONLY
     kio/kjob.h
     kdiroperator.h
     kcolordialog.h
-    kdesktopfile.h
+    #kdesktopfile.h
     kassistantdialog.h
     knotifyconfigwidget.h
     knewpassworddialog.h
