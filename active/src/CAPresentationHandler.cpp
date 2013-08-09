@@ -40,10 +40,10 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoFindBase.h>
+#include <KoDocumentEntry.h>
 
 #include <kdebug.h>
 #include <kmimetype.h>
-#include <kmimetypetrader.h>
 
 #include <QSize>
 #include <QTimer>
@@ -107,8 +107,8 @@ bool CAPresentationHandler::openDocument (const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
-    KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
+    KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
+    KoPart *part = documentEntry.createKoPart(&error);
 
     if (!part) {
         kDebug() << "Doc can't be openend" << error;
