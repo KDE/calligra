@@ -49,7 +49,7 @@ GradientStrategy::GradientStrategy(KoShape *shape, const QGradient * gradient, T
         , m_selectionIndex(0), m_type(gradient->type())
 {
     if (m_target == Fill) {
-        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
+        QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
         if (fill)
             m_matrix = fill->transform() * m_shape->absoluteTransformation(0);
     } else {
@@ -67,7 +67,7 @@ void GradientStrategy::setEditing(bool on)
     // for use inside the command emitted when finished
     if (on) {
         if (m_target == Fill) {
-            KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
+            QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
             if (fill) {
                 m_oldBrush = QBrush(*fill->gradient());
                 m_oldBrush.setTransform(fill->transform());
@@ -299,7 +299,7 @@ void GradientStrategy::applyChanges()
 {
     m_newBrush = brush();
     if (m_target == Fill) {
-        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
+        QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
         if (fill) {
             fill->setGradient(*m_newBrush.gradient());
             fill->setTransform(m_newBrush.transform());
@@ -317,9 +317,9 @@ KUndo2Command * GradientStrategy::createCommand(KUndo2Command * parent)
         return 0;
 
     if (m_target == Fill) {
-        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
+        QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
         if (fill) {
-            KoGradientBackground * newFill = new KoGradientBackground(*fill->gradient(), fill->transform());
+            QSharedPointer<KoGradientBackground> newFill(new KoGradientBackground(*fill->gradient(), fill->transform()));
             fill->setGradient(*m_oldBrush.gradient());
             fill->setTransform(m_oldBrush.transform());
             return new KoShapeBackgroundCommand(m_shape, newFill, parent);
@@ -371,7 +371,7 @@ void GradientStrategy::repaint(const KoViewConverter &converter) const
 const QGradient * GradientStrategy::gradient()
 {
     if (m_target == Fill) {
-        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
+        QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
         if (! fill)
             return 0;
         return fill->gradient();
@@ -419,7 +419,7 @@ void GradientStrategy::updateStops()
 {
     QBrush brush;
     if (m_target == Fill) {
-        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
+        QSharedPointer<KoGradientBackground>  fill = qSharedPointerDynamicCast<KoGradientBackground>(m_shape->background());
         if (fill)
             m_stops = fill->gradient()->stops();
     } else {

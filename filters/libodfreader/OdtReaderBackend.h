@@ -80,21 +80,6 @@ class KOODFREADER_EXPORT OdtReaderBackend
     virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 
-    // ----------------------------------------------------------------
-    // Text level functions: paragraphs, headings, sections, frames, objects, etc
-
-    virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    // ----------------------------------------------------------------
-    // Paragraph level functions: spans, annotations, notes, text content itself, etc.
-
-    virtual void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
-
  private:
     class Private;
     Private * const d;

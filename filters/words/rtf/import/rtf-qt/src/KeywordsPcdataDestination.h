@@ -1,4 +1,4 @@
-#include "rtfreader_export.h"/*
+/*
     Copyright (C)  2010  Brad Hards <bradh@frogmouth.net>
 
     This program is free software: you can redistribute it and/or modify

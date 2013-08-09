@@ -1177,13 +1177,20 @@ void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
 
 QString Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::CHP> chp , const bool isBulletPicture)
 {
-    //NOTE: No need for the globalCP argument at the moment.
+    //NOTE: No need for the globalCP param at the moment.
 
 #ifdef WV2_DEBUG_PICTURES
-    wvlog << "Found a picture; fcPic: " << chp->fcPic_fcObj_lTagObj;
+    wvlog << "fcPic: " << chp->fcPic_fcObj_lTagObj;
+    wvlog << "fObj:" << chp->fObj;
+    wvlog << "fOle2:" << chp->fOle2;
 #endif
-
     QString ret;
+
+    if (chp->fOle2) {
+        wvlog << "Embedded OLE2 objects not supported." << endl;
+        return ret;
+    }
+
     OLEStreamReader* stream( m_fib.nFib < Word8nFib ? m_wordDocument : m_data );
     if ( !stream || static_cast<unsigned int>( chp->fcPic_fcObj_lTagObj ) >= stream->size() ) {
         wvlog << "Error: Severe problems when trying to read an image. Skipping." << endl;

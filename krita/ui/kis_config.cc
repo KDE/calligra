@@ -48,7 +48,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
 
-#include "config-ocio.h"
+#include <config-ocio.h>
 
 
 namespace
@@ -704,16 +704,6 @@ QString KisConfig::pressureTabletCurve() const
 void KisConfig::setPressureTabletCurve(const QString& curveString) const
 {
     m_cfg.writeEntry("tabletPressureCurve", curveString);
-}
-
-bool KisConfig::zoomWithWheel() const
-{
-    return m_cfg.readEntry("ZoomWithWheel", true);
-}
-
-void KisConfig::setZoomWithWheel(const bool zoom) const
-{
-    m_cfg.writeEntry("ZoomWithWheel", zoom);
 }
 
 qreal KisConfig::vastScrolling() const
