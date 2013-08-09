@@ -32,7 +32,13 @@
 #include <QtCore/QFile>
 #include <QtCore/QBuffer>
 #include <QProcess>
+
+#ifdef FAKEDBUS
 #include <QtDBus/QtDBus>
+#else
+#include <QDebug>
+#include <QFileInfo>
+#endif
 
 #include <stdlib.h>
 #include <fcntl.h>
@@ -174,10 +180,12 @@ Q_GLOBAL_STATIC(KSycocaSingleton, ksycocaInstance)
 KSycoca::KSycoca()
   : d(new KSycocaPrivate)
 {
+#ifdef FAKEDBUS
     QDBusConnection::sessionBus().connect(QString(), QString(),
                                           QString::fromLatin1("org.kde.KSycoca"),
                                           QString::fromLatin1("notifyDatabaseChanged"),
                                           this, SLOT(notifyDatabaseChanged(QStringList)));
+#endif
 }
 
 bool KSycocaPrivate::openDatabase(bool openDummyIfNotFound)
@@ -408,12 +416,15 @@ bool KSycocaPrivate::checkDatabase(BehaviorsIfNotFound ifNotFound)
 
     closeDatabase(); // close the dummy one
 
+#ifdef FAKEDBUS
     // We can only use the installed ksycoca file if kded is running,
     // since kded is what keeps the file uptodate.
     QDBusConnectionInterface* bus = QDBusConnection::sessionBus().interface();
     const bool kdedRunning = bus->isServiceRegistered(QString::fromLatin1("org.kde.kded5")) ||
                              qAppName() == "kbuildsycoca5";
-
+#else
+    const bool kdedRunning = false;
+#endif
     // Check if new database already available
     if (kdedRunning && openDatabase(ifNotFound & IfNotFoundOpenDummy)) {
         if (checkVersion()) {
@@ -426,6 +437,7 @@ bool KSycocaPrivate::checkDatabase(BehaviorsIfNotFound ifNotFound)
         // Ask kded to rebuild ksycoca
         // (so that it's not only built, but also kept up-to-date...)
         bool justStarted = false;
+#ifdef FAKEDBUS
         if (!bus->isServiceRegistered(QLatin1String("org.kde.kded5"))) {
             // kded isn't even running: start it
             QDBusReply<void> reply = bus->startService(QLatin1String("org.kde.kded5"));
@@ -458,6 +470,7 @@ bool KSycocaPrivate::checkDatabase(BehaviorsIfNotFound ifNotFound)
 
         //qDebug() << "We have no database.... asking kded to create it";
         sycoca.call(QLatin1String("recreate"));
+#endif
 
         closeDatabase(); // close the dummy one
 
