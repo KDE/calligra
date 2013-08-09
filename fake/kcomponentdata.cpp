@@ -4,6 +4,8 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 
+#include <QStandardPaths>
+
 using namespace KGlobal;
 
 KSharedConfigPtr KComponentData::config() const
@@ -25,7 +27,7 @@ KSharedConfigPtr KGlobal::config()
 {
     static KSharedConfigPtr globalConfig;
     if (!globalConfig)
-        globalConfig = KSharedConfigPtr(new KSharedConfig(qApp->applicationName()));
+        globalConfig = KSharedConfig::openConfig(qApp->applicationName());
     return globalConfig;
 }
 
