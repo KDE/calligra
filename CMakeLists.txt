@@ -301,7 +301,7 @@ find_package(Qt5Concurrent REQUIRED NO_MODULE)
 find_package(Qt5Sql REQUIRED NO_MODULE)
 
 if (UNIX)
-    find_package(Qt5X11Extras REQUIRED NO_MODULE)
+    #find_package(Qt5X11Extras REQUIRED NO_MODULE)
 endif (UNIX)
 
 if (Qt5_POSITION_INDEPENDENT_CODE)
