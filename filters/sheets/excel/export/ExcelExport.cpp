@@ -18,7 +18,6 @@
 */
 
 #include <ExcelExport.h>
-#include <ExcelExport.moc>
 
 #include <QFont>
 #include <QFontMetricsF>
@@ -1147,3 +1146,5 @@ unsigned ExcelExport::Private::fontIndex(const QFont& f, const QColor& c, QHash<
     fontRecords.append(fr);
     return idx;
 }
+
+#include "ExcelExport.moc"

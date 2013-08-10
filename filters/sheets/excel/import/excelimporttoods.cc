@@ -22,7 +22,6 @@
 */
 
 #include <excelimporttoods.h>
-#include <excelimporttoods.moc>
 
 #include <QUrl>
 #include <QString>
@@ -1808,3 +1807,4 @@ void ExcelImport::Private::insertPictureManifest(const QString &fileName)
     manifestEntries.insert(fileName, mimeType);
 }
 
+#include "excelimporttoods.moc"

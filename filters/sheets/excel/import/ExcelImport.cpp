@@ -22,7 +22,6 @@
 */
 
 #include "ExcelImport.h"
-#include <ExcelImport.moc>
 
 #include <QString>
 #include <QDate>
@@ -1440,3 +1439,5 @@ void ExcelImport::slotSigProgress(int progress)
 {
     emit sigProgress(int(SIDEWINDERPROGRESS/100.0 * progress + 0.5));
 }
+
+#include "ExcelImport.moc"

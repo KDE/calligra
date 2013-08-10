@@ -18,7 +18,6 @@
 */
 
 #include <dbaseimport.h>
-#include <dbaseimport.moc>
 #include <dbase.h>
 
 #include <QFont>
@@ -164,3 +163,5 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
 
     return KoFilter::OK;
 }
+
+#include "dbaseimport.moc"
