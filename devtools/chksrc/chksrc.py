@@ -230,10 +230,6 @@ def usage(errormsg=""):
     print """usage: chksrc.py [options] [files]
     options:
 
-        -a --actions    a comma separated list of the following possible actions:
-                          includeguards: checks the include guards for misdefines and duplicates
-                          exports:       normalizes SIGNAL and SLOT signatures
-                          all:           all of the above
         -h --help       print this help and exit immediately
         -v --verbse     print verbose output
 
@@ -259,10 +255,11 @@ def main():
     #print "opts:", opts
     #print "params:", params
 
-    actions = []
+    #actions = []
+    actions = ["all"]
     for opt, param in opts:
         #print opt, param
-        if opt in ("-a" , "--actions"):
+        if False and opt in ("-a" , "--actions"):  #disable -a for now
             actions = string.split(param, ",")
             #print "actions: ", actions
             for a in actions:
