@@ -63,3 +63,5 @@ bool TableShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
     Q_UNUSED(context);
     return (element.namespaceURI() == KoXmlNS::table && element.localName() == "table");
 }
+
+#include "TableShapeFactory.moc"

@@ -80,3 +80,4 @@ KoShape *TableDeferredShapeFactory::createDefaultShape(KoDocumentResourceManager
     }
     return shape;
 }
+#include "TableShapeDeferredFactory.moc"

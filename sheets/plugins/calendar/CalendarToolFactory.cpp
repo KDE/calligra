@@ -47,3 +47,5 @@ KoToolBase* CalendarToolFactory::createTool(KoCanvasBase* canvas)
 {
     return new CalendarTool(canvas);
 }
+
+#include "CalendarToolFactory.moc"

@@ -21,6 +21,7 @@
 #define CALLIGRA_SHEETS_FACTORY_H
 
 #include <kpluginfactory.h>
+#include <kcomponentdata.h>
 
 #include "calligra_sheets_export.h"
 
