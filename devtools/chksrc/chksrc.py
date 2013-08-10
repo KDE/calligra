@@ -27,15 +27,18 @@ verbose = False
 # Stores include guards in .h files.
 includeGuards = {}
 
+# Stores the export macros for each directory
+exportMacros = {}
+
 
 # ----------------------------------------------------------------
 #                         Individual actions
 
 
-def checkContents(filename, contents):
+def checkContents(dirName, filename, contents):
     global verbose
-    global dryrun
     global includeGuards
+    global exportMacros
 
     # Compile a regex that matches an ifndef statement.
     ifndefPattern = '^(\\#ifndef\\s*)([^\\s]*)(\\s*)'
@@ -45,6 +48,10 @@ def checkContents(filename, contents):
     definePattern = '^(\\#define\\s*)([^\\s]*)(\\s*)'
     defineRegex = re.compile(definePattern)
 
+    # Compile a regex that matches a class definition with an export
+    classPattern = '^(class\\s*)([a-zA-Z_]*[Ee][Xx][Pp][Oo][Rr][Tt])?(\\s*)([a-zA-Z0-9_]*)(.*)'
+    classRegex = re.compile(classPattern)
+
     lineNo = 1
     ifndefFound = False
     defineFound = False
@@ -53,6 +60,9 @@ def checkContents(filename, contents):
     includeGuard = ""
     for line in contents:
         #print "input: ", line
+
+        # ----------------------------------------------------------------
+        # Check include guards
 
         # Check if this line is an #ifndef line. Only check the first one.
         # if it is, and it's the first one, assume that it's the include guard and store it.
@@ -88,10 +98,30 @@ def checkContents(filename, contents):
                 else:
                     sys.stderr.write(filename + ":" + str(ifndefLine) + ": Faulty include guard\n")
 
+        # ----------------------------------------------------------------
+        # Check exports
 
-        # Check for export macros
+        classes = classRegex.findall(line)
+        #print "defines: ", defines
+        if len(classes) > 0:
+            classLine = classes[0]
+            # Here we know it's an include statement.  We should only have found one hit.
+            #  classLine[0] = "class "
+            #  classLine[1] = export macro
+            #  classLine[2] = spaces
+            #  classLine[3] = class name
+            #  classLine[4] = rest of the line
+            if classLine[1] != "":
+                #print classLine
+                exportMacro = classLine[1]
+                if exportMacros.has_key(dirName):
+                    # Append the export macro name if it's not already there.
+                    if not exportMacro in exportMacros[dirName]:
+                        exportMacros[dirName].append(exportMacro)
+                else:
+                    exportMacros[dirName] = [exportMacro]
 
-
+        # end of the loop over the lines
         lineNo = lineNo + 1
 
     if not ifndefFound or not defineFound:
@@ -103,7 +133,7 @@ def checkContents(filename, contents):
 # ----------------------------------------------------------------
 
 
-def handleFile(name, actions):
+def handleFile(dir, name, actions):
     global dryrun, verbose
 
     # We only handle .h files for now.
@@ -120,7 +150,7 @@ def handleFile(name, actions):
     contents = infile.readlines()
     infile.close()
 
-    checkContents(name, contents)
+    checkContents(dir, name, contents)
 
 
 def traverseTree(dir, actions, names):
@@ -143,11 +173,12 @@ def traverseTree(dir, actions, names):
             # Ignore all directories if not in recursive mode
         else:
             if fnmatch.fnmatch(name, pattern):
-                handleFile(fullname, actions)
+                handleFile(dir, fullname, actions)
 
 
 def report():
     global includeGuards
+    global exportMacros
 
     print
     print "SUMMARY REPORT"
@@ -171,6 +202,15 @@ def report():
             sys.stderr.write('include guard "' + guard + '" is duplicated in the following files:\n')
             for file in guardFiles[guard]:
                 sys.stderr.write('  ' + file + '\n')
+
+    #print exportMacros
+    for key in exportMacros.keys():
+        if len(exportMacros[key]) > 1:
+            globalProblems = True
+            sys.stderr.write('directory "' + key + '" has the following export macros:\n')
+            for macro in exportMacros[key]:
+                sys.stderr.write('  ' + macro + '\n')
+            
 
     if not globalProblems:
         print "  No global problems"
