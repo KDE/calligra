@@ -49,7 +49,7 @@ KComponentData *CAuFactory::s_instance = 0;
 KAboutData *CAuFactory::s_aboutData = 0;
 
 CAuFactory::CAuFactory(QObject *parent)
-        : KPluginFactory(*aboutData(), parent)
+        : KPluginFactory(aboutData()->appName().toUtf8(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Author.
@@ -87,7 +87,7 @@ KAboutData *CAuFactory::aboutData()
 const KComponentData &CAuFactory::componentData()
 {
     if (!s_instance) {
-        s_instance = new KComponentData(aboutData());
+        s_instance = new KComponentData();
 
         s_instance->dirs()->addResourceType("words_template",
                                             "data", "words/templates/");

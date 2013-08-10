@@ -46,7 +46,7 @@ KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
 
 KWFactory::KWFactory(QObject *parent)
-        : KPluginFactory(*aboutData(), parent)
+        : KPluginFactory(aboutData()->appName().toUtf8(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Words.
@@ -84,7 +84,7 @@ KAboutData *KWFactory::aboutData()
 const KComponentData &KWFactory::componentData()
 {
     if (!s_instance) {
-        s_instance = new KComponentData(aboutData());
+        s_instance = new KComponentData();
 
         s_instance->dirs()->addResourceType("words_template",
                                             "data", "words/templates/");

@@ -21,6 +21,7 @@
 #define KWFACTORY_H
 
 #include <kpluginfactory.h>
+#include <kcomponentdata.h>
 #include "words_export.h"
 
 class KAboutData;
