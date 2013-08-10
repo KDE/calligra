@@ -49,7 +49,7 @@ def checkContents(dirName, filename, contents):
     defineRegex = re.compile(definePattern)
 
     # Compile a regex that matches a class definition with an export
-    classPattern = '^(class\\s*)([a-zA-Z_]*[Ee][Xx][Pp][Oo][Rr][Tt])?(\\s*)([a-zA-Z0-9_]*)(.*)'
+    classPattern = '^(class\\s*)([a-zA-Z0-9_]*[Ee][Xx][Pp][Oo][Rr][Tt])?(\\s*)([a-zA-Z0-9_]*)(.*)'
     classRegex = re.compile(classPattern)
 
     lineNo = 1
