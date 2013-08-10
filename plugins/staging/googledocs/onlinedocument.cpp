@@ -42,7 +42,7 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)
     , m_login(0)
 {
-    setComponentData(OnlineDocumentFactory::componentData());
+    //FIXME QT5 setComponentData(OnlineDocumentFactory::componentData());
 
     KAction *action  = new KAction(i18n("&Google Online Document..."), this);
     actionCollection()->addAction("google_docs", action );
