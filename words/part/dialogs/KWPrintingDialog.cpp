@@ -118,7 +118,8 @@ QAbstractPrintDialog::PrintDialogOptions KWPrintingDialog::printDialogOptions() 
            QAbstractPrintDialog::PrintPageRange |
            QAbstractPrintDialog::PrintCurrentPage |
            QAbstractPrintDialog::PrintCollateCopies |
-           QAbstractPrintDialog::DontUseSheet;
+           QAbstractPrintDialog::DontUseSheet |
+           QAbstractPrintDialog::PrintShowPageSize;
 }
 
 // options;
