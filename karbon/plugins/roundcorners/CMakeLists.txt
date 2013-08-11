@@ -21,4 +21,3 @@ install(TARGETS karbon_roundcornersplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  RoundCornersPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
 install( FILES  karbonroundcornersplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-

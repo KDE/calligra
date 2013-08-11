@@ -14,6 +14,6 @@ install(TARGETS calligra_filter_applixword2odt  DESTINATION ${PLUGIN_INSTALL_DIR
 
 ########### install files ###############
 
-install( FILES  words_applixword_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_applixword2odt.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

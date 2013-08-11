@@ -254,7 +254,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     // PartManager
     // End
 
-
     if (componentData.isValid()) {
         setComponentData(componentData);   // don't load plugins! we don't want
         // the part's plugins with this main window, even though we are using the

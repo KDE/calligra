@@ -20,9 +20,9 @@ target_link_libraries(calligra_filter_mpxj2plan komain)
 install(TARGETS calligra_filter_mpxj2plan  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES
-    plan_msproject_import.desktop
-    plan_msprojectexchange_import.desktop
-    plan_planner_import.desktop
+    calligra_filter_mpp2plan.desktop
+    calligra_filter_mpx2plan.desktop
+    calligra_filter_planner2plan.desktop
   DESTINATION ${SERVICES_INSTALL_DIR})
 
 install(FILES calligra_planner_mpp.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
