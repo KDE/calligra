@@ -29,7 +29,7 @@
 #include <QVector>
 #include <QSharedData>
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 
 class QByteArray;
