@@ -17,7 +17,6 @@ Name[pt_BR]=Formas básicas
 Name[sk]=Základné vločky
 Name[sv]=Grundläggande Flake
 Name[uk]=Основні модулі
-Name[x-test]=xxBasic Flakesxx
 X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-PluginInfo-Name=basicflakesplugin
