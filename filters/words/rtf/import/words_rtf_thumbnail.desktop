@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=RTF Documents
+Name[bs]=RTF Dokumenti
 Name[ca]=Documents RTF
 Name[cs]=Dokumenty RTF
 Name[da]=RTF-dokumenter
@@ -13,6 +14,7 @@ Name[fr]=Documents RTF
 Name[gl]=Documentos RTF
 Name[hu]=RTF dokumentumok
 Name[it]=Documenti RTF
+Name[ja]=RTF 文書
 Name[kk]=RTF құжаттары
 Name[lt]=RTF dokumentai
 Name[nb]=RTF-dokumenter
