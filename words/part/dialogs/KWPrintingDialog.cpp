@@ -48,21 +48,6 @@ KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeMa
             break;
     }
     printer().setFromTo(documentFirstPage(), documentLastPage());
-
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs) {
-            QTextDocument *doc = tfs->document();
-            // TODO check if I can group changes into one undo-command and then redo it after printing.
-            QTextBlock block = doc->begin();
-            while (block.isValid()) {
-                QTextLayout *layout = block.layout();
-                if (layout)
-                    layout->clearAdditionalFormats();
-                block = block.next();
-            }
-        }
-    }
 }
 
 KWPrintingDialog::~KWPrintingDialog()
