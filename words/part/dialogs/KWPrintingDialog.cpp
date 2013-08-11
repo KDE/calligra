@@ -36,9 +36,10 @@
 #include <QTextLayout>
 #include <QTextDocument>
 
-KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, QWidget *parent)
-        : KoPrintingDialog(parent),
-        m_document(document)
+KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, KWView *view)
+    : KoPrintingDialog(view)
+    , m_document(document)
+    , m_view(view)
 {
     setShapeManager(shapeManager);
 
@@ -106,10 +107,16 @@ int KWPrintingDialog::documentLastPage() const
     return lastPage.pageNumber();
 }
 
+int KWPrintingDialog::documentCurrentPage() const
+{
+    return m_view->currentPage().pageNumber();
+}
+
 QAbstractPrintDialog::PrintDialogOptions KWPrintingDialog::printDialogOptions() const
 {
     return QAbstractPrintDialog::PrintToFile |
            QAbstractPrintDialog::PrintPageRange |
+           QAbstractPrintDialog::PrintCurrentPage |
            QAbstractPrintDialog::PrintCollateCopies |
            QAbstractPrintDialog::DontUseSheet;
 }
