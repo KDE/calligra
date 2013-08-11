@@ -12,7 +12,7 @@ install(TARGETS calligra_filter_applixspread2kspread  DESTINATION ${PLUGIN_INSTA
 
 ########### install files ###############
 
-install( FILES  kspread_applixspread_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_applixspread2kspread.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 
