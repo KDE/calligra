@@ -36,6 +36,7 @@ QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, qu
         break;
     case(Grayscale):
         colorSpaceId.first = GrayColorModelID.id();
+        break;
     case(DuoTone):
         colorSpaceId.first = GrayAColorModelID.id();
         break;

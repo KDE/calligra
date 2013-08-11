@@ -215,7 +215,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
         break;
     }
 
-return true;
+    return true;
 }
 
 bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
@@ -586,7 +586,7 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
     return true;
 }
 
-bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev){
+bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev) {
     int channelid = 0;
 
     for (quint32 row = 0; row < m_header->height; row++) {
@@ -625,7 +625,7 @@ bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev){
 
         }
 
-        if (m_channelInfoRecords[channelid].compressionType == 0){
+        if (m_channelInfoRecords[channelid].compressionType == 0) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
