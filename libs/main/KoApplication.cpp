@@ -537,6 +537,7 @@ QList<KoPart*> KoApplication::partList() const
 
 void KoApplication::addPart(KoPart* part)
 {
+    qDebug() << "Adding Part" << part;
     d->partList << part;
 }
 

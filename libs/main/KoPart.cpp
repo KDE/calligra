@@ -350,6 +350,7 @@ KoPart::KoPart(QObject *parent)
         : QObject(parent)
         , d(new Private(this))
 {
+    qDebug() << "KoPart created" << this;
 #ifndef QT_NO_DBUS
     new KoPartAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
@@ -515,11 +516,6 @@ KoMainWindow *KoPart::currentMainwindow() const
     }
     return mainWindow;
 
-}
-
-KoDocumentInfoDlg *KoPart::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
-{
-    return new KoDocumentInfoDlg(parent, docInfo);
 }
 
 void KoPart::openExistingFile(const KUrl& url)

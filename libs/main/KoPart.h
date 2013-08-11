@@ -43,8 +43,6 @@ class KoView;
 class KoMainWindow;
 class KoView;
 class KoOpenPane;
-class KoDocumentInfoDlg;
-class KoDocumentInfo;
 class QGraphicsItem;
 
 /**
@@ -128,8 +126,6 @@ public:
     void addRecentURLToAllMainWindows(KUrl url);
 
     KoMainWindow *currentMainwindow() const;
-
-    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
 protected slots:
 

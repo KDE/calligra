@@ -1340,7 +1340,7 @@ void KoMainWindow::slotDocumentInfo()
     if (!docInfo)
         return;
 
-    KoDocumentInfoDlg *dlg = d->rootPart->createDocumentInfoDialog(this, docInfo);
+    KoDocumentInfoDlg *dlg = d->rootDocument->createDocumentInfoDialog(this, docInfo);
 
     if (dlg->exec()) {
         if (dlg->isDocumentSaved()) {

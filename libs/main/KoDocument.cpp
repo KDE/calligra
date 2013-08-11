@@ -45,6 +45,7 @@
 #include <KoDocumentRdfBase.h>
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
+#include <KoDocumentInfoDlg.h>
 
 #include <kmimetype.h>
 #include <kfileitem.h>
@@ -2218,6 +2219,13 @@ KUrl KoDocument::url() const {
 void KoDocument::setUrl(const KUrl& url) {
     d->parentPart->setUrl(url);
 }
+
+KoDocumentInfoDlg *KoDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
+{
+    return new KoDocumentInfoDlg(parent, docInfo);
+}
+
+
 
 #include <KoDocument.moc>
 

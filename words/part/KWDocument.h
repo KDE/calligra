@@ -54,7 +54,7 @@ class KoPart;
 class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
-
+class KoDocumentInfoDlg;
 /**
  * The class that represents a Words document containing content and settings.
  */
@@ -198,6 +198,8 @@ public:
 
     /// return cover data.
     QPair<QString, QByteArray> coverImage();
+
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
 public slots:
     /**

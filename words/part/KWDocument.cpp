@@ -72,6 +72,7 @@
 #include <KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
+#include <KoDocumentRdfEditWidget.h>
 #endif
 
 #include <KoProgressUpdater.h>
@@ -769,3 +770,15 @@ QPair<QString, QByteArray> KWDocument::coverImage()
 {
     return m_coverImage;
 }
+
+KoDocumentInfoDlg *KWDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
+{
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+#ifdef SHOULD_BUILD_RDF
+    KoPageWidgetItem *rdfEditWidget = new KoDocumentRdfEditWidget(static_cast<KoDocumentRdf*>(documentRdf()));
+    dlg->addPageItem(rdfEditWidget);
+#endif
+    return dlg;
+
+}
+

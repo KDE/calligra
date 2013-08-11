@@ -50,6 +50,7 @@ class KoDocumentRdfBase;
 class KoProgressUpdater;
 class KoPageWidgetItem;
 class KoProgressProxy;
+class KoDocumentInfoDlg;
 
 class KoVersionInfo
 {
@@ -743,6 +744,8 @@ public:
     virtual KUrl url() const;
 
     virtual void setUrl(const KUrl& url);
+
+    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
 private slots:
 
