@@ -424,6 +424,10 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
         // the resize, and we're stuck with a very oddly sized viewport
         QResizeEvent *event = new QResizeEvent(newGeometry.toRect().size(), d->view->size());
         QApplication::sendEvent(d->view, event);
+        // This is a touch on the hackish side - i'm sure there's a better way of doing it
+        // but it's taking a long time to work it out. Problem: When switching orientation,
+        // the canvas is rendered wrong, in what looks like an off-by-one ish kind of fashion.
+        zoomOut();zoomIn();
         d->timer->start(100);
     }
 }
