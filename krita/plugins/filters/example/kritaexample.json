@@ -1,0 +1,10 @@
+{
+    "Comment": "Invert the colors of an image",
+    "Name": "Invert Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritaexample",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

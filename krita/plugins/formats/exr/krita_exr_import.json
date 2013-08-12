@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Name": "Krita exr Import Filter",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/x-exr",
+    "X-KDE-Library": "kritaexrimport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

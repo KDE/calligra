@@ -1,0 +1,12 @@
+{
+    "Name": "Krita Encapsulated PostScript Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "x-eps",
+    "X-KDE-Import": "application/x-krita",
+    "X-KDE-Library": "kritaepsexport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

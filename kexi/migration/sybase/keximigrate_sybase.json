@@ -1,0 +1,13 @@
+{
+    "Comment": "Sybase Import Plugin for Kexi",
+    "InitialPreference": "8",
+    "Name": "Sybase",
+    "Type": "Service",
+    "X-KDE-Library": "keximigrate_sybase",
+    "X-KDE-ServiceTypes": [
+        "Kexi/MigrationDriver"
+    ],
+    "X-Kexi-KexiMigrationVersion": "1.1",
+    "X-Kexi-MigrationDriverName": "Sybase",
+    "X-Kexi-MigrationDriverType": "Network"
+}

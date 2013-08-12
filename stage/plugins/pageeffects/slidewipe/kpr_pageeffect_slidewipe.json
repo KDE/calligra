@@ -1,0 +1,11 @@
+{
+    "Comment": "Slide Wipe Page Effect",
+    "Name": "Slide Wipe",
+    "Type": "Service",
+    "X-KDE-Library": "kpr_pageeffect_slidewipe",
+    "X-KDE-PluginInfo-Name": "kpr_pageeffect_slidewipe",
+    "X-KDE-ServiceTypes": [
+        "CalligraStage/PageEffect"
+    ],
+    "X-KPresenter-Version": "28"
+}

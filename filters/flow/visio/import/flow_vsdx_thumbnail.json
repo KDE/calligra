@@ -1,0 +1,10 @@
+{
+    "CacheThumbnail": "true",
+    "MimeType": "application/vnd.visio;",
+    "Name": "Microsoft Visio Documents",
+    "Type": "Service",
+    "X-KDE-Library": "calligraimagethumbnail",
+    "X-KDE-ServiceTypes": [
+        "ThumbCreator"
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "Comment": "Iris Wipe Page Effects",
+    "Name": "Iris Wipe",
+    "Type": "Service",
+    "X-KDE-Library": "kpr_pageeffect_iriswipe",
+    "X-KDE-PluginInfo-Name": "kpr_pageeffect_iriswipe",
+    "X-KDE-ServiceTypes": [
+        "CalligraStage/PageEffect"
+    ],
+    "X-KPresenter-Version": "28"
+}

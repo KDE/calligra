@@ -1,0 +1,10 @@
+{
+    "Comment": "Generates a solid color",
+    "Name": "Solid Color Generator",
+    "Type": "Service",
+    "X-KDE-Library": "kritacolorgenerator",
+    "X-KDE-ServiceTypes": [
+        "Krita/Generator"
+    ],
+    "X-Krita-Version": "28"
+}

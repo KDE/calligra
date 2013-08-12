@@ -1,0 +1,13 @@
+{
+    "Comment": "Kexi database driver for accessing Sybase servers",
+    "InitialPreference": "8",
+    "Name": "Sybase",
+    "Type": "Service",
+    "X-KDE-Library": "kexidb_sybasedriver",
+    "X-KDE-ServiceTypes": [
+        "Kexi/DBDriver"
+    ],
+    "X-Kexi-DriverName": "Sybase",
+    "X-Kexi-DriverType": "Network",
+    "X-Kexi-KexiDBVersion": "1.9"
+}

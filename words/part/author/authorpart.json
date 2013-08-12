@@ -1,0 +1,15 @@
+{
+    "GenericName": "Author tool",
+    "Icon": "calligraauthor",
+    "InitialPreference": "3",
+    "MimeType": "application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;",
+    "Name": "Calligra Author Component",
+    "Type": "Service",
+    "X-KDE-ExtraNativeMimeTypes": "application/vnd.oasis.opendocument.text-template",
+    "X-KDE-Library": "authorpart",
+    "X-KDE-NativeMimeType": "application/vnd.oasis.opendocument.text",
+    "X-KDE-NativeOasisMimeType": "application/vnd.oasis.opendocument.text",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Part"
+    ]
+}

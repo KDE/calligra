@@ -1,0 +1,10 @@
+{
+    "Name": "Map Browser Plugin for Kexi Forms",
+    "Type": "Service",
+    "X-KDE-Library": "kformdesigner_mapbrowser",
+    "X-KDE-ServiceTypes": [
+        "KFormDesigner/WidgetFactory"
+    ],
+    "X-KFormDesigner-FactoryGroup": "kexi",
+    "X-KFormDesigner-WidgetFactoryVersion": "2"
+}

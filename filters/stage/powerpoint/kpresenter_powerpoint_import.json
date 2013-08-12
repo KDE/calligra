@@ -1,0 +1,11 @@
+{
+    "Name": "Microsoft PowerPoint Import Filter for KPresenter",
+    "Type": "Service",
+    "X-KDE-Export": "application/vnd.oasis.opendocument.presentation",
+    "X-KDE-Import": "application/vnd.ms-powerpoint",
+    "X-KDE-Library": "calligra_filter_ppt2odp",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

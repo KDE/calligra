@@ -1,0 +1,11 @@
+{
+    "Name": "Comment Shape",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligra_shape_comment",
+    "X-KDE-PluginInfo-Name": "commentshape",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Shape"
+    ]
+}

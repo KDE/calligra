@@ -1,0 +1,9 @@
+{
+    "Name": "Grid",
+    "Type": "Service",
+    "X-KDE-Library": "kritatoolgrid",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

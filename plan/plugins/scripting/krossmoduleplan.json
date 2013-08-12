@@ -1,0 +1,7 @@
+{
+    "Comment": "Allow execution of scripts",
+    "Name": "Scripting plugin",
+    "Type": "Service",
+    "X-KDE-Library": "krossmoduleplan",
+    "X-KDE-Version": "28"
+}

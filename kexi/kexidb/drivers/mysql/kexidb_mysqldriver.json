@@ -1,0 +1,13 @@
+{
+    "Comment": "Kexi database driver for accessing MySQL servers",
+    "InitialPreference": "8",
+    "Name": "MySQL",
+    "Type": "Service",
+    "X-KDE-Library": "kexidb_mysqldriver",
+    "X-KDE-ServiceTypes": [
+        "Kexi/DBDriver"
+    ],
+    "X-Kexi-DriverName": "MySQL",
+    "X-Kexi-DriverType": "Network",
+    "X-Kexi-KexiDBVersion": "1.9"
+}

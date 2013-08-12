@@ -1,0 +1,15 @@
+{
+    "GenericName": "Relationships",
+    "Name": "Relationships",
+    "Type": "Service",
+    "X-KDE-Library": "kexihandler_relation",
+    "X-KDE-ParentApp": "kexi",
+    "X-KDE-ServiceTypes": [
+        "Kexi/Handler"
+    ],
+    "X-Kexi-ItemIcon": "relation",
+    "X-Kexi-NoObject": "true",
+    "X-Kexi-PartVersion": "2",
+    "X-Kexi-TypeMime": "kexi/relation",
+    "X-Kexi-TypeName": "relation"
+}

@@ -1,0 +1,11 @@
+{
+    "Name": "Change case plugin",
+    "Type": "Service",
+    "X-KDE-Library": "calligra_textediting_changecase",
+    "X-KDE-PluginInfo-Name": "changecase",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Text-EditingPlugin"
+    ],
+    "X-KoText-MinVersion": "28",
+    "X-KoText-PluginVersion": "28"
+}

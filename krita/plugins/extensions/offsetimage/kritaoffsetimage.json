@@ -1,0 +1,9 @@
+{
+    "Name": "Offset Image Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritaoffsetimage",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

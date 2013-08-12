@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Name": "Karbon JPEG Export Filter",
+    "Type": "Service",
+    "X-KDE-Export": "image/jpeg",
+    "X-KDE-Import": "application/vnd.oasis.opendocument.graphics",
+    "X-KDE-Library": "calligra_filter_karbon2image",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

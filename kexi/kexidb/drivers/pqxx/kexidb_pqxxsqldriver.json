@@ -1,0 +1,13 @@
+{
+    "Comment": "Kexi database driver for accessing PostgreSQL servers",
+    "InitialPreference": "8",
+    "Name": "PostgreSQL",
+    "Type": "Service",
+    "X-KDE-Library": "kexidb_pqxxsqldriver",
+    "X-KDE-ServiceTypes": [
+        "Kexi/DBDriver"
+    ],
+    "X-Kexi-DriverName": "PostgreSQL",
+    "X-Kexi-DriverType": "Network",
+    "X-Kexi-KexiDBVersion": "1.9"
+}

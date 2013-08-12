@@ -1,0 +1,11 @@
+{
+    "Comment": "Random pick to an image",
+    "Icon": "",
+    "Name": "Random pick Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritarandompickfilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

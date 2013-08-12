@@ -1,0 +1,22 @@
+{
+    "Comment": "AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR",
+    "Icon": "funct",
+    "Name": "Logic Functions",
+    "Type": "Service",
+    "X-CalligraSheets-InterfaceVersion": "0",
+    "X-KDE-Library": "kspreadlogicmodule",
+    "X-KDE-PluginInfo-Author": "The KSpread Team",
+    "X-KDE-PluginInfo-Category": "FunctionModule",
+    "X-KDE-PluginInfo-Depends": [
+    ],
+    "X-KDE-PluginInfo-Email": "calligra-devel@kde.org",
+    "X-KDE-PluginInfo-EnabledByDefault": true,
+    "X-KDE-PluginInfo-License": "GPL",
+    "X-KDE-PluginInfo-Name": "LogicModule",
+    "X-KDE-PluginInfo-Version": "1.0",
+    "X-KDE-PluginInfo-Website": "http://www.calligra.org/",
+    "X-KDE-ServiceTypes": [
+        "CalligraSheets/Plugin",
+        "KPluginInfo"
+    ]
+}

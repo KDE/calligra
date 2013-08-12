@@ -1,0 +1,11 @@
+{
+    "Name": "LCMS Color Management Engine for Pigment",
+    "Type": "Service",
+    "X-KDE-Library": "kolcmsengine",
+    "X-KDE-PluginInfo-Name": "kolcmsengine",
+    "X-KDE-ServiceTypes": [
+        "Calligra/ColorSpace"
+    ],
+    "X-Pigment-MinVersion": "28",
+    "X-Pigment-PluginVersion": "28"
+}

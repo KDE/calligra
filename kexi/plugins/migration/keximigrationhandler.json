@@ -1,0 +1,15 @@
+{
+    "GenericName": "Migration Plugin",
+    "Name": "Migration Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kexihandler_migration",
+    "X-KDE-ParentApp": "kexi",
+    "X-KDE-ServiceTypes": [
+        "Kexi/Handler"
+    ],
+    "X-Kexi-GroupIcon": "migration",
+    "X-Kexi-ItemIcon": "migration",
+    "X-Kexi-NoObject": "true",
+    "X-Kexi-PartVersion": "2",
+    "X-Kexi-TypeName": "migration"
+}

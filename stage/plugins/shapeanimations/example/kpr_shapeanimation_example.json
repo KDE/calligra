@@ -1,0 +1,11 @@
+{
+    "Comment": "Jiggle and Wiggle that Shape!",
+    "Name": "Jiggle and Wiggle",
+    "Type": "Service",
+    "X-KDE-Library": "kpr_shapeanimation_example",
+    "X-KDE-PluginInfo-Name": "kpr_shapeanimation_example",
+    "X-KDE-ServiceTypes": [
+        "CalligraStage/ShapeAnimation"
+    ],
+    "X-KPresenter-Version": "28"
+}

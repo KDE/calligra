@@ -1,0 +1,11 @@
+{
+    "Name": "Words ASCII Export Filter",
+    "Type": "Service",
+    "X-KDE-Export": "text/plain",
+    "X-KDE-Import": "application/vnd.oasis.opendocument.text",
+    "X-KDE-Library": "calligra_filter_odt2ascii",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

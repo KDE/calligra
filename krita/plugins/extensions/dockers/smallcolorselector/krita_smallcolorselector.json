@@ -1,0 +1,10 @@
+{
+    "Comment": "SmallColorSelector",
+    "Name": "SmallColorSelector",
+    "Type": "Service",
+    "X-KDE-Library": "kritasmallcolorselector",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

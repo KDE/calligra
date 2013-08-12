@@ -1,0 +1,9 @@
+{
+    "Name": "Quickstates Plugin",
+    "Type": "Service",
+    "X-Braindump-Version": "28",
+    "X-KDE-Library": "braindumpquickstates",
+    "X-KDE-ServiceTypes": [
+        "Braindump/Extensions"
+    ]
+}

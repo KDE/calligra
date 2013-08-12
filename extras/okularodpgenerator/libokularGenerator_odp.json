@@ -1,0 +1,11 @@
+{
+    "Comment": "Odp for okular",
+    "MimeType": "application/vnd.oasis.opendocument.presentation;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;",
+    "Name": "OpenDocument Presentation Document",
+    "ServiceTypes": "okular/Generator",
+    "Type": "Service",
+    "X-KDE-Library": "okularGenerator_odp",
+    "X-KDE-Priority": "1",
+    "X-KDE-okularAPIVersion": "1",
+    "X-KDE-okularHasInternalSettings": "false"
+}

@@ -1,0 +1,10 @@
+{
+    "Comment": "Convolution filters",
+    "Name": "Convolution Filters",
+    "Type": "Service",
+    "X-KDE-Library": "kritaconvolutionfilters",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

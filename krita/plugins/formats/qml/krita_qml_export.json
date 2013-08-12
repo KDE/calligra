@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Name": "Krita QML Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "text/x-qml",
+    "X-KDE-Import": "application/x-krita",
+    "X-KDE-Library": "kritaqmlexport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

@@ -1,0 +1,8 @@
+{
+    "Icon": "okular",
+    "MimeType": "application/vnd.oasis.opendocument.presentation;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;",
+    "Name": "okular",
+    "ServiceTypes": "KParts/ReadOnlyPart",
+    "Type": "Service",
+    "X-KDE-Library": "okularpart"
+}

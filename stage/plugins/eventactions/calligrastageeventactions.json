@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Name": "Presentation Event Actions",
+    "Type": "Service",
+    "X-KDE-Library": "calligrastageeventactions",
+    "X-KDE-PluginInfo-Name": "calligrastageeventactions",
+    "X-KDE-ServiceTypes": [
+        "Calligra/PresentationEventAction"
+    ],
+    "X-PresentationEventAction-MinVersion": "28",
+    "X-PresentationEventAction-PluginVersion": "28"
+}

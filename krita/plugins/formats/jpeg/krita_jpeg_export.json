@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Name": "Krita JPEG Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "image/jpeg",
+    "X-KDE-Import": "application/x-krita",
+    "X-KDE-Library": "kritajpegexport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

@@ -1,0 +1,13 @@
+{
+    "Icon": "calligrastage",
+    "MimeType": "application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.openxmlformats-officedocument.presentationml.template;application/vnd.openxmlformats-officedocument.presentationml.slideshow;",
+    "Name": "Calligra Stage Component",
+    "Type": "Service",
+    "X-KDE-ExtraNativeMimeTypes": "application/vnd.oasis.opendocument.presentation-template",
+    "X-KDE-Library": "calligrastagepart",
+    "X-KDE-NativeMimeType": "application/vnd.oasis.opendocument.presentation",
+    "X-KDE-NativeOasisMimeType": "application/vnd.oasis.opendocument.presentation",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Part"
+    ]
+}

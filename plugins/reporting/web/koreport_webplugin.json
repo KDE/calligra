@@ -1,0 +1,9 @@
+{
+    "Comment": "Calligra Reports web Plugin",
+    "Name": "Web Report Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "koreport_webplugin",
+    "X-KDE-ServiceTypes": [
+        "KoReport/ItemPlugin"
+    ]
+}

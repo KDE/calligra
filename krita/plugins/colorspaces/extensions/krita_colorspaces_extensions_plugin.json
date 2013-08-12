@@ -1,0 +1,12 @@
+{
+    "Comment": "Some extensions to color spaces",
+    "Name": "Some extensions to color spaces",
+    "Type": "Service",
+    "X-KDE-Library": "krita_colorspaces_extensions",
+    "X-KDE-PluginInfo-Name": "krita_colorspaces_extensions",
+    "X-KDE-ServiceTypes": [
+        "Calligra/ColorSpaceExtension"
+    ],
+    "X-Pigment-MinVersion": "28",
+    "X-Pigment-PluginVersion": "28"
+}

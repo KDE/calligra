@@ -1,0 +1,11 @@
+{
+    "Name": "Autocorrection plugin",
+    "Type": "Service",
+    "X-KDE-Library": "calligra_textediting_autocorrect",
+    "X-KDE-PluginInfo-Name": "autocorrect",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Text-EditingPlugin"
+    ],
+    "X-KoText-MinVersion": "28",
+    "X-KoText-PluginVersion": "28"
+}

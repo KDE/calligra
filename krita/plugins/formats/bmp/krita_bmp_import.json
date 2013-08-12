@@ -1,0 +1,12 @@
+{
+    "Name": "Krita BMP Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "image/bmp,image/x-xpixmap,image/gif,image/x-xbitmap",
+    "X-KDE-Library": "kritabmpimport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

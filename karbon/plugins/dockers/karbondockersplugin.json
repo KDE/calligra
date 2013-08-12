@@ -1,0 +1,11 @@
+{
+    "Name": "Karbon Dockers plugin",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "karbondockersplugin",
+    "X-KDE-PluginInfo-Name": "karbondockersplugin",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Dock"
+    ]
+}

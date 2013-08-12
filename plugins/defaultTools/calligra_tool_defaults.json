@@ -1,0 +1,11 @@
+{
+    "Name": "Default Flake Tools",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligra_tool_defaults",
+    "X-KDE-PluginInfo-Name": "defaulttools",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Tool"
+    ]
+}

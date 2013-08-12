@@ -1,0 +1,17 @@
+{
+    "GenericName": "Reports",
+    "Name": "Report",
+    "ServiceTypes": "Kexi/Handler",
+    "Type": "Service",
+    "X-KDE-Library": "kexihandler_report",
+    "X-KDE-ParentApp": "kexi",
+    "X-Kexi-Class": "org.kexi-project.report",
+    "X-Kexi-ItemIcon": "report",
+    "X-Kexi-PartVersion": "2",
+    "X-Kexi-SupportsDataExport": "false",
+    "X-Kexi-SupportsDataView": "true",
+    "X-Kexi-SupportsDataViewInUserMode": "true",
+    "X-Kexi-SupportsDesignView": "true",
+    "X-Kexi-SupportsPrinting": "false",
+    "X-Kexi-TypeName": "report"
+}

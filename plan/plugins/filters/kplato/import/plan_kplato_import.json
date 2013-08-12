@@ -1,0 +1,11 @@
+{
+    "Name": "Plan KPlato Import Filter",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-vnd.kde.plan",
+    "X-KDE-Import": "application/x-vnd.kde.kplato",
+    "X-KDE-Library": "plankplatoimport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

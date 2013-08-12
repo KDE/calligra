@@ -1,0 +1,13 @@
+{
+    "Comment": "Kexi database driver for accessing xBase database files",
+    "InitialPreference": "8",
+    "Name": "xBase",
+    "Type": "Service",
+    "X-KDE-Library": "kexidb_xbasedriver",
+    "X-KDE-ServiceTypes": [
+        "Kexi/DBDriver"
+    ],
+    "X-Kexi-DriverName": "xBase",
+    "X-Kexi-DriverType": "File",
+    "X-Kexi-KexiDBVersion": "1.9"
+}

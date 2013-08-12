@@ -1,0 +1,15 @@
+{
+    "Categories": "Qt;KDE;Office;",
+    "GenericName": "Flowchart & Diagram",
+    "Icon": "calligraflow",
+    "MimeType": "application/vnd.oasis.opendocument.graphics;application/vnd.visio;",
+    "Name": "Calligra Flowchart & Diagram Editing Component",
+    "Type": "Service",
+    "X-KDE-ExtraNativeMimeTypes": "application/vnd.oasis.opendocument.graphics-template",
+    "X-KDE-Library": "flowpart",
+    "X-KDE-NativeMimeType": "application/vnd.oasis.opendocument.graphics",
+    "X-KDE-NativeOasisMimeType": "application/vnd.oasis.opendocument.graphics",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Part"
+    ]
+}

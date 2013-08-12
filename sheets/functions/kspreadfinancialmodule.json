@@ -1,0 +1,22 @@
+{
+    "Comment": "ACCRINT, ACCRINTM, AMORDEGRC, AMORLINC, COMPOUND, CONTINUOUS, COUPNUM, CUMIPMT, CUMPRINC, DB, DDB, DISC, DOLLARDE, DOLLARFR, DURATION, DURATION_ADD, EFFECT, EFFECTIVE, EURO, EUROCONVERT, FV, FV_ANNUITY, INTRATE, IPMT, ISPMT, LEVEL_COUPON, MDURATION, MIRR, NOMINAL, NPER, NPV, ODDLPRICE, ODDLYIELD, PMT, PPMT, PRICEMAT, PV, PV_ANNUITY, RECEIVED, RRI, SLN, SYD, TBILLEQ, TBILLPRICE, TBILLYIELD, VDB, XIRR, XNPV, YIELDDISC, YIELDMAT, ZERO_COUPON",
+    "Icon": "funct",
+    "Name": "Financial Functions",
+    "Type": "Service",
+    "X-CalligraSheets-InterfaceVersion": "0",
+    "X-KDE-Library": "kspreadfinancialmodule",
+    "X-KDE-PluginInfo-Author": "The KSpread Team",
+    "X-KDE-PluginInfo-Category": "FunctionModule",
+    "X-KDE-PluginInfo-Depends": [
+    ],
+    "X-KDE-PluginInfo-Email": "calligra-devel@kde.org",
+    "X-KDE-PluginInfo-EnabledByDefault": true,
+    "X-KDE-PluginInfo-License": "GPL",
+    "X-KDE-PluginInfo-Name": "FinancialModule",
+    "X-KDE-PluginInfo-Version": "1.0",
+    "X-KDE-PluginInfo-Website": "http://www.calligra.org/",
+    "X-KDE-ServiceTypes": [
+        "CalligraSheets/Plugin",
+        "KPluginInfo"
+    ]
+}

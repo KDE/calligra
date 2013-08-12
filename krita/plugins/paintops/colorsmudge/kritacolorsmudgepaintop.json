@@ -1,0 +1,9 @@
+{
+    "Name": "Color Smudge Brush",
+    "Type": "Service",
+    "X-KDE-Library": "kritacolorsmudgepaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

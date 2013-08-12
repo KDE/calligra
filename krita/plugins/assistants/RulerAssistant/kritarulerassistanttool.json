@@ -1,0 +1,9 @@
+{
+    "Name": "RulerAssistantTool",
+    "Type": "Service",
+    "X-KDE-Library": "kritarulerassistanttool",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

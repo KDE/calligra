@@ -1,0 +1,14 @@
+{
+    "Comment": "Spreadsheet Import Plugin for Kexi",
+    "InitialPreference": "8",
+    "Name": "Spreadsheet",
+    "Type": "Service",
+    "X-KDE-Library": "keximigrate_spreadsheet",
+    "X-KDE-ServiceTypes": [
+        "Kexi/MigrationDriver"
+    ],
+    "X-Kexi-FileDBDriverMime": "application/vnd.oasis.opendocument.spreadsheet",
+    "X-Kexi-KexiMigrationVersion": "28",
+    "X-Kexi-MigrationDriverName": "Spreadsheet",
+    "X-Kexi-MigrationDriverType": "File"
+}

@@ -1,0 +1,11 @@
+{
+    "Comment": "Bar Wipe Page Effect",
+    "Name": "Bar Wipe",
+    "Type": "Service",
+    "X-KDE-Library": "kpr_pageeffect_barwipe",
+    "X-KDE-PluginInfo-Name": "kpr_pageeffect_barwipe",
+    "X-KDE-ServiceTypes": [
+        "CalligraStage/PageEffect"
+    ],
+    "X-KPresenter-Version": "28"
+}

@@ -1,0 +1,10 @@
+{
+    "Comment": "Default paint operations",
+    "Name": "Default Paint Operations",
+    "Type": "Service",
+    "X-KDE-Library": "kritadefaultpaintops",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

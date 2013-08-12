@@ -1,0 +1,19 @@
+{
+    "GenericName": "Forms",
+    "Name": "Form",
+    "Type": "Service",
+    "X-KDE-Library": "kexihandler_form",
+    "X-KDE-ParentApp": "kexi",
+    "X-KDE-ServiceTypes": [
+        "Kexi/Handler"
+    ],
+    "X-Kexi-Class": "org.kexi-project.form",
+    "X-Kexi-ItemIcon": "form",
+    "X-Kexi-PartVersion": "2",
+    "X-Kexi-SupportsDataExport": "false",
+    "X-Kexi-SupportsDataView": "true",
+    "X-Kexi-SupportsDataViewInUserMode": "true",
+    "X-Kexi-SupportsDesignView": "true",
+    "X-Kexi-SupportsPrinting": "false",
+    "X-Kexi-TypeName": "form"
+}

@@ -1,0 +1,11 @@
+{
+    "Name": "HTML Import Filter for KSpread",
+    "Type": "Service",
+    "X-KDE-Export": "application/vnd.oasis.opendocument.spreadsheet",
+    "X-KDE-Import": "text/html",
+    "X-KDE-Library": "calligra_filter_html2ods",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "50"
+}

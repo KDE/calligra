@@ -1,0 +1,10 @@
+{
+    "CacheThumbnail": "true",
+    "MimeType": "application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;",
+    "Name": "OpenDocument Drawings",
+    "Type": "Service",
+    "X-KDE-Library": "calligraimagethumbnail",
+    "X-KDE-ServiceTypes": [
+        "ThumbCreator"
+    ]
+}

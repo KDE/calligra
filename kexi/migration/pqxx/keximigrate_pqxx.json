@@ -1,0 +1,13 @@
+{
+    "Comment": "PostgreSQL Import Plugin for Kexi",
+    "InitialPreference": "8",
+    "Name": "PostgreSQL",
+    "Type": "Service",
+    "X-KDE-Library": "keximigrate_pqxx",
+    "X-KDE-ServiceTypes": [
+        "Kexi/MigrationDriver"
+    ],
+    "X-Kexi-KexiMigrationVersion": "1.1",
+    "X-Kexi-MigrationDriverName": "PostgreSQL",
+    "X-Kexi-MigrationDriverType": "Network"
+}

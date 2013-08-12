@@ -1,0 +1,12 @@
+{
+    "Comment": "Kexi database driver for accessing Oracle servers",
+    "Name": "Oracle",
+    "Type": "Service",
+    "X-KDE-Library": "kexidb_oracledriver",
+    "X-KDE-ServiceTypes": [
+        "Kexi/DBDriver"
+    ],
+    "X-Kexi-DriverName": "Oracle",
+    "X-Kexi-DriverType": "Network",
+    "X-Kexi-KexiDBVersion": "1.9"
+}

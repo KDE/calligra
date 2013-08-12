@@ -1,0 +1,22 @@
+{
+    "Comment": "BASE, BESSELI, BESSELJ, BESSELK, BESSELY, BIN2DEC, BIN2HEX, BIN2OCT, COMPLEX, CONVERT, DEC2BIN, DEC2HEX, DEC2OCT, DELTA, ERF, ERFC, GESTEP, HEX2BIN, HEX2DEC, HEX2OCT, IMABS, IMAGINARY, IMARGUMENT, IMCONJUGATE, IMCOS, IMCOSH, IMDIV, IMEXP, IMLN, IMLOG10, IMLOG2, IMPOWER, IMPRODUCT, IMREAL, IMSIN, IMSINH, IMSQRT, IMSUB, IMSUM, IMTAN, IMTANH, OCT2BIN, OCT2DEC, OCT2HEX",
+    "Icon": "funct",
+    "Name": "Engineering Functions",
+    "Type": "Service",
+    "X-CalligraSheets-InterfaceVersion": "0",
+    "X-KDE-Library": "kspreadengineeringmodule",
+    "X-KDE-PluginInfo-Author": "The KSpread Team",
+    "X-KDE-PluginInfo-Category": "FunctionModule",
+    "X-KDE-PluginInfo-Depends": [
+    ],
+    "X-KDE-PluginInfo-Email": "calligra-devel@kde.org",
+    "X-KDE-PluginInfo-EnabledByDefault": true,
+    "X-KDE-PluginInfo-License": "GPL",
+    "X-KDE-PluginInfo-Name": "EngineeringModule",
+    "X-KDE-PluginInfo-Version": "1.0",
+    "X-KDE-PluginInfo-Website": "http://www.calligra.org/",
+    "X-KDE-ServiceTypes": [
+        "CalligraSheets/Plugin",
+        "KPluginInfo"
+    ]
+}

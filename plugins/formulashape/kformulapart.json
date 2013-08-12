@@ -1,0 +1,14 @@
+{
+    "GenericName": "Formula Editor",
+    "Icon": "kformula",
+    "MimeType": "application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;application/x-kformula;text/mathml;",
+    "Name": "Calligra Formula Component",
+    "Type": "Service",
+    "X-KDE-ExtraNativeMimeTypes": "application/x-kformula,application/vnd.oasis.opendocument.formula-template,text/mathml",
+    "X-KDE-Library": "kformulapart",
+    "X-KDE-NativeMimeType": "application/vnd.oasis.opendocument.formula",
+    "X-KDE-NativeOasisMimeType": "application/vnd.oasis.opendocument.formula",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Part"
+    ]
+}

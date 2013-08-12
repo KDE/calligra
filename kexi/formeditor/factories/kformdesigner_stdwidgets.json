@@ -1,0 +1,10 @@
+{
+    "Name": "Basic Widgets",
+    "Type": "Service",
+    "X-KDE-Library": "kformdesigner_stdwidgets",
+    "X-KDE-ServiceTypes": [
+        "KFormDesigner/WidgetFactory"
+    ],
+    "X-KFormDesigner-FactoryGroup": "",
+    "X-KFormDesigner-WidgetFactoryVersion": "2"
+}

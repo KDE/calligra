@@ -1,0 +1,9 @@
+{
+    "Name": "Polyline Tool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatoolpolyline",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

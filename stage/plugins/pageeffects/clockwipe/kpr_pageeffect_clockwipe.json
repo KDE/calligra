@@ -1,0 +1,11 @@
+{
+    "Comment": "Clock wipe Page Effects",
+    "Name": "Clock wipe",
+    "Type": "Service",
+    "X-KDE-Library": "kpr_pageeffect_clockwipe",
+    "X-KDE-PluginInfo-Name": "kpr_pageeffect_clockwipe",
+    "X-KDE-ServiceTypes": [
+        "CalligraStage/PageEffect"
+    ],
+    "X-KPresenter-Version": "28"
+}

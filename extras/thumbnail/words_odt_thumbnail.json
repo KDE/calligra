@@ -1,0 +1,10 @@
+{
+    "CacheThumbnail": "true",
+    "MimeType": "application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;",
+    "Name": "OpenDocument Texts",
+    "Type": "Service",
+    "X-KDE-Library": "calligrathumbnail",
+    "X-KDE-ServiceTypes": [
+        "ThumbCreator"
+    ]
+}

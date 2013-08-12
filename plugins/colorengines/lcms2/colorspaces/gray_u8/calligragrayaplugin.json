@@ -1,0 +1,12 @@
+{
+    "Comment": "Color model for 8-bit grayscale images",
+    "Name": "Grayscale Color Model with Alpha",
+    "Type": "Service",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligragrayau8plugin",
+    "X-KDE-PluginInfo-Name": "calligragrayau8plugin",
+    "X-KDE-ServiceTypes": [
+        "Calligra/ColorSpace"
+    ],
+    "X-Pigment-MinVersion": "28"
+}

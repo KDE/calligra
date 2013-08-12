@@ -1,0 +1,9 @@
+{
+    "Comment": "The TaskJuggler scheduler",
+    "Name": "TJ Scheduler",
+    "Type": "Service",
+    "X-KDE-Library": "plantjscheduler",
+    "X-KDE-ServiceTypes": [
+        "Plan/SchedulerPlugin"
+    ]
+}

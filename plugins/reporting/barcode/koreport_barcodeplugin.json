@@ -1,0 +1,9 @@
+{
+    "Comment": "KoReport Barcode Plugin",
+    "Name": "Barcode Report Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "koreport_barcodeplugin",
+    "X-KDE-ServiceTypes": [
+        "KoReport/ItemPlugin"
+    ]
+}

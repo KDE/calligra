@@ -1,0 +1,11 @@
+{
+    "Name": "Spacenavigator Device",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligra_device_spacenavigator",
+    "X-KDE-PluginInfo-Name": "spacenavigator",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Device"
+    ]
+}

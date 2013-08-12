@@ -1,0 +1,14 @@
+{
+    "ExportDescription": "iCalendar",
+    "Icon": "",
+    "ImportDescription": "Plan",
+    "Name": "Plan iCalendar Export Filter",
+    "Type": "Service",
+    "X-KDE-Export": "text/calendar",
+    "X-KDE-Import": "application/x-vnd.kde.plan",
+    "X-KDE-Library": "planicalexport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

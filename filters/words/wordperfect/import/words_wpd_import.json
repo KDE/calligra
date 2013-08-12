@@ -1,0 +1,11 @@
+{
+    "Name": "Words WordPerfect Import Filter",
+    "Type": "Service",
+    "X-KDE-Export": "application/vnd.oasis.opendocument.text",
+    "X-KDE-Import": "application/vnd.wordperfect",
+    "X-KDE-Library": "calligra_filter_wpd2odt",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

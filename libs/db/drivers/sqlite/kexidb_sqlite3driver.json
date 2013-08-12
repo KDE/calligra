@@ -1,0 +1,14 @@
+{
+    "Comment": "SQLite is default Kexi embedded SQL engine",
+    "InitialPreference": "8",
+    "Name": "SQLite3",
+    "Type": "Service",
+    "X-KDE-Library": "kexidb_sqlite3driver",
+    "X-KDE-ServiceTypes": [
+        "Kexi/DBDriver"
+    ],
+    "X-Kexi-DriverName": "SQLite3",
+    "X-Kexi-DriverType": "File",
+    "X-Kexi-FileDBDriverMimeList": "application/x-sqlite3,application/x-kexiproject-sqlite3,application/x-hk_classes-sqlite3",
+    "X-Kexi-KexiDBVersion": "1.9"
+}

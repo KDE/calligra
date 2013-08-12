@@ -1,0 +1,10 @@
+{
+    "CacheThumbnail": "true",
+    "MimeType": "application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;",
+    "Name": "OpenDocument Presentations",
+    "Type": "Service",
+    "X-KDE-Library": "calligrathumbnail",
+    "X-KDE-ServiceTypes": [
+        "ThumbCreator"
+    ]
+}

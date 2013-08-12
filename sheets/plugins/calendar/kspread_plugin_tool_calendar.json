@@ -1,0 +1,22 @@
+{
+    "Comment": "Inserts a calendar into a cell range.",
+    "Icon": "office-calendar",
+    "Name": "Calendar Tool",
+    "Type": "Service",
+    "X-CalligraSheets-InterfaceVersion": "0",
+    "X-KDE-Library": "kspread_plugin_tool_calendar",
+    "X-KDE-PluginInfo-Author": "Raphael Langerhorst",
+    "X-KDE-PluginInfo-Category": "Tool",
+    "X-KDE-PluginInfo-Depends": [
+    ],
+    "X-KDE-PluginInfo-Email": "raphael.langerhorst@kdemail.net",
+    "X-KDE-PluginInfo-EnabledByDefault": true,
+    "X-KDE-PluginInfo-License": "GPL",
+    "X-KDE-PluginInfo-Name": "CalendarTool",
+    "X-KDE-PluginInfo-Version": "28",
+    "X-KDE-PluginInfo-Website": "http://www.calligra.org/",
+    "X-KDE-ServiceTypes": [
+        "CalligraSheets/Plugin",
+        "KPluginInfo"
+    ]
+}

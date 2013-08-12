@@ -1,0 +1,22 @@
+{
+    "Comment": "DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA",
+    "Icon": "funct",
+    "Name": "Database Functions",
+    "Type": "Service",
+    "X-CalligraSheets-InterfaceVersion": "0",
+    "X-KDE-Library": "kspreaddatabasemodule",
+    "X-KDE-PluginInfo-Author": "The KSpread Team",
+    "X-KDE-PluginInfo-Category": "FunctionModule",
+    "X-KDE-PluginInfo-Depends": [
+    ],
+    "X-KDE-PluginInfo-Email": "calligra-devel@kde.org",
+    "X-KDE-PluginInfo-EnabledByDefault": true,
+    "X-KDE-PluginInfo-License": "GPL",
+    "X-KDE-PluginInfo-Name": "DatabaseModule",
+    "X-KDE-PluginInfo-Version": "1.0",
+    "X-KDE-PluginInfo-Website": "http://www.calligra.org/",
+    "X-KDE-ServiceTypes": [
+        "CalligraSheets/Plugin",
+        "KPluginInfo"
+    ]
+}

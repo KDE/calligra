@@ -1,0 +1,11 @@
+{
+    "Name": "Animation Tool",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligrastagetoolanimation",
+    "X-KDE-PluginInfo-Name": "calligrastagetoolanimation",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Tool"
+    ]
+}

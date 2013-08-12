@@ -1,0 +1,9 @@
+{
+    "Comment": "Calligra Reports Maps Plugin",
+    "Name": "Maps Report Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "koreport_mapsplugin",
+    "X-KDE-ServiceTypes": [
+        "KoReport/ItemPlugin"
+    ]
+}

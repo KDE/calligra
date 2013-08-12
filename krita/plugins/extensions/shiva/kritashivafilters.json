@@ -1,0 +1,10 @@
+{
+    "Comment": "Shiva Kernel Language Support For Filters",
+    "Name": "Shiva Kernel Language Support For Filters",
+    "Type": "Service",
+    "X-KDE-Library": "kritashivafilters",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -1,0 +1,9 @@
+{
+    "Name": "Crop Tool",
+    "Type": "Service",
+    "X-KDE-Library": "kritatoolcrop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Tool"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -1,0 +1,11 @@
+{
+    "Name": "Spreadsheet Shape",
+    "Type": "Service",
+    "X-DeferredID": "spreadsheetshape-deferred",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligra_shape_spreadsheet-deferred",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Deferred"
+    ]
+}

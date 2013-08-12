@@ -1,0 +1,14 @@
+{
+    "GenericName": "Spreadsheet",
+    "Icon": "calligrasheets",
+    "MimeType": "application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;",
+    "Name": "Calligra Spreadsheet Component",
+    "Type": "Service",
+    "X-KDE-ExtraNativeMimeTypes": "application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread",
+    "X-KDE-Library": "calligrasheetspart",
+    "X-KDE-NativeMimeType": "application/vnd.oasis.opendocument.spreadsheet",
+    "X-KDE-NativeOasisMimeType": "application/vnd.oasis.opendocument.spreadsheet",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Part"
+    ]
+}

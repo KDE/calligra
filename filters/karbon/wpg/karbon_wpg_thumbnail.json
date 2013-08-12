@@ -1,0 +1,10 @@
+{
+    "CacheThumbnail": "true",
+    "MimeType": "application/x-wpg;",
+    "Name": "WordPerfect/DrawPerfect Images",
+    "Type": "Service",
+    "X-KDE-Library": "calligraimagethumbnail",
+    "X-KDE-ServiceTypes": [
+        "ThumbCreator"
+    ]
+}

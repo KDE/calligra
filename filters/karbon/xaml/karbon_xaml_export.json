@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Name": "Karbon WVG Export Filter",
+    "Type": "Service",
+    "X-KDE-Export": "image/wvg+xml",
+    "X-KDE-Import": "application/x-karbon",
+    "X-KDE-Library": "karbonxamlexport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

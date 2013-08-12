@@ -1,0 +1,14 @@
+{
+    "Comment": "Text Import Plugin for Kexi",
+    "InitialPreference": "8",
+    "Name": "Text",
+    "Type": "Service",
+    "X-KDE-Library": "keximigrate_txt",
+    "X-KDE-ServiceTypes": [
+        "Kexi/MigrationDriver"
+    ],
+    "X-Kexi-FileDBDriverMime": "text/tab-separated-values",
+    "X-Kexi-KexiMigrationVersion": "1.1",
+    "X-Kexi-MigrationDriverName": "Text",
+    "X-Kexi-MigrationDriverType": "File"
+}

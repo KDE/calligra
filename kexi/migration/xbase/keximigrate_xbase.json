@@ -1,0 +1,13 @@
+{
+    "Comment": "xBase Import Plugin for Kexi",
+    "InitialPreference": "8",
+    "Name": "xBase",
+    "Type": "Service",
+    "X-KDE-Library": "keximigrate_xbase",
+    "X-KDE-ServiceTypes": [
+        "Kexi/MigrationDriver"
+    ],
+    "X-Kexi-KexiMigrationVersion": "1.1",
+    "X-Kexi-MigrationDriverName": "xBase",
+    "X-Kexi-MigrationDriverType": "Network"
+}

@@ -1,0 +1,20 @@
+{
+    "GenericName": "Scripts",
+    "Name": "Script",
+    "Type": "Service",
+    "X-KDE-Library": "kexihandler_script",
+    "X-KDE-ParentApp": "kexi",
+    "X-KDE-ServiceTypes": [
+        "Kexi/Handler"
+    ],
+    "X-Kexi-Class": "org.kexi-project.script",
+    "X-Kexi-ItemIcon": "script",
+    "X-Kexi-PartVersion": "2",
+    "X-Kexi-SupportsDataExport": "false",
+    "X-Kexi-SupportsDataView": "false",
+    "X-Kexi-SupportsDataViewInUserMode": "false",
+    "X-Kexi-SupportsDesignView": "true",
+    "X-Kexi-SupportsExecution": "true",
+    "X-Kexi-SupportsPrinting": "false",
+    "X-Kexi-TypeName": "script"
+}

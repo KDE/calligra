@@ -1,0 +1,9 @@
+{
+    "Comment": "KoReport Chart Plugin",
+    "Name": "Chart Report Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "koreport_chartplugin",
+    "X-KDE-ServiceTypes": [
+        "KoReport/ItemPlugin"
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "Comment": "Matrix wipe Page Effects",
+    "Name": "Matrix wipe",
+    "Type": "Service",
+    "X-KDE-Library": "kpr_pageeffect_matrixwipe",
+    "X-KDE-PluginInfo-Name": "kpr_pageeffect_matrixwipe",
+    "X-KDE-ServiceTypes": [
+        "CalligraStage/PageEffect"
+    ],
+    "X-KPresenter-Version": "28"
+}

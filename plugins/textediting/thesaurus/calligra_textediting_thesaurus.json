@@ -1,0 +1,14 @@
+{
+    "Commands": "thesaurus",
+    "Comment": "Show Related Words",
+    "Icon": "",
+    "Name": "Thesaurus Tool",
+    "Type": "Service",
+    "X-KDE-Library": "calligra_textediting_thesaurus",
+    "X-KDE-PluginInfo-Name": "thesaurustool",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Text-EditingPlugin"
+    ],
+    "X-KoText-MinVersion": "28",
+    "X-KoText-PluginVersion": "28"
+}

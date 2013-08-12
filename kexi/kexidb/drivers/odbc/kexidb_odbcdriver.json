@@ -1,0 +1,13 @@
+{
+    "Comment": "Kexi Open Database Connectivity Driver",
+    "InitialPreference": "8",
+    "Name": "ODBC",
+    "Type": "Service",
+    "X-KDE-Library": "kexidb_odbcdriver",
+    "X-KDE-ServiceTypes": [
+        "Kexi/DBDriver"
+    ],
+    "X-Kexi-DriverName": "ODBC",
+    "X-Kexi-DriverType": "Network",
+    "X-Kexi-KexiDBVersion": "1.9"
+}

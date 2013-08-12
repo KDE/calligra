@@ -1,0 +1,10 @@
+{
+    "CacheThumbnail": "true",
+    "MimeType": "application/vnd.ms-excel;",
+    "Name": "Microsoft Excel Spreadsheets",
+    "Type": "Service",
+    "X-KDE-Library": "calligrathumbnail",
+    "X-KDE-ServiceTypes": [
+        "ThumbCreator"
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "Name": "Krita Oiio OpenColorIO-based export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "image/cineon,image/dpx,image/fits,image/field3d,image/vnd.radiance,image/exr",
+    "X-KDE-Import": "application/x-krita",
+    "X-KDE-Library": "kritaoiioexport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

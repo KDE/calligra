@@ -1,0 +1,13 @@
+{
+    "Comment": "MySQL Import Plugin for Kexi",
+    "InitialPreference": "8",
+    "Name": "MySQL",
+    "Type": "Service",
+    "X-KDE-Library": "keximigrate_mysql",
+    "X-KDE-ServiceTypes": [
+        "Kexi/MigrationDriver"
+    ],
+    "X-Kexi-KexiMigrationVersion": "1.1",
+    "X-Kexi-MigrationDriverName": "MySQL",
+    "X-Kexi-MigrationDriverType": "Network"
+}

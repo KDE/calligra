@@ -1,0 +1,11 @@
+{
+    "Comment": "Edge Wipe Page Effects",
+    "Name": "Edge wipe",
+    "Type": "Service",
+    "X-KDE-Library": "kpr_pageeffect_edgewipe",
+    "X-KDE-PluginInfo-Name": "kpr_pageeffect_edgewipe",
+    "X-KDE-ServiceTypes": [
+        "CalligraStage/PageEffect"
+    ],
+    "X-KPresenter-Version": "28"
+}

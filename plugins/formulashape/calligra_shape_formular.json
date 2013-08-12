@@ -1,0 +1,11 @@
+{
+    "Name": "Formula Shape",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligra_shape_formular",
+    "X-KDE-PluginInfo-Name": "formulashape",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Flake"
+    ]
+}

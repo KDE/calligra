@@ -1,0 +1,11 @@
+{
+    "Name": "Karbon SVGZ Import Filter",
+    "Type": "Service",
+    "X-KDE-Export": "application/vnd.oasis.opendocument.graphics",
+    "X-KDE-Import": "image/svg+xml-compressed",
+    "X-KDE-Library": "calligra_filter_svg2karbon",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

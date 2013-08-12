@@ -1,0 +1,13 @@
+{
+    "GenericName": "Project Management",
+    "Icon": "calligraplan",
+    "MimeType": "application/x-vnd.kde.plan,application/x-vnd.kde.kplato;",
+    "Name": "Calligra Project Management Component",
+    "Type": "Service",
+    "X-KDE-Library": "planpart",
+    "X-KDE-NOTKoDocumentEmbeddable": "true",
+    "X-KDE-NativeMimeType": "application/x-vnd.kde.plan",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Part"
+    ]
+}

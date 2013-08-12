@@ -1,0 +1,9 @@
+{
+    "Name": "MyPaint brush",
+    "Type": "Service",
+    "X-KDE-Library": "kritamypaintpaintop",
+    "X-KDE-ServiceTypes": [
+        "Krita/Paintop"
+    ],
+    "X-Krita-Version": "28"
+}

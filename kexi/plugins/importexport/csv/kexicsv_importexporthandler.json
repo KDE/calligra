@@ -1,0 +1,14 @@
+{
+    "Name": "Kexi CSV Data Import/Export Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kexihandler_csv_importexport",
+    "X-KDE-ParentApp": "kexi",
+    "X-KDE-ServiceTypes": [
+        "Kexi/Handler"
+    ],
+    "X-Kexi-GroupIcon": "csv_importexport",
+    "X-Kexi-ItemIcon": "csv_importexport",
+    "X-Kexi-NoObject": "true",
+    "X-Kexi-PartVersion": "2",
+    "X-Kexi-TypeName": "csv_importexport"
+}

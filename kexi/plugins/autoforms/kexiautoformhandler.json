@@ -1,0 +1,14 @@
+{
+    "GenericName": "AutoForm",
+    "Name": "AutoForm",
+    "ServiceTypes": "Kexi/Handler",
+    "Type": "Service",
+    "X-KDE-Library": "kexihandler_autoform",
+    "X-KDE-ParentApp": "kexi",
+    "X-Kexi-Class": "org.kexi-project.autoform",
+    "X-Kexi-ItemIcon": "form",
+    "X-Kexi-PartVersion": "2",
+    "X-Kexi-SupportsDataExport": "false",
+    "X-Kexi-SupportsPrinting": "false",
+    "X-Kexi-TypeName": "autoform"
+}

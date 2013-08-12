@@ -1,0 +1,11 @@
+{
+    "Name": "Page Application Background Tool",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "kopabackgroundtool",
+    "X-KDE-PluginInfo-Name": "kopabackgroundtool",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Tool"
+    ]
+}

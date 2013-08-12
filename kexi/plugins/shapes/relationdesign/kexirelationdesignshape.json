@@ -1,0 +1,9 @@
+{
+    "Name": "Kexi Relation Design Shape",
+    "ServiceTypes": "Calligra/Flake",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "kexirelationdesignshape",
+    "X-KDE-PluginInfo-Name": "kexirelationdesignshape"
+}

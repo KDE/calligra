@@ -1,0 +1,10 @@
+{
+    "Comment": "Shiva Kernel Language Support For Generators",
+    "Name": "Shiva Kernel Language Support For Generators",
+    "Type": "Service",
+    "X-KDE-Library": "kritashivagenerators",
+    "X-KDE-ServiceTypes": [
+        "Krita/Generator"
+    ],
+    "X-Krita-Version": "28"
+}

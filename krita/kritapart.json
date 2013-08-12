@@ -1,0 +1,13 @@
+{
+    "GenericName": "Image Object",
+    "Icon": "calligrakrita",
+    "MimeType": "application/x-krita;image/openraster;application/x-krita-flipbook;",
+    "Name": "Calligra Painting and Image Editor Component",
+    "Type": "Service",
+    "X-KDE-Library": "kritapart",
+    "X-KDE-NativeMimeType": "application/x-krita",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Part"
+    ],
+    "X-Krita-Version": "28"
+}

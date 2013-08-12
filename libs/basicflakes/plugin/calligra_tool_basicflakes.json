@@ -1,0 +1,11 @@
+{
+    "Name": "Basic Flakes",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "calligra_tool_basicflakes",
+    "X-KDE-PluginInfo-Name": "basicflakesplugin",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Tool"
+    ]
+}

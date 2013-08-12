@@ -1,0 +1,11 @@
+{
+    "Comment": "This plugins allow to transfer color from an image to an other image",
+    "Icon": "",
+    "Name": "Color Transfer Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritafastcolortransferfilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}

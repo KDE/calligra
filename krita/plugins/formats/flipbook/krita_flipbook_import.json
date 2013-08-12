@@ -1,0 +1,12 @@
+{
+    "Name": "Krita Flipbook Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-krita",
+    "X-KDE-Import": "application/x-krita-flipbook",
+    "X-KDE-Library": "kritaflipbookimport",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

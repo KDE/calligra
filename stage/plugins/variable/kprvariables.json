@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Name": "Presentation Variables",
+    "Type": "Service",
+    "X-KDE-Library": "kprvariables",
+    "X-KDE-PluginInfo-Name": "kprvariables",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Text-InlineObject"
+    ],
+    "X-KoText-MinVersion": "28",
+    "X-KoText-PluginVersion": "28"
+}

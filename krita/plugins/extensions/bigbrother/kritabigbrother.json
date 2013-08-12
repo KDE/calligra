@@ -1,0 +1,10 @@
+{
+    "Comment": "bigbrother",
+    "Name": "bigbrother",
+    "Type": "Service",
+    "X-KDE-Library": "kritabigbrother",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

@@ -1,0 +1,11 @@
+{
+    "Name": "CSV Export Filter for KSpread",
+    "Type": "Service",
+    "X-KDE-Export": "text/csv,text/plain",
+    "X-KDE-Import": "application/x-kspread",
+    "X-KDE-Library": "calligra_filter_sheets2csv",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "50"
+}

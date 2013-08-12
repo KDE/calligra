@@ -1,0 +1,20 @@
+{
+    "GenericName": "Queries",
+    "Name": "Query",
+    "Type": "Service",
+    "X-KDE-Library": "kexihandler_query",
+    "X-KDE-ParentApp": "kexi",
+    "X-KDE-ServiceTypes": [
+        "Kexi/Handler"
+    ],
+    "X-Kexi-Class": "org.kexi-project.query",
+    "X-Kexi-ItemIcon": "query",
+    "X-Kexi-PartVersion": "2",
+    "X-Kexi-SupportsDataExport": "true",
+    "X-Kexi-SupportsDataView": "true",
+    "X-Kexi-SupportsDataViewInUserMode": "true",
+    "X-Kexi-SupportsDesignView": "true",
+    "X-Kexi-SupportsPrinting": "true",
+    "X-Kexi-SupportsTextView": "true",
+    "X-Kexi-TypeName": "query"
+}

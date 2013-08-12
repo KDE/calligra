@@ -1,0 +1,11 @@
+{
+    "Name": "Flow Dockers plugin",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "flowdockersplugin",
+    "X-KDE-PluginInfo-Name": "flowdockersplugin",
+    "X-KDE-ServiceTypes": [
+        "Flow/Dock"
+    ]
+}

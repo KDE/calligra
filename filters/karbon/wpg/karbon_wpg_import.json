@@ -1,0 +1,11 @@
+{
+    "Name": "Karbon WPG Import Filter",
+    "Type": "Service",
+    "X-KDE-Export": "image/svg+xml",
+    "X-KDE-Import": "application/x-wpg",
+    "X-KDE-Library": "calligra_filter_wpg2svg",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

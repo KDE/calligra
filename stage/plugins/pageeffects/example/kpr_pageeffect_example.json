@@ -1,0 +1,11 @@
+{
+    "Comment": "Exploding Page Page Effect",
+    "Name": "Exploding Page",
+    "Type": "Service",
+    "X-KDE-Library": "kpr_pageeffect_example",
+    "X-KDE-PluginInfo-Name": "kpr_pageeffect_example",
+    "X-KDE-ServiceTypes": [
+        "CalligraStage/PageEffect"
+    ],
+    "X-KPresenter-Version": "28"
+}
