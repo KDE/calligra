@@ -198,14 +198,11 @@ void KisZoomAction::inputEvent( QEvent* event )
                 qreal zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
                 static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
                 d->lastDistance = dist;
-            }
-            
-            QPointF moveDelta = center - d->lastPosition;
-            // If this length is massively big, chances are we're ending the gesture and we
-            // should really be ignoring the request to move, so... go away silly thing!
-            if(moveDelta.manhattanLength() < 100)
+                // Also do panning here, as doing it later requires a further check for validity
+                QPointF moveDelta = center - d->lastPosition;
                 inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
-            d->lastPosition = center;
+                d->lastPosition = center;
+            }
         }
         default:
             break;
