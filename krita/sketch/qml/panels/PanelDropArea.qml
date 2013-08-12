@@ -57,6 +57,7 @@ DnD.DropArea {
             item.y = 0;
             item.width = width;
             item.height = height;
+            item.roundTop = (Constants.IsLandscape && y > 0);
         }
     }
 }
