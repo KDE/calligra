@@ -53,7 +53,7 @@ public:
 class Constants : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( int GridRows READ gridRows CONSTANT )
+    Q_PROPERTY( int GridRows READ gridRows NOTIFY gridSizeChanged )
     Q_PROPERTY( int GridColumns READ gridColumns CONSTANT )
     Q_PROPERTY( QObject* Theme READ theme CONSTANT )
 

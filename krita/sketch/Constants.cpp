@@ -80,7 +80,7 @@ Constants::Constants(QObject* parent)
 
     m_gridWidth = qApp->activeWindow()->width() / gridColumns();
     m_gridHeight = qApp->activeWindow()->height() / gridHeight();
-    m_toolbarButtonSize = (m_gridHeight * 1.5 < m_gridWidth) ? m_gridHeight : m_gridWidth / 1.5;
+    m_toolbarButtonSize = m_gridHeight;
 }
 
 qreal Constants::gridHeight() const
@@ -91,7 +91,7 @@ qreal Constants::gridHeight() const
 void Constants::setGridHeight( qreal height )
 {
     m_gridHeight = height;
-    m_toolbarButtonSize = (m_gridHeight * 1.5 < m_gridWidth) ? m_gridHeight : m_gridWidth / 1.5;
+    m_toolbarButtonSize = m_gridHeight;
     emit gridSizeChanged();
 }
 
@@ -103,7 +103,7 @@ qreal Constants::gridWidth() const
 void Constants::setGridWidth( qreal width )
 {
     m_gridWidth = width;
-    m_toolbarButtonSize = (m_gridHeight * 1.5 < m_gridWidth) ? m_gridHeight : m_gridWidth / 1.5;
+    m_toolbarButtonSize = m_gridHeight;
     emit gridSizeChanged();
 }
 
@@ -114,6 +114,8 @@ qreal Constants::toolbarButtonSize() const
 
 int Constants::gridRows() const
 {
+    if(isLandscape())
+        return 18;
     return 12;
 }
 
@@ -130,42 +132,32 @@ QObject* Constants::theme() const
 
 qreal Constants::defaultMargin() const
 {
-    if(isLandscape())
-        return 0.1 * m_gridWidth;
     return 0.1 * m_gridHeight;
 }
 
 qreal Constants::smallFontSize() const
 {
-    if(isLandscape())
-        return 0.2 * m_gridWidth;
     return 0.2 * m_gridHeight;
 }
 
 qreal Constants::defaultFontSize() const
 {
-    if(isLandscape())
-        return 0.3 * m_gridWidth;
     return 0.3 * m_gridHeight;
 }
 
 qreal Constants::largeFontSize() const
 {
-    if(isLandscape())
-        return 0.4 * m_gridWidth;
     return 0.4 * m_gridHeight;
 }
 
 qreal Constants::hugeFontSize() const
 {
-    if(isLandscape())
-        return 0.9 * m_gridWidth;
     return 0.9 * m_gridHeight;
 }
 
 bool Constants::isLandscape() const
 {
-    return m_gridHeight > m_gridWidth;
+    return qApp->activeWindow()->height() > qApp->activeWindow()->width();
 }
 
 #include "Constants.moc"
