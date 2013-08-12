@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Quick Layergroup Switcher
+Name[bs]=Brzi preklopnik grupe slojeva
 Name[ca]=Commutador ràpid de grups de capes
 Name[da]=Hurtig laggruppe-skifter
 Name[el]=Quick Layergroup Switcher
@@ -15,6 +16,7 @@ Name[pt_BR]=Seletor rápido de grupos de camadas
 Name[sk]=Rýchly prepínač skupín vrstiev
 Name[sv]=Snabb lagergruppsväxling
 Name[uk]=Швидкий перемикач між групами шарів
+Name[x-test]=xxQuick Layergroup Switcherxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritalayergroupswitcher

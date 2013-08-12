@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Offset Image Plugin
+Name[bs]=Dodatak za pomak slik
 Name[ca]=Connector de desplaçament de les imatges
 Name[cs]=Modul pro posun obrázku
 Name[da]=Plugin til forskydning af billeder
@@ -17,6 +18,7 @@ Name[pt_BR]=Plugin de deslocamento de imagem
 Name[sk]=Plugin posunu obrázku
 Name[sv]=Insticksprogram för förskjutning av bild
 Name[uk]=Додаток зміщення зображення
+Name[x-test]=xxOffset Image Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaoffsetimage

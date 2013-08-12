@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=MS Project Exchange Import Filter
+Name[bs]=MS Project Exchange uvozni filter
 Name[ca]=Filtre d'importació de MS Project Exchange
 Name[cs]=Importní filtr Microsoft Project Exchange
 Name[da]=MS Project Exchange-importfilter
@@ -14,6 +15,7 @@ Name[pt_BR]=Filtro de importação de Exchange para MS Project
 Name[sk]=Importný filter MS Project Exchange
 Name[sv]=MS Project Exchange-importfilter
 Name[uk]=Фільтр імпорту MS Project Exchange
+Name[x-test]=xxMS Project Exchange Import Filterxx
 X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/x-project
 X-KDE-Weight=1

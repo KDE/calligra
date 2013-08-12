@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Krita Flipbook Import Filter
+Name[bs]=Krita unosni Filter za notes
 Name[ca]=Filtre d'importació de foliscopi per al Krita
 Name[da]=Flipbook-importfilter til Krita
 Name[de]=Krita Daumenkino-Importfilter
@@ -18,6 +19,7 @@ Name[pt_BR]=Filtro de importação de Flipbook para Krita
 Name[sk]=Importný filter Krita Flipbook
 Name[sv]=Krita Flipbook-importfilter
 Name[uk]=Фільтр імпорту кінеографів для Krita
+Name[x-test]=xxKrita Flipbook Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-ServiceTypes=Calligra/Filter
 Type=Service
