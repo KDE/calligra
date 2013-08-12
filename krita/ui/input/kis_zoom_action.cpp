@@ -201,7 +201,10 @@ void KisZoomAction::inputEvent( QEvent* event )
             }
             
             QPointF moveDelta = center - d->lastPosition;
-            inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
+            // If this length is massively big, chances are we're ending the gesture and we
+            // should really be ignoring the request to move, so... go away silly thing!
+            if(moveDelta.manhattanLength() < 100)
+                inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
             d->lastPosition = center;
         }
         default:
