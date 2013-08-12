@@ -183,25 +183,25 @@ Page {
 
         RecentFilesList {
             width: parent.width / 3 - 4;
-            height: Constants.GridHeight * 9;
+            height: Constants.GridHeight * (Constants.GridRows - 3);
 
             onOpenClicked: pageStack.push( openImage );
             onItemClicked: baseLoadingDialog.visible = true;
         }
 
-        Divider { height: Constants.GridHeight * 9; }
+        Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
 
         NewImageList {
             width: parent.width / 3 - 8;
-            height: Constants.GridHeight * 9;
+            height: Constants.GridHeight * (Constants.GridRows - 3);
             onClicked: baseLoadingDialog.visible = true;
         }
 
-        Divider { height: Constants.GridHeight * 9; }
+        Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
 
         NewsList {
             width: parent.width / 3 - 4;
-            height: Constants.GridHeight * 9;
+            height: Constants.GridHeight * (Constants.GridRows - 3);
         }
     }
 
