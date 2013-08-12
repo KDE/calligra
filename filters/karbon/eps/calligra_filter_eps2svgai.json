@@ -1,0 +1,11 @@
+{
+    "Name": "Karbon EPS Import Filter",
+    "Type": "Service",
+    "X-KDE-Export": "image/svg+xml,application/illustrator",
+    "X-KDE-Import": "image/x-eps,image/eps,application/eps,application/x-eps,application/postscript",
+    "X-KDE-Library": "calligra_filter_eps2svgai",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

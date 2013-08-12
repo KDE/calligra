@@ -1,0 +1,11 @@
+{
+    "Name": "ODT to Epub2 Export Filter",
+    "Type": "Service",
+    "X-KDE-Export": "application/epub+zip",
+    "X-KDE-Import": "application/vnd.oasis.opendocument.text",
+    "X-KDE-Library": "calligra_filter_odt2epub2",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

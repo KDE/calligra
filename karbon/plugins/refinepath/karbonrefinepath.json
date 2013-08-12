@@ -1,0 +1,9 @@
+{
+    "Name": "Karbon Refine Path plugin",
+    "Type": "Service",
+    "X-KDE-Library": "karbon_refinepathplugin",
+    "X-KDE-ServiceTypes": [
+        "Karbon/ViewPlugin"
+    ],
+    "X-Karbon-Version": "28"
+}

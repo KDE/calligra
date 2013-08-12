@@ -1,0 +1,14 @@
+{
+    "ExportDescription": "LATEX",
+    "Icon": "",
+    "ImportDescription": "KSpread",
+    "Name": "KSpread LATEX Export Filter",
+    "Type": "Service",
+    "X-KDE-Export": "text/x-tex",
+    "X-KDE-Import": "application/x-kspread",
+    "X-KDE-Library": "calligra_filter_kspread2tex",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

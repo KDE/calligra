@@ -1,0 +1,9 @@
+{
+    "Name": "Sheets Pivot Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "sheetssolver",
+    "X-KDE-ServiceTypes": [
+        "Sheets/ViewPlugin"
+    ],
+    "X-Sheets-Version": "28"
+}

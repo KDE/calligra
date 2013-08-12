@@ -1,0 +1,11 @@
+{
+    "Name": "OpenOffice.org Calc Export Filter for KSpread",
+    "Type": "Service",
+    "X-KDE-Export": "application/vnd.sun.xml.calc",
+    "X-KDE-Import": "application/x-kspread",
+    "X-KDE-Library": "calligra_filter_sheets2opencalc",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

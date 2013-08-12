@@ -1,0 +1,9 @@
+{
+    "Name": "Karbon Flatten Path plugin",
+    "Type": "Service",
+    "X-KDE-Library": "karbon_flattenpathplugin",
+    "X-KDE-ServiceTypes": [
+        "Karbon/ViewPlugin"
+    ],
+    "X-Karbon-Version": "28"
+}

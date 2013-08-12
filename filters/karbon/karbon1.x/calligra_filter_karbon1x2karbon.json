@@ -1,0 +1,11 @@
+{
+    "Name": "Karbon 1.x Import Filter",
+    "Type": "Service",
+    "X-KDE-Export": "image/svg+xml",
+    "X-KDE-Import": "application/x-karbon",
+    "X-KDE-Library": "calligra_filter_karbon1x2karbon",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

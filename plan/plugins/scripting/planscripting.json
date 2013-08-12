@@ -1,0 +1,9 @@
+{
+    "Name": "Plan Scripting Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "krossmoduleplan",
+    "X-KDE-ServiceTypes": [
+        "Plan/ViewPlugin"
+    ],
+    "X-Plan-Version": "28"
+}

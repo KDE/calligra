@@ -1,0 +1,14 @@
+{
+    "Name": "GNUmeric Export Filter for KSpread",
+    "Type": "Service",
+    "X-KDE-Export": "application/x-gnumeric",
+    "X-KDE-Import": "application/x-kspread",
+    "X-KDE-Library": "calligra_filter_sheets2gnumeric",
+    "X-KDE-LibraryDependencies": "",
+    "X-KDE-LibraryMajor": "1",
+    "X-KDE-LibraryMinor": "0",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

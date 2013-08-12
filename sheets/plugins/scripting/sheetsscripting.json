@@ -1,0 +1,9 @@
+{
+    "Name": "Sheets Scripting Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "krossmodulesheets",
+    "X-KDE-ServiceTypes": [
+        "Sheets/ViewPlugin"
+    ],
+    "X-Sheets-Version": "28"
+}

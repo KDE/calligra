@@ -1,0 +1,11 @@
+{
+    "Name": "HTML Export Filter for KSpread",
+    "Type": "Service",
+    "X-KDE-Export": "text/html",
+    "X-KDE-Import": "application/x-kspread",
+    "X-KDE-Library": "calligra_filter_sheets2html",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "50"
+}

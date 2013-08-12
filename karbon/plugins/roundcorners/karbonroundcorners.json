@@ -1,0 +1,9 @@
+{
+    "Name": "Karbon Round Corners plugin",
+    "Type": "Service",
+    "X-KDE-Library": "karbon_roundcornersplugin",
+    "X-KDE-ServiceTypes": [
+        "Karbon/ViewPlugin"
+    ],
+    "X-Karbon-Version": "28"
+}

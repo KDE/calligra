@@ -1,0 +1,12 @@
+{
+    "Name": "Karbon PDF Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "image/svg+xml",
+    "X-KDE-Import": "application/pdf",
+    "X-KDE-Library": "calligra_filter_pdf2svg",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

@@ -1,0 +1,14 @@
+{
+    "Name": "MS Word 2007 Import Filter for Words",
+    "Type": "Service",
+    "X-KDE-Export": "application/vnd.oasis.opendocument.text",
+    "X-KDE-Import": "application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12",
+    "X-KDE-Library": "calligra_filter_docx2odt",
+    "X-KDE-LibraryDependencies": "",
+    "X-KDE-LibraryMajor": "0",
+    "X-KDE-LibraryMinor": "1",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Filter"
+    ],
+    "X-KDE-Weight": "1"
+}

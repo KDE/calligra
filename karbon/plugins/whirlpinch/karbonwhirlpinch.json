@@ -1,0 +1,9 @@
+{
+    "Name": "Karbon Whirl Pinch plugin",
+    "Type": "Service",
+    "X-KDE-Library": "karbon_whirlpinchplugin",
+    "X-KDE-ServiceTypes": [
+        "Karbon/ViewPlugin"
+    ],
+    "X-Karbon-Version": "28"
+}
