@@ -125,8 +125,13 @@ void KisPanAction::inputEvent(QEvent *event)
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
             QPointF newPos = d->averagePoint(tevent);
             QPointF delta = newPos - d->lastPosition;
-            inputManager()->canvas()->canvasController()->pan(-delta.toPoint());
-            d->lastPosition = newPos;
+            // If this is enormously large, then we are likely in the process of ending the gesture,
+            // with fingers being lifted one by one from the perspective of our very speedy operations,
+            // and as such, ignore those big jumps.
+            if(delta.manhattanLength() < 50) {
+                inputManager()->canvas()->canvasController()->pan(-delta.toPoint());
+                d->lastPosition = newPos;
+            }
         }
         default:
             break;
