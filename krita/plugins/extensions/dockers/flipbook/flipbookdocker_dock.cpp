@@ -111,8 +111,8 @@ FlipbookDockerDock::~FlipbookDockerDock()
 void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas && m_canvas->view()) {
-         m_canvas->view()->actionCollection()->disconnect(this);
-         foreach(KXMLGUIClient* client, m_canvas->view()->childClients()) {
+        m_canvas->view()->actionCollection()->disconnect(this);
+        foreach(KXMLGUIClient* client, m_canvas->view()->childClients()) {
             client->actionCollection()->disconnect(this);
         }
     }
@@ -182,8 +182,8 @@ void FlipbookDockerDock::newFlipbook()
 
 
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
+                                                               KoFilterManager::Import,
+                                                               KoServiceProvider::readExtraNativeMimeTypes());
 
     QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),
@@ -247,8 +247,8 @@ void FlipbookDockerDock::openFlipbook()
 void FlipbookDockerDock::addImage()
 {
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
+                                                               KoFilterManager::Import,
+                                                               KoServiceProvider::readExtraNativeMimeTypes());
 
     QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),
@@ -355,32 +355,32 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 
 void FlipbookDockerDock::toggleAnimation()
 {
-//    if (!m_animationWidget) {
-//        m_animationWidget = new SequenceViewer(m_canvas->view()->mainWindow());
-//        m_animationWidget->hide();
-//    }
+    //    if (!m_animationWidget) {
+    //        m_animationWidget = new SequenceViewer(m_canvas->view()->mainWindow());
+    //        m_animationWidget->hide();
+    //    }
 
-//    if (!m_canvasWidget) {
-//        m_canvasWidget = m_canvas->view()->findChild<KisCanvasController*>();
-//    }
+    //    if (!m_canvasWidget) {
+    //        m_canvasWidget = m_canvas->view()->findChild<KisCanvasController*>();
+    //    }
 
-//    if (!m_animating) {
-//        qDebug() << "start animation";
-//        m_animating = true;
-//        bnAnimate->setIcon(koIcon("media-playback-stop"));
-//        m_canvas->view()->
-//        m_mainWindow->setCentralWidget(m_animationWidget);
-//        m_animationWidget->show();
-//        m_canvasWidget->hide();
-//    }
-//    else {
-//        qDebug() << "stopt animation";
-//        m_animating = false;
-//        bnAnimate->setIcon(koIcon("media-playback-start"));
-//        m_mainWindow->setCentralWidget(m_canvasWidget);
-//        m_animationWidget->hide();
-//        m_canvasWidget->show();
-//    }
+    //    if (!m_animating) {
+    //        qDebug() << "start animation";
+    //        m_animating = true;
+    //        bnAnimate->setIcon(koIcon("media-playback-stop"));
+    //        m_canvas->view()->
+    //        m_mainWindow->setCentralWidget(m_animationWidget);
+    //        m_animationWidget->show();
+    //        m_canvasWidget->hide();
+    //    }
+    //    else {
+    //        qDebug() << "stopt animation";
+    //        m_animating = false;
+    //        bnAnimate->setIcon(koIcon("media-playback-start"));
+    //        m_mainWindow->setCentralWidget(m_canvasWidget);
+    //        m_animationWidget->hide();
+    //        m_canvasWidget->show();
+    //    }
 }
 
 
