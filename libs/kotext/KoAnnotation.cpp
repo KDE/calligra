@@ -144,7 +144,7 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
 
         writer->endElement(); //office:annotation
     } else if ((tagType == EndTag) && (position == rangeEnd())) {
-        writer->startElement("text:annotation-end", false);
+        writer->startElement("office:annotation-end", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();
     }
