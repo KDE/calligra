@@ -41,7 +41,7 @@ public:
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
-    void openDocument(const QString &document);
+    void openDocument(const QString& document, bool import = false);
     void closeDocument();
     bool save();
     void saveAs(const QString &filename, const QString &mimetype);

@@ -36,6 +36,10 @@ public:
         , part(0)
         , settingsManager(0)
         , recentFileManager(0)
+        , newDocWidth(0)
+        , newDocHeight(0)
+        , newDocResolution(0)
+        , importingDocument(false)
     { }
     ProgressProxy* proxy;
     QPointer<KisDoc2> document;
@@ -46,6 +50,7 @@ public:
     QString saveAsFilename;
     QString openDocumentFilename;
     int newDocWidth, newDocHeight; float newDocResolution;
+    bool importingDocument;
 };
 
 DocumentManager *DocumentManager::sm_instance = 0;
@@ -104,10 +109,11 @@ void DocumentManager::delayedNewDocument()
     emit documentChanged();
 }
 
-void DocumentManager::openDocument(const QString& document)
+void DocumentManager::openDocument(const QString& document, bool import)
 {
     closeDocument();
     d->openDocumentFilename = document;
+    d->importingDocument = import;
     QTimer::singleShot(1000, this, SLOT(delayedOpenDocument()));
 }
 
@@ -119,7 +125,10 @@ void DocumentManager::delayedOpenDocument()
     part()->setDocument(d->document);
 
     d->document->setModified(false);
-    d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
+    if(d->importingDocument)
+        d->document->importDocument(QUrl::fromLocalFile(d->openDocumentFilename));
+    else
+        d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
     d->recentFileManager->addRecent(d->openDocumentFilename);
     emit documentChanged();
 }
