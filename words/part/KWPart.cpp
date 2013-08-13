@@ -62,21 +62,21 @@ KWDocument *KWPart::document() const
     return m_document;
 }
 
-KoView *KWPart::createViewInstance(QWidget *parent)
+KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    KWView *view = new KWView(this, m_document, parent);
-    setupViewInstance(view);
+    KWView *view = new KWView(this, qobject_cast<KWDocument*>(document), parent);
+    setupViewInstance(document, view);
     return view;
 }
 
-void KWPart::setupViewInstance(KWView *view)
+void KWPart::setupViewInstance(KoDocument *document, KWView *view)
 {
-    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *, KoShapeManager::Repaint)));
-    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape *)));
-    connect(m_document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
+    connect(document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *, KoShapeManager::Repaint)));
+    connect(document, SIGNAL(shapeRemoved(KoShape *)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape *)));
+    connect(document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
 
     bool switchToolCalled = false;
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
+    foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
         if (fs->frameCount() == 0)
             continue;
         foreach (KWFrame *frame, fs->frames())
@@ -97,11 +97,11 @@ void KWPart::setupViewInstance(KWView *view)
         KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
 }
 
-QGraphicsItem *KWPart::createCanvasItem()
+QGraphicsItem *KWPart::createCanvasItem(KoDocument *document)
 {
     // caller owns the canvas item
-    KWCanvasItem *item = new KWCanvasItem(QString(), m_document);
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
+    KWCanvasItem *item = new KWCanvasItem(QString(), qobject_cast<KWDocument*>(document));
+    foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
         if (fs->frameCount() == 0) {
             continue;
         }

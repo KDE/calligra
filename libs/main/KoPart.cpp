@@ -78,6 +78,7 @@ public:
     QList<KoView*> views;
     QList<KoMainWindow*> mainWindows;
     KoDocument *document;
+    QList<KoDocument*> documents;
     QGraphicsItem *canvasItem;
     QPointer<KoOpenPane> startUpWidget;
     QString templateType;
@@ -141,10 +142,13 @@ KoMainWindow *KoPart::createMainWindow()
     return new KoMainWindow(d->m_componentData);
 }
 
-KoView *KoPart::createView(QWidget *parent)
+KoView *KoPart::createView(KoDocument *document, QWidget *parent)
 {
-    KoView *view = createViewInstance(parent);
+    KoView *view = createViewInstance(document, parent);
     addView(view);
+    if (!d->documents.contains(document)) {
+        d->documents.append(document);
+    }
     return view;
 }
 
@@ -186,17 +190,17 @@ int KoPart::viewCount() const
     return d->views.count();
 }
 
-QGraphicsItem *KoPart::canvasItem(bool create)
+QGraphicsItem *KoPart::canvasItem(KoDocument *document, bool create)
 {
     if (create && !d->canvasItem) {
-        d->canvasItem = createCanvasItem();
+        d->canvasItem = createCanvasItem(document);
     }
     return d->canvasItem;
 }
 
-QGraphicsItem *KoPart::createCanvasItem()
+QGraphicsItem *KoPart::createCanvasItem(KoDocument *document)
 {
-    KoView *view = createView();
+    KoView *view = createView(document);
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
     QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
     proxy->setWidget(canvasController);

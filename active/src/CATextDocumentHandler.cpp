@@ -106,7 +106,7 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
     d->document = static_cast<KWDocument*> (part->document());
     d->document->openUrl (KUrl (uri));
 
-    setCanvas (dynamic_cast<KoCanvasBase*> (part->canvasItem()));
+    setCanvas (dynamic_cast<KoCanvasBase*> (part->canvasItem(d->document)));
     KoToolManager::instance()->addController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()));
     KoSelection *sel = canvas()->shapeManager()->selection();
 

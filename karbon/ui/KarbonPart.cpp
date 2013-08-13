@@ -76,9 +76,9 @@ void KarbonPart::setDocument(KoDocument *document)
     connect(doc, SIGNAL(applyCanvasConfiguration(KarbonCanvas*)), SLOT(applyCanvasConfiguration(KarbonCanvas*)));
 }
 
-KoView * KarbonPart::createViewInstance(QWidget *parent)
+KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
 {
-    KarbonDocument *doc = qobject_cast<KarbonDocument*>(document());
+    KarbonDocument *doc = qobject_cast<KarbonDocument*>(_document);
 
     KarbonView *result = new KarbonView(this, doc, parent);
 

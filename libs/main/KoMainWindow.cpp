@@ -503,7 +503,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
         Q_ASSERT(d->m_registeredPart.isNull());
         d->m_registeredPart = d->rootPart.data();
 
-        KoView *view = d->rootPart->createView(this);
+        KoView *view = d->rootPart->createView(doc, this);
         setCentralWidget(view);
         d->rootViews.append(view);
 

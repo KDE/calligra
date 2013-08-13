@@ -157,10 +157,10 @@ public:
     /**
      *  Create a new view for the document.
      */
-    KoView *createView(QWidget *parent = 0);
+    KoView *createView(KoDocument *document, QWidget *parent = 0);
 
     /**
-     * Adds a view to the document.
+     * Adds a view to the document. If the part doesn't know yet about the document, it is registered.
      *
      * This calls KoView::updateReadWrite to tell the new view
      * whether the document is readonly or not.
@@ -189,7 +189,7 @@ public:
      *
      * @param create if true, a new canvas item is created if there wasn't one.
      */
-    QGraphicsItem *canvasItem(bool create = true);
+    QGraphicsItem *canvasItem(KoDocument *document, bool create = true);
 
     // ------- startup/openpane etc ---------------
 
@@ -254,13 +254,13 @@ protected:
     KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
                                const QString& templateType = QString());
 
-    virtual KoView *createViewInstance(QWidget *parent) = 0;
+    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
 
     /**
      * Override this to create a QGraphicsItem that does not rely
      * on proxying a KoCanvasController.
      */
-    virtual QGraphicsItem *createCanvasItem();
+    virtual QGraphicsItem *createCanvasItem(KoDocument *document);
 
 
 public: // Part stuff
@@ -287,9 +287,9 @@ public:
     MockPart()
     : KoPart( 0 )
     {}
-    KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
+    KoView *createViewInstance(KoDocument */*document*/, QWidget * /* parent */ ) { return 0; }
 protected:
-    virtual QGraphicsItem *createCanvasItem() { return 0; }
+    virtual QGraphicsItem *createCanvasItem(KoDocument */*document*/) { return 0; }
 };
 
 #endif

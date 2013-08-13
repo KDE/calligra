@@ -33,8 +33,9 @@ FormulaPart::~FormulaPart()
 {
 }
 
-KoView * FormulaPart::createViewInstance(QWidget *parent)
+KoView * FormulaPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
+    Q_UNUSED(document);
     Q_UNUSED(parent);
 
     return 0;

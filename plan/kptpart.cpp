@@ -42,7 +42,7 @@ void Part::setDocument(KPlato::MainDocument *document)
     m_document = document;
 }
 
-KoView *Part::createViewInstance(QWidget *parent)
+KoView *Part::createViewInstance(KoDocument *document, QWidget *parent)
 {
     // synchronize view selector
     View *view = dynamic_cast<View*>(views().value(0));
@@ -51,10 +51,10 @@ KoView *Part::createViewInstance(QWidget *parent)
         QDomDocument doc = m_context->save(view);
         m_context->setContent(doc.toString());
     }*/
-    view = new View(this, m_document, parent);
+    view = new View(this, qobject_cast<MainDocument*>(document), parent);
 //    connect(view, SIGNAL(destroyed()), this, SLOT(slotViewDestroyed()));
-//    connect(m_document, SIGNAL(viewListItemAdded(const ViewListItem*,const ViewListItem*,int)), view, SLOT(addViewListItem(const ViewListItem*,const ViewListItem*,int)));
-//    connect(m_document, SIGNAL(viewListItemRemoved(const ViewListItem*)), view, SLOT(removeViewListItem(const ViewListItem*)));
+//    connect(document, SIGNAL(viewListItemAdded(const ViewListItem*,const ViewListItem*,int)), view, SLOT(addViewListItem(const ViewListItem*,const ViewListItem*,int)));
+//    connect(document, SIGNAL(viewListItemRemoved(const ViewListItem*)), view, SLOT(removeViewListItem(const ViewListItem*)));
     return view;
 }
 

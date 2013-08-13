@@ -65,7 +65,7 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
     }
 
     doc->setReadWrite(false);
-    KoView *view = part->createView();
+    KoView *view = part->createView(doc);
     KoPrintJob *printJob = view->createPdfPrintJob();
 
     // We should now have a print job - but check to make sure

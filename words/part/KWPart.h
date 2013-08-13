@@ -39,7 +39,7 @@ public:
 
     virtual ~KWPart();
 
-    QGraphicsItem *createCanvasItem(); ///reimplemented
+    QGraphicsItem *createCanvasItem(KoDocument *document); ///reimplemented
 
     void setDocument(KWDocument *document);
     KWDocument *document() const;
@@ -54,8 +54,8 @@ private slots:
 
 protected:
 
-    virtual KoView *createViewInstance(QWidget *parent); ///reimplemented
-    virtual void setupViewInstance(KWView *view);
+    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent); ///reimplemented
+    virtual void setupViewInstance(KoDocument *document, KWView *view);
 
     KWDocument *m_document;
 };

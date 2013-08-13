@@ -60,10 +60,10 @@ public:
 
     virtual void addView(KoView *_view); /// reimplemented
 
-    virtual QGraphicsItem *createCanvasItem(); /// reimplemented
+    virtual QGraphicsItem *createCanvasItem(KoDocument *document); /// reimplemented
 
 protected:
-    virtual KoView* createViewInstance(QWidget*); /// reimplemented
+    virtual KoView* createViewInstance(KoDocument *document, QWidget*); /// reimplemented
 
     virtual void openTemplate(const KUrl& url); /// reimplemented
 

@@ -30,8 +30,9 @@ ChartPart::~ChartPart()
 {
 }
 
-KoView * ChartPart::createViewInstance(QWidget *parent)
+KoView * ChartPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
+    Q_UNUSED(document);
     Q_UNUSED(parent);
 
     return 0;

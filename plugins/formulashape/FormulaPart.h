@@ -36,7 +36,7 @@ public:
     virtual ~FormulaPart();
 
     /// reimplemented
-    virtual KoView *createViewInstance(QWidget *parent);
+    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
 };
 
 #endif
