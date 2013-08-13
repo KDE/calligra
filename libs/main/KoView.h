@@ -268,6 +268,11 @@ public:
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions();
 
+    /**
+     * @brief guiActivateEvent is called when the window activates a view. Reimplement this for any special behaviour.
+     */
+    virtual void guiActivateEvent(bool activated);
+
 public slots:
 
     /**
@@ -290,8 +295,8 @@ public slots:
 protected:
 
     /**
-       Generate a name for this view.
-    */
+     * Generate a name for this view.
+     */
     QString newObjectName();
 
 signals:

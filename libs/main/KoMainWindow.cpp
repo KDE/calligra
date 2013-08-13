@@ -550,7 +550,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
     if (!d->rootDocument) {
         statusBar()->setVisible(false);
     }
-    connect(d->rootDocument, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
+    else {
+        connect(d->rootDocument, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
+    }
 }
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)
@@ -2123,6 +2125,10 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
     else {
         d->activeView = 0;
         d->activePart = 0;
+    }
+
+    if (d->activeView) {
+        d->activeView->guiActivateEvent(true);
     }
 }
 

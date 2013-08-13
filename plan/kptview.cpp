@@ -2619,19 +2619,18 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
     }
 }
 
-//void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
-//{
-//    KParts::Part::guiActivateEvent( ev );
-//    if ( ev->activated() ) {
-//        // plug my own actionlists, they may be gone
-//        slotPlugScheduleActions();
-//    }
-//    // propagate to sub-view
-//    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
-//    if ( v ) {
-//        v->setGuiActive( ev->activated() );
-//    }
-//}
+void View::guiActivateEvent( bool activated )
+{
+    if ( activated ) {
+        // plug my own actionlists, they may be gone
+        slotPlugScheduleActions();
+    }
+    // propagate to sub-view
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v ) {
+        v->setGuiActive( activated );
+    }
+}
 
 void View::slotViewListItemRemoved( ViewListItem *item )
 {

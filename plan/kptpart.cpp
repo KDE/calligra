@@ -52,7 +52,7 @@ KoView *Part::createViewInstance(QWidget *parent)
         m_context->setContent(doc.toString());
     }*/
     view = new View(this, m_document, parent);
-    connect(view, SIGNAL(destroyed()), this, SLOT(slotViewDestroyed()));
+//    connect(view, SIGNAL(destroyed()), this, SLOT(slotViewDestroyed()));
 //    connect(m_document, SIGNAL(viewListItemAdded(const ViewListItem*,const ViewListItem*,int)), view, SLOT(addViewListItem(const ViewListItem*,const ViewListItem*,int)));
 //    connect(m_document, SIGNAL(viewListItemRemoved(const ViewListItem*)), view, SLOT(removeViewListItem(const ViewListItem*)));
     return view;
