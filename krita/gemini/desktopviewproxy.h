@@ -25,6 +25,7 @@
 
 #include <QObject>
 
+class KUrl;
 class KoMainWindow;
 class MainWindow;
 class DesktopViewProxy : public QObject
@@ -41,6 +42,7 @@ public Q_SLOTS:
     bool fileSaveAs();
     void reload();
     void loadExistingAsNew();
+    void slotFileOpenRecent(const KUrl &url);
 
 private:
     class Private;

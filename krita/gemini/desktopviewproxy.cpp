@@ -37,6 +37,7 @@
 #include <QApplication>
 #include <KFileDialog>
 #include <KLocalizedString>
+#include <krecentfilesaction.h>
 
 class DesktopViewProxy::Private
 {
@@ -75,6 +76,11 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
     loadExistingAsNewAction->disconnect(d->desktopView);
     connect(loadExistingAsNewAction, SIGNAL(triggered(bool)), this, SLOT(loadExistingAsNew()));
+
+    // Recent files need a touch more work, as they aren't simply an action.
+    KRecentFilesAction* recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), d->desktopView->actionCollection());
+    recent->loadEntries(KGlobal::config()->group("RecentFiles"));
+    d->desktopView->setRecentAction(recent);
 }
 
 DesktopViewProxy::~DesktopViewProxy()
@@ -137,6 +143,11 @@ void DesktopViewProxy::loadExistingAsNew()
     d->isImporting = true;
     fileOpen();
     d->isImporting = false;
+}
+
+void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
+{
+    DocumentManager::instance()->openDocument(url.toLocalFile());
 }
 
 #include "desktopviewproxy.moc"
