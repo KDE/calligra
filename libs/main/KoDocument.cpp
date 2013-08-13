@@ -129,7 +129,7 @@ public:
         isLoading(false),
         undoStack(0),
         modified(false),
-        readwrite(false)
+        readwrite(true)
     {
         confirmNonNativeSave[0] = true;
         confirmNonNativeSave[1] = true;

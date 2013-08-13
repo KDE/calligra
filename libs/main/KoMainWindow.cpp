@@ -568,7 +568,6 @@ void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
 
 void KoMainWindow::setReadWrite(bool readwrite)
 {
-    d->rootDocument->setReadWrite(readwrite);
     d->saveAction->setEnabled(readwrite);
     d->importFile->setEnabled(readwrite);
     d->readOnly =  !readwrite;
