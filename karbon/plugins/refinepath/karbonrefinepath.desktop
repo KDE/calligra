@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Karbon Refine Path plugin
+Name[pt]='Plugin' de Ajuste de Caminhos do Karbon
+Name[sk]=Plugin zjemnenie cesty pre Karbon
+Name[uk]=Додаток покращення контурів для Karbon
+Name[x-test]=xxKarbon Refine Path pluginxx
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
 X-KDE-Library=karbon_refinepathplugin
