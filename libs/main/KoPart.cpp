@@ -120,7 +120,6 @@ public:
         m_bTemp = false;
         m_bAutoDetectedMime = false;
 
-        m_bModified = false;
         m_bReadWrite = true;
         m_bClosing = false;
     }
@@ -155,8 +154,6 @@ public:
     QString m_file; // Local file - the only one the part implementation should deal with.
     QString m_mimeType;
 
-    bool m_bModified;
-    bool m_bReadWrite;
     bool m_bClosing;
     QEventLoop m_eventLoop;
 
