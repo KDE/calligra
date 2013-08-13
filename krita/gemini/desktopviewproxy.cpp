@@ -44,9 +44,11 @@ public:
     Private(MainWindow* mainWindow, KoMainWindow* desktopView)
         : mainWindow(mainWindow)
         , desktopView(desktopView)
+        , isImporting(false)
     {}
     MainWindow* mainWindow;
     KoMainWindow* desktopView;
+    bool isImporting;
 };
 
 DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
@@ -69,7 +71,10 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     connect(saveasAction, SIGNAL(triggered(bool)), this, SLOT(fileSaveAs()));
     QAction* reloadAction = d->desktopView->actionCollection()->action("file_reload_file");
     reloadAction->disconnect(d->desktopView);
-    connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload(bool)));
+    connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload()));
+    QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
+    loadExistingAsNewAction->disconnect(d->desktopView);
+    connect(loadExistingAsNewAction, SIGNAL(triggered(bool)), this, SLOT(loadExistingAsNew()));
 }
 
 DesktopViewProxy::~DesktopViewProxy()
@@ -109,7 +114,7 @@ void DesktopViewProxy::fileOpen()
     if (url.isEmpty())
         return;
 
-    DocumentManager::instance()->openDocument(url.toLocalFile());
+    DocumentManager::instance()->openDocument(url.toLocalFile(), d->isImporting);
 }
 
 void DesktopViewProxy::fileSave()
@@ -125,6 +130,13 @@ bool DesktopViewProxy::fileSaveAs()
 void DesktopViewProxy::reload()
 {
     DocumentManager::instance()->reload();
+}
+
+void DesktopViewProxy::loadExistingAsNew()
+{
+    d->isImporting = true;
+    fileOpen();
+    d->isImporting = false;
 }
 
 #include "desktopviewproxy.moc"

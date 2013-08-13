@@ -40,6 +40,7 @@ public Q_SLOTS:
     void fileSave();
     bool fileSaveAs();
     void reload();
+    void loadExistingAsNew();
 
 private:
     class Private;
