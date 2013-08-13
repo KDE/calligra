@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Karbon Flatten Path plugin
+Name[pt]='Plugin' de Achatamento de Caminhos do Karbon
+Name[sk]=Plugin vyrovnanie cesty pre Karbon
+Name[uk]=Додаток спрощення контурів для Karbon
+Name[x-test]=xxKarbon Flatten Path pluginxx
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service
 X-KDE-Library=karbon_flattenpathplugin
