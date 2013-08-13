@@ -49,37 +49,27 @@ public:
     explicit KoDocumentEntry(const KService::Ptr& service);
     ~KoDocumentEntry();
 
-    KService::Ptr service() const {
-        return m_service;
-    }
+    KService::Ptr service() const;
 
     /**
      * @return TRUE if the service pointer is null
      */
-    bool isEmpty() const {
-        return m_service.isNull();
-    }
+    bool isEmpty() const;
 
     /**
      * @return name of the associated service
      */
-    QString name() const {
-        return m_service->name();
-    }
+    QString name() const;
 
     /**
      *  Mimetypes (and other service types) which this document can handle.
      */
-    QStringList mimeTypes() const {
-        return m_service->serviceTypes();
-    }
+    QStringList mimeTypes() const;
 
     /**
      *  @return TRUE if the document can handle the requested mimetype.
      */
-    bool supportsMimeType(const QString & _mimetype) const {
-        return mimeTypes().contains(_mimetype);
-    }
+    bool supportsMimeType(const QString & _mimetype) const;
 
     /**
      *  Uses the factory of the component to create

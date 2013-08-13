@@ -45,6 +45,39 @@ KoDocumentEntry::~KoDocumentEntry()
 {
 }
 
+
+KService::Ptr KoDocumentEntry::service() const {
+    return m_service;
+}
+
+/**
+ * @return TRUE if the service pointer is null
+ */
+bool KoDocumentEntry::isEmpty() const {
+    return m_service.isNull();
+}
+
+/**
+ * @return name of the associated service
+ */
+QString KoDocumentEntry::name() const {
+    return m_service->name();
+}
+
+/**
+ *  Mimetypes (and other service types) which this document can handle.
+ */
+QStringList KoDocumentEntry::mimeTypes() const {
+    return m_service->serviceTypes();
+}
+
+/**
+ *  @return TRUE if the document can handle the requested mimetype.
+ */
+bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
+    return mimeTypes().contains(_mimetype);
+}
+
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
     QString error;
