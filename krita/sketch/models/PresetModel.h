@@ -25,6 +25,7 @@ class PresetModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(QString currentPreset READ currentPreset WRITE setCurrentPreset NOTIFY currentPresetChanged)
 public:
     enum PresetRoles
     {
@@ -42,13 +43,18 @@ public:
     QObject* view() const;
     void setView(QObject* newView);
 
+    QString currentPreset() const;
+    void setCurrentPreset(QString presetName);
+
     Q_INVOKABLE int nameToIndex(QString presetName) const;
 
 Q_SIGNALS:
     void viewChanged();
+    void currentPresetChanged();
 
 public Q_SLOTS:
     void activatePreset(int index);
+    void resourceChanged(int key, const QVariant& v);
 
 private:
     class Private;

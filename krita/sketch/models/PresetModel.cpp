@@ -34,14 +34,13 @@
 class PresetModel::Private {
 public:
     Private()
-        : currentPreset(0)
-        , view(0)
+        : view(0)
     {
         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     }
 
     KoResourceServer<KisPaintOpPreset> * rserver;
-    int currentPreset;
+    QString currentPreset;
     KisView2* view;
 
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp)
@@ -151,7 +150,24 @@ QObject* PresetModel::view() const
 void PresetModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisView2*>( newView );
+    if(d->view)
+    {
+        connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(resourceChanged(int, const QVariant&)));
+    }
     emit viewChanged();
+}
+
+QString PresetModel::currentPreset() const
+{
+    return d->currentPreset;
+}
+
+void PresetModel::setCurrentPreset(QString presetName)
+{
+    activatePreset(nameToIndex(presetName));
+    // not emitting here, as that happens when the resource changes... this is more
+    // a polite request than an actual setter, due to the nature of the resource system.
 }
 
 int PresetModel::nameToIndex(QString presetName) const
@@ -178,6 +194,19 @@ void PresetModel::activatePreset(int index)
     if (index >= 0 && index < resources.count())  {
         KisPaintOpPreset* preset = resources.at( index );
         d->setCurrentPaintop(preset->paintOp(), preset->clone());
+    }
+}
+
+void PresetModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
+{
+    if(d->view)
+    {
+        KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if(preset && d->currentPreset != preset->name())
+        {
+            d->currentPreset = preset->name();
+            emit currentPresetChanged();
+        }
     }
 }
 
