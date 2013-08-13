@@ -92,6 +92,10 @@ Panel {
     PresetModel {
         id: presetsModel;
         view: sketchView.view;
+        onCurrentPresetChanged: {
+            peekViewGrid.currentIndex = nameToIndex(currentPreset);
+            fullViewGrid.currentIndex = nameToIndex(currentPreset);
+        }
     }
     Connections {
         target: sketchView;
