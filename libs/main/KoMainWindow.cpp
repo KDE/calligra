@@ -2062,6 +2062,13 @@ KRecentFilesAction *KoMainWindow::recentAction() const
     return d->recent;
 }
 
+void KoMainWindow::setRecentAction(KRecentFilesAction* newAction)
+{
+    d->recent->deleteLater();
+    d->recent = newAction;
+    setupGUI();
+}
+
 KoView* KoMainWindow::currentView() const
 {
     // XXX
