@@ -736,8 +736,8 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
 
     d->firstTime = true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    connect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    connect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+    connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
     newpart->addMainWindow(this);   // used by openUrl
     bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
@@ -779,8 +779,8 @@ void KoMainWindow::slotLoadCompleted()
         setRootDocument(newdoc);
     }
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+    disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
     emit loadCompleted();
 }
 
@@ -791,11 +791,11 @@ void KoMainWindow::slotLoadCanceled(const QString & errMsg)
         KMessageBox::error(this, errMsg);
     // ... can't delete the document, it's the one who emitted the signal...
 
-    KoPart* newpart = qobject_cast<KoPart*>(sender());
-    Q_ASSERT(newpart);
-    disconnect(newpart->document(), SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    KoDocument* doc = qobject_cast<KoDocument*>(sender());
+    Q_ASSERT(doc);
+    disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+    disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
 }
 
 void KoMainWindow::slotSaveCanceled(const QString &errMsg)
@@ -809,11 +809,11 @@ void KoMainWindow::slotSaveCanceled(const QString &errMsg)
 void KoMainWindow::slotSaveCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotSaveCompleted";
-    KoPart* pPart = (KoPart *)(sender());
-    disconnect(pPart->document(), SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(pPart, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    disconnect(pPart, SIGNAL(canceled(const QString &)),
-               this, SLOT(slotSaveCanceled(const QString &)));
+    KoDocument* doc = qobject_cast<KoDocument*>(sender());
+    Q_ASSERT(doc);
+    disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
     if (d->deferredClosingEvent) {
         KXmlGuiWindow::closeEvent(d->deferredClosingEvent);
@@ -879,8 +879,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     }
 
     connect(d->rootDocument, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    connect(d->rootPart, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    connect(d->rootPart, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
+    connect(d->rootDocument, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    connect(d->rootDocument, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
     KUrl oldURL = d->rootDocument->url();
     QString oldFile = d->rootDocument->localFilePath();

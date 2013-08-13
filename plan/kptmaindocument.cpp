@@ -959,8 +959,8 @@ void MainDocument::insertFile( const QString &filename, Node *parent, Node *afte
     doc->m_insertFileInfo.url = filename;
     doc->m_insertFileInfo.parent = parent;
     doc->m_insertFileInfo.after = after;
-    connect(part, SIGNAL(completed()), SLOT(insertFileCompleted()));
-    connect(part, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
+    connect(doc, SIGNAL(completed()), SLOT(insertFileCompleted()));
+    connect(doc, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
 
     doc->openUrl( KUrl( filename ) );
 }
