@@ -58,7 +58,7 @@ QString KoPartAdaptor::url()
 
 bool KoPartAdaptor::isModified()
 {
-    return m_pDoc->isModified();
+    return m_pDoc->document()->isModified();
 }
 
 int KoPartAdaptor::viewCount()

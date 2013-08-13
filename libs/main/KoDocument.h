@@ -747,6 +747,8 @@ public:
 
     virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
+    bool isReadWrite() const;
+
 private slots:
 
     void slotAutoSave();

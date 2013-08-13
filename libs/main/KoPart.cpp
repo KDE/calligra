@@ -329,7 +329,7 @@ public:
             ::org::kde::KDirNotify::emitFilesAdded( dirUrl.url() );
 
             m_uploadJob = 0;
-            parent->setModified( false );
+            parent->document()->setModified( false );
             emit parent->completed();
             m_saveOk = true;
         }
@@ -393,20 +393,6 @@ KoDocument *KoPart::document() const
     return d->document;
 }
 
-void KoPart::setReadWrite(bool readwrite)
-{
-    d->m_bReadWrite = readwrite;
-
-    foreach(KoView *view, d->views) {
-        view->updateReadWrite(readwrite);
-    }
-
-    foreach(KoMainWindow *mainWindow, d->mainWindows) {
-        mainWindow->setReadWrite(readwrite);
-    }
-}
-
-
 KoMainWindow *KoPart::createMainWindow()
 {
     return new KoMainWindow(d->m_componentData);
@@ -425,7 +411,7 @@ void KoPart::addView(KoView *view)
         return;
 
     d->views.append(view);
-    view->updateReadWrite(isReadWrite());
+    view->updateReadWrite(d->document->isReadWrite());
 
     if (d->views.size() == 1) {
         KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
@@ -522,7 +508,7 @@ void KoPart::openExistingFile(const KUrl& url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     d->document->openUrl(url);
-    setModified(false);
+    d->document->setModified(false);
     qApp->restoreOverrideCursor();
 }
 
@@ -674,7 +660,7 @@ KUrl KoPart::url() const
 bool KoPart::closeUrl()
 {
     abortLoad(); //just in case
-    if ( isReadWrite() && isModified() ) {
+    if ( d->document->isReadWrite() && d->document->isModified() ) {
         if (!queryClose())
             return false;
     }
@@ -696,26 +682,6 @@ bool KoPart::closeUrl()
 QString KoPart::mimeType() const
 {
     return d->m_mimeType;
-}
-
-bool KoPart::isReadWrite() const
-{
-    return d->m_bReadWrite;
-}
-
-bool KoPart::isModified() const
-{
-    return d->m_bModified;
-}
-
-void KoPart::setModified( bool modified )
-{
-    kDebug(1000) << "setModified(" << (modified ? "true" : "false") << ")";
-    if ( !d->m_bReadWrite && modified ) {
-        kError(1000) << "Can't set a read-only document to 'modified' !" << endl;
-        return;
-    }
-    d->m_bModified = modified;
 }
 
 bool KoPart::saveAs( const KUrl & kurl )
@@ -871,7 +837,7 @@ void KoPart::setLocalFilePath( const QString &localFilePath )
 
 bool KoPart::queryClose()
 {
-    if ( !isReadWrite() || !isModified() )
+    if ( !d->document->isReadWrite() || !d->document->isModified() )
         return true;
 
     QString docName = url().fileName();
@@ -915,7 +881,7 @@ bool KoPart::queryClose()
 bool KoPart::saveToUrl()
 {
     if ( d->m_url.isLocalFile() ) {
-        setModified( false );
+        d->document->setModified( false );
         emit completed();
         // if m_url is a local file there won't be a temp file -> nothing to remove
         Q_ASSERT( !d->m_bTemp );

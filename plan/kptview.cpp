@@ -223,7 +223,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     doc->registerView( this );
 
     setComponentData( Factory::global() );
-    if ( !part->isReadWrite() )
+    if ( !doc->isReadWrite() )
         setXMLFile( "plan_readonly.rc" );
     else
         setXMLFile( "plan.rc" );
@@ -1252,7 +1252,7 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString &tag
 
 ViewBase *View::createGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
-    GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
+    GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, koDocument()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
@@ -1286,7 +1286,7 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString &tag, const QS
 
 ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
-    MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
+    MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, koDocument()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );

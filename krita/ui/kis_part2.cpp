@@ -78,8 +78,8 @@ KoView *KisPart2::createViewInstance(QWidget *parent)
     // XXX: this prevents a crash when opening a new document after opening a
     // a document that has not been touched! I have no clue why, though.
     // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    setModified(true);
-    setModified(false);
+    document()->setModified(true);
+    document()->setModified(false);
     qApp->restoreOverrideCursor();
 
     return v;

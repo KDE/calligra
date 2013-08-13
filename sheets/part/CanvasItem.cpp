@@ -112,7 +112,6 @@
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
-#include "Part.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -139,7 +138,7 @@ public:
     Sheet* activeSheet;
     ColumnHeaderItem* columnHeader;
     RowHeaderItem* rowHeader;
-    KoPart *part;
+    Doc *doc;
 };
 
 CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
@@ -160,7 +159,7 @@ CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
     setAcceptDrops(true);
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
-    d->part = doc->documentPart();
+    d->doc = doc;
     d->rowHeader = 0;
     d->columnHeader = 0;
 
@@ -180,7 +179,7 @@ CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
 
 CanvasItem::~CanvasItem()
 {
-    if (d->part->isReadWrite())
+    if (d->doc->isReadWrite())
         selection()->emitCloseEditor(true);
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);

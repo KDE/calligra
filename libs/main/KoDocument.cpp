@@ -32,6 +32,8 @@
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
+#include "KoMainWindow.h"
+#include "KoView.h"
 
 #include "KoOdfStylesReader.h"
 #include "KoOdfReadStore.h"
@@ -126,7 +128,8 @@ public:
         storeInternal(false),
         isLoading(false),
         undoStack(0),
-        modified(0)
+        modified(false),
+        readwrite(false)
     {
         confirmNonNativeSave[0] = true;
         confirmNonNativeSave[1] = true;
@@ -189,6 +192,7 @@ public:
 
 
     bool modified;
+    bool readwrite;
 
 };
 
@@ -500,14 +504,25 @@ void KoDocument::slotAutoSave()
 
 void KoDocument::setReadWrite(bool readwrite)
 {
-    d->parentPart->setReadWrite(readwrite);
+    d->readwrite = readwrite;
     setAutoSave(d->autoSaveDelay);
+
+
+    // XXX: this doesn't belong in KoDocument
+    foreach(KoView *view, d->parentPart->views()) {
+        view->updateReadWrite(readwrite);
+    }
+
+    foreach(KoMainWindow *mainWindow, d->parentPart->mainWindows()) {
+        mainWindow->setReadWrite(readwrite);
+    }
+
 }
 
 void KoDocument::setAutoSave(int delay)
 {
     d->autoSaveDelay = delay;
-    if (d->parentPart->isReadWrite() && d->autoSaveDelay > 0)
+    if (isReadWrite() && d->autoSaveDelay > 0)
         d->autoSaveTimer.start(d->autoSaveDelay * 1000);
     else
         d->autoSaveTimer.stop();
@@ -531,11 +546,7 @@ void KoDocument::setDocumentRdf(KoDocumentRdfBase *rdfDocument)
 
 bool KoDocument::isModified() const
 {
-    if (d->parentPart->isModified()) {
-        //kDebug(30003)<<" Modified doc='"<<url().url()<<"' extern="<<isStoredExtern();
-        return true;
-    }
-    return false;
+    return d->modified;
 }
 
 bool KoDocument::saveNativeFormat(const QString & file)
@@ -1773,10 +1784,21 @@ bool KoDocument::isStoredExtern() const
     return !storeInternal() && hasExternURL();
 }
 
+
+void KoDocument::setModified()
+{
+    d->modified = true;
+}
+
 void KoDocument::setModified(bool mod)
 {
     if (isAutosaving())   // ignore setModified calls due to autosaving
         return;
+
+    if ( !d->readwrite && d->modified ) {
+        kError(1000) << "Can't set a read-only document to 'modified' !" << endl;
+        return;
+    }
 
     //kDebug(30003)<<" url:" << url.path();
     //kDebug(30003)<<" mod="<<mod<<" MParts mod="<<KoParts::ReadWritePart::isModified()<<" isModified="<<isModified();
@@ -1791,7 +1813,6 @@ void KoDocument::setModified(bool mod)
         return;
 
     d->modified = mod;
-    d->parentPart->setModified(mod);
 
     if (mod) {
         d->isEmpty = false;
@@ -2201,11 +2222,6 @@ int KoDocument::pageCount() const {
 
 void KoDocument::setupOpenFileSubProgress() {}
 
-void KoDocument::setModified() {
-    d->modified = true;
-    d->parentPart->setModified(true);
-}
-
 
 QString KoDocument::localFilePath() const
 {
@@ -2225,6 +2241,10 @@ KoDocumentInfoDlg *KoDocument::createDocumentInfoDialog(QWidget *parent, KoDocum
     return new KoDocumentInfoDlg(parent, docInfo);
 }
 
+bool KoDocument::isReadWrite() const
+{
+    return d->readwrite;
+}
 
 
 #include <KoDocument.moc>

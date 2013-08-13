@@ -568,6 +568,7 @@ void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
 
 void KoMainWindow::setReadWrite(bool readwrite)
 {
+    d->rootDocument->setReadWrite(readwrite);
     d->saveAction->setEnabled(readwrite);
     d->importFile->setEnabled(readwrite);
     d->readOnly =  !readwrite;
@@ -750,8 +751,9 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
     updateVersionsFileAction(newdoc);
 
     KFileItem file(url, newdoc->mimeType(), KFileItem::Unknown);
-    if (!file.isWritable())
-        newdoc->setReadWrite(false);
+    if (!file.isWritable()) {
+        setReadWrite(false);
+    }
     return true;
 }
 

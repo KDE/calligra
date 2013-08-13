@@ -270,14 +270,8 @@ public: // Part stuff
     KUrl url() const;
     void setUrl(const KUrl &url);
 
-    bool isModified() const;
-    virtual void setModified( bool modified );
-
     QString localFilePath() const;
     void setLocalFilePath( const QString &localFilePath );
-
-    bool isReadWrite() const;
-    void setReadWrite(bool readwrite);
 
     virtual bool closeUrl();
     QString mimeType() const;
