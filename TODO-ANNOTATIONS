@@ -9,14 +9,22 @@ Bugs
 
  * Fix cursor movement and placement within the annotation shape.
  
- * Fix right position of refrence text.
+ * Fix right position of reference text.
  
- * Fix expanding problem, expanded shape doesn't move down other shapes.
+ * Expanding: expanded shape doesn't move down other shapes.
 
- * Fix saving bug that writes <text:annotation-end> but not <text:annotation>
+ * saving: writes <office:annotation-end> before <office:annotation>
+
+ * When new annotations are created, they are placed in the upper left
+   corner and not connected.
+
+ * saved name is empty.
+
+ * Can't load its own saved annotations
 
 
 ---------------- Milestone 1: merge with master ----------------
+
 
  * Save state of view_showNotes in the words rc file under .kde
    (or before the merge?)
