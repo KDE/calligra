@@ -350,6 +350,7 @@ void MainWindow::minimize()
 
 void MainWindow::closeWindow()
 {
+    d->desktopView->setNoCleanup(true);
     //For some reason, close() does not work even if setAllowClose(true) was called just before this method.
     //So instead just completely quit the application, since we are using a single window anyway.
     DocumentManager::instance()->closeDocument();
@@ -360,6 +361,7 @@ void MainWindow::closeWindow()
 
 bool MainWindow::Private::queryClose()
 {
+    desktopView->setNoCleanup(true);
     if (DocumentManager::instance()->document() == 0)
         return true;
 
