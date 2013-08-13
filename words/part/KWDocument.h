@@ -91,6 +91,17 @@ public:
     virtual int pageCount() const {
         return pageManager()->pageCount();
     }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return "application/vnd.oasis.opendocument.text"; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const {return "application/vnd.oasis.opendocument.text";}
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/vnd.oasis.opendocument.text-master"
+                             << "application/vnd.oasis.opendocument.text-template";
+    }
+
 
     bool isMasterDocument() const;
     void setIsMasterDocument(bool isMasterDocument);

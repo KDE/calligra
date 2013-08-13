@@ -79,6 +79,17 @@ public:
     /// reimplemented form KoDocument
     virtual bool saveOdf(SavingContext &documentContext);
 
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return "application/vnd.oasis.opendocument.graphics"; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const { return "application/vnd.oasis.opendocument.graphics"; }
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/vnd.oasis.opendocument.graphics"
+                             << "application/vnd.oasis.opendocument.graphics-template";
+    }
+
     /// implemented from KoShapeController
     virtual void addShape(KoShape* shape);
     /// implemented from KoShapeController

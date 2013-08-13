@@ -42,6 +42,19 @@ public:
     explicit FormulaDocument(KoFormulaShape *parent);
     ~FormulaDocument();
     
+
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return "application/vnd.oasis.opendocument.formula"; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const {return "application/vnd.oasis.opendocument.formula";}
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/x-kformula"
+                             << "application/vnd.oasis.opendocument.formula-template"
+                             << "text/mathml";
+    }
+
     bool loadOdf( KoOdfReadStore &odfStore );
     bool loadXML( const KoXmlDocument &doc, KoStore *store );
     

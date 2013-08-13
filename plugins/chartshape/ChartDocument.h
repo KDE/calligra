@@ -42,7 +42,15 @@ class ChartDocument : public KoDocument
 public:
     explicit ChartDocument(ChartShape *parent);
     ~ChartDocument();
-    
+
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return ""; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const { return ""; }
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const { return QStringList(); }
+
+
     bool loadOdf(KoOdfReadStore &odfStore);
     bool loadXML(const KoXmlDocument &doc, KoStore *store);
     

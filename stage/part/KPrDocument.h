@@ -44,6 +44,16 @@ public:
     /// reimplemented
     virtual KoOdf::DocumentType documentType() const;
 
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return "application/vnd.oasis.opendocument.presentation"; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const {return "application/vnd.oasis.opendocument.presentation";}
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/vnd.oasis.opendocument.presentation-template";
+    }
+
     /**
      * @brief Add animation to shape
      *

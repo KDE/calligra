@@ -893,7 +893,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     KUrl suggestedURL = d->rootDocument->url();
 
     QStringList mimeFilter = KoFilterManager::mimeFilter(_native_format,
-            KoFilterManager::Export, d->rootDocument->extraNativeMimeTypes(KoDocument::ForExport));
+            KoFilterManager::Export, d->rootDocument->extraNativeMimeTypes());
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
         kDebug(30003) << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
@@ -1014,7 +1014,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
             // don't change this line unless you know what you're doing :)
             if (!justChangingFilterOptions || d->rootDocument->confirmNonNativeSave(isExporting())) {
-                if (!d->rootDocument->isNativeFormat(outputFormat, KoDocument::ForExport))
+                if (!d->rootDocument->isNativeFormat(outputFormat))
                     wantToSave = exportConfirmation(outputFormat);
             }
 
@@ -1082,7 +1082,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
             ret = false;
     } else { // saving
         bool needConfirm = d->rootDocument->confirmNonNativeSave(false) &&
-                           !d->rootDocument->isNativeFormat(oldOutputFormat, KoDocument::ForExport);
+                           !d->rootDocument->isNativeFormat(oldOutputFormat);
         if (!needConfirm ||
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
            ) {

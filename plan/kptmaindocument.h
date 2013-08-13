@@ -61,6 +61,17 @@ public:
     explicit MainDocument(KoPart *part = 0);
     ~MainDocument();
 
+
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return "application/x-vnd.kde.plan.work"; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const { return ""; }
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/x-vnd.kde.kplato.work";
+    }
+
     void setReadWrite( bool rw );
     void configChanged();
 

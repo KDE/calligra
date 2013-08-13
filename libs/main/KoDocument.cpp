@@ -579,7 +579,7 @@ bool KoDocument::saveFile()
     emit statusBarMessage(i18n("Saving..."));
     bool ret = false;
     bool suppressErrorDialog = false;
-    if (!isNativeFormat(outputMimeType, ForExport)) {
+    if (!isNativeFormat(outputMimeType)) {
         kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
         if (!d->filterManager)
@@ -1478,7 +1478,7 @@ bool KoDocument::openFile()
 
     setupOpenFileSubProgress();
 
-    if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
+    if (!isNativeFormat(typeName.toLatin1())) {
         if (!d->filterManager)
             d->filterManager = new KoFilterManager(this, d->progressUpdater);
         KoFilter::ConversionStatus status;
@@ -1657,7 +1657,7 @@ void KoDocument::setMimeTypeAfterLoading(const QString& mimeType)
 
     d->outputMimeType = d->mimeType;
 
-    const bool needConfirm = !isNativeFormat(d->mimeType, ForImport);
+    const bool needConfirm = !isNativeFormat(d->mimeType);
     setConfirmNonNativeSave(false, needConfirm);
     setConfirmNonNativeSave(true, needConfirm);
 }
@@ -2176,65 +2176,11 @@ QDomDocument KoDocument::saveXML()
     return QDomDocument();
 }
 
-KService::Ptr KoDocument::nativeService()
-{
-    if (!d->nativeService)
-        d->nativeService = KoServiceProvider::readNativeService();
-
-    return d->nativeService;
-}
-
-QByteArray KoDocument::nativeFormatMimeType() const
-{
-    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
-    if (!service) {
-        kWarning(30003) << "No native service defined to read NativeMimeType from desktop file!";
-        return QByteArray();
-    }
-    QByteArray nativeMimeType = service->property("X-KDE-NativeMimeType").toString().toLatin1();
-#ifndef NDEBUG
-    if (nativeMimeType.isEmpty()) {
-        // shouldn't happen, let's find out why it happened
-        if (!service->serviceTypes().contains("Calligra/Part"))
-            kWarning(30003) << "Wrong desktop file, Calligra/Part isn't mentioned";
-        else if (!KServiceType::serviceType("Calligra/Part"))
-            kWarning(30003) << "The Calligra/Part service type isn't installed!";
-        else
-            kWarning(30003) << "Failed to read NativeMimeType from desktop file!";
-    }
-#endif
-    return nativeMimeType;
-}
-
-QByteArray KoDocument::nativeOasisMimeType() const
-{
-    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
-    if (!service) {
-        return KoDocument::nativeFormatMimeType();
-    }
-    return service->property("X-KDE-NativeOasisMimeType").toString().toLatin1();
-}
-
-
-
-bool KoDocument::isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const
+bool KoDocument::isNativeFormat(const QByteArray& mimetype) const
 {
     if (mimetype == nativeFormatMimeType())
         return true;
-    return extraNativeMimeTypes(importExportType).contains(mimetype);
-}
-
-QStringList KoDocument::extraNativeMimeTypes(KoDocument::ImportExportType importExportType) const
-{
-    Q_UNUSED(importExportType);
-    QStringList lst;
-    // This implementation is temporary while we treat both calligra-1.3 and OASIS formats as native.
-    // But it's good to have this virtual method, in case some app want to
-    // support more than one native format.
-    KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
-    if (!service)   // can't happen
-        return lst;
-    return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+    return extraNativeMimeTypes().contains(mimetype);
 }
 
 int KoDocument::supportedSpecialFormats() const

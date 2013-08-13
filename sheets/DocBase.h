@@ -72,6 +72,17 @@ public:
 
     virtual void setReadWrite(bool readwrite = true);
 
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return "application/vnd.oasis.opendocument.spreadsheet"; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const {return "application/vnd.oasis.opendocument.spreadsheet";}
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/vnd.oasis.opendocument.spreadsheet-template"
+                             << "application/x-kspread";
+    }
+
     /**
      * @return the Map that belongs to this Document
      */

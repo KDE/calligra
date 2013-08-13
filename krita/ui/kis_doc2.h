@@ -75,6 +75,18 @@ public:
     /// Unused
     virtual bool saveOdf(SavingContext &documentContext);
 
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return "application/x-krita"; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const { return ""; }
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/x-krita"
+                             << "image/openraster"
+                             << "application/x-krita-flipbook";
+    }
+
     virtual QDomDocument saveXML();
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 

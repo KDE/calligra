@@ -145,7 +145,7 @@ public:
      * delivers.
      * This comes from the X-KDE-NativeMimeType key in the .desktop file.
      */
-    QByteArray nativeFormatMimeType() const;
+    virtual QByteArray nativeFormatMimeType() const = 0;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
@@ -154,19 +154,14 @@ public:
      *
      * @return the oasis mimetype or, if it hasn't one, the nativeformatmimetype.
      */
-    QByteArray nativeOasisMimeType() const;
-
-    enum ImportExportType {
-        ForExport,
-        ForImport
-    };
+    virtual QByteArray nativeOasisMimeType() const = 0;
 
     /// Checks whether a given mimetype can be handled natively.
-    bool isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const;
+    bool isNativeFormat(const QByteArray& mimetype) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
-    virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
+    virtual QStringList extraNativeMimeTypes() const = 0;
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
     enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
@@ -777,7 +772,6 @@ private:
 
     QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
-    KService::Ptr nativeService();
     bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
     bool loadNativeFormatFromStore(const QString& file);
     bool loadNativeFormatFromStoreInternal(KoStore *store);
