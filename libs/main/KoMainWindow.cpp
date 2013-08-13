@@ -870,7 +870,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
     bool reset_url;
 
-    if (d->rootPart->url().isEmpty()) {
+    if (d->rootDocument->url().isEmpty()) {
         emit saveDialogShown();
         reset_url = true;
         saveas = true;
@@ -882,15 +882,15 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     connect(d->rootPart, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     connect(d->rootPart, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
-    KUrl oldURL = d->rootPart->url();
-    QString oldFile = d->rootPart->localFilePath();
+    KUrl oldURL = d->rootDocument->url();
+    QString oldFile = d->rootDocument->localFilePath();
 
     QByteArray _native_format = d->rootDocument->nativeFormatMimeType();
     QByteArray oldOutputFormat = d->rootDocument->outputMimeType();
 
     int oldSpecialOutputFlag = d->rootDocument->specialOutputFlag();
 
-    KUrl suggestedURL = d->rootPart->url();
+    KUrl suggestedURL = d->rootDocument->url();
 
     QStringList mimeFilter = KoFilterManager::mimeFilter(_native_format,
             KoFilterManager::Export, d->rootDocument->extraNativeMimeTypes(KoDocument::ForExport));
@@ -931,7 +931,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
     bool ret = false;
 
-    if (d->rootPart->url().isEmpty() || saveas) {
+    if (d->rootDocument->url().isEmpty() || saveas) {
         // if you're just File/Save As'ing to change filter options you
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
@@ -972,7 +972,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                 kDebug(30003) << "KoMainWindow::saveDocument outputFormat =" << outputFormat;
 
                 if (!isExporting())
-                    justChangingFilterOptions = (newURL == d->rootPart->url()) &&
+                    justChangingFilterOptions = (newURL == d->rootDocument->url()) &&
                                                 (outputFormat == d->rootDocument->mimeType()) &&
                                                 (specialOutputFlag == oldSpecialOutputFlag);
                 else
@@ -1046,7 +1046,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
                 d->rootDocument->setOutputMimeType(outputFormat, specialOutputFlag);
                 if (!isExporting()) {  // Save As
-                    ret = d->rootPart->saveAs(newURL);
+                    ret = d->rootDocument->saveAs(newURL);
 
                     if (ret) {
                         kDebug(30003) << "Successful Save As!";
@@ -1055,7 +1055,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                     } else {
                         kDebug(30003) << "Failed Save As!";
                         d->rootDocument->setUrl(oldURL);
-                        d->rootPart->setLocalFilePath(oldFile);
+                        d->rootDocument->setLocalFilePath(oldFile);
                         d->rootDocument->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
                     }
                 } else { // Export
@@ -1087,12 +1087,12 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
            ) {
             // be sure d->rootDocument has the correct outputMimeType!
-            ret = d->rootPart->save();
+            ret = d->rootDocument->save();
 
             if (!ret) {
                 kDebug(30003) << "Failed Save!";
-                d->rootPart->setUrl(oldURL);
-                d->rootPart->setLocalFilePath(oldFile);
+                d->rootDocument->setUrl(oldURL);
+                d->rootDocument->setLocalFilePath(oldFile);
             }
         } else
             ret = false;

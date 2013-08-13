@@ -465,7 +465,7 @@ bool KoApplication::start()
                                           <<"\t100" << endl;
                         }
                         if (!roundtripFileName.isEmpty()) {
-                            part->saveAs(KUrl("file:"+roundtripFileName));
+                            part->document()->saveAs(KUrl("file:"+roundtripFileName));
                         }
                         // close the document
                         mainWindow->slotFileQuit();

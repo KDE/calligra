@@ -124,7 +124,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
         image = m_doc->generatePreview(size).toImage();
     }
 
-    m_part->closeUrl();
+    m_doc->closeUrl();
 
     return m_loadingCompleted;
 }

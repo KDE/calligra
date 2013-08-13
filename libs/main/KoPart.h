@@ -267,49 +267,17 @@ public: // Part stuff
 
     virtual void setManager( KoMainWindow * manager );
 
-    KUrl url() const;
-    void setUrl(const KUrl &url);
-
-    QString localFilePath() const;
-    void setLocalFilePath( const QString &localFilePath );
-
-    virtual bool closeUrl();
-    QString mimeType() const;
-
-    virtual bool saveAs( const KUrl &url );
-
-public slots:
-
-    virtual bool openUrl( const KUrl &url );
-    virtual bool save();
-    bool waitSaveComplete();
-
-signals:
-
-    void completed();
-    void canceled(const QString &);
-
 protected:
 
     /// Call in the constructor of the subclass: setComponentData(AppFactory::componentData());
     virtual void setComponentData(const KComponentData &componentData);
-    void abortLoad();
 
 private:
-
-    bool queryClose();
-    bool saveToUrl();
 
     Q_DISABLE_COPY(KoPart)
 
     class Private;
     Private *const d;
-
-    Q_PRIVATE_SLOT(d, void _k_slotJobFinished( KJob * job ))
-    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KJob*))
-    Q_PRIVATE_SLOT(d, void _k_slotGotMimeType(KIO::Job *job, const QString &mime))
-    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished( KJob * job ))
-
 
 };
 

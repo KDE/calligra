@@ -532,7 +532,7 @@ void KisView2::dropEvent(QDropEvent *event)
                     }
                     else if (action == replaceCurrentDocument) {
                         if (m_d->doc->isModified()) {
-                            m_d->doc->documentPart()->save();
+                            m_d->doc->save();
                         }
 
                         if (mainWindow() != 0) {
@@ -1116,7 +1116,7 @@ void KisView2::slotSaveIncremental()
         return;
     }
     m_d->doc->setSaveInBatchMode(true);
-    m_d->doc->documentPart()->saveAs(fileName);
+    m_d->doc->saveAs(fileName);
     m_d->doc->setSaveInBatchMode(false);
 
     mainWindow()->updateCaption();
@@ -1182,7 +1182,7 @@ void KisView2::slotSaveIncrementalBackup()
             KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
             return;
         }
-        m_d->doc->documentPart()->saveAs(fileName);
+        m_d->doc->saveAs(fileName);
 
         mainWindow()->updateCaption();
     }
@@ -1219,7 +1219,7 @@ void KisView2::slotSaveIncrementalBackup()
 
         // Save both as backup and on current file for interapplication workflow
         m_d->doc->setSaveInBatchMode(true);
-        m_d->doc->documentPart()->saveAs(backupFileName);
+        m_d->doc->saveAs(backupFileName);
         m_d->doc->setSaveInBatchMode(false);
 
         mainWindow()->updateCaption();

@@ -740,14 +740,29 @@ protected:
 public:
 
     QString localFilePath() const;
-
-    virtual KUrl url() const;
-
-    virtual void setUrl(const KUrl& url);
+    void setLocalFilePath( const QString &localFilePath );
 
     virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
+
+    KUrl url() const;
+    void setUrl(const KUrl &url);
+
+
+    virtual bool closeUrl();
+
+    virtual bool saveAs( const KUrl &url );
+
+public slots:
+
+    virtual bool save();
+    bool waitSaveComplete();
+
+signals:
+
+    void completed();
+    void canceled(const QString &);
 
 private slots:
 
@@ -772,8 +787,19 @@ private:
 
     QString prettyPathOrUrl() const;
 
+    bool queryClose();
+    bool saveToUrl();
+    bool openUrlInternal(const KUrl &url);
+
+    void abortLoad();
+
     class Private;
     Private *const d;
+
+    Q_PRIVATE_SLOT(d, void _k_slotJobFinished( KJob * job ))
+    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KJob*))
+    Q_PRIVATE_SLOT(d, void _k_slotGotMimeType(KIO::Job *job, const QString &mime))
+    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished( KJob * job ))
 };
 
 Q_DECLARE_METATYPE(KoDocument*)

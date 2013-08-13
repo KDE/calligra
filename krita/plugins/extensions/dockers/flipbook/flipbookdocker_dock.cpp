@@ -176,7 +176,7 @@ void FlipbookDockerDock::newFlipbook()
 
     KisImageSP oldImage = m_canvas->view()->image();
     if (m_canvas->view()->document()->isModified()) {
-        m_canvas->view()->document()->documentPart()->save();
+        m_canvas->view()->document()->save();
         m_canvas->view()->document()->setModified(false);
     }
 
@@ -332,7 +332,7 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 
     if (item && item->document() && item->document()->image()) {
         if (m_canvas->view()->document()->isModified()) {
-            m_canvas->view()->document()->documentPart()->save();
+            m_canvas->view()->document()->save();
             m_canvas->view()->document()->setModified(false);
         }
         m_canvas->view()->document()->setUrl(item->filename());

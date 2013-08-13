@@ -962,7 +962,7 @@ void MainDocument::insertFile( const QString &filename, Node *parent, Node *afte
     connect(part, SIGNAL(completed()), SLOT(insertFileCompleted()));
     connect(part, SIGNAL(canceled(QString)), SLOT(insertFileCancelled(QString)));
 
-    part->openUrl( KUrl( filename ) );
+    doc->openUrl( KUrl( filename ) );
 }
 
 void MainDocument::insertFileCompleted()
