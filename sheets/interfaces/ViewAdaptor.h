@@ -26,6 +26,7 @@
 #ifndef CALLIGRA_SHEETS_VIEW_ADAPTOR
 #define CALLIGRA_SHEETS_VIEW_ADAPTOR
 
+#ifndef QT_NO_DBUS
 #include <QColor>
 #include <QRect>
 #include <QString>
@@ -259,5 +260,6 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
+#endif // QT_NO_DBUS
 
 #endif // CALLIGRA_SHEETS_VIEW_ADAPTOR
