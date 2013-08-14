@@ -42,5 +42,21 @@ install(TARGETS koodf2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES
     koodf2_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+    KoCell.h
+    KoCellStyle.h
+    KoColumn.h
+    KoColumnStyle.h
+    KoOdfGraphicProperties.h
+    KoOdfParagraphProperties.h
+    KoOdfStyle.h
+    KoOdfStyleManager.h
+    KoOdfStyleProperties.h
+    KoOdfTextProperties.h
+    KoRawCellChild.h
+    KoRow.h
+    KoRowStyle.h
+    KoStyle.h
+    KoTable.h
+    KoTblStyle.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 

@@ -41,7 +41,6 @@
 #include <KoXmlNS.h>
 #include <KoDocument.h>
 #include <KoTextShapeDataBase.h>
-#include <KoTextDocument.h>
 #include <KoBookmarkManager.h>
 #include <KoTextRangeManager.h>
 

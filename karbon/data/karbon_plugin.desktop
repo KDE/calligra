@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Karbon/ViewPlugin
+Comment=GUI functionality for Karbon
+Comment[cs]=Funkcionalita GUI pro Karbon
+Comment[hu]=Grafikus felület a Karbonhoz
+Comment[nl]=Interfacefunctionaliteit voor Karbon
+Comment[pt]=Funcionalidade gráfica para o Karbon
+Comment[pt_BR]=Funcionalidade gráfica para o Karbon
+Comment[sk]=GUI funkcionalita pre Karbon
+Comment[uk]=Функціональність графічного інтерфейсу для Karbon
+Comment[x-test]=xxGUI functionality for Karbonxx
+[PropertyDef::X-Karbon-Version]
+Type=int

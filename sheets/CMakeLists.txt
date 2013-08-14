@@ -314,6 +314,7 @@ install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/she
 install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES  sheets_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 

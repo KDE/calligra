@@ -14,7 +14,7 @@ target_link_libraries( calligra_filter_xfig2odg
 
 install(TARGETS calligra_filter_xfig2odg  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-install( FILES  karbon_xfig_import.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES  calligra_filter_xfig2odg.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
     install( FILES  karbon_xfig_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
