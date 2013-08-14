@@ -30,6 +30,7 @@
 
 #include <kcalendarsystem.h>
 #include <kmessagebox.h>
+#include <kdeversion.h>
 
 using namespace Calligra::Sheets;
 
