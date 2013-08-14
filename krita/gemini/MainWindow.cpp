@@ -89,7 +89,7 @@ public:
         , desktopViewProxy(0)
         , forceDesktop(false)
         , forceSketch(false)
-        , wasMaximized(true)
+        , wasMaximized(false)
         , temporaryFile(false)
     {
 #ifdef Q_OS_WIN
@@ -251,10 +251,10 @@ void MainWindow::switchToDesktop()
         d->sketchView->setParent(0);
         setCentralWidget(d->desktopView);
     }
-    //if(d->wasMaximized)
+    if(d->wasMaximized)
         showMaximized();
-    //else
-        //showNormal();
+    else
+        showNormal();
     qApp->processEvents();
     if(d->desktopView && qobject_cast<KisView2*>(d->desktopView->rootView()))
     {
