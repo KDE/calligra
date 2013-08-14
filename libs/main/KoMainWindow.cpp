@@ -40,6 +40,7 @@
 #include "KoDockerManager.h"
 #include "KoServiceProvider.h"
 #include "KoPart.h"
+#include "KoApplication.h"
 
 #include <KoPageLayoutWidget.h>
 #include <KoIcon.h>
@@ -1301,9 +1302,8 @@ void KoMainWindow::slotFileOpen()
     else
         dialog->setCaption(i18n("Import Document"));
 
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
+
     dialog->setMimeFilter(mimeFilter);
     if (dialog->exec() != QDialog::Accepted) {
         delete dialog;

@@ -371,8 +371,7 @@ void KoPart::startCustomDocument()
 KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &componentData,
                                        const QString& templateType)
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                                               KoFilterManager::Import, KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);

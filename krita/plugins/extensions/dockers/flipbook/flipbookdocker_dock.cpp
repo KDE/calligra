@@ -37,6 +37,7 @@
 #include <KoMainWindow.h>
 #include <KoView.h>
 #include <KoToolManager.h>
+#include <KoApplication.h>
 
 #include <kis_image.h>
 #include <kis_view2.h>
@@ -181,9 +182,7 @@ void FlipbookDockerDock::newFlipbook()
     }
 
 
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                                               KoFilterManager::Import,
-                                                               KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),
@@ -246,9 +245,7 @@ void FlipbookDockerDock::openFlipbook()
 
 void FlipbookDockerDock::addImage()
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                                               KoFilterManager::Import,
-                                                               KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),

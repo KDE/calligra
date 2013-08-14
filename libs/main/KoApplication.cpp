@@ -54,12 +54,15 @@
 #include <QFile>
 #include <QSplashScreen>
 #include <QSysInfo>
-
+#include <QStringList>
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
 
 #include <stdlib.h>
+
+
+KoApplication* KoApplication::KoApp = 0;
 
 bool KoApplication::m_starting = true;
 
@@ -82,6 +85,8 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     : KApplication(initHack())
     , d(new KoApplicationPrivate)
 {
+    KoApplication::KoApp = this;
+
     d->nativeMimeType = nativeMimeType;
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
@@ -545,6 +550,16 @@ int KoApplication::documents()
     return nameList.size();
 }
 
+QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) const
+{
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
+    KService::Ptr service = entry.service();
+    return KoFilterManager::mimeFilter(d->nativeMimeType,
+                                       direction,
+                                       service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+}
+
+
 bool KoApplication::notify(QObject *receiver, QEvent *event)
 {
     try {
@@ -558,6 +573,11 @@ bool KoApplication::notify(QObject *receiver, QEvent *event)
     }
     return false;
 
+}
+
+KoApplication *KoApplication::koApplication()
+{
+    return KoApp;
 }
 
 #include <KoApplication.moc>
