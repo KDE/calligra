@@ -51,7 +51,6 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
-    KoServiceProvider.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
@@ -166,7 +165,6 @@ install( FILES
     KoMainWindow.h
     MacSupport.h
     KoModeBoxFactory.h
-    KoServiceProvider.h
     KoPart.h
     KoPrintJob.h
     KoVersionDialog.h

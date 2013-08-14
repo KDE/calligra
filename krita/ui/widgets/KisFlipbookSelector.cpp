@@ -25,7 +25,6 @@
 #include <KoApplication.h>
 #include <KoIcon.h>
 #include <KoFilterManager.h>
-#include <KoServiceProvider.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

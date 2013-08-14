@@ -32,7 +32,6 @@
 #include <QLabel>
 #include <QTabBar>
 
-#include <KoServiceProvider.h>
 #include <KoIcon.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
@@ -503,12 +502,8 @@ void KoPAView::importDocument()
     // this needs to go via the filters to get the file in the correct format.
     // For now we only support the native mime types
     QStringList mimeFilter;
-#if 1
+
     mimeFilter << KoOdf::mimeType( d->doc->documentType() ) << KoOdf::templateMimeType( d->doc->documentType() );
-#else
-    mimeFilter = KoFilterManager::mimeFilter( KoServiceProvider::readNativeFormatMimeType(d->doc->componentData()), KoFilterManager::Import,
-                                              KoServiceProvider::readExtraNativeMimeTypes() );
-#endif
 
     dialog->setMimeFilter( mimeFilter );
     if (dialog->exec() == QDialog::Accepted) {

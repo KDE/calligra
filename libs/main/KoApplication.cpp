@@ -34,7 +34,6 @@
 #include "KoMainWindow.h"
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
-#include "KoServiceProvider.h"
 #include "KoPart.h"
 
 #include <kdeversion.h>

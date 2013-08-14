@@ -38,7 +38,6 @@
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
 #include "KoDockerManager.h"
-#include "KoServiceProvider.h"
 #include "KoPart.h"
 #include "KoApplication.h"
 

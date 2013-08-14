@@ -22,7 +22,6 @@
 
 #include "KoMainWindow.h"
 #include "KoDocumentEntry.h"
-#include "KoServiceProvider.h"
 #include "KoPart.h"
 
 #include <QFile>

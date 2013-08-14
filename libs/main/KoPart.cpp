@@ -30,7 +30,6 @@
 #include "KoOpenPane.h"
 #include "KoProgressProxy.h"
 #include "KoFilterManager.h"
-#include "KoServiceProvider.h"
 #include <KoDocumentInfoDlg.h>
 
 #include <KoCanvasController.h>

@@ -32,7 +32,6 @@
 
 #include <KoApplication.h>
 #include <KoFilterManager.h>
-#include <KoServiceProvider.h>
 
 #include <kis_config_widget.h>
 #include <kis_paint_device.h>
