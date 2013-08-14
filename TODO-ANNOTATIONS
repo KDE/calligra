@@ -10,8 +10,6 @@ Bugs
  * Fix cursor movement and placement within the annotation shape.
  
  * Fix right position of reference text.
- 
- * saving: writes <office:annotation-end> before <office:annotation>
 
  * When new annotations are created, they are placed in the upper left
    corner and not connected.
