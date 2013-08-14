@@ -169,5 +169,4 @@ X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=application/x-kexiproject-sqlite,application/x-kexiproject-shortcut,application/x-kexiproject-sqlite3,application/x-sqlite3,application/x-kexi-connectiondata,application/x-msaccess
 X-DocPath=kexi/index.html
 X-KDE-NativeMimeType=application/x-kexiproject-sqlite
-X-KDE-NOTKoDocumentEmbeddable=true
 Categories=Qt;KDE;Office;
