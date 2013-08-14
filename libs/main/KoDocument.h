@@ -27,7 +27,6 @@
 #include <QTransform>
 #include <QList>
 
-#include <kservice.h>
 #include <kcomponentdata.h>
 
 #include <KoUnit.h>
@@ -38,6 +37,9 @@
 #include <KoXmlReader.h>
 #include <KoOdfDocument.h>
 #include <kundo2stack.h>
+
+#include <klocale.h>
+#include <kglobal.h>
 
 class KUndo2Command;
 class KoPart;

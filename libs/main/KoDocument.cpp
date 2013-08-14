@@ -27,7 +27,6 @@
 
 #include "KoDocument.h"
 #include "KoPart.h"
-#include "KoServiceProvider.h"
 #include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
@@ -240,8 +239,6 @@ public:
 
     KoGridData gridData;
     KoGuidesData guidesData;
-
-    KService::Ptr nativeService;
 
     bool isEmpty;
 
