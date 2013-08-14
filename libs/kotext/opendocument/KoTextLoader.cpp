@@ -1105,8 +1105,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     //        I'm not sure exactly what right now.
                     d->textSharedData->shapeInserted(shape, element, d->context);
                     annotation->setAnnotationShape(shape);
-
-                    annotation->setRangeEnd(cursor.position());
                 }
                 else {
                     kWarning(32500) << "Could not load annotation";

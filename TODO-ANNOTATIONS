@@ -11,14 +11,6 @@ Bugs
  
  * Fix right position of reference text.
 
- * When new annotations are created, they are placed in the upper left
-   corner and not connected.
-
- * saved name is empty.
-
- * Can't load its own saved annotations
-
-
 ---------------- Milestone 1: merge with master ----------------
 
 
