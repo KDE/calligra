@@ -59,13 +59,13 @@ KoAnnotationLayoutManager::KoAnnotationLayoutManager(QObject *parent)
     :d(new Private(612.0))
 {
     Q_UNUSED(parent);
-    if (d->shapeManager) {
-        disconnect(d->shapeManager, SIGNAL(shapeChanged(KoShape*)), this, SLOT(updateLayout(KoShape*)));
-    }
 }
 
 void KoAnnotationLayoutManager::setShapeManager(KoShapeManager *shapeManager)
 {
+    if (d->shapeManager) {
+        disconnect(d->shapeManager, SIGNAL(shapeChanged(KoShape*)), this, SLOT(updateLayout(KoShape*)));
+    }
     d->shapeManager = shapeManager;
     connect(d->shapeManager, SIGNAL(shapeChanged(KoShape*)), this, SLOT(updateLayout(KoShape*)));
 }
