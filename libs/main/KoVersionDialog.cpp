@@ -201,7 +201,11 @@ void KoVersionDialog::slotOpen()
     tmp.flush();
 
     if (!m_doc->documentPart()->mainWindows().isEmpty()) { //open the version in a new window if possible
-        KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
+        KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(m_doc->nativeOasisMimeType());
+        if (entry.isEmpty()) {
+            entry = KoDocumentEntry::queryByMimeType(m_doc->nativeFormatMimeType());
+        }
+        Q_ASSERT(!entry.isEmpty());
         QString errorMsg;
         KoPart *part= entry.createKoPart(&errorMsg);
         if (!part) {
