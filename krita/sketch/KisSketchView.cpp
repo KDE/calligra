@@ -80,6 +80,7 @@
 #include "cpuid.h"
 #include "DocumentManager.h"
 #include "SketchDeclarativeView.h"
+#include <gemini/ViewModeSwitchEvent.h>
 
 class KisSketchView::Private
 {
@@ -367,6 +368,72 @@ void KisSketchView::documentChanged()
     d->resetDocumentPosition();
 }
 
+bool KisSketchView::event( QEvent* event )
+{
+    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            qDebug() << "About to switch!";
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            if(d->view) {
+                KisCanvasResourceProvider* provider = d->view->resourceProvider();
+                syncObject->backgroundColor = provider->bgColor();
+                syncObject->foregroundColor = provider->fgColor();
+                syncObject->exposure = provider->HDRExposure();
+                syncObject->gamma = provider->HDRGamma();
+                syncObject->compositeOp = provider->currentCompositeOp();
+                syncObject->pattern = provider->currentPattern();
+                syncObject->gradient = provider->currentGradient();
+                syncObject->node = provider->currentNode();
+                syncObject->paintOp = provider->currentPreset();
+                syncObject->opacity = provider->opacity();
+                syncObject->globalAlphaLock = provider->globalAlphaLock();
+
+                syncObject->documentOffset = d->view->canvasControllerWidget()->documentOffset();
+                syncObject->zoomLevel = d->view->zoomController()->zoomAction()->effectiveZoom();
+                syncObject->rotationAngle = d->view->canvasBase()->rotationAngle();
+
+                syncObject->initialized = true;
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToSketchModeEvent: {
+            qDebug() << "Switched to sketch";
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            KisConfig cfg;
+            cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+
+            if(d->view && syncObject->initialized) {
+                KisCanvasResourceProvider* provider = d->view->resourceProvider();
+
+                provider->setBGColor(syncObject->backgroundColor);
+                provider->setFGColor(syncObject->foregroundColor);
+                provider->setHDRExposure(syncObject->exposure);
+                provider->setHDRGamma(syncObject->gamma);
+                provider->setCurrentCompositeOp(syncObject->compositeOp);
+                provider->slotPatternActivated(syncObject->pattern);
+                provider->slotGradientActivated(syncObject->gradient);
+                provider->slotNodeActivated(syncObject->node);
+                provider->setPaintOpPreset(syncObject->paintOp);
+                provider->setOpacity(syncObject->opacity);
+                provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
+
+                d->view->canvasControllerWidget()->setScrollBarValue(syncObject->documentOffset);
+                d->view->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+
+                d->view->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - d->view->canvasBase()->rotationAngle());
+            }
+
+            return true;
+        }
+        default:
+            break;
+    }
+    return QDeclarativeItem::event( event );
+}
+
 bool KisSketchView::sceneEvent(QEvent* event)
 {
     if (d->canvas && d->canvasWidget) {
@@ -428,7 +495,7 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
         // but it's taking a long time to work it out. Problem: When switching orientation,
         // the canvas is rendered wrong, in what looks like an off-by-one ish kind of fashion.
         zoomOut();zoomIn();
-        d->timer->start(100);
+//         d->timer->start(100);
     }
 }
 

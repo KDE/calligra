@@ -21,6 +21,7 @@
 
 #include "MainWindow.h"
 #include "desktopviewproxy.h"
+#include "ViewModeSwitchEvent.h"
 
 #include "opengl/kis_opengl.h"
 
@@ -52,6 +53,7 @@
 #include <KoGlobal.h>
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
+#include <KoZoomController.h>
 
 #include <kis_paintop_preset.h>
 #include <kis_pattern.h>
@@ -223,50 +225,83 @@ void MainWindow::switchToSketch()
 {
     QTime timer;
     timer.start();
-    KisConfig cfg;
-    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
-    d->wasMaximized = isMaximized();
+
+    ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
+    KisView2* view = 0;
+
     if(d->desktopView) {
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        view = qobject_cast<KisView2*>(d->desktopView->rootView());
+
+        //Notify the view we are switching away from that we are about to switch away from it
+        //giving it the possibility to set up the synchronisation object.
+        ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, view, d->sketchView, syncObject);
+        QApplication::sendEvent(view, &aboutToSwitchEvent);
+
         d->desktopView->setParent(0);
-        if(d->sketchKisView && view)
-            cloneResources(view->resourceProvider(), d->sketchKisView->resourceProvider());
     }
+    
+    d->wasMaximized = isMaximized();
+
+    //Notify the new view that we just switched to it, passing our synchronisation object
+    //so it can use those values to sync with the old view.
+    ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, syncObject);
+    QApplication::sendEvent(d->sketchView, &switchedEvent);
+
+    d->wasMaximized = isMaximized();
+
     setCentralWidget(d->sketchView);
     if(d->slateMode)
         showFullScreen();
     emit switchedToSketch();
     qApp->processEvents();
+
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
+
+    delete syncObject;
 }
 
 void MainWindow::switchToDesktop()
 {
     QTime timer;
     timer.start();
-    KisConfig cfg;
-    cfg.setCursorStyle(CURSOR_STYLE_OUTLINE);
+
     if(d->currentSketchPage == "MainPage")
     {
         d->sketchView->setParent(0);
         setCentralWidget(d->desktopView);
     }
+
     if(d->wasMaximized)
         showMaximized();
     else
         showNormal();
+
+    ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
+
+    KisView2* view = 0;
+    if(d->desktopView) {
+        view = qobject_cast<KisView2*>(d->desktopView->rootView());
+    }
+
+    //Notify the view we are switching away from that we are about to switch away from it
+    //giving it the possibility to set up the synchronisation object.
+    ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->sketchView, view, syncObject);
+    QApplication::sendEvent(d->sketchView, &aboutToSwitchEvent);
+
     qApp->processEvents();
-    if(d->desktopView && qobject_cast<KisView2*>(d->desktopView->rootView()))
-    {
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+
+    if(view) {
+        //Notify the new view that we just switched to it, passing our synchronisation object
+        //so it can use those values to sync with the old view.
+        ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, syncObject);
+        QApplication::sendEvent(view, &switchedEvent);
+
         QPoint center = view->rect().center();//->canvasBase()->coordinatesConverter()->widgetCenterPoint().toPoint();
         view->canvasController()->zoomIn(center);
         view->canvasController()->zoomOut(center);
         view->canvasControllerWidget()->setPreferredCenter(view->image()->bounds().center());
-
-        if(d->sketchKisView && view)
-            cloneResources(d->sketchKisView->resourceProvider(), view->resourceProvider());
     }
+
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 

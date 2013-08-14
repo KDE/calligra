@@ -129,6 +129,7 @@
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
 
+#include "krita/gemini/ViewModeSwitchEvent.h"
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -556,6 +557,74 @@ void KisView2::dropEvent(QDropEvent *event)
             }
         }
     }
+}
+
+bool KisView2::event( QEvent* event )
+{
+    switch(static_cast<int>(event->type()))
+    {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            qDebug() << "About to switch!";
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            KisCanvasResourceProvider* provider = resourceProvider();
+            syncObject->backgroundColor = provider->bgColor();
+            syncObject->foregroundColor = provider->fgColor();
+            syncObject->exposure = provider->HDRExposure();
+            syncObject->gamma = provider->HDRGamma();
+            syncObject->compositeOp = provider->currentCompositeOp();
+            syncObject->pattern = provider->currentPattern();
+            syncObject->gradient = provider->currentGradient();
+            syncObject->node = provider->currentNode();
+            syncObject->paintOp = provider->currentPreset();
+            syncObject->opacity = provider->opacity();
+            syncObject->globalAlphaLock = provider->globalAlphaLock();
+
+            syncObject->documentOffset = canvasControllerWidget()->documentOffset();
+            syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
+            syncObject->rotationAngle = canvasBase()->rotationAngle();
+
+            syncObject->initialized = true;
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+            qDebug() << "Switched to desktop";
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            KisConfig cfg;
+            cfg.setCursorStyle(CURSOR_STYLE_OUTLINE);
+
+            if(syncObject->initialized) {
+                KisCanvasResourceProvider* provider = resourceProvider();
+
+
+                provider->setBGColor(syncObject->backgroundColor);
+                provider->setFGColor(syncObject->foregroundColor);
+                provider->setHDRExposure(syncObject->exposure);
+                provider->setHDRGamma(syncObject->gamma);
+                provider->setCurrentCompositeOp(syncObject->compositeOp);
+                provider->slotPatternActivated(syncObject->pattern);
+                provider->slotGradientActivated(syncObject->gradient);
+                provider->slotNodeActivated(syncObject->node);
+                provider->setPaintOpPreset(syncObject->paintOp);
+                provider->setOpacity(syncObject->opacity);
+                provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
+
+                canvasControllerWidget()->setScrollBarValue(syncObject->documentOffset);
+                qDebug() << "New offset" << canvasControllerWidget()->documentOffset();
+
+                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+                canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
+            }
+
+            return true;
+        }
+        default:
+            break;
+    }
+
+    return QWidget::event( event );
 }
 
 KoZoomController *KisView2::zoomController() const

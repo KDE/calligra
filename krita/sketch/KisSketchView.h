@@ -94,6 +94,7 @@ Q_SIGNALS:
     void imageSizeChanged();
 
 protected:
+    virtual bool event(QEvent* event);
     virtual bool sceneEvent(QEvent* event);
 
 private:

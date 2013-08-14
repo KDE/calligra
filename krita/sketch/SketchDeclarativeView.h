@@ -49,6 +49,7 @@ signals:
 
 protected:
     void resizeEvent(QResizeEvent *event);
+    virtual bool event(QEvent* event);
 
     void drawBackground(QPainter *painter, const QRectF &rect);
 private:

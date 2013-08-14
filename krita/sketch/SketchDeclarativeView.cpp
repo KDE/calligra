@@ -23,7 +23,13 @@
 #include <QGLFramebufferObject>
 #include <QDebug>
 #include <QResizeEvent>
-#include <kis_coordinates_converter.h>
+#include <QApplication>
+#include <QGraphicsItem>
+
+#include "kis_coordinates_converter.h"
+#include "kis_config.h"
+
+#include "gemini/ViewModeSwitchEvent.h"
 
 SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     : QDeclarativeView(parent)
@@ -123,4 +129,18 @@ void SketchDeclarativeView::resizeEvent(QResizeEvent *event)
     }
 
     QDeclarativeView::resizeEvent(event);
+}
+
+bool SketchDeclarativeView::event( QEvent* event )
+{
+    if(static_cast<int>(event->type()) == ViewModeSwitchEvent::AboutToSwitchViewModeEvent || static_cast<int>(event->type()) == ViewModeSwitchEvent::SwitchedToSketchModeEvent) {
+        //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
+        //functionality.
+
+        QList<QGraphicsItem*> items = scene()->items();
+        Q_FOREACH(QGraphicsItem* item, items) {
+            scene()->sendEvent(item, event);
+        }
+    }
+    return QGraphicsView::event( event );
 }
