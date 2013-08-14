@@ -521,6 +521,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     }
     if (wasEmpty && !d->aggregate4update.isEmpty())
         QTimer::singleShot(100, this, SLOT(updateTree()));
+    emit shapeChanged(shape);
 }
 
 QList<KoShape*> KoShapeManager::shapes() const

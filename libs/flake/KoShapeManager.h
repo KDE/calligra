@@ -207,6 +207,8 @@ signals:
     void contentChanged();
     /// emitted when an annotation shape removed.
     void shapeRemoved(KoShape *);
+    /// emitted when any shape changed.
+    void shapeChanged(KoShape *);
 
 private:
 

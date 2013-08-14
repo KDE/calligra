@@ -46,17 +46,28 @@ class KoAnnotationLayoutManager::Private
 {
 public:
     Private(qreal annotationX)
-        : x(annotationX)
+        : x(annotationX),
+          shapeManager(0)
     {}
 
     qreal x;
     QList< QPair < QPointF, KoShape * > > annotationShapePositions;
+    KoShapeManager *shapeManager;
 };
 
-KoAnnotationLayoutManager::KoAnnotationLayoutManager(qreal annotationX, QObject *parent)
-    :d(new Private(annotationX))
+KoAnnotationLayoutManager::KoAnnotationLayoutManager(QObject *parent)
+    :d(new Private(612.0))
 {
     Q_UNUSED(parent);
+    if (d->shapeManager) {
+        disconnect(d->shapeManager, SIGNAL(shapeChanged(KoShape*)), this, SLOT(updateLayout(KoShape*)));
+    }
+}
+
+void KoAnnotationLayoutManager::setShapeManager(KoShapeManager *shapeManager)
+{
+    d->shapeManager = shapeManager;
+    connect(d->shapeManager, SIGNAL(shapeChanged(KoShape*)), this, SLOT(updateLayout(KoShape*)));
 }
 
 KoAnnotationLayoutManager::~KoAnnotationLayoutManager()
@@ -142,6 +153,18 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter, KoViewConver
         // draw pointer.
         painter.drawLine(refTextPosition, pointLine);
 
+        i++;
+    }
+}
+
+void KoAnnotationLayoutManager::updateLayout(KoShape *shape)
+{
+    QList< QPair < QPointF, KoShape * > >::const_iterator i = d->annotationShapePositions.constBegin();
+    while (i != d->annotationShapePositions.end() && !d->annotationShapePositions.isEmpty()) {
+        if (i->second == shape) {
+            layoutAnnotationShapes();
+            break;
+        }
         i++;
     }
 }

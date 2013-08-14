@@ -123,8 +123,7 @@ KWDocument::KWDocument(KoPart *part)
 
 #endif
 
-    // FIXME: This (400.0) is just for now i know i know. :)
-    m_annotationManager = new KoAnnotationLayoutManager(612.0);
+
 
 /* TODO reenable after release
     QVariant variant;
@@ -137,6 +136,8 @@ KWDocument::KWDocument(KoPart *part)
         connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
                 inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
     }
+
+    m_annotationManager = new KoAnnotationLayoutManager();
 
     clear();
 }

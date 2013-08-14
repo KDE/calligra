@@ -11,8 +11,6 @@ Bugs
  
  * Fix right position of reference text.
  
- * Expanding: expanded shape doesn't move down other shapes.
-
  * saving: writes <office:annotation-end> before <office:annotation>
 
  * When new annotations are created, they are placed in the upper left
