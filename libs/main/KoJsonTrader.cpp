@@ -25,6 +25,7 @@
 #include <QList>
 #include <QPluginLoader>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QDirIterator>
 
 KoJsonTrader::KoJsonTrader()
@@ -39,19 +40,28 @@ KoJsonTrader* KoJsonTrader::self()
     return s_instance;
 }
 
-QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &constraint) const
+QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &mimetype) const
 {
     Q_UNUSED(servicetype);
-    Q_UNUSED(constraint);
     QList<QPluginLoader *>list;
     QDirIterator dirIter(QCoreApplication::applicationDirPath()+"/../lib/", QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
         QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
-        QJsonObject json = loader->metaData();
+        QJsonObject json = loader->metaData().value("MetaData").toObject();
         if (!json.isEmpty()) {
+            if (! json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
+                continue;
+            }
+
+            if (!mimetype.isEmpty()) {
+                QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+                mimeTypes += json.value("X-KDE-NativeMimeType").toString();
+                if (! mimeTypes.contains(mimetype)) {
+                    continue;
+                }
+            }
             list.append(loader);
-            qDebug() << "plugin: " << dirIter.fileName();
         }
 
     }

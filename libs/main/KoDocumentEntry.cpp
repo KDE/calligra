@@ -55,7 +55,7 @@ KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
     KoPart *part = qobject_cast<KoPart *>(m_loader->instance());
 
     if (!part) {
-        kWarning(30003) << m_loader->errorString();
+        kWarning(30003) << m_loader->errorString() << m_loader->fileName();
         if (errorMsg)
             *errorMsg = m_loader->errorString();
         return 0;
@@ -102,7 +102,6 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
     constr += " exist Library";
     // Query the trader
     const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", constr);
-#if 0
 
     QList<QPluginLoader *>::ConstIterator it = offers.begin();
     unsigned int max = offers.count();
@@ -110,14 +109,14 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
         //kDebug(30003) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
         //               << "   library=" << (*it)->library() << endl;
 
-        if ((*it)->noDisplay())
-            continue;
+//        if ((*it)->noDisplay())
+//            continue;
 
         lst.append(KoDocumentEntry(*it));
     }
 
     if (lst.count() > 1 && !_constr.isEmpty())
         kWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!";
-#endif
+
     return lst;
 }
