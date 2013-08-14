@@ -516,7 +516,6 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-    //     delete d->m_appIface;
     delete d;
 }
 
