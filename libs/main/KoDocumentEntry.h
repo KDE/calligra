@@ -24,12 +24,14 @@
 #include <kservice.h>
 #include <ksharedptr.h>
 #include <QList>
+
 #include "komain_export.h"
 
 class QStringList;
 class KoDocument;
 class KoFilter;
 class KoPart;
+class QPluginLoader;
 
 /**
  *  Represents an available Calligra component
@@ -46,32 +48,32 @@ public:
     /**
      * Represents a valid entry
      */
-    explicit KoDocumentEntry(const KService::Ptr& service);
+    explicit KoDocumentEntry(QPluginLoader *loader);
     ~KoDocumentEntry();
 
-    KService::Ptr service() const {
-        return m_service;
+    QPluginLoader *loader() const {
+        return m_loader;
     }
 
     /**
      * @return TRUE if the service pointer is null
      */
     bool isEmpty() const {
-        return m_service.isNull();
+        return m_loader == 0;
     }
 
     /**
      * @return name of the associated service
      */
     QString name() const {
-        return m_service->name();
+        return m_loader->fileName(); //FIXME should return servicename
     }
 
     /**
      *  Mimetypes (and other service types) which this document can handle.
      */
     QStringList mimeTypes() const {
-        return m_service->serviceTypes();
+        return QStringList();//FIXME m_loader->serviceTypes();
     }
 
     /**
@@ -95,7 +97,7 @@ public:
      *                 You can use it to set additional restrictions on the available
      *                 components.
      */
-    static QList<KoDocumentEntry> query(const QString &  _constr = QString());
+    static QList<KoDocumentEntry> query(const QString & _constr = QString());
 
     /**
      *  This is a convenience function.
@@ -103,10 +105,10 @@ public:
      *  @return a document entry for the Calligra component that supports
      *          the requested mimetype and fits the user best.
      */
-    static KoDocumentEntry queryByMimeType(const QString & mimetype);
+    static KoDocumentEntry queryByMimeType(const QString &mimetype);
 
 private:
-    KService::Ptr m_service;
+    QPluginLoader *m_loader;
 };
 
 #endif

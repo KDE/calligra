@@ -201,7 +201,7 @@ void KoVersionDialog::slotOpen()
     tmp.flush();
 
     if (!m_doc->documentPart()->shells().isEmpty()) { //open the version in a new window if possible
-        KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
+        KoDocumentEntry entry = KoDocumentEntry(0);// FIXME QPluginLOader not KoServiceProvider::readNativeService());
         QString errorMsg;
         KoPart *part= entry.createKoPart(&errorMsg);
         if (!part) {

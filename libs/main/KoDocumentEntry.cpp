@@ -30,15 +30,17 @@
 #include <kdebug.h>
 #include <KoJsonTrader.h>
 
+#include <QPluginLoader>
+
 #include <limits.h> // UINT_MAX
 
 KoDocumentEntry::KoDocumentEntry()
-        : m_service(0)
+        : m_loader(0)
 {
 }
 
-KoDocumentEntry::KoDocumentEntry(const KService::Ptr& service)
-        : m_service(service)
+KoDocumentEntry::KoDocumentEntry(QPluginLoader *loader)
+        : m_loader(loader)
 {
 }
 
@@ -49,12 +51,13 @@ KoDocumentEntry::~KoDocumentEntry()
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
     QString error;
-    KoPart* part = m_service->createInstance<KoPart>(0, QVariantList(), &error);
+    m_loader->load();
+    KoPart *part = qobject_cast<KoPart *>(m_loader->instance());
 
     if (!part) {
-        kWarning(30003) << error;
+        kWarning(30003) << m_loader->errorString();
         if (errorMsg)
-            *errorMsg = error;
+            *errorMsg = m_loader->errorString();
         return 0;
     }
 

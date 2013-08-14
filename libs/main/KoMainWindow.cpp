@@ -607,7 +607,7 @@ void KoMainWindow::reloadRecentFileList()
 
 KoPart* KoMainWindow::createPart() const
 {
-    KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
+    KoDocumentEntry entry = KoDocumentEntry(0);// FIXME QPluginLOader not KoServiceProvider::readNativeService());
     QString errorMsg;
     KoPart *part = entry.createKoPart(&errorMsg);
     if (!part || !errorMsg.isEmpty()) {

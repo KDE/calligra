@@ -32,6 +32,7 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QApplication>
 #include <QByteArray>
+#include <QJsonObject>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -292,8 +293,8 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
+        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
@@ -463,8 +464,8 @@ QStringList KoFilterManager::mimeFilter()
     Vertex *v = new Vertex("supercalifragilistic/x-pialadocious");
     vertices.insert("supercalifragilistic/x-pialadocious", v);
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
+        QStringList nativeMimeTypes = (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+        nativeMimeTypes += (*partIt).loader()->metaData().value("MetaData").toObject().value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
