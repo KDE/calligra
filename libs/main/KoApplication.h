@@ -85,8 +85,6 @@ public:
 
     QList<KoPart*> partList() const;
 
-    void addPart(KoPart* part);
-
     /**
      *  Get the number of currently open documents.
      */

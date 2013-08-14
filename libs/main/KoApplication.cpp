@@ -535,11 +535,6 @@ QList<KoPart*> KoApplication::partList() const
     return d->partList;
 }
 
-void KoApplication::addPart(KoPart* part)
-{
-    d->partList << part;
-}
-
 int KoApplication::documents()
 {
     QSet<QString> nameList;
