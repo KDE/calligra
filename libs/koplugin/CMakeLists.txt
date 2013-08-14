@@ -1,5 +1,6 @@
 set(koplugin_LIB_SRCS
-	KoPluginLoader.cpp
+        KoPluginLoader.cpp
+        KoJsonTrader.cpp
 )
 
 kde4_add_library(koplugin SHARED ${koplugin_LIB_SRCS})

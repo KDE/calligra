@@ -22,14 +22,14 @@
 #define KOJSONTRADER_H
 
 #include <QList>
-#include "komain_export.h"
+#include "koplugin_export.h"
 
 class QPluginLoader;
 
 /**
  *  Support class to fetch a list of relevant plugins
  */
-class KOMAIN_EXPORT KoJsonTrader
+class KOPLUGIN_EXPORT KoJsonTrader
 {
 
 private:

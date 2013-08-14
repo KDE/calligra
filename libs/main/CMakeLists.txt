@@ -26,7 +26,6 @@ set(komain_LIB_SRCS
     KoFileDialog.cpp
     KoGlobal.cpp
     KoGridData.cpp
-    KoJsonTrader.cpp
     KoMainWindow.cpp
     KoPrintingDialog.cpp
     KoPrintJob.cpp

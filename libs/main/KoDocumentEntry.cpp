@@ -26,6 +26,7 @@
 
 #include <kparts/factory.h>
 #include <kservicetype.h>
+#include <kpluginfactory.h>
 
 #include <kdebug.h>
 #include <KoJsonTrader.h>
@@ -51,11 +52,11 @@ KoDocumentEntry::~KoDocumentEntry()
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
     QString error;
-    m_loader->load();
-    KoPart *part = qobject_cast<KoPart *>(m_loader->instance());
+    QObject *obj = m_loader->instance();
+    KPluginFactory *factory = qobject_cast<KPluginFactory *>(obj);
+    KoPart *part = factory->create<KoPart>(0, QVariantList());
 
     if (!part) {
-        kWarning(30003) << m_loader->errorString() << m_loader->fileName();
         if (errorMsg)
             *errorMsg = m_loader->errorString();
         return 0;
@@ -95,13 +96,8 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
 {
 
     QList<KoDocumentEntry> lst;
-    QString constr;
-    if (!_constr.isEmpty()) {
-        constr = '(' + _constr + ") and ";
-    }
-    constr += " exist Library";
     // Query the trader
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", constr);
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", QString());
 
     QList<QPluginLoader *>::ConstIterator it = offers.begin();
     unsigned int max = offers.count();
@@ -116,7 +112,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
     }
 
     if (lst.count() > 1 && !_constr.isEmpty())
-        kWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!";
+        kWarning(30003) << "KoDocumentEntry::query " << " got " << max << " offers!";
 
     return lst;
 }

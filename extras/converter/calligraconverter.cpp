@@ -49,8 +49,9 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
     QString error;
 
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(inputFormat);
-    KoPart *part = documentEntry.createKoPart();
+    KoPart *part = documentEntry.createKoPart(&error);
     if (!part) {
+        qDebug() << "couldn't open a part"<<error;
         return false;
     }
 
