@@ -13,12 +13,12 @@
 class KoServiceType : public KShared
 {
 public:
-    typedef KSharedPtr<KServiceType> Ptr;
+    typedef KSharedPtr<KoServiceType> Ptr;
     typedef QList<Ptr> List;
 
-    KServiceType() {}
-    KServiceType( KDesktopFile *config ) {}
-    KServiceType( QDataStream& _str, int offset ) {}
+    KoServiceType() {}
+    KoServiceType( KDesktopFile *config ) {}
+    KoServiceType( QDataStream& _str, int offset ) {}
 
 #if 0
 

@@ -3,12 +3,13 @@
 
 #include <kurl.h>
 #include <kservicetype.h>
+#include <koservicetype.h>
 
 #include <QStringList>
 #include <QRegExp>
 #include <QDebug>
 
-class KMimeType : public KServiceType
+class KMimeType : public KoServiceType
 {
 public:
     typedef KSharedPtr<KMimeType> Ptr;
@@ -49,6 +50,8 @@ public:
             m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-powerpoint.presentation.macroEnabled.12"), QStringList() << "*.pptm"));
             m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-powerpoint.template.macroEnabled.12"), QStringList() << "*.potm"));
             m_allMimeTypes << Ptr(new KMimeType(QString("application/vnd.ms-powerpoint.slideshow.macroEnabled.12"), QStringList() << "*.ppsm"));
+
+            m_allMimeTypes << Ptr(new KMimeType(QString("application/pdf"), QStringList() << "*.pdf"));
         }
         return m_allMimeTypes;
     }
@@ -374,7 +377,7 @@ protected:
      */
     KMimeType( KMimeTypePrivate &dd, const QString& name, const QString& comment );
 #else
-    KMimeType(const QString& name = QString(), const QStringList &patterns = QStringList()) : KServiceType(0), m_name(name), m_patterns(patterns) {}
+    KMimeType(const QString& name = QString(), const QStringList &patterns = QStringList()) : KoServiceType(0), m_name(name), m_patterns(patterns) {}
 #endif
 
 private:

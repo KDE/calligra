@@ -25,11 +25,10 @@
 #include "KoFilter.h"
 
 #include <kparts/factory.h>
-
 #include <kservicetype.h>
+
 #include <kdebug.h>
-#include <kservicetypetrader.h>
-#include <QFile>
+#include <KoJsonTrader.h>
 
 #include <limits.h> // UINT_MAX
 
@@ -66,12 +65,12 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
 {
     QString constr = QString::fromLatin1("[X-KDE-NativeMimeType] == '%1' or '%2' in [X-KDE-ExtraNativeMimeTypes]").arg(mimetype).arg(mimetype);
 
-    QList<KoDocumentEntry> vec = query(AllEntries, constr);
+    QList<KoDocumentEntry> vec = query(constr);
     if (vec.isEmpty()) {
         kWarning(30003) << "Got no results with " << constr;
         // Fallback to the old way (which was probably wrong, but better be safe)
         QString constr = QString::fromLatin1("'%1' in ServiceTypes").arg(mimetype);
-        vec = query(AllEntries, constr);
+        vec = query(constr);
         if (vec.isEmpty()) {
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
@@ -89,7 +88,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
     return KoDocumentEntry(vec[0]);
 }
 
-QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & _constr)
+QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
 {
 
     QList<KoDocumentEntry> lst;
@@ -98,13 +97,11 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
         constr = '(' + _constr + ") and ";
     }
     constr += " exist Library";
-
-    const bool onlyDocEmb = flags & OnlyEmbeddableDocuments;
-
     // Query the trader
-    const KService::List offers = KServiceTypeTrader::self()->query("Calligra/Part", constr);
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", constr);
+#if 0
 
-    KService::List::ConstIterator it = offers.begin();
+    QList<QPluginLoader *>::ConstIterator it = offers.begin();
     unsigned int max = offers.count();
     for (unsigned int i = 0; i < max; i++, ++it) {
         //kDebug(30003) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
@@ -112,17 +109,12 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
 
         if ((*it)->noDisplay())
             continue;
-        // Maybe this could be done as a trader constraint too.
-        if ((!onlyDocEmb) || ((*it)->property("X-KDE-NOTKoDocumentEmbeddable").toString() != "1")) {
-            KoDocumentEntry d(*it);
-            // Append converted offer
-            lst.append(d);
-            // Next service
-        }
+
+        lst.append(KoDocumentEntry(*it));
     }
 
     if (lst.count() > 1 && !_constr.isEmpty())
         kWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!";
-
+#endif
     return lst;
 }
