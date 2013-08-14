@@ -39,6 +39,8 @@
 
 class KoView;
 
+#define MIME_TYPE "application/x-vnd.kde.plan.work"
+
 /// The main namespace.
 namespace KPlato
 {
@@ -63,13 +65,13 @@ public:
 
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return "application/x-vnd.kde.plan.work"; }
+    virtual QByteArray nativeFormatMimeType() const { return MIME_TYPE; }
     /// reimplemented from KoDocument
     virtual QByteArray nativeOasisMimeType() const { return ""; }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
-        return QStringList() << "application/x-vnd.kde.kplato.work";
+        return QStringList() << MIME_TYPE;
     }
 
     void setReadWrite( bool rw );

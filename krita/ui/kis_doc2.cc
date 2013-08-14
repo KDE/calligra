@@ -103,14 +103,6 @@
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
 
-/**
- * Mime type for this app - not same as file type, but file types
- * can be associated with a mime type and are opened with applications
- * associated with the same mime type
- */
-#define APP_MIMETYPE "application/x-krita"
-
-
 class KisDoc2::KisDocPrivate
 {
 
@@ -175,7 +167,7 @@ KisDoc2::~KisDoc2()
 
 QByteArray KisDoc2::mimeType() const
 {
-    return APP_MIMETYPE;
+    return MIME_TYPE;
 }
 
 void KisDoc2::slotLoadingFinished() {

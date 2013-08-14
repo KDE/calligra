@@ -125,6 +125,11 @@ QList<KoPart::CustomDocumentWidgetItem> KWPart::createCustomDocumentWidgets(QWid
     return widgetList;
 }
 
+KoMainWindow *KWPart::createMainWindow()
+{
+    return new KoMainWindow(MIME_TYPE, componentData());
+}
+
 void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 {
     // print error if kotext not available

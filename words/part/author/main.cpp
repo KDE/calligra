@@ -22,7 +22,7 @@
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 #include "CAuAboutData.h"
-
+#include "KWDocument.h"
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
     QScopedPointer<KAboutData> aboutData(newAuthorAboutData());
@@ -38,7 +38,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KoApplication app;
+    KoApplication app(MIME_TYPE);
 
     if (!app.start())
         return 1;

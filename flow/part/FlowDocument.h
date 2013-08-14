@@ -25,6 +25,8 @@
 #include <KoPADocument.h>
 #include "flow_export.h"
 
+#define MIME_TYPE "application/vnd.oasis.opendocument.graphics"
+
 class KoPart;
 
 class FLOW_EXPORT FlowDocument : public KoPADocument
@@ -39,9 +41,9 @@ public:
 
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return "application/vnd.oasis.opendocument.graphics"; }
+    virtual QByteArray nativeFormatMimeType() const { return MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return "application/vnd.oasis.opendocument.graphics";}
+    virtual QByteArray nativeOasisMimeType() const {return MIME_TYPE;}
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {

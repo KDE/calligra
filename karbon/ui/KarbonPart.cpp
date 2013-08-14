@@ -90,6 +90,11 @@ KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
     return result;
 }
 
+KoMainWindow *KarbonPart::createMainWindow()
+{
+    return new KoMainWindow(MIME_TYPE, componentData());
+}
+
 void KarbonPart::openTemplate(const KUrl& url)
 {
     KoPart::openTemplate(url);

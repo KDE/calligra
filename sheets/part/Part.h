@@ -62,6 +62,8 @@ public:
 
     virtual QGraphicsItem *createCanvasItem(KoDocument *document); /// reimplemented
 
+    virtual KoMainWindow *createMainWindow(); /// reimplemented
+
 protected:
     virtual KoView* createViewInstance(KoDocument *document, QWidget*); /// reimplemented
 

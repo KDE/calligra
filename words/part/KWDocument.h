@@ -55,6 +55,10 @@ class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
 class KoDocumentInfoDlg;
+
+
+#define MIME_TYPE "application/vnd.oasis.opendocument.text"
+
 /**
  * The class that represents a Words document containing content and settings.
  */
@@ -92,9 +96,9 @@ public:
         return pageManager()->pageCount();
     }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return "application/vnd.oasis.opendocument.text"; }
+    virtual QByteArray nativeFormatMimeType() const { return MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return "application/vnd.oasis.opendocument.text";}
+    virtual QByteArray nativeOasisMimeType() const {return MIME_TYPE;}
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {

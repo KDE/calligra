@@ -32,15 +32,15 @@
 
 #include "komain_export.h"
 
+#include <KoMainWindow.h>
+
 class KJob;
 namespace KIO {
   class Job;
 }
 
-class KoMainWindow;
 class KoDocument;
 class KoView;
-class KoMainWindow;
 class KoView;
 class KoOpenPane;
 class QGraphicsItem;
@@ -97,7 +97,7 @@ public:
     /**
      * Create a new main window, but does not add it to the current set of managed main windows.
      */
-    virtual KoMainWindow *createMainWindow();
+    virtual KoMainWindow *createMainWindow() = 0;
 
     /**
      * Appends the mainwindow to the list of mainwindows which show this
@@ -288,6 +288,7 @@ public:
     : KoPart( 0 )
     {}
     KoView *createViewInstance(KoDocument */*document*/, QWidget * /* parent */ ) { return 0; }
+    virtual KoMainWindow *createMainWindow() { return 0; }
 protected:
     virtual QGraphicsItem *createCanvasItem(KoDocument */*document*/) { return 0; }
 };

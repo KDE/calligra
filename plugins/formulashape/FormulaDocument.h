@@ -36,6 +36,8 @@ class KoShapeLoadingContext;
 
 class KoFormulaShape;
 
+#define MIME_TYPE "application/vnd.oasis.opendocument.formula"
+
 class FormulaDocument : public KoDocument
 {
 public:
@@ -44,15 +46,16 @@ public:
     
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return "application/vnd.oasis.opendocument.formula"; }
+    virtual QByteArray nativeFormatMimeType() const { return MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return "application/vnd.oasis.opendocument.formula";}
+    virtual QByteArray nativeOasisMimeType() const {return MIME_TYPE; }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
         return QStringList() << "application/x-kformula"
                              << "application/vnd.oasis.opendocument.formula-template"
                              << "text/mathml";
+
     }
 
     bool loadOdf( KoOdfReadStore &odfStore );

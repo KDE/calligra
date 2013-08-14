@@ -47,6 +47,9 @@ public:
     /// reimplemented from super
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
+    /// reimplemented from super
+    virtual KoMainWindow *createMainWindow();
+
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
 private slots:

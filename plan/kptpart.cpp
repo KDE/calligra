@@ -58,6 +58,11 @@ KoView *Part::createViewInstance(KoDocument *document, QWidget *parent)
     return view;
 }
 
+KoMainWindow *Part::createMainWindow()
+{
+    return new KoMainWindow(MIME_TYPE, componentData());
+}
+
 void Part::openTemplate(const KUrl &url)
 {
     m_document->setLoadingTemplate(true);

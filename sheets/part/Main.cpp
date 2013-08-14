@@ -22,6 +22,7 @@
 
 // #include <dcopclient.h>
 #include "AboutData.h"
+#include "DocBase.h"
 
 using namespace Calligra::Sheets;
 
@@ -36,7 +37,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KoApplication app;
+    KoApplication app(MIME_TYPE);
 
     if (!app.start())
         return 1;

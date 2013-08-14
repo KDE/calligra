@@ -91,6 +91,11 @@ QGraphicsItem *KisPart2::createCanvasItem(KoDocument *document)
     return 0;
 }
 
+KoMainWindow *KisPart2::createMainWindow()
+{
+    return new KoMainWindow(MIME_TYPE, componentData());
+}
+
 void KisPart2::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 {
     // print error if the lcms engine is not available

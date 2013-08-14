@@ -65,6 +65,11 @@ QGraphicsItem *FlowPart::createCanvasItem(KoDocument *document)
     return canvasItem;
 }
 
+KoMainWindow *FlowPart::createMainWindow()
+{
+    return new KoMainWindow(MIME_TYPE, componentData());
+}
+
 void FlowPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 {
     // Go through all (optional) plugins we require and quit if necessary

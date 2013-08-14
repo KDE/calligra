@@ -62,7 +62,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow(const KComponentData &instance);
+    explicit KoMainWindow(const QByteArray nativeMimeType, const KComponentData &instance);
 
     /**
      *  Destructor.

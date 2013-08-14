@@ -18,7 +18,7 @@
 */
 
 #include "FormulaPart.h"
-
+#include "FormulaDocument.h"
 
 FormulaPart::FormulaPart(QObject *parent)
     : KoPart(parent)
@@ -39,4 +39,9 @@ KoView * FormulaPart::createViewInstance(KoDocument *document, QWidget *parent)
     Q_UNUSED(parent);
 
     return 0;
+}
+
+KoMainWindow *FormulaPart::createMainWindow()
+{
+    return new KoMainWindow(MIME_TYPE, componentData());
 }

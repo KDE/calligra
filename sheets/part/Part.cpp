@@ -77,6 +77,11 @@ QGraphicsItem *Part::createCanvasItem(KoDocument *document)
     return new CanvasItem(qobject_cast<Sheets::Doc*>(document));
 }
 
+KoMainWindow *Part::createMainWindow()
+{
+    return new KoMainWindow(MIME_TYPE, componentData());
+}
+
 void Part::openTemplate(const KUrl& url)
 {
     m_document->map()->loadingInfo()->setLoadTemplate(true);

@@ -99,7 +99,9 @@
 class KoMainWindowPrivate
 {
 public:
-    KoMainWindowPrivate(KoMainWindow *w) {
+    KoMainWindowPrivate(const QByteArray &_nativeMimeType, KoMainWindow *w)
+    {
+        nativeMimeType = _nativeMimeType;
         parent = w;
         rootDocument = 0;
         rootPart = 0;
@@ -141,6 +143,7 @@ public:
         m_activeWidget = 0;
         m_activePart = 0;
     }
+
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
     }
@@ -168,6 +171,8 @@ public:
         }
         printer.setDocName(title);
     }
+
+    QByteArray nativeMimeType;
 
     KoMainWindow *parent;
     KoDocument *rootDocument;
@@ -236,9 +241,9 @@ public:
 
 };
 
-KoMainWindow::KoMainWindow(const KComponentData &componentData)
+KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData &componentData)
     : KXmlGuiWindow()
-    , d(new KoMainWindowPrivate(this))
+    , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
 #ifdef __APPLE__
     //setUnifiedTitleAndToolBarOnMac(true);
@@ -632,7 +637,7 @@ void KoMainWindow::reloadRecentFileList()
 
 KoPart* KoMainWindow::createPart() const
 {
-    KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     QString errorMsg;
     KoPart *part = entry.createKoPart(&errorMsg);
     if (!part || !errorMsg.isEmpty()) {

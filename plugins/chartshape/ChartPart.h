@@ -35,6 +35,9 @@ public:
 
     /// reimplemented
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
+
+    /// reimplemented
+    virtual KoMainWindow *createMainWindow();
 };
 
 #endif

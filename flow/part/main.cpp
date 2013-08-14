@@ -23,6 +23,7 @@
 #include <memory>
 
 #include "FlowAboutData.h"
+#include "FlowDocument.h"
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
@@ -33,7 +34,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
   options.add("+[file]", ki18n("File to open"));
   KCmdLineArgs::addCmdLineOptions( options );
 
-  KoApplication app;
+  KoApplication app(MIME_TYPE);
 
   if (!app.start())
       return 1;

@@ -69,6 +69,11 @@ QGraphicsItem *KPrPart::createCanvasItem(KoDocument *document)
     return canvasItem;
 }
 
+KoMainWindow *KPrPart::createMainWindow()
+{
+    return new KoMainWindow(MIME_TYPE, componentData());
+}
+
 void KPrPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 {
     // Go through all (optional) plugins we require and quit if necessary

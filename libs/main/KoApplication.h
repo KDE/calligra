@@ -48,8 +48,10 @@ public:
     /**
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
+     *
+     * @param nativeMimeType: the nativeMimeType of the calligra application
      */
-    KoApplication();
+    KoApplication(const QByteArray &nativeMimeType);
 
     /**
      *  Destructor.

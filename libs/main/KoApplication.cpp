@@ -73,15 +73,16 @@ public:
     KoApplicationPrivate()
         : splashScreen(0)
     {}
-
+    QByteArray nativeMimeType;
     QSplashScreen *splashScreen;
     QList<KoPart *> partList;
 };
 
-KoApplication::KoApplication()
+KoApplication::KoApplication(const QByteArray &nativeMimeType)
     : KApplication(initHack())
     , d(new KoApplicationPrivate)
 {
+    d->nativeMimeType = nativeMimeType;
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
 
@@ -189,7 +190,7 @@ bool KoApplication::start()
     Q_UNUSED(resetStarting);
 
     // Find the *.desktop file corresponding to the kapp instance name
-    KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
         kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;

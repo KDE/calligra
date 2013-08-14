@@ -136,11 +136,6 @@ KoDocument *KoPart::document() const
     return d->document;
 }
 
-KoMainWindow *KoPart::createMainWindow()
-{
-    return new KoMainWindow(d->m_componentData);
-}
-
 KoView *KoPart::createView(KoDocument *document, QWidget *parent)
 {
     KoView *view = createViewInstance(document, parent);

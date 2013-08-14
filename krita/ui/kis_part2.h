@@ -55,6 +55,9 @@ public:
     /// reimplemented
     virtual QGraphicsItem *createCanvasItem(KoDocument *document);
 
+    /// reimplemented
+    virtual KoMainWindow *createMainWindow();
+
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     KisFlipbook *flipbook() const { return m_flipbook; }
