@@ -85,7 +85,6 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
         i++;
     }
     d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
-    kDebug() << "An annotation shape inserted to list: " << d->annotationShapePositions.count();
 
     layoutAnnotationShapes();
 }
@@ -137,8 +136,6 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter, KoViewConver
     QList< QPair < QPointF, KoShape * > >::const_iterator i = d->annotationShapePositions.constBegin();
     while (i != d->annotationShapePositions.end() && !d->annotationShapePositions.isEmpty()) {
         KoShape *shape = i->second;
-
-        kDebug() << "Shape Position:" << shape->position() << "text Position:" << i->first;
 
         QPointF shapePosition(viewConverter->documentToView(QPointF(shape->position().x(), (shape->position().y() + 25))));
         QPointF refTextPosition(viewConverter->documentToView(QPointF(i->first.x(), (i->first.y()))));

@@ -19,36 +19,11 @@
 
 #include "AnnotationTextShape.h"
 
-#include "ShrinkToFitShapeContainer.h"
-#include <KoTextSharedLoadingData.h>
-#include "SimpleRootAreaProvider.h"
-
-#include <KoTextLayoutRootArea.h>
-#include <KoTextEditor.h>
-
-#include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
-#include <KoChangeTracker.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
-#include <KoOdfWorkaround.h>
-#include <KoParagraphStyle.h>
-#include <KoPostscriptPaintDevice.h>
-#include <KoSelection.h>
-#include <KoShapeBackground.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeManager.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoText.h>
-#include <KoTextDocument.h>
-#include <KoTextDocumentLayout.h>
-#include <KoTextEditor.h>
-#include <KoTextPage.h>
-#include <KoTextShapeContainerModel.h>
-#include <KoPageProvider.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -56,13 +31,10 @@
 #include <KoTextLoader.h>
 #include <KoColorBackground.h>
 
-#include <QAbstractTextDocumentLayout>
-#include <QApplication>
 #include <QFont>
 #include <QPainter>
 #include <QPen>
 #include <QTextLayout>
-#include <QStaticText>
 
 #include <kdebug.h>
 
@@ -153,8 +125,6 @@ void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
     writer->addTextNode(m_date);
     writer->endElement(); // dc:date
 
-    // I am not sure that this line is right or no?
-    kDebug(31000) << m_textShapeData->document()->toPlainText();
     m_textShapeData->saveOdf(context, 0, 0, -1);
 }
 

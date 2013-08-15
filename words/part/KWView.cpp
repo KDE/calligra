@@ -516,8 +516,6 @@ void KWView::pasteRequested()
 
 void KWView::showNotes(bool doShow)
 {
-    kDebug(30015) << "doShow:" << doShow;
-
     m_canvas->setShowAnnotations(doShow);
     m_canvas->updateSize();
 

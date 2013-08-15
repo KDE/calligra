@@ -4,10 +4,6 @@
 #include "ui_SimpleAnnotationWidget.h"
 #include <QWidget>
 
-//namespace Ui {
-//class SimpleAnnotationWidget;
-//}
-
 class ReviewTool;
 
 class SimpleAnnotationWidget : public QWidget

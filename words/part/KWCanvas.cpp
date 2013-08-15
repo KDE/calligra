@@ -72,10 +72,8 @@ void KWCanvas::updateSize()
 {
     resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
     QSizeF  canvasSize = m_viewMode->contentsSize();
-    kDebug(30015) << "Update Size";
     if (showAnnotations()) {
         canvasSize += QSize(KWView::AnnotationAreaWidth, 0.0);
-        kDebug(30015) << "Update size in if";
     }
     emit documentSize(canvasSize);
 }
