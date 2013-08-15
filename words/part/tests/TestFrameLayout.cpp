@@ -8,11 +8,8 @@
 #include "../frames/KWCopyShape.h"
 #include "../frames/KWTextFrameSet.h"
 #include "../frames/KWTextFrame.h"
-#include "../frames/KWCopyShape.h"
 #include "../KWDocument.h"
 #include "../Words.h"
-#include <MockShapes.h>
-#include <MockTextShape.h>
 
 #include <MockShapes.h>
 #include <MockTextShape.h>
