@@ -67,7 +67,7 @@ QGraphicsItem *FlowPart::createCanvasItem(KoDocument *document)
 
 KoMainWindow *FlowPart::createMainWindow()
 {
-    return new KoMainWindow(MIME_TYPE, componentData());
+    return new KoMainWindow(FLOW_MIME_TYPE, componentData());
 }
 
 void FlowPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

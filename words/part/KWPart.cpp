@@ -127,7 +127,7 @@ QList<KoPart::CustomDocumentWidgetItem> KWPart::createCustomDocumentWidgets(QWid
 
 KoMainWindow *KWPart::createMainWindow()
 {
-    return new KoMainWindow(MIME_TYPE, componentData());
+    return new KoMainWindow(WORDS_MIME_TYPE, componentData());
 }
 
 void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

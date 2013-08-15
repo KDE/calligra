@@ -79,7 +79,7 @@ QGraphicsItem *Part::createCanvasItem(KoDocument *document)
 
 KoMainWindow *Part::createMainWindow()
 {
-    return new KoMainWindow(MIME_TYPE, componentData());
+    return new KoMainWindow(SHEETS_MIME_TYPE, componentData());
 }
 
 void Part::openTemplate(const KUrl& url)

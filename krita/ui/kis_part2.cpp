@@ -93,7 +93,7 @@ QGraphicsItem *KisPart2::createCanvasItem(KoDocument *document)
 
 KoMainWindow *KisPart2::createMainWindow()
 {
-    return new KoMainWindow(MIME_TYPE, componentData());
+    return new KoMainWindow(KIS_MIME_TYPE, componentData());
 }
 
 void KisPart2::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

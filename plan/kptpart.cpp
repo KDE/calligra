@@ -60,7 +60,7 @@ KoView *Part::createViewInstance(KoDocument *document, QWidget *parent)
 
 KoMainWindow *Part::createMainWindow()
 {
-    return new KoMainWindow(MIME_TYPE, componentData());
+    return new KoMainWindow(PLAN_MIME_TYPE, componentData());
 }
 
 void Part::openTemplate(const KUrl &url)

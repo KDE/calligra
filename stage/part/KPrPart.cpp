@@ -71,7 +71,7 @@ QGraphicsItem *KPrPart::createCanvasItem(KoDocument *document)
 
 KoMainWindow *KPrPart::createMainWindow()
 {
-    return new KoMainWindow(MIME_TYPE, componentData());
+    return new KoMainWindow(STAGE_MIME_TYPE, componentData());
 }
 
 void KPrPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

@@ -43,5 +43,5 @@ KoView * FormulaPart::createViewInstance(KoDocument *document, QWidget *parent)
 
 KoMainWindow *FormulaPart::createMainWindow()
 {
-    return new KoMainWindow(MIME_TYPE, componentData());
+    return new KoMainWindow(FORMULA_MIME_TYPE, componentData());
 }

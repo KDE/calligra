@@ -57,7 +57,7 @@ class KoShapeLayer;
 class KoImageCollection;
 class KoStore;
 
-#define MIME_TYPE "application/vnd.oasis.opendocument.graphics"
+#define KARBON_MIME_TYPE "application/vnd.oasis.opendocument.graphics"
 
 /**
  * Keeps track of visual per document properties.
@@ -82,9 +82,9 @@ public:
     virtual bool saveOdf(SavingContext &documentContext);
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const { return KARBON_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const { return MIME_TYPE; }
+    virtual QByteArray nativeOasisMimeType() const { return KARBON_MIME_TYPE; }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {

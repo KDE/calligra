@@ -47,7 +47,7 @@ class KisView2;
  * can be associated with a mime type and are opened with applications
  * associated with the same mime type
  */
-#define MIME_TYPE "application/x-krita"
+#define KIS_MIME_TYPE "application/x-krita"
 
 
 /**
@@ -84,13 +84,13 @@ public:
     virtual bool saveOdf(SavingContext &documentContext);
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const { return KIS_MIME_TYPE; }
     /// reimplemented from KoDocument
     virtual QByteArray nativeOasisMimeType() const { return ""; }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
-        return QStringList() << MIME_TYPE
+        return QStringList() << KIS_MIME_TYPE
                              << "image/openraster"
                              << "application/x-krita-flipbook";
     }

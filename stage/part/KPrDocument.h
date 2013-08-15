@@ -29,7 +29,7 @@ class KPrDeclarations;
 class KPrShapeAnimation;
 class KPrShapeAnimations;
 
-#define MIME_TYPE "application/vnd.oasis.opendocument.presentation"
+#define STAGE_MIME_TYPE "application/vnd.oasis.opendocument.presentation"
 
 class STAGE_EXPORT KPrDocument : public KoPADocument
 {
@@ -47,9 +47,9 @@ public:
     virtual KoOdf::DocumentType documentType() const;
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const { return STAGE_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return MIME_TYPE;}
+    virtual QByteArray nativeOasisMimeType() const {return STAGE_MIME_TYPE;}
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {

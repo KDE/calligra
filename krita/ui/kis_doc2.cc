@@ -167,7 +167,7 @@ KisDoc2::~KisDoc2()
 
 QByteArray KisDoc2::mimeType() const
 {
-    return MIME_TYPE;
+    return KIS_MIME_TYPE;
 }
 
 void KisDoc2::slotLoadingFinished() {

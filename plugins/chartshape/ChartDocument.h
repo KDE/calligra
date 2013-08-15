@@ -35,7 +35,7 @@ class KoShapeLoadingContext;
 
 namespace KChart {
 
-#define MIME_TYPE ""
+#define CHART_MIME_TYPE ""
 
 class ChartShape;
 
@@ -46,9 +46,9 @@ public:
     ~ChartDocument();
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const { return CHART_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const { return MIME_TYPE; }
+    virtual QByteArray nativeOasisMimeType() const { return CHART_MIME_TYPE; }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const { return QStringList(); }
 

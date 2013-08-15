@@ -92,7 +92,7 @@ KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
 
 KoMainWindow *KarbonPart::createMainWindow()
 {
-    return new KoMainWindow(MIME_TYPE, componentData());
+    return new KoMainWindow(KARBON_MIME_TYPE, componentData());
 }
 
 void KarbonPart::openTemplate(const KUrl& url)

@@ -214,8 +214,7 @@ private slots:
      * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.
      */
-    void setDistractionFreeMode(bool);
-    /// Call after 4 seconds, user doesn't move cursor.
+    void setDistractionFreeMode(bool); /// Call after 4 seconds, user doesn't move cursor.
     void hideCursor();
     /// Hide status bar and scroll bars after seconds in Distraction-Free mode.
     void hideUI();

@@ -37,7 +37,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KoApplication app(MIME_TYPE);
+    KoApplication app(SHEETS_MIME_TYPE);
 
     if (!app.start())
         return 1;
