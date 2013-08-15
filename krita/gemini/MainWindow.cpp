@@ -240,7 +240,6 @@ void MainWindow::switchToSketch()
 
         d->desktopView->setParent(0);
     }
-    
     d->wasMaximized = isMaximized();
 
     //Notify the new view that we just switched to it, passing our synchronisation object
@@ -312,10 +311,14 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
-    if(d->desktopView) {
+    if(d->desktopView && centralWidget() == d->desktopView) {
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         qApp->processEvents();
         view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+    }
+    else if(d->sketchKisView && centralWidget() == d->sketchView) {
+        qApp->processEvents();
+        d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
     }
 }
 
@@ -363,6 +366,10 @@ void MainWindow::setCurrentSketchPage(QString newPage)
         if(!d->forceSketch && !d->slateMode)
         {
             QTimer::singleShot(2000, this, SLOT(switchToDesktop()));
+        }
+        else
+        {
+            QTimer::singleShot(2000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
         }
     }
 }
