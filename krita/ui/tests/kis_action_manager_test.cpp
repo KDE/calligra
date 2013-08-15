@@ -34,7 +34,7 @@ void KisActionManagerTest::testUpdateGUI()
     KisDoc2* doc = createEmptyDocument();
     KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
     KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
-    doc->documentPart()->addView(view);
+    doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -61,7 +61,7 @@ void KisActionManagerTest::testCondition()
     KisDoc2* doc = createEmptyDocument();
     KoMainWindow* mainWindow =  doc->documentPart()->createMainWindow();
     KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
-    doc->documentPart()->addView(view);
+    doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -98,7 +98,7 @@ void KisActionManagerTest::testTakeAction()
     KisDoc2* doc = createEmptyDocument();
     KoMainWindow* mainWindow =  doc->documentPart()->createMainWindow();
     KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
-    doc->documentPart()->addView(view);
+    doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
     view->actionManager()->addAction("dummy", action, view->actionCollection());

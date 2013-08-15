@@ -90,10 +90,11 @@ void Part::openTemplate(const KUrl& url)
     m_document->initConfig();
 }
 
-void Part::addView(KoView *_view)
+void Part::addView(KoView *_view, KoDocument *document)
 {
-    KoPart::addView(_view);
-    foreach(KoView* view, views())
-    static_cast<View*>(view)->selection()->emitCloseEditor(true);
+    KoPart::addView(_view, document);
+    foreach(KoView* view, views()) {
+        static_cast<View*>(view)->selection()->emitCloseEditor(true);
+    }
 }
 

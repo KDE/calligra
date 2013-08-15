@@ -160,12 +160,13 @@ public:
     KoView *createView(KoDocument *document, QWidget *parent = 0);
 
     /**
-     * Adds a view to the document. If the part doesn't know yet about the document, it is registered.
+     * Adds a view to the document. If the part doesn't know yet about
+     * the document, it is registered.
      *
      * This calls KoView::updateReadWrite to tell the new view
      * whether the document is readonly or not.
      */
-    virtual void addView(KoView *view);
+    virtual void addView(KoView *view, KoDocument *document);
 
     /**
      * Removes a view of the document.

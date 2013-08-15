@@ -138,20 +138,26 @@ KoDocument *KoPart::document() const
 KoView *KoPart::createView(KoDocument *document, QWidget *parent)
 {
     KoView *view = createViewInstance(document, parent);
-    addView(view);
+    addView(view, document);
     if (!d->documents.contains(document)) {
         d->documents.append(document);
     }
     return view;
 }
 
-void KoPart::addView(KoView *view)
+void KoPart::addView(KoView *view, KoDocument *document)
 {
     if (!view)
         return;
 
-    d->views.append(view);
-    view->updateReadWrite(d->document->isReadWrite());
+    if (!d->views.contains(view)) {
+        d->views.append(view);
+    }
+    if (!d->documents.contains(document)) {
+        d->documents.append(document);
+    }
+
+    view->updateReadWrite(document->isReadWrite());
 
     if (d->views.size() == 1) {
         KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());

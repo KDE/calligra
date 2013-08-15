@@ -58,7 +58,7 @@ public:
 
     void setDocument(Doc *document);
 
-    virtual void addView(KoView *_view); /// reimplemented
+    virtual void addView(KoView *_view, KoDocument *document); /// reimplemented
 
     virtual QGraphicsItem *createCanvasItem(KoDocument *document); /// reimplemented
 
