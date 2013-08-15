@@ -59,7 +59,7 @@ public:
      * since the Calligra components come with their own view classes which inherit
      * KoView.
      *
-     * The standard way to retrieve a KoView is to call @ref KoDocument::createView.
+     * The standard way to retrieve a KoView is to call @ref KoPart::createView.
      *
      * @param document is the document which should be displayed in this view. This pointer
      *                 must not be zero.
