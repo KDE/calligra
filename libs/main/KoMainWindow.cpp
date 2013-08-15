@@ -640,6 +640,7 @@ KoPart* KoMainWindow::createPart() const
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     QString errorMsg;
     KoPart *part = entry.createKoPart(&errorMsg);
+
     if (!part || !errorMsg.isEmpty()) {
         return 0;
     }
@@ -728,7 +729,7 @@ bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
 
 bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDocument *newdoc)
 {
-    //kDebug(30003) <<"KoMainWindow::openDocument" << url.url();
+    kDebug(30003) <<"KoMainWindow::openDocument" << url.url();
 
     if (!newpart)
         newpart = createPart();
@@ -765,8 +766,8 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
 void KoMainWindow::slotLoadCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotLoadCompleted";
-    KoPart *newpart = qobject_cast<KoPart*>(sender());
-    KoDocument *newdoc = newpart->document();
+    KoDocument *newdoc = qobject_cast<KoDocument*>(sender());
+    KoPart *newpart = newdoc->documentPart();
 
     if (d->rootDocument && d->rootDocument->isEmpty()) {
         // Replace current empty document
