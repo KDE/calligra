@@ -12,7 +12,8 @@ SimpleAnnotationWidget::SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent
     widget.insertAnnotation->setDefaultAction(tool->action("insert_annotation"));
     widget.removeAnnotation->setDefaultAction(tool->action("remove_annotation"));
 
-    //FIXME:: why doesn't work :( ?
+    // This doesn't work due to a bug in Qt.
+    // FIXME: Check if there is a workaround.
     widget.removeAnnotation->setDisabled(true);
 
     connect(widget.insertAnnotation, SIGNAL(clicked(bool)), this, SLOT(addAnnotation()));

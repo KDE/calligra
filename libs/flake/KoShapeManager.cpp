@@ -204,7 +204,9 @@ void KoShapeManager::remove(KoShape *shape)
             remove(containerShape);
         }
     }
-    // FIXME: I have added this signal just for annoattion shapes.
+
+    // This signal is used in the annotation shape.
+    // FIXME: Is this really what we want?  (and shouldn't it be called shapeDeleted()?)
     shapeRemoved(shape);
 }
 
