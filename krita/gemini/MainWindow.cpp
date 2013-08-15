@@ -91,7 +91,7 @@ public:
         , desktopViewProxy(0)
         , forceDesktop(false)
         , forceSketch(false)
-        , wasMaximized(false)
+        , wasMaximized(true)
         , temporaryFile(false)
     {
 #ifdef Q_OS_WIN
@@ -205,6 +205,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     // Set the initial view to sketch... because reasons.
     // Really, this allows us to show the pleasant welcome screen from Sketch
     switchToSketch();
+    d->wasMaximized = true;
 }
 
 void MainWindow::switchDesktopForced()
