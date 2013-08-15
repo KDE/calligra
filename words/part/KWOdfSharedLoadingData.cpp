@@ -60,10 +60,6 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
 
     KoTextShapeData *text = qobject_cast<KoTextShapeData*>(shape->userData());
     if (text) {
-        // FIXME: Should do sth here.
-        if (shape->shapeId() == "AnnotationTextShapeID") {
-            m_loader->document()->addAnnotationShape(shape);
-        }
         KWTextFrameSet *fs = 0;
         KWFrame *previous = m_nextFrames.value(shape->name());
         if (previous)

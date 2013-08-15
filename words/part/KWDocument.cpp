@@ -194,21 +194,8 @@ void KWDocument::addShape(KoShape *shape)
     shape->update();
 }
 
-void KWDocument::addAnnotationShape(KoShape *shape)
-{
-    if (!m_loadedAnnotationShapes.contains(shape)) {
-        m_loadedAnnotationShapes.append(shape);
-    }
-}
-
-QList<KoShape*> KWDocument::annotationShapes()
-{
-    return m_loadedAnnotationShapes;
-}
-
 void KWDocument::removeShape(KoShape *shape)
 {
-    kDebug(31000) << "Remove shape in document";
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     qDebug() << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
@@ -221,13 +208,10 @@ void KWDocument::removeShape(KoShape *shape)
     } else { // not a frame, but we still have to remove it from views.
         // We don't use this for now, I don't know how to use KWDocument in TextTool
         // For now we use KoShapeManager to remove annotation shape.
-        kDebug(31000) << "Remove shape in document ****";
         if (shape->shapeId() == "AnnotationTextShapeID") {
             emit annotationShapeRemoved(shape);
-            kDebug(31000) << "Remove annotation shape in document 1";
         } else {
             emit shapeRemoved(shape);
-            kDebug(31000) << "Remove shape in document 2****";
         }
     }
 }

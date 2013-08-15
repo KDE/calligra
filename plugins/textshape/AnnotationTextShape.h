@@ -22,18 +22,13 @@
 
 #include "TextShape.h"
 #include <KoShapeContainer.h>
-#include <KoFrameShape.h>
 #include <KoTextShapeData.h>
-#include <KoTextDocument.h>
 
 #include <QTextDocument>
 #include <QPainter>
+
 class KoInlineTextObjectManager;
 class KoTextRangeManager;
-class KoPageProvider;
-class KoImageCollection;
-class KoTextDocument;
-class TextShape;
 class KoTextDocumentLayout;
 
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"

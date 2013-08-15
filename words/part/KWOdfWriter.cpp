@@ -288,7 +288,6 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         QSet<QString> uniqueNames;
         foreach (KWFrame *frame, fs->frames()) { // make sure all shapes have names.
             KoShape *shape = frame->shape();
-            kDebug(31000) << "**** Shape Id:" << shape->shapeId() << "****";
             if (counter++ == 1)
                 shape->setName(fs->name());
             else if (shape->name().isEmpty() || uniqueNames.contains(shape->name()))

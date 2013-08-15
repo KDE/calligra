@@ -4,16 +4,12 @@
 #include "ui_SimpleAnnotationWidget.h"
 #include <QWidget>
 
-//namespace Ui {
-//class SimpleAnnotationWidget;
-//}
-
 class ReviewTool;
 
 class SimpleAnnotationWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent = 0);
     //virtual ~SimpleAnnotationWidget();
@@ -24,7 +20,7 @@ signals:
 private slots:
     void addAnnotation();
     void removeAnnotation();
-    
+
 private:
     Ui::SimpleAnnotationWidget widget;
     ReviewTool *m_tool;
