@@ -40,7 +40,6 @@
 #include <KoDocument.h>
 #include <KoGlobal.h>
 
-#include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
