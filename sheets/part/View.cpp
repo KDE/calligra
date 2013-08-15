@@ -76,7 +76,6 @@
 #include <ktoolinvocation.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
-#include <knotifyconfigwidget.h>
 #include <kservicetypetrader.h>
 
 // Calligra includes
@@ -162,6 +161,7 @@
 // D-Bus
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
+#include <knotifyconfigwidget.h>
 #include <QtDBus>
 #endif
 
@@ -1609,8 +1609,10 @@ void View::showTabBar(bool enable)
 }
 
 void View::optionsNotifications()
-{
+{  
+#ifndef QT_NO_DBUS
     KNotifyConfigWidget::configure(this);
+#endif
 }
 
 void View::preference()
