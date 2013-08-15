@@ -51,9 +51,6 @@
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kparts/componentfactory.h>
-#include <kparts/event.h>
-#include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
@@ -241,7 +238,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     canvasController->setDrawShadow(false);
     canvasController->setCanvasMode(KoCanvasController::Infinite);
     KisConfig cfg;
-    canvasController->setZoomWithWheel(cfg.zoomWithWheel());
     canvasController->setVastScrolling(cfg.vastScrolling());
 
     m_d->canvasController = canvasController;
@@ -346,15 +342,14 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
     }
 
-    //Workaround, by default has the same shortcut as hide/show dockers
-    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
-    if (action) {
-        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-    }
+    if (shell()) {
+        //Workaround, by default has the same shortcut as hide/show dockers
+        action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
+        if (action) {
+            action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+            action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+        }
 
-    if (shell())
-    {
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
@@ -870,7 +865,6 @@ void KisView2::slotPreferences()
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
         KisConfig cfg;
-        static_cast<KoCanvasControllerWidget*>(m_d->canvasController)->setZoomWithWheel(cfg.zoomWithWheel());
 
         // Update the settings for all nodes -- they don't query
         // KisConfig directly because they need the settings during
@@ -972,8 +966,8 @@ void KisView2::loadPlugins()
         dbgUI << "Load plugin " << service->name();
         QString error;
 
-        KParts::Plugin* plugin =
-                dynamic_cast<KParts::Plugin*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if (plugin) {
             insertChildClient(plugin);
         } else {

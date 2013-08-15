@@ -13,7 +13,7 @@ target_link_libraries(calligra_filter_eps2svgai komain)
 install(TARGETS calligra_filter_eps2svgai  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES
-    karbon_eps_import.desktop
+    calligra_filter_eps2svgai.desktop
     #karbon_ps_import.desktop
     DESTINATION ${SERVICES_INSTALL_DIR}
 )

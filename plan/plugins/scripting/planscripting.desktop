@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Plan Scripting Plugin
+Name[cs]=Skriptovací modul pro Plan
+Name[hu]=Plan szkriptelés bővítmény
+Name[pt]='Plugin' de Programação do Plan
+Name[pt_BR]=Plugin de criação de scripts do Plan
+Name[sk]=Plugin skriptovania Plan
+Name[uk]=Додаток роботи зі скриптами для Plan
+Name[x-test]=xxPlan Scripting Pluginxx
+X-KDE-ServiceTypes=Plan/ViewPlugin
+Type=Service
+X-KDE-Library=krossmoduleplan
+X-Plan-Version=28
