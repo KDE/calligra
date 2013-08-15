@@ -20,4 +20,4 @@ install(TARGETS calligra_filter_pdf2svg DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES karbon_pdf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_filter_pdf2svg.desktop DESTINATION ${SERVICES_INSTALL_DIR})

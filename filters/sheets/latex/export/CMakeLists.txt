@@ -32,7 +32,7 @@ install(TARGETS calligra_filter_kspread2tex  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kspread_latex_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_kspread2tex.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 
