@@ -62,7 +62,7 @@ public Q_SLOTS:
     void closeWindow();
 
     void switchToSketch();
-    void switchToDesktop();
+    void switchToDesktop(bool justLoaded = false);
     void documentChanged();
 Q_SIGNALS:
     void closeRequested();
@@ -75,6 +75,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void switchDesktopForced();
     void switchSketchForced();
+    void adjustZoomOnDocumentChangedAndStuff();
 
 private:
     void cloneResources(KisCanvasResourceProvider *from, KisCanvasResourceProvider *to);

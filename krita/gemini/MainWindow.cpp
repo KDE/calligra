@@ -260,7 +260,7 @@ void MainWindow::switchToSketch()
     delete syncObject;
 }
 
-void MainWindow::switchToDesktop()
+void MainWindow::switchToDesktop(bool justLoaded)
 {
     QTime timer;
     timer.start();
@@ -291,18 +291,31 @@ void MainWindow::switchToDesktop()
     qApp->processEvents();
 
     if(view) {
+        QPoint center = view->rect().center();
+        view->canvasController()->zoomIn(center);
+        view->canvasController()->zoomOut(center);
+
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, syncObject);
         QApplication::sendEvent(view, &switchedEvent);
 
-        QPoint center = view->rect().center();//->canvasBase()->coordinatesConverter()->widgetCenterPoint().toPoint();
-        view->canvasController()->zoomIn(center);
-        view->canvasController()->zoomOut(center);
-        view->canvasControllerWidget()->setPreferredCenter(view->image()->bounds().center());
+        if(justLoaded)
+        {
+            QTimer::singleShot(1000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+        }
     }
 
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
+}
+
+void MainWindow::adjustZoomOnDocumentChangedAndStuff()
+{
+    if(d->desktopView) {
+        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        qApp->processEvents();
+        view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+    }
 }
 
 void MainWindow::documentChanged()
@@ -316,7 +329,7 @@ void MainWindow::documentChanged()
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
     if(!d->forceSketch && !d->slateMode)
-        switchToDesktop();
+        switchToDesktop(true);
 }
 
 bool MainWindow::allowClose() const
