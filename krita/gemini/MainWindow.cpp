@@ -244,7 +244,7 @@ void MainWindow::switchToSketch()
 
     //Notify the new view that we just switched to it, passing our synchronisation object
     //so it can use those values to sync with the old view.
-    ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, syncObject);
+    ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, syncObject);
     QApplication::sendEvent(d->sketchView, &switchedEvent);
 
     d->wasMaximized = isMaximized();
