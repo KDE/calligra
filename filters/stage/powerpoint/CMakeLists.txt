@@ -23,7 +23,7 @@ kde4_add_plugin(calligra_filter_ppt2odp PowerPointImport.cpp)
 target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 
 install(TARGETS calligra_filter_ppt2odp  DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES  kpresenter_powerpoint_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_ppt2odp.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
     install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

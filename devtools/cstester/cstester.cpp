@@ -27,7 +27,6 @@
 #include <KoPart.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
-#include <kparts/componentfactory.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 

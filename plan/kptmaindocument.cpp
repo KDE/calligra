@@ -59,7 +59,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kparts/partmanager.h>
 #include <kmimetype.h>
 #include <ktemporaryfile.h>
 #include <KoGlobal.h>

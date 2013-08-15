@@ -119,11 +119,13 @@ SET (functions_DIR_SRCS
     functions/helper.cpp
     )
 
+if(NOT QT_NO_DBUS)
 SET (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
     interfaces/SheetAdaptor.cpp
     interfaces/ViewAdaptor.cpp
     )
+endif()
 
 SET (part_DIR_SRCS
     part/CanvasBase.cpp
@@ -196,10 +198,16 @@ SET (calligrasheetscommon_LIB_SRCS
     ${database_DIR_SRCS}
     ${dialogs_DIR_SRCS}
     ${functions_DIR_SRCS}
-    ${interfaces_DIR_SRCS}
     ${part_DIR_SRCS}
     ${ui_DIR_SRCS}
     )
+
+if(NOT QT_NO_DBUS)
+set (calligrasheetscommon_LIB_SRCS
+    ${calligrasheetscommon_LIB_SRCS}
+    ${interfaces_DIR_SRCS}
+    )
+endif()
 
 set (calligrasheetsodf_LIB_SRCS
     part/Digest.cpp
@@ -280,9 +288,12 @@ target_link_libraries(calligrasheetscommon
     komain
     calligrasheetsodf
     ${QT_QTSQL_LIBRARY}
-    ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
 )
+if(NOT QT_NO_DBUS)
+    target_link_libraries(calligrasheetscommon ${KDE4_KNOTIFYCONFIG_LIBS} )
+endif()
+
 if(KDE4_KCMUTILS_LIBS)
     target_link_libraries(calligrasheetscommon ${KDE4_KCMUTILS_LIBS} )
 else()
@@ -314,6 +325,7 @@ install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/she
 install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES  sheets_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 
