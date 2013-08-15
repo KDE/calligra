@@ -32,7 +32,7 @@ public:
     QString toXML();
     bool isForeign;
     int position;
-    QString step;
+    QString stepText;
     const QString type;
     StepStepLocation location;
 

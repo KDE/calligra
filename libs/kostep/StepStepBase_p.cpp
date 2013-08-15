@@ -40,7 +40,7 @@ bool StepStepBasePrivate::operator==(StepStepBasePrivate *other)
 {
     if (other->isForeign == isForeign &&
       other->position == position &&
-      other->step == step &&
+      other->stepText == stepText &&
       other->type == type
     ) {
     return true;
@@ -52,12 +52,13 @@ bool StepStepBasePrivate::operator==(StepStepBasePrivate *other)
 
 QString StepStepBasePrivate::toString()
 {
-    QString string = type + " " + step + " " + string.number(position);
+    QString string = type + " " + stepText + " " + QString::number(position);
     return string;
 }
 
 QString StepStepBasePrivate::toXML()
 {
+    //Should not be called, a derivative class should overload the toXML method
     qDebug("Not supposed to be here");
     QString string = "";
     return string;

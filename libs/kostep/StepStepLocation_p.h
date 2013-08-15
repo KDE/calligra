@@ -32,8 +32,10 @@ public:
     ~StepStepLocationPrivate();
 
     StepStepLocationPrivate *operator=(const StepStepLocationPrivate &other);
+    //Sets up the Location Stack using the cursor
     void constructor(const QTextCursor &cursor);
     QTextCursor convertToQTextCursor(QTextDocument *ptr);
+    //converts the location stack into the format for the XML tag of s="/x/y".
     QString toString();
     void parentFrame(QTextFrame *frame, QTextFrame *rootFrame);
 
