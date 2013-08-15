@@ -118,7 +118,7 @@ Panel {
 
             checked: GridView.isCurrentItem;
 
-            color: (model.index === peekViewGrid.currentIndex) ? "#D7D7D7" : "transparent";
+            color: (model.name === presetsModel.currentPreset) ? "#D7D7D7" : "transparent";
             shadow: false
             //textSize: 10;
             //image: model.image;
@@ -177,7 +177,7 @@ Panel {
                 width: contentArea.width;
                 Rectangle {
                     anchors.fill: parent;
-                    color: (model.index === fullViewGrid.currentIndex) ? "#D7D7D7" : "transparent";
+                    color: (model.name === presetsModel.currentPreset) ? "#D7D7D7" : "transparent";
                 }
                 Rectangle {
                     id: presetThumbContainer;
