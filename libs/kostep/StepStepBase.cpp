@@ -86,12 +86,12 @@ void StepStepBase::setPosition(int position)
 }
 QString StepStepBase::stepText()
 {
-    return d->step;
+    return d->stepText;
 }
 
 void StepStepBase::setStepText (QString text)
 {
-    d->step = text;
+    d->stepText = text;
 }
 
 QString StepStepBase::toString()
