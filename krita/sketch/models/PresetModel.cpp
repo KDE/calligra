@@ -84,6 +84,7 @@ PresetModel::PresetModel(QObject *parent)
     QHash<int, QByteArray> roles;
     roles[ImageRole] = "image";
     roles[TextRole] = "text";
+    roles[NameRole] = "name";
     setRoleNames(roles);
 }
 
@@ -111,6 +112,9 @@ QVariant PresetModel::data(const QModelIndex &index, int role) const
             break;
         case TextRole:
             result = d->rserver->resources().at(index.row())->name().replace(QLatin1String("_"), QLatin1String(" "));
+            break;
+        case NameRole:
+            result = d->rserver->resources().at(index.row())->name();
             break;
         default:
             result = "";

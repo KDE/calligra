@@ -30,7 +30,8 @@ public:
     enum PresetRoles
     {
         ImageRole = Qt::UserRole + 1,
-        TextRole
+        TextRole,
+        NameRole
     };
 
     explicit PresetModel(QObject *parent = 0);
