@@ -100,9 +100,9 @@ Panel {
     Connections {
         target: sketchView;
         onLoadingFinished: {
-            if(window.applicationName === undefined) {
+//            if(window.applicationName === undefined) {
                 presetsModel.currentPreset = "Pencil_HB";
-            }
+//            }
         }
     }
 
