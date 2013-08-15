@@ -56,7 +56,7 @@ public:
 
         QVERIFY(checkLayersInitial());
 
-        mainWindow = new KoMainWindow(MIME_TYPE, doc->documentPart()->componentData());
+        mainWindow = new KoMainWindow(KIS_MIME_TYPE, doc->documentPart()->componentData());
         view = new KisView2(doc->documentPart(), doc, mainWindow);
 
         KisPattern *newPattern = new KisPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
