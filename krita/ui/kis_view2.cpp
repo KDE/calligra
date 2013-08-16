@@ -281,7 +281,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
     connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
-    connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+    connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
 
     if (m_d->doc->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
@@ -342,21 +342,22 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
     }
 
-    if (shell()) {
+    if (mainWindow())
+    {
         //Workaround, by default has the same shortcut as hide/show dockers
-        action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
+        action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
         if (action) {
             action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
             action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
         }
 
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
-        shell()->createDockWidget(&toolBoxFactory);
+        mainWindow()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
-        shell()->dockerManager()->setIcons(false);
+        mainWindow()->dockerManager()->setIcons(false);
     }
 
     m_d->statusBar = new KisStatusBar(this);
@@ -531,23 +532,23 @@ void KisView2::dropEvent(QDropEvent *event)
                     }
                     else if (action == replaceCurrentDocument) {
                         if (m_d->doc->isModified()) {
-                            m_d->doc->documentPart()->save();
+                            m_d->doc->save();
                         }
 
-                        if (shell() != 0) {
+                        if (mainWindow() != 0) {
                             /**
                              * NOTE: this is effectively deferred self-destruction
                              */
-                            connect(shell(), SIGNAL(loadCompleted()),
-                                    shell(), SLOT(close()));
+                            connect(mainWindow(), SIGNAL(loadCompleted()),
+                                    mainWindow(), SLOT(close()));
 
-                            shell()->openDocument(url);
+                            mainWindow()->openDocument(url);
                         }
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
 
-                        if (shell() != 0) {
-                            shell()->openDocument(url);
+                        if (mainWindow() != 0) {
+                            mainWindow()->openDocument(url);
                         }
                     }
                 }
@@ -1115,10 +1116,10 @@ void KisView2::slotSaveIncremental()
         return;
     }
     m_d->doc->setSaveInBatchMode(true);
-    m_d->doc->documentPart()->saveAs(fileName);
+    m_d->doc->saveAs(fileName);
     m_d->doc->setSaveInBatchMode(false);
 
-    shell()->updateCaption();
+    mainWindow()->updateCaption();
 }
 
 void KisView2::slotSaveIncrementalBackup()
@@ -1181,9 +1182,9 @@ void KisView2::slotSaveIncrementalBackup()
             KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
             return;
         }
-        m_d->doc->documentPart()->saveAs(fileName);
+        m_d->doc->saveAs(fileName);
 
-        shell()->updateCaption();
+        mainWindow()->updateCaption();
     }
     else { // if NOT working on a backup...
         // Navigate directory searching for latest backup version, ignore letters
@@ -1218,10 +1219,10 @@ void KisView2::slotSaveIncrementalBackup()
 
         // Save both as backup and on current file for interapplication workflow
         m_d->doc->setSaveInBatchMode(true);
-        m_d->doc->documentPart()->saveAs(backupFileName);
+        m_d->doc->saveAs(backupFileName);
         m_d->doc->setSaveInBatchMode(false);
 
-        shell()->updateCaption();
+        mainWindow()->updateCaption();
     }
 }
 
@@ -1265,27 +1266,27 @@ void KisView2::showJustTheCanvas(bool toggled)
     }
 
     if (cfg.hideDockersFullscreen()) {
-        action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_toggledockers"));
+        action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
         if (action && action->isChecked() == toggled) {
             action->setChecked(!toggled);
         }
     }
 
     if (cfg.hideTitlebarFullscreen()) {
-        action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_fullscreen"));
+        action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_fullscreen"));
         if (action && action->isChecked() != toggled) {
             action->setChecked(toggled);
         }
     }
 
     if (cfg.hideMenuFullscreen()) {
-        if (shell()->menuBar()->isVisible() == toggled) {
-            shell()->menuBar()->setVisible(!toggled);
+        if (mainWindow()->menuBar()->isVisible() == toggled) {
+            mainWindow()->menuBar()->setVisible(!toggled);
         }
     }
 
     if (cfg.hideToolbarFullscreen()) {
-        foreach(KToolBar* toolbar, shell()->toolBars()) {
+        foreach(KToolBar* toolbar, mainWindow()->toolBars()) {
             if (toolbar->isVisible() == toggled) {
                 toolbar->setVisible(!toggled);
             }

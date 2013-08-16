@@ -20,7 +20,7 @@
 #include <KPrAboutData.h>
 
 #include <KoApplication.h>
-
+#include "KPrDocument.h"
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
@@ -35,8 +35,9 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions( options );
+
     KoApplication::addCommonCommandLineOptions();
-    KoApplication app(argc, argv, about.data());
+    KoApplication app(argc, argv, STAGE_MIME_TYPE, about.data());
 
     if (!app.start())
         return 1;

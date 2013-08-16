@@ -58,12 +58,14 @@ public:
 
     void setDocument(Doc *document);
 
-    virtual void addView(KoView *_view); /// reimplemented
+    virtual void addView(KoView *_view, KoDocument *document); /// reimplemented
 
-    virtual QGraphicsItem *createCanvasItem(); /// reimplemented
+    virtual QGraphicsItem *createCanvasItem(KoDocument *document); /// reimplemented
+
+    virtual KoMainWindow *createMainWindow(); /// reimplemented
 
 protected:
-    virtual KoView* createViewInstance(QWidget*); /// reimplemented
+    virtual KoView* createViewInstance(KoDocument *document, QWidget*); /// reimplemented
 
     virtual void openTemplate(const KUrl& url); /// reimplemented
 

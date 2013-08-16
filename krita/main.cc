@@ -38,6 +38,7 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "ui/kis_doc2.h"
 
 #ifdef Q_OS_WIN
 #include "stdlib.h"
@@ -59,7 +60,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
     KoApplication::addCommonCommandLineOptions();
     // first create the application so we can create a  pixmap
-    KoApplication app(argc, argv, about.data());
+    KoApplication app(argc, argv, KIS_MIME_TYPE, about.data());
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

@@ -79,9 +79,7 @@ public:
     /**
      *  @return TRUE if the document can handle the requested mimetype.
      */
-    bool supportsMimeType(const QString & _mimetype) const {
-        return mimeTypes().contains(_mimetype);
-    }
+    bool supportsMimeType(const QString & _mimetype) const;
 
     /**
      *  Uses the factory of the component to create

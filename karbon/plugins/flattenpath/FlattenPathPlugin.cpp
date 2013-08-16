@@ -55,7 +55,7 @@ K_PLUGIN_FACTORY_WITH_JSON(FlattenPathPluginFactory, "karbonflattenpath.json", r
 
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 {
-    setXMLFile(KStandardDirs::locate("data", "karbon/karbonplugins/FlattenPathPlugin.rc"), true);
+    setXMLFile(KStandardDirs::locate("data", "karbon/plugins/FlattenPathPlugin.rc"), true);
 
 
     KAction *actionFlattenPath  = new KAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);

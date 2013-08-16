@@ -23,7 +23,6 @@
 
 #include <KoMainWindow.h>
 #include <KoDocumentEntry.h>
-#include <KoServiceProvider.h>
 #include <KoPart.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
@@ -354,7 +353,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = new KoMainWindow(doc->documentPart()->componentData());
+    KoMainWindow *win = doc->documentPart()->createMainWindow();
     win->show();
     win->setRootDocument(doc);
 }

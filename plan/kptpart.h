@@ -44,8 +44,10 @@ public:
     void setDocument(KPlato::MainDocument *document);
 
     /// reimplemented
-    virtual KoView *createViewInstance(QWidget *parent);
+    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
 
+    /// reimplemented
+    virtual KoMainWindow *createMainWindow();
 protected:
     virtual void openTemplate( const KUrl& url );
 

@@ -60,7 +60,7 @@ K_PLUGIN_FACTORY_WITH_JSON(WhirlPinchPluginFactory, "karbonwhirlpinch.json", reg
 
 WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
 {
-    setXMLFile(KStandardDirs::locate("data", "karbon/karbonplugins/WhirlPinchPlugin.rc"), true);
+    setXMLFile(KStandardDirs::locate("data", "karbon/plugins/WhirlPinchPlugin.rc"), true);
     QAction *a = new KAction(koIcon("effect_whirl"), i18n("&Whirl/Pinch..."), this);
     actionCollection()->addAction("path_whirlpinch", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));

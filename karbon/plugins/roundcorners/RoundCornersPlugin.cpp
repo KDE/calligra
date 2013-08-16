@@ -56,7 +56,7 @@ K_PLUGIN_FACTORY_WITH_JSON(RoundCornersPluginFactory, "karbonroundcorners.json",
 
 RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
 {
-    setXMLFile(KStandardDirs::locate("data", "karbon/karbonplugins/RoundCornersPlugin.rc"));
+    setXMLFile(KStandardDirs::locate("data", "karbon/plugins/RoundCornersPlugin.rc"));
 
     KAction *actionRoundCorners  = new KAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
     actionCollection()->addAction("path_round_corners", actionRoundCorners);

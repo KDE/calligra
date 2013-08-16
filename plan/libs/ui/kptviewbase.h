@@ -78,8 +78,8 @@ class KPLATOUI_EXPORT DockWidget : public QDockWidget
 public:
     DockWidget( ViewBase *v, const QString &identity, const QString &title );
 
-    void activate( KoMainWindow *shell );
-    void deactivate( KoMainWindow *shell );
+    void activate( KoMainWindow *mainWindow );
+    void deactivate( KoMainWindow *mainWindow );
     bool shown() const;
 
     bool saveXml( QDomElement &context ) const;

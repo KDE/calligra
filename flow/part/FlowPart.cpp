@@ -37,7 +37,7 @@ FlowPart::FlowPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("flow_template");
-    setComponentData(FlowFactory::componentData(), false);
+    setComponentData(FlowFactory::componentData());
 }
 
 FlowPart::~FlowPart()
@@ -50,19 +50,24 @@ void FlowPart::setDocument(FlowDocument *document)
     m_document = document;
 }
 
-KoView * FlowPart::createViewInstance(QWidget *parent)
+KoView * FlowPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    FlowView *view = new FlowView(this, m_document, parent);
-    connect(m_document, SIGNAL(shapeAdded(KoShape*)), view->viewMode(), SLOT(addShape(KoShape*)));
-    connect(m_document, SIGNAL(shapeRemoved(KoShape*)), view->viewMode(), SLOT(removeShape(KoShape*)));
-    connect(m_document, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), view, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
+    FlowView *view = new FlowView(this, qobject_cast<FlowDocument*>(document), parent);
+    connect(document, SIGNAL(shapeAdded(KoShape*)), view->viewMode(), SLOT(addShape(KoShape*)));
+    connect(document, SIGNAL(shapeRemoved(KoShape*)), view->viewMode(), SLOT(removeShape(KoShape*)));
+    connect(document, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), view, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
     return view;
 }
 
-QGraphicsItem *FlowPart::createCanvasItem()
+QGraphicsItem *FlowPart::createCanvasItem(KoDocument *document)
 {
-    KoPACanvasItem *canvasItem = new KoPACanvasItem(m_document);
+    KoPACanvasItem *canvasItem = new KoPACanvasItem(qobject_cast<KoPADocument*>(document));
     return canvasItem;
+}
+
+KoMainWindow *FlowPart::createMainWindow()
+{
+    return new KoMainWindow(FLOW_MIME_TYPE, componentData());
 }
 
 void FlowPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

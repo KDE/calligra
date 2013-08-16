@@ -69,7 +69,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     }
 
 
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, workspace->name());      
+    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, workspace->name());
 
 }
 
@@ -82,16 +82,18 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisView2 * view, QWidget* parent): QWid
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setColumnCount(1);
+    m_itemChooser->showTaggingBar(false, false);
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
-    
+
     QPushButton* saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
-    
+
     m_nameEdit = new QLineEdit(this);
+
     m_nameEdit->setClickMessage(i18n("Insert name"));
     m_nameEdit->setClearButtonShown(true);
-    
+
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_itemChooser, 0, 0, 1, 2);
     layout->addWidget(m_nameEdit, 1, 0, 1, 1);
@@ -105,25 +107,25 @@ KisWorkspaceChooser::~KisWorkspaceChooser()
 
 void KisWorkspaceChooser::slotSave()
 {
-    if(!m_view->shell()) {
+    if(!m_view->mainWindow()) {
         return;
     }
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
 
     KisWorkspaceResource* workspace = new KisWorkspaceResource("");
-    workspace->setDockerState(m_view->shell()->saveState());
+    workspace->setDockerState(m_view->mainWindow()->saveState());
     m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
     QString saveLocation = rserver->saveLocation();
     QString name = m_nameEdit->text();
-    
+
     bool newName = false;
     if(name.isEmpty()) {
         newName = true;
         name = i18n("Workspace");
     }
     QFileInfo fileInfo(saveLocation + name + workspace->defaultFileExtension());
-    
+
     int i = 1;
     while (fileInfo.exists()) {
         fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + workspace->defaultFileExtension());
@@ -139,10 +141,10 @@ void KisWorkspaceChooser::slotSave()
 
 void KisWorkspaceChooser::resourceSelected(KoResource* resource)
 {
-    if(!m_view->shell()) {
+    if(!m_view->mainWindow()) {
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
-    m_view->shell()->restoreState(workspace->dockerState());
+    m_view->mainWindow()->restoreState(workspace->dockerState());
     m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
 }

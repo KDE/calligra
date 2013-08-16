@@ -43,6 +43,14 @@ class KisPaintingAssistant;
 class KisView2;
 
 /**
+ * Mime type for this app - not same as file type, but file types
+ * can be associated with a mime type and are opened with applications
+ * associated with the same mime type
+ */
+#define KIS_MIME_TYPE "application/x-krita"
+
+
+/**
  * The class that represents a Krita document containing content and
    settings.
 
@@ -74,6 +82,18 @@ public:
     virtual bool loadOdf(KoOdfReadStore & odfStore);
     /// Unused
     virtual bool saveOdf(SavingContext &documentContext);
+
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return KIS_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const { return ""; }
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << KIS_MIME_TYPE
+                             << "image/openraster"
+                             << "application/x-krita-flipbook";
+    }
 
     virtual QDomDocument saveXML();
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);

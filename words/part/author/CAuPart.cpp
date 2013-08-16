@@ -31,15 +31,15 @@
 CAuPart::CAuPart(QObject *parent)
     : KWPart(parent)
 {
-    setComponentData(CAuFactory::componentData(), false);
+    setComponentData(CAuFactory::componentData());
     setTemplateType("words_template");
 }
 
 
-KoView *CAuPart::createViewInstance(QWidget *parent)
+KoView *CAuPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    CAuView *view = new CAuView(this, document(), parent);
-    setupViewInstance(view);
+    CAuView *view = new CAuView(this, qobject_cast<KWDocument*>(document), parent);
+    setupViewInstance(document, view);
     return view;
 }
 

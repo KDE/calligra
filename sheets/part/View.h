@@ -81,6 +81,10 @@ class TabBar;
  *  \li horizontal and vertical scrollbars for navigation
  *  \li tab bar to select active worksheet
  *  \li status bar to show status messages
+ *
+ *
+ * KPART_TODO: when we have mdi again, we need to have an equivalent of guiActivateEvent
+ *   that sets the initalPosition() and calls calcStatusBarOp().
  */
 class CALLIGRA_SHEETS_COMMON_EXPORT View : public KoView
 {
@@ -353,7 +357,6 @@ protected: // reimplementations
     virtual void keyPressEvent(QKeyEvent * _ev);
     // KoView interface
     virtual void updateReadWrite(bool readwrite);
-    virtual void guiActivateEvent(KParts::GUIActivateEvent *ev);
     virtual KoPrintJob * createPrintJob();
 public:
     virtual KoZoomController *zoomController() const;

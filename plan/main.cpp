@@ -27,6 +27,8 @@
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 
+#include "kptmaindocument.h"
+
 #ifdef MAINTANER_WANTED_SPLASH
 class KoSplashScreen : public KSplashScreen
 {
@@ -49,8 +51,9 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions( options );
+
     KoApplication::addCommonCommandLineOptions();
-    KoApplication app(argc, argv, about.data());
+    KoApplication app(argc, argv, PLAN_MIME_TYPE, about.data());
 
 #ifdef MAINTANER_WANTED_SPLASH
     // After creating the QApplication then create the pixmap from an xpm: we cannot get the

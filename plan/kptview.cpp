@@ -223,7 +223,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     doc->registerView( this );
 
     setComponentData( Factory::global() );
-    if ( !part->isReadWrite() )
+    if ( !doc->isReadWrite() )
         setXMLFile( "plan_readonly.rc" );
     else
         setXMLFile( "plan.rc" );
@@ -236,7 +236,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     layout->addWidget( m_sp );
 
     ViewListDocker *docker = 0;
-    if ( shell() == 0 ) {
+    if ( mainWindow() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget(doc, m_sp);
         m_viewlist->setProject( &( getProject() ) );
@@ -245,7 +245,7 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         connect( m_viewlist, SIGNAL(updateViewInfo(ViewListItem*)), SLOT(slotUpdateViewInfo(ViewListItem*)) );
     } else {
         ViewListDockerFactory vl(this);
-        docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
+        docker = dynamic_cast<ViewListDocker *>(mainWindow()->createDockWidget(&vl));
         if (docker->view() != this) {
             docker->setView(this);
         }
@@ -424,10 +424,10 @@ View::~View()
 // hackish way to get rid of unused dockers, but as long as no official way exists...
 void View::hideToolDocker()
 {
-    if ( shell() ) {
+    if ( mainWindow() ) {
         QStringList lst; lst << "KPlatoViewList" << "Scripting";
         QStringList names;
-        foreach ( QDockWidget *w, shell()->dockWidgets() ) {
+        foreach ( QDockWidget *w, mainWindow()->dockWidgets() ) {
             if ( ! lst.contains( w->objectName() ) ) {
                 names << w->windowTitle();
                 w->setFeatures( QDockWidget::DockWidgetClosable );
@@ -1252,7 +1252,7 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString &tag
 
 ViewBase *View::createGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
-    GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
+    GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, koDocument()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
@@ -1286,7 +1286,7 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString &tag, const QS
 
 ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
-    MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
+    MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, koDocument()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
@@ -2608,28 +2608,27 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
         }
         foreach ( DockWidget *ds, view->dockers() ) {
             m_dockers.append( ds );
-            ds->activate( shell() );
+            ds->activate( mainWindow() );
         }
         kDebug(planDbg())<<"Added dockers:"<<view<<m_dockers;
     } else {
         kDebug(planDbg())<<"Remove dockers:"<<view<<m_dockers;
         while ( ! m_dockers.isEmpty() ) {
-            m_dockers.takeLast()->deactivate( shell() );
+            m_dockers.takeLast()->deactivate( mainWindow() );
         }
     }
 }
 
-void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
+void View::guiActivateEvent( bool activated )
 {
-    KoView::guiActivateEvent( ev );
-    if ( ev->activated() ) {
+    if ( activated ) {
         // plug my own actionlists, they may be gone
         slotPlugScheduleActions();
     }
     // propagate to sub-view
     ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
     if ( v ) {
-        v->setGuiActive( ev->activated() );
+        v->setGuiActive( activated );
     }
 }
 
@@ -2788,11 +2787,11 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
     if ( item && item->type() == ViewListItem::ItemType_SubView ) {
         //kDebug(planDbg())<<"Activate:"<<item;
         m_tab->setCurrentWidget( item->view() );
-        if (  prev && prev->type() != ViewListItem::ItemType_SubView ) {
-            // Put back my own gui (removed when (if) viewing different doc)
-            if (getKoPart()->manager() )
-                getKoPart()->manager()->setActivePart(getKoPart(), this );
-        }
+//        if (  prev && prev->type() != ViewListItem::ItemType_SubView ) {
+//            // Put back my own gui (removed when (if) viewing different doc)
+//            if (getKoPart()->manager() )
+//                getKoPart()->manager()->setActivePart(getKoPart(), this );
+//        }
         // Add sub-view specific gui
         ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
         if ( v ) {

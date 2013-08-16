@@ -759,11 +759,11 @@ void KWView::setDistractionFreeMode(bool status)
 {
     m_isDistractionFreeMode = status;
 
-    shell()->toggleDockersVisibility(!status);
-    shell()->menuBar()->setVisible(!status);
+    mainWindow()->toggleDockersVisibility(!status);
+    mainWindow()->menuBar()->setVisible(!status);
 
-    shell()->viewFullscreen(status);
-    foreach(KToolBar* toolbar, shell()->toolBars()) {
+    mainWindow()->viewFullscreen(status);
+    foreach(KToolBar* toolbar, mainWindow()->toolBars()) {
         if (toolbar->isVisible() == status) {
             toolbar->setVisible(!status);
         }
@@ -772,7 +772,7 @@ void KWView::setDistractionFreeMode(bool status)
     if (status) {
          QTimer::singleShot(2000, this, SLOT(hideUI()));
     } else {
-         shell()->statusBar()->setVisible(true);
+         mainWindow()->statusBar()->setVisible(true);
          static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
          static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     }
@@ -792,7 +792,7 @@ void KWView::setDistractionFreeMode(bool status)
 void KWView::hideUI()
 {
     if (m_isDistractionFreeMode) {
-        shell()->statusBar()->setVisible(false);
+        mainWindow()->statusBar()->setVisible(false);
         // Hide vertical  and horizontal scroll bar.
         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -823,11 +823,11 @@ void KWView::viewMouseMoveEvent(QMouseEvent *e)
 
     // Handle stause bar and horizonta scroll bar.
     if (e->y() >= (m_gui->size().height() - statusBar()->size().height())) {
-        shell()->statusBar()->setVisible(true);
+        mainWindow()->statusBar()->setVisible(true);
         static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     }
     else {
-       shell()->statusBar()->setVisible(false);
+       mainWindow()->statusBar()->setVisible(false);
        static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 

@@ -24,7 +24,6 @@
 #include "KoDocument.h"
 #include "KoFilter.h"
 
-#include <kparts/factory.h>
 #include <kservicetype.h>
 #include <kpluginfactory.h>
 
@@ -47,6 +46,13 @@ KoDocumentEntry::KoDocumentEntry(QPluginLoader *loader)
 
 KoDocumentEntry::~KoDocumentEntry()
 {
+}
+
+/**
+ *  @return TRUE if the document can handle the requested mimetype.
+ */
+bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
+    return mimeTypes().contains(_mimetype);
 }
 
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
@@ -104,10 +110,8 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
     for (unsigned int i = 0; i < max; i++, ++it) {
         //kDebug(30003) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
         //               << "   library=" << (*it)->library() << endl;
-
 //        if ((*it)->noDisplay())
 //            continue;
-
         lst.append(KoDocumentEntry(*it));
     }
 

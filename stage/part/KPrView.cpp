@@ -194,9 +194,9 @@ void KPrView::showStatusBar(bool toggled)
 void KPrView::initGUI()
 {
     // add page effect docker to the main window
-    if (shell()) {
+    if (mainWindow()) {
         KPrPageLayoutDockerFactory pageLayoutFactory;
-        KPrPageLayoutDocker *pageLayoutDocker = qobject_cast<KPrPageLayoutDocker*>( shell()->createDockWidget( &pageLayoutFactory ) );
+        KPrPageLayoutDocker *pageLayoutDocker = qobject_cast<KPrPageLayoutDocker*>( mainWindow()->createDockWidget( &pageLayoutFactory ) );
         pageLayoutDocker->setView( this );
     }
 
@@ -220,7 +220,7 @@ void KPrView::initGUI()
 void KPrView::initActions()
 {
     setComponentData(KPrFactory::componentData());
-    if (!m_part->isReadWrite() )
+    if (!koDocument()->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else
        setXMLFile( "stage.rc" );

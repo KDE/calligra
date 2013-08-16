@@ -36,6 +36,7 @@
 #include <QPrintDialog>
 
 #include <kconfigdialog.h>
+#include <kparts/event.h>
 
 class QStackedWidget;
 class QSplitter;
@@ -304,7 +305,7 @@ protected slots:
     void removeTaskModule( const KUrl &url );
 
 protected:
-    virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
+    virtual void guiActivateEvent( bool activated );
     virtual void updateReadWrite( bool readwrite );
 
     QList<QAction*> sortedActionList();

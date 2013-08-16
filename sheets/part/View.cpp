@@ -76,7 +76,6 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <ktoolinvocation.h>
-#include <kparts/event.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
@@ -636,6 +635,8 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     new ViewAdaptor(this);
 #endif
 
+    initialPosition();
+
     d->canvas->setFocus();
 }
 
@@ -712,7 +713,6 @@ void View::initView()
 
     // Setup the map model.
     d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas, this);
-    installEventFilter(d->mapViewModel); // listen to KParts::GUIActivateEvent
     connect(d->mapViewModel, SIGNAL(addCommandRequested(KUndo2Command*)),
             doc(), SLOT(addCommand(KUndo2Command*)));
     connect(d->mapViewModel, SIGNAL(activeSheetChanged(Sheet*)),
@@ -741,18 +741,18 @@ void View::initView()
     // Load the KSpread Tools
     ToolRegistry::instance()->loadTools();
 
-    if (shell())
+    if (mainWindow())
     {
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
-        shell()->dockerManager()->removeToolOptionsDocker();
+        QDockWidget* modeBox = mainWindow()->createDockWidget(&modeBoxFactory);
+        mainWindow()->dockerManager()->removeToolOptionsDocker();
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
         //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-        //        shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -1004,8 +1004,8 @@ void View::initConfig()
 
 void View::changeNbOfRecentFiles(int _nb)
 {
-    if (shell())
-        shell()->setMaxRecentItems(_nb);
+    if (mainWindow())
+        mainWindow()->setMaxRecentItems(_nb);
 }
 
 void View::initCalcMenu()
@@ -1157,7 +1157,7 @@ void View::finishLoading()
     setHeaderMinima();
 
     // Activate the cell tool.
-    if (shell())
+    if (mainWindow())
         KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
 }
 
@@ -1944,24 +1944,6 @@ void View::menuCalc(bool)
 QWidget* View::canvas() const
 {
     return d->canvas;
-}
-
-void View::guiActivateEvent(KParts::GUIActivateEvent *ev)
-{
-    // We need a width/height > 0 for setting the initial position properly.
-    // This is not always the case from the beginning of the View's lifetime.
-    if (ev->activated()) {
-        initialPosition();
-    }
-
-    if (d->activeSheet) {
-        if (ev->activated()) {
-            if (d->calcLabel)
-                calcStatusBarOp();
-        }
-    }
-
-    KoView::guiActivateEvent(ev);
 }
 
 void View::popupTabBarMenu(const QPoint & _point)

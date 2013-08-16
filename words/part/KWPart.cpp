@@ -27,11 +27,6 @@
 #include "frames/KWTextFrameSet.h"
 #include "dialogs/KWStartupWidget.h"
 
-#ifdef SHOULD_BUILD_RDF
-#include <KoDocumentRdf.h>
-#include <KoDocumentRdfEditWidget.h>
-#endif
-
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoToolManager.h>
@@ -47,7 +42,7 @@ KWPart::KWPart(QObject *parent)
     : KoPart(parent)
     , m_document(0)
 {
-    setComponentData(KWFactory::componentData(), false);
+    setComponentData(KWFactory::componentData());
 
     setTemplateType("words_template");
 }
@@ -67,21 +62,21 @@ KWDocument *KWPart::document() const
     return m_document;
 }
 
-KoView *KWPart::createViewInstance(QWidget *parent)
+KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    KWView *view = new KWView(this, m_document, parent);
-    setupViewInstance(view);
+    KWView *view = new KWView(this, qobject_cast<KWDocument*>(document), parent);
+    setupViewInstance(document, view);
     return view;
 }
 
-void KWPart::setupViewInstance(KWView *view)
+void KWPart::setupViewInstance(KoDocument *document, KWView *view)
 {
-    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *, KoShapeManager::Repaint)));
-    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape *)));
-    connect(m_document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
+    connect(document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *, KoShapeManager::Repaint)));
+    connect(document, SIGNAL(shapeRemoved(KoShape *)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape *)));
+    connect(document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
 
     bool switchToolCalled = false;
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
+    foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
         if (fs->frameCount() == 0)
             continue;
         foreach (KWFrame *frame, fs->frames())
@@ -102,11 +97,11 @@ void KWPart::setupViewInstance(KWView *view)
         KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
 }
 
-QGraphicsItem *KWPart::createCanvasItem()
+QGraphicsItem *KWPart::createCanvasItem(KoDocument *document)
 {
     // caller owns the canvas item
-    KWCanvasItem *item = new KWCanvasItem(QString(), m_document);
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
+    KWCanvasItem *item = new KWCanvasItem(QString(), qobject_cast<KWDocument*>(document));
+    foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
         if (fs->frameCount() == 0) {
             continue;
         }
@@ -130,6 +125,11 @@ QList<KoPart::CustomDocumentWidgetItem> KWPart::createCustomDocumentWidgets(QWid
     return widgetList;
 }
 
+KoMainWindow *KWPart::createMainWindow()
+{
+    return new KoMainWindow(WORDS_MIME_TYPE, componentData());
+}
+
 void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 {
     // print error if kotext not available
@@ -138,17 +138,6 @@ void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     else
         KoPart::showStartUpWidget(parent, alwaysShow);
-}
-
-KoDocumentInfoDlg *KWPart::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
-{
-    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
-#ifdef SHOULD_BUILD_RDF
-    KoPageWidgetItem *rdfEditWidget = new KoDocumentRdfEditWidget(static_cast<KoDocumentRdf*>(document()->documentRdf()));
-    dlg->addPageItem(rdfEditWidget);
-#endif
-    return dlg;
-
 }
 
 void KWPart::showErrorAndDie()

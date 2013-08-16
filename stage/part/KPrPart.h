@@ -46,10 +46,11 @@ public:
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow);
 
     /// reimplemented
-    virtual KoView *createViewInstance(QWidget *parent);
+    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
     /// reimplemented
-    virtual QGraphicsItem *createCanvasItem();
-
+    virtual QGraphicsItem *createCanvasItem(KoDocument *document);
+    /// reimplemented
+    virtual KoMainWindow *createMainWindow();
 protected slots:
     /// Quits Stage with error message from m_errorMessage.
     void showErrorAndDie();
