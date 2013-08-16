@@ -69,7 +69,9 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoPart.h>
+#include <KoDocumentInfoDlg.h>
 #include <KoDocumentRdfBase.h>
+#include <KoPageWidgetItem.h>
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #include <KoDocumentRdfEditWidget.h>

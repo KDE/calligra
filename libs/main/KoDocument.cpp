@@ -95,8 +95,6 @@
 
 using namespace std;
 
-class KoPageWidgetItem;
-
 /**********************************************************
  *
  * KoDocument

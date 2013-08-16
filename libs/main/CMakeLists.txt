@@ -163,6 +163,7 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    KoPageWidgetItem.h
     MacSupport.h
     KoModeBoxFactory.h
     KoPart.h
