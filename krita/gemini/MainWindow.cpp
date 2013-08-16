@@ -193,6 +193,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     KisConfig cfg;
     cfg.setUseOpenGL(true);
+    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
 
     foreach(QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent(fileName);
@@ -375,7 +376,7 @@ void MainWindow::setCurrentSketchPage(QString newPage)
         }
         else
         {
-            QTimer::singleShot(2000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+            QTimer::singleShot(3000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
         }
     }
 }
