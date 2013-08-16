@@ -449,10 +449,6 @@ KoMainWindow::~KoMainWindow()
         delete d->rootDocument;
     }
 
-    if (d->m_registeredPart ) {
-            d->m_registeredPart->setManager( 0 );
-    }
-
     delete d;
 }
 
@@ -2031,7 +2027,6 @@ void KoMainWindow::removePart( KoPart *part )
         return;
     }
     d->m_registeredPart = 0;
-    part->setManager(0);
     if ( part == d->m_activePart ) {
         setActivePart(0, 0);
     }

@@ -62,7 +62,6 @@ public:
         , document(0)
         , canvasItem(0)
         , startUpWidget(0)
-        , m_manager(0)
         , m_componentData(KGlobal::mainComponent())
     {
     }
@@ -81,8 +80,6 @@ public:
     QGraphicsItem *canvasItem;
     QPointer<KoOpenPane> startUpWidget;
     QString templateType;
-
-    KoMainWindow * m_manager;
 
     KComponentData m_componentData;
 
@@ -389,11 +386,6 @@ KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &compon
     connect(openPane, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
 
     return openPane;
-}
-
-void KoPart::setManager(KoMainWindow *manager)
-{
-    d->m_manager = manager;
 }
 
 void KoPart::setComponentData(const KComponentData &componentData)

@@ -263,11 +263,6 @@ protected:
      */
     virtual QGraphicsItem *createCanvasItem(KoDocument *document);
 
-
-public: // Part stuff
-
-    virtual void setManager( KoMainWindow * manager );
-
 protected:
 
     /// Call in the constructor of the subclass: setComponentData(AppFactory::componentData());
