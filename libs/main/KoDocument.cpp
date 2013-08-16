@@ -2687,14 +2687,8 @@ bool KoDocument::openUrlInternal(const KUrl &url)
     if (d->m_url.isLocalFile()) {
         d->m_file = d->m_url.toLocalFile();
         return d->openLocalFile();
-    } else if (KProtocolInfo::protocolClass(url.protocol()) == ":local") {
-        // Maybe we can use a "local path", to avoid a temp copy?
-        KIO::JobFlags flags = KIO::DefaultFlags;
-        d->m_statJob = KIO::mostLocalUrl(d->m_url, flags);
-        d->m_statJob->ui()->setWindow( 0 );
-        connect(d->m_statJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotStatJobFinished(KJob*)));
-        return true;
-    } else {
+    }
+    else {
         d->openRemoteFile();
         return true;
     }
