@@ -50,7 +50,6 @@ class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
 class KoProgressUpdater;
-class KoPageWidgetItem;
 class KoProgressProxy;
 class KoDocumentInfoDlg;
 

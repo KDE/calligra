@@ -69,7 +69,6 @@
 #include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
-#include <kprotocolinfo.h>
 #include <kfiledialog.h>
 
 #include <QBuffer>
@@ -98,8 +97,6 @@
 #include <unistd.h>
 
 using namespace std;
-
-class KoPageWidgetItem;
 
 /**********************************************************
  *

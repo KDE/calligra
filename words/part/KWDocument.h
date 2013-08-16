@@ -51,7 +51,6 @@ class KoShapeAnchor;
 class KoShapeContainer;
 class KoShapeController;
 class KoPart;
-class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
 class KoDocumentInfoDlg;
