@@ -489,6 +489,9 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
     if (entry->available != "check")
         return true;
 
+#if 1
+        return true;
+#else
     //kDebug( 30500 ) <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
     QString key = entry->loader()->fileName() + " - " + entry->service()->library();
@@ -518,6 +521,7 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
         }
     }
     return m_filterAvailable[key];
+#endif
 }
 
 void KoFilterManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)
