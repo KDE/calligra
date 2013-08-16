@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QMetaMethod>
 #include <QJsonObject>
+#include <QPluginLoader>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -161,7 +162,7 @@ void Graph::buildGraph()
                 }
             }
         } else
-            kDebug(30500) << "Filter:" << filter->service()->name() << " doesn't apply.";
+            kDebug(30500) << "Filter:" << filter->loader()->fileName() << " doesn't apply.";
     }
 }
 

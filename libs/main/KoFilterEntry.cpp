@@ -23,31 +23,32 @@ Boston, MA 02110-1301, USA.
 #include "KoDocument.h"
 #include "KoFilter.h"
 
+#include <KoJsonTrader.h>
 #include <kservicetype.h>
+#include <kpluginfactory.h>
 #include <kdebug.h>
-#include <kservicetypetrader.h>
 #include <QFile>
 
 #include <limits.h> // UINT_MAX
 
 
-KoFilterEntry::KoFilterEntry(const KService::Ptr& service)
-        : m_service(service)
+KoFilterEntry::KoFilterEntry(QPluginLoader *loader)
+        : m_loader(loader)
 {
-    import = service->property("X-KDE-Import").toStringList();
-    export_ = service->property("X-KDE-Export").toStringList();
-    int w = service->property("X-KDE-Weight").toInt();
+    import = loader->property("X-KDE-Import").toStringList();
+    export_ = loader->property("X-KDE-Export").toStringList();
+    int w = loader->property("X-KDE-Weight").toInt();
     weight = w < 0 ? UINT_MAX : static_cast<unsigned int>(w);
-    available = service->property("X-KDE-Available").toString();
+    available = loader->property("X-KDE-Available").toString();
 }
 
 QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;
 
-    KService::List offers = KServiceTypeTrader::self()->query("Calligra/Filter");
+    QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Filter", QString());
 
-    KService::List::ConstIterator it = offers.constBegin();
+    QList<QPluginLoader *>::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();
     //kDebug(30500) <<"Query returned" << max <<" offers";
     for (unsigned int i = 0; i < max; i++) {
@@ -64,11 +65,10 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 
 KoFilter* KoFilterEntry::createFilter(KoFilterChain* chain, QObject* parent)
 {
-    KPluginLoader loader(*m_service);
-    KLibFactory* factory = loader.factory();
+    KLibFactory *factory = qobject_cast<KLibFactory *>(m_loader->instance());
 
     if (!factory) {
-        kWarning(30003) << loader.errorString();
+        kWarning(30003) << m_loader->errorString();
         return 0;
     }
 

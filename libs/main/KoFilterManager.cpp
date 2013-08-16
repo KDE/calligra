@@ -333,7 +333,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
 
         if (impList.empty() || expList.empty()) {
             // This filter cannot be used under these conditions
-            kDebug(30500) << "Filter:" << (*it)->service()->name() << " ruled out";
+            kDebug(30500) << "Filter:" << (*it)->loader()->fileName() << " ruled out";
             continue;
         }
 
@@ -373,7 +373,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
                 }
             }
         } else {
-            kDebug(30500) << "Filter:" << (*it)->service()->name() << " does not apply.";
+            kDebug(30500) << "Filter:" << (*it)->loader()->fileName() << " does not apply.";
         }
     }
 }
@@ -491,7 +491,7 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
 
     //kDebug( 30500 ) <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
-    QString key = entry->service()->name() + " - " + entry->service()->library();
+    QString key = entry->loader()->fileName() + " - " + entry->service()->library();
 
     if (!m_filterAvailable.contains(key)) {
         //kDebug( 30500 ) <<"Not cached, checking...";
