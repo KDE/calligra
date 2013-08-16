@@ -99,11 +99,14 @@ Panel {
     }
     Connections {
         target: sketchView;
-        onLoadingFinished: {
-//            if(window.applicationName === undefined) {
-                presetsModel.currentPreset = "Pencil_HB";
-//            }
-        }
+        onLoadingFinished: presetSettingTimer.start();
+    }
+    Timer {
+        id: presetSettingTimer
+        interval: 1500;
+        running: false;
+        repeat: false;
+        onTriggered: presetsModel.currentPreset = "Pencil_HB";
     }
 
     peekContents: GridView {
