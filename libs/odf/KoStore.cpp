@@ -82,7 +82,7 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
 #ifdef QCA2
         if (automatic && mode == Read) {
             // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
-            return new KoEncryptedStore(fileName, Read, appIdentification);
+            //return new KoEncryptedStore(fileName, Read, appIdentification);
         }
 #endif
         return new KoZipStore(fileName, mode, appIdentification);
