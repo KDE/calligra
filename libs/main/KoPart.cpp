@@ -242,7 +242,7 @@ KoMainWindow *KoPart::currentMainwindow() const
         mainWindow = qobject_cast<KoMainWindow*>(widget);
     }
 
-    if (!mainWindow && d->document && mainWindows().size() > 0) {
+    if (!mainWindow && mainWindows().size() > 0) {
         mainWindow = mainWindows().first();
     }
     return mainWindow;
