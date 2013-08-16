@@ -67,7 +67,7 @@
 #include <kio/jobuidelegate.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
-#include <kdirnotify.h>
+//#include <kdirnotify.h>
 #include <ktemporaryfile.h>
 #include <kfiledialog.h>
 
