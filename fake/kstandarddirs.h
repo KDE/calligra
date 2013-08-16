@@ -9,6 +9,7 @@
 #include <QFileInfo>
 #include <QStandardPaths>
 #include <QDebug>
+#include <QCoreApplication>
 
 class KStandardDirs
 {
@@ -542,9 +543,14 @@ public:
      **/
     static QString locate( const char *type, const QString& filename, const KComponentData &cData = KGlobal::mainComponent() )
     {
-        qDebug() << Q_FUNC_INFO << type << filename;
+        if (QString(type) == QString("data")) {
+            return QCoreApplication::applicationDirPath()+QString("/../share/")+filename;
+  //      } else if (type == "apps"|| type == "xdgdata-apps") {
+  //      } else if (type == "config") {
+  //      } else if (type == "pixmap" || type == "xdgdata-pixmap" || type == "xdgdata-icon") {
+        }
         //Q_ASSERT(false);
-        return QString();
+        return QString()+filename;
     }
 
     /**
