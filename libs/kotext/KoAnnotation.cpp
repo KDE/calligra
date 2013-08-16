@@ -93,39 +93,37 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 {
     Q_UNUSED(context);
 
-    kDebug(32500) << "****** Start Load odf ******";
+    if (element.localName() != "annotation") {
+        return false;
+    }
+
+    //kDebug(32500) << "****** Start Load odf ******";
     QString annotationName = element.attribute("name");
-    const QString localName(element.localName());
 
     if (manager()) {
         // For cut and paste, make sure that the name is unique.
         d->name = createUniqueAnnotationName(manager()->annotationManager(), annotationName, false);
 
-        if (localName == "annotation") {
-            // We only support annotations for a point to start with.
-            // point, not a region. If we encounter an annotation-end
-            // tag, we will change that.
-            setPositionOnlyMode(true);
+        // When loading an annotation we must assume that it is for a point rather than
+        // a range. If we encounter an <annotation-end> tag later, we will change that.
+        setPositionOnlyMode(true);
 
-            // Add inline Rdf to the annotation.
-            if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
-                KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
-                if (inlineRdf->loadOdf(element)) {
-                    setInlineRdf(inlineRdf);
-                }
-                else {
-                    delete inlineRdf;
-                    inlineRdf = 0;
-                }
+        // Add inline Rdf to the annotation.
+        if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
+            KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
+            if (inlineRdf->loadOdf(element)) {
+                setInlineRdf(inlineRdf);
             }
-            kDebug(32500) << "****** End Load ******";
+            else {
+                delete inlineRdf;
+                inlineRdf = 0;
+            }
         }
-        else {
-            // something pretty weird going on...
-            return false;
-        }
+        //kDebug(32500) << "****** End Load ******";
+
         return true;
     }
+
     return false;
 }
 

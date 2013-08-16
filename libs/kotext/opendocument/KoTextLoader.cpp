@@ -1084,11 +1084,16 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 
             if (localName == "annotation-end") {
+                // If the tag is annotation-end, there should already be a KoAnnotation
+                // with the same name as this one.  If so, just find it and set the end
+                // of the range to the current position.
                 KoAnnotation *annotation = textRangeManager->annotationManager()->annotation(KoAnnotation::createUniqueAnnotationName(textRangeManager->annotationManager(), ts.attribute("name"), true));
                 if (annotation) {
                     annotation->setRangeEnd(cursor.position());
                 }
             } else {
+                // if the tag is "annotation" then create a KoAnnotation
+                // and an annotation shape and call loadOdf() in them.
                 KoAnnotation *annotation = new KoAnnotation(cursor);
                 annotation->setManager(textRangeManager);
                 if (textRangeManager && annotation->loadOdf(ts, d->context)) {

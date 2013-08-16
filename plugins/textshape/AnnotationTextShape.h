@@ -44,7 +44,9 @@ public:
     void setAnnotaionTextData(KoTextShapeData *textShape);
 
     // reimplemented
-        void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter,
+                        KoShapePaintingContext &paintcontext);
+
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
      *
@@ -66,15 +68,18 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
     void setCreator(QString creator);
-    QString creator();
+    QString creator() const;
     void setDate(QString date);
-    QString date();
+    QString date() const;
+    void setDateString(QString date);
+    QString dateString() const;
 
 private:
     KoTextShapeData *m_textShapeData;
 
     QString m_creator;
     QString m_date;
+    QString m_dateString;       // another wayof storing the date. Not sure when it is used.
 };
 
 #endif // ANNOTATIONTEXTSHAPE_H

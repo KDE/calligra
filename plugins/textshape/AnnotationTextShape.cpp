@@ -41,6 +41,9 @@
 AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
                                          KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
+    , m_creator()
+    , m_date()
+    , m_dateString()
 {
     setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::yellow)));
     setGeometryProtected(true);
@@ -59,7 +62,8 @@ void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
     m_textShapeData->setResizeMethod(KoTextShapeData::AutoGrowHeight);
 }
 
-void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
+                                         KoShapePaintingContext &paintcontext)
 {
     TextShape::paintComponent(painter, converter, paintcontext);
     QRectF clipRect = outlineRect();
@@ -100,7 +104,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
                 m_date = el.text();
             }
             else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
-                // FIXME: What to do here?
+                m_dateString = el.text();
             }
         }
         textLoader.loadBody(element, cursor);
@@ -125,6 +129,12 @@ void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
     writer->addTextNode(m_date);
     writer->endElement(); // dc:date
 
+    if (!m_dateString.isEmpty()) {
+        writer->startElement("meta:date-string", false);
+        writer->addTextNode(m_dateString);
+        writer->endElement(); // meta:date-string
+    }
+
     m_textShapeData->saveOdf(context, 0, 0, -1);
 }
 
@@ -133,7 +143,7 @@ void AnnotationTextShape::setCreator(const QString creator)
     m_creator = creator;
 }
 
-QString AnnotationTextShape::creator()
+QString AnnotationTextShape::creator() const
 {
     return m_creator;
 }
@@ -143,7 +153,17 @@ void AnnotationTextShape::setDate(QString date)
     m_date = date;
 }
 
-QString AnnotationTextShape::date()
+QString AnnotationTextShape::date() const
 {
     return m_date;
+}
+
+void AnnotationTextShape::setDateString(QString dateString)
+{
+    m_dateString = dateString;
+}
+
+QString AnnotationTextShape::dateString() const
+{
+    return m_dateString;
 }
