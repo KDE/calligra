@@ -49,7 +49,7 @@
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
 #endif
-#include <khelpmenu.h>
+//#include <khelpmenu.h>
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
@@ -137,7 +137,7 @@ public:
         activityResource = 0;
 #endif
         themeManager = 0;
-        m_helpMenu = 0;
+//        m_helpMenu = 0;
 
         // PartManger
         m_activeWidget = 0;
@@ -236,7 +236,7 @@ public:
 
     Digikam::ThemeManager *themeManager;
 
-    KHelpMenu *m_helpMenu;
+//    KHelpMenu *m_helpMenu;
 
 
 };
