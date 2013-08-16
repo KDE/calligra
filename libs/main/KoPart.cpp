@@ -391,7 +391,7 @@ KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &compon
     return openPane;
 }
 
-void KoPart::setManager( KoMainWindow *manager )
+void KoPart::setManager(KoMainWindow *manager)
 {
     d->m_manager = manager;
 }
