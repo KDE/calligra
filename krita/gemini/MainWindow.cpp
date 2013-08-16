@@ -315,10 +315,16 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         qApp->processEvents();
         view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        qApp->processEvents();
+        QPoint center = view->rect().center();
+        view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
     }
     else if(d->sketchKisView && centralWidget() == d->sketchView) {
         qApp->processEvents();
         d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        qApp->processEvents();
+        QPoint center = d->sketchKisView->rect().center();
+        d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
     }
 }
 
