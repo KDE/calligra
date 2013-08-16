@@ -58,6 +58,8 @@
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QPluginLoader>
+#include <QJsonObject>
 
 #include <stdlib.h>
 
@@ -82,7 +84,7 @@ public:
 };
 
 
-KoApplication::KoApplication(const QByteArray &nativeMimeType, int argc, char** argv, KAboutData *aboutData)
+KoApplication::KoApplication(int argc, char** argv, const QByteArray &nativeMimeType, KAboutData *aboutData)
     : QApplication(argc, argv)
     , d(new KoApplicationPrivate)
 {
@@ -558,10 +560,10 @@ int KoApplication::documents()
 QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) const
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
-    KService::Ptr service = entry.service();
-    return KoFilterManager::mimeFilter(d->nativeMimeType,
-                                       direction,
-                                       service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+    QJsonObject json = entry.loader()->metaData().value("MetaData").toObject();
+    QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+
+    return KoFilterManager::mimeFilter(d->nativeMimeType, direction, mimeTypes);
 }
 
 

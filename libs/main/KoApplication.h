@@ -62,7 +62,7 @@ public:
      *
      * @param nativeMimeType: the nativeMimeType of the calligra application
      */
-    KoApplication(int argc, char **argv, const QByteArray &nativeMimeType. KAboutData *aboutData);
+    KoApplication(int argc, char **argv, const QByteArray &nativeMimeType, KAboutData *aboutData);
 
     /**
      *  Destructor.

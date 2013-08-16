@@ -122,6 +122,7 @@ public:
         UserDefinedError = 100
     };
 
+#endif
 
     /**
      * Returns the error code, if there has been an error.
@@ -130,7 +131,7 @@ public:
      *
      * @return the error code for this job, 0 if no error.
      */
-    int error() const;
+    int error() const {return 0;}
 
     /**
      * Returns the error text if there has been an error.
@@ -143,7 +144,7 @@ public:
      *
      * @return a string to help understand the error
      */
-    QString errorText() const;
+    QString errorText() const {return QString();}
 
     /**
      * A human-readable error message.
@@ -161,9 +162,9 @@ public:
      *
      * @return a translated error message, providing error() is 0
      */
-    virtual QString errorString() const;
+    virtual QString errorString() const {return QString();}
 
-
+#if 0
     /**
      * Returns the processed amount of a given unit for this job.
      *
@@ -254,11 +255,20 @@ public:
     }
 };
 
+class KOFAKE_EXPORT StatJob : public Job
+{
+    Q_OBJECT
+public:
+    virtual void exec();
+    KUrl mostLocalUrl() const {return KUrl();}
+};
+
 class KOFAKE_EXPORT FileCopyJob : public Job
 {
     Q_OBJECT
 public:
     virtual void exec();
+    KUrl srcUrl() const {return KUrl();}
 };
 
 class KOFAKE_EXPORT SimpleJob : public Job

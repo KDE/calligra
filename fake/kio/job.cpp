@@ -3,6 +3,12 @@
 
 using namespace KIO;
 
+void KIO::StatJob::exec()
+{
+    qWarning() << Q_FUNC_INFO << "TODO";
+    deleteLater();
+}
+
 void KIO::FileCopyJob::exec()
 {
     KUrl src = m_args[0].value<KUrl>();

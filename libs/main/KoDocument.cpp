@@ -423,9 +423,9 @@ public:
         }
         else
         {
-            KUrl dirUrl( m_url );
-            dirUrl.setPath( dirUrl.directory() );
-            ::org::kde::KDirNotify::emitFilesAdded( dirUrl.url() );
+//            KUrl dirUrl( m_url );
+//            dirUrl.setPath( dirUrl.directory() );
+//            ::org::kde::KDirNotify::emitFilesAdded( dirUrl.url() );
 
             m_uploadJob = 0;
             document->setModified( false );
