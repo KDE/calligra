@@ -218,7 +218,6 @@ void KoPart::removeMainWindow(KoMainWindow *mainWindow)
 {
     kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
     if (mainWindow) {
-        disconnect(mainWindow, SIGNAL(documentSaved()), d->document->undoStack(), SLOT(setClean()));
         d->mainWindows.removeAll(mainWindow);
     }
 }
