@@ -7,6 +7,8 @@
 #include <kicon.h>
 #include <kguiitem.h>
 #include <kpushbutton.h>
+#include <kconfigbase.h>
+#include <kconfiggroup.h>
 
 #include "kofake_export.h"
 
