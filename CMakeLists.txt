@@ -272,6 +272,8 @@ calligra_set_productset(${PRODUCTSET})
 # this gives us the KDE install dir variables (instead of defining them in FindKDE4Internal.cmake),
 # RPATH handling and test settings. It does not need the actual KF5 modules
 find_package(KF5 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs)
+# override the kf5 plugin installdir
+set(PLUGIN_INSTALL_DIR ${BIN_INSTALL_DIR}/calligra/plugins)
 
 # Use the KDE4 macros, they are very convenient. There's a copy in cmake/kde4_macros
 include(KDE4Macros)

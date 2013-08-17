@@ -44,7 +44,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 {
     Q_UNUSED(servicetype);
     QList<QPluginLoader *>list;
-    QDirIterator dirIter(QCoreApplication::applicationDirPath()+"/../lib/", QDirIterator::Subdirectories);
+    QDirIterator dirIter(QCoreApplication::applicationDirPath() + "/calligra/plugins/", QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
         QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
