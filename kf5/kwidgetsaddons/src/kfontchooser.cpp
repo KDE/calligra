@@ -395,11 +395,11 @@ KFontChooser::KFontChooser( QWidget *parent,
     // Finished setting up the chooser layout.
 
     // lets initialize the display if possible
-    if (d->usingFixed) {
-        setFont( QFontDatabase::systemFont(QFontDatabase::FixedFont), d->usingFixed );
-    } else {
+    //if (d->usingFixed) {
+    //     setFont( QFontDatabase::systemFont(QFontDatabase::FixedFont), d->usingFixed );
+    //} else {
         setFont( QGuiApplication::font(), d->usingFixed );
-    }
+    //}
 
     // check or uncheck or gray out the "relative" checkbox
     if( sizeIsRelativeState && d->sizeIsRelativeCheckBox )
