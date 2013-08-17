@@ -782,15 +782,22 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CM
 
 # for the fake kde headers during transition
 include_directories(${CMAKE_SOURCE_DIR}/fake
-                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/plugin
-                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/services
-                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/kdeinit
-                    ${CMAKE_SOURCE_DIR}/fake/kservice/src/sycoca
-                    ${CMAKE_BINARY_DIR}/fake/kservice/src
-                    ${CMAKE_BINARY_DIR}/fake/kservice/
-                    ${CMAKE_SOURCE_DIR}/fake/kconfig/src/core/
-                    ${CMAKE_BINARY_DIR}/fake/kconfig/src/core
-                    ${CMAKE_BINARY_DIR}/fake/kconfig
+                    ${CMAKE_SOURCE_DIR}/kf5/kservice/src/plugin
+                    ${CMAKE_SOURCE_DIR}/kf5/kservice/src/services
+                    ${CMAKE_SOURCE_DIR}/kf5/kservice/src/kdeinit
+                    ${CMAKE_SOURCE_DIR}/kf5/kservice/src/sycoca
+                    ${CMAKE_BINARY_DIR}/kf5/kservice/src
+                    ${CMAKE_BINARY_DIR}/kf5/kservice/
+                    ${CMAKE_SOURCE_DIR}/kf5/kconfig/src/core/
+                    ${CMAKE_BINARY_DIR}/kf5/kconfig/src/core
+                    ${CMAKE_BINARY_DIR}/kf5/kconfig
+                    ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src
+                    ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/caching
+                    ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/io
+                    ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/jobs
+                    ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/randomness
+                    ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/text
+                    ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/util
 )
 
 # koplugin is at the bottom of the stack
@@ -1062,6 +1069,7 @@ endif(SHOULD_BUILD_RDF)
 ####################
 ###################
 
+add_subdirectory(kf5)
 add_subdirectory(fake)
 add_subdirectory(words)
 

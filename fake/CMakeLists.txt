@@ -225,10 +225,6 @@ set(kofake_HEADERS
     kstandardaction.h
 )
 
-add_subdirectory(kcoreaddons)
-add_subdirectory(kservice)
-add_subdirectory(kconfig)
-
 QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS_ONLY})
 
 kde4_add_library(kofake SHARED ${kofake_LIB_SRCS} ${kofake_HEADERS_MOC})
