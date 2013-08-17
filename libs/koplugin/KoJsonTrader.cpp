@@ -47,29 +47,31 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     QDirIterator dirIter(QCoreApplication::applicationDirPath() + "/calligra/plugins/", QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
-        QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
-        QJsonObject json = loader->metaData().value("MetaData").toObject();
+        if (dirIter.fileInfo().isFile()) {
+            QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
+            QJsonObject json = loader->metaData().value("MetaData").toObject();
 
-        if (json.isEmpty()) {
-            qDebug() << dirIter.filePath() << "has no json!";
-//            foreach(QString key, loader->metaData().keys()) {
-//                qDebug() << key << loader->metaData().value(key);
-//            }
+            if (json.isEmpty()) {
+                qDebug() << dirIter.filePath() << "has no json!";
+                //            foreach(QString key, loader->metaData().keys()) {
+                //                qDebug() << key << loader->metaData().value(key);
+                //            }
 
-        }
-        if (!json.isEmpty()) {
-            if (! json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
-                continue;
             }
-
-            if (!mimetype.isEmpty()) {
-                QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-                mimeTypes += json.value("X-KDE-NativeMimeType").toString();
-                if (! mimeTypes.contains(mimetype)) {
+            if (!json.isEmpty()) {
+                if (! json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
                     continue;
                 }
+
+                if (!mimetype.isEmpty()) {
+                    QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+                    mimeTypes += json.value("X-KDE-NativeMimeType").toString();
+                    if (! mimeTypes.contains(mimetype)) {
+                        continue;
+                    }
+                }
+                list.append(loader);
             }
-            list.append(loader);
         }
 
     }
