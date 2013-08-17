@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KPrFactory.h"
-
-//K_EXPORT_PLUGIN(KPrFactory )
+#include "KPrFactoryInit.h"
+#include "KPrFactoryInit.moc"
 

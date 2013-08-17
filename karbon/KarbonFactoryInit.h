@@ -16,21 +16,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FLOWFACTORYINIT_H
-#define FLOWFACTORYINIT_H
+#ifndef KARBONFACTORYINIT_H
+#define KARBONFACTORYINIT_H
 
-#include <FlowFactory.h>
+#include "ui/KarbonFactory.h"
+#include <kpluginfactory.h>
 
-class FlowFactoryInit : public FlowFactory
+class KarbonFactoryInit : public KarbonFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "flowpart.json")
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "karbonpart.json")
     Q_INTERFACES(KPluginFactory)
 
 public:
-    explicit FlowFactoryInit(QObject *parent = 0) : FlowFactory(parent) {}
-    virtual ~FlowFactoryInit() {}
+    explicit KarbonFactoryInit(QObject *parent = 0) : KarbonFactory(parent) {}
+    virtual ~KarbonFactoryInit() {}
 
 };
 
-#endif // FLOWFACTORYINIT_H
+
+#endif // KARBONFACTORYINIT_H

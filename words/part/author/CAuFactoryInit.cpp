@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "CAuFactory.h"
+#include "CAuFactoryInit.h"
+#include "CAuFactoryInit.moc"
 
-//K_EXPORT_PLUGIN(CAuFactory)
 

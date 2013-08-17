@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+  /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -36,8 +36,6 @@ namespace Sheets
 class CALLIGRA_SHEETS_COMMON_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "sheetspart.json")
-    Q_INTERFACES(KPluginFactory)
 
 public:
     explicit Factory(QObject* parent = 0);

@@ -18,7 +18,5 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ui/kis_factory2.h"
-
-
-//K_EXPORT_PLUGIN(KisFactory2)
+#include "krita_part_init.h"
+#include "krita_part_init.moc"

@@ -17,7 +17,5 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KWFactory.h"
-
-//K_EXPORT_PLUGIN(KWFactory)
-
+#include "KWFactoryInit.h"
+#include "moc_KWFactoryInit.cpp"

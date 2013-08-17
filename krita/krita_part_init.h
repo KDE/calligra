@@ -16,20 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FLOWFACTORYINIT_H
-#define FLOWFACTORYINIT_H
+#ifndef KRITAPARTINIT_H
+#define KRITAPARTINIT_H
 
-#include <FlowFactory.h>
+#include <kis_factory2.h>
 
-class FlowFactoryInit : public FlowFactory
+class KritaPartInit : public KisFactory2
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "flowpart.json")
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "kritapart.json")
     Q_INTERFACES(KPluginFactory)
 
+
 public:
-    explicit FlowFactoryInit(QObject *parent = 0) : FlowFactory(parent) {}
-    virtual ~FlowFactoryInit() {}
+    explicit KritaPartInit(QObject *parent = 0) : KisFactory2(parent) {}
+    virtual ~KirtaPartInit() {}
 
 };
 

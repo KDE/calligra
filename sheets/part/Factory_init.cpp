@@ -17,7 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Factory.h"
-
-//K_EXPORT_PLUGIN(Calligra::Sheets::Factory)
+#include "Factory_init.h"
+#include "moc_Factory_init.cpp"
 

@@ -33,8 +33,6 @@ class KAboutData;
 class KRITAUI_EXPORT KisFactory2 : public KPluginFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "../kritapart.json")
-    Q_INTERFACES(KPluginFactory)
 
 public:
 
