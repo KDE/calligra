@@ -614,7 +614,11 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
         }
         KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(range);
         if (annotation) {
-            QPointF refPos = d->anchoringParagraphContentRect.topLeft();
+            int position = range->rangeStart();
+            QTextBlock block = range->document()->findBlock(position);
+            QTextLine line = block.layout()->lineForTextPosition(position - block.position());
+            QPointF refPos(line.cursorToX(position - block.position()), line.y());
+
             KoShape *refShape = d->anchoringRootArea->associatedShape();
             //KoTextShapeData *refTextShapeData;
             //refPos += QPointF(refTextShapeData->leftPadding(), -refTextShapeData->documentOffset() + refTextShapeData->topPadding());
