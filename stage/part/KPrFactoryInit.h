@@ -24,6 +24,8 @@
 class KPrFactoryInit : public KPrFactory
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "stagepart.json")
+    Q_INTERFACES(KPluginFactory)
 
 public:
     explicit KPrFactoryInit(QObject *parent = 0) : KPrFactory(parent) {}

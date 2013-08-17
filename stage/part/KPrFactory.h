@@ -30,9 +30,6 @@ class KAboutData;
 class STAGE_EXPORT KPrFactory : public KPluginFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "stagepart.json")
-    Q_INTERFACES(KPluginFactory)
-
 public:
     explicit KPrFactory( QObject* parent = 0, const char* name = 0 );
     ~KPrFactory();

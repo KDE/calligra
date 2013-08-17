@@ -19,5 +19,5 @@
 */
 
 #include "KPrFactoryInit.h"
-#include "KPrFactoryInit.moc"
+#include "moc_KPrFactoryInit.cpp"
 
