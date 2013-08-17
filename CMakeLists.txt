@@ -789,7 +789,7 @@ include_directories(${CMAKE_SOURCE_DIR}/fake
                     ${CMAKE_BINARY_DIR}/kf5/kservice/src
                     ${CMAKE_BINARY_DIR}/kf5/kservice/
                     ${CMAKE_SOURCE_DIR}/kf5/kconfig/src/core/
-                    ${CMAKE_BINARY_DIR}/kf5/kconfig/src/core
+                    ${CMAKE_BINARY_DIR}/kf5/kconfig/src/core/
                     ${CMAKE_BINARY_DIR}/kf5/kconfig
                     ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src
                     ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/caching
@@ -798,7 +798,8 @@ include_directories(${CMAKE_SOURCE_DIR}/fake
                     ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/randomness
                     ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/text
                     ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/util
-                    ${CMAKE_SOURCE_DIR}kf5/kwidgetsaddons/src/
+                    ${CMAKE_SOURCE_DIR}/kf5/kwidgetsaddons/src/
+                    ${CMAKE_BINARY_DIR}/kf5/kwidgetsaddons/src
 )
 
 # koplugin is at the bottom of the stack

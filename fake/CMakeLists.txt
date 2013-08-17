@@ -57,7 +57,7 @@ set(kofake_LIB_SRCS
 )
 
 set(kofake_HEADERS_ONLY 
-    kcolorbutton.h
+    #kcolorbutton.h
     kencodingprober.h
     kstatusbar.h
     kcombobox.h
@@ -66,7 +66,7 @@ set(kofake_HEADERS_ONLY
     kreplacedialog.h
     kfind.h
     kxmlguiwindow.h
-    kmessagebox.h
+    #kmessagebox.h
     krecentdocument.h
     kfilewidget.h
     kparts/componentfactory.h
@@ -81,17 +81,17 @@ set(kofake_HEADERS_ONLY
     kfontsizeaction.h
     klimitediodevice_p.h
     klistwidgetsearchline.h
-    kselectaction.h
-    kpagewidget.h
+    #kselectaction.h
+    #kpagewidget.h
     config.h
     knuminput.h
     kstandarddirs.h
-    ktoggleaction.h
-    kstandardguiitem.h
+    #ktoggleaction.h
+    #kstandardguiitem.h
     kshortcut.h
     kpagedialog.h
     kmenu.h
-    kactionmenu.h
+    #kactionmenu.h
     kcolormimedata.h
     kmimetype.h
     kemailsettings.h
@@ -115,9 +115,9 @@ set(kofake_HEADERS_ONLY
     kdiroperator.h
     kcolordialog.h
     #kdesktopfile.h
-    kassistantdialog.h
+    #kassistantdialog.h
     knotifyconfigwidget.h
-    knewpassworddialog.h
+    #knewpassworddialog.h
     kwordwrap.h
     klocalizedstring.h
     ktoolbar.h
@@ -136,26 +136,26 @@ set(kofake_HEADERS_ONLY
     kwindowsystem.h
     kmainwindow.h
     kcolorscheme.h
-    kselector.h
+    #kselector.h
     kglobalsettings.h
-    kseparator.h
+    #kseparator.h
     #ksharedconfig.h
     kdeprintdialog.h
     kaboutdata.h
     kurlcombobox.h
     kimageio.h
-    kpassworddialog.h
+    #kpassworddialog.h
     kcolorutils.h
     kactioncollection.h
     ktextedit.h
     kfinddialog.h
     kurlcompletion.h
-    kfontaction.h
+    #kfontaction.h
     kcodecs.h
     krecentfilesaction.h
     kiconloader.h
     ktabwidget.h
-    kcolorcombo.h
+    #kcolorcombo.h
     kfilefiltercombo.h
     soprano/soprano.h
     kicondialog.h
@@ -166,11 +166,11 @@ set(kofake_HEADERS_ONLY
     knotification.h
     kcharsets.h
     kcharselect.h
-    kpagewidgetmodel.h
+    #kpagewidgetmodel.h
     kglobal.h
     kpassivepopup.h
     kfiledialog.h
-    kfontchooser.h
+    #kfontchooser.h
     #kconfig.h
     ksharedptr.h
     kfileitem.h
@@ -184,7 +184,7 @@ set(kofake_HEADERS_ONLY
     #kservice.h
     ktoolinvocation.h
     kedittoolbar.h
-    ksqueezedtextlabel.h
+    #ksqueezedtextlabel.h
     #kservicetype.h
     knumvalidator.h
     ktemporaryfile.h
@@ -192,10 +192,10 @@ set(kofake_HEADERS_ONLY
     #kconfiggroup.h
     config-compression.h
     kwidgetitemdelegate.h
-    kxyselector.h
+    #kxyselector.h
     kdeversion.h
     kfontdialog.h
-    kguiitem.h
+    #kguiitem.h
 )
 
 set(kofake_HEADERS 
