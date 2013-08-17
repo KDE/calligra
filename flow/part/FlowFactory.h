@@ -28,9 +28,6 @@ class KAboutData;
 
 class FLOW_EXPORT FlowFactory : public KPluginFactory
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID KPluginFactory_iid FILE "flowpart.json")
-    Q_INTERFACES(KPluginFactory)
 
 public:
     explicit FlowFactory(QObject *parent = 0);

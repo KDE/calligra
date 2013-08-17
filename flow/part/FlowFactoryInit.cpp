@@ -17,6 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "FlowFactory.h"
+#include "FlowFactoryInit.h"
 
-//K_EXPORT_PLUGIN(FlowFactory)
+#include "FlowFactoryInit.moc"
