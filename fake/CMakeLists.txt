@@ -226,8 +226,8 @@ QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS_ONLY})
 
 kde4_add_library(kofake SHARED ${kofake_LIB_SRCS} ${kofake_HEADERS_MOC})
 
-target_link_libraries(kofake Qt5::Widgets Qt5::Xml ${ZLIB_LIBRARIES} KService KConfigCore)
-target_link_libraries(kofake LINK_INTERFACE_LIBRARIES Qt5::Widgets Qt5::Xml KService KConfigCore)
+target_link_libraries(kofake Qt5::Widgets Qt5::Xml ${ZLIB_LIBRARIES} KService KConfigCore KCoreAddons KWidgetsAddons)
+target_link_libraries(kofake LINK_INTERFACE_LIBRARIES Qt5::Widgets Qt5::Xml KService KConfigCore KCoreAddons KWidgetsAddons)
 
 set_target_properties(kofake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
