@@ -62,7 +62,6 @@ set(kofake_HEADERS_ONLY
     kstatusbar.h
     kcombobox.h
     kurlrequester.h
-    kuser.h
     kicon.h
     kreplacedialog.h
     kfind.h
@@ -113,7 +112,6 @@ set(kofake_HEADERS_ONLY
     kio/kfileitem.h
     kio/netaccess.h
     kio/copyjob.h
-    kio/kjob.h
     kdiroperator.h
     kcolordialog.h
     #kdesktopfile.h
@@ -193,7 +191,6 @@ set(kofake_HEADERS_ONLY
     ktextbrowser.h
     #kconfiggroup.h
     config-compression.h
-    kjob.h
     kwidgetitemdelegate.h
     kxyselector.h
     kdeversion.h
