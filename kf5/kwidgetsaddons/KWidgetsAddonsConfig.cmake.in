@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+set(KWidgetsAddons_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+set_and_check(KWidgetsAddons_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+include("${CMAKE_CURRENT_LIST_DIR}/KWidgetsAddonsTargets.cmake")
+
+set(KWidgetsAddons_LIBRARIES KF5::KWidgetsAddons)
+set(KWidgetsAddons_INCLUDE_DIRS ${KWidgetsAddons_INCLUDE_DIR})
