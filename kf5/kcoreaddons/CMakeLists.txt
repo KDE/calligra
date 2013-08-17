@@ -11,6 +11,7 @@ include(CMakePackageConfigHelpers)
 include(ECMSetupVersion)
 
 find_package(KF5 5.0.0 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs)
+remove_definitions(-DQT_NO_KEYWORDS)
 
 # Configure checks for kdirwatch
 find_package(FAM)
