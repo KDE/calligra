@@ -134,7 +134,7 @@ bool KSycocaPrivate::tryMmap()
     /* POSIX mandates only MAP_FAILED, but we are paranoid so check for
        null pointer too.  */
     if (sycoca_mmap == (const char*) MAP_FAILED || sycoca_mmap == 0) {
-        qDebug().nospace() << "mmap failed. (length = " << sycoca_size << ")";
+        //qDebug().nospace() << "mmap failed. (length = " << sycoca_size << ")";
         sycoca_mmap = 0;
         return false;
     } else {
@@ -196,11 +196,11 @@ bool KSycocaPrivate::openDatabase(bool openDummyIfNotFound)
     QString path = KSycoca::absoluteFilePath();
 
     bool canRead = QFileInfo(path).isReadable();
-    qDebug() << "Trying to open ksycoca from" << path;
+    //qDebug() << "Trying to open ksycoca from" << path;
     if (!canRead) {
         path = KSycoca::absoluteFilePath(KSycoca::GlobalDatabase);
         if (!path.isEmpty()) {
-            qDebug() << "Trying to open global ksycoca from " << path;
+            //qDebug() << "Trying to open global ksycoca from " << path;
             canRead = QFileInfo(path).isReadable();
         }
     }
@@ -396,7 +396,7 @@ bool KSycocaPrivate::checkVersion()
     qint32 aVersion;
     *m_str >> aVersion;
     if ( aVersion < KSYCOCA_VERSION ) {
-        qDebug() << "Found version" << aVersion << ", expecting version" << KSYCOCA_VERSION << "or higher.";
+        //qDebug() << "Found version" << aVersion << ", expecting version" << KSYCOCA_VERSION << "or higher.";
         databaseStatus = BadVersion;
         return false;
     } else {
@@ -476,11 +476,11 @@ bool KSycocaPrivate::checkDatabase(BehaviorsIfNotFound ifNotFound)
 
         // Ok, the new database should be here now, open it.
         if (!openDatabase(ifNotFound & IfNotFoundOpenDummy)) {
-            qDebug() << "Still no database...";
+            //qDebug() << "Still no database...";
             return false; // Still no database - uh oh
         }
         if (!checkVersion()) {
-            qDebug() << "Still outdated...";
+            //qDebug() << "Still outdated...";
             return false; // Still outdated - uh oh
         }
         return true;
