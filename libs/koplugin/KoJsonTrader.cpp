@@ -42,13 +42,21 @@ KoJsonTrader* KoJsonTrader::self()
 
 QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &mimetype) const
 {
-    Q_UNUSED(servicetype);
+//    qDebug() << servicetype << mimetype;
     QList<QPluginLoader *>list;
     QDirIterator dirIter(QCoreApplication::applicationDirPath() + "/calligra/plugins/", QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
         QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
         QJsonObject json = loader->metaData().value("MetaData").toObject();
+
+        if (json.isEmpty()) {
+            qDebug() << dirIter.filePath() << "has no json!";
+//            foreach(QString key, loader->metaData().keys()) {
+//                qDebug() << key << loader->metaData().value(key);
+//            }
+
+        }
         if (!json.isEmpty()) {
             if (! json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
                 continue;
