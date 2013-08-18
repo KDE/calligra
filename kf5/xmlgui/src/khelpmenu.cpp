@@ -47,7 +47,7 @@
 
 #include <kaboutdata.h>
 #include <kcoreauthorized.h>
-#include <kiconloader.h>
+//#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandardaction.h>
 
