@@ -790,9 +790,9 @@ include_directories(${CMAKE_SOURCE_DIR}/fake
                     ${CMAKE_SOURCE_DIR}/kf5/kservice/src/kdeinit
                     ${CMAKE_SOURCE_DIR}/kf5/kservice/src/sycoca
                     ${CMAKE_BINARY_DIR}/kf5/kservice/src
-                    ${CMAKE_BINARY_DIR}/kf5/kservice/
-                    ${CMAKE_SOURCE_DIR}/kf5/kconfig/src/core/
-                    ${CMAKE_BINARY_DIR}/kf5/kconfig/src/core/
+                    ${CMAKE_BINARY_DIR}/kf5/kservice
+                    ${CMAKE_SOURCE_DIR}/kf5/kconfig/src/core
+                    ${CMAKE_BINARY_DIR}/kf5/kconfig/src/core
                     ${CMAKE_BINARY_DIR}/kf5/kconfig
                     ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src
                     ${CMAKE_BINARY_DIR}/kf5/kcoreaddons/src
@@ -804,8 +804,10 @@ include_directories(${CMAKE_SOURCE_DIR}/fake
                     ${CMAKE_SOURCE_DIR}/kf5/kcoreaddons/src/util
                     ${CMAKE_SOURCE_DIR}/kf5/kcodec/src
                     ${CMAKE_BINARY_DIR}/kf5/kcodec/src
-                    ${CMAKE_SOURCE_DIR}/kf5/kwidgetsaddons/src/
+                    ${CMAKE_SOURCE_DIR}/kf5/kwidgetsaddons/src
                     ${CMAKE_BINARY_DIR}/kf5/kwidgetsaddons/src
+                    ${CMAKE_SOURCE_DIR}/kf5/xmlgui/src
+                    ${CMAKE_BINARY_DIR}/kf5/xmlgui/src
 )
 
 # koplugin is at the bottom of the stack
