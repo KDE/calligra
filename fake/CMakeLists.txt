@@ -40,15 +40,15 @@ set(kofake_HEADERS_ONLY
     #kmessagebox.h
     krecentdocument.h
     kfilewidget.h
-    kparts/componentfactory.h
-    kparts/browserextension.h
-    kparts/browserinterface.h
-    kparts/factory.h
-    kparts/mainwindow.h
-    kparts/part.h
-    kparts/partmanager.h
-    kparts/plugin.h
-    kparts/event.h
+    #kparts/componentfactory.h
+    #kparts/browserextension.h
+    #kparts/browserinterface.h
+    #kparts/factory.h
+    #kparts/mainwindow.h
+    #kparts/part.h
+    #kparts/partmanager.h
+    #kparts/plugin.h
+    #kparts/event.h
     kfontsizeaction.h
     klimitediodevice_p.h
     klistwidgetsearchline.h
