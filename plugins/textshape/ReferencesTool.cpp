@@ -45,7 +45,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <QAction>
+#include <QWidgetAction>
 #include <QTextDocument>
 #include <QLineEdit>
 #include <QBoxLayout>
@@ -122,71 +122,89 @@ ReferencesTool::~ReferencesTool()
 
 void ReferencesTool::createActions()
 {
-    QAction *action = new QAction(i18n("Insert"), this);
+    QWidgetAction *action = new QWidgetAction(this);
+    action->setText(i18n("Insert"));
     addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
 
-    action = new QAction(i18n("Insert Custom..."), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert Custom..."));
     addAction("insert_configure_tableofcontents", action);
     action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
-    action = new QAction(koIcon("configure"), i18n("Configure..."), this);
+    action = new QWidgetAction(this);
+    action->setIcon(koIcon("configure"));
+    action->setText(i18n("Configure..."));
     addAction("format_tableofcontents", action);
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
-    action = new QAction(i18n("Insert footnote with auto number"),this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert footnote with auto number"));
     addAction("insert_autofootnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
-    action = new QAction(i18n("Insert Labeled Footnote"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert Labeled Footnote"));
     QWidget *w = new LabeledWidget(action, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     action->setDefaultWidget(w);
     addAction("insert_labeledfootnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
 
-    action = new QAction(i18n("Insert endnote with auto number"),this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert endnote with auto number"));
     addAction("insert_autoendnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
 
-    action = new QAction(i18n("Insert Labeled Endnote"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert Labeled Endnote"));
     w = new LabeledWidget(action, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     action->setDefaultWidget(w);
     addAction("insert_labeledendnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
-    action = new QAction(koIcon("configure"), i18n("Settings..."), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Settings..."));
+    action->setIcon(koIcon("configure"));
     addAction("format_footnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showFootnotesConfigureDialog()));
 
-    action = new QAction(koIcon("configure"), i18n("Settings..."), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Settings..."));
+    action->setIcon(koIcon("configure"));
     addAction("format_endnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
 
-    action = new QAction(i18n("Insert Citation"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert Citation"));
     addAction("insert_citation",action);
     action->setToolTip(i18n("Insert a citation into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
 
-    action = new QAction(i18n("Insert Bibliography"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert Bibliography"));
     addAction("insert_bibliography",action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
 
-    action = new QAction(i18n("Insert Custom Bibliography"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert Custom Bibliography"));
     addAction("insert_custom_bibliography", action);
     action->setToolTip(i18n("Insert a custom Bibliography into the document."));
 
-    action = new QAction(i18n("Configure"),this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Configure"));
     addAction("configure_bibliography",action);
     action->setToolTip(i18n("Configure the bibliography"));
     connect(action, SIGNAL(triggered()), this, SLOT(configureBibliography()));
 
-    action = new QAction(i18n("Insert Link"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Insert Link"));
     addAction("insert_link", action);
     action->setToolTip(i18n("Insert a weblink or link to a bookmark."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertLink()));
 
-    action = new QAction(i18n("Add Bookmark"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Add Bookmark"));
     m_bmark = new LabeledWidget(action, i18n("Add Bookmark :"), LabeledWidget::ABOVE, true);
     connect(m_bmark, SIGNAL(lineEditChanged(QString)), this, SLOT(validateBookmark(QString)));
     action->setDefaultWidget(m_bmark);
@@ -194,11 +212,13 @@ void ReferencesTool::createActions()
     connect(m_bmark, SIGNAL(triggered(QString)), this, SLOT(insertBookmark(QString)));
     action->setToolTip(i18n("Insert a Bookmark. This is useful to create links that point to areas within the document"));
 
-    action = new QAction(i18n("Bookmarks"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Bookmarks"));
     addAction("invoke_bookmark_handler", action);
     action->setToolTip(i18n("Display a pop up that hosts the options to add new Bookmark or handle existing Bookmarks"));
 
-    action = new QAction(i18n("Manage Bookmarks"), this);
+    action = new QWidgetAction(this);
+    action->setText(i18n("Manage Bookmarks"));
     addAction("manage_bookmarks", action);
     action->setToolTip(i18n("Manage your Bookmarks. Check where are they pointing to, Delete or Rename."));
 }
