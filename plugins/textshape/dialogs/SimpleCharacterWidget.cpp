@@ -27,7 +27,7 @@
 #include "StylesDelegate.h"
 #include <KoStyleThumbnailer.h>
 
-#include <QAction>
+#include <QWidgetAction>
 #include <kselectaction.h>
 #include <KoTextBlockData.h>
 #include <KoCharacterStyle.h>
@@ -75,13 +75,13 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     connect(widget.superscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.subscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
-    QComboBox *family = qobject_cast<QComboBox*> (tool->action("format_fontfamily")->requestWidget(this));
+    QComboBox *family = qobject_cast<QComboBox*> (qobject_cast<QWidgetAction*>(tool->action("format_fontfamily"))->requestWidget(this));
     if (family) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(family,0,0);
         connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
         connect(family, SIGNAL(activated(int)), this, SLOT(fontFamilyActivated(int)));
     }
-    QComboBox *size = qobject_cast<QComboBox*> (tool->action("format_fontsize")->requestWidget(this));
+    QComboBox *size = qobject_cast<QComboBox*> (qobject_cast<QWidgetAction*>(tool->action("format_fontsize"))->requestWidget(this));
     if (size) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(size,0,1);
         connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
