@@ -117,6 +117,7 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KFILE_LIBRARY}
     kowidgets
     kotextlayout
+    XmlGui
 )
 
 if( KActivities_FOUND )
@@ -129,7 +130,7 @@ if (APPLE)
     target_link_libraries(komain ${FOUNDATION_LIBRARY})
 endif (APPLE)
 
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets )
+target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets XmlGui)
 
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
