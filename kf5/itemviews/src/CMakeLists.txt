@@ -15,7 +15,7 @@ add_library(ItemViews ${itemviews_SRCS})
 generate_export_header(ItemViews)
 
 # KCoreAddons dependency is required by kcategorizedsortfilterproxymodel (KStringHandler::naturalCompare)
-target_link_libraries(ItemViews LINK_PUBLIC Qt5::Widgets ${KCoreAddons_LIBRARIES})
+target_link_libraries(ItemViews LINK_PUBLIC Qt5::Widgets KCoreAddons)
 
 set_target_properties(ItemViews PROPERTIES VERSION   ${ITEMVIEWS_VERSION_STRING}
                                            SOVERSION ${ITEMVIEWS_SOVERSION}

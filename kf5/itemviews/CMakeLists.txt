@@ -34,7 +34,6 @@ add_subdirectory(src)
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/ItemViews")
 
 include(CMakePackageConfigHelpers)
-target_link_libraries(ItemViews KCoreAddons )
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/ItemViewsConfig.cmake.in"
