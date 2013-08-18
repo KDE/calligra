@@ -147,13 +147,13 @@ int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
-    KAboutData aboutData("calligraconverter", 0, ki18n("CalligraConverter"), CALLIGRA_VERSION_STRING,
-                         ki18n("Calligra Document Converter"),
+    KAboutData aboutData("calligraconverter", 0, "CalligraConverter", CALLIGRA_VERSION_STRING,
+                         "Calligra Document Converter",
                          KAboutData::License_GPL,
-                         ki18n("(c) 2001-2011 Calligra developers"));
-    aboutData.addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    aboutData.addAuthor(ki18n("Nicolas Goutte"), KLocalizedString(), "goutte@kde.org");
-    aboutData.addAuthor(ki18n("Dan Leinir Turthra Jensen"), KLocalizedString(), "admin@leinir.dk");
+                         "(c) 2001-2011 Calligra developers");
+    aboutData.addAuthor("David Faure", "", "faure@kde.org");
+    aboutData.addAuthor("Nicolas Goutte", "", "goutte@kde.org");
+    aboutData.addAuthor("Dan Leinir Turthra Jensen", "", "admin@leinir.dk");
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;

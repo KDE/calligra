@@ -29,32 +29,32 @@ static const char version[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newKPresenterAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "stage", 0, ki18nc("application name", "Stage"),
-                                           version, ki18n(description), KAboutData::License_LGPL,
-                                           ki18n("(c) 1998-2011, The Stage Team"), KLocalizedString(),
+    KAboutData * aboutData=new KAboutData( "stage", 0, "Stage",
+                                           version, description, KAboutData::License_LGPL,
+                                           "(c) 1998-2011, The Stage Team", ""
                                            "http://www.calligra.org/stage/");
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrastage"));
-    aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("Maintainer"), "zachmann@kde.org");
-    aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Former maintainer"), "montel@kde.org");
-    aboutData->addAuthor(ki18n("Reginald Stadlbauer"),ki18n("Original author"), "reggie@kde.org");
-    aboutData->addAuthor(ki18n("Werner Trobin"), KLocalizedString(), "trobin@kde.org");
-    aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    aboutData->addAuthor(ki18n("Toshitaka Fujioka"), KLocalizedString(), "fujioka@kde.org");
-    aboutData->addAuthor(ki18n("Lukáš Tinkl"), KLocalizedString(), "lukas@kde.org");
-    aboutData->addAuthor(ki18n("Ariya Hidayat"), KLocalizedString(), "ariya@kde.org");
-    aboutData->addAuthor(ki18n("Percy Leonhardt"), KLocalizedString(), "percy@eris23.de");
-    aboutData->addAuthor(ki18n("Thomas Zander"));
-    aboutData->addAuthor(ki18n("Peter Simonsson"), KLocalizedString(), "peter.simonsson@gmail.com");
-    aboutData->addAuthor(ki18n("Boudewijn Rempt "), KLocalizedString(), "boud@valdyas.org");
-    aboutData->addAuthor(ki18n("Carlos Licea "), KLocalizedString(), "carlos.licea@kdemail.net");
-    aboutData->addAuthor(ki18n("C. Boemann "), KLocalizedString(), "cbo@boemann.dk");
-    aboutData->addAuthor(ki18n("Fredy Yanardi "), KLocalizedString(), "fyanardi@gmail.com");
-    aboutData->addAuthor(ki18n("Jan Hambrecht "), KLocalizedString(), "jaham@gmx.net");
-    aboutData->addAuthor(ki18n("Marijn Kruisselbrink "), KLocalizedString(), "mkruisselbrink@kde.org");
-    aboutData->addAuthor(ki18n("Martin Pfeiffer "), KLocalizedString(), "hubipete@gmx.net");
-    aboutData->addAuthor(ki18n("Sven Langkamp "), KLocalizedString(), "sven.langkamp@gmail.com");
-    aboutData->addAuthor(ki18n("Timothée Lacroix "), KLocalizedString(), "dakeyras.khan@gmail.com");
+    aboutData->addAuthor("Thorsten Zachmann", "Maintainer", "zachmann@kde.org");
+    aboutData->addAuthor("Laurent Montel", "Former maintainer", "montel@kde.org");
+    aboutData->addAuthor("Reginald Stadlbauer""Original author", "reggie@kde.org");
+    aboutData->addAuthor("Werner Trobin", "", "trobin@kde.org");
+    aboutData->addAuthor("David Faure", "", "faure@kde.org");
+    aboutData->addAuthor("Toshitaka Fujioka", "", "fujioka@kde.org");
+    aboutData->addAuthor("Lukáš Tinkl", "", "lukas@kde.org");
+    aboutData->addAuthor("Ariya Hidayat", "", "ariya@kde.org");
+    aboutData->addAuthor("Percy Leonhardt", "", "percy@eris23.de");
+    aboutData->addAuthor("Thomas Zander");
+    aboutData->addAuthor("Peter Simonsson", "", "peter.simonsson@gmail.com");
+    aboutData->addAuthor("Boudewijn Rempt ", "", "boud@valdyas.org");
+    aboutData->addAuthor("Carlos Licea ", "", "carlos.licea@kdemail.net");
+    aboutData->addAuthor("C. Boemann ", "", "cbo@boemann.dk");
+    aboutData->addAuthor("Fredy Yanardi ", "", "fyanardi@gmail.com");
+    aboutData->addAuthor("Jan Hambrecht ", "", "jaham@gmx.net");
+    aboutData->addAuthor("Marijn Kruisselbrink ", "", "mkruisselbrink@kde.org");
+    aboutData->addAuthor("Martin Pfeiffer ", "", "hubipete@gmx.net");
+    aboutData->addAuthor("Sven Langkamp ", "", "sven.langkamp@gmail.com");
+    aboutData->addAuthor("Timothée Lacroix ", "", "dakeyras.khan@gmail.com");
 
     return aboutData;
 }

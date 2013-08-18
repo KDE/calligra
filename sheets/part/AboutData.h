@@ -36,57 +36,57 @@ static const char version[] = CALLIGRA_VERSION_STRING;
 
 static KAboutData * newAboutData()
 {
-    KAboutData * aboutData = new KAboutData("sheets", 0, ki18nc("application name", "Calligra Sheets"),
-                                            version, ki18n(description), KAboutData::License_LGPL,
-                                            ki18n("(c) 1998-2011, The Calligra Sheets Team"), KLocalizedString(),
+    KAboutData * aboutData = new KAboutData("sheets", 0, "Calligra Sheets",
+                                            version, description, KAboutData::License_LGPL,
+                                            "(c) 1998-2011, The Calligra Sheets Team", "",
                                             "http://www.calligra.org/sheets/");
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrasheets"));
-    aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
-    aboutData->addAuthor(ki18n("Marijn Kruisselbrink"), ki18n("Maintainer"), "mkruisselbrink@kde.org");
-    aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("ODS and Excel, functions, scripting"), "mail@dipe.org");
-    aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "montel@kde.org");
-    aboutData->addAuthor(ki18n("John Dailey"), KLocalizedString(), "dailey@vt.edu");
-    aboutData->addAuthor(ki18n("Philipp Müller"), KLocalizedString(), "philipp.mueller@gmx.de");
-    aboutData->addAuthor(ki18n("Ariya Hidayat"), KLocalizedString(), "ariya@kde.org");
-    aboutData->addAuthor(ki18n("Norbert Andres"), KLocalizedString(), "nandres@web.de");
-    aboutData->addAuthor(ki18n("Shaheed Haque"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("Torben Weis", "Original Author", "weis@kde.org");
+    aboutData->addAuthor("Marijn Kruisselbrink", "Maintainer", "mkruisselbrink@kde.org");
+    aboutData->addAuthor("Sebastian Sauer", "ODS and Excel, functions, scripting", "mail@dipe.org");
+    aboutData->addAuthor("Laurent Montel", "", "montel@kde.org");
+    aboutData->addAuthor("John Dailey", "", "dailey@vt.edu");
+    aboutData->addAuthor("Philipp Müller", "", "philipp.mueller@gmx.de");
+    aboutData->addAuthor("Ariya Hidayat", "", "ariya@kde.org");
+    aboutData->addAuthor("Norbert Andres", "", "nandres@web.de");
+    aboutData->addAuthor("Shaheed Haque",
+                         "Import/export filter developer",
                          "srhaque@iee.org");
-    aboutData->addAuthor(ki18n("Werner Trobin"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("Werner Trobin",
+                         "Import/export filter developer",
                          "trobin@kde.org");
-    aboutData->addAuthor(ki18n("Nikolas Zimmermann"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("Nikolas Zimmermann",
+                         "Import/export filter developer",
                          "wildfox@kde.org");
-    aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    aboutData->addAuthor(ki18n("Helge Deller"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("David Faure", "", "faure@kde.org");
+    aboutData->addAuthor("Helge Deller",
+                         "Import/export filter developer",
                          "deller@gmx.de");
-    aboutData->addAuthor(ki18n("Percy Leonhart"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("Percy Leonhart",
+                         "Import/export filter developer",
                          "percy@eris23.org");
-    aboutData->addAuthor(ki18n("Eva Brucherseifer"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("Eva Brucherseifer",
+                         "Import/export filter developer",
                          "eva@kde.org");
-    aboutData->addAuthor(ki18n("Phillip Ezolt"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("Phillip Ezolt",
+                         "Import/export filter developer",
                          "phillipezolt@hotmail.com");
-    aboutData->addAuthor(ki18n("Enno Bartels"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("Enno Bartels",
+                         "Import/export filter developer",
                          "ebartels@nwn.de");
-    aboutData->addAuthor(ki18n("Graham Short"),
-                         ki18n("Import/export filter developer"),
+    aboutData->addAuthor("Graham Short",
+                         "Import/export filter developer",
                          "grahshrt@netscape.net");
-    aboutData->addAuthor(ki18n("Lukáš Tinkl"), KLocalizedString(), "lukas@kde.org");
-    aboutData->addAuthor(ki18n("Tomas Mecir"), KLocalizedString(), "mecirt@gmail.com");
-    aboutData->addAuthor(ki18n("Raphael Langerhorst"), KLocalizedString(), "raphael.langerhorst@kdemail.net");
-    aboutData->addAuthor(ki18n("John Tapsell"), KLocalizedString(), "john.tapsell@kdemail.net");
-    aboutData->addAuthor(ki18n("Robert Knight"), KLocalizedString() , "robertknight@gmail.com");
-    aboutData->addAuthor(ki18n("Stefan Nikolaus"), KLocalizedString(), "stefan.nikolaus@kdemail.net");
-    aboutData->addAuthor(ki18n("Sascha Pfau"), ki18n("Developer (functions)"), "mrpeacock@gmail.com");
-    aboutData->addAuthor(ki18n("Brad Hards"),
-                         ki18n("Implemented, reviewed and tested various functions"),
+    aboutData->addAuthor("Lukáš Tinkl", "", "lukas@kde.org");
+    aboutData->addAuthor("Tomas Mecir", "", "mecirt@gmail.com");
+    aboutData->addAuthor("Raphael Langerhorst", "", "raphael.langerhorst@kdemail.net");
+    aboutData->addAuthor("John Tapsell", "", "john.tapsell@kdemail.net");
+    aboutData->addAuthor("Robert Knight", "" , "robertknight@gmail.com");
+    aboutData->addAuthor("Stefan Nikolaus", "", "stefan.nikolaus@kdemail.net");
+    aboutData->addAuthor("Sascha Pfau", "Developer (functions)", "mrpeacock@gmail.com");
+    aboutData->addAuthor("Brad Hards",
+                         "Implemented, reviewed and tested various functions",
                          "bradh@frogmouth.net");
     return aboutData;
 }

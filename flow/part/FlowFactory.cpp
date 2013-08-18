@@ -34,7 +34,7 @@ KComponentData* FlowFactory::s_instance = 0;
 KAboutData* FlowFactory::s_aboutData = 0;
 
 FlowFactory::FlowFactory(QObject* parent)
-  : KPluginFactory(aboutData()->appName().toUtf8(), parent)
+  : KPluginFactory(aboutData()->componentName().toUtf8(), parent)
 {
   (void) componentData();
 }

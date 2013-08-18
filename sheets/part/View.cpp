@@ -571,7 +571,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->loading = true;
 
-    setComponentData(Factory::global());
+    //setComponentData(Factory::global());
     setXMLFile("sheets.rc");
 
     // GUI Initializations

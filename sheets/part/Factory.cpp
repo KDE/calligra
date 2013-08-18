@@ -37,7 +37,7 @@ KComponentData* Factory::s_global = 0;
 KAboutData* Factory::s_aboutData = 0;
 
 Factory::Factory(QObject* parent)
-        : KPluginFactory(aboutData()->appName().toUtf8(), parent)
+        : KPluginFactory(aboutData()->componentName().toUtf8(), parent)
 {
     //kDebug(36001) <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the

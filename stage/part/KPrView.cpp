@@ -219,7 +219,7 @@ void KPrView::initGUI()
 
 void KPrView::initActions()
 {
-    setComponentData(KPrFactory::componentData());
+    //setComponentData(KPrFactory::componentData());
     if (!koDocument()->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else
