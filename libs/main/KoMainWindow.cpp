@@ -49,7 +49,7 @@
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
 #endif
-//#include <khelpmenu.h>
+#include <khelpmenu.h>
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
@@ -137,7 +137,7 @@ public:
         activityResource = 0;
 #endif
         themeManager = 0;
-//        m_helpMenu = 0;
+        m_helpMenu = 0;
 
         // PartManger
         m_activeWidget = 0;
@@ -165,7 +165,7 @@ public:
         if (title.isEmpty()) {
             // #139905
             const QString programName = parent->componentData().aboutData() ?
-                                        parent->componentData().aboutData()->programName() : parent->componentData().componentName();
+                                        parent->componentData().aboutData()->displayName() : parent->componentData().componentName();
             title = i18n("%1 unsaved document (%2)", programName,
                          KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
         }
@@ -236,7 +236,9 @@ public:
 
     Digikam::ThemeManager *themeManager;
 
-//    KHelpMenu *m_helpMenu;
+    KComponentData componentData;
+
+    KHelpMenu *m_helpMenu;
 
 
 };
@@ -362,41 +364,37 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     createMainwindowGUI();
     d->mainWindowGuiIsBuilt = true;
 
-    // if the user didn's specify the geometry on the command line (does anyone do that still?),
-    // we first figure out some good default size and restore the x,y position. See bug 285804Z.
-    if (!initialGeometrySet()) {
-
-        const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-        QRect desk = QApplication::desktop()->availableGeometry(scnum);
-        // if the desktop is virtual then use virtual screen size
-        if (QApplication::desktop()->isVirtualDesktop()) {
-            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
-            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
-        }
-
-        quint32 x = desk.x();
-        quint32 y = desk.y();
-        quint32 w = 0;
-        quint32 h = 0;
-
-        // Default size -- maximize on small screens, something useful on big screens
-        const int deskWidth = desk.width();
-        if (deskWidth > 1024) {
-            // a nice width, and slightly less than total available
-            // height to componensate for the window decs
-            w = ( deskWidth / 3 ) * 2;
-            h = desk.height();
-        }
-        else {
-            w = desk.width();
-            h = desk.height();
-        }
-        // KDE doesn't restore the x,y position, so let's do that ourselves
-        KConfigGroup cfg(KGlobal::config(), "MainWindow");
-        x = cfg.readEntry("ko_x", x);
-        y = cfg.readEntry("ko_y", y);
-        setGeometry(x, y, w, h);
+    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+    QRect desk = QApplication::desktop()->availableGeometry(scnum);
+    // if the desktop is virtual then use virtual screen size
+    if (QApplication::desktop()->isVirtualDesktop()) {
+        desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
+        desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
     }
+
+    quint32 x = desk.x();
+    quint32 y = desk.y();
+    quint32 w = 0;
+    quint32 h = 0;
+
+    // Default size -- maximize on small screens, something useful on big screens
+    const int deskWidth = desk.width();
+    if (deskWidth > 1024) {
+        // a nice width, and slightly less than total available
+        // height to componensate for the window decs
+        w = ( deskWidth / 3 ) * 2;
+        h = desk.height();
+    }
+    else {
+        w = desk.width();
+        h = desk.height();
+    }
+    // KDE doesn't restore the x,y position, so let's do that ourselves
+    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    x = cfg.readEntry("ko_x", x);
+    y = cfg.readEntry("ko_y", y);
+    setGeometry(x, y, w, h);
+
 
     // Now ask kde to restore the size of the window; this could probably be replaced by
     // QWidget::saveGeometry and QWidget::restoreGeometry, but let's stay with the KDE
@@ -1164,7 +1162,7 @@ void KoMainWindow::saveWindowSettings()
 
         // Save window size into the config file of our componentData
         kDebug(30003) << "KoMainWindow::saveWindowSettings";
-        saveWindowSize(config->group("MainWindow"));
+        //saveWindowSize(config->group("MainWindow"));
         config->sync();
         d->windowSizeDirty = false;
     }
@@ -1571,8 +1569,8 @@ void KoMainWindow::slotConfigureKeys()
 
 void KoMainWindow::slotConfigureToolbars()
 {
-    if (rootDocument())
-        saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+//    if (rootDocument())
+//        saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1605,8 +1603,8 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
         else
             bar->hide();
 
-        if (rootDocument())
-            saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+//        if (rootDocument())
+//            saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
     } else
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
 }
@@ -1827,6 +1825,16 @@ void KoMainWindow::setPartToOpen(KoPart *part)
     d->partToOpen = part;
 }
 
+KComponentData KoMainWindow::componentData() const
+{
+    return d->componentData;
+}
+
+void KoMainWindow::setComponentData(const KComponentData &componentData)
+{
+    d->componentData = componentData;
+}
+
 QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
@@ -2003,8 +2011,8 @@ void KoMainWindow::newView()
 
 void KoMainWindow::createMainwindowGUI()
 {
-//    if ( isHelpMenuEnabled() && !d->m_helpMenu )
-//        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), true, actionCollection() );
+    if ( isHelpMenuEnabled() && !d->m_helpMenu )
+        d->m_helpMenu = new KHelpMenu(this, *componentData().aboutData(), true);
 
     QString f = xmlFile();
     setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );

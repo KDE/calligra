@@ -25,6 +25,7 @@
 
 #include <kxmlguiwindow.h>
 #include <kurl.h>
+#include <kcomponentdata.h>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
@@ -81,6 +82,9 @@ public:
      */
     void setPartToOpen(KoPart *part);
 
+
+    KComponentData componentData () const;
+    void setComponentData (const KComponentData &componentData);
 
 
     /**

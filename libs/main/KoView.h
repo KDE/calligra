@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <kxmlguiclient.h>
+#include <kcomponentdata.h>
 #include "komain_export.h"
 
 class KoPart;
