@@ -1084,7 +1084,7 @@ calligra_drop_unbuildable_products()
 #############################################
 ####     Setup product-depending vars    ####
 #############################################
-
+set (SHOULD_BUILD_RDF FALSE)
 if(SHOULD_BUILD_RDF)
    add_definitions( -DSHOULD_BUILD_RDF )
 endif(SHOULD_BUILD_RDF)
