@@ -35,15 +35,16 @@
 int main(int argc, char** argv)
 {
     KAboutData aboutData("CCSGraph",
-                         0,
-                         ki18n("CCSGraph"),
+                         "",
+                         "CCSGraph",
                          "1.0",
-                         ki18n("Output the graph of color conversion of pigment's Color Conversion"),
+                         "Output the graph of color conversion of pigment's Color Conversion",
                          KAboutData::License_LGPL,
-                         ki18n("(c) 2007 Cyrille Berger"),
-                         KLocalizedString(),
+                         "(c) 2007 Cyrille Berger",
+                         "",
                          "www.calligra.org",
                          "submit@bugs.kde.org");
+
     KCmdLineArgs::init(argc, argv, &aboutData);
     // Initialize the list of options
     KCmdLineOptions options;
