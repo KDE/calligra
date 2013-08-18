@@ -221,8 +221,8 @@ kde4_add_library(flake SHARED ${flake_SRCS})
 target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
 
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
-target_link_libraries(flake kundo2)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
+target_link_libraries(flake kundo2 XmlGui)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2 XmlGui)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
