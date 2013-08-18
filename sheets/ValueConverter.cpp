@@ -24,6 +24,11 @@
 #include "Localization.h"
 #include "ValueParser.h"
 
+#ifdef __GNUC__
+#warning "QT5 PORT: fix the localization of ValueConverter"
+#endif
+
+
 using namespace Calligra::Sheets;
 
 ValueConverter::ValueConverter(const ValueParser* parser)
@@ -272,8 +277,9 @@ Value ValueConverter::asString(const Value &value) const
         val = Value(QString());
         break;
     case Value::Boolean:
-        val = Value(value.asBoolean() ? ki18n("True").toString(m_parser->settings()->locale()) :
-                    ki18n("False").toString(m_parser->settings()->locale()));
+// XXX: QT5_PORT
+//        val = Value(value.asBoolean() ? ki18n("True").toString(m_parser->settings()->locale()) :
+//                    ki18n("False").toString(m_parser->settings()->locale()));
         break;
     case Value::Integer: {
         fmt = value.format();
