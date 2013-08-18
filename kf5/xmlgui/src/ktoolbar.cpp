@@ -45,7 +45,7 @@
 #include <kcoreauthorized.h>
 #include <kconfig.h>
 #include <ksharedconfig.h>
-#include <kicontheme.h>
+//#include <kicontheme.h>
 #include <klocalizedstring.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
@@ -264,8 +264,8 @@ void KToolBar::Private::init(bool readConfig, bool _isMainToolBar)
 
     QDBusConnection::sessionBus().connect(QString(), QStringLiteral("/KToolBar"), QStringLiteral("org.kde.KToolBar"),
                                           QStringLiteral("styleChanged"), q, SLOT(slotAppearanceChanged()));
-    connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()),
-            q, SLOT(slotAppearanceChanged()));
+//     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()),
+//             q, SLOT(slotAppearanceChanged()));
 }
 
 QString KToolBar::Private::getPositionAsString() const
@@ -327,11 +327,11 @@ QMenu *KToolBar::Private::contextMenu(const QPoint &globalPos)
                             iconSizeSettings.defaultValue());
 
     // Query the current theme for available sizes
-    KIconTheme *theme = KIconLoader::global()->theme();
+    //KIconTheme *theme = KIconLoader::global()->theme();
     QList<int> avSizes;
-    if (theme) {
-        avSizes = theme->querySizes(isMainToolBar ? KIconLoader::MainToolbar : KIconLoader::Toolbar);
-    }
+//     if (theme) {
+//         avSizes = theme->querySizes(isMainToolBar ? KIconLoader::MainToolbar : KIconLoader::Toolbar);
+//     }
 
     qSort(avSizes);
 
@@ -1076,7 +1076,8 @@ void KToolBar::setIconDimensions(int size)
 
 int KToolBar::iconSizeDefault() const
 {
-    return KIconLoader::global()->currentSize(d->isMainToolBar ? KIconLoader::MainToolbar : KIconLoader::Toolbar);
+  return 22;
+  //return KIconLoader::global()->currentSize(d->isMainToolBar ? KIconLoader::MainToolbar : KIconLoader::Toolbar);
 }
 
 void KToolBar::slotMovableChanged(bool movable)
