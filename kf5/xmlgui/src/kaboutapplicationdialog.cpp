@@ -305,12 +305,12 @@ void KAboutApplicationDialog::Private::_k_showLicense( const QString &number )
 
     dialog->setWindowTitle(i18n("License Agreement"));
 
-    const QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    QFontMetrics metrics(font);
+    //const QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    //QFontMetrics metrics(font);
 
     const QString licenseText = aboutData.licenses().at(number.toInt()).text();
     QTextBrowser *licenseBrowser = new QTextBrowser(dialog);
-    licenseBrowser->setFont(font);
+    //licenseBrowser->setFont(font);
     licenseBrowser->setLineWrapMode(QTextEdit::NoWrap);
     licenseBrowser->setText(licenseText);
     layout->addWidget(licenseBrowser);
@@ -328,9 +328,9 @@ void KAboutApplicationDialog::Private::_k_showLicense( const QString &number )
         + licenseBrowser->verticalScrollBar()->width() * 2;
 
     // try to allow enough height for a reasonable number of lines to be shown
-    const int idealHeight = metrics.height() * 30;
+    //const int idealHeight = metrics.height() * 30;
 
-    dialog->resize(dialog->sizeHint().expandedTo(QSize((int)idealWidth,idealHeight)));
+    //dialog->resize(dialog->sizeHint().expandedTo(QSize((int)idealWidth,idealHeight)));
     dialog->adjustSize();
     dialog->show();
 }
