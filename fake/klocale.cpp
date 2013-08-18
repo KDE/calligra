@@ -1,6 +1,7 @@
 #include "klocale.h"
 #include "kcalendarsystem.h"
 
+
 KLocale::KLocale(const QByteArray &name)
     : m_calendar(new KCalendarSystem(this))
 {

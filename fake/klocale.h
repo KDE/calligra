@@ -12,12 +12,17 @@
 #include <QCoreApplication>
 
 #include <kdatetime.h>
+#include <klocalizedstring.h>
+
+class KCalendarSystem;
+
+#if 0
 
 #define I18N_NOOP(x) x
 #define I18N_NOOP2(comment,x) x
 
 class KLocale;
-class KCalendarSystem;
+
 
 /**
  * Wraps KLocale to pure Qt the quick and dirty way to make it
@@ -765,6 +770,7 @@ inline QString i18ncp (const char *ctxt, const char *sing, const char *plur, con
   return ki18ncp(ctxt, sing, plur).subs(a1).subs(a2).subs(a3).subs(a4).subs(a5).subs(a6).subs(a7).subs(a8).subs(a9).toString();
 }
 // <<<<< End of context-plural calls
+#endif
 
 class Q_DECL_EXPORT KLocale {
 public:
@@ -2092,7 +2098,7 @@ private:
     QLocale m_locale;
     KCalendarSystem *m_calendar;
 };
-
+#if 0
 /**
  * Qt's uic generated translation calls go through numerous indirections
  * unnecessary in our case. So we use <tt>uic -tr tr2i18n</tt> to redirect them
@@ -2109,5 +2115,5 @@ inline QString tr2i18n (const char *message, const char *comment = 0) {
         return QString();
     }
 }
-
+#endif
 #endif
