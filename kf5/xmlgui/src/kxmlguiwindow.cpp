@@ -49,7 +49,7 @@
 #include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kaboutdata.h>
-#include <kwindowsystem.h>
+//#include <kwindowsystem.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
