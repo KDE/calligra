@@ -22,7 +22,7 @@
 
 #include "kplatoui_export.h"
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 
 namespace KPlato

@@ -20,7 +20,7 @@
 #ifndef KWCONFIGUREDIALOG_H
 #define KWCONFIGUREDIALOG_H
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 class KWView;
 class KoConfigDocumentPage;
@@ -28,7 +28,7 @@ class KoConfigGridPage;
 class KoConfigMiscPage;
 class KoConfigAuthorPage;
 
-class KWConfigureDialog : public KPageDialog
+class KWConfigureDialog : public KoPageDialog
 {
     Q_OBJECT
 

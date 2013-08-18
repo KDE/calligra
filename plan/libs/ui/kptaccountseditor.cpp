@@ -52,7 +52,7 @@ namespace KPlato
 
 
 AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountTreeView *treeview, QWidget *p)
-    : KPageDialog(p),
+    : KoPageDialog(p),
     m_view( view ),
     m_treeview( treeview )
 {

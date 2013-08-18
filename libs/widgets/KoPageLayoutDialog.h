@@ -24,12 +24,12 @@
 
 #include <KoText.h>
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 struct KoPageLayout;
 
 /// A dialog to show the settings for one page and apply them afterwards.
-class KOWIDGETS_EXPORT KoPageLayoutDialog : public KPageDialog
+class KOWIDGETS_EXPORT KoPageLayoutDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

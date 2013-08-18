@@ -30,7 +30,7 @@
 
 #include <ktabwidget.h>
 #include <k3listview.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include <kpushbutton.h>
 #include <kguiitem.h>
 #include <kdebug.h>

@@ -20,7 +20,7 @@
 #ifndef KOPACONFIGUREDIALOG_H
 #define KOPACONFIGUREDIALOG_H
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 class KoPAView;
 class KoConfigDocumentPage;
@@ -28,7 +28,7 @@ class KoConfigGridPage;
 class KoConfigMiscPage;
 class KoConfigAuthorPage;
 
-class KoPAConfigureDialog : public KPageDialog
+class KoPAConfigureDialog : public KoPageDialog
 {
     Q_OBJECT
 

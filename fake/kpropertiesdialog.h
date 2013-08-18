@@ -1,14 +1,14 @@
 #ifndef FAKE_KPROPERTIESDIALOG_H
 #define FAKE_KPROPERTIESDIALOG_H
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include <kurl.h>
 #include <QVariant>
 
-class KPropertiesDialog : public KPageDialog
+class KPropertiesDialog : public KoPageDialog
 {
 public:
-    KPropertiesDialog(QWidget *parent = 0) : KPageDialog(parent) {}
+    KPropertiesDialog(QWidget *parent = 0) : KoPageDialog(parent) {}
 #if 0
   /**
    * Determine whether there are any property pages available for the
@@ -273,7 +273,7 @@ public:
   /**
    * Constructor
    * To insert tabs into the properties dialog, use the add methods provided by
-   * KPageDialog (the properties dialog is a KPageDialog).
+   * KoPageDialog (the properties dialog is a KoPageDialog).
    */
   KPropertiesDialogPlugin( KPropertiesDialog *_props );
   virtual ~KPropertiesDialogPlugin();

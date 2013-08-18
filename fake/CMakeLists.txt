@@ -60,7 +60,7 @@ set(kofake_HEADERS_ONLY
     #ktoggleaction.h
     #kstandardguiitem.h
     kshortcut.h
-    #kpagedialog.h
+    kopagedialog.h
     kmenu.h
     #kactionmenu.h
     kcolormimedata.h

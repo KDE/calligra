@@ -32,7 +32,7 @@
 #include <klocale.h>
 
 KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
-: KPageDialog(parent)
+: KoPageDialog(parent)
 {
     setFaceType(List);
     setCaption(i18n("Configure"));

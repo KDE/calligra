@@ -599,14 +599,14 @@ void FullscreenSettingsTab::setDefault()
 //---------------------------------------------------------------------------------------------------
 
 KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
-    : KPageDialog(parent)
+    : KoPageDialog(parent)
 {
     Q_UNUSED(name);
     setCaption(i18n("Preferences"));
     setButtons(Ok | Cancel | Help | Default);
     setDefaultButton(Ok);
     showButtonSeparator(true);
-    setFaceType(KPageDialog::List);
+    setFaceType(KoPageDialog::List);
 
     // General
     KVBox *vbox = new KVBox();

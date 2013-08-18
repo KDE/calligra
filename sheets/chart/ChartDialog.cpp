@@ -27,7 +27,7 @@
 using namespace Calligra::Sheets;
 
 ChartDialog::ChartDialog(const QList<KChart::ChartShape*> &charts, QWidget *parent)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
 {
     Q_UNUSED(charts);
     connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));

@@ -38,7 +38,7 @@ namespace KPlato
 {
 
 AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *p)
-    : KPageDialog(p),
+    : KoPageDialog(p),
     m_view( view ),
     m_treeview( treeview )
 {

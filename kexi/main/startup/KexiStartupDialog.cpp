@@ -158,7 +158,7 @@ KexiStartupDialog::KexiStartupDialog(
     int dialogType, int dialogOptions,
     KexiDBConnectionSet& connSet, KexiProjectSet& recentProjects,
     QWidget *parent)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
         , d(new Private())
 {
     d->singlePage = dialogType == KexiStartupDialog::Templates
@@ -230,7 +230,7 @@ bool KexiStartupDialog::shouldBeShown()
 
 void KexiStartupDialog::showEvent(QShowEvent *e)
 {
-    KPageDialog::showEvent(e);
+    KoPageDialog::showEvent(e);
     //just some cleanup
     //d->existingUrlToOpen = KUrl();
     d->result = -1;
@@ -298,13 +298,13 @@ void KexiStartupDialog::done(int r)
 
     group.sync();
 
-    KPageDialog::done(r);
+    KoPageDialog::done(r);
 }
 
 void KexiStartupDialog::reject()
 {
 // d->result = CancelResult;
-    KPageDialog::reject();
+    KoPageDialog::reject();
 }
 
 void KexiStartupDialog::setupPageTemplates()
@@ -757,7 +757,7 @@ bool KexiStartupDialog::eventFilter(QObject *o, QEvent *e)
             }
         }
     }
-    return KPageDialog::eventFilter(o, e);
+    return KoPageDialog::eventFilter(o, e);
 }
 
 // internal reimplementation

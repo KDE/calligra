@@ -297,7 +297,7 @@ void PreferenceDialog::Private::resetOpenSaveOptions()
 
 
 PreferenceDialog::PreferenceDialog(View* view)
-        : KPageDialog(view)
+        : KoPageDialog(view)
         , d(new Private)
 {
     setObjectName(QLatin1String("PreferenceDialog"));

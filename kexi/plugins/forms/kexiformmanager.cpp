@@ -30,7 +30,7 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include <ktextedit.h>
 #include <ktoolbar.h>
 
@@ -489,8 +489,8 @@ void KexiFormManager::showFormUICode()
         return;
     }
 
-    KPageDialog uiCodeDialog;
-    uiCodeDialog.setFaceType(KPageDialog::Tabbed);
+    KoPageDialog uiCodeDialog;
+    uiCodeDialog.setFaceType(KoPageDialog::Tabbed);
     uiCodeDialog.setModal(true);
     uiCodeDialog.setWindowTitle(i18n("Form's UI Code"));
     uiCodeDialog.setButtons(KDialog::Close);

@@ -305,7 +305,7 @@ bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
         , d(new Private)
 {
     setWindowTitle(i18n("Open Recent Project"));
@@ -315,7 +315,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
 KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         const KexiDB::ConnectionData& cdata,
         bool showProjectNameColumn, bool showConnectionColumns)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
         , d(new Private)
 {
     setWindowTitle(i18n("Open Project"));
@@ -379,6 +379,6 @@ void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData* pda
 
 void KexiProjectSelectorDialog::showEvent(QShowEvent * event)
 {
-    KPageDialog::showEvent(event);
-    KPageDialog::centerOnScreen(this);
+    KoPageDialog::showEvent(event);
+    KoPageDialog::centerOnScreen(this);
 }

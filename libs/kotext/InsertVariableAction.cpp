@@ -27,7 +27,7 @@
 #include <KoShapeController.h>
 #include <KoInlineTextObjectManager.h>
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <klocale.h>
 #include <QLayout>
@@ -54,10 +54,10 @@ KoInlineObject *InsertVariableAction::createInlineObject()
         if (widget->layout()) {
             widget->layout()->setMargin(0);
         }
-        KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
+        KoPageDialog *dialog = new KoPageDialog(m_canvas->canvasWidget());
         dialog->setWindowTitle(i18n("%1 Options", m_templateName));
         dialog->addPage(widget, QString());
-        if (dialog->exec() != KPageDialog::Accepted) {
+        if (dialog->exec() != KoPageDialog::Accepted) {
             delete variable;
             variable = 0;
         }

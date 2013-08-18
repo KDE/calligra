@@ -28,7 +28,7 @@
 
 #include <kactionmenu.h>
 #include <QVBoxLayout>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -168,10 +168,10 @@ void KoRdfSemanticTreeWidgetItem::edit()
     lay->setMargin(0);
     QWidget *w = semanticItem()->createEditor(widget);
     lay->addWidget(w);
-    KPageDialog dialog;
+    KoPageDialog dialog;
     dialog.setCaption(caption);
     dialog.addPage(widget, QString());
-    if (dialog.exec() == KPageDialog::Accepted) {
+    if (dialog.exec() == KoPageDialog::Accepted) {
         kDebug(30015) << "KoRdfCalendarEventTreeWidgetItem::edit() accepted...";
         semanticItem()->updateFromEditorData();
     }

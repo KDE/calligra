@@ -55,7 +55,7 @@ Q_DECLARE_METATYPE(Validity::Action)
 Q_DECLARE_METATYPE(Validity::Restriction)
 
 ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
 
 {
     setFaceType(Tabbed);

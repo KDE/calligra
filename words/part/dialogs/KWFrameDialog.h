@@ -23,7 +23,7 @@
 
 #include <KoShapeConfigFactoryBase.h>
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include <QList>
 #include <QCheckBox>
 
@@ -39,7 +39,7 @@ class FrameConfigSharedState;
 class KWCanvas;
 
 /// A dialog for showing and altering frame properties
-class KWFrameDialog : public KPageDialog
+class KWFrameDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

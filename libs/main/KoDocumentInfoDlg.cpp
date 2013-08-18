@@ -66,14 +66,14 @@ public:
 
 
 KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
-    : KPageDialog(parent)
+    : KoPageDialog(parent)
     , d(new KoDocumentInfoDlgPrivate)
 {
     d->info = docInfo;
 
     setCaption(i18n("Document Information"));
     setInitialSize(QSize(500, 500));
-    setFaceType(KPageDialog::List);
+    setFaceType(KoPageDialog::List);
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
 
@@ -152,7 +152,7 @@ void KoDocumentInfoDlg::slotButtonClicked(int button)
         accept();
         return;
     }
-    KPageDialog::slotButtonClicked(button);
+    KoPageDialog::slotButtonClicked(button);
 }
 
 bool KoDocumentInfoDlg::isDocumentSaved()

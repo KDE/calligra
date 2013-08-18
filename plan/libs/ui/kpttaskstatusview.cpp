@@ -1371,7 +1371,7 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
 
 //-----------------
 ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent )
-    : KPageDialog( parent ),
+    : KoPageDialog( parent ),
     m_base( base )
 {
     PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( view, this );

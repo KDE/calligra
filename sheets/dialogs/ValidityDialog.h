@@ -24,7 +24,7 @@
 #ifndef CALLIGRA_SHEETS_VALIDITY_DIALOG
 #define CALLIGRA_SHEETS_VALIDITY_DIALOG
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include "Validity.h"
 
@@ -44,7 +44,7 @@ class Selection;
  * \ingroup UI
  * Dialog for setting cell validations.
  */
-class ValidityDialog : public KPageDialog
+class ValidityDialog : public KoPageDialog
 {
     Q_OBJECT
 

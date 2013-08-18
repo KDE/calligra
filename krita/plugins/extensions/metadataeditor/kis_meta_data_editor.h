@@ -19,14 +19,14 @@
 #ifndef _KIS_META_DATA_EDITOR_H_
 #define _KIS_META_DATA_EDITOR_H_
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 namespace KisMetaData
 {
 class Store;
 }
 
-class KisMetaDataEditor : public KPageDialog
+class KisMetaDataEditor : public KoPageDialog
 {
     struct Private;
 public:

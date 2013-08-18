@@ -21,7 +21,7 @@
 #ifndef __koDocumentInfoDlg_h__
 #define __koDocumentInfoDlg_h__
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 class KoDocumentInfo;
 class KoDocumentRdfBase;
@@ -45,10 +45,10 @@ class KoPageWidgetItem;
  * class.
  * The widgets shown in the tabs are koDocumentInfoAboutWidget and
  * koDocumentInfoAuthorWidget. This class here is derived from
- * KPageDialog and uses the face type Tabbed.
+ * KoPageDialog and uses the face type Tabbed.
  */
 
-class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
+class KOMAIN_EXPORT KoDocumentInfoDlg : public KoPageDialog
 {
     Q_OBJECT
 

@@ -42,7 +42,7 @@ namespace KFormDesigner
 /////////////////////////////////////////////////////////////////////////////////
 
 EditListViewDialog::EditListViewDialog(QWidget *parent)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
 {
     setObjectName("editlistview_dialog");
     setModal(true);
@@ -207,7 +207,7 @@ EditListViewDialog::exec(Q3ListView *listview)
     m_listbox->setSelected(0, true);
 
     // and we exec the dialog
-    int r =  KPageDialog::exec();
+    int r =  KoPageDialog::exec();
     if (r == QDialog::Accepted) {
         listview->clear();
         // We copy the contents of our listview back in the listview

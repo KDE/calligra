@@ -65,7 +65,7 @@ public:
 
 
 DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* parent)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
         , d(new Private)
 {
     setObjectName(QLatin1String("DocumentSettingsDialog"));

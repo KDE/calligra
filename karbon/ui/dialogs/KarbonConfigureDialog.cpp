@@ -35,7 +35,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <klocale.h>
 
 KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
-    : KPageDialog(parent)
+    : KoPageDialog(parent)
 {
     setFaceType(List);
     setCaption(i18n("Configure"));

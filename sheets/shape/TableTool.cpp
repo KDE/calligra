@@ -37,7 +37,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kfiledialog.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -228,10 +228,10 @@ void TableTool::sheetActivated(const QString& sheetName)
 
 void TableTool::sheetsBtnClicked()
 {
-    QPointer<KPageDialog> dialog = new KPageDialog();
+    QPointer<KoPageDialog> dialog = new KoPageDialog();
     dialog->setCaption(i18n("Sheets"));
     dialog->setButtons(KDialog::Ok);
-    dialog->setFaceType(KPageDialog::Plain);
+    dialog->setFaceType(KoPageDialog::Plain);
     SheetsEditor* editor = new SheetsEditor(d->tableShape);
     dialog->setMainWidget(editor);
     dialog->exec();

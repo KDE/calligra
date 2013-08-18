@@ -23,7 +23,7 @@
 
 #include <KoShapeConfigFactoryBase.h>
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <QCheckBox>
 #include <QList>
@@ -40,7 +40,7 @@ namespace Sheets
 class Map;
 
 /// A dialog for showing and altering frame properties
-class ChartDialog : public KPageDialog
+class ChartDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

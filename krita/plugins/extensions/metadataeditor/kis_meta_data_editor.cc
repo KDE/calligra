@@ -47,7 +47,7 @@ struct KisMetaDataEditor::Private {
 
 
 KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* originalStore) :
-        KPageDialog(parent), d(new Private)
+        KoPageDialog(parent), d(new Private)
 {
     d->originalStore = originalStore;
     d->store = new KisMetaData::Store(*originalStore);
@@ -156,7 +156,7 @@ KisMetaDataEditor::~KisMetaDataEditor()
 
 void KisMetaDataEditor::accept()
 {
-    KPageDialog::accept();
+    KoPageDialog::accept();
     d->originalStore->copyFrom(d->store);
 }
 

@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <QVBoxLayout>
 #include <QLabel>
@@ -60,11 +60,11 @@ void InsertSemanticObjectReferenceAction::activated()
     td.update(const_cast<KoDocumentRdf*>(m_rdf));
     lay->addWidget(tree);
 
-    KPageDialog dialog(m_canvas->canvasWidget());
+    KoPageDialog dialog(m_canvas->canvasWidget());
     dialog.setCaption(i18n("%1 Options", text())); // TODO add comment (i18nc)
     dialog.addPage(widget, QString());
 
-    if (dialog.exec() == KPageDialog::Accepted && tree->currentItem()) {
+    if (dialog.exec() == KoPageDialog::Accepted && tree->currentItem()) {
         QTreeWidgetItem *item = tree->currentItem();
         if (KoRdfSemanticTreeWidgetItem *ditem = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(item)) {
 

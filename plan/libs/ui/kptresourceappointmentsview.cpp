@@ -87,7 +87,7 @@ void ResourceAppointmentsDisplayOptionsPanel::setDefault()
 
 //----
 ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent )
-    : KPageDialog( parent ),
+    : KoPageDialog( parent ),
     m_view( view )
 {
     ResourceAppointmentsDisplayOptionsPanel *panel = new ResourceAppointmentsDisplayOptionsPanel( model );

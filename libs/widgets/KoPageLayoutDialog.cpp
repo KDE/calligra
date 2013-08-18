@@ -40,11 +40,11 @@ public:
 
 
 KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layout)
-    : KPageDialog(parent)
+    : KoPageDialog(parent)
     , d(new Private)
 {
     setWindowTitle(i18n("Page Layout"));
-    setFaceType(KPageDialog::Tabbed);
+    setFaceType(KoPageDialog::Tabbed);
 
     QWidget *widget = new QWidget(this);
     addPage(widget, i18n("Page"));
@@ -84,13 +84,13 @@ void KoPageLayoutDialog::setPageLayout(const KoPageLayout &layout)
 
 void KoPageLayoutDialog::accept()
 {
-    KPageDialog::accept();
+    KoPageDialog::accept();
     deleteLater();
 }
 
 void KoPageLayoutDialog::reject()
 {
-    KPageDialog::reject();
+    KoPageDialog::reject();
     deleteLater();
 }
 

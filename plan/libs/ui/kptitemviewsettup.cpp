@@ -134,7 +134,7 @@ void ItemViewSettup::setDefault()
 
 //---------------------------
 ItemViewSettupDialog::ItemViewSettupDialog( ViewBase *view, TreeViewBase *treeview, bool includeColumn0, QWidget *parent )
-    : KPageDialog( parent ),
+    : KoPageDialog( parent ),
     m_view( view ),
     m_treeview( treeview ),
     m_pagelayout( 0 ),
@@ -206,7 +206,7 @@ void ItemViewSettupDialog::addPrintingOptions()
 
 //-------------------------------
 SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTreeViewBase *treeview, QWidget *parent )
-    : KPageDialog( parent ),
+    : KoPageDialog( parent ),
     m_view( view ),
     m_treeview( treeview ),
     m_pagelayout( 0 ),

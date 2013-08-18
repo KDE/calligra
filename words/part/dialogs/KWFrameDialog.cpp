@@ -31,7 +31,7 @@
 #include "frames/KWFrame.h"
 
 KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document, KWCanvas *canvas)
-        : KPageDialog(canvas)
+        : KoPageDialog(canvas)
         , m_frameConnectSelector(0)
         , m_canvas(canvas)
 {

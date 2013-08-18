@@ -20,7 +20,7 @@
 #ifndef KexiStartupDialog_h
 #define KexiStartupDialog_h
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <db/connectiondata.h>
 #include <core/kexiprojectdata.h>
@@ -37,7 +37,7 @@ class QEvent;
  on Kexi startup. If only one page is shown, tab is not displayed, so the dialog
  becomes a normal "plain" type dialog.
 */
-class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
+class KEXIMAIN_EXPORT KexiStartupDialog : public KoPageDialog
 {
     Q_OBJECT
 

@@ -482,7 +482,7 @@ public:
 
 };
 
-class ProjectStatusViewSettingsDialog : public KPageDialog
+class ProjectStatusViewSettingsDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

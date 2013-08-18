@@ -28,7 +28,7 @@
 #include <QWidget>
 
 #include <kdialog.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 class KoPageLayoutWidget;
 
@@ -69,7 +69,7 @@ private:
     bool m_includeColumn0;
 };
 
-class KPLATOUI_EXPORT ItemViewSettupDialog : public KPageDialog
+class KPLATOUI_EXPORT ItemViewSettupDialog : public KoPageDialog
 {
     Q_OBJECT
 public:
@@ -90,7 +90,7 @@ protected:
     ItemViewSettup *m_panel;
 };
 
-class KPLATOUI_EXPORT SplitItemViewSettupDialog : public KPageDialog
+class KPLATOUI_EXPORT SplitItemViewSettupDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

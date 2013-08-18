@@ -30,7 +30,7 @@ public:
 };
 
 KoUniColorDialog::KoUniColorDialog(KoColor &initialColor, QWidget *parent)
-    : KPageDialog(parent),
+    : KoPageDialog(parent),
     d(new KoUniColorDialogPrivate())
 {
     setFaceType(Plain);

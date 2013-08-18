@@ -27,7 +27,7 @@
 #ifndef CALLIGRA_SHEETS_PREFERENCE_DIALOG
 #define CALLIGRA_SHEETS_PREFERENCE_DIALOG
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 namespace Sonnet
 {
@@ -44,7 +44,7 @@ class View;
  * \ingroup UI
  * Dialog to set the application preferences.
  */
-class PreferenceDialog : public KPageDialog
+class PreferenceDialog : public KoPageDialog
 {
     Q_OBJECT
 

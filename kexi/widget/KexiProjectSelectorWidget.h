@@ -23,7 +23,7 @@
 #include "ui_KexiProjectSelector.h"
 #include "kexiprojectset.h"
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <QTreeWidget>
 
@@ -91,7 +91,7 @@ protected:
 };
 
 /*! Dialog container for KexiProjectSelectorWidget */
-class KEXIEXTWIDGETS_EXPORT KexiProjectSelectorDialog : public KPageDialog
+class KEXIEXTWIDGETS_EXPORT KexiProjectSelectorDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

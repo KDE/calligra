@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_SHEETS_INSPECTOR
 #define CALLIGRA_SHEETS_INSPECTOR
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 namespace Calligra
 {
@@ -28,7 +28,7 @@ namespace Sheets
 {
 class Cell;
 
-class Inspector : public KPageDialog
+class Inspector : public KoPageDialog
 {
     Q_OBJECT
 public:

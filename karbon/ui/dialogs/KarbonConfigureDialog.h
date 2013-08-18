@@ -22,7 +22,7 @@
 #define KARBONCONFIGUREDIALOG_H
 
 #include <KoUnit.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 class KarbonView;
 class KarbonConfigInterfacePage;
@@ -31,7 +31,7 @@ class KoConfigGridPage;
 class KoConfigDocumentPage;
 class KoConfigAuthorPage;
 
-class KarbonConfigureDialog : public KPageDialog
+class KarbonConfigureDialog : public KoPageDialog
 {
     Q_OBJECT
 

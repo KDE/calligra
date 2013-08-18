@@ -25,7 +25,7 @@
 #ifndef LINK_DIALOG
 #define LINK_DIALOG
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 namespace Calligra
 {
@@ -37,7 +37,7 @@ class Selection;
  * \ingroup UI
  * Dialog to insert a hyperlink.
  */
-class LinkDialog : public KPageDialog
+class LinkDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

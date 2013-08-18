@@ -24,7 +24,7 @@
 
 #include <QWidget>
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include "kis_global.h"
 
@@ -255,7 +255,7 @@ public:
 /**
  *  Preferences dialog of KImageShop^WKrayon^WKrita
  */
-class KisDlgPreferences : public KPageDialog
+class KisDlgPreferences : public KoPageDialog
 {
     Q_OBJECT
 

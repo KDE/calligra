@@ -297,7 +297,7 @@ bool GeneralTab::apply(CustomStyle * style)
  ***************************************************************************/
 
 CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
         , m_sheet(selection->activeSheet())
         , m_selection(selection)
         , m_style(0)
@@ -478,7 +478,7 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
 
 CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection,
                                    CustomStyle* style, StyleManager* manager)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
         , m_sheet(selection->activeSheet())
         , m_selection(selection)
         , m_style(style)
@@ -747,7 +747,7 @@ void CellFormatDialog::init()
 
     setCaption(i18n("Cell Format"));
     setButtons(KDialog::Ok | KDialog::Cancel);
-    setFaceType(KPageDialog::Tabbed);
+    setFaceType(KoPageDialog::Tabbed);
     setMinimumWidth(600);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 

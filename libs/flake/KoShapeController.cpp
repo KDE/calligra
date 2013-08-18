@@ -39,7 +39,7 @@
 
 #include <QObject>
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include <klocale.h>
 
 class KoShapeController::Private
@@ -66,7 +66,7 @@ public:
                 shape->setZIndex(z + 1);
 
                 // show config dialog.
-                KPageDialog *dialog = new KPageDialog(canvas->canvasWidget());
+                KoPageDialog *dialog = new KoPageDialog(canvas->canvasWidget());
                 dialog->setWindowTitle(i18n("%1 Options", factory->name()));
 
                 int pageCount = 0;
@@ -105,8 +105,8 @@ public:
 
                 if (pageCount > 0) {
                     if (pageCount > 1)
-                        dialog->setFaceType(KPageDialog::Tabbed);
-                    if (dialog->exec() != KPageDialog::Accepted) {
+                        dialog->setFaceType(KoPageDialog::Tabbed);
+                    if (dialog->exec() != KoPageDialog::Accepted) {
                         delete dialog;
                         return 0;
                     }

@@ -26,7 +26,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <QVBoxLayout>
 
@@ -54,10 +54,10 @@ void InsertSemanticObjectCreateAction::activated()
     hKoRdfSemanticItem semItem = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, m_semanticClass);
     QWidget *w = semItem->createEditor(widget);
     lay->addWidget(w);
-    KPageDialog dialog(m_canvas->canvasWidget());
+    KoPageDialog dialog(m_canvas->canvasWidget());
     dialog.setCaption(i18n("%1 Options", text().remove('&'))); // TODO add comment using i18nc
     dialog.addPage(widget, QString());
-    if (dialog.exec() == KPageDialog::Accepted) {
+    if (dialog.exec() == KoPageDialog::Accepted) {
         kDebug(30015) << "activated...";
         semItem->updateFromEditorData();
         semItem->insert(m_canvas);

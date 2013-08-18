@@ -5,13 +5,13 @@
 #include <kdialog.h>
 #include <kpagewidgetitem.h>
 
-class KPageDialog : public KDialog
+class KoPageDialog : public KDialog
 {
 public:
     enum FaceType { Tree, Tabbed, List, Plain };
 
-    KPageDialog(QWidget *parent = 0) : KDialog(parent) { m_tabWidget = new QTabWidget(this); }
-    virtual ~KPageDialog() { qDeleteAll(m_items); }
+    KoPageDialog(QWidget *parent = 0) : KDialog(parent) { m_tabWidget = new QTabWidget(this); }
+    virtual ~KoPageDialog() { qDeleteAll(m_items); }
 
     void setFaceType(FaceType) {}
 

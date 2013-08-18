@@ -37,7 +37,7 @@
 
 #include <kcombobox.h>
 #include <kdesktopfile.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include <QLineEdit>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -68,7 +68,7 @@ public:
 };
 
 LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
-        : KPageDialog(parent)
+        : KoPageDialog(parent)
         , d(new Private)
 {
     setCaption(i18n("Insert Link"));

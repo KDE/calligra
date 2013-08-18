@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 #include <QPen>
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 // KSpread
 #include "Cell.h"
@@ -179,7 +179,7 @@ void Inspector::Private::handleDep()
 }
 
 Inspector::Inspector(const Cell& cell)
-        : KPageDialog()
+        : KoPageDialog()
         , d(new Private)
 {
     setFaceType(Tabbed);

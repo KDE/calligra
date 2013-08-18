@@ -33,7 +33,7 @@
 #include <klocale.h>
 
 KWConfigureDialog::KWConfigureDialog(KWView* parent)
-: KPageDialog(parent)
+: KoPageDialog(parent)
 {
     setFaceType(List);
     setCaption(i18n("Configure"));

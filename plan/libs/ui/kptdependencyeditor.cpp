@@ -1965,7 +1965,7 @@ void DependencyView::slotAutoScroll()
 
 //-----------------------------------
 DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWidget *p)
-    : KPageDialog(p),
+    : KoPageDialog(p),
     m_view( view )
 {
     setCaption( i18n("Settings") );

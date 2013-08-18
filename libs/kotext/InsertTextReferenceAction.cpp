@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QLabel>
@@ -59,12 +59,12 @@ KoInlineObject *InsertTextReferenceAction::createInlineObject()
     lay->addWidget(list);
     list->addItems(selectionList);
 
-    KPageDialog dialog(m_canvas->canvasWidget());
+    KoPageDialog dialog(m_canvas->canvasWidget());
     dialog.setWindowTitle(i18n("%1 Options", i18n("Text Reference"))); // reuse the text passed in the constructor
     dialog.addPage(widget, QString());
 
     KoVariable *variable = 0;
-    if (dialog.exec() == KPageDialog::Accepted && list->currentRow() >= 0) {
+    if (dialog.exec() == KoPageDialog::Accepted && list->currentRow() >= 0) {
         KoTextLocator *locator = textLocators[list->currentRow()];
         Q_ASSERT(locator);
         variable = new KoTextReference(locator->id());

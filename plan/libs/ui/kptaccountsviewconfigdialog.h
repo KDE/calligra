@@ -21,7 +21,7 @@
 #define KPTACCOUNTSVIEWCONFIGDIALOG_H
 
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include "ui_kptaccountsviewconfigurepanelbase.h"
 
 class QDate;
@@ -47,7 +47,7 @@ public:
 };
 
 
-class AccountsviewConfigDialog : public KPageDialog {
+class AccountsviewConfigDialog : public KoPageDialog {
     Q_OBJECT
 public:
     AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *parent );

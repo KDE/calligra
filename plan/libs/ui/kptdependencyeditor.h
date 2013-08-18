@@ -39,7 +39,7 @@
 
 #include "KoView.h"
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 class KoPageLayoutWidget;
 
@@ -488,7 +488,7 @@ private:
 };
 
 //--------------------
-class DependencyeditorConfigDialog : public KPageDialog {
+class DependencyeditorConfigDialog : public KoPageDialog {
     Q_OBJECT
 public:
     DependencyeditorConfigDialog( ViewBase *view, QWidget *parent );

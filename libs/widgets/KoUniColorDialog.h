@@ -22,7 +22,7 @@
 
 #include "KoColor.h"
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include "kowidgets_export.h"
 
 class KoUniColorDialogPrivate;
@@ -32,7 +32,7 @@ class KoUniColorDialogPrivate;
  *
  * KoUniColorDialog is simply the dialog'ification of KoUniColorChooser.
  */
-class KOWIDGETS_EXPORT KoUniColorDialog : public KPageDialog
+class KOWIDGETS_EXPORT KoUniColorDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

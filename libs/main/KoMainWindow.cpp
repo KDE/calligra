@@ -1413,11 +1413,11 @@ void KoMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
-class ExportPdfDialog : public KPageDialog
+class ExportPdfDialog : public KoPageDialog
 {
 public:
-    ExportPdfDialog(const KUrl &startUrl, const KoPageLayout &pageLayout) : KPageDialog() {
-        setFaceType(KPageDialog::List);
+    ExportPdfDialog(const KUrl &startUrl, const KoPageLayout &pageLayout) : KoPageDialog() {
+        setFaceType(KoPageDialog::List);
         setCaption(i18n("Export to PDF"));
 
         m_fileWidget = new KFileWidget(startUrl, this);
@@ -1455,7 +1455,7 @@ protected:
         if (button == KDialog::Ok) {
             m_fileWidget->slotOk();
         } else {
-            KPageDialog::slotButtonClicked(button);
+            KoPageDialog::slotButtonClicked(button);
         }
     }
 private:

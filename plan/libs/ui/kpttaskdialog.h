@@ -23,7 +23,7 @@
 
 #include "kplatoui_export.h"
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 
 namespace KPlato
@@ -45,7 +45,7 @@ class RequestResourcesPanel;
 /**
  * The dialog that shows and allows you to alter any task.
  */
-class KPLATOUI_EXPORT TaskDialog : public KPageDialog {
+class KPLATOUI_EXPORT TaskDialog : public KoPageDialog {
     Q_OBJECT
 public:
     /**

@@ -40,7 +40,7 @@
 
 #include <kcompletion.h>
 #include <knuminput.h>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include "RowColumnFormat.h"
 #include "Style.h"
@@ -554,7 +554,7 @@ protected:
  * \ingroup UI
  * Dialog to set the cell style.
  */
-class CellFormatDialog : public KPageDialog
+class CellFormatDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

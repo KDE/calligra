@@ -32,7 +32,7 @@
 
 #include <kconfig.h>
 #include <QLineEdit>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 #include <ksharedconfig.h>
 #include <kvbox.h>
 
@@ -86,7 +86,7 @@ protected:
  * \ingroup UI
  * Dialog to alter document settings.
  */
-class DocumentSettingsDialog : public KPageDialog
+class DocumentSettingsDialog : public KoPageDialog
 {
     Q_OBJECT
 public:

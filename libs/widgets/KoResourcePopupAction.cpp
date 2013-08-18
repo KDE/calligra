@@ -39,6 +39,7 @@
 #include <QGradient>
 #include <QToolButton>
 #include <QRect>
+#include <QWidgetAction>
 
 class KoResourcePopupAction::Private
 {

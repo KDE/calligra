@@ -22,7 +22,7 @@
 
 #include <QHash>
 #include <QToolButton>
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 #include <kexi_export.h>
 
@@ -49,7 +49,7 @@ namespace KFormDesigner
  (there are two properties not supported by Qt Designer: 'width' and 'resizable').
  The user can enter list contents inside the list
  using K3ListViewItem::setRenameable(). Pixmaps are not yet supported. */
-class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
+class KFORMEDITOR_EXPORT EditListViewDialog : public KoPageDialog
 {
     Q_OBJECT
 

@@ -25,7 +25,7 @@
 #include <kptviewbase.h>
 #include "kptaccountsmodel.h"
 
-#include <kpagedialog.h>
+#include <kopagedialog.h>
 
 class KoDocument;
 
@@ -39,7 +39,7 @@ class Project;
 class Account;
 class AccountTreeView;
 
-class AccountseditorConfigDialog : public KPageDialog {
+class AccountseditorConfigDialog : public KoPageDialog {
     Q_OBJECT
 public:
     AccountseditorConfigDialog( ViewBase *view, AccountTreeView *treeview, QWidget *parent );
