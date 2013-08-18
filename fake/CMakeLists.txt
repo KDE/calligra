@@ -36,7 +36,7 @@ set(kofake_HEADERS_ONLY
     kicon.h
     kreplacedialog.h
     kfind.h
-    kxmlguiwindow.h
+    #kxmlguiwindow.h
     #kmessagebox.h
     krecentdocument.h
     kfilewidget.h
@@ -67,13 +67,13 @@ set(kofake_HEADERS_ONLY
     kmimetype.h
     kemailsettings.h
     klineedit.h
-    kxmlguifactory.h
+    #kxmlguifactory.h
     kcompletion.h
     kcmdlineargs.h
     kinputdialog.h
     kpluginselector.h
     kofake_export.h
-    kxmlguiclient.h
+    #kxmlguiclient.h
     klistwidget.h
     kio/global.h
     kio/udsentry.h

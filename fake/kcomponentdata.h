@@ -23,14 +23,14 @@ class KOFAKE_EXPORT KComponentData
 {
 public:
     KComponentData(const QByteArray &name = QByteArray()) {}
-    KComponentData(KAboutData *about) { m_about = *about; }
+    KComponentData(KAboutData *about) { m_about = about; }
     KSharedConfigPtr config() const;
     KStandardDirs* dirs() const;
     bool isValid() const;
     QString componentName() const { return  qApp->applicationName(); }
-    const KAboutData* aboutData() const { return &m_about; }
+    const KAboutData* aboutData() const { return m_about; }
 private:
-    KAboutData m_about;
+    KAboutData *m_about;
 };
 
 #define K_GLOBAL_STATIC(clazz, inst) \
