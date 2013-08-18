@@ -823,6 +823,9 @@ include_directories(${CMAKE_SOURCE_DIR}/fake
 
                     ${CMAKE_SOURCE_DIR}/kf5/ki18n/src/
                     ${CMAKE_BINARY_DIR}/kf5/ki18n/src/
+
+                    ${CMAKE_SOURCE_DIR}/kf5/kcodecs/src
+                    ${CMAKE_BINARY_DIR}/kf5/kcodecs/src
 )
 
 # koplugin is at the bottom of the stack

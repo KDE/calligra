@@ -95,7 +95,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     QStringList encodings;
     encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" ,"UTF-8" );
     encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name() ));
-    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    encodings += KCharSets::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18nc("Descriptive encoding name","Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple
