@@ -24,7 +24,7 @@ set(kofake_LIB_SRCS
     krun.cpp
     klocale.cpp
     kcalendarsystem.cpp
-    kstandardaction.cpp
+    #kstandardaction.cpp
 )
 
 set(kofake_HEADERS_ONLY 
@@ -49,9 +49,9 @@ set(kofake_HEADERS_ONLY
     #kparts/partmanager.h
     #kparts/plugin.h
     #kparts/event.h
-    kfontsizeaction.h
+    #kfontsizeaction.h
     klimitediodevice_p.h
-    klistwidgetsearchline.h
+    #klistwidgetsearchline.h
     #kselectaction.h
     #kpagewidget.h
     config.h
@@ -90,8 +90,8 @@ set(kofake_HEADERS_ONLY
     knotifyconfigwidget.h
     #knewpassworddialog.h
     kwordwrap.h
-    klocalizedstring.h
-    ktoolbar.h
+    #klocalizedstring.h
+    #ktoolbar.h
     kfakepagewidgetitem.h
     sonnet/dialog.h
     sonnet/speller.h
@@ -102,11 +102,11 @@ set(kofake_HEADERS_ONLY
     #kservicetypetrader.h
     kdatetime.h
     kde_file.h
-    kstringhandler.h
+    #kstringhandler.h
     kpushbutton.h
     kwindowsystem.h
     #kmainwindow.h
-    kcolorscheme.h
+    #kcolorscheme.h
     #kselector.h
     kglobalsettings.h
     #kseparator.h
@@ -117,13 +117,13 @@ set(kofake_HEADERS_ONLY
     kimageio.h
     #kpassworddialog.h
     kcolorutils.h
-    kactioncollection.h
+    #kactioncollection.h
     ktextedit.h
     kfinddialog.h
     kurlcompletion.h
     #kfontaction.h
     #kcodecs.h
-    krecentfilesaction.h
+    #krecentfilesaction.h
     kiconloader.h
     ktabwidget.h
     #kcolorcombo.h
@@ -132,18 +132,18 @@ set(kofake_HEADERS_ONLY
     kicondialog.h
     kreplace.h
     krecentdirs.h
-    kstandardshortcut.h
+    #kstandardshortcut.h
     khistorycombobox.h
     knotification.h
-    kcharsets.h
+    #kcharsets.h
     kcharselect.h
     #kpagewidgetmodel.h
     kglobal.h
-    kpassivepopup.h
+    #kpassivepopup.h
     kfiledialog.h
     #kfontchooser.h
     #kconfig.h
-    ksharedptr.h
+    #ksharedptr.h
     kfileitem.h
     #klibloader.h
     kpropertiesdialog.h
@@ -153,8 +153,8 @@ set(kofake_HEADERS_ONLY
     kvbox.h
     kmenubar.h
     #kservice.h
-    ktoolinvocation.h
-    kedittoolbar.h
+    #ktoolinvocation.h
+    #kedittoolbar.h
     #ksqueezedtextlabel.h
     #kservicetype.h
     knumvalidator.h
@@ -162,7 +162,7 @@ set(kofake_HEADERS_ONLY
     ktextbrowser.h
     #kconfiggroup.h
     config-compression.h
-    kwidgetitemdelegate.h
+    #kwidgetitemdelegate.h
     #kxyselector.h
     kdeversion.h
     kfontdialog.h
@@ -185,12 +185,12 @@ set(kofake_HEADERS
     kaction.h
     kdialog.h
     kocursor.h
-    kprocess.h
+    #kprocess.h
     krun.h
     klocale.h
     kcalendarsystem.h
     kocursor_p.h
-    kstandardaction.h
+    #kstandardaction.h
 )
 
 QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS_ONLY})
