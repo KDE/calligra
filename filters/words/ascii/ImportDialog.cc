@@ -49,7 +49,7 @@ AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
     QStringList encodings;
     encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )", "UTF-8");
     encodings << i18nc("Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()));
-    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    encodings += KCharsets::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18nc("Descriptive encoding name", "Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple
@@ -62,11 +62,11 @@ AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
     for (int i = 2; i < m_ui.comboBoxEncoding->count(); ++i) {
         // the string in strCodec and the one given back by codec->name() are not always the same so 
         // we check both
-        const QString strCodec(KGlobal::charsets()->encodingForName(m_ui.comboBoxEncoding->itemText(i)));
+        const QString strCodec(KCharsets::charsets()->encodingForName(m_ui.comboBoxEncoding->itemText(i)));
         QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
         if (!codec) {
             bool ok = false;
-            codec = KGlobal::charsets()->codecForName(strCodec, ok);
+            codec = KCharsets::charsets()->codecForName(strCodec, ok);
             if (!ok) {
                 codec = 0;
             }
@@ -87,7 +87,7 @@ AsciiImportDialog::~AsciiImportDialog()
 
 QTextCodec* AsciiImportDialog::getCodec() const
 {
-    const QString strCodec(KGlobal::charsets()->encodingForName(m_ui.comboBoxEncoding->currentText()));
+    const QString strCodec(KCharsets::charsets()->encodingForName(m_ui.comboBoxEncoding->currentText()));
     kDebug(30502) << "Encoding:" << strCodec << m_ui.comboBoxEncoding->currentText();
 
     bool ok = false;
@@ -97,7 +97,7 @@ QTextCodec* AsciiImportDialog::getCodec() const
     if (codec) {
         ok = true;
     } else {
-        codec = KGlobal::charsets()->codecForName(strCodec, ok);
+        codec = KCharsets::charsets()->codecForName(strCodec, ok);
     }
 
     // Still nothing?
