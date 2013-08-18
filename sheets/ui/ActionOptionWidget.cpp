@@ -28,6 +28,7 @@
 
 // KDE
 #include <QAction>
+#include <QWidgetAction>
 #include <klocale.h>
 
 // Calligra
@@ -82,7 +83,7 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
         // In each group there are a number of actions that will be layouted together.
         for (QDomElement action = group.firstChildElement("action"); !action.isNull(); action = action.nextSiblingElement("action")) {
             QString actionName = action.attribute("name");
-            QAction* a = cellTool->action(actionName);
+            QWidgetAction* a = qobject_cast<QWidgetAction*>(cellTool->action(actionName));
             if (!a) {
                 kWarning() << "unknown action" << actionName << "in CellToolOptionWidgets.xml";
                 continue;
