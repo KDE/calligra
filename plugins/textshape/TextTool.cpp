@@ -119,7 +119,7 @@ public:
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
-    foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
+    foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut)) {
         if (input == ks)
             return true;
     }
@@ -354,7 +354,7 @@ void TextTool::createActions()
 
         action  = new QAction(koIcon("insert-pagebreak"), i18n("Page Break"), this);
         addAction("insert_framebreak", action);
-        action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
+        action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Return));
         connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
         action->setToolTip(i18n("Insert a page break"));
         action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
