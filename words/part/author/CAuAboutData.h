@@ -33,16 +33,16 @@ KAboutData * newAuthorAboutData()
     // The second argument, "words", apparently enables translations.
     // FIXME: We will probably have to change this when we move into
     //        our own top level directory.
-    KAboutData * aboutData = new KAboutData("author", "words", ki18nc("application name", "Calligra Author"),
-                                            AUTHOR_VERSION, ki18n(AUTHOR_DESCRIPTION), KAboutData::License_LGPL,
-                                            ki18n("© 2012, The Author Team"), KLocalizedString(),
+    KAboutData * aboutData = new KAboutData("author", "words", "Calligra Author",
+                                            AUTHOR_VERSION, AUTHOR_DESCRIPTION, KAboutData::License_LGPL,
+                                            "© 2012, The Author Team", "KLocalizedString()""",
                                             "http://www.calligra.org/author/");
     aboutData->setProductName("calligraauthor"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligraauthor"));
     //                          Name             Function               email (if any)
-    aboutData->addAuthor(ki18n("Inge Wallin"), ki18n("Co-maintainer"), "");
-    aboutData->addAuthor(ki18n("Gopalakrishna Bhat"), ki18n("Co-maintainer"), "");
-    aboutData->addAuthor(ki18n("Mojtaba Shahi Senobari"), ki18n("EPUB export"), "mojtaba.shahi3000@gmail.com");
+    aboutData->addAuthor("Inge Wallin", "Co-maintainer", "");
+    aboutData->addAuthor("Gopalakrishna Bhat", "Co-maintainer", "");
+    aboutData->addAuthor("Mojtaba Shahi Senobari", "EPUB export", "mojtaba.shahi3000@gmail.com");
     return aboutData;
 }
 

@@ -49,7 +49,7 @@ KComponentData *CAuFactory::s_instance = 0;
 KAboutData *CAuFactory::s_aboutData = 0;
 
 CAuFactory::CAuFactory(QObject *parent)
-        : KPluginFactory(aboutData()->appName().toUtf8(), parent)
+        : KPluginFactory(aboutData()->componentName().toUtf8(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Author.
