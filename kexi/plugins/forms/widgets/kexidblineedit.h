@@ -24,6 +24,7 @@
 #include <QValidator>
 #include <QEvent>
 #include <QPaintEvent>
+
 #include <QLineEdit>
 #include <QValidator>
 

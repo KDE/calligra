@@ -44,6 +44,7 @@
 #include <kmessagebox.h>
 #include <QLineEdit>
 #include <kurlcombobox.h>
+
 #include <kcategorizedview.h>
 #include <ktitlewidget.h>
 #include <kpushbutton.h>

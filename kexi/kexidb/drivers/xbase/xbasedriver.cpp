@@ -21,8 +21,6 @@
 #include <db/drivermanager.h>
 #include <db/driver_p.h>
 #include <db/utils.h>
-#include <db/drivermanager.h>
-#include <db/utils.h>
 
 #include <kdebug.h>
 

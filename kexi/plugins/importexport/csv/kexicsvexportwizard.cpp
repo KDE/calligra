@@ -44,6 +44,7 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <QApplication>
+
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kdialog.h>
