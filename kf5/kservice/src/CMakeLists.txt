@@ -51,7 +51,7 @@ set(kservice_includes
    ${CMAKE_CURRENT_SOURCE_DIR}/services
    ${CMAKE_CURRENT_SOURCE_DIR}/sycoca
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin
-   ${CMAKE_CURRENT_SOURCE_DIR}/kdeinit
+   #${CMAKE_CURRENT_SOURCE_DIR}/kdeinit
 )
 target_include_directories(KService PUBLIC "$<BUILD_INTERFACE:${kservice_includes}>")
 
@@ -73,7 +73,7 @@ install(TARGETS KService EXPORT KServiceTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
    "${CMAKE_CURRENT_BINARY_DIR}/kservice_export.h"
-   kdeinit/ktoolinvocation.h
+   #kdeinit/ktoolinvocation.h
    services/kautostart.h
    services/kmimetypetrader.h
    services/kservice.h

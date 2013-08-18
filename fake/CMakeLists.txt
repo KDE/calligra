@@ -153,7 +153,7 @@ set(kofake_HEADERS_ONLY
     kvbox.h
     kmenubar.h
     #kservice.h
-    #ktoolinvocation.h
+    ktoolinvocation.h
     #kedittoolbar.h
     #ksqueezedtextlabel.h
     #kservicetype.h

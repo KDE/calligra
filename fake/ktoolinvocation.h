@@ -5,6 +5,8 @@
 #include <QProcess>
 #include <QDebug>
 
+#include "kurl.h"
+
 class OrgKdeKLauncherInterface;
 
 class KToolInvocation

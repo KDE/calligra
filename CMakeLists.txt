@@ -789,7 +789,6 @@ include_directories(${CMAKE_SOURCE_DIR}/fake
 
                     ${CMAKE_SOURCE_DIR}/kf5/kservice/src/plugin
                     ${CMAKE_SOURCE_DIR}/kf5/kservice/src/services
-                    ${CMAKE_SOURCE_DIR}/kf5/kservice/src/kdeinit
                     ${CMAKE_SOURCE_DIR}/kf5/kservice/src/sycoca
                     ${CMAKE_BINARY_DIR}/kf5/kservice/src
                     ${CMAKE_BINARY_DIR}/kf5/kservice
