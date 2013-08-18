@@ -632,7 +632,7 @@ void KShortcutsEditorPrivate::printShortcuts() const
     QTreeWidgetItem* root = ui.list->invisibleRootItem();
     QTextDocument doc;
 
-    doc.setDefaultFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    //doc.setDefaultFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
     QTextCursor cursor(&doc);
     cursor.beginEditBlock();
