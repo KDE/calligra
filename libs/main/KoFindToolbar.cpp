@@ -108,8 +108,13 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     QList<KoFindOption *> options = finder->options()->options();
     foreach(KoFindOption * option, options) {
         if(option->value().type() == QVariant::Bool) {
+<<<<<<< HEAD
             KAction *action = new KAction(option->title(), menu);
             action->setHelpText(option->description());
+=======
+            QAction *action = new QAction(option->title(), menu);
+            action->setToolTip(option->description());
+>>>>>>> 4234b5f... Restore fake KPageWidgetItem
             action->setObjectName(option->name());
             action->setCheckable(true);
             action->setChecked(option->value().toBool());
