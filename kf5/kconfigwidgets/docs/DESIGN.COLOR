@@ -1,0 +1,141 @@
+Color Management in KDE
+
+Colors are in important part of KDE and are an important tool to make
+a good looking desktop. Colors can also be a burden, especially for
+people with visual impairments.
+
+The goal of color management is to take full advantage of colors while
+reducing the disadvantages of color use to a minimum.
+
+Color Schemes
+=============
+
+Color Management is based around the concept of color schemes.
+A color scheme defines colors for different elements in the
+UI. The most important factor for the readability of a UI is the
+contrast between foreground and background colors. Colors in a color
+scheme are therefor grouped in pairs which define the foreground and
+background color for a UI element. When composing a color scheme care
+should be taken to use sufficiently contrasting colors for fore- and
+background in the same group. When using colors in applications, care
+should be taken never to mix foreground colors from one group with
+background colors from another group: they do not necasserily have any
+contrast at all which can lead to a completely unreadable UI.
+
+Color schemes are supported by Qt (see QColorGroup) and can be
+configured on a KDE wide basis from the Control Panel. The settings
+are stored in the global KDE configuration file under the "General"
+setting. The KApplication class takes care that the configured
+settings are passed on to Qt. Application developers can just use the
+values provided by QColorGroup.
+
+There are three major color categories:
+
+General
+=======
+The colors in this group are used when no particular other group is
+relevant.
+
+QColorGroup...: ColorRole::Background, background()
+KDE config key: background
+Control Center: i18n("Window Background")
+Description...: General background color
+Example use...: Background of dialogs
+
+QColorGroup...: ColorRole::Foreground, foreground()
+KDE config key: foreground
+Control Center: i18n("Window Text")
+Description...: General foreground color
+Example use...: Text in dialogs
+
+Text Areas
+==========
+The colors in this group are used where the user can type text. it is
+also used for lists from which the user can choose.
+
+QColorGroup...: ColorRole::Base, base()
+KDE config key: windowBackground
+Control Center: i18n("Standard background")
+Description...: Background color for text areas.
+Example use...: Background in a word-processor.
+
+QColorGroup...: ColorRole::Text, text()
+KDE config key: windowForeground
+Control Center: i18n("Standard text")
+Description...: Text color for text areas.
+Example use...: Text in a word-processor.
+
+QColorGroup...: ColorRole::Highlight, highlight()
+KDE config key: selectBackground
+Control Center: i18n("Select background")
+Description...: Background color for selected text.
+Example use...: In a selection list.
+
+QColorGroup...: ColorRole::HighlightedText, highlightedText()
+KDE config key: selectForeground
+Control Center: i18n("Select text")
+Description...: Text color for selected text.
+Example use...: In a selection list.
+
+"Base" and "Text" should have high contrast as well as "Highlight" and
+"HighlightedText". In addition, "Highlight"/"HighlightedText" and
+"Base"/"Text" are supposed to be sufficiently different to get a clear
+indication of what is selected and what is not.
+
+Buttons
+=======
+The colors used in this category are used for buttons in the broad
+sense, including e.g.scrollbars, menubars and
+popup-menus.
+
+QColorGroup...: ColorRole::Button, button()
+KDE config key: buttonBackground
+Control Center: i18n("Button background")
+Description...: Background color for buttons.
+Example use...: Background color of the OK button in a messagebox.
+
+QColorGroup...: ColorRole::ButtonText, buttonText()
+KDE config key: buttonForeground
+Control Center: i18n("Button text")
+Description...: Color for text on buttons.
+Example use...: Color of the OK text on a button in a messagebox.
+
+
+In addition to the above colors a number of derived colors are
+defined.They are all darker of lighter version of "Background".
+
+QColorGroup...: ColorRole::Shadow, shadow()
+Description...: Used for shadow effects.(Very dark)
+
+QColorGroup...: ColorRold::BrightText, brightText()
+Description...: Used for text on pushed pushbuttons
+
+QColorGroup...: ColorRole::Light, light()
+Description...: Lighter than "Button"
+
+QColorGroup...: ColorRole::Midlight, midlight()
+Description...: Between "Button" and "Light"
+
+QColorGroup...: ColorRole::Dark, dark()
+Description...: Darker than "Button"
+
+QColorGroup...: ColorRole::Mid, mid()
+Description...: Between "Button" and "Dark"
+
+Well Behaved Aplications
+========================
+
+Applications should never hardcode colors but always default to the
+colors from the users color scheme. This ensures consistency among
+applications on the desktop. It also ensures that all applications
+are equally readable.
+
+An application may offer the user an option to change the color of
+certain aspects of the application. It should be noted that an
+application specific color setting can cause unexpected results when
+the user changes its color scheme. The application specific color may
+look ugly in combination with other color schemes or the resulting UI
+may even become unreadable. Therefor applications specific colors
+should be used with care.
+
+
