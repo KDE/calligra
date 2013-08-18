@@ -20,7 +20,7 @@
 #define ABSTRACTMUSICACTION_H
 
 #include <QAction>
-
+#include <kicon.h>
 class SimpleEntryTool;
 class MusicCursor;
 namespace MusicCore {
