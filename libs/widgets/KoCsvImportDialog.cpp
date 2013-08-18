@@ -95,7 +95,7 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     QStringList encodings;
     encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" ,"UTF-8" );
     encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name() ));
-    encodings += KCharSets::charsets()->descriptiveEncodingNames();
+    encodings += KCharsets::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18nc("Descriptive encoding name","Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple
@@ -742,7 +742,7 @@ void KoCsvImportDialog::ignoreDuplicatesChanged(int)
 
 QTextCodec* KoCsvImportDialog::Private::updateCodec() const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( dialog->comboBoxEncoding->currentText() ) );
+    const QString strCodec( KCharsets::charsets()->encodingForName( dialog->comboBoxEncoding->currentText() ) );
     kDebug(30501) <<"Encoding:" << strCodec;
 
     bool ok = false;
@@ -755,7 +755,7 @@ QTextCodec* KoCsvImportDialog::Private::updateCodec() const
     }
     else
     {
-        codec = KGlobal::charsets()->codecForName( strCodec, ok );
+        codec = KCharsets::charsets()->codecForName( strCodec, ok );
     }
 
     // Still nothing?

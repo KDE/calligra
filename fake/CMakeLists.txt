@@ -106,7 +106,7 @@ set(kofake_HEADERS_ONLY
     kpushbutton.h
     kwindowsystem.h
     #kmainwindow.h
-    #kcolorscheme.h
+    kcolorscheme.h
     #kselector.h
     kglobalsettings.h
     #kseparator.h
@@ -197,8 +197,8 @@ QT5_WRAP_CPP(kofake_HEADERS_MOC ${kofake_HEADERS_ONLY})
 
 kde4_add_library(kofake SHARED ${kofake_LIB_SRCS} ${kofake_HEADERS_MOC})
 
-target_link_libraries(kofake Qt5::Widgets Qt5::Xml ${ZLIB_LIBRARIES} KService KConfigCore KCoreAddons KWidgetsAddons KI18n)
-target_link_libraries(kofake LINK_INTERFACE_LIBRARIES Qt5::Widgets Qt5::Xml KService KConfigCore KCoreAddons KWidgetsAddons KI18n)
+target_link_libraries(kofake Qt5::Widgets Qt5::Xml ${ZLIB_LIBRARIES} KService KConfigCore KCoreAddons KWidgetsAddons KI18n KConfigWidgets XmlGui)
+target_link_libraries(kofake LINK_INTERFACE_LIBRARIES Qt5::Widgets Qt5::Xml KService KConfigCore KCoreAddons KWidgetsAddons KI18n KConfigWidgets XmlGui) 
 
 set_target_properties(kofake PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
