@@ -24,7 +24,7 @@ ecm_setup_version(5 0 0 VARIABLE_PREFIX ITEMVIEWS
 
 remove_definitions(-DQT_NO_KEYWORDS)
 
-include_directories("../kcoreaddons")
+include_directories("../kcoreaddons" "../ki18n")
 
 
 add_subdirectory(src)

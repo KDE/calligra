@@ -1,0 +1,11 @@
+@PACKAGE_INIT@
+
+# Any changes in this file will be overwritten by CMake.
+
+set(KI18n_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+set_and_check(KI18n_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+include("${CMAKE_CURRENT_LIST_DIR}/KI18nTargets.cmake")
+
+set(KI18n_INCLUDE_DIRS ${KI18n_INCLUDE_DIR})
+set(KI18n_LIBRARIES KF5::KI18n)

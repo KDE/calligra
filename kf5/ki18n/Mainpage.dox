@@ -1,0 +1,2050 @@
+/*  This file is part of the KDE libraries
+    Copyright (C) 2006, 2012 Chusslove Illich <caslav.ilic@gmx.net>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+/**
+ * \mainpage
+ *
+ * Ki18n is the KDE internationalization system for user-interface text.
+ * It enables localization of user-visible strings,
+ * including locale-aware argument substitution and formatting.
+ * Ki18n is built atop the widely used Gettext internationalization system,
+ * making the workflow familiar to both programmers and translators.
+ * It can be considered a Gettext-wrapper for code based on the Qt library,
+ * but it also provides additional functionality over basic Gettext.
+ *
+ * - \ref prg_guide
+ * - \ref trn_guide
+ *
+ * \author Chusslove Illich \<caslav.ilic@gmx.net\>
+ *
+ *
+ * \page prg_guide Programmer's Guide
+ *
+ * - \ref intro
+ * - \ref write_i18n
+ *   - \ref gen_usage
+ *   - \ref spec_usage <!--
+ *     - \ref dyn_ctxt-->
+ *   - \ref subs_notes
+ *   - \ref good_text
+ *   - \ref good_ctxt <!--
+ *     - \ref uimark_ctxt
+ *     - \ref nocpp_ctxt
+ *     - \ref ctxt_extc-->
+ *   - \ref i18n_noop
+ * - \ref link_cat
+ *   - \ref link_prog
+ *   - \ref link_lib
+ *   - \ref link_noncode <!--
+ *     - \ref link_ui
+ *     - \ref link_rc
+ *     - \ref link_kcfg-->
+ * - \ref handle_cat
+ *   - \ref handle_extract
+ *   - \ref handle_install <!--
+ *     - \ref handle_transcript-->
+ *   - \ref handle_update
+ * - \ref kuit_markup
+ *   - \ref kuit_def_tags
+ *   - \ref kuit_sel_fmt
+ *   - \ref kuit_escape
+ *   - \ref kuit_tags
+ *   - \ref kuit_ents
+ * - \ref non_text
+ * - \ref refs
+ *
+ *
+ * \section intro Introduction
+ *
+ * \em Internationalization (i18n) is the process of preparing
+ * the source code such that the running program can receive and
+ * output user-visible information in various human languages, or,
+ * more precisely, \em locales. This is because the same language may
+ * be spoken at several places which differ in other details of relevance
+ * to the software internationalization (e.g. dialect, calendar, etc).
+ * I18n is performed by the programmer.
+ * \em Localization (l10n) is the process of adapting relevant
+ * program resources for a particular locale.
+ * L10n is performed by the translator, who is usually a native of the locale.
+ *
+ * User interface text is the most prominent resource needing l10n.
+ * In the source code, there are two general approaches
+ * to writing i18n'd user-visible strings, hereafter called \em messages.
+ * In the first approach, the programmer writes symbolic identifier in place
+ * of actual message text, and then for each language there is a file,
+ * called translation \em catalog, which contains the actual text linked
+ * to the appropriate identifier.
+ * For example, in the code:
+ * \code
+ * QString msg = getId("out_of_disk_space");
+ * \endcode
+ * and in the translation catalog:
+ * \code
+ * out_of_disk_space "There is no space left on the disk."
+ * \endcode
+ * In the second approach, the programmer writes actual text inside
+ * the source code, in an agreed upon human language,
+ * which is usually American English. Then there is a translation catalog
+ * for every \em other language, in which English and translated text of
+ * the message are linked. For example, in the code:
+ * \code
+ * QString msg = i18n("There is no space left on the disk.");
+ * \endcode
+ * and in the translation catalog:
+ * \code
+ * msgid "There is no space left on the disk."
+ * msgstr "Nema više prostora na disku."
+ * \endcode
+ * One may observe that the second approach is technically a generalization
+ * of the first approach. However, in actual use there are non-negligible
+ * differences in the i18n/l10n workflow between these approaches,
+ * and therefore they are treated as qualitatively different.
+ *
+ * Both approaches -- the symbolic-identifier and the actual-text -- have
+ * some advantages and disadvantages over each other. That is why today
+ * both are in use, in software i18n in general. Within free software,
+ * though, the actual-text approach is considerably more widespread,
+ * as embodied in the GNU Gettext i18n system. Whether this is a historical
+ * accident, or due to sensibilities of people writing free software,
+ * is left to the interested reader to research.
+ *
+ * The KDE Ki18n library, being built atop Gettext, provides
+ * the actual-text approach. In the following it is described
+ * how to use Ki18n, from the viewpoint of programmers and maintainers.
+ * Basic instructions are split into three parts:
+ *
+ * \li The first part deals with how to write i18n messages in the code.
+ *     This is the largest and the most important part, since there are
+ *     many nuances to preparing quality messages for translation.
+ *     Section: \ref write_i18n.
+ *
+ * \li The second part describes how to connect particular translation calls
+ *     with particular translation catalogs, so that the system can know
+ *     in which catalogs to search for translations.
+ *     In particular, there are some differences here depending on whether
+ *     the piece of code is an application or a library.
+ *     Section: \ref link_cat.
+ *
+ * \li The third part explains how to \em extract messages from the code,
+ *     in order to create the translation \em template.
+ *     The template is simply a clean translation catalog (having only English
+ *     part of each message), which the translator copies over and fills in
+ *     the translations for a particular language.
+ *     Then it is shown how and where to install translation catalogs,
+ *     and how to update existing translation catalogs to newly extracted
+ *     templates (after some new development has been done, causing
+ *     new messages to appear, some to be removed, and some modified).
+ *     Unlike in the GNU Gettext manual, here there are no dependencies or
+ *     references to a particular software build system;
+ *     this is left to the maintainer to choose.
+ *     Section: \ref handle_cat.
+ *
+ * There are also two special topics:
+ *
+ * \li Some programmers like to have more structure and consistency
+ *     in message texts, and for them Ki18n provides
+ *     a customizable semantic markup.
+ *     Section: \ref kuit_markup.
+ *
+ * \li Sometimes there are program resources other than text
+ *     that require localization.
+ *     Ki18n provides a generic, though rudimentary solution for such cases.
+ *     Section: \ref non_text.
+ *
+ *
+ * \section write_i18n Writing Messages
+ *
+ * Most messages can be internationalized with simple \c i18n\* calls,
+ * which are described in the section \ref gen_usage.
+ * A few messages may require treatment with \c ki18n\* calls,
+ * and when this is needed is described in the section \ref spec_usage.
+ * Argument substitution in messages is performed using the familiar
+ * Qt syntax \c %\<number\>, but there may be some differences;
+ * the section \ref subs_notes gives some notes about placeholders.
+ * Finally, guidelines for writing good messages are given
+ * in sections \ref good_text and \ref good_ctxt.
+ *
+ * \subsection gen_usage General Messages
+ *
+ * General messages are wrapped with \c i18n\* calls.
+ * These calls are \em immediate, which means that they return
+ * the final localized text (including substituted arguments)
+ * as a \c QString object, that can be passed to UI widgets.
+ *
+ * The most frequent message type, a simple text without any arguments,
+ * is handled like this:
+ * \code
+ * QString msg = i18n("Just plain info.");
+ * \endcode
+ * The message text may contain arbitrary Unicode characters,
+ * and the source file \em must be UTF-8 encoded.
+ * Ki18n supports no other character encoding.
+ *
+ * If there are some arguments to be substituted into the message,
+ * \c %\<number\> placeholders are put into the text at desired positions,
+ * and arguments are listed after the string:
+ * \code
+ * QString msg = i18n("%1 has scored %2", playerName, score);
+ * \endcode
+ * Arguments can be of any type for which there exists an overloaded
+ * \c KLocalizedString::subs method.
+ * Up to 9 arguments can be inserted in this fashion, due to the fact that
+ * \c i18n calls are realized as overloaded templates.
+ * If more than 9 arguments are needed, which is extremely rare,
+ * a \c ki18n\* call (described later) must be used.
+ *
+ * Sometimes a short message in English is ambiguous to translators,
+ * possibly leading to a wrong translations.
+ * Ambiguity can be resolved by providing a context string along the text,
+ * using the \c i18nc call. In it, the first argument is the context,
+ * which only the translator will see, and the second argument is the text
+ * which the user will see:
+ * \code
+ * QString msg = i18nc("player name - score", "%1 - %2", playerName, score);
+ * \endcode
+ * Section \ref good_ctxt gives a few pointers on when contexts are needed,
+ * and what they should contain.
+ *
+ * In messages stating how many of some kind of objects there are,
+ * where the number of objects is inserted at run time, it is necessary
+ * to differentiate between <em>plural forms</em> of the text.
+ * In English there are only two forms, one for number 1 (singular) and
+ * another form for any other number (plural).
+ * In other languages this might be more complicated (more than two forms),
+ * or it might be simpler (same form for all numbers).
+ * This is handled properly by using the \c i18np plural call:
+ * \code
+ * QString msg = i18np("%1 image in album %2", "%1 images in album %2",
+ *                     numImages, albumName);
+ * \endcode
+ * The plural form is decided by the first integer-valued argument,
+ * which is \c numImages in this example. In rare cases when there are
+ * two or more integer arguments, they should be ordered carefully.
+ * It is also allowed to omit the plural-deciding placeholder, for example:
+ * \code
+ * QString msg = i18np("One image in album %2", "%1 images in album %2",
+ *                     numImages, albumName);
+ * \endcode
+ * or even:
+ * \code
+ * QString msg = i18np("One image in album %2", "More images in album %2",
+ *                     numImages, albumName);
+ * \endcode
+ * If the code context is such that the number is always greater than 1,
+ * the plural call must be used nevertheless.
+ * This is because in some languages there are different plural forms
+ * for different classes of numbers; in particular, the singular form
+ * may be used for numbers other than 1 (e.g. those ending in 1).
+ *
+ * If a message needs both context and plural forms, this is provided by
+ * \c i18ncp call:
+ * \code
+ * QString msg = i18ncp("file on a person", "1 file", "%1 files", numFiles);
+ * \endcode
+ *
+ * In the basic \c i18n call (no context, no plural) it is not allowed
+ * to put a literal string as the first argument for substitution.
+ * In debug mode this will even trigger a static assertion,
+ * resulting in compilation error. This serves to prevent misnamed calls:
+ * context or plural frequently needs to be added at a later point to
+ * a basic call, and at that moment the programmer may forget to update
+ * the call name from \c i18n to \c i18nc/p.
+ *
+ * Furthermore, an empty string should never be wrapped with
+ * a basic \c i18n call (no <tt>i18n("")</tt>),
+ * because in translation catalog the message with empty text
+ * has a special meaning, and is not intended for client use.
+ * The behavior of <tt>i18n("")</tt> is undefined,
+ * and there will be some warnings in debug mode.
+ *
+ * There is also a complement of \c i18nd\* calls
+ * (\c i18nd, \c i18ndc, \c i18ndp, \c i18ndcp),
+ * which are not supposed to be used directly,
+ * but as will be explained in the section \ref link_cat.
+ *
+ * \subsection spec_usage Specialized Messages
+ *
+ * There are some situations where \c i18n\* calls are not sufficient,
+ * or are not convenient enough.
+ * One obvious case is if more than 9 arguments need to be substituted.
+ * Another case is if it would be easier to substitute arguments later on,
+ * after the line with the i18n call.
+ * For cases such as these, \c ki18n\* calls can be used.
+ * These calls are \em deferred, which means that they do not return
+ * the final translated text as \c QString, but instead return
+ * a \c KLocalizedString instance which needs further treatment.
+ * Arguments are then substituted one by one using
+ * \c KLocalizedString::subs methods, and after all arguments
+ * have been substituted, the translation is finalized by one of
+ * \c KLocalizedString::toString methods (which return \c QString).
+ * For example:
+ * \code
+ * KLocalizedString ks;
+ * case (reportSource) {
+ *     SRC_ENG: ks = ki18n("Engineering reports: %1"); break;
+ *     SRC_HEL: ks = ki18n("Helm reports: %1"); break;
+ *     SRC_SON: ks = ki18n("Sonar reports: %1"); break;
+ *     default: ks = ki18n("General report: %1");
+ * }
+ * QString msg = ks.subs(reportText).toString();
+ * \endcode
+ *
+ * \c subs methods do not update the \c KLocalizedString instance on which
+ * they are invoked, but return a copy of it with one argument slot filled.
+ * This allows to use \c KLocalizedString instances as a templates
+ * for constructing final texts, by supplying different arguments.
+ *
+ * Another use for deferred calls is when special formatting of arguments
+ * is needed, like requesting the field width or number of decimals.
+ * \c subs methods can take these formatting parameters.
+ * In particular, arguments should not be formatted in a custom way,
+ * because \c subs methods will also take care of proper localization
+ * (e.g. use either dot or comma as decimal separator in numbers, etc):
+ * \code
+ * // BAD (number not localized):
+ * QString msg = i18n("Rounds: %1", myNumberFormat(n, 8));
+ * // Good:
+ * QString msg = ki18n("Rounds: %1").subs(n, 8).toString();
+ * \endcode
+ *
+ * Like with \c i18n, there are context, plural, and context-plural
+ * variants of \c ki18n:
+ * \code
+ * ki18nc("No function", "None").toString();
+ * ki18np("File found", "%1 files found").subs(n).toString();
+ * ki18ncp("Personal file", "One file", "%1 files").subs(n).toString();
+ * \endcode
+ *
+ * \c toString methods can be used to override the global locale.
+ * To override only the language of the locale, \c toString can take
+ * a list of languages for which to look up translations
+ * (ordered by decreasing priority):
+ * \code
+ * QStringList myLanguages;
+ * ...
+ * QString msg = ki18n("Welcome").toString(myLanguages);
+ * \endcode
+ * The complete global locale (language and everything else, like number
+ * formatting) can be overridden by the \c toString method
+ * which takes a pointer to a locale:
+ * \code
+ * KLocale *myLocale;
+ * ...
+ * QString msg = ki18n("Welcome").toString(myLocale);
+ * \endcode
+ *
+ * The section \ref link_cat describes how to specify
+ * the translation \em domain, a canonical name for the catalog file
+ * from which \c \*i18n\* calls will draw translations.
+ * But \c toString can always be used to override the domain for a given call,
+ * by supplying a specific domain:
+ * \code
+ * QString trName = ki18n("Georgia").toString("country-names");
+ * \endcode
+ * Relevant here is the set of \c ki18nd\* calls
+ * (\c ki18nd, \c ki18ndc, \c ki18ndp, \c ki18ndcp),
+ * which can be used for the same purpose,
+ * but which are not intended to be used directly.
+ * This will also be covered in the section \ref link_cat.
+ *
+ * \subsubsection dyn_ctxt Dynamic Contexts
+ *
+ * Translators are provided with the capability to script translations,
+ * such that the text changes based on arguments supplied at run time.
+ * For the most part, this feature is transparent to the programmer.
+ * However, sometimes the programmer may help in this by providing
+ * a \em dynamic context to the message, through
+ * \c KLocalizedString::inContext methods.
+ * Unlike the static context, the dynamic context changes at run time;
+ * translators have the means to fetch it and use it to script
+ * the translation properly. An example:
+ * \code
+ * KLocalizedString ks = ki18nc("%1 is user name; may have "
+ *                              "dynamic context gender=[male,female]",
+ *                              "%1 went offline");
+ * if (knownUsers.contains(user) && !knownUsers[user].gender.isEmpty()) {
+ *     ks = ks.inContext("gender", knownUsers[user].gender);
+ * }
+ * QString msg = ks.subs(user).toString();
+ * \endcode
+ * Any number of dynamic contexts, with different keys, can be added like this.
+ * Normally every message with a dynamic context should also have
+ * a static context, like in the previous example, informing the translator
+ * of the available dynamic context keys and possible values.
+ * Like \c subs methods, \c inContext does not modify the parent instance,
+ * but returns a copy of it.
+ *
+ * \subsection subs_notes Placeholder Substitution
+ *
+ * Hopefully, most of the time \c %\<number\> placeholders are substituted
+ * in the way one would intuitively expect them to be.
+ * Nevertheless, some details about substitution are as follows.
+ *
+ * Placeholders are substituted in one pass, so there is no need
+ * to worry about what will happen if one of the substituted arguments
+ * contains a placeholder, and another argument is substituted after it.
+ *
+ * All same-numbered placeholders are substituted with the same argument.
+ *
+ * Placeholders directly index arguments: they should be numbered from 1
+ * upwards, without gaps in the sequence, until each argument is indexed.
+ * Otherwise, error marks will be inserted into message at run time
+ * (when the code is compiled in debug mode), and any invalid placeholder
+ * will be left unsubstituted.
+ * The exception is the plural-deciding argument in plural calls,
+ * where it is allowed to drop its placeholder,
+ * in either the singular or the plural text.
+ *
+ * If none of the arguments supplied to a plural call is integer-valued,
+ *  an error mark will be inserted into the message at run time
+ *  (when compiled in debug mode).
+ *
+ * Integer arguments will be by default formatted as if they denote
+ * an amount, according to locale rules (thousands separation, etc.)
+ * But sometimes an integer is a numerical identifier (e.g. port number),
+ * and then it should be manually converted into \c QString beforehand
+ * to avoid treatment as amount:
+ * \code
+ * i18n("Listening on port %1.", QString::number(port));
+ * \endcode
+ *
+ * \subsection good_text Writing Good Texts
+ *
+ * When writing message texts, sometimes it is tempting to assemble text
+ * from pieces such as to have less repetition.
+ * However, such shortcuts frequently cannot work for other languages,
+ * and are almost always confusing to translators.
+ * The first rule of writing good message texts is therefore to
+ * <em>keep sentences together and clearly structured</em>
+ * (or "no word puzzles"), even at the cost of some repetition.
+ *
+ * At its basic, this rule means always to use placeholders for insertion
+ * of run time arguments, rather than string concatenation. For example:
+ * \code
+ * // BAD:
+ * i18n("File ") + filePath + i18n(" not found.");
+ * // Good:
+ * i18n("File %1 not found.", filePath);
+ * \endcode
+ * This is rather obvious, since it also results in clearer and shorter code.
+ * But sometimes placeholders can be overused:
+ * \code
+ * // BAD:
+ * i18n("This contact is now %1.",
+ *      isOnline ? i18n("online") : i18n("offline"));
+ * // Good:
+ * isOnline ? i18n("This contact is now online.")
+ *          : i18n("This contact is now offline.");
+ * \endcode
+ * The shorter version here is bad, because the sentence structure of
+ * translation may need to change by more than the one word,
+ * and also because a less thorough translator may fail to check
+ * in which way the short messages "online" and "offline" are used.
+ *
+ * If an otherwise long text needs to differ in only small part,
+ * then a reasonable solution is to split it at sentence level,
+ * but also explain the situation to translators through context:
+ * \code
+ * // BAD:
+ * i18n("Something very long here. This contact is now %1.",
+ *      isOnline ? i18n("online") : i18n("offline"));
+ * // Good:
+ * i18nc("%1 one of the 'This contact...' messages below",
+ *       "Something very long here. %1",
+ *       isOnline ? i18n("This contact is now online.")
+ *                : i18n("This contact is now offline."));
+ * // BAD:
+ *   i18n("Something very long here. ")
+ * + isOnline ? i18n("This contact is now online.")
+ *            : i18n("This contact is now offline.");
+ * \endcode
+ * The third version above is bad because, firstly, the translator
+ * may wonder about the trailing space in the first message or
+ * simply overlook it, and secondly, there may be some cross-dependency
+ * between the translation of the long message and the short messages.
+ * In general, insertions of one message into another should \em always
+ * be accompanied by contexts, and composition-significant
+ * leading and trailing whitespace should be avoided.
+ *
+ * The second basic rule of writing good texts is to
+ * <em>expose every user-visible text for translation</em>.
+ * One should \em never make assumptions of the type
+ * "this does not need translation" or "it will be same in every language".
+ *
+ * One example where programmers sometimes make such assumption
+ * are compositions without any letters:
+ * \code
+ * // BAD:
+ * QString("%1: %2").arg(albumName, playCount);
+ * // Good:
+ * i18nc("album name: play count", "%1: %2", albumName, playCount)
+ * \endcode
+ * Here, in some languages the arrangement of whitespace will need to differ
+ * (e.g. a space may be needed before the colon as well).
+ * Letter-free compositions should also normally be equipped with context,
+ * because, for example, separation may depend on type of arguments.
+ *
+ * Another example of user-visible texts sometimes wrongly omitted
+ * from i18n are proper names:
+ * \code
+ * // BAD:
+ * label1->setText(i18n("Written by:"));
+ * label2->setText("Roofus McBane");
+ * // Good:
+ * label1->setText(i18n("Written by:"));
+ * label2->setText(i18n("Roofus McBane"));
+ * \endcode
+ * Proper names too may need localization, for example, transliteration
+ * when the target language uses a different writing system.
+ * This holds for proper names of people, and of anything else.
+ *
+ * When it comes to text markup, like the HTML subset supported by
+ * Qt rich text processing, opinions are divided on how much of it
+ * to expose for translation. One argument goes that markup may be
+ * confusing for translators, and that exposing it increases
+ * the chance of syntactical errors in translation.
+ * This is true as such, but it should be balanced with situations where,
+ * either, the translator needs to modify the markup,
+ * or, the markup will convey some context to translator.
+ * For example, typographical modifiers should always be left in:
+ * \code
+ * // BAD:
+ * label->setText("<b>" + i18n("Disk almost full:") + "</b>");
+ * // Good:
+ * label->setText(i18n("<b>Disk almost full:</b>"));
+ * \endcode
+ * because the target language may have different typographical standards
+ * (e.g. CJK languages tend to avoid boldface in text body font sizes,
+ * as it makes ideographs harder to recognize).
+ * Especially if tags are found around internal parts of the message text,
+ * it would be ungainly to hide them, e.g. by placeholder insertion.
+ * But, values to tag attributes, such as links in <tt>\<a href='...'\></tt>,
+ * tags, should be inserted through placeholders
+ * (unless it is expected that translators provide localized values).
+ * In this example:
+ * \code
+ * // Good:
+ * i18n("<p>Preprocessing has failed.</p>"
+ *      "<p>Please check your bracketed images stack.</p>"
+ *      "<p>Click \"Details\" to show processing details.</p>")
+ * \endcode
+ * <tt>\<p\></tt> tags could be avoided by splitting this message into
+ * one message per sentence, but this should not be done, because
+ * paragraphs should be translated as single units of meaning.
+ *
+ * Another important point about XML-like text markup, is to try and keep it
+ * well-formed in XML sense on the level of standalone message. For example:
+ * \code
+ * // BAD (for translation, although fine by HTML / Qt rich text):
+ * i18n("<p>Some sentence."
+ *      "<p>Another sentence.");
+ * // Good:
+ * i18n("<p>Some sentence.</p>"
+ *      "<p>Another sentence.</p>");
+ * \endcode
+ * Well-formedness is good because the most frequent error in translation
+ * in presence of markup is mistyping (or miscopying) a tag.
+ * If the original text is well-formed, a translation checker tool
+ * can require the same of translation, and signal when that is not so.
+ * The previous example of non-well-formedness was perhaps trivial;
+ * in practice, non-trivial examples usually break some other rules too
+ * (e.g. no word puzzles).
+ *
+ * \subsection good_ctxt Writing Good Contexts
+ *
+ * The message context, given as first argument in \c \*i18nc calls,
+ * is of great help to translators. Unfortunately, to a programmer it is
+ * not always clear when a context is needed, or what it should state.
+ * So, the very first rule of writing good contexts is to
+ * <em>listen to the translators asking for contexts</em>.
+ * When taking suggestions from translators, there is no need to worry if
+ * the proposed context will be sufficient for "all" languages.
+ * It is fine to simply add the information that a translator into
+ * particular language requested, and wait for translators into other
+ * languages to maybe request some other context information as well.
+ *
+ * Having said this, some apriori guidelines on contexts can be followed.
+ *
+ * Since in English the form of an adjective does not change based on
+ * the gender of the noun it modifies, properly translating messages which
+ * are single standalone adjectives will be impossible in many languages
+ * without a context. So, in general, every message which is a standalone
+ * adjective should have context:
+ * \code
+ * i18nc("new file", "New");
+ * i18nc("default action", "Default");
+ * \endcode
+ *
+ * Lists of related items typically benefit from having the same context,
+ * since they should all be translated in the same style:
+ * \code
+ * i18nc("IPv4 configuration method", "Automatic (VPN)");
+ * i18nc("IPv4 configuration method", "Automatic (VPN) addresses only");
+ * i18nc("IPv4 configuration method", "Automatic (PPP)");
+ * i18nc("IPv4 configuration method", "Automatic (PPP) addresses only");
+ * ...
+ * \endcode
+ *
+ * When there are placeholders in the text for which it is not clear,
+ * from the text alone, what kind of argument they represent,
+ * this should be explained in the context:
+ * \code
+ * i18nc("%1 old file path, %2 new file path",
+ *       "Cannot move '%1' to '%2'.", oldPath, newPath);
+ * i18nc("%1 track URL, %2 artist name",
+ *       "%1 (by %2)", trackUrl, artistName);
+ * \endcode
+ *
+ * It is frequently suggested to state in the context the grammar category
+ * of the message text, such as "this is a verb" or "this is a noun".
+ * Since the grammar category of the translation does not have to be
+ * the same as that of the original, this kind of context provides
+ * circumstantial information at best (see the section \ref uimark_ctxt
+ * for what translators may use it to draw some real information about),
+ * and is worthless at worst.
+ * Also, due to relative absence of declension in English grammar,
+ * different programmers may have different opinion on the grammar category:
+ * the menu title "View", is it a verb or a noun?
+ *
+ * \subsubsection uimark_ctxt User Interface Markers
+ *
+ * In the same way there exists a HIG (Human Interface Guidelines) document
+ * for the programmers to follow, translators should establish HIG-like
+ * convention for their language concerning the forms of UI text.
+ * Therefore, for a proper translation, the translator will need too know
+ * not only what does the message mean, but also where it figures in the UI.
+ * E.g. is the message a button label, a menu title, a tooltip, etc.
+ *
+ * To this end a convention has been developed among KDE translators,
+ * which programmers can use to succinctly describe UI usage of messages.
+ * In this convention, the context string starts with an <em>UI marker</em>
+ * of the form <tt>\@\<major\>:\<minor\></tt>, and may be followed by any other
+ * usual context information, separated with a single space:
+ * \code
+ * i18nc("@action:inmenu create new file", "New");
+ * \endcode
+ *
+ * The major and minor component of the UI marker are not arbitrary,
+ * but are drawn from the following table.
+ * For each component, the superscript states the Ki18n release
+ * when the component was introduced.
+ * <table>
+ * <tr><th>Major</th><th>Minor</th><th>Description</th></tr>
+ * <tr><td><b>\@action</b><sup>5.0</sup></td><td></td>
+ *     <td>Labels of clickable widgets which cause an action
+ *         to be performed.</td></tr>
+ * <tr><td></td><td>:button<sup>5.0</sup></td>
+ *     <td>Push buttons in windows and dialogs.</td></tr>
+ * <tr><td></td><td>:inmenu<sup>5.0</sup></td>
+ *     <td>Menu entries that perform an action
+ *         (as opposed e.g. to being checked).</td></tr>
+ * <tr><td></td><td>:intoolbar<sup>5.0</sup></td>
+ *     <td>Toolbar buttons.</td></tr>
+ * <tr><td><b>\@title</b><sup>5.0</sup></td><td></td>
+ *     <td>Text that is the title of a major UI element or
+ *         a widget container.</td></tr>
+ * <tr><td></td><td>:window<sup>5.0</sup></td>
+ *     <td>Title of a window or a (dockable) view/pane.</td></tr>
+ * <tr><td></td><td>:menu<sup>5.0</sup></td>
+ *     <td>Menu title.</td></tr>
+ * <tr><td></td><td>:tab<sup>5.0</sup></td>
+ *     <td>Tab name.</td></tr>
+ * <tr><td></td><td>:group<sup>5.0</sup></td>
+ *     <td>Title to a group of widgets, like a group of checkboxes or
+ *         radio buttons.</td>
+ * <tr><td></td><td>:column<sup>5.0</sup></td>
+ *     <td>Column name in a table header,
+ *         e.g. in a table view widget.</td></tr>
+ * <tr><td></td><td>:row<sup>5.0</sup></td>
+ *     <td>Row name in a table.</td></tr>
+ * <tr><td><b>\@option</b><sup>5.0</sup></td><td></td>
+ *     <td>Labels of option selection widgets, which can be enable/disabled
+ *         or selected between.</td></tr>
+ * <tr><td></td><td>:check<sup>5.0</sup></td>
+ *     <td>Checkbox label, also a checkable menu entry.</td></tr>
+ * <tr><td></td><td>:radio<sup>5.0</sup></td>
+ *     <td>Radio button label.</td></tr>
+ * <tr><td><b>\@label</b><sup>5.0</sup></td><td></td>
+ *     <td>Various widget labels which are not covered by any of
+ *         \@action, \@title, or \@option.</td></tr>
+ * <tr><td></td><td>:slider<sup>5.0</sup></td>
+ *     <td>Slider label.</td></tr>
+ * <tr><td></td><td>:spinbox<sup>5.0</sup></td>
+ *     <td>Spinbox label.</td></tr>
+ * <tr><td></td><td>:listbox<sup>5.0</sup></td>
+ *     <td>Label to a list box or combo box.</td></tr>
+ * <tr><td></td><td>:textbox<sup>5.0</sup></td>
+ *     <td>Label to a text box or text edit field.</td></tr>
+ * <tr><td></td><td>:chooser<sup>5.0</sup></td>
+ *     <td>Label to any special-purpose chooser widget,
+ *         like color chooser, font chooser, etc.</td></tr>
+ * <tr><td><b>\@item</b><sup>5.0</sup></td><td></td>
+ *     <td>Strings that are items from a range of possibilities or
+ *         properties of a given type.</td></tr>
+ * <tr><td></td><td>:inmenu<sup>5.0</sup></td>
+ *     <td>Item presented in menu (e.g. sort ordering,
+ *         encoding name, etc).</td></tr>
+ * <tr><td></td><td>:inlistbox<sup>5.0</sup></td>
+ *     <td>Item presented in a list or combo box.</td></tr>
+ * <tr><td></td><td>:intable<sup>5.0</sup></td>
+ *     <td>Item presented in a table cell.</td></tr>
+ * <tr><td></td><td>:inrange<sup>5.0</sup></td>
+ *     <td>End range labels, e.g. on sliders.</td></tr>
+ * <tr><td></td><td>:intext<sup>5.0</sup></td>
+ *     <td>Words and short phrases which are inserted into
+ *         a larger piece of text.</td></tr>
+ * <tr><td><b>\@info</b><sup>5.0</sup></td><td></td>
+ *     <td>Any transient information for the user.</td></tr>
+ * <tr><td></td><td>:tooltip<sup>5.0</sup></td>
+ *     <td>Expanded formulation of the widget's label,
+ *         usually appearing automatically when the pointer
+ *         hovers over the widget.</td></tr>
+ * <tr><td></td><td>:whatsthis<sup>5.0</sup></td>
+ *     <td>Longer description of a widget's purpose and behavior,
+ *         usually manually called up by the user.</td></tr>
+ * <tr><td></td><td>:status<sup>5.0</sup></td>
+ *     <td>A piece of text displayed in application's status view
+ *         (e.g in the status bar).</td></tr>
+ * <tr><td></td><td>:progress<sup>5.0</sup></td>
+ *     <td>Text describing the current step or state of an operation,
+ *         possibly periodically updating.</td></tr>
+ * <tr><td></td><td>:usagetip<sup>5.0</sup></td>
+ *     <td>A tip that comes up to inform the user about
+ *         a certain possibility in a given context,
+ *         e.g. a "tip of the day" on application startup.<br/>
+ *         Deprecated synonym: :tipoftheday.</td></tr>
+ * <tr><td></td><td>:credit<sup>5.0</sup></td>
+ *     <td>Contributor names and their contributions,
+ *         e.g. in the about dialog.</td></tr>
+ * <tr><td></td><td>:shell<sup>5.0</sup></td>
+ *     <td>A note, warning or error sent to application's text output stream
+ *         (stdout, stderr) rather than shown in the UI.</td></tr>
+ * </table>
+ * If none of the minor components apply to a given message,
+ * a major component can be used standalone.
+ * For example, this would happen with a library-provided list of items
+ * without any immediate UI context (e.g. language or country names),
+ * where the appropriate UI marker would be just <tt>\@item</tt>.
+ *
+ * One way to extend the context after the UI marker,
+ * which is simple for the programmer yet can be very helpful for translators,
+ * is simply to add the text of the (technically or logically) parent widget.
+ * For example, if the action "New" is in the menu "File", then:
+ * \code
+ * i18nc("@action:inmenu File", "New")
+ * \endcode
+ * Or, if the item "Left" is found in the list box with
+ * the label "Vertical alignment":
+ * \code
+ * i18nc("@item:inlistbox Vertical alignment", "Left")
+ * \endcode
+ *
+ * \subsubsection nocpp_ctxt Adding Contexts in Non-C++ files
+ *
+ * When Qt Designer is used to build the user interface,
+ * the \em -tr option of \c uic should be used to pass UI strings
+ * through Ki18n's \c tr2i18n function (see also \ref link_ui).
+ * This function is the equivalent of \c i18n or \c i18nc,
+ * based on whether the second argument is null or not.
+ * If a string in the \c .ui file has the attribute \c comment=,
+ * its value will be automatically used as the context argument.
+ * (In Qt Designer, this is the "disambiguation" property of a string.)
+ * Alternatively, strings can be passed to Ki18n's \c tr2xi18n function
+ * (see \ref kuit_markup).
+ *
+ * In KXmlGui (\c .rc) and KConfigXT (\c .kcfg) files,
+ * contexts can be added through \c context= attributes to
+ * \c text, \c label, and \c whatsthis tags.
+ *
+ * \subsubsection ctxt_extc Disambiguation Context vs. Extracted Comment
+ *
+ * The GNU Gettext system actually defines \em two types of context
+ * for translators. The type discussed so far, the first argument
+ * of \c \*i18nc\* calls, is called <em>disambiguation context</em>.
+ * The other type of context is <em>extracted comment</em>.
+ * In Ki18n, this other type of context is written as a code comment,
+ * in the line just preceding the message text,
+ * and starting with <em>i18n:</em> keyword:
+ * \code
+ * // i18n: This is a short text containing all letter of the alphabet,
+ * // e.g. for testing fonts. Translate with a sentence which can
+ * // serve the same purpose in your language.
+ * i18n("The quick brown fox jumps over the lazy dog");
+ * \endcode
+ *
+ * There are two main differences between disambiguation contexts and
+ * extracted comments.
+ *
+ * The first difference is that extracted comments
+ * <em>do not separate messages</em> in the translation catalog.
+ * For example, such two messages equipped with extracted comments:
+ * \code
+ * // i18n: new file
+ * QString msg1 = i18n("New");
+ * // i18n: new folder
+ * QString msg2 = i18n("New");
+ * \endcode
+ * will show up in the translation catalog as a single message
+ * with aggregate comments:
+ * \code
+ * #. i18n: new file
+ * #. i18n: new folder
+ * msgid "New"
+ * msgstr ""
+ * \endcode
+ * The same two messages equipped with disambiguation contexts:
+ * \code
+ * QString msg1 = i18nc("new file", "New");
+ * QString msg2 = i18nc("new folder", "New");
+ * \endcode
+ * will show up in the translation catalog as two messages:
+ * \code
+ * msgctxt "new file"
+ * msgid "New"
+ * msgstr ""
+ *
+ * msgctxt "new folder"
+ * msgid "New"
+ * msgstr ""
+ * \endcode
+ *
+ * The second difference is that a change in extracted comment
+ * <em>does not invalidate the existing translation</em>, i.e.
+ * it will not force translators to revisit the message and revise
+ * the translation (see the section \ref handle_update for details
+ * on how this invalidation happens with disambiguation contexts).
+ * Thus, for example, if there is a "message freeze"
+ * before the next release of a piece of software, during which
+ * programmers must not modify messages so that translators can
+ * thoroughly complete their work, it is allowed to modify
+ * the extracted comment, but it is not allowed to modify
+ * the disambiguation context.
+ *
+ * The Gettext manual suggests to use extracted comments as
+ * the default way of providing context for translators,
+ * and to use disambiguation contexts only when message separation
+ * is necessary. However, we (the people in the KDE community)
+ * suggest the opposite -- to use disambiguation context by default,
+ * and extracted comments only in special cases.
+ * This because there are two dangers associated with extracted comments:
+ * one is that programmer may fail to properly judge when two messages
+ * should be made separate for translation (and having to judge that
+ * all the time is a burden in the first place), and the other is that
+ * when the context change is such that translators really should revisit
+ * the message, they would not get any automatic signal about that.
+ * The message freeze advantage of extracted comments has not been
+ * observed to be very important.
+ *
+ * One special case when to an use extracted comment is when the context
+ * is a multi-sentence text explaining the purpose of the message,
+ * and the context is unlikely to change (in its meaning).
+ * Another case is when the context lists a fixed set
+ * of possible translations ("meta-messages", by which translators
+ * influence some aspect of text formatting), which may expand in
+ * the future, as new possibilities are introduced at request of
+ * translators into new languages.
+ *
+ * \subsection i18n_noop Extraction-Only Macros
+ *
+ * Sometimes it is convenient only to mark a message for extraction
+ * (into the catalog template, as described in \ref handle_extract),
+ * and to place the actual \c i18n call somewhere else.
+ * A typical case of this are global static initializers,
+ * where only POD types can be safely used.
+ * For this purpose \c I18N\*_NOOP macros are provided.
+ *
+ * The \c I18N_NOOP macro is the counterpart to \c \*i18n calls,
+ * and it is used like this:
+ * \code
+ * typedef struct
+ * {
+ *     const char *description;
+ *     const char *regExp;
+ * } term;
+ * // Inert I18N_NOOP macros here...
+ * static const term items[] = {
+ *     {I18N_NOOP("any character"), "."},
+ *     {I18N_NOOP("start of line"), "^"},
+ *     {I18N_NOOP("end of line"), "$"},
+ *     {I18N_NOOP("repeats, zero or more times"), "*"},
+ *     ...
+ * };
+ *
+ * ...
+ *
+ * void populatePatternMenu (QMenu *menu)
+ * {
+ *     for (uint i = 0; i < sizeof(items) / sizeof(items[0]); i++) {
+ *         menu->addAction(new RegExpAction(menu,
+ *                                          // ...actual i18n call here.
+ *                                          i18n(items[i].description),
+ *                                          items[i].regExp));
+ *     }
+ * }
+ * \endcode
+ *
+ * The \c I18NC_NOOP macro is the counterpart to \c \*i18nc calls:
+ * \code
+ * typedef struct
+ * {
+ *     const char *description, *abbrev;
+ * } unitDef;
+ * static const unitDef units[] = {
+ *     {I18N_NOOP2_NOSTRIP("unit for 2^10 bytes", "KiB")},
+ *     {I18N_NOOP2_NOSTRIP("unit for 2^20 bytes", "MiB")},
+ *     ...
+ * }
+ * ...
+ *     QString unitAbbrev = i18nc(units[i].description, units[i].abbrev);
+ * \endcode
+ *
+ * There are also two deprecated macros:
+ * \c I18N_NOOP2_NOSTRIP is simply the old name of \c I18NC_NOOP;
+ * \c I18N_NOOP2 takes the context argument but discards it,
+ * which means that the context must be repeated verbatim in
+ * the corresponding \c i18nc call.
+ *
+ * In general, \c I18N\*_NOOP macros make it harder to follow
+ * i18n in the code, and should be avoided when possible.
+ *
+ *
+ * \section link_cat Connecting Calls to Catalogs
+ *
+ * Every \c i18n call must look for translations in exactly
+ * one translation catalog for a given language of translation.
+ * For this purpose, a group of catalogs which have the same source text
+ * but translations into different languages, is identified by
+ * a unique canonical name, called the \em domain.
+ * Therefore, every \c i18n call must be connected to a domain.
+ * This connection is established differently for applications
+ * and libraries, though the difference is only for convenience: if desired,
+ * the more verbose library method can be used for application code as well.
+ *
+ * \subsection link_prog Connecting to Catalogs in Application Code
+ *
+ * All \c \*i18n\* calls in an application can be connected
+ * to a single domain by calling the static
+ * \c KLocalizedString::setApplicationDomain method with
+ * the domain as the argument:
+ * \code
+ * #include <klocalizedstring.h>
+ *
+ * ...
+ *
+ * int main (int argc, char *argv[])
+ * {
+ *     ...
+ *     KLocalizedString::setApplicationDomain("fooapp");
+ *     ...
+ * }
+ * \endcode
+ * This call can be made at any place in the code
+ * (e.g. there is no need to have \c QApplication constructed beforehand),
+ * but of course before any \c i18n call takes place.
+ *
+ * \c KLocalizedString::setApplicationDomain has one more effect.
+ * In any linked libraries which also use Ki18n, \c i18n calls will
+ * not return translations into given language if the application catalog
+ * for that language does not exist.
+ * This prevents a mix of translated and untranslated messages appearing
+ * in the user interface, when the application itself is not translated.
+ * For this reason, if the more verbose library call-domain connection
+ * described in the next section is used for application code as well,
+ * \c setApplicationDomain call should be made nevertheless.
+ *
+ * This is all there is to connecting calls and catalogs application's
+ * C++ source files. However, there may also be some non-code files
+ * that need connecting, and how to do this is some typical non-code
+ * files is described in the section \ref link_noncode.
+ *
+ * \subsection link_lib Connecting to Catalogs in Library Code
+ *
+ * \c i18n calls in libraries must be strictly connected to library's
+ * own translation domain no matter how the library is used,
+ * and this should be fully transparent to the library's client.
+ * In particular, if the client does not use Ki18n for internationalization
+ * of its own messages, library translation must still work as expected.
+ * Therefore, in library code, the call-domain connection is established
+ * in this way:
+ * \code
+ * #define TRANSLATION_DOMAIN "foolib"
+ * #include <klocalizedstring.h>
+ *
+ * ...
+ *
+ * void some_library_function ()
+ * {
+ *     ...
+ *     QString msg = i18n("Greetings from Foolib!");
+ *     ...
+ * }
+ * \endcode
+ * The definition of \c TRANSLATION_DOMAIN triggers
+ * the domain-specialization macro in \c klocalizedstring.h.
+ * It routes all \c \*i18n\* calls to their \c \*i18nd\* counterparts,
+ * which take the domain as their first argument.
+ * The \c i18n call from this example will thus expand into:
+ * \code
+ * QString msg = i18nd("foolib", "Greetings from Foolib!");
+ * \endcode
+ *
+ * It is possible to use \c \*i18nd\* calls explicitly,
+ * but there should be no need for that.
+ * If there are any messages that should draw translations
+ * from a special domain, it is better style-wise to use the
+ * <tt>ki18n("...").toString(domain)</tt> construct.
+ *
+ * Definition of \c TRANSLATION_DOMAIN can be put into
+ * a private header file of the library, so that it does not have
+ * to be repeated at multiple locations.
+ * If there are some \c i18n calls in a \em public header file,
+ * definition of \c TRANSLATION_DOMAIN would propagate
+ * into and affect the application client code that uses Ki18n too.
+ * This is prevented by adding the following lines somewhere
+ * after the last \c i18n call in the public header:
+ * \code
+ * #undef TRANSLATION_DOMAIN
+ * #include <klocalizedstring.h>
+ * \endcode
+ * This will undefine all expansions of \c \*i18n\* into \c \*i18nd\*,
+ * leaving the client's environment clean.
+ * If instead the public header contains only \c I18N_NOOP\* macros,
+ * defining \c TRANSLATION_DOMAIN is unnecessary in the first place,
+ * since actual \c i18n calls happen somewhere else.
+ * 
+ * \subsection link_noncode Connecting to Catalogs in Non-Code Files
+ * 
+ * Both KDE applications and libraries can include some non-code files
+ * which contain messages that need to be connected to a translation domain.
+ * This can be the same domain where messages from C++ code are found,
+ * or another domain, whatever seems more appropriate.
+ * In principle, each type of non-code file requires its own connection
+ * mechanism, and here it is explained how this works for
+ * typical types of non-code files found in KDE sources.
+ *
+ * It is assumed in the following that all messages in the non-code file
+ * are connected to the single domain. In other words, the connection
+ * is specified on the file level rather than on the message level.
+ *
+ * \subsubsection link_ui Qt Designer (.ui) files
+ *
+ * First, to have UI strings from \c .ui file passed through Ki18n,
+ * \c uic is run with <tt>-tr tr2i18n</tt>. This will replace all
+ * native Qt \c tr calls with Ki18n's \c tr2i18n calls
+ * in the resulting header file.
+ * Then, the generated header file needs to be post-processed
+ * to fix empty messages and include \c klocalizedstring.h.
+ * At this point, the \c TRANSLATION_DOMAIN can be defined just like
+ * in static C++ files.
+ *
+ * If CMake is used as the build system, a macro that performs
+ * all of the above is provided (\c kf5_add_ui_files).
+ * Otherwise, one could use a shell snippet such as this:
+ * \code
+ * domain=fooapp
+ * uifile=fooconfpage.ui
+ * uihfile=$uifile.h
+ * uic -tr tr2i18n $uifile -o $uihfile
+ * sed -i 's/tr2i18n("")/QString::null/g' $uihfile
+ * sed -i 's/tr2i18n("", "")/QString::null/g' $uihfile
+ * sed -i "1i\#define TRANSLATION_DOMAIN \"$domain\"\n#include <klocalizedstring.h>" $uihfile
+ * \endcode
+ *
+ * If strings contain KUIT markup (section \ref kuit_markup),
+ * \c tr2i18n in the lines above should be replaced with \c tr2xi18n.
+ *
+ * \subsubsection link_rc KXmlGui (.rc) files
+ *
+ * Since \c .rc files are interpreted at runtime,
+ * the translation domain connection is established simply
+ * by adding the \c translationDomain attribute to the top element:
+ * \code
+ * <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+ * <kpartgui name="foolib_part" version="55" translationDomain="foolib">
+ * ...
+ * \endcode
+ * If the \c .rc file belongs to application rather than library source,
+ * it is not necessary to set \c translationDomain. If not set,
+ * translations will be looked up in the domain set with
+ * \c KLocalizedString::setApplicationDomain call in the code.
+ *
+ * If strings contain KUIT markup (section \ref kuit_markup),
+ * additionally the attribute \c translationMarkup="true" should be set.
+ *
+ * \subsubsection link_kcfg KConfigXT (.kcfg) files
+ *
+ * Instructions for building the configuration code from a \c .kcfg file
+ * are contained in the \c .kcfgc file of the same base name;
+ * \c kconfig_compiler is invoked with both files as arguments.
+ * Then, the domain connection is established simply by adding
+ * the \c TranslationSystem and \c TranslationDomain fields in
+ * the \c .kcfgc file, to select Ki18n as the translation system
+ * and the appropriate translation domain:
+ * \code
+ * File=foolib.kcfg
+ * ...
+ * TranslationSystem=kde
+ * TranslationDomain=foolib
+ * \endcode
+ * If the \c .kcfg file is part of an application rather than a library,
+ * the \c TranslationDomain field can be omitted in order
+ * to have messages looked up in the domain set by
+ * \c KLocalizedString::setApplicationDomain call in the code.
+ *
+ * If strings contain KUIT markup (section \ref kuit_markup),
+ * additionaly the field \c TranslationMarkup=true should be set.
+ *
+ * \section handle_cat Handling Catalog Files
+ *
+ * For translators to start working, one or more translation catalog files
+ * should be prepared, based on the \c i18n calls in the source code.
+ * The procedure to do this is called \em extraction of messages.
+ * Extraction produces empty catalog files, called \em templates.
+ * These files are in the PO format, and have \c .pot extension.
+ * Section \ref handle_extract explains how to perform extraction.
+ *
+ * Once templates are ready, a translators make copies of them,
+ * with \c .po extension, and start filling them out with translations
+ * into respective languages.
+ * When translation is done, the translated catalog is committed
+ * into the source code repository.
+ * The build system is set up to install translated catalogs.
+ * Section \ref handle_install provides necessary steps for this.
+ *
+ * After some development has passed, the source repository will
+ * contain many translated catalogs which are out of date with
+ * respect to latest catalog templates.
+ * Of course, translators do not have to start translating from scratch,
+ * but there are specialized tools to carry over as much of existing
+ * translation as possible, so that only new and modified texts
+ * need to be considered.
+ * Section \ref handle_update shows how this is done.
+ *
+ * A usual application or a library has one translation catalog,
+ * but there can be more if there is higher modularity of the source.
+ * The following subsections refer to a single catalog wherever
+ * the extension to case with multiple catalogs is obvious,
+ * and mention multiple catalogs only where necessary.
+ *
+ * \subsection handle_extract Extracting Templates
+ *
+ * The primary tool for collecting texts from \c i18n calls and
+ * writing out the catalog template is \c xgettext,
+ * from the official Gettext tools package.
+ * \c xgettext supports many programming languages and sublanguage
+ * environments, among which naturally C++ and Ki18n specifically.
+ *
+ * The extraction process from source code files is thus simple:
+ * \c xgettext runs with appropriate options over all files,
+ * and it writes out the catalog template.
+ * For the moment masking the complete list of options as \c $EXTOPTS,
+ * \c xgettext can be run for example like this at the top of Fooapp
+ * source to create the catalog template <tt>fooapp.pot</tt>:
+ * \code
+ * find -name \*.cpp -o -name \*.h | sort \
+ * | xargs xgettext $EXTOPTS -o fooapp.pot
+ * \endcode
+ * Or, a list of source files that should be extracted from can be
+ * assembled separately and fed to \c xgettext:
+ * \code
+ * # ...create sources.list...
+ * xgettext $EXTOPTS -f sources.list -o fooapp.pot
+ * \endcode
+ * One may want to assemble the list of source files by hand
+ * or semi-automatically in order to prioritize the order of translation
+ * (messages from most important files appearing first in the catalog),
+ * to exclude some portions of the source tree from extraction, and so on.
+ *
+ * \c $EXTOPTS that cover everything from Ki18n, and some generalities,
+ * should look like this:
+ * \code
+ * --c++ --kde \
+ * --from-code=UTF-8 \
+ * -c i18n \
+ * -k i18n:1 -k i18nc:1c,2 -k i18np:1,2 -k i18ncp:1c,2,3 \
+ * -k ki18n:1 -k ki18nc:1c,2 -k ki18np:1,2 -k ki18ncp:1c,2,3 \
+ * -k I18N_NOOP:1 -k I18NC_NOOP:1c,2 \
+ * --copyright-holder=<author-of-original-text> \
+ * --msgid-bugs-address=<where-to-report-errors-in-original-text>
+ * \endcode
+ * <tt>\-\-c++ \-\-kde</tt> options tell \c xgettext that source files
+ * are C++ with Ki18n. <tt>\-\-from-code=UTF-8</tt> specifies the encoding
+ * of source files to be UTF-8, which must be so for Ki18n.
+ * <tt>-c i18n</tt> states that comments for extraction start with given
+ * keyword (<tt>// i18n: ...</tt>).
+ * The series of <tt>-k</tt> options informs \c xgettext of all possible
+ * translation call names and which of their arguments to extract.
+ * Finally, options <tt>\-\-copyright-holder</tt> and
+ * <tt>\-\-msgid-bugs-address</tt> automatically write
+ * the corresponding information into the catalog at proper place.
+ * If there are semantic markup calls in the code (section \ref kuit_markup),
+ * the following \c -k options should be added as well:
+ * \code
+ * -k xi18n:1 -k xi18nc:1c,2 -k xi18np:1,2 -k xi18ncp:1c,2,3 \
+ * -k kxi18n:1 -k kxi18nc:1c,2 -k kxi18np:1,2 -k kxi18ncp:1c,2,3 \
+ * \endcode
+ *
+ * \c xgettext unfortunately cannot be directly used to extract messages
+ * from the usual XML files appearing in Qt and KDE sources --
+ * Designer (\c .ui), KXmlGui (\c .rc) and KConfigXT (\c .kcfg) files.
+ * Therefore the \c kdesdk package provides the \c extractrc script,
+ * which extracts XML messages as dummy \c i18n calls into a dummy C++ file,
+ * This file can then be included into the list of files for \c xgettext run.
+ * The usual invocation of \c extractrc is:
+ * \code
+ * find -name \*.ui -o -name \*.rc -o -name \*.kcfg | sort \
+ * | extractrc > rc.cpp
+ * # ...run xgettext with rc.cpp included in source files...
+ * rm rc.cpp
+ * \endcode
+ *
+ * If the catalog being extracted is an application catalog,
+ * i.e. given as \c KLocalizedString::setApplicationDomain in the code,
+ * it should contain two meta-messages for translation credits
+ * which will be shown by \c KAboutApplicationDialog.
+ * These messages are also written as dummy \c i18n calls,
+ * usually into the same dummy C++ file with XML messages,
+ * with the following context and text:
+ * \code
+ * echo 'i18nc("NAME OF TRANSLATORS", "Your names");' >> rc.cpp
+ * echo 'i18nc("EMAIL OF TRANSLATORS", "Your emails");' >> rc.cpp
+ * \endcode
+ *
+ * The extraction command sequence can be written down as a small script,
+ * to be run periodically by the maintainer,
+ * or it can be integrated into the build system.
+ *
+ * For the code residing in the official KDE repositories
+ * a special form of the extraction script is mandated.
+ * This enables automatic overnight template extraction and feeding
+ * into dedicated translation section of KDE repositories.
+ * Details can be found at
+ * <a href="http://techbase.kde.org/Development/Tutorials/Localization/i18n_Build_Systems">KDE Techbase</a>.
+ *
+ * \subsection handle_install Placing and Installing Catalogs
+ *
+ * For an application or a library which uses a single catalog,
+ * the usual organization of catalogs in the source tree is this:
+ * \code
+ * fooapp/
+ *     src/
+ *     doc/
+ *     po/
+ *         fooapp.pot
+ *         aa.po
+ *         bb.po
+ *         cc.po
+ *         ...
+ * \endcode
+ * Here translated catalog files are named by their language codes
+ * (<tt>aa</tt>, <tt>bb</tt>, <tt>cc</tt>...).
+ * In case of multiple catalogs, one directory per catalog can be created
+ * under the <tt>po/</tt> directory:
+ * \code
+ * fooapp/
+ *     src/
+ *     lib
+ *     doc/
+ *     po/
+ *         fooapp/
+ *             fooapp.pot
+ *             aa.po
+ *             bb.po
+ *             ...
+ *         foolib/
+ *             foolib.pot
+ *             aa.po
+ *             bb.po
+ *             ...
+ * \endcode
+ * An alternative organization is to have one directory per language,
+ * and name catalog files by the translation domain.
+ * In multiple catalog situation this would look like:
+ * \code
+ * fooapp/
+ *     src/
+ *     lib
+ *     doc/
+ *     po/
+ *         templates/
+ *             fooapp.pot
+ *             foolib.pot
+ *         aa/
+ *             fooapp.po
+ *             foolib.po
+ *         bb/
+ *             fooapp.po
+ *             foolib.po
+ *         ...
+ * \endcode
+ *
+ * Catalog templates are fully derived files, and therefore
+ * some maintainers do not like to keep them inside the repository.
+ * In that case, at least the tarball should contain the templates
+ * (i.e. they should be generated at packaging time),
+ * so that translators have somewhere to get them from.
+ * Another possibility is to upload the template to
+ * a <em>translation hub</em> (such as
+ * <a href="https://www.transifex.com/">Transifex</a>),
+ * which translators can use to upload translated catalogs back,
+ * and usually for some other features as well (assignment, review, etc).
+ *
+ * If the code resides in an official KDE repository, neither templates
+ * nor translated catalogs are kept inside the source tree.
+ * Instead, translated catalogs are fetched from an appropriate place
+ * when tarball is made, using a script provided for that purpose.
+ * Details can be found at
+ * <a href="http://techbase.kde.org/Development/Tutorials/Localization/i18n_Build_Systems">KDE Techbase</a>.
+ *
+ * No matter how the catalog files are named and organized inside
+ * the distribution tarball, they must be installed in exactly one way.
+ * The base name of the installed catalog must be their translation domain,
+ * and if the package is installed into \c $PREFIX, the installed directory
+ * tree must look like as follows:
+ * \code
+ * $PREFIX/
+ *     share/
+ *         locales/
+ *             aa/
+ *                 LC_MESSAGES/
+ *                     fooapp.mo
+ *                     foolib.mo
+ *             bb/
+ *                 LC_MESSAGES/
+ *                     fooapp.mo
+ *                     foolib.mo
+ *             ...
+ * \endcode
+ * Given that these directories are shared with other packages
+ * in the same prefix, by Gettext convention translation domains
+ * must be unique (like package names are).
+ *
+ * MO files are the compiled version of PO files, and they are produced
+ * using Gettext's \c msgfmt command:
+ * \code
+ * msgfmt $SRCDIR/po/fooapp/aa.po -o $BUILDDIR/mo/aa/fooapp.mo
+ * \endcode
+ * Compilation and installation of catalogs should naturally be integrated
+ * into the build system. In case <a href="http://www.cmake.org/">CMake</a>
+ * is used, KDE provides CMake macros for this purpose.
+ *
+ * \subsubsection handle_transcript Placing and Installing Scripting Modules
+ *
+ * Since Ki18n provides a run-time scripting capability for translators,
+ * some translators may also write the scripting module corresponding
+ * to the catalog.
+ * A scripting module is a directory named like the translation domain,
+ * and at least one JavaScript file inside, also with the same base name
+ * as the translation domain.
+ *
+ * Scripting modules can be placed like this in the source tree:
+ * \code
+ * fooapp/
+ *     po/
+ *         fooapp.pot
+ *         aa.po
+ *         aa/
+ *             fooapp.js
+ *             ...
+ *         bb.po
+ *         ...
+ * \endcode
+ * or in the per-language directory variant:
+ * \code
+ * fooapp/
+ *     po/
+ *         templates/
+ *             fooapp.pot
+ *         aa/
+ *             fooapp.po
+ *             fooapp/
+ *                 fooapp.js
+ *                 ...
+ *         bb/
+ *             fooapp.po
+ *         ...
+ * \endcode
+ *
+ * The installation location for scripting modules is like that for catalogs,
+ * only using <tt>LC_SCRIPTS/</tt> directory instead of <tt>LC_MESSAGES/</tt>:
+ * \code
+ * $PREFIX/
+ *     share/
+ *         locales/
+ *             aa/
+ *                 LC_SCRIPTS/
+ *                     fooapp/
+ *                         fooapp.js
+ *                         ...
+ * \endcode
+ *
+ * When a translator inquires about adding a scripting module,
+ * or sends one in, the maintainer should check with the translator
+ * if perhaps the functions provided by the module are more widely
+ * applicable. If that is the case, they should rather become part of
+ * Ki18n's own scripting module, because then they will be accessible
+ * to all Ki18n-based translations in the given language.
+ *
+ * \subsection handle_update Updating Catalogs
+ *
+ * When new catalog template is extracted after some development
+ * has been done, existing translation should be updated against it.
+ * This is called \em merging with template, and it is performed
+ * by Gettext's \c msgmerge command.
+ * There are some merging options that can be examined here,
+ * but generally the best invocation of \c msgmerge is this:
+ * \code
+ * msgmerge --update --backup=none --previous aa.po fooapp.pot
+ * \endcode
+ * Options <tt>\-\-update \-\-backup=none</tt> mean to update the catalog
+ * in place, and not to make a backup file. Option <tt>\-\-previous</tt>
+ * puts some additional information into every modified message,
+ * that translation editing tools can use to show to the translator
+ * all changes in the text.
+ * This command should be run once for every existing translation catalog.
+ *
+ * One thing to keep in mind is that a change in the context string
+ * of a message in the code (i.e. the first argument to \c \*i18nc\* calls),
+ * including adding or removing one, will also register as
+ * a modified message in the merged catalog.
+ * This will require that translators revisit it, which is exactly as
+ * intended: if the context has changed, especially if it was added,
+ * some changes in translation may be needed.
+ * However, this means that when a "message freeze" is declared so that
+ * translators can complete updating translations without disruption,
+ * contexts fall under same rules as text.
+ *
+ * There are a few possibilities for who and when should perform merging.
+ * For example, the maintainer can write a script that at the same time
+ * extracts the template and merges all catalogs, and run it periodically,
+ * committing updated catalogs to the repository for translators to pick up.
+ * This could even be integrated into the build system.
+ * Some maintainers do not like committing automatic changes,
+ * and instead expect translators to run the extraction-merging script
+ * for the language they maintain, update the translation,
+ * and commit only that updated catalog. This solution is cleaner with
+ * respect to repository history, but it may burden translators.
+ *
+ * When operating in an official KDE repository, maintainers do not
+ * have to deal with merging at all. The server-side automation which
+ * automatically extracts templates and provides them to translators,
+ * also performs merging. So the maintainer is left only to pick up
+ * whatever are the latest catalogs when making a tarball.
+ *
+ *
+ * \section kuit_markup Semantic Markup
+ *
+ * When composing user-interface text, some programmers ponder about
+ * the typographical conventions to use in certain contexts.
+ * For example, when a file name is inserted into the text,
+ * some typographical solutions that can be used are:
+ * \code
+ * i18n("Cannot open %1 for reading.", filePath);
+ * i18n("Cannot open '%1' for reading.", filePath);
+ * i18n("Cannot open \"%1\" for reading.", filePath);
+ * \endcode
+ * For the Qt widgets that have rich text capability,
+ * exposed as subset of HTML tags, additional solutions include:
+ * \code
+ * i18n("Cannot open <b>%1</b> for reading.", filePath);
+ * i18n("Cannot open <i>%1</i> for reading.", filePath);
+ * i18n("Cannot open <tt>%1</tt> for reading.", filePath);
+ * \endcode
+ * The problem here is not so much to decide on one solution, as it is
+ * to follow it consistently through time and between contributors.
+ * One may also want to use two solutions, one in places where only
+ * plain text is allowed, and another where rich text is available.
+ * Wouldn't it then be easier to write everywhere:
+ * \code
+ * xi18n("Cannot open <filename>%1</filename> for reading.", filePath);
+ * \endcode
+ * and have it automatically resolve into plain or rich text according to
+ * the UI context, using formatting patterns defined at one place?
+ * This approach is called \em semantic markup, because the author
+ * marks parts of the text according to what they \em represent.
+ *
+ * Ki18n implements such a semantic markup,
+ * called KUIT (KDE User Interface Text).
+ * It is accessed through the series of \c xi18n\* and \c kxi18n\* calls,
+ * which are the KUIT-aware counterparts of \c i18n\* and \c ki18n\* calls.
+ * Ordinary and KUIT-aware calls can be freely mixed within
+ * a given body of code.
+ *
+ * KUIT defines a number of semantic tags that are frequently of use,
+ * as listed in the section \ref kuit_tags.
+ * But, KUIT also allows the programmer to define custom tags,
+ * as well as to change visual formatting patterns for predefined tags.
+ * This capability should lessen one important issue of semantic markups:
+ * when the author is forced to choose between several tags
+ * none of which exactly fits the desired meaning;
+ * with KUIT, the author can simply define a custom tag in that case.
+ *
+ * \subsection kuit_def_tags Defining Tags
+ *
+ * Tags are defined and redefined per translation domain, so that changes
+ * will not affect markup resolution in any other domain.
+ * Changes are performed through the \c KuitSetup object associated
+ * with the domain, as returned by the \c Kuit::setupForDomain method.
+ * A tag is defined (or redefined) by defining (or redefining)
+ * its formatting patterns, with one call to \c KuitSetup::setTagPattern
+ * for each desired combination of tag name, attribute names,
+ * and visual format.
+ * Here is an example of defining the tag <tt>\<player\></tt>,
+ * which has an optional attribute <tt>color=</tt>,
+ * on the domain <tt>foogame</tt>:
+ * \code
+ * KuitSetup *ks = Kuit::setupForDomain("foogame");
+ * QString tagName;
+ * QStringList attribNames;
+ *
+ * tagName = "player";
+ * attribNames.clear()
+ * ks->setTagPattern(tagName, attribNames, Kuit::PlainText,
+ *                   ki18nc("tag-format-pattern <player> plain",
+ *                          "'%1'"));
+ * ks->setTagPattern(tagName, attribNames, Kuit::RichText,
+ *                   ki18nc("tag-format-pattern <player> rich",
+ *                          "<b>%1</b>"));
+ * attribNames.append("color");
+ * ks->setTagPattern(tagName, attribNames, Kuit::RichText,
+ *                   ki18nc("tag-format-pattern <player color= > rich",
+ *                          "<font color='%2'><b>%1</b></font>"));
+ * \endcode
+ * The first two \c setTagPattern calls set up resolution of
+ * <tt>\<player\></tt> without attributes, into plain and rich text.
+ * The third call sets up resolution for <tt>\<player color="..."\></tt>,
+ * but only into rich text; since a plain text pattern is not defined
+ * for this tag-attribute combination, it will fall back to basic
+ * <tt>\<player\></tt> plain text pattern.
+ * A fallback is always defined, the elementary fallback being a no-op,
+ * where tag is simply removed.
+ * Formatting patterns must be wrapped for translation too,
+ * since translators may need to tweak them;
+ * <em>ordinary</em> (not markup-aware) \c ki18nc calls must be used here,
+ * since patterns themselves are not KUIT markup.
+ * The <tt>%1</tt> placeholder in the pattern will be replaced by
+ * the text wrapped with the tag, and <tt>%2</tt> and upwards with
+ * attribute values, in the order of appearance in attribute names list.
+ *
+ * If a simple substitution pattern is insufficient for formatting,
+ * additionally a formatting function of type \c Kuit::TagFormatter
+ * can be given. The result of this function is substituted into the pattern;
+ * alternatively an empty pattern can be given (as <tt>KLocalizedString()</tt>),
+ * in which case the result is used directly, no substitution is performed.
+ * The formatting function also receives the current element path,
+ * so that the resolution can depend on the markup tree context if needed.
+ * Anything in the function that may need translator input
+ * should be appropriately exposed through \c i18nc\* or \c ki18nc\* calls.
+ *
+ * In the section \ref kuit_tags it is stated that every KUIT tag
+ * is classified either as a phrase tag or as a structuring tag,
+ * and explained what that means for processing.
+ * A newly defined tag is by default a phrase tag;
+ * method \c KuitSetup::setTagClass can be used to change its class:
+ * \code
+ * tagName = "list2";
+ * ks->setTagPattern(tagName, ...);
+ * ks->setTagClass(tagName, Kuit::StructTag);
+ * \endcode
+ *
+ * In a library, changes to the KUIT setup may need to be private,
+ * applicable only in library's own domain, but they may also need
+ * to be public, applicable in clients' domains.
+ * For changes that should be public, the library should define
+ * a public function which takes the domain as the argument
+ * and performs all the changes on that domain:
+ * \code
+ * void updateKuitSetup (const char *domain)
+ * {
+ *     KuitSetup *ks = Kuit::setupForDomain(domain);
+ *     ....
+ * }
+ * \endcode
+ * The client code should then call this function in its initialization.
+ *
+ * \subsection kuit_sel_fmt Selecting Visual Format
+ *
+ * The target visual format for any given \c xi18n call can be selected
+ * in two ways.
+ *
+ * The primary way is by UI markers in the message context,
+ * which were described in the section \ref uimark_ctxt.
+ * Every <tt>\@\<major\>:\<minor\></tt> marker combination has
+ * a default target visual format assigned, as follows:
+ * <table>
+ * <tr><th>UI Marker</th>
+ *     <th>Visual Format</th></tr>
+ * <tr><td>(none)</td>
+ *     <td>plain</td></tr>
+ * <tr><td>\@action:\<any\></td>
+ *     <td>plain</td></tr>
+ * <tr><td>\@title:\<any\></td>
+ *     <td>plain</td></tr>
+ * <tr><td>\@option:\<any\></td>
+ *     <td>plain</td></tr>
+ * <tr><td>\@label:\<any\></td>
+ *     <td>plain</td></tr>
+ * <tr><td>\@item:\<any\></td>
+ *      <td>plain</td></tr>
+ * <tr><td>\@info, \@info:tooltip, \@info:whatsthis, \@info:usagetip</td>
+ *     <td>rich</td></tr>
+ * <tr><td>\@info:status, \@info:progress, \@info:credit</td>
+ *     <td>plain</td></tr>
+ * <tr><td>\@info:shell</td>
+ *     <td>term</td></tr>
+ * </tr>
+ * </table>
+ * Target visual formats associated with UI markers can be changed using
+ * the \c KUITSetup::setFormatForMarker method:
+ * \code
+ * KuitSetup *ks = Kuit::setupForDomain("fooapp");
+ * // Set standalone @info (no minor component) to plain text:
+ * ks->setFormatForMarker("@info", Kuit::PlainText);
+ * // Set @info:tooltip to rich text:
+ * ks->setFormatForMarker("@info:tooltip", Kuit::RichText);
+ * // Set all @info:<minor> to plain text:
+ * ks->setFormatForMarker("@info:", Kuit::PlainText);
+ * \endcode
+ *
+ * The second way to select the visual format is by using a \c kxi18n\* call,
+ * and passing the format type to the \c toString method:
+ * \code
+ * kxi18n("@info", "Logging paused.").toString(Kuit::PlainText);
+ * \endcode
+ * This will override any format implied by the UI marker if present.
+ *
+ * If a library is making modifications in visual format association
+ * with UI markers, and these changes should be available to clients,
+ * the same approach as in the section \ref kuit_def_tags should be used.
+ *
+ * \subsection kuit_escape Escaping
+ *
+ * While for \c \*i18n\* calls it was advised to keep each message text
+ * well-formed by itself with respect to Qt rich text markup,
+ * for \c \*xi18n\* calls well-formedness is mandatory.
+ * This means that markup-significant characters in plain-looking text
+ * need to be escaped, using standard XML entities:
+ * \code
+ * xi18n("Installed Fooapp too old, need release &gt;= 2.1.8.");
+ * xi18n("Set &lt;themeId&gt; as theme on startup");
+ * \endcode
+ * The exception is the ampersand (&) character, which in XML denotes
+ * the start of an entity, but in Qt denotes the accelerator marker.
+ * Therefore it is necessary to escape ampersand as <tt>\&amp;</tt>
+ * only when it is in position which would result in valid entity syntax:
+ * \code
+ * // Escaping not needed because not in entity-like position:
+ * xi18n("Remove &all entries");
+ * // Escaping not needed for the same reason wrt. markup,
+ * // but ampersand doubled to escape it wrt. Qt accelerator marker:
+ * xi18n("Look && Feel");
+ * // Escaping wrt. markup necessary:
+ * xi18n("Delete &amp;everything; see if I care!");
+ * \endcode
+ * The example for necessary escaping above is rather artificial,
+ * because in practice it is unlikely for ampersand to appear
+ * in entity-like position while not actually starting an entity.
+ *
+ * To assure the validity of markup when arguments are inserted into
+ * <tt>xi18n</tt>-wrapped text, all markup-significant characters
+ * in string arguments are automatically escaped.
+ * For example, this works as expected:
+ * \code
+ * QString filePath("assignment03-<yourname>.txt");
+ * QString msg1 = kxi18n("Delete <filename>%1</filename>?", filePath)
+ *                      .toString(Kuit::PlainText);
+ * // msg1 == "Delete 'assignment03-<yourname>.txt'?"
+ * QString msg2 = kxi18n("Delete <filename>%1</filename>?", filePath)
+ *                      .toString(Kuit::RichText);
+ * // msg2 == "Delete <tt>assignment03-&lt;yourname&gt;.txt</tt>?"
+ * \endcode
+ * But, how then to compose a text where the arguments too should
+ * contain some KUIT markup? This is done by using non-finalization
+ * \c kxi18n\* call to translate the argument text, and passing
+ * the returned \c KLocalizedString object directly as argument:
+ * \code
+ * KLocalizedString stateDesc = kxi18nc(
+ *     "On <emphasis>indefinite</emphasis> hold.");
+ * QString msg = xi18n("@info",
+ *                     "<para>Task state:</para>"
+ *                     "<para>%1</para>", stateDesc);
+ * // msg == "<p>Task state:</p>"
+ * //        "<p>On <i>indefinite</i> hold.</p>"
+ * \endcode
+ * If the argument and the text have different visual formats implied by
+ * their UI markers, the outermost format overrides inner formats.
+ *
+ * \subsection kuit_tags Predefined Tags
+ *
+ * All KUIT tags belong to one of the two classes:
+ * - phrase tags, which describe parts of sentences or whole sentences
+ *   inserted into running text;
+ * - structuring tags, which split text into paragraph-level blocks.
+ *
+ * A text without any structuring tags is considered equivalent of
+ * one paragraph or sub-paragraph sentence or phrase.
+ * If at least one structuring tag appears in the text,
+ * then the text is considered multi-paragraph,
+ * and no content may appear outside of structuring tags.
+ * For example:
+ * \code
+ * // Good:
+ * i18nc("@info",
+ *       "You can configure the history sidebar here.");
+ * // BAD:
+ * i18nc("@info",
+ *       "<title>History Sidebar</title>"
+ *       "You can configure the history sidebar here.");
+ * // Good:
+ * i18nc("@info",
+ *       "<title>History Sidebar</title>"
+ *       "<para>You can configure the history sidebar here.</para>");
+ * \endcode
+ *
+ * The current set of predefined tags is presented below.
+ * For each tag the following information is stated:
+ * the tag name (in superscript: Ki18n release of first appearance),
+ * available attributes (in superscript: \em * if mandatory,
+ * Ki18n release of first appearance),
+ * admissible subtags, and description.
+ *
+ * <table>
+ * <tr><th>
+ * Phrase Tags
+ * </th></tr>
+ * <tr><td>
+ * <b>\<application\></b><sup>5.0</sup><br/>
+ * Name of an application.
+ * \code
+ * i18nc("@action:inmenu",
+ *       "Open with <application>%1</application>", appName);
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<bcode\></b><sup>5.0</sup><br/>
+ * Line-breaking body of code, for short code or output listings.
+ * \code
+ * i18nc("@info:whatsthis",
+ *       "You can try the following snippet:<bcode>"
+ *       "\\begin{equation}\n"
+ *       "  C_{x_i} = \\frac{C_z^2}{e \\pi \\lambda}\n"
+ *       "\\end{equation}\n"
+ *       "</bcode>");
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<command\></b><sup>5.0</sup><br/>
+ * <i>Attributes:</i> section=<sup>5.0</sup><br/>
+ * Name of a shell command, system call, signal, etc.
+ * Its man section can be given with the <tt>section=</tt> attribute.
+ * \code
+ * i18nc("@info",
+ *       "This will call <command>%1</command> internally.", cmdName);
+ * i18nc("@info",
+ *       "Consult the man entry of "
+ *       "<command section='1'>%1</command>", cmdName);
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<email\></b><sup>5.0</sup><br/>
+ * <i>Attributes:</i> address=<sup>5.0</sup><br/>
+ * Email address.
+ * Without attributes, the tag text is the address.
+ * If the address is explicitly given with the <tt>address=</tt> attribute,
+ * the tag text is the name or description attached to the address.
+ * In rich text, the phrase will be hyperlinked.
+ * \code
+ * i18nc("@info",
+ *       "Send bug reports to <email>%1</email>.", emailNull);
+ * i18nc("@info",
+ *       "Send praises to <email address='%1'>the author</email>.", emailMy);
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<emphasis\></b><sup>5.0</sup><br/>
+ * <i>Attributes:</i> strong=<sup>5.0</sup><br/>
+ * Emphasized word or phrase in the text.
+ * For strong emphasis, attribute <tt>strong=</tt>
+ * can be set to <tt>[1|true|yes]</tt>.
+ * </td></tr>
+ * <tr><td>
+ * <b>\<envar\></b><sup>5.0</sup><br/>
+ * Environment variable.
+ * A <tt>$</tt>-sign will be prepended automatically in formatted text.
+ * \code
+ * i18nc("@info",
+ *       "Assure that <envar>PATH</envar> is properly set.");
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<filename\></b><sup>5.0</sup><br/>
+ * <i>Subtags:</i> \<envar\>, \<placeholder\><br/>
+ * File or folder name or path.
+ * Slash (/) should be used as path separator, and it will be converted
+ * into native separator for the underlying platform.
+ * \code
+ * i18nc("@info", "Cannot read <filename>%1</filename>.", filePath);
+ * i18nc("@info",
+         "<filename><envar>HOME</envar>/.foorc</filename> "
+         "does not exist.");
+ *  \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<icode\></b><sup>5.0</sup><br/>
+ * <i>Subtags:</i> \<envar\>, \<placeholder\><br/>
+ * Inline code, like a shell command line.
+ * \code
+ * i18nc("@info:tooltip",
+ *       "Execute <icode>svn merge</icode> on selected revisions.");
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<interface\></b><sup>5.0</sup><br/>
+ * Path to a graphical user interface element.
+ * If a path of UI elements is needed,
+ * elements should be separated with <tt>|</tt> or <tt>-></tt>,
+ * which will be converted into the canonical separator.
+ * \code
+ * i18nc("@info:whatsthis",
+ *       "If you make a mistake, click "
+ *       "<interface>Reset</interface> to start again.");
+ * i18nc("@info:whatsthis",
+ *       "The line colors can be changed under "
+ *       "<interface>Settings->Visuals</interface>.");
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<link\></b><sup>5.0</sup><br/>
+ * <i>Attributes:</i> url=<sup>5.0</sup><br/>
+ * Link to a URL-addressable resource.
+ * Without attributes, the tag text is the URL;
+ * alternatively, the URL can be given by <tt>url=</tt> attribute,
+ * and then the text serves as description.
+ * Separate URL and description are preferred if applicable.
+ * The phrase will be hyperlinked in rich text.
+ * \code
+ * i18nc("@info:tooltip",
+ *       "Go to <link>%1</link> website.", urlKDE);
+ * i18nc("@info:tooltip",
+ *       "Go to the <link url='%1'>KDE website</link>.", urlKDE);
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<message\></b><sup>5.0</sup><br/>
+ * <i>Subtags:</i> all phrase tags<br/>
+ * An external message inserted into the text.
+ * \code
+ * i18nc("@info",
+ *       "The fortune cookie says: <message>%1</message>", cookieText);
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<nl\></b><sup>5.0</sup><br/>
+ * Line break.
+ * \code
+ * i18nc("@info",
+ *       "The server replied:<nl/>"
+ *       "<message>%1</message>", serverReply);
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<note\></b><sup>5.0</sup><br/>
+ * <i>Attributes:</i> label=<sup>5.0</sup><br/>
+ * <i>Subtags:</i> all phrase tags<br/>
+ * The sentence is a side note related to the topic.
+ * Prefix "Note:" will be added automatically;
+ * another prefix can be set with attribute <tt>label=</tt>.
+ * \code
+ * i18nc("@info",
+ *       "Probably the best known of all duck species is the Mallard. "
+ *       "It breeds throughout the temperate areas around the world. "
+ *       "<note>Most domestic ducks are derived from Mallard.</note>");
+ * \endcode
+ * </tr></td>
+ * <tr><td>
+ * <b>\<placeholder\></b><sup>5.0</sup><br/>
+ * A placeholder text.
+ * It could be something which the user should replace with actual text,
+ * or a generic item in a list.
+ * \code
+ * i18nc("@info",
+ *       "Replace <placeholder>name</placeholder> with your name.");
+ * i18nc("@item:inlistbox",
+ *       "<placeholder>All images</placeholder>");
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<shortcut\></b><sup>5.0</sup><br/>
+ * Combination of keyboard keys to press.
+ * Key names should be separated by "+" or "-",
+ * and the shortcut will be converted into canonical form.
+ * \code
+ * i18nc("@info:whatsthis",
+ *       "Cycle through layouts using <shortcut>Alt+Space</shortcut>.");
+ * \endcode
+ * </td></tr>
+ * <tr><td>
+ * <b>\<warning\></b><sup>5.0</sup><br/>
+ * <i>Attributes:</i> label=<sup>5.0</sup><br/>
+ * <i>Subtags:</i> all phrase tags<br/>
+ * The sentence is a warning.
+ * Prefix "Warning:" will be added automatically;
+ * another prefix can be set with attribute <tt>label=</tt>.
+ * \code
+ * i18nc("@info",
+ *       "Really delete this key? "
+ *       "<warning>This cannot be undone.</warning>");
+ * \endcode
+ * </tr></td>
+ * <tr><th>
+ * Structuring Tags
+ * </th></tr>
+ * <tr><td>
+ * <b>\<item\></b><sup>5.0</sup><br/>
+ * <i>Subtags:</i> all phrase tags<br/>
+ * A list item.
+ * </tr></td>
+ * <tr><td>
+ * <b>\<list\></b><sup>5.0</sup><br/>
+ * <i>Subtags:</i> \<item\><br/>
+ * List of items.
+ * List is considered an element of the paragraph,
+ * so <tt>\<list\></tt> tags must be inside <tt>\<para\></tt> tags.
+ * </tr></td>
+ * <tr><td>
+ * <b>\<para\></b><sup>5.0</sup><br/>
+ * <i>Subtags:</i> all phrase tags, \<list\><br/>
+ * One paragraph of text.
+ * </tr></td>
+ * <tr><td>
+ * <b>\<subtitle\></b><sup>5.0</sup><br/>
+ * <i>Subtags:</i> all phrase tags<br/>
+ * The subtitle of the text. Must come after <tt>\<title\></tt>.
+ * </tr></td>
+ * <tr><td>
+ * <b>\<title\></b><sup>5.0</sup><br/>
+ * <i>Subtags:</i> all phrase tags<br/>
+ * The title of the text.
+ * Must be the first tag in the text if present.
+ * </tr></td>
+ * </table>
+ *
+ * The criteria for adding new tags to the predefined set,
+ * particularly new phrase tags, are not very strict.
+ * If the tag is clearly useful to a class of applications,
+ * of which more than one are known to use Ki18n,
+ * it is reasonable to add it here.
+ * Adding synonymous tag names is also fine, where one finds that
+ * the original name is not sufficiently discoverable,
+ * or that it is too verbose for the given frequency of use.
+ *
+ * \subsection kuit_ents Predefined Entities
+ *
+ * KUIT defines a fixed set of XML entities, which means that unlike tags,
+ * entities cannot be added to, nor their character expansions changed.
+ * The standard XML entities are:
+ * <table>
+ * <tr><th>Entity</th><th>Expansion</th></tr>
+ * <tr><td><b>\&lt;</b></td><td>less-than (<tt>\<</tt>)</td></tr>
+ * <tr><td><b>\&gt;</b></td><td>greater-than (<tt>\></tt>)</td></tr>
+ * <tr><td><b>\&amp;</b></td><td>ampersand (<tt>\&</tt>)</td></tr>
+ * <tr><td><b>\&apos;</b></td><td>single quote (<tt>'</tt>)</td></tr>
+ * <tr><td><b>\&quot;</b></td><td>double quote (<tt>"</tt>)</td></tr>
+ * </table>
+ * The <tt>\&apos;</tt> and <tt>\&quot;</tt> are really needed only
+ * within tag attribute values (and even there they can be avoided
+ * by choosing the opposite quote sign for quoting the attribute value).
+ *
+ * Additional entities are (Ki18n release where they were introduced
+ * given in superscript):
+ * <table>
+ * <tr><th>Entity</th><th>Expansion</th></tr>
+ * <tr>
+ * <td><b>\&nbsp;</b><sup>5.0</sup></td>
+ * <td></td>non-breaking space (<tt>&nbsp;</tt>)
+ * </tr>
+ * </table>
+ *
+ * The reason for not allowing custom entities
+ * can be demonstrated by the following example.
+ * An application programmer may think of defining the entity
+ * <tt>\&appname;</tt>, which would be used everywhere in text in place of
+ * the actual application name. In that way, seemingly, it would be easy
+ * to play with various names or spellings without disrupting translations.
+ * The problem, however, is that in many languages the structure of
+ * the sentence depends on the grammar properties of the particular name
+ * (e.g. its grammar gender or number), and conversely, the name may
+ * need modification according to sentence structure (e.g. by grammar case).
+ * Thus, custom entities are not allowed because
+ * they are misused too easily.
+ * If something \em really needs to be inserted verbatim into text,
+ * argument substitution is always at hand.
+ *
+ *
+ * \section non_text Localizing Non-Text Resources
+ *
+ * It sometimes happens that a non-textual application resource
+ * needs localization. The most frequent example are images
+ * that contain some text, like splash screens.
+ * Ki18n also provides a rudimentary facility for this situation,
+ * the \c KLocalizedString::localizedFilePath static method.
+ * When called with a resource file path as the argument,
+ * this method will check what are the active languages,
+ * and look if there exists a localized version of the resource at path
+ * <tt>\<original-parent-dir\>/l10n/\<language\>/\<original-basename\></tt>.
+ * For example, if the active language is \c aa, and a candidate image
+ * for localization is installed as:
+ * \code
+ * $PREFIX/share/fooapp/splash.png
+ * \endcode
+ * then a call to
+ * \code
+ * QString splashPath = QStandardPaths::locate(
+ *     QStandardPaths::GenericDataLocation, "splash.png");
+ * splashPath = KLocalizedString::localizedFilePath(splashPath);
+ * \endcode
+ * will check if there exist the file
+ * \code
+ * $PREFIX/share/fooapp/l10n/aa/splash.png
+ * \endcode
+ * and return that path if it does, or else the original path.
+ *
+ * Some KDE libraries will call \c KLocalizedString::localizedFilePath
+ * on their own behind the scene, for resources that may need localization
+ * but whose paths are not directly manipulated in application sources.
+ * An example here are icons handled through \c KIcon class,
+ * which are referred to in the code only by the icon name.
+ *
+ *
+ * \section refs Further References
+ *
+ * For details about the format of translation catalogs (PO)
+ * and various Gettext tools, the first stop is the
+ * <a href="http://www.gnu.org/software/gettext/manual/gettext.html">
+ * Gettext manual</a>.
+ *
+ * <a href="http://techbase.kde.org/">KDE Techbase</a> contains a
+ * <a href="http://techbase.kde.org/Development/Tutorials/Localization">
+ * series of tutorials</a> on preparing the KDE code for localization,
+ * and on the internationalization process in general.
+ *
+ *
+ * \page trn_guide Translator's Guide
+ *
+ * [[To be done.]]
+ */
