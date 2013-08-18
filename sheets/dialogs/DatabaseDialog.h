@@ -42,7 +42,7 @@ class QListWidgetItem;
 class QRadioButton;
 class KTextEdit;
 
-class KFakePageWidgetItem;
+class KPageWidgetItem;
 class KPushButton;
 
 namespace Calligra
@@ -88,7 +88,7 @@ private:
     QRect          m_targetRect;
     QSqlDatabase   m_dbConnection;
 
-    KFakePageWidgetItem * m_database;
+    KPageWidgetItem * m_database;
     QLabel       * m_databaseStatus;
     QLineEdit    * m_username;
     QLineEdit    * m_port;
@@ -97,16 +97,16 @@ private:
     QLineEdit    * m_password;
     QLineEdit    * m_host;
     QLabel       * m_Type;
-    KFakePageWidgetItem * m_table;
+    KPageWidgetItem * m_table;
     KComboBox    * m_databaseList;
     KPushButton  * m_connectButton;
     QLabel       * m_tableStatus;
     QLabel       * m_SelectTableLabel;
     QListWidget  * m_tableView;
-    KFakePageWidgetItem * m_columns;
+    KPageWidgetItem * m_columns;
     QTreeWidget  * m_columnView;
     QLabel       * m_columnsStatus;
-    KFakePageWidgetItem * m_options;
+    KPageWidgetItem * m_options;
     KComboBox    * m_columns_1;
     KComboBox    * m_columns_2;
     KComboBox    * m_columns_3;
@@ -123,7 +123,7 @@ private:
     KComboBox    * m_sortMode_1;
     KComboBox    * m_sortMode_2;
     QCheckBox    * m_distinct;
-    KFakePageWidgetItem * m_result;
+    KPageWidgetItem * m_result;
     KTextEdit    * m_sqlQuery;
     QRadioButton * m_startingRegion;
     QLineEdit    * m_cell;

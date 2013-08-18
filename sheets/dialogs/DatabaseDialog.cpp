@@ -136,7 +136,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     databaseFrameLayout->setRowStretch(7, 1);
 
-    m_database = new KFakePageWidgetItem(databaseFrame, i18n("Database"));
+    m_database = new KPageWidgetItem(databaseFrame, i18n("Database"));
     addPage(m_database);
 
     // tables page
@@ -174,7 +174,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     tablesFrameLayout->setRowStretch(4, 1);
 
-    m_table = new KFakePageWidgetItem(tablesFrame, i18n("Tables"));
+    m_table = new KPageWidgetItem(tablesFrame, i18n("Tables"));
     addPage(m_table);
 
     // columns page
@@ -198,7 +198,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     columnsFrameLayout->setRowStretch(3, 1);
 
-    m_columns = new KFakePageWidgetItem(columnsFrame, i18n("Columns"));
+    m_columns = new KPageWidgetItem(columnsFrame, i18n("Columns"));
     addPage(m_columns);
 
     // options page
@@ -301,7 +301,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     optionsFrameLayout->setRowStretch(8, 1);
 
-    m_options = new KFakePageWidgetItem(optionsFrame, i18n("Query Options"));
+    m_options = new KPageWidgetItem(optionsFrame, i18n("Query Options"));
     addPage(m_options);
 
     // result page
@@ -340,10 +340,10 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     resultFrameLayout->setRowStretch(3, 1);
 
-    m_result = new KFakePageWidgetItem(resultFrame, i18n("Result"));
+    m_result = new KPageWidgetItem(resultFrame, i18n("Result"));
     addPage(m_result);
 
-    enableButton(KDialog::User1, false);   // Finish
+    //enableButton(KDialog::User1, false);   // Finish
 
     // signals and slots connections
     connect(m_orBox, SIGNAL(clicked()), this, SLOT(orBox_clicked()));
@@ -360,7 +360,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     QStringList str = QSqlDatabase::drivers();
     m_driver->insertItems(0, QSqlDatabase::drivers());
 
-    showButton(KDialog::Help, false);
+    //showButton(KDialog::Help, false);
     setValid(m_database, false);
     setValid(m_table, false);
     setValid(m_columns, false);
