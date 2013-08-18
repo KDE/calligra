@@ -123,10 +123,10 @@ KoApplication::KoApplication(int argc, char** argv, const QByteArray &nativeMime
         setStyle("Oxygen");
     }
 
-    setApplicationName(aboutData->appName());
+    setApplicationName(aboutData->internalProgramName());
     setApplicationVersion(aboutData->version());
     setOrganizationDomain(aboutData->organizationDomain());
-    setApplicationDisplayName(aboutData->programName());
+    setApplicationDisplayName(aboutData->displayName());
 
 }
 
