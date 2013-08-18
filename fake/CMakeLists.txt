@@ -105,7 +105,7 @@ set(kofake_HEADERS_ONLY
     kstringhandler.h
     kpushbutton.h
     kwindowsystem.h
-    kmainwindow.h
+    #kmainwindow.h
     kcolorscheme.h
     #kselector.h
     kglobalsettings.h
