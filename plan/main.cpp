@@ -53,7 +53,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication::addCommonCommandLineOptions();
-    KoApplication app(argc, argv, PLAN_MIME_TYPE, about.data());
+    KoApplication app(KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv(), PLAN_MIME_TYPE, about.data());
 
 #ifdef MAINTANER_WANTED_SPLASH
     // After creating the QApplication then create the pixmap from an xpm: we cannot get the

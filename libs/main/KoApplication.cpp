@@ -88,10 +88,6 @@ KoApplication::KoApplication(int argc, char** argv, const QByteArray &nativeMime
     : QApplication(argc, argv)
     , d(new KoApplicationPrivate)
 {
-    // Initialize the arguments before we run KoApplication::start() because that gives a
-    // crash in KConfig::mainConfigName().
-    QCoreApplication::arguments();
-
     KoApplication::KoApp = this;
 
     d->nativeMimeType = nativeMimeType;

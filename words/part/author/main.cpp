@@ -39,7 +39,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
 
     KoApplication::addCommonCommandLineOptions();
-    KoApplication app(argc, argv, WORDS_MIME_TYPE, aboutData.data());
+    KoApplication app(KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv(), WORDS_MIME_TYPE, aboutData.data());
 
     if (!app.start())
         return 1;

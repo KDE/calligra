@@ -60,7 +60,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
     KoApplication::addCommonCommandLineOptions();
     // first create the application so we can create a  pixmap
-    KoApplication app(argc, argv, KIS_MIME_TYPE, about.data());
+    KoApplication app(KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv(), KIS_MIME_TYPE, about.data());
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

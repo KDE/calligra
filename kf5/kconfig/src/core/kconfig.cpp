@@ -523,13 +523,13 @@ void KConfig::setMainConfigName(const QString& str)
 
 QString KConfig::mainConfigName()
 {
-//    // --config on the command line overrides everything else
-//    const QStringList args = QCoreApplication::arguments();
-//    for (int i = 1; i < args.count() ; ++i) {
-//        if (args.at(i) == QLatin1String("--config") && i < args.count()-1) {
-//            return args.at(i+1);
-//        }
-//    }
+    // --config on the command line overrides everything else
+    const QStringList args = QCoreApplication::arguments();
+    for (int i = 1; i < args.count() ; ++i) {
+        if (args.at(i) == QLatin1String("--config") && i < args.count()-1) {
+            return args.at(i+1);
+        }
+    }
     const QString globalName = *globalMainConfigName();
     if (!globalName.isEmpty())
         return globalName;
