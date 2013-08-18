@@ -64,10 +64,11 @@ public:
      * @return A list of QPluginLoader that satisfy the query
      * @see http://techbase.kde.org/Development/Tutorials/Services/Traders#The_KTrader_Query_Language
      */
-     QList<QPluginLoader *> query(const QString &servicetype, const QString &constraint) const;
+     QList<QPluginLoader *> query(const QString &servicetype, const QString &constraint);
 
 private:
      KoJsonTrader *m_service;
+     QString m_pluginPath;
 };
 
 #endif

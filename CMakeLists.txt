@@ -275,7 +275,8 @@ calligra_set_productset(${PRODUCTSET})
 find_package(KF5 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs)
 set(kdelibs_SOURCE_DIR TRUE)
 # override the kf5 plugin installdir
-set(PLUGIN_INSTALL_DIR ${BIN_INSTALL_DIR}/calligra/plugins)
+set(PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/calligra)
+
 
 # Use the KDE4 macros, they are very convenient. There's a copy in cmake/kde4_macros
 include(KDE4Macros)

@@ -27,6 +27,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDirIterator>
+#include <QDir>
 
 KoJsonTrader::KoJsonTrader()
 {
@@ -40,11 +41,31 @@ KoJsonTrader* KoJsonTrader::self()
     return s_instance;
 }
 
-QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &mimetype) const
+QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &mimetype)
 {
+
+    if (m_pluginPath.isEmpty()) {
+        QDir appDir(qApp->applicationDirPath());
+        appDir.cdUp();
+        foreach(QString entry, appDir.entryList()) {
+            QFileInfo info(appDir, entry);
+            if (info.isDir() && info.fileName().contains("lib")) {
+                if (QDir(info.absoluteFilePath()).entryList(QStringList() << "calligra").size() > 0) {
+                    m_pluginPath = info.absoluteFilePath() + "/calligra";
+                    break;
+                }
+            }
+            if (!m_pluginPath.isEmpty()) {
+                break;
+            }
+        }
+        qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
+
+    }
+
 //    qDebug() << servicetype << mimetype;
     QList<QPluginLoader *>list;
-    QDirIterator dirIter(QCoreApplication::applicationDirPath() + "/calligra/plugins/", QDirIterator::Subdirectories);
+    QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
         if (dirIter.fileInfo().isFile()) {
