@@ -31,7 +31,7 @@
 #include "kdualaction.h"
 #include "krecentfilesaction.h"
 #include "ktogglefullscreenaction.h"
-#include "kpastetextaction.h"
+//#include "kpastetextaction.h"
 #include "kacceleratormanager_p.h"
 
 namespace KStandardAction
@@ -147,9 +147,9 @@ QAction *create(StandardAction id, const QObject *recvr, const char *slot, QObje
       pAction = new KToggleFullScreenAction(parent);
       pAction->setCheckable(true);
       break;
-    case PasteText:
-      pAction = new KPasteTextAction(parent);
-      break;
+//    case PasteText:
+//      pAction = new KPasteTextAction(parent);
+//      break;
     // Same as default, but with the app icon
     case AboutApp:
       pAction = new QAction(parent);

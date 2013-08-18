@@ -14,6 +14,14 @@ if(NOT kdelibs_SOURCE_DIR)
 
 endif()
 
+include_directories("../kconfig/src/core" 
+                    "../kconfig/src/gui"
+                    "../kwidgetsaddons/src/"
+                    ${CMAKE_CURRENT_BINARY_DIR}/../kconfig/src/gui
+                    ${CMAKE_CURRENT_BINARY_DIR}/../kconfig/src/core
+                    ${CMAKE_CURRENT_BINARY_DIR}/../kwidgetsaddons/src/
+)
+
 include(FeatureSummary)
 
 include(ECMSetupVersion)

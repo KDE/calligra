@@ -153,7 +153,7 @@ void KRecentFilesAction::addUrl(const QUrl& _url, const QString& name)
 
     if (url.isLocalFile() && url.toLocalFile().startsWith(QDir::tempPath()))
        return;
-    const QString tmpName = name.isEmpty() ? url.fileName() : name;
+    const QString tmpName = name.isEmpty() ? url.toLocalFile() : name;
     const QString pathOrUrl(url.toDisplayString(QUrl::PreferLocalFile));
 
 #ifdef Q_OS_WIN
@@ -299,7 +299,7 @@ void KRecentFilesAction::loadEntries( const KConfigGroup& _config)
 #endif
 
         nameKey = QString( "Name%1" ).arg( i );
-        nameValue = cg.readPathEntry(nameKey, url.fileName());
+        nameValue = cg.readPathEntry(nameKey, url.toLocalFile());
         title = titleWithSensibleWidth(nameValue, value);
         if (!value.isNull())
         {
