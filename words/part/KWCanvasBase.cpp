@@ -24,7 +24,6 @@
 
 // words includes
 #include "KWCanvas.h"
-#include "KWView.h"  // Only for the annotationWidth.  Move it?
 #include "KWGui.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
@@ -193,7 +192,7 @@ void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &view
     if (m_showAnnotations) {
         color = Qt::cyan;
         QRect annotationRect(m_viewMode->contentsSize().width(), 0,
-                             KWView::AnnotationAreaWidth, m_viewMode->contentsSize().height());
+                             AnnotationAreaWidth, m_viewMode->contentsSize().height());
         QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
         qDebug() << "annotation rect " << annotationRect << "view rect " << viewRect;
         painter.fillRect(viewRect, QBrush(color));

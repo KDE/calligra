@@ -166,7 +166,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // that resulted in bug 180759
     QSizeF pageSize = m_currentPage.rect().size();
     if (m_canvas->showAnnotations()) {
-        pageSize += QSize(AnnotationAreaWidth, 0.0);
+        pageSize += QSize(KWCanvasBase::AnnotationAreaWidth, 0.0);
     }
     m_zoomController->setPageSize(pageSize);
     m_zoomController->setTextMinMax(m_currentPage.contentRect().left(), m_currentPage.contentRect().right());
@@ -1110,7 +1110,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
         m_pageSize = maxPageSize;
         QSizeF pageSize = m_pageSize;
         if (m_canvas->showAnnotations()) {
-            pageSize += QSize(AnnotationAreaWidth, 0.0);
+            pageSize += QSize(KWCanvasBase::AnnotationAreaWidth, 0.0);
         }
         m_zoomController->setPageSize(pageSize);
     }

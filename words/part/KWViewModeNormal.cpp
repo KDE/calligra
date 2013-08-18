@@ -73,7 +73,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewR
                    QString("Pagemanager has more pages than viewmode (%1>%2 with pageOffset=%3 and pageNumber=%4 and pageCount=%5). Make sure you add pages via the document!")
                    .arg(page.pageNumber()-pageOffset).arg(m_pageTops.count()).arg(pageOffset).arg(page.pageNumber()).arg(m_pageManager->pageCount()).toLocal8Bit());
 
-        const QRectF pageRect = page.rect().adjusted(0, 0, KWView::AnnotationAreaWidth, 0);
+        const QRectF pageRect = page.rect().adjusted(0, 0, KWCanvasBase::AnnotationAreaWidth, 0);
         const QRectF zoomedPage = viewConverter->documentToView(pageRect);
         ViewMap vm;
         vm.page = page;

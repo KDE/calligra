@@ -4,15 +4,56 @@ Things left to do for the annotations branch
 Features
 --------
 
+
 Bugs
 ----
 
- * Fix cursor movement and placement within the annotation shape.
- 
- * Fix right position of reference text.
+ * Fix repaint of lines when adding and removing text.
+
+ * Lines remain when an annotation is deleted.
+
+ * Possible to insert other things than allowed by the standard:
+    - paragraphs
+    - list entries
+
+ * The annotation area is broken at the page breaks.
+
+
+Annoyances
+----------
+
+ * Save and load status of "Show notes".
+
+ * Insert/delete buttons mentions annotations, but menu has
+   "Show Notes".  LO/AOO call them notes so the buttons should
+   use the same word.
+
+ * Use same shortcut as LO/AOO.
+
+ * Insert/delete buttons are too wide
+    - better to have two textlines in them ("insert\nnote")
+
+
+
+To Check / Test
+---------------
+
+ * Check undo/redo handling
+
 
 ---------------- Milestone 1: merge with master ----------------
 
 
- * Save state of view_showNotes in the words rc file under .kde
-   (or before the merge?)
+More work
+---------
+
+ * Load more attributes, especially the styles.
+
+ * roundtrip tests
+
+
+Ideas
+-----
+
+ * Use color coding for different authors
+   (This is probably already possible through the styles)

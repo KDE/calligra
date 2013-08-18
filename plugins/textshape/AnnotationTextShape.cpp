@@ -56,9 +56,10 @@ AnnotationTextShape::~AnnotationTextShape()
 void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
 {
     m_textShapeData = textShapeData;
-    m_textShapeData->setTopPadding(25);
-    m_textShapeData->setLeftPadding(4);
-    m_textShapeData->setRightPadding(4);
+    m_textShapeData->setTopPadding(HeaderSpace);
+    m_textShapeData->setLeftPadding(qreal(4.0)); // Make it a little nicer
+    m_textShapeData->setRightPadding(qreal(4.0));
+    m_textShapeData->setBottomPadding(qreal(4.0));
     m_textShapeData->setResizeMethod(KoTextShapeData::AutoGrowHeight);
 }
 
@@ -67,10 +68,10 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
 {
     TextShape::paintComponent(painter, converter, paintcontext);
     QRectF clipRect = outlineRect();
-    // Paint annotation shape creator.
-    // Set Author and date.
+
+    // Paint creator and of creation of the annotation.
     QPen peninfo (Qt::darkYellow);
-    QFont serifFont("Times", 6, QFont::Bold);
+    QFont serifFont("Times", HeaderFontSize, QFont::Bold);
     painter.setPen(peninfo);
     painter.setFont(serifFont);
 
@@ -80,7 +81,7 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
 
 bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    kDebug(31000) << "****** Start Load odf ******";
+    //kDebug(31000) << "****** Start Load odf ******";
 
     KoTextLoader textLoader(context);
     QTextCursor cursor(textShapeData()->document());
@@ -97,7 +98,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
             if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
                 m_creator = el.text();
                 if (m_creator.isEmpty()) {
-                    m_creator = "Anonymous";
+                    m_creator = "Unknown";
                 }
             }
             else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
@@ -108,7 +109,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
             }
         }
         textLoader.loadBody(element, cursor);
-        kDebug(31000) << "****** End Load ******";
+        //kDebug(31000) << "****** End Load ******";
     }
     else {
         // something pretty weird going on...
