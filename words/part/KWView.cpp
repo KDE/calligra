@@ -91,13 +91,14 @@
 #include <QTimer>
 #include <QScrollBar>
 #include <QPushButton>
+#include <QMenuBar>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <ktoolbar.h>
 
 #include <limits>
@@ -123,7 +124,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
-    setComponentData(KWFactory::componentData());
+    //setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
