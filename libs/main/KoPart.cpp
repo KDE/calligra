@@ -324,7 +324,9 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
         }
     }
 
-    mainWindow->factory()->container("mainToolBar", mainWindow)->hide();
+    if (mainWindow && mainWindow->factory() && mainWindow->factory()->container("mainToolBar", mainWindow)) {
+        mainWindow->factory()->container("mainToolBar", mainWindow)->hide();
+    }
 
     if (d->startUpWidget) {
         d->startUpWidget->show();
@@ -343,9 +345,14 @@ void KoPart::deleteOpenPane(bool closing)
         d->startUpWidget->deleteLater();
 
         if(!closing) {
-            mainWindows().first()->setRootDocument(d->document, this);
-            KoPart::mainWindows().first()->factory()->container("mainToolBar",
-                                                                  mainWindows().first())->show();
+            KoMainWindow *mainWindow = KoPart::mainWindows().first();
+            if (mainWindow) {
+                mainWindow->setRootDocument(d->document, this);
+                if (mainWindow && mainWindow->factory() && mainWindow->factory()->container("mainToolBar", mainWindow)) {
+                    mainWindow->factory()->container("mainToolBar",
+                                                     mainWindows().first())->show();
+                }
+            }
         }
     } else {
         emit closeEmbedInitDialog();
