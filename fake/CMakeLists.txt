@@ -92,7 +92,7 @@ set(kofake_HEADERS_ONLY
     kwordwrap.h
     klocalizedstring.h
     ktoolbar.h
-    #kpagewidgetitem.h
+    kfakepagewidgetitem.h
     sonnet/dialog.h
     sonnet/speller.h
     sonnet/configwidget.h

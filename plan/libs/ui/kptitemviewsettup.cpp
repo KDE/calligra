@@ -148,7 +148,7 @@ ItemViewSettupDialog::ItemViewSettupDialog( ViewBase *view, TreeViewBase *treevi
     button( Default )->setEnabled( ! treeview->defaultColumns().isEmpty() );
     
     m_panel = new ItemViewSettup( treeview, includeColumn0 );
-    KPageWidgetItem *page = new KPageWidgetItem( m_panel, i18n( "Tree View" ) );
+    KFakePageWidgetItem *page = new KFakePageWidgetItem( m_panel, i18n( "Tree View" ) );
     page->setHeader( i18n( "Tree View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
@@ -172,10 +172,10 @@ void ItemViewSettupDialog::slotOk()
     }
 }
 
-KPageWidgetItem *ItemViewSettupDialog::insertWidget( int index, QWidget *widget, const QString &name, const QString &header )
+KFakePageWidgetItem *ItemViewSettupDialog::insertWidget( int index, QWidget *widget, const QString &name, const QString &header )
 {
-    KPageWidgetItem *before = m_pageList.value( index );
-    KPageWidgetItem *page = new KPageWidgetItem( widget, name );
+    KFakePageWidgetItem *before = m_pageList.value( index );
+    KFakePageWidgetItem *page = new KFakePageWidgetItem( widget, name );
     page->setHeader( header );
     if ( before ) {
         insertPage( before, page );
@@ -221,13 +221,13 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTree
     button( Default )->setEnabled( ! nodef );
 
     m_page1 = new ItemViewSettup( treeview->masterView(), true );
-    KPageWidgetItem *page = new KPageWidgetItem( m_page1, i18n( "Main View" ) );
+    KFakePageWidgetItem *page = new KFakePageWidgetItem( m_page1, i18n( "Main View" ) );
     page->setHeader( i18n( "Main View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
 
     m_page2 = new ItemViewSettup( treeview->slaveView(), true );
-    page = new KPageWidgetItem( m_page2, i18n( "Auxiliary View" ) );
+    page = new KFakePageWidgetItem( m_page2, i18n( "Auxiliary View" ) );
     page->setHeader( i18n( "Auxiliary View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
@@ -252,10 +252,10 @@ void SplitItemViewSettupDialog::slotOk()
     m_view->setPrintingOptions( m_headerfooter->options() );
 }
 
-KPageWidgetItem *SplitItemViewSettupDialog::insertWidget( int index, QWidget *widget, const QString &name, const QString &header )
+KFakePageWidgetItem *SplitItemViewSettupDialog::insertWidget( int index, QWidget *widget, const QString &name, const QString &header )
 {
-    KPageWidgetItem *before = m_pageList.value( index );
-    KPageWidgetItem *page = new KPageWidgetItem( widget, name );
+    KFakePageWidgetItem *before = m_pageList.value( index );
+    KFakePageWidgetItem *page = new KFakePageWidgetItem( widget, name );
     page->setHeader( header );
     if ( before ) {
         insertPage( before, page );

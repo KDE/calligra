@@ -610,7 +610,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     // General
     KVBox *vbox = new KVBox();
-    KPageWidgetItem *page = new KPageWidgetItem(vbox, i18n("General"));
+    KFakePageWidgetItem *page = new KFakePageWidgetItem(vbox, i18n("General"));
     page->setHeader(i18n("General"));
     page->setIcon(koIcon("configure"));
     addPage(page);
@@ -618,7 +618,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     // Display
     vbox = new KVBox();
-    page = new KPageWidgetItem(vbox, i18n("Display"));
+    page = new KFakePageWidgetItem(vbox, i18n("Display"));
     page->setHeader(i18n("Display"));
     page->setIcon(koIcon("preferences-desktop-display"));
     addPage(page);
@@ -626,7 +626,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     // Color
     vbox = new KVBox();
-    page = new KPageWidgetItem(vbox, i18n("Color Management"));
+    page = new KFakePageWidgetItem(vbox, i18n("Color Management"));
     page->setHeader(i18n("Color"));
     page->setIcon(koIcon("preferences-desktop-color"));
     addPage(page);
@@ -635,7 +635,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     // Performance
 #if 0
     vbox = new KVBox();
-    page = new KPageWidgetItem(vbox, i18n("Performance"));
+    page = new KFakePageWidgetItem(vbox, i18n("Performance"));
     page->setHeader(i18n("Performance"));
     page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
@@ -644,7 +644,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     // Grid
     vbox = new KVBox();
-    page = new KPageWidgetItem(vbox, i18n("Grid"));
+    page = new KFakePageWidgetItem(vbox, i18n("Grid"));
     page->setHeader(i18n("Grid"));
     page->setIcon(koIcon("grid"));
     addPage(page);
@@ -652,7 +652,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     // Tablet
     vbox = new KVBox();
-    page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
+    page = new KFakePageWidgetItem(vbox, i18n("Tablet settings"));
     page->setHeader(i18n("Tablet"));
     page->setIcon(koIcon("input-tablet"));
     addPage(page);
@@ -661,7 +661,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     // full-screen mode
     vbox = new KVBox();
-    page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
+    page = new KFakePageWidgetItem(vbox, i18n("Canvas-only settings"));
     page->setHeader(i18n("Canvas-only"));
     page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
@@ -688,7 +688,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
         KisPreferenceSet* preferenceSet = preferenceSetFactory->createPreferenceSet();
         vbox = new KVBox();
-        page = new KPageWidgetItem(vbox, preferenceSet->name());
+        page = new KFakePageWidgetItem(vbox, preferenceSet->name());
         page->setHeader(preferenceSet->header());
         page->setIcon(preferenceSet->icon());
         addPage(page);

@@ -45,12 +45,12 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     Q_ASSERT(page.isValid());
 
     m_columns = new KWDocumentColumns(this, m_page.pageStyle().columns());
-    KPageWidgetItem *columnsPage = addPage(m_columns, i18n("Columns"));
+    KFakePageWidgetItem *columnsPage = addPage(m_columns, i18n("Columns"));
 
     QWidget *pageStyleWidget = new QWidget(this);
     QHBoxLayout *pageStyleLayout = new QHBoxLayout(pageStyleWidget);
     pageStyleLayout->setMargin(0);
-    KPageWidgetItem *stylePage = addPage(pageStyleWidget, i18n("Style"));
+    KFakePageWidgetItem *stylePage = addPage(pageStyleWidget, i18n("Style"));
     m_pageStylesView = new QListWidget(this);
     pageStyleLayout->addWidget(m_pageStylesView, 1);
     connect(m_pageStylesView, SIGNAL(currentRowChanged(int)), this, SLOT(pageStyleCurrentRowChanged(int)));
@@ -63,7 +63,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     connect(m_deletePageStyleButton, SIGNAL(clicked()), this, SLOT(pageStyleDeleteClicked()));
     pageStyleLayout2->addWidget(m_deletePageStyleButton);
     pageStyleLayout2->addStretch();
-    foreach(KPageWidgetItem *item, QList<KPageWidgetItem*>() << columnsPage << stylePage)
+    foreach(KFakePageWidgetItem *item, QList<KFakePageWidgetItem*>() << columnsPage << stylePage)
         m_pages[item->name()] = item;
 
     reloadPageStyles();
@@ -127,7 +127,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     connect(this, SIGNAL(unitChanged(KoUnit)), SLOT(setDocumentUnit(KoUnit)));
 }
 
-KPageWidgetItem* KWPageSettingsDialog::pageItem(const QString &name) const
+KFakePageWidgetItem* KWPageSettingsDialog::pageItem(const QString &name) const
 {
     return m_pages.value(name);
 }

@@ -75,7 +75,7 @@ class KPLATOUI_EXPORT ItemViewSettupDialog : public KoPageDialog
 public:
     explicit ItemViewSettupDialog( ViewBase *view, TreeViewBase *treeview, bool includeColumn0 = false, QWidget *parent = 0 );
 
-    KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
+    KFakePageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
     void addPrintingOptions();
 
 protected slots:
@@ -86,7 +86,7 @@ protected:
     TreeViewBase *m_treeview;
     KoPageLayoutWidget *m_pagelayout;
     PrintingHeaderFooter *m_headerfooter;
-    QList<KPageWidgetItem*> m_pageList;
+    QList<KFakePageWidgetItem*> m_pageList;
     ItemViewSettup *m_panel;
 };
 
@@ -96,7 +96,7 @@ class KPLATOUI_EXPORT SplitItemViewSettupDialog : public KoPageDialog
 public:
     explicit SplitItemViewSettupDialog( ViewBase *view, DoubleTreeViewBase *treeview, QWidget *parent = 0 );
 
-    KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
+    KFakePageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
     void addPrintingOptions();
 
 protected slots:
@@ -105,7 +105,7 @@ protected slots:
 private:
     ViewBase *m_view;
     DoubleTreeViewBase *m_treeview;
-    QList<KPageWidgetItem*> m_pageList;
+    QList<KFakePageWidgetItem*> m_pageList;
     ItemViewSettup *m_page1;
     ItemViewSettup *m_page2;
     KoPageLayoutWidget *m_pagelayout;

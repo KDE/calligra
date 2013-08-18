@@ -6,10 +6,10 @@
 #include <QString>
 #include <kicon.h>
 
-class KPageWidgetItem : public QObject
+class KFakePageWidgetItem : public QObject
 {
 public:
-    KPageWidgetItem(QWidget *widget, const QString &title = QString()) : m_widget(widget), m_title(title) {}
+    KFakePageWidgetItem(QWidget *widget, const QString &title = QString()) : m_widget(widget), m_title(title) {}
     QWidget* widget() const { return m_widget; }
     QString name() const { return m_title; }
     QString header() const { return m_title; }

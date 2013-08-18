@@ -1984,7 +1984,7 @@ DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWid
     m_headerfooter->setOptions( view->printingOptions() );
     tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
 
-    KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
+    KFakePageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
     page->setHeader( i18n( "Printing Options" ) );
 
     connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));

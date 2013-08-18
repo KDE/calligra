@@ -694,7 +694,7 @@ void KWView::formatPage()
         return;
     KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_document, m_currentPage);
     if (!m_lastPageSettingsTab.isEmpty()) {
-        KPageWidgetItem *item = dia->pageItem(m_lastPageSettingsTab);
+        KFakePageWidgetItem *item = dia->pageItem(m_lastPageSettingsTab);
         if (item)
             dia->setCurrentPage(item);
     }

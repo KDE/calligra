@@ -754,7 +754,7 @@ void CellFormatDialog::init()
     if (m_style) {
         generalPage = new GeneralTab(this, this);
 
-        KPageWidgetItem* generalitem = addPage(generalPage, i18n("&General"));
+        KFakePageWidgetItem* generalitem = addPage(generalPage, i18n("&General"));
         //generalitem->setHeader( i18n( "&General" ) );
         Q_UNUSED(generalitem);
     }

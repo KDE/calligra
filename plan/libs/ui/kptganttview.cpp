@@ -131,7 +131,7 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttIte
     m_gantt( gantt )
 {
     GanttChartDisplayOptionsPanel *panel = new GanttChartDisplayOptionsPanel( delegate );
-    /*KPageWidgetItem *page = */insertWidget( 1, panel, i18n( "Chart" ), i18n( "Gantt Chart Settings" ) );
+    /*KFakePageWidgetItem *page = */insertWidget( 1, panel, i18n( "Chart" ), i18n( "Gantt Chart Settings" ) );
     QTabWidget *tab = new QTabWidget();
     QWidget *w = ViewBase::createPageLayoutWidget( view );
     tab->addTab( w, w->windowTitle() );
@@ -141,7 +141,7 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttIte
     m_printingoptions = new GanttPrintingOptionsWidget( this );
     m_printingoptions->setOptions( gantt->printingOptions() );
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
-    /*KPageWidgetItem *page = */insertWidget( 2, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    /*KFakePageWidgetItem *page = */insertWidget( 2, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 
     connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
     connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
@@ -822,7 +822,7 @@ MilestoneGanttViewSettingsDialog::MilestoneGanttViewSettingsDialog( GanttViewBas
     m_printingoptions = new GanttPrintingOptionsWidget( this );
     m_printingoptions->setOptions( gantt->printingOptions() );
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
-    /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    /*KFakePageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 
     connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
 }
@@ -1088,7 +1088,7 @@ ResourceAppointmentsGanttViewSettingsDialog::ResourceAppointmentsGanttViewSettin
     tab->addTab( w, w->windowTitle() );
     m_pagelayout = w->findChild<KoPageLayoutWidget*>();
     Q_ASSERT( m_pagelayout );
-    /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+    /*KFakePageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 }
 
 //------------------------------------------

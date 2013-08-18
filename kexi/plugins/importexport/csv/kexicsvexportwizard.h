@@ -35,7 +35,7 @@ class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiCharacterEncodingComboBox;
-class KPageWidgetItem;
+class KFakePageWidgetItem;
 namespace KexiDB
 {
 class TableOrQuerySchema;
@@ -60,7 +60,7 @@ protected slots:
     virtual void done(int result);
     void slotShowOptionsButtonClicked();
     void slotDefaultsButtonClicked();
-    void slotCurrentPageChanged(KPageWidgetItem*, KPageWidgetItem*);
+    void slotCurrentPageChanged(KFakePageWidgetItem*, KFakePageWidgetItem*);
 
 protected:
 
@@ -96,8 +96,8 @@ protected:
 //  int m_itemId;
     KexiFileWidget* m_fileSaveWidget;
     QWidget* m_exportOptionsWidget;
-    KPageWidgetItem *m_fileSavePage;
-    KPageWidgetItem *m_exportOptionsPage;
+    KFakePageWidgetItem *m_fileSavePage;
+    KFakePageWidgetItem *m_exportOptionsPage;
     KPushButton *m_showOptionsButton;
     KPushButton *m_defaultsBtn;
     QGroupBox* m_exportOptionsSection;

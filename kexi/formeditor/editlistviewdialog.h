@@ -85,7 +85,7 @@ protected:
     enum Buttons { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
     KoProperty::EditorView  *m_editor;
     KoProperty::Set  *m_propSet;
-    KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
+    KFakePageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
     K3ListBox  *m_listbox;
     K3ListView  *m_listview;
     QHash<Buttons, QToolButton*>  m_buttons;

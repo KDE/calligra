@@ -41,7 +41,7 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
     setDefaultButton(KDialog::Ok);
 
     m_miscPage = new KoConfigMiscPage(parent->koDocument(), parent->canvasBase()->shapeController()->resourceManager());
-    KPageWidgetItem *item = addPage(m_miscPage, i18n("Misc"));
+    KFakePageWidgetItem *item = addPage(m_miscPage, i18n("Misc"));
     item->setHeader(i18n("Misc"));
     item->setIcon(koIcon("preferences-other"));
 

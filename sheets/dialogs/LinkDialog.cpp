@@ -64,7 +64,7 @@ public:
     QWidget* cellPage;
     QLineEdit* cellText;
     KComboBox* cellLink;
-    KPageWidgetItem* p1, *p2, *p3, *p4;
+    KFakePageWidgetItem* p1, *p2, *p3, *p4;
 };
 
 LinkDialog::LinkDialog(QWidget* parent, Selection* selection)

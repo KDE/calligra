@@ -46,7 +46,7 @@ class KexiProjectSet;
 class KexiDBTitlePage;
 class KexiDBDriverComboBox;
 class KexiPrjTypeSelector;
-class KPageWidgetItem;
+class KFakePageWidgetItem;
 
 namespace Kexi
 {
@@ -81,7 +81,7 @@ public slots:
 protected slots:
     virtual void next();
     virtual void back();
-    void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);
+    void slot_currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*);
     virtual void accept();
     virtual void reject();
     void helpClicked();

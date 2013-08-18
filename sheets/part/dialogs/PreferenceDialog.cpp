@@ -71,10 +71,10 @@ class PreferenceDialog::Private
 {
 public:
     View* view;
-    KPageWidgetItem* page2;
-    KPageWidgetItem* page3;
-    KPageWidgetItem* page4;
-    KPageWidgetItem* pluginPage;
+    KFakePageWidgetItem* page2;
+    KFakePageWidgetItem* page3;
+    KFakePageWidgetItem* page4;
+    KFakePageWidgetItem* pluginPage;
 
     // Interface Options
     Ui::InterfaceOptionsWidget interfaceOptions;
@@ -313,12 +313,12 @@ PreferenceDialog::PreferenceDialog(View* view)
     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
 
     QWidget* widget = 0;
-    KPageWidgetItem* page = 0;
+    KFakePageWidgetItem* page = 0;
 
     // Interface Options Widget
     widget = new QWidget(this);
     d->interfaceOptions.setupUi(widget);
-    page = new KPageWidgetItem(widget, i18n("Interface"));
+    page = new KFakePageWidgetItem(widget, i18n("Interface"));
     page->setIcon(koIcon("preferences-desktop-theme"));
     addPage(page);
     d->page2 = page;
@@ -351,7 +351,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     // Open/Save Options Widget
     widget = new QWidget(this);
     d->fileOptions.setupUi(widget);
-    page = new KPageWidgetItem(widget, i18n("Open/Save"));
+    page = new KFakePageWidgetItem(widget, i18n("Open/Save"));
     page->setIcon(koIcon("document-save"));
     addPage(page);
     d->page3 = page;
@@ -369,7 +369,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
                                   i18n("Tools"), "Tool");
     d->pluginSelector->load();
-    page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
+    page = new KFakePageWidgetItem(d->pluginSelector, i18n("Plugins"));
     page->setIcon(koIcon("preferences-plugin"));
     addPage(page);
     d->pluginPage = page;
@@ -377,14 +377,14 @@ PreferenceDialog::PreferenceDialog(View* view)
     // Spell Checker Options
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
     d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
-    page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
+    page = new KFakePageWidgetItem(d->spellCheckPage, i18n("Spelling"));
     page->setIcon(koIcon("tools-check-spelling"));
     page->setHeader(i18n("Spell Checker Behavior"));
     addPage(page);
     d->page4 = page;
 
     d->authorPage = new KoConfigAuthorPage();
-    page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
+    page = new KFakePageWidgetItem(d->spellCheckPage, i18n("Spelling"));
     page = addPage(d->authorPage, i18nc("@title:tab Author page", "Author"));
     page->setHeader(i18n("Author"));
     page->setIcon(koIcon("user-identity"));

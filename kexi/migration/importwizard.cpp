@@ -82,7 +82,7 @@ public:
       *dstTypePageWidget, *dstPageWidget, *importTypePageWidget,
       *importingPageWidget, *finishPageWidget;
 
-    KPageWidgetItem *introPageItem, *srcConnPageItem, *srcDBPageItem,
+    KFakePageWidgetItem *introPageItem, *srcConnPageItem, *srcDBPageItem,
       *dstTypePageItem, *dstPageItem, *importTypePageItem,
       *importingPageItem, *finishPageItem;
 
@@ -91,7 +91,7 @@ public:
     QRadioButton *importTypeStructureAndDataCheckBox;
     QRadioButton *importTypeStructureOnlyCheckBox;
     KexiDBTitlePage* dstTitlePageWidget;
-    KPageWidgetItem *dstTitlePageItem;
+    KFakePageWidgetItem *dstTitlePageItem;
 
     KComboBox *srcTypeCombo;
     KexiDBDriverComboBox *dstServerTypeCombo;
@@ -143,7 +143,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
     setupImporting();
     setupFinish();
 
-    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
+    connect(this, SIGNAL(currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)), this, SLOT(slot_currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)));
     connect(this, SIGNAL(helpClicked()), this, SLOT(helpClicked()));
 
     if (d->predefinedConnectionData) {
@@ -247,7 +247,7 @@ void ImportWizard::setupIntro()
                       + i18n("Click \"Next\" button to continue or \"Cancel\" button to exit this wizard."));
     vbox->addWidget(lblIntro);
 
-    d->introPageItem = new KPageWidgetItem(d->introPageWidget, i18n("Welcome to the Database Importing Wizard"));
+    d->introPageItem = new KFakePageWidgetItem(d->introPageWidget, i18n("Welcome to the Database Importing Wizard"));
     addPage(d->introPageItem);
 }
 
@@ -276,7 +276,7 @@ void ImportWizard::setupSrcConn()
 // d->srcConn->hideHelpers();
     vbox->addWidget(d->srcConn);
 
-    d->srcConnPageItem = new KPageWidgetItem(d->srcConnPageWidget, i18n("Select Location for Source Database"));
+    d->srcConnPageItem = new KFakePageWidgetItem(d->srcConnPageWidget, i18n("Select Location for Source Database"));
     addPage(d->srcConnPageItem);
 }
 
@@ -288,7 +288,7 @@ void ImportWizard::setupSrcDB()
     d->srcDBPageWidget = new QWidget(this);
     d->srcDBName = NULL;
 
-    d->srcDBPageItem = new KPageWidgetItem(d->srcDBPageWidget, i18n("Select Source Database"));
+    d->srcDBPageItem = new KFakePageWidgetItem(d->srcDBPageWidget, i18n("Select Source Database"));
     addPage(d->srcDBPageItem);
 }
 
@@ -328,7 +328,7 @@ void ImportWizard::setupDstType()
 //! @todo hardcoded: find a way to preselect default engine item
     //d->dstTypeCombo->setCurrentText("SQLite3");
 
-    d->dstTypePageItem = new KPageWidgetItem(d->dstTypePageWidget, i18n("Select Destination Database Type"));
+    d->dstTypePageItem = new KFakePageWidgetItem(d->dstTypePageWidget, i18n("Select Destination Database Type"));
     addPage(d->dstTypePageItem);
 }
 
@@ -341,7 +341,7 @@ void ImportWizard::setupDstTitle()
     d->dstTitlePageWidget->updateGeometry();
     d->dstNewDBNameLineEdit = d->dstTitlePageWidget->le_title;
 
-    d->dstTitlePageItem = new KPageWidgetItem(d->dstTitlePageWidget, i18n("Select Destination Database Project's Title"));
+    d->dstTitlePageItem = new KFakePageWidgetItem(d->dstTitlePageWidget, i18n("Select Destination Database Project's Title"));
     addPage(d->dstTitlePageItem);
 }
 
@@ -376,7 +376,7 @@ void ImportWizard::setupDst()
     //js dstNewDBName = new QLineEdit(dstControls);
     //   dstNewDBName->setText(i18n("Enter new database name here"));
 
-    d->dstPageItem = new KPageWidgetItem(d->dstPageWidget, i18n("Select Location for Destination Database"));
+    d->dstPageItem = new KFakePageWidgetItem(d->dstPageWidget, i18n("Select Location for Destination Database"));
     addPage(d->dstPageItem);
 }
 
@@ -402,7 +402,7 @@ void ImportWizard::setupImportType()
     importTypeGroupBoxLyr->addStretch(1);
     d->importTypeGroupBox->setLayout(importTypeGroupBoxLyr);
 
-    d->importTypePageItem = new KPageWidgetItem(d->importTypePageWidget, i18n("Select Type of Import"));
+    d->importTypePageItem = new KFakePageWidgetItem(d->importTypePageWidget, i18n("Select Type of Import"));
     addPage(d->importTypePageItem);
 }
 
@@ -449,7 +449,7 @@ void ImportWizard::setupImporting()
     vbox->addStretch(2);
     d->importingPageWidget->show();
 
-    d->importingPageItem = new KPageWidgetItem(d->importingPageWidget, i18n("Importing"));
+    d->importingPageItem = new KFakePageWidgetItem(d->importingPageWidget, i18n("Importing"));
     addPage(d->importingPageItem);
 }
 
@@ -473,7 +473,7 @@ void ImportWizard::setupFinish()
     vbox->addWidget(d->openImportedProjectCheckBox);
     vbox->addStretch(1);
 
-    d->finishPageItem = new KPageWidgetItem(d->finishPageWidget, i18n("Success"));
+    d->finishPageItem = new KFakePageWidgetItem(d->finishPageWidget, i18n("Success"));
     addPage(d->finishPageItem);
 }
 
@@ -997,7 +997,7 @@ void ImportWizard::back()
     KAssistantDialog::back();
 }
 
-void ImportWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWidgetItem* prevPage)
+void ImportWizard::slot_currentPageChanged(KFakePageWidgetItem* curPage,KFakePageWidgetItem* prevPage)
 {
     Q_UNUSED(prevPage);
     if (curPage == d->introPageItem) {

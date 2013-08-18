@@ -93,8 +93,8 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
     d->m_dlg = new KoDocumentInfoDlg(props, d->m_info);
     d->m_dlg->setReadOnly(true);
     // "Steal" the pages from the document info dialog
-    Q_FOREACH(KPageWidgetItem* page, d->m_dlg->pages()) {
-        KPageWidgetItem* myPage = new KPageWidgetItem(page->widget(), page->header());
+    Q_FOREACH(KFakePageWidgetItem* page, d->m_dlg->pages()) {
+        KFakePageWidgetItem* myPage = new KFakePageWidgetItem(page->widget(), page->header());
         myPage->setIcon(page->icon());
         props->addPage(myPage);
     }

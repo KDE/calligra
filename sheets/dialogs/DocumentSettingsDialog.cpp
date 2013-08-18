@@ -57,7 +57,7 @@ using namespace Calligra::Sheets;
 class DocumentSettingsDialog::Private
 {
 public:
-    KPageWidgetItem* page1;
+    KFakePageWidgetItem* page1;
 
     // Locale Options
     parameterLocale* localePage;

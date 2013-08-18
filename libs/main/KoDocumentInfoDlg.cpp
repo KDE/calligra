@@ -55,7 +55,7 @@ public:
     ~KoDocumentInfoDlgPrivate() {}
 
     KoDocumentInfo* info;
-    QList<KPageWidgetItem*> pages;
+    QList<KFakePageWidgetItem*> pages;
     Ui::KoDocumentInfoAboutWidget* aboutUi;
     Ui::KoDocumentInfoAuthorWidget* authorUi;
 
@@ -89,7 +89,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->aboutUi->cbLanguage->addItems(KoGlobal::listOfLanguages());
     d->aboutUi->cbLanguage->setCurrentIndex(-1);
 
-    KPageWidgetItem *page = new KPageWidgetItem(infodlg, i18n("General"));
+    KFakePageWidgetItem *page = new KFakePageWidgetItem(infodlg, i18n("General"));
     page->setHeader(i18n("General"));
 
     // Ugly hack, the mimetype should be a parameter, instead
@@ -115,7 +115,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->authorUi = new Ui::KoDocumentInfoAuthorWidget();
     QWidget *authordlg = new QWidget();
     d->authorUi->setupUi(authordlg);
-    page = new KPageWidgetItem(authordlg, i18n("Author"));
+    page = new KFakePageWidgetItem(authordlg, i18n("Author"));
     page->setHeader(i18n("Last saved by"));
     page->setIcon(koIcon("user-identity"));
     addPage(page);
@@ -140,7 +140,7 @@ void KoDocumentInfoDlg::slotButtonClicked(int button)
     emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
     switch (button) {
     case Ok:
-        foreach(KPageWidgetItem* item, d->pages) {
+        foreach(KFakePageWidgetItem* item, d->pages) {
             KoPageWidgetItem *page = dynamic_cast<KoPageWidgetItem*>(item);
             if (page) {
                 if (page->shouldDialogCloseBeVetoed()) {
@@ -251,7 +251,7 @@ void KoDocumentInfoDlg::initAuthorTab()
 void KoDocumentInfoDlg::slotApply()
 {
     saveAboutData();
-    foreach(KPageWidgetItem* item, d->pages) {
+    foreach(KFakePageWidgetItem* item, d->pages) {
         KoPageWidgetItem *page = dynamic_cast<KoPageWidgetItem*>(item);
         if (page) {
             page->apply();
@@ -416,7 +416,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
     d->documentSaved = !doc->url().isEmpty();
 }
 
-QList<KPageWidgetItem*> KoDocumentInfoDlg::pages() const
+QList<KFakePageWidgetItem*> KoDocumentInfoDlg::pages() const
 {
     return d->pages;
 }
@@ -425,7 +425,7 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
 {
     d->aboutUi->meComments->setReadOnly(ro);
 
-    Q_FOREACH(KPageWidgetItem* page, d->pages) {
+    Q_FOREACH(KFakePageWidgetItem* page, d->pages) {
         Q_FOREACH(QLineEdit* le, page->widget()->findChildren<QLineEdit *>()) {
             le->setReadOnly(ro);
         }
@@ -437,7 +437,7 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
 
 void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
 {
-    KPageWidgetItem * page = new KPageWidgetItem(item->widget(), item->name());
+    KFakePageWidgetItem * page = new KFakePageWidgetItem(item->widget(), item->name());
     page->setHeader(item->name());
     page->setIcon(koIcon(item->icon()));
 

@@ -455,8 +455,8 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     connect(this, SIGNAL(helpClicked()), this, SLOT(optionsButtonClicked()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(import()));
 
-    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
-            this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
+    connect(this, SIGNAL(currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)),
+            this, SLOT(slotCurrentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)));
 
     installRecursiveEventFilter(this, this);
     if ( m_mode == Clipboard )
@@ -472,7 +472,7 @@ KexiCSVImportDialog::~KexiCSVImportDialog()
 
 void KexiCSVImportDialog::next()
 {
-    KPageWidgetItem *curPage = currentPage();
+    KFakePageWidgetItem *curPage = currentPage();
 
     if (curPage == m_openFilePage) {
         m_fname = m_openFileWidget->highlightedFile();
@@ -555,7 +555,7 @@ void KexiCSVImportDialog::slotShowSchema(KexiPart::Item *item)
     m_fieldsListView->setModel(m_fieldsListModel);
 }
 
-void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWidgetItem *prev)
+void KexiCSVImportDialog::slotCurrentPageChanged(KFakePageWidgetItem *page, KFakePageWidgetItem *prev)
 {
     enableButton(KDialog::User2, (page == m_saveMethodPage ? false : true));
     showButton(KDialog::Apply, (page == m_importPage ? true : false));
@@ -656,7 +656,7 @@ void KexiCSVImportDialog::createFileOpenPage()
     m_openFileWidget->setAdditionalFilters(csvMimeTypes().toSet());
     m_openFileWidget->setDefaultExtension("csv");
     connect(m_openFileWidget, SIGNAL(fileSelected(KUrl)), this, SLOT(next()));
-    m_openFilePage = new KPageWidgetItem(m_openFileWidget, i18n("Select file name for import"));
+    m_openFilePage = new KFakePageWidgetItem(m_openFileWidget, i18n("Select file name for import"));
     addPage(m_openFilePage);
 }
 
@@ -758,7 +758,7 @@ void KexiCSVImportDialog::createOptionsPage()
     spolicy.setVerticalStretch(1);
     m_tableView->setSizePolicy(spolicy);
 
-    m_optionsPage=new KPageWidgetItem(m_optionsWidget, i18n("Import Options"));
+    m_optionsPage=new KFakePageWidgetItem(m_optionsWidget, i18n("Import Options"));
     addPage(m_optionsPage);
 }
 
@@ -782,7 +782,7 @@ void KexiCSVImportDialog::createImportMethodPage()
     l->addItem(hSpacer, 1, 1, 1, 1);
     l->addItem(vSpacer, 2, 0, 1, 1);
 
-    m_saveMethodPage = new KPageWidgetItem(m_saveMethodWidget, i18n("Choose Method of Saving Imported Data"));
+    m_saveMethodPage = new KFakePageWidgetItem(m_saveMethodWidget, i18n("Choose Method of Saving Imported Data"));
     addPage(m_saveMethodPage);
 
     connect(m_newTableButton, SIGNAL(clicked()), this, SLOT(slotCommandLinkClicked()));
@@ -842,7 +842,7 @@ void KexiCSVImportDialog::createTableNamePage()
 
     page2->addWidget(tableDetailsWidget);
     m_tableNameWidget->addWidget(page2);
-    m_tableNamePage = new KPageWidgetItem(m_tableNameWidget, i18nc("@label", "Choose Name of Destination Table"));
+    m_tableNamePage = new KFakePageWidgetItem(m_tableNameWidget, i18nc("@label", "Choose Name of Destination Table"));
     addPage(m_tableNamePage);
 }
 
@@ -869,7 +869,7 @@ void KexiCSVImportDialog::createImportPage()
     l->addStretch(1);
     m_importingProgressBar->hide();
     m_importProgressLabel->hide();
-    m_importPage = new KPageWidgetItem(m_importWidget, i18n("Importing..."));
+    m_importPage = new KFakePageWidgetItem(m_importWidget, i18n("Importing..."));
     addPage(m_importPage);
 }
 

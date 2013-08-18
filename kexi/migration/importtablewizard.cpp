@@ -73,7 +73,7 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     setupFinishPage();
     setValid(m_srcConnPageItem, false);
     
-    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
+    connect(this, SIGNAL(currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)), this, SLOT(slot_currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)));
     //! @todo Change this to message prompt when we move to non-dialog wizard.
     connect(m_srcConnSel, SIGNAL(connectionSelected(bool)), this, SLOT(slotConnPageItemSelected(bool)));
 }
@@ -142,7 +142,7 @@ void ImportTableWizard::setupIntroPage()
     + i18n("Click \"Next\" button to continue or \"Cancel\" button to exit this wizard."));
     vbox->addWidget(lblIntro);
     
-    m_introPageItem = new KPageWidgetItem(m_introPageWidget, i18n("Welcome to the Table Importing Wizard"));
+    m_introPageItem = new KFakePageWidgetItem(m_introPageWidget, i18n("Welcome to the Table Importing Wizard"));
     addPage(m_introPageItem);
 }
 
@@ -173,7 +173,7 @@ void ImportTableWizard::setupSrcConn()
     // m_srcConn->hideHelpers();
     vbox->addWidget(m_srcConnSel);
 
-    m_srcConnPageItem = new KPageWidgetItem(m_srcConnPageWidget, i18n("Select Location for Source Database"));
+    m_srcConnPageItem = new KFakePageWidgetItem(m_srcConnPageWidget, i18n("Select Location for Source Database"));
     addPage(m_srcConnPageItem);
 }
 
@@ -183,7 +183,7 @@ void ImportTableWizard::setupSrcDB()
     m_srcDBPageWidget = new QWidget(this);
     m_srcDBName = NULL;
     
-    m_srcDBPageItem = new KPageWidgetItem(m_srcDBPageWidget, i18n("Select Source Database"));
+    m_srcDBPageItem = new KFakePageWidgetItem(m_srcDBPageWidget, i18n("Select Source Database"));
     addPage(m_srcDBPageItem);
 }
 
@@ -200,7 +200,7 @@ void ImportTableWizard::setupTableSelectPage() {
     
     vbox->addWidget(m_tableListWidget);
     
-    m_tablesPageItem = new KPageWidgetItem(m_tablesPageWidget, i18n("Select the Table to Import"));
+    m_tablesPageItem = new KFakePageWidgetItem(m_tablesPageWidget, i18n("Select the Table to Import"));
     addPage(m_tablesPageItem);
 }
 
@@ -242,7 +242,7 @@ void ImportTableWizard::setupImportingPage()
     vbox->addStretch(2);
     m_importingPageWidget->show();
 
-    m_importingPageItem = new KPageWidgetItem(m_importingPageWidget, i18n("Importing"));
+    m_importingPageItem = new KFakePageWidgetItem(m_importingPageWidget, i18n("Importing"));
     addPage(m_importingPageItem);
 }
 
@@ -258,7 +258,7 @@ void ImportTableWizard::setupAlterTablePage()
     vbox->addWidget(m_alterSchemaWidget);
     m_alterTablePageWidget->show();
     
-    m_alterTablePageItem = new KPageWidgetItem(m_alterTablePageWidget, i18n("Alter the Detected Design"));
+    m_alterTablePageItem = new KFakePageWidgetItem(m_alterTablePageWidget, i18n("Alter the Detected Design"));
     addPage(m_alterTablePageItem);
 }
 
@@ -275,11 +275,11 @@ void ImportTableWizard::setupFinishPage()
     vbox->addWidget(m_finishLbl);
     vbox->addStretch(1);
 
-    m_finishPageItem = new KPageWidgetItem(m_finishPageWidget, i18n("Success"));
+    m_finishPageItem = new KFakePageWidgetItem(m_finishPageWidget, i18n("Success"));
     addPage(m_finishPageItem);
 }
 
-void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWidgetItem* prevPage)
+void ImportTableWizard::slot_currentPageChanged(KFakePageWidgetItem* curPage,KFakePageWidgetItem* prevPage)
 {
     Q_UNUSED(prevPage);
     if (curPage == m_introPageItem) {

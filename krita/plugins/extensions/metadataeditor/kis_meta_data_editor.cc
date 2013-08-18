@@ -127,7 +127,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         }
         xmlFile.close();
 
-        KPageWidgetItem *page = new KPageWidgetItem(widget, pageName);
+        KFakePageWidgetItem *page = new KFakePageWidgetItem(widget, pageName);
         if (!iconName.isEmpty()) {
             page->setIcon(KIcon(iconName));
         }
@@ -140,7 +140,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     tableView->setModel(model);
     tableView->verticalHeader()->setVisible(false);
     tableView->resizeColumnsToContents();
-    KPageWidgetItem *page = new KPageWidgetItem(tableView, i18n("List"));
+    KFakePageWidgetItem *page = new KFakePageWidgetItem(tableView, i18n("List"));
     page->setIcon(koIcon("format-list-unordered"));
     addPage(page);
 }

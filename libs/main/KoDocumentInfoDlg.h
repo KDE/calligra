@@ -25,7 +25,7 @@
 
 class KoDocumentInfo;
 class KoDocumentRdfBase;
-class KPageWidgetItem;
+class KFakePageWidgetItem;
 class KoPageWidgetItem;
 
 #include "komain_export.h"
@@ -63,7 +63,7 @@ public:
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
 
-    QList<KPageWidgetItem*> pages() const;
+    QList<KFakePageWidgetItem*> pages() const;
 
     /** Returns true if the document was saved when the dialog was closed */
     bool isDocumentSaved();

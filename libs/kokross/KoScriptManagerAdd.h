@@ -26,7 +26,7 @@
 class KoScriptManagerAddWizard;
 
 class QRadioButton;
-class KPageWidgetItem;
+class KFakePageWidgetItem;
 class KFileWidget;
 
 namespace Kross {
@@ -177,7 +177,7 @@ private:
     friend class KoScriptManagerAddCollectionWidget;
 
     Kross::ActionCollection *m_collection;
-    KPageWidgetItem *m_typeItem, *m_fileItem, *m_scriptItem, *m_collectionItem;
+    KFakePageWidgetItem *m_typeItem, *m_fileItem, *m_scriptItem, *m_collectionItem;
     KoScriptManagerAddTypeWidget *m_typewidget;
     KoScriptManagerAddFileWidget *m_filewidget;
     KoScriptManagerAddScriptWidget *m_scriptwidget;

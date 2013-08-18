@@ -286,7 +286,7 @@ KoScriptManagerAddWizard::KoScriptManagerAddWizard(QWidget *parent, Kross::Actio
 
     resize(QSize(620, 460).expandedTo(minimumSizeHint()));
 
-    //connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slotUpdate()));
+    //connect(this, SIGNAL(currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)), this, SLOT(slotUpdate()));
     m_typewidget->slotUpdate();
     m_filewidget->slotUpdate();
     m_scriptwidget->slotUpdate();
@@ -306,7 +306,7 @@ bool KoScriptManagerAddWizard::invokeWidgetMethod(const char *member)
 {
     KPageWidget *pagewidget = pageWidget();
     Q_ASSERT(pagewidget);
-    KPageWidgetItem *item = pagewidget->currentPage();
+    KFakePageWidgetItem *item = pagewidget->currentPage();
     Q_ASSERT(item);
     bool ok = true;
     QMetaObject::invokeMethod(item->widget(), member, Q_RETURN_ARG(bool,ok));

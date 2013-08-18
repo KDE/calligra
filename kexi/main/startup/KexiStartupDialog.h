@@ -133,12 +133,12 @@ protected slots:
     virtual void slotOk();
 
     //! slot activated when one of the top-level tabs is shown
-    void slotCurrentPageChanged(KPageWidgetItem* current,
-                                KPageWidgetItem* before);
+    void slotCurrentPageChanged(KFakePageWidgetItem* current,
+                                KFakePageWidgetItem* before);
 
     //! slot activated when one of the subpages within templates tab is shown
-    void slotCurrentTemplatesubpageChanged(KPageWidgetItem* current,
-                                           KPageWidgetItem* before);
+    void slotCurrentTemplatesubpageChanged(KFakePageWidgetItem* current,
+                                           KFakePageWidgetItem* before);
     /*
       //! Any icon view item has been executed (dblclicked)
       void templateItemExecuted(Q3IconViewItem *item);
@@ -164,7 +164,7 @@ protected:
     virtual void showEvent(QShowEvent *e);
 
     //! helper: updates a state of dialog's OK button
-    void updateDialogOKButton(KPageWidgetItem *pageWidgetItem);
+    void updateDialogOKButton(KFakePageWidgetItem *pageWidgetItem);
 
     // //! internal reimplementation
     //int activePageIndex() const;

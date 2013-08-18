@@ -60,7 +60,7 @@ class KComboBox;
 class KIntSpinBox;
 class KProgressDialog;
 class QProgressBar;
-class KPageWidgetItem;
+class KFakePageWidgetItem;
 
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
@@ -138,15 +138,15 @@ private:
     KexiFileWidget *m_openFileWidget;
     QWidget *m_optionsWidget;
     QWidget *m_saveMethodWidget;
-    KPageWidgetItem *m_openFilePage;
-    KPageWidgetItem *m_optionsPage;
-    KPageWidgetItem *m_saveMethodPage;
-    KPageWidgetItem *m_chooseTablePage;
+    KFakePageWidgetItem *m_openFilePage;
+    KFakePageWidgetItem *m_optionsPage;
+    KFakePageWidgetItem *m_saveMethodPage;
+    KFakePageWidgetItem *m_chooseTablePage;
     KexiCommandLinkButton *m_newTableButton;
     KexiCommandLinkButton *m_existentTableButton;
 
     QStackedWidget *m_tableNameWidget;
-    KPageWidgetItem *m_tableNamePage;
+    KFakePageWidgetItem *m_tableNamePage;
     KexiNameWidget *m_newTableWidget;
     KexiProjectNavigator *m_tablesList;
     QTreeView *m_fieldsListView;
@@ -156,7 +156,7 @@ private:
     QLabel *m_colCountLabel;
 
     QWidget *m_importWidget;
-    KPageWidgetItem *m_importPage;
+    KFakePageWidgetItem *m_importPage;
     KexiCSVInfoLabel *m_fromLabel;
     KexiCSVInfoLabel *m_toLabel;
     QLabel *m_importProgressLabel;
@@ -301,7 +301,7 @@ private slots:
     void slot1stRowForFieldNamesChanged(int state);
     void optionsButtonClicked();
     void slotPrimaryKeyFieldToggled(bool on);
-    void slotCurrentPageChanged(KPageWidgetItem *page, KPageWidgetItem *prev);
+    void slotCurrentPageChanged(KFakePageWidgetItem *page, KFakePageWidgetItem *prev);
     void slotCommandLinkClicked();
     void slotShowSchema(KexiPart::Item *item);
     void import();

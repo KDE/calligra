@@ -29,7 +29,7 @@ class QPushButton;
 class QListWidget;
 class KWDocument;
 class KWDocumentColumns;
-class KPageWidgetItem;
+class KFakePageWidgetItem;
 
 /// A dialog to show the settings for one page and apply them afterwards.
 class KWPageSettingsDialog : public KoPageLayoutDialog
@@ -37,7 +37,7 @@ class KWPageSettingsDialog : public KoPageLayoutDialog
     Q_OBJECT
 public:
     explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, const KWPage &page);
-    KPageWidgetItem* pageItem(const QString &name) const;
+    KFakePageWidgetItem* pageItem(const QString &name) const;
 
 protected:
     void accept();
@@ -57,7 +57,7 @@ private:
     KWDocumentColumns *m_columns;
     QListWidget *m_pageStylesView;
     QPushButton *m_clonePageStyleButton, *m_deletePageStyleButton;
-    QMap<QString, KPageWidgetItem*> m_pages;
+    QMap<QString, KFakePageWidgetItem*> m_pages;
     QString m_prevSelectedPageStyle;
 
     void reloadPageStyles();

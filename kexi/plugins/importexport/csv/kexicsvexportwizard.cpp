@@ -119,10 +119,10 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         m_fileSaveWidget->setDefaultExtension("csv");
         m_fileSaveWidget->setLocationText(
             KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()));
-        m_fileSavePage = new KPageWidgetItem(m_fileSaveWidget, i18n("Enter Name of File You Want to Save Data To"));
+        m_fileSavePage = new KFakePageWidgetItem(m_fileSaveWidget, i18n("Enter Name of File You Want to Save Data To"));
         addPage(m_fileSavePage);
-        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
-                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
+        connect(this, SIGNAL(currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)),
+                this, SLOT(slotCurrentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)));
     }
 
     /* 2. Export options
@@ -236,7 +236,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_alwaysUseCheckBox->hide();
     // -</options section>
 
-    m_exportOptionsPage = new KPageWidgetItem(m_exportOptionsWidget, m_options.mode == KexiCSVExport::Clipboard ? i18n("Copying") : i18n("Exporting"));
+    m_exportOptionsPage = new KFakePageWidgetItem(m_exportOptionsWidget, m_options.mode == KexiCSVExport::Clipboard ? i18n("Copying") : i18n("Exporting"));
     addPage(m_exportOptionsPage);
 
     // load settings
@@ -279,7 +279,7 @@ bool KexiCSVExportWizard::cancelled() const
     return m_cancelled;
 }
 
-void KexiCSVExportWizard::slotCurrentPageChanged(KPageWidgetItem *page, KPageWidgetItem *prev)
+void KexiCSVExportWizard::slotCurrentPageChanged(KFakePageWidgetItem *page, KFakePageWidgetItem *prev)
 {
     Q_UNUSED(prev)
 

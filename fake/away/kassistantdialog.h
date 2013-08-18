@@ -8,7 +8,7 @@ class KAssistantDialog : public KoPageDialog
 public:
     KAssistantDialog(QWidget *parent=0, Qt::WFlags flags=0) : KoPageDialog(parent) {}
     virtual ~KAssistantDialog() {}
-    void setValid(KPageWidgetItem* page, bool enable) {Q_UNUSED(page); Q_UNUSED(enable);}
+    void setValid(KFakePageWidgetItem* page, bool enable) {Q_UNUSED(page); Q_UNUSED(enable);}
 
 };
 

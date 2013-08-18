@@ -75,7 +75,7 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( ViewBase *view, AccountsTree
     m_panel->ui_cumulative->setChecked( treeview->cumulative() );
     m_panel->ui_showBox->setCurrentIndex( treeview->showMode() );
 
-    KPageWidgetItem *page = addPage( m_panel, i18n( "General" ) );
+    KFakePageWidgetItem *page = addPage( m_panel, i18n( "General" ) );
     page->setHeader( i18n( "View Settings" ) );
 
     QTabWidget *tab = new QTabWidget();

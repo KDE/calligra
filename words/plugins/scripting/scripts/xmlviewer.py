@@ -99,7 +99,7 @@ class Dialog:
                 self.pages[path] = [typeName, None, widgets]
 
         self.currentPageChanged()
-        self.dialog.connect("currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)",self.currentPageChanged)
+        self.dialog.connect("currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*)",self.currentPageChanged)
         self.dialog.exec_loop()
 
     def __del__(self):

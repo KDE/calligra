@@ -2,13 +2,13 @@
 #define FAKE_KPAGEWIDGET_H
 
 #include <QTabWidget>
-#include <kpagewidgetitem.h>
+#include <kfakepagewidgetitem.h>
 
 class KPageWidget : public QTabWidget
 {
 public:
     KPageWidget(QWidget *parent = 0) : QTabWidget(parent) {}
-    void addPage(KPageWidgetItem *item) { m_tabWidget->addTab(item->widget(), item->header()); }
+    void addPage(KFakePageWidgetItem *item) { m_tabWidget->addTab(item->widget(), item->header()); }
 };
 
 #endif

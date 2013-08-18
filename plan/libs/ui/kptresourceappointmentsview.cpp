@@ -91,7 +91,7 @@ ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ViewBase
     m_view( view )
 {
     ResourceAppointmentsDisplayOptionsPanel *panel = new ResourceAppointmentsDisplayOptionsPanel( model );
-    KPageWidgetItem *page = addPage( panel, i18n( "General" ) );
+    KFakePageWidgetItem *page = addPage( panel, i18n( "General" ) );
     page->setHeader( i18n( "Resource Assignments View Settings" ) );
 
     QTabWidget *tab = new QTabWidget();

@@ -57,7 +57,7 @@ Q_OBJECT
         virtual void reject();
 
     protected slots:
-        void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);
+        void slot_currentPageChanged(KFakePageWidgetItem*,KFakePageWidgetItem*);
         
     private:
 
@@ -83,7 +83,7 @@ Q_OBJECT
         bool doImport();
         
         //Page Items
-        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem, *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem, *m_finishPageItem;
+        KFakePageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem, *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem, *m_finishPageItem;
         
         //Page Widgets
         QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget, *m_tablesPageWidget, *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;

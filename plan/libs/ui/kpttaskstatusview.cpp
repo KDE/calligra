@@ -418,7 +418,7 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( ViewBase *view, Task
     : SplitItemViewSettupDialog( view, treeview, parent )
 {
     TaskStatusViewSettingsPanel *panel = new TaskStatusViewSettingsPanel( treeview );
-    KPageWidgetItem *page = insertWidget( 0, panel, i18n( "General" ), i18n( "General Settings" ) );
+    KFakePageWidgetItem *page = insertWidget( 0, panel, i18n( "General" ), i18n( "General Settings" ) );
     setCurrentPage( page );
     //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
 
@@ -1360,7 +1360,7 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
     : ItemViewSettupDialog( view, treeview->treeView(), true, parent )
 {
     PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( treeview->chartView(), this );
-    KPageWidgetItem *page = insertWidget( 0, panel, i18n( "Chart" ), i18n( "Chart Settings" ) );
+    KFakePageWidgetItem *page = insertWidget( 0, panel, i18n( "Chart" ), i18n( "Chart Settings" ) );
     setCurrentPage( page );
     addPrintingOptions();
     //connect( panel, SIGNAL(changed(bool)), this, SLOT(enableButtonOk(bool)) );
@@ -1375,7 +1375,7 @@ ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base
     m_base( base )
 {
     PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( view, this );
-    KPageWidgetItem *page = new KPageWidgetItem( panel, i18n( "Chart" ) );
+    KFakePageWidgetItem *page = new KFakePageWidgetItem( panel, i18n( "Chart" ) );
     page->setHeader( i18n( "Chart Settings" ) );
     addPage( page );
 

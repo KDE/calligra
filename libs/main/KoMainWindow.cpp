@@ -1426,13 +1426,13 @@ public:
         m_fileWidget->setMimeFilter(QStringList() << "application/pdf");
         connect(m_fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
 
-        KPageWidgetItem *fileItem = new KPageWidgetItem(m_fileWidget, i18n( "File" ));
+        KFakePageWidgetItem *fileItem = new KFakePageWidgetItem(m_fileWidget, i18n( "File" ));
         fileItem->setIcon(koIcon("document-open"));
         addPage(fileItem);
 
         m_pageLayoutWidget = new KoPageLayoutWidget(this, pageLayout);
         m_pageLayoutWidget->showUnitchooser(false);
-        KPageWidgetItem *optionsItem = new KPageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
+        KFakePageWidgetItem *optionsItem = new KFakePageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
         optionsItem->setIcon(koIcon("configure"));
         addPage(optionsItem);
 
