@@ -106,10 +106,10 @@ target_link_libraries(XmlGui LINK_PUBLIC
     KCoreAddons
     KConfigCore
     KConfigWidgets
-    KIconThemes
-    KTextWidgets
-    SonnetUi
-    KWindowSystem
+#    KIconThemes
+#    KTextWidgets
+#    SonnetUi
+#    KWindowSystem
     ${XMLGUI_EXTRA_LIBS}
 )
 
