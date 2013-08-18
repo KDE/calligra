@@ -166,19 +166,19 @@ QList<QWidget *> KoToolBase::optionWidgets()
     return d->optionWidgets;
 }
 
-void KoToolBase::addAction(const QString &name, KAction *action)
+void KoToolBase::addAction(const QString &name, QAction *action)
 {
     Q_D(KoToolBase);
     d->actionCollection.insert(name, action);
 }
 
-QHash<QString, KAction*> KoToolBase::actions() const
+QHash<QString, QAction*> KoToolBase::actions() const
 {
     Q_D(const KoToolBase);
     return d->actionCollection;
 }
 
-KAction *KoToolBase::action(const QString &name) const
+QAction *KoToolBase::action(const QString &name) const
 {
     Q_D(const KoToolBase);
     return d->actionCollection.value(name);

@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kaction.h>
+#include <QAction>
 #include <QMenu>
 #include <kdialog.h>
 
@@ -152,7 +152,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     // -- setup local actions
     QList<QAction*> viewActions;
     QAction* a;
-    viewActions << (a = new KAction(koIcon("test_it"), i18n("Check Query"), this));
+    viewActions << (a = new QAction(koIcon("test_it"), i18n("Check Query"), this));
     a->setObjectName("querypart_check_query");
     a->setShortcut(Qt::Key_F9);
     a->setToolTip(i18n("Check Query"));

@@ -105,12 +105,12 @@ void KexiDataAwareView::initActions()
         << ac->action("data_save_row")
         << ac->action("data_cancel_row_changes");
 
-    KAction *a = new KAction(this);
+    QAction *a = new QAction(this);
     a->setSeparator(true);
     viewActions << a;
 
     if (d->dataAwareObject->isSortingEnabled()) {
-//  a = new KAction(this);
+//  a = new QAction(this);
 //  a->setSeparator(true);
 //  viewActions << a;
         viewActions
@@ -267,7 +267,7 @@ void KexiDataAwareView::reloadActions()
 //warning FIXME Move this to the table part
     /*
       kDebug()<<"INIT ACTIONS***********************************************************************";
-      new KAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
+      new QAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
       setXMLFile("kexidatatableui.rc");
     */
     d->dataAwareObject->contextMenu()->clear();

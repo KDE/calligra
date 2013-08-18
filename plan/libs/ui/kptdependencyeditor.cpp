@@ -44,7 +44,7 @@
 #include <QKeyEvent>
 
 #include <QMenu>
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
@@ -2311,12 +2311,12 @@ void DependencyEditor::setupGui()
     connect( menuAddTask, SIGNAL(triggered(bool)), SLOT(slotAddTask()) );
     addAction( name, menuAddTask );
 
-    actionAddTask  = new KAction( i18n("Add Task..."), this);
+    actionAddTask  = new QAction( i18n("Add Task..."), this);
     actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddTask, SIGNAL(triggered(bool)), SLOT(slotAddTask()) );
     menuAddTask->addAction( actionAddTask );
 
-    actionAddMilestone  = new KAction( i18n("Add Milestone..."), this );
+    actionAddMilestone  = new QAction( i18n("Add Milestone..."), this );
     actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
     connect( actionAddMilestone, SIGNAL(triggered(bool)), SLOT(slotAddMilestone()) );
     menuAddTask->addAction( actionAddMilestone );
@@ -2327,17 +2327,17 @@ void DependencyEditor::setupGui()
     connect( menuAddSubTask, SIGNAL(triggered(bool)), SLOT(slotAddSubtask()) );
     addAction( name, menuAddSubTask );
 
-    actionAddSubtask  = new KAction( i18n("Add Sub-Task..."), this );
+    actionAddSubtask  = new QAction( i18n("Add Sub-Task..."), this );
     actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionAddSubtask, SIGNAL(triggered(bool)), SLOT(slotAddSubtask()) );
     menuAddSubTask->addAction( actionAddSubtask );
 
-    actionAddSubMilestone = new KAction( i18n("Add Sub-Milestone..."), this );
+    actionAddSubMilestone = new QAction( i18n("Add Sub-Milestone..."), this );
     actionAddSubMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I ) );
     connect( actionAddSubMilestone, SIGNAL(triggered(bool)), SLOT(slotAddSubMilestone()) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
-    actionDeleteTask  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteTask  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
     coll->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );

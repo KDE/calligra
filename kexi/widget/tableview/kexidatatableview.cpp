@@ -25,7 +25,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <db/connection.h>
 #include <db/cursor.h>
@@ -67,7 +67,7 @@ KexiDataTableView::init()
 /*void KexiDataTableView::initActions(KActionCollection *col)
 {
   KexiTableView::initActions(col);
-  new KAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), col, "tablepart_filter");
+  new QAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 }*/
 
 bool KexiDataTableView::setData(KexiDB::Cursor *cursor)

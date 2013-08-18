@@ -19,7 +19,7 @@
 
 #include <QList>
 
-#include <kaction.h>
+#include <QAction>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>

@@ -30,7 +30,7 @@
 template<class type> class QList;
 template<class type> class QVector;
 class KActionCollection;
-class KAction;
+class QAction;
 class QMenu;
 class QWidget;
 class QVariant;
@@ -46,7 +46,7 @@ class WidgetLibraryPrivate;
 class ActionGroup;
 class WidgetInfo;
 
-typedef QList<KAction*> ActionList;
+typedef QList<QAction*> ActionList;
 
 /**
  * This class searches for factories and provides KActions for widget creation.

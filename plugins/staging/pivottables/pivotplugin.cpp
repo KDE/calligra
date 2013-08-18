@@ -27,7 +27,7 @@
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <sheets/part/Canvas.h>
 #include <sheets/part/View.h>
@@ -44,7 +44,7 @@ PivotPlugin::PivotPlugin(QObject *parent, const QVariantList &)
 {
     setComponentData(PivotPluginFactory::componentData());
     setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/pivottables.rc"), true);
-    KAction *action = new KAction(i18n("&Pivot..."), this);
+    QAction *action = new QAction(i18n("&Pivot..."), this);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P));
     actionCollection()->addAction("pivot", action );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(pivot()));

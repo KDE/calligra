@@ -45,7 +45,7 @@
 #include <QKeyEvent>
 #include <QContextMenuEvent>
 
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kxmlguifactory.h>
@@ -277,37 +277,37 @@ void ScheduleEditor::setupGui()
 {
     QString name = "scheduleeditor_edit_list";
 
-    actionAddSchedule  = new KAction(koIcon("view-time-schedule-insert"), i18n("Add Schedule"), this);
+    actionAddSchedule  = new QAction(koIcon("view-time-schedule-insert"), i18n("Add Schedule"), this);
     actionAddSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     actionCollection()->addAction("add_schedule", actionAddSchedule );
     connect( actionAddSchedule, SIGNAL(triggered(bool)), SLOT(slotAddSchedule()) );
     addAction( name, actionAddSchedule );
 
-    actionAddSubSchedule  = new KAction(koIcon("view-time-schedule-child-insert"), i18n("Add Sub-schedule"), this);
+    actionAddSubSchedule  = new QAction(koIcon("view-time-schedule-child-insert"), i18n("Add Sub-schedule"), this);
     actionAddSubSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     actionCollection()->addAction("add_subschedule", actionAddSubSchedule );
     connect( actionAddSubSchedule, SIGNAL(triggered(bool)), SLOT(slotAddSubSchedule()) );
     addAction( name, actionAddSubSchedule );
 
-    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this );
+    actionDeleteSelection  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     actionCollection()->addAction("schedule_delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );
     addAction( name, actionDeleteSelection );
 
-    actionCalculateSchedule  = new KAction(koIcon("view-time-schedule-calculus"), i18n("Calculate"), this);
+    actionCalculateSchedule  = new QAction(koIcon("view-time-schedule-calculus"), i18n("Calculate"), this);
 //    actionCalculateSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::Key_C ) );
     actionCollection()->addAction("calculate_schedule", actionCalculateSchedule );
     connect( actionCalculateSchedule, SIGNAL(triggered(bool)), SLOT(slotCalculateSchedule()) );
     addAction( name, actionCalculateSchedule );
 
-    actionBaselineSchedule  = new KAction(koIcon("view-time-schedule-baselined-add"), i18n("Baseline"), this);
+    actionBaselineSchedule  = new QAction(koIcon("view-time-schedule-baselined-add"), i18n("Baseline"), this);
 //    actionBaselineSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::Key_B ) );
     actionCollection()->addAction("schedule_baseline", actionBaselineSchedule );
     connect( actionBaselineSchedule, SIGNAL(triggered(bool)), SLOT(slotBaselineSchedule()) );
     addAction( name, actionBaselineSchedule );
 
-    actionMoveLeft  = new KAction(koIcon("go-first"), i18nc("@action", "Detach"), this);
+    actionMoveLeft  = new QAction(koIcon("go-first"), i18nc("@action", "Detach"), this);
     actionCollection()->addAction("schedule_move_left", actionMoveLeft );
     connect( actionMoveLeft, SIGNAL(triggered(bool)), SLOT(slotMoveLeft()) );
     addAction( name, actionMoveLeft );
@@ -635,7 +635,7 @@ void ScheduleLogView::slotContextMenuRequested( const QModelIndex &index, const 
     if ( id.isEmpty() ) {
         return;
     }
-    KAction *a = new KAction(koIcon("document-edit"), i18n( "Edit..." ), m);
+    QAction *a = new QAction(koIcon("document-edit"), i18n( "Edit..." ), m);
     a->setProperty( "p_identity", id );
     m->addAction( a );
     connect(a, SIGNAL(triggered(bool)), SLOT(slotEdit()));

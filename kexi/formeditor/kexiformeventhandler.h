@@ -21,7 +21,7 @@
 #define KEXIFORMEVENTHANDLER_H
 
 #include <QWidget>
-#include <kaction.h>
+#include <QAction>
 #include <kexi_export.h>
 
 namespace KexiPart
@@ -56,7 +56,7 @@ private:
 };
 
 //! @internal form-level action for handling "on click" actions
-class KFORMEDITOR_EXPORT KexiFormEventAction : public KAction
+class KFORMEDITOR_EXPORT KexiFormEventAction : public QAction
 {
     Q_OBJECT
 public:
@@ -68,19 +68,19 @@ public:
 
         /*! Decodes action string into action type/action argument parts.
          Action string has to be in a form of "actiontype:actionarg"
-         - Action type is passed to \a actionType on success. Action type can be "kaction"
+         - Action type is passed to \a actionType on success. Action type can be "QAction"
           or any of the part names (see KexiPart::Info::objectName()), e.g. "table", "query", etc.
-         - Action argument can be an action name in case of "kaction" type or object name
+         - Action argument can be an action name in case of "QAction" type or object name
           in case of action of type "table", "query", etc.
          \a ok is set to true on success and to false on failure. On failure no other
          values are passed.
-         \return part info if action type is "table", "query", etc., or 0 for "kaction" type. */
+         \return part info if action type is "table", "query", etc., or 0 for "QAction" type. */
         KexiPart::Info* decodeString(QString& actionType, QString& actionArg, bool& ok) const;
 
         //! \return true if the action is empty
         bool isEmpty() const;
 
-        QString string; //!< action string with prefix, like "kaction:edit_copy" or "table:<tableName>"
+        QString string; //!< action string with prefix, like "QAction:edit_copy" or "table:<tableName>"
 
         QString option; //!< option used when name is "table/query/etc.:\<objectName\>" is set;
         //!< can be set to "open", "design", "editText", etc.

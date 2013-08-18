@@ -58,7 +58,7 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kaction.h>
+#include <QAction>
 #include <QStack>
 #include <QLabel>
 
@@ -90,12 +90,12 @@ public:
         // 3. replace conflicting actions in the action collection
         KActionCollection *ac = canvas->actionCollection();
 
-        QHash<QString, KAction*> toolActions = activeTool->actions();
-        QHash<QString, KAction*>::const_iterator it(toolActions.constBegin());
+        QHash<QString, QAction*> toolActions = activeTool->actions();
+        QHash<QString, QAction*>::const_iterator it(toolActions.constBegin());
 
         for (; it != toolActions.constEnd(); ++it) {
             if (ac) {
-                KAction* action = qobject_cast<KAction*>(ac->action(it.key()));
+                QAction* action = qobject_cast<QAction*>(ac->action(it.key()));
                 if (action) {
                     ac->takeAction(action);
                     if (action != it.value()) {
@@ -119,14 +119,14 @@ public:
         if (!activeTool)
             return;
         // disable actions of active tool
-        foreach(KAction *action, activeTool->actions()) {
+        foreach(QAction *action, activeTool->actions()) {
             action->setEnabled(false);
         }
 
         // enable actions which where disabled on activating the active tool
         // and re-add them to the action collection
         KActionCollection *ac = canvas->actionCollection();
-        foreach(KAction *action, disabledDisabledActions) {
+        foreach(QAction *action, disabledDisabledActions) {
             if(ac) {
                 ac->addAction(action->objectName(), action);
             }
@@ -150,8 +150,8 @@ public:
     const KoInputDevice inputDevice;
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
-    QList<KAction*> disabledActions; ///< disabled conflicting actions
-    QList<KAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
+    QList<QAction*> disabledActions; ///< disabled conflicting actions
+    QList<QAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)
@@ -648,7 +648,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
     // disable all actions for all tools in the all canvasdata objects for this canvas.
     foreach(CanvasData *cd, items) {
         foreach(KoToolBase* tool, cd->allTools) {
-            foreach(KAction* action, tool->actions()) {
+            foreach(QAction* action, tool->actions()) {
                 action->setEnabled(false);
             }
         }
@@ -766,8 +766,8 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     }
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoToolBase *tool, cd->allTools) {
-        QHash<QString, KAction*> actions = tool->actions();
-        QHash<QString, KAction*>::const_iterator it(actions.constBegin());
+        QHash<QString, QAction*> actions = tool->actions();
+        QHash<QString, QAction*>::const_iterator it(actions.constBegin());
         for (; it != actions.constEnd(); ++it) {
             if (!ac->action(it.key()))
                 ac->addAction(it.key(), it.value());
@@ -1000,7 +1000,7 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
     tl->setObjectName(tool->id());
 
-    foreach(KAction *action, tl->actions()) {
+    foreach(QAction *action, tl->actions()) {
         action->setEnabled(false);
     }
 

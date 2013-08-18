@@ -890,16 +890,16 @@ void KoDocumentRdf::expandStatements(QSharedPointer<Soprano::Model> model) const
     expandStatementsToIncludeOtherPredicates(model);
 }
 
-KAction *KoDocumentRdf::createInsertSemanticObjectReferenceAction(KoCanvasBase *host)
+QAction *KoDocumentRdf::createInsertSemanticObjectReferenceAction(KoCanvasBase *host)
 {
-    KAction *ret = new InsertSemanticObjectReferenceAction(host, this, i18n("Reference"));
+    QAction *ret = new InsertSemanticObjectReferenceAction(host, this, i18n("Reference"));
     RDEBUG << "createInsertSemanticObjectReferenceAction";
     return ret;
 }
 
-QList<KAction*> KoDocumentRdf::createInsertSemanticObjectNewActions(KoCanvasBase *host)
+QList<QAction*> KoDocumentRdf::createInsertSemanticObjectNewActions(KoCanvasBase *host)
 {
-    QList<KAction*> ret;
+    QList<QAction*> ret;
     foreach (const QString &semanticClass,  KoRdfSemanticItem::classNames()) {
         ret.append(new InsertSemanticObjectCreateAction(host, this, semanticClass));
     }

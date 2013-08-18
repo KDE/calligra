@@ -37,7 +37,7 @@
 
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <KoDualColorButton.h>
 #include <KoAbstractGradient.h>
@@ -79,7 +79,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     m_patternWidget->setText(i18n("Fill Patterns"));
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
     m_patternWidget->setFixedSize(26, 26);
-    KAction * action  = new KAction(i18n("&Patterns"), this);
+    QAction * action  = new QAction(i18n("&Patterns"), this);
     view->actionCollection()->addAction("patterns", action);
     action->setDefaultWidget(m_patternWidget);
 
@@ -87,7 +87,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     m_gradientWidget->setText(i18n("Gradients"));
     m_gradientWidget->setToolTip(i18n("Gradients"));
     m_gradientWidget->setFixedSize(26, 26);
-    action  = new KAction(i18n("&Gradients"), this);
+    action  = new QAction(i18n("&Gradients"), this);
     view->actionCollection()->addAction("gradients", action);
     action->setDefaultWidget(m_gradientWidget);
 
@@ -97,7 +97,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
 
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);
     dual->setPopDialog(true);
-    action  = new KAction(i18n("&Color"), this);
+    action  = new QAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(dual);
     connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
@@ -113,7 +113,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
 
     m_paintopBox = new KisPaintopBox(view, view, "paintopbox");
-    action  = new KAction(i18n("&Painter's Tools"), this);
+    action  = new QAction(i18n("&Painter's Tools"), this);
     view->actionCollection()->addAction("paintops", action);
     action->setDefaultWidget(m_paintopBox);
 }

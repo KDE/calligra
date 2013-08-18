@@ -33,7 +33,7 @@
 #include <kis_debug.h>
 
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <kacceleratormanager.h>
 #include <kseparator.h>
 
@@ -110,7 +110,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton = new QToolButton(this);
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
-    KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
+    QAction* eraseAction = new QAction(i18n("Set eraser mode"), m_eraseModeButton);
     eraseAction->setIcon(koIcon("draw-eraser"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
@@ -120,7 +120,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_alphaLockButton = new QToolButton(this);
     m_alphaLockButton->setFixedSize(32, 32);
     m_alphaLockButton->setCheckable(true);
-    KAction* alphaLockAction = new KAction(i18n("Preserve Alpha"), m_alphaLockButton);
+    QAction* alphaLockAction = new QAction(i18n("Preserve Alpha"), m_alphaLockButton);
     alphaLockAction->setIcon(koIcon("transparency-unlocked"));
     alphaLockAction->setCheckable(true);
     m_alphaLockButton->setDefaultAction(alphaLockAction);
@@ -129,7 +129,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     QToolButton* hMirrorButton = new QToolButton(this);
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
-    KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
+    QAction* hMirrorAction = new QAction(i18n("Set horizontal mirror mode"), hMirrorButton);
     hMirrorAction->setIcon(koIcon("object-flip-horizontal"));
     hMirrorAction->setCheckable(true);
     hMirrorButton->setDefaultAction(hMirrorAction);
@@ -138,7 +138,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     QToolButton* vMirrorButton = new QToolButton(this);
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
-    KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
+    QAction* vMirrorAction = new QAction(i18n("Set vertical mirror mode"), vMirrorButton);
     vMirrorAction->setIcon(koIcon("object-flip-vertical"));
     vMirrorAction->setCheckable(true);
     vMirrorButton->setDefaultAction(vMirrorAction);
@@ -191,7 +191,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     baseLayout->addWidget(m_paintopWidget);
     baseLayout->setContentsMargins(0, 0, 0, 0);
 
-    KAction* action;
+    QAction* action;
     m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
@@ -204,31 +204,31 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
     compositeLayout->setContentsMargins(0, 0, 0, 0);
-    action = new KAction(i18n("Brush composite"), this);
+    action = new QAction(i18n("Brush composite"), this);
     view->actionCollection()->addAction("composite_actions", action);
     action->setDefaultWidget(compositeActions);
 
-    action = new KAction(i18n("Brush option slider 1"), this);
+    action = new QAction(i18n("Brush option slider 1"), this);
     view->actionCollection()->addAction("brushslider1", action);
     action->setDefaultWidget(m_sliderChooser[0]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[0], SLOT(showPopupWidget()));
 
-    action = new KAction(i18n("Brush option slider 2"), this);
+    action = new QAction(i18n("Brush option slider 2"), this);
     view->actionCollection()->addAction("brushslider2", action);
     action->setDefaultWidget(m_sliderChooser[1]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
 
-    action = new KAction(i18n("Next Favourite Preset"), this);
+    action = new QAction(i18n("Next Favourite Preset"), this);
     view->actionCollection()->addAction("next_favorite_preset", action);
     action->setShortcut(KShortcut(Qt::Key_Right));
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
 
-    action = new KAction(i18n("Previous Favourite Preset"), this);
+    action = new QAction(i18n("Previous Favourite Preset"), this);
     view->actionCollection()->addAction("previous_favorite_preset", action);
     action->setShortcut(KShortcut(Qt::Key_Left));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
-    action = new KAction(i18n("Switch to Previous Preset"), this);
+    action = new QAction(i18n("Switch to Previous Preset"), this);
     view->actionCollection()->addAction("previous_preset", action);
     action->setShortcut(KShortcut(Qt::Key_Slash));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
@@ -238,15 +238,15 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     mirrorLayout->addWidget(hMirrorButton);
     mirrorLayout->addWidget(vMirrorButton);
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
-    action = new KAction(i18n("Mirror"), this);
+    action = new QAction(i18n("Mirror"), this);
     view->actionCollection()->addAction("mirror_actions", action);
     action->setDefaultWidget(mirrorActions);
 
-    action = new KAction(i18n("Add to palette"), this);
+    action = new QAction(i18n("Add to palette"), this);
     view->actionCollection()->addAction("palette_manager", action);
     action->setDefaultWidget(m_paletteButton);
 
-    action = new KAction(i18n("Workspaces"), this);
+    action = new QAction(i18n("Workspaces"), this);
     view->actionCollection()->addAction("workspaces", action);
     action->setDefaultWidget(m_workspaceWidget);
 

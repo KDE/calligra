@@ -28,7 +28,7 @@
 #include "kexisharedactionhost.h"
 
 class QAction;
-class KAction;
+class QAction;
 class KXMLGUIClient;
 class KAction_setEnabled_Helper;
 class KexiActionProxy;
@@ -135,7 +135,7 @@ protected:
      action_name + "_alt". The new action's owner is \a w. You can delete
      this action without informing action proxy about this.
      \return newly created action or 0 if \a action_name not found. */
-    KAction* plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w);
+    QAction* plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w);
 
     /*! \return action named with \a name or NULL if there is no such action. */
     virtual QAction* sharedAction(const QString& action_name);
@@ -162,7 +162,7 @@ protected:
 
     QList<KexiActionProxy*> m_sharedActionChildren;
 
-    QList<KAction*> m_alternativeActions;
+    QList<QAction*> m_alternativeActions;
 
     KexiActionProxy* m_actionProxyParent;
 

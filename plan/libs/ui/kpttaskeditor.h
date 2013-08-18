@@ -34,7 +34,7 @@ class KoDocument;
 
 class QModelIndex;
 
-class KAction;
+class QAction;
 class KActionMenu;
 
 namespace KPlato
@@ -194,17 +194,17 @@ private:
 
     KActionMenu *menuAddTask;
     KActionMenu *menuAddSubTask;
-    KAction *actionAddTask;
-    KAction *actionAddMilestone;
-    KAction *actionAddSubtask;
-    KAction *actionAddSubMilestone;
-    KAction *actionDeleteTask;
-    KAction *actionMoveTaskUp;
-    KAction *actionMoveTaskDown;
-    KAction *actionIndentTask;
-    KAction *actionUnindentTask;
+    QAction *actionAddTask;
+    QAction *actionAddMilestone;
+    QAction *actionAddSubtask;
+    QAction *actionAddSubMilestone;
+    QAction *actionDeleteTask;
+    QAction *actionMoveTaskUp;
+    QAction *actionMoveTaskDown;
+    QAction *actionIndentTask;
+    QAction *actionUnindentTask;
 
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 };
 
 class KPLATOUI_EXPORT TaskView : public ViewBase
@@ -261,7 +261,7 @@ private slots:
 
 private:
     NodeTreeView *m_view;
-    KAction *actionShowProject;
+    QAction *actionShowProject;
 
 };
 
@@ -350,7 +350,7 @@ private:
     WorkPackageTreeView *m_view;
     MacroCommand *m_cmd;
 
-    KAction *actionMailWorkpackage;
+    QAction *actionMailWorkpackage;
 
 };
 

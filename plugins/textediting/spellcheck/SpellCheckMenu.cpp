@@ -43,7 +43,7 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
     m_suggestionsMenu = m_suggestionsMenuAction->menu();
     connect(m_suggestionsMenu, SIGNAL(aboutToShow()), this, SLOT(createSuggestionsMenu()));
 
-    m_addToDictionaryAction = new KAction(i18n("Add to Dictionary"), this);
+    m_addToDictionaryAction = new QAction(i18n("Add to Dictionary"), this);
     connect(m_addToDictionaryAction, SIGNAL(triggered()), this, SLOT(addWordToDictionary()));
 
     // disabling this as if it calls the speller it's only changed in a local copy
@@ -51,7 +51,7 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
     // doesn't have suche a method for ignoreWord
     // Only option left is to personally ignore words
 
-    // m_ignoreWordAction = new KAction(i18n("Ignore Word"), this);
+    // m_ignoreWordAction = new QAction(i18n("Ignore Word"), this);
     // connect(m_ignoreWordAction, SIGNAL(triggered()), this, SLOT(ignoreWord()));
 
     connect(m_suggestionsSignalMapper, SIGNAL(mapped(const QString&)), 
@@ -66,9 +66,9 @@ SpellCheckMenu::~SpellCheckMenu()
 
 }
 
-QPair<QString, KAction*> SpellCheckMenu::menuAction()
+QPair<QString, QAction*> SpellCheckMenu::menuAction()
 {
-    return QPair<QString, KAction*>("spelling_suggestions", m_suggestionsMenuAction);
+    return QPair<QString, QAction*>("spelling_suggestions", m_suggestionsMenuAction);
 }
 
 void SpellCheckMenu::createSuggestionsMenu()
@@ -84,7 +84,7 @@ void SpellCheckMenu::createSuggestionsMenu()
         m_suggestions = m_speller.suggest(m_currentMisspelled);
         for (int i = 0; i < m_suggestions.count(); ++i) {
             const QString &suggestion = m_suggestions.at(i);
-            KAction *action = new KAction(suggestion, m_suggestionsMenu);
+            QAction *action = new QAction(suggestion, m_suggestionsMenu);
             connect(action, SIGNAL(triggered()), m_suggestionsSignalMapper, SLOT(map()));
             m_suggestionsSignalMapper->setMapping(action, suggestion);
             m_suggestionsMenu->addAction(action);

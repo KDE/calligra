@@ -38,7 +38,7 @@
 
 #include <kis_debug.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <klocale.h>
 #include <knuminput.h>
 

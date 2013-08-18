@@ -26,7 +26,7 @@
 #include <QColor>
 #include <QTimer>
 
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <klocale.h>
 #include <kstandardaction.h>
@@ -134,11 +134,11 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     m_copy = KStandardAction::copy(this, SLOT(copy()), collection);
     m_paste = KStandardAction::paste(this, SLOT(paste()), collection);
 
-    m_pasteNew  = new KAction(i18n("Paste into &New Image"), this);
+    m_pasteNew  = new QAction(i18n("Paste into &New Image"), this);
     collection->addAction("paste_new", m_pasteNew);
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
-    m_pasteAt = new KAction(i18n("Paste at cursor"), this);
+    m_pasteAt = new QAction(i18n("Paste at cursor"), this);
     collection->addAction("paste_at", m_pasteAt);
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
 
@@ -155,7 +155,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     m_clear = collection->addAction(KStandardAction::Clear,  "clear", this, SLOT(clear()));
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
 
-    m_reselect  = new KAction(i18n("&Reselect"), this);
+    m_reselect  = new QAction(i18n("&Reselect"), this);
     collection->addAction("reselect", m_reselect);
     m_reselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
@@ -225,14 +225,14 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
 //     m_load
-//         = new KAction(i18n("Load..."),
+//         = new QAction(i18n("Load..."),
 //                   0, 0,
 //                   this, SLOT(load()),
 //                   collection, "load_selection");
 //
 //
 //     m_save
-//         = new KAction(i18n("Save As..."),
+//         = new QAction(i18n("Save As..."),
 //                   0, 0,
 //                   this, SLOT(save()),
 //                   collection, "save_selection");

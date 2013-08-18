@@ -32,7 +32,7 @@
 // OpenGL
 #include <opengl/kis_opengl.h>
 
-class KAction;
+class QAction;
 
 class KoPointerEvent;
 class KoCanvasBase;

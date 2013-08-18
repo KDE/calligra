@@ -29,7 +29,7 @@
 #include <KexiMainWindowIface.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 #include <kstandardguiitem.h>
 #include <kpushbutton.h>
@@ -142,7 +142,7 @@ void KActionsListViewBase::init()
     foreach(QAction *action, sharedActions) {
 //   kDebug() << (*it)->name() << " " << (*it)->text();
         //! @todo group actions
-        //! @todo: store KAction* here?
+        //! @todo: store QAction* here?
         const int actionCategories = acat->actionCategories(action->objectName().toLatin1());
         if (actionCategories == -1) {
             kWarning() << "no category declared for action \""
@@ -154,7 +154,7 @@ void KActionsListViewBase::init()
         ActionSelectorDialogTreeItem *pitem = new ActionSelectorDialogTreeItem(
             action->toolTip().isEmpty() ? action->text().remove('&') : action->toolTip(), this);
 
-        pitem->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "kaction");
+        pitem->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "QAction");
         pitem->setData(ActionSelectorDialogTreeItem::ActionDataRole, action->objectName());
 
         pitem->setIcon(action->icon());
@@ -209,8 +209,8 @@ public:
         itm->setIcon(noIcon);
 
         itm = new ActionSelectorDialogTreeItem(i18n("Application actions"), this );
-        itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "kaction");
-        itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, "kaction");
+        itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "QAction");
+        itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, "QAction");
         itm->setIcon(koIcon("calligrakexi"));
 
         KexiPart::PartInfoList *pl = Kexi::partManager().infoList();
@@ -285,7 +285,7 @@ public:
             ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
                 "print", this, i18n("Print"));
             printItem->setPixmap(0, koIcon("document-print"));
-            KAction *a = KStandardAction::printPreview(0, 0, 0);
+            QAction *a = KStandardAction::printPreview(0, 0, 0);
             item = new ActionSelectorDialogListItem("printPreview", printItem,
                                                     a->text().remove('&').remove("..."));
             item->setPixmap(0, a->icon().pixmap(16));
@@ -519,7 +519,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     KexiPart::Info* partInfo = action.decodeString(actionType, actionArg, ok);
     if (ok) {
         d->actionCategoriesListView->selectAction(actionType);
-        if (actionType == "kaction") {
+        if (actionType == "QAction") {
             d->kactionListView->selectAction(actionArg);
             d->kactionListView->setFocus();
         } else if (actionType == "currentForm") {
@@ -600,12 +600,12 @@ void KexiActionSelectionDialog::slotActionToExecuteItemSelected(QTreeWidgetItem*
 void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item)
 {
     ActionSelectorDialogTreeItem *categoryItm = dynamic_cast<ActionSelectorDialogTreeItem*>(item);
-    // simple case: part-less item, e.g. kaction:
+    // simple case: part-less item, e.g. QAction:
     if (categoryItm) {
         d->updateSelectActionToBeExecutedMessage(categoryItm->data(ActionSelectorDialogTreeItem::ActionDataRole).toString());
         QString selectActionToBeExecutedMsg(
             I18N_NOOP("&Select action to be executed after clicking \"%1\" button:")); // msg for a label
-        if (categoryItm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "kaction") {
+        if (categoryItm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "QAction") {
             if (!d->kactionPageWidget) {
                 //create lbl+list view with a vlayout
                 d->kactionPageWidget = new QWidget();
@@ -703,9 +703,9 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
     if (categoryItm) {
         QString actionCategory = categoryItm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString();
 
-        if (actionCategory == "kaction") {
+        if (actionCategory == "QAction") {
             if (d->kactionListView->currentItem()) {
-                data.string = QString("kaction:")
+                data.string = QString("QAction:")
                 + dynamic_cast<ActionSelectorDialogTreeItem*>(d->kactionListView->currentItem())->data(ActionSelectorDialogTreeItem::ActionDataRole).toString();
                 return data;
             }

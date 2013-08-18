@@ -95,13 +95,13 @@ public:
     //! Implemented by KXMLGUIClient
 #ifdef KEXI_IMPL_WARNINGS
 #ifdef __GNUC__
-#warning TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0;
+#warning TODO virtual void plugActionList(const QString& name, const QList<QAction *>& actionList) = 0;
 #else
-#pragma WARNING( TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0; )
+#pragma WARNING( TODO virtual void plugActionList(const QString& name, const QList<QAction *>& actionList) = 0; )
 #endif
 #endif
     virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) = 0;
+                                const QList<QAction *>& actionList) = 0;
 
 #ifdef KEXI_IMPL_WARNINGS
 #ifdef __GNUC__

@@ -27,7 +27,7 @@ class KoTextShapeData;
 class KoViewConverter;
 class TextShape;
 
-class KAction;
+class QAction;
 
 class QModelIndex;
 class QPainter;

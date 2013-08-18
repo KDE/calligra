@@ -30,7 +30,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <QMenu>
@@ -1071,11 +1071,11 @@ void Form::emitUndoActionSignals()
 #pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-    KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
+    QAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
     if (undoAction)
         emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
 
-    KAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
+    QAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
     if (redoAction)
         emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
 #endif
@@ -1397,7 +1397,7 @@ void Form::emitUndoEnabled()
 #pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-    KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
+    QAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
     if (undoAction)
         emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
 #endif
@@ -1409,7 +1409,7 @@ void Form::emitRedoEnabled()
 #warning pixmapcollection
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-    KAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
+    QAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
     if (redoAction)
         emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
 #endif

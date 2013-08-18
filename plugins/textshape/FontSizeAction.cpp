@@ -131,7 +131,7 @@ void FontSizeAction::setFontSize( qreal size )
         // Sort the list
         qSort( lst );
         Q_FOREACH( qreal it, lst ) {
-            KAction* const action = addAction( format(it) );
+            QAction* const action = addAction( format(it) );
             if (it == size) {
                 setCurrentAction(action);
             }

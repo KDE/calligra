@@ -30,7 +30,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <QMenu>
 #include <kmessagebox.h>

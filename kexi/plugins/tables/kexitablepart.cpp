@@ -80,7 +80,7 @@ void KexiTablePart::initInstanceActions()
 {
 //moved to main window createSharedAction(Kexi::DataViewMode, i18n("Filter"), koIconName("view-filter"), 0, "tablepart_filter");
     /*2.0 moved to createViewActions()
-      KAction *a = createSharedToggleAction(
+      QAction *a = createSharedToggleAction(
         Kexi::DesignViewMode, i18n("Primary Key"), "key", KShortcut(),
         "tablepart_toggle_pkey");
     //  Kexi::DesignViewMode, i18n("Toggle Primary Key"), "key", KShortcut(), "tablepart_toggle_pkey");

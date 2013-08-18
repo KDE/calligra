@@ -32,7 +32,7 @@ class KActionCollection;
 class KexiWindow;
 class KexiWindowData;
 class KexiView;
-class KAction;
+class QAction;
 class KShortcut;
 class KTabWidget;
 
@@ -255,14 +255,14 @@ protected:
     Part(QObject* parent, StaticPartInfo *info);
 
 #if 0
-    /*! For reimplementation. Create here all part actions (KAction or similar).
+    /*! For reimplementation. Create here all part actions (QAction or similar).
      "Part action" is an action that is bound to given part, not for dialogs
      created with this part, eg. "Open external project" action for Form part.
      Default implementation does nothing.
     */
     virtual void initPartActions(KActionCollection *) {};
 
-    /*! For reimplementation. You should here create all instance actions (KAction or similar)
+    /*! For reimplementation. You should here create all instance actions (QAction or similar)
      for \a mode (this method called for every value given by Kexi::ViewMode enum,
      and in special cases, in the future - for user-defined part-specific modes).
      Actions should be bound to action collection \a col.
@@ -293,28 +293,28 @@ protected:
     /*! Creates shared action for action collection declared
      for 'instance actions' of this part.
      See KexiSharedActionHost::createSharedAction() for details.
-     Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
-     that subclass allocated instead just KAction (what is the default). */
-    KAction* createSharedAction(Kexi::ViewMode mode, const QString &text,
+     Pass desired QAction subclass with \a subclassName (e.g. "KToggleAction") to have
+     that subclass allocated instead just QAction (what is the default). */
+    QAction* createSharedAction(Kexi::ViewMode mode, const QString &text,
                                 const QString &pix_name, const KShortcut &cut, const char *name,
                                 const char *subclassName = 0);
 
     /*! Convenience version of above method - creates shared toggle action. */
-    KAction* createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
+    QAction* createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
                                       const QString &pix_name, const KShortcut &cut, const char *name);
 
     /*! Creates shared action for action collection declared
      for 'part actions' of this part.
      See KexiSharedActionHost::createSharedAction() for details.
-     Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
-     that subclass allocated instead just KAction (what is the default). */
-    KAction* createSharedPartAction(const QString &text,
+     Pass desired QAction subclass with \a subclassName (e.g. "KToggleAction") to have
+     that subclass allocated instead just QAction (what is the default). */
+    QAction* createSharedPartAction(const QString &text,
                                     const QString &pix_name, const KShortcut &cut, const char *name,
                                     const char *subclassName = 0);
 
     /*! Convenience version of above method - creates shared toggle action
      for 'part actions' of this part. */
-    KAction* createSharedPartToggleAction(const QString &text,
+    QAction* createSharedPartToggleAction(const QString &text,
                                           const QString &pix_name, const KShortcut &cut, const char *name);
 
     void setActionAvailable(const char *action_name, bool avail);

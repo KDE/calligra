@@ -20,7 +20,7 @@
 
 #include <QString>
 
-#include <kaction.h>
+#include <QAction>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kurl.h>
@@ -47,11 +47,11 @@ KisImageManager::KisImageManager(KisView2 * view)
 
 void KisImageManager::setup(KActionCollection * actionCollection)
 {
-    KAction *action  = new KAction(i18n("I&mport Layer..."), this);
+    QAction *action  = new QAction(i18n("I&mport Layer..."), this);
     actionCollection->addAction("import_layer_from_file", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KAction(koIcon("document-properties"), i18n("Properties..."), this);
+    action  = new QAction(koIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }

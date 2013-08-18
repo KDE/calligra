@@ -65,7 +65,7 @@
 //#include <kserviceoffer.h>
 #include <krun.h>
 #include <kprocess.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 

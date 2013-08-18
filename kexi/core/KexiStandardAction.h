@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QString>
 
-class KAction;
+class QAction;
 
 //! @short Convenience methods to access all standard Kexi actions
 /*! These actions should be used instead of hardcoding actions.
@@ -45,17 +45,17 @@ enum StandardAction {
 };
 
 //! Creates an action corresponding to the KexiStandardAction::StandardAction enum.
-KEXICORE_EXPORT KAction* create(
+KEXICORE_EXPORT QAction* create(
     StandardAction id, const QObject *recvr, const char *slot, QObject *parent);
 
 //! @return the internal name of a given standard action
 KEXICORE_EXPORT const char* name(StandardAction id);
 
 //! Sorts data in ascending order
-KEXICORE_EXPORT KAction *sortAscending(const QObject *recvr, const char *slot, QObject *parent);
+KEXICORE_EXPORT QAction *sortAscending(const QObject *recvr, const char *slot, QObject *parent);
 
 //! Sorts data in descending order
-KEXICORE_EXPORT KAction *sortDescending(const QObject *recvr, const char *slot, QObject *parent);
+KEXICORE_EXPORT QAction *sortDescending(const QObject *recvr, const char *slot, QObject *parent);
 }
 
 #endif

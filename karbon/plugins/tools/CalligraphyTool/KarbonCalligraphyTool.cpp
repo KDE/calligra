@@ -36,7 +36,7 @@
 #include <KoShapePaintingContext.h>
 #include <KoFillConfigWidget.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 #include <klocale.h>
 #include <QPainter>
@@ -387,22 +387,22 @@ QList<QWidget *> KarbonCalligraphyTool::createOptionWidgets()
             widget, SLOT(setUsePathEnabled(bool)));
 
     // add shortcuts
-    KAction *action = new KAction(i18n("Calligraphy: increase width"), this);
+    QAction *action = new QAction(i18n("Calligraphy: increase width"), this);
     action->setShortcut(Qt::Key_Right);
     connect(action, SIGNAL(triggered()), widget, SLOT(increaseWidth()));
     addAction("calligraphy_increase_width", action);
 
-    action = new KAction(i18n("Calligraphy: decrease width"), this);
+    action = new QAction(i18n("Calligraphy: decrease width"), this);
     action->setShortcut(Qt::Key_Left);
     connect(action, SIGNAL(triggered()), widget, SLOT(decreaseWidth()));
     addAction("calligraphy_decrease_width", action);
 
-    action = new KAction(i18n("Calligraphy: increase angle"), this);
+    action = new QAction(i18n("Calligraphy: increase angle"), this);
     action->setShortcut(Qt::Key_Up);
     connect(action, SIGNAL(triggered()), widget, SLOT(increaseAngle()));
     addAction("calligraphy_increase_angle", action);
 
-    action = new KAction(i18n("Calligraphy: decrease angle"), this);
+    action = new QAction(i18n("Calligraphy: decrease angle"), this);
     action->setShortcut(Qt::Key_Down);
     connect(action, SIGNAL(triggered()), widget, SLOT(decreaseAngle()));
     addAction("calligraphy_decrease_angle", action);

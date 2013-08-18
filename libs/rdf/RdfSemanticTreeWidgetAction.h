@@ -21,12 +21,12 @@
 #define __rdf_RdfSemanticTreeWidgetAction_h__
 
 #include <QObject>
-#include <kaction.h>
+#include <QAction>
 
 class KoCanvasBase;
 class KoTextEditor;
 
-class RdfSemanticTreeWidgetAction : public KAction
+class RdfSemanticTreeWidgetAction : public QAction
 {
     Q_OBJECT
 

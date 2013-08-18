@@ -40,7 +40,7 @@ class SchemaData;
 }
 
 //! @short action for toggling view mode
-class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
+class KEXICORE_EXPORT KexiToggleViewModeAction : public QAction
 {
     //Q_OBJECT
 public:

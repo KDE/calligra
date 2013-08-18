@@ -156,16 +156,16 @@ protected slots:
 private:
     KPrPart *m_part;
     KActionMenu *m_actionStartPresentation;
-    KAction *m_actionCreateAnimation;
-    KAction *m_actionViewModeNormal;
-    KAction *m_actionViewModeNotes;
-    KAction *m_actionViewModeSlidesSorter;
-    KAction *m_actionEditCustomSlideShows;
-    KAction *m_actionExportHtml;
-    KAction *m_actionInsertPictures;
-    KAction *m_actionDrawOnPresentation;
-    KAction *m_actionHighlightPresentation;
-    KAction *m_actionBlackPresentation;
+    QAction *m_actionCreateAnimation;
+    QAction *m_actionViewModeNormal;
+    QAction *m_actionViewModeNotes;
+    QAction *m_actionViewModeSlidesSorter;
+    QAction *m_actionEditCustomSlideShows;
+    QAction *m_actionExportHtml;
+    QAction *m_actionInsertPictures;
+    QAction *m_actionDrawOnPresentation;
+    QAction *m_actionHighlightPresentation;
+    QAction *m_actionBlackPresentation;
 
     KPrViewModePresentation *m_presentationMode;
     KoPAViewMode *m_normalMode;

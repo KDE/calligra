@@ -73,7 +73,7 @@ protected:
     virtual void paintEvent(QPaintEvent * event);
 
     KexiMainWidget *m_mainWidget;
-    KAction *m_closeAction;
+    QAction *m_closeAction;
 
 private:
     int m_tabIndex;
@@ -117,7 +117,7 @@ public:
 #endif
 #endif
     virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) {
+                                const QList<QAction *>& actionList) {
         Q_UNUSED(name)
         Q_UNUSED(actionList)
     }
@@ -402,7 +402,7 @@ protected:
 
     void setupPropertyEditor();
 
-    void setupMainMenuActionShortcut(KAction* action, const char* slot);
+    void setupMainMenuActionShortcut(QAction* action, const char* slot);
 
     /*! Creates standard actions like new, open, save ... */
     void setupActions();
@@ -724,14 +724,14 @@ protected slots:
 private:
     //! Adds action @a name with text @a text and optional shortcut @a shortcut.
     //! This is helper method containing workaround for Kexi
-    //! until KAction::setShortcut() works again.
+    //! until QAction::setShortcut() works again.
     //! @return created action
-    KAction* addAction(const char *name, const QString &text, const char *shortcut = 0);
+    QAction* addAction(const char *name, const QString &text, const char *shortcut = 0);
 
     //! Like @ref addAction(const char *, const QString&, const char *) but also adds
     //! icon @a icon.
     //! @return created action
-    KAction* addAction(const char *name, const KIcon &icon, const QString& text,
+    QAction* addAction(const char *name, const KIcon &icon, const QString& text,
                        const char *shortcut = 0);
 
     class MessageHandler;

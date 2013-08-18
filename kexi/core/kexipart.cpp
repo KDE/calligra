@@ -191,7 +191,7 @@ KActionCollection* Part::actionCollectionForMode(Kexi::ViewMode viewMode) const
     return cli ? cli->actionCollection() : 0;
 }
 
-KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
+QAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
                                   const QString &pix_name, const KShortcut &cut, const char *name,
                                   const char *subclassName)
 {
@@ -204,7 +204,7 @@ KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
             instanceGuiClient->actionCollection(), subclassName);
 }
 
-KAction* Part::createSharedPartAction(const QString &text,
+QAction* Part::createSharedPartAction(const QString &text,
                                       const QString &pix_name, const KShortcut &cut, const char *name,
                                       const char *subclassName)
 {
@@ -214,19 +214,19 @@ KAction* Part::createSharedPartAction(const QString &text,
             d->guiClient->actionCollection(), subclassName);
 }
 
-KAction* Part::createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
+QAction* Part::createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
                                         const QString &pix_name, const KShortcut &cut, const char *name)
 {
     return createSharedAction(mode, text, pix_name, cut, name, "KToggleAction");
 }
 
-KAction* Part::createSharedPartToggleAction(const QString &text,
+QAction* Part::createSharedPartToggleAction(const QString &text,
         const QString &pix_name, const KShortcut &cut, const char *name)
 {
     return createSharedPartAction(text, pix_name, cut, name, "KToggleAction");
 }
 
-/*KAction* Part::sharedAction(int mode, const char* name, const char *classname)
+/*QAction* Part::sharedAction(int mode, const char* name, const char *classname)
 {
   GUIClient *instanceGuiClient = d->instanceGuiClients[mode];
   if (!instanceGuiClient) {
@@ -236,7 +236,7 @@ KAction* Part::createSharedPartToggleAction(const QString &text,
   return instanceGuiClient->actionCollection()->action(name, classname);
 }
 
-KAction* Part::sharedPartAction(int mode, const char* name, const char *classname)
+QAction* Part::sharedPartAction(int mode, const char* name, const char *classname)
 {
   if (!d->guiClient)
     return 0;
@@ -516,10 +516,10 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
         }
     }
 
-// new KAction(part->d->names["new"], part->info()->itemIconName(), 0, this,
+// new QAction(part->d->names["new"], part->info()->itemIconName(), 0, this,
 //  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
 
-// new KAction(i18nInstanceName+"...", part->info()->itemIconName(), 0, this,
+// new QAction(i18nInstanceName+"...", part->info()->itemIconName(), 0, this,
 //  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
 
 // win->guiFactory()->addClient(this);

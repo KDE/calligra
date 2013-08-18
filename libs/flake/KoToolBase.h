@@ -37,7 +37,7 @@ class KoToolSelection;
 class KoToolBasePrivate;
 class KoShapeBasedDocumentBase;
 
-class KAction;
+class QAction;
 class QAction;
 class QKeyEvent;
 class QWidget;
@@ -114,12 +114,12 @@ public:
     /**
      * Retrieves the entire collection of actions for the tool.
      */
-    QHash<QString, KAction*> actions() const;
+    QHash<QString, QAction*> actions() const;
 
     /**
      * Retrieve an action by name.
      */
-    KAction *action(const QString &name) const;
+    QAction *action(const QString &name) const;
 
     /**
      * Called when (one of) the mouse or stylus buttons is pressed.
@@ -449,7 +449,7 @@ protected:
      * @param readWrite set this to ReadOnlyAction to keep the action available on
      *      read-only documents
      */
-    void addAction(const QString &name, KAction *action);
+    void addAction(const QString &name, QAction *action);
 
     /**
      * Set the list of actions to be used as popup menu.

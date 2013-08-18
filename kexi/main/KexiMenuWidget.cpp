@@ -380,29 +380,29 @@ public:
 };
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(QObject *parent)
- : KAction(parent)
+ : QAction(parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(const QString &text, QObject *parent)
- : KAction(text, parent)
+ : QAction(text, parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(const KIcon &icon, const QString &text,
                                            QObject *parent)
- : KAction(icon, text, parent)
+ : QAction(icon, text, parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent)
- : KAction(parent)
+ : QAction(parent)
  , d(new KexiMenuWidgetActionPrivate)
 {
-    QScopedPointer<KAction> tmp(KStandardAction::create(id, 0, 0, 0));
+    QScopedPointer<QAction> tmp(KStandardAction::create(id, 0, 0, 0));
     setIcon(tmp->icon());
     setText(tmp->text());
     setShortcut(tmp->shortcut(DefaultShortcut), DefaultShortcut);
@@ -873,28 +873,28 @@ void KexiMenuWidgetPrivate::updateLayoutDirection()
 
 bool KexiMenuWidgetPrivate::actionPersistentlySelected(const QAction* action) const
 {
-    const KexiMenuWidgetAction* kaction = qobject_cast<const KexiMenuWidgetAction*>(action);
-    return kaction ? kaction->persistentlySelected() : false;
+    const KexiMenuWidgetAction* QAction = qobject_cast<const KexiMenuWidgetAction*>(action);
+    return QAction ? QAction->persistentlySelected() : false;
 }
 
 void KexiMenuWidgetPrivate::setActionPersistentlySelected(QAction* action, bool set)
 {
-    KexiMenuWidgetAction* kaction = qobject_cast<KexiMenuWidgetAction*>(action);
+    KexiMenuWidgetAction* QAction = qobject_cast<KexiMenuWidgetAction*>(action);
     if (previousPersistentlySelectedAction) {
         previousPersistentlySelectedAction->setPersistentlySelected(false);
         q->update(actionRect(previousPersistentlySelectedAction));
     }
-    if (kaction)
-        kaction->setPersistentlySelected(set);
-    previousPersistentlySelectedAction = kaction;
+    if (QAction)
+        QAction->setPersistentlySelected(set);
+    previousPersistentlySelectedAction = QAction;
 }
 
 void KexiMenuWidgetPrivate::toggleActionPersistentlySelected(QAction* action)
 {
-    KexiMenuWidgetAction* kaction = qobject_cast<KexiMenuWidgetAction*>(action);
-    if (!kaction)
+    KexiMenuWidgetAction* QAction = qobject_cast<KexiMenuWidgetAction*>(action);
+    if (!QAction)
         return;
-    setActionPersistentlySelected(kaction, !kaction->persistentlySelected());
+    setActionPersistentlySelected(QAction, !QAction->persistentlySelected());
 }
 
 /*!

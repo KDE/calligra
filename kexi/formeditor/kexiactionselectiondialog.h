@@ -33,7 +33,7 @@ class Item;
 
 //! @short A dialog for selecting an action to be executed for a form's button
 /*! Available actions are:
- - application's global actions like "edit->copy" (KAction-based)
+ - application's global actions like "edit->copy" (QAction-based)
  - opening/printing/executing of selected object (table/query/form/script/macrto, etc.)
 */
 class KFORMEDITOR_EXPORT KexiActionSelectionDialog : public KDialog

@@ -70,7 +70,7 @@ public:
 };
 
 KoColorPopupAction::KoColorPopupAction(QObject *parent)
-    : KAction(parent),
+    : QAction(parent),
     d(new KoColorPopupActionPrivate())
 {
     d->menu = new QMenu();

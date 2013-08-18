@@ -41,7 +41,7 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QPrinter;
 
-class KAction;
+class QAction;
 
 namespace KPlato
 {

@@ -30,7 +30,7 @@
 
 class KoZoomHandler;
 class KisView2;
-class KAction;
+class QAction;
 class KoZoomAction;
 class KoRuler;
 class KoCanvasController;
@@ -79,7 +79,7 @@ private:
     QAction *m_showRulersAction;
     KoZoomAction * m_zoomAction;
     QWidget * m_zoomActionWidget;
-    KAction *m_100pct;
+    QAction *m_100pct;
 };
 
 #endif

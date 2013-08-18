@@ -48,7 +48,7 @@ BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QS
     foreach(const QString & catId, StatesRegistry::instance()->categorieIds()) {
         foreach(const QString & stateId, StatesRegistry::instance()->stateIds(catId)) {
             const State* state = StatesRegistry::instance()->state(catId, stateId);
-            KAction* action = new KAction(state->name(), this);
+            QAction* action = new QAction(state->name(), this);
             actionCollection()->addAction(QString("State_%1_%2").arg(catId).arg(stateId), action);
             actionMenu->addAction(action);
             QuickStateHandler* handler = new QuickStateHandler(catId, stateId, this);

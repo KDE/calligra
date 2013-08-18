@@ -57,7 +57,7 @@
 #include <krecentdocument.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 
 #include <kaboutdata.h>

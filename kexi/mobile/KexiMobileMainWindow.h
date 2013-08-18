@@ -59,7 +59,7 @@ public slots:
     virtual bool newObject(KexiPart::Info* info, bool& openingCancelled);
     virtual KexiWindow* openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0, QString* errorMessage = 0);
     virtual KexiWindow* openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0);
-    virtual void plugActionList(const QString& name, const QList< KAction* >& actionList);
+    virtual void plugActionList(const QString& name, const QList< QAction* >& actionList);
     virtual tristate printItem(KexiPart::Item* item);
     virtual tristate printPreviewForItem(KexiPart::Item* item);
     virtual KexiProject* project();

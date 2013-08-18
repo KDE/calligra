@@ -47,7 +47,7 @@
 #include <KoIcon.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 //Calligra Headers
@@ -233,13 +233,13 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         // Populate context menu
         QActionGroup *actionGroup = new QActionGroup(m_timeLineView);
         actionGroup->setExclusive(true);
-        KAction *onClickAction = new KAction(koIcon("onclick"), i18n("start on mouse click"), m_timeLineView);
+        QAction *onClickAction = new QAction(koIcon("onclick"), i18n("start on mouse click"), m_timeLineView);
         onClickAction->setCheckable(true);
         onClickAction->setData(KPrShapeAnimation::OnClick);
-        KAction *afterAction = new KAction(koIcon("after_previous"), i18n("start after previous animation"), m_timeLineView);
+        QAction *afterAction = new QAction(koIcon("after_previous"), i18n("start after previous animation"), m_timeLineView);
         afterAction->setCheckable(true);
         afterAction->setData(KPrShapeAnimation::AfterPrevious);
-        KAction *withAction = new KAction(koIcon("with_previous"), i18n("start with previous animation"), m_timeLineView);
+        QAction *withAction = new QAction(koIcon("with_previous"), i18n("start with previous animation"), m_timeLineView);
         withAction->setCheckable(true);
         withAction->setData(KPrShapeAnimation::WithPrevious);
 

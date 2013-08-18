@@ -30,7 +30,7 @@
 class KisView2;
 class KActionCollection;
 class KToggleAction;
-class KAction;
+class QAction;
 
 class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
 {
@@ -63,13 +63,13 @@ private:
     KisView2* m_view;
     KToggleAction *toggleGrid;
     KToggleAction* m_toggleSnapToGrid;
-    KAction* m_gridConfig;
-    KAction* m_gridFastConfig1x1;
-    KAction* m_gridFastConfig2x2;
-    KAction* m_gridFastConfig5x5;
-    KAction* m_gridFastConfig10x10;
-    KAction* m_gridFastConfig20x20;
-    KAction* m_gridFastConfig40x40;
+    QAction* m_gridConfig;
+    QAction* m_gridFastConfig1x1;
+    QAction* m_gridFastConfig2x2;
+    QAction* m_gridFastConfig5x5;
+    QAction* m_gridFastConfig10x10;
+    QAction* m_gridFastConfig20x20;
+    QAction* m_gridFastConfig40x40;
 };
 
 #endif

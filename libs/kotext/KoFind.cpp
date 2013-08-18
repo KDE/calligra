@@ -23,7 +23,7 @@
 
 #include <KoCanvasResourceManager.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 #include "KoFind_p.h"
 

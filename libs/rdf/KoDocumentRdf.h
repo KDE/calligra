@@ -34,7 +34,7 @@
 #include <Soprano/Soprano>
 #include <QTextBlockUserData>
 #include <QTreeWidgetItem>
-#include <kaction.h>
+#include <QAction>
 #include <kdatetime.h>
 
 class QDomDocument;
@@ -371,12 +371,12 @@ public:
     /**
      * XXXX? What does this do?
      */
-    KAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
+    QAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
 
     /**
      * XXXX? What does this do?
      */
-    QList<KAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
+    QList<QAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
 
     /**
      * Collect together the semantic item, stylehseet, xmlid of the

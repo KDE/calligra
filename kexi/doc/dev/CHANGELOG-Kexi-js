@@ -6736,7 +6736,7 @@ Core
   KexiViewBase::updateActions(bool activated) is called for a current view
 - Workaround found for integrating katepart's actions with Kexi's shared actions:
    - katepart KXMLGUIClient's KActions are now pluggable to KexiActionProxy
-   - KXMLGUIClient's KAction::enabled(bool) signals are now automatically mapped 
+   - KXMLGUIClient's QAction::enabled(bool) signals are now automatically mapped 
       to KexiActionProxy::setAvailable(bool)
 <TODO>: introduce KexiSharedXMLGUIClient class: 
   ctor: KexiSharedXMLGUIClient(KexiSharedActionHost *host, KXMLGUIClient *client).
@@ -8648,7 +8648,7 @@ TODO: move this submenu after 'Error report' Entry (requires changes to koffice_
 2003-07-15
 - Kexi/win32 synced with cvs again after plugins/ rearrangement.
 - New Kexi icon updated for win32
-- menubar and popupmenu entries in Query Part merged using KexiPartItemAction (new KAction subclass);
+- menubar and popupmenu entries in Query Part merged using KexiPartItemAction (new QAction subclass);
   The same for Tables Part. KexiPartPopupMenu now collaborates with KexiPartItemAction to reuse its
 	action's information (avoid redundancy).
 TODO: add delete_item action icon (equal "button_cancel" in crystalsvg) to the koffice/actions icons

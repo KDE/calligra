@@ -44,7 +44,7 @@ class KoDocument;
 class KoPageLayoutWidget;
 class PrintingHeaderFooter;
 
-class KAction;
+class QAction;
 
 namespace KDChart
 {

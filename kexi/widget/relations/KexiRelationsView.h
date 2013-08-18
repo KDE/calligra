@@ -27,7 +27,7 @@
 class KComboBox;
 class KPushButton;
 class QMenu;
-class KAction;
+class QAction;
 class Q3ListViewItem;
 
 

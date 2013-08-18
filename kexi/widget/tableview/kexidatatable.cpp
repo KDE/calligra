@@ -24,7 +24,7 @@
 #include <QLabel>
 
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <QMenu>
 
 #include <db/cursor.h>

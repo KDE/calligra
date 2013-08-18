@@ -228,22 +228,22 @@ private:
     KWPage m_currentPage;
     KoFindText *m_find;
 
-    KAction *m_actionCreateTemplate;
-    KAction *m_actionFormatFrameSet;
-    KAction *m_actionInsertFrameBreak;
-    KAction *m_actionAddBookmark;
-    KAction *m_actionFormatFont;
-    KAction *m_actionEditDelFrame;
-    KAction *m_actionRaiseFrame;
-    KAction *m_actionLowerFrame;
-    KAction *m_actionBringToFront;
-    KAction *m_actionSendBackward;
+    QAction *m_actionCreateTemplate;
+    QAction *m_actionFormatFrameSet;
+    QAction *m_actionInsertFrameBreak;
+    QAction *m_actionAddBookmark;
+    QAction *m_actionFormatFont;
+    QAction *m_actionEditDelFrame;
+    QAction *m_actionRaiseFrame;
+    QAction *m_actionLowerFrame;
+    QAction *m_actionBringToFront;
+    QAction *m_actionSendBackward;
     KToggleAction *m_actionFormatBold;
     KToggleAction *m_actionFormatItalic;
     KToggleAction *m_actionFormatUnderline;
     KToggleAction *m_actionFormatStrikeOut;
-    KAction *m_actionViewHeader;
-    KAction *m_actionViewFooter;
+    QAction *m_actionViewHeader;
+    QAction *m_actionViewFooter;
     KToggleAction *m_actionViewSnapToGrid;
 
     bool m_snapToGrid;

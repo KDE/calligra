@@ -37,7 +37,7 @@
 
 class KoDocument;
 
-class KAction;
+class QAction;
 
 /// The main namespace
 namespace KPlato

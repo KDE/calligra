@@ -22,7 +22,7 @@
 #include "KexiMainWindowIface.h"
 
 #include <kdebug.h>
-#include <kaction.h>
+#include <QAction>
 #include <kshortcut.h>
 #include <kxmlguiclient.h>
 #include <kactioncollection.h>
@@ -40,8 +40,8 @@ KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)
 
 void KAction_setEnabled_Helper::slotSetEnabled(bool enabled)
 {
-    if (sender()->inherits("KAction")) {
-        const KAction *a = static_cast<const KAction*>(sender());
+    if (sender()->inherits("QAction")) {
+        const QAction *a = static_cast<const QAction*>(sender());
         m_proxy->setAvailable(a->objectName(), enabled);
     }
 }
@@ -160,7 +160,7 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
     w->removeAction(a);
 }
 
-KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
+QAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
@@ -169,9 +169,9 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
     }
     QString altName = a->objectName() + "_alt";
 
-    KAction *ka = dynamic_cast<KAction*>(a);
+    QAction *ka = dynamic_cast<QAction*>(a);
     Q_ASSERT(ka);
-    KAction *alt_act = new KAction(0);
+    QAction *alt_act = new QAction(0);
     alt_act->setObjectName(altName);
     alt_act->setText(alternativeText);
     alt_act->setParent(ka->parent());

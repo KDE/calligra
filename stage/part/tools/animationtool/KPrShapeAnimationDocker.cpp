@@ -44,7 +44,7 @@
 //KDE Headers
 #include <KoIcon.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <kiconloader.h>
 
 //Calligra Headers
@@ -534,13 +534,13 @@ void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
             (m_animationsView->currentIndex().isValid())) {
         QActionGroup *actionGroup = new QActionGroup(m_animationsView);
         actionGroup->setExclusive(true);
-        KAction *onClickAction = new KAction(koIcon("onclick"), i18n("start on mouse click"), m_animationsView);
+        QAction *onClickAction = new QAction(koIcon("onclick"), i18n("start on mouse click"), m_animationsView);
         onClickAction->setCheckable(true);
         onClickAction->setData(KPrShapeAnimation::OnClick);
-        KAction *afterAction = new KAction(koIcon("after_previous"), i18n("start after previous animation"), m_animationsView);
+        QAction *afterAction = new QAction(koIcon("after_previous"), i18n("start after previous animation"), m_animationsView);
         afterAction->setCheckable(true);
         afterAction->setData(KPrShapeAnimation::AfterPrevious);
-        KAction *withAction = new KAction(koIcon("with_previous"), i18n("start with previous animation"), m_animationsView);
+        QAction *withAction = new QAction(koIcon("with_previous"), i18n("start with previous animation"), m_animationsView);
         withAction->setCheckable(true);
         withAction->setData(KPrShapeAnimation::WithPrevious);
 

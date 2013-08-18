@@ -40,7 +40,7 @@
 #include <KoView.h>
 
 #include <kaboutdata.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <QApplication>
 #include <kcmdlineargs.h>

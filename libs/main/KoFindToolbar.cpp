@@ -32,7 +32,7 @@
 #include <QLineEdit>
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kcolorscheme.h>
 
@@ -108,13 +108,8 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     QList<KoFindOption *> options = finder->options()->options();
     foreach(KoFindOption * option, options) {
         if(option->value().type() == QVariant::Bool) {
-<<<<<<< HEAD
-            KAction *action = new KAction(option->title(), menu);
-            action->setHelpText(option->description());
-=======
             QAction *action = new QAction(option->title(), menu);
             action->setToolTip(option->description());
->>>>>>> 4234b5f... Restore fake KPageWidgetItem
             action->setObjectName(option->name());
             action->setCheckable(true);
             action->setChecked(option->value().toBool());
@@ -159,11 +154,11 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(activateSearch()));
     ac->addAction(KStandardAction::Replace, "edit_replace", this, SLOT(activateReplace()));
 
-    KAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->nextButton, SIGNAL(clicked(bool)));
+    QAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->nextButton, SIGNAL(clicked(bool)));
     connect(finder, SIGNAL(hasMatchesChanged(bool)), findNextAction, SLOT(setEnabled(bool)));
     connect(findNextAction, SIGNAL(triggered(bool)), this, SLOT(activateSearch()));
     findNextAction->setEnabled(false);
-    KAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->previousButton, SIGNAL(clicked(bool)));
+    QAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->previousButton, SIGNAL(clicked(bool)));
     connect(finder, SIGNAL(hasMatchesChanged(bool)), findPrevAction, SLOT(setEnabled(bool)));
     connect(findPrevAction, SIGNAL(triggered(bool)), this, SLOT(activateSearch()));
     findPrevAction->setEnabled(false);

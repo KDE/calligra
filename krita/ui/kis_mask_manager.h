@@ -24,7 +24,7 @@
 
 class KisView2;
 class KActionCollection;
-class KAction;
+class QAction;
 class KToggleAction;
 class KisNodeCommandsAdapter;
 
@@ -125,8 +125,8 @@ private:
     KisView2 * m_view;
 
     KisMaskSP m_activeMask;
-    KAction *m_maskToSelection;
-    KAction *m_maskToLayer;
+    QAction *m_maskToSelection;
+    QAction *m_maskToLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 
 };

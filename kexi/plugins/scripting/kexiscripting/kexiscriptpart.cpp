@@ -194,7 +194,7 @@ void KexiScriptPart::initPartActions()
         if (! Kross::Api::Manager::scriptManager()->hasChild("KexiMainWindow")) {
             Kross::Api::Manager::scriptManager()->addQObject(m_mainWin, "KexiMainWindow");
 
-            // Add the KAction's provided by the ScriptGUIClient to the
+            // Add the QAction's provided by the ScriptGUIClient to the
             // KexiMainWindow.
             //FIXME: fix+use createSharedPartAction() whyever it doesn't work as expected right now...
             Q3PopupMenu* popup = m_mainWin->findPopupMenu("tools");
@@ -209,10 +209,10 @@ void KexiScriptPart::initPartActions()
                 if (scriptmenuaction)
                     scriptmenuaction->plug(popup);
                 /*
-                KAction* execscriptmenuaction = d->scriptguiclient->action("executedscripts");
+                QAction* execscriptmenuaction = d->scriptguiclient->action("executedscripts");
                 if(execscriptmenuaction)
                     execscriptmenuaction->plug( popup );
-                KAction* loadedscriptmenuaction = d->scriptguiclient->action("loadedscripts");
+                QAction* loadedscriptmenuaction = d->scriptguiclient->action("loadedscripts");
                 if(loadedscriptmenuaction)
                     loadedscriptmenuaction->plug( popup );
                 */

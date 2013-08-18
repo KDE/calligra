@@ -42,7 +42,7 @@
 
 #include <kundo2command.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <kdebug.h>
 #include <QDebug>

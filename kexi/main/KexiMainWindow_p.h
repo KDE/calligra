@@ -1999,23 +1999,23 @@ public:
 #endif
 
     //! Kexi menu
-    KAction *action_save, *action_save_as, 
+    QAction *action_save, *action_save_as, 
     *action_project_import_export_send, *action_close,
     *action_project_properties,
     *action_project_relations, *action_project_import_data_table,
     *action_project_export_data_table;
 #ifndef KEXI_NO_QUICK_PRINTING
-    KAction *action_project_print, *action_project_print_preview,
+    QAction *action_project_print, *action_project_print_preview,
         *action_project_print_setup;
 #endif
-    KAction *action_project_welcome;
-    KAction *action_show_other;
+    QAction *action_project_welcome;
+    QAction *action_show_other;
     int action_welcome_projects_title_id,
     action_welcome_connections_title_id;
-    KAction *action_settings;
+    QAction *action_settings;
 
     //! edit menu
-    KAction *action_edit_delete, *action_edit_delete_row,
+    QAction *action_edit_delete, *action_edit_delete_row,
     *action_edit_cut, *action_edit_copy, *action_edit_paste,
     *action_edit_find, *action_edit_findnext, *action_edit_findprev,
     *action_edit_replace, *action_edit_replace_all,
@@ -2027,7 +2027,7 @@ public:
     *action_edit_copy_special_data_table;
 
     //! view menu
-    KAction *action_view_nav, *action_view_propeditor, *action_view_mainarea;
+    QAction *action_view_nav, *action_view_propeditor, *action_view_mainarea;
 //! todo see FormManager::createActions() for usage
     /* UNUSED, see KexiToggleViewModeAction
         QActionGroup* action_view_mode;
@@ -2037,23 +2037,23 @@ public:
     KToggleAction *action_show_helper;
 #endif
     //! data menu
-    KAction *action_data_save_row;
-    KAction *action_data_cancel_row_changes;
-    KAction *action_data_execute;
+    QAction *action_data_save_row;
+    QAction *action_data_cancel_row_changes;
+    QAction *action_data_execute;
 
     //! format menu
-    KAction *action_format_font;
+    QAction *action_format_font;
 
     //! tools menu
-    KAction *action_tools_import_project, *action_tools_compact_database, *action_tools_data_import;
+    QAction *action_tools_import_project, *action_tools_compact_database, *action_tools_data_import;
     KActionMenu *action_tools_scripts;
 
     //! window menu
-    KAction *action_window_next, *action_window_previous, *action_window_fullscreen;
+    QAction *action_window_next, *action_window_previous, *action_window_fullscreen;
 
     //! global
-    KAction *action_show_help_menu;
-    KAction *action_view_global_search;
+    QAction *action_show_help_menu;
+    QAction *action_view_global_search;
     //! for dock windows
 
     QPointer<QWidget> focus_before_popup;

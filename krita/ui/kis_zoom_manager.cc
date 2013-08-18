@@ -122,7 +122,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
                                           "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
-    m_100pct = new KAction(i18n("Reset zoom"), this);
+    m_100pct = new QAction(i18n("Reset zoom"), this);
     actionCollection->addAction("zoom_to_100pct", m_100pct);
     m_100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
     connect(m_100pct, SIGNAL(triggered()), SLOT(zoomTo100()));

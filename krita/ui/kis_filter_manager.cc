@@ -51,9 +51,9 @@ struct KisFilterManager::Private {
     Private() : reapplyAction(0), actionCollection(0) {
 
     }
-    KAction* reapplyAction;
+    QAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
-    QHash<KisFilter*, KAction*> filters2Action;
+    QHash<KisFilter*, QAction*> filters2Action;
     KActionCollection *actionCollection;
     KisView2 *view;
 
@@ -80,7 +80,7 @@ void KisFilterManager::setup(KActionCollection * ac)
     d->actionCollection = ac;
 
     // Setup reapply action
-    d->reapplyAction = new KAction(i18n("Apply Filter Again"), this);
+    d->reapplyAction = new QAction(i18n("Apply Filter Again"), this);
     d->actionCollection->addAction("filter_apply_again", d->reapplyAction);
 
     d->reapplyAction->setEnabled(false);
@@ -116,8 +116,8 @@ void KisFilterManager::insertFilter(const QString & filterName)
         d->filterActionMenus[category.id()] = actionMenu;
     }
 
-    KAction *action = new KAction(filter->menuEntry(), this);
-    action->setShortcut(filter->shortcut(), KAction::DefaultShortcut);
+    QAction *action = new QAction(filter->menuEntry(), this);
+    action->setShortcut(filter->shortcut(), QAction::DefaultShortcut);
     d->actionCollection->addAction(QString("krita_filter_%1").arg(filterName), action);
     d->filters2Action[filter.data()] = action;
 
@@ -138,7 +138,7 @@ void KisFilterManager::updateGUI()
 
     d->reapplyAction->setEnabled(enable);
 
-    for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
+    for (QHash<KisFilter*, QAction*>::iterator it = d->filters2Action.begin();
             it != d->filters2Action.end(); ++it) {
 
         bool localEnable = enable &&

@@ -22,7 +22,7 @@
 #include <kdebug.h>
 #include <ktar.h>
 #include <QDir>
-#include <kaction.h>
+#include <QAction>
 #include <QApplication>
 #include <kfiledialog.h>
 #include <klocale.h>

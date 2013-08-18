@@ -20,7 +20,7 @@
 #include "KoTextDocument.h"
 #include "KoStyleManager.h"
 
-#include <kaction.h>
+#include <QAction>
 #include <klocale.h>
 
 #include <QWidget>

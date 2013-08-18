@@ -22,7 +22,7 @@
 
 #include <KoPAView.h>
 
-class KAction;
+class QAction;
 
 class FlowDocument;
 class FlowPart;

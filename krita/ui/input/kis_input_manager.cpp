@@ -21,7 +21,7 @@
 #include <QDebug>
 #include <QQueue>
 
-#include <kaction.h>
+#include <QAction>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <QApplication>
@@ -364,7 +364,7 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
      * There really should be a better way to handle this, one that neither
      * relies on "hidden" mouse interaction or shortcuts.
      */
-    KAction *setMirrorAxis = new KAction(i18n("Set Mirror Axis"), this);
+    QAction *setMirrorAxis = new QAction(i18n("Set Mirror Axis"), this);
     d->canvas->view()->actionCollection()->addAction("set_mirror_axis", setMirrorAxis);
     setMirrorAxis->setShortcut(QKeySequence("Shift+r"));
     connect(setMirrorAxis, SIGNAL(triggered(bool)), SLOT(setMirrorAxis()));

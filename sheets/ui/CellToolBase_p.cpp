@@ -181,7 +181,7 @@ void CellToolBase::Private::updateActions(const Cell& cell)
 void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
 {
     // Enable/disable actions.
-    const QList<KAction*> actions = q->actions().values();
+    const QList<QAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
     q->action("insertFormula")->setEnabled(enable);
@@ -1258,47 +1258,47 @@ void CellToolBase::Private::createPopupMenuActions()
         popupMenuActions.insert(QString("separator%1").arg(i), action);
     }
 
-    action = new KAction(koIcon("insertcell"), i18n("Insert Cells..."), q);
+    action = new QAction(koIcon("insertcell"), i18n("Insert Cells..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertCells()));
     popupMenuActions.insert("insertCell", action);
 
-    action = new KAction(koIcon("removecell"), i18n("Delete Cells..."), q);
+    action = new QAction(koIcon("removecell"), i18n("Delete Cells..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteCells()));
     popupMenuActions.insert("deleteCell", action);
 
-    action = new KAction(koIcon("adjustcol"), i18n("Adjust Column"), q);
+    action = new QAction(koIcon("adjustcol"), i18n("Adjust Column"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(adjustColumn()));
     popupMenuActions.insert("adjustColumn", action);
 
-    action = new KAction(koIcon("edit-table-insert-column-left"), i18n("Insert Columns"), q);
+    action = new QAction(koIcon("edit-table-insert-column-left"), i18n("Insert Columns"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertColumn()));
     popupMenuActions.insert("insertColumn", action);
 
-    action = new KAction(koIcon("edit-table-delete-column"), i18n("Delete Columns"), q);
+    action = new QAction(koIcon("edit-table-delete-column"), i18n("Delete Columns"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteColumn()));
     popupMenuActions.insert("deleteColumn", action);
 
-    action = new KAction(koIcon("adjustrow"), i18n("Adjust Row"), q);
+    action = new QAction(koIcon("adjustrow"), i18n("Adjust Row"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(adjustRow()));
     popupMenuActions.insert("adjustRow", action);
 
-    action = new KAction(koIcon("edit-table-insert-row-above"), i18n("Insert Rows"), q);
+    action = new QAction(koIcon("edit-table-insert-row-above"), i18n("Insert Rows"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertRow()));
     popupMenuActions.insert("insertRow", action);
 
-    action = new KAction(koIcon("edit-table-delete-row"), i18n("Delete Rows"), q);
+    action = new QAction(koIcon("edit-table-delete-row"), i18n("Delete Rows"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteRow()));
     popupMenuActions.insert("deleteRow", action);
 
-    action = new KAction(i18n("Selection List..."), q);
+    action = new QAction(i18n("Selection List..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(listChoosePopupMenu()));
     popupMenuActions.insert("listChoose", action);
 
-    action = new KAction(koIcon("comment"), i18n("Comment"), q);
+    action = new QAction(koIcon("comment"), i18n("Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
     popupMenuActions.insert("comment", action);
 
-    action = new KAction(koIcon("removecomment"),i18n("Clear Comment"), q);
+    action = new QAction(koIcon("removecomment"),i18n("Clear Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
     popupMenuActions.insert("clearComment", action);
 

@@ -173,9 +173,9 @@ private slots:
 private:
     ResourceAppointmentsTreeView *m_view;
 
-    KAction *actionAddResource;
-    KAction *actionAddGroup;
-    KAction *actionDeleteSelection;
+    QAction *actionAddResource;
+    QAction *actionAddGroup;
+    QAction *actionDeleteSelection;
 
 };
 

@@ -86,14 +86,14 @@ public:
 
     KexiItemMenu *itemMenu;
     KexiGroupMenu *partMenu;
-    KAction *deleteAction, *renameAction,
+    QAction *deleteAction, *renameAction,
         *newObjectAction,
     // *newObjectToolbarAction,
         *openAction, *designAction, *editTextAction,
         *executeAction,
         *dataExportToClipboardAction, *dataExportToFileAction;
 #ifndef KEXI_NO_QUICK_PRINTING
-    KAction *printAction, *pageSetupAction;
+    QAction *printAction, *pageSetupAction;
 #endif
 
     KActionMenu* exportActionMenu;
@@ -293,10 +293,10 @@ KexiProjectNavigator::~KexiProjectNavigator()
     delete d;
 }
 
-KAction* KexiProjectNavigator::addAction(const QString& name, const KIcon& icon, const QString& text,
+QAction* KexiProjectNavigator::addAction(const QString& name, const KIcon& icon, const QString& text,
                                 const QString& toolTip, const QString& whatsThis, const char* slot)
 {
-    KAction *action = new KAction(icon, text, this);
+    QAction *action = new QAction(icon, text, this);
     d->actions->addAction(name, action);
     action->setToolTip(toolTip);
     action->setWhatsThis(whatsThis);

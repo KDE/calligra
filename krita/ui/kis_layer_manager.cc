@@ -276,17 +276,17 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
 
 void KisLayerManager::setup(KActionCollection * actionCollection)
 {
-    m_imageFlatten  = new KAction(i18n("&Flatten image"), this);
+    m_imageFlatten  = new QAction(i18n("&Flatten image"), this);
     actionCollection->addAction("flatten_image", m_imageFlatten);
     m_imageFlatten->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
     connect(m_imageFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
-    m_imageMergeLayer  = new KAction(i18n("&Merge with Layer Below"), this);
+    m_imageMergeLayer  = new QAction(i18n("&Merge with Layer Below"), this);
     actionCollection->addAction("merge_layer", m_imageMergeLayer);
     m_imageMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imageMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
-    m_flattenLayer  = new KAction(i18n("&Flatten Layer"), this);
+    m_flattenLayer  = new QAction(i18n("&Flatten Layer"), this);
     actionCollection->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
@@ -296,7 +296,7 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_view->actionManager()->addAction("rasterize_layer", m_rasterizeLayer, actionCollection);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_groupLayersSave = new KAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave = new QAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
     actionCollection->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 

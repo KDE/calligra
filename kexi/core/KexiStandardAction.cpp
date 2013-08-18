@@ -26,7 +26,7 @@
 #include <kshortcut.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <klocale.h>
 
@@ -79,13 +79,13 @@ inline const Info* infoPtr(StandardAction id)
 
 //---------------------------------------------
 
-KAction *create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
+QAction *create(StandardAction id, const QObject *recvr, const char *slot, QObject *parent)
 {
-    KAction *pAction = 0;
+    QAction *pAction = 0;
     const Info* pInfo = infoPtr(id);
 
     if (pInfo) {
-        pAction = new KAction(parent);
+        pAction = new QAction(parent);
         pAction->setObjectName(pInfo->psName);
         KShortcut cut(pInfo->shortcut);
         if (!cut.isEmpty())
@@ -115,7 +115,7 @@ const char* name(StandardAction id)
 }
 
 #define CREATE_METHOD(methodName, enumName) \
-    KAction *methodName(const QObject *recvr, const char *slot, QObject *parent) \
+    QAction *methodName(const QObject *recvr, const char *slot, QObject *parent) \
     { \
         return KexiStandardAction::create(enumName, recvr, slot, parent); \
     }

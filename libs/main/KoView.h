@@ -36,7 +36,7 @@ struct KoPageLayout;
 // KDE classes
 class KStatusBar;
 class KXmlGuiWindow;
-class KAction;
+class QAction;
 
 // Qt classes
 class QToolBar;

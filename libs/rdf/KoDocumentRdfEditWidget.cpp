@@ -344,14 +344,14 @@ void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfSemanticItem item)
 void KoDocumentRdfEditWidget::showSemanticViewContextMenu(const QPoint &position)
 {
     QPointer<QMenu> menu = new QMenu(0);
-    QList<KAction*> actions;
+    QList<QAction*> actions;
     if (QTreeWidgetItem *baseitem = d->m_ui->m_semanticView->itemAt(position)) {
         if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
             actions = item->actions(menu);
         }
     }
     if (actions.count() > 0) {
-        foreach (KAction *a, actions) {
+        foreach (QAction *a, actions) {
             menu->addAction(a);
         }
         menu->exec(d->m_ui->m_semanticView->mapToGlobal(position));

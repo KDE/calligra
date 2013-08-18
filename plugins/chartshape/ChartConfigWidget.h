@@ -59,7 +59,7 @@ public:
 
     void open(KoShape* shape);
     void save();
-    KAction* createAction();
+    QAction* createAction();
 
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }

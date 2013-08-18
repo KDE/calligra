@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <db/tableviewdata.h>
 #include <db/queryschema.h>
@@ -55,7 +55,7 @@ KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
     if (_actionType.isEmpty() || _actionArg.isEmpty())
         return 0;
     KexiPart::Info *info = 0;
-    if (_actionType != "kaction" && _actionType != "currentForm") {
+    if (_actionType != "QAction" && _actionType != "currentForm") {
         info = Kexi::partManager().infoForClass(QString("org.kexi-project.%1").arg(_actionType));
         if (!info)
             return 0;
@@ -90,7 +90,7 @@ KexiFormEventAction::Private::~Private()
 
 KexiFormEventAction::KexiFormEventAction(QObject* parent,
         const QString& actionName, const QString& objectName, const QString& actionOption)
-        : KAction(parent)
+        : QAction(parent)
         ,d(new Private(actionName, objectName, actionOption))
 {
     connect(this, SIGNAL(triggered()), this, SLOT(trigger()));
@@ -213,7 +213,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
         if (!ok)
             continue;
 kDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
-        if (actionType == "kaction" || actionType == "currentForm") {
+        if (actionType == "QAction" || actionType == "currentForm") {
             QAction *action = KexiMainWindowIface::global()->actionCollection()->action(
                                   actionArg);
             if (!action)

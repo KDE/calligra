@@ -19,7 +19,7 @@
 #include "SimpleInsertWidget.h"
 #include "TextTool.h"
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QWidget>

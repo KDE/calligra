@@ -25,7 +25,7 @@
 
 #include "ui_KexiMainImportExportPage.h"
 
-class KAction;
+class QAction;
 class KexiImportExportAssistant;
 
 class KexiMainImportExportPage : public KexiAssistantPage,
@@ -43,13 +43,13 @@ class KexiImportExportAssistant : public KexiAssistantWidget
     Q_OBJECT
 public:
     KexiImportExportAssistant(
-        const KAction *action_project_import_export_send_,
-        const KAction *action_import_project_,
+        const QAction *action_project_import_export_send_,
+        const QAction *action_import_project_,
         QWidget* parent = 0);
     ~KexiImportExportAssistant();
 
-    const KAction *action_project_import_export_send;
-    const KAction *action_import_project;
+    const QAction *action_project_import_export_send;
+    const QAction *action_import_project;
 
 public slots:
     virtual void nextPageRequested(KexiAssistantPage* page);

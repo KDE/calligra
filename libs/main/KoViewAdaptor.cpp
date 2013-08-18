@@ -27,7 +27,7 @@
 #include "KoView.h"
 
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <QList>
 
 KoViewAdaptor::KoViewAdaptor(KoView *view)

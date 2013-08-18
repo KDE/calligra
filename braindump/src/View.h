@@ -28,7 +28,7 @@
 class KoCanvasControllerWidget;
 class Canvas;
 class MainWindow;
-class KAction;
+class QAction;
 class KToggleAction;
 class KoZoomAction;
 class KoViewConverter;
@@ -123,13 +123,13 @@ private:
 
     KoCutController* m_cutController;
     KoCopyController* m_copyController;
-    KAction* m_editCopy;
-    KAction* m_editCut;
+    QAction* m_editCopy;
+    QAction* m_editCut;
 
-    KAction *m_editPaste;
-    KAction *m_deleteSelectionAction;
-    KAction* m_groupShapes;
-    KAction* m_ungroupShapes;
+    QAction *m_editPaste;
+    QAction *m_deleteSelectionAction;
+    QAction* m_groupShapes;
+    QAction* m_ungroupShapes;
     KoZoomAction *m_zoomAction;
 };
 

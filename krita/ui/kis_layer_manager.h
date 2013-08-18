@@ -23,7 +23,7 @@
 
 #include "kis_types.h"
 
-class KAction;
+class QAction;
 class QAction;
 class KToggleAction;
 class KActionCollection;
@@ -128,12 +128,12 @@ private:
     KisView2 * m_view;
     KisDoc2 * m_doc;
 
-    KAction *m_imageFlatten;
-    KAction *m_imageMergeLayer;
-    KAction *m_groupLayersSave;
+    QAction *m_imageFlatten;
+    QAction *m_imageMergeLayer;
+    QAction *m_groupLayersSave;
     bool m_actLayerVis;
     KisAction *m_imageResizeToLayer;
-    KAction *m_flattenLayer;
+    QAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;

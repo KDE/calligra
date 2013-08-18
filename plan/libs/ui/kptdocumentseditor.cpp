@@ -37,7 +37,7 @@
 #include <QVBoxLayout>
 
 
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -214,20 +214,20 @@ void DocumentsEditor::updateActionsEnabled(  bool on )
 void DocumentsEditor::setupGui()
 {
     QString name = "documentseditor_edit_list";
-    actionEditDocument  = new KAction(koIcon("document-properties"), i18n("Edit..."), this);
+    actionEditDocument  = new QAction(koIcon("document-properties"), i18n("Edit..."), this);
     actionCollection()->addAction("edit_documents", actionEditDocument );
 //    actionEditDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionEditDocument, SIGNAL(triggered(bool)), SLOT(slotEditDocument()) );
     addAction( name, actionEditDocument );
 
-    actionViewDocument  = new KAction(koIcon("document-preview"), i18nc("@action View a document", "View..."), this);
+    actionViewDocument  = new QAction(koIcon("document-preview"), i18nc("@action View a document", "View..."), this);
     actionCollection()->addAction("view_documents", actionViewDocument );
 //    actionViewDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionViewDocument, SIGNAL(triggered(bool)), SLOT(slotViewDocument()) );
     addAction( name, actionViewDocument );
 
     
-/*    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
+/*    actionDeleteSelection  = new QAction(koIcon("edit-delete"), i18n("Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );

@@ -22,7 +22,7 @@
 
 #include <formeditor/widgetfactory.h>
 
-class KAction;
+class QAction;
 
 namespace KFormDesigner
 {

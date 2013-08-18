@@ -24,7 +24,7 @@
 #include <KexiLinkButton.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kcolorscheme.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -286,7 +286,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     textLabel->setBackgroundRole(QPalette::Mid);
 #endif
     }
-/*    KAction* closeAction = KStandardAction::close(q, SLOT(animatedHide()), q);
+/*    QAction* closeAction = KStandardAction::close(q, SLOT(animatedHide()), q);
     closeButton = new QToolButton(content);
     closeButton->setAutoRaise(true);
     closeButton->setDefaultAction(closeAction);*/

@@ -24,7 +24,7 @@
 #include <QMouseEvent>
 
 #include <kxmlguifactory.h>
-#include <kaction.h>
+#include <QAction>
 #include <kundo2stack.h>
 
 #include <KoCanvasController.h>

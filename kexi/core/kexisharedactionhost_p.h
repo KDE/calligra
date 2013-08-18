@@ -35,7 +35,7 @@ public:
     KexiVolatileActionData() {
         plugged = false;
     }
-//  KAction *kaction;
+//  QAction *QAction;
     bool plugged;
 };
 
@@ -55,9 +55,9 @@ public slots:
 public:
     QHash<QObject*, KexiActionProxy*> actionProxies;
     KexiMainWindowIface *mainWin;
-    QList<KAction*> sharedActions;
+    QList<QAction*> sharedActions;
     QSignalMapper actionMapper;
-    QHash<KAction*, KexiVolatileActionData*> volatileActions;
+    QHash<QAction*, KexiVolatileActionData*> volatileActions;
     QHash<QString, QWidget*> enablers;
     KexiSharedActionHost *host;
 };

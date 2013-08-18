@@ -38,7 +38,7 @@
 #include <kis_debug.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <KoIcon.h>
 #include <KoShape.h>
@@ -87,34 +87,34 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
     if (!collection->action("make_brush_color_lighter")) {
-        KAction *lighterColor = new KAction(i18n("Make brush color lighter"), collection);
+        QAction *lighterColor = new QAction(i18n("Make brush color lighter"), collection);
         lighterColor->setShortcut(Qt::Key_L);
         collection->addAction("make_brush_color_lighter", lighterColor);
     }
 
     if (!collection->action("make_brush_color_darker")) {
-        KAction *darkerColor = new KAction(i18n("Make brush color darker"), collection);
+        QAction *darkerColor = new QAction(i18n("Make brush color darker"), collection);
         darkerColor->setShortcut(Qt::Key_K);
         collection->addAction("make_brush_color_darker", darkerColor);
     }
 
-    addAction("make_brush_color_lighter", dynamic_cast<KAction*>(collection->action("make_brush_color_lighter")));
-    addAction("make_brush_color_darker", dynamic_cast<KAction*>(collection->action("make_brush_color_darker")));
+    addAction("make_brush_color_lighter", dynamic_cast<QAction*>(collection->action("make_brush_color_lighter")));
+    addAction("make_brush_color_darker", dynamic_cast<QAction*>(collection->action("make_brush_color_darker")));
 
     if (!collection->action("increase_opacity")) {
-        KAction *increaseOpacity = new KAction(i18n("Increase opacity"), collection);
+        QAction *increaseOpacity = new QAction(i18n("Increase opacity"), collection);
         increaseOpacity->setShortcut(Qt::Key_O);
         collection->addAction("increase_opacity", increaseOpacity);
     }
 
     if (!collection->action("decrease_opacity")) {
-        KAction *increaseOpacity = new KAction(i18n("Decrease opacity"), collection);
+        QAction *increaseOpacity = new QAction(i18n("Decrease opacity"), collection);
         increaseOpacity->setShortcut(Qt::Key_I);
         collection->addAction("decrease_opacity", increaseOpacity);
     }
 
-    addAction("decrease_opacity", dynamic_cast<KAction*>(collection->action("decrease_opacity")));
-    addAction("increase_opacity", dynamic_cast<KAction*>(collection->action("increase_opacity")));
+    addAction("decrease_opacity", dynamic_cast<QAction*>(collection->action("decrease_opacity")));
+    addAction("increase_opacity", dynamic_cast<QAction*>(collection->action("increase_opacity")));
 
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);

@@ -55,7 +55,7 @@
 
 KexiToggleViewModeAction::KexiToggleViewModeAction(
     Kexi::ViewMode mode, QObject* parent)//, QObject* receiver, const char* slot)
-        : KAction(
+        : QAction(
             KIcon(Kexi::iconNameForViewMode(mode)),
             Kexi::nameForViewMode(mode, true/*withAmpersand*/),
             parent)
@@ -113,7 +113,7 @@ public:
 
     ~Private() {
         /*   qDeleteAll(viewActions); */
-        /*   foreach(KAction* action, viewActions) {
+        /*   foreach(QAction* action, viewActions) {
                 //only delete action if it is not shared (otherwise, window itself will delete it)
                 if (!window->sharedViewAction(action->name()))
                   delete action;
@@ -163,7 +163,7 @@ public:
         if (!window->supportsViewMode(mode)) {
             return 0;
         }
-        KAction *a = new KexiToggleViewModeAction(mode, q);
+        QAction *a = new KexiToggleViewModeAction(mode, q);
         toggleViewModeActions.insert(mode, a);
 
         KoGroupButton *btn = new KoGroupButton(pos, parent);

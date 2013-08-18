@@ -158,7 +158,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
     //                        && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow*>(o));
 
     KexiActionProxy *p = o ? d->actionProxies.value(o) : 0;
-    foreach(KAction* a, d->sharedActions) {
+    foreach(QAction* a, d->sharedActions) {
         //setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 #ifdef __GNUC__
 #warning TODO:  if (!insideKexiWindow && d->mainWin->actionCollection()!=a->parentCollection()) {
@@ -178,7 +178,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
         KexiVolatileActionData *va = d->volatileActions.value(a);
         if (va != 0) {
             if (p && p->isSupported(a->objectName())) {
-                QList<KAction*> actions_list;
+                QList<QAction*> actions_list;
                 actions_list.append(a);
                 if (!va->plugged) {
                     va->plugged = true;
@@ -224,7 +224,7 @@ QWidget* KexiSharedActionHost::focusWindow()
     return findWindow(fw);
 }
 
-KAction* KexiSharedActionHost::createSharedActionInternal(KAction *action)
+QAction* KexiSharedActionHost::createSharedActionInternal(QAction *action)
 {
     QObject::connect(action, SIGNAL(activated()), &d->actionMapper, SLOT(map()));
     d->actionMapper.setMapping(action, action->objectName());
@@ -232,32 +232,32 @@ KAction* KexiSharedActionHost::createSharedActionInternal(KAction *action)
     return action;
 }
 
-QList<KAction*> KexiSharedActionHost::sharedActions() const
+QList<QAction*> KexiSharedActionHost::sharedActions() const
 {
     return d->sharedActions;
 }
 
-/*class KexiAction : public KAction
+/*class KexiAction : public QAction
 {
   public:
     KexiAction(const QString &text, const QIcon &pix,
       const KShortcut &cut, const QObject *receiver,
       const char *slot, KActionCollection *parent, const char *name)
-     : KAction(text,pix,cut,receiver,slot,parent,name)
+     : QAction(text,pix,cut,receiver,slot,parent,name)
     {
     }
 
   QPtrDict<QWidget> unplugged;
 };*/
 
-KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &iconName,
+QAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &iconName,
         const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
 {
     if (!col)
         col = d->mainWin->actionCollection();
 
     if (subclassName == 0) {
-        KAction *action = new KAction(KIcon(iconName), text, col);
+        QAction *action = new QAction(KIcon(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);
@@ -275,29 +275,29 @@ KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QSt
         col->addAction(name, action);
         return createSharedActionInternal(action);
     }
-    //TODO: more KAction subclasses
+    //TODO: more QAction subclasses
     return 0;
 }
 
-KAction* KexiSharedActionHost::createSharedAction(KStandardAction::StandardAction id,
+QAction* KexiSharedActionHost::createSharedAction(KStandardAction::StandardAction id,
         const char *name, KActionCollection* col)
 {
     if (!col)
         col = d->mainWin->actionCollection();
 
-    KAction* action = createSharedActionInternal(
+    QAction* action = createSharedActionInternal(
                           KStandardAction::create(id, 0/*receiver*/, 0/*slot*/, col)
                       );
     action->setObjectName(name);
     return action;
 }
 
-KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut,
+QAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut,
         const char *name, KActionCollection* col)
 {
     if (!col)
         col = d->mainWin->actionCollection();
-    KAction* action = new KAction(guiItem.icon(), guiItem.text(), col);
+    QAction* action = new QAction(guiItem.icon(), guiItem.text(), col);
     action->setObjectName(name);
     action->setShortcut(cut);
     action->setEnabled(guiItem.isEnabled());   //TODO how to update enable/disable? is it needed anyway?
@@ -306,7 +306,7 @@ KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const
     return createSharedActionInternal(action);
 }
 
-void KexiSharedActionHost::setActionVolatile(KAction *a, bool set)
+void KexiSharedActionHost::setActionVolatile(QAction *a, bool set)
 {
     if (!set) {
         d->volatileActions.remove(a);

@@ -134,9 +134,9 @@ protected:
 private:
     CalendarDayItemModel *m_model;
     
-    KAction *actionSetUndefined;
-    KAction *actionSetVacation;
-    KAction *actionSetWork;
+    QAction *actionSetUndefined;
+    QAction *actionSetVacation;
+    QAction *actionSetWork;
 
     bool m_readwrite;
 };
@@ -203,17 +203,17 @@ private:
     KDatePicker *m_datePicker;
     DateTableDataModel *m_model;
     
-    KAction *actionAddCalendar;
-    KAction *actionAddSubCalendar;
-    KAction *actionDeleteSelection;
+    QAction *actionAddCalendar;
+    QAction *actionAddSubCalendar;
+    QAction *actionDeleteSelection;
 
-    KAction *actionAddDay;
-    KAction *actionAddWorkInterval;
-    KAction *actionDeleteDaySelection;
+    QAction *actionAddDay;
+    QAction *actionAddWorkInterval;
+    QAction *actionDeleteDaySelection;
 
-    KAction *actionSetUndefined;
-    KAction *actionSetVacation;
-    KAction *actionSetWork;
+    QAction *actionSetUndefined;
+    QAction *actionSetVacation;
+    QAction *actionSetWork;
     
     QList<QDate> m_currentMenuDateList;
 

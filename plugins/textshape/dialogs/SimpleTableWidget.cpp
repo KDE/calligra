@@ -25,7 +25,7 @@
 #include <KoColorPopupAction.h>
 #include <KoIcon.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QWidget>
@@ -47,7 +47,7 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     widget.mergeCells->setDefaultAction(tool->action("merge_tablecells"));
     widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
 
-     KAction *action = new KAction(koIcon("borderpainter"), "activate_borderpainter", this);
+     QAction *action = new QAction(koIcon("borderpainter"), "activate_borderpainter", this);
     action->setToolTip(i18n("Select a border style and paint that style onto a table"));
     connect(action, SIGNAL(activated()), this, SLOT(restartPainting()));
     widget.border->setDefaultAction(action);

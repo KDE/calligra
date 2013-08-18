@@ -110,60 +110,60 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
 
     // The menu items
     // ------ Edit
-    actionRemoveSelectedPackages  = new KAction(koIcon("edit-delete"), i18n("Remove Packages"), this);
+    actionRemoveSelectedPackages  = new QAction(koIcon("edit-delete"), i18n("Remove Packages"), this);
     collection->addAction("package_remove_selected", actionRemoveSelectedPackages );
     connect( actionRemoveSelectedPackages, SIGNAL(triggered(bool)), SLOT(slotRemoveSelectedPackages()) );
 
-    actionRemoveCurrentPackage  = new KAction(koIcon("edit-delete"), i18n("Remove Package"), this);
+    actionRemoveCurrentPackage  = new QAction(koIcon("edit-delete"), i18n("Remove Package"), this);
     collection->addAction("package_remove_current", actionRemoveCurrentPackage );
     connect( actionRemoveCurrentPackage, SIGNAL(triggered(bool)), SLOT(slotRemoveCurrentPackage()) );
 
-    actionViewList  = new KAction(koIcon("view-list-tree"), i18n("List"), this);
+    actionViewList  = new QAction(koIcon("view-list-tree"), i18n("List"), this);
     actionViewList->setToolTip( i18nc( "@info:tooltip", "Select task list" ) );
     collection->addAction("view_list", actionViewList );
     connect( actionViewList, SIGNAL(triggered(bool)), SLOT(slotViewList()) );
 
-    actionViewGantt  = new KAction(koIcon("view-time-schedule"), i18n("Gantt"), this);
+    actionViewGantt  = new QAction(koIcon("view-time-schedule"), i18n("Gantt"), this);
     actionViewGantt->setToolTip( i18nc( "@info:tooltip", "Select timeline" ) );
     collection->addAction("view_gantt", actionViewGantt );
     connect( actionViewGantt, SIGNAL(triggered(bool)), SLOT(slotViewGantt()) );
 
-//     actionTaskProgress  = new KAction(koIcon("document-edit"), i18n("Progress..."), this);
+//     actionTaskProgress  = new QAction(koIcon("document-edit"), i18n("Progress..."), this);
 //     collection->addAction("task_progress", actionTaskProgress );
 //     connect( actionTaskProgress, SIGNAL(triggered(bool)), SLOT(slotTaskProgress()) );
 
     //------ Settings
-    actionConfigure  = new KAction(koIcon("configure"), i18n("Configure PlanWork..."), this);
+    actionConfigure  = new QAction(koIcon("configure"), i18n("Configure PlanWork..."), this);
     collection->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL(triggered(bool)), SLOT(slotConfigure()) );
 
     //------ Popups
-    actionEditDocument  = new KAction(koIcon("document-edit"), i18n("Edit..."), this);
+    actionEditDocument  = new QAction(koIcon("document-edit"), i18n("Edit..."), this);
     collection->addAction("edit_document", actionEditDocument );
     connect( actionEditDocument, SIGNAL(triggered(bool)), SLOT(slotEditDocument()) );
 
-    actionViewDocument  = new KAction(koIcon("document-preview"), i18nc( "@verb", "View..."), this);
+    actionViewDocument  = new QAction(koIcon("document-preview"), i18nc( "@verb", "View..."), this);
     collection->addAction("view_document", actionViewDocument );
     connect( actionViewDocument, SIGNAL(triggered(bool)), SLOT(slotViewDocument()) );
 
     // FIXME remove UndoText::removeDocument() when string freeze is lifted
-    actionRemoveDocument = new KAction(koIcon("list-remove"), UndoText::removeDocument(), this);
+    actionRemoveDocument = new QAction(koIcon("list-remove"), UndoText::removeDocument(), this);
     collection->addAction("remove_document", actionRemoveDocument );
     connect( actionRemoveDocument, SIGNAL(triggered(bool)), SLOT(slotRemoveDocument()) );
 
-    actionSendPackage  = new KAction(koIcon("mail-send"), i18n("Send Package..."), this);
+    actionSendPackage  = new QAction(koIcon("mail-send"), i18n("Send Package..."), this);
     collection->addAction("edit_sendpackage", actionSendPackage );
     connect( actionSendPackage, SIGNAL(triggered(bool)), SLOT(slotSendPackage()) );
 
-    actionPackageSettings  = new KAction(koIcon("document-properties"), i18n("Package Settings..."), this);
+    actionPackageSettings  = new QAction(koIcon("document-properties"), i18n("Package Settings..."), this);
     collection->addAction("edit_packagesettings", actionPackageSettings );
     connect( actionPackageSettings, SIGNAL(triggered(bool)), SLOT(slotPackageSettings()) );
 
-    actionTaskCompletion  = new KAction(koIcon("document-edit"), i18n("Edit Progress..."), this);
+    actionTaskCompletion  = new QAction(koIcon("document-edit"), i18n("Edit Progress..."), this);
     collection->addAction("task_progress", actionTaskCompletion );
     connect( actionTaskCompletion, SIGNAL(triggered(bool)), SLOT(slotTaskCompletion()) );
 
-    actionViewDescription  = new KAction(/*koIcon("document_view"),*/ i18n("View Description..."), this);
+    actionViewDescription  = new QAction(/*koIcon("document_view"),*/ i18n("View Description..."), this);
     collection->addAction("task_description", actionViewDescription );
     connect( actionViewDescription, SIGNAL(triggered(bool)), SLOT(slotTaskDescription()) );
 

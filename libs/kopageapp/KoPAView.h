@@ -89,7 +89,7 @@ public:
 
     KoCutController* cutController() const;
 
-    KAction* deleteSelectionAction() const;
+    QAction* deleteSelectionAction() const;
 
     void updateReadWrite( bool readwrite );
 

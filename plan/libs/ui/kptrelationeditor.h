@@ -32,7 +32,7 @@ class KoDocument;
 class QModelIndex;
 class QItemDelegate;
 
-class KAction;
+class QAction;
 
 namespace KPlato
 {

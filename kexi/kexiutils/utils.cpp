@@ -37,7 +37,7 @@
 #include <QApplication>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
-#include <kaction.h>
+#include <QAction>
 #include <kdialog.h>
 #include <kcolorscheme.h>
 

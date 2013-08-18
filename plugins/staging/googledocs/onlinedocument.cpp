@@ -44,7 +44,7 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
 {
     //FIXME QT5 setComponentData(OnlineDocumentFactory::componentData());
 
-    KAction *action  = new KAction(i18n("&Google Online Document..."), this);
+    QAction *action  = new QAction(i18n("&Google Online Document..."), this);
     actionCollection()->addAction("google_docs", action );
     connect(action, SIGNAL(triggered(bool)), SLOT(slotOnlineDocument()));
 

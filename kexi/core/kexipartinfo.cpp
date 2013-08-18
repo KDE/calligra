@@ -102,7 +102,7 @@ Info::Private::Private()
 //------------------------------
 
 KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
-    : KAction(KIcon(info->createItemIconName()), info->instanceCaption() + "...", parent)
+    : QAction(KIcon(info->createItemIconName()), info->instanceCaption() + "...", parent)
     , m_info(info)
 {
     setObjectName(KexiPart::nameForCreateAction(*m_info));

@@ -20,7 +20,7 @@
 
 
 #include <kstandardaction.h>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 

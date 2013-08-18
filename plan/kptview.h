@@ -42,7 +42,7 @@ class QStackedWidget;
 class QSplitter;
 class KUndo2Command;
 
-class KAction;
+class QAction;
 class KToggleAction;
 class QLabel;
 class KConfigSkeleton;
@@ -410,38 +410,38 @@ private:
 
     // ------ Insert
     // ------ Project
-    KAction *actionEditMainProject;
+    QAction *actionEditMainProject;
 
     // ------ Tools
-    KAction *actionEditStandardWorktime;
-    KAction *actionDefineWBS;
-    KAction *actionInsertFile;
-    KAction *actionCurrencyConfig;
+    QAction *actionEditStandardWorktime;
+    QAction *actionDefineWBS;
+    QAction *actionInsertFile;
+    QAction *actionCurrencyConfig;
 
-    KAction *actionOpenReportFile;
+    QAction *actionOpenReportFile;
 
     // ------ Settings
-    KAction *actionConfigure;
+    QAction *actionConfigure;
 
     // ------ Help
-    KAction *actionIntroduction;
+    QAction *actionIntroduction;
 
     // ------ Popup
-    KAction *actionOpenNode;
-    KAction *actionTaskProgress;
-    KAction *actionTaskDescription;
-    KAction *actionDeleteTask;
-    KAction *actionIndentTask;
-    KAction *actionUnindentTask;
-    KAction *actionMoveTaskUp;
-    KAction *actionMoveTaskDown;
+    QAction *actionOpenNode;
+    QAction *actionTaskProgress;
+    QAction *actionTaskDescription;
+    QAction *actionDeleteTask;
+    QAction *actionIndentTask;
+    QAction *actionUnindentTask;
+    QAction *actionMoveTaskUp;
+    QAction *actionMoveTaskDown;
 
-    KAction *actionEditResource;
-    KAction *actionEditRelation;
-    KAction *actionDeleteRelation;
+    QAction *actionEditResource;
+    QAction *actionEditRelation;
+    QAction *actionDeleteRelation;
 
     //Test
-    KAction *actNoInformation;
+    QAction *actNoInformation;
 
     QMap<ViewListItem*, QAction*> m_reportActionMap;
 

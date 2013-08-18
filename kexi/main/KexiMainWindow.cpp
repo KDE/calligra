@@ -45,7 +45,7 @@
 
 #include <QApplication>
 #include <kcmdlineargs.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
@@ -167,7 +167,7 @@ KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget
         , m_mainWidget(mainWidget)
         , m_tabIndex(-1)
 {
-    m_closeAction = new KAction(koIcon("tab-close"), i18n("&Close Tab"), this);
+    m_closeAction = new QAction(koIcon("tab-close"), i18n("&Close Tab"), this);
     m_closeAction->setToolTip(i18n("Close the current tab"));
     m_closeAction->setWhatsThis(i18n("Closes the current tab."));
     connect(m_closeAction, SIGNAL(triggered()), this, SLOT(closeTab()));
@@ -402,7 +402,7 @@ KexiWindow* KexiMainWindow::windowForTab(int tabIndex) const
     return windowContainer->window;
 }
 
-void KexiMainWindow::setupMainMenuActionShortcut(KAction* action, const char* slot)
+void KexiMainWindow::setupMainMenuActionShortcut(QAction* action, const char* slot)
 {
     if (!action->shortcut().isEmpty()) {
         (void)new QShortcut(action->shortcut().primary(), this, slot);
@@ -415,10 +415,10 @@ static void addThreeDotsToActionText(QAction* action)
     action->setText(i18nc("Action name with three dots...", "%1...", action->text()));
 }
 
-KAction* KexiMainWindow::addAction(const char *name, const KIcon &icon, const QString& text,
+QAction* KexiMainWindow::addAction(const char *name, const KIcon &icon, const QString& text,
                                    const char *shortcut)
 {
-    KAction *action = icon.isNull() ? new KAction(text, this) : new KAction(icon, text, this);
+    QAction *action = icon.isNull() ? new QAction(text, this) : new QAction(icon, text, this);
     actionCollection()->addAction(name, action);
     if (shortcut) {
         action->setShortcut(QKeySequence(shortcut));
@@ -428,7 +428,7 @@ KAction* KexiMainWindow::addAction(const char *name, const KIcon &icon, const QS
     return action;
 }
 
-KAction* KexiMainWindow::addAction(const char *name, const QString& text, const char *shortcut)
+QAction* KexiMainWindow::addAction(const char *name, const QString& text, const char *shortcut)
 {
     return addAction(name, KIcon(), text, shortcut);
 }
@@ -446,7 +446,7 @@ void KexiMainWindow::setupActions()
     KActionCollection *ac = actionCollection();
 
     // PROJECT MENU
-    KAction *action;
+    QAction *action;
     
     ac->addAction("project_new",
         action = new KexiMenuWidgetAction(KStandardAction::New, this));
@@ -595,9 +595,9 @@ void KexiMainWindow::setupActions()
     connect(d->action_project_export_data_table, SIGNAL(triggered()),
             this, SLOT(slotProjectExportDataTable()));
 
-//TODO new KAction(i18n("From File..."), "document-open", 0,
+//TODO new QAction(i18n("From File..."), "document-open", 0,
 //TODO  this, SLOT(slotImportFile()), actionCollection(), "project_import_file");
-//TODO new KAction(i18n("From Server..."), "network-server-database", 0,
+//TODO new QAction(i18n("From Server..."), "network-server-database", 0,
 //TODO  this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
 
 #ifndef KEXI_NO_QUICK_PRINTING
@@ -674,7 +674,7 @@ void KexiMainWindow::setupActions()
 //! @todo d->action_edit_replace = KStandardAction::replace(
 //!  this, SLOT(slotEditReplace()), actionCollection(), "project_print_preview" );
     d->action_edit_replace_all = 0;
-//! @todo d->action_edit_replace_all = new KAction( i18n("Replace All"), "", 0,
+//! @todo d->action_edit_replace_all = new QAction( i18n("Replace All"), "", 0,
 //!   this, SLOT(slotEditReplaceAll()), actionCollection(), "edit_replaceall");
 
     d->action_edit_select_all =  createSharedAction(KStandardAction::SelectAll,

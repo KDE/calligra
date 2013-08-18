@@ -21,7 +21,7 @@
 #include "BibliographyPreview.h"
 #include "BibliographyTemplate.h"
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 
 #include <QWidget>

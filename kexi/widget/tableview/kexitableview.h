@@ -53,7 +53,7 @@
 class QPrinter;
 class QPrintDialog;
 
-class KAction;
+class QAction;
 
 class KexiTableView;
 class KexiTableEdit;

@@ -43,7 +43,7 @@ public:
     /// reimplemented
     void save();
     /// reimplemented
-    KAction *createAction();
+    QAction *createAction();
 
     /// reimplemented
     virtual bool showOnShapeCreate() {

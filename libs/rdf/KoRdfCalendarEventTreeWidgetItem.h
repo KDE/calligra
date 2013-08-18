@@ -45,7 +45,7 @@ public:
     // inherited and reimplemented...
 
     hKoRdfCalendarEvent semanticObject() const;
-    virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
+    virtual QList<QAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
     virtual void insert(KoCanvasBase *host);
 
 public slots:

@@ -661,7 +661,7 @@ void ChartConfigWidget::save()
     command.redo();
 }
 
-KAction* ChartConfigWidget::createAction()
+QAction* ChartConfigWidget::createAction()
 {
     return 0;
 }

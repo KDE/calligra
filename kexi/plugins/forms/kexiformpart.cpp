@@ -27,7 +27,7 @@
 #include <kcombobox.h>
 #include <QApplication>
 #include <kconfig.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
@@ -140,8 +140,8 @@ void KexiFormPart::initInstanceActions(int mode, KActionCollection *col)
 {
     if (mode == Kexi::DesignViewMode) {
         KFormDesigner::FormManager::self()->createActions(col, 0);
-        new KAction(i18n("Edit Tab Order..."), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), col, "taborder");
-        new KAction(i18n("Adjust Size"), "zoom-fit-best", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()), col, "adjust");
+        new QAction(i18n("Edit Tab Order..."), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), col, "taborder");
+        new QAction(i18n("Adjust Size"), "zoom-fit-best", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()), col, "adjust");
     }
     //TODO
 }
@@ -172,7 +172,7 @@ void KexiFormPart::initInstanceActions()
 
 // KFormDesigner::CreateLayoutCommand
 
-    KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Layout Widgets"),
+    QAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Layout Widgets"),
                                          QString(), KShortcut(), "formpart_layout_menu", "KActionMenu");
     KActionMenu *menu = static_cast<KActionMenu*>(action);
 

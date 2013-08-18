@@ -46,7 +46,7 @@
 #include <QHeaderView>
 #include <QPointer>
 
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
@@ -415,7 +415,7 @@ void TaskWorkPackageView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new QAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
@@ -905,7 +905,7 @@ void TaskWPGanttView::slotContextMenuRequested( const QModelIndex &idx, const QP
 
 void TaskWPGanttView::setupGui()
 {
-    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new QAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool)), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }

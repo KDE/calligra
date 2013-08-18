@@ -113,7 +113,7 @@ signals:
 
 //! Action of adding tab to a tab widget
 //! Keeps context expressed using container and receiver widget
-class AddTabAction : public KAction
+class AddTabAction : public QAction
 {
 Q_OBJECT
 public:
@@ -128,7 +128,7 @@ private:
 
 //! Action of removing tab from a tab widget
 //! Keeps context expressed using container and receiver widget
-class RemoveTabAction : public KAction
+class RemoveTabAction : public QAction
 {
 Q_OBJECT
 public:
@@ -143,7 +143,7 @@ private:
 
 //! Action renaming tab widget's tab
 //! Keeps context expressed using container and receiver widget
-class RenameTabAction : public KAction
+class RenameTabAction : public QAction
 {
 Q_OBJECT
 public:
@@ -158,7 +158,7 @@ private:
 
 //! Action of adding page to a stacked widget
 //! Keeps context expressed using container and receiver widget
-class AddStackPageAction : public KAction
+class AddStackPageAction : public QAction
 {
 Q_OBJECT
 public:
@@ -173,7 +173,7 @@ private:
 
 //! Action of removing page from a stacked widget
 //! Keeps context expressed using container and receiver widget
-class RemoveStackPageAction : public KAction
+class RemoveStackPageAction : public QAction
 {
 Q_OBJECT
 public:
@@ -188,7 +188,7 @@ private:
 
 //! Action of moving between pages of a stacked widget
 //! Keeps context expressed using container and receiver widget
-class GoToStackPageAction : public KAction
+class GoToStackPageAction : public QAction
 {
 Q_OBJECT
 public:

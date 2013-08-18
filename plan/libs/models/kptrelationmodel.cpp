@@ -32,7 +32,7 @@
 #include <QModelIndex>
 #include <QWidget>
 
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <klocale.h>
 #include <ktoggleaction.h>

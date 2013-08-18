@@ -41,7 +41,7 @@
 #include <QVBoxLayout>
 #include <QDragMoveEvent>
 
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -276,19 +276,19 @@ void ResourceEditor::updateActionsEnabled(  bool on )
 void ResourceEditor::setupGui()
 {
     QString name = "resourceeditor_edit_list";
-    actionAddGroup  = new KAction(koIcon("resource-group-new"), i18n("Add Resource Group"), this);
+    actionAddGroup  = new QAction(koIcon("resource-group-new"), i18n("Add Resource Group"), this);
     actionCollection()->addAction("add_group", actionAddGroup );
     actionAddGroup->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddGroup, SIGNAL(triggered(bool)), SLOT(slotAddGroup()) );
     addAction( name, actionAddGroup );
     
-    actionAddResource  = new KAction(koIcon("list-add-user"), i18n("Add Resource"), this);
+    actionAddResource  = new QAction(koIcon("list-add-user"), i18n("Add Resource"), this);
     actionCollection()->addAction("add_resource", actionAddResource );
     actionAddResource->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionAddResource, SIGNAL(triggered(bool)), SLOT(slotAddResource()) );
     addAction( name, actionAddResource );
     
-    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteSelection  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );

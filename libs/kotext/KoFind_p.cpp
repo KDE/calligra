@@ -28,7 +28,7 @@
 #include <kreplacedialog.h>
 #include <kfind.h>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <QTextDocument>
 #include <QTextCursor>

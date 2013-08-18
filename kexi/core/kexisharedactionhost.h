@@ -25,7 +25,7 @@
 #include <QPair>
 
 #include <kstandardaction.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <kexi_export.h>
 
@@ -95,10 +95,10 @@ public:
     static KexiSharedActionHost* defaultHost();
 
     /*! \return shared actions list. */
-    QList<KAction*> sharedActions() const;
+    QList<QAction*> sharedActions() const;
 
     /*! PROTOTYPE, DO NOT USE YET */
-    void setActionVolatile(KAction *a, bool set);
+    void setActionVolatile(QAction *a, bool set);
 
 
 protected:
@@ -132,22 +132,22 @@ protected:
     /*! Creates shared action using \a text, \a pix_name pixmap, shortcut \a cut,
      optional \a name. You can pass your own action collection as \a col.
      If \a col action collection is null, main window's action will be used.
-     Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
-     that subclass allocated instead just KAction (what is the default).
+     Pass desired QAction subclass with \a subclassName (e.g. "KToggleAction") to have
+     that subclass allocated instead just QAction (what is the default).
      Created action's data is owned by the main window. */
-    KAction* createSharedAction(const QString &text, const QString &iconName,
+    QAction* createSharedAction(const QString &text, const QString &iconName,
                                 const KShortcut &cut, const char *name, KActionCollection* col = 0,
                                 const char *subclassName = 0);
 
     /*! Like above - creates shared action, but from standard action identified by \a id.
      Action's data is owned by the main window. */
-    KAction* createSharedAction(KStandardAction::StandardAction id, const char *name,
+    QAction* createSharedAction(KStandardAction::StandardAction id, const char *name,
                                 KActionCollection* col = 0);
 
     /*! Creates shared action with name \a name and shortcut \a cut
      by copying all properties of \a guiItem.
      If \a col action collection is null, main window's action will be used. */
-    KAction* createSharedAction(const KGuiItem& guiItem, const KShortcut &cut, const char *name,
+    QAction* createSharedAction(const KGuiItem& guiItem, const KShortcut &cut, const char *name,
                                 KActionCollection* col = 0);
 
     /*! \return action proxy for object \a o, or NULL if this object has
@@ -160,7 +160,7 @@ protected:
 
 private:
     /*! Helper function for createSharedAction(). */
-    KAction* createSharedActionInternal(KAction *action);
+    QAction* createSharedActionInternal(QAction *action);
 
     KexiSharedActionHostPrivate *d;
 

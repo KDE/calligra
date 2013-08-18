@@ -41,26 +41,26 @@ ReportDesignView::ReportDesignView ( QWidget *parent, ReportEntitySelector* r , 
     
     _rd = 0;
 
-    editCutAction = new KAction(koIcon("edit-cut"), i18n("Cut"), this);
+    editCutAction = new QAction(koIcon("edit-cut"), i18n("Cut"), this);
     editCutAction->setObjectName ( "editcut" );
-    editCopyAction = new KAction(koIcon("edit-copy"), i18n("Copy"), this);
+    editCopyAction = new QAction(koIcon("edit-copy"), i18n("Copy"), this);
     editCopyAction->setObjectName ( "editcopy" );
-    editPasteAction = new KAction(koIcon("edit-paste"), i18n("Paste"), this);
+    editPasteAction = new QAction(koIcon("edit-paste"), i18n("Paste"), this);
     editPasteAction->setObjectName ( "editpaste" );
-    editDeleteAction = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
+    editDeleteAction = new QAction(koIcon("edit-delete"), i18n("Delete"), this);
     editDeleteAction->setObjectName ( "editdelete" );
 
-    sectionEdit = new KAction ( i18n ( "Section Editor" ), this );
+    sectionEdit = new QAction ( i18n ( "Section Editor" ), this );
     sectionEdit->setObjectName ( "sectionedit" );
 
-    itemRaiseAction = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
+    itemRaiseAction = new QAction(koIcon("arrow-up"), i18n("Raise"), this);
     itemRaiseAction->setObjectName ( "itemraise" );
-    itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
+    itemLowerAction = new QAction(koIcon("arrow-down"), i18n("Lower"), this);
     itemLowerAction->setObjectName ( "itemlower" );
-    //parameterEdit = new KAction ( i18n ( "Parameter Editor" ), this );
+    //parameterEdit = new QAction ( i18n ( "Parameter Editor" ), this );
     //parameterEdit->setObjectName("parameteredit");
     QList<QAction*> al;
-    KAction *sep = new KAction ( "", this );
+    QAction *sep = new QAction ( "", this );
     sep->setSeparator ( true );
 
     al << editCutAction << editCopyAction << editPasteAction << editDeleteAction << sep << sectionEdit << sep << itemLowerAction << itemRaiseAction;

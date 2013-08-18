@@ -199,18 +199,18 @@ public:
     bool windowSizeDirty;
     bool readOnly;
 
-    KAction *showDocumentInfo;
-    KAction *saveAction;
-    KAction *saveActionAs;
-    KAction *printAction;
-    KAction *printActionPreview;
-    KAction *sendFileAction;
-    KAction *exportPdf;
-    KAction *closeFile;
-    KAction *reloadFile;
-    KAction *showFileVersions;
-    KAction *importFile;
-    KAction *exportFile;
+    QAction *showDocumentInfo;
+    QAction *saveAction;
+    QAction *saveActionAs;
+    QAction *printAction;
+    QAction *printActionPreview;
+    QAction *sendFileAction;
+    QAction *exportPdf;
+    QAction *closeFile;
+    QAction *reloadFile;
+    QAction *showFileVersions;
+    QAction *importFile;
+    QAction *exportFile;
     KToggleAction *toggleDockers;
     KRecentFilesAction *recent;
 
@@ -280,7 +280,7 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->printAction = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
     d->printActionPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
 
-    d->exportPdf  = new KAction(i18n("Export as PDF..."), this);
+    d->exportPdf  = new QAction(i18n("Export as PDF..."), this);
     d->exportPdf->setIcon(koIcon("application-pdf"));
     actionCollection()->addAction("file_export_pdf", d->exportPdf);
     connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
@@ -290,30 +290,30 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->closeFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT(slotFileClose()));
     actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT(slotFileQuit()));
 
-    d->reloadFile  = new KAction(i18n("Reload"), this);
+    d->reloadFile  = new QAction(i18n("Reload"), this);
     actionCollection()->addAction("file_reload_file", d->reloadFile);
     connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->showFileVersions  = new KAction(i18n("Versions..."), this);
+    d->showFileVersions  = new QAction(i18n("Versions..."), this);
     actionCollection()->addAction("file_versions_file", d->showFileVersions);
     connect(d->showFileVersions, SIGNAL(triggered(bool)), this, SLOT(slotVersionsFile()));
 
-    d->importFile  = new KAction(koIcon("document-import"), i18n("Open ex&isting Document as Untitled Document..."), this);
+    d->importFile  = new QAction(koIcon("document-import"), i18n("Open ex&isting Document as Untitled Document..."), this);
     actionCollection()->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
-    d->exportFile  = new KAction(koIcon("document-export"), i18n("E&xport..."), this);
+    d->exportFile  = new QAction(koIcon("document-export"), i18n("E&xport..."), this);
     actionCollection()->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
-    KAction *actionNewView  = new KAction(koIcon("window-new"), i18n("&New View"), this);
+    QAction *actionNewView  = new QAction(koIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView);
     connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
 
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
-    d->showDocumentInfo  = new KAction(koIcon("document-properties"), i18n("Document Information"), this);
+    d->showDocumentInfo  = new QAction(koIcon("document-properties"), i18n("Document Information"), this);
     actionCollection()->addAction("file_documentinfo", d->showDocumentInfo);
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 

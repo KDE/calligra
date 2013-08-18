@@ -30,7 +30,7 @@
 #include <kexi.h>
 
 class KIcon;
-class KAction;
+class QAction;
 class KActionMenu;
 class KActionCollection;
 class KToolBar;
@@ -189,7 +189,7 @@ protected slots:
 protected:
     void itemRenameDone();
 
-    KAction* addAction(const QString& name, const KIcon& icon, const QString& text,
+    QAction* addAction(const QString& name, const KIcon& icon, const QString& text,
                        const QString& toolTip, const QString& whatsThis, const char* slot);
 
     virtual void contextMenuEvent ( QContextMenuEvent *event );

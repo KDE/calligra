@@ -62,7 +62,7 @@ public:
     QMenu *tableQueryPopup //!< over table/query
     , *connectionPopup //!< over connection
     , *areaPopup; //!< over outer area
-    KAction *openSelectedTableAction, *designSelectedTableAction,
+    QAction *openSelectedTableAction, *designSelectedTableAction,
     *appendSelectedFieldAction, *appendSelectedFieldsAction, *hideTableAction;
 };
 
@@ -122,22 +122,22 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     d->areaPopup = new QMenu(this);
     d->areaPopup->setObjectName("areaPopup");
 
-    d->appendSelectedFieldAction = new KAction(koIcon("add_field"), i18n("&Append Field"), this);
+    d->appendSelectedFieldAction = new QAction(koIcon("add_field"), i18n("&Append Field"), this);
     d->appendSelectedFieldAction->setObjectName("relationsview_appendField");
     connect(d->appendSelectedFieldAction, SIGNAL(triggered()),
             this, SLOT(appendSelectedFields()));
 
-    d->appendSelectedFieldsAction = new KAction(koIcon("add_field"), i18n("&Append Fields"), this);
+    d->appendSelectedFieldsAction = new QAction(koIcon("add_field"), i18n("&Append Fields"), this);
     d->appendSelectedFieldsAction->setObjectName("relationsview_appendFields");
     connect(d->appendSelectedFieldsAction, SIGNAL(triggered()),
             this, SLOT(appendSelectedFields()));
 
-    d->openSelectedTableAction = new KAction(koIcon("document-open"), i18n("&Open Table"), this);
+    d->openSelectedTableAction = new QAction(koIcon("document-open"), i18n("&Open Table"), this);
     d->openSelectedTableAction->setObjectName("relationsview_openTable");
     connect(d->openSelectedTableAction, SIGNAL(triggered()),
             this, SLOT(openSelectedTable()));
 
-    d->designSelectedTableAction = new KAction(koIcon("document-properties"), i18n("&Design Table"), this);
+    d->designSelectedTableAction = new QAction(koIcon("document-properties"), i18n("&Design Table"), this);
     connect(d->designSelectedTableAction, SIGNAL(triggered()),
             this, SLOT(designSelectedTable()));
     d->designSelectedTableAction->setObjectName("relationsview_designTable");

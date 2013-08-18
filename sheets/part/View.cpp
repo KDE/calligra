@@ -233,7 +233,7 @@ public:
     QAction * showSheet;
 
     //Shape manipulation
-    KAction * deleteShape;
+    QAction * deleteShape;
 
     // page layout
     QAction * paperLayout;
@@ -241,16 +241,16 @@ public:
     KToggleAction* showPageOutline;
 
     // recalculation
-    KAction * recalcWorksheet;
-    KAction * recalcWorkbook;
+    QAction * recalcWorksheet;
+    QAction * recalcWorkbook;
 
     // protection
     KToggleAction* protectSheet;
     KToggleAction* protectDoc;
 
     // navigation
-    KAction * nextSheet;
-    KAction * prevSheet;
+    QAction * nextSheet;
+    QAction * prevSheet;
     QAction * firstSheet;
     QAction * lastSheet;
 
@@ -285,49 +285,49 @@ void View::Private::initActions()
     KActionCollection* ac = view->actionCollection();
 
     // -- sheet/workbook actions --
-    actions->sheetProperties  = new KAction(i18n("Sheet Properties..."), view);
+    actions->sheetProperties  = new QAction(i18n("Sheet Properties..."), view);
     ac->addAction("sheetProperties", actions->sheetProperties);
     connect(actions->sheetProperties, SIGNAL(triggered(bool)), view, SLOT(sheetProperties()));
     actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));
 
-    actions->insertSheet = new KAction(koIcon("insert-table"), i18n("Sheet"), view);
+    actions->insertSheet = new QAction(koIcon("insert-table"), i18n("Sheet"), view);
     actions->insertSheet->setIconText(i18n("Insert Sheet"));
     actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
     ac->addAction("insertSheet", actions->insertSheet);
     connect(actions->insertSheet, SIGNAL(triggered(bool)), view, SLOT(insertSheet()));
 
-    actions->duplicateSheet = new KAction(/*koIcon("inserttable"),*/ i18n("Duplicate Sheet"), view);
+    actions->duplicateSheet = new QAction(/*koIcon("inserttable"),*/ i18n("Duplicate Sheet"), view);
     actions->duplicateSheet->setToolTip(i18n("Duplicate the selected sheet"));
     ac->addAction("duplicateSheet", actions->duplicateSheet);
     connect(actions->duplicateSheet, SIGNAL(triggered(bool)), view, SLOT(duplicateSheet()));
 
-    actions->deleteSheet = new KAction(koIcon("edit-delete"), i18n("Sheet"), view);
+    actions->deleteSheet = new QAction(koIcon("edit-delete"), i18n("Sheet"), view);
     actions->deleteSheet->setIconText(i18n("Remove Sheet"));
     actions->deleteSheet->setToolTip(i18n("Remove the active sheet"));
     ac->addAction("deleteSheet", actions->deleteSheet);
     connect(actions->deleteSheet, SIGNAL(triggered(bool)), view, SLOT(deleteSheet()));
 
-    actions->renameSheet  = new KAction(i18n("Rename Sheet..."), view);
+    actions->renameSheet  = new QAction(i18n("Rename Sheet..."), view);
     ac->addAction("renameSheet", actions->renameSheet);
     connect(actions->renameSheet, SIGNAL(triggered(bool)), view, SLOT(slotRename()));
     actions->renameSheet->setToolTip(i18n("Rename the active sheet"));
 
-    actions->showSheet  = new KAction(i18n("Show Sheet..."), view);
+    actions->showSheet  = new QAction(i18n("Show Sheet..."), view);
     ac->addAction("showSheet", actions->showSheet);
     connect(actions->showSheet, SIGNAL(triggered(bool)), view, SLOT(showSheet()));
     actions->showSheet->setToolTip(i18n("Show a hidden sheet"));
 
-    actions->hideSheet  = new KAction(i18n("Hide Sheet"), view);
+    actions->hideSheet  = new QAction(i18n("Hide Sheet"), view);
     ac->addAction("hideSheet", actions->hideSheet);
     connect(actions->hideSheet, SIGNAL(triggered(bool)), view, SLOT(hideSheet()));
     actions->hideSheet->setToolTip(i18n("Hide the active sheet"));
 
-    actions->paperLayout  = new KAction(i18n("Page Layout..."), view);
+    actions->paperLayout  = new QAction(i18n("Page Layout..."), view);
     ac->addAction("paperLayout", actions->paperLayout);
     connect(actions->paperLayout, SIGNAL(triggered(bool)), view, SLOT(paperLayoutDlg()));
     actions->paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout"));
 
-    actions->resetPrintRange  = new KAction(i18n("Reset Print Range"), view);
+    actions->resetPrintRange  = new QAction(i18n("Reset Print Range"), view);
     ac->addAction("resetPrintRange", actions->resetPrintRange);
     connect(actions->resetPrintRange, SIGNAL(triggered(bool)), view, SLOT(resetPrintRange()));
     actions->resetPrintRange->setToolTip(i18n("Reset the print range in the current sheet"));
@@ -337,7 +337,7 @@ void View::Private::initActions()
     ac->addAction("showPageOutline", actions->showPageOutline);
     connect(actions->showPageOutline, SIGNAL(toggled(bool)), view, SLOT(togglePageOutline(bool)));
 
-    actions->recalcWorksheet  = new KAction(i18n("Recalculate Sheet"), view);
+    actions->recalcWorksheet  = new QAction(i18n("Recalculate Sheet"), view);
     actions->recalcWorksheet->setIcon(koIcon("view-refresh"));
     actions->recalcWorksheet->setIconText(i18n("Recalculate"));
     ac->addAction("RecalcWorkSheet", actions->recalcWorksheet);
@@ -345,7 +345,7 @@ void View::Private::initActions()
     connect(actions->recalcWorksheet, SIGNAL(triggered(bool)), view, SLOT(recalcWorkSheet()));
     actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
 
-    actions->recalcWorkbook  = new KAction(i18n("Recalculate Document"), view);
+    actions->recalcWorkbook  = new QAction(i18n("Recalculate Document"), view);
     actions->recalcWorkbook->setIcon(koIcon("view-refresh"));
     actions->recalcWorkbook->setIconText(i18n("Recalculate"));
     ac->addAction("RecalcWorkBook", actions->recalcWorkbook);
@@ -366,7 +366,7 @@ void View::Private::initActions()
 
     // -- misc actions --
 
-    actions->createTemplate  = new KAction(i18n("&Create Template From Document..."), view);
+    actions->createTemplate  = new QAction(i18n("&Create Template From Document..."), view);
     ac->addAction("createTemplate", actions->createTemplate);
     connect(actions->createTemplate, SIGNAL(triggered(bool)), view, SLOT(createTemplate()));
 
@@ -381,27 +381,27 @@ void View::Private::initActions()
 
     // -- navigation actions --
 
-    actions->nextSheet  = new KAction(koIcon("go-next"), i18n("Next Sheet"), view);
+    actions->nextSheet  = new QAction(koIcon("go-next"), i18n("Next Sheet"), view);
     actions->nextSheet->setIconText(i18n("Next"));
     actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
     ac->addAction("go_next", actions->nextSheet);
     actions->nextSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageDown));
     connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT(nextSheet()));
 
-    actions->prevSheet  = new KAction(koIcon("go-previous"), i18n("Previous Sheet"), view);
+    actions->prevSheet  = new QAction(koIcon("go-previous"), i18n("Previous Sheet"), view);
     actions->prevSheet->setIconText(i18n("Previous"));
     actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
     ac->addAction("go_previous", actions->prevSheet);
     actions->prevSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageUp));
     connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT(previousSheet()));
 
-    actions->firstSheet  = new KAction(koIcon("go-first"), i18n("First Sheet"), view);
+    actions->firstSheet  = new QAction(koIcon("go-first"), i18n("First Sheet"), view);
     actions->firstSheet->setIconText(i18n("First"));
     actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
     ac->addAction("go_first", actions->firstSheet);
     connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT(firstSheet()));
 
-    actions->lastSheet  = new KAction(koIcon("go-last"), i18n("Last Sheet"), view);
+    actions->lastSheet  = new QAction(koIcon("go-last"), i18n("Last Sheet"), view);
     actions->lastSheet->setIconText(i18nc("Move to the last sheet", "Last"));
     actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
     ac->addAction("go_last", actions->lastSheet);
@@ -449,7 +449,7 @@ void View::Private::initActions()
     actions->preference->setToolTip(i18n("Set various Calligra Sheets options"));
     ac->addAction("preference", actions->preference);
 
-    KAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
+    QAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
     ac->addAction("configureNotifications", notifyAction);
 
     // -- calculation actions --
@@ -505,7 +505,7 @@ void View::Private::initActions()
     actions->calcCountA->setActionGroup(groupCalc);
 
     //Shape actions
-    actions->deleteShape = new KAction(koIcon("edit-delete"), i18n("Delete"), view);
+    actions->deleteShape = new QAction(koIcon("edit-delete"), i18n("Delete"), view);
     actions->deleteShape->setShortcut(QKeySequence("Del"));
     connect(actions->deleteShape, SIGNAL(triggered()), view, SLOT(editDeleteSelection()));
     connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), actions->deleteShape, SLOT(setEnabled(bool)));
@@ -1955,12 +1955,12 @@ void View::popupTabBarMenu(const QPoint & _point)
         if (!menu)
             return;
 
-        QAction* insertSheet = new KAction(koIcon("insert-table"), i18n("Insert Sheet"), this);
+        QAction* insertSheet = new QAction(koIcon("insert-table"), i18n("Insert Sheet"), this);
         insertSheet->setToolTip(i18n("Remove the active sheet"));
         connect(insertSheet, SIGNAL(triggered(bool)), this, SLOT(insertSheet()));
         menu->insertAction(d->actions->duplicateSheet, insertSheet);
 
-        QAction* deleteSheet = new KAction(koIcon("delete_table"), i18n("Remove Sheet"), this);
+        QAction* deleteSheet = new QAction(koIcon("delete_table"), i18n("Remove Sheet"), this);
         deleteSheet->setToolTip(i18n("Remove the active sheet"));
         connect(deleteSheet, SIGNAL(triggered(bool)), this, SLOT(deleteSheet()));
         menu->insertAction(d->actions->hideSheet, deleteSheet);

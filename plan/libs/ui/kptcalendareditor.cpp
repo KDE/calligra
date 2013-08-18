@@ -41,7 +41,7 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -198,11 +198,11 @@ CalendarDayView::CalendarDayView( QWidget *parent )
     setModel(m_model);
     verticalHeader()->hide();
 
-    actionSetWork = new KAction( i18n( "Work..." ), this );
+    actionSetWork = new QAction( i18n( "Work..." ), this );
     connect( actionSetWork, SIGNAL(triggered(bool)), SLOT(slotSetWork()) );
-    actionSetVacation = new KAction( i18n( "Non-working" ), this );
+    actionSetVacation = new QAction( i18n( "Non-working" ), this );
     connect( actionSetVacation, SIGNAL(triggered(bool)), SLOT(slotSetVacation()) );
-    actionSetUndefined = new KAction( i18n( "Undefined" ), this );
+    actionSetUndefined = new QAction( i18n( "Undefined" ), this );
     connect( actionSetUndefined, SIGNAL(triggered(bool)), SLOT(slotSetUndefined()) );
 }
 
@@ -617,17 +617,17 @@ void CalendarEditor::setupGui()
     KActionCollection *coll = actionCollection();
     QString name = "calendareditor_calendar_list";
 
-    actionAddCalendar   = new KAction(koIcon("resource-calendar-insert"), i18n("Add Calendar"), this);
+    actionAddCalendar   = new QAction(koIcon("resource-calendar-insert"), i18n("Add Calendar"), this);
     coll->addAction("add_calendar", actionAddCalendar  );
     actionAddCalendar ->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddCalendar , SIGNAL(triggered(bool)), SLOT(slotAddCalendar()) );
 
-    actionAddSubCalendar   = new KAction(koIcon("resource-calendar-child-insert"), i18n("Add Subcalendar"), this);
+    actionAddSubCalendar   = new QAction(koIcon("resource-calendar-child-insert"), i18n("Add Subcalendar"), this);
     coll->addAction("add_subcalendar", actionAddSubCalendar  );
     actionAddSubCalendar ->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubCalendar , SIGNAL(triggered(bool)), SLOT(slotAddSubCalendar()) );
 
-    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteSelection  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     coll->addAction("delete_calendar_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteCalendar()) );
@@ -636,11 +636,11 @@ void CalendarEditor::setupGui()
     addAction( name, actionAddSubCalendar  );
     addAction( name, actionDeleteSelection );
 
-    actionSetWork = new KAction( i18n( "Work..." ), this );
+    actionSetWork = new QAction( i18n( "Work..." ), this );
     connect( actionSetWork, SIGNAL(triggered(bool)), SLOT(slotSetWork()) );
-    actionSetVacation = new KAction( i18n( "Non-working" ), this );
+    actionSetVacation = new QAction( i18n( "Non-working" ), this );
     connect( actionSetVacation, SIGNAL(triggered(bool)), SLOT(slotSetVacation()) );
-    actionSetUndefined = new KAction( i18n( "Undefined" ), this );
+    actionSetUndefined = new QAction( i18n( "Undefined" ), this );
     connect( actionSetUndefined, SIGNAL(triggered(bool)), SLOT(slotSetUndefined()) );
 
 }

@@ -32,7 +32,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kis_debug.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <KoColorConversions.h>
 #include <KoColorProfile.h>

@@ -19,7 +19,7 @@
 #ifndef ABSTRACTMUSICACTION_H
 #define ABSTRACTMUSICACTION_H
 
-#include <kaction.h>
+#include <QAction>
 
 class SimpleEntryTool;
 class MusicCursor;
@@ -27,7 +27,7 @@ namespace MusicCore {
     class Staff;
 }
 
-class AbstractMusicAction : public KAction
+class AbstractMusicAction : public QAction
 {
     Q_OBJECT
 public:

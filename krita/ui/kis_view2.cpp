@@ -47,7 +47,7 @@
 #include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <QMenu>
@@ -197,11 +197,11 @@ public:
     KisCanvasResourceProvider *resourceProvider;
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
-    KAction *totalRefresh;
-    KAction *mirrorCanvas;
-    KAction *createTemplate;
-    KAction *saveIncremental;
-    KAction *saveIncrementalBackup;
+    QAction *totalRefresh;
+    QAction *mirrorCanvas;
+    QAction *createTemplate;
+    QAction *saveIncremental;
+    QAction *saveIncrementalBackup;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
@@ -271,12 +271,12 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     // krita/krita.rc must also be modified to add actions to the menu entries
 
-    m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
+    m_d->saveIncremental = new QAction(i18n("Save Incremental &Version"), this);
     m_d->saveIncremental->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
 
-    m_d->saveIncrementalBackup = new KAction(i18n("Save Incremental Backup"), this);
+    m_d->saveIncrementalBackup = new QAction(i18n("Save Incremental Backup"), this);
     m_d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
     actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
     connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
@@ -288,12 +288,12 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         m_d->saveIncrementalBackup->setEnabled(false);
     }
 
-    m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
+    m_d->totalRefresh = new QAction(i18n("Total Refresh"), this);
     actionCollection()->addAction("total_refresh", m_d->totalRefresh);
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
 
-    m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
+    m_d->createTemplate = new QAction( i18n( "&Create Template From Image..." ), this);
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
@@ -303,17 +303,17 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvasController, SLOT(mirrorCanvas(bool)));
 
-    KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
+    QAction *rotateCanvasRight = new QAction(i18n("Rotate Canvas Right"), this);
     actionCollection()->addAction("rotate_canvas_right", rotateCanvasRight);
     rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
     connect(rotateCanvasRight, SIGNAL(triggered()),m_d->canvasController, SLOT(rotateCanvasRight15()));
 
-    KAction *rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
+    QAction *rotateCanvasLeft = new QAction(i18n("Rotate Canvas Left"), this);
     actionCollection()->addAction("rotate_canvas_left", rotateCanvasLeft);
     rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
     connect(rotateCanvasLeft, SIGNAL(triggered()),m_d->canvasController, SLOT(rotateCanvasLeft15()));
 
-    KAction *resetCanvasTransformations = new KAction(i18n("Reset Canvas Transformations"), this);
+    QAction *resetCanvasTransformations = new QAction(i18n("Reset Canvas Transformations"), this);
     actionCollection()->addAction("reset_canvas_transformations", resetCanvasTransformations);
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvasController, SLOT(resetCanvasTransformations()));
@@ -336,19 +336,19 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
     //Workaround, by default has the same shortcut as mirrorCanvas
-    KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    QAction* action = dynamic_cast<QAction*>(actionCollection()->action("format_italic"));
     if (action) {
-        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+        action->setShortcut(QKeySequence(), QAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), QAction::ActiveShortcut);
     }
 
     if (mainWindow())
     {
         //Workaround, by default has the same shortcut as hide/show dockers
-        action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
+        action = dynamic_cast<QAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
         if (action) {
-            action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-            action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+            action->setShortcut(QKeySequence(), QAction::DefaultShortcut);
+            action->setShortcut(QKeySequence(), QAction::ActiveShortcut);
         }
 
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
@@ -497,15 +497,15 @@ void KisView2::dropEvent(QDropEvent *event)
             QMenu popup;
             popup.setObjectName("drop_popup");
 
-            QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
-            QAction *insertManyLayers = new KAction(i18n("Insert Many Layers"), &popup);
+            QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
+            QAction *insertManyLayers = new QAction(i18n("Insert Many Layers"), &popup);
 
-            QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
-            QAction *openManyDocuments = new KAction(i18n("Open Many Documents"), &popup);
+            QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
+            QAction *openManyDocuments = new QAction(i18n("Open Many Documents"), &popup);
 
-            QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
+            QAction *replaceCurrentDocument = new QAction(i18n("Replace Current Document"), &popup);
 
-            QAction *cancel = new KAction(i18n("Cancel"), &popup);
+            QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
             popup.addAction(insertAsNewLayer);
             popup.addAction(openInNewDocument);
@@ -751,7 +751,7 @@ void KisView2::createActions()
 {
     actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
 
-    KAction *action = new KAction(i18n("Cleanup removed files..."), this);
+    QAction *action = new QAction(i18n("Cleanup removed files..."), this);
     actionCollection()->addAction("edit_blacklist_cleanup", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }

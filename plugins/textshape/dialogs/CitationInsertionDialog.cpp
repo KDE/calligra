@@ -18,7 +18,7 @@
  */
 #include "CitationInsertionDialog.h"
 
-#include <kaction.h>
+#include <QAction>
 #include <kdebug.h>
 #include <KoInlineCite.h>
 #include <KoInlineTextObjectManager.h>

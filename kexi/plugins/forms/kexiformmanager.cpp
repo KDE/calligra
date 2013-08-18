@@ -27,7 +27,7 @@
 #include <KoIcon.h>
 
 #include <QToolButton>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kopagedialog.h>
@@ -219,7 +219,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifdef KEXI_DEBUG_GUI
     KConfigGroup generalGroup(KGlobal::config()->group("General"));
     if (generalGroup.readEntry("ShowInternalDebugger", false)) {
-        KAction *a = new KAction(koIcon("run-build-file"), i18n("Show Form UI Code"), this);
+        QAction *a = new QAction(koIcon("run-build-file"), i18n("Show Form UI Code"), this);
         d->collection->addAction("show_form_ui", a);
         a->setShortcut(Qt::CTRL + Qt::Key_U);
         connect(a, SIGNAL(triggered()), this, SLOT(showFormUICode()));

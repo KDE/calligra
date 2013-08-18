@@ -33,7 +33,7 @@
 #include <QLineEdit>
 #include <ksqueezedtextlabel.h>
 #include <khistorycombobox.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kcolorscheme.h>
 

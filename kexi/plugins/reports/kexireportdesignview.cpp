@@ -43,23 +43,23 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     m_editPasteAction = KStandardAction::paste(this);
     m_editPasteAction->setProperty("iconOnly", true);
     const KGuiItem del = KStandardGuiItem::del();
-    m_editDeleteAction = new KAction(del.icon(), del.text(), this);
+    m_editDeleteAction = new QAction(del.icon(), del.text(), this);
     m_editDeleteAction->setObjectName("editdelete");
     m_editDeleteAction->setToolTip(del.toolTip());
     m_editDeleteAction->setWhatsThis(del.whatsThis());
     m_editDeleteAction->setProperty("iconOnly", true);
 
-    m_sectionEdit = new KAction(i18n("Edit Sections"), this);
+    m_sectionEdit = new QAction(i18n("Edit Sections"), this);
     m_sectionEdit->setObjectName("sectionedit");
 
-    m_itemRaiseAction = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
+    m_itemRaiseAction = new QAction(koIcon("arrow-up"), i18n("Raise"), this);
     m_itemRaiseAction->setObjectName("itemraise");
-    m_itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
+    m_itemLowerAction = new QAction(koIcon("arrow-down"), i18n("Lower"), this);
     m_itemLowerAction->setObjectName("itemlower");
-    //parameterEdit = new KAction ( i18n ( "Parameter Editor" ), this );
+    //parameterEdit = new QAction ( i18n ( "Parameter Editor" ), this );
     //parameterEdit->setObjectName("parameteredit");
     QList<QAction*> al;
-    KAction *sep = new KAction(QString(), this);
+    QAction *sep = new QAction(QString(), this);
     sep->setSeparator(true);
 
     al << m_editCutAction << m_editCopyAction << m_editPasteAction << m_editDeleteAction << sep << m_sectionEdit << sep << m_itemLowerAction << m_itemRaiseAction;

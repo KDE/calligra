@@ -35,7 +35,7 @@ class QLabel;
 class QMenu;
 class QActionGroup;
 
-class KAction;
+class QAction;
 class KToggleAction;
 class KActionCollection;
 
@@ -175,24 +175,24 @@ private:
     QAction *actionCut;
     QAction *actionCopy;
     QAction *actionPaste;
-    KAction *actionRemoveSelectedPackages;
+    QAction *actionRemoveSelectedPackages;
 
     // ------ View
     QAction *actionViewList;
     QAction *actionViewGantt;
 
     // ------ Settings
-    KAction *actionConfigure;
+    QAction *actionConfigure;
 
-    KAction *actionViewDocument;
-    KAction *actionEditDocument;
-    KAction *actionRemoveDocument;
+    QAction *actionViewDocument;
+    QAction *actionEditDocument;
+    QAction *actionRemoveDocument;
 
-    KAction *actionSendPackage;
-    KAction *actionPackageSettings;
-    KAction *actionTaskCompletion;
-    KAction *actionViewDescription;
-    KAction *actionRemoveCurrentPackage;
+    QAction *actionSendPackage;
+    QAction *actionPackageSettings;
+    QAction *actionTaskCompletion;
+    QAction *actionViewDescription;
+    QAction *actionRemoveCurrentPackage;
 };
 
 } //KplatoWork namespace

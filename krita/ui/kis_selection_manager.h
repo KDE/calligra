@@ -29,7 +29,7 @@
 
 class KisActionManager;
 class KisAction;
-class KAction;
+class QAction;
 class KToggleAction;
 class KActionCollection;
 class KoViewConverter;
@@ -121,21 +121,21 @@ private:
 
     KisNodeCommandsAdapter* m_adapter;
 
-    KAction *m_copy;
+    QAction *m_copy;
     KisAction *m_copyMerged;
-    KAction *m_cut;
-    KAction *m_paste;
-    KAction *m_pasteAt;
-    KAction *m_pasteNew;
+    QAction *m_cut;
+    QAction *m_paste;
+    QAction *m_pasteAt;
+    QAction *m_pasteNew;
     KisAction *m_cutToNewLayer;
-    KAction *m_selectAll;
-    KAction *m_deselect;
-    KAction *m_clear;
-    KAction *m_reselect;
+    QAction *m_selectAll;
+    QAction *m_deselect;
+    QAction *m_clear;
+    QAction *m_reselect;
     KisAction *m_invert;
     KisAction *m_copyToNewLayer;
-//     KAction *m_load;
-//     KAction *m_save;
+//     QAction *m_load;
+//     QAction *m_save;
     KisAction *m_fillForegroundColor;
     KisAction *m_fillBackgroundColor;
     KisAction *m_fillPattern;

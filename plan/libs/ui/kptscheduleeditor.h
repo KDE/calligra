@@ -136,12 +136,12 @@ private slots:
 private:
     ScheduleTreeView *m_view;
 
-    KAction *actionCalculateSchedule;
-    KAction *actionBaselineSchedule;
-    KAction *actionAddSchedule;
-    KAction *actionAddSubSchedule;
-    KAction *actionDeleteSelection;
-    KAction *actionMoveLeft;
+    QAction *actionCalculateSchedule;
+    QAction *actionBaselineSchedule;
+    QAction *actionAddSchedule;
+    QAction *actionAddSubSchedule;
+    QAction *actionDeleteSelection;
+    QAction *actionMoveLeft;
 };
 
 

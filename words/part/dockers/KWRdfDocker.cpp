@@ -129,14 +129,14 @@ void KWRdfDocker::semanticObjectUpdated(hKoRdfSemanticItem item)
 void KWRdfDocker::showSemanticViewContextMenu(const QPoint &position)
 {
     QMenu* menu = new QMenu(0);
-    QList<KAction *> actions;
+    QList<QAction *> actions;
     if (QTreeWidgetItem *baseitem = widgetDocker.semanticView->itemAt(position)) {
         if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
             actions = item->actions(menu, m_canvas);
         }
     }
     if (actions.count() > 0) {
-        foreach (KAction *a, actions) {
+        foreach (QAction *a, actions) {
             menu->addAction(a);
         }
         menu->exec(widgetDocker.semanticView->mapToGlobal(position));

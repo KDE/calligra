@@ -26,7 +26,7 @@
 
 #include <krita_export.h>
 
-class KAction;
+class QAction;
 class KActionCollection;
 class KToggleAction;
 class KisView2;
@@ -72,7 +72,7 @@ private:
 private:
     KisView2* m_view;
     KToggleAction* m_toggleGrid;
-    KAction* m_gridClear;
+    QAction* m_gridClear;
 };
 
 #endif

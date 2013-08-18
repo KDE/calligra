@@ -19,13 +19,13 @@
 #ifndef KIS_ACTION_H
 #define KIS_ACTION_H
 
-#include <kaction.h>
+#include <QAction>
 #include <krita_export.h>
 #include <kdebug.h>
 
 class KisActionManager;
 
-class KRITAUI_EXPORT KisAction : public KAction
+class KRITAUI_EXPORT KisAction : public QAction
 {
     Q_OBJECT
 public:

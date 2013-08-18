@@ -55,14 +55,14 @@ private:
     QScrollArea * scr;
 
     //Actions
-    KAction *editCutAction;
-    KAction *editCopyAction;
-    KAction *editPasteAction;
-    KAction *editDeleteAction;
-    KAction *sectionEdit;
-    KAction *parameterEdit;
-    KAction *itemRaiseAction;
-    KAction *itemLowerAction;
+    QAction *editCutAction;
+    QAction *editCopyAction;
+    QAction *editPasteAction;
+    QAction *editDeleteAction;
+    QAction *sectionEdit;
+    QAction *parameterEdit;
+    QAction *itemRaiseAction;
+    QAction *itemLowerAction;
 
     ReportEntitySelector* res;
     SourceSelector *srcsel;

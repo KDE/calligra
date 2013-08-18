@@ -58,7 +58,7 @@ protected:
     virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
             const QByteArray& property);
 
-    KAction* m_assignAction;
+    QAction* m_assignAction;
 };
 
 #endif

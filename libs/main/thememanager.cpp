@@ -220,7 +220,7 @@ void ThemeManager::populateThemeMenu()
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-    KAction* action = new KAction(defaultThemeName(), d->themeMenuActionGroup);
+    QAction* action = new QAction(defaultThemeName(), d->themeMenuActionGroup);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
@@ -235,7 +235,7 @@ void ThemeManager::populateThemeMenu()
         QIcon icon              = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
         const QString name      = group.readEntry("Name", info.baseName());
-        action                  = new KAction(name, d->themeMenuActionGroup);
+        action                  = new QAction(name, d->themeMenuActionGroup);
         d->themeMap.insert(name, filename);
         action->setIcon(icon);
         action->setCheckable(true);
@@ -255,7 +255,7 @@ void ThemeManager::populateThemeMenu()
     setCurrentTheme(theme);
 #if HAVE_X11
     d->themeMenuAction->addSeparator();
-    KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);
+    QAction* config = new QAction(i18n("Configuration..."), d->themeMenuAction);
     config->setIcon(koIcon("preferences-desktop-theme"));
     d->themeMenuAction->addAction(config);
 

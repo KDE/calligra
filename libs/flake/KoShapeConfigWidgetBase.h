@@ -25,7 +25,7 @@
 #include <QWidget>
 
 #include "flake_export.h"
-#include <kaction.h>
+#include <QAction>
 
 #include <KoUnit.h>
 

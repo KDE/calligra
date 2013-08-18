@@ -25,7 +25,7 @@
 #include <QApplication>
 
 #include <kglobal.h>
-#include <kaction.h>
+#include <QAction>
 #include <klocale.h>
 
 #include <KoPluginLoader.h>

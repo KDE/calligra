@@ -47,7 +47,7 @@
 #include <kdebug.h>
 
 #include <kinputdialog.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <KoIcon.h>
 
@@ -120,7 +120,7 @@ Line::orientation() const
 
 //! Action of editing rich text for a label or text editor
 //! Keeps context expressed using container and receiver widget
-class EditRichTextAction : public KAction
+class EditRichTextAction : public QAction
 {
 public:
     EditRichTextAction(KFormDesigner::Container *container,
@@ -137,7 +137,7 @@ private:
 EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container, 
                                        QWidget *receiver, QObject *parent,
                                        StdWidgetFactory *factory)
-    : KAction(koIcon("document-edit"),
+    : QAction(koIcon("document-edit"),
               i18nc("Edit rich text for a widget", "Edit Rich Text"),
               parent)
     , m_container(container)

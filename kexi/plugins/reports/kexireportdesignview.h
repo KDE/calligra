@@ -55,14 +55,14 @@ private:
     QScrollArea * m_scrollArea;
 
     //Actions
-    KAction *m_editCutAction;
-    KAction *m_editCopyAction;
-    KAction *m_editPasteAction;
-    KAction *m_editDeleteAction;
-    KAction *m_sectionEdit;
-    KAction *m_parameterEdit;
-    KAction *m_itemRaiseAction;
-    KAction *m_itemLowerAction;
+    QAction *m_editCutAction;
+    QAction *m_editCopyAction;
+    QAction *m_editPasteAction;
+    QAction *m_editDeleteAction;
+    QAction *m_sectionEdit;
+    QAction *m_parameterEdit;
+    QAction *m_itemRaiseAction;
+    QAction *m_itemLowerAction;
 
     KexiSourceSelector *m_sourceSelector;
 

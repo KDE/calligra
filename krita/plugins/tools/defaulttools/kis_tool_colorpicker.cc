@@ -31,7 +31,7 @@
 #include <QWidget>
 
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <klocale.h>
 #include <kmessagebox.h>
 

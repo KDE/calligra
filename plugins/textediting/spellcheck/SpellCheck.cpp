@@ -31,7 +31,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <sonnet/configdialog.h>
 
@@ -52,7 +52,7 @@ SpellCheck::SpellCheck()
     , m_simpleEdit(false)
 {
     /* setup actions for this plugin */
-    KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);
+    QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
     addAction("tool_configure_spellcheck", configureAction);
 
@@ -66,7 +66,7 @@ SpellCheck::SpellCheck()
     m_bgSpellCheck = new BgSpellCheck(m_speller, this);
 
     m_spellCheckMenu = new SpellCheckMenu(m_speller, this);
-    QPair<QString, KAction*> pair = m_spellCheckMenu->menuAction();
+    QPair<QString, QAction*> pair = m_spellCheckMenu->menuAction();
     addAction(pair.first, pair.second);
 
     connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),

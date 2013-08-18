@@ -50,7 +50,7 @@ class QResizeEvent;
 class QRectF;
 class QPrinter;
 
-class KAction;
+class QAction;
 class KarbonDocument;
 class KSelectAction;
 class KToggleAction;

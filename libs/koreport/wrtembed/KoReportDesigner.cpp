@@ -50,7 +50,7 @@
 #include <KoZoomHandler.h>
 #include <KoDpi.h>
 #include <KoPageFormat.h>
-#include <kaction.h>
+#include <QAction>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
@@ -840,7 +840,7 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
     if (itemsSelected) {
         pop.addSeparator();
         const KGuiItem del = KStandardGuiItem::del();
-        QAction *a = new KAction(del.icon(), del.text(), &pop);
+        QAction *a = new QAction(del.icon(), del.text(), &pop);
         a->setToolTip(del.toolTip());
         connect(a, SIGNAL(activated()), SLOT(slotEditDelete()));
         pop.addAction(a);

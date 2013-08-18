@@ -296,7 +296,7 @@ KexiWindow* KexiMobileMainWindow::openObject(const QString& mime, const QString&
     return 0;
 }
 
-void KexiMobileMainWindow::plugActionList(const QString& name, const QList< KAction* >& actionList)
+void KexiMobileMainWindow::plugActionList(const QString& name, const QList< QAction* >& actionList)
 {
 
 }

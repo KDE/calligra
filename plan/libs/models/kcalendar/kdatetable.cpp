@@ -49,7 +49,7 @@
 #include "kdatepicker.h"
 #include "QMenu"
 #include "kactioncollection.h"
-#include "kaction.h"
+#include "QAction"
 
 #include <QDate>
 #include <QCharRef>

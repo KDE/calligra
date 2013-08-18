@@ -108,7 +108,7 @@ protected:
 
     virtual void initPartActions();
     virtual void initInstanceActions();
-//  virtual QList<KAction*> createViewActions(Kexi::ViewMode mode);
+//  virtual QList<QAction*> createViewActions(Kexi::ViewMode mode);
 
     virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window,
             const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);

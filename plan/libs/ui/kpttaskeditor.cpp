@@ -43,7 +43,7 @@
 #include <QDragMoveEvent>
 #include <QDockWidget>
 
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -699,12 +699,12 @@ void TaskEditor::setupGui()
     connect( menuAddTask, SIGNAL(triggered(bool)), SLOT(slotAddTask()) );
     addAction( name, menuAddTask );
 
-    actionAddTask  = new KAction( i18n( "Add Task" ), this);
+    actionAddTask  = new QAction( i18n( "Add Task" ), this);
     actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddTask, SIGNAL(triggered(bool)), SLOT(slotAddTask()) );
     menuAddTask->addAction( actionAddTask );
 
-    actionAddMilestone  = new KAction( i18n( "Add Milestone" ), this );
+    actionAddMilestone  = new QAction( i18n( "Add Milestone" ), this );
     actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
     connect( actionAddMilestone, SIGNAL(triggered(bool)), SLOT(slotAddMilestone()) );
     menuAddTask->addAction( actionAddMilestone );
@@ -715,17 +715,17 @@ void TaskEditor::setupGui()
     connect( menuAddSubTask, SIGNAL(triggered(bool)), SLOT(slotAddSubtask()) );
     addAction( name, menuAddSubTask );
 
-    actionAddSubtask  = new KAction( i18n( "Add Sub-Task" ), this );
+    actionAddSubtask  = new QAction( i18n( "Add Sub-Task" ), this );
     actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionAddSubtask, SIGNAL(triggered(bool)), SLOT(slotAddSubtask()) );
     menuAddSubTask->addAction( actionAddSubtask );
 
-    actionAddSubMilestone = new KAction( i18n( "Add Sub-Milestone" ), this );
+    actionAddSubMilestone = new QAction( i18n( "Add Sub-Milestone" ), this );
     actionAddSubMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I ) );
     connect( actionAddSubMilestone, SIGNAL(triggered(bool)), SLOT(slotAddSubMilestone()) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
-    actionDeleteTask  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
+    actionDeleteTask  = new QAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL(triggered(bool)), SLOT(slotDeleteTask()) );
@@ -733,22 +733,22 @@ void TaskEditor::setupGui()
 
 
     name = "taskeditor_move_list";
-    actionIndentTask  = new KAction(koIcon("format-indent-more"), i18n("Indent Task"), this);
+    actionIndentTask  = new QAction(koIcon("format-indent-more"), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
     connect(actionIndentTask, SIGNAL(triggered(bool)), SLOT(slotIndentTask()));
     addAction( name, actionIndentTask );
 
-    actionUnindentTask  = new KAction(koIcon("format-indent-less"), i18n("Unindent Task"), this);
+    actionUnindentTask  = new QAction(koIcon("format-indent-less"), i18n("Unindent Task"), this);
     actionCollection()->addAction("unindent_task", actionUnindentTask );
     connect(actionUnindentTask, SIGNAL(triggered(bool)), SLOT(slotUnindentTask()));
     addAction( name, actionUnindentTask );
 
-    actionMoveTaskUp  = new KAction(koIcon("arrow-up"), i18n("Move Up"), this);
+    actionMoveTaskUp  = new QAction(koIcon("arrow-up"), i18n("Move Up"), this);
     actionCollection()->addAction("move_task_up", actionMoveTaskUp );
     connect(actionMoveTaskUp, SIGNAL(triggered(bool)), SLOT(slotMoveTaskUp()));
     addAction( name, actionMoveTaskUp );
 
-    actionMoveTaskDown  = new KAction(koIcon("arrow-down"), i18n("Move Down"), this);
+    actionMoveTaskDown  = new QAction(koIcon("arrow-down"), i18n("Move Down"), this);
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
     connect(actionMoveTaskDown, SIGNAL(triggered(bool)), SLOT(slotMoveTaskDown()));
     addAction( name, actionMoveTaskDown );
@@ -1481,7 +1481,7 @@ void TaskWorkPackageView::setupGui()
 //    KActionCollection *coll = actionCollection();
 
     QString name = "workpackage_list";
-    actionMailWorkpackage  = new KAction(koIcon("mail-send"), i18n("Send..."), this);
+    actionMailWorkpackage  = new QAction(koIcon("mail-send"), i18n("Send..."), this);
     actionMailWorkpackage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_M ) );
     actionCollection()->addAction("send_workpackage", actionMailWorkpackage );
     connect( actionMailWorkpackage, SIGNAL(triggered(bool)), SLOT(slotMailWorkpackage()) );
