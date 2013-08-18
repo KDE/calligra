@@ -1,5 +1,6 @@
 project(calligra)
 
+
 cmake_minimum_required(VERSION 2.8.10 FATAL_ERROR)
 
 cmake_policy(SET CMP0002 OLD)
@@ -364,6 +365,8 @@ SET(WARN "${WARN} -Wno-unused-parameter -Wno-unused-function -Wno-undef")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARN}")
 
+# Now first build the kf5 frameworks we need
+add_subdirectory(kf5)
 
  ########################
 #########################
@@ -1074,7 +1077,6 @@ endif(SHOULD_BUILD_RDF)
 ####################
 ###################
 
-add_subdirectory(kf5)
 add_subdirectory(fake)
 add_subdirectory(words)
 
