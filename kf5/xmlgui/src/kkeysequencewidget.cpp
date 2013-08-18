@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kkeyserver.h>
+//#include <kkeyserver.h>
 
 #include "kglobalaccel.h"
 #include "kactioncollection.h"
@@ -646,7 +646,7 @@ void KKeySequenceWidgetPrivate::updateShortcutDisplay()
     //empty string if no non-modifier was pressed
     QString s = keySequence.toString(QKeySequence::NativeText);
     s.replace(QLatin1Char('&'), QStringLiteral("&&"));
-
+#if 0
     if (isRecording) {
         if (modifierKeys) {
             if (!s.isEmpty()) s.append(QLatin1Char(','));
@@ -666,7 +666,7 @@ void KKeySequenceWidgetPrivate::updateShortcutDisplay()
         //make it clear that input is still going on
         s.append(QStringLiteral(" ..."));
     }
-
+#endif
     if (s.isEmpty()) {
         s = i18nc("No shortcut defined", "None");
     }
@@ -763,9 +763,9 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
             if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
                 keyQt = Qt::Key_Tab | d->modifierKeys;
             }
-            else if (KKeyServer::isShiftAsModifierAllowed(keyQt)) {
-                keyQt |= d->modifierKeys;
-            }
+//             else if (KKeyServer::isShiftAsModifierAllowed(keyQt)) {
+//                 keyQt |= d->modifierKeys;
+//             }
             else
                 keyQt |= (d->modifierKeys & ~Qt::SHIFT);
 
