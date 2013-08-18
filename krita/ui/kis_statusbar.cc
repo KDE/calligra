@@ -26,7 +26,7 @@
 
 #include <KoProgressBar.h>
 #include <ksqueezedtextlabel.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <klocale.h>
 
 #include <KoIcon.h>

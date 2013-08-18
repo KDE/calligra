@@ -57,7 +57,7 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kconfigdialogmanager.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <kxmlguifactory.h>
 #include <kdesktopfile.h>
 #include <ktoggleaction.h>

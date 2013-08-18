@@ -27,7 +27,7 @@
 #include <kactionmenu.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 
 #include <KoIcon.h>
 

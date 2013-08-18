@@ -26,7 +26,7 @@
 //temporary
 #define KexiStatusBar_KTEXTEDITOR_USED 0
 
-#include <kstatusbar.h>
+#include <QStatusBar>
 
 class QMenu;
 class QCheckBox;
@@ -39,7 +39,7 @@ namespace KTextEditor
 }
 #endif
 
-class KexiStatusBar : public KStatusBar
+class KexiStatusBar : public QStatusBar
 {
     Q_OBJECT
 public:

@@ -38,7 +38,7 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <knuminput.h>
 #include <kmessagebox.h>
 

@@ -53,7 +53,7 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
 #include <kstandarddirs.h>

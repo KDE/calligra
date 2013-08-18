@@ -88,7 +88,7 @@
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>

@@ -3,10 +3,10 @@
 
 #include <QStatusBar>
 
-class KStatusBar : public QStatusBar
+class QStatusBar : public QStatusBar
 {
 public:
-    KStatusBar(QWidget *parent = 0) : QStatusBar(parent) {}
+    QStatusBar(QWidget *parent = 0) : QStatusBar(parent) {}
 };
 
 #endif

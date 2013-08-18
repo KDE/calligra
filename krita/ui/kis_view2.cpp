@@ -45,7 +45,7 @@
 #include <kio/netaccess.h>
 #include <QMenuBar>
 #include <ktoolbar.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <ktoggleaction.h>
 #include <QAction>
 #include <kactionmenu.h>

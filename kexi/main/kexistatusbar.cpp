@@ -54,7 +54,7 @@ void Menu::mouseReleaseEvent(QMouseEvent* e)
 
 
 KexiStatusBar::KexiStatusBar(QWidget *parent)
-        : KStatusBar(parent)
+        : QStatusBar(parent)
 #if KexiStatusBar_KTEXTEDITOR_USED
         , m_cursorIface(0)
 #endif
@@ -125,7 +125,7 @@ void KexiStatusBar::setCursorPosition(int line, int col)
 
 /*void KexiStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
 {
-  KStatusBar::addWidget(widget,stretch,permanent);
+  QStatusBar::addWidget(widget,stretch,permanent);
 
   if(widget->sizeHint().height() + 4 > height())
     setFixedHeight(widget->sizeHint().height() + 4);

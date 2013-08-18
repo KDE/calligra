@@ -26,7 +26,7 @@
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <kis_debug.h>
 
 #include <KoView.h>

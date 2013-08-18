@@ -22,12 +22,12 @@
 
 #include "MainWindow.h"
 
-#include "kstatusbar.h"
+#include "QStatusBar"
 
 struct MainWindow::StatusBarItem {
     StatusBarItem(QWidget* _widget, int _strech, bool _permanent) : m_widget(_widget), m_stretch(_strech), m_permanent(_permanent), m_visible(false) {
     }
-    void ensureItemShown(KStatusBar * sb) {
+    void ensureItemShown(QStatusBar * sb) {
         Q_ASSERT(m_widget);
         Q_ASSERT(sb);
         if(!m_visible) {
@@ -40,7 +40,7 @@ struct MainWindow::StatusBarItem {
             m_widget->show();
         }
     }
-    void ensureItemHidden(KStatusBar * sb) {
+    void ensureItemHidden(QStatusBar * sb) {
         Q_ASSERT(sb);
         if(m_visible) {
             sb->removeWidget(m_widget);

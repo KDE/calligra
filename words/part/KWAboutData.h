@@ -29,50 +29,51 @@ static const char WORDS_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newWordsAboutData()
 {
-    KAboutData * aboutData = new KAboutData("words", 0, ki18nc("application name", "Calligra Words"),
-                                            WORDS_VERSION, ki18n(WORDS_DESCRIPTION), KAboutData::License_LGPL,
-                                            ki18n("© 1998-2012, The Words Team"), KLocalizedString(),
+    KAboutData * aboutData = new KAboutData("words", 0, "Calligra Words",
+                                            WORDS_VERSION, WORDS_DESCRIPTION, KAboutData::License_LGPL,
+                                            "© 1998-2012, The Words Team", "",
                                             "http://www.calligra.org/words/");
+
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrawords"));
-    aboutData->addAuthor(ki18n("Pierre Ducroquet"), ki18n("Co maintainer"), "");
-    aboutData->addAuthor(ki18n("C. Boemann"), ki18n("Co maintainer"), "cbo@boemann.dk");
-    aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("Everything"), "mail@dipe.org");
-    aboutData->addAuthor(ki18n("Boudewijn Rempt"), ki18n("Everything"), "boud@kde.org");
-    aboutData->addAuthor(ki18n("Pierre Stirnweiss"), ki18n("Everything"), "");
-    aboutData->addAuthor(ki18n("Inge Wallin"), ki18n("Formatting stuff"), "inge@lysator.liu.se");
-    aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("Everything"), "zachmann@kde.org");
-    aboutData->addAuthor(ki18n("Matus Uzak"), ki18n("Filter"), "matus.uzak@ixonos.com");
-    aboutData->addAuthor(ki18n("Pavol Korinek"), ki18n("Layout and Painting"), "pavol.korinek@ixonos.com");
-    aboutData->addAuthor(ki18n("Shreya Pandit"), ki18n("Statistics docker"), "");
-    aboutData->addAuthor(ki18n("Brijesh Patel"), ki18n("Foot and endnotes"), "");
-    aboutData->addAuthor(ki18n("Smit Patel"), ki18n("Bibliography"), "");
-    aboutData->addAuthor(ki18n("Mojtaba Shahi"), ki18n("Style Manager"), "");
-    aboutData->addAuthor(ki18n("Lassi Nieminen"), ki18n("Filter"), "lassniem@gmail.com");
-    aboutData->addAuthor(ki18n("Hanzes Matus"), ki18n("Filter"), "matus.hanzes@ixonos.com");
-    aboutData->addAuthor(ki18n("Lukáš Tvrdý"), ki18n("Filter"), "lukast.dev@gmail.com");
-    aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
-    aboutData->addAuthor(ki18n("Girish Ramakrishnan"), ki18n("ODF Support"), "girish@forwardbias.in");
-    aboutData->addAuthor(ki18n("Robert Mathias Marmorstein"), ki18n("ODF Support"), "robert@narnia.homeunix.com");
-    aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "montel@kde.org");
-    aboutData->addAuthor(ki18n("Sven Lüppken"), KLocalizedString(), "sven@kde.org");
-    aboutData->addAuthor(ki18n("Frank Dekervel"), KLocalizedString(), "Frank.dekervel@student.kuleuven.ac.Be");
-    aboutData->addAuthor(ki18n("Krister Wicksell Eriksson"), KLocalizedString(), "krister.wicksell@spray.se");
-    aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
-    aboutData->addAuthor(ki18n("Nash Hoogwater"), KLocalizedString(), "nrhoogwater@wanadoo.nl");
-    aboutData->addAuthor(ki18n("Ulrich Kuettler"), ki18n("KFormula"), "ulrich.kuettler@mailbox.tu-dresden.de");
-    aboutData->addAuthor(ki18n("Shaheed Haque"), ki18n("Filter"), "srhaque@iee.org");
-    aboutData->addAuthor(ki18n("Werner Trobin"), ki18n("Filter"), "trobin@kde.org");
-    aboutData->addAuthor(ki18n("Nicolas Goutte"), ki18n("Filter"), "goutte@kde.org");
-    aboutData->addAuthor(ki18n("Ariya Hidayat"), ki18n("Filter"), "ariya@kde.org");
-    aboutData->addAuthor(ki18n("Clarence Dang"), ki18n("Filter"), "dang@kde.org");
-    aboutData->addAuthor(ki18n("Robert Jacolin"), ki18n("Filter"), "rjacolin@ifrance.com");
-    aboutData->addAuthor(ki18n("Enno Bartels"), ki18n("Filter"), "ebartels@nwn.de");
-    aboutData->addAuthor(ki18n("Ewald Snel"), ki18n("Filter"), "ewald@rambo.its.tudelft.nl");
-    aboutData->addAuthor(ki18n("Tomasz Grobelny"), ki18n("Filter"), "grotk@poczta.onet.pl");
-    aboutData->addAuthor(ki18n("Michael Johnson"), ki18n("Filter"));
-    aboutData->addAuthor(ki18n("Fatcow Web Hosting"), ki18n("Page break icon"), "http://www.fatcow.com/free-icons");
+    aboutData->addAuthor("Pierre Ducroquet", "Co maintainer", "");
+    aboutData->addAuthor("C. Boemann", "Co maintainer", "cbo@boemann.dk");
+    aboutData->addAuthor("Sebastian Sauer", "Everything", "mail@dipe.org");
+    aboutData->addAuthor("Boudewijn Rempt", "Everything", "boud@kde.org");
+    aboutData->addAuthor("Pierre Stirnweiss", "Everything", "");
+    aboutData->addAuthor("Inge Wallin", "Formatting stuff", "inge@lysator.liu.se");
+    aboutData->addAuthor("Thorsten Zachmann", "Everything", "zachmann@kde.org");
+    aboutData->addAuthor("Matus Uzak", "Filter", "matus.uzak@ixonos.com");
+    aboutData->addAuthor("Pavol Korinek", "Layout and Painting", "pavol.korinek@ixonos.com");
+    aboutData->addAuthor("Shreya Pandit", "Statistics docker", "");
+    aboutData->addAuthor("Brijesh Patel", "Foot and endnotes", "");
+    aboutData->addAuthor("Smit Patel", "Bibliography", "");
+    aboutData->addAuthor("Mojtaba Shahi", "Style Manager", "");
+    aboutData->addAuthor("Lassi Nieminen", "Filter", "lassniem@gmail.com");
+    aboutData->addAuthor("Hanzes Matus", "Filter", "matus.hanzes@ixonos.com");
+    aboutData->addAuthor("Lukáš Tvrdý", "Filter", "lukast.dev@gmail.com");
+    aboutData->addAuthor("Thomas Zander", "", "zander@kde.org");
+    aboutData->addAuthor("Girish Ramakrishnan", "ODF Support", "girish@forwardbias.in");
+    aboutData->addAuthor("Robert Mathias Marmorstein", "ODF Support", "robert@narnia.homeunix.com");
+    aboutData->addAuthor("David Faure", "", "faure@kde.org");
+    aboutData->addAuthor("Laurent Montel", "", "montel@kde.org");
+    aboutData->addAuthor("Sven Lüppken", "", "sven@kde.org");
+    aboutData->addAuthor("Frank Dekervel", "", "Frank.dekervel@student.kuleuven.ac.Be");
+    aboutData->addAuthor("Krister Wicksell Eriksson", "", "krister.wicksell@spray.se");
+    aboutData->addAuthor("Dag Andersen", "", "danders@get2net.dk");
+    aboutData->addAuthor("Nash Hoogwater", "", "nrhoogwater@wanadoo.nl");
+    aboutData->addAuthor("Ulrich Kuettler", "KFormula", "ulrich.kuettler@mailbox.tu-dresden.de");
+    aboutData->addAuthor("Shaheed Haque", "Filter", "srhaque@iee.org");
+    aboutData->addAuthor("Werner Trobin", "Filter", "trobin@kde.org");
+    aboutData->addAuthor("Nicolas Goutte", "Filter", "goutte@kde.org");
+    aboutData->addAuthor("Ariya Hidayat", "Filter", "ariya@kde.org");
+    aboutData->addAuthor("Clarence Dang", "Filter", "dang@kde.org");
+    aboutData->addAuthor("Robert Jacolin", "Filter", "rjacolin@ifrance.com");
+    aboutData->addAuthor("Enno Bartels", "Filter", "ebartels@nwn.de");
+    aboutData->addAuthor("Ewald Snel", "Filter", "ewald@rambo.its.tudelft.nl");
+    aboutData->addAuthor("Tomasz Grobelny", "Filter", "grotk@poczta.onet.pl");
+    aboutData->addAuthor("Michael Johnson", "Filter");
+    aboutData->addAuthor("Fatcow Web Hosting", "Page break icon", "http://www.fatcow.com/free-icons");
     return aboutData;
 }
 

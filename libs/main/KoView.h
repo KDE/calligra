@@ -239,8 +239,8 @@ public:
      * and readding them when it is reactivated.
      * The parameters are the same as QStatusBar::addWidget().
      *
-     * Note that you can't use KStatusBar methods (inserting text items by id).
-     * But you can create a KStatusBarLabel with a dummy id instead, and use
+     * Note that you can't use QStatusBar methods (inserting text items by id).
+     * But you can create a QStatusBarLabel with a dummy id instead, and use
      * it directly, to get the same look and feel.
      */
     void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);

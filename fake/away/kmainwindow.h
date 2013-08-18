@@ -27,9 +27,9 @@ public:
     bool restore( int number, bool show = true ) { return false; }
     bool hasMenuBar() { return false; }
     KMenuBar *menuBar() { return 0; }
-    KStatusBar *statusBar()  {
+    QStatusBar *statusBar()  {
         QStatusBar *bar = QMainWindow::statusBar();
-        return bar ? new KStatusBar(bar) : 0;
+        return bar ? new QStatusBar(bar) : 0;
     }
     static QList<KMainWindow*> memberList() { return QList<KMainWindow*>(); }
     KToolBar *toolBar( const QString& name = QString() ) { return 0; }

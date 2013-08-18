@@ -40,7 +40,7 @@
 #include <QToolButton>
 #include <QTimer>
 #include <ksqueezedtextlabel.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
@@ -118,7 +118,7 @@ public:
     }
 };
 
-KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
+KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     : QObject(statusBar),
     m_statusbar(statusBar),
     m_controller(0),
@@ -537,18 +537,18 @@ void KWStatusBar::removeView(QObject *object)
 }
 
 //static
-void KWStatusBar::addViewControls(KStatusBar *statusBar, KWView *view)
+void KWStatusBar::addViewControls(QStatusBar *statusBar, KWView *view)
 {
     /**
      * Life time of a KWStatusBar is tricky...
-     * One main window has one KStatusBar.  But it can be re-used by different
+     * One main window has one QStatusBar.  But it can be re-used by different
      *  documents and thus by many different KWView instances.
      * So;  open a document in a window creates a KWView. That creates a KWStatusBar
      *      split the view creates a new KWView in the same mainwindow, this reuses
      *      the already existing KWStatusBar
      *      Create a new view (new MainWindow) also creates a new KWStatusBar
      *      Close all your views (deletes all KWViews) but not your Mainwindow will
-     *      NOT destroy all KWStatusBar instance.  Note that KStatusBar is not
+     *      NOT destroy all KWStatusBar instance.  Note that QStatusBar is not
      *      destructed in that case either.
      */
 

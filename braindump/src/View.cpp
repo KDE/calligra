@@ -59,7 +59,7 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <kservicetypetrader.h>
 
 #include "KoOdf.h"

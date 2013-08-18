@@ -46,7 +46,7 @@ KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
 
 KWFactory::KWFactory(QObject *parent)
-        : KPluginFactory(aboutData()->appName().toUtf8(), parent)
+        : KPluginFactory(aboutData()->componentName().toUtf8(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Words.

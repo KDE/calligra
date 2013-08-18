@@ -72,7 +72,7 @@
 #include <kpassivepopup.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
-#include <kstatusbar.h>
+#include <QStatusBar>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <ktoolinvocation.h>
@@ -823,7 +823,7 @@ void View::initView()
     d->viewLayout->setColumnMinimumWidth(2, extent);
     d->viewLayout->setRowMinimumHeight(3, extent);
 
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     d->calcLabel = sb ? new QLabel(sb) : 0;
     if (d->calcLabel) {
         d->calcLabel->setContextMenuPolicy(Qt::CustomContextMenu);
