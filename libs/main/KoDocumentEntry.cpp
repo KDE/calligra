@@ -71,52 +71,37 @@ KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
     return part;
 }
 
-KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
+KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString &mimetype)
 {
-    QString constr = QString::fromLatin1("[X-KDE-NativeMimeType] == '%1' or '%2' in [X-KDE-ExtraNativeMimeTypes]").arg(mimetype).arg(mimetype);
-
-    QList<KoDocumentEntry> vec = query(constr);
+    QList<KoDocumentEntry> vec = queryAllByMimeType(mimetype);
     if (vec.isEmpty()) {
-        kWarning(30003) << "Got no results with " << constr;
-        // Fallback to the old way (which was probably wrong, but better be safe)
-        QString constr = QString::fromLatin1("'%1' in ServiceTypes").arg(mimetype);
-        vec = query(constr);
-        if (vec.isEmpty()) {
-            // Still no match. Either the mimetype itself is unknown, or we have no service for it.
-            // Help the user debugging stuff by providing some more diagnostics
-            if (KServiceType::serviceType(mimetype).isNull()) {
-                kError(30003) << "Unknown Calligra MimeType " << mimetype << "." << endl;
-                kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
-            } else {
-                kError(30003) << "Found no Calligra part able to handle " << mimetype << "!" << endl;
-                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
-            }
-            return KoDocumentEntry();
+        // Still no match. Either the mimetype itself is unknown, or we have no service for it.
+        // Help the user debugging stuff by providing some more diagnostics
+        if (KServiceType::serviceType(mimetype).isNull()) {
+            kError(30003) << "Unknown Calligra MimeType " << mimetype << "." << endl;
+            kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
+        } else {
+            kError(30003) << "Found no Calligra part able to handle " << mimetype << "!" << endl;
+            kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and Calligra/Part, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
         }
+        return KoDocumentEntry();
     }
 
     return KoDocumentEntry(vec[0]);
 }
 
-QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
+QList<KoDocumentEntry> KoDocumentEntry::queryAllByMimeType(const QString &mimetype)
 {
 
     QList<KoDocumentEntry> lst;
     // Query the trader
-    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", QString());
+    const QList<QPluginLoader *> offers = KoJsonTrader::self()->query("Calligra/Part", mimetype);
 
     QList<QPluginLoader *>::ConstIterator it = offers.begin();
     unsigned int max = offers.count();
     for (unsigned int i = 0; i < max; i++, ++it) {
-        //kDebug(30003) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
-        //               << "   library=" << (*it)->library() << endl;
-//        if ((*it)->noDisplay())
-//            continue;
         lst.append(KoDocumentEntry(*it));
     }
-
-    if (lst.count() > 1 && !_constr.isEmpty())
-        kWarning(30003) << "KoDocumentEntry::query " << " got " << max << " offers!";
 
     return lst;
 }

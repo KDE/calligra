@@ -88,14 +88,12 @@ public:
     KoPart *createKoPart(QString* errorMsg = 0) const;
 
     /**
-     *  This function will query ksycoca to find all available components.
-     *  The result will only contain parts, which are embeddable into a document
+     *  This function will find all available Calligra/Parts.
      *
-     *  @param _constr is a constraint expression as used by KTrader.
-     *                 You can use it to set additional restrictions on the available
-     *                 components.
+     *  @param mimetype You can use it to set limit to only a specific mimetype or leave it blank to get all
+     *                 parts.
      */
-    static QList<KoDocumentEntry> query(const QString & _constr = QString());
+    static QList<KoDocumentEntry> queryAllByMimeType(const QString &mimetype = QString());
 
     /**
      *  This is a convenience function.
