@@ -11,7 +11,6 @@ set(kofake_LIB_SRCS
     kbuttongroup.cpp
     kcomponentdata.cpp
     #kconfigbase.cpp
-    kencodingprober.cpp
     kfilterbase.cpp
     kfilterdev.cpp
     kgzipfilter.cpp
@@ -26,39 +25,10 @@ set(kofake_LIB_SRCS
     klocale.cpp
     kcalendarsystem.cpp
     kstandardaction.cpp
-    probers/CharDistribution.cpp
-    probers/ChineseGroupProber.cpp
-    probers/JapaneseGroupProber.cpp
-    probers/JpCntx.cpp
-    probers/LangBulgarianModel.cpp
-    probers/LangCyrillicModel.cpp
-    probers/LangGreekModel.cpp
-    probers/LangHebrewModel.cpp
-    probers/LangHungarianModel.cpp
-    probers/LangThaiModel.cpp
-    probers/UnicodeGroupProber.cpp
-    probers/nsBig5Prober.cpp
-    probers/nsCharSetProber.cpp
-    probers/nsEUCJPProber.cpp
-    probers/nsEUCKRProber.cpp
-    probers/nsEUCTWProber.cpp
-    probers/nsEscCharsetProber.cpp
-    probers/nsEscSM.cpp
-    probers/nsGB2312Prober.cpp
-    probers/nsHebrewProber.cpp
-    probers/nsLatin1Prober.cpp
-    probers/nsMBCSGroupProber.cpp
-    probers/nsMBCSSM.cpp
-    probers/nsSBCSGroupProber.cpp
-    probers/nsSBCharSetProber.cpp
-    probers/nsSJISProber.cpp
-    probers/nsUniversalDetector.cpp
-
 )
 
 set(kofake_HEADERS_ONLY 
     kcolorbutton.h
-    kencodingprober.h
     kstatusbar.h
     kcombobox.h
     kurlrequester.h
@@ -151,7 +121,6 @@ set(kofake_HEADERS_ONLY
     kfinddialog.h
     kurlcompletion.h
     kfontaction.h
-    kcodecs.h
     krecentfilesaction.h
     kiconloader.h
     ktabwidget.h
