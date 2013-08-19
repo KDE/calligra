@@ -47,6 +47,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTimer>
+#include <QFileSystemWatcher>
 #include <kundo2qstack.h>
 #include <QPointer>
 
@@ -64,7 +65,6 @@
 //#include <kserviceoffer.h>
 #include <krun.h>
 #include <kprocess.h>
-#include <kdirwatch.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
@@ -88,7 +88,9 @@ DocumentChild::DocumentChild( WorkPackage *parent)
     m_process( 0 ),
     m_editor( 0 ),
     m_editormodified( false ),
-    m_filemodified( false )
+    m_filemodified( false ),
+    m_fileSystemWatcher(new QFileSystemWatcher(this))
+
 {
 }
 
@@ -117,8 +119,8 @@ DocumentChild::DocumentChild( WorkPackage *parent)
 DocumentChild::~DocumentChild()
 {
     kDebug(planworkDbg());
-    disconnect( KDirWatch::self(), SIGNAL(dirty(QString)), this, SLOT(slotDirty(QString)) );
-    KDirWatch::self()->removeFile( filePath() );
+    disconnect(m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(slotDirty(QString)));
+    m_fileSystemWatcher->removePath( filePath() );
 
     if ( m_type == Type_Calligra || m_type == Type_KParts ) {
         delete m_editor;
@@ -134,14 +136,14 @@ void DocumentChild::setFileInfo( const KUrl &url )
 {
     m_fileinfo.setFile( url.path() );
     //kDebug(planworkDbg())<<url;
-    bool res = connect( KDirWatch::self(), SIGNAL(dirty(QString)), this, SLOT(slotDirty(QString)) );
+    bool res = connect( m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(slotDirty(QString)) );
     //kDebug(planworkDbg())<<res<<filePath();
 #ifndef NDEBUG
     Q_ASSERT( res );
 #else
     Q_UNUSED( res );
 #endif
-    KDirWatch::self()->addFile( filePath() );
+    m_fileSystemWatcher->addPath( filePath() );
 }
 
 void DocumentChild::setModified( bool mod )
@@ -312,7 +314,7 @@ void DocumentChild::slotEditError( QProcess::ProcessError status )
 bool DocumentChild::saveToStore( KoStore *store )
 {
     kDebug(planworkDbg())<<filePath();
-    KDirWatch::self()->removeFile( filePath() );
+    m_fileSystemWatcher->removePath( filePath() );
     bool ok = false;
     bool wasmod = m_filemodified;
     if ( m_type == Type_Calligra || m_type == Type_KParts ) {
@@ -337,7 +339,7 @@ bool DocumentChild::saveToStore( KoStore *store )
             emit fileModified( m_filemodified );
         }
     }
-    KDirWatch::self()->addFile( filePath() );
+    m_fileSystemWatcher->addPath( filePath() );
     return ok;
 }
 
