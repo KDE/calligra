@@ -5,6 +5,7 @@
 #include <kurl.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
+#include <kicon.h>
 #include "kofake_export.h"
 class KOFAKE_EXPORT KRecentFilesAction : public KSelectAction
 {
