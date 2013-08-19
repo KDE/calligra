@@ -951,7 +951,7 @@ bool MainDocument::loadAndParse(KoStore *store, const QString &filename, KoXmlDo
 
 void MainDocument::insertFile( const QString &filename, Node *parent, Node *after )
 {
-    Part *part = new Part( documentPart()->componentData(), this );
+    Part *part = new Part( this );
     MainDocument *doc = new MainDocument( part );
     part->setDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()

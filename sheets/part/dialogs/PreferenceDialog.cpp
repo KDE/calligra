@@ -115,7 +115,7 @@ public:
 
 void PreferenceDialog::Private::applyInterfaceOptions()
 {
-    KSharedConfigPtr config = Factory::componentData().config();
+    KSharedConfigPtr config = Factory::global().config();
     KConfigGroup parameterGroup = config->group("Parameters");
 
     oldCursorMovement = view->doc()->map()->settings()->moveToValue();
@@ -221,7 +221,7 @@ void PreferenceDialog::Private::defaultInterfaceOptions()
 
 void PreferenceDialog::Private::resetInterfaceOptions()
 {
-    KSharedConfigPtr config = Factory::componentData().config();
+    KSharedConfigPtr config = Factory::global().config();
     const KConfigGroup parameterGroup = config->group("Parameters");
 
     oldCursorMovement = view->doc()->map()->settings()->moveToValue();
@@ -247,7 +247,7 @@ void PreferenceDialog::Private::resetInterfaceOptions()
 
 void PreferenceDialog::Private::applyOpenSaveOptions()
 {
-    KSharedConfigPtr config = Factory::componentData().config();
+    KSharedConfigPtr config = Factory::global().config();
     KConfigGroup parameterGroup = config->group("Parameters");
     Doc* doc = view->doc();
 
@@ -282,7 +282,7 @@ void PreferenceDialog::Private::defaultOpenSaveOptions()
 
 void PreferenceDialog::Private::resetOpenSaveOptions()
 {
-    KSharedConfigPtr config = Factory::componentData().config();
+    KSharedConfigPtr config = Factory::global().config();
     const KConfigGroup parameterGroup = config->group("Parameters");
 
     oldCreateBackupFile = parameterGroup.readEntry("BackupFile", true);
@@ -375,7 +375,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->pluginPage = page;
 
     // Spell Checker Options
-    KSharedConfig::Ptr sharedConfigPtr = Factory::componentData().config();
+    KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
     d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
     page->setIcon(koIcon("tools-check-spelling"));

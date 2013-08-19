@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     QApplication qapp(argc, argv);
     KComponentData cd("graphicsview-test");
 
-    Calligra::Sheets::Part part(cd);
+    Calligra::Sheets::Part part;
     Calligra::Sheets::Doc doc(&part);
     part.setDocument(&doc);
 

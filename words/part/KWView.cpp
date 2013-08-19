@@ -41,7 +41,6 @@
 #include "ui_KWInsertImage.h"
 
 // calligra libs includes
-#include <KoPart.h>
 #include <KoShapeCreateCommand.h>
 #include <calligraversion.h>
 #include <KoShapeRegistry.h>
@@ -125,7 +124,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
-    setComponentData(part->componentData());
+    setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
@@ -523,7 +522,7 @@ KoPrintJob *KWView::createPrintJob()
 void KWView::createTemplate()
 {
     KoTemplateCreateDia::createTemplate("words_template", ".ott",
-                                        m_document->documentPart()->componentData(), m_document, this);
+                                        KWFactory::componentData(), m_document, this);
 }
 
 void KWView::addBookmark()

@@ -66,7 +66,7 @@ QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QOb
     Q_UNUSED(args);
     Q_UNUSED(keyword);
 
-    KWPart *part = new KWPart(componentData(), parent);
+    KWPart *part = new KWPart(parent);
     KWDocument *doc = new KWDocument(part);
     part->setDocument(doc);
     KoToolRegistry::instance()->add(new KWPageToolFactory());

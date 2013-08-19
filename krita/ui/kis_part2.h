@@ -35,7 +35,7 @@ class KRITAUI_EXPORT KisPart2 : public KoPart
     Q_OBJECT
 
 public:
-    KisPart2(const KComponentData & componentData, QObject *parent = 0);
+    KisPart2(QObject *parent = 0);
 
     virtual ~KisPart2();
 

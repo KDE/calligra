@@ -33,7 +33,7 @@ class FLOW_EXPORT FlowPart : public KoPart
     Q_OBJECT
 
 public:
-    explicit FlowPart(const KComponentData & componentData, QObject *parent);
+    explicit FlowPart(QObject *parent);
 
     virtual ~FlowPart();
 

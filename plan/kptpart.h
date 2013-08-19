@@ -37,10 +37,7 @@ class KPLATO_EXPORT Part : public KoPart
     Q_OBJECT
 
 public:
-    /// create a part with a default componentdata object
     explicit Part(QObject *parent);
-    /// create a part with a specified componentdata object
-    explicit Part(const KComponentData & componentData, QObject *parent);
 
     virtual ~Part();
 

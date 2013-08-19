@@ -569,7 +569,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->loading = true;
 
-    setComponentData(part->componentData());
+    setComponentData(Factory::global());
     setXMLFile("sheets.rc");
 
     // GUI Initializations
@@ -966,7 +966,7 @@ void View::aboutToModify(const Region& region)
 
 void View::initConfig()
 {
-    KSharedConfigPtr config = Factory::componentData().config();
+    KSharedConfigPtr config = Factory::global().config();
     const KConfigGroup parameterGroup = config->group("Parameters");
     const bool configFromDoc = doc()->configLoadFromFile();
     if (!configFromDoc) {
@@ -1185,7 +1185,7 @@ void View::updateReadWrite(bool readwrite)
 void View::createTemplate()
 {
     KoTemplateCreateDia::createTemplate("sheets_template", ".ots",
-                                        Factory::componentData(), doc(), this);
+                                        Factory::global(), doc(), this);
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)

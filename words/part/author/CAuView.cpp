@@ -38,7 +38,7 @@
 CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
     :KWView(part, document, parent)
 {
-        setComponentData(part->componentData());
+        setComponentData(CAuFactory::componentData());
         setXMLFile("author.rc");
 
         setupActions();

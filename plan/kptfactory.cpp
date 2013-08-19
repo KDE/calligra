@@ -53,7 +53,7 @@ QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObj
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 
-    Part *part = new Part(componentData(), parent);
+    Part *part = new Part(parent);
     MainDocument *doc = new MainDocument(part);
     part->setDocument(doc);
 

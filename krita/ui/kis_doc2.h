@@ -70,8 +70,7 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-
-    KisDoc2(const KComponentData & componentData = KComponentData("krita"));
+    KisDoc2();
     virtual ~KisDoc2();
 
 public:

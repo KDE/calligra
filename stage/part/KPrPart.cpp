@@ -35,11 +35,11 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 
-KPrPart::KPrPart(const KComponentData & componentData, QObject *parent)
+KPrPart::KPrPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("stage_template");
-    setComponentData(componentData);
+    setComponentData(KPrFactory::componentData());
 }
 
 KPrPart::~KPrPart()

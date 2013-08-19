@@ -45,13 +45,13 @@
 
 #include <QApplication>
 
-KisPart2::KisPart2(const KComponentData &componentData, QObject *parent)
+KisPart2::KisPart2(QObject *parent)
     : KoPart(parent)
     , m_flipbook(0)
     , m_dieOnError(false)
     , m_document(0)
 {
-    setComponentData(componentData);
+    setComponentData(KisFactory2::componentData());
     setTemplateType("krita_template");
 }
 
