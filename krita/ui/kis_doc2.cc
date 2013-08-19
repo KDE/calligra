@@ -136,8 +136,8 @@ public:
 };
 
 
-KisDoc2::KisDoc2()
-    : KoDocument(new KisPart2, new UndoStack(this))
+KisDoc2::KisDoc2(const KComponentData &componentData)
+    : KoDocument(new KisPart2(componentData), new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
     qobject_cast<KisPart2*>(documentPart())->setDocument(this);

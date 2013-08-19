@@ -38,11 +38,11 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 
-KWPart::KWPart(QObject *parent)
+KWPart::KWPart(const KComponentData &componentData, QObject *parent)
     : KoPart(parent)
     , m_document(0)
 {
-    setComponentData(KWFactory::componentData());
+    setComponentData(componentData);
 
     setTemplateType("words_template");
 }

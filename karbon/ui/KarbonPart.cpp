@@ -58,11 +58,11 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 
-KarbonPart::KarbonPart(QObject *parent)
+KarbonPart::KarbonPart(const KComponentData &componentData, QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("karbon_template");
-    setComponentData(KarbonFactory::componentData());
+    setComponentData(componentData);
 }
 
 KarbonPart::~KarbonPart()

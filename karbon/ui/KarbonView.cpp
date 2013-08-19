@@ -205,7 +205,7 @@ public:
 KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* parent)
         : KoView(karbonPart, doc, parent), d(new Private(karbonPart, doc))
 {
-    setComponentData(KarbonFactory::componentData());
+    setComponentData(karbonPart->componentData());
     setAcceptDrops(true);
 
     setXMLFile(QString::fromLatin1("karbon.rc"));
@@ -509,7 +509,7 @@ void KarbonView::fileImportGraphic()
 
     QMap<QString, KoDataCenterBase*> dataCenters = part()->dataCenterMap();
 
-    KarbonPart importPart(0);
+    KarbonPart importPart(KComponentData("karbon"), 0);
     KarbonDocument importDocument(&importPart);
     importPart.setDocument(&importDocument);
 

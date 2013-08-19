@@ -33,11 +33,11 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 
-FlowPart::FlowPart(QObject *parent)
+FlowPart::FlowPart(const KComponentData &componentData, QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("flow_template");
-    setComponentData(FlowFactory::componentData());
+    setComponentData(componentData);
 }
 
 FlowPart::~FlowPart()

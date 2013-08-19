@@ -35,7 +35,7 @@ class WORDS_EXPORT KWPart : public KoPart
     Q_OBJECT
 
 public:
-    explicit KWPart(QObject *parent);
+    explicit KWPart(const KComponentData & componentData, QObject *parent);
 
     virtual ~KWPart();
 

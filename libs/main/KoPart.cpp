@@ -114,7 +114,7 @@ KoPart::~KoPart()
     delete d;
 }
 
-KComponentData KoPart::componentData() const
+const KComponentData &KoPart::componentData() const
 {
     return d->m_componentData;
 }

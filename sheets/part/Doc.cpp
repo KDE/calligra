@@ -181,7 +181,7 @@ Doc::~Doc()
 
 void Doc::initEmpty()
 {
-    KSharedConfigPtr config = Factory::global().config();
+    KSharedConfigPtr config = documentPart()->componentData().config();
     const int page = config->group("Parameters").readEntry("NbPage", 1);
 
     for (int i = 0; i < page; ++i)
@@ -196,13 +196,13 @@ void Doc::initEmpty()
 
 void Doc::saveConfig()
 {
-    KSharedConfigPtr config = Factory::global().config();
+    KSharedConfigPtr config = documentPart()->componentData().config();
     Q_UNUSED(config);
 }
 
 void Doc::initConfig()
 {
-    KSharedConfigPtr config = Factory::global().config();
+    KSharedConfigPtr config = documentPart()->componentData().config();
 
     const int page = config->group("Tables Page Layout").readEntry("Default unit page", 0);
     setUnit(KoUnit::fromListForUi(page, KoUnit::HidePixel));

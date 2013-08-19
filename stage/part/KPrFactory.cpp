@@ -49,7 +49,7 @@ QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, Q
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
-    KPrPart *part = new KPrPart(parent);
+    KPrPart *part = new KPrPart(componentData(), parent);
     KPrDocument *doc = new KPrDocument(part);
     part->setDocument(doc);
     return part;

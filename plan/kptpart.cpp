@@ -25,10 +25,19 @@
 
 #include <kglobal.h>
 
+
 Part::Part(QObject *parent)
     : KoPart(parent)
 {
-    setComponentData( Factory::global()); // Do not load plugins now (the view will load them)
+    setComponentData(KComponentData("plan")); // Do not load plugins now (the view will load them)
+    setTemplateType( "plan_template" );
+}
+
+
+Part::Part(const KComponentData &componentData, QObject *parent)
+    : KoPart(parent)
+{
+    setComponentData(componentData); // Do not load plugins now (the view will load them)
     setTemplateType( "plan_template" );
 }
 

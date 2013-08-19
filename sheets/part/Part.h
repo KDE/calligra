@@ -49,7 +49,7 @@ class CALLIGRA_SHEETS_COMMON_EXPORT Part : public KoPart
     Q_OBJECT
 
 public:
-    explicit Part(QObject *parent = 0);
+    explicit Part(const KComponentData & componentData, QObject *parent = 0);
 
     /**
      * Destroys the document.

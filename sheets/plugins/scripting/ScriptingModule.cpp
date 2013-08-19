@@ -81,7 +81,7 @@ Calligra::Sheets::Doc* ScriptingModule::kspreadDoc()
         if (Calligra::Sheets::View* v = kspreadView())
             d->doc = v->doc();
         if (! d->doc) {
-            Calligra::Sheets::Part *part = new Calligra::Sheets::Part(this);
+            Calligra::Sheets::Part *part = new Calligra::Sheets::Part(KComponentData("sheets"), this);
             d->doc = new Calligra::Sheets::Doc(part);
             part->setDocument(d->doc);
         }

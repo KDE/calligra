@@ -400,7 +400,7 @@ void KarbonDocument::reorganizeGUI()
 
 void KarbonDocument::initConfig()
 {
-    KSharedConfigPtr config = KarbonFactory::componentData().config();
+    KSharedConfigPtr config = documentPart()->componentData().config();
 
     // disable grid by default
     gridData().setShowGrid(false);

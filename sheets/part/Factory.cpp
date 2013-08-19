@@ -42,7 +42,7 @@ Factory::Factory(QObject* parent)
     //kDebug(36001) <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is KSpread.
-    (void)global();
+    (void)componentData();
 }
 
 Factory::~Factory()
@@ -58,7 +58,7 @@ QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObje
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
-    Part *part = new Part(parent);
+    Part *part = new Part(componentData(), parent);
     Doc *doc = new Doc(part);
     part->setDocument(doc);
     return part;
@@ -71,7 +71,7 @@ KAboutData* Factory::aboutData()
     return s_aboutData;
 }
 
-const KComponentData &Factory::global()
+const KComponentData &Factory::componentData()
 {
     if (!s_global) {
         s_global = new KComponentData(aboutData());

@@ -41,7 +41,7 @@ public:
 
     virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
-    static const KComponentData &global();
+    static const KComponentData &componentData();
 
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();

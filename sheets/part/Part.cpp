@@ -40,10 +40,10 @@
 
 using namespace Calligra::Sheets;
 
-Part::Part(QObject *parent)
+Part::Part(const KComponentData &componentData, QObject *parent)
     : KoPart(parent)
 {
-    setComponentData(Factory::global());
+    setComponentData(componentData);
     setTemplateType("sheets_template");
 }
 

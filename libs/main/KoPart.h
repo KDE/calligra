@@ -80,7 +80,7 @@ public:
      * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
      * in your subclass: setComponentData(AppFactory::componentData()); in the constructor
      */
-    KComponentData componentData() const;
+    const KComponentData &componentData() const;
 
     /**
      * @param document the document this part manages

@@ -28,10 +28,10 @@
 
 #include <kmessagebox.h>
 
-CAuPart::CAuPart(QObject *parent)
-    : KWPart(parent)
+CAuPart::CAuPart(const KComponentData &componentData, QObject *parent)
+    : KWPart(componentData, parent)
 {
-    setComponentData(CAuFactory::componentData());
+    setComponentData(componentData);
     setTemplateType("words_template");
 }
 
