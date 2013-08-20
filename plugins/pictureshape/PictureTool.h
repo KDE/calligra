@@ -22,7 +22,7 @@
 #define PICTURE_TOOL
 
 #include <KoToolBase.h>
-#include <kjob.h>
+#include <kio/kjob.h>
 
 class PictureShape;
 class KoFilterEffect;
@@ -66,7 +66,7 @@ private slots:
     void contourCheckBoxChanged(bool checked);
     void fillButtonPressed();
     void updateControlElements();
-    void setImageData(KJob *job);
+    void setImageData(KFakeJob *job);
 
 private:
     PictureShape *m_pictureshape;

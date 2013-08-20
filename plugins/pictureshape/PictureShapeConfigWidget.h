@@ -26,7 +26,7 @@
 
 class PictureShape;
 class KFileWidget;
-class KJob;
+class KFakeJob;
 
 class PictureShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -56,7 +56,7 @@ public:
     explicit LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
 
 public slots:
-    void setImageData(KJob *job);
+    void setImageData(KFakeJob *job);
 
 private:
     PictureShape *m_pictureShape;

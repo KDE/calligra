@@ -30,7 +30,7 @@
 class KoParagraphStyle;
 class KoCharacterStyle;
 class KoImageCollection;
-class KJob;
+class KFakeJob;
 class KoImageData;
 
 class ParagraphBulletsNumbers : public QWidget
@@ -59,7 +59,7 @@ private slots:
     void recalcPreview();
     void labelFollowedByIndexChanged(int);
     void selectListImage();
-    void setImageData(KJob *job);
+    void setImageData(KFakeJob *job);
 
 private:
     Ui::ParagraphBulletsNumbers widget;

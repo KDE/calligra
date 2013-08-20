@@ -9,7 +9,7 @@
 #include <kio/jobuidelegate.h>
 #include "kofake_export.h"
 
-class KOFAKE_EXPORT KJob : public QObject
+class KOFAKE_EXPORT KFakeJob : public QObject
 {
     Q_OBJECT
     Q_ENUMS( KillVerbosity Capability Unit )
@@ -24,7 +24,7 @@ public:
 
     Q_DECLARE_FLAGS( Capabilities, Capability )
 #endif
-    KJob( QObject *parent = 0 ) :QObject(parent) {}
+    KFakeJob( QObject *parent = 0 ) :QObject(parent) {}
 
 #if 0
     /**
@@ -34,16 +34,16 @@ public:
      * attached to the job, the UI delegate will be deleted with the job.
      *
      * @param delegate the new UI delegate to use
-     * @see KJobUiDelegate
+     * @see KFakeJobUiDelegate
      */
-    void setUiDelegate( KJobUiDelegate *delegate );
+    void setUiDelegate( KFakeJobUiDelegate *delegate );
 
     /**
      * Retrieves the delegate attached to this job.
      *
      * @return the delegate attached to this job, or 0 if there's no such delegate
      */
-    KJobUiDelegate *uiDelegate() const;
+    KFakeJobUiDelegate *uiDelegate() const;
 
     /**
      * Returns the capabilities of this job.
@@ -97,7 +97,7 @@ public:
      *
      * This will start a nested QEventLoop internally. Nested event loop can be dangerous and
      * can have unintended side effects, you should avoid calling exec() whenever you can and use the
-     * asynchronous interface of KJob instead.
+     * asynchronous interface of KFakeJob instead.
      *
      * Should you indeed call this method, you need to make sure that all callers are reentrant,
      * so that events delivered by the inner event loop don't cause non-reentrant functions to be
@@ -192,7 +192,7 @@ public:
      * set the auto-delete property of the job. If @p autodelete is
      * set to false the job will not delete itself once it is finished.
      *
-     * The default for any KJob is to automatically delete itself.
+     * The default for any KFakeJob is to automatically delete itself.
      *
      * @param autodelete set to false to disable automatic deletion
      * of the job.
@@ -209,30 +209,30 @@ public:
     bool isAutoDelete() const;
 
 Q_SIGNALS:
-    void finished(KJob *job);
-    void suspended(KJob *job);
-    void resumed(KJob *job);
-    void result(KJob *job);
+    void finished(KFakeJob *job);
+    void suspended(KFakeJob *job);
+    void resumed(KFakeJob *job);
+    void result(KFakeJob *job);
 
 Q_SIGNALS:
-    void description(KJob *job, const QString &title,
+    void description(KFakeJob *job, const QString &title,
                      const QPair<QString, QString> &field1 = qMakePair(QString(), QString()),
                      const QPair<QString, QString> &field2 = qMakePair(QString(), QString()));
-    void infoMessage( KJob *job, const QString &plain, const QString &rich = QString() );
-    void warning( KJob *job, const QString &plain, const QString &rich = QString() );
+    void infoMessage( KFakeJob *job, const QString &plain, const QString &rich = QString() );
+    void warning( KFakeJob *job, const QString &plain, const QString &rich = QString() );
 
 Q_SIGNALS:
-    void totalAmount(KJob *job, KJob::Unit unit, qulonglong amount);
-    void processedAmount(KJob *job, KJob::Unit unit, qulonglong amount);
-    void totalSize(KJob *job, qulonglong size);
-    void processedSize(KJob *job, qulonglong size);
-    void percent( KJob *job, unsigned long percent );
-    void speed(KJob *job, unsigned long speed);
+    void totalAmount(KFakeJob *job, KJob::Unit unit, qulonglong amount);
+    void processedAmount(KFakeJob *job, KJob::Unit unit, qulonglong amount);
+    void totalSize(KFakeJob *job, qulonglong size);
+    void processedSize(KFakeJob *job, qulonglong size);
+    void percent( KFakeJob *job, unsigned long percent );
+    void speed(KFakeJob *job, unsigned long speed);
 #endif
 };
 
 #if 0
-Q_DECLARE_OPERATORS_FOR_FLAGS( KJob::Capabilities )
+Q_DECLARE_OPERATORS_FOR_FLAGS( KFakeJob::Capabilities )
 #endif
 
 namespace KIO {
@@ -244,7 +244,7 @@ class UDSEntry
 public:
 };
 
-class KOFAKE_EXPORT Job : public KJob
+class KOFAKE_EXPORT Job : public KFakeJob
 {
     Q_OBJECT
 public:

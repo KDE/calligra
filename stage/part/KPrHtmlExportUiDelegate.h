@@ -29,7 +29,7 @@ class KPrHtmlExportUiDelegate : public KIO::JobUiDelegate
 public:
     KPrHtmlExportUiDelegate();
 
-    virtual KIO::RenameDialog_Result askFileRename(KJob * job, const QString & caption, const QString& src, const QString & dest,
+    virtual KIO::RenameDialog_Result askFileRename(KFakeJob * job, const QString & caption, const QString& src, const QString & dest,
                                               KIO::RenameDialog_Mode mode, QString& newDest,
                                               KIO::filesize_t sizeSrc = (KIO::filesize_t) -1,
                                               KIO::filesize_t sizeDest = (KIO::filesize_t) -1,

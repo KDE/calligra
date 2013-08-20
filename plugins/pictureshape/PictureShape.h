@@ -37,7 +37,7 @@
 
 class KoImageData;
 class KoImageCollection;
-class KJob;
+class KFakeJob;
 class PictureShape;
 class KoPathShape;
 class KoClipPath;

@@ -26,7 +26,7 @@
 
 class KPrView;
 class KoPAPageBase;
-class KJob;
+class KFakeJob;
 
 class KPrHtmlExport : public QObject
 {
@@ -78,7 +78,7 @@ protected:
     void copyFromTmpToDest();
 
 private slots:
-    void moveResult(KJob *job);
+    void moveResult(KFakeJob *job);
 
 private:
     QString m_tmpDirPath;

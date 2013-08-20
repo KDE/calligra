@@ -152,12 +152,12 @@ void KPrHtmlExport::copyFromTmpToDest()
     KIO::CopyJob *job = KIO::moveAs(m_tmpDirPath, m_parameters.destination);
     job->setWriteIntoExistingDirectories(true);
     job->setUiDelegate(new KPrHtmlExportUiDelegate);
-    connect(job, SIGNAL(result(KJob*)), this, SLOT(moveResult(KJob*)));
+    connect(job, SIGNAL(result(KFakeJob*)), this, SLOT(moveResult(KFakeJob*)));
     job->exec();
 #endif
 }
 
-void KPrHtmlExport::moveResult(KJob *job)
+void KPrHtmlExport::moveResult(KFakeJob *job)
 {
 #if 0 // XXX_QT5
 

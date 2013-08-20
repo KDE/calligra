@@ -452,7 +452,7 @@ void KisRulerAssistantTool::loadAssistants()
     KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.krassistants"));
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedGet(file);
-    connect(job, SIGNAL(result(KJob*)), SLOT(openFinish(KJob*)));
+    connect(job, SIGNAL(result(KFakeJob*)), SLOT(openFinish(KJob*)));
     job->start();
 }
 
@@ -494,11 +494,11 @@ void KisRulerAssistantTool::saveAssistants()
     KUrl file = KFileDialog::getSaveUrl(KUrl(), QString("*.krassistants"));
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedPut(data, file, -1);
-    connect(job, SIGNAL(result(KJob*)), SLOT(saveFinish(KJob*)));
+    connect(job, SIGNAL(result(KFakeJob*)), SLOT(saveFinish(KJob*)));
     job->start();
 }
 
-void KisRulerAssistantTool::openFinish(KJob* job)
+void KisRulerAssistantTool::openFinish(KFakeJob* job)
 {
     job->deleteLater();
     if (job->error()) {
@@ -586,7 +586,7 @@ void KisRulerAssistantTool::openFinish(KJob* job)
     m_canvas->updateCanvas();
 }
 
-void KisRulerAssistantTool::saveFinish(KJob* job)
+void KisRulerAssistantTool::saveFinish(KFakeJob* job)
 {
     if (job->error()) {
         dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();

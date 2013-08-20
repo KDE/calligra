@@ -791,10 +791,10 @@ private:
     class Private;
     Private *const d;
 
-    Q_PRIVATE_SLOT(d, void _k_slotJobFinished( KJob * job ))
-    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KJob*))
+    Q_PRIVATE_SLOT(d, void _k_slotJobFinished( KFakeJob * job ))
+    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KFakeJob*))
     Q_PRIVATE_SLOT(d, void _k_slotGotMimeType(KIO::Job *job, const QString &mime))
-    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished( KJob * job ))
+    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished( KFakeJob * job ))
 };
 
 Q_DECLARE_METATYPE(KoDocument*)

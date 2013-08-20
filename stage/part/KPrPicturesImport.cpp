@@ -75,12 +75,12 @@ void KPrPicturesImport::import()
         KUrl url(m_urls.takeAt(0));
         // todo calculate the correct size so that the image is centered to
         KIO::StoredTransferJob *job(KIO::storedGet(url, KIO::NoReload, 0));
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(pictureImported(KJob*)));
+        connect(job, SIGNAL(result(KFakeJob*)), this, SLOT(pictureImported(KFakeJob*)));
         job->exec();
     }
 }
 
-void KPrPicturesImport::pictureImported(KJob *job)
+void KPrPicturesImport::pictureImported(KFakeJob *job)
 {
     KoShape *shape = m_factory->createDefaultShape();
     if (shape) {

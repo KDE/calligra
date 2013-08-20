@@ -28,7 +28,7 @@
 class RulerDecoration;
 class KisCanvas2;
 class ConstraintSolver;
-class KJob;
+class KFakeJob;
 
 class KisRulerAssistantTool : public KisTool
 {
@@ -65,8 +65,8 @@ private slots:
     void saveAssistants();
     void loadAssistants();
 
-    void saveFinish(KJob* job);
-    void openFinish(KJob* job);
+    void saveFinish(KFakeJob* job);
+    void openFinish(KFakeJob* job);
 protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);

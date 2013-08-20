@@ -33,7 +33,7 @@ class QPoint;
 namespace KIO {
     class Job;
 }
-class KJob;
+class KFakeJob;
 
 namespace KPlato
 {
@@ -151,7 +151,7 @@ protected slots:
     void slotLayoutChanged();
 
     void slotDataArrived( KIO::Job *job, const QByteArray &data  );
-    void slotJobFinished( KJob *job );
+    void slotJobFinished( KFakeJob *job );
 
 protected:
     QVariant notUsed( const ResourceGroup *res, int role ) const;
@@ -190,7 +190,7 @@ private:
         QModelIndex parent;
         QByteArray data;
     } m_dropData;
-    QMap<KJob*, DropData> m_dropDataMap;
+    QMap<KFakeJob*, DropData> m_dropDataMap;
 };
 
 class KPLATOMODELS_EXPORT ResourceItemSFModel : public QSortFilterProxyModel

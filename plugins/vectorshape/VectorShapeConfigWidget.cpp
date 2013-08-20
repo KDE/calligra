@@ -28,7 +28,7 @@
 // Qt
 #include <QVBoxLayout>
 
-void LoadWaiter::setImageData(KJob *job)
+void LoadWaiter::setImageData(KFakeJob *job)
 {
     if (m_vectorShape) {
         KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
@@ -83,7 +83,7 @@ void VectorShapeConfigWidget::save()
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
         LoadWaiter *waiter = new LoadWaiter(m_shape);
-        connect(job, SIGNAL(result(KJob*)), waiter, SLOT(setImageData(KJob*)));
+        connect(job, SIGNAL(result(KFakeJob*)), waiter, SLOT(setImageData(KFakeJob*)));
     }
 }
 

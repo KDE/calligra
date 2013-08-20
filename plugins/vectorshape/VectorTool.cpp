@@ -88,7 +88,7 @@ void VectorTool::changeUrlPressed()
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
+        connect(job, SIGNAL(result(KFakeJob*)), this, SLOT(setImageData(KFakeJob*)));
     }
 
 }
@@ -102,7 +102,7 @@ void VectorTool::mouseDoubleClickEvent( KoPointerEvent *event )
     changeUrlPressed();
 }
 
-void VectorTool::setImageData(KJob *job)
+void VectorTool::setImageData(KFakeJob *job)
 {
     if (m_shape == 0) {
         return;

@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-class KJob;
+class KFakeJob;
 
 //! User Feedback Agent
 class KexiUserFeedbackAgent : public QObject
@@ -60,8 +60,8 @@ public slots:
     void waitForRedirect(QObject *receiver, const char* slot);
 
 private slots:
-    void sendDataFinished(KJob* job);
-    void sendRedirectQuestionFinished(KJob* job);
+    void sendDataFinished(KFakeJob* job);
+    void sendRedirectQuestionFinished(KFakeJob* job);
 
 private:
     void sendData();

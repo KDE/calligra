@@ -64,11 +64,11 @@ public:
 
     ~KoRecentDocumentsPanePrivate()
     {
-        foreach(KJob* job, m_previewJobs)
+        foreach(KFakeJob* job, m_previewJobs)
             job->kill();
     }
 
-    QList<KJob*> m_previewJobs;
+    QList<KFakeJob*> m_previewJobs;
     QStandardItemModel* m_model;
 };
 
@@ -130,7 +130,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
 #endif
 
     d->m_previewJobs.append(previewJob);
-    connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
+    connect(previewJob, SIGNAL(result(KFakeJob*)), SLOT(previewResult(KFakeJob*)));
     connect(previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
             SLOT(updateIcon(KFileItem,QPixmap)));
 }
@@ -161,7 +161,7 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
 #endif
 
             d->m_previewJobs.append(previewJob);
-            connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
+            connect(previewJob, SIGNAL(result(KFakeJob*)), SLOT(previewResult(KFakeJob*)));
             connect(previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
                     SLOT(updatePreview(KFileItem,QPixmap)));
 
@@ -215,7 +215,7 @@ void KoRecentDocumentsPane::openFile(const QModelIndex& index)
     }
 }
 
-void KoRecentDocumentsPane::previewResult(KJob* job)
+void KoRecentDocumentsPane::previewResult(KFakeJob* job)
 {
     d->m_previewJobs.removeOne(job);
 }

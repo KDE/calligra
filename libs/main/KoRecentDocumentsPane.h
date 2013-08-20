@@ -24,7 +24,7 @@
 
 class KFileItem;
 class QPixmap;
-class KJob;
+class KFakeJob;
 
 class KoRecentDocumentsPanePrivate;
 
@@ -51,7 +51,7 @@ protected slots:
     void openFile();
     void openFile(const QModelIndex& index);
 
-    void previewResult(KJob* job);
+    void previewResult(KFakeJob* job);
     void updatePreview(const KFileItem& fileItem, const QPixmap& preview);
     void updateIcon(const KFileItem& fileItem, const QPixmap& pixmap);
 

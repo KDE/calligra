@@ -331,7 +331,7 @@ public:
         if (m_job->ui()) {
             m_job->ui()->setWindow(parentPart->currentMainwindow());
         }
-        QObject::connect(m_job, SIGNAL(result(KJob*)), document, SLOT(_k_slotJobFinished(KJob*)));
+        QObject::connect(m_job, SIGNAL(result(KFakeJob*)), document, SLOT(_k_slotJobFinished(KFakeJob*)));
         QObject::connect(m_job, SIGNAL(mimetype(KIO::Job*,QString)), document, SLOT(_k_slotGotMimeType(KIO::Job*,QString)));
     }
 
@@ -364,7 +364,7 @@ public:
     }
 
 
-    void _k_slotJobFinished( KJob * job )
+    void _k_slotJobFinished( KFakeJob * job )
     {
         Q_ASSERT( job == m_job );
         m_job = 0;
@@ -380,7 +380,7 @@ public:
         }
     }
 
-    void _k_slotStatJobFinished(KJob * job)
+    void _k_slotStatJobFinished(KFakeJob * job)
     {
         Q_ASSERT(job == m_statJob);
         m_statJob = 0;
@@ -410,7 +410,7 @@ public:
         }
     }
 
-    void _k_slotUploadFinished( KJob * )
+    void _k_slotUploadFinished( KFakeJob * )
     {
         if (m_uploadJob->error())
         {
@@ -2655,7 +2655,7 @@ bool KoDocument::saveToUrl()
         }
         d->m_uploadJob = KIO::file_move( uploadUrl, d->m_url, -1, KIO::Overwrite );
         d->m_uploadJob->ui()->setWindow( 0 );
-        connect( d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)) );
+        connect( d->m_uploadJob, SIGNAL(result(KFakeJob*)), this, SLOT(_k_slotUploadFinished(KFakeJob*)) );
         return true;
     }
 }

@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-class KJob;
+class KFakeJob;
 
 //! Web updater for the status bar GUI
 class KexiWelcomeStatusBarGuiUpdater : public QObject
@@ -37,8 +37,8 @@ public slots:
 
 private slots:
     void slotRedirectLoaded();
-    void sendRequestListFilesFinished(KJob* job);
-    void filesCopyFinished(KJob* job);
+    void sendRequestListFilesFinished(KFakeJob* job);
+    void filesCopyFinished(KFakeJob* job);
 
 private:
     QString uiPath(const QString &fname) const;

@@ -29,7 +29,7 @@ namespace KIO {
 
 class QWidget;
 
-class KJob;
+class KFakeJob;
 namespace KIO {
 
 class KOFAKE_EXPORT NetAccess : public QObject

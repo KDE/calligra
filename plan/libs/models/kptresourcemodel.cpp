@@ -1234,7 +1234,7 @@ void ResourceItemModel::slotDataArrived( KIO::Job *job, const QByteArray &data  
     }
 }
 
-void ResourceItemModel::slotJobFinished( KJob *job )
+void ResourceItemModel::slotJobFinished( KFakeJob *job )
 {
     if ( job->error() || ! m_dropDataMap.contains( job ) ) {
         kDebug(planDbg())<<(job->error() ? "Job error":"Error: no such job");
@@ -1254,7 +1254,7 @@ void ResourceItemModel::slotJobFinished( KJob *job )
     if ( m_dropDataMap.contains( job ) ) {
         m_dropDataMap.remove( job );
     }
-    disconnect(job, SIGNAL(result(KJob*)), this, SLOT(slotJobFinished(KJob*)));
+    disconnect(job, SIGNAL(result(KFakeJob*)), this, SLOT(slotJobFinished(KJob*)));
     disconnect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(slotDataArrived(KIO::Job*,QByteArray)));
 }
 
@@ -1371,7 +1371,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
             bool res = connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(slotDataArrived(KIO::Job*,QByteArray)));
             Q_ASSERT( res );
 	    Q_UNUSED( res );
-            res = connect(job, SIGNAL(result(KJob*)), this, SLOT(slotJobFinished(KJob*)));
+            res = connect(job, SIGNAL(result(KFakeJob*)), this, SLOT(slotJobFinished(KJob*)));
             Q_ASSERT( res );
 
             m_dropDataMap[ job ].action = action;

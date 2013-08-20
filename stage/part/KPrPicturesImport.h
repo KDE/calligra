@@ -28,7 +28,7 @@ class KoPAPageBase;
 class KoPAMasterPage;
 class KPrDocument;
 class KPrView;
-class KJob;
+class KFakeJob;
 class KUndo2Command;
 
 class KPrPicturesImport : public QObject
@@ -42,7 +42,7 @@ public:
 private slots:
     // starts the transfer of the next image
     void import();
-    void pictureImported(KJob *job);
+    void pictureImported(KFakeJob *job);
 
 private:
     KPrDocument *m_doc;

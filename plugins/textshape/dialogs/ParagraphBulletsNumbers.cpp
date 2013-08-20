@@ -358,11 +358,11 @@ void ParagraphBulletsNumbers::selectListImage()
     KUrl url = KFileDialog::getOpenUrl();
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
+        connect(job, SIGNAL(result(KFakeJob*)), this, SLOT(setImageData(KFakeJob*)));
     }
 }
 
-void ParagraphBulletsNumbers::setImageData(KJob *job)
+void ParagraphBulletsNumbers::setImageData(KFakeJob *job)
 {
     KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
     Q_ASSERT(transferJob);

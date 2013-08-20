@@ -255,11 +255,11 @@ void KexiUserFeedbackAgent::sendData()
     kDebug() << postData;
     
     KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
-    connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendDataFinished(KJob*)));
+    connect(sendJob, SIGNAL(result(KFakeJob*)), this, SLOT(sendDataFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
 
-void KexiUserFeedbackAgent::sendDataFinished(KJob* job)
+void KexiUserFeedbackAgent::sendDataFinished(KFakeJob* job)
 {
     if (job->error()) {
         //! @todo error...
@@ -284,11 +284,11 @@ void KexiUserFeedbackAgent::sendRedirectQuestion()
     QByteArray postData = "get_url";
     kDebug() << postData;
     KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
-    connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRedirectQuestionFinished(KJob*)));
+    connect(sendJob, SIGNAL(result(KFakeJob*)), this, SLOT(sendRedirectQuestionFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
 
-void KexiUserFeedbackAgent::sendRedirectQuestionFinished(KJob* job)
+void KexiUserFeedbackAgent::sendRedirectQuestionFinished(KFakeJob* job)
 {
     if (job->error()) {
         //! @todo error...

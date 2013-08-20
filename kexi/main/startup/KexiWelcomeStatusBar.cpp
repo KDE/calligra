@@ -134,11 +134,11 @@ void KexiWelcomeStatusBarGuiUpdater::slotRedirectLoaded()
     KIO::Job* sendJob = KIO::storedHttpPost(postData,
                                             KUrl(uiPath(".list")),
                                             KIO::HideProgressInfo);
-    connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRequestListFilesFinished(KJob*)));
+    connect(sendJob, SIGNAL(result(KFakeJob*)), this, SLOT(sendRequestListFilesFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
 
-void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
+void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KFakeJob* job)
 {
     if (job->error()) {
         kWarning() << "Error while receiving .list file - no files will be updated";
@@ -202,7 +202,7 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
     KIO::CopyJob *copyJob = KIO::copy(sourceFiles,
                                         KUrl("file://" + tempDir.path() + "/"),
                                         KIO::HideProgressInfo | KIO::Overwrite);
-    connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(filesCopyFinished(KJob*)));
+    connect(copyJob, SIGNAL(result(KFakeJob*)), this, SLOT(filesCopyFinished(KJob*)));
         //kDebug() << "copying from" << KUrl(uiPath(fname)) << "to"
 //            << (dir + fname);
 }
@@ -235,7 +235,7 @@ void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
     }
 }
 
-void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
+void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KFakeJob* job)
 {
     if (job->error()) {
         //! @todo error...

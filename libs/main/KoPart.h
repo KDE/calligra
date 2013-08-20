@@ -34,7 +34,7 @@
 
 #include <KoMainWindow.h>
 
-class KJob;
+class KFakeJob;
 namespace KIO {
   class Job;
 }
