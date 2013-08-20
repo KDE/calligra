@@ -112,7 +112,7 @@ set(kofake_HEADERS_ONLY
     #kseparator.h
     #ksharedconfig.h
     kdeprintdialog.h
-    kaboutdata.h
+    #kaboutdata.h
     kurlcombobox.h
     kimageio.h
     #kpassworddialog.h

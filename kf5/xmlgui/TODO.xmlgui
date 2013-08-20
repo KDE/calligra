@@ -1,0 +1,91 @@
+Bug with toolbars: a->saveState(); delete a; b->saveState(); delete b;
+will store wrong positions (index, offset and newline).
+When removing an xmlgui-client involves destroying toolbars, we need to save the
+whole set of toolbar positions of the mainwindow, into the xmlgui-client.
+
+Data structure:
+struct KToolBarPos {
+   short int index;
+   short int offset;
+   bool newLine;
+};
+typedef QValueVector<KToolBarPos> KToolBarPosList;
+
+API:
+KToolBarPosList KMainWindow::toolBarPositionList() const;
+
+The remaining problem is to know when to call it:
+* when we know in advance that we'll be able to remove toolbars?
+  (when creating the client we could remember if we created a toolbar and store
+   that bit of information, to re-use it when removing the client again)
+* when removing the first toolbar (of a given client); then we need
+to differentiate between first and following toolbars
+* always, if fast enough? With tons of plugins that might not be a good idea.
+
+========== More long term
+
+Problems:
+* No ui_standards.rc merging for parts
+* Confusing tag names (MergeLocal vs DefineGroup) for similar features
+* Two different merging codes (DOM-tree merging for ui_standards, xmlguifactory merging
+between xmlguiclients).
+
+Solution:
+* Get rid of the custom DOM-tree merging code from kxmlguiclient (for ui_standards.rc),
+use the existing merging code from kxmlguifactory instead
+* MergeLocal and DefineGroup are renamed MergeGroup, and append= becomes equivalent to group=.
+* Action is renamed MergeAction, and uses a new kind of place holder
+(one that matches actions by name during merging)
+So ui_standards.rc needs to be turned into <MergeAction>s and <MergeGroup>s only.
+* This also means that it will be possible to have only merge tags (and custom items
+like separators and tearoffhandle etc.) in a container, in which case it should
+not appear in the GUI. For that, ContainerNode must be improved so that it supports
+having no real GUI container attached to it.
+Big problem here. This means not building a container until we find that it
+really has an action (and the other way round: deleting a container when
+removing its last action, as we do, but still keeping a ContainerNode around...)
+(A ContainerNode is destroyed when its owner guiclient is removed from the factory,
+no change here).
+
+* A new XMLGUIClient provides the ui_standards.rc XML. It has the same instance
+as the mainwindow's guiclient. It provides no actions. No problems, since it
+only has <Merge*> tags.
+
+But that new xmlguiclient will 'own' the containers, so KEditToolbar will
+give wrong information.
+
+=====>
+This means the following KEditToolbar improvement is necessary:
+(it's an almost unrelated and necessary change there anyway, usability-wise)
+
+It would use merging, to present a merged view of the toolbars
+When the user inserts an action to a toolbar, we know which client the action
+belongs to, so we know which XML file to modify.
+BUT if the user adds actions in non-contiguous positions, we need to
+create <DefineGroup name="client1_tmp1"> groups, so that the merging actually does
+what the user asked for (!!)
+
+This allows to get rid of the "toolbar <client>" combobox stuff, and just have
+a list of toolbars there.
+
+Implementation: it can do this by providing its own KXMLGUIBuilder, to a
+new factory. The guiclients would be wrapped in a KXMLGUIClientProxy,
+which would forward the action() and domElement() calls - because a client
+can be in only one factory at a time.
+
+This custom builder needs to know about action plugging too, we don't really want
+to call KAction::plug here. So this would be 'virtualized' (new virtual, in a new
+interface to keep BC, that by default calls plug, but does something else in
+kedittoolbar's builder).
+
+
+======
+
+Additional benefits:
+* Any XML file can use the new <MergeAction> feature to modify the way a
+child client (e.g. a part) is getting merged, without adding group attributes
+to the child client (useful for a binary-only one, e.g.)
+
+--
+David Faure <faure@kde.org>
+Simon Hausmann <hausmann@kde.org>

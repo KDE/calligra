@@ -1,0 +1,11 @@
+@PACKAGE_INIT@
+
+# Any changes in this file will be overwritten by CMake.
+
+set(ItemViews_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+set_and_check(ItemViews_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+include("${CMAKE_CURRENT_LIST_DIR}/ItemViewsTargets.cmake")
+
+set(ItemViews_LIBRARIES KF5::ItemViews)
+set(ItemViews_INCLUDE_DIRS ${ItemViews_INCLUDE_DIR} )
