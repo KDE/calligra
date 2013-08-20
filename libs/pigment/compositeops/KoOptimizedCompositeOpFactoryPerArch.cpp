@@ -85,6 +85,12 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<VC_IM
 #  define HAVE_AVX 0
 #endif
 
+#ifdef __AVX2__
+#  define HAVE_AVX2 1
+#else
+#  define HAVE_AVX2 0
+#endif
+
 inline void printFeatureSupported(const QString &feature,
                                   bool present)
 {
@@ -104,4 +110,5 @@ KoReportCurrentArch::create<VC_IMPL>(ParamType)
     printFeatureSupported("SSE4.2", HAVE_SSE4_2);
     printFeatureSupported("SSE4a", HAVE_SSE4a);
     printFeatureSupported("AVX ", HAVE_AVX);
+    printFeatureSupported("AVX2 ", HAVE_AVX2);
 }

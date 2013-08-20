@@ -51,13 +51,15 @@ typename FactoryType::ReturnType
 createOptimizedClass(typename FactoryType::ParamType param)
 {
     /**
-     * We use SSE2, SSSE3, SSE4.1 and AVX now only.
+     * We use SSE2, SSSE3, SSE4.1, AVX and AVX2.
      * The rest are integer and string instructions mostly.
      *
      * TODO: Add FMA3/4 when it is adopted by Vc
      */
 
-    if (Vc::isImplementationSupported(Vc::AVXImpl)) {
+    if (Vc::isImplementationSupported(Vc::AVX2Impl)) {
+        return FactoryType::template create<Vc::AVX2Impl>(param);
+    } else if (Vc::isImplementationSupported(Vc::AVXImpl)) {
         return FactoryType::template create<Vc::AVXImpl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
         return FactoryType::template create<Vc::SSE41Impl>(param);
