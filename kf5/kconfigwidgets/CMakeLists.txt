@@ -10,7 +10,7 @@ if(NOT kdelibs_SOURCE_DIR)
 
   find_package(Qt5 5.1.0 REQUIRED NO_MODULE COMPONENTS Widgets)
 
-  find_package(KF5 5.0.0 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs KWidgetsAddons KConfig)
+  find_package(KF5 5.0.0 REQUIRED MODULE COMPONENTS CMake Compiler InstallDirs)
 
 endif()
 
