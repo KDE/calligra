@@ -56,10 +56,12 @@ createOptimizedClass(typename FactoryType::ParamType param)
      *
      * TODO: Add FMA3/4 when it is adopted by Vc
      */
-
+#if VC_VERSION_NUMBER >= VC_VERSION_CHECK(0, 8, 0)
     if (Vc::isImplementationSupported(Vc::AVX2Impl)) {
         return FactoryType::template create<Vc::AVX2Impl>(param);
-    } else if (Vc::isImplementationSupported(Vc::AVXImpl)) {
+    } else
+#endif
+    if (Vc::isImplementationSupported(Vc::AVXImpl)) {
         return FactoryType::template create<Vc::AVXImpl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
         return FactoryType::template create<Vc::SSE41Impl>(param);
