@@ -179,7 +179,7 @@ KoTemplateCreateDia::KoTemplateCreateDia(const char *templateType, const KCompon
 
     d->m_defaultTemplate = new QCheckBox( i18n("Use the new template as default"), mainwidget );
     d->m_defaultTemplate->setChecked( true );
-    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",componentData.aboutData()->programName() ) );
+    d->m_defaultTemplate->setToolTip( i18n("Use the new template every time %1 starts",componentData.aboutData()->displayName() ) );
     rightbox->addWidget( d->m_defaultTemplate );
 
     enableButtonOk(false);
