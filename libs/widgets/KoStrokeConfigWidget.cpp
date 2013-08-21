@@ -332,6 +332,7 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
         d->capNJoinButton->miterLimit->changeValue(lineStroke->miterLimit());
         d->capNJoinButton->miterLimit->setEnabled(lineStroke->joinStyle() == Qt::MiterJoin);
         d->lineStyle->setLineStyle(lineStroke->lineStyle(), lineStroke->lineDashes());
+        d->colorAction->setCurrentColor(lineStroke->color());
     }
     else {
         d->lineWidth->changeValue(0.0);
