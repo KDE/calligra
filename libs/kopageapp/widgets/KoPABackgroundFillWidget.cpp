@@ -22,16 +22,9 @@
 
 #include <KoPageApp.h>
 #include <KoPAViewBase.h>
-#include <KoCanvasController.h>
-#include <KoToolManager.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
 #include <KoShape.h>
-#include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
-#include <KoShapeLayer.h>
-#include <KoSelection.h>
-#include <KoPAViewBase.h>
 
 #include <KLocale>
 
