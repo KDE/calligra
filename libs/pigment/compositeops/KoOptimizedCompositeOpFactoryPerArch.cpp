@@ -110,5 +110,7 @@ KoReportCurrentArch::create<VC_IMPL>(ParamType)
     printFeatureSupported("SSE4.2", HAVE_SSE4_2);
     printFeatureSupported("SSE4a", HAVE_SSE4a);
     printFeatureSupported("AVX ", HAVE_AVX);
+#if VC_VERSION_NUMBER >= VC_VERSION_CHECK(0, 8, 0)
     printFeatureSupported("AVX2 ", HAVE_AVX2);
+#endif
 }
