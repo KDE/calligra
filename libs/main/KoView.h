@@ -229,7 +229,7 @@ public:
    /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
      */
-    KStatusBar * statusBar() const;
+    QStatusBar * statusBar() const;
 
     /**
      * This adds a widget to the statusbar for this view.

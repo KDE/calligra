@@ -30,7 +30,7 @@ set(kofake_LIB_SRCS
 set(kofake_HEADERS_ONLY 
     #kcolorbutton.h
     #kencodingprober.h
-    kstatusbar.h
+    #kstatusbar.h
     kcombobox.h
     kurlrequester.h
     kicon.h

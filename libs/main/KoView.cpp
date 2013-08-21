@@ -48,7 +48,6 @@
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <kmessagebox.h>
@@ -485,7 +484,7 @@ KoMainWindow * KoView::mainWindow() const
     return dynamic_cast<KoMainWindow *>(window());
 }
 
-KStatusBar * KoView::statusBar() const
+QStatusBar *KoView::statusBar() const
 {
     KoMainWindow *mw = mainWindow();
     return mw ? mw->statusBar() : 0;
