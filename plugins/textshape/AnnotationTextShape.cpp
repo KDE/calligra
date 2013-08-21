@@ -120,7 +120,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
 
 void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
 {
-    kDebug(31000) << " ****** Start saveing annotation shape **********";
+    //kDebug(31000) << " ****** Start saveing annotation shape **********";
     KoXmlWriter *writer = &context.xmlWriter();
 
     writer->startElement("dc:creator", false);

@@ -194,7 +194,6 @@ void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &view
         QRect annotationRect(m_viewMode->contentsSize().width(), 0,
                              AnnotationAreaWidth, m_viewMode->contentsSize().height());
         QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
-        qDebug() << "annotation rect " << annotationRect << "view rect " << viewRect;
         painter.fillRect(viewRect, QBrush(color));
 
 
