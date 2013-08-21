@@ -59,6 +59,7 @@
 
 #include <QTimer>
 #include <QDockWidget>
+#include <QStatusBar>
 #include <QToolBar>
 #include <QApplication>
 #include <QList>
@@ -127,7 +128,7 @@ public:
             return m_widget;
         }
 
-        void ensureItemShown(KStatusBar * sb) {
+        void ensureItemShown(QStatusBar * sb) {
             Q_ASSERT(m_widget);
             if (!m_connected) {
                 if (m_permanent)
@@ -141,7 +142,7 @@ public:
                 m_connected = true;
             }
         }
-        void ensureItemHidden(KStatusBar * sb) {
+        void ensureItemHidden(QStatusBar * sb) {
             if (m_connected) {
                 m_hidden = m_widget->isHidden();
                 sb->removeWidget(m_widget);
@@ -184,7 +185,7 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setupGlobalActions();
 
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
         connect(d->document, SIGNAL(statusBarMessage(const QString&)),
                 this, SLOT(slotActionStatusText(const QString&)));
@@ -353,7 +354,7 @@ int KoView::canvasYOffset() const
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);
-    KStatusBar * sb = statusBar();
+    QStatusBar * sb = statusBar();
     if (sb) {
         item.ensureItemShown(sb);
     }
@@ -362,7 +363,7 @@ void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 
 void KoView::removeStatusBarItem(QWidget *widget)
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
 
     int itemCount = d->statusBarItems.count();
     for (int i = itemCount-1; i >= 0; --i) {
@@ -492,14 +493,14 @@ QStatusBar *KoView::statusBar() const
 
 void KoView::slotActionStatusText(const QString &text)
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb)
         sb->showMessage(text);
 }
 
 void KoView::slotClearStatusText()
 {
-    KStatusBar *sb = statusBar();
+    QStatusBar *sb = statusBar();
     if (sb)
         sb->clearMessage();
 }

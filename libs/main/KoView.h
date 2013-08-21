@@ -34,12 +34,12 @@ class KoZoomController;
 struct KoPageLayout;
 
 // KDE classes
-class KStatusBar;
 class KXmlGuiWindow;
 class QAction;
 
 // Qt classes
 class QToolBar;
+class QStatusBar;
 class QDragEnterEvent;
 class QDropEvent;
 class QPrintDialog;

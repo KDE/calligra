@@ -60,7 +60,6 @@
 #include <ktemporaryfile.h>
 #include <krecentdocument.h>
 #include <klocale.h>
-#include <kstatusbar.h>
 #include <kglobalsettings.h>
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
@@ -84,6 +83,7 @@
 #include <QLayout>
 #include <QLabel>
 #include <QProgressBar>
+#include <QStatusBar>
 #include <QTabBar>
 #include <QPrinter>
 #include <QPrintDialog>
