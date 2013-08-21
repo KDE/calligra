@@ -1144,8 +1144,11 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         /*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol);
     }
     if (res == Validator::Ok) {
-        if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
+        if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting) {
+            m_inside_acceptEditor = false;
             acceptRowEdit();
+            m_inside_acceptEditor = true;
+        }
         return true;
     }
     if (m_editor) {
