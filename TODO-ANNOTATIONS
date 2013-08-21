@@ -16,7 +16,7 @@ Bugs
     - paragraphs
     - list entries
 
- * The annotation area is broken at the page breaks.
+ * Default tool for annotations should be the text tool.
 
 
 Annoyances
@@ -24,15 +24,16 @@ Annoyances
 
  * Save and load status of "Show notes".
 
+ * Zoom to Page Width should include the annotation area if active.
+
  * Insert/delete buttons mentions annotations, but menu has
    "Show Notes".  LO/AOO call them notes so the buttons should
    use the same word.
 
- * Use same shortcut as LO/AOO.
+ * Use same shortcut as LO/AOO to insert a note.
 
  * Insert/delete buttons are too wide
     - better to have two textlines in them ("insert\nnote")
-
 
 
 To Check / Test

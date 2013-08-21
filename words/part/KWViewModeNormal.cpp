@@ -41,9 +41,9 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewR
     if (m_pageTops.isEmpty())
         return answer;
     KWPage page  = m_pageManager->begin();
-    qreal offsetX = 0.0;
     const int pageOffset = page.pageNumber();
 
+    // Perform a binary search for page-index using our m_pageTops cache.
     int begin = 0;
     int end = m_pageTops.count() - 1;
     int index = 0;
@@ -52,7 +52,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewR
         begin = end;
         index = end;
     }
-    while (end - begin > 1) { // binary search for page-index using our m_pageTops cache.
+    while (end - begin > 1) {
         index = begin + (end - begin) / 2;
         qreal diff = m_pageTops.value(index) - value;
         if (diff < 0)
@@ -62,38 +62,93 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewR
         else
             break;
     }
-    while (index > 1) { // 1 since we might hit a pagespread in the binary search, so start one page early
+    // index is now the number of the first possible page that can
+    // contain the viewRect.  The next step is to find the
+    // corresponding Page.  Since we have no way to get to the Nth
+    // page directly we have to enumerate them from the beginning.
+    //
+    // We use 1 since we might hit a pagespread in the binary search,
+    // so start one page early.
+    while (index > 1) { 
         page = page.next();
         --index;
     }
 
+    // From here we loop through some more pages after the found one
+    // and see if they intersect with the page in question.  When we
+    // have two pages in row that don't intersect we break the loop.
+    qreal offsetX = 0.0;
     int emptyPages = 0;
     for(; page.isValid(); page = page.next()) {
         Q_ASSERT_X(page.pageNumber()-pageOffset < m_pageTops.count(), __FUNCTION__,
                    QString("Pagemanager has more pages than viewmode (%1>%2 with pageOffset=%3 and pageNumber=%4 and pageCount=%5). Make sure you add pages via the document!")
-                   .arg(page.pageNumber()-pageOffset).arg(m_pageTops.count()).arg(pageOffset).arg(page.pageNumber()).arg(m_pageManager->pageCount()).toLocal8Bit());
+                   .arg(page.pageNumber()-pageOffset).arg(m_pageTops.count())
+                   .arg(pageOffset).arg(page.pageNumber()).arg(m_pageManager->pageCount()).toLocal8Bit());
 
-        const QRectF pageRect = page.rect().adjusted(0, 0, KWCanvasBase::AnnotationAreaWidth, 0);
+
+        // Some invariants
+        const QRectF pageRect = page.rect();
+        const qreal offsetY = m_pageTops[page.pageNumber() - pageOffset] - pageRect.top();
+
+        bool pageIntersects = false;
+
+        // 1. First handle the page itself.
         const QRectF zoomedPage = viewConverter->documentToView(pageRect);
         ViewMap vm;
         vm.page = page;
         //kDebug(32003) <<"page" << page.pageNumber();
-        const qreal offsetY = m_pageTops[page.pageNumber() - pageOffset] - pageRect.top();
         vm.distance = viewConverter->documentToView(QPointF(offsetX, offsetY));
 
         const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(),
-                zoomedPage.width() , zoomedPage.height());
+                                zoomedPage.width(), zoomedPage.height());
         QRectF intersection = targetPage.intersect(viewRect);
         if (! intersection.isEmpty()) {
             intersection.moveTopLeft(intersection.topLeft() - vm.distance);
             vm.clipRect = intersection.toRect();
             answer.append(vm);
+            pageIntersects = true;
+        }
+
+        // 2. Then handle the annotation area if annotations are active.
+        //
+        //    The reason we don't do them together with the page
+        //    itself is because the pages have a gap between them, but
+        //    the annotation area should be unbroken.
+        //
+        // NOTE: 'annotation' below means the annotation area.
+        //
+        // FIXME: We should only do this if the annotation area is
+        //        actually shown. How can we inside the KWViewMode
+        //        know if annotations are active?
+        if (1 /* annotations are shown */) {
+            const QRectF annotationRect = pageRect.adjusted(page.width(), 0,
+                                                            KWCanvasBase::AnnotationAreaWidth, GAP);
+            const QRectF zoomedAnnotation = viewConverter->documentToView(annotationRect);
+            ViewMap vm2;
+            vm2.page = page;
+            vm2.distance = viewConverter->documentToView(QPointF(offsetX, offsetY));
+
+            const QRectF targetAnnotation(zoomedAnnotation.x() + vm2.distance.x(),
+                                          zoomedAnnotation.y() + vm2.distance.y(),
+                                          zoomedAnnotation.width(), zoomedAnnotation.height());
+            intersection = targetAnnotation.intersect(viewRect);
+            if (! intersection.isEmpty()) {
+                intersection.moveTopLeft(intersection.topLeft() - vm2.distance);
+                vm2.clipRect = intersection.toRect();
+                answer.append(vm2);
+                pageIntersects = true;
+            }
+        }
+
+        // Record whether this page had an intersection with the view rect.
+        if (pageIntersects) {
             emptyPages = 0;
         } else {
-            emptyPages++;
+            ++emptyPages;
         }
         if (emptyPages > 2) // Since we show at max 2 pages side by side this is an easy rule
             break;
+
         if (m_pageSpreadMode) {
             if (page.pageSide() == KWPage::Left)
                 offsetX = page.width() + GAP;
