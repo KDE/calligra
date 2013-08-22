@@ -65,12 +65,12 @@ ReviewTool::~ReviewTool()
 
 void ReviewTool::createActions()
 {
-    m_insertAnnotationAction = new KAction(i18n("Insert Annotation"), this);
-    m_insertAnnotationAction->setToolTip(i18n("Insert Annotation"));
+    m_insertAnnotationAction = new KAction(i18n("Insert Note"), this);
+    m_insertAnnotationAction->setToolTip(i18n("Insert Note"));
     addAction("insert_annotation", m_insertAnnotationAction);
 
-    m_removeAnnotationAction = new KAction(i18n("Remove Annotation"), this);
-    m_removeAnnotationAction->setToolTip(i18n("Remove Annotation"));
+    m_removeAnnotationAction = new KAction(i18n("Remove Note"), this);
+    m_removeAnnotationAction->setToolTip(i18n("Remove Note"));
     addAction("remove_annotation", m_removeAnnotationAction);
 }
 
@@ -140,12 +140,10 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
     sscw->setWindowTitle("SpellCheck");
     widgets.append(sscw);
 
-
-    saw->setWindowTitle("Annotation");
+    saw->setWindowTitle("Notes");
     widgets.append(saw);
 
     return widgets;
-
 }
 
 void ReviewTool::insertAnnotation()

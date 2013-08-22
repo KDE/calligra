@@ -12,11 +12,14 @@ Bugs
 
  * Lines remain when an annotation is deleted.
 
- * Possible to insert other things than allowed by the standard:
+ * Possible to insert other things than allowed by the standard into the annotation shapes:
     - paragraphs
     - list entries
 
  * Default tool for annotations should be the text tool.
+
+ * When an annotation is deleted, the behaviour of the toolbox is strange.
+   It's not really clear what should happen though.
 
 
 Annoyances
@@ -26,14 +29,10 @@ Annoyances
 
  * Zoom to Page Width should include the annotation area if active.
 
- * Insert/delete buttons mentions annotations, but menu has
-   "Show Notes".  LO/AOO call them notes so the buttons should
-   use the same word.
-
  * Use same shortcut as LO/AOO to insert a note.
 
- * Insert/delete buttons are too wide
-    - better to have two textlines in them ("insert\nnote")
+ * The review tool's annotation widget is ugly.  The buttons should
+   be spread out evenly in the layout, not be stacked to the left.
 
 
 To Check / Test
