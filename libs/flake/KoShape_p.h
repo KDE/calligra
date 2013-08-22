@@ -80,7 +80,6 @@ public:
     qreal transparency; ///< the shapes transparency
     QString hyperLink; //hyperlink for this shape
 
-    KoShape::ChildZOrderPolicy childZOrderPolicy;
     static const int MaxZIndex = 32767;
     int zIndex : 16; // keep maxZIndex in sync!
     int runThrough : 16;

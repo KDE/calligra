@@ -769,7 +769,6 @@ KoShape *KWFrameLayout::createTextShape(const KWPage &page)
     if (m_document)
         rm = m_document->resourceManager();
     KoShape *shape = factory->createDefaultShape(rm);
-    shape->setChildZOrderPolicy(KoShape::ChildZInterleave);
     //Q_ASSERT(shape);
     return shape;
 }
