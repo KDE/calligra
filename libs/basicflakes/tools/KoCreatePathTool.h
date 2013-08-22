@@ -71,8 +71,6 @@ public slots:
     /// reimplemented
     virtual void documentResourceChanged(int key, const QVariant & res);
 
-    void strokeChanged(KoShapeStroke *newStroke);
-
 protected:
     /**
      * Add path shape to document.
@@ -91,6 +89,8 @@ protected:
     virtual QList<QWidget *> createOptionWidgets();
 
 private:
+    KoShapeStroke *createStroke();
+
     Q_DECLARE_PRIVATE(KoCreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
     Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(int))

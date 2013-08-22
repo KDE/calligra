@@ -57,13 +57,11 @@ public:
     qreal miterLimit() const;
     KoMarker *startMarker() const;
     KoMarker *endMarker() const;
+    Qt::PenCapStyle capStyle() const;
+    Qt::PenJoinStyle joinStyle() const;
 
     void setCanvas(KoCanvasBase *canvas);
-    void activate();
-    void unactivate();
-
-signals:
-    void strokeChanged(KoShapeStroke*);
+    void setActive(bool active);
 
 private slots:
     void updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker);

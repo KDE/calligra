@@ -246,7 +246,6 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->colorAction = new KoColorPopupAction(this);
     d->colorAction->setIcon(koIcon("format-stroke-color"));
     d->colorAction->setToolTip(i18n("Change the color of the line/border"));
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(applyChanges()));
     d->colorButton->setDefaultAction(d->colorAction);
 
     mainLayout->addLayout(firstLineLayout);
@@ -257,9 +256,16 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->spacer->setObjectName("SpecialSpacer");
     mainLayout->addWidget(d->spacer);
 
+
+    // set sensitive defaults
+    d->lineStyle->setLineStyle(Qt::SolidLine);
+    d->lineWidth->changeValue(1);
+    d->colorAction->setCurrentColor(Qt::black);
+
     // Make the signals visible on the outside of this widget.
     connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
     connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
+    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(applyChanges()));
     connect(d->capNJoinButton->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
     connect(d->capNJoinButton->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
     connect(d->capNJoinButton->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
@@ -309,6 +315,16 @@ KoMarker *KoStrokeConfigWidget::startMarker() const
 KoMarker *KoStrokeConfigWidget::endMarker() const
 {
     return d->endMarkerSelector->marker();
+}
+
+Qt::PenCapStyle KoStrokeConfigWidget::capStyle() const
+{
+    return static_cast<Qt::PenCapStyle>(d->capNJoinButton->capGroup->checkedId());
+}
+
+Qt::PenJoinStyle KoStrokeConfigWidget::joinStyle() const
+{
+    return static_cast<Qt::PenJoinStyle>(d->capNJoinButton->joinGroup->checkedId());
 }
 
 // ----------------------------------------------------------------
@@ -376,14 +392,9 @@ void KoStrokeConfigWidget::blockChildSignals(bool block)
     d->endMarkerSelector->blockSignals(block);
 }
 
-void KoStrokeConfigWidget::activate()
+void KoStrokeConfigWidget::setActive(bool active)
 {
-    d->active = true;
-}
-
-void KoStrokeConfigWidget::unactivate()
-{
-    d->active = false;
+    d->active = active;
 }
 
 //------------------------
@@ -394,18 +405,11 @@ void KoStrokeConfigWidget::applyChanges()
 
     //FIXME d->canvas->resourceManager()->setActiveStroke( d->stroke );
 
-    KoShapeStroke *newStroke = new KoShapeStroke();
     if (!selection || !selection->count()) {
-        newStroke->setColor(color());
-        newStroke->setLineWidth(lineWidth());
-        newStroke->setCapStyle(static_cast<Qt::PenCapStyle>(d->capNJoinButton->capGroup->checkedId()));
-        newStroke->setJoinStyle(static_cast<Qt::PenJoinStyle>(d->capNJoinButton->joinGroup->checkedId()));
-        newStroke->setMiterLimit(miterLimit());
-        newStroke->setLineStyle(lineStyle(), lineDashes());
-        emit(strokeChanged(newStroke));
         return;
     }
 
+    KoShapeStroke *newStroke = new KoShapeStroke();
     KoShapeStroke *oldStroke = dynamic_cast<KoShapeStroke*>( selection->firstSelectedShape()->stroke() );
     if (oldStroke) {
         newStroke->setLineBrush(oldStroke->lineBrush());
@@ -421,8 +425,6 @@ void KoStrokeConfigWidget::applyChanges()
         KoShapeStrokeCommand *cmd = new KoShapeStrokeCommand(selection->selectedShapes(), newStroke);
         canvasController->canvas()->addCommand(cmd);
     }
-
-    emit(strokeChanged(newStroke));
 }
 
 void KoStrokeConfigWidget::applyMarkerChanges(KoMarkerData::MarkerPosition position)
