@@ -40,7 +40,6 @@
 #include "RootSection.h"
 #include "View.h"
 #include "Canvas.h"
-#include "RootSection.h"
 #include "import/DockerManager.h"
 #include <kxmlguifactory.h>
 #include <kdebug.h>

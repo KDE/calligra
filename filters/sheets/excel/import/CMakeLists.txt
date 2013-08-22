@@ -3,6 +3,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
+    ${KOODF_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx
     ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
@@ -59,7 +60,7 @@ install(TARGETS calligra_filter_xls2ods DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kspread_excel_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_xls2ods.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
     install( FILES sheets_excel_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Excel Spreadsheets
+Name[bs]=Microsoft Excel tabele
 Name[ca]=Fulls de càlcul del Microsoft Excel
 Name[da]=Microsoft Excel-regneark
 Name[de]=Microsoft Excel Tabellenkalkulation
@@ -10,8 +11,9 @@ Name[et]=Microsoft Exceli arvutustabelid
 Name[fi]=MIcrosoft Excel laskentataulukot
 Name[fr]=Tableurs Microsoft Excel
 Name[gl]=Follas de cálculo de Microsoft Excel
-Name[hu]=Microsoft Excel táblázatok
+Name[hu]=Microsoft Excel munkafüzetek
 Name[it]=Fogli di calcolo Microsoft Excel
+Name[ja]=Microsoft Excel スプレッドシート
 Name[kk]=Microsoft Excel эл.кестелері
 Name[lt]=„Microsoft Excel“ skaičiuoklės dokumentai
 Name[nb]=Microsoft Excel regneark

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Karbon Whirl Pinch plugin
+Name[kk]=Karbon-ның бұрау және қысу плагині
+Name[nl]=Plug-in voor Whirl Pinch van Karbon
+Name[pt]='Plugin' de Punção do Karbon
+Name[pt_BR]=Plugin de punção do Karbon
+Name[sk]=Plugin rozštiepený vír pre Karbon
+Name[sv]=Karbon-insticksprogram för virvla och kläm
+Name[uk]=Додаток вихору для Karbon
+Name[x-test]=xxKarbon Whirl Pinch pluginxx
+X-KDE-ServiceTypes=Karbon/ViewPlugin
+Type=Service
+X-KDE-Library=karbon_whirlpinchplugin
+X-Karbon-Version=28

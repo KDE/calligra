@@ -16,7 +16,7 @@ target_link_libraries(calligra_filter_wmf2svg kovectorimage komain koodf)
 install(TARGETS calligra_filter_wmf2svg
         DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES  karbon_wmf_import.desktop
+install(FILES  calligra_filter_wmf2svg.desktop
         DESTINATION ${SERVICES_INSTALL_DIR})
 
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
@@ -42,7 +42,7 @@ target_link_libraries(
 install(TARGETS calligra_filter_karbon2wmf
         DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES  karbon_wmf_export.desktop
+install(FILES  calligra_filter_karbon2wmf.desktop
         DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif(SHOULD_BUILD_FILTER_KARBON_TO_WMF)

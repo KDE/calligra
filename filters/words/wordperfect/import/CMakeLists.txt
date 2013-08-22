@@ -12,7 +12,7 @@ target_link_libraries(calligra_filter_wpd2odt komain writerperfect)
 
 install(TARGETS calligra_filter_wpd2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES words_wpd_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_filter_wpd2odt.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
     install( FILES words_wpd_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})

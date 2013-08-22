@@ -49,7 +49,11 @@
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
+
+#ifndef QT_NO_DBUS
 #include "KPrViewAdaptor.h"
+#endif
+
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "KPrViewModeSlidesSorter.h"
@@ -75,7 +79,9 @@ KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
   , m_slidesSorterMode(new KPrViewModeSlidesSorter(this, kopaCanvas()))
+#ifndef QT_NO_DBUS
   , m_dbus( new KPrViewAdaptor( this ) )
+#endif
 {
     m_normalMode->setName(i18n("Normal"));
     initGUI();
@@ -135,10 +141,12 @@ KPrDocument * KPrView::kprDocument() const
     return static_cast<KPrDocument *>( kopaDocument() );
 }
 
+#ifndef QT_NO_DBUS
 KPrViewAdaptor * KPrView::dbusObject() const
 {
     return m_dbus;
 }
+#endif
 
 KPrViewModePresentation * KPrView::presentationMode() const
 {

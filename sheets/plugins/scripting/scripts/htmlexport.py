@@ -51,7 +51,7 @@ class Config:
         'Keywords' : '',
         'Filename' : '',
     }
-    """ The default values for the "HTML Document Informations" page. They are used
+    """ The default values for the "HTML Document Information" page. They are used
     if the corresponding value is not defined (for KSpread see in the mainmenu the
     item "File=>Document Information". """
 
@@ -353,7 +353,7 @@ class Writer:
 class Dialog:
     """ The Dialog class uses the Kross forms-module to display a dialog
     to let the user change settings like for example the HTML file that
-    should be written, document-informations or the style. """
+    should be written, document-information or the style. """
 
     def __init__(self, exporter):
         self.exporter = exporter
@@ -424,7 +424,7 @@ class Dialog:
                         raise Exception, T.i18n("Export aborted.")
                 self.exporter.writer.setFile(savefilename)
 
-            # set informations
+            # set information
             for s in ['Title','Subject','Author','EMail','Keywords','Filename','Date']:
                 try:
                     self.exporter.writer.infos[s] = self.infoswidget[s].text
