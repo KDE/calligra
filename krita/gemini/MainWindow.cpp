@@ -302,6 +302,8 @@ void MainWindow::switchToDesktop(bool justLoaded)
         view->canvasController()->zoomIn(center);
         view->canvasController()->zoomOut(center);
 
+        qApp->processEvents();
+
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, syncObject);
