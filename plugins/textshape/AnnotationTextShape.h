@@ -37,8 +37,8 @@ class AnnotationTextShape : public TextShape
 {
 public:
     // Some constants
-    const qreal  HeaderSpace = 25.0; // The space needed for the annotation header.
-    const qreal  HeaderFontSize = 6.0;
+    static const qreal  HeaderSpace = 25.0; // The space needed for the annotation header.
+    static const qreal  HeaderFontSize = 6.0;
     
 
     // For now we should give these parameters for TextShape.

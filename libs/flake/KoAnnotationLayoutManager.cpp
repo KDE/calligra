@@ -47,12 +47,14 @@ class KoAnnotationLayoutManager::Private
 public:
     Private(qreal annotationX)
         : x(annotationX),
-          shapeManager(0)
+          shapeManager(0),
+          canvas(0)
     {}
 
     qreal x;
     QList< QPair < QPointF, KoShape * > > annotationShapePositions;
     KoShapeManager *shapeManager;
+    KoCanvasBase *canvas;
 };
 
 KoAnnotationLayoutManager::KoAnnotationLayoutManager(QObject *parent)
@@ -76,17 +78,30 @@ KoAnnotationLayoutManager::~KoAnnotationLayoutManager()
 
 void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotationShape, QPointF pos) {
     QList< QPair < QPointF, KoShape * > >::iterator i = d->annotationShapePositions.begin();
+    bool yPositionChanged = false;
     while (i != d->annotationShapePositions.end()) {
         KoShape *shape = i->second;
         if (shape == annotationShape) {
+            if (i->first.y() != pos.y()) {
+                yPositionChanged = true;
+            }
             d->annotationShapePositions.erase(i);
             break;
         }
         i++;
     }
     d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
-
     layoutAnnotationShapes();
+    // Update the free space between page outline rect and textarea (90).
+    // 729.001 is viewMode content size height.
+    //FIXME: Help me to find correct width.
+    if (yPositionChanged) {
+        d->canvas->updateCanvas(QRectF((d->x-90), 0, 90, 729.001));
+    }
+}
+void KoAnnotationLayoutManager::setCanvasBase(KoCanvasBase *canvas)
+{
+    d->canvas = canvas;
 }
 
 void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape) {
@@ -125,6 +140,9 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
 
 void KoAnnotationLayoutManager::paintConnections(QPainter &painter, KoViewConverter *viewConverter)
 {
+
+    painter.save();
+
     QPen pen(QColor(230, 216, 87));
     pen.setStyle(Qt::DashLine);
     pen.setWidth(2);
@@ -137,10 +155,10 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter, KoViewConver
     while (i != d->annotationShapePositions.end() && !d->annotationShapePositions.isEmpty()) {
         KoShape *shape = i->second;
 
-        QPointF shapePosition(viewConverter->documentToView(QPointF(shape->position().x(), (shape->position().y() + 25))));
-        QPointF refTextPosition(viewConverter->documentToView(QPointF(i->first.x(), (i->first.y()))));
-        QPointF connectionPoint(viewConverter->documentToView(QPointF((shape->position().x() - 50), (i->first.y()))));
-        QPointF pointLine(viewConverter->documentToView(QPointF(i->first.x(), (i->first.y() + 5))));
+        QPointF shapePosition(d->canvas->viewConverter()->documentToView(QPointF(shape->position().x(), (shape->position().y() + 25))));
+        QPointF refTextPosition(d->canvas->viewConverter()->documentToView(QPointF(i->first.x(), (i->first.y()))));
+        QPointF connectionPoint(d->canvas->viewConverter()->documentToView(QPointF((shape->position().x() - 50), (i->first.y()))));
+        QPointF pointLine(d->canvas->viewConverter()->documentToView(QPointF(i->first.x(), (i->first.y() + 5))));
 
 
         //draw first line, from shape to connectionPint.
@@ -152,6 +170,8 @@ void KoAnnotationLayoutManager::paintConnections(QPainter &painter, KoViewConver
 
         i++;
     }
+    painter.restore();
+
 }
 
 void KoAnnotationLayoutManager::updateLayout(KoShape *shape)

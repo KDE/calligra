@@ -133,6 +133,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_currentPage = m_document->pageManager()->begin();
 
     m_document->annotationLayoutManager()->setShapeManager(m_canvas->shapeManager());
+    m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
+
     connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
     connect(m_document, SIGNAL(annotationShapeRemoved(KoShape *)), this, SLOT(annotationShapeRemoved(KoShape *)));
     //We need to create associate widget before connect them in actions

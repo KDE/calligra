@@ -25,6 +25,8 @@
 #include <QPointF>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 
 class QPainter;
 
@@ -40,6 +42,8 @@ public:
     void paintConnections(QPainter &painter, KoViewConverter *viewConverter);
 
     void setShapeManager(KoShapeManager *shapeManager);
+
+    void setCanvasBase(KoCanvasBase *canvas);
 
 public slots:
     /// register the position of an annotation shape.
