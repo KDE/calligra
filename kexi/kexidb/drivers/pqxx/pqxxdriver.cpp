@@ -142,7 +142,7 @@ QString pqxxSqlDriver::escapeString(const QString& str) const
  //          .replace('"', "\\\"")
  //          + QString::fromLatin1("'");
 
-return QString::fromLatin1("E'") + QString(str).replace("'", "\"\"").replace("\\", "\\\\") + QString::fromLatin1("'");
+return QString::fromLatin1("E'") + QString(str).replace("\\", "\\\\").replace("'", "\\\'") + QString::fromLatin1("'");
   
 }
 
@@ -165,7 +165,7 @@ QByteArray pqxxSqlDriver::escapeString(const QByteArray& str) const
 //           .replace('"', "\\\"")
 //           + QByteArray("'");
 
-    return QByteArray("E'") + QByteArray(str).replace("'", "\"\"").replace("\\", "\\\\") + QByteArray("'");
+    return QByteArray("E'") + QByteArray(str).replace("\\", "\\\\").replace("'", "\\\'") + QByteArray("'");
 
 }
 
