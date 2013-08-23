@@ -231,6 +231,11 @@ void MainWindow::switchToSketch()
     ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
     KisView2* view = 0;
 
+    if(d->sketchKisView) {
+        QPoint center = d->sketchKisView->rect().center();
+        d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+    }
+
     if(d->desktopView && centralWidget() == d->desktopView) {
         view = qobject_cast<KisView2*>(d->desktopView->rootView());
 
@@ -376,7 +381,7 @@ void MainWindow::setCurrentSketchPage(QString newPage)
         }
         else
         {
-            QTimer::singleShot(2000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+            QTimer::singleShot(3000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
         }
     }
 }
