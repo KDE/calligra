@@ -96,7 +96,8 @@ public:
         CompletionFinishTime,
         CompletionPercentage,
         CompletionRemainingEffort,
-        CompletionActualEffort
+        CompletionActualEffort,
+        CompletionUsedEffort
     };
 
     explicit Node(Node *parent = 0);

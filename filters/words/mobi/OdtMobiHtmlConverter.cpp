@@ -177,7 +177,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
     // Write the beginning of the output.
     beginHtmlFile(metaData);
 
-    QString currentChapterTitle = "";
+    QString currentChapterTitle;
 
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {
@@ -660,7 +660,7 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->startElement("a", m_doIndent);
     QString reference = nodeElement.attribute("href");
     //    QString chapter = m_linksInfo.value(reference);
-    QString mark = m_linksInfo.value(reference); // refrence without # at its begining.
+    QString mark = m_linksInfo.value(reference); // refrence without # at its beginning.
     if (!mark.isEmpty() /*&& !m_options->stylesInCssFile*/) {
 //        // This is internal link.
 //        reference.remove('|');
@@ -1297,12 +1297,12 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::createCSS(QHash<QString, StyleI
             continue;
 
         // The style name
-        head = QString("." + styleName).toUtf8();
+        head = QString('.' + styleName).toUtf8();
         cssContent.append(head);
         cssContent.append(begin);
 
         foreach (const QString &propName, styleInfo->attributes.keys()) {
-            attributeList += (propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
+            attributeList += QString(propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
         }
 
         cssContent.append(attributeList);

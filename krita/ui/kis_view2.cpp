@@ -51,9 +51,6 @@
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kparts/componentfactory.h>
-#include <kparts/event.h>
-#include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
@@ -123,13 +120,11 @@
 
 #include <QDebug>
 #include <QPoint>
-#include "kis_paintop_box.h"
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
-#include "kis_paintop_box.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -243,7 +238,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     canvasController->setDrawShadow(false);
     canvasController->setCanvasMode(KoCanvasController::Infinite);
     KisConfig cfg;
-    canvasController->setZoomWithWheel(cfg.zoomWithWheel());
     canvasController->setVastScrolling(cfg.vastScrolling());
 
     m_d->canvasController = canvasController;
@@ -348,15 +342,14 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
     }
 
-    //Workaround, by default has the same shortcut as hide/show dockers
-    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
-    if (action) {
-        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-    }
+    if (shell()) {
+        //Workaround, by default has the same shortcut as hide/show dockers
+        action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
+        if (action) {
+            action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+            action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+        }
 
-    if (shell())
-    {
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
@@ -872,7 +865,6 @@ void KisView2::slotPreferences()
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
         KisConfig cfg;
-        static_cast<KoCanvasControllerWidget*>(m_d->canvasController)->setZoomWithWheel(cfg.zoomWithWheel());
 
         // Update the settings for all nodes -- they don't query
         // KisConfig directly because they need the settings during
@@ -974,8 +966,8 @@ void KisView2::loadPlugins()
         dbgUI << "Load plugin " << service->name();
         QString error;
 
-        KParts::Plugin* plugin =
-                dynamic_cast<KParts::Plugin*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if (plugin) {
             insertChildClient(plugin);
         } else {
@@ -1113,7 +1105,7 @@ void KisView2::slotSaveIncremental()
                 ++letterCh;
                 letter = QString(QChar(letterCh));
             } else {
-                letter = "a";
+                letter = 'a';
             }
         }
     } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
@@ -1162,6 +1154,7 @@ void KisView2::slotSaveIncrementalBackup()
         int intVersion = version.toInt(0);
         ++intVersion;
         QString baseNewVersion = QString::number(intVersion);
+        QString backupFileName = m_d->doc->localFilePath();
         while (baseNewVersion.length() < version.length()) {
             baseNewVersion.prepend("0");
         }
@@ -1172,15 +1165,15 @@ void KisView2::slotSaveIncrementalBackup()
             newVersion.prepend("~");
             if (!letter.isNull()) newVersion.append(letter);
             newVersion.append(".");
-            fileName.replace(regex, newVersion);
-            fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
+            backupFileName.replace(regex, newVersion);
+            fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, this);
             if (fileAlreadyExists) {
                 if (!letter.isNull()) {
                     char letterCh = letter.at(0).toLatin1();
                     ++letterCh;
                     letter = QString(QChar(letterCh));
                 } else {
-                    letter = "a";
+                    letter = 'a';
                 }
             }
         } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
@@ -1189,6 +1182,7 @@ void KisView2::slotSaveIncrementalBackup()
             KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
             return;
         }
+        QFile::copy(fileName, backupFileName);
         m_d->doc->documentPart()->saveAs(fileName);
 
         shell()->updateCaption();
@@ -1226,7 +1220,8 @@ void KisView2::slotSaveIncrementalBackup()
 
         // Save both as backup and on current file for interapplication workflow
         m_d->doc->setSaveInBatchMode(true);
-        m_d->doc->documentPart()->saveAs(backupFileName);
+        QFile::copy(fileName, backupFileName);
+        m_d->doc->documentPart()->saveAs(fileName);
         m_d->doc->setSaveInBatchMode(false);
 
         shell()->updateCaption();

@@ -174,7 +174,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     // Write the beginning of the output.
     beginHtmlFile(metaData);
 
-    QString currentChapterTitle = "";
+    QString currentChapterTitle;
 
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {
@@ -222,7 +222,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
                 if (nodeElement.localName() == "h") {
                     currentChapterTitle = nodeElement.text();
                 } else {
-                    currentChapterTitle = "";
+                    currentChapterTitle.clear();
                 }
 
                 // And begin a new chapter.
@@ -665,7 +665,7 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
 {
     // Start the element;
     // keep the name in a QByteArray so that it stays valid until end element is called.
-    const QByteArray name(el.nodeName().toAscii());
+    const QByteArray name(el.nodeName().toLatin1());
     kDebug(30503) << "Copying element;" << name;
     writer.startElement(name.constData());
 
@@ -675,12 +675,12 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
         const QPair<QString, QString>  &attrPair(attributeNames.value(i));
         if (attrPair.first.isEmpty()) {
             kDebug(30503) << "Copying attribute;" << attrPair.second;
-            writer.addAttribute(attrPair.second.toAscii(), el.attribute(attrPair.second));
+            writer.addAttribute(attrPair.second.toLatin1(), el.attribute(attrPair.second));
         }
         else {
             // This somewhat convoluted code is because we need the
             // namespace, not the namespace URI.
-            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toAscii());
+            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toLatin1());
             // in case we don't find the namespace in our list create a own one and use that
             // so the document created on saving is valid.
             if (nsShort.isEmpty()) {
@@ -689,10 +689,10 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
                     nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
                     unknownNamespaces.insert(attrPair.first, nsShort);
                 }
-                writer.addAttribute("xmlns:" + nsShort.toAscii(), attrPair.first);
+                writer.addAttribute("xmlns:" + nsShort.toLatin1(), attrPair.first);
             }
             QString attr(nsShort + ':' + attrPair.second);
-            writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
+            writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first,
                                                                attrPair.second));
         }
     }
@@ -1454,12 +1454,12 @@ KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*
             continue;
 
         // The style name
-        head = QString("." + styleName).toUtf8();
+        head = QString('.' + styleName).toUtf8();
         cssContent.append(head);
         cssContent.append(begin);
 
         foreach (const QString &propName, styleInfo->attributes.keys()) {
-            attributeList += (propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
+            attributeList += QString(propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
         }
 
         cssContent.append(attributeList);

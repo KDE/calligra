@@ -8,5 +8,5 @@ target_link_libraries(calligra_filter_dbase2kspread komain)
 
 install(TARGETS calligra_filter_dbase2kspread  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES  kspread_dbase_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_dbase2kspread.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

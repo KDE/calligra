@@ -55,14 +55,14 @@ QVariant CAPADocumentModel::data(const QModelIndex& index, int role) const
                 QImage image = KoPADocumentModel::data(index, BeginThumbnailRole + 256).value<QImage>();
                 CAImageProvider::s_imageProvider->addImage(id, image);
             }
-            return QString("image://") + QString(CAImageProvider::identificationString) + "/" + id;
+            return QString("image://" + QString(CAImageProvider::identificationString) + '/' + id);
         } else if (role == SlideImageRole) {
             const QString id = m_document->caption() + "slideimage" + QString::number(index.row());
             if (!CAImageProvider::s_imageProvider->containsId(id)) {
                 QImage image = KoPADocumentModel::data(index, BeginThumbnailRole + 1024).value<QImage>();
                 CAImageProvider::s_imageProvider->addImage(id, image);
             }
-            return QString("image://") + QString(CAImageProvider::identificationString) + "/" + id;
+            return QString("image://" + QString(CAImageProvider::identificationString) + '/' + id);
         }
     }
     return KoPADocumentModel::data(index, role);

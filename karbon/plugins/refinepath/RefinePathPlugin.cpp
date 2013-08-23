@@ -44,6 +44,8 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kaction.h>
+#include <kstandarddirs.h>
 
 #include <QGroupBox>
 #include <QLabel>
@@ -52,8 +54,10 @@
 K_PLUGIN_FACTORY(RefinePathPluginFactory, registerPlugin<RefinePathPlugin>();)
 K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))
 
-RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &) : Plugin(parent)
+RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
+    setXMLFile(KStandardDirs::locate("data", "karbon/karbonplugins/RefinePathPlugin.rc"), true);
     QAction *actionRefinePath  = new KAction(koIcon("effect_refine"), i18n("&Refine Path..."), this);
     actionCollection()->addAction("path_refine", actionRefinePath);
     connect(actionRefinePath, SIGNAL(triggered()), this, SLOT(slotRefinePath()));

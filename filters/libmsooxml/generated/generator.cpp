@@ -177,8 +177,8 @@ int main()
                     index = index + 1000;
                 }
                 outStream << output;
-                shapeDefinition = "";
-                pathEquations = "";
+                shapeDefinition.clear();
+                pathEquations.clear();
                 shapeAttributes.replace('"', "\\\"");
                 outStream << "attributes[\"" << currentShapeName << "\"]=\"" << shapeAttributes << "\";" << "\n";
                 shapeAttributes = "";

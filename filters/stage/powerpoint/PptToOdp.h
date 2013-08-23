@@ -96,6 +96,9 @@ public:
      * @return path
      */
     QString getPicturePath(const quint32 pib) const;
+
+    class TextListTag;
+    typedef QStack<TextListTag> ListStack;
 private:
 
     /**
@@ -310,6 +313,14 @@ private:
                          const quint16 indentLevel,
                          const ListStyleInput& info);
 
+    void defineListStyleProperties(KoXmlWriter& out, bool imageBullet,
+                                   const QString& bulletSize,
+                                   const PptTextPFRun& pf);
+
+    void defineListStyleTextProperties(KoXmlWriter& out_,
+                                       const QString& bulletSize,
+                                       const PptTextPFRun& pf);
+
     /**
      * TODO:
      * @param
@@ -368,7 +379,7 @@ private:
      */
     void addListElement(KoXmlWriter& out,
                         const QString& listStyle,
-                        QStack<QString>& levels,
+                        ListStack& levels,
                         quint16 level,
                         const PptTextPFRun &pf);
 
@@ -411,7 +422,7 @@ private:
      * @param end specifies end of the paragraph in text
      */
     void processParagraph(Writer& out,
-                          QStack<QString>& levels,
+                          ListStack& levels,
                           const MSO::OfficeArtClientData* cd,
                           const MSO::TextContainer* tc,
                           const MSO::TextRuler* tr,

@@ -43,7 +43,6 @@
 #include <kurlcombobox.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kurlcombobox.h>
 #include <kcategorizedview.h>
 #include <ktitlewidget.h>
 #include <kpushbutton.h>

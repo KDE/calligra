@@ -276,6 +276,9 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
         } else {
             kWarning(32001) << "shape has no KoTextShapeData";
         }
+        if ((!shape->anchor()) || shape->anchor()->anchorType() == KoShapeAnchor::AnchorPage) {
+            area->setPage(new KWPage(rootAreaPage->page));
+        }
     }
 
     if (m_textFrameSet->type() != Words::OtherFrameSet && m_textFrameSet->textFrameSetType() != Words::OtherTextFrameSet) {
@@ -392,12 +395,19 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
     kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << Words::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "isDirty=" << rootArea->isDirty();
 
-    QRectF updateRect = rootArea->associatedShape()->outlineRect();
+    QRectF updateRect = shape->outlineRect();
     //rootArea->associatedShape()->update(updateRect);
 
-    QSizeF newSize = rootArea->associatedShape()->size()
+    QSizeF newSize = shape->size()
                     - QSizeF(data->leftPadding() + data->rightPadding(),
                              data->topPadding() + data->bottomPadding());
+
+    KoBorder *border = shape->border();
+
+    if (border) {
+        newSize -= QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+    }
+
     if (isHeaderFooter
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
@@ -424,6 +434,10 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
     newSize += QSizeF(data->leftPadding() + data->rightPadding(),
                       data->topPadding() + data->bottomPadding());
+    if (border) {
+        newSize += QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+    }
+
     if (newSize != rootArea->associatedShape()->size()) {
         //QPointF centerpos = rootArea->associatedShape()->absolutePosition();
         rootArea->associatedShape()->setSize(newSize);
@@ -580,29 +594,37 @@ void KWRootAreaProvider::updateAll()
     }
 }
 
-QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
+QRectF KWRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
 {
     KoShape *shape = rootArea->associatedShape();
     if (!shape) { // no shape => nothing to draw => no space needed
-        return QSizeF(0.,0.);
+        return QRectF(0., 0., 0.,0.);
     }
 
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
 
-    QSizeF size = shape->size() - QSizeF(data->leftPadding() + data->rightPadding(), data->topPadding() + data->bottomPadding());
-    size.setWidth(qMax(size.width(), qreal(1.0)));
-    size.setHeight(qMax(size.height(), qreal(1.0)));
+    QRectF rect(QPointF(), shape->size());
+    rect.adjust(data->leftPadding(), data->topPadding(), -data->rightPadding(), - data->bottomPadding());
+
+    KoBorder *border = shape->border();
+    if (border) {
+        rect.adjust(border->borderWidth(KoBorder::LeftBorder),  border->borderWidth(KoBorder::TopBorder),
+              -border->borderWidth(KoBorder::RightBorder), - border->borderWidth(KoBorder::BottomBorder));
+    }
+
+    rect.setWidth(qMax(rect.width(), qreal(1.0)));
+    rect.setHeight(qMax(rect.height(), qreal(1.0)));
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight
         || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
-        size.setHeight(1E6);
+        rect.setHeight(1E6);
     }
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         rootArea->setNoWrap(1E6);
     }
 
-    return size;
+    return rect;
 }
 
 QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
