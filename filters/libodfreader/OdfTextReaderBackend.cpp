@@ -104,6 +104,13 @@ void OdfTextReaderBackend::elementTableTableRow(KoXmlStreamReader &reader,
     Q_UNUSED(context);
 }
 
+void OdfTextReaderBackend::elementTableTableHeaderRows(KoXmlStreamReader &reader,
+                                                       OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
 void OdfTextReaderBackend::elementTableTableCell(KoXmlStreamReader &reader,
                                                  OdfReaderContext *context)
 {

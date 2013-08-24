@@ -68,6 +68,7 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
 
     virtual void elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTableTableColumn(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTableTableHeaderRows(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTableTableRow(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTableTableCell(KoXmlStreamReader &reader, OdfReaderContext *context);
 

@@ -102,10 +102,10 @@ void OdfTextReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 
     // <namespace:tagname> has the following children in ODF 1.2:
     //   FILL IN THE CHILDREN LIKE THIS EXAMPLE (taken from office:document-content):
-    //   <office:automatic-styles> 3.15.3
-    //   <office:body> 3.3
-    //   <office:font-face-decls> 3.14
-    //   <office:scripts> 3.12.
+    //          <office:automatic-styles> 3.15.3
+    //          <office:body> 3.3
+    //          <office:font-face-decls> 3.14
+    //          <office:scripts> 3.12.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
@@ -153,41 +153,41 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     // The ones that are not text boxes can also have other children
     // but these are the ones we have found to be the common ones.
     //
-    //   <dr3d:scene> 10.5.2
-    //   <draw:a> 10.4.12
-    //   <draw:caption> 10.3.11
-    //   <draw:circle> 10.3.8
-    //   <draw:connector> 10.3.10
-    //   <draw:control> 10.3.13
-    //   <draw:custom-shape> 10.6.1
-    //   <draw:ellipse> 10.3.9
-    //   <draw:frame> 10.4.2
-    //   <draw:g> 10.3.15
-    //   <draw:line> 10.3.3
-    //   <draw:measure> 10.3.12
-    //   <draw:page-thumbnail> 10.3.14
-    //   <draw:path> 10.3.7
-    //   <draw:polygon> 10.3.5
-    //   <draw:polyline> 10.3.4
-    //   <draw:rect> 10.3.2
-    //   <draw:regular-polygon> 10.3.6
-    //   <table:table> 9.1.2
-    //   <text:alphabetical-index> 8.8
-    //   <text:bibliography> 8.9
-    //   <text:change> 5.5.7.4
-    //   <text:change-end> 5.5.7.3
-    //   <text:change-start> 5.5.7.2
-    //   <text:h> 5.1.2
-    //   <text:illustration-index> 8.4
-    //   <text:list> 5.3.1
-    //   <text:numbered-paragraph> 5.3.6
-    //   <text:object-index> 8.6
-    //   <text:p> 5.1.3
-    //   <text:section> 5.4
-    //   <text:soft-page-break> 5.6
-    //   <text:table-index> 8.5
-    //   <text:table-of-content> 8.3
-    //   <text:user-index> 8.7
+    //          <dr3d:scene> 10.5.2
+    //          <draw:a> 10.4.12
+    //          <draw:caption> 10.3.11
+    //          <draw:circle> 10.3.8
+    //          <draw:connector> 10.3.10
+    //          <draw:control> 10.3.13
+    //          <draw:custom-shape> 10.6.1
+    //          <draw:ellipse> 10.3.9
+    //          <draw:frame> 10.4.2
+    //          <draw:g> 10.3.15
+    //          <draw:line> 10.3.3
+    //          <draw:measure> 10.3.12
+    //          <draw:page-thumbnail> 10.3.14
+    //          <draw:path> 10.3.7
+    //          <draw:polygon> 10.3.5
+    //          <draw:polyline> 10.3.4
+    //          <draw:rect> 10.3.2
+    //          <draw:regular-polygon> 10.3.6
+    //   [done] <table:table> 9.1.2
+    //          <text:alphabetical-index> 8.8
+    //          <text:bibliography> 8.9
+    //          <text:change> 5.5.7.4
+    //          <text:change-end> 5.5.7.3
+    //          <text:change-start> 5.5.7.2
+    //   [done] <text:h> 5.1.2
+    //          <text:illustration-index> 8.4
+    //          <text:list> 5.3.1
+    //          <text:numbered-paragraph> 5.3.6
+    //          <text:object-index> 8.6
+    //   [done] <text:p> 5.1.3
+    //          <text:section> 5.4
+    //          <text:soft-page-break> 5.6
+    //          <text:table-index> 8.5
+    //          <text:table-of-content> 8.3
+    //          <text:user-index> 8.7
 
     QString tagName = reader.qualifiedName().toString();
         
@@ -214,7 +214,7 @@ void OdfTextReader::readElementTextH(KoXmlStreamReader &reader)
     DEBUGSTART();
     m_backend->elementTextH(reader, m_context);
 
-    // The function readParagraphContents() expect to have the reader
+    // The function readParagraphContents() expects to have the reader
     // point to the contents of the paragraph so we have to read past
     // the text:h start tag here.
     reader.readNext();
@@ -231,9 +231,9 @@ void OdfTextReader::readElementTextP(KoXmlStreamReader &reader)
     DEBUGSTART();
     m_backend->elementTextP(reader, m_context);
 
-    // readParagraphContents expect to have the reader point to the
-    // contents of the paragraph so we have to read past the text:p
-    // start tag here.
+    // The function readParagraphContents() expects to have the reader
+    // point to the contents of the paragraph so we have to read past
+    // the text:p start tag here.
     reader.readNext();
     m_context->setIsInsideParagraph(true);
     readParagraphContents(reader);
@@ -250,29 +250,32 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     m_backend->elementTableTable(reader, m_context);
 
     // <table:table> has the following children in ODF 1.2:
-    //   <office:dde-source> 14.6.5
-    //   <office:forms> 13.2
-    //   <table:desc> 9.1.14
-    //   <table:named-expressions> 9.4.11
-    //   <table:scenario> 9.2.7
-    //   <table:shapes> 9.2.8
-    //   <table:table-column> 9.1.6
-    //   <table:table-column-group> 9.1.10
-    //   <table:table-columns> 9.1.12
-    //   <table:table-header-columns> 9.1.11
-    //   <table:table-header-rows> 9.1.7
-    //   <table:table-row> 9.1.3
-    //   <table:table-row-group> 9.1.9
-    //   <table:table-rows> 9.1.8
-    //   <table:table-source> 9.2.6
-    //   <table:title> 9.1.13
-    //   <text:soft-page-break> 5.6
+    //          <office:dde-source> 14.6.5
+    //          <office:forms> 13.2
+    //          <table:desc> 9.1.14
+    //          <table:named-expressions> 9.4.11
+    //          <table:scenario> 9.2.7
+    //          <table:shapes> 9.2.8
+    //   [done] <table:table-column> 9.1.6
+    //          <table:table-column-group> 9.1.10
+    //          <table:table-columns> 9.1.12
+    //          <table:table-header-columns> 9.1.11
+    //   [done] <table:table-header-rows> 9.1.7
+    //   [done] <table:table-row> 9.1.3
+    //          <table:table-row-group> 9.1.9
+    //          <table:table-rows> 9.1.8
+    //          <table:table-source> 9.2.6
+    //          <table:title> 9.1.13
+    //          <text:soft-page-break> 5.6
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
         if (tagName == "table:table-column") {
             reader.skipCurrentElement();
             //Readelementtabletablecolumn(reader);
+        }
+        else if (tagName == "table:table-header-rows") {
+            readElementTableTableHeaderRows(reader);
         }
         else if (tagName == "table:table-row") {
             reader.skipCurrentElement();
@@ -287,12 +290,39 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
+void OdfTextReader::readElementTableTableHeaderRows(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableTableHeaderRows(reader, m_context);
+
+    // <table:table> has the following children in ODF 1.2:
+    //   [done] <table:table-row> 9.1.3
+    //          <text:soft-page-break> 5.6.
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "table:table-row") {
+            readElementTableTableRow(reader);
+        }
+        else if (tagName == "text:soft-page-break") {
+            reader.skipCurrentElement();
+            //readElementTextSoftPageBreak(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementTableTableHeaderRows(reader, m_context);
+    DEBUGEND();
+}
+
 void OdfTextReader::readElementTableTableColumn(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
     m_backend->elementTableTableColumn(reader, m_context);
 
-    // <table:table-column> has the no children in ODF 1.2
+    // <table:table-column> has no children in ODF 1.2
     reader.skipCurrentElement();
 
     m_backend->elementTableTableColumn(reader, m_context);
@@ -305,14 +335,14 @@ void OdfTextReader::readElementTableTableRow(KoXmlStreamReader &reader)
     m_backend->elementTableTableRow(reader, m_context);
 
     // <table:table-row> has the following children in ODF 1.2:
-    //   <table:covered-table-cell> 9.1.5
-    //   <table:table-cell> 9.1.4.
+    //          <table:covered-table-cell> 9.1.5
+    //   [done] <table:table-cell> 9.1.4.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
         if (tagName == "table:covered-table-cell") {
             reader.skipCurrentElement();
-            //Readelementtabletablecolumn(reader);
+            //readElementTableTableCoveredCell(reader);
         }
         else if (tagName == "table:table-cell") {
             readElementTableTableCell(reader);
@@ -337,9 +367,9 @@ void OdfTextReader::readElementTableTableCell(KoXmlStreamReader &reader)
     // be found in any textbox, table cell or similar, it has the
     // following text document children:
     //
-    //   <office:annotation> 14.1
-    //   <table:cell-range-source> 9.3.1
-    //   <table:detective> 9.3.2
+    //          <office:annotation> 14.1
+    //          <table:cell-range-source> 9.3.1
+    //          <table:detective> 9.3.2
 
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
