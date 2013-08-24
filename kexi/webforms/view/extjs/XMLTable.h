@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIWEBFORMS_VIEW_READ_H
-#define KEXIWEBFORMS_VIEW_READ_H
+#ifndef KEXIWEBFORMS_VIEW_XMLTABLE_H
+#define KEXIWEBFORMS_VIEW_XMLTABLE_H
 
 #include <QHash>
 #include <pion/net/HTTPResponseWriter.hpp>

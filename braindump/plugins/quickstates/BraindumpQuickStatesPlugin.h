@@ -20,9 +20,9 @@
 #ifndef _BRAINDUMP_QUICK_STATES_PLUGIN_H_
 #define _BRAINDUMP_QUICK_STATES_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <kxmlguiclient.h>
 
-class BraindumpQuickStatesPlugin : public KParts::Plugin
+class BraindumpQuickStatesPlugin : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 public:

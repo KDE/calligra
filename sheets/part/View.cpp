@@ -77,7 +77,7 @@
 #include <kparts/event.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
-#include <knotifyconfigwidget.h>
+#include <kservicetypetrader.h>
 
 // Calligra includes
 #include <KoGlobal.h>
@@ -162,6 +162,7 @@
 // D-Bus
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
+#include <knotifyconfigwidget.h>
 #include <QtDBus>
 #endif
 
@@ -576,6 +577,28 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     initView();
 
     d->initActions();
+
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Sheets/ViewPlugin"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Sheets-Version] == 28)"));
+
+    KService::List::ConstIterator iter;
+    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+
+        KService::Ptr service = *iter;
+
+        QString error;
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if(plugin) {
+            insertChildClient(plugin);
+        } else {
+            if(!error.isEmpty()) {
+                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
+            }
+        }
+    }
+
 
     // Connect updateView() signal to View::update() in order to repaint its
     // child widgets: the column/row headers and the select all button.
@@ -1586,8 +1609,10 @@ void View::showTabBar(bool enable)
 }
 
 void View::optionsNotifications()
-{
+{  
+#ifndef QT_NO_DBUS
     KNotifyConfigWidget::configure(this);
+#endif
 }
 
 void View::preference()
