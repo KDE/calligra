@@ -42,7 +42,7 @@
 #include "OdfReaderContext.h"
 
 
-#if 0
+#if 1
 static int debugIndent = 0;
 #define DEBUGSTART() \
     ++debugIndent; \
@@ -96,8 +96,9 @@ void OdfTextReader::setContext(OdfReaderContext *context)
 // This is a template function for the reader library.
 // Copy this one and change the name and fill in the code.
 void OdfTextReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
-{ 
+{
    DEBUGSTART();
+    m_backend->elementNamespaceTagname(reader, m_context);
 
     // <namespace:tagname> has the following children in ODF 1.2:
     //   FILL IN THE CHILDREN LIKE THIS EXAMPLE (taken from office:document-content):
@@ -197,6 +198,9 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     else if (tagName == "text:p") {
         readElementTextP(reader);
     }
+    else if (tagName == "table:table") {
+        readElementTableTable(reader);
+    }
     else {
         readUnknownElement(reader);
     }
@@ -236,6 +240,130 @@ void OdfTextReader::readElementTextP(KoXmlStreamReader &reader)
     m_context->setIsInsideParagraph(false);
 
     m_backend->elementTextP(reader, m_context);
+    DEBUGEND();
+}
+
+
+void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableTable(reader, m_context);
+
+    // <table:table> has the following children in ODF 1.2:
+    //   <office:dde-source> 14.6.5
+    //   <office:forms> 13.2
+    //   <table:desc> 9.1.14
+    //   <table:named-expressions> 9.4.11
+    //   <table:scenario> 9.2.7
+    //   <table:shapes> 9.2.8
+    //   <table:table-column> 9.1.6
+    //   <table:table-column-group> 9.1.10
+    //   <table:table-columns> 9.1.12
+    //   <table:table-header-columns> 9.1.11
+    //   <table:table-header-rows> 9.1.7
+    //   <table:table-row> 9.1.3
+    //   <table:table-row-group> 9.1.9
+    //   <table:table-rows> 9.1.8
+    //   <table:table-source> 9.2.6
+    //   <table:title> 9.1.13
+    //   <text:soft-page-break> 5.6
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "table:table-column") {
+            reader.skipCurrentElement();
+            //Readelementtabletablecolumn(reader);
+        }
+        else if (tagName == "table:table-row") {
+            reader.skipCurrentElement();
+            //readElementTableTableRow(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementTableTable(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableTableColumn(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableTableColumn(reader, m_context);
+
+    // <table:table-column> has the no children in ODF 1.2
+    reader.skipCurrentElement();
+
+    m_backend->elementTableTableColumn(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableTableRow(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableTableRow(reader, m_context);
+
+    // <table:table-row> has the following children in ODF 1.2:
+    //   <table:covered-table-cell> 9.1.5
+    //   <table:table-cell> 9.1.4.
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "table:covered-table-cell") {
+            reader.skipCurrentElement();
+            //Readelementtabletablecolumn(reader);
+        }
+        else if (tagName == "table:table-cell") {
+            readElementTableTableCell(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementTableTableRow(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableTableCell(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableTableCell(reader, m_context);
+
+    // <table:table-cell> has the following children in ODF 1.2:
+    //
+    // In addition to the text level tags like <text:p> etc that can
+    // be found in any textbox, table cell or similar, it has the
+    // following text document children:
+    //
+    //   <office:annotation> 14.1
+    //   <table:cell-range-source> 9.3.1
+    //   <table:detective> 9.3.2
+
+    while (reader.readNextStartElement()) {
+        DEBUG_READING("loop-start");
+        
+        QString tagName = reader.qualifiedName().toString();
+        if (tagName == "office:annotation") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:cell-range-source") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:detective") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else {
+            readTextLevelElement(reader);
+        }
+        DEBUG_READING("loop-end");
+    }
+
+    m_backend->elementTableTableCell(reader, m_context);
     DEBUGEND();
 }
 

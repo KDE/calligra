@@ -66,6 +66,11 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
 
+    virtual void elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTableTableColumn(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTableTableRow(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTableTableCell(KoXmlStreamReader &reader, OdfReaderContext *context);
+
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, etc.
     // This includes text content itself.
