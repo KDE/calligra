@@ -186,7 +186,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
             list.append(a);
-            addAction(QString("apply_%1").arg(factory->id()), a);
+      //      addAction(QString("apply_%1").arg(factory->id()), a);
         }
     }
     setPopupActionList(list);

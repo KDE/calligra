@@ -67,6 +67,7 @@ SpellCheck::SpellCheck()
 
     m_spellCheckMenu = new SpellCheckMenu(m_speller, this);
     QPair<QString, KAction*> pair = m_spellCheckMenu->menuAction();
+    qDebug() << "spellcheck pair" <<pair;
     addAction(pair.first, pair.second);
 
     connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),

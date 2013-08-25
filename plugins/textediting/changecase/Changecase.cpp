@@ -18,6 +18,7 @@
  */
 
 #include "Changecase.h"
+#include "ChangeCaseMenu.h"
 
 #include <QTextBlock>
 #include <QTextDocument>
@@ -30,16 +31,25 @@
 
 Changecase::Changecase()
 {
+    qDebug() << "Instantiating new obj of changecase";
+    m_menu = new ChangeCaseMenu(this);
+    QPair<QString, KAction*> pair = m_menu->menuAction();
+    qDebug() << "pair" <<pair;
+    addAction(pair.first, pair.second);
 }
 
 void Changecase::finishedWord(QTextDocument *document, int cursorPosition)
 {
+    m_menu->setEnabled(true);
+    m_menu->setVisible(true);
     Q_UNUSED(document);
     Q_UNUSED(cursorPosition);
 }
 
 void Changecase::finishedParagraph(QTextDocument *document, int cursorPosition)
 {
+    m_menu->setEnabled(true);
+    m_menu->setVisible(true);
     Q_UNUSED(document);
     Q_UNUSED(cursorPosition);
 }
@@ -52,57 +62,20 @@ void Changecase::startingSimpleEdit(QTextDocument *document, int cursorPosition)
 
 void Changecase::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
+    m_menu->setEnabled(true);
+    m_menu->setVisible(true);
     m_cursor = QTextCursor(document);
     m_cursor.setPosition(startPosition);
     m_cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
     m_document = document;
-
+    qDebug()<<"Trying to change case between  " <<startPosition << "and " <<endPosition;
     m_startPosition = startPosition;
     m_endPosition = endPosition;
-
-    KDialog *dialog = new KDialog();
-    dialog->setCaption(i18n("Change case"));
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
-
-    QWidget *widget = new QWidget(dialog);
-
-    m_sentenceCaseRadio = new QRadioButton(i18n("Sentence case"));
-    m_lowerCaseRadio = new QRadioButton(i18n("lowercase"));
-    m_upperCaseRadio = new QRadioButton(i18n("UPPER CASE"));
-    m_initialCapsRadio = new QRadioButton(i18n("Initial Caps"));
-    m_toggleCaseRadio = new QRadioButton(i18n("tOGGLE cASE"));
-
-    QVBoxLayout *vLayout = new QVBoxLayout;
-    vLayout->addWidget(m_sentenceCaseRadio);
-    vLayout->addWidget(m_lowerCaseRadio);
-    vLayout->addWidget(m_upperCaseRadio);
-    vLayout->addWidget(m_initialCapsRadio);
-    vLayout->addWidget(m_toggleCaseRadio);
-
-    widget->setLayout(vLayout);
-    dialog->setMainWidget(widget);
-
-    dialog->show();
-
-    connect(dialog, SIGNAL(accepted()), this, SLOT(process()));
-}
-
-void Changecase::process()
-{
-    emit startMacro(i18n("Change case"));
-
-    if (m_sentenceCaseRadio->isChecked())
-        sentenceCase();
-    else if (m_lowerCaseRadio->isChecked())
-        lowerCase();
-    else if (m_upperCaseRadio->isChecked())
-        upperCase();
-    else if (m_initialCapsRadio->isChecked())
-        initialCaps();
-    else if (m_toggleCaseRadio->isChecked())
-        toggleCase();
-
-    emit stopMacro();
+    connect(m_menu->lowercaseAction, SIGNAL(triggered()), this, SLOT(lowerCase()));
+    connect(m_menu->uppercaseAction, SIGNAL(triggered()), this, SLOT(upperCase()));
+    connect(m_menu->initialcapsAction, SIGNAL(triggered()), this, SLOT(initialCaps()));
+    connect(m_menu->togglecaseAction, SIGNAL(triggered()), this, SLOT(toggleCase()));
+    connect(m_menu->sentencecaseAction, SIGNAL(triggered()), this, SLOT(sentenceCase()));
 }
 
 void Changecase::sentenceCase()

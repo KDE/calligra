@@ -19,18 +19,19 @@
 
 #include "ChangecaseFactory.h"
 #include "Changecase.h"
-
+#include <QDebug>
 #include <klocale.h>
 
 ChangecaseFactory::ChangecaseFactory()
     : KoTextEditingFactory("changecase")
 {
     setShowInMenu(true);
-    setTitle(i18n ("Change Case...") );
+    setTitle(i18n ("Change Case") );
 }
 
 KoTextEditingPlugin *ChangecaseFactory::create() const
 {
+    qDebug()<<"creating new change case factory";
     return new Changecase();
 }
 

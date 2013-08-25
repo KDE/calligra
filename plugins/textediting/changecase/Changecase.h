@@ -21,12 +21,12 @@
 #define CHANGECASE_H
 
 #include <QTextCursor>
-
 #include <KoTextEditingPlugin.h>
 
+#include <ChangeCaseMenu.h>
 class QTextDocument;
 class QRadioButton;
-
+class ChangeCaseMenu;
 class Changecase : public KoTextEditingPlugin
 {
     Q_OBJECT
@@ -39,20 +39,19 @@ public:
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
 private slots:
-    void process();
-
-private:
     void sentenceCase();
     void lowerCase();
     void upperCase();
     void initialCaps();
     void toggleCase();
 
+private:    
     QRadioButton *m_sentenceCaseRadio;
     QRadioButton *m_lowerCaseRadio;
     QRadioButton *m_upperCaseRadio;
     QRadioButton *m_initialCapsRadio;
     QRadioButton *m_toggleCaseRadio;
+    ChangeCaseMenu* m_menu;
 
     QTextCursor m_cursor;
     QTextDocument *m_document;

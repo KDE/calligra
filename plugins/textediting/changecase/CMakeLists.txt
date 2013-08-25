@@ -3,6 +3,7 @@ project(changecase)
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES} )
 
 set(changecase_SRCS
+    ChangeCaseMenu.cpp
     ChangecasePlugin.cpp
     Changecase.cpp
     ChangecaseFactory.cpp
