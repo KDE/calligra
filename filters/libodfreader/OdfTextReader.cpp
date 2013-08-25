@@ -244,6 +244,10 @@ void OdfTextReader::readElementTextP(KoXmlStreamReader &reader)
 }
 
 
+// ----------------------------------------------------------------
+//                             Tables
+
+
 void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
@@ -293,7 +297,7 @@ void OdfTextReader::readElementTableTableHeaderRows(KoXmlStreamReader &reader)
     DEBUGSTART();
     m_backend->elementTableTableHeaderRows(reader, m_context);
 
-    // <table:table> has the following children in ODF 1.2:
+    // <table:table-header-rows> has the following children in ODF 1.2:
     //   [done] <table:table-row> 9.1.3
     //          <text:soft-page-break> 5.6.
     while (reader.readNextStartElement()) {
@@ -433,134 +437,134 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //
         // The common paragraph level elements are the following in ODF 1.2:
         //
-        //  <dr3d:scene> 10.5.2
-        //  <draw:a> 10.4.12
-        //  <draw:caption> 10.3.11
-        //  <draw:circle> 10.3.8
-        //  <draw:connector> 10.3.10
-        //  <draw:control> 10.3.13
-        //  <draw:custom-shape> 10.6.1
-        //  <draw:ellipse> 10.3.9
-        //  <draw:frame> 10.4.2
-        //  <draw:g> 10.3.15
-        //  <draw:line> 10.3.3
-        //  <draw:measure> 10.3.12
-        //  <draw:page-thumbnail> 10.3.14
-        //  <draw:path> 10.3.7
-        //  <draw:polygon> 10.3.5
-        //  <draw:polyline> 10.3.4
-        //  <draw:rect> 10.3.2
-        //  <draw:regular-polygon> 10.3.6
-        //  <office:annotation> 14.1
-        //  <office:annotation-end> 14.2
-        //  <presentation:date-time> 10.9.3.5
-        //  <presentation:footer> 10.9.3.3
-        //  <presentation:header> 10.9.3.1
-        //  <text:a> 6.1.8
-        //  <text:alphabetical-index-mark> 8.1.10
-        //  <text:alphabetical-index-mark-end> 8.1.9
-        //  <text:alphabetical-index-mark-start> 8.1.8
-        //  <text:author-initials> 7.3.7.2
-        //  <text:author-name> 7.3.7.1
-        //  <text:bibliography-mark> 8.1.11
-        //  <text:bookmark> 6.2.1.2
-        //  <text:bookmark-end> 6.2.1.4
-        //  <text:bookmark-ref> 7.7.6
-        //  <text:bookmark-start> 6.2.1.3
-        //  <text:change> 5.5.7.4
-        //  <text:change-end> 5.5.7.3
-        //  <text:change-start> 5.5.7.2
-        //  <text:chapter> 7.3.8
-        //  <text:character-count> 7.5.18.5
-        //  <text:conditional-text> 7.7.3
-        //  <text:creation-date> 7.5.3
-        //  <text:creation-time> 7.5.4
-        //  <text:creator> 7.5.17
-        //  <text:database-display> 7.6.3
-        //  <text:database-name> 7.6.7
-        //  <text:database-next> 7.6.4
-        //  <text:database-row-number> 7.6.6
-        //  <text:database-row-select> 7.6.5
-        //  <text:date> 7.3.2
-        //  <text:dde-connection> 7.7.12
-        //  <text:description> 7.5.5
-        //  <text:editing-cycles> 7.5.13
-        //  <text:editing-duration> 7.5.14
-        //  <text:execute-macro> 7.7.10
-        //  <text:expression> 7.4.14
-        //  <text:file-name> 7.3.9
-        //  <text:hidden-paragraph> 7.7.11
-        //  <text:hidden-text> 7.7.4
-        //  <text:image-count> 7.5.18.7
-        //  <text:initial-creator> 7.5.2
-        //  <text:keywords> 7.5.12
-        //  <text:line-break> 6.1.5
-        //  <text:measure> 7.7.13
-        //  <text:meta> 6.1.9
-        //  <text:meta-field> 7.5.19
-        //  <text:modification-date> 7.5.16
-        //  <text:modification-time> 7.5.15
-        //  <text:note> 6.3.2
-        //  <text:note-ref> 7.7.7
-        //  <text:object-count> 7.5.18.8
-        //  <text:page-continuation> 7.3.5
-        //  <text:page-count> 7.5.18.2
-        //  <text:page-number> 7.3.4
-        //  <text:page-variable-get> 7.7.1.3
-        //  <text:page-variable-set> 7.7.1.2
-        //  <text:paragraph-count> 7.5.18.3
-        //  <text:placeholder> 7.7.2
-        //  <text:print-date> 7.5.8
-        //  <text:printed-by> 7.5.9
-        //  <text:print-time> 7.5.7
-        //  <text:reference-mark> 6.2.2.2
-        //  <text:reference-mark-end> 6.2.2.4
-        //  <text:reference-mark-start> 6.2.2.3
-        //  <text:reference-ref> 7.7.5
-        //  <text:ruby> 6.4
-        //  <text:s> 6.1.3
-        //  <text:script> 7.7.9
-        //  <text:sender-city> 7.3.6.13
-        //  <text:sender-company> 7.3.6.10
-        //  <text:sender-country> 7.3.6.15
-        //  <text:sender-email> 7.3.6.7
-        //  <text:sender-fax> 7.3.6.9
-        //  <text:sender-firstname> 7.3.6.2
-        //  <text:sender-initials> 7.3.6.4
-        //  <text:sender-lastname> 7.3.6.3
-        //  <text:sender-phone-private> 7.3.6.8
-        //  <text:sender-phone-work> 7.3.6.11
-        //  <text:sender-position> 7.3.6.6
-        //  <text:sender-postal-code> 7.3.6.14
-        //  <text:sender-state-or-province> 7.3.6.16
-        //  <text:sender-street> 7.3.6.12
-        //  <text:sender-title> 7.3.6.5
-        //  <text:sequence> 7.4.13
-        //  <text:sequence-ref> 7.7.8
-        //  <text:sheet-name> 7.3.11
-        //  <text:soft-page-break> 5.6
-        //  <text:span> 6.1.7
-        //  <text:subject> 7.5.11
-        //  <text:tab> 6.1.4
-        //  <text:table-count> 7.5.18.6
-        //  <text:table-formula> 7.7.14
-        //  <text:template-name> 7.3.10
-        //  <text:text-input> 7.4.15
-        //  <text:time> 7.3.3
-        //  <text:title> 7.5.10
-        //  <text:toc-mark> 8.1.4
-        //  <text:toc-mark-end> 8.1.3
-        //  <text:toc-mark-start> 8.1.2
-        //  <text:user-defined> 7.5.6
-        //  <text:user-field-get> 7.4.9
-        //  <text:user-field-input> 7.4.10
-        //  <text:user-index-mark> 8.1.7
-        //  <text:user-index-mark-end> 8.1.6
-        //  <text:user-index-mark-start> 8.1.5
-        //  <text:variable-get> 7.4.5
-        //  <text:variable-input> 7.4.6
-        //  <text:variable-set> 7.4.4
-        //  <text:word-count> 7.5.18.4.
+        //          <dr3d:scene> 10.5.2
+        //          <draw:a> 10.4.12
+        //          <draw:caption> 10.3.11
+        //          <draw:circle> 10.3.8
+        //          <draw:connector> 10.3.10
+        //          <draw:control> 10.3.13
+        //          <draw:custom-shape> 10.6.1
+        //          <draw:ellipse> 10.3.9
+        //          <draw:frame> 10.4.2
+        //          <draw:g> 10.3.15
+        //          <draw:line> 10.3.3
+        //          <draw:measure> 10.3.12
+        //          <draw:page-thumbnail> 10.3.14
+        //          <draw:path> 10.3.7
+        //          <draw:polygon> 10.3.5
+        //          <draw:polyline> 10.3.4
+        //          <draw:rect> 10.3.2
+        //          <draw:regular-polygon> 10.3.6
+        //          <office:annotation> 14.1
+        //          <office:annotation-end> 14.2
+        //          <presentation:date-time> 10.9.3.5
+        //          <presentation:footer> 10.9.3.3
+        //          <presentation:header> 10.9.3.1
+        //   [done] <text:a> 6.1.8
+        //          <text:alphabetical-index-mark> 8.1.10
+        //          <text:alphabetical-index-mark-end> 8.1.9
+        //          <text:alphabetical-index-mark-start> 8.1.8
+        //          <text:author-initials> 7.3.7.2
+        //          <text:author-name> 7.3.7.1
+        //          <text:bibliography-mark> 8.1.11
+        //          <text:bookmark> 6.2.1.2
+        //          <text:bookmark-end> 6.2.1.4
+        //          <text:bookmark-ref> 7.7.6
+        //          <text:bookmark-start> 6.2.1.3
+        //          <text:change> 5.5.7.4
+        //          <text:change-end> 5.5.7.3
+        //          <text:change-start> 5.5.7.2
+        //          <text:chapter> 7.3.8
+        //          <text:character-count> 7.5.18.5
+        //          <text:conditional-text> 7.7.3
+        //          <text:creation-date> 7.5.3
+        //          <text:creation-time> 7.5.4
+        //          <text:creator> 7.5.17
+        //          <text:database-display> 7.6.3
+        //          <text:database-name> 7.6.7
+        //          <text:database-next> 7.6.4
+        //          <text:database-row-number> 7.6.6
+        //          <text:database-row-select> 7.6.5
+        //          <text:date> 7.3.2
+        //          <text:dde-connection> 7.7.12
+        //          <text:description> 7.5.5
+        //          <text:editing-cycles> 7.5.13
+        //          <text:editing-duration> 7.5.14
+        //          <text:execute-macro> 7.7.10
+        //          <text:expression> 7.4.14
+        //          <text:file-name> 7.3.9
+        //          <text:hidden-paragraph> 7.7.11
+        //          <text:hidden-text> 7.7.4
+        //          <text:image-count> 7.5.18.7
+        //          <text:initial-creator> 7.5.2
+        //          <text:keywords> 7.5.12
+        //          <text:line-break> 6.1.5
+        //          <text:measure> 7.7.13
+        //          <text:meta> 6.1.9
+        //          <text:meta-field> 7.5.19
+        //          <text:modification-date> 7.5.16
+        //          <text:modification-time> 7.5.15
+        //          <text:note> 6.3.2
+        //          <text:note-ref> 7.7.7
+        //          <text:object-count> 7.5.18.8
+        //          <text:page-continuation> 7.3.5
+        //          <text:page-count> 7.5.18.2
+        //          <text:page-number> 7.3.4
+        //          <text:page-variable-get> 7.7.1.3
+        //          <text:page-variable-set> 7.7.1.2
+        //          <text:paragraph-count> 7.5.18.3
+        //          <text:placeholder> 7.7.2
+        //          <text:print-date> 7.5.8
+        //          <text:printed-by> 7.5.9
+        //          <text:print-time> 7.5.7
+        //          <text:reference-mark> 6.2.2.2
+        //          <text:reference-mark-end> 6.2.2.4
+        //          <text:reference-mark-start> 6.2.2.3
+        //          <text:reference-ref> 7.7.5
+        //          <text:ruby> 6.4
+        //   [done] <text:s> 6.1.3
+        //          <text:script> 7.7.9
+        //          <text:sender-city> 7.3.6.13
+        //          <text:sender-company> 7.3.6.10
+        //          <text:sender-country> 7.3.6.15
+        //          <text:sender-email> 7.3.6.7
+        //          <text:sender-fax> 7.3.6.9
+        //          <text:sender-firstname> 7.3.6.2
+        //          <text:sender-initials> 7.3.6.4
+        //          <text:sender-lastname> 7.3.6.3
+        //          <text:sender-phone-private> 7.3.6.8
+        //          <text:sender-phone-work> 7.3.6.11
+        //          <text:sender-position> 7.3.6.6
+        //          <text:sender-postal-code> 7.3.6.14
+        //          <text:sender-state-or-province> 7.3.6.16
+        //          <text:sender-street> 7.3.6.12
+        //          <text:sender-title> 7.3.6.5
+        //          <text:sequence> 7.4.13
+        //          <text:sequence-ref> 7.7.8
+        //          <text:sheet-name> 7.3.11
+        //          <text:soft-page-break> 5.6
+        //   [done] <text:span> 6.1.7
+        //          <text:subject> 7.5.11
+        //          <text:tab> 6.1.4
+        //          <text:table-count> 7.5.18.6
+        //          <text:table-formula> 7.7.14
+        //          <text:template-name> 7.3.10
+        //          <text:text-input> 7.4.15
+        //          <text:time> 7.3.3
+        //          <text:title> 7.5.10
+        //          <text:toc-mark> 8.1.4
+        //          <text:toc-mark-end> 8.1.3
+        //          <text:toc-mark-start> 8.1.2
+        //          <text:user-defined> 7.5.6
+        //          <text:user-field-get> 7.4.9
+        //          <text:user-field-input> 7.4.10
+        //          <text:user-index-mark> 8.1.7
+        //          <text:user-index-mark-end> 8.1.6
+        //          <text:user-index-mark-start> 8.1.5
+        //          <text:variable-get> 7.4.5
+        //          <text:variable-input> 7.4.6
+        //          <text:variable-set> 7.4.4
+        //          <text:word-count> 7.5.18.4.
         //        
         // FIXME: Only very few tags are handled right now.
         QString tagName = reader.qualifiedName().toString();
@@ -606,8 +610,9 @@ void OdfTextReader::readElementTextS(KoXmlStreamReader &reader)
     DEBUGSTART();
     m_backend->elementTextS(reader, m_context);
 
-    // This element has no child elements.
+    // This element has no child elements in ODF 1.2.
     reader.skipCurrentElement();
+
     m_backend->elementTextS(reader, m_context);
     DEBUGEND();
 }
