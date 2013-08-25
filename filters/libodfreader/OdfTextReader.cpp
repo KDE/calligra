@@ -271,15 +271,13 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
         QString tagName = reader.qualifiedName().toString();
         
         if (tagName == "table:table-column") {
-            reader.skipCurrentElement();
-            //Readelementtabletablecolumn(reader);
+            readElementTableTableColumn(reader);
         }
         else if (tagName == "table:table-header-rows") {
             readElementTableTableHeaderRows(reader);
         }
         else if (tagName == "table:table-row") {
-            reader.skipCurrentElement();
-            //readElementTableTableRow(reader);
+            readElementTableTableRow(reader);
         }
         else {
             reader.skipCurrentElement();
