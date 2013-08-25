@@ -93,6 +93,7 @@ class KOODFREADER_EXPORT OdfTextReader
     // ----------------------------------------------------------------
     // Other functions
 
+    void readElementTextSoftPageBreak(KoXmlStreamReader &reader);
     void readUnknownElement(KoXmlStreamReader &reader);
 
 

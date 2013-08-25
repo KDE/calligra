@@ -81,6 +81,8 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     virtual void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
 
+    virtual void elementTextSoftPageBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
+
     virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 
  private:

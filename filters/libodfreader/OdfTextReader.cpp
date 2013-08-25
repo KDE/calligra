@@ -184,7 +184,7 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     //          <text:object-index> 8.6
     //   [done] <text:p> 5.1.3
     //          <text:section> 5.4
-    //          <text:soft-page-break> 5.6
+    //   [done] <text:soft-page-break> 5.6
     //          <text:table-index> 8.5
     //          <text:table-of-content> 8.3
     //          <text:user-index> 8.7
@@ -200,6 +200,9 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     }
     else if (tagName == "table:table") {
         readElementTableTable(reader);
+    }
+    else if (tagName == "text:soft-page-break") {
+        readElementTextSoftPageBreak(reader);
     }
     else {
         readUnknownElement(reader);
@@ -270,7 +273,7 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     //          <table:table-rows> 9.1.8
     //          <table:table-source> 9.2.6
     //          <table:title> 9.1.13
-    //          <text:soft-page-break> 5.6
+    //   [done] <text:soft-page-break> 5.6
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
@@ -282,6 +285,9 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
         }
         else if (tagName == "table:table-row") {
             readElementTableTableRow(reader);
+        }
+        else if (tagName == "text:soft-page-break") {
+            readElementTextSoftPageBreak(reader);
         }
         else {
             reader.skipCurrentElement();
@@ -299,7 +305,7 @@ void OdfTextReader::readElementTableTableHeaderRows(KoXmlStreamReader &reader)
 
     // <table:table-header-rows> has the following children in ODF 1.2:
     //   [done] <table:table-row> 9.1.3
-    //          <text:soft-page-break> 5.6.
+    //   [done] <text:soft-page-break> 5.6.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
@@ -307,8 +313,7 @@ void OdfTextReader::readElementTableTableHeaderRows(KoXmlStreamReader &reader)
             readElementTableTableRow(reader);
         }
         else if (tagName == "text:soft-page-break") {
-            reader.skipCurrentElement();
-            //readElementTextSoftPageBreak(reader);
+            readElementTextSoftPageBreak(reader);
         }
         else {
             reader.skipCurrentElement();
@@ -582,7 +587,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <text:sequence> 7.4.13
         //          <text:sequence-ref> 7.7.8
         //          <text:sheet-name> 7.3.11
-        //          <text:soft-page-break> 5.6
+        //   [done] <text:soft-page-break> 5.6
         //   [done] <text:span> 6.1.7
         //          <text:subject> 7.5.11
         //          <text:tab> 6.1.4
@@ -616,6 +621,9 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         }
         else if (tagName == "text:s") {
             readElementTextS(reader);
+        }
+        else if (tagName == "text:soft-page-break") {
+            readElementTextSoftPageBreak(reader);
         }
         else {
             readUnknownElement(reader);
@@ -672,6 +680,19 @@ void OdfTextReader::readElementTextSpan(KoXmlStreamReader &reader)
 
 // ----------------------------------------------------------------
 //                             Other functions
+
+
+void OdfTextReader::readElementTextSoftPageBreak(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTextSoftPageBreak(reader, m_context);
+
+    // <text:soft-page-break> has no children in ODF 1.2
+    reader.skipCurrentElement();
+
+    m_backend->elementTextSoftPageBreak(reader, m_context);
+    DEBUGEND();
+}
 
 
 void OdfTextReader::readUnknownElement(KoXmlStreamReader &reader)

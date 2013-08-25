@@ -149,6 +149,14 @@ void OdfTextReaderBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCont
 }
 
 
+void OdfTextReaderBackend::elementTextSoftPageBreak(KoXmlStreamReader &reader,
+                                                    OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+
 void OdfTextReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
