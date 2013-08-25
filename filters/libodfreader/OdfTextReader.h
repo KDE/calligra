@@ -80,6 +80,7 @@ class KOODFREADER_EXPORT OdfTextReader
     void readElementTableTableHeaderRows(KoXmlStreamReader &reader);
     void readElementTableTableRow(KoXmlStreamReader &reader);
     void readElementTableTableCell(KoXmlStreamReader &reader);
+    void readElementTableCoveredTableCell(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.

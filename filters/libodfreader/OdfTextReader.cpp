@@ -337,14 +337,13 @@ void OdfTextReader::readElementTableTableRow(KoXmlStreamReader &reader)
     m_backend->elementTableTableRow(reader, m_context);
 
     // <table:table-row> has the following children in ODF 1.2:
-    //          <table:covered-table-cell> 9.1.5
+    //   [done] <table:covered-table-cell> 9.1.5
     //   [done] <table:table-cell> 9.1.4.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
         if (tagName == "table:covered-table-cell") {
-            reader.skipCurrentElement();
-            //readElementTableTableCoveredCell(reader);
+            readElementTableCoveredTableCell(reader);
         }
         else if (tagName == "table:table-cell") {
             readElementTableTableCell(reader);
@@ -396,6 +395,47 @@ void OdfTextReader::readElementTableTableCell(KoXmlStreamReader &reader)
     }
 
     m_backend->elementTableTableCell(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableCoveredTableCell(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableCoveredTableCell(reader, m_context);
+
+    // <table:covered-table-cell> has the following children in ODF 1.2:
+    //
+    // In addition to the text level tags like <text:p> etc that can
+    // be found in any textbox, table cell or similar, it has the
+    // following text document children:
+    //
+    //          <office:annotation> 14.1
+    //          <table:cell-range-source> 9.3.1
+    //          <table:detective> 9.3.2
+
+    while (reader.readNextStartElement()) {
+        DEBUG_READING("loop-start");
+        
+        QString tagName = reader.qualifiedName().toString();
+        if (tagName == "office:annotation") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:cell-range-source") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:detective") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else {
+            readTextLevelElement(reader);
+        }
+        DEBUG_READING("loop-end");
+    }
+
+    m_backend->elementTableCoveredTableCell(reader, m_context);
     DEBUGEND();
 }
 
