@@ -135,10 +135,10 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
     m_backend->elementOfficeDocumentcontent(reader, m_context);
 
     // <office:document-content> has the following children in ODF 1.2:
-    //   <office:automatic-styles> 3.15.3
-    //   <office:body> 3.3
-    //   <office:font-face-decls> 3.14
-    //   <office:scripts> 3.12.
+    //          <office:automatic-styles> 3.15.3
+    //   [done] <office:body> 3.3
+    //          <office:font-face-decls> 3.14
+    //          <office:scripts> 3.12.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
@@ -179,10 +179,10 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 
     // <namespace:tagname> has the following children in ODF 1.2:
     //   FILL IN THE CHILDREN LIKE THIS EXAMPLE (taken from office:document-content):
-    //   <office:automatic-styles> 3.15.3
-    //   <office:body> 3.3
-    //   <office:font-face-decls> 3.14
-    //   <office:scripts> 3.12.
+    //          <office:automatic-styles> 3.15.3
+    //          <office:body> 3.3
+    //          <office:font-face-decls> 3.14
+    //          <office:scripts> 3.12.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
@@ -210,13 +210,13 @@ void OdtReader::readElementOfficeBody(KoXmlStreamReader &reader)
     m_backend->elementOfficeBody(reader, m_context);
 
     // <office:body> has the following children in ODF 1.2:
-    //   <office:chart> 3.8,
-    //   <office:database> 12.1
-    //   <office:drawing> 3.5
-    //   <office:image> 3.9
-    //   <office:presentation> 3.6
-    //   <office:spreadsheet> 3.7
-    //   <office:text> 3.4
+    //          <office:chart> 3.8,
+    //          <office:database> 12.1
+    //          <office:drawing> 3.5
+    //          <office:image> 3.9
+    //          <office:presentation> 3.6
+    //          <office:spreadsheet> 3.7
+    //   [done] <office:text> 3.4
     //
     // Of those only <office:text> is present in a text document (odt).
     while (reader.readNextStartElement()) {
@@ -245,22 +245,22 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     // be found in any textbox, table cell or similar, it has the
     // following text document children:
     //
-    //   <office:forms> 13.2
-    //   <table:calculation-settings> 9.4.1
-    //   <table:consolidation> 9.7
-    //   <table:content-validations> 9.4.4
-    //   <table:database-ranges> 9.4.14
-    //   <table:data-pilot-tables> 9.6.2
-    //   <table:dde-links> 9.8
-    //   <table:label-ranges> 9.4.10
-    //   <table:named-expressions> 9.4.11
-    //   <text:alphabetical-index-auto-mark-file> 8.8.3
-    //   <text:dde-connection-decls> 14.6.2
-    //   <text:page-sequence> 5.2
-    //   <text:sequence-decls> 7.4.11
-    //   <text:tracked-changes> 5.5.1
-    //   <text:user-field-decls> 7.4.7
-    //   <text:variable-decls> 7.4.2
+    //          <office:forms> 13.2
+    //          <table:calculation-settings> 9.4.1
+    //          <table:consolidation> 9.7
+    //          <table:content-validations> 9.4.4
+    //          <table:database-ranges> 9.4.14
+    //          <table:data-pilot-tables> 9.6.2
+    //          <table:dde-links> 9.8
+    //          <table:label-ranges> 9.4.10
+    //          <table:named-expressions> 9.4.11
+    //          <text:alphabetical-index-auto-mark-file> 8.8.3
+    //          <text:dde-connection-decls> 14.6.2
+    //          <text:page-sequence> 5.2
+    //          <text:sequence-decls> 7.4.11
+    //          <text:tracked-changes> 5.5.1
+    //          <text:user-field-decls> 7.4.7
+    //          <text:variable-decls> 7.4.2
     //
     // FIXME: For now, none of these are handled
     while (reader.readNextStartElement()) {
