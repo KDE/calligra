@@ -52,6 +52,8 @@ public:
     QString productName() const { return appName(); }
     QString programName() const { return appName(); }
     QString organizationDomain() const { return QString(); }
+    QString componentName() const { return QString(); }
+    QString displayName() const { return appName(); }
     const char* internalProgramName() const { return m_name.constData(); }
     QString programIconName() const { return QString(); }
     QVariant programLogo() const { return QVariant(); }

@@ -2,6 +2,7 @@
 #define FAKE_KURL_H
 
 #include <QUrl>
+#include <QUrlQuery>
 #include <QList>
 #include <QFileInfo>
 #include <QFile>
@@ -298,7 +299,7 @@ public:
 
         if (hasQuery()) {
             result += QLatin1Char('?');
-            result += QString::fromLatin1(encodedQuery());
+            result += QUrlQuery(*static_cast<const QUrl*>(this)).toString(QUrl::FullyEncoded);
         }
         if (hasFragment()) {
             result += QLatin1Char('#');
@@ -309,7 +310,8 @@ public:
 
     QString pathOrUrl(AdjustPathOption trailing = LeaveTrailingSlash) const
     {
-        if ( isLocalFile() && fragment().isNull() && encodedQuery().isNull() ) {
+        if ( isLocalFile() && fragment().isNull() &&
+            QUrlQuery(*static_cast<const QUrl*>(this)).toString(QUrl::FullyEncoded).isEmpty() ) {
             return toLocalFile(trailing);
         } else {
             return prettyUrl(trailing);

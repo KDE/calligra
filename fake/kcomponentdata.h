@@ -4,11 +4,15 @@
 #include <QString>
 #include <QStringList>
 #include <QObject>
+#ifndef QT_NO_PRINTER
 #include <QPrinter>
+#endif
 #include <QApplication>
 #include <QDate>
 #include <QTime>
 #include <QDateTime>
+#include <QJsonObject>
+#include <QPluginLoader>
 
 #include <ksharedconfig.h>
 #include <kconfig.h>

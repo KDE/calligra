@@ -4,7 +4,9 @@
 #include <QString>
 #include <QStringList>
 #include <QObject>
+#ifndef QT_NO_PRINTER
 #include <QPrinter>
+#endif
 #include <QDate>
 #include <QTime>
 #include <QDateTime>
@@ -816,7 +818,11 @@ public:
 
     int pageSize() const
     {
+#ifndef QT_NO_PRINTER
         return QPrinter::A4;
+#else
+        return 0;
+#endif
     }
 #if 0
     /**

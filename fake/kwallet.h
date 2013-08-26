@@ -24,7 +24,7 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QObject>
-
+#include <qwindowdefs.h>
 #include <kofake_export.h>
 
 namespace KWallet {

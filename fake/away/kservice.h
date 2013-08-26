@@ -8,6 +8,7 @@
 
 #include <ksharedptr.h>
 #include <kurl.h>
+#include <klibrary.h>
 
 class KService : public KShared
 {

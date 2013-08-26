@@ -10,7 +10,7 @@
 #include <ksharedptr.h>
 #include <kdesktopfile.h>
 
-class KoServiceType : public KShared
+class KServiceType : public KShared
 {
 public:
     typedef KSharedPtr<KServiceType> Ptr;

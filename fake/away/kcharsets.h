@@ -9,6 +9,7 @@
 class KCharsets
 {
 public:
+    static KCharsets* charsets();
     QTextCodec *codecForName(const QString &name) const { return QTextCodec::codecForName(name.toUtf8()); }
     QTextCodec *codecForName(const QString &name, bool &ok) const { QTextCodec *c = QTextCodec::codecForName(name.toUtf8()); ok = c; return c; }
     static QChar fromEntity(const QString &str) { return QChar(); }
@@ -33,5 +34,7 @@ namespace KGlobal
 {
     static KCharsets *charsets() { return globalKCharsets(); }
 }
+
+KCharsets* KCharsets::charsets() { return globalKCharsets(); }
 
 #endif
