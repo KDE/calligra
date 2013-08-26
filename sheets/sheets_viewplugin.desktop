@@ -4,9 +4,13 @@ X-KDE-ServiceType=Sheets/ViewPlugin
 Comment=GUI functionality for Sheets
 Comment[cs]=Funkcionalita GUI pro Sheets
 Comment[hu]=Grafikus felület a Sheets-hez
+Comment[it]=Funzionalità d'interfaccia per Sheets
+Comment[kk]=Sheets-тің графикалық интерфейс функционалдығы
+Comment[nl]=Interfacefunctionaliteit voor Sheets
 Comment[pt]=Funcionalidade gráfica para o Sheets
 Comment[pt_BR]=Funcionalidade gráfica para o Sheets
 Comment[sk]=GUI funkcionalita pre Sheets
+Comment[sv]=Grafisk gränssnittsfunktion för Sheets
 Comment[uk]=Функціональність графічного інтерфейсу для Sheets
 Comment[x-test]=xxGUI functionality for Sheetsxx
 [PropertyDef::X-Sheets-Version]

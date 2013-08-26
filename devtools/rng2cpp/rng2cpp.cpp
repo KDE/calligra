@@ -1084,7 +1084,7 @@ void setRequiredAttributes(QTextStream& out, const RNGItemPtr& item)
  */
 void defineElement(QTextStream& out, const RNGItemPtr& item)
 {
-    RNGItemList bases = getBasesList(item);
+    const RNGItemList bases = getBasesList(item);
     out << "class " << item->cppName << " : public OdfWriter";
     RNGItemList::const_iterator i = bases.begin();
     while (i != bases.end()) {
@@ -1164,7 +1164,7 @@ void defineGroup(QTextStream& out, const RNGItemPtr& item)
     if (!hasElementOrAttribute(item)) {
         return;
     }
-    RNGItemList bases = getBasesList(item);
+    const RNGItemList bases = getBasesList(item);
     out << "class " << item->cppName;
     if (bases.size()) {
         RNGItemList::const_iterator i = bases.begin();
