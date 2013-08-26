@@ -93,6 +93,8 @@ public:
         , forceSketch(false)
         , wasMaximized(true)
         , temporaryFile(false)
+        , desktopInitialized(false)
+        , syncObject(0)
     {
 #ifdef Q_OS_WIN
         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
@@ -115,6 +117,8 @@ public:
     bool forceSketch;
     bool wasMaximized;
     bool temporaryFile;
+    bool desktopInitialized;
+    ViewModeSynchronisationObject* syncObject;
 
     void initSketchView(QObject* parent)
     {
@@ -177,6 +181,7 @@ public:
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
+        desktopInitialized = false;
     }
 
     void notifySlateModeChange();
@@ -280,7 +285,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
     else
         showNormal();
 
-    ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
+    d->syncObject = new ViewModeSynchronisationObject;
 
     KisView2* view = 0;
     if(d->desktopView) {
@@ -291,7 +296,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
     {
         //Notify the view we are switching away from that we are about to switch away from it
         //giving it the possibility to set up the synchronisation object.
-        ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->sketchView, view, syncObject);
+        ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->sketchView, view, d->syncObject);
         QApplication::sendEvent(d->sketchView, &aboutToSwitchEvent);
     }
 
@@ -304,10 +309,17 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
         qApp->processEvents();
 
-        //Notify the new view that we just switched to it, passing our synchronisation object
-        //so it can use those values to sync with the old view.
-        ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, syncObject);
-        QApplication::sendEvent(view, &switchedEvent);
+        if(d->desktopInitialized)
+        {
+            //Notify the new view that we just switched to it, passing our synchronisation object
+            //so it can use those values to sync with the old view.
+            ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, d->syncObject);
+            QApplication::sendEvent(view, &switchedEvent);
+        }
+        else
+        {
+            QTimer::singleShot(1500, this, SLOT(initialDesktopChange()));
+        }
     }
     else if(justLoaded)
     {
@@ -315,6 +327,18 @@ void MainWindow::switchToDesktop(bool justLoaded)
     }
 
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
+}
+
+void MainWindow::initialDesktopChange()
+{
+    d->desktopInitialized = true;
+    if(d->desktopView) {
+        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        //Notify the new view that we just switched to it, passing our synchronisation object
+        //so it can use those values to sync with the old view.
+        ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, d->syncObject);
+        QApplication::sendEvent(view, &switchedEvent);
+    }
 }
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
@@ -326,6 +350,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         QPoint center = view->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        d->desktopInitialized = true;
     }
     else if(d->sketchKisView && centralWidget() == d->sketchView) {
         qApp->processEvents();
