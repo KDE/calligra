@@ -259,10 +259,11 @@ void MainWindow::switchToSketch()
     }
 
     setCentralWidget(d->sketchView);
-    if(d->slateMode)
-        showFullScreen();
     emit switchedToSketch();
     qApp->processEvents();
+
+    if(d->slateMode)
+        QTimer::singleShot(100, this, SLOT(showFullScreen()));
 
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 
@@ -310,16 +311,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
         qApp->processEvents();
 
         if(d->desktopInitialized)
-        {
-            //Notify the new view that we just switched to it, passing our synchronisation object
-            //so it can use those values to sync with the old view.
-            ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, d->syncObject);
-            QApplication::sendEvent(view, &switchedEvent);
-        }
+            QTimer::singleShot(150, this, SLOT(initialDesktopChange()));
         else
-        {
             QTimer::singleShot(1500, this, SLOT(initialDesktopChange()));
-        }
     }
     else if(justLoaded)
     {
