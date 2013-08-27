@@ -576,7 +576,7 @@ bool KisView2::event( QEvent* event )
             syncObject->opacity = provider->opacity();
             syncObject->globalAlphaLock = provider->globalAlphaLock();
 
-            syncObject->documentOffset = canvasControllerWidget()->scrollBarValue() - QPoint(x(), y());
+            syncObject->documentOffset = canvasControllerWidget()->scrollBarValue() - pos();
             syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
             syncObject->rotationAngle = canvasBase()->rotationAngle();
 
@@ -610,7 +610,7 @@ bool KisView2::event( QEvent* event )
                 zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
                 canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
 
-                QPoint newOffset = syncObject->documentOffset + QPoint(x(), y());
+                QPoint newOffset = syncObject->documentOffset + pos();
                 qApp->processEvents();
                 canvasControllerWidget()->setScrollBarValue(newOffset);
                 qDebug() << "New offset" << canvasControllerWidget()->documentOffset();
