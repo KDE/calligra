@@ -76,6 +76,7 @@ private Q_SLOTS:
     void switchDesktopForced();
     void switchSketchForced();
     void adjustZoomOnDocumentChangedAndStuff();
+    void sketchChange();
     void initialDesktopChange();
 
 private:

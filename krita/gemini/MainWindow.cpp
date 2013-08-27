@@ -233,7 +233,7 @@ void MainWindow::switchToSketch()
     QTime timer;
     timer.start();
 
-    ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
+    d->syncObject = new ViewModeSynchronisationObject;
     KisView2* view = 0;
 
     if(d->sketchKisView) {
@@ -246,28 +246,38 @@ void MainWindow::switchToSketch()
 
         //Notify the view we are switching away from that we are about to switch away from it
         //giving it the possibility to set up the synchronisation object.
-        ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, view, d->sketchView, syncObject);
+        ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, view, d->sketchView, d->syncObject);
         QApplication::sendEvent(view, &aboutToSwitchEvent);
 
         d->desktopView->setParent(0);
         d->wasMaximized = isMaximized();
 
-        //Notify the new view that we just switched to it, passing our synchronisation object
-        //so it can use those values to sync with the old view.
-        ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, syncObject);
-        QApplication::sendEvent(d->sketchView, &switchedEvent);
+        sketchChange();
     }
 
     setCentralWidget(d->sketchView);
     emit switchedToSketch();
     qApp->processEvents();
 
-    if(d->slateMode)
-        QTimer::singleShot(100, this, SLOT(showFullScreen()));
+    if(d->slateMode) {
+        QTimer::singleShot(50, this, SLOT(showFullScreen()));
+        if(d->syncObject->initialized)
+            QTimer::singleShot(100, this, SLOT(sketchChange()));
+    }
 
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
+}
 
-    delete syncObject;
+void MainWindow::sketchChange()
+{
+    if(d->desktopView)
+    {
+        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        //Notify the new view that we just switched to it, passing our synchronisation object
+        //so it can use those values to sync with the old view.
+        ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, d->syncObject);
+        QApplication::sendEvent(d->sketchView, &switchedEvent);
+    }
 }
 
 void MainWindow::switchToDesktop(bool justLoaded)
@@ -311,7 +321,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
         qApp->processEvents();
 
         if(d->desktopInitialized)
-            QTimer::singleShot(150, this, SLOT(initialDesktopChange()));
+            initialDesktopChange();
         else
             QTimer::singleShot(1500, this, SLOT(initialDesktopChange()));
     }
