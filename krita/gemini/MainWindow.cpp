@@ -85,6 +85,7 @@ public:
         , sketchView(0)
         , desktopView(0)
         , currentView(0)
+        , desktopCursorStyle(CURSOR_STYLE_OUTLINE)
         , slateMode(false)
         , docked(false)
         , sketchKisView(0)
@@ -106,6 +107,7 @@ public:
     SketchDeclarativeView* sketchView;
     KoMainWindow* desktopView;
     QObject* currentView;
+    enumCursorStyle desktopCursorStyle;
 
     bool slateMode;
     bool docked;
@@ -182,6 +184,8 @@ public:
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
         desktopInitialized = false;
+        KisConfig cfg;
+        cfg.setCursorStyle(desktopCursorStyle);
     }
 
     void notifySlateModeChange();
@@ -197,8 +201,12 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     setWindowTitle(i18n("Krita Gemini"));
 
     KisConfig cfg;
-    cfg.setUseOpenGL(true);
+    // Store the current setting before we do "things", and heuristic our way to a reasonable
+    // default if it's no cursor (that's most likely due to a broken config)
+    if(cfg.cursorStyle() != CURSOR_STYLE_NO_CURSOR)
+        d->desktopCursorStyle = cfg.cursorStyle();
     cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+    cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent(fileName);
@@ -241,7 +249,9 @@ void MainWindow::switchToSketch()
         d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
     }
 
+    KisConfig cfg;
     if(d->desktopView && centralWidget() == d->desktopView) {
+        d->desktopCursorStyle = cfg.cursorStyle();
         view = qobject_cast<KisView2*>(d->desktopView->rootView());
 
         //Notify the view we are switching away from that we are about to switch away from it
@@ -264,7 +274,7 @@ void MainWindow::switchToSketch()
         if(d->syncObject->initialized)
             QTimer::singleShot(100, this, SLOT(sketchChange()));
     }
-
+    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 }
 
@@ -343,6 +353,8 @@ void MainWindow::initialDesktopChange()
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, d->syncObject);
         QApplication::sendEvent(view, &switchedEvent);
     }
+    KisConfig cfg;
+    cfg.setCursorStyle(d->desktopCursorStyle);
 }
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
@@ -532,6 +544,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
 MainWindow::~MainWindow()
 {
     delete d;
+    KisConfig cfg;
+    cfg.setCursorStyle(d->desktopCursorStyle);
 }
 
 #ifdef Q_OS_WIN
