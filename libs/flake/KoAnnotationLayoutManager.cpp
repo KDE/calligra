@@ -111,6 +111,8 @@ void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape) 
         i++;
     }
     layoutAnnotationShapes();
+    //Should update canvas.
+    d->canvas->canvasWidget()->update();
 }
 
 void KoAnnotationLayoutManager::layoutAnnotationShapes()

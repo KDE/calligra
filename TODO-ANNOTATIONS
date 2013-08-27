@@ -7,11 +7,6 @@ Features
 
 Bugs
 ----
-
- * Fix repaint of lines when adding and removing text.
-
- * Lines remain when an annotation is deleted.
-
  * Possible to insert other things than allowed by the standard into the annotation shapes:
     - paragraphs
     - list entries

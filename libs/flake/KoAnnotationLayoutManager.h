@@ -52,7 +52,7 @@ public slots:
     /// Remove annotation shape.
     void removeAnnotationShape(KoShape *annotationShape);
 
-    /// Update layout annotation shapes.
+    /// Update layout annotation shapes. Called when shape size changed.
     void updateLayout(KoShape *shape);
 
 private:

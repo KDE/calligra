@@ -136,7 +136,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
 
     connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
-    connect(m_document, SIGNAL(annotationShapeRemoved(KoShape *)), this, SLOT(annotationShapeRemoved(KoShape *)));
+    connect(m_canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(annotationShapeRemoved(KoShape *)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -1239,9 +1239,9 @@ void KWView::annotationShapeRemoved(KoShape *shape)
         KoAnnotation *annotation = annotationManager->annotation(name);
         if (annotation->annotationShape() == shape) {
             manager->remove(annotation);
+            // Remove From annotation layout manager.
+            m_document->annotationLayoutManager()->removeAnnotationShape(shape);
             break;
         }
     }
-    // Remove From annotation layout manager.
-    m_document->annotationLayoutManager()->removeAnnotationShape(shape);
 }
