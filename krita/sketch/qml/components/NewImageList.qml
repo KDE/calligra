@@ -45,22 +45,22 @@ PageStack {
                     switch(model.bnrole) {
                         case "a5p": {
                             base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(1200, 1750, 300);
+                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(600, 875, 150);
                             Settings.temporaryFile = true;
                         }
                         case "a5l": {
                             base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(1750, 1200, 300);
+                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(875, 600, 150);
                             Settings.temporaryFile = true;
                         }
                         case "a4p": {
                             base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(2400, 3500, 300);
+                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(1200, 1750, 150);
                             Settings.temporaryFile = true;
                         }
                         case "a4l": {
                             base.clicked();
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(3500, 2400, 300);
+                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(1750, 1200, 150);
                             Settings.temporaryFile = true;
                         }
                         case "screen": {
