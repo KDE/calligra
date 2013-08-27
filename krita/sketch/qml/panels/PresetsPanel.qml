@@ -101,7 +101,7 @@ Panel {
         target: sketchView;
         onLoadingFinished: {
 //            if(window.applicationName === undefined) {
-                presetsModel.currentPreset = "Pencil_HB";
+                presetsModel.currentPreset = "inking doodle brush";
 //            }
         }
     }
