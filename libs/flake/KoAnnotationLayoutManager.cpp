@@ -92,11 +92,8 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
     }
     d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
     layoutAnnotationShapes();
-    // Update the free space between page outline rect and textarea (90).
-    // 729.001 is viewMode content size height.
-    //FIXME: Help me to find correct width.
     if (yPositionChanged) {
-        d->canvas->updateCanvas(QRectF((d->x-90), 0, 90, 729.001));
+        d->canvas->canvasWidget()->update();
     }
 }
 void KoAnnotationLayoutManager::setCanvasBase(KoCanvasBase *canvas)
