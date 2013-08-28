@@ -54,7 +54,7 @@ void KarbonPatternEditStrategyBase::setEditing(bool on)
     // for use inside the command emitted when finished
     if (on) {
         m_modified = false;
-        QPointer<KoPatternBackground> fill = dynamic_cast<KoPatternBackground*>(m_shape->background().data());
+        QSharedPointer<KoPatternBackground> fill = qSharedPointerDynamicCast<KoPatternBackground>(m_shape->background());
         if (fill)
             m_oldFill = fill;
     }
@@ -72,12 +72,12 @@ bool KarbonPatternEditStrategyBase::isModified() const
 
 KUndo2Command * KarbonPatternEditStrategyBase::createCommand()
 {
-    QPointer<KoPatternBackground>  fill = dynamic_cast<KoPatternBackground*>(m_shape->background().data());
+    QSharedPointer<KoPatternBackground>  fill = qSharedPointerDynamicCast<KoPatternBackground>(m_shape->background());
     if (fill && isModified()) {
         fill = m_oldFill;
-        QPointer<KoPatternBackground>  newFill = new KoPatternBackground(m_imageCollection);
+        QSharedPointer<KoPatternBackground> newFill(new KoPatternBackground(m_imageCollection));
         newFill = m_newFill;
-        return new KoShapeBackgroundCommand(m_shape, newFill.data(), 0);
+        return new KoShapeBackgroundCommand(m_shape, newFill, 0);
     }
     return 0;
 }
@@ -132,7 +132,7 @@ KarbonPatternEditStrategy::KarbonPatternEditStrategy(KoShape * s, KoImageCollect
     m_normalizedLength = 0.25 * (size.width() + size.height());
     // get the brush tranformation matrix
     QTransform brushMatrix;
-    QPointer<KoPatternBackground>  fill = dynamic_cast<KoPatternBackground*>(shape()->background().data());
+    QSharedPointer<KoPatternBackground>  fill = qSharedPointerDynamicCast<KoPatternBackground>(shape()->background());
     if (fill)
         brushMatrix = fill->transform();
 
@@ -192,7 +192,7 @@ void KarbonPatternEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
 
     setModified();
 
-    QPointer<KoPatternBackground>  fill = dynamic_cast<KoPatternBackground*>(shape()->background().data());
+    QSharedPointer<KoPatternBackground>  fill = qSharedPointerDynamicCast<KoPatternBackground>(shape()->background());
     if (fill) {
         m_newFill = updatedBackground();
         fill = m_newFill;
@@ -214,7 +214,7 @@ QRectF KarbonPatternEditStrategy::boundingRect() const
     return bbox.adjusted(-hr, -hr, hr, hr);
 }
 
-QPointer<KoPatternBackground> KarbonPatternEditStrategy::updatedBackground()
+QSharedPointer<KoPatternBackground> KarbonPatternEditStrategy::updatedBackground()
 {
     // the direction vector controls the rotation of the pattern
     QPointF dirVec = m_handles[direction] - m_handles[center];
@@ -224,7 +224,7 @@ QPointer<KoPatternBackground> KarbonPatternEditStrategy::updatedBackground()
     matrix.translate(m_handles[center].x(), m_handles[center].y());
     matrix.rotate(angle);
 
-    QPointer<KoPatternBackground> newFill = new KoPatternBackground(imageCollection());
+    QSharedPointer<KoPatternBackground> newFill(new KoPatternBackground(imageCollection()));
     newFill->setTransform(matrix);
 
     return newFill;
@@ -239,7 +239,7 @@ KarbonOdfPatternEditStrategy::KarbonOdfPatternEditStrategy(KoShape * s, KoImageC
 {
     m_handles.append(QPointF());
     m_handles.append(QPointF());
-    updateHandles(dynamic_cast<KoPatternBackground*>(shape()->background().data()));
+    updateHandles(qSharedPointerDynamicCast<KoPatternBackground>(shape()->background()));
 }
 
 KarbonOdfPatternEditStrategy::~KarbonOdfPatternEditStrategy()
@@ -250,7 +250,7 @@ void KarbonOdfPatternEditStrategy::paint(QPainter &painter, const KoViewConverte
 {
     KoShape::applyConversion(painter, converter);
 
-    QPointer<KoPatternBackground>  fill = dynamic_cast<KoPatternBackground*>(shape()->background().data());
+    QSharedPointer<KoPatternBackground>  fill = qSharedPointerDynamicCast<KoPatternBackground>(shape()->background());
     if (! fill)
         return;
 
@@ -269,7 +269,7 @@ void KarbonOdfPatternEditStrategy::paint(QPainter &painter, const KoViewConverte
 
 bool KarbonOdfPatternEditStrategy::selectHandle(const QPointF &mousePos, const KoViewConverter &converter)
 {
-    QPointer<KoPatternBackground>  fill = dynamic_cast<KoPatternBackground*>(shape()->background().data());
+    QSharedPointer<KoPatternBackground>  fill = qSharedPointerDynamicCast<KoPatternBackground>(shape()->background());
     if (! fill)
         return false;
 
@@ -298,7 +298,7 @@ void KarbonOdfPatternEditStrategy::handleMouseMove(const QPointF &mouseLocation,
 {
     Q_UNUSED(modifiers);
 
-    QPointer<KoPatternBackground> fill = dynamic_cast<KoPatternBackground*>(shape()->background().data());
+    QSharedPointer<KoPatternBackground> fill = qSharedPointerDynamicCast<KoPatternBackground>(shape()->background());
     if (!fill)
         return;
 
@@ -340,13 +340,13 @@ QRectF KarbonOdfPatternEditStrategy::boundingRect() const
     return bbox.adjusted(-hr, -hr, hr, hr);
 }
 
-QPointer<KoPatternBackground> KarbonOdfPatternEditStrategy::updatedBackground()
+QSharedPointer<KoPatternBackground> KarbonOdfPatternEditStrategy::updatedBackground()
 {
     QSizeF displaySize(m_handles[size].x() - m_handles[origin].x(), m_handles[size].y() - m_handles[origin].y());
     qreal offsetX = 100.0 * (m_handles[origin].x() / displaySize.width());
     qreal offsetY = 100.0 * (m_handles[origin].y() / displaySize.height());
 
-    QPointer<KoPatternBackground> newFill = new KoPatternBackground(imageCollection());
+    QSharedPointer<KoPatternBackground> newFill(new KoPatternBackground(imageCollection()));
     newFill = m_oldFill;
     newFill->setReferencePoint(KoPatternBackground::TopLeft);
     newFill->setReferencePointOffset(QPointF(offsetX, offsetY));
@@ -355,7 +355,7 @@ QPointer<KoPatternBackground> KarbonOdfPatternEditStrategy::updatedBackground()
     return newFill;
 }
 
-void KarbonOdfPatternEditStrategy::updateHandles(QPointer<KoPatternBackground>  fill)
+void KarbonOdfPatternEditStrategy::updateHandles(QSharedPointer<KoPatternBackground> fill)
 {
     if (! fill)
         return;
@@ -367,5 +367,5 @@ void KarbonOdfPatternEditStrategy::updateHandles(QPointer<KoPatternBackground>  
 
 void KarbonOdfPatternEditStrategy::updateHandles()
 {
-    updateHandles(dynamic_cast<KoPatternBackground*>(shape()->background().data()));
+    updateHandles(qSharedPointerDynamicCast<KoPatternBackground>(shape()->background()));
 }

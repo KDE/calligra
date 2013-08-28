@@ -147,24 +147,23 @@ QString WBSDefinition::code(const CodeDef &def, uint index) const {
 }
 
 // Nicked from koparagcounter.cc
-const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-const QByteArray RNThousands[] = {"", "m", "mm", "mmm"};
-
 QString WBSDefinition::toRoman( int n, bool upper ) const
 {
-    if ( n >= 0 ) {
-        QString s = QString::fromLatin1( RNThousands[ ( n / 1000 ) ] +
-                                         RNHundreds[ ( n / 100 ) % 10 ] +
-                                         RNTens[ ( n / 10 ) % 10 ] +
-                                         RNUnits[ ( n ) % 10 ] );
-        return upper ? s.toUpper() : s;
-        
-    } else { // should never happen, but better not crash if it does
-        kWarning()<< " n=" << n;
-        return QString::number( n );
+    static const QString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+    static const QString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+    static const QString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+    static const QString RNThousands[] = {"", "m", "mm", "mmm"};
+
+    if (n < 0) { // should never happen, but better not crash if it does
+        kWarning() << "intToRoman called with negative number: n=" << n;
+        return QString::number(n);
     }
+
+    QString s = RNThousands[ ( n / 1000 ) ] +
+                RNHundreds[ ( n / 100 ) % 10 ] +
+                RNTens[ ( n / 10 ) % 10 ] +
+                RNUnits[ ( n ) % 10 ];
+    return upper ? s.toUpper() : s;
 }
 
 QStringList WBSDefinition::codeList() const {

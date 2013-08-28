@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Karbon Round Corners plugin
+Name[kk]=Karbon-ның бұрыштарды дөңгелету плагині
+Name[nl]=Plug-in voor Karbon ronde hoeken
+Name[pt]='Plugin' de Cantos Arredondados do Karbon
+Name[pt_BR]=Plugin de cantos arredondados do Karbon
+Name[sk]=Plugin oblé rohy pre Karbon
+Name[sv]=Karbon-insticksprogram för runda hörn
+Name[uk]=Додаток скруглення кутів для Karbon
+Name[x-test]=xxKarbon Round Corners pluginxx
+X-KDE-ServiceTypes=Karbon/ViewPlugin
+Type=Service
+X-KDE-Library=karbon_roundcornersplugin
+X-Karbon-Version=28

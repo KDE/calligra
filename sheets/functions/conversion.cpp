@@ -173,23 +173,24 @@ Value func_sexdec(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ROMAN
 Value func_roman(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    const QByteArray RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
-    const QByteArray RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-    const QByteArray RNHundreds[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
-    const QByteArray RNThousands[] = {"", "M", "MM", "MMM"};
+    static const QString RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+    static const QString RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+    static const QString RNHundreds[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+    static const QString RNThousands[] = {"", "M", "MM", "MMM"};
 
     // precision loss is not a problem here, as we only use the 0-3999 range
     qint64 value = calc->conv()->asInteger(args[0]).asInteger();
-    if ((value < 0) || (value > 3999))
+    if ((value < 0) || (value > 3999)) {
         return Value::errorNA();
-    QString result;
+    }
+
     // There is an optional argument, but the specification only covers the case
     // where it is zero for conciseness, and zero is the default. So we just
     // ignore it.
-    result = QString::fromLatin1(RNThousands[(value / 1000)] +
-                                 RNHundreds[(value / 100) % 10] +
-                                 RNTens[(value / 10) % 10] +
-                                 RNUnits[(value) % 10]);
+    QString result = RNThousands[(value / 1000)] +
+                     RNHundreds[(value / 100) % 10] +
+                     RNTens[(value / 10) % 10] +
+                     RNUnits[(value) % 10];
     return Value(result);
 }
 

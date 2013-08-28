@@ -65,7 +65,7 @@ ENDIF(FALSE)
 ########### install files ###############
 
 install( FILES
-  words_docx_import.desktop
+  calligra_filter_docx2odt.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
 

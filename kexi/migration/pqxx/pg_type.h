@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KEXIPQXXTYPE_H
+#define KEXIPQXXTYPE_H
+
 //boolean, 'true'/'false'
 #define BOOLOID   16
 
@@ -197,3 +200,4 @@
 //registered type
 #define REGTYPEOID  2206
 
+#endif

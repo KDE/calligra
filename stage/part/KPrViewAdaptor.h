@@ -20,6 +20,8 @@
 #ifndef KPRVIEWADAPTOR_H
 #define KPRVIEWADAPTOR_H
 
+#ifndef QT_NO_DBUS
+
 #include <KoViewAdaptor.h>
 
 class KPrView;
@@ -178,5 +180,7 @@ private slots:
 private:
     KPrView* m_view;
 };
+
+#endif // QT_NO_DBUS
 
 #endif

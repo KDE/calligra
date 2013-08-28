@@ -35,7 +35,7 @@ install(TARGETS calligra_filter_pptx2odp DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES
-  kpresenter_pptx_import.desktop
+  calligra_filter_pptx2odp.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
 

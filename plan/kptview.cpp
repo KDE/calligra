@@ -69,6 +69,7 @@
 #include <ktoolinvocation.h>
 #include <krun.h>
 #include <kstandarddirs.h>
+#include <kservicetypetrader.h>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -390,6 +391,26 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     QTimer::singleShot( 0, this, SLOT(hideToolDocker()) );
     // create views after dockers hidden, views take time for large projects
     QTimer::singleShot( 100, this, SLOT(initiateViews()) );
+
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Plan/ViewPlugin"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Plan-Version] == 28)"));
+
+    KService::List::ConstIterator iter;
+    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+
+        KService::Ptr service = *iter;
+        QString error;
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if(plugin) {
+            insertChildClient(plugin);
+        } else {
+            if(!error.isEmpty()) {
+                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
+            }
+        }
+    }
 
     //kDebug(planDbg())<<" end";
 }

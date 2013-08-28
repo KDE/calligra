@@ -21,6 +21,7 @@
 #ifndef CALLIGRA_SHEETS_MAP_ADAPTOR
 #define CALLIGRA_SHEETS_MAP_ADAPTOR
 
+#ifndef QT_NO_DBUS
 #include <QStringList>
 
 #include <QtDBus>
@@ -66,5 +67,6 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
+#endif // QT_NO_DBUS
 
 #endif

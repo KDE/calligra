@@ -41,8 +41,6 @@
 #include <kcomponentdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kparts/componentfactory.h>
-#include <kparts/plugin.h>
 
 #include <kdebug.h>
 

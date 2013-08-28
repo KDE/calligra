@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Sheets Scripting Plugin
+Name[cs]=Skriptovací modul pro Sheets
+Name[hu]=Sheets szkriptelés bővítmény
+Name[kk]=Sheets скрипт плагині
+Name[nl]=Scriptplug-in van Sheets
+Name[pt]='Plugin' de Programação do Sheets
+Name[pt_BR]=Plugin de criação de scripts do Sheets
+Name[sk]=Plugin skriptovania Sheets
+Name[sv]=Skript-insticksprogram för Sheets
+Name[uk]=Додаток роботи зі скриптами для Sheets
+Name[x-test]=xxSheets Scripting Pluginxx
+X-KDE-ServiceTypes=Sheets/ViewPlugin
+Type=Service
+X-KDE-Library=krossmodulesheets
+X-Sheets-Version=28
