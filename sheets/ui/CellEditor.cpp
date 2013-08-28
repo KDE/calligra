@@ -33,12 +33,14 @@
 #include "Style.h"
 #include "Cell.h"
 #include "ValueConverter.h"
-
+#include "RectStorage.h"
+#include "Map.h"
+#include "Value.h"
+#include "CellStorage.h"
 
 // Calligra
 #include <KoDpi.h>
 #include <KoViewConverter.h>
-
 // KDE
 #include <kdebug.h>
 #include <ktextedit.h>
@@ -314,15 +316,21 @@ QAbstractItemModel *CellEditor::getModel()
 {
   ValueConverter *conv;
   QList<QString> words;
+  //RectStorage<QString> *rs=new RectStorage<QString>(d->selection->activeSheet()->map());
+  //QRect rect=rs->usedArea();
+  
+  //qDebug()<<"rect"<<rect;
   const Cell cell(d->selection->activeSheet(), d->selection->marker());
   int col=cell.column();
-  for(int i=0;i<50;i++)
+  
+  int lastrow=d->selection->activeSheet()->cellStorage()->rows();
+  qDebug()<<"rows"<<lastrow;
+  for(int i=0;i<lastrow;i++)
   {
     QString val=conv->toString(Value(Cell(d->selection->activeSheet(),col,i).value()));
     if(val!="" && !words.contains(val))
       words.append(val);
   }
-  
   //words<<"Test"<<"Testing"<<"Test Again";
   return new QStringListModel(words,c);  
 }
