@@ -250,7 +250,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
     }
 }
 
-QIcon KoModeBox::createTextedIcon(const KoToolButton button)
+QIcon KoModeBox::createTextIcon(const KoToolButton button)
 {
     QSize iconSize = d->tabBar->iconSize();
     QFont smallFont  = KGlobalSettings::generalFont();
@@ -357,7 +357,7 @@ void KoModeBox::addItem(const KoToolButton button)
 
     // Create a rotated icon with text
     if (d->iconMode == IconAndText) {
-        d->tabBar->addTab(createTextedIcon(button), QString());
+        d->tabBar->addTab(createTextIcon(button), QString());
     } else {
         int index = d->tabBar->addTab(createSimpleIcon(button), QString());
         d->tabBar->setTabToolTip(index, button.button->toolTip());

@@ -141,7 +141,7 @@ private:
         RightSide
     };
 
-    QIcon createTextedIcon(const KoToolButton button);
+    QIcon createTextIcon(const KoToolButton button);
     QIcon createSimpleIcon(const KoToolButton button);
     void addItem(const KoToolButton button);
 
