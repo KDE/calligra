@@ -588,9 +588,6 @@ bool KisView2::event( QEvent* event )
             qDebug() << "Switched to desktop";
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
-            KisConfig cfg;
-            cfg.setCursorStyle(CURSOR_STYLE_OUTLINE);
-
             if(syncObject->initialized) {
                 KisCanvasResourceProvider* provider = resourceProvider();
 
