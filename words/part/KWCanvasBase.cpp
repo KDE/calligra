@@ -198,7 +198,7 @@ void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &view
 
 
         if (m_document->annotationLayoutManager())
-            m_document->annotationLayoutManager()->paintConnections(painter, m_viewConverter);
+            m_document->annotationLayoutManager()->paintConnections(painter);
     }
 }
 

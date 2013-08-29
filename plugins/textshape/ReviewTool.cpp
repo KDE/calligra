@@ -175,7 +175,6 @@ void ReviewTool::insertAnnotation()
         }
     }
     // Set Annotation creation date.
-    // FIXME: I am not sure about date format
     shape->setDate(QDate::currentDate().toString(Qt::LocalDate));
 }
 

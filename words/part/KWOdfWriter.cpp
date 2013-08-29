@@ -36,6 +36,7 @@
 #include <KoParagraphStyle.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
+#include <KoAnnotationLayoutManager.h>
 
 #include <KoGenChanges.h>
 #include <changetracker/KoChangeTracker.h>
@@ -299,16 +300,8 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
             KWFrame *frame = frames.at(i);
             KWPage page = m_document->pageManager()->page(frame->shape());
             KoShape *shape = frame->shape();
-            // FIXME: This comparison is a big fat temporary hack that
-            //        will go away as soon as possible.  Instead of
-            //        checking for a special shape using it's ID (and
-            //        not even it's defined ID but the actual string!)
-            //        we will add a bool in KoShape that tells the
-            //        caller if it should save itself by calling
-            //        saveOdf (like most shapes) or save itself from
-            //        somewhere else (like this shape).
-            if (shape->shapeId() == "AnnotationTextShapeID") {
-                // Skip to save annotation shpaes.
+            if (m_document->annotationLayoutManager()->isAnnotationShape(shape)) {
+                // Skip to save annotation shapes.
                 continue;
             }
             frame->saveOdf(context, page, m_zIndexOffsets.value(page));
