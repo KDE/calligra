@@ -152,7 +152,6 @@
 #include <QListView>
 #include <QApplication>
 #include <QEvent>
-#include <QHeaderView>
 #include <QDesktopWidget>
 #include <QLineEdit>
 #include <QKeyEvent>
