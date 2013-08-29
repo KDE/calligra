@@ -123,6 +123,7 @@ bool KoAnnotationLayoutManager::isAnnotationShape(KoShape *shape)
         if (shape == it->second) {
             return true;
         }
+        it++;
     }
     return false;
 }
