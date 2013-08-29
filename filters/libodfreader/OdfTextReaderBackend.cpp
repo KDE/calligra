@@ -60,7 +60,6 @@ OdfTextReaderBackend::Private::~Private()
 OdfTextReaderBackend::OdfTextReaderBackend()
     : d(new OdfTextReaderBackend::Private)
 {
-    //Q_UNUSED(context)
 }
 
 OdfTextReaderBackend::~OdfTextReaderBackend()
@@ -85,6 +84,48 @@ void OdfTextReaderBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
 }
 
 
+void OdfTextReaderBackend::elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableColumn(KoXmlStreamReader &reader,
+                                                   OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableRow(KoXmlStreamReader &reader,
+                                                OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableHeaderRows(KoXmlStreamReader &reader,
+                                                       OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableCell(KoXmlStreamReader &reader,
+                                                 OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableCoveredTableCell(KoXmlStreamReader &reader,
+                                                        OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
@@ -102,6 +143,14 @@ void OdfTextReaderBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderC
 }
 
 void OdfTextReaderBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+
+void OdfTextReaderBackend::elementTextSoftPageBreak(KoXmlStreamReader &reader,
+                                                    OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);

@@ -22,10 +22,10 @@
 #define _KIS_PAINTOP_OPTION_LIST_MODEL_H_
 
 #include <kis_categorized_list_model.h>
+#include <kis_paintop_option.h>
+#include <krita_export.h>
 
-class KisPaintOpOption;
-
-struct KisOptionInfo
+struct PAINTOP_EXPORT KisOptionInfo
 {
     KisOptionInfo() { }
     KisOptionInfo(KisPaintOpOption* o, int i): option(o), index(i) { }
@@ -34,23 +34,23 @@ struct KisOptionInfo
     int               index;
 };
 
+struct PAINTOP_EXPORT OptionInfoToQStringConverter {
+    QString operator() (const KisOptionInfo &info) {
+        return info.option->label();
+    }
+};
+
+typedef KisCategorizedListModel<KisOptionInfo, OptionInfoToQStringConverter> BaseOptionCategorizedListModel;
+
 /**
  * This model can be use to show a list of visible composite op in a list view.
  */
-class KisPaintOpOptionListModel: public KisCategorizedListModel<QString,KisOptionInfo>
+class PAINTOP_EXPORT KisPaintOpOptionListModel : public BaseOptionCategorizedListModel
 {
-    typedef KisCategorizedListModel<QString,KisOptionInfo> BaseClass;
-    
 public:
+    KisPaintOpOptionListModel(QObject *parent);
     void addPaintOpOption(KisPaintOpOption* option, int widgetIndex);
-    virtual QVariant data(const QModelIndex& idx, int role=Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
-    virtual Qt::ItemFlags flags(const QModelIndex& idx) const;
-    using QAbstractListModel::reset;
-    
-protected:
-    virtual QString categoryToString(const QString& val) const;
-    virtual QString entryToString(const KisOptionInfo& val) const;
 };
 
 #endif // _KIS_PAINTOP_OPTION_LIST_MODEL_H_
