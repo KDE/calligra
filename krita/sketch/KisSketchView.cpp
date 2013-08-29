@@ -389,7 +389,7 @@ bool KisSketchView::event( QEvent* event )
                 syncObject->opacity = provider->opacity();
                 syncObject->globalAlphaLock = provider->globalAlphaLock();
 
-                syncObject->documentOffset = d->view->canvasControllerWidget()->documentOffset();
+                syncObject->documentOffset = d->view->canvasControllerWidget()->scrollBarValue();
                 syncObject->zoomLevel = d->view->zoomController()->zoomAction()->effectiveZoom();
                 syncObject->rotationAngle = d->view->canvasBase()->rotationAngle();
 
@@ -401,9 +401,6 @@ bool KisSketchView::event( QEvent* event )
         case ViewModeSwitchEvent::SwitchedToSketchModeEvent: {
             qDebug() << "Switched to sketch";
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-
-            KisConfig cfg;
-            cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
 
             if(d->view && syncObject->initialized) {
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
@@ -420,10 +417,12 @@ bool KisSketchView::event( QEvent* event )
                 provider->setOpacity(syncObject->opacity);
                 provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
 
-                d->view->canvasControllerWidget()->setScrollBarValue(syncObject->documentOffset);
                 d->view->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
-
                 d->view->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - d->view->canvasBase()->rotationAngle());
+                
+                qApp->processEvents();
+                QPoint newOffset = syncObject->documentOffset;
+                d->view->canvasControllerWidget()->setScrollBarValue(newOffset);
             }
 
             return true;
@@ -494,8 +493,9 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
         // This is a touch on the hackish side - i'm sure there's a better way of doing it
         // but it's taking a long time to work it out. Problem: When switching orientation,
         // the canvas is rendered wrong, in what looks like an off-by-one ish kind of fashion.
-        zoomOut();zoomIn();
-//         d->timer->start(100);
+        zoomOut();
+        QTimer::singleShot(100, this, SLOT(zoomIn()));
+        //d->timer->start(100);
     }
 }
 
