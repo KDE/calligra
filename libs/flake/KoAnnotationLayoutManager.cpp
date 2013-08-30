@@ -123,7 +123,7 @@ bool KoAnnotationLayoutManager::isAnnotationShape(KoShape *shape)
         if (shape == it->second) {
             return true;
         }
-        it++;
+        ++it;
     }
     return false;
 }
@@ -141,7 +141,7 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
             d->annotationShapePositions.erase(it);
             break;
         }
-        it++;
+        ++it;
     }
     d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
     layoutAnnotationShapes();
@@ -158,7 +158,7 @@ void KoAnnotationLayoutManager::removeAnnotationShape(KoShape *annotationShape)
             d->annotationShapePositions.erase(it);
             break;
         }
-        it++;
+        ++it;
     }
     layoutAnnotationShapes();
     //Should update canvas.
@@ -173,7 +173,7 @@ void KoAnnotationLayoutManager::updateLayout(KoShape *shape)
             layoutAnnotationShapes();
             break;
         }
-        it++;
+        ++it;
     }
 }
 
@@ -195,6 +195,6 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
         shape->update();
         currentY += shape->size().height() + shapeSpace;
 
-        it++;
+        ++it;
     }
 }
