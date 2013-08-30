@@ -419,7 +419,7 @@ bool KisSketchView::event( QEvent* event )
 
                 d->view->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
                 d->view->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - d->view->canvasBase()->rotationAngle());
-                
+
                 qApp->processEvents();
                 QPoint newOffset = syncObject->documentOffset;
                 d->view->canvasControllerWidget()->setScrollBarValue(newOffset);
