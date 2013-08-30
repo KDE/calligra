@@ -172,9 +172,6 @@ public:
      */
     KoDockerManager * dockerManager() const;
 
-    // Allow replacing the recent files action with something else, if needed (for example for Gemini)
-    void setRecentAction(KRecentFilesAction* newAction);
-
 signals:
     /**
      * This signal is emitted if the document has been saved successfully.
