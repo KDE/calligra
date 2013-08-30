@@ -41,8 +41,4 @@ Textured_big.kpp
 Texturer_large.kpp
 Texturer_thin.kpp
 Thin_splatter.kpp
-wash_alchoholmarker_dark.kpp
-wash_alchoholmarker_large.kpp
-wash_alchoholmarker_light.kpp
-wash_alchoholmarker_mid.kpp
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
