@@ -206,8 +206,9 @@ Panel {
                         bottom: parent.bottom;
                     }
                     wrapMode: Text.Wrap;
-                    elide: Text.ElideNone;
+                    elide: Text.ElideRight;
                     text: model.text;
+                    maximumLineCount: 3;
                 }
                 MouseArea {
                     anchors.fill: parent;
