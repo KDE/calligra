@@ -38,6 +38,7 @@
 #include <KFileDialog>
 #include <KLocalizedString>
 #include <krecentfilesaction.h>
+#include <boost/config/posix_features.hpp>
 
 class DesktopViewProxy::Private
 {
@@ -57,6 +58,11 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     , d(new Private(mainWindow, parent))
 {
     Q_ASSERT(parent); // "There MUST be a KoMainWindow assigned, otherwise everything will blow up");
+
+    // Hide this one... as it doesn't work at all well and release happens :P
+    QAction* closeAction = d->desktopView->actionCollection()->action("file_close");
+    closeAction->setVisible(false);
+
     // Concept is simple - simply steal all the actions we require to work differently, and reconnect them to local functions
     QAction* newAction = d->desktopView->actionCollection()->action("file_new");
     newAction->disconnect(d->desktopView);
@@ -78,9 +84,11 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     connect(loadExistingAsNewAction, SIGNAL(triggered(bool)), this, SLOT(loadExistingAsNew()));
 
     // Recent files need a touch more work, as they aren't simply an action.
-    KRecentFilesAction* recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), d->desktopView->actionCollection());
+    KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));
+    recent->disconnect(d->desktopView);
+    connect(recent, SIGNAL(urlSelected(KUrl)), this, SLOT(slotFileOpenRecent(KUrl)));
+    recent->clear();
     recent->loadEntries(KGlobal::config()->group("RecentFiles"));
-    d->desktopView->setRecentAction(recent);
 }
 
 DesktopViewProxy::~DesktopViewProxy()
